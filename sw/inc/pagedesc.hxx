@@ -255,39 +255,31 @@ inline void SwPageDesc::ChgHeaderShare( BOOL bNew )
 {
     if ( bNew )
         eUse = (UseOnPage) (eUse | nsUseOnPage::PD_HEADERSHARE);
-        // (USHORT&)eUse |= (USHORT)nsUseOnPage::PD_HEADERSHARE;
     else
         eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOHEADERSHARE);
-        // (USHORT&)eUse &= (USHORT)nsUseOnPage::PD_NOHEADERSHARE;
 }
 inline void SwPageDesc::ChgFooterShare( BOOL bNew )
 {
     if ( bNew )
         eUse = (UseOnPage) (eUse | nsUseOnPage::PD_FOOTERSHARE);
-        // (USHORT&)eUse |= (USHORT)nsUseOnPage::PD_FOOTERSHARE;
     else
         eUse = (UseOnPage) (eUse & nsUseOnPage::PD_NOFOOTERSHARE);
-        // (USHORT&)eUse &= (USHORT)nsUseOnPage::PD_NOFOOTERSHARE;
 }
 inline void SwPageDesc::SetUseOn( UseOnPage eNew )
 {
     UseOnPage eTmp = nsUseOnPage::PD_NONE;
     if ( eUse & nsUseOnPage::PD_HEADERSHARE )
         eTmp = nsUseOnPage::PD_HEADERSHARE;
-        // (USHORT&)eTmp |= (USHORT)nsUseOnPage::PD_HEADERSHARE;
     if ( eUse & nsUseOnPage::PD_FOOTERSHARE )
         eTmp = (UseOnPage) (eTmp | nsUseOnPage::PD_FOOTERSHARE);
-        // (USHORT&)eTmp |= (USHORT)nsUseOnPage::PD_FOOTERSHARE;
     eUse = (UseOnPage) (eTmp | eNew);
-    // (USHORT&)eUse = eTmp | eNew;
+
 }
 inline UseOnPage SwPageDesc::GetUseOn() const
 {
     UseOnPage eRet = eUse;
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOHEADERSHARE);
-    // (USHORT&)eRet &= (USHORT)nsUseOnPage::PD_NOHEADERSHARE;
     eRet = (UseOnPage) (eRet & nsUseOnPage::PD_NOFOOTERSHARE);
-    // (USHORT&)eRet &= (USHORT)nsUseOnPage::PD_NOFOOTERSHARE;
     return eRet;
 }
 

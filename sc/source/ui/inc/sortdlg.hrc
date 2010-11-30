@@ -34,13 +34,6 @@
                     // -> SCSTR_UNDEFINED
                     // -> SCSTR_FIELD
 
-/*
-#define RID_SCDLG_SORT          256
-#define RID_SCPAGE_SORT_FIELDS  257
-#define RID_SCPAGE_SORT_OPTIONS 258
-#define RID_SCDLG_SORT_WARNING
-*/
-
 #define TP_FIELDS           1
 #define TP_OPTIONS          2
 
@@ -63,8 +56,6 @@
 #define LB_SORT_USER        2
 #define LB_OUTAREA          3
 #define ED_OUTAREA          4
-//#define FT_AREA_LABEL       5
-//#define FT_AREA             6
 #define BTN_SORT_USER       7
 #define BTN_CASESENSITIVE   8
 #define BTN_LABEL           9
@@ -86,6 +77,3 @@
 #define BTN_EXTSORT         3
 #define BTN_CURSORT         4
 #define BTN_CANCEL          5
-
-
-

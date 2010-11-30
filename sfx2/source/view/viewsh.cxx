@@ -277,11 +277,11 @@ static ::rtl::OUString impl_retrieveFilterNameFromTypeAndModule(
     {
         ::comphelper::SequenceAsHashMap aFilterPropsHM( xEnumeration->nextElement() );
         ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString::createFromAscii( "Name" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                     ::rtl::OUString() );
 
         sal_Int32 nFilterFlags = aFilterPropsHM.getUnpackedValueOrDefault(
-                                    ::rtl::OUString::createFromAscii( "Flags" ),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),
                                     sal_Int32( 0 ) );
 
         if ( nFilterFlags & nFlags )
@@ -307,7 +307,7 @@ enum ETypeFamily
 ::rtl::OUString impl_searchFormatTypeForApp(const css::uno::Reference< css::frame::XFrame >& xFrame     ,
                                                   ETypeFamily                                eTypeFamily)
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
 
     try
     {
@@ -639,7 +639,7 @@ void SfxViewShell::ExecMisc_Impl( SfxRequest &rReq )
                 }
 
                 ::com::sun::star::uno::Reference< XSystemShellExecute > xSystemShellExecute( xSMGR->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
                     css::uno::UNO_QUERY );
 
                 BOOL bRet( TRUE );

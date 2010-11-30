@@ -63,7 +63,10 @@ CXXFILES = \
 
 
 SLOFILES =	\
-        $(SLO)$/textapi.obj \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/scrptfld.obj
+
+EXCEPTIONSFILES = \
         $(SLO)$/authfld.obj \
         $(SLO)$/cellfml.obj \
         $(SLO)$/chpfld.obj \
@@ -76,17 +79,12 @@ SLOFILES =	\
         $(SLO)$/flddat.obj \
         $(SLO)$/flddropdown.obj \
         $(SLO)$/fldlst.obj \
-        $(SLO)$/scrptfld.obj \
         $(SLO)$/macrofld.obj \
         $(SLO)$/postithelper.obj \
         $(SLO)$/reffld.obj \
         $(SLO)$/tblcalc.obj \
+        $(SLO)$/textapi.obj \
         $(SLO)$/usrfld.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/flddropdown.obj \
-        $(SLO)$/postithelper.obj \
-        $(SLO)$/docufld.obj 
 
 # --- Tagets -------------------------------------------------------
 

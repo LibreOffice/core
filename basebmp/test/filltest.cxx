@@ -45,21 +45,12 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
-#include <basebmp/debug.hxx>
 #include "tools.hxx"
-
-#include <iostream>
-#include <fstream>
 
 using namespace ::basebmp;
 
 namespace
 {
-/*
-  std::ofstream output("32bpp_test.dump");
-  debugDump( mpDevice32bpp, output );
-*/
-
 class FillTest : public CppUnit::TestFixture
 {
 private:
@@ -168,8 +159,7 @@ private:
         CPPUNIT_ASSERT_MESSAGE("bottom-middle pixel set",
                                rDevice->getPixel(aPt4) == aCol);
 
-        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
-            "m 0 0l7 7h-1z" );
+        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0l7 7h-1z" ));
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
@@ -269,15 +259,7 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
-// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(FillTest);
 }
-
-
-// -----------------------------------------------------------------------------
-
-// this macro creates an empty function, which will called by the RegisterAllFunctions()
-// to let the user the possibility to also register some functions by hand.
-//NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

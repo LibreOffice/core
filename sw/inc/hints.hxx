@@ -196,10 +196,10 @@ public:
 
     USHORT Count() const { return pChgSet->Count(); }
     void ClearItem( USHORT nWhichL = 0 )
-#ifndef DBG_UTIL
-    { pChgSet->ClearItem( nWhichL ); }
-#else
+#if OSL_DEBUG_LEVEL > 1
         ;
+#else
+    { pChgSet->ClearItem( nWhichL ); }
 #endif
 };
 

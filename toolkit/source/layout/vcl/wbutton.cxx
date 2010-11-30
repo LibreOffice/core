@@ -166,9 +166,9 @@ bool Button::SetModeImage (Image const& image)
     return getImpl().SetModeImage (image.getImpl().mxGraphic);
 }
 
-bool Button::SetModeImage (::Image const& image, BmpColorMode mode)
+bool Button::SetModeImage (::Image const& image)
 {
-    return GetButton ()->SetModeImage (image, mode);
+    return GetButton ()->SetModeImage (image);
 }
 
 void Button::SetImageAlign( ImageAlign eAlign )
@@ -507,8 +507,8 @@ public:
           // TODO: i18n
           // Button::GetStandardText( BUTTON_ADVANCED );
           // Button::GetStandardText( BUTTON_SIMPLE );
-        , mAdvancedLabel( rtl::OUString::createFromAscii( "Advanced..." ) )
-        , mSimpleLabel( rtl::OUString::createFromAscii( "Simple..." ) )
+        , mAdvancedLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Advanced...")) )
+        , mSimpleLabel( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Simple...")) )
     {
     }
     void Click()

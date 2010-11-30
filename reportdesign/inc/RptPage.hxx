@@ -40,7 +40,6 @@ namespace rptui
 //============================================================================
 
 class OReportModel;
-//class OReportSection;
 
 class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
 {

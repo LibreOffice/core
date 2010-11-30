@@ -107,7 +107,6 @@ namespace offapp
 
     //--------------------------------------------------------------------
     DriverListControl::DriverListControl( Window* _pParent, const ResId& _rId)
-//      :DriverListControl_Base(_pParent, _rId, DBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HIDESELECT | BROWSER_CURSOR_WO_FOCUS)
         :DriverListControl_Base(_pParent, _rId, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL)
         ,m_aSeekRow(m_aSettings.end())
         ,m_sYes(ResId(STR_YES,*_rId.GetResMgr()))

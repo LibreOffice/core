@@ -237,7 +237,6 @@ rtl::OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException
     sal_Int32 wdSectionStart = word::WdSectionStart::wdSectionNewPage;
     uno::Reference< container::XNamed > xNamed( mxPageProps, uno::UNO_QUERY_THROW );
     rtl::OUString sStyleName = xNamed->getName();
-    //mxPageProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Name") ) ) >>= sStyleName;
     if( sStyleName.equalsAscii("Left Page") )
         wdSectionStart = word::WdSectionStart::wdSectionEvenPage;
     else if( sStyleName.equalsAscii("Right Page") )

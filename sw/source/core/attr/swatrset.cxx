@@ -158,7 +158,7 @@ USHORT SwAttrSet::ClearItem_BC( USHORT nWhich,
 USHORT SwAttrSet::ClearItem_BC( USHORT nWhich1, USHORT nWhich2,
                         SwAttrSet* pOld, SwAttrSet* pNew )
 {
-    ASSERT( nWhich1 <= nWhich2, "kein gueltiger Bereich" );
+    OSL_ENSURE( nWhich1 <= nWhich2, "kein gueltiger Bereich" );
     pNewSet = pNew;
     pOldSet = pOld;
     USHORT nRet = 0;
@@ -383,9 +383,9 @@ void SwAttrSet::CopyToModify( SwModify& rMod ) const
             // <--
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
-        ASSERT( !this, "weder Format noch ContentNode - keine Attribute kopiert");
+        OSL_ENSURE( !this, "weder Format noch ContentNode - keine Attribute kopiert");
 #endif
 }
 

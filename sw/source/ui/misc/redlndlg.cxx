@@ -322,10 +322,6 @@ void SwRedlineAcceptDlg::InitAuthors()
         if( bOnlyFormatedRedlines && nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType() )
             bOnlyFormatedRedlines = FALSE;
 
-//JP 27.9.2001: make no sense if we handle readonly sections
-//      if( !bHasReadonlySel && rRedln.HasReadonlySel() )
-//          bHasReadonlySel = TRUE;
-
         String *pAuthor = new String(rRedln.GetAuthorString());
         if (!aStrings.Insert(pAuthor))
             delete pAuthor;
@@ -426,12 +422,6 @@ void SwRedlineAcceptDlg::Activate()
 
     if (!pView) // Kann passieren, wenn man auf eine andere App umschaltet, wenn
         return; // vorher eine Listbox im Dialog den Focus hatte (eigentlich THs Bug)
-
-/*  if (HasRedlineAutoFmt())
-    {
-        Init();
-        return;
-    }*/
 
     // Hat sich was geaendert?
     SwWrtShell* pSh = pView->GetWrtShellPtr();
@@ -984,7 +974,6 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
 
     BOOL bIsNotFormated = FALSE;
     BOOL bSel = FALSE;
-//  BOOL bReadonlySel = FALSE;
 
     //#98883# don't select redlines while the dialog is not focussed
     //#107938# But not only ask pTable if it has the focus. To move
@@ -1024,10 +1013,6 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
 
                 const SwRedline& rRedln = pSh->GetRedline( nPos );
                 bIsNotFormated |= nsRedlineType_t::REDLINE_FORMAT != rRedln.GetType();
-
-//JP 27.9.2001: make no sense if we handle readonly sections
-//          if( !bReadonlySel && rRedln.HasReadonlySel() )
-//              bReadonlySel = TRUE;
 
                 if (pSh->GotoRedline(nPos, TRUE))
                 {

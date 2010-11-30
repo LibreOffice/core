@@ -41,7 +41,7 @@ namespace com { namespace sun { namespace star { namespace i18n {
 CharacterClassificationImpl::CharacterClassificationImpl(
         const Reference < lang::XMultiServiceFactory >& rxMSF ) : xMSF( rxMSF )
 {
-        if (createLocaleSpecificCharacterClassification(OUString::createFromAscii("Unicode"), Locale()))
+        if (createLocaleSpecificCharacterClassification(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")), Locale()))
             xUCI = cachedItem->xCI;
 }
 
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClas
         }
 
         Reference < XInterface > xI = xMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.i18n.CharacterClassification_") + serviceName);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification_")) + serviceName);
 
         Reference < XCharacterClassification > xCI;
         if ( xI.is() ) {
@@ -178,7 +178,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             }
 
             static sal_Unicode under = (sal_Unicode)'_';
-            static OUString tw(OUString::createFromAscii("TW"));
+            static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
             sal_Int32 l = rLocale.Language.getLength();
             sal_Int32 c = rLocale.Country.getLength();
             sal_Int32 v = rLocale.Variant.getLength();
@@ -203,7 +203,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
                     createLocaleSpecificCharacterClassification(rLocale.Language, rLocale))) {
                 return cachedItem->xCI;
             } else if (xUCI.is()) {
-                lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, OUString::createFromAscii("Unicode"), xUCI) );
+                lookupTable.push_back( cachedItem = new lookupTableItem(rLocale, OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")), xUCI) );
                 return cachedItem->xCI;
             }
         }

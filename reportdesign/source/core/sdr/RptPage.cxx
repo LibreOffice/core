@@ -92,7 +92,7 @@ ULONG OReportPage::getIndexOf(const uno::Reference< report::XReportComponent >& 
         {
             break;
         }
-    } // for (; i < nCount; ++i)
+    }
     return i;
 }
 //----------------------------------------------------------------------------
@@ -106,7 +106,7 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
         OSL_ENSURE(pBase,"Why is this not a OObjectBase?");
         if ( pBase )
             pBase->EndListening();
-        /*delete */RemoveObject(nPos);
+        RemoveObject(nPos);
     }
 }
 // -----------------------------------------------------------------------------
@@ -132,26 +132,11 @@ SdrObject* OReportPage::RemoveObject(ULONG nObjNum)
     return pObj;
 }
 //----------------------------------------------------------------------------
-//namespace
-//{
-//  ::rtl::OUString lcl_getControlName(const uno::Reference< lang::XServiceInfo >& _xServiceInfo)
-//  {
-//      if ( _xServiceInfo->supportsService( SERVICE_FIXEDTEXT ))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
-//        if ( _xServiceInfo->supportsService( SERVICE_FORMATTEDFIELD ))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FormattedField"));
-//      if ( _xServiceInfo->supportsService( SERVICE_IMAGECONTROL))
-//          return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.DatabaseImageControl"));
-//
-//      return ::rtl::OUString();
-//  }
-//}
-//----------------------------------------------------------------------------
 void OReportPage::insertObject(const uno::Reference< report::XReportComponent >& _xObject)
 {
     DBG_CHKTHIS( rpt_OReportPage,NULL);
     OSL_ENSURE(_xObject.is(),"Object is not valid to create a SdrObject!");
-    if ( !_xObject.is() ) // || !m_pView )
+    if ( !_xObject.is() )
         return;
     ULONG nPos = getIndexOf(_xObject);
     if ( nPos < GetObjCount() )
@@ -231,14 +216,6 @@ void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertRe
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
     pSection->notifyElementAdded(xShape);
-
-    //// check if we are a shape
-    //uno::Reference<beans::XPropertySet> xProp(xShape,uno::UNO_QUERY);
-    //if ( xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID"))) )
-    //{
-    //    // use MimeConfigurationHelper::GetStringClassIDRepresentation(MimeConfigurationHelper::GetSequenceClassID(SO3_SCH_OLE_EMBED_CLASSID_8))
-    //    xProp->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CLSID")),uno::makeAny(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("12dcae26-281f-416f-a234-c3086127382e"))));
-    //}
 
     // now that the shape is inserted into its structures, we can allow the OObjectBase
     // to release the reference to it

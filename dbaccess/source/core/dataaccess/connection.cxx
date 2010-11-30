@@ -88,7 +88,7 @@ namespace dbaccess
 rtl::OUString OConnection::getImplementationName(  ) throw(RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dataaccess", "Ocke.Janssen@sun.com", "OConnection::getImplementationName" );
-    return rtl::OUString::createFromAscii("com.sun.star.comp.dbaccess.Connection");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbaccess.Connection"));
 }
 
 sal_Bool OConnection::supportsService( const ::rtl::OUString& _rServiceName ) throw (RuntimeException)

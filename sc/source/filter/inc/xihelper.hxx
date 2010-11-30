@@ -30,6 +30,8 @@
 #define SC_XIHELPER_HXX
 
 #include <editeng/editdata.hxx>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "scmatrix.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
@@ -111,7 +113,7 @@ class EditTextObject;
 /** This class provides methods to convert an XclImpString.
     @The string can be converted to an edit engine text object or directly
     to a Calc edit cell. */
-class XclImpStringHelper : ScfNoInstance
+class XclImpStringHelper : boost::noncopyable
 {
 public:
     /** Returns a new edit engine text object.
@@ -126,6 +128,11 @@ public:
                             const XclImpRoot& rRoot,
                             const XclImpString& rString,
                             sal_uInt16 nXFIndex = 0 );
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpStringHelper();
 };
 
 // Header/footer conversion ===================================================
@@ -165,7 +172,7 @@ struct XclFontData;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclImpHFConverter : protected XclImpRoot, ScfNoCopy
+class XclImpHFConverter : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpHFConverter( const XclImpRoot& rRoot );
@@ -188,7 +195,7 @@ private:    // types
     /** Contains all information about a header/footer portion. */
     struct XclImpHFPortionInfo
     {
-        typedef ScfRef< EditTextObject > EditTextObjectRef;
+        typedef boost::shared_ptr< EditTextObject > EditTextObjectRef;
         EditTextObjectRef   mxObj;          /// Edit engine text object.
         ESelection          maSel;          /// Edit engine selection.
         sal_Int32           mnHeight;       /// Height of previous lines in twips.
@@ -250,7 +257,7 @@ private:
 /** This class contains static methods to decode an URL stored in an Excel file.
     @descr  Excel URLs can contain a sheet name, for instance: path\[test.xls]Sheet1
     This sheet name will be extracted automatically. */
-class XclImpUrlHelper : ScfNoInstance
+class XclImpUrlHelper : boost::noncopyable
 {
 public:
     /** Decodes an encoded external document URL with optional sheet name.
@@ -280,6 +287,12 @@ public:
         For OLE object links: Decodes to class name and document URL.
         @return  true = decoding was successful, returned strings are valid (not empty). */
     static bool         DecodeLink( String& rApplic, String& rTopic, const String rEncUrl );
+
+private:
+    /** We don't want anybody to instantiate this class, since it is just a
+        collection of static methods. To enforce this, the default constructor
+        is made private */
+    XclImpUrlHelper();
 };
 
 // Cached values ==============================================================
@@ -288,7 +301,7 @@ class ScTokenArray;
 
 /** This class stores one cached value of a cached value list (used for instance in
     CRN, EXTERNNAME, tArray). */
-class XclImpCachedValue : ScfNoCopy
+class XclImpCachedValue : boost::noncopyable
 {
 public:
     /** Creates a cached value and reads contents from stream and stores it with its array address. */

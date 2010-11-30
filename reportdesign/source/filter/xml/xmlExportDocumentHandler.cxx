@@ -168,7 +168,6 @@ void SAL_CALL ExportDocumentHandler::startElement(const ::rtl::OUString & _sName
         {
             { XML_TABLE, sdb::CommandType::TABLE },
             { XML_QUERY, sdb::CommandType::QUERY },
-            // { XML_COMMAND, CommandType::COMMAND }, // default
             { XML_TOKEN_INVALID, 0 }
         };
         if ( SvXMLUnitConverter::convertEnum( sValue, static_cast<sal_uInt16>(m_xDatabaseDataProvider->getCommandType()),aXML_CommnadTypeEnumMap ) )
@@ -415,7 +414,7 @@ void ExportDocumentHandler::exportTableRows()
                 bRemoveString = false;
                 pCellAtt->RemoveAttribute(sValueType);
                 pCellAtt->AddAttribute(sValueType,s_sFloat);
-            } // if ( i == 0 )
+            }
             m_xDelegatee->startElement(sP,NULL);
             m_xDelegatee->endElement(sP);
             m_xDelegatee->endElement(sCell);
@@ -447,7 +446,7 @@ void ExportDocumentHandler::exportTableRows()
         m_xDelegatee->endElement(sFtext);
         m_xDelegatee->endElement(sP);
         m_xDelegatee->endElement(sCell);
-    } // for(sal_Int32 i = 0; i < nCount ; ++i)
+    }
 
     m_xDelegatee->endElement(sRow);
 }

@@ -189,9 +189,9 @@ static void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
                         const uno::Sequence< rtl::OUString >& rServices )
                     throw( registry::InvalidRegistryException )
 {
-    rtl::OUString aImpl(rtl::OUString::createFromAscii( "/" ));
+    rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM( "/" ));
     aImpl += rImplementationName;
-    aImpl += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    aImpl += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
     uno::Reference<registry::XRegistryKey> xNewKey(pRegistryKey->createKey(aImpl));
 
     const rtl::OUString* pArray = rServices.getConstArray();
@@ -504,14 +504,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
 
 rtl::OUString ScSpreadsheetSettings::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScSpreadsheetSettings" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScSpreadsheetSettings" ));
 }
 
 uno::Sequence<rtl::OUString> ScSpreadsheetSettings::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCSPREADSHEETSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEETSETTINGS_SERVICE ));
     return aRet;
 }
 
@@ -767,14 +767,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
 
 rtl::OUString ScRecentFunctionsObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScRecentFunctionsObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScRecentFunctionsObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScRecentFunctionsObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCRECENTFUNCTIONSOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCRECENTFUNCTIONSOBJ_SERVICE ));
     return aRet;
 }
 
@@ -848,14 +848,14 @@ uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
 
 rtl::OUString ScFunctionListObj::getImplementationName_Static()
 {
-    return rtl::OUString::createFromAscii( "stardiv.StarCalc.ScFunctionListObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.StarCalc.ScFunctionListObj" ));
 }
 
 uno::Sequence<rtl::OUString> ScFunctionListObj::getSupportedServiceNames_Static()
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCFUNCTIONLISTOBJ_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCFUNCTIONLISTOBJ_SERVICE ));
     return aRet;
 }
 
@@ -868,21 +868,21 @@ static void lcl_FillSequence( uno::Sequence<beans::PropertyValue>& rSequence, co
 
     beans::PropertyValue* pArray = rSequence.getArray();
 
-    pArray[0].Name = rtl::OUString::createFromAscii( SC_UNONAME_ID );
+    pArray[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ID ));
     pArray[0].Value <<= (sal_Int32) rDesc.nFIndex;
 
-    pArray[1].Name = rtl::OUString::createFromAscii( SC_UNONAME_CATEGORY );
+    pArray[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_CATEGORY ));
     pArray[1].Value <<= (sal_Int32) rDesc.nCategory;
 
-    pArray[2].Name = rtl::OUString::createFromAscii( SC_UNONAME_NAME );
+    pArray[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_NAME ));
     if (rDesc.pFuncName)
         pArray[2].Value <<= rtl::OUString( *rDesc.pFuncName );
 
-    pArray[3].Name = rtl::OUString::createFromAscii( SC_UNONAME_DESCRIPTION );
+    pArray[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_DESCRIPTION ));
     if (rDesc.pFuncDesc)
         pArray[3].Value <<= rtl::OUString( *rDesc.pFuncDesc );
 
-    pArray[4].Name = rtl::OUString::createFromAscii( SC_UNONAME_ARGUMENTS );
+    pArray[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_UNONAME_ARGUMENTS ));
     if (rDesc.ppDefArgNames && rDesc.ppDefArgDescs && rDesc.pDefArgFlags )
     {
         USHORT nCount = rDesc.nArgCount;

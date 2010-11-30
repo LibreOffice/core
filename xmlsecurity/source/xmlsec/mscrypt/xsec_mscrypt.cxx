@@ -66,7 +66,7 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         // XMLSignature_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSignature_MSCryptImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -78,7 +78,7 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         // XMLEncryption_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLEncryption_MSCryptImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -90,7 +90,7 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         // XMLSecurityContext_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSecurityContext_MSCryptImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         // SecurityEnvironment_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += SecurityEnvironment_MSCryptImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL mscrypt_component_writeInfo( void* /*pServiceManager*/ , void*
         // SEInitializer_MSCryptImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += SEInitializer_MSCryptImpl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {

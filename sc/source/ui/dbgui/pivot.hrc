@@ -78,4 +78,3 @@
 #define PIVOTSTR_DEV2           9
 #define PIVOTSTR_VAR            10
 #define PIVOTSTR_VAR2           11
-

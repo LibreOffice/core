@@ -69,7 +69,7 @@ void SwAccessiblePage::GetStates(
     // FOCUSED
     if( IsSelected() )
     {
-        ASSERT( bIsSelected, "bSelected out of sync" );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
@@ -117,7 +117,7 @@ void SwAccessiblePage::_InvalidateFocus()
             osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
-        ASSERT( bSelected, "focus object should be selected" );
+        OSL_ENSURE( bSelected, "focus object should be selected" );
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );

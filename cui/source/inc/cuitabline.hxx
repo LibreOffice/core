@@ -174,8 +174,8 @@ private:
     ChangeType*         pnLineEndListState;
     ChangeType*         pnDashListState;
     ChangeType*         pnColorTableState;
-    UINT16             nPageType; //add CHINA001
-    UINT16             nDlgType; //add CHINA001
+    UINT16             nPageType;
+    UINT16             nDlgType;
     USHORT*             pPosDashLb;
     USHORT*             pPosLineEndLb;
 
@@ -190,7 +190,6 @@ private:
     DECL_STATIC_LINK( SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
     DECL_LINK( SizeHdl_Impl, MetricField * );
     DECL_LINK( RatioHdl_Impl, CheckBox * );
-    // <- Symbole
 
 #ifdef _SVX_TPLINE_CXX
     DECL_LINK( ClickInvisibleHdl_Impl, void * );
@@ -215,7 +214,6 @@ public:
 
     void    Construct();
 
-
     static  SfxTabPage* Create( Window*, const SfxItemSet& );
     static  USHORT*    GetRanges();
 
@@ -234,8 +232,8 @@ public:
     void    SetLineEndList( XLineEndList* pLneEndLst) { pLineEndList = pLneEndLst; }
     void    SetObjSelected( BOOL bHasObj ) { bObjSelected = bHasObj; }
 
-    void    SetPageType( UINT16 nInType ) { nPageType = nInType; }//CHINA001 void    SetPageType( USHORT* pInType ) { pPageType = pInType; }
-    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }    //CHINA001 void    SetDlgType( USHORT* pInType ) { pDlgType = pInType; }
+    void    SetPageType( UINT16 nInType ) { nPageType = nInType; }
+    void    SetDlgType( UINT16 nInType ) { nDlgType = nInType; }
     void    SetPosDashLb( USHORT* pInPos ) { pPosDashLb = pInPos; }
     void    SetPosLineEndLb( USHORT* pInPos ) { pPosLineEndLb = pInPos; }
 
@@ -243,7 +241,7 @@ public:
     void    SetDashChgd( ChangeType* pIn ) { pnDashListState = pIn; }
     void    SetColorChgd( ChangeType* pIn ) { pnColorTableState = pIn; }
 
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
 
@@ -425,7 +423,6 @@ public:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 };
-
 
 #endif // _CUI_TAB_LINE_HXX
 

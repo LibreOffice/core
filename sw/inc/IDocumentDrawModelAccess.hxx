@@ -54,13 +54,11 @@ public:
     virtual SdrLayerID GetInvisibleControlsId() const = 0;
 
     /** method to notify drawing page view about the invisible layers
-        OD 26.06.2003 #108784#
         @author OD
     */
     virtual void NotifyInvisibleLayers( SdrPageView& _rSdrPageView ) = 0;
 
     /** method to determine, if a layer ID belongs to the visible ones.
-        OD 25.06.2003 #108784#
         Note: If given layer ID is unknown, method asserts and returns <false>.
         @author OD
 
@@ -74,7 +72,6 @@ public:
 
     /** method to determine, if the corresponding visible layer ID for a invisible one.
 
-        OD 25.06.2003 #108784#
         Note: If given layer ID is a visible one, method returns given layer ID.
         Note: If given layer ID is unknown, method returns given layer ID.
 
@@ -90,7 +87,6 @@ public:
 
     /** method to determine, if the corresponding invisible layer ID for a visible one.
 
-        OD 25.06.2003 #108784#
         Note: If given layer ID is a invisible one, method returns given layer ID.
         Note: If given layer ID is unknown, method returns given layer ID.
 

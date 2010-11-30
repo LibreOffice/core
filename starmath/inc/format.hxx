@@ -104,14 +104,14 @@ String GetDefaultFontName( LanguageType nLang, USHORT nIdent );
 class SmFormat : public SfxBroadcaster
 {
     SmFace      vFont[FNT_END + 1];
-    BOOL        bDefaultFont[FNT_END + 1];
+    bool        bDefaultFont[FNT_END + 1];
     Size        aBaseSize;
     long        nVersion;
     USHORT      vSize[SIZ_END + 1];
     USHORT      vDist[DIS_END + 1];
     SmHorAlign  eHorAlign;
     INT16       nGreekCharStyle;
-    BOOL        bIsTextmode,
+    bool        bIsTextmode,
                 bScaleNormalBrackets;
 
 public:
@@ -122,11 +122,11 @@ public:
     void            SetBaseSize(const Size &rSize)  { aBaseSize = rSize; }
 
     const SmFace &  GetFont(USHORT nIdent) const { return vFont[nIdent]; }
-    void            SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault = FALSE);
+    void            SetFont(USHORT nIdent, const SmFace &rFont, bool bDefault = false);
     void            SetFontSize(USHORT nIdent, const Size &rSize)   { vFont[nIdent].SetSize( rSize ); }
 
-    void            SetDefaultFont(USHORT nIdent, BOOL bVal)    { bDefaultFont[nIdent] = bVal; }
-    BOOL            IsDefaultFont(USHORT nIdent) const   { return bDefaultFont[nIdent]; }
+    void            SetDefaultFont(USHORT nIdent, bool bVal)    { bDefaultFont[nIdent] = bVal; }
+    bool            IsDefaultFont(USHORT nIdent) const   { return bDefaultFont[nIdent]; }
 
     USHORT          GetRelSize(USHORT nIdent) const         { return vSize[nIdent]; }
     void            SetRelSize(USHORT nIdent, USHORT nVal)  { vSize[nIdent] = nVal;}
@@ -137,14 +137,14 @@ public:
     SmHorAlign      GetHorAlign() const             { return eHorAlign; }
     void            SetHorAlign(SmHorAlign eAlign)  { eHorAlign = eAlign; }
 
-    BOOL            IsTextmode() const     { return bIsTextmode; }
-    void            SetTextmode(BOOL bVal) { bIsTextmode = bVal; }
+    bool            IsTextmode() const     { return bIsTextmode; }
+    void            SetTextmode(bool bVal) { bIsTextmode = bVal; }
 
     INT16           GetGreekCharStyle() const     { return nGreekCharStyle; }
     void            SetGreekCharStyle(INT16 nVal) { nGreekCharStyle = nVal; }
 
-    BOOL            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
-    void            SetScaleNormalBrackets(BOOL bVal) { bScaleNormalBrackets = bVal; }
+    bool            IsScaleNormalBrackets() const     { return bScaleNormalBrackets; }
+    void            SetScaleNormalBrackets(bool bVal) { bScaleNormalBrackets = bVal; }
 
     long            GetVersion() const { return nVersion; }
 
@@ -153,8 +153,8 @@ public:
 
     SmFormat &      operator = (const SmFormat &rFormat);
 
-    BOOL            operator == (const SmFormat &rFormat) const;
-    inline BOOL     operator != (const SmFormat &rFormat) const;
+    bool            operator == (const SmFormat &rFormat) const;
+    inline bool     operator != (const SmFormat &rFormat) const;
 
     void RequestApplyChanges() const
     {
@@ -163,7 +163,7 @@ public:
 
 };
 
-inline BOOL    SmFormat::operator != (const SmFormat &rFormat) const
+inline bool    SmFormat::operator != (const SmFormat &rFormat) const
 {
     return !(*this == rFormat);
 }

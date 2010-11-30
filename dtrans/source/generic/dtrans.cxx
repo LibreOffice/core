@@ -61,7 +61,7 @@ sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegist
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii("/" CLIPBOARDMANAGER_IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("/" CLIPBOARDMANAGER_IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< OUString > & rSNL = ClipboardManager_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL component_writeInfo(void * /*pServiceManager*/, void * pRegist
                 xNewKey->createKey( pArray[nPos] );
 
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                OUString::createFromAscii("/" GENERIC_CLIPBOARD_IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("/" GENERIC_CLIPBOARD_IMPLEMENTATION_NAME "/UNO/SERVICES" )) );
 
             const Sequence< OUString > & rSNL2 = GenericClipboard_getSupportedServiceNames();
             pArray = rSNL2.getConstArray();

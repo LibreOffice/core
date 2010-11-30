@@ -126,13 +126,11 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
     nFnd      = nNext;
     nSavPtr   = nNext;
     aFieldName = aData.Copy( 0, nFnd );
-//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-//  aData.SetChar( nSavPtr, cLastChar );
 }
 
 
@@ -508,7 +506,7 @@ uno::Reference< text::XTextField > SwVbaFields::Create_Field_DocProperty( const 
         if( aDocProperty.EqualsIgnoreCaseAscii( pTable->sDocPropertyName ) )
         {
             if( pTable->sFieldService != NULL )
-                sFieldService = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( pTable->sFieldService ) );
+                sFieldService = rtl::OUString::createFromAscii(pTable->sFieldService);
             bCustom = sal_False;
             break;
         }

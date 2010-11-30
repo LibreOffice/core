@@ -733,7 +733,6 @@ void DbGridControl::NavigationBar::SetState(sal_uInt16 nWhich)
         // event (ImplGenerateMouseMove) even if nothing happened. This may lead to some unwanted effects, so we
         // do this check.
         // For further explanation see Bug 69900.
-        // FS - 18.11.99
         pWnd->Enable(bAvailable);
 }
 
@@ -1488,7 +1487,7 @@ void DbGridControl::setDataSource(const Reference< XRowSet >& _xCursor, sal_uInt
             // retrieve the datebase of the Numberformatter
             try
             {
-                xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString::createFromAscii("NullDate")) >>= m_aNullDate;
+                xSupplier->getNumberFormatSettings()->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= m_aNullDate;
             }
             catch(Exception&)
             {

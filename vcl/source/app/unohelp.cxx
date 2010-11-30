@@ -106,7 +106,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
         {
             pSVData->maAppData.mxMSF = ::cppu::createRegistryServiceFactory( aTempFileName, rtl::OUString(), sal_False );
             uno::Reference < registry::XImplementationRegistration > xReg(
-                pSVData->maAppData.mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )), uno::UNO_QUERY );
+                pSVData->maAppData.mxMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), uno::UNO_QUERY );
 
             if( xReg.is() )
             {
@@ -119,7 +119,7 @@ uno::Reference< lang::XMultiServiceFactory > vcl::unohelper::GetMultiServiceFact
                         try
                         {
                             xReg->registerImplementation(
-                                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),aComponentPathString, NULL );
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),aComponentPathString, NULL );
                         }
                         catch( ::com::sun::star::uno::Exception & )
                         {
@@ -145,7 +145,7 @@ uno::Reference < i18n::XBreakIterator > vcl::unohelper::CreateBreakIterator()
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XBreakIterator >*)0) );
@@ -161,7 +161,7 @@ uno::Reference < i18n::XCharacterClassification > vcl::unohelper::CreateCharacte
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")) );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCharacterClassification >*)0) );
@@ -177,7 +177,7 @@ uno::Reference < i18n::XCollator > vcl::unohelper::CreateCollator()
     uno::Reference< lang::XMultiServiceFactory > xMSF = GetMultiServiceFactory();
     if ( xMSF.is() )
     {
-        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) );
+        uno::Reference < uno::XInterface > xI = xMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) );
         if ( xI.is() )
         {
             uno::Any x = xI->queryInterface( ::getCppuType((const uno::Reference< i18n::XCollator >*)0) );

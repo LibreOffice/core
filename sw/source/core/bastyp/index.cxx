@@ -37,7 +37,7 @@
 #include "index.hxx"
 #include "error.h"              // fuers ASSERT
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 int SwIndex::nSerial = 0;
 #endif
 
@@ -53,7 +53,7 @@ TYPEINIT0(SwIndexReg);  // rtti
 
 void SwIndexReg::ChkArr()
 {
-    ASSERT( (pFirst && pLast) || (!pFirst && !pLast),
+    OSL_ENSURE( (pFirst && pLast) || (!pFirst && !pLast),
             "Array falsch Indiziert" );
 
     if( !pFirst )
@@ -61,15 +61,15 @@ void SwIndexReg::ChkArr()
 
     xub_StrLen nVal = 0;
     const SwIndex* pIdx = pFirst, *pPrev = 0;
-    ASSERT( !pIdx->pPrev, "Array-pFirst nicht am Anfang" );
+    OSL_ENSURE( !pIdx->pPrev, "Array-pFirst nicht am Anfang" );
 
     while( pIdx != pLast )
     {
-        ASSERT( pIdx->pPrev != pIdx && pIdx->pNext != pIdx,
-                "Index zeigt auf sich selbst" )
+        OSL_ENSURE( pIdx->pPrev != pIdx && pIdx->pNext != pIdx,
+                "Index zeigt auf sich selbst" );
 
-        ASSERT( pIdx->nIndex >= nVal, "Reihenfolge stimmt nicht" );
-        ASSERT( pPrev == pIdx->pPrev, "Verkettung stimmt nicht" );
+        OSL_ENSURE( pIdx->nIndex >= nVal, "Reihenfolge stimmt nicht" );
+        OSL_ENSURE( pPrev == pIdx->pPrev, "Verkettung stimmt nicht" );
         pPrev = pIdx;
         pIdx = pIdx->pNext;
         nVal = pPrev->nIndex;
@@ -101,7 +101,7 @@ SwIndex::SwIndex(SwIndexReg *const pArr, xub_StrLen const nIdx)
     else
         ChgValue( *pArray->pFirst, nIdx );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -113,7 +113,7 @@ SwIndex::SwIndex( const SwIndex& rIdx, short nIdx )
 {
     ChgValue( rIdx, rIdx.nIndex + nIdx );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -124,7 +124,7 @@ SwIndex::SwIndex( const SwIndex& rIdx )
     : nIndex( rIdx.nIndex ), pArray( rIdx.pArray ), pNext( 0 ), pPrev( 0 )
 {
     ChgValue( rIdx, rIdx.nIndex );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 IDX_CHK_ARRAY
@@ -321,7 +321,7 @@ SwIndexReg::SwIndexReg()
 
 SwIndexReg::~SwIndexReg()
 {
-    ASSERT( !pFirst || !pLast, "Es sind noch Indizies angemeldet" );
+    OSL_ENSURE( !pFirst || !pLast, "Es sind noch Indizies angemeldet" );
 }
 
 
@@ -369,7 +369,7 @@ void SwIndexReg::Update( SwIndex const & rIdx, const xub_StrLen nDiff,
 ARR_CHK_ARRAY
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #ifndef CFRONT
 
 /*************************************************************************
@@ -505,7 +505,7 @@ xub_StrLen SwIndex::operator-=( const SwIndex & rIndex )
 
 BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 {
-    ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
+    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex < rIndex.nIndex;
 }
 
@@ -521,7 +521,7 @@ BOOL SwIndex::operator<( const SwIndex & rIndex ) const
 
 BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 {
-    ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
+    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex <= rIndex.nIndex;
 }
 
@@ -537,7 +537,7 @@ BOOL SwIndex::operator<=( const SwIndex & rIndex ) const
 
 BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 {
-    ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
+    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex > rIndex.nIndex;
 }
 
@@ -553,7 +553,7 @@ BOOL SwIndex::operator>( const SwIndex & rIndex ) const
 
 BOOL SwIndex::operator>=( const SwIndex & rIndex ) const
 {
-    ASSERT( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
+    OSL_ENSURE( pArray == rIndex.pArray, "Attempt to compare indices into different arrays.");
     return nIndex >= rIndex.nIndex;
 }
 

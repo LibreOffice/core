@@ -419,7 +419,7 @@ String impl_getFilter( const String& _rURL )
     {
         css::uno::Reference< ::com::sun::star::document::XTypeDetection > xTypeDetection(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection") ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection")) ),
                 css::uno::UNO_QUERY );
         if ( xTypeDetection.is() )
         {
@@ -436,7 +436,7 @@ String impl_getFilter( const String& _rURL )
                 {
                     ::comphelper::SequenceAsHashMap lTypeProps( xTypeCont->getByName( sType ) );
                     sFilter = lTypeProps.getUnpackedValueOrDefault(
-                        ::rtl::OUString::createFromAscii("PreferredFilter"), ::rtl::OUString() );
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PreferredFilter")), ::rtl::OUString() );
                 }
             }
         }

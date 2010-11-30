@@ -93,7 +93,6 @@ void OScrollWindowHelper::impl_initScrollBar( ScrollBar& _rScrollBar ) const
     aStyle.SetDragFullOptions( aStyle.GetDragFullOptions() | DRAGFULL_OPTION_SCROLL ); // live scrolling
     aSettings.SetStyleSettings( aStyle );
     _rScrollBar.SetSettings( aSettings );
-    //_rScrollBar.SetMapMode( MapMode( MAP_100TH_MM ) );
 
     _rScrollBar.SetScrollHdl( LINK( this, OScrollWindowHelper, ScrollHdl ) );
     _rScrollBar.SetLineSize( SCR_LINE_SIZE );
@@ -359,7 +358,6 @@ void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,boo
 void OScrollWindowHelper::ImplInitSettings()
 {
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
-    // SetBackground( Wallpaper( COL_LIGHTRED ));
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }

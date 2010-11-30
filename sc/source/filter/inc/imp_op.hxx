@@ -39,6 +39,7 @@
 #include "otlnbuff.hxx"
 #include "colrowst.hxx"
 #include "excdefs.hxx"
+#include <boost/shared_ptr.hpp>
 
 
 class SfxItemSet;
@@ -78,8 +79,8 @@ public:
     void                Convert();
 
 private:
-    typedef ScfRef< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
-    typedef ScfRef< XclImpColRowSettings > XclImpColRowSettRef;
+    typedef boost::shared_ptr< XclImpOutlineBuffer >  XclImpOutlineBfrRef;
+    typedef boost::shared_ptr< XclImpColRowSettings > XclImpColRowSettRef;
 
     XclImpOutlineBfrRef mxColOutlineBuff;
     XclImpOutlineBfrRef mxRowOutlineBuff;

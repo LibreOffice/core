@@ -308,7 +308,7 @@ Sequence<PluginDescription> XPluginManager_Impl::impl_getPluginDescriptions() th
         // create return value
         aDescriptions = Sequence<PluginDescription>( aPlugins.size() );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "found %d plugins\n", aPlugins.size() );
+        fprintf( stderr, "found %" SAL_PRI_SIZET "u plugins\n", aPlugins.size() );
 #endif
         list<PluginDescription*>::iterator iter;
         for( iter = aPlugins.begin(), i=0; iter != aPlugins.end(); ++iter ,i++ )

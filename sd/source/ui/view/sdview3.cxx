@@ -165,30 +165,6 @@ bool View::InsertMetaFile( TransferableDataHelper& rDataHelper, const Point& rPo
     if( !rDataHelper.GetGDIMetaFile( FORMAT_GDIMETAFILE, aMtf ) )
         return false;
 
-/*
-SvFileStream    aSvOutputStream( String( RTL_CONSTASCII_USTRINGPARAM( "/tmp/test.png" ) ), STREAM_WRITE | STREAM_TRUNC );
-Graphic         aMtfGraphic( aMtf );
-Size            aPreviewSizePixel( OutputDevice::LogicToLogic( aMtf.GetPrefSize(), aMtf.GetPrefMapMode(), MAP_PIXEL ) );
-
-if( aPreviewSizePixel.Width() && aPreviewSizePixel.Height() )
-{
-    const double fWH = static_cast< double >( aPreviewSizePixel.Width() ) / static_cast< double >( aPreviewSizePixel.Height() );
-
-    if( fWH <= 1.0 )
-        aPreviewSizePixel.Width() = static_cast< long >( 128.0 * fWH ), aPreviewSizePixel.Height() = 128;
-    else
-        aPreviewSizePixel.Width() = 128, aPreviewSizePixel.Height() = static_cast< long >( 128.0 / fWH );
-
-    if( GraphicConverter::Export( aSvOutputStream, aMtfGraphic.GetBitmapEx( &aPreviewSizePixel ), CVT_PNG ) )
-    {
-        // handle errror case here
-    }
-    else
-    {
-        // Success
-    }
-}
-*/
     bool bVector = false;
     Graphic aGraphic;
 

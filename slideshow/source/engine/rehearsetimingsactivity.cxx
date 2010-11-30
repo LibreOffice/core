@@ -71,7 +71,7 @@ public:
                  ActivitySharedPtr const&                                 rActivity,
                  ActivitiesQueue &                                        rActivityQueue ) :
 #if OSL_DEBUG_LEVEL > 1
-        Event(::rtl::OUString::createFromAscii("WakeupEvent")),
+        Event(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WakeupEvent"))),
 #endif
         maTimer(pTimeBase),
         mnNextTime(0.0),

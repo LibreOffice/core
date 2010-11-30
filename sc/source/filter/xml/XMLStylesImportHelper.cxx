@@ -578,7 +578,7 @@ void ScMyStylesImportHelper::AddCell(const com::sun::star::table::CellAddress& r
 
 void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(rImport);
     ScMyStylesSet::iterator aItr(aCellStyles.begin());
     ScMyStylesSet::iterator aEndItr(aCellStyles.end());
     while (aItr != aEndItr)
@@ -586,12 +586,11 @@ void ScMyStylesImportHelper::InsertRow(const sal_Int32 nRow, const sal_Int32 nTa
         aItr->xRanges->InsertRow(nRow, nTab, pDoc);
         ++aItr;
     }
-    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTab, ScDocument* pDoc)
 {
-    rImport.LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(rImport);
     ScMyStylesSet::iterator aItr(aCellStyles.begin());
     ScMyStylesSet::iterator aEndItr(aCellStyles.end());
     while (aItr != aEndItr)
@@ -599,7 +598,6 @@ void ScMyStylesImportHelper::InsertCol(const sal_Int32 nCol, const sal_Int32 nTa
         aItr->xRanges->InsertCol(nCol, nTab, pDoc);
         ++aItr;
     }
-    rImport.UnlockSolarMutex();
 }
 
 void ScMyStylesImportHelper::EndTable()

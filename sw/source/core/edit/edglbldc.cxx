@@ -85,7 +85,7 @@ USHORT SwEditShell::GetGlobalDocContent( SwGlblDocContents& rArr ) const
             {
             case TOX_HEADER_SECTION:    break;      // ignore
             case TOX_CONTENT_SECTION:
-                ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+                OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
                 pNew = new SwGlblDocContent( (SwTOXBaseSection*)pSect );
                 break;
 

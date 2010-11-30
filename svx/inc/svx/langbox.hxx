@@ -68,7 +68,6 @@ public:
 private:
     Image                   m_aNotCheckedImage;
     Image                   m_aCheckedImage;
-    Image                   m_aCheckedImageHC;
     String                  m_aAllString;
     com::sun::star::uno::Sequence< INT16 >  *m_pSpellUsedLang;
     SvtLanguageTable*       m_pLangTable;

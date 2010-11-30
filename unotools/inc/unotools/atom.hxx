@@ -34,9 +34,7 @@
 #include <cppuhelper/implbase1.hxx>
 
 #include <hash_map>
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #include <com/sun/star/util/XAtomServer.hpp>
 
 #define INVALID_ATOM 0

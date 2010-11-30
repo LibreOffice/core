@@ -376,7 +376,7 @@ findAndRemove( const char *pAttr, PropList &rProps, OUString &rValue )
     for ( it = rProps.begin(); it != rProps.end(); it++ )
     {
         if ( it->first.equalsIgnoreAsciiCase( aName )
-             || it->first.equalsIgnoreAsciiCase( OUString::createFromAscii ("_") + aName ) )
+             || it->first.equalsIgnoreAsciiCase( OUString(RTL_CONSTASCII_USTRINGPARAM ("_")) + aName ) )
         {
             rValue = it->second;
             rProps.erase( it );

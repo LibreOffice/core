@@ -120,9 +120,6 @@ void OXMLSubDocument::EndElement()
         m_xComponent.set(m_pContainer->getSection()->getByIndex(m_nCurrentCount),uno::UNO_QUERY);
         if ( m_xComponent.is() )
         {
-            // #i94115# this is no longer need.
-            // m_pContainer->addCell(m_xComponent.get());
-
             if ( !m_aMasterFields.empty() )
                 m_xComponent->setMasterFields(Sequence< ::rtl::OUString>(&*m_aMasterFields.begin(),m_aMasterFields.size()));
             if ( !m_aDetailFields.empty() )
@@ -143,7 +140,7 @@ void OXMLSubDocument::EndElement()
                         uno::Reference< report::XFormatCondition > xNewCond = xComponentModel->createFormatCondition();
                         ::comphelper::copyProperties(xCond.get(),xNewCond.get());
                         xComponentModel->insertByIndex(xComponentModel->getCount(),uno::makeAny(xNewCond));
-                    } // for (sal_Int32 i = 0; i < nCount ; ++i)
+                    }
                 }
                 catch(uno::Exception&)
                 {

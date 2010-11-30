@@ -240,10 +240,6 @@ $(DESTDIRSETTINGS)/dk.mk : dk.mk
     -$(MKDIRHIER) $(@:d)
     tr -d "\015" < dk.mk | sed -e 's/@@RELEASE@@/$(PRODUCT_RELEASE)/' -e 's/@@BUILDID@@/$(RSCREVISION)/'> $@
 
-$(CONVERTTAGFLAG) : $(DOCUHTMLFILES)
-#    $(PERL) $(CONVERTTAGSCRIPT) 1 "$(TITLE)" "$(OFFICEPRODUCTNAME)" $(DOCUHTMLFILES)
-    @echo "tags converted" > $@
-
 $(IDL_DOCU_CLEANUP_FLAG) : $(IDL_CHAPTER_REFS) $(PRJ)/docs/common/ref/idl.css $(DESTIDLLIST)
     @@-$(MY_DELETE_RECURSIVE) $(DESTDIRGENIDLREF)
     $(TOUCH) $@

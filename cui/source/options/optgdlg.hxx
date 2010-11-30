@@ -165,9 +165,7 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
-/* -----------------------------23.11.00 13:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct LanguageConfig_Impl;
 class OfaLanguagesTabPage : public SfxTabPage
 {

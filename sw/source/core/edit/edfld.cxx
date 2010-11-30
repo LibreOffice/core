@@ -267,7 +267,7 @@ void SwEditShell::Insert2(SwField& rFld, const bool bForceExpandHints)
 
     FOREACHPAM_START(this)                      // fuer jeden PaM
         bool bSuccess(GetDoc()->InsertPoolItem(*PCURCRSR, aFld, nInsertFlags));
-        ASSERT( bSuccess, "Doc->Insert(Field) failed");
+        OSL_ENSURE( bSuccess, "Doc->Insert(Field) failed");
         (void) bSuccess;
     FOREACHPAM_END()                      // fuer jeden PaM
 
@@ -376,11 +376,6 @@ void SwEditShell::UpdateFlds( SwField &rFld )
         SwTxtFld *pTxtFld;
         SwFmtFld *pFmtFld;
 
-//      if( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark() &&
-//          ( 0 != ( pTxtFld = GetDocTxtFld( pCrsr->Start() ) ) ||
-//            0 != ( pTxtFld = lcl_FindInputFld( GetDoc(), rFld ) ) ) &&
-//          ( pFmtFld = (SwFmtFld*)&pTxtFld->GetFld())->GetFld()
-//              ->GetTyp()->Which() == rFld.GetTyp()->Which() )
         if ( pCrsr->GetNext() == pCrsr && !pCrsr->HasMark())
         {
             pTxtFld = GetDocTxtFld(pCrsr->Start());
@@ -553,16 +548,12 @@ BOOL SwEditShell::IsLabelDoc() const
 {
     return getIDocumentSettingAccess()->get(IDocumentSettingAccess::LABEL_DOCUMENT);
 }
-/* -----------------------------21.12.99 12:53--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwEditShell::ChangeAuthorityData(const SwAuthEntry* pNewData)
 {
     GetDoc()->ChangeAuthorityData(pNewData);
 }
-/* -----------------------------03.08.2001 12:04------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwEditShell::IsAnyDatabaseFieldInDoc()const
 {
     const SwFldTypes * pFldTypes = GetDoc()->GetFldTypes();

@@ -168,7 +168,7 @@ private:
 
 CTransferable::CTransferable( ) :
     m_FlavorList( 1 ),
-    m_Data( OUString::createFromAscii( "Ich habe mir ein neues Fahrrad gekauft!" ) )
+    m_Data( OUString(RTL_CONSTASCII_USTRINGPARAM("Ich habe mir ein neues Fahrrad gekauft!")) )
 {
     DataFlavor df;
 

@@ -32,7 +32,7 @@
 #include "sbcomp.hxx"
 #include "expr.hxx"
 
-// Umsetztabelle fuer Token-Operatoren und Opcodes
+// Transform table for token operators and opcodes
 
 typedef struct {
         SbiToken  eTok;                 // Token
@@ -65,7 +65,7 @@ static OpTable aOpTable [] = {
     { IS,   _IS },
     { NIL,  _NOP }};
 
-// Ausgabe eines Elements
+// Output of an element
 void SbiExprNode::Gen( RecursiveMode eRecMode )
 {
     if( IsConstant() )
@@ -109,10 +109,10 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
                     eOp = aVar.pDef->IsGlobal() ? _FIND_G : _FIND;
             }
         }
-        // AB: 17.12.1995, Spezialbehandlung fuer WITH
+        // From 1995-12-17, special treatment for WITH
         else if( (pWithParent_ = GetWithParent()) != NULL )
         {
-            eOp = _ELEM;            // .-Ausdruck in WITH
+            eOp = _ELEM;            // .-Term in in WITH
         }
         else
         {
@@ -163,7 +163,7 @@ void SbiExprNode::Gen( RecursiveMode eRecMode )
     }
 }
 
-// Ausgabe eines Operanden-Elements
+// Output of an operand element
 
 void SbiExprNode::GenElement( SbiOpcode eOp )
 {
@@ -172,11 +172,11 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
         pGen->GetParser()->Error( SbERR_INTERNAL_ERROR, "Opcode" );
 #endif
     SbiSymDef* pDef = aVar.pDef;
-    // Das ID ist entweder die Position oder das String-ID
-    // Falls das Bit 0x8000 gesetzt ist, hat die Variable
-    // eine Parameterliste.
+    // The ID is either the position or the String-ID
+    // If the bit Bit 0x8000 is set, the variable have
+    // a parameter list.
     USHORT nId = ( eOp == _PARAM ) ? pDef->GetPos() : pDef->GetId();
-    // Parameterliste aufbauen
+    // Build a parameter list
     if( aVar.pPar && aVar.pPar->GetSize() )
     {
         nId |= 0x8000;
@@ -198,16 +198,16 @@ void SbiExprNode::GenElement( SbiOpcode eOp )
     }
 }
 
-// Erzeugen einer Argv-Tabelle
-// Das erste Element bleibt immer frei fuer Returnwerte etc.
-// Siehe auch SbiProcDef::SbiProcDef() in symtbl.cxx
+// Create an Argv-Table
+// The first element remain available for return value etc.
+// See as well SbiProcDef::SbiProcDef() in symtbl.cxx
 
 void SbiExprList::Gen()
 {
     if( pFirst )
     {
         pParser->aGen.Gen( _ARGC );
-        // AB 10.1.96: Typ-Anpassung bei DECLARE
+        // From 1996-01-10: Type adjustment at DECLARE
         USHORT nCount = 1 /*, nParAnz = 0*/;
 //      SbiSymPool* pPool = NULL;
         for( SbiExpression* pExpr = pFirst; pExpr; pExpr = pExpr->pNext,nCount++ )
@@ -220,13 +220,13 @@ void SbiExprList::Gen()
                 pParser->aGen.Gen( _ARGN, nSid );
 
                 /* TODO: Check after Declare concept change
-                // AB 10.1.96: Typanpassung bei named -> passenden Parameter suchen
+                // From 1996-01-10: Type adjustment at named -> search suitable parameter
                 if( pProc )
                 {
-                    // Vorerst: Error ausloesen
+                    // For the present: trigger an error
                     pParser->Error( SbERR_NO_NAMED_ARGS );
 
-                    // Spaeter, wenn Named Args bei DECLARE moeglich
+                    // Later, if Named Args at DECLARE is posible
                     //for( USHORT i = 1 ; i < nParAnz ; i++ )
                     //{
                     //  SbiSymDef* pDef = pPool->Get( i );
@@ -254,8 +254,8 @@ void SbiExprList::Gen()
 
 void SbiExpression::Gen( RecursiveMode eRecMode )
 {
-    // AB: 17.12.1995, Spezialbehandlung fuer WITH
-    // Wenn pExpr == .-Ausdruck in With, zunaechst Gen fuer Basis-Objekt
+    // From 1995-12-17, special treatment for WITH
+    // If pExpr == .-term in With, approximately Gen for Basis-Object
     pExpr->Gen( eRecMode );
     if( bByVal )
         pParser->aGen.Gen( _BYVAL );

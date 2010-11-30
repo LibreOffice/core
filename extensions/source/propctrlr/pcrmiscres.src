@@ -48,14 +48,6 @@ Resource RID_RSC_BUTTON_IMAGES
     {
         ImageBitmap = Bitmap{ file = "buttonminus.png"; };
     };
-    Image IMG_PLUS_HC
-    {
-        ImageBitmap = Bitmap{ file = "buttonplus_hc.png"; };
-    };
-    Image IMG_MINUS_HC
-    {
-        ImageBitmap = Bitmap{ file = "buttonminus_hc.png"; };
-    };
 };
 
 #define IMAGE_IDS \
@@ -96,13 +88,6 @@ Resource RID_RSC_BUTTON_IMAGES
 ImageList RID_IL_FORMEXPLORER
 {
     Prefix = "sx";
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-    IMAGE_IDS;
-};
-
-ImageList RID_IL_FORMEXPLORER_HC
-{
-    Prefix = "sxh";
     MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
     IMAGE_IDS;
 };

@@ -1152,11 +1152,13 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     {
                        aLRItem.SetLeft( (long)( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
                        rStyleSet.Put( aLRItem );
+                       pDocShell->SetModified(true);
                     }
                     else if( bRightRulerChange && bRightRulerMove )
                     {
                         aLRItem.SetRight( (long)( nWidth - aButtonUpPt.X() / HMM_PER_TWIPS - aOffset.X() / HMM_PER_TWIPS ));
                         rStyleSet.Put( aLRItem );
+                        pDocShell->SetModified(true);
                     }
 
                     ScStyleSaveData aNewData;
@@ -1220,11 +1222,13 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                     {
                         aULItem.SetUpperValue( (USHORT)( aButtonUpPt.Y() / HMM_PER_TWIPS + aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
+                        pDocShell->SetModified(true);
                     }
                     else if( bBottomRulerMove && bBottomRulerChange )
                     {
                         aULItem.SetLowerValue( (USHORT)( nHeight - aButtonUpPt.Y() / HMM_PER_TWIPS - aOffset.Y() / HMM_PER_TWIPS ) );
                         rStyleSet.Put( aULItem );
+                        pDocShell->SetModified(true);
                     }
                     else if( bHeaderRulerMove && bHeaderRulerChange )
                     {
@@ -1238,6 +1242,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             SvxSetItem  aNewHeader( (const SvxSetItem&)rStyleSet.Get(ATTR_PAGE_HEADERSET) );
                             aNewHeader.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aHeaderSize ) );
                             rStyleSet.Put( aNewHeader );
+                            pDocShell->SetModified(true);
                         }
                     }
                     else if( bFooterRulerMove && bFooterRulerChange )
@@ -1252,6 +1257,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                             SvxSetItem  aNewFooter( (const SvxSetItem&)rStyleSet.Get(ATTR_PAGE_FOOTERSET) );
                             aNewFooter.GetItemSet().Put( SvxSizeItem( ATTR_PAGE_SIZE, aFooterSize ) );
                             rStyleSet.Put( aNewFooter );
+                            pDocShell->SetModified(true);
                         }
                     }
 
@@ -1319,6 +1325,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 if( nNewColWidth >= 0 )
                 {
                     aFunc.SetWidthOrHeight( TRUE, 1,nCols, nTab, SC_SIZE_DIRECT, (USHORT)nNewColWidth, TRUE, TRUE);
+                    pDocShell->SetModified(true);
                 }
                 if ( ValidTab( nTab ) )
                 {

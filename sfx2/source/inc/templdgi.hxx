@@ -274,9 +274,6 @@ public:
 
     void                SetAutomaticFilter();
 };
-/* -----------------10.12.2003 11:42-----------------
-
- --------------------------------------------------*/
 
 class DropToolBox_Impl : public ToolBox, public DropTargetHelper
 {

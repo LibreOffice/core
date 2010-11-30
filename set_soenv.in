@@ -1,8 +1,6 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.201 $
-# Date:        $Date: 2008-09-05 14:14:29 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -38,12 +36,12 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $bootfile, $newline, $comment,
-     $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
-     $wps, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
+my ( $outfile, $bootfile, $newline, $comment,
+     $compiler, $ds, $ps,
+     $wps, $cur_dir, $par_dir, $I, $L, $tmp, $MINGW,
      $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include,
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -56,7 +54,7 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
      $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL,
      $CC, $CXX,
      $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC,
-     $BUILD_SOSL_RELEASE, $RSC_ONCE );
+     $BUILD_SOSL_RELEASE);
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE,
@@ -74,7 +72,7 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $XLIB, $XINC,
      $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
-     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
+     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH, $CL_X64 );
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
@@ -90,7 +88,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $JAVAFLAGS, $OOO_SHELL,
      $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB, $MOZILLABUILD,
 	 $PROEXT, $TARFILE_LOCATION,
-     $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
+     $PYTHON, $SYSTEM_PYTHON, $SYSTEM_MOZILLA, $EPM_FLAGS);
 #
 #-------------------------------------------
 # IId. Declaring the aliases.
@@ -110,10 +108,6 @@ chomp( $platform );
 
 $UPD            = '@UPD@';          # the project's UPD
 $newline        = "\n";             # Perl newline character
-$unsetenv       = "unsetenv";       # c-shell command
-$setenv         = "setenv";         # c-shell command
-$unset          = "unset";          # msdos batch file command
-$set            = "set";            # msdos batch file command
 $ds             = "/";              # directory separator
 $ps             = ":";              # path separator
 $wps            = ":";              # path separator, will be set to ';' for windows later.
@@ -121,13 +115,15 @@ $cur_dir        = ".";              # current directory
 $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
 $L              = " -L";            # library search path
-$D              = " -D";            # define search path
 $empty          = "";               # used as argument
 $no_stl         = "NO_STLPORT4";    # possible argument
 $warnfile       = "warn";           # logfile configure warnings.
 $Warning        = "";               # container for warning messages
 $STLPORT4       = '@STLPORT4@';     # Location of STLport4
 $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
+if ($SYSTEM_PYTHON eq "NO") {
+    $PYTHON              = "python";
+}
 $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
@@ -145,6 +141,7 @@ $FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
+$CL_X64 = '@CL_X64@';
 
 #
 #--------------------------------------------------------------------
@@ -177,11 +174,9 @@ chomp( $oldPATH );                  # cut off new line
 # C. Setting the constant values.
 #
 # Setting platform independent constant values.
-print "Setting platform independent values... ";
 # NB: Language options now set at 'ToFile' stage.
 $BMP_WRITES_FLAG      = "TRUE";
 $BUILD_SOSL_RELEASE   = "TRUE";
-$RSC_ONCE             = "TRUE";
 $CALL_CDECL           = "TRUE";
 $COMMON_OUTDIR        = "";
 $common_build         = "";
@@ -205,10 +200,10 @@ if ( $platform =~ m/solaris/ )
    if ($platform =~ m/^i[3456]86/)
    {
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisX86GccEnv.Set";
+         $outfile        = "SolarisX86GccEnv.Set.sh";
          $OUTPATH        = "unxsogi";
       } else {
-         $outfile        = "SolarisX86Env.Set";
+         $outfile        = "SolarisX86Env.Set.sh";
          $OUTPATH        = "unxsoli4";
       }
       $CPU            = "I";
@@ -221,10 +216,10 @@ if ( $platform =~ m/solaris/ )
    else
    {
       if ( $CC =~ "gcc") {
-         $outfile        = "SolarisSparcGccEnv.Set";
+         $outfile        = "SolarisSparcGccEnv.Set.sh";
          $OUTPATH        = "unxsogs";
       } else {
-         $outfile        = "SolarisSparcEnv.Set";
+         $outfile        = "SolarisSparcEnv.Set.sh";
          $OUTPATH        = "unxsols4";
       }
       $CPU            = "S";
@@ -256,7 +251,7 @@ elsif ( $platform =~ m/netbsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting NetBSD x86 specific values... ";
-      $outfile        = "NetBSDX86Env.Set";
+      $outfile        = "NetBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxbsdi";
@@ -266,7 +261,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
-      $outfile        = "NetBSDSparcEnv.Set";
+      $outfile        = "NetBSDSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxbsds";
@@ -276,7 +271,7 @@ elsif ( $platform =~ m/netbsd/ )
    }
    elsif ($platform =~ m/powerpc/)
    {  print "Setting NetBSD PPC specific values... ";
-      $outfile        = "NetBSDPPCEnv.Set";
+      $outfile        = "NetBSDPPCEnv.Set.sh";
       $CPU            = "P";
       $CPUNAME        = "POWERPC";
       $OUTPATH        = "unxbsdppc";
@@ -319,7 +314,7 @@ elsif ( $platform =~ m/kfreebsd/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting GNU/kFreeBSD x86 specific values... ";
-      $outfile        = "GNUkFreeBSDX86Env.Set";
+      $outfile        = "GNUkFreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxkfgi6";
@@ -331,7 +326,7 @@ elsif ( $platform =~ m/kfreebsd/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting GNU/kFreeBSD x86-64 specific values... ";
-      $outfile        = "GNUkFreeBSDX86-64Env.Set";
+      $outfile        = "GNUkFreeBSDX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxkfgx6";
@@ -357,7 +352,7 @@ elsif ( $platform =~ m/freebsd/ )
    if ($platform =~ m/^amd64/)
    {  my ( $JAVA_OS );
       print "Setting FreeBSD AMD64 specific values... ";
-      $outfile        = "FreeBSDAMDEnv.Set";
+      $outfile        = "FreeBSDAMDEnv.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxfbsdx";
@@ -376,7 +371,7 @@ elsif ( $platform =~ m/freebsd/ )
    }
    elsif ($platform =~ m/^i386/)
    {  print "Setting FreeBSD x86 specific values... ";
-      $outfile        = "FreeBSDX86Env.Set";
+      $outfile        = "FreeBSDX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
       $OUTPATH        = "unxfbsdi";
@@ -405,7 +400,7 @@ elsif ( $platform =~ m/openbsd/ )
       $PATH_SEPERATOR = $ps;
       $OSVERSION      = '@OSVERSION@';
       $OUTPATH        = "unxobsd";
-      $outfile        = "OpenBSDEnv.Set";
+      $outfile        = "OpenBSDEnv.Set.sh";
    if ($platform =~ m/^amd64/)
    {
       print "Setting OpenBSD AMD64 specific values... ";
@@ -449,7 +444,7 @@ elsif ( $platform =~ m/linux/ )
 #Set platform specific values:
    if ($platform =~ m/^i[3456]86/)
    {  print "Setting Linux x86 specific values... ";
-      $outfile        = "LinuxX86Env.Set";
+      $outfile        = "LinuxX86Env.Set.sh";
       $CPU            = "I";
       $CPUNAME        = "INTEL";
 
@@ -474,7 +469,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^x86_64/)
    {  print "Setting Linux x86-64 specific values... ";
-      $outfile        = "LinuxX86-64Env.Set";
+      $outfile        = "LinuxX86-64Env.Set.sh";
       $CPU            = "X";
       $CPUNAME        = "X86_64";
       $OUTPATH        = "unxlngx6";
@@ -486,7 +481,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^ia64/)
    {  print "Setting Linux ia64 specific values... ";
-      $outfile        = "LinuxIA64Env.Set";
+      $outfile        = "LinuxIA64Env.Set.sh";
       $CPU            = "A";
       $CPUNAME        = "IA64";
       $OUTPATH        = "unxlnga";
@@ -497,7 +492,7 @@ elsif ( $platform =~ m/linux/ )
    elsif ($platform =~ m/^sparc/)
 
    {  print "Setting Linux Sparc specific values... ";
-      $outfile        = "LinuxSparcEnv.Set";
+      $outfile        = "LinuxSparcEnv.Set.sh";
       $CPU            = "S";
       $CPUNAME        = "SPARC";
       $OUTPATH        = "unxlngs";
@@ -509,7 +504,7 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^powerpc64/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux PPC64 specific values... ";
-         $outfile = "LinuxPPC64Env.Set";
+         $outfile = "LinuxPPC64Env.Set.sh";
          $OUTPATH = "unxlngppc64";
          $CPUNAME = "POWERPC64";
 
@@ -521,7 +516,7 @@ elsif ( $platform =~ m/linux/ )
       }
       else {
          print "Setting Linux PPC specific values... ";
-         $outfile = "LinuxPPCEnv.Set";
+         $outfile = "LinuxPPCEnv.Set.sh";
          $OUTPATH = "unxlngppc";
          $CPUNAME = "POWERPC";
 
@@ -549,14 +544,14 @@ elsif ( $platform =~ m/linux/ )
    {
       if (($platform =~ m/^s390x/) && ('@SIZEOF_LONG@' eq '8')) {
          print "Setting Linux zSeries specific values... ";
-         $outfile        = "LinuxS390XEnv.Set";
+         $outfile        = "LinuxS390XEnv.Set.sh";
          $CPUNAME        = "S390X";
 	 $ARCH           = "s390x";
          $OUTPATH        = "unxlngs390x";
       }
       else {
          print "Setting Linux S/390 specific values... ";
-         $outfile        = "LinuxS390Env.Set";
+         $outfile        = "LinuxS390Env.Set.sh";
          $CPUNAME        = "S390";
 	 $ARCH           = "s390";
          $OUTPATH        = "unxlngs390";
@@ -568,7 +563,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^m68k/)
    {  print "Setting Linux m68k specific values... ";
-      $outfile        = "LinuxM68KEnv.Set";
+      $outfile        = "LinuxM68KEnv.Set.sh";
       $CPU            = "6";
       $CPUNAME        = "M68K";
       $OUTPATH        = "unxlngm68k";
@@ -578,7 +573,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^hppa/)
    {  print "Setting Linux hppa specific values... ";
-      $outfile        = "LinuxHPPAEnv.Set";
+      $outfile        = "LinuxHPPAEnv.Set.sh";
       $CPU            = "H";
       $CPUNAME        = "HPPA";
       $OUTPATH        = "unxlnghppa";
@@ -589,7 +584,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^alpha/)
    {  print "Setting Linux Alpha specific values... ";
-      $outfile        = "LinuxAlphaEnv.Set";
+      $outfile        = "LinuxAlphaEnv.Set.sh";
       $CPU            = "L";
       $CPUNAME        = "AXP";
       $OUTPATH        = "unxlngaxp";
@@ -599,7 +594,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^arm.*?l-/)
    {  print "Setting Linux ARM specific values... ";
-      $outfile        = "LinuxARMEnv.Set";
+      $outfile        = "LinuxARMEnv.Set.sh";
       $CPU            = "R";
       $CPUNAME        = "ARM";
       $OUTPATH        = "unxlngr";
@@ -610,7 +605,7 @@ elsif ( $platform =~ m/linux/ )
    }
    elsif ($platform =~ m/^mips/)
    {  print "Setting Linux MIPS specific values... ";
-      $outfile        = "LinuxMIPSEnv.Set";
+      $outfile        = "LinuxMIPSEnv.Set.sh";
       $CPU            = "M";
       $CPUNAME        = "GODSON";
       $OUTPATH        = "unxlngmips";
@@ -654,7 +649,7 @@ elsif ( $platform =~ m/linux/ )
 }
 elsif ( $platform =~ m/osf1/ )
 {     print "Setting Tru64 specific values... ";
-      $outfile        = "Tru64AlphaEnv.Set";
+      $outfile        = "Tru64AlphaEnv.Set.sh";
       $BIG_SVX        = "TRUE";
       $COM            = "CXX";
       $COMPATH        = '@COMPATH@';
@@ -697,7 +692,7 @@ elsif ( $platform =~ m/cygwin/ )
       print "Setting Windows NT cygwin MinGW specific values... ";
       $FLIPCMD        = "slfl.pl";
       $PATH_SEPERATOR = ';';
-      $outfile        = "winmingw.set";
+      $outfile        = "winmingw.set.sh";
       $COMPATH        = PathFormat('@COMPATH@/bin');
       $COMPATH        =~ s/\/bin$//i;
       $COM            = "GCC";
@@ -707,7 +702,7 @@ elsif ( $platform =~ m/cygwin/ )
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
-  {   $outfile        = "winenv.set";
+  {   $outfile        = "winenv.set.sh";
       $COMPATH        = PathFormat('@COMPATH@');
       $COM            = "MSC";
       $OUTPATH        = "wntmsci@COMEX@";
@@ -769,7 +764,7 @@ elsif ( $platform =~ m/os2/ )
       $use_shl_versions = "TRUE";
   {
       print "Setting OS/2 gcc 3.3.5 specific values... \n";
-      $outfile        = "os2env.set";
+      $outfile        = "os2env.set.sh";
       $COM            = "GCC";
       $CVER           = "C300";
       $OUTPATH        = "os2gcci";
@@ -794,7 +789,7 @@ elsif ( $platform =~ m/darwin/ )
       if ($platform =~ m/^powerpc/)
       {
           print "Setting values for Mac OS X/Darwin on PowerPC... ";
-          $outfile        = "MacOSXPPCEnv.Set";
+          $outfile        = "MacOSXPPCEnv.Set.sh";
           $CPU            = "P";
           $CPUNAME        = "POWERPC";
           $OUTPATH        = "unxmacxp";
@@ -802,7 +797,7 @@ elsif ( $platform =~ m/darwin/ )
       else
       {
           print "Setting values for Mac OS X/Darwin on default x86... ";
-          $outfile        = "MacOSXX86Env.Set";
+          $outfile        = "MacOSXX86Env.Set.sh";
           $CPU            = "I";
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
@@ -822,7 +817,7 @@ elsif ( $platform =~ m/darwin/ )
 elsif ( $platform =~ m/aix/ )
 {
    print "Setting AIX PPC specific values... ";
-   $outfile        = "aixPPCEnv.Set";
+   $outfile        = "aixPPCEnv.Set.sh";
    $CPU            = "P";
    $CPUNAME        = "POWERPC";
    $OUTPATH        = "unxaigppc";
@@ -925,8 +920,7 @@ else
 #
 # E. Determining the envionment values based on the information
 #    that was gathered earlier on.
-#
-print "Setting the environment variables... ";
+
 $USR                  = $ds."usr";
 $ETC                  = $ds."etc";
 $BIN                  = $ds."bin";
@@ -938,6 +932,8 @@ $LIB64               .= "64"
 if (($platform =~ m/powerpc64-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
 $LIB64               .= "64"
 if (($platform =~ m/s390x-.*-linux/) && ('@SIZEOF_LONG@' eq '8'));
+$LIB64               .= $ds."x64"
+if ($platform =~ m/cygwin/);
 $INC                  = $ds."inc";
 $INCLUDE              = $ds."include";
 $DEV                  = $ds."dev";
@@ -954,9 +950,6 @@ $USR_CCS              = $USR.$ds."ccs";
 $USR_OPENWIN          = $USR.$ds."openwin";
 $USR_DT               = $USR.$ds."dt";
 $COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
-
-# Generate alternate output file for sh?
-$outfile_sh = $outfile.".sh";
 
 if ($STLPORT4 ne $no_stl) {
 	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB64;
@@ -1110,10 +1103,15 @@ if ($platform =~ m/cygwin|os2/)
    # Mingw is different
    if ( $COM eq "MSC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $wps.$JAVA_HOME.$LIB.
-                        $wps.$PSDK_HOME.$LIB.
-                        $wps.$FRAME_HOME.$LIB.
-                        $wps.$COMPATH.$LIB;
+                        $wps.$JAVA_HOME.$LIB;
+      if ( $CL_X64 ne "TRUE" ) {
+          $ILIB   .= $wps.$COMPATH.$LIB.
+		             $wps.$PSDK_HOME.$LIB;
+	  } else {
+	      $ILIB   .= $wps.$COMPATH.$LIB.$ds."amd64".
+		             $wps.$PSDK_HOME.$LIB64;
+	  }
+      $ILIB       .= $wps.$FRAME_HOME.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $ILIB   .= $wps.$DIRECTXSDK_LIB;
           if ( '@COMEX@' eq "10" ) {
@@ -1550,13 +1548,10 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-#
-print "done\n";
 
 #
 # F. Setting the different aliases.
 #
-print "Setting the aliases... ";
 # 1. alias for a full product make.
 	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
 	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
@@ -1565,7 +1560,7 @@ print "Setting the aliases... ";
 	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
 # 3. alias for a full product make
 $nmake           = '"dmake"';
-print "done\n";
+
 #
 #--------------------------
 # VI. Open the output file.
@@ -1574,18 +1569,13 @@ print "done\n";
 open( OUT, ">$outfile" ) ||
    die "Cannot open $outfile: $!\n";
 
-# Create sh environment file
-open( OUT_SH, ">$outfile_sh" ) ||
-  die "Cannot open $outfile_sh: $!\n";
-
 #
 #------------------------------------------
 # VII. Writing the data to the output file.
 #------------------------------------------
 #
 # Write file header.
-CreateFileHeader( *OUT, $UPD, $platform, "(t)csh", "#" );
-CreateFileHeader( *OUT_SH, $UPD, $platform, "sh/bash/ksh", "#" );
+CreateFileHeader( *OUT, $UPD, $platform, "sh/bash/ksh", "#" );
 
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "OOO_SHELL",         $OOO_SHELL,         "e" );
@@ -1842,6 +1832,8 @@ ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
 ToFile( "CC",                $CC,                "e" );
 ToFile( "HAVE_GCC_VISIBILITY_FEATURE",
 		"@HAVE_GCC_VISIBILITY_FEATURE@", "e" );
+ToFile( "HAVE_GCC_VISIBILITY_BROKEN",
+        "@HAVE_GCC_VISIBILITY_BROKEN@", "e" );
 ToFile( "HAVE_LD_HASH_STYLE","@HAVE_LD_HASH_STYLE@","e" );
 ToFile( "HAVE_LD_BSYMBOLIC_FUNCTIONS",
 		"@HAVE_LD_BSYMBOLIC_FUNCTIONS@","e" );
@@ -1866,7 +1858,7 @@ ToFile( "ENABLE_GRAPHITE",   "@ENABLE_GRAPHITE@",   "e");
 ToFile( "SYSTEM_GRAPHITE",   "@SYSTEM_GRAPHITE@",   "e");
 ToFile( "GRAPHITE_LIBS",     "@GRAPHITE_LIBS@",     "e");
 ToFile( "GRAPHITE_CFLAGS",   "@GRAPHITE_CFLAGS@",   "e");
-ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
+ToFile( "CL_X64",            "@CL_X64@",            "e");
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "SYSTEM_DICTS",      "@SYSTEM_DICTS@",     "e");
 ToFile( "DICT_SYSTEM_DIR",   "@DICT_SYSTEM_DIR@",  "e");
@@ -1885,6 +1877,7 @@ ToFile( "MOZ_LIB",           "@MOZ_LIB@",          "e" );
 ToFile( "MOZ_LIB_XPCOM",     "@MOZ_LIB_XPCOM@",    "e" );
 ToFile( "MOZ_NSPR_CFLAGS",   "@MOZ_NSPR_CFLAGS@",  "e" );
 ToFile( "MOZ_NSS_CFLAGS",    "@MOZ_NSS_CFLAGS@",   "e" );
+ToFile( "MOZ_NSS_LIBS",      "@MOZ_NSS_LIBS@",     "e" );
 ToFile( "MOZ_LDAP_CFLAGS",   "@MOZ_LDAP_CFLAGS@",  "e" );
 ToFile( "WITH_FONTS",        "@WITH_FONTS@",       "e" );
 ToFile( "WITHOUT_AFMS",      "@WITHOUT_AFMS@",     "e" );
@@ -1909,6 +1902,7 @@ ToFile( "SYSTEM_OPENSSL",    "@SYSTEM_OPENSSL@",   "e" );
 ToFile( "OPENSSL_CFLAGS",    "@OPENSSL_CFLAGS@",   "e" );
 ToFile( "OPENSSL_LIBS",      "@OPENSSL_LIBS@",     "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
+ToFile( "PYTHON",            "@PYTHON@",           "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
 if ($SYSTEM_PYTHON eq "NO") {
@@ -1950,6 +1944,10 @@ ToFile( "USE_FT_EMBOLDEN",   "@USE_FT_EMBOLDEN@",  "e" );
 ToFile( "LIBXML_CFLAGS",     "@LIBXML_CFLAGS@",    "e" );
 ToFile( "LIBXML_LIBS",       "@LIBXML_LIBS@",      "e" );
 ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
+ToFile( "WITH_EXTRA_GALLERY",       "@WITH_EXTRA_GALLERY@",      "e" );
+ToFile( "WITH_EXTRA_TEMPLATE",       "@WITH_EXTRA_TEMPLATE@",      "e" );
+ToFile( "WITH_EXTRA_SAMPLE",       "@WITH_EXTRA_SAMPLE@",      "e" );
+ToFile( "WITH_EXTRA_FONT",       "@WITH_EXTRA_FONT@",      "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
@@ -2069,7 +2067,6 @@ ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 # Writing the aliases to file.
 ToFile( "Aliases.",          $empty,             "c" );
 ToFile( "Don't set aliases when bootstrapping", $empty, "c" );
-ToFile( 'if ( ! ${?_ISBOOTSTRAP_} ) then', $empty, "y");
 ToFile( "if test -z \"\$_ISBOOTSTRAP_\"; then", $empty, "z");
 
 ToFile( "alias mkout",       $mkout,             "a" );
@@ -2084,7 +2081,6 @@ if ( $platform =~ m/os2/ )
 {  ToFile( "alias gunzip",       "gzip -d",         "a" );
 }
 
-ToFile( "endif",             $empty, "y");
 ToFile( "fi",                $empty, "z");
 
 # Check if the right dmake version is used. (W32 only)
@@ -2092,8 +2088,6 @@ if ( $platform =~ m/cygwin/ ) {
     ToFile( "Check if the right dmake version is used.", $empty, "c" );
     # Invalidate build environment.
     ToFile( "WORK_STAMP", "_invalid_", "e" );
-    # Don't test the dmake version if this file is sourced by bootstrap
-    ToFile( "bash -c 'if test -n \"\$_ISBOOTSTRAP_\" || (dmake.exe -V | grep -e \"-cygwin\\|OS := cygwin\" > /dev/null ); then true; else echo -e \"\\n\\nERROR: Not a cygwin build dmake or dmake missing, please check!\\n\\n\" ; sleep 5; false ; fi' || exit 1", $empty, "y");
     # Restore valid environment if test was successful.
     ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
     ToFile( "", $empty, "n");
@@ -2119,11 +2113,8 @@ ToFile( "ENV_SCRIPT", "$outfile", "e" );
 #
 # Writing unset variables you might not need to file.
 #
-print OUT $unsetvars;
-
-print OUT_SH "export $exportvars$newline";
-print OUT_SH "unset $unsetvarssh$newline";
-
+print OUT "export $exportvars$newline";
+print OUT "unset $unsetvars$newline";
 
 #
 #---------------------------
@@ -2131,8 +2122,6 @@ print OUT_SH "unset $unsetvarssh$newline";
 #---------------------------
 #
 close( OUT ) || print "Can't close $outfile: $!";
-
-close( OUT_SH ) || print "Can't close $outfile_sh: $!";
 
 #
 #------------------------------
@@ -2152,11 +2141,6 @@ if (rename( $outfile, $tmp ) ne 1)
 {  `mv -f $outfile $tmp`;
 }
 
-$tmp = $SRC_ROOT.$ds.$outfile_sh;
-if (rename( $outfile_sh, $tmp ) ne 1)
-{  `mv -f $outfile_sh $tmp`;
-}
-
 #
 #--------------------------------------------------------
 # XII. Message at the end.
@@ -2165,34 +2149,24 @@ if (rename( $outfile_sh, $tmp ) ne 1)
 #
 print "$newline";
 print "*********************************************************".
-      "******************* $newline"."*"."$newline";
-print "* LibreOffice $UPD configuration. $newline";
-for ( $tmp = 0; $tmp < 2; $tmp++ )
-{  print "* $newline";
-}
-print "* Configuration part of LibreOffice $UPD build is finished. $newline* $newline";
-print "* NB! Be aware that you might not be able to build LibreOffice if you $newline".
-      "* ignore any warning message that were generated during this configuration $newline".
-      "* process. $newline* $newline";
+      "*******************$newline*$newline";
+print "* LibreOffice $UPD configuration finished. $newline*$newline";
 
 if ( $Warning ne "" )
-{  print "$Warning*";
-   print "$newline";
+{  print "$Warning*$newline";
 }
 
 print "*********************************************************".
       "******************* $newline";
 
-print "\nTo build, do:\n";
-print "  \$ make\n\n";
-print "Developer installation (after you have built):\n";
-print "  \$ make dev-install\n\n";
+print "\nTo build, issue:\nmake\n\n";
+print "For the developer installation, issue:\nmake dev-install\n\n";
 
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||
 die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
-print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n";
+print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile\n";
 print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n";
 if ( $MINGW eq "yes" )
 {  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
@@ -2209,7 +2183,6 @@ if (rename( $bootfile, $tmp ) ne 1)
 {  `mv -f $bootfile $tmp`;
 }
 
-print "Configure completed\n";
 if ( $Warning ne "" ) {
 	print "***** WARNINGS ISSUED *****\n";
 }
@@ -2295,9 +2268,7 @@ sub CreateFileHeader
 #                   a - alias
 #                   c - comment
 #                   n - newline
-#                   x - raw, write as is to OUT_BAT
-#                   y - raw, write as is to OUT
-#                   z - raw, write as is to OUT_SH
+#                   z - raw, write as is to OUT
 # Return value:  void
 #---------------------------------------------------------
 sub ToFile {
@@ -2305,28 +2276,23 @@ sub ToFile {
       # Write an environment variable to file.
       if (defined $_[ 1 ] && $_[ 1 ] ne "" ) {
          my $envvar = $_[ 1 ];
-         my $envvarbash = $envvar;
 
          # Tcsh/bash needs backslashes quoted
          $envvar =~ s/\\/\\\\/g;
-         $envvarbash = $envvar;
 
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar) if ( '@VERBOSE@' eq 'TRUE' );
-         print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
-         print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
+         print OUT "$_[ 0 ]=\"$envvar\"$newline";      # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
 
       } else {
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", "unset") if ( '@VERBOSE@' eq 'TRUE' );
-         $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline"; # for tcsh file
-         $unsetvarssh .= " $_[ 0 ]";                             # for sh file
+         $unsetvars .= " $_[ 0 ]";                             # for sh file
       }
    }
    elsif ( $_[ 2 ] eq "a" )
    {  # Write an alias to file.
       print "The $_[ 0 ] is set to: $_[ 1 ]\n" if ( '@VERBOSE@' eq 'TRUE' );    # to stdout
-      print OUT "$_[ 0 ] $_[ 1 ]$newline";         # to tcsh file
-      print OUT_SH "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
+      print OUT "$_[ 0 ]=$_[ 1 ]$newline";      # to sh file
    }
    elsif ( $_[ 2 ] eq "c" )
    {  # Write a comment to file.
@@ -2341,25 +2307,15 @@ sub ToFile {
       print OUT "$comment$newline";
       print OUT "$comment $_[ 0 ]$newline";
       print OUT "$comment$newline";
-      print OUT_SH "$newline";
-      print OUT_SH "$comment$newline";
-      print OUT_SH "$comment $_[ 0 ]$newline";
-      print OUT_SH "$comment$newline";
    }
    elsif ( $_[ 2 ] eq "n" )
    {  #Write a newline to a file
       print OUT "$newline";
-      print OUT_SH "$newline";
-   }
-   elsif ( $_[ 2 ] eq "y" )
-   {
-      #Write first argument as is, and nothing else
-      print OUT "$_[ 0 ]$newline";
    }
    elsif ( $_[ 2 ] eq "z" )
    {
       #Write first argument as is, and nothing else
-      print OUT_SH "$_[ 0 ]$newline";
+      print OUT "$_[ 0 ]$newline";
    }
    else
    {  print "Unknown type!$newline";

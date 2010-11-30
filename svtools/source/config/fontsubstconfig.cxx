@@ -64,9 +64,7 @@ struct SvtFontSubstConfig_Impl
 {
     SubstitutionStructArr   aSubstArr;
 };
-/* -----------------------------18.01.01 12:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtFontSubstConfig::SvtFontSubstConfig() :
     ConfigItem(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Font/Substitution"))),
     bIsEnabled(sal_False),
@@ -112,16 +110,12 @@ SvtFontSubstConfig::SvtFontSubstConfig() :
         pImpl->aSubstArr.Insert(pInsert, pImpl->aSubstArr.Count());
     }
 }
-/* -----------------------------18.01.01 12:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 SvtFontSubstConfig::~SvtFontSubstConfig()
 {
     delete pImpl;
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::Notify( const com::sun::star::uno::Sequence< rtl::OUString >& )
 {
 }
@@ -169,23 +163,17 @@ void SvtFontSubstConfig::Commit()
         ReplaceSetProperties(sNode, aSetValues);
     }
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int32 SvtFontSubstConfig::SubstitutionCount() const
 {
     return pImpl->aSubstArr.Count();
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::ClearSubstitutions()
 {
     pImpl->aSubstArr.DeleteAndDestroy(0, pImpl->aSubstArr.Count());
 }
-/*-- 18.01.01 12:08:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
 {
     DBG_ASSERT(nPos >= 0 && nPos < pImpl->aSubstArr.Count(), "illegal array index");
@@ -193,9 +181,7 @@ const SubstitutionStruct* SvtFontSubstConfig::GetSubstitution(sal_Int32 nPos)
         return pImpl->aSubstArr[(sal_uInt16)nPos];
     return 0;
 }
-/*-- 18.01.01 12:08:01---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvtFontSubstConfig::AddSubstitution(const SubstitutionStruct& rToAdd)
 {
     SubstitutionStructPtr pInsert = new SubstitutionStruct(rToAdd);

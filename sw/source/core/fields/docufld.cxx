@@ -250,9 +250,6 @@ sal_uInt16 SwPageNumberField::GetSubType() const
     return nSubType;
 }
 
-/*-----------------05.03.98 10:25-------------------
-
---------------------------------------------------*/
 bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -283,9 +280,7 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 10:25-------------------
 
---------------------------------------------------*/
 bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = true;
@@ -299,8 +294,6 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
         else {
-            //exception(wrong_value)
-            ;
         }
         break;
     case FIELD_PROP_USHORT1:
@@ -384,9 +377,6 @@ SwField* SwAuthorField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 11:15-------------------
-
---------------------------------------------------*/
 bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     bool bVal;
@@ -411,9 +401,7 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 11:15-------------------
 
---------------------------------------------------*/
 bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -530,9 +518,6 @@ SwField* SwFileNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -572,9 +557,7 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
 bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -634,7 +617,7 @@ SwTemplNameFieldType::SwTemplNameFieldType(SwDoc *pDocument)
 
 String SwTemplNameFieldType::Expand(ULONG nFmt) const
 {
-    ASSERT( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
+    OSL_ENSURE( nFmt < FF_END, "Expand: kein guelt. Fmt!" );
 
     String aRet;
     SwDocShell *pDocShell(pDoc->GetDocShell());
@@ -706,9 +689,6 @@ SwField* SwTemplNameField::Copy() const
     return pTmp;
 }
 
-/*-----------------05.03.98 08:59-------------------
-
---------------------------------------------------*/
 bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -734,9 +714,7 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 09:01-------------------
 
---------------------------------------------------*/
 bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
@@ -804,7 +782,7 @@ String SwDocStatFieldType::Expand(sal_uInt16 nSubType, sal_uInt32 nFmt) const
                 nFmt = (sal_uInt32)nNumberingType;
             break;
         default:
-            ASSERT( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
+            OSL_ENSURE( sal_False, "SwDocStatFieldType::Expand: unbekannter SubType" );
     }
 
     String sRet;
@@ -861,9 +839,6 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
-/*-----------------05.03.98 11:38-------------------
-
---------------------------------------------------*/
 bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -876,9 +851,7 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 11:38-------------------
 
---------------------------------------------------*/
 bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = false;
@@ -1456,7 +1429,7 @@ String SwHiddenTxtField::Expand() const
 
 void SwHiddenTxtField::Evaluate(SwDoc* pDoc)
 {
-    ASSERT(pDoc, Wo ist das Dokument Seniore);
+    OSL_ENSURE(pDoc, "Wo ist das Dokument Seniore");
 
     if( TYP_CONDTXTFLD == nSubType )
     {
@@ -1749,9 +1722,7 @@ SwField* SwHiddenParaField::Copy() const
 
     return pFld;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
 bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -1771,9 +1742,7 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 13:25-------------------
 
---------------------------------------------------*/
 bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
@@ -1914,9 +1883,6 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
     return (mpText) ? mpText->Count() : 1;
 }
 
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1977,10 +1943,6 @@ bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
-
-/*-----------------05.03.98 13:42-------------------
-
---------------------------------------------------*/
 bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1999,7 +1961,6 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_TEXT:
         DBG_ERROR("Not implemented!");
-        // ::GetString( rAny, sTxt );
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
@@ -2070,7 +2031,7 @@ String SwExtUserFieldType::Expand(sal_uInt16 nSub, sal_uInt32 ) const
     case EU_STATE:          nRet = USER_OPT_STATE;          break;
     case EU_FATHERSNAME:    nRet = USER_OPT_FATHERSNAME;    break;
     case EU_APARTMENT:      nRet = USER_OPT_APARTMENT;      break;
-    default:                ASSERT( !this, "Field unknown");
+    default:             OSL_ENSURE( !this, "Field unknown");
     }
     if( USHRT_MAX != nRet )
     {
@@ -2122,9 +2083,6 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
     nType = nSub;
 }
 
-/*-----------------05.03.98 14:14-------------------
-
---------------------------------------------------*/
 bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2150,9 +2108,7 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 14:14-------------------
 
---------------------------------------------------*/
 bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2242,9 +2198,6 @@ void SwRefPageSetField::SetPar2(const String& rStr)
     SetOffset( (short) rStr.ToInt32() );
 }
 
-/*-----------------05.03.98 14:52-------------------
-
---------------------------------------------------*/
 bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2260,9 +2213,7 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2357,8 +2308,8 @@ sal_uInt16 SwRefPageGetFieldType::MakeSetList( _SetGetExpFlds& rTmpLst )
                 {
                     // einen sdbcx::Index fuers bestimmen vom TextNode anlegen
                     SwPosition aPos( pDoc->GetNodes().GetEndOfPostIts() );
-#ifdef DBG_UTIL
-                    ASSERT( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_ENSURE( GetBodyTxtNode( *pDoc, aPos, *pFrm ),
                             "wo steht das Feld" );
 #else
                     GetBodyTxtNode( *pDoc, aPos, *pFrm );
@@ -2467,7 +2418,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
 
     sTxt.Erase();
 
-    ASSERT( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !pFrm->IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // sammel erstmal alle SetPageRefFelder ein.
     _SetGetExpFlds aTmpLst( 10, 5 );
@@ -2513,9 +2464,7 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2531,9 +2480,7 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 14:52-------------------
 
---------------------------------------------------*/
 bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2545,8 +2492,6 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;
@@ -2649,9 +2594,6 @@ void SwJumpEditField::SetPar2(const String& rStr)
     sHelp = rStr;
 }
 
-/*-----------------05.03.98 15:00-------------------
-
---------------------------------------------------*/
 bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2665,7 +2607,6 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
             case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
-//          case JE_FMT_TEXT:
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
@@ -2683,9 +2624,7 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 15:00-------------------
 
---------------------------------------------------*/
 bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )

@@ -137,7 +137,7 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
 {
     if( !pStrm )
     {
-        ASSERT( FALSE, "RTF-Read ohne Stream" );
+        OSL_ENSURE( FALSE, "RTF-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -380,12 +380,12 @@ void SwRTFParser::Continue( int nToken )
                 pPam->GetPoint()->nContent.Assign( pTxtNode, nStt );
             }
 
-#ifdef DBG_UTIL
-// !!! sollte nicht moeglich sein, oder ??
-ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
-            "Pam.Bound1 steht noch im Node" );
-ASSERT( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
-            "Pam.Bound2 steht noch im Node" );
+#if OSL_DEBUG_LEVEL > 1
+            // !!! sollte nicht moeglich sein, oder ??
+            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( TRUE ).nNode.GetIndex(),
+                "Pam.Bound1 steht noch im Node" );
+            OSL_ENSURE( pSttNdIdx->GetIndex()+1 != pPam->GetBound( FALSE ).nNode.GetIndex(),
+                "Pam.Bound2 steht noch im Node" );
 
 if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( TRUE ).nNode.GetIndex() )
 {
@@ -747,10 +747,7 @@ void rtfSections::SetSegmentToPageDesc(const rtfSection &rSection,
 {
     SwPageDesc &rPage = bTitlePage ? *rSection.mpTitlePage : *rSection.mpPage;
 
-//    SetNumberingType(rSection, rPage);
-
     SwFrmFmt &rFmt = rPage.GetMaster();
-//    mrReader.SetDocumentGrid(rFmt, rSection);
 
     wwULSpaceData aULData;
     GetPageULData(rSection, bTitlePage, aULData);
@@ -790,20 +787,16 @@ void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
     SwFrmFmt &rFromMaster = rFrom.GetMaster();
     rDestMaster.SetFmtAttr(rFromMaster.GetHeader());
     rDestMaster.SetFmtAttr(rFromMaster.GetFooter());
-    //rFromMaster.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
-    //rFromMaster.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 
     SwFrmFmt &rDestLeft = rDest.GetLeft();
     SwFrmFmt &rFromLeft = rFrom.GetLeft();
     rDestLeft.SetFmtAttr(rFromLeft.GetHeader());
     rDestLeft.SetFmtAttr(rFromLeft.GetFooter());
-    //rFromLeft.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
-    //rFromLeft.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 }
 
 void rtfSections::SetHdFt(rtfSection &rSection)
 {
-    ASSERT(rSection.mpPage, "makes no sense to call without a main page");
+    OSL_ENSURE(rSection.mpPage, "makes no sense to call without a main page");
     if (rSection.mpPage && rSection.maPageInfo.mpPageHdFt)
     {
         if (rSection.maPageInfo.mbPageHdFtUsed)
@@ -846,7 +839,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
 
     rSection.mpSection =
         mrReader.pDoc->InsertSwSection( rMyPaM, aSectionData, 0, &aSet );
-    ASSERT(rSection.mpSection, "section not inserted!");
+    OSL_ENSURE(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
 
@@ -859,7 +852,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
             break;
     }
 
-    ASSERT(pPage, "no page outside this section!");
+    OSL_ENSURE(pPage, "no page outside this section!");
 
     if (!pPage)
         pPage = &mrReader.pDoc->_GetPageDesc(0);
@@ -875,7 +868,7 @@ SwSectionFmt *rtfSections::InsertSection(SwPaM& rMyPaM, rtfSection &rSection)
     long nRight = rLR.GetRight();
 
     SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
-    ASSERT(pFmt, "impossible");
+    OSL_ENSURE(pFmt, "impossible");
     if (!pFmt)
         return 0;
     SetCols(*pFmt, rSection, (USHORT)(nWidth - nLeft - nRight) );
@@ -933,7 +926,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                         , 0, false);
                     aIter->mpTitlePage = &mrReader.pDoc->_GetPageDesc(nPos);
                 }
-                ASSERT(aIter->mpTitlePage, "no page!");
+                OSL_ENSURE(aIter->mpTitlePage, "no page!");
                 if (!aIter->mpTitlePage)
                     continue;
 
@@ -955,7 +948,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                         aIter->mpTitlePage, false);
                 aIter->mpPage = &mrReader.pDoc->_GetPageDesc(nPos);
             }
-            ASSERT(aIter->mpPage, "no page!");
+            OSL_ENSURE(aIter->mpPage, "no page!");
             if (!aIter->mpPage)
                 continue;
 
@@ -985,7 +978,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 SwTable& rTable =
                     aIter->maStart.GetNode().GetTableNode()->GetTable();
                 SwFrmFmt* pApply = rTable.GetFrmFmt();
-                ASSERT(pApply, "impossible");
+                OSL_ENSURE(pApply, "impossible");
                 if (pApply)
                     pApply->SetFmtAttr(aPgDesc);
             }
@@ -1081,7 +1074,7 @@ void InsertedTablesManager::DelAndMakeTblFrms()
         // exitiert schon ein Layout, dann muss an dieser Tabelle die BoxFrames
         // neu erzeugt
         SwTableNode *pTable = aIter->first->GetTableNode();
-        ASSERT(pTable, "Why no expected table");
+        OSL_ENSURE(pTable, "Why no expected table");
         if (pTable)
         {
             SwFrmFmt * pFrmFmt = pTable->GetTable().GetFrmFmt();
@@ -1241,15 +1234,7 @@ void SwRTFParser::ReadDrawingObject()
         }
     }
     SkipToken(-1);
-    /*
-    const Point aPointC1( 0, 0 );
-    const Point aPointC2( 100, 200 );
-    const Point aPointC3( 300, 400 );
-    XPolygon aPolygonC(3);
-    aPolygonC[0] = aPointC1;
-    aPolygonC[1] = aPointC2;
-    aPolygonC[2] = aPointC3;
-    */
+
     if(bPolygonActive && aPolygon.count())
     {
         SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aPolygon));
@@ -1260,10 +1245,7 @@ void SwRTFParser::ReadDrawingObject()
         aFlySet.Put( aSur );
         SwFmtFollowTextFlow aFollowTextFlow( FALSE );
         aFlySet.Put( aFollowTextFlow );
-        /*
-        sw::util::SetLayer aSetLayer(*pDoc);
-        aSetLayer.SendObjectToHeaven(*pStroke);
-        */
+
         SwFmtAnchor aAnchor( FLY_AT_PARA );
         aAnchor.SetAnchor( pPam->GetPoint() );
         aFlySet.Put( aAnchor );
@@ -1316,7 +1298,7 @@ void SwRTFParser::ReadDrawingObject()
 
         pStroke->SetSnapRect(aRect);
 
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
     }
 }
 
@@ -1348,7 +1330,7 @@ void SwRTFParser::InsertShpObject(SdrObject* pStroke, int _nZOrder)
         SdrPage* pDrawPg = pDrawModel->GetPage(0);
         pDrawPg->InsertObject(pStroke);
         pDrawPg->SetObjectOrdNum(pStroke->GetOrdNum(), _nZOrder);
-        /* SwFrmFmt* pRetFrmFmt = */pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
+        pDoc->Insert(*pPam, *pStroke, &aFlySet, NULL);
 }
 
 ::basegfx::B2DPoint rotate(const ::basegfx::B2DPoint& rStart, const ::basegfx::B2DPoint& rEnd)
@@ -1376,6 +1358,7 @@ void SwRTFParser::ReadShapeObject()
     String shpTxt;
     bool bshpTxt=false;
     int txflTextFlow=0;
+    ::rtl::OUString sDescription, sName;
 
 
     while (level>0 && IsParserWorking())
@@ -1403,7 +1386,7 @@ void SwRTFParser::ReadShapeObject()
                 break;
             case RTF_SN:
                 nToken = GetNextToken();
-                ASSERT(nToken==RTF_TEXTTOKEN, "expected name");
+                OSL_ENSURE(nToken==RTF_TEXTTOKEN, "expected name");
                 sn=aToken;
                 break;
             case RTF_SV:
@@ -1433,7 +1416,14 @@ void SwRTFParser::ReadShapeObject()
                       {
                         txflTextFlow=aToken.ToInt32();
                       }
-
+                    else if (sn.EqualsAscii("wzDescription"))
+                    {
+                        sDescription = aToken;
+                    }
+                    else if(sn.EqualsAscii("wzName"))
+                    {
+                        sName = aToken;
+                    }
                 }
                 break;
             case RTF_PICT:
@@ -1459,6 +1449,7 @@ void SwRTFParser::ReadShapeObject()
     }
     SkipToken(-1);
 
+    SdrObject* pSdrObject = 0;
     switch(shapeType)
     {
         case 202: /* Text Box */
@@ -1478,6 +1469,7 @@ void SwRTFParser::ReadShapeObject()
 
             const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
             SdrRectObj* pStroke = new SdrRectObj(aRect);
+            pSdrObject = pStroke;
             pStroke->SetSnapRect(aRect);
             pDoc->GetOrCreateDrawModel(); // create model
             InsertShpObject(pStroke, this->nZOrder++);
@@ -1525,7 +1517,7 @@ void SwRTFParser::ReadShapeObject()
             aLine.append(aPointRightBottom);
 
             SdrPathObj* pStroke = new SdrPathObj(OBJ_PLIN, ::basegfx::B2DPolyPolygon(aLine));
-            //pStroke->SetSnapRect(aRect);
+            pSdrObject = pStroke;
 
             InsertShpObject(pStroke, this->nZOrder++);
             SfxItemSet aSet(pStroke->GetMergedItemSet());
@@ -1545,10 +1537,16 @@ void SwRTFParser::ReadShapeObject()
             const Rectangle aRect(FRound(aRange.getMinX()), FRound(aRange.getMinY()), FRound(aRange.getMaxX()), FRound(aRange.getMaxY()));
 
             SdrRectObj* pStroke = new SdrGrafObj(aGrf);
+            pSdrObject = pStroke;
             pStroke->SetSnapRect(aRect);
 
             InsertShpObject(pStroke, this->nZOrder++);
         }
+    }
+    if( pSdrObject )
+    {
+        pSdrObject->SetDescription(sDescription);
+        pSdrObject->SetTitle(sName);
     }
 }
 
@@ -1558,7 +1556,6 @@ extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
 
 USHORT SwRTFParser::ReadRevTbl()
 {
-    // rStr.Erase( 0 );
     int nNumOpenBrakets = 1, nToken;        // die erste wurde schon vorher erkannt !!
     USHORT nAuthorTableIndex = 0;
 
@@ -2114,7 +2111,7 @@ void SwRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos, xub_StrLen& rCntPos )
     SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aIdx );
     if( !pNode )
     {
-        ASSERT( FALSE, "keinen vorherigen ContentNode gefunden" );
+        OSL_ENSURE( FALSE, "keinen vorherigen ContentNode gefunden" );
     }
 
     rpNodePos = new SwNodeIdx( aIdx );
@@ -2128,12 +2125,12 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 
     SwPaM aPam( *pPam->GetPoint() );
 
-#ifdef DBG_UTIL
-    ASSERT( nSNd <= nENd, "Start groesser als Ende" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( nSNd <= nENd, "Start groesser als Ende" );
     SwNode* pDebugNd = pDoc->GetNodes()[ nSNd ];
-    ASSERT( pDebugNd->IsCntntNode(), "Start kein ContentNode" );
+    OSL_ENSURE( pDebugNd->IsCntntNode(), "Start kein ContentNode" );
     pDebugNd = pDoc->GetNodes()[ nENd ];
-    ASSERT( pDebugNd->IsCntntNode(), "Ende kein ContentNode" );
+    OSL_ENSURE( pDebugNd->IsCntntNode(), "Ende kein ContentNode" );
 #endif
 
     SwCntntNode* pCNd = pDoc->GetNodes()[ nSNd ]->GetCntntNode();
@@ -2687,7 +2684,7 @@ void SwRTFParser::ReadDocControls( int nToken )
             pColl = pDoc->GetTxtCollFromPool(RES_POOLCOLL_STANDARD, false );
         }
 
-        ASSERT(pColl, "impossible to have no standard style");
+        OSL_ENSURE(pColl, "impossible to have no standard style");
 
         if (pColl)
         {
@@ -2716,11 +2713,8 @@ void SwRTFParser::MakeStyleTab()
         if( !IsNewDoc() )
         {
             // search all outlined collections
-            //BYTE nLvl;
             const SwTxtFmtColls& rColls = *pDoc->GetTxtFmtColls();
             for( USHORT n = rColls.Count(); n; )
-                //if( MAXLEVEL > (nLvl = rColls[ --n ]->GetOutlineLevel() ))//#outline level,zhaojianwei
-                //  nValidOutlineLevels |= 1 << nLvl;
                 if( rColls[ --n ]->IsAssignedToListLevelOfOutlineStyle())
                     nValidOutlineLevels |= 1 << rColls[ n ]->GetAssignedOutlineStyleLevel();//<-end,zhaojianwei
         }
@@ -2839,7 +2833,7 @@ void SwRTFParser::ReadSectControls( int nToken )
         return;
     }
 
-    ASSERT(!maSegments.empty(), "suspicious to have a section with no "
+    OSL_ENSURE(!maSegments.empty(), "suspicious to have a section with no "
         "page info, though probably legal");
     if (maSegments.empty())
     {
@@ -3000,7 +2994,7 @@ void SwRTFParser::ReadSectControls( int nToken )
                 }
                 if (!aNewSection.mpPageHdFt)
                 {
-                    String aName(RTL_CONSTASCII_STRINGPARAM("rtfHdFt"));
+                    String aName(RTL_CONSTASCII_USTRINGPARAM("rtfHdFt"));
                     aName += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aName);
                     aNewSection.mpPageHdFt = &pDoc->_GetPageDesc(nPageNo);
@@ -3015,7 +3009,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_HEADERF:
                 if (!aNewSection.mpTitlePageHdFt)
                 {
-                    String aTitle(RTL_CONSTASCII_STRINGPARAM("rtfTitleHdFt"));
+                    String aTitle(RTL_CONSTASCII_USTRINGPARAM("rtfTitleHdFt"));
                     aTitle += String::CreateFromInt32(maSegments.size());
                     sal_uInt16 nPageNo = pDoc->MakePageDesc(aTitle);
                     aNewSection.mpTitlePageHdFt = &pDoc->_GetPageDesc(nPageNo);
@@ -3110,7 +3104,7 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_MARGT:
             case RTF_MARGB:
             case RTF_FACINGP:
-                ASSERT(!this, "why are these tokens found in this section?");
+                OSL_ENSURE(!this, "why are these tokens found in this section?");
                 ReadDocControls( nToken );
                 break;
             default:
@@ -3238,7 +3232,7 @@ void SwRTFParser::ReadPageDescTbl()
         case '}':
             if (1 == --nNumOpenBrakets)
             {
-                ASSERT(pPgFmt && pPg, "Serious problem here");
+                OSL_ENSURE(pPgFmt && pPg, "Serious problem here");
                 if (pPgFmt && pPg)
                 {
                     // PageDesc ist fertig, setze am Doc
@@ -3274,7 +3268,7 @@ void SwRTFParser::ReadPageDescTbl()
                 if (nPos != pDoc->MakePageDesc(
                     String::CreateFromInt32(nTokenValue)))
                 {
-                    ASSERT( FALSE, "PageDesc an falscher Position" );
+                    OSL_ENSURE( FALSE, "PageDesc an falscher Position" );
                 }
             }
             pPg = &pDoc->_GetPageDesc(nPos);
@@ -3437,7 +3431,7 @@ void SwRTFParser::ReadPageDescTbl()
         case RTF_TEXTTOKEN:
             if (!DelCharAtEnd(aToken, ';' ).Len())
                 break;
-            ASSERT(pPg, "Unexpected missing pPg");
+            OSL_ENSURE(pPg, "Unexpected missing pPg");
             if (pPg)
             {
                 pPg->SetName(aToken);
@@ -3499,20 +3493,6 @@ void SwRTFParser::ReadPageDescTbl()
     SkipToken( -1 );
 }
 
-// -------------- Methoden --------------------
-
-/*
-void SwRTFParser::ReadUnknownData()
-{
-    SvRTFParser::ReadUnknownData();
-}
-
-void SwRTFParser::ReadOLEData()
-{
-    SvRTFParser::ReadOLEData();
-}
-*/
-
 void SwRTFParser::ReadPrtData()
 {
     while( IsParserWorking() )
@@ -3527,7 +3507,7 @@ void SwRTFParser::ReadPrtData()
 
 static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
-    ASSERT(pHdFtFmt, "Impossible, no header");
+    OSL_ENSURE(pHdFtFmt, "Impossible, no header");
     const SwFrmFmt* pExisting = bReuseOld ?
         pHdFtFmt->GetHeader().GetHeaderFmt() : 0;
     if (!pExisting)
@@ -3541,7 +3521,7 @@ static const SwNodeIndex* SetHeader(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 
 static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 {
-    ASSERT(pHdFtFmt, "Impossible, no footer");
+    OSL_ENSURE(pHdFtFmt, "Impossible, no footer");
     const SwFrmFmt* pExisting = bReuseOld ?
         pHdFtFmt->GetFooter().GetFooterFmt() : 0;
     if (!pExisting)
@@ -3556,7 +3536,7 @@ static const SwNodeIndex* SetFooter(SwFrmFmt* pHdFtFmt, BOOL bReuseOld)
 
 void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 {
-    ASSERT( RTF_FOOTNOTE == nToken ||
+    OSL_ENSURE( RTF_FOOTNOTE == nToken ||
             RTF_FLY_INPARA == nToken ||
             pPageDesc, "PageDesc fehlt" );
 
@@ -3607,7 +3587,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
             pTxtAttr = pTxtNd->InsertItem( aFtnNote, nPos, nPos,
                         bDelFirstChar ? nsSetAttrMode::SETATTR_NOTXTATRCHR : 0 );
 
-            ASSERT( pTxtAttr, "konnte die Fussnote nicht einfuegen/finden" );
+            OSL_ENSURE( pTxtAttr, "konnte die Fussnote nicht einfuegen/finden" );
 
             if( pTxtAttr )
                 pSttIdx = ((SwTxtFtn*)pTxtAttr)->GetStartNode();
@@ -3634,7 +3614,7 @@ void SwRTFParser::ReadHeaderFooter( int nToken, SwPageDesc* pPageDesc )
 
             pTxtAttr = pPam->GetNode()->GetTxtNode()->GetTxtAttrForCharAt(
                                                 nPos, RES_TXTATR_FLYCNT );
-            ASSERT( pTxtAttr, "konnte den Fly nicht einfuegen/finden" );
+            OSL_ENSURE( pTxtAttr, "konnte den Fly nicht einfuegen/finden" );
 
             pSttIdx = pHdFtFmt->GetCntnt().GetCntntIdx();
             bSetFlyInDoc = FALSE;
@@ -3859,29 +3839,6 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
 
     }
 
-
-/*
- ????????????????????????????????????????????????????????????????????
- ?? muss die LineSpacing Hoehe 200Twip betragen ??
- ?? in rtfitem.hxx wird es auf 0 defaultet. Wenn ja, dann muss hier
- ?? ein neues Item gesetzt werden!!!!
- ????????????????????????????????????????????????????????????????????
-
-    // LineSpacing korrigieren
-    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_LINESPACING, FALSE, &pItem ))
-    {
-        const SvxLineSpacingItem* pLS = (const SvxLineSpacingItem*)pItem;
-        SvxLineSpacingItem aNew;
-
-        aNew.SetInterLineSpace( pLS->GetInterLineSpace() );
-        aNew.GetLineSpaceRule() = pLS->GetLineSpaceRule();
-        aNew.SetPropLineSpace( pLS->GetPropLineSpace() );
-        aNew.GetInterLineSpaceRule() = pLS->GetInterLineSpaceRule();
-
-        rSet.Put( aNew );
-    }
-?????????????????????????????????????????????????????????????????? */
-
 }
 
 
@@ -3889,7 +3846,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     BYTE nOutlineLevel, bool& rbCollExist)
 {
     if( BYTE(-1) == nOutlineLevel )
-        //nOutlineLevel = NO_NUMBERING;
         nOutlineLevel = MAXLEVEL;//#outline level,zhaojianwei
 
     rbCollExist = false;
@@ -3897,11 +3853,10 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
     String aNm( rName );
     if( !aNm.Len() )
     {
-        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
+        OSL_ENSURE(!this, "not a bug, but I (cmc) want to see an example of this");
         if( !nPos )
         {
             pColl = pDoc->GetTxtCollFromPool( RES_POOLCOLL_STANDARD, false );
-            //pColl->SetOutlineLevel( nOutlineLevel );      //#outline level,removed by zhaojianwei
             if(nOutlineLevel < MAXLEVEL )                           //->add by zhaojianwei
                 pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
             else
@@ -3929,7 +3884,6 @@ SwTxtFmtColl* SwRTFParser::MakeColl(const String& rName, USHORT nPos,
 
     if (!rbCollExist)
     {
-        //pColl->SetOutlineLevel( nOutlineLevel );  //#outline level,removed by zhaojianwei
         if(nOutlineLevel < MAXLEVEL)                        //->add by zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle( nOutlineLevel );
         else
@@ -3947,7 +3901,7 @@ SwCharFmt* SwRTFParser::MakeCharFmt(const String& rName, USHORT nPos,
     String aNm( rName );
     if( !aNm.Len() )
     {
-        ASSERT(!this, "not a bug, but I (cmc) want to see an example of this");
+        OSL_ENSURE(!this, "not a bug, but I (cmc) want to see an example of this");
         aNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "NoName(" ));
         aNm += String::CreateFromInt32( nPos );
         aNm += ')';
@@ -4261,13 +4215,6 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
             pSet->Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, nLevel ));
         }
         break;
-
-/*
-    case RTF_SBYS:
-    case RTF_EXPND:
-    case RTF_KEEP:
-    case RTF_KEEPN:
-*/
 
     }
 }

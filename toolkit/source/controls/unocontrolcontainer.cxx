@@ -809,8 +809,8 @@ void UnoControlContainer::createPeer( const uno::Reference< awt::XToolkit >& rxT
                 aCtrls.getArray()[n]->createPeer( rxToolkit, getPeer() );
 
             uno::Reference< awt::XVclContainerPeer >  xC( getPeer(), uno::UNO_QUERY );
-
-            xC->enableDialogControl( sal_True );
+            if ( xC.is() )
+                xC->enableDialogControl( sal_True );
             ImplActivateTabControllers();
         }
 

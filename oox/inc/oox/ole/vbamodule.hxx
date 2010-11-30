@@ -69,9 +69,30 @@ public:
 
     /** Imports all records for this module until the MODULEEND record. */
     void                importDirRecords( BinaryInputStream& rDirStrm );
-    /** Imports the Basic source code into the passed Basic library. */
-    void                importSourceCode(
+
+    /** Imports the VBA source code into the passed Basic library. */
+    void                createAndImportModule(
                             StorageBase& rVbaStrg,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxOleNameOverrides ) const;
+    /** Creates an empty Basic module in the passed Basic library. */
+    void                createEmptyModule(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
+
+private:
+    /** Reads and returns the VBA source code from the passed storage. */
+    ::rtl::OUString     readSourceCode(
+                            StorageBase& rVbaStrg,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxOleNameOverrides ) const;
+
+    void extractOleOverrideFromAttr( const rtl::OUString& rAttribute,
+                                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxOleNameOverrides ) const;
+
+    /** Creates a new Basic module and inserts it into the passed Basic library. */
+    void                createModule(
+                            const ::rtl::OUString& rVBASourceCode,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& rxBasicLib,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& rxDocObjectNA ) const;
 

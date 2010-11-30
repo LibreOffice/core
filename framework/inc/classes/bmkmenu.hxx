@@ -54,25 +54,28 @@ class BmkMenu_Impl;
 class BmkMenu : public AddonMenu
 {
     public:
-                        enum BmkMenuType
-                        {
-                            BMK_NEWMENU,
-                            BMK_WIZARDMENU
-                        };
+        enum BmkMenuType
+        {
+            BMK_NEWMENU,
+            BMK_WIZARDMENU
+        };
 
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType nType );
-                        ~BmkMenu();
+        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                 BmkMenuType nType
+        );
 
-    void                Initialize(); // Synchrones Laden der Eintraege
+        ~BmkMenu();
+
+        void Initialize(); // Synchrones Laden der Eintraege
 
     protected:
         BmkMenu::BmkMenuType m_nType;
-        USHORT          CreateMenuId();
+        USHORT CreateMenuId();
 
     private:
-                        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-                                 BmkMenuType, BmkMenu* pRoot );
+        BmkMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                 BmkMenuType, BmkMenu* pRoot
+        );
 
         BmkMenu_Impl*   _pImp;
 };

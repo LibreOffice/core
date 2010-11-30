@@ -105,9 +105,6 @@ public:
 
 };
 
-/* -----------------26.05.98 15:55-------------------
- *
- * --------------------------------------------------*/
 class SwXAutoTextGroup : public cppu::WeakImplHelper6
 <
     ::com::sun::star::text::XAutoTextGroup,
@@ -127,7 +124,7 @@ protected:
     virtual ~SwXAutoTextGroup();    // ref-counted objects are not to be deleted from outside -> protected dtor
 
 public:
-        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries*  pGloss/*SwTextBlocks* pGroup*/);
+        SwXAutoTextGroup(const rtl::OUString& rName, SwGlossaries* pGloss);
 
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
@@ -176,9 +173,6 @@ public:
     void    Invalidate();
 };
 
-/* -----------------17.06.98 12:03-------------------
- *
- * --------------------------------------------------*/
 class SwXAutoTextEntry
         :public SfxListener
         ,public cppu::WeakImplHelper5

@@ -138,8 +138,8 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
 
     Reference< XExternalUriReferenceTranslator > xTranslator(
         xMS->createInstance(
-        OUString::createFromAscii(
-        "com.sun.star.uri.ExternalUriReferenceTranslator")),
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.uri.ExternalUriReferenceTranslator"))),
         UNO_QUERY);
 
     // parse command line arguments
@@ -168,7 +168,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             break;
         }
         // convert file URLs to internal form #112849#
-        if (aArg.indexOf(OUString::createFromAscii("file:"))==0 &&
+        if (aArg.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file:")))==0 &&
             xTranslator.is())
         {
             OUString tmp(xTranslator->translateToInternal(aArg));
@@ -981,8 +981,6 @@ sal_Bool CommandLineArgs::GetConversionOut( ::rtl::OUString& rPara ) const
     rPara = m_aStrParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
     return m_aStrSetParams[ CMD_STRINGPARAM_CONVERSIONOUT ];
 }
-
-
 
 sal_Bool CommandLineArgs::IsEmpty() const
 {

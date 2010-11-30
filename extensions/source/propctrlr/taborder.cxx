@@ -106,9 +106,7 @@ namespace pcr
         aPB_OK.SetClickHdl( LINK( this, TabOrderDialog, OKClickHdl ) );
         aPB_OK.Disable();
 
-        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-        pImageList = new ImageList( PcrRes( bIsHighContrast ? RID_IL_FORMEXPLORER_HC : RID_IL_FORMEXPLORER ) );
-
+        pImageList = new ImageList( PcrRes( RID_IL_FORMEXPLORER ) );
 
         if ( m_xModel.is() )
             m_xTempModel = new OSimpleTabModel( m_xModel->getControlModels() );
@@ -302,9 +300,7 @@ namespace pcr
         }
 
         // TODO: UNO action (to bracket all the single actions which are being created)
-//        pDrawModel->BegUndo(PcrRes(RID_STR_UNDO_TABORDER));
         m_xModel->setControlModels( aSortedControlModelSeq );
-//        pDrawModel->EndUndo();
 
         EndDialog( sal_True );
         return 0;

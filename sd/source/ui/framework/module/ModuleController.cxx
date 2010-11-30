@@ -104,7 +104,7 @@ Sequence<rtl::OUString> SAL_CALL ModuleController_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController"));
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ModuleController"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -155,15 +155,15 @@ void ModuleController::LoadFactories (const Reference<XComponentContext>& rxCont
     {
         ConfigurationAccess aConfiguration (
             rxContext,
-            OUString::createFromAscii("/org.openoffice.Office.Impress/"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/")),
             ConfigurationAccess::READ_ONLY);
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode(
-                OUString::createFromAscii("MultiPaneGUI/Framework/ResourceFactories")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiPaneGUI/Framework/ResourceFactories"))),
             UNO_QUERY);
         ::std::vector<rtl::OUString> aProperties (snFactoryPropertyCount);
-        aProperties[0] = OUString::createFromAscii("ServiceName");
-        aProperties[1] = OUString::createFromAscii("ResourceList");
+        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
+        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ResourceList"));
         ConfigurationAccess::ForAll(
             xFactories,
             aProperties,
@@ -191,7 +191,7 @@ void ModuleController::ProcessFactory (const ::std::vector<Any>& rValues)
     ::std::vector<rtl::OUString> aURLs;
     tools::ConfigurationAccess::FillList(
         xResources,
-        OUString::createFromAscii("URL"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
         aURLs);
 
 #if defined VERBOSE && VERBOSE>0
@@ -219,14 +219,14 @@ void ModuleController::InstantiateStartupServices (void)
     try
     {
         tools::ConfigurationAccess aConfiguration (
-            OUString::createFromAscii("/org.openoffice.Office.Impress/"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/")),
             tools::ConfigurationAccess::READ_ONLY);
         Reference<container::XNameAccess> xFactories (
             aConfiguration.GetConfigurationNode(
-                OUString::createFromAscii("MultiPaneGUI/Framework/StartupServices")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("MultiPaneGUI/Framework/StartupServices"))),
             UNO_QUERY);
         ::std::vector<rtl::OUString> aProperties (snStartupPropertyCount);
-        aProperties[0] = OUString::createFromAscii("ServiceName");
+        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
         tools::ConfigurationAccess::ForAll(
             xFactories,
             aProperties,

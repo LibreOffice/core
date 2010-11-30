@@ -187,7 +187,6 @@ namespace rptui
                 OUnoObject* pUnoObj = dynamic_cast<OUnoObject*>(pObject);
                 if ( pUnoObj ) // this doesn't need to be done for shapes
                 {
-                    // Rectangle aRect = pUnoObj->GetCurrentBoundRect();
                     ::boost::shared_ptr<OSectionWindow> pSectionWindow = m_rReportController.getSectionWindow(xSection);
                     if (pSectionWindow != NULL)
                     {

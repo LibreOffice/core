@@ -659,9 +659,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Left = TRUE ;
     };
 };
-/*-- 29.11.00 11:36:24---------------------------------------------------
-  Asian typography
-  -----------------------------------------------------------------------*/
+
+// Asian typography
 TabPage RID_SVXPAGE_PARA_ASIAN
 {
     HelpId = HID_SVXPAGE_PARA_ASIAN ;

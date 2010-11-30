@@ -160,16 +160,16 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 //------------------------------------------------------------------------------
 ::rtl::OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dbu.SbaXGridControl");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dbu.SbaXGridControl"));
 }
 
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> SbaXGridControl::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(3);
-    aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.InteractionGridControl");
-    aSupported[1] = ::rtl::OUString::createFromAscii("com.sun.star.form.control.GridControl");
-    aSupported[2] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.InteractionGridControl"));
+    aSupported[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.control.GridControl"));
+    aSupported[2] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControl"));
     return aSupported;
 }
 DBG_NAME(SbaXGridControl );
@@ -257,8 +257,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
 
     // TODO: why the hell this whole class does not use any mutex?
 
-//  if (0 == m_nPeerCreationLevel)
-    {
         Reference< ::com::sun::star::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
         for (   StatusMultiplexerArray::iterator aIter = m_aStatusMultiplexer.begin();
                 aIter != m_aStatusMultiplexer.end();
@@ -267,7 +265,6 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< ::com::sun::star::awt
             if ((*aIter).second && (*aIter).second->getLength())
                 xDisp->addStatusListener((*aIter).second, (*aIter).first);
         }
-    }
 }
 
 //---------------------------------------------------------------------------------------
@@ -423,10 +420,10 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
 //---------------------------------------------------------------------------------------
 Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException )
 {
-    if  (   (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/BrowserAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/RowHeight")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnAttribs")))
-        ||  (aURL.Complete.equals(::rtl::OUString::createFromAscii(".uno:GridSlots/ColumnWidth")))
+    if  (   (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/BrowserAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/RowHeight"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnAttribs"))))
+        ||  (aURL.Complete.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:GridSlots/ColumnWidth"))))
         )
     {
         return (::com::sun::star::frame::XDispatch*)this;
@@ -509,17 +506,17 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     const PropertyValue* pArgs = aArgs.getConstArray();
     for (sal_uInt16 i=0; i<aArgs.getLength(); ++i, ++pArgs)
     {
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnViewPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnViewPos")))
         {
             nColId = pGrid->GetColumnIdFromViewPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnModelPos"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnModelPos")))
         {
             nColId = pGrid->GetColumnIdFromModelPos(::comphelper::getINT16(pArgs->Value));
             break;
         }
-        if (pArgs->Name == ::rtl::OUString::createFromAscii("ColumnId"))
+        if (pArgs->Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnId")))
         {
             nColId = ::comphelper::getINT16(pArgs->Value);
             break;
@@ -675,10 +672,6 @@ void SbaGridHeader::MouseButtonDown( const MouseEvent& _rMEvt )
             // the base class will start a column move here, which we don't want to allow
             // (at the moment. If we store relative positions with the columns, we can allow column moves ....)
 
-//          sal_uInt16  nPos(0);
-//          sal_uInt16  nHitTest = ImplHitTest( _rMEvt.GetPosPixel(), mnMouseOff, nPos );
-//          if (!nHitTest & HEAD_HITTEST_DIVIDER)
-//              return;
         }
 
     FmGridHeader::MouseButtonDown(_rMEvt);
@@ -863,7 +856,7 @@ void SbaGridControl::PreExecuteRowContextMenu(sal_uInt16 nRow, PopupMenu& rMenu)
         rMenu.InsertItem(ID_BROWSER_ROWHEIGHT, aNewItems.GetItemText(ID_BROWSER_ROWHEIGHT), 0, nPos++);
         rMenu.SetHelpId(ID_BROWSER_ROWHEIGHT, aNewItems.GetHelpId(ID_BROWSER_ROWHEIGHT));
         rMenu.InsertSeparator(nPos++);
-    } // if (!IsReadOnlyDB())
+    }
 
     if ( GetSelectRowCount() > 0 )
     {
@@ -994,13 +987,13 @@ void SbaGridControl::SetBrowserAttrs()
     try
     {
         PropertyValue aArg;
-        aArg.Name = ::rtl::OUString::createFromAscii("IntrospectedObject");
+        aArg.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IntrospectedObject"));
         aArg.Value <<= xGridModel;
         Sequence< Any > aDialogArgs(1);
         aDialogArgs[0] <<= aArg;
 
         Reference< XInterface > xDialog = getServiceManager()->createInstanceWithArguments(
-            ::rtl::OUString::createFromAscii("com.sun.star.form.ControlFontDialog"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.ControlFontDialog")),
             aDialogArgs
             );
         if (!xDialog.is())
@@ -1206,14 +1199,14 @@ void SbaGridControl::StartDrag( sal_Int8 _nAction, const Point& _rPosPixel )
         // check which kind of dragging has to be initiated
         if  (   bHitHandle                          //  the handle column
                                                     // AND
-            &&  (   GetSelectRowCount()                     //  at least one row is selected
-                                                        // OR
-                ||  (   (nRow >= 0)                         //  a row below the header
-                    &&  !bCurrentRowVirtual                 //  we aren't appending a new record
-                    &&  (nRow != GetCurrentPos())           //  a row which is not the current one
-                    )                                   // OR
-                ||  (   (0 == GetSelectRowCount())          // no rows selected
-                    &&  (-1 == nRow)                        // hit the header
+            &&  (   GetSelectRowCount()             //  at least one row is selected
+                                                    // OR
+                ||  (   (nRow >= 0)                 //  a row below the header
+                    &&  !bCurrentRowVirtual         //  we aren't appending a new record
+                    &&  (nRow != GetCurrentPos())   //  a row which is not the current one
+                    )                               // OR
+                ||  (   (0 == GetSelectRowCount())  // no rows selected
+                    &&  (-1 == nRow)                // hit the header
                     )
                 )
             )
@@ -1397,8 +1390,6 @@ void SbaGridControl::DoFieldDrag(sal_uInt16 nColumnPos, sal_Int16 nRowPos)
         {
             switch (_aType.mnSotId)
             {
-//              case SOT_FORMAT_RTF:                    // RTF data descriptions
-//              case SOT_FORMATSTR_ID_HTML:             // HTML data descriptions
                 case SOT_FORMATSTR_ID_DBACCESS_TABLE:   // table descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_QUERY:   // query descriptor
                 case SOT_FORMATSTR_ID_DBACCESS_COMMAND: // SQL command

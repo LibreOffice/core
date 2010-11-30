@@ -165,7 +165,7 @@ static char *pt (unsigned char *md, int length)
     return(buf);
 }
 
-int SAL_CALL main (int argc, char **argv)
+int SAL_CALL main (void)
 {
     const char **P,**R, **Q;
     char *p;
@@ -308,7 +308,7 @@ int SAL_CALL main (int argc, char **argv)
     i = 1;
     while (*P)
     {
-        rtl_digest_initHMAC_MD5 (Digest, *Q, strlen(*Q));
+        rtl_digest_initHMAC_MD5 (Digest, (const sal_uInt8*)(*Q), strlen(*Q));
         rtl_digest_updateHMAC_MD5 (Digest, *P, strlen(*P));
         rtl_digest_getHMAC_MD5 (Digest, md, sizeof(md));
 
@@ -336,8 +336,8 @@ int SAL_CALL main (int argc, char **argv)
     i = 1;
     while (*P)
     {
-        rtl_digest_initHMAC_SHA1 (Digest, *Q, strlen(*Q));
-        rtl_digest_updateHMAC_SHA1 (Digest, *P, strlen(*P));
+        rtl_digest_initHMAC_SHA1 (Digest, (const sal_uInt8*)(*Q), strlen(*Q));
+        rtl_digest_updateHMAC_SHA1 (Digest, (const sal_uInt8*)(*P), strlen(*P));
         rtl_digest_getHMAC_SHA1 (Digest, md, sizeof(md));
 
         p=pt (md, RTL_DIGEST_LENGTH_HMAC_SHA1);
@@ -361,8 +361,8 @@ int SAL_CALL main (int argc, char **argv)
     Q=digest_key_HMAC_MD5;
     rtl_digest_PBKDF2 (
         md, RTL_DIGEST_LENGTH_MD5, /* [out] derived key     */
-        Q[1], strlen(Q[1]),        /* [in]  password        */
-        P[1], strlen(P[1]),        /* [in]  salt            */
+        (const sal_uInt8*)(Q[1]), strlen(Q[1]),        /* [in]  password        */
+        (const sal_uInt8*)(P[1]), strlen(P[1]),        /* [in]  salt            */
         1000);                     /* [in]  iteration count */
 
     p=pt (md, RTL_DIGEST_LENGTH_MD5);

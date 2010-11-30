@@ -112,9 +112,7 @@ long SwWrtShell::DelLine()
     SwCrsrShell::LeftMargin();
     SetMark();
     SwCrsrShell::RightMargin();
-//Warum soll hier noch ein Zeichen in der naechsten Zeile geloescht werden?
-//  if(!IsEndOfPara())
-//      SwCrsrShell::Right();
+
     long nRet = Delete();
     Pop(FALSE);
     if( nRet )

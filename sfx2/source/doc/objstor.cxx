@@ -163,7 +163,7 @@ void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& 
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
     css::uno::Reference< css::container::XSet > xModelCollection(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster")),
+        xSMGR->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),
         css::uno::UNO_QUERY);
     if (xModelCollection.is())
     {
@@ -223,7 +223,7 @@ sal_Bool SfxObjectShell::PutURLContentsToVersionStream_Impl(
     try
     {
         uno::Reference< embed::XStorage > xVersion = xDocStorage->openStorageElement(
-                                                        ::rtl::OUString::createFromAscii( "Versions" ),
+                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Versions")),
                                                         embed::ElementModes::READWRITE );
 
         DBG_ASSERT( xVersion.is(),
@@ -335,7 +335,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
             {
                 try
                 {
-                    xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ), uno::makeAny( aDataFlavor.MimeType ) );
+                    xProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")), uno::makeAny( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
                 {
@@ -354,7 +354,7 @@ void SfxObjectShell::SetupStorage( const uno::Reference< embed::XStorage >& xSto
                 {
                     try
                     {
-                        xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "Version" ), uno::makeAny( aVersion ) );
+                        xProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Version")), uno::makeAny( aVersion ) );
                     }
                     catch( uno::Exception& )
                     {
@@ -686,7 +686,7 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
             if ( pMedium->GetFilter() && ( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) )
             {
                 uno::Reference < beans::XPropertySet > xSet( GetModel(), uno::UNO_QUERY );
-                ::rtl::OUString sLockUpdates(::rtl::OUString::createFromAscii("LockUpdates"));
+                ::rtl::OUString sLockUpdates(RTL_CONSTASCII_USTRINGPARAM("LockUpdates"));
                 bool bSetProperty = true;
                 try
                 {
@@ -827,7 +827,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
         if( xServiceManager.is() )
         {
             xFilterCFG = com::sun::star::uno::Reference< XNameAccess >(
-                xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                xServiceManager->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.FilterFactory")) ),
                 UNO_QUERY );
         }
 
@@ -842,7 +842,7 @@ sal_uInt32 SfxObjectShell::HandleFilter( SfxMedium* pMedium, SfxObjectShell* pDo
                 {
                     sal_Int32 nPropertyCount = aProps.getLength();
                     for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
-                        if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                        if( aProps[nProperty].Name.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UIComponent"))) )
                         {
                             ::rtl::OUString aServiceName;
                             aProps[nProperty].Value >>= aServiceName;
@@ -1307,7 +1307,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
                     if ( !xProps.is() )
                         throw uno::RuntimeException();
 
-                    xProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ),
+                    xProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
                                             uno::makeAny( aDataFlavor.MimeType ) );
                 }
                 catch( uno::Exception& )
@@ -2718,7 +2718,7 @@ sal_Bool SfxObjectShell::CommonSaveAs_Impl
 
     BOOL bWasReadonly = IsReadOnly();
 
-    if ( aURL == aActName && aURL != INetURLObject( OUString::createFromAscii( "private:stream" ) )
+    if ( aURL == aActName && aURL != INetURLObject( OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")) )
         && IsReadOnly() )
     {
         SetError(ERRCODE_SFX_DOCUMENTREADONLY, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ));
@@ -3592,12 +3592,12 @@ sal_Bool SfxObjectShell::GenerateAndStoreThumbnail( sal_Bool bEncrypted,
 
     try {
         uno::Reference< embed::XStorage > xThumbnailStor =
-                                        xStor->openStorageElement( ::rtl::OUString::createFromAscii( "Thumbnails" ),
+                                        xStor->openStorageElement( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Thumbnails")),
                                                                     embed::ElementModes::READWRITE );
         if ( xThumbnailStor.is() )
         {
             uno::Reference< io::XStream > xStream = xThumbnailStor->openStreamElement(
-                                                        ::rtl::OUString::createFromAscii( "thumbnail.png" ),
+                                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("thumbnail.png")),
                                                         embed::ElementModes::READWRITE );
 
             if ( xStream.is() && WriteThumbnail( bEncrypted, bSigned, bIsTemplate, xStream ) )
@@ -3630,8 +3630,8 @@ sal_Bool SfxObjectShell::WriteThumbnail( sal_Bool bEncrypted,
 
             uno::Reference < beans::XPropertySet > xSet( xStream, uno::UNO_QUERY );
             if ( xSet.is() )
-                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("MediaType"),
-                                        uno::makeAny( ::rtl::OUString::createFromAscii("image/png") ) );
+                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")),
+                                        uno::makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/png")) ) );
             if ( bEncrypted )
             {
                 sal_uInt16 nResID = GraphicHelper::getThumbnailReplacementIDByFactoryName_Impl(

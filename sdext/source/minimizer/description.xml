@@ -11,7 +11,7 @@
         <OpenOffice.org-minimal-version value="2.3" dep:name="OpenOffice.org 2.3"/>
     </dependencies>
 
-    <version value="1.0.2"/>
+    <version value="1.0.3"/>
 
     <platform value="UPDATED_SUPPORTED_PLATFORM"/>
 
@@ -25,7 +25,6 @@
 
     <icon>
       <default xlink:href="bitmaps/extension_32.png" />
-      <high-contrast xlink:href="bitmaps/extension_32_h.png" />
     </icon>
 
 </description>

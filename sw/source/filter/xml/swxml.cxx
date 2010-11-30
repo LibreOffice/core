@@ -255,7 +255,7 @@ sal_Int32 ReadThroughComponent(
         }
         else
         {
-            ASSERT( bMustBeSuccessfull, "Warnings are not supported" );
+            OSL_ENSURE( bMustBeSuccessfull, "Warnings are not supported" );
             return *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                              ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
         }
@@ -445,10 +445,8 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
     for ( USHORT n = 1; n < rColls.Count(); ++n )
     {
         SwTxtFmtColl* pColl = rColls[ n ];
-        //if ( pColl->GetOutlineLevel() != NO_NUMBERING )       //#outline level zhaojianwei
         if ( pColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-        //  aOutlineLevelAssigned[ pColl->GetOutlineLevel() ] = true;
             aOutlineLevelAssigned[ pColl->GetAssignedOutlineStyleLevel() ] = true;//<-end,zhaojianwei
         }
 
@@ -471,14 +469,12 @@ void lcl_AdjustOutlineStylesForOOo( SwDoc& _rDoc )
         // --> OD 2007-01-11 #i73361#
         // Do not change assignment of already created default outline style
         // to a certain outline level.
-//        if ( aCreatedDefaultOutlineStyles[ i ] != 0 && !aOutlineLevelAssigned[ i ] )
         if ( !aOutlineLevelAssigned[ i ] &&
              aCreatedDefaultOutlineStyles[ i ] != 0 &&
              ! aCreatedDefaultOutlineStyles[ i ]->IsAssignedToListLevelOfOutlineStyle() )
         // <--
         {
             // apply outline level at created default outline style
-            //aCreatedDefaultOutlineStyles[ i ]->SetOutlineLevel( i );
             aCreatedDefaultOutlineStyles[ i ]->AssignToListLevelOfOutlineStyle(i);//#outline level added by zhaojianwei
 
             // apply outline numbering rule, if none is set.
@@ -541,7 +537,7 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // Get service factory
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return ERR_SWG_READ_ERROR;
@@ -580,11 +576,11 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
 
     // Get the docshell, the model, and finally the model's component
     SwDocShell *pDocSh = rDoc.GetDocShell();
-    ASSERT( pDocSh, "XMLReader::Read: got no doc shell" );
+    OSL_ENSURE( pDocSh, "XMLReader::Read: got no doc shell" );
     if( !pDocSh )
         return ERR_SWG_READ_ERROR;
     uno::Reference< lang::XComponent > xModelComp( pDocSh->GetModel(), UNO_QUERY );
-    ASSERT( xModelComp.is(),
+    OSL_ENSURE( xModelComp.is(),
             "XMLReader::Read: got no model" );
     if( !xModelComp.is() )
         return ERR_SWG_READ_ERROR;
@@ -1087,7 +1083,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
 {
     uno::Reference< lang::XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     uno::Reference < embed::XStorage > xStg2;
     if( xServiceFactory.is() && ( xStg2 = rMedium.GetStorage() ).is() )
@@ -1105,7 +1101,7 @@ USHORT XMLReader::GetSectionList( SfxMedium& rMedium,
             // get parser
             uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
-            ASSERT( xXMLParser.is(),
+            OSL_ENSURE( xXMLParser.is(),
                 "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
             if( xXMLParser.is() )
             {

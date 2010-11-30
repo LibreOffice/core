@@ -27,6 +27,7 @@
  */
 
 #include "DocumentElement.hxx"
+#include "DocumentHandler.hxx"
 #include "FilterInternal.hxx"
 #include <string.h>
 
@@ -37,7 +38,7 @@ void TagElement::print() const
     WRITER_DEBUG_MSG(("%s\n", msTagName.cstr()));
 }
 
-void TagOpenElement::write(DocumentHandler *pHandler) const
+void TagOpenElement::write(DocumentHandlerInterface *pHandler) const
 {
     pHandler->startElement(getTagName().cstr(), maAttrList);
 }
@@ -52,14 +53,14 @@ void TagOpenElement::addAttribute(const char *szAttributeName, const WPXString &
         maAttrList.insert(szAttributeName, sAttributeValue);
 }
 
-void TagCloseElement::write(DocumentHandler *pHandler) const
+void TagCloseElement::write(DocumentHandlerInterface *pHandler) const
 {
     WRITER_DEBUG_MSG(("TagCloseElement: write (%s)\n", getTagName().cstr()));
 
     pHandler->endElement(getTagName().cstr());
 }
 
-void CharDataElement::write(DocumentHandler *pHandler) const
+void CharDataElement::write(DocumentHandlerInterface *pHandler) const
 {
     WRITER_DEBUG_MSG(("TextElement: write\n"));
     pHandler->characters(msData);
@@ -72,8 +73,10 @@ TextElement::TextElement(const WPXString & sTextBuf) :
 
 // write: writes a text run, appropriately converting spaces to <text:s>
 // elements
-void TextElement::write(DocumentHandler *pHandler) const
+void TextElement::write(DocumentHandlerInterface *pHandler) const
 {
+    if (msTextBuf.len() <= 0)
+        return;
     WPXPropertyList xBlankAttrList;
 
     WPXString sTemp;

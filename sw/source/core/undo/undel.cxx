@@ -139,7 +139,7 @@ SwUndoDelete::SwUndoDelete( SwPaM& rPam, BOOL bFullPara, BOOL bCalledByTblCpy )
     // Step 1. deletion/record of content indizes
     if( bDelFullPara )
     {
-        ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+        OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
         DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                         DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -892,7 +892,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
 
         if( bDelFullPara )
         {
-            ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 
@@ -908,7 +908,7 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
     {
         if( bDelFullPara )
         {
-            ASSERT( rPam.HasMark(), "PaM ohne Mark" );
+            OSL_ENSURE( rPam.HasMark(), "PaM ohne Mark" );
             DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint(),
                             DelCntntType(nsDelCntntType::DELCNT_ALL | nsDelCntntType::DELCNT_CHKNOCNTNT) );
 

@@ -121,7 +121,7 @@ void SAL_CALL DocumentAcceleratorConfiguration::initialize(const css::uno::Seque
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
     m_xDocumentRoot = lArgs.getUnpackedValueOrDefault(
-                        ::rtl::OUString::createFromAscii("DocumentRoot"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot")),
                         css::uno::Reference< css::embed::XStorage >());
 
     aWriteLock.unlock();

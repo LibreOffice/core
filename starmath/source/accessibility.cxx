@@ -1167,8 +1167,8 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
         // get list of char attribs
         rEditEngine.GetCharAttribs( nPara, aAttribs );
 
-        BOOL bEmpty = TRUE;     // we found no item inside the selektion of this paragraph
-        BOOL bGaps  = FALSE;    // we found items but theire gaps between them
+        bool bEmpty = true;     // we found no item inside the selektion of this paragraph
+        bool bGaps  = false;    // we found items but theire gaps between them
         USHORT nLastEnd = nPos;
 
         const SfxPoolItem* pParaItem = NULL;
@@ -1201,16 +1201,16 @@ USHORT GetSvxEditEngineItemState( EditEngine& rEditEngine, const ESelection& rSe
             }
 
             if( bEmpty )
-                bEmpty = FALSE;
+                bEmpty = false;
 
             if( !bGaps && aAttrib.nStart > nLastEnd )
-                bGaps = TRUE;
+                bGaps = true;
 
             nLastEnd = aAttrib.nEnd;
         }
 
         if( !bEmpty && !bGaps && nLastEnd < ( nEndPos - 1 ) )
-            bGaps = TRUE;
+            bGaps = true;
         if( bEmpty )
             eParaState = SFX_ITEM_DEFAULT;
         else if( bGaps )

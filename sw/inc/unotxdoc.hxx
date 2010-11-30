@@ -331,9 +331,6 @@ public:
     // css::text::XTextEmbeddedObjectsSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getEmbeddedObjects(void) throw( css::uno::RuntimeException );
 
-//  // css::text::XTextShapesSupplier
-//    virtual css::uno::Reference< css::container::XIndexAccess >  getShapes(void) throw( css::uno::RuntimeException );
-
     // css::text::XBookmarksSupplier
     virtual css::uno::Reference< css::container::XNameAccess >  SAL_CALL getBookmarks(void) throw( css::uno::RuntimeException );
 
@@ -444,9 +441,7 @@ public:
     void SAL_CALL operator delete( void * ) throw();
 
 };
-/* -----------------25.10.99 11:02-------------------
 
- --------------------------------------------------*/
 class SwXLinkTargetSupplier : public cppu::WeakImplHelper2
 <
     css::container::XNameAccess,
@@ -483,9 +478,7 @@ public:
     //
     void    Invalidate() {pxDoc = 0;}
 };
-/* -----------------26.10.99 09:05-------------------
 
- --------------------------------------------------*/
 class SwXLinkNameAccessWrapper : public cppu::WeakImplHelper4
 <
     css::beans::XPropertySet,
@@ -536,9 +529,7 @@ public:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void) throw( css::uno::RuntimeException );
 
 };
-/* -----------------26.10.99 15:46-------------------
 
- --------------------------------------------------*/
 class SwXOutlineTarget : public cppu::WeakImplHelper2
 <
     css::beans::XPropertySet,
@@ -589,8 +580,7 @@ public:
 };
 
 
-/*-- 06.01.2004 15:08:34---------------------------------------------------
-    The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
+/*  The class SwViewOptionAdjust_Impl is used to adjust the SwViewOption of
     the current ViewShell so that fields are not printed as commands and
     hidden characters are always invisible. Hidden text and place holders
     should be printed according to the current print options.
@@ -600,8 +590,6 @@ class SwViewOptionAdjust_Impl
 {
     SwWrtShell &    m_rShell;
     SwViewOption    m_aOldViewOptions;
-//    SwViewOption    m_aRenderViewOptions;   // view options to use when rendering for PDF export or printing
-//    bool            m_bRestoreViewOptions;
 
 public:
     SwViewOptionAdjust_Impl( SwWrtShell& rSh, const SwViewOption &rViewOptions );

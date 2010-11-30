@@ -98,7 +98,6 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aCond1ED.ShowBrackets(FALSE);
     aCond2ED.ShowBrackets(FALSE);
 
-//  SwWrtShell* pSh = (SwWrtShell*)ViewShell::GetCurrShell();
 }
 
 SwFldFuncPage::~SwFldFuncPage()
@@ -351,7 +350,6 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
             case TYP_INPUTFLD:
                 aValueFT.SetText(SW_RESSTR(STR_PROMPT));
                 bValue = TRUE;
-                // bShowSelection = TRUE;
                 break;
 
             case TYP_COMBINED_CHARS:

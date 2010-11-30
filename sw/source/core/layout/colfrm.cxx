@@ -92,14 +92,14 @@ SwColumnFrm::~SwColumnFrm()
 
 void MA_FASTCALL lcl_RemoveColumns( SwLayoutFrm *pCont, USHORT nCnt )
 {
-    ASSERT( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
+    OSL_ENSURE( pCont && pCont->Lower() && pCont->Lower()->IsColumnFrm(),
             "Keine Spalten zu entfernen." );
 
     SwColumnFrm *pColumn = (SwColumnFrm*)pCont->Lower();
     ::lcl_RemoveFtns( pColumn, TRUE, TRUE );
     while ( pColumn->GetNext() )
     {
-        ASSERT( pColumn->GetNext()->IsColumnFrm(),
+        OSL_ENSURE( pColumn->GetNext()->IsColumnFrm(),
                 "Nachbar von ColFrm kein ColFrm." );
         pColumn = (SwColumnFrm*)pColumn->GetNext();
     }
@@ -245,7 +245,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     if( nOldNum != nNewNum || bChgFtn )
     {
         SwDoc *pDoc = GetFmt()->GetDoc();
-        ASSERT( pDoc, "FrmFmt gibt kein Dokument her." );
+        OSL_ENSURE( pDoc, "FrmFmt gibt kein Dokument her." );
         // SaveCntnt wuerde auch den Inhalt der Fussnotencontainer aufsaugen
         // und im normalen Textfluss unterbringen.
         if( IsPageBodyFrm() )
@@ -311,7 +311,7 @@ void SwLayoutFrm::ChgColumns( const SwFmtCol &rOld, const SwFmtCol &rNew,
     //unnuetzte Aktionen beim Einstellen zur Folge haben.
     if ( pSave )
     {
-        ASSERT( Lower() && Lower()->IsLayoutFrm() &&
+        OSL_ENSURE( Lower() && Lower()->IsLayoutFrm() &&
                 ((SwLayoutFrm*)Lower())->Lower() &&
                 ((SwLayoutFrm*)Lower())->Lower()->IsLayoutFrm(),
                 "Gesucht: Spaltenbody (Tod oder Lebend)." );   // ColumnFrms jetzt mit BodyFrm

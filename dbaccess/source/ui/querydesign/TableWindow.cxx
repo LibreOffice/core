@@ -121,7 +121,7 @@ OTableWindow::~OTableWindow()
         OSL_ENSURE(m_pListBox->GetEntryCount()==0,"Forgot to call EmptyListbox()!");
         ::std::auto_ptr<Window> aTemp(m_pListBox);
         m_pListBox = NULL;
-    } // if (m_pListBox)
+    }
     if ( m_pContainerListener.is() )
         m_pContainerListener->dispose();
 
@@ -188,13 +188,13 @@ BOOL OTableWindow::FillListBox()
             m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
     }
     // mark all primary keys with special image
-    ModuleRes TmpRes(isHiContrast(m_pListBox) ? IMG_JOINS_H : IMG_JOINS);
+    ModuleRes TmpRes(IMG_JOINS);
     ImageList aImageList(TmpRes);
     Image aPrimKeyImage = aImageList.GetImage(IMG_PRIMARY_KEY);
 
     if (GetData()->IsShowAll())
     {
-        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString::createFromAscii("*") );
+        SvLBoxEntry* pEntry = m_pListBox->InsertEntry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) );
         pEntry->SetUserData( createUserData(NULL,false) );
     }
 
@@ -273,17 +273,16 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController().getConnection() );
 
-    Image aImage, aImageHC;
-    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
+    Image aImage;
+    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage );
 
-    if ( !aImage || !aImageHC )
+    if ( !aImage )
     {
         OSL_ENSURE( false, "OTableWindow::impl_updateImage: no images!" );
         return;
     }
 
-    m_aTypeImage.SetModeImage( aImage, BMP_COLOR_NORMAL );
-    m_aTypeImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_aTypeImage.SetModeImage( aImage );
     m_aTypeImage.Show();
 }
 

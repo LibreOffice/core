@@ -134,7 +134,6 @@ SwGlossaryGroupDlg::SwGlossaryGroupDlg(Window * pParent,
         pData->sGroupName = sGroup;
         pData->sGroupTitle = sTitle;
         String sTemp(sTitle);
-        //sGroup.GetToken(0, GLOS_DELIM)
         sTemp += '\t';
         pData->sPath = aPathLB.GetEntry((USHORT)sGroup.GetToken(1, GLOS_DELIM).ToInt32());
         sTemp += pData->sPath;
@@ -265,7 +264,6 @@ IMPL_LINK( SwGlossaryGroupDlg, SelectHdl, SvTabListBox*, EMPTYARG  )
 IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
 {
     String sGroup(aNameED.GetText());
-//  sGroup.ToLower();
     sGroup += GLOS_DELIM;
     sGroup += String::CreateFromInt32(aPathLB.GetSelectEntryPos());
     OSL_ENSURE(!pGlosHdl->FindGroupName(sGroup), "group already available!");
@@ -273,7 +271,6 @@ IMPL_LINK( SwGlossaryGroupDlg, NewHdl, Button*, EMPTYARG )
         pInsertedArr = new SvStrings;
     pInsertedArr->Insert(new String(sGroup), pInsertedArr->Count());
     String sTemp(aNameED.GetText());
-//  sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     SvLBoxEntry* pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -399,7 +396,6 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
     delete (GlosBibUserData*)pEntry->GetUserData();
     aGroupTLB.GetModel()->Remove(pEntry);
     String sTemp(aNameED.GetText());
-//  sTemp.ToLower();
     sTemp += '\t';
     sTemp += aPathLB.GetSelectEntry();
     pEntry = aGroupTLB.InsertEntry(sTemp);
@@ -417,7 +413,6 @@ IMPL_LINK( SwGlossaryGroupDlg, RenameHdl, Button *, EMPTYARG )
 IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
 {
     String sEntry(aNameED.GetText());
-//  sEntry.ToLower();
     BOOL bEnableNew = TRUE;
     BOOL bEnableDel = FALSE;
     ULONG nCaseReadonly =
@@ -462,11 +457,6 @@ IMPL_LINK( SwGlossaryGroupDlg, ModifyHdl, Edit*, EMPTYARG )
     {
         GlosBibUserData* pUserData = (GlosBibUserData*)pEntry->GetUserData();
         bEnableDel = IsDeleteAllowed(pUserData->sGroupName);
-
-//      String sGroup = aGroupTLB.GetEntryText(pEntry, 0);
-//      sGroup += GLOS_DELIM;
-//      sGroup += String::CreateFromInt32(aPathLB.GetEntryPos(aGroupTLB.GetEntryText(pEntry, 1)));
-//      bEnableDel = IsDeleteAllowed(sGroup);
     }
 
     aDelPB.Enable(bEnableDel);

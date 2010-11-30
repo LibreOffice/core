@@ -93,7 +93,7 @@ bool SplitString( const rtl::OUString &sWhole,
     i18n::LocaleDataItem aLocaleItem = ScGlobal::pLocaleData->getLocaleItem();
 
     // Get prefix element
-    rtl::OUString sEmpty, sUser = rtl::OUString::createFromAscii( "-" );
+    rtl::OUString sEmpty, sUser = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "-" ));
     ParseResult aPRPre = ScGlobal::pCharClass->parsePredefinedToken(
         KParseType::IDENTNAME, sWhole, 0,
         KParseTokens::ANY_LETTER, sUser, KParseTokens::ANY_LETTER, sUser );

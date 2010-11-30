@@ -3167,7 +3167,7 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
             // XML_TEMPLATE is default
             eElement = XML_TEMPLATE;
             break;
-        // --> OD 2007-09-14 #i81002#
+        // Core implementation for direct cross-references (#i81002#)
         case ReferenceFieldPart::NUMBER:
             eElement = XML_NUMBER;
             break;
@@ -3177,7 +3177,6 @@ enum XMLTokenEnum XMLTextFieldExport::MapReferenceType(sal_Int16 nType)
         case ReferenceFieldPart::NUMBER_FULL_CONTEXT:
             eElement = XML_NUMBER_ALL_SUPERIOR;
             break;
-        // <--
         default:
             DBG_ERROR("unknown reference type");
             eElement = XML_TEMPLATE;

@@ -2006,7 +2006,7 @@ ADORecordset* WpADOConnection::getTables( const ::com::sun::star::uno::Any& cata
 
     ++nPos;
     ::rtl::OUStringBuffer aTypes;
-    ::rtl::OUString aComma = ::rtl::OUString::createFromAscii(",");
+    ::rtl::OUString aComma( RTL_CONSTASCII_USTRINGPARAM( "," ));
     const ::rtl::OUString* pIter = types.getConstArray();
     const ::rtl::OUString* pEnd = pIter + types.getLength();
     for( ; pIter != pEnd ; ++pIter)

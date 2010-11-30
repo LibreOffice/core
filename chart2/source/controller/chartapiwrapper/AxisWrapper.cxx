@@ -337,7 +337,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
         lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedLineProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
 
@@ -584,8 +583,6 @@ Sequence< OUString > AxisWrapper::getSupportedServiceNames_Static()
     aServices[ 0 ] = C2U( "com.sun.star.chart.ChartAxis" );
     aServices[ 1 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 2 ] = C2U( "com.sun.star.style.CharacterProperties" );
-//     aServices[ 3 ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ 4 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

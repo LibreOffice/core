@@ -212,7 +212,7 @@ namespace sdbtools
     //--------------------------------------------------------------------
     namespace
     {
-        /** translates a CopmositionType into a EComposeRule
+        /** translates a CompositionType into a EComposeRule
             @throws IllegalArgumentException
                 if the given value does not denote a valid CompositionType
         */

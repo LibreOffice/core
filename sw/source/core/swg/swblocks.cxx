@@ -522,7 +522,7 @@ USHORT SwTextBlocks::Rename( USHORT n, const String* s, const String* l )
             aLong = *l;
         if( !aNew.Len() )
         {
-            ASSERT( !this, "Kein Kurzname in Rename angegeben" );
+            OSL_ENSURE( !this, "Kein Kurzname in Rename angegeben" );
             nErr = ERR_SWG_INTERNAL_ERROR; return (USHORT) -1;
         }
 
@@ -756,7 +756,7 @@ BOOL SwTextBlocks::IsOnlyTextBlock( const String& rShort ) const
         return IsOnlyTextBlock( nIdx );
     }
 
-    ASSERT( !this, "ungueltiger Name" );
+    OSL_ENSURE( !this, "ungueltiger Name" );
     return FALSE;
 }
 
@@ -791,9 +791,6 @@ void SwTextBlocks::EndPutMuchBlockEntries()
         pImp->PutMuchEntries( FALSE );
 }
 
-/*-- 20.09.2004 10:25:33---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 String    SwTextBlocks::GetBaseURL() const
 {
     String sRet;
@@ -801,9 +798,7 @@ String    SwTextBlocks::GetBaseURL() const
         sRet = pImp->GetBaseURL();
     return sRet;
 }
-/*-- 20.09.2004 10:25:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTextBlocks::SetBaseURL( const String& rURL )
 {
     if(pImp)

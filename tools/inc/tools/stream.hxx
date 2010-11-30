@@ -842,9 +842,7 @@ public:
 class TOOLS_DLLPUBLIC SvDataCopyStream
 {
 public:
-    /*-----------------MM 30.04.96 11:01-----------------
-     mehrfaches Aufrufen von Load und Assign erlaubt
-    --------------------------------------------------*/
+    // mehrfaches Aufrufen von Load und Assign erlaubt
                     TYPEINFO();
     virtual         ~SvDataCopyStream(){}
     virtual void    Load( SvStream & ) = 0;

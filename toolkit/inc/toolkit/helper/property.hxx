@@ -205,6 +205,8 @@ namespace rtl {
 #define BASEPROPERTY_MULTISELECTION_SIMPLEMODE      152
 #define BASEPROPERTY_ITEM_SEPARATOR_POS             153
 #define BASEPROPERTY_GROUPNAME                      154  // ::rtl::OUString
+#define BASEPROPERTY_MULTIPAGEVALUE                 155  // sal_Int32
+#define BASEPROPERTY_USERFORMCONTAINEES             156  // css::container::XNameContainer
 
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.

@@ -506,7 +506,7 @@ double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
       && nType != NUMBERFORMAT_TIME && nType != NUMBERFORMAT_DATETIME )
     {
         short nPrecision;
-        if ( nFormat )
+        if ((nFormat % SV_COUNTRY_LANGUAGE_OFFSET) != 0)
         {
             nPrecision = (short)GetFormatTable()->GetFormatPrecision( nFormat );
             switch ( nType )
@@ -525,7 +525,12 @@ double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
             }
         }
         else
+        {
             nPrecision = (short)GetDocOptions().GetStdPrecision();
+            // #i115512# no rounding for automatic decimals
+            if (nPrecision == static_cast<short>(SvNumberFormatter::UNLIMITED_PRECISION))
+                return fVal;
+        }
         double fRound = ::rtl::math::round( fVal, nPrecision );
         if ( ::rtl::math::approxEqual( fVal, fRound ) )
             return fVal;        // durch Rundung hoechstens Fehler

@@ -33,7 +33,6 @@
     #include <sal/types.h>
 #endif
 
-//     #include <rtl/tres.h>
 #include <testshl/tresstatewrapper.hxx>
 
 #ifndef _RTL_STRING_HXX_
@@ -55,8 +54,7 @@
 #ifndef _RTL_USTRBUF_HXX
         #include <rtl/ustrbuf.hxx>
 #endif
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
+
 #ifndef _OSL_THREAD_H_
     #include <osl/thread.h>
 #endif
@@ -151,11 +149,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_003(
                                                hTestResult hRtlTestResult )
 {
     ::rtl::OUStringBuffer aUStrBuf1(kTestStr2Len);
-#ifdef WITH_CORE
-    ::rtl::OUStringBuffer aUStrBuf2(kSInt32Max);     //will core dump
-#else
     ::rtl::OUStringBuffer aUStrBuf2(0);
-#endif
     ::rtl::OUStringBuffer aUStrBuf3(kNonSInt32Max);
 
 
@@ -164,13 +158,9 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_ctor_003(
         ! *(aUStrBuf1.getStr()) && aUStrBuf1.getCapacity() == kTestStr2Len ;
 
     bool b2 =
-#ifdef WITH_CORE
-        aUStrBuf2.getLength() == 0 &&
-        ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == kSInt32Max ;
-#else
         aUStrBuf2.getLength() == 0 &&
             ! *(aUStrBuf2.getStr()) && aUStrBuf2.getCapacity() == /* LLA: ??? 16 */ 0;
-#endif
+
     bool b3 =
         aUStrBuf3.getLength() == 0 &&
         ! *(aUStrBuf3.getStr()) && aUStrBuf3.getCapacity() == kNonSInt32Max;
@@ -443,10 +433,6 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getCapacity(
             new OUStringBuffer(arrOUS[5]) },
         {"capacity of empty string (default constructor)", 16,
                         new OUStringBuffer() },
-#ifdef WITH_CORE
-        {"capacity of empty string (with capacity 2147483647)(code will core dump)", kSInt32Max,
-                        new OUStringBuffer(kSInt32Max) },// will core dump
-#endif
         {"capacity of empty string (with capacity -2147483648)", kNonSInt32Max,
                         new OUStringBuffer(kNonSInt32Max) },
         {"capacity of empty string (with capacity 16)", 16,
@@ -528,24 +514,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ensureCapacity(
       {"capacity equal to 0, minimum is -1", 0,
                         new OUStringBuffer(0), -1},
     */
-#ifdef WITH_CORE
-        {"capacity equal to 2147483647, minimum is 65535", kSInt32Max,//will core dump
-                        new OUStringBuffer(kSInt32Max), 65535},
-        {"capacity equal to 2147483647, minimum is 2147483647", kSInt32Max,//will core dump
-                        new OUStringBuffer(kSInt32Max), kSInt32Max},
-        {"capacity equal to 2147483647, minimum is -1", kSInt32Max,//will core dump
-                        new OUStringBuffer(kSInt32Max), -1},
-        {"capacity equal to 2147483647, minimum is 0", kSInt32Max,//will core dump
-                        new OUStringBuffer(kSInt32Max), 0},
-        {"capacity equal to 2147483647, minimum is -2147483648", kSInt32Max,//will core dump
-                        new OUStringBuffer(kSInt32Max), kNonSInt32Max},
-#endif
         {"capacity equal to -2147483648, minimum is 65535", 65535,
                         new OUStringBuffer(kNonSInt32Max), 65535},
-#ifdef WITH_CORE
-        {"capacity equal to -2147483648, minimum is 2147483647", 2147483647,//will core dump
-                        new OUStringBuffer(kNonSInt32Max), 2147483647},
-#endif
         {"capacity equal to -2147483648, minimum is -1", 2,
                         new OUStringBuffer(kNonSInt32Max), -1},
         {"capacity equal to -2147483648, minimum is 0", 2,
@@ -951,23 +921,6 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
     {"set the only of OUStringBuffer(aUStr28) with special character",
                 new OUString(aUStr34),
                 new OUStringBuffer(arrOUS[2]), 1, 5},
-/*
-        {"set the only of OUStringBuffer(aUStr28) with special character",
-                new OUString(aUStr35),
-                new OUStringBuffer(arrOUS[2]), 1, -5}
-*/
-#ifdef WITH_CORE
-    ,{"invalid character of OUStringBuffer()",
-                0,
-                new OUStringBuffer(arrOUS[3]), 0, 5},
-        {"invalid character of OUStringBuffer()",
-                0,
-                new OUStringBuffer(arrOUS[3]), -2, 5},
-        {"invalid character of OUStringBuffer()",
-                0,
-                new OUStringBuffer(arrOUS[3]), 3, 5}
-#endif
-
     };
 
 
@@ -1096,11 +1049,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), new OUString()}
-#ifdef WITH_CORE
-        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
-                new OUString(),
-                new OUStringBuffer(kSInt32Max), new OUString()}
-#endif
     };
 
 
@@ -1218,11 +1166,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), aUStr25 }
-#ifdef WITH_CORE
-        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
-                new OUString(),
-                new OUStringBuffer(kSInt32Max), aUStr25 }
-#endif
     };
 
 
@@ -1361,16 +1304,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), aUStr2, 0 },
-    /* LLA: input3 must null < 0
-      {"Appends the string(length less than 0) to the string buffer arrOUS[4]",
-                new OUString(aUStr42),
-                new OUStringBuffer(arrOUS[4]), aUStr2, -1 }
-    */
-#ifdef WITH_CORE
-        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
-                new OUString(),
-                new OUStringBuffer(kSInt32Max), aUStr25 }
-#endif
     };
 
 
@@ -1459,14 +1392,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
         {"Appends the sal_Bool(sal_False) to the string buffer arrOUS[4]",
                 new OUString(aUStr50),
                 new OUStringBuffer(arrOUS[4]), sal_False }
-#ifdef WITH_CORE
-        ,{"Appends the sal_Bool(sal_True) to the string buffer(with INT_MAX) ",
-                new OUString(aUStr47),
-                new OUStringBuffer(kSInt32Max), sal_True },
-        {"Appends the sal_Bool(sal_False) to the string buffer(with INT_MAX) ",
-                new OUString(aUStr48),
-                new OUStringBuffer(kSInt32Max), sal_False }
-#endif
     };
 
 
@@ -1598,15 +1523,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), kTestStr25 }
-        /*{"Appends the string(with special characters) to the string buffer arrOUS[4]",
-                new OUString(aUStr43),
-                new OUStringBuffer(arrOUS[4]), kTestStr44 }*/
-#ifdef WITH_CORE
-        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
-                new OUString(),
-                new OUStringBuffer(kSInt32Max), kTestStr25 }
-#endif
-
     };
 
 
@@ -1743,16 +1659,6 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
         {"Appends the string(length equal to 0) to the string buffer arrOUS[4]",
                 new OUString(aUStr28),
                 new OUStringBuffer(arrOUS[4]), kTestStr2, 0 },
-    /* LLA: input3 must null < 0
-        {"Appends the string(length less than 0) to the string buffer arrOUS[4]",
-                new OUString(aUStr42),
-                new OUStringBuffer(arrOUS[4]), kTestStr2, -1 }
-    */
-#ifdef WITH_CORE
-        ,{"Appends the string(length equal to 0) to the string buffer(with INT_MAX) ",
-                new OUString(),
-                new OUStringBuffer(kSInt32Max), kTestStr25 }
-#endif
     };
 
 

@@ -787,13 +787,13 @@ ooo_atk_util_get_type (void)
 
         static const GTypeInfo typeInfo =
         {
-            type_query.class_size,
+            static_cast<guint16>(type_query.class_size),
             (GBaseInitFunc) NULL,
             (GBaseFinalizeFunc) NULL,
             (GClassInitFunc) ooo_atk_util_class_init,
             (GClassFinalizeFunc) NULL,
             NULL,
-            type_query.instance_size,
+            static_cast<guint16>(type_query.instance_size),
             0,
             (GInstanceInitFunc) NULL,
             NULL

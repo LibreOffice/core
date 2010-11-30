@@ -41,6 +41,9 @@ CXXFILES =  \
     styledlg.cxx
 
 SLOFILES =  \
+    $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
     $(SLO)$/styledlg.obj \
 
 SRS1NAME=$(TARGET)

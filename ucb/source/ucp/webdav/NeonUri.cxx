@@ -192,14 +192,14 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
 #if NEON_VERSION >= 0x0260
     if ( pUri->query )
     {
-        mPath += rtl::OUString::createFromAscii( "?" );
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?"));
         mPath += rtl::OStringToOUString(
             pUri->query,  RTL_TEXTENCODING_UTF8 );
     }
 
     if ( pUri->fragment )
     {
-        mPath += rtl::OUString::createFromAscii( "#" );
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
         mPath += rtl::OStringToOUString(
             pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
@@ -291,7 +291,7 @@ void NeonUri::calculateURI ()
         return aTemp;
     }
     else
-        return rtl::OUString::createFromAscii ("/");
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
 }
 
 bool NeonUri::operator== ( const NeonUri & rOther ) const
@@ -307,7 +307,7 @@ bool NeonUri::operator== ( const NeonUri & rOther ) const
 void NeonUri::AppendPath (const rtl::OUString& rPath)
 {
     if (mPath.lastIndexOf ('/') != mPath.getLength () - 1)
-        mPath += rtl::OUString::createFromAscii ("/");
+        mPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/"));
 
     mPath += rPath;
     calculateURI ();

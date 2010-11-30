@@ -260,7 +260,7 @@ namespace accessibility
 
     ::rtl::OUString AccessibleTabBarPage::getImplementationName() throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii( "com.sun.star.comp.svtools.AccessibleTabBarPage" );
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabBarPage" ));
     }
 
     // -----------------------------------------------------------------------------
@@ -281,7 +281,7 @@ namespace accessibility
     Sequence< ::rtl::OUString > AccessibleTabBarPage::getSupportedServiceNames() throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aNames(1);
-        aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabBarPage" );
+        aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabBarPage" ));
         return aNames;
     }
 

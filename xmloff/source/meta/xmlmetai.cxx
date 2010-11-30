@@ -200,9 +200,9 @@ void SvXMLMetaDocumentContext::initDocumentProperties()
         throw;
     } catch (uno::Exception & e) {
         throw lang::WrappedTargetRuntimeException(
-            ::rtl::OUString::createFromAscii(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                 "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
+                "properties init exception")),
             GetImport(), makeAny(e));
     }
 }
@@ -252,11 +252,11 @@ void SvXMLMetaDocumentContext::setBuildId(::rtl::OUString const& i_rBuildId, con
             (i_rBuildId.compareToAscii(
                 RTL_CONSTASCII_STRINGPARAM("OpenOffice.org 1") ) == 0))
         {
-            sBuildId = OUString::createFromAscii( "645$8687" );
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("645$8687"));
         }
         if ((i_rBuildId.compareToAscii( RTL_CONSTASCII_STRINGPARAM("NeoOffice/2") ) == 0) )
         {
-            sBuildId = OUString::createFromAscii( "680$9134" ); // fake NeoOffice as OpenOffice.org 2.2 release
+            sBuildId = OUString(RTL_CONSTASCII_USTRINGPARAM("680$9134")); // fake NeoOffice as OpenOffice.org 2.2 release
         }
     }
 

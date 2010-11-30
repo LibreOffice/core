@@ -81,12 +81,6 @@ OWizNameMatching::OWizNameMatching( Window* pParent)
     m_sDestText     = m_FT_TABLE_RIGHT.GetText();
     m_sDestText.AppendAscii("\n");
 
-    // set hiContrast
-    m_ibColumn_up.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_up_right.SetModeImage(ModuleRes(IMG_SORTUP_H),BMP_COLOR_HIGHCONTRAST);
-    m_ibColumn_down_right.SetModeImage(ModuleRes(IMG_SORTDOWN_H),BMP_COLOR_HIGHCONTRAST);
-
     FreeResource();
 }
 // -----------------------------------------------------------------------
@@ -111,7 +105,6 @@ void OWizNameMatching::Reset()
         m_bFirstTime = sal_False;
     }
 
-    //  m_CTRL_LEFT.Clear();
 }
 // -----------------------------------------------------------------------
 void OWizNameMatching::ActivatePage( )
@@ -170,7 +163,6 @@ sal_Bool OWizNameMatching::LeavePage()
             ;
         const sal_Int32 nPos = ::std::distance(pSrcColumns->begin(),aSrcIter);
 
-        //  sal_Int32 nPos = m_CTRL_LEFT.GetModel()->GetAbsPos(pLeftEntry);
         if(m_CTRL_LEFT.GetCheckButtonState(pLeftEntry) == SV_BUTTON_CHECKED)
         {
             OFieldDescription* pDestField = static_cast<OFieldDescription*>(pRightEntry->GetUserData());
@@ -228,7 +220,6 @@ IMPL_LINK( OWizNameMatching, ButtonClickHdl, Button *, pButton )
         if(pButton == &m_ibColumn_down && (nThumbPos+nVisibleSize+1) < nPos)
         {
             m_CTRL_LEFT.GetVScroll()->DoScrollAction(SCROLL_LINEDOWN);
-            //  m_CTRL_LEFT.MakeVisible(pEntry,sal_True);
         }
 
         TableListClickHdl(&m_CTRL_LEFT);
@@ -357,18 +348,7 @@ public:
     }
 
     virtual void Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 nFlags, SvLBoxEntry* pEntry);
-    //virtual void InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData);
 };
-
-
-
-//------------------------------------------------------------------------
-/*
-void OColumnString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry, SvViewDataItem* pViewData)
-{
-    SvLBoxString::InitViewData(pView,pEntry,pViewData);
-}
-*/
 //------------------------------------------------------------------------
 void OColumnString::Paint(const Point& rPos, SvLBox& rDev, sal_uInt16 /*nFlags*/, SvLBoxEntry* /*pEntry*/ )
 {

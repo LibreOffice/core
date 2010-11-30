@@ -1416,10 +1416,8 @@ SfxItemPresentation __EXPORT SdrTextAniAmountItem::GetPresentation(
 
     if(nValue < 0)
     {
-        sal_Char aText[] = "pixel";
-
         rText = UniString::CreateFromInt32(-nValue);
-        rText += UniString(aText, sizeof(aText-1));
+        rText += UniString(RTL_CONSTASCII_USTRINGPARAM("pixel"));
     }
     else
     {
@@ -2046,14 +2044,9 @@ XubString __EXPORT SdrMeasureUnitItem::GetValueTextByPos(USHORT nPos) const
     XubString aRetval;
 
     if((FieldUnit)nPos == FUNIT_NONE)
-    {
-        sal_Char aText[] = "default";
-        aRetval += UniString(aText, sizeof(aText-1));
-    }
+        aRetval += UniString(RTL_CONSTASCII_USTRINGPARAM("default"));
     else
-    {
         SdrFormatter::TakeUnitStr((FieldUnit)nPos, aRetval);
-    }
 
     return aRetval;
 }
@@ -2360,26 +2353,22 @@ XubString __EXPORT SdrGrafModeItem::GetValueTextByPos(UINT16 nPos) const
     {
         case 1:
         {
-            sal_Char aTextGreys[] = "Greys";
-            aStr += UniString(aTextGreys, sizeof(aTextGreys-1));
+            aStr += UniString(RTL_CONSTASCII_USTRINGPARAM("Greys"));
             break;
         }
         case 2:
         {
-            sal_Char aTextBlackWhite[] = "Black/White";
-            aStr += UniString(aTextBlackWhite, sizeof(aTextBlackWhite-1));
+            aStr += UniString(RTL_CONSTASCII_USTRINGPARAM("Black/White"));
             break;
         }
         case 3:
         {
-            sal_Char aTextWatermark[] = "Watermark";
-            aStr += UniString(aTextWatermark, sizeof(aTextWatermark-1));
+            aStr += UniString(RTL_CONSTASCII_USTRINGPARAM("Watermark"));
             break;
         }
         default:
         {
-            sal_Char aTextStandard[] = "Standard";
-            aStr += UniString(aTextStandard, sizeof(aTextStandard-1));
+            aStr += UniString(RTL_CONSTASCII_USTRINGPARAM("Standard"));
             break;
         }
     }

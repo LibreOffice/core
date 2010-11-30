@@ -762,11 +762,9 @@ void FontNameBox::DataChanged( const DataChangedEvent& rDCEvt )
 
 void FontNameBox::InitBitmaps( void )
 {
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    maImagePrinterFont = Image( SvtResId( bHC? RID_IMG_PRINTERFONT_HC : RID_IMG_PRINTERFONT ) );
-    maImageBitmapFont = Image( SvtResId( bHC? RID_IMG_BITMAPFONT_HC : RID_IMG_BITMAPFONT ) );
-    maImageScalableFont = Image( SvtResId( bHC? RID_IMG_SCALABLEFONT_HC : RID_IMG_SCALABLEFONT ) );
+    maImagePrinterFont = Image( SvtResId( RID_IMG_PRINTERFONT ) );
+    maImageBitmapFont = Image( SvtResId( RID_IMG_BITMAPFONT ) );
+    maImageScalableFont = Image( SvtResId( RID_IMG_SCALABLEFONT ) );
 }
 
 // -------------------------------------------------------------------

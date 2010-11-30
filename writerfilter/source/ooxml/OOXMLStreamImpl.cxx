@@ -262,7 +262,7 @@ uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
 
     uno::Reference<xml::sax::XParser> xParser
         (xFactory->createInstanceWithContext
-        ( rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ),
+        ( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")),
           mxContext ),
         uno::UNO_QUERY );
 

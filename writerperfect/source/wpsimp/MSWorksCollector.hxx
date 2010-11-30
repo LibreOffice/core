@@ -31,13 +31,14 @@
 #define _MSWORKSCOLLECTOR_HXX
 
 #include "filter/DocumentCollector.hxx"
+#include "filter/DocumentHandlerInterface.hxx"
 
 class MSWorksCollector : public DocumentCollector
 {
 public:
-    MSWorksCollector(WPSInputStream *pInput, DocumentHandler *pHandler);
+    MSWorksCollector(WPXInputStream *pInput, DocumentHandlerInterface *pHandler);
     virtual ~MSWorksCollector();
-    bool parseSourceDocument(WPSInputStream &input);
+    bool parseSourceDocument(WPXInputStream &input);
 };
 #endif
 

@@ -308,7 +308,6 @@
 // - ImageLists
 
 #define RID_IL_FORMEXPLORER                 ( RID_PROPCONTROLLER_START +  0 )
-#define RID_IL_FORMEXPLORER_HC              ( RID_PROPCONTROLLER_START +  1 )
 
 // -----------------------------------------------------------------------
 // - untyped resources

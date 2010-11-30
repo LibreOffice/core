@@ -179,7 +179,8 @@ public:
                         sal_Bool bDoNormalization,
                         sal_Bool bNormalizeWhitespace) throw( SAXException );
 
-    sal_uInt32 GetLastColumnCount() { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
+    sal_uInt32 GetLastColumnCount() const
+        { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
 
     inline void startDocument() throw( SAXException );
 
@@ -245,7 +246,7 @@ inline sal_uInt32 SaxWriterHelper::writeSequence() throw( SAXException )
         Any a;
         a <<= e;
         throw SAXException(
-            OUString::createFromAscii( "io exception during writing" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("io exception during writing")),
             Reference< XInterface > (),
             a );
     }
@@ -1030,12 +1031,12 @@ Reference < XInterface > SAL_CALL SaxWriter_CreateInstance(
 
 OUString SaxWriter_getServiceName() throw()
 {
-    return OUString::createFromAscii( "com.sun.star.xml.sax.Writer" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"));
 }
 
 OUString SaxWriter_getImplementationName() throw()
 {
-    return OUString::createFromAscii( "com.sun.star.extensions.xml.sax.Writer" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.extensions.xml.sax.Writer"));
 }
 
 Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
@@ -1111,12 +1112,12 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
     if( ! m_bDocStarted )
     {
         throw SAXException(
-            OUString::createFromAscii( "endDocument called before startDocument" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("endDocument called before startDocument")),
             Reference< XInterface >() , Any() );
     }
     if( m_nLevel ) {
         throw SAXException(
-            OUString::createFromAscii( "unexpected end of document" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("unexpected end of document")),
             Reference< XInterface >() , Any() );
     }
     mp_SaxWriterHelper->endDocument();
@@ -1129,7 +1130,7 @@ void SAXWriter::endDocument(void)                   throw(SAXException, RuntimeE
         Any a;
         a <<= e;
         throw SAXException(
-            OUString::createFromAscii( "IO exception during closing the IO Stream" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("IO exception during closing the IO Stream")),
             Reference< XInterface > (),
             a );
     }

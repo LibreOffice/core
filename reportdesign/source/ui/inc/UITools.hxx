@@ -69,7 +69,7 @@ namespace rptui
             ::com::sun::star::uno::Reference< T > xObject(_xCollection->getByIndex(i),::com::sun::star::uno::UNO_QUERY);
             if ( xObject == _xSearch )
                 break;
-        } // for (;i<nCount ; ++i)
+        }
         return i;
     }
 

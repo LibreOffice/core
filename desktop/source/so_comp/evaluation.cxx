@@ -67,7 +67,7 @@ const char* SOEvaluation::serviceName = "com.sun.star.office.Evaluation";
 
 OUString SOEvaluation::GetImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( implementationName));
+    return OUString::createFromAscii(implementationName);
 }
 
 Sequence< OUString > SOEvaluation::GetSupportedServiceNames()
@@ -151,7 +151,7 @@ rtl::OUString SAL_CALL SOEvaluation::getExactName( const rtl::OUString& rApproxi
                     rValue.Value >>= aEval;
             }
             // append eval string to title
-            aTitle += OUString::createFromAscii(" ") + aEval;
+            aTitle += OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) + aEval;
             if ( bExpired )
                 throw RuntimeException();
         }

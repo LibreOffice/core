@@ -62,7 +62,7 @@ public:
     SwNodeIndex* GetMvSttIdx() const
         { return SwUndoSaveSection::GetMvSttIdx(); }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     USHORT nRedlineCount;
 #endif
 };
@@ -435,7 +435,7 @@ void SwUndoSaveCntnt::MoveFromUndoNds( SwDoc& rDoc, ULONG nNodeIdx,
 
     }
     else {
-        ASSERT( FALSE, "was ist es denn nun?" );
+        OSL_ENSURE( FALSE, "was ist es denn nun?" );
     }
 
     rDoc.DoUndo( bUndo );
@@ -536,7 +536,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =
                     pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
-                ASSERT( pFtnHnt, "kein FtnAttribut" );
+                OSL_ENSURE( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -560,7 +560,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     pHistory = new SwHistory;
                 SwTxtAttr* const pFtnHnt =
                     pTxtNd->GetTxtAttrForCharAt( nFtnSttIdx );
-                ASSERT( pFtnHnt, "kein FtnAttribut" );
+                OSL_ENSURE( pFtnHnt, "kein FtnAttribut" );
                 SwIndex aIdx( pTxtNd, nFtnSttIdx );
                 pHistory->Add( pFtnHnt, pTxtNd->GetIndex(), false );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -599,7 +599,7 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                         SwTxtNode* pTxtNd = pDoc->GetNodes()[ pAPos->nNode]->GetTxtNode();
                         SwTxtAttr* const pFlyHnt = pTxtNd->GetTxtAttrForCharAt(
                             pAPos->nContent.GetIndex());
-                        ASSERT( pFlyHnt, "kein FlyAttribut" );
+                        OSL_ENSURE( pFlyHnt, "kein FlyAttribut" );
                         pHistory->Add( pFlyHnt, 0, false );
                         // n wieder zurueck, damit nicht ein Format uebesprungen wird !
                         n = n >= rSpzArr.Count() ? rSpzArr.Count() : n+1;
@@ -879,7 +879,7 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     {
         // ueberpruefe, ob der Inhalt an der alten Position steht
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
-        ASSERT( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
+        OSL_ENSURE( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
                 "Position in irgendeiner Section" );
 
         // move den Inhalt aus dem UndoNodes-Array in den Fly
@@ -1046,7 +1046,7 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
     : SwUndRng( rRedl ),
     SwRedlineData( rRedl.GetRedlineData(), bCopyNext )
 {
-    ASSERT( POS_OUTSIDE == eCmpPos ||
+    OSL_ENSURE( POS_OUTSIDE == eCmpPos ||
             !rRedl.GetContentIdx(), "Redline mit Content" );
 
     switch( eCmpPos )
@@ -1080,10 +1080,10 @@ SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,
         break;
 
     default:
-        ASSERT( !this, "keine gueltigen Daten!" )
+        OSL_ENSURE( !this, "keine gueltigen Daten!" );
     }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nRedlineCount = rSttPos.nNode.GetNode().GetDoc()->GetRedlineTbl().Count();
 #endif
 }
@@ -1114,7 +1114,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     RedlineMode_t eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
-    if (rDoc.GetDocShell() && (pRedl->GetComment() != String(::rtl::OUString::createFromAscii(""))) )
+    if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
 #if OSL_DEBUG_LEVEL > 0
@@ -1197,10 +1197,12 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     for( USHORT n = rSData.Count(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
 
+#if OSL_DEBUG_LEVEL > 1
     // check redline count against count saved in RedlineSaveData object
-    DBG_ASSERT( (rSData.Count() == 0) ||
+    OSL_ENSURE( (rSData.Count() == 0) ||
                 (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),
                 "redline count not restored properly" );
+#endif
 
     rDoc.SetRedlineMode_intern( eOld );
 }
@@ -1254,7 +1256,7 @@ BOOL SwUndo::CanRedlineGroup( SwRedlineSaveDatas& rCurr,
 // #111827#
 String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr)
 {
-    ASSERT( nLength - rFillStr.Len() >= 2, "improper arguments")
+    OSL_ENSURE( nLength - rFillStr.Len() >= 2, "improper arguments");
 
     String aResult;
 

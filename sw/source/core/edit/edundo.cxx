@@ -261,8 +261,8 @@ void SwEditShell::SetUndoActionCount( USHORT nNew )
 void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList )
 {
-    ASSERT( pShell != NULL, "need shell!" );
-    ASSERT( pSdrMarkList != NULL, "need mark list" );
+    OSL_ENSURE( pShell != NULL, "need shell!" );
+    OSL_ENSURE( pSdrMarkList != NULL, "need mark list" );
 
     if( pShell->ISA( SwFEShell ) )
     {
@@ -275,7 +275,7 @@ void lcl_SelectSdrMarkList( SwEditShell* pShell,
         // the old implementation would always unselect
         // objects, even if no new ones were selected. If this
         // is a problem, we need to re-work this a little.
-        ASSERT( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
+        OSL_ENSURE( pSdrMarkList->GetMarkCount() != 0, "empty mark list" );
     }
 }
 

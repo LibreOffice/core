@@ -180,7 +180,6 @@ ULONG SwASCWriter::WriteStream()
                                     BYTE(0xBF);
                                 break;
                             case RTL_TEXTENCODING_UCS2:
-                                //Strm().StartWritingUnicodeText();
                                 Strm().SetEndianSwap(FALSE);
 #ifdef OSL_LITENDIAN
                                 Strm() << BYTE(0xFF) << BYTE(0xFE);

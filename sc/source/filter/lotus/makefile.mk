@@ -44,22 +44,22 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =						\
-        $(SLO)$/filter.obj		\
-        $(SLO)$/lotus.obj		\
-        $(SLO)$/lotimpop.obj	\
-        $(SLO)$/lotread.obj		\
-        $(SLO)$/lotform.obj		\
-        $(SLO)$/memory.obj		\
-        $(SLO)$/op.obj			\
-        $(SLO)$/optab.obj		\
-        $(SLO)$/tool.obj		\
+SLOFILES =				\
+        $(EXCEPTIONSFILES)		\
+        $(SLO)$/optab.obj
+
+EXCEPTIONSFILES =			\
         $(SLO)$/expop.obj		\
         $(SLO)$/export.obj		\
-        $(SLO)$/lotattr.obj
-
-EXCEPTIONSFILES =				\
-        $(SLO)$/op.obj
+        $(SLO)$/filter.obj		\
+        $(SLO)$/lotattr.obj		\
+        $(SLO)$/lotform.obj		\
+        $(SLO)$/lotimpop.obj		\
+        $(SLO)$/lotread.obj		\
+        $(SLO)$/lotus.obj		\
+        $(SLO)$/memory.obj		\
+        $(SLO)$/op.obj			\
+        $(SLO)$/tool.obj
 
 # --- Tagets -------------------------------------------------------
 

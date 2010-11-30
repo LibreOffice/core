@@ -75,7 +75,6 @@ HyphenEdit_Impl::HyphenEdit_Impl( Window* pParent, const ResId& rResId ) :
 
 void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 {
-//  sal_uInt16 nMod  = rKEvt.GetKeyCode().GetModifier();
     sal_uInt16 nCode = rKEvt.GetKeyCode().GetCode();
 
     switch ( nCode )
@@ -105,7 +104,6 @@ void HyphenEdit_Impl::KeyInput( const KeyEvent& rKEvt )
 struct SvxHyphenWordDialog_Impl
 {
     SvxHyphenWordDialog *       m_pDialog;
-//    Window *                    m_pParent;
 
     FixedText           aWordFT;
     HyphenEdit_Impl     aWordEdit;
@@ -514,7 +512,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, HyphenateAllHdl_Impl, Button *, EMPTYARG /*
         try
         {
             uno::Reference< beans::XPropertySet >  xProp( SvxGetLinguPropertySet() );
-            const rtl::OUString aName( rtl::OUString::createFromAscii( "IsHyphAuto" ) );
+            const rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "IsHyphAuto" ) );
             uno::Any aAny;
 
             aAny <<= sal_True;

@@ -175,14 +175,14 @@ void SwNumRule::SetNumRuleMap(std::hash_map<String, SwNumRule *, StringHash> *
 
 USHORT SwNumRule::GetNumIndent( BYTE nLvl )
 {
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
 
 USHORT SwNumRule::GetBullIndent( BYTE nLvl )
 {
-    ASSERT( MAXLEVEL > nLvl, "NumLevel is out of range" );
+    OSL_ENSURE( MAXLEVEL > nLvl, "NumLevel is out of range" );
     return aDefNumIndents[ nLvl ];
 }
 
@@ -253,31 +253,6 @@ BOOL SwNumFmt::IsEnumeration() const
     // using this code. Therefore HBRINKM and I agreed upon defining
     // IsEnumeration() as !IsItemize()
     return !IsItemize();
-    // <--
-
-    /*
-    BOOL bResult;
-
-    switch(GetNumberingType())
-    {
-    case SVX_NUM_CHARS_UPPER_LETTER:
-    case SVX_NUM_CHARS_LOWER_LETTER:
-    case SVX_NUM_ROMAN_UPPER:
-    case SVX_NUM_ROMAN_LOWER:
-    case SVX_NUM_ARABIC:
-    case SVX_NUM_PAGEDESC:
-    case SVX_NUM_CHARS_UPPER_LETTER_N:
-    case SVX_NUM_CHARS_LOWER_LETTER_N:
-        bResult = TRUE;
-
-        break;
-
-    default:
-        bResult = FALSE;
-    }
-
-    return bResult;
-     */
 }
 
 
@@ -387,33 +362,6 @@ void SwNumFmt::UpdateNumNodes( SwDoc* pDoc )
         for( BYTE i = 0; i < MAXLEVEL; ++i )
             if( pRule->GetNumFmt( i ) == this )
             {
-                // --> OD 2008-02-19 #refactorlists#
-//                const String& rRuleNm = pRule->GetName();
-
-//                SwModify* pMod;
-//                const SfxPoolItem* pItem;
-//                USHORT k, nMaxItems = pDoc->GetAttrPool().GetItemCount(
-//                                                    RES_PARATR_NUMRULE );
-//                for( k = 0; k < nMaxItems; ++k )
-//                    if( 0 != (pItem = pDoc->GetAttrPool().GetItem(
-//                        RES_PARATR_NUMRULE, k ) ) &&
-//                        0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->
-//                                GetDefinedIn()) &&
-//                        ((SwNumRuleItem*)pItem)->GetValue() == rRuleNm )
-//                    {
-//                        if( pMod->IsA( TYPE( SwFmt )) )
-//                        {
-//                            SwNumRuleInfo aInfo( rRuleNm );
-//                            pMod->GetInfo( aInfo );
-
-//                            for( ULONG nFirst = 0, nLast = aInfo.GetList().Count();
-//                                nFirst < nLast; ++nFirst )
-//                                lcl_SetRuleChgd(
-//                                    *aInfo.GetList().GetObject( nFirst ), i );
-//                        }
-//                        else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-//                            lcl_SetRuleChgd( *(SwTxtNode*)pMod, i );
-//                    }
                 SwNumRule::tTxtNodeList aTxtNodeList;
                 pRule->GetTxtNodeList( aTxtNodeList );
                 for ( SwNumRule::tTxtNodeList::iterator aIter = aTxtNodeList.begin();
@@ -443,7 +391,7 @@ const SwFmtVertOrient*      SwNumFmt::GetGraphicOrientation() const
     }
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 long int SwNumRule::nInstances = 0;
 #endif
 
@@ -468,7 +416,7 @@ SwNumRule::SwNumRule( const String& rNm,
     meDefaultNumberFormatPositionAndSpaceMode( eDefaultNumberFormatPositionAndSpaceMode ),
     msDefaultListId()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSerial = nInstances++;
 #endif
 
@@ -550,7 +498,7 @@ SwNumRule::SwNumRule( const String& rNm,
         }
     }
     memset( aFmts, 0, sizeof( aFmts ));
-    ASSERT( sName.Len(), "NumRule ohne Namen!" );
+    OSL_ENSURE( sName.Len(), "NumRule ohne Namen!" );
 }
 
 SwNumRule::SwNumRule( const SwNumRule& rNumRule )
@@ -570,7 +518,7 @@ SwNumRule::SwNumRule( const SwNumRule& rNumRule )
       meDefaultNumberFormatPositionAndSpaceMode( rNumRule.meDefaultNumberFormatPositionAndSpaceMode ),
       msDefaultListId( rNumRule.msDefaultListId )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     nSerial = nInstances++;
 #endif
 
@@ -676,7 +624,7 @@ BOOL SwNumRule::operator==( const SwNumRule& rRule ) const
 
 void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 {
-    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i < MAXLEVEL )
     {
         if( !aFmts[ i ] || !(rNumFmt == Get( i )) )
@@ -690,7 +638,7 @@ void SwNumRule::Set( USHORT i, const SwNumFmt& rNumFmt )
 
 void SwNumRule::Set( USHORT i, const SwNumFmt* pNumFmt )
 {
-    ASSERT( i < MAXLEVEL, "Serious defect, please inform OD" )
+    OSL_ENSURE( i < MAXLEVEL, "Serious defect, please inform OD" );
     if( i >= MAXLEVEL )
         return;
     SwNumFmt* pOld = aFmts[ i ];
@@ -737,8 +685,7 @@ String SwNumRule::MakeNumString( const SwNumberTree::tNumberVector & rNumVector,
     if (nLevel < MAXLEVEL)
     {
         const SwNumFmt& rMyNFmt = Get( static_cast<USHORT>(nLevel) );
-        // - levels with numbering none has to provide prefix and suffix string
-//        if( SVX_NUM_NUMBER_NONE != rMyNFmt.GetNumberingType() )
+
         {
             BYTE i = static_cast<BYTE>(nLevel);
 
@@ -916,18 +863,14 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
 {
     if (bFlag)
     {
-//        tPamAndNums::iterator aIt;
-//        for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-//            (*aIt).second->InvalidateTree();
         std::set< SwList* > aLists;
         tTxtNodeList::iterator aIter;
         for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
         {
             const SwTxtNode* pTxtNode = *aIter;
             // --> OD 2010-06-04 #i111681# - applying patch from cmc
-//            aLists.insert( pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() ) );
             SwList* pList = pTxtNode->GetDoc()->getListByName( pTxtNode->GetListId() );
-            ASSERT( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
+            OSL_ENSURE( pList, "<SwNumRule::SetInvalidRule(..)> - list at which the text node is registered at does not exist. This is a serious issue --> please inform OD.");
             if ( pList )
             {
                 aLists.insert( pList );
@@ -942,71 +885,6 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
     bInvalidRuleFlag = bFlag;
 }
 
-// --> OD 2008-06-16 #i90078#
-// #i23725#, #i23726#
-//void SwNumRule::Indent(short nAmount, int nLevel, int nReferenceLevel,
-//                       BOOL bRelative, BOOL bFirstLine, BOOL bCheckGtZero)
-//{
-//    int nStartLevel = 0;
-//    int nEndLevel = MAXLEVEL - 1;
-//    BOOL bGotInvalid = FALSE;
-
-//    if (nLevel >= 0)
-//        nStartLevel = nEndLevel = nLevel;
-
-//    int i;
-//    short nRealAmount =  nAmount;
-
-//    if (! bRelative)
-//    {
-//        if (bFirstLine)
-//        {
-//            if (nReferenceLevel >= 0)
-//                nAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetFirstLineOffset();
-//            else
-//                nAmount = nAmount - Get(static_cast<USHORT>(nStartLevel)).GetFirstLineOffset();
-//        }
-
-//        BOOL bFirst = TRUE;
-
-//        if (nReferenceLevel >= 0)
-//            nRealAmount = nAmount - Get(static_cast<USHORT>(nReferenceLevel)).GetAbsLSpace();
-//        else
-//            for (i = nStartLevel; i < nEndLevel + 1; i++)
-//            {
-//                short nTmp = nAmount - Get(static_cast<USHORT>(i)).GetAbsLSpace();
-
-//                if (bFirst || nTmp > nRealAmount)
-//                {
-//                    nRealAmount = nTmp;
-//                    bFirst = FALSE;
-//                }
-//            }
-//    }
-
-//    if (nRealAmount < 0)
-//        for (i = nStartLevel; i < nEndLevel + 1; i++)
-//            if (Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount < 0)
-//                nRealAmount = -Get(static_cast<USHORT>(i)).GetAbsLSpace();
-
-//    for (i = nStartLevel; i < nEndLevel + 1; i++)
-//    {
-//        short nNew = Get(static_cast<USHORT>(i)).GetAbsLSpace() + nRealAmount;
-
-//        if (bCheckGtZero && nNew < 0)
-//            nNew = 0;
-
-//        SwNumFmt aTmpNumFmt(Get(static_cast<USHORT>(i)));
-//        aTmpNumFmt.SetAbsLSpace(nNew);
-
-//        Set(static_cast<USHORT>(i), aTmpNumFmt);
-
-//        bGotInvalid = TRUE;
-//    }
-
-//    if (bGotInvalid)
-//        SetInvalidRule(bGotInvalid);
-//}
 
 // change indent of all list levels by given difference
 void SwNumRule::ChangeIndent( const short nDiff )
@@ -1104,9 +982,6 @@ void SwNumRule::SetIndentOfFirstListLevelAndChangeOthers( const short nNewIndent
 
 void SwNumRule::Validate()
 {
-//    tPamAndNums::iterator aIt;
-//    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-//        (*aIt).second->NotifyInvalidChildren();
     std::set< SwList* > aLists;
     tTxtNodeList::iterator aIter;
     for ( aIter = maTxtNodeList.begin(); aIter != maTxtNodeList.end(); ++aIter )
@@ -1287,25 +1162,12 @@ namespace numfunc
 
     void SwDefBulletConfig::SetToDefault()
     {
-        // default bullet font name is now OpenSymbol
-//        msFontname = String::CreateFromAscii("StarSymbol");
         msFontname = String::CreateFromAscii("OpenSymbol");
         mbUserDefinedFontname = false;
         // <--
         meFontWeight = WEIGHT_DONTKNOW;
         meFontItalic = ITALIC_NONE;
 
-        // new bullet characters
-//        mnLevelChars[0] = 0x25cf;
-//        mnLevelChars[1] = 0x25cb;
-//        mnLevelChars[2] = 0x25a0;
-//        mnLevelChars[3] = 0x25cf;
-//        mnLevelChars[4] = 0x25cb;
-//        mnLevelChars[5] = 0x25a0;
-//        mnLevelChars[6] = 0x25cf;
-//        mnLevelChars[7] = 0x25cb;
-//        mnLevelChars[8] = 0x25a0;
-//        mnLevelChars[9] = 0x25cf;
         mnLevelChars[0] = 0x2022;
         mnLevelChars[1] = 0x25e6;
         mnLevelChars[2] = 0x25aa;
@@ -1345,8 +1207,8 @@ namespace numfunc
         uno::Sequence<uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const uno::Any* pValues = aValues.getConstArray();
-        ASSERT( aValues.getLength() == aPropNames.getLength(),
-                "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed")
+        OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
+                "<SwDefBulletConfig::SwDefBulletConfig()> - GetProperties failed");
         if ( aValues.getLength() == aPropNames.getLength() )
         {
             for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
@@ -1533,8 +1395,8 @@ namespace numfunc
         com::sun::star::uno::Sequence<com::sun::star::uno::Any> aValues =
                                                     GetProperties( aPropNames );
         const com::sun::star::uno::Any* pValues = aValues.getConstArray();
-        ASSERT( aValues.getLength() == aPropNames.getLength(),
-                "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed")
+        OSL_ENSURE( aValues.getLength() == aPropNames.getLength(),
+                "<SwNumberingUIBehaviorConfig::LoadConfig()> - GetProperties failed");
         if ( aValues.getLength() == aPropNames.getLength() )
         {
             for ( int nProp = 0; nProp < aPropNames.getLength(); ++nProp )
@@ -1550,8 +1412,8 @@ namespace numfunc
                         break;
                         default:
                         {
-                            ASSERT( false,
-                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property")
+                            OSL_ENSURE( false,
+                                    "<SwNumberingUIBehaviorConfig::LoadConfig()> - unknown configuration property");
                         }
                     }
                 }

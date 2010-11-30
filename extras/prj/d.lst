@@ -9,5 +9,8 @@ mkdir: %COMMON_DEST%\pck%_EXT%\openoffice
 ..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-CN.zip
 ..\%COMMON_OUTDIR%\bin\wordbook_en-US.zip %COMMON_DEST%\pck%_EXT%\wordbook_zh-TW.zip
 ..\source\truetype\symbol\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\truetype\symbol\*.otf %COMMON_DEST%\pck%_EXT%\*.otf
+..\source\truetype\decorative\*.ttf %COMMON_DEST%\pck%_EXT%\*.ttf
+..\source\truetype\decorative\*.otf %COMMON_DEST%\pck%_EXT%\*.otf
 ..\source\shellnew\soffice.* %COMMON_DEST%\pck%_EXT%\soffice.*
 ..\unx\source\fonts\fonts.dir %COMMON_DEST%\pck%_EXT%\openoffice\fonts.dir

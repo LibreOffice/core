@@ -50,7 +50,8 @@ TARFILE_MD5=e81c2f0953aa60f8062c05a4673f2be0
 PATCH_FILES=\
     Python-$(PYVERSION).patch \
     Python-ssl.patch \
-    Python-aix.patch
+    Python-aix.patch \
+    Python-2.6.1-urllib.patch
 
 CONFIGURE_DIR=
 

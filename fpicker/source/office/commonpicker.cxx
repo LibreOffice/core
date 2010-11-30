@@ -67,13 +67,13 @@ namespace svt
     {
         // the two properties we have
         registerProperty(
-            ::rtl::OUString::createFromAscii( "HelpURL" ), PROPERTY_ID_HELPURL,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "HelpURL" )), PROPERTY_ID_HELPURL,
             PropertyAttribute::TRANSIENT,
             &m_sHelpURL, ::getCppuType( &m_sHelpURL )
         );
 
         registerProperty(
-            ::rtl::OUString::createFromAscii( "Window" ), PROPERTY_ID_WINDOW,
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" )), PROPERTY_ID_WINDOW,
             PropertyAttribute::TRANSIENT | PropertyAttribute::READONLY,
             &m_xWindow, ::getCppuType( &m_xWindow )
         );

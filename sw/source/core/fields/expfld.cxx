@@ -143,7 +143,7 @@ SwTxtNode* GetFirstTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         while( 0 != (pCNd = rNodes.GoNext( &rPos.nNode ) ) &&
                 0 == ( pTxtNode = pCNd->GetTxtNode() ) )
                         ;
-        ASSERT( pTxtNode, "wo ist der 1.TextNode" );
+        OSL_ENSURE( pTxtNode, "wo ist der 1.TextNode" );
         rPos.nContent.Assign( pTxtNode, 0 );
     }
     else if ( !pCFrm->IsValid() )
@@ -172,7 +172,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
         {
             // hole das FlyFormat
             SwFrmFmt* pFlyFmt = ((SwFlyFrm*)pLayout)->GetFmt();
-            ASSERT( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
+            OSL_ENSURE( pFlyFmt, "kein FlyFormat gefunden, wo steht das Feld" );
 
             const SwFmtAnchor &rAnchor = pFlyFmt->GetAnchor();
 
@@ -187,7 +187,7 @@ const SwTxtNode* GetBodyTxtNode( const SwDoc& rDoc, SwPosition& rPos,
                      (FLY_AT_CHAR == rAnchor.GetAnchorId()) ||
                      (FLY_AS_CHAR == rAnchor.GetAnchorId()))
             {
-                ASSERT( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
+                OSL_ENSURE( rAnchor.GetCntntAnchor(), "keine gueltige Position" );
                 rPos = *rAnchor.GetCntntAnchor();
                 pTxtNode = rPos.nNode.GetNode().GetTxtNode();
                 if ( FLY_AT_PARA == rAnchor.GetAnchorId() )
@@ -340,7 +340,7 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     if( bIsInBodyTxt )      // nur Felder in Footer, Header, FootNote, Flys
         return;
 
-    ASSERT( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
+    OSL_ENSURE( !rFrm.IsInDocBody(), "Flag ist nicht richtig, Frame steht im DocBody" );
 
     // bestimme mal das Dokument (oder geht es noch einfacher?)
     const SwTxtNode* pTxtNode = &rFld.GetTxtNode();
@@ -421,9 +421,6 @@ void SwGetExpField::SetLanguage(USHORT nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-/*-----------------07.03.98 16:08-------------------
-
---------------------------------------------------*/
 bool SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -460,9 +457,7 @@ bool SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------07.03.98 16:08-------------------
 
---------------------------------------------------*/
 bool SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;
@@ -646,16 +641,13 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
             }
             else
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwSetExpFieldType::SetChapter(..)> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
             }
         }
     }
 }
 
-/* -----------------24.03.99 09:44-------------------
- *
- * --------------------------------------------------*/
 bool SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1067,9 +1059,6 @@ String SwInputField::Expand() const
     return sRet;
 }
 
-/*-----------------06.03.98 11:12-------------------
-
---------------------------------------------------*/
 bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1091,9 +1080,7 @@ bool SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------06.03.98 11:12-------------------
 
---------------------------------------------------*/
 bool SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1177,9 +1164,7 @@ void SwInputField::SetSubType(USHORT nSub)
 {
     nSubType = nSub;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 bool SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1244,9 +1229,7 @@ bool SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 bool SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp32 = 0;
@@ -1270,8 +1253,6 @@ bool SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nTmp16 <= SVX_NUMBER_NONE )
                 SetFormat(nTmp16);
             else {
-                //exception(wrong_value)
-                ;
             }
         }
         break;

@@ -107,7 +107,7 @@ bool SwMirrorGrf::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
                    GetValue() == RES_MIRROR_GRAPH_BOTH;
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            OSL_ENSURE( !this, "unknown MemberId" );
             bRet = false;
     }
     rVal.setValue( &bVal, ::getBooleanCppuType() );
@@ -156,7 +156,7 @@ bool SwMirrorGrf::PutValue( const uno::Any& rVal, BYTE nMemberId )
             }
             break;
         default:
-            ASSERT( !this, "unknown MemberId" );
+            OSL_ENSURE( !this, "unknown MemberId" );
             bRet = false;
     }
     return bRet;
@@ -332,10 +332,6 @@ SfxPoolItem* SwDrawModeGrf::Clone( SfxItemPool * ) const
 
 USHORT SwDrawModeGrf::GetValueCount() const
 {
-    // GRAPHICDRAWMODE_STANDARD = 0,
-    // GRAPHICDRAWMODE_GREYS = 1,
-    // GRAPHICDRAWMODE_MONO = 2,
-    // GRAPHICDRAWMODE_WATERMARK = 3
     return GRAPHICDRAWMODE_WATERMARK + 1;
 }
 

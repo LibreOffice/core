@@ -187,9 +187,6 @@ private:
     bool mbIsActive;
 };
 
-
-
-
 /******************************************************************************
 
    SlideShowImpl
@@ -345,7 +342,6 @@ private:
         uno::Reference<drawing::XShape> const& xShape, sal_Int16 nPointerShape )
         throw (uno::RuntimeException);
 
-
     // CursorManager
     // -----------------------------------------------------------
 
@@ -434,7 +430,6 @@ private:
     private: SlideShowImpl& mrSlideShowImpl;
     };
 
-
     /// Filter requested cursor shape against hard slideshow cursors (wait, etc.)
     sal_Int16 calcActiveCursor( sal_Int16 nCursorShape ) const;
 
@@ -517,7 +512,6 @@ private:
     FrameSynchronization                    maFrameSynchronization;
 };
 
-
 /** Separate event listener for animation, view and hyperlink events.
 
     This handler is registered for slide animation end, view and
@@ -580,7 +574,6 @@ struct SlideShowImpl::SeparateListenerImpl : public EventHandler,
     }
 };
 
-
 SlideShowImpl::SlideShowImpl(
     uno::Reference<uno::XComponentContext> const& xContext )
     : SlideShowImplBase(m_aMutex),
@@ -638,7 +631,7 @@ SlideShowImpl::SlideShowImpl(
             // #i82460# try to retrieve special transition factory
             mxOptionalTransitionFactory.set(
                 xFactory->createInstanceWithContext(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.presentation.TransitionFactory" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.TransitionFactory" )),
                     mxComponentContext ),
                 uno::UNO_QUERY );
         }
@@ -912,7 +905,6 @@ PolygonMap::iterator SlideShowImpl::findPolygons( uno::Reference<drawing::XDrawP
     bool bFound = false;
     PolygonMap::iterator aIter=maPolygons.begin();
 
-
     while(aIter!=maPolygons.end() && !bFound)
     {
         if(aIter->first == xDrawPage)
@@ -1010,7 +1002,6 @@ sal_Int16 SlideShowImpl::calcActiveCursor( sal_Int16 nCursorShape ) const
     return nCursorShape;
 }
 
-
 void SlideShowImpl::stopShow()
 {
     // Force-end running animation
@@ -1049,8 +1040,6 @@ void SlideShowImpl::stopShow()
         maEventMultiplexer.setAutomaticMode( true );
     }
 }
-
-
 
 class SlideShowImpl::PrefetchPropertiesFunc
 {
@@ -1278,7 +1267,6 @@ sal_Bool SlideShowImpl::nextEffect() throw (uno::RuntimeException)
         return maEventMultiplexer.notifyNextEffect();
 }
 
-
 sal_Bool SlideShowImpl::previousEffect() throw (uno::RuntimeException)
 {
     osl::MutexGuard const guard( m_aMutex );
@@ -1360,7 +1348,6 @@ sal_Bool SlideShowImpl::pause( sal_Bool bPauseShow )
 
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
-
 
     if (bPauseShow)
         mpPresTimer->pauseTimer();
@@ -1483,17 +1470,17 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
     uno::Reference< beans::XPropertySet > xLayerPropSet(xDrawnInSlideshow, uno::UNO_QUERY);
 
     //Layer Name which enables to catch annotations
-    rtl::OUString layerName = rtl::OUString::createFromAscii("DrawnInSlideshow");
+    rtl::OUString layerName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"));
     uno::Any aPropLayer;
 
     aPropLayer <<= layerName;
-    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("Name"), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")), aPropLayer);
 
     aPropLayer <<= true;
-    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("IsVisible"), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsVisible")), aPropLayer);
 
     aPropLayer <<= false;
-    xLayerPropSet->setPropertyValue(rtl::OUString::createFromAscii("IsLocked"), aPropLayer);
+    xLayerPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsLocked")), aPropLayer);
 
     PolygonMap::iterator aIter=maPolygons.begin();
 
@@ -1525,7 +1512,7 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                 {
                     //create the PolyLineShape
                     uno::Reference< uno::XInterface > polyshape(xDocFactory->createInstance(
-                                                                    rtl::OUString::createFromAscii("com.sun.star.drawing.PolyLineShape") ) );
+                                                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.PolyLineShape")) ) );
                     uno::Reference< drawing::XShape > rPolyShape(polyshape, uno::UNO_QUERY);
 
                     //Add the shape to the slide
@@ -1555,27 +1542,27 @@ void SlideShowImpl::registerUserPaintPolygons( const uno::Reference< lang::XMult
                     //Give the built PointSequenceSequence.
                     uno::Any aParam;
                     aParam <<= aRetval;
-                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("PolyPolygon"), aParam );
+                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygon")), aParam );
 
                     //LineStyle : SOLID by default
                     uno::Any            aAny;
                     drawing::LineStyle  eLS;
                     eLS = drawing::LineStyle_SOLID;
                     aAny <<= eLS;
-                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineStyle"), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineStyle")), aAny );
 
                     //LineColor
                     sal_uInt32          nLineColor;
                     nLineColor = pPolyPoly->getRGBALineColor();
                     //Transform polygon color from RRGGBBAA to AARRGGBB
                     aAny <<= RGBAColor2UnoColor(nLineColor);
-                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineColor"), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")), aAny );
 
                     //LineWidth
                     double              fLineWidth;
                     fLineWidth = pPolyPoly->getStrokeWidth();
                     aAny <<= (sal_Int32)fLineWidth;
-                    aXPropSet->setPropertyValue( rtl::OUString::createFromAscii("LineWidth"), aAny );
+                    aXPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineWidth")), aAny );
 
                     // make polygons special
                     xLayerManager->attachShapeToLayer(rPolyShape, xDrawnInSlideshow);
@@ -1684,7 +1671,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         return true;
     }
 
-
     if (rProperty.Name.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("SwitchEraserMode") ))
     {
@@ -1704,8 +1690,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             resetCursor();
         return true;
     }
-
-
 
     if (rProperty.Name.equalsAsciiL(
             RTL_CONSTASCII_STRINGPARAM("EraseInk") ))
@@ -2458,7 +2442,6 @@ bool SlideShowImpl::handleAnimationEvent( const AnimationNodeSharedPtr& rNode )
     return true;
 }
 
-
 //===== FrameSynchronization ==================================================
 
 FrameSynchronization::FrameSynchronization (const double nFrameDuration)
@@ -2470,16 +2453,10 @@ FrameSynchronization::FrameSynchronization (const double nFrameDuration)
     MarkCurrentFrame();
 }
 
-
-
-
 void FrameSynchronization::MarkCurrentFrame (void)
 {
     mnNextFrameTargetTime = maTimer.getElapsedTime() + mnFrameDuration;
 }
-
-
-
 
 void FrameSynchronization::Synchronize (void)
 {
@@ -2493,30 +2470,20 @@ void FrameSynchronization::Synchronize (void)
     MarkCurrentFrame();
 }
 
-
-
-
 void FrameSynchronization::Activate (void)
 {
     mbIsActive = true;
 }
-
-
-
 
 void FrameSynchronization::Deactivate (void)
 {
     mbIsActive = false;
 }
 
-
-
-
 double FrameSynchronization::GetCurrentTime (void) const
 {
     return maTimer.getElapsedTime();
 }
-
 
 } // anon namespace
 

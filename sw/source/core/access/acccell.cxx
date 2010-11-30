@@ -100,7 +100,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        ASSERT( bIsSelected, "bSelected out of sync" );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -160,8 +160,8 @@ sal_Bool SwAccessibleCell::_InvalidateChildrenCursorPos( const SwFrm *pFrm )
                     GetMap()->GetContextImpl( pLower, sal_False ) );
                 if( xAccImpl.is() )
                 {
-                    ASSERT( xAccImpl->GetFrm()->IsCellFrm(),
-                             "table child is not a cell frame" )
+                    OSL_ENSURE( xAccImpl->GetFrm()->IsCellFrm(),
+                             "table child is not a cell frame" );
                     bChanged |= static_cast< SwAccessibleCell *>(
                             xAccImpl.get() )->_InvalidateMyCursorPos();
                 }
@@ -186,7 +186,7 @@ void SwAccessibleCell::_InvalidateCursorPos()
 {
 
     const SwFrm *pParent = GetParent( SwAccessibleChild(GetFrm()), IsInPagePreview() );
-    ASSERT( pParent->IsTabFrm(), "parent is not a tab frame" );
+    OSL_ENSURE( pParent->IsTabFrm(), "parent is not a tab frame" );
     const SwTabFrm *pTabFrm = static_cast< const SwTabFrm * >( pParent );
     if( pTabFrm->IsFollow() )
         pTabFrm = pTabFrm->FindMaster();

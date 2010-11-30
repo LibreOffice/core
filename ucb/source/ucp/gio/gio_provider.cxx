@@ -94,10 +94,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       com::sun::star::ucb::XContentProvider );
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                       "com.sun.star.comp.GIOContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                       "com.sun.star.ucb.GIOContentProvider" ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                       "com.sun.star.comp.GIOContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                       "com.sun.star.ucb.GIOContentProvider" )) );
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 
@@ -106,9 +106,9 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 static sal_Bool writeInfo( void *pRegistryKey,
     const rtl::OUString &rImplementationName, uno::Sequence< rtl::OUString > const &rServiceNames )
 {
-    rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
+    rtl::OUString aKeyName( RTL_CONSTASCII_USTRINGPARAM("/") );
     aKeyName += rImplementationName;
-    aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+    aKeyName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     uno::Reference< registry::XRegistryKey > xKey;
     try

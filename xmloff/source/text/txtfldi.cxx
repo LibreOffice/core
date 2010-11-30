@@ -1995,7 +1995,7 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
         {
             if (!bValid)
             {
-                SetServiceName(OUString::createFromAscii( sAPI_docinfo_custom ) );
+                SetServiceName(OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_docinfo_custom )) );
                 aName = sAttrValue;
                 bValid = sal_True;
             }
@@ -2887,11 +2887,10 @@ static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
     { XML_CATEGORY_AND_VALUE, ReferenceFieldPart::CATEGORY_AND_NUMBER },
     { XML_CAPTION,      ReferenceFieldPart::ONLY_CAPTION },
     { XML_VALUE,        ReferenceFieldPart::ONLY_SEQUENCE_NUMBER },
-    // --> OD 2007-09-14 #i81002#
+    // Core implementation for direct cross-references (#i81002#)
     { XML_NUMBER,               ReferenceFieldPart::NUMBER },
     { XML_NUMBER_NO_SUPERIOR,   ReferenceFieldPart::NUMBER_NO_CONTEXT },
     { XML_NUMBER_ALL_SUPERIOR,  ReferenceFieldPart::NUMBER_FULL_CONTEXT },
-    // <--
     { XML_TOKEN_INVALID, 0 }
 };
 
@@ -3903,7 +3902,7 @@ void XMLMeasureFieldImportContext::PrepareField(
 {
     Any aAny;
     aAny <<= mnKind;
-    xPropertySet->setPropertyValue(OUString::createFromAscii("Kind"), aAny);
+    xPropertySet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Kind")), aAny);
 }
 
 
@@ -4063,7 +4062,7 @@ XMLHeaderFieldImportContext::XMLHeaderFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_header, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 
@@ -4087,7 +4086,7 @@ XMLFooterFieldImportContext::XMLFooterFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_footer, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 
@@ -4112,7 +4111,7 @@ XMLDateTimeFieldImportContext::XMLDateTimeFieldImportContext(
         const ::rtl::OUString& sLocalName)      /// element name w/o prefix
 : XMLTextFieldImportContext(rImport, rHlp, sAPI_datetime, nPrfx, sLocalName )
 {
-    sServicePrefix = OUString::createFromAscii( sAPI_presentation_prefix );
+    sServicePrefix = OUString(RTL_CONSTASCII_USTRINGPARAM( sAPI_presentation_prefix ));
     bValid = sal_True;
 }
 

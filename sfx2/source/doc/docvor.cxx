@@ -104,18 +104,12 @@ public:
 
 
 inline void SfxOrganizeListBox_Impl::SetBitmaps(
-    const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc,
-    const Image &rOFolderHC, const Image &rCFolderHC, const Image &rODocHC, const Image &rCDocHC )
+    const Image &rOFolder, const Image &rCFolder, const Image &rODoc, const Image &rCDoc )
 {
     aOpenedFolderBmp = rOFolder;
     aClosedFolderBmp = rCFolder;
     aOpenedDocBmp = rODoc;
     aClosedDocBmp = rCDoc;
-
-    aOpenedFolderBmpHC = rOFolderHC;
-    aClosedFolderBmpHC = rCFolderHC;
-    aOpenedDocBmpHC = rODocHC;
-    aClosedDocBmpHC = rCDocHC;
 
 }
 
@@ -325,15 +319,8 @@ void SfxOrganizeDlg_Impl::InitBitmaps( void )
     Image   aOpenedDocBmp( SfxResId( IMG_OPENED_DOC ) );
     Image   aClosedDocBmp( SfxResId( IMG_CLOSED_DOC ) );
 
-    Image   aOpenedFolderBmpHC( SfxResId( IMG_OPENED_FOLDER_HC ) );
-    Image   aClosedFolderBmpHC( SfxResId( IMG_CLOSED_FOLDER_HC ) );
-    Image   aOpenedDocBmpHC( SfxResId( IMG_OPENED_DOC_HC ) );
-    Image   aClosedDocBmpHC( SfxResId( IMG_CLOSED_DOC_HC ) );
-
-    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
-                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
-    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp,
-                        aOpenedFolderBmpHC, aClosedFolderBmpHC, aOpenedDocBmpHC, aClosedDocBmpHC );
+    aLeftLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
+    aRightLb.SetBitmaps( aOpenedFolderBmp, aClosedFolderBmp, aOpenedDocBmp, aClosedDocBmp );
 }
 
 //=========================================================================
@@ -427,7 +414,6 @@ ImpPath_Impl::ImpPath_Impl( const ImpPath_Impl& rCopy ) :
 class Path
 {
     ImpPath_Impl *pData;
-    void NewImp();
 public:
     Path(SvLBox *pBox, SvLBoxEntry *pEntry);
     Path(const Path &rPath):
@@ -474,17 +460,6 @@ Path::Path(SvLBox *pBox, SvLBoxEntry *pEntry) :
         pEntry = pParent;
         pParent = pBox->GetParent(pEntry);
     } while(1);
-}
-
-//-------------------------------------------------------------------------
-
-void Path::NewImp()
-{
-    if(pData->nRef != 1)
-    {
-        pData->nRef--;
-        pData = new ImpPath_Impl(*pData);
-    }
 }
 
 //-------------------------------------------------------------------------
@@ -544,7 +519,7 @@ BOOL SfxOrganizeListBox_Impl::Select( SvLBoxEntry* pEntry, BOOL bSelect )
 
     Path aPath(this, pEntry);
     GetObjectShell(aPath)->TriggerHelpPI(
-        aPath[nLevel+1], aPath[nLevel+2], aPath[nLevel+3]);
+        aPath[nLevel+1], aPath[nLevel+2]);
     return SvTreeListBox::Select(pEntry,bSelect);
 }
 
@@ -1178,20 +1153,10 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
 */
 
 {
-    // wenn keine Childs vorhanden sind, gfs. Childs
-    // einfuegen
-    BmpColorMode eColorMode = BMP_COLOR_NORMAL;
-
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-        eColorMode = BMP_COLOR_HIGHCONTRAST;
-
-
     if ( !GetModel()->HasChilds( pEntry ) )
     {
         WaitObject aWaitCursor( this );
 
-        // Choose the correct mask color dependent from eColorMode. This must be adopted if
-        // we change the mask color for normal images, too!
         Color aMaskColor( COL_LIGHTMAGENTA );
 
         // hier sind alle initial eingefuegt
@@ -1210,19 +1175,18 @@ void SfxOrganizeListBox_Impl::RequestingChilds( SvLBoxEntry* pEntry )
             SfxObjectShellRef aRef = GetObjectShell(aPath);
             if(aRef.Is())
             {
-                const USHORT nCount = aRef->GetContentCount(
-                    aPath[nDocLevel+1], aPath[nDocLevel+2]);
+                const USHORT nCount = aRef->GetContentCount(aPath[nDocLevel+1]);
                 String aText;
                 Bitmap aClosedBmp, aOpenedBmp;
-                const BOOL bCanHaveChilds =
+                const bool bCanHaveChilds =
                     aRef->CanHaveChilds(aPath[nDocLevel+1],
                                         aPath[nDocLevel+2]);
-                for(USHORT i = 0; i < nCount; ++i)
+                for(sal_uInt16 i = 0; i < nCount; ++i)
                 {
-                    BOOL bDeletable;
+                    sal_Bool bDeletable;
                     aRef->GetContent(
-                        aText, aClosedBmp, aOpenedBmp, eColorMode, bDeletable,
-                        i, aPath[nDocLevel+1], aPath[nDocLevel+2]);
+                        aText, aClosedBmp, aOpenedBmp, bDeletable,
+                        i, aPath[nDocLevel+1]);
 
                     // Create image with the correct mask color
                     Image aClosedImage( aClosedBmp, aMaskColor );
@@ -1323,38 +1287,36 @@ USHORT SfxOrganizeListBox_Impl::GetLevelCount_Impl(SvLBoxEntry* pParent) const
 
 //-------------------------------------------------------------------------
 
-SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType( const XubString& rText, BMPTYPE eBmpType,
-    SvLBoxEntry* pParent, BOOL bChildsOnDemand, ULONG nPos, void* pUserData )
+SvLBoxEntry* SfxOrganizeListBox_Impl::InsertEntryByBmpType(
+    const XubString& rText,
+    BMPTYPE eBmpType,
+    SvLBoxEntry* pParent,
+    BOOL bChildsOnDemand,
+    ULONG nPos,
+    void* pUserData
+)
 {
     SvLBoxEntry*    pEntry = NULL;
     const Image*    pExp = NULL;
     const Image*    pCol = NULL;
-    const Image*    pExpHC = NULL;
-    const Image*    pColHC = NULL;
 
     switch( eBmpType )
     {
         case BMPTYPE_FOLDER:
             pExp = &aOpenedFolderBmp;
             pCol = &aClosedFolderBmp;
-            pExpHC = &aOpenedFolderBmpHC;
-            pColHC = &aClosedFolderBmpHC;
             break;
-        default:
-            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
 
         case BMPTYPE_DOC:
             pExp = &aOpenedDocBmp;
             pCol = &aClosedDocBmp;
-            pExpHC = &aOpenedDocBmpHC;
-            pColHC = &aClosedDocBmpHC;
             break;
+
+        default:
+            DBG_ERROR( "SfxOrganizeListBox_Impl::InsertEntryByBmpType(): something forgotten?!" );
     }
 
     pEntry = SvTreeListBox::InsertEntry( rText, *pExp, *pCol, pParent, bChildsOnDemand, nPos, pUserData );
-
-    SetExpandedEntryBmp( pEntry, *pExpHC, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pEntry, *pColHC, BMP_COLOR_HIGHCONTRAST );
 
     return pEntry;
 }
@@ -1474,15 +1436,16 @@ const Image &SfxOrganizeListBox_Impl::GetClosedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL            bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image*    pRet = NULL;
 
     switch( nLevel )
     {
         default:    DBG_ERROR( "Bitmaps ueberindiziert" );
 
-        case 0:     pRet = bHC? &aClosedFolderBmpHC : &aClosedFolderBmp;        break;
-        case 1:     pRet = bHC? &aClosedDocBmpHC : &aClosedDocBmp;              break;
+        case 0:     pRet = &aClosedFolderBmp;
+            break;
+        case 1:     pRet = &aClosedDocBmp;
+            break;
     }
 
     return *pRet;
@@ -1508,17 +1471,16 @@ const Image &SfxOrganizeListBox_Impl::GetOpenedBmp(USHORT nLevel) const
 */
 
 {
-    BOOL         bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     const Image* pRet = NULL;
 
     switch( nLevel )
     {
         case 0:
-           pRet = bHC ? &aOpenedFolderBmpHC : &aOpenedFolderBmp; break;
+            pRet = &aOpenedFolderBmp; break;
         case 1:
-           pRet = bHC ? &aOpenedDocBmpHC : &aOpenedDocBmp; break;
+            pRet = &aOpenedDocBmp; break;
         default:
-            pRet = bHC ? &aClosedFolderBmpHC : &aClosedFolderBmp; break;
+            pRet = &aClosedFolderBmp; break;
     }
 
     return *pRet;
@@ -2136,7 +2098,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, MenuActivate_Impl, Menu *, pMenu )
             String aTitle = SvFileInformationManager::GetDescription(
                 INetURLObject(aObjFacURL) );
             pSubMenu->InsertItem( nItemId, aTitle,
-                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL)) );
+                SvFileInformationManager::GetImage(INetURLObject(aObjFacURL), false) );
             pSubMenu->SetItemCommand( nItemId++, aObjFacURL );
             DBG_ASSERT( nItemId <= ID_RESET_DEFAULT_TEMPLATE_END, "menu item id overflow" );
         }

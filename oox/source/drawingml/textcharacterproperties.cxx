@@ -70,7 +70,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     moUnderlineFillFollowText.assignIfUsed( rSourceProps.moUnderlineFillFollowText );
 }
 
-void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter ) const
+    void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFilterBase& rFilter, bool bUseOptional ) const
 {
     OUString aFontName;
     sal_Int16 nFontPitch = 0;
@@ -134,15 +134,19 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     rPropMap[ PROP_CharStrikeout ] <<= GetFontStrikeout( moStrikeout.get( XML_noStrike ) );
     rPropMap[ PROP_CharCaseMap ] <<= GetCaseMap( moCaseMap.get( XML_none ) );
 
-    float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
-    rPropMap[ PROP_CharWeight ] <<= fWeight;
-    rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
-    rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
+    if( !bUseOptional || moBold.has() ) {
+        float fWeight = moBold.get( false ) ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL;
+        rPropMap[ PROP_CharWeight ] <<= fWeight;
+        rPropMap[ PROP_CharWeightAsian ] <<= fWeight;
+        rPropMap[ PROP_CharWeightComplex ] <<= fWeight;
+    }
 
-    awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
-    rPropMap[ PROP_CharPosture ] <<= eSlant;
-    rPropMap[ PROP_CharPostureAsian ] <<= eSlant;
-    rPropMap[ PROP_CharPostureComplex ] <<= eSlant;
+    if( !bUseOptional || moItalic.has() ) {
+        awt::FontSlant eSlant = moItalic.get( false ) ? awt::FontSlant_ITALIC : awt::FontSlant_NONE;
+        rPropMap[ PROP_CharPosture ] <<= eSlant;
+        rPropMap[ PROP_CharPostureAsian ] <<= eSlant;
+        rPropMap[ PROP_CharPostureComplex ] <<= eSlant;
+    }
 
     bool bUnderlineFillFollowText = moUnderlineFillFollowText.get( false );
     if( moUnderline.has() && maUnderlineColor.isUsed() && !bUnderlineFillFollowText )
@@ -152,10 +156,10 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     }
 }
 
-void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter ) const
+    void TextCharacterProperties::pushToPropSet( PropertySet& rPropSet, const XmlFilterBase& rFilter, bool bUseOptional ) const
 {
     PropertyMap aPropMap;
-    pushToPropMap( aPropMap, rFilter );
+    pushToPropMap( aPropMap, rFilter, bUseOptional );
     rPropSet.setProperties( aPropMap );
 }
 

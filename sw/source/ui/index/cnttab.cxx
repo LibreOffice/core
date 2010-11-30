@@ -191,8 +191,6 @@ class SwEntryBrowseBox : public SwEntryBrowseBox_Base
 
 protected:
     virtual sal_Bool                SeekRow( long nRow );
-//  virtual void                PaintField( OutputDevice& rDev, const awt::Rectangle& rRect,
-//                                          sal_uInt16 nColumnId ) const;
     virtual void                    PaintCell(OutputDevice& rDev, const Rectangle& rRect, sal_uInt16 nColId) const;
     virtual void                    InitController(::svt::CellControllerRef& rController, long nRow, sal_uInt16 nCol);
     virtual ::svt::CellController*  GetController(long nRow, sal_uInt16 nCol);
@@ -586,13 +584,11 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
 sal_Bool SwMultiTOXTabDialog::IsNoNum(SwWrtShell& rSh, const String& rName)
 {
     SwTxtFmtColl* pColl = rSh.GetParaStyle(rName);
-    //if(pColl && pColl->GetOutlineLevel() == NO_NUMBERING)     //#outline level,zhaojianwei
     if(pColl && ! pColl->IsAssignedToListLevelOfOutlineStyle()) //<-end,zhaojianwei
         return sal_True;
 
     sal_uInt16 nId = SwStyleNameMapper::GetPoolIdFromUIName(rName, nsSwGetPoolIdFromName::GET_POOLID_TXTCOLL);
     if(nId != USHRT_MAX &&
-        //rSh.GetTxtCollFromPool(nId)->GetOutlineLevel() == NO_NUMBERING)       //#outline level,zhaojianwei
         ! rSh.GetTxtCollFromPool(nId)->IsAssignedToListLevelOfOutlineStyle())   //<-end,zhaojianwei
         return sal_True;
 
@@ -736,9 +732,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 {
     FreeResource();
 
-    aLeftPB.SetModeImage( Image( SW_RES( IMG_ALL_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-    aRightPB.SetModeImage( Image( SW_RES( IMG_ALL_RIGHT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aOk.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, OkHdl));
     aLeftPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
     aRightPB.SetClickHdl(LINK(this, SwAddStylesDlg_Impl, LeftRightHdl));
@@ -758,7 +751,6 @@ SwAddStylesDlg_Impl::SwAddStylesDlg_Impl(Window* pParent,
 
     SwIndexTreeLB& rTLB = aHeaderTree.GetTreeListBox();
     rTLB.SetWindowBits(WB_CLIPCHILDREN|WB_SORT);
-    //aStylesTLB.SetSelectHdl(LINK(this, SwAddStylesDlg_Impl, SelectHdl));
     rTLB.GetModel()->SetSortMode(SortAscending);
     for(i = 0; i < MAXLEVEL; ++i)
     {
@@ -882,7 +874,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 
     aCreateFromFL(      this, SW_RES(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, SW_RES(CB_FROMHEADINGS     )),
-//   aChapterDlgPB(      this, SW_RES(PB_CHAPTERDLG      )),//#outline level,removed by zhaojianwei
     aAddStylesCB(       this, SW_RES(CB_ADDSTYLES       )),
     aAddStylesPB(       this, SW_RES(PB_ADDSTYLES       )),
 
@@ -959,7 +950,6 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aTypeLB.SetSelectHdl(LINK(this, SwTOXSelectTabPage, TOXTypeHdl));
 
     aAddStylesPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, AddStylesHdl));
-    //aChapterDlgPB.SetClickHdl(LINK(this, SwTOXSelectTabPage, ChapterHdl));//#outline level,removed by zhaojianwei
 
     PopupMenu*  pMenu = aAutoMarkPB.GetPopupMenu();
     pMenu->SetActivateHdl(LINK(this, SwTOXSelectTabPage, MenuEnableHdl));
@@ -1123,7 +1113,6 @@ void    SwTOXSelectTabPage::ApplyTOXDescription()
     if(TOX_CONTENT == aCurType.eType)
     {
         aFromHeadingsCB.Check( 0 != (nCreateType & nsSwTOXElement::TOX_OUTLINELEVEL) );
-        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
         aAddStylesCB.SetText(sAddStyleContent);
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
     }
@@ -1375,7 +1364,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aAreaFL.Show( 0 != (nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT)) );
 
     aFromHeadingsCB.Show( 0 != (nType & (TO_CONTENT)) );
-   // aChapterDlgPB.Show( 0 != (nType & (TO_CONTENT)) );//#outline level,removed by zhaojianwei
     aAddStylesCB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
     aAddStylesPB.Show( 0 != (nType & (TO_CONTENT|TO_USER)) );
 
@@ -1407,13 +1395,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSortAlgorithmFT.Show(bEnableSortLanguage);
     aSortAlgorithmLB.Show(bEnableSortLanguage);
 
-    //if(nType & TO_CONTENT)            //#outline level,removed by zhaojianwei
-    //{
-         //Point aPos(aAddStylesPB.GetPosPixel());
-        //aPos.X() = aChapterDlgPB.GetPosPixel().X();
-        //aAddStylesPB.SetPosPixel(aPos);
-    //}
-    //else if( nType & TO_ILLUSTRATION )//<-removed end.
     if( nType & TO_ILLUSTRATION )       //add by zhaojianwei
         aCaptionSequenceLB.SelectEntry( SwStyleNameMapper::GetUIName(
                                     RES_POOLCOLL_LABEL_ABB, aEmptyStr ));
@@ -1425,7 +1406,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
         aAddStylesCB.SetText(sAddStyleUser);
         // move left!
          Point aPos(aAddStylesPB.GetPosPixel());
-    //  aPos.X() = aChapterDlgPB.GetPosPixel().X();
         aPos.X() -= 2 * aAddStylesPB.GetSizePixel().Width();
         aAddStylesPB.SetPosPixel(aPos);
     }
@@ -1438,8 +1418,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aKeyAsEntryCB.Show( 0 != (nType & TO_INDEX) );
     aFromFileCB.Show( 0 != (nType & TO_INDEX) );
     aAutoMarkPB.Show( 0 != (nType & TO_INDEX) );
-//  aCreateAutoMarkPB.Show(nType &TO_INDEX);
-//  aEditAutoMarkPB.Show(nType & TO_INDEX);
 
     aIdxOptionsFL.Show( 0 != (nType & TO_INDEX) );
 
@@ -1485,7 +1463,6 @@ IMPL_LINK(SwTOXSelectTabPage, CheckBoxHdl,  CheckBox*, pBox )
             pBox->Check(sal_True);
         }
         aAddStylesPB.Enable(aAddStylesCB.IsChecked());
-        //aChapterDlgPB.Enable(aFromHeadingsCB.IsChecked());//#outline level,removed by zhaojianwei
     }
     if(TOX_USER == aCurType.eType)
     {
@@ -1562,45 +1539,6 @@ IMPL_LINK(SwTOXSelectTabPage, TOXAreaHdl,   ListBox*, pBox)
     }
     return 0;
 }
-
-//#outline level, removed by zhaojianwei
-//It is no longer used!
-///* -----------------14.06.99 13:10-------------------
-//
-// --------------------------------------------------*/
-//IMPL_LINK(SwTOXSelectTabPage, ChapterHdl,     PushButton*, pButton)
-//{
-//  SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
-//  SwWrtShell& rSh = pTOXDlg->GetWrtShell();
-//
-//  SfxItemSet aTmp(rSh.GetView().GetPool(), FN_PARAM_1, FN_PARAM_1);
-//  SwOutlineTabDialog* pDlg = new SwOutlineTabDialog(pButton, &aTmp, rSh);
-//
-//  if(RET_OK == pDlg->Execute())
-//  {
-//      CurTOXType aCurType = pTOXDlg->GetCurrentTOXType();
-//      SwForm* pForm = ((SwMultiTOXTabDialog*)GetTabDialog())->GetForm(aCurType);
-//      // jetzt muss ueberprueft werden, ob dem sdbcx::Index Ueberschriftenvorlagen
-//      // zugewiesen wurden
-//      String sStr;
-//      for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
-//      {
-//          sal_Bool bNum = !SwMultiTOXTabDialog::IsNoNum(rSh, pForm->GetTemplate( i + 1 ));
-//          if(bNum)
-//          {
-//              //es gibt getrennte Resourcebereiche fuer die Inhaltsverzeichnisse
-//              if(i < 5)
-//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT1 + i), sStr );
-//              else
-//                    SwStyleNameMapper::FillUIName( static_cast< sal_uInt16 >(RES_POOLCOLL_TOX_CNTNT6 + i - 5), sStr );
-//              pForm->SetTemplate( i + 1, sStr );
-//          }
-//      }
-//
-//  }
-//  delete pDlg;
-//  return 0;
-//}
 
 IMPL_LINK(SwTOXSelectTabPage, AddStylesHdl, PushButton*, pButton)
 {
@@ -1975,15 +1913,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     m_pCurrentForm(0),
     bInLevelHdl(sal_False)
 {
-    Image aSortUpHC(SW_RES(IMG_SORTUP_HC ));
-    aFirstSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortUpRB.SetModeRadioImage(aSortUpHC,BMP_COLOR_HIGHCONTRAST);
-
-    Image aSortDownHC(SW_RES(IMG_SORTDOWN_HC ));
-    aFirstSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aSecondSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
-    aThirdSortDownRB.SetModeRadioImage(aSortDownHC,BMP_COLOR_HIGHCONTRAST);
     FreeResource();
 
     sLevelStr = aLevelFT.GetText();
@@ -1996,7 +1925,6 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
 
     aLastTOXType.eType = (TOXTypes)USHRT_MAX;
     aLastTOXType.nIndex = 0;
-    //aLevelGBSize = aLevelGB.GetSizePixel();
     aLevelFLSize = aLevelFT.GetSizePixel();
 
     SetExchangeSupport();
@@ -2052,7 +1980,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
         (aRelToStyleIdxPos.Y() - aAlphaDelimCB.GetPosPixel().Y());
     aEditStylePB.Enable(sal_False);
 
-//get position for Numbering and other stuff
+    //get position for Numbering and other stuff
     aChapterEntryFTPosition = aChapterEntryFT.GetPosPixel();
     aEntryOutlineLevelFTPosition = aEntryOutlineLevelFT.GetPosPixel();
     nBiasToEntryPoint = aEntryOutlineLevelNF.GetPosPixel().X() -
@@ -2241,13 +2169,11 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
         if(nDiff)
         {
-//          lcl_ChgWidth(aLevelFL, nDiff);
             lcl_ChgWidth(aLevelFT, nDiff);
             lcl_ChgWidth(aLevelLB, nDiff);
             lcl_ChgXPos(aCharStyleFT, nDiff);
             lcl_ChgXPos(aCharStyleLB, nDiff);
             lcl_ChgWidth(aCharStyleLB, -nDiff);
-    //          lcl_ChgXPos(aEditStylePB, -nDiff);
             lcl_ChgXPos(aFillCharFT,  nDiff);
             lcl_ChgXPos(aFillCharCB,  nDiff);
             lcl_ChgXPos(aTabPosFT,   nDiff);
@@ -2329,8 +2255,6 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& /*rSet*/)
 
         aRelToStyleCB.SetPosPixel( bToxIsIndex ? aRelToStyleIdxPos
                                                : aRelToStylePos );
-
-//      aRecalcTabCB.Show(  aCurType.eType == TOX_CONTENT);
 
         aMainEntryStyleFT.Show( bToxIsIndex );
         aMainEntryStyleLB.Show( bToxIsIndex );
@@ -2607,7 +2531,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         aCharStyleLB.SelectEntry(pToken->sCharStyleName);
     else
         aCharStyleLB.SelectEntry(sNoCharStyle);
-    //StyleSelectHdl(&aCharStyleLB);
 
     String sEntry = aCharStyleLB.GetSelectEntry();
     aEditStylePB.Enable(sEntry != sNoCharStyle);
@@ -2632,13 +2555,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
         }
 //<---
 //i53420
-//move into position the fixed text
-//         aEntryOutlineLevelFT.SetPosPixel( aEntryOutlineLevelFTPosition );
-// // then the entry
-//         Point aPoint;
-//         aPoint.Y() = aEntryOutlineLevelFTPosition.Y();
-//         aPoint.X() = aEntryOutlineLevelFTPosition.X() + nBiasToEntryPoint;
-//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
 
         aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
     }
@@ -2646,14 +2562,6 @@ IMPL_LINK(SwTOXEntryTabPage, TokenSelectedHdl, SwFormToken*, pToken)
 //i53420
     if(pToken->eTokenType == TOKEN_ENTRY_NO)
     {
-//move into position the fixed text
-//        aEntryOutlineLevelFT.SetPosPixel( aChapterEntryFTPosition );
-// // then the entry
-//         Point aPoint;
-//         aPoint.Y() = aChapterEntryFTPosition.Y();
-//         aPoint.X() = aChapterEntryFTPosition.X() + nBiasToEntryPoint;
-//         aEntryOutlineLevelNF.SetPosPixel( aPoint );
-
         aEntryOutlineLevelNF.SetValue(pToken->nOutlineLevel);
         sal_uInt16 nFormat = 0;
         if( pToken->nChapterFormat == CF_NUM_NOPREPST_TITLE )
@@ -2925,8 +2833,6 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
 
 SwTokenWindow::~SwTokenWindow()
 {
-//  for(sal_uInt16 i = GetItemCount(); i ; i--)
-//      RemoveItem(i - 1);
 
     for( sal_uInt32 n = 0; n < aControlList.Count(); ++n )
     {
@@ -3080,8 +2986,6 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
         aControlList.Insert(pButton, aControlList.Count());
          Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
-//        pButton->SetControlBackground(aCtrlColor);
-//        pButton->SetControlForeground(aTextColor);
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
         pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
@@ -3525,8 +3429,6 @@ BOOL SwTokenWindow::CreateQuickHelp(Control* pCtrl,
      Rectangle aItemRect( aPos, pCtrl->GetSizePixel() );
         if(rToken.eTokenType == TOKEN_TAB_STOP )
         {
-//          sEntry += '\n';
-//          sEntry += rToken.nTabStopPosition;
         }
         else
         {
@@ -3679,8 +3581,6 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     FreeResource();
     SetExchangeSupport( sal_True );
 
-    aAssignBT.SetModeImage( Image( SW_RES( IMG_ONE_LEFT_HC ) ), BMP_COLOR_HIGHCONTRAST );
-
     aEditStyleBT.SetClickHdl   (LINK(   this, SwTOXStylesTabPage, EditStyleHdl));
     aAssignBT.SetClickHdl      (LINK(   this, SwTOXStylesTabPage, AssignHdl));
     aStdBT.SetClickHdl         (LINK(   this, SwTOXStylesTabPage, StdHdl));
@@ -3789,13 +3689,12 @@ IMPL_LINK( SwTOXStylesTabPage, EditStyleHdl, Button *, pBtn )
     {
         SfxStringItem aStyle(SID_STYLE_EDIT, aParaLayLB.GetSelectEntry());
         SfxUInt16Item aFamily(SID_STYLE_FAMILY, SFX_STYLE_FAMILY_PARA);
-//      SwPtrItem aShell(FN_PARAM_WRTSHELL, pWrtShell);
         Window* pDefDlgParent = Application::GetDefDialogParent();
         Application::SetDefDialogParent( pBtn );
         SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();
         rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(
         SID_STYLE_EDIT, SFX_CALLMODE_SYNCHRON|SFX_CALLMODE_MODAL,
-            &aStyle, &aFamily/*, &aShell*/, 0L);
+            &aStyle, &aFamily, 0L);
         Application::SetDefDialogParent( pDefDlgParent );
     }
     return 0;
@@ -3864,7 +3763,6 @@ IMPL_LINK_INLINE_END( SwTOXStylesTabPage, DoubleClickHdl, Button *, EMPTYARG )
  --------------------------------------------------------------------*/
 IMPL_LINK( SwTOXStylesTabPage, EnableSelectHdl, ListBox *, EMPTYARG )
 {
-    //UpdatePattern();
     aStdBT.Enable(aLevelLB.GetSelectEntryPos()  != LISTBOX_ENTRY_NOTFOUND);
 
     SwWrtShell& rSh = ((SwMultiTOXTabDialog*)GetTabDialog())->GetWrtShell();

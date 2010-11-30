@@ -313,10 +313,10 @@ private:
                             const Color& rColor ) const;
 
 private:
-    typedef ScfDelList< XclListColor >          XclListColorList;
-    typedef ScfRef< XclListColorList >          XclListColorListRef;
-    typedef ::std::vector< XclColorIdData >     XclColorIdDataVec;
-    typedef ::std::vector< XclPaletteColor >    XclPaletteColorVec;
+    typedef ScfDelList< XclListColor >            XclListColorList;
+    typedef boost::shared_ptr< XclListColorList > XclListColorListRef;
+    typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
+    typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
 
     const XclDefaultPalette& mrDefPal;      /// The default palette for the current BIFF version.
     XclListColorListRef mxColorList;        /// Working color list.
@@ -2819,8 +2819,8 @@ XclExpXmlStyleSheet::XclExpXmlStyleSheet( const XclExpRoot& rRoot )
 void XclExpXmlStyleSheet::SaveXml( XclExpXmlStream& rStrm )
 {
     sax_fastparser::FSHelperPtr aStyleSheet = rStrm.CreateOutputStream(
-            OUString::createFromAscii( "xl/styles.xml" ),
-            OUString::createFromAscii( "styles.xml" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/styles.xml") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "styles.xml" )),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" );

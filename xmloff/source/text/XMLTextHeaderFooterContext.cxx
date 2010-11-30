@@ -61,12 +61,12 @@ XMLTextHeaderFooterContext::XMLTextHeaderFooterContext( SvXMLImport& rImport, sa
                        sal_Bool bFooter, sal_Bool bLft ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xPropSet( rPageStylePropSet ),
-    sOn( OUString::createFromAscii( bFooter ? "FooterIsOn" : "HeaderIsOn" ) ),
-    sShareContent( OUString::createFromAscii( bFooter ? "FooterIsShared"
-                                                      : "HeaderIsShared" ) ),
-    sText( OUString::createFromAscii( bFooter ? "FooterText" : "HeaderText" ) ),
-    sTextLeft( OUString::createFromAscii( bFooter ? "FooterTextLeft"
-                                                     : "HeaderTextLeft" ) ),
+    sOn( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsOn" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsOn" )) ),
+    sShareContent( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterIsShared" ))
+                                                      : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderIsShared" )) ),
+    sText( bFooter ? OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterText" )) : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderText" )) ),
+    sTextLeft( bFooter ?  OUString(RTL_CONSTASCII_USTRINGPARAM( "FooterTextLeft" ))
+                                                     : OUString(RTL_CONSTASCII_USTRINGPARAM( "HeaderTextLeft" )) ),
     bInsertContent( sal_True ),
     bLeft( bLft )
 {

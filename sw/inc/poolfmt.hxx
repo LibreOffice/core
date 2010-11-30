@@ -91,7 +91,6 @@ const USHORT POOLGRP_CHARFMT        = (0 << 11) + POOLGRP_NOCOLLID;
 const USHORT POOLGRP_FRAMEFMT       = (1 << 11) + POOLGRP_NOCOLLID;
 const USHORT POOLGRP_PAGEDESC       = (2 << 11) + POOLGRP_NOCOLLID;
 const USHORT POOLGRP_NUMRULE        = (3 << 11) + POOLGRP_NOCOLLID;
-//const USHORT POOLGRP_GRFFMT           = (4 << 11) + POOLGRP_NOCOLLID; // ?
 
 // fuer Erkennung ob Benutzer-Vorlage oder nicht:
 const USHORT POOL_IDUSER_FMT =
@@ -432,14 +431,6 @@ inline BOOL IsConditionalByPoolId(USHORT nId)
     {
         return RES_POOLCOLL_TEXT == nId;
     }
-// die Id's fuer die Grafik-Formate
-/*enum RES_POOL_GRFFMT_TYPE
-{
-RES_POOLGRF_BEGIN = RES_POOLPAR_END,
-RES_POOLGRF_1 = RES_POOLGRF_BEGIN,
-RES_POOLGRF_END
-};
-*/
 
 #endif
 

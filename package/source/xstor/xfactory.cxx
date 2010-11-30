@@ -68,15 +68,15 @@ sal_Bool CheckPackageSignature_Impl( const uno::Reference< io::XInputStream >& x
 uno::Sequence< ::rtl::OUString > SAL_CALL OStorageFactory::impl_staticGetSupportedServiceNames()
 {
     uno::Sequence< ::rtl::OUString > aRet(2);
-    aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.StorageFactory");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.StorageFactory");
+    aRet[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.StorageFactory") );
+    aRet[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
     return aRet;
 }
 
 //-------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OStorageFactory::impl_staticGetImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.StorageFactory");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.embed.StorageFactory") );
 }
 
 //-------------------------------------------------------------------------
@@ -93,7 +93,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstance()
 {
     // TODO: reimplement TempStream service to support XStream interface
     uno::Reference < io::XStream > xTempStream(
-                        m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                        m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile") ) ),
                         uno::UNO_QUERY );
 
     if ( !xTempStream.is() )
@@ -166,7 +166,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
 
         uno::Reference < ::com::sun::star::ucb::XSimpleFileAccess > xTempAccess(
                 m_xFactory->createInstance (
-                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess") ) ),
                 uno::UNO_QUERY );
 
         if ( !xTempAccess.is() )
@@ -196,7 +196,7 @@ uno::Reference< uno::XInterface > SAL_CALL OStorageFactory::createInstanceWithAr
             if ( aURL.getLength() )
             {
                 aPropsToSet.realloc(1);
-                aPropsToSet[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aPropsToSet[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
                 aPropsToSet[0].Value <<= aURL;
             }
 

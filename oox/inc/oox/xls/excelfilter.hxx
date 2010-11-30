@@ -31,6 +31,7 @@
 
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/core/binaryfilterbase.hxx"
+#include "oox/ole/vbaprojectfilter.hxx"
 
 namespace oox {
 namespace xls {
@@ -92,6 +93,20 @@ public:
 
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
+    virtual ::rtl::OUString implGetImplementationName() const;
+};
+
+// ============================================================================
+
+class ExcelVbaProjectFilter : public ExcelBiffFilter
+{
+public:
+    explicit            ExcelVbaProjectFilter(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxGlobalFactory );
+
+    virtual bool        importDocument() throw();
+
+private:
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 

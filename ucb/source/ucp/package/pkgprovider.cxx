@@ -183,10 +183,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.PackageContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.PackageContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -278,8 +278,8 @@ ContentProvider::createPackage( const rtl::OUString & rName, const rtl::OUString
 
         uno::Reference< uno::XInterface > xIfc
             = m_xSMgr->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments );
 
         if ( xIfc.is() )

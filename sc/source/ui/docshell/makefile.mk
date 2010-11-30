@@ -66,43 +66,35 @@ CXXFILES = \
 
 
 SLOFILES =  \
-        $(SLO)$/docsh.obj	\
-        $(SLO)$/docsh2.obj	\
-        $(SLO)$/docsh3.obj	\
-        $(SLO)$/docsh4.obj   	\
-        $(SLO)$/docsh5.obj   	\
-        $(SLO)$/docsh6.obj   	\
-        $(SLO)$/docsh7.obj   	\
-        $(SLO)$/docsh8.obj   	\
-        $(SLO)$/externalrefmgr.obj \
-        $(SLO)$/tablink.obj   	\
-        $(SLO)$/arealink.obj   	\
-        $(SLO)$/dbdocfun.obj 	\
-        $(SLO)$/dbdocimp.obj 	\
-        $(SLO)$/impex.obj	\
-        $(SLO)$/docfunc.obj	\
-        $(SLO)$/olinefun.obj	\
-        $(SLO)$/servobj.obj	\
-        $(SLO)$/tpstat.obj	\
-        $(SLO)$/autostyl.obj	\
-        $(SLO)$/pagedata.obj \
+        $(EXCEPTIONSFILES) \
         $(SLO)$/hiranges.obj \
-        $(SLO)$/pntlock.obj \
-        $(SLO)$/sizedev.obj \
-        $(SLO)$/editable.obj \
-    $(SLO)$/macromgr.obj
+        $(SLO)$/pagedata.obj \
+        $(SLO)$/pntlock.obj
 
 
 EXCEPTIONSFILES= \
-        $(SLO)$/docsh.obj \
-        $(SLO)$/docsh3.obj	\
-        $(SLO)$/docsh4.obj \
-        $(SLO)$/docsh6.obj \
-        $(SLO)$/docsh8.obj \
-        $(SLO)$/externalrefmgr.obj \
+        $(SLO)$/arealink.obj \
+        $(SLO)$/autostyl.obj \
+        $(SLO)$/dbdocfun.obj \
         $(SLO)$/dbdocimp.obj \
         $(SLO)$/docfunc.obj \
-    $(SLO)$/macromgr.obj
+        $(SLO)$/docsh.obj \
+        $(SLO)$/docsh2.obj \
+        $(SLO)$/docsh3.obj \
+        $(SLO)$/docsh4.obj \
+        $(SLO)$/docsh5.obj \
+        $(SLO)$/docsh6.obj \
+        $(SLO)$/docsh7.obj \
+        $(SLO)$/docsh8.obj \
+        $(SLO)$/editable.obj \
+        $(SLO)$/externalrefmgr.obj \
+        $(SLO)$/impex.obj \
+        $(SLO)$/macromgr.obj \
+        $(SLO)$/olinefun.obj \
+        $(SLO)$/servobj.obj \
+        $(SLO)$/sizedev.obj \
+        $(SLO)$/tablink.obj \
+        $(SLO)$/tpstat.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  tpstat.src
@@ -133,7 +125,7 @@ LIB1OBJFILES =  \
         $(SLO)$/pntlock.obj \
         $(SLO)$/sizedev.obj \
         $(SLO)$/editable.obj \
-    $(SLO)$/macromgr.obj
+        $(SLO)$/macromgr.obj
 
 # --- Tagets -------------------------------------------------------
 

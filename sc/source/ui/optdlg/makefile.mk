@@ -45,20 +45,17 @@ CXXFILES = \
         tpprint.cxx     \
         opredlin.cxx
 
-EXCEPTIONSFILES= \
-        $(SLO)$/tpcompatibility.obj
-
 SLOFILES =  \
-        $(SLO)$/tpusrlst.obj \
-        $(SLO)$/tpview.obj   \
-        $(SLO)$/tpcalc.obj	\
-        $(SLO)$/tpformula.obj	\
-        $(SLO)$/tpcompatibility.obj \
-        $(SLO)$/tpprint.obj	\
-        $(SLO)$/opredlin.obj
+        $(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES= \
-        $(SLO)$/tpcompatibility.obj	\
+        $(SLO)$/opredlin.obj \
+        $(SLO)$/tpcalc.obj \
+        $(SLO)$/tpcompatibility.obj \
+        $(SLO)$/tpformula.obj \
+        $(SLO)$/tpprint.obj \
+        $(SLO)$/tpusrlst.obj \
+        $(SLO)$/tpview.obj
 
 
 # --- Tagets -------------------------------------------------------

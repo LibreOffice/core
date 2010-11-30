@@ -3343,9 +3343,6 @@ IMPL_LINK( SvxCharPositionPage, ScaleWidthModifyHdl_Impl, MetricField*, EMPTYARG
     return 0;
 }
 
-/* -----------------28.08.2003 12:12-----------------
-
- --------------------------------------------------*/
 void  SvxCharPositionPage::ActivatePage( const SfxItemSet& rSet )
 {
     //update the preview

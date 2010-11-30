@@ -44,10 +44,6 @@ class SwDoc;
 class SwModify;
 class SwFmtRefMark;
 
-
-/* -----------------27.08.98 15:11-------------------
- *
- * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper5
 <   ::com::sun::star::lang::XUnoTunnel
 ,   ::com::sun::star::lang::XServiceInfo

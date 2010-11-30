@@ -48,9 +48,12 @@ SRC1FILES =  \
         wrap.src
 
 SLOFILES =  \
-        $(SLO)$/colmgr.obj \
-        $(SLO)$/column.obj \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/colmgr.obj
+
+EXCEPTIONSFILES =  \
         $(SLO)$/colex.obj \
+        $(SLO)$/column.obj \
         $(SLO)$/cption.obj \
         $(SLO)$/frmdlg.obj \
         $(SLO)$/frmmgr.obj \
@@ -58,10 +61,6 @@ SLOFILES =  \
         $(SLO)$/pattern.obj \
         $(SLO)$/uiborder.obj \
         $(SLO)$/wrap.obj
-
-EXCEPTIONSFILES =  \
-        $(SLO)$/frmpage.obj \
-        $(SLO)$/cption.obj 
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

@@ -29,9 +29,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-// Wang Xu Ming - DataPilot migration
-// Buffer&&Performance
-//
+
 #ifndef _SC_DPGLOBAL_HXX
 #define _SC_DPGLOBAL_HXX
 
@@ -107,6 +105,9 @@
 
 class TypedStrData;
 class ScDPObject;
+class ScDPInfoWnd;
+class ScDocShell;
+class ScTabViewShell;
 
 class SC_DLLPUBLIC ScDPItemData
 {
@@ -122,25 +123,25 @@ private:
     String  aString;
     double  fValue;
     BYTE    mbFlag;
-    //BOOL  bHasValue: 1 ;
-    //BOOL  bHasData: 1;
-    //BOOL  bErr: 1;
+    //bool  bHasValue: 1 ;
+    //bool  bHasData: 1;
+    //bool  bErr: 1;
 
     friend class ScDPTableDataCache;
 public:
     ScDPItemData() : nNumFormat( 0 ), fValue(0.0), mbFlag( 0 ){}
     ScDPItemData( ULONG nNF, const String & rS, double fV, BYTE bF ):nNumFormat(nNF), aString(rS), fValue(fV), mbFlag( bF ){}
-    ScDPItemData( const String& rS, double fV = 0.0, BOOL bHV = FALSE, const ULONG nNumFormat = 0 , BOOL bData = TRUE) ;
+    ScDPItemData( const String& rS, double fV = 0.0, bool bHV = FALSE, const ULONG nNumFormat = 0 , bool bData = TRUE) ;
     ScDPItemData( ScDocument* pDoc, SCROW nRow, USHORT nCol, USHORT nDocTab );
 
     void        SetString( const String& rS ) { aString = rS; mbFlag &= ~(MK_VAL|MK_DATE); nNumFormat = 0; mbFlag |= MK_DATA; }
 //  void        SetValue ( double value , ULONG nNumFormat = 0 ) { bHasValue = TRUE; nNumFormat = 0;bHasData = TRUE; bDate = FALSE; fValue = value ;}
-    BOOL        IsCaseInsEqual( const ScDPItemData& r ) const;
+    bool        IsCaseInsEqual( const ScDPItemData& r ) const;
 
     size_t      Hash() const;
 
     // exact equality
-    BOOL        operator==( const ScDPItemData& r ) const;
+    bool        operator==( const ScDPItemData& r ) const;
     // case insensitive equality
     static sal_Int32    Compare( const ScDPItemData& rA, const ScDPItemData& rB );
 
@@ -149,16 +150,16 @@ public:
 #endif
 
 public:
-    BOOL IsHasData() const ;
-    BOOL IsHasErr() const ;
-    BOOL IsValue() const;
+    bool IsHasData() const ;
+    bool IsHasErr() const ;
+    bool IsValue() const;
     String  GetString() const ;
     double  GetValue() const ;
     ULONG    GetNumFormat() const ;
-    BOOL HasStringData() const ;
-    BOOL IsDate() const;
-    BOOL HasDatePart() const;
-    void SetDate( BOOL b ) ;
+    bool HasStringData() const ;
+    bool IsDate() const;
+    bool HasDatePart() const;
+    void SetDate( bool b ) ;
 
     TypedStrData*  CreateTypeString( );
     sal_uInt8    GetType() const;
@@ -169,11 +170,10 @@ public:
 class SC_DLLPUBLIC ScDPItemDataPool
 {
 public:
-    // construct
-    ScDPItemDataPool(void);
+    ScDPItemDataPool();
     ScDPItemDataPool(const ScDPItemDataPool& r);
 
-    virtual ~ScDPItemDataPool(void);
+    virtual ~ScDPItemDataPool();
     virtual const ScDPItemData* getData( sal_Int32 nId  );
     virtual sal_Int32 getDataId( const ScDPItemData& aData );
     virtual sal_Int32 insertData( const ScDPItemData& aData );
@@ -189,13 +189,10 @@ protected:
     DataHash  maItemIds;
 };
 
-class ScDPInfoWnd;
-class ScDocShell;
-class ScTabViewShell;
 namespace ScDPGlobal
 {
 // used for core data
-    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, BOOL bIsValue );
+    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, bool bIsValue );
     String GetFuncString( const String &rString, const USHORT nIndex );
     com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> DP_GetMembers( const com::sun::star::uno::Reference<
                                                                                       com::sun::star::sheet::XDimensionsSupplier>&rSrc, long nField );
@@ -204,7 +201,7 @@ namespace ScDPGlobal
     Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
 // used for  DataPilot Panel
     ScDPInfoWnd* GetDPInfoWnd( ScTabViewShell *pViewShell );
-   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip = FALSE );
+   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, bool bExcludeClip = FALSE );
 
 }
 #endif

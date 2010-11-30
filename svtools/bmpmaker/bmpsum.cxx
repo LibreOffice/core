@@ -60,7 +60,6 @@ private:
     sal_uInt32      cExitCode;
 
     BOOL            GetCommandOption( const ::std::vector< String >& rArgs, const String& rSwitch, String& rSwitchParam );
-    BOOL            GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rSwitchParams );
 
     void            SetExitCode( BYTE cExit )
                     {
@@ -125,38 +124,6 @@ BOOL BmpSum::GetCommandOption( const ::std::vector< String >& rArgs, const Strin
     }
 
     return bRet;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL BmpSum::GetCommandOptions( const ::std::vector< String >& rArgs, const String& rSwitch, ::std::vector< String >& rParams )
-{
-    BOOL bRet = FALSE;
-
-    for( int i = 0, nCount = rArgs.size(); ( i < nCount ); i++ )
-    {
-        String  aTestStr( '-' );
-
-        for( int n = 0; ( n < 2 ) && !bRet; n++ )
-        {
-            aTestStr += rSwitch;
-
-            if( aTestStr.CompareIgnoreCaseToAscii( rArgs[ i ] ) == COMPARE_EQUAL )
-            {
-                if( i < ( nCount - 1 ) )
-                    rParams.push_back( rArgs[ i + 1 ] );
-                else
-                    rParams.push_back( String() );
-
-                break;
-            }
-
-            if( 0 == n )
-                aTestStr = '/';
-        }
-    }
-
-    return( rParams.size() > 0 );
 }
 
 // -----------------------------------------------------------------------

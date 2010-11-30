@@ -660,7 +660,7 @@ void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element 
     {
         std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         for( sal_Int32 n = 0; n < Index; n++ )
-            aIter++;
+            ++aIter;
 
         maObjectList.insert( aIter, pObject );
     }
@@ -681,7 +681,7 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 Index ) throw(IndexOutOfBo
     {
         std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
         for( sal_Int32 n = 0; n < Index; n++ )
-            aIter++;
+            ++aIter;
 
         (*aIter)->release();
         maObjectList.erase( aIter );
@@ -698,7 +698,7 @@ void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 Index, const Any& Element
 
     std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
-        aIter++;
+        ++aIter;
 
     (*aIter)->release();
     *aIter = pObject;
@@ -719,7 +719,7 @@ Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
 
     std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
     for( sal_Int32 n = 0; n < Index; n++ )
-        aIter++;
+        ++aIter;
 
     Reference< XPropertySet > xObj( *aIter );
     return makeAny( xObj );
@@ -778,7 +778,7 @@ sal_Bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
         rMap.InsertIMapObject( *pNewMapObject );
         delete pNewMapObject;
 
-        aIter++;
+        ++aIter;
     }
 
     return sal_True;

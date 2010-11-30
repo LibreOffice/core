@@ -363,9 +363,6 @@ namespace utl
         return bIsSet;
     }
 
-    //---------------------------------------------------------------------
-    //--- 20.08.01 19:03:20 -----------------------------------------------
-
     sal_Bool OConfigurationNode::hasByHierarchicalName( const ::rtl::OUString& _rName ) const throw()
     {
         OSL_ENSURE( m_xHierarchyAccess.is(), "OConfigurationNode::hasByHierarchicalName: no hierarchy access!" );
@@ -533,10 +530,9 @@ namespace utl
                 aArgs.put( "lazywrite", i_bLazyWrite );
                 aArgs.put( "depth", i_nDepth );
 
-                ::rtl::OUString sAccessService = ::rtl::OUString::createFromAscii(
-                        i_bUpdatable
-                    ? "com.sun.star.configuration.ConfigurationUpdateAccess"
-                    : "com.sun.star.configuration.ConfigurationAccess" );
+                ::rtl::OUString sAccessService( i_bUpdatable ?
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" )) :
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )));
 
                 Reference< XInterface > xRoot(
                     i_rxConfigProvider->createInstanceWithArguments( sAccessService, aArgs.getWrappedPropertyValues() ),

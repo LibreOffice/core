@@ -164,7 +164,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         URL aURL;
-        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionSave");
+        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionSave"));
         xURLTransformer->parseStrict(aURL);
 
         // in case of asynchronous call the notification will trigger saveDone()
@@ -172,7 +172,7 @@ void SessionListener::StoreSession( sal_Bool bAsync )
             xDispatch->addStatusListener(this, aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
@@ -196,11 +196,11 @@ void SessionListener::QuitSessionQuietly()
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         URL aURL;
-        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionQuietQuit");
+        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionQuietQuit"));
         xURLTransformer->parseStrict(aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString::createFromAscii("DispatchAsynchron"),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron")),-1,makeAny(sal_False),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (com::sun::star::uno::Exception& e) {
         OString aMsg = OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8);
@@ -216,7 +216,7 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
     throw (RuntimeException)
 {
 
-    OUString aSMgr = OUString::createFromAscii("com.sun.star.frame.SessionManagerClient");
+    OUString aSMgr(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SessionManagerClient"));
     if (args.getLength() > 0)
     {
         NamedValue v;
@@ -273,7 +273,7 @@ sal_Bool SAL_CALL SessionListener::doRestore()
         css::uno::Reference< XDispatch > xDispatch(m_xSMGR->createInstance(SERVICENAME_AUTORECOVERY), UNO_QUERY_THROW);
 
         URL aURL;
-        aURL.Complete = OUString::createFromAscii("vnd.sun.star.autorecovery:/doSessionRestore");
+        aURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:/doSessionRestore"));
         css::uno::Reference< XURLTransformer > xURLTransformer(m_xSMGR->createInstance(SERVICENAME_URLTRANSFORMER), UNO_QUERY_THROW);
         xURLTransformer->parseStrict(aURL);
         Sequence< PropertyValue > args;

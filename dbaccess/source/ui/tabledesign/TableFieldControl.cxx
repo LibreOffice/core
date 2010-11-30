@@ -68,7 +68,7 @@ sal_Bool OTableFieldControl::IsReadOnly()
     {
         // Die Spalten einer ::com::sun::star::sdbcx::View können nicht verändert werden
         Reference<XPropertySet> xTable = GetCtrl()->GetView()->getController().getTable();
-        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
+        if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
             bRead = sal_True;
         else
         {
@@ -152,8 +152,5 @@ sal_Bool OTableFieldControl::isAutoIncrementValueEnabled() const
     return const_cast<OTableFieldControl*>(this)->GetCtrl()->GetView()->getController().getAutoIncrementValue();
 }
 // -----------------------------------------------------------------------------
-
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

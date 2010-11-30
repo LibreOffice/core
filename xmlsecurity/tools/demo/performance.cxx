@@ -469,16 +469,16 @@ rtl::OUString XSecTester::parseFile(
 
         if (bIsJavaBased)
         {
-            SEInitializer_comp = rtl::OUString::createFromAscii( SEINITIALIZER_JAVA_COMPONENT );
-            XMLSignature_comp = rtl::OUString::createFromAscii( XMLSIGNATURE_JAVA_COMPONENT);
-            m_ouXMLDocumentWrapperComponentName = rtl::OUString::createFromAscii( XMLDOCUMENTWRAPPER_JAVA_COMPONENT );
+            SEInitializer_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_JAVA_COMPONENT ));
+            XMLSignature_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_JAVA_COMPONENT));
+            m_ouXMLDocumentWrapperComponentName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENTWRAPPER_JAVA_COMPONENT ));
             tokenPath = m_ouJavaCryptokenDir;
         }
         else
         {
-            SEInitializer_comp = rtl::OUString::createFromAscii( SEINITIALIZER_C_COMPONENT );
-            XMLSignature_comp = rtl::OUString::createFromAscii( XMLSIGNATURE_C_COMPONENT);
-            m_ouXMLDocumentWrapperComponentName = rtl::OUString::createFromAscii( XMLDOCUMENT_C_COMPONENT );
+            SEInitializer_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_C_COMPONENT ));
+            XMLSignature_comp = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLSIGNATURE_C_COMPONENT));
+            m_ouXMLDocumentWrapperComponentName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XMLDOCUMENT_C_COMPONENT ));
             tokenPath = m_ouCCryptokenDir;
         }
 
@@ -584,13 +584,13 @@ rtl::OUString XSecTester::parseFile(
         }
         else
         {
-            ouMessage += rtl::OUString::createFromAscii( "N/A" );
+            ouMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("N/A"));
         }
 
     }
     else
     {
-        ouMessage += rtl::OUString::createFromAscii( "-" );
+        ouMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
     }
 
     return ouMessage;
@@ -736,7 +736,7 @@ rtl::OUString SAL_CALL XSecTester::transfer_without_sec(
                 xJavaFilterParser, cssu::UNO_QUERY );
 
             if ( !xJavaFilterParser.is() )
-                return rtl::OUString::createFromAscii( "NO JAVA" );
+                return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO JAVA"));
 
             /* connect the SAX Parser, the Java Flat Filter and the SAX Writer */
             xJavaFilterParser->setDocumentHandler( xSaxWriterHandler );
@@ -890,7 +890,7 @@ SignatureEntity::SignatureEntity(
         m_xSAXEventKeeper->setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
         m_xReferenceListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-            mxMSF->createInstance( rtl::OUString::createFromAscii( SIGNATURECREATOR_COMPONENT )),
+            mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATURECREATOR_COMPONENT ))),
             cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xReferenceListener, cssu::UNO_QUERY);
@@ -929,7 +929,7 @@ SignatureEntity::SignatureEntity(
         m_xSAXEventKeeper->setSecurityId(m_nSignatureElementCollectorId, m_nSecurityId);
 
         m_xReferenceListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
-            mxMSF->createInstance( rtl::OUString::createFromAscii( SIGNATUREVERIFIER_COMPONENT )),
+            mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATUREVERIFIER_COMPONENT ))),
             cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xReferenceListener, cssu::UNO_QUERY);
@@ -1186,7 +1186,7 @@ bool XSecTester::foundSecurityRelated()
              cssu::UNO_QUERY);
 
         m_xSAXEventKeeper = cssu::Reference< cssxc::sax::XSecuritySAXEventKeeper >
-            (mxMSF->createInstance( rtl::OUString::createFromAscii( SAXEVENTKEEPER_COMPONENT )),
+            (mxMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SAXEVENTKEEPER_COMPONENT ))),
              cssu::UNO_QUERY);
 
         cssu::Reference<cssl::XInitialization> xInitialization(m_xSAXEventKeeper,  cssu::UNO_QUERY);
@@ -1772,7 +1772,7 @@ int main( int argc, char **argv )
              * export the file with signautre/encryption (C++)
              */
             outputFileName1 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-ex.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ex.xml"));
             ouTime_C = pTester->export_xml(ouInputFileName, outputFileName1, sal_False);
             nPosition1 = ouTime_C.lastIndexOf('\t');
             ouRemark_C = ouTime_C.copy(nPosition1 + 1);
@@ -1782,7 +1782,7 @@ int main( int argc, char **argv )
              * export the file with signautre/encryption (Java)
              */
             outputFileName1 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-ex2.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ex2.xml"));
             ouTime_Java = pTester->export_xml(ouInputFileName, outputFileName1, sal_True);
             nPosition1 = ouTime_Java.lastIndexOf('\t');
             ouRemark_Java = ouTime_Java.copy(nPosition1 + 1);
@@ -1792,14 +1792,14 @@ int main( int argc, char **argv )
              * export the file without signautre/encryption
              */
             outputFileName2 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-ex-no.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ex-no.xml"));
             ouTime_NoSecurity = pTester->transfer_without_sec(ouInputFileName, outputFileName2, sal_False);
 
             /*
              * export the file with Java Flat Filter
              */
             outputFileName2 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-ex-jf.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-ex-jf.xml"));
             ouTime_JavaForwardOnly = pTester->transfer_without_sec(ouInputFileName, outputFileName2, sal_True);
 
             /*
@@ -1822,7 +1822,7 @@ int main( int argc, char **argv )
              * import the file with signautre/encryption (C++)
              */
             outputFileName1 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-im.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-im.xml"));
             ouTime_C = pTester->import_xml(ouInputFileName, outputFileName1, sal_False);
             nPosition1 = ouTime_C.lastIndexOf('\t');
             ouRemark_C = ouTime_C.copy(nPosition1 + 1);
@@ -1832,7 +1832,7 @@ int main( int argc, char **argv )
              * import the file with signautre/encryption (Java)
              */
             outputFileName1 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-im2.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-im2.xml"));
             ouTime_Java = pTester->import_xml(ouInputFileName, outputFileName1, sal_True);
             nPosition1 = ouTime_Java.lastIndexOf('\t');
             ouRemark_Java = ouTime_Java.copy(nPosition1 + 1);
@@ -1842,7 +1842,7 @@ int main( int argc, char **argv )
              * import the file without signautre/encryption
              */
             outputFileName2 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-im-no.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-im-no.xml"));
             ouTime_NoSecurity = pTester->transfer_without_sec(ouInputFileName, outputFileName2, sal_False);
 
             /*
@@ -1850,7 +1850,7 @@ int main( int argc, char **argv )
              */
 
             outputFileName2 = ouInputFileName.copy(0, nPosition) +
-                rtl::OUString::createFromAscii("-im-jf.xml");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-im-jf.xml"));
             ouTime_JavaForwardOnly = pTester->transfer_without_sec(ouInputFileName, outputFileName2, sal_True);
 
             /*

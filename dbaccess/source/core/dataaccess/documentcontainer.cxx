@@ -186,7 +186,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
     {
         MutexGuard aGuard(m_aMutex);
 
-        // extrat known arguments
+        // extract known arguments
         ::rtl::OUString sName, sPersistentName, sURL, sMediaType, sDocServiceName;
         Reference< XCommandProcessor > xCopyFrom;
         Reference< XConnection > xConnection;
@@ -572,7 +572,6 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
     }
     catch(WrappedTargetException e)
     {
-        // throw IllegalArgumentException();
         throw;
     }
     return xComp;
@@ -751,8 +750,6 @@ void SAL_CALL ODocumentContainer::removeByName( const ::rtl::OUString& _rName ) 
 
     // do the removal
     implRemove(_rName);
-
-    //  disposeComponent(xContent); // no dispose here, the object may be inserted again under a different name
 
     notifyByName( aGuard, _rName, NULL, NULL, E_REMOVED, ContainerListemers );
 }

@@ -164,8 +164,8 @@ int test_ftplist(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/dir"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/dir")),
         &provider);
 
     std::vector<ftp::FTPDirentry> vec =
@@ -230,8 +230,8 @@ int test_ftpproperties(void) {
     FTPHandleProviderI provider;
 
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/file"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/file")),
         &provider);
 
     ftp::FTPDirentry ade(url.direntry());
@@ -251,8 +251,8 @@ int test_ftpopen(void)
 
     FTPHandleProviderI provider;
     ftp::FTPURL url(
-        rtl::OUString::createFromAscii(
-            "ftp://abi:psswd@abi-1/file"),
+        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "ftp://abi:psswd@abi-1/file")),
         &provider);
 
     FILE* file = url.open();

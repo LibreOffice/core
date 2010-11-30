@@ -175,7 +175,7 @@ namespace migration
                 ::rtl::OUString sLanguageType = sSourceLocalName.copy( nStart, nEnd - nStart );
                 ::rtl::OUString sIsoName = MsLangId::convertLanguageToIsoString( (LanguageType) sLanguageType.toInt32() );
                 ::rtl::OUString sTargetLocalName = sBaseName;
-                sTargetLocalName += ::rtl::OUString::createFromAscii( "_" );
+                sTargetLocalName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" ));
                 sTargetLocalName += sIsoName;
                 sTargetLocalName += sSuffix;
                 ::rtl::OUString sTargetName = sTargetDir + sTargetLocalName;

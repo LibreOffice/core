@@ -58,31 +58,12 @@ extern "C" {
 
 #endif
 
-#if 0
-// I18N doesn't get this right, can't specify more than one to ignore
-#define SC_COLLATOR_IGNORES ( \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_KANA | \
-    ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_WIDTH )
-#else
 #define SC_COLLATOR_IGNORES ( \
     ::com::sun::star::i18n::CollatorOptions::CollatorOptions_IGNORE_CASE )
-#endif
-#if 0
-// #107998# Don't ignore Width and Kana. The issue was mainly with AutoInput,
-// but affects also comparison of names in general.
-#define SC_TRANSLITERATION_IGNORECASE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#define SC_TRANSLITERATION_CASESENSE ( \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_KANA | \
-    ::com::sun::star::i18n::TransliterationModules_IGNORE_WIDTH )
-#else
+
 #define SC_TRANSLITERATION_IGNORECASE ( \
     ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE )
 #define SC_TRANSLITERATION_CASESENSE 0
-#endif
 
 //------------------------------------------------------------------------
 
@@ -131,14 +112,6 @@ const SCSIZE PIVOT_MAXPAGEFIELD = 10;
 #define SC_START_INDEX_DB_COLL 50000
                                         // Oberhalb dieser Grenze liegen
                                         // die Indizes fuer DBBereiche
-
-/*
-#ifdef OS2
-#define PIXEL_PER_INCH      72.0
-#else
-#define PIXEL_PER_INCH      96.0
-#endif
-*/
 
 #define PIXEL_PER_INCH      96.0
 
@@ -549,10 +522,6 @@ class ScGlobal
     static SvxBrushItem*    pProtectedBrushItem;
 
     static ImageList*       pOutlineBitmaps;
-    static ImageList*       pOutlineBitmapsHC;
-
-//  static Bitmap*          pAnchorBitmap;
-//  static Bitmap*          pGrayAnchorBitmap;
 
     static ScFunctionList*  pStarCalcFunctionList;
     static ScFunctionMgr*   pStarCalcFunctionMgr;
@@ -584,7 +553,7 @@ public:
     static IntlWrapper*         GetScIntlWrapper();
     static ::com::sun::star::lang::Locale*      GetLocale();
 
-    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration(); //CHINA001
+    SC_DLLPUBLIC static ::utl::TransliterationWrapper* GetpTransliteration();
     static ::utl::TransliterationWrapper* GetCaseTransliteration();
 
     SC_DLLPUBLIC static LanguageType            eLnge;
@@ -636,12 +605,8 @@ public:
     SC_DLLPUBLIC    static const String&    GetEmptyString();
     static const String&    GetScDocString();
 
-    /** Returns the specified image list with outline symbols.
-        @param bHC  false = standard symbols; true = high contrast symbols. */
-    static ImageList*       GetOutlineSymbols( bool bHC );
-
-//  static const Bitmap&    GetAnchorBitmap();
-//  static const Bitmap&    GetGrayAnchorBitmap();
+    /** Returns the specified image list with outline symbols. */
+    static ImageList*       GetOutlineSymbols();
 
     static bool             HasStarCalcFunctionList();
     static ScFunctionList*  GetStarCalcFunctionList();
@@ -886,10 +851,6 @@ struct ScConsolidateParam
     void                ClearDataAreas  ();
     void                SetAreas        ( ScArea* const* ppAreas, USHORT nCount );
 };
-
-// -----------------------------------------------------------------------
-extern ::utl::TransliterationWrapper* GetScGlobalpTransliteration();//CHINA001
-extern const LocaleDataWrapper* GetScGlobalpLocaleData();
 
 #endif
 

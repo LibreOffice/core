@@ -33,10 +33,6 @@
 #define RB_VERT     12
 #define FL_DIR      12
 
-#define BMP_SPLIT_VERT 13
-#define BMP_SPLIT_HORZ 14
-
 #define BT_OK       100
 #define BT_CANCEL   101
 #define BT_HELP     102
-

@@ -96,7 +96,7 @@ namespace calc
         // register our property at the base class
         CellAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString::createFromAscii( "BoundCell" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "BoundCell" )),
             PROP_HANDLE_BOUND_CELL,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),
@@ -266,7 +266,7 @@ namespace calc
                         if ( xProp.is() )
                         {
                             CellContentType eResultType;
-                            if ( (xProp->getPropertyValue(::rtl::OUString::createFromAscii( "FormulaResultType" ) ) >>= eResultType) && eResultType == CellContentType_VALUE )
+                            if ( (xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormulaResultType" )) ) >>= eResultType) && eResultType == CellContentType_VALUE )
                                 bHasValue = sal_True;
                         }
                     }
@@ -404,7 +404,7 @@ namespace calc
     {
         // set boolean number format if not already set
 
-        ::rtl::OUString sPropName( ::rtl::OUString::createFromAscii( "NumberFormat" ) );
+        ::rtl::OUString sPropName( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" ) );
         Reference<XPropertySet> xCellProp( m_xCell, UNO_QUERY );
         Reference<XNumberFormatsSupplier> xSupplier( m_xDocument, UNO_QUERY );
         if ( xSupplier.is() && xCellProp.is() )
@@ -429,10 +429,10 @@ namespace calc
                 if ( xOldFormat.is() )
                 {
                     // use the locale of the existing format
-                    xOldFormat->getPropertyValue( ::rtl::OUString::createFromAscii( "Locale" ) ) >>= aLocale;
+                    xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Locale" )) ) >>= aLocale;
 
                     sal_Int16 nOldType = ::comphelper::getINT16(
-                        xOldFormat->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) );
+                        xOldFormat->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) );
                     if ( nOldType & NumberFormat::LOGICAL )
                         bWasBoolean = sal_True;
                 }

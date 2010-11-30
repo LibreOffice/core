@@ -1032,9 +1032,7 @@ IMPL_LINK( RefEdit, UpdateHdl, Timer*, EMPTYARG )
 RefButton::RefButton( Window* _pParent, const ResId& rResId) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefStartHC( ModuleRes( RID_BMP_REFBTN1_H ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aImgRefDoneHC( ModuleRes( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( NULL ),
     pRefEdit( NULL )
 {
@@ -1044,9 +1042,7 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId) :
 RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, IControlReferenceHandler* _pDlg ) :
     ImageButton( _pParent, rResId ),
     aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefStartHC( ModuleRes( RID_BMP_REFBTN1_H ) ),
     aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
-    aImgRefDoneHC( ModuleRes( RID_BMP_REFBTN2_H ) ),
     pAnyRefDlg( _pDlg ),
     pRefEdit( pEdit )
 {
@@ -1056,13 +1052,11 @@ RefButton::RefButton( Window* _pParent, const ResId& rResId, RefEdit* pEdit, ICo
 void RefButton::SetStartImage()
 {
     SetModeImage( aImgRefStart );
-    SetModeImage( aImgRefStartHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void RefButton::SetEndImage()
 {
     SetModeImage( aImgRefDone );
-    SetModeImage( aImgRefDoneHC, BMP_COLOR_HIGHCONTRAST );
 }
 
 void RefButton::SetReferences( IControlReferenceHandler* pDlg, RefEdit* pEdit )

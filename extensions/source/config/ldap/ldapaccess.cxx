@@ -297,20 +297,20 @@ void LdapConnection::loadModule()
         s_Ldap_Module = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
         if ( s_Ldap_Module != NULL )
         {
-            s_p_unbind_s = (t_ldap_unbind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_unbind_s").pData));
-            s_p_simple_bind_s = (t_ldap_simple_bind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_simple_bind_s").pData));
-            s_p_set_option = (t_ldap_set_option)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_set_option").pData));
-            s_p_err2string = (t_ldap_err2string)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_err2string").pData));
-            s_p_init = (t_ldap_init)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_init").pData));
-            s_p_msgfree = (t_ldap_msgfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_msgfree").pData));
-            s_p_get_dn = (t_ldap_get_dn)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_get_dn").pData));
-            s_p_first_entry = (t_ldap_first_entry)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_first_entry").pData));
-            s_p_first_attribute = (t_ldap_first_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_first_attribute").pData));
-            s_p_next_attribute = (t_ldap_next_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_next_attribute").pData));
-            s_p_search_s = (t_ldap_search_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_search_s").pData));
-            s_p_value_free = (t_ldap_value_free)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_value_free").pData));
-            s_p_get_values = (t_ldap_get_values)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_get_values").pData));
-            s_p_memfree = (t_ldap_memfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString::createFromAscii("ldap_memfree").pData));
+            s_p_unbind_s = (t_ldap_unbind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_unbind_s")).pData));
+            s_p_simple_bind_s = (t_ldap_simple_bind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_simple_bind_s")).pData));
+            s_p_set_option = (t_ldap_set_option)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_set_option")).pData));
+            s_p_err2string = (t_ldap_err2string)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_err2string")).pData));
+            s_p_init = (t_ldap_init)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_init")).pData));
+            s_p_msgfree = (t_ldap_msgfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_msgfree")).pData));
+            s_p_get_dn = (t_ldap_get_dn)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_get_dn")).pData));
+            s_p_first_entry = (t_ldap_first_entry)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_first_entry")).pData));
+            s_p_first_attribute = (t_ldap_first_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_first_attribute")).pData));
+            s_p_next_attribute = (t_ldap_next_attribute)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_next_attribute")).pData));
+            s_p_search_s = (t_ldap_search_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_search_s")).pData));
+            s_p_value_free = (t_ldap_value_free)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_value_free")).pData));
+            s_p_get_values = (t_ldap_get_values)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_get_values")).pData));
+            s_p_memfree = (t_ldap_memfree)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_memfree")).pData));
         }
     }
 }

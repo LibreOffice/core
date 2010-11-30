@@ -66,7 +66,7 @@ int __LOADONCALLAPI main( int argc, char **argv )
     oslModule aLibrary = osl_loadModule( aLib.pData, SAL_LOADMODULE_DEFAULT );
     if ( aLibrary )
     {
-        void* pFunc = osl_getSymbol( aLibrary, OUString::createFromAscii( "GetVersionInfo" ).pData );
+        void* pFunc = osl_getSymbol( aLibrary, OUString( RTL_CONSTASCII_USTRINGPARAM( "GetVersionInfo" )).pData );
         if ( pFunc )
             pInfo = (*(GetVersionInfo)pFunc)();
     }

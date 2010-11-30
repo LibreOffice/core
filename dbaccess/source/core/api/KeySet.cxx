@@ -288,15 +288,12 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet,const ::rtl::O
                 for(SelectColumnsMetaData::iterator aPosIter = (*m_pForeignColumnNames).begin();aPosIter != aPosEnd;++aPosIter)
                 {
                     // look for columns not in the source columns to use them as filter as well
-                    // if ( !xSourceColumns->hasByName(aPosIter->first) )
-                    {
                         if ( aFilter.getLength() )
                             aFilter.append(aAnd);
                         aFilter.append(::dbtools::quoteName( aQuote,sSelectTableName));
                         aFilter.append(s_sDot);
                         aFilter.append(::dbtools::quoteName( aQuote,aPosIter->second.sRealName));
                         aFilter.append(s_sParam);
-                    }
                 }
                 break;
             }
@@ -519,7 +516,6 @@ void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow
     SelectColumnsMetaData::const_iterator aEnd = m_pColumnNames->end();
     for(;aIter != aEnd;++aIter,++i)
     {
-        //if(xKeyColumns.is() && xKeyColumns->hasByName(aIter->first))
         if ( m_pKeyColumnNames->find(aIter->first) != m_pKeyColumnNames->end() )
         {
             sKeyCondition.append(::dbtools::quoteName( aQuote,aIter->second.sRealName));

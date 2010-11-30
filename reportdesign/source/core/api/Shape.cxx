@@ -322,11 +322,9 @@ uno::Reference< util::XCloneable > SAL_CALL OShape::createClone(  ) throw (uno::
                 if ( pClone )
                 {
                     xSet.set(pClone->getUnoShape(),uno::UNO_QUERY_THROW );
-
-                    // ::comphelper::copyProperties(xSource.get(),xSet.get());
                 }
             }
-        } // if ( pShape )
+        }
     }
     catch(const uno::Exception&)
     {
@@ -345,11 +343,6 @@ void SAL_CALL OShape::setParent( const uno::Reference< uno::XInterface >& Parent
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     m_aProps.aComponent.m_xParent = uno::Reference< container::XChild >(Parent,uno::UNO_QUERY);
-    // not supported by the shape
-    //uno::Reference< container::XChild > xChild;
-    //comphelper::query_aggregation(m_aProps.aComponent.m_xProxy,xChild);
-    //if ( xChild.is() )
-       // xChild->setParent(Parent);
 }
 uno::Reference< report::XFormatCondition > SAL_CALL OShape::createFormatCondition(  ) throw (uno::Exception, uno::RuntimeException)
 {

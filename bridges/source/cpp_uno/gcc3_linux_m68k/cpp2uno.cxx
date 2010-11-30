@@ -300,7 +300,7 @@ namespace
         if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
         {
             throw RuntimeException(
-                OUString::createFromAscii("illegal vtable index!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
                 (XInterface *)pCppI );
         }
 
@@ -399,7 +399,7 @@ namespace
         default:
         {
             throw RuntimeException(
-                OUString::createFromAscii("no member description found!"),
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
                 (XInterface *)pCppI );
             // is here for dummy
             eRet = typelib_TypeClass_VOID;

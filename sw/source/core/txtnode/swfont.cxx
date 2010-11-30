@@ -78,7 +78,7 @@
 #define FNT_ATM_HACK
 #endif
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 // globale Variable
 SvStatistics aSvStat;
 #endif
@@ -115,7 +115,7 @@ USHORT MapDirection( USHORT nDir, const BOOL bVertFormat )
             break;
 #if OSL_DEBUG_LEVEL > 1
         default :
-            ASSERT( sal_False, "Unsupported direction" );
+            OSL_ENSURE( sal_False, "Unsupported direction" );
             break;
 #endif
         }
@@ -142,7 +142,7 @@ USHORT UnMapDirection( USHORT nDir, const BOOL bVertFormat )
             break;
 #if OSL_DEBUG_LEVEL > 1
         default :
-            ASSERT( sal_False, "Unsupported direction" );
+            OSL_ENSURE( sal_False, "Unsupported direction" );
             break;
 #endif
         }
@@ -419,7 +419,7 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet,
     }
     bPaintBlank = FALSE;
     bPaintWrong = FALSE;
-    ASSERT( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
+    OSL_ENSURE( aSub[SW_LATIN].IsTransparent(), "SwFont: Transparent revolution" );
 }
 
 /*************************************************************************
@@ -1162,8 +1162,10 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 // used during painting of small capitals
 void SwDrawTextInfo::Shift( USHORT nDir )
 {
-    ASSERT( bPos, "DrawTextInfo: Undefined Position" );
-    ASSERT( bSize, "DrawTextInfo: Undefined Width" );
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE( bPos, "DrawTextInfo: Undefined Position" );
+    OSL_ENSURE( bSize, "DrawTextInfo: Undefined Width" );
+#endif
 
     const BOOL bBidiPor = ( GetFrm() && GetFrm()->IsRightToLeft() ) !=
                           ( 0 != ( TEXT_LAYOUT_BIDI_RTL & GetpOut()->GetLayoutMode() ) );
@@ -1178,7 +1180,7 @@ void SwDrawTextInfo::Shift( USHORT nDir )
         ((Point*)pPos)->X() += GetSize().Width();
         break;
     case 900 :
-        ASSERT( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
+        OSL_ENSURE( ((Point*)pPos)->Y() >= GetSize().Width(), "Going underground" );
         ((Point*)pPos)->Y() -= GetSize().Width();
         break;
     case 1800 :

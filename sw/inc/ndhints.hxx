@@ -113,7 +113,7 @@ public:
         { return m_HintStarts[nIdx]; }
     inline USHORT Count() const { return m_HintStarts.Count(); }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bool Check() const;
 #endif
 };

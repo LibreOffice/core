@@ -67,7 +67,6 @@
 #define CONTEXT_FLAGS_MULTICOL (HTML_CNTXT_STRIP_PARA |  \
                                 HTML_CNTXT_KEEP_NUMRULE | \
                                 HTML_CNTXT_KEEP_ATTRS)
-//#define CONTEXT_FLAGS_HDRFTR (HTML_CNTXT_STRIP_PARA|HTML_CNTXT_PROTECT_STACK)
 #define CONTEXT_FLAGS_HDRFTR (CONTEXT_FLAGS_MULTICOL)
 #define CONTEXT_FLAGS_FTN (CONTEXT_FLAGS_MULTICOL)
 
@@ -431,7 +430,7 @@ void SwHTMLParser::FixHeaderFooterDistance( sal_Bool bHeader,
     SwFrmFmt *pHdFtFmt =
         bHeader ? (SwFrmFmt*)rPageFmt.GetHeader().GetHeaderFmt()
                 : (SwFrmFmt*)rPageFmt.GetFooter().GetFooterFmt();
-    ASSERT( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
+    OSL_ENSURE( pHdFtFmt, "Doch keine Kopf- oder Fusszeile" );
 
     const SwFmtCntnt& rFlyCntnt = pHdFtFmt->GetCntnt();
     const SwNodeIndex& rCntntStIdx = *rFlyCntnt.GetCntntIdx();
@@ -526,7 +525,7 @@ sal_Bool SwHTMLParser::EndSection( sal_Bool bLFStripped )
         return sal_True;
     }
 
-    ASSERT( !this, "Falsche PaM Position Beenden eines Bereichs" );
+    OSL_ENSURE( !this, "Falsche PaM Position Beenden eines Bereichs" );
 
     return sal_False;
 }
@@ -817,7 +816,7 @@ void SwHTMLParser::MovePageDescAttrs( SwNode *pSrcNd,
     SwCntntNode* pDestCntntNd =
         pDoc->GetNodes()[nDestIdx]->GetCntntNode();
 
-    ASSERT( pDestCntntNd, "Wieso ist das Ziel kein Content-Node?" );
+    OSL_ENSURE( pDestCntntNd, "Wieso ist das Ziel kein Content-Node?" );
 
     if( pSrcNd->IsCntntNode() )
     {

@@ -207,7 +207,7 @@ void SwFlyFrm::Chain( SwFrm* _pAnch )
             SwFlyFrm* pFollow = FindChainNeighbour( *rChain.GetNext(), _pAnch );
             if ( pFollow )
             {
-                ASSERT( !pFollow->GetPrevLink(), "wrong chain detected" );
+                OSL_ENSURE( !pFollow->GetPrevLink(), "wrong chain detected" );
                 if ( !pFollow->GetPrevLink() )
                     SwFlyFrm::ChainFrames( this, pFollow );
             }
@@ -217,7 +217,7 @@ void SwFlyFrm::Chain( SwFrm* _pAnch )
             SwFlyFrm *pMaster = FindChainNeighbour( *rChain.GetPrev(), _pAnch );
             if ( pMaster )
             {
-                ASSERT( !pMaster->GetNextLink(), "wrong chain detected" );
+                OSL_ENSURE( !pMaster->GetNextLink(), "wrong chain detected" );
                 if ( !pMaster->GetNextLink() )
                     SwFlyFrm::ChainFrames( pMaster, this );
             }
@@ -231,7 +231,7 @@ void SwFlyFrm::InsertCnt()
     if ( !GetPrevLink() )
     {
         const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
-        ASSERT( rCntnt.GetCntntIdx(), ":-( no content prepared." );
+        OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( no content prepared." );
         ULONG nIndex = rCntnt.GetCntntIdx()->GetIndex();
         // Lower() bedeutet SwColumnFrm, eingefuegt werden muss der Inhalt dann in den (Column)BodyFrm
         ::_InsertCnt( Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)Lower())->Lower() : (SwLayoutFrm*)this,
@@ -253,7 +253,7 @@ void SwFlyFrm::InsertCnt()
     // Check, if column are allowed.
     // Columns are not allowed for fly frames, which represent graphics or embedded objects.
     const SwFmtCntnt& rCntnt = GetFmt()->GetCntnt();
-    ASSERT( rCntnt.GetCntntIdx(), "<SwFlyFrm::InsertColumns()> - no content prepared." );
+    OSL_ENSURE( rCntnt.GetCntntIdx(), "<SwFlyFrm::InsertColumns()> - no content prepared." );
     SwNodeIndex aFirstCntnt( *(rCntnt.GetCntntIdx()), 1 );
     if ( aFirstCntnt.GetNode().IsNoTxtNode() )
     {
@@ -399,7 +399,7 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
                                           pIDDMA->GetOrCreateDrawModel() );
         // <--
     }
-    ASSERT( pContact, "InitDrawObj failed" );
+    OSL_ENSURE( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
     SetDrawObj( *(pContact->CreateNewRef( this )) );
 
@@ -491,9 +491,9 @@ void SwFlyFrm::FinitDrawObj()
 
 void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 {
-    ASSERT( pMaster && pFollow, "uncomplete chain" );
-    ASSERT( !pMaster->GetNextLink(), "link can not be changed" );
-    ASSERT( !pFollow->GetPrevLink(), "link can not be changed" );
+    OSL_ENSURE( pMaster && pFollow, "uncomplete chain" );
+    OSL_ENSURE( !pMaster->GetNextLink(), "link can not be changed" );
+    OSL_ENSURE( !pFollow->GetPrevLink(), "link can not be changed" );
 
     pMaster->pNextLink = pFollow;
     pFollow->pPrevLink = pMaster;
@@ -522,7 +522,7 @@ void SwFlyFrm::ChainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         //Es gibt nur noch den Inhalt des Masters, der Inhalt vom Follow
         //hat keine Frames mehr (sollte immer nur genau ein leerer TxtNode sein).
         SwFrm *pFrm = pFollow->ContainsCntnt();
-        ASSERT( !pFrm->IsTabFrm() && !pFrm->FindNext(), "follow in chain contains content" );
+        OSL_ENSURE( !pFrm->IsTabFrm() && !pFrm->FindNext(), "follow in chain contains content" );
         pFrm->Cut();
         delete pFrm;
     }
@@ -547,7 +547,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
         {
             pUpper = static_cast<SwLayoutFrm*>(pUpper->GetLastLower());
             pUpper = static_cast<SwLayoutFrm*>(pUpper->Lower()); // der (Column)BodyFrm
-            ASSERT( pUpper && pUpper->IsColBodyFrm(), "Missing ColumnBody" );
+            OSL_ENSURE( pUpper && pUpper->IsColBodyFrm(), "Missing ColumnBody" );
         }
         SwFlyFrm *pFoll = pFollow;
         while ( pFoll )
@@ -563,7 +563,7 @@ void SwFlyFrm::UnchainFrames( SwFlyFrm *pMaster, SwFlyFrm *pFollow )
 
     //Der Follow muss mit seinem eigenen Inhalt versorgt werden.
     const SwFmtCntnt &rCntnt = pFollow->GetFmt()->GetCntnt();
-    ASSERT( rCntnt.GetCntntIdx(), ":-( Kein Inhalt vorbereitet." );
+    OSL_ENSURE( rCntnt.GetCntntIdx(), ":-( Kein Inhalt vorbereitet." );
     ULONG nIndex = rCntnt.GetCntntIdx()->GetIndex();
     // Lower() bedeutet SwColumnFrm, dieser beinhaltet wieder einen SwBodyFrm
     ::_InsertCnt( pFollow->Lower() ? (SwLayoutFrm*)((SwLayoutFrm*)pFollow->Lower())->Lower()
@@ -626,7 +626,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
     }
     else if ( pFly )
     {
-        ASSERT( !aIter.Next(), "chain with more than one inkarnation" );
+        OSL_ENSURE( !aIter.Next(), "chain with more than one inkarnation" );
     }
     return pFly;
 }
@@ -1201,7 +1201,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                     aVert.SetVertOrient( text::VertOrientation::NONE );
                     xub_StrLen nOfs =
                         pFmt->GetAnchor().GetCntntAnchor()->nContent.GetIndex();
-                    ASSERT( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
+                    OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected" );
                     pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
                     while( pAutoFrm->GetFollow() &&
                            pAutoFrm->GetFollow()->GetOfst() <= nOfs )
@@ -1258,7 +1258,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
                         {
                             xub_StrLen nOfs = pFmt->GetAnchor().GetCntntAnchor()
                                           ->nContent.GetIndex();
-                            ASSERT( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected");
+                            OSL_ENSURE( GetAnchorFrm()->IsTxtFrm(), "TxtFrm expected");
                             pAutoFrm = (SwTxtFrm*)GetAnchorFrm();
                             while( pAutoFrm->GetFollow() &&
                                    pAutoFrm->GetFollow()->GetOfst() <= nOfs )
@@ -1290,7 +1290,7 @@ void SwFlyFrm::ChgRelPos( const Point &rNewPos )
 
 void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 {
-    ASSERT( pAttrs, "FlyFrm::Format, pAttrs ist 0." );
+    OSL_ENSURE( pAttrs, "FlyFrm::Format, pAttrs ist 0." );
 
     ColLock();
 
@@ -1316,8 +1316,8 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         const SwFmtFrmSize &rFrmSz = GetFmt()->GetFrmSize();
               Size aRelSize( CalcRel( rFrmSz ) );
 
-        ASSERT( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
-        ASSERT( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
+        OSL_ENSURE( pAttrs->GetSize().Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
+        OSL_ENSURE( pAttrs->GetSize().Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
 
         SWRECTFN( this )
         if( !HasFixSize() )
@@ -1428,7 +1428,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
         if ( !bFormatHeightOnly )
         {
-            ASSERT( aRelSize == CalcRel( rFrmSz ), "SwFlyFrm::Format CalcRel problem" )
+            OSL_ENSURE( aRelSize == CalcRel( rFrmSz ), "SwFlyFrm::Format CalcRel problem" );
             SwTwips nNewSize = bVert ? aRelSize.Height() : aRelSize.Width();
 
             if ( rFrmSz.GetWidthSizeType() != ATT_FIX_SIZE )
@@ -1635,7 +1635,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                             bAgain = true;
                             if ( pAgainObj2 == pAnchoredObj )
                             {
-                                ASSERT( false,
+                                OSL_ENSURE( false,
                                         "::CalcCntnt(..) - loop detected, perform attribute changes to avoid the loop" );
                                 //Oszillation unterbinden.
                                 SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
@@ -1720,7 +1720,7 @@ void CalcCntnt( SwLayoutFrm *pLay,
                         continue;
 
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( false, "LoopControl in CalcCntnt" )
+                    OSL_ENSURE( false, "LoopControl in CalcCntnt" );
 #endif
                 }
             }
@@ -2103,7 +2103,7 @@ Size SwFlyFrm::ChgSize( const Size& aNewSize )
 
 BOOL SwFlyFrm::IsLowerOf( const SwLayoutFrm* pUpperFrm ) const
 {
-    ASSERT( GetAnchorFrm(), "8-( Fly is lost in Space." );
+    OSL_ENSURE( GetAnchorFrm(), "8-( Fly is lost in Space." );
     const SwFrm* pFrm = GetAnchorFrm();
     do
     {
@@ -2232,7 +2232,7 @@ void SwFrm::AppendDrawObj( SwAnchoredObject& _rNewObj )
 {
     if ( !_rNewObj.ISA(SwAnchoredDrawObject) )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "SwFrm::AppendDrawObj(..) - anchored object of unexcepted type -> object not appended" );
         return;
     }
@@ -2462,7 +2462,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             }
             else
             {
-                ASSERT( pObj->ISA(SwAnchoredDrawObject),
+                OSL_ENSURE( pObj->ISA(SwAnchoredDrawObject),
                         "<SwLayoutFrm::NotifyFlys() - anchored object of unexcepted type" );
                 // --> OD 2004-10-08 #i26945# - use <pAnchorFrm> to check, if
                 // fly frame is lower of layout frame resp. if fly frame is
@@ -2683,7 +2683,7 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
             pGrfObj = new GraphicObject( pNd->GetGraphic() );
             bGrfObjCreated = sal_True;
         }
-        ASSERT( pGrfObj, "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
+        OSL_ENSURE( pGrfObj, "SwFlyFrm::GetContour() - No Graphic/GraphicObject found at <SwNoTxtNode>." );
         if ( pGrfObj && pGrfObj->GetType() != GRAPHIC_NONE )
         {
             if( !pNd->HasContour() )
@@ -2692,7 +2692,7 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
                 // during paint. Thus, return (value of <bRet> should be <FALSE>).
                 if ( pGrfNd && _bForPaint )
                 {
-                    ASSERT( false, "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );
+                    OSL_ENSURE( false, "SwFlyFrm::GetContour() - No Contour found at <SwNoTxtNode> during paint." );
                     return bRet;
                 }
                 pNd->CreateContour();
@@ -2786,13 +2786,13 @@ void SwFlyFrm::InvalidateObjPos()
 
 SwFrmFmt& SwFlyFrm::GetFrmFmt()
 {
-    ASSERT( GetFmt(),
+    OSL_ENSURE( GetFmt(),
             "<SwFlyFrm::GetFrmFmt()> - missing frame format -> crash." );
     return *GetFmt();
 }
 const SwFrmFmt& SwFlyFrm::GetFrmFmt() const
 {
-    ASSERT( GetFmt(),
+    OSL_ENSURE( GetFmt(),
             "<SwFlyFrm::GetFrmFmt()> - missing frame format -> crash." );
     return *GetFmt();
 }

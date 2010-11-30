@@ -79,14 +79,11 @@
 #define STR_BTN_NEWDOC           (RC_ENVLOP_BEGIN + 65)
 #define STR_SENDER_TOKENS        (RC_ENVLOP_BEGIN + 66)
 
-#define RC_ENVPRT_HC_BEGIN       (RC_ENVLOP_BEGIN + 70)
-#define RC_ENVPRT_HC_END         (RC_ENVLOP_BEGIN + 82)
-
 // Ueberlaufpruefung ----------------------------------------------------------
 
 #define ENVELP_ACT_END  STR_SENDER_TOKENS
 
-#if ENVELP_ACT_END > RC_ENVPRT_HC_END
+#if ENVELP_ACT_END > STR_SENDER_TOKENS
 #error Resource-Ueberlauf in #file, #line
 #endif
 

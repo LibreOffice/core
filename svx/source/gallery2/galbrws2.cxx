@@ -1228,12 +1228,10 @@ IMPL_LINK( GalleryBrowser2, SelectTbxHdl, ToolBox*, pBox )
 
 IMPL_LINK( GalleryBrowser2, MiscHdl, void*, EMPTYARG )
 {
-    const sal_Bool  bHC = maViewBox.GetSettings().GetStyleSettings().GetHighContrastMode();
-
     maViewBox.SetOutStyle( maMiscOptions.GetToolboxStyle() );
 
-    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_ICON_HC : RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
-    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( bHC? RID_SVXIMG_GALLERY_VIEW_LIST_HC : RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
+    BitmapEx aIconBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_ICON ) ).GetBitmapEx() );
+    BitmapEx aListBmpEx = BitmapEx( Image( GAL_RESID( RID_SVXIMG_GALLERY_VIEW_LIST ) ).GetBitmapEx() );
 
     if( maMiscOptions.AreCurrentSymbolsLarge() )
     {

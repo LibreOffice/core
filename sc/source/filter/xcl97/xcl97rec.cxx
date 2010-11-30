@@ -103,9 +103,9 @@ sal_Int32 XclExpObjList::mnVmlCount;
 
 XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) :
     XclExpRoot( rRoot ),
+    mnScTab( rRoot.GetCurrScTab() ),
     mrEscherEx( rEscherEx ),
-    pSolverContainer( 0 ),
-    mnScTab( rRoot.GetCurrScTab() )
+    pSolverContainer( 0 )
 {
     pMsodrawingPerSheet = new XclExpMsoDrawing( rEscherEx );
     // open the DGCONTAINER and the patriarch group shape
@@ -972,42 +972,6 @@ void XclObjAny::WriteFromTo( XclExpXmlStream& rStrm, const XclObjAny& rObj )
     WriteFromTo( rStrm, rObj.GetShape(), rObj.GetTab() );
 }
 
-static void
-WritePicPr( sax_fastparser::FSHelperPtr pDrawing, sal_Int32 nId, Reference< XPropertySet > xPropSet )
-{
-    pDrawing->startElement( FSNS( XML_xdr, XML_nvPicPr ),
-            FSEND );
-    OUString sName, sDescr;
-    xPropSet->getPropertyValue( XclXmlUtils::ToOUString( "Name" ) ) >>= sName;
-    xPropSet->getPropertyValue( XclXmlUtils::ToOUString( "Description" ) ) >>= sDescr;
-    pDrawing->singleElement( FSNS( XML_xdr, XML_cNvPr ),
-            XML_id,     OString::valueOf( nId ).getStr(),
-            XML_name,   XclXmlUtils::ToOString( sName ).getStr(),
-            XML_descr,  XclXmlUtils::ToOString( sDescr ).getStr(),
-            FSEND );
-    // OOXTODO: //xdr:cNvPr children: XML_extLst, XML_hlinkClick, XML_hlinkHover
-    pDrawing->startElement( FSNS( XML_xdr, XML_cNvPicPr ),
-            // OOXTODO: FSNS( XML_xdr, XML_preferRelativeSize )
-            FSEND );
-    // OOXTODO: XML_extLst
-    pDrawing->singleElement( FSNS( XML_a, XML_picLocks ),
-            // OOXTODO: XML_noGrp,
-            // OOXTODO: XML_noSelect,
-            // OOXTODO: XML_noRot,
-            // OOXTODO: XML_noChangeAspect,
-            // OOXTODO: XML_noMove,
-            // OOXTODO: XML_noResize,
-            // OOXTODO: XML_noEditPoints,
-            // OOXTODO: XML_noAdjustHandles,
-            // OOXTODO: XML_noChangeArrowheads,
-            // OOXTODO: XML_noChangeShapeType,
-            // OOXTODO: XML_noCrop,
-            FSEND );
-    pDrawing->endElement( FSNS( XML_xdr, XML_cNvPicPr ) );
-    pDrawing->endElement( FSNS( XML_xdr, XML_nvPicPr ) );
-}
-
-
 static const char*
 GetEditAs( XclObjAny& rObj )
 {
@@ -1031,7 +995,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    ShapeExport aDML( XML_xdr, pDrawing, &rStrm, DrawingML::DOCUMENT_XLSX );
+    ShapeExport aDML( XML_xdr, pDrawing, NULL, &rStrm, DrawingML::DOCUMENT_XLSX );
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ),

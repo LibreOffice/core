@@ -106,7 +106,6 @@ class SwEditRegionDlg : public SfxModalDialog
     PushButton      aDismiss;
     HelpButton      aHelp;
     ImageList       aImageIL;
-    ImageList       aImageILH;
 
     SwWrtShell&             rSh;
     SectReprArr             aSectReprArr;
@@ -119,7 +118,7 @@ class SwEditRegionDlg : public SfxModalDialog
     BOOL            bWeb            :1;
 
 
-    Image  BuildBitmap(BOOL bProtect,BOOL bHidden,BOOL bHighContrast);
+    Image  BuildBitmap(BOOL bProtect,BOOL bHidden);
 
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     USHORT  FindArrPos(const SwSectionFmt* pFmt);

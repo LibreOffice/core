@@ -172,7 +172,7 @@ void ImplDirEntryHelper::Kill( const String& rMainUrl )
         ::ucbhelper::Content aCnt( rMainUrl,
                              ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-        aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+        aCnt.executeCommand( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )),
                              ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException& )
@@ -1921,10 +1921,10 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                     if( xMgr.is() )
                     {
                         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler > xSaxWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.sax.Writer" )) ), ::com::sun::star::uno::UNO_QUERY );
 
                         ::com::sun::star::uno::Reference< ::com::sun::star::svg::XSVGWriter > xSVGWriter( xMgr->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.svg.SVGWriter" ) ), ::com::sun::star::uno::UNO_QUERY );
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svg.SVGWriter" )) ), ::com::sun::star::uno::UNO_QUERY );
 
                         if( xSaxWriter.is() && xSVGWriter.is() )
                         {
@@ -2033,7 +2033,7 @@ BOOL GraphicFilter::DoExportDialog( Window*, USHORT nFormat, FieldUnit )
         xSMgr( ::comphelper::getProcessServiceFactory() );
 
     uno::Reference< com::sun::star::uno::XInterface > xFilterOptionsDialog
-        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.svtools.SvFilterOptionsDialog" ) ),
+        ( xSMgr->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.svtools.SvFilterOptionsDialog" )) ),
             com::sun::star::uno::UNO_QUERY );
     if ( xFilterOptionsDialog.is() )
     {

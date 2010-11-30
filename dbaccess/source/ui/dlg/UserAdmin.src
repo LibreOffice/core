@@ -71,7 +71,6 @@ TabPage TAB_PAGE_USERADMIN
         HelpId              = HID_TAB_PAGE_LBUSER ;
     };
 
-
     PushButton PB_NEWUSER
     {
         Pos                 = MAP_APPFONT ( 12 , 29 ) ;
@@ -150,7 +149,6 @@ ModalDialog DLG_PASSWORD
         Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
         Text [ en-US ] = "User \"$name$:  $\"";
     };
-
     FixedText FT_OLDPASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
@@ -215,28 +213,3 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
 {
     Text [ en-US ] = "The passwords do not match. Please enter the password again.";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

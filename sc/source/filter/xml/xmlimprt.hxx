@@ -1003,6 +1003,18 @@ public:
 
     virtual void DisposingModel();
 
+    /**
+     * Use this class to manage solar mutex locking instead of calling
+     * LockSolarMutex() and UnlockSolarMutex() directly.
+     */
+    class MutexGuard
+    {
+    public:
+        explicit MutexGuard(ScXMLImport& rImport);
+        ~MutexGuard();
+    private:
+        ScXMLImport& mrImport;
+    };
     void LockSolarMutex();
     void UnlockSolarMutex();
 

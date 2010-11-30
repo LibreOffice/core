@@ -326,7 +326,7 @@ BOOL SwCursor::IsSelOvr( int eFlags )
                 if( rProtect.IsCntntProtected() )
                 {
                     const SwFmtCntnt& rCntnt = pFmt->GetCntnt(FALSE);
-                    ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                    OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                     ULONG nIdx = rCntnt.GetCntntIdx()->GetIndex();
                     if( nSttIdx <= nIdx && nEndIdx >= nIdx )
                     {
@@ -536,7 +536,7 @@ BOOL SwCursor::IsInProtectTable( BOOL bMove, BOOL bChgCrsr )
     // Check for convered cell:
     bool bInCoveredCell = false;
     const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
-    ASSERT( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" )
+    OSL_ENSURE( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" );
     const SwTableBox* pBox = pTmpSttNode ? pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() ) : 0; //Robust #151355
     if ( pBox && pBox->getRowSpan() < 1 ) // Robust #151270
         bInCoveredCell = true;
@@ -1379,6 +1379,7 @@ BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
             const SwPosition rStart = pMark->GetMarkStart();
             GetPoint()->nNode = rStart.nNode;
             GetPoint()->nContent = rStart.nContent;
+            GetPoint()->nContent++; // Don't select the start delimiter
 
             const SwPosition rEnd = pMark->GetMarkEnd();
 
@@ -1387,6 +1388,7 @@ BOOL SwCursor::SelectWordWT( sal_Int16 nWordType, const Point* pPt )
                 SetMark();
                 GetMark()->nNode = rEnd.nNode;
                 GetMark()->nContent = rEnd.nContent;
+                GetMark()->nContent--; //Don't select the end delimiter
             }
             bRet = TRUE;
         }
@@ -1639,7 +1641,7 @@ BOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
 
-    // ASSERT( not in covered cell )
+    // OSL_ENSURE( not in covered cell )
 
     while( nCnt )
     {
@@ -1833,7 +1835,7 @@ BOOL SwCursor::UpDown( BOOL bUp, USHORT nCnt,
             // set the point to the last frame in the table box. This is
             // only necessary if we do not already have a table selection
             const SwStartNode* pTblNd = GetNode( TRUE )->FindTableBoxStartNode();
-            ASSERT( pTblNd, "pTblCrsr without SwTableNode?" )
+            OSL_ENSURE( pTblNd, "pTblCrsr without SwTableNode?" );
 
             if ( pTblNd ) // safety first
             {
@@ -2094,12 +2096,6 @@ BOOL SwCursor::MoveSection( SwWhichSection fnWhichSect,
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
-/*
-    BOOL MoveTable( SwWhichTable, SwPosTable );
-    BOOL MoveColumn( SwWhichColumn, SwPosColumn );
-    BOOL MoveRegion( SwWhichRegion, SwPosRegion );
-*/
-
 void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
 {
     if( pSavePos )
@@ -2215,19 +2211,6 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( bDel )
             {
                 SwPaM* pDel = (SwPaM*)pCur->GetPrev();
-/*
-JP 20.07.98: der alte Code geht mit dem UNO-TableCrsr nicht
-                if( pDel == pAktCrsr )
-                {
-                    if( pAktCrsr->GetNext() == pAktCrsr )
-                    {
-                        pAktCrsr->DeleteMark();
-                        break;      // es gibt nichts mehr zu loeschen!
-                    }
-                    pAktCrsr = (SwCursor*)pDel->GetPrev();
-                }
-                delete pDel;
-*/
 
                 if( pDel == pAktCrsr )
                     pAktCrsr->DeleteMark();

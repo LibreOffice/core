@@ -78,9 +78,7 @@ class FORMULA_DLLPUBLIC RefButton : public ImageButton
 {
 private:
     Image               aImgRefStart;   /// Start reference input
-    Image               aImgRefStartHC; /// Start reference input (high contrast)
     Image               aImgRefDone;    /// Stop reference input
-    Image               aImgRefDoneHC;  /// Stop reference input (high contrast)
     IControlReferenceHandler*      pAnyRefDlg;     // parent dialog
     RefEdit*            pRefEdit;       // zugeordnetes Edit-Control
 

@@ -88,8 +88,7 @@ using namespace ::cppu;
 // Image sizes for our toolbars/menus
 const sal_Int32 IMAGE_SIZE_NORMAL         = 16;
 const sal_Int32 IMAGE_SIZE_LARGE          = 26;
-const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST|
-                                            ::com::sun::star::ui::ImageType::SIZE_LARGE;
+const sal_Int16 MAX_IMAGETYPE_VALUE       = ::com::sun::star::ui::ImageType::SIZE_LARGE;
 
 static const char   IMAGE_FOLDER[]        = "images";
 static const char   BITMAPS_FOLDER[]      = "Bitmaps";
@@ -98,17 +97,13 @@ static const char   IMAGE_EXTENSION[]     = ".png";
 static const char*  IMAGELIST_XML_FILE[]  =
 {
     "sc_imagelist.xml",
-    "lc_imagelist.xml",
-    "sch_imagelist.xml",
-    "lch_imagelist.xml"
+    "lc_imagelist.xml"
 };
 
 static const char*  BITMAP_FILE_NAMES[]   =
 {
     "sc_userimages.png",
-    "lc_userimages.png",
-    "sch_userimages.png",
-    "lch_userimages.png"
+    "lc_userimages.png"
 };
 
 namespace framework
@@ -119,9 +114,7 @@ namespace framework
     static const char* ImageType_Prefixes[ImageType_COUNT] =
     {
         "res/commandimagelist/sc_",
-        "res/commandimagelist/lc_",
-        "res/commandimagelist/sch_",
-        "res/commandimagelist/lch_"
+        "res/commandimagelist/lc_"
     };
 
 typedef GraphicNameAccess CmdToXGraphicNameAccess;
@@ -427,8 +420,7 @@ static sal_Bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGra
     Size   aSize = aImage.GetSizePixel();
     bool   bMustScale( false );
 
-    if (( nImageType == ImageType_Color_Large ) ||
-        ( nImageType == ImageType_HC_Large ))
+    if ( nImageType == ImageType_Color_Large )
         bMustScale = ( aSize != aLargeSize );
     else
         bMustScale = ( aSize != aNormSize );
@@ -450,8 +442,6 @@ static sal_Int16 implts_convertImageTypeToIndex( sal_Int16 nImageType )
     sal_Int16 nIndex( 0 );
     if ( nImageType & ::com::sun::star::ui::ImageType::SIZE_LARGE )
         nIndex += 1;
-    if ( nImageType & ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST )
-        nIndex += 2;
     return nIndex;
 }
 
@@ -473,11 +463,11 @@ void ImageManagerImpl::implts_initialize()
 
         try
         {
-            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+            m_xUserImageStorage = m_xUserConfigStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                             nModes );
             if ( m_xUserImageStorage.is() )
             {
-                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+                m_xUserBitmapsStorage = m_xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                  nModes );
             }
         }
@@ -1367,11 +1357,11 @@ throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException
     {
         long nModes = ElementModes::READWRITE;
 
-        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString::createFromAscii( IMAGE_FOLDER ),
+        uno::Reference< XStorage > xUserImageStorage = Storage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( IMAGE_FOLDER )),
                                                                                     nModes );
         if ( xUserImageStorage.is() )
         {
-            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString::createFromAscii( BITMAPS_FOLDER ),
+            uno::Reference< XStorage > xUserBitmapsStorage = xUserImageStorage->openStorageElement( OUString(RTL_CONSTASCII_USTRINGPARAM( BITMAPS_FOLDER )),
                                                                                                     nModes );
             for ( sal_Int32 i = 0; i < ImageType_COUNT; i++ )
             {

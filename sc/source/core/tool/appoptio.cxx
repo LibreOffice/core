@@ -309,7 +309,7 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
 
     //  adjust for metric system
     if (ScOptionsUtil::IsMetricSystem())
-        pNames[SCLAYOUTOPT_MEASURE] = OUString::createFromAscii( "Other/MeasureUnit/Metric" );
+        pNames[SCLAYOUTOPT_MEASURE] = OUString(RTL_CONSTASCII_USTRINGPARAM( "Other/MeasureUnit/Metric") );
 
     return aNames;
 }
@@ -393,12 +393,12 @@ Sequence<OUString> ScAppCfg::GetMiscPropertyNames()
 
 
 ScAppCfg::ScAppCfg() :
-    aLayoutItem( OUString::createFromAscii( CFGPATH_LAYOUT ) ),
-    aInputItem( OUString::createFromAscii( CFGPATH_INPUT ) ),
-    aRevisionItem( OUString::createFromAscii( CFGPATH_REVISION ) ),
-    aContentItem( OUString::createFromAscii( CFGPATH_CONTENT ) ),
-    aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) ),
-    aMiscItem( OUString::createFromAscii( CFGPATH_MISC ) )
+    aLayoutItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_LAYOUT )) ),
+    aInputItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) ),
+    aRevisionItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_REVISION )) ),
+    aContentItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_CONTENT )) ),
+    aSortListItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_SORTLIST )) ),
+    aMiscItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_MISC )) )
 {
     sal_Int32 nIntVal = 0;
 

@@ -205,14 +205,14 @@ namespace toolkit
             // load the library implementing the factory
             if ( !s_pFactory.get() )
             {
-                const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii(
-                    SVLIBRARY( "acc" )
+                const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(
+                    SVLIBRARY( "acc" ))
                 );
                 s_hAccessibleImplementationModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
                 if ( s_hAccessibleImplementationModule != NULL )
                 {
                     const ::rtl::OUString sFactoryCreationFunc =
-                        ::rtl::OUString::createFromAscii( "getStandardAccessibleFactory" );
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getStandardAccessibleFactory"));
                     s_pAccessibleFactoryFunc = (GetStandardAccComponentFactory)
                         osl_getFunctionSymbol( s_hAccessibleImplementationModule, sFactoryCreationFunc.pData );
 

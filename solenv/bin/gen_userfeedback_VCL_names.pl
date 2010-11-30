@@ -59,7 +59,7 @@ for (<HID>) {
 
   if ( exists $hids{$upperlongname} && ( $hids{$upperlongname} != $ID ) )
   {
-    print STDERR "errror: unclear definition of longname: $longname = $hids{$upperlongname} or $ID\n";
+    print STDERR "warn: unclear definition of longname: $longname = $hids{$upperlongname} or $ID\n";
   }
   $hids{$upperlongname} = $ID;
 
@@ -121,7 +121,7 @@ foreach ( glob("$winpath/*win") ) {
       $upperlongname =~ tr/a-z/A-Z/;
       if ( $shortname !~ /^[\+\*]/ && !exists $hids{$upperlongname} )
       {
-        print STDERR "errror: Longname not in hid.lst: $filename $longname\n";
+        print STDERR "warn: Longname not in hid.lst: $filename $longname\n";
       }
       if ( exists $hids{$upperlongname} )
       {

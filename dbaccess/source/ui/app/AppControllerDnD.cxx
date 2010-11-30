@@ -568,7 +568,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
 
             if ( CommandType::QUERY == nCommandType || CommandType::COMMAND == nCommandType )
             {
-                // read all nescessary data
+                // read all necessary data
 
                 ::rtl::OUString sCommand;
                 sal_Bool bEscapeProcessing = sal_True;

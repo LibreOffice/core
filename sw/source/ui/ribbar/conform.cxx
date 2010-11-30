@@ -121,9 +121,7 @@ void ConstFormControl::Activate(const USHORT nSlotId)
 
     m_pWin->SetPointer(Pointer(POINTER_DRAW_RECT));
 }
-/* -----------------------------19.04.2002 12:42------------------------------
 
- ---------------------------------------------------------------------------*/
 void ConstFormControl::CreateDefaultObject()
 {
     Point aStartPos(GetDefaultCenterPos());

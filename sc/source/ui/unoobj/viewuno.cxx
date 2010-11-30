@@ -2255,7 +2255,7 @@ void ScTabViewObj::RangeSelChanged( const String& rText )
 
 rtl::OUString SAL_CALL ScTabViewObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScTabViewObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScTabViewObj" ));
 }
 
 sal_Bool SAL_CALL ScTabViewObj::supportsService( const rtl::OUString& rServiceName )
@@ -2271,8 +2271,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTabViewObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(2);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( SCTABVIEWOBJ_SERVICE );
-    pArray[1] = rtl::OUString::createFromAscii( SCVIEWSETTINGS_SERVICE );
+    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCTABVIEWOBJ_SERVICE ));
+    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCVIEWSETTINGS_SERVICE ));
     return aRet;
 }
 

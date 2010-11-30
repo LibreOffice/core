@@ -39,7 +39,6 @@
 #include <bparr.hxx>
 #include <ndtyp.hxx>
 
-
 class Graphic;
 class GraphicObject;
 class String;
@@ -73,7 +72,6 @@ class SwUndoTblToTxt;
 class SwUndoTxtToTbl;
 struct SwPosition;
 
-
 // --------------------
 // class SwNodes
 // --------------------
@@ -91,13 +89,10 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
 
     SwNodeIndex* pRoot;                 // Liste aller Indizies auf Nodes
 
-    // --> OD 2008-05-14 #refactorlists# - removed <bSyncNumberAndNumRule>
     void InsertNode( const SwNodePtr pNode,
                      const SwNodeIndex& rPos );
     void InsertNode( const SwNodePtr pNode,
                      ULONG nPos );
-    // <--
-
 
     SwDoc* pMyDoc;                      // in diesem Doc ist das Nodes-Array
 
@@ -142,8 +137,8 @@ public:
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
 
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
+    // impl. steht im ndindex.hxx - sollte moeglichst bald auf die
+    // neue Schnittstelle angepasst werden
     inline SwNodePtr operator[]( const SwNodeIndex& rIdx ) const;
 
     ULONG Count() const { return BigPtrArray::Count(); }
@@ -259,8 +254,7 @@ public:
         // fuege die Nodes fuer die Tabelle ein
         // wenn Lines angegeben, erzeuge die Matrix aus Lines & Boxen
         // ansonsten nur die Anzahl von Boxen.
-    /* #109161#
-
+    /*
        New parameter pAttrSet: If pAttrSet is non-null and contains an
        adjust item it is propagated to the table cells. If there is an
        adjust in pCntntTxtColl or pHeadlineTxtColl this adjust item
@@ -339,16 +333,12 @@ public:
     SwNode* FindPrvNxtFrmNode( SwNodeIndex& rFrmIdx,
                                 const SwNode* pEnd = 0 ) const;
 
-    //-> #112139#
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
-    //<- #112139#
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwNodes( const SwNodes & rNodes );
 };
-
-
 
 #endif
 

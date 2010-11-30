@@ -320,7 +320,7 @@ sal_Bool SAL_CALL ContentResultSetWrapper
         }
         aGuard.reacquire();
 
-        rtl::OUString aName = OUString::createFromAscii( "ResultSetType" );
+        rtl::OUString aName(RTL_CONSTASCII_USTRINGPARAM("ResultSetType"));
         //find out, if we are ForwardOnly and cache the value:
 
         impl_init_xPropertySetOrigin();

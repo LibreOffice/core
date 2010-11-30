@@ -334,15 +334,15 @@ static void impl_setNeedsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString::createFromAscii("NodePath"),
-                      makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
+        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
-        Any value = makeAny( OUString::createFromAscii("never") );
+        Any value = makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("never")) );
 
-        pset->setPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID"), value );
+        pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), value );
         Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
     }
     catch (const Exception&) {}
@@ -387,20 +387,20 @@ static bool impl_needsCompatCheck()
                 xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString::createFromAscii("NodePath"),
-                      makeAny( OUString::createFromAscii("org.openoffice.Setup/Office") ) );
+        beans::NamedValue v( OUString(RTL_CONSTASCII_USTRINGPARAM("NodePath")),
+                      makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office")) ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset = Reference< beans::XPropertySet >(
             theConfigProvider->createInstanceWithArguments( sAccessSrvc, theArgs ), UNO_QUERY_THROW );
 
-        Any result = pset->getPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID") );
+        Any result = pset->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")) );
 
         result >>= aLastCheckBuildID;
         if ( aLastCheckBuildID != aCurrentBuildID )
         {
             bNeedsCheck = true;
             result <<= aCurrentBuildID;
-            pset->setPropertyValue( OUString::createFromAscii("LastCompatibilityCheckID"), result );
+            pset->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LastCompatibilityCheckID")), result );
             Reference< util::XChangesBatch >( pset, UNO_QUERY_THROW )->commitChanges();
         }
 #ifdef DEBUG

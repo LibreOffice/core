@@ -115,8 +115,8 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
         try
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString::createFromAscii( FILE_PICKER_REGKEY_NAME ) );
-            pXNewKey->createKey( OUString::createFromAscii( FOLDER_PICKER_REGKEY_NAME ) );
+            pXNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_REGKEY_NAME ) ));
+            pXNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_REGKEY_NAME ) ));
         }
         catch( InvalidRegistryException& )
         {
@@ -153,7 +153,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FILE_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
@@ -165,7 +165,7 @@ void* SAL_CALL component_getFactory(
             {
                 Sequence< OUString > aSNS( 1 );
                 aSNS.getArray( )[0] =
-                    OUString::createFromAscii(FOLDER_PICKER_SERVICE_NAME);
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(FOLDER_PICKER_SERVICE_NAME));
 
                 xFactory = createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

@@ -60,7 +60,7 @@ using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 // id + 100
 #define LB_LABEL_OFFSET 100
 
-const rtl::OUString TILDE = OUString::createFromAscii( "~" );
+const rtl::OUString TILDE = OUString(RTL_CONSTASCII_USTRINGPARAM( "~" ));
 const sal_Unicode TILDE_SIGN = L'~';
 
 #define FOLDERPICKER_TITLE            500

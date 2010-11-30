@@ -149,8 +149,8 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
         Content aCnt( rStartURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
         Sequence< OUString > aProps( 2 );
 
-        aProps.getArray()[ 0 ] = OUString::createFromAscii( "IsFolder" );
-        aProps.getArray()[ 1 ] = OUString::createFromAscii( "IsDocument" );
+        aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ));
+        aProps.getArray()[ 1 ] = OUString(RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ));
         ::com::sun::star::uno::Reference< XResultSet > xResultSet(
             aCnt.createCursor( aProps, INCLUDE_FOLDERS_AND_DOCUMENTS ) );
 
@@ -1033,11 +1033,10 @@ IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
             if( xMgr.is() )
             {
                 xFolderPicker = ::com::sun::star::uno::Reference< XFolderPicker >(
-                    xMgr->createInstance( OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" )), UNO_QUERY );
+                    xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FolderPicker" ))), UNO_QUERY );
 
                 if ( xFolderPicker.is() )
                 {
-//                  svt::SetDialogHelpId( xFolderPicker, HID_GALLERY_NEWTHEME_FINDFILES );
                     String  aDlgPathName( SvtPathOptions().GetGraphicPath() );
                     xFolderPicker->setDisplayDirectory(aDlgPathName);
 
@@ -1148,7 +1147,6 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
         if( !aLbxFound.GetSelectEntryCount() || !bEntriesFound )
         {
             SvxOpenGraphicDialog aDlg(String( RTL_CONSTASCII_USTRINGPARAM( "Gallery" ) ) );
-//          aDlg.SetDialogHelpId( HID_GALLERY_NEWTHEME_ADDFILES );
             aDlg.EnableLink(sal_False);
             aDlg.AsLink(sal_False);
 

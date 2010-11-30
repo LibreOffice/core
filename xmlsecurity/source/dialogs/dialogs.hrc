@@ -82,9 +82,6 @@
 #define FI_STATE_BROKEN                 10
 #define IMG_STATE_NOTVALIDATED          11
 #define FI_STATE_NOTVALIDATED           12
-#define IMG_STATE_VALID_HC              13
-#define IMG_STATE_BROKEN_HC             14
-#define IMG_STATE_NOTVALIDATED_HC       15
 #define FI_STATE_OLDSIGNATURE           16
 
 //#define DS_WIDTH                      DLGS_WIDTH
@@ -175,9 +172,6 @@
 #define FI_CORRPRIVKEY                  14
 #define STR_CERTIFICATE_NOT_VALIDATED   15
 #define IMG_STATE_NOT_VALIDATED         16
-#define IMG_STATE_CERIFICATED_HC        17
-#define IMG_STATE_NOT_VALIDATED_HC      18
-#define IMG_KEY_HC                      19
 
 #define IMG1_WIDTH                      33
 #define IMG1_HEIGHT                     22
@@ -237,9 +231,7 @@
 #define FT_CERTSTATUS                   2
 #define ML_CERTSTATUS                   3
 #define IMG_CERT_SMALL                  4
-#define IMG_CERT_SMALL_HC               5
 #define IMG_CERT_NOTVALIDATED_SMALL     6
-#define IMG_CERT_NOTVALIDATED_SMALL_HC  7
 #define STR_PATH_CERT_OK                8
 #define STR_PATH_CERT_NOT_VALIDATED     9
 

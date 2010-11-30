@@ -26,16 +26,29 @@
 #*************************************************************************
 
 # Add certain symbol patterns to the first global section.
+#
+# The below code fails with 'perverted' mapfiles (using a strange line layout,
+# or containing version UDK_3_0_0 without a global section, ...).
 
 BEGIN { state = 0 }
-/\{/ && state == 1 { exit 1 } #TODO: print error explanation to stderr?
-/^[\t ]*UDK_3_0_0[\t ]*\{/ && state == 0 { state = 1 }
-/^[\t ]*global[\t ]*:/ && state == 1 { state = 2 }
-{ print }
+END {
+    if (state == 0) {
+        print "# Weak RTTI symbols for C++ exceptions:"
+        print "UDK_3_0_0 {"
+        print "global:"
+        print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
+        if (ENVIRON["USE_SYSTEM_STL"] != "YES")
+            print "_ZN4_STL7num_put*; # for STLport"
+        print "};"
+    }
+}
 state == 2 {
     print "_ZTI*; _ZTS*; # weak RTTI symbols for C++ exceptions"
     if (ENVIRON["USE_SYSTEM_STL"] != "YES")
         print "_ZN4_STL7num_put*; # for STLport"
     state = 3
 }
-END { if (state != 3) exit 1 } #TODO: print error explanation to stderr?
+# #i66636# - ???
+/^[\t ]*UDK_3_0_0[\t ]*\{/ { state = 1 }
+/^[\t ]*global[\t ]*:/ && state == 1 { state = 2 }
+{ print }

@@ -30,6 +30,7 @@
 #include "sal/config.h"
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/lang/XSingleComponentFactory.hpp"
 #include "com/sun/star/uno/Any.hxx"
 #include "com/sun/star/uno/Exception.hpp"
@@ -60,7 +61,10 @@ class Factory:
     private boost::noncopyable
 {
 public:
-    Factory() {}
+    Factory()
+    {
+        lock_ = lock();
+    }
 
 private:
     virtual ~Factory() {}
@@ -75,6 +79,8 @@ private:
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException);
+
+    boost::shared_ptr<osl::Mutex> lock_;
 };
 
 css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(
@@ -99,7 +105,7 @@ Factory::createInstanceWithArgumentsAndContext(
                     " instantiated without arguments")),
             static_cast< cppu::OWeakObject * >(this));
     }
-    osl::MutexGuard guard(lock);
+    osl::MutexGuard guard(*lock_);
     static css::uno::Reference< css::uno::XInterface > singleton(
         configuration_provider::createDefault(Context));
     return singleton;

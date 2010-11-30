@@ -165,7 +165,7 @@ SwFmt &SwFmt::operator=(const SwFmt& rFmt)
 
 void SwFmt::SetName( const String& rNewName, sal_Bool bBroadcast )
 {
-    ASSERT(!IsDefault(), "SetName: Defaultformat" );
+    OSL_ENSURE(!IsDefault(), "SetName: Defaultformat" );
     if( bBroadcast )
     {
         SwStringMsgPoolItem aOld( RES_NAME_CHANGED, aFmtName );
@@ -253,7 +253,7 @@ SwFmt::~SwFmt()
     /* alle Abhaengigen auf DerivedFrom umhaengen */
     if( GetDepends() )
     {
-        ASSERT(DerivedFrom(), "SwFmt::~SwFmt: Def Abhaengige!" );
+        OSL_ENSURE(DerivedFrom(), "SwFmt::~SwFmt: Def Abhaengige!" );
 
         bFmtInDTOR = TRUE;
 
@@ -372,9 +372,9 @@ void SwFmt::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             {
 // wie finde ich heraus, ob nicht ich die Message versende ??
 // aber wer ruft das hier ????
-//ASSERT( FALSE, "Modify ohne Absender verschickt" );
+// OSL_ENSURE( FALSE, "Modify ohne Absender verschickt" );
 //JP 11.06.96: DropCaps koennen hierher kommen
-ASSERT( RES_PARATR_DROP == nWhich, "Modify ohne Absender verschickt" );
+                OSL_ENSURE( RES_PARATR_DROP == nWhich, "Modify ohne Absender verschickt" );
                 bWeiter = FALSE;
             }
 
@@ -414,7 +414,7 @@ BOOL SwFmt::SetDerivedFrom(SwFmt *pDerFrom)
     if ( (pDerFrom == DerivedFrom()) || (pDerFrom == this) )
         return FALSE;
 
-    ASSERT( Which()==pDerFrom->Which()
+    OSL_ENSURE( Which()==pDerFrom->Which()
             || ( Which()==RES_CONDTXTFMTCOLL && pDerFrom->Which()==RES_TXTFMTCOLL)
             || ( Which()==RES_TXTFMTCOLL && pDerFrom->Which()==RES_CONDTXTFMTCOLL)
             || ( Which()==RES_FLYFRMFMT && pDerFrom->Which()==RES_FRMFMT ),

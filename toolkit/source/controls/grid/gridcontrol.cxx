@@ -162,7 +162,7 @@ UnoGridControl::UnoGridControl()
 
 OUString UnoGridControl::GetComponentServiceName()
 {
-    return OUString::createFromAscii( "Grid" );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Grid"));
 }
 
 void SAL_CALL UnoGridControl::dispose(  ) throw(RuntimeException)
@@ -184,10 +184,10 @@ void UnoGridControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
     Reference<XGridColumnListener> xColListener ( getPeer(), UNO_QUERY_THROW );
     Reference<XPropertySet> xPropSet ( getModel(), UNO_QUERY_THROW );
 
-    Reference<XGridDataModel> xGridDataModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "GridDataModel" )), UNO_QUERY_THROW );
+    Reference<XGridDataModel> xGridDataModel ( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("GridDataModel"))), UNO_QUERY_THROW );
     if(xGridDataModel != NULL)
         xGridDataModel->addDataListener(xListener);
-    Reference<XGridColumnModel> xGridColumnModel ( xPropSet->getPropertyValue(OUString::createFromAscii( "ColumnModel" )), UNO_QUERY_THROW );
+    Reference<XGridColumnModel> xGridColumnModel ( xPropSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("ColumnModel"))), UNO_QUERY_THROW );
     if(xGridColumnModel != NULL)
     {
         for(int i = 0;i<xGridColumnModel->getColumnCount();i++)

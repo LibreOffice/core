@@ -148,7 +148,7 @@ void ThreadManager::RemoveThread( const oslInterlockedCount nThreadID,
             }
             else
             {
-                ASSERT( false, "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
+                OSL_ENSURE( false, "<ThreadManager::RemoveThread(..)> - ThreadJoiner already gone!" );
             }
         }
 
@@ -201,7 +201,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
         }
         else
         {
-            ASSERT( false, "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
+            OSL_ENSURE( false, "<ThreadManager::StartThread(..)> - ThreadJoiner already gone!" );
         }
     }
     else

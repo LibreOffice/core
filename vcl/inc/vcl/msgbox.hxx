@@ -71,7 +71,6 @@ protected:
     FixedImage*         mpFixedImage;
     XubString           maMessText;
     Image               maImage;
-    Image               maImageHC;
     USHORT              mnSoundType;
     BOOL                mbHelpBtn;
     BOOL                mbSound;
@@ -101,8 +100,8 @@ public:
     void                SetImage( const Image& rImage ) { maImage = rImage; }
     const Image&        GetImage() const { return maImage; }
 
-    BOOL                SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&        GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    BOOL                SetModeImage( const Image& rImage );
+    const Image&        GetModeImage( ) const;
 
     void                SetDefaultCheckBoxText();
     void                SetCheckBoxText( const XubString& rText ) { maCheckBoxText = rText;}
@@ -127,7 +126,6 @@ public:
                         InfoBox( Window* pParent, const ResId & rResId );
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // --------------
@@ -147,7 +145,6 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -165,7 +162,6 @@ public:
                         ErrorBox( Window* pParent, const ResId& rResId );
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 // ------------
@@ -185,7 +181,6 @@ public:
     void                SetDefaultCheckBoxText();
 
     static Image        GetStandardImage();
-    static Image        GetStandardImageHC();
 };
 
 #endif  // _SV_MSGBOX_HXX

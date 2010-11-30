@@ -231,13 +231,13 @@ Reference< XMultiServiceFactory > InitializeFac( void )
                     createRegistryServiceFactory( types, sal_True );
                 Reference< XImplementationRegistration > xIR(
                     interimSmgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
+                        OUString::(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.registry.ImplementationRegistration" )) ), UNO_QUERY );
 
                 Reference< XSimpleRegistry > xReg(
                     interimSmgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.registry.SimpleRegistry" ) ), UNO_QUERY );
+                        OUString::(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.registry.SimpleRegistry" )) ), UNO_QUERY );
                 if ( xReg.is() )
                 {
                     xReg->open(services, sal_False, sal_True);
@@ -283,12 +283,12 @@ Reference< XMultiServiceFactory > InitializeFac( void )
 
 /*  // Create simple ConfigManager
     Sequence< Any > aConfArgs(3);
-    aConfArgs[0] <<= PropertyValue( OUString::createFromAscii("servertype"), 0, makeAny( OUString::createFromAscii("local") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
-    aConfArgs[1] <<= PropertyValue( OUString::createFromAscii("sourcepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
-    aConfArgs[2] <<= PropertyValue( OUString::createFromAscii("updatepath"), 0, makeAny( OUString::createFromAscii("g:\\") ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[0] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("servertype")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("local")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[1] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("sourcepath")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
+    aConfArgs[2] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("updatepath")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
 
     Reference< XContentProvider > xConfProvider
-        ( xSMgr->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.configuration.ConfigurationProvider" ), aConfArgs), UNO_QUERY );
+        ( xSMgr->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), aConfArgs), UNO_QUERY );
 */
 
 
@@ -301,13 +301,13 @@ Reference< XMultiServiceFactory > InitializeFac( void )
         ucb::ContentBroker::get()->getContentProviderManagerInterface();
 
     Reference< XContentProvider > xFileProvider
-        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" ) ), UNO_QUERY );
-    xUcb->registerContentProvider( xFileProvider, OUString::createFromAscii( "file" ), sal_True );
+        ( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.FileContentProvider")) ), UNO_QUERY );
+    xUcb->registerContentProvider( xFileProvider, OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True );
 
 
 /*  Reference< XContentProvider > xPackageProvider
-        ( xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.ucb.PackageContentProvider" ) ), UNO_QUERY );
-    xUcb->registerContentProvider( xPackageProvider, OUString::createFromAscii( "vnd.sun.star.pkg" ), sal_True );
+        ( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.PackageContentProvider")) ), UNO_QUERY );
+    xUcb->registerContentProvider( xPackageProvider, OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.pkg")), sal_True );
     */
     globalUcb = xUcb;
     return xSMgr;
@@ -329,10 +329,10 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                     printf("Testing getColumns() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getColumns(
-                                makeAny(OUString::createFromAscii("")), // Catalog
-                                OUString::createFromAscii("%"),          // Schema
-                                OUString::createFromAscii("%"),          // TabName
-                                OUString::createFromAscii("%")
+                                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
                                 );
                         printXResultSets( xRes );
                     }
@@ -348,9 +348,9 @@ int TestMetaData(Reference< ::com::sun::star::sdbc::XConnection> &pConnection)
                 printf("Testing getTables() : START\n");
                     {
                         Reference<XResultSet> xRes = xDmd->getTables(
-                                makeAny(OUString::createFromAscii("")), // Catalog
-                                OUString::createFromAscii("%"),          // Schema
-                                OUString::createFromAscii("%"),          // TabName
+                                makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM(""))), // Catalog
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // Schema
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("%")),          // TabName
                                 Sequence<rtl::OUString>()
                                 );
                         printXResultSets( xRes );
@@ -437,16 +437,16 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
     {
         case -1:
         case 1: //mozilla
-            url=OUString::createFromAscii("sdbc:address:mozilla://");
+            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:mozilla://"));
             break;
         case 2:
-            url=OUString::createFromAscii("sdbc:address:ldap://");
+            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap://"));
             char hostname[40],basedn[40];
             scanf("%s %s",hostname,basedn);
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
+            aValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName"));
             aValue[0].Value <<= rtl::OUString::createFromAscii(hostname);
-            aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
+            aValue[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
             aValue[1].Value <<= rtl::OUString::createFromAscii(basedn);
             break;
         case 3:
@@ -454,12 +454,12 @@ Reference< ::com::sun::star::sdbc::XConnection> TestConnected
             break;
         case 5:
             //Default LDAP AB
-            url=OUString::createFromAscii("sdbc:address:ldap://");
+            url=OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:address:ldap://"));
             aValue.realloc(2);
-            aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
-            aValue[0].Value <<= rtl::OUString::createFromAscii("sun-ds");
-            aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
-            aValue[1].Value <<= rtl::OUString::createFromAscii("dc=sun,dc=com");
+            aValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HostName"));
+            aValue[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sun-ds"));
+            aValue[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseDN"));
+            aValue[1].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dc=sun,dc=com"));
             break;
         default:
             return pConnection;
@@ -676,7 +676,7 @@ int _cdecl main( int argc, char * argv[] )
     {
     Reference< ::com::sun::star::sdbc::XDriver>
     m_xDriver(xMgr->createInstance(
-           OUString::createFromAscii("com.sun.star.comp.sdbc.MozabDriver")),
+           OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.MozabDriver"))),
              UNO_QUERY);
         if(m_xDriver.is())
     {

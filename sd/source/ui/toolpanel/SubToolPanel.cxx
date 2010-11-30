@@ -55,7 +55,7 @@ SubToolPanel::SubToolPanel (
       mnHorizontalBorder(2)
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -84,7 +84,7 @@ SubToolPanel::SubToolPanel (
       mnHorizontalBorder(2)
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -412,8 +412,8 @@ IMPL_LINK(SubToolPanel, WindowEventListener, VclSimpleEvent*, pEvent)
 {
     return new ::accessibility::AccessibleTreeNode (
         *this,
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
-        ::rtl::OUString::createFromAscii("Sub Task Panel"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")),
         ::com::sun::star::accessibility::AccessibleRole::PANEL);
 }
 

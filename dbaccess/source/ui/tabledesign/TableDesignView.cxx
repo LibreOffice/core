@@ -148,7 +148,6 @@ void OTableBorderWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground,
         if ( IsControlFont() )
             aFont.Merge( GetControlFont() );
         SetPointFont( aFont );
-//      Set/*Zoomed*/PointFont( aFont );
     }
 
     if ( bFont || bForeground )

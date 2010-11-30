@@ -101,34 +101,10 @@
 
 using namespace sw::sidebarwindows;
 
-/*
-bool comp_author( const SwPostItItem* a, const SwPostItItem* b)
-{
-    return a->pFmtFld->GetFld()->GetPar1() < b->pFmtFld->GetFld()->GetPar1();
-}
-
-bool comp_date( const SwPostItItem* a, const SwPostItItem* b)
-{
-    return static_cast<SwPostItField*>(a->pFmtFld->GetFld())->GetDate()  < static_cast<SwPostItField*>(b->pFmtFld->GetFld())->GetDate();
-}
-*/
-
-//
 bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
 {
-    // --> OD 2010-01-19 #i88070#
     // sort by anchor position
-//// if position is on the same line, sort by x (Left) position, otherwise by y(Bottom) position
-//// if two notes are at the same position, sort by logical node position
-//    return (a->maLayoutInfo.mPosition.Bottom() == b->maLayoutInfo.mPosition.Bottom())
-//            ? ( ( (a->maLayoutInfo.mPosition.Left() == b->maLayoutInfo.mPosition.Left()) &&
-//                  (a->GetBroadCaster()->ISA(SwFmtFld) && b->GetBroadCaster()->ISA(SwFmtFld)) )
-//                ? *(static_cast<SwFmtFld*>(a->GetBroadCaster())->GetTxtFld()->GetStart()) <
-//                    *(static_cast<SwFmtFld*>(b->GetBroadCaster())->GetTxtFld()->GetStart())
-//                : a->maLayoutInfo.mPosition.Left() < b->maLayoutInfo.mPosition.Left() )
-//            : a->maLayoutInfo.mPosition.Bottom() < b->maLayoutInfo.mPosition.Bottom();
     return a->GetAnchorPosition() < b->GetAnchorPosition();
-    // <--
 }
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
@@ -235,12 +211,7 @@ void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool b
     mbLayout = bFocus;
     if (pItem->ISA(SwFmtFld))
         mvPostItFlds.push_back(new SwAnnotationItem(static_cast<SwFmtFld*>(pItem), true, bFocus) );
-    /*
-    else
-    if (pItem->ISA(SwRedline))
-        mvPostItFlds.push_back(new SwRedCommentItem( static_cast<SwRedline*>(pItem), true, bFocus)) ;
-    */
-    OSL_ENSURE(pItem->ISA(SwFmtFld) /*|| pItem->ISA(SwRedline)*/,"Mgr::InsertItem: seems like new stuff was added");
+    OSL_ENSURE(pItem->ISA(SwFmtFld),"Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
 }
 
@@ -323,35 +294,6 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
         }
     }
-    /*
-    else if ( rHint.IsA(TYPE(SwRedlineHint) ) )
-    {
-        const SwRedlineHint rRedlineHint = static_cast<const SwRedlineHint&>(rHint);
-           SwRedline* pRedline = const_cast<SwRedline*>(rRedlineHint.GetRedline());
-        switch ( rRedlineHint.Which() )
-        {
-            case SWREDLINE_INSERTED :
-            {
-                bool bEmpty = !HasNotes();
-                InsertItem( pRedline, true, false );
-                if (bEmpty && !mvPostItFlds.empty())
-                    PrepareView(true);
-                break;
-            }
-            case SWREDLINE_REMOVED:
-            {
-                RemoveItem(pRedline);
-                break;
-            }
-            case SWREDLINE_FOCUS:
-            {
-                                if (rRedlineHint.GetView()== mpView)
-                    Focus(rBC);
-                break;
-            }
-        }
-    }
-    */
     else if ( rHint.IsA(TYPE(SwFmtFldHint) ) )
     {
         const SwFmtFldHint& rFmtHint = static_cast<const SwFmtFldHint&>(rHint);
@@ -1113,7 +1055,6 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
                     //(*i) is the last visible item
                     SwSidebarWin_iterator aPrevPostIt = i;
                     --aPrevPostIt;
-                    //lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() + GetSpaceBetween() ) - (*i)->VirtualPos().Y();
                     lTranslatePos = ( (*aPrevPostIt)->VirtualPos().Y() + (*aPrevPostIt)->VirtualSize().Height() ) - (*i)->VirtualPos().Y();
                     if (lTranslatePos > 0)
                     {
@@ -1167,22 +1108,6 @@ bool SwPostItMgr::LayoutByPage(std::list<SwSidebarWin*> &aVisiblePostItList,cons
     }
     return bScrollbars;
  }
-
-/*
-void SwPostItMgr::AddRedlineComments(bool bCheckExistance, bool bFocus)
-{
-    bool bEmpty = mvPostItFlds.empty();
-    const SwRedlineTbl& aTable = mpView->GetDocShell()->GetDoc()->GetRedlineTbl();
-    for( USHORT i = 0; i < aTable.Count(); ++i )
-    {
-        SwRedline* pRedline = const_cast<SwRedline*>((aTable)[i]);
-        if ( pRedline->GetComment() != String(rtl::OUString::createFromAscii("")) )
-            InsertItem(pRedline, bCheckExistance, bFocus);
-    }
-    if (bEmpty && !mvPostItFlds.empty())
-        PrepareView(true);
- }
- */
 
 void SwPostItMgr::AddPostIts(bool bCheckExistance, bool bFocus)
 {
@@ -1281,23 +1206,6 @@ void SwPostItMgr::Delete()
         mpWrtShell->DelRight();
     }
 
-/*
-    for(std::list<SwPostItItem*>::iterator i = mvPostItFlds.begin(); i!= mvPostItFlds.end() ; i++)
-    {
-        SwPostItItem* pItem = (*i);
-        // stop listening, we delete ourselves
-        EndListening( *(pItem->pFmtFld) );
-        // delete the actual SwPostItField
-        mpWrtShell->GotoField(*pItem->pFmtFld);
-        mpWrtShell->DelRight();
-        // delete visual representation
-        delete pItem->pPostIt;
-        // delete struct saving the pointers
-        delete pItem;
-    }
-    mvPostItFlds.clear();
-*/
-
     mpWrtShell->EndUndo( UNDO_DELETE );
     PrepareView();
     mpWrtShell->EndAllAction();
@@ -1347,14 +1255,6 @@ void SwPostItMgr::Sort(const short aType)
             case SORT_POS:
                 mvPostItFlds.sort(comp_pos);
                 break;
-            /*
-            case SORT_AUTHOR:
-                mvPostItFlds.sort(comp_author);
-                break;
-            case SORT_DATE:
-                mvPostItFlds.sort(comp_date);
-                break;
-            */
         }
     }
 }
@@ -1506,7 +1406,6 @@ void SwPostItMgr::PrepareView(bool bIgnoreCount)
     if (!HasNotes() || bIgnoreCount)
     {
         mpWrtShell->StartAllAction();
-        //mpEditWin->Invalidate(); // really not needed anymore??
         SwRootFrm* pLayout = mpWrtShell->GetLayout();
         if ( pLayout )
             SwPostItHelper::setSidebarChanged( pLayout,
@@ -1627,14 +1526,13 @@ void SwPostItMgr::CorrectPositions()
        return;
 
     // yeah, I know,    if this is a left page it could be wrong, but finding the page and the note is probably not even faster than just doing it
-    // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+    // check, if anchor overlay object exists.
     const long aAnchorX = pFirstPostIt->Anchor()
                           ? mpEditWin->LogicToPixel( Point((long)(pFirstPostIt->Anchor()->GetSixthPosition().getX()),0)).X()
                           : 0;
     const long aAnchorY = pFirstPostIt->Anchor()
                           ? mpEditWin->LogicToPixel( Point(0,(long)(pFirstPostIt->Anchor()->GetSixthPosition().getY()))).Y() + 1
                           : 0;
-    // <--
     if (Point(aAnchorX,aAnchorY) != pFirstPostIt->GetPosPixel())
     {
         long aAnchorPosX = 0;
@@ -1643,9 +1541,8 @@ void SwPostItMgr::CorrectPositions()
         {
             for(SwSidebarItem_iterator i = mPages[n]->mList->begin(); i!= mPages[n]->mList->end(); i++)
             {
-                // --> OD 2010-06-03 #i111964# - check, if anchor overlay object exists.
+                // check, if anchor overlay object exists.
                 if ( (*i)->bShow && (*i)->pPostIt && (*i)->pPostIt->Anchor() )
-                // <--
                 {
                     aAnchorPosX = mPages[n]->eSidebarPosition == sw::sidebarwindows::SIDEBAR_LEFT
                         ? mpEditWin->LogicToPixel( Point((long)((*i)->pPostIt->Anchor()->GetSeventhPosition().getX()),0)).X()
@@ -1887,7 +1784,6 @@ sal_uInt16 SwPostItMgr::SearchReplace(const SwFmtFld &pFld, const ::com::sun::st
 
 void SwPostItMgr::AssureStdModeAtShell()
 {
-    //#i103373# #i103645#
         // deselect any drawing or frame and leave editing mode
           SdrView* pSdrView = mpWrtShell->GetDrawView();
         if ( pSdrView && pSdrView->IsTextEdit() )

@@ -36,6 +36,7 @@
 #include <vector>
 
 #include "boost/noncopyable.hpp"
+#include "boost/shared_ptr.hpp"
 #include "com/sun/star/beans/PropertyVetoException.hpp"
 #include "com/sun/star/beans/UnknownPropertyException.hpp"
 #include "com/sun/star/beans/XExactName.hpp"
@@ -568,6 +569,8 @@ private:
     VetoableChangeListeners vetoableChangeListeners_;
     PropertiesChangeListeners propertiesChangeListeners_;
     bool disposed_;
+
+    boost::shared_ptr<osl::Mutex> lock_;
 
 #if OSL_DEBUG_LEVEL > 0
 protected:

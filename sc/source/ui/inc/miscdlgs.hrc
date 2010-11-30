@@ -36,20 +36,6 @@
                     // -> RID_SCDLG_FILLSERIES
                     // -> RID_SCDLG_AUTOFORMAT
 
-// Fuer den DesignEditor:
-/*
-#define RID_SCDLG_DELCELL 1256
-#define RID_SCDLG_INSCELL 1257
-#define RID_SCDLG_DELCONT 1258
-#define RID_SCDLG_INSCONT 1259
-#define RID_SCDLG_MOVETAB 1260
-#define RID_SCDLG_STRINPUT 1261
-#define RID_SCDLG_MTRINPUT 1262
-#define RID_SCDLG_SELENTRY 1263
-#define RID_SCDLG_FILLSERIES 1264
-#define RID_SCDLG_AUTOFORMAT 1255
-*/
-
 // allgemein
 #define BTN_OK          100
 #define BTN_CANCEL      102
@@ -185,4 +171,3 @@
 // Tab Bg Color
 #define TAB_BG_COLOR_CT_BORDER 1
 #define TAB_BG_COLOR_SET_BGDCOLOR 2
-

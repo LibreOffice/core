@@ -173,7 +173,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
+        maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
@@ -223,13 +223,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
                 *pPaM, aBookmarkName,
-                rtl::OUString::createFromAscii( ODF_FORMCHECKBOX ) ) );
-        ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX )) ) );
+        OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_NAME))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_HELPTEXT))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
             // set field data here...
@@ -296,15 +296,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
                     pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
-                           ::rtl::OUString::createFromAscii( ODF_FORMDROPDOWN ) ) );
-            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN )) ) );
+            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
                 uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
-                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
-                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = uno::makeAny(nIndex);
+                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = uno::makeAny(nIndex);
                 // set field data here...
             }
         }
@@ -628,7 +628,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                     }
                 }
             }
-            ASSERT(bDone, "tab setting in numbering is "
+            OSL_ENSURE(bDone, "tab setting in numbering is "
                 "of unexpected configuration");
         }
         if ( rNumFmt.GetPositionAndSpaceMode() ==
@@ -872,7 +872,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
             break;
          default:
             // undefied value
-            ASSERT( !this, "Value of aLVL.nAlign is not supported" );
+            OSL_ENSURE( !this, "Value of aLVL.nAlign is not supported" );
             // take default
             eAdj = SVX_ADJUST_LEFT;
             break;
@@ -1033,7 +1033,6 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         if( !pFmt )
         {
             // --> OD 2006-06-27 #b6440955#
-//            aFont = SwNumRule::GetDefBulletFont();
             aFont = numfunc::GetDefBulletFont();
             // <--
         }
@@ -1060,7 +1059,6 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // --> OD 2008-06-04 #i86652#
-//    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, FALSE,
                               SvxNumberFormat::LABEL_ALIGNMENT );
@@ -1291,7 +1289,7 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 // 2.2.1 eine neue NumRule fuer diese Liste anlegen
                 //
                 SwNumRule* pParentNumRule = pLFOInfo->pNumRule;
-                ASSERT(pParentNumRule, "ww: Impossible lists, please report");
+                OSL_ENSURE(pParentNumRule, "ww: Impossible lists, please report");
                 if( !pParentNumRule )
                     break;
                 // Nauemsprefix aufbauen: fuer NumRule-Name (eventuell)
@@ -1518,7 +1516,6 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
     // #i25545#
     // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
-//    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
     SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
     // <--
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
@@ -1569,7 +1566,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
     if (pLFOInfo->bOverride && nLevel < pLFOInfo->nLfoLvl)
     {
         WW8LSTInfo* pParentListInfo = GetLSTByListId(pLFOInfo->nIdLst);
-        ASSERT(pParentListInfo, "ww: Impossible lists, please report");
+        OSL_ENSURE(pParentListInfo, "ww: Impossible lists, please report");
         if (pParentListInfo && pParentListInfo->pNumRule)
         {
             const WW8LFOLVL &rOverride = pLFOInfo->maOverrides[nLevel];
@@ -1633,7 +1630,7 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
         bRes = rDoc.SetTxtFmtColl(rRg, (SwTxtFmtColl*)rStyleInfo.pFmt)
             ? true : false;
         SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode();
-        ASSERT( pTxtNode, "No Text-Node at PaM-Position" );
+        OSL_ENSURE( pTxtNode, "No Text-Node at PaM-Position" );
         // --> OD 2006-10-19 #134160# - make code robust
         if ( !pTxtNode )
         {
@@ -1666,8 +1663,6 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             // could contain more than one outline numbering rule and the one
             // of the text format isn't the one, which a chosen as the Writer
             // outline rule.
-//            pTxtNode->
-//                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
             pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
             // <--
         }
@@ -1720,7 +1715,7 @@ void SwWW8ImplReader::SetStylesList(sal_uInt16 nStyle, sal_uInt16 nActLFO,
     SwWW8StyInf &rStyleInf = pCollA[nStyle];
     if (rStyleInf.bValid)
     {
-        ASSERT(pAktColl, "Cannot be called outside of style import");
+        OSL_ENSURE(pAktColl, "Cannot be called outside of style import");
         // Phase 1: Nummerierungsattribute beim Einlesen einer StyleDef
         if( pAktColl )
         {
@@ -1803,7 +1798,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
     {
         std::vector<sal_uInt8> aParaSprms;
         SwTxtNode* pTxtNd = pPaM->GetNode()->GetTxtNode();
-        ASSERT(pTxtNd, "Kein Text-Node an PaM-Position");
+        OSL_ENSURE(pTxtNd, "Kein Text-Node an PaM-Position");
 
         const SwNumRule* pRule = bSetAttr ?
             pLstManager->GetNumRuleForActivation( nActLFO, nActLevel,
@@ -1845,11 +1840,6 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 }
             }
             // --> OD 2005-10-17 #126238#
-            // - re-introduce fix for issue #i49037#, which got lost by
-            // accident on a re-synchronisation on the master.
-//            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
-//                pTxtNd->SetCounted(false);
-            // <--
 
             pTxtNd->SetAttrListLevel(nActLevel);
             // --> OD 2005-11-01 #126924#
@@ -1880,7 +1870,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                         RES_LR_SPACE);
                 const SvxLRSpaceItem *pItem = (const SvxLRSpaceItem*)(
                     GetFmtAttr(RES_LR_SPACE));
-                ASSERT(pItem, "impossible");
+                OSL_ENSURE(pItem, "impossible");
                 if (pItem)
                     aListIndent.Put(*pItem);
 
@@ -1907,7 +1897,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
 
                 const SvxLRSpaceItem *pLR =
                     HasItem<SvxLRSpaceItem>(aListIndent, RES_LR_SPACE);
-                ASSERT(pLR, "Impossible");
+                OSL_ENSURE(pLR, "Impossible");
                 if (pLR)
                 {
                     pCtrlStck->NewAttr(*pPaM->GetPoint(), *pLR);
@@ -2014,10 +2004,6 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
                 // --> OD 2005-10-21 #i54393#
-                // - Reset hard set numbering rule at paragraph instead of
-                //   setting hard no numbering.
-//                pTxtNode->SwCntntNode::SetAttr
-//                    (*GetDfltAttr(RES_PARATR_NUMRULE));
                 pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
                 // <--
                 pTxtNode->SetCountedInList(false);
@@ -2226,7 +2212,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 nChecked = false;
                 break;
             default:
-                ASSERT(!this, "unknown option, please report to cmc");
+                OSL_ENSURE(!this, "unknown option, please report to cmc");
                 break;
         }
     }
@@ -2287,7 +2273,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
                 bAllOk = false;
             *pDataStream >> nNoStrings;
         }
-        ASSERT(bAllOk,
+        OSL_ENSURE(bAllOk,
             "Unknown formfield dropdown list structure. Report to cmc");
         if (!bAllOk)    //Not as expected, don't risk it at all.
             nNoStrings = 0;
@@ -2338,7 +2324,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
     {
         bool bSet = true;
         const SfxPoolItem* pItem = GetFmtAttr( pMap->nWhichId );
-        ASSERT(pItem, "Impossible");
+        OSL_ENSURE(pItem, "Impossible");
         if (!pItem)
             continue;
 
@@ -2431,7 +2417,7 @@ awt::Size SwWW8ImplReader::MiserableDropDownFormHack(const String &rString,
     }
     // now calculate the size of the control
     OutputDevice* pOut = Application::GetDefaultDevice();
-    ASSERT(pOut, "Impossible");
+    OSL_ENSURE(pOut, "Impossible");
     if (pOut)
     {
         pOut->Push( PUSH_FONT | PUSH_MAPMODE );

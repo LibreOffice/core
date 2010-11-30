@@ -73,10 +73,6 @@ typedef SwTOXSortKey* TOXSortKeyPtr;
 SV_DECL_PTRARR_DEL( SortKeyArr, TOXSortKeyPtr, 5, 5 )
 SV_IMPL_PTRARR( SortKeyArr, TOXSortKeyPtr )
 
-
-/* -----------------16.09.99 11:53-------------------
-
- --------------------------------------------------*/
 SwAuthEntry::SwAuthEntry(const SwAuthEntry& rCopy)
     : nRefCount(0)
 {
@@ -93,9 +89,6 @@ BOOL    SwAuthEntry::operator==(const SwAuthEntry& rComp)
 }
 // --------------------------------------------------------
 
-/* -----------------14.09.99 16:15-------------------
-
- --------------------------------------------------*/
 SwAuthorityFieldType::SwAuthorityFieldType(SwDoc* pDoc)
     : SwFieldType( RES_AUTHORITY ),
     m_pDoc(pDoc),
@@ -126,30 +119,22 @@ SwAuthorityFieldType::SwAuthorityFieldType( const SwAuthorityFieldType& rFType)
         m_pSortKeyArr->Insert((*rFType.m_pSortKeyArr)[i], i);
 }
 
-/* -----------------17.09.99 13:52-------------------
-
- --------------------------------------------------*/
 SwAuthorityFieldType::~SwAuthorityFieldType()
 {
-//  DBG_ASSERT(!m_pDataArr->Count(), "Array is not empty");
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
     delete m_pSortKeyArr;
     delete m_pSequArr;
     delete m_pDataArr;
 }
-/*-- 14.09.99 16:22:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwFieldType*    SwAuthorityFieldType::Copy()  const
 {
     return new SwAuthorityFieldType(m_pDoc);
 }
-/* -----------------17.09.99 13:43-------------------
 
- --------------------------------------------------*/
 void    SwAuthorityFieldType::RemoveField(long nHandle)
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bRemoved = FALSE;
 #endif
     for(USHORT j = 0; j < m_pDataArr->Count(); j++)
@@ -158,7 +143,7 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
         long nRet = (long)(void*)pTemp;
         if(nRet == nHandle)
         {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             bRemoved = TRUE;
 #endif
             pTemp->RemoveRef();
@@ -171,13 +156,11 @@ void    SwAuthorityFieldType::RemoveField(long nHandle)
             break;
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     DBG_ASSERT(bRemoved, "Field unknown" );
 #endif
 }
-/* -----------------17.09.99 13:43-------------------
 
- --------------------------------------------------*/
 long    SwAuthorityFieldType::AddField(const String& rFieldContents)
 {
     long nRet = 0;
@@ -207,9 +190,7 @@ long    SwAuthorityFieldType::AddField(const String& rFieldContents)
     }
     return nRet;
 }
-/* -----------------17.09.99 14:18-------------------
 
- --------------------------------------------------*/
 BOOL SwAuthorityFieldType::AddField(long nHandle)
 {
     BOOL bRet = FALSE;
@@ -229,9 +210,7 @@ BOOL SwAuthorityFieldType::AddField(long nHandle)
     DBG_ASSERT(bRet, "::AddField(long) failed");
     return bRet;
 }
-/* -----------------17.09.99 14:52-------------------
 
- --------------------------------------------------*/
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
 {
     const SwAuthEntry* pRet = 0;
@@ -245,12 +224,10 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByHandle(long nHandle) const
             break;
         }
     }
-    ASSERT( pRet, "invalid Handle" );
+    OSL_ENSURE( pRet, "invalid Handle" );
     return pRet;
 }
-/* -----------------21.09.99 13:34-------------------
 
- --------------------------------------------------*/
 void SwAuthorityFieldType::GetAllEntryIdentifiers(
                 SvStringsDtor& rToFill )const
 {
@@ -261,9 +238,7 @@ void SwAuthorityFieldType::GetAllEntryIdentifiers(
                     AUTH_FIELD_IDENTIFIER )), rToFill.Count() );
     }
 }
-/* -----------------21.09.99 13:34-------------------
 
- --------------------------------------------------*/
 const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
                                 const String& rIdentifier)const
 {
@@ -279,9 +254,7 @@ const SwAuthEntry*  SwAuthorityFieldType::GetEntryByIdentifier(
     }
     return pRet;
 }
-/* -----------------------------21.12.99 13:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwAuthorityFieldType::ChangeEntryContent(const SwAuthEntry* pNewEntry)
 {
     bool bChanged = false;
@@ -324,9 +297,6 @@ USHORT  SwAuthorityFieldType::AppendField( const SwAuthEntry& rInsert )
     return nRet;
 }
 
-/*-- 11.10.99 08:49:24---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 long    SwAuthorityFieldType::GetHandle(USHORT nPos)
 {
     long nRet = 0;
@@ -337,13 +307,11 @@ long    SwAuthorityFieldType::GetHandle(USHORT nPos)
     }
     return nRet;
 }
-/* -----------------19.10.99 13:46-------------------
 
- --------------------------------------------------*/
 USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
 {
     //find the field in a sorted array of handles,
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool bCurrentFieldWithoutTextNode = sal_False;
 #endif
     if(m_pSequArr->Count() && m_pSequArr->Count() != m_pDataArr->Count())
@@ -361,7 +329,7 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
             if(!pTxtFld || !pTxtFld->GetpTxtNode())
             {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 if(nHandle == ((SwAuthorityField*)pFmtFld->GetFld())->GetHandle())
                     bCurrentFieldWithoutTextNode = sal_True;
 #endif
@@ -433,12 +401,12 @@ USHORT  SwAuthorityFieldType::GetSequencePos(long nHandle)
             break;
         }
     }
-    ASSERT(bCurrentFieldWithoutTextNode || nRet, "Handle not found")
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(bCurrentFieldWithoutTextNode || nRet, "Handle not found");
+#endif
     return nRet;
 }
-/* -----------------------------15.11.00 17:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -493,9 +461,7 @@ bool    SwAuthorityFieldType::QueryValue( Any& rVal, USHORT nWhichId ) const
     }
     return true;
 }
-/* -----------------------------15.11.00 17:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
 {
     bool bRet = true;
@@ -568,25 +534,19 @@ bool    SwAuthorityFieldType::PutValue( const Any& rAny, USHORT nWhichId )
     }
     return bRet;
 }
-/* -----------------19.10.99 13:25-------------------
 
- --------------------------------------------------*/
 void SwAuthorityFieldType::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     //re-generate positions of the fields
     DelSequenceArray();
     SwModify::Modify( pOld, pNew );
 }
-/* -----------------20.10.99 13:38-------------------
 
- --------------------------------------------------*/
 USHORT SwAuthorityFieldType::GetSortKeyCount() const
 {
     return m_pSortKeyArr->Count();
 }
-/* -----------------20.10.99 13:38-------------------
 
- --------------------------------------------------*/
 const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(USHORT nIdx) const
 {
     SwTOXSortKey* pRet = 0;
@@ -595,9 +555,7 @@ const SwTOXSortKey*  SwAuthorityFieldType::GetSortKey(USHORT nIdx) const
     DBG_ASSERT(pRet, "Sort key not found");
     return pRet;
 }
-/* -----------------20.10.99 13:38-------------------
 
- --------------------------------------------------*/
 void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
 {
     m_pSortKeyArr->DeleteAndDestroy(0, m_pSortKeyArr->Count());
@@ -607,9 +565,6 @@ void SwAuthorityFieldType::SetSortKeys(USHORT nKeyCount, SwTOXSortKey aKeys[])
             m_pSortKeyArr->Insert(new SwTOXSortKey(aKeys[i]), nArrIdx++);
 }
 
-/* -----------------14.09.99 16:15-------------------
-
- --------------------------------------------------*/
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                     const String& rFieldContents )
     : SwField(pInitType),
@@ -617,9 +572,7 @@ SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
 {
     m_nHandle = pInitType->AddField( rFieldContents );
 }
-/* -----------------17.09.99 14:24-------------------
 
- --------------------------------------------------*/
 SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
                                                 long nSetHandle )
     : SwField( pInitType ),
@@ -628,16 +581,12 @@ SwAuthorityField::SwAuthorityField( SwAuthorityFieldType* pInitType,
 {
     pInitType->AddField( m_nHandle );
 }
-/* -----------------15.09.99 15:00-------------------
 
- --------------------------------------------------*/
 SwAuthorityField::~SwAuthorityField()
 {
     ((SwAuthorityFieldType* )GetTyp())->RemoveField(m_nHandle);
 }
-/*-- 14.09.99 16:20:59---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 String  SwAuthorityField::Expand() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
@@ -663,45 +612,32 @@ String  SwAuthorityField::Expand() const
         sRet += pAuthType->GetSuffix();
     return sRet;
 }
-/*-- 14.09.99 16:21:00---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SwField* SwAuthorityField::Copy() const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     return new SwAuthorityField(pAuthType, m_nHandle);
 }
-/* -----------------21.09.99 12:55-------------------
 
- --------------------------------------------------*/
 const String&   SwAuthorityField::GetFieldText(ToxAuthorityField eField) const
 {
     SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
     const SwAuthEntry* pEntry = pAuthType->GetEntryByHandle( m_nHandle );
     return pEntry->GetAuthorField( eField );
 }
-/* -----------------21.09.99 14:57-------------------
 
- --------------------------------------------------*/
 void    SwAuthorityField::SetPar1(const String& rStr)
 {
     SwAuthorityFieldType* pInitType = (SwAuthorityFieldType* )GetTyp();
     pInitType->RemoveField(m_nHandle);
     m_nHandle = pInitType->AddField(rStr);
 }
-/* -----------------11.10.99 09:43-------------------
 
- --------------------------------------------------*/
 String SwAuthorityField::GetDescription() const
 {
     return SW_RES(STR_AUTHORITY_ENTRY);
 }
 
-
-
-/* -----------------------------15.11.00 17:33--------------------------------
-
- ---------------------------------------------------------------------------*/
 const char* aFieldNames[] =
 {
     "Identifier",
@@ -736,9 +672,7 @@ const char* aFieldNames[] =
     "Custom5",
     "ISBN"
 };
-/* -----------------------------16.11.00 12:27--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
 {
     if(!GetTyp())
@@ -761,9 +695,7 @@ bool    SwAuthorityField::QueryValue( Any& rAny, USHORT /*nWhichId*/ ) const
     /* FIXME: it is weird that we always return false here */
     return false;
 }
-/* -----------------------------15.11.00 17:33--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Int16 lcl_Find(const OUString& rFieldName)
 {
     for(sal_Int16 i = 0; i < AUTH_FIELD_END; i++)
@@ -808,9 +740,7 @@ bool    SwAuthorityField::PutValue( const Any& rAny, USHORT /*nWhichId*/ )
     /* FIXME: it is weird that we always return false here */
     return false;
 }
-/* -----------------11.10.99 09:43-------------------
 
- --------------------------------------------------*/
 SwFieldType* SwAuthorityField::ChgTyp( SwFieldType* pFldTyp )
 {
     SwAuthorityFieldType* pSrcTyp = (SwAuthorityFieldType*)GetTyp(),

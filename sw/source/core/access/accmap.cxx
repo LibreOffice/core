@@ -95,12 +95,12 @@ class SwAccessibleContextMap_Impl: public _SwAccessibleContextMap_Impl
 {
 public:
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool mbLocked;
 #endif
 
     SwAccessibleContextMap_Impl()
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         : mbLocked( sal_False )
 #endif
     {}
@@ -165,7 +165,7 @@ void SwDrawModellListener_Impl::Notify( SfxBroadcaster& /*rBC*/,
         return;
     }
 
-    ASSERT( mpDrawModel, "draw model listener is disposed" );
+    OSL_ENSURE( mpDrawModel, "draw model listener is disposed" );
     if( !mpDrawModel )
         return;
 
@@ -218,11 +218,11 @@ class SwAccessibleShapeMap_Impl: public _SwAccessibleShapeMap_Impl
 
 public:
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool mbLocked;
 #endif
     SwAccessibleShapeMap_Impl( SwAccessibleMap *pMap )
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         : mbLocked( sal_False )
 #endif
     {
@@ -296,7 +296,7 @@ SwAccessibleObjShape_Impl
             }
             ++aIter;
         }
-        ASSERT( pSelShape == pShape, "copying shapes went wrong!" );
+        OSL_ENSURE( pSelShape == pShape, "copying shapes went wrong!" );
     }
 
     if( pSelStart )
@@ -345,7 +345,7 @@ public:
           meType( eT ),
           mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::DISPOSE == meType,
+        OSL_ENSURE( SwAccessibleEvent_Impl::DISPOSE == meType,
                 "wrong event constructor, DISPOSE only" );
     }
 
@@ -353,7 +353,7 @@ public:
         : meType( eT ),
           mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
+        OSL_ENSURE( SwAccessibleEvent_Impl::SHAPE_SELECTION == meType,
                 "wrong event constructor, SHAPE_SELECTION only" );
     }
 
@@ -367,7 +367,7 @@ public:
           meType( eT ),
           mnStates( 0 )
     {
-        ASSERT( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
+        OSL_ENSURE( SwAccessibleEvent_Impl::CHILD_POS_CHANGED == meType ||
                 SwAccessibleEvent_Impl::POS_CHANGED == meType,
                 "wrong event constructor, (CHILD_)POS_CHANGED only" );
     }
@@ -381,7 +381,7 @@ public:
           meType( eT ),
           mnStates( _nStates )
     {
-        ASSERT( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
+        OSL_ENSURE( SwAccessibleEvent_Impl::CARET_OR_STATES == meType,
                 "wrong event constructor, CARET_OR_STATES only" );
     }
 
@@ -679,7 +679,7 @@ void SwAccPreviewData::Update( const SwAccessibleMap& rAccMap,
 void SwAccPreviewData::InvalidateSelection( const SwPageFrm* _pSelectedPageFrm )
 {
     mpSelPage = _pSelectedPageFrm;
-    ASSERT( mpSelPage, "selected page not found" );
+    OSL_ENSURE( mpSelPage, "selected page not found" );
 }
 
 struct ContainsPredicate
@@ -815,7 +815,7 @@ void SwAccessibleMap::FireEvent( const SwAccessibleEvent_Impl& rEvent )
                                        rEvent.GetOldBox() );
             break;
         case SwAccessibleEvent_Impl::DISPOSE:
-            ASSERT( xAccImpl.is(),
+            OSL_ENSURE( xAccImpl.is(),
                     "dispose event has been stored" );
             break;
         case SwAccessibleEvent_Impl::INVALID_ATTR:
@@ -867,7 +867,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
     {
         // While events are fired new ones are generated. They have to be fired
         // now. This does not work for DISPOSE events!
-        ASSERT( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+        OSL_ENSURE( rEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                 "dispose event while firing events" );
         FireEvent( rEvent );
     }
@@ -879,7 +879,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
         if( aIter != mpEventMap->end() )
         {
             SwAccessibleEvent_Impl aEvent( *(*aIter).second );
-            ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
+            OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::DISPOSE,
                     "dispose events should not be stored" );
             sal_Bool bAppendEvent = sal_True;
             switch( rEvent.GetType() )
@@ -888,7 +888,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // A CARET_OR_STATES event is added to any other
                 // event only. It is broadcasted after any other event, so the
                 // event should be put to the back.
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 aEvent.SetStates( rEvent.GetAllStates() );
                 break;
@@ -898,7 +898,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // POS_CHANGED event.
                 // Therefor, the event's type has to be adapted and the event
                 // has to be put at the end.
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() == SwAccessibleEvent_Impl::CARET_OR_STATES )
                     aEvent.SetType( SwAccessibleEvent_Impl::INVALID_CONTENT );
@@ -908,7 +908,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // flags) as well as INVALID_CONTENT. The old box position
                 // has to be stored however if the old event is not a
                 // POS_CHANGED itself.
-                ASSERT( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                OSL_ENSURE( aEvent.GetType() != SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 if( aEvent.GetType() != SwAccessibleEvent_Impl::POS_CHANGED )
                     aEvent.SetOldBox( rEvent.GetOldBox() );
@@ -919,11 +919,11 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // events. The only action that needs to be done again is
                 // to put the old event to the back. The new one cannot be used,
                 // because we are interested in the old frame bounds.
-                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
+                OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::SHAPE_SELECTION:
-                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::SHAPE_SELECTION,
+                OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::SHAPE_SELECTION,
                         "invalid event combination" );
                 break;
             case SwAccessibleEvent_Impl::DISPOSE:
@@ -934,7 +934,7 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 bAppendEvent = sal_False;
                 break;
             case SwAccessibleEvent_Impl::INVALID_ATTR:
-                ASSERT( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
+                OSL_ENSURE( aEvent.GetType() == SwAccessibleEvent_Impl::INVALID_ATTR,
                         "invalid event combination" );
                 break;
             }
@@ -963,8 +963,8 @@ void SwAccessibleMap::InvalidateCursorPosition(
 {
     SwAccessibleContext *pAccImpl =
         static_cast< SwAccessibleContext *>( rAcc.get() );
-    ASSERT( pAccImpl, "no caret context" );
-    ASSERT( pAccImpl->GetFrm(), "caret context is disposed" );
+    OSL_ENSURE( pAccImpl, "no caret context" );
+    OSL_ENSURE( pAccImpl->GetFrm(), "caret context is disposed" );
     if( GetShell()->ActionPend() )
     {
         SwAccessibleEvent_Impl aEvent( SwAccessibleEvent_Impl::CARET_OR_STATES,
@@ -1175,8 +1175,8 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         osl::MutexGuard aGuard( maMutex );
-#ifdef DBG_UTIL
-        ASSERT( !mpFrmMap || mpFrmMap->empty(),
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( !mpFrmMap || mpFrmMap->empty(),
                 "Frame map should be empty after disposing the root frame" );
         if( mpFrmMap )
         {
@@ -1193,7 +1193,7 @@ SwAccessibleMap::~SwAccessibleMap()
                 ++aIter;
             }
         }
-        ASSERT( !mpShapeMap || mpShapeMap->empty(),
+        OSL_ENSURE( !mpShapeMap || mpShapeMap->empty(),
                 "Object map should be empty after disposing the root frame" );
         if( mpShapeMap )
         {
@@ -1226,8 +1226,8 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         osl::MutexGuard aGuard( maEventMutex );
-#ifdef DBG_UTIL
-        ASSERT( !(mpEvents || mpEventMap), "pending events" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( !(mpEvents || mpEventMap), "pending events" );
         if( mpEvents )
         {
             SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
@@ -1265,13 +1265,13 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
         if( !mpFrmMap )
         {
             mpFrmMap = new SwAccessibleContextMap_Impl;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             mpFrmMap->mbLocked = sal_False;
 #endif
         }
 
-#ifdef DBG_UTIL
-        ASSERT( !mpFrmMap->mbLocked, "Map is locked" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( !mpFrmMap->mbLocked, "Map is locked" );
         mpFrmMap->mbLocked = sal_True;
 #endif
 
@@ -1302,7 +1302,7 @@ uno::Reference< XAccessible > SwAccessibleMap::_GetDocumentView(
             }
         }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         mpFrmMap->mbLocked = sal_False;
 #endif
     }
@@ -1418,7 +1418,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext( const SwFrm *pFrm,
                 }
                 xAcc = pAcc;
 
-                ASSERT( xAcc.is(), "unknown frame type" );
+                OSL_ENSURE( xAcc.is(), "unknown frame type" );
                 if( xAcc.is() )
                 {
                     if( aIter != mpFrmMap->end() )
@@ -1519,7 +1519,7 @@ uno::Reference< XAccessible> SwAccessibleMap::GetContext(
                 }
                 xAcc = pAcc;
 
-                ASSERT( xAcc.is(), "unknown shape type" );
+                OSL_ENSURE( xAcc.is(), "unknown shape type" );
                 if( xAcc.is() )
                 {
                     pAcc->Init();
@@ -1580,7 +1580,7 @@ void SwAccessibleMap::RemoveContext( const SwFrm *pFrm )
             {
                 SwAccessibleContext *pOldAccImpl =
                     static_cast< SwAccessibleContext *>( xOldAcc.get() );
-                ASSERT( pOldAccImpl->GetFrm(), "old caret context is disposed" );
+                OSL_ENSURE( pOldAccImpl->GetFrm(), "old caret context is disposed" );
                 if( pOldAccImpl->GetFrm() == pFrm )
                 {
                     xOldAcc.clear();    // get an empty ref
@@ -1634,7 +1634,7 @@ void SwAccessibleMap::Dispose( const SwFrm *pFrm,
     // because that's the one that is evaluated in the layout. The frame
     // might not be accessible anyway. That's the case for cell frames that
     // contain further cells.
-    ASSERT( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
+    OSL_ENSURE( !aFrmOrObj.GetSwFrm() || aFrmOrObj.GetSwFrm()->IsAccessibleFrm(),
             "non accessible frame should be disposed" );
 
     if( aFrmOrObj.IsAccessible( GetShell()->IsPreView() ) )
@@ -1931,7 +1931,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
             const SwFrm *pFlyFrm = pFESh->GetCurrFlyFrm();
             if( pFlyFrm )
             {
-                ASSERT( !pFrm || pFrm->FindFlyFrm() == pFlyFrm,
+                OSL_ENSURE( !pFrm || pFrm->FindFlyFrm() == pFlyFrm,
                         "cursor is not contained in fly frame" );
                 aFrmOrObj = pFlyFrm;
             }
@@ -1943,7 +1943,7 @@ void SwAccessibleMap::InvalidateCursorPosition( const SwFrm *pFrm )
         }
     }
 
-    ASSERT( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreView()),
+    OSL_ENSURE( bShapeSelected || aFrmOrObj.IsAccessible(GetShell()->IsPreView()),
             "frame is not accessible" );
 
     uno::Reference < XAccessible > xOldAcc;
@@ -2633,7 +2633,7 @@ SwAccessibleSelectedParas_Impl* SwAccessibleMap::_BuildSelectedParas()
                          pFrm;
                          pFrm = (SwFrm*)aIter.Next() )
                     {
-                        ASSERT( dynamic_cast<SwTxtFrm*>(pFrm),
+                        OSL_ENSURE( dynamic_cast<SwTxtFrm*>(pFrm),
                                 "<SwAccessibleMap::_BuildSelectedParas()> - unexpected frame type" );
                         SwTxtFrm* pTxtFrm( dynamic_cast<SwTxtFrm*>(pFrm) );
                         if ( pTxtFrm )
@@ -2734,7 +2734,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                     {
                         const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
-                        ASSERT( pTxtFrm,
+                        OSL_ENSURE( pTxtFrm,
                                 "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
                         if ( pTxtFrm )
                         {
@@ -2762,7 +2762,7 @@ void SwAccessibleMap::InvalidateTextSelectionOfAllParas()
                 {
                     const SwTxtFrm* pTxtFrm(
                             dynamic_cast<const SwTxtFrm*>(xAccImpl->GetFrm()) );
-                    ASSERT( pTxtFrm,
+                    OSL_ENSURE( pTxtFrm,
                             "<SwAccessibleMap::_SubmitTextSelectionChangedEvents()> - unexcepted type of frame" );
                     if ( pTxtFrm )
                     {

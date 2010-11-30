@@ -261,15 +261,17 @@ namespace pdfi
             void  setGraphicsContext (GraphicsContext&  rCurrentContext ){ m_rCurrentContext= rCurrentContext; }
             void  setCurElement( Element* pCurElement ){ m_pCurElement= pCurElement; }
 
-            double getYPrevGlyphPosition(){ return m_fYPrevGlyphPosition; }
-            double getXPrevGlyphPosition(){ return m_fXPrevGlyphPosition; }
-            double getPrevGlyphHeight(){ return m_fPrevGlyphHeight; }
-            double getPrevGlyphWidth (){ return m_fPrevGlyphWidth; }
-            double getPrevGlyphsSpace() { if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
-                                                return 0;
-                                           else
-                                            return m_rRect.X1-m_fXPrevGlyphPosition;
-                                         }
+            double getYPrevGlyphPosition() const { return m_fYPrevGlyphPosition; }
+            double getXPrevGlyphPosition() const { return m_fXPrevGlyphPosition; }
+            double getPrevGlyphHeight() const { return m_fPrevGlyphHeight; }
+            double getPrevGlyphWidth () const { return m_fPrevGlyphWidth; }
+            double getPrevGlyphsSpace() const
+            {
+                if( (m_rRect.X1-m_fXPrevGlyphPosition)<0 )
+                    return 0;
+                else
+                    return m_rRect.X1-m_fXPrevGlyphPosition;
+            }
 
             void setYPrevGlyphPosition( double fYPrevTextPosition ){ m_fYPrevGlyphPosition= fYPrevTextPosition; }
             void setXPrevGlyphPosition( double fXPrevTextPosition ){ m_fXPrevGlyphPosition= fXPrevTextPosition; }

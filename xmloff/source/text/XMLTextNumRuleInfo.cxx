@@ -36,9 +36,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include "XMLTextNumRuleInfo.hxx"
-// --> OD 2008-04-25 #refactorlists#
 #include "XMLTextListAutoStylePool.hxx"
-// <--
 
 using ::rtl::OUString;
 
@@ -47,7 +45,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
 
-// --> OD 2008-05-08 #refactorlists#
 // Complete refactoring of the class and enhancement of the class for lists.
 XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     : msNumberingRules(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"))
@@ -58,10 +55,8 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     , msNumberingIsOutline(RTL_CONSTASCII_USTRINGPARAM("NumberingIsOutline"))
     , msPropNameListId(RTL_CONSTASCII_USTRINGPARAM("ListId"))
     , msPropNameStartWith(RTL_CONSTASCII_USTRINGPARAM("StartWith"))
-    // --> OD 2008-11-26 #158694#
     , msContinueingPreviousSubTree(RTL_CONSTASCII_USTRINGPARAM("ContinueingPreviousSubTree"))
     , msListLabelStringProp(RTL_CONSTASCII_USTRINGPARAM("ListLabelString"))
-    // <--
     , mxNumRules()
     , msNumRulesName()
     , msListId()
@@ -75,20 +70,17 @@ XMLTextNumRuleInfo::XMLTextNumRuleInfo()
     Reset();
 }
 
-// --> OD 2006-09-27 #i69627#
+// Written OpenDocument file format doesn't fit to the created text document (#i69627#)
 void XMLTextNumRuleInfo::Set(
         const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & xTextContent,
         const sal_Bool bOutlineStyleAsNormalListStyle,
         const XMLTextListAutoStylePool& rListAutoPool,
-        // --> OD 2008-11-26 #158694#
         const sal_Bool bExportTextNumberElement )
-        // <--
 {
     Reset();
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbOutlineStyleAsNormalListStyle = bOutlineStyleAsNormalListStyle;
-    // <--
 
     Reference< XPropertySet > xPropSet( xTextContent, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
@@ -111,7 +103,7 @@ void XMLTextNumRuleInfo::Set(
         mnListLevel = 0;
     }
 
-    // --> OD 2008-12-17 #i97312#
+    // Assertion saving writer document (#i97312#)
     if ( mxNumRules.is() && mxNumRules->getCount() < 1 )
     {
         DBG_ASSERT( false,
@@ -119,9 +111,7 @@ void XMLTextNumRuleInfo::Set(
         Reset();
         return;
     }
-    // <--
 
-    // --> OD 2010-01-13 #b6912256#
     if ( mnListLevel < 0 )
     {
         DBG_ASSERT( false,
@@ -130,7 +120,7 @@ void XMLTextNumRuleInfo::Set(
         return;
     }
 
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     bool bSuppressListStyle( false );
     if ( mxNumRules.is() )
     {
@@ -149,7 +139,6 @@ void XMLTextNumRuleInfo::Set(
     }
 
     if( mxNumRules.is() && !bSuppressListStyle )
-    // <--
     {
         // First try to find the numbering rules in the list auto style pool.
         // If not found, the numbering rules instance has to be named.
@@ -172,13 +161,11 @@ void XMLTextNumRuleInfo::Set(
             xPropSet->getPropertyValue( msPropNameListId ) >>= msListId;
         }
 
-        // --> OD 2008-11-26 #158694#
         mbContinueingPreviousSubTree = sal_False;
         if( xPropSetInfo->hasPropertyByName( msContinueingPreviousSubTree ) )
         {
             xPropSet->getPropertyValue( msContinueingPreviousSubTree ) >>= mbContinueingPreviousSubTree;
         }
-        // <--
 
         mbIsNumbered = sal_True;
         if( xPropSetInfo->hasPropertyByName( msNumberingIsNumber ) )
@@ -225,14 +212,12 @@ void XMLTextNumRuleInfo::Set(
             }
         }
 
-        // --> OD 2008-11-26 #158694#
         msListLabelString = ::rtl::OUString();
         if ( bExportTextNumberElement &&
              xPropSetInfo->hasPropertyByName( msListLabelStringProp ) )
         {
             xPropSet->getPropertyValue( msListLabelStringProp ) >>= msListLabelString;
         }
-        // <--
 
         // paragraph's list level range is [0..9] representing list levels [1..10]
         ++mnListLevel;
@@ -259,6 +244,5 @@ sal_Bool XMLTextNumRuleInfo::BelongsToSameList( const XMLTextNumRuleInfo& rCmp )
 
     return bRet;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

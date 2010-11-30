@@ -95,12 +95,6 @@ ULONG SwReader::Read( const Reader& rOptions )
 
     GetDoc();
 
-    // am Sw3-Reader noch den pIo-Pointer "loeschen"
-    /*
-    if( po == ReadSw3 && pDoc->GetDocShell() &&
-        ((Sw3Reader*)po)->GetSw3Io() != pDoc->GetDocShell()->GetIoSystem() )
-            ((Sw3Reader*)po)->SetSw3Io( pDoc->GetDocShell()->GetIoSystem() );*/
-
     // waehrend des einlesens kein OLE-Modified rufen
     Link aOLELink( pDoc->GetOle2Link() );
     pDoc->SetOle2Link( Link() );
@@ -403,10 +397,6 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         pDoc->SetModified();
     }
-    // <--
-
-//  if( po == ReadSw3 )         // am Sw3-Reader noch den pIo-Pointer "loeschen"
-//      ((Sw3Reader*)po)->SetSw3Io( 0 );
 
     po->SetReadUTF8( FALSE );
     po->SetBlockMode( FALSE );
@@ -421,20 +411,6 @@ ULONG SwReader::Read( const Reader& rOptions )
  * Konstruktoren, Destruktor
  */
 
-// Initiales Einlesben
-
-                                       /*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(0),
-    aFileName(rFileName)
-{
-}
-
-SwReader::SwReader(const uno::Reference < embed::XStorage >& rStg, const String& rFileName, SwDoc *pDoc)
-    : SwDocFac(pDoc), pStrm(0), pMedium(0), pCrsr(0), xStg( rStg ), aFileName(rFileName)
-{
-}
-                                         */
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwDoc *pDocument)
     : SwDocFac(pDocument), pStrm(0), pMedium(&rMedium), pCrsr(0),
     aFileName(rFileName)
@@ -450,13 +426,7 @@ SwReader::SwReader(SvStream& rStrm, const String& rFileName, const String& rBase
 {
     SetBaseURL( rBaseURL );
 }
-/*
-SwReader::SwReader(SvStorage& rStg, const String& rFileName, SwPaM& rPam)
-    : SwDocFac(rPam.GetDoc()), pStrm(0), pStg(&rStg), pMedium(0), pCrsr(&rPam),
-    aFileName(rFileName)
-{
-}
-*/
+
 SwReader::SwReader(SfxMedium& rMedium, const String& rFileName, SwPaM& rPam)
     : SwDocFac(rPam.GetDoc()), pStrm(0), pMedium(&rMedium),
     pCrsr(&rPam), aFileName(rFileName)
@@ -530,7 +500,7 @@ SwDoc* Reader::GetTemplateDoc()
         if( bLoad )
         {
             ClearTemplate();
-            ASSERT( !pTemplate, "Who holds the template doc?" );
+            OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
 
                 // #95605#: If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
@@ -561,7 +531,7 @@ SwDoc* Reader::GetTemplateDoc()
                 }
         }
 
-        ASSERT( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
+        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) ||
                 aTemplateNm.EqualsAscii( "$$Dummy$$" ),
                 "TemplatePtr but no template exist!" );
     }
@@ -620,7 +590,7 @@ void Reader::MakeHTMLDummyTemplateDoc()
 // muessen die Methode ueberladen
 int Reader::SetStrmStgPtr()
 {
-    ASSERT( pMedium, "Wo ist das Medium??" );
+    OSL_ENSURE( pMedium, "Wo ist das Medium??" );
 
     if( pMedium->IsStorage() )
     {
@@ -683,7 +653,7 @@ void Reader::ResetFrmFmts( SwDoc& rDoc )
         switch (i)
         {
             default:
-                ASSERT(i == 0, "Impossible");
+                OSL_ENSURE(i == 0, "Impossible");
                 //fallthrough
             case 0:
                 nPoolId = RES_POOLFRM_FRAME;
@@ -836,7 +806,7 @@ ULONG SwWriter::Write( WriterRef& rxWriter, const String* pRealFileName )
         SwTableNode* pTblNd = (SwTableNode*)aBoxes[0]->GetSttNd()->StartOfSectionNode();
         SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
         SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
-        ASSERT( pNd, "Node not found" );
+        OSL_ENSURE( pNd, "Node not found" );
         SwPosition aPos( aIdx, SwIndex( pNd ) );
         pTblNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
     }

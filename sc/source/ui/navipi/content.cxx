@@ -128,7 +128,6 @@ ScDocShell* ScContentTree::GetManualOrCurrent()
 ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
     SvTreeListBox   ( pParent, rResId ),
     aEntryImages    ( ScResId( RID_IMAGELIST_NAVCONT ) ),
-    aHCEntryImages  ( ScResId( RID_IMAGELIST_H_NAVCONT ) ),
     nRootType       ( SC_CONTENT_ROOT ),
     bHiddenDoc      ( FALSE ),
     pHiddenDocument ( NULL )
@@ -168,10 +167,6 @@ void ScContentTree::InitRoot( USHORT nType )
     // wieder an die richtige Position:
     USHORT nPos = nRootType ? 0 : pPosList[nType]-1;
     SvLBoxEntry* pNew = InsertEntry( aName, rImage, rImage, NULL, FALSE, nPos );
-
-    const Image& rHCImage = aHCEntryImages.GetImage( nType );
-    SetExpandedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
-    SetCollapsedEntryBmp( pNew, rHCImage, BMP_COLOR_HIGHCONTRAST );
 
     pRootNodes[nType] = pNew;
 }

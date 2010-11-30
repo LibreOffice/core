@@ -1011,12 +1011,6 @@ void View::DoConnect(SdrOle2Obj* pObj)
     }
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 BOOL View::IsMorphingAllowed() const
 {
     const SdrMarkList&  rMarkList = GetMarkedObjectList();
@@ -1062,12 +1056,6 @@ BOOL View::IsMorphingAllowed() const
 
     return bRet;
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 BOOL View::IsVectorizeAllowed() const
 {

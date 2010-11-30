@@ -69,8 +69,6 @@ public:
 PasswordReenterEdit_Impl::PasswordReenterEdit_Impl( Window * pParent, const ResId &rResId ) :
     Edit( pParent, rResId )
 {
-// currently the spec does not want to display this text anymore...
-//    m_aDefaultTxt = String( CUI_RES( STR_PASSWD_MUST_BE_CONFIRMED ) );
 }
 
 
@@ -83,16 +81,7 @@ void PasswordReenterEdit_Impl::Paint( const Rectangle& rRect )
 {
     if (GetText().Len() == 0)
     {
-        Push( /*PUSH_FILLCOLOR | PUSH_TEXTFILLCOLOR |*/ PUSH_TEXTCOLOR );
-/*
-        Color aFillColor( GetParent()->GetBackground().GetColor() );
-        SetLineColor(); // don't draw a border when painting the Edit field rectangle with the new background color
-        SetFillColor( aFillColor );
-        SetTextFillColor( aFillColor );
-        SetTextColor( GetParent()->GetTextColor() );    // use plain text color even if the Edit field is disabled (it is hard to read the text otherwise)
-
-        DrawRect( Rectangle( Point(), GetOutputSizePixel() ) );
-*/
+        Push( PUSH_TEXTCOLOR );
         SetTextColor( Color( COL_GRAY ) );
         DrawText( Point(), m_aDefaultTxt );
 
@@ -114,7 +103,6 @@ struct PasswordToOpenModifyDialog_Impl
     Edit                        m_aPasswdToOpenED;
     FixedText                   m_aReenterPasswdToOpenFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToOpenED;
-//    FixedImage                  m_aPasswdToOpenMatchFI;
     FixedText                   m_aPasswdNoteFT;
     FixedLine                   m_aButtonsFL;
     MoreButton                  m_aMoreFewerOptionsBTN;
@@ -126,7 +114,6 @@ struct PasswordToOpenModifyDialog_Impl
     Edit                        m_aPasswdToModifyED;
     FixedText                   m_aReenterPasswdToModifyFT;
     PasswordReenterEdit_Impl    m_aReenterPasswdToModifyED;
-//    FixedImage                  m_aPasswdToModifyMatchFI;
 
     String                      m_aOneMismatch;
     String                      m_aTwoMismatch;
@@ -136,7 +123,6 @@ struct PasswordToOpenModifyDialog_Impl
     bool                        m_bIsPasswordToModify;
 
 
-//    DECL_LINK( ModifyHdl, Edit * );
     DECL_LINK( OkBtnClickHdl, OKButton * );
 
     PasswordToOpenModifyDialog_Impl( PasswordToOpenModifyDialog * pParent,
@@ -156,7 +142,6 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
     m_aPasswdToOpenED           ( pParent, CUI_RES( ED_PASSWD_TO_OPEN ) ),
     m_aReenterPasswdToOpenFT    ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_OPEN ) ),
     m_aReenterPasswdToOpenED    ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_OPEN ) ),
-//    m_aPasswdToOpenMatchFI      ( pParent, CUI_RES( FI_PASSWD_TO_OPEN_MATCH ) ),
     m_aPasswdNoteFT             ( pParent, CUI_RES( FT_PASSWD_NOTE ) ),
     m_aButtonsFL                ( pParent, CUI_RES( FL_BUTTONS ) ),
     m_aMoreFewerOptionsBTN      ( pParent, CUI_RES( BTN_MORE_FEWER_OPTIONS ) ),
@@ -168,34 +153,16 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
     m_aPasswdToModifyED         ( pParent, CUI_RES( ED_PASSWD_TO_MODIFY ) ),
     m_aReenterPasswdToModifyFT  ( pParent, CUI_RES( FT_REENTER_PASSWD_TO_MODIFY ) ),
     m_aReenterPasswdToModifyED  ( pParent, CUI_RES( ED_REENTER_PASSWD_TO_MODIFY ) ),
-//    m_aPasswdToModifyMatchFI    ( pParent, CUI_RES( FI_PASSWD_TO_MODIFY_MATCH ) )
     m_aOneMismatch( CUI_RES( STR_ONE_PASSWORD_MISMATCH ) ),
     m_aTwoMismatch( CUI_RES( STR_TWO_PASSWORDS_MISMATCH ) ),
     m_aInvalidStateForOkButton( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON ) ),
     m_aInvalidStateForOkButton_v2( CUI_RES( STR_INVALID_STATE_FOR_OK_BUTTON_V2 ) ),
     m_bIsPasswordToModify( bIsPasswordToModify )
 {
-/*
-    const sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
-    const Image aImage( CUI_RES( bHighContrast ? IMG_PASSWD_MATCH_HC : IMG_PASSWD_MATCH ) );
-    m_aPasswdToOpenMatchFI.SetImage( aImage );
-    m_aPasswdToModifyMatchFI.SetImage( aImage );
-*/
-
     m_aMoreFewerOptionsBTN.SetMoreText( String( CUI_RES( STR_MORE_OPTIONS ) ) );
     m_aMoreFewerOptionsBTN.SetLessText( String( CUI_RES( STR_FEWER_OPTIONS ) ) );
 
-#if 0
-    Link aModifyLink = LINK( this, PasswordToOpenModifyDialog_Impl, ModifyHdl );
-    m_aPasswdToOpenED.SetModifyHdl( aModifyLink );
-    m_aReenterPasswdToOpenED.SetModifyHdl( aModifyLink );
-    m_aPasswdToModifyED.SetModifyHdl( aModifyLink );
-    m_aReenterPasswdToModifyED.SetModifyHdl( aModifyLink );
-#endif
-
     m_aOk.SetClickHdl( LINK( this, PasswordToOpenModifyDialog_Impl, OkBtnClickHdl ) );
-
-//    m_aOk.Enable( FALSE );
 
     if (nMaxPasswdLen)
     {
@@ -209,8 +176,6 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 
     m_aPasswdToOpenED.GrabFocus();
 
-//    ModifyHdl( NULL );
-
     m_aMoreFewerOptionsBTN.Enable( bIsPasswordToModify );
     if (!bIsPasswordToModify)
         m_aMoreFewerOptionsBTN.Hide( TRUE );
@@ -220,32 +185,6 @@ PasswordToOpenModifyDialog_Impl::PasswordToOpenModifyDialog_Impl(
 PasswordToOpenModifyDialog_Impl::~PasswordToOpenModifyDialog_Impl()
 {
 }
-
-#if 0
-IMPL_LINK( PasswordToOpenModifyDialog_Impl, ModifyHdl, Edit *, EMPTYARG /*pEdit*/ )
-{
-    // force repaints to get the m_aDefaultTxt displayed again
-    if (m_aReenterPasswdToOpenED.GetText().Len() == 0)
-        m_aReenterPasswdToOpenED.Invalidate();
-    if (m_aReenterPasswdToModifyED.GetText().Len() == 0)
-        m_aReenterPasswdToModifyED.Invalidate();
-
-    const sal_Int32 nPasswdToOpenLen    = m_aPasswdToOpenED.GetText().Len();
-    const sal_Int32 nPasswdToModifyLen  = m_aPasswdToModifyED.GetText().Len();
-
-    const bool bBothEmpty       = nPasswdToOpenLen == 0 && nPasswdToModifyLen == 0;
-    const bool bToOpenMatch     = m_aPasswdToOpenED.GetText()   == m_aReenterPasswdToOpenED.GetText();
-    const bool bToModifyMatch   = m_aPasswdToModifyED.GetText() == m_aReenterPasswdToModifyED.GetText();
-
-    m_aOk.Enable( bToOpenMatch && bToModifyMatch && !bBothEmpty );
-
-//    m_aPasswdToOpenMatchFI.Enable( bToOpenMatch && !bBothEmpty );
-//    m_aPasswdToModifyMatchFI.Enable( bToModifyMatch && !bBothEmpty );
-
-    return 0;
-}
-#endif
-
 
 IMPL_LINK( PasswordToOpenModifyDialog_Impl, OkBtnClickHdl, OKButton *, EMPTYARG /*pBtn*/ )
 {

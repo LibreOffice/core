@@ -828,8 +828,8 @@ void SAL_CALL ModuleUIConfigurationManager::initialize( const Sequence< Any >& a
     if ( !m_bInitialized )
     {
         ::comphelper::SequenceAsHashMap lArgs(aArguments);
-        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleIdentifier"), ::rtl::OUString());
-        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString::createFromAscii("ModuleShortName"), ::rtl::OUString());
+        m_aModuleIdentifier = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier")), ::rtl::OUString());
+        m_aModuleShortName  = lArgs.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleShortName")), ::rtl::OUString());
 
         for ( int i = 1; i < ::com::sun::star::ui::UIElementType::COUNT; i++ )
         {
@@ -1390,7 +1390,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
         Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
 
         PropertyValue aProp;
-        aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
+        aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ModuleIdentifier"));
         aProp.Value <<= aModule;
 
         Sequence< Any > lArgs(1);

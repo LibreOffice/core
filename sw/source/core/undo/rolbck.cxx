@@ -252,7 +252,7 @@ void SwHistorySetTxt::SetInDoc( SwDoc* pDoc, bool )
     }
 
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistorySetTxt::SetInDoc: not a TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistorySetTxt::SetInDoc: not a TextNode" );
 
     if ( pTxtNd )
     {
@@ -314,7 +314,7 @@ void SwHistorySetTxtFld::SetInDoc( SwDoc* pDoc, bool )
     m_pFld->GetFld()->ChgTyp( pNewFldType ); // change field type
 
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistorySetTxtFld: no TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistorySetTxtFld: no TextNode" );
 
     if ( pTxtNd )
     {
@@ -338,7 +338,7 @@ SwHistorySetRefMark::SwHistorySetRefMark( SwTxtRefMark* pTxtHt, ULONG nNodePos )
 void SwHistorySetRefMark::SetInDoc( SwDoc* pDoc, bool )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistorySetRefMark: no TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistorySetRefMark: no TextNode" );
     if ( !pTxtNd )
         return;
 
@@ -370,7 +370,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
 void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistorySetTOXMark: no TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistorySetTOXMark: no TextNode" );
     if ( !pTxtNd )
         return;
 
@@ -424,7 +424,7 @@ SwHistoryResetTxt::SwHistoryResetTxt( USHORT nWhich,
 void SwHistoryResetTxt::SetInDoc( SwDoc* pDoc, bool )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistoryResetTxt: no TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistoryResetTxt: no TextNode" );
     if ( pTxtNd )
     {
         pTxtNd->DeleteAttributes( m_nAttr, m_nStart, m_nEnd );
@@ -440,7 +440,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( SwTxtFtn* pTxtFtn, ULONG nNodePos )
     , m_nStart( *pTxtFtn->GetStart() )
     , m_bEndNote( pTxtFtn->GetFtn().IsEndNote() )
 {
-    ASSERT( pTxtFtn->GetStartNode(),
+    OSL_ENSURE( pTxtFtn->GetStartNode(),
             "SwHistorySetFootnote: Footnote without Section" );
 
     // merke die alte NodePos, denn wer weiss was alles in der SaveSection
@@ -465,7 +465,7 @@ SwHistorySetFootnote::SwHistorySetFootnote( const SwTxtFtn &rTxtFtn )
     , m_nStart( *rTxtFtn.GetStart() )
     , m_bEndNote( rTxtFtn.GetFtn().IsEndNote() )
 {
-    ASSERT( rTxtFtn.GetStartNode(),
+    OSL_ENSURE( rTxtFtn.GetStartNode(),
             "SwHistorySetFootnote: Footnote without Section" );
 }
 
@@ -482,7 +482,7 @@ SwHistorySetFootnote::~SwHistorySetFootnote()
 void SwHistorySetFootnote::SetInDoc( SwDoc* pDoc, bool )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetTxtNode();
-    ASSERT( pTxtNd, "SwHistorySetFootnote: no TextNode" );
+    OSL_ENSURE( pTxtNd, "SwHistorySetFootnote: no TextNode" );
     if ( !pTxtNd )
         return;
 
@@ -538,7 +538,7 @@ SwHistoryChangeFmtColl::SwHistoryChangeFmtColl( SwFmtColl* pFmtColl, ULONG nNd,
 void SwHistoryChangeFmtColl::SetInDoc( SwDoc* pDoc, bool )
 {
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
-    ASSERT( pCntntNd, "SwHistoryChangeFmtColl: no ContentNode" );
+    OSL_ENSURE( pCntntNd, "SwHistoryChangeFmtColl: no ContentNode" );
 
     // before setting the format, check if it is still available in the
     // document. if it has been deleted, there is no undo!
@@ -565,7 +565,7 @@ SwHistoryTxtFlyCnt::SwHistoryTxtFlyCnt( SwFrmFmt* const pFlyFmt )
     : SwHistoryHint( HSTRY_FLYCNT )
     , m_pUndo( new SwUndoDelLayFmt( pFlyFmt ) )
 {
-    ASSERT( pFlyFmt, "SwHistoryTxtFlyCnt: no Format" );
+    OSL_ENSURE( pFlyFmt, "SwHistoryTxtFlyCnt: no Format" );
     m_pUndo->ChgShowSel( FALSE );
 }
 
@@ -843,7 +843,7 @@ SwHistoryResetAttrSet::SwHistoryResetAttrSet( const SfxItemSet& rSet,
             case RES_TXTATR_FTN:
             case RES_TXTATR_META:
             case RES_TXTATR_METAFIELD:
-                ASSERT(rSet.Count() == 1,
+                OSL_ENSURE(rSet.Count() == 1,
                     "text attribute with CH_TXTATR, but not the only one:"
                     "\nnot such a good idea");
                 break;
@@ -880,7 +880,7 @@ void SwHistoryResetAttrSet::SetInDoc( SwDoc* pDoc, bool )
     pDoc->DoUndo( FALSE );
 
     SwCntntNode * pCntntNd = pDoc->GetNodes()[ m_nNodeIndex ]->GetCntntNode();
-    ASSERT( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
+    OSL_ENSURE( pCntntNd, "SwHistoryResetAttrSet: no CntntNode" );
 
     if (pCntntNd)
     {
@@ -937,7 +937,7 @@ void SwHistoryChangeFlyAnchor::SetInDoc( SwDoc* pDoc, bool )
         SwPosition aPos( *pNd );
         if ( STRING_MAXLEN != m_nOldContentIndex )
         {
-            ASSERT(pCNd, "SwHistoryChangeFlyAnchor: no ContentNode");
+            OSL_ENSURE(pCNd, "SwHistoryChangeFlyAnchor: no ContentNode");
             if (pCNd)
             {
                 aPos.nContent.Assign( pCNd, m_nOldContentIndex );
@@ -1050,7 +1050,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
                      ULONG nNodeIdx )
 // <--
 {
-    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+    OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     USHORT nWhich = pNewValue->Which();
     if( (nWhich >= POOLATTR_END) || (nWhich == RES_TXTATR_FIELD) )
@@ -1072,7 +1072,7 @@ void SwHistory::Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
 
 void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
 {
-    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+    OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHt;
     USHORT nAttrWhich = pHint->Which();
@@ -1117,7 +1117,7 @@ void SwHistory::Add( SwTxtAttr* pHint, ULONG nNodeIdx, bool bNewAttr )
 
 void SwHistory::Add( SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
 {
-    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+    OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHt =
         new SwHistoryChangeFmtColl( pColl, nNodeIdx, nWhichNd );
@@ -1127,7 +1127,7 @@ void SwHistory::Add( SwFmtColl* pColl, ULONG nNodeIdx, BYTE nWhichNd )
 
 void SwHistory::Add(const ::sw::mark::IMark& rBkmk, bool bSavePos, bool bSaveOtherPos)
 {
-    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+    OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHt = new SwHistoryBookmark(rBkmk, bSavePos, bSaveOtherPos);
     m_SwpHstry.Insert( pHt, Count() );
@@ -1142,7 +1142,7 @@ void SwHistory::Add( SwFrmFmt& rFmt )
 
 void SwHistory::Add( SwFlyFrmFmt& rFmt, USHORT& rSetPos )
 {
-    ASSERT( !m_nEndDiff, "History was not deleted after REDO" );
+    OSL_ENSURE( !m_nEndDiff, "History was not deleted after REDO" );
 
     SwHistoryHint * pHint;
     const USHORT nWh = rFmt.Which();
@@ -1261,7 +1261,7 @@ void SwHistory::Delete( USHORT nStart )
 
 USHORT SwHistory::SetTmpEnd( USHORT nNewTmpEnd )
 {
-    ASSERT( nNewTmpEnd <= Count(),  "SwHistory::SetTmpEnd: out of bounds" );
+    OSL_ENSURE( nNewTmpEnd <= Count(),  "SwHistory::SetTmpEnd: out of bounds" );
 
     USHORT nOld = Count() - m_nEndDiff;
     m_nEndDiff = Count() - nNewTmpEnd;
@@ -1436,7 +1436,7 @@ bool SwRegHistory::InsertItems( const SfxItemSet& rSet,
     SwTxtNode * const pTxtNode =
         dynamic_cast<SwTxtNode *>(const_cast<SwModify *>(GetRegisteredIn()));
 
-    ASSERT(pTxtNode, "SwRegHistory not registered at text node?");
+    OSL_ENSURE(pTxtNode, "SwRegHistory not registered at text node?");
     if (!pTxtNode)
         return false;
 

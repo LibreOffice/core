@@ -58,7 +58,7 @@
  *
  */
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/string.hxx>
 #endif
 
@@ -90,7 +90,7 @@ class SwCache : public SwCacheObjArr
 
     void DeleteObj( SwCacheObj *pObj );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ByteString aName;
     long nAppend;           //Anzahl der Eintragungen durch Erweiterung.
     long nInsertFree;       //Anzahl der Eintragungen auf freie Plaetze.
@@ -112,7 +112,7 @@ class SwCache : public SwCacheObjArr
 public:
 
     //nur BYTE hineinstecken!!!
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     SwCache( const USHORT nInitSize, const USHORT nGrowSize,
             const ByteString &rNm );
     ~SwCache();
@@ -193,12 +193,12 @@ public:
 
     inline BOOL IsLocked() const { return 0 != nLock; }
 
-#ifndef DBG_UTIL
-    inline void Lock() { ++nLock; }
-    inline void Unlock() { --nLock; }
-#else
+#if OSL_DEBUG_LEVEL > 1
     void Lock();
     void Unlock();
+#else
+    inline void Lock() { ++nLock; }
+    inline void Unlock() { --nLock; }
 #endif
 
     SwCacheObj *Next() { return pNext; }
@@ -245,7 +245,7 @@ public:
 inline void SwCache::IncreaseMax( const USHORT nAdd )
 {
     nCurMax = nCurMax + sal::static_int_cast< USHORT >(nAdd);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nIncreaseMax;
 #endif
 }
@@ -253,7 +253,7 @@ inline void SwCache::DecreaseMax( const USHORT nSub )
 {
     if ( nCurMax > nSub )
         nCurMax = nCurMax - sal::static_int_cast< USHORT >(nSub);
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ++nDecreaseMax;
 #endif
 }

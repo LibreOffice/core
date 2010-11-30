@@ -691,7 +691,7 @@ static int path_make_parent(sal_Unicode* path)
     If there are no more parents 0 will be returned,
     e.g. 'c:\' or '\\Share' have no more parents */
 
-    OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) != -1, "Path must not contain slashes");
+    OSL_PRECOND(rtl_ustr_indexOfChar(path, SLASH) == -1, "Path must not contain slashes");
     OSL_PRECOND(has_path_parent(path), "Path must have a parent");
 
     sal_Unicode* pos_last_backslash = path + rtl_ustr_lastIndexOfChar(path, BACKSLASH);

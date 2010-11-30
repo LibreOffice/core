@@ -292,7 +292,7 @@ sal_Bool OStatement_Base::lockIfNecessary (const ::rtl::OUString& sql) throw( SQ
     // Now, look for the FOR UPDATE keywords.  If there is any extra white
     // space between the FOR and UPDATE, this will fail.
 
-    sal_Int32 index = sqlStatement.indexOf(::rtl::OUString::createFromAscii(" FOR UPDATE"));
+    sal_Int32 index = sqlStatement.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOR UPDATE")));
 
     // We found it.  Change our concurrency level to ensure that the
     // row can be updated.

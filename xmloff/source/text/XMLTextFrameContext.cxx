@@ -121,7 +121,7 @@ inline XMLTextFrameContextHyperlink_Impl::XMLTextFrameContextHyperlink_Impl(
 {
 }
 
-// --> OD 2009-07-22 #i73249#
+// Implement Title/Description Elements UI (#i73249#)
 class XMLTextFrameTitleOrDescContext_Impl : public SvXMLImportContext
 {
     OUString&   mrTitleOrDesc;
@@ -159,7 +159,6 @@ void XMLTextFrameTitleOrDescContext_Impl::Characters( const OUString& rText )
 {
     mrTitleOrDesc += rText;
 }
-// <--
 
 // ------------------------------------------------------------------------
 
@@ -383,11 +382,8 @@ class XMLTextFrameContext_Impl : public SvXMLImportContext
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sGraphicURL;
     const ::rtl::OUString sGraphicFilter;
-    // --> OD 2009-07-22 #i73249#
-//    const ::rtl::OUString sAlternativeText;
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sDescription;
-    // <--
     const ::rtl::OUString sFrameStyleName;
     const ::rtl::OUString sGraphicRotation;
     const ::rtl::OUString sTextBoxServiceName;
@@ -463,9 +459,10 @@ public:
                        const ::rtl::OUString& rName,
                        const ::rtl::OUString& rTargetFrameName,
                        sal_Bool bMap );
-    // --> OD 2009-07-22 #i73249#
+
+    // Implement Title/Description Elements UI (#i73249#)
     void SetTitle( const ::rtl::OUString& rTitle );
-    // <--
+
     void SetDesc( const ::rtl::OUString& rDesc );
 
     ::com::sun::star::text::TextContentAnchorType GetAnchorType() const { return eAnchorType; }
@@ -834,11 +831,8 @@ XMLTextFrameContext_Impl::XMLTextFrameContext_Impl(
 ,   sAnchorPageNo(RTL_CONSTASCII_USTRINGPARAM("AnchorPageNo"))
 ,   sGraphicURL(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))
 ,   sGraphicFilter(RTL_CONSTASCII_USTRINGPARAM("GraphicFilter"))
-// --> OD 2009-07-22 #i73249#
-//,   sAlternativeText(RTL_CONSTASCII_USTRINGPARAM("AlternativeText"))
 ,   sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"))
 ,   sDescription(RTL_CONSTASCII_USTRINGPARAM("Description"))
-// <--
 ,   sFrameStyleName(RTL_CONSTASCII_USTRINGPARAM("FrameStyleName"))
 ,   sGraphicRotation(RTL_CONSTASCII_USTRINGPARAM("GraphicRotation"))
 ,   sTextBoxServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame"))
@@ -1145,15 +1139,13 @@ SvXMLImportContext *XMLTextFrameContext_Impl::CreateChildContext(
             }
         }
     }
-    // --> OD 2009-08-17 #i100480#
-    // correction of condition which also avoids warnings.
+    // Correction of condition which also avoids warnings. (#i100480#)
     if( !pContext &&
         ( XML_TEXT_FRAME_OBJECT == nType &&
           ( ( XML_NAMESPACE_OFFICE == nPrefix &&
               IsXMLToken( rLocalName, XML_DOCUMENT ) ) ||
             ( XML_NAMESPACE_MATH == nPrefix &&
               IsXMLToken( rLocalName, XML_MATH ) ) ) ) )
-    // <--
     {
         if( !xPropSet.is() && !bCreateFailed )
         {
@@ -1283,7 +1275,7 @@ void XMLTextFrameContext_Impl::SetHyperlink( const OUString& rHRef,
     }
 }
 
-// --> OD 2009-07-22 #i73249#
+// Implement Title/Description Elements UI (#i73249#)
 void XMLTextFrameContext_Impl::SetTitle( const OUString& rTitle )
 {
     if ( xPropSet.is() )
@@ -1307,7 +1299,6 @@ void XMLTextFrameContext_Impl::SetDesc( const OUString& rDesc )
         }
     }
 }
-// <--
 
 //-----------------------------------------------------------------------------------------------------
 
@@ -1346,14 +1337,12 @@ XMLTextFrameContext::XMLTextFrameContext(
 :   SvXMLImportContext( rImport, nPrfx, rLName )
 ,   m_xAttrList( new SvXMLAttributeList( xAttrList ) )
 ,   m_pHyperlink( 0 )
-// --> OD 2009-07-22 #i73249#
+    // Implement Title/Description Elements UI (#i73249#)
 ,   m_sTitle()
 ,   m_sDesc()
-// <--
 ,   m_eDefaultAnchorType( eATyp )
-    // --> OD 2006-03-10 #i51726#
+    // Shapes in Writer cannot be named via context menu (#i51726#)
 ,   m_HasAutomaticStyleWithoutParentStyle( sal_False )
-    // <--
 ,   m_bSupportsReplacement( sal_False )
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -1364,9 +1353,8 @@ XMLTextFrameContext::XMLTextFrameContext(
         OUString aLocalName;
         sal_uInt16 nPrefix =
             GetImport().GetNamespaceMap().GetKeyByAttrName( rAttrName, &aLocalName );
-        // --> OD 2006-03-10 #i51726#
         // New distinguish attribute between Writer objects and Draw objects is:
-        // Draw objects have an automatic style without a parent style
+        // Draw objects have an automatic style without a parent style (#i51726#)
         if ( XML_NAMESPACE_DRAW == nPrefix &&
              IsXMLToken( aLocalName, XML_STYLE_NAME ) )
         {
@@ -1383,7 +1371,6 @@ XMLTextFrameContext::XMLTextFrameContext(
                 }
             }
         }
-        // <--
         else if ( XML_NAMESPACE_TEXT == nPrefix &&
                   IsXMLToken( aLocalName, XML_ANCHOR_TYPE ) )
         {
@@ -1412,11 +1399,6 @@ void XMLTextFrameContext::EndElement()
     {
         pImpl->CreateIfNotThere();
 
-        // --> OD 2009-07-22 #i73249#
-//        // alternative text
-//        if( m_sDesc.getLength() )
-//            pImpl->SetDesc( m_sDesc );
-        // svg:title
         if( m_sTitle.getLength() )
         {
             pImpl->SetTitle( m_sTitle );
@@ -1425,7 +1407,6 @@ void XMLTextFrameContext::EndElement()
         {
             pImpl->SetDesc( m_sDesc );
         }
-        // <--
 
         if( m_pHyperlink )
         {
@@ -1468,11 +1449,10 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
 
             if( USHRT_MAX != nFrameType )
             {
-                // --> OD 2006-03-10 #i51726#
+                // Shapes in Writer cannot be named via context menu (#i51726#)
                 if ( ( XML_TEXT_FRAME_TEXTBOX == nFrameType ||
                        XML_TEXT_FRAME_GRAPHIC == nFrameType ) &&
                      m_HasAutomaticStyleWithoutParentStyle )
-                // <--
                 {
                     Reference < XShapes > xShapes;
                     pContext = GetImport().GetShapeImport()->CreateFrameChildContext(
@@ -1543,11 +1523,7 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
         // the child is a writer frame
         if( XML_NAMESPACE_SVG == p_nPrefix )
         {
-            // --> OD 2009-07-22 #i73249#
-//            bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
-//            if( IsXMLToken( rLocalName, bOld ? XML_DESC : XML_TITLE ) )
-//                pContext = new XMLTextFrameDescContext_Impl( GetImport(), p_nPrefix, rLocalName,
-//                                                         xAttrList, m_sDesc );
+            // Implement Title/Description Elements UI (#i73249#)
             const bool bOld = SvXMLImport::OOo_2x >= GetImport().getGeneratorVersion();
             if ( bOld )
             {
@@ -1576,7 +1552,6 @@ SvXMLImportContext *XMLTextFrameContext::CreateChildContext(
                                                                         m_sDesc );
                 }
             }
-            // <--
         }
         else if( XML_NAMESPACE_DRAW == p_nPrefix )
         {
@@ -1666,7 +1641,6 @@ Reference < XTextContent > XMLTextFrameContext::GetTextContent() const
     return xTxtCntnt;
 }
 
-// --> OD 2004-08-24 #33242#
 Reference < XShape > XMLTextFrameContext::GetShape() const
 {
     Reference < XShape > xShape;
@@ -1679,6 +1653,5 @@ Reference < XShape > XMLTextFrameContext::GetShape() const
 
     return xShape;
 }
-// <--
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

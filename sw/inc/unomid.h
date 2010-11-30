@@ -152,7 +152,7 @@
 #define MID_ENV_SHIFT_RIGHT     12
 #define MID_ENV_SHIFT_DOWN      13
 
-// OD 2004-05-04 #i28701# - SwFmtWrapInfluenceOnObjPos
+// SwFmtWrapInfluenceOnObjPos
 #define MID_WRAP_INFLUENCE      0
 
 #endif

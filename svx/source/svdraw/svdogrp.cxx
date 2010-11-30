@@ -272,22 +272,19 @@ SdrObjList* SdrObjGroup::GetSubList() const
 
 const Rectangle& SdrObjGroup::GetCurrentBoundRect() const
 {
-    // --> OD 2007-02-01 #144962#
-    // <aOutRect> has to contain the bounding rectangle
+    // <aOutRect> has to contain the bounding rectangle (#144962#)
     if ( pSub->GetObjCount()!=0 )
     {
         const_cast<SdrObjGroup*>(this)->aOutRect = pSub->GetAllObjBoundRect();
     }
 
     return aOutRect;
-    // <--
 }
 
 
 const Rectangle& SdrObjGroup::GetSnapRect() const
 {
-    // --> OD 2007-02-01 #144962#
-    // <aOutRect> has to contain the bounding rectangle
+    // <aOutRect> has to contain the bounding rectangle (#144962#)
     if ( pSub->GetObjCount()!=0 )
     {
         return pSub->GetAllObjSnapRect();
@@ -296,7 +293,6 @@ const Rectangle& SdrObjGroup::GetSnapRect() const
     {
         return aOutRect;
     }
-    // <--
 }
 
 void SdrObjGroup::operator=(const SdrObject& rObj)

@@ -63,7 +63,6 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         SetText(aTitle);
     if( nFlags & TP_ATTR_CHAR )
     {
-//        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ModuleRes(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
         DBG_ERROR( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
@@ -96,14 +95,11 @@ void SbaSbAttrDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 
         case RID_SVXPAGE_CHAR_STD:
         {
-            //  ((SvxCharStdPage&)rTabPage).SetFontList(SBA_MOD_EXT()->FontListItem());
         }
         break;
 
         case RID_SVXPAGE_ALIGNMENT:
         {
-//           aSet.Put (SfxUInt32Item(SID_FLAG_TYPE, WBA_NO_ORIENTATION|WBA_NO_LINEBREAK|WBA_NO_GRIDLINES|WBA_NO_VERTICAL|WBA_NO_LEFTINDENT));
-//           rTabPage.PageCreated(aSet);
         }
         break;
 

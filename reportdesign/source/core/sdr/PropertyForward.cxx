@@ -94,7 +94,7 @@ OPropertyMediator::OPropertyMediator(const Reference< XPropertySet>& _xSource
             DBG_UNHANDLED_EXCEPTION();
             (void)e;
         }
-    } // if ( m_xDest.is() && m_xSource.is() )
+    }
     osl_decrementInterlockedCount(&m_refCount);
 }
 // -----------------------------------------------------------------------------

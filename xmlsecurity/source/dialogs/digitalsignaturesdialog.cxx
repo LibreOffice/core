@@ -221,14 +221,6 @@ DigitalSignaturesDialog::DigitalSignaturesDialog(
 
     maSigsNotvalidatedFI.SetText( String( XMLSEC_RES( STR_NO_INFO_TO_VERIFY ) ) );
 
-    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        // high contrast mode needs other images
-        maSigsValidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_VALID_HC ) ) );
-        maSigsInvalidImg.SetImage( Image( XMLSEC_RES( IMG_STATE_BROKEN_HC ) ) );
-        maSigsNotvalidatedImg.SetImage( Image( XMLSEC_RES( IMG_STATE_NOTVALIDATED_HC ) ) );
-    }
-
     FreeResource();
 
     mbVerifySignatures = true;
@@ -654,7 +646,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
 
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
                 aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
-                // --> PB 2004-10-12 #i20172# String with date and time information
+                // String with date and time information (#i20172#)
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
             bSigValid = ( rInfo.nStatus == ::com::sun::star::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED );

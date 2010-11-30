@@ -241,7 +241,7 @@ ContextHandlerRef ShapeTypeContext::onCreateContext( sal_Int32 nElement, const A
             mrTypeModel.maFillModel.moRotate = lclDecodeBool( rAttribs, XML_rotate );
         break;
         case VML_TOKEN( imagedata ):
-            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, O_TOKEN( relid ) );
+            mrTypeModel.moGraphicPath = decodeFragmentPath( rAttribs, R_TOKEN( id ) );
             mrTypeModel.moGraphicTitle = rAttribs.getString( O_TOKEN( title ) );
         break;
     }
@@ -294,7 +294,7 @@ ContextHandlerRef ShapeContext::onCreateContext( sal_Int32 nElement, const Attri
     // Custom shape in Writer with a textbox are transformed into a frame
     if ( nElement == ( NMSP_VML + XML_textbox ) )
         dynamic_cast<SimpleShape&>( mrShape ).setService(
-            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
 
     // Excel specific shape client data
     if( isRootElement() && (nElement == VMLX_TOKEN( ClientData )) )
@@ -342,7 +342,7 @@ ContextHandlerRef RectangleShapeContext::onCreateContext( sal_Int32 nElement, co
 {
     if ( nElement == ( NMSP_VML + XML_textbox ) )
         dynamic_cast< SimpleShape &>( mrShape ).setService(
-            OUString::createFromAscii( "com.sun.star.text.TextFrame" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextFrame")) );
 
     // The parent class's context is fine
     return ShapeContext::onCreateContext( nElement, rAttribs );

@@ -1129,8 +1129,6 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
         delete pView;
 
-        List* pList = pBookmarkList;
-
         if (pExchangeList)
         {
             // Anzahl Objekte nach dem Einfuegen bestimmen
@@ -1151,8 +1149,6 @@ BOOL SdDrawDocument::InsertBookmarkAsObject(
 
                 pExchangeList->Next();
             }
-
-            pList = pExchangeList;
         }
     }
 
@@ -1728,9 +1724,8 @@ void SdDrawDocument::SetMasterPage(USHORT nSdPageNum,
         if (pSourceDoc != this)
         {
             // Aus dem Source-Dokument austragen
-            SdrPage* pTest = NULL;
-            pTest = pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNum());
-            pTest = pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
+            pSourceDoc->RemoveMasterPage(pNotesMaster->GetPageNum());
+            pSourceDoc->RemoveMasterPage(pMaster->GetPageNum());
         }
 
         /*********************************************************************

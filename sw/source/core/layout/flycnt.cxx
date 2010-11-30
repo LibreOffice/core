@@ -123,7 +123,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 
     if( pAnch )
     {
-        ASSERT( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
+        OSL_ENSURE( pAnch->GetAnchorId() == GetFmt()->GetAnchor().GetAnchorId(),
                 "Unzulaessiger Wechsel des Ankertyps." );
 
         //Abmelden, neuen Anker besorgen und 'dranhaengen.
@@ -196,7 +196,7 @@ void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
         {
             SwCntntNode *pNode = aNewIdx.GetNode().GetCntntNode();
             pCntnt = pNode->GetFrm( &pOldAnchor->Frm().Pos(), 0, FALSE );
-            ASSERT( pCntnt, "Neuen Anker nicht gefunden" );
+            OSL_ENSURE( pCntnt, "Neuen Anker nicht gefunden" );
         }
         //Flys haengen niemals an einem Follow sondern immer am
         //Master, den suchen wir uns jetzt.
@@ -457,7 +457,7 @@ void SwFlyAtCntFrm::MakeAll()
                 {
                     SwTxtFrm* pAnchPosAnchorFrm =
                             dynamic_cast<SwTxtFrm*>(GetAnchorFrmContainingAnchPos());
-                    ASSERT( pAnchPosAnchorFrm,
+                    OSL_ENSURE( pAnchPosAnchorFrm,
                             "<SwFlyAtCntFrm::MakeAll()> - anchor frame of wrong type -> crash" );
                     // --> OD 2006-01-27 #i58182# - For the usage of new method
                     // <SwObjectFormatterTxtFrm::CheckMovedFwdCondition(..)>
@@ -534,7 +534,7 @@ void SwFlyAtCntFrm::MakeAll()
                                 pFmt->UnlockModify();
                                 bOsz = false;
 #if OSL_DEBUG_LEVEL > 1
-                                ASSERT( false,
+                                OSL_ENSURE( false,
                                         "<SwFlyAtCntFrm::MakeAll()> - special loop prevention for dedicated document of b6403541 applied" );
 #endif
                             }
@@ -1428,64 +1428,6 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
         ::Notify_Background( GetVirtDrawObj(), pOldPage, aOld, PREP_FLY_LEAVE,
                              FALSE );
 }
-
-// OD 2004-08-12 #i32795# - Note: method no longer used in <flyincnt.cxx>
-//void DeepCalc( const SwFrm *pFrm )
-//{
-//    if( pFrm->IsSctFrm() ||
-//        ( pFrm->IsFlyFrm() && ((SwFlyFrm*)pFrm)->IsFlyInCntFrm() ) )
-//      return;
-//    const SwFlowFrm *pFlow = SwFlowFrm::CastFlowFrm( pFrm );
-//    if( pFlow && pFlow->IsAnyJoinLocked() )
-//        return;
-
-//    USHORT nCnt = 0;
-
-//  BOOL bContinue = FALSE;
-//  do
-//    {
-//        if ( ++nCnt == 10 )
-//      {
-//          ASSERT( !nCnt, "DeepCalc: Loop detected1?" );
-//          break;
-//      }
-
-//      const BOOL bSetComplete = !pFrm->IsValid();
-//      const SwRect aOldFrm( pFrm->Frm() );
-//      const SwRect aOldPrt( pFrm->Prt() );
-
-//      const SwFrm *pUp = pFrm->GetUpper();
-//      if ( pUp )
-//      {
-//          //Nicht weiter wenn der Up ein Fly mit Spalten ist.
-//          if( ( !pUp->IsFlyFrm() || !((SwLayoutFrm*)pUp)->Lower() ||
-//               !((SwLayoutFrm*)pUp)->Lower()->IsColumnFrm() ) &&
-//               !pUp->IsSctFrm() )
-//          {
-//                SWRECTFN( pUp )
-//                const Point aPt( (pUp->Frm().*fnRect->fnGetPos)() );
-//              ::DeepCalc( pUp );
-//                bContinue = aPt != (pUp->Frm().*fnRect->fnGetPos)();
-//          }
-//      }
-//      else
-//          pUp = pFrm;
-
-//      pFrm->Calc();
-//      if ( bSetComplete && (aOldFrm != pFrm->Frm() || aOldPrt != pFrm->Prt()))
-//          pFrm->SetCompletePaint();
-
-//      if ( pUp->IsFlyFrm() )
-//      {
-//          if ( ((SwFlyFrm*)pUp)->IsLocked() ||
-//               (((SwFlyFrm*)pUp)->IsFlyAtCntFrm() &&
-//                SwOszControl::IsInProgress( (const SwFlyFrm*)pUp )) )
-//          {
-//              bContinue = FALSE;
-//          }
-//      }
-//  } while ( bContinue );
-//}
 
 /** method to assure that anchored object is registered at the correct
     page frame

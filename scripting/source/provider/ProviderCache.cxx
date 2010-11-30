@@ -167,7 +167,7 @@ ProviderCache::populateCache() throw ( RuntimeException )
             Reference< lang::XSingleComponentFactory > factory;
             if ( sal_False == ( xEnum->nextElement() >>= factory ) )
             {
-                throw new RuntimeException( ::rtl::OUString::createFromAscii( "  error extracting XSingleComponentFactory from Content enumeration. " ), Reference< XInterface >() );
+                throw new RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("  error extracting XSingleComponentFactory from Content enumeration. ")), Reference< XInterface >() );
             }
             validateXRef( factory, "ProviderCache::populateCache() invalid factory" );
             Reference< lang::XServiceInfo > xServiceInfo( factory, UNO_QUERY_THROW );
@@ -214,7 +214,7 @@ ProviderCache::createProvider( ProviderDetails& details ) throw ( RuntimeExcepti
     }
     catch ( RuntimeException& e )
     {
-        ::rtl::OUString temp = ::rtl::OUString::createFromAscii("ProviderCache::createProvider() Error creating provider from factory!!!");
+        ::rtl::OUString temp(RTL_CONSTASCII_USTRINGPARAM("ProviderCache::createProvider() Error creating provider from factory!!!"));
         throw RuntimeException( temp.concat( e.Message ), Reference< XInterface >() );
     }
 

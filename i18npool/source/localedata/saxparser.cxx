@@ -354,7 +354,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         // Create registration service
         Reference < XInterface > x = xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" ) );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) );
         xReg = Reference<  XImplementationRegistration > ( x , UNO_QUERY );
     }
     catch( Exception & ) {
@@ -366,10 +366,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     try
     {
         // Load dll for the tested component
-        OUString aDllName =
-            OUString::createFromAscii( "sax.uno" SAL_DLLEXTENSION );
+        OUString aDllName(RTL_CONSTASCII_USTRINGPARAM( "sax.uno" SAL_DLLEXTENSION ));
         xReg->registerImplementation(
-            OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
             aDllName,
             Reference< XSimpleRegistry > ()  );
     }
@@ -386,7 +385,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     // read xml from a file and count elements
     //--------------------------------
     Reference< XInterface > x = xSMgr->createInstance(
-        OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
     int nError = 0;
     if( x.is() )
     {

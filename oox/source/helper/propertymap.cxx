@@ -267,6 +267,7 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
         sal_uInt32 uintValue = 0;
         sal_Int16 int16Value = 0;
         sal_uInt16 uint16Value = 0;
+        float floatValue = 0;
         bool boolValue = false;
     LineSpacing spacing;
 //         RectanglePoint pointValue;
@@ -284,6 +285,8 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
             fprintf (stderr,"%d            (hex: %x)\n", int16Value, int16Value);
         else if( value >>= uint16Value )
             fprintf (stderr,"%d            (hex: %x)\n", uint16Value, uint16Value);
+        else if( value >>= floatValue )
+            fprintf (stderr,"%f\n", floatValue);
         else if( value >>= boolValue )
             fprintf (stderr,"%d            (bool)\n", boolValue);
     else if( value >>= aWritingMode )

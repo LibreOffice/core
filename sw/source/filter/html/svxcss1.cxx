@@ -856,8 +856,6 @@ BOOL SvxCSS1Parser::ParseStyleSheet( const String& rIn )
 
     BOOL bSuccess = CSS1Parser::ParseStyleSheet( rIn );
 
-    // die bisher geparsten Items auf die Styles verteilt werden
-//  pSheetPropInfo->CreateBoxItem( *pSheetItemSet, GetDfltBorderDist() );
     for( USHORT i=0; i<aSelectors.Count(); i++ )
     {
         StyleParsed( aSelectors[i], *pSheetItemSet, *pSheetPropInfo );
@@ -884,7 +882,6 @@ BOOL SvxCSS1Parser::ParseStyleOption( const String& rIn,
 
     BOOL bSuccess = CSS1Parser::ParseStyleOption( rIn );
     rItemSet.ClearItem( aItemIds.nDirection );
-//  pPropInfo->CreateBoxItem( *pItemSet, GetDfltBorderDist() );
 
     pItemSet = 0;
     pPropInfo = 0;

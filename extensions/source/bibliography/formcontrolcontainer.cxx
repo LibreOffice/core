@@ -54,8 +54,6 @@ namespace bib
     {
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 18:54:57 -----------------------------------------------
     FormControlContainer::~FormControlContainer( )
     {
         DBG_ASSERT( !isFormConnected(), "FormControlContainer::~FormControlContainer: you should disconnect in your derived class!" );
@@ -63,8 +61,6 @@ namespace bib
             disconnectForm();
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 17:03:14 -----------------------------------------------
     void FormControlContainer::disconnectForm()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -77,8 +73,6 @@ namespace bib
         }
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:56:01 -----------------------------------------------
     void FormControlContainer::connectForm( const Reference< XLoadable >& _rxForm )
     {
         DBG_ASSERT( !isFormConnected(), "FormControlContainer::connectForm: already connected!" );
@@ -96,8 +90,6 @@ namespace bib
         m_xForm = _rxForm;
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 18:50:14 -----------------------------------------------
     struct ControlModeSwitch : public ::std::unary_function< Reference< XControl >, void >
     {
         sal_Bool bDesign;
@@ -110,8 +102,6 @@ namespace bib
         }
     };
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 18:49:57 -----------------------------------------------
     void FormControlContainer::implSetDesignMode( sal_Bool _bDesign )
     {
         try
@@ -134,42 +124,30 @@ namespace bib
         }
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 18:16:54 -----------------------------------------------
     void FormControlContainer::ensureDesignMode()
     {
         implSetDesignMode( !m_xForm.is() || !m_xForm->isLoaded() );
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:45:33 -----------------------------------------------
     void FormControlContainer::_loaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_False );
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:45:35 -----------------------------------------------
     void FormControlContainer::_unloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_True );
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:45:36 -----------------------------------------------
     void FormControlContainer::_unloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:45:36 -----------------------------------------------
     void FormControlContainer::_reloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_True );
     }
 
-    //---------------------------------------------------------------------
-    //--- 18.10.01 16:45:37 -----------------------------------------------
     void FormControlContainer::_reloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_False );

@@ -81,7 +81,7 @@ namespace abp
     //---------------------------------------------------------------------
     static Reference< XNameAccess > lcl_getDataSourceContext( const Reference< XMultiServiceFactory >& _rxORB ) SAL_THROW (( Exception ))
     {
-        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.DatabaseContext" ) ), UNO_QUERY );
+        Reference< XNameAccess > xContext( _rxORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.DatabaseContext" )) ), UNO_QUERY );
         DBG_ASSERT(xContext.is(), "lcl_getDataSourceContext: could not access the data source context!");
         return xContext;
     }
@@ -136,7 +136,7 @@ namespace abp
             if (xNewDataSource.is())
             {
                 xNewDataSource->setPropertyValue(
-                    ::rtl::OUString::createFromAscii( "URL" ),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" )),
                     makeAny( ::rtl::OUString::createFromAscii( _pInitialAsciiURL ) )
                 );
             }
@@ -524,7 +524,7 @@ namespace abp
 
         // ................................................................
         // create the interaction handler (needed for authentication and error handling)
-        static ::rtl::OUString s_sInteractionHandlerServiceName = ::rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler");
+        static ::rtl::OUString s_sInteractionHandlerServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler"));
         Reference< XInteractionHandler > xInteractions;
         try
         {

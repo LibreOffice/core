@@ -2674,14 +2674,14 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         sal_Int32 nNum = 0;
         String genModuleName;
         if ( sModuleName.Len() )
-            sModuleName = sModuleName;
+            genModuleName = sModuleName;
         else
         {
              genModuleName = String::CreateFromAscii( "Sheet1" );
              nNum = 1;
         }
-        while( xLib->hasByName( genModuleName  ) )
-            genModuleName = rtl::OUString::createFromAscii( "Sheet" ) + rtl::OUString::valueOf( ++nNum );
+        while( xLib->hasByName( genModuleName ) )
+            genModuleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Sheet")) + rtl::OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
         rtl::OUString sTmpSource = sSource;
@@ -2691,8 +2691,7 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
-            String sCodeName( genModuleName );
-            rDoc.SetCodeName( nTab, sCodeName );
+            rDoc.SetCodeName( nTab, genModuleName );
             script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
             xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
             xLib->insertByName( genModuleName, aSourceAny );
@@ -3746,13 +3745,6 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bSize)
         {
-/*          SCCOL nCols[2];
-            nCols[0] = nStartCol;
-            nCols[1] = nEndCol;
-            SCROW nRows[2];
-            nRows[0] = nStartRow;
-            nRows[1] = nEndRow;
-*/
             SCCOLROW nCols[2] = { nStartCol, nEndCol };
             SCCOLROW nRows[2] = { nStartRow, nEndRow };
 
@@ -4506,12 +4498,12 @@ bool ScDocFunc::UnmergeCells( const ScCellMergeOption& rOption, BOOL bRecord, BO
 
 //------------------------------------------------------------------------
 
-BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
+bool ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges )
 {
-    return SetNewRangeNames( new ScRangeName( rNewRanges ), bApi );
+    return SetNewRangeNames( new ScRangeName(rNewRanges) );
 }
 
-BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL /* bApi */ )     // takes ownership of pNewRanges
+bool ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, bool bModifyDoc )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -4539,10 +4531,13 @@ BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL /* bApi */ )    
     if ( bCompile )
         pDoc->CompileNameFormula( FALSE );  // CompileFormulaString
 
-    aModificator.SetDocumentModified();
-    SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );
+    if (bModifyDoc)
+    {
+        aModificator.SetDocumentModified();
+        SFX_APP()->Broadcast( SfxSimpleHint(SC_HINT_AREAS_CHANGED) );
+    }
 
-    return TRUE;
+    return true;
 }
 
 //------------------------------------------------------------------------
@@ -4691,7 +4686,7 @@ BOOL ScDocFunc::CreateNames( const ScRange& rRange, USHORT nFlags, BOOL bApi )
         if ( bBottom && bRight )
             CreateOneName( aNewRanges, nEndCol,nEndRow,nTab, nContX1,nContY1,nContX2,nContY2, bCancel, bApi );
 
-        bDone = ModifyRangeNames( aNewRanges, bApi );
+        bDone = ModifyRangeNames( aNewRanges );
 
         aModificator.SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREAS_CHANGED ) );

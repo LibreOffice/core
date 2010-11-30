@@ -46,11 +46,9 @@ class IDocumentListsAccess
         virtual SwList* createListForListStyle( const String sListStyleName ) = 0;
         virtual SwList* getListForListStyle( const String sListStyleName ) const = 0;
         virtual void deleteListForListStyle( const String sListStyleName ) = 0;
-        // --> OD 2008-07-08 #i91400#
+        // #i91400#
         virtual void trackChangeOfListStyleName( const String sListStyleName,
                                                  const String sNewListStyleName ) = 0;
-        // <--
-
     protected:
         virtual ~IDocumentListsAccess() {};
 };

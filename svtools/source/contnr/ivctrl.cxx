@@ -46,20 +46,6 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image
 {
     aText = rText;
     aImage = rImage;
-    aImageHC = rImage;
-    pUserData = NULL;
-
-    nFlags = _nFlags;
-    eTextMode = IcnShowTextShort;
-    pblink = 0;
-    pflink = 0;
-}
-
-SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, USHORT _nFlags )
-{
-    aText = rText;
-    aImage = rImage;
-    aImageHC = rImageHC;
     pUserData = NULL;
 
     nFlags = _nFlags;
@@ -93,15 +79,6 @@ void SvxIconChoiceCtrlEntry::LockPos( BOOL bLock )
     else
         nFlags &= ~ICNVIEW_FLAG_POS_LOCKED;
 }
-
-/*sal_Unicode SvxIconChoiceCtrlEntry::GetMnemonicChar() const
-{
-    sal_Unicode cChar = 0;
-    xub_StrLen nPos = aText.Search( '~' );
-    if ( nPos != STRING_NOTFOUND && nPos < ( aText.Len() ) - 1 )
-        cChar = aText.GetChar( nPos + 1 );
-    return cChar;
-}*/
 
 String SvxIconChoiceCtrlEntry::GetDisplayText() const
 {
@@ -177,43 +154,41 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
-SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC, ULONG nPos, const Point* pPos, USHORT nFlags  )
-{
-    SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, rImageHC, nFlags);
-
-    _pImp->InsertEntry( pEntry, nPos, pPos );
-
-    return pEntry;
-}
-
 BOOL SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString&, BOOL )
 {
     return TRUE;
 }
+
 BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* )
 {
     return TRUE;
 }
+
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
-    rDev.DrawImage( rPos, GetSettings().GetStyleSettings().GetHighContrastMode() ? pEntry->GetImageHC() : pEntry->GetImage() );
+    rDev.DrawImage( rPos, pEntry->GetImage() );
 }
+
 String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL )
 {
     return pEntry->GetText();
 }
+
 BOOL SvtIconChoiceCtrl::HasBackground() const
 {
     return FALSE;
 }
+
 BOOL SvtIconChoiceCtrl::HasFont() const
 {
     return FALSE;
 }
+
 BOOL SvtIconChoiceCtrl::HasFontTextColor() const
 {
     return TRUE;
 }
+
 BOOL SvtIconChoiceCtrl::HasFontFillColor() const
 {
     return TRUE;

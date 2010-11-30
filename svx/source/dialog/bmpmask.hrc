@@ -57,6 +57,3 @@
 #define FT_2 2
 #define FT_3 3
 #define IMG_PIPETTE     11
-#define IMG_PIPETTE_H   12
-
-

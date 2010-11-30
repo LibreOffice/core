@@ -11,10 +11,6 @@
 #pragma warning(disable : 4350)
 #endif
 
-//------------------------------
-//
-//------------------------------
-
 WindowsRegistry::WindowsRegistry()
 {
     OSVERSIONINFOA osverinfo;
@@ -25,45 +21,25 @@ WindowsRegistry::WindowsRegistry()
     m_IsWinNT = (osverinfo.dwPlatformId == VER_PLATFORM_WIN32_NT);
 }
 
-//------------------------------
-//
-//------------------------------
-
 RegistryKey WindowsRegistry::GetClassesRootKey(bool Writeable) const
 {
     return GetRegistryKey(HKEY_CLASSES_ROOT, Writeable);
 }
-
-//------------------------------
-//
-//------------------------------
 
 RegistryKey WindowsRegistry::GetCurrentUserKey(bool Writeable) const
 {
     return GetRegistryKey(HKEY_CURRENT_USER, Writeable);
 }
 
-//------------------------------
-//
-//------------------------------
-
 RegistryKey WindowsRegistry::GetLocalMachineKey(bool Writeable) const
 {
     return GetRegistryKey(HKEY_LOCAL_MACHINE, Writeable);
 }
 
-//------------------------------
-//
-//------------------------------
-
 RegistryKey WindowsRegistry::GetUserKey(bool Writeable) const
 {
     return GetRegistryKey(HKEY_USERS, Writeable);
 }
-
-//------------------------------
-//
-//------------------------------
 
 RegistryKey WindowsRegistry::GetRegistryKey(HKEY RootKey, bool Writeable) const
 {

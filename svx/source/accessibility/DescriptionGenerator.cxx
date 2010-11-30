@@ -123,19 +123,19 @@ void DescriptionGenerator::Initialize (::rtl::OUString sPrefix)
         {
             if (mxSet.is())
             {
-                uno::Any aValue = mxSet->getPropertyValue (OUString::createFromAscii ("Style"));
+                uno::Any aValue = mxSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("Style")) );
                 uno::Reference<container::XNamed> xStyle (aValue, uno::UNO_QUERY);
                 if (xStyle.is())
                     msDescription.append (xStyle->getName());
             }
             else
                 msDescription.append (
-                    OUString::createFromAscii("<no style>"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("<no style>")) );
         }
         catch (::com::sun::star::beans::UnknownPropertyException)
         {
             msDescription.append (
-                OUString::createFromAscii("<unknown>"));
+                OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
         }
     }
 }
@@ -222,14 +222,14 @@ void DescriptionGenerator::AppendString (const ::rtl::OUString& sString)
 
 void DescriptionGenerator::AddLineProperties (void)
 {
-    AddProperty (OUString::createFromAscii ("LineColor"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")),
         DescriptionGenerator::COLOR,
         SIP_XA_LINECOLOR);
-    AddProperty (OUString::createFromAscii ("LineDashName"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("LineDashName")),
         DescriptionGenerator::STRING,
         SIP_XA_LINEDASH,
         XATTR_LINEDASH);
-    AddProperty (OUString::createFromAscii ("LineWidth"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("LineWidth")),
         DescriptionGenerator::INTEGER,
         SIP_XA_LINEWIDTH);
 }
@@ -242,7 +242,7 @@ void DescriptionGenerator::AddLineProperties (void)
 */
 void DescriptionGenerator::AddFillProperties (void)
 {
-    AddProperty (OUString::createFromAscii ("FillStyle"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillStyle")),
         DescriptionGenerator::FILL_STYLE,
         SIP_XA_FILLSTYLE);
 }
@@ -252,7 +252,7 @@ void DescriptionGenerator::AddFillProperties (void)
 
 void DescriptionGenerator::Add3DProperties (void)
 {
-    AddProperty (OUString::createFromAscii ("D3DMaterialColor"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("D3DMaterialColor")),
         DescriptionGenerator::COLOR,
         RID_SVXSTR_A11Y_3D_MATERIAL_COLOR);
     AddLineProperties ();
@@ -264,7 +264,7 @@ void DescriptionGenerator::Add3DProperties (void)
 
 void DescriptionGenerator::AddTextProperties (void)
 {
-    AddProperty (OUString::createFromAscii ("CharColor"),
+    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("CharColor")),
         DescriptionGenerator::COLOR);
     AddFillProperties ();
 }
@@ -296,7 +296,7 @@ void DescriptionGenerator::AddColor (const OUString& sPropertyName,
     catch (::com::sun::star::beans::UnknownPropertyException)
     {
         msDescription.append (
-            OUString::createFromAscii("<unknown>"));
+            OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
     }
 }
 
@@ -332,7 +332,7 @@ void DescriptionGenerator::AddInteger (const OUString& sPropertyName,
     catch (::com::sun::star::beans::UnknownPropertyException)
     {
         msDescription.append (
-            OUString::createFromAscii("<unknown>"));
+            OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
     }
 }
 
@@ -368,7 +368,7 @@ void DescriptionGenerator::AddString (const OUString& sPropertyName,
     catch (::com::sun::star::beans::UnknownPropertyException)
     {
         msDescription.append (
-            OUString::createFromAscii("<unknown>"));
+            OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
     }
 }
 
@@ -422,27 +422,27 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
                 case drawing::FillStyle_NONE:
                     break;
                 case drawing::FillStyle_SOLID:
-                    AddProperty (OUString::createFromAscii ("FillColor"),
+                    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")),
                         COLOR,
                         SIP_XA_FILLCOLOR);
                     break;
                 case drawing::FillStyle_GRADIENT:
-                    AddProperty (OUString::createFromAscii ("FillGradientName"),
+                    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillGradientName")),
                         STRING,
                         SIP_XA_FILLGRADIENT,
                         XATTR_FILLGRADIENT);
                     break;
                 case drawing::FillStyle_HATCH:
-                    AddProperty (OUString::createFromAscii ("FillColor"),
+                    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")),
                         COLOR,
                         SIP_XA_FILLCOLOR);
-                    AddProperty (OUString::createFromAscii ("FillHatchName"),
+                    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillHatchName")),
                         STRING,
                         SIP_XA_FILLHATCH,
                         XATTR_FILLHATCH);
                     break;
                 case drawing::FillStyle_BITMAP:
-                    AddProperty (OUString::createFromAscii ("FillBitmapName"),
+                    AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("FillBitmapName")),
                         STRING,
                         SIP_XA_FILLBITMAP,
                         XATTR_FILLBITMAP);
@@ -455,7 +455,7 @@ void DescriptionGenerator::AddFillStyle (const OUString& sPropertyName,
     catch (::com::sun::star::beans::UnknownPropertyException)
     {
         msDescription.append (
-            OUString::createFromAscii("<unknown>"));
+            OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown>")) );
     }
 }
 

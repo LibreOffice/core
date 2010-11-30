@@ -37,9 +37,6 @@
 
 namespace dbaui
 {
-//  class OTableRow;
-//  friend SvStream& operator<<( SvStream& rStr, OTableRow& _rRow );
-
     class OFieldDescription;
     class OTypeInfo;
     class OTableRow

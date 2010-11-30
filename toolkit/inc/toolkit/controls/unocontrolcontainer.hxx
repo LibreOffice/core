@@ -120,6 +120,15 @@ protected:
     virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
     virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 
+    /** ensures that the given control has a peer, if necessary and possible
+        @param _rxControl
+            an ->XControl which has just been inserted into the container. Must not be <NULL/>.
+        @precond
+            our mutex is locked
+    */
+    virtual void    impl_createControlPeerIfNecessary(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl
+    );
 private:
     /** adds the control to the container, does necessary notifications, and the like
         @param _rxControl
@@ -150,15 +159,6 @@ private:
         const ::rtl::OUString* _pNameAccessor
     );
 
-    /** ensures that the given control has a peer, if necessary and possible
-        @param _rxControl
-            an ->XControl which has just been inserted into the container. Must not be <NULL/>.
-        @precond
-            our mutex is locked
-    */
-    void    impl_createControlPeerIfNecessary(
-        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl
-    );
 };
 
 

@@ -33,7 +33,7 @@
 #include <resourcemodel/TagLogger.hxx>
 #include "PropertyMapHelper.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 namespace writerfilter
 {
 namespace dmapper

@@ -124,21 +124,21 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     }
     //  open read-only as long as updating isn't implemented
     Sequence<PropertyValue> aArgs(2);
-    aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
+    aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
     aArgs[0].Value <<= (sal_Bool) sal_True;
-    aArgs[1].Name = ::rtl::OUString::createFromAscii("ReadOnly");
+    aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
     aArgs[1].Value <<= (sal_Bool) sal_True;
 
     if ( m_sPassword.getLength() )
     {
         const sal_Int32 nPos = aArgs.getLength();
         aArgs.realloc(nPos+1);
-        aArgs[nPos].Name = ::rtl::OUString::createFromAscii("Password");
+        aArgs[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Password"));
         aArgs[nPos].Value <<= m_sPassword;
     }
 
     Reference< XComponentLoader > xDesktop( getDriver()->getFactory()->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))), UNO_QUERY );
     if (!xDesktop.is())
     {
         OSL_ASSERT("no desktop");
@@ -149,7 +149,7 @@ Reference< XSpreadsheetDocument> OCalcConnection::acquireDoc()
     try
     {
         xComponent = xDesktop->loadComponentFromURL(
-            m_aFileName, ::rtl::OUString::createFromAscii("_blank"), 0, aArgs );
+            m_aFileName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")), 0, aArgs );
     }
     catch( const Exception& )
     {

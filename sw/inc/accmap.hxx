@@ -67,12 +67,8 @@ class Window;
 #define ACC_STATE_OPAQUE 0x02
 
 // pseudo states for events
-// --> OD 2009-01-07 #i88069# - pseudo state for event TEXT_ATTRIBUTE_CHANGED
 #define ACC_STATE_TEXT_ATTRIBUTE_CHANGED 0x0200
-// <--
-// --> OD 2005-12-12 #i27301# - pseudo state for event TEXT_SELECTION_CHANGED
 #define ACC_STATE_TEXT_SELECTION_CHANGED 0x0100
-// <--
 #define ACC_STATE_CARET 0x80
 #define ACC_STATE_RELATION_FROM 0x40
 #define ACC_STATE_RELATION_TO 0x20
@@ -81,9 +77,7 @@ class Window;
 
 #define ACC_STATE_MASK 0x1F
 
-// --> OD 2005-12-12 #i27301# - introduce type definition of states
 typedef sal_uInt16 tAccessibleStates;
-// <--
 
 class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
                         public accessibility::IAccessibleParent
@@ -95,10 +89,9 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     SwShapeList_Impl *mpShapes;
     SwAccessibleEventList_Impl *mpEvents;
     SwAccessibleEventMap_Impl *mpEventMap;
-    // --> OD 2005-12-13 #i27301# - data structure to keep information about
+    // #i27301 data structure to keep information about
     // accessible paragraph, which have a selection.
     SwAccessibleSelectedParas_Impl* mpSelectedParas;
-    // <--
     ViewShell *mpVSh;
     /// for page preview: store preview data, VisArea, and mapping of
     /// preview-to-display coordinates
@@ -133,7 +126,6 @@ class SwAccessibleMap : public accessibility::IAccessibleViewForwarder,
     /** method to build up a new data structure of the accessible pararaphs,
         which have a selection
 
-        OD 2005-12-13 #i27301#
         Important note: method has to used inside a mutual exclusive section
 
         @author OD
@@ -148,8 +140,6 @@ public:
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentView();
 
-    // OD 15.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible> GetDocumentPreview(
                             const std::vector<PrevwPage*>& _rPrevwPages,
@@ -184,10 +174,6 @@ public:
 
     /** get size of a dedicated preview page
 
-        OD 15.01.2003 #103492#
-        complete re-factoring of previous method due to new page/print preview
-        functionality.
-
         @author OD
 
         @param _nPrevwPageNum
@@ -213,9 +199,7 @@ public:
 
     void InvalidateContent( const SwFrm *pFrm );
 
-    // --> OD 2009-01-06 #i88069#
     void InvalidateAttr( const SwTxtFrm& rTxtFrm );
-    // <--
 
     void InvalidateCursorPosition( const SwFrm *pFrm );
     void InvalidateFocus();
@@ -225,15 +209,12 @@ public:
 
     // Invalidate state of whole tree. If an action is open, this call
     // is processed when the last action ends.
-    // --> OD 2005-12-12 #i27301# - use new type definition for <_nStates>
     void InvalidateStates( tAccessibleStates _nStates,
                            const SwFrm* _pFrm = 0 );
 
     void InvalidateRelationSet( const SwFrm* pMaster, const SwFrm* pFollow );
 
     /** invalidation CONTENT_FLOWS_FROM/_TO relation of a paragraph
-
-        OD 2005-12-01 #i27138#
 
         @author OD
 
@@ -250,15 +231,11 @@ public:
 
     /** invalidation of text selection of a paragraph
 
-        OD 2005-12-12 #i27301#
-
         @author OD
     */
     void InvalidateParaTextSelection( const SwTxtFrm& _rTxtFrm );
 
     /** invalidation of text selection of all paragraphs
-
-        OD 2005-12-13 #i27301#
 
         @author OD
     */
@@ -268,8 +245,6 @@ public:
                              Window& rChild ) const;
 
     // update preview data (and fire events if necessary)
-    // OD 15.01.2003 #103492# - complete re-factoring of method due to new
-    // page/print preview functionality.
     void UpdatePreview( const std::vector<PrevwPage*>& _rPrevwPages,
                         const Fraction&  _rScale,
                         const SwPageFrm* _pSelectedPageFrm,
@@ -306,7 +281,6 @@ public:
 private:
     /** get mapping mode for LogicToPixel and PixelToLogic conversions
 
-        OD 15.01.2003 #103492#
         Replacement method <PreviewAdjust(..)> by new method <GetMapMode>.
         Method returns mapping mode of current output device and adjusts it,
         if the shell is in page/print preview.

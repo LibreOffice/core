@@ -76,8 +76,8 @@ namespace
     uno::Sequence<rtl::OUString> SAL_CALL FilePicker_getSupportedServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(2);
-        aRet[0] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.FilePicker");
-        aRet[1] = rtl::OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFilePicker");
+        aRet[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.FilePicker"));
+        aRet[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.dialogs.SystemFilePicker"));
         return aRet;
     }
 }
@@ -123,7 +123,7 @@ void SAL_CALL CFilePicker::addFilePickerListener(const uno::Reference<XFilePicke
 {
     if ( rBHelper.bDisposed )
         throw lang::DisposedException(
-            rtl::OUString::createFromAscii( "object is already disposed" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "object is already disposed" )),
             static_cast< XFilePicker2* >( this ) );
 
     if ( !rBHelper.bInDispose && !rBHelper.bDisposed )
@@ -139,7 +139,7 @@ void SAL_CALL CFilePicker::removeFilePickerListener(const uno::Reference<XFilePi
 {
     if ( rBHelper.bDisposed )
         throw lang::DisposedException(
-            rtl::OUString::createFromAscii( "object is already disposed" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "object is already disposed" )),
             static_cast< XFilePicker2* >( this ) );
 
     rBHelper.aLC.removeInterface( getCppuType( &xListener ), xListener );
@@ -462,7 +462,7 @@ sal_Int16 SAL_CALL CFilePicker::execute() throw(uno::RuntimeException)
         OSL_ENSURE(sal_False, "Could not start event notifier thread!");
 
         throw uno::RuntimeException(
-            rtl::OUString::createFromAscii("Error executing dialog"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Error executing dialog")),
             static_cast<XFilePicker2*>(this));
     }
 
@@ -630,7 +630,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     uno::Any aAny;
     if ( 0 == aArguments.getLength( ) )
         throw lang::IllegalArgumentException(
-            rtl::OUString::createFromAscii( "no arguments" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "no arguments" )),
             static_cast<XFilePicker2*>(this), 1);
 
     aAny = aArguments[0];
@@ -638,7 +638,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
     if ( (aAny.getValueType() != ::getCppuType((sal_Int16*)0)) &&
          (aAny.getValueType() != ::getCppuType((sal_Int8*)0)) )
          throw lang::IllegalArgumentException(
-            rtl::OUString::createFromAscii("invalid argument type"),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("invalid argument type")),
             static_cast<XFilePicker2*>(this), 1);
 
     sal_Int16 templateId = -1;
@@ -728,7 +728,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 
     default:
         throw lang::IllegalArgumentException(
-            rtl::OUString::createFromAscii( "Unknown template" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Unknown template" )),
             static_cast< XFilePicker2* >( this ),
             1 );
     }
@@ -768,7 +768,7 @@ void SAL_CALL CFilePicker::cancel()
 rtl::OUString SAL_CALL CFilePicker::getImplementationName()
     throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii(FILE_PICKER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FILE_PICKER_IMPL_NAME));
 }
 
 // -------------------------------------------------

@@ -178,7 +178,7 @@ void wwSection::SetDirection()
     switch (maSep.wTextFlow)
     {
         default:
-            ASSERT(!this, "Unknown layout type");
+            OSL_ENSURE(!this, "Unknown layout type");
         case 0:
             meDir=FRMDIR_HORI_LEFT_TOP;
             break;
@@ -253,7 +253,7 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
             eType = GRID_NONE;
             break;
         default:
-            ASSERT(!this, "Unknown grid type");
+            OSL_ENSURE(!this, "Unknown grid type");
         case 3:
             eType = GRID_LINES_CHARS;
             aGrid.SetSnapToChars(sal_True);
@@ -313,10 +313,6 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
     aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
 
-    // ruby height is not supported in ww8
-    //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
-    //if (nRubyHeight < 0)
-    //    nRubyHeight = 0;
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
@@ -690,7 +686,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
 
     rSection.mpSection =
         mrReader.rDoc.InsertSwSection( rMyPaM, aSection, 0, & aSet );
-    ASSERT(rSection.mpSection, "section not inserted!");
+    OSL_ENSURE(rSection.mpSection, "section not inserted!");
     if (!rSection.mpSection)
         return 0;
 
@@ -702,7 +698,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
             break;
     }
 
-    ASSERT(pPage, "no page outside this section!");
+    OSL_ENSURE(pPage, "no page outside this section!");
 
     if (!pPage)
         pPage = &mrReader.rDoc._GetPageDesc(0);
@@ -711,7 +707,7 @@ SwSectionFmt *wwSectionManager::InsertSection(
         return 0;
 
     SwSectionFmt *pFmt = rSection.mpSection->GetFmt();
-    ASSERT(pFmt, "impossible");
+    OSL_ENSURE(pFmt, "impossible");
     if (!pFmt)
         return 0;
 
@@ -820,7 +816,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
         return;
 
     WW8PLCFx_SEPX* pSep = mrReader.pPlcxMan->GetSepPLCF();
-    ASSERT(pSep, "impossible!");
+    OSL_ENSURE(pSep, "impossible!");
     if (!pSep)
         return;
 
@@ -937,7 +933,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                 //sprmSDxaColWidth
                 const BYTE* pSW = pSep->HasSprm( (eVer <= ww::eWW7 ? 136 : 0xF203), BYTE( i ) );
 
-                ASSERT( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
+                OSL_ENSURE( pSW, "+Sprm 136 (bzw. 0xF203) (ColWidth) fehlt" );
                 sal_uInt16 nWidth = pSW ? SVBT16ToShort(pSW + 1) : 1440;
 
                 aNewSection.maSep.rgdxaColumnWidthSpacing[++nIdx] = nWidth;
@@ -947,7 +943,7 @@ void wwSectionManager::CreateSep(const long nTxtPos, bool /*bMustHaveBreak*/)
                     //sprmSDxaColSpacing
                     const BYTE* pSD = pSep->HasSprm( (eVer <= ww::eWW7 ? 137 : 0xF204), BYTE( i ) );
 
-                    ASSERT( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
+                    OSL_ENSURE( pSD, "+Sprm 137 (bzw. 0xF204) (Colspacing) fehlt" );
                     if( pSD )
                     {
                         nWidth = SVBT16ToShort(pSD + 1);
@@ -1234,12 +1230,6 @@ static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const BYTE* pS)
 BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
-// Ausgegend von diesen defines:
-//      #define WW8_TOP 0
-//      #define WW8_LEFT 1
-//      #define WW8_BOT 2
-//      #define WW8_RIGHT 3
-//      #define WW8_BETW 4
 
 //returns a BYTE filled with a bit for each position that had a sprm
 //setting that border
@@ -1281,7 +1271,7 @@ BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
                 nBorder |= (_SetWW8_BRC( bVer67, brc[ i ], pSty->HasParaSprm( *pIds )))<<i;
         }
         else {
-            ASSERT( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
+            OSL_ENSURE( pSty || pPap, "WW8PLCFx_Cp_FKP and WW8RStyle "
                                "and WW8PLCFx_SEPX is 0" );
         }
     }
@@ -1908,7 +1898,7 @@ bool WW8FlyPara::IsEmpty() const
      #107103# if wrong, so given that the empty is 2, if we are 0 then set
      empty to 0 to make 0 equiv to 2 for empty checking
     */
-    ASSERT(aEmpty.nSp37 == 2, "this is not what we expect for nSp37");
+    OSL_ENSURE(aEmpty.nSp37 == 2, "this is not what we expect for nSp37");
     if (this->nSp37 == 0)
         aEmpty.nSp37 = 0;
     if (aEmpty == *this)
@@ -2346,7 +2336,7 @@ void SwWW8ImplReader::MoveInsideFly(const SwFrmFmt *pFlyFmt)
 
     // Setze Pam in den FlyFrame
     const SwFmtCntnt& rCntnt = pFlyFmt->GetCntnt();
-    ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
+    OSL_ENSURE( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
     pPaM->GetPoint()->nNode = rCntnt.GetCntntIdx()->GetIndex() + 1;
     pPaM->GetPoint()->nContent.Assign( pPaM->GetCntntNode(), 0 );
 
@@ -2421,7 +2411,7 @@ WW8FlyPara *SwWW8ImplReader::ConstructApo(const ApoTestResults &rApo,
     const WW8_TablePos *pTabPos)
 {
     WW8FlyPara *pRet = 0;
-    ASSERT(rApo.HasFrame() || pTabPos,
+    OSL_ENSURE(rApo.HasFrame() || pTabPos,
         "If no frame found, *MUST* be in a table");
 
     pRet = new WW8FlyPara(bVer67, rApo.mpStyleApo);
@@ -2499,7 +2489,7 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
 
         pSFlyPara->pFlyFmt = rDoc.MakeFlySection( pSFlyPara->eAnchor,
             pPaM->GetPoint(), &aFlySet );
-        ASSERT(pSFlyPara->pFlyFmt->GetAnchor().GetAnchorId() ==
+        OSL_ENSURE(pSFlyPara->pFlyFmt->GetAnchor().GetAnchorId() ==
             pSFlyPara->eAnchor, "Not the anchor type requested!");
 
         if (pSFlyPara->pFlyFmt)
@@ -2569,7 +2559,7 @@ bool SwWW8ImplReader::JoinNode(SwPaM &rPam, bool bStealAttr)
 
 void SwWW8ImplReader::StopApo()
 {
-    ASSERT(pWFlyPara, "no pWFlyPara to close");
+    OSL_ENSURE(pWFlyPara, "no pWFlyPara to close");
     if (!pWFlyPara)
         return;
     if (pWFlyPara->bGrafApo)
@@ -2583,8 +2573,8 @@ void SwWW8ImplReader::StopApo()
     {
         if (!pSFlyPara->pMainTextPos || !pWFlyPara)
         {
-            ASSERT( pSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
-            ASSERT( pWFlyPara, "StopApo: pWFlyPara ist 0" );
+            OSL_ENSURE( pSFlyPara->pMainTextPos, "StopApo: pMainTextPos ist 0" );
+            OSL_ENSURE( pWFlyPara, "StopApo: pWFlyPara ist 0" );
             return;
         }
 
@@ -2695,7 +2685,7 @@ bool SwWW8ImplReader::TestSameApo(const ApoTestResults &rApo,
 {
     if( !pWFlyPara )
     {
-        ASSERT( pWFlyPara, " Wo ist mein pWFlyPara ? " );
+        OSL_ENSURE( pWFlyPara, " Wo ist mein pWFlyPara ? " );
         return true;
     }
 
@@ -2726,7 +2716,7 @@ void SwWW8ImplReader::NewAttr( const SfxPoolItem& rAttr,
     {
         if (pAktColl)
         {
-            ASSERT(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
+            OSL_ENSURE(rAttr.Which() != RES_FLTR_REDLINE, "redline in style!");
             pAktColl->SetFmtAttr(rAttr);
         }
         else if (pAktItemSet)
@@ -3034,7 +3024,7 @@ void SwWW8ImplReader::Read_BoldBiDiUsw(USHORT nId, const BYTE* pData,
     else
         nI = static_cast< BYTE >(nId - 0x085C);
 
-    ASSERT(nI <= 1, "not happening");
+    OSL_ENSURE(nI <= 1, "not happening");
     if (nI > 1)
         return;
 
@@ -3106,7 +3096,7 @@ void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
             }
             break;
         default:
-            ASSERT(!this, "Unhandled unknown bidi toggle attribute");
+            OSL_ENSURE(!this, "Unhandled unknown bidi toggle attribute");
             break;
 
     }
@@ -3157,7 +3147,7 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
                                                 : STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT ) );
             break;
         default:
-            ASSERT(!this, "Unhandled unknown toggle attribute");
+            OSL_ENSURE(!this, "Unhandled unknown toggle attribute");
             break;
     }
 }
@@ -3304,7 +3294,7 @@ void SwWW8ImplReader::Read_SubSuperProp( USHORT, const BYTE* pData, short nLen )
     INT32 nPos2 = nPos * ( 10 * 100 );      // HalfPoints in 100 * tw
     const SvxFontHeightItem* pF
         = (const SvxFontHeightItem*)GetFmtAttr(RES_CHRATR_FONTSIZE);
-    ASSERT(pF, "Expected to have the fontheight available here");
+    OSL_ENSURE(pF, "Expected to have the fontheight available here");
 
     // #i59022: Check ensure nHeight != 0. Div by zero otherwise.
     INT32 nHeight = 240;
@@ -3669,14 +3659,14 @@ bool SwWW8ImplReader::SetNewFontAttr(USHORT nFCode, bool bSetEnums,
 
 void SwWW8ImplReader::ResetCharSetVars()
 {
-    ASSERT(!maFontSrcCharSets.empty(),"no charset to remove");
+    OSL_ENSURE(!maFontSrcCharSets.empty(),"no charset to remove");
     if (!maFontSrcCharSets.empty())
         maFontSrcCharSets.pop();
 }
 
 void SwWW8ImplReader::ResetCJKCharSetVars()
 {
-    ASSERT(!maFontSrcCJKCharSets.empty(),"no charset to remove");
+    OSL_ENSURE(!maFontSrcCJKCharSets.empty(),"no charset to remove");
     if (!maFontSrcCJKCharSets.empty())
         maFontSrcCJKCharSets.pop();
 }
@@ -3690,18 +3680,18 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-    //      case 0x4a51:    //font to bias towards all else being equal ?
             case 113:
-            case 0x4a5E:
+            case 0x4A51:    //"Other" font, override with BiDi if it exists
+            case 0x4A5E:    //BiDi Font
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case 93:
             case 111:
-            case 0x4a4f:
+            case 0x4A4f:
                 nId = RES_CHRATR_FONT;
                 break;
             case 112:
-            case 0x4a50:
+            case 0x4A50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
             default:
@@ -3913,7 +3903,7 @@ void SwWW8ImplReader::Read_TxtBackColor(USHORT, const BYTE* pData, short nLen )
     }
     else
     {
-        ASSERT(nLen == 10, "Len of para back colour not 10!");
+        OSL_ENSURE(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
         Color aColour(ExtractColour(pData, bVer67));
@@ -4273,7 +4263,7 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
 // im Style "Normal" eingefuegt, der
 // gar nicht da ist. Ueber das IniFlag WW8FL_NO_STY_DYA laesst sich dieses
 // Verhalten auch fuer andere WW-Versionen erzwingen
-//  ASSERT( !bStyNormal || bWWBugNormal, "+Dieses Doc deutet evtl. auf einen
+//  OSL_ENSURE( !bStyNormal || bWWBugNormal, "+Dieses Doc deutet evtl. auf einen
 // Fehler in der benutzten WW-Version hin. Wenn sich die Styles <Standard> bzw.
 // <Normal> zwischen WW und SW im Absatz- oder Zeilenabstand unterscheiden,
 // dann bitte dieses Doc SH zukommen lassen." );
@@ -4429,7 +4419,7 @@ void SwWW8ImplReader::Read_BoolItem( USHORT nId, const BYTE* pData, short nLen )
             nId = RES_PARATR_SCRIPTSPACE;
             break;
         default:
-            ASSERT( !this, "wrong Id" );
+            OSL_ENSURE( !this, "wrong Id" );
             return ;
     }
 
@@ -4575,14 +4565,14 @@ void SwWW8ImplReader::Read_TxtAnim(USHORT /*nId*/, const BYTE* pData, short nLen
 SwWW8Shade::SwWW8Shade(bool bVer67, const WW8_SHD& rSHD)
 {
     BYTE b = rSHD.GetFore();
-    ASSERT(b < 17, "ww8: colour out of range");
+    OSL_ENSURE(b < 17, "ww8: colour out of range");
     if (b >= 17)
         b = 0;
 
     ColorData nFore(SwWW8ImplReader::GetCol(b));
 
     b = rSHD.GetBack();
-    ASSERT(b < 17, "ww8: colour out of range");
+    OSL_ENSURE(b < 17, "ww8: colour out of range");
     if( b >=  17 )
         b = 0;
 
@@ -4749,7 +4739,7 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
     }
     else
     {
-        ASSERT(nLen == 10, "Len of para back colour not 10!");
+        OSL_ENSURE(nLen == 10, "Len of para back colour not 10!");
         if (nLen != 10)
             return;
         NewAttr(SvxBrushItem(Color(ExtractColour(pData, bVer67)), RES_BACKGROUND));
@@ -4758,13 +4748,14 @@ void SwWW8ImplReader::Read_ParaBackColor(USHORT, const BYTE* pData, short nLen)
 
 sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     bool
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bVer67
 #endif
     )
 {
-    ASSERT(bVer67 == false, "Impossible");
-    //ASSERT(SVBT32ToUInt32(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
+#if OSL_DEBUG_LEVEL > 1
+    OSL_ENSURE(bVer67 == false, "Impossible");
+#endif
     sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
@@ -4775,7 +4766,7 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
     //background through, it merely acts like white
     if (nBack == 0xFF000000)
         nBack = COL_AUTO;
-    ASSERT(nBack == COL_AUTO || !(nBack & 0xFF000000),
+    OSL_ENSURE(nBack == COL_AUTO || !(nBack & 0xFF000000),
         "ww8: don't know what to do with such a transparent bg colour, report");
     SwWW8Shade aShade(nFore, nBack, nIndex);
     return aShade.aColor.GetColor();
@@ -4942,7 +4933,7 @@ void SwWW8ImplReader::Read_AlignFont( USHORT, const BYTE* pData, short nLen )
                 break;
             default:
                 nVal = SvxParaVertAlignItem::AUTOMATIC;
-                ASSERT(!this,"Unknown paragraph vertical align");
+                OSL_ENSURE(!this,"Unknown paragraph vertical align");
                 break;
         }
         NewAttr( SvxParaVertAlignItem( nVal, RES_PARATR_VERTALIGN ) );
@@ -5914,8 +5905,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x085B, 0},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
-        {0x4A5E, &SwWW8ImplReader::Read_FontCode},
-        {0x485F, &SwWW8ImplReader::Read_Language},   // "sprmCLidBi"
+        {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
+        {0x485F, &SwWW8ImplReader::Read_Language},   //"sprmCLidBi"
       //0x4A60, ? ? ?,                               //"sprmCIcoBi",
         {0x4A61, &SwWW8ImplReader::Read_FontSize},   //"sprmCHpsBi"
         {0xCA62, 0},                                 //"sprmCDispFldRMark"
@@ -6244,7 +6235,7 @@ short SwWW8ImplReader::ImportSprm(const BYTE* pPos,USHORT nId)
         nId = mpSprmParser->GetSprmId(pPos);
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( nId != 0xff, "Sprm FF !!!!" );
+    OSL_ENSURE( nId != 0xff, "Sprm FF !!!!" );
 #endif
 
     const SprmReadInfo& rSprm = GetSprmReadInfo(nId);

@@ -66,7 +66,7 @@ namespace DOM
             // get the XNode
             Reference< XNode > xNode(CNode::get(static_cast<const CNode*>(pElement)->m_aNodePtr));
             Reference< XEventTarget > xTarget(xNode, UNO_QUERY_THROW);
-            OUString aType = OUString::createFromAscii("DOMSubtreeModified");
+            OUString aType(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"));
             sal_Bool capture = sal_False;
             xTarget->addEventListener(aType, Reference< XEventListener >(this), capture);
         } catch (Exception &e){

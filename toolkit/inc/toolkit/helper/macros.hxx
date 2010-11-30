@@ -190,6 +190,57 @@ void ClassName::disposing( const ::com::sun::star::lang::EventObject& ) throw(::
     #define DISPLAY_EXCEPTION( ClassName, MethodName, e )
 #endif
 
+#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_2PARAM( ClassName, InterfaceName, MethodName, ParamType1, ParamType2 ) \
+{ \
+    ParamType1 aMulti( evt ); \
+    ParamType2 aMulti2( evt2 ); \
+    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    while( aIt.hasMoreElements() ) \
+    { \
+        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
+            static_cast< InterfaceName* >( aIt.next() ) ); \
+        try \
+        { \
+            xListener->MethodName( aMulti, aMulti2 ); \
+        } \
+        catch( ::com::sun::star::lang::DisposedException e ) \
+        { \
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
+            if ( e.Context == xListener || !e.Context.is() ) \
+                aIt.remove(); \
+        } \
+        catch( ::com::sun::star::uno::RuntimeException e ) \
+        { \
+            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+        } \
+    } \
+}
+
+#define IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( ClassName, InterfaceName, MethodName, ParamType1 ) \
+{ \
+    ParamType1 aMulti( evt ); \
+    ::cppu::OInterfaceIteratorHelper aIt( *this ); \
+    while( aIt.hasMoreElements() ) \
+    { \
+        ::com::sun::star::uno::Reference< InterfaceName > xListener( \
+            static_cast< InterfaceName* >( aIt.next() ) ); \
+        try \
+        { \
+            xListener->MethodName( aMulti ); \
+        } \
+        catch( ::com::sun::star::lang::DisposedException e ) \
+        { \
+            OSL_ENSURE( e.Context.is(), "caught DisposedException with empty Context field" ); \
+            if ( e.Context == xListener || !e.Context.is() ) \
+                aIt.remove(); \
+        } \
+        catch( ::com::sun::star::uno::RuntimeException e ) \
+        { \
+            DISPLAY_EXCEPTION( ClassName, MethodName, e ) \
+        } \
+    } \
+}
+
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType ) \
 { \
     EventType aMulti( evt ); \

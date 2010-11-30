@@ -32,7 +32,6 @@ class SwFlyFrmFmt;
 class SwFmtAnchor;
 class SwFlyFrm;
 
-// OD 2006-02-28 #125892#
 // helper class to track change of anchor node of at-paragraph respectively
 // at-character anchored fly frames
 // if such a change happens, it has to be checked, if the count of the anchor

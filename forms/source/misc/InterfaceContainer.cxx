@@ -96,7 +96,7 @@ lcl_hasVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents  )
     const ScriptEventDescriptor* pEnd = ( pDesc + sEvents.getLength() );
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        if ( pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
             return true;
     }
     return false;
@@ -112,7 +112,7 @@ lcl_stripVbaEvents( const Sequence< ScriptEventDescriptor >& sEvents )
     sal_Int32 nCopied = 0;
     for ( ; pDesc != pEnd; ++pDesc )
     {
-        if ( !pDesc->ScriptType.equals( rtl::OUString::createFromAscii( "VBAInterop" ) ) )
+        if ( !pDesc->ScriptType.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VBAInterop") ) ) )
         {
             sStripped[ nCopied++ ] = *pDesc;
         }
@@ -134,7 +134,7 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
                 break;
 
             Reference< XMultiServiceFactory > xDocFac( xDoc, UNO_QUERY_THROW );
-            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBACodeNameProvider" ) ), UNO_QUERY );
+            Reference< XCodeNameQuery > xNameQuery( xDocFac->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBACodeNameProvider") ) ), UNO_QUERY );
             if ( !xNameQuery.is() )
                 break;
 
@@ -152,9 +152,9 @@ void OInterfaceContainer::impl_addVbEvents_nolck_nothrow(  const sal_Int32 i_nIn
 
             Reference< XPropertySet > xProps( xElement, UNO_QUERY_THROW );
             ::rtl::OUString sServiceName;
-            xProps->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl" ) ) >>= sServiceName;
+            xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl") ) ) >>= sServiceName;
 
-            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString::createFromAscii( "ooo.vba.VBAToOOEventDesc" ) ), UNO_QUERY_THROW );
+            Reference< ooo::vba::XVBAToOOEventDescGen > xDescSupplier( m_xServiceFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.VBAToOOEventDesc") ) ), UNO_QUERY_THROW );
             Reference< XInterface > xInterface = m_xServiceFactory->createInstance( sServiceName );
             Sequence< ScriptEventDescriptor > vbaEvents = xDescSupplier->getEventDescriptions( xInterface, sCodeName );
             // register the vba script events

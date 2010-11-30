@@ -150,7 +150,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a new item is started.
 
         <p> The current node must be a set and
-            a preexisting item (if any) must be removeable.
+            a preexisting item (if any) must be removable.
         </p>
         <p> The new item will be created from the default template
             of the set.
@@ -178,7 +178,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to a node of that name</li>
             <li>if the template for the new node is not found</li>
-            <li>if an item of that name on a lower layer is not removeable</li>
+            <li>if an item of that name on a lower layer is not removable</li>
             <li>if the name is not a valid item name</li>
             <li>if the attributes are not valid for the node</li>
             </ul>
@@ -199,7 +199,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
         is started.
 
         <p> The current node must be a set and
-            a preexisting item (if any) must be removeable.
+            a preexisting item (if any) must be removable.
         </p>
         <p> Subsequent calls describe the difference from the template
             of properties and members or items of the node until
@@ -228,7 +228,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <li>if there already was a change to a node of that name</li>
             <li>if the template for the new node is not found</li>
             <li>if the template is not a valid item type for the containing set</li>
-            <li>if an item of that name on a lower layer is not removeable</li>
+            <li>if an item of that name on a lower layer is not removable</li>
             <li>if the name is not a valid item name</li>
             <li>if the attributes are not valid for the node</li>
             </ul>
@@ -272,7 +272,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
     /** receives notification that a node is dropped from a set.
 
         <p> The current node must be a set and
-            the item must be removeable.
+            the item must be removable.
         </p>
 
         @param aName
@@ -283,7 +283,7 @@ published interface XLayerHandler: ::com::sun::star::uno::XInterface
             <li>if there isn't a set node in progress currently</li>
             <li>if there already was a change to a node of that name</li>
             <li>if there is no item with that name</li>
-            <li>if the item is not removeable</li>
+            <li>if the item is not removable</li>
             <li>if the name is not a valid node name</li>
             </ul>
             <p><em>Not every implementation can detect each condition</em></p>

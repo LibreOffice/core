@@ -137,26 +137,15 @@ SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     aTimer.SetTimeout( 1500 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SvxGrfCropPage::~SvxGrfCropPage()
 {
     aTimer.Stop();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SfxTabPage* SvxGrfCropPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SvxGrfCropPage( pParent, rSet );
 }
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
 {
@@ -247,10 +236,6 @@ void SvxGrfCropPage::Reset( const SfxItemSet &rSet )
     bReset = FALSE;
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 {
     const SfxItemPool& rPool = *rSet.GetPool();
@@ -315,10 +300,6 @@ BOOL SvxGrfCropPage::FillItemSet(SfxItemSet &rSet)
 
     return bModified;
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 {
@@ -390,10 +371,6 @@ void SvxGrfCropPage::ActivatePage(const SfxItemSet& rSet)
 
     CalcZoom();
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 int SvxGrfCropPage::DeactivatePage(SfxItemSet *_pSet)
 {

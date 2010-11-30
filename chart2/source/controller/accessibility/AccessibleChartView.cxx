@@ -93,9 +93,6 @@ awt::Rectangle AccessibleChartView::GetWindowPosSize() const
     if( ! xWindow.is())
         return awt::Rectangle();
 
-    // this should do, but it doesn't => HACK
-//     return xWindow->getPosSize();
-
     awt::Rectangle aBBox( xWindow->getPosSize() );
 
     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));

@@ -103,9 +103,9 @@ public:
     virtual ~ChartTypeDialogController();
 
     virtual String  getName()=0;
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const = 0;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
 
     virtual bool    shouldShow_XAxisTypeControl() const;
     virtual bool    shouldShow_3DLookControl() const;
@@ -159,9 +159,9 @@ public:
     virtual ~ColumnChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
 };
 
 class BarChartDialogController : public ColumnOrBarChartDialogController_Base
@@ -171,9 +171,9 @@ public:
     virtual ~BarChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
 };
 
 class PieChartDialogController : public ChartTypeDialogController
@@ -183,9 +183,9 @@ public:
     virtual ~PieChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 
     virtual bool    shouldShow_3DLookControl() const;
@@ -198,9 +198,9 @@ public:
     virtual ~LineChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void adjustParameterToMainType( ChartTypeParameter& rParameter );
 
@@ -216,9 +216,9 @@ public:
     virtual ~XYChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 
     virtual bool    shouldShow_SplineControl() const;
@@ -232,9 +232,9 @@ public:
     virtual ~AreaChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
     virtual void adjustParameterToMainType( ChartTypeParameter& rParameter );
 
@@ -248,9 +248,9 @@ public:
     virtual ~NetChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 
     virtual bool    shouldShow_StackingControl() const;
@@ -263,9 +263,9 @@ public:
     virtual ~StockChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 };
 
@@ -276,9 +276,9 @@ public:
     virtual ~CombiColumnLineChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 
     virtual void    showExtraControls( Window* pParent, const Point& rPosition, const Size& rSize );
@@ -304,9 +304,9 @@ public:
     virtual ~BubbleChartDialogController();
 
     virtual String  getName();
-    virtual Image   getImage( bool bIsHighContrast );
+    virtual Image   getImage();
     virtual const tTemplateServiceChartTypeParameterMap& getTemplateMap() const;
-    virtual void fillSubTypeList( ValueSet& rSubTypeList, bool bIsHighContrast, const ChartTypeParameter& rParameter );
+    virtual void fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter );
     virtual void adjustParameterToSubType( ChartTypeParameter& rParameter );
 };
 

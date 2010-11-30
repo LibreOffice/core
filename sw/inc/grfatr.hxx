@@ -64,10 +64,10 @@ public:
         bGrfToggle( rMirrorGrf.IsGrfToggle() )
     {}
 
-    // pure virtual-Methoden von SfxPoolItem
+    // pure virtual methods of SfxPoolItem
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods of SfxEnumItem
     virtual USHORT          GetValueCount() const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -105,7 +105,7 @@ public:
     SwCropGrf(  sal_Int32 nLeft,    sal_Int32 nRight,
                 sal_Int32 nTop,     sal_Int32 nBottom );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual methods" of SfxPoolItem
     virtual SfxPoolItem*        Clone( SfxItemPool *pPool = 0 ) const;
 };
 
@@ -120,7 +120,7 @@ public:
         : SfxUInt16Item( RES_GRFATR_ROTATION, nVal ), aUnrotatedSize( rSz )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -144,7 +144,7 @@ public:
         : SfxInt16Item( RES_GRFATR_LUMINANCE, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -160,7 +160,7 @@ public:
         : SfxInt16Item( RES_GRFATR_CONTRAST, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -177,7 +177,7 @@ protected:
     {}
 
 public:
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,
@@ -228,7 +228,7 @@ public:
             return *this;
         }
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods from SfxEnumItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -254,7 +254,7 @@ public:
         : SfxBoolItem( RES_GRFATR_INVERT, bVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -270,7 +270,7 @@ public:
         : SfxByteItem( RES_GRFATR_TRANSPARENCY, nVal )
     {}
 
-    // pure virtual-Methiden from SfxInt16Item
+    // pure virtual methods from SfxInt16Item
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -290,10 +290,10 @@ public:
         : SfxEnumItem( RES_GRFATR_DRAWMODE, nMode )
     {}
 
-    // pure virtual-Methoden von SfxPoolItem
+    // pure virtual methods of SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
 
-    // pure virtual-Methiden von SfxEnumItem
+    // pure virtual methods of SfxEnumItem
     virtual USHORT          GetValueCount() const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

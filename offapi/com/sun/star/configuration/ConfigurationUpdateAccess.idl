@@ -76,7 +76,7 @@ module com { module sun { module star { module configuration {
         The root element of a modifiable tree provides extended functionality
         to control processing of changes for the entire tree (fragment) by
         supporting <type scope="com::sun::star::util">XChangesBatch</type>.
-        For elements of a <em>set</em> or a <em>group</em> no additinal
+        For elements of a <em>set</em> or a <em>group</em> no additional
         interfaces are supported.
     </li>
  </ul>

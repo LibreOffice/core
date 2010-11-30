@@ -381,7 +381,7 @@ void SfxMacroStatement::GenerateNameAndArgs_Impl
                 USHORT nPos = 0;
                 while ( TRUE )
                 {
-                    nPos = aRecordable.SearchAndReplace( DEFINE_CONST_UNICODE('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
+                    nPos = aRecordable.SearchAndReplace( String('"'), DEFINE_CONST_UNICODE("\"\""), nPos );
                     if ( STRING_NOTFOUND == nPos )
                         break;
                     nPos += 2;

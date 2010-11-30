@@ -178,7 +178,7 @@ void WW8Analyzer::dumpStats(ostream & o) const
 {
     {
         for (IdSet::const_iterator aIt = mSprmIdSet.begin();
-             aIt != mSprmIdSet.end(); aIt++)
+             aIt != mSprmIdSet.end(); ++aIt)
         {
             sal_uInt32 aId = *aIt;
 
@@ -194,7 +194,7 @@ void WW8Analyzer::dumpStats(ostream & o) const
 
     {
         for (IdSet::const_iterator aIt = mAttributeIdSet.begin();
-             aIt != mAttributeIdSet.end(); aIt++)
+             aIt != mAttributeIdSet.end(); ++aIt)
         {
             sal_uInt32 aId = *aIt;
 

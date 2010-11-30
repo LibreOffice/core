@@ -746,18 +746,20 @@ sal_Bool ScRowFormatRanges::GetNext(ScMyRowFormatRange& aFormatRange)
     return sal_False;
 }
 
-sal_Int32 ScRowFormatRanges::GetMaxRows()
+sal_Int32 ScRowFormatRanges::GetMaxRows() const
 {
-    ScMyRowFormatRangesList::iterator aItr(aRowFormatRanges.begin());
-    ScMyRowFormatRangesList::iterator aEndItr(aRowFormatRanges.end());
+    ScMyRowFormatRangesList::const_iterator aItr(aRowFormatRanges.begin());
+    ScMyRowFormatRangesList::const_iterator aEndItr(aRowFormatRanges.end());
     sal_Int32 nMaxRows = MAXROW + 1;
     if (aItr != aEndItr)
+    {
         while (aItr != aEndItr)
         {
             if ((*aItr).nRepeatRows < nMaxRows)
                 nMaxRows = (*aItr).nRepeatRows;
             ++aItr;
         }
+    }
     else
     {
         DBG_ERROR("no ranges found");
@@ -765,7 +767,7 @@ sal_Int32 ScRowFormatRanges::GetMaxRows()
     return nMaxRows;
 }
 
-sal_Int32 ScRowFormatRanges::GetSize()
+sal_Int32 ScRowFormatRanges::GetSize() const
 {
     return nSize;
 }

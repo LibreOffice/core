@@ -358,10 +358,10 @@ XTYPEPROVIDER_IMPL_3( UcbPropertiesManager,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbPropertiesManager,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UcbPropertiesManager" ),
-                     OUString::createFromAscii(
-                         PROPERTIES_MANAGER_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbPropertiesManager" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         PROPERTIES_MANAGER_SERVICE_NAME )) );
 
 //=========================================================================
 //

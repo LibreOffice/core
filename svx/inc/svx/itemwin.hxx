@@ -43,7 +43,6 @@ class SfxObjectShell;
 
 class SvxLineBox : public LineLB
 {
-    BmpColorMode    meBmpMode;
     USHORT          nCurPos;
     Timer           aDelayTimer;
     Size            aLogicalSize;

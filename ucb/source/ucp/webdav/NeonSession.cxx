@@ -363,7 +363,7 @@ namespace {
     ::rtl::OUString GetHostnamePart( const ::rtl::OUString& _rRawString )
     {
         ::rtl::OUString sPart;
-        ::rtl::OUString sPartId = ::rtl::OUString::createFromAscii( "CN=" );
+        ::rtl::OUString sPartId(RTL_CONSTASCII_USTRINGPARAM("CN="));
         sal_Int32 nContStart = _rRawString.indexOf( sPartId );
         if ( nContStart != -1 )
         {
@@ -390,8 +390,8 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
         xCertificateContainer
             = uno::Reference< security::XCertificateContainer >(
                 pSession->getMSF()->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.security.CertificateContainer" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.security.CertificateContainer" )) ),
                 uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -423,7 +423,7 @@ extern "C" int NeonSession_CertificationNotify( void *userdata,
     {
         xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
             pSession->getMSF()->createInstance(
-                rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ) ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT )) ),
             uno::UNO_QUERY );
     }
     catch ( uno::Exception const & )
@@ -2147,7 +2147,7 @@ NeonSession::isDomainMatch( rtl::OUString certHostName )
     if (hostName.equalsIgnoreAsciiCase( certHostName ) )
         return sal_True;
 
-    if ( 0 == certHostName.indexOf( rtl::OUString::createFromAscii( "*" ) ) &&
+    if ( 0 == certHostName.indexOf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")) ) &&
          hostName.getLength() >= certHostName.getLength()  )
     {
         rtl::OUString cmpStr = certHostName.copy( 1 );

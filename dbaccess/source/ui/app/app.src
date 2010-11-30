@@ -312,43 +312,53 @@ String RID_STR_REPORTS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a report." ;
 };
+
 String RID_STR_FORMS_HELP_TEXT
 {
     Text [ en-US ] = "Create a form by specifying the record source, controls, and control properties." ;
 };
+
 String RID_STR_REPORT_HELP_TEXT
 {
     Text [ de ] ="Erstellen Sie einen Bericht, indem Sie die Datensatzquelle, Steuerelemente und Steuerelementeigenschaften angeben." ;
     Text [ en-US ] = "Create a report by specifying the record source, controls, and control properties." ;
 };
+
 String RID_STR_FORMS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a form." ;
 };
+
 String RID_STR_QUERIES_HELP_TEXT
 {
     Text [ en-US ] = "Create a query by specifying the filters, input tables, field names,  and  properties for sorting or grouping." ;
 };
+
 String RID_STR_QUERIES_HELP_TEXT_SQL
 {
     Text [ en-US ] = "Create a query  entering an SQL statement directly." ;
 };
+
 String RID_STR_QUERIES_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "The wizard will guide you through the steps necessary to create a query." ;
 };
+
 String RID_STR_TABLES_HELP_TEXT_DESIGN
 {
     Text [ en-US ] = "Create a table by specifying the field names and properties, as well as the data types." ;
 };
+
 String RID_STR_TABLES_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "Choose from a selection of business and personal table samples, which you customize to create a table." ;
 };
+
 String RID_STR_VIEWS_HELP_TEXT_DESIGN
 {
     Text [ en-US ] = "Create a view by specifying the tables and field names you would like to have visible." ;
 };
+
 String RID_STR_VIEWS_HELP_TEXT_WIZARD
 {
     Text [ en-US ] = "Opens the view wizard" ;
@@ -358,28 +368,34 @@ String STR_DATABASE
 {
     Text [ en-US ] = "Database" ;
 };
+
 String STR_TASKS
 {
     Text [ en-US ] = "Tasks" ;
 };
+
 String STR_DESCRIPTION
 {
     Text [ en-US ] = "Description" ;
 };
+
 String STR_PREVIEW
 {
     Text [ en-US ] = "Preview" ;
 };
+
 String STR_DISABLEPREVIEW
 {
     Text [ en-US ] = "Disable Preview" ;
 };
+
 QueryBox APP_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
     Message [ en-US ] = "The database has been modified.\nDo you want to save the changes?" ;
 };
+
 QueryBox APP_CLOSEDOCUMENTS
 {
     Buttons = WB_YES_NO ;
@@ -423,6 +439,7 @@ Menu RID_MENU_APP_PREVIEW
         };
     };
 };
+
 String RID_STR_FORM
 {
     Text [ en-US ] = "Form";
@@ -432,10 +449,12 @@ String RID_STR_REPORT
 {
     Text [ en-US ] = "Report";
 };
+
 String STR_FRM_LABEL
 {
     Text [ en-US ] = "F~orm name" ;
 };
+
 String STR_RPT_LABEL
 {
     Text [ en-US ] = "~Report name" ;
@@ -466,10 +485,12 @@ String RID_STR_EMBEDDED_DATABASE
 {
     Text [ en-US ] = "Embedded database";
 };
+
 String RID_STR_NO_DIFF_CAT
 {
     Text [ en-US ] = "You cannot select different categories.";
 };
+
 String RID_STR_UNSUPPORTED_OBJECT_TYPE
 {
     Text [ en-US ] = "Unsupported object type found ($type$).";

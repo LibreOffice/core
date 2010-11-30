@@ -168,7 +168,7 @@ start:
         case SbxBYREF | SbxULONG:
             nRes = *p->pULong; break;
 
-        // Tests ab hier
+        // from here on tests
         case SbxBYREF | SbxCHAR:
             aTmp.nChar = *p->pChar; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -222,7 +222,7 @@ start:
             ImpCreateDecimal( p )->setULong( n );
             break;
 
-        // Tests ab hier
+        // from here on tests
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxUINT:

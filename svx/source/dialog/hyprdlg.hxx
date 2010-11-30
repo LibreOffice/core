@@ -39,10 +39,6 @@
 class SvxHyperlinkDlg;
 class SfxViewFrame;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 class HyperCombo : public ComboBox
 {
     SvxHyperlinkDlg *pDlg;

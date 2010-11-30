@@ -58,9 +58,7 @@
 #define CB_SORTLIST             28
 #define EDT_LIST                29
 #define FT_SOURCEHINT           30
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #define RB_VALIDITY_REF         88
-//-->Added by PengYunQuan for Validity Cell Range Picker
 
 /*  Position indexes for "Allow" list box.
     They do not map directly to ScValidationMode and can safely be modified to
@@ -85,4 +83,3 @@
 #define SC_VALIDDLG_DATA_NOTEQUAL   5
 #define SC_VALIDDLG_DATA_BETWEEN    6
 #define SC_VALIDDLG_DATA_NOTBETWEEN 7
-

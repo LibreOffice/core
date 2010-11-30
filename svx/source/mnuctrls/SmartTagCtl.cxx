@@ -42,8 +42,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-#define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
 // STATIC DATA -----------------------------------------------------------
 
 SFX_IMPL_MENU_CONTROL(SvxSmartTagsControl, SvxSmartTagItem);
@@ -118,7 +116,7 @@ void SvxSmartTagsControl::FillMenu()
         pSbMenu->SetSelectHdl( LINK( this, SvxSmartTagsControl, MenuSelect ) );
 
         // sub-menu starts with smart tag caption and separator
-        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + C2U(": ") + aRangeText;
+        const rtl::OUString aSmartTagCaption2 = aSmartTagCaption + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(": ")) + aRangeText;
         nSubMenuPos = 0;
         pSbMenu->InsertItem( nMenuId++, aSmartTagCaption2, MIB_NOSELECT, nSubMenuPos++ );
         pSbMenu->InsertSeparator( nSubMenuPos++ );

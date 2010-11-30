@@ -383,8 +383,8 @@ namespace pcr
                     // StringItemList?
                     else if( eType == TypeClass_SEQUENCE )
                     {
-                        static ::rtl::OUString aDot = ::rtl::OUString::createFromAscii( "." );
-                        static ::rtl::OUString aEsc = ::rtl::OUString::createFromAscii( "&" );
+                        static ::rtl::OUString aDot(RTL_CONSTASCII_USTRINGPARAM("."));
+                        static ::rtl::OUString aEsc(RTL_CONSTASCII_USTRINGPARAM("&"));
 
                         // Put strings into resource using new ids
                         Sequence< ::rtl::OUString > aNewStrings;
@@ -1424,7 +1424,7 @@ namespace pcr
             aDescriptor.HasSecondaryButton = sal_True;
 
         bool bIsDataProperty = ( nPropertyUIFlags & PROP_FLAG_DATA_PROPERTY ) != 0;
-        aDescriptor.Category = ::rtl::OUString::createFromAscii( bIsDataProperty ? "Data" : "General" );
+        aDescriptor.Category = bIsDataProperty ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Data")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("General"));
         return aDescriptor;
     }
 
@@ -2785,8 +2785,9 @@ namespace pcr
 
         aFileDlg.SetTitle(aStrTrans);
         // non-linked images ( e.g. those located in the document
-        // stream ) cannot *currently* be handled by openoffice basic dialogs.
-        bool bHandleNonLink = ( m_eComponentClass == eFormControl );
+        // stream ) only if document is available
+        Reference< XModel > xModel( impl_getContextDocument_nothrow() );
+        bool bHandleNonLink = xModel.is();
 
         Reference< XFilePickerControlAccess > xController(aFileDlg.GetFilePicker(), UNO_QUERY);
         DBG_ASSERT(xController.is(), "FormComponentPropertyHandler::impl_browseForImage_nothrow: missing the controller interface on the file picker!");

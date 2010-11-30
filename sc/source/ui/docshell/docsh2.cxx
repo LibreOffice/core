@@ -57,11 +57,6 @@
 #include <sfx2/app.hxx>
 
 // INCLUDE ---------------------------------------------------------------
-/*
-#include <svdrwetc.hxx>
-#include <svdrwobx.hxx>
-#include <sostor.hxx>
-*/
 #include "drwlayer.hxx"
 #include "stlpool.hxx"
 #include "docsh.hxx"
@@ -103,27 +98,6 @@ BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xSt
 
     InitItems();
     CalcOutputFactor();
-#if 0
-    uno::Any aGlobs;
-        uno::Sequence< uno::Any > aArgs(1);
-        aArgs[ 0 ] <<= GetModel();
-    aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-    GetBasicManager()->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-        // Fake ThisComponent being setup by Activate ( which is a view
-        // related thing ),
-        //  a) if another document is opened then in theory  ThisComponent
-        //     will be reset as before,
-        //  b) when this document is  'really' Activated then ThisComponent
-        //     again will be set as before
-        // The only wrinkle seems if this document is loaded 'InVisible'
-        // but.. I don't see that this is possible from the vba API
-        // I could be wrong though
-        // There may be implications setting the current component
-        // too early :-/ so I will just manually set the Basic Variables
-        BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
-        if ( pAppMgr )
-            pAppMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[ 0 ] );
-#endif
 
     return bRet;
 }
@@ -147,13 +121,8 @@ void ScDocShell::InitItems()
 {
     // AllItemSet fuer Controller mit benoetigten Items fuellen:
 
-    // if ( pImpl->pFontList )
-    //  delete pImpl->pFontList;
-
     //  Druck-Optionen werden beim Drucken und evtl. in GetPrinter gesetzt
 
-    // pImpl->pFontList = new FontList( GetPrinter(), Application::GetDefaultDevice() );
-    //PutItem( SvxFontListItem( pImpl->pFontList, SID_ATTR_CHAR_FONTLIST ) );
     UpdateFontList();
 
     ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
@@ -170,7 +139,6 @@ void ScDocShell::InitItems()
 
         pDrawLayer->SetNotifyUndoActionHdl( LINK( pDocFunc, ScDocFunc, NotifyDrawUndo ) );
 
-        //if (SfxObjectShell::HasSbxObject())
         pDrawLayer->UpdateBasic();          // DocShell-Basic in DrawPages setzen
     }
     else
@@ -200,7 +168,6 @@ void ScDocShell::InitItems()
                     i18n::ForbiddenCharacters aForbidden;
                     aAsian.GetStartEndChars( pLocales[i], aForbidden.beginLine, aForbidden.endLine );
                     LanguageType eLang = SvxLocaleToLanguage(pLocales[i]);
-                    //pDoc->SetForbiddenCharacters( eLang, aForbidden );
 
                     xForbiddenTable->SetForbiddenCharacters( eLang, aForbidden );
                 }

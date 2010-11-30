@@ -75,9 +75,6 @@ static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
 
 void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
 {
-    // --> OD 2006-06-12 #b6435904#
-    // export all numberings, except the outline numbering.
-//    if( rTxtNd.GetNumRule() && ! rTxtNd.IsOutline())
     const SwNumRule* pTxtNdNumRule( rTxtNd.GetNumRule() );
     if ( pTxtNdNumRule &&
          pTxtNdNumRule != rTxtNd.GetDoc()->GetOutlineNumRule() )
@@ -92,8 +89,6 @@ void SwHTMLNumRuleInfo::Set( const SwTxtNode& rTxtNd )
         // text node and the start value equals <USHRT_MAX>.
         // Start value <USHRT_MAX> indicates, that at this text node the numbering
         // is restarted with the value given at the corresponding level.
-//        bRestart = rTxtNd.IsListRestart() &&
-//                   GetNum() && rTxtNd.GetNum()->GetStartValue() == USHRT_MAX;
         bRestart = rTxtNd.IsListRestart() && !rTxtNd.HasAttrListRestartValue();
         // <--
     }
@@ -309,11 +304,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // den aktuellen Absatz erst einmal nicht numerieren
     {
         BYTE nLvl = nLevel;
-        // --> OD 2008-04-02 #refactorlists#
-//        SetNoNum(&nLvl, TRUE); // #115962#
-//        SetNodeNum( nLvl );
         SetNodeNum( nLvl, false );
-        // <--
     }
 
     // einen neuen Kontext anlegen
@@ -470,9 +461,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
         }
         else
         {
-            // den naechsten Absatz erstmal nicht numerieren
-            // --> OD 2008-04-02 #refactorlists#
-//            SetNodeNum( rInfo.GetLevel() | NO_NUMLEVEL );
+            // the next paragraph not numbered first
             SetNodeNum( rInfo.GetLevel(), false );
             // <--
         }
@@ -576,7 +565,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
 
         pDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
-        ASSERT( !nOpenParaToken,
+        OSL_ENSURE( !nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
         // Wir tun so, als ob wir in einem Absatz sind. Dann wird
         // beim naechsten Absatz wenigstens die Numerierung
@@ -588,9 +577,8 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(aNumRuleName) );
     pTxtNode->SetAttrListLevel(nLevel);
-    // --> OD 2005-11-14 #i57656#
-    // <IsCounted()> state of text node has to be adjusted accordingly.
-    if ( /*nLevel >= 0 &&*/ nLevel < MAXLEVEL )
+    // #i57656# - <IsCounted()> state of text node has to be adjusted accordingly.
+    if ( nLevel < MAXLEVEL )
     {
         // --> OD 2008-04-02 #refactorlists#
         pTxtNode->SetCountedInList( bCountedInList );
@@ -687,28 +675,14 @@ void SwHTMLParser::EndNumBulListItem( int nToken, sal_Bool bSetColl,
 void SwHTMLParser::SetNodeNum( sal_uInt8 nLevel, bool bCountedInList )
 {
     SwTxtNode* pTxtNode = pPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNode, "Kein Text-Node an PaM-Position" );
+    OSL_ENSURE( pTxtNode, "Kein Text-Node an PaM-Position" );
 
-    ASSERT( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
+    OSL_ENSURE( GetNumInfo().GetNumRule(), "Kein Numerierungs-Regel" );
     const String& rName = GetNumInfo().GetNumRule()->GetName();
     ((SwCntntNode *)pTxtNode)->SetAttr( SwNumRuleItem(rName) );
 
-    // --> OD 2008-04-02 #refactorlists#
-//    // --> OD 2005-11-14 #i57656#
-//    // consider usage of NO_NUMLEVEL - see implementation of <SwTxtNode::SetLevel(..)>
-//    if ( /*nLevel >= 0 &&*/ ( nLevel & NO_NUMLEVEL ) )
-//    {
-//        pTxtNode->SetAttrListLevel( nLevel & ~NO_NUMLEVEL );
-//        pTxtNode->SetCountedInList( false );
-//    }
-//    else
-//    {
-//        pTxtNode->SetAttrListLevel( nLevel );
-//        pTxtNode->SetCountedInList( true );
-//    }
     pTxtNode->SetAttrListLevel( nLevel );
     pTxtNode->SetCountedInList( bCountedInList );
-    // <--
 
     // NumRule invalidieren, weil sie durch ein EndAction bereits
     // auf valid geschaltet worden sein kann.
@@ -810,7 +784,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                                 break;
                             }
 
-                            ASSERT(! pTxtNd->IsOutline(),
+                            OSL_ENSURE(! pTxtNd->IsOutline(),
                                    "outline not expected");
 
                             if( pTxtNd->GetActualListLevel() + 1 <
@@ -924,7 +898,7 @@ Writer& OutHTML_NumBulListStart( SwHTMLWriter& rWrt,
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<OutHTML_NumBulListStart(..) - text node has no number." );
                 }
             }

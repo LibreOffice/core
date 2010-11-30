@@ -37,9 +37,9 @@ namespace com{namespace sun{namespace star{
             class XEventListener;
         }
 }}}
-/* -----------------22.04.99 11:18-------------------
+/*
  *  Verwaltung der EventListener
- * --------------------------------------------------*/
+ * */
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener > *  XEventListenerPtr;
 SV_DECL_PTRARR(SwEvtLstnrArray, XEventListenerPtr, 4, 4)
 

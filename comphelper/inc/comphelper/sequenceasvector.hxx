@@ -68,6 +68,11 @@ class SequenceAsVector : public ::std::vector< TElementType >
                     types from the base! */
         typedef typename ::std::vector< TElementType >::const_iterator const_iterator;
 
+        //---------------------------------------
+        /** @short  When inheriting from a template using typename is generally required when using
+                    types from the base! */
+        typedef typename ::std::vector< TElementType >::iterator iterator;
+
     //-------------------------------------------
     // interface
     public:

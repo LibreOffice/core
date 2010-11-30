@@ -115,7 +115,7 @@ SwNode2LayImpl::SwNode2LayImpl( const SwNode& rNode, ULONG nIdx, BOOL bSearch )
             pMod = (SwModify*)pNd->GetCntntNode();
         else
         {
-            ASSERT( pNd->IsTableNode(), "For Tablenodes only" );
+            OSL_ENSURE( pNd->IsTableNode(), "For Tablenodes only" );
             pMod = pNd->GetTableNode()->GetTable().GetFrmFmt();
         }
         pIter = new SwClientIter( *pMod );
@@ -150,7 +150,7 @@ SwFrm* SwNode2LayImpl::NextFrm()
     while( pRet )
     {
         SwFlowFrm* pFlow = SwFlowFrm::CastFlowFrm( pRet );
-        ASSERT( pFlow, "Cntnt or Table expected?!" );
+        OSL_ENSURE( pFlow, "Cntnt or Table expected?!" );
         // Follows sind fluechtige Gestalten, deshalb werden sie ignoriert.
         // Auch wenn wir hinter dem Frame eingefuegt werden sollen, nehmen wir
         // zunaechst den Master, hangeln uns dann aber zum letzten Follow durch.
@@ -172,9 +172,9 @@ SwFrm* SwNode2LayImpl::NextFrm()
                 // und nicht ausserhalb liegt.
                 if( !pRet->IsInFtn() || pSct->IsInFtn() )
                 {
-                    ASSERT( pSct && pSct->GetSection(), "Where's my section?" );
+                    OSL_ENSURE( pSct && pSct->GetSection(), "Where's my section?" );
                     SwSectionNode* pNd = pSct->GetSection()->GetFmt()->GetSectionNode();
-                    ASSERT( pNd, "Lost SectionNode" );
+                    OSL_ENSURE( pNd, "Lost SectionNode" );
                     // Wenn der erhaltene Frame in einem Bereichsframe steht,
                     // dessen Bereich den Ausgangsnode nicht umfasst, so kehren
                     // wir mit dem SectionFrm zurueck, sonst mit dem Cntnt/TabFrm
@@ -247,11 +247,11 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
                     {
                         pFrm = static_cast<SwLayoutFrm*>(pFrm)->Lower();
                     }
-                    ASSERT( pFrm->IsLayoutFrm(),
+                    OSL_ENSURE( pFrm->IsLayoutFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected upper frame isn't a layout frame." );
                     rpFrm = bMaster ? NULL
                                     : static_cast<SwLayoutFrm*>(pFrm)->Lower();
-                    ASSERT( !rpFrm || rpFrm->IsFlowFrm(),
+                    OSL_ENSURE( !rpFrm || rpFrm->IsFlowFrm(),
                             "<SwNode2LayImpl::UpperFrm(..)> - expected sibling isn't a flow frame." );
                     return static_cast<SwLayoutFrm*>(pFrm);
                 }
@@ -280,7 +280,7 @@ SwLayoutFrm* SwNode2LayImpl::UpperFrm( SwFrm* &rpFrm, const SwNode &rNode )
 
 void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
 {
-    ASSERT( pUpperFrms, "RestoreUpper without SaveUpper?" )
+    OSL_ENSURE( pUpperFrms, "RestoreUpper without SaveUpper?" );
     SwNode* pNd;
     SwDoc *pDoc = rNds.GetDoc();
     BOOL bFirst = TRUE;
@@ -316,7 +316,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
                 else
                     pNxt = pUp->Lower();
                 pNew = ((SwTableNode*)pNd)->MakeFrm();
-                ASSERT( pNew->IsTabFrm(), "Table exspected" );
+                OSL_ENSURE( pNew->IsTabFrm(), "Table exspected" );
                 pNew->Paste( pUp, pNxt );
                 ((SwTabFrm*)pNew)->RegistFlys();
                 (*pUpperFrms)[x-2] = pNew;
@@ -330,7 +330,7 @@ void SwNode2LayImpl::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
                 if( bFirst && pNxt && pNxt->IsSctFrm() )
                     ((SwSectionFrm*)pNxt)->UnlockJoin();
                 pUp = (SwLayoutFrm*)(*pUpperFrms)[x++];
-                ASSERT( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
+                OSL_ENSURE( pUp->GetUpper() || pUp->IsFlyFrm(), "Lost Upper" );
                 ::_InsertCnt( pUp, pDoc, pNd->GetIndex(), FALSE, nStt+1, pNxt );
                 pNxt = pUp->GetLastLower();
                 (*pUpperFrms)[x-2] = pNxt;
@@ -377,7 +377,7 @@ SwNode2Layout::SwNode2Layout( const SwNode& rNd )
 
 void SwNode2Layout::RestoreUpperFrms( SwNodes& rNds, ULONG nStt, ULONG nEnd )
 {
-    ASSERT( pImpl, "RestoreUpperFrms without SaveUpperFrms" );
+    OSL_ENSURE( pImpl, "RestoreUpperFrms without SaveUpperFrms" );
     pImpl->RestoreUpperFrms( rNds, nStt, nEnd );
 }
 

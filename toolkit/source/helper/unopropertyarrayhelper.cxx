@@ -47,7 +47,7 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Seq
 UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs )
 {
     std::list< sal_uInt16 >::const_iterator iter;
-    for( iter = rIDs.begin(); iter != rIDs.end(); iter++)
+    for( iter = rIDs.begin(); iter != rIDs.end(); ++iter)
       maIDs.Insert( *iter, (void*)1L);
 }
 

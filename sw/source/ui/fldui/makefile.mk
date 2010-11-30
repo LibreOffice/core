@@ -54,8 +54,12 @@ SRC1FILES =  \
         inpdlg.src
 
 SLOFILES =  \
-            $(SLO)$/changedb.obj \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES =  \
         $(SLO)$/DropDownFieldDialog.obj \
+        $(SLO)$/FldRefTreeListBox.obj \
+        $(SLO)$/changedb.obj \
         $(SLO)$/flddb.obj \
         $(SLO)$/flddinf.obj \
         $(SLO)$/flddok.obj \
@@ -66,17 +70,9 @@ SLOFILES =  \
         $(SLO)$/fldref.obj \
         $(SLO)$/fldtdlg.obj \
         $(SLO)$/fldvar.obj \
-        $(SLO)$/javaedit.obj \
-        $(SLO)$/inpdlg.obj \
         $(SLO)$/fldwrap.obj \
-                $(SLO)$/xfldui.obj \
-                $(SLO)$/FldRefTreeListBox.obj
-
-
-EXCEPTIONSFILES =  \
-        $(SLO)$/fldtdlg.obj \
-        $(SLO)$/fldedt.obj \
-        $(SLO)$/flddinf.obj \
+        $(SLO)$/inpdlg.obj \
+        $(SLO)$/javaedit.obj \
         $(SLO)$/xfldui.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib

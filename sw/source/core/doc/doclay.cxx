@@ -199,18 +199,18 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
         }
         break;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     case FLY_AT_PAGE:
     case FLY_AT_CHAR:
     case FLY_AT_FLY:
     case FLY_AT_PARA:
     case FLY_AS_CHAR:
-        ASSERT( false, "use new interface instead: SwDoc::MakeFlySection!" );
+        OSL_ENSURE( false, "use new interface instead: SwDoc::MakeFlySection!" );
         break;
 #endif
 
     default:
-        ASSERT( !this,
+        OSL_ENSURE( !this,
                 "Layoutformat mit ungueltigem Request angefordert." );
 
     }
@@ -253,18 +253,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
         SwOLENode* pOLENd = GetNodes()[ pCntIdx->GetIndex()+1 ]->GetOLENode();
         if( pOLENd && pOLENd->GetOLEObj().IsOleRef() )
         {
-            /*
-            SwDoc* pDoc = (SwDoc*)pFmt->GetDoc();
-            if( pDoc )
-            {
-                SfxObjectShell* p = pDoc->GetPersist();
-                if( p )     // muss da sein
-                {
-                    SvInfoObjectRef aRef( p->Find( pOLENd->GetOLEObj().GetName() ) );
-                    if( aRef.Is() )
-                        aRef->SetObj(0);
-                }
-            } */
 
             // TODO/MBA: the old object closed the object, cleared all references to it, but didn't remove it from the container.
             // I have no idea, why, nobody could explain it - so I do my very best to mimic this behavior
@@ -280,7 +268,6 @@ void SwDoc::DelLayoutFmt( SwFrmFmt *pFmt )
                 }
             }
 
-            //pOLENd->GetOLEObj().GetOleRef() = 0;
         }
     }
 
@@ -392,7 +379,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
 {
     const bool bFly = RES_FLYFRMFMT == rSource.Which();
     const bool bDraw = RES_DRAWFRMFMT == rSource.Which();
-    ASSERT( bFly || bDraw, "this method only works for fly or draw" );
+    OSL_ENSURE( bFly || bDraw, "this method only works for fly or draw" );
 
     SwDoc* pSrcDoc = (SwDoc*)rSource.GetDoc();
 
@@ -499,7 +486,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
     }
     else
     {
-        ASSERT( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
+        OSL_ENSURE( RES_DRAWFRMFMT == rSource.Which(), "Weder Fly noch Draw." );
         // OD 2005-08-02 #i52780# - Note: moving object to visible layer not needed.
         SwDrawContact* pSourceContact = (SwDrawContact *)rSource.FindContactObj();
 
@@ -689,7 +676,7 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
         xub_StrLen nStt = rAnchPos.nContent.GetIndex();
         SwTxtNode * pTxtNode = rAnchPos.nNode.GetNode().GetTxtNode();
 
-        ASSERT(pTxtNode!= 0, "There should be a SwTxtNode!");
+        OSL_ENSURE(pTxtNode!= 0, "There should be a SwTxtNode!");
 
         if (pTxtNode != NULL)
         {
@@ -809,7 +796,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
     {
         do {        // middle check loop
             const SwFmtCntnt &rCntnt = pFmt->GetCntnt();
-            ASSERT( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
+            OSL_ENSURE( rCntnt.GetCntntIdx(), "Kein Inhalt vorbereitet." );
             SwNodeIndex aIndex( *(rCntnt.GetCntntIdx()), 1 );
             SwCntntNode *pNode = aIndex.GetNode().GetCntntNode();
 
@@ -858,7 +845,7 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
 
                 // wenn Tabelle im Rahmen, dann ohne nachfolgenden TextNode
                 aIndex = rCntnt.GetCntntIdx()->GetNode().EndOfSectionIndex() - 1;
-                ASSERT( aIndex.GetNode().GetTxtNode(),
+                OSL_ENSURE( aIndex.GetNode().GetTxtNode(),
                         "hier sollte ein TextNode stehen" );
                 aPos.nContent.Assign( 0, 0 );       // Index abmelden !!
                 GetNodes().Delete( aIndex, 1 );
@@ -870,15 +857,6 @@ if( DoesUndo() )    // werden erstmal alle Undo - Objecte geloescht.
             }
             else
             {
-/*
-                // alle Pams verschieben
-                SwPaM* pTmp = (SwPaM*)&rPam;
-                do {
-                    if( pTmp->HasMark() &&
-                        *pTmp->GetPoint() != *pTmp->GetMark() )
-                        MoveAndJoin( *pTmp, aPos );
-                } while( &rPam != ( pTmp = (SwPaM*)pTmp->GetNext() ) );
-*/
                 // copy all Pams and then delete all
                 SwPaM* pTmp = (SwPaM*)&rPam;
                 BOOL bOldFlag = mbCopyIsMove, bOldUndo = mbUndo;
@@ -1017,26 +995,6 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     SetModified();
     return pFmt;
 }
-
-/*************************************************************************
-|*
-|*  SwDoc::GetAllFlyFmts
-|*
-|*  Ersterstellung      MA 14. Jul. 93
-|*  Letzte Aenderung    MD 23. Feb. 95
-|*
-|*************************************************************************/
-/*sal_Bool TstFlyRange( const SwPaM* pPam, sal_uInt32 nFlyPos )
-{
-    sal_Bool bOk = sal_False;
-    const SwPaM* pTmp = pPam;
-    do {
-        bOk = pTmp->Start()->nNode.GetIndex() < nFlyPos &&
-                pTmp->End()->nNode.GetIndex() > nFlyPos;
-    } while( !bOk && pPam != ( pTmp = (const SwPaM*)pTmp->GetNext() ));
-    return bOk;
-}
-*/
 
 /* -----------------------------04.04.00 10:55--------------------------------
     paragraph frames - o.k. if the PaM includes the paragraph from the beginning
@@ -1204,11 +1162,11 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
                     rNewSet.Put( *pOldItem );
             }
             else {
-                ASSERT(0, "What am I doing here?");
+                OSL_ENSURE(0, "What am I doing here?");
             }
         }
         else {
-            ASSERT(0, "What am I doing here?");
+            OSL_ENSURE(0, "What am I doing here?");
         }
     }
 
@@ -1234,9 +1192,9 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
     //Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt werden
     //muss
-    ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
+    OSL_ENSURE( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType ueberindiziert." );
     SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : NULL;
-    ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
+    OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Falsche Id fuer Label" );
 
     SwTxtFmtColl *pColl = NULL;
     if( pType )
@@ -1268,7 +1226,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             //einfuegen (Frame wird automatisch erzeugt).
             {
                 SwStartNode *pSttNd = GetNodes()[nNdIdx]->GetStartNode();
-                ASSERT( pSttNd, "Kein StartNode in InsertLabel." );
+                OSL_ENSURE( pSttNd, "Kein StartNode in InsertLabel." );
                 ULONG nNode;
                 if( bBefore )
                 {
@@ -1301,7 +1259,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
                 //Erstmal das Format zum Fly besorgen und das Layout entkoppeln.
                 SwFrmFmt *pOldFmt = GetNodes()[nNdIdx]->GetFlyFmt();
-                ASSERT( pOldFmt, "Format des Fly nicht gefunden." );
+                OSL_ENSURE( pOldFmt, "Format des Fly nicht gefunden." );
                 pOldFmt->DelFrms();
 
                 pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
@@ -1380,14 +1338,14 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 {
                     const SwPosition *pPos = rAnchor.GetCntntAnchor();
                     SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-                    ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+                    OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
                     const xub_StrLen nIdx = pPos->nContent.GetIndex();
                     SwTxtAttr * const pHnt =
                         pTxtNode->GetTxtAttrForCharAt(nIdx, RES_TXTATR_FLYCNT);
 
-                    ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+                    OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                                 "Missing FlyInCnt-Hint." );
-                    ASSERT( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pOldFmt,
+                    OSL_ENSURE( pHnt && pHnt->GetFlyCnt().GetFrmFmt() == pOldFmt,
                                 "Wrong TxtFlyCnt-Hint." );
 
                     const_cast<SwFmtFlyCnt&>(pHnt->GetFlyCnt()).SetFlyFmt(
@@ -1443,9 +1401,9 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             break;
 
         default:
-            ASSERT( !this, "Neuer LabelType?." );
+            OSL_ENSURE( !this, "Neuer LabelType?." );
     }
-    ASSERT( pNew, "No Label inserted" );
+    OSL_ENSURE( pNew, "No Label inserted" );
     if( pNew )
     {
         //#i61007# order of captions
@@ -1546,7 +1504,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 {
 
     SwDrawContact* pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
-    ASSERT( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
+    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
             "Kein DrawFrmFmt" );
     if ( !pContact )
         return 0;
@@ -1569,9 +1527,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
     // werden muss
-    ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType overflow" );
+    OSL_ENSURE( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType overflow" );
     SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
-    ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
+    OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
 
     SwTxtFmtColl *pColl = NULL;
     if( pType )
@@ -1679,15 +1637,15 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     {
         const SwPosition *pPos = rAnchor.GetCntntAnchor();
         SwTxtNode *pTxtNode = pPos->nNode.GetNode().GetTxtNode();
-        ASSERT( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
+        OSL_ENSURE( pTxtNode->HasHints(), "Missing FlyInCnt-Hint." );
         const xub_StrLen nIdx = pPos->nContent.GetIndex();
         SwTxtAttr * const pHnt =
             pTxtNode->GetTxtAttrForCharAt( nIdx, RES_TXTATR_FLYCNT );
 
-#ifdef DBG_UTIL
-        ASSERT( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( pHnt && pHnt->Which() == RES_TXTATR_FLYCNT,
                     "Missing FlyInCnt-Hint." );
-        ASSERT( pHnt && ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).
+        OSL_ENSURE( pHnt && ((SwFmtFlyCnt&)pHnt->GetFlyCnt()).
                     GetFrmFmt() == (SwFrmFmt*)pOldFmt,
                     "Wrong TxtFlyCnt-Hint." );
 #endif
@@ -1735,7 +1693,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     //wir vorhanden Methoden (insb. fuer InCntFlys etwas aufwendig).
     pNewFmt->MakeFrms();
 
-    ASSERT( pNew, "No Label inserted" );
+    OSL_ENSURE( pNew, "No Label inserted" );
 
     if( pNew )
     {
@@ -1868,8 +1826,8 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             BOOL bIsOnlineSpell = pSh->GetViewOptions()->IsOnlineSpell();
 
             sal_Bool bIsAutoGrammar = sal_False;
-            SvtLinguConfig().GetProperty( ::rtl::OUString::createFromAscii(
-                        UPN_IS_GRAMMAR_AUTO ) ) >>= bIsAutoGrammar;
+            SvtLinguConfig().GetProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        UPN_IS_GRAMMAR_AUTO )) ) >>= bIsAutoGrammar;
 
             if (bIsOnlineSpell && bIsAutoGrammar)
                 StartGrammarChecking( *this );
@@ -2204,7 +2162,7 @@ sal_Bool SwDoc::IsInHeaderFooter( const SwNodeIndex& rIdx ) const
         }
         if( n >= GetSpzFrmFmts()->Count() )
         {
-            ASSERT( mbInReading, "Fly-Section aber kein Format gefunden" );
+            OSL_ENSURE( mbInReading, "Fly-Section aber kein Format gefunden" );
             return sal_False;
         }
     }

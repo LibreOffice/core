@@ -124,8 +124,8 @@ namespace dbaxml
                         (void)ex;
                         OSL_ASSERT(0);
                     }
-                } // if ( s_bFirstTime )
-            } // if ( m_eWhat == E_JAVA )
+                }
+            }
             else if ( m_eWhat == E_CALC )
             {
                 static bool s_bFirstTime = true;
@@ -199,7 +199,7 @@ namespace dbaxml
                 if ( m_aTypeCollection.needsJVM(sURL) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_JAVA);
-                } // if ( m_aTypeCollection.needsJVM(sURL) )
+                }
                 else if ( sURL.matchIgnoreAsciiCaseAsciiL("sdbc:calc:",10,0) )
                 {
                     pCreatorThread = new FastLoader(m_xFactory,FastLoader::E_CALC);
@@ -241,7 +241,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     uno::Reference< XParser > xParser(
         rFactory->createInstance(
-        ::rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -846,10 +846,8 @@ SvXMLImportContext* ODBFilter::CreateStylesContext(sal_uInt16 _nPrefix,const ::r
     {
         pContext = new OTableStylesContext(*this, _nPrefix, rLocalName, xAttrList, bIsAutoStyle);
         if (bIsAutoStyle)
-            //xAutoStyles = pContext;
             SetAutoStyles((SvXMLStylesContext*)pContext);
         else
-            //xStyles = pContext;
             SetStyles((SvXMLStylesContext*)pContext);
     }
     return pContext;

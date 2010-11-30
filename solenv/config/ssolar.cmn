@@ -22,7 +22,6 @@ common
         *copyprj
 		__mgrdir
 		product
-        rsc_once
         wrapper_override_cc_wrapper
         *zipdep
 		ALT_L10N_MODULE

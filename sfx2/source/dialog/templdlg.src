@@ -42,18 +42,7 @@ ImageList DLG_STYLE_DESIGNER
     };
     IdCount = { 3 ; };
 };
-ImageList IMG_LST_STYLE_DESIGNER_HC
-{
-    Prefix = "sch";
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-    IdList =
-    {
-        SID_STYLE_WATERCAN ;
-        SID_STYLE_NEW_BY_EXAMPLE ;
-        SID_STYLE_UPDATE_BY_EXAMPLE ;
-    };
-    IdCount = { 3 ; };
-};
+
  // RID_STYLECATALOG ------------------------------------------------------
 ModalDialog RID_STYLECATALOG
 {
@@ -136,11 +125,13 @@ ModalDialog RID_STYLECATALOG
         DropDown = TRUE ;
     };
 };
+
  // Strings ---------------------------------------------------------------
 String STR_STYLE_FILTER_HIERARCHICAL
 {
     Text [ en-US ] = "Hierarchical" ;
 };
+
  // DLG_STYLE_DESIGNER ----------------------------------------------------
 DockingWindow DLG_STYLE_DESIGNER
 {

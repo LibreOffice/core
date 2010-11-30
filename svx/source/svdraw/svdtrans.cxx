@@ -1088,46 +1088,39 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
         // Metrisch
         case MAP_100TH_MM   :
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case MAP_10TH_MM    :
         {
-            sal_Char aText[] = "/10mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/10mm"));
             break;
         }
         case MAP_MM         :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case MAP_CM         :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
 
         // Inch
         case MAP_1000TH_INCH:
         {
-            sal_Char aText[] = "/1000\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/1000\""));
             break;
         }
         case MAP_100TH_INCH :
         {
-            sal_Char aText[] = "/100\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100\""));
             break;
         }
         case MAP_10TH_INCH  :
         {
-            sal_Char aText[] = "/10\"";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/10\""));
             break;
         }
         case MAP_INCH       :
@@ -1138,34 +1131,29 @@ void SdrFormatter::TakeUnitStr(MapUnit eUnit, XubString& rStr)
         }
         case MAP_POINT      :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case MAP_TWIP       :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
 
         // Sonstiges
         case MAP_PIXEL      :
         {
-            sal_Char aText[] = "pixel";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pixel"));
             break;
         }
         case MAP_SYSFONT    :
         {
-            sal_Char aText[] = "sysfont";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("sysfont"));
             break;
         }
         case MAP_APPFONT    :
         {
-            sal_Char aText[] = "appfont";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("appfont"));
             break;
         }
         case MAP_RELATIVE   :
@@ -1193,20 +1181,17 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         // Metrisch
         case FUNIT_100TH_MM:
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case FUNIT_MM     :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case FUNIT_CM     :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
         case FUNIT_M      :
@@ -1217,28 +1202,24 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("km"));
             break;
         }
 
         // Inch
         case FUNIT_TWIP   :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
         case FUNIT_POINT  :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case FUNIT_PICA   :
         {
-            sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pica"));
             break;
         }
         case FUNIT_INCH   :
@@ -1249,14 +1230,12 @@ void SdrFormatter::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("ft"));
             break;
         }
         case FUNIT_MILE   :
         {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mile(s)"));
             break;
         }
 

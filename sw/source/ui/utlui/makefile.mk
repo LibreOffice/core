@@ -50,28 +50,28 @@ SRC1FILES =  \
                 utlui.src
 
 EXCEPTIONSFILES= \
+        $(SLO)$/attrdesc.obj \
         $(SLO)$/bookctrl.obj \
-        $(SLO)$/glbltree.obj \
-        $(SLO)$/navipi.obj \
-        $(SLO)$/unotools.obj    \
-        $(SLO)$/content.obj \
-        $(SLO)$/swrenamexnameddlg.obj
-
-SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/condedit.obj \
+        $(SLO)$/content.obj \
+        $(SLO)$/glbltree.obj \
         $(SLO)$/gloslst.obj \
         $(SLO)$/initui.obj \
-        $(SLO)$/navicfg.obj \
+        $(SLO)$/navipi.obj \
         $(SLO)$/numfmtlb.obj \
         $(SLO)$/prcntfld.obj \
+        $(SLO)$/shdwcrsr.obj \
+        $(SLO)$/swrenamexnameddlg.obj \
         $(SLO)$/textcontrolcombo.obj \
         $(SLO)$/tmplctrl.obj \
         $(SLO)$/uitool.obj \
-        $(SLO)$/uiitems.obj \
-        $(SLO)$/attrdesc.obj \
-        $(SLO)$/shdwcrsr.obj \
-                $(SLO)$/zoomctrl.obj \
-                $(SLO)$/viewlayoutctrl.obj
+        $(SLO)$/unotools.obj \
+        $(SLO)$/viewlayoutctrl.obj \
+        $(SLO)$/zoomctrl.obj
+
+SLOFILES =  $(EXCEPTIONSFILES) \
+        $(SLO)$/navicfg.obj \
+        $(SLO)$/uiitems.obj
 
 # --- Tagets -------------------------------------------------------
 

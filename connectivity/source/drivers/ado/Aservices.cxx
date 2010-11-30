@@ -61,10 +61,9 @@ void REGISTER_PROVIDER(
         const Sequence< OUString>& Services,
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
-    OUString aMainKeyName;
-    aMainKeyName = OUString::createFromAscii("/");
+    OUString aMainKeyName(RTL_CONSTASCII_USTRINGPARAM("/"));
     aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "ADO::component_writeInfo : could not create a registry key !");
@@ -86,7 +85,7 @@ struct ProviderRequest
         sal_Char const* pImplementationName
     )
     : xServiceManager(reinterpret_cast<XMultiServiceFactory*>(pServiceManager))
-    , sImplementationName(OUString::createFromAscii(pImplementationName))
+    , sImplementationName(OUString(RTL_CONSTASCII_USTRINGPARAM(pImplementationName)))
     {
     }
 

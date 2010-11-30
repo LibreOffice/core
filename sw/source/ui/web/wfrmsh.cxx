@@ -51,11 +51,6 @@
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
 
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 SFX_IMPL_INTERFACE(SwWebFrameShell, SwFrameShell, SW_RES(STR_SHELLNAME_WEBFRAME))
 {
     SFX_POPUPMENU_REGISTRATION(SW_RES(MN_FRM_POPUPMENU));
@@ -66,23 +61,11 @@ SFX_IMPL_INTERFACE(SwWebFrameShell, SwFrameShell, SW_RES(STR_SHELLNAME_WEBFRAME)
 
 TYPEINIT1(SwWebFrameShell, SwFrameShell)
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
-
 SwWebFrameShell::SwWebFrameShell(SwView &_rView) :
     SwFrameShell(_rView)
 {
     SetHelpId(SW_WEBFRAMESHELL);
 }
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
-
 
 SwWebFrameShell::~SwWebFrameShell()
 {

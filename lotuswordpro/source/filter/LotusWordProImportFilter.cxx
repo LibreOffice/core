@@ -69,7 +69,7 @@ private:
     std::vector< OUString > m_vStringChunks;
     SvStream& m_InputStream;
 
-    bool CheckValidData( sal_Int8 nChar )
+    bool CheckValidData( sal_Int8 nChar ) const
     {
         if( ( nChar >= 0x20 && nChar <= 0x7E ) && ( nChar != 0X40 ) )
             return  true;

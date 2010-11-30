@@ -62,7 +62,7 @@ SwFmtRefMark::SwFmtRefMark( const SwFmtRefMark& rAttr )
 
 int SwFmtRefMark::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return aRefName == ((SwFmtRefMark&)rAttr).aRefName;
 }
 

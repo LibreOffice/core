@@ -64,7 +64,7 @@
 #include <svx/dialogs.hrc>
 // static ----------------------------------------------------------------
 
-// --> OD 2004-06-18 #i19922#
+// Word 97 incompatibility (#i19922#)
 //static const long MINBODY = 284;            // 0,5cm in twips aufgerundet
 static const long MINBODY = 56;  // 1mm in twips rounded
 
@@ -89,10 +89,6 @@ static USHORT pRanges[] =
     SID_ATTR_HDFT_DYNAMIC_SPACING, SID_ATTR_HDFT_DYNAMIC_SPACING,
     0
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 // gibt den Bereich der Which-Werte zurueck
 
@@ -711,10 +707,6 @@ void SvxHFPage::ResetBackground_Impl( const SfxItemSet& rSet )
     }
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_LRSPACE );
@@ -866,10 +858,6 @@ void SvxHFPage::ActivatePage( const SfxItemSet& rSet )
     RangeHdl( 0 );
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if ( _pSet )
@@ -953,9 +941,7 @@ IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
     aRMEdit.SetMax( aLMEdit.Normalize( nMax ), FUNIT_TWIP );
     return 0;
 }
-/* -----------------------------26.08.2002 12:49------------------------------
 
- ---------------------------------------------------------------------------*/
 void lcl_Move(Window& rWin, sal_Int32 nDiff)
 {
     Point aPos(rWin.GetPosPixel());

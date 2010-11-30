@@ -249,9 +249,12 @@ namespace
             if(nPushFlags)
             {
                 OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: PUSH with no property holders (!)");
-                PropertyHolder* pNew = new PropertyHolder(*maPropertyHolders.back());
-                pNew->setPushFlags(nPushFlags);
-                maPropertyHolders.push_back(pNew);
+                if ( !maPropertyHolders.empty() )
+                {
+                    PropertyHolder* pNew = new PropertyHolder(*maPropertyHolders.back());
+                    pNew->setPushFlags(nPushFlags);
+                    maPropertyHolders.push_back(pNew);
+                }
             }
         }
 
@@ -355,8 +358,9 @@ namespace
 
         PropertyHolder& Current()
         {
+            static PropertyHolder aDummy;
             OSL_ENSURE(maPropertyHolders.size(), "PropertyHolders: CURRENT with no property holders (!)");
-            return *maPropertyHolders.back();
+            return maPropertyHolders.empty() ? aDummy : *maPropertyHolders.back();
         }
 
         ~PropertyHolders()

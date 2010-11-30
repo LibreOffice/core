@@ -777,37 +777,27 @@ BOOL Outliner::IsForceAutoColor() const
     DBG_CHKTHIS(Outliner,0);
     return pEditEngine->IsForceAutoColor();
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::StartSpelling(EditView& rEditView, sal_Bool bMultipleDoc)
 {
     pEditEngine->StartSpelling(rEditView, bMultipleDoc);
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::EndSpelling()
 {
     pEditEngine->EndSpelling();
 }
-/*-- 13.10.2003 16:56:23---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 bool Outliner::SpellSentence(EditView& rEditView, ::svx::SpellPortions& rToFill, bool bIsGrammarChecking )
 {
     return pEditEngine->SpellSentence(rEditView, rToFill, bIsGrammarChecking );
 }
-/*-- 08.09.2008 11:39:05---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::PutSpellingToSentenceStart( EditView& rEditView )
 {
     pEditEngine->PutSpellingToSentenceStart( rEditView );
 }
-/*-- 13.10.2003 16:56:25---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void Outliner::ApplyChangedSentence(EditView& rEditView, const ::svx::SpellPortions& rNewPortions, bool bRecheck )
 {
     pEditEngine->ApplyChangedSentence( rEditView, rNewPortions, bRecheck );

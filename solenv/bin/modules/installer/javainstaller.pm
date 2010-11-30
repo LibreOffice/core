@@ -260,7 +260,6 @@ sub translate_javafile
             $newstring =~ s/\"/\\\"/g;  # masquerading the "
             $newstring =~ s/\\\\\"/\\\"/g;  # unmasquerading if \" was converted to \\" (because " was already masked)
 
-            # if (!( $newstring eq "" )) { ${$idtfile}[$i] =~ s/$oldstring/$newstring/; }
             ${$templatefile}[$i] =~ s/$oldstring/$newstring/;   # always substitute, even if $newstring eq ""
         }
     }
@@ -861,15 +860,7 @@ sub prepare_language_pack_in_xmlfile
 {
     my ($xmlfile, $languagesarrayref) = @_;
 
-    # if ( ! $installer::globals::is_unix_multi )
-    # {
-    #   remove_languagepack_from_xmlfile($xmlfile);
-    # }
-    # else
-    # {
         duplicate_languagepack_in_xmlfile($xmlfile, $languagesarrayref);
-    # }
-
 }
 
 #######################################################
@@ -1168,8 +1159,7 @@ sub copy_setup_locally
     if ($$loadernameref eq "") { installer::exiter::exit_program("ERROR: Could not find Java loader $loadername!", "copy_setup_locally"); }
 
     installer::systemactions::copy_one_file($$loadernameref, $newname);
-    my $localcall = "chmod 775 $newname \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $newname;
 }
 
 
@@ -1185,8 +1175,7 @@ sub put_loader_into_installset
 
     installer::systemactions::copy_one_file($filename, $installname);
 
-    my $localcall = "chmod 775 $installname \>\/dev\/null 2\>\&1";
-    system($localcall);
+    chmod 0775, $installname;
 }
 
 #################################################################
@@ -1672,7 +1661,6 @@ sub create_java_installer
     # creating the directory
     my $javadir = installer::systemactions::create_directories("javainstaller", $languagestringref);
     $javadir =~ s/\/\s*$//;
-#   push(@installer::globals::removedirs, $javadir);
 
     # copying the content from directory install_sdk into the java directory
 
@@ -1694,7 +1682,6 @@ sub create_java_installer
 
     # determining the ulf language file
 
-    # my $ulffilename = "installsdk.ulf";
     my $ulffilename = "installsdk.jlf";
     $ulffilename = $installer::globals::javalanguagepath . $installer::globals::separator . $ulffilename;
     my $ulffile = installer::files::read_file($ulffilename);
@@ -1728,7 +1715,6 @@ sub create_java_installer
 
         # setting the class name in the java file ( "MyResources_TEMPLATE" -> "MyResources_en" )
 
-        # if ( $onelanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $onelanguage = $1; }
         $onelanguage =~ s/en-US/en/;    # java file name and class name contain only "_en"
         $onelanguage =~ s/\-/\_/;       # "pt-BR" -> "pt_BR"
         my $classfilename = "MyResources_" . $onelanguage;
@@ -1750,8 +1736,6 @@ sub create_java_installer
     my $baselanguage = installer::languages::get_default_language($languagesarrayref);
     $baselanguage =~ s/\-/\_/;      # "pt-BR" -> "pt_BR"
     $baselanguage =~ s/en_US/en/;   # java file name and class name contain only "_en"
-    # if ( $baselanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $baselanguage = $1; }     # java file name and class name contain only "_en"
-    # $baselanguage =~ s/en-US/en/;  # java file name and class name contain only "_en"
     my $baselanguagefilename = $javadir . $installer::globals::separator . "locale/resources/MyResources_" . $baselanguage . "\.java";
     my $basedestfilename = $javadir . $installer::globals::separator . "locale/resources/MyResources.java";
     installer::systemactions::copy_one_file($baselanguagefilename, $basedestfilename);

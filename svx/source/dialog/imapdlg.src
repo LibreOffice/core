@@ -265,13 +265,8 @@ ModelessDialog RID_SVXDLG_IMAP
         MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
         IMAPDLG_IDLIST
     };
-    ImageList ILH_IMAPDLG
-    {
-        Prefix = "idh";
-        MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; } ;
-        IMAPDLG_IDLIST
-    };
 };
+
 Control RID_SVXCTL_IMAP
 {
     Border = TRUE ;

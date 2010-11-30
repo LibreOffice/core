@@ -865,7 +865,6 @@ FltError ImportExcel8::Read( void )
                     eAkt = EXC_STATE_SHEET;
                     aIn.SeekGlobalPosition();
                     continue;   // next iteration in while loop
-//                break;    // unxsols warning: statement unreachable
                 case EXC_STATE_SHEET:
                     Eof();
                     eAkt = EXC_STATE_END;

@@ -84,7 +84,7 @@ SwFldPortion *SwFldPortion::Clone( const XubString &rExpand ) const
 
 void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
 {
-    ASSERT( pFld, "TakeNextOffset: Missing Source" );
+    OSL_ENSURE( pFld, "TakeNextOffset: Missing Source" );
     nNextOffset = pFld->GetNextOffset();
     aExpand.Erase( 0, nNextOffset );
     bFollow = sal_True;
@@ -455,7 +455,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     SwFontSave aSave( rInf, pFnt );
 
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
     if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
@@ -595,7 +595,7 @@ sal_Bool SwNumberPortion::Format( SwTxtFormatInfo &rInf )
     if( rInf.IsNumDone() )
     {
 //        SetAscent( rInf.GetAscent() );
-        ASSERT( Height() && nAscent, "NumberPortions without Height | Ascent" );
+        OSL_ENSURE( Height() && nAscent, "NumberPortions without Height | Ascent" );
 
         long nDiff( 0 );
         // --> OD 2008-01-23 #newlistlevelattrs#
@@ -1093,7 +1093,7 @@ void SwGrfNumPortion::SetBase( long nLnAscent, long nLnDescent,
 
 void SwTxtFrm::StopAnimation( OutputDevice* pOut )
 {
-    ASSERT( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
+    OSL_ENSURE( HasAnimation(), "SwTxtFrm::StopAnimation: Which Animation?" );
     if( HasPara() )
     {
         SwLineLayout *pLine = GetPara();
@@ -1156,7 +1156,7 @@ SwCombinedPortion::SwCombinedPortion( const XubString &rTxt )
 
 void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
-    ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
+    OSL_ENSURE( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
     if( Width() )
     {
         rInf.DrawBackBrush( *this );
@@ -1169,7 +1169,7 @@ void SwCombinedPortion::Paint( const SwTxtPaintInfo &rInf ) const
         USHORT nCount = aExpand.Len();
         if( !nCount )
             return;
-        ASSERT( nCount < 7, "Too much combined characters" );
+        OSL_ENSURE( nCount < 7, "Too much combined characters" );
 
         // the first character of the second row
         USHORT nTop = ( nCount + 1 ) / 2;
@@ -1221,7 +1221,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         return sal_False;
     }
 
-    ASSERT( nCount < 7, "Too much combined characters" );
+    OSL_ENSURE( nCount < 7, "Too much combined characters" );
     // If there are leading "weak"-scripttyped characters in this portion,
     // they get the actual scripttype.
     USHORT i = 0;
@@ -1233,7 +1233,7 @@ sal_Bool SwCombinedPortion::Format( SwTxtFormatInfo &rInf )
         i = 0;
         while( i < aExpand.Len() )
         {
-            ASSERT( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
+            OSL_ENSURE( aScrType[i] < SW_SCRIPTS, "Combined: Script fault" );
             if( !aWidth[ aScrType[i] ] )
             {
                 rInf.GetOut()->SetFont( rInf.GetFont()->GetFnt( aScrType[i] ) );

@@ -872,7 +872,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         {
             String aTransform;
 
-            aTransform = NMSP_RTL::OUString::createFromAscii( "translate" );
+            aTransform = NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( "translate" ));
             aTransform += '(';
             aTransform += String( GetValueString( aPt.X() ) );
             aTransform += ',';
@@ -881,7 +881,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
             if( rFont.GetOrientation() )
             {
-                aTransform += String( NMSP_RTL::OUString::createFromAscii( " rotate" ) );
+                aTransform += String( NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( " rotate" )) );
                 aTransform += '(';
                 aTransform += String( NMSP_RTL::OUString::valueOf( rFont.GetOrientation() * -0.1 ) );
                 aTransform += ')';
@@ -889,13 +889,13 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 
             if( rFont.GetItalic() != ITALIC_NONE )
             {
-                aTransform += String( NMSP_RTL::OUString::createFromAscii( " skewX" ) );
+                aTransform += String( NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( " skewX" )) );
                 aTransform += '(';
                 aTransform += String( NMSP_RTL::OUString::valueOf( (sal_Int32) -10 ) );
                 aTransform += ')';
             }
 
-            aTransform += String( NMSP_RTL::OUString::createFromAscii( " translate" ) );
+            aTransform += String( NMSP_RTL::OUString( RTL_CONSTASCII_USTRINGPARAM( " translate" )) );
             aTransform += '(';
             aTransform += String( GetValueString( -aPt.X() ) );
             aTransform += ',';

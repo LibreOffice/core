@@ -83,10 +83,10 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
         ScCellRangesBase* pUno= dynamic_cast< ScCellRangesBase* >( xIf.get() );
         ScDocShell* pDocShell = NULL;
         if ( !pUno )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii("Failed to obtain the impl class from the drawpage"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Failed to obtain the impl class from the drawpage")), uno::Reference< uno::XInterface >() );
         pDocShell = pUno->GetDocShell();
         if ( !pDocShell )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii("Failed to obtain the docshell implclass"), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Failed to obtain the docshell implclass")), uno::Reference< uno::XInterface >() );
 
         uno::Reference< sheet::XSpreadsheetDocument > xSpreadsheetDocument( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
         uno::Reference< sheet::XSpreadsheets > xSpreadsheets = xSpreadsheetDocument->getSheets();

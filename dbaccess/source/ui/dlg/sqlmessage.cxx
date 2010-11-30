@@ -70,7 +70,7 @@ namespace
     class IImageProvider
     {
     public:
-        virtual Image   getImage( bool _highContrast ) const = 0;
+        virtual Image   getImage() const = 0;
 
         virtual ~IImageProvider() { }
     };
@@ -89,27 +89,17 @@ namespace
     {
     private:
         USHORT  m_defaultImageID;
-        USHORT  m_highContrastImageID;
 
         mutable Image   m_defaultImage;
-        mutable Image   m_highContrastImage;
 
     public:
-        ImageProvider( USHORT _defaultImageID, USHORT _highContrastImageID )
+        ImageProvider( USHORT _defaultImageID )
             :m_defaultImageID( _defaultImageID )
-            ,m_highContrastImageID( _highContrastImageID )
         {
         }
 
-        virtual Image getImage( bool _highContrast ) const
+        virtual Image getImage() const
         {
-            if ( _highContrast )
-            {
-                if ( !m_highContrastImage )
-                    m_highContrastImage = Image( ModuleRes( m_highContrastImageID ) );
-                return m_highContrastImage;
-            }
-
             if ( !m_defaultImage )
                 m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
             return m_defaultImage;
@@ -153,20 +143,17 @@ namespace
         {
             ::boost::shared_ptr< IImageProvider >* ppProvider( &m_pErrorImage );
             USHORT nNormalImageID( BMP_EXCEPTION_ERROR );
-            USHORT nHCImageID( BMP_EXCEPTION_ERROR_SCH );
 
             switch ( _eType )
             {
             case SQLExceptionInfo::SQL_WARNING:
                 ppProvider = &m_pWarningsImage;
                 nNormalImageID = BMP_EXCEPTION_WARNING;
-                nHCImageID = BMP_EXCEPTION_WARNING_SCH;
                 break;
 
             case SQLExceptionInfo::SQL_CONTEXT:
                 ppProvider = &m_pInfoImage;
                 nNormalImageID = BMP_EXCEPTION_INFO;
-                nHCImageID = BMP_EXCEPTION_INFO_SCH;
                 break;
 
             default:
@@ -174,7 +161,7 @@ namespace
             }
 
             if ( !ppProvider->get() )
-                ppProvider->reset( new ImageProvider( nNormalImageID, nHCImageID ) );
+                ppProvider->reset( new ImageProvider( nNormalImageID ) );
             return *ppProvider;
         }
 
@@ -314,9 +301,9 @@ namespace
     }
 
     //------------------------------------------------------------------------------
-    void lcl_insertExceptionEntry( SvTreeListBox& _rList, bool _bHiContrast, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
+    void lcl_insertExceptionEntry( SvTreeListBox& _rList, size_t _nElementPos, const ExceptionDisplayInfo& _rEntry )
     {
-        Image aEntryImage( _rEntry.pImageProvider->getImage( _bHiContrast ) );
+        Image aEntryImage( _rEntry.pImageProvider->getImage() );
         SvLBoxEntry* pListEntry =
             _rList.InsertEntry( _rEntry.pLabelProvider->getLabel(), aEntryImage, aEntryImage );
         pListEntry->SetUserData( reinterpret_cast< void* >( _nElementPos ) );
@@ -375,7 +362,6 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
     m_aExceptionText.SetReadOnly(sal_True);
 
     bool bHave22018 = false;
-    bool bHiContrast = isHiContrast( this );
     size_t elementPos = 0;
 
     for (   ExceptionDisplayChain::const_iterator loop = m_aExceptions.begin();
@@ -383,7 +369,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
             ++loop, ++elementPos
         )
     {
-        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, elementPos, *loop );
+        lcl_insertExceptionEntry( m_aExceptionList, elementPos, *loop );
         bHave22018 = loop->sSQLState.EqualsAscii( "22018" );
     }
 
@@ -399,7 +385,7 @@ OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDi
         aInfo22018.pImageProvider = aProviderFactory.getImageProvider( SQLExceptionInfo::SQL_CONTEXT );
         m_aExceptions.push_back( aInfo22018 );
 
-        lcl_insertExceptionEntry( m_aExceptionList, bHiContrast, m_aExceptions.size() - 1, aInfo22018 );
+        lcl_insertExceptionEntry( m_aExceptionList, m_aExceptions.size() - 1, aInfo22018 );
     }
 }
 

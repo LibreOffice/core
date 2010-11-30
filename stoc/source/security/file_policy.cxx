@@ -199,12 +199,12 @@ class PolicyReader
     inline void back( sal_Unicode c ) SAL_THROW( () )
         { m_back = c; }
 
-    inline bool isWhiteSpace( sal_Unicode c ) SAL_THROW( () )
+    inline bool isWhiteSpace( sal_Unicode c ) const SAL_THROW( () )
         { return (' ' == c || '\t' == c || '\n' == c || '\r' == c); }
     void skipWhiteSpace()
         SAL_THROW( (RuntimeException) );
 
-    inline bool isCharToken( sal_Unicode c ) SAL_THROW( () )
+    inline bool isCharToken( sal_Unicode c ) const SAL_THROW( () )
         { return (';' == c || ',' == c || '{' == c || '}' == c); }
 
 public:
@@ -439,7 +439,6 @@ static OUString s_user = OUSTR("user");
 static OUString s_permission = OUSTR("permission");
 static OUString s_openBrace = OUSTR("{");
 static OUString s_closingBrace = OUSTR("}");
-static OUString s_semi = OUSTR(";");
 
 static OUString s_filePermission = OUSTR("com.sun.star.io.FilePermission");
 static OUString s_socketPermission = OUSTR("com.sun.star.connection.SocketPermission");

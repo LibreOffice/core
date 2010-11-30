@@ -45,7 +45,7 @@ PRJPCH=
 
 CXXFILES =
 
-.IF "$(dbgutil)"!=""
+.IF "$(DBG_LEVEL)">="2"
 CXXFILES += \
         errhdl.cxx			\
         dbgloop.cxx

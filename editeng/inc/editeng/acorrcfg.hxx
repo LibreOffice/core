@@ -32,9 +32,7 @@
 
 #include "editeng/editengdllapi.h"
 #include <unotools/configitem.hxx>
-/* -----------------------------12.10.00 11:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SvxAutoCorrect;
 class SvxAutoCorrCfg;
 class EDITENG_DLLPUBLIC SvxBaseAutoCorrCfg : public utl::ConfigItem
@@ -51,9 +49,7 @@ public:
     virtual void            Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames);
     void                    SetModified() {ConfigItem::SetModified();}
 };
-/* -----------------------------12.10.00 11:40--------------------------------
 
- ---------------------------------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxSwAutoCorrCfg : public utl::ConfigItem
 {
     SvxAutoCorrCfg& rParent;

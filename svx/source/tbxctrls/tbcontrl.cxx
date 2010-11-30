@@ -276,14 +276,7 @@ public:
                                   const SfxPoolItem* pState );
     virtual SfxPopupWindow* Clone() const;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
-
-    inline BOOL     IsHighContrast( void ) const;
 };
-
-inline BOOL SvxFrameWindow_Impl::IsHighContrast( void ) const
-{
-    return GetSettings().GetStyleSettings().GetHighContrastMode();
-}
 
 //========================================================================
 // class SvxLineWindow_Impl ---------------------------------------------------
@@ -440,16 +433,16 @@ void SvxStyleBox_Impl::Select()
 
             Sequence< PropertyValue > aArgs( 2 );
             aArgs[0].Value  = makeAny( OUString( aSelEntry ) );
-            aArgs[1].Name   = OUString::createFromAscii( "Family" );
+            aArgs[1].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Family"));
             aArgs[1].Value  = makeAny( sal_Int16( eStyleFamily ));
             if( bCreateNew )
             {
-                aArgs[0].Name   = OUString::createFromAscii( "Param" );
+                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Param"));
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, String::CreateFromAscii(".uno:StyleNewByExample"), aArgs);
             }
             else
             {
-                aArgs[0].Name   = OUString::createFromAscii( "Template" );
+                aArgs[0].Name   = OUString(RTL_CONSTASCII_USTRINGPARAM("Template"));
                 SfxToolBoxControl::Dispatch( m_xDispatchProvider, m_aCommand, aArgs );
             }
         }
@@ -511,9 +504,7 @@ long SvxStyleBox_Impl::Notify( NotifyEvent& rNEvt )
     }
     return nHandled ? nHandled : ComboBox::Notify( rNEvt );
 }
-/* -----------------------------08.03.2002 13:03------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxStyleBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -1066,7 +1057,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     BindListener();
     String sCommand(String::CreateFromAscii( ".uno:BorderReducedMode" ));
     AddStatusListener( sCommand );
-    aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
+    aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
     /*
      *  1       2        3         4
@@ -1097,9 +1088,7 @@ SvxFrameWindow_Impl::SvxFrameWindow_Impl( USHORT nId, const Reference< XFrame >&
     SetText( SVX_RESSTR(RID_SVXSTR_FRAME) );
     aFrameSet.Show();
 }
-/*-- 22.09.2004 12:27:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxFrameWindow_Impl::~SvxFrameWindow_Impl()
 {
     UnbindListener();
@@ -1127,7 +1116,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 
     if( ( rDCEvt.GetType() == DATACHANGED_SETTINGS ) && ( rDCEvt.GetFlags() & SETTINGS_STYLE ) )
     {
-        aImgList = ImageList( SVX_RES( IsHighContrast()? RID_SVXIL_FRAME_HC : RID_SVXIL_FRAME ) );
+        aImgList = ImageList( SVX_RES( RID_SVXIL_FRAME ) );
 
         USHORT  nNumOfItems = aFrameSet.GetItemCount();
 

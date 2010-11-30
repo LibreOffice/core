@@ -101,7 +101,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
 
     Sequence< Any > aAnys(1);
     OUString aBaseURI;
-    if (aMediaMap.find(OUString::createFromAscii("URL"))->second >>= aBaseURI)
+    if (aMediaMap.find(OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" )))->second >>= aBaseURI)
     {
         INetURLObject aURLObj(aBaseURI);
         // base URI in this case is the URI of the actual saving location
@@ -119,7 +119,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
      Reference< XPropertySet > xInfoSet(
         GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
      xInfoSet->setPropertyValue(
-        OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
+        OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" )), makeAny( aBaseURI ));
     aAnys[0] <<= xInfoSet;
 
 
@@ -170,12 +170,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< ::com::sun::star
             Sequence<com::sun::star::beans::PropertyValue> pValue=xstyleLoader->getStyleLoaderOptions();
 
             //Load the Styles from the Template URL Supplied in the TypeDetection file
-            if(msTemplateName.indexOf(OUString::createFromAscii("file:"))==-1)
+            if(msTemplateName.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM( "file:" )))==-1)
             {
                 Reference< XConfigManager >xCfgMgr ( mxMSF->createInstance(
-                    OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
-                OUString PathString=xCfgMgr->substituteVariables(OUString::createFromAscii("$(progurl)"));
-                PathString=PathString.concat(OUString::createFromAscii("/"));
+                    OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ), UNO_QUERY );
+                OUString PathString(xCfgMgr->substituteVariables(OUString(RTL_CONSTASCII_USTRINGPARAM("$(progurl)"))));
+                PathString = PathString.concat(OUString( RTL_CONSTASCII_USTRINGPARAM( "/" )));
                 msTemplateName=PathString.concat(msTemplateName);
             }
 
@@ -272,7 +272,7 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
 
         // get the base URI, so we can use relative links
         OUString aBaseURI;
-        if (aMediaMap.find(OUString::createFromAscii("URL"))->second >>= aBaseURI)
+        if (aMediaMap.find(OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" )))->second >>= aBaseURI)
         {
             INetURLObject aURLObj(aBaseURI);
             // base URI in this case is the URI of the actual saving location
@@ -292,12 +292,12 @@ sal_Bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< ::com::sun::star
          Reference< XPropertySet > xInfoSet(
             GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
          xInfoSet->setPropertyValue(
-            OUString::createFromAscii( "UsePrettyPrinting" ), makeAny( bPrettyPrint ));
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "UsePrettyPrinting" )), makeAny( bPrettyPrint ));
         xInfoSet->setPropertyValue(
-                        OUString::createFromAscii( "ExportTextNumberElement" ),
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportTextNumberElement" )),
                         makeAny( bExportTextNumberElementForListItems ));
          xInfoSet->setPropertyValue(
-            OUString::createFromAscii( "BaseURI" ), makeAny( aBaseURI ));
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "BaseURI" )), makeAny( aBaseURI ));
         aAnys[1] <<= xInfoSet;
 
         Reference< XExporter > xExporter( mxMSF->createInstanceWithArguments (
@@ -376,11 +376,11 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     {
         comphelper::SequenceAsHashMap aMap(aAnySeq);
         msFilterName = aMap.getUnpackedValueOrDefault(
-            OUString::createFromAscii("Type"), OUString());
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" )), OUString());
         msUserData = aMap.getUnpackedValueOrDefault(
-            OUString::createFromAscii("UserData"), Sequence< OUString >());
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "UserData" )), Sequence< OUString >());
         msTemplateName = aMap.getUnpackedValueOrDefault(
-            OUString::createFromAscii("TemplateName"), OUString());
+            OUString( RTL_CONSTASCII_USTRINGPARAM( "TemplateName" )), OUString());
     }
 }
 OUString XmlFilterAdaptor_getImplementationName ()

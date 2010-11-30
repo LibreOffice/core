@@ -65,9 +65,9 @@ struct LayoutInfoOrder
         else
         {
             // corresponding <SwFrm> instances are in different repeating table header rows
-            ASSERT( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
+            OSL_ENSURE( rLayoutInfo.mpAnchorFrm->FindTabFrm(),
                     "<LayoutInfoOrder::operator()> - table frame not found" );
-            ASSERT( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
+            OSL_ENSURE( rNewLayoutInfo.mpAnchorFrm->FindTabFrm(),
                     "<LayoutInfoOrder::operator()> - table frame not found" );
             const SwTabFrm* pLayoutInfoTabFrm( rLayoutInfo.mpAnchorFrm->FindTabFrm() );
             const SwTabFrm* pNewLayoutInfoTabFrm( rNewLayoutInfo.mpAnchorFrm->FindTabFrm() );
@@ -205,22 +205,5 @@ sw::sidebarwindows::SwSidebarWin* SwAnnotationItem::GetSidebarWindow(
                                                 *this,
                                                 pFmtFld );
 }
-
-/*
-SwPosition SwRedCommentItem::GetAnchorPosition()
-{
-    return *pRedline->Start();
-}
-
-SwSidebarWin* SwRedCommentItem::GetSidebarWindow(Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits)
-{
-    return new SwRedComment(pParent,nBits,aMgr,aBits,pRedline);
-}
-
-bool SwRedCommentItem::UseElement()
-{
-    return true;
-}
-*/
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

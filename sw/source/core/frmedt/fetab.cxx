@@ -117,7 +117,7 @@ void SwFEShell::ParkCursorInTab()
 {
     SwCursor * pSwCrsr = GetSwCrsr();
 
-    ASSERT(pSwCrsr, "no SwCursor");
+    OSL_ENSURE(pSwCrsr, "no SwCursor");
 
     SwPosition aStartPos = *pSwCrsr->GetPoint(), aEndPos = aStartPos;
 
@@ -582,10 +582,6 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
-                    //ASSERT( bVert ||
-                    //        pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
-                    //        "GetTabCols: wrong result" )
-
                     pColumnCacheLastTabFrm = pTab;
                 }
                 else
@@ -721,9 +717,6 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     _GetTabCols( rToFill, pFrm );
 }
 
-/*-- 19.01.2004 08:56:42---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 {
     const SwFrm *pFrm = GetCurrFrm();
@@ -735,9 +728,7 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 
     _GetTabRows( rToFill, pFrm );
 }
-/*-- 19.01.2004 08:56:44---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly )
 {
     SwFrm *pBox = GetCurrFrm();
@@ -754,18 +745,14 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly )
     GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
     EndAllActionAndCall();
 }
-/*-- 19.01.2004 08:59:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
 {
     const SwFrm *pBox = GetBox( rPt );
     if ( pBox )
         _GetTabRows( rToFill, pBox );
 }
-/*-- 19.01.2004 08:59:45---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const Point &rPt )
 {
     const SwFrm *pBox = GetBox( rPt );
@@ -999,9 +986,7 @@ BOOL SwFEShell::HasBoxSelection() const
     if( IsTableMode() )
         return TRUE;
     SwPaM* pPam = GetCrsr();
-        // leere Boxen gelten auch ohne Selektion als selektiert
-//  if( !pPam->HasMark() )
-//      return FALSE;
+        // empty boxes are also selected as the absence of selection
     BOOL bChg = FALSE;
     if( pPam->GetPoint() == pPam->End())
     {
@@ -1020,7 +1005,7 @@ BOOL SwFEShell::HasBoxSelection() const
             if( !pCNd )
             {
                 pCNd = GetDoc()->GetNodes().GoPrevious( &aIdx );
-                ASSERT( pCNd, "kein ContentNode in der Box ??" );
+                OSL_ENSURE( pCNd, "kein ContentNode in der Box ??" );
             }
             if( pPam->GetMark()->nContent == pCNd->Len() )
             {
@@ -1445,7 +1430,7 @@ USHORT SwFEShell::GetCurTabColNum() const
     USHORT nRet = 0;
 
     SwFrm *pFrm = GetCurrFrm();
-    ASSERT( pFrm, "Crsr geparkt?" );
+    OSL_ENSURE( pFrm, "Crsr geparkt?" );
 
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     if( pFrm && pFrm->IsInTab() )
@@ -1569,7 +1554,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
 
                     // We first check if the given point is 'close' to the left or top
                     // border of the table frame:
-                    ASSERT( pFrm, "Nested table frame without outer table" )
+                    OSL_ENSURE( pFrm, "Nested table frame without outer table" );
                     SWRECTFN( pFrm )
                     const bool bRTL = pFrm->IsRightToLeft();
 
@@ -1667,7 +1652,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
                 if ( !bMouseMoveRowCols )
                 {
 
-                    ASSERT( pbCol && pbRow, "pbCol or pbRow missing" )
+                    OSL_ENSURE( pbCol && pbRow, "pbCol or pbRow missing" );
 
                     if ( bCloseToRow || bCloseToCol )
                     {
@@ -1716,7 +1701,7 @@ const SwCellFrm *lcl_FindFrm( const SwLayoutFrm *pLay, const Point &rPt,
     }
 
     // robust:
-    ASSERT( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" )
+    OSL_ENSURE( !pRet || pRet->IsCellFrm(), "lcl_FindFrm() is supposed to find a cell frame!" );
     return pRet && pRet->IsCellFrm() ? static_cast<const SwCellFrm*>(pRet) : 0;
 }
 
@@ -1888,7 +1873,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
         else if ( aRet.Y() < aMin1.Y() )
             aRet.Y() = aMin1.Y();
     }
-    else //if ( bTop )
+    else
     {
         aRet.Y() = aMin1.Y();
         if ( aRet.X() > aMin2.X() )
@@ -2216,7 +2201,7 @@ USHORT SwFEShell::GetCurMouseTabColNum( const Point &rPt ) const
     USHORT nRet = 0;
 
     const SwFrm *pFrm = GetBox( rPt );
-    ASSERT( pFrm, "Table not found" );
+    OSL_ENSURE( pFrm, "Table not found" );
     if( pFrm )
     {
         const long nX = pFrm->Frm().Left();
@@ -2283,13 +2268,13 @@ void SwFEShell::SetTblAttr( const SfxItemSet &rNew )
  */
 bool lcl_GoTableRow( SwCrsrShell* pShell, bool bUp )
 {
-    ASSERT( pShell != NULL, "need shell" );
+    OSL_ENSURE( pShell != NULL, "need shell" );
 
     bool bRet = false;
 
     SwPaM* pPam = pShell->GetCrsr();
     const SwStartNode* pTableBox = pPam->GetNode()->FindTableBoxStartNode();
-    ASSERT( pTableBox != NULL, "I'm living in a box... NOT!" );
+    OSL_ENSURE( pTableBox != NULL, "I'm living in a box... NOT!" );
 
     // move cursor to start node of table box
     pPam->GetPoint()->nNode = pTableBox->GetIndex();
@@ -2538,24 +2523,12 @@ BOOL SwFEShell::GetAutoSum( String& rFml ) const
         if( nW )
         {
             rFml += ')';
-
-/*
-            // TabellenSelektion erzeugen??
-            SwTblBoxFormula aTmp( rFml );
-            SwSelBoxes aBoxes;
-            for( USHORT nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes );
-                    nSelBoxes; )
-            {
-            }
-*/
         }
     }
 
     return TRUE;
 }
-/* -----------------------------22.08.2002 12:50------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsTableRightToLeft() const
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -2565,20 +2538,14 @@ BOOL SwFEShell::IsTableRightToLeft() const
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
 }
 
-/* -----------------------------22.08.2002 12:50------------------------------
-
- ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
     const SwTabFrm*  pTabFrm = pFrm ? pFrm->ImplFindTabFrm() : 0;
-    ASSERT( pTabFrm, "Table not found" );
+    OSL_ENSURE( pTabFrm, "Table not found" );
     return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }
 
-/* -----------------------------11.02.2004 12:50------------------------------
-
- ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsTableVertical() const
 {
     SwFrm *pFrm = GetCurrFrm();

@@ -64,7 +64,7 @@ namespace offapp
         try
         {
             Reference< XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
-            Reference< XInterface > xDM = xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.sdbc.DriverManager"));
+            Reference< XInterface > xDM = xORB->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.DriverManager") ) );
             OSL_ENSURE(xDM.is(), "ODriverEnumerationImpl::ODriverEnumerationImpl: no access to the SDBC driver manager!");
 
             Reference< XEnumerationAccess > xEnumAccess(xDM, UNO_QUERY);

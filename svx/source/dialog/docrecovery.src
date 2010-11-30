@@ -211,25 +211,13 @@ TabPage RID_SVXPAGE_DOCRECOVERY_RECOVER
     {
         ImageBitmap = Bitmap { File = "nu01.png"; };
     };
-    Image IMG_GREENCHECK_HC
-    {
-        ImageBitmap = Bitmap { File = "nuh01.png"; };
-    };
     Image IMG_YELLOWCHECK
     {
         ImageBitmap = Bitmap { File = "nu04.png"; };
     };
-    Image IMG_YELLOWCHECK_HC
-    {
-        ImageBitmap = Bitmap { File = "nuh04.png"; };
-    };
     Image IMG_REDCROSS
     {
         ImageBitmap = Bitmap { File = "nu02.png"; };
-    };
-    Image IMG_REDCROSS_HC
-    {
-        ImageBitmap = Bitmap { File = "nuh02.png"; };
     };
     String STR_SUCCESSRECOV
     {

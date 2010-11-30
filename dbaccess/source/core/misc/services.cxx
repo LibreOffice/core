@@ -64,8 +64,8 @@ namespace dba{
 
 //***************************************************************************************
 //
-// Die vorgeschriebene C-Api muss erfuellt werden!
-// Sie besteht aus drei Funktionen, die von dem Modul exportiert werden muessen.
+// The prescribed C api must be complied with
+// It consists of three functions which must be exported by the module.
 //
 extern "C" void SAL_CALL createRegistryInfo_DBA()
 {

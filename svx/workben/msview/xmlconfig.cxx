@@ -328,7 +328,7 @@ void load_config( const OUString& rPath )
         // get parser
         Reference< XParser > xParser(
             comphelper::getProcessServiceFactory()->createInstance(
-                OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
             UNO_QUERY_THROW );
 
         // get filter

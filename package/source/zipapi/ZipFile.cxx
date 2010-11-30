@@ -291,7 +291,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
         throw ( packages::WrongPasswordException, ZipIOException, RuntimeException )
 {
     if ( !rData.is() )
-        throw ZipIOException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
                             Reference< XInterface >() );
 
     if ( !rData->aKey.getLength() )
@@ -299,7 +299,7 @@ Reference< XInputStream > ZipFile::StaticGetDataFromRawStream(  const Reference<
 
     Reference< XSeekable > xSeek( xStream, UNO_QUERY );
     if ( !xSeek.is() )
-        throw ZipIOException( OUString::createFromAscii( "The stream must be seekable!\n" ),
+        throw ZipIOException( OUString(RTL_CONSTASCII_USTRINGPARAM( "The stream must be seekable!\n" )),
                             Reference< XInterface >() );
 
 
@@ -559,7 +559,7 @@ Reference< XInputStream > SAL_CALL ZipFile::getDataStream( ZipEntry& rEntry,
         // in case no digest is provided there is no way
         // to detect password correctness
         if ( !rData.is() )
-            throw ZipException( OUString::createFromAscii( "Encrypted stream without encryption data!\n" ),
+            throw ZipException( OUString(RTL_CONSTASCII_USTRINGPARAM( "Encrypted stream without encryption data!\n" )),
                                 Reference< XInterface >() );
 
         // if we have a digest, then this file is an encrypted one and we should
@@ -638,28 +638,37 @@ sal_Bool ZipFile::readLOC( ZipEntry &rEntry )
     aGrabber >> nExtraLen;
     rEntry.nOffset = static_cast < sal_Int32 > (aGrabber.getPosition()) + nPathLen + nExtraLen;
 
-    // read always in UTF8, some tools seem not to set UTF8 bit
-    uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
-    sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
-    if ( nRead < aNameBuffer.getLength() )
-            aNameBuffer.realloc( nRead );
+    sal_Bool bBroken = sal_False;
 
-    ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
-                                                        aNameBuffer.getLength(),
-                                                        RTL_TEXTENCODING_UTF8 );
-
-    if ( rEntry.nPathLen == -1 ) // the file was created
+    try
     {
-        rEntry.nPathLen = nPathLen;
-        rEntry.sPath = sLOCPath;
-    }
+        // read always in UTF8, some tools seem not to set UTF8 bit
+        uno::Sequence < sal_Int8 > aNameBuffer( nPathLen );
+        sal_Int32 nRead = aGrabber.readBytes( aNameBuffer, nPathLen );
+        if ( nRead < aNameBuffer.getLength() )
+                aNameBuffer.realloc( nRead );
 
-    // the method can be reset for internal use so it is not checked
-    sal_Bool bBroken = rEntry.nVersion != nVersion
-                    || rEntry.nFlag != nFlag
-                    || rEntry.nTime != nTime
-                    || rEntry.nPathLen != nPathLen
-                    || !rEntry.sPath.equals( sLOCPath );
+        ::rtl::OUString sLOCPath = rtl::OUString::intern( (sal_Char *) aNameBuffer.getArray(),
+                                                            aNameBuffer.getLength(),
+                                                            RTL_TEXTENCODING_UTF8 );
+
+        if ( rEntry.nPathLen == -1 ) // the file was created
+        {
+            rEntry.nPathLen = nPathLen;
+            rEntry.sPath = sLOCPath;
+        }
+
+        // the method can be reset for internal use so it is not checked
+        bBroken = rEntry.nVersion != nVersion
+                        || rEntry.nFlag != nFlag
+                        || rEntry.nTime != nTime
+                        || rEntry.nPathLen != nPathLen
+                        || !rEntry.sPath.equals( sLOCPath );
+    }
+    catch(::std::bad_alloc &)
+    {
+        bBroken = sal_True;
+    }
 
     if ( bBroken && !bRecoveryMode )
         throw ZipIOException( OUString( RTL_CONSTASCII_USTRINGPARAM( "The stream seems to be broken!" ) ),
@@ -921,7 +930,7 @@ sal_Int32 ZipFile::recover()
                     aMemGrabber >> nCompressedSize;
                     aMemGrabber >> nSize;
 
-                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); aIter++ )
+                    for( EntryHash::iterator aIter = aEntries.begin(); aIter != aEntries.end(); ++aIter )
                     {
                         ZipEntry aTmp = (*aIter).second;
 

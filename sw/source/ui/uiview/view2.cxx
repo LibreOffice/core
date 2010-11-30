@@ -973,10 +973,10 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                 JumpToSwMark( (( const SfxStringItem*)pItem)->GetValue() );
             break;
         case SID_GALLERY :
-            GetViewFrame()->ChildWindowExecute(rReq);//ToggleChildWindow(SID_GALLERY);
+            GetViewFrame()->ChildWindowExecute(rReq);
         break;
         case SID_AVMEDIA_PLAYER :
-            GetViewFrame()->ChildWindowExecute(rReq);//ToggleChildWindow(SID_AVMEDIA_PLAYER);
+            GetViewFrame()->ChildWindowExecute(rReq);
         break;
         case SID_VIEW_DATA_SOURCE_BROWSER:
         {
@@ -995,7 +995,6 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             if( pArgs &&
                 SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem ))
                 bShow = ((const SfxBoolItem*)pItem)->GetValue();
-            //GetViewFrame()->ShowChildWindow(nSlot, bShow && bInMailMerge);
             if((bShow && bInMailMerge) != GetViewFrame()->HasChildWindow(nSlot))
                 GetViewFrame()->ToggleChildWindow(nSlot);
             //if fields have been succesfully inserted call the "real"
@@ -1189,19 +1188,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
     {
         switch( nWhich )
         {
-            case FN_STAT_PAGE:
-/*
-//JP 07.01.00: is a nice feature - show the selektion of DrawObjects
-            if( rShell.IsObjSelected()
-//???               || rShell.IsFrmSelected()
-                )
-            {
-                String sDisplay( rShell.GetDrawView()->GetMarkedObjectList().
-                                    GetDescriptionOfMarkedObjects() );
-                rSet.Put( SfxStringItem( FN_STAT_PAGE, sDisplay ));
-            }
-            else
-*/          {
+            case FN_STAT_PAGE: {
                 // Anzahl der Seiten, log. SeitenNr. SeitenNr ermitteln
                 USHORT nPage, nLogPage;
                 String sDisplay;
@@ -1384,45 +1371,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                         }
                     }
                 }
-
-                //#outline level, removed by zhaojianwei
-                //const SwNumRule* pNumRule = rShell.GetCurNumRule();
-                //if (pNumRule) // Cursor in Numerierung
-                //{
-                //  BYTE nNumLevel = rShell.GetNumLevel();
-                //  if( IsShowNum(nNumLevel) && MAXLEVEL >
-                //      ( nNumLevel = GetRealLevel( nNumLevel )) )
-                //  {
-                //      if( sStr.Len() )
-                //          sStr.AppendAscii(sStatusDelim);
-                //      sStr += SW_RESSTR(STR_NUM_LEVEL);
-                //      sStr += String::CreateFromInt32( nNumLevel + 1 );
-                //      if(!pNumRule->IsAutoRule())
-                //      {
-                //          SfxItemSet aSet(GetPool(),
-                //              RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
-                //          rShell.GetCurAttr(aSet);
-                //          /* const SfxPoolItem* pItem; */
-                //          if(SFX_ITEM_AVAILABLE <=
-                //              aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
-                //              /*, &pItem */ ))
-                //          {
-                //              const String& rNumStyle =
-                //                  ((const SfxStringItem &)
-                //                  aSet.Get(RES_PARATR_NUMRULE)).GetValue();
-                //              /* #i5116# GetItemState does not necessarily
-                //              change pItem */
-                //              // ((const SfxStringItem*)pItem)->GetValue();
-                //              if(rNumStyle.Len())
-                //              {
-                //                  sStr.AppendAscii(sStatusDelim);
-                //                  sStr += rNumStyle;
-                //              }
-                //          }
-                //      }
-                //  }
-                //}//<-removed end ,zhaojianwei
-
                 //-->#outline level,added by zhaojianwei
                 const SwNumRule* pNumRule = rShell.GetCurNumRule();
                 const bool bOutlineNum = pNumRule ? pNumRule->IsOutlineRule() : 0;
@@ -1431,18 +1379,13 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                 if (pNumRule && !bOutlineNum )  // Cursor in Numerierung
                 {
                     BYTE nNumLevel = rShell.GetNumLevel();
-                    // --> OD 2008-04-02 #refactorlists#
-//                    if( IsShowNum(nNumLevel) && MAXLEVEL >
-//                        ( nNumLevel = GetRealLevel( nNumLevel )) )
                     if ( nNumLevel < MAXLEVEL )
-                    // <--
                     {
                         if(!pNumRule->IsAutoRule())
                         {
                             SfxItemSet aSet(GetPool(),
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetCurAttr(aSet);
-                            /* const SfxPoolItem* pItem; */
                             if(SFX_ITEM_AVAILABLE <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
                                                  /*, &pItem */ ))
@@ -1450,9 +1393,6 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                                 const String& rNumStyle =
                                     ((const SfxStringItem &)
                                      aSet.Get(RES_PARATR_NUMRULE)).GetValue();
-                                /* #i5116# GetItemState does not necessarily
-                                   change pItem */
-                                // ((const SfxStringItem*)pItem)->GetValue();
                                 if(rNumStyle.Len())
                                 {
                                     if( sStr.Len() )
@@ -1818,13 +1758,6 @@ void SwView::EditLinkDlg()
         pDlg->Execute();
         delete pDlg;
     }
-/*
-    SwLinkDlg* pDlg = new SwLinkDlg(GetFrameWindow());
-    pDlg->SetShell(&GetWrtShell());
-    pDlg->Execute();
-
-    DELETEZ(pDlg);
-*/
 }
 
 BOOL SwView::JumpToSwMark( const String& rMark )

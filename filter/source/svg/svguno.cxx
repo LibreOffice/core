@@ -61,7 +61,7 @@ extern "C"
             {
                 Reference< XRegistryKey > xNewKey(
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SVGFilter_getImplementationName() ) );
-                xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+                xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
 
                 const Sequence< OUString > & rSNL = SVGFilter_getSupportedServiceNames();
                 const OUString * pArray = rSNL.getConstArray();

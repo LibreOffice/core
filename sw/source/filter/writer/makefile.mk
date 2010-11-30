@@ -44,9 +44,13 @@ CXXFILES = \
         wrtswtbl.cxx
 
 SLOFILES =  \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
         $(SLO)$/writer.obj \
         $(SLO)$/wrt_fn.obj \
         $(SLO)$/wrtswtbl.obj
+
 
 # --- Tagets -------------------------------------------------------
 

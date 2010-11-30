@@ -116,7 +116,7 @@ sal_Bool SvEmbedTransferHelper::GetData( const ::com::sun::star::datatransfer::D
                         if ( xPers.is() )
                         {
                             uno::Reference < embed::XStorage > xStg = comphelper::OStorageHelper::GetTemporaryStorage();
-                            ::rtl::OUString aName = ::rtl::OUString::createFromAscii("Dummy");
+                            ::rtl::OUString aName( RTL_CONSTASCII_USTRINGPARAM( "Dummy" ));
                             SvStream* pStream = NULL;
                             BOOL bDeleteStream = FALSE;
                             uno::Sequence < beans::PropertyValue > aEmpty;

@@ -566,13 +566,10 @@ OUString BackendDb::readSimpleElement(
 }
 
 
-
-//================================================================================
 RegisteredDb::RegisteredDb(
     Reference<XComponentContext> const &  xContext,
     ::rtl::OUString const & url):BackendDb(xContext, url)
 {
-
 }
 
 void RegisteredDb::addEntry(::rtl::OUString const & url)
@@ -626,14 +623,10 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
         Reference<css::xml::dom::XNode> root = doc->getFirstChild();
 
         Reference<css::xml::xpath::XXPathAPI> xpathApi = getXPathAPI();
-        //find the extension element that is to be removed
         Reference<css::xml::dom::XNode> aNode =
             xpathApi->selectSingleNode(root, sExpression);
-        if (!aNode.is())
-        {
-            return false;
-        }
-        return true;
+
+        return aNode.is();
     }
     catch(css::uno::Exception &)
     {
@@ -643,7 +636,6 @@ bool RegisteredDb::getEntry(::rtl::OUString const & url)
             m_urlDb, 0, exc);
     }
 }
-
 
 } // namespace backend
 } // namespace dp_registry

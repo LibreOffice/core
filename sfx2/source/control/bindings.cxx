@@ -2355,7 +2355,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
 {
     ::com::sun::star::util::URL aURL;
     aURL.Complete = rCommand;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( aURL );
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  xDisp = pImp->xProv->queryDispatch( aURL, ::rtl::OUString(), 0 );
     if ( xDisp.is() )
@@ -2365,7 +2365,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
             ::rtl::OUString sAppName;
             try
             {
-                static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
                 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                     ::comphelper::getProcessServiceFactory();
                 ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
@@ -2376,7 +2376,7 @@ BOOL SfxBindings::ExecuteCommand_Impl( const String& rCommand )
                 sAppName = xModuleManager->identify(xFrame);
             } catch(::com::sun::star::uno::Exception&) {}
             Sequence<beans::PropertyValue> source;
-            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxAsyncExec"));
+            ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxAsyncExec")));
             ::comphelper::UiEventsLogger::logDispatch(aURL, source);
         }
         new SfxAsyncExec_Impl( aURL, xDisp );

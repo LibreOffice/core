@@ -189,10 +189,6 @@ void SwTblField::SetPar2(const String& rStr)
     SetFormula( rStr );
 }
 
-
-/*-----------------04.03.98 10:33-------------------
-
---------------------------------------------------*/
 bool SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     bool bRet = true;
@@ -224,9 +220,7 @@ bool SwTblField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return bRet;
 }
-/*-----------------04.03.98 10:33-------------------
 
---------------------------------------------------*/
 bool SwTblField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = true;

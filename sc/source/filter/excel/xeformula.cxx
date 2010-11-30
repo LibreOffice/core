@@ -117,7 +117,7 @@ void XclExpOperandList::AppendOperand( sal_uInt16 nTokPos, XclFuncParamConv eCon
     rConvInfo.mbValType = bValType;
 }
 
-typedef ScfRef< XclExpOperandList > XclExpOperandListRef;
+typedef boost::shared_ptr< XclExpOperandList > XclExpOperandListRef;
 typedef ::std::vector< XclExpOperandListRef > XclExpOperandListVector;
 
 // ----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ static const XclExpCompConfig spConfigTable[] =
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
-    typedef ScfRef< ScTokenArray > ScTokenArrayRef;
+    typedef boost::shared_ptr< ScTokenArray > ScTokenArrayRef;
 
     const XclExpCompConfig& mrCfg;          /// Configuration for current formula type.
     ScTokenArrayRef     mxOwnScTokArr;      /// Own clone of a Calc token array.
@@ -479,7 +479,7 @@ private:
     // ------------------------------------------------------------------------
 private:
     typedef ::std::map< XclFormulaType, XclExpCompConfig >  XclExpCompConfigMap;
-    typedef ScfRef< XclExpCompData >                        XclExpCompDataRef;
+    typedef boost::shared_ptr< XclExpCompData >             XclExpCompDataRef;
     typedef ::std::vector< XclExpCompDataRef >              XclExpCompDataVector;
 
     XclExpCompConfigMap maCfgMap;       /// Compiler configuration map for all formula types.
@@ -635,7 +635,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
         mxData->mpLinkMgr = mxData->mrCfg.mbLocalLinkMgr ? &GetLocalLinkManager() : &GetGlobalLinkManager();
 
         // token array iterator (use cloned token array if present)
-        mxData->maTokArrIt.Init( mxData->mxOwnScTokArr.is() ? *mxData->mxOwnScTokArr : rScTokArr, false );
+        mxData->maTokArrIt.Init( mxData->mxOwnScTokArr ? *mxData->mxOwnScTokArr : rScTokArr, false );
         mxData->mpRefLog = pRefLog;
     }
 }

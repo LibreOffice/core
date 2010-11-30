@@ -117,6 +117,14 @@ SLOFILES= \
                 $(SLO)$/vbaframes.obj \
                 $(SLO)$/vbaeventshelper.obj \
 
+# These files to be enabled when field related patches
+# are folded into libreoffice
+.IF "$(ENABLE_FIELDBITS)"=="YES"
+SLOFILES+=$(SLO)$/vbaformfield.obj \
+          $(SLO)$/vbaformfields.obj \
+          $(SLO)$/vbacheckbox.obj
+.ENDIF
+
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk

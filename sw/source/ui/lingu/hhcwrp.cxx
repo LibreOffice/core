@@ -189,11 +189,6 @@ SwHHCWrapper::~SwHHCWrapper()
         }
 
     }
-
-/*
-    if( bInfoBox )
-        InfoBox(&pView->GetEditWin(), String(SW_RES(STR_SPELL_OK)) ).Execute();
-*/
 }
 
 
@@ -502,9 +497,7 @@ void SwHHCWrapper::ReplaceUnit(
 
         pRuby->SetPosition( bRubyBelow );
         pRuby->SetAdjustment( RubyAdjust_CENTER );
-        //!! the following seem not to be needed
-        //pRuby->SetCharFmtName( const String& rNm );
-        //pRuby->SetCharFmtId( USHORT nNew );
+
 #ifdef DEBUG
         SwPaM *pPaM = rWrtShell.GetCrsr();
         (void)pPaM;
@@ -543,8 +536,6 @@ void SwHHCWrapper::ReplaceUnit(
             SfxItemSet aSet( rWrtShell.GetAttrPool(), aRanges );
             if (pNewUnitLanguage)
             {
-                //OSL_ENSURE(!IsSimilarChinese( *pNewUnitLanguage, nOldLang ),
-                //      "similar language should not be changed!");
                 aSet.Put( SvxLanguageItem( *pNewUnitLanguage, RES_CHRATR_CJK_LANGUAGE ) );
             }
 
@@ -695,7 +686,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
         return sal_False;
     }
 
-    //ResMgr* pMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bIsOtherCntnt )
@@ -717,29 +707,9 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
     }
     else
     {
-        // Ein BODY_Bereich erledigt, Frage nach dem anderen BODY_Bereich
-/*
-        //pWin->LeaveWait();
-
-        sal_uInt16 nResId = RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
-        if ( aBox.Execute() != RET_YES )
-        {
-            // Verzicht auf den anderen Bereich, ggf. Frage nach Sonderbereich
-            //pWin->EnterWait();
-            bStartDone = bEndDone = sal_True;
-            return SpellNext();
-        }
-        else
-        {
-*/
             bStartChk = !bStartDone;
             ConvStart_impl( pConvArgs, bStartChk ? SVX_SPELL_BODY_START : SVX_SPELL_BODY_END );
             bGoOn = sal_True;
-/*
-        }
-        pWin->EnterWait();
-*/
     }
     return bGoOn;
 }
@@ -748,8 +718,6 @@ sal_Bool SwHHCWrapper::ConvNext_impl( )
 sal_Bool SwHHCWrapper::FindConvText_impl()
 {
     //! modified version of SvxSpellWrapper::FindSpellError
-
-    //ShowLanguageErrors();
 
     sal_Bool bFound = sal_False;
 
@@ -790,20 +758,17 @@ void SwHHCWrapper::ConvStart_impl( SwConversionArgs /* [out] */ *pConversionArgs
 void SwHHCWrapper::ConvEnd_impl( SwConversionArgs *pConversionArgs )
 {
     pView->SpellEnd( pConversionArgs );
-    //ShowLanguageErrors();
 }
 
 
 sal_Bool SwHHCWrapper::ConvContinue_impl( SwConversionArgs *pConversionArgs )
 {
     sal_Bool bProgress = !bIsDrawObj && !bIsSelection;
-//    bLastRet = aConvText.getLength() == 0;
     pConversionArgs->aConvText = OUString();
     pConversionArgs->nConvTextLang = LANGUAGE_NONE;
     uno::Any  aRet = bProgress ?
         pView->GetWrtShell().SpellContinue( &nPageCount, &nPageStart, pConversionArgs ) :
         pView->GetWrtShell().SpellContinue( &nPageCount, NULL, pConversionArgs );
-    //aRet >>= aConvText;
     return pConversionArgs->aConvText.getLength() != 0;
 }
 

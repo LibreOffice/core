@@ -185,7 +185,7 @@ namespace dbtools
                 // some more formatter settings
                 _rData.m_nKeyType  = ::comphelper::getNumberFormatType( xNumberFormatsSupp->getNumberFormats(), _rData.m_nFormatKey );
                 Reference< XPropertySet > xFormatSettings( xNumberFormatsSupp->getNumberFormatSettings(), UNO_QUERY_THROW );
-                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString::createFromAscii( "NullDate" ) ) >>= _rData.m_aNullDate );
+                OSL_VERIFY( xFormatSettings->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "NullDate" )) ) >>= _rData.m_aNullDate );
 
                 // remember the formatter
                 _rData.m_xFormatter = i_rNumberFormatter;

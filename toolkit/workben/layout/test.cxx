@@ -147,12 +147,12 @@ void LayoutTest::InitUCB()
     OUString aEmpty;
     Sequence< Any > aArgs( 6 );
     aArgs[0]
-        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
     aArgs[1]
-        <<= OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
-    aArgs[2] <<= OUString::createFromAscii( "PIPE" );
+        <<= OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[2] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aEmpty;
-    aArgs[4] <<= OUString::createFromAscii( "PORTAL" );
+    aArgs[4] <<= OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
     aArgs[5] <<= aEmpty;
 
     if ( !::ucbhelper::ContentBroker::initialize( mxMSF, aArgs ) )
@@ -209,7 +209,7 @@ void LayoutTest::ParseCommandLine()
         }
         else if ( aParam.equalsAscii( "--test" ) )
         {
-            mTestDialog = OUString::createFromAscii( "zoom" );
+            mTestDialog = OUString(RTL_CONSTASCII_USTRINGPARAM("zoom"));
             if (i + 1 < GetCommandLineParamCount())
                 mTestDialog = GetCommandLineParam( ++i );
         }
@@ -220,7 +220,7 @@ void LayoutTest::ParseCommandLine()
     }
 
     if ( mFiles.size() <= 0 )
-        mFiles.push_back( OUString::createFromAscii( "layout.xml" ) );
+        mFiles.push_back( OUString(RTL_CONSTASCII_USTRINGPARAM("layout.xml")) );
 }
 
 void LayoutTest::RunEditor()
@@ -279,7 +279,7 @@ void TestDialog( OUString const& name )
         QueryBox query ( 0,
                          WinBits( WB_YES_NO | WB_DEF_YES ),
 //                         WinBits( WB_ABORT_RETRY_IGNORE ),
-                         OUString::createFromAscii ("Do you want to do?"));
+                         OUString(RTL_CONSTASCII_USTRINGPARAM ("Do you want to do?")));
         RunDialog( query );
     }
     else if ( name.equalsAscii( "recover" ) )

@@ -357,9 +357,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions_Impl::G
 {
     return m_eOpenHyperlinkMode;
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions_Impl::IsOpenHyperlinkModeReadOnly() const
 {
     return m_bROOpenHyperlinkMode;
@@ -496,9 +494,7 @@ SvtExtendedSecurityOptions::OpenHyperlinkMode SvtExtendedSecurityOptions::GetOpe
     MutexGuard aGuard( GetInitMutex() );
     return m_pDataContainer->GetOpenHyperlinkMode();
 }
-/* -----------------09.07.2003 11:26-----------------
 
- --------------------------------------------------*/
 sal_Bool SvtExtendedSecurityOptions::IsOpenHyperlinkModeReadOnly() const
 {
     return m_pDataContainer->IsOpenHyperlinkModeReadOnly();

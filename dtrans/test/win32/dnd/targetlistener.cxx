@@ -67,7 +67,7 @@ void SAL_CALL DropTargetListener::drop( const DropTargetDropEvent& e )
 //  for( int i=0; i < flavors.getLength(); i++)
 //      aFlavor= flavors[4];
 
-    DataFlavor flavor( OUString(OUString::createFromAscii("text/plain;charset=windows-1252")),
+    DataFlavor flavor( OUString(OUString(RTL_CONSTASCII_USTRINGPARAM("text/plain;charset=windows-1252"))),
         OUString(L"Text plain"), getCppuType( ( Sequence<sal_Int8>*)0 ) );
 
     Any anyData= e.Transferable->getTransferData( flavor);

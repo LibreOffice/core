@@ -249,3 +249,20 @@ End
 
 
 #endif
+
+/* script providers */
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Beanshell
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-beanshell";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Javascript
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-javascript";
+End
+
+Directory gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName = "script-provider-for-python";
+End

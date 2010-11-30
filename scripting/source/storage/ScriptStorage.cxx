@@ -70,8 +70,8 @@ const sal_Char * const SCRIPT_DIR = "/Scripts";
 const sal_Char * const SCRIPT_PARCEL = "/parcel-descriptor.xml";
 const sal_Char * const SCRIPT_PARCEL_NAME_ONLY = "parcel-descriptor";
 
-static OUString ss_implName = OUString::createFromAscii( IMPL_NAME );
-static OUString ss_serviceName = OUString::createFromAscii( SERVICE_NAME );
+static OUString ss_implName(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ));
+static OUString ss_serviceName(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
 static Sequence< OUString > ss_serviceNames =
     Sequence< OUString >( &ss_serviceName, 1 );
 
@@ -104,8 +104,8 @@ throw ( RuntimeException )
             mh_scriptLangs = new ScriptLanguages_hash();
             Reference< XInterface > xInterface =
                 m_xMgr->createInstanceWithContext(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationProvider" )
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationProvider" ))
                         , m_xContext );
             validateXRef( xInterface,
                 "ScriptStorage::ScriptStorage: cannot get ConfigurationProvider" );
@@ -117,14 +117,14 @@ throw ( RuntimeException )
             validateXRef( xConfigProvFactory,
                 "ScriptStorage::ScriptStorage: cannot get XMultiServiceFactory interface from ConfigurationProvider" );
             beans::PropertyValue configPath;
-            configPath.Name = ::rtl::OUString::createFromAscii( "nodepath" );
-            configPath.Value <<= ::rtl::OUString::createFromAscii( "org.openoffice.Office.Scripting/ScriptRuntimes" );
+            configPath.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
+            configPath.Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Scripting/ScriptRuntimes"));
             Sequence < Any > aargs( 1 );
             aargs[ 0 ] <<= configPath;
 
             xInterface = xConfigProvFactory->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess"),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationAccess")),
                         aargs );
             validateXRef( xInterface,
                 "ScriptStorage::ScriptStorage: cannot get ConfigurationAccess" );
@@ -144,7 +144,7 @@ throw ( RuntimeException )
                 validateXRef( xPropSet,
                     "ScriptStorage::ScriptStorage: cannot get XPropertySet for name" );
                 Any aProp = xPropSet->getPropertyValue(
-                        OUString::createFromAscii( "SupportedFileExtensions") );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("SupportedFileExtensions")) );
                 Sequence< OUString > extns;
                 if( sal_False == ( aProp >>= extns ) )
                 {
@@ -290,8 +290,8 @@ throw ( RuntimeException, Exception )
 
         validateXRef( xSMI, "ScriptStorage::create: failed to obtain valid XExtendedDocumentHandler" );
 
-        xStringUri = xStringUri.concat( ::rtl::OUString::createFromAscii(
-            SCRIPT_DIR ) );
+        xStringUri = xStringUri.concat( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            SCRIPT_DIR )) );
 
        // No Scripts directory - just return
        if ( ! m_xSimpleFileAccess->isFolder( xStringUri ) )
@@ -329,7 +329,7 @@ throw ( RuntimeException, Exception )
                     RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
                 OUString parcelFile = parcelDirs[ j ].concat(
-                    ::rtl::OUString::createFromAscii( SCRIPT_PARCEL ) );
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL )) );
 
                 // Do not have a valid parcel.xml
                 if ( !m_xSimpleFileAccess->exists( parcelFile ) ||
@@ -448,7 +448,7 @@ throw ( RuntimeException, Exception )
     // the char just after the filesep
     lastFileSep += 1;
     sal_Int32 lastFileExt = xStringUri.lastIndexOf( fileExtension );
-    OUString searchString = OUString::createFromAscii( "://" );
+    OUString searchString(RTL_CONSTASCII_USTRINGPARAM("://"));
     sal_Int32 searchStringLength = searchString.getLength();
     sal_Int32 startPath = xStringUri.indexOf( searchString );
     sal_Int32 uriLength = xStringUri.getLength();
@@ -500,7 +500,7 @@ ScriptStorage::getFileExtension( const OUString & stringUri )
     }
     else
     {
-        fileExtension = OUString::createFromAscii("");
+        fileExtension = OUString(RTL_CONSTASCII_USTRINGPARAM(""));
     }
     return fileExtension;
 }
@@ -559,8 +559,8 @@ throw ( RuntimeException )
     // xScriptInvocation = Reference<XScriptInvocation>(xx, UNO_QUERY_THROW);
     Reference< xml::sax::XExtendedDocumentHandler > xHandler;
 
-    OUString parcel_suffix = OUString::createFromAscii( SCRIPT_PARCEL );
-    OUString ou_parcel = OUString(
+    OUString parcel_suffix(RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL ));
+    OUString ou_parcel(
         RTL_CONSTASCII_USTRINGPARAM( SCRIPT_PARCEL_NAME_ONLY ) );
 
     try
@@ -584,13 +584,13 @@ throw ( RuntimeException )
                     xOS = m_xSimpleFileAccess->openFileWrite( parcel_xml_path );
 
                     OSL_TRACE(  "saving: %s\n", rtl::OUStringToOString(
-                        it_sfh->second.parcelURI.concat( OUString::createFromAscii(
-                        "/parcel.xml" ) ),
+                        it_sfh->second.parcelURI.concat( OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "/parcel.xml" )) ),
                         RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 
                     Reference< XInterface > xInterface =
                         m_xMgr->createInstanceWithContext(
-                        OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")),
                         m_xContext );
                     validateXRef( xInterface, "ScriptStorage::save: cannot get sax.Writer" );
                     xHandler = Reference<xml::sax::XExtendedDocumentHandler>(

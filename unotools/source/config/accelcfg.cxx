@@ -84,7 +84,7 @@ SvtAcceleratorConfig_Impl::SvtAcceleratorConfig_Impl( Reference< XInputStream >&
         : bModified( false )
 {
     Reference< XParser > xParser( ::comphelper::getProcessServiceFactory()->createInstance(
-                                    ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Parser" )),
+                                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))),
                                   UNO_QUERY);
 
     // connect stream to input stream to the parser
@@ -104,7 +104,7 @@ bool SvtAcceleratorConfig_Impl::Commit( Reference< XOutputStream >& rOutputStrea
     Reference< XDocumentHandler > xWriter;
 
     xWriter = Reference< XDocumentHandler >( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii( "com.sun.star.xml.sax.Writer" )), UNO_QUERY) ;
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))), UNO_QUERY) ;
 
     Reference< ::com::sun::star::io::XActiveDataSource> xDataSource( xWriter , UNO_QUERY );
     xDataSource->setOutputStream( rOutputStream );

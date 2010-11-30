@@ -71,7 +71,7 @@ SwTxtCharFmt::~SwTxtCharFmt( )
 void SwTxtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtCharFmt::Modify(): unknown Modify");
 
@@ -190,7 +190,7 @@ SwCharFmt* SwTxtINetFmt::GetCharFmt()
 void SwTxtINetFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtINetFmt::Modify(): unknown Modify");
 
@@ -239,7 +239,7 @@ SwTxtRuby::~SwTxtRuby()
 void SwTxtRuby::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
-    ASSERT(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
+    OSL_ENSURE(  isCHRATR(nWhich) || (RES_OBJECTDYING == nWhich)
              || (RES_ATTRSET_CHG == nWhich) || (RES_FMT_CHG == nWhich),
         "SwTxtRuby::Modify(): unknown Modify");
 

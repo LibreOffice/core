@@ -232,7 +232,7 @@ sal_Int32 ReadThroughComponent(
     // get parser
     Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString::createFromAscii("com.sun.star.xml.sax.Parser") ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
         UNO_QUERY );
     DBG_ASSERT( xParser.is(), "Can't create parser" );
     if( !xParser.is() )
@@ -518,7 +518,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     };
 
     uno::Reference< beans::XPropertySet > xInfoSet( GenericPropertySet_CreateInstance( new PropertySetInfo( aImportInfoMap ) ) );
-    xInfoSet->setPropertyValue( OUString::createFromAscii( "Preview" ), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
+    xInfoSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "Preview" )), uno::makeAny( mrDocShell.GetDoc()->IsStarDrawPreviewMode() ) );
 
     // ---- get BuildId from parent container if available
 
@@ -622,7 +622,7 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
                 aName = pDocHierarchItem->GetValue();
         }
         else
-            aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
+            aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
 
         if( aName.getLength() )
         {

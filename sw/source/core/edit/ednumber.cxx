@@ -341,13 +341,9 @@ void SwEditShell::SetIndent(short nIndent, const SwPosition & rPos)
         SwTxtNode * pTxtNode = aPaM.GetNode()->GetTxtNode();
 
         // --> OD 2008-06-09 #i90078#
-//        int nLevel = -1;
-//        int nReferenceLevel = pTxtNode->GetActualListLevel();
-//        if (! IsFirstOfNumRule(aPaM))
-//            nLevel = nReferenceLevel;
 
         SwNumRule aRule(*pCurNumRule);
-//        aRule.ChangeIndent(nIndent, nLevel, nReferenceLevel, FALSE);
+
         if ( IsFirstOfNumRule() )
         {
             aRule.SetIndentOfFirstListLevelAndChangeOthers( nIndent );
@@ -559,15 +555,11 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
         {
             SwNodePtr pTmpNd = rOutlNd[ nPos ];
 
-            // --> OD 2008-04-02 #refactorlists#
-//            BYTE nTmpLvl = GetRealLevel( pTmpNd->GetTxtNode()->
-//                                    GetTxtColl()->GetOutlineLevel() );
- //           int nTmpLvl = pTmpNd->GetTxtNode()->GetOutlineLevel();//#outline level,zhaojianwei
             int nTmpLvl = pTmpNd->GetTxtNode()->GetAttrOutlineLevel();
- //           ASSERT( nTmpLvl >= 0 && nTmpLvl < MAXLEVEL,
-            ASSERT( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,            //<-end,zhaojianwei
+
+            OSL_ENSURE( nTmpLvl >= 0 && nTmpLvl <= MAXLEVEL,
                     "<SwEditShell::IsProtectedOutlinePara()>" );
-            // <--
+
             if( bFirst )
             {
                 nLvl = nTmpLvl;
@@ -583,10 +575,10 @@ BOOL SwEditShell::IsProtectedOutlinePara() const
             }
         }
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     else
     {
-        ASSERT(!this, "Cursor not on an outline node" );
+        OSL_ENSURE(!this, "Cursor not on an outline node" );
     }
 #endif
     return bRet;
@@ -658,14 +650,13 @@ BOOL SwEditShell::IsNoNum( BOOL bChkStart ) const
 BYTE SwEditShell::GetNumLevel() const
 {
     // gebe die akt. Ebene zurueck, auf der sich der Point vom Cursor befindet
-    //BYTE nLevel = NO_NUMBERING;   //#outline level,zhaojianwei
     BYTE nLevel = MAXLEVEL;     //end,zhaojianwei
 
     SwPaM* pCrsr = GetCrsr();
     const SwTxtNode* pTxtNd = pCrsr->GetNode()->GetTxtNode();
 
     // --> FME 2005-09-12 #124972# Made code robust:
-    ASSERT( pTxtNd, "GetNumLevel() without text node" )
+    OSL_ENSURE( pTxtNd, "GetNumLevel() without text node" );
     if ( !pTxtNd )
         return nLevel;
     // <--
@@ -819,9 +810,6 @@ USHORT SwEditShell::GetNodeNumStart() const
     // <--
 }
 
-/*-- 26.08.2005 14:47:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 // --> OD 2008-03-18 #refactorlists#
 const SwNumRule * SwEditShell::SearchNumRule( const bool bForward,
                                               const bool bNum,

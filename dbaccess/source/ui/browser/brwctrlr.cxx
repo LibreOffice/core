@@ -764,7 +764,7 @@ void SbaXDataBrowserController::initFormatter()
     {
         // create a new formatter
         m_xFormatter = Reference< ::com::sun::star::util::XNumberFormatter > (
-            getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
+            getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
         if (m_xFormatter.is())
             m_xFormatter->attachNumberFormatsSupplier(xSupplier);
     }
@@ -935,14 +935,14 @@ void SbaXDataBrowserController::RemoveColumnListener(const Reference< XPropertyS
 Reference< XRowSet >  SbaXDataBrowserController::CreateForm()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateForm" );
-    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.Form")), UNO_QUERY);
+    return Reference< XRowSet > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.Form"))), UNO_QUERY);
 }
 
 //------------------------------------------------------------------------------
 Reference< ::com::sun::star::form::XFormComponent >  SbaXDataBrowserController::CreateGridModel()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::CreateGridModel" );
-    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.form.component.GridControl")), UNO_QUERY);
+    return Reference< ::com::sun::star::form::XFormComponent > (getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.GridControl"))), UNO_QUERY);
 }
 
 // -------------------------------------------------------------------------
@@ -1209,31 +1209,17 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     // the filter or the sort criterias have changed ? -> update our parser
     if (evt.PropertyName.equals(PROPERTY_ACTIVECOMMAND))
     {
-      //  if (m_xParser.is())
-            //DO_SAFE( m_xParser->setElementaryQuery(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new query to my parser !" );
     }
     else if (evt.PropertyName.equals(PROPERTY_FILTER))
     {
-  //      if ( m_xParser.is() && m_xParser->getFilter() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setFilter(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_HAVING_CLAUSE))
     {
-        //if ( m_xParser.is() && m_xParser->getHavingClause() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setHavingClause(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new filter to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
     else if (evt.PropertyName.equals(PROPERTY_ORDER))
     {
-        //if ( m_xParser.is() && m_xParser->getOrder() != ::comphelper::getString(evt.NewValue))
-        //{
-        //  DO_SAFE( m_xParser->setOrder(::comphelper::getString(evt.NewValue)), "SbaXDataBrowserController::propertyChange : could not forward the new order to my parser !" );
-        //}
         InvalidateFeature(ID_BROWSER_REMOVEFILTER);
     }
 
@@ -1600,7 +1586,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowInserts" ) ) >>= bAllowInsertions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts")) ) >>= bAllowInsertions );
                     }
                     catch( const Exception& )
                     {
@@ -1619,7 +1605,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     try
                     {
                         Reference< XPropertySet > xRowSetProps( getRowSet(), UNO_QUERY_THROW );
-                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString::createFromAscii( "AllowDeletes" ) ) >>= bAllowDeletions );
+                        OSL_VERIFY( xRowSetProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes")) ) >>= bAllowDeletions );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ROWCOUNT ) >>= nRowCount );
                         OSL_VERIFY( xRowSetProps->getPropertyValue( PROPERTY_ISNEW ) >>= bInsertionRow );
                     }
@@ -1736,9 +1722,9 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
                     break;  // no datasource -> no edit mode
 
                 sal_Int32 nDataSourcePrivileges = ::comphelper::getINT32(xDataSourceSet->getPropertyValue(PROPERTY_PRIVILEGES));
-                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowInserts")));
-                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowUpdates")));
-                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString::createFromAscii("AllowDeletes")));
+                sal_Bool bInsertAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::INSERT) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowInserts"))));
+                sal_Bool bUpdateAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::UPDATE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowUpdates"))));
+                sal_Bool bDeleteAllowedAndPossible = ((nDataSourcePrivileges & ::com::sun::star::sdbcx::Privilege::DELETE) != 0) && ::comphelper::getBOOL(xDataSourceSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllowDeletes"))));
                 if (!bInsertAllowedAndPossible && !bUpdateAllowedAndPossible && !bDeleteAllowedAndPossible)
                     break;  // no insert/update/delete -> no edit mode
 
@@ -1806,7 +1792,6 @@ void SbaXDataBrowserController::applyParserOrder(const ::rtl::OUString& _rOldOrd
     if (!bSuccess)
     {
         xFormSet->setPropertyValue(PROPERTY_ORDER, makeAny(_rOldOrder));
-        //DO_SAFE( _xParser->setOrder(_rOldOrder), "SbaXDataBrowserController::applyParserOrder: could not restore the old order of my parser !" );
 
         try
         {
@@ -1914,8 +1899,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aFilter;
             if(!aDlg.Execute())
             {
-                //m_xParser->setFilter(sOldVal);
-                //m_xParser->setHavingClause(sOldHaving);
                 return; // if so we don't need to actualize the grid
             }
             aDlg.BuildWherePart();
@@ -1926,7 +1909,6 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
             String aOrder;
             if(!aDlg.Execute())
             {
-                //m_xParser->setOrder(sOldVal);
                 return; // if so we don't need to actualize the grid
             }
             aDlg.BuildOrderPart();
@@ -1992,9 +1974,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     // prohibit the synchronization of the grid's display with the cursor's position
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::ExecuteSearch : no model set ?!");
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), makeAny(sal_Int32(COL_LIGHTRED)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), makeAny(sal_Int32(COL_LIGHTRED)));
 
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xNFS(::dbtools::getNumberFormats(::dbtools::getConnection(m_xRowSet), sal_True,getORB()));
 
@@ -2017,9 +1999,9 @@ void SbaXDataBrowserController::ExecuteSearch()
     }
 
     // restore the grid's normal operating state
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("AlwaysShowCursor"), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("CursorColor"), Any());
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AlwaysShowCursor")), ::comphelper::makeBoolAny(sal_Bool(sal_False)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CursorColor")), Any());
 }
 
 //------------------------------------------------------------------------------
@@ -2535,7 +2517,7 @@ IMPL_LINK(SbaXDataBrowserController, OnSearchContextRequest, FmSearchContext*, p
         if (!xCurrentColumn.is())
             continue;
 
-        // can we use this column control fo searching ?
+        // can we use this column control for searching ?
         if (!IsSearchableControl(xCurrentColumn))
             continue;
 
@@ -2577,9 +2559,9 @@ IMPL_LINK(SbaXDataBrowserController, OnFoundData, FmFoundRecordInformation*, pIn
     // let the grid snyc it's display with the cursor
     Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
     DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnFoundData : no model set ?!");
-    Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-    xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
+    Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+    xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
 
     // and move to the field
     Reference< ::com::sun::star::container::XIndexAccess >  aColumnControls(getBrowserView()->getGridControl()->getPeer(), UNO_QUERY);
@@ -2621,12 +2603,12 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 
     try
     {
-        // let the grid snyc it's display with the cursor
+        // let the grid snyc its display with the cursor
         Reference< XPropertySet >  xModelSet(getControlModel(), UNO_QUERY);
         DBG_ASSERT(xModelSet.is(), "SbaXDataBrowserController::OnCanceledNotFound : no model set ?!");
-        Any aOld = xModelSet->getPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"));
-        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
-        xModelSet->setPropertyValue(::rtl::OUString::createFromAscii("DisplayIsSynchron"), aOld);
+        Any aOld = xModelSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")));
+        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), ::comphelper::makeBoolAny(sal_Bool(sal_True)));
+        xModelSet->setPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayIsSynchron")), aOld);
     }
     catch( const Exception& )
     {
@@ -2708,22 +2690,7 @@ void SbaXDataBrowserController::initializeParser() const
             {   // (only if the statement isn't native)
                 // (it is allowed to use the PROPERTY_ISPASSTHROUGH : _after_ loading a form it is valid)
                 xFormSet->getPropertyValue(PROPERTY_SINGLESELECTQUERYCOMPOSER) >>= m_xParser;
-/*
-                const Reference<XMultiServiceFactory> xFactory(::dbtools::getConnection(getRowSet()),UNO_QUERY);
-                if ( xFactory.is() )
-                    m_xParser.set(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
-*/
             }
-/*
-            // initialize the parser with the current sql-statement of the form
-            if ( m_xParser.is() )
-            {
-                m_xParser->setElementaryQuery(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ACTIVECOMMAND)));
-                m_xParser->setFilter(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_FILTER)));
-                m_xParser->setHavingClause(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_HAVING_CLAUSE)));
-                m_xParser->setOrder(::comphelper::getString(xFormSet->getPropertyValue(PROPERTY_ORDER)));
-            }
-*/
         }
         catch(Exception&)
         {
@@ -2754,21 +2721,11 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( R
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::unloaded" );
     m_xParser.clear();
     InvalidateAll();
-        // do this asynchron, there are other listeners reacting on this message ...
+        // do this asynchronously, there are other listeners reacting on this message ...
         // (it's a little hack : the grid columns are listening to this event, too, and their bound field may
         // change as a reaction on that event. as we have no chance to be notified of this change (which is
         // the one we're interested in) we give them time to do what they want to before invalidating our
         // bound-field-dependent slots ....
-    /*
-    try
-    {
-        ::comphelper::disposeComponent(m_xParser);
-    }
-    catch(Exception&)
-    {
-        OSL_ENSURE(0,"Exception thrown by dispose");
-    }
-    */
 }
 
 //------------------------------------------------------------------------------
@@ -2838,7 +2795,7 @@ sal_Bool SbaXDataBrowserController::isValidCursor() const
         {
             bIsValid = m_xParser.is();
         }
-    } // if ( !bIsValid )
+    }
     return bIsValid;
 }
 

@@ -59,7 +59,7 @@ BOOL SwAutoCorrect::GetLongText( const uno::Reference < embed::XStorage >& rStg,
         nRet = aBlk.GetText( rShort, rLong );
     }
     else {
-        ASSERT ( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
+       OSL_ENSURE( rStg.is(), "Someone passed SwAutoCorrect::GetLongText a dud storage!");
     }
     return !IsError( nRet ) && rLong.Len();
 }

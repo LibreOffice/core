@@ -1060,7 +1060,7 @@ void WMAdaptor::setWMName( X11SalFrame* pFrame, const String& rWMName ) const
 
         if( aCountry.getLength() )
         {
-            aLocaleString += ::rtl::OUString::createFromAscii( "_" );
+            aLocaleString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
             aLocaleString += aCountry;
         }
         if( aVariant.getLength() )

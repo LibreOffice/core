@@ -59,7 +59,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
                     uno::Reference< registry::XRegistryKey > xNewKey(
                     reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( DocumentDigitalSignatures::GetImplementationName() ) );
 
-                    xNewKey = xNewKey->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+                    xNewKey = xNewKey->createKey( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
 
                     const uno::Sequence< rtl::OUString >& rSNL = DocumentDigitalSignatures::GetSupportedServiceNames();
                     const rtl::OUString* pArray = rSNL.getConstArray();
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
                     nPos = 0;
                     uno::Reference< registry::XRegistryKey > xNewKeyCertificateContainer(
                     reinterpret_cast< registry::XRegistryKey* >( pRegistryKey )->createKey( CertificateContainer::impl_getStaticImplementationName() ) );
-                    xNewKeyCertificateContainer = xNewKeyCertificateContainer->createKey( rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+                    xNewKeyCertificateContainer = xNewKeyCertificateContainer->createKey( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
 
                     const uno::Sequence< rtl::OUString >& rSNLCertificateContainer = CertificateContainer::impl_getStaticSupportedServiceNames();
                     const rtl::OUString* pArrayCertificateContainer = rSNLCertificateContainer.getConstArray();

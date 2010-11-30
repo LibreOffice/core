@@ -31,6 +31,8 @@
 
 #include <list>
 #include <tools/mempool.hxx>
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -168,7 +170,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Stores the data of all fonts occurred in an Excel file. */
-class XclImpFontBuffer : protected XclImpRoot, ScfNoCopy
+class XclImpFontBuffer : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpFontBuffer( const XclImpRoot& rRoot );
@@ -392,7 +394,7 @@ inline bool operator!=( const XclImpXFIndex& rLeft, const XclImpXFIndex& rRight 
 // ----------------------------------------------------------------------------
 
 /** Contains all data of a XF record and a Calc item set. */
-class XclImpXF : public XclXFBase, protected XclImpRoot, ScfNoCopy
+class XclImpXF : public XclXFBase, protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpXF( const XclImpRoot& rRoot );
@@ -480,7 +482,7 @@ private:
 
 /** Contains all XF records occured in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
-class XclImpXFBuffer : protected XclImpRoot, ScfNoCopy
+class XclImpXFBuffer : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpXFBuffer( const XclImpRoot& rRoot );
@@ -564,7 +566,7 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 // ----------------------------------------------------------------------------
 
 /** Contains the XF indexes for every used cell in a column. */
-class XclImpXFRangeColumn : ScfNoCopy
+class XclImpXFRangeColumn : private boost::noncopyable
 {
 public:
     inline explicit     XclImpXFRangeColumn() {}
@@ -601,7 +603,7 @@ private:
 // ----------------------------------------------------------------------------
 
 /** Contains the XF indexes for every used cell in a single sheet. */
-class XclImpXFRangeBuffer : protected XclImpRoot, ScfNoCopy
+class XclImpXFRangeBuffer : protected XclImpRoot, private boost::noncopyable
 {
 public:
     explicit            XclImpXFRangeBuffer( const XclImpRoot& rRoot );
@@ -654,10 +656,10 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
 
 private:
-    typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef > XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, String >         XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >     XclImpHyperlinkList;
+    typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
+    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
+    typedef ::std::pair< XclRange, String >          XclImpHyperlinkRange;
+    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

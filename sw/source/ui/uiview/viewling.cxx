@@ -737,8 +737,8 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.ExecutePosition.Y = aPixPos.Y();
                 Menu* pMenu = 0;
 
-                ::rtl::OUString sMenuName = ::rtl::OUString::createFromAscii(
-                    bUseGrammarContext ? "private:resource/GrammarContextMenu" : "private:resource/SpellContextMenu");
+                ::rtl::OUString sMenuName  = bUseGrammarContext ?
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/GrammarContextMenu")) : OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/SpellContextMenu"));
                 if(TryContextMenuInterception( *pPopup, sMenuName, pMenu, aEvent ))
                 {
 
@@ -865,12 +865,10 @@ public:
 
 protected:
     virtual void LoseFocus() {
-//  printf("ListBox: lose focus!!\n");
     ListBox::LoseFocus();
     }
 
     virtual void Select() {
-//  printf("SELECT!!! IsTravelSelect=%i\n", IsTravelSelect());
     ListBox::Select();
     }
 };
@@ -890,7 +888,7 @@ public:
     assert(fieldBM!=NULL);
     if (fieldBM!=NULL) {
         const IFieldmark::parameter_map_t* const pParameters = fieldBM->GetParameters();
-        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
+        IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
         if(pListEntries != pParameters->end())
         {
             Sequence< ::rtl::OUString> vListEntries;
@@ -915,21 +913,12 @@ public:
     aText.SetPosPixel(Point(0, lbSize.Height()));
     aText.Show();
     SetSizePixel(Size(lbSize.Width(), lbSize.Height()+tSize.Height()));
-//  SetSizePixel(Size(200, 200));
     }
 
     int getSelection() {
     return selection;
     }
 protected:
-    /*
-    virtual void LoseFocus() {
-    printf("lose focus!!\n");
-    Dialog::LoseFocus();
-    printf("close:\n");
-    EndDialog(8);
-    }
-    */
 
     virtual long PreNotify( NotifyEvent& rNEvt ) {
     if (rNEvt.GetType() == EVENT_LOSEFOCUS && aListBox.GetImplWin()==rNEvt.GetWindow()) {
@@ -937,7 +926,6 @@ protected:
         return 1;
     }
     if (rNEvt.GetType() == EVENT_KEYINPUT) {
-//      printf("PreNotify::KEYINPUT\n");
     }
     return Dialog::PreNotify(rNEvt);
     }
@@ -971,7 +959,7 @@ BOOL SwView::ExecFieldPopup( const Point& rPt, IFieldmark *fieldBM )
     /*short ret=*/aFldDlg.Execute();
     sal_Int32 selection=aFldDlg.getSelection();
     if (selection>=0) {
-        (*fieldBM->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = makeAny(selection);
+        (*fieldBM->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = makeAny(selection);
     }
 
     pWrtShell->Pop( sal_False );

@@ -468,11 +468,11 @@ bool ShapeImporter::isSkip(
         rtl::OUString layerName;
         uno::Reference<beans::XPropertySet> xPropLayerSet(
                                                           xLayer, uno::UNO_QUERY );
-        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString::createFromAscii("Name")) );
+        const uno::Any& a(xPropLayerSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))) );
         bool const bRet = (a >>= layerName);
         if(bRet)
         {
-            if( layerName.equals(rtl::OUString::createFromAscii("DrawnInSlideshow")))
+            if( layerName.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DrawnInSlideshow"))))
             {
                 //Transform shapes into PolyPolygons
                 importPolygons(xPropSet);

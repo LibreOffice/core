@@ -217,19 +217,6 @@ private:
     com::sun::star::uno::Reference<
         com::sun::star::xml::crypto::XXMLSecurityContext > m_xSecurityContext;
 
-#if 0
-    /*
-     * the signature creation result listener
-     */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureCreationResultListener > m_xSignatureCreationResultListener;
-    /*
-     * the signature verify result listener
-     */
-    com::sun::star::uno::Reference<
-        com::sun::star::xml::crypto::sax::XSignatureVerifyResultListener > m_xSignatureVerifyResultListener;
-#endif
-
     /*
      * the security id incrementer, in order to make any security id unique
      * to the SAXEventKeeper.
@@ -532,23 +519,6 @@ public:
     /*
      * XFastPropertySet
      */
-    /*
-    virtual void SAL_CALL setFastPropertyValue(
-        sal_Int32 nHandle,
-        const com::sun::star::uno::Any& aValue )
-        throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::beans::PropertyVetoException,
-            com::sun::star::lang::IllegalArgumentException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-    virtual com::sun::star::uno::Any SAL_CALL getFastPropertyValue(
-        sal_Int32 nHandle )
-        throw (
-            com::sun::star::beans::UnknownPropertyException,
-            com::sun::star::lang::WrappedTargetException,
-            com::sun::star::uno::RuntimeException);
-    */
 
     /*
      * XSAXEventKeeperStatusChangeListener

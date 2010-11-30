@@ -85,47 +85,47 @@ SRC1FILES =	\
 
 # ... object files ............................
 EXCEPTIONSFILES=						\
-        $(SLO)$/directsql.obj			\
-        $(SLO)$/dbwiz.obj				\
-        $(SLO)$/dbwizsetup.obj				\
-        $(SLO)$/generalpage.obj			\
-        $(SLO)$/indexfieldscontrol.obj	\
-        $(SLO)$/indexdialog.obj			\
-        $(SLO)$/RelationDlg.obj			\
-        $(SLO)$/adtabdlg.obj			\
-        $(SLO)$/dlgsave.obj				\
-        $(SLO)$/admincontrols.obj       \
-        $(SLO)$/adminpages.obj			\
-        $(SLO)$/queryorder.obj			\
-        $(SLO)$/queryfilter.obj			\
-        $(SLO)$/paramdialog.obj			\
-        $(SLO)$/dbadmin.obj				\
-        $(SLO)$/detailpages.obj			\
-        $(SLO)$/sqlmessage.obj			\
-        $(SLO)$/finteraction.obj		\
-        $(SLO)$/ConnectionPage.obj		\
-        $(SLO)$/ConnectionHelper.obj	\
-        $(SLO)$/TextConnectionHelper.obj	\
-        $(SLO)$/ConnectionPageSetup.obj	\
-        $(SLO)$/DBSetupConnectionPages.obj 	\
-        $(SLO)$/UserAdminDlg.obj		\
-        $(SLO)$/UserAdmin.obj			\
         $(SLO)$/AdabasStat.obj			\
-        $(SLO)$/tablespage.obj			\
-        $(SLO)$/DbAdminImpl.obj			\
-        $(SLO)$/TablesSingleDlg.obj		\
         $(SLO)$/CollectionView.obj		\
+        $(SLO)$/ConnectionHelper.obj		\
+        $(SLO)$/ConnectionPage.obj		\
+        $(SLO)$/ConnectionPageSetup.obj		\
+        $(SLO)$/DBSetupConnectionPages.obj 	\
+        $(SLO)$/DbAdminImpl.obj			\
+        $(SLO)$/DriverSettings.obj      	\
+        $(SLO)$/RelationDlg.obj			\
+        $(SLO)$/TablesSingleDlg.obj		\
+        $(SLO)$/TextConnectionHelper.obj	\
+        $(SLO)$/UserAdmin.obj			\
+        $(SLO)$/UserAdminDlg.obj		\
+        $(SLO)$/admincontrols.obj       	\
+        $(SLO)$/adminpages.obj			\
+        $(SLO)$/adtabdlg.obj			\
+        $(SLO)$/advancedsettings.obj    	\
+        $(SLO)$/dbadmin.obj			\
+        $(SLO)$/dbfindex.obj            	\
+        $(SLO)$/dbwiz.obj			\
+        $(SLO)$/dbwizsetup.obj			\
+        $(SLO)$/detailpages.obj			\
+        $(SLO)$/directsql.obj			\
+        $(SLO)$/dlgattr.obj             	\
+        $(SLO)$/dlgsave.obj			\
+        $(SLO)$/dlgsize.obj			\
         $(SLO)$/dsselect.obj			\
-        $(SLO)$/dbfindex.obj            \
-        $(SLO)$/DriverSettings.obj      \
-        $(SLO)$/odbcconfig.obj          \
-        $(SLO)$/advancedsettings.obj    \
+        $(SLO)$/finteraction.obj		\
+        $(SLO)$/generalpage.obj			\
+        $(SLO)$/indexdialog.obj			\
+        $(SLO)$/indexfieldscontrol.obj		\
+        $(SLO)$/odbcconfig.obj          	\
+        $(SLO)$/paramdialog.obj			\
+        $(SLO)$/queryfilter.obj			\
+        $(SLO)$/queryorder.obj			\
+        $(SLO)$/sqlmessage.obj			\
+        $(SLO)$/tablespage.obj			\
         $(SLO)$/textconnectionsettings.obj
 
-SLOFILES=								\
-        $(EXCEPTIONSFILES)				\
-        $(SLO)$/dlgsize.obj				\
-        $(SLO)$/dlgattr.obj             \
+SLOFILES=					\
+        $(EXCEPTIONSFILES)			\
         $(SLO)$/optionalboolitem.obj 
 
 .IF "$(WINDOWS_VISTA_PSDK)"!="" && "$(PROF_EDITION)"==""

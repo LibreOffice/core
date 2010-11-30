@@ -1052,18 +1052,19 @@ void XMLShapeImportHelper::finishShape(
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >&,
         com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >&)
 {
-    // --> OD 2004-08-10 #i28749#, #i36248# - set property <PositionLayoutDir>
-    // to <PositionInHoriL2R>, if it exists and the import states that
-    // the shape positioning attributes are in horizontal left-to-right
-    // layout. This is the case for the OpenOffice.org file format.
-    // This setting is done for Writer documents, because the property
-    // only exists at service com::sun::star::text::Shape - the Writer
-    // UNO service for shapes.
-    // The value indicates that the positioning attributes are given
-    // in horizontal left-to-right layout. The property is evaluated
-    // during the first positioning of the shape in order to convert
-    // the shape position given in the OpenOffice.org file format to
-    // the one for the OASIS Open Office file format.
+    /* Set property <PositionLayoutDir>
+       to <PositionInHoriL2R>, if it exists and the import states that
+       the shape positioning attributes are in horizontal left-to-right
+       layout. This is the case for the OpenOffice.org file format.
+       This setting is done for Writer documents, because the property
+       only exists at service com::sun::star::text::Shape - the Writer
+       UNO service for shapes.
+       The value indicates that the positioning attributes are given
+       in horizontal left-to-right layout. The property is evaluated
+       during the first positioning of the shape in order to convert
+       the shape position given in the OpenOffice.org file format to
+       the one for the OASIS Open Office file format. (#i28749#, #i36248#)
+    */
     uno::Reference< beans::XPropertySet > xPropSet(rShape, uno::UNO_QUERY);
     if ( xPropSet.is() )
     {

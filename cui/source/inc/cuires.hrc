@@ -76,8 +76,6 @@
 #define RID_SVXSTR_PAGEDIR_RTL_VERT         (RID_SVX_START + 967)
 #define RID_SVXSTR_PAGEDIR_LTR_VERT         (RID_SVX_START + 968)
 #define RID_STR_EDIT_GRAPHIC                (RID_SVX_START + 509)
-#define RID_SVXIMG_LOAD_H                   (RID_SVX_START + 283)
-#define RID_SVXIMG_SAVE_H                   (RID_SVX_START + 284)
 
 #define RID_SVXSTR_DESC_GRADIENT            (RID_SVX_START + 163)
 #define RID_SVXSTR_ASK_DEL_GRADIENT         (RID_SVX_START + 165)
@@ -133,7 +131,6 @@
 #define RID_OFADLG_OPTIONS_TREE_PAGES   (RID_OFA_START + 116)
 #define RID_OFADLG_OPTIONS_TREE         (RID_OFA_START + 115)
 #define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
-#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
 #define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)//?
 #define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)//?
 #define RID_OFADLG_OPTIONS_TREE_HINT    (RID_OFA_START + 118)//?
@@ -180,7 +177,6 @@
 #define RID_SVXSTR_PATH_NAME_START          (RID_SVX_START + 1003)
 #define RID_SVXDLG_FILTER_WARNING           (RID_SVX_START + 248)
 #define RID_SVXBMP_LOCK                     (RID_SVX_START + 118)
-#define RID_SVXBMP_LOCK_HC                  (RID_SVX_START + 119)
 #define RID_SVXSTR_READONLY_CONFIG_TIP      (RID_SVX_START + 1026)
 #define RID_SVXQB_CHANGEDATA                (RID_SVX_START + 214)       //?
 #define RID_SVXERR_OPT_DOUBLEPATHS          (RID_SVX_START + 208)       //?
@@ -219,10 +215,6 @@
 
 // hyperlink dialog
 #define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)
-#define RID_SVXBMP_HLINETTP_H               (RID_SVX_START + 272)
-#define RID_SVXBMP_HLMAILTP_H               (RID_SVX_START + 273)
-#define RID_SVXBMP_HLDOCTP_H                (RID_SVX_START + 274)
-#define RID_SVXBMP_HLDOCNTP_H               (RID_SVX_START + 275)
 #define RID_SVXBMP_HLINETTP                 (RID_SVX_START + 556)
 #define RID_SVXBMP_HLMAILTP                 (RID_SVX_START + 557)
 #define RID_SVXBMP_HLDOCTP                  (RID_SVX_START + 558)

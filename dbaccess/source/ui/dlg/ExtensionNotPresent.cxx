@@ -130,19 +130,6 @@ DBG_NAME( dbu_OExtensionNotPresentDialog )
 
     m_aFI_WARNING.SetImage(WarningBox::GetStandardImage());
 
-    // set an image in high contrast
-    // m_aFI_WARNING.SetModeImage(Image(BMP_EXCEPTION_WARNING_SCH), BMP_COLOR_HIGHCONTRAST);
-
-    // to resize images
-    // WinBits aBits = m_aFI_WARNING.GetStyle();
-    // aBits |= WB_SCALE;
-    // m_aFI_WARNING.SetStyle(aBits);
-    //
-    // Size aImageSize = m_aFI_WARNING.GetSizePixel();
-    // (void) aImageSize;
-    // m_aFI_WARNING.Resize();
-
-
     Resize();
     FreeResource();
 }

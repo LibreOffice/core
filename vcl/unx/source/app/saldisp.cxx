@@ -803,7 +803,7 @@ void SalDisplay::initScreen( int nScreen ) const
         }
         rSD.m_hInvert50 = XCreateBitmapFromData( pDisp_,
                                                  rSD.m_aRefWindow,
-                                                 invert50_bits,
+                                                 reinterpret_cast<const char*>(invert50_bits),
                                                  invert50_width,
                                                  invert50_height );
     }
@@ -1856,7 +1856,7 @@ KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
 #define MAKE_BITMAP( name ) \
     XCreateBitmapFromData( pDisp_, \
                            DefaultRootWindow( pDisp_ ), \
-                           name##_bits, \
+                           reinterpret_cast<const char*>(name##_bits), \
                            name##_width, \
                            name##_height )
 
@@ -2218,10 +2218,13 @@ XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
 
 int SalDisplay::CaptureMouse( SalFrame *pCapture )
 {
+    static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
+
     if( !pCapture )
     {
         m_pCapture = NULL;
-        XUngrabPointer( GetDisplay(), CurrentTime );
+        if( !pEnv || !*pEnv )
+            XUngrabPointer( GetDisplay(), CurrentTime );
         XFlush( GetDisplay() );
         return 0;
     }
@@ -2230,20 +2233,23 @@ int SalDisplay::CaptureMouse( SalFrame *pCapture )
 
     // FIXME: get rid of X11SalFrame
     const SystemEnvData* pEnvData = pCapture->GetSystemData();
-    int ret = XGrabPointer( GetDisplay(),
-                            (XLIB_Window)pEnvData->aWindow,
-                            False,
-                            PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
-                            GrabModeAsync,
-                            GrabModeAsync,
-                            None,
-                            static_cast<X11SalFrame*>(pCapture)->GetCursor(),
-                            CurrentTime );
-
-    if( ret != GrabSuccess )
+    if( !pEnv || !*pEnv )
     {
-        DBG_ASSERT( 1, "SalDisplay::CaptureMouse could not grab pointer\n");
-        return -1;
+        int ret = XGrabPointer( GetDisplay(),
+                                (XLIB_Window)pEnvData->aWindow,
+                                False,
+                                PointerMotionMask| ButtonPressMask|ButtonReleaseMask,
+                                GrabModeAsync,
+                                GrabModeAsync,
+                                None,
+                                static_cast<X11SalFrame*>(pCapture)->GetCursor(),
+                                CurrentTime );
+
+        if( ret != GrabSuccess )
+        {
+            DBG_ASSERT( 1, "SalDisplay::CaptureMouse could not grab pointer\n");
+            return -1;
+        }
     }
 
     m_pCapture = pCapture;

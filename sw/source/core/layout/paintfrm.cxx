@@ -530,7 +530,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||
-                 bVert == rL2.Height() > rL2.Width() )
+                 bVert == (rL2.Height() > rL2.Width()) )
                 continue;
 
             long nL2a, nL2b, nL2c, nL2d;
@@ -704,12 +704,12 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             if ( rLine.IsLocked () )
                 continue;
 
-            if ( !bVerticalSubs == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
+            if ( !bVerticalSubs == (rLine.Height() > rLine.Width()) ) // same direction?
                 continue;
 
             if ( aSubsRect.IsOver( rLine ) )
             {
-                if ( bVerticalSubs ) //Vertikal?
+                if ( bVerticalSubs ) // Vertical?
                 {
                     if ( aSubsRect.Left()  <= rLine.Right() &&
                          aSubsRect.Right() >= rLine.Left() )
@@ -949,7 +949,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 SwLineRect &rLk = operator[](k);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
-                    if ( bVerticalSubs == rLk.Height() > rLk.Width() )
+                    if ( bVerticalSubs == (rLk.Height() > rLk.Width()) )
                     {
                         if ( bVerticalSubs )
                         {
@@ -1400,12 +1400,12 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             continue;
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         //Flys, die innerhalb des eigenen verankert sind, muessen eine
         //groessere OrdNum haben oder Zeichengebunden sein.
         if ( pSelfFly && bLowerOfSelf )
         {
-            ASSERT( pFly->IsFlyInCntFrm() ||
+            OSL_ENSURE( pFly->IsFlyInCntFrm() ||
                     pSdrObj->GetOrdNumDirect() > pSelfFly->GetVirtDrawObj()->GetOrdNumDirect(),
                     "Fly with wrong z-Order" );
         }
@@ -1863,7 +1863,7 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
         bDraw = FALSE;
         break;
 
-    default: ASSERT( !pOutDev, "new Graphic position?" );
+    default: OSL_ENSURE( !pOutDev, "new Graphic position?" );
     }
 
     /// OD 02.09.2002 #99657#
@@ -2084,35 +2084,35 @@ void lcl_AdjustRectToPixelSize( SwRect& io_aSwRect, const OutputDevice &aOut )
 
     io_aSwRect = SwRect( aSizedRect );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     Rectangle aTestOrgPxRect = aOut.LogicToPixel( io_aSwRect.SVRect() );
     Rectangle aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect == aTestNewPxRect,
+    OSL_ENSURE( aTestOrgPxRect == aTestNewPxRect,
             "Error in lcl_AlignRectToPixelSize(..): Adjusted rectangle has incorrect position or size");
 #if OSL_DEBUG_LEVEL > 1
     Rectangle aTestNewRect( aSizedRect );
     /// check Left()
     --aSizedRect.Left();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Left() >= (aTestNewPxRect.Left()+1),
+    OSL_ENSURE( aTestOrgPxRect.Left() >= (aTestNewPxRect.Left()+1),
             "Error in lcl_AlignRectToPixelSize(..): Left() not correct adjusted");
     ++aSizedRect.Left();
     /// check Right()
     ++aSizedRect.Right();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Right() <= (aTestNewPxRect.Right()-1),
+    OSL_ENSURE( aTestOrgPxRect.Right() <= (aTestNewPxRect.Right()-1),
             "Error in lcl_AlignRectToPixelSize(..): Right() not correct adjusted");
     --aSizedRect.Right();
     /// check Top()
     --aSizedRect.Top();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Top() >= (aTestNewPxRect.Top()+1),
+    OSL_ENSURE( aTestOrgPxRect.Top() >= (aTestNewPxRect.Top()+1),
             "Error in lcl_AlignRectToPixelSize(..): Top() not correct adjusted");
     ++aSizedRect.Top();
     /// check Bottom()
     ++aSizedRect.Bottom();
     aTestNewPxRect = aOut.LogicToPixel( aSizedRect );
-    ASSERT( aTestOrgPxRect.Bottom() <= (aTestNewPxRect.Bottom()-1),
+    OSL_ENSURE( aTestOrgPxRect.Bottom() <= (aTestNewPxRect.Bottom()-1),
             "Error in lcl_AlignRectToPixelSize(..): Bottom() not correct adjusted");
     --aSizedRect.Bottom();
 #endif
@@ -2505,7 +2505,7 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     // pStyles[ 6 ] = bHori ? aRFromB : BFromR,
 
     SwLineEntryMapConstIter aMapIter = maVertLines.find( rStartPoint.X() );
-    ASSERT( aMapIter != maVertLines.end(), "FindStylesForLine: Error" )
+    OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
     const SwLineEntrySet& rVertSet = (*aMapIter).second;
     SwLineEntrySetConstIter aIter = rVertSet.begin();
 
@@ -2530,7 +2530,7 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     }
 
     aMapIter = maHoriLines.find( rStartPoint.Y() );
-    ASSERT( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" )
+    OSL_ENSURE( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" );
     const SwLineEntrySet& rHoriSet = (*aMapIter).second;
     aIter = rHoriSet.begin();
 
@@ -2557,7 +2557,7 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     if ( bHori )
     {
         aMapIter = maVertLines.find( rEndPoint.X() );
-        ASSERT( aMapIter != maVertLines.end(), "FindStylesForLine: Error" )
+        OSL_ENSURE( aMapIter != maVertLines.end(), "FindStylesForLine: Error" );
         const SwLineEntrySet& rVertSet2 = (*aMapIter).second;
         aIter = rVertSet2.begin();
 
@@ -2574,7 +2574,7 @@ void SwTabFrmPainter::FindStylesForLine( const Point& rStartPoint,
     else
     {
         aMapIter = maHoriLines.find( rEndPoint.Y() );
-        ASSERT( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" )
+        OSL_ENSURE( aMapIter != maHoriLines.end(), "FindStylesForLine: Error" );
         const SwLineEntrySet& rHoriSet2 = (*aMapIter).second;
         aIter = rHoriSet2.begin();
 
@@ -2680,7 +2680,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 
         if ( SwLineEntry::OVERLAP1 == nOverlapType )
         {
-            ASSERT( rNew.mnStartPos >= rOld.mnStartPos, "Overlap type 3? How this?" )
+            OSL_ENSURE( rNew.mnStartPos >= rOld.mnStartPos, "Overlap type 3? How this?" );
 
             // new left segment
             const SwLineEntry aLeft( nKey, rOld.mnStartPos, rNew.mnStartPos, rOldAttr );
@@ -2774,7 +2774,7 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 
 void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
 {
-        ASSERT( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
+        OSL_ENSURE( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
 
     PROTOCOL( this, PROT_FILE_INIT, 0, 0)
 
@@ -2894,20 +2894,6 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 
                 aPaintRect._Intersection( aRect );
 
-                // --> OD 2007-11-14 #i82616#
-                // Invalidate area for extra data (line numbers or change tracking
-                // marks), if painting on a window and the paint is trigger by an
-                // end action. The inefficient and simple enlargement of the
-                // paint area is replaced by this invalidation.
-    //            if ( bExtraData )
-    //            {
-    //                //Ja, das ist grob, aber wie macht man es besser?
-    //                SWRECTFN( pPage )
-    //                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
-    //                    (pPage->Frm().*fnRect->fnGetLeft)(),
-    //                    (pPage->Frm().*fnRect->fnGetWidth)() );
-    //                aPaintRect._Intersection( pSh->VisArea() );
-    //            }
                 if ( bExtraData &&
                      pSh->GetWin() && pSh->IsInEndAction() )
                 {
@@ -3095,7 +3081,7 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
             }
         }
 
-        ASSERT( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
+        OSL_ENSURE( !pPage->GetNext() || pPage->GetNext()->IsPageFrm(),
                 "Nachbar von Seite keine Seite." );
         pPage = (SwPageFrm*)pPage->GetNext();
     }
@@ -3142,9 +3128,9 @@ void SwRootFrm::HackPrepareLongTblPaint( int nMode )
 {
     switch ( nMode )
     {
-        case HACK_TABLEMODE_INIT       : ASSERT( !pLines, "HackPrepare: already prepared" );
+        case HACK_TABLEMODE_INIT       : OSL_ENSURE( !pLines, "HackPrepare: already prepared" );
                                          pLines = new SwLineRects;
-                                         ASSERT( !pGlobalShell, "old GlobalShell lost" );
+                                         OSL_ENSURE( !pGlobalShell, "old GlobalShell lost" );
                                          pGlobalShell = GetShell();
                                          bTableHack = TRUE;
                                          break;
@@ -3489,7 +3475,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
                 // OD 02.07.2003 #108784# - debug assert
                 if ( !pObj->ISA(SdrObjGroup) )
                 {
-                    ASSERT( false, "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
+                    OSL_ENSURE( false, "<SwFlyFrm::IsPaint(..)> - paint of drawing object without anchor frame!?" );
                 }
             }
         }
@@ -3972,7 +3958,7 @@ void SwFrm::PaintShadow( const SwRect& rRect, SwRect& rOutRect,
             }
             break;
         default:
-            ASSERT( !this, "new ShadowLocation() ?" )
+            OSL_ENSURE( !this, "new ShadowLocation() ?" );
             break;
     }
 
@@ -4510,8 +4496,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
 
 const SwFrm* lcl_HasNextCell( const SwFrm& rFrm )
 {
-    ASSERT( rFrm.IsCellFrm(),
-            "lcl_HasNextCell( const SwFrm& rFrm ) should be called with SwCellFrm" )
+    OSL_ENSURE( rFrm.IsCellFrm(),
+            "lcl_HasNextCell( const SwFrm& rFrm ) should be called with SwCellFrm" );
 
     const SwFrm* pTmpFrm = &rFrm;
     do
@@ -4564,7 +4550,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                                            const SwBorderAttrs& _rCellBorderAttrs,
                                            const bool           _bTop )
 {
-    ASSERT( _pCellFrm, "No cell frame available, dying soon" )
+    OSL_ENSURE( _pCellFrm, "No cell frame available, dying soon" );
 
     // determine, if cell frame is at bottom/top border of a table frame and
     // the table frame has/is a follow.
@@ -4593,7 +4579,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
             }
         }
     }
-    ASSERT( pTmpFrm && pTmpFrm->IsRowFrm(), "No RowFrm available" );
+    OSL_ENSURE( pTmpFrm && pTmpFrm->IsRowFrm(), "No RowFrm available" );
 
     const SwLayoutFrm* pParentRowFrm = static_cast<const SwLayoutFrm*>(pTmpFrm);
     const SwTabFrm* pParentTabFrm =
@@ -4659,7 +4645,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                 {
                     pLowerCell = pLowerCell->GetLower();
                 }
-                ASSERT( pLowerCell && pLowerCell->IsCellFrm(), "No CellFrm available" );
+                OSL_ENSURE( pLowerCell && pLowerCell->IsCellFrm(), "No CellFrm available" );
                 pRet = pLowerCell;
             }
             else if ( !_bTop && !_rCellBorderAttrs.GetBox().GetBottom() )
@@ -4691,7 +4677,7 @@ const SwFrm* lcl_GetCellFrmForBorderAttrs( const SwFrm*         _pCellFrm,
                     }
                     pLowerCell = pLowerCell->GetLower();
                 }
-                ASSERT( pLowerCell && pLowerCell->IsCellFrm(), "No CellFrm available" );
+                OSL_ENSURE( pLowerCell && pLowerCell->IsCellFrm(), "No CellFrm available" );
                 pRet = pLowerCell;
             }
         }
@@ -4905,7 +4891,7 @@ void SwFtnContFrm::PaintLine( const SwRect& rRect,
         case FTNADJ_LEFT:
             /* do nothing */; break;
         default:
-            ASSERT( !this, "Neues Adjustment fuer Fussnotenlinie?" );
+            OSL_ENSURE( !this, "Neues Adjustment fuer Fussnotenlinie?" );
     }
     SwTwips nLineWidth = rInf.GetLineWidth();
     const SwRect aLineRect = bVert ?
@@ -4952,7 +4938,7 @@ void SwLayoutFrm::PaintColLines( const SwRect &rRect, const SwFmtCol &rFmtCol,
         case COLADJ_BOTTOM:
             break;
         default:
-            ASSERT( !this, "Neues Adjustment fuer Spaltenlinie?" );
+            OSL_ENSURE( !this, "Neues Adjustment fuer Spaltenlinie?" );
     }
 
     if( nTop )
@@ -6040,7 +6026,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
                                   SwLineRects* _pSubsLines )
 {
     //In welche Richtung gehts? Kann nur Horizontal oder Vertikal sein.
-    ASSERT( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
+    OSL_ENSURE( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
             "Schraege Hilfslinien sind nicht erlaubt." );
     const PointPtr pDirPt = rP1.X() == rP2.X() ? pY : pX;
     const PointPtr pOthPt = pDirPt == pX ? pY : pX;
@@ -6305,7 +6291,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
-    BOOL bLineInFly = rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys()
+    BOOL bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );
@@ -6434,8 +6420,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
     if ( bFlyMetafile )
         return;
 
-    ASSERT( GetUpper(), "Retoucheversuch ohne Upper." );
-    ASSERT( GetShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
+    OSL_ENSURE( GetUpper(), "Retoucheversuch ohne Upper." );
+    OSL_ENSURE( GetShell() && pGlobalShell->GetWin(), "Retouche auf dem Drucker?" );
 
     SwRect aRetouche( GetUpper()->PaintArea() );
     aRetouche.Top( Frm().Top() + Frm().Height() );
@@ -6674,7 +6660,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
             SFX_ITEM_SET != GetAttrSet().GetItemState( RES_URL, TRUE );
         if( bNoteURL )
         {
-            ASSERT( !pNoteURL, "MakeGraphic: pNoteURL already used? " );
+            OSL_ENSURE( !pNoteURL, "MakeGraphic: pNoteURL already used? " );
             pNoteURL = new SwNoteURL;
         }
         SwFlyFrm *pFly = (SwFlyFrm*)pFirst;
@@ -6754,7 +6740,7 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 
         if( bNoteURL )
         {
-            ASSERT( pNoteURL, "MakeGraphic: Good Bye, NoteURL." );
+            OSL_ENSURE( pNoteURL, "MakeGraphic: Good Bye, NoteURL." );
             pNoteURL->FillImageMap( pMap, pFly->Frm().Pos(), aMap );
             delete pNoteURL;
             pNoteURL = NULL;

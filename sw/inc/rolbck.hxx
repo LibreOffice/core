@@ -70,12 +70,9 @@ class SwCharFmt;
 #include <tox.hxx>
 
 #include <SwNumberTreeTypes.hxx>
-// --> OD 2007-10-17 #i81002#
 #include <IDocumentMarkAccess.hxx>
-// <--
 
 #include <memory>
-
 
 enum HISTORY_HINT {
     HSTRY_SETFMTHNT,
@@ -93,7 +90,7 @@ enum HISTORY_HINT {
     HSTRY_RESETATTRSET,
     HSTRY_CHGFLYANCHOR,
     HSTRY_CHGFLYCHAIN,
-    HSTRY_CHGCHARFMT, // #i27615#
+    HSTRY_CHGCHARFMT,
     HSTRY_END
 };
 
@@ -128,9 +125,7 @@ class SwHistoryResetFmt : public SwHistoryHint
     const USHORT m_nWhich;
 
 public:
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     SwHistoryResetFmt( const SfxPoolItem* pFmtHt, ULONG nNodeIdx );
-    // <--
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
@@ -268,7 +263,6 @@ class SwHistoryBookmark : public SwHistoryHint
         bool IsEqualBookmark(const ::sw::mark::IMark& rBkmk);
         const ::rtl::OUString& GetName() const;
 
-
     private:
         const ::rtl::OUString m_aName;
         ::rtl::OUString m_aShortName;
@@ -296,7 +290,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
-
 
 class SwHistoryResetAttrSet : public SwHistoryHint
 {
@@ -339,7 +332,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 };
 
-// #i27615#
 class SwHistoryChangeCharFmt : public SwHistoryHint
 {
     const SfxItemSet m_OldSet;
@@ -350,7 +342,6 @@ public:
     virtual void SetInDoc( SwDoc* pDoc, bool bTmpSet );
 
 };
-
 
 #endif
 
@@ -377,17 +368,15 @@ public:
     // call all objects between nStart and TmpEnd; store nStart as TmpEnd
     bool TmpRollback( SwDoc* pDoc, USHORT nStart, bool ToFirst = true );
 
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void Add( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue,
               ULONG nNodeIdx );
-    // <--
     void Add( SwTxtAttr* pTxtHt, ULONG nNodeIdx, bool bNewAttr = true );
     void Add( SwFmtColl*, ULONG nNodeIdx, BYTE nWhichNd );
     void Add( const ::sw::mark::IMark&, bool bSavePos, bool bSaveOtherPos );
     void Add( SwFrmFmt& rFmt );
     void Add( SwFlyFrmFmt&, USHORT& rSetPos );
     void Add( const SwTxtFtn& );
-    void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt); // #i27615#
+    void Add( const SfxItemSet & rSet, const SwCharFmt & rCharFmt);
 
     USHORT Count() const { return m_SwpHstry.Count(); }
     USHORT GetTmpEnd() const { return m_SwpHstry.Count() - m_nEndDiff; }
@@ -410,9 +399,7 @@ public:
     // used by Undo classes (Delete/Overwrite/Inserts)
     void CopyAttr( SwpHints* pHts, ULONG nNodeIdx, xub_StrLen nStart,
                     xub_StrLen nEnd, bool bFields );
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
     void CopyFmtAttr( const SfxItemSet& rSet, ULONG nNodeIdx );
-    // <--
 };
 
 #ifndef ROLBCK_HISTORY_ONLY
@@ -427,15 +414,14 @@ private:
     void _MakeSetWhichIds();
 
 public:
-    // --> OD 2008-02-27 #refactorlists# - removed <rDoc>
+
     SwRegHistory( SwHistory* pHst );
-    // <--
     SwRegHistory( const SwNode& rNd, SwHistory* pHst );
     SwRegHistory( SwModify* pRegIn, const SwNode& rNd, SwHistory* pHst );
 
     virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
 
-    /// @return true iff at least 1 item was inserted
+    /// @return true if at least 1 item was inserted
     bool InsertItems( const SfxItemSet& rSet,
         xub_StrLen const nStart, xub_StrLen const nEnd,
         SetAttrMode const nFlags );
@@ -447,7 +433,6 @@ public:
 };
 
 #endif
-
 
 #endif // _ROLBCK_HXX
 

@@ -251,7 +251,7 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
 ::rtl::OUString SAL_CALL ScIndexEnumeration::getImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("ScIndexEnumeration");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScIndexEnumeration"));
 }
 
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const ::rtl::OUString& ServiceName )

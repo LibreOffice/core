@@ -1054,8 +1054,6 @@ IMPL_LINK( SwColumnPage, Timeout, Timer *, EMPTYARG )
             ++nChanged;
         else if(pModifiedField == &aEd3)
             nChanged += 2;
-        /*else if(pModifiedField == &aEd4)
-            nChanged += 3;*/
 
         long nNewWidth = (USHORT)
             pModifiedField->DenormalizePercent(pModifiedField->GetValue(FUNIT_TWIP));

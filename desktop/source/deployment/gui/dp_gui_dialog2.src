@@ -158,19 +158,9 @@ Image RID_IMG_WARNING
     ImageBitmap = Bitmap { File = "caution_16.png"; };
 };
 
-Image RID_IMG_WARNING_HC
-{
-    ImageBitmap = Bitmap { File = "caution_16_h.png"; };
-};
-
 Image RID_IMG_LOCKED
 {
     ImageBitmap = Bitmap { File = "lock_16.png"; };
-};
-
-Image RID_IMG_LOCKED_HC
-{
-    ImageBitmap = Bitmap { File = "lock_16_h.png"; };
 };
 
 Image RID_IMG_SHARED
@@ -178,19 +168,9 @@ Image RID_IMG_SHARED
     ImageBitmap = Bitmap { File = "shared_16.png"; };
 };
 
-Image RID_IMG_SHARED_HC
-{
-    ImageBitmap = Bitmap { File = "shared_16_h.png"; };
-};
-
 Image RID_IMG_EXTENSION
 {
     ImageBitmap = Bitmap { File = "extension_32.png"; };
-};
-
-Image RID_IMG_EXTENSION_HC
-{
-    ImageBitmap = Bitmap { File = "extension_32_h.png"; };
 };
 
 QueryBox RID_QUERYBOX_INSTALL_FOR_ALL

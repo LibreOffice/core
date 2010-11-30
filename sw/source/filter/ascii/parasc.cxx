@@ -82,7 +82,7 @@ ULONG AsciiReader::Read( SwDoc &rDoc, const String&, SwPaM &rPam, const String &
 {
     if( !pStrm )
     {
-        ASSERT( !this, "ASCII-Read ohne Stream" );
+        OSL_ENSURE( !this, "ASCII-Read ohne Stream" );
         return ERR_SWG_READ_ERROR;
     }
 
@@ -254,7 +254,7 @@ ULONG SwASCIIParser::CallParser()
                                     pInsPam->GetCntntNode(), nSttCntnt );
 
                 // !!!!!
-                ASSERT( !this, "Have to change - hard attr. to para. style" );
+                OSL_ENSURE( !this, "Have to change - hard attr. to para. style" );
                 pDoc->InsertItemSet( *pInsPam, *pItemSet, 0 );
             }
         }
@@ -287,7 +287,7 @@ ULONG SwASCIIParser::ReadChars()
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
         CharSet eCharSet;
         bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
-        ASSERT(bRet, "Autodetect of text import without nag dialog must "
+        OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must "
             "have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
@@ -307,7 +307,7 @@ ULONG SwASCIIParser::ReadChars()
         if( currentCharSet == RTL_TEXTENCODING_DONTKNOW )
                 currentCharSet = RTL_TEXTENCODING_ASCII_US;
         hConverter = rtl_createTextToUnicodeConverter( currentCharSet );
-        ASSERT( hConverter, "no string convert avaiable" );
+        OSL_ENSURE( hConverter, "no string convert avaiable" );
         if (!hConverter)
             return ERROR_SW_READ_BASE;
         bSwapUnicode = false;
@@ -405,12 +405,6 @@ ULONG SwASCIIParser::ReadChars()
         bool bIns = true, bSplitNode = false;
         switch( *pStt )
         {
-//JP 12.11.2001: task 94636 - don't ignore all behind the zero character,
-//                            change it to the default "control character"
-//      case 0:
-//                  pEnd = pStt;
-//                  bIns = false ;
-//                  break;
 
         case 0x0a:  if( LINEEND_LF == pUseMe->GetParaFlags() )
                     {
@@ -456,8 +450,6 @@ ULONG SwASCIIParser::ReadChars()
                         *pStt++ = 0;
                         if( nLineLen )
                         {
-                            // Change to charset system!!!!
-                            //rOpt.GetCharSet();
                             InsertText( String( pLastStt ));
                         }
                         pDoc->SplitNode( *pPam->GetPoint(), false );

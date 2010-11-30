@@ -261,12 +261,6 @@ FloatingWindow RID_SCROLL_NAVIGATION_WIN
         MaskColor = IMAGE_MASK_COLOR ;
         SCROLL_IMAGE_IDLIST
     };
-    ImageList ILH_VALUES
-    {
-        Prefix = "srh";
-        MaskColor = IMAGE_MASK_COLOR ;
-        SCROLL_IMAGE_IDLIST
-    };
     FixedLine FL_SEP
     {
         //no position, no text
@@ -544,11 +538,6 @@ ImageButton BTN_NAVI
     Image IMG_BTN
     {
         ImageBitmap = Bitmap { File = "punkt.bmp" ; };
-        MaskColor = IMAGE_MASK_COLOR ;
-    };
-    Image IMG_BTN_H
-    {
-        ImageBitmap = Bitmap { File = "punkt_h.bmp" ; };
         MaskColor = IMAGE_MASK_COLOR ;
     };
     String ST_QUICK

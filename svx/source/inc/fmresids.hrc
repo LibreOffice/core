@@ -35,7 +35,6 @@
 
 // ImageList-Id's -----------------------------------------------------------
 #define RID_SVXIMGLIST_FMEXPL                       (RID_FORMS_START + 0)
-#define RID_SVXIMGLIST_FMEXPL_HC                    (RID_FORMS_START + 2)
 
 // Image-Id's -----------------------------------------------------------
 //#define SID_FMSLOTS_START                          (SID_SVX_START + 592)  -> svxids.hrc

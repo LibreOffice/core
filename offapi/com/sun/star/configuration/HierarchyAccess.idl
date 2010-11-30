@@ -111,7 +111,7 @@ published service HierarchyAccess
  any other interfaces that allow access to or manipulation of subnodes
  selected by name or hierarchical name.
  </p>
- <p>If an inexact name could be matched to either a simple or a hierachical
+ <p>If an inexact name could be matched to either a simple or a hierarchical
  name, the simple (immediate child) name is preferred.
  </p>
 */

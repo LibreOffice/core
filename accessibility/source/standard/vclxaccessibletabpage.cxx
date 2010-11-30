@@ -276,7 +276,7 @@ void VCLXAccessibleTabPage::disposing()
 
 ::rtl::OUString VCLXAccessibleTabPage::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleTabPage" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleTabPage" ));
 }
 
 // -----------------------------------------------------------------------------
@@ -297,7 +297,7 @@ sal_Bool VCLXAccessibleTabPage::supportsService( const ::rtl::OUString& rService
 Sequence< ::rtl::OUString > VCLXAccessibleTabPage::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabPage" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.AccessibleTabPage" ));
     return aNames;
 }
 

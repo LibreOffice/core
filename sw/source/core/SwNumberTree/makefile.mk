@@ -38,10 +38,10 @@ TARGET=SwNumberTree
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(SLO)$/SwNumberTree.obj \
-        $(SLO)$/SwNodeNum.obj
+        $(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES = \
+        $(SLO)$/SwNodeNum.obj \
         $(SLO)$/SwNumberTree.obj 
 
 # --- Tagets -------------------------------------------------------

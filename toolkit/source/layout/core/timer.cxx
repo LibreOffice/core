@@ -70,7 +70,7 @@ public:
             if ( it != jt && isParentOf( *it, *jt ) )
                 jt = list.erase( jt );
             else
-                jt++;
+                ++jt;
         }
     }
 
@@ -98,12 +98,12 @@ public:
 
         // 1. remove duplications and children
         for ( ContainerList::iterator it = mxContainers.begin();
-             it != mxContainers.end(); it++ )
+             it != mxContainers.end(); ++it )
             eraseChildren( it, mxContainers );
 
         // 2. check damage extent
         for ( ContainerList::iterator it = mxContainers.begin();
-             it != mxContainers.end(); it++ )
+             it != mxContainers.end(); ++it )
         {
             uno::Reference< awt::XLayoutContainer > xContainer = *it;
             while ( xContainer->getParent().is() && isContainerDamaged( xContainer ) )
@@ -124,7 +124,7 @@ public:
 
         // 3. force re-calculations
         for ( ContainerList::iterator it = mxContainers.begin();
-             it != mxContainers.end(); it++ )
+             it != mxContainers.end(); ++it )
             (*it)->allocateArea( (*it)->getAllocatedArea() );
     }
 };

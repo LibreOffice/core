@@ -39,54 +39,46 @@ LIBTARGET=no
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-    $(SLO)$/datafdlg.obj		\
-    $(SLO)$/delcldlg.obj		\
-    $(SLO)$/inscldlg.obj		\
-    $(SLO)$/delcodlg.obj		\
-    $(SLO)$/inscodlg.obj		\
-    $(SLO)$/strindlg.obj		\
-    $(SLO)$/tabbgcolordlg.obj   \
-    $(SLO)$/mtrindlg.obj		\
-    $(SLO)$/lbseldlg.obj		\
-    $(SLO)$/filldlg.obj			\
-    $(SLO)$/autofmt.obj			\
-    $(SLO)$/solvrdlg.obj		\
-    $(SLO)$/optsolver.obj       \
-    $(SLO)$/solveroptions.obj   \
-    $(SLO)$/solverutil.obj      \
-    $(SLO)$/mvtabdlg.obj		\
-    $(SLO)$/groupdlg.obj		\
-    $(SLO)$/tabopdlg.obj		\
-    $(SLO)$/crdlg.obj			\
-    $(SLO)$/namecrea.obj		\
-    $(SLO)$/namepast.obj		\
-    $(SLO)$/textdlgs.obj		\
-    $(SLO)$/anyrefdg.obj		\
-    $(SLO)$/crnrdlg.obj			\
-    $(SLO)$/shtabdlg.obj		\
-    $(SLO)$/instbdlg.obj		\
-    $(SLO)$/acredlin.obj		\
-    $(SLO)$/highred.obj			\
-    $(SLO)$/simpref.obj			\
-    $(SLO)$/redcom.obj			\
-    $(SLO)$/linkarea.obj		\
-    $(SLO)$/warnbox.obj	\
-    $(SLO)$/scuiautofmt.obj     \
-    $(SLO)$/conflictsdlg.obj    \
-    $(SLO)$/sharedocdlg.obj \
-    $(SLO)$/protectiondlg.obj \
-    $(SLO)$/retypepassdlg.obj
+    $(EXCEPTIONSFILES)
 
 EXCEPTIONSFILES = \
-    $(SLO)$/acredlin.obj        \
-    $(SLO)$/conflictsdlg.obj    \
+    $(SLO)$/acredlin.obj		\
+    $(SLO)$/anyrefdg.obj		\
+    $(SLO)$/autofmt.obj			\
+    $(SLO)$/conflictsdlg.obj		\
+    $(SLO)$/crdlg.obj			\
+    $(SLO)$/crnrdlg.obj			\
+    $(SLO)$/datafdlg.obj		\
+    $(SLO)$/delcldlg.obj		\
+    $(SLO)$/delcodlg.obj		\
+    $(SLO)$/filldlg.obj			\
+    $(SLO)$/groupdlg.obj		\
+    $(SLO)$/highred.obj			\
+    $(SLO)$/inscldlg.obj		\
+    $(SLO)$/inscodlg.obj		\
+    $(SLO)$/instbdlg.obj		\
+    $(SLO)$/lbseldlg.obj		\
+    $(SLO)$/linkarea.obj		\
+    $(SLO)$/mtrindlg.obj		\
+    $(SLO)$/mvtabdlg.obj		\
+    $(SLO)$/namecrea.obj		\
+    $(SLO)$/namepast.obj		\
+    $(SLO)$/optsolver.obj		\
+    $(SLO)$/protectiondlg.obj		\
+    $(SLO)$/redcom.obj			\
+    $(SLO)$/retypepassdlg.obj		\
+    $(SLO)$/scuiautofmt.obj		\
     $(SLO)$/sharedocdlg.obj		\
-    $(SLO)$/optsolver.obj       \
-    $(SLO)$/solveroptions.obj   \
-    $(SLO)$/crnrdlg.obj         \
-    $(SLO)$/solverutil.obj \
-    $(SLO)$/protectiondlg.obj \
-    $(SLO)$/retypepassdlg.obj
+    $(SLO)$/shtabdlg.obj		\
+    $(SLO)$/simpref.obj			\
+    $(SLO)$/solveroptions.obj		\
+    $(SLO)$/solverutil.obj		\
+    $(SLO)$/solvrdlg.obj		\
+    $(SLO)$/strindlg.obj		\
+    $(SLO)$/tabbgcolordlg.obj   	\
+    $(SLO)$/tabopdlg.obj		\
+    $(SLO)$/textdlgs.obj		\
+    $(SLO)$/warnbox.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \

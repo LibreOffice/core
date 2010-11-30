@@ -102,11 +102,11 @@ XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResM
 
     try
     {
-        mxFilterContainer = Reference< XNameContainer >::query( rxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.FilterFactory" ) ) );
-        mxTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.TypeDetection" ) ));
-        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString::createFromAscii("com.sun.star.document.ExtendedTypeDetectionFactory" ) ) );
+        mxFilterContainer = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.FilterFactory" )) ) );
+        mxTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" )) ));
+        mxExtendedTypeDetection = Reference< XNameContainer >::query( rxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExtendedTypeDetectionFactory" )) ) );
 
-        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager") ), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" )) ), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sTemplatePath = xCfgMgr->substituteVariables( sTemplatePath );
@@ -251,7 +251,7 @@ void XMLFilterSettingsDialog::onNew()
     aTempInfo.maInterfaceName = createUniqueInterfaceName( String( RESID( STR_DEFAULT_UI_NAME ) ) );
 
     // set default application
-    aTempInfo.maDocumentService = OUString::createFromAscii("com.sun.star.text.TextDocument");
+    aTempInfo.maDocumentService = OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ));
 
     // execute XML Filter Dialog
     XMLFilterTabDialog aDlg( this, *mpResMgr, mxMSF, &aTempInfo );
@@ -1378,9 +1378,9 @@ OUString getApplicationUIName( const OUString& rServiceName )
         OUString aRet = String( RESID( STR_UNKNOWN_APPLICATION ) );
         if( rServiceName.getLength() )
         {
-            aRet += OUString::createFromAscii(" (");
+            aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( " (" ));
             aRet += rServiceName;
-            aRet += OUString::createFromAscii(")");
+            aRet += OUString( RTL_CONSTASCII_USTRINGPARAM( ")" ));
         }
         return aRet;
     }

@@ -148,7 +148,7 @@ StylePool::SfxItemSet_Pointer_t SwStyleManager::getByName( const rtl::OUString& 
     {
         // Ok, ok, it's allowed to ask for uncached styles (from UNO) but it should not be done
         // during loading a document
-        ASSERT( false, "Don't ask for uncached styles" );
+        OSL_ENSURE( false, "Don't ask for uncached styles" );
         rpCache->addCompletePool( rAutoPool );
         pStyle = rpCache->getByName( rName );
     }

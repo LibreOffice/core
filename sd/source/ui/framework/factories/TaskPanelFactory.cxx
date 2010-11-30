@@ -66,7 +66,7 @@ Sequence<rtl::OUString> SAL_CALL TaskPanelFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const OUString sServiceName(
-        OUString::createFromAscii("com.sun.star.drawing.framework.TaskPanelFactory"));
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.TaskPanelFactory"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 

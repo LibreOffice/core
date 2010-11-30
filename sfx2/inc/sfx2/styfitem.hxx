@@ -105,7 +105,7 @@ public:
         @return
             <TRUE/> if an image list for the requested mode could be found in the given resource.
     */
-    sal_Bool    updateImages( const ResId& _rId, const BmpColorMode _eMode );
+    sal_Bool    updateImages( const ResId& _rId );
 };
 
 #endif

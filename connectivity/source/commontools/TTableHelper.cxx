@@ -279,7 +279,7 @@ void OTableHelper::refreshColumns()
             aCatalog,
             m_SchemaName,
             m_Name,
-            ::rtl::OUString::createFromAscii("%")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"))
         ) );
 
         // collect the column names, together with their ordinal position
@@ -520,7 +520,7 @@ void SAL_CALL OTableHelper::rename( const ::rtl::OUString& newName ) throw(SQLEx
             ::rtl::OUString sComposedName;
             sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName
-                 + ::rtl::OUString::createFromAscii(" TO ");
+                 + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
             sComposedName = ::dbtools::composeTableName(getMetaData(),sCatalog,sSchema,sTable,sal_True,::dbtools::eInDataManipulation);
             sSql += sComposedName;
 

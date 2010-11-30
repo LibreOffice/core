@@ -81,26 +81,14 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
     aRemoveColorLB.SetSelectHdl( aLk );
 }
 
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
-
 __EXPORT ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
@@ -168,10 +156,6 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 
     return FALSE;
 }
-
-/*-----------------------------------------------------------------------
-    Beschreibung:
- -----------------------------------------------------------------------*/
 
 void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {

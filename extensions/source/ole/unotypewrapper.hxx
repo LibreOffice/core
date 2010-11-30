@@ -35,8 +35,8 @@
 #define STRICT
 #define _WIN32_WINNT 0x0403
 #define _WIN32_DCOM
-#if OSL_DEBUG_LEVEL > 0
-//#define _ATL_DEBUG_INTERFACES
+#if OSL_DEBUG_LEVEL > 2
+#define _ATL_DEBUG_INTERFACES
 #endif
 #include <atlbase.h>
 extern CComModule _Module;

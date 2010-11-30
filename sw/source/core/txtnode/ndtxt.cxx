@@ -103,7 +103,7 @@ SV_DECL_PTRARR(SwpHts,SwTxtAttr*,1,1)
 // Leider ist das SwpHints nicht ganz wasserdicht:
 // Jeder darf an den Hints rumfummeln, ohne die Sortierreihenfolge
 // und Verkettung sicherstellen zu muessen.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #define CHECK_SWPHINTS(pNd)  { if( pNd->GetpSwpHints() && \
                                    !pNd->GetDoc()->IsInReading() ) \
                                   pNd->GetpSwpHints()->Check(); }
@@ -115,7 +115,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
                                  SwTxtFmtColl *pColl,
                                  SwAttrSet* pAutoAttr )
 {
-    ASSERT( pColl, "Collectionpointer ist 0." );
+    OSL_ENSURE( pColl, "Collectionpointer ist 0." );
 
     SwTxtNode *pNode = new SwTxtNode( rWhere, pColl, pAutoAttr );
 
@@ -312,7 +312,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                         return;
                 }
                 SwTxtFtn *pAttr = (SwTxtFtn*)pHt;
-                ASSERT( pAttr->GetStartNode(), "FtnAtr ohne StartNode." );
+                OSL_ENSURE( pAttr->GetStartNode(), "FtnAtr ohne StartNode." );
                 SwNodeIndex aIdx( *pAttr->GetStartNode(), 1 );
                 SwCntntNode *pNd = aIdx.GetNode().GetCntntNode();
                 if ( !pNd )
@@ -324,7 +324,7 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                 SwCntntFrm* pCntnt = (SwCntntFrm*)aIter.First(TYPE(SwCntntFrm));
                 if( pCntnt )
                 {
-                    ASSERT( pCntnt->FindRootFrm() == pFrm->FindRootFrm(),
+                    OSL_ENSURE( pCntnt->FindRootFrm() == pFrm->FindRootFrm(),
                             "lcl_ChangeFtnRef: Layout double?" );
                     SwFtnFrm *pFtn = pCntnt->FindFtnFrm();
                     if( pFtn && pFtn->GetAttr() == pAttr )
@@ -340,11 +340,11 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
                             ((SwTxtFrm*)pFrm)->SetFtn( TRUE );
                         }
                     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                     while( 0 != (pCntnt = (SwCntntFrm*)aIter.Next()) )
                     {
                         SwFtnFrm *pDbgFtn = pCntnt->FindFtnFrm();
-                        ASSERT( !pDbgFtn || pDbgFtn->GetRef() == pFrm,
+                        OSL_ENSURE( !pDbgFtn || pDbgFtn->GetRef() == pFrm,
                                 "lcl_ChangeFtnRef: Who's that guy?" );
                     }
 #endif
@@ -607,7 +607,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
 void SwTxtNode::MoveTxtAttr_To_AttrSet()
 {
-    ASSERT( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
+    OSL_ENSURE( m_pSwpHints, "MoveTxtAttr_To_AttrSet without SwpHints?" );
     for ( USHORT i = 0; m_pSwpHints && i < m_pSwpHints->Count(); ++i )
     {
         SwTxtAttr *pHt = m_pSwpHints->GetTextHint(i);
@@ -723,7 +723,7 @@ SwCntntNode *SwTxtNode::JoinNext()
         InvalidateNumRule();
     }
     else {
-        ASSERT( FALSE, "kein TxtNode." );
+        OSL_ENSURE( FALSE, "kein TxtNode." );
     }
 
     return this;
@@ -818,7 +818,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
         InvalidateNumRule();
     }
     else {
-        ASSERT( FALSE, "kein TxtNode." );
+        OSL_ENSURE( FALSE, "kein TxtNode." );
     }
 
     return this;
@@ -827,7 +827,7 @@ SwCntntNode *SwTxtNode::JoinPrev()
 // erzeugt einen AttrSet mit Bereichen fuer Frame-/Para/Char-Attributen
 void SwTxtNode::NewAttrSet( SwAttrPool& rPool )
 {
-    ASSERT( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
+    OSL_ENSURE( !mpAttrSet.get(), "AttrSet ist doch gesetzt" );
     SwAttrSet aNewAttrSet( rPool, aTxtNodeSetRange );
 
     // put names of parent style and conditional style:
@@ -930,7 +930,7 @@ void SwTxtNode::Update( SwIndex const & rPos, const xub_StrLen nChangeLen,
                         USHORT nWhPos;
                         const USHORT nWhich = pHint->Which();
 
-                        ASSERT(!isCHRATR(nWhich), "Update: char attr hint?");
+                        OSL_ENSURE(!isCHRATR(nWhich), "Update: char attr hint?");
                         if (isCHRATR(nWhich) || isTXTATR_WITHEND(nWhich))
                         {
                             nWhPos = static_cast<USHORT>(nWhich -
@@ -1077,7 +1077,7 @@ void SwTxtNode::_ChgTxtCollUpdateNum( const SwTxtFmtColl *pOldColl,
                                         const SwTxtFmtColl *pNewColl)
 {
     SwDoc* pDoc = GetDoc();
-    ASSERT( pDoc, "Kein Doc?" );
+    OSL_ENSURE( pDoc, "Kein Doc?" );
     // erfrage die OutlineLevel und update gegebenenfalls das Nodes-Array,
     // falls sich die Level geaendert haben !
     const int nOldLevel = pOldColl && pOldColl->IsAssignedToListLevelOfOutlineStyle() ?
@@ -1200,7 +1200,7 @@ lcl_GetTxtAttrs(
         }
 
         xub_StrLen const*const pEndIdx = pHint->GetEnd();
-        ASSERT(pEndIdx || pHint->HasDummyChar(),
+        OSL_ENSURE(pEndIdx || pHint->HasDummyChar(),
                 "hint with no end and no dummy char?");
             // Wenn bExpand gesetzt ist, wird das Verhalten bei Eingabe
             // simuliert, d.h. der Start wuede verschoben, das Ende expandiert,
@@ -1243,7 +1243,7 @@ SwTxtAttr *
 SwTxtNode::GetTxtAttrAt(xub_StrLen const nIndex, RES_TXTATR const nWhich,
                         enum GetTxtAttrMode const eMode) const
 {
-    ASSERT(    (nWhich == RES_TXTATR_META)
+    OSL_ENSURE(    (nWhich == RES_TXTATR_META)
             || (nWhich == RES_TXTATR_METAFIELD)
             || (nWhich == RES_TXTATR_AUTOFMT)
             || (nWhich == RES_TXTATR_INETFMT)
@@ -1279,12 +1279,12 @@ SwCharFmt* lcl_FindCharFmt( const SwCharFmts* pCharFmts, const XubString& rName 
 void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
     SwTxtAttr *const pNewHt, SwDoc *const pOtherDoc, SwTxtNode *const pDest )
 {
-    ASSERT( nWhich == pHt->Which(), "Falsche Hint-Id" );
+    OSL_ENSURE( nWhich == pHt->Which(), "Falsche Hint-Id" );
     switch( nWhich )
     {
         // copy nodesarray section with footnote content
         case RES_TXTATR_FTN :
-            ASSERT(pDest, "lcl_CopyHint: no destination text node?");
+            OSL_ENSURE(pDest, "lcl_CopyHint: no destination text node?");
             static_cast<const SwTxtFtn*>(pHt)->CopyFtn(
                 *static_cast<SwTxtFtn*>(pNewHt), *pDest);
             break;
@@ -1385,8 +1385,8 @@ void lcl_CopyHint( const USHORT nWhich, const SwTxtAttr * const pHt,
         }
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
-            ASSERT(pNewHt, "copying META should not fail! cannot call DoCopy");
-            ASSERT(pDest && (CH_TXTATR_INWORD ==
+            OSL_ENSURE(pNewHt, "copying META should not fail! cannot call DoCopy");
+            OSL_ENSURE(pDest && (CH_TXTATR_INWORD ==
                                 pDest->GetTxt().GetChar(*pNewHt->GetStart())),
                    "missing CH_TXTATR?");
             if (pNewHt)
@@ -1727,8 +1727,8 @@ void SwTxtNode::CopyText( SwTxtNode *const pDest,
 void SwTxtNode::InsertText( const XubString & rStr, const SwIndex & rIdx,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    ASSERT( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
-    ASSERT( (ULONG)m_Text.Len() + (ULONG)rStr.Len() <= STRING_LEN,
+    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::InsertText: invalid index." );
+    OSL_ENSURE( (ULONG)m_Text.Len() + (ULONG)rStr.Len() <= STRING_LEN,
             "SwTxtNode::InsertText: node text with insertion > STRING_LEN." );
 
     xub_StrLen aPos = rIdx.GetIndex();
@@ -1843,7 +1843,7 @@ void SwTxtNode::CutText( SwTxtNode * const pDest,
     }
     else
     {
-        ASSERT(false,
+        OSL_ENSURE(false,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
     }
@@ -1855,7 +1855,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 {
     if(!pDest)
     {
-        ASSERT(false,
+        OSL_ENSURE(false,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
         EraseText( rStart, nLen );
         return;
@@ -1864,7 +1864,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // nicht im Dokument verschieben ?
     if( GetDoc() != pDest->GetDoc() )
     {
-        ASSERT(false,
+        OSL_ENSURE(false,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
         CopyText( pDest, rDestStart, rStart, nLen);
         EraseText(rStart, nLen);
@@ -1886,7 +1886,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
     // wird in sich selbst verschoben, muss es gesondert behandelt werden !!
     if( pDest == this )
     {
-        ASSERT(false,
+        OSL_ENSURE(false,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
         m_Text.Insert( m_Text, nTxtStartIdx, nLen, nDestStart );
         m_Text.Erase( nTxtStartIdx + (nDestStart<nTxtStartIdx ? nLen : 0), nLen );
@@ -2050,7 +2050,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
         const bool bUndoNodes =
             !pOtherDoc && GetDoc()->GetUndoNds() == &GetNodes();
 
-        ASSERT(!pOtherDoc,
+        OSL_ENSURE(!pOtherDoc,
             "mst: entering dead and bitrotted code; fasten your seatbelts!");
 
         // harte Absatz umspannende Attribute kopieren
@@ -2216,7 +2216,7 @@ void SwTxtNode::CutImpl( SwTxtNode * const pDest, const SwIndex & rDestStart,
 void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         const IDocumentContentOperations::InsertFlags nMode )
 {
-    ASSERT( rIdx <= m_Text.Len(), "SwTxtNode::EraseText: invalid index." );
+    OSL_ENSURE( rIdx <= m_Text.Len(), "SwTxtNode::EraseText: invalid index." );
 
     const xub_StrLen nStartIdx = rIdx.GetIndex();
     const xub_StrLen nCnt = (STRING_LEN == nCount)
@@ -2246,7 +2246,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
 
         if( !pHtEndIdx )
         {
-            ASSERT(pHt->HasDummyChar(),
+            OSL_ENSURE(pHt->HasDummyChar(),
                     "attribute with neither end nor CH_TXTATR?");
             if (isTXTATR(nWhich) &&
                 (nHintStart >= nStartIdx) && (nHintStart < nEndIdx))
@@ -2258,7 +2258,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
             continue;
         }
 
-        ASSERT (!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
+       OSL_ENSURE(!( (nHintStart < nEndIdx) && (*pHtEndIdx > nEndIdx)
                     && pHt->HasDummyChar() )
                 // next line: deleting exactly dummy char: DeleteAttributes
                 || ((nHintStart == nStartIdx) && (nHintStart + 1 == nEndIdx)),
@@ -2290,7 +2290,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         }
     }
 
-    ASSERT(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
+    OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
 
     TryDeleteSwpHints();
 
@@ -2307,7 +2307,7 @@ void SwTxtNode::EraseText(const SwIndex &rIdx, const xub_StrLen nCount,
         SwModify::Modify( 0, &aHint );
     }
 
-    ASSERT(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
+    OSL_ENSURE(rIdx.GetIndex() == nStartIdx, "huh? start index has changed?");
 
     // By deleting a character, the hidden flags
     // at the TxtNode can become invalid:
@@ -3263,7 +3263,7 @@ XubString SwTxtNode::GetRedlineTxt( xub_StrLen nIdx, xub_StrLen nLen,
 void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
                              const XubString& rText )
 {
-    ASSERT( rStart.GetIndex() < m_Text.Len() &&
+    OSL_ENSURE( rStart.GetIndex() < m_Text.Len() &&
             rStart.GetIndex() + nDelLen <= m_Text.Len(),
             "SwTxtNode::ReplaceText: index out of bounds" );
     const xub_StrLen nStartPos = rStart.GetIndex();
@@ -3277,7 +3277,7 @@ void SwTxtNode::ReplaceText( const SwIndex& rStart, const xub_StrLen nDelLen,
             SwTxtAttr *const pHint = GetTxtAttrForCharAt( nPos );
             if (pHint)
             {
-                ASSERT (!( pHint->GetEnd() && pHint->HasDummyChar()
+               OSL_ENSURE(!( pHint->GetEnd() && pHint->HasDummyChar()
                             && (*pHint->GetStart() < nEndPos)
                             && (*pHint->GetEnd()   > nEndPos) ),
                     "ReplaceText: ERROR: "
@@ -3464,7 +3464,7 @@ namespace {
                             String::CreateFromAscii( SwNumRule::GetOutlineRuleName() ) )
                     {
                         // --> OD 2008-09-10 #i70748#
-                        ASSERT( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
+                        OSL_ENSURE( rTxtNode.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle(),
                                 "<HandleModifyAtTxtNode()> - text node with outline style, but its paragraph style is not assigned to outline style." );
                         int nNewListLevel =
                             rTxtNode.GetTxtColl()->GetAssignedOutlineStyleLevel();
@@ -3558,8 +3558,8 @@ void SwTxtNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
 
 SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
 {
-    ASSERT( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
-    ASSERT( HAS_BASE( SwTxtFmtColl, pNewColl ),
+    OSL_ENSURE( pNewColl,"ChgFmtColl: Collectionpointer ist 0." );
+    OSL_ENSURE( HAS_BASE( SwTxtFmtColl, pNewColl ),
                 "ChgFmtColl: ist kein Text-Collectionpointer." );
 
     SwTxtFmtColl *pOldColl = GetTxtColl();
@@ -3570,8 +3570,8 @@ SwFmtColl* SwTxtNode::ChgFmtColl( SwFmtColl *pNewColl )
         // --> OD 2008-03-27 #refactorlists#
 //        NumRuleChgd();
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( !mbInSetOrResetAttr,
-                "DEBUG ASSERTION - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" )
+        OSL_ENSURE( !mbInSetOrResetAttr,
+                "DEBUG OSL_ENSURE(ON - <SwTxtNode::ChgFmtColl(..)> called during <Set/ResetAttr(..)>" );
 #endif
         if ( !mbInSetOrResetAttr )
         {
@@ -3654,7 +3654,7 @@ int SwTxtNode::GetAttrOutlineLevel() const
 }
 void SwTxtNode::SetAttrOutlineLevel(int nLevel)
 {
-    ASSERT( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
+    OSL_ENSURE( 0 <= nLevel && nLevel <= MAXLEVEL ,"SwTxtNode: Level Out Of Range" );//#outline level,zhaojianwei
     if ( 0 <= nLevel && nLevel <= MAXLEVEL )
     {
         SetAttr( SfxUInt16Item( RES_PARATR_OUTLINELEVEL,
@@ -3694,7 +3694,7 @@ void SwTxtNode::SetAttrListLevel( int nLevel )
 {
     if ( nLevel < 0 || nLevel >= MAXLEVEL )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwTxtNode::SetAttrListLevel()> - value of parameter <nLevel> is out of valid range" );
         return;
     }
@@ -3818,7 +3818,7 @@ bool SwTxtNode::HasAttrListRestartValue() const
 // <--
 SwNumberTree::tSwNumTreeNumber SwTxtNode::GetAttrListRestartValue() const
 {
-    ASSERT( HasAttrListRestartValue(),
+    OSL_ENSURE( HasAttrListRestartValue(),
             "<SwTxtNode::GetAttrListRestartValue()> - only ask for list restart value, if attribute is set at text node." );
 
     const SfxInt16Item& aListRestartValueItem =
@@ -3900,7 +3900,7 @@ void SwTxtNode::AddToList()
 {
     if ( IsInList() )
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwTxtNode::AddToList()> - the text node is already added to a list. Serious defect -> please inform OD" );
         return;
     }
@@ -3918,7 +3918,7 @@ void SwTxtNode::AddToList()
                 pList = GetDoc()->createList( sListId, GetNumRule()->GetName() );
             }
         }
-        ASSERT( pList != 0,
+        OSL_ENSURE( pList != 0,
                 "<SwTxtNode::AddToList()> - no list for given list id. Serious defect -> please inform OD" );
         if ( pList )
         {
@@ -4061,7 +4061,7 @@ bool SwTxtNode::AreListLevelIndentsApplicable() const
             }
 
             pColl = dynamic_cast<const SwTxtFmtColl*>(pColl->DerivedFrom());
-            ASSERT( pColl,
+            OSL_ENSURE( pColl,
                     "<SwTxtNode::AreListLevelIndentsApplicable()> - something wrong in paragraph's style hierarchy. The applied list style is not found." );
         }
     }
@@ -4155,7 +4155,7 @@ XubString SwTxtNode::GetLabelFollowedBy() const
                 break;
                 default:
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwTxtNode::GetLabelFollowedBy()> - unknown SvxNumberFormat::GetLabelFollowedBy() return value" );
                 }
             }
@@ -4272,7 +4272,7 @@ namespace {
             {
                 const SfxStringItem& pListIdItem =
                                         dynamic_cast<const SfxStringItem&>(pItem);
-                ASSERT( pListIdItem.GetValue().Len() > 0,
+                OSL_ENSURE( pListIdItem.GetValue().Len() > 0,
                         "<HandleSetAttrAtTxtNode(..)> - empty list id attribute not excepted. Serious defect -> please inform OD." );
                 const String sListIdOfTxtNode = rTxtNode.GetListId();
                 if ( pListIdItem.GetValue() != sListIdOfTxtNode )

@@ -119,7 +119,7 @@ Sequence<rtl::OUString> SAL_CALL BasicPaneFactory_getSupportedServiceNames (void
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.BasicPaneFactory"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.BasicPaneFactory")));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -329,8 +329,8 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
         // The requested pane can not be created by any of the factories
         // managed by the called BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "BasicPaneFactory::createPane() called for unknown resource id"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "BasicPaneFactory::createPane() called for unknown resource id")),
             NULL,
             0);
     }
@@ -388,8 +388,8 @@ void SAL_CALL BasicPaneFactory::releaseResource (
         // created by any of the factories managed by the called
         // BasicPaneFactory object.
         throw lang::IllegalArgumentException(
-            ::rtl::OUString::createFromAscii(
-                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory."),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "BasicPaneFactory::releasePane() called for pane that that was not created by same factory.")),
             NULL,
             0);
     }

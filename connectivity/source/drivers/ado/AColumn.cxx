@@ -181,7 +181,7 @@ void OAdoColumn::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& r
                 break;
 
             case PROPERTY_ID_ISAUTOINCREMENT:
-                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString::createFromAscii( "Autoincrement" ), getBOOL( rValue ) );
+                OTools::putValue( m_aColumn.get_Properties(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Autoincrement" )), getBOOL( rValue ) );
                 break;
 
             case PROPERTY_ID_IM001:

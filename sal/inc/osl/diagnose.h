@@ -78,23 +78,6 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 
 #define OSL_THIS_FILE       __FILE__
 
-/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
-/* as documented in http://www.openoffice.org/issues/show_bug.cgi?id=114290 ,
-   this cannot work, so disable it for now */
-#if 1
-#define OSL_THIS_FUNC " "
-#else
-#ifdef __func__
-#define OSL_THIS_FUNC __func__
-#elif defined (__PRETTY_FUNCTION__)
-#define OSL_THIS_FUNC __PRETTY_FUNCTION__
-#elif defined (__FUNCTION__)
-#define OSL_THIS_FUNC __FUNCTION__
-#else
-#define OSL_THIS_FUNC " "
-#endif
-#endif /* 1 */
-
 /* the macro OSL_TO_STRING is intended to be an office internal macro for now */
 #define OSL_TO_STRING( x ) #x
 
@@ -102,7 +85,7 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define OSL_MACRO_VALUE_TO_STRING( x ) OSL_TO_STRING( x )
 
 /* the macro OSL_LOG_PREFIX is intended to be an office internal macro for now */
-#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_THIS_FUNC ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
+#define OSL_LOG_PREFIX OSL_THIS_FILE ":" OSL_MACRO_VALUE_TO_STRING( __LINE__ ) "; "
 
 #define OSL_DEBUG_ONLY(s)   _OSL_DEBUG_ONLY(s)
 #define OSL_TRACE           _OSL_TRACE
@@ -163,6 +146,31 @@ pfunc_osl_printDetailedDebugMessage SAL_CALL osl_setDetailedDebugMessageFunc( pf
 #define _OSL_TRACE                  1 ? ((void)0) : _OSL_GLOBAL osl_trace
 
 #endif /* OSL_DEBUG_LEVEL */
+
+/* the macro OSL_THIS_FUNC is intended to be an office internal macro for now */
+/* copied from boost/current_function.hpp to make it usable from C
+ * sources as well
+ *
+ * Copyright (c) 2002 Peter Dimov and Multi Media Ltd.
+ *
+ * Distributed under the Boost Software License, Version 1.0. (See
+ * accompanying file LICENSE_1_0.txt or copy at
+ * http://www.boost.org/LICENSE_1_0.txt) */
+#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600))
+#define OSL_THIS_FUNC __PRETTY_FUNCTION__
+#elif defined(__DMC__) && (__DMC__ >= 0x810)
+#define OSL_THIS_FUNC __PRETTY_FUNCTION__
+#elif defined(__FUNCSIG__)
+#define OSL_THIS_FUNC __FUNCSIG__
+#elif (defined(__INTEL_COMPILER) && (__INTEL_COMPILER >= 600)) || (defined(__IBMCPP__) && (__IBMCPP__ >= 500))
+#define OSL_THIS_FUNC __FUNCTION__
+#elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x550)
+#define OSL_THIS_FUNC __FUNC__
+#elif defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
+#define OSL_THIS_FUNC __func__
+#else
+#define OSL_THIS_FUNC ""
+#endif
 
 #endif /* _OSL_DIAGNOSE_H_ */
 

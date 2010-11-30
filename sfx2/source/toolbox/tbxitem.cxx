@@ -153,7 +153,7 @@ svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const Reference< X
 
     URL aTargetURL;
     aTargetURL.Complete = aCommandURL;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
     if ( aTargetURL.Arguments.getLength() )
         return NULL;
@@ -450,7 +450,7 @@ void SfxToolBoxControl::Dispatch(
         ::com::sun::star::util::URL aTargetURL;
         aTargetURL.Complete = rCommand;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                                           UNO_QUERY );
         xTrans->parseStrict( aTargetURL );
 
@@ -483,7 +483,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
                 ::rtl::OUString sAppName;
                 try
                 {
-                    static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+                    static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
                     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                         ::comphelper::getProcessServiceFactory();
                     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
@@ -494,7 +494,7 @@ void SfxToolBoxControl::Dispatch( const ::rtl::OUString& aCommand, ::com::sun::s
                     sAppName = xModuleManager->identify(xFrame);
                 } catch(::com::sun::star::uno::Exception&) {}
                 Sequence<PropertyValue> source;
-                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+                ::comphelper::UiEventsLogger::appendDispatchOrigin(source, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
                 ::comphelper::UiEventsLogger::logDispatch(aTargetURL, source);
             }
             xDispatch->dispatch( aTargetURL, aArgs );
@@ -1027,7 +1027,7 @@ void SfxToolBoxControl::Select( BOOL /*bMod1*/ )
         ::rtl::OUString sAppName;
         try
         {
-            static ::rtl::OUString our_aModuleManagerName = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
+            static ::rtl::OUString our_aModuleManagerName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"));
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceManager =
                 ::comphelper::getProcessServiceFactory();
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > xModuleManager(
@@ -1036,7 +1036,7 @@ void SfxToolBoxControl::Select( BOOL /*bMod1*/ )
             sAppName = xModuleManager->identify(m_xFrame);
         } catch(::com::sun::star::uno::Exception&) {}
         Sequence<PropertyValue> vSource;
-        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString::createFromAscii("SfxToolBoxControl"));
+        ::comphelper::UiEventsLogger::appendDispatchOrigin(vSource, sAppName, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SfxToolBoxControl")));
         URL aURL;
         aURL.Complete = m_aCommandURL;
         ::comphelper::UiEventsLogger::logDispatch(aURL, vSource);
@@ -1522,7 +1522,6 @@ SfxAppToolBoxControl_Impl::SfxAppToolBoxControl_Impl( USHORT nSlotId, USHORT nId
     // Determine the current background color of the menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
-    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     SetImage( String() );
@@ -1647,11 +1646,10 @@ void SfxAppToolBoxControl_Impl::SetImage( const String &rURL )
         aURL = sFallback;
 
     BOOL bBig = SvtMiscOptions().AreCurrentSymbolsLarge();
-    BOOL bHC = GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode();
-    Image aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( aURL ), bBig, bHC );
+    Image aImage = SvFileInformationManager::GetImageNoDefault( INetURLObject( aURL ), bBig );
     if ( !aImage )
         aImage = !!aMenuImage ? aMenuImage :
-            SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig, bHC );
+            SvFileInformationManager::GetImage( INetURLObject( aURL ), bBig );
     Size aBigSize( GetToolBox().GetDefaultImageSize() );
     if ( bBig && aImage.GetSizePixel() != aBigSize )
     {
@@ -1709,7 +1707,7 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
             aTargetURL.Complete = aLastURL;
             getURLTransformer()->parseStrict( aTargetURL );
 
-            ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
+            ::rtl::OUString aTarget( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")));
             if ( pMenu )
             {
                 ::framework::MenuConfiguration::Attributes* pMenuAttributes =
@@ -1725,8 +1723,8 @@ void SfxAppToolBoxControl_Impl::Select( BOOL bMod1 )
             {
                 Sequence< PropertyValue > aArgs( 1 );
 
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
-                aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer"));
+                aArgs[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )) );
 
                 ExecuteInfo* pExecuteInfo = new ExecuteInfo;
                 pExecuteInfo->xDispatch     = xDispatch;
@@ -1757,7 +1755,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
     URL aTargetURL;
     aTargetURL.Complete = aURL;
     Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                                            rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
+                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
                                           UNO_QUERY );
     xTrans->parseStrict( aTargetURL );
 
@@ -1769,7 +1767,7 @@ long Select_Impl( void* /*pHdl*/, void* pVoid )
             xDisp = xProv->queryDispatch( aTargetURL, ::rtl::OUString(), 0 );
         else
         {
-            ::rtl::OUString aTargetFrame( ::rtl::OUString::createFromAscii( "_blank" ) );
+            ::rtl::OUString aTargetFrame( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")) );
             ::framework::MenuConfiguration::Attributes* pMenuAttributes =
                 (::framework::MenuConfiguration::Attributes*)pMenu->GetUserValue( pMenu->GetCurItemId() );
 
@@ -1798,15 +1796,12 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle     = rSettings.GetSymbolsStyle();
-        BOOL bIsHiContrastMode  = rSettings.GetHighContrastMode();
         BOOL bShowMenuImages    = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
-            ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
             m_nSymbolsStyle      = nSymbolsStyle;
-            m_bWasHiContrastMode = bIsHiContrastMode;
             m_bShowMenuImages    = bShowMenuImages;
 
             USHORT nCount = pActMenu->GetItemCount();
@@ -1828,7 +1823,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, FALSE, bIsHiContrastMode );
+                            Image aImage = GetImage( xFrame, aImageId, FALSE );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
@@ -1840,7 +1835,7 @@ IMPL_LINK( SfxAppToolBoxControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), FALSE, bIsHiContrastMode );
+                                INetURLObject(aCmd), FALSE );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nId, aImage );
                         }

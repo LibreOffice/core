@@ -167,7 +167,7 @@ sub call_regcomp
 
     my $error_occured = 0;
 
-    my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
+    my $systemcall = "$$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
 
     open (REG, "$systemcall");
     while (<REG>) {push(@regcompoutput, $_); }
@@ -229,7 +229,7 @@ sub register_javacomponents
             {
                 my @regcompoutput = ();
 
-                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $javaservicesurlprefix . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
+                my $systemcall = "$$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $javaservicesurlprefix . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -276,7 +276,7 @@ sub fix_cygwin_path
 {
     my ( $path ) = @_;
 
-    if ( $installer::globals::iswin eq 1 && $installer::globals::wrapcmd eq "" )
+    if ( $installer::globals::iswin eq 1 )
     {
     $path = qx{cygpath -m "$path"};
     chomp($path);
@@ -365,7 +365,7 @@ sub register_pythoncomponents
 
                 my @regcompoutput = ();
 
-                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register"
+                $systemcall = "$$regcompfileref -register"
                 . " -br " . fix_cygwin_path($$typesrdbref)
                 . " -br " . fix_cygwin_path($$pyunoservicesrdbref)
                 . " -r " . fix_cygwin_path($servicesfile)
@@ -715,7 +715,7 @@ sub prepare_regcomp_rdb
 
         chdir($to);
 
-        my $systemcall = "$installer::globals::wrapcmd $regcompfile -register -s -r " . fix_cygwin_path($regcomprdb) . " -c $libfilename";
+        my $systemcall = "$regcompfile -register -s -r " . fix_cygwin_path($regcomprdb) . " -c $libfilename";
 
         my $returnvalue = system($systemcall);
 
@@ -922,25 +922,15 @@ sub create_services_rdb
         {
             my $registryfile = ${$registryfiles}[$i];
 
-            # my $servicesname = "services.rdb";
             my $servicesname = $registryfile->{'Name'};  # not unique!
             my $servicesgid = $registryfile->{'gid'};  # unique
             my $uniquedirname = $servicesgid . "_servicesrdb";
-            # my $uniquedirname = $servicesgid;
 
             my ($nativeservicesurlprefix, $javaservicesurlprefix) = set_url_prefixes($registryfile);
 
             installer::logger::include_header_into_logfile("Creating $servicesname ($servicesgid):");
 
-            # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
-
-#           if ( $^O =~ /cygwin/i )
-#           {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
-#               $servicesdir = qx{cygpath -d "$servicesdir"};
-#               chomp($servicesdir);
-#               $servicesdir =~ s/\\/\//g;
-#           }
 
             push(@installer::globals::removedirs, $servicesdir);
 
@@ -949,8 +939,6 @@ sub create_services_rdb
             # If there is an older version of this file, it has to be removed
             if ( -f $servicesfile ) { unlink($servicesfile); }
 
-            # if ((-f $servicesfile) && (!($installer::globals::services_rdb_created))) { $installer::globals::services_rdb_created = 1; }
-            # if ((!($installer::globals::services_rdb_created)) && $installer::globals::servicesrdb_can_be_created )   # This has to be done once
             if ( $installer::globals::servicesrdb_can_be_created )  # This has to be done always
             {
                 # Creating the services.rdb in directory "inprogress"
@@ -1009,7 +997,6 @@ sub create_services_rdb
 
                 # and now iteration over all files
 
-                # my $error_during_registration = register_all_components($filesarrayref, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref);
                 my $error_during_registration = register_all_components($allvariableshashref, $servicesgid, $unocomponentfiles, $regcompfileref, $servicesfile, $regcomprdb, $includepatharrayref, $nativeservicesurlprefix, $javaservicesurlprefix);
 
                 if (defined $var_library_path) {
@@ -1061,7 +1048,6 @@ sub create_services_rdb
 
             # Adding the new services file source path to the filearray
             $registryfile->{'sourcepath'} = $servicesfile;  # setting the sourcepath!
-            # add_services_sourcepath_into_filearray( $filesarrayref, $servicesfile, $servicesname );
         }
     }
 

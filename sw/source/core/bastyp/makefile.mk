@@ -56,21 +56,21 @@ CXXFILES = \
         SwSmartTagMgr.cxx
 
 SLOFILES =	\
+        $(EXCEPTIONSFILES) \
         $(SLO)$/bparr.obj \
-        $(SLO)$/breakit.obj \
-        $(SLO)$/calc.obj \
         $(SLO)$/checkit.obj \
         $(SLO)$/index.obj \
-        $(SLO)$/init.obj \
         $(SLO)$/ring.obj \
         $(SLO)$/swcache.obj \
         $(SLO)$/swrect.obj \
-        $(SLO)$/swregion.obj \
-        $(SLO)$/swtypes.obj \
-        $(SLO)$/tabcol.obj \
-        $(SLO)$/SwSmartTagMgr.obj
+        $(SLO)$/swregion.obj
 
 EXCEPTIONSFILES = \
+        $(SLO)$/SwSmartTagMgr.obj \
+        $(SLO)$/breakit.obj \
+        $(SLO)$/calc.obj \
+        $(SLO)$/init.obj \
+        $(SLO)$/swtypes.obj \
         $(SLO)$/tabcol.obj
 
 # --- Tagets -------------------------------------------------------

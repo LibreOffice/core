@@ -37,6 +37,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
@@ -45,8 +46,8 @@ using namespace ::com::sun::star;
 
 namespace ooo { namespace vba {
 
-const static rtl::OUString sUrlPart0 = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
-const static rtl::OUString sUrlPart1 = rtl::OUString::createFromAscii( "?language=Basic&location=document");
+const static rtl::OUString sUrlPart0( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
+const static rtl::OUString sUrlPart1( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
 
 String makeMacroURL( const String& sMacroName )
 {
@@ -121,7 +122,7 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                         bDocNameNoPathMatch = xModel->getURL().copy( lastSlashIndex + 1 ).equals( aURL );
                         if ( !bDocNameNoPathMatch )
                         {
-                            rtl::OUString aTmpName = rtl::OUString::createFromAscii("'") + xModel->getURL().copy( lastSlashIndex + 1 ) + rtl::OUString::createFromAscii("'");
+                            rtl::OUString aTmpName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "'" )) + xModel->getURL().copy( lastSlashIndex + 1 ) + rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "'" ));
                             bDocNameNoPathMatch = aTmpName.equals( aURL );
                         }
                     }
@@ -287,15 +288,15 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
         {
             // Ok, if we have no Container specified then we need to search them in order, this document, template this document created from, global templates,
             // get the name of Project/Library for 'this' document
-            rtl::OUString sThisProject;
-            BasicManager* pBasicMgr = pShell-> GetBasicManager();
-            if ( pBasicMgr )
+            rtl::OUString sThisProject = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+            try
             {
-                if ( pBasicMgr->GetName().Len() )
-                   sThisProject = pBasicMgr->GetName();
-                else // cater for the case where VBA is not enabled
-                   sThisProject = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+                uno::Reference< beans::XPropertySet > xProps( pShell->GetModel(), uno::UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+                sThisProject = xVBAMode->getProjectName();
             }
+            catch( uno::Exception& /*e*/) {}
+
             sSearchList.push_back( sThisProject ); // First Lib to search
             if ( xPrjNameCache.is() )
             {

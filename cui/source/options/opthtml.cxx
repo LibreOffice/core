@@ -114,27 +114,15 @@ OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
     aCharSetLB.FillWithMimeAndSelectBest();
 }
 
-/*-----------------02.09.96 13.47-------------------
-
---------------------------------------------------*/
-
 OfaHtmlTabPage::~OfaHtmlTabPage()
 {
 }
-
-/*-----------------02.09.96 13.47-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* OfaHtmlTabPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new OfaHtmlTabPage(pParent, rAttrSet);
 }
-
-/*-----------------02.09.96 13.47-------------------
-
---------------------------------------------------*/
 
 BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 {
@@ -183,10 +171,6 @@ BOOL OfaHtmlTabPage::FillItemSet( SfxItemSet& )
 
     return FALSE;
 }
-
-/*-----------------02.09.96 13.47-------------------
-
---------------------------------------------------*/
 
 void OfaHtmlTabPage::Reset( const SfxItemSet& )
 {
@@ -238,9 +222,6 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
         aCharSetLB.SelectTextEncoding( pHtmlOpt->GetTextEncoding() );
 }
 
-/*-----------------16.04.98 16:03-------------------
-
---------------------------------------------------*/
 IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
 {
     USHORT nExport = aPosToExportArr[ pBox->GetSelectEntryPos() ];
@@ -256,9 +237,7 @@ IMPL_LINK(OfaHtmlTabPage, ExportHdl_Impl, ListBox*, pBox)
 
     return 0;
 }
-/* -----------------05.02.99 09:17-------------------
- *
- * --------------------------------------------------*/
+
 IMPL_LINK(OfaHtmlTabPage, CheckBoxHdl_Impl, CheckBox*, pBox)
 {
     aStarBasicWarningCB.Enable(!pBox->IsChecked());

@@ -79,7 +79,7 @@ void lcl_getFormatter(com::sun::star::uno::Reference<com::sun::star::text::XNumb
         {
             Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
             Reference < XInterface > xI = xMSF->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.text.DefaultNumberingProvider" ) );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.DefaultNumberingProvider" )) );
             Reference<XDefaultNumberingProvider> xRet(xI, UNO_QUERY);
             DBG_ASSERT(xRet.is(), "service missing: \"com.sun.star.text.DefaultNumberingProvider\"");
             _xFormatter = Reference<XNumberingFormatter> (xRet, UNO_QUERY);

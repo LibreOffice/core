@@ -290,7 +290,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                 break;
             }
         }
-    } // if(xSet.is())
+    }
     if ( !m_pTypeInfo )
         m_pTypeInfo = TOTypeInfoSP(new OTypeInfo());
     SetColumnTypes(pList,_pInfoMap);
@@ -326,20 +326,17 @@ void ODatabaseExport::insertValueIntoColumn()
                 sal_Int32 nPos = m_vColumns[nNewPos].first;
                 if ( nPos != COLUMN_POSITION_NOT_FOUND )
                 {
-    //                  if(m_nDefToken != LANGUAGE_DONTKNOW) // falls Sprache anders als Systemsprache
-    //                      m_pNF->ChangeIntl((LanguageType)m_nDefToken);
-
                     if ( !m_sTextToken.Len() && pField->IsNullable() )
                         m_pUpdateHelper->updateNull(nPos,pField->GetType());
                     else
                     {
-                        sal_Int32 nNumberFormat = 0;
-                        double fOutNumber = 0.0;
                         OSL_ENSURE((nNewPos) < static_cast<sal_Int32>(m_vColumnTypes.size()),"Illegal index for vector");
                         if (m_vColumnTypes[nNewPos] != DataType::VARCHAR && m_vColumnTypes[nNewPos] != DataType::CHAR && m_vColumnTypes[nNewPos] != DataType::LONGVARCHAR )
                         {
                             RTL_LOGFILE_CONTEXT_TRACE( aLogger, "ODatabaseExport::insertValueIntoColumn != DataType::VARCHAR" );
                             ensureFormatter();
+                            sal_Int32 nNumberFormat = 0;
+                            double fOutNumber = 0.0;
                             bool bNumberFormatError = false;
                             if ( m_pFormatter && m_sNumToken.Len() )
                             {
@@ -790,7 +787,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
             m_bDontAskAgain = TRUE;
         else
             m_bError = TRUE;
-    } // if(!m_bDontAskAgain)
+    }
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::adjustFormat()

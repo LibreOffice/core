@@ -76,7 +76,6 @@ private:
     rtl::OUString m_ouDigestValue;
     rtl::OUString m_ouSignatureValue;
     rtl::OUString m_ouDate;
-    //rtl::OUString m_ouTime;
 
     /*
      * whether inside a particular element
@@ -87,7 +86,6 @@ private:
     bool m_bInDigestValue;
     bool m_bInSignatureValue;
     bool m_bInDate;
-    //bool m_bInTime;
 
     /*
      * the XSecController collaborating with XSecParser

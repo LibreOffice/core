@@ -187,9 +187,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     };
 };
 
-/*-- 13.04.2004 16:07:28---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_SELECTADDRESSBLOCK
 {
     OutputSize = TRUE ;
@@ -286,10 +283,6 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 };
-
-/*-- 13.04.2004 16:07:28---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 #define WORKAROUND\
     Text [ en-US ] = "New Address Block";
@@ -512,9 +505,7 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         };
     };
 };
-/*-- 13.04.2004 17:45:24---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ModalDialog DLG_MM_ASSIGNFIELDS
 {
     OutputSize = TRUE ;

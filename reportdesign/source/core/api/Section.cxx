@@ -136,7 +136,6 @@ OSection::OSection(const uno::Reference< report::XReportDefinition >& _xParent
 {
     DBG_CTOR( rpt_OSection,NULL);
     init();
-    //.getSdrModel()->createNewPage(m_xSection);
 }
 //--------------------------------------------------------------------------
 // TODO: VirtualFunctionFinder: This is virtual function!
@@ -179,28 +178,6 @@ void SAL_CALL OSection::disposing()
     lang::EventObject aDisposeEvent( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aContainerListeners.disposeAndClear( aDisposeEvent );
     m_xContext.clear();
-    //m_xDrawPage.clear();
-
-    /*uno::Reference< report::XReportDefinition> xReport = getReportDefinition();
-    ::boost::shared_ptr<rptui::OReportModel> pModel = OReportDefinition::getSdrModel(xReport);
-    osl_incrementInterlockedCount( &m_refCount );
-    while( m_xDrawPage.is() && m_xDrawPage->hasElements() )
-    {
-        try
-        {
-            uno::Reference< drawing::XShape> xShape(m_xDrawPage->getByIndex(0),uno::UNO_QUERY);
-            m_xDrawPage->remove(xShape);
-            ::comphelper::disposeComponent(xShape);
-        }
-        catch(const uno::Exception&)
-        {}
-    }
-    if ( pModel )
-    {
-        uno::Reference< report::XSection> xSection = this;
-        pModel->DeletePage(pModel->getPage(xSection)->GetPageNum());
-    }
-    osl_decrementInterlockedCount( &m_refCount );*/
 }
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OSection::getImplementationName(  ) throw(uno::RuntimeException)
@@ -471,7 +448,7 @@ const ::std::vector< ::rtl::OUString >& lcl_getControlModelMap()
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ImageControl")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField")) );
         s_sControlModels.push_back( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Shape")) );
-    } // if ( s_sMap.empty() )
+    }
     return s_sControlModels;
 
 }
@@ -504,9 +481,8 @@ uno::Reference< report::XReportComponent > SAL_CALL OSection::createReportCompon
             xRet.set(xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ControlShape"))),uno::UNO_QUERY);
             break;
         default:
-            //xRet = new OShape(m_xContext);
             break;
-    } // switch( aRet.begin() - aFind  )
+    }
     return xRet;
 }
 // -----------------------------------------------------------------------------

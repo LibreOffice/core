@@ -64,7 +64,6 @@ class SwHHCWrapper : public editeng::HangulHanjaConversion
     sal_Bool    bIsConvSpecial; // true if special regions: header, footer, ... should be converted
     sal_Bool    bStartDone;
     sal_Bool    bEndDone;
-//    sal_Bool    bLastRet;
 
     // from SvxSpellWrapper copied and modified
     sal_Bool    ConvNext_impl();        // former SpellNext

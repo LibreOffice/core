@@ -71,7 +71,7 @@ ScSheetDPData::ScSheetDPData( ScDocument* pD, const ScSheetSourceDesc& rDesc , l
     aCacheTable( pD, rDesc.GetCacheId( pD, nCacheId))
 {
     SCSIZE nEntryCount( aQuery.GetEntryCount());
-    pSpecial = new BOOL[nEntryCount];
+    pSpecial = new bool[nEntryCount];
     for (SCSIZE j = 0; j < nEntryCount; ++j )
     {
         ScQueryEntry& rEntry = aQuery.GetEntry(j);
@@ -146,7 +146,7 @@ BOOL ScSheetDPData::IsDateDimension(long nDim)
     }
     else
     {
-        return aCacheTable.GetCache()->IsDateDimension( nDim);
+        return aCacheTable.getCache()->IsDateDimension( nDim);
     }
 }
 
@@ -164,7 +164,7 @@ ULONG ScSheetDPData::GetNumberFormat(long nDim)
     }
     else
     {
-        return GetCacheTable().GetCache()->GetNumberFormat( nDim );
+        return GetCacheTable().getCache()->GetNumberFormat( nDim );
     }
 }
 UINT32  ScDPTableData::GetNumberFormatByIdx( NfIndexTableOffset eIdx )

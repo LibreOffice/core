@@ -95,6 +95,7 @@ ChildAccess::ChildAccess(
     Access(components), root_(root), parent_(parent), name_(name), node_(node),
     inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && parent.is() && node.is());
 }
 
@@ -103,6 +104,7 @@ ChildAccess::ChildAccess(
     rtl::Reference< Node > const & node):
     Access(components), root_(root), node_(node), inTransaction_(false)
 {
+    lock_ = lock();
     OSL_ASSERT(root.is() && node.is());
 }
 
@@ -169,7 +171,7 @@ css::uno::Reference< css::uno::XInterface > ChildAccess::getParent()
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return static_cast< cppu::OWeakObject * >(parent_.get());
 }
@@ -178,7 +180,7 @@ void ChildAccess::setParent(css::uno::Reference< css::uno::XInterface > const &)
     throw (css::lang::NoSupportException, css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     throw css::lang::NoSupportException(
         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParent")),
@@ -190,7 +192,7 @@ sal_Int64 ChildAccess::getSomething(
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     return aIdentifier == getTunnelId()
         ? reinterpret_cast< sal_Int64 >(this) : 0;
@@ -283,9 +285,10 @@ css::uno::Any ChildAccess::asValue() {
             if (!Components::allLocales(locale)) {
                 // Find best match using an adaption of RFC 4647 lookup matching
                 // rules, removing "-" or "_" delimited segments from the end;
-                // defaults are the empty string locale, the "en-US" locale, the
-                // first child (if any), or a nil value (even though it may be
-                // illegal for the given property), in that order:
+                // defaults are the "en-US" locale, the "en" locale, the empty
+                // string locale, the first child (if any), or a nil value (even
+                // though it may be illegal for the given property), in that
+                // order:
                 rtl::Reference< ChildAccess > child;
                 for (;;) {
                     child = getChild(locale);
@@ -296,16 +299,26 @@ css::uno::Any ChildAccess::asValue() {
                     while (i > 0 && locale[i] != '-' && locale[i] != '_') {
                         --i;
                     }
+                    if (i == 0) {
+                        break;
+                    }
                     locale = locale.copy(0, i);
                 }
                 if (!child.is()) {
                     child = getChild(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
                     if (!child.is()) {
-                        std::vector< rtl::Reference< ChildAccess > > all(
-                            getAllChildren());
-                        if (!all.empty()) {
-                            child = all.front();
+                        child = getChild(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")));
+                        if (!child.is()) {
+                            child = getChild(rtl::OUString());
+                            if (!child.is()) {
+                                std::vector< rtl::Reference< ChildAccess > >
+                                    all(getAllChildren());
+                                if (!all.empty()) {
+                                    child = all.front();
+                                }
+                            }
                         }
                     }
                 }
@@ -349,7 +362,7 @@ void ChildAccess::commitChanges(bool valid, Modifications * globalModifications)
 }
 
 ChildAccess::~ChildAccess() {
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     if (parent_.is()) {
         parent_->releaseChild(name_);
     }
@@ -379,7 +392,7 @@ css::uno::Any ChildAccess::queryInterface(css::uno::Type const & aType)
     throw (css::uno::RuntimeException)
 {
     OSL_ASSERT(thisIs(IS_ANY));
-    osl::MutexGuard g(lock);
+    osl::MutexGuard g(*lock_);
     checkLocalizedPropertyAccess();
     css::uno::Any res(Access::queryInterface(aType));
     return res.hasValue()

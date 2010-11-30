@@ -48,7 +48,6 @@ protected:
     ToolBox    *pToolBoxCmd;
     ToolBox    *vToolBoxCategories[NUM_TBX_CATEGORIES];
     ImageList  *aImageLists [NUM_TBX_CATEGORIES + 1];   /* regular */
-    ImageList  *aImageListsH[NUM_TBX_CATEGORIES + 1];   /* high contrast */
     USHORT      nActiveCategoryRID;
 
     virtual BOOL    Close();
@@ -60,7 +59,7 @@ protected:
     DECL_LINK( CmdSelectHdl, ToolBox* );
 
     SmViewShell * GetView();
-    const ImageList * GetImageList( USHORT nResId, BOOL bHighContrast );
+    const ImageList * GetImageList( USHORT nResId );
 
 public:
     SmToolBoxWindow(SfxBindings    *pBindings,
@@ -72,7 +71,7 @@ public:
     virtual void    StateChanged( StateChangedType nStateChange );
     virtual void    DataChanged( const DataChangedEvent &rEvt );
 
-    void        AdjustPosSize( BOOL bSetPos );
+    void        AdjustPosSize( bool bSetPos );
     void        SetCategory(USHORT nCategory);
 };
 

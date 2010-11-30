@@ -142,7 +142,7 @@ SwExtraPainter::SwExtraPainter( const SwTxtFrm *pFrm, ViewShell *pVwSh,
         nDivider = rLineInf.GetDivider().Len() ? rLineInf.GetDividerCountBy() : 0;
         nX = pFrm->Frm().Left();
         SwCharFmt* pFmt = rLineInf.GetCharFmt( const_cast<IDocumentStylePoolAccess&>(*pFrm->GetNode()->getIDocumentStylePoolAccess()) );
-        ASSERT( pFmt, "PaintExtraData without CharFmt" );
+        OSL_ENSURE( pFmt, "PaintExtraData without CharFmt" );
         pFnt = new SwFont( &pFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         pFnt->Invalidate();
         pFnt->ChgPhysFnt( pSh, *pSh->GetOut() );
@@ -438,7 +438,7 @@ SwRect SwTxtFrm::Paint()
 #endif
 
     // finger layout
-    ASSERT( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+    OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
     SwRect aRet( Prt() );
     if ( IsEmpty() || !HasPara() )
@@ -630,7 +630,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         //Informationen entzogen hat.
         if( !HasPara() )
         {
-            ASSERT( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
+            OSL_ENSURE( GetValidPosFlag(), "+SwTxtFrm::Paint: no Calc()" );
 
             // --> FME 2004-10-29 #i29062# pass info that we are currently
             // painting.
@@ -643,7 +643,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
             }
             if( !HasPara() )
             {
-                ASSERT( !this, "+SwTxtFrm::Paint: missing format information" );
+                OSL_ENSURE( !this, "+SwTxtFrm::Paint: missing format information" );
                 return;
             }
         }
@@ -678,7 +678,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         // die Laenge ist immer wieder interessant.
 
         // Rectangle
-        ASSERT( ! IsSwapped(), "A frame is swapped before Paint" );
+        OSL_ENSURE( ! IsSwapped(), "A frame is swapped before Paint" );
         SwRect aOldRect( rRect );
 
         SWAP_IF_NOT_SWAPPED( this )
@@ -725,7 +725,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
                 //DBG_LOOP; shadows declaration above.
                 //resolved into:
 #if  OSL_DEBUG_LEVEL > 1
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                 DbgLoop aDbgLoop2( (const void*) this );
 #endif
 #endif
@@ -744,7 +744,7 @@ void SwTxtFrm::Paint( const SwRect &rRect, const SwPrtOptions * /*pPrintData*/ )
         UNDO_SWAP( this )
         (SwRect&)rRect = aOldRect;
 
-        ASSERT( ! IsSwapped(), "A frame is swapped after Paint" );
+        OSL_ENSURE( ! IsSwapped(), "A frame is swapped after Paint" );
     }
 }
 

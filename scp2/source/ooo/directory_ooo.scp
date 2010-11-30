@@ -1005,6 +1005,11 @@ Directory gid_Dir_Template_Forms
     DIR_IDENT_ALL_LANG(forms);
 End
 
+Directory gid_Dir_Template_Labels
+    ParentID = gid_Dir_Template_Language;
+    DIR_IDENT_ALL_LANG(labels);
+End
+
 Directory gid_Dir_Template_Layout
     ParentID = gid_Dir_Template_Language;
     DIR_IDENT_ALL_LANG(layout);
@@ -1339,3 +1344,182 @@ Directory gid_Dir_Share_Icons
 End
 
 #endif
+
+/* *** Accessories Extras *** */
+
+/* ** Gallery ** */
+
+/* Draws */
+Directory gid_Dir_Gallery_Draws
+    ParentID = gid_Dir_Gallery;
+    DosName = "Draws";
+End
+
+/* Draws - People */
+Directory gid_Dir_Gallery_Draws_People
+    ParentID = gid_Dir_Gallery_Draws;
+    DosName = "People";
+End
+
+/* Photos */
+Directory gid_Dir_Gallery_Photos
+    ParentID = gid_Dir_Gallery;
+    DosName = "Photos";
+End
+
+/* Photos - Cities */
+Directory gid_Dir_Gallery_Photos_Cities
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Cities";
+End
+
+/* Photos - Buildings */
+Directory gid_Dir_Gallery_Photos_Buildings
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Buildings";
+End
+
+/* Photos - Plants */
+Directory gid_Dir_Gallery_Photos_Plants
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Plants";
+End
+
+/* Photos - Fauna */
+Directory gid_Dir_Gallery_Photos_Fauna
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Fauna";
+End
+
+/* Photos - Flowers */
+Directory gid_Dir_Gallery_Photos_Flowers
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Flowers";
+End
+
+/* Photos - Landscapes */
+Directory gid_Dir_Gallery_Photos_Landscapes
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Landscapes";
+End
+
+/* Photos - Statues */
+Directory gid_Dir_Gallery_Photos_Statues
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Statues";
+End
+
+/* Photos - Space */
+Directory gid_Dir_Gallery_Photos_Space
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Space";
+End
+
+/* Photos - Travel */
+Directory gid_Dir_Gallery_Photos_Travel
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Travel";
+End
+
+/* Photos - Objects */
+Directory gid_Dir_Gallery_Photos_Objects
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Objects";
+End
+
+/* Photos - Humans */
+Directory gid_Dir_Gallery_Photos_Humans
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Humans";
+End
+
+/* Photos - FoodsandDrinks */
+Directory gid_Dir_Gallery_Photos_FoodsandDrinks
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "FoodsandDrinks";
+End
+
+/* Photos - Celebration */
+Directory gid_Dir_Gallery_Photos_Celebration
+    ParentID = gid_Dir_Gallery_Photos;
+    DosName = "Celebration";
+End
+
+/* Samples - Documentations */
+Directory gid_Dir_Samples_Documentations
+    ParentID = gid_Dir_Samples_Language;
+    DosName = "Documentations";
+End
+
+/* Samples - Advertisement */
+Directory gid_Dir_Samples_Advertisement
+    ParentID = gid_Dir_Samples_Language;
+    DosName = "Advertisement";
+End
+
+/* Elements */
+Directory gid_Dir_Gallery_Elements
+    ParentID = gid_Dir_Gallery;
+    DosName = "Elements";
+End
+
+/* Elements - Bullets 2 */
+Directory gid_Dir_Gallery_Elements_Bullets2
+    ParentID = gid_Dir_Gallery_Elements;
+    DosName = "Bullets2";
+End
+
+ /* Templates - Common */
+Directory gid_Dir_Template_Common
+    ParentID = gid_Dir_Template;
+    DosName = "common";
+End
+
+Directory gid_Dir_Template_Common_Educate
+    ParentID = gid_Dir_Template_Common;
+    DosName = "educate";
+End
+
+Directory gid_Dir_Template_Common_Finance
+    ParentID = gid_Dir_Template_Common;
+    DosName = "finance";
+End
+
+Directory gid_Dir_Template_Common_Forms
+    ParentID = gid_Dir_Template_Common;
+    DosName = "forms";
+End
+
+Directory gid_Dir_Template_Common_Labels
+    ParentID = gid_Dir_Template_Common;
+    DosName = "labels";
+End
+
+Directory gid_Dir_Template_Common_Layout
+    ParentID = gid_Dir_Template_Common;
+    DosName = "layout";
+End
+
+Directory gid_Dir_Template_Common_Misc
+    ParentID = gid_Dir_Template_Common;
+    DosName = "misc";
+End
+
+Directory gid_Dir_Template_Common_Officorr
+    ParentID = gid_Dir_Template_Common;
+    DosName = "officorr";
+End
+
+Directory gid_Dir_Template_Common_Offimisc
+    ParentID = gid_Dir_Template_Common;
+    DosName = "offimisc";
+End
+
+Directory gid_Dir_Template_Common_Personal
+    ParentID = gid_Dir_Template_Common;
+    DosName = "personal";
+End
+
+Directory gid_Dir_Template_Common_Presnt
+    ParentID = gid_Dir_Template_Common;
+    DosName = "presnt";

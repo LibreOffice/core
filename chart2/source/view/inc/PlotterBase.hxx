@@ -34,9 +34,6 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-/*
-#include <com/sun/star/lang/XComponent.hpp>
-*/
 
 //----
 #include <vector>
@@ -44,9 +41,6 @@
 //---- chart2
 #include <com/sun/star/chart2/ExplicitScaleData.hpp>
 #include <com/sun/star/chart2/XTransformation.hpp>
-/*
-#include <com/sun/star/chart2/XPlotter.hpp>
-*/
 
 //----
 #include <cppuhelper/implbase1.hxx>
@@ -87,14 +81,7 @@ public:
     virtual void SAL_CALL createShapes() = 0;
 
     static bool isValidPosition( const ::com::sun::star::drawing::Position3D& rPos );
-    /*
-    virtual ::rtl::OUString SAL_CALL getCoordinateSystemTypeID(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setTransformation( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToLogicTarget, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTransformation >& xTransformationToFinalPage ) throw (::com::sun::star::uno::RuntimeException);
-    */
 
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
 private: //methods
     //no default constructor
     PlotterBase();
@@ -113,8 +100,6 @@ protected: //member
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::lang::XMultiServiceFactory>       m_xShapeFactory;
     ShapeFactory*                                                       m_pShapeFactory;
-    //::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext>          m_xCC;
-
     rtl::OUString   m_aCID;
 
     sal_Int32                                           m_nDimension;

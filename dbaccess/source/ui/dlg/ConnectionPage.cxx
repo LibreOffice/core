@@ -268,7 +268,7 @@ namespace dbaui
                     m_aJavaDriver.SetText(sDefaultJdbcDriverName);
                     m_aJavaDriver.SetModifyFlag();
                 }
-            } // if ( !pJdbcDrvItem->GetValue().Len() )
+            }
             else
                 m_aJavaDriver.SetText(pJdbcDrvItem->GetValue());
 

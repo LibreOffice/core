@@ -179,13 +179,14 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
             nCloneErrCnt++;
         }
     }
-    // und nun zu den Konnektoren
-    // Die neuen Objekte werden auf die der rSrcList abgebildet
-    // und so die Objektverbindungen hergestellt.
-    // Aehnliche Implementation an folgenden Stellen:
+
+    // and now for the Connectors
+    // The new objects would be shown in the rSrcList
+    // and then the object connections are made.
+    // Similar implementation are setup as the following:
     //    void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
     //    SdrModel* SdrExchangeView::GetMarkedObjModel() const
-    //    FASTBOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
+    //    BOOL SdrExchangeView::Paste(const SdrModel& rMod,...)
     //    void SdrEditView::CopyMarked()
     if (nCloneErrCnt==0) {
         for (no=0; no<nAnz; no++) {
@@ -980,8 +981,6 @@ void SdrObjList::ClearObjectNavigationOrder (void)
 
 bool SdrObjList::RecalcNavigationPositions (void)
 {
-    bool bUpToDate (false);
-
     if (mbIsNavigationOrderDirty)
     {
         if (mpNavigationOrder.get() != NULL)
@@ -993,8 +992,6 @@ bool SdrObjList::RecalcNavigationPositions (void)
             sal_uInt32 nIndex (0);
             for (iObject=mpNavigationOrder->begin(); iObject!=iEnd; ++iObject,++nIndex)
                 (*iObject)->SetNavigationPosition(nIndex);
-
-            bUpToDate = true;
         }
     }
 

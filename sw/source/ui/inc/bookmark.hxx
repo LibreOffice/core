@@ -38,10 +38,6 @@
 class SwWrtShell;
 class SfxRequest;
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
-
 class BookmarkCombo : public SwComboBox
 {
     USHORT          GetFirstSelEntryPos() const;
@@ -57,10 +53,6 @@ public:
 
     static const String aForbiddenChars;
 };
-
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
 
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {

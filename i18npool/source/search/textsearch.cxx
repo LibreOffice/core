@@ -114,8 +114,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -136,8 +136,8 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
         if( !xTranslit2.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.i18n.Transliteration"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.Transliteration")));
             if ( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XExtendedTransliteration >*)0))
@@ -153,7 +153,7 @@ void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeExcep
     if ( !xBreak.is() )
     {
         Reference < XInterface > xI = xMSF->createInstance(
-                OUString::createFromAscii( "com.sun.star.i18n.BreakIterator"));
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")));
         if( xI.is() )
             xI->queryInterface( ::getCppuType(
                         (const Reference< XBreakIterator >*)0))
@@ -413,7 +413,7 @@ bool TextSearch::IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const
         if ( !xCharClass.is() )
         {
             Reference < XInterface > xI = xMSF->createInstance(
-                    OUString::createFromAscii( "com.sun.star.i18n.CharacterClassification"));
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification")));
             if( xI.is() )
                 xI->queryInterface( ::getCppuType(
                             (const Reference< XCharacterClassification >*)0))
@@ -1001,7 +1001,7 @@ sal_Bool SAL_CALL component_writeInfo(
 
         xNewKey = pRegistryKey->createKey( getImplementationName_Static() );
         xNewKey = xNewKey->createKey(
-                ::rtl::OUString::createFromAscii( "/UNO/SERVICES" ) );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
         xNewKey->createKey( getServiceName_Static() );
     }
     return sal_True;

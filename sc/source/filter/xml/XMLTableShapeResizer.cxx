@@ -201,7 +201,7 @@ void ScMyShapeResizer::ResizeShapes()
             ScDocument* pDoc(rImport.GetDocument());
             if ( pDoc && xIndex.is() )
             {
-                rImport.LockSolarMutex();
+                ScXMLImport::MutexGuard aGuard(rImport);
                 while (aItr != aEndItr)
                 {
                     // #i78086# invalid cell position is used to call CreateChartListener only
@@ -377,9 +377,6 @@ void ScMyShapeResizer::ResizeShapes()
                         delete aItr->pRangeList;
                     aItr = aShapes.erase(aItr);
                 }
-                rImport.UnlockSolarMutex();
-//              if (pCollection)
-//                  pDoc->SetChartListenerCollection(pCollection);
             }
         }
     }

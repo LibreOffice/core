@@ -508,7 +508,7 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 uno::Reference < beans::XPropertySet > xSet( xSup->getComponent(), uno::UNO_QUERY );
                                 if ( xSet.is() )
                                 {
-                                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
+                                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL")),
                                             uno::makeAny( ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                                 }
                             }

@@ -27,22 +27,6 @@
 
 #include "macros.inc"
 
-ScpAction scp_Copy_License_Html
-  #ifdef UNX
-    README_TXT_ALL_LANG(Copy, LICENSE, html);
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-  #else
-    README_TXT_ALL_LANG(Copy, license, html);
-    README_TXT_ALL_LANG(Name, license, html);
-  #endif
-    Styles = (SCPZIP_REPLACE);
-  #ifndef MACOSX
-    Subdir = "licenses";
-  #else
-    Subdir = "LICENSEs";
-  #endif
-End
-
 ScpAction scp_Copy_License_Txt
   #ifdef UNX
     README_ALL_LANG(Copy, LICENSE);
@@ -66,22 +50,6 @@ ScpAction scp_Copy_Thirdpartylicense_Readme_Html
     Subdir = "LICENSEs";
 End
 #endif
-
-ScpAction scp_Copy_Readme_Html
-  #ifdef UNX
-    README_TXT_ALL_LANG(Copy, README, html);
-    README_TXT_ALL_LANG(Name, README, html);
-  #else
-    README_TXT_ALL_LANG(Copy, readme, html);
-    README_TXT_ALL_LANG(Name, readme, html);
-  #endif
-    Styles = (SCPZIP_REPLACE);
-  #ifndef MACOSX
-    Subdir = "readmes";
-  #else
-    Subdir = "READMEs";
-  #endif
-End
 
 ScpAction scp_Copy_Readme_Txt
   #ifdef UNX

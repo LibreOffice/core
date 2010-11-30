@@ -104,7 +104,6 @@ namespace
         bool operator()(const SwTxtFmtColl *pA, const SwTxtFmtColl *pB) const
         {
             // --> OD 2009-02-04 #i98791#
-//            return pA->GetAttrOutlineLevel() < pB->GetAttrOutlineLevel();   //<-end,zhaojianwei
             bool bResult( false );
             const bool bIsAAssignedToOutlineStyle( pA->IsAssignedToListLevelOfOutlineStyle() );
             const bool bIsBAssignedToOutlineStyle( pB->IsAssignedToListLevelOfOutlineStyle() );
@@ -233,7 +232,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    OSL_ENSURE(!this, "Impossible");
                     meWriterType = eTxtBox;
                 }
                 break;
@@ -248,7 +247,7 @@ namespace sw
                 }
                 else
                 {
-                    ASSERT(!this, "Impossible");
+                    OSL_ENSURE(!this, "Impossible");
                     meWriterType = eDrawing;
                 }
                 break;
@@ -296,14 +295,12 @@ namespace sw
             mxIPRef(rObj.GetObjRef()), mrPers(rPers),
             mpGraphic( rObj.GetGraphic() )
         {
-            //rObj.SetPersistName(String());
-            //rObj.SetObjRef(0);
             rObj.AbandonObject();
         }
 
         bool DrawingOLEAdaptor::TransferToDoc( ::rtl::OUString &rName )
         {
-            ASSERT(mxIPRef.is(), "Transferring invalid object to doc");
+            OSL_ENSURE(mxIPRef.is(), "Transferring invalid object to doc");
             if (!mxIPRef.is())
                 return false;
 
@@ -320,7 +317,6 @@ namespace sw
                                                                     rName,
                                                                     ::rtl::OUString() );
 
-                //mxIPRef->changeState( embed::EmbedStates::LOADED );
                 mxIPRef = 0;
             }
 
@@ -466,9 +462,21 @@ namespace sw
         }
         //SetLayer boilerplate end
 
-        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems)
+        void GetPoolItems(const SfxItemSet &rSet, PoolItems &rItems, bool bExportParentItemSet )
         {
-            if (rSet.Count())
+            if( bExportParentItemSet )
+            {
+                USHORT nTotal = rSet.TotalCount();
+                for( USHORT nItem =0; nItem < nTotal; ++nItem )
+                {
+                    const SfxPoolItem* pItem = 0;
+                    if( SFX_ITEM_SET == rSet.GetItemState( rSet.GetWhichByPos( nItem ), true, &pItem ) )
+                    {
+                        rItems[pItem->Which()] = pItem;
+                    }
+                }
+            }
+            else if( rSet.Count())
             {
                 SfxItemIter aIter(rSet);
                 if (const SfxPoolItem *pItem = aIter.GetCurItem())
@@ -586,7 +594,7 @@ namespace sw
                 return &(pRule->Get( static_cast< USHORT >(rTxtNode.GetActualListLevel()) ));
             }
 
-            ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
+            OSL_ENSURE(rTxtNode.GetDoc(), "No document for node?, suspicious");
             if (!rTxtNode.GetDoc())
                 return 0;
 
@@ -624,7 +632,7 @@ namespace sw
         SwNoTxtNode *GetNoTxtNodeFromSwFrmFmt(const SwFrmFmt &rFmt)
         {
             const SwNodeIndex *pIndex = rFmt.GetCntnt().GetCntntIdx();
-            ASSERT(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
+            OSL_ENSURE(pIndex, "No NodeIndex in SwFrmFmt ?, suspicious");
             if (!pIndex)
                 return 0;
             SwNodeIndex aIdx(*pIndex, 1);
@@ -638,7 +646,7 @@ namespace sw
             {
                 const SwTable& rTable = rNd.GetTableNode()->GetTable();
                 const SwFrmFmt* pApply = rTable.GetFrmFmt();
-                ASSERT(pApply, "impossible");
+                OSL_ENSURE(pApply, "impossible");
                 if (pApply)
                     pBreak = &(ItemGet<SvxFmtBreakItem>(*pApply, RES_BREAK));
             }
@@ -716,13 +724,13 @@ namespace sw
                 }
             }
 
-            ASSERT(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
+            OSL_ENSURE(aGrTwipSz.Width() && aGrTwipSz.Height(), "0 x 0 graphic ?");
             return aGrTwipSz;
         }
 
         void RedlineStack::open(const SwPosition& rPos, const SfxPoolItem& rAttr)
         {
-            ASSERT(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
+            OSL_ENSURE(rAttr.Which() == RES_FLTR_REDLINE, "not a redline");
             maStack.push_back(new SwFltStackEntry(rPos,rAttr.Clone()));
         }
 
@@ -833,12 +841,6 @@ namespace sw
             }
             return nRet;
         }
-/*
-        std::vector<String> WrtRedlineAuthor::GetNames()
-        {
-            return maAuthors;
-        }
-*/
     }
 }
 

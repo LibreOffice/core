@@ -46,17 +46,9 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES = \
         $(SLO)$/SwRewriter.obj \
-        $(SLO)$/unattr.obj \
-        $(SLO)$/undobj.obj \
-        $(SLO)$/undraw.obj \
-        $(SLO)$/unovwr.obj \
-        $(SLO)$/untbl.obj
-
-SLOFILES =	\
-        $(SLO)$/SwRewriter.obj \
         $(SLO)$/SwUndoField.obj \
-        $(SLO)$/SwUndoPageDesc.obj \
         $(SLO)$/SwUndoFmt.obj \
+        $(SLO)$/SwUndoPageDesc.obj \
         $(SLO)$/SwUndoTOXChange.obj \
         $(SLO)$/docundo.obj \
         $(SLO)$/rolbck.obj \
@@ -65,7 +57,7 @@ SLOFILES =	\
         $(SLO)$/undel.obj \
         $(SLO)$/undobj.obj \
         $(SLO)$/undobj1.obj \
-                $(SLO)$/undoflystrattr.obj \
+        $(SLO)$/undoflystrattr.obj \
         $(SLO)$/undraw.obj \
         $(SLO)$/unfmco.obj \
         $(SLO)$/unins.obj \
@@ -79,6 +71,9 @@ SLOFILES =	\
         $(SLO)$/unspnd.obj \
         $(SLO)$/untbl.obj \
         $(SLO)$/untblk.obj
+
+SLOFILES =	\
+        $(EXCEPTIONSFILES)
 
 # --- Tagets -------------------------------------------------------
 

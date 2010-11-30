@@ -82,6 +82,8 @@ class LateInitThread : public ::osl::Thread
         /** @short  thread function.
          */
         virtual void SAL_CALL run();
+
+        virtual void SAL_CALL onTerminated();
 };
 
     } // namespace config

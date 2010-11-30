@@ -474,9 +474,6 @@ SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
         delete aList.Remove(n);
 }
 
-/*-- 25.02.2005 13:22:04---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 static int lcl_MapPropertyName( const ::rtl::OUString rCompare,
                 const uno::Sequence< ::rtl::OUString>& aInternalPropertyNames)
 {

@@ -189,7 +189,7 @@ void LanguageSelectionMenuController::impl_select(const Reference< XDispatch >& 
     {
         Sequence<PropertyValue>      aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper( OUString::createFromAscii("LanguageSelectionMenuController")).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
+            UiEventLogHelper( OUString(RTL_CONSTASCII_USTRINGPARAM("LanguageSelectionMenuController"))).log( m_xServiceManager, m_xFrame, aTargetURL, aArgs );
         xDispatch->dispatch( aTargetURL, aArgs );
     }
 }

@@ -220,7 +220,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                            {
                                try
                                {
-                                   aCaller = xProps->getPropertyValue( rtl::OUString::createFromAscii("Name") );
+                                   aCaller = xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")) );
                                }
                                catch( uno::Exception& ) {}
                            }

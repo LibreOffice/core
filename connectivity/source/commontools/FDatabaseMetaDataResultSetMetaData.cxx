@@ -209,19 +209,19 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSetMetaData::isWritable( sal_Int32 colu
 void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 {
     setColumnMap();
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTOR"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTOR")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTEE"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTEE")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRIVILEGE"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVILEGE")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
@@ -229,15 +229,15 @@ void ODatabaseMetaDataResultSetMetaData::setColumnPrivilegesMap()
 // -----------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTableNameMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_CAT")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
+    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_SCHEM")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_NAME"),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_NAME")),
                 ColumnValue::NO_NULLS,
         3,3,0,
                 DataType::VARCHAR);
@@ -246,7 +246,7 @@ void ODatabaseMetaDataResultSetMetaData::setTableNameMap()
 void ODatabaseMetaDataResultSetMetaData::setColumnMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         3,3,0,
                 DataType::VARCHAR);
@@ -256,59 +256,59 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 {
     setColumnMap();
 
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_SIZE"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_SIZE")),
                 ColumnValue::NO_NULLS,
         3,3,0,
                 DataType::INTEGER);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("BUFFER_LENGTH"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BUFFER_LENGTH")),
                 ColumnValue::NULLABLE,
         3,3,0,
                 DataType::INTEGER);
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DECIMAL_DIGITS"),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL_DIGITS")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NUM_PREC_RADIX"),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUM_PREC_RADIX")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_DEF"),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_DEF")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
+    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
+    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATETIME_SUB")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CHAR_OCTET_LENGTH"),
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR_OCTET_LENGTH")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("ORDINAL_POSITION"),
+    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ORDINAL_POSITION")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_NULLABLE"),
+    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_NULLABLE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::VARCHAR);
@@ -317,11 +317,11 @@ void ODatabaseMetaDataResultSetMetaData::setColumnsMap()
 void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_TYPE"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -329,15 +329,15 @@ void ODatabaseMetaDataResultSetMetaData::setTablesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setProcedureNameMap()
 {
-   m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_CAT"),
+   m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROCEDURE_CAT")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_SCHEM"),
+    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROCEDURE_SCHEM")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_NAME"),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROCEDURE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
@@ -346,43 +346,43 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureNameMap()
 void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 {
     setProcedureNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_TYPE"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE_NAME")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRECISION"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRECISION")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("LENGTH"),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LENGTH")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SCALE"),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCALE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("RADIX"),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RADIX")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -392,11 +392,11 @@ void ODatabaseMetaDataResultSetMetaData::setProcedureColumnsMap()
 void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 {
     setColumnMap();
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEY_SEQ")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PK_NAME"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PK_NAME")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -405,43 +405,43 @@ void ODatabaseMetaDataResultSetMetaData::setPrimaryKeysMap()
 void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NON_UNIQUE"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NON_UNIQUE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::BIT);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("INDEX_QUALIFIER"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INDEX_QUALIFIER")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("INDEX_NAME"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INDEX_NAME")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("ORDINAL_POSITION"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ORDINAL_POSITION")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("ASC_OR_DESC"),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ASC_OR_DESC")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CARDINALITY"),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CARDINALITY")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PAGES"),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PAGES")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FILTER_CONDITION"),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FILTER_CONDITION")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -450,19 +450,19 @@ void ODatabaseMetaDataResultSetMetaData::setIndexInfoMap()
 void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 {
     setTableNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTOR"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTOR")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("GRANTEE"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GRANTEE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRIVILEGE"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRIVILEGE")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("IS_GRANTABLE"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IS_GRANTABLE")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -470,60 +470,60 @@ void ODatabaseMetaDataResultSetMetaData::setTablePrivilegesMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PKTABLE_CAT"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PKTABLE_CAT")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PKTABLE_SCHEM"),
+    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PKTABLE_SCHEM")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PKTABLE_NAME"),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PKTABLE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PKCOLUMN_NAME"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PKCOLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FKTABLE_CAT"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FKTABLE_CAT")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FKTABLE_SCHEM"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FKTABLE_SCHEM")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FKTABLE_NAME"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FKTABLE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FKCOLUMN_NAME"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FKCOLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
 
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("KEY_SEQ"),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KEY_SEQ")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("UPDATE_RULE"),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE_RULE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DELETE_RULE"),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE_RULE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FK_NAME"),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FK_NAME")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PK_NAME"),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PK_NAME")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DEFERRABILITY"),
+    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DEFERRABILITY")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
@@ -531,75 +531,75 @@ void ODatabaseMetaDataResultSetMetaData::setCrossReferenceMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
+    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PRECISION"),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PRECISION")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("LITERAL_PREFIX"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LITERAL_PREFIX")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("LITERAL_SUFFIX"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LITERAL_SUFFIX")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CREATE_PARAMS"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CREATE_PARAMS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NULLABLE"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NULLABLE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("CASE_SENSITIVE"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CASE_SENSITIVE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::BIT);
-    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SEARCHABLE"),
+    m_mColumns[9] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SEARCHABLE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("UNSIGNED_ATTRIBUTE"),
+    m_mColumns[10] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNSIGNED_ATTRIBUTE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::BIT);
-    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("FIXED_PREC_SCALE"),
+    m_mColumns[11] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FIXED_PREC_SCALE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::BIT);
-    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("AUTO_INCREMENT"),
+    m_mColumns[12] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AUTO_INCREMENT")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::BIT);
-    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("LOCAL_TYPE_NAME"),
+    m_mColumns[13] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LOCAL_TYPE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("MINIMUM_SCALE"),
+    m_mColumns[14] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MINIMUM_SCALE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("MAXIMUM_SCALE"),
+    m_mColumns[15] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MAXIMUM_SCALE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATA_TYPE"),
+    m_mColumns[16] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SQL_DATETIME_SUB"),
+    m_mColumns[17] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_DATETIME_SUB")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
-    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("NUM_PREC_RADIX"),
+    m_mColumns[18] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUM_PREC_RADIX")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
@@ -608,23 +608,23 @@ void ODatabaseMetaDataResultSetMetaData::setTypeInfoMap()
 void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 {
     setProcedureNameMap();
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("RESERVED1"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESERVED1")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("RESERVED2"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESERVED2")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("RESERVED3"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RESERVED3")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("REMARKS"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REMARKS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PROCEDURE_TYPE"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PROCEDURE_TYPE")),
                 ColumnValue::NO_NULLS,
         1,1,0,
                 DataType::INTEGER);
@@ -632,7 +632,7 @@ void ODatabaseMetaDataResultSetMetaData::setProceduresMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setTableTypes()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_TYPE"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_TYPE")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -640,7 +640,7 @@ void ODatabaseMetaDataResultSetMetaData::setTableTypes()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setCatalogsMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_CAT"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_CAT")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -648,7 +648,7 @@ void ODatabaseMetaDataResultSetMetaData::setCatalogsMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setSchemasMap()
 {
-    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TABLE_SCHEM"),
+    m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE_SCHEM")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::VARCHAR);
@@ -656,35 +656,35 @@ void ODatabaseMetaDataResultSetMetaData::setSchemasMap()
 // -------------------------------------------------------------------------
 void ODatabaseMetaDataResultSetMetaData::setVersionColumnsMap()
 {
-   m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("SCOPE"),
+   m_mColumns[1] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCOPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_NAME"),
+    m_mColumns[2] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DATA_TYPE"),
+    m_mColumns[3] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA_TYPE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("TYPE_NAME"),
+    m_mColumns[4] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE_NAME")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::VARCHAR);
-    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("COLUMN_SIZE"),
+    m_mColumns[5] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COLUMN_SIZE")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("BUFFER_LENGTH"),
+    m_mColumns[6] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BUFFER_LENGTH")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("DECIMAL_DIGITS"),
+    m_mColumns[7] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL_DIGITS")),
                 ColumnValue::NULLABLE,
         0,0,0,
                 DataType::INTEGER);
-    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString::createFromAscii("PSEUDO_COLUMN"),
+    m_mColumns[8] = OColumn(::rtl::OUString(),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PSEUDO_COLUMN")),
                 ColumnValue::NO_NULLS,
         0,0,0,
                 DataType::INTEGER);

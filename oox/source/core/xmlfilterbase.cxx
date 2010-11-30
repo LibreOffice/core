@@ -142,7 +142,7 @@ static Reference< XComponentContext > lcl_getComponentContext(Reference< XMultiS
     {
         Reference< XPropertySet > xFactProp( aFactory, UNO_QUERY );
         if( xFactProp.is() )
-            xFactProp->getPropertyValue( OUString::createFromAscii("DefaultContext") ) >>= xContext;
+            xFactProp->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext;
     }
     catch( Exception& )
     {}

@@ -46,16 +46,16 @@
 namespace svx
 {
 
-static const ::rtl::OUString SEARCHITEM_SEARCHSTRING   = ::rtl::OUString::createFromAscii("SearchItem.SearchString");
-static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD = ::rtl::OUString::createFromAscii("SearchItem.Backward");
+static const ::rtl::OUString SEARCHITEM_SEARCHSTRING( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchString" ) );
+static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.Backward" ) );
 
-static const ::rtl::OUString COMMAND_EXECUTESEARCH = ::rtl::OUString::createFromAscii(".uno:ExecuteSearch");
-static const ::rtl::OUString COMMAND_FINDTEXT   = ::rtl::OUString::createFromAscii(".uno:FindText")  ;
-static const ::rtl::OUString COMMAND_DOWNSEARCH = ::rtl::OUString::createFromAscii(".uno:DownSearch");
-static const ::rtl::OUString COMMAND_UPSEARCH   = ::rtl::OUString::createFromAscii(".uno:UpSearch")  ;
-static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY   = ::rtl::OUString::createFromAscii("AppendSearchHistory");
+static const ::rtl::OUString COMMAND_EXECUTESEARCH( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExecuteSearch" ) );
+static const ::rtl::OUString COMMAND_FINDTEXT( RTL_CONSTASCII_USTRINGPARAM( ".uno:FindText" ) );
+static const ::rtl::OUString COMMAND_DOWNSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:DownSearch") );
+static const ::rtl::OUString COMMAND_UPSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:UpSearch") );
+static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY( RTL_CONSTASCII_USTRINGPARAM( "AppendSearchHistory") );
 
-static const ::rtl::OUString SERVICENAME_URLTRANSFORMER = ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer");
+static const ::rtl::OUString SERVICENAME_URLTRANSFORMER( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer") );
 static const sal_Int32       REMEMBER_SIZE = 10;
 
 void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
@@ -801,12 +801,12 @@ void SAL_CALL FindbarDispatcher::dispatch( const css::util::URL& aURL, const css
             return;
 
         css::uno::Reference< css::frame::XLayoutManager > xLayoutManager;
-        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") );
+        css::uno::Any aValue = xPropSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) );
         aValue >>= xLayoutManager;
         if (!xLayoutManager.is())
             return;
 
-        const ::rtl::OUString sResourceURL = ::rtl::OUString::createFromAscii("private:resource/toolbar/findbar");
+        const ::rtl::OUString sResourceURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/findbar" ));
         css::uno::Reference< css::ui::XUIElement > xUIElement = xLayoutManager->getElement(sResourceURL);
         if (!xUIElement.is())
             return;

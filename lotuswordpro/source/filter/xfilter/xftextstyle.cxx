@@ -120,12 +120,12 @@ void    XFTextStyle::ToXml(IXFStream *strm)
 
     pAttrList->Clear();
     if( style.getLength() )
-        pAttrList->AddAttribute(rtl::OUString::createFromAscii("style:name"),GetStyleName());
+        pAttrList->AddAttribute(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:name")),GetStyleName());
     if( GetParentStyleName().getLength() > 0 )
         pAttrList->AddAttribute(A2OUSTR("style:parent-style-name"),GetParentStyleName());
 
-    pAttrList->AddAttribute(rtl::OUString::createFromAscii("style:family"),A2OUSTR("text") );
-    strm->StartElement(rtl::OUString::createFromAscii("style:style"));
+    pAttrList->AddAttribute(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:family")),A2OUSTR("text") );
+    strm->StartElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:style")));
 
     //Font properties:
     pAttrList->Clear();
@@ -133,10 +133,10 @@ void    XFTextStyle::ToXml(IXFStream *strm)
     if( m_pFont )
         m_pFont->ToXml(strm);
 
-    strm->StartElement(rtl::OUString::createFromAscii("style:properties"));
-    strm->EndElement(rtl::OUString::createFromAscii("style:properties"));
+    strm->StartElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:properties")));
+    strm->EndElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:properties")));
 
-    strm->EndElement(rtl::OUString::createFromAscii("style:style"));
+    strm->EndElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("style:style")));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

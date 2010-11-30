@@ -77,7 +77,7 @@ namespace slideshow
                 {
                 }
 
-                bool operator()( const beans::NamedValue& rValue )
+                bool operator()( const beans::NamedValue& rValue ) const
                 {
                     return rValue.Name == mrSearchString;
                 }
@@ -94,7 +94,7 @@ namespace slideshow
                 {
                 }
 
-                bool operator()( const beans::NamedValue& rValue )
+                bool operator()( const beans::NamedValue& rValue ) const
                 {
                     return rValue.Name == mrKey.Name && rValue.Value == mrKey.Value;
                 }

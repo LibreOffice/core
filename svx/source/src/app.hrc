@@ -248,10 +248,9 @@
 #define RID_BMP_DB_RELATIONS_S          (RID_OFA_START + 172)
 #define RID_BMP_DB_RELATIONS_L          (RID_OFA_START + 173)
 #define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
-#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
 
-                                        // 12 und 13 nicht benutzen!!!
-// ..._BEGIN kann nochmal benutzt werden, nur zum Iterieren
+// don't use 12 and 13 !!!
+// ..._BEGIN can be used again. Just for iteration here
 #define RID_STR_PRIO_BEGIN              (RID_OFA_START + 17)
 #define RID_STR_PRIO_HIGHEST            (RID_OFA_START + 18)
 #define RID_STR_PRIO_HIGH               (RID_OFA_START + 19)

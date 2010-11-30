@@ -582,7 +582,6 @@ sal_Bool SwTransferable::GetData( const DATA_FLAVOR& rFlavor )
             break;
 
         case SOT_FORMATSTR_ID_EMBED_SOURCE:
-//      default:
             if( !aDocShellRef.Is() )
             {
                 SwDoc *const pDoc = lcl_GetDoc(*pClpDocFac);
@@ -1176,9 +1175,6 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
                 SwTransferable::SetSelInShell( rSh, TRUE, pPt );
                 break;
 
-            // case EXCHG_DEST_DOC_TEXTFRAME:
-            // case EXCHG_DEST_SWDOC_FREE_AREA:
-            // case EXCHG_DEST_DOC_URLFIELD:
             default:
                 SwTransferable::SetSelInShell( rSh, FALSE, pPt );
                 break;
@@ -1214,13 +1210,6 @@ int SwTransferable::PasteData( TransferableDataHelper& rData,
     }
 
     SwTransferable *pTrans=0, *pTunneledTrans=GetSwTransferable( rData );
-//    uno::Reference<XUnoTunnel> xTunnel( rData.GetTransferable(), UNO_QUERY );
-//    if ( xTunnel.is() )
-//    {
-//        sal_Int64 nHandle = xTunnel->getSomething( getUnoTunnelId() );
-//        if ( nHandle )
-//            pTunneledTrans = (SwTransferable*) (sal_IntPtr) nHandle;
-//    }
 
     if( pPt && ( bPasteSelection ? 0 != ( pTrans = pMod->pXSelection )
                                  : 0 != ( pTrans = pMod->pDragDrop) ))
@@ -1563,7 +1552,6 @@ USHORT SwTransferable::GetSotDestination( const SwWrtShell& rSh,
     case OBJCNT_GROUPOBJ:   nRet = EXCHG_DEST_DOC_GROUPOBJ;     break;
 
 // was mmchen wir bei Mehrfachselektion???
-//  case OBJCNT_DONTCARE:
     default:
         {
 /*
@@ -1633,7 +1621,6 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 pStream = aMSE40ClpObj.IsValid( *xStrm );
                 pRead = ReadHTML;
                 pRead->SetReadUTF8( TRUE );
-                //pRead->SetBaseURL( aMSE40ClpObj.GetBaseURL() );
 
                 BOOL bNoComments =
                     ( nFmt == SOT_FORMATSTR_ID_HTML_NO_COMMENT );
@@ -1808,18 +1795,6 @@ int SwTransferable::_PasteOLE( TransferableDataHelper& rData, SwWrtShell& rSh,
             // try to get the replacement image from the clipboard
             Graphic aGraphic;
             ULONG nGrFormat = 0;
-
-// (wg. Selection Manager bei Trustet Solaris)
-#ifndef SOLARIS
-/*
-            if( rData.GetGraphic( SOT_FORMATSTR_ID_SVXB, aGraphic ) )
-                nGrFormat = SOT_FORMATSTR_ID_SVXB;
-            else if( rData.GetGraphic( FORMAT_GDIMETAFILE, aGraphic ) )
-                nGrFormat = SOT_FORMAT_GDIMETAFILE;
-            else if( rData.GetGraphic( FORMAT_BITMAP, aGraphic ) )
-                nGrFormat = SOT_FORMAT_BITMAP;
-*/
-#endif
 
             // insert replacement image ( if there is one ) into the object helper
             if ( nGrFormat )
@@ -2223,13 +2198,6 @@ int SwTransferable::_PasteGrf( TransferableDataHelper& rData, SwWrtShell& rSh,
     case SOT_FORMATSTR_ID_UNIFORMRESOURCELOCATOR:
         if( 0 != ( nRet = rData.GetINetBookmark( nFmt, aBkmk ) ))
         {
-/*              if( SW_PASTESDR_SETATTR != nAction )
-            {
-                INetURLObject aURL( aBkmk.GetURL() );
-                bCheckForGrf = INET_PROT_FILE == aURL.GetProtocol();
-                nRet = 0 != bCheckForGrf;
-            }
-*/
             if( SW_PASTESDR_SETATTR == nAction )
                 nFmt = SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK;
             else
@@ -2471,15 +2439,7 @@ int SwTransferable::_PasteFileName( TransferableDataHelper& rData,
                 const SfxFilter* pFlt = SW_PASTESDR_SETATTR == nAction
                         ? 0 : SwIoSystem::GetFileFilter(
                         sFileURL, aEmptyStr );
-                if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell)
-    /*
-    JP 02.07.98: warum nur fuer die Formate ??
-                    && ( pFlt->GetUserData() == FILTER_SW5 ||
-                    pFlt->GetUserData() == FILTER_SW4 ||
-                    pFlt->GetUserData() == FILTER_SW3 ||
-                    pFlt->GetUserData() == FILTER_SWG )
-    */
-                    )
+                if( pFlt && !rSh.GetView().GetDocShell()->ISA(SwWebDocShell) )
                 {
     // und dann per PostUser Event den Bereich-Einfuegen-Dialog hochreissen
                     SwSectionData * pSect = new SwSectionData(
@@ -3123,14 +3083,6 @@ void SwTransferable::DragFinished( sal_Int8 nAction )
         pWrtShell->HideCrsr();
     else
         pWrtShell->ShowCrsr();
-//!!    else if( DND_ACTION_NONE != nAction )
-//!!        pWrtShell->ShowCrsr();
-//!!    else
-//!!    {
-//!!        //Muss wohl sein weil gescrollt wurde und ?...?
-//!!        pWrtShell->StartAction();
-//!!        pWrtShell->EndAction();
-//!!    }
 
     ((SwViewOption *)pWrtShell->GetViewOptions())->SetIdle( bOldIdle );
 }
@@ -3180,10 +3132,6 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 // a word in the buffer, word in this context means 'something with spaces at
 // beginning and end'. In this case we definitely want these spaces to be inserted
 // here.
-//      if( SCRIPTTYPE_LATIN != rShell.GetScriptType() )
-//          bSmart = FALSE;
-//      else
-//      {
             bInWrd = rShell.IsInWrd();
              bEndWrd = rShell.IsEndWrd();
             bSmart = bInWrd || bEndWrd;
@@ -3193,7 +3141,6 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
                 if( bSmart && !bSttWrd && (bInWrd || bEndWrd) )
                     rShell.SwEditShell::Insert(' ');
             }
-//      }
     }
 
     int nRet = rShell.Paste( pClpDocFac->GetDoc() );
@@ -3586,7 +3533,6 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
         {
             refObj->AddConnectAdvise( this );
             refObj->AddDataAdvise( this,
-//                          SotExchange::GetFormatMimeType( FORMAT_RTF ),
                             aEmptyStr,
                             ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
             nOldTimeOut = refObj->GetUpdateTimeout();
@@ -3639,12 +3585,6 @@ BOOL SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 
     rStrm.Write( pMem, nLen );
     delete[] pMem;
-
-    //if( bDelBookmrk )
-    //{
-    //  // er wird das erstemal abgeholt, also ins Undo mitaufnehmen
-    //  // aber wie??
-    //}
 
     IDocumentMarkAccess* const pMarkAccess = pDocShell->GetDoc()->getIDocumentMarkAccess();
     IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->findMark(sName);

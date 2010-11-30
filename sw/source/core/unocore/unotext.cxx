@@ -175,7 +175,7 @@ SwXText::PrepareForAttach(uno::Reference< text::XTextRange > &, const SwPaM &)
 bool SwXText::CheckForOwnMemberMeta(const SwPaM &, const bool)
     throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
-    ASSERT(CURSOR_META != m_pImpl->m_eType, "should not be called!");
+    OSL_ENSURE(CURSOR_META != m_pImpl->m_eType, "should not be called!");
     return false;
 }
 

@@ -381,7 +381,7 @@ static typelib_TypeClass cpp_mediate(
     if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("illegal vtable index!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "illegal vtable index!" )),
             (XInterface *)pCppI );
     }
 
@@ -475,7 +475,7 @@ static typelib_TypeClass cpp_mediate(
     default:
     {
         throw RuntimeException(
-            rtl::OUString::createFromAscii("no member description found!"),
+            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no member description found!" )),
             (XInterface *)pCppI );
         // is here for dummy
         eRet = typelib_TypeClass_VOID;

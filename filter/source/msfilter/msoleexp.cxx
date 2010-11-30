@@ -214,7 +214,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             //TODO/LATER: a "StoreTo" method at embedded object would be nice
             uno::Sequence < beans::PropertyValue > aSeq(2);
             SvStream* pStream = new SvMemoryStream;
-            aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+            aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
             ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
             aSeq[0].Value <<= xOut;
             aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
@@ -222,7 +222,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
             uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
         try
         {
-            xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+            xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
         }
         catch( uno::Exception& ) {} // #TODO really handle exceptions - interactionalhandler etc. ?
 
@@ -319,11 +319,11 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                         //TODO/LATER: is stream instead of outputstream a better choice?!
                         //TODO/LATER: a "StoreTo" method at embedded object would be nice
                         uno::Sequence < beans::PropertyValue > aSeq(1);
-                        aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        aSeq[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ));
                         ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
                         aSeq[0].Value <<= xOut;
                         uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-                        xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+                        xStor->storeToURL( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" )), aSeq );
                     }
                     catch( uno::Exception& )
                     {
@@ -348,7 +348,7 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
         if ( xPers.is() )
         {
             uno::Sequence < beans::PropertyValue > aEmptySeq;
-            ::rtl::OUString aTempName(::rtl::OUString::createFromAscii("bla"));
+            ::rtl::OUString aTempName( RTL_CONSTASCII_USTRINGPARAM( "bla" ));
             try
             {
                 xPers->storeToEntry( xStor, aTempName, aEmptySeq, aEmptySeq );

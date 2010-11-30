@@ -395,10 +395,6 @@ uno::Reference< text::XAutoTextEntry >  SwXAutoTextGroup::insertNewByName(const 
     String sLongName(aTitle);
     if(pGlosGroup && !pGlosGroup->GetError())
     {
-        /*if( pGlosGroup->IsOld() && pGlosGroup->ConvertToNew())
-        {
-            throw uno::RuntimeException();
-        } */
         uno::Reference<lang::XUnoTunnel> xRangeTunnel( xTextRange, uno::UNO_QUERY);
         SwXTextRange* pxRange = 0;
         OTextCursorHelper* pxCursor = 0;

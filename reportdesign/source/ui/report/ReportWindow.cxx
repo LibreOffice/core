@@ -122,7 +122,6 @@ void OReportWindow::removeSection(USHORT _nPosition)
     m_aViewsWindow.removeSection(_nPosition);
     m_pParent->setTotalSize(GetTotalWidth(),GetTotalHeight());
     m_aViewsWindow.Invalidate(INVALIDATE_TRANSPARENT);
-    //Resize();
 }
 //----------------------------------------------------------------------------
 void OReportWindow::addSection(const uno::Reference< report::XSection >& _xSection,const ::rtl::OUString& _sColorEntry,USHORT _nPosition)
@@ -163,7 +162,7 @@ sal_Int32 OReportWindow::GetTotalWidth() const
     {
         Fraction aStartWidth(long(REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH ));
         const Fraction aZoom(m_pView->getController().getZoomValue(),100);
-        aStartWidth *= aZoom; // m_aViewsWindow.GetMapMode().GetScaleX();;
+        aStartWidth *= aZoom;
         const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(m_pView->getController().getReportDefinition(),PROPERTY_PAPERSIZE).Width;
         Fraction aPaperWidth(nPaperWidth,1);
         aPaperWidth *= aZoom;
@@ -248,7 +247,6 @@ void OReportWindow::ScrollChildren(const Point& _aThumbPos)
         m_aHRuler.Scroll(-(aOrg.X() + _aThumbPos.X()),0);
     }
 
-    /*const Point aPos(PixelToLogic(_aThumbPos));*/
     m_aViewsWindow.scrollChildren(_aThumbPos);
 }
 //----------------------------------------------------------------------------
@@ -386,7 +384,6 @@ void OReportWindow::zoom(const Fraction& _aZoom)
     m_aHRuler.SetZoom(_aZoom);
     m_aHRuler.Invalidate();
 
-    //setZoomFactor(_aZoom,*this); // if this will be include the H - ruler has the wrong size
     m_aViewsWindow.zoom(_aZoom);
 
     notifySizeChanged();

@@ -37,13 +37,13 @@ TARGET=navipi
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =					\
-    $(SLO)$/navipi.obj		\
-    $(SLO)$/navcitem.obj	\
-    $(SLO)$/scenwnd.obj		\
-    $(SLO)$/content.obj
+SLOFILES =			\
+    $(EXCEPTIONSFILES)
 
-EXCEPTIONSFILES =			\
+EXCEPTIONSFILES =		\
+    $(SLO)$/content.obj		\
+    $(SLO)$/navcitem.obj	\
+    $(SLO)$/navipi.obj		\
     $(SLO)$/scenwnd.obj
 
 SRS1NAME=$(TARGET)

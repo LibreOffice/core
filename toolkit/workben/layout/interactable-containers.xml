@@ -44,6 +44,6 @@
                 <pushbutton label="Content 4" cnt:title="Page 4" />
                 <pushbutton label="Content 5" cnt:title="Page 5" />
             </tabcontrol>
-        </vscroll>
+        </vsplitter>
     </hsplitter>
 </dialog>

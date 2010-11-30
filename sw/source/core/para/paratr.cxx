@@ -145,7 +145,7 @@ sal_Bool SwFmtDrop::GetInfo( SfxPoolItem& ) const
 
 int SwFmtDrop::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return ( nLines == ((SwFmtDrop&)rAttr).GetLines() &&
              nChars == ((SwFmtDrop&)rAttr).GetChars() &&
              nDistance ==  ((SwFmtDrop&)rAttr).GetDistance() &&
@@ -230,8 +230,6 @@ bool SwFmtDrop::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
                 nDistance   = MM100_TO_TWIP(pDrop->Distance);
             }
             else {
-                //exception( wrong_type)
-                ;
             }
         }
         break;
@@ -260,23 +258,19 @@ SfxPoolItem* SwNumRuleItem::Clone( SfxItemPool * ) const
 }
 int SwNumRuleItem::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     return GetValue() == ((SwNumRuleItem&)rAttr).GetValue();
     // <--
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwNumRuleItem::QueryValue( uno::Any& rVal, BYTE ) const
 {
     rtl::OUString sRet = SwStyleNameMapper::GetProgName(GetValue(), nsSwGetPoolIdFromName::GET_POOLID_NUMRULE );
     rVal <<= sRet;
     return true;
 }
-/* -----------------------------27.06.00 11:05--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
 {
     rtl::OUString uName;
@@ -284,9 +278,7 @@ bool    SwNumRuleItem::PutValue( const uno::Any& rVal, BYTE )
     SetValue(SwStyleNameMapper::GetUIName(uName, nsSwGetPoolIdFromName::GET_POOLID_NUMRULE));
     return true;
 }
-/* -----------------19.05.2003 10:44-----------------
 
- --------------------------------------------------*/
 SfxPoolItem* SwParaConnectBorderItem::Clone( SfxItemPool * ) const
 {
     return new SwParaConnectBorderItem( *this );

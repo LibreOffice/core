@@ -101,7 +101,6 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
     SdrView *pSdrView = m_pSh->GetDrawView();
 
     // #i33136#
-    // pSdrView->SetOrtho(rMEvt.IsShift());
     pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
     pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
@@ -212,8 +211,6 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         bNoInterrupt = TRUE;
                         pSdrView->MarkPoint(*pHdl);
-//                      bReturn = pSdrView->BegDragObj(m_aStartPos, (OutputDevice*) NULL, pHdl);
-//                      m_pWin->SetDrawAction(TRUE);
                     }
                 }
             }
@@ -240,11 +237,9 @@ BOOL SwDrawBase::MouseButtonDown(const MouseEvent& rMEvt)
                     {
                         if (!pSdrView->HasMarkablePoints())
                         {
-                            //JP 10.10.2001: Bug 89619 - don't scroll the
-                            //              cursor into the visible area
                             BOOL bUnlockView = !m_pSh->IsViewLocked();
                             m_pSh->LockView( TRUE ); //lock visible section
-                            m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // Alles deselektieren
+                            m_pSh->SelectObj(Point(LONG_MAX, LONG_MAX)); // deselect all
                             if( bUnlockView )
                                 m_pSh->LockView( FALSE );
                         }
@@ -281,7 +276,6 @@ BOOL SwDrawBase::MouseMove(const MouseEvent& rMEvt)
     if (IsCreateObj() && !m_pWin->IsDrawSelMode() && pSdrView->IsCreateObj())
     {
         // #i33136#
-        // pSdrView->SetOrtho(rMEvt.IsShift());
         pSdrView->SetOrtho(doConstructOrthogonal() ? !rMEvt.IsShift() : rMEvt.IsShift());
         pSdrView->SetAngleSnapEnabled(rMEvt.IsShift());
 
@@ -531,9 +525,6 @@ void __EXPORT SwDrawBase::Deactivate()
     m_pWin->ReleaseMouse();
     bNoInterrupt = FALSE;
 
-//  if(!m_pSh->IsObjSelected())
-//      m_pSh->Edit();
-
     if(m_pWin->GetApplyTemplate())
         m_pWin->SetApplyTemplate(SwApplyTemplate());
     m_pSh->GetView().GetViewFrame()->GetBindings().Invalidate(SID_INSERT_DRAW);
@@ -647,7 +638,6 @@ void SwDrawBase::BreakCreate()
     m_pWin->ReleaseMouse();
 
     Deactivate();
-//  m_pView->LeaveDrawCreate();
 }
 
 /*************************************************************************
@@ -700,9 +690,7 @@ void SwDrawBase::EnterSelectMode(const MouseEvent& rMEvt)
         m_pView->NoRotate();
     }
 }
-/* -----------------------------03.04.2002 10:52------------------------------
 
- ---------------------------------------------------------------------------*/
 void SwDrawBase::CreateDefaultObject()
 {
     Point aStartPos = GetDefaultCenterPos();
@@ -714,9 +702,7 @@ void SwDrawBase::CreateDefaultObject()
     Rectangle aRect(aStartPos, aEndPos);
     m_pSh->CreateDefaultShape( static_cast< UINT16 >(m_pWin->GetSdrDrawMode()), aRect, m_nSlotId);
 }
-/* -----------------25.10.2002 14:14-----------------
- *
- * --------------------------------------------------*/
+
 Point  SwDrawBase::GetDefaultCenterPos()
 {
     Size aDocSz(m_pSh->GetDocSize());

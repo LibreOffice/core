@@ -41,9 +41,7 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 #include <itemholder1.hxx>
 
@@ -225,7 +223,7 @@ class SvtCompatibility
             return lEntries.size();
         }
 
-        const SvtCompatibilityEntry& operator[]( int i )
+        const SvtCompatibilityEntry& operator[]( int i ) const
         {
             return lEntries[i];
         }

@@ -671,9 +671,7 @@ const BitmapEx& SdPageObjectFadeNameNumberPrimitive::getFadeEffectIconBitmap() c
     if(mpFadeEffectIconBitmap == NULL)
     {
         // prepare FadeEffectIconBitmap on demand
-        const sal_uInt16 nIconId(Application::GetSettings().GetStyleSettings().GetHighContrastMode()
-            ? BMP_FADE_EFFECT_INDICATOR_H
-            : BMP_FADE_EFFECT_INDICATOR);
+        const sal_uInt16 nIconId(BMP_FADE_EFFECT_INDICATOR);
         const BitmapEx aFadeEffectIconBitmap(IconCache::Instance().GetIcon(nIconId).GetBitmapEx());
         const_cast< SdPageObjectFadeNameNumberPrimitive* >(this)->mpFadeEffectIconBitmap = new BitmapEx(aFadeEffectIconBitmap);
     }

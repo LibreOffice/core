@@ -111,7 +111,7 @@ void SwTblFmtCmp::Delete( SvPtrarr &rArr )
 void lcl_GetStartEndCell( const SwCursor& rCrsr,
                         SwLayoutFrm *&prStart, SwLayoutFrm *&prEnd )
 {
-    ASSERT( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( FALSE ),
+    OSL_ENSURE( rCrsr.GetCntntNode() && rCrsr.GetCntntNode( FALSE ),
             "Tabselection nicht auf Cnt." );
 
     Point aPtPos, aMkPos;
@@ -573,7 +573,7 @@ void lcl_CollectCells( SvPtrarr &rArr, const SwRect &rUnion,
         // uns erst wieder zur Zelle hochhangeln
         while ( !pCell->IsCellFrm() )
             pCell = pCell->GetUpper();
-        ASSERT( pCell, "Frame ist keine Zelle." );
+        OSL_ENSURE( pCell, "Frame ist keine Zelle." );
         if ( rUnion.IsOver( pCell->Frm() ) )
             ::InsertCell( rArr, (SwCellFrm*)pCell );
         //Dafuer sorgen, dass die Zelle auch verlassen wird (Bereiche)
@@ -1234,7 +1234,7 @@ BOOL SwDoc::GetBoxAttr( const SwCursor& rCursor, SfxPoolItem& rToFill ) const
 #***********************************************************************/
 void SwDoc::SetBoxAlign( const SwCursor& rCursor, USHORT nAlign )
 {
-    ASSERT( nAlign == text::VertOrientation::NONE   ||
+    OSL_ENSURE( nAlign == text::VertOrientation::NONE   ||
             nAlign == text::VertOrientation::CENTER ||
             nAlign == text::VertOrientation::BOTTOM, "wrong alignment" );
     SwFmtVertOrient aVertOri( 0, nAlign );

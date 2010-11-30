@@ -1446,7 +1446,7 @@ void AnimationImporter::importTimeContainer( const Atom* pAtom, const Reference<
                 {
                     if( pChildAtom->hasChildAtom( DFF_msofbtAnimCommand ) )
                     {
-                        const OUString aServiceName( OUString::createFromAscii("com.sun.star.animations.Command") );
+                        const OUString aServiceName( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.animations.Command")) );
                         Reference< XAnimationNode > xChildNode( ::comphelper::getProcessServiceFactory()->createInstance(aServiceName), UNO_QUERY );
                         importAnimationNodeContainer( pChildAtom, xChildNode );
                         Reference< XTimeContainer > xParentContainer( xNode, UNO_QUERY );
@@ -3771,7 +3771,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
             fprintf( mpFile, "\"" );
         }
 
-        aIter++;
+        ++aIter;
     }
 }
 

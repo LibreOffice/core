@@ -69,13 +69,6 @@ public:
     virtual bool             QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool             PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 
-// will be used at time??
-//  void                    FillVariable( SbxVariable &rVar,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric ) const;
-//  virtual SfxArgumentError SetVariable( const SbxVariable &rVal,
-//                                        SfxMapUnit eCoreMetric,
-//                                        SfxMapUnit eUserMetric );
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
                                     SfxMapUnit ePresMetric,

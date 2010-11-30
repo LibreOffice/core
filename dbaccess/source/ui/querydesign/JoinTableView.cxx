@@ -171,8 +171,6 @@ void OScrollWindowHelper::Resize()
 // class OJoinTableView
 //==================================================================
 
-//const long WINDOW_WIDTH = 1000;
-//const long WINDOW_HEIGHT = 1000;
 DBG_NAME(OJoinTableView);
 //------------------------------------------------------------------------------
 OJoinTableView::OJoinTableView( Window* pParent, OJoinDesignView* pView )
@@ -466,7 +464,6 @@ namespace
         Point aUpperLeft = _rPoint;
         // normalize with respect to visibility
         aUpperLeft -= _pView->GetScrollOffset();
-        //  aUpperLeft.Y() -= _pView->GetScrollOffset().Y();
         Point aLowerRight(aUpperLeft.X() + _rSize.Width(), aUpperLeft.Y() + _rSize.Height());
 
         // data about ourself
@@ -485,7 +482,6 @@ namespace
                     _nScrollX = aLowerRight.X() - aSize.Width() + TABWIN_SPACING_X;
 
                 // ensure the visibility of the left border (higher priority)
-                //  if ( (aUpperLeft.X() - _nScrollX) < 0 )
                 if ( aUpperLeft.X() < 0 )
                     _nScrollX = aUpperLeft.X() - TABWIN_SPACING_X;
             }
@@ -496,7 +492,6 @@ namespace
                 if ( aLowerRight.Y() > aSize.Height() )
                     _nScrollY = aLowerRight.Y() - aSize.Height() + TABWIN_SPACING_Y;
                 // upper border
-                //  if ( (aUpperLeft.Y() - _nScrollY) < 0 )
                 if ( aUpperLeft.Y() < 0 )
                     _nScrollY = aUpperLeft.Y() - TABWIN_SPACING_Y;
             }
@@ -534,7 +529,6 @@ void OJoinTableView::EnsureVisible(const OTableWindow* _pWin)
 {
     // data about the tab win
     TTableWindowData::value_type pData = _pWin->GetData();
-    //  Point aUpperLeft = pData->GetPosition();
     EnsureVisible( pData->GetPosition() , pData->GetSize());
     Invalidate(INVALIDATE_NOCHILDREN);
 }
@@ -1227,10 +1221,6 @@ BOOL OJoinTableView::IsAddAllowed()
     {
         return FALSE;
     }
-
-    // nicht wenn keine Joins moeglich
-//  if (!GetDatabase()->IsCapable(SDB_CAP_JOIN) && nMax <= GetTabWinCount())
-//      return FALSE;
 
     return TRUE;
 }

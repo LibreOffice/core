@@ -248,8 +248,6 @@ extern USHORT __FAR_DATA aTypeTab[];
 
 String  GetResult(double nVal, sal_uInt32 nNumFmt, USHORT nLang = LANGUAGE_SYSTEM);
 void    SetErrorStr(const String& rStr);
-//String    ExpandDate(const Date& rDate, ULONG nFmt, USHORT nLang);
-//String    ExpandTime(const Time& rTime, ULONG nFmt, USHORT nLang);
 String  FormatNumber(USHORT nNum, sal_uInt32 nFormat);
 
 /*--------------------------------------------------------------------
@@ -276,7 +274,7 @@ protected:
 
 public:
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     virtual ~SwFieldType();
 #endif
     static  const String&   GetTypeStr( USHORT nTypeId );
@@ -307,7 +305,7 @@ inline void SwFieldType::UpdateFlds() const
 class SW_DLLPUBLIC SwField
 {
 private:
-    mutable String      m_Cache; /// #i85766# cached expansion (for clipboard)
+    mutable String      m_Cache; // cached expansion (for clipboard)
     USHORT              nLang;  // Immer ueber SetLanguage aendern!
     BOOL                bIsAutomaticLanguage;
     sal_uInt32          nFormat;
@@ -344,10 +342,10 @@ public:
 
     // ResId
     USHORT              Which() const
-#ifndef DBG_UTIL
-        { return pType->Which(); }
+#if OSL_DEBUG_LEVEL > 1
+        ;       // implemented in fldbas.cxx
 #else
-        ;       // in fldbas.cxx implementiert
+        { return pType->Which(); }
 #endif
 
     // TYP_ID
@@ -421,7 +419,6 @@ public:
 class SW_DLLPUBLIC SwValueField : public SwField
 {
     double fValue;
-//  String sExpand;
 
 protected:
     SwValueField( SwValueFieldType* pFldType, sal_uInt32 nFmt = 0, USHORT nLang = LANGUAGE_SYSTEM, const double fVal = 0.0 );
@@ -432,8 +429,6 @@ public:
 
     virtual SwFieldType*    ChgTyp( SwFieldType* );
     virtual void            SetLanguage(USHORT nLng);
-//  os: wozu war das denn da?
-//  virtual void            ChangeFormat(ULONG n);
 
     inline SwDoc*           GetDoc() const          { return ((SwValueFieldType*)GetTyp())->GetDoc(); }
 

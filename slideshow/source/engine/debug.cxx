@@ -73,30 +73,30 @@ OUString DebugGetDescription (const AnimationNodeSharedPtr& rpNode)
     {
         // Node is a container.
         if (::boost::dynamic_pointer_cast<ParallelTimeContainer>(rpNode))
-            return OUString::createFromAscii("ParallelTimeContainer");
+            return OUString(RTL_CONSTASCII_USTRINGPARAM("ParallelTimeContainer"));
         else if (::boost::dynamic_pointer_cast<SequentialTimeContainer>(rpNode))
-            return OUString::createFromAscii("SequentialTimeContainer");
+            return OUString(RTL_CONSTASCII_USTRINGPARAM("SequentialTimeContainer"));
         else
-            return OUString::createFromAscii("<unknown container>");
+            return OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown container>"));
     }
     else if (::boost::dynamic_pointer_cast<AnimationTransitionFilterNode>(rpNode))
-        return OUString::createFromAscii("AnimationTransitionFilterNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationTransitionFilterNode"));
     else if (::boost::dynamic_pointer_cast<AnimationAudioNode>(rpNode))
-        return OUString::createFromAscii("AnimationAudioNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationAudioNode"));
     else if (::boost::dynamic_pointer_cast<AnimationColorNode>(rpNode))
-        return OUString::createFromAscii("AnimationColorNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationColorNode"));
     else if (::boost::dynamic_pointer_cast<AnimationCommandNode>(rpNode))
-        return OUString::createFromAscii("AnimationCommandNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationCommandNode"));
     else if (::boost::dynamic_pointer_cast<AnimationPathMotionNode>(rpNode))
-        return OUString::createFromAscii("AnimationPathMotionNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationPathMotionNode"));
     else if (::boost::dynamic_pointer_cast<AnimationSetNode>(rpNode))
-        return OUString::createFromAscii("AnimationSetNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationSetNode"));
     else if (::boost::dynamic_pointer_cast<AnimationTransformNode>(rpNode))
-        return OUString::createFromAscii("AnimationTransformNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("AnimationTransformNode"));
     else if (::boost::dynamic_pointer_cast<PropertyAnimationNode>(rpNode))
-        return OUString::createFromAscii("PropertyAnimationNode");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("PropertyAnimationNode"));
     else
-        return OUString::createFromAscii("<unknown node type>");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("<unknown node type>"));
 }
 
 
@@ -113,28 +113,28 @@ void DebugShowState (const AnimationNodeSharedPtr& rpNode)
     {
         default:
         case AnimationNode::INVALID:
-            sState = OUString::createFromAscii("Invalid");
-            sStateColor = OUString::createFromAscii("firebrick1");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("firebrick1"));
             break;
         case AnimationNode::UNRESOLVED:
-            sState = OUString::createFromAscii("Unresolved");
-            sStateColor = OUString::createFromAscii("dodgerblue4");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Unresolved"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("dodgerblue4"));
             break;
         case AnimationNode::RESOLVED:
-            sState = OUString::createFromAscii("Resolved");
-            sStateColor = OUString::createFromAscii("dodgerblue");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Resolved"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("dodgerblue"));
             break;
         case AnimationNode::ACTIVE:
-            sState = OUString::createFromAscii("Active");
-            sStateColor = OUString::createFromAscii("seagreen1");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Active"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("seagreen1"));
             break;
         case AnimationNode::FROZEN:
-            sState = OUString::createFromAscii("Frozen");
-            sStateColor = OUString::createFromAscii("lightskyblue1");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Frozen"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("lightskyblue1"));
             break;
         case AnimationNode::ENDED:
-            sState = OUString::createFromAscii("Ended");
-            sStateColor = OUString::createFromAscii("slategray3");
+            sState = OUString(RTL_CONSTASCII_USTRINGPARAM("Ended"));
+            sStateColor = OUString(RTL_CONSTASCII_USTRINGPARAM("slategray3"));
             break;
     }
 
@@ -158,11 +158,11 @@ void DebugShowState (const AnimationNodeSharedPtr& rpNode)
         }
         else
         {
-            sTrigger = OUString::createFromAscii("other");
+            sTrigger = OUString(RTL_CONSTASCII_USTRINGPARAM("other"));
         }
     }
     else
-        sTrigger = ::rtl::OUString::createFromAscii("void");
+        sTrigger = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("void"));
 
     TRACE("Node state: n%x [label=\"%x / %x / %s\\n%s\\n%s\",style=filled,fillcolor=\"%s\"]\r",
         rpNode.get(),

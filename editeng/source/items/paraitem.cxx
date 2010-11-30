@@ -141,14 +141,12 @@ int SvxLineSpacingItem::operator==( const SfxPoolItem& rAttr ) const
                 1 : 0;
 }
 
-/*-----------------18.03.98 16:32-------------------
-    os: wer weiss noch, wieso das LineSpacingItem so
-    kompliziert ist? Fuer UNO koennen wir das nicht
-    gebrauchen. Da gibt es nur zwei Werte:
-        - ein sal_uInt16 fuer den Modus
-        - ein sal_uInt32 fuer alle Werte (Abstand, Hoehe, rel. Angaben)
-
---------------------------------------------------*/
+/* wer weiss noch, wieso das LineSpacingItem so
+   kompliziert ist? Fuer UNO koennen wir das nicht
+   gebrauchen. Da gibt es nur zwei Werte:
+      - ein sal_uInt16 fuer den Modus
+      - ein sal_uInt32 fuer alle Werte (Abstand, Hoehe, rel. Angaben)
+*/
 bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -193,9 +191,7 @@ bool SvxLineSpacingItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 
     return true;
 }
-/*-----------------18.03.98 16:32-------------------
 
---------------------------------------------------*/
 bool SvxLineSpacingItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -388,9 +384,6 @@ int SvxAdjustItem::operator==( const SfxPoolItem& rAttr ) const
         ? 1 : 0 );
 }
 
-/*-----------------18.03.98 16:15-------------------
-
---------------------------------------------------*/
 bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //    sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -409,9 +402,6 @@ bool SvxAdjustItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     }
     return true;
 }
-/*-----------------18.03.98 16:15-------------------
-
---------------------------------------------------*/
 
 bool SvxAdjustItem::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 {
@@ -1012,9 +1002,6 @@ struct   ::com::sun::star::style::TabStop
 typedef sequence ::com::sun::star::style::TabStop> TabSTopSequence;
 
  */
-/*-----------------19.03.98 08:50-------------------
-
---------------------------------------------------*/
 
 bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -1056,9 +1043,6 @@ bool SvxTabStopItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     }
     return sal_True;
 }
-/*-----------------19.03.98 08:50-------------------
-
---------------------------------------------------*/
 
 bool SvxTabStopItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
@@ -1560,25 +1544,19 @@ SvxForbiddenRuleItem::SvxForbiddenRuleItem(
     : SfxBoolItem( nId, bOn )
 {
 }
-/* -----------------------------29.11.00 11:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxPoolItem* SvxForbiddenRuleItem::Clone( SfxItemPool * ) const
 {
     return new SvxForbiddenRuleItem( GetValue(), Which() );
 }
-/* -----------------------------29.11.00 11:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxPoolItem* SvxForbiddenRuleItem::Create(SvStream & rStrm, USHORT) const
 {
     sal_Bool nValue;
     rStrm >> nValue;
     return new SvxForbiddenRuleItem( nValue, Which() );
 }
-/* -----------------------------29.11.00 11:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
 {
     DBG_ASSERT( SOFFICE_FILEFORMAT_31==nFFVer ||
@@ -1588,9 +1566,7 @@ USHORT SvxForbiddenRuleItem::GetVersion( USHORT nFFVer ) const
 
     return SOFFICE_FILEFORMAT_50 > nFFVer ? USHRT_MAX : 0;
 }
-/* -----------------------------29.11.00 11:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 SfxItemPresentation SvxForbiddenRuleItem::GetPresentation(
         SfxItemPresentation ePres,
         SfxMapUnit /*eCoreMetric*/, SfxMapUnit /*ePresMetric*/,

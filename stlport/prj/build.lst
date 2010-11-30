@@ -1,2 +1,2 @@
-sl	stlport	:   SO:so_prereq solenv NULL
+sl	stlport	:   solenv NULL
 sl	stlport						nmake	-	all	sl_mkout NULL

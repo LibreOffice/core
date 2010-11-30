@@ -109,11 +109,11 @@ AccessiblePresentationGraphicShape::~AccessiblePresentationGraphicShape (void)
     switch (nShapeType)
     {
         case PRESENTATION_GRAPHIC_OBJECT:
-            aDG.Initialize (::rtl::OUString::createFromAscii ("PresentationGraphicShape"));
+            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("PresentationGraphicShape"))));
             break;
         default:
             aDG.Initialize (
-                ::rtl::OUString::createFromAscii ("Unknown accessible presentation graphic shape"));
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown accessible presentation graphic shape")));
             uno::Reference<drawing::XShapeDescriptor> xDescriptor (mxShape, uno::UNO_QUERY);
             if (xDescriptor.is())
             {

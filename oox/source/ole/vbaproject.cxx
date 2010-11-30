@@ -130,11 +130,9 @@ VbaProject::VbaProject( const Reference< XMultiServiceFactory >& rxGlobalFactory
     VbaFilterConfig( rxGlobalFactory, rConfigCompName ),
     mxGlobalFactory( rxGlobalFactory ),
     mxDocModel( rxDocModel ),
-    maLibName( CREATE_OUSTRING( "Standard" ) )
+    maPrjName( CREATE_OUSTRING( "Standard" ) )
 {
     OSL_ENSURE( mxDocModel.is(), "VbaProject::VbaProject - missing document model" );
-    mxBasicLib = openLibrary( PROP_BasicLibraries, false );
-    mxDialogLib = openLibrary( PROP_DialogLibraries, false );
 }
 
 VbaProject::~VbaProject()
@@ -174,6 +172,18 @@ bool VbaProject::hasDialog( const OUString& rDialogName ) const
     return mxDialogLib.is() && mxDialogLib->hasByName( rDialogName );
 }
 
+// protected ------------------------------------------------------------------
+
+void VbaProject::addDummyModule( const OUString& rName, sal_Int32 nType )
+{
+    OSL_ENSURE( rName.getLength() > 0, "VbaProject::addDummyModule - missing module name" );
+    maDummyModules[ rName ] = nType;
+}
+
+void VbaProject::prepareModuleImport()
+{
+}
+
 // private --------------------------------------------------------------------
 
 Reference< XLibraryContainer > VbaProject::getLibraryContainer( sal_Int32 nPropId )
@@ -189,9 +199,9 @@ Reference< XNameContainer > VbaProject::openLibrary( sal_Int32 nPropId, bool bCr
     try
     {
         Reference< XLibraryContainer > xLibContainer( getLibraryContainer( nPropId ), UNO_SET_THROW );
-        if( bCreateMissing && !xLibContainer->hasByName( maLibName ) )
-            xLibContainer->createLibrary( maLibName );
-        xLibrary.set( xLibContainer->getByName( maLibName ), UNO_QUERY_THROW );
+        if( bCreateMissing && !xLibContainer->hasByName( maPrjName ) )
+            xLibContainer->createLibrary( maPrjName );
+        xLibrary.set( xLibContainer->getByName( maPrjName ), UNO_QUERY_THROW );
     }
     catch( Exception& )
     {
@@ -232,6 +242,9 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
     if( aDirStrm.isEof() )
         return;
 
+    // virtual call, derived classes may do some preparations
+    prepareModuleImport();
+
     // read all records of the directory
     rtl_TextEncoding eTextEnc = RTL_TEXTENCODING_MS_1252;
     sal_uInt16 nModuleCount = 0;
@@ -258,6 +271,14 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
                 OSL_ENSURE( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW, "VbaProject::importVba - unknown text encoding" );
                 if( eNewTextEnc != RTL_TEXTENCODING_DONTKNOW )
                     eTextEnc = eNewTextEnc;
+            }
+            break;
+            case VBA_ID_PROJECTNAME:
+            {
+                OUString aPrjName = aRecStrm.readCharArrayUC( nRecSize, eTextEnc );
+                OSL_ENSURE( aPrjName.getLength() > 0, "VbaProject::importVba - invalid project name" );
+                if( aPrjName.getLength() > 0 )
+                    maPrjName = aPrjName;
             }
             break;
             case VBA_ID_PROJECTMODULES:
@@ -346,11 +367,21 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         }
     }
 
+    // create empty dummy modules
+    VbaModuleMap aDummyModules;
+    for( DummyModuleMap::iterator aIt = maDummyModules.begin(), aEnd = maDummyModules.end(); aIt != aEnd; ++aIt )
+    {
+        OSL_ENSURE( !aModules.has( aIt->first ) && !aDummyModules.has( aIt->first ), "VbaProject::importVba - multiple modules with the same name" );
+        VbaModuleMap::mapped_type& rxModule = aDummyModules[ aIt->first ];
+        rxModule.reset( new VbaModule( mxDocModel, aIt->first, eTextEnc, bExecutable ) );
+        rxModule->setType( aIt->second );
+    }
+
     /*  Now it is time to load the source code. All modules will be inserted
-        into the Basic library of the document specified by the 'maLibName'
+        into the Basic library of the document specified by the 'maPrjName'
         member. Do not create the Basic library, if there are no modules
         specified. */
-    if( !aModules.empty() ) try
+    if( !aModules.empty() || !aDummyModules.empty() ) try
     {
         // get the model factory and the basic library
         Reference< XMultiServiceFactory > xModelFactory( mxDocModel, UNO_QUERY_THROW );
@@ -359,7 +390,10 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
         // set library container to VBA compatibility mode
         try
         {
-            Reference< XVBACompatibility >( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
+            Reference< XVBACompatibility > xVBACompat( getLibraryContainer( PROP_BasicLibraries ), UNO_QUERY_THROW );
+            xVBACompat->setVBACompatibilityMode( sal_True );
+            xVBACompat->setProjectName( maPrjName );
+
         }
         catch( Exception& )
         {
@@ -385,10 +419,17 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
             // not all documents support this
         }
 
-        // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
         if( xBasicLib.is() )
-            aModules.forEachMem( &VbaModule::importSourceCode,
-                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        {
+            // call Basic source code import for each module, boost::[c]ref enforces pass-by-ref
+            aModules.forEachMem( &VbaModule::createAndImportModule,
+                ::boost::ref( *xVbaStrg ), ::boost::cref( xBasicLib ),
+                ::boost::cref( xDocObjectNA ), ::boost::cref( mxOleOverridesSink ) );
+
+            // create empty dummy modules
+            aDummyModules.forEachMem( &VbaModule::createEmptyModule,
+                ::boost::cref( xBasicLib ), ::boost::cref( xDocObjectNA ) );
+        }
     }
     catch( Exception& )
     {
@@ -418,7 +459,7 @@ void VbaProject::importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGrap
 
                 // create and import the form
                 Reference< XNameContainer > xDialogLib( createDialogLibrary(), UNO_SET_THROW );
-                VbaUserForm aForm( mxGlobalFactory, rGraphicHelper, bDefaultColorBgr );
+                VbaUserForm aForm( mxGlobalFactory, mxDocModel, rGraphicHelper, bDefaultColorBgr );
                 aForm.importForm( mxDocModel, xDialogLib, *xSubStrg, aModuleName, eTextEnc );
             }
             catch( Exception& )

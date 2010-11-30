@@ -31,26 +31,32 @@ String RID_STR_ADD_PACKAGES
 {
     Text [ en-US ] = "Add Extension(s)";
 };
+
 String RID_CTX_ITEM_REMOVE
 {
     Text [ en-US ] = "~Remove";
 };
+
 String RID_CTX_ITEM_ENABLE
 {
     Text [ en-US ] = "~Enable";
 };
+
 String RID_CTX_ITEM_DISABLE
 {
     Text [ en-US ] = "~Disable";
 };
+
 String RID_CTX_ITEM_CHECK_UPDATE
 {
     Text [ en-US ] = "~Update...";
 };
+
 String RID_CTX_ITEM_OPTIONS
 {
     Text [ en-US ] = "~Options...";
 };
+
 
 String RID_STR_ADDING_PACKAGES
 {
@@ -177,7 +183,6 @@ ModalDialog RID_DLG_LICENSE
     Moveable = TRUE;
     Closeable = TRUE;
     Sizeable = FALSE;
-//    Hide = TRUE;
 
     MultiLineEdit ML_LICENSE
     {
@@ -196,6 +201,7 @@ ModalDialog RID_DLG_LICENSE
         NoLabel = TRUE;
         Text [ en-US ] = "Please follow these steps to proceed with the installation of the extension:";
     };
+
     FixedText FT_LICENSE_BODY_1
     {
         Pos = MAP_APPFONT(COL2_X, ROW3_Y);
@@ -203,6 +209,7 @@ ModalDialog RID_DLG_LICENSE
         NoLabel = TRUE;
         Text [ en-US ] = "1.";
     };
+
     //spans col3 + col4
     FixedText FT_LICENSE_BODY_1_TXT
     {
@@ -212,6 +219,7 @@ ModalDialog RID_DLG_LICENSE
         NoLabel = TRUE;
         Text [ en-US ] = "Read the complete License Agreement. Use the scroll bar or the \'Scroll Down\' button in this dialog to view the entire license text.";
     };
+
     FixedText FT_LICENSE_BODY_2
     {
         Pos = MAP_APPFONT(COL2_X, ROW4_Y);
@@ -219,6 +227,7 @@ ModalDialog RID_DLG_LICENSE
         NoLabel = TRUE;
         Text [ en-US ] = "2.";
     };
+
     FixedText FT_LICENSE_BODY_2_TXT
     {
         Pos = MAP_APPFONT(COL3_X, ROW4_Y);
@@ -228,6 +237,7 @@ ModalDialog RID_DLG_LICENSE
         Text [ en-US ] = "Accept the License Agreement for the extension by pressing the \'Accept\' button.";
 
     };
+
     PushButton PB_LICENSE_DOWN
     {
         TabStop = TRUE ;
@@ -236,6 +246,7 @@ ModalDialog RID_DLG_LICENSE
         Text [ en-US ] = "~Scroll Down";
 
     };
+
     FixedLine FL_LICENSE
     {
         Pos = MAP_APPFONT ( 0, ROW5_Y) ;
@@ -262,12 +273,6 @@ ModalDialog RID_DLG_LICENSE
             ImageBitmap = Bitmap { File = "sc06300.png"; };
             MASKCOLOR
         };
-    };
-
-    Image IMG_LICENCE_ARROW_HC
-    {
-        ImageBitmap = Bitmap { File = "sch06300.png"; };
-        MASKCOLOR
     };
 
     OKButton BTN_LICENSE_ACCEPT

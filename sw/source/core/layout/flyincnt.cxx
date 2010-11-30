@@ -93,7 +93,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
                                  const Point& rRelPos )
 {
     // OD 2004-05-27 #i26791# - member <aRelPos> moved to <SwAnchoredObject>
-    ASSERT( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
+    OSL_ENSURE( rPoint != aRef || rRelAttr != GetCurrRelPos(), "SetRefPoint: no change" );
     SwFlyNotify *pNotify = NULL;
     // No notify at a locked fly frame, if a fly frame is locked, there's
     // already a SwFlyNotify object on the stack (MakeAll).
@@ -275,7 +275,7 @@ void SwFlyInCntFrm::RegistFlys()
 {
     // vgl. SwRowFrm::RegistFlys()
     SwPageFrm *pPage = FindPageFrm();
-    ASSERT( pPage, "Flys ohne Seite anmelden?" );
+    OSL_ENSURE( pPage, "Flys ohne Seite anmelden?" );
     ::RegistFlys( pPage, this );
 }
 

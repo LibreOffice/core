@@ -253,7 +253,6 @@ void Ww1Manager::Out(Ww1Shell& rOut, sal_Unicode cUnknown)
         break;
         case 0x0b: // linebreak
             if (rOut.IsInTable())
-//              rOut.NextBand();    // war Stuss
                 ;
             else
                 rOut.NextLine();
@@ -402,7 +401,6 @@ void Ww1Footnotes::Stop(Ww1Shell& /*rOut*/, Ww1Manager& rMan, sal_Unicode& c)
     if (bStarted && rMan.Where() > Where())
     {
         DBG_ASSERT(nPlcIndex < Count(), "Ww1Footnotes");
-//      DBG_ASSERT(c==0x02, "Ww1Footnotes");    // scheint Stuss zu sein
         c = ' ';
         (*this)++;
     }
@@ -636,10 +634,7 @@ oncemore:
                 REF_BOOKMARK,
                 0,
                 REF_CONTENT );
-//          pField = new SwGetExpField((SwGetExpFieldType*)
-//           rOut.GetSysFldType(RES_GETEXPFLD), sFormel, nsSwGetSetExpType::GSE_STRING);
-//           ,
-//           nsSwGetSetExpType::GSE_STRING, VVF_SYS);
+
         break;
         case 6: // set command
         {
@@ -854,10 +849,6 @@ oncemore:
                 break;
             aFName.SearchAndReplaceAscii( "\\\\", String( '\\' ));
 
-//          char* pBook = FindNextPara( pNext, 0 );     //!! Bookmark/Feld-Name
-//                                                      //!! erstmal nicht
-
-//          ConvertFFileName( aPara, pFName );          //!! WW1 ????
             aFName = URIHelper::SmartRel2Abs(
                 INetURLObject(rOut.GetBaseURL()), aFName );
 
@@ -890,9 +881,6 @@ oncemore:
             pField = new SwSetExpField((SwSetExpFieldType*)pFT, aStr );
             ((SwSetExpField*)pField)->SetInputFlag( TRUE );
             ((SwSetExpField*)pField)->SetSubType(nsSwExtendedSubType::SUB_INVISIBLE);
-//          pField.SetPromptText( aQ ); //!! fehlt noch
-//          aFld.SetPar2( aDef );       //!! dito
-            // das Ignorieren des Bookmarks ist nicht implementiert
         }
         case 39: // fillin command
             pField = new SwInputField(
@@ -963,9 +951,6 @@ oncemore:
         case 4: // index entry
         // wwpar5: 1351/1454
         case 5: // footnote ref
-//          pField = new SwGetRefField(
-//           (SwGetRefFieldType*)rDoc.GetSysFldType(RES_GETREFFLD),
-//           sFormel, REF_FOOTNOTE, 0, REF_BEGIN);
         case 7: // if command
         case 8: // create index
         // wwpar5: 1351/1454
@@ -1076,7 +1061,6 @@ void Ww1Pap::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
             aSprm.Stop(rOut, rMan);
         }else{
             DBG_ASSERT( !nPlcIndex || rMan.IsStopAll(), "Pap-Attribut-Stop verloren" );
-//          rMan.IsStopAll() ist nicht schoen.
         }
     }
 }
@@ -1455,7 +1439,6 @@ SvxFontItem Ww1Fonts::GetFont(USHORT nFCode)
 void Ww1Dop::Out(Ww1Shell& rOut)
 {
     //~ mdt: fehlt
-    // aDop.fWidowControlGet(); // keine Absatztrennung fuer einzelne Zeilen
     long nDefTabSiz = aDop.dxaTabGet();
     if (nDefTabSiz < 56)
         nDefTabSiz = 709;
@@ -1487,7 +1470,6 @@ void Ww1Dop::Out(Ww1Shell& rOut)
     case 2: aInfo.ePos = FTNPOS_PAGE; break;
     default: aInfo.ePos = FTNPOS_CHAPTER; break;
     }
-//  aInfo.eNum = ( rDOP.fFtnRestartGet() ) ? FTNNUM_CHAPTER : FTNNUM_DOC;
     // Da Sw unter Chapter anscheinend was anderes versteht als PMW
     // hier also immer Doc !
     aInfo.eNum = FTNNUM_DOC;
@@ -1640,12 +1622,7 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
 {
     const RES_POOL_COLLFMT_TYPE RES_NONE = RES_POOLCOLL_DOC_END;
     RES_POOL_COLLFMT_TYPE aType = RES_NONE;
-//              aType = RES_POOLCOLL_JAKETADRESS; break;
-//              aType = RES_POOLCOLL_LISTS_BEGIN; break;
-//              aType = RES_POOLCOLL_SENDADRESS; break;
-//              aType = RES_POOLCOLL_SIGNATURE; break;
-//              aType = RES_POOLCOLL_TEXT_NEGIDENT; break;
-//              aType = RES_POOLCOLL_TOX_IDXH; break;
+
     switch (stc)
     {
     case 222: // Null
@@ -1718,7 +1695,6 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
         aType = RES_POOLCOLL_TEXT_IDENT; break;
     case 0: // Normal
         aType = RES_POOLCOLL_STANDARD; break;
-//      aType = RES_POOLCOLL_TEXT; break;       // Das ist "textkoerper"
     }
     if (aType == RES_NONE)
         rOut.BeginStyle(stc, GetStyle(stc).GetName() );
@@ -1727,7 +1703,6 @@ void Ww1StyleSheet::OutOne(Ww1Shell& rOut, Ww1Manager& rMan, USHORT stc)
     OutDefaults(rOut, rMan, stc);
     GetStyle(stc).Out(rOut, rMan);
     rOut.EndStyle();
-//  rMan.SetInApo(FALSE);
 }
 // OutOneWithBase() liest einen Style mit OutOne() einen Style ein
 // Jedoch liest er, wenn noch nicht geschehen, den Basisstyle rekursiv ein
@@ -1794,8 +1769,8 @@ void Ww1Picture::WriteBmp(SvStream& rOut)
     USHORT padx = ((maxx + 7) / 8) * 8;
     USHORT maxy = pPic->mfp.yExtGet();
 
-    /*USHORT unknown1 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
-    /*USHORT unknown2 = SVBT16ToShort(p);*/ p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
+     p+= sizeof(SVBT16); nSize -= sizeof(SVBT16);
 #if OSL_DEBUG_LEVEL > 1
     USHORT x = SVBT16ToShort(p);
     (void) x;
@@ -1955,13 +1930,11 @@ void Ww1Picture::Out(Ww1Shell& rOut, Ww1Manager& /*rMan*/)
         String aDir( (sal_Char*)pPic->rgbGet(),
                 (USHORT)(pPic->lcbGet() - (sizeof(*pPic)-sizeof(pPic->rgb))),
                 RTL_TEXTENCODING_MS_1252 );
-        //SvFileStream aOut(aDir, STREAM_READ|STREAM_WRITE|STREAM_TRUNC);
+
         rOut.AddGraphic( aDir );
     }
     break;
     case 97: // embedded bitmap
-//  case 99: // SH: bei meinem BspDoc 41738.doc auch embedded Bitmap,
-             // aber leider anderes Format
     {
         ULONG nSiz = GuessPicSize(pPic);
         SvMemoryStream aOut(nSiz, 8192);
@@ -2045,9 +2018,7 @@ void Ww1HeaderFooter::Start(Ww1Shell& rOut, Ww1Manager& rMan)
 
 void Ww1HeaderFooter::Stop(Ww1Shell& rOut, Ww1Manager& rMan, sal_Unicode&)
 {
-    if (!rMan.Pushed() && eHeaderFooterMode != None
-//   && rMan.GetText().Where() >= rMan.GetText().Count()
-    )
+    if (!rMan.Pushed() && eHeaderFooterMode != None)
     {
         Start(rOut, rMan);
     }

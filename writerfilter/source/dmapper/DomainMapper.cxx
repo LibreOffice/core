@@ -4243,6 +4243,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->startElement("unhandled");
             dmapper_logger->attribute("id", nSprmId);
+            dmapper_logger->attribute("name", rSprm.getName());
             dmapper_logger->endElement("unhandled");
 #endif
         }
@@ -4313,7 +4314,7 @@ void DomainMapper::startParagraphGroup()
 
     m_pImpl->getTableManager().startParagraphGroup();
     m_pImpl->PushProperties(CONTEXT_PARAGRAPH);
-    static ::rtl::OUString sDefault( ::rtl::OUString::createFromAscii("Standard") );
+    static ::rtl::OUString sDefault(RTL_CONSTASCII_USTRINGPARAM("Standard") );
     if (m_pImpl->GetTopContext())
     {
         m_pImpl->GetTopContext()->Insert( PROP_PARA_STYLE_NAME, true, uno::makeAny( sDefault ) );

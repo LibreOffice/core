@@ -157,9 +157,6 @@ void SfxPreviewWin_Impl::ImpPaint(
         pWindow->SetLineColor( aBlackCol );
         pWindow->SetFillColor( aWhiteCol );
         pWindow->DrawRect( Rectangle( aPoint + Point( FRAME, FRAME ), bPoint + Point( FRAME, FRAME ) ) );
-//!     pFile->Move( Point( FRAME, FRAME ) );
-//!     pFile->Scale( Fraction( aTmpSize.Width(), aSize.Width() ),
-//!                   Fraction( aTmpSize.Height(), aSize.Height() ) );
         pFile->WindStart();
         pFile->Play( pWindow, aPoint + Point( FRAME, FRAME ), aSize  );
     }
@@ -177,8 +174,7 @@ SfxPreviewWin::SfxPreviewWin(
     SetHelpId( HID_PREVIEW_FRAME );
 
     // adjust contrast mode initially
-    bool bUseContrast = UseHighContrastSetting();
-    SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+    SetDrawMode( OUTPUT_DRAWMODE_COLOR );
 
     // #107818# This preview window is for document previews.  Therefore
     // right-to-left mode should be off
@@ -219,17 +215,9 @@ void SfxPreviewWin::DataChanged( const DataChangedEvent& rDCEvt )
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        // adjust contrast mode
-        bool bUseContrast = UseHighContrastSetting();
-        SetDrawMode( bUseContrast ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
+        SetDrawMode( OUTPUT_DRAWMODE_COLOR );
     }
 }
-
-bool SfxPreviewWin::UseHighContrastSetting() const
-{
-    return GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
 
 class SfxNewFileDialog_Impl
 {

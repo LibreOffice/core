@@ -203,8 +203,8 @@ bool ParseURL(
         xSMgr = ::comphelper::getProcessServiceFactory();
 
     Reference< com::sun::star::uri::XUriReferenceFactory >
-        xFactory( xSMgr->createInstance( OUString::createFromAscii(
-            "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        xFactory( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.uri.UriReferenceFactory" )) ), UNO_QUERY );
 
     if ( xFactory.is() )
     {
@@ -306,7 +306,7 @@ void XMLEventOASISTransformerContext::StartElement(
                             GetXMLToken( XML_LANGUAGE ) ) );
 
                         pMutableAttrList->SetValueByIndex( idx,
-                            OUString::createFromAscii("StarBasic") );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                         OUString aLocQName(
                             GetTransformer().GetNamespaceMap().GetQNameByKey(
@@ -358,7 +358,7 @@ void XMLEventOASISTransformerContext::StartElement(
                     GetXMLToken( XML_LANGUAGE ) ) );
 
                     pMutableAttrList->SetValueByIndex( idx,
-                    OUString::createFromAscii("StarBasic") );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarBasic")) );
 
                     OUString aLocQName(
                     GetTransformer().GetNamespaceMap().GetQNameByKey(

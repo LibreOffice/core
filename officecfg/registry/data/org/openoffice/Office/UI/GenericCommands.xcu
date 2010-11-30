@@ -4145,7 +4145,7 @@
                     <value xml:lang="en-US">License Information...</value>
                 </prop>
             </node>
-            <node oor:name=".uno:Credits" oor:op="replace">
+            <node oor:name=".uno:ShowCredits" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">%PRODUCTNAME Credits...</value>
                 </prop>

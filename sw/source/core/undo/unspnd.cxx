@@ -59,7 +59,7 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         bTblFlag( FALSE ), bChkTblStt( bChkTable )
 {
     SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "nur beim TextNode rufen!" );
+    OSL_ENSURE( pTxtNd, "nur beim TextNode rufen!" );
     if( pTxtNd->GetpSwpHints() )
     {
         pHistory = new SwHistory;

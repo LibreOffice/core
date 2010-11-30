@@ -51,18 +51,19 @@ namespace framework
 class AddonMenu : public PopupMenu
 {
     public:
-                        AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
-                        ~AddonMenu();
+        AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        ~AddonMenu();
 
     protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 };
 
 class AddonMenuManager;
+
 class AddonPopupMenu : public AddonMenu
 {
     public:
-                                ~AddonPopupMenu();
+        ~AddonPopupMenu();
 
         // Check if command URL string has the unique prefix to identify addon popup menus
         static sal_Bool         IsCommandURLPrefix( const rtl::OUString& aCmdURL );
@@ -71,12 +72,12 @@ class AddonPopupMenu : public AddonMenu
         const rtl::OUString&    GetCommandURL() const { return m_aCommandURL; }
 
     protected:
-        void                    Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
+        void Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
 
     private:
-                                AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+        AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
-    rtl::OUString               m_aCommandURL;
+        rtl::OUString               m_aCommandURL;
 
     friend class AddonMenuManager;
 };

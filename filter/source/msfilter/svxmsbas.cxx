@@ -135,7 +135,7 @@ bool SvxImportMSVBasic::ImportForms_Impl(const String& rStorageName,
        // hacky test code to read referenced projects on linux
        sal_Int32 nPos = (*it).lastIndexOf('\\');
        sFileName = (*it).copy( nPos + 1 );
-       sFileName =  rtl::OUString::createFromAscii("~/Documents/") + sFileName;
+       sFileName =  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "~/Documents/" )) + sFileName;
 #endif
 #endif
        SotStorageRef rRoot = new SotStorage( sFileName, STREAM_STD_READWRITE, STORAGE_TRANSACTED );
@@ -518,7 +518,7 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( VBA_Impl& aVBA, const std::vector< Stri
                 }
                 if (bAsComment)
                 {
-                        aSource += rtl::OUString::createFromAscii("\nEnd Sub");
+                        aSource += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\nEnd Sub" ));
                 }
                 ::rtl::OUString aModName( sModule );
                 aSource = modeTypeComment + aSource;

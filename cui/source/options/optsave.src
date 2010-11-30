@@ -228,14 +228,6 @@ TabPage RID_SFXPAGE_SAVE
         };
         MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
     };
-    Image IMG_ODF_WARNING_HC
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "odfwarning_h.png";
-        };
-        MaskColor = Color { Red=0xffff; Green=0x0000; Blue=0xffff; };
-    };
 };
 
 ModalDialog RID_SVXDLG_FILTER_WARNING

@@ -107,7 +107,6 @@ static E3dObjFactory* pF3d = NULL;
 static USHORT nInst = 0;
 
 SfxObjectShell* ScDrawLayer::pGlobalDrawPersist = NULL;
-//REMOVE    SvPersist* ScDrawLayer::pGlobalDrawPersist = NULL;
 
 BOOL bDrawIsInUndo = FALSE;         //! Member
 
@@ -2042,29 +2041,11 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
                 }
             }
         }
-        // the following code seems to be related to binary format
-//REMOVE            else
-//REMOVE            {
-//REMOVE                pRet = pStor->OpenStream( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(STRING_SCSTREAM)),
-//REMOVE                                          STREAM_READ | STREAM_WRITE | STREAM_TRUNC );
-//REMOVE
-//REMOVE                if( pRet )
-//REMOVE                {
-//REMOVE                    pRet->SetVersion( pStor->GetVersion() );
-//REMOVE                    pRet->SetKey( pStor->GetKey() );
-//REMOVE                }
-//REMOVE            }
-
         rStreamInfo.mbDeleteAfterUse = ( pRet != NULL );
     }
 
     return pRet;
 }
-
-//REMOVE    void ScDrawLayer::ReleasePictureStorage()
-//REMOVE    {
-//REMOVE        xPictureStorage.Clear();
-//REMOVE    }
 
 SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {

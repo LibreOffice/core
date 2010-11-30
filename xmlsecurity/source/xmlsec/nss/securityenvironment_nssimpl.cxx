@@ -99,7 +99,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
     if ( xMSF.is() )
     {
         uno::Reference < task::XInteractionHandler > xInteractionHandler(
-            xMSF->createInstance( rtl::OUString::createFromAscii("com.sun.star.task.InteractionHandler") ), uno::UNO_QUERY );
+            xMSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.task.InteractionHandler")) ), uno::UNO_QUERY );
 
         if ( xInteractionHandler.is() )
         {
@@ -191,12 +191,12 @@ Sequence< OUString > SAL_CALL SecurityEnvironment_NssImpl :: getSupportedService
 Sequence< OUString > SecurityEnvironment_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.SecurityEnvironment" ) ;
+    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.SecurityEnvironment")) ;
     return seqServiceNames ;
 }
 
 OUString SecurityEnvironment_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl" ) ;
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_NssImpl")) ;
 }
 
 //Helper for registry
@@ -576,55 +576,14 @@ Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const O
         if( arena == NULL )
             throw RuntimeException() ;
 
-                /*
-                 * mmi : because MS Crypto use the 'S' tag (equal to the 'ST' tag in NSS), but the NSS can't recognise
-                 *      it, so the 'S' tag should be changed to 'ST' tag
-                 *
-                 * PS  : it can work, but inside libxmlsec, the 'S' tag is till used to find cert in NSS engine, so it
-                 *       is not useful at all. (comment out now)
-                 */
-
-                /*
-                sal_Int32 nIndex = 0;
-                OUString newIssuerName;
-                do
-                {
-                    OUString aToken = issuerName.getToken( 0, ',', nIndex ).trim();
-                    if (aToken.compareToAscii("S=",2) == 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii("ST=");
-                        newIssuerName+=aToken.copy(2);
-                    }
-                    else
-                    {
-                        newIssuerName+=aToken;
-                    }
-
-                    if (nIndex >= 0)
-                    {
-                        newIssuerName+=OUString::createFromAscii(",");
-                    }
-                } while ( nIndex >= 0 );
-                */
-
-                /* end */
-
-        //Create cert info from issue and serial
+        // Create cert info from issue and serial
         rtl::OString ostr = rtl::OUStringToOString( issuerName , RTL_TEXTENCODING_UTF8 ) ;
         chIssuer = PL_strndup( ( char* )ostr.getStr(), ( int )ostr.getLength() ) ;
         nmIssuer = CERT_AsciiToName( chIssuer ) ;
         if( nmIssuer == NULL ) {
             PL_strfree( chIssuer ) ;
             PORT_FreeArena( arena, PR_FALSE ) ;
-
-            /*
-             * i40394
-             *
-             * mmi : no need to throw exception
-             *       just return "no found"
-             */
-            //throw RuntimeException() ;
-            return NULL;
+            return NULL; // no need for exception cf. i40394
         }
 
         derIssuer = SEC_ASN1EncodeItem( arena, NULL, ( void* )nmIssuer, SEC_ASN1_GET( CERT_NameTemplate ) ) ;

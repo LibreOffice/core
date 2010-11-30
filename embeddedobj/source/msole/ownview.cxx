@@ -126,35 +126,35 @@ sal_Bool OwnView_Impl::CreateModelFromURL( const ::rtl::OUString& aFileURL )
         try {
             uno::Reference < frame::XComponentLoader > xDocumentLoader(
                             m_xFactory->createInstance (
-                                        ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
+                                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) )),
                             uno::UNO_QUERY );
 
             if ( xDocumentLoader.is() )
             {
                 uno::Sequence< beans::PropertyValue > aArgs( m_aFilterName.getLength() ? 5 : 4 );
 
-                aArgs[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "URL" ));
                 aArgs[0].Value <<= aFileURL;
 
-                aArgs[1].Name = ::rtl::OUString::createFromAscii( "ReadOnly" );
+                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ));
                 aArgs[1].Value <<= sal_True;
 
-                aArgs[2].Name = ::rtl::OUString::createFromAscii( "InteractionHandler" );
+                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ));
                 aArgs[2].Value <<= uno::Reference< task::XInteractionHandler >(
                                     static_cast< ::cppu::OWeakObject* >( new DummyHandler_Impl() ), uno::UNO_QUERY );
 
-                aArgs[3].Name = ::rtl::OUString::createFromAscii( "DontEdit" );
+                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "DontEdit" ));
                 aArgs[3].Value <<= sal_True;
 
                 if ( m_aFilterName.getLength() )
                 {
-                    aArgs[4].Name = ::rtl::OUString::createFromAscii( "FilterName" );
+                    aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
                     aArgs[4].Value <<= m_aFilterName;
                 }
 
                 uno::Reference< frame::XModel > xModel( xDocumentLoader->loadComponentFromURL(
                                                                 aFileURL,
-                                                                ::rtl::OUString::createFromAscii( "_blank" ),
+                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )),
                                                                 0,
                                                                 aArgs ),
                                                             uno::UNO_QUERY );
@@ -214,7 +214,7 @@ sal_Bool OwnView_Impl::CreateModel( sal_Bool bUseNative )
         throw uno::RuntimeException();
 
     uno::Reference< document::XTypeDetection > xTypeDetection(
-            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+            xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.TypeDetection" ) )),
             uno::UNO_QUERY_THROW );
 
     ::rtl::OUString aTypeName;
@@ -276,7 +276,7 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
     // create m_aNativeTempURL
     ::rtl::OUString aNativeTempURL;
     uno::Reference < beans::XPropertySet > xNativeTempFile(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+            m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.io.TempFile" ) )),
             uno::UNO_QUERY_THROW );
     uno::Reference < io::XStream > xNativeTempStream( xNativeTempFile, uno::UNO_QUERY_THROW );
     uno::Reference < io::XOutputStream > xNativeOutTemp = xNativeTempStream->getOutputStream();
@@ -285,8 +285,8 @@ sal_Bool OwnView_Impl::ReadContentsAndGenerateTempFile( const uno::Reference< io
         throw uno::RuntimeException();
 
     try {
-        xNativeTempFile->setPropertyValue( ::rtl::OUString::createFromAscii( "RemoveFile" ), uno::makeAny( sal_False ) );
-        uno::Any aUrl = xNativeTempFile->getPropertyValue( ::rtl::OUString::createFromAscii( "Uri" ) );
+        xNativeTempFile->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "RemoveFile" )), uno::makeAny( sal_False ) );
+        uno::Any aUrl = xNativeTempFile->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Uri" ) ));
         aUrl >>= aNativeTempURL;
     }
     catch ( uno::Exception& )
@@ -430,7 +430,7 @@ void OwnView_Impl::CreateNative()
     {
         uno::Reference < ucb::XSimpleFileAccess > xAccess(
                 m_xFactory->createInstance (
-                        ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" ) )),
                 uno::UNO_QUERY_THROW );
 
         uno::Reference< io::XInputStream > xInStream = xAccess->openFileRead( m_aTempFileURL );
@@ -441,11 +441,11 @@ void OwnView_Impl::CreateNative()
         aArgs[0] <<= xInStream;
         uno::Reference< container::XNameAccess > xNameAccess(
                 m_xFactory->createInstanceWithArguments(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.embed.OLESimpleStorage" ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.OLESimpleStorage" )),
                         aArgs ),
                 uno::UNO_QUERY_THROW );
 
-        ::rtl::OUString aSubStreamName = ::rtl::OUString::createFromAscii( "\1Ole10Native" );
+        ::rtl::OUString aSubStreamName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\1Ole10Native" ));
         uno::Reference< embed::XClassifiedObject > xStor( xNameAccess, uno::UNO_QUERY_THROW );
         uno::Sequence< sal_Int8 > aStorClassID = xStor->getClassID();
 

@@ -46,8 +46,6 @@ namespace rptui
         OSectionWindow*             m_pParent;
         static Image*               s_pDefCollapsed;
         static Image*               s_pDefExpanded;
-        static Image*               s_pDefCollapsedHC;
-        static Image*               s_pDefExpandedHC;
         static oslInterlockedCount  s_nImageRefCount; /// When 0 all static images will be destroyed
 
         sal_Bool                    m_bShowRuler;

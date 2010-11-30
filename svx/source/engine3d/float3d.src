@@ -965,16 +965,6 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ en-US ] = "Textures" ;
     };
      // Material
-    /*  Control CTL_MATERIAL
-  {
-      //HelpId = HID_SD_CTL_FAVORITES ;
-      Border = TRUE ;
-      Pos = MAP_APPFONT ( BORDER + 6 , GROUP_Y + 9 ) ;
-      Size = MAP_APPFONT ( GROUP_WIDTH - 12 , GROUP_HEIGHT - 15 ) ;
-      TabStop = TRUE ;
-      Hide = TRUE ;
-  };
-*/
      // Materialeditor
     FixedText FT_MAT_FAVORITES
     {
@@ -1112,30 +1102,6 @@ DockingWindow RID_SVXFLOAT_3D
         Last = 100 ;
         SpinSize = 1 ;
     };
-    /*
-    ImageButton BTN_MAT_FAVORITES {
-        Pos = MAP_APPFONT( BORDER, GROUP_PREV_Y+1 );
-        Size = IMG_BUTTON_SIZE;
-      QuickHelpText = "Material Favoriten" ;
-      ButtonImage = Image
-      {
-          ImageBitmap = Bitmap { File = "matfavor.bmp" ; };
-          MASKCOLOR
-      };
-            TabStop = TRUE;
-        };
-    ImageButton BTN_MAT_EDITOR {
-            Pos = MAP_APPFONT( BORDER + BUTTON_WIDTH, GROUP_PREV_Y+1 );
-            Size = IMG_BUTTON_SIZE;
-      QuickHelpText = "Material Editor" ;
-      ButtonImage = Image
-      {
-          ImageBitmap = Bitmap { File = "matedit.bmp" ; };
-          MASKCOLOR
-      };
-            TabStop = TRUE;
-        };
-*/
     FixedLine FL_MATERIAL
     {
         Pos = TOP_FIXED_LINE_POS;
@@ -1143,155 +1109,6 @@ DockingWindow RID_SVXFLOAT_3D
         Text [ en-US ] = "Material" ;
     };
 
-    Bitmap BMP_GEO_H
-    {
-        File = "3dgeo_h.bmp";
-    };
-
-    Bitmap BMP_REPRESENTATION_H
-    {
-        File = "3drepres_h.bmp";
-    };
-
-    Bitmap BMP_3DLIGHT_H
-    {
-        File = "3dlight_h.bmp";
-    };
-
-    Bitmap BMP_TEXTURE_H
-    {
-        File = "3dtextur_h.bmp";
-    };
-
-    Bitmap BMP_MATERIAL_H
-    {
-        File = "material_h.bmp";
-    };
-
-    Bitmap BMP_UPDATE_H
-    {
-        File = "sc10350_h.bmp";
-    };
-
-    Bitmap BMP_ASSIGN_H
-    {
-        File = "apply_h.bmp";
-    };
-
-    Bitmap BMP_CHANGE_TO_3D_H
-    {
-        File = "convrt3d_h.bmp";
-    };
-
-    Bitmap BMP_LATHE_OBJ_H
-    {
-        File = "rotate3d_h.bmp";
-    };
-
-    Bitmap BMP_PERSPECTIVE_H
-    {
-        File = "persp3d_h.bmp";
-    };
-
-    Bitmap BMP_NORMALS_OBJ_H
-    {
-        File = "normobjs_h.bmp";
-    };
-
-    Bitmap BMP_NORMALS_FLAT_H
-    {
-        File = "normflat_h.bmp";
-    };
-
-    Bitmap BMP_NORMALS_SPHERE_H
-    {
-        File = "normsphe_h.bmp";
-    };
-
-    Bitmap BMP_NORMALS_INVERT_H
-    {
-        File = "invert3d_h.bmp";
-    };
-
-    Bitmap BMP_TWO_SIDED_LIGHTING_H
-    {
-        File = "lght2sid_h.bmp";
-    };
-
-    Bitmap BMP_DOUBLE_SIDED_H
-    {
-        File = "doublesi_h.bmp";
-    };
-
-    Bitmap BMP_SHADOW_3D_H
-    {
-        File = "shadow3d_h.bmp";
-    };
-
-    Bitmap BMP_LIGHT_H
-    {
-        File = "light_h.bmp";
-    };
-
-    Bitmap BMP_LIGHT_COLOR_H
-    {
-        File = "colordlg_h.bmp";
-    };
-
-    Bitmap BMP_AMBIENT_COLOR_H
-    {
-        File = "colordlg_h.bmp";
-    };
-
-    Bitmap BMP_TEX_LUMINANCE_H
-    {
-        File = "luminanc_h.bmp";
-    };
-
-    Bitmap BMP_TEX_COLOR_H
-    {
-        File = "color_h.bmp";
-    };
-
-    Bitmap BMP_TEX_REPLACE_H
-    {
-        File = "replac3d_h.bmp";
-    };
-
-    Bitmap BMP_TEX_MODULATE_H
-    {
-        File = "modula3d_h.bmp";
-    };
-
-    Bitmap BMP_TEX_BLEND_H
-    {
-        File = "blend3d_h.bmp";
-    };
-
-    Bitmap BMP_TEX_OBJECT_H
-    {
-        File = "objspc3d_h.bmp";
-    };
-
-    Bitmap BMP_TEX_PARALLEL_H
-    {
-        File = "parallel_h.bmp";
-    };
-
-    Bitmap BMP_TEX_CIRCLE_H
-    {
-        File = "sphere3d_h.bmp";
-    };
-
-    Bitmap BMP_TEX_FILTER_H
-    {
-        File = "filter3d_h.bmp";
-    };
-
-    Bitmap BMP_COLORDLG_H
-    {
-        File = "colordlg_h.bmp";
-    };
 };
 
 Image RID_SVXIMAGE_LIGHT_ON
@@ -1306,115 +1123,43 @@ Image RID_SVXIMAGE_LIGHT_OFF
     MASKCOLOR
 };
 
-Image RID_SVXIMAGE_LIGHT_ON_H
-{
-    ImageBitmap = Bitmap { File = "lighton_h.bmp" ; };
-    MASKCOLOR
-};
-
-Image RID_SVXIMAGE_LIGHT_OFF_H
-{
-    ImageBitmap = Bitmap { File = "light_h.bmp" ; };
-    MASKCOLOR
-};
-
 Image RID_SVXIMAGE_COLORDLG
 {
     ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
     MASKCOLOR
 };
 
-Image RID_SVXIMAGE_COLORDLG_H
-{
-    ImageBitmap = Bitmap { File = "colordlg_h.bmp" ; };
-    MASKCOLOR
-};
-
-/*Image RID_SVXIMAGE_LIGHT_ON_SELECTED {
-      ImageBitmap = Bitmap { File = "lightons.bmp" ; };
-      MASKCOLOR
-};
-Image RID_SVXIMAGE_LIGHT_OFF_SELECTED {
-      ImageBitmap = Bitmap { File = "lightsel.bmp" ; };
-      MASKCOLOR
-};*/
-
 String RID_SVXFLOAT3D_FAVORITE
 {
     Text [ en-US ] = "Favorite";
 };
+
 String RID_SVXFLOAT3D_FIX_X
 {
     Text [ en-US ] = "X";
 };
+
 String RID_SVXFLOAT3D_FIX_Y
 {
     Text [ en-US ] = "Y";
 };
+
 String RID_SVXFLOAT3D_FIX_Z
 {
     Text [ en-US ] = "Z";
 };
+
 String RID_SVXFLOAT3D_FIX_R
 {
     Text [ en-US ] = "R:";
 };
+
 String RID_SVXFLOAT3D_FIX_G
 {
     Text [ en-US ] = "G:";
 };
+
 String RID_SVXFLOAT3D_FIX_B
 {
     Text [ en-US ] = "B:";
-
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

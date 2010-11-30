@@ -38,9 +38,13 @@ extern const sal_Char __FAR_DATA szServiceName_PopupMenu[], szServiceName2_Popup
 extern const sal_Char __FAR_DATA szServiceName_MenuBar[], szServiceName2_MenuBar[];
 extern const sal_Char __FAR_DATA szServiceName_Pointer[], szServiceName2_Pointer[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlContainer[], szServiceName2_UnoControlContainer[];
+extern const sal_Char __FAR_DATA szServiceName_UnoControlContainerModel[], szServiceName2_UnoControlContainerModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoMultiPageControl[], szServiceName2_UnoMultiPageControl[];
 extern const sal_Char __FAR_DATA szServiceName_UnoMultiPageModel[], szServiceName2_UnoMultiPageModel[];
-extern const sal_Char __FAR_DATA szServiceName_UnoControlContainerModel[], szServiceName2_UnoControlContainerModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoPageControl[], szServiceName2_UnoPageControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoPageModel[], szServiceName2_UnoPageModel[];
+extern const sal_Char __FAR_DATA szServiceName_UnoFrameControl[], szServiceName2_UnoFrameControl[];
+extern const sal_Char __FAR_DATA szServiceName_UnoFrameModel[], szServiceName2_UnoFrameModel[];
 extern const sal_Char __FAR_DATA szServiceName_TabController[], szServiceName2_TabController[];
 extern const sal_Char __FAR_DATA szServiceName_TabControllerModel[], szServiceName2_TabControllerModel[];
 extern const sal_Char __FAR_DATA szServiceName_UnoControlDialog[], szServiceName2_UnoControlDialog[];

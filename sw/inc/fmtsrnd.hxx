@@ -33,10 +33,7 @@
 #include <format.hxx>
 #include <svl/eitem.hxx>
 
-// --> OD 2006-08-15 #i68520# - refactoring
-// separate enumeration <SwSurround> in own header file
 #include <fmtsrndenum.hxx>
-// <--
 class IntlWrapper;
 
 //SwFmtSurround, wie soll sich der ---------------
@@ -52,7 +49,7 @@ public:
     SwFmtSurround( const SwFmtSurround & );
     inline SwFmtSurround &operator=( const SwFmtSurround &rCpy );
 
-    // "pure virtual Methoden" vom SfxPoolItem
+    // "pure virtual Methods" of SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual USHORT          GetValueCount() const;

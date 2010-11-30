@@ -300,16 +300,10 @@ OUString LinguOptions::GetName( INT32 nWID )
     OUString aRes;
 
     INT32 nLen = SAL_N_ELEMENTS( aWID_Name );
-    if (0 <= nWID  &&  nWID < nLen
-        && aWID_Name[ nWID ].nWID == nWID)
-    {
-        aRes = OUString( RTL_CONSTASCII_USTRINGPARAM(
-                aWID_Name[ nWID ].pPropertyName ) );
-    }
+    if (0 <= nWID && nWID < nLen && aWID_Name[ nWID ].nWID == nWID)
+        aRes = OUString::createFromAscii(aWID_Name[nWID].pPropertyName);
     else
-    {
-        DBG_ASSERT( 0,"lng : unknown WID");
-    }
+        OSL_ENSURE(false, "lng : unknown WID");
 
     return aRes;
 }

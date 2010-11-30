@@ -235,26 +235,26 @@ void TitleBarUpdate::impl_updateApplicationID(const css::uno::Reference< css::fr
              aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) ||
              aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) ||
              aModuleId.equalsAscii( "com.sun.star.xforms.XMLFormDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("writer");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("writer"));
         else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("calc");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("calc"));
         else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("impress");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("impress"));
         else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("draw");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("draw"));
         else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("math");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("math"));
         else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) ||
                   aModuleId.equalsAscii( "com.sun.star.sdb.OfficeDatabaseDocument" ) ||
                   aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) ||
                   aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) ||
                   aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) ||
                   aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("base");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("base"));
         else if ( aModuleId.equalsAscii( "com.sun.star.frame.StartModule" ) )
-            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         else
-            sDesktopName = ::rtl::OUString::createFromAscii("startcenter");
+            sDesktopName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("startcenter"));
         sApplicationID = aProductName.toAsciiLowerCase();
         sApplicationID += ::rtl::OUString(sal_Unicode('-'));
         sApplicationID += sDesktopName;

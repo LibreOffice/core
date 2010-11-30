@@ -27,7 +27,7 @@
  ************************************************************************/
 #define invert50_width 32
 #define invert50_height 32
-static char invert50_bits[] = {
+static unsigned char invert50_bits[] = {
 #if 1
    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,
    0xAA, 0xAA, 0xAA, 0xAA, 0x55, 0x55, 0x55, 0x55,

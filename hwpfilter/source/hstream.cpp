@@ -70,7 +70,7 @@ int HStream::skipBytes(int aToSkip)
 }
 
 
-int HStream::available()
+int HStream::available() const
 {
     return size - pos;
 }

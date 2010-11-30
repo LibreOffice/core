@@ -234,9 +234,9 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
 
 void DialogWindow::Command( const CommandEvent& rCEvt )
 {
-    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL ) ||
-            ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
-            ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL ) )
+    if ( ( rCEvt.GetCommand() == COMMAND_WHEEL           ) ||
+         ( rCEvt.GetCommand() == COMMAND_STARTAUTOSCROLL ) ||
+         ( rCEvt.GetCommand() == COMMAND_AUTOSCROLL      ) )
     {
         HandleScrollCommand( rCEvt, GetHScrollBar(), GetVScrollBar() );
     }
@@ -272,17 +272,6 @@ void DialogWindow::Command( const CommandEvent& rCEvt )
 IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 {
     (void)pUndoAction;
-
-    // not working yet for unocontrols
-    /*
-    if (pUndoAction)
-    {
-        pUndoMgr->AddUndoAction( pUndoAction );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_UNDO );
-    }
-    */
 
     return 0;
 }
@@ -682,8 +671,7 @@ void DialogWindow::UpdateBrowser()
         ((PropBrw*)(pChildWin->GetWindow()))->Update( pIDEShell );
 }
 
-static ::rtl::OUString aResourceResolverPropName =
-    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
 
 BOOL DialogWindow::SaveDialog()
 {
@@ -732,7 +720,7 @@ BOOL DialogWindow::SaveDialog()
         Reference< XInputStream > xInput( xISP->createInputStream() );
 
         Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-            ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
 
         Reference< XOutputStream > xOutput;
         try
@@ -790,9 +778,9 @@ BOOL DialogWindow::SaveDialog()
                 aURLObj.removeSegment();
                 ::rtl::OUString aURL( aURLObj.GetMainURL( INetURLObject::NO_DECODE ) );
                 sal_Bool bReadOnly = sal_False;
-                ::rtl::OUString aComment( ::rtl::OUString::createFromAscii( "# " ) );
+                ::rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "# " ));
                 aComment += aDialogName;
-                aComment += ::rtl::OUString::createFromAscii( " strings" );
+                aComment += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " strings" ));
                 Reference< task::XInteractionHandler > xDummyHandler;
 
                 // Remove old properties files in case of overwriting Dialog files
@@ -801,7 +789,7 @@ BOOL DialogWindow::SaveDialog()
                     Sequence< ::rtl::OUString > aContentSeq = xSFI->getFolderContents( aURL, false );
 
                     ::rtl::OUString aDialogName_( aDialogName );
-                    aDialogName_ += ::rtl::OUString::createFromAscii( "_" );
+                    aDialogName_ += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_" ));
                     sal_Int32 nCount = aContentSeq.getLength();
                     const ::rtl::OUString* pFiles = aContentSeq.getConstArray();
                     for( int i = 0 ; i < nCount ; i++ )
@@ -922,8 +910,7 @@ NameClashQueryBox::NameClashQueryBox( Window* pParent,
     AddButton( String( IDEResId( RID_STR_DLGIMP_CLASH_REPLACE ) ), RET_NO, 0 );
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 
@@ -948,8 +935,7 @@ LanguageMismatchQueryBox::LanguageMismatchQueryBox( Window* pParent,
     AddButton( BUTTON_CANCEL, RET_CANCEL, BUTTONDIALOG_CANCELBUTTON );
     AddButton( BUTTON_HELP, BUTTONID_HELP, BUTTONDIALOG_HELPBUTTON, 4 );
 
-    SetImage( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-        QueryBox::GetStandardImageHC() : QueryBox::GetStandardImage() );
+    SetImage( QueryBox::GetStandardImage() );
 }
 
 BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocument& rDocument, const String& aLibName )
@@ -1000,7 +986,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
                 ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.UnoControlDialogModel" ) ) ), UNO_QUERY_THROW );
 
             Reference< XSimpleFileAccess > xSFI( xMSF->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY_THROW );
+                ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY_THROW );
 
             Reference< XInputStream > xInput;
             if( xSFI->exists( aCurPath ) )
@@ -1044,7 +1030,7 @@ BOOL implImportDialog( Window* pWin, const String& rCurPath, const ScriptDocumen
             if( bDialogAlreadyExists )
             {
                 String aQueryBoxTitle( IDEResId( RID_STR_DLGIMP_CLASH_TITLE ) );
-                String aQueryBoxText( IDEResId( RID_STR_DLGIMP_CLASH_TEXT ) );
+                String aQueryBoxText(  IDEResId( RID_STR_DLGIMP_CLASH_TEXT  ) );
                 aQueryBoxText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "$(ARG1)" ) ), aXmlDlgName );
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );

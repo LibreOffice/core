@@ -34,32 +34,19 @@
 
 using namespace webdav_ucp;
 
-const ::rtl::OUString DAVProperties::CREATIONDATE =
-                ::rtl::OUString::createFromAscii( "DAV:creationdate" );
-const ::rtl::OUString DAVProperties::DISPLAYNAME =
-                ::rtl::OUString::createFromAscii( "DAV:displayname" );
-const ::rtl::OUString DAVProperties::GETCONTENTLANGUAGE =
-                ::rtl::OUString::createFromAscii( "DAV:getcontentlanguage" );
-const ::rtl::OUString DAVProperties::GETCONTENTLENGTH =
-                ::rtl::OUString::createFromAscii( "DAV:getcontentlength" );
-const ::rtl::OUString DAVProperties::GETCONTENTTYPE =
-                ::rtl::OUString::createFromAscii( "DAV:getcontenttype" );
-const ::rtl::OUString DAVProperties::GETETAG =
-                ::rtl::OUString::createFromAscii( "DAV:getetag" );
-const ::rtl::OUString DAVProperties::GETLASTMODIFIED =
-                ::rtl::OUString::createFromAscii( "DAV:getlastmodified" );
-const ::rtl::OUString DAVProperties::LOCKDISCOVERY =
-                ::rtl::OUString::createFromAscii( "DAV:lockdiscovery" );
-const ::rtl::OUString DAVProperties::RESOURCETYPE =
-                ::rtl::OUString::createFromAscii( "DAV:resourcetype" );
-const ::rtl::OUString DAVProperties::SOURCE =
-                ::rtl::OUString::createFromAscii( "DAV:source" );
-const ::rtl::OUString DAVProperties::SUPPORTEDLOCK =
-                ::rtl::OUString::createFromAscii( "DAV:supportedlock" );
+const ::rtl::OUString DAVProperties::CREATIONDATE(RTL_CONSTASCII_USTRINGPARAM("DAV:creationdate"));
+const ::rtl::OUString DAVProperties::DISPLAYNAME(RTL_CONSTASCII_USTRINGPARAM("DAV:displayname"));
+const ::rtl::OUString DAVProperties::GETCONTENTLANGUAGE(RTL_CONSTASCII_USTRINGPARAM("DAV:getcontentlanguage"));
+const ::rtl::OUString DAVProperties::GETCONTENTLENGTH(RTL_CONSTASCII_USTRINGPARAM("DAV:getcontentlength"));
+const ::rtl::OUString DAVProperties::GETCONTENTTYPE(RTL_CONSTASCII_USTRINGPARAM("DAV:getcontenttype"));
+const ::rtl::OUString DAVProperties::GETETAG(RTL_CONSTASCII_USTRINGPARAM("DAV:getetag"));
+const ::rtl::OUString DAVProperties::GETLASTMODIFIED(RTL_CONSTASCII_USTRINGPARAM("DAV:getlastmodified"));
+const ::rtl::OUString DAVProperties::LOCKDISCOVERY(RTL_CONSTASCII_USTRINGPARAM("DAV:lockdiscovery"));
+const ::rtl::OUString DAVProperties::RESOURCETYPE(RTL_CONSTASCII_USTRINGPARAM("DAV:resourcetype"));
+const ::rtl::OUString DAVProperties::SOURCE(RTL_CONSTASCII_USTRINGPARAM("DAV:source"));
+const ::rtl::OUString DAVProperties::SUPPORTEDLOCK(RTL_CONSTASCII_USTRINGPARAM("DAV:supportedlock"));
 
-const ::rtl::OUString DAVProperties::EXECUTABLE =
-                ::rtl::OUString::createFromAscii(
-                                "http://apache.org/dav/props/executable" );
+const ::rtl::OUString DAVProperties::EXECUTABLE(RTL_CONSTASCII_USTRINGPARAM("http://apache.org/dav/props/executable"));
 
 // -------------------------------------------------------------------
 // static
@@ -181,11 +168,11 @@ void DAVProperties::createUCBPropName( const char * nspace,
     else
     {
         // Create property name that encodes, namespace and name ( XML ).
-        rFullName  = rtl::OUString::createFromAscii( "<prop:" );
+        rFullName  = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<prop:"));
         rFullName += aName;
-        rFullName += rtl::OUString::createFromAscii( " xmlns:prop=\"" );
+        rFullName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " xmlns:prop=\"" ));
         rFullName += aNameSpace;
-        rFullName += rtl::OUString::createFromAscii( "\">" );
+        rFullName += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\">" ));
     }
 }
 

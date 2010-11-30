@@ -101,7 +101,7 @@ const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
 // -----------------------------------------------------------------------------
 ::rtl::OUString OConnection::getDriverImplementationName()
 {
-    return rtl::OUString::createFromAscii(MOZAB_DRIVER_IMPL_NAME);
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(MOZAB_DRIVER_IMPL_NAME));
 }
 
 // -----------------------------------------------------------------------------

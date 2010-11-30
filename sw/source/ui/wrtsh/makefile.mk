@@ -43,18 +43,17 @@ SRC1FILES =  \
         wrtsh.src
 
 SLOFILES =  \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES = \
+        $(SLO)$/delete.obj \
         $(SLO)$/move.obj \
         $(SLO)$/select.obj \
         $(SLO)$/wrtsh1.obj \
         $(SLO)$/wrtsh2.obj \
         $(SLO)$/wrtsh3.obj \
         $(SLO)$/wrtsh4.obj \
-        $(SLO)$/delete.obj \
         $(SLO)$/wrtundo.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/wrtsh1.obj \
-        $(SLO)$/wrtsh2.obj
 
 # --- Tagets -------------------------------------------------------
 

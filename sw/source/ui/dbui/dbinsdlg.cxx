@@ -455,7 +455,6 @@ SwInsertDBColAutoPilot::~SwInsertDBColAutoPilot()
     delete pTblSet;
     delete pRep;
 
-//  delete pConfig;
     delete pTAutoFmt;
 }
 
@@ -1181,12 +1180,14 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                     }
                 }
                 catch(Exception&
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                             aExcept
 #endif
                 )
                 {
+#if OSL_DEBUG_LEVEL > 1
                     OSL_ENSURE(false, ByteString(String(aExcept.Message), gsl_getSystemTextEncoding()).GetBuffer());
+#endif
                 }
             }
 
@@ -1401,14 +1402,12 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                         // Cursor am Ende wieder auf Anfangsposition
                         // gesetzt werden kann.
 
-                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaStart );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaStart() );
                         pMark = rSh.SetBookmark(
                             KeyCode(),
                             ::rtl::OUString(),
                             ::rtl::OUString(), IDocumentMarkAccess::UNO_BOOKMARK );
-                        // rSh.SwCrsrShell::MovePara( fnParaCurr, fnParaEnd );
                         rSh.SwCrsrShell::MovePara(
                             GetfnParaCurr(), GetfnParaEnd() );
                         bSetCrsr = FALSE;
@@ -1804,7 +1803,6 @@ void SwInsertDBColAutoPilot::Load()
                 pInsDBColumn->nUsrNumFmt = rNFmtr.GetEntryKey( pInsDBColumn->sUsrNumFmt,
                                                         pInsDBColumn->eUsrNumFmtLng );
 
-//              pInsDBColumn->nDBNumFmt
 
                 pNewData->aDBColumns.Insert(pInsDBColumn);
             }

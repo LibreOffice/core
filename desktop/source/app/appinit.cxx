@@ -118,14 +118,13 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
 
     Sequence< Any > aArgs(6);
     aArgs[0]
-        <<= rtl::OUString::createFromAscii(bServer ?
-                                               UCB_CONFIGURATION_KEY1_SERVER :
-                                               UCB_CONFIGURATION_KEY1_LOCAL);
+        <<= bServer ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_SERVER)) :
+                      rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY1_LOCAL));
     aArgs[1]
-        <<= rtl::OUString::createFromAscii(UCB_CONFIGURATION_KEY2_OFFICE);
-    aArgs[2] <<= rtl::OUString::createFromAscii("PIPE");
+        <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(UCB_CONFIGURATION_KEY2_OFFICE));
+    aArgs[2] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PIPE"));
     aArgs[3] <<= aPipe;
-    aArgs[4] <<= rtl::OUString::createFromAscii("PORTAL");
+    aArgs[4] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PORTAL"));
     aArgs[5] <<= aPortal.makeStringAndClear();
 
     bool ret =
@@ -161,13 +160,13 @@ static bool configureUcb(bool bServer, rtl::OUString const & rPortalConnect)
                     {
                         Reference<XContentProvider> xCP(
                             xServiceFactory->createInstance(
-                                rtl::OUString::createFromAscii(
-                                    "com.sun.star.ucb.GnomeVFSContentProvider")),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.ucb.GnomeVFSContentProvider"))),
                             UNO_QUERY);
                         if(xCP.is())
                             xCPM->registerContentProvider(
                                 xCP,
-                                rtl::OUString::createFromAscii(".*"),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")),
                                 false);
                     } catch (...)
                     {
@@ -278,7 +277,7 @@ void Desktop::RegisterServices( Reference< XMultiServiceFactory >& xSMgr )
         if ( !configureUcb( bServer, aPortalConnect ) )
         {
             DBG_ERROR( "Can't configure UCB" );
-            throw com::sun::star::uno::Exception(rtl::OUString::createFromAscii("RegisterServices, configureUcb"), NULL);
+            throw com::sun::star::uno::Exception(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegisterServices, configureUcb")), NULL);
         }
 
         CreateTemporaryDirectory();
@@ -306,7 +305,7 @@ void Desktop::createAcceptor(const OUString& aAcceptString)
         aSeq[1] <<= bAccept;
         Reference<XInitialization> rAcceptor(
             ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString::createFromAscii( "com.sun.star.office.Acceptor" )), UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.office.Acceptor" ))), UNO_QUERY );
         if ( rAcceptor.is() ) {
             try{
                 rAcceptor->initialize( aSeq );

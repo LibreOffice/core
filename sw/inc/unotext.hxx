@@ -55,9 +55,6 @@ class OTextCursorHelper;
 class SwXTextRange;
 
 
-/* -----------------03.12.98 12:22-------------------
- *
- * --------------------------------------------------*/
 
 class SwXText
     : public ::com::sun::star::lang::XTypeProvider

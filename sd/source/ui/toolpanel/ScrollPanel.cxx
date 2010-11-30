@@ -82,7 +82,7 @@ ScrollPanel::ScrollPanel (
 void ScrollPanel::Construct()
 {
     SetAccessibleName (
-        ::rtl::OUString::createFromAscii("Sub Task Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sub Task Panel")));
     mpControlContainer->SetMultiSelection (true);
 
     SetBorderStyle (WINDOW_BORDER_NORMAL);
@@ -714,8 +714,8 @@ long ScrollPanel::Notify( NotifyEvent& rNEvt )
 {
     return new ::accessibility::AccessibleScrollPanel (
         *this,
-        ::rtl::OUString::createFromAscii("Scroll Panel"),
-        ::rtl::OUString::createFromAscii("Scroll Panel"));
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Scroll Panel")));
 }
 
 

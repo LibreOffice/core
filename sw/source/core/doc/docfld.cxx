@@ -174,7 +174,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
     USHORT nSize = pFldTypes->Count(), nFldWhich = rFldTyp.Which();
     USHORT i = INIT_FLDTYPES;
 
-    ASSERT( RES_SETEXPFLD == nFldWhich ||
+    OSL_ENSURE( RES_SETEXPFLD == nFldWhich ||
             RES_USERFLD == nFldWhich ||
             RES_DDEFLD == nFldWhich, "Falscher FeldTyp" );
 
@@ -227,7 +227,7 @@ void SwDoc::InsDeletedFldType( SwFieldType& rFldTyp )
  --------------------------------------------------------------------*/
 void SwDoc::RemoveFldType(USHORT nFld)
 {
-    ASSERT( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
+    OSL_ENSURE( INIT_FLDTYPES <= nFld,  "keine InitFields loeschen" );
     /*
      * Abheangige Felder vorhanden -> ErrRaise
      */
@@ -260,7 +260,7 @@ void SwDoc::RemoveFldType(USHORT nFld)
 
         if( nWhich )
         {
-            ASSERT( !pTmp->GetDepends(), "Abhaengige vorh.!" );
+            OSL_ENSURE( !pTmp->GetDepends(), "Abhaengige vorh.!" );
             // Feldtype loschen
             delete pTmp;
         }
@@ -423,7 +423,7 @@ void SwDoc::UpdateRefFlds( SfxPoolItem* pHt )
 
 void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
 {
-    ASSERT( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
+    OSL_ENSURE( !pHt || RES_TABLEFML_UPDATE  == pHt->Which(),
             "Was ist das fuer ein MessageItem?" );
 
     SwFieldType* pFldType(0);
@@ -584,11 +584,11 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFld->CalcField( aPara );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
                         }
 #endif
                     }
@@ -652,11 +652,11 @@ void SwDoc::UpdateTblFlds( SfxPoolItem* pHt )
                     {
                         if( aPara.CalcWithStackOverflow() )
                             pFml->Calc( aPara, nValue );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
                         else
                         {
                             // mind. ein ASSERT
-                            ASSERT( !this, "die Kettenformel konnte nicht errechnet werden" );
+                            OSL_ENSURE( !this, "die Kettenformel konnte nicht errechnet werden" );
                         }
 #endif
                     }
@@ -882,8 +882,8 @@ void _SetGetExpFld::SetBodyPos( const SwCntntFrm& rFrm )
         SwNodeIndex aIdx( *rFrm.GetNode() );
         SwDoc& rDoc = *aIdx.GetNodes().GetDoc();
         SwPosition aPos( aIdx );
-#ifdef DBG_UTIL
-        ASSERT( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( ::GetBodyTxtNode( rDoc, aPos, rFrm ), "wo steht das Feld" );
 #else
         ::GetBodyTxtNode( rDoc, aPos, rFrm );
 #endif
@@ -1299,15 +1299,6 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
     // aktuelle Datensatznummer schon vorher einstellen
     SwNewDBMgr* pMgr = GetNewDBMgr();
     pMgr->CloseAll(FALSE);
-/*
-    if(pMgr && pMgr->OpenDB(DBMGR_STD, GetDBDesc(), FALSE))
-    {
-        if(!pMgr->IsInMerge() )
-            pMgr->ToFirstSelectedRecord(DBMGR_STD);
-
-        aCalc.VarChange( sDBNumNm, pMgr->GetCurSelectedRecordId(DBMGR_STD));
-    }
-*/
 
     String aNew;
     const _SetGetExpFldPtr* ppSortLst = pUpdtFlds->GetSortLst()->GetData();
@@ -1316,9 +1307,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwSection* pSect = (SwSection*)(*ppSortLst)->GetSection();
         if( pSect )
         {
-            //!SECTION
 
-//          if( pGFld->IsInBodyTxt() )
             SwSbxValue aValue = aCalc.Calculate(
                                         pSect->GetCondition() );
             if(!aValue.IsVoidValue())
@@ -1329,7 +1318,7 @@ void SwDoc::UpdateExpFlds( SwTxtFld* pUpdtFld, bool bUpdRefFlds )
         SwTxtFld* pTxtFld = (SwTxtFld*)(*ppSortLst)->GetFld();
         if( !pTxtFld )
         {
-            ASSERT( !this, "was ist es denn nun" );
+            OSL_ENSURE( !this, "was ist es denn nun" );
             continue;
         }
 
@@ -1619,7 +1608,7 @@ void SwDoc::_InitFieldTypes()       // wird vom CTOR gerufen!!
     pFldTypes->Insert( new SwSetExpFieldType(this,
                 SW_RESSTR(STR_POOLCOLL_LABEL_DRAWING), nsSwGetSetExpType::GSE_SEQ),nFldType++);
 
-    ASSERT( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
+    OSL_ENSURE( nFldType == INIT_FLDTYPES, "Bad initsize: SwFldTypes" );
 }
 
 void SwDoc::InsDelFldInFldLst( bool bIns, const SwTxtFld& rFld )
@@ -2140,9 +2129,7 @@ bool SwDoc::SetFieldsDirty( bool b, const SwNode* pChk, ULONG nLen )
             const SwTxtNode* pTNd = rNds[ nStt++ ]->GetTxtNode();
             if( pTNd )
             {
-                if( //pTNd->GetFmtColl() &&     //#outline level,zhaojianwei
-                //  MAXLEVEL > pTNd->GetTxtColl()->GetOutlineLevel() )
-                    pTNd->GetAttrOutlineLevel() != 0 )//<-end,zhaojianwei
+                if( pTNd->GetAttrOutlineLevel() != 0 )
                     // Kapitelfelder aktualisieren
                     b = TRUE;
                 else if( pTNd->GetpSwpHints() && pTNd->GetSwpHints().Count() )
@@ -2288,13 +2275,13 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
         for( n = nArrStt; n < aTmpArr.Count(); ++n )
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            ASSERT( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
             pSectNd->GetSection().SetCondHidden( FALSE );
         }
         for( n = 0; n < nArrStt; ++n )
         {
             pSectNd = rDoc.GetNodes()[ aTmpArr[ n ] ]->GetSectionNode();
-            ASSERT( pSectNd, "Wo ist mein SectionNode" );
+            OSL_ENSURE( pSectNd, "Wo ist mein SectionNode" );
             pSectNd->GetSection().SetCondHidden( FALSE );
         }
 
@@ -2338,18 +2325,6 @@ void SwDocUpdtFld::_MakeFldList( SwDoc& rDoc, int eGetMode )
                 break;
 
             case RES_SETEXPFLD:
-                /// OD 04.10.2002 #102894#
-                /// fields of subtype <string> have also been add
-                /// for calculation (eGetMode == GETFLD_CALC).
-                /// Thus, add fields of subtype <string> in all modes
-                ///     (eGetMode == GETFLD_EXPAND||GETFLD_CALC||GETFLD_ALL)
-                /// and fields of other subtypes only in the modes
-                ///     (eGetMode == GETFLD_CALC||GETFLD_ALL)
-                /* "old" if construct - not deleted for history and code review
-                if( ( nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()
-                        ? GETFLD_EXPAND : GETFLD_CALC )
-                        & eGetMode )
-                */
                 if ( !(eGetMode == GETFLD_EXPAND) ||
                      (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
                 {
@@ -2485,8 +2460,8 @@ void SwDocUpdtFld::GetBodyNode( const SwTxtFld& rTFld, USHORT nFldWhich )
     {
         // einen Index fuers bestimmen vom TextNode anlegen
         SwPosition aPos( rDoc.GetNodes().GetEndOfPostIts() );
-#ifdef DBG_UTIL
-        ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
         GetBodyTxtNode( rDoc, aPos, *pFrm );
 #endif
@@ -2533,8 +2508,8 @@ void SwDocUpdtFld::GetBodyNode( const SwSectionNode& rSectNd )
             if( !pFrm )
                 break;
 
-#ifdef DBG_UTIL
-            ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
+#if OSL_DEBUG_LEVEL > 1
+            OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ), "wo steht das Feld" );
 #else
             GetBodyTxtNode( rDoc, aPos, *pFrm );
 #endif
@@ -2562,7 +2537,7 @@ void SwDocUpdtFld::InsertFldType( const SwFieldType& rType )
         sFldName = ((SwSetExpFieldType&)rType).GetName();
         break;
     default:
-        ASSERT( !this, "kein gueltiger FeldTyp" );
+        OSL_ENSURE( !this, "kein gueltiger FeldTyp" );
     }
 
     if( sFldName.Len() )
@@ -2641,7 +2616,7 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
                       SwMsgPoolItem * pMsgHnt,
                       bool bUpdateFlds)
 {
-    ASSERT(pDstTxtFld, "no field to update!");
+    OSL_ENSURE(pDstTxtFld, "no field to update!");
 
     BOOL bTblSelBreak = FALSE;
 
@@ -2661,10 +2636,6 @@ bool SwDoc::UpdateFld(SwTxtFld * pDstTxtFld, SwField & rSrcFld,
             AppendUndo(new SwUndoFieldFromDoc(aPosition, *pDstFld, rSrcFld,
                                               pMsgHnt, bUpdateFlds));
         }
-
-        // Das gefundene Feld wird angepasst ...
-        //pDstFld->ChangeFormat( rSrcFld.GetFormat() );
-        //pDstFld->SetLanguage( rSrcFld.GetLanguage() );
 
         SwField * pNewFld = rSrcFld.CopyField();
         pDstFmtFld->SetFld(pNewFld);

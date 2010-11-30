@@ -245,7 +245,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
             return 1;
         }
     }
-    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::EmptyHeight with swapped frame" );
 
     SwFont *pFnt;
     const SwTxtNode& rTxtNode = *GetTxtNode();
@@ -308,7 +308,7 @@ SwTwips SwTxtFrm::EmptyHeight() const
 
 sal_Bool SwTxtFrm::FormatEmpty()
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),"SwTxtFrm::FormatEmpty with swapped frame" );
 
     if ( HasFollow() || GetTxtNode()->GetpSwpHints() ||
         0 != GetTxtNode()->GetNumRule() ||
@@ -442,8 +442,8 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                         rRegDiff = rSpace.GetLineHeight();
                                     break;
                                 }
-                                default: ASSERT(
-                                sal_False, ": unknown LineSpaceRule" );
+                                default:
+                                    OSL_ENSURE( sal_False, ": unknown LineSpaceRule" );
                             }
                             switch( rSpace.GetInterLineSpaceRule() )
                             {
@@ -468,7 +468,7 @@ sal_Bool SwTxtFrm::FillRegister( SwTwips& rRegStart, KSHORT& rRegDiff )
                                     nNettoHeight = rRegDiff;
                                     break;
                                 }
-                                default: ASSERT( sal_False, ": unknown InterLineSpaceRule" );
+                                default: OSL_ENSURE( sal_False, ": unknown InterLineSpaceRule" );
                             }
                             pDesc->SetRegHeight( rRegDiff );
                             pDesc->SetRegAscent( rRegDiff - nNettoHeight +

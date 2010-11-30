@@ -554,7 +554,6 @@
 ../../chart2/source/controller/dialogs/dlg_RotateDiagram.src
 ../../chart2/source/controller/dialogs/tp_PointGeometry.src
 ../../chart2/source/controller/dialogs/dlg_ObjectProperties.src
-../../chart2/source/controller/dialogs/Bitmaps_HC.src
 ../../chart2/source/controller/dialogs/tp_TitleRotation.src
 ../../chart2/source/controller/dialogs/dlg_ChartType.src
 ../../chart2/source/controller/dialogs/Bitmaps.src

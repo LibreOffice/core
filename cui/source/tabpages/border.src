@@ -324,12 +324,6 @@ TabPage RID_SVXPAGE_BORDER
         MaskColor = STD_MASKCOLOR ;
         _PREVIEW_IDLIST_
     };
-    ImageList ILH_PRE_BITMAPS
-    {
-        Prefix = "prh";
-        MaskColor = STD_MASKCOLOR ;
-        _PREVIEW_IDLIST_
-    };
 
 #define _SHADOW_IDLIST_             \
         IdList =                    \
@@ -345,12 +339,6 @@ TabPage RID_SVXPAGE_BORDER
     ImageList IL_SDW_BITMAPS
     {
         Prefix = "sh";
-        MaskColor = STD_MASKCOLOR ;
-        _SHADOW_IDLIST_
-    };
-    ImageList ILH_SDW_BITMAPS
-    {
-        Prefix = "shh";
         MaskColor = STD_MASKCOLOR ;
         _SHADOW_IDLIST_
     };

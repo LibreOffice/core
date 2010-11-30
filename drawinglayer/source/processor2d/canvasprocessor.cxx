@@ -1043,8 +1043,8 @@ using namespace com::sun::star;
                         basegfx::B2DPolyPolygon aPoly;
                         basegfx::tools::importFromSvgD(
                             aPoly,
-                            rtl::OUString::createFromAscii(
-                                "m-1 0 h2 m0 -1 v2" ));
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "m-1 0 h2 m0 -1 v2" )));
                         mxCrossMarkerPoly =
                             basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                                 mxCanvas->getDevice(),
@@ -1059,8 +1059,8 @@ using namespace com::sun::star;
                         basegfx::B2DPolyPolygon aPoly;
                         basegfx::tools::importFromSvgD(
                             aPoly,
-                            rtl::OUString::createFromAscii(
-                                "m-2 -3 l5 5 m-3 -2 l5 5 m-3 2 l5 -5 m-2 3 l5 -5" ));
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "m-2 -3 l5 5 m-3 -2 l5 5 m-3 2 l5 -5 m-2 3 l5 -5" )));
                         mxGluePointPoly =
                             basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                                 mxCanvas->getDevice(),
@@ -1071,8 +1071,8 @@ using namespace com::sun::star;
                         basegfx::B2DPolyPolygon aPoly;
                         basegfx::tools::importFromSvgD(
                             aPoly,
-                            rtl::OUString::createFromAscii(
-                                "m-2 -2 l4 4 m-2 2 l4 -4" ));
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "m-2 -2 l4 4 m-2 2 l4 -4" )));
                         mxGluePointHighlightPoly =
                             basegfx::unotools::xPolyPolygonFromB2DPolyPolygon(
                                 mxCanvas->getDevice(),

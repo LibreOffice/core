@@ -35,7 +35,7 @@
 #include "error.h"              // fuers ASSERT
 #include "ndindex.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 int SwNodeIndex::nSerial = 0;
 #endif
 
@@ -69,7 +69,7 @@ SwNodeIndex::SwNodeIndex( SwNodes& rNds, ULONG nIdx )
 {
     rNds.RegisterIndex( *this );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
@@ -84,7 +84,7 @@ SwNodeIndex::SwNodeIndex( const SwNodeIndex& rIdx, long nDiff )
         pNd = rIdx.pNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }
@@ -99,7 +99,7 @@ SwNodeIndex::SwNodeIndex( const SwNode& rNd, long nDiff )
         pNd = (SwNode*)&rNd;
 
     pNd->GetNodes().RegisterIndex( *this );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     MySerial = ++nSerial;       // nur in der nicht PRODUCT-Version
 #endif
 }

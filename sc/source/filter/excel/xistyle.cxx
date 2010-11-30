@@ -1871,7 +1871,7 @@ void XclImpXFRangeBuffer::Finalize()
     for( XclImpXFRangeColumnVec::const_iterator aVBeg = maColumns.begin(), aVEnd = maColumns.end(), aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
     {
         // apply all cell styles of an existing column
-        if( aVIt->is() )
+        if( aVIt->get() )
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );

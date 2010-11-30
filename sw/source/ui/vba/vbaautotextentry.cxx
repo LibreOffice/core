@@ -78,7 +78,6 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
             }
         }
         xEndMarker->setString( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("") ) ); // remove marker
-        //xTC->gotoRange( xEndMarker, sal_True );
         xTC = xText->createTextCursorByRange( xEndMarker->getEnd() );
         pWhere->setXTextCursor( xTC );
     }
@@ -118,8 +117,6 @@ SwVbaAutoTextEntries::getElementType() throw (uno::RuntimeException)
 uno::Reference< container::XEnumeration >
 SwVbaAutoTextEntries::createEnumeration() throw (uno::RuntimeException)
 {
-    //uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    //return xEnumerationAccess->createEnumeration();
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 

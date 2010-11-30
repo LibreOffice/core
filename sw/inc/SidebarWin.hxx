@@ -51,7 +51,6 @@ class SwEditWin;
 class SwView;
 class Edit;
 class MenuButton;
-//class SwRedline;
 class SwFrm;
 
 
@@ -238,36 +237,6 @@ class SwSidebarWin : public Window
 };
 
 } } // eof namespace sw::sidebarwindows
-
-
-// implementation for change tracking comments, fully functional, but not yet used
-/*
-class SwRedComment : public SwSidebarWin
-{
-    private:
-        SwRedline*      pRedline;
-
-    protected:
-        virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    public:
-        SwRedComment( Window* pParent, WinBits nBits,SwPostItMgr* aMgr,SwPostItBits aBits,SwRedline* pRed);
-        virtual ~SwRedComment() {};
-
-        virtual void    UpdateData();
-        virtual void    SetPostItText();
-        virtual void    Delete();
-        virtual void    GotoPos();
-        virtual void    SetPopup();
-        virtual void    ActivatePostIt();
-        virtual void    DeactivatePostIt();
-
-        virtual String  GetAuthor();
-        virtual Date    GetDate();
-        virtual Time    GetTime();
-
-        virtual bool    IsProtected();
-};
-*/
 
 #endif
 

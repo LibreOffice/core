@@ -37,9 +37,6 @@
 #define ST_QUICK            7
 #define FI_INFO             8
 #define FL_SEP              9
-#define ILH_VALUES         10
-#define IMG_BTN_H            11
-
 
 #define ST_TBL          12
 #define ST_FRM          13

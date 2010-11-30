@@ -1079,7 +1079,6 @@ void SwSvxNumBulletTabDialog::PageCreated(USHORT nPageId, SfxTabPage& rPage)
             SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));
             aSet.Put ( SfxAllEnumItem(SID_METRIC_ITEM, static_cast< USHORT >(eMetric)) );
             rPage.PageCreated(aSet);
-//          ((SvxNumPositionTabPage&)rPage).SetWrtShell(&rWrtSh);
         }
         break;
     }

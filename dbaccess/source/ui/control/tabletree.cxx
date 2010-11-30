@@ -105,10 +105,8 @@ OTableTreeListBox::~OTableTreeListBox()
 void OTableTreeListBox::implSetDefaultImages()
 {
     ImageProvider aImageProvider;
-    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
-    SetDefaultExpandedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, false ), BMP_COLOR_NORMAL );
-    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE, true ), BMP_COLOR_HIGHCONTRAST );
+    SetDefaultExpandedEntryBmp(  aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
+    SetDefaultCollapsedEntryBmp( aImageProvider.getFolderImage( DatabaseObject::TABLE ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -139,25 +137,19 @@ void OTableTreeListBox::notifyHiContrastChanged()
             {
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                Image aImage, aImageHC;
+                Image aImage;
                 if ( isFolderEntry( pEntryLoop ) )
                 {
-                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, false );
-                    aImageHC = m_pImageProvider->getFolderImage( DatabaseObject::TABLE, true );
+                    aImage = m_pImageProvider->getFolderImage( DatabaseObject::TABLE );
                 }
                 else
                 {
                     String sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage, aImageHC );
+                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage );
                 }
 
-                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                // TODO: Now that we give both images to the entry item, it is not necessary anymore
-                // to do this anytime HC changes - the tree control will do this itself now.
-                // We would only need to properly initialize newly inserted entries.
+                pContextBitmapItem->SetBitmap1( aImage );
+                pContextBitmapItem->SetBitmap2( aImage );
                 break;
             }
         }
@@ -392,8 +384,8 @@ void OTableTreeListBox::checkedButton_noBroadcast(SvLBoxEntry* _pEntry)
 {
     OMarkableTreeListBox::checkedButton_noBroadcast(_pEntry);
 
-    // if an entry has children, it makes a difference if the entry is checked because alls children are checked
-    // or if the user checked it explicitly.
+    // if an entry has children, it makes a difference if the entry is checked
+    // because all children are checked or if the user checked it explicitly.
     // So we track explicit (un)checking
 
     SvButtonState eState = GetCheckButtonState(_pEntry);
@@ -507,13 +499,11 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
 
-        Image aImage, aImageHC;
-        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage, aImageHC );
+        Image aImage;
+        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage );
 
-        SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-        SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
-        SetExpandedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
-        SetCollapsedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
+        SetExpandedEntryBmp( pRet, aImage );
+        SetCollapsedEntryBmp( pRet, aImage );
     }
     return pRet;
 }

@@ -68,6 +68,68 @@ GALLERY_WWWANIM_TARGET          = gallwwwanim
 GALLERY_WWWBACK_TARGET          = gallwwwback
 GALLERY_WWWGRAF_TARGET          = gallwwwgraf
 
+GALLERY_ACCESSORIES_ROOT_TARGET = accessoriesgallery
+GALLERY_ACCESSORIES_DRAWS_PEOPLE_TARGET = accessoriesgallerydrawspeople
+GALLERY_ACCESSORIES_PHOTOS_BUILDINGS_TARGET = accessoriesgalleryphotosbuildings
+GALLERY_ACCESSORIES_PHOTOS_CELEBRATION_TARGET = accessoriesgalleryphotoscelebration
+GALLERY_ACCESSORIES_PHOTOS_CITIES_TARGET = accessoriesgalleryphotoscities
+GALLERY_ACCESSORIES_PHOTOS_FAUNA_TARGET = accessoriesgalleryphotosfauna
+GALLERY_ACCESSORIES_PHOTOS_FLOWERS_TARGET = accessoriesgalleryphotosflowers
+GALLERY_ACCESSORIES_PHOTOS_FOODSANDDRINKS_TARGET = accessoriesgalleryphotosfoodsanddrinks
+GALLERY_ACCESSORIES_PHOTOS_HUMANS_TARGET = accessoriesgalleryphotoshumans
+GALLERY_ACCESSORIES_PHOTOS_LANDSCAPES_TARGET = accessoriesgalleryphotoslandscapes
+GALLERY_ACCESSORIES_PHOTOS_OBJECTS_TARGET = accessoriesgalleryphotosobjects
+GALLERY_ACCESSORIES_PHOTOS_PLANTS_TARGET = accessoriesgalleryphotosplants
+GALLERY_ACCESSORIES_PHOTOS_SPACE_TARGET = accessoriesgalleryphotosspace
+GALLERY_ACCESSORIES_PHOTOS_STATUES_TARGET = accessoriesgalleryphotosstatues
+GALLERY_ACCESSORIES_PHOTOS_TRAVEL_TARGET = accessoriesgalleryphotostravel
+GALLERY_ACCESSORIES_ELEMENTS_BULLETS2_TARGET = accessoriesgalleryelementsbullets2
+
+GALLERY_ACCESSORIES_NONFREE_ROOT_TARGET = accessoriesgallerynonfree
+
+PREMIUM_TEMPLATES_LAYOUT_IMPRESS_TARGET     = accessoriestemplateslayout
+PREMIUM_TEMPLATES_PRESNT_IMPRESS_TARGET     = accessoriestemplatespresent
+PREMIUM_TEMPLATES_EDUCATE_TARGET            = accessoriestemplateseducate
+PREMIUM_TEMPLATES_FINANCE_TARGET            = accessoriestemplatesfinance
+PREMIUM_TEMPLATES_FORMS_TARGET              = accessoriestemplatesforms
+PREMIUM_TEMPLATES_LABELS_TARGET             = accessoriestemplateslabels
+PREMIUM_TEMPLATES_MISC_TARGET               = accessoriestemplatesmisc
+PREMIUM_TEMPLATES_OFFICORR_TARGET           = accessoriestemplatesofficorr
+PREMIUM_TEMPLATES_OFFIMISC_TARGET           = accessoriestemplatesoffimisc
+PREMIUM_TEMPLATES_PERSONAL_TARGET           = accessoriestemplatespersonal
+PREMIUM_TEMPLATES_ROOT_TARGET               = accessoriestemplates
+
+PREMIUM_TEMPLATES_COMMON_LAYOUT_IMPRESS_TARGET     = accessoriestemplatescommonlayout
+PREMIUM_TEMPLATES_COMMON_PRESNT_IMPRESS_TARGET     = accessoriestemplatescommonpresent
+PREMIUM_TEMPLATES_COMMON_EDUCATE_TARGET            = accessoriestemplatescommoneducate
+PREMIUM_TEMPLATES_COMMON_FINANCE_TARGET            = accessoriestemplatescommonfinance
+PREMIUM_TEMPLATES_COMMON_FORMS_TARGET              = accessoriestemplatescommonforms
+PREMIUM_TEMPLATES_COMMON_LABELS_TARGET             = accessoriestemplatescommonlabels
+PREMIUM_TEMPLATES_COMMON_MISC_TARGET               = accessoriestemplatescommonmisc
+PREMIUM_TEMPLATES_COMMON_OFFICORR_TARGET           = accessoriestemplatescommonofficorr
+PREMIUM_TEMPLATES_COMMON_OFFIMISC_TARGET           = accessoriestemplatescommonoffimisc
+PREMIUM_TEMPLATES_COMMON_PERSONAL_TARGET           = accessoriestemplatescommonpersonal
+PREMIUM_TEMPLATES_COMMON_ROOT_TARGET               = accessoriestemplatescommon
+
+PREMIUM_SAMPLES_ROOT_TARGET                 = accessoriessamples
+PREMIUM_SAMPLES_DOCUMENTATION_TARGET        = accessoriessamplesdocumentation
+PREMIUM_SAMPLES_ADVERTISEMENT_TARGET        = accessoriessamplesadvertisement
+
+PREMIUM_TEMPLATES_NONFREE_LAYOUT_IMPRESS_TARGET     = accessoriestemplatesnonfreelayout
+PREMIUM_TEMPLATES_NONFREE_PRESNT_IMPRESS_TARGET     = accessoriestemplatesnonfreepresent
+PREMIUM_TEMPLATES_NONFREE_EDUCATE_TARGET            = accessoriestemplatesnonfreeeducate
+PREMIUM_TEMPLATES_NONFREE_FINANCE_TARGET            = accessoriestemplatesnonfreefinance
+PREMIUM_TEMPLATES_NONFREE_FORMS_TARGET              = accessoriestemplatesnonfreeforms
+PREMIUM_TEMPLATES_NONFREE_LABELS_TARGET             = accessoriestemplatesnonfreelabels
+PREMIUM_TEMPLATES_NONFREE_MISC_TARGET               = accessoriestemplatesnonfreemisc
+PREMIUM_TEMPLATES_NONFREE_OFFICORR_TARGET           = accessoriestemplatesnonfreeofficorr
+PREMIUM_TEMPLATES_NONFREE_OFFIMISC_TARGET           = accessoriestemplatesnonfreeoffimisc
+PREMIUM_TEMPLATES_NONFREE_PERSONAL_TARGET           = accessoriestemplatesnonfreepersonal
+PREMIUM_TEMPLATES_NONFREE_ROOT_TARGET               = accessoriestemplatesnonfree
+PREMIUM_SAMPLES_NONFREE_ROOT_TARGET                 = accessoriessamplesnonfree
+PREMIUM_SAMPLES_NONFREE_DOCUMENTATION_TARGET        = accessoriessamplesnonfreedocumentation
+PREMIUM_SAMPLES_NONFREE_ADVERTISEMENT_TARGET        = accessoriessamplesnonfreeadvertisement
+
 INSO_DUTCH_TARGET               = inso31
 INSO_ENGLISH_UK_TARGET          = inso44
 INSO_ENGLISH_US_TARGET          = inso01

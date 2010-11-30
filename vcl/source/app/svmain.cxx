@@ -392,11 +392,6 @@ void DeInitVCL()
         delete pSVData->maWinData.mpMsgBoxImgList;
         pSVData->maWinData.mpMsgBoxImgList = NULL;
     }
-    if ( pSVData->maWinData.mpMsgBoxHCImgList )
-    {
-        delete pSVData->maWinData.mpMsgBoxHCImgList;
-        pSVData->maWinData.mpMsgBoxHCImgList = NULL;
-    }
     if ( pSVData->maCtrlData.mpCheckImgList )
     {
         delete pSVData->maCtrlData.mpCheckImgList;
@@ -437,20 +432,10 @@ void DeInitVCL()
         delete pSVData->maCtrlData.mpDisclosurePlus;
         pSVData->maCtrlData.mpDisclosurePlus = NULL;
     }
-    if ( pSVData->maCtrlData.mpDisclosurePlusHC )
-    {
-        delete pSVData->maCtrlData.mpDisclosurePlusHC;
-        pSVData->maCtrlData.mpDisclosurePlusHC = NULL;
-    }
     if ( pSVData->maCtrlData.mpDisclosureMinus )
     {
         delete pSVData->maCtrlData.mpDisclosureMinus;
         pSVData->maCtrlData.mpDisclosureMinus = NULL;
-    }
-    if ( pSVData->maCtrlData.mpDisclosureMinusHC )
-    {
-        delete pSVData->maCtrlData.mpDisclosureMinusHC;
-        pSVData->maCtrlData.mpDisclosureMinusHC = NULL;
     }
     if ( pSVData->mpDefaultWin )
     {

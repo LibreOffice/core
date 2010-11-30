@@ -40,7 +40,7 @@
 // OD 12.11.2002 #96272# - include declaration for <SetMappingForVirtDev>
 #include "setmapvirtdev.hxx"
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
  *                          class DbgRect
@@ -210,7 +210,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
         aTmp.SSize().Height()+= aPixSz.Height()/2 + 1;
         Rectangle aTmpRect( pO->LogicToPixel( aTmp.SVRect() ) );
 
-        ASSERT( !pSh->GetWin()->IsReallyVisible() ||
+        OSL_ENSURE( !pSh->GetWin()->IsReallyVisible() ||
                 aTmpRect.GetWidth() <= pSh->GetWin()->GetOutputSizePixel().Width() + 2,
                 "Paintwidth bigger than visarea?" );
         // Passt das Rechteck in unseren Buffer ?
@@ -246,7 +246,7 @@ void SwLayVout::Enter(  ViewShell *pShell, SwRect &rRect, BOOL bOn )
 
 void SwLayVout::_Flush()
 {
-    ASSERT( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
+    OSL_ENSURE( pVirDev, "SwLayVout::DrawOut: nothing left Toulouse" );
     Rectangle aTmp( aRect.SVRect() );
     pOut->DrawOutDev( aRect.Pos(), aRect.SSize(),
                       aRect.Pos(), aRect.SSize(), *pVirDev );

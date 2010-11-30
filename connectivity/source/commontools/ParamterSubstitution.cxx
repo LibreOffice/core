@@ -78,7 +78,7 @@ namespace connectivity
     Sequence< ::rtl::OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
     {
         Sequence< ::rtl::OUString > aSNS( 1 );
-        aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ParameterSubstitution");
+        aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ParameterSubstitution"));
         return aSNS;
     }
 

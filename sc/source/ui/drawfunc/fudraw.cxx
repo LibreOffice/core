@@ -249,25 +249,6 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
     switch ( rKEvt.GetKeyCode().GetCode() )
     {
         case KEY_ESCAPE:
-
-    /* 18.12.95: TextShell beibehalten nicht mehr gewuenscht...
-     *
-     *          if ( pView->IsAction() )
-     *          {
-     *              pView->BrkAction();
-     *              pWindow->ReleaseMouse();
-     *              bReturn = TRUE;
-     *          }
-     *          else if ( pView->IsTextEdit() )
-     *          {
-     *              pView->EndTextEdit();
-     *              pView->SetCreateMode();
-     *              pViewShell->GetScDrawView()->InvalidateDrawTextAttrs();
-     *              bReturn = TRUE;
-     *          }
-     *          else
-     */
-
             if ( pViewShell->IsDrawTextShell() || aSfxRequest.GetSlot() == SID_DRAW_NOTEEDIT )
             {
                 // in normale Draw-Shell, wenn Objekt selektiert, sonst Zeichnen aus

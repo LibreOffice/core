@@ -394,9 +394,6 @@ sub create_component_table
 
     installer::windows::idtglobal::write_idt_header(\@componenttable, "component");
 
-    # collect_layer_conditions();
-
-
     # File components
 
     for ( my $i = 0; $i <= $#{$allfilecomponentsref}; $i++ )

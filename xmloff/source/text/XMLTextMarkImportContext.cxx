@@ -186,7 +186,7 @@ void XMLTextMarkImportContext::StartElement(
     {
         if (m_sBookmarkName.getLength() == 0)
         {
-            m_sBookmarkName = ::rtl::OUString::createFromAscii("Unknown");
+            m_sBookmarkName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown"));
         }
         m_rHelper.pushFieldCtx( m_sBookmarkName, m_sFieldName );
     }

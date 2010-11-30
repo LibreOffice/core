@@ -29,19 +29,20 @@
 #include "visitors.hxx"
 #include "document.hxx"
 #include "view.hxx"
+#include "accessibility.hxx"
 
 void SmCursor::Move(OutputDevice* pDev, SmMovementDirection direction, bool bMoveAnchor){
     SmCaretPosGraphEntry* NewPos = NULL;
     switch(direction){
         case MoveLeft:
         {
-            //If position->Left is NULL, we want NewPos = NULL anyway...
             NewPos = position->Left;
+            j_assert(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveRight:
         {
-            //If position->Right is NULL, we want NewPos = NULL anyway...
             NewPos = position->Right;
+            j_assert(NewPos, "NewPos shouldn't be NULL here!");
         }break;
         case MoveUp:
             //Implementation is practically identical to MoveDown, except for a single if statement
@@ -177,12 +178,11 @@ bool SmCursor::SetCaretPosition(SmCaretPos pos, bool moveAnchor){
 
 void SmCursor::AnnotateSelection(){
     //TODO: Manage a state, reset it upon modification and optimize this call
-    SmSetSelectionVisitor SSV(anchor->CaretPos, position->CaretPos);
-    pTree->Accept(&SSV);
+    SmSetSelectionVisitor(anchor->CaretPos, position->CaretPos, pTree);
 }
 
-void SmCursor::Draw(OutputDevice& pDev, Point Offset){
-    SmCaretDrawingVisitor(pDev, GetPosition(), Offset);
+void SmCursor::Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible){
+    SmCaretDrawingVisitor(pDev, GetPosition(), Offset, isCaretVisible);
 }
 
 void SmCursor::Delete(){
@@ -202,6 +202,7 @@ void SmCursor::Delete(){
 
     //Find the topmost node of the line that holds the selection
     SmNode* pLine = FindTopMostNodeInLine(pSNode, true);
+    j_assert(pLine != pTree, "Shouldn't be able to select the entire tree");
 
     //Get the parent of the line
     SmStructureNode* pLineParent = pLine->GetParent();
@@ -481,7 +482,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
 
     //Find node that this should be applied to
     SmNode* pSubject;
-    BOOL bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
+    bool bPatchLine = pSelectedNodesList->size() > 0; //If the line should be patched later
     if(it != pLineList->begin()) {
         it--;
         pSubject = *it;
@@ -492,7 +493,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
         pSubject->Prepare(pDocShell->GetFormat(), *pDocShell);
         it = pLineList->insert(it, pSubject);
         it++;
-        bPatchLine = TRUE;  //We've modified the line it should be patched later.
+        bPatchLine = true;  //We've modified the line it should be patched later.
     }
 
     //Wrap the subject in a SmSubSupNode
@@ -555,7 +556,7 @@ void SmCursor::InsertSubSup(SmSubSup eSubSup) {
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterScript, pScriptLine);
 }
 
-BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
+bool SmCursor::InsertLimit(SmSubSup eSubSup, bool bMoveCaret) {
     //Find a subject to set limits on
     SmOperNode *pSubject = NULL;
     //Check if pSelectedNode might be a subject
@@ -570,7 +571,7 @@ BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
 
     //Abort operation if we're not in the appropriate context
     if(!pSubject)
-        return FALSE;
+        return false;
 
     BeginEdit();
 
@@ -591,7 +592,7 @@ BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
 
     //Create the limit, if needed
     SmCaretPos PosAfterLimit;
-    SmNode *pLine;
+    SmNode *pLine = NULL;
     if(!pSubSup->GetSubSup(eSubSup)){
         pLine = new SmPlaceNode();
         pSubSup->SetSubSup(eSubSup, pLine);
@@ -624,7 +625,7 @@ BOOL SmCursor::InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret) {
 
     EndEdit();
 
-    return TRUE;
+    return true;
 }
 
 void SmCursor::InsertBrackets(SmBracketType eBracketType) {
@@ -697,7 +698,7 @@ void SmCursor::InsertBrackets(SmBracketType eBracketType) {
     FinishEdit(pLineList, pLineParent, nParentIndex, PosAfterInsert);
 }
 
-SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, BOOL bIsLeft) {
+SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, bool bIsLeft) {
     SmToken aTok;
     if(bIsLeft){
         switch(eBracketType){
@@ -771,7 +772,7 @@ SmNode *SmCursor::CreateBracket(SmBracketType eBracketType, BOOL bIsLeft) {
     return pRetVal;
 }
 
-BOOL SmCursor::InsertRow() {
+bool SmCursor::InsertRow() {
     AnnotateSelection();
 
     //Find line
@@ -808,7 +809,7 @@ BOOL SmCursor::InsertRow() {
 
     //If we're not in a context that supports InsertRow, return FALSE
     if(!pTable && !pMatrix)
-        return FALSE;
+        return false;
 
     //Now we start editing
     BeginEdit();
@@ -893,7 +894,7 @@ BOOL SmCursor::InsertRow() {
     //FinishEdit is actually used to handle siturations where parent is an instance of
     //SmSubSupNode. In this case parent should always be a table or matrix, however, for
     //code reuse we just use FinishEdit() here too.
-    return TRUE;
+    return true;
 }
 
 void SmCursor::InsertFraction() {
@@ -1108,14 +1109,14 @@ void SmCursor::InsertCommand(USHORT nCommand) {
             InsertRow();
             break;
         case RID_FROMX:
-            InsertLimit(CSUB, TRUE);
+            InsertLimit(CSUB, true);
             break;
         case RID_TOX:
-            InsertLimit(CSUP, TRUE);
+            InsertLimit(CSUP, true);
             break;
         case RID_FROMXTOY:
-            if(InsertLimit(CSUB, FALSE))
-                InsertLimit(CSUP, TRUE);
+            if(InsertLimit(CSUB, true))
+                InsertLimit(CSUP, true);
             break;
         default:
             InsertCommandText(SmResId(nCommand));
@@ -1226,19 +1227,18 @@ SmNode* SmCursor::FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected){
         return NULL;
 
     //Move up parent untill we find a node who's
-    //parent isn't selected and not a type of:
+    //parent is NULL or isn't selected and not a type of:
     //      SmExpressionNode
+    //      SmLineNode
     //      SmBinHorNode
     //      SmUnHorNode
     //      SmAlignNode
     //      SmFontNode
-    while((MoveUpIfSelected && pSNode->GetParent()->IsSelected()) ||
-          IsLineCompositionNode(pSNode->GetParent())){
+    while(pSNode->GetParent() &&
+          ((MoveUpIfSelected &&
+            pSNode->GetParent()->IsSelected()) ||
+           IsLineCompositionNode(pSNode->GetParent())))
         pSNode = pSNode->GetParent();
-        j_assert(pSNode, "pSNode shouldn't be NULL, have we hit root node if so, this is bad!");
-        if(!pSNode) //I've got to do something, nothing is probably the best solution :)
-            return NULL;
-    }
     //Now we have the selection line node
     return pSNode;
 }
@@ -1259,6 +1259,7 @@ SmNodeList* SmCursor::LineToList(SmStructureNode* pLine, SmNodeList* list){
     SmNodeIterator it(pLine);
     while(it.Next()){
         switch(it->GetType()){
+            case NLINE:
             case NUNHOR:
             case NEXPRESSION:
             case NBINHOR:
@@ -1304,6 +1305,7 @@ SmNodeList* SmCursor::CloneLineToList(SmStructureNode* pLine, bool bOnlyIfSelect
 
 bool SmCursor::IsLineCompositionNode(SmNode* pNode){
     switch(pNode->GetType()){
+        case NLINE:
         case NUNHOR:
         case NEXPRESSION:
         case NBINHOR:
@@ -1577,7 +1579,7 @@ SmNode* SmNodeListParser::Error(){
     return new SmErrorNode(PE_UNEXPECTED_TOKEN, SmToken());
 }
 
-BOOL SmNodeListParser::IsOperator(const SmToken &token) {
+bool SmNodeListParser::IsOperator(const SmToken &token) {
     return  IsRelationOperator(token) ||
             IsSumOperator(token) ||
             IsProductOperator(token) ||
@@ -1585,15 +1587,15 @@ BOOL SmNodeListParser::IsOperator(const SmToken &token) {
             IsPostfixOperator(token);
 }
 
-BOOL SmNodeListParser::IsRelationOperator(const SmToken &token) {
+bool SmNodeListParser::IsRelationOperator(const SmToken &token) {
     return token.nGroup & TGRELATION;
 }
 
-BOOL SmNodeListParser::IsSumOperator(const SmToken &token) {
+bool SmNodeListParser::IsSumOperator(const SmToken &token) {
     return token.nGroup & TGSUM;
 }
 
-BOOL SmNodeListParser::IsProductOperator(const SmToken &token) {
+bool SmNodeListParser::IsProductOperator(const SmToken &token) {
     return token.nGroup & TGPRODUCT &&
            token.eType != TWIDESLASH &&
            token.eType != TWIDEBACKSLASH &&
@@ -1602,7 +1604,7 @@ BOOL SmNodeListParser::IsProductOperator(const SmToken &token) {
            token.eType != TOVER;
 }
 
-BOOL SmNodeListParser::IsUnaryOperator(const SmToken &token) {
+bool SmNodeListParser::IsUnaryOperator(const SmToken &token) {
     return  token.nGroup & TGUNOPER &&
             (token.eType == TPLUS ||
              token.eType == TMINUS ||
@@ -1612,6 +1614,6 @@ BOOL SmNodeListParser::IsUnaryOperator(const SmToken &token) {
              token.eType == TUOPER);
 }
 
-BOOL SmNodeListParser::IsPostfixOperator(const SmToken &token) {
+bool SmNodeListParser::IsPostfixOperator(const SmToken &token) {
     return token.eType == TFACT;
 }

@@ -65,7 +65,7 @@ sal_Int32 GetEnumAsInt32( const UNO_NMSPC::Any& rVal )
     catch( UNO_NMSPC::Exception & )
     {
         eVal = 0;
-        ASSERT( FALSE, "can't get EnumAsInt32" );
+        OSL_ENSURE( FALSE, "can't get EnumAsInt32" );
     }
     return eVal;
 }
@@ -87,7 +87,7 @@ BOOL UCB_DeleteFile( const String& rURL )
     catch( UNO_NMSPC::Exception& )
     {
         bRemoved = FALSE;
-        ASSERT( FALSE, "Exeception from executeCommand( delete )" );
+        OSL_ENSURE( FALSE, "Exeception from executeCommand( delete )" );
     }
     return bRemoved;
 }
@@ -118,7 +118,7 @@ BOOL UCB_CopyFile( const String& rURL, const String& rNewURL, BOOL bCopyIsMove )
     }
     catch( UNO_NMSPC::Exception& )
     {
-        ASSERT( FALSE, "Exeception from executeCommand( transfer )" );
+        OSL_ENSURE( FALSE, "Exeception from executeCommand( transfer )" );
         bCopyCompleted = FALSE;
     }
     return bCopyCompleted;
@@ -152,7 +152,7 @@ BOOL UCB_IsCaseSensitiveFileName( const String& rURL )
     catch( UNO_NMSPC::Exception& )
     {
         bCaseSensitive = FALSE;
-        ASSERT( FALSE, "Exeception from compareContentIds()" );
+        OSL_ENSURE( FALSE, "Exeception from compareContentIds()" );
     }
     return bCaseSensitive;
 }

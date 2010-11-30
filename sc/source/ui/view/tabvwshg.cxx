@@ -91,21 +91,21 @@ void ScTabViewShell::InsertURLButton( const String& rName, const String& rURL,
     uno::Any aAny;
 
     aAny <<= rtl::OUString(rName);
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "Label" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Label" )), aAny );
 
     ::rtl::OUString aTmp = INetURLObject::GetAbsURL( pDoc->GetDocumentShell()->GetMedium()->GetBaseURL(), rURL );
     aAny <<= aTmp;
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetURL" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetURL" )), aAny );
 
     if( rTarget.Len() )
     {
         aAny <<= rtl::OUString(rTarget);
-        xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "TargetFrame" ), aAny );
+        xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "TargetFrame" )), aAny );
     }
 
     form::FormButtonType eButtonType = form::FormButtonType_URL;
     aAny <<= eButtonType;
-    xPropSet->setPropertyValue( rtl::OUString::createFromAscii( "ButtonType" ), aAny );
+    xPropSet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ButtonType" )), aAny );
 
         if ( ::avmedia::MediaWindow::isMediaURL( rURL ) )
     {

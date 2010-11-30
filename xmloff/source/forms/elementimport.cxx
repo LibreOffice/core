@@ -457,7 +457,7 @@ namespace xmloff
         // no optimization here. If this method gets called, the XML stream did not contain a name for the
         // element, which is a heavy error. So in this case we don't care for performance
         Sequence< ::rtl::OUString > aNames = m_xParentContainer->getElementNames();
-        static const ::rtl::OUString sUnnamedName = ::rtl::OUString::createFromAscii("unnamed");
+        static const ::rtl::OUString sUnnamedName(RTL_CONSTASCII_USTRINGPARAM("unnamed"));
 
         ::rtl::OUString sReturn;
         const ::rtl::OUString* pNames = NULL;
@@ -1443,12 +1443,12 @@ namespace xmloff
             const Reference< sax::XAttributeList >& _rxAttrList)
     {
         // is it the "option" sub tag of a listbox ?
-        static const ::rtl::OUString s_sOptionElementName = ::rtl::OUString::createFromAscii("option");
+        static const ::rtl::OUString s_sOptionElementName(RTL_CONSTASCII_USTRINGPARAM("option"));
         if (s_sOptionElementName == _rLocalName)
             return new OListOptionImport(GetImport(), _nPrefix, _rLocalName, this);
 
         // is it the "item" sub tag of a combobox ?
-        static const ::rtl::OUString s_sItemElementName = ::rtl::OUString::createFromAscii("item");
+        static const ::rtl::OUString s_sItemElementName(RTL_CONSTASCII_USTRINGPARAM("item"));
         if (s_sItemElementName == _rLocalName)
             return new OComboItemImport(GetImport(), _nPrefix, _rLocalName, this);
 
@@ -1655,9 +1655,9 @@ namespace xmloff
         // the label and the value
         const SvXMLNamespaceMap& rMap = GetImport().GetNamespaceMap();
         const ::rtl::OUString sLabelAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii("label"));
+            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("label")));
         const ::rtl::OUString sValueAttribute = rMap.GetQNameByKey(
-            GetPrefix(), ::rtl::OUString::createFromAscii("value"));
+            GetPrefix(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value")));
 
         // -------------------
         // the label attribute

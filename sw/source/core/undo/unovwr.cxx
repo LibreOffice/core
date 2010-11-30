@@ -84,7 +84,7 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     nSttCntnt = rPos.nContent.GetIndex();
 
     SwTxtNode* pTxtNd = rPos.nNode.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
 
     bInsChar = TRUE;
     xub_StrLen nTxtNdLen = pTxtNd->GetTxt().Len();
@@ -208,7 +208,7 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
     rIdx.Assign( pTxtNd, nSttCntnt );
 
@@ -293,7 +293,7 @@ void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "Overwrite nicht im TextNode?" );
+    OSL_ENSURE( pTxtNd, "Overwrite nicht im TextNode?" );
     SwIndex& rIdx = pAktPam->GetPoint()->nContent;
 
     if( pRedlSaveData )

@@ -92,6 +92,7 @@ Resource RID_ERRCTX
         Text [ en-US ] = "$(ERR) searching for an address";
     };
 };
+
 Resource RID_ERRHDL
 {
     String ERRCODE_CLASS_ABORT

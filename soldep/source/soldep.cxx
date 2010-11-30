@@ -44,7 +44,7 @@
 #include "dtsodcmp.hrc"
 
 IMPLEMENT_HASHTABLE_OWNER( SolIdMapper, ByteString, ULONG* );
-//IMPLEMENT_HASHTABLE_OWNER( PrjIdMapper, ByteString, ULONG* );
+
 #define EVENT_RESIZE                0x00000001
 #define MIN(a,b) (a)<(b)?(a):(b)
 #define MAX(a,b) (a)>(b)?(a):(b)
@@ -67,7 +67,6 @@ SolDep::SolDep( Window* pBaseWindow )
 {
     mnSolWinCount = 0;
     mnSolLastId = 0;
-//    mpPrjIdMapper = new SolIdMapper( 63997 );
     maTaskBarFrame.EnableAlwaysOnTop();
     maTaskBarFrame.Show();
     maToolBox.SetPosSizePixel( Point( 0,0 ), Size( 1100,35 ));
@@ -102,8 +101,7 @@ void SolDep::Init()
     if ( mpStandLst && (aUpdater == "YES") ) {
         if ( GetVersion() )
             ReadSource( TRUE );
-    } else
-    {
+    } else {
         ReadSource();   // if stand.lst isn't available
     }
 }
@@ -144,86 +142,80 @@ void SolDep::ProcessChildWindowEvent( const VclWindowEvent& _rVclWindowEvent )
 /*****************************************************************************/
 {
     Window* pChildWin = _rVclWindowEvent.GetWindow();
-//    Window* pParentWin = pChildWin->GetParent();
-//Resize();
     if ( isAlive() )
+    {
+        ULONG id = _rVclWindowEvent.GetId();
+        switch ( id )
         {
-            ULONG id = _rVclWindowEvent.GetId();
-            switch ( id )
+        case VCLEVENT_USER_MOUSEBUTTON_DOWN:
             {
-                case VCLEVENT_USER_MOUSEBUTTON_DOWN:
+                ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
+                if( pObjWin )
+                {
+                    // handle mouse click on ObjectWin object
+                    ObjectWin* pWin = (ObjectWin*) pChildWin;
+                    if (IsHideMode())      // simple mouse click left
                     {
-                        ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
-                        if( pObjWin )
-                        {
-                            // handle mouse click on ObjectWin object
-                            ObjectWin* pWin = (ObjectWin*) pChildWin;
-                            //GetObjectList()->ResetSelectedObject();
-                            if (IsHideMode())      // simple mouse click left
-                            {
-                                pWin->CaptureMouse();
-                                pWin->SetMarkMode( MARKMODE_SELECTED );
-                                pWin->MarkNeeded();
-                                pWin->MarkDepending();
-                                pWin->Invalidate();
-                            } else
-                            {
-                                pWin->LoseFocus();
-                                pWin->SetMarkMode( MARKMODE_SELECTED );
-                                pWin->UnsetMarkMode( MARKMODE_ACTIVATED );
-                                pWin->MarkNeeded( TRUE );
-                                pWin->MarkDepending( TRUE );
-                            }
-
-                        }
+                        pWin->CaptureMouse();
+                        pWin->SetMarkMode( MARKMODE_SELECTED );
+                        pWin->MarkNeeded();
+                        pWin->MarkDepending();
+                        pWin->Invalidate();
+                    } else {
+                        pWin->LoseFocus();
+                        pWin->SetMarkMode( MARKMODE_SELECTED );
+                        pWin->UnsetMarkMode( MARKMODE_ACTIVATED );
+                        pWin->MarkNeeded( TRUE );
+                        pWin->MarkDepending( TRUE );
                     }
-                    break;
-                case VCLEVENT_USER_MOUSEBUTTON_DOWN_ALT:
-                    {
-                        ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
-                        if( pObjWin )
-                        {
-                            ObjectWin* pWin = (ObjectWin*) pChildWin;
-                            MarkObjects( pWin );
-                        }
-                    }
-                    break;
-                case VCLEVENT_USER_MOUSEBUTTON_DOWN_DBLCLICK:
-                    {
-                        ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
-                        if( pObjWin )
-                        {
-                            if (IsHideMode()) ToggleHideDependency();
-                            ByteString text = ((ObjectWin*) pChildWin)->GetBodyText();
-                            ViewContent(text);
-                        }
-                    }
-                    break;
-                case VCLEVENT_USER_MOUSEBUTTON_UP_SHFT:
-                    {
-                        ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
-                        if( pObjWin )
-                        {
-                            ObjectWin* pWin = (ObjectWin*) pChildWin;
-                            GetDepWin()->NewConnector( pWin );
-                        }
-                    }
-                    break;
-                case VCLEVENT_USER_MOUSEBUTTON_UP:
-                     {
-                        ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
-                        if( pObjWin )
-                        {
-                            ObjectWin* pWin = (ObjectWin*) pChildWin;
-                            pWin->ReleaseMouse();
-                            pWin->SetMarkMode(MARKMODE_SELECTED);
-                            GetDepWin()->Invalidate();
-                        }
-                     }
-                     break;
-            }    // switch
-        }  // if isAlive
-        //fprintf(stdout,"BLA::Resize: %d\n",pChildWin);
+                }
+            }
+            break;
+        case VCLEVENT_USER_MOUSEBUTTON_DOWN_ALT:
+            {
+                ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
+                if( pObjWin )
+                {
+                    ObjectWin* pWin = (ObjectWin*) pChildWin;
+                    MarkObjects( pWin );
+                }
+            }
+            break;
+        case VCLEVENT_USER_MOUSEBUTTON_DOWN_DBLCLICK:
+            {
+                ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
+                if( pObjWin )
+                {
+                    if (IsHideMode()) ToggleHideDependency();
+                    ByteString text = ((ObjectWin*) pChildWin)->GetBodyText();
+                    ViewContent(text);
+                }
+            }
+            break;
+        case VCLEVENT_USER_MOUSEBUTTON_UP_SHFT:
+            {
+               ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
+               if( pObjWin )
+               {
+                    ObjectWin* pWin = (ObjectWin*) pChildWin;
+                    GetDepWin()->NewConnector( pWin );
+                }
+            }
+            break;
+        case VCLEVENT_USER_MOUSEBUTTON_UP:
+            {
+                ObjectWin* pObjWin = dynamic_cast<ObjectWin*>(pChildWin);
+                if( pObjWin )
+                {
+                    ObjectWin* pWin = (ObjectWin*) pChildWin;
+                    pWin->ReleaseMouse();
+                    pWin->SetMarkMode(MARKMODE_SELECTED);
+                    GetDepWin()->Invalidate();
+                }
+            }
+            break;
+        }
+    }
 }
 
 /*****************************************************************************/
@@ -233,10 +225,10 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
     USHORT nItemId = pBox->GetCurItemId();
     switch ( nItemId )
     {
-        case TID_SOLDEP_FIND:
-            FindProject();
-            break;
-        case TID_SOLDEP_CREATEMETA :
+    case TID_SOLDEP_FIND:
+        FindProject();
+        break;
+    case TID_SOLDEP_CREATEMETA :
         {
             VirtualDevice   aVDev;
             aVDev.SetMapMode( MAP_100TH_MM );
@@ -279,38 +271,37 @@ IMPL_LINK( SolDep, ToolSelect, SoldepToolBox* , pBox)
             aMtf.SetPrefSize( aDevSize );
             SvFileStream aStream( String::CreateFromAscii("d:\\out.svm"), STREAM_STD_READWRITE );
             aMtf.Write( aStream );
-            break;
         }
-        case TID_SOLDEP_HIDE_INDEPENDEND:
+        break;
+    case TID_SOLDEP_HIDE_INDEPENDEND:
+        {
+            ToggleHideDependency();
+            for ( USHORT i=0; i<mpObjectList->Count(); i++ )
+                mpObjectList->GetObject(i)->SetViewMask(!mbIsHide);
+                maToolBox.CheckItem(TID_SOLDEP_HIDE_INDEPENDEND, IsHideMode());
+               GetDepWin()->Invalidate(); //repaint Main-View
+        }
+        break;
+    case TID_SOLDEP_SELECT_WORKSPACE:
+        if (mpStandLst)
+        {
+            if (GetVersion()) // Version dialog box
             {
-                ToggleHideDependency();
-                for ( USHORT i=0; i<mpObjectList->Count(); i++ )
-                    mpObjectList->GetObject(i)->SetViewMask(!mbIsHide);
-
-                   maToolBox.CheckItem(TID_SOLDEP_HIDE_INDEPENDEND, IsHideMode());
-                   GetDepWin()->Invalidate(); //repaint Main-View
+                delete mpSolIdMapper;
+                delete mpStarWriter;
+                mpObjectList->ClearAndDelete();
+                ReadSource(TRUE);
             }
-            break;
-        case TID_SOLDEP_SELECT_WORKSPACE:
-            if (mpStandLst)
-            {
-                if (GetVersion()) // Version dialog box
-                {
-                    delete mpSolIdMapper;
-                    delete mpStarWriter;
-                    mpObjectList->ClearAndDelete();
-                    ReadSource(TRUE);
-                }
-            }
-            break;
-        case TID_SOLDEP_BACK:
-            maToolBox.HideItem(TID_SOLDEP_BACK);
-            maToolBox.ShowItem(TID_SOLDEP_SELECT_WORKSPACE);  //disabled for prj view (doubleclick ObjWin)
-            maToolBox.ShowItem(TID_SOLDEP_HIDE_INDEPENDEND);  //disabled for prj view (doubleclick ObjWin)
-            maToolBox.ShowItem(TID_SOLDEP_FIND);              //disabled for prj view (doubleclick ObjWin)
-            maToolBox.Resize();
-            TogglePrjViewStatus();
-            break;
+        }
+        break;
+    case TID_SOLDEP_BACK:
+        maToolBox.HideItem(TID_SOLDEP_BACK);
+        maToolBox.ShowItem(TID_SOLDEP_SELECT_WORKSPACE);  //disabled for prj view (doubleclick ObjWin)
+        maToolBox.ShowItem(TID_SOLDEP_HIDE_INDEPENDEND);  //disabled for prj view (doubleclick ObjWin)
+        maToolBox.ShowItem(TID_SOLDEP_FIND);              //disabled for prj view (doubleclick ObjWin)
+        maToolBox.Resize();
+        TogglePrjViewStatus();
+        break;
     }
     return 0;
 }
@@ -367,7 +358,7 @@ ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
 {
     Prj* pPrj;
 
-//hshtable auf stand halten
+    //hshtable auf stand halten
     ObjectWin* pWin = RemoveObjectFromList( mpObjectList, mnSolWinCount, nId, FALSE );
     if ( pWin )
     {
@@ -375,7 +366,7 @@ ObjectWin *SolDep::RemoveObject( USHORT nId, BOOL bDelete )
         if( (pPrj = mpStarWriter->GetPrj( aBodyText )) )
         {
             mpStarWriter->Remove( pPrj );
-//cleanup ist teuer...
+            //cleanup ist teuer...
             mpStarWriter->CleanUp();
             delete pPrj;
         }
@@ -402,7 +393,7 @@ ULONG SolDep::AddObject( ByteString& rBodyText, BOOL bInteract )
     }
     else
     {
-//hashtable auf stand halten
+        //hashtable auf stand halten
         MyHashObject* pHObject;
         nObjectId = AddObjectToList( mpBaseWin, mpObjectList, mnSolLastId, mnSolWinCount, rBodyText, FALSE );
         pHObject = new MyHashObject( nObjectId, ObjIdToPtr(mpObjectList, nObjectId ));
@@ -422,11 +413,11 @@ ULONG SolDep::AddPrjObject( ByteString& rBodyText, BOOL bInteract )
     }
     else
     {
-//hshtable auf stand halten
+        //hshtable auf stand halten
         MyHashObject* pHObject;
         nObjectId = AddObjectToList( mpBasePrjWin, mpObjectPrjList, mnPrjLastId, mnPrjWinCount, rBodyText );
         pHObject = new MyHashObject( nObjectId, ObjIdToPtr( mpObjectPrjList, nObjectId ));
-        mpPrjIdMapper->Insert( rBodyText, pHObject ); // mpPrjIdMapper
+        mpPrjIdMapper->Insert( rBodyText, pHObject );
     }
     return nObjectId;
 }
@@ -435,7 +426,6 @@ ULONG SolDep::AddPrjObject( ByteString& rBodyText, BOOL bInteract )
 USHORT SolDep::AddConnector( ObjectWin* pStartWin, ObjectWin* pEndWin )
 /*****************************************************************************/
 {
-//  DBG_ASSERT( FALSE , "not yet" );
     ByteString sEndName = pEndWin->GetBodyText();
     ByteString sStartName = pStartWin->GetBodyText();
 
@@ -500,7 +490,6 @@ void SolDep::RemoveAllObjects( ObjectList* pObjLst )
 ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 /*****************************************************************************/
 {
-//  DBG_ASSERT( FALSE , "soldep" );
     MyHashObject* pHObject = pIdMapper->Find( "null" );//null_project
 
     if ( !pHObject ) {
@@ -517,7 +506,6 @@ ULONG SolDep::GetStart(SolIdMapper* pIdMapper, ObjectList* pObjList)
 ULONG SolDep::GetStartPrj(SolIdMapper* , ObjectList* )
 /*****************************************************************************/
 {
-//  DBG_ASSERT( FALSE , "prjdep" );
     MyHashObject* pHObject = mpPrjIdMapper->Find( ByteString( "null" ) ); //null_dir
     if ( !pHObject )
     {
@@ -593,29 +581,19 @@ USHORT SolDep::ReadSource(BOOL bUpdater)
             {
                 pStr = pLst->GetObject(m);
                 pHObject = mpSolIdMapper->Find( *pStr );
-                /*if ( !pHObject )
-                {
-    // create new prj
-                    Prj *pNewPrj = new Prj( *pStr );
-                    ByteString sPrjName = pNewPrj->GetProjectName();
-                    nObjectId = AddObject( sPrjName, FALSE );
-                    pHObject = mpSolIdMapper->Find( *pStr );
-                    ObjIdToPtr( mpObjectList, nObjectId )->SetViewMask( 2 );
-                }*/
-
                 if ( pHObject )
                 {
-                nHashedId = pHObject->GetId();
-                ByteString sF_Os2 = pPrj->GetProjectName();
-                pStr = &sF_Os2;
-                pHObject = mpSolIdMapper->Find( *pStr );
-                nObjectId = pHObject->GetId();
-                pStartWin = ObjIdToPtr( mpObjectList, nHashedId );
-                pEndWin = ObjIdToPtr( mpObjectList, nObjectId );
-                AddConnectorToObjects( pStartWin, pEndWin );
+                    nHashedId = pHObject->GetId();
+                    ByteString sF_Os2 = pPrj->GetProjectName();
+                    pStr = &sF_Os2;
+                    pHObject = mpSolIdMapper->Find( *pStr );
+                    nObjectId = pHObject->GetId();
+                    pStartWin = ObjIdToPtr( mpObjectList, nHashedId );
+                    pEndWin = ObjIdToPtr( mpObjectList, nObjectId );
+                    AddConnectorToObjects( pStartWin, pEndWin );
+                }
             }
         }
-    }
     }
     if (!IsPrjView())
     {
@@ -669,37 +647,12 @@ SolarFileList* SolDep::GetPrjListFromDir()
 USHORT SolDep::WriteSource()
 /*****************************************************************************/
 {
-/* zur Sicherheit deaktiviert
-    USHORT nMode = mpStarWriter->GetMode();
-    if ( nMode == STAR_MODE_SINGLE_PARSE ) {
-        ByteString sFileName = mpStarWriter->GetName();
-        if ( sFileName.Len()) {
-            mpStarWriter->Write( String( sFileName, RTL_TEXTENCODING_UTF8) );
-            mpStarWriter->RemoveProject( ByteString( "null"));  //null_project
-        }
-    }
-    else if ( nMode == STAR_MODE_MULTIPLE_PARSE ) {
-    // *OBO*
-    //String sRoot = mpStarWriter->GetSourceRoot();
-    //nicht mehr unterstützt mpStarWriter->GetSourceRoot()
-        ByteString sFileName = mpStarWriter->GetName();
-        DirEntry aEntry( sFileName );
-        aEntry.ToAbs();
-        aEntry = aEntry.GetPath().GetPath().GetPath();
-        String sRoot = aEntry.GetFull();
-
-        if ( sRoot.Len()) {
-            mpStarWriter->RemoveProject( ByteString( "null")); //null_project
-            mpStarWriter->WriteMultiple( sRoot );
-        }
-    }
-*/
     return 1;
 }
 
 USHORT SolDep::Load( const ByteString& rFileName )
 {
-// moved from depper class
+    // moved from depper class
     DBG_ASSERT( FALSE , "you are dead!" );
     SvFileStream aInFile( String( rFileName, RTL_TEXTENCODING_UTF8 ), STREAM_READ );
     depper_head dh;
@@ -723,7 +676,7 @@ USHORT SolDep::Load( const ByteString& rFileName )
 
     ULONG nStartId;
     ULONG nEndId;
-//  ueber addconnector fuehren!
+    //  ueber addconnector fuehren!
     for ( i=0; i < nCnctrCount ; i++ )
     {
         Connector* pCon = new Connector( mpBaseWin, WB_NOBORDER );
@@ -738,7 +691,6 @@ USHORT SolDep::Load( const ByteString& rFileName )
         pCon->Initialize( pStartWin, pEndWin );
     }
 
-
     return 0;
 }
 
@@ -752,7 +704,6 @@ BOOL SolDep::ViewContent( ByteString& rObjectName )
     for ( ULONG i = 0; i < mpObjectList->Count() && !mpFocusWin; i++ )
         if ( mpObjectList->GetObject( i )->HasFocus())
             mpFocusWin = mpObjectList->GetObject( i );
-    //HideObjectsAndConnections( mpObjectList );
     mpProcessWin->Resize();
     GetDepWin()->Show();
     return InitPrj( rObjectName );
@@ -794,8 +745,7 @@ BOOL SolDep::InitPrj( ByteString& rListName )
 
     for ( i=0; i<nCount; i++ )
     {
-// pPrj->GetProjectName() returns the name of
-// the project e.g. svtools
+        // pPrj->GetProjectName() returns the name of the project e.g. svtools
         pPrj = mpStarWriter->GetObject(i);
         ByteString sPrjName = pPrj->GetProjectName();
         if ( sPrjName == rListName )
@@ -809,23 +759,23 @@ BOOL SolDep::InitPrj( ByteString& rListName )
                 CommandData *pData = mpPrj->GetObject(j);
                 fprintf( stdout, "\tProjectDir : %s\n",
                         pData->GetLogFile().GetBuffer());
-// pData->GetLogFile() contains internal project IDs
-// e.g. st_mkout etc.
+                        // pData->GetLogFile() contains internal project IDs
+                        // e.g. st_mkout etc.
                 if ( pData->GetLogFile() != "" )
                 {
                     ByteString sItem = pData->GetLogFile();
                     nObjectId = AddPrjObject( sItem, FALSE);
-// there may be faster ways......
+                    // there may be faster ways......
                     ObjectWin *pWin = ObjIdToPtr( mpObjectPrjList, nObjectId );
                     pWin->SetViewMask( 0x0001 );
-// pData->GetPath() contains internal project directories
-// e.g. svtools/inc etc.
+                    // pData->GetPath() contains internal project directories
+                    // e.g. svtools/inc etc.
                     ByteString sPath = pData->GetPath();
                     pWin->SetTipText( sPath );
                 }
             }
 
-// set connectors for dependencies here
+            // set connectors for dependencies here
             for ( j=0; j<nDirCount; j++ )
             {
                 CommandData *pData = mpPrj->GetObject(j);
@@ -834,11 +784,9 @@ BOOL SolDep::InitPrj( ByteString& rListName )
                 {
                     ByteString sFlagName = pData->GetLogFile();
                     pFlagName = &sFlagName;
-                    //pHObject = mpPrjIdMapper->Find( (*pFlagName).GetToken( 0, '.'));//mpSolIdMapper see ReadSource()
                     pHObject = mpPrjIdMapper->Find( sFlagName.GetToken( 0, '.'));
                     if (pHObject)
                     {
-
                         nObjectId = pHObject->GetId();
 
                         ULONG nDepCount = pDeps->Count();
@@ -866,9 +814,7 @@ BOOL SolDep::InitPrj( ByteString& rListName )
                         }
                     }
                 }
-
             }
-
             break;
         }
     }
@@ -877,9 +823,6 @@ BOOL SolDep::InitPrj( ByteString& rListName )
     ObjectWin *pWin = ObjIdToPtr( mpObjectPrjList, nObjectId );
     pWin->SetViewMask( 0x0001 );
     mpGraphPrjWin->EnablePaint( TRUE );
-    //debug
-//    int test_l = GetStartPrj(mpPrjIdMapper, mpObjectPrjList);
-//    ObjectWin *pTestWin = ObjIdToPtr( mpObjectPrjList, test_l );
     AutoArrange( mpPrjIdMapper, mpObjectPrjList, GetStartPrj(mpPrjIdMapper, mpObjectPrjList), 0, GetStartPrj(mpPrjIdMapper, mpObjectPrjList) );
     mpGraphWin->Hide();
     mpGraphPrjWin->Show();
@@ -984,21 +927,17 @@ BOOL SolDep::MarkObjects( ObjectWin* pObjectWin )
 
 void SolDep::Resize()
 {
-//funzt! muß aber von der applikation aufgerufen werden.
+    //funzt! muß aber von der applikation aufgerufen werden.
     Point aOutPos = Point( 0, 0 );
     Size aOutSize = mpProcessWin->GetOutputSizePixel();
-        // calculate output size
+    // calculate output size
     ULONG nTaskHeight = maToolBox.CalcWindowSizePixel().Height();
     ULONG nTaskWidth  = maToolBox.CalcWindowSizePixel().Width();
     Size aSize( aOutSize.Width(), nTaskHeight );
 
-//  ULONG nMenuHeight = 0;
     Point aGraphWinPos = Point(0,0);
     Size  aGraphWinSize = Size(0,0);
 
-//weiß nicht wie:    nMenuHeight = aMenuBar.GetWindow()->GetSizePixel().Height(); //Höhe des Menues
-
-    //aInRect = pTBManager->Resize( Rectangle( aOutPos, aOutSize );
     // Set Docking-Rectangle for ToolBar
     Rectangle aInRect;
 
@@ -1067,14 +1006,8 @@ void SolDep::Resize()
         }
     }
 
-    Rectangle rout = Rectangle( Point( 0,0 ), aOutSize ); //OutputToScreenPixel( aOutPos )
-    Rectangle rin  = Rectangle( Point( 0,0 ),//OutputToScreenPixel( Point( aOutPos.X() - 20, aInRect.Top())
-                Size( aOutSize.Width(), aOutSize.Height()));
-/*
-    Rectangle rout = mpProcessWin->OutputToScreenPixel( aOutPos );
-    Rectangle rin  = Rectangle( Point( 0,0 ),//OutputToScreenPixel( Point( aOutPos.X() - 20, aInRect.Top())
-                Size( aOutSize.Width(), aOutSize.Height()));
-*/
+    Rectangle rout = Rectangle( Point( 0,0 ), aOutSize );
+    Rectangle rin  = Rectangle( Point( 0,0 ), Size( aOutSize.Width(), aOutSize.Height()));
     maToolBox.SetDockingRects( rout, rin );
 
     BOOL bFloating = maToolBox.IsFloatingMode();
@@ -1082,10 +1015,8 @@ void SolDep::Resize()
     if ( bFloating )
     {
         GetGraphWin()->SetPosSizePixel(Point(0,0),aOutSize);
-        //if (IsPrjView() && (mpPrjDep)) mpPrjDep->Resize();
         if (maToolBox.IsVisible()) maToolBox.Show();
-    } else
-    {
+    } else {
         GetGraphWin()->SetPosSizePixel( aGraphWinPos, aGraphWinSize );
     }
     if (maToolBox.IsVisible()) maToolBox.Show();
@@ -1093,7 +1024,6 @@ void SolDep::Resize()
 
 USHORT SolDep::AddConnectorPrjView( ObjectWin* pStartWin, ObjectWin* pEndWin )
 {
-//  DBG_ASSERT( FALSE , "not yet" );
     ByteString sEndName = pEndWin->GetBodyText();
     ByteString sStartName = pStartWin->GetBodyText();
     if ( sStartName != ByteString("null"))
@@ -1222,12 +1152,9 @@ double SolDep::CalcDistSum( ObjWinList* pObjList, DistType eDistType )
                 }
                 j++;
             }
-//          if ( j != 0 )
-//              dWinVal /= j;
             dRetVal += dWinVal;
         }
     }
-
     return dRetVal;
 }
 
@@ -1271,13 +1198,12 @@ USHORT SolDep::Impl_Traveller( ObjectWin* pWin, USHORT nDepth )
 
 double SolDep::Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinList& rResultList, double dMinDist, ULONG nStart, ULONG nSize, DistType eDistType )
 {
-
     ULONG i, j, l;
     ULONG nEnd = nStart + nSize;
     ObjectWin* pSwapWin;
     ULONG nLevelObjCount = rObjList.Count();
 
-//dont use full recusion for more than 6 objects
+    //dont use full recusion for more than 6 objects
     if ( nLevelObjCount > 6 )
     {
         srand(( unsigned ) time( NULL ));
@@ -1315,7 +1241,6 @@ double SolDep::Impl_PermuteMin( ObjWinList& rObjList, Point* pPosArray, ObjWinLi
                         rResultList.Insert( pSwapWin, LIST_APPEND);
                     }
                 }
-//              if ( dCurDist > dMinDist * 1.5 )
                 if ( dCurDist > dMinDist * 15 )
                 {
                     pSwapWin = rObjList.GetObject( nIdx1 );
@@ -1478,7 +1403,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
                 }
                 else
                 {
-    //              need to be arranged more intelligent...
+                    // need to be arranged more intelligent...
                     Point aPos( 5, nUnvisYOffs );
                     pWin->SetCalcPosPixel( aPos );
 
@@ -1515,11 +1440,9 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
         {
             LevelList[ i ]->Insert( NULL, LIST_APPEND );
             nLevelObjCount++;
-//          LevelUse bleibt orginal...
-//          LevelUse[ i ]++;
         }
 
-// catch too big lists
+        // catch too big lists
         DBG_ASSERT( nLevelObjCount < DEPPER_MAX_LEVEL_WIDTH * DEPPER_MAX_WIDTH , "graph zu breit! dat geiht nich gut. breaking" );
         if ( nLevelObjCount >= DEPPER_MAX_LEVEL_WIDTH * DEPPER_MAX_WIDTH )
         {
@@ -1631,7 +1554,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
     mnMinDynXOffs = 0xffff;
 
-// and back again...
+    // and back again...
     // get better results form already preoptimized upper and lower rows
 
     do
@@ -1651,7 +1574,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             aWorkList.Insert( pSwapWin, LIST_APPEND);
             Point aPos = CalcPos( i, j );
             aPosArray[ j ] = aPos;
-//no need to do this stuff.......   ?????
+            //no need to do this stuff.......   ?????
             if ( pSwapWin )
                 pSwapWin->SetCalcPosPixel( aPosArray[ j ] );
         }
@@ -1659,12 +1582,11 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
         double dMinDist = CalcDistSum( LevelList[ i ], BOTH );
 
         dMinDist = MIN( dMinDist, Impl_PermuteMin( *(LevelList[ i ]), aPosArray, aWorkList, dMinDist, 0, nLevelObjCount, BOTH ));
-// wrong position for remaping - keep old positions for comparing
+        // wrong position for remaping - keep old positions for comparing
         for ( j = 0; j < nLevelObjCount; j++ )
         {
             pSwapWin = aWorkList.GetObject( j );
             if ( pSwapWin )
-//              pSwapWin->SetCalcPosPixel( mpBaseWin->LogicToPixel( aPosArray[ j ] ));
                 pSwapWin->SetCalcPosPixel( aPosArray[ j ] );
         }
 
@@ -1681,7 +1603,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             {
                 Point aPos = CalcPos( i, j );
                 bUsedPos = FALSE;
-// could be faster
+                // could be faster
                 for ( k = 0; k < nLevelObjCount; k++ )
                 {
                     if ( LevelList[ i ]->GetObject( k ) )
@@ -1705,7 +1627,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             dMinDist = CalcDistSum( LevelSecList[ i ], BOTH );
 
             dMinDist = MIN( dMinDist, Impl_PermuteMin( *(LevelSecList[ i ]), aPosArray, aWorkList, dMinDist, 0, nLevelSecObjCount, BOTH ));
-// wrong position for remaping - keep old positions for comparing
+            // wrong position for remaping - keep old positions for comparing
             for ( j = 0; j < nLevelSecObjCount; j++ )
             {
                 pSwapWin = aWorkList.GetObject( j );
@@ -1713,13 +1635,10 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
                     pSwapWin->SetCalcPosPixel( aPosArray[ j ] );
             }
         }
-//      i--;
     } while ( i != 0 );
     SetMainProgressBar( 100 );
 
     ULONG nNewXSize = ( DEPPER_MAX_WIDTH + 1 )  * ( OBJWIN_X_SPACING + GetDefSize().Width() );
-
-    //    ULONG aObjID = GetStart(pIdMapper, pObjLst) //hier muß man switchen GetStart/GetPrjStart oder so
 
     ObjectWin* pObjWin = ObjIdToPtr( pObjLst, aObjID);
 
@@ -1738,14 +1657,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
     if ( GetDepWin()->LogicToPixel( aNowSize ).Height()  > aTmpSize.Height() )
         aTmpSize.Height() = GetDepWin()->LogicToPixel( aNowSize ).Height() ;
 
-//  if ( nZoomed <= 0 )
-//  {
-//      mpBaseWin->SetSizePixel( aTmpSize );
-//      mpGraphWin->SetTotalSize( aTmpSize );
-//      mpGraphWin->EndScroll( 0, 0 );
-//  }
-
-// now remap all objects
+    // now remap all objects
     ULONG nAllObjCount = pObjLst->Count();
     Point aTmpPos;
     for ( j = 0; j < nAllObjCount; j++ )
@@ -1755,10 +1667,10 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
             aTmpPos = pWin->GetCalcPosPixel();
             if ( pWin->mbVisited )
             {
-// reserve space for unconnected
+                // reserve space for unconnected
                 aTmpPos.X() -= mnMinDynXOffs;
                 aTmpPos.X() += GetDefSize().Width() + OBJWIN_X_SPACING;
-// center window
+                // center window
                 aTmpPos.X() += GetDefSize().Width() / 2;
                 aTmpPos.X() -= pWin->PixelToLogic( pWin->GetSizePixel()).Width() / 2 ;
             }
@@ -1768,10 +1680,10 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
     aWorkList.Clear();
     GetDepWin()->EnablePaint( TRUE );
     GetDepWin()->Invalidate();
-//LevelListen loeschen                  Hä? Welche Levellisten?
+    //LevelListen loeschen                  Hä? Welche Levellisten?
 
-//Update all Connectors
-// --> To be done: Don't call twice Object1-Connector-Object2
+    //Update all Connectors
+    // --> To be done: Don't call twice Object1-Connector-Object2
     ObjectWin* pObject1;
     for ( i = 0 ; i < nObjCount ; i++)
     {
@@ -1784,7 +1696,7 @@ USHORT SolDep::OptimizePos(SolIdMapper* pIdMapper, ObjectList* pObjLst, ULONG nT
 
 void SolDep::WriteToErrorFile()
 {
-//Needs some improvement
+    //Needs some improvement
     ObjectWin* pWin;
     WarningBox aWBox( mpBaseWin, WB_OK, String::CreateFromAscii("graph too deep! dat geiht nich gut.\nlook at depper.err in your Tmp-directory\nfor list of objects"));
     aWBox.Execute();

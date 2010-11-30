@@ -101,10 +101,10 @@ void SwTxtPainter::CtorInitTxtPainter( SwTxtFrm *pNewFrm, SwTxtPaintInfo *pNewIn
     pInf = pNewInf;
     SwFont *pMyFnt = GetFnt();
     GetInfo().SetFont( pMyFnt );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     if( ALIGN_BASELINE != pMyFnt->GetAlign() )
     {
-        ASSERT( ALIGN_BASELINE == pMyFnt->GetAlign(),
+        OSL_ENSURE( ALIGN_BASELINE == pMyFnt->GetAlign(),
                 "+SwTxtPainter::CTOR: font alignment revolution" );
         pMyFnt->SetAlign( ALIGN_BASELINE );
     }
@@ -538,8 +538,8 @@ void SwTxtPainter::CheckSpecialUnderline( const SwLinePortion* pPor,
     Range aRange( 0, GetInfo().GetTxt().Len() );
     MultiSelection aUnderMulti( aRange );
 
-    ASSERT( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
-            "CheckSpecialUnderline without underlined font" )
+    OSL_ENSURE( GetFnt() && UNDERLINE_NONE != GetFnt()->GetUnderline(),
+            "CheckSpecialUnderline without underlined font" );
     const SwFont* pParaFnt = GetAttrHandler().GetFont();
     if( pParaFnt && pParaFnt->GetUnderline() == GetFnt()->GetUnderline() )
         aUnderMulti.SelectAll();

@@ -108,8 +108,8 @@ bool getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 rServiceMgr->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.configuration.ConfigurationProvider" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.configuration.ConfigurationProvider" )) ),
                 uno::UNO_QUERY );
 
         if ( !xConfigProv.is() )

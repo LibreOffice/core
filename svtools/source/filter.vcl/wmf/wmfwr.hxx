@@ -182,7 +182,6 @@ private:
     void WMFRecord_RoundRect(const Rectangle & rRect, long nHorzRound, long nVertRound);
     void WMFRecord_SaveDC();
     void WMFRecord_SelectObject(USHORT nObjectHandle);
-    void WMFRecord_SetBkColor(const Color & rColor);
     void WMFRecord_SetBkMode(BOOL bTransparent);
     void WMFRecord_SetStretchBltMode();
     void WMFRecord_SetPixel(const Point & rPoint, const Color & rColor);

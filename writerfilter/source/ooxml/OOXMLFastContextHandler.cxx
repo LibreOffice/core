@@ -101,7 +101,7 @@ static string resourceToString
 
 set<OOXMLFastContextHandler *> aSetContexts;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 class OOXMLIdToString : public IdToString
 {
 public:
@@ -435,7 +435,7 @@ void OOXMLFastContextHandler::lcl_endAction(Token_t Element)
     OOXMLFactory::getInstance()->endAction(this, Element);
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 XMLTag::Pointer_t OOXMLFastContextHandler::toPropertiesTag
     (OOXMLPropertySet::Pointer_t pProps)
 {
@@ -1360,7 +1360,7 @@ OOXMLValue::Pointer_t OOXMLFastContextHandlerProperties::getValue() const
     return OOXMLValue::Pointer_t(new OOXMLPropertySetValue(mpPropertySet));
 }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 XMLTag::Pointer_t OOXMLFastContextHandlerProperties::toTag() const
 {
     XMLTag::Pointer_t pTag(OOXMLFastContextHandler::toTag());

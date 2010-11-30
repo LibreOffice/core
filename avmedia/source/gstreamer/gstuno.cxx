@@ -62,7 +62,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
         {
             uno::Reference< registry::XRegistryKey > xNewKey1(
                 static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                ::rtl::OUString::createFromAscii( "/com.sun.star.comp.media.Manager_GStreamer/UNO/SERVICES/com.sun.star.media.Manager_GStreamer" ) ) );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/com.sun.star.comp.media.Manager_GStreamer/UNO/SERVICES/com.sun.star.media.Manager_GStreamer" )) ) );
 
             bRet = sal_True;
         }
@@ -86,11 +86,11 @@ extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void*
 
     if( rtl_str_compare( pImplName, "com.sun.star.comp.media.Manager_GStreamer" ) == 0 )
     {
-        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( "com.sun.star.media.Manager_GStreamer" ) );
+        const ::rtl::OUString aServiceName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.media.Manager_GStreamer" )) );
 
         xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
                         reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
-                        ::rtl::OUString::createFromAscii( "com.sun.star.comp.media.Manager_GStreamer" ),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.media.Manager_GStreamer" )),
                         create_MediaPlayer, uno::Sequence< ::rtl::OUString >( &aServiceName, 1 ) ) );
     }
 

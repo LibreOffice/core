@@ -207,7 +207,7 @@ Reference< chart2::XDataSeries > SchXMLSeriesHelper::getFirstCandleStickSeries(
             for( sal_Int32 nCTIdx=0; !xResult.is() && nCTIdx<aCTSeq.getLength(); ++nCTIdx )
             {
                 if( aCTSeq[nCTIdx]->getChartType().equals(
-                        ::rtl::OUString::createFromAscii("com.sun.star.chart2.CandleStickChartType")))
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.CandleStickChartType"))))
                 {
                     Reference< chart2::XDataSeriesContainer > xSeriesCnt( aCTSeq[nCTIdx], uno::UNO_QUERY_THROW );
                     Sequence< Reference< chart2::XDataSeries > > aSeriesSeq( xSeriesCnt->getDataSeries() );
@@ -240,7 +240,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPISeriesProp
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.DataSeriesWrapper")) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {
@@ -277,7 +277,7 @@ uno::Reference< beans::XPropertySet > SchXMLSeriesHelper::createOldAPIDataPointP
             if( xFactory.is() )
             {
                 xRet = uno::Reference< beans::XPropertySet >( xFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.comp.chart2.DataSeriesWrapper" ) ), uno::UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.DataSeriesWrapper")) ), uno::UNO_QUERY );
                 Reference< lang::XInitialization > xInit( xRet, uno::UNO_QUERY );
                 if(xInit.is())
                 {

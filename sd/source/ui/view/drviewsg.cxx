@@ -57,12 +57,6 @@
 
 namespace sd {
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawViewShell::ExecIMap( SfxRequest& rReq )
 {
     // waehrend einer Diashow wird nichts ausgefuehrt!
@@ -93,13 +87,6 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
         }
     }
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 void DrawViewShell::GetIMapState( SfxItemSet& rSet )
 {

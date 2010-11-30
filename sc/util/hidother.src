@@ -501,4 +501,3 @@ hidspecial HID_DAI_FUNC_ROT13       { HelpID = HID_DAI_FUNC_ROT13; };
 //  generated from there, because of the use of macros (#95943#):
 
 hidspecial SID_RENAME_OBJECT        { HelpID = SID_RENAME_OBJECT; };
-

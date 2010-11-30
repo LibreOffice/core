@@ -62,10 +62,8 @@ SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId ) :
 // -----------------------------------------------------------------------
 
 SvxCheckListBox::SvxCheckListBox( Window* pParent, const ResId& rResId,
-                                  const Image& rNormalStaticImage,
-                                  const Image& /*TODO#i72485# rHighContrastStaticImage*/ ) :
-
-    SvTreeListBox( pParent, rResId )
+                                  const Image& rNormalStaticImage )
+    : SvTreeListBox( pParent, rResId )
 
 {
     Init_Impl();

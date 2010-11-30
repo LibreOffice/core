@@ -38,7 +38,7 @@ namespace TxtFmtCollFunc
     /** Checks, if assignment of paragraph style to list level of outline style
         has to be deleted, and deletes the assignment, if needed.
 
-        OD 2006-11-22 #i71574#
+        #i71574#
         The assignment of a paragraph style to a list level of the outline style
         has to be deleted, if the numbering rule, which is set at the paragraph
         style isn't the outline style.
@@ -50,8 +50,6 @@ namespace TxtFmtCollFunc
                                     const SwNumRuleItem* pNewNumRuleItem = 0L );
 
     /** determines the list style, which directly set at the given paragraph style
-
-        OD 2008-03-04 #refactorlists#
 
         @author OD
 
@@ -65,7 +63,6 @@ namespace TxtFmtCollFunc
 
     /** adds the given paragraph style at the directly set list style
 
-        OD 2008-03-04 #refactorlists#
         Note: If the given paragraph style has no directly set list style, nothing happens
 
         @param rTxtFmtColl
@@ -77,7 +74,6 @@ namespace TxtFmtCollFunc
 
     /** removes te given paragraph style from the directly set list style
 
-        OD 2008-03-04 #refactorlists#
         Note: If the given paragraph style has no directly set list style, nothing happens
 
         @param rTxtFmtColl

@@ -45,7 +45,6 @@ import org.openoffice.xmerge.converter.xml.StyleCatalog;
 
 import java.io.IOException;
 
-
 /**
  * <p>Pocket Word implementation of <code>DocumentDeserializer</code>
  * for use by {@link
@@ -67,7 +66,6 @@ public final class DocumentSerializerImpl
 
     private boolean inList = false;
 
-
     /**
      *  <p>Initialises a new <code>DocumentSerializerImpl</code> using the.<br>
      *     supplied <code>Document</code></p>
@@ -76,13 +74,12 @@ public final class DocumentSerializerImpl
      *    org.openoffice.xmerge.converter.xml.sxw.SxwDocument SxwDocument}
      *    object.</p>
      *
-     *  @param  document  The <code>Document</code> to convert.
+     *  @param  doc  The <code>Document</code> to convert.
      */
     public DocumentSerializerImpl(Document doc) {
         sxwDoc = (SxwDocument)doc;
         pswDoc = new PocketWordDocument(sxwDoc.getName());
     }
-
 
     /**
      *  <p>Convert the data passed into the <code>DocumentSerializerImpl</code>
@@ -118,7 +115,6 @@ public final class DocumentSerializerImpl
 
         return cd;
     }
-
 
     /*
      * Handles the loading of defined styles from the style.xml file as well
@@ -175,7 +171,6 @@ public final class DocumentSerializerImpl
         }
     }
 
-
     /*
      * Process the office:body tag.
      */
@@ -204,7 +199,6 @@ public final class DocumentSerializerImpl
             }
         }
     }
-
 
     /*
      * Process a text:p tag
@@ -237,7 +231,6 @@ public final class DocumentSerializerImpl
 
         traverseParagraphContents(node, tstyle);
     }
-
 
     /*
      * Process the contents of a paragraph.  This method handles situations
@@ -356,7 +349,6 @@ public final class DocumentSerializerImpl
         }
     }
 
-
     /*
      * Process a text:ordered-list or text:unordered-list tag.  Pocket Word has
      * no concept of a list so there is no need to differentiate between the
@@ -387,7 +379,6 @@ public final class DocumentSerializerImpl
         inList = false;
     }
 
-
     /*
      * Process a text:list-item node.  They usually contain have a single
      * text:p child but can also have sections or other lists.
@@ -413,7 +404,6 @@ public final class DocumentSerializerImpl
         }
 
     }
-
 
     /*
      * Utility method to retrieve a Node attribute.

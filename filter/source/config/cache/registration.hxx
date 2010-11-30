@@ -67,7 +67,7 @@ namespace comphelper{
                                                  MyClass::st_getServNames())
 
                    b) _COMPHELPER_COMPONENTINFO( MyClass,
-                                                 ::rtl::OUString::createFromAscii("css.MyClass"),
+                                                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "css.MyClass" )),
                                                  lServiceNames)
 
     @param  CLASS

@@ -893,7 +893,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
         {
             // A quote is turned into "\"" - a quote to end quoted text, an escaped quote,
             // and a quote to resume quoting.
-            rtl::OUString aInsert( rtl::OUString::createFromAscii( "\"\\\"" ) );
+            rtl::OUString aInsert( RTL_CONSTASCII_USTRINGPARAM( "\"\\\"" ) );
 
             sal_Int32 nPos = 0;
             while ( nPos < rContent.getLength() )
@@ -1233,7 +1233,7 @@ void SvXMLNumFmtElementContext::EndElement()
             {
                 rParent.AddNumber( aNumInfo );      // simple number
 
-                rParent.AddToCode( OUString::createFromAscii( "E+" ) );
+                rParent.AddToCode( OUString(RTL_CONSTASCII_USTRINGPARAM("E+")) );
                 for (sal_Int32 i=0; i<aNumInfo.nExpDigits; i++)
                     rParent.AddToCode( OUString::valueOf((sal_Unicode)'0') );
             }
@@ -1245,74 +1245,6 @@ void SvXMLNumFmtElementContext::EndElement()
 }
 
 //-------------------------------------------------------------------------
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDay( const SvtSysLocale&, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return bLong ? rIntn.IsLongDateDayLeadingZero() : rIntn.IsDateDayLeadingZero();
-#else
-    return !bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongMonth( const SvtSysLocale&, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    if (bLong)
-    {
-        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
-        return ( eMonth == MONTH_ZERO || eMonth == MONTH_LONG );
-    }
-    else
-        return rIntn.IsDateMonthLeadingZero();
-#else
-    return !bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemTextualMonth( const SvtSysLocale&, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    if (bLong)
-    {
-        MonthFormat eMonth = rIntn.GetLongDateMonthFormat();
-        return ( eMonth == MONTH_SHORT || eMonth == MONTH_LONG );
-    }
-    else
-        return sal_False;
-#else
-    return bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongYear( const SvtSysLocale&, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return bLong ? rIntn.IsLongDateCentury() : rIntn.IsDateCentury();
-#else
-    return bLong;
-#endif
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongEra( const SvtSysLocale& rSysLoc, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-    return IsSystemLongYear( rSysLoc, bLong );      // no separate setting
-}
-
-sal_Bool SvXMLNumFmtDefaults::IsSystemLongDayOfWeek( const SvtSysLocale&, BOOL bLong )
-{
-    // TODO: merge system information and defaults into i18n locale data
-#if 0
-    return ( bLong && rIntn.GetLongDateDayOfWeekFormat() == DAYOFWEEK_LONG );
-#else
-    return bLong && true;
-#endif
-}
 
 sal_uInt16 SvXMLNumFmtDefaults::GetDefaultDateFormat( SvXMLDateElementAttributes eDOW,
                 SvXMLDateElementAttributes eDay, SvXMLDateElementAttributes eMonth,
@@ -2104,7 +2036,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
     SvNumberFormatter* pFormatter = pData->GetNumberFormatter();
     sal_uInt32 l_nKey = pData->GetKeyForName( rApplyName );
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( pFormatter && l_nKey != NUMBERFORMAT_ENTRY_NOT_FOUND &&
@@ -2154,7 +2086,7 @@ void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex )
 void SvXMLNumFormatContext::AddCondition( const sal_Int32 nIndex, const rtl::OUString& rFormat, const LocaleDataWrapper& rData )
 {
     rtl::OUString rCondition = aMyConditions[nIndex].sCondition;
-    OUString sValue = OUString::createFromAscii( "value()" );       //! define constant
+    OUString sValue(RTL_CONSTASCII_USTRINGPARAM("value()"));        //! define constant
     sal_Int32 nValLen = sValue.getLength();
 
     if ( rCondition.copy( 0, nValLen ) == sValue )

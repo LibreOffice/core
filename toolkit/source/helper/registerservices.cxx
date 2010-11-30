@@ -167,6 +167,8 @@ IMPL_CREATEINSTANCE( UnoControlProgressBarModel )
 IMPL_CREATEINSTANCE( UnoControlScrollBarModel )
 IMPL_CREATEINSTANCE( UnoSpinButtonModel )
 IMPL_CREATEINSTANCE( UnoMultiPageModel )
+IMPL_CREATEINSTANCE( UnoPageModel )
+IMPL_CREATEINSTANCE( UnoFrameModel )
 IMPL_CREATEINSTANCE( UnoControlFixedLineModel )
 IMPL_CREATEINSTANCE( UnoCurrencyFieldControl )
 IMPL_CREATEINSTANCE( UnoDateFieldControl )
@@ -187,6 +189,8 @@ IMPL_CREATEINSTANCE( UnoProgressBarControl )
 IMPL_CREATEINSTANCE( UnoScrollBarControl )
 IMPL_CREATEINSTANCE( UnoSpinButtonControl )
 IMPL_CREATEINSTANCE( UnoMultiPageControl )
+IMPL_CREATEINSTANCE( UnoPageControl )
+IMPL_CREATEINSTANCE( UnoFrameControl )
 IMPL_CREATEINSTANCE( UnoFixedLineControl )
 IMPL_CREATEINSTANCE( VCLXMenuBar )
 IMPL_CREATEINSTANCE( VCLXPointer )
@@ -281,6 +285,10 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
         registerServices( xRegistryKey, "UnoMultiPageModel", szServiceName_UnoMultiPageModel );
         registerServices( xRegistryKey, "UnoMultiPageControl", szServiceName_UnoMultiPageControl );
+        registerServices( xRegistryKey, "UnoPageModel", szServiceName_UnoPageModel );
+        registerServices( xRegistryKey, "UnoPageControl", szServiceName_UnoPageControl );
+        registerServices( xRegistryKey, "UnoFrameModel", szServiceName_UnoFrameModel );
+        registerServices( xRegistryKey, "UnoFrameControl", szServiceName_UnoFrameControl );
         registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
         registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
@@ -317,7 +325,6 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory =
             static_cast< ::com::sun::star::lang::XMultiServiceFactory* >( _pServiceManager );
-
         CHECKANDCREATEFACTORY( VCLXToolkit, szServiceName_Toolkit, szServiceName2_Toolkit )
         CHECKANDCREATEFACTORY( VCLXPopupMenu, szServiceName_PopupMenu, szServiceName2_PopupMenu )
         CHECKANDCREATEFACTORY( VCLXMenuBar, szServiceName_MenuBar, szServiceName2_MenuBar )
@@ -373,6 +380,10 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoControlRoadmapModel, szServiceName_UnoControlRoadmapModel, szServiceName2_UnoControlRoadmapModel )
         CHECKANDCREATEFACTORY( UnoMultiPageModel, szServiceName_UnoMultiPageModel, NULL )
         CHECKANDCREATEFACTORY( UnoMultiPageControl, szServiceName_UnoMultiPageControl, NULL )
+        CHECKANDCREATEFACTORY( UnoPageModel, szServiceName_UnoPageModel, NULL )
+        CHECKANDCREATEFACTORY( UnoPageControl, szServiceName_UnoPageControl, NULL )
+        CHECKANDCREATEFACTORY( UnoFrameModel, szServiceName_UnoFrameModel, NULL )
+        CHECKANDCREATEFACTORY( UnoFrameControl, szServiceName_UnoFrameControl, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonModel, szServiceName_UnoSpinButtonModel, NULL )
         CHECKANDCREATEFACTORY( UnoSpinButtonControl, szServiceName_UnoSpinButtonControl, NULL )
         CHECKANDCREATEFACTORY( TreeControl, szServiceName_TreeControl, NULL )

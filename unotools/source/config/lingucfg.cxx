@@ -1364,13 +1364,13 @@ rtl::OUString SvtLinguConfig::GetVendorImageUrl_Impl(
 
 
 rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage(
-    const rtl::OUString &rServiceImplName,
-    bool bHighContrast ) const
+    const rtl::OUString &rServiceImplName
+) const
 {
     rtl::OUString   aRes;
     if (rServiceImplName.getLength() > 0)
     {
-        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarDialogImage_HC" : "SpellAndGrammarDialogImage" ));
+        rtl::OUString aImageName( A2OU( "SpellAndGrammarDialogImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
@@ -1379,13 +1379,13 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarDialogImage(
 
 
 rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
-    const rtl::OUString &rServiceImplName,
-    bool bHighContrast ) const
+    const rtl::OUString &rServiceImplName
+) const
 {
     rtl::OUString   aRes;
     if (rServiceImplName.getLength() > 0)
     {
-        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarContextMenuSuggestionImage_HC" : "SpellAndGrammarContextMenuSuggestionImage" ));
+        rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuSuggestionImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
@@ -1394,13 +1394,13 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextSuggestionImage(
 
 
 rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
-    const rtl::OUString &rServiceImplName,
-    bool bHighContrast ) const
+    const rtl::OUString &rServiceImplName
+) const
 {
     rtl::OUString   aRes;
     if (rServiceImplName.getLength() > 0)
     {
-        rtl::OUString aImageName( A2OU( bHighContrast ? "SpellAndGrammarContextMenuDictionaryImage_HC" : "SpellAndGrammarContextMenuDictionaryImage" ));
+        rtl::OUString aImageName( A2OU( "SpellAndGrammarContextMenuDictionaryImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
@@ -1409,13 +1409,13 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 
 
 ::rtl::OUString SvtLinguConfig::GetThesaurusDialogImage(
-    const ::rtl::OUString &rServiceImplName,
-    bool bHighContrast ) const
+    const ::rtl::OUString &rServiceImplName
+) const
 {
     rtl::OUString   aRes;
     if (rServiceImplName.getLength() > 0)
     {
-        rtl::OUString aImageName( A2OU( bHighContrast ? "ThesaurusDialogImage_HC" : "ThesaurusDialogImage" ));
+        rtl::OUString aImageName( A2OU( "ThesaurusDialogImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }
@@ -1424,13 +1424,13 @@ rtl::OUString SvtLinguConfig::GetSpellAndGrammarContextDictionaryImage(
 
 
 ::rtl::OUString SvtLinguConfig::GetSynonymsContextImage(
-    const ::rtl::OUString &rServiceImplName,
-    bool bHighContrast ) const
+    const ::rtl::OUString &rServiceImplName
+) const
 {
     rtl::OUString   aRes;
     if (rServiceImplName.getLength() > 0)
     {
-        rtl::OUString aImageName( A2OU( bHighContrast ? "SynonymsContextMenuImage_HC" : "SynonymsContextMenuImage" ));
+        rtl::OUString aImageName( A2OU( "SynonymsContextMenuImage" ));
         rtl::OUString aPath( GetVendorImageUrl_Impl( rServiceImplName, aImageName ) );
         aRes = aPath;
     }

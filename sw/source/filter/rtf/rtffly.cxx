@@ -61,6 +61,7 @@
 #include <txtflcnt.hxx>
 #include <fmtflcnt.hxx>
 #include <fltini.hxx>
+#include <unoframe.hxx>
 #include <deque>
 #include <map>
 #include <utility>
@@ -236,9 +237,9 @@ void SwRTFParser::SetFlysInDoc()
     {
         SwFlySave* pFlySave = aFlyArr[ n ];
 
-        ASSERT( !pFlySave->nSttNd.GetNode().FindFlyStartNode(),
+        OSL_ENSURE( !pFlySave->nSttNd.GetNode().FindFlyStartNode(),
                 "Content vom Fly steht in einem Fly" );
-        ASSERT( pFlySave->nSttNd.GetIndex() <= pFlySave->nEndNd.GetIndex(),
+        OSL_ENSURE( pFlySave->nSttNd.GetIndex() <= pFlySave->nEndNd.GetIndex(),
                 "Fly hat falschen Bereich" );
 
 
@@ -395,7 +396,7 @@ void SwRTFParser::SetFlysInDoc()
         // patch from cmc for #i52542#
         if (pSttNd->GetIndex() + 1 == pSttNd->EndOfSectionIndex())
         {
-            ASSERT(!this, "nothing in this frame, not legal");
+            OSL_ENSURE(!this, "nothing in this frame, not legal");
             delete pFlySave;
             continue;
         }
@@ -464,7 +465,6 @@ void SwRTFParser::SetFlysInDoc()
             if( !bSwPageDesc || 5430 < GetVersionNo() )
                 pFlySave->nSttNd++;
 
-//            if( !pFlySave->nSttNd.GetNode().IsCntntNode() )
             {
                 // Seitenumbrueche in den Bodybereich verschieben!
                 SwCntntNode* pSrcNd = aRg.aStart.GetNode().GetCntntNode();
@@ -980,16 +980,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
                 nTmp *= USHRT_MAX;
                 nTmp /= nWidth;
                 pCol->SetWishWidth( USHORT(nTmp) );
-/*
-    JP 07.07.95: der Dialog kennt nur eine Breite fuer alle Spalten
-                 darum hier nicht weiter beachten
-                nTmp = aColumns[ n+1 ];
-                if( nTmp )
-                    pCol->SetRight( USHORT(nTmp) );
-                else
-                    pCol->SetRight( 0 );
-                pCol->SetLeft( 0 );
-*/
             }
         }
         pSet->Put( aCol );
@@ -1112,8 +1102,6 @@ void SwRTFParser::ReadFly( int nToken, SfxItemSet* pSet )
         pPam->GetPoint()->nNode == pFlySave->nSttNd &&
         !pPam->GetPoint()->nContent.GetIndex() )
     {
-//      // dann erzeuge mindestens einen leeren TextNode
-//      pDoc->AppendTxtNode(*pPam);
         // dann zerstoere den FlySave wieder.
         aFlyArr.DeleteAndDestroy( --nFlyArrCnt );
 
@@ -1248,7 +1236,6 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     SwGrfNode * pGrfNd;
     // --> OD 2008-12-22 #i83368#
     // Assure that graphic node is enclosed by fly frame node.
-//    if( bReadSwFly )
     if ( bReadSwFly && !mbReadCellWhileReadSwFly )
     // <--
     {
@@ -1276,8 +1263,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
     else
     {
         // wenn normale RTF-Grafik, dann steht diese im Textfluss !
-        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_OPAQUE, /*RES_OPAQUE,
-                                                RES_VERT_ORIENT,*/ RES_ANCHOR );
+        SwAttrSet aFlySet( pDoc->GetAttrPool(), RES_OPAQUE, RES_ANCHOR );
         const SwPosition* pPos = pPam->GetPoint();
 
         SwFmtAnchor aAnchor( FLY_AS_CHAR );
@@ -1293,7 +1279,7 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
             aFlySet.Put(aSurroundItem);
         }
 
-        SwFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
+        SwFlyFrmFmt* pFlyFmt = pDoc->Insert( *pPam,
                     rGrfNm, aEmptyStr,      // Name der Graphic !!
                     pGrf,
                     &aFlySet,               // Attribute fuer den FlyFrm
@@ -1305,6 +1291,26 @@ void SwRTFParser::InsPicture( const String& rGrfNm, const Graphic* pGrf,
         _SetPictureSize( *pGrfNd, pPos->nNode,
                         (SfxItemSet&)pFlyFmt->GetAttrSet(),
                         pPicType );
+        if( pPicType )
+        {
+            PictPropertyNameValuePairs::const_iterator aIt = pPicType->aPropertyPairs.begin();
+            PictPropertyNameValuePairs::const_iterator aEnd = pPicType->aPropertyPairs.end();
+            while( aIt != aEnd)
+            {
+                if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzDescription") ))
+                {
+                    SwXFrame::GetOrCreateSdrObject( pFlyFmt );
+                    pDoc->SetFlyFrmDescription( *(pFlyFmt), aIt->second );
+                }
+                else if( aIt->first.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM( "wzName") ))
+                {
+                    SwXFrame::GetOrCreateSdrObject( pFlyFmt );
+                    pDoc->SetFlyFrmTitle( *(pFlyFmt), aIt->second );
+                }
+                ++aIt;
+            }
+        }
+
     }
 
     if( pGrfAttrSet )
@@ -1387,33 +1393,6 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
         BOOL bChg = FALSE;
         SwCropGrf aCrop;
 
-/*
- JP 28.07.99: Bug 67800 - no crop by MAC_QUICKDRAW. At time i dont know why
-                            it has been coded. But this has used for any
-                            RTF-File, but i dont found them.
-        if( SvxRTFPictureType::MAC_QUICKDRAW == pPicType->eStyle )
-        {
-            // evt. ein wenig Croppen ??
-            // IMMER auf 72 DPI bezogen, also 1pt == 20 Twip !!
-            long nTmp = pPicType->nWidth * 20;
-            if( nTmp != aSize.Width() )
-            {
-                // in der Breite (also rechts) croppen
-                aCrop.Right() = nTmp - aSize.Width();
-                aSize.Width() = nTmp;
-                bChg = TRUE;
-            }
-
-            nTmp = pPicType->nHeight * 20;
-            if( nTmp != aSize.Height() )
-            {
-                // in der Hoehe (also unten) croppen
-                aCrop.Bottom() = nTmp - aSize.Height();
-                aSize.Height() = nTmp;
-                bChg = TRUE;
-            }
-        }
-*/
         if( pPicType->nCropT )
         {
             aCrop.SetTop( pPicType->nCropT );
@@ -1446,7 +1425,7 @@ void SwRTFParser::_SetPictureSize( const SwNoTxtNode& rNd,
 
 void SwRTFParser::GetPageSize( Size& rSize )
 {
-    ASSERT(!maSegments.empty(), "not possible");
+    OSL_ENSURE(!maSegments.empty(), "not possible");
     if (maSegments.empty())
     {
         rSize.Width() = 12240 - 1800 - 1800;

@@ -192,7 +192,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sSuffix.EqualsAscii( pMarkToOLE ))
                     sTxt = sTxt.Copy( 0, nFound - 1);
                 }
-                // --> OD 2009-08-18 #i104300#
+                // #i104300#
                 // special handling if target is a cross-reference bookmark
                 {
                     String sTmpSearchStr = sTxt.Copy( 1, sTxt.Len() );
@@ -223,8 +223,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         }
                     }
                 }
-                // <--
-                // --> OD 2007-07-26 #i80029#
+                // #i80029#
                 BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
@@ -237,7 +236,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
                     }
                 }
-                // <--
                 break;
             }
             case SwContentAtPos::SW_SMARTTAG:
@@ -313,24 +311,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_POSTITFLD:
                             {
-                                /*
-                                SwPostItMgr* pMgr = rView.GetPostItMgr();
-                                if (pMgr->ShowNotes())
-                                {
-                                    SwFmtFld* pSwFmtFld = 0;
-                                    if (pMgr->ShowPreview(pFld,pSwFmtFld))
-                                    {
-                                        SwPostIt* pPostIt = new SwPostIt(static_cast<Window*>(this),0,pSwFmtFld,pMgr,PB_Preview);
-                                        pPostIt->InitControls();
-                                        pPostIt->SetReadonly(true);
-                                        pMgr->SetColors(pPostIt,static_cast<SwPostItField*>(pSwFmtFld->GetFld()));
-                                        pPostIt->SetVirtualPosSize(rEvt.GetMousePosPixel(),Size(180,70));
-                                        pPostIt->ShowNote();
-                                        SetPointerPosPixel(pPostIt->GetPosPixel() + Point(20,20));
-                                    }
-                                    return;
-                                }
-                                */
                                 break;
                             }
                         case RES_INPUTFLD:  // BubbleHelp, da der Hinweis ggf ziemlich lang sein kann
@@ -358,7 +338,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                         case RES_GETREFFLD:
                         {
-                            // --> OD 2008-01-09 #i85090#
+                            // #i85090#
                             const SwGetRefField* pRefFld( dynamic_cast<const SwGetRefField*>(pFld) );
                             OSL_ENSURE( pRefFld,
                                     "<SwEditWin::RequestHelp(..)> - unexpected type of <pFld>" );
@@ -381,7 +361,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                                     sTxt = ((SwGetRefField*)pFld)->GetSetRefName();
                                 }
                             }
-                            // <--
                         }
                         break;
                         }
@@ -430,7 +409,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABROW_VERT:
                     nTabRes = STR_TABLE_ROW_ADJUST;
                     break;
-                // --> FME 2004-07-30 #i32329# Enhanced table selection
+                // #i32329# Enhanced table selection
                 case SW_TABSEL_HORI:
                 case SW_TABSEL_HORI_RTL:
                 case SW_TABSEL_VERT:
@@ -445,7 +424,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 case SW_TABCOLSEL_VERT:
                     nTabRes = STR_TABLE_SELECT_COL;
                     break;
-                // <--
             }
             if(nTabRes)
             {
@@ -458,14 +436,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
         }
     }
 
-/*
-aktuelle Zeichenvorlage anzeigen?
-    if( bWeiter && rEvt.GetMode() & ( HELPMODE_QUICK | HELPMODE_BALLOON ))
-    {
-        SwCharFmt* pChrFmt = rSh.GetCurCharFmt();
-
-    }
-*/
     if( bWeiter && pSdrView && bQuickBalloon)
     {
         SdrViewEvent aVEvt;
@@ -571,16 +541,7 @@ void  SwEditWin::Paint(const Rectangle& rRect)
             bPaintShadowCrsr = TRUE;
         }
     }
-/*
-    //TODO/LATER: what's the replacement for this? Do we need it?
-    SwDocShell* pDocShell = GetView().GetDocShell();
 
-  SvInPlaceEnvironment *pIpEnv =  pDocShell ?
-                                  pDocShell->GetIPEnv() : 0;
-    if ( pIpEnv && pIpEnv->GetRectsChangedLockCount() )
-        //Wir stehen in Groessenverhandlungen (MM), Paint verzoegern
-        Invalidate( rRect );
-    else */
     if ( GetView().GetVisArea().GetWidth()  <= 0 ||
               GetView().GetVisArea().GetHeight() <= 0 )
         Invalidate( rRect );

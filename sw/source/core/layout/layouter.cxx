@@ -80,7 +80,7 @@ public:
 
 void SwEndnoter::CollectEndnotes( SwSectionFrm* pSct )
 {
-    ASSERT( pSct, "CollectEndnotes: Which section?" );
+    OSL_ENSURE( pSct, "CollectEndnotes: Which section?" );
     if( !pSect )
         pSect = pSct;
     else if( pSct != pSect )
@@ -110,7 +110,7 @@ void SwEndnoter::CollectEndnote( SwFtnFrm* pFtn )
                 } while ( pCnt );
             }
             else
-            {   ASSERT( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
+            { OSL_ENSURE( pNxt->Lower() && pNxt->Lower()->IsSctFrm(),
                         "Endnote without content?" );
                 pNxt->Cut();
                 delete pNxt;
@@ -147,7 +147,7 @@ void SwEndnoter::InsertEndnotes()
         pSect = NULL;
         return;
     }
-    ASSERT( pSect->Lower() && pSect->Lower()->IsFtnBossFrm(),
+    OSL_ENSURE( pSect->Lower() && pSect->Lower()->IsFtnBossFrm(),
             "InsertEndnotes: Where's my column?" );
     SwFrm* pRef = pSect->FindLastCntnt( FINDMODE_MYLAST );
     SwFtnBossFrm *pBoss = pRef ? pRef->FindFtnBossFrm()
@@ -160,7 +160,7 @@ void SwEndnoter::InsertEndnotes()
 
 SwLooping::SwLooping( SwPageFrm* pPage )
 {
-    ASSERT( pPage, "Where's my page?" );
+    OSL_ENSURE( pPage, "Where's my page?" );
     nMinPage = pPage->GetPhyPageNum();
     nMaxPage = nMinPage;
     nCount = 0;
@@ -199,7 +199,7 @@ void SwLooping::Control( SwPageFrm* pPage )
     }
     else if( ++nCount > LOOP_DETECT )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #if OSL_DEBUG_LEVEL > 1
         static BOOL bNoLouie = FALSE;
         if( bNoLouie )
@@ -209,9 +209,9 @@ void SwLooping::Control( SwPageFrm* pPage )
 
         // FME 2007-08-30 #i81146# new loop control
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
-        ASSERT( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
-        ASSERT( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
+        OSL_ENSURE( 0 != mnLoopControlStage, "Looping Louie: Stage 1!" );
+        OSL_ENSURE( 1 != mnLoopControlStage, "Looping Louie: Stage 2!!" );
+        OSL_ENSURE( 2 >  mnLoopControlStage, "Looping Louie: Stage 3!!!" );
 #endif
 
         Drastic( pPage->Lower() );
@@ -286,7 +286,7 @@ void SwLayouter::InsertEndnotes( SwSectionFrm* pSect )
 
 void SwLayouter::LoopControl( SwPageFrm* pPage, BYTE )
 {
-    ASSERT( pLooping, "Looping: Lost control" );
+    OSL_ENSURE( pLooping, "Looping: Lost control" );
     pLooping->Control( pPage );
 }
 
@@ -295,7 +295,7 @@ void SwLayouter::LoopingLouieLight( const SwDoc& rDoc, const SwTxtFrm& rFrm )
     if ( pLooping && pLooping->IsLoopingLouieLight() )
     {
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( false, "Looping Louie (Light): Fixating fractious frame" )
+        OSL_ENSURE( false, "Looping Louie (Light): Fixating fractious frame" );
 #endif
         SwLayouter::InsertMovedFwdFrm( rDoc, rFrm, rFrm.FindPageFrm()->GetPhyPageNum() );
     }
@@ -317,7 +317,7 @@ void SwLayouter::EndLoopControl()
 
 void SwLayouter::CollectEndnotes( SwDoc* pDoc, SwSectionFrm* pSect )
 {
-    ASSERT( pDoc, "No doc, no fun" );
+    OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )
         pDoc->SetLayouter( new SwLayouter() );
     pDoc->GetLayouter()->_CollectEndnotes( pSect );
@@ -341,7 +341,7 @@ BOOL SwLayouter::Collecting( SwDoc* pDoc, SwSectionFrm* pSect, SwFtnFrm* pFtn )
 
 BOOL SwLayouter::StartLoopControl( SwDoc* pDoc, SwPageFrm *pPage )
 {
-    ASSERT( pDoc, "No doc, no fun" );
+    OSL_ENSURE( pDoc, "No doc, no fun" );
     if( !pDoc->GetLayouter() )
         pDoc->SetLayouter( new SwLayouter() );
     return !pDoc->GetLayouter()->pLooping &&

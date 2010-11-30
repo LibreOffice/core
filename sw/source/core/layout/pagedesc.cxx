@@ -177,14 +177,9 @@ void SwPageDesc::ResetAllAttr( sal_Bool bLeft )
     // erfrage vom Modify Informationen
 BOOL SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 {
-//    if( RES_AUTOFMT_DOCNODE == rInfo.Which() )
-//    {
-        // dann weiter zum Format
-        if( !aMaster.GetInfo( rInfo ) )
-            return FALSE;       // gefunden
-        return aLeft.GetInfo( rInfo );
-//    }
-//    return TRUE;        // weiter suchen
+    if( !aMaster.GetInfo( rInfo ) )
+        return FALSE;       // gefunden
+    return aLeft.GetInfo( rInfo );
 }
 
 /*************************************************************************
@@ -344,13 +339,13 @@ const SwFrmFmt* SwPageDesc::GetPageFmtOfNode( const SwNode& rNd,
         const SwPageDesc* pPd = bCheckForThisPgDc ? this :
                                 ((SwPageFrm*)pChkFrm)->GetPageDesc();
         pRet = &pPd->GetMaster();
-        ASSERT( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd,
+        OSL_ENSURE( ((SwPageFrm*)pChkFrm)->GetPageDesc() == pPd,
                 "Falcher Node fuers erkennen des Seitenformats" );
         // an welchem Format haengt diese Seite?
         if( pRet != pChkFrm->GetRegisteredIn() )
         {
             pRet = &pPd->GetLeft();
-            ASSERT( pRet == pChkFrm->GetRegisteredIn(),
+            OSL_ENSURE( pRet == pChkFrm->GetRegisteredIn(),
                     "Falcher Node fuers erkennen des Seitenformats" );
         }
     }

@@ -110,6 +110,7 @@ int main(int argc, char *argv[] )
     GError *error = NULL;
     char *fallback;
     char *index;
+    int retcode = -1;
 
     if( argc != 2 )
     {
@@ -137,12 +138,11 @@ int main(int argc, char *argv[] )
         args[0] = fallback;
         args[1] = argv[1];
         args[2] = NULL;
-        return execv(fallback, args);
+        retcode = execv(fallback, args);
     }
+    free(fallback);
 
-    return -1;
+    return retcode;
 }
-
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

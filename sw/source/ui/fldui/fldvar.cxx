@@ -280,7 +280,6 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
                         }
                         else
                             aValueED.SetText(pType->GetContent());
-//                          aValueED.SetText(pType->GetContent(aNumFormatLB.GetFormat()));
                     }
                 }
                 else
@@ -469,7 +468,6 @@ IMPL_LINK( SwFldVarPage, SubTypeHdl, ListBox *, pBox )
 
         case TYP_SEQFLD:
             {
-                // aNumRB.Check(TRUE);
                 bName = bValue = bSeparator = bChapterLevel = TRUE;
 
                 SwFieldType* pFldTyp;
@@ -1215,7 +1213,6 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
         }
         case TYP_SEQFLD:
         {
-            // nSubType = nsSwGetSetExpType::GSE_SEQ;   // nsSwGetSetExpType::GSE_SEQ wird im Fldmgr fest gesetzt, kann also entfallen
             nSubType = aChapterLevelLB.GetSelectEntryPos();
             if (nSubType == 0)
                 nSubType = 0x7f;
@@ -1224,7 +1221,6 @@ BOOL SwFldVarPage::FillItemSet(SfxItemSet& )
                 nSubType--;
                 String sSeparator(aSeparatorED.GetText().GetChar(0));
                 cSeparator = sSeparator.Len() ? sSeparator.GetChar(0) : ' ';
-                //nSubType |= (USHORT)(((BYTE)) << 8);
             }
             break;
         }
@@ -1274,14 +1270,12 @@ SelectionListBox::SelectionListBox( SwFldVarPage* pDialog, const ResId& rResId )
 long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
 {
     long nHandled = ListBox::PreNotify( rNEvt );
-    //BOOL bAddSel = FALSE;
     if ( rNEvt.GetType() == EVENT_KEYUP )
     {
         const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
         const KeyCode aKeyCode = pKEvt->GetKeyCode();
         const USHORT nModifier = aKeyCode.GetModifier();
         if( aKeyCode.GetCode() == KEY_SPACE && !nModifier)
-//          bAddSel = TRUE;
             bCallAddSelection = TRUE;
     }
     if ( rNEvt.GetType() == EVENT_MOUSEBUTTONDOWN )
@@ -1289,12 +1283,8 @@ long SelectionListBox::PreNotify( NotifyEvent& rNEvt )
         const MouseEvent* pMEvt = rNEvt.GetMouseEvent();
 
         if (pMEvt && (pMEvt->IsMod1() || pMEvt->IsMod2()))  // Alt oder Ctrl
-            //bAddSel = TRUE;
             bCallAddSelection = TRUE;
     }
-
-//  if (bAddSel)
-//      pDlg->AddSelection(this);
 
     return nHandled;
 }

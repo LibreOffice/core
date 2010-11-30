@@ -240,18 +240,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         };
         IdCount = { 3 ; };
     };
-    ImageList IL_ICON_HC
-    {
-        Prefix = "nuh";
-        MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-        IdList =
-        {
-            IID_ADD ;
-            IID_REMOVE ;
-            IID_INFO ;
-        };
-        IdCount = { 3 ; };
-    };
 
     String STR_AUTO_ENTRY
     {

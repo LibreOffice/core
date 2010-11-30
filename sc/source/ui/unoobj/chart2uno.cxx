@@ -1810,7 +1810,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         func = ::std::for_each(aAllTokens.begin(), aAllTokens.end(), func);
         func.getList(aTableNumList);
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("TableNumberList"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableNumberList")), -1,
                                   uno::makeAny( lcl_createTableNumberList( aTableNumList ) ),
                                   beans::PropertyState_DIRECT_VALUE ));
     }
@@ -1819,7 +1819,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("DataRowSource"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
                                   uno::makeAny( eRowSource ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1827,7 +1827,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("HasCategories"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
                                   uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1835,7 +1835,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
     if( bRowSourceDetected )
     {
         aResult.push_back(
-            beans::PropertyValue( ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
+            beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
                                   uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE ));
     }
 
@@ -1861,7 +1861,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 
     // add cell range property
     aResult.push_back(
-        beans::PropertyValue( ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
+        beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
                               uno::makeAny( sRangeRep ), beans::PropertyState_DIRECT_VALUE ));
 
     //Sequence Mapping
@@ -1931,7 +1931,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
         if( bDifferentIndexes && aSequenceMappingVector.size() )
         {
             aResult.push_back(
-                beans::PropertyValue( ::rtl::OUString::createFromAscii("SequenceMapping"), -1,
+                beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SequenceMapping")), -1,
                     uno::makeAny( lcl_VectorToSequence(aSequenceMappingVector) )
                     , beans::PropertyState_DIRECT_VALUE ));
         }
@@ -2438,7 +2438,7 @@ ScChart2DataSequence::ScChart2DataSequence( ScDocument* pDoc,
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
 //    m_aIdentifier = ::rtl::OUString( aStr );
 
-//      m_aIdentifier = ::rtl::OUString::createFromAscii( "ID_");
+//      m_aIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID_"));
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += ::rtl::OUString::valueOf( ++nID);
 }
@@ -3572,7 +3572,7 @@ ScChart2EmptyDataSequence::ScChart2EmptyDataSequence( ScDocument* pDoc,
 //  rRangeList->Format( aStr, SCR_ABS_3D, m_pDocument );
 //    m_aIdentifier = ::rtl::OUString( aStr );
 
-//      m_aIdentifier = ::rtl::OUString::createFromAscii( "ID_");
+//      m_aIdentifier = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ID_"));
 //      static sal_Int32 nID = 0;
 //      m_aIdentifier += ::rtl::OUString::valueOf( ++nID);
 }

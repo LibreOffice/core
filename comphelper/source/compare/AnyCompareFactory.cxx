@@ -65,7 +65,7 @@ public:
         if ( xFactory.is() )
     {
         m_rCollator = Reference< XCollator >(
-                xFactory->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.i18n.Collator" ), xContext ),
+                xFactory->createInstanceWithContext( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.Collator" )), xContext ),
                         UNO_QUERY );
         m_rCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
@@ -133,7 +133,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
 
-    if( aPropertyName.equals( OUString::createFromAscii( "Title" ) ) )
+    if( aPropertyName.equals( OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) ) )
         return m_rAnyCompare;
 
     return Reference< XAnyCompare >();

@@ -1107,7 +1107,7 @@ Reference< XInterface > SAL_CALL UIConfigurationManager::getShortCutManager() th
     Reference< XInitialization > xInit      (xAccConfig, UNO_QUERY_THROW);
 
     PropertyValue aProp;
-    aProp.Name    = ::rtl::OUString::createFromAscii("DocumentRoot");
+    aProp.Name    = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentRoot"));
     aProp.Value <<= xDocumentRoot;
 
     Sequence< Any > lArgs(1);

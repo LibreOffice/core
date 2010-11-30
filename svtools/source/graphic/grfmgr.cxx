@@ -1217,7 +1217,7 @@ SvStream& operator<<( SvStream& rOStm, const GraphicObject& rGraphicObj )
 
 GraphicObject GraphicObject::CreateGraphicObjectFromURL( const ::rtl::OUString &rURL )
 {
-    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
+    const String aURL( rURL ), aPrefix( RTL_CONSTASCII_USTRINGPARAM(UNO_NAME_GRAPHOBJ_URLPREFIX) );
     if( aURL.Search( aPrefix ) == 0 )
     {
         // graphic manager url

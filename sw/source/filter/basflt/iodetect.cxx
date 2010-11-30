@@ -194,17 +194,15 @@ BOOL SwIoSystem::IsValidStgFilter(SotStorage& rStg, const SfxFilter& rFilter)
                 bRet = !(nByte & 1);
             }
         }
-        //      else if( !rFilter.GetUserData().EqualsAscii(sCExcel) )
-        //          bRet = rFilter.GetFormat() == nStgFmtId;
     }
     return bRet;
 }
 
 void TerminateBuffer(sal_Char *pBuffer, ULONG nBytesRead, ULONG nBufferLen)
 {
-    ASSERT(nBytesRead <= nBufferLen - 2,
+    OSL_ENSURE(nBytesRead <= nBufferLen - 2,
             "what you read must be less than the max + null termination");
-    ASSERT(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
+    OSL_ENSURE(!(nBufferLen & 0x00000001), "nMaxReadBuf must be an even number");
     if (nBytesRead <= nBufferLen - 2)
     {
         pBuffer[nBytesRead] = '\0';
@@ -392,18 +390,6 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
         nBytesRead = pIStrm->Read(aBuffer, nMaxRead);
         pIStrm->Seek( nCurrPos );
     }
-    /*
-       else
-       {
-       SvFileStream aStrm( rFileName, STREAM_READ );
-
-    // ohne FileName oder ohne Stream gibts nur den ANSI-Filter
-    if( !rFileName.Len() || SVSTREAM_OK != aStrm.GetError() )
-    return 0;
-
-    nBytesRead = aStrm.Read(aBuffer, nMaxRead);
-    aStrm.Close();
-    }*/
 
     TerminateBuffer(aBuffer, nBytesRead, sizeof(aBuffer));
 

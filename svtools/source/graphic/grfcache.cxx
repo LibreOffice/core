@@ -171,7 +171,6 @@ private:
     BOOL                mbSwappedAll;
 
     BOOL                ImplInit( const GraphicObject& rObj );
-    BOOL                ImplMatches( const GraphicObject& rObj ) const { return( GraphicID( rObj ) == maID ); }
     void                ImplFillSubstitute( Graphic& rSubstitute );
 
 public:

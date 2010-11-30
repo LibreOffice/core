@@ -45,7 +45,6 @@
 
 ////////////////////// Umsetzen der Standard-Defines //////////////////////
 
-//#define _SVDDRAG_HXX      // SdrDragStat
 #define _SVDPAGE_HXX        // SdrPage
 
 #ifdef _SDR_NOSURROGATEOBJ
@@ -116,12 +115,7 @@
     #undef _SVDORECT_HXX
 #endif
 
-//#ifdef _SDR_NOVIEWS
-//  #define _SVDDRAG_HXX
-//#endif
-
 ////////////////////// Ende der SVDRAW-Modifikationen /////////////////////
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -200,7 +194,7 @@ void __EXPORT ScCornerButton::Paint( const Rectangle& rRect )
     BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
     long nDarkX = bLayoutRTL ? 0 : nPosX;
 
-    if ( !bAdd && !rStyleSettings.GetHighContrastMode() )
+    if ( !bAdd )
     {
         // match the shaded look of column/row headers
 
@@ -472,7 +466,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
             if ( WhichH( aViewData.GetActivePart() ) == SC_SPLIT_RIGHT )
                 ActivatePart( SC_SPLIT_BOTTOMLEFT );
             InvalidateSplit();
-//          UpdateShow();
         }
     if ( aViewData.GetVSplitMode() != SC_SPLIT_NONE )
         if ( aViewData.GetVSplitPos() > nSizeY - SPLIT_MARGIN )
@@ -481,7 +474,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
             if ( WhichV( aViewData.GetActivePart() ) == SC_SPLIT_TOP )
                 ActivatePart( SC_SPLIT_BOTTOMLEFT );
             InvalidateSplit();
-//          UpdateShow();
         }
 
     UpdateShow();
@@ -491,13 +483,11 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         long nScrollBarSize = pFrameWin->GetSettings().GetStyleSettings().GetScrollBarSize();
         if (bVScroll)
         {
-//          nBarX = aVScrollBottom.GetSizePixel().Width();
             nBarX = nScrollBarSize;
             nSizeX -= nBarX - nOverlap;
         }
         if (bHScroll)
         {
-//          nBarY = aHScrollLeft.GetSizePixel().Height();
             nBarY = nScrollBarSize;
             nSizeY -= nBarY - nOverlap;
         }
@@ -1015,11 +1005,6 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
     for (USHORT i=0; i<4; i++)
         if (pGridWin[i])
             pGridWin[i]->SetPointer( rPointer );
-
-/*  ScSplitPos ePos = aViewData.GetActivePart();
-    if (pGridWin[ePos])
-        pGridWin[ePos]->SetPointer( rPointer );
-*/
 }
 
 
@@ -1750,7 +1735,6 @@ void ScTabView::DoHSplit(long nSplitPos)
         else
         {
             nOldDelta = aViewData.GetPosX( SC_SPLIT_LEFT );
-//          aViewData.SetPosX( SC_SPLIT_LEFT, nOldDelta );
             long nLeftWidth = nSplitPos - pRowBar[SC_SPLIT_BOTTOM]->GetSizePixel().Width();
             if ( nLeftWidth < 0 ) nLeftWidth = 0;
             nNewDelta = nOldDelta + aViewData.CellsAtX( nOldDelta, 1, SC_SPLIT_LEFT,
@@ -2440,7 +2424,6 @@ void ScTabView::EnableRefInput(BOOL bFlag)
     if(pRowBar[SC_SPLIT_TOP]!=NULL)
         pRowBar[SC_SPLIT_TOP]->EnableInput(bFlag,FALSE);
 }
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -2290,9 +2290,7 @@ uno::Reference< text::XTextRange > SAL_CALL SvxUnoTextBase::appendTextPortion(
     }
     return xRet;
 }
-/*-- 25.03.2008 08:16:09---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxUnoTextBase::copyText(
     const uno::Reference< text::XTextCopy >& xSource ) throw ( uno::RuntimeException )
 {

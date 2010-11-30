@@ -270,9 +270,9 @@ bool lcl_CheckKashidaWidth ( SwScriptInfo& rSI, SwTxtSizeInfo& rInf, SwTxtIter& 
 void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
                                   const SwLinePortion *pStopAt, SwTwips nReal, bool bSkipKashida )
 {
-    ASSERT( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
+    OSL_ENSURE( GetInfo().IsMulti() || SVX_ADJUST_BLOCK == GetAdjust(),
             "CalcNewBlock: Why?" );
-    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
 
     pCurrent->InitSpaceAdd();
     xub_StrLen nGluePortion = 0;
@@ -422,8 +422,8 @@ void SwTxtAdjuster::CalcNewBlock( SwLineLayout *pCurrent,
 
 SwTwips SwTxtAdjuster::CalcKanaAdj( SwLineLayout* pCurrent )
 {
-    ASSERT( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
-    ASSERT( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
+    OSL_ENSURE( pCurrent->Height(), "SwTxtAdjuster::CalcBlockAdjust: missing CalcLine()" );
+    OSL_ENSURE( !pCurrent->GetpKanaComp(), "pKanaComp already exists!!" );
 
     SvUShorts *pNewKana = new SvUShorts;
     pCurrent->SetKanaComp( pNewKana );
@@ -713,7 +713,7 @@ void SwTxtAdjuster::CalcFlyAdjust( SwLineLayout *pCurrent )
 
 void SwTxtAdjuster::CalcAdjLine( SwLineLayout *pCurrent )
 {
-    ASSERT( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
+    OSL_ENSURE( pCurrent->IsFormatAdj(), "CalcAdjLine: Why?" );
 
     pCurrent->SetFormatAdj(sal_False);
 
@@ -814,8 +814,8 @@ SwFlyPortion *SwTxtAdjuster::CalcFlyPortion( const long nRealWidth,
 
 void SwTxtAdjuster::CalcDropAdjust()
 {
-    ASSERT( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
-            "CalcDropAdjust: No reason for DropAdjustment." )
+    OSL_ENSURE( 1<GetDropLines() && SVX_ADJUST_LEFT!=GetAdjust() && SVX_ADJUST_BLOCK!=GetAdjust(),
+            "CalcDropAdjust: No reason for DropAdjustment." );
 
     const MSHORT nLineNumber = GetLineNr();
 

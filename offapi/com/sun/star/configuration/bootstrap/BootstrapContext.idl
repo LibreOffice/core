@@ -47,7 +47,7 @@ module com { module sun { module star { module configuration { module bootstrap 
         <type scope="com::sun::star::configuration::backend">DefaultBackend</type> of the
         component context.
     </p>
-    <p> The implementation is usally available as singleton in the context
+    <p> The implementation is usually available as a singleton in the context
         that it wraps..
     </p>
 

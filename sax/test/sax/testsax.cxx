@@ -237,7 +237,7 @@ Reference < XInputStream > createStreamFromSequence(
     const Reference < XMultiServiceFactory > &xSMgr )
 {
     Reference < XInterface > xOutStreamService =
-        xSMgr->createInstance( OUString::createFromAscii("com.sun.star.io.Pipe") );
+        xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) );
     OSL_ASSERT( xOutStreamService.is() );
     Reference< XOutputStream >  rOutStream( xOutStreamService , UNO_QUERY );
     OSL_ASSERT( rOutStream.is() );

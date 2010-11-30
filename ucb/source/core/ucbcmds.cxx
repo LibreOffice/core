@@ -249,12 +249,12 @@ CommandProcessorInfo::CommandProcessorInfo()
 
     (*m_pInfo)[ 0 ]
         = ucb::CommandInfo(
-            rtl::OUString::createFromAscii( GETCOMMANDINFO_NAME ), // Name
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GETCOMMANDINFO_NAME )), // Name
             GETCOMMANDINFO_HANDLE, // Handle
             getCppuVoidType() ); // ArgType
     (*m_pInfo)[ 1 ]
         = ucb::CommandInfo(
-            rtl::OUString::createFromAscii( GLOBALTRANSFER_NAME ), // Name
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( GLOBALTRANSFER_NAME )), // Name
             GLOBALTRANSFER_HANDLE, // Handle
             getCppuType(
                 static_cast<
@@ -559,19 +559,19 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii( "Target is no XCommandProcessor!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target is no XCommandProcessor!")),
             rContext.xProcessor );
         // Unreachable
     }
 
     uno::Sequence< beans::Property > aPropsToObtain( 1 );
     aPropsToObtain[ 0 ].Name
-        = rtl::OUString::createFromAscii( "CreatableContentsInfo" );
+        = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreatableContentsInfo"));
     aPropsToObtain[ 0 ].Handle
         = -1;
 
     ucb::Command aGetPropsCommand(
-            rtl::OUString::createFromAscii( "getPropertyValues" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
             -1,
             uno::makeAny( aPropsToObtain ) );
 
@@ -613,7 +613,7 @@ uno::Reference< ucb::XContent > createNew(
                 ucb::IOErrorCode_CANT_CREATE,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 rContext.xOrigEnv,
-                rtl::OUString::createFromAscii( "Target is no XContentCreator!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Target is no XContentCreator!")),
                 rContext.xProcessor );
             // Unreachable
         }
@@ -634,7 +634,7 @@ uno::Reference< ucb::XContent > createNew(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii( "No types creatable!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No types creatable!")),
             rContext.xProcessor );
         // Unreachable
     }
@@ -700,8 +700,8 @@ uno::Reference< ucb::XContent > createNew(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                        rtl::OUString::createFromAscii(
-                                            "Unknown transfer operation!" ),
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "Unknown transfer operation!" )),
                                         rContext.xProcessor,
                                         -1 ) ),
                               rContext.xOrigEnv );
@@ -721,7 +721,7 @@ uno::Reference< ucb::XContent > createNew(
                 // First, try it using "CreatabeleContentsInfo" property and
                 // "createNewContent" command -> the "new" way.
                 ucb::Command aCreateNewCommand(
-                   rtl::OUString::createFromAscii( "createNewContent" ),
+                   rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createNewContent")),
                    -1,
                    uno::makeAny( aTypesInfo[ n ] ) );
 
@@ -750,8 +750,8 @@ uno::Reference< ucb::XContent > createNew(
                     ucb::IOErrorCode_CANT_CREATE,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString::createFromAscii(
-                        "createNewContent failed!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "createNewContent failed!" )),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -770,7 +770,7 @@ void transferProperties(
         throw( uno::Exception )
 {
     ucb::Command aGetPropertySetInfoCommand(
-                rtl::OUString::createFromAscii( "getPropertySetInfo" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertySetInfo")),
                 -1,
                 uno::Any() );
 
@@ -791,8 +791,8 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "Unable to get propertyset info from source object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unable to get propertyset info from source object!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -800,7 +800,7 @@ void transferProperties(
     uno::Sequence< beans::Property > aAllProps = xInfo->getProperties();
 
     ucb::Command aGetPropsCommand1(
-                rtl::OUString::createFromAscii( "getPropertyValues" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
                 -1,
                 uno::makeAny( aAllProps ) );
 
@@ -821,8 +821,8 @@ void transferProperties(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "Unable to get properties from source object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unable to get properties from source object!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -893,7 +893,7 @@ void transferProperties(
     if ( !bHasTitle && ( rContext.aArg.NewTitle.getLength() > 0 ) )
     {
         aPropValues[ nWritePos ].Name
-            = rtl::OUString::createFromAscii( "Title" );
+            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.NewTitle;
 
@@ -905,7 +905,7 @@ void transferProperties(
                                 == ucb::TransferCommandOperation_LINK ) )
     {
         aPropValues[ nWritePos ].Name
-            = rtl::OUString::createFromAscii( "TargetURL" );
+            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
         aPropValues[ nWritePos ].Handle = -1;
         aPropValues[ nWritePos ].Value <<= rContext.aArg.SourceURL;
 
@@ -917,7 +917,7 @@ void transferProperties(
     // Set properties at new object.
 
     ucb::Command aSetPropsCommand(
-                rtl::OUString::createFromAscii( "setPropertyValues" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues")),
                 -1,
                 uno::makeAny( aPropValues ) );
 
@@ -952,7 +952,7 @@ uno::Reference< io::XInputStream > getInputStream(
         aArg.Properties = uno::Sequence< beans::Property >( 0 ); // unused
 
         ucb::Command aOpenCommand(
-                                rtl::OUString::createFromAscii( "open" ),
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
                                 -1,
                                 uno::makeAny( aArg ) );
 
@@ -980,7 +980,7 @@ uno::Reference< io::XInputStream > getInputStream(
         {
             uno::Reference< io::XOutputStream > xOutputStream(
                 rContext.xSMgr->createInstance(
-                    rtl::OUString::createFromAscii( "com.sun.star.io.Pipe" ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) ),
                 uno::UNO_QUERY );
 
             if ( xOutputStream.is() )
@@ -992,7 +992,7 @@ uno::Reference< io::XInputStream > getInputStream(
                 aArg.Properties = uno::Sequence< beans::Property >( 0 );
 
                 ucb::Command aOpenCommand(
-                                    rtl::OUString::createFromAscii( "open" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
                                     -1,
                                     uno::makeAny( aArg ) );
 
@@ -1025,11 +1025,11 @@ uno::Reference< sdbc::XResultSet > getResultSet(
 
     uno::Sequence< beans::Property > aProps( 3 );
 
-    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
+    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
+    aProps[ 1 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = rtl::OUString::createFromAscii( "TargetURL" );
+    aProps[ 2 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
     aProps[ 2 ].Handle = -1; /* unknown */
 
     ucb::OpenCommandArgument2 aArg;
@@ -1038,7 +1038,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     aArg.Sink       = 0;
     aArg.Properties = aProps;
 
-    ucb::Command aOpenCommand( rtl::OUString::createFromAscii( "open" ),
+    ucb::Command aOpenCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("open")),
                                      -1,
                                      uno::makeAny( aArg ) );
     try
@@ -1076,11 +1076,11 @@ void handleNameClashRename(
 
     // Obtain old title.
     uno::Sequence< beans::Property > aProps( 1 );
-    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( "Title" );
+    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
     aProps[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
-            rtl::OUString::createFromAscii( "getPropertyValues" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
             -1,
             uno::makeAny( aProps ) );
 
@@ -1101,8 +1101,8 @@ void handleNameClashRename(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >( &aProps2, 1 ),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "Unable to get properties from new object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unable to get properties from new object!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1112,9 +1112,9 @@ void handleNameClashRename(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "Unable to get property 'Title' "
-                                "from new object!" ),
+                                "from new object!" )),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1133,7 +1133,7 @@ void handleNameClashRename(
         aOldTitlePre = aOldTitle;
 
     if ( nPos > 0 )
-        aOldTitlePre += rtl::OUString::createFromAscii( "_" );
+        aOldTitlePre += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
 
     sal_Bool bContinue = sal_True;
     do
@@ -1194,8 +1194,8 @@ void handleNameClashRename(
                             ucb::IOErrorCode_CANT_READ,
                             uno::Sequence< uno::Any >( &aProps2, 1 ),
                             rContext.xOrigEnv,
-                            rtl::OUString::createFromAscii(
-                                "Got no data stream from source!" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "Got no data stream from source!" )),
                             rContext.xProcessor );
                         // Unreachable
                     }
@@ -1207,7 +1207,7 @@ void handleNameClashRename(
             aArg.ReplaceExisting = sal_False;
 
             ucb::Command aInsertCommand(
-                        rtl::OUString::createFromAscii( "insert" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                         -1,
                         uno::makeAny( aArg ) );
 
@@ -1231,8 +1231,8 @@ void handleNameClashRename(
         ucbhelper::cancelCommandExecution(
             uno::makeAny(
                 ucb::UnsupportedNameClashException(
-                    rtl::OUString::createFromAscii(
-                        "Unable to resolve name clash!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to resolve name clash!" )),
                     rContext.xProcessor,
                     ucb::NameClash::RENAME ) ),
             rContext.xOrigEnv );
@@ -1254,9 +1254,9 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "Unable to get property 'IsFolder' "
-                                "from source object!" ),
+                                "from source object!" )),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1268,9 +1268,9 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            rtl::OUString::createFromAscii(
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                 "Unable to get property 'IsDocument' "
-                                "from source object!" ),
+                                "from source object!" )),
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1304,8 +1304,8 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_CREATE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "No matching content type at target!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "No matching content type at target!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1333,8 +1333,8 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_WRITE,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "New content is not a XCommandProcessor!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "New content is not a XCommandProcessor!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1356,8 +1356,8 @@ void globalTransfer_(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             rContext.xOrigEnv,
-            rtl::OUString::createFromAscii(
-                "Source content is not a XCommandProcessor!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Source content is not a XCommandProcessor!" )),
             rContext.xProcessor );
         // Unreachable
     }
@@ -1426,7 +1426,7 @@ void globalTransfer_(
         try
         {
             ucb::Command aInsertCommand(
-                                    rtl::OUString::createFromAscii( "insert" ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("insert")),
                                     -1,
                                     uno::makeAny( aArg ) );
 
@@ -1444,9 +1444,9 @@ void globalTransfer_(
             // No chance to solve name clashes, because I'm not able to detect
             // whether there is one.
             throw ucb::UnsupportedNameClashException(
-                    rtl::OUString::createFromAscii(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                         "Unable to resolve name clashes, no chance to detect "
-                        "that there is one!" ),
+                        "that there is one!" )),
                     rContext.xProcessor,
                     rContext.aArg.NameClash );
         }
@@ -1472,9 +1472,9 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                rtl::OUString::createFromAscii(
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
                                     "BUG: insert + replace == true MUST NOT "
-                                    "throw NameClashException." ),
+                                    "throw NameClashException." )),
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1617,8 +1617,8 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString::createFromAscii(
-                        "Unable to get properties from children of source!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to get properties from children of source!" )),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1640,8 +1640,8 @@ void globalTransfer_(
                     ucb::IOErrorCode_CANT_READ,
                     uno::Sequence< uno::Any >(&aProps, 1),
                     rContext.xOrigEnv,
-                    rtl::OUString::createFromAscii(
-                        "Unable to get children of source!" ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "Unable to get children of source!" )),
                     rContext.xProcessor );
                 // Unreachable
             }
@@ -1697,14 +1697,13 @@ void globalTransfer_(
             aAny =
                 xcp->execute(
                     ucb::Command(
-                        rtl::OUString::createFromAscii("getCommandInfo"),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getCommandInfo")),
                         -1,
                         uno::Any()),
                     0,
                     rContext.xEnv );
 
-        const rtl::OUString cmdName =
-            rtl::OUString::createFromAscii("flush");
+        const rtl::OUString cmdName(RTL_CONSTASCII_USTRINGPARAM("flush"));
         if((aAny >>= xci) && xci->hasCommandByName(cmdName))
             xcp->execute(
                 ucb::Command(
@@ -1792,8 +1791,8 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString::createFromAscii(
-                "Can't instanciate target object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Can't instanciate target object!" )),
             this );
         // Unreachable
     }
@@ -1817,8 +1816,8 @@ void UniversalContentBroker::globalTransfer(
                 ucb::IOErrorCode_CANT_READ,
                 uno::Sequence< uno::Any >(&aProps, 1),
                 xEnv,
-                rtl::OUString::createFromAscii(
-                    "Target content is not a XCommandProcessor!" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Target content is not a XCommandProcessor!" )),
                 this );
             // Unreachable
         }
@@ -1838,7 +1837,7 @@ void UniversalContentBroker::globalTransfer(
             try
             {
                 ucb::Command aCommand(
-                    rtl::OUString::createFromAscii( "transfer" ), // Name
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")), // Name
                     -1,                                           // Handle
                     uno::makeAny( aTransferArg ) );               // Argument
 
@@ -1874,7 +1873,7 @@ void UniversalContentBroker::globalTransfer(
                             ucb::NameClash::ERROR );
 
                         ucb::Command aCommand1(
-                            rtl::OUString::createFromAscii( "transfer" ),
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("transfer")),
                             -1,
                             uno::makeAny( aTransferArg1 ) );
 
@@ -1981,8 +1980,8 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString::createFromAscii(
-                "Can't instanciate source object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Can't instanciate source object!" )),
             this );
         // Unreachable
     }
@@ -2002,8 +2001,8 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps, 1),
             xEnv,
-            rtl::OUString::createFromAscii(
-                "Source content is not a XCommandProcessor!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Source content is not a XCommandProcessor!" )),
             this );
         // Unreachable
     }
@@ -2012,17 +2011,17 @@ void UniversalContentBroker::globalTransfer(
 
     uno::Sequence< beans::Property > aProps( 4 );
 
-    aProps[ 0 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
+    aProps[ 0 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
     aProps[ 0 ].Handle = -1; /* unknown */
-    aProps[ 1 ].Name   = rtl::OUString::createFromAscii( "IsDocument" );
+    aProps[ 1 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument"));
     aProps[ 1 ].Handle = -1; /* unknown */
-    aProps[ 2 ].Name   = rtl::OUString::createFromAscii( "TargetURL" );
+    aProps[ 2 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL"));
     aProps[ 2 ].Handle = -1; /* unknown */
-    aProps[ 3 ].Name   = rtl::OUString::createFromAscii( "BaseURI" );
+    aProps[ 3 ].Name   = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BaseURI"));
     aProps[ 3 ].Handle = -1; /* unknown */
 
     ucb::Command aGetPropsCommand(
-                rtl::OUString::createFromAscii( "getPropertyValues" ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("getPropertyValues")),
                 -1,
                 uno::makeAny( aProps ) );
 
@@ -2042,8 +2041,8 @@ void UniversalContentBroker::globalTransfer(
             ucb::IOErrorCode_CANT_READ,
             uno::Sequence< uno::Any >(&aProps2, 1),
             xEnv,
-            rtl::OUString::createFromAscii(
-                "Unable to get properties from source object!" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unable to get properties from source object!" )),
             this );
         // Unreachable
     }
@@ -2076,7 +2075,7 @@ void UniversalContentBroker::globalTransfer(
         try
         {
             ucb::Command aCommand(
-                rtl::OUString::createFromAscii( "delete" ), // Name
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), // Name
                 -1,                                         // Handle
                 uno::makeAny( sal_Bool( sal_True ) ) );     // Argument
 

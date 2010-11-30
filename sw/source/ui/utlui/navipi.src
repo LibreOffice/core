@@ -91,12 +91,6 @@ Window DLG_NAVIGATION_PI
         MaskColor = IMAGE_MASK_COLOR ;
         NAVI_IDLIST
     };
-    ImageList ILH_CONTENT
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
-        NAVI_IDLIST
-    };
     Toolbox TB_CONTENT
     {
         Pos = MAP_PIXEL ( 5 , 5 ) ;
@@ -519,18 +513,9 @@ Window DLG_NAVIGATION_PI
     };                 \
     IdCount = { 12 ; };
 
-
-
 ImageList IMG_NAVI_ENTRYBMP
 {
     Prefix = "nc";
-    MaskColor = IMAGE_MASK_COLOR ;
-    NAVI_ENTRY_IDS
-};
-
-ImageList IMG_NAVI_ENTRYBMPH
-{
-    Prefix = "nch";
     MaskColor = IMAGE_MASK_COLOR ;
     NAVI_ENTRY_IDS
 };

@@ -55,13 +55,13 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
     Reference < XInterface > xI;
 
     xI = xMSF->createInstance(
-        OUString::createFromAscii("com.sun.star.i18n.ConversionDictionary_ko"));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.ConversionDictionary_ko")));
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionary>*)0) ) >>= xCD;
 
     xI = xMSF->createInstance(
-        OUString::createFromAscii( "com.sun.star.linguistic2.ConversionDictionaryList" ));
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList")));
 
     if ( xI.is() )
         xI->queryInterface( getCppuType((const Reference< XConversionDictionaryList>*)0) ) >>= xCDL;
@@ -70,8 +70,8 @@ TextConversion_ko::TextConversion_ko( const Reference < XMultiServiceFactory >& 
 
     // get maximum length of word in dictionary
     if (xCDL.is()) {
-        Locale loc(OUString::createFromAscii("ko"),
-                    OUString::createFromAscii("KR"),
+        Locale loc(OUString(RTL_CONSTASCII_USTRINGPARAM("ko")),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("KR")),
                     OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
                         ConversionDictionaryType::HANGUL_HANJA,

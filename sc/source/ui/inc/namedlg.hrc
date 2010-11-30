@@ -33,20 +33,19 @@
 #define BTN_REMOVE      4
 #define BTN_HELP        5
 #define BTN_MORE        6
-//
+
 #define FL_NAME         11
 #define ED_NAME         12
 #define FL_ASSIGN       13
 #define ED_ASSIGN       15
 #define RB_ASSIGN       16
-//
+
 #define STR_ADD         21
 #define STR_MODIFY      22
 #define STR_INVALIDSYMBOL 23
-//
+
 #define BTN_CRITERIA    31
 #define BTN_PRINTAREA   32
 #define BTN_COLHEADER   33
 #define BTN_ROWHEADER   34
 #define FL_TYPE         35
-

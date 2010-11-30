@@ -77,7 +77,7 @@ using ::com::sun::star::lang::XComponent;
 
 static ::rtl::OUString GetModuleName_Impl( const ::rtl::OUString& sDocService )
 {
-    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager")), uno::UNO_QUERY );
+    uno::Reference< container::XNameAccess > xMM( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager"))), uno::UNO_QUERY );
     ::rtl::OUString sVar;
     if ( !xMM.is() )
         return sVar;

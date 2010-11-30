@@ -237,7 +237,7 @@ void GalleryBrowser1::ImplFillExchangeData( const GalleryTheme* pThm, ExchangeDa
         util::DateTime  aDateTimeModified;
         DateTime        aDateTime;
 
-        aCnt.getPropertyValue( OUString::createFromAscii( "DateModified" ) ) >>= aDateTimeModified;
+        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "DateModified" )) ) >>= aDateTimeModified;
         ::utl::typeConvert( aDateTimeModified, aDateTime );
         rData.aThemeChangeDate = aDateTime;
         rData.aThemeChangeTime = aDateTime;

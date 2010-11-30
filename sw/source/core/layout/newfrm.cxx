@@ -309,7 +309,7 @@ void _FrmInit()
 {
     SwRootFrm::pVout = new SwLayVout();
     SwCache *pNew = new SwCache( 100, 100
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     , "static SwBorderAttrs::pCache"
 #endif
     );
@@ -320,13 +320,13 @@ void _FrmInit()
 
 void _FrmFinit()
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     // im Chache duerfen nur noch 0-Pointer stehen
     for( USHORT n = SwFrm::GetCachePtr()->Count(); n; )
         if( (*SwFrm::GetCachePtr())[ --n ] )
         {
             SwCacheObj* pObj = (*SwFrm::GetCachePtr())[ n ];
-            ASSERT( !pObj, "Wer hat sich nicht ausgetragen?")
+            OSL_ENSURE( !pObj, "Wer hat sich nicht ausgetragen?");
         }
 #endif
     delete SwRootFrm::pVout;
@@ -348,7 +348,7 @@ SV_IMPL_PTRARR_SORT(SwCurrShells,CurrShellPtr)
 
 CurrShell::CurrShell( ViewShell *pNew )
 {
-    ASSERT( pNew, "0-Shell einsetzen?" );
+    OSL_ENSURE( pNew, "0-Shell einsetzen?" );
     pRoot = pNew->GetLayout();
     if ( pRoot )
     {
@@ -561,7 +561,7 @@ SwRootFrm::~SwRootFrm()
 
     delete pCurrShells;
 
-    ASSERT( 0==nAccessibleShells, "Some accessible shells are left" );
+    OSL_ENSURE( 0==nAccessibleShells, "Some accessible shells are left" );
 }
 
 /*************************************************************************

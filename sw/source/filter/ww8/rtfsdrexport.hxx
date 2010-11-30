@@ -80,11 +80,13 @@ protected:
     /// Start the shape for which we just collected the information.
     ///
     /// Returns the element's tag number, -1 means we wrote nothing.
+    using EscherEx::StartShape;
     virtual sal_Int32   StartShape();
 
     /// End the shape.
     ///
     /// The parameter is just what we got from StartShape().
+    using EscherEx::EndShape;
     virtual void        EndShape( sal_Int32 nShapeElement );
 
     virtual void        Commit( EscherPropertyContainer& rProps, const Rectangle& rRect );
@@ -94,6 +96,7 @@ private:
     virtual void OpenContainer( UINT16 nEscherContainer, int nRecInstance = 0 );
     virtual void CloseContainer();
 
+    using EscherEx::EnterGroup;
     virtual UINT32 EnterGroup( const String& rShapeName, const Rectangle* pBoundRect = 0 );
     virtual void LeaveGroup();
 

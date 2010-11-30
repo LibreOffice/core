@@ -279,9 +279,9 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 {
     SwPaM* pCmp = (SwPaM*)pDestShell->GetCrsr();        // sicher den Pointer auf Cursor
     do {
-        ASSERT( pCmp->GetPoint()->nContent.GetIdxReg()
+        OSL_ENSURE( pCmp->GetPoint()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(), "Point im falschen Node" );
-        ASSERT( pCmp->GetMark()->nContent.GetIdxReg()
+        OSL_ENSURE( pCmp->GetMark()->nContent.GetIdxReg()
                     == pCmp->GetCntntNode(FALSE), "Mark im falschen Node" );
         BOOL bTst = *pCmp->GetPoint() == *pCmp->GetMark();
         (void) bTst;

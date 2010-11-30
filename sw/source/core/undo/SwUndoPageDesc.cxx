@@ -149,7 +149,7 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
               UNDO_CHANGE_PAGEDESC ),
       aOld(_aOld, _pDoc), aNew(_aNew, _pDoc), pDoc(_pDoc), bExchange( false )
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 
 #ifdef DEBUG
     DebugHeaderFooterContent( (SwPageDesc&)aOld );
@@ -228,7 +228,7 @@ SwUndoPageDesc::~SwUndoPageDesc()
 
 void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDest )
 {
-    ASSERT( bExchange, "You shouldn't do that." );
+    OSL_ENSURE( bExchange, "You shouldn't do that." );
     const SwFmtHeader& rDestHead = rDest.GetMaster().GetHeader();
     const SwFmtHeader& rSourceHead = rSource.GetMaster().GetHeader();
     if( rDestHead.IsActive() )
@@ -373,7 +373,7 @@ SwUndoPageDescCreate::SwUndoPageDescCreate(const SwPageDesc * pNew,
     : SwUndo(UNDO_CREATE_PAGEDESC), pDesc(pNew), aNew(*pNew, _pDoc),
       pDoc(_pDoc)
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 }
 
 SwUndoPageDescCreate::~SwUndoPageDescCreate()
@@ -433,7 +433,7 @@ SwUndoPageDescDelete::SwUndoPageDescDelete(const SwPageDesc & _aOld,
                                            SwDoc * _pDoc)
     : SwUndo(UNDO_DELETE_PAGEDESC), aOld(_aOld, _pDoc), pDoc(_pDoc)
 {
-    ASSERT(0 != pDoc, "no document?");
+    OSL_ENSURE(0 != pDoc, "no document?");
 }
 
 SwUndoPageDescDelete::~SwUndoPageDescDelete()

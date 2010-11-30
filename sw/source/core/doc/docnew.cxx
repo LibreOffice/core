@@ -329,7 +329,7 @@ SwDoc::SwDoc() :
     mbInsOnlyTxtGlssry =
     mbContains_MSVBasic =
     mbKernAsianPunctuation =
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     mbXMLExport =
 #endif
     // --> OD 2006-03-21 #b6375613#
@@ -605,7 +605,7 @@ SwDoc::~SwDoc()
     pFtnColl = pEndNoteInfo->GetFtnTxtColl();
     if ( pFtnColl ) pFtnColl->Remove(pEndNoteInfo);
 
-    ASSERT( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
+    OSL_ENSURE( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
             "Default-Text-Collection muss immer am Anfang stehen" );
 
     // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
@@ -616,7 +616,7 @@ SwDoc::~SwDoc()
     pTxtFmtCollTbl->DeleteAndDestroy( 1, pTxtFmtCollTbl->Count()-1 );
     delete pTxtFmtCollTbl;
 
-    ASSERT( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
+    OSL_ENSURE( pDfltGrfFmtColl == (*pGrfFmtCollTbl)[0],
             "Default-Grf-Collection muss immer am Anfang stehen" );
 
     pGrfFmtCollTbl->DeleteAndDestroy( 1, pGrfFmtCollTbl->Count()-1 );
@@ -720,10 +720,10 @@ VirtualDevice& SwDoc::CreateVirtualDevice_() const
 
 SfxPrinter& SwDoc::CreatePrinter_() const
 {
-    ASSERT( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" )
+    OSL_ENSURE( ! pPrt, "Do not call CreatePrinter_(), call getPrinter() instead" );
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( false, "Printer will be created!" )
+    OSL_ENSURE( false, "Printer will be created!" );
 #endif
 
     // wir erzeugen einen default SfxPrinter.
@@ -752,7 +752,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
         {
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
             pDrawModel->SetPersist( pDocShell );
-            ASSERT( pDrawModel->GetPersist() == GetPersist(),
+            OSL_ENSURE( pDrawModel->GetPersist() == GetPersist(),
                     "draw model's persist is out of sync" );
         }
     }
@@ -791,7 +791,7 @@ void SwDoc::ClearDoc()
     USHORT n;
     while ( 0 != (n = GetSpzFrmFmts()->Count()) )
         DelLayoutFmt((*pSpzFrmFmtTbl)[n-1]);
-    ASSERT( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
+    OSL_ENSURE( !pDrawModel || !pDrawModel->GetPage(0)->GetObjCount(),
                 "not all DrawObjects removed from the page" );
 
     pRedlineTbl->DeleteAndDestroy( 0, pRedlineTbl->Count() );

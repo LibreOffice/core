@@ -522,10 +522,6 @@ TabPage TP_GRF_EXT
     {
         File = "dog.bmp" ;
     };
-    Bitmap BMP_EXAMPLE_HC
-    {
-        File = "dog_h.bmp" ;
-    };
     FixedLine FL_CONNECT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;

@@ -428,7 +428,6 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     FileDialogHelper aDlgHelper( TemplateDescription::FILESAVE_SIMPLE, 0 );
     Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
 
-//    aExpDlg.SetHelpId(HID_FILEDLG_ROMENU);
     INetURLObject aPath;
     aPath.SetSmartURL( sGrfPath );
 

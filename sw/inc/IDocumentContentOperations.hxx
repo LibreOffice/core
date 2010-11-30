@@ -93,7 +93,7 @@
 
     /** complete delete of a given PaM
 
-        OD 2009-08-20 #i100466#
+        #i100466#
         Add optional parameter <bForceJoinNext>, default value <false>
         Needed for hiding of deletion redlines
     */

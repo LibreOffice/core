@@ -914,14 +914,14 @@ lcl_ForceIntoMeta(SwPaM & rCursor,
 {
     sal_Bool bRet( sal_True ); // means not forced in META_CHECK_BOTH
     SwXMeta const * const pXMeta( dynamic_cast<SwXMeta*>(xParentText.get()) );
-    ASSERT(pXMeta, "no parent?");
+    OSL_ENSURE(pXMeta, "no parent?");
     if (!pXMeta)
         throw uno::RuntimeException();
     SwTxtNode * pTxtNode;
     xub_StrLen nStart;
     xub_StrLen nEnd;
     const bool bSuccess( pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
-    ASSERT(bSuccess, "no pam?");
+    OSL_ENSURE(bSuccess, "no pam?");
     if (!bSuccess)
         throw uno::RuntimeException();
     // force the cursor back into the meta if it has moved outside
@@ -958,7 +958,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
         SwUnoCrsr const * const pCursor( m_pImpl->GetCursor() );
         SwXMeta const*const pXMeta(
                 dynamic_cast<SwXMeta*>(m_pImpl->m_xParentText.get()) );
-        ASSERT(pXMeta, "no meta?");
+        OSL_ENSURE(pXMeta, "no meta?");
         if (pCursor && pXMeta)
         {
             SwTxtNode * pTxtNode;
@@ -966,7 +966,7 @@ bool SwXTextCursor::IsAtEndOfMeta() const
             xub_StrLen nEnd;
             const bool bSuccess(
                     pXMeta->SetContentRange(pTxtNode, nStart, nEnd) );
-            ASSERT(bSuccess, "no pam?");
+            OSL_ENSURE(bSuccess, "no pam?");
             if (bSuccess)
             {
                 const SwPosition end(*pTxtNode, nEnd);

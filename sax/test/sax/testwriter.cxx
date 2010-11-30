@@ -348,7 +348,7 @@ void OSaxWriterTest::testInvariant( const OUString& TestName,
                                     const Reference < XInterface >& TestObject )
     throw  (    IllegalArgumentException, RuntimeException)
 {
-    if( OUString::createFromAscii("com.sun.star.xml.sax.Writer") == TestName ) {
+    if( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) == TestName ) {
         Reference< XDocumentHandler > doc( TestObject , UNO_QUERY );
         Reference< XExtendedDocumentHandler > ext( TestObject , UNO_QUERY );
         Reference< XActiveDataSource > source( TestObject , UNO_QUERY );

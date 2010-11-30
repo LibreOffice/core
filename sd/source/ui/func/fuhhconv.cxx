@@ -230,7 +230,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
         {
             Reference< ui::dialogs::XExecutableDialog > xDialog(
                     xMCF->createInstanceWithContext(
-                        rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                         , xContext), UNO_QUERY);
             Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
             if( xInit.is() )
@@ -240,7 +240,7 @@ void FuHangulHanjaConversion::StartChineseConversion()
                 Sequence<Any> aSeq(1);
                 Any* pArray = aSeq.getArray();
                 PropertyValue aParam;
-                aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                 aParam.Value <<= makeAny(xDialogParentWindow);
                 pArray[0] <<= makeAny(aParam);
                 xInit->initialize( aSeq );

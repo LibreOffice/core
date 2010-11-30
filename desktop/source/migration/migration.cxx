@@ -85,6 +85,7 @@ static const ::rtl::OUString ITEM_DESCRIPTOR_LABEL(RTL_CONSTASCII_USTRINGPARAM("
 
 static const ::rtl::OUString MENU_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM(" | "));
 static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
+static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED"));
 
 ::rtl::OUString retrieveLabelFromCommand(const ::rtl::OUString& sCommand, const ::rtl::OUString& sModuleIdentifier)
 {
@@ -194,15 +195,31 @@ static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
     return sIdentifier;
 }
 
-sal_Bool MigrationImpl::initializeMigration()
+bool MigrationImpl::alreadyMigrated()
 {
-    sal_Bool bRet = sal_False;
+    rtl::OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
+    File aFile(aStr);
+    // create migration stamp, and/or check its existence
+    bool bRet = aFile.open (osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock) == FileBase::E_EXIST;
+    OSL_TRACE( "File '%s' exists? %d\n",
+             rtl::OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr(),
+             bRet );
+    return bRet;
+}
+
+bool MigrationImpl::initializeMigration()
+{
+    bool bRet = false;
 
     if (!checkMigrationCompleted()) {
         readAvailableMigrations(m_vMigrationsAvailable);
         sal_Int32 nIndex = findPreferedMigrationProcess(m_vMigrationsAvailable);
-        if ( nIndex >= 0 )
+        // m_aInfo is now set to the preferred migration source
+        if ( nIndex >= 0 ) {
+            if (alreadyMigrated())
+                return false;
             m_vrMigrations = readMigrationSteps(m_vMigrationsAvailable[nIndex].name);
+        }
 
         bRet = m_aInfo.userdata.getLength() > 0;
     }
@@ -358,7 +375,7 @@ void MigrationImpl::setMigrationCompleted()
     }
 }
 
-sal_Bool MigrationImpl::checkMigrationCompleted()
+bool MigrationImpl::checkMigrationCompleted()
 {
     sal_Bool bMigrationCompleted = sal_False;
     try {
@@ -367,15 +384,17 @@ sal_Bool MigrationImpl::checkMigrationCompleted()
         aPropertySet->getPropertyValue(
             OUString(RTL_CONSTASCII_USTRINGPARAM("MigrationCompleted"))) >>= bMigrationCompleted;
 
-        static const char* pEnv = getenv("SAL_DISABLE_USERMIGRATION" );
-        if( !bMigrationCompleted && pEnv != NULL )
+        if( !bMigrationCompleted && getenv("SAL_DISABLE_USERMIGRATION" ) )
         {
             // migration prevented - fake it's success
             setMigrationCompleted();
+            bMigrationCompleted = sal_True;
         }
     } catch (Exception&) {
         // just return false...
     }
+    OSL_TRACE( "Migration %s", bMigrationCompleted ? "already completed" : "not done" );
+
     return bMigrationCompleted;
 }
 

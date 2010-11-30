@@ -187,8 +187,8 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
                 {
                     SwPosition aPos( *pNd );
                     const SwDoc& rDoc = *pNd->GetDoc();
-#ifdef DBG_UTIL
-                    ASSERT( GetBodyTxtNode( rDoc, aPos, *pFrm ),
+#if OSL_DEBUG_LEVEL > 1
+                    OSL_ENSURE( GetBodyTxtNode( rDoc, aPos, *pFrm ),
                             "wo steht der Absatz" );
 #else
                     GetBodyTxtNode( rDoc, aPos, *pFrm );
@@ -341,7 +341,7 @@ BOOL SwTOXIndex::operator==( const SwTOXSortTabBase& rCmpBase )
     if(GetLevel() != rCmp.GetLevel() || nKeyLevel != rCmp.nKeyLevel)
         return FALSE;
 
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -371,7 +371,7 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 {
     SwTOXIndex& rCmp = (SwTOXIndex&)rCmpBase;
 
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     String sMyTxt;
     String sMyTxtReading;
@@ -404,7 +404,7 @@ BOOL SwTOXIndex::operator<( const SwTOXSortTabBase& rCmpBase )
 
 void SwTOXIndex::_GetText( String& rTxt, String& rTxtReading )
 {
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
     const SwTOXMark& rTOXMark = pTxtMark->GetTOXMark();
     switch(nKeyLevel)
     {
@@ -462,7 +462,7 @@ void SwTOXIndex::FillText( SwTxtNode& rNd, const SwIndex& rInsPos, USHORT ) cons
 
 USHORT SwTOXIndex::GetLevel() const
 {
-    ASSERT(pTxtMark, "pTxtMark == 0, Kein Stichwort");
+    OSL_ENSURE(pTxtMark, "pTxtMark == 0, Kein Stichwort");
 
     USHORT nForm = FORM_PRIMARY_KEY;
 
@@ -644,7 +644,7 @@ void SwTOXPara::_GetText( String& rTxt, String& )
                 rTxt = pFly->GetName();
             else
             {
-                ASSERT( !this, "Grafik/Object ohne Namen" )
+                OSL_ENSURE( !this, "Grafik/Object ohne Namen" );
                 USHORT nId = nsSwTOXElement::TOX_OLE == eType
                                 ? STR_OBJECT_DEFNAME
                                 : nsSwTOXElement::TOX_GRAPHIC == eType
@@ -741,7 +741,7 @@ String SwTOXPara::GetURL() const
 //                        }
 //                        else
 //                        {
-//                            ASSERT( false,
+//                            OSL_ENSURE( false,
 //                                    "<SwTOXPara::GetURL()> - text node with numbering rule, but without number. This is a serious defect -> inform OD" );
 //                        }
 //                    }
@@ -809,7 +809,7 @@ void SwTOXTable::_GetText( String& rTxt, String& )
     }
     else
     {
-        ASSERT( !this, "Wo ist meine Tabelle geblieben?" )
+        OSL_ENSURE( !this, "Wo ist meine Tabelle geblieben?" );
         rTxt = SW_RESSTR( STR_TABLE_DEFNAME );
     }
 }
@@ -835,9 +835,6 @@ String SwTOXTable::GetURL() const
     }
     return aTxt;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 
 SwTOXAuthority::SwTOXAuthority( const SwCntntNode& rNd,
                 SwFmtFld& rField, const SwTOXInternational& rIntl ) :
@@ -864,9 +861,7 @@ USHORT SwTOXAuthority::GetLevel() const
         nRet = 1;
     return nRet;
 }
-/*-- 15.09.99 14:28:08---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SwTOXAuthority::_GetText( String& rTxt, String& )
 {
     bool const isClipBoard(
@@ -874,9 +869,6 @@ void SwTOXAuthority::_GetText( String& rTxt, String& )
     rTxt = m_rField.GetFld()->ExpandField(isClipBoard);
 }
 
-/* -----------------21.09.99 12:50-------------------
-
- --------------------------------------------------*/
 void    SwTOXAuthority::FillText( SwTxtNode& rNd,
                         const SwIndex& rInsPos, USHORT nAuthField ) const
 {
@@ -903,18 +895,14 @@ void    SwTOXAuthority::FillText( SwTxtNode& rNd,
         sText = (pField->GetFieldText((ToxAuthorityField) nAuthField));
     rNd.InsertText( sText, rInsPos );
 }
-/* -----------------14.10.99 09:35-------------------
 
- --------------------------------------------------*/
 BOOL    SwTOXAuthority::operator==( const SwTOXSortTabBase& rCmp)
 {
     return nType == rCmp.nType &&
             ((SwAuthorityField*)m_rField.GetFld())->GetHandle() ==
                 ((SwAuthorityField*)((SwTOXAuthority&)rCmp).m_rField.GetFld())->GetHandle();
 }
-/* -----------------21.10.99 09:52-------------------
 
- --------------------------------------------------*/
 BOOL    SwTOXAuthority::operator<( const SwTOXSortTabBase& rBase)
 {
     BOOL bRet = FALSE;

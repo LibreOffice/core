@@ -35,13 +35,7 @@ String RID_STR_EXTENSION_NOT_PRESENT
 {
     // #i96130# use hard coded name
     Text [ en-US ] = "To open a report you require the extension Sun™ Report Builder.\n\nClick 'Download...' to download and install the extension.";
-    // OLD: Text [ en-US ] = "To open a report you require the extension %RPT_EXTENSION_NAME.\n\nClick 'Download...' to download and install the extension.";
 };
-// To open a report you require the extension Sun Report Designer weiss der Geier Hauptsache extra langer Name
-// String RID_STR_EXTENSION_NAME
-// {
-//  Text = "Sun(TM) Report Builder";
-// };
 
 ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
 {
@@ -66,7 +60,6 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
     {
         Pos                 = MAP_APPFONT ( 32 , CELL_PADDING ) ;
         Size                = MAP_APPFONT ( DLG_WIDTH - LEFT_PADDING - RIGHT_PADDING , 3 * (FIXEDTEXT_HEIGHT + 2) ) ;
-        // Border = TRUE ;
         // Text will set outside from RID_STR_EXTENSION_NOT_PRESENT
     };
 
@@ -86,4 +79,3 @@ ModalDialog RID_EXTENSION_NOT_PRESENT_DLG
         TabStop = TRUE ;
     };
 };
-

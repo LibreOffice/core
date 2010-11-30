@@ -115,7 +115,7 @@ USHORT SwInputFieldList::Count() const
 SwField* SwInputFieldList::GetField(USHORT nId)
 {
     const SwTxtFld* pTxtFld = (*pSrtLst)[ nId ]->GetFld();
-    ASSERT( pTxtFld, "kein TextFld" );
+    OSL_ENSURE( pTxtFld, "kein TextFld" );
     return (SwField*)pTxtFld->GetFld().GetFld();
 }
 

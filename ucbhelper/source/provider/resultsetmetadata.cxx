@@ -412,8 +412,8 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnType( sal_Int32 column )
             {
                 Reference< XPropertySetInfo > xInfo(
                             m_xSMgr->createInstance(
-                                OUString::createFromAscii(
-                                    "com.sun.star.ucb.PropertiesManager" ) ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.ucb.PropertiesManager" )) ),
                             UNO_QUERY );
                 if ( xInfo.is() )
                 {

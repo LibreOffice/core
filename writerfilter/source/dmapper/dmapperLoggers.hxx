@@ -32,7 +32,7 @@
 #ifndef INCLUDED_DMAPPER_LOGGERS_HXX
 #define INCLUDED_DMAPPER_LOGGERS_HXX
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <resourcemodel/TagLogger.hxx>
 
 namespace writerfilter {

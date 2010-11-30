@@ -222,50 +222,6 @@ public:
     void ExpandEntry ( USHORT nPos, const String &rStr );
 };
 
-/*
-// class USHORTArr **********************************************************
-
-DECL_2BYTEARRAY(USHORTArr, USHORT, 10, 10)
-
-// class SfxAcceleratorConfigDialog **************************************************
-
-class SfxAcceleratorConfigDialog : public ModalDialog
-{
-    OKButton           aOKButton;
-    CancelButton       aCancelButton;
-    PushButton         aChangeButton;
-    PushButton         aRemoveButton;
-    SfxAcceleratorConfigListBox aEntriesBox;
-    FixedText          aDescriptionTextText;
-    FixedText          aDescriptionInfoText;
-    FixedLine          aKeyboardGroup;
-    FixedText          aGroupText;
-    ListBox            aGroupLBox;
-    FixedText          aFunctionText;
-    ListBox            aFunctionBox;
-    FixedText          aKeyText;
-    ListBox            aKeyBox;
-    FixedLine          aFunctionsGroup;
-
-    USHORTArr     aAccelArr;
-    USHORTArr     aFunctionArr;
-    USHORTArr     aKeyArr;
-
-    void OKHdl    ( Button  * );
-    void ChangeHdl( Button  * );
-    void RemoveHdl( Button  * );
-    void SelectHdl( ListBox *pListBox );
-
-    KeyCode PosToKeyCode   ( USHORT nPos )          const;
-    USHORT  KeyCodeToPos   ( const KeyCode &rCode ) const;
-    String  GetFunctionName( KeyFuncType eType )    const;
-
-public:
-
-    SfxAcceleratorConfigDialog( Window *pParent );
-};
-*/
-
 class SvxShortcutAssignDlg : public SfxSingleTabDialog
 {
 public:

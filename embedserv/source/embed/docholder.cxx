@@ -396,7 +396,7 @@ HRESULT DocumentHolder::InPlaceActivate(
             if( xPS.is() )
             {
                 aAny = xPS->getPropertyValue(
-                    rtl::OUString::createFromAscii("LayoutManager"));
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")));
                 aAny >>= m_xLayoutManager;
             }
 
@@ -418,8 +418,8 @@ HRESULT DocumentHolder::InPlaceActivate(
             if(m_xLayoutManager.is()) {
                 uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
                     m_xLayoutManager->getElement(
-                        rtl::OUString::createFromAscii(
-                            "private:resource/menubar/menubar")));
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "private:resource/menubar/menubar"))));
                 OSL_ENSURE(xUIEl.is(),"no menubar");
                 uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
                     xUIEl->getRealInterface(),
@@ -786,7 +786,7 @@ void DocumentHolder::SetDocument( const uno::Reference< frame::XModel >& xDoc, s
     {
         // set the document mode to embedded
         uno::Sequence< beans::PropertyValue > aSeq(1);
-        aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
+        aSeq[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "SetEmbedded" ));
         aSeq[0].Value <<= sal_True;
         m_xDocument->attachResource(::rtl::OUString(),aSeq);
     }
@@ -929,11 +929,11 @@ void DocumentHolder::show()
             if ( xProps.is() )
             {
                 uno::Reference< frame::XLayoutManager > xLayoutManager;
-                xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
+                xProps->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )) ) >>= xLayoutManager;
                 uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
                 if ( xLMProps.is() )
                 {
-                    xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
+                    xLMProps->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MenuBarCloser" )),
                                                 uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
                 }
             }

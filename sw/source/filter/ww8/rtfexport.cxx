@@ -348,11 +348,31 @@ void RtfExport::DoComboBox(const rtl::OUString& /*rName*/,
     // this is handled in RtfAttributeOutput::OutputFlyFrame_Impl
 }
 
-void RtfExport::DoFormText(const SwInputField* /*pFld*/)
+void RtfExport::DoFormText(const SwInputField* pFld )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    // this is hanled in RtfAttributeOutput::OutputFlyFrame_Impl
+    ::rtl::OUString sResult = pFld->ExpandField(pDoc->IsClipBoard());
+    ::rtl::OUString sHelp( pFld->GetHelp() );
+    ::rtl::OUString sName = pFld->GetPar2();
+    ::rtl::OUString sStatus = pFld->GetToolTip();
+    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_FIELD "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FLDINST "{ FORMTEXT }");
+    m_pAttrOutput->RunText().append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD " {" OOO_STRING_SVTOOLS_RTF_FFTYPE "0" );
+    if( sHelp.getLength() )
+        m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNHELP );
+    if( sStatus.getLength() )
+        m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFOWNSTAT );
+    m_pAttrOutput->RunText().append( OOO_STRING_SVTOOLS_RTF_FFTYPETXT  "0" );
+
+    if( sName.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFNAME " ").append( OutString( sName, eDefaultEncoding )).append( "}" );
+    if( sHelp.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFHELPTEXT " ").append( OutString( sHelp, eDefaultEncoding )).append( "}" );
+    m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFDEFTEXT " ").append( OutString( sResult, eDefaultEncoding )).append( "}" );
+    if( sStatus.getLength() )
+        m_pAttrOutput->RunText().append( "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFSTATTEXT " ").append( OutString( sStatus, eDefaultEncoding )).append( "}");
+    m_pAttrOutput->RunText().append( "}}}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " " );
+    m_pAttrOutput->RunText().append( OutString( sResult, eDefaultEncoding )).append( "}}" );
 }
 
 ULONG RtfExport::ReplaceCr( BYTE )
@@ -629,7 +649,6 @@ void RtfExport::ExportDocument_Impl()
         {
             case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
             case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
-            // case FTNNUM_CHAPTER:
             default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
         Strm() << pOut;
@@ -643,7 +662,6 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
-            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm() << pOut;
@@ -664,7 +682,6 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
-            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
         Strm() << pOut;
@@ -765,6 +782,7 @@ RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurren
       eCurrentEncoding(eDefaultEncoding),
       bRTFFlySyntax(false)
 {
+    mbExportModeRTF = true;
     // the attribute output for the document
     m_pAttrOutput = new RtfAttributeOutput( *this );
     // that just causes problems for RTF
@@ -915,7 +933,7 @@ OString RtfExport::OutChar(sal_Unicode c, int *pUCMode, rtl_TextEncoding eDestEn
 OString RtfExport::OutString(const String &rStr, rtl_TextEncoding eDestEnc)
 {
     OSL_TRACE("%s, rStr = '%s'", OSL_THIS_FUNC,
-            OUStringToOString( OUString( rStr ), eCurrentEncoding ).getStr());
+            OUStringToOString( OUString( rStr ), eDestEnc ).getStr());
     OStringBuffer aBuf;
     int nUCMode = 1;
     for (xub_StrLen n = 0; n < rStr.Len(); ++n)
@@ -1186,7 +1204,6 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, 
     AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), 0);
 
     pAktPageDesc = pSave;
-    //bOutPageDesc = bOldOut;
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 
@@ -1207,9 +1224,6 @@ void RtfExport::WriteHeaderFooter(const SfxPoolItem& rItem, bool bHeader)
 
     OSL_TRACE("%s start", OSL_THIS_FUNC);
 
-    Strm() << (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADERY : OOO_STRING_SVTOOLS_RTF_FOOTERY);
-    OutLong( pAktPageDesc->GetMaster().
-            GetULSpace().GetUpper() );
     const sal_Char* pStr = (bHeader ? OOO_STRING_SVTOOLS_RTF_HEADER : OOO_STRING_SVTOOLS_RTF_FOOTER);
     /* is this a title page? */
     if( pAktPageDesc->GetFollow() && pAktPageDesc->GetFollow() != pAktPageDesc )

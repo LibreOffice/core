@@ -246,7 +246,7 @@ void SwDrawView::AddCustomHdl()
     SwFrmFmt* pFrmFmt( ::FindFrmFmt( pObj ) );
     if ( !pFrmFmt )
     {
-        ASSERT( false, "<SwDrawView::AddCustomHdl()> - missing frame format!" );
+        OSL_ENSURE( false, "<SwDrawView::AddCustomHdl()> - missing frame format!" );
         return;
     }
     const SwFmtAnchor &rAnchor = pFrmFmt->GetAnchor();
@@ -405,7 +405,7 @@ sal_uInt32 SwDrawView::_GetMaxChildOrdNum( const SwFlyFrm& _rParentObj,
     sal_uInt32 nMaxChildOrdNum = _rParentObj.GetDrawObj()->GetOrdNum();
 
     const SdrPage* pDrawPage = _rParentObj.GetDrawObj()->GetPage();
-    ASSERT( pDrawPage,
+    OSL_ENSURE( pDrawPage,
             "<SwDrawView::_GetMaxChildOrdNum(..) - missing drawing page at parent object - crash!" );
 
     sal_uInt32 nObjCount = pDrawPage->GetObjCount();
@@ -444,7 +444,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
     std::vector<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
-        ASSERT( pContact,
+        OSL_ENSURE( pContact,
                 "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
         pContact->GetAnchoredObjs( aAnchoredObjs );
     }
@@ -487,7 +487,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
             SdrObject* pChildObj = (*aObjIter);
             {
                 const SwContact* pContact = ::GetUserCall( pChildObj );
-                ASSERT( pContact,
+                OSL_ENSURE( pContact,
                         "SwDrawView::_MoveRepeatedObjs(..) - missing contact object -> crash." );
                 pContact->GetAnchoredObjs( aAnchoredObjs );
             }
@@ -889,7 +889,6 @@ void SwDrawView::ShowDragAnchor()
     {
         CalcAnchor();
         pHdl->SetPos(aAnchorPoint);
-        //OLMRefreshAllIAOManagers();
     }
 }
 
@@ -944,7 +943,7 @@ void SwDrawView::ModelHasChanged()
 
 void SwDrawView::MakeVisible( const Rectangle &rRect, Window & )
 {
-    ASSERT( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
+    OSL_ENSURE( rImp.GetShell()->GetWin(), "MakeVisible, unknown Window");
     rImp.GetShell()->MakeVisible( SwRect( rRect ) );
 }
 
@@ -1005,7 +1004,7 @@ void SwDrawView::CheckPossibilities()
             SwFrmFmt* pFrmFmt( ::FindFrmFmt( const_cast<SdrObject*>(pObj) ) );
             if ( !pFrmFmt )
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<SwDrawView::CheckPossibilities()> - missing frame format" );
                 bProtect = TRUE;
             }
@@ -1096,16 +1095,6 @@ void SwDrawView::DeleteMarked()
     if( pDoc->GetRootFrm() )
         pDoc->GetRootFrm()->EndAllAction();
 }
-
-/********
-JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
-            wie Bug 57475
-const SdrMarkList& SwDrawView::GetMarkedObjectList() const
-{
-    FlushComeBackTimer();
-    return FmFormView::GetMarkedObjectList();
-}
-*************/
 
 
 

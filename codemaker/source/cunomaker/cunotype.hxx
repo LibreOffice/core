@@ -124,7 +124,7 @@ protected:
     ::rtl::OString  checkRealBaseType(const ::rtl::OString& type, sal_Bool bResolveTypeOnly = sal_False);
     void    dumpCppuGetTypeMemberDecl(FileStream& o, CunoTypeDecl eDeclFlag);
 
-     sal_Bool isNestedType()
+     sal_Bool isNestedType() const
         { return m_bIsNestedType; };
 
      RegistryKeyNames& getNestedTypeNames()

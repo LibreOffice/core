@@ -865,7 +865,6 @@ void ObjectPage::NewDialog()
                             pEntry = aBasicBox.AddEntry(
                                 aDlgName,
                                 Image( IDEResId( RID_IMG_DIALOG ) ),
-                                Image( IDEResId( RID_IMG_DIALOG_HC ) ),
                                 pLibEntry, false,
                                 std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_DIALOG ) ) );
                             DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );
@@ -1039,7 +1038,6 @@ SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
                         pEntry = rBasicBox.AddEntry(
                             aModName,
                             Image( IDEResId( RID_IMG_MODULE ) ),
-                            Image( IDEResId( RID_IMG_MODULE_HC ) ),
                             pSubRootEntry, false,
                             std::auto_ptr< BasicEntry >( new BasicEntry( OBJ_TYPE_MODULE ) ) );
                         DBG_ASSERT( pEntry, "InsertEntry fehlgeschlagen!" );

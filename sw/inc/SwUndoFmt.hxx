@@ -93,7 +93,6 @@ class SwUndoRenameFmt : public SwUndo
 protected:
     String sOldName, sNewName;
     SwDoc * pDoc;
-//    SwUndoId nId;
 
 public:
     SwUndoRenameFmt(SwUndoId nUndoId, const String & sOldName,

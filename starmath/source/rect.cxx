@@ -62,19 +62,19 @@ static xub_Unicode __READONLY_DATA aMathAlpha[] =
     xub_Unicode('\0')
 };
 
-BOOL SmIsMathAlpha(const XubString &rText)
-    // ergibt genau dann TRUE, wenn das Zeichen (aus dem StarMath Font) wie ein
+bool SmIsMathAlpha(const XubString &rText)
+    // ergibt genau dann true, wenn das Zeichen (aus dem StarMath Font) wie ein
     // Buchstabe behandelt werden soll.
 {
     if (rText.Len() == 0)
-        return FALSE;
+        return false;
 
     OSL_ENSURE(rText.Len() == 1, "Sm : string must be exactly one character long");
     xub_Unicode cChar = rText.GetChar(0);
 
     // ist es ein griechisches Zeichen ?
     if (xub_Unicode(0xE0AC) <= cChar  &&  cChar <= xub_Unicode(0xE0D4))
-        return TRUE;
+        return true;
     else
     {
         // kommt es in 'aMathAlpha' vor ?
@@ -98,7 +98,7 @@ SmRect::SmRect()
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
     OSL_ENSURE(aSize == Size(0, 0), "Sm: ooops...");
 
-    bHasBaseline = bHasAlignInfo = FALSE;
+    bHasBaseline = bHasAlignInfo = false;
     nBaseline = nAlignT = nAlignM = nAlignB =
     nGlyphTop = nGlyphBottom =
     nItalicLeftSpace = nItalicRightSpace =
@@ -148,13 +148,13 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
 
     const FontMetric  aFM (rDev.GetFontMetric());
-    BOOL              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
-    BOOL              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
+    bool              bIsMath  = aFM.GetName().EqualsIgnoreCaseAscii( FONTNAME_MATH );
+    bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
     const long        nFontHeight = rDev.GetFont().GetSize().Height();
 
     nBorderWidth  = nBorder;
-    bHasAlignInfo = TRUE;
-    bHasBaseline  = TRUE;
+    bHasAlignInfo = true;
+    bHasBaseline  = true;
     nBaseline     = aFM.GetAscent();
     nAlignT       = nBaseline - nFontHeight * 750L / 1000L;
     nAlignM       = nBaseline - nFontHeight * 121L / 422L;
@@ -188,7 +188,7 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
     // get GlyphBoundRect
     Rectangle  aGlyphRect;
 #if OSL_DEBUG_LEVEL > 1
-    BOOL bSuccess =
+    bool bSuccess =
 #endif
                 SmGetGlyphBoundRect(rDev, rText, aGlyphRect);
 #if OSL_DEBUG_LEVEL > 1
@@ -262,8 +262,8 @@ SmRect::SmRect(long nWidth, long nHeight)
 {
     OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: ooops...");
 
-    bHasBaseline  = FALSE;
-    bHasAlignInfo = TRUE;
+    bHasBaseline  = false;
+    bHasAlignInfo = true;
     nBaseline     = 0;
     nAlignT       = GetTop();
     nAlignB       = GetBottom();
@@ -350,7 +350,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                        + GetItalicLeftSpace();
             break;
         default :
-            OSL_ENSURE(FALSE, "Sm: unknown case");
+            OSL_ENSURE(false, "Sm: unknown case");
     }
 
     // check if horizontal position is already set
@@ -387,7 +387,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.Y() += rRect.GetLoAttrFence() - GetTop();
                 break;
         default :
-                OSL_ENSURE(FALSE, "Sm: unknown case");
+                OSL_ENSURE(false, "Sm: unknown case");
         }
 
     // check if vertical position is already set
@@ -404,7 +404,7 @@ const Point SmRect::AlignTo(const SmRect &rRect, RectPos ePos,
                 aPos.X() += rRect.GetItalicRight() - GetItalicRight();
                 break;
             default :
-                OSL_ENSURE(FALSE, "Sm: unknown case");
+                OSL_ENSURE(false, "Sm: unknown case");
         }
 
     return aPos;
@@ -495,7 +495,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode)
                     CopyMBL(rRect);
                 break;
             default :
-                OSL_ENSURE(FALSE, "Sm: unknown case");
+                OSL_ENSURE(false, "Sm: unknown case");
         }
     }
 
@@ -520,7 +520,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
 
 
 SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                          BOOL bKeepVerAlignParams)
+                          bool bKeepVerAlignParams)
     // as 'ExtendBy' but keeps original values for AlignT, -M and -B and
     // baseline.
     // (this is used in 'SmSupSubNode' where the sub-/supscripts shouldn't
@@ -530,7 +530,7 @@ SmRect & SmRect::ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
           nOldAlignM   = GetAlignM(),
           nOldAlignB   = GetAlignB(),
           nOldBaseline = nBaseline;     //! depends not on 'HasBaseline'
-    BOOL  bOldHasAlignInfo = HasAlignInfo();
+    bool  bOldHasAlignInfo = HasAlignInfo();
 
     ExtendBy(rRect, eCopyMode);
 
@@ -552,7 +552,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
     // rectangle.
     // For simplicity the maximum-norm is used.
 {
-    BOOL  bIsInside = IsInsideItalicRect(rPoint);
+    bool  bIsInside = IsInsideItalicRect(rPoint);
 
     // build reference point to define the distance
     Point  aRef;
@@ -590,7 +590,7 @@ long SmRect::OrientedDist(const Point &rPoint) const
 }
 
 
-BOOL SmRect::IsInsideRect(const Point &rPoint) const
+bool SmRect::IsInsideRect(const Point &rPoint) const
 {
     return     rPoint.Y() >= GetTop()
            &&  rPoint.Y() <= GetBottom()
@@ -599,7 +599,7 @@ BOOL SmRect::IsInsideRect(const Point &rPoint) const
 }
 
 
-BOOL SmRect::IsInsideItalicRect(const Point &rPoint) const
+bool SmRect::IsInsideItalicRect(const Point &rPoint) const
 {
     return     rPoint.Y() >= GetTop()
            &&  rPoint.Y() <= GetBottom()
@@ -696,7 +696,7 @@ void SmDrawFrame(OutputDevice &rDev, const Rectangle &rRec,
 #endif //SM_RECT_DEBUG
 
 
-BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
+bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect)
     // basically the same as 'GetTextBoundRect' (in class 'OutputDevice')
     // but with a string as argument.
@@ -705,7 +705,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     xub_StrLen nLen = rText.Len();
     if (nLen == 0)
     {   rRect.SetEmpty();
-        return TRUE;
+        return true;
     }
 
     // get a device where 'OutputDevice::GetTextBoundRect' will be successful
@@ -743,7 +743,7 @@ BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
     Rectangle   aResult (aPoint, Size(nTextWidth, rDev.GetTextHeight())),
                 aTmp;
 
-    BOOL bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
+    bool bSuccess = pGlyphDev->GetTextBoundRect(aTmp, rText, 0, 0);
     OSL_ENSURE( bSuccess, "GetTextBoundRect failed" );
 
 

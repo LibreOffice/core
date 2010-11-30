@@ -189,13 +189,13 @@ bool SwPagePreviewLayout::Init( const sal_uInt16 _nCols,
     // check environment and parameters
     {
         bool bColsRowsValid = (_nCols != 0) && (_nRows != 0);
-        ASSERT( bColsRowsValid, "preview layout parameters not correct - preview layout can *not* be initialized" );
+        OSL_ENSURE( bColsRowsValid, "preview layout parameters not correct - preview layout can *not* be initialized" );
         if ( !bColsRowsValid )
             return false;
 
         bool bPxWinSizeValid = (_rPxWinSize.Width() >= 0) &&
                                (_rPxWinSize.Height() >= 0);
-        ASSERT( bPxWinSizeValid, "no window size - preview layout can *not* be initialized" );
+        OSL_ENSURE( bPxWinSizeValid, "no window size - preview layout can *not* be initialized" );
         if ( !bPxWinSizeValid )
             return false;
     }
@@ -266,7 +266,7 @@ bool SwPagePreviewLayout::ReInit()
     // check environment and parameters
     {
         bool bLayoutSettingsValid = mbLayoutInfoValid && mbLayoutSizesValid;
-        ASSERT( bLayoutSettingsValid,
+        OSL_ENSURE( bLayoutSettingsValid,
                 "no valid preview layout info/sizes - no re-init of page preview layout");
         if ( !bLayoutSettingsValid )
             return false;
@@ -295,13 +295,13 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
     // check environment and parameters
     {
         bool bLayoutSettingsValid = mbLayoutInfoValid && mbLayoutSizesValid;
-        ASSERT( bLayoutSettingsValid,
+        OSL_ENSURE( bLayoutSettingsValid,
                 "no valid preview layout info/sizes - no prepare of preview paint");
         if ( !bLayoutSettingsValid )
             return false;
 
         bool bStartPageRangeValid = nProposedStartPageNum <= mnPages;
-        ASSERT( bStartPageRangeValid,
+        OSL_ENSURE( bStartPageRangeValid,
                 "proposed start page not existing - no prepare of preview paint");
         if ( !bStartPageRangeValid )
             return false;
@@ -310,13 +310,13 @@ bool SwPagePreviewLayout::Prepare( const sal_uInt16 _nProposedStartPageNum,
                 _aProposedStartPos.X() >= 0 && _aProposedStartPos.Y() >= 0 &&
                 _aProposedStartPos.X() <= maPreviewDocRect.Right() &&
                 _aProposedStartPos.Y() <= maPreviewDocRect.Bottom();
-        ASSERT( bStartPosRangeValid,
+        OSL_ENSURE( bStartPosRangeValid,
                 "proposed start position out of range - no prepare of preview paint");
         if ( !bStartPosRangeValid )
             return false;
 
         bool bWinSizeValid = _rPxWinSize.Width() != 0 && _rPxWinSize.Height() != 0;
-        ASSERT ( bWinSizeValid, "no window size - no prepare of preview paint");
+       OSL_ENSURE( bWinSizeValid, "no window size - no prepare of preview paint");
         if ( !bWinSizeValid )
             return false;
 
@@ -819,7 +819,7 @@ bool SwPagePreviewLayout::CalcStartValuesForSelectedPageMove(
     {
         if ( _nHoriMove != 0 && _nVertMove != 0 )
         {
-            ASSERT( false, "missing implementation for moving preview selected page horizontal AND vertical");
+            OSL_ENSURE( false, "missing implementation for moving preview selected page horizontal AND vertical");
             return false;
         }
 
@@ -977,7 +977,7 @@ bool SwPagePreviewLayout::Paint( const Rectangle  _aOutRect ) const
              !mrParentViewShell.GetOut()->GetConnectMetaFile() )
             return false;
 
-        ASSERT( mbPaintInfoValid,
+        OSL_ENSURE( mbPaintInfoValid,
                 "invalid preview settings - no paint of preview" );
         if ( !mbPaintInfoValid )
             return false;
@@ -1133,7 +1133,7 @@ void SwPagePreviewLayout::Repaint( const Rectangle _aInvalidCoreRect ) const
              !mrParentViewShell.GetOut()->GetConnectMetaFile() )
             return;
 
-        ASSERT( mbPaintInfoValid,
+        OSL_ENSURE( mbPaintInfoValid,
                 "invalid preview settings - no paint of preview" );
         if ( !mbPaintInfoValid )
             return;
@@ -1325,7 +1325,7 @@ sal_uInt16 SwPagePreviewLayout::GetColOfPage( sal_uInt16 _nPageNum ) const
 
 Size SwPagePreviewLayout::GetPrevwDocSize() const
 {
-    ASSERT( PreviewLayoutValid(), "PagePreviewLayout not valid" );
+    OSL_ENSURE( PreviewLayoutValid(), "PagePreviewLayout not valid" );
     return maPreviewDocRect.GetSize();
 }
 

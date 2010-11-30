@@ -48,7 +48,7 @@ module com {  module sun {  module star {  module configuration {  module backen
 interface XBackendChangesNotifier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-    /** adds the specified listener to receive events when changes occured.
+    /** adds the specified listener to receive events when changes occurred.
         @param aListener
             specifies the listener object.
 

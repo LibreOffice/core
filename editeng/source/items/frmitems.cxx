@@ -1166,8 +1166,6 @@ int SvxProtectItem::operator==( const SfxPoolItem& rAttr ) const
              bPos   == ( (SvxProtectItem&)rAttr ).bPos );
 }
 
-/*-----------------16.03.98 12:42-------------------
---------------------------------------------------*/
 bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -1186,9 +1184,7 @@ bool SvxProtectItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     rVal = Bool2Any( bValue );
     return true;
 }
-/*-----------------16.03.98 12:42-------------------
 
---------------------------------------------------*/
 bool    SvxProtectItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
 //  sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
@@ -2097,7 +2093,7 @@ bool SvxBoxItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
         {
             // serialization for basic macro recording
             uno::Reference < script::XTypeConverter > xConverter
-                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                    ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                     uno::UNO_QUERY );
             uno::Sequence < uno::Any > aSeq;
             uno::Any aNew;
@@ -2958,7 +2954,7 @@ bool SvxBoxInfoItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
             {
                 // serialization for basic macro recording
                 uno::Reference < script::XTypeConverter > xConverter
-                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")),
+                        ( ::comphelper::getProcessServiceFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),
                         uno::UNO_QUERY );
                 uno::Any aNew;
                 uno::Sequence < uno::Any > aSeq;
@@ -4334,9 +4330,7 @@ CntWallpaperItem* SvxBrushItem::CreateCntWallpaperItem() const
 #ifdef _MSC_VER
 #pragma optimize ( "", on )
 #endif
-/* -----------------------------16.08.2002 09:18------------------------------
 
- ---------------------------------------------------------------------------*/
 void  SvxBrushItem::ApplyGraphicTransparency_Impl()
 {
     DBG_ASSERT(pImpl->pGraphicObject, "no GraphicObject available" );

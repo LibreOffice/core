@@ -301,15 +301,13 @@ BackendImpl::BackendImpl(
                              OUSTR("application/vnd.sun.star.package-bundle"),
                              OUSTR("*.oxt;*.uno.pkg"),
                              getResourceString(RID_STR_PACKAGE_BUNDLE),
-                             RID_IMG_DEF_PACKAGE_BUNDLE,
-                             RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                             RID_IMG_DEF_PACKAGE_BUNDLE ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    OUSTR("application/"
                                          "vnd.sun.star.legacy-package-bundle"),
                                    OUSTR("*.zip"),
                                    m_xBundleTypeInfo->getShortDescription(),
-                                   RID_IMG_DEF_PACKAGE_BUNDLE,
-                                   RID_IMG_DEF_PACKAGE_BUNDLE_HC ) ),
+                                   RID_IMG_DEF_PACKAGE_BUNDLE ) ),
     m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;
@@ -347,7 +345,7 @@ Sequence<OUString> BackendImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
     return comphelper::makeSequence(
-        OUString::createFromAscii(BACKEND_SERVICE_NAME) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM(BACKEND_SERVICE_NAME)) );
 }
 
 // XPackageRegistry
@@ -987,16 +985,20 @@ OUString BackendImpl::PackageImpl::getDescription()
     if (sRelativeURL.getLength())
     {
         OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
-        sDescription = getTextFromURL(
-            css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL);
 
+        try
+        {
+            sDescription = getTextFromURL( css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
+        }
+        catch ( css::deployment::DeploymentException& )
+        {
+            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
     }
+
     if (sDescription.getLength())
         return sDescription;
-    else if(m_oldDescription.getLength())
-        return m_oldDescription;
-    else
-        return OUString();
+    return m_oldDescription;
 }
 
 //______________________________________________________________________________

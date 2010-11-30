@@ -38,7 +38,7 @@
 namespace com { namespace sun { namespace star { namespace i18n {
 
 #if OSL_DEBUG_LEVEL > 1
-#define RETURN_DEBUG_STRING (rtl::OUString::createFromAscii("return from transliterationImpl"));
+#define RETURN_DEBUG_STRING (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("return from transliterationImpl")));
 #define RETURN_DEBUG_NUMBER 'TRAN'
 #else
 #define RETURN_DEBUG_STRING

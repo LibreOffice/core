@@ -44,7 +44,7 @@ CollatorImpl::CollatorImpl( const Reference < XMultiServiceFactory >& rxMSF ) : 
 {
     if ( rxMSF.is()) {
         Reference < XInterface > xI =
-            xMSF->createInstance( OUString::createFromAscii("com.sun.star.i18n.LocaleData"));
+            xMSF->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData")));
         if ( xI.is() )
             xI->queryInterface(::getCppuType((const Reference< XLocaleData>*)0)) >>= localedata;
     }
@@ -168,7 +168,7 @@ CollatorImpl::createCollator(const lang::Locale& rLocale, const OUString& servic
     }
     if (xMSF.is()) {
         Reference < XInterface > xI =
-            xMSF->createInstance(OUString::createFromAscii("com.sun.star.i18n.Collator_") + serviceName);
+            xMSF->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator_")) + serviceName);
 
         if (xI.is()) {
             Reference < XCollator > xC;
@@ -195,8 +195,8 @@ CollatorImpl::loadCachedCollator(const lang::Locale& rLocale, const OUString& rS
     }
 
     static sal_Unicode under = (sal_Unicode) '_';
-    static OUString tw(OUString::createFromAscii("TW"));
-    static OUString unicode(OUString::createFromAscii("Unicode"));
+    static OUString tw(RTL_CONSTASCII_USTRINGPARAM("TW"));
+    static OUString unicode(RTL_CONSTASCII_USTRINGPARAM("Unicode"));
 
     sal_Int32 l = rLocale.Language.getLength();
     sal_Int32 c = rLocale.Country.getLength();

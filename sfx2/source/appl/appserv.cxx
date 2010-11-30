@@ -513,7 +513,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 sBuildId.Insert( sProductSource, 0 );
             }
 
-            // --> PB 2008-10-30 #i94693#
+            // Version information (in about box) (#i94693#)
             /* if the build ids of the basis or ure layer are different from the build id
              * of the brand layer then show them */
             rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
@@ -531,7 +531,6 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                 sTemp += String( aUREProductBuildId );
                 sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
             }
-            // <--
 
             // the build id format is "milestone(build)[cwsname]". For readability, it would
             // be nice to have some more spaces in there.
@@ -792,7 +791,7 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
 
 static const ::rtl::OUString& getProductRegistrationServiceName( )
 {
-    static ::rtl::OUString s_sServiceName = ::rtl::OUString::createFromAscii( "com.sun.star.setup.ProductRegistration" );
+    static ::rtl::OUString s_sServiceName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.setup.ProductRegistration"));
     return s_sServiceName;
 }
 
@@ -1012,9 +1011,9 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 // read repository URL from configuration
                 ::rtl::OUString sTemplRepoURL =
                     getConfigurationStringValue(
-                        ::rtl::OUString::createFromAscii("org.openoffice.Office.Common"),
-                        ::rtl::OUString::createFromAscii("Dictionaries"),
-                        ::rtl::OUString::createFromAscii("RepositoryURL"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dictionaries")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepositoryURL")),
                         ::rtl::OUString());
 
                 if ( xSystemShell.is() && sTemplRepoURL.getLength() > 0 )
@@ -1025,10 +1024,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
                     // read locale from configuration
                     ::rtl::OUString sLocale = getConfigurationStringValue(
-                        ::rtl::OUString::createFromAscii("org.openoffice.Setup"),
-                        ::rtl::OUString::createFromAscii("L10N"),
-                        ::rtl::OUString::createFromAscii("ooLocale"),
-                        ::rtl::OUString::createFromAscii("en-US"));
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("L10N")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooLocale")),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US")));
 
                     aURLBuf.append( sLocale );
                     xSystemShell->execute(
@@ -1058,7 +1057,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 // tell it that the user wants to register
                 if ( xProductRegistration.is() )
                 {
-                    xProductRegistration->trigger( ::rtl::OUString::createFromAscii( "RegistrationRequired" ) );
+                    xProductRegistration->trigger( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RegistrationRequired")) );
                 }
             }
             catch( const ::com::sun::star::uno::Exception& )
@@ -1298,13 +1297,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.drawing.ModuleDispatcher")), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ModuleDispatcher"))), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;
@@ -1328,13 +1327,13 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
-                xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.text.ModuleDispatcher")), UNO_QUERY );
+                xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.ModuleDispatcher"))), UNO_QUERY );
 
             if ( xProv.is() )
             {
                 ::rtl::OUString aCmd = ::rtl::OUString::createFromAscii( GetInterface()->GetSlot( rReq.GetSlot() )->GetUnoName() );
                 Reference< com::sun::star::frame::XDispatchHelper > xHelper(
-                    xORB->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchHelper")), UNO_QUERY );
+                    xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DispatchHelper"))), UNO_QUERY );
                 if ( xHelper.is() )
                 {
                     Sequence < com::sun::star::beans::PropertyValue > aSeq;

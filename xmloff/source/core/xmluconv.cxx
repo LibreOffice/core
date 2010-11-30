@@ -1907,8 +1907,8 @@ OUString SvXMLUnitConverter::encodeStyleName(
                                 ->xCharClass =
                                     Reference < XCharacterClassification >(
                                 mxServiceFactory->createInstance(
-                                    OUString::createFromAscii(
-                        "com.sun.star.i18n.CharacterClassification_Unicode") ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.i18n.CharacterClassification_Unicode")) ),
                                 UNO_QUERY );
 
                             OSL_ENSURE( xCharClass.is(),

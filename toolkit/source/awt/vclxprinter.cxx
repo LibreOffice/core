@@ -63,8 +63,8 @@
         {
             static ::com::sun::star::beans::Property __FAR_DATA aPropTable[] =
             {
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Orientation" ), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
-                ::com::sun::star::beans::Property( ::rtl::OUString::createFromAscii( "Horizontal" ), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
+                ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Horizontal")), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( ::com::sun::star::beans::Property );

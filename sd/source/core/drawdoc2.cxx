@@ -209,24 +209,11 @@ USHORT SdDrawDocument::GetPageByName(const String& rPgName, BOOL& rbIsMasterPage
     return nPageNum;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 SdPage* SdDrawDocument::GetSdPage(USHORT nPgNum, PageKind ePgKind) const
 {
     // #109538#
     return mpDrawPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 USHORT SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
 {
@@ -234,23 +221,11 @@ USHORT SdDrawDocument::GetSdPageCount(PageKind ePgKind) const
     return (sal_uInt16)mpDrawPageListWatcher->GetSdPageCount(ePgKind);
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 SdPage* SdDrawDocument::GetMasterSdPage(USHORT nPgNum, PageKind ePgKind)
 {
     // #109538#
     return mpMasterPageListWatcher->GetSdPage(ePgKind, sal_uInt32(nPgNum));
 }
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 USHORT SdDrawDocument::GetMasterSdPageCount(PageKind ePgKind) const
 {
@@ -1100,13 +1075,6 @@ SdAnimationInfo* SdDrawDocument::GetShapeUserData(SdrObject& rObject, bool bCrea
     return pRet;
 }
 
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 {
     DBG_ASSERT(pObject, "ohne Objekt keine IMapInfo");
@@ -1126,13 +1094,6 @@ SdIMapInfo* SdDrawDocument::GetIMapInfo( SdrObject* pObject ) const
 
     return pIMapInfo;
 }
-
-
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
 
 IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
                                               const Point& rWinPoint,

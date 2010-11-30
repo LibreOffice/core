@@ -380,7 +380,7 @@ public:
         { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
                    ? (*pKanaComp)[nKanaIdx] : 0; }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     sal_Bool IsOptCalm() const;
     sal_Bool IsOptLow() const;
     sal_Bool IsOptDbg() const;
@@ -423,11 +423,11 @@ class SwTxtPaintInfo : public SwTxtSizeInfo
     void _DrawBackBrush( const SwLinePortion &rPor ) const;
 
 protected:
-#ifndef DBG_UTIL
-    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
-#else
+#if OSL_DEBUG_LEVEL > 1
     SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pSmartTags = 0; pSpaceAdd = 0;
                        pBrushItem = ((SvxBrushItem*)-1);}
+#else
+    SwTxtPaintInfo() { pFrm = 0; pWrongList = 0; pGrammarCheckList = 0; pWrongList = 0; pSmartTags = 0; pSpaceAdd = 0; pBrushItem = 0;}
 #endif
 public:
     SwTxtPaintInfo( const SwTxtPaintInfo &rInf );
@@ -812,13 +812,13 @@ public:
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
 {
-    ASSERT( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" )
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetAscent() without pOut" );
     return ((SwFont*)GetFont())->GetAscent( pVsh, *GetOut() );
 }
 
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
-    ASSERT( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" )
+    OSL_ENSURE( GetOut(), "SwTxtSizeInfo::GetTxtHeight() without pOut" );
     return ((SwFont*)GetFont())->GetHeight( pVsh, *GetOut() );
 }
 

@@ -657,7 +657,7 @@ void LwpFribField::RegisterDateTimeStyle(OUString sFormula)
         else if (sFormula == A2OUSTR("%FLeeeeoa") || sFormula == A2OUSTR("%FLffffooaa") || sFormula == A2OUSTR("%FLEEEEOA"))
         {
             pDateStyle = new XFDateStyle;
-    //      OUString lang = OUString::createFromAscii("zh-CN");
+    //      OUString lang(RTL_CONSTASCII_USTRINGPARAM("zh-CN"));
     //      pDateStyle->SetLanguage( lang);
             rtl::OUString sText;
             pDateStyle->AddYear();

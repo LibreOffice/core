@@ -78,8 +78,6 @@ namespace beans = com::sun::star::beans;
 namespace util = com::sun::star::util;
 namespace css = com::sun::star;
 
-//#define OUSTR(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
-
 using ::com::sun::star::uno::Reference;
 using ::rtl::OUString;
 
@@ -90,7 +88,6 @@ struct CompIdentifiers
     bool operator() (::std::vector<Reference<deploy::XPackage> > const & a,
                      ::std::vector<Reference<deploy::XPackage> > const & b)
         {
-
             if (getName(a).compareTo(getName(b)) < 0)
                 return true;
             return false;
@@ -170,7 +167,7 @@ ExtensionRemoveGuard::~ExtensionRemoveGuard()
     }
 }
 
-} //end namespace
+}
 
 namespace dp_manager {
 
@@ -227,7 +224,7 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
   Enters the XPackage objects into a map. They must be all from the
   same repository. The value type of the map is a vector, where each vector
   represents an extension with a particular identifier. The first member
-  is represents the user extension, the second the shared extension and the
+  represents the user extension, the second the shared extension and the
   third the bundled extension.
  */
 void ExtensionManager::addExtensionsToMap(
@@ -266,8 +263,8 @@ void ExtensionManager::addExtensionsToMap(
 
 /*
    returns a list containing extensions with the same identifier from
-   all repositories (user, shared, bundled) If one repository does not
-   have this extension, then the list contains an empty Referenc. The list
+   all repositories (user, shared, bundled). If one repository does not
+   have this extension, then the list contains an empty Reference. The list
    is ordered according to the priority of the repostories:
    1. user
    2. shared
@@ -283,29 +280,21 @@ void ExtensionManager::addExtensionsToMap(
 
 {
     ::std::list<Reference<deploy::XPackage> > extensionList;
-    try
-    {   //will throw an exception if the extension does not exist
-        extensionList.push_back(m_userRepository->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch(lang::IllegalArgumentException &)
+    Reference<deploy::XPackageManager> lRepos[] = {
+        m_userRepository, m_sharedRepository, m_bundledRepository };
+    for (int i(0); i != SAL_N_ELEMENTS(lRepos); ++i)
     {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-        extensionList.push_back(m_sharedRepository->getDeployedPackage(
-            identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
-    }
-    try
-    {
-       extensionList.push_back(m_bundledRepository->getDeployedPackage(
-           identifier, fileName, Reference<ucb::XCommandEnvironment>()));
-    } catch (lang::IllegalArgumentException &)
-    {
-        extensionList.push_back(Reference<deploy::XPackage>());
+        Reference<deploy::XPackage> xPackage;
+        try
+        {
+            xPackage = lRepos[i]->getDeployedPackage(
+                identifier, fileName, Reference<ucb::XCommandEnvironment>());
+        }
+        catch(lang::IllegalArgumentException &)
+        {
+            // thrown if the extension does not exist in this repository
+        }
+        extensionList.push_back(xPackage);
     }
     OSL_ASSERT(extensionList.size() == 3);
     return extensionList;
@@ -720,7 +709,7 @@ Reference<deploy::XPackage> ExtensionManager::addExtension(
                 }
                 //check again dependencies but prevent user interaction,
                 //We can disregard the license, because the user must have already
-                //accepted it, whe we called checkPrerequisites the first time
+                //accepted it, when we called checkPrerequisites the first time
                 SilentCheckPrerequisitesCommandEnv * pSilentCommandEnv =
                     new SilentCheckPrerequisitesCommandEnv();
                 Reference<ucb::XCommandEnvironment> silentCommandEnv(pSilentCommandEnv);

@@ -57,10 +57,6 @@
 
 
 
-/*-----------------11.01.97 10.52-------------------
-    Optionen Inhalte
---------------------------------------------------*/
-
 ScTpContentOptions::ScTpContentOptions( Window*         pParent,
                              const SfxItemSet&  rArgSet ) :
     SfxTabPage(pParent, ScResId( RID_SCPAGE_CONTENT ), rArgSet),
@@ -133,26 +129,18 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
 
     aGridCB     .SetClickHdl( LINK( this, ScTpContentOptions, GridHdl ) );
 }
-/*-----------------11.01.97 10.52-------------------
-
---------------------------------------------------*/
 
 ScTpContentOptions::~ScTpContentOptions()
 {
     delete pLocalOptions;
 }
-/*-----------------11.01.97 10.52-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* ScTpContentOptions::Create( Window*     pParent,
                               const SfxItemSet&     rCoreSet )
 {
     return new ScTpContentOptions(pParent, rCoreSet);
 }
-/*-----------------11.01.97 10.52-------------------
 
---------------------------------------------------*/
 BOOL    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
     BOOL bRet = FALSE;
@@ -196,9 +184,6 @@ BOOL    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
 
     return bRet;
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
 {
@@ -261,9 +246,6 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
     aHandleCB       .SaveValue();
     aBigHandleCB    .SaveValue();
 }
-/*-----------------11.01.97 12.45-------------------
-
---------------------------------------------------*/
 
 void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
 {
@@ -271,9 +253,6 @@ void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
     if(SFX_ITEM_SET == rSet.GetItemState(SID_SCVIEWOPTIONS, FALSE , &pItem))
         *pLocalOptions = ((const ScTpViewItem*)pItem)->GetViewOptions();
 }
-/*-----------------11.01.97 12.45-------------------
-
---------------------------------------------------*/
 
 int ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -281,9 +260,6 @@ int ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
         FillItemSet(*pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
-/*-----------------11.01.97 13.43-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 {
@@ -300,10 +276,6 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 
     return 0;
 }
-
-/*-----------------11.01.97 14.25-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 {
@@ -335,9 +307,6 @@ IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 
     return 0;
 }
-/*-----------------11.01.97 13.13-------------------
-
---------------------------------------------------*/
 
 void ScTpContentOptions::InitGridOpt()
 {
@@ -407,9 +376,6 @@ void ScTpContentOptions::InitGridOpt()
     else
         aColorLB.SelectEntryPos( aColorLB.InsertEntry( aCol, aName ) );
 }
-/*-----------------11.01.97 13.40-------------------
-
---------------------------------------------------*/
 
 IMPL_LINK( ScTpContentOptions, GridHdl, CheckBox*, pBox )
 {
@@ -419,9 +385,6 @@ IMPL_LINK( ScTpContentOptions, GridHdl, CheckBox*, pBox )
     pLocalOptions->SetOption( VOPT_GRID, bChecked );
     return 0;
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
                                         const SfxItemSet&   rArgSet ) :
@@ -485,16 +448,10 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     }
 
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 ScTpLayoutOptions::~ScTpLayoutOptions()
 {
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
                                     const SfxItemSet&   rCoreSet )
@@ -506,9 +463,6 @@ SfxTabPage* ScTpLayoutOptions::Create( Window*          pParent,
         pNew->SetDocument(pDocSh->GetDocument());
     return pNew;
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 {
@@ -601,9 +555,6 @@ BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
 
     return bRet;
 }
-/*-----------------11.01.97 10.53-------------------
-
---------------------------------------------------*/
 
 void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 {
@@ -697,16 +648,9 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
     aRequestRB.SaveValue();
 }
 
-/*-----------------11.01.97 12.46-------------------
-
---------------------------------------------------*/
-
 void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 {
 }
-/*-----------------11.01.97 12.46-------------------
-
---------------------------------------------------*/
 
 int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 {
@@ -714,11 +658,6 @@ int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
         FillItemSet(*pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
-
-
-/*-----------------13.01.97 14.44-------------------
-    Metric des Deftabstops umschalten
---------------------------------------------------*/
 
 IMPL_LINK(ScTpLayoutOptions, MetricHdl, ListBox*, EMPTYARG)
 {
@@ -734,9 +673,7 @@ IMPL_LINK(ScTpLayoutOptions, MetricHdl, ListBox*, EMPTYARG)
 
     return 0;
 }
-/*-----------------11.01.97 15.30-------------------
 
---------------------------------------------------*/
 IMPL_LINK( ScTpLayoutOptions, AlignHdl, CheckBox*, pBox )
 {
     aAlignLB.Enable(pBox->IsChecked());

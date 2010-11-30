@@ -103,7 +103,7 @@ bool ButtonsImpl::getGraphic( const Reference< XGraphicProvider >& xGraphicProvi
     if( xInputStream.is() && xGraphicProvider.is() ) try
     {
         Sequence< PropertyValue > aMediaProperties( 1 );
-        aMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "InputStream" );
+        aMediaProperties[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "InputStream" ) );
         aMediaProperties[0].Value <<= xInputStream;
         Reference< XGraphic > xGraphic( xGraphicProvider->queryGraphic( aMediaProperties  ) );
 

@@ -551,7 +551,7 @@ void SwPaM::SetMark()
     (*m_pMark) = (*m_pPoint);
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 void SwPaM::Exchange()
 {
@@ -690,24 +690,18 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
     else
         pFrm = 0;
 
-    // --> FME 2004-06-29 #114856# Formular view
     // Will be set if point/mark are inside edit-in-readonly environment
     const SwFrm* pSttEIRFrm = 0;
     const SwFrm* pEndEIRFrm = 0;
 
     if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pSttEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
         bRet = TRUE;
     else if( pNd )
     {
         const SwSectionNode* pSNd = pNd->GetSectionNode();
         if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                      // --> FME 2004-06-29 #114856# Formular view
                       (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                      // <--
             bRet = TRUE;
     }
 
@@ -719,22 +713,16 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
             pFrm = 0;
 
         if( pFrm && ( pFrm->IsProtected() ||
-                  // --> FME 2004-06-29 #114856# Formular view
-                  ( bFormView &&
-                     0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
-                  // <--
+                  ( bFormView && 0 == ( pEndEIRFrm = lcl_FindEditInReadonlyFrm( *pFrm ) ) ) ) )
             bRet = TRUE;
         else if( pNd )
         {
             const SwSectionNode* pSNd = pNd->GetSectionNode();
             if( pSNd && ( pSNd->GetSection().IsProtectFlag() ||
-                          // --> FME 2004-06-29 #114856# Formular view
                           (bFormView && !pSNd->GetSection().IsEditInReadonlyFlag()) ) )
-                          // <--
                 bRet = TRUE;
         }
 
-        // --> FME 2004-06-29 #114856# Formular view
         if ( !bRet && bFormView )
         {
            // Check if start and end frame are inside the _same_
@@ -742,7 +730,6 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
            if ( pSttEIRFrm != pEndEIRFrm )
                 bRet = TRUE;
         }
-        // <--
 
         // oder sollte eine geschuetzte Section innerhalb der
         // Selektion liegen?
@@ -769,7 +756,7 @@ BOOL SwPaM::HasReadonlySel( bool bFormView ) const
                     if( pFmt->GetProtect().IsCntntProtected() )
                     {
                         const SwFmtCntnt& rCntnt = pFmt->GetCntnt(FALSE);
-                        ASSERT( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
+                        OSL_ENSURE( rCntnt.GetCntntIdx(), "wo ist der SectionNode?" );
                         ULONG nIdx = rCntnt.GetCntntIdx()->GetIndex();
                         if( nSttIdx <= nIdx && nEndIdx >= nIdx &&
                             rCntnt.GetCntntIdx()->GetNode().GetNodes().IsDocNodes() )
@@ -930,12 +917,6 @@ SwCntntNode* GetNode( SwPaM & rPam, BOOL& rbFirst, SwMoveFn fnMove,
                             ( !bInReadOnly && pFrm->IsProtected() ) ||
                             ( pFrm->IsTxtFrm() &&
                                 ((SwTxtFrm*)pFrm)->IsHiddenNow() ) )
-
-//                          rNodes[ rNodes.EndOfAutotext ]->StartOfSection().GetIndex()
-//                          < aPos.nNode.GetIndex() && aPos.nNode.GetIndex()
-//                          < rNodes.EndOfAutotext.GetIndex() &&
-//                          0 == ( pFrm = pNd->GetFrm()) &&
-//                          pFrm->IsProtected() )
                         {
                             pNd = 0;
                             continue;       // suche weiter

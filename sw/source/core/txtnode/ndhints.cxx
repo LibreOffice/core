@@ -35,7 +35,7 @@
 #include "ndhints.hxx"
 #include <txtatr.hxx>
 
-#ifndef PRODUCT
+#if OSL_DEBUG_LEVEL > 1
 #include <pam.hxx>
 #endif
 
@@ -48,7 +48,7 @@ _SV_IMPL_SORTAR_ALG( SwpHtEnd, SwTxtAttr* )
 void DumpHints( const SwpHtStart &rHtStart,
                 const SwpHtEnd &rHtEnd )
 {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     aDbstream << "DumpHints:" << endl;
     (aDbstream << "\tStarts:" ).WriteNumber(rHtStart.Count()) << endl;
     for( USHORT i = 0; i < rHtStart.Count(); ++i )
@@ -114,7 +114,7 @@ static BOOL lcl_IsLessStart( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" )
+                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessStart trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 < nS2;
                 }
@@ -150,7 +150,7 @@ static BOOL lcl_IsLessEnd( const SwTxtAttr &rHt1, const SwTxtAttr &rHt2 )
                 {
                     const USHORT nS1 = static_cast<const SwTxtCharFmt&>(rHt1).GetSortNumber();
                     const USHORT nS2 = static_cast<const SwTxtCharFmt&>(rHt2).GetSortNumber();
-                    ASSERT( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" )
+                    OSL_ENSURE( nS1 != nS2, "AUTOSTYLES: lcl_IsLessEnd trouble" );
                     if ( nS1 != nS2 ) // robust
                         return nS1 > nS2;
                 }
@@ -245,16 +245,16 @@ BOOL SwpHtEnd::Seek_Entry( const SwTxtAttr *pElement, USHORT *pPos ) const
 void SwpHintsArray::Insert( const SwTxtAttr *pHt )
 {
     Resort();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     USHORT nPos;
-    ASSERT(!m_HintStarts.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(!m_HintStarts.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtStart");
-    ASSERT(!m_HintEnds.Seek_Entry( pHt, &nPos ),
+    OSL_ENSURE(!m_HintEnds.Seek_Entry( pHt, &nPos ),
             "Insert: hint already in HtEnd");
 #endif
     m_HintStarts.Insert( pHt );
     m_HintEnds.Insert( pHt );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #ifdef NIE
     (aDbstream << "Insert: " ).WriteNumber( long( pHt ) ) << endl;
     DumpHints( m_HintStarts, m_HintEnds );
@@ -273,7 +273,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
     USHORT nEndPos;
     m_HintEnds.Seek_Entry( pHt, &nEndPos );
     m_HintEnds.Remove( nEndPos );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #ifdef NIE
     (aDbstream << "DeleteAtPos: " ).WriteNumber( long( pHt ) ) << endl;
     DumpHints( m_HintStarts, m_HintEnds );
@@ -281,7 +281,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 #endif
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
  *                      SwpHintsArray::Check()
@@ -291,7 +291,7 @@ void SwpHintsArray::DeleteAtPos( const USHORT nPos )
 #define CHECK_ERR(cond, text) \
         if(!(cond)) \
         { \
-            ASSERT(!this, text); \
+            OSL_ENSURE(!this, text); \
             DumpHints(m_HintStarts, m_HintEnds); \
             return !(const_cast<SwpHintsArray*>(this))->Resort(); \
         }
@@ -447,8 +447,8 @@ bool SwpHintsArray::Resort()
         if( pLast && !lcl_IsLessStart( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifdef DBG_UTIL
-//            ASSERT( bResort, "!Resort/Start: correcting hints-array" );
+#if OSL_DEBUG_LEVEL > 1
+//            OSL_ENSURE( bResort, "!Resort/Start: correcting hints-array" );
             aDbstream << "Resort: Starts" << endl;
             DumpHints( m_HintStarts, m_HintEnds );
 #endif
@@ -470,7 +470,7 @@ bool SwpHintsArray::Resort()
         if( pLast && !lcl_IsLessEnd( *pLast, *pHt ) )
         {
 #ifdef NIE
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             aDbstream << "Resort: Ends" << endl;
             DumpHints( m_HintStarts, m_HintEnds );
 #endif
@@ -486,7 +486,7 @@ bool SwpHintsArray::Resort()
         }
         pLast = pHt;
     }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #ifdef NIE
     aDbstream << "Resorted:" << endl;
     DumpHints( m_HintStarts, m_HintEnds );

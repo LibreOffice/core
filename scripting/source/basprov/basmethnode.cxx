@@ -87,17 +87,17 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
+                    m_sURI = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:"));
                     m_sURI += pBasic->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "." );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
                     m_sURI += pModule->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "." );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
                     m_sURI += m_pMethod->GetName();
-                    m_sURI += ::rtl::OUString::createFromAscii( "?language=Basic&location=" );
+                    m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?language=Basic&location="));
                     if ( m_bIsAppScript )
-                        m_sURI += ::rtl::OUString::createFromAscii( "application" );
+                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("application"));
                     else
-                        m_sURI += ::rtl::OUString::createFromAscii( "document" );
+                        m_sURI += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("document"));
                 }
             }
         }
@@ -236,7 +236,7 @@ namespace basprov
                         for ( sal_Int32 i = 0; i < nProps; ++i )
                         {
                             // TODO: according to MBA the property 'Title' may change in future
-                            if ( pProps[i].Name == ::rtl::OUString::createFromAscii( "Title" ) )
+                            if ( pProps[i].Name == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) )
                             {
                                 pProps[i].Value >>= sDocURL;
                                 break;
@@ -280,17 +280,17 @@ namespace basprov
                             if ( xHelper.is() )
                             {
                                 Sequence < PropertyValue > aArgs(7);
-                                aArgs[0].Name = ::rtl::OUString::createFromAscii( "Document" );
+                                aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"));
                                 aArgs[0].Value <<= sDocURL;
-                                aArgs[1].Name = ::rtl::OUString::createFromAscii( "LibName" );
+                                aArgs[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LibName"));
                                 aArgs[1].Value <<= sLibName;
-                                aArgs[2].Name = ::rtl::OUString::createFromAscii( "Name" );
+                                aArgs[2].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
                                 aArgs[2].Value <<= sModName;
-                                aArgs[3].Name = ::rtl::OUString::createFromAscii( "Type" );
-                                aArgs[3].Value <<= ::rtl::OUString::createFromAscii( "Module" );
-                                aArgs[4].Name = ::rtl::OUString::createFromAscii( "Line" );
+                                aArgs[3].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type"));
+                                aArgs[3].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Module"));
+                                aArgs[4].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Line"));
                                 aArgs[4].Value <<= static_cast< sal_uInt32 >( nLine1 );
-                                xHelper->executeDispatch( xProv, ::rtl::OUString::createFromAscii( ".uno:BasicIDEAppear" ), ::rtl::OUString(), 0, aArgs );
+                                xHelper->executeDispatch( xProv, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:BasicIDEAppear")), ::rtl::OUString(), 0, aArgs );
                             }
                         }
                     }

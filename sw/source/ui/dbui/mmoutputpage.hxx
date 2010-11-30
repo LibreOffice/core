@@ -196,7 +196,6 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     bool                    m_bDesctructionEnabled;
 
     ImageList               m_aImageList;
-    ImageList               m_aImageListHC;
 
     SwSendMailDialog_Impl*  m_pImpl;
     SwMailMergeConfigItem*  m_pConfigItem;

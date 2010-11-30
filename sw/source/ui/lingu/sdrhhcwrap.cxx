@@ -110,9 +110,6 @@ SdrHHCWrapper::~SdrHHCWrapper()
         pSdrView->SdrEndTextEdit( sal_True );
         SetUpdateMode(sal_False);
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
-//      SetPaperSize( Size(1, 1) );
-//      SetText(NULL);
-//      pTextObj = NULL;
     }
     RemoveView( pOutlView );
     delete pOutlView;

@@ -19,6 +19,10 @@
 #include "shutdownicon.hxx"
 #endif
 
+#ifdef ENABLE_GIO
+#include <gio/gio.h>
+#endif
+
 // Cut/paste from vcl/inc/svids.hrc
 #define SV_ICON_SMALL_START                 25000
 
@@ -39,6 +43,9 @@ static EggTrayIcon *pTrayIcon;
 static GtkWidget *pExitMenuItem = NULL;
 static GtkWidget *pOpenMenuItem = NULL;
 static GtkWidget *pDisableMenuItem = NULL;
+#ifdef ENABLE_GIO
+GFileMonitor* pMonitor = NULL;
+#endif
 
 static void open_url_cb( GtkWidget *, gpointer data )
 {
@@ -66,11 +73,14 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    egg_tray_icon_cancel_message (pTrayIcon, 1 );
-    plugin_shutdown_sys_tray();
-    //terminate may cause this .so to be unloaded. So we must be hands off
-    //all calls into this .so after this call
-    ShutdownIcon::terminateDesktop();
+    if (pTrayIcon)
+    {
+        egg_tray_icon_cancel_message (pTrayIcon, 1 );
+        plugin_shutdown_sys_tray();
+        //terminate may cause this .so to be unloaded. So we must be hands off
+        //all calls into this .so after this call
+        ShutdownIcon::terminateDesktop();
+    }
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
@@ -91,7 +101,8 @@ static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
     g_return_val_if_fail( pSalBitmap != NULL, NULL );
 
     Size aSize( pSalBitmap->Width(), pSalBitmap->Height() );
-    g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
+    if (pSalAlpha)
+        g_return_val_if_fail( Size( pSalAlpha->Width(), pSalAlpha->Height() ) == aSize, NULL );
 
     int nX, nY;
     guchar *pPixbufData = ( guchar * )g_malloc( 4 * aSize.Width() * aSize.Height() );
@@ -354,6 +365,22 @@ extern "C" {
     }
 }
 
+#ifdef ENABLE_GIO
+/*
+ * See rhbz#610103. If the quickstarter is running, then LibreOffice is
+ * upgraded, then the old quickstarter is still running, but is now unreliable
+ * as the old install has been deleted. A fairly intractable problem but we
+ * can avoid much of the pain if we turn off the quickstarter if we detect
+ * that it has been physically deleted.
+*/
+static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*/,
+    GFile * /*arg2*/, GFileMonitorEvent event_type, gpointer /*user_data*/)
+{
+    if (event_type == G_FILE_MONITOR_EVENT_DELETED)
+        exit_quickstarter_cb(GTK_WIDGET(pTrayIcon));
+}
+#endif
+
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 {
     ::SolarMutexGuard aGuard;
@@ -396,6 +423,23 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     // disable shutdown
     pShutdownIcon->SetVeto( true );
     pShutdownIcon->addTerminateListener();
+
+    g_signal_connect(GTK_WIDGET(pTrayIcon), "destroy",
+            G_CALLBACK(exit_quickstarter_cb), NULL);
+
+#ifdef ENABLE_GIO
+    GFile* pFile = NULL;
+    rtl::OUString sLibraryFileUrl;
+    if (osl::Module::getUrlFromAddress(plugin_init_sys_tray, sLibraryFileUrl))
+        pFile = g_file_new_for_uri(rtl::OUStringToOString(sLibraryFileUrl, RTL_TEXTENCODING_UTF8).getStr());
+
+    if (pFile)
+    {
+        if ((pMonitor = g_file_monitor_file(pFile, G_FILE_MONITOR_NONE, NULL, NULL)))
+            g_signal_connect(pMonitor, "changed", (GCallback)notify_file_changed, NULL);
+        g_object_unref(pFile);
+    }
+#endif
 }
 
 void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
@@ -403,8 +447,28 @@ void SAL_DLLPUBLIC_EXPORT plugin_shutdown_sys_tray()
     ::SolarMutexGuard aGuard;
     if( !pTrayIcon )
         return;
-    gtk_widget_destroy( GTK_WIDGET( pTrayIcon ) );
+
+#ifdef ENABLE_GIO
+    if (pMonitor)
+    {
+        g_signal_handlers_disconnect_by_func(pMonitor,
+            (void*)notify_file_changed, pMonitor);
+        g_file_monitor_cancel(pMonitor);
+        g_object_unref(pMonitor);
+        pMonitor = NULL;
+    }
+#endif
+
+    /* we have to set pTrayIcon to NULL now, because gtk_widget_destroy
+     * causes calling exit_quickstarter_cb (which then calls this func.)
+     * again -> crash.
+     * As an alternative, we could deregister the "destroy" signal here,
+     * but this is simpler .-)
+     */
+    GtkWidget* const pIcon = GTK_WIDGET( pTrayIcon );
     pTrayIcon = NULL;
+    gtk_widget_destroy( pIcon );
+
     pExitMenuItem = NULL;
     pOpenMenuItem = NULL;
     pDisableMenuItem = NULL;

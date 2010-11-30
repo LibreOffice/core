@@ -33,8 +33,8 @@ namespace chart
 {
 //.............................................................................
 
-#define CHART2_VIEW_DLWRAPPER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.DrawModelWrapper")
-#define CHART2_VIEW_DLWRAPPER_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.chart2.DrawModelWrapper")
+#define CHART2_VIEW_DLWRAPPER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DrawModelWrapper" ))
+#define CHART2_VIEW_DLWRAPPER_SERVICE_NAME ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DrawModelWrapper" ))
 
 //.............................................................................
 } //namespace chart

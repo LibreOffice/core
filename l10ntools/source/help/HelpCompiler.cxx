@@ -567,7 +567,7 @@ namespace fs
                         rtl::OUString suFilename = aStatus.getFileName();
                         rtl::OUString suFullFileURL;
                         suFullFileURL += _suDirURL;
-                        suFullFileURL += rtl::OUString::createFromAscii("/");
+                        suFullFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                         suFullFileURL += suFilename;
 
                         if (aStatus.getFileType() == osl::FileStatus::Directory)

@@ -73,9 +73,7 @@ public:
 
     static ::com::sun::star::beans::XPropertySet*           GetObject( SwRedline& rRedline, SwDoc& rDoc );
 };
-/* -----------------------------12.01.01 14:58--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwXRedlineEnumeration
     : public SwSimpleEnumeration_Base
     , public SwClient

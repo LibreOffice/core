@@ -182,13 +182,13 @@ String STR_QUERY_FULL_JOIN
 {
     Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
 };
+
 String STR_QUERY_CROSS_JOIN
 {
     Text [ en-US ] = "Contains the cartesian product of ALL records from '%1' and from '%2'.";
 };
+
 String STR_QUERY_NATURAL_JOIN
 {
     Text [ en-US ] = "Contains only one column for each pair of equally-named columns from '%1' and from '%2'.";
 };
-
-

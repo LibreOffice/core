@@ -36,7 +36,7 @@ sal_Bool SAL_CALL component_writeInfo(
             sal_Int32 nPos = 0;
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( LotusWordProImportFilter_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
 
             const Sequence< OUString > & rSNL = LotusWordProImportFilter_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

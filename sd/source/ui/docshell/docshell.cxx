@@ -478,12 +478,6 @@ void DrawDocShell::UpdateTablePointers()
     UpdateFontList();
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 void DrawDocShell::CancelSearching()
 {
     if( dynamic_cast<FuSearch*>( mxDocShellFunction.get() ) )

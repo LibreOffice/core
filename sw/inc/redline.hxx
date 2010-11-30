@@ -268,7 +268,6 @@ public:
     void PushData( const SwRedline& rRedl, BOOL bOwnAsNext = TRUE );
     BOOL PopData();
 
-    // #111827#
     /**
        Returns textual description of this a redline data element of
        this redline.

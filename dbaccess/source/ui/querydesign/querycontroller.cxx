@@ -124,12 +124,12 @@ namespace dbaui
         // need by registration
         static ::rtl::OUString getImplementationName_Static() throw( RuntimeException )
         {
-            return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OViewDesign");
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OViewDesign"));
         }
         static Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( RuntimeException )
         {
             Sequence< ::rtl::OUString> aSupported(1);
-            aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ViewDesign");
+            aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ViewDesign"));
             return aSupported;
         }
         static Reference< XInterface > SAL_CALL Create(const Reference< XMultiServiceFactory >& _rM)
@@ -156,11 +156,11 @@ namespace dbaui
             if (!_pNode->isToken())
             {
                 // Regelnamen als rule: ...
-                rString = ::rtl::OUString::createFromAscii("RULE_ID: ");
+                rString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RULE_ID: "));
                 rString += ::rtl::OUString::valueOf( (sal_Int32)_pNode->getRuleID());
-                rString+= ::rtl::OUString::createFromAscii("(");
+                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("));
                 rString += OSQLParser::RuleIDToStr(_pNode->getRuleID());
-                rString+= ::rtl::OUString::createFromAscii(")");
+                rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
 
 
                 _pParent = _pBox->InsertEntry(rString,_pParent);
@@ -181,50 +181,55 @@ namespace dbaui
 
                 case SQL_NODE_KEYWORD:
                     {
-                        rString+= ::rtl::OUString::createFromAscii("SQL_KEYWORD:");
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_KEYWORD:"));
                         ::rtl::OString sT = OSQLParser::TokenIDToStr(_pNode->getTokenID());
                         rString += ::rtl::OUString(sT,sT.getLength(),RTL_TEXTENCODING_UTF8);
                      break;}
 
                 case SQL_NODE_COMPARISON:
-                    {rString+= ::rtl::OUString::createFromAscii("SQL_COMPARISON:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                    {
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_COMPARISON:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
                             // und beginne neu Zeile
-                    break;}
+                        break;}
 
                 case SQL_NODE_NAME:
-                    {rString+= ::rtl::OUString::createFromAscii("SQL_NAME:");
-                     rString+= ::rtl::OUString::createFromAscii("\"");
-                     rString += _pNode->getTokenValue();
-                     rString+= ::rtl::OUString::createFromAscii("\"");
-
-                     break;}
+                    {
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_NAME:"));
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                        rString += _pNode->getTokenValue();
+                        rString+= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\""));
+                        break;}
 
                 case SQL_NODE_STRING:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_STRING:'");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_STRING:'"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_INTNUM:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_INTNUM:");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_INTNUM:"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_APPROXNUM:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_APPROXNUM:");
-                     rString += _pNode->getTokenValue();
-                     break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_APPROXNUM:"));
+                        rString += _pNode->getTokenValue();
+                        break;}
 
                 case SQL_NODE_PUNCTUATION:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_PUNCTUATION:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
-                    break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_PUNCTUATION:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        break;}
 
                 case SQL_NODE_AMMSC:
-                    {rString += ::rtl::OUString::createFromAscii("SQL_AMMSC:");
-                    rString += _pNode->getTokenValue(); // haenge Nodevalue an
-
-                    break;}
+                    {
+                        rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQL_AMMSC:"));
+                        rString += _pNode->getTokenValue(); // haenge Nodevalue an
+                        break;}
 
                 default:
                     OSL_ASSERT("OSQLParser::ShowParseTree: unzulaessiger NodeType");
@@ -303,13 +308,13 @@ namespace
 //------------------------------------------------------------------------------
 ::rtl::OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OQueryDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OQueryDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OQueryController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.QueryDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.QueryDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -694,7 +699,6 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if(m_bGraphicalDesign)
                     InvalidateFeature(ID_BROWSER_ADDTABLE);
             }
-            //  InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
             break;
         case SID_QUERY_VIEW_FUNCTIONS:
         case SID_QUERY_VIEW_TABLES:
@@ -734,15 +738,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
             break;
         case ID_QUERY_ZOOM_IN:
             {
-//              m_aZoom *= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         case ID_QUERY_ZOOM_OUT:
             {
-//              if(m_aZoom != Fraction(1,1))
-//                  m_aZoom /= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
 #if OSL_DEBUG_LEVEL > 1
@@ -779,11 +778,10 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                                 pNodeTmp = pTemp->getChild(1);
                                 OSQLParseNode::compress(pNodeTmp);
                                 pNodeTmp = pTemp->getChild(1);
-                            } // if ( pCondition ) // no where clause
+                            }
                             ::rtl::OUString sTemp;
                             pNode->parseNodeToStr(sTemp,getConnection());
                             getContainer()->setStatement(sTemp);
-
                         }
                     }
 
@@ -1165,7 +1163,7 @@ void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(Run
     if ( getContainer() && Source.Source.is() )
     {
         if ( Source.Source == m_aCurrentFrame.getFrame() )
-        {   // our frame is beeing disposed -> close the preview window (if we have one)
+        {   // our frame is being disposed -> close the preview window (if we have one)
             Reference< XFrame > xPreviewFrame( getContainer()->getPreviewFrame() );
             ::comphelper::disposeComponent( xPreviewFrame );
         }
@@ -1290,7 +1288,7 @@ void OQueryController::executeQuery()
             InvalidateFeature(SID_DB_QUERY_PREVIEW);
 
             URL aWantToDispatch;
-            aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
+            aWantToDispatch.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".component:DB/DataSourceBrowser"));
 
             ::rtl::OUString sFrameName( FRAME_NAME_QUERY_PREVIEW );
             sal_Int32 nSearchFlags = FrameSearchFlag::CHILDREN;
@@ -1382,7 +1380,6 @@ sal_Bool OQueryController::askForNewName(const Reference<XNameAccess>& _xElement
         {
             String sName = String( ModuleRes( editingView() ? STR_VIEW_TITLE : STR_QRY_TITLE ) );
             aDefaultName = sName.GetToken(0,' ');
-            //aDefaultName = getPrivateTitle( );
             aDefaultName = ::dbtools::createUniqueName(_xElements,aDefaultName);
         }
 
@@ -1548,7 +1545,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
                 // now check if our datasource has set a tablefilter and if so, append the new table name to it
                 ::dbaui::appendToFilter( getConnection(), m_sName, getORB(), getView() );
-            } // if ( editingView() )
+            }
             Reference< XTitleChangeListener> xEventListener(impl_getTitleHelper_throw(),UNO_QUERY);
             if ( xEventListener.is() )
             {

@@ -29,9 +29,6 @@
 #ifndef SC_PFILTDLG_HXX
 #define SC_PFILTDLG_HXX
 
-#ifndef _SV_HXX
-#endif
-
 #include <vcl/morebtn.hxx>
 #include <svtools/stdctrl.hxx>
 #include <vcl/button.hxx>

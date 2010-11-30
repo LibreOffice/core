@@ -102,7 +102,7 @@ public:
     long                CalcHeight() const;
     sal_Bool            IsRootURL( const String& rURL ) const;
     ULONG               GetRootPos( const String& rURL ) const;
-    void                UpdateIcons( sal_Bool _bHiContrast );
+    void                UpdateIcons();
 
     inline sal_Bool         ProcessKeyEvent( const KeyEvent& rKEvt );
 

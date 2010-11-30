@@ -72,7 +72,6 @@ static const fProvider pInstanceProviders[] =
     NULL
 };
 
-
 static const char** pSupportedServices[] =
 {
     SOEvaluation::interfaces,
@@ -118,9 +117,9 @@ component_writeInfo(
     for (int i = 0; (pServices[i]!=NULL)&&(pImplementations[i]!=NULL); i++) {
         pServiceName= pServices[i];
         pImplName = pImplementations[i];
-        aImpl = OUString::createFromAscii("/")
+        aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
               + OUString::createFromAscii(pImplName)
-              + OUString::createFromAscii("/UNO/SERVICES");
+              + OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
         Reference<XRegistryKey> xNewKey = xKey->createKey(aImpl);
         xNewKey->createKey(OUString::createFromAscii(pServiceName));
     }

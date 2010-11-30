@@ -287,7 +287,7 @@ void SAL_CALL VCLXAccessibleToolBoxItem::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString VCLXAccessibleToolBoxItem::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.toolkit.AccessibleToolBoxItem" ));
 }
 // -----------------------------------------------------------------------------
 sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
@@ -304,10 +304,10 @@ sal_Bool VCLXAccessibleToolBoxItem::supportsService( const ::rtl::OUString& rSer
 Sequence< ::rtl::OUString > VCLXAccessibleToolBoxItem::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(4);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleContext" );
-    aNames[1] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleComponent" );
-    aNames[2] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleExtendedComponent" );
-    aNames[3] = ::rtl::OUString::createFromAscii( "com.sun.star.accessibility.AccessibleToolBoxItem" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleContext" ));
+    aNames[1] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleComponent" ));
+    aNames[2] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleExtendedComponent" ));
+    aNames[3] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.accessibility.AccessibleToolBoxItem" ));
     return aNames;
 }
 // -----------------------------------------------------------------------------

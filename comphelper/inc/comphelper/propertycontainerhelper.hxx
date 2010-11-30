@@ -32,9 +32,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <com/sun/star/uno/Type.hxx>
 #include <com/sun/star/beans/Property.hpp>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include "comphelper/comphelperdllapi.h"
 
 //.........................................................................

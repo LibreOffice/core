@@ -33,11 +33,6 @@ Image RID_IMG_DEF_PACKAGE_BUNDLE
     ImageBitmap = Bitmap { File = "sx03256.bmp"; };
     MASKCOLOR
 };
-Image RID_IMG_DEF_PACKAGE_BUNDLE_HC
-{
-    ImageBitmap = Bitmap { File = "sxh03256.bmp"; };
-    MASKCOLOR
-};
 
 // script, dialog:
 Image RID_IMG_SCRIPTLIB
@@ -45,20 +40,10 @@ Image RID_IMG_SCRIPTLIB
     ImageBitmap = Bitmap { File = "im30820.bmp"; };
     MASKCOLOR
 };
-Image RID_IMG_SCRIPTLIB_HC
-{
-    ImageBitmap = Bitmap { File = "imh30820.bmp"; };
-    MASKCOLOR
-};
 
 Image RID_IMG_DIALOGLIB
 {
     ImageBitmap = Bitmap { File = "dialogfolder_16.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_DIALOGLIB_HC
-{
-    ImageBitmap = Bitmap { File = "dialogfolder_16_h.bmp"; };
     MASKCOLOR
 };
 
@@ -68,21 +53,11 @@ Image RID_IMG_CONF_XML
     ImageBitmap = Bitmap { File = "xml_16.bmp"; };
     MASKCOLOR
 };
-Image RID_IMG_CONF_XML_HC
-{
-    ImageBitmap = Bitmap { File = "xml_16_h.bmp"; };
-    MASKCOLOR
-};
 
 // component, typelib:
 Image RID_IMG_COMPONENT
 {
     ImageBitmap = Bitmap { File = "component_16.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_COMPONENT_HC
-{
-    ImageBitmap = Bitmap { File = "component_16_h.bmp"; };
     MASKCOLOR
 };
 
@@ -91,20 +66,10 @@ Image RID_IMG_JAVA_COMPONENT
     ImageBitmap = Bitmap { File = "javacomponent_16.bmp"; };
     MASKCOLOR
 };
-Image RID_IMG_JAVA_COMPONENT_HC
-{
-    ImageBitmap = Bitmap { File = "javacomponent_16_h.bmp"; };
-    MASKCOLOR
-};
 
 Image RID_IMG_TYPELIB
 {
     ImageBitmap = Bitmap { File = "library_16.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_TYPELIB_HC
-{
-    ImageBitmap = Bitmap { File = "library_16_h.bmp"; };
     MASKCOLOR
 };
 
@@ -113,19 +78,9 @@ Image RID_IMG_JAVA_TYPELIB
     ImageBitmap = Bitmap { File = "javalibrary_16.bmp"; };
     MASKCOLOR
 };
-Image RID_IMG_JAVA_TYPELIB_HC
-{
-    ImageBitmap = Bitmap { File = "javalibrary_16_h.bmp"; };
-    MASKCOLOR
-};
 
 Image RID_IMG_HELP
 {
     ImageBitmap = Bitmap { File = "commandimagelist/sc_helperdialog.bmp"; };
-    MASKCOLOR
-};
-Image RID_IMG_HELP_HC
-{
-    ImageBitmap = Bitmap { File = "commandimagelist/sch_helperdialog.bmp"; };
     MASKCOLOR
 };

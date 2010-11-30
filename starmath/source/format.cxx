@@ -115,7 +115,7 @@ SmFormat::SmFormat()
 
     eHorAlign       = AlignCenter;
     nGreekCharStyle = 0;
-    bIsTextmode     = bScaleNormalBrackets = FALSE;
+    bIsTextmode     = bScaleNormalBrackets = false;
 
     vSize[SIZ_TEXT]     = 100;
     vSize[SIZ_INDEX]    = 60;
@@ -170,18 +170,18 @@ SmFormat::SmFormat()
     for ( USHORT i = FNT_BEGIN;  i <= FNT_END;  i++ )
     {
         SmFace &rFace = vFont[i];
-        rFace.SetTransparent( TRUE );
+        rFace.SetTransparent( true );
         rFace.SetAlign( ALIGN_BASELINE );
         rFace.SetColor( COL_AUTO );
-        bDefaultFont[i] = FALSE;
+        bDefaultFont[i] = false;
     }
 }
 
 
-void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont, BOOL bDefault )
+void SmFormat::SetFont(USHORT nIdent, const SmFace &rFont, bool bDefault )
 {
     vFont[nIdent] = rFont;
-    vFont[nIdent].SetTransparent( TRUE );
+    vFont[nIdent].SetTransparent( true );
     vFont[nIdent].SetAlign( ALIGN_BASELINE );
 
     bDefaultFont[nIdent] = bDefault;
@@ -211,9 +211,9 @@ SmFormat & SmFormat::operator = (const SmFormat &rFormat)
 }
 
 
-BOOL SmFormat::operator == (const SmFormat &rFormat) const
+bool SmFormat::operator == (const SmFormat &rFormat) const
 {
-    BOOL bRes = aBaseSize == rFormat.aBaseSize  &&
+    bool bRes = aBaseSize == rFormat.aBaseSize  &&
                 eHorAlign == rFormat.eHorAlign  &&
                 nGreekCharStyle == rFormat.nGreekCharStyle &&
                 bIsTextmode == rFormat.bIsTextmode  &&
@@ -223,18 +223,18 @@ BOOL SmFormat::operator == (const SmFormat &rFormat) const
     for (i = 0;  i <= SIZ_END && bRes;  ++i)
     {
         if (vSize[i] != rFormat.vSize[i])
-            bRes = FALSE;
+            bRes = false;
     }
     for (i = 0;  i <= DIS_END && bRes;  ++i)
     {
         if (vDist[i] != rFormat.vDist[i])
-            bRes = FALSE;
+            bRes = false;
     }
     for (i = 0;  i <= FNT_END && bRes;  ++i)
     {
         if (vFont[i] != rFormat.vFont[i]  ||
             bDefaultFont[i] != rFormat.bDefaultFont[i])
-            bRes = FALSE;
+            bRes = false;
     }
 
     return bRes;

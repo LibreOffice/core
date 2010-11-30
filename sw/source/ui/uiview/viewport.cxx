@@ -701,10 +701,6 @@ IMPL_LINK( SwView, ScrollHdl, SwScrollbar *, pScrollbar )
         String sDisplay;
         if(pWrtShell->GetPageNumber( aPos.Y(), FALSE, nPhNum, nVirtNum, sDisplay ))
         {
-            // JP 21.07.00: the end scrollhandler invalidate the FN_STAT_PAGE,
-            //              so we dont must do it agin.
-//          if(!GetViewFrame()->GetFrame().IsInPlace())
-//              S F X_BINDINGS().Update(FN_STAT_PAGE);
 
             //QuickHelp:
             if( pWrtShell->GetPageCnt() > 1 && Help::IsQuickHelpEnabled() )

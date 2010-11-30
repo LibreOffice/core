@@ -99,12 +99,12 @@ namespace chelp {
 
         ~StaticModuleInformation() { }
 
-        rtl::OUString get_title()     { return m_aTitle; }
-        rtl::OUString get_id()        { return m_aStartId; }
-        rtl::OUString get_program()   { return m_aProgramSwitch; }
-        rtl::OUString get_heading()   { return m_aHeading; }
-        rtl::OUString get_fulltext()  { return m_aFulltext; }
-        int get_order() { return m_nOrder; }
+        rtl::OUString get_title() const { return m_aTitle; }
+        rtl::OUString get_id() const { return m_aStartId; }
+        rtl::OUString get_program() const { return m_aProgramSwitch; }
+        rtl::OUString get_heading() const { return m_aHeading; }
+        rtl::OUString get_fulltext() const { return m_aFulltext; }
+        int get_order() const { return m_nOrder; }
     };  // end class StaticModuleInformation
 
 

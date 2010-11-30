@@ -463,7 +463,7 @@ uno::Reference< ::com::sun::star::frame::XLayoutManager > SAL_CALL SdrLightEmbed
     uno::Reference < beans::XPropertySet > xFrame( lcl_getFrame_throw(mpObj));
     try
     {
-        xMan.set(xFrame->getPropertyValue( ::rtl::OUString::createFromAscii("LayoutManager") ),uno::UNO_QUERY);
+        xMan.set(xFrame->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ),uno::UNO_QUERY);
     }
     catch ( uno::Exception& )
     {
@@ -1491,11 +1491,6 @@ SdrObject* SdrOle2Obj::getFullDragClone() const
     // create a graphic object with it
     Graphic* pOLEGraphic = GetGraphic();
     SdrObject* pClone = 0;
-
-    if(Application::GetSettings().GetStyleSettings().GetHighContrastMode())
-    {
-        pOLEGraphic = getEmbeddedObjectRef().GetHCGraphic();
-    }
 
     if(pOLEGraphic)
     {

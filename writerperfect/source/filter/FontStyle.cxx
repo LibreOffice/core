@@ -30,7 +30,7 @@
 #include "DocumentElement.hxx"
 
 FontStyle::FontStyle(const char *psName, const char *psFontFamily) : Style(psName),
-    msFontFamily(psFontFamily),
+    msFontFamily(psFontFamily, true),
     msFontPitch(IMP_DEFAULT_FONT_PITCH)
 {
 }
@@ -39,14 +39,14 @@ FontStyle::~FontStyle()
 {
 }
 
-void FontStyle::write(DocumentHandler *pHandler) const
+void FontStyle::write(DocumentHandlerInterface *pHandler) const
 {
-    TagOpenElement styleOpen("style:font-decl");
+    TagOpenElement styleOpen("style:font-face");
     styleOpen.addAttribute("style:name", getName());
-    styleOpen.addAttribute("fo:font-family", msFontFamily);
-    styleOpen.addAttribute("style:font-pitch", msFontPitch);
+    styleOpen.addAttribute("svg:font-family", msFontFamily);
+//    styleOpen.addAttribute("style:font-pitch", msFontPitch);
     styleOpen.write(pHandler);
-    TagCloseElement styleClose("style:font-decl");
+    TagCloseElement styleClose("style:font-face");
     styleClose.write(pHandler);
 }
 

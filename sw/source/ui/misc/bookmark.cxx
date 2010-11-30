@@ -96,7 +96,6 @@ IMPL_LINK( SwInsertBookmarkDlg, DeleteHdl, Button *, EMPTYARG )
 
     aBookmarkBox.SetText(aEmptyStr);
     aDeleteBtn.Enable(FALSE);   // keine weiteren Eintraege vorhanden
-    // aBookmarkBox.SetText(aEmptyStr);
 
     aOkBtn.Enable();            // Im OK Handler wird geloescht
     return 0;

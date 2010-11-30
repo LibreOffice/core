@@ -144,13 +144,6 @@ namespace
 
 // -----------------------------------------------------------------------
 
-static sal_Bool isHighContrast( const Window* _pView )
-{
-    return _pView->GetSettings().GetStyleSettings().GetHighContrastMode();
-}
-
-// -----------------------------------------------------------------------
-
 void FilterMatch::createWildCardFilterList(const String& _rFilterList,::std::vector< WildCard >& _rFilters)
 {
     if( _rFilterList.Len() )
@@ -892,7 +885,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
                     if ( aCommands.is() )
                         bEnableDelete
                             = aCommands->hasCommandByName(
-                                OUString::createFromAscii( "delete" ) );
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )) );
                     else
                         bEnableDelete = false;
                 }
@@ -911,7 +904,7 @@ PopupMenu* ViewTabListBox_Impl::CreateContextMenu( void )
                     {
                         Property aProp
                             = aProps->getPropertyByName(
-                                OUString::createFromAscii( "Title" ) );
+                                OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" )) );
                         bEnableRename
                             = !( aProp.Attributes & PropertyAttribute::READONLY );
                     }
@@ -995,7 +988,7 @@ void ViewTabListBox_Impl::DeleteEntries()
             if ( aCommands.is() )
                 canDelete
                     = aCommands->hasCommandByName(
-                        OUString::createFromAscii( "delete" ) );
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )) );
             else
                 canDelete = false;
         }
@@ -1055,7 +1048,7 @@ BOOL ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
 
     try
     {
-        OUString aPropName = OUString::createFromAscii( "Title" );
+        OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
         bool canRename = true;
         ::ucbhelper::Content aContent( aURL, mxCmdEnv );
 
@@ -1191,7 +1184,7 @@ sal_Bool ViewTabListBox_Impl::Kill( const OUString& rContent )
     try
     {
         ::ucbhelper::Content aCnt( rContent, mxCmdEnv );
-        aCnt.executeCommand( OUString::createFromAscii( "delete" ), makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" )), makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ::com::sun::star::ucb::CommandAbortedException const & )
     {
@@ -1323,7 +1316,7 @@ void SvtFileView::OpenFolder( const Sequence< OUString >& aContents )
         // detect image
         sal_Bool bDoInsert = sal_True;
         INetURLObject aObj( aImageURL.Len() > 0 ? aImageURL : aURL );
-        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( this ) );
+        Image aImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         if ( bDoInsert )
         {
@@ -2292,8 +2285,8 @@ void SvtFileView_Impl::implEnumerationSuccess()
 // -----------------------------------------------------------------------
 void SvtFileView_Impl::ReplaceTabWithString( OUString& aValue )
 {
-    OUString aTab     = OUString::createFromAscii( "\t" );
-    OUString aTabString = OUString::createFromAscii( "%09" );
+    OUString aTab(       RTL_CONSTASCII_USTRINGPARAM( "\t" ));
+    OUString aTabString( RTL_CONSTASCII_USTRINGPARAM( "%09" ));
     sal_Int32 iPos;
 
     while ( ( iPos = aValue.indexOf( aTab ) ) >= 0 )
@@ -2306,8 +2299,8 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
     ::osl::MutexGuard aGuard( maMutex );
 
     OUString aValue;
-    OUString aTab     = OUString::createFromAscii( "\t" );
-    OUString aDateSep = OUString::createFromAscii( ", " );
+    OUString aTab(     RTL_CONSTASCII_USTRINGPARAM( "\t" ));
+    OUString aDateSep( RTL_CONSTASCII_USTRINGPARAM( ", " ));
 
     std::vector< SortingData_Impl* >::iterator aIt;
 
@@ -2341,10 +2334,10 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
             ::svtools::VolumeInfo aVolInfo( (*aIt)->mbIsVolume, (*aIt)->mbIsRemote,
                                             (*aIt)->mbIsRemoveable, (*aIt)->mbIsFloppy,
                                             (*aIt)->mbIsCompactDisc );
-            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
+            (*aIt)->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
         }
         else
-            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE, isHighContrast( mpView ));
+            (*aIt)->maImage = SvFileInformationManager::GetFileImage( INetURLObject( (*aIt)->maTargetURL ), FALSE );
     }
 }
 
@@ -2357,7 +2350,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
-    OUString aTab     = OUString::createFromAscii( "\t" );
+    OUString aTab( RTL_CONSTASCII_USTRINGPARAM( "\t" ));
 
     sal_uInt32 nCount = (sal_uInt32) rList.getLength();
 
@@ -2429,7 +2422,7 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
 
         // detect the image
         INetURLObject aObj( pEntry->maImageURL.getLength() ? pEntry->maImageURL : pEntry->maTargetURL );
-        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE, isHighContrast( mpView ) );
+        pEntry->maImage = SvFileInformationManager::GetImage( aObj, FALSE );
 
         maContent.push_back( pEntry );
     }
@@ -2639,11 +2632,11 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     ::svtools::VolumeInfo aVolInfo;
     pData->maType = SvFileInformationManager::GetFolderDescription( aVolInfo );
-    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE, isHighContrast( mpView ) );
+    pData->maImage = SvFileInformationManager::GetFolderImage( aVolInfo, FALSE );
 
     OUString aValue;
-    OUString aTab     = OUString::createFromAscii( "\t" );
-    OUString aDateSep = OUString::createFromAscii( ", " );
+    OUString aTab(     RTL_CONSTASCII_USTRINGPARAM( "\t" ));
+    OUString aDateSep( RTL_CONSTASCII_USTRINGPARAM( ", " ));
 
     // title, type, size, date
     aValue = pData->GetTitle();

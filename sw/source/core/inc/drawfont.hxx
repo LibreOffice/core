@@ -95,7 +95,7 @@ class SwDrawTextInfo
     SwDrawTextInfo();       // nicht zulaessig
 public:
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bPos   : 1;            // These flags should control, that the appropriate
     BOOL bWrong : 1;            // Set-function has been called before calling
     BOOL bGrammarCheck : 1;     //  the Get-function of a member
@@ -158,7 +158,7 @@ public:
         bUpper = FALSE;
         bDrawSpace = FALSE;
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         // these flags control, whether the matching member variables have
         // been set by using the Set-function before they may be accessed
         // by their Get-function:
@@ -199,13 +199,17 @@ public:
 
     const Point &GetPos() const
     {
-        ASSERT( bPos, "DrawTextInfo: Undefined Position" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bPos, "DrawTextInfo: Undefined Position" );
+#endif
         return *pPos;
     }
 
     xub_StrLen *GetHyphPos() const
     {
-        ASSERT( bHyph, "DrawTextInfo: Undefined Hyph Position" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bHyph, "DrawTextInfo: Undefined Hyph Position" );
+#endif
         return pHyphPos;
     }
 
@@ -216,13 +220,17 @@ public:
 
     const SwWrongList* GetWrong() const
     {
-        ASSERT( bWrong, "DrawTextInfo: Undefined WrongList" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bWrong, "DrawTextInfo: Undefined WrongList" );
+#endif
         return pWrong;
     }
 
     const SwWrongList* GetGrammarCheck() const
     {
-        ASSERT( bGrammarCheck, "DrawTextInfo: Undefined GrammarCheck List" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bGrammarCheck, "DrawTextInfo: Undefined GrammarCheck List" );
+#endif
         return pGrammarCheck;
     }
 
@@ -233,13 +241,17 @@ public:
 
     const Size &GetSize() const
     {
-        ASSERT( bSize, "DrawTextInfo: Undefined Size" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bSize, "DrawTextInfo: Undefined Size" );
+#endif
         return *pSize;
     }
 
     SwFont* GetFont() const
     {
-        ASSERT( bFnt, "DrawTextInfo: Undefined Font" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bFnt, "DrawTextInfo: Undefined Font" );
+#endif
         return pFnt;
     }
 
@@ -260,7 +272,9 @@ public:
 
     xub_StrLen GetOfst() const
     {
-        ASSERT( bOfst, "DrawTextInfo: Undefined Offset" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bOfst, "DrawTextInfo: Undefined Offset" );
+#endif
         return nOfst;
     }
 
@@ -271,19 +285,25 @@ public:
 
     long GetLeft() const
     {
-        ASSERT( bLeft, "DrawTextInfo: Undefined left range" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bLeft, "DrawTextInfo: Undefined left range" );
+#endif
         return nLeft;
     }
 
     long GetRight() const
     {
-        ASSERT( bRight, "DrawTextInfo: Undefined right range" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bRight, "DrawTextInfo: Undefined right range" );
+#endif
         return nRight;
     }
 
     long GetKanaDiff() const
     {
-        ASSERT( bKana, "DrawTextInfo: Undefined kana difference" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bKana, "DrawTextInfo: Undefined kana difference" );
+#endif
         return nKanaDiff;
     }
 
@@ -294,7 +314,9 @@ public:
 
     USHORT GetAscent() const
     {
-        ASSERT( bAscent, "DrawTextInfo: Undefined Ascent" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bAscent, "DrawTextInfo: Undefined Ascent" );
+#endif
         return nAscent;
     }
 
@@ -305,7 +327,9 @@ public:
 
     long GetSperren() const
     {
-        ASSERT( bSperr, "DrawTextInfo: Undefined >Sperren<" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bSperr, "DrawTextInfo: Undefined >Sperren<" );
+#endif
         return nSperren;
     }
 
@@ -316,13 +340,17 @@ public:
 
     long GetSpace() const
     {
-        ASSERT( bSpace, "DrawTextInfo: Undefined Spacing" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bSpace, "DrawTextInfo: Undefined Spacing" );
+#endif
         return nSpace;
     }
 
     xub_StrLen GetNumberOfBlanks() const
     {
-        ASSERT( bNumberOfBlanks, "DrawTextInfo::Undefined NumberOfBlanks" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bNumberOfBlanks, "DrawTextInfo::Undefined NumberOfBlanks" );
+#endif
         return nNumberOfBlanks;
     }
 
@@ -338,13 +366,17 @@ public:
 
     BOOL GetUpper() const
     {
-        ASSERT( bUppr, "DrawTextInfo: Undefined Upperflag" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bUppr, "DrawTextInfo: Undefined Upperflag" );
+#endif
         return bUpper;
     }
 
     BOOL GetDrawSpace() const
     {
-        ASSERT( bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
+#if OSL_DEBUG_LEVEL > 1
+        OSL_ENSURE( bDrawSp, "DrawTextInfo: Undefined DrawSpaceflag" );
+#endif
         return bDrawSpace;
     }
 
@@ -381,7 +413,7 @@ public:
     void SetPos( const Point &rNew )
     {
         pPos = &rNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bPos = TRUE;
 #endif
     }
@@ -389,7 +421,7 @@ public:
     void SetHyphPos( xub_StrLen *pNew )
     {
         pHyphPos = pNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bHyph = TRUE;
 #endif
     }
@@ -402,7 +434,7 @@ public:
     void SetWrong( const SwWrongList* pNew )
     {
         pWrong = pNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bWrong = TRUE;
 #endif
     }
@@ -410,7 +442,7 @@ public:
     void SetGrammarCheck( const SwWrongList* pNew )
     {
         pGrammarCheck = pNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bGrammarCheck = TRUE;
 #endif
     }
@@ -423,7 +455,7 @@ public:
     void SetSize( const Size &rNew )
     {
         pSize = &rNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bSize = TRUE;
 #endif
     }
@@ -431,7 +463,7 @@ public:
     void SetFont( SwFont* pNew )
     {
         pFnt = pNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bFnt = TRUE;
 #endif
     }
@@ -449,7 +481,7 @@ public:
     void SetOfst( xub_StrLen nNew )
     {
         nOfst = nNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bOfst = TRUE;
 #endif
     }
@@ -457,7 +489,7 @@ public:
     void SetLeft( long nNew )
     {
         nLeft = nNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bLeft = TRUE;
 #endif
     }
@@ -465,7 +497,7 @@ public:
     void SetRight( long nNew )
     {
         nRight = nNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bRight = TRUE;
 #endif
     }
@@ -473,7 +505,7 @@ public:
     void SetKanaDiff( long nNew )
     {
         nKanaDiff = nNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bKana = TRUE;
 #endif
     }
@@ -486,7 +518,7 @@ public:
     void SetAscent( USHORT nNew )
     {
         nAscent = nNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bAscent = TRUE;
 #endif
     }
@@ -508,7 +540,7 @@ public:
             nSpace = nNew;
             nSperren = 0;
         }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bSpace = TRUE;
         bSperr = TRUE;
 #endif
@@ -516,7 +548,7 @@ public:
 
     void SetNumberOfBlanks( xub_StrLen nNew )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bNumberOfBlanks = TRUE;
 #endif
         nNumberOfBlanks = nNew;
@@ -545,7 +577,7 @@ public:
     void SetUpper( BOOL bNew )
     {
         bUpper = bNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bUppr = TRUE;
 #endif
     }
@@ -553,7 +585,7 @@ public:
     void SetDrawSpace( BOOL bNew )
     {
         bDrawSpace = bNew;
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bDrawSp = TRUE;
 #endif
     }

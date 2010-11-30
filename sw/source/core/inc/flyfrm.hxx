@@ -166,7 +166,7 @@ public:
 
     virtual void  CheckDirection( BOOL bVert );
     virtual void Cut();
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 

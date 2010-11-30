@@ -562,7 +562,6 @@ public:
     Size    getMinSize();
 
     Image   maImage;
-    Image   maImageHC;
 };
 
 DecoToolBox::DecoToolBox( Window* pParent, WinBits nStyle ) :
@@ -640,8 +639,7 @@ void DecoToolBox::SetImages( long nMaxHeight, bool bForce )
 
         Color       aEraseColor( 255, 255, 255, 255 );
         BitmapEx    aBmpExDst( maImage.GetBitmapEx() );
-        BitmapEx    aBmpExSrc( GetSettings().GetStyleSettings().GetHighContrastMode() ?
-                              maImageHC.GetBitmapEx() : aBmpExDst );
+        BitmapEx    aBmpExSrc( aBmpExDst );
 
         aEraseColor.SetTransparency( 255 );
         aBmpExDst.Erase( aEraseColor );
@@ -5165,18 +5163,14 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     if( pResMgr )
     {
         BitmapEx aBitmap( ResId( SV_RESID_BITMAP_CLOSEDOC, *pResMgr ) );
-        BitmapEx aBitmapHC( ResId( SV_RESID_BITMAP_CLOSEDOCHC, *pResMgr ) );
-
         aCloser.maImage = Image( aBitmap );
-        aCloser.maImageHC = Image( aBitmapHC );
 
         aCloser.SetOutStyle( TOOLBOX_STYLE_FLAT );
         aCloser.SetBackground();
         aCloser.SetPaintTransparent( TRUE );
         aCloser.SetParentClipMode( PARENTCLIPMODE_NOCLIP );
 
-        aCloser.InsertItem( IID_DOCUMENTCLOSE,
-        GetSettings().GetStyleSettings().GetHighContrastMode() ? aCloser.maImageHC : aCloser.maImage, 0 );
+        aCloser.InsertItem( IID_DOCUMENTCLOSE, aCloser.maImage, 0 );
         aCloser.SetSelectHdl( LINK( this, MenuBarWindow, CloserHdl ) );
         aCloser.AddEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
         aCloser.SetQuickHelpText( IID_DOCUMENTCLOSE, XubString( ResId( SV_HELPTEXT_CLOSEDOCUMENT, *pResMgr ) ) );

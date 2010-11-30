@@ -113,40 +113,30 @@ USHORT SwEditShell::GetCurTOXMarks(SwTOXMarks& rMarks) const
     return GetDoc()->GetCurTOXMark( *GetCrsr()->Start(), rMarks );
 }
 
-/* -----------------01.09.99 16:05-------------------
-
- --------------------------------------------------*/
 BOOL SwEditShell::IsTOXBaseReadonly(const SwTOXBase& rTOXBase) const
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     return  rTOXSect.IsProtect();
 }
-/* -----------------18.10.99 15:53-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOXBaseReadonly(const SwTOXBase& rTOXBase, BOOL bReadonly)
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     ((SwTOXBase&)rTOXBase).SetProtected(bReadonly);
-    ASSERT( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
+    OSL_ENSURE( rTOXSect.SwSection::GetType() == TOX_CONTENT_SECTION, "not a TOXContentSection" );
 
     SwSectionData aSectionData(rTOXSect);
     aSectionData.SetProtectFlag(bReadonly);
     UpdateSection( GetSectionFmtPos( *rTOXSect.GetFmt()  ), aSectionData, 0 );
 }
 
-/* -----------------02.09.99 07:47-------------------
-
- --------------------------------------------------*/
 const SwTOXBase*    SwEditShell::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     return GetDoc()->GetDefaultTOXBase( eTyp, bCreate );
 }
-/* -----------------02.09.99 08:05-------------------
 
- --------------------------------------------------*/
 void    SwEditShell::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     GetDoc()->SetDefaultTOXBase(rBase);
@@ -168,7 +158,7 @@ void SwEditShell::InsertTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
     // Einfuegen des Verzeichnisses
     const SwTOXBaseSection* pTOX = pDoc->InsertTableOf(
                                         *GetCrsr()->GetPoint(), rTOX, pSet, TRUE );
-    ASSERT(pTOX, "Kein aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Kein aktuelles Verzeichnis");
 
     // Formatierung anstossen
     CalcLayout();
@@ -192,9 +182,9 @@ BOOL SwEditShell::UpdateTableOf( const SwTOXBase& rTOX, const SfxItemSet* pSet )
 {
     BOOL bRet = FALSE;
 
-    ASSERT( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
+    OSL_ENSURE( rTOX.ISA( SwTOXBaseSection ),  "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOX;
-    ASSERT(pTOX, "Keine aktuelles Verzeichnis");
+    OSL_ENSURE(pTOX, "Keine aktuelles Verzeichnis");
     const SwSectionNode* pSectNd;
     if( pTOX && 0 != ( pSectNd = pTOX->GetFmt()->GetSectionNode() ) )
     {
@@ -290,7 +280,7 @@ const SwTOXBase* SwEditShell::GetTOX( USHORT nPos ) const
             pSect->GetFmt()->GetSectionNode() &&
             nCnt++ == nPos )
         {
-            ASSERT( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+            OSL_ENSURE( pSect->ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
             return (SwTOXBaseSection*)pSect;
         }
     }
@@ -310,23 +300,16 @@ BOOL SwEditShell::IsUpdateTOX() const
     return GetDoc()->IsUpdateTOX();
 }
 
-/* -----------------26.08.99 13:49-------------------
-
- --------------------------------------------------*/
 const String&   SwEditShell::GetTOIAutoMarkURL() const
 {
     return GetDoc()->GetTOIAutoMarkURL();
 }
-/* -----------------26.08.99 13:49-------------------
 
- --------------------------------------------------*/
 void SwEditShell::SetTOIAutoMarkURL(const String& rSet)
 {
     GetDoc()->SetTOIAutoMarkURL(rSet);
 }
-/* -----------------26.08.99 09:29-------------------
 
- --------------------------------------------------*/
 void SwEditShell::ApplyAutoMark()
 {
     StartAllAction();
@@ -362,8 +345,6 @@ void SwEditShell::ApplyAutoMark()
         //
         // SearchOptions to be used in loop below
         //
-        //SearchAlgorithms eSrchType    = SearchAlgorithms_ABSOLUTE;
-        //OUString aSrchStr = rText;
         BOOL bCaseSensitive = TRUE;
         BOOL bWordOnly      = FALSE;
         BOOL bSrchInSel     = FALSE;
@@ -424,13 +405,11 @@ void SwEditShell::ApplyAutoMark()
                     //
                     if (!bCaseSensitive)
                     {
-                        //nSrchFlags |= SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags |=
                                      TransliterationModules_IGNORE_CASE;
                     }
                     else
                     {
-                        //aSearchOpt.searchFlag &= ~SearchFlags::ALL_IGNORE_CASE;
                         aSearchOpt.transliterateFlags &=
                                     ~TransliterationModules_IGNORE_CASE;
                     }

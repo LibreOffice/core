@@ -405,7 +405,7 @@ namespace accessibility
         /// Our listeners (guarded by maMutex)
         int mnNotifierClientId;
 
-        // --> OD 2006-01-11 #i27138#
+        // Text paragraphs should provide FLOWS_TO and FLOWS_FROM relations (#i27138#)
         // the paragraph manager, which created this instance - is NULL, if
         // instance isn't created by AccessibleParaManager.
         // Needed for method <getAccessibleRelationSet()> to retrieve predecessor

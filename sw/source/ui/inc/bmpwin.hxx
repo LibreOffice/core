@@ -41,7 +41,6 @@ class BmpWindow : public Window
 private:
     Graphic     aGraphic;
     BitmapEx    aBmp;
-    BitmapEx    aBmpHC;
 
     BOOL        bHorz : 1;
     BOOL        bVert : 1;
@@ -52,7 +51,7 @@ private:
 
 public:
     BmpWindow(Window* pPar, USHORT nId,
-                const Graphic& rGraphic, const BitmapEx& rBmp, const BitmapEx& rBmpHC);
+                const Graphic& rGraphic, const BitmapEx& rBmp);
     BmpWindow(Window* pParent, const ResId rResId) :
         Window(pParent, rResId),
         bHorz(FALSE), bVert(FALSE),bGraphic(FALSE), bLeftAlign(TRUE) {}

@@ -313,8 +313,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     SfxTabPage( pParent, SW_RES( TP_OPTPRINT_PAGE ), rCoreSet),
     aFL1          (this, SW_RES(FL_1)),
     aGrfCB           (this, SW_RES(CB_PGRF)),
-//  aTabCB           (this, SW_RES(CB_PTAB)),
-//  aDrawCB          (this, SW_RES(CB_PDRAW)),
     aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)),
     aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
     aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
@@ -324,7 +322,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aFL2          (this, SW_RES(FL_2)),
     aLeftPageCB      (this, SW_RES(CB_LEFTP)),
     aRightPageCB     (this, SW_RES(CB_RIGHTP)),
-//    aReverseCB       (this, SW_RES(CB_REVERSE)),
     aProspectCB      (this, SW_RES(CB_PROSPECT)),
     aProspectCB_RTL      (this, SW_RES(CB_PROSPECT_RTL)),
     aSeparatorRFL    (this, SW_RES(FL_SEP_PRT_RIGHT)),
@@ -335,7 +332,6 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aFL3          (this, SW_RES(FL_3)),
     aFL4          (this, SW_RES(FL_4)),
     aPrintEmptyPagesCB(this, SW_RES(CB_PRINTEMPTYPAGES)),
-//    aSingleJobsCB    (this, SW_RES(CB_SINGLEJOBS)),
     aPaperFromSetupCB(this, SW_RES(CB_PAPERFROMSETUP)),
     aFaxFT           (this, SW_RES(FT_FAX)),
     aFaxLB           (this, SW_RES(LB_FAX)),
@@ -349,14 +345,11 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aGrfCB.SetClickHdl( aLk );
     aRightPageCB.SetClickHdl( aLk );
     aLeftPageCB.SetClickHdl( aLk );
-//  aTabCB.SetClickHdl( aLk );
-//  aDrawCB.SetClickHdl( aLk );
     aCtrlFldCB.SetClickHdl( aLk );
     aBackgroundCB.SetClickHdl( aLk );
     aBlackFontCB.SetClickHdl( aLk );
     aPrintHiddenTextCB.SetClickHdl( aLk );
     aPrintTextPlaceholderCB.SetClickHdl( aLk );
-//  aReverseCB.SetClickHdl( aLk );
     aProspectCB.SetClickHdl( aLk );
     aProspectCB_RTL.SetClickHdl( aLk );
     aPaperFromSetupCB.SetClickHdl( aLk );
@@ -365,27 +358,20 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aEndRB.SetClickHdl( aLk );
     aOnlyRB.SetClickHdl( aLk );
     aNoRB.SetClickHdl( aLk );
-//  aSingleJobsCB.SetClickHdl( aLk );
     aFaxLB.SetSelectHdl( LINK( this, SwAddPrinterTabPage, SelectHdl ) );
 
     const SfxPoolItem* pItem;
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_HTML_MODE, FALSE, &pItem )
         && ((SfxUInt16Item*)pItem)->GetValue() & HTMLMODE_ON)
     {
-//      aDrawCB      .Hide();
         aLeftPageCB  .Hide();
         aRightPageCB .Hide();
         aPrintHiddenTextCB.Hide();
         aPrintTextPlaceholderCB.Hide();
-//      aReverseCB.SetPosPixel(aLeftPageCB.GetPosPixel());
         aProspectCB.SetPosPixel(aLeftPageCB.GetPosPixel());
         Point aPt( aRightPageCB.GetPosPixel() );
         aPt.setX(aPt.getX() + 15); // indent
         aProspectCB_RTL.SetPosPixel(aPt);
-//      aBlackFontCB.SetPosPixel(aBackgroundCB.GetPosPixel());
-//        aPrintHiddenTextCB.SetPosPixel(aBlackFontCB.GetPosPixel());
-//      aBackgroundCB.SetPosPixel(aCtrlFldCB.GetPosPixel());
-//      aCtrlFldCB.SetPosPixel(aDrawCB.GetPosPixel());
 
         // hide aPrintEmptyPagesCB and move everything below up accordingly
         long nDeltaY = aPaperFromSetupCB.GetPosPixel().getY() - aPrintEmptyPagesCB.GetPosPixel().getY();
@@ -477,8 +463,6 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
                                     (const SfxPoolItem**)&pAddPrinterAttr ))
     {
         aGrfCB.Check(           pAddPrinterAttr->bPrintGraphic || pAddPrinterAttr->bPrintDraw );
-//      aTabCB.Check(           pAddPrinterAttr->bPrintTable);
-//        aDrawCB.Check(          pAddPrinterAttr->bPrintDraw);
         aCtrlFldCB.Check(       pAddPrinterAttr->bPrintControl);
         aBackgroundCB.Check(    pAddPrinterAttr->bPrintPageBackground);
         aBlackFontCB.Check(     pAddPrinterAttr->bPrintBlackFont);
@@ -486,12 +470,10 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aPrintTextPlaceholderCB.Check(pAddPrinterAttr->bPrintTextPlaceholder);
         aLeftPageCB.Check(      pAddPrinterAttr->bPrintLeftPages);
         aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPages);
-//      aReverseCB.Check(       pAddPrinterAttr->bPrintReverse);
         aPaperFromSetupCB.Check(pAddPrinterAttr->bPaperFromSetup);
         aPrintEmptyPagesCB.Check(pAddPrinterAttr->bPrintEmptyPages);
         aProspectCB.Check(      pAddPrinterAttr->bPrintProspect);
         aProspectCB_RTL.Check(      pAddPrinterAttr->bPrintProspectRTL);
-//      aSingleJobsCB.Check(    pAddPrinterAttr->bPrintSingleJobs);
 
         aNoRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;
         aOnlyRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ONLY ) ;
@@ -548,7 +530,6 @@ IMPL_LINK_INLINE_END( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
 
 void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 {
-    //SFX_ITEMSET_ARG (&aSet,pListItem,SfxStringListItem,SID_FAX_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pListItem,SfxBoolItem,SID_FAX_LIST,sal_False);
     SFX_ITEMSET_ARG (&aSet,pPreviewItem,SfxBoolItem,SID_PREVIEWFLAG_TYPE,sal_False);
     if (pPreviewItem)

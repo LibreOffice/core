@@ -103,7 +103,7 @@ sal_Bool SfxContentHelper::Transfer_Impl( const String& rSource, const String& r
     {
         ::ucbhelper::Content aDestPath( aDestObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         uno::Reference< ucb::XCommandInfo > xInfo = aDestPath.getCommands();
-        OUString aTransferName = OUString::createFromAscii( "transfer" );
+        OUString aTransferName(RTL_CONSTASCII_USTRINGPARAM("transfer"));
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
@@ -206,7 +206,7 @@ sal_Bool SfxContentHelper::GetTitle( const String& rContent, String& rTitle )
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
         OUString aTemp;
-        aCnt.getPropertyValue( OUString::createFromAscii( "Title" ) ) >>= aTemp;
+        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Title")) ) >>= aTemp;
         rTitle = String( aTemp );
         bRet = sal_True;
     }
@@ -232,7 +232,7 @@ sal_Bool SfxContentHelper::Kill( const String& rContent )
     try
     {
         ::ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.executeCommand( OUString::createFromAscii( "delete" ), uno::makeAny( sal_Bool( sal_True ) ) );
+        aCnt.executeCommand( OUString(RTL_CONSTASCII_USTRINGPARAM("delete")), uno::makeAny( sal_Bool( sal_True ) ) );
     }
     catch( ucb::CommandAbortedException& )
     {
@@ -261,8 +261,8 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "IsFolder" );
+        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
 
         try
         {
@@ -279,7 +279,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
                 uno::Reference < ucb::XAnyCompareFactory > xFactory;
                 uno::Reference < lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
                 uno::Reference < ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                    xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), uno::UNO_QUERY );
+                    xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory")) ), uno::UNO_QUERY );
 
                 uno::Sequence< ucb::NumberedSortingInfo > aSortInfo( 2 );
                 ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
@@ -369,11 +369,11 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Sequence< OUString > aProps(5);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "ContentType" );
-        pProps[2] = OUString::createFromAscii( "Size" );
-        pProps[3] = OUString::createFromAscii( "DateModified" );
-        pProps[4] = OUString::createFromAscii( "IsFolder" );
+        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType"));
+        pProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("Size"));
+        pProps[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified"));
+        pProps[4] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
 
         try
         {
@@ -384,7 +384,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
             uno::Reference < ucb::XAnyCompareFactory > xCmpFactory;
             uno::Reference < lang::XMultiServiceFactory > xMgr = getProcessServiceFactory();
             uno::Reference < ucb::XSortedDynamicResultSetFactory > xSRSFac(
-                xMgr->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), uno::UNO_QUERY );
+                xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory")) ), uno::UNO_QUERY );
 
             uno::Sequence< ucb::NumberedSortingInfo > aSortInfo( 2 );
             ucb::NumberedSortingInfo* pInfo = aSortInfo.getArray();
@@ -500,9 +500,9 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         uno::Reference< ucb::XDynamicResultSet > xDynResultSet;
         uno::Sequence< OUString > aProps(3);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "ContentType" );
-        pProps[2] = OUString::createFromAscii( "IsFolder" );
+        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType"));
+        pProps[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
 
         try
         {
@@ -596,8 +596,8 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
         uno::Reference< sdbc::XResultSet > xResultSet;
         uno::Sequence< OUString > aProps(2);
         OUString* pProps = aProps.getArray();
-        pProps[0] = OUString::createFromAscii( "Title" );
-        pProps[1] = OUString::createFromAscii( "IsFolder" );
+        pProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        pProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder"));
 
         try
         {
@@ -707,7 +707,7 @@ sal_Bool SfxContentHelper::IsHelpErrorDocument( const String& rURL )
     {
         ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                       uno::Reference< ucb::XCommandEnvironment > () );
-        if ( !( aCnt.getPropertyValue( OUString::createFromAscii( "IsErrorDocument" ) ) >>= bRet ) )
+        if ( !( aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsErrorDocument")) ) >>= bRet ) )
         {
             DBG_ERRORFILE( "Property 'IsErrorDocument' is missing" );
         }
@@ -785,7 +785,7 @@ ErrCode SfxContentHelper::QueryDiskSpace( const String& rPath, sal_Int64& rFreeB
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.getPropertyValue( OUString::createFromAscii( "FreeSpace" ) ) >>= rFreeBytes;
+        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("FreeSpace")) ) >>= rFreeBytes;
     }
     catch( ucb::CommandAbortedException& )
     {
@@ -811,7 +811,7 @@ ULONG SfxContentHelper::GetSize( const String& rContent )
     try
     {
         ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-        aCnt.getPropertyValue( OUString::createFromAscii( "Size" ) ) >>= nTemp;
+        aCnt.getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("Size")) ) >>= nTemp;
     }
     catch( ucb::CommandAbortedException& )
     {

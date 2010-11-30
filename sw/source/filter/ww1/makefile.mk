@@ -43,15 +43,14 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=	\
+        $(SLO)$/fltshell.obj \
         $(SLO)$/w1filter.obj \
-        $(SLO)$/fltshell.obj
+        $(SLO)$/w1par.obj \
+        $(SLO)$/w1sprm.obj
 
 SLOFILES =  \
-        $(SLO)$/w1par.obj \
-        $(SLO)$/w1class.obj \
-        $(SLO)$/w1filter.obj \
-        $(SLO)$/w1sprm.obj \
-        $(SLO)$/fltshell.obj \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/w1class.obj
 
 
 # --- Targets -------------------------------------------------------

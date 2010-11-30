@@ -152,13 +152,14 @@ class SmCaretDrawingVisitor : public SmDefaultingVisitor
 {
 public:
     /** Given position and device this constructor will draw the caret */
-    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset );
+    SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
     void Visit( SmTextNode* pNode );
 private:
     OutputDevice &rDev;
     SmCaretPos pos;
     /** Offset to draw from */
     Point Offset;
+    bool isCaretVisible;
 protected:
     /** Default method for drawing pNodes */
     void DefaultVisit( SmNode* pNode );
@@ -263,17 +264,13 @@ private:
 class SmSetSelectionVisitor : public SmDefaultingVisitor
 {
 public:
-    SmSetSelectionVisitor( SmCaretPos startPos,
-                        SmCaretPos endPos ){
-        StartPos    = startPos;
-        EndPos      = endPos;
-        IsSelecting = false;
-    }
+    SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
     void Visit( SmBinHorNode* pNode );
     void Visit( SmUnHorNode* pNode );
     void Visit( SmFontNode* pNode );
     void Visit( SmTextNode* pNode );
     void Visit( SmExpressionNode* pNode );
+    void Visit( SmLineNode* pNode );
     void Visit( SmAlignNode* pNode );
     /** Set IsSelected on all pNodes of pSubTree */
     static void SetSelectedOnAll( SmNode* pSubTree, bool IsSelected = true );
@@ -295,7 +292,7 @@ private:
      * or EndPos. This means that anything visited in between will be
      * selected.
      */
-    BOOL IsSelecting;
+    bool IsSelecting;
 };
 
 
@@ -421,7 +418,7 @@ private:
     /** Reference to drawing device */
     OutputDevice& rDev;
     /** True if  aSelectionArea have been initialized */
-    BOOL bHasSelectionArea;
+    bool bHasSelectionArea;
     /** The current area that is selected */
     Rectangle aSelectionArea;
     /** Extend the area that must be selected  */

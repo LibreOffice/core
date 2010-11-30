@@ -110,21 +110,17 @@ public:
     BOOL                    IsPhysical() const              { return bPhysical; }
     void                    SetPhysical(BOOL bPhys);
 
-    // --> OD 2008-02-11 #newlistlevelattrs#
     // add optional parameter <bResetIndentAttrsAtParagraphStyle>, default value FALSE,
     // which indicates that the indent attributes at a paragraph style should
     // be reset in case that a list style is applied to the paragraph style and
     // no indent attributes are applied.
     void                    SetItemSet( const SfxItemSet& rSet,
                                         const bool bResetIndentAttrsAtParagraphStyle = false );
-    // <--
 
     virtual SfxItemSet&     GetItemSet();
-    // --> OD 2008-02-12 #newlistlevelattrs#
     // new method for paragraph styles to merge indent attributes of applied list
     // style into the given item set, if the list style indent attributes are applicable.
     void MergeIndentAttrsOfListStyle( SfxItemSet& rSet );
-    // <--
     virtual const String&   GetParent() const;
     virtual const String&   GetFollow() const;
 

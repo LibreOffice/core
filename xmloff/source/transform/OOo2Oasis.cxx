@@ -359,15 +359,12 @@ static XMLTransformerActionInit aActionTable[] =
         OOO_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( STYLE, PRESENTATION_PAGE_LAYOUT, XML_ETACTION_PROC_ATTRS,
                         OOO_MASTER_PAGE_ACTIONS ),
-    // --> OD 2005-01-10 #i40011#, #i40015#
-    // - consider also attribute table:style-name for <table:table>,
-    //   <table:table-row> and <table:table-column>.
-//    ENTRY1( TABLE, TABLE, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
+    /* Consider also attribute table:style-name for <table:table>,
+       <table:table-row> and <table:table-column>. (#i40011#, #i40015#)
+    */
     ENTRY0( TABLE, TABLE, XML_ETACTION_TABLE ),
-
     ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
     ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS, OOO_STYLE_REF_ACTIONS ),
-    // <--
 
     // split frame elements
     ENTRY0( DRAW, TEXT_BOX, XML_ETACTION_FRAME ),
@@ -915,17 +912,16 @@ static XMLTransformerActionInit aBackgroundImageActionTable[] =
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
 
-// --> OD 2005-06-10 #i50322#
-// OOO_BACKGROUND_IMAGE_ACTIONS for OpenOffice.org text documents
-// OpenOffice.org text documents, written by OpenOffice.org, contain
-// wrong value for the transparency of the background graphic
+/* OOO_BACKGROUND_IMAGE_ACTIONS for OpenOffice.org text documents
+   OpenOffice.org text documents, written by OpenOffice.org, contain
+   wrong value for the transparency of the background graphic (#i50322#)
+*/
 static XMLTransformerActionInit aWriterBackgroundImageActionTable[] =
 {
     ENTRY1Q( DRAW, TRANSPARENCY, XML_ATACTION_WRITER_BACK_GRAPHIC_TRANSPARENCY, XML_NAMESPACE_DRAW, XML_OPACITY ),
     ENTRY1( XLINK, HREF, XML_ATACTION_URI_OOO, sal_True ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
-// <--
 
 // OOO_DDE_CONNECTION_DECL
 static XMLTransformerActionInit aDDEConnectionDeclActionTable[] =
@@ -1513,11 +1509,10 @@ XMLTableOOoTransformerContext_Impl::~XMLTableOOoTransformerContext_Impl()
 void XMLTableOOoTransformerContext_Impl::StartElement(
         const Reference< XAttributeList >& rAttrList )
 {
-    // --> OD 2005-07-05 #i50521# - perform OOO_STYLE_REF_ACTIONS for all applications
+    // Perform OOO_STYLE_REF_ACTIONS for all applications (#i50521#)
     Reference< XAttributeList > xAttrList( rAttrList );
     XMLMutableAttributeList* pMutableAttrList =
         GetTransformer().ProcessAttrList( xAttrList, OOO_STYLE_REF_ACTIONS, sal_False );
-    // <--
     if( rAttrList->getLength() && IsXMLToken( GetTransformer().GetClass(), XML_SPREADSHEET  ) )
     {
         sal_Bool bPrintRanges(sal_False);
@@ -1701,13 +1696,11 @@ XMLTransformerActions *OOo2OasisTransformer::GetUserDefinedActions(
                         new XMLTransformerActions( aFrameAttrActionTable );
                     break;
                 case OOO_BACKGROUND_IMAGE_ACTIONS:
-                    // --> OD 2005-06-10 #i50322#
-                    // use special actions for Writer documents.
+                    // Use special actions for Writer documents. (#i50322#)
                     m_aActions[OOO_BACKGROUND_IMAGE_ACTIONS] =
                         isWriter()
                         ? new XMLTransformerActions( aWriterBackgroundImageActionTable )
                         : new XMLTransformerActions( aBackgroundImageActionTable );
-                    // <--
                     break;
                 case OOO_DDE_CONNECTION_DECL_ACTIONS:
                     m_aActions[OOO_DDE_CONNECTION_DECL_ACTIONS] =

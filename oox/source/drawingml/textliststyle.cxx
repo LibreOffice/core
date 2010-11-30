@@ -67,7 +67,7 @@ void TextListStyle::apply( const TextListStyle& rTextListStyle )
 }
 
 #if OSL_DEBUG_LEVEL > 0
-void TextListStyle::dump( int nLevels )
+void TextListStyle::dump( int nLevels ) const
 {
     for ( int i = 0; i < nLevels; i++ )
     {

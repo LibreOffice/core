@@ -190,11 +190,6 @@ void SwVbaTableHelper::InitTabCols( SwTabCols& rCols, const SwTableBox *pStart, 
     rCols.SetLeft    ( 0 );
     rCols.SetRight   ( UNO_TABLE_COLUMN_SUM );
     rCols.SetRightMax( UNO_TABLE_COLUMN_SUM );
-
-    //if( !pDoc )
-   // {
-     //   pDoc = word::getDocShell( getCurrentDocument() )->GetDoc();
-   // }
     pTable->GetTabCols( rCols, pStart, sal_False, sal_False );
 }
 
@@ -272,14 +267,11 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     SwTabCols aOldCols;
     InitTabCols( aOldCols, pStart, bCurRowOnly );
 
-    //BOOL bCurRowOnly = FALSE;
     SwTwips nWidth = 0;
 
     SwTabCols aCols( aOldCols );
     if ( aCols.Count() > 0 )
     {
-    //  if(aCols.Count() != GetColCount( aCols ))
-    //      bCurRowOnly = TRUE;
         nWidth = GetColWidth( aCols, nCol);
 
         int nDiff = (int)(nNewWidth - nWidth);
@@ -302,7 +294,6 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     else
         aCols.SetRight( Min( (long)nNewWidth, aCols.GetRightMax()) );
 
-    //pDoc->SetTabCols(*pTable, aCols, aOldCols, pStartBox, bCurRowOnly );
     pTable->SetTabCols(aCols, aOldCols, pStart, bCurRowOnly );
 }
 

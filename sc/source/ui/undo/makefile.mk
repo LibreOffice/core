@@ -56,26 +56,23 @@ CXXFILES = \
 
 
 SLOFILES =  \
-        $(SLO)$/target.obj \
-        $(SLO)$/refundo.obj \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/target.obj
+
+EXCEPTIONSFILES= \
         $(SLO)$/areasave.obj \
+        $(SLO)$/refundo.obj \
         $(SLO)$/undobase.obj \
-        $(SLO)$/undoutil.obj \
-        $(SLO)$/undocell.obj \
-        $(SLO)$/undostyl.obj \
-        $(SLO)$/undoolk.obj \
         $(SLO)$/undoblk.obj \
         $(SLO)$/undoblk2.obj \
         $(SLO)$/undoblk3.obj \
+        $(SLO)$/undocell.obj \
         $(SLO)$/undodat.obj \
         $(SLO)$/undodraw.obj \
-        $(SLO)$/undotab.obj
-
-EXCEPTIONSFILES= \
-    $(SLO)$/undoblk3.obj \
-    $(SLO)$/undocell.obj \
-    $(SLO)$/undostyl.obj \
-    $(SLO)$/undotab.obj
+        $(SLO)$/undoolk.obj \
+        $(SLO)$/undostyl.obj \
+        $(SLO)$/undotab.obj \
+        $(SLO)$/undoutil.obj
 
 # --- Tagets -------------------------------------------------------
 

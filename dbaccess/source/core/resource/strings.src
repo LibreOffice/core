@@ -32,6 +32,7 @@ String RID_STR_TRIED_OPEN_TABLE
 {
     Text [ en-US ] = "Tried to open the table $name$.";
 };
+
 String RID_STR_CONNECTION_INVALID
 {
     Text [ en-US ] = "No connection could be established.";
@@ -46,7 +47,6 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
 {
     Text [ en-US ] = "You have no write access to the configuration data the object is based on.";
 };
-
 
 String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 {
@@ -77,106 +77,132 @@ String RID_STR_DATASOURCE_NOT_STORED
 {
     Text [ en-US ] = "The data source was not saved. Please use the interface XStorable to save the data source.";
 };
+
 String RID_STR_ONLY_QUERY
 {
     Text [ en-US ] = "The given command is not a SELECT statement.\nOnly queries are allowed.";
 };
+
 String RID_STR_NO_VALUE_CHANGED
 {
     Text [ en-US ] = "No values were modified.";
 };
+
 String RID_STR_NO_XROWUPDATE
 {
     Text [ en-US ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
 };
+
 String RID_STR_NO_XRESULTSETUPDATE
 {
     Text [ en-US ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
 };
+
 String RID_STR_NO_UPDATE_MISSING_CONDITION
 {
     Text [ en-US ] = "Values could not be modified, due to a missing condition statement.";
 };
+
 String RID_STR_NO_COLUMN_ADD
 {
     Text [ en-US ] = "The adding of columns is not supported.";
 };
+
 String RID_STR_NO_COLUMN_DROP
 {
     Text [ en-US ] = "The dropping of columns is not supported.";
 };
+
 String RID_STR_NO_CONDITION_FOR_PK
 {
     Text [ en-US ] = "The WHERE condition could not be created for the primary key.";
 };
+
 String RID_STR_COLUMN_UNKNOWN_PROP
 {
     Text [ en-US ] = "The column does not support the property '%value'.";
 };
+
 String RID_STR_COLUMN_NOT_SEARCHABLE
 {
     Text [ en-US ] = "The column is not searchable!";
 };
+
 String RID_STR_NOT_SEQUENCE_INT8
 {
     Text [ en-US ] = "The value of the columns is not of the type Sequence<sal_Int8>.";
 };
+
 String RID_STR_COLUMN_NOT_VALID
 {
     Text [ en-US ] = "The column is not valid.";
 };
+
 String RID_STR_COLUMN_MUST_VISIBLE
 {
     Text [ en-US ] = "The column '%name' must be visible as a column.";
 };
+
 String RID_STR_NO_XQUERIESSUPPLIER
 {
     Text [ en-US ] = "The interface XQueriesSupplier is not available.";
 };
+
 String RID_STR_NOT_SUPPORTED_BY_DRIVER
 {
     Text [ en-US ] = "The driver does not support this function.";
 };
+
 String RID_STR_NO_ABS_ZERO
 {
     Text [ en-US ] = "An 'absolute(0)' call is not allowed.";
 };
+
 String RID_STR_NO_RELATIVE
 {
     Text [ en-US ] = "Relative positioning is not allowed in this state.";
 };
+
 String RID_STR_NO_REFESH_AFTERLAST
 {
     Text [ en-US ] = "A row cannot be refreshed when the ResultSet is positioned after the last row.";
 };
+
 String RID_STR_NO_MOVETOINSERTROW_CALLED
 {
     Text [ en-US ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
 };
+
 String RID_STR_NO_UPDATEROW
 {
     Text [ en-US ] = "A row cannot be modified in this state";
 };
+
 String RID_STR_NO_DELETEROW
 {
     Text [ en-US ] = "A row cannot be deleted in this state.";
 };
+
 String RID_STR_NO_TABLE_RENAME
 {
     Text [ en-US ] = "The driver does not support table renaming.";
 };
+
 String RID_STR_NO_ALTER_COLUMN_DEF
 {
     Text [ en-US ] = "The driver does not support the modification of column descriptions.";
 };
+
 String RID_STR_COLUMN_ALTER_BY_NAME
 {
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the name.";
 };
+
 String RID_STR_COLUMN_ALTER_BY_INDEX
 {
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the index.";
 };
+
 String RID_STR_FILE_DOES_NOT_EXIST
 {
     Text[ en-US ] = "The file \"$file$\" does not exist.";
@@ -200,7 +226,6 @@ String RID_STR_CONFLICTING_NAMES
 String RID_STR_COMMAND_LEADING_TO_ERROR
 {
     Text [ en-US ] = "The SQL command leading to this error is:\n\n$command$";
-
 };
 
 String RID_STR_STATEMENT_WITHOUT_RESULT_SET
@@ -247,79 +272,99 @@ String RID_NO_SUCH_DATA_SOURCE
 {
     Text [ en-US ] = "Error accessing data source '$name$':\n$error$";
 };
+
 String RID_STR_NO_SUB_FOLDER
 {
     Text [ en-US ] = "There exists no folder named \"$folder$\".";
 };
+
 String RID_STR_NO_DELETE_BEFORE_AFTER
 {
     Text [ en-US ] = "Cannot delete the before-first or after-last row.";
 };
+
 String RID_STR_NO_DELETE_INSERT_ROW
 {
     Text [ en-US ] = "Cannot delete the insert-row.";
 };
+
 String RID_STR_RESULT_IS_READONLY
 {
     Text [ en-US ] = "Result set is read only.";
 };
+
 String RID_STR_NO_DELETE_PRIVILEGE
 {
     Text [ en-US ] = "DELETE privilege not available.";
 };
+
 String RID_STR_ROW_ALREADY_DELETED
 {
     Text [ en-US ] = "Current row is already deleted.";
 };
+
 String RID_STR_UPDATE_FAILED
 {
     Text [ en-US ] = "Current row could be updated.";
 };
+
 //-------------------------------------------------------------------------
+
 String RID_STR_NO_INSERT_PRIVILEGE
 {
     Text [ en-US ] = "INSERT privilege not available.";
 };
+
 String RID_STR_INTERNAL_ERROR
 {
     Text [ en-US ] = "Internal error: no statement object provided by the database driver.";
 };
+
 String RID_STR_EXPRESSION1
 {
     Text [ en-US ] = "Expression1";
 };
+
 String RID_STR_NO_SQL_COMMAND
 {
     Text [ en-US ] = "No SQL command was provided.";
 };
+
 String RID_STR_INVALID_INDEX
 {
     Text [ en-US ] = "Invalid column index.";
 };
+
 String RID_STR_INVALID_CURSOR_STATE
 {
     Text [ en-US ] = "Invalid cursor state.";
 };
+
 String RID_STR_CURSOR_BEFORE_OR_AFTER
 {
     Text [ en-US ] = "The cursor points to before the first or after the last row.";
 };
+
 String RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER
 {
     Text [ en-US ] = "The rows before the first and after the last row don't have a bookmark.";
 };
+
 String RID_STR_NO_BOOKMARK_DELETED
 {
     Text [ en-US ] = "The current row is deleted, and thus doesn't have a bookmark.";
 };
+
 String RID_STR_NO_EMBEDDING
 {
     Text [ en-US ] = "Embedding of database documents is not supported.";
 };
+
 String RID_STR_CONNECTION_REQUEST
 {
     Text [ en-US ] = "A connection for the following URL was requested \"$name$\".";
 };
+
 String RID_STR_MISSING_EXTENSION
 {
     Text [ en-US ] = "The extension is not installed.";

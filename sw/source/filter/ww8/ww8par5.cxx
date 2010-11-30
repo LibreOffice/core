@@ -153,13 +153,12 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
 
     nFnd      = nNext;
     nSavPtr   = nNext;
-//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-//  aData.SetChar( nSavPtr, cLastChar );
+
 }
 
 
@@ -322,7 +321,7 @@ long SwWW8ImplReader::Read_Book(WW8PLCFManResult*)
     WW8PLCFx_Book* pB = pPlcxMan->GetBook();
     if( !pB )
     {
-        ASSERT( pB, "WW8PLCFx_Book - Pointer nicht da" );
+        OSL_ENSURE( pB, "WW8PLCFx_Book - Pointer nicht da" );
         return 0;
     }
 
@@ -565,7 +564,7 @@ bool SwWW8ImplReader::ForceFieldLanguage(SwField &rFld, USHORT nLang)
 
     const SvxLanguageItem *pLang =
         (const SvxLanguageItem*)GetFmtAttr(RES_CHRATR_LANGUAGE);
-    ASSERT(pLang, "impossible");
+    OSL_ENSURE(pLang, "impossible");
     USHORT nDefault =  pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     if (nLang != nDefault)
@@ -614,7 +613,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
     }
     RES_CHRATR eLang = bRTL ? RES_CHRATR_CTL_LANGUAGE : RES_CHRATR_LANGUAGE;
     const SvxLanguageItem *pLang = (SvxLanguageItem*)GetFmtAttr( static_cast< USHORT >(eLang));
-    ASSERT(pLang, "impossible");
+    OSL_ENSURE(pLang, "impossible");
     rLang = pLang ? pLang->GetValue() : LANGUAGE_ENGLISH_US;
 
     SvNumberFormatter* pFormatter = rDoc.GetNumberFormatter();
@@ -654,7 +653,8 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
     }
 
     ULONG nFmtIdx =
-        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
+        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri,
+                GetFib().lid);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
@@ -669,10 +669,6 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
 // Am Ende des Einlesens entsprechende Felder updaten ( z.Zt. die Referenzen )
 void SwWW8ImplReader::UpdateFields()
 {
-//  rDoc.GetSysFldType( RES_GETREFFLD )->UpdateFlds();  // Referenzen
-//  rDoc.UpdateFlds();                                  // SetExp-Fields
-//  rDoc.UpdateFlds();              // alles ???
-//  rDoc.UpdateExpFlds();                               // SetExp-Fields
     rDoc.SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
@@ -681,14 +677,14 @@ sal_uInt16 SwWW8ImplReader::End_Field()
 {
     sal_uInt16 nRet = 0;
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
-    ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
+    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");
     if (!pF || !pF->EndPosIsFieldEnd())
         return nRet;
 
     const SvtFilterOptions* pOpt = SvtFilterOptions::Get();
     sal_Bool bUseEnhFields=(pOpt && pOpt->IsUseEnhancedFields());
 
-    ASSERT(!maFieldStack.empty(), "Empty field stack\n");
+    OSL_ENSURE(!maFieldStack.empty(), "Empty field stack\n");
     if (!maFieldStack.empty())
     {
         /*
@@ -705,8 +701,8 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
-                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString::createFromAscii(ODF_FORMTEXT ) ) );
-            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT )) ) );
+            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
                 const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(pParametersToAdd.begin(), pParametersToAdd.end());
@@ -723,7 +719,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPosition aEndPos = *pPaM->GetPoint();
             SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             SwFieldBookmark *pFieldmark=(SwFieldBookmark*)rDoc.makeFieldBookmark(aFldPam, maFieldStack.back().GetBookmarkName(), maFieldStack.back().GetBookmarkType());
-            ASSERT(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
+            OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
                 const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
                 pFieldmark->GetParameters()->insert(pParameters.begin(), pParameters.end());
@@ -755,7 +751,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFldPam,
                                 maFieldStack.back().GetBookmarkName(),
-                                rtl::OUString::createFromAscii( ODF_UNHANDLED ) );
+                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_UNHANDLED )) );
                     if ( pFieldmark )
                     {
                         const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
@@ -763,11 +759,11 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString::createFromAscii( ODF_ID_PARAM ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )),
                                     uno::makeAny( sFieldId ) ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString::createFromAscii( ODF_CODE_PARAM ),
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )),
                                     uno::makeAny( aCode ) ) );
 
                         if ( maFieldStack.back().mnObjLocFc > 0 )
@@ -800,7 +796,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
                                     std::pair< rtl::OUString, uno::Any >(
-                                        rtl::OUString::createFromAscii( ODF_OLE_PARAM ),
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )),
                                         uno::makeAny( rtl::OUString( sOleId ) ) ) );
                         }
 
@@ -1007,11 +1003,11 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         &SwWW8ImplReader::Read_F_Shape,             // 95
         0                                           // eMax - Dummy leer Methode
     };
-    ASSERT( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
+    OSL_ENSURE( ( sizeof( aWW8FieldTab ) / sizeof( *aWW8FieldTab ) == eMax+1 ),
             "FeldFunc-Tabelle stimmt nicht" );
 
     WW8PLCFx_FLD* pF = pPlcxMan->GetFld();
-    ASSERT(pF, "WW8PLCFx_FLD - Pointer nicht da");
+    OSL_ENSURE(pF, "WW8PLCFx_FLD - Pointer nicht da");
 
     if (!pF || !pF->StartPosIsFieldStart())
         return 0;
@@ -1031,7 +1027,7 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
     WW8FieldDesc aF;
     bool bOk = pF->GetPara(pRes->nCp2OrIdx, aF);
 
-    ASSERT(bOk, "WW8: Bad Field!\n");
+    OSL_ENSURE(bOk, "WW8: Bad Field!\n");
     if (aF.nId == 33) aF.bCodeNest=false; //#124716#: do not recurse into nested page fields
     bool bCodeNest = aF.bCodeNest;
     if ( aF.nId == 6 ) bCodeNest = false; // We can handle them and loose the inner data
@@ -1388,7 +1384,7 @@ the appropiate set/ask field.
 long SwWW8ImplReader::MapBookmarkVariables(const WW8FieldDesc* pF,
     String &rOrigName, const String &rData)
 {
-    ASSERT(pPlcxMan,"No pPlcxMan");
+    OSL_ENSURE(pPlcxMan,"No pPlcxMan");
     long nNo;
     /*
     If there was no bookmark associated with this set field, then we create a
@@ -1453,7 +1449,7 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pFld,
 String SwWW8ImplReader::GetMappedBookmark(const String &rOrigName)
 {
     String sName(BookmarkToWriter(rOrigName));
-    ASSERT(pPlcxMan,"no pPlcxMan");
+    OSL_ENSURE(pPlcxMan,"no pPlcxMan");
     pPlcxMan->GetBook()->MapName(sName);
 
     //See if there has been a variable set with this name, if so get
@@ -1724,13 +1720,6 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
         if( !bFldFound )
         {
-/*
-            SwUserFieldType aTmp( &rDoc, aDocProperty );
-            aTmp.SetContent(GetFieldResult( pF ));
-            SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
-            aUFld.ChangeFormat( UF_STRING );
-            rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
-*/
             SwDocInfoField aFld( (SwDocInfoFieldType*)
                 rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
             rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
@@ -1919,7 +1908,7 @@ eF_ResT SwWW8ImplReader::Read_F_FileName(WW8FieldDesc*, String &rStr)
                 aReadParam.SkipToNextToken();
                 break;
             default:
-                ASSERT(!this, "unknown option in FileName field");
+                OSL_ENSURE(!this, "unknown option in FileName field");
                 break;
         }
     }
@@ -2255,7 +2244,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_REF"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_PAGEREF));
+    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_PAGEREF)));
     maFieldStack.back().AddParam(rtl::OUString(), sName);
     return FLD_TEXT;
     }
@@ -2479,11 +2468,11 @@ eF_ResT SwWW8ImplReader::Read_F_IncludeText( WW8FieldDesc* /*pF*/, String& rStr 
 
     SwSection *const pSection =
         rDoc.InsertSwSection(*pPaM, aSection, 0, 0, false);
-    ASSERT(pSection, "no section inserted");
+    OSL_ENSURE(pSection, "no section inserted");
     if (!pSection)
         return FLD_TEXT;
     const SwSectionNode* pSectionNode = pSection->GetFmt()->GetSectionNode();
-    ASSERT(pSectionNode, "no section node!");
+    OSL_ENSURE(pSectionNode, "no section node!");
     if (!pSectionNode)
         return FLD_TEXT;
 
@@ -2815,7 +2804,6 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
             sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
             sal_uInt16 nMaxLevel = rBase.GetLevel();
             if (
-                 //nStyleLevel != pFmt->GetOutlineLevel() &&        //#outline level,zhaojianwei
                  nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
                  nStyleLevel < nMaxLevel
                )
@@ -2966,8 +2954,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_TOC));
-//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_TOC)));
     return FLD_TEXT;
     }
 #endif
@@ -3397,7 +3384,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
                     }
                     break;
                 default:
-                    ASSERT(!this, "Unhandled toc options!");
+                    OSL_ENSURE(!this, "Unhandled toc options!");
                     break;
             }
         }
@@ -3405,7 +3392,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     case TOX_USER:
         break;
     default:
-        ASSERT(!this, "Unhandled toc options!");
+        OSL_ENSURE(!this, "Unhandled toc options!");
         break;
     } // ToxBase fertig
 
@@ -3453,7 +3440,7 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     //for future page/section segment insertion
     SwPaM aRegion(*pPaM);
     aRegion.Move(fnMoveBackward);
-    ASSERT(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
+    OSL_ENSURE(rDoc.GetCurTOX(*aRegion.GetPoint()), "Misunderstood how toc works");
     if (SwTOXBase* pBase2 = (SwTOXBase*)rDoc.GetCurTOX(*aRegion.GetPoint()))
     {
         if(nIndexCols>1)
@@ -3494,8 +3481,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_HYPERLINK));
-//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
+    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_HYPERLINK)));
     return FLD_TEXT;
     }
 #endif
@@ -3544,7 +3530,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
                     break;
                 case 'h':
                 case 'm':
-                    ASSERT( !this, "Auswertung fehlt noch - Daten unbekannt" );
+                    OSL_ENSURE( !this, "Auswertung fehlt noch - Daten unbekannt" );
                 case 's':   //worthless fake anchor option
                     bOptions = true;
                     break;
@@ -3553,7 +3539,7 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     }
 
     // das Resultat uebernehmen
-    ASSERT((sURL.Len() || sMark.Len()), "WW8: Empty URL")
+   OSL_ENSURE((sURL.Len() || sMark.Len()), "WW8: Empty URL");
 
     if( sMark.Len() )
         ( sURL += INET_MARK_TOKEN ) += sMark;
@@ -3614,7 +3600,7 @@ void lcl_ImportTox(SwDoc &rDoc, SwPaM &rPaM, const String &rStr, bool bIdx)
             break;
         }
 
-    ASSERT( rDoc.GetTOXTypeCount( eTox ), "Doc.GetTOXTypeCount() == 0  :-(" );
+    OSL_ENSURE( rDoc.GetTOXTypeCount( eTox ), "Doc.GetTOXTypeCount() == 0  :-(" );
 
     const SwTOXType* pT = rDoc.GetTOXType( eTox, 0 );
     SwTOXMark aM( pT );

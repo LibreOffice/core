@@ -364,7 +364,6 @@ void SidebarTxtControl::Command( const CommandEvent& rCEvt )
             //!! call different Execute function to get rid of the new thesaurus sub menu
             //!! pointer created in the call to Popup.
             //!! Otherwise we would have a memory leak (see also #i107205#)
-            //((PopupMenu*)pMgr->GetSVMenu())->Execute( this, aPos );
             pMgr->Execute( aPos, this );
             delete pMgr;
         }

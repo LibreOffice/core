@@ -103,8 +103,6 @@
 #define IS_AVAILABLE(WhichId,ppItem) \
     (pReqArgs->GetItemState((WhichId), TRUE, ppItem ) == SFX_ITEM_SET)
 
-#define C2U(cChar)  rtl::OUString::createFromAscii(cChar)
-
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -1567,7 +1565,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         Reference< ui::dialogs::XExecutableDialog > xDialog(
                                 xMCF->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ChineseTranslationDialog"))
                                     , xContext), UNO_QUERY);
                         Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
                         if( xInit.is() )
@@ -1577,7 +1575,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             Sequence<Any> aSeq(1);
                             Any* pArray = aSeq.getArray();
                             PropertyValue aParam;
-                            aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                            aParam.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow"));
                             aParam.Value <<= makeAny(xDialogParentWindow);
                             pArray[0] <<= makeAny(aParam);
                             xInit->initialize( aSeq );
@@ -1595,9 +1593,9 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                 {
                                     try
                                     {
-                                        xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
-                                        xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
-                                        xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                        xProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDirectionToSimplified")) ) >>= bToSimplified;
+                                        xProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsUseCharacterVariants")) ) >>= bUseVariants;
+                                        xProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsTranslateCommonTerms")) ) >>= bCommonTerms;
                                     }
                                     catch( Exception& )
                                     {

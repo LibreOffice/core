@@ -735,7 +735,6 @@ uno::Any SAL_CALL SwXMailMerge::execute(
                 aCurFileNamePrefix = aURLObj.GetBase(); // filename without extension
             if (!aCurOutputURL.getLength())
             {
-                //aCurOutputURL = aURLObj.GetURLPath();
                 aURLObj.removeSegment();
                 aCurOutputURL = aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
             }
@@ -768,7 +767,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
             aMergeDesc.aSaveToFilterData = aSaveFilterData;
             aMergeDesc.bCreateSingleFile = bSaveAsSingleFile;
         }
-        else /*if(MailMergeType::MAIL == nCurOutputType)*/
+        else
         {
             pMgr->SetEMailColumn( sAddressFromColumn );
             if(!sAddressFromColumn.getLength())

@@ -115,9 +115,6 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
     if ( xIndexAccess.is() )
     {
         AddonsOptions aAddonOptions;
-        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
-        sal_Bool bHiContrast = rSettings.GetHighContrastMode();
-
         OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
 
         for ( sal_Int32 i = 0; i < xIndexAccess->getCount(); i++ )
@@ -221,7 +218,7 @@ void InsertSubMenuItems( Menu* pSubMenu, USHORT& nItemId, Reference< XIndexConta
                             else
                             {
                                 // Support add-on images for context menu interceptors
-                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, bHiContrast, sal_True );
+                                Image aImage = aAddonOptions.GetImageFromURL( aCommandURL, sal_False, sal_True );
                                 if ( !!aImage )
                                     pSubMenu->SetItemImage( nNewItemId, aImage );
                             }

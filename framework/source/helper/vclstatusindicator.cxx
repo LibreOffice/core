@@ -70,7 +70,7 @@ VCLStatusIndicator::VCLStatusIndicator(const css::uno::Reference< css::lang::XMu
 {
     if (!m_xParentWindow.is())
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Cant work without a parent window!"),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cant work without a parent window!")),
                 static_cast< css::task::XStatusIndicator* >(this));
 }
 

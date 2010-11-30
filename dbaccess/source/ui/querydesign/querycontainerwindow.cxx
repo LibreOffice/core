@@ -86,12 +86,11 @@ namespace dbaui
             m_xBeamer = NULL;
             if(xCloseable.is())
                 xCloseable->close(sal_False); // false - holds the owner ship of this frame
-            //  m_xBeamer->setComponent(NULL,NULL);
         }
-        {
-            ::std::auto_ptr<Window> aTemp(m_pSplitter);
-            m_pSplitter = NULL;
-        }
+
+        ::std::auto_ptr<Window> aTemp(m_pSplitter);
+        m_pSplitter = NULL;
+
     }
     // -----------------------------------------------------------------------------
     bool OQueryContainerWindow::switchView( ::dbtools::SQLExceptionInfo* _pErrorInfo )
@@ -207,7 +206,7 @@ namespace dbaui
 
             ::dbaui::notifySystemWindow(this,m_pBeamer,::comphelper::mem_fun(&TaskPaneList::AddWindow));
 
-            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY );
+            Reference < XFrame > xBeamerFrame( m_pViewSwitch->getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Frame"))),UNO_QUERY );
             m_xBeamer.set( xBeamerFrame );
             OSL_ENSURE(m_xBeamer.is(),"No frame created!");
             m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );

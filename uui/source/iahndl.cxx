@@ -959,8 +959,8 @@ UUIInteractionHelper::getInteractionHandlerList(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
             m_xServiceFactory->createInstance(
-                rtl::OUString::createFromAscii(
-                    "com.sun.star.configuration.ConfigurationProvider" ) ),
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.configuration.ConfigurationProvider" )) ),
             uno::UNO_QUERY );
 
         if ( !xConfigProv.is() )

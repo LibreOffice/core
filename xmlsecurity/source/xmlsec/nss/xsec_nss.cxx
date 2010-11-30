@@ -66,7 +66,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         // XMLSignature_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSignature_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -78,7 +78,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         // XMLEncryption_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLEncryption_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -90,7 +90,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         // XMLSecurityContext_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLSecurityContext_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -102,7 +102,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         // SecurityEnvironment_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += SecurityEnvironment_NssImpl::impl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -114,7 +114,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRe
         // SEInitializer_NssImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += SEInitializer_NssImpl_getImplementationName() ;
-        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
+        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {

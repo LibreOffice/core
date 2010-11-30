@@ -29,6 +29,3 @@
 #define BT_CLOSE    2
 #define TLB_MARK    3
 
-//#define HYPERLINK_BMP_EXPAND      301
-//#define HYPERLINK_BMP_COLLAPSE    302
-

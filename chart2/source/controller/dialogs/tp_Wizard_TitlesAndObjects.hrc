@@ -27,19 +27,6 @@
 
 #include "ResourceIds.hrc"
 
-/*
-#define ED_MAINTITLE    1
-#define ED_SUBTITLE     2
-#define ED_X_AXIS       3
-#define ED_Y_AXIS       4
-#define ED_Z_AXIS       5
-#define FT_MAINTITLE    1
-#define FT_SUBTITLE     2
-#define FT_TITLE_X_AXIS 3
-#define FT_TITLE_Y_AXIS 4
-#define FT_TITLE_Z_AXIS 5
-*/
-
 #define FT_TITLEDESCRIPTION 30
 
 #define FL_VERTICAL 3

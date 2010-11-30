@@ -102,7 +102,7 @@ SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
         pParent = &GetTxtFmtColl(0);
     if (  (pColl=GetDoc()->MakeTxtFmtColl(rFmtCollName, pParent)) == 0 )
     {
-        ASSERT( FALSE, "MakeTxtFmtColl failed" )
+        OSL_ENSURE( FALSE, "MakeTxtFmtColl failed" );
     }
     return pColl;
 

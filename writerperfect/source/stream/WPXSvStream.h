@@ -13,13 +13,12 @@
 #if defined _MSC_VER
 #pragma warning( push, 1 )
 #endif
-#include <libwps/WPSStream.h>
-#include <libwpd/WPXStream.h>
+#include <libwpd-stream/WPXStream.h>
 #if defined _MSC_VER
 #pragma warning( pop )
 #endif
 
-class WPXSvInputStream : public WPSInputStream
+class WPXSvInputStream : public WPXInputStream
 {
 public:
     WPXSvInputStream( ::com::sun::star::uno::Reference<
@@ -27,10 +26,9 @@ public:
     virtual ~WPXSvInputStream();
 
     virtual bool isOLEStream();
-    virtual WPXInputStream * getDocumentOLEStream();
     virtual WPXInputStream * getDocumentOLEStream(const char *name);
 
-    virtual const uint8_t *read(size_t numBytes, size_t &numBytesRead);
+    virtual const unsigned char *read(unsigned long numBytes, unsigned long &numBytesRead);
     virtual int seek(long offset, WPX_SEEK_TYPE seekType);
     virtual long tell();
     virtual bool atEOS();

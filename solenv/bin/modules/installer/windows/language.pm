@@ -60,7 +60,6 @@ sub get_windows_encoding
 
     if ( $installer::globals::msiencoding->{$language} ) { $windowsencoding = $installer::globals::msiencoding->{$language}; }
 
-    # if ( $windowsencoding eq "" ) { installer::exiter::exit_program("ERROR: Unknown language $language in function get_windows_encoding", "get_windows_encoding"); }
     if ( $windowsencoding eq "" ) { $windowsencoding = "0"; }   # setting value, if the language is not listed in the encodinglist
 
     if ( $windowsencoding eq "0" ) { $windowsencoding = "65001"; }  # languages with "0" have to be available in UTF-8 (65001)

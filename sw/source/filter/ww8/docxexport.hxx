@@ -86,6 +86,9 @@ class DocxExport : public MSWordExportBase
     oox::vml::VMLExport *m_pVMLExport;
 
 public:
+
+    DocxExportFilter& GetFilter() { return *m_pFilter; };
+
     /// Access to the attribute output class.
     virtual AttributeOutputBase& AttrOutput() const;
 

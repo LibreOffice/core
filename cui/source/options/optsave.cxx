@@ -73,7 +73,7 @@ using namespace comphelper;
 using rtl::OUString;
 
 #define C2U(cChar)                  OUString::createFromAscii(cChar)
-#define C2S(cChar)                  String( RTL_CONSTASCII_STRINGPARAM(cChar) )
+#define C2S(cChar)                  String( RTL_CONSTASCII_USTRINGPARAM(cChar) )
 #define CFG_PAGE_AND_GROUP          C2S("General"), C2S("LoadSave")
 // !! you have to update these index, if you changed the list of the child windows !!
 #define WININDEX_AUTOSAVE           ((USHORT)6)
@@ -227,9 +227,7 @@ SfxSaveTabPage::SfxSaveTabPage( Window* pParent, const SfxItemSet& rCoreSet ) :
     pImpl               ( new SvxSaveTabPage_Impl )
 
 {
-    sal_Bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-    aODFWarningFI.SetImage(
-        Image( CUI_RES( bHighContrast ? IMG_ODF_WARNING_HC : IMG_ODF_WARNING ) ) );
+    aODFWarningFI.SetImage( Image( CUI_RES( IMG_ODF_WARNING )));
 
     FreeResource();
 
@@ -325,9 +323,6 @@ SfxTabPage* SfxSaveTabPage::Create( Window* pParent,
     return ( new SfxSaveTabPage( pParent, rAttrSet ) );
 }
 
-/* -----------------------------05.04.01 13:10--------------------------------
-
- ---------------------------------------------------------------------------*/
 OUString lcl_ExtractUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
@@ -603,10 +598,10 @@ void SfxSaveTabPage::Reset( const SfxItemSet& )
                     while(xList->hasMoreElements())
                     {
                         SequenceAsHashMap aFilter(xList->nextElement());
-                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Name"),OUString());
+                        OUString sFilter = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),OUString());
                         if (sFilter.getLength())
                         {
-                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString::createFromAscii("Flags"),sal_Int32());
+                            sal_Int32 nFlags = aFilter.getUnpackedValueOrDefault(OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")),sal_Int32());
                             lList.push_back(sFilter);
                             lAlienList.push_back(0 != (nFlags & SFX_FILTER_ALIEN));
                             lODFList.push_back( isODFFormat( sFilter ) );
@@ -705,9 +700,7 @@ IMPL_LINK( SfxSaveTabPage, AutoClickHdl_Impl, CheckBox *, pBox )
     }
     return 0;
 }
-/* -----------------------------05.04.01 13:10--------------------------------
 
- ---------------------------------------------------------------------------*/
 OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
 {
     OUString sRet;
@@ -734,9 +727,7 @@ OUString lcl_ExtracUIName(const Sequence<PropertyValue> rProperties)
     }
     return sRet;
 }
-/* -----------------------------05.04.01 13:37--------------------------------
 
- ---------------------------------------------------------------------------*/
 IMPL_LINK( SfxSaveTabPage, FilterHdl_Impl, ListBox *, pBox )
 {
     USHORT nCurPos = aDocTypeLB.GetSelectEntryPos();

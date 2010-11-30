@@ -143,11 +143,10 @@ using namespace ::com::sun::star::io;
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
 #include <sfx2/appuno.hxx>
+#include "sfxacldetect.hxx"
 
 #define MAX_REDIRECT 5
 
-
-sal_Bool IsReadonlyAccordingACL( const sal_Unicode* pFilePath );
 
 //==========================================================
 namespace {
@@ -1055,6 +1054,11 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             catch( uno::Exception )
             {}
 
+#if EXTRA_ACL_CHECK
+            // This block was introduced as a fix to i#102464, but removing
+            // this does not make the problem re-appear.  But leaving this
+            // part would interfere with documents saved in samba share.  This
+            // affects Windows only.
             if ( !bContentReadonly )
             {
                 // the file is not readonly, check the ACL
@@ -1063,6 +1067,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
                 if ( ::utl::LocalFileHelper::ConvertURLToPhysicalName( GetURLObject().GetMainURL( INetURLObject::NO_DECODE ), aPhysPath ) )
                     bContentReadonly = IsReadonlyAccordingACL( aPhysPath.GetBuffer() );
             }
+#endif
         }
 
         // do further checks only if the file not readonly in fs
@@ -1265,9 +1270,9 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
                                     new utl::ProgressHandlerWrap( xStatusIndicator ) );
 
         uno::Sequence< beans::PropertyValue > aAddProps( 2 );
-        aAddProps[0].Name = ::rtl::OUString::createFromAscii( "RepairPackage" );
+        aAddProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
         aAddProps[0].Value <<= (sal_Bool)sal_True;
-        aAddProps[1].Name = ::rtl::OUString::createFromAscii( "StatusIndicator" );
+        aAddProps[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
         aAddProps[1].Value <<= xProgressHandler;
 
         // the first arguments will be filled later
@@ -1649,7 +1654,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     {
                         Reference< XInputStream > aTempInput = aTempCont.openStream();
                         bTransactStarted = sal_True;
-                        aOriginalContent.setPropertyValue( ::rtl::OUString::createFromAscii( "Size" ),
+                        aOriginalContent.setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Size")),
                                                             uno::makeAny( (sal_Int64)0 ) );
                         aOriginalContent.writeStream( aTempInput, bOverWrite );
                         bResult = sal_True;
@@ -3185,11 +3190,11 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 
             try
             {
-                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                 ::rtl::OUString aContentType;
                 aAny >>= aContentType;
 
-                pImp->xAttributes->Append( SvKeyValue( ::rtl::OUString::createFromAscii( "content-type" ), aContentType ) );
+                pImp->xAttributes->Append( SvKeyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content-type")), aContentType ) );
             }
             catch ( ::com::sun::star::uno::Exception& )
             {
@@ -3225,7 +3230,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
          ( aName.Len() || aLogicName.Len() ) && GetStorage().is() )
     {
         uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence")) ), uno::UNO_QUERY );
         if ( xReader.is() )
         {
             try
@@ -3247,7 +3252,7 @@ const uno::Sequence < util::RevisionTag >& SfxMedium::GetVersionList( bool _bNoR
 uno::Sequence < util::RevisionTag > SfxMedium::GetVersionList( const uno::Reference < embed::XStorage >& xStorage )
 {
     uno::Reference < document::XDocumentRevisionListPersistence > xReader( comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence")) ), uno::UNO_QUERY );
     if ( xReader.is() )
     {
         try
@@ -3335,7 +3340,7 @@ sal_Bool SfxMedium::SaveVersionList_Impl( sal_Bool /*bUseXML*/ )
             return sal_True;
 
         uno::Reference < document::XDocumentRevisionListPersistence > xWriter( comphelper::getProcessServiceFactory()->createInstance(
-                ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentRevisionListPersistence") ), uno::UNO_QUERY );
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentRevisionListPersistence")) ), uno::UNO_QUERY );
         if ( xWriter.is() )
         {
             try
@@ -3541,7 +3546,7 @@ void SfxMedium::CreateTempFileNoCopy()
 
             try
             {
-                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) );
                 ::rtl::OUString aField;
                 aAny >>= aField;
 

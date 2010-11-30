@@ -63,7 +63,7 @@ rDevice
     aBuf.append( "debug" );
     mkdir( aBuf.getStr(), 0777 );
     aBuf.append( "/" );
-    aBuf.append( sal_Int64(reinterpret_cast<sal_uInt32>(rDevice.get())), 16 );
+    aBuf.append( sal_Int64(reinterpret_cast<sal_IntPtr>(rDevice.get())), 16 );
     mkdir( aBuf.getStr(), 0777 );
     aBuf.append( "/bmp" );
     aBuf.append( sal_Int32(dbgStreamNum++) );

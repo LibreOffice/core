@@ -143,21 +143,15 @@ SwAsciiFilterDlg::SwAsciiFilterDlg( Window* pParent, SwDocShell& rDocSh,
                 if( bLF )
                 {
                     aOpt.SetParaFlags( LINEEND_CRLF );
-// have to check if of CharSet is type of ANSI
-//                  aOpt.SetCharSet( CHARSET_ANSI );
                 }
                 else
                 {
                     aOpt.SetParaFlags( LINEEND_CR );
-// have to check if CharSet is type of MAC
-//                  aOpt.SetCharSet( CHARSET_MAC );
                 }
             }
             else if( bLF )
             {
                 aOpt.SetParaFlags( LINEEND_LF );
-// have to check if of CharSet is type of ANSI
-//              aOpt.SetCharSet( CHARSET_ANSI );
             }
         }
 

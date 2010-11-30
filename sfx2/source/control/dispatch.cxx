@@ -248,7 +248,7 @@ int SfxDispatcher::Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest
 
             if ( xSet.is() )
             {
-                com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString::createFromAscii("DispatchRecorderSupplier"));
+                com::sun::star::uno::Any aProp = xSet->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DispatchRecorderSupplier")));
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorderSupplier > xSupplier;
                 com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > xRecorder;
                 aProp >>= xSupplier;

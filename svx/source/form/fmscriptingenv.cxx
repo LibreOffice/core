@@ -212,7 +212,7 @@ namespace svxform
             Reference< XHierarchicalNameAccess > xTypeDescriptions( aContext.getSingleton( "com.sun.star.reflection.theTypeDescriptionManager" ), UNO_QUERY_THROW );
 
             ::rtl::OUString sMethodDescription( _rListenerType );
-            sMethodDescription += ::rtl::OUString::createFromAscii( "::" );
+            sMethodDescription += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "::" ));
             sMethodDescription += _rMethodName;
 
             Reference< XInterfaceMethodTypeDescription > xMethod( xTypeDescriptions->getByHierarchicalName( sMethodDescription ), UNO_QUERY_THROW );
@@ -239,8 +239,7 @@ namespace svxform
     void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
-       static const ::rtl::OUString vbaInterOp =
-           ::rtl::OUString::createFromAscii("VBAInterop");
+       static const ::rtl::OUString vbaInterOp( RTL_CONSTASCII_USTRINGPARAM("VBAInterop") );
        if ( _rEvent.ScriptType.equals(vbaInterOp) )
            return; // not handled here
 

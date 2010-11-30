@@ -397,7 +397,7 @@ BOOL lcl_MergeGCLine( const SwTableLine*& rpLine, void* pPara )
             SwTableLines& rLns = *pGCPara->pLns;
             const SwTableLine* pTmp = pLn;
             USHORT nInsPos = rLns.GetPos( pTmp );
-            ASSERT( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
+            OSL_ENSURE( USHRT_MAX != nInsPos, "Line nicht gefunden!" );
 
             SwTableBox* pUpper = pLn->GetUpper();
 

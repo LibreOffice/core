@@ -157,7 +157,7 @@ void SbaTableQueryBrowser::SelectionChanged()
         InvalidateFeature(ID_BROWSER_INSERTCOLUMNS);
         InvalidateFeature(ID_BROWSER_INSERTCONTENT);
         InvalidateFeature(ID_BROWSER_FORMLETTER);
-    } // if ( !m_bShowMenu )
+    }
     InvalidateFeature(ID_BROWSER_COPY);
     InvalidateFeature(ID_BROWSER_CUT);
 }
@@ -224,25 +224,21 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
             ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( pEntryLoop ) );
 
             // the images for this entry
-            Image aImage, aImageHC;
+            Image aImage;
             if ( pData->eType == etDatasource )
-            {
-                aImage = pImageProvider->getDatabaseImage( false );
-                aImageHC = pImageProvider->getDatabaseImage( true );
-            }
+                aImage = pImageProvider->getDatabaseImage();
             else
             {
                 bool bIsFolder = !isObject( pData->eType );
                 if ( bIsFolder )
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getFolderImage( nObjectType, false );
-                    aImageHC = pImageProvider->getFolderImage( nObjectType, true );
+                    aImage = pImageProvider->getFolderImage( nObjectType );
                 }
                 else
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage, aImageHC );
+                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage );
                 }
             }
 
@@ -256,10 +252,8 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
 
                 SvLBoxContextBmp* pContextBitmapItem = static_cast< SvLBoxContextBmp* >( pItem );
 
-                pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap2( aImage, BMP_COLOR_NORMAL );
-                pContextBitmapItem->SetBitmap1( aImageHC, BMP_COLOR_HIGHCONTRAST );
-                pContextBitmapItem->SetBitmap2( aImageHC, BMP_COLOR_HIGHCONTRAST );
+                pContextBitmapItem->SetBitmap1( aImage );
+                pContextBitmapItem->SetBitmap2( aImage );
                 break;
             }
 

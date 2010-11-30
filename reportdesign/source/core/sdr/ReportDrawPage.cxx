@@ -134,7 +134,6 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
             SvxOle2Shape* pShape = new SvxOle2Shape( pObj );
             xShape.set(*pShape,uno::UNO_QUERY);
             pShape->setShapeKind(pObj->GetObjIdentifier());
-            //xShape = new SvxOle2Shape( pOle2Obj );
         }
 
         if ( !xShape.is() )

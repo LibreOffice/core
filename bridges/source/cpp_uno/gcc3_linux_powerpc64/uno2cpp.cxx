@@ -480,9 +480,8 @@ void unoInterfaceProxyDispatch(
     void * pReturn, void * pArgs[], uno_Any ** ppException )
 {
     // is my surrogate
-        bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
-            = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
-    typelib_InterfaceTypeDescription * pTypeDescr = pThis->pTypeDescr;
+    bridges::cpp_uno::shared::UnoInterfaceProxy * pThis
+        = static_cast< bridges::cpp_uno::shared::UnoInterfaceProxy *> (pUnoI);
 
     switch (pMemberDescr->eTypeClass)
     {

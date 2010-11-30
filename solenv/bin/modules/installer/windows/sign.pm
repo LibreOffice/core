@@ -243,9 +243,6 @@ sub execute_open_system_call
 
     if( $^O =~ /cygwin/i )
     {
-        # $comspec =~ s/\\/\\\\/g;
-        # $comspec = qx{cygpath -u "$comspec"};
-        # $comspec =~ s/\s*$//g;
         $comspec = "";
     }
 
@@ -548,7 +545,6 @@ sub cabinet_cosistency_check
         my $sourcecabfile = $finalinstalldir . $installer::globals::separator . $onefile;
         my $currentpath = cwd();
         my $destcabfile = $currentpath . $installer::globals::separator . $onefile;
-        # my $destcabfile = $onefile;
 
         if ( $^O =~ /cygwin/i )
         {
@@ -614,7 +610,6 @@ sub cabinet_cosistency_check
                 # Also making a binary diff?
 
                 my $difffile = "diff.exe";  # has to be in the path
-                # $systemcall = "$difffile $sourcecabfile $destcabfile";  # Test for differences
                 $systemcall = "$difffile $origfile $newfile";
                 $infoline = $systemcall . "\n";
                 $returnvalue = make_systemcall($systemcall, $systemcall);
@@ -1049,8 +1044,6 @@ sub already_certified
     my $returnvalue = system($systemcall);
 
     if ( $returnvalue ) { $success = 0; }
-
-    # my $success = make_systemcall($systemcall, $systemcall);
 
      if ( $success )
      {

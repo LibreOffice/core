@@ -100,8 +100,8 @@ public:
               xContext), uno::UNO_QUERY_THROW);
         xInputStream = xFileAccess->openFileRead(absFileUrl) ;
 
-        mLF = rtl::OUString::createFromAscii("\n");
-        mCRLF = rtl::OUString::createFromAscii("\r\n");
+        mLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        mCRLF = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\r\n"));
     }
 
     rtl::OUString getURL()

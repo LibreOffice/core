@@ -435,12 +435,9 @@ int SwAttrCheckArr::SetAttrFwd( const SwTxtAttr& rAttr )
                 // vorhanden, auf den Stack. Aber nur wenn es noch grosser ist
                 if( pCmp->nEnd > aTmp.nEnd )
                 {
-                    ASSERT( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                                     "Stack-Platz ist noch belegt" );
 
-        // ---------
-        // JP 22.08.96: nur Ende manipulieren reicht nicht. Bug 30547
-        //          pCmp->nStt = aTmp.nEnd;
                     if( aTmp.nStt <= pCmp->nStt )
                         pCmp->nStt = aTmp.nEnd;
                     else
@@ -591,12 +588,9 @@ int SwAttrCheckArr::SetAttrBwd( const SwTxtAttr& rAttr )
                 // vorhanden, auf den Stack. Aber nur wenn es noch grosser ist
                 if( pCmp->nStt < aTmp.nStt )
                 {
-                    ASSERT( !pStackArr[ nWhch - nArrStart ].nWhich,
+                    OSL_ENSURE( !pStackArr[ nWhch - nArrStart ].nWhich,
                             "Stack-Platz ist noch belegt" );
 
-// ---------
-// JP 22.08.96: nur Ende manipulieren reicht nicht. Bug 30547
-//          pCmp->nEnd = aTmp.nStt;
                     if( aTmp.nEnd <= pCmp->nEnd )
                         pCmp->nEnd = aTmp.nStt;
                     else
@@ -673,7 +667,7 @@ int SwAttrCheckArr::CheckStack()
         {
             // alle die "offen" sind, heisst ueber die Start Position ragen,
             // im FndSet setzen
-            ASSERT( !pFndArr[ n ].nWhich, "Array-Platz ist noch belegt" );
+            OSL_ENSURE( !pFndArr[ n ].nWhich, "Array-Platz ist noch belegt" );
             pFndArr[ n ] = *pArrPtr;
             pArrPtr->nWhich = 0;
             nFound++;
@@ -865,10 +859,7 @@ int lcl_Search( const SwCntntNode& rCNd, const SfxItemSet& rCmpSet, BOOL bNoColl
         else
         {
             nWhich = pItem->Which();
-//JP 27.02.95: wenn nach defaults gesucht wird, dann muss man bis zum Pool
-//              runter
-//          if( SFX_ITEM_SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
-//              || *pNdItem != *pItem )
+
             if( !CmpAttr( rNdSet.Get( nWhich, !bNoColls ), *pItem ))
                 return FALSE;
         }
@@ -1147,36 +1138,6 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             else if( !pSet->Count() )
                 return FIND_NOT_FOUND;      // nur Text und nicht gefunden
 
-/*          // --> FME 2007-4-12 #i74765 # Why should we move the position?
-            Moving the position results in bugs when there are two adjacent
-            portions which both have the requested attributes set. I suspect this
-            should be only be an optimization. Therefore I boldly remove it now!
-
-            // JP: und wieder neu aufsetzen, aber eine Position weiter
-            //JP 04.11.97: Bug 44897 - aber den Mark wieder aufheben, damit
-            //              weiterbewegt werden kann!
-            {
-                BOOL bCheckRegion = TRUE;
-                SwPosition* pPos = aSrchPam.GetPoint();
-                if( !(*fnMove->fnNd)( &pPos->nNode.GetNode(),
-                                        &pPos->nContent, CRSR_SKIP_CHARS ))
-                {
-                    if( (*fnMove->fnNds)( &pPos->nNode, FALSE ))
-                    {
-                        SwCntntNode *pNd = pPos->nNode.GetNode().GetCntntNode();
-                        xub_StrLen nCPos;
-                        if( fnMove == fnMoveForward )
-                            nCPos = 0;
-                        else
-                            nCPos = pNd->Len();
-                        pPos->nContent.Assign( pNd, nCPos );
-                    }
-                    else
-                        bCheckRegion = FALSE;
-                }
-                if( !bCheckRegion || *aRegion.GetPoint() <= *pPos )
-                    return FIND_NOT_FOUND;      // nicht gefunden
-            }*/
             *aRegion.GetMark() = *aSrchPam.GetPoint();
         }
 

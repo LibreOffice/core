@@ -311,17 +311,10 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
     if ( pMBarWin )
         nMBarHeight = pMBarWin->GetOutputSizePixel().getHeight();
 
-    if ( Application::GetSettings().GetStyleSettings().GetHighContrastMode() ) {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26_HC;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16_HC;
-    } else {
-        if ( nMBarHeight >= 35 )
-            nResID = RID_UPDATE_AVAILABLE_26;
-        else
-            nResID = RID_UPDATE_AVAILABLE_16;
-    }
+    if ( nMBarHeight >= 35 )
+        nResID = RID_UPDATE_AVAILABLE_26;
+    else
+        nResID = RID_UPDATE_AVAILABLE_16;
 
     return Image( ResId( nResID, *mpUpdResMgr ) );
 }
@@ -344,12 +337,12 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
         {
             uno::Reference< graphic::XGraphicProvider > xGraphProvider(
                     xServiceManager->createInstance(
-                            ::rtl::OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ),
+                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")) ),
                     uno::UNO_QUERY );
             if ( xGraphProvider.is() )
             {
                 uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-                aMediaProps[0].Name = ::rtl::OUString::createFromAscii( "URL" );
+                aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"));
                 aMediaProps[0].Value <<= rURL;
 
                 uno::Reference< graphic::XGraphic > xGraphic = xGraphProvider->queryGraphic( aMediaProps );

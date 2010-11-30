@@ -108,8 +108,8 @@ uno::Any
 CustomToolBarImportHelper::createCommandFromMacro( const rtl::OUString& sCmd )
 {
 //"vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-    static rtl::OUString scheme = rtl::OUString::createFromAscii( "vnd.sun.star.script:");
-    static rtl::OUString part2 = rtl::OUString::createFromAscii("?language=Basic&location=document");
+    static rtl::OUString scheme( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
+    static rtl::OUString part2( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
     // create script url
     rtl::OUString scriptURL = scheme + sCmd + part2;
     return uno::makeAny( scriptURL );
@@ -493,7 +493,7 @@ TBCGeneralInfo::ImportToolBarControlData( CustomToolBarImportHelper& helper, std
             if ( aMacroInf.IsResolved() )
                 aProp.Value = helper.createCommandFromMacro( aMacroInf.ResolvedMacro() );
             else
-                aProp.Value <<= rtl::OUString::createFromAscii("UnResolvedMacro[").concat( extraInfo.getOnAction() ).concat( rtl::OUString::createFromAscii("]") );
+                aProp.Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UnResolvedMacro[" )).concat( extraInfo.getOnAction() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "]" )) );
             sControlData.push_back( aProp );
         }
 

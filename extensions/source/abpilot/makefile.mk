@@ -44,21 +44,21 @@ CDEFS+=-DCOMPMOD_RESPREFIX=abp
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=	\
-        $(SLO)$/fieldmappingimpl.obj	\
-        $(SLO)$/datasourcehandling.obj	\
+        $(SLO)$/abpfinalpage.obj	\
+        $(SLO)$/abpservices.obj		\
+        $(SLO)$/abspage.obj		\
+        $(SLO)$/abspilot.obj		\
         $(SLO)$/admininvokationimpl.obj	\
-        $(SLO)$/unodialogabp.obj	\
-        $(SLO)$/moduleabp.obj	\
-        $(SLO)$/abpservices.obj \
+        $(SLO)$/admininvokationpage.obj	\
+        $(SLO)$/datasourcehandling.obj	\
+        $(SLO)$/fieldmappingimpl.obj	\
+        $(SLO)$/fieldmappingpage.obj	\
+        $(SLO)$/moduleabp.obj		\
+        $(SLO)$/tableselectionpage.obj	\
         $(SLO)$/typeselectionpage.obj	\
+        $(SLO)$/unodialogabp.obj	\
 
 SLOFILES=	\
-        $(SLO)$/fieldmappingpage.obj	\
-        $(SLO)$/abpfinalpage.obj	\
-        $(SLO)$/tableselectionpage.obj	\
-        $(SLO)$/admininvokationpage.obj	\
-        $(SLO)$/abspage.obj	\
-        $(SLO)$/abspilot.obj \
         $(EXCEPTIONSFILES)
 
 

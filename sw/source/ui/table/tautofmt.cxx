@@ -328,8 +328,6 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
         pData->SetBackground( bCheck );
     else if ( pBtn == &aBtnAlignment )
         pData->SetJustify( bCheck );
-//    else if ( pBtn == &aBtnAdjust )
-//        pData->SetIncludeWidthHeight( bCheck );
     else
         bDataChgd = FALSE;
 
@@ -755,9 +753,6 @@ MAKENUMSTR:
         Rectangle           cellRect        = maArray.GetCellRect( nCol, nRow );
         Point               aPos            = cellRect.TopLeft();
         USHORT              nRightX         = 0;
-//            BOOL                bJustify        = aCurData.IsJustify();
-//            ScHorJustifyAttr    aHorJustifyItem;
-//          CellHorJustify    eJustification;
 
         Size theMaxStrSize( cellRect.GetWidth() - FRAME_OFFSET,
                             cellRect.GetHeight() - FRAME_OFFSET );
@@ -786,9 +781,6 @@ MAKENUMSTR:
         while( theMaxStrSize.Width() <= aStrSize.Width() &&
                 cellString.Len() > 1 )
         {
-//                  if( eJustification == SVX_HOR_JUSTIFY_RIGHT )
-//                          cellString.Erase( 0, 1 );
-//                  else
             cellString.Erase( cellString.Len() - 1 );
             aScriptedText.SetText( cellString, m_xBreak );
             aStrSize = aScriptedText.GetTextSize();
@@ -797,18 +789,6 @@ MAKENUMSTR:
         nRightX  = (USHORT)(  cellRect.GetWidth()
                                 - aStrSize.Width()
                                 - FRAME_OFFSET );
-        //-------------
-        // Ausrichtung:
-        //-------------
-        /*   if ( bJustify )
-        {
-            aCurData.GetHorJustify( nFmtIndex, aHorJustifyItem );
-            eJustification = (CellHorJustify)aHorJustifyItem.GetValue();
-        }
-        else
-        {
-            eJustification = SC_HOR_JUSTIFY_STANDARD;
-        }*/
 
         //-----------------------------
         // vertikal (immer zentrieren):
@@ -818,7 +798,6 @@ MAKENUMSTR:
         //-----------
         // horizontal
         //-----------
-/*        if ( eJustification != SC_HOR_JUSTIFY_STANDARD )*/
         if( mbRTL )
             aPos.X() += nRightX;
         else if (aCurData.IsJustify())

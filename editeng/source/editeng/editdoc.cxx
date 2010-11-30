@@ -1459,7 +1459,7 @@ ULONG EditDoc::GetTextLen() const
     {
         ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
-        // Felder k”nnen laenger sein als der Platzhalter im Node.
+        // Fields can be longer than the placeholder in the Node
         const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
         for ( USHORT nAttr = rAttrs.Count(); nAttr; )
         {
@@ -1941,12 +1941,11 @@ void EditDoc::FindAttribs( ContentNode* pNode, USHORT nStartPos, USHORT nEndPos,
             {
                 // pItem = pAttr->GetItem();
                 // s.o.
-                /*-----------------31.05.95 16:01-------------------
-                 Ist falsch, wenn das gleiche Attribut sofort wieder
-                 eingestellt wird!
-                 => Sollte am besten nicht vorkommen, also gleich beim
-                    Setzen von Attributen richtig machen!
-                --------------------------------------------------*/
+                /* Ist falsch, wenn das gleiche Attribut sofort wieder
+                   eingestellt wird!
+                   => Sollte am besten nicht vorkommen, also gleich beim
+                      Setzen von Attributen richtig machen!
+                */
                 rCurSet.InvalidateItem( pAttr->GetItem()->Which() );
             }
 

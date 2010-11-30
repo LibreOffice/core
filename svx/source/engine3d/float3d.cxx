@@ -73,16 +73,7 @@ SFX_IMPL_DOCKINGWINDOW( Svx3DChildWindow, SID_3D_WIN )
 struct Svx3DWinImpl
 {
     SfxItemPool*        pPool;
-    Image               maImgLightOnH;
-    Image               maImgLightOffH;
 };
-
-#define SETHCIMAGE(btn,res) \
-{ \
-    Bitmap aBmp( SVX_RES( res ) ); \
-    Image aImage( aBmp, COL_LIGHTMAGENTA ); \
-    btn.SetModeImage( aImage, BMP_COLOR_HIGHCONTRAST ); \
-}
 
 namespace {
     /** Get the dispatcher from the current view frame, or, if that is not
@@ -130,20 +121,20 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aMtrEndAngle        ( this, SVX_RES( MTR_END_ANGLE ) ),
         aFtDepth            ( this, SVX_RES( FT_DEPTH ) ),
         aMtrDepth           ( this, SVX_RES( MTR_DEPTH ) ),
-        aFLGeometrie       ( this, SVX_RES( FL_GEOMETRIE ) ),
+        aFLGeometrie        ( this, SVX_RES( FL_GEOMETRIE ) ),
 
         aFtHorizontal       ( this, SVX_RES( FT_HORIZONTAL ) ),
         aNumHorizontal      ( this, SVX_RES( NUM_HORIZONTAL ) ),
         aFtVertical         ( this, SVX_RES( FT_VERTICAL ) ),
         aNumVertical        ( this, SVX_RES( NUM_VERTICAL ) ),
-        aFLSegments        ( this, SVX_RES( FL_SEGMENTS ) ),
+        aFLSegments         ( this, SVX_RES( FL_SEGMENTS ) ),
 
         aBtnNormalsObj      ( this, SVX_RES( BTN_NORMALS_OBJ ) ),
         aBtnNormalsFlat     ( this, SVX_RES( BTN_NORMALS_FLAT ) ),
         aBtnNormalsSphere   ( this, SVX_RES( BTN_NORMALS_SPHERE ) ),
         aBtnNormalsInvert   ( this, SVX_RES( BTN_NORMALS_INVERT ) ),
         aBtnTwoSidedLighting( this, SVX_RES( BTN_TWO_SIDED_LIGHTING ) ),
-        aFLNormals         ( this, SVX_RES( FL_NORMALS ) ),
+        aFLNormals          ( this, SVX_RES( FL_NORMALS ) ),
 
         aBtnDoubleSided     ( this, SVX_RES( BTN_DOUBLE_SIDED ) ),
 
@@ -153,13 +144,13 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnShadow3d        ( this, SVX_RES( BTN_SHADOW_3D ) ),
         aFtSlant            ( this, SVX_RES( FT_SLANT ) ),
         aMtrSlant           ( this, SVX_RES( MTR_SLANT ) ),
-        aFLShadow          ( this, SVX_RES( FL_SHADOW ) ),
+        aFLShadow           ( this, SVX_RES( FL_SHADOW ) ),
         aFtDistance         ( this, SVX_RES( FT_DISTANCE ) ),
         aMtrDistance        ( this, SVX_RES( MTR_DISTANCE ) ),
         aFtFocalLeng        ( this, SVX_RES( FT_FOCAL_LENGTH ) ),
         aMtrFocalLength     ( this, SVX_RES( MTR_FOCAL_LENGTH ) ),
-        aFLCamera          ( this, SVX_RES( FL_CAMERA ) ),
-        aFLRepresentation  ( this, SVX_RES( FL_REPRESENTATION ) ),
+        aFLCamera           ( this, SVX_RES( FL_CAMERA ) ),
+        aFLRepresentation   ( this, SVX_RES( FL_REPRESENTATION ) ),
 
         // Beleuchtung
         aBtnLight1          ( this, SVX_RES( BTN_LIGHT_1 ) ),
@@ -180,15 +171,15 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aLbLight8           ( this, SVX_RES( LB_LIGHT_8 ) ),
 
         aBtnLightColor      ( this, SVX_RES( BTN_LIGHT_COLOR ) ),
-        aFTLightsource     ( this, SVX_RES( FT_LIGHTSOURCE ) ),
+        aFTLightsource      ( this, SVX_RES( FT_LIGHTSOURCE ) ),
 
         // #99694# Keyboard shortcuts activate the next control, so the
         // order needed to be changed here
-        aFTAmbientlight    ( this, SVX_RES( FT_AMBIENTLIGHT ) ),    // Text label
+        aFTAmbientlight     ( this, SVX_RES( FT_AMBIENTLIGHT ) ),   // Text label
         aLbAmbientlight     ( this, SVX_RES( LB_AMBIENTLIGHT ) ),   // ListBox
         aBtnAmbientColor    ( this, SVX_RES( BTN_AMBIENT_COLOR ) ), // color button
 
-        aFLLight           ( this, SVX_RES( FL_LIGHT ) ),
+        aFLLight            ( this, SVX_RES( FL_LIGHT ) ),
 
         // Textures
         aFtTexKind          ( this, SVX_RES( FT_TEX_KIND ) ),
@@ -208,7 +199,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         aBtnTexCircleY      ( this, SVX_RES( BTN_TEX_CIRCLE_Y ) ),
         aFtTexFilter        ( this, SVX_RES( FT_TEX_FILTER ) ),
         aBtnTexFilter       ( this, SVX_RES( BTN_TEX_FILTER ) ),
-        aFLTexture         ( this, SVX_RES( FL_TEXTURE ) ),
+        aFLTexture          ( this, SVX_RES( FL_TEXTURE ) ),
 
         // Material
         aFtMatFavorites     ( this, SVX_RES( FT_MAT_FAVORITES ) ),
@@ -251,57 +242,11 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
         pControllerItem(0L),
         pConvertTo3DItem(0L),
         pConvertTo3DLatheItem(0L),
-//      pPool               ( NULL ),
         mpImpl              ( new Svx3DWinImpl() ),
         mpRemember2DAttributes(NULL),
         bOnly3DChanged      ( FALSE )
 {
-    SETHCIMAGE( aBtnGeo, BMP_GEO_H );
-    SETHCIMAGE( aBtnRepresentation, BMP_REPRESENTATION_H );
-    SETHCIMAGE( aBtnLight, BMP_3DLIGHT_H );
-    SETHCIMAGE( aBtnTexture, BMP_TEXTURE_H );
-    SETHCIMAGE( aBtnMaterial, BMP_MATERIAL_H );
-    SETHCIMAGE( aBtnUpdate, BMP_UPDATE_H );
-    SETHCIMAGE( aBtnAssign, BMP_ASSIGN_H );
-    SETHCIMAGE( aBtnNormalsObj, BMP_NORMALS_OBJ_H );
-    SETHCIMAGE( aBtnNormalsFlat, BMP_NORMALS_FLAT_H );
-    SETHCIMAGE( aBtnNormalsSphere, BMP_NORMALS_SPHERE_H );
-    SETHCIMAGE( aBtnTwoSidedLighting, BMP_TWO_SIDED_LIGHTING_H );
-    SETHCIMAGE( aBtnNormalsInvert, BMP_NORMALS_INVERT_H );
-    SETHCIMAGE( aBtnDoubleSided, BMP_DOUBLE_SIDED_H );
-    SETHCIMAGE( aBtnShadow3d, BMP_SHADOW_3D_H );
-    SETHCIMAGE( aBtnLight1, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight2, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight3, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight4, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight5, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight6, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight7, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLight8, BMP_LIGHT_H );
-    SETHCIMAGE( aBtnLightColor, BMP_LIGHT_COLOR_H );
-    SETHCIMAGE( aBtnAmbientColor, BMP_AMBIENT_COLOR_H );
-    SETHCIMAGE( aBtnTexLuminance, BMP_TEX_LUMINANCE_H );
-    SETHCIMAGE( aBtnTexColor, BMP_TEX_COLOR_H );
-    SETHCIMAGE( aBtnTexReplace, BMP_TEX_REPLACE_H );
-    SETHCIMAGE( aBtnTexModulate, BMP_TEX_MODULATE_H );
-    SETHCIMAGE( aBtnTexBlend, BMP_TEX_BLEND_H );
-    SETHCIMAGE( aBtnTexParallelX, BMP_TEX_PARALLEL_H );
-    SETHCIMAGE( aBtnTexCircleX, BMP_TEX_CIRCLE_H );
-    SETHCIMAGE( aBtnTexObjectX, BMP_TEX_OBJECT_H );
-    SETHCIMAGE( aBtnTexParallelY, BMP_TEX_PARALLEL_H );
-    SETHCIMAGE( aBtnTexCircleY, BMP_TEX_CIRCLE_H );
-    SETHCIMAGE( aBtnTexObjectY, BMP_TEX_OBJECT_H );
-    SETHCIMAGE( aBtnTexFilter, BMP_TEX_FILTER_H );
-    SETHCIMAGE( aBtnMatColor, BMP_COLORDLG_H );
-    SETHCIMAGE( aBtnEmissionColor, BMP_COLORDLG_H );
-    SETHCIMAGE( aBtnSpecularColor, BMP_COLORDLG_H );
-    SETHCIMAGE( aBtnPerspective, BMP_PERSPECTIVE_H );
-    SETHCIMAGE( aBtnConvertTo3D, BMP_CHANGE_TO_3D_H );
-    SETHCIMAGE( aBtnLatheObject, BMP_LATHE_OBJ_H );
-
     mpImpl->pPool = NULL;
-    mpImpl->maImgLightOnH = Image( SVX_RES( RID_SVXIMAGE_LIGHT_ON_H ) );
-    mpImpl->maImgLightOffH = Image( SVX_RES( RID_SVXIMAGE_LIGHT_OFF_H ) );
     FreeResource();
 
     // Metrik einstellen
@@ -462,13 +407,12 @@ void Svx3DWin::Reset()
 
 bool Svx3DWin::GetUILightState( ImageButton& aBtn ) const
 {
-    return (aBtn.GetModeImage() == aImgLightOn) || (aBtn.GetModeImage() == mpImpl->maImgLightOnH);
+    return (aBtn.GetModeImage() == aImgLightOn);
 }
 
 void Svx3DWin::SetUILightState( ImageButton& aBtn, bool bState )
 {
     aBtn.SetModeImage( bState ? aImgLightOn : aImgLightOff );
-    aBtn.SetModeImage( bState ? mpImpl->maImgLightOnH : mpImpl->maImgLightOffH, BMP_COLOR_HIGHCONTRAST );
 }
 
 // -----------------------------------------------------------------------
@@ -499,7 +443,6 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 
     // construct field values
     const SfxPoolItem* pItem;
-    //BOOL bUpdate = FALSE;
 
     // evtl. PoolUnit ermitteln
     if( !mpImpl->pPool )

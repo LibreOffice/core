@@ -130,7 +130,7 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
     {
         xRowSet = uno::Reference<sdbc::XRowSet>(
             comphelper::getProcessServiceFactory()->createInstance(
-            rtl::OUString::createFromAscii( SC_SERVICE_ROWSET ) ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_ROWSET )) ),
             uno::UNO_QUERY);
         uno::Reference<beans::XPropertySet> xRowProp( xRowSet, uno::UNO_QUERY );
         DBG_ASSERT( xRowProp.is(), "can't get RowSet" );
@@ -142,22 +142,22 @@ ScDPTableDataCache* ScImportSourceDesc::CreateCache( ScDocument* pDoc , long nID
             uno::Any aAny;
             aAny <<= rtl::OUString( aDBName );
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_DATASOURCENAME), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_DATASOURCENAME)), aAny );
 
             aAny <<= rtl::OUString( aObject );
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMAND), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMAND)), aAny );
 
             aAny <<= nSdbType;
             xRowProp->setPropertyValue(
-                rtl::OUString::createFromAscii(SC_DBPROP_COMMANDTYPE), aAny );
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_DBPROP_COMMANDTYPE)), aAny );
 
             uno::Reference<sdb::XCompletedExecution> xExecute( xRowSet, uno::UNO_QUERY );
             if ( xExecute.is() )
             {
                 uno::Reference<task::XInteractionHandler> xHandler(
                     comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString::createFromAscii( SC_SERVICE_INTHANDLER ) ),
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_SERVICE_INTHANDLER )) ),
                     uno::UNO_QUERY);
                 xExecute->executeWithCompletion( xHandler );
             }
@@ -306,9 +306,6 @@ const ScDPCacheTable& ScDatabaseDPData::GetCacheTable() const
 }
 
 // -----------------------------------------------------------------------
-
-
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

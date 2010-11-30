@@ -40,7 +40,7 @@ namespace svgi
 
 struct ARGBColor
 {
-    double toDoubleColor( sal_uInt8 val ) { return val/255.0; }
+    double toDoubleColor( sal_uInt8 val ) const { return val/255.0; }
 
     ARGBColor() : a(1.0), r(0.0), g(0.0), b(0.0)
     {}

@@ -1,0 +1,11 @@
+diff -up misc/build/libwps-0.2.0/src/lib/libwps_internal.h.old misc/build/libwps-0.2.0/src/lib/libwps_internal.h
+--- misc/build/libwps-0.2.0/src/lib/libwps_internal.h.old	2010-11-17 20:47:23.288507198 +0100
++++ misc/build/libwps-0.2.0/src/lib/libwps_internal.h	2010-11-17 20:47:26.596839807 +0100
+@@ -23,6 +23,7 @@
+ #define LIBWPS_INTERNAL_H
+ #ifdef DEBUG
+ #include <bitset>
++#include <stdio.h>
+ #endif
+ #include <libwpd-stream/libwpd-stream.h>
+ #include <libwpd/libwpd.h>

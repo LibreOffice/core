@@ -95,10 +95,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString::createFromAscii(
-                         "com.sun.star.comp.WebDAVContentProvider" ),
-                     rtl::OUString::createFromAscii(
-                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME ) );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.WebDAVContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -160,8 +160,8 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                WEBDAV_URL_SCHEME_LENGTH,
-                               rtl::OUString::createFromAscii(
-                                                    HTTP_URL_SCHEME ) );
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                    HTTP_URL_SCHEME )) );
         bNewId = true;
     }
     else if ( aScheme.equalsAsciiL(
@@ -169,8 +169,8 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                DAV_URL_SCHEME_LENGTH,
-                               rtl::OUString::createFromAscii(
-                                                    HTTP_URL_SCHEME ) );
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                    HTTP_URL_SCHEME )) );
         bNewId = true;
     }
     else if ( aScheme.equalsAsciiL(
@@ -178,8 +178,8 @@ ContentProvider::queryContent(
     {
         aURL = aURL.replaceAt( 0,
                                DAVS_URL_SCHEME_LENGTH,
-                               rtl::OUString::createFromAscii(
-                                                    HTTPS_URL_SCHEME ) );
+                               rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                                    HTTPS_URL_SCHEME )) );
         bNewId = true;
     }
 
@@ -194,7 +194,7 @@ ContentProvider::queryContent(
         nPos = aURL.indexOf( '/', nPos + 1 );
         if ( nPos == -1 )
         {
-            aURL += rtl::OUString::createFromAscii( "/" );
+            aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
             bNewId = true;
         }
     }

@@ -300,7 +300,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 
         aArgsList.realloc( NUM_OF_PICKLIST_ARGS );
         aArgsList[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Referer" ));
-        aArgsList[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+        aArgsList[0].Value = makeAny( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SFX_REFERER_USER )));
 
         // documents in the picklist will never be opened as templates
         aArgsList[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AsTemplate" ));
@@ -325,7 +325,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ));
         aArgsList[NUM_OF_PICKLIST_ARGS-1].Value <<= aFilter;
 
-        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString::createFromAscii("_default"), 0 );
+        xDispatch = xDispatchProvider->queryDispatch( aTargetURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_default")), 0 );
     }
 
     if ( xDispatch.is() )
@@ -338,7 +338,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
         pLoadRecentFile->aTargetURL = aTargetURL;
         pLoadRecentFile->aArgSeq    = aArgsList;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("RecentFilesMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RecentFilesMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgsList);
         Application::PostUserEvent( STATIC_LINK(0, RecentFilesMenuController, ExecuteHdl_Impl), pLoadRecentFile );
     }
 }

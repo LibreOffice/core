@@ -132,7 +132,7 @@ public:
 inline  void SwDBField::SetExpansion(const String& rStr)
     { aContent = rStr; }
 
-// wird von UpdateExpFlds gesetzt (dort ist die Node-Position bekannt)
+// set from UpdateExpFlds (the Node-Position is known there)
 inline void SwDBField::ChgBodyTxtFlag( BOOL bIsInBody )
     { bIsInBodyTxt = bIsInBody; }
 
@@ -156,7 +156,7 @@ public:
     inline const SwDBData&  GetRealDBData() { return aDBData; }
 
     SwDBData                GetDBData(SwDoc* pDoc);
-    void                    SetDBData(const SwDBData& rDBData); // #111840#
+    void                    SetDBData(const SwDBData& rDBData);
 
     // Name oder Inhalt
     virtual String          GetCntnt(BOOL bName = FALSE) const;
@@ -165,7 +165,6 @@ public:
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nType);
 };
-
 
 /*--------------------------------------------------------------------
     Beschreibung: Datenbankfeld Naechster Satz
@@ -178,7 +177,6 @@ public:
 
     virtual SwFieldType*    Copy() const;
 };
-
 
 /*--------------------------------------------------------------------
     Beschreibung: Naechsten Datensatz mit Bedingung
@@ -224,7 +222,6 @@ public:
 
     virtual SwFieldType*    Copy() const;
 };
-
 
 /*--------------------------------------------------------------------
     Beschreibung: Datensatz mit Nummer xxx
@@ -334,7 +331,6 @@ inline long SwDBSetNumberField::GetSetNumber() const
 
 inline void SwDBSetNumberField::SetSetNumber(long nNum)
     { nNumber = nNum; }
-
 
 #endif // _DBFLD_HXX
 

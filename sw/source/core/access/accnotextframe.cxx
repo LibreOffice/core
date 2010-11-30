@@ -106,7 +106,7 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     }
 
     const SwNoTxtNode *pNd = GetNoTxtNode();
-    ASSERT( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
+    OSL_ENSURE( pNd == aDepend.GetRegisteredIn(), "invalid frame" );
     switch( nWhich )
     {
         // --> OD 2009-07-14 #i73249#
@@ -158,20 +158,6 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
             }
         }
         break;
-        // <--
-        /*
-    case RES_OBJECTDYING:
-        if( aDepend.GetRegisteredIn() ==
-                static_cast< SwModify *>( static_cast< SwPtrMsgPoolItem * >( pOld )->pObject ) )
-            const_cast < SwModify *>( aDepend.GetRegisteredIn()->Remove( aDepend );
-        break;
-
-    case RES_FMT_CHG:
-        if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
-            static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            pRegisteredIn->Remove( this );
-        break;
-    */
     }
 }
 

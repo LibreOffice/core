@@ -246,9 +246,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         // <--
 
         const SfxPoolItem* pItem;
-  //      USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,  //#outline level,removed by zhaojianwei
-  //                                              RES_PARATR_NUMRULE };
-        //for( USHORT n = 0; n < 3; ++n )
+
         USHORT __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,    //->add by zhaojianwei
                                                 RES_PARATR_NUMRULE,
                                                 RES_PARATR_OUTLINELEVEL };
@@ -308,7 +306,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
             if( pPara->pDelSet && pPara->pDelSet->Count() )
             {
                 // --> OD 2008-04-15 #refactorlists#
-                ASSERT( !bKeepAttributes,
+                OSL_ENSURE( !bKeepAttributes,
                         "<lcl_RstAttr(..)> - certain attributes are kept, but not needed. -> please inform OD" );
                 // <--
                 SfxItemIter aIter( *pPara->pDelSet );
@@ -689,7 +687,7 @@ lcl_InsAttr(SwDoc *const pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // --> OD 2005-10-24 #126346# - make code robust:
             if ( !pNumRule )
             {
-                ASSERT( false,
+                OSL_ENSURE( false,
                         "<InsAttr(..)> - PaM in front of label, but text node has no numbering rule set. This is a serious defect, please inform OD." );
                 DELETECHARSETS
                 return false;
@@ -1413,7 +1411,7 @@ void SwDoc::DelCharFmt(USHORT nFmt, BOOL bBroadcast)
 void SwDoc::DelCharFmt( SwCharFmt *pFmt, BOOL bBroadcast )
 {
     USHORT nFmt = pCharFmtTbl->GetPos( pFmt );
-    ASSERT( USHRT_MAX != nFmt, "Fmt not found," );
+    OSL_ENSURE( USHRT_MAX != nFmt, "Fmt not found," );
 
     DelCharFmt( nFmt, bBroadcast );
 }
@@ -1422,7 +1420,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
-        ASSERT( !this, "Format steht nicht mehr im DocArray, "
+        OSL_ENSURE( !this, "Format steht nicht mehr im DocArray, "
                        "kann per delete geloescht werden" );
         delete pFmt;
     }
@@ -1451,7 +1449,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
         else
         {
             nPos = GetSpzFrmFmts()->GetPos( pFmt );
-            ASSERT( nPos != USHRT_MAX, "FrmFmt not found." );
+            OSL_ENSURE( nPos != USHRT_MAX, "FrmFmt not found." );
             if( USHRT_MAX != nPos )
                 GetSpzFrmFmts()->DeleteAndDestroy( nPos );
         }
@@ -1461,7 +1459,7 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
 void SwDoc::DelTblFrmFmt( SwTableFmt *pFmt )
 {
     USHORT nPos = pTblFrmFmtTbl->GetPos( pFmt );
-    ASSERT( USHRT_MAX != nPos, "Fmt not found," );
+    OSL_ENSURE( USHRT_MAX != nPos, "Fmt not found," );
     pTblFrmFmtTbl->DeleteAndDestroy( nPos );
 }
 
@@ -1683,7 +1681,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
 
 void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
 {
-    ASSERT( nFmtColl, "Remove fuer Coll 0." );
+    OSL_ENSURE( nFmtColl, "Remove fuer Coll 0." );
 
     // Wer hat die zu loeschende als Next
     SwTxtFmtColl *pDel = (*pTxtFmtCollTbl)[nFmtColl];
@@ -1714,7 +1712,7 @@ void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
 void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, BOOL bBroadcast )
 {
     USHORT nFmt = pTxtFmtCollTbl->GetPos( pColl );
-    ASSERT( USHRT_MAX != nFmt, "Collection not found," );
+    OSL_ENSURE( USHRT_MAX != nFmt, "Collection not found," );
     DelTxtFmtColl( nFmt, bBroadcast );
 }
 
@@ -1746,7 +1744,7 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
                 // Check, if the list style of the paragraph will change.
                 bool bChangeOfListStyleAtParagraph( true );
                 SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
-                ASSERT( pTNd,
+                OSL_ENSURE( pTNd,
                         "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
                 {
                     SwNumRule* pNumRuleAtParagraph( pTNd->GetNumRule() );
@@ -1928,9 +1926,6 @@ SwTxtFmtColl* SwDoc::CopyTxtColl( const SwTxtFmtColl& rColl )
     // kopiere jetzt noch die Auto-Formate oder kopiere die Attribute
     pNewColl->CopyAttrs( rColl, TRUE );
 
-    // setze noch den Outline-Level
-    //if( NO_NUMBERING != rColl.GetOutlineLevel() ) //#outline level,zhaojianwei
-    //  pNewColl->SetOutlineLevel( rColl.GetOutlineLevel() );
     if(rColl.IsAssignedToListLevelOfOutlineStyle())
         pNewColl->AssignToListLevelOfOutlineStyle(rColl.GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
     //<-end
@@ -2041,13 +2036,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
         pDest->SetAuto( FALSE );
-//      pDest->ResetAllAttr();
-//      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
+
 //JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
-        // --> OD 2009-03-23 #i94285#
-        // copy existing <SwFmtPageDesc> instance, before copying attributes
-//        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
         //JP 18.08.98: Bug 55115 - copy PageDescAttribute in this case
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
@@ -2063,7 +2054,6 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                 pPageDesc = aPageDescs[ MakePageDesc( rNm ) ];
             }
             pPageDesc->Add( &aPageDesc );
-//            pDest->SetFmtAttr( aPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
             aTmpAttrSet.Put( aPageDesc );
             pDest->SetFmtAttr( aTmpAttrSet );
@@ -2092,9 +2082,6 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
                 pDstColl->SetNextTxtFmtColl( *(SwTxtFmtColl*)FindFmtByName(
                     rDestArr, pSrcColl->GetNextTxtFmtColl().GetName() ) );
 
-            // setze noch den Outline-Level
-            //if( NO_NUMBERING != pSrcColl->GetOutlineLevel() ) //#outline level,zhaojianwei
-            //  pDstColl->SetOutlineLevel( pSrcColl->GetOutlineLevel() );
             if(pSrcColl->IsAssignedToListLevelOfOutlineStyle())
                 pDstColl->AssignToListLevelOfOutlineStyle(pSrcColl->GetAssignedOutlineStyleLevel());//<-end,zhaojianwei
             //<-end
@@ -2439,13 +2426,11 @@ void SwDoc::_CreateNumberFormatter()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLog, "SW", "JP93722",  "SwDoc::_CreateNumberFormatter" );
 
-    ASSERT( !pNumberFormatter, "ist doch schon vorhanden" );
+    OSL_ENSURE( !pNumberFormatter, "ist doch schon vorhanden" );
 
 
-    LanguageType eLang = LANGUAGE_SYSTEM; //System::GetLanguage();
-/*              ((const SvxLanguageItem&)GetAttrPool().
-                    GetDefaultItem( RES_CHRATR_LANGUAGE )).GetLanguage();
-*/
+    LanguageType eLang = LANGUAGE_SYSTEM;
+
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
     pNumberFormatter = new SvNumberFormatter( xMSF, eLang );
     pNumberFormatter->SetEvalDateFormat( NF_EVALDATEFORMAT_FORMAT_INTL );
@@ -2534,19 +2519,6 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
         // in den Node gesetzt werden. Also muss man die Differenz nehmen
         SwRedlineExtraData_Format aExtraData( rSet );
 
-/*
-        if( pSet && pTNd->HasSwAttrSet() )
-        {
-            SfxItemSet aTmp( *pTNd->GetpSwAttrSet() );
-            aTmp.Differentiate( *pSet );
-            // das Adjust Item behalten wir extra
-            const SfxPoolItem* pItem;
-            if( SFX_ITEM_SET == pTNd->GetpSwAttrSet()->GetItemState(
-                    RES_PARATR_ADJUST, FALSE, &pItem ))
-                aTmp.Put( *pItem );
-            aExtraData.SetItemSet( aTmp );
-        }
-*/
         pRedl->SetExtraData( &aExtraData );
 
 // !!!!!!!!! Undo fehlt noch !!!!!!!!!!!!!!!!!!
@@ -2654,7 +2626,6 @@ namespace docfunc
                 SwTxtFmtColl* pTxtFmtColl = (*pTxtFmtColls)[i];
 
                 if ( pTxtFmtColl->IsDefault() ||
-                   //  pTxtFmtColl->GetOutlineLevel() == NO_NUMBERING ) //#outline level,zhaojianwei
                     ! pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )  //<-end,zhaojianwei
                 {
                     continue;

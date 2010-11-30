@@ -121,11 +121,11 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 
 //------------------------------------------------------------------
 OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
-    :m_xComponent( rxSet )
-    ,m_xControlModel(rxSet,UNO_QUERY)
-    ,m_nPos( nInsertPos )
-    ,m_nTabIndex(0)
-    ,m_aName( OGroupManager::GetGroupName( rxSet ) )
+    : m_aName( OGroupManager::GetGroupName( rxSet ) )
+    , m_xComponent( rxSet )
+    , m_xControlModel(rxSet,UNO_QUERY)
+    , m_nPos( nInsertPos )
+    , m_nTabIndex(0)
 {
     if (m_xComponent.is())
     {
@@ -269,7 +269,7 @@ Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 DBG_NAME(OGroupManager);
 //------------------------------------------------------------------
 OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
-    :m_pCompGroup( new OGroup( ::rtl::OUString::createFromAscii( "AllComponentGroup" ) ) )
+    :m_pCompGroup( new OGroup( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AllComponentGroup") ) ) )
     ,m_xContainer(_rxContainer)
 {
     DBG_CTOR(OGroupManager,NULL);

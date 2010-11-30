@@ -441,6 +441,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             //setup parameters from the OO values
             option.minimum = sbVal->mnMin;
             option.maximum = sbVal->mnMax - sbVal->mnVisibleSize;
+            option.maximum = qMax( option.maximum, option.minimum ); // bnc#619772
             option.sliderValue = sbVal->mnCur;
             option.sliderPosition = sbVal->mnCur;
             option.pageStep = sbVal->mnVisibleSize;

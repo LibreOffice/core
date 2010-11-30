@@ -201,8 +201,6 @@ void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) thro
         m_xConnection.clear();
         dispose();
         m_bNeedToReInitialize = true;
-        //if(!m_bInInitialize)
-        //  initialize();
     }
 }
 // -----------------------------------------------------------------------------
@@ -332,7 +330,7 @@ void ODatabaseImportExport::initialize()
             // the result set may be already set with the datadescriptor
             if ( !m_xResultSet.is() )
             {
-                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.sdb.RowSet" ) ), UNO_QUERY );
+                m_xResultSet.set( m_xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.RowSet")) ), UNO_QUERY );
                 Reference< XPropertySet > xProp( m_xResultSet, UNO_QUERY_THROW );
                 xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
                 xProp->setPropertyValue( PROPERTY_COMMAND_TYPE, makeAny( m_nCommandType ) );
@@ -369,7 +367,7 @@ BOOL ODatabaseImportExport::Write()
     {
         if ( !m_bInInitialize )
             initialize();
-    } // if ( m_bNeedToReInitialize )
+    }
     return TRUE;
 }
 // -----------------------------------------------------------------------------
@@ -379,7 +377,7 @@ BOOL ODatabaseImportExport::Read()
     {
         if ( !m_bInInitialize )
             initialize();
-    } // if ( m_bNeedToReInitialize )
+    }
     return TRUE;
 }
 // -----------------------------------------------------------------------------
@@ -403,54 +401,6 @@ BOOL ORTFImportExport::Write()
     (*m_pStream) << '{'     << OOO_STRING_SVTOOLS_RTF_RTF;
     (*m_pStream) << OOO_STRING_SVTOOLS_RTF_ANSI << ODatabaseImportExport::sNewLine;
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
-
-    /*
-    // Access RTF Export Beispiel
-    {\rtf1\ansi
-        {\colortbl\red0\green0\blue0;\red255\green255\blue255;\red192\green192\blue192;}
-        {\fonttbl\f0\fcharset0\fnil MS Sans Serif;\f1\fcharset0\fnil Arial;\f2\fcharset0\fnil Arial;}
-        \trowd\trgaph40
-                \clbrdrl\brdrs\brdrcf0\clbrdrt\brdrs\brdrcf0\clbrdrb\brdrs\brdrcf0\clbrdrr\brdrs\brdrcf0\clshdng10000\clcfpat2\cellx1437
-                \clbrdrl\brdrs\brdrcf0\clbrdrt\brdrs\brdrcf0\clbrdrb\brdrs\brdrcf0\clbrdrr\brdrs\brdrcf0\clshdng10000\clcfpat2\cellx2874
-        {
-            \trrh-270\pard\intbl
-                {\qc\fs20\b\f1\cf0\cb2 text\cell}
-                \pard\intbl
-                {\qc\fs20\b\f1\cf0\cb2 datum\cell}
-                \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 heute\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 10.11.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 morgen\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 11.11.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx1437\clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 bruder\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 21.04.98\cell}
-            \pard\intbl\row
-        }
-        \trowd\trgaph40
-        \clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx
-        \clbrdrl\brdrs\brdrcf2\clbrdrt\brdrs\brdrcf2\clbrdrb\brdrs\brdrcf2\clbrdrr\brdrs\brdrcf2\clshdng10000\clcfpat1\cellx2874
-        {\trrh-270\pard\intbl
-            {\ql\fs20\f2\cf0\cb1 vater\cell}
-            \pard\intbl
-            {\qr\fs20\f2\cf0\cb1 28.06.98\cell}
-            \pard\intbl\row
-        }
-    }
-    */
 
     BOOL bBold          = ( ::com::sun::star::awt::FontWeight::BOLD     == m_aFont.Weight );
     BOOL bItalic        = ( ::com::sun::star::awt::FontSlant_ITALIC     == m_aFont.Slant );
@@ -671,8 +621,6 @@ void ORTFImportExport::appendRow(::rtl::OString* pHorzChar,sal_Int32 _nColumnCou
                 Reference<XPropertySet> xColumn(m_xRowSetColumns->getByIndex(i-1),UNO_QUERY_THROW);
                 dbtools::FormattedColumnValue aFormatedValue(aContext,xRowSet,xColumn);
                 ::rtl::OUString sValue = aFormatedValue.getFormattedValue();
-                // m_xRow->getString(i);
-                //if (!m_xRow->wasNull())
                 if ( sValue.getLength() )
                     RTFOutFuncs::Out_String(*m_pStream,sValue,m_eDestEnc);
             }
@@ -724,7 +672,7 @@ const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
 const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 //========================================================================
-// Makros fuer HTML-Export
+// Macros for HTML-Export
 //========================================================================
 #define OUT_PROLOGUE()      ((*m_pStream) << sHTML30_Prologue << ODatabaseImportExport::sNewLine << ODatabaseImportExport::sNewLine)
 #define TAG_ON( tag )       HTMLOutFuncs::Out_AsciiTag( (*m_pStream), tag )
@@ -802,8 +750,8 @@ void OHTMLImportExport::WriteHeader()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "misc", "Ocke.Janssen@sun.com", "OHTMLImportExport::WriteHeader" );
     uno::Reference<document::XDocumentProperties> xDocProps(
-        m_xFactory->createInstance(::rtl::OUString::createFromAscii(
-            "com.sun.star.document.DocumentProperties")),
+        m_xFactory->createInstance(::rtl::OUString(
+            RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties"))),
         uno::UNO_QUERY);
     if (xDocProps.is()) {
         xDocProps->setTitle(m_sName);
@@ -835,7 +783,7 @@ void OHTMLImportExport::WriteBody()
     IncIndent(-1); OUT_LF(); TAG_OFF_LF( OOO_STRING_SVTOOLS_HTML_style );
     OUT_LF();
 
-    // default Textfarbe schwarz
+    // default Textcolour black
     (*m_pStream) << '<' << OOO_STRING_SVTOOLS_HTML_body << ' ' << OOO_STRING_SVTOOLS_HTML_O_text << '=';
     sal_Int32 nColor = 0;
     if(m_xObject.is())
@@ -1057,13 +1005,13 @@ void OHTMLImportExport::WriteCell( sal_Int32 nFormat,sal_Int32 nWidthPixel,sal_I
     aStrTD = aStrTD + "=";
     aStrTD = aStrTD + pChar;
 
-    double fVal = 0.0;
-
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier = m_xFormatter->getNumberFormatsSupplier();
     SvNumberFormatsSupplierObj* pSupplierImpl = SvNumberFormatsSupplierObj::getImplementation( xSupplier );
     SvNumberFormatter* pFormatter = pSupplierImpl ? pSupplierImpl->GetNumberFormatter() : NULL;
     if(pFormatter)
     {
+        double fVal = 0.0;
+
         try
         {
             fVal = m_xFormatter->convertStringToNumber(nFormat,rValue);

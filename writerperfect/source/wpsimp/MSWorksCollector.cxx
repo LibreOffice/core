@@ -30,7 +30,7 @@
 #include "MSWorksCollector.hxx"
 #include <libwps/WPSDocument.h>
 
-MSWorksCollector::MSWorksCollector(WPSInputStream *pInput, DocumentHandler *pHandler) :
+MSWorksCollector::MSWorksCollector(WPXInputStream *pInput, DocumentHandlerInterface *pHandler) :
     DocumentCollector(pInput, pHandler)
 {
 }
@@ -39,9 +39,9 @@ MSWorksCollector::~MSWorksCollector()
 {
 }
 
-bool MSWorksCollector::parseSourceDocument(WPSInputStream &input)
+bool MSWorksCollector::parseSourceDocument(WPXInputStream &input)
 {
-        WPSResult result = WPSDocument::parse(&input, static_cast<WPXHLListenerImpl *>(this));
+        WPSResult result = WPSDocument::parse(&input, static_cast<WPXDocumentInterface *>(this));
         if (result != WPS_OK)
                 return false;
 

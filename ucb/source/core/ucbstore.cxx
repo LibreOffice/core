@@ -244,10 +244,10 @@ XTYPEPROVIDER_IMPL_4( UcbStore,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbStore,
-                     OUString::createFromAscii(
-                         "com.sun.star.comp.ucb.UcbStore" ),
-                     OUString::createFromAscii(
-                         STORE_SERVICE_NAME ) );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbStore" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         STORE_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -383,10 +383,10 @@ XTYPEPROVIDER_IMPL_4( PropertySetRegistry,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PropertySetRegistry,
-                                OUString::createFromAscii(
-                                   "com.sun.star.comp.ucb.PropertySetRegistry" ),
-                                OUString::createFromAscii(
-                                   PROPSET_REG_SERVICE_NAME ) );
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.comp.ucb.PropertySetRegistry" )),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   PROPSET_REG_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -461,7 +461,7 @@ PropertySetRegistry::openPropertySet( const OUString& key, sal_Bool create )
 
 //                              // Set Values
 //                              xNameReplace->replaceByName(
-//                                      OUString::createFromAscii( "Values" ),
+//                                      OUString(RTL_CONSTASCII_USTRINGPARAM("Values")),
 //                                      makeAny( ... ) );
 
                                 // Insert new item.
@@ -845,7 +845,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                 {
                     rtl::OUString aOldValuesKey
                         = makeHierarchalNameSegment( rOldKey );
-                    aOldValuesKey += OUString::createFromAscii( "/Values" );
+                    aOldValuesKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Values"));
 
                     Reference< XNameAccess > xOldNameAccess;
                     xRootHierNameAccess->getByHierarchicalName(
@@ -867,7 +867,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                     {
                         rtl::OUString aNewValuesKey
                             = makeHierarchalNameSegment( rNewKey );
-                        aNewValuesKey += OUString::createFromAscii( "/Values" );
+                        aNewValuesKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Values"));
 
                         Reference< XSingleServiceFactory > xNewFac;
                         xRootHierNameAccess->getByHierarchicalName(
@@ -891,16 +891,12 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                             return;
                         }
 
-                        aOldValuesKey += OUString::createFromAscii( "/" );
+                        aOldValuesKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
-                        OUString aHandleKey
-                            = OUString::createFromAscii( "/Handle" );
-                        OUString aValueKey
-                            = OUString::createFromAscii( "/Value" );
-                        OUString aStateKey
-                            = OUString::createFromAscii( "/State" );
-                        OUString aAttrKey
-                            = OUString::createFromAscii( "/Attributes" );
+                        OUString aHandleKey(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
+                        OUString aValueKey(RTL_CONSTASCII_USTRINGPARAM("/Value"));
+                        OUString aStateKey(RTL_CONSTASCII_USTRINGPARAM("/State"));
+                        OUString aAttrKey(RTL_CONSTASCII_USTRINGPARAM("/Attributes"));
 
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
@@ -931,7 +927,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName(
-                                OUString::createFromAscii( "Handle" ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("Handle")),
                                 aAny );
 
                             // ... value
@@ -941,7 +937,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName(
-                                OUString::createFromAscii( "Value" ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("Value")),
                                 aAny );
 
                             // ... state
@@ -951,7 +947,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName(
-                                OUString::createFromAscii( "State" ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("State")),
                                 aAny );
 
                             // ... attributes
@@ -961,7 +957,7 @@ void PropertySetRegistry::renamePropertySet( const OUString& rOldKey,
                                 xRootHierNameAccess->getByHierarchicalName(
                                     aNewKey1 );
                             xNewPropNameReplace->replaceByName(
-                                OUString::createFromAscii( "Attributes" ),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("Attributes")),
                                 aAny );
 
                             // Insert new item.
@@ -1091,9 +1087,9 @@ Reference< XMultiServiceFactory > PropertySetRegistry::getConfigProvider()
                     m_pImpl->m_xConfigProvider
                         = Reference< XMultiServiceFactory >(
                             m_xSMgr->createInstance(
-                                OUString::createFromAscii(
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.configuration."
-                                    "ConfigurationProvider" ) ),
+                                    "ConfigurationProvider" )) ),
                             UNO_QUERY );
 
                     OSL_ENSURE( m_pImpl->m_xConfigProvider.is(),
@@ -1149,8 +1145,8 @@ Reference< XInterface > PropertySetRegistry::getRootConfigReadAccess()
 
                 m_pImpl->m_xRootReadAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationAccess" ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationAccess" )),
                         aArguments );
 
                 if ( m_pImpl->m_xRootReadAccess.is() )
@@ -1221,8 +1217,8 @@ Reference< XInterface > PropertySetRegistry::getConfigWriteAccess(
 
                 m_pImpl->m_xRootWriteAccess =
                     m_pImpl->m_xConfigProvider->createInstanceWithArguments(
-                        OUString::createFromAscii(
-                            "com.sun.star.configuration.ConfigurationUpdateAccess" ),
+                        OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.configuration.ConfigurationUpdateAccess" )),
                         aArguments );
 
                 OSL_ENSURE( m_pImpl->m_xRootWriteAccess.is(),
@@ -1401,10 +1397,10 @@ XTYPEPROVIDER_IMPL_8( PersistentPropertySet,
 //=========================================================================
 
 XSERVICEINFO_NOFACTORY_IMPL_1( PersistentPropertySet,
-                                OUString::createFromAscii(
-                                   "com.sun.star.comp.ucb.PersistentPropertySet" ),
-                                OUString::createFromAscii(
-                                   PERS_PROPSET_SERVICE_NAME ) );
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.comp.ucb.PersistentPropertySet" )),
+                                OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   PERS_PROPSET_SERVICE_NAME )) );
 
 //=========================================================================
 //
@@ -1507,7 +1503,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( getFullKey() );
-        aFullPropName += OUString::createFromAscii( "/" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName += makeHierarchalNameSegment( aPropertyName );
 
         // Does property exist?
@@ -1526,7 +1522,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                 {
                     // Obtain old value
                     OUString aValueName = aFullPropName;
-                    aValueName += OUString::createFromAscii( "/Value" );
+                    aValueName += OUString(RTL_CONSTASCII_USTRINGPARAM("/Value"));
                     Any aOldValue
                         = xRootHierNameAccess->getByHierarchicalName(
                                                                 aValueName );
@@ -1539,12 +1535,12 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
 
                     // Write value
                     xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Value" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Value")),
                                     aValue );
 
                     // Write state ( Now it is a directly set value )
                     xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "State" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("State")),
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
@@ -1557,7 +1553,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValue(
                     {
                         // Obtain handle
                         aValueName = aFullPropName;
-                        aValueName += OUString::createFromAscii( "/Handle" );
+                        aValueName += OUString(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
                         sal_Int32 nHandle = -1;
                         xRootHierNameAccess->getByHierarchicalName( aValueName )
                             >>= nHandle;
@@ -1613,9 +1609,9 @@ Any SAL_CALL PersistentPropertySet::getPropertyValue(
     if ( xNameAccess.is() )
     {
         OUString aFullPropName( getFullKey() );
-        aFullPropName += OUString::createFromAscii( "/" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName += makeHierarchalNameSegment( PropertyName );
-        aFullPropName += OUString::createFromAscii( "/Value" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/Value"));
         try
         {
             return xNameAccess->getByHierarchicalName( aFullPropName );
@@ -1774,7 +1770,7 @@ void SAL_CALL PersistentPropertySet::addProperty(
     {
         aFullValuesName = getFullKey();
         OUString aFullPropName = aFullValuesName;
-        aFullPropName += OUString::createFromAscii( "/" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName += makeHierarchalNameSegment( Name );
 
         if ( xRootHierNameAccess->hasByHierarchicalName( aFullPropName ) )
@@ -1820,24 +1816,24 @@ void SAL_CALL PersistentPropertySet::addProperty(
 
                 // Set handle
                 xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Handle" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Handle")),
                                     makeAny( sal_Int32( -1 ) ) );
 
                 // Set default value
                 xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Value" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Value")),
                                     DefaultValue );
 
                 // Set state ( always "default" )
                 xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "State" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("State")),
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DEFAULT_VALUE ) ) );
 
                 // Set attributes
                 xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Attributes" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Attributes")),
                                     makeAny( sal_Int32( Attributes ) ) );
 
                 // Insert new item.
@@ -1930,7 +1926,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
     {
         aFullValuesName = getFullKey();
         aFullPropName   = aFullValuesName;
-        aFullPropName   += OUString::createFromAscii( "/" );
+        aFullPropName   += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName   += makeHierarchalNameSegment( Name );
 
         // Property in set?
@@ -1941,7 +1937,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
         try
         {
             OUString aFullAttrName = aFullPropName;
-            aFullAttrName += OUString::createFromAscii( "/Attributes" );
+            aFullAttrName += OUString(RTL_CONSTASCII_USTRINGPARAM("/Attributes"));
 
             sal_Int32 nAttribs = 0;
             if ( xRootHierNameAccess->getByHierarchicalName( aFullAttrName )
@@ -2001,7 +1997,7 @@ void SAL_CALL PersistentPropertySet::removeProperty( const OUString& Name )
                     {
                         OUString aFullHandleName = aFullPropName;
                         aFullHandleName
-                                += OUString::createFromAscii( "/Handle" );
+                                += OUString(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
 
                         if ( ! ( xRootHierNameAccess->getByHierarchicalName(
                                         aFullHandleName ) >>= nHandle ) )
@@ -2135,12 +2131,9 @@ Sequence< PropertyValue > SAL_CALL PersistentPropertySet::getPropertyValues()
                     {
                         Sequence< PropertyValue > aValues( nCount );
 
-                        const OUString aHandleName
-                                    = OUString::createFromAscii( "/Handle" );
-                        const OUString aValueName
-                                    = OUString::createFromAscii( "/Value" );
-                        const OUString aStateName
-                                    = OUString::createFromAscii( "/State" );
+                        const OUString aHandleName(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
+                        const OUString aValueName(RTL_CONSTASCII_USTRINGPARAM("/Value"));
+                        const OUString aStateName(RTL_CONSTASCII_USTRINGPARAM("/State"));
 
                         for ( sal_Int32 n = 0; n < nCount; ++n )
                         {
@@ -2265,7 +2258,7 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
         Events aEvents;
 
         OUString aFullPropNamePrefix( getFullKey() );
-        aFullPropNamePrefix += OUString::createFromAscii( "/" );
+        aFullPropNamePrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 
         // Iterate over given property value sequence.
         for ( sal_Int32 n = 0; n < nCount; ++n )
@@ -2292,23 +2285,23 @@ void SAL_CALL PersistentPropertySet::setPropertyValues(
                     {
                         // Write handle
                         xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Handle" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Handle")),
                                     makeAny( rNewValue.Handle ) );
 
                         // Save old value
                         OUString aValueName = aFullPropName;
-                        aValueName += OUString::createFromAscii( "/Value" );
+                        aValueName += OUString(RTL_CONSTASCII_USTRINGPARAM("/Value"));
                         Any aOldValue
                             = xRootHierNameAccess->getByHierarchicalName(
                                                                 aValueName );
                         // Write value
                         xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "Value" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("Value")),
                                     rNewValue.Value );
 
                         // Write state ( Now it is a directly set value )
                         xNameReplace->replaceByName(
-                                    OUString::createFromAscii( "State" ),
+                                    OUString(RTL_CONSTASCII_USTRINGPARAM("State")),
                                     makeAny(
                                         sal_Int32(
                                             PropertyState_DIRECT_VALUE ) ) );
@@ -2545,12 +2538,9 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
 
                         if ( xHierNameAccess.is() )
                         {
-                            const OUString aHandleName
-                                = OUString::createFromAscii( "/Handle" );
-                            const OUString aValueName
-                                = OUString::createFromAscii( "/Value" );
-                            const OUString aAttrName
-                                = OUString::createFromAscii( "/Attributes" );
+                            const OUString aHandleName(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
+                            const OUString aValueName(RTL_CONSTASCII_USTRINGPARAM("/Value"));
+                            const OUString aAttrName(RTL_CONSTASCII_USTRINGPARAM("/Attributes"));
 
                             Property* pProps = pPropSeq->getArray();
 
@@ -2672,7 +2662,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( m_pOwner->getFullKey() );
-        aFullPropName += OUString::createFromAscii( "/" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName += makeHierarchalNameSegment( aName );
 
         // Does property exist?
@@ -2685,7 +2675,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
 
             // Obtain handle.
             OUString aKey = aFullPropName;
-            aKey += OUString::createFromAscii( "/Handle" );
+            aKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Handle"));
 
             if ( !( xRootHierNameAccess->getByHierarchicalName( aKey )
                     >>= aProp.Handle ) )
@@ -2698,7 +2688,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
 
             // Obtain Value and extract type.
             aKey = aFullPropName;
-            aKey += OUString::createFromAscii( "/Value" );
+            aKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Value"));
 
             Any aValue = xRootHierNameAccess->getByHierarchicalName( aKey );
             if ( !aValue.hasValue() )
@@ -2713,7 +2703,7 @@ Property SAL_CALL PropertySetInfo_Impl::getPropertyByName(
 
             // Obtain Attributes.
             aKey = aFullPropName;
-            aKey += OUString::createFromAscii( "/Attributes" );
+            aKey += OUString(RTL_CONSTASCII_USTRINGPARAM("/Attributes"));
 
             sal_Int32 nAttribs = 0;
             if ( xRootHierNameAccess->getByHierarchicalName( aKey )
@@ -2760,7 +2750,7 @@ sal_Bool SAL_CALL PropertySetInfo_Impl::hasPropertyByName(
     if ( xRootHierNameAccess.is() )
     {
         OUString aFullPropName( m_pOwner->getFullKey() );
-        aFullPropName += OUString::createFromAscii( "/" );
+        aFullPropName += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         aFullPropName += makeHierarchalNameSegment( Name );
 
         return xRootHierNameAccess->hasByHierarchicalName( aFullPropName );

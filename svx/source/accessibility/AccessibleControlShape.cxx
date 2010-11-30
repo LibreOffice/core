@@ -380,10 +380,10 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
             if ( !sDesc.getLength() )
             {   // no -> use the default
                 aDG.Initialize (STR_ObjNameSingulUno);
-                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBackground"),
+                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
                     DescriptionGenerator::COLOR,
                     ::rtl::OUString());
-                aDG.AddProperty (::rtl::OUString::createFromAscii ("ControlBorder"),
+                aDG.AddProperty (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
                     DescriptionGenerator::INTEGER,
                     ::rtl::OUString());
             }
@@ -393,8 +393,8 @@ void SAL_CALL AccessibleControlShape::grabFocus(void)  throw (RuntimeException)
         break;
 
         default:
-            aDG.Initialize (::rtl::OUString::createFromAscii (
-                "Unknown accessible control shape"));
+            aDG.Initialize (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Unknown accessible control shape")) );
             Reference< XShapeDescriptor > xDescriptor (mxShape, UNO_QUERY);
             if (xDescriptor.is())
             {

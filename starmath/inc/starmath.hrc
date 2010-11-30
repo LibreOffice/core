@@ -162,27 +162,16 @@
 #define RID_ERR_OVERFLOW            (RID_APP_START + 937)
 
 // toolbox image lists for 'Selection' window
-//!! RID_ILH_XYZ = RID_IL_XYZ + 1 !!
 #define RID_IL_CATALOG                  (RID_APP_START + 950)
-#define RID_ILH_CATALOG                 (RID_APP_START + 951)
 #define RID_IL_UNBINOPS                 (RID_APP_START + 952)
-#define RID_ILH_UNBINOPS                (RID_APP_START + 953)
 #define RID_IL_RELATIONS                (RID_APP_START + 954)
-#define RID_ILH_RELATIONS               (RID_APP_START + 955)
 #define RID_IL_SETOPERATIONS            (RID_APP_START + 956)
-#define RID_ILH_SETOPERATIONS           (RID_APP_START + 957)
 #define RID_IL_FUNCTIONS                (RID_APP_START + 958)
-#define RID_ILH_FUNCTIONS               (RID_APP_START + 959)
 #define RID_IL_OPERATORS                (RID_APP_START + 960)
-#define RID_ILH_OPERATORS               (RID_APP_START + 961)
 #define RID_IL_ATTRIBUTES               (RID_APP_START + 962)
-#define RID_ILH_ATTRIBUTES              (RID_APP_START + 963)
 #define RID_IL_BRACKETS                 (RID_APP_START + 964)
-#define RID_ILH_BRACKETS                (RID_APP_START + 965)
 #define RID_IL_FORMAT                   (RID_APP_START + 966)
-#define RID_ILH_FORMAT                  (RID_APP_START + 967)
 #define RID_IL_MISC                     (RID_APP_START + 968)
-#define RID_ILH_MISC                    (RID_APP_START + 969)
 
 #define RID_UNBINOPS_CAT                (RID_APP_START + 1101)
 #define RID_RELATIONS_CAT               (RID_APP_START + 1102)

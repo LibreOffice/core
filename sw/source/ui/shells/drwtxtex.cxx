@@ -411,10 +411,6 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
                 aDlgAttr.Put(aEditAttr);
 
-                // Die Werte sind erst einmal uebernommen worden, um den Dialog anzuzeigen.
-                // Muss natuerlich noch geaendert werden
-                // aDlgAttr.Put( SvxParaDlgLimitsItem( 567 * 50, 5670) );
-
                 aDlgAttr.Put( SvxHyphenZoneItem( sal_False, RES_PARATR_HYPHENZONE) );
                 aDlgAttr.Put( SvxFmtBreakItem( SVX_BREAK_NONE, RES_BREAK ) );
                 aDlgAttr.Put( SvxFmtSplitItem( sal_True, RES_PARATR_SPLIT ) );

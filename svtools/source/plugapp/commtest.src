@@ -33,7 +33,6 @@ ToolBox TBMenu {
     Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT( 100, 20 );
     LineCount = 2;
-//  FloatingLines = 2;
     ItemList = {
     ToolBoxItem  {
             Identifier = SERVER_TCP;

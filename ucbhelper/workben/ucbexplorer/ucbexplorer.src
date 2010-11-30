@@ -79,25 +79,6 @@ Menu MENU_POPUP
     };
 };
 
-/*
-Bitmap BMP_FOLDER_CLOSED
-{
-    File = "bmp/fldclose.bmp" ;
-};
-Bitmap BMP_FOLDER_OPENED
-{
-    File = "bmp/fldopen.bmp" ;
-};
-Bitmap BMP_DOCUMENT
-{
-    File = "bmp/document.bmp" ;
-};
-Bitmap BMP_LINK
-{
-    File = "bmp/link.bmp" ;
-};
-*/
-
 ModalDialog DLG_STRINGINPUT
 {
     Border = TRUE ;
@@ -146,4 +127,3 @@ String TEXT_TITLEBAR
 {
     Text [ en-US ] = "UCB Explorer" ;
 };
-

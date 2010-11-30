@@ -90,7 +90,7 @@ namespace calc
         // register our property at the base class
         CellRangeAddress aInitialPropValue;
         registerPropertyNoMember(
-            ::rtl::OUString::createFromAscii( "CellRange" ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CellRange" )),
             PROP_HANDLE_RANGE_ADDRESS,
             PropertyAttribute::BOUND | PropertyAttribute::READONLY,
             ::getCppuType( &aInitialPropValue ),

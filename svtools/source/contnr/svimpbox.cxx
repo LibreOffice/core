@@ -56,8 +56,6 @@
 // #i27063# (pl), #i32300# (pb) never access VCL after DeInitVCL - also no destructors
 Image*  SvImpLBox::s_pDefCollapsed      = NULL;
 Image*  SvImpLBox::s_pDefExpanded       = NULL;
-Image*  SvImpLBox::s_pDefCollapsedHC    = NULL;
-Image*  SvImpLBox::s_pDefExpandedHC     = NULL;
 sal_Int32 SvImpLBox::s_nImageRefCount   = 0;
 
 SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits nWinStyle) :
@@ -140,8 +138,6 @@ SvImpLBox::~SvImpLBox()
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-        DELETEZ(s_pDefCollapsedHC);
-        DELETEZ(s_pDefExpandedHC);
     }
 }
 
@@ -3077,9 +3073,8 @@ void SvImpLBox::PaintDDCursor( SvLBoxEntry* pInsertionPos )
     pView->SetLineColor( aOldLineColor );
     pView->SetRasterOp( eOldOp );
 }
-/* -----------------26.08.2003 12:52-----------------
-    Delete all sub menues of a PopupMenu, recursively
- --------------------------------------------------*/
+
+// Delete all submenus of a PopupMenu, recursively
 void lcl_DeleteSubPopups(PopupMenu* pPopup)
 {
     for(USHORT i = 0; i < pPopup->GetItemCount(); i++)
@@ -3568,24 +3563,22 @@ void SvImpLBox::implInitDefaultNodeImages()
         // assume that all or nothing is initialized
         return;
 
-    s_pDefCollapsed = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
-    s_pDefCollapsedHC = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED_HC ) );
-    s_pDefExpanded = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
-    s_pDefExpandedHC = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED_HC ) );
+    s_pDefCollapsed  = new Image( SvtResId( RID_IMG_TREENODE_COLLAPSED ) );
+    s_pDefExpanded   = new Image( SvtResId( RID_IMG_TREENODE_EXPANDED ) );
 }
 
 // -----------------------------------------------------------------------
-const Image& SvImpLBox::GetDefaultExpandedNodeImage( BmpColorMode _eMode )
+const Image& SvImpLBox::GetDefaultExpandedNodeImage( )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_pDefExpanded : *s_pDefExpandedHC;
+    return *s_pDefExpanded;
 }
 
 // -----------------------------------------------------------------------
-const Image& SvImpLBox::GetDefaultCollapsedNodeImage( BmpColorMode _eMode )
+const Image& SvImpLBox::GetDefaultCollapsedNodeImage( )
 {
     implInitDefaultNodeImages();
-    return ( BMP_COLOR_NORMAL == _eMode ) ? *s_pDefCollapsed : *s_pDefCollapsedHC;
+    return *s_pDefCollapsed;
 }
 
 // -----------------------------------------------------------------------

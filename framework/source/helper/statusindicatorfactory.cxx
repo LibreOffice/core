@@ -74,7 +74,7 @@ namespace framework{
 // definitions
 
 sal_Int32 StatusIndicatorFactory::m_nInReschedule = 0;  /// static counter for rescheduling
-static ::rtl::OUString PROGRESS_RESOURCE = ::rtl::OUString::createFromAscii("private:resource/progressbar/progressbar");
+static ::rtl::OUString PROGRESS_RESOURCE(RTL_CONSTASCII_USTRINGPARAM("private:resource/progressbar/progressbar"));
 
 //-----------------------------------------------
 DEFINE_XINTERFACE_5(StatusIndicatorFactory                              ,
@@ -435,9 +435,9 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
         bool bForceFrontAndFocus(false);
         ::comphelper::ConfigurationHelper::readDirectKey(
             xSMGR,
-            ::rtl::OUString::createFromAscii("org.openoffice.Office.Common/View"),
-            ::rtl::OUString::createFromAscii("NewDocumentHandling"),
-            ::rtl::OUString::createFromAscii("ForceFocusAndToFront"),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/View")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewDocumentHandling")),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ForceFocusAndToFront")),
             ::comphelper::ConfigurationHelper::E_READONLY) >>= bForceFrontAndFocus;
 
         pWindow->Show(sal_True, bForceFrontAndFocus ? SHOW_FOREGROUNDTASK : 0 );

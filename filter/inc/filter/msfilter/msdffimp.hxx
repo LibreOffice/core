@@ -74,7 +74,7 @@ public:
     ULONG   nFilePos;
 public:
     DffRecordHeader() : nRecVer(0), nRecInstance(0), nImpVerInst(0), nRecType(0), nRecLen(0), nFilePos(0) {}
-    FASTBOOL IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
+    bool IsContainer() const { return nRecVer == DFF_PSFLAG_CONTAINER; }
     ULONG    GetRecBegFilePos() const { return nFilePos; }
     ULONG    GetRecEndFilePos() const { return nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen; }
     void SeekToEndOfRecord(SvStream& rIn) const { rIn.Seek(nFilePos + DFF_COMMON_RECORD_HEADER_SIZE + nRecLen ); }
@@ -472,7 +472,7 @@ protected :
     long            nEmuDiv;
     long            nPntMul;
     long            nPntDiv;
-    FASTBOOL        bNeedMap;
+    bool        bNeedMap;
     UINT32          nSvxMSDffSettings;
     UINT32          nSvxMSDffOLEConvFlags;
 
@@ -501,7 +501,7 @@ protected :
                                 ULONG nPosGroup,
                                 const unsigned long nDrawingContainerId );
 
-    FASTBOOL ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
+    bool ReadGraphic( SvStream& rSt, ULONG nIndex, Graphic& rGraphic ) const;
     SdrObject* ImportFontWork( SvStream&, SfxItemSet&, Rectangle& rBoundRect ) const;
     SdrObject* ImportGraphic( SvStream&, SfxItemSet&, const DffObjData& ) const;
     // #i32596# - pass <nCalledByGroup> to method
@@ -531,10 +531,10 @@ protected :
     virtual BOOL ProcessClientData(  SvStream& rStData, ULONG nDatLen, char*& rpBuff, UINT32& rBuffLen ) const;
     virtual SdrObject* ProcessObj( SvStream& rSt, DffObjData& rData, void* pData, Rectangle& rTextRect, SdrObject* pObj = NULL);
     virtual ULONG Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const;
-    virtual FASTBOOL GetColorFromPalette(USHORT nNum, Color& rColor) const;
+    virtual bool GetColorFromPalette(USHORT nNum, Color& rColor) const;
 
-    FASTBOOL ReadDffString(SvStream& rSt, String& rTxt) const;
-    FASTBOOL ReadObjText(SvStream& rSt, SdrObject* pObj) const;
+    bool ReadDffString(SvStream& rSt, String& rTxt) const;
+    bool ReadObjText(SvStream& rSt, SdrObject* pObj) const;
 
     // SJ: New implementation of ReadObjText is used by Fontwork objects, because
     // the old one does not properly import multiple paragraphs
@@ -573,10 +573,10 @@ public:
     Color MSO_TEXT_CLR_ToColor( sal_uInt32 nColorCode ) const;
     Color MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nContextProperty = DFF_Prop_lineColor ) const;
     virtual BOOL SeekToShape( SvStream& rSt, void* pClientData, UINT32 nId ) const;
-    FASTBOOL SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
-    FASTBOOL SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
+    bool SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
+    bool SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd = NULL, ULONG nSkipCount = 0 ) const;
 
-    static void MSDFFReadZString( SvStream& rIn, String& rStr, ULONG nMaxLen, FASTBOOL bUniCode = FALSE );
+    static void MSDFFReadZString( SvStream& rIn, String& rStr, ULONG nMaxLen, bool bUniCode = FALSE );
 
     static BOOL ReadCommonRecordHeader( DffRecordHeader& rRec, SvStream& rIn );
     static BOOL ReadCommonRecordHeader( SvStream& rSt,

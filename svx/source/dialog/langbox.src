@@ -34,14 +34,10 @@ Image RID_SVXIMG_NOTCHECKED
     ImageBitmap = Bitmap { File = "notcheck.bmp" ; } ;
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
+
 Image RID_SVXIMG_CHECKED
 {
     ImageBitmap = Bitmap { File = "lngcheck.bmp" ; } ;
-    MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
-};
-Image RID_SVXIMG_CHECKED_H
-{
-    ImageBitmap = Bitmap { File = "lngcheck_h.bmp" ; } ;
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 

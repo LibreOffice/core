@@ -92,10 +92,10 @@ SwNoTxtNode *SwXMLTextParagraphExport::GetNoTxtNode(
     const Reference < XPropertySet >& rPropSet ) const
 {
     Reference<XUnoTunnel> xCrsrTunnel( rPropSet, UNO_QUERY );
-    ASSERT( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
+    OSL_ENSURE( xCrsrTunnel.is(), "missing XUnoTunnel for embedded" );
     SwXFrame *pFrame = reinterpret_cast< SwXFrame * >(
                 sal::static_int_cast< sal_IntPtr >( xCrsrTunnel->getSomething( SwXFrame::getUnoTunnelId() )));
-    ASSERT( pFrame, "SwXFrame missing" );
+    OSL_ENSURE( pFrame, "SwXFrame missing" );
     SwFrmFmt *pFrmFmt = pFrame->GetFrmFmt();
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
@@ -118,7 +118,7 @@ void SwXMLTextParagraphExport::exportStyleContent(
         const SwDoc *pDoc = pStyle->GetDoc();
         const SwTxtFmtColl *pColl =
             pDoc->FindTxtFmtCollByName( pStyle->GetStyleName() );
-        ASSERT( pColl, "There is the text collection?" );
+        OSL_ENSURE( pColl, "There is the text collection?" );
         if( pColl && RES_CONDTXTFMTCOLL == pColl->Which() )
         {
             const SwFmtCollConditions& rConditions =
@@ -227,7 +227,7 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
     SwGrfNode *pGrfNd = GetNoTxtNode( rPropSet )->GetGrfNode();
     if( !pGrfNd->IsGrfLink() )
     {
-        String aNewURL( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.Package:") );
+        String aNewURL( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.Package:") );
         aNewURL += String(rURL);
         pGrfNd->SetNewStreamName( aNewURL );
 
@@ -236,13 +236,6 @@ void SwXMLTextParagraphExport::setTextEmbeddedGraphicURL(
         pGrfNd->SwapOut();
     }
 }
-/*
-static void lcl_addParam ( SvXMLExport &rExport, const SvCommand &rCommand )
-{
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NAME, rCommand.GetCommand() );
-    rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_VALUE, rCommand.GetArgument() );
-    SvXMLElementExport aElem( rExport, XML_NAMESPACE_DRAW, XML_PARAM, sal_False, sal_True );
-}*/
 
 static void lcl_addURL ( SvXMLExport &rExport, const String &rURL,
                          sal_Bool bToRel = sal_True )
@@ -292,22 +285,18 @@ void lcl_addOutplaceProperties(
         if( aSize.Width() && aSize.Height() )
         {
             Any aAny;
-            //aAny <<= (sal_Int32)rVisArea.Left();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_LEFT ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.Top();
             aAny <<= 0L;
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_TOP ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetWidth();
             aAny <<= (sal_Int32)aSize.Width();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_WIDTH ), aAny );
             pStates++;
 
-            //aAny <<= (sal_Int32)rVisArea.GetHeight();
             aAny <<= (sal_Int32)aSize.Height();
             *pStates = new XMLPropertyState( rMapper->FindEntryIndex( CTF_OLE_VIS_AREA_HEIGHT ), aAny );
             pStates++;
@@ -659,7 +648,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         }
         break;
     default:
-        ASSERT( !this, "unknown object type! Base class should have been called!" );
+        OSL_ENSURE( !this, "unknown object type! Base class should have been called!" );
     }
 
     {
@@ -671,7 +660,7 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             if( (rXMLExport.getExportFlags() & EXPORT_EMBEDDED) != 0 )
             {
                 Reference < XEmbeddedObjectSupplier > xEOS( rPropSet, UNO_QUERY );
-                ASSERT( xEOS.is(), "no embedded object supplier for own object" );
+                OSL_ENSURE( xEOS.is(), "no embedded object supplier for own object" );
                 Reference < XComponent > xComp = xEOS->getEmbeddedObject();
                 rXMLExport.ExportEmbeddedOwnObject( xComp );
             }

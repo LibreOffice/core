@@ -71,22 +71,27 @@ String STR_ADDRESSBOOK_SYSTEM
 {
     Text[ en-US ] = "Windows address book";
 };
+
 String STR_ADDRESSBOOK_OUTLOOK
 {
     Text[ en-US ] = "MS Outlook";
 };
+
 String STR_ADDRESSBOOK_MOZILLA
 {
     Text[ en-US ] = "Mozilla address book";
 };
+
 String STR_ADDRESSBOOK_THUNDERBIRD
 {
     Text[ en-US ] = "Thunderbird address book";
 };
+
 String STR_ADDRESSBOOK_EVOLUTION
 {
     Text[ en-US ] = "Evolution address book";
 };
+
 String STR_ADDRESSBOOK_LDAP
 {
     Text[ en-US ] = "LDAP address book";
@@ -185,4 +190,3 @@ TabPage PAGE_TABLESUBSCRIPTION
         Text [ en-US ] = "Mark the tables that should be visible for the applications.";
     };
 };
-

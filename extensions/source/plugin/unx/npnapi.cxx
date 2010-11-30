@@ -340,27 +340,6 @@ static const char* l_NPN_UserAgent( NPP instance )
     return pAgent;
 }
 
-#if 0
-static void l_NPN_Version( int* major, int* minor, int* net_major, int* net_minor )
-{
-    MediatorMessage* pMes = pConnector->
-        Transact( eNPN_Version,
-                  NULL );
-
-    if( ! pMes )
-        return;
-
-    *major = pMes->GetUINT32();
-    *minor = pMes->GetUINT32();
-    *net_major = pMes->GetUINT32();
-    *net_minor = pMes->GetUINT32();
-
-    medDebug( 1, "pluginapp: NPN_Version: results %d %d, %d %d\n", *major, *minor, *net_major, *net_minor );
-
-    delete pMes;
-}
-#endif
-
 static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffer )
 {
     UINT32 nFileID = pConnector->GetStreamID( stream );

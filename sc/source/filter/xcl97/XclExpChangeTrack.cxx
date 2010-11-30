@@ -741,7 +741,7 @@ void XclExpChTrData::Clear()
 
 void XclExpChTrData::WriteFormula( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
-    DBG_ASSERT( mxTokArr.is() && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
+    DBG_ASSERT( mxTokArr && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
     rStrm << *mxTokArr;
 
     for( XclExpRefLog::const_iterator aIt = maRefLog.begin(), aEnd = maRefLog.end(); aIt != aEnd; ++aIt )
@@ -1000,7 +1000,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
             break;
         case EXC_CHTR_TYPE_STRING:
             pStream->startElement( XML_is, FSEND );
-            if( pData->mpFormattedString.is() )
+            if( pData->mpFormattedString )
                 pData->mpFormattedString->WriteXml( rStrm );
             else
                 pData->pString->WriteXml( rStrm );
@@ -1661,8 +1661,8 @@ void XclExpChangeTrack::Write()
 static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
 {
     sax_fastparser::FSHelperPtr pUserNames = rWorkbookStrm.CreateOutputStream(
-            OUString::createFromAscii( "xl/revisions/userNames.xml" ),
-            OUString::createFromAscii( "revisions/userNames.xml" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/revisions/userNames.xml" )),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "revisions/userNames.xml" )),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/usernames" );
@@ -1685,8 +1685,8 @@ void XclExpChangeTrack::WriteXml( XclExpXmlStream& rWorkbookStrm )
     lcl_WriteUserNamesXml( rWorkbookStrm );
 
     sax_fastparser::FSHelperPtr pRevisionHeaders = rWorkbookStrm.CreateOutputStream(
-            OUString::createFromAscii( "xl/revisions/revisionHeaders.xml" ),
-            OUString::createFromAscii( "revisions/revisionHeaders.xml" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/revisions/revisionHeaders.xml" )),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( "revisions/revisionHeaders.xml" )),
             rWorkbookStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.revisionHeaders+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/revisionHeaders" );

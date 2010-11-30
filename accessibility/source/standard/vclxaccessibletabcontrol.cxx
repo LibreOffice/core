@@ -355,7 +355,7 @@ void VCLXAccessibleTabControl::disposing()
 
 ::rtl::OUString VCLXAccessibleTabControl::getImplementationName() throw (RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii( "com.sun.star.comp.toolkit.AccessibleTabControl" );
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.toolkit.AccessibleTabControl") );
 }
 
 // -----------------------------------------------------------------------------
@@ -363,7 +363,7 @@ void VCLXAccessibleTabControl::disposing()
 Sequence< ::rtl::OUString > VCLXAccessibleTabControl::getSupportedServiceNames() throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aNames(1);
-    aNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.awt.AccessibleTabControl" );
+    aNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.AccessibleTabControl") );
     return aNames;
 }
 

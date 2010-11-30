@@ -99,17 +99,17 @@ TextConversionImpl::getLocaleSpecificTextConversion(const Locale& rLocale) throw
         Reference < XInterface > xI;
 
         xI = xMSF->createInstance(
-            OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language);
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language);
 
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString::createFromAscii("_") + aLocale.Country);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country);
         if ( ! xI.is() )
             xI = xMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.i18n.TextConversion_") + aLocale.Language +
-                OUString::createFromAscii("_") + aLocale.Country +
-                OUString::createFromAscii("_") + aLocale.Variant);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.TextConversion_")) + aLocale.Language +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Country +
+                OUString(RTL_CONSTASCII_USTRINGPARAM("_")) + aLocale.Variant);
 
         if (xI.is())
             xI->queryInterface( getCppuType((const Reference< XTextConversion>*)0) ) >>= xTC;

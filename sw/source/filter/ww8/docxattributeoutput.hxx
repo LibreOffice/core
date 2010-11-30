@@ -64,6 +64,7 @@ enum DocxColBreakStatus
     COLBRK_WRITE
 };
 
+/// The class that has handlers for various resource types when exporting as DOCX.
 class DocxAttributeOutput : public AttributeOutputBase
 {
 public:

@@ -294,7 +294,7 @@ uno::Reference<uno::XComponentContext> getContext(uno::Reference<lang::XMultiSer
     try {
         uno::Reference<beans::XPropertySet> xPropset(xMSF, uno::UNO_QUERY);
         xPropset->getPropertyValue(
-            ::rtl::OUString::createFromAscii("DefaultContext")) >>= xCtx;
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext"))) >>= xCtx;
     }
     catch ( uno::Exception & ) {
     }
@@ -311,7 +311,7 @@ void ScUnoAddInCollection::Initialize()
     {
         uno::Reference<container::XEnumeration> xEnum =
                         xEnAc->createContentEnumeration(
-                            rtl::OUString::createFromAscii(SCADDINSUPPLIER_SERVICE) );
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SCADDINSUPPLIER_SERVICE)) );
         if ( xEnum.is() )
         {
             //  loop through all AddIns
@@ -411,7 +411,7 @@ void ScUnoAddInCollection::ReadConfiguration()
     ScAddInCfg& rAddInConfig = SC_MOD()->GetAddInCfg();
 
     // additional, temporary config item for the compatibility names
-    ScLinkConfigItem aAllLocalesConfig( rtl::OUString::createFromAscii( CFGPATH_ADDINS ), CONFIG_MODE_ALL_LOCALES );
+    ScLinkConfigItem aAllLocalesConfig( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_ADDINS )), CONFIG_MODE_ALL_LOCALES );
     // CommitLink is not used (only reading values)
 
     const rtl::OUString sSlash('/');
@@ -428,7 +428,7 @@ void ScUnoAddInCollection::ReadConfiguration()
 
         rtl::OUString aFunctionsPath = aServiceName;
         aFunctionsPath += sSlash;
-        aFunctionsPath += rtl::OUString::createFromAscii( CFGSTR_ADDINFUNCTIONS );
+        aFunctionsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_ADDINFUNCTIONS) );
 
         uno::Sequence<rtl::OUString> aFunctionNames = rAddInConfig.GetNodeNames( aFunctionsPath );
         sal_Int32 nNewCount = aFunctionNames.getLength();
@@ -486,11 +486,11 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<rtl::OUString> aFuncPropNames(CFG_FUNCPROP_COUNT);
                 rtl::OUString* pNameArray = aFuncPropNames.getArray();
                 pNameArray[CFG_FUNCPROP_DISPLAYNAME] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString::createFromAscii( CFGSTR_DISPLAYNAME );
+                pNameArray[CFG_FUNCPROP_DISPLAYNAME] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME) );
                 pNameArray[CFG_FUNCPROP_DESCRIPTION] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString::createFromAscii( CFGSTR_DESCRIPTION );
+                pNameArray[CFG_FUNCPROP_DESCRIPTION] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
                 pNameArray[CFG_FUNCPROP_CATEGORY] = aFuncPropPath;
-                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString::createFromAscii( CFGSTR_CATEGORY );
+                pNameArray[CFG_FUNCPROP_CATEGORY] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_CATEGORY) );
 
                 uno::Sequence<uno::Any> aFuncProperties = rAddInConfig.GetProperties( aFuncPropNames );
                 if ( aFuncProperties.getLength() == CFG_FUNCPROP_COUNT )
@@ -508,7 +508,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 uno::Sequence<sheet::LocalizedName> aCompNames;
 
                 rtl::OUString aCompPath = aFuncPropPath;
-                aCompPath += rtl::OUString::createFromAscii( CFGSTR_COMPATIBILITYNAME );
+                aCompPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_COMPATIBILITYNAME ));
                 uno::Sequence<rtl::OUString> aCompPropNames( &aCompPath, 1 );
 
                 uno::Sequence<uno::Any> aCompProperties = aAllLocalesConfig.GetProperties( aCompPropNames );
@@ -553,7 +553,7 @@ void ScUnoAddInCollection::ReadConfiguration()
                 long nCallerPos = SC_CALLERPOS_NONE;
 
                 rtl::OUString aArgumentsPath = aFuncPropPath;
-                aArgumentsPath += rtl::OUString::createFromAscii( CFGSTR_PARAMETERS );
+                aArgumentsPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_PARAMETERS) );
 
                 uno::Sequence<rtl::OUString> aArgumentNames = rAddInConfig.GetNodeNames( aArgumentsPath );
                 sal_Int32 nArgumentCount = aArgumentNames.getLength();
@@ -574,9 +574,9 @@ void ScUnoAddInCollection::ReadConfiguration()
                         aOneArgPath += sSlash;
 
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString::createFromAscii( CFGSTR_DISPLAYNAME );
+                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DISPLAYNAME ));
                         pPropNameArray[nIndex] = aOneArgPath;
-                        pPropNameArray[nIndex++] += rtl::OUString::createFromAscii( CFGSTR_DESCRIPTION );
+                        pPropNameArray[nIndex++] += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( CFGSTR_DESCRIPTION ));
                     }
 
                     uno::Sequence<uno::Any> aArgProperties = rAddInConfig.GetProperties( aArgPropNames );
@@ -826,8 +826,8 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
         if ( xManager.is() )
         {
             uno::Reference<beans::XIntrospection> xIntro(
-                                    xManager->createInstance(rtl::OUString::createFromAscii(
-                                        "com.sun.star.beans.Introspection" )),
+                                    xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                        "com.sun.star.beans.Introspection" ))),
                                     uno::UNO_QUERY );
             if ( xIntro.is() )
             {
@@ -946,7 +946,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aLocalU = rtl::OUString::createFromAscii( "###" );
+                                            aLocalU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                         }
                                         String aLocalName = String( aLocalU );
 
@@ -958,7 +958,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                         }
                                         catch(uno::Exception&)
                                         {
-                                            aDescU = rtl::OUString::createFromAscii( "###" );
+                                            aDescU = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                         }
                                         String aDescription = String( aDescU );
 
@@ -983,7 +983,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString::createFromAscii( "###" );
+                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                                     }
                                                     rtl::OUString aArgDesc;
                                                     try
@@ -993,7 +993,7 @@ void ScUnoAddInCollection::ReadFromAddIn( const uno::Reference<uno::XInterface>&
                                                     }
                                                     catch(uno::Exception&)
                                                     {
-                                                        aArgName = rtl::OUString::createFromAscii( "###" );
+                                                        aArgName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "###" ));
                                                     }
 
                                                     BOOL bOptional =
@@ -1097,8 +1097,8 @@ void ScUnoAddInCollection::UpdateFromAddIn( const uno::Reference<uno::XInterface
     if ( xManager.is() )
     {
         uno::Reference<beans::XIntrospection> xIntro(
-                                xManager->createInstance(rtl::OUString::createFromAscii(
-                                    "com.sun.star.beans.Introspection" )),
+                                xManager->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                    "com.sun.star.beans.Introspection" ))),
                                 uno::UNO_QUERY );
         if ( xIntro.is() )
         {
@@ -1784,7 +1784,6 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
 
 
 //------------------------------------------------------------------------
-
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -95,7 +95,6 @@ protected:
     virtual BOOL            Close();
     virtual void            Move();
 
-//    virtual long          PreNotify( NotifyEvent& rNEvt );
 public:
     SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings );
     ~SvxHpLinkDlg ();

@@ -225,7 +225,6 @@ void lcl_SetHeadline( SwDoc* pDoc, SwTxtFmtColl* pColl,
     {
         if( !( nOutLvlBits & ( 1 << nLevel )) )
         {
-            //pColl->SetOutlineLevel( nLevel );          //#outline level zhaojianwei
             pColl->AssignToListLevelOfOutlineStyle(nLevel);//<-end,zhaojianwei
             if( !bHTMLMode )
             {
@@ -320,7 +319,7 @@ SvxFrameDirection GetDefaultFrameDirection(ULONG nLanguage)
 
 SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
 {
-    ASSERT(
+    OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
         (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END) ||
         (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END) ||
@@ -337,8 +336,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
         {
             return pNewColl;
         }
-        //if( pNewColl->GetOutlineLevel() < MAXLEVEL )          //#outline level,zhaojianwei
-        //nOutLvlBits |= ( 1 << pNewColl->GetOutlineLevel() );
+
         if( pNewColl->IsAssignedToListLevelOfOutlineStyle())
             nOutLvlBits |= ( 1 << pNewColl->GetAssignedOutlineStyleLevel() );//<-end,zhaojianwei
     }
@@ -358,7 +356,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     else if (RES_POOLCOLL_HTML_BEGIN <= nId && nId < RES_POOLCOLL_HTML_END)
         nResId = RC_POOLCOLL_HTML_BEGIN - RES_POOLCOLL_HTML_BEGIN;
 
-    ASSERT( nResId, "Ungueltige Pool-ID" );
+    OSL_ENSURE( nResId, "Ungueltige Pool-ID" );
     if( !nResId )
         return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
@@ -970,7 +968,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
             aLR.SetLeft( GetMetricVal( CM_1 ));
             aLR.SetRight( GetMetricVal( CM_1 ));
             aSet.Put( aLR );
-//          aSet.Put( SvxAdjustItem( SVX_ADJUST_BLOCK, RES_PARATR_ADJUST ) );
             SvxULSpaceItem aUL( RES_UL_SPACE );
             aUL = pNewColl->GetULSpace();
             aUL.SetLower( HTML_PARSPACE );
@@ -1049,9 +1046,6 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     {
         {
             pNewColl->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewColl;
@@ -1063,7 +1057,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     // benutzt wird
 bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
 {
-    ASSERT(
+    OSL_ENSURE(
         (RES_POOLCOLL_TEXT_BEGIN <= nId && nId < RES_POOLCOLL_TEXT_END) ||
         (RES_POOLCOLL_LISTS_BEGIN <= nId && nId < RES_POOLCOLL_LISTS_END) ||
         (RES_POOLCOLL_EXTRA_BEGIN <= nId && nId < RES_POOLCOLL_EXTRA_END) ||
@@ -1117,7 +1111,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             //          -> returne das erste
             if( RES_POOLCHR_BEGIN > nId || nId >= RES_POOLCHR_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                OSL_ENSURE( !this, "ungueltige Id" );
                 nId = RES_POOLCHR_BEGIN;
             }
         }
@@ -1135,7 +1129,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             //          -> returne das erste
             if( RES_POOLFRM_BEGIN > nId || nId >= RES_POOLFRM_END )
             {
-                ASSERT( !this, "ungueltige Id" );
+                OSL_ENSURE( !this, "ungueltige Id" );
                 nId = RES_POOLFRM_BEGIN;
             }
         }
@@ -1143,10 +1137,10 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
 
     default:
         // Fehlerfall, unbekanntes Format
-        ASSERT( nId, "ungueltige Id" );
+        OSL_ENSURE( nId, "ungueltige Id" );
         return 0;
     }
-    ASSERT( nRCId, "ungueltige Id" );
+    OSL_ENSURE( nRCId, "ungueltige Id" );
 
     while( nArrCnt-- )
         for( USHORT n = 0; n < (*pArray[nArrCnt]).Count(); ++n )
@@ -1213,10 +1207,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
             SetAllScriptItem( aSet, SvxFontItem( rBulletFont.GetFamily(),
                       rBulletFont.GetName(), rBulletFont.GetStyleName(),
                         rBulletFont.GetPitch(), rBulletFont.GetCharSet(), RES_CHRATR_FONT ));
-            // --> OD 2008-06-02 #i63395#
-            // no font and no font size any more
-//            SetAllScriptItem( aSet, SvxFontHeightItem( PT_9, 100, RES_CHRATR_FONTSIZE ));
-            // <--
         }
         break;
 
@@ -1286,10 +1276,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
    case RES_POOLCHR_VERT_NUM:
             aSet.Put( SvxCharRotateItem( 900, sal_False, RES_CHRATR_ROTATE ) );
     break;
-//nichts besonderes
-//  case RES_POOLCHR_HTML_DEFINSTANCE:
-//          break;
-
 
     case RES_POOLFRM_FRAME:
         {
@@ -1377,9 +1363,6 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
     {
         {
             pNewFmt->SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewFmt;
@@ -1416,7 +1399,7 @@ bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
     }
     else
     {
-        ASSERT( FALSE, "ungueltige Id" );
+        OSL_ENSURE( FALSE, "ungueltige Id" );
         bFnd = FALSE;
     }
 
@@ -1461,7 +1444,7 @@ void lcl_GetStdPgSize( SwDoc* pDoc, SfxItemSet& rSet )
 
 SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 {
-    ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
+    OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
 
     SwPageDesc *pNewPgDsc;
@@ -1476,7 +1459,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
     // Fehlerfall: unbekannte Poolvorlage
     if( RES_POOLPAGE_BEGIN > nId ||  nId >= RES_POOLPAGE_END )
     {
-        ASSERT( !this, "ungueltige Id" );
+        OSL_ENSURE( !this, "ungueltige Id" );
         nId = RES_POOLPAGE_BEGIN;
     }
 
@@ -1626,9 +1609,6 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
             if( bSetLeft )
                 pNewPgDsc->GetLeft().SetFmtAttr( aSet );
             pNewPgDsc->GetMaster().SetFmtAttr( aSet );
-            // JP 31.08.95: erzeugen einer PoolVorlage ist keine Modifikation
-            //              (Bug: 18545)
-            // SetModified();
         }
     }
     return pNewPgDsc;
@@ -1636,7 +1616,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
 
 SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
 {
-    ASSERT( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
+    OSL_ENSURE( RES_POOLNUMRULE_BEGIN <= nId && nId < RES_POOLNUMRULE_END,
             "Falsche AutoFormat-Id" );
 
     SwNumRule* pNewRule;
@@ -1651,7 +1631,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
     // Fehlerfall: unbekannte Poolvorlage
     if( RES_POOLNUMRULE_BEGIN > nId ||  nId >= RES_POOLNUMRULE_END )
     {
-        ASSERT( !this, "ungueltige Id" );
+        OSL_ENSURE( !this, "ungueltige Id" );
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
@@ -2341,7 +2321,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
     // benutzt wird
 bool SwDoc::IsPoolPageDescUsed( USHORT nId ) const
 {
-    ASSERT( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
+    OSL_ENSURE( RES_POOLPAGE_BEGIN <= nId && nId < RES_POOLPAGE_END,
             "Falsche AutoFormat-Id" );
     SwPageDesc *pNewPgDsc = 0;
     BOOL bFnd = FALSE;
@@ -2374,36 +2354,6 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 // erfrage ob die NumRule benutzt wird
 sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
 {
-    // --> OD 2008-03-04 #refactorlists#
-//    // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
-//    // (auch indirekte fuer Format-Ableitung! )
-//    sal_Bool bUsed = FALSE;
-//    SwAutoFmtGetDocNode aGetHt( &aNodes );
-//    SwModify* pMod;
-//    const SfxPoolItem* pItem;
-//    USHORT i, nMaxItems = GetAttrPool().GetItemCount( RES_PARATR_NUMRULE);
-//    for( i = 0; i < nMaxItems; ++i )
-//    {
-//        if( 0 != (pItem = GetAttrPool().GetItem( RES_PARATR_NUMRULE, i ) ) &&
-//            0 != ( pMod = (SwModify*)((SwNumRuleItem*)pItem)->GetDefinedIn()) &&
-//            ((SwNumRuleItem*)pItem)->GetValue().Len() &&
-//            ((SwNumRuleItem*)pItem)->GetValue() == rRule.GetName() )
-//        {
-//            if( pMod->IsA( TYPE( SwFmt )) )
-//            {
-//                bUsed = !pMod->GetInfo( aGetHt );
-//                if( bUsed )
-//                    break;
-//            }
-//            else if( ((SwTxtNode*)pMod)->GetNodes().IsDocNodes() )
-//            {
-//                bUsed = TRUE;
-//                break;
-//            }
-//        }
-//    }
-
-//    return bUsed;
     sal_Bool bUsed = rRule.GetTxtNodeListSize() > 0 ||
                      rRule.GetParagraphStyleListSize() > 0;
 
@@ -2415,7 +2365,7 @@ sal_Bool SwDoc::IsUsed( const SwNumRule& rRule ) const
     // dann fuege neu ein
 USHORT SwDoc::SetDocPattern( const String& rPatternName )
 {
-    ASSERT( rPatternName.Len(), "kein Dokument-Vorlagenname" );
+    OSL_ENSURE( rPatternName.Len(), "kein Dokument-Vorlagenname" );
 
     USHORT nNewPos = aPatternNms.Count();
     for( USHORT n = 0; n < aPatternNms.Count(); ++n )

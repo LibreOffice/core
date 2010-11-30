@@ -125,7 +125,7 @@ sal_uInt32 XMLMetaExportComponent::exportDoc( enum XMLTokenEnum )
                 // get filter component
                 xDocHandler = uno::Reference< xml::sax::XDocumentHandler >(
                     xFactory->createInstanceWithArguments(
-                        ::rtl::OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
                         aArgs),
                     uno::UNO_QUERY_THROW );
 

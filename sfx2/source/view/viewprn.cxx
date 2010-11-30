@@ -750,19 +750,19 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                 for ( sal_Int32 nProp=0; nProp<aProps.getLength(); nProp++ )
                 {
                     if ( aProps[nProp].Name.equalsAscii("Copies") )
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("CopyCount");
+                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CopyCount"));
                     else if ( aProps[nProp].Name.equalsAscii("RangeText") )
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("Pages");
+                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pages"));
                     if ( aProps[nProp].Name.equalsAscii("Asynchron") )
                     {
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("Wait");
+                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                         sal_Bool bAsynchron = sal_False;
                         aProps[nProp].Value >>= bAsynchron;
                         aProps[nProp].Value <<= (sal_Bool) (!bAsynchron);
                     }
                     if ( aProps[nProp].Name.equalsAscii("Silent") )
                     {
-                        aProps[nProp]. Name = rtl::OUString::createFromAscii("MonitorVisible");
+                        aProps[nProp]. Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MonitorVisible"));
                         sal_Bool bPrintSilent = sal_False;
                         aProps[nProp].Value >>= bPrintSilent;
                         aProps[nProp].Value <<= (sal_Bool) (!bPrintSilent);

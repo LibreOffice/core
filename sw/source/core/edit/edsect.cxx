@@ -115,11 +115,11 @@ const SwSection* SwEditShell::GetAnySection( BOOL bOutOfTab, const Point* pPt ) 
     if( pFrm && pFrm->IsInSct() )
     {
         SwSectionFrm* pSect = pFrm->FindSctFrm();
-        ASSERT( pSect, "GetAnySection: Where's my Sect?" );
+        OSL_ENSURE( pSect, "GetAnySection: Where's my Sect?" );
         if( pSect->IsInFtn() && pSect->GetUpper()->IsInSct() )
         {
             pSect = pSect->GetUpper()->FindSctFrm();
-            ASSERT( pSect, "GetAnySection: Where's my SectFrm?" );
+            OSL_ENSURE( pSect, "GetAnySection: Where's my SectFrm?" );
         }
         return pSect->GetSection();
     }
@@ -144,8 +144,8 @@ BOOL SwEditShell::IsAnySectionInDoc( BOOL bChkReadOnly, BOOL bChkHidden, BOOL bC
         const SwSectionFmt* pFmt = rFmts[ n ];
         if( pFmt->IsInNodesArr() &&
             (bChkTOX  ||
-                (eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
-                && TOX_HEADER_SECTION != eTmpType ))
+                ((eTmpType = pFmt->GetSection()->GetType()) != TOX_CONTENT_SECTION
+                && TOX_HEADER_SECTION != eTmpType )))
         {
             const SwSection& rSect = *rFmts[ n ]->GetSection();
             if( (!bChkReadOnly && !bChkHidden ) ||
@@ -401,9 +401,7 @@ const SwNode* lcl_SpecialInsertNode(const SwPosition* pCurrentPos)
             pReturn = pInnermostNode->EndOfSectionNode();
         else if ( bStart )
             pReturn = pInnermostNode;
-        // else pReturn = NULL;
     }
-    // else: pReturn = NULL
 
 
     DBG_ASSERT( ( pReturn == NULL ) || pReturn->IsStartNode() ||

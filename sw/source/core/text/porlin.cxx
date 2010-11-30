@@ -43,7 +43,7 @@
 #include "porglue.hxx"
 #include "inftxt.hxx"
 #include "blink.hxx"
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 sal_Bool ChkChain( SwLinePortion *pStart )
 {
@@ -52,7 +52,7 @@ sal_Bool ChkChain( SwLinePortion *pStart )
     while( pPor )
     {
         ++nCount;
-        ASSERT( nCount < 200 && pPor != pStart,
+        OSL_ENSURE( nCount < 200 && pPor != pStart,
                 "ChkChain(): lost in chains" );
         if( nCount >= 200 || pPor == pStart )
         {
@@ -107,8 +107,8 @@ SwLinePortion::SwLinePortion( ) :
 void SwLinePortion::PrePaint( const SwTxtPaintInfo& rInf,
                               const SwLinePortion* pLast ) const
 {
-    ASSERT( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
-    ASSERT( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
+    OSL_ENSURE( rInf.OnWin(), "SwLinePortion::PrePaint: don't prepaint on a printer");
+    OSL_ENSURE( !Width(), "SwLinePortion::PrePaint: For Width()==0 only!");
 
     const KSHORT nViewWidth = GetViewWidth( rInf );
 
@@ -191,7 +191,7 @@ void SwLinePortion::_Truncate()
 {
     SwLinePortion *pPos = pPortion;
     do
-    {   ASSERT( pPos != this, "SwLinePortion::Truncate: loop" );
+    { OSL_ENSURE( pPos != this, "SwLinePortion::Truncate: loop" );
         SwLinePortion *pLast = pPos;
         pPos = pPos->GetPortion();
         pLast->SetPortion( 0 );
@@ -212,7 +212,7 @@ SwLinePortion *SwLinePortion::Insert( SwLinePortion *pIns )
 {
     pIns->FindLastPortion()->SetPortion( pPortion );
     SetPortion( pIns );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkChain( this );
 #endif
     return pIns;
@@ -243,7 +243,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
     SwLinePortion *pPos = FindLastPortion();
     pPos->SetPortion( pIns );
     pIns->SetPortion( 0 );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     ChkChain( this );
 #endif
     return pIns;
@@ -256,7 +256,7 @@ SwLinePortion *SwLinePortion::Append( SwLinePortion *pIns )
 SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
 {
     SwLinePortion *pPrev = pVictim->FindPrevPortion( this );
-    ASSERT( pPrev, "SwLinePortion::Cut(): can't cut" );
+    OSL_ENSURE( pPrev, "SwLinePortion::Cut(): can't cut" );
     pPrev->SetPortion( pVictim->GetPortion() );
     pVictim->SetPortion(0);
     return pVictim;
@@ -268,14 +268,14 @@ SwLinePortion *SwLinePortion::Cut( SwLinePortion *pVictim )
 
 SwLinePortion *SwLinePortion::FindPrevPortion( const SwLinePortion *pRoot )
 {
-    ASSERT( pRoot != this, "SwLinePortion::FindPrevPortion(): invalid root" );
+    OSL_ENSURE( pRoot != this, "SwLinePortion::FindPrevPortion(): invalid root" );
     SwLinePortion *pPos = (SwLinePortion*)pRoot;
     while( pPos->GetPortion() && pPos->GetPortion() != this )
     {
         DBG_LOOP;
         pPos = pPos->GetPortion();
     }
-    ASSERT( pPos->GetPortion(),
+    OSL_ENSURE( pPos->GetPortion(),
             "SwLinePortion::FindPrevPortion: blowing in the wind");
     return pPos;
 }
@@ -298,12 +298,12 @@ xub_StrLen SwLinePortion::GetCrsrOfst( const KSHORT nOfst ) const
 
 SwPosSize SwLinePortion::GetTxtSize( const SwTxtSizeInfo & ) const
 {
-    ASSERT( !this, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
+    OSL_ENSURE( !this, "SwLinePortion::GetTxtSize: don't ask me about sizes, "
                    "I'm only a stupid SwLinePortion" );
     return SwPosSize();
 }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
  *                virtual SwLinePortion::Check()

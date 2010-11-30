@@ -76,7 +76,7 @@ void ScModule::SetAutoSpellProperty( BOOL bSet )
 
     uno::Any aAny;
     aAny <<= bSet;
-    aConfig.SetProperty( rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ), aAny );
+    aConfig.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( LINGUPROP_AUTOSPELL )), aAny );
 }
 
 

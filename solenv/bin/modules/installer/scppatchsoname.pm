@@ -175,9 +175,6 @@ sub resolving_patchsoname_flag
             my $destinationpath = $replacedir . $onefilename;
             my $movepath = $destinationpath . ".orig";
 
-            # if (!(-f $destinationpath))   # do nothing if the file already exists
-            # {
-
             my $copysuccess = installer::systemactions::copy_one_file($sourcepath, $movepath);
 
             if ( $copysuccess )
@@ -196,8 +193,6 @@ sub resolving_patchsoname_flag
                     push( @installer::globals::logfileinfo, $infoline);
                 }
             }
-
-            # }
 
             # Saving the original source, where the file was found
             $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};

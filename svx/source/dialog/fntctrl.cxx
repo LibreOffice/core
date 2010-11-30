@@ -147,7 +147,7 @@ class FontPrevWin_Impl
 public:
     inline FontPrevWin_Impl() :
         pPrinter( NULL ), bDelPrinter( FALSE ),
-        pColor( NULL ), pBackColor( 0 ),
+        pColor( NULL ), pBackColor( 0 ), nAscent( 0 ),
         cStartBracket( 0 ), cEndBracket( 0 ), nFontWidthScale( 100 ),
         bSelection( FALSE ), bGetSelection( FALSE ), bUseResText( FALSE ),
         bTwoLines( FALSE ),
@@ -223,7 +223,7 @@ void FontPrevWin_Impl::_CheckScript()
     {
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xBreak = Reference< XBreakIterator >(xMSF->createInstance(
-                ::rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) ),UNO_QUERY);
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")) ),UNO_QUERY);
     }
     if( xBreak.is() )
     {
@@ -802,23 +802,17 @@ void SvxFontPrevWindow::Paint( const Rectangle& )
         pImpl->DrawPrev( this, pPrinter, aTmpPoint, rFont );
     }
 }
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 BOOL SvxFontPrevWindow::IsTwoLines() const
 {
     return pImpl->bTwoLines;
 }
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxFontPrevWindow::SetTwoLines(BOOL bSet)
 {
     pImpl->bTwoLines = bSet;}
 
-/* -----------------------------04.12.00 16:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 void SvxFontPrevWindow::SetBrackets(sal_Unicode cStart, sal_Unicode cEnd)
 {
     pImpl->cStartBracket = cStart;

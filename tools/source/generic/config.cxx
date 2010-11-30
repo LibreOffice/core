@@ -217,20 +217,20 @@ static String ImplMakeConfigName( const XubString* pFileName,
     if ( pFileName )
     {
 #ifdef UNX
-        aFileName = ::rtl::OUString::createFromAscii( "." );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
         aFileName += *pFileName;
-        aFileName += ::rtl::OUString::createFromAscii( "rc" );
+        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "rc" ));
 #else
         aFileName = *pFileName;
-        aFileName += ::rtl::OUString::createFromAscii( ".ini" );
+        aFileName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".ini" ));
 #endif
     }
     else
     {
 #ifdef UNX
-        aFileName = ::rtl::OUString::createFromAscii( ".sversionrc" );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".sversionrc" ));
 #else
-        aFileName = ::rtl::OUString::createFromAscii( "sversion.ini" );
+        aFileName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sversion.ini" ));
 #endif
     }
 
@@ -249,7 +249,7 @@ static String ImplMakeConfigName( const XubString* pFileName,
     }
 
     ::rtl::OUString aName( aPathName );
-    aName += ::rtl::OUString::createFromAscii( "/" );
+    aName += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ));
     aName += aFileName;
 
     return aName;

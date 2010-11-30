@@ -402,7 +402,7 @@ namespace x11 {
         void sendDropPosition( bool bForce, XLIB_Time eventXLIB_Time );
         bool updateDragAction( int modifierState );
         int getXdndVersion( XLIB_Window aXLIB_Window, XLIB_Window& rProxy );
-        XLIB_Cursor createCursor( const char* pPointerData, const char* pMaskData, int width, int height, int hotX, int hotY );
+        XLIB_Cursor createCursor( const unsigned char* pPointerData, const unsigned char* pMaskData, int width, int height, int hotX, int hotY );
         // coordinates on root XLIB_Window
         void updateDragWindow( int nX, int nY, XLIB_Window aRoot );
 

@@ -580,7 +580,7 @@ sal_Bool SdrEscherImport::ReadString( String& rStr ) const
     return bRet;
 }
 
-FASTBOOL SdrEscherImport::GetColorFromPalette(USHORT /*nNum*/, Color& /*rColor*/) const
+bool SdrEscherImport::GetColorFromPalette(USHORT /*nNum*/, Color& /*rColor*/) const
 {
     return FALSE;
 }
@@ -1398,12 +1398,16 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
 
     if ( bOk )
     {
-        // PersistPtrs lesen (alle)
-        nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;  // 1 mehr, damit ich immer direkt indizieren kann
-        pPersistPtr = new UINT32[ nPersistPtrAnz ];             // (die fangen naemlich eigentlich bei 1 an)
+        nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;
+        if ( ( nPersistPtrAnz >> 2 ) > nStreamLen )     // sj: at least nPersistPtrAnz is not allowed to be greater than filesize
+            bOk = FALSE;                                // (it should not be greater than the PPT_PST_PersistPtrIncrementalBlock, but
+                                                        // we are reading this block later, so we do not have access yet)
+
+        if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( UINT32 ) ) ) )
+            pPersistPtr = new (std::nothrow) UINT32[ nPersistPtrAnz ];
         if ( !pPersistPtr )
             bOk = FALSE;
-        else
+        if ( bOk )
         {
             memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
 
@@ -1730,7 +1734,7 @@ sal_Bool PPTConvertOCXControls::InsertControl(
         if( rServiceFactory.is() )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xCreate = rServiceFactory
-                ->createInstance(String( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.drawing.ControlShape" ) ) );
+                ->createInstance(String( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.ControlShape" ) ) );
             if( xCreate.is() )
             {
                 xShape = ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >(xCreate, ::com::sun::star::uno::UNO_QUERY);
@@ -2203,7 +2207,7 @@ sal_Bool SdrPowerPointImport::ReadFontCollection()
                 aFont.SetHeight( 100 );
 
                 if ( mbTracing && !pFont->bAvailable )
-                    mpTracer->Trace( rtl::OUString::createFromAscii( "sd1000" ), pFont->aName );
+                    mpTracer->Trace( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sd1000" )), pFont->aName );
 
 #ifdef DBG_EXTRACTFONTMETRICS
 
@@ -2644,7 +2648,7 @@ Size SdrPowerPointImport::GetPageSize() const
     return aRet;
 }
 
-FASTBOOL SdrPowerPointImport::GetColorFromPalette( USHORT nNum, Color& rColor ) const
+bool SdrPowerPointImport::GetColorFromPalette( USHORT nNum, Color& rColor ) const
 {
     if ( nPageColorsNum != nAktPageNum || ePageColorsKind != eAktPageKind )
     {
@@ -2879,8 +2883,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
     {
         if ( mbTracing )
             mpTracer->AddAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                    ? rtl::OUString::createFromAscii( "Page" )
-                                    : rtl::OUString::createFromAscii( "NotesPage" ),
+                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
+                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )),
                                     rtl::OUString::valueOf( (sal_Int32)nAktPageNum + 1 ) );
 
         rSlidePersist.pHeaderFooterEntry = new HeaderFooterEntry( pMasterPersist );
@@ -3073,8 +3077,8 @@ void SdrPowerPointImport::ImportPage( SdrPage* pRet, const PptSlidePersistEntry*
             SolveSolver( *rSlidePersist.pSolverContainer );
         if ( mbTracing )
             mpTracer->RemoveAttribute( eAktPageKind == PPT_SLIDEPAGE
-                                        ? rtl::OUString::createFromAscii( "Page" )
-                                        : rtl::OUString::createFromAscii( "NotesPage" ) );
+                                        ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Page" ))
+                                        : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NotesPage" )) );
     }
     rStCtrl.Seek( nMerk );
 }
@@ -5016,8 +5020,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             rIn >> nCharCount
                 >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
-            aParaPropSet.pParaSet->mnDepth =
-                std::min(sal_uInt16(9),
+            aParaPropSet.pParaSet->mnDepth =        // taking care of about using not more than 9 outliner levels
+                std::min(sal_uInt16(8),
                     aParaPropSet.pParaSet->mnDepth);
 
             nCharCount--;

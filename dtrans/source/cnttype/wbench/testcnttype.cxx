@@ -97,7 +97,7 @@ void CheckMimeContentType( const OUString& aCntType, const OUString& aType, cons
             pvalue = xMimeCntType->getParameterValue( param );
         }
 
-        pvalue = xMimeCntType->getParameterValue( OUString::createFromAscii( "aparam" ) );
+        pvalue = xMimeCntType->getParameterValue( OUString(RTL_CONSTASCII_USTRINGPARAM("aparam")) );
     }
     catch( IllegalArgumentException& )
     {
@@ -181,32 +181,32 @@ sal_Bool processCntTypesAndWriteResultIntoFile( char* fname, vector< string >& v
 
             Reference< XMimeContentType > xMCntTyp = cnttypeFactory->createMimeContentType( OUString::createFromAscii( iter->c_str( ) ) );
 
-            fwprintf( fstream, OUString::createFromAscii( "Type: %s\n" ),  xMCntTyp->getMediaType( ).getStr( ) );
-            fwprintf( fstream, OUString::createFromAscii( "Subtype: %s\n" ), xMCntTyp->getMediaSubtype( ).getStr( ) );
+            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Type: %s\n")),  xMCntTyp->getMediaType( ).getStr( ) );
+            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Subtype: %s\n")), xMCntTyp->getMediaSubtype( ).getStr( ) );
 
             Sequence< OUString > seqParam = xMCntTyp->getParameters( );
             sal_Int32 nParams = seqParam.getLength( );
 
             for ( sal_Int32 i = 0; i < nParams; i++ )
             {
-                fwprintf( fstream, OUString::createFromAscii("PName: %s\n" ), seqParam[i].getStr( ) );
-                fwprintf( fstream, OUString::createFromAscii("PValue: %s\n" ), xMCntTyp->getParameterValue( seqParam[i] ).getStr( ) );
+                fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("PName: %s\n")), seqParam[i].getStr( ) );
+                fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("PValue: %s\n")), xMCntTyp->getParameterValue( seqParam[i] ).getStr( ) );
             }
         }
         catch( IllegalArgumentException& ex )
         {
-            fwprintf( fstream, OUString::createFromAscii( "Fehlerhafter Content-Type gelesen!!!\n\n" ) );
+            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Fehlerhafter Content-Type gelesen!!!\n\n")) );
         }
         catch( NoSuchElementException& )
         {
-            fwprintf( fstream, OUString::createFromAscii( "Parameterwert nicht vorhanden\n" ) );
+            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Parameterwert nicht vorhanden\n")) );
         }
         catch( ... )
         {
-            fwprintf( fstream, OUString::createFromAscii( "Unbekannter Fehler!!!\n\n" ) );
+            fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("Unbekannter Fehler!!!\n\n")) );
         }
 
-        fwprintf( fstream, OUString::createFromAscii( "\n#############################################\n\n" ) );
+        fwprintf( fstream, OUString(RTL_CONSTASCII_USTRINGPARAM("\n#############################################\n\n")) );
     }
 
     fclose( fstream );
@@ -246,7 +246,7 @@ int SAL_CALL main( int nArgc, char* argv[] )
     }
 
     Reference< XMimeContentTypeFactory >
-        xMCntTypeFactory( g_xFactory->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.MimeContentTypeFactory" ) ), UNO_QUERY );
+        xMCntTypeFactory( g_xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.MimeContentTypeFactory")) ), UNO_QUERY );
 
     if ( !xMCntTypeFactory.is( ) )
     {

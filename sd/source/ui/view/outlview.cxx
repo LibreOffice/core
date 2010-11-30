@@ -120,7 +120,6 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
 , mnPagesProcessed(0)
 , mbFirstPaint(TRUE)
 , mpProgress(NULL)
-, mbHighContrastMode( false )
 , maDocColor( COL_WHITE )
 , mnPageNumberWidthPixel( 0 )
 , maLRSpaceItem( 0, 0, 2000, 0, EE_PARA_OUTLLRSPACE )
@@ -132,37 +131,6 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
         // Outliner initialisieren: Referenz-Device setzen
         bInitOutliner = TRUE;
         mpOutliner->Init( OUTLINERMODE_OUTLINEVIEW );
-/*
-        SfxStyleSheet* pTitleSheet = mpDoc->GetSdPage( 0, PK_STANDARD )->GetStyleSheetForPresObj( PRESOBJ_TITLE );
-
-        if ( pTitleSheet )
-        {
-            // set title symbol (level 0)
-            SvxNumBulletItem aNumBulletItem( (const SvxNumBulletItem&) pTitleSheet->GetItemSet().Get(EE_PARA_NUMBULLET) );
-            SvxNumRule aNumRule(* aNumBulletItem.GetNumRule());
-            SvxNumberFormat aFormat( aNumRule.GetLevel(0));
-            Font    aBulletFont;
-            const Font* pFont = aFormat.GetBulletFont();
-            if ( pFont )                                        // if available take font size and color from style
-                aBulletFont = *pFont;
-            else
-            {
-                aBulletFont.SetColor( COL_AUTO );
-                aBulletFont.SetHeight( 1552 );
-            }
-            aBulletFont.SetCharSet(RTL_TEXTENCODING_MS_1252);   // and replacing other values by standard
-            aBulletFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "StarSymbol" )) );
-            aBulletFont.SetWeight(WEIGHT_NORMAL);
-            aBulletFont.SetUnderline(UNDERLINE_NONE);
-            aBulletFont.SetStrikeout(STRIKEOUT_NONE);
-            aBulletFont.SetItalic(ITALIC_NONE);
-            aBulletFont.SetOutline(FALSE);
-            aBulletFont.SetShadow(FALSE);
-            aFormat.SetBulletFont( &aBulletFont );
-            aFormat.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
-            mpOutliner->OverwriteLevel0Bullet( aFormat );
-        }
-*/
         mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *pDocSh ) );
         ULONG nWidth = OUTLINE_PAPERWIDTH;
         mpOutliner->SetPaperSize(Size(nWidth, 400000000));
@@ -213,7 +181,7 @@ OutlineView::OutlineView( DrawDocShell* pDocSh, ::Window* pWindow, OutlineViewSh
     Reference<XFrame> xFrame (mpOutlineViewShell->GetViewShellBase().GetFrame()->GetTopFrame().GetFrameInterface(), UNO_QUERY);
 
     const OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( ".uno:ShowSlide" ));
-    maSlideImage = GetImage( xFrame, aSlotURL, true, false /* todo, hc mode */ );
+    maSlideImage = GetImage( xFrame, aSlotURL, true );
 
     // Tell undo manager of the document about the undo manager of the
     // outliner, so that the former can synchronize with the later.
@@ -303,46 +271,6 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 
         pOlView->ShowCursor(mbFirstPaint);
 
-/*
-        if( mnPageNumberWidthPixel == 0 )
-            GetPageNumberWidthPixel();
-
-        const ULONG nParaCount = pOlView->GetOutliner()->GetParagraphCount();
-        EditView& rEditView = pOlView->GetEditView();
-
-        Font aOldFont( pWin->GetFont() );
-
-        const String aBulletStr( sal_Unicode( 0xE011 ) );
-        pWin->SetFont( maBulletFont);
-        sal_Int32 nBulletWidth = pWin->GetTextWidth(aBulletStr);
-
-        sal_Int32 nPage = 1;
-        for( ULONG nPara = 0; nPara < nParaCount; nPara++ )
-        {
-            Paragraph* pPara = pOlView->GetOutliner()->GetParagraph( nPara );
-            if( pPara->HasFlag( PARAFLAG_ISPAGE ) )
-            {
-                pWin->SetFont( maPageNumberFont );
-                const String aStr( String::CreateFromInt32( nPage++ ) );
-                Point aPos( rEditView.GetWindowPosTopLeft( (USHORT)nPara ) );
-
-                sal_Int32 nNumberOffset = pWin->PixelToLogic( Point(mnPageNumberWidthPixel, 0) ).X() - nBulletWidth;
-                sal_Int32 nLineHeight = pOlView->GetOutliner()->GetLineHeight( nPara, 0 );
-
-                aPos.X() = nNumberOffset;
-
-                Point aPoint( aPos.X() - pWin->GetTextWidth( aStr ), aPos.Y() + ( nLineHeight - maPageNumberFont.GetHeight()) / 2 );
-                pWin->DrawText( aPoint, aStr );
-
-                aPoint.X() = aPos.X();
-                aPoint.Y() = aPos.Y() +( nLineHeight - maBulletFont.GetHeight()) / 2;
-                pWin->SetFont( maBulletFont );
-                pWin->DrawText( aPoint, aBulletStr );
-            }
-        }
-
-        pWin->SetFont( aOldFont );
-*/
         mbFirstPaint = FALSE;
     }
 }
@@ -970,8 +898,6 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
     ::sd::Window*   pWin = mpOutlineViewShell->GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
     Rectangle     aVis          = pOutlinerView->GetVisArea();
-
-//    ULONG nWidth = ((SdPage*)mpDoc->GetSdPage(0, PK_STANDARD))->GetSize().Width();
     ULONG nWidth = OUTLINE_PAPERWIDTH;
     Rectangle aText = Rectangle(Point(0,0),
                                    Size(nWidth,
@@ -1682,17 +1608,6 @@ sal_uInt16 OutlineView::GetScriptType() const
 
 void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
 {
-    const bool bHighContrastMode = Application::GetSettings().GetStyleSettings().GetHighContrastMode() != 0;
-    if( bForceUpdate || (mbHighContrastMode != bHighContrastMode) )
-    {
-        if( mpOutliner )
-        {
-            mpOutliner->ForceAutoColor( bHighContrastMode );
-        }
-        mbHighContrastMode = bHighContrastMode;
-
-    }
-
     svtools::ColorConfig aColorConfig;
     const Color aDocColor( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     if( bForceUpdate || (maDocColor != aDocColor) )
@@ -1973,14 +1888,10 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             long nFontHeight = 0;
             if ( !rEditEngine.IsFlatMode() )
             {
-//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetParaAttrib( pInfo->mnPara, EE_CHAR_FONTHEIGHT );
-//              nBulletHeight = rFH.GetHeight();
                 nFontHeight = nBulletHeight / 5;
             }
             else
             {
-//              const SvxFontHeightItem& rFH = (const SvxFontHeightItem&)rEditEngine.GetEmptyItemSet().Get( EE_CHAR_FONTHEIGHT );
- //               nBulletHeight = rFH.GetHeight();
                 nFontHeight = (nBulletHeight * 10) / 25;
             }
 
@@ -2007,7 +1918,6 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             Point aTextPos( aImagePos.X() - aOffset.Width(), pInfo->mrStartPos.Y() );
             Font aNewFont( OutputDevice::GetDefaultFont( DEFAULTFONT_SANS_UNICODE, eLang, 0 ) );
             aNewFont.SetSize( aFontSz );
-//          aNewFont.SetAlign( aBulletFont.GetAlign() );
             aNewFont.SetVertical( bVertical );
             aNewFont.SetOrientation( bVertical ? 2700 : 0 );
             aNewFont.SetColor( COL_AUTO );
@@ -2016,7 +1926,6 @@ IMPL_LINK(OutlineView, PaintingFirstLineHdl, PaintFirstLineInfo*, pInfo)
             Size aTextSz;
             aTextSz.Width() = pInfo->mpOutDev->GetTextWidth( aPageText );
             aTextSz.Height() = pInfo->mpOutDev->GetTextHeight();
-//            long nBulletHeight = !bVertical ? aBulletArea.GetHeight() : aBulletArea.GetWidth();
             if ( !bVertical )
             {
                 aTextPos.Y() += (aOutSize.Height() - aTextSz.Height()) / 2;

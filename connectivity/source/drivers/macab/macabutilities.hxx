@@ -111,7 +111,7 @@ namespace connectivity
             /* Get the length, and make sure that there is actually a string
              * here.
              */
-            if(_originalLabel.indexOf(::rtl::OUString::createFromAscii("_$!<")) == 0)
+            if(_originalLabel.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_$!<"))) == 0)
             {
                 return _originalLabel.copy(4,_originalLabel.getLength()-8);
             }

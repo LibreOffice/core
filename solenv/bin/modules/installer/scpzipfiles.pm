@@ -69,8 +69,6 @@ sub replace_all_ziplistvariables_in_rtffile
 {
     my ( $fileref, $variablesref, $onelanguage, $loggingdir ) = @_;
 
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_before.rtf", $fileref);
-
     for ( my $i = 0; $i <= $#{$fileref}; $i++ )
     {
         my $line = ${$fileref}[$i];
@@ -96,8 +94,6 @@ sub replace_all_ziplistvariables_in_rtffile
             }
         }
     }
-
-    # installer::files::save_file($loggingdir . "license_" . $onelanguage . "_after.rtf", $fileref);
 }
 
 #########################################################

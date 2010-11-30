@@ -182,11 +182,6 @@ AnimationWindow::AnimationWindow( SfxBindings* pInBindings,
 {
     FreeResource();
 
-    aBtnGetOneObject.SetModeImage( Image( SdResId( IMG_GET1OBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnGetAllObjects.SetModeImage( Image( SdResId( IMG_GETALLOBJECT_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnRemoveBitmap.SetModeImage( Image( SdResId( IMG_REMOVEBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnRemoveAll.SetModeImage( Image( SdResId( IMG_REMOVEALLBMP_H ) ), BMP_COLOR_HIGHCONTRAST );
-
     // neues Dokument mit Seite erzeugen
     pMyDoc = new SdDrawDocument(DOCUMENT_TYPE_IMPRESS, NULL);
     SdPage* pPage = (SdPage*) pMyDoc->AllocPage(FALSE);

@@ -44,8 +44,4 @@
 #define NF_LONGER           21
 #define FL_SIMILARITY       22
 
-
-
-
 #endif
-

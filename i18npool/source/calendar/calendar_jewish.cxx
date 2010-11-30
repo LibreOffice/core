@@ -192,9 +192,9 @@ public:
          + HebrewEpoch));         // Days elapsed before absolute date 1.
     }
 
-    sal_Int32 GetMonth() { return month; }
-    sal_Int32 GetDay() { return day; }
-    sal_Int32 GetYear() { return year; }
+    sal_Int32 GetMonth() const { return month; }
+    sal_Int32 GetDay() const { return day; }
+    sal_Int32 GetYear() const { return year; }
 
 };
 
@@ -251,9 +251,9 @@ public:
            + (year - 1)/400);   // ...plus prior years divisible by 400
     }
 
-    int GetMonth() { return month; }
-    int GetDay() { return day; }
-    int GetYear() { return year; }
+    int GetMonth() const { return month; }
+    int GetDay() const { return day; }
+    int GetYear() const { return year; }
 
 };
 

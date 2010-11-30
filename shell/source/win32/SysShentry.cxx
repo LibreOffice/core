@@ -100,7 +100,7 @@ sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistr
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
             pXNewKey->createKey(
-                OUString::createFromAscii( SYSSHEXEC_REGKEY_NAME ) );
+                OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_REGKEY_NAME )) );
         }
         catch( InvalidRegistryException& )
         {
@@ -124,7 +124,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString::createFromAscii( SYSSHEXEC_SERVICE_NAME );
+        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_SERVICE_NAME ));
 
         Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

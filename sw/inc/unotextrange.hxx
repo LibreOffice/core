@@ -52,9 +52,6 @@ class SwPaM;
 class SwUnoCrsr;
 class SwFrmFmt;
 
-/* -----------------29.04.98 07:35-------------------
- *
- * --------------------------------------------------*/
 class SwUnoInternalPaM
     : public SwPaM
 {
@@ -274,10 +271,6 @@ public:
                 ::com::sun::star::uno::RuntimeException);
 
 };
-
-/* -----------------15.05.98 08:29-------------------
- *
- * --------------------------------------------------*/
 
 typedef ::cppu::WeakImplHelper3
 <   ::com::sun::star::lang::XUnoTunnel

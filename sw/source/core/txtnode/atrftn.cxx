@@ -35,7 +35,7 @@
 #define _SVSTDARR_USHORTSSORT
 #include <svl/svstdarr.hxx>
 #include <doc.hxx>
-#include <cntfrm.hxx>       // ASSERT in ~SwTxtFtn()
+#include <cntfrm.hxx>       // OSL_ENSURE(in ~SwTxtFtn()
 #include <pagefrm.hxx>      // RemoveFtn()
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
@@ -71,7 +71,7 @@ SwFmtFtn::SwFmtFtn( bool bEndNote )
 
 int SwFmtFtn::operator==( const SfxPoolItem& rAttr ) const
 {
-    ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
+    OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return nNumber  == ((SwFmtFtn&)rAttr).nNumber &&
            aNumber  == ((SwFmtFtn&)rAttr).aNumber &&
            m_bEndNote == ((SwFmtFtn&)rAttr).m_bEndNote;
@@ -271,7 +271,7 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
         rFtn.aNumber = aEmptyStr;
     }
 
-    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
     m_pTxtNode->Modify( 0, &rFtn );
     if ( m_pStartNode )
@@ -366,7 +366,7 @@ void SwTxtFtn::MakeNewTextSection( SwNodes& rNodes )
 void SwTxtFtn::DelFrms()
 {
     // delete the FtnFrames from the pages
-    ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
+    OSL_ENSURE( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     if ( !m_pTxtNode )
         return;
 
@@ -405,7 +405,7 @@ void SwTxtFtn::DelFrms()
                 SwFtnFrm *pFtn = (SwFtnFrm*)pFrm;
                 while ( pFtn && pFtn->GetMaster() )
                     pFtn = pFtn->GetMaster();
-                ASSERT( pFtn->GetAttr() == this, "Ftn mismatch error." );
+                OSL_ENSURE( pFtn->GetAttr() == this, "Ftn mismatch error." );
 
                 while ( pFtn )
                 {

@@ -39,10 +39,10 @@
 #include "format.hxx"
 
 
-BOOL SmGetGlyphBoundRect(const OutputDevice &rDev,
+bool SmGetGlyphBoundRect(const OutputDevice &rDev,
                          const XubString &rText, Rectangle &rRect);
 
-BOOL SmIsMathAlpha(const XubString &rText);
+bool SmIsMathAlpha(const XubString &rText);
 
 
 inline long SmFromTo(long nFrom, long nTo, double fRelDist)
@@ -105,7 +105,7 @@ class SmRect
             nLoAttrFence,
             nHiAttrFence;
     USHORT  nBorderWidth;
-    BOOL    bHasBaseline,
+    bool    bHasBaseline,
             bHasAlignInfo;
 
 protected:
@@ -114,7 +114,7 @@ protected:
             void Init(const OutputDevice &rDev, const SmFormat *pFormat,
                       const XubString &rText, USHORT nBorderWidth);
 
-            void ClearBaseline()    { bHasBaseline = FALSE; };
+            void ClearBaseline()    { bHasBaseline = false; };
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
@@ -164,7 +164,7 @@ public:
             long GetItalicRight() const     { return GetRight() + GetItalicRightSpace(); }
             long GetItalicWidth() const     { return GetWidth() + GetItalicLeftSpace() + GetItalicRightSpace(); }
 
-            BOOL HasBaseline() const        { return bHasBaseline; }
+            bool HasBaseline() const        { return bHasBaseline; }
     inline  long GetBaseline() const;
             long GetBaselineOffset() const  { return GetBaseline() - GetTop(); }
 
@@ -187,12 +187,12 @@ public:
             void Move  (const Point &rPosition);
             void MoveTo(const Point &rPosition) { Move(rPosition - GetTopLeft()); }
 
-            BOOL IsEmpty() const
+            bool IsEmpty() const
             {
                 return GetWidth() == 0  ||  GetHeight() == 0;
             }
 
-            BOOL HasAlignInfo() const { return bHasAlignInfo; }
+            bool HasAlignInfo() const { return bHasAlignInfo; }
 
             const Point AlignTo(const SmRect &rRect, RectPos ePos,
                                 RectHorAlign eHor, RectVerAlign eVer) const;
@@ -201,11 +201,11 @@ public:
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
                               long nNewAlignM);
             SmRect & ExtendBy(const SmRect &rRect, RectCopyMBL eCopyMode,
-                      BOOL bKeepVerAlignParams);
+                      bool bKeepVerAlignParams);
 
             long    OrientedDist(const Point &rPoint) const;
-            BOOL    IsInsideRect(const Point &rPoint) const;
-            BOOL    IsInsideItalicRect(const Point &rPoint) const;
+            bool    IsInsideRect(const Point &rPoint) const;
+            bool    IsInsideItalicRect(const Point &rPoint) const;
 
     inline  SmRect & operator = (const SmRect &rRect);
 

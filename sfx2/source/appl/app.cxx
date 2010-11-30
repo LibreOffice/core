@@ -757,8 +757,8 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
     ::com::sun::star::uno::Reference
         < ::com::sun::star::uri::XUriReferenceFactory >
             xFactory( xSMgr->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.uri.UriReferenceFactory" ) ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "com.sun.star.uri.UriReferenceFactory" )) ),
                 ::com::sun::star::uno::UNO_QUERY );
 
     if ( xFactory.is() )

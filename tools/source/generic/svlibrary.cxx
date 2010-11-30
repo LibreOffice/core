@@ -62,7 +62,7 @@ static uno::Sequence< rtl::OUString > GetMultiPaths_Impl()
             aUser     .AppendAscii( "_user" );
 
             uno::Reference< beans::XPropertySet > xPathSettings( xMgr->createInstance(
-                rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ), uno::UNO_QUERY_THROW );
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" )) ), uno::UNO_QUERY_THROW );
             xPathSettings->getPropertyValue( aInternal )  >>= aInternalPaths;
             xPathSettings->getPropertyValue( aUser )      >>= aUserPaths;
         }

@@ -7366,7 +7366,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
                 {
-                    pUnicodesPerGlyph[i] = nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    // #i115618# fix for simple RTL+CTL cases
+                    // TODO: sanitize for RTL ligatures, more complex CTL, etc.
+                    if( nChars < 0 )
+                        nChars = -nChars;
+            else if( nChars == 0 )
+                        nChars = 1;
+                    pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
                         aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ) );
                 }
@@ -11802,7 +11809,7 @@ sal_Int32 PDFWriterImpl::createControl( const PDFWriter::AnyWidget& rControl, sa
             rNewWidget.m_nTextStyle =
                 TEXT_DRAW_VCENTER | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK;
 
-        rNewWidget.m_aValue = OUString::createFromAscii( rBox.Checked ? "Yes" : "Off" );
+        rNewWidget.m_aValue = rBox.Checked ? OUString(RTL_CONSTASCII_USTRINGPARAM("Yes")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Off" ));
         // create default appearance before m_aRect gets transformed
         createDefaultCheckBoxAppearance( rNewWidget, rBox );
     }

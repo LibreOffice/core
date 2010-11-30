@@ -101,7 +101,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
         if( pGrammarContact )
         {
             pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
-            ASSERT( pWList, "GrammarContact _has_ to deliver a wrong list" )
+            OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
         }
         else
         {
@@ -127,7 +127,7 @@ void SAL_CALL SwXTextMarkup::commitTextMarkup(
     }
     else
     {
-        ASSERT( false, "Unknown mark-up type" )
+        OSL_ENSURE( false, "Unknown mark-up type" );
         return;
     }
 
@@ -241,7 +241,7 @@ void lcl_commitGrammarMarkUp(
     ::sal_Int32 nLength,
     const uno::Reference< container::XStringKeyMap > & xMarkupInfoContainer)
 {
-    ASSERT( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" )
+    OSL_ENSURE( nType == text::TextMarkupType::PROOFREADING || nType == text::TextMarkupType::SENTENCE, "Wrong mark-up type" );
     const ModelToViewHelper::ModelPosition aStartPos =
             ModelToViewHelper::ConvertToModelPosition( pConversionMap, nStart );
     const ModelToViewHelper::ModelPosition aEndPos   =
@@ -373,7 +373,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     if( pGrammarContact )
     {
         pWList = pGrammarContact->getGrammarCheck( *mpTxtNode, true );
-        ASSERT( pWList, "GrammarContact _has_ to deliver a wrong list" )
+        OSL_ENSURE( pWList, "GrammarContact _has_ to deliver a wrong list" );
     }
     else
     {

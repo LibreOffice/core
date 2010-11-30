@@ -36,6 +36,9 @@
 #include <cppuhelper/implbase2.hxx>
 
 #include <stack>
+#include <map>
+
+#include <boost/shared_ptr.hpp>
 
 #include "sax/dllapi.h"
 #include "sax/fshelper.hxx"
@@ -47,6 +50,9 @@ namespace sax_fastparser {
 
 class SAX_DLLPUBLIC FastSaxSerializer : public ::cppu::WeakImplHelper2< ::com::sun::star::xml::sax::XFastSerializer, ::com::sun::star::lang::XServiceInfo >
 {
+    typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
+    typedef ::com::sun::star::uno::Sequence< ::sal_Int32 > Int32Sequence;
+
 public:
     explicit            FastSaxSerializer(  );
     virtual             ~FastSaxSerializer();
@@ -102,7 +108,7 @@ public:
           mergeTopMarks( true ), mergeTopMarks(), /r, /p
         and you are done.
      */
-    void mark();
+    void mark( Int32Sequence aOrder = Int32Sequence() );
 
     /** Merge 2 topmost marks.
 
@@ -125,7 +131,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > mxOutputStream;
     ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastTokenHandler > mxFastTokenHandler;
 
-    typedef ::com::sun::star::uno::Sequence< ::sal_Int8 > Int8Sequence;
     class ForMerge
     {
         Int8Sequence maData;
@@ -134,24 +139,54 @@ private:
     public:
         ForMerge() : maData(), maPostponed() {}
 
-        Int8Sequence& getData();
+        virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
+        virtual Int8Sequence& getData();
 #if DEBUG
-        void print();
+        virtual void print();
 #endif
 
-        void prepend( const Int8Sequence &rWhat );
-        void append( const Int8Sequence &rWhat );
+        virtual void prepend( const Int8Sequence &rWhat );
+        virtual void append( const Int8Sequence &rWhat );
         void postpone( const Int8Sequence &rWhat );
 
-    private:
+    protected:
+        void resetData( );
         static void merge( Int8Sequence &rTop, const Int8Sequence &rMerge, bool bAppend );
+    };
+
+    class ForSort : public ForMerge
+    {
+        std::map< ::sal_Int32, Int8Sequence > maData;
+        sal_Int32 mnCurrentElement;
+
+        Int32Sequence maOrder;
+
+    public:
+        ForSort( Int32Sequence aOrder ) :
+            ForMerge(),
+            maData(),
+            mnCurrentElement( 0 ),
+            maOrder( aOrder ) {}
+
+        void setCurrentElement( ::sal_Int32 nToken );
+
+        virtual Int8Sequence& getData();
+
+#if DEBUG
+        virtual void print();
+#endif
+
+        virtual void prepend( const Int8Sequence &rWhat );
+        virtual void append( const Int8Sequence &rWhat );
+    private:
+        void sort();
     };
 
 #if DEBUG
         void printMarkStack( );
 #endif
 
-    ::std::stack< ForMerge > maMarkStack;
+    ::std::stack< boost::shared_ptr< ForMerge > > maMarkStack;
 
     void writeFastAttributeList( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XFastAttributeList >& Attribs );
     void write( const ::rtl::OUString& s );

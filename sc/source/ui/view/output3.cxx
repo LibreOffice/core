@@ -69,10 +69,8 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
     aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nTab );
 
     long nDataWidth = 0;
-    long nDataHeight = 0;
     for (nCol=nX1; nCol<=nX2; nCol++)
         nDataWidth += pDoc->GetColWidth( nCol, nTab );
-    nDataHeight += pDoc->GetRowHeight( nY1, nY2, nTab );
 
     if ( bLayoutRTL )
         aOffset.X() += nDataWidth;
@@ -247,7 +245,6 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer)
 void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
 {
     BOOL    bHad    = FALSE;
-    long    nPosY   = nScrY;
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
@@ -265,7 +262,6 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer)
             DrawSelectiveObjects( nLayer );
             bHad = FALSE;
         }
-        nPosY += pRowInfo[nArrY].nHeight;
     }
 
     if (bHad)

@@ -154,7 +154,7 @@ void ObjectMenuController::impl_select(const Reference< XDispatch >& _xDispatch,
 {
     Sequence<PropertyValue>      aArgs;
     if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-        UiEventLogHelper(::rtl::OUString::createFromAscii("ObjectMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+        UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ObjectMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
     OSL_ENSURE(_xDispatch.is(),"ObjectMenuController::impl_select: No dispatch");
     if ( _xDispatch.is() )
         _xDispatch->dispatch( aTargetURL, aArgs );

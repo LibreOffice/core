@@ -178,8 +178,6 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
     USHORT  nBackgroundDestination = rSh.GetViewOptions()->GetTblDest();
     rSet.Put(SwBackgroundDestinationItem(SID_BACKGRND_DESTINATION, nBackgroundDestination ));
     SvxBrushItem aBrush( RES_BACKGROUND );
-//      rSh.GetBoxBackground(aBrush);
-//  rSet.Put( aBrush );
     if(rSh.GetRowBackground(aBrush))
         rSet.Put( aBrush, SID_ATTR_BRUSH_ROW );
     else
@@ -494,23 +492,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
     {
         case SID_ATTR_BORDER:
         {
-/*          BOOL bPopCrsr = FALSE;
-            if ( !rReq.IsAPI() )
-            {
-                //Keine Tabellenselektion -> Aenderung wird auf die gesamte
-                //Tabelle.
-                if ( !rSh.IsTableMode() )
-                {
-                    rSh.StartAction();
-                    bPopCrsr = TRUE;
-                    rSh.Push();
-                    rSh.EnterStdMode();
-                    rSh.MoveTable( fnTableCurr, fnTableStart );
-                    rSh.SttSelect();
-                    rSh.MoveTable( fnTableCurr, fnTableEnd );
-                    rSh.EndSelect();
-                }
-            }*/
             if(!pArgs)
                 break;
             //Items erzeugen, weil wir sowieso nacharbeiten muessen
@@ -586,9 +567,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             if ((pBorderLine = aInfo.GetVert()) != NULL)
                 aInfo.SetLine(&aBorderLine, BOXINFO_LINE_VERT), bLine |= TRUE;
 
-//          if ( bPopCrsr && !bLine )
-//              aBox.SetDistance( 0 );
-
             aCoreSet.Put( aBox  );
             aCoreSet.Put( aInfo );
             rSh.SetTabBorders( aCoreSet );
@@ -600,12 +578,6 @@ void SwTableShell::Execute(SfxRequest &rReq)
             rReq.AppendItem( aInfo );
             bCallDone = TRUE;
 
-/*          if ( bPopCrsr )
-            {
-                rSh.KillPams();
-                rSh.Pop(FALSE);
-                rSh.EndAction();
-            }*/
         }
         break;
         case FN_INSERT_TABLE:
@@ -1268,7 +1240,6 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_INSERT_TABLE:
                 // Irgendeinen Wert "putten", damit Controller enabled bleibt.
                 // Statt "Insert:Table" erscheint dann "Format:Table".
-//              rSet.Put(SfxUInt16Item(nSlot, 1));
                 break;
 
             case FN_TABLE_OPTIMAL_HEIGHT:
@@ -1428,24 +1399,6 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
             case SID_FRAME_LINESTYLE:
             case SID_FRAME_LINECOLOR:
             {
-/*  Tabellenselektion ist abgeschafft
-                BOOL bPopCrsr = FALSE;
-                if ( !rReq.IsAPI() )
-                {
-                    //Keine Tabellenselektion -> Aenderung wird auf die gesamte
-                    //Tabelle.
-                    if ( !rSh.IsTableMode() )
-                    {
-                        bPopCrsr = TRUE;
-                        rSh.Push();
-                        rSh.StartAction();
-                        rSh.EnterStdMode();
-                        rSh.MoveTable( fnTableCurr, fnTableStart );
-                        rSh.SttSelect();
-                        rSh.MoveTable( fnTableCurr, fnTableEnd );
-                        rSh.EndSelect();
-                    }
-                }*/
                 if ( rReq.GetSlot() == SID_FRAME_LINESTYLE )
                 {
                     const SvxLineItem &rLineItem = (const SvxLineItem&)pArgs->
@@ -1461,12 +1414,7 @@ void SwTableShell::ExecTableStyle(SfxRequest& rReq)
                 }
 
                 rReq.Done();
-/*              if ( bPopCrsr )
-                {
-                    rSh.KillPams();
-                    rSh.Pop(FALSE);
-                    rSh.EndAction();
-                }*/
+
                 break;
             }
         }

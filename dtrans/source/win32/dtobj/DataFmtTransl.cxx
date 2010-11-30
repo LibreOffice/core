@@ -77,11 +77,11 @@ const Type       CPPUTYPE_OUSTRING   = getCppuType((OUString*)0);
 const Type       CPPUTYPE_SEQSALINT8 = getCppuType((Sequence< sal_Int8>*)0);
 const sal_Int32  MAX_CLIPFORMAT_NAME = 256;
 
-const OUString TEXT_PLAIN_CHARSET   = OUString::createFromAscii( "text/plain;charset=" );
-const OUString HPNAME_OEM_ANSI_TEXT = OUString::createFromAscii( "OEM/ANSI Text" );
+const OUString TEXT_PLAIN_CHARSET   (RTL_CONSTASCII_USTRINGPARAM("text/plain;charset="));
+const OUString HPNAME_OEM_ANSI_TEXT (RTL_CONSTASCII_USTRINGPARAM("OEM/ANSI Text"));
 
-const OUString HTML_FORMAT_NAME_WINDOWS = OUString::createFromAscii( "HTML Format" );
-const OUString HTML_FORMAT_NAME_SOFFICE = OUString::createFromAscii( "HTML (HyperText Markup Language)" );
+const OUString HTML_FORMAT_NAME_WINDOWS (RTL_CONSTASCII_USTRINGPARAM("HTML Format"));
+const OUString HTML_FORMAT_NAME_SOFFICE (RTL_CONSTASCII_USTRINGPARAM("HTML (HyperText Markup Language)"));
 
 //------------------------------------------------------------------------
 //
@@ -91,7 +91,7 @@ CDataFormatTranslator::CDataFormatTranslator( const Reference< XMultiServiceFact
     m_SrvMgr( aServiceManager )
 {
     m_XDataFormatTranslator = Reference< XDataFormatTranslator >(
-        m_SrvMgr->createInstance( OUString::createFromAscii( "com.sun.star.datatransfer.DataFormatTranslator" ) ), UNO_QUERY );
+        m_SrvMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.DataFormatTranslator")) ), UNO_QUERY );
 }
 
 //------------------------------------------------------------------------

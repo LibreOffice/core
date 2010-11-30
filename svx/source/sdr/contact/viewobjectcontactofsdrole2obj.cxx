@@ -195,7 +195,7 @@ namespace sdr
 
                     // create OLE primitive stuff directly at VC with HC as parameter
                     const ViewContactOfSdrOle2Obj& rVC = static_cast< const ViewContactOfSdrOle2Obj& >(GetViewContact());
-                    xRetval = rVC.createPrimitive2DSequenceWithParameters(GetObjectContact().isDrawModeHighContrast());
+                    xRetval = rVC.createPrimitive2DSequenceWithParameters();
                 }
 
                 if(bIsOutplaceActive)

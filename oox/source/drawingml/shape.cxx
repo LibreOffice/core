@@ -246,7 +246,7 @@ Reference< XShape > Shape::createAndInsert(
     OUString aServiceName = rServiceName;
     if( mxCreateCallback.get() )
         aServiceName = mxCreateCallback->onCreateXShape( aServiceName, awt::Rectangle( aPosition.X / 360, aPosition.Y / 360, aSize.Width / 360, aSize.Height / 360 ) );
-    sal_Bool bIsCustomShape = aServiceName == OUString::createFromAscii( "com.sun.star.drawing.CustomShape" );
+    sal_Bool bIsCustomShape = aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.CustomShape"));
 
     basegfx::B2DHomMatrix aTransformation;
     if( aSize.Width != 1 || aSize.Height != 1)
@@ -289,7 +289,7 @@ Reference< XShape > Shape::createAndInsert(
     }
 
     // special for lineshape
-    if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.LineShape" ) )
+    if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.LineShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -310,7 +310,7 @@ Reference< XShape > Shape::createAndInsert(
 
         maShapeProperties[ PROP_PolyPolygon ] <<= aPolyPolySequence;
     }
-    else if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.ConnectorShape" ) )
+    else if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.ConnectorShape")) )
     {
         ::basegfx::B2DPolygon aPoly;
         aPoly.insert( 0, ::basegfx::B2DPoint( 0, 0 ) );
@@ -438,9 +438,9 @@ Reference< XShape > Shape::createAndInsert(
 
         // applying properties
         PropertySet aPropSet( xSet );
-        if ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.GraphicObjectShape" ) )
+        if ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GraphicObjectShape")) )
             mpGraphicPropertiesPtr->pushToPropSet( aPropSet, rGraphicHelper );
-        if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString::createFromAscii( "com.sun.star.drawing.TableShape" ) ) )
+        if ( mpTablePropertiesPtr.get() && ( aServiceName == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.TableShape")) ) )
             mpTablePropertiesPtr->pushToPropSet( rFilterBase, xSet, mpMasterTextListStyle );
         aFillProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, FillProperties::DEFAULT_IDS, mnRotation, nFillPhClr );
         aLineProperties.pushToPropSet( aPropSet, rModelObjectHelper, rGraphicHelper, LineProperties::DEFAULT_IDS, nLinePhClr );
@@ -455,7 +455,7 @@ Reference< XShape > Shape::createAndInsert(
                 xSet->setPropertyValue( rPropName, Any( false ) );
 
         // do not set properties at a group shape (this causes assertions from svx)
-        if( aServiceName != OUString::createFromAscii( "com.sun.star.drawing.GroupShape" ) )
+        if( aServiceName != OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.GroupShape")) )
             aPropSet.setProperties( aShapeProperties );
 
         if( bIsCustomShape )

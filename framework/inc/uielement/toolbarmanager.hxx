@@ -200,7 +200,7 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         sal_uInt16 ConvertStyleToToolboxItemBits( sal_Int32 nStyle );
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > GetModelFromFrame() const;
         sal_Bool IsPluginMode() const;
-        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
+        Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages );
         long HandleClick(void ( SAL_CALL ::com::sun::star::frame::XToolbarController::*_pClick )(  ));
         void setToolBarImage(const Image& _aImage,const CommandToInfoMap::const_iterator& _pIter);
         void impl_elementChanged(bool _bRemove,const ::com::sun::star::ui::ConfigurationEvent& Event );
@@ -215,7 +215,6 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
 
         typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > > MenuDescriptionMap;
         sal_Bool                                                                               m_bDisposed : 1,
-                                                                                               m_bIsHiContrast : 1,
                                                                                                m_bSmallSymbols : 1,
                                                                                                m_bModuleIdentified : 1,
                                                                                                m_bAddedToTaskPaneList : 1,

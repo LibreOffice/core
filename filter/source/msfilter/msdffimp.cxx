@@ -3682,9 +3682,9 @@ BOOL SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, UINT3
     return bRet;
 }
 
-FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd, ULONG nSkipCount ) const
+bool SvxMSDffManager::SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFilePos, DffRecordHeader* pRecHd, ULONG nSkipCount ) const
 {
-    FASTBOOL bRet = FALSE;
+    bool bRet = FALSE;
     ULONG nFPosMerk = rSt.Tell(); // FilePos merken fuer ggf. spaetere Restauration
     DffRecordHeader aHd;
     do
@@ -3712,9 +3712,9 @@ FASTBOOL SvxMSDffManager::SeekToRec( SvStream& rSt, USHORT nRecId, ULONG nMaxFil
     return bRet;
 }
 
-FASTBOOL SvxMSDffManager::SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd, ULONG nSkipCount ) const
+bool SvxMSDffManager::SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMaxFilePos, DffRecordHeader* pRecHd, ULONG nSkipCount ) const
 {
-    FASTBOOL bRet = FALSE;
+    bool bRet = FALSE;
     ULONG nFPosMerk = rStCtrl.Tell();   // FilePos merken fuer ggf. spaetere Restauration
     DffRecordHeader aHd;
     do
@@ -3743,7 +3743,7 @@ FASTBOOL SvxMSDffManager::SeekToRec2( USHORT nRecId1, USHORT nRecId2, ULONG nMax
 }
 
 
-FASTBOOL SvxMSDffManager::GetColorFromPalette( USHORT /* nNum */, Color& rColor ) const
+bool SvxMSDffManager::GetColorFromPalette( USHORT /* nNum */, Color& rColor ) const
 {
     // diese Methode ist in der zum Excel-Import
     // abgeleiteten Klasse zu ueberschreiben...
@@ -4001,15 +4001,15 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
     return aColor;
 }
 
-FASTBOOL SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt) const
+bool SvxMSDffManager::ReadDffString(SvStream& rSt, String& rTxt) const
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet=FALSE;
     DffRecordHeader aStrHd;
     if( !ReadCommonRecordHeader(aStrHd, rSt) )
         rSt.Seek( aStrHd.nFilePos );
     else if ( aStrHd.nRecType == DFF_PST_TextBytesAtom || aStrHd.nRecType == DFF_PST_TextCharsAtom )
     {
-        FASTBOOL bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
+        bool bUniCode=aStrHd.nRecType==DFF_PST_TextCharsAtom;
         bRet=TRUE;
         ULONG nBytes = aStrHd.nRecLen;
         MSDFFReadZString( rSt, rTxt, nBytes, bUniCode );
@@ -4092,9 +4092,9 @@ void SvxMSDffManager::ReadObjText( const String& rText, SdrObject* pObj ) const
     }
 }
 
-FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
+bool SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 {
-    FASTBOOL bRet=FALSE;
+    bool bRet=FALSE;
     SdrTextObj* pText = PTR_CAST(SdrTextObj, pObj);
     if( pText )
     {
@@ -4116,7 +4116,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 
             { // Wohl 'nen kleiner Bug der EditEngine, das die
               // Absastzattribute bei Clear() nicht entfernt werden.
-                FASTBOOL bClearParaAttribs = TRUE;
+                bool bClearParaAttribs = TRUE;
                 rOutliner.SetStyleSheet( 0, NULL );
                 SfxItemSet aSet(rOutliner.GetEmptyItemSet());
                 aSet.Put(SvxColorItem( COL_BLACK ));
@@ -4271,7 +4271,7 @@ FASTBOOL SvxMSDffManager::ReadObjText(SvStream& rSt, SdrObject* pObj) const
 
 //static
 void SvxMSDffManager::MSDFFReadZString( SvStream& rIn, String& rStr,
-                                    ULONG nRecLen, FASTBOOL bUniCode )
+                                    ULONG nRecLen, bool bUniCode )
 {
     sal_uInt16 nLen = (sal_uInt16)nRecLen;
     if( nLen )
@@ -4854,8 +4854,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     if ( mbTracing )
         mpTracer->AddAttribute( aObjData.nSpFlags & SP_FGROUP
-                                ? rtl::OUString::createFromAscii( "GroupShape" )
-                                : rtl::OUString::createFromAscii( "Shape" ),
+                                ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
+                                : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )),
                                 rtl::OUString::valueOf( (sal_Int32)aObjData.nShapeId ) );
     aObjData.bOpt = maShapeRecords.SeekToContent( rSt, DFF_msofbtOPT, SEEK_FROM_CURRENT_AND_RESTART );
     if ( aObjData.bOpt )
@@ -4927,7 +4927,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
             }
         }
         aTextRect = aObjData.aBoundRect;
-        FASTBOOL bGraphic = IsProperty( DFF_Prop_pib ) ||
+        bool bGraphic = IsProperty( DFF_Prop_pib ) ||
                             IsProperty( DFF_Prop_pibName ) ||
                             IsProperty( DFF_Prop_pibFlags );
 
@@ -5422,8 +5422,8 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
 
     if ( mbTracing )
         mpTracer->RemoveAttribute( aObjData.nSpFlags & SP_FGROUP
-                                    ? rtl::OUString::createFromAscii( "GroupShape" )
-                                    : rtl::OUString::createFromAscii( "Shape" ) );
+                                    ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GroupShape" ))
+                                    : rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Shape" )) );
     return pRet;
 }
 
@@ -5637,7 +5637,7 @@ SdrObject* SvxMSDffManager::ProcessObj(SvStream& rSt,
             //textbox, this was changed for #88277# to be created as a simple
             //rect to keep impress happy. For the rest of us we'd like to turn
             //it back into a textbox again.
-            FASTBOOL bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
+            bool bTextFrame = (pImpRec->eShapeType == mso_sptTextBox);
             if (!bTextFrame)
             {
                 //Either
@@ -6184,7 +6184,7 @@ SvxMSDffManager::SvxMSDffManager(SvStream& rStCtrl_,
 {
     if ( mpTracer )
     {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
         aAny >>= mbTracing;
     }
     SetModel( pSdrModel_, nApplicationScale );
@@ -6236,7 +6236,7 @@ SvxMSDffManager::SvxMSDffManager( SvStream& rStCtrl_, const String& rBaseURL, MS
 {
     if ( mpTracer )
     {
-        uno::Any aAny( mpTracer->GetProperty( rtl::OUString::createFromAscii( "On" ) ) );
+        uno::Any aAny( mpTracer->GetProperty( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "On" )) ) );
         aAny >>= mbTracing;
     }
     SetModel( NULL, 0 );
@@ -7063,12 +7063,12 @@ BOOL SvxMSDffManager::GetBLIPDirect( SvStream& rBLIPStream, Graphic& rData, Rect
         aFileName.Append( String::CreateFromInt32( nCount++ ) );
         switch( nInst &~ 1 )
         {
-            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".wmf" ) ) ); break;
-            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".emf" ) ) ); break;
-            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".pct" ) ) ); break;
-            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".jpg" ) ) ); break;
-            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".png" ) ) ); break;
-            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_STRINGPARAM( ".bmp" ) ) ); break;
+            case 0x216 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".wmf" ) ) ); break;
+            case 0x3d4 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".emf" ) ) ); break;
+            case 0x542 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".pct" ) ) ); break;
+            case 0x46a : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".jpg" ) ) ); break;
+            case 0x6e0 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".png" ) ) ); break;
+            case 0x7a8 : aFileName.Append( String( RTL_CONSTASCII_USTRINGPARAM( ".bmp" ) ) ); break;
         }
 
         String aURLStr;
@@ -7830,7 +7830,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                         // TODO/LATER: should the caller be notified if the aspect changes in future?
 
                         SvStorageStreamRef xObjInfoSrc = xObjStg->OpenSotStream(
-                            String( RTL_CONSTASCII_STRINGPARAM( "\3ObjInfo" ) ),
+                            String( RTL_CONSTASCII_USTRINGPARAM( "\3ObjInfo" ) ),
                             STREAM_STD_READ | STREAM_NOCREATE );
                         if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
                         {

@@ -831,7 +831,7 @@ long CXMergeSyncModule::LockServer(BOOL fLock)
         return ::InterlockedDecrement(&m_lLocks);
 }
 
-long CXMergeSyncModule::GetLockCount()
+long CXMergeSyncModule::GetLockCount() const
 {
     return m_lLocks + m_lObjs;
 }

@@ -317,7 +317,7 @@ namespace frm
 
                     Sequence<PropertyValue> aArgs(1);
                     PropertyValue& rProp = aArgs.getArray()[0];
-                    rProp.Name = ::rtl::OUString::createFromAscii("Referer");
+                    rProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Referer") );
                     rProp.Value <<= xModel->getURL();
 
                     if (xDisp.is())

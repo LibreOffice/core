@@ -213,7 +213,7 @@ void ComboBox::ImplInit( Window* pParent, WinBits nStyle )
     Window* pLBParent = this;
     if ( mpFloatWin )
         pLBParent = mpFloatWin;
-    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE );
+    mpImplLB = new ImplListBox( pLBParent, nListStyle|WB_SIMPLEMODE|WB_AUTOHSCROLL );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->SetSelectHdl( LINK( this, ComboBox, ImplSelectHdl ) );
     mpImplLB->SetCancelHdl( LINK( this, ComboBox, ImplCancelHdl ) );

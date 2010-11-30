@@ -81,10 +81,10 @@ ScVbaNames::getScDocument()
     uno::Reference< frame::XModel > xModel( getModel() , uno::UNO_QUERY_THROW );
     ScTabViewShell * pTabViewShell = excel::getBestViewShell( xModel );
     if ( !pTabViewShell )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("No ViewShell available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewShell available")), uno::Reference< uno::XInterface >() );
     ScViewData* pViewData = pTabViewShell->GetViewData();
     if ( !pViewData )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii("No ViewData available"), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("No ViewData available")), uno::Reference< uno::XInterface >() );
     return pViewData->GetDocument();
 }
 
@@ -156,7 +156,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                 sResult = sName.copy( nIndex );
             sName = sResult ;
             if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
-                throw uno::RuntimeException( rtl::OUString::createFromAscii("This Name is a invalid ."), uno::Reference< uno::XInterface >() );
+                throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("This Name is a invalid .")), uno::Reference< uno::XInterface >() );
         }
     }
     if ( RefersTo.hasValue() || RefersToR1C1.hasValue() || RefersToR1C1Local.hasValue() )

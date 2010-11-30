@@ -48,13 +48,13 @@ BOOL SwOutlineNodes::Seek_Entry( const SwNodePtr rSrch, USHORT* pFndPos ) const
 //JP 17.03.98: aufgrund des Bug 48592 - wo unter anderem nach Undo/Redo
 //              Nodes aus dem falschen NodesArray im OutlineArray standen,
 //              jetzt mal einen Check eingebaut.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         {
             for( USHORT n = 1; n < nO; ++n )
                 if( &(*this)[ n-1 ]->GetNodes() !=
                     &(*this)[ n ]->GetNodes() )
                 {
-                    ASSERT( !this, "Node im falschen Outline-Array" );
+                    OSL_ENSURE( !this, "Node im falschen Outline-Array" );
                 }
         }
 #endif
@@ -106,7 +106,7 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
                 }
                 else
                 {
-                    ASSERT( false,
+                    OSL_ENSURE( false,
                             "<SwNodes::UpdateOutlineNode(..)> - given text node isn't in the correct nodes array. This is a serious defect -> inform OD" );
                 }
                 // <--
@@ -124,83 +124,6 @@ void SwNodes::UpdateOutlineNode(SwNode & rNd)
         GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
     }
 }
-
-//void SwNodes::UpdateOutlineNode( const SwNode& rNd, BYTE nOldLevel, //#outline level,removed by zhaojianwei
-//                                 BYTE nNewLevel )
-//{
-//  const SwNodePtr pSrch = (SwNodePtr)&rNd;
-//  USHORT nSttPos;
-//  BOOL bSeekIdx = pOutlineNds->Seek_Entry( pSrch, &nSttPos );
-//
-//  //if( NO_NUMBERING == nOldLevel )   //#outline level,zhaojianwei
-//  if( 0 == nOldLevel )                //<-end, zhaojianwei
-//  {
-//      // nicht vorhanden, also einfuegen
-//      //ASSERT( !bSeekIdx, "Der Node ist schon als OutlineNode vorhanden" );
-//
-//      //JP 12.03.99: 63293 - Nodes vom RedlineBereich NIE aufnehmen
-//      ULONG nNd = rNd.GetIndex();
-//      if( nNd < GetEndOfRedlines().GetIndex() &&
-//            nNd > GetEndOfRedlines().StartOfSectionNode()->GetIndex() )
-//          return ;
-//
-//      // jetzt noch alle nachfolgende Outline-Nodes updaten
-//        if (! bSeekIdx)
-//        {
-//            // --> OD 2005-11-03 #125329#
-//            // assure that node <pSrch> is in the correct nodes array
-//            if ( &(pSrch->GetNodes()) == this )
-//            {
-//                pOutlineNds->Insert( pSrch );
-//            }
-//            else
-//            {
-//                ASSERT( false,
-//                        "<SwNodes::UpdateOutlineNode(..)> - node <pSrch> isn't in correct nodes array. This is a serious defect -> inform OD" );
-//            }
-//            // <--
-//        }
-//
-//  }
-//  //else if( NO_NUMBERING == nNewLevel )  //#outline level,removed by zhaojianwei
-//  else if( 0 == nNewLevel )               //<-end,added by zhaojianwei    // Level entfernen
-//  {
-//      if( !bSeekIdx )
-//          return;
-//
-//      // jetzt noch alle nachfolgende Outline-Nodes updaten
-//      pOutlineNds->Remove( nSttPos );
-//  }
-//  else if( !bSeekIdx )        // Update und Index nicht gefunden ??
-//      return ;
-//
-//    {
-//        SwTxtNode & rTxtNd = (SwTxtNode &) rNd;
-//        SwPaM aPam(rTxtNd); // #115901#
-//
-//        //if (nNewLevel != NO_NUMBERING) //#outline level,zhaojianwei // #115901#
-//      if (nNewLevel != 0)              //<-end,zhaojianwei // #115901#
-//        {
-//            //rTxtNd.SetLevel(rTxtNd.GetTxtColl()->GetOutlineLevel());    //#outline level,zhaojianwei
-//          //rTxtNd.NumRuleChgd();
-//          if(rTxtNd.GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
-//          {
-//              rTxtNd.SetLevel(rTxtNd.GetTxtColl()->GetAssignedOutlineStyleLevel());
-//              rTxtNd.NumRuleChgd();
-//          }//<-end,zhaojianwei
-//
-//            //GetDoc()->SetNumRule(aPam, *GetDoc()->GetOutlineNumRule());
-//        }
-//        else
-//        {
-//            GetDoc()->DelNumRules(aPam);
-//        }
-//    }
-//
-//  // die Gliederungs-Felder Updaten
-//  GetDoc()->GetSysFldType( RES_CHAPTERFLD )->UpdateFlds();
-//    GetDoc()->ChkCondColls();
-//}//<-end,zhaojianwei
 
 void SwNodes::UpdtOutlineIdx( const SwNode& rNd )
 {

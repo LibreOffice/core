@@ -145,7 +145,7 @@ public:
             // need to find the page ( and index )  for this control
             uno::Reference< drawing::XDrawPageSupplier > xSupplier( mpDocShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< container::XIndexAccess > xIndex( xSupplier->getDrawPage(), uno::UNO_QUERY_THROW );
-            sal_Int32 nLen = xIndex->getCount();
+
             bool bMatched = false;
             uno::Sequence< script::ScriptEventDescriptor > aFakeEvents;
                 try

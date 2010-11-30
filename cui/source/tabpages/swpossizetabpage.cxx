@@ -365,9 +365,7 @@ static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::LINE_BOTTOM,   LB_REL_ROW},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::LINE_CENTER,   LB_REL_ROW}
 };
-/*-- 05.03.2004 15:52:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 {
     if ( pMap )
@@ -422,9 +420,7 @@ std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
     }
     return 0;
 }
-/*-- 03.03.2004 12:21:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             SvxSwFramePosString::StringId eStringId, BOOL bVertical, BOOL bRTL)
 {
@@ -520,9 +516,7 @@ ULONG lcl_GetLBRelationsForStrID( const FrmMap* _pMap,
 
     return nLBRelations;
 }
-/*-- 03.03.2004 12:21:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rInAttrs  ) :
     SfxTabPage( pParent, CUI_RES( RID_SVXPAGE_SWPOSSIZE ), rInAttrs ),
 #ifdef _MSC_VER
@@ -624,22 +618,16 @@ SvxSwPosSizeTabPage::SvxSwPosSizeTabPage( Window* pParent, const SfxItemSet& rIn
     m_aHoriMirrorCB.SetClickHdl(LINK(this, SvxSwPosSizeTabPage, MirrorHdl));
     m_aPositionCB.SetClickHdl(LINK(this, SvxSwPosSizeTabPage, ProtectHdl));
 }
-/*-- 03.03.2004 12:21:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SvxSwPosSizeTabPage::~SvxSwPosSizeTabPage()
 {
 }
-/*-- 03.03.2004 12:21:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 SfxTabPage* SvxSwPosSizeTabPage::Create( Window* pParent, const SfxItemSet& rSet)
 {
     return new SvxSwPosSizeTabPage(pParent, rSet);
 }
-/*-- 05.03.2004 17:27:42---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 USHORT* SvxSwPosSizeTabPage::GetRanges()
 {
     static USHORT pSwPosRanges[] =
@@ -668,9 +656,7 @@ USHORT* SvxSwPosSizeTabPage::GetRanges()
     };
     return pSwPosRanges;
 }
-/*-- 03.03.2004 12:21:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 {
     bool bAnchorChanged = false;
@@ -826,9 +812,7 @@ BOOL SvxSwPosSizeTabPage::FillItemSet( SfxItemSet& rSet)
 
     return bModified;
 }
-/*-- 03.03.2004 12:21:34---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
 {
     const SfxPoolItem* pItem = GetItem( rSet, SID_ATTR_TRANSFORM_ANCHOR );
@@ -1003,18 +987,14 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet& rSet)
         RangeModifyHdl(&m_aWidthMF);  // initially set maximum values
     }
 }
-/*-- 03.03.2004 12:21:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 int  SvxSwPosSizeTabPage::DeactivatePage( SfxItemSet* _pSet )
 {
     if( _pSet )
         FillItemSet( *_pSet );
     return( LEAVE_PAGE );
 }
-/*-- 04.03.2004 09:14:41---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwPosSizeTabPage::EnableAnchorTypes(USHORT nAnchorEnable)
 {
     if((nAnchorEnable & SVX_OBJ_AT_FLY))
@@ -1022,9 +1002,7 @@ void SvxSwPosSizeTabPage::EnableAnchorTypes(USHORT nAnchorEnable)
     if(!(nAnchorEnable & SVX_OBJ_PAGE))
         m_aToPageRB.Enable(FALSE);
 }
-/*-- 04.03.2004 09:33:33---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
 {
     short nRet = -1;
@@ -1066,9 +1044,7 @@ short SvxSwPosSizeTabPage::GetAnchorType(bool* pbHasChanged)
     }
    return nRet;
 }
-/*-- 05.03.2004 10:43:32---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
 {
     if(m_bPositioningDisabled)
@@ -1152,9 +1128,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RangeModifyHdl, Edit *, EMPTYARG )
 
     return 0;
 }
-/*-- 05.03.2004 11:12:56---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
 {
     m_aHoriMirrorCB.Enable(!m_aAsCharRB.IsChecked() && !m_bIsMultiSelection);
@@ -1175,9 +1149,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, AnchorTypeHdl, RadioButton *, EMPTYARG )
     }
     return 0;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, MirrorHdl, CheckBox *, EMPTYARG )
 {
     short nId = GetAnchorType();
@@ -1185,9 +1157,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, MirrorHdl, CheckBox *, EMPTYARG )
 
     return 0;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
 {
     BOOL bHori = pLB == &m_aHoriToLB;
@@ -1246,9 +1216,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, RelHdl, ListBox *, pLB )
     return 0;
 
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
 {
     BOOL bHori = pLB == &m_aHoriLB;
@@ -1353,9 +1321,7 @@ IMPL_LINK( SvxSwPosSizeTabPage, PosHdl, ListBox *, pLB )
     }
     return 0;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
 {
     sal_Int64 nWidth = m_aWidthMF.Denormalize(m_aWidthMF.GetValue(FUNIT_TWIP));
@@ -1377,17 +1343,13 @@ IMPL_LINK( SvxSwPosSizeTabPage, ModifyHdl, Edit *, pEdit )
     UpdateExample();
     return 0;
 }
-/*-- 11.03.2004 15:40:17---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 IMPL_LINK( SvxSwPosSizeTabPage, ProtectHdl, TriStateBox *, EMPTYARG)
 {
     m_aSizeCB.Enable(m_aPositionCB.IsEnabled() && !m_aPositionCB.IsChecked());
     return 0;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
 {
     short nRel = 0;
@@ -1401,9 +1363,7 @@ short SvxSwPosSizeTabPage::GetRelation(FrmMap *, ListBox &rRelationLB)
 
     return nRel;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &/*rAlignLB*/, ListBox &rRelationLB)
 {
     short nAlign = 0;
@@ -1438,9 +1398,7 @@ short SvxSwPosSizeTabPage::GetAlignment(FrmMap *pMap, USHORT nMapPos, ListBox &/
 
     return nAlign;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 USHORT SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
 {
     USHORT nMapPos = 0;
@@ -1472,9 +1430,7 @@ USHORT SvxSwPosSizeTabPage::GetMapPos(FrmMap *pMap, ListBox &rAlignLB)
 
     return nMapPos;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwPosSizeTabPage::InitPos(short nAnchor,
                                 USHORT nH,
                                 USHORT nHRel,
@@ -1624,9 +1580,7 @@ void SvxSwPosSizeTabPage::InitPos(short nAnchor,
     m_aVertByMF.Enable( bEnable );
     UpdateExample();
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwPosSizeTabPage::UpdateExample()
 {
     USHORT nPos = m_aHoriLB.GetSelectEntryPos();
@@ -1659,9 +1613,7 @@ void SvxSwPosSizeTabPage::UpdateExample()
     m_aExampleWN.SetAnchor( GetAnchorType() );
     m_aExampleWN.Invalidate();
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign,
         USHORT nRel, ListBox &rLB, FixedText &rFT)
 {
@@ -1807,9 +1759,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
 
     return nLBRelations;
 }
-/*-- 05.03.2004 14:20:19---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 USHORT SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
                                       USHORT _nAlign,
                                       const USHORT _nRel,
@@ -1862,9 +1812,7 @@ USHORT SvxSwPosSizeTabPage::FillPosLB(FrmMap *_pMap,
 
     return GetMapPos(_pMap, _rLB);
 }
-/*-- 09.03.2004 15:37:50---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 void SvxSwPosSizeTabPage::SetView( const SdrView* pSdrView )
 {
     m_pSdrView = pSdrView;

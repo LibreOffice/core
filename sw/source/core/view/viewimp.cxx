@@ -58,7 +58,7 @@
 
 void SwViewImp::Init( const SwViewOption *pNewOpt )
 {
-    ASSERT( pDrawView, "SwViewImp::Init without DrawView" );
+    OSL_ENSURE( pDrawView, "SwViewImp::Init without DrawView" );
     //Now create the page view if it does not exist.
     SwRootFrm *pRoot = pSh->getIDocumentLayoutAccess()->GetRootFrm();
     if ( !pSdrPageView )
@@ -131,8 +131,8 @@ SwViewImp::~SwViewImp()
 
     DelRegion();
 
-    ASSERT( !pLayAct, "Have action for the rest of your life." );
-    ASSERT( !pIdleAct,"Be idle for the rest of your life." );
+    OSL_ENSURE( !pLayAct, "Have action for the rest of your life." );
+    OSL_ENSURE( !pIdleAct,"Be idle for the rest of your life." );
 }
 
 void SwViewImp::DelRegion()
@@ -249,7 +249,7 @@ void SwViewImp::MakeDrawView()
         {
             bool bIsReadOnly(pSwViewOption->IsReadonly());
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             // add test possibilities
             static bool bAlwaysActivateForTest(false);
             if(bAlwaysActivateForTest && bIsReadOnly)
@@ -286,7 +286,7 @@ Color SwViewImp::GetRetoucheColor() const
 
 void SwViewImp::InitPagePreviewLayout()
 {
-    ASSERT( pSh->GetLayout(), "no layout - page preview layout can not be created.");
+    OSL_ENSURE( pSh->GetLayout(), "no layout - page preview layout can not be created.");
     if ( pSh->GetLayout() )
         mpPgPrevwLayout = new SwPagePreviewLayout( *pSh, *(pSh->GetLayout()) );
 }
@@ -296,8 +296,8 @@ void SwViewImp::UpdateAccessible()
     // We require a layout and an XModel to be accessible.
     IDocumentLayoutAccess* pIDLA = GetShell()->getIDocumentLayoutAccess();
     Window *pWin = GetShell()->GetWin();
-    ASSERT( pIDLA->GetRootFrm(), "no layout, no access" );
-    ASSERT( pWin, "no window, no access" );
+    OSL_ENSURE( pIDLA->GetRootFrm(), "no layout, no access" );
+    OSL_ENSURE( pWin, "no window, no access" );
 
     if( IsAccessible() && pIDLA->GetRootFrm() && pWin )
         GetAccessibleMap().GetDocumentView();
@@ -307,7 +307,7 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
                                    const SdrObject *pObj,
                                    sal_Bool bRecursive )
 {
-    ASSERT( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
     ViewShell *pVSh = GetShell();
     ViewShell *pTmp = pVSh;
     do
@@ -321,7 +321,7 @@ void SwViewImp::DisposeAccessible( const SwFrm *pFrm,
 void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
                                 const SwRect& rOldFrm )
 {
-    ASSERT( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( !pFrm || pFrm->IsAccessibleFrm(), "frame is not accessible" );
     ViewShell *pVSh = GetShell();
     ViewShell *pTmp = pVSh;
     do
@@ -335,7 +335,7 @@ void SwViewImp::MoveAccessible( const SwFrm *pFrm, const SdrObject *pObj,
 
 void SwViewImp::InvalidateAccessibleFrmContent( const SwFrm *pFrm )
 {
-    ASSERT( pFrm->IsAccessibleFrm(), "frame is not accessible" );
+    OSL_ENSURE( pFrm->IsAccessibleFrm(), "frame is not accessible" );
     ViewShell *pVSh = GetShell();
     ViewShell *pTmp = pVSh;
     do
@@ -467,7 +467,7 @@ void SwViewImp::InvalidateAccessiblePreViewSelection( sal_uInt16 nSelPage )
 
 SwAccessibleMap *SwViewImp::CreateAccessibleMap()
 {
-    ASSERT( !pAccMap, "accessible map exists" )
+    OSL_ENSURE( !pAccMap, "accessible map exists" );
     pAccMap = new SwAccessibleMap( GetShell() );
     return pAccMap;
 }

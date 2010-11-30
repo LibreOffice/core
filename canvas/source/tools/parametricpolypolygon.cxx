@@ -54,9 +54,9 @@ namespace canvas
     uno::Sequence<rtl::OUString> ParametricPolyPolygon::getAvailableServiceNames()
     {
         uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii("LinearGradient");
-        aRet[1] = rtl::OUString::createFromAscii("EllipticalGradient");
-        aRet[2] = rtl::OUString::createFromAscii("RectangularGradient");
+        aRet[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LinearGradient" ));
+        aRet[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EllipticalGradient" ));
+        aRet[2] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RectangularGradient" ));
 
         return aRet;
     }

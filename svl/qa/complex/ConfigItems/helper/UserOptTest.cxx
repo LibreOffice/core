@@ -31,24 +31,24 @@
 namespace css = ::com::sun::star;
 
 //=============================================================================
-static const ::rtl::OUString MESSAGE_SETCOMPANY_FAILED        = ::rtl::OUString::createFromAscii("set company failed")       ;
-static const ::rtl::OUString MESSAGE_SETFIRSTNAME_FAILED      = ::rtl::OUString::createFromAscii("set firstname failed")     ;
-static const ::rtl::OUString MESSAGE_SETLASTNAME_FAILED       = ::rtl::OUString::createFromAscii("set lastname failed")      ;
-static const ::rtl::OUString MESSAGE_SETID_FAILED             = ::rtl::OUString::createFromAscii("set ID failed")            ;
-static const ::rtl::OUString MESSAGE_SETSTREET_FAILED         = ::rtl::OUString::createFromAscii("set street failed")        ;
-static const ::rtl::OUString MESSAGE_SETCITY_FAILED           = ::rtl::OUString::createFromAscii("set city failed")          ;
-static const ::rtl::OUString MESSAGE_SETSTATE_FAILED          = ::rtl::OUString::createFromAscii("set state failed")         ;
-static const ::rtl::OUString MESSAGE_SETZIP_FAILED            = ::rtl::OUString::createFromAscii("set zip failed")           ;
-static const ::rtl::OUString MESSAGE_SETCOUNTRY_FAILED        = ::rtl::OUString::createFromAscii("set country failed")       ;
-static const ::rtl::OUString MESSAGE_SETPOSITION_FAILED       = ::rtl::OUString::createFromAscii("set position failed")      ;
-static const ::rtl::OUString MESSAGE_SETTITLE_FAILED          = ::rtl::OUString::createFromAscii("set title failed")         ;
-static const ::rtl::OUString MESSAGE_SETTELEPHONEHOME_FAILED  = ::rtl::OUString::createFromAscii("set telephonehome failed") ;
-static const ::rtl::OUString MESSAGE_SETTELEPHONEWORK_FAILED  = ::rtl::OUString::createFromAscii("set telephonework failed") ;
-static const ::rtl::OUString MESSAGE_SETFAX_FAILED            = ::rtl::OUString::createFromAscii("set fax failed")           ;
-static const ::rtl::OUString MESSAGE_SETEMAIL_FAILED          = ::rtl::OUString::createFromAscii("set email failed")         ;
-static const ::rtl::OUString MESSAGE_SETCUSTOMERNUMBER_FAILED = ::rtl::OUString::createFromAscii("set customernumber failed");
-static const ::rtl::OUString MESSAGE_SETFATHERSNAME_FAILED    = ::rtl::OUString::createFromAscii("set fathersname failed")   ;
-static const ::rtl::OUString MESSAGE_SETAPARTMENT_FAILED      = ::rtl::OUString::createFromAscii("set apartment failed")     ;
+static const ::rtl::OUString MESSAGE_SETCOMPANY_FAILED        (RTL_CONSTASCII_USTRINGPARAM("set company failed"))       ;
+static const ::rtl::OUString MESSAGE_SETFIRSTNAME_FAILED      (RTL_CONSTASCII_USTRINGPARAM("set firstname failed"))     ;
+static const ::rtl::OUString MESSAGE_SETLASTNAME_FAILED       (RTL_CONSTASCII_USTRINGPARAM("set lastname failed"))      ;
+static const ::rtl::OUString MESSAGE_SETID_FAILED             (RTL_CONSTASCII_USTRINGPARAM("set ID failed"))            ;
+static const ::rtl::OUString MESSAGE_SETSTREET_FAILED         (RTL_CONSTASCII_USTRINGPARAM("set street failed"))        ;
+static const ::rtl::OUString MESSAGE_SETCITY_FAILED           (RTL_CONSTASCII_USTRINGPARAM("set city failed"))          ;
+static const ::rtl::OUString MESSAGE_SETSTATE_FAILED          (RTL_CONSTASCII_USTRINGPARAM("set state failed"))         ;
+static const ::rtl::OUString MESSAGE_SETZIP_FAILED            (RTL_CONSTASCII_USTRINGPARAM("set zip failed"))           ;
+static const ::rtl::OUString MESSAGE_SETCOUNTRY_FAILED        (RTL_CONSTASCII_USTRINGPARAM("set country failed"))       ;
+static const ::rtl::OUString MESSAGE_SETPOSITION_FAILED       (RTL_CONSTASCII_USTRINGPARAM("set position failed"))      ;
+static const ::rtl::OUString MESSAGE_SETTITLE_FAILED          (RTL_CONSTASCII_USTRINGPARAM("set title failed"))         ;
+static const ::rtl::OUString MESSAGE_SETTELEPHONEHOME_FAILED  (RTL_CONSTASCII_USTRINGPARAM("set telephonehome failed")) ;
+static const ::rtl::OUString MESSAGE_SETTELEPHONEWORK_FAILED  (RTL_CONSTASCII_USTRINGPARAM("set telephonework failed")) ;
+static const ::rtl::OUString MESSAGE_SETFAX_FAILED            (RTL_CONSTASCII_USTRINGPARAM("set fax failed"))           ;
+static const ::rtl::OUString MESSAGE_SETEMAIL_FAILED          (RTL_CONSTASCII_USTRINGPARAM("set email failed"))         ;
+static const ::rtl::OUString MESSAGE_SETCUSTOMERNUMBER_FAILED (RTL_CONSTASCII_USTRINGPARAM("set customernumber failed"));
+static const ::rtl::OUString MESSAGE_SETFATHERSNAME_FAILED    (RTL_CONSTASCII_USTRINGPARAM("set fathersname failed"))   ;
+static const ::rtl::OUString MESSAGE_SETAPARTMENT_FAILED      (RTL_CONSTASCII_USTRINGPARAM("set apartment failed"))     ;
 
 //=============================================================================
 
@@ -84,24 +84,24 @@ void UserOptTest::impl_checkUserData()
     impl_checkSetFathersName( ::rtl::OUString() );
     impl_checkSetApartment( ::rtl::OUString() );
 
-    impl_checkSetCompany( ::rtl::OUString::createFromAscii("RedFlag2000") );
-    impl_checkSetFirstName( ::rtl::OUString::createFromAscii("Yan") );
-    impl_checkSetLastName( ::rtl::OUString::createFromAscii("Wu") );
-    impl_checkSetID( ::rtl::OUString::createFromAscii("wuy") );
-    impl_checkSetStreet( ::rtl::OUString::createFromAscii("SouthFifthRing") );
-    impl_checkSetCity( ::rtl::OUString::createFromAscii("Beijing") );
-    impl_checkSetState( ::rtl::OUString::createFromAscii("Beijing") );
-    impl_checkSetZip( ::rtl::OUString::createFromAscii("100176") );
-    impl_checkSetCountry( ::rtl::OUString::createFromAscii("China") );
-    impl_checkSetPosition( ::rtl::OUString::createFromAscii("Engineer") );
-    impl_checkSetTitle( ::rtl::OUString::createFromAscii("Software Engineer") );
-    impl_checkSetTelephoneHome( ::rtl::OUString::createFromAscii("010-51570010") );
-    impl_checkSetTelephoneWork( ::rtl::OUString::createFromAscii("010-51570010") );
-    impl_checkSetFax( ::rtl::OUString::createFromAscii("010-51570010") );
-    impl_checkSetEmail( ::rtl::OUString::createFromAscii("wuy@redflag2000.cn") );
-    //impl_checkSetCustomerNumber( ::rtl::OUString::createFromAscii("87654321") );
-    impl_checkSetFathersName( ::rtl::OUString::createFromAscii("father") );
-    impl_checkSetApartment( ::rtl::OUString::createFromAscii("apartment") );
+    impl_checkSetCompany( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedFlag2000")) );
+    impl_checkSetFirstName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Yan")) );
+    impl_checkSetLastName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wu")) );
+    impl_checkSetID( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wuy")) );
+    impl_checkSetStreet( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SouthFifthRing")) );
+    impl_checkSetCity( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Beijing")) );
+    impl_checkSetState( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Beijing")) );
+    impl_checkSetZip( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("100176")) );
+    impl_checkSetCountry( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("China")) );
+    impl_checkSetPosition( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Engineer")) );
+    impl_checkSetTitle( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Software Engineer")) );
+    impl_checkSetTelephoneHome( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("010-51570010")) );
+    impl_checkSetTelephoneWork( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("010-51570010")) );
+    impl_checkSetFax( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("010-51570010")) );
+    impl_checkSetEmail( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("wuy@redflag2000.cn")) );
+    //impl_checkSetCustomerNumber( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("87654321")) );
+    impl_checkSetFathersName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("father")) );
+    impl_checkSetApartment( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("apartment")) );
 }
 
 void UserOptTest::impl_checkSetCompany( const ::rtl::OUString& sUserData )

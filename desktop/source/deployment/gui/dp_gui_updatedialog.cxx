@@ -565,8 +565,7 @@ UpdateDialog::UpdateDialog(
     m_update(this, DpGuiResId(RID_DLG_UPDATE_UPDATE)),
     m_updates(
         *this, DpGuiResId(RID_DLG_UPDATE_UPDATES),
-        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)),
-        Image(DpGuiResId(RID_DLG_UPDATE_HIGHCONTRASTALERT))),
+        Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))),
     m_all(this, DpGuiResId(RID_DLG_UPDATE_ALL)),
     m_description(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTION)),
     m_PublisherLabel(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LABEL)),
@@ -667,9 +666,9 @@ short UpdateDialog::Execute() {
 
 UpdateDialog::CheckListBox::CheckListBox(
     UpdateDialog & dialog, ResId const & resource,
-    Image const & normalStaticImage, Image const & highContrastStaticImage):
+    Image const & normalStaticImage):
     SvxCheckListBox(
-        &dialog, resource, normalStaticImage, highContrastStaticImage),
+        &dialog, resource, normalStaticImage),
     m_dialog(dialog)
 {}
 

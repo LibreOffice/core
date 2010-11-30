@@ -82,7 +82,6 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     m_sRequired     ( ModuleRes( STR_REQUIRED ) ),
     bRefMode        (FALSE)
 {
-    Image aFxHC( ModuleRes( IMG_FX_H ) );
     FreeResource();
     aDefaultString=aFtEditDesc.GetText();
 
@@ -94,11 +93,6 @@ ParaWin::ParaWin(Window* pParent,IControlReferenceHandler* _pDlg,Point aPos):
     aSlider.SetSizePixel( aSize );
     aSlider.SetEndScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
     aSlider.SetScrollHdl( LINK( this, ParaWin, ScrollHdl ) );
-
-    aBtnFx1.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx2.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx3.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
-    aBtnFx4.SetModeImage( aFxHC, BMP_COLOR_HIGHCONTRAST );
 
     InitArgInput( 0, aFtArg1, aBtnFx1, aEdArg1, aRefBtn1);
     InitArgInput( 1, aFtArg2, aBtnFx2, aEdArg2, aRefBtn2);

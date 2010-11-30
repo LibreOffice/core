@@ -93,36 +93,11 @@ void __EXPORT SwInsFootNoteDlg::Apply()
     }
     else
     {
-/*
-        rSh.StartUndo( UNDO_UI_INSERT_FOOTNOTE );
-        rSh.InsertFootnote( aStr, aEndNoteBtn.IsChecked(), !bExtCharAvailable );
 
-        if ( bExtCharAvailable )
-        {
-            rSh.Left( CRSR_SKIP_CHARS, TRUE, 1, FALSE );
-            SfxItemSet aSet( rSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
-            rSh.GetAttr( aSet );
-            SvxFontItem &rFont = (SvxFontItem &) aSet.Get( RES_CHRATR_FONT );
-            SvxFontItem aFont( rFont.GetFamily(), aFontName,
-                               rFont.GetStyleName(), rFont.GetPitch(),
-                               eCharSet );
-            aSet.Put( aFont );
-            rSh.SetAttr( aSet, SETATTR_DONTEXPAND );
-            // zur Bearbeitung des Fussnotentextes
-            rSh.ResetSelect(0, FALSE);
-            rSh.GotoFtnTxt();
-        }
-        rSh.EndUndo( UNDO_UI_INSERT_FOOTNOTE );
-*/
     }
 
     bFootnote = aFtnBtn.IsChecked();
 }
-
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
 {
@@ -131,10 +106,6 @@ IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberCharHdl, Button *, EMPTYARG )
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 {
@@ -145,20 +116,12 @@ IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberEditHdl, void *, EMPTYARG )
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK_INLINE_START( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
 {
     aOkBtn.Enable( TRUE );
     return 0;
 }
 IMPL_LINK_INLINE_END( SwInsFootNoteDlg, NumberAutoBtnHdl, Button *, EMPTYARG )
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
 {
@@ -203,10 +166,6 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     return 0;
 }
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 {
     Apply();
@@ -222,10 +181,6 @@ IMPL_LINK( SwInsFootNoteDlg, NextPrevHdl, Button *, pBtn )
 
     return 0;
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd) :
 
@@ -272,11 +227,6 @@ SwInsFootNoteDlg::SwInsFootNoteDlg(Window *pParent, SwWrtShell &rShell, BOOL bEd
     }
 }
 
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 SwInsFootNoteDlg::~SwInsFootNoteDlg()
 {
     rSh.SetCareWin(0);
@@ -284,10 +234,6 @@ SwInsFootNoteDlg::~SwInsFootNoteDlg()
     if (bEdit)
         rSh.ResetSelect(0, FALSE);
 }
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 void SwInsFootNoteDlg::Init()
 {

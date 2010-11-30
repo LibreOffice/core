@@ -27,7 +27,6 @@
 
 #include "sc.hrc"
 
-
 // Imageliste hier, damit sie nicht in ui.src beim Zusammenbauen der
 // "echten" Imagelisten stoert
 
@@ -41,11 +40,3 @@ ImageList RID_OUTLINEBITMAPS
     MaskColor = STD_MASKCOLOR;
     OUTLINE_ID_LIST
 };
-
-ImageList RID_OUTLINEBITMAPS_H
-{
-    Prefix = "ouh";
-    MaskColor = SC_HC_MASKCOLOR;
-    OUTLINE_ID_LIST
-};
-

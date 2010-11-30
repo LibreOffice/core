@@ -141,7 +141,7 @@ USHORT MSWordExportBase::GetId( const SwNumRule& rNumRule )
 //here in the ww export filter
 sal_Int16 GetWordFirstLineOffset(const SwNumFmt &rFmt)
 {
-    ASSERT( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
+    OSL_ENSURE( rFmt.GetPositionAndSpaceMode() == SvxNumberFormat::LABEL_WIDTH_AND_POSITION,
             "<GetWordFirstLineOffset> - misusage: position-and-space-mode does not equal LABEL_WIDTH_AND_POSITION" );
 
     short nFirstLineOffset;
@@ -267,7 +267,7 @@ void WW8AttributeOutput::NumberingLevel( BYTE /*nLevel*/,
             m_rWW8Export.InsUInt16( nFontID );
         }
 
-        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN );
+        m_rWW8Export.OutputItemSet( *pOutSet, false, true, i18n::ScriptType::LATIN, m_rWW8Export.mbExportModeRTF );
 
         m_rWW8Export.pO = pOldpO;
     }
@@ -359,7 +359,7 @@ void MSWordExportBase::AbstractNumberingDefinitions()
                     default:
                     {
                         nFollow = 0;
-                        ASSERT( false,
+                        OSL_ENSURE( false,
                                 "unknown GetLabelFollowedBy() return value" );
                     }
                 }
@@ -609,10 +609,7 @@ void WW8Export::Out_WwNumLvl( BYTE nWwLevel )
 
 void WW8Export::Out_SwNumLvl( BYTE nSwLevel )
 {
-    // --> OD 2008-04-02 #refactorlists#
-//    ASSERT(IsNum(nSwLevel), "numbered?");
-    ASSERT( nSwLevel < MAXLEVEL, "numbered?");
-    // <--
+    OSL_ENSURE( nSwLevel < MAXLEVEL, "numbered?");
     Out_WwNumLvl( nSwLevel + 1 );
 }
 
@@ -650,9 +647,7 @@ void WW8Export::BuildAnlvBulletBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
 
     if (1 < rCharLen)
     {
-        // --> OD 2006-06-27 #b6440955#
-//        const Font& rFont = rFmt.GetBulletFont() ? *rFmt.GetBulletFont()
-//            : SwNumRule::GetDefBulletFont();
+        // --> #b6440955#
         const Font& rFont = rFmt.GetBulletFont()
                             ? *rFmt.GetBulletFont()
                             : numfunc::GetDefBulletFont();
@@ -895,7 +890,7 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
 
     if (nLevel < 0 || nLevel >= MAXLEVEL)
     {
-        ASSERT(FALSE, "Invalid level");
+        OSL_ENSURE(FALSE, "Invalid level");
 
         return false;
     }
@@ -922,11 +917,7 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
          aFmt.GetNumberingType() == SVX_NUM_BITMAP
        )
     {
-        // Aufzaehlung
-        // --> OD 2008-04-02 #refactorlists#
-//        Out_WwNumLvl(bNoNum ? 12 : 11);
         Out_WwNumLvl(11);
-        // <--
         Out_NumRuleAnld(*pRul, aFmt, 11);
         bRet = false;
     }
@@ -935,21 +926,13 @@ bool WW8Export::Out_SwNum(const SwTxtNode* pNd)
               (pRul->Get(1).GetIncludeUpperLevels() <= 1)
             )
     {
-        // Nummerierung
-        // --> OD 2008-04-02 #refactorlists#
-//        Out_WwNumLvl(bNoNum ? 12 : 10);
         Out_WwNumLvl(10);
-        // <--
         Out_NumRuleAnld(*pRul, aFmt, 10);
         bRet = false;
     }
     else
     {
-        // Gliederung
-        // --> OD 2008-04-02 #refactorlists#
-//        Out_SwNumLvl(bNoNum ? 12 : nSwLevel);
         Out_SwNumLvl(nSwLevel);
-        // <--
         Out_NumRuleAnld(*pRul, aFmt, nSwLevel);
     }
     return bRet;

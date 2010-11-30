@@ -376,7 +376,7 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
         sal_uInt32 nLoopTime;
         double fZeroLogic, fOneLogic, fInitLogic, fDistanceLogic;
         double fZeroLogicAlternate = 0.0, fOneLogicAlternate = 0.0;
-        double fZeroRelative, fOneRelative, fInitRelative,fDistanceRelative;
+        double fZeroRelative, fOneRelative, fInitRelative;
 
         if(ScrollHorizontal())
         {
@@ -429,13 +429,11 @@ void ActivityImpl::ImpForceScrollTextAnimNodes()
                 (fZeroLogicAlternate - fZeroLogic) / fDistanceLogic;
             fOneRelative =
                 (fOneLogicAlternate - fZeroLogic) / fDistanceLogic;
-            fDistanceRelative = fOneRelative - fZeroRelative;
         }
         else
         {
             fZeroRelative = 0.0;
             fOneRelative = 1.0;
-            fDistanceRelative = 1.0;
         }
 
         if(mnStartTime)

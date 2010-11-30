@@ -197,7 +197,7 @@ String SfxFilter::GetTypeFromStorage( const com::sun::star::uno::Reference< com:
     if ( xProps.is() )
     {
         ::rtl::OUString aMediaType;
-        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= aMediaType;
+        xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MediaType")) ) >>= aMediaType;
         if ( aMediaType.getLength() )
         {
             ::com::sun::star::datatransfer::DataFlavor aDataFlavor;

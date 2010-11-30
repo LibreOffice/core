@@ -248,7 +248,7 @@ SvXMLNumFmtExport::SvXMLNumFmtExport(
             SvXMLExport& rExp,
             const uno::Reference< util::XNumberFormatsSupplier >& rSupp ) :
     rExport( rExp ),
-    sPrefix( OUString::createFromAscii( "N" ) ),
+    sPrefix( OUString(RTL_CONSTASCII_USTRINGPARAM("N")) ),
     pFormatter( NULL ),
     pCharClass( NULL ),
     pLocaleData( NULL )

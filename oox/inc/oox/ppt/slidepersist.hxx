@@ -72,6 +72,10 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage >    getPage() const { return mxPage; };
 
+#if OSL_DEBUG_LEVEL > 0
+    static com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > mxDebugPage;
+#endif
+
     void setMasterPersist( SlidePersistPtr pMasterPersistPtr ){ mpMasterPagePtr = pMasterPersistPtr; }
     SlidePersistPtr getMasterPersist() const { return mpMasterPagePtr; }
 

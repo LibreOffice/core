@@ -90,7 +90,7 @@ void SwAccessibleFrameBase::GetStates(
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        ASSERT( bIsSelected, "bSelected out of sync" );
+        OSL_ENSURE( bIsSelected, "bSelected out of sync" );
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
 
@@ -199,7 +199,7 @@ void SwAccessibleFrameBase::_InvalidateFocus()
             osl::MutexGuard aGuard( aMutex );
             bSelected = bIsSelected;
         }
-        ASSERT( bSelected, "focus object should be selected" );
+        OSL_ENSURE( bSelected, "focus object should be selected" );
 
         FireStateChangedEvent( AccessibleStateType::FOCUSED,
                                pWin->HasFocus() && bSelected );
@@ -227,16 +227,16 @@ void SwAccessibleFrameBase::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         if(  pFlyFrm )
         {
             const SwFrmFmt *pFrmFmt = pFlyFrm->GetFmt();
-            ASSERT( pFrmFmt == GetRegisteredIn(), "invalid frame" );
+            OSL_ENSURE( pFrmFmt == GetRegisteredIn(), "invalid frame" );
 
             OUString sOldName( GetName() );
-            ASSERT( !pOld ||
+            OSL_ENSURE( !pOld ||
                     static_cast < SwStringMsgPoolItem * >( pOld )->GetString() == String( sOldName ),
                     "invalid old name" );
 
             const String& rNewName = pFrmFmt->GetName();
             SetName( rNewName );
-            ASSERT( !pNew ||
+            OSL_ENSURE( !pNew ||
                     static_cast < SwStringMsgPoolItem * >( pNew )->GetString() == rNewName,
                     "invalid new name" );
 

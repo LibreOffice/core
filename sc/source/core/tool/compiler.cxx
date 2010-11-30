@@ -5475,10 +5475,6 @@ BOOL ScCompiler::HandleDbData()
     return TRUE;
 }
 
-String GetScCompilerNativeSymbol( OpCode eOp )
-{
-    return ScCompiler::GetNativeSymbol( eOp );
-}
 // -----------------------------------------------------------------------------
 FormulaTokenRef ScCompiler::ExtendRangeReference( FormulaToken & rTok1, FormulaToken & rTok2, bool bReuseDoubleRef )
 {

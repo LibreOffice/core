@@ -60,8 +60,6 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
             AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             break;
         case RID_PAGEDIALOG_PAGE:
-            //AddTabPage( RID_SVXPAGE_PAGE,String(ModuleRes(1)));
-   //         AddTabPage( RID_SVXPAGE_BACKGROUND,String(ModuleRes(1)));
             AddTabPage(RID_SVXPAGE_PAGE, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_PAGE ), 0 );
             AddTabPage(RID_SVXPAGE_BACKGROUND, pFact->GetTabPageCreatorFunc( RID_SVXPAGE_BACKGROUND ), 0 );
             break;
@@ -76,8 +74,6 @@ SfxTabDialog ( pParent, ModuleRes( _nPageId ), pAttr ),
             break;
         case RID_PAGEDIALOG_LINE:
             AddTabPage( RID_SVXPAGE_LINE,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE ), 0 );
-            //AddTabPage( RID_SVXPAGE_LINE_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINE_DEF ), 0 );
-            //AddTabPage( RID_SVXPAGE_LINEEND_DEF,pFact->GetTabPageCreatorFunc( RID_SVXPAGE_LINEEND_DEF ), 0 );
             break;
         default:
             OSL_ENSURE(0,"Unknown page id");

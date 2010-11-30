@@ -1054,7 +1054,7 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         const XclChEscherFormat& rEscherFmt, const XclChPicFormat& rPicFmt,
         XclChPropertyMode ePropMode )
 {
-    if( rEscherFmt.mxItemSet.is() )
+    if( rEscherFmt.mxItemSet )
     {
         if( const XFillStyleItem* pStyleItem = static_cast< const XFillStyleItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLSTYLE, FALSE ) ) )
         {

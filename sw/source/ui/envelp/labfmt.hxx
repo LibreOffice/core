@@ -138,9 +138,7 @@ public:
 
     SwLabDlg* GetParent() {return (SwLabDlg*) SfxTabPage::GetParent()->GetParent();}
 };
-/* -----------------------------23.01.01 10:26--------------------------------
 
- ---------------------------------------------------------------------------*/
 class SwSaveLabelDlg : public ModalDialog
 {
     FixedLine       aOptionsFL;

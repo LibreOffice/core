@@ -166,7 +166,6 @@ long OTableWindowListBox::PreNotify(NotifyEvent& rNEvt)
                 if(m_pTabWin)
                 {
                     bHandled = m_pTabWin->HandleKeyInput(*pKeyEvent);
-                    //  bHandled = TRUE;
                 }
                 break;
             }
@@ -196,7 +195,6 @@ IMPL_LINK( OTableWindowListBox, ScrollUpHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( -1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, TRUE );
-//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -214,7 +212,6 @@ IMPL_LINK( OTableWindowListBox, ScrollDownHdl, SvTreeListBox*, /*pBox*/ )
         ScrollOutputArea( 1 );
         pEntry = GetEntry( m_aMousePos );
         Select( pEntry, TRUE );
-//      m_aScrollTimer.Start();
     }
 
     return 0;
@@ -246,7 +243,6 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
     if ( !OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_TABID) // this means that the first entry is to be draged
         && OJoinExchObj::isFormatAvailable(GetDataFlavorExVector(),SOT_FORMATSTR_ID_SBA_JOIN) )
     {   // don't drop into the window if it's the drag source itself
-
 
         // remove the selection if the dragging operation is leaving the window
         if (_rEvt.mbLeaving)

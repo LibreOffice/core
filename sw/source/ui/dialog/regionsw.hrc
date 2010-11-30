@@ -83,7 +83,6 @@
 #define FL_END                 52
 #define FL_FTN                 53
 #define IL_BITMAPS              54
-#define ILH_BITMAPS             55
 // #114856# edit in readonly sections
 #define FL_PROPERTIES           56
 #define CB_EDIT_IN_READONLY     57

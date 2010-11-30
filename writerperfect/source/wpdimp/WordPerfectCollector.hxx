@@ -31,13 +31,17 @@
 #define _WORDPERFECTCOLLECTOR_HXX
 
 #include "filter/DocumentCollector.hxx"
+#include "filter/DocumentHandlerInterface.hxx"
+#include <rtl/ustring.hxx>
 
 class WordPerfectCollector : public DocumentCollector
 {
 public:
-    WordPerfectCollector(WPSInputStream *pInput, DocumentHandler *pHandler);
+    WordPerfectCollector(WPXInputStream *pInput, DocumentHandlerInterface *pHandler, const rtl::OString& password);
     virtual ~WordPerfectCollector();
-    bool parseSourceDocument(WPSInputStream &pInput);
+    bool parseSourceDocument(WPXInputStream &pInput);
+private:
+    rtl::OString maUtf8Password;
 };
 #endif
 

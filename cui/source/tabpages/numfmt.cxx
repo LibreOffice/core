@@ -308,7 +308,6 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 void SvxNumberFormatTabPage::Init_Impl()
 {
     ImageList               aIconList( CUI_RES_PLAIN ( IL_ICON ) );
-    ImageList               aIconListHC( CUI_RES_PLAIN ( IL_ICON_HC ) );
 
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;
@@ -321,13 +320,8 @@ void SvxNumberFormatTabPage::Init_Impl()
     nStdFormatHeight=nCurFormatY-nStdFormatY+nCurFormatHeight;
 
     aIbAdd.     SetModeImage( aIconList.GetImage( IID_ADD ) );
-    aIbAdd.     SetModeImage( aIconListHC.GetImage( IID_ADD ), BMP_COLOR_HIGHCONTRAST );
-
     aIbRemove.  SetModeImage( aIconList.GetImage( IID_REMOVE ) );
-    aIbRemove.  SetModeImage( aIconListHC.GetImage( IID_REMOVE ), BMP_COLOR_HIGHCONTRAST );
-
     aIbInfo.    SetModeImage( aIconList.GetImage( IID_INFO ) );
-    aIbInfo.    SetModeImage( aIconListHC.GetImage( IID_INFO ), BMP_COLOR_HIGHCONTRAST );
 
     aIbAdd.Enable(FALSE );
     aIbRemove.Enable(FALSE );
@@ -1925,12 +1919,11 @@ void SvxNumberFormatTabPage::SetCategory(USHORT nPos)
     }
     aLbCategory.SelectEntryPos(nPos);
 }
-/* -----------------12.11.2002 14:35-----------------
- * to support Writer text field language handling an
- * additional entry needs to be inserted into the ListBox
- * which marks a certain language as automatically detected
- * Additionally the "Default" language is removed
- * --------------------------------------------------*/
+/* to support Writer text field language handling an
+   additional entry needs to be inserted into the ListBox
+   which marks a certain language as automatically detected
+   Additionally the "Default" language is removed
+*/
 void SvxNumberFormatTabPage::AddAutomaticLanguage_Impl(LanguageType eAutoLang, BOOL bSelect)
 {
     aLbLanguage.RemoveLanguage(LANGUAGE_SYSTEM);

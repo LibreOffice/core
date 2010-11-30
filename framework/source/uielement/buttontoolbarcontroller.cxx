@@ -282,7 +282,7 @@ throw (::com::sun::star::uno::RuntimeException)
             aArgs[0].Value  <<= KeyModifier;
 
             if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-                UiEventLogHelper(::rtl::OUString::createFromAscii("ButtonToolbarController")).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
+                UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ButtonToolbarController"))).log(m_xServiceManager, m_xFrame, aTargetURL, aArgs);
             xDispatch->dispatch( aTargetURL, aArgs );
         }
         catch ( DisposedException& )

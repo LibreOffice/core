@@ -407,7 +407,6 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                 {
                     pSh->LeaveSelFrmMode();
                     // #105852# FME
-//                   pSh->NoEdit();
                 }
                 bNotify = TRUE;
             }
@@ -638,19 +637,6 @@ IMPL_LINK( SwDrawBaseShell, CheckGroupShapeNameHdl, AbstractSvxNameDialog*, pNam
     {
         nRet = 1;
         SdrModel* pModel = rSh.getIDocumentDrawModelAccess()->GetDrawModel();
-        // --> OD 2006-03-09 #i51726# - all drawing objects can be named now.
-        // consider also drawing objects inside group objects
-//        SdrPage* pPage = pModel->GetPage(0);
-//        sal_uInt32 nCount = pPage->GetObjCount();
-//        for( sal_uInt32 i=0; i< nCount; i++ )
-//        {
-//            SdrObject* pTemp = pPage->GetObj(i);
-//            if(pObj != pTemp && pTemp->ISA(SdrObjGroup) && pTemp->GetName() == sNewName)
-//            {
-//                nRet = 0;
-//                break;
-//            }
-//        }
         SdrObjListIter aIter( *(pModel->GetPage(0)), IM_DEEPWITHGROUPS );
         while( aIter.IsMore() )
         {

@@ -31,6 +31,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/binarystreambase.hxx"
+#include "oox/helper/propertyset.hxx"
 #include "oox/ole/axbinaryreader.hxx"
 #include "oox/ole/olehelper.hxx"
 
@@ -38,6 +39,7 @@ namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
     namespace container { class XIndexContainer; }
     namespace drawing { class XDrawPage; }
+    namespace frame { class XModel; }
     namespace form { class XFormsSupplier; }
     namespace lang { class XMultiServiceFactory; }
 } } }
@@ -148,6 +150,7 @@ class ControlConverter
 {
 public:
     explicit            ControlConverter(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );
     virtual             ~ControlConverter();
@@ -185,6 +188,14 @@ public:
                             PropertyMap& rPropMap,
                             sal_Int32 nMin, sal_Int32 nMax, sal_Int32 nPosition,
                             sal_Int32 nSmallChange, sal_Int32 nLargeChange, bool bAwtModel ) const;
+
+    /** Binds the passed control model to the passed data sources. The
+        implementation will check which source types are supported. */
+    void                bindToSources(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxCtrlModel,
+                            const ::rtl::OUString& rCtrlSource,
+                            const ::rtl::OUString& rRowSource,
+                            sal_Int32 nRefSheet = 0 ) const;
 
     // ActiveX (Forms 2.0) specific conversion --------------------------------
 
@@ -239,7 +250,10 @@ public:
                             sal_Int32 nOrientation ) const;
 
 private:
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > mxDocModel;
     const GraphicHelper& mrGraphicHelper;
+    mutable PropertySet maAddressConverter;
+    mutable PropertySet maRangeConverter;
     bool                mbDefaultColorBgr;
 };
 
@@ -805,7 +819,7 @@ class EmbeddedForm : public ControlConverter
 {
 public:
     explicit            EmbeddedForm(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& rxModelFactory,
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxDocModel,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& rxDrawPage,
                             const GraphicHelper& rGraphicHelper,
                             bool bDefaultColorBgr = true );

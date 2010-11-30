@@ -109,19 +109,19 @@
 
 // TP_LCONTENT
 
-#define GB_DISPLAY      20
-#define CB_FORMULA              21
-#define CB_NIL                  22
+#define GB_DISPLAY          20
+#define CB_FORMULA          21
+#define CB_NIL              22
 #define CB_ANNOT            23
 #define CB_VALUE            24
 #define CB_ANCHOR           25
 #define GB_OBJECT           26
 #define FT_OBJGRF           27
 #define LB_OBJGRF           28
-#define FT_DIAGRAM              29
-#define LB_DIAGRAM              30
-#define FT_DRAW                 31
-#define LB_DRAW                 32
+#define FT_DIAGRAM          29
+#define LB_DIAGRAM          30
+#define FT_DRAW             31
+#define LB_DRAW             32
 #define CB_CLIP             33
 #define GB_ZOOM             34
 #define CB_SYNCZOOM         35
@@ -162,9 +162,8 @@
 #define FL_SEPARATOR1   71
 #define FL_SEPARATOR2   72
 #define FL_SEPARATOR    73
-#define FL_H_SEPARATOR  74
-// TP_INPUT
 
+// TP_INPUT
 #define GB_OPTIONS      70
 #define CB_ALIGN        71
 #define LB_ALIGN        72

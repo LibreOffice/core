@@ -123,6 +123,8 @@ public:
         ChildProps( VCLXTabControl::ChildData *pData );
     };
 
+    inline TabControl *getTabControl() const throw (::com::sun::star::uno::RuntimeException);
+
 protected:
     ChildData *createChild( css::uno::Reference< css::awt::XLayoutConstrains > const& xChild );
     ChildProps *createChildProps( Box_Base::ChildData* pData );
@@ -133,7 +135,6 @@ protected:
     std::list< ::com::sun::star::uno::Reference
                < ::com::sun::star::awt::XTabListener > > mxTabListeners;
 
-    inline TabControl *getTabControl() const throw (::com::sun::star::uno::RuntimeException);
 
 private:
     VCLXTabControl( const VCLXTabControl& );            // never implemented

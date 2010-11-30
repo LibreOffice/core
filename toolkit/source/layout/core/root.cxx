@@ -80,7 +80,7 @@ LayoutRoot::~LayoutRoot()
 void ShowMessageBox( uno::Reference< lang::XMultiServiceFactory > const& xFactory, uno::Reference< awt::XToolkit > xToolkit, OUString const& aTitle, OUString const& aMessage )
 {
     uno::Reference< uno::XInterface > iDesktop = xFactory->createInstance
-        ( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) );
+        ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) );
     uno::Reference< frame::XDesktop > xDesktop ( iDesktop, uno::UNO_QUERY );
     uno::Reference< frame::XFrame > xFrame ( xDesktop->getCurrentFrame() );
     uno::Reference< awt::XWindow > xContainerWindow( xFrame->getContainerWindow() );
@@ -90,7 +90,7 @@ void ShowMessageBox( uno::Reference< lang::XMultiServiceFactory > const& xFactor
     awt::Rectangle aRectangle;
     uno::Reference< awt::XMessageBox > xMessageBox
         = xMessageBoxFactory->createMessageBox
-        ( xWindowPeer, aRectangle, OUString::createFromAscii( "errorbox" ),
+        ( xWindowPeer, aRectangle, OUString(RTL_CONSTASCII_USTRINGPARAM("errorbox")),
           awt::MessageBoxButtons::BUTTONS_OK, aTitle, aMessage );
 
     if ( xMessageBox.is() )
@@ -104,7 +104,7 @@ void LayoutRoot::error( OUString const& message )
 {
     OSL_TRACE( "%s\n", OUSTRING_CSTR( message ) );
     ShowMessageBox( mxFactory, mxToolkit,
-                    OUString::createFromAscii( "Fatal error" ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("Fatal error")),
                     message );
     throw uno::RuntimeException( message, uno::Reference< uno::XInterface >() );
 }
@@ -133,13 +133,13 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
 
     uno::Reference< xml::sax::XParser > xParser
         ( mxFactory->createInstance(
-            OUString::createFromAscii( "com.sun.star.xml.sax.Parser" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
           uno::UNO_QUERY );
     OSL_ASSERT( xParser.is() );
     if (! xParser.is())
     {
         throw uno::RuntimeException(
-            OUString::createFromAscii( "cannot create sax-parser component" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("cannot create sax-parser component")),
             uno::Reference< uno::XInterface >() );
     }
 
@@ -148,18 +148,18 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
 
     mxToolkit = uno::Reference< awt::XToolkit >(
         mxFactory->createInstance(
-            OUString::createFromAscii( "com.sun.star.awt.Toolkit" ) ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Toolkit")) ),
         uno::UNO_QUERY );
 
     if ( !mxToolkit.is() )
         throw uno::RuntimeException(
-            OUString::createFromAscii( "failed to create toolkit!" ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("failed to create toolkit!")),
             uno::Reference< uno::XInterface >() );
 
     OUString aXMLFile = readRightTranslation( aXMLName );
     uno::Reference< io::XInputStream > xStream = getFileAsStream( aXMLFile );
     if (! xStream.is() )
-        error( OUString::createFromAscii( "Installation problem: cannot find XML file:" ) + aXMLName );
+        error( OUString(RTL_CONSTASCII_USTRINGPARAM("Installation problem: cannot find XML file:")) + aXMLName );
 
     // error handler, entity resolver omitted
 
@@ -170,17 +170,17 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
     aArgs[0] <<= xRoot;
     uno::Reference< xml::sax::XDocumentHandler > xDocHandler
         (mxFactory->createInstanceWithArguments
-         ( OUString::createFromAscii( "com.sun.star.xml.input.SaxDocumentHandler" ),
+         ( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.input.SaxDocumentHandler")),
           aArgs ), uno::UNO_QUERY );
 
     if (! xDocHandler.is() )
-        error( OUString::createFromAscii( "cannot find SAx handler for document type of:") + aXMLName );
+        error( OUString(RTL_CONSTASCII_USTRINGPARAM("cannot find SAx handler for document type of:")) + aXMLName );
 
     xParser->setDocumentHandler( xDocHandler );
 
     xml::sax::InputSource source;
     source.aInputStream = xStream;
-    source.sSystemId = OUString::createFromAscii( "virtual file" );
+    source.sSystemId = OUString(RTL_CONSTASCII_USTRINGPARAM("virtual file"));
 
     try
     {
@@ -188,11 +188,11 @@ void SAL_CALL LayoutRoot::initialize( const uno::Sequence< uno::Any >& aArgument
     }
     catch ( xml::sax::SAXParseException& e )
     {
-        OUString c = OUString::createFromAscii( ":" );
+        OUString c(RTL_CONSTASCII_USTRINGPARAM(":"));
         error( aXMLName
                + c + OUString::valueOf( e.LineNumber )
                + c + OUString::valueOf( e.ColumnNumber )
-               + c + OUString::createFromAscii( "Sax parse error" ) );
+               + c + OUString(RTL_CONSTASCII_USTRINGPARAM("Sax parse error")) );
     }
 }
 

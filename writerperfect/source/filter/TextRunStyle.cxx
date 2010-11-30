@@ -51,7 +51,7 @@ ParagraphStyle::~ParagraphStyle()
     delete mpPropList;
 }
 
-void ParagraphStyle::write(DocumentHandler *pHandler) const
+void ParagraphStyle::write(DocumentHandlerInterface *pHandler) const
 {
     WRITER_DEBUG_MSG(("Writing a paragraph style..\n"));
 
@@ -64,49 +64,53 @@ void ParagraphStyle::write(DocumentHandler *pHandler) const
         pHandler->startElement("style:style", propList);
 
         propList.clear();
-    WPXPropertyList::Iter k((*mpPropList));
-    for (k.rewind(); k.next(); )
+    WPXPropertyList::Iter i((*mpPropList));
+    for (i.rewind(); i.next(); )
     {
-                if (strcmp(k.key(), "style:list-style-name") == 0)
-                        propList.insert("style:list-style-name", k()->getStr());
-        if (strcmp(k.key(), "fo:margin-left") == 0)
-            propList.insert("fo:margin-left", k()->getStr());
-        if (strcmp(k.key(), "fo:margin-right") == 0)
-            propList.insert("fo:margin-right", k()->getStr());
-        if (strcmp(k.key(), "fo:text-indent") == 0)
-            propList.insert("fo:text-indent", k()->getStr());
-        if (strcmp(k.key(), "fo:margin-top") == 0)
-            propList.insert("fo:margin-top", k()->getStr());
-        if (strcmp(k.key(), "fo:margin-bottom") == 0)
+#if 0
+        if (strcmp(i.key(), "style:list-style-name") == 0)
+            propList.insert("style:list-style-name", i()->getStr());
+#endif
+        if (strcmp(i.key(), "fo:margin-left") == 0)
+            propList.insert("fo:margin-left", i()->getStr());
+        if (strcmp(i.key(), "fo:margin-right") == 0)
+            propList.insert("fo:margin-right", i()->getStr());
+        if (strcmp(i.key(), "fo:text-indent") == 0)
+            propList.insert("fo:text-indent", i()->getStr());
+        if (strcmp(i.key(), "fo:margin-top") == 0)
+            propList.insert("fo:margin-top", i()->getStr());
+        if (strcmp(i.key(), "fo:margin-bottom") == 0)
         {
-            if (k()->getFloat() > 0.0f)
-                propList.insert("fo:margin-bottom", k()->getStr());
+            if (i()->getDouble() > 0.0f)
+                propList.insert("fo:margin-bottom", i()->getStr());
             else
                 propList.insert("fo:margin-bottom", 0.0f);
         }
-        if (strcmp(k.key(), "fo:line-height") == 0)
-            propList.insert("fo:line-height", k()->getStr());
-        if (strcmp(k.key(), "fo:break-before") == 0)
-            propList.insert("fo:break-before", k()->getStr());
-        if (strcmp(k.key(), "fo:text-align") == 0)
-            propList.insert("fo:text-align", k()->getStr());
-                if (strcmp(k.key(), "fo:text-align-last") == 0)
-                        propList.insert("fo:text-align-last", k()->getStr());
+        if (strcmp(i.key(), "fo:line-height") == 0)
+            propList.insert("fo:line-height", i()->getStr());
+        if (strcmp(i.key(), "fo:break-before") == 0)
+            propList.insert("fo:break-before", i()->getStr());
+        if (strcmp(i.key(), "fo:text-align") == 0)
+            propList.insert("fo:text-align", i()->getStr());
+        if (strcmp(i.key(), "fo:text-align-last") == 0)
+            propList.insert("fo:text-align-last", i()->getStr());
     }
 
     propList.insert("style:justify-single-word", "false");
-    pHandler->startElement("style:properties", propList);
+    pHandler->startElement("style:paragraph-properties", propList);
 
         if (mxTabStops.count() > 0)
         {
                 TagOpenElement tabListOpen("style:tab-stops");
                 tabListOpen.write(pHandler);
-                WPXPropertyListVector::Iter i(mxTabStops);
-                for (i.rewind(); i.next();)
+        WPXPropertyListVector::Iter i2(mxTabStops);
+        for (i2.rewind(); i2.next();)
                 {
+            if (i2()["style:position"] && i2()["style:position"]->getDouble() < 0)
+                continue;
                         TagOpenElement tabStopOpen("style:tab-stop");
 
-                        WPXPropertyList::Iter j(i());
+            WPXPropertyList::Iter j(i2());
                         for (j.rewind(); j.next(); )
                         {
                                 tabStopOpen.addAttribute(j.key(), j()->getStr().cstr());
@@ -117,7 +121,7 @@ void ParagraphStyle::write(DocumentHandler *pHandler) const
                 pHandler->endElement("style:tab-stops");
         }
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:paragraph-properties");
     pHandler->endElement("style:style");
 }
 
@@ -127,7 +131,7 @@ SpanStyle::SpanStyle(const char *psName, const WPXPropertyList &xPropList) :
 {
 }
 
-void SpanStyle::write(DocumentHandler *pHandler) const
+void SpanStyle::write(DocumentHandlerInterface *pHandler) const
 {
     WRITER_DEBUG_MSG(("Writing a span style..\n"));
         WPXPropertyList styleOpenList;
@@ -145,8 +149,13 @@ void SpanStyle::write(DocumentHandler *pHandler) const
 
     if (mPropList["fo:font-size"])
     {
+        if (mPropList["fo:font-size"]->getDouble() > 0.0f)
+        {
         propList.insert("style:font-size-asian", mPropList["fo:font-size"]->getStr());
         propList.insert("style:font-size-complex", mPropList["fo:font-size"]->getStr());
+    }
+        else
+            propList.remove("fo:font-size");
     }
 
     if (mPropList["fo:font-weight"])
@@ -161,9 +170,9 @@ void SpanStyle::write(DocumentHandler *pHandler) const
         propList.insert("style:font-style-complex", mPropList["fo:font-style"]->getStr());
     }
 
-        pHandler->startElement("style:properties", propList);
+    pHandler->startElement("style:text-properties", propList);
 
-    pHandler->endElement("style:properties");
+    pHandler->endElement("style:text-properties");
     pHandler->endElement("style:style");
 }
 

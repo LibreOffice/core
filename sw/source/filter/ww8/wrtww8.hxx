@@ -228,6 +228,7 @@ class WW8_WrPlcSepx : public MSWordSections
     SvULongs aCps;              // PTRARR von CPs
     WW8_PdAttrDesc* pAttrs;
     WW8_WrPlc0* pTxtPos;        // Pos der einzelnen Header / Footer
+    bool bNoMoreSections;
 
     // No copy, no assign
     WW8_WrPlcSepx( const WW8_WrPlcSepx& );
@@ -544,6 +545,8 @@ public:
     BYTE bHasFtr : 1;
     BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
 
+    bool mbExportModeRTF;
+
     SwDoc *pDoc;
     SwPaM *pCurPam, *pOrigPam;
 
@@ -593,7 +596,7 @@ public:
     void AppendWordBookmark( const String& rName );
 
     /// Use OutputItem() on an item set according to the parameters.
-    void OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript );
+    void OutputItemSet( const SfxItemSet& rSet, bool bPapFmt, bool bChpFmt, USHORT nScript, bool bExportParentItemSet );
 
     short GetDefaultFrameDirection( ) const;
 
@@ -800,7 +803,7 @@ protected:
     /// Find the nearest bookmark from the current position.
     ///
     /// Returns false when there is no bookmark.
-    bool NearestBookmark( xub_StrLen& rNearest );
+    bool NearestBookmark( xub_StrLen& rNearest, const xub_StrLen nAktPos, bool bNextPositionOnly );
 
     void GetSortedBookmarks( const SwTxtNode& rNd, xub_StrLen nAktPos,
                 xub_StrLen nLen );
@@ -1402,7 +1405,7 @@ public:
 
     bool IsTxtAttr(xub_StrLen nSwPos);
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( xub_StrLen nSwPos );
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
@@ -1463,7 +1466,7 @@ public:
     bool IsDropCap( int nSwPos );
     bool RequiresImplicitBookmark();
 
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
+    void NextPos() { if ( nAktSwPos < STRING_NOTFOUND ) nAktSwPos = SearchNext( nAktSwPos + 1 ); }
 
     void OutAttr( xub_StrLen nSwPos, bool bRuby = false );
     virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;

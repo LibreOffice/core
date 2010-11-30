@@ -122,7 +122,6 @@ public:
 
     Graphic* GetGraphic();
 
-    Graphic* GetHCGraphic(); // tries to retrieve HighContrast representation if possible
     void GetNewReplacement();
 
     virtual BOOL SavePersistentData();
@@ -147,9 +146,9 @@ public:
 
     void CheckFileLink_Impl();
 
-    // --> OD 2009-03-05 #i99665#
+    // #i99665#
     bool IsChart() const;
-    // <--
+
 
 #ifndef _FESHVIEW_ONLY_INLINE_NEEDED
     const String& GetChartTblName() const       { return sChartTblName; }

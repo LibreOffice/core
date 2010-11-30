@@ -180,7 +180,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::functionSelected( const ::rtl::OUString& rC
         if ( m_aCommand.getLength() > 0 )
         {
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+            Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
             if ( !!aImage )
                 GetToolBox().SetItemImage( GetId(), aImage );
         }
@@ -195,7 +195,7 @@ void SAL_CALL SvxTbxCtlCustomShapes::updateImage(  ) throw (::com::sun::star::un
     if ( m_aCommand.getLength() > 0 )
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > xFrame( getFrameInterface());
-        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages(), isHighContrast() );
+        Image aImage = GetImage( xFrame, m_aCommand, hasBigImages() );
         if ( !!aImage )
             GetToolBox().SetItemImage( GetId(), aImage );
     }

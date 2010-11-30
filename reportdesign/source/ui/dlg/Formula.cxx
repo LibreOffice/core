@@ -218,7 +218,7 @@ void FormulaDialog::ToggleCollapsed( RefEdit* _pEdit, RefButton* _pButton)
         }
 
         m_pAddField->Update();
-    } // if ( !m_pAddField )
+    }
     RefInputStartAfter( aPair.second, aPair.first );
     m_pAddField->Show();
 
@@ -240,7 +240,7 @@ IMPL_LINK( FormulaDialog, OnClickHdl, OAddFieldWindow* ,_pAddFieldDlg)
             sName = ::rtl::OUString (RTL_CONSTASCII_USTRINGPARAM("[")) + sName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
             m_pEdit->SetText(sName);
         }
-    } // if ( m_pEdit && aArgs.getLength() )
+    }
     m_pEdit = NULL;
     _pAddFieldDlg->Hide();
     RefInputDoneAfter( TRUE );

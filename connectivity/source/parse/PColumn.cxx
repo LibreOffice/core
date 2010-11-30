@@ -239,9 +239,9 @@ void OOrderColumn::construct()
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aSupported(1);
     if ( m_bOrder )
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderColumn");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OrderColumn"));
     else
-        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.GroupColumn");
+        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.GroupColumn"));
 
     return aSupported;
 }

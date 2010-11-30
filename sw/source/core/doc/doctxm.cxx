@@ -181,10 +181,10 @@ void SwDoc::DeleteTOXMark( const SwTOXMark* pTOXMark )
 {
     // hole den TextNode und
     const SwTxtTOXMark* pTxtTOXMark = pTOXMark->GetTxtTOXMark();
-    ASSERT( pTxtTOXMark, "Kein TxtTOXMark, kann nicht geloescht werden" );
+    OSL_ENSURE( pTxtTOXMark, "Kein TxtTOXMark, kann nicht geloescht werden" );
 
     SwTxtNode& rTxtNd = const_cast<SwTxtNode&>(pTxtTOXMark->GetTxtNode());
-    ASSERT( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
+    OSL_ENSURE( rTxtNd.GetpSwpHints(), "kann nicht geloescht werden" );
 
     if( DoesUndo() )
     {
@@ -220,20 +220,20 @@ public:
     CompareNodeCntnt( ULONG nNd, xub_StrLen nCnt )
         : nNode( nNd ), nCntnt( nCnt ) {}
 
-    int operator==( const CompareNodeCntnt& rCmp )
+    int operator==( const CompareNodeCntnt& rCmp ) const
         { return nNode == rCmp.nNode && nCntnt == rCmp.nCntnt; }
-    int operator!=( const CompareNodeCntnt& rCmp )
+    int operator!=( const CompareNodeCntnt& rCmp ) const
         { return nNode != rCmp.nNode || nCntnt != rCmp.nCntnt; }
-    int operator< ( const CompareNodeCntnt& rCmp )
+    int operator< ( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt < rCmp.nCntnt); }
-    int operator<=( const CompareNodeCntnt& rCmp )
+    int operator<=( const CompareNodeCntnt& rCmp ) const
         { return nNode < rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt <= rCmp.nCntnt); }
-    int operator> ( const CompareNodeCntnt& rCmp )
+    int operator> ( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt > rCmp.nCntnt); }
-    int operator>=( const CompareNodeCntnt& rCmp )
+    int operator>=( const CompareNodeCntnt& rCmp ) const
         { return nNode > rCmp.nNode ||
             ( nNode == rCmp.nNode && nCntnt >= rCmp.nCntnt); }
 };
@@ -242,7 +242,7 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
                                     SwTOXSearch eDir, BOOL bInReadOnly )
 {
     const SwTxtTOXMark* pMark = rCurTOXMark.GetTxtTOXMark();
-    ASSERT(pMark, "pMark==0 Ungueltige TxtTOXMark");
+    OSL_ENSURE(pMark, "pMark==0 Ungueltige TxtTOXMark");
 
     const SwTxtNode *pTOXSrc = pMark->GetpTxtNd();
 
@@ -459,7 +459,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
         SectionType eT = pSectNd->GetSection().GetType();
         if( TOX_CONTENT_SECTION == eT )
         {
-            ASSERT( pSectNd->GetSection().ISA( SwTOXBaseSection ),
+            OSL_ENSURE( pSectNd->GetSection().ISA( SwTOXBaseSection ),
                     "keine TOXBaseSection!" );
             SwTOXBaseSection& rTOXSect = (SwTOXBaseSection&)
                                                 pSectNd->GetSection();
@@ -472,10 +472,10 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
 
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
-    ASSERT( pFmt, "invalid TOXBaseSection!" );
+    OSL_ENSURE( pFmt, "invalid TOXBaseSection!" );
     return pFmt->GetAttrSet();
 }
 
@@ -526,7 +526,7 @@ BOOL SwDoc::DeleteTOX( const SwTOXBase& rTOXBase, BOOL bDelNodes )
 {
     // its only delete the TOX, not the nodes
     BOOL bRet = FALSE;
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ), "keine TOXBaseSection!" );
 
     const SwTOXBaseSection& rTOXSect = (const SwTOXBaseSection&)rTOXBase;
     SwSectionFmt* pFmt = rTOXSect.GetFmt();
@@ -697,7 +697,7 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
 
 BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
-    ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
+    OSL_ENSURE( rTOXBase.ISA( SwTOXBaseSection ),
                     "keine TOXBaseSection!" );
     SwTOXBaseSection* pTOX = (SwTOXBaseSection*)&rTOXBase;
 
@@ -726,7 +726,7 @@ const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
         {
             SwPosition aPos( *pNd );
             pNd = GetBodyTxtNode( *pNd->GetDoc(), aPos, *pFrm );
-            ASSERT( pNd,    "wo steht der Absatz" );
+            OSL_ENSURE( pNd,    "wo steht der Absatz" );
         }
     }
     return pNd ? pNd->FindOutlineNodeOfLevel( nLvl ) : 0;
@@ -1246,8 +1246,7 @@ void SwTOXBaseSection::UpdateOutline( const SwTxtNode* pOwnChapterNode )
         ::SetProgressState( 0, pDoc->GetDocShell() );
         SwTxtNode* pTxtNd = rOutlNds[ n ]->GetTxtNode();
         if( pTxtNd && pTxtNd->Len() && pTxtNd->GetDepends() &&
-            //USHORT(pTxtNd->GetTxtColl()->GetOutlineLevel()+1) <= GetLevel() &&    //#outline level,zhaojianwei
-            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() && //<-end,zhaojianwei
+            USHORT( pTxtNd->GetAttrOutlineLevel()) <= GetLevel() &&
             pTxtNd->GetFrm() &&
            !pTxtNd->HasHiddenParaField() &&
            !pTxtNd->HasHiddenCharAttribute( true ) &&
@@ -1279,8 +1278,7 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
             if( !pColl ||
                 ( TOX_CONTENT == SwTOXBase::GetType() &&
                   GetCreateType() & nsSwTOXElement::TOX_OUTLINELEVEL &&
-                  //NO_NUMBERING != pColl->GetOutlineLevel() ) )//#outline level,zhaojianwei
-                    pColl->IsAssignedToListLevelOfOutlineStyle()) )//<-end,zhaojianwei
+                    pColl->IsAssignedToListLevelOfOutlineStyle()) )
                   continue;
 
             SwClientIter aIter( *pColl );
@@ -1361,11 +1359,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
         const SwTxtNode& rTxtNode = pTxtFld->GetTxtNode();
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
-//      const SwTxtNode* pChapterCompareNode = 0;
-
         if( rTxtNode.GetTxt().Len() && rTxtNode.GetFrm() &&
-            rTxtNode.GetNodes().IsDocNodes() /*&&
-            (!IsFromChapter() || pChapterCompareNode == pOwnChapterNode) */)
+            rTxtNode.GetNodes().IsDocNodes() )
         {
             //#106485# the body node has to be used!
             SwCntntFrm *pFrm = rTxtNode.GetFrm();
@@ -1509,9 +1504,6 @@ void SwTOXBaseSection::UpdateCntnt( SwTOXElement eMyType,
                                                         MAXLEVEL - 1 );
                 if( pOutlNd )
                 {
-                    //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                    //if( nTmp < NO_NUMBERING )
-                    //  nSetLevel = nTmp + 1;
                     if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                         nSetLevel = pOutlNd->GetTxtColl()->GetAttrOutlineLevel() ;//<-end,zhaojianwei
                 }
@@ -1567,9 +1559,6 @@ void SwTOXBaseSection::UpdateTable( const SwTxtNode* pOwnChapterNode )
                             ::lcl_FindChapterNode( *pCNd, MAXLEVEL - 1 );
                         if( pOutlNd )
                         {
-                            //USHORT nTmp = pOutlNd->GetTxtColl()->GetOutlineLevel();//#outline level,zhaojianwei
-                            //if( nTmp < NO_NUMBERING )
-                            //  pNew->SetLevel( nTmp + 1 );
                             if( pOutlNd->GetTxtColl()->IsAssignedToListLevelOfOutlineStyle())
                             {
                                 const int nTmp = pOutlNd->GetTxtColl()->GetAttrOutlineLevel();
@@ -1630,7 +1619,7 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
         // String mit dem Pattern aus der Form initialisieren
         const SwTOXSortTabBase& rBase = *aSortArr[nIndex];
         USHORT nLvl = rBase.GetLevel();
-        ASSERT( nLvl < GetTOXForm().GetFormMax(), "ungueltiges FORM_LEVEL");
+        OSL_ENSURE( nLvl < GetTOXForm().GetFormMax(), "ungueltiges FORM_LEVEL");
 
         SvxTabStopItem aTStops( 0, 0, SVX_TAB_ADJUST_DEFAULT, RES_PARATR_TABSTOP );
         xub_StrLen nLinkStartPosition = STRING_NOTFOUND;
@@ -1769,9 +1758,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                         aInsStr += cEndPageNum;
                         rTxt.Append( aInsStr );
                     }
-//                      // Tab entfernen, wenn keine Seitennummer
-//                  else if( rTxt.Len() && '\t' == rTxt.GetChar( rTxt.Len() - 1 ))
-//                      rTxt.Erase( rTxt.Len()-1, 1 );
                 }
                 break;
 
@@ -1783,8 +1769,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                         pTOXSource = &rBase.aTOXSources[0];
 
                     // --> OD 2008-02-14 #i53420#
-//                    if( pTOXSource && pTOXSource->pNd
-//                        pTOXSource->pNd->IsTxtNode() )
                     if ( pTOXSource && pTOXSource->pNd &&
                          pTOXSource->pNd->IsCntntNode() )
                     // <--
@@ -1796,7 +1780,6 @@ void SwTOXBaseSection::GenerateText( USHORT nArrayIdx,
                             SwChapterField aFld( &aFldTyp, aToken.nChapterFormat );
                             aFld.SetLevel( static_cast<BYTE>(aToken.nOutlineLevel - 1) );
                             // --> OD 2008-02-14 #i53420#
-//                            aFld.ChangeExpansion( pFrm, (SwTxtNode*)pTOXSource->pNd, TRUE );
                             aFld.ChangeExpansion( pFrm,
                                 dynamic_cast<const SwCntntNode*>(pTOXSource->pNd),
                                 TRUE );
@@ -1964,7 +1947,7 @@ void SwTOXBaseSection::UpdatePageNum()
                 if( rTOXSource.pNd )
                 {
                     SwCntntFrm* pFrm = rTOXSource.pNd->GetFrm();
-                    ASSERT( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
+                    OSL_ENSURE( pFrm || pDoc->IsUpdateTOX(), "TOX, no Frame found");
                     if( !pFrm )
                         continue;
                     if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->HasFollow() )
@@ -2007,7 +1990,7 @@ void SwTOXBaseSection::UpdatePageNum()
             if(pBase->pTOXNd)
             {
                 const SwTxtNode* pTxtNd = pBase->pTOXNd->GetTxtNode();
-                ASSERT( pTxtNd, "kein TextNode, falsches Verzeichnis" );
+                OSL_ENSURE( pTxtNd, "kein TextNode, falsches Verzeichnis" );
 
                 _UpdatePageNum( (SwTxtNode*)pTxtNd, aNums, aDescs, pMainNums,
                                 aIntl );
@@ -2277,7 +2260,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                 delete pNew;
                 return;
             }
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
             else
                 DBG_ERROR("Bibliography entries cannot be found here");
 #endif
@@ -2311,7 +2294,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
         sToCompare.Erase( 0, 1 ).Insert( sUpper, 0 );
     }
 
-    ASSERT(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
+    OSL_ENSURE(rRange.Min() >= 0 && rRange.Max() >= 0, "Min Max < 0");
 
     const USHORT nMin = (USHORT)rRange.Min();
     const USHORT nMax = (USHORT)rRange.Max();

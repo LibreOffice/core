@@ -74,7 +74,7 @@ SwNumRule * SwNodeNum::GetNumRule() const
 
 void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 {
-    ASSERT( GetNumRule() && GetTxtNode(),
+    OSL_ENSURE( GetNumRule() && GetTxtNode(),
             "<SwNodeNum::ChangeNumRule(..)> - missing list style and/or text node. Serious defect -> please informm OD." );
     if ( GetNumRule() && GetTxtNode() )
     {
@@ -91,7 +91,7 @@ void SwNodeNum::ChangeNumRule( SwNumRule& rNumRule )
 
 SwPosition SwNodeNum::GetPosition() const
 {
-    ASSERT( GetTxtNode(),
+    OSL_ENSURE( GetTxtNode(),
             "<SwNodeNum::GetPosition()> - no text node set at <SwNodeNum> instance" );
     return SwPosition(*mpTxtNode);
 }
@@ -110,13 +110,13 @@ SwNumberTreeNode * SwNodeNum::Create() const
 // --> OD 2008-02-19 #refactorlists#
 void SwNodeNum::PreAdd()
 {
-    ASSERT( GetTxtNode(),
+    OSL_ENSURE( GetTxtNode(),
             "<SwNodeNum::PreAdd()> - no text node set at <SwNodeNum> instance" );
     if ( !GetNumRule() && GetTxtNode() )
     {
         mpNumRule = GetTxtNode()->GetNumRule();
     }
-    ASSERT( GetNumRule(),
+    OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PreAdd()> - no list style set at <SwNodeNum> instance" );
     if ( GetNumRule() && GetTxtNode() )
     {
@@ -135,9 +135,9 @@ void SwNodeNum::PreAdd()
 
 void SwNodeNum::PostRemove()
 {
-    ASSERT( GetTxtNode(),
+    OSL_ENSURE( GetTxtNode(),
             "<SwNodeNum::PostRemove()> - no text node set at <SwNodeNum> instance" );
-    ASSERT( GetNumRule(),
+    OSL_ENSURE( GetNumRule(),
             "<SwNodeNum::PostRemove()> - no list style set at <SwNodeNum> instance" );
 
     if ( GetTxtNode() )
@@ -191,7 +191,7 @@ bool SwNodeNum::IsContinuous() const
     }
     else
     {
-        ASSERT( false, "<SwNodeNum::IsContinuous()> - OD debug" );
+        OSL_ENSURE( false, "<SwNodeNum::IsContinuous()> - OD debug" );
     }
     // <--
 
@@ -232,7 +232,7 @@ bool SwNodeNum::HasCountedChildren() const
     for (aIt = mChildren.begin(); aIt != mChildren.end(); aIt++)
     {
         SwNodeNum* pChild( dynamic_cast<SwNodeNum*>(*aIt) );
-        ASSERT( pChild,
+        OSL_ENSURE( pChild,
                 "<SwNodeNum::HasCountedChildren()> - unexcepted type of child -> please inform OD" );
         if ( pChild &&
              ( pChild->IsCountedForNumbering() ||
@@ -348,7 +348,7 @@ bool SwNodeNum::IsCountPhantoms() const
                   mpNumRule->IsCountPhantoms();
     else
     {
-        ASSERT( false,
+        OSL_ENSURE( false,
                 "<SwNodeNum::IsCountPhantoms(): missing numbering rule - please inform OD" );
     }
     // <--
@@ -471,7 +471,7 @@ void SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete( SwNodeNum& rNodeNum )
         SwNodeNum* pChildNode( dynamic_cast<SwNodeNum*>((*rNodeNum.mChildren.begin())) );
         if ( !pChildNode )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwNodeNum::_UnregisterMeAndChildrenDueToRootDelete(..)> - unknown number tree node child" );
             ++nAllowedChildCount;
             continue;

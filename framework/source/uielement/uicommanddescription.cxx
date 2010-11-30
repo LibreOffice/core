@@ -643,7 +643,7 @@ UICommandDescription::UICommandDescription( const Reference< XMultiServiceFactor
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "UICommandDescription::UICommandDescription" );
     Reference< XNameAccess > xEmpty;
-    rtl::OUString aGenericUICommand( ::rtl::OUString::createFromAscii( "GenericCommands" ));
+    rtl::OUString aGenericUICommand( RTL_CONSTASCII_USTRINGPARAM("GenericCommands") );
     m_xGenericUICommands = new ConfigurationAccess_UICommand( aGenericUICommand, xEmpty, xServiceManager );
 
     impl_fillElements("ooSetupFactoryCommandConfigRef");

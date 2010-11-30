@@ -77,14 +77,11 @@ void DbgTColumn(TColumn* pTColumn, USHORT nCount)
         String sMsg(i);
         sMsg += pTColumn[i].bVisible ? " v " : " h ";
         sMsg += pTColumn[i].nWidth;
-        OSL_ENSURE(false, sMsg)
+        OSL_ENSURE(false, sMsg);
     }
 }
 #endif
 
-
-/*-----------------20.08.96 09.43-------------------
---------------------------------------------------*/
 SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
     :
     nTblWidth(0),
@@ -117,15 +114,11 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol, BOOL bCplx )
     nAllCols++;
 }
 
-/*-----------------20.08.96 09.43-------------------
---------------------------------------------------*/
 SwTableRep::~SwTableRep()
 {
     delete[] pTColumns;
 }
 
-/*-----------------20.08.96 13.33-------------------
---------------------------------------------------*/
 BOOL SwTableRep::FillTabCols( SwTabCols& rTabCols ) const
 {
     long nOldLeft = rTabCols.GetLeft(),

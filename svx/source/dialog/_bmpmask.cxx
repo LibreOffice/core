@@ -447,8 +447,7 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
         pColTab             ( NULL ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
-        maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) ),
-        maImgPipetteH       ( BMP_RESID ( IMG_PIPETTE_H ) )
+        maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) )
 {
     FreeResource();
 
@@ -1210,9 +1209,7 @@ void SvxBmpMask::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SvxBmpMask::ApplyStyle()
 {
-    bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    aTbxPipette.SetItemImage( TBI_PIPETTE, bHighContrast ? maImgPipetteH : maImgPipette );
+    aTbxPipette.SetItemImage( TBI_PIPETTE, maImgPipette );
 }
 
 

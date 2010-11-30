@@ -60,6 +60,7 @@
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:ShowLicense"/>
             <menu:menuseparator/>
+            <menu:menuitem menu:id=".uno:ShowCredits"/>
             <menu:menuitem menu:id=".uno:About"/>
         </menu:menupopup>
     </menu:menu>

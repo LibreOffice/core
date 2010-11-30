@@ -31,30 +31,7 @@
 #include <svx/dlgctrl.hxx>
 #include <vcl/group.hxx>
 #include <vcl/fixed.hxx>
-#include <svx/dstribut_enum.hxx> //CHINA001
-/*************************************************************************
-|*
-\************************************************************************/
-
-/*
-enum SvxDistributeHorizontal
-{
-    SvxDistributeHorizontalNone = 0,
-    SvxDistributeHorizontalLeft,
-    SvxDistributeHorizontalCenter,
-    SvxDistributeHorizontalDistance,
-    SvxDistributeHorizontalRight
-};
-
-enum SvxDistributeVertical
-{
-    SvxDistributeVerticalNone = 0,
-    SvxDistributeVerticalTop,
-    SvxDistributeVerticalCenter,
-    SvxDistributeVerticalDistance,
-    SvxDistributeVerticalBottom
-};
-*/
+#include <svx/dstribut_enum.hxx>
 
 /*************************************************************************
 |*

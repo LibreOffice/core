@@ -49,7 +49,7 @@ public:
     virtual sal_Bool SAL_CALL getMultiline() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setMultiline( sal_Bool _multiline ) throw (css::uno::RuntimeException);
     // XDefaultProperty
-    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
+    rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();

@@ -35,10 +35,10 @@
 
 SbxObject* cloneTypeObjectImpl( const SbxObject& rTypeObj );
 
-// Deklaration einer Variablen
-// Bei Fehlern wird bis zum Komma oder Newline geparst.
-// Returnwert: eine neue Instanz, die eingefuegt und dann geloescht wird.
-// Array-Indexe werden als SbiDimList zurueckgegeben
+// Declaration of a variable
+// If there are errors it will be parsed up to the comma or the newline.
+// Return-value: a new instance, which were inserted and then deleted.
+// Array-Indexex were returned as SbiDimList
 
 SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
 {
@@ -52,7 +52,7 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
     SbxDataType t = eScanType;
     SbiSymDef* pDef = bConst ? new SbiConstDef( aSym ) : new SbiSymDef( aSym );
     SbiDimList* pDim = NULL;
-    // Klammern?
+    // Brackets?
     if( Peek() == LPAREN )
         pDim = new SbiDimList( this );
     pDef->SetType( t );
@@ -72,8 +72,8 @@ SbiSymDef* SbiParser::VarDecl( SbiDimList** ppDim, BOOL bStatic, BOOL bConst )
     return pDef;
 }
 
-// Aufloesen einer AS-Typdeklaration
-// Der Datentyp wird in die uebergebene Variable eingetragen
+// Resolving of a AS-Type-Declaration
+// The data type were inserted into the handed over variable
 
 void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
 {
@@ -127,14 +127,14 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                     }
                 }
                 break;
-            case SYMBOL: // kann nur ein TYPE oder eine Objektklasse sein!
+            case SYMBOL: // can only be a TYPE or a object class!
                 if( eScanType != SbxVARIANT )
                     Error( SbERR_SYNTAX );
                 else
                 {
                     String aCompleteName = aSym;
 
-                    // #52709 DIM AS NEW fuer Uno mit voll-qualifizierten Namen
+                    // #52709 DIM AS NEW for Uno with full-qualified name
                     if( Peek() == DOT )
                     {
                         String aDotStr( '.' );
@@ -162,7 +162,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                         break;
                     }
 
-                    // In den String-Pool uebernehmen
+                    // Take over in the String pool
                     rDef.SetTypeId( aGblStrings.Add( aCompleteName ) );
 
                     if( rDef.IsNew() && pProc == NULL )
@@ -178,7 +178,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
                 Error( SbERR_UNEXPECTED, eTok );
                 Next();
         }
-        // Die Variable koennte mit Suffix deklariert sein
+        // The variable could have been declared with a suffix
         if( rDef.GetType() != SbxVARIANT )
         {
             if( rDef.GetType() != eType )
@@ -191,7 +191,7 @@ void SbiParser::TypeDecl( SbiSymDef& rDef, BOOL bAsNewAlreadyParsed )
     }
 }
 
-// Hier werden Variable, Arrays und Strukturen definiert.
+// Here variables, arrays and structures were definied.
 // DIM/PRIVATE/PUBLIC/GLOBAL
 
 void SbiParser::Dim()
@@ -209,7 +209,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         Error( SbERR_NOT_IN_SUBR, eCurTok );
     if( eCurTok == PUBLIC || eCurTok == GLOBAL )
     {
-        bSwitchPool = TRUE;     // im richtigen Moment auf globalen Pool schalten
+        bSwitchPool = TRUE;     // at the right moment switch to the global pool
         if( eCurTok == GLOBAL )
             bPersistantGlobal = TRUE;
     }
@@ -217,7 +217,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     // tied to the document. e.g. a module scope variable is global
        if(  GetBasic()->IsDocBasic() && bVBASupportOn && !pProc )
         bPersistantGlobal = TRUE;
-    // PRIVATE ist Synonym fuer DIM
+    // PRIVATE is a synonymous for DIM
     // _CONST_?
     BOOL bConst = FALSE;
     if( eCurTok == _CONST_ )
@@ -275,13 +275,13 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
 #define tmpSHARED
 #undef SHARED
 #endif
-    // SHARED wird ignoriert
+    // SHARED were ignored
     if( Peek() == SHARED ) Next();
 #ifdef tmpSHARED
 #define SHARED
 #undef tmpSHARED
 #endif
-    // PRESERVE nur bei REDIM
+    // PRESERVE only at REDIM
     if( Peek() == PRESERVE )
     {
         Next();
@@ -293,23 +293,23 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
     SbiSymDef* pDef;
     SbiDimList* pDim;
 
-    // AB 9.7.97, #40689, Statics -> Modul-Initialisierung, in Sub ueberspringen
+    // From 1997-07-09, #40689, Statics -> Modul-Initialising, skip in Sub
     UINT32 nEndOfStaticLbl = 0;
     if( !bVBASupportOn && bStatic )
     {
         nEndOfStaticLbl = aGen.Gen( _JUMP, 0 );
-        aGen.Statement();   // bei static hier nachholen
+        aGen.Statement();   // catch up on static here
     }
 
     BOOL bDefined = FALSE;
     while( ( pDef = VarDecl( &pDim, bStatic, bConst ) ) != NULL )
     {
         EnableErrors();
-        // Variable suchen:
+        // search variable:
         if( bSwitchPool )
             pPool = &aGlobals;
         SbiSymDef* pOld = pPool->Find( pDef->GetName() );
-        // AB 31.3.1996, #25651#, auch in Runtime-Library suchen
+        // From 1996-03-31, #25651#, search also in the Runtime-Library
         BOOL bRtlSym = FALSE;
         if( !pOld )
         {
@@ -325,10 +325,10 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         if( pOld )
         {
             bDefined = TRUE;
-            // Bei RTL-Symbol immer Fehler
+            // always an error at a RTL-S
             if( !bRtlSym && (eOp == _REDIM || eOp == _REDIMP) )
             {
-                // Bei REDIM die Attribute vergleichen
+                // compare the attributes at a REDIM
                 SbxDataType eDefType;
                 bool bError_ = false;
                 if( pOld->IsStatic() )
@@ -350,19 +350,19 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         else
             pPool->Add( pDef );
 
-        // #36374: Variable vor Unterscheidung IsNew() anlegen
-        // Sonst Error bei Dim Identifier As New Type und option explicit
+        // #36374: Create the variable in front of the distinction IsNew()
+        // Otherwise error at Dim Identifier As New Type and option explicit
         if( !bDefined && !(eOp == _REDIM || eOp == _REDIMP)
                       && ( !bConst || pDef->GetScope() == SbGLOBAL ) )
         {
-            // Variable oder globale Konstante deklarieren
+            // Declare variable or global constant
             SbiOpcode eOp2;
             switch ( pDef->GetScope() )
             {
                 case SbGLOBAL:  eOp2 = bPersistantGlobal ? _GLOBAL_P : _GLOBAL;
                                 goto global;
                 case SbPUBLIC:  eOp2 = bPersistantGlobal ? _PUBLIC_P : _PUBLIC;
-                                // AB 9.7.97, #40689, kein eigener Opcode mehr
+                                // From 1997-07-09, #40689, no own Opcode anymore
                                 if( bVBASupportOn && bStatic )
                                 {
                                     eOp2 = _STATIC;
@@ -385,8 +385,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             aGen.Gen( eOp2, pDef->GetId(), nOpnd2 );
         }
 
-        // Initialisierung fuer selbstdefinierte Datentypen
-        // und per NEW angelegte Variable
+        // Initialising for self-defined daty types
+        // and per NEW created variable
         if( pDef->GetType() == SbxOBJECT
          && pDef->GetTypeId() )
         {
@@ -439,7 +439,7 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
         {
             if( bConst )
             {
-                // Konstanten-Definition
+                // Definition of the constants
                 if( pDim )
                 {
                     Error( SbERR_SYNTAX );
@@ -447,13 +447,13 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
                 }
                 SbiExpression aVar( this, *pDef );
                 if( !TestToken( EQ ) )
-                    goto MyBreak;   // AB 24.6.1996 (s.u.)
+                    goto MyBreak;   // From 1996-06-24 (see below)
                 SbiConstExpression aExpr( this );
                 if( !bDefined && aExpr.IsValid() )
                 {
                     if( pDef->GetScope() == SbGLOBAL )
                     {
-                        // Nur Code fuer globale Konstante erzeugen!
+                        // Create code only for the global constant!
                         aVar.Gen();
                         aExpr.Gen();
                         aGen.Gen( _PUTC );
@@ -467,8 +467,8 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             }
             else if( pDim )
             {
-                // Die Variable dimensionieren
-                // Bei REDIM die Var vorher loeschen
+                // Dimension the variable
+                // Delete the var at REDIM beforehand
                 if( eOp == _REDIM )
                 {
                     SbiExpression aExpr( this, *pDef, NULL );
@@ -498,36 +498,36 @@ void SbiParser::DefVar( SbiOpcode eOp, BOOL bStatic )
             }
         }
         if( !TestComma() )
-            goto MyBreak;   // AB 24.6.1996 (s.u.)
+            goto MyBreak;   // From 1996-06-24 (see below)
 
-        // #27963# AB, 24.6.1996
-        // Einfuehrung bSwitchPool (s.o.): pPool darf beim VarDecl-Aufruf
-        // noch nicht auf &aGlobals gesetzt sein.
-        // Ansonsten soll das Verhalten aber absolut identisch bleiben,
-        // d.h. pPool muss immer am Schleifen-Ende zurueckgesetzt werden.
-        // auch bei break
+        // #27963# From 1996-06-24
+        // Implementation of bSwitchPool (see above): pPool must not be set to &aGlobals
+        // at the VarDecl-Call.
+        // Apart from that the behavior should be absolutely identical,
+        // i.e., pPool had to be reset always at the end of the loop.
+        // also at a break
         pPool = pOldPool;
-        continue;       // MyBreak überspingen
+        continue;       // Skip MyBreak
     MyBreak:
         pPool = pOldPool;
         break;
     }
 
-    // AB 9.7.97, #40689, Sprung ueber Statics-Deklaration abschliessen
+    // From 1997-07-09, #40689, finalize the jump over statics declarations
     if( !bVBASupportOn && bStatic )
     {
-        // globalen Chain pflegen
+        // maintain the global chain
         nGblChain = aGen.Gen( _JUMP, 0 );
         bGblDefs = bNewGblDefs = TRUE;
 
-        // fuer Sub Sprung auf Ende der statics eintragen
+        // Register for Sub a jump to the end of statics
         aGen.BackChain( nEndOfStaticLbl );
     }
 
     //pPool = pOldPool;
 }
 
-// Hier werden Arrays redimensioniert.
+// Here were Arrays redimensioned.
 
 void SbiParser::ReDim()
 {
@@ -547,7 +547,7 @@ void SbiParser::Erase()
     }
 }
 
-// Deklaration eines Datentyps
+// Declaration of a data type
 
 void SbiParser::Type()
 {
@@ -559,7 +559,7 @@ void SbiParser::DefType( BOOL bPrivate )
     // TODO: Use bPrivate
     (void)bPrivate;
 
-    // Neues Token lesen, es muss ein Symbol sein
+    // Read the new Token lesen. It had to be a symbol
     if (!TestSymbol())
         return;
 
@@ -681,7 +681,7 @@ void SbiParser::Enum()
 
 void SbiParser::DefEnum( BOOL bPrivate )
 {
-    // Neues Token lesen, es muss ein Symbol sein
+    // Read a the new Token. It had to be a symbol
     if (!TestSymbol())
         return;
 
@@ -808,8 +808,8 @@ void SbiParser::DefEnum( BOOL bPrivate )
 }
 
 
-// Prozedur-Deklaration
-// das erste Token ist bereits eingelesen (SUB/FUNCTION)
+// Procedure-Declaration
+// the first Token is already read in (SUB/FUNCTION)
 // xxx Name [LIB "name"[ALIAS "name"]][(Parameter)][AS TYPE]
 
 SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
@@ -843,7 +843,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
     }
     if( !bDecl )
     {
-        // CDECL, LIB und ALIAS sind unzulaessig
+        // CDECL, LIB and ALIAS are invalid
         if( pDef->GetLib().Len() )
             Error( SbERR_UNEXPECTED, LIB );
         if( pDef->GetAlias().Len() )
@@ -856,7 +856,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
     }
     else if( !pDef->GetLib().Len() )
     {
-        // ALIAS und CDECL nur zusammen mit LIB
+        // ALIAS and CDECL only together with LIB
         if( pDef->GetAlias().Len() )
             Error( SbERR_UNEXPECTED, ALIAS );
         if( pDef->IsCdecl() )
@@ -864,7 +864,7 @@ SbiProcDef* SbiParser::ProcDecl( BOOL bDecl )
         pDef->SetCdecl( FALSE );
         pDef->GetAlias().Erase();
     }
-    // Klammern?
+    // Brackets?
     if( Peek() == LPAREN )
     {
         Next();
@@ -962,14 +962,14 @@ void SbiParser::DefDeclare( BOOL bPrivate )
         {
             if( !pDef->GetLib().Len() )
                 Error( SbERR_EXPECTED, LIB );
-            // gibts den schon?
+            // Is it already there?
             SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
             if( pOld )
             {
                 SbiProcDef* p = pOld->GetProcDef();
                 if( !p )
                 {
-                    // Als Variable deklariert
+                    // Declared as a variable
                     Error( SbERR_BAD_DECLARATION, pDef->GetName() );
                     delete pDef;
                     pDef = NULL;
@@ -1066,7 +1066,7 @@ void SbiParser::Attribute()
     // Don't generate any code - just discard it.
 }
 
-// Aufruf einer SUB oder FUNCTION
+// Call of a SUB or a FUNCTION
 
 void SbiParser::Call()
 {
@@ -1082,7 +1082,7 @@ void SbiParser::SubFunc()
     DefProc( FALSE, FALSE );
 }
 
-// Einlesen einer Prozedur
+// Read in of a procedure
 
 BOOL runsInSetup( void );
 
@@ -1111,7 +1111,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
         return;
     pDef->setPropertyMode( ePropertyMode );
 
-    // Ist die Proc bereits deklariert?
+    // Is the Proc already declared?
     SbiSymDef* pOld = aPublics.Find( pDef->GetName() );
     if( pOld )
     {
@@ -1120,7 +1120,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
         pProc = pOld->GetProcDef();
         if( !pProc )
         {
-            // Als Variable deklariert
+            // Declared as a variable
             Error( SbERR_BAD_DECLARATION, pDef->GetName() );
             delete pDef;
             pProc = NULL;
@@ -1153,8 +1153,8 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
         return;
     pProc->SetPublic( !bPrivate );
 
-    // Nun setzen wir die Suchhierarchie fuer Symbole sowie die aktuelle
-    // Prozedur.
+    // Now we set the search hierarchy for symbols as well as the
+    // current procedure.
     aPublics.SetProcId( pProc->GetId() );
     pProc->GetParams().SetParent( &aPublics );
     if( bStatic )
@@ -1168,7 +1168,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
     {
         pProc->SetStatic( FALSE );
         }
-    // Normalfall: Lokale Variable->Parameter->Globale Variable
+    // Normal case: Local variable->parameter->global variable
     pProc->GetLocals().SetParent( &pProc->GetParams() );
     pPool = &pProc->GetLocals();
 
@@ -1180,7 +1180,7 @@ void SbiParser::DefProc( BOOL bStatic, BOOL bPrivate )
     pProc->SetLine2( l2 );
     pPool = &aPublics;
     aPublics.SetProcId( 0 );
-    // Offene Labels?
+    // Open labels?
     pProc->GetLabels().CheckRefs();
     CloseBlock();
     aGen.Gen( _LEAVE );
@@ -1214,8 +1214,8 @@ void SbiParser::DefStatic( BOOL bPrivate )
         default: {
             if( !pProc )
                 Error( SbERR_NOT_IN_SUBR );
-            // Pool umsetzen, damit STATIC-Deklarationen im globalen
-            // Pool landen
+            // Reset the Pool, so that STATIC-Declarations go into the
+            // global Pool
             SbiSymPool* p = pPool; pPool = &aPublics;
             DefVar( _STATIC, TRUE );
             pPool = p;

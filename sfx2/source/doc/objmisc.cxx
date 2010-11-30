@@ -1728,7 +1728,7 @@ ErrCode SfxObjectShell::CallXScript( const Reference< XInterface >& _rxScriptCon
             {
                 Sequence< uno::Any > aArgs( 1 );
                 aArgs[ 0 ] = *pCaller;
-                xProps->setPropertyValue( rtl::OUString::createFromAscii("Caller"), uno::makeAny( aArgs ) );
+                xProps->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Caller")), uno::makeAny( aArgs ) );
             }
         }
         aRet = xScript->invoke( aParams, aOutParamIndex, aOutParam );

@@ -50,9 +50,7 @@
     #include <rtl/strbuf.hxx>
     #endif
 
-    #ifndef __SGI_STL_VECTOR
     #include <vector>
-    #endif
 
     /*_____________________________________________________________________________________________________________
         LOGFILE_MEMORYMEASURE

@@ -618,7 +618,7 @@ void XMLSourceFileDialog::onValidate()
 
     try
     {
-        Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString::createFromAscii( "com.sun.star.documentconversion.XSLTValidate" ) ), UNO_QUERY );
+        Reference< XImportFilter > xImporter( mxMSF->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documentconversion.XSLTValidate" )) ), UNO_QUERY );
         if( xImporter.is() )
         {
             osl::File aInputFile( maFileURL );

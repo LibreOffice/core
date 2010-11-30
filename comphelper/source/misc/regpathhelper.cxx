@@ -72,7 +72,7 @@ static sal_Bool retrievePortalUserDir( OUString *pDirectory )
     {
         if ( !osl_getCommandArg(--nArgs, &sArg.pData) )
         {
-            if ( sArg.indexOf(OUString::createFromAscii("-userid")) == 0 )
+            if ( sArg.indexOf(OUString( RTL_CONSTASCII_USTRINGPARAM( "-userid" ))) == 0 )
             {
 
                 bIsPortalUser = sal_True;

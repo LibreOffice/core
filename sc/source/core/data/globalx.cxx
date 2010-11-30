@@ -146,7 +146,7 @@ String ScGlobal::GetOrdinalSuffix( sal_Int32 nNumber)
                 ::comphelper::getProcessServiceFactory();
             Reference< XInterface > xInterface =
                 xServiceManager->createInstance(
-                    ::rtl::OUString::createFromAscii("com.sun.star.i18n.OrdinalSuffix"));
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.OrdinalSuffix")));
             if  (xInterface.is())
                 xOrdinalSuffix = Reference< i18n::XOrdinalSuffix >( xInterface, UNO_QUERY);
         }

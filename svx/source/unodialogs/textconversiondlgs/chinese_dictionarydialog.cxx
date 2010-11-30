@@ -492,7 +492,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
 
     SvtLinguConfig  aLngCfg;
     sal_Bool bValue = sal_Bool();
-    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ) ) );
+    Any aAny( aLngCfg.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )) ) );
     if( aAny >>= bValue )
         m_aCB_Reverse.Check( bValue );
 
@@ -511,7 +511,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
         {
             Reference< linguistic2::XConversionDictionaryList > xDictionaryList(
                                 m_xFactory->createInstanceWithContext(
-                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ConversionDictionaryList")
+                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.linguistic2.ConversionDictionaryList"))
                                     , m_xContext), uno::UNO_QUERY);
             if( xDictionaryList.is() )
             {
@@ -520,17 +520,17 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                 {
                     try
                     {
-                        rtl::OUString aNameTo_Simplified( rtl::OUString::createFromAscii("ChineseT2S") );
-                        rtl::OUString aNameTo_Traditional( rtl::OUString::createFromAscii("ChineseS2T") );
+                        rtl::OUString aNameTo_Simplified( RTL_CONSTASCII_USTRINGPARAM("ChineseT2S") );
+                        rtl::OUString aNameTo_Traditional( RTL_CONSTASCII_USTRINGPARAM("ChineseS2T") );
                         lang::Locale aLocale;
-                        aLocale.Language = rtl::OUString::createFromAscii("zh");
+                        aLocale.Language = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("zh") );
 
                         if( xContainer->hasByName( aNameTo_Simplified ) )
                             xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                     xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
                         else
                         {
-                            aLocale.Country = rtl::OUString::createFromAscii("TW");
+                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("TW") );
                             xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
                                     xDictionaryList->addNewDictionary( aNameTo_Simplified
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -545,7 +545,7 @@ ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
                                     xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
                         else
                         {
-                            aLocale.Country = rtl::OUString::createFromAscii("CN");
+                            aLocale.Country = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("CN") );
                             xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
                                     xDictionaryList->addNewDictionary( aNameTo_Traditional
                                     , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
@@ -850,7 +850,7 @@ short ChineseDictionaryDialog::Execute()
         SvtLinguConfig  aLngCfg;
         Any aAny;
         aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
-        aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ), aAny );
+        aLngCfg.SetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_IS_REVERSE_MAPPING )), aAny );
 
         m_aCT_DictionaryToSimplified.save();
         m_aCT_DictionaryToTraditional.save();

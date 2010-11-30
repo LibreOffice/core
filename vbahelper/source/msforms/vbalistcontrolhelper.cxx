@@ -28,8 +28,8 @@ ListPropListener::ListPropListener( const uno::Reference< beans::XPropertySet >&
 void ListPropListener::setValueEvent( const uno::Any& value )
 {
     if( m_pvargIndex.hasValue() || m_pvarColumn.hasValue() )
-        throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                "Bad argument" ), uno::Reference< uno::XInterface >() );
+        throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "Bad argument" )), uno::Reference< uno::XInterface >() );
 
     m_xProps->setPropertyValue( ITEMS, value );
 }
@@ -45,13 +45,13 @@ uno::Any ListPropListener::getValueEvent()
         sal_Int16 nIndex = -1;
         m_pvargIndex >>= nIndex;
         if( nIndex < 0 || nIndex >= nLength )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Bad row Index" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Bad row Index" )), uno::Reference< uno::XInterface >() );
         aRet <<= sList[ nIndex ];
     }
     else if ( m_pvarColumn.hasValue() ) // pvarColumn on its own would be bad
-            throw uno::RuntimeException( rtl::OUString::createFromAscii(
-                    "Bad column Index" ), uno::Reference< uno::XInterface >() );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                    "Bad column Index" )), uno::Reference< uno::XInterface >() );
     else // List() ( e.g. no args )
     {
         uno::Sequence< uno::Sequence< rtl::OUString > > sReturnArray( nLength );
@@ -130,7 +130,7 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
         uno::Sequence< rtl::OUString > sList;
         m_xProps->getPropertyValue( ITEMS ) >>= sList;
         if( nIndex < 0 || nIndex > ( sList.getLength() - 1 ) )
-            throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid index" ), uno::Reference< uno::XInterface > () );
+            throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid index")), uno::Reference< uno::XInterface > () );
         if( sList.hasElements() )
         {
             if( sList.getLength() == 1 )

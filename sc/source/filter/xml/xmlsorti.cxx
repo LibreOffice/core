@@ -155,19 +155,19 @@ void ScXMLSortContext::EndElement()
     if (nAlgoLength)
         ++i;
     uno::Sequence <beans::PropertyValue> aSortDescriptor(7 + i);
-    aSortDescriptor[0].Name = rtl::OUString::createFromAscii(SC_UNONAME_BINDFMT);
+    aSortDescriptor[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_BINDFMT));
     aSortDescriptor[0].Value = ::cppu::bool2any(bBindFormatsToContent);
-    aSortDescriptor[1].Name = rtl::OUString::createFromAscii(SC_UNONAME_COPYOUT);
+    aSortDescriptor[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_COPYOUT));
     aSortDescriptor[1].Value = ::cppu::bool2any(bCopyOutputData);
-    aSortDescriptor[2].Name = rtl::OUString::createFromAscii(SC_UNONAME_ISCASE);
+    aSortDescriptor[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISCASE));
     aSortDescriptor[2].Value = ::cppu::bool2any(bIsCaseSensitive);
-    aSortDescriptor[3].Name = rtl::OUString::createFromAscii(SC_UNONAME_ISULIST);
+    aSortDescriptor[3].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ISULIST));
     aSortDescriptor[3].Value = ::cppu::bool2any(bEnabledUserList);
-    aSortDescriptor[4].Name = rtl::OUString::createFromAscii(SC_UNONAME_OUTPOS);
+    aSortDescriptor[4].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_OUTPOS));
     aSortDescriptor[4].Value <<= aOutputPosition;
-    aSortDescriptor[5].Name = rtl::OUString::createFromAscii(SC_UNONAME_UINDEX);
+    aSortDescriptor[5].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_UINDEX));
     aSortDescriptor[5].Value <<= nUserListIndex;
-    aSortDescriptor[6].Name = rtl::OUString::createFromAscii(SC_UNONAME_SORTFLD);
+    aSortDescriptor[6].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SORTFLD));
     aSortDescriptor[6].Value <<= aSortFields;
     if (nLangLength || nCountryLength)
     {

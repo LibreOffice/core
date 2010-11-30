@@ -43,7 +43,7 @@ class SW_DLLPUBLIC SwNodeIndex
     friend void SwNodes::DeRegisterIndex( SwNodeIndex& );
     friend void SwNodes::RemoveNode( ULONG, ULONG, BOOL );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     static int nSerial;
     int MySerial;
 #endif
@@ -242,8 +242,8 @@ inline SwNodeIndex& SwNodeIndex::operator=( ULONG nWert )
 
 
 
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
+// impl. steht im ndindex.hxx - sollte moeglichst bald auf die
+// neue Schnittstelle angepasst werden
 inline SwNode* SwNodes::operator[]( const SwNodeIndex& rIdx ) const
 {
     return &rIdx.GetNode();

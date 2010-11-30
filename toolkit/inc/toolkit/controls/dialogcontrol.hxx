@@ -35,12 +35,16 @@
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/util/XChangesNotifier.hpp>
 #include <com/sun/star/util/XChangesListener.hpp>
+#include <com/sun/star/awt/XTabListener.hpp>
+#include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #include <com/sun/star/awt/XDialog2.hpp>
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
+#include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <cppuhelper/implbase6.hxx>
 #include <cppuhelper/implbase5.hxx>
+#include <cppuhelper/implbase2.hxx>
 #include <toolkit/helper/listenermultiplexer.hxx>
 #include <toolkit/controls/unocontrolmodel.hxx>
 #include "toolkit/helper/servicenames.hxx"
@@ -68,11 +72,13 @@ class UnoControlDialogModel :   public UnoControlDialogModel_IBase
                             ,   public UnoControlDialogModel_Base
 {
 public:
+    enum ChildOperation { Insert = 0, Remove };
     // would like to make this typedef private, too, but the Forte 7 compiler does have
     // problems with this .....
     typedef ::std::pair< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >, ::rtl::OUString >
                                                         UnoControlModelHolder;
-private:
+protected:
+    void updateUserFormChildren(  const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& xAllChildren, const rtl::OUString& aName, ChildOperation Operation,  const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& xTarget ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     typedef ::std::list< UnoControlModelHolder >        UnoControlModelHolderList;
 
     // for grouping control models (XTabControllerModel::getGroupXXX)
@@ -84,7 +90,6 @@ private:
     friend struct FindControlModel;
     friend struct CompareControlModel;
 
-private:
     ContainerListenerMultiplexer        maContainerListeners;
     ::cppu::OInterfaceContainerHelper   maChangeListeners;
     UnoControlModelHolderList           maModels;
@@ -94,14 +99,15 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphicObject > mxGrfObj;
     bool mbAdjustingGraphic;
-protected:
+
     ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
     ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
 
     UnoControlModelHolderList::iterator         ImplFindElement( const ::rtl::OUString& rName );
 
 public:
-                        UnoControlDialogModel();
+                        // bRegProps = false => subclass will register its own props
+                        UnoControlDialogModel(  bool bRegProps = true );
                         UnoControlDialogModel( const UnoControlDialogModel& rModel );
                         ~UnoControlDialogModel();
 
@@ -323,6 +329,197 @@ protected:
     virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
 };
 
+
+typedef ::cppu::ImplHelper2< ::com::sun::star::container::XContainerListener,
+                             ::com::sun::star::util::XChangesListener >
+                             UnoParentControl_IBase;
+
+class UnoParentControl : public UnoControlContainer, public UnoParentControl_IBase
+{
+protected:
+    bool                                                                        mbSizeModified;
+    bool                                                                        mbPosModified;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabController >   mxTabController;
+    void        ImplInsertControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel, const ::rtl::OUString& rName );
+    void        ImplRemoveControl( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& rxModel );
+    virtual void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
+
+public:
+    UnoParentControl();
+    ~UnoParentControl();
+
+    DECLIMPL_SERVICEINFO_DERIVED( UnoParentControl, UnoControlBase, "com.sun.star.awt.UnoParentControl" )
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlContainer::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw() { OWeakAggObject::acquire(); }
+    void SAL_CALL release() throw() { OWeakAggObject::release(); }
+
+    void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
+
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::container::XContainerListener
+    void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // XChangesListener
+    virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XControl
+    sal_Bool SAL_CALL setModel( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel >& Model ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setDesignMode( sal_Bool bOn ) throw(::com::sun::star::uno::RuntimeException);
+protected:
+    virtual void ImplModelPropertiesChanged( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyChangeEvent >& rEvents ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void removingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+    virtual void addingControl( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+};
+
+class UnoMultiPageModel : public UnoControlDialogModel
+{
+public:
+    UnoMultiPageModel();
+    ~UnoMultiPageModel();
+    UnoMultiPageModel( const UnoMultiPageModel& rModel );
+
+    UnoControlModel*    Clone() const;
+
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageModel, UnoControlDialogModel, szServiceName_UnoMultiPageModel )
+
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
+    // XNamedContainer
+    void SAL_CALL insertByName( const ::rtl::OUString& aName, const ::com::sun::star::uno::Any& aElement ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    // Override the method of parent Class
+    virtual sal_Bool SAL_CALL getGroupControl(  ) throw (::com::sun::star::uno::RuntimeException);
+protected:
+    virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
+
+};
+
+class UnoMultiPageControl :  public UnoParentControl
+                            ,public ::com::sun::star::awt::XSimpleTabController
+                            ,public ::com::sun::star::awt::XTabListener
+{
+    TabListenerMultiplexer maTabListeners;
+    void bindPage( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl );
+public:
+    UnoMultiPageControl();
+    ~UnoMultiPageControl();
+    ::rtl::OUString     GetComponentServiceName();
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoMultiPageControl, UnoParentControl, szServiceName_UnoMultiPageControl )
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoParentControl::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+    // com::sun::star::awt::XSimpleTabController
+    virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getActiveTabID() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    // XTabListener
+    virtual void SAL_CALL inserted( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removed( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL changed( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL activated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL deactivated( ::sal_Int32 ID ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& evt ) throw (::com::sun::star::uno::RuntimeException);
+    // XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual void    impl_createControlPeerIfNecessary(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& _rxControl
+    );
+
+};
+
+
+class UnoPageModel : public UnoControlDialogModel
+{
+public:
+    UnoPageModel();
+    ~UnoPageModel();
+    UnoPageModel( const UnoPageModel& rModel );
+
+    UnoControlModel*    Clone() const;
+
+    DECLIMPL_SERVICEINFO_DERIVED( UnoPageModel, UnoControlDialogModel, szServiceName_UnoPageModel )
+
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
+
+    // Override the method of parent Class
+    virtual sal_Bool SAL_CALL getGroupControl(  ) throw (::com::sun::star::uno::RuntimeException);
+protected:
+    virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
+
+};
+
+class UnoPageControl :  public UnoParentControl
+{
+public:
+    UnoPageControl();
+    ~UnoPageControl();
+    ::rtl::OUString     GetComponentServiceName();
+
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoPageControl, UnoParentControl, szServiceName_UnoPageControl )
+};
+
+class UnoFrameModel : public UnoControlDialogModel
+{
+public:
+    UnoFrameModel();
+    ~UnoFrameModel();
+    UnoFrameModel( const UnoFrameModel& rModel );
+
+    UnoControlModel*    Clone() const;
+
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFrameModel, UnoControlDialogModel, szServiceName_UnoFrameModel )
+
+    virtual ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw( ::com::sun::star::uno::RuntimeException);
+
+protected:
+    virtual ::com::sun::star::uno::Any          ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&       SAL_CALL getInfoHelper();
+};
+
+class UnoFrameControl :  public UnoParentControl
+{
+protected:
+    virtual void        ImplSetPosSize( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >& rxCtrl );
+public:
+    UnoFrameControl();
+    ~UnoFrameControl();
+    ::rtl::OUString     GetComponentServiceName();
+
+// ::com::sun::star::lang::XServiceInfo
+DECLIMPL_SERVICEINFO_DERIVED( UnoFrameControl, UnoParentControl, szServiceName_UnoPageControl )
+};
 
 #endif // TOOLKIT_DIALOG_CONTROL_HXX
 

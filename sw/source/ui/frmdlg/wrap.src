@@ -246,12 +246,4 @@ TabPage TP_FRM_WRAP
         MaskColor = IMAGE_MASK_COLOR ;
         WRAP_IDLIST
     };
-    ImageList ILH_WRAP
-    {
-        Prefix = "wrh";
-        MaskColor = IMAGE_MASK_COLOR ;
-        WRAP_IDLIST
-    };
-
 };
-

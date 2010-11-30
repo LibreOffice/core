@@ -178,21 +178,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( 6, 171 );
         Size = MAP_APPFONT( 50, 14 );
     };
-    Image IMG_STATE_VALID_HC
-    {
-        ImageBitmap = Bitmap { File = "signet_11x16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_STATE_BROKEN_HC
-    {
-        ImageBitmap = Bitmap { File = "caution_11x16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_STATE_NOTVALIDATED_HC
-    {
-        ImageBitmap = Bitmap { File = "notcertificate_16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
 };
 
 

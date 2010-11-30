@@ -33,7 +33,6 @@
 #define IMP_DEFAULT_FONT_NAME "Times New Roman"
 #define IMP_DEFAULT_FONT_SIZE 12.0f
 #define IMP_DEFAULT_FONT_PITCH "variable"
-#define IMP_DEFAULT_FONT_COLOR (new RGBSColor(0x00,0x00,0x00,0x64))
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

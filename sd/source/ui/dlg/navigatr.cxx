@@ -87,7 +87,6 @@ SdNavigatorWin::SdNavigatorWin(
 ,   meDragType      ( NAVIGATOR_DRAGTYPE_EMBEDDED )
 ,   mpBindings      ( pInBindings )
 ,   maImageList     ( SdResId( IL_NAVIGATR ) )
-,   maImageListH    ( SdResId( ILH_NAVIGATR ) )
 {
     maTlbObjects.SetViewFrame( mpBindings->GetDispatcher()->GetFrame() );
 
@@ -716,7 +715,6 @@ void SdNavigatorWin::RefreshDocumentLB( const String* pDocName )
 
                 maLbDocs.InsertEntry( aStr, LISTBOX_APPEND );
 
-                //
                 if( pDocShell == pCurrentDocShell )
                     pInfo->SetActive();
                 else
@@ -860,11 +858,9 @@ void SdNavigatorWin::SetDragImage()
 
 void SdNavigatorWin::ApplyImageList()
 {
-    const bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
 
-    maToolbox.SetImageList( bHighContrast ? maImageListH : maImageList );
-
-    maToolbox.SetItemImage(TBI_SHAPE_FILTER, BitmapEx(SdResId( bHighContrast ? BMP_GRAPHIC_H : BMP_GRAPHIC)));
+    maToolbox.SetImageList( maImageList );
+    maToolbox.SetItemImage( TBI_SHAPE_FILTER, BitmapEx( SdResId( BMP_GRAPHIC ) ) );
 
     SetDragImage();
 }

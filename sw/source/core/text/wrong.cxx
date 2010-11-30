@@ -561,7 +561,7 @@ void SwWrongList::Remove(USHORT nIdx, USHORT nLen )
     maList.erase(i1, i2);
 
 #if OSL_DEBUG_LEVEL > 1
-    ASSERT( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" )
+    OSL_ENSURE( Count() + nLen == nOldSize, "SwWrongList::Remove() trouble" );
 #endif
 }
 

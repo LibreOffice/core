@@ -145,13 +145,13 @@ namespace
 //------------------------------------------------------------------------------
 ::rtl::OUString OTableController::getImplementationName_Static() throw( RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OTableDesign");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OTableDesign"));
 }
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString> OTableController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.TableDesign");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TableDesign"));
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -349,7 +349,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             {
                 String aName = String(ModuleRes(STR_TBL_TITLE));
                 aDefaultName = aName.GetToken(0,' ');
-                //aDefaultName = getPrivateTitle();
                 aDefaultName = ::dbtools::createUniqueName(xTables,aDefaultName);
             }
 
@@ -475,7 +474,6 @@ sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
             stopTableListening();
             m_xTable = NULL;
         }
-        //  reload(); // a error occured so we have to reload
     }
     return ! (aInfo.isValid() || bError);
 }
@@ -582,8 +580,6 @@ sal_Bool OTableController::Construct(Window* pParent)
 {
     setView( * new OTableDesignView( pParent, getORB(), *this ) );
     OTableController_BASE::Construct(pParent);
-//  m_pView->Construct();
-//  m_pView->Show();
     return sal_True;
 }
 // -----------------------------------------------------------------------------
@@ -646,10 +642,7 @@ sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( Runti
             }
         }
     }
-/*
-    if ( bCheck )
-        OSingleDocumentController::suspend(_bSuspend);
-*/
+
     return bCheck;
 }
 // -----------------------------------------------------------------------------
@@ -912,7 +905,6 @@ void OTableController::loadData()
             {
                 pActFieldDescr->SetName(sName);
                 pActFieldDescr->SetFormatKey(nFormatKey);
-                //  pActFieldDescr->SetPrimaryKey(pPrimary->GetValue());
                 pActFieldDescr->SetDescription(sDescription);
                 pActFieldDescr->SetHelpText(sHelpText);
                 pActFieldDescr->SetAutoIncrement(bIsAutoIncrement);
@@ -1027,7 +1019,7 @@ sal_Bool OTableController::checkColumns(sal_Bool _bNew) throw(::com::sun::star::
             pActFieldDescr->SetAutoIncrement(sal_False); // #95927# pTypeInfo->bAutoIncrement
             pActFieldDescr->SetIsNullable(ColumnValue::NO_NULLS);
 
-            pActFieldDescr->SetName( createUniqueName(::rtl::OUString::createFromAscii("ID") ));
+            pActFieldDescr->SetName( createUniqueName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ID")) ));
             pActFieldDescr->SetPrimaryKey( sal_True );
             m_vRowList.insert(m_vRowList.begin(),pNewRow);
 
@@ -1110,7 +1102,6 @@ void OTableController::alterColumns()
                 // Normally, sdbcx::Column objects are expected to have a TypeName property
             }
 
-            //  xColumn->getPropertyValue(PROPERTY_ISCURRENCY,::cppu::bool2any(pField->IsCurrency()));
             // check if something changed
             if((nType != pField->GetType()                  ||
                 sTypeName != pField->GetTypeName()         ||
@@ -1214,7 +1205,7 @@ void OTableController::alterColumns()
         }
         else
             bReload = sal_True;
-    } // for(sal_Int32 nPos = 0;aIter != aEnd;++aIter,++nPos)
+    }
     // alter column settings
     aIter = m_vRowList.begin();
 
@@ -1245,7 +1236,7 @@ void OTableController::alterColumns()
                 xColumn->setPropertyValue(PROPERTY_FORMATKEY,makeAny(pField->GetFormatKey()));
             if(xInfo->hasPropertyByName(PROPERTY_ALIGN))
                 xColumn->setPropertyValue(PROPERTY_ALIGN,makeAny(dbaui::mapTextAllign(pField->GetHorJustify())));
-        } // if ( xColumns->hasByName(pField->GetName()) )
+        }
     }
     // second drop all columns which could be found by name
     Reference<XNameAccess> xKeyColumns  = getKeyColumns();
@@ -1287,7 +1278,7 @@ void OTableController::alterColumns()
 
                     SQLException aNewException;
                     aNewException.Message = sError;
-                    aNewException.SQLState = ::rtl::OUString::createFromAscii( "S1000" );
+                    aNewException.SQLState = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("S1000"));
                     aNewException.NextException = ::cppu::getCaughtException();
 
                     throw aNewException;
@@ -1458,7 +1449,6 @@ void OTableController::assignTable()
             }
         }
     }
-    //updateTitle();
 }
 // -----------------------------------------------------------------------------
 sal_Bool OTableController::isAddAllowed() const

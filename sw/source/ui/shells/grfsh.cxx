@@ -152,10 +152,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
             if ( nSlot == FN_FORMAT_GRAFIC_DLG )
             {
-                // --> OD 2009-07-13 #i73249#
-//                aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                // #i73249#
                 aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
-                // <--
             }
 
             pRect = &rSh.GetAnyCurRect(RECT_PAGE_PRT);
@@ -328,11 +326,8 @@ void SwGrfShell::Execute(SfxRequest &rReq)
                 if ( SFX_ITEM_SET == pSet->GetItemState(
                                         FN_SET_FRM_ALT_NAME, TRUE, &pItem ))
                 {
-                    // --> OD 2009-07-13 #i73249#
-//                    rSh.SetAlternateText(
-//                                ((const SfxStringItem*)pItem)->GetValue() );
+                    // #i73249#
                     rSh.SetObjTitle( ((const SfxStringItem*)pItem)->GetValue() );
-                    // <--
                 }
 
                 SfxItemSet aGrfSet( rSh.GetAttrPool(), RES_GRFATR_BEGIN,
@@ -518,10 +513,6 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
     rSh.GetCurAttr( aCoreSet );
     BOOL bParentCntProt = 0 != rSh.IsSelObjProtected( FLYPROTECT_CONTENT|FLYPROTECT_PARENT );
     BOOL bIsGrfCntnt = CNT_GRF == GetShell().GetCntType();
-    // --> OD 2006-11-03 #i59688#
-//    BOOL bSwappedOut = rSh.IsGrfSwapOut( TRUE );
-//    BOOL bBitmapType = !bSwappedOut && GRAPHIC_BITMAP == rSh.GetGraphicType();
-    // <--
 
     SetGetStateSet( &rSet );
 
@@ -651,16 +642,7 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
             {
                 if( bParentCntProt || !bIsGrfCntnt )
                     bDisable = TRUE;
-                // --> OD 2006-11-03 #i59688#
-                // load graphic only if type is unknown
-//                else if( bSwappedOut )
-//                {
-//                    rSet.DisableItem( nWhich );
-//                    if( AddGrfUpdateSlot( nWhich ))
-//                        rSh.GetGraphic(FALSE);  // start the loading
-//                }
-//                else
-//                    bDisable = !bBitmapType;
+                // #i59688# load graphic only if type is unknown
                 else
                 {
                     const USHORT eGraphicType( rSh.GetGraphicType() );

@@ -30,7 +30,7 @@
 #define WW_SORTEDARRAY_HXX
 
 #include <algorithm>
-#include <errhdl.hxx>       // ASSERT()
+#include <errhdl.hxx>       // OSL_ENSURE()
 #include <tools/debug.hxx>
 
 //simple template that manages a static [] array by sorting at construction
@@ -69,7 +69,7 @@ namespace ww
         SortedArray(C *pWwSprmTab, size_t nNoElems)
             : mpWwSprmTab(pWwSprmTab), mnNoElems(nNoElems)
         {
-            ASSERT(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
+            OSL_ENSURE(mnNoElems && pWwSprmTab, "WW8: empty Array: Don't do that");
             std::sort(mpWwSprmTab, mpWwSprmTab + mnNoElems);
 #if OSL_DEBUG_LEVEL > 1
             bool bBroken=false;

@@ -34,12 +34,13 @@
 #include <swtypes.hxx>
 #include <calbck.hxx>
 #include <swrect.hxx>
-#ifndef DBG_UTIL
-#include <node.hxx>         // fuer StartNode->GetMyIndex
-#else
+
+#if OSL_DEBUG_LEVEL > 1
 class SwStartNode;
 #include <memory>
 #include <boost/noncopyable.hpp>
+#else
+#include <node.hxx>         // fuer StartNode->GetMyIndex
 #endif
 
 class Color;
@@ -109,7 +110,7 @@ protected:
 
     BOOL        bModifyLocked   :1;
     BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
 #endif
 
@@ -208,7 +209,7 @@ public:
     BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
                 SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
@@ -217,7 +218,7 @@ public:
     BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
                    BOOL bSameHeight = FALSE )
     {
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         bDontChangeModel = true;
 #endif
         return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
@@ -249,19 +250,17 @@ public:
 
         // lese die 1. Nummer und loesche sie aus dem String
         // (wird von GetTblBox und SwTblFld benutzt)
-    // --> OD 2007-08-03 #i80314#
+    // #i80314#
     // add 3rd parameter in order to control validation check on <rStr>
     static USHORT _GetBoxNum( String& rStr,
                               BOOL bFirst = FALSE,
                               const bool bPerformValidCheck = false );
-    // <--
         // suche die Inhaltstragende Box mit dem Namen
-    // --> OD 2007-08-03 #i80314#
+    // #i80314#
     // add 2nd parameter in order to control validation check in called method
     // <_GetBoxNum(..)>
     const SwTableBox* GetTblBox( const String& rName,
                                  const bool bPerformValidCheck = false ) const;
-    // <--
         // kopiere die selektierten Boxen in ein anderes Dokument.
     BOOL MakeCopy( SwDoc*, const SwPosition&, const SwSelBoxes&,
                     BOOL bCpyNds = TRUE, BOOL bCpyName = FALSE ) const;
@@ -321,7 +320,7 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     void CheckConsistency() const;
 #endif
 };
@@ -410,10 +409,10 @@ public:
 
     const SwStartNode *GetSttNd() const { return pSttNd; }
     ULONG GetSttIdx() const
-#ifndef DBG_UTIL
-        { return pSttNd ? pSttNd->GetIndex() : 0; }
-#else
+#if OSL_DEBUG_LEVEL > 1
         ;
+#else
+        { return pSttNd ? pSttNd->GetIndex() : 0; }
 #endif
 
     // suche nach der naechsten/vorherigen Box mit Inhalt

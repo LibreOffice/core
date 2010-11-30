@@ -368,7 +368,6 @@ void AxisItemConverter::FillSpecialItem( USHORT nWhichId, SfxItemSet & rOutItemS
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
-//         case SCHATTR_AXIS_NUMFMT:
         {
             if( m_pExplicitScale )
             {
@@ -758,7 +757,6 @@ bool AxisItemConverter::ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rI
         break;
 
         case SID_ATTR_NUMBERFORMAT_VALUE:
-//         case SCHATTR_AXIS_NUMFMT:
         {
             if( m_pExplicitScale )
             {

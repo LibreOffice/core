@@ -185,7 +185,7 @@ USHORT DXFGroupReader::Read()
 }
 
 
-long DXFGroupReader::GetI(USHORT nG)
+long DXFGroupReader::GetI(USHORT nG) const
 {
     sal_Int32 nRetValue = 0;
     if ( ( nG >= 60 ) && ( nG <= 79 ) )
@@ -199,7 +199,7 @@ long DXFGroupReader::GetI(USHORT nG)
     return nRetValue;
 }
 
-double DXFGroupReader::GetF(USHORT nG)
+double DXFGroupReader::GetF(USHORT nG) const
 {
     nG-=10;
     if (nG<50) return F10_59[nG];
@@ -218,7 +218,7 @@ double DXFGroupReader::GetF(USHORT nG)
     }
 }
 
-const char * DXFGroupReader::GetS(USHORT nG)
+const char * DXFGroupReader::GetS(USHORT nG) const
 {
     if (nG<10) return S0_9[nG];
     else if ( nG == 100 )

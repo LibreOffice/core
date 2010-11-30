@@ -350,7 +350,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( URL& aURL ) throw( RuntimeException 
         if ( !bWithPassword && aTestURL.Password.getLength() > 0 )
         {
             // Exchange password text with other placeholder string
-            aTestURL.Password = ::rtl::OUString::createFromAscii( "<******>" );
+            aTestURL.Password = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<******>"));
             assemble( aTestURL );
         }
 

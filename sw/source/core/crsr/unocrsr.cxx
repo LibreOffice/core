@@ -68,7 +68,7 @@ SwUnoCrsr::~SwUnoCrsr()
         if( USHRT_MAX != nDelPos )
             rTbl.Remove( nDelPos );
         else {
-            ASSERT( !this, "UNO Cursor nicht mehr im Array" );
+            OSL_ENSURE( !this, "UNO Cursor nicht mehr im Array" );
         }
     }
 
@@ -226,14 +226,6 @@ SwUnoTableCrsr::~SwUnoTableCrsr()
     while( aTblSel.GetNext() != &aTblSel )
         delete aTblSel.GetNext();           // und loeschen
 }
-
-
-/*
-SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
-{
-    return SwUnoCrsr::Create( pRing );
-}
-*/
 
 BOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
 {

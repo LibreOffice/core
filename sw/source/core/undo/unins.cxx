@@ -233,7 +233,7 @@ SwUndoInsert::~SwUndoInsert()
         if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
+            OSL_ENSURE( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
             pTxtNd->EraseText( pPos->nContent );
             pPos->nNode++;
         }
@@ -367,7 +367,7 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
             if( pTxt )
             {
                 SwTxtNode *const pTxtNode = pCNd->GetTxtNode();
-                ASSERT( pTxtNode, "where is my textnode ?" );
+                OSL_ENSURE( pTxtNode, "where is my textnode ?" );
                 pTxtNode->InsertText( *pTxt, pPam->GetMark()->nContent,
                       m_nInsertFlags );
                 DELETEZ( pTxt );
@@ -541,7 +541,7 @@ void SwUndoReplace::Redo( SwUndoIter& rUndoIter )
     // Count neu
     if( rUndoIter.pLastUndoObj != this )
     {
-        ASSERT( !nAktPos, "Redo ohne vorheriges Undo??" );
+        OSL_ENSURE( !nAktPos, "Redo ohne vorheriges Undo??" );
         rUndoIter.pLastUndoObj = this;
         bOldIterFlag = rUndoIter.bWeiter;
         rUndoIter.bWeiter = TRUE;
@@ -632,7 +632,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     m_bSplitNext = m_nSttNd != pEnd->nNode.GetIndex();
 
     SwTxtNode* pNd = pStt->nNode.GetNode().GetTxtNode();
-    ASSERT( pNd, "wo ist der TextNode" );
+    OSL_ENSURE( pNd, "wo ist der TextNode" );
 
     pHistory = new SwHistory;
     DelCntntIndex( *rPam.GetMark(), *rPam.GetPoint() );
@@ -685,7 +685,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     rPam.DeleteMark();
 
     SwTxtNode* pNd = pDoc->GetNodes()[ m_nSttNd - m_nOffset ]->GetTxtNode();
-    ASSERT( pNd, "Wo ist der TextNode geblieben?" )
+    OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
 
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
@@ -714,7 +714,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
         pDoc->DeleteAndJoin( rPam );
         rPam.DeleteMark();
         pNd = rPam.GetNode()->GetTxtNode();
-        ASSERT( pNd, "Wo ist der TextNode geblieben?" );
+        OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
         aIdx.Assign( pNd, m_nSttCnt );
     }
 
@@ -774,7 +774,7 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
     rPam.GetPoint()->nNode = m_nSttNd;
 
     SwTxtNode* pNd = rPam.GetPoint()->nNode.GetNode().GetTxtNode();
-    ASSERT( pNd, "Wo ist der TextNode geblieben?" )
+    OSL_ENSURE( pNd, "Wo ist der TextNode geblieben?" );
     rPam.GetPoint()->nContent.Assign( pNd, m_nSttCnt );
     rPam.SetMark();
     if( m_bSplitNext )
@@ -945,7 +945,7 @@ void SwUndoInsertLabel::Undo( SwUndoIter& rIter )
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
-        ASSERT( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" )
+        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" );
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&
@@ -985,7 +985,7 @@ void SwUndoInsertLabel::Redo( SwUndoIter& rIter )
 
     if( LTYPE_OBJECT == eType || LTYPE_DRAW == eType )
     {
-        ASSERT( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" )
+        OSL_ENSURE( OBJECT.pUndoAttr && OBJECT.pUndoFly, "Pointer nicht initialisiert" );
         SwFrmFmt* pFmt;
         SdrObject *pSdrObj = 0;
         if( OBJECT.pUndoAttr &&

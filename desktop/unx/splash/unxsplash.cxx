@@ -110,7 +110,7 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 
 // XInitialize
 void SAL_CALL
-UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
+UnxSplashScreen::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& )
     throw ( RuntimeException )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )

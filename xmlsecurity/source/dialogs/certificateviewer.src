@@ -174,21 +174,6 @@ TabPage RID_XMLSECTP_GENERAL
         ImageBitmap = Bitmap { File = "notcertificate_40x56.png"; };
            MaskColor = STD_MASKCOLOR;
     };
-    Image IMG_STATE_CERIFICATED_HC
-    {
-        ImageBitmap = Bitmap { File = "certificate_40x56_h.png"; };
-           MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_STATE_NOT_VALIDATED_HC
-    {
-        ImageBitmap = Bitmap { File = "notcertificate_40x56_h.png"; };
-           MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_KEY_HC
-    {
-        ImageBitmap = Bitmap { File = "key_12_h.png"; };
-           MaskColor = STD_MASKCOLOR;
-    };
 };
 
 TabPage RID_XMLSECTP_DETAILS
@@ -321,19 +306,9 @@ TabPage RID_XMLSECTP_CERTPATH
         ImageBitmap = Bitmap { File = "certificate_16.png"; };
         MaskColor = STD_MASKCOLOR;
     };
-    Image IMG_CERT_SMALL_HC
-    {
-        ImageBitmap = Bitmap { File = "certificate_16_h.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
     Image IMG_CERT_NOTVALIDATED_SMALL
     {
         ImageBitmap = Bitmap { File = "notcertificate_16.png"; };
-        MaskColor = STD_MASKCOLOR;
-    };
-    Image IMG_CERT_NOTVALIDATED_SMALL_HC
-    {
-        ImageBitmap = Bitmap { File = "notcertificate_16_h.png"; };
         MaskColor = STD_MASKCOLOR;
     };
     String STR_PATH_CERT_OK

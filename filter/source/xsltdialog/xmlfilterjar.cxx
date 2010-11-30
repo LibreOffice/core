@@ -81,7 +81,7 @@ XMLFilterJarHelper::XMLFilterJarHelper( Reference< XMultiServiceFactory >& xMSF 
 {
     try
     {
-        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString::createFromAscii("com.sun.star.config.SpecialConfigManager")), UNO_QUERY );
+        Reference< XConfigManager > xCfgMgr( xMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.config.SpecialConfigManager" ))), UNO_QUERY );
         if( xCfgMgr.is() )
         {
             sProgPath = xCfgMgr->substituteVariables( sProgPath );
@@ -187,8 +187,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )
@@ -290,8 +289,7 @@ void XMLFilterJarHelper::openPackage( const OUString& rPackageURL, XMLFilterVect
 
         Reference< XHierarchicalNameAccess > xIfc(
             mxMSF->createInstanceWithArguments(
-                rtl::OUString::createFromAscii(
-                                "com.sun.star.packages.comp.ZipPackage" ),
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.packages.comp.ZipPackage" )),
                 aArguments ), UNO_QUERY );
 
         if( xIfc.is() )

@@ -80,12 +80,12 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( FlashExportFilter_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
 
             singlecomponent_writeInfo( xNewKey, FlashExportFilter_getSupportedServiceNames() );
 
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( SWFDialog_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
+            xNewKey = xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" )) );
 
             singlecomponent_writeInfo( xNewKey, SWFDialog_getSupportedServiceNames() );
 

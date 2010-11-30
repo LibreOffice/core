@@ -100,7 +100,7 @@ void SwAttrIter::CtorInitAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf, S
     aMagicNo[SW_LATIN] = aMagicNo[SW_CJK] = aMagicNo[SW_CTL] = NULL;
 
     // determine script changes if not already done for current paragraph
-    ASSERT( pScriptInfo, "No script info available");
+    OSL_ENSURE( pScriptInfo, "No script info available");
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
          pScriptInfo->InitScriptInfo( rTxtNode, bRTL );
 
@@ -318,7 +318,7 @@ void SwRedlineItr::FillHints( MSHORT nAuthor, RedlineType_t eType )
 
 void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
 {
-    ASSERT( IsOn(), "SwRedlineItr::ChangeTxtAttr: Off?" );
+    OSL_ENSURE( IsOn(), "SwRedlineItr::ChangeTxtAttr: Off?" );
 
     if( !bShow && !pExt )
         return;
@@ -332,14 +332,14 @@ void SwRedlineItr::ChangeTxtAttr( SwFont* pFnt, SwTxtAttr &rHt, sal_Bool bChg )
     }
     else
     {
-        ASSERT( ! pExt || ! pExt->IsOn(), "Pop of attribute during opened extension" )
+        OSL_ENSURE( ! pExt || ! pExt->IsOn(), "Pop of attribute during opened extension" );
         rAttrHandler.PopAndChg( rHt, *pFnt );
     }
 }
 
 void SwRedlineItr::_Clear( SwFont* pFnt )
 {
-    ASSERT( bOn, "SwRedlineItr::Clear: Off?" );
+    OSL_ENSURE( bOn, "SwRedlineItr::Clear: Off?" );
     bOn = sal_False;
     while( aHints.Count() )
     {
@@ -445,8 +445,8 @@ void SwExtend::ActualizeFont( SwFont &rFnt, MSHORT nAttr )
 
 short SwExtend::Enter( SwFont& rFnt, xub_StrLen nNew )
 {
-    ASSERT( !Inside(), "SwExtend: Enter without Leave" );
-    ASSERT( !pFnt, "SwExtend: Enter with Font" );
+    OSL_ENSURE( !Inside(), "SwExtend: Enter without Leave" );
+    OSL_ENSURE( !pFnt, "SwExtend: Enter with Font" );
     nPos = nNew;
     if( Inside() )
     {
@@ -459,7 +459,7 @@ short SwExtend::Enter( SwFont& rFnt, xub_StrLen nNew )
 
 sal_Bool SwExtend::_Leave( SwFont& rFnt, xub_StrLen nNew )
 {
-    ASSERT( Inside(), "SwExtend: Leave without Enter" );
+    OSL_ENSURE( Inside(), "SwExtend: Leave without Enter" );
     MSHORT nOldAttr = rArr[ nPos - nStart ];
     nPos = nNew;
     if( Inside() )

@@ -79,7 +79,7 @@ void SkeletonDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString SkeletonDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.SkeletonDriver");
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.SkeletonDriver"));
         // this name is referenced in the configuration and in the skeleton.xml
         // Please take care when changing it.
 }
@@ -89,7 +89,7 @@ Sequence< ::rtl::OUString > SkeletonDriver::getSupportedServiceNames_Static(  ) 
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 
@@ -134,7 +134,7 @@ sal_Bool SAL_CALL SkeletonDriver::acceptsURL( const ::rtl::OUString& url )
 {
     // here we have to look if we support this url format
     // change the URL format to your needs, but please aware that the first on who accepts the URl wins.
-    return (!url.compareTo(::rtl::OUString::createFromAscii("sdbc:skeleton:"),14));
+    return (!url.compareTo(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:skeleton:")),14));
 }
 // --------------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL SkeletonDriver::getPropertyInfo( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)

@@ -56,7 +56,6 @@
 #include <toolkit/unohlp.hxx>
 
 #include <algorithm>
-//add
 #include <cuires.hrc>
 #include "cfg.hrc"
 #include "helpid.hrc"
@@ -150,7 +149,7 @@ void printPropertySet(
 
         uno::Any a = xPropSet->getPropertyValue( aPropDetails[i].Name );
 
-        if ( ( a >>= tmp ) /* && tmp.getLength() != 0 */ )
+        if ( a >>= tmp )
         {
             OSL_TRACE("%s: Got property: %s = %s",
                 PRTSTR(prefix), PRTSTR(aPropDetails[i].Name), PRTSTR(tmp));
@@ -214,7 +213,7 @@ OUString replaceSaveInName(
     const OUString& rSaveInName )
 {
     OUString name;
-    OUString placeholder = OUString::createFromAscii( "%SAVE IN SELECTION%" );
+    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%SAVE IN SELECTION%" ));
 
     sal_Int32 pos = rMessage.indexOf( placeholder );
 
@@ -222,10 +221,6 @@ OUString replaceSaveInName(
     {
         name = rMessage.replaceAt(
             pos, placeholder.getLength(), rSaveInName );
-    }
-    else
-    {
-        // don't change the message
     }
 
     return name;
@@ -258,10 +253,10 @@ generateCustomName(
 {
     // find and replace the %n placeholder in the prefix string
     OUString name;
-    OUString placeholder = OUString::createFromAscii( "%n" );
+    OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%n" ));
 
     sal_Int32 pos = prefix.indexOf(
-        OUString::createFromAscii( "%n" ) );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "%n" )) );
 
     if ( pos != -1 )
     {
@@ -308,8 +303,8 @@ OUString
 generateCustomURL(
     SvxEntries* entries )
 {
-    OUString url = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    url += OUString::createFromAscii( CUSTOM_TOOLBAR_STR );
+    OUString url = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    url += OUString(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_TOOLBAR_STR ));
 
     // use a random number to minimize possible clash with existing custom toolbars
     url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
@@ -343,7 +338,7 @@ generateCustomMenuURL(
     SvxEntries* entries,
     sal_Int32 suffix = 1 )
 {
-    OUString url = OUString::createFromAscii( CUSTOM_MENU_STR );
+    OUString url(RTL_CONSTASCII_USTRINGPARAM( CUSTOM_MENU_STR ));
     url += OUString::valueOf( suffix );
 
     // now check is there is an already existing entry with this url
@@ -383,13 +378,6 @@ void InitImageType()
     if ( SvtMiscOptions().AreCurrentSymbolsLarge() )
     {
         theImageType |= css::ui::ImageType::SIZE_LARGE;
-    }
-
-    Window* topwin = Application::GetActiveTopWindow();
-    if ( topwin != NULL &&
-         topwin->GetSettings().GetStyleSettings().GetHighContrastMode() )
-    {
-        theImageType |= css::ui::ImageType::COLOR_HIGHCONTRAST;
     }
 }
 
@@ -431,29 +419,29 @@ OUString GetModuleName( const OUString& aModuleId )
 {
     if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
          aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
-        return OUString::createFromAscii("Writer");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer"));
     else if ( aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) )
-        return OUString::createFromAscii("Writer/Web");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Writer/Web"));
     else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
-        return OUString::createFromAscii("Draw");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Draw"));
     else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
-        return OUString::createFromAscii("Impress");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Impress"));
     else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
-        return OUString::createFromAscii("Calc");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Calc"));
     else if ( aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" ) )
-        return OUString::createFromAscii("Basic");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Basic"));
     else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
-        return OUString::createFromAscii("Math");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Math"));
     else if ( aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
-        return OUString::createFromAscii("Relation Design");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Relation Design"));
     else if ( aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) )
-        return OUString::createFromAscii("Query Design");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Query Design"));
     else if ( aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) )
-        return OUString::createFromAscii("Table Design");
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Table Design"));
     else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
-        return OUString::createFromAscii("Data Source Browser" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Data Source Browser" ));
     else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) )
-        return OUString::createFromAscii("Database" );
+        return OUString(RTL_CONSTASCII_USTRINGPARAM("Database" ));
 
     return ::rtl::OUString();
 }
@@ -803,9 +791,9 @@ SfxTabPage *CreateSvxEventConfigPage( Window *pParent, const SfxItemSet& rSet )
 
 sal_Bool impl_showKeyConfigTabPage( const css::uno::Reference< css::frame::XFrame >& xFrame )
 {
-    static ::rtl::OUString SERVICENAME_MODULEMANAGER = ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager");
-    static ::rtl::OUString SERVICENAME_DESKTOP       = ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"             );
-    static ::rtl::OUString MODULEID_STARTMODULE      = ::rtl::OUString::createFromAscii("com.sun.star.frame.StartModule"         );
+    static ::rtl::OUString SERVICENAME_MODULEMANAGER (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.ModuleManager") );
+    static ::rtl::OUString SERVICENAME_DESKTOP       (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.Desktop"           ) );
+    static ::rtl::OUString MODULEID_STARTMODULE      (RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.frame.StartModule"       ) );
 
     try
     {
@@ -858,7 +846,7 @@ SvxConfigDialog::SvxConfigDialog(
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
 
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             SetCurPageId( RID_SVXPAGE_TOOLBARS );
         }
@@ -936,7 +924,7 @@ SaveInData::SaveInData(
         ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
 
     xProps->getPropertyValue(
-        OUString::createFromAscii( "DefaultContext" ))
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" )))
             >>= m_xComponentContext;
 
     m_aSeparatorSeq.realloc( 1 );
@@ -998,7 +986,7 @@ uno::Reference< graphic::XGraphic > GetGraphic(
 
     if ( xImageManager.is() )
     {
-        // TODO handle large and high contrast graphics
+        // TODO handle large graphics
         uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
 
         uno::Sequence< OUString > aImageCmdSeq( 1 );
@@ -1716,7 +1704,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
         OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
-        OUString aSearchString = OUString::createFromAscii( "%MODULENAME" );
+        OUString aSearchString(RTL_CONSTASCII_USTRINGPARAM( "%MODULENAME" ));
         sal_Int32 index = title.indexOf( aSearchString );
 
         if ( index != -1 )
@@ -1754,7 +1742,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             OUString label;
             utl::ConfigManager::GetDirectConfigProperty(
                 utl::ConfigManager::PRODUCTNAME ) >>= label;
-            label += OUString::createFromAscii( " " );
+            label += OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
             label += aModuleName;
 
             nPos = aSaveInListBox.InsertEntry( label );
@@ -2637,7 +2625,7 @@ IMPL_LINK( SvxMenuConfigPage, MenuSelectHdl, MenuButton *, pButton )
                 GetSaveInData()->SetModified( TRUE );
             }
 
-            // #i68101# Moemory leak (!)
+            // #i68101# Memory leak (!)
             delete pNameDialog;
 
             break;
@@ -3123,7 +3111,7 @@ SvxConfigEntry::GetHelpText()
 {
     if ( aHelpText.getLength() == 0 )
     {
-        OUString helpid = OUString::createFromAscii( "helpid:" );
+        OUString helpid(RTL_CONSTASCII_USTRINGPARAM( "helpid:" ));
         if ( aHelpURL.indexOf( helpid ) != -1 )
         {
             aHelpURL = aHelpURL.copy( helpid.getLength() );
@@ -3234,42 +3222,6 @@ SvxConfigEntry::GetProperties(
 
     return aPropSeq;
 }
-
-/*
-SvxMenuConfigEntry::SvxMenuConfigEntry(
-    const uno::Sequence< beans::PropertyValue >& rProperties,
-    const uno::Reference< container::XNameAccess >& rCommandToLabelMap )
-    :
-        SvxConfigEntry( rProperties, rCommandToLabelMap )
-{
-    uno::Reference< container::XIndexAccess > aChildren;
-
-    for ( sal_Int32 i = 0; i < rProperties.getLength(); i++ )
-    {
-        if ( rProperties[i].Name.equalsAscii( ITEM_DESCRIPTOR_CONTAINER ))
-        {
-            rProperties[i].Value >>= aChildren;
-        }
-    }
-
-    if ( aChildren.is() )
-    {
-        SetPopup( TRUE );
-        SetEntries( new SvxEntries() );
-
-           uno::Sequence< beans::PropertyValue > aProps;
-        for ( sal_Int32 i = 0; i < aChildren->getCount(); i++ )
-        {
-               if ( aChildren->getByIndex( i ) >>= aProps )
-            {
-                SvxConfigEntry* pEntry =
-                    new SvxMenuConfigEntry( aProps, rCommandToLabelMap );
-                GetEntries()->push_back( pEntry );
-            }
-        }
-    }
-}
-*/
 
 SvxConfigEntry::SvxConfigEntry( const OUString& rDisplayName,
                                 const OUString& rCommandURL, bool bPopup, bool bParentData )
@@ -3396,8 +3348,8 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
 
     // default toolbar to select is standardbar unless a different one
     // has been passed in
-    m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-    m_aURLToSelect += OUString::createFromAscii( "standardbar" );
+    m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+    m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
 
     const SfxPoolItem* pItem =
         rSet.GetItem( rSet.GetPool()->GetWhich( SID_CONFIG ) );
@@ -3405,7 +3357,7 @@ SvxToolbarConfigPage::SvxToolbarConfigPage(
     if ( pItem )
     {
         OUString text = ((const SfxStringItem*)pItem)->GetValue();
-        if (text.indexOf(OUString::createFromAscii(ITEM_TOOLBAR_URL)) == 0)
+        if (text.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM(ITEM_TOOLBAR_URL))) == 0)
         {
             m_aURLToSelect = text.copy( 0 );
         }
@@ -3947,8 +3899,8 @@ void SvxToolbarConfigPage::Init()
         }
 
         // in future select the default toolbar: Standard
-        m_aURLToSelect = OUString::createFromAscii( ITEM_TOOLBAR_URL );
-        m_aURLToSelect += OUString::createFromAscii( "standardbar" );
+        m_aURLToSelect = OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_TOOLBAR_URL ));
+        m_aURLToSelect += OUString(RTL_CONSTASCII_USTRINGPARAM( "standardbar" ));
     }
 
     aTopLevelListBox.SelectEntryPos(nPos, TRUE);
@@ -4053,7 +4005,7 @@ void ToolbarSaveInData::SetSystemStyle(
     const OUString& rResourceURL,
     sal_Int32 nStyle )
 {
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -4092,7 +4044,7 @@ sal_Int32 ToolbarSaveInData::GetSystemStyle( const OUString& rResourceURL )
 {
     sal_Int32 result = 0;
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -4126,7 +4078,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
 {
     OUString result;
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( "private" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( "private" )) ) == 0 &&
          m_xPersistentWindowState.is() &&
          m_xPersistentWindowState->hasByName( rResourceURL ) )
     {
@@ -4152,7 +4104,7 @@ OUString ToolbarSaveInData::GetSystemUIName( const OUString& rResourceURL )
         }
     }
 
-    if ( rResourceURL.indexOf( OUString::createFromAscii( ".uno" ) ) == 0 &&
+    if ( rResourceURL.indexOf( OUString(RTL_CONSTASCII_USTRINGPARAM( ".uno" )) ) == 0 &&
          m_xCommandToLabelMap.is() &&
          m_xCommandToLabelMap->hasByName( rResourceURL ) )
     {
@@ -4253,7 +4205,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 // insert into hash_map to filter duplicates from the parent
                 aToolbarInfo.insert( ToolbarInfo::value_type( systemname, true ));
 
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                 {
                     pEntry->SetUserDefined( TRUE );
@@ -4305,7 +4257,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
                 }
 
                 // custom toolbars of the parent are not visible in the document layer
-                OUString custom = OUString::createFromAscii(CUSTOM_TOOLBAR_STR);
+                OUString custom(RTL_CONSTASCII_USTRINGPARAM(CUSTOM_TOOLBAR_STR));
                 if ( systemname.indexOf( custom ) == 0 )
                     continue;
 
@@ -4524,7 +4476,7 @@ void ToolbarSaveInData::ApplyToolbar( SvxConfigEntry* pToolbar )
     if ( pToolbar->IsUserDefined() )
     {
         xProps->setPropertyValue(
-            OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+            OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( OUString( pToolbar->GetName() ) ) );
     }
 
@@ -4572,7 +4524,7 @@ void ToolbarSaveInData::CreateToolbar( SvxConfigEntry* pToolbar )
         xPropertySet( xSettings, uno::UNO_QUERY );
 
     xPropertySet->setPropertyValue(
-        OUString::createFromAscii( ITEM_DESCRIPTOR_UINAME ),
+        OUString(RTL_CONSTASCII_USTRINGPARAM( ITEM_DESCRIPTOR_UINAME )),
             uno::makeAny( pToolbar->GetName() ) );
 
     try
@@ -5104,8 +5056,6 @@ SvxToolbarEntriesListBox::SvxToolbarEntriesListBox(
     m_pButtonData = new SvLBoxButtonData( this );
     BuildCheckBoxButtonImages( m_pButtonData );
     EnableCheckButton( m_pButtonData );
-
-    m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 // --------------------------------------------------------
@@ -5180,9 +5130,6 @@ void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
     if (( rDCEvt.GetType() == DATACHANGED_SETTINGS ) &&
         ( rDCEvt.GetFlags() & SETTINGS_STYLE ))
     {
-        // We have to reset all images because we change to/from high contrast mode
-        m_bHiContrastMode = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         BuildCheckBoxButtonImages( m_pButtonData );
         Invalidate();
     }
@@ -5365,8 +5312,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     {
         m_xGraphProvider = uno::Reference< graphic::XGraphicProvider >(
             xServiceManager->createInstance(
-                ::rtl::OUString::createFromAscii(
-                    "com.sun.star.graphic.GraphicProvider" ) ),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider" ) ) ),
             uno::UNO_QUERY );
     }
 
@@ -5376,7 +5322,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
     }
 
     uno::Reference< beans::XPropertySet > xPropSet(
-        xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.util.PathSettings" ) ),
+        xServiceManager->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.PathSettings" ) ) ),
         uno::UNO_QUERY );
 
     uno::Any aAny = xPropSet->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UserConfig" ) ) );
@@ -5404,7 +5350,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     uno::Reference< lang::XSingleServiceFactory > xStorageFactory(
         xServiceManager->createInstance(
-        ::rtl::OUString::createFromAscii( "com.sun.star.embed.FileSystemStorageFactory" )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.embed.FileSystemStorageFactory" ) ) ),
         uno::UNO_QUERY );
 
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -5427,7 +5373,7 @@ SvxIconSelectorDialog::SvxIconSelectorDialog( Window *pWindow,
 
     m_xImportedImageManager = uno::Reference< com::sun::star::ui::XImageManager >(
         xServiceManager->createInstanceWithArguments(
-        ::rtl::OUString::createFromAscii( "com.sun.star.ui.ImageManager" ), aProp ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.ImageManager" ) ), aProp ),
         uno::UNO_QUERY );
 
     ImageInfo mImageInfo;
@@ -5670,7 +5616,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
 
     uno::Reference< graphic::XGraphic > xGraphic;
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     aMediaProps[0].Value <<= aURL;
 
     com::sun::star::awt::Size aSize;
@@ -5682,7 +5628,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
         uno::Reference< beans::XPropertySet > props =
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
         uno::Any a = props->getPropertyValue(
-            OUString::createFromAscii("SizePixel") );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
         a >>= aSize;
         if (0 == aSize.Width || 0 == aSize.Height)
             return FALSE;
@@ -5749,7 +5695,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     uno::Sequence< OUString > URLs(1);
     uno::Sequence< uno::Reference<graphic::XGraphic > > aImportGraph( 1 );
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
     uno::Reference< css::ui::XUIConfigurationPersistence >
         xConfigPer( m_xImportedImageManager, uno::UNO_QUERY );
 
@@ -5778,7 +5724,7 @@ void SvxIconSelectorDialog::ImportGraphics(
     {
         ::rtl::OUString aSourcePath( rPaths[0] );
         if ( rPaths[0].lastIndexOf( '/' ) != rPaths[0].getLength() -1 )
-            aSourcePath = rPaths[0] + ::rtl::OUString::createFromAscii( "/" );
+            aSourcePath = rPaths[0] + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
 
         for ( sal_Int32 i = 1; i < rPaths.getLength(); i++ )
         {
@@ -5826,11 +5772,11 @@ void SvxIconSelectorDialog::ImportGraphics(
 
     if ( rejectedCount != 0 )
     {
-        OUString message =OUString::createFromAscii("");
-        OUString newLine = OUString::createFromAscii("\n");
-        rtl::OUString fPath = OUString::createFromAscii("");
+        OUString message;
+        OUString newLine(RTL_CONSTASCII_USTRINGPARAM("\n"));
+        OUString fPath;
         if (rejectedCount > 1)
-              fPath = rPaths[0].copy(8) + ::rtl::OUString::createFromAscii( "/" );
+              fPath = rPaths[0].copy(8) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/" ) );
         for ( sal_Int32 i = 0; i < rejectedCount; i++ )
         {
             message += fPath + rejected[i];
@@ -5850,7 +5796,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
     ++m_nNextId;
 
     uno::Sequence< beans::PropertyValue > aMediaProps( 1 );
-    aMediaProps[0].Name = ::rtl::OUString::createFromAscii("URL");
+    aMediaProps[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL") );
 
     uno::Reference< graphic::XGraphic > xGraphic;
     com::sun::star::awt::Size aSize;
@@ -5862,7 +5808,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
             m_xGraphProvider->queryGraphicDescriptor( aMediaProps );
 
         uno::Any a = props->getPropertyValue(
-            OUString::createFromAscii("SizePixel") );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("SizePixel")) );
 
             xGraphic = m_xGraphProvider->queryGraphic( aMediaProps );
             if ( xGraphic.is() )
@@ -5953,7 +5899,7 @@ rtl::OUString SvxIconReplacementDialog :: ReplaceIconName( const OUString& rMess
 {
     rtl::OUString name;
     rtl::OUString message = String( CUI_RES( RID_SVXSTR_REPLACE_ICON_WARNING ) );
-    rtl::OUString placeholder = OUString::createFromAscii( "%ICONNAME" );
+    rtl::OUString placeholder(RTL_CONSTASCII_USTRINGPARAM( "%ICONNAME" ));
     sal_Int32 pos = message.indexOf( placeholder );
     if ( pos != -1 )
     {

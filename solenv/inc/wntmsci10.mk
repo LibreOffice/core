@@ -78,12 +78,6 @@ CDEFS+= -D_X86_=1
 CFLAGS+= -Gy
 .ENDIF # "$(product)" != ""
 
-.IF "$(bndchk)" == ""
-.IF "$(VC_STANDARD)"==""
-CFLAGS+= -Ob1
-.ENDIF	# "$(VC_STANDARD)"==""
-.ENDIF
-
 # flags to enable build with symbols; required for crashdump feature
 #CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
 # full debug for RE builds only due to size concerns

@@ -40,12 +40,12 @@
 // deklarations
 //------------------------------------------------------------------------
 
-const rtl::OUString TEXTPLAIN_PARAM_CHARSET = rtl::OUString::createFromAscii( "charset" );
+const rtl::OUString TEXTPLAIN_PARAM_CHARSET = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("charset"));
 
-const rtl::OUString PRE_WINDOWS_CODEPAGE = rtl::OUString::createFromAscii( "windows" );
-const rtl::OUString PRE_OEM_CODEPAGE     = rtl::OUString::createFromAscii( "cp" );
-const rtl::OUString CHARSET_UTF16        = rtl::OUString::createFromAscii( "utf-16" );
-const rtl::OUString CHARSET_UNICODE      = rtl::OUString::createFromAscii( "unicode" );
+const rtl::OUString PRE_WINDOWS_CODEPAGE (RTL_CONSTASCII_USTRINGPARAM("windows"));
+const rtl::OUString PRE_OEM_CODEPAGE     (RTL_CONSTASCII_USTRINGPARAM("cp"));
+const rtl::OUString CHARSET_UTF16        (RTL_CONSTASCII_USTRINGPARAM("utf-16"));
+const rtl::OUString CHARSET_UNICODE      (RTL_CONSTASCII_USTRINGPARAM("unicode"));
 
 
 #endif

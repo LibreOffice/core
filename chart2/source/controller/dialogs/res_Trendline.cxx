@@ -35,15 +35,10 @@
 #include "ResId.hxx"
 #include "Strings.hrc"
 #include "Bitmaps.hrc"
-#include "Bitmaps_HC.hrc"
 #include "chartview/ChartSfxItemIds.hxx"
 
 #include <vector>
 #include <algorithm>
-
-// macro for selecting a normal or high contrast bitmap the stack variable
-// bIsHighContrast must exist and reflect the correct state
-#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
 
 namespace
 {
@@ -86,21 +81,22 @@ enum StatTrendLine
 TrendlineResources::TrendlineResources( Window * pParent, const SfxItemSet& rInAttrs, bool bNoneAvailable ) :
         m_aFLType( pParent, SchResId( FL_TYPE )),
 
-        m_aRBNone( pParent, SchResId( RB_NONE )),
-        m_aRBLinear( pParent, SchResId( RB_LINEAR )),
+        m_aRBNone(        pParent, SchResId( RB_NONE        )),
+        m_aRBLinear(      pParent, SchResId( RB_LINEAR      )),
         m_aRBLogarithmic( pParent, SchResId( RB_LOGARITHMIC )),
         m_aRBExponential( pParent, SchResId( RB_EXPONENTIAL )),
-        m_aRBPower( pParent, SchResId( RB_POWER )),
+        m_aRBPower(       pParent, SchResId( RB_POWER       )),
 
-        m_aFINone( pParent, SchResId( FI_NONE )),
-        m_aFILinear( pParent, SchResId( FI_LINEAR )),
+        m_aFINone(        pParent, SchResId( FI_NONE        )),
+        m_aFILinear(      pParent, SchResId( FI_LINEAR      )),
         m_aFILogarithmic( pParent, SchResId( FI_LOGARITHMIC )),
         m_aFIExponential( pParent, SchResId( FI_EXPONENTIAL )),
-        m_aFIPower( pParent, SchResId( FI_POWER )),
+        m_aFIPower(       pParent, SchResId( FI_POWER       )),
 
-        m_aFLEquation( pParent, SchResId( FL_EQUATION )),
-        m_aCBShowEquation( pParent, SchResId( CB_SHOW_EQUATION )),
+        m_aFLEquation(             pParent, SchResId( FL_EQUATION               )),
+        m_aCBShowEquation(         pParent, SchResId( CB_SHOW_EQUATION          )),
         m_aCBShowCorrelationCoeff( pParent, SchResId( CB_SHOW_CORRELATION_COEFF )),
+
         m_eTrendLineType( CHREGRESS_NONE ),
         m_bNoneAvailable( bNoneAvailable ),
         m_bTrendLineUnique( true )
@@ -260,14 +256,12 @@ BOOL TrendlineResources::FillItemSet(SfxItemSet& rOutAttrs) const
 
 void TrendlineResources::FillValueSets()
 {
-    bool bIsHighContrast = ( true && m_aFLType.GetSettings().GetStyleSettings().GetHighContrastMode() );
-
     if( m_bNoneAvailable )
-        m_aFINone.SetImage( SELECT_IMAGE( BMP_REGRESSION_NONE ));
-    m_aFILinear.SetImage( SELECT_IMAGE( BMP_REGRESSION_LINEAR ));
-    m_aFILogarithmic.SetImage( SELECT_IMAGE( BMP_REGRESSION_LOG ));
-    m_aFIExponential.SetImage( SELECT_IMAGE( BMP_REGRESSION_EXP ));
-    m_aFIPower.SetImage( SELECT_IMAGE( BMP_REGRESSION_POWER ));
+        m_aFINone.SetImage(    Image( SchResId( BMP_REGRESSION_NONE   ) ) );
+    m_aFILinear.SetImage(      Image( SchResId( BMP_REGRESSION_LINEAR ) ) );
+    m_aFILogarithmic.SetImage( Image( SchResId( BMP_REGRESSION_LOG    ) ) );
+    m_aFIExponential.SetImage( Image( SchResId( BMP_REGRESSION_EXP    ) ) );
+    m_aFIPower.SetImage(       Image( SchResId( BMP_REGRESSION_POWER  ) ) );
 }
 
 void TrendlineResources::UpdateControlStates()

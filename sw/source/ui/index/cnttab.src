@@ -907,16 +907,6 @@ TabPage TP_TOX_ENTRY
         Border = TRUE;
         DropDown = TRUE;
     };
-    Image IMG_SORTUP_HC
-    {
-        ImageBitmap = Bitmap{File = "sch10712.bmp"; };
-        MaskColor = IMAGE_MASK_COLOR ;
-    };
-    Image IMG_SORTDOWN_HC
-    {
-        ImageBitmap = Bitmap{File = "sch10713.bmp"; };
-        MaskColor = IMAGE_MASK_COLOR ;
-    };
     ImageRadioButton RB_SORTUP1
     {
         Pos = MAP_APPFONT ( 222 , 138 ) ;

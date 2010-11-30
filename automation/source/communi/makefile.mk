@@ -36,7 +36,9 @@ TARGET=communi
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=   \
+SLOFILES=   $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES=   \
     $(SLO)$/communi.obj
 
 # --- Targets ------------------------------------------------------

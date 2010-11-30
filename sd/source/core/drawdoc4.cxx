@@ -1374,12 +1374,6 @@ void SdDrawDocument::SetTextDefaults() const
     pItemPool->SetPoolDefaultItem( aNumBulletItem );
 }
 
-/*************************************************************************
-|*
-|*
-|*
-\************************************************************************/
-
 ::com::sun::star::text::WritingMode SdDrawDocument::GetDefaultWritingMode() const
 {
     const SfxPoolItem*                  pItem = ( pItemPool ? pItemPool->GetPoolDefaultItem( EE_PARA_WRITINGDIR ) : NULL );

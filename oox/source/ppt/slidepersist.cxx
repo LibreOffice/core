@@ -75,7 +75,14 @@ SlidePersist::SlidePersist( XmlFilterBase& rFilter, sal_Bool bMaster, sal_Bool b
     */
         maOtherTextStylePtr->apply( *pDefaultTextStyle.get() );
     }
+#if OSL_DEBUG_LEVEL > 0
+    mxDebugPage = mxPage;
+#endif
 }
+
+#if OSL_DEBUG_LEVEL > 0
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SlidePersist::mxDebugPage;
+#endif
 
 SlidePersist::~SlidePersist()
 {

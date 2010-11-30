@@ -418,10 +418,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
                 if( nSel & nsSelectionType::SEL_OLE )
                 {
-                    // --> OD 2009-07-13 #i73249#
-//                    aSet.Put(SfxStringItem(FN_SET_FRM_ALT_NAME, rSh.GetAlternateText()));
+                    // #i73249#
                     aSet.Put( SfxStringItem( FN_SET_FRM_ALT_NAME, rSh.GetObjTitle() ) );
-                    // <--
                 }
 
                 const SwRect &rPg = rSh.GetAnyCurRect(RECT_PAGE);
@@ -479,10 +477,8 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                         }
                         if (SFX_ITEM_SET == pOutSet->GetItemState(FN_SET_FRM_ALT_NAME, TRUE, &pItem))
                         {
-                            // --> OD 2009-07-13 #i73249#
-//                            rSh.SetAlternateText(((const SfxStringItem*)pItem)->GetValue());
+                            // #i73249#
                             rSh.SetObjTitle(((const SfxStringItem*)pItem)->GetValue());
-                            // <--
                         }
                         // Vorlagen-AutoUpdate
                         SwFrmFmt* pFmt = rSh.GetCurFrmFmt();

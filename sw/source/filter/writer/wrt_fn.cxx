@@ -42,7 +42,7 @@
 Writer& Out( const SwAttrFnTab pTab, const SfxPoolItem& rHt, Writer & rWrt )
 {
     USHORT nId = rHt.Which();
-    ASSERT(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
+    OSL_ENSURE(  nId < POOLATTR_END && nId >= POOLATTR_BEGIN, "SwAttrFnTab::Out()" );
     FnAttrOut pOut;
     if( 0 != ( pOut = pTab[ nId - RES_CHRATR_BEGIN] ))
         (*pOut)( rWrt, rHt );
@@ -70,7 +70,7 @@ Writer& Out_SfxItemSet( const SwAttrFnTab pTab, Writer& rWrt,
     FnAttrOut pOut;
     if( !bDeep || !pSet->GetParent() )
     {
-        ASSERT( rSet.Count(), "Wurde doch schon behandelt oder?" );
+        OSL_ENSURE( rSet.Count(), "Wurde doch schon behandelt oder?" );
         SfxItemIter aIter( *pSet );
         pItem = aIter.GetCurItem();
         do {
@@ -119,7 +119,7 @@ Writer& Out( const SwNodeFnTab pTab, SwNode& rNode, Writer & rWrt )
             nId = RES_OLENODE;
             break;
         default:
-            ASSERT(false, "was fuer ein Node ist es denn nun?");
+            OSL_ENSURE(false, "was fuer ein Node ist es denn nun?");
             break;
     }
     FnNodeOut pOut;

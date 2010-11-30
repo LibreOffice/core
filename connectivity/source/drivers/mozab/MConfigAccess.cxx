@@ -58,7 +58,7 @@ namespace connectivity
 
                 if ( xConfigProvider.is() )
                 {
-                    ::rtl::OUString sCompleteNodePath = ::rtl::OUString::createFromAscii ("/org.openoffice.Office.DataAccess/DriverSettings/" );
+                    ::rtl::OUString sCompleteNodePath(RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.DataAccess/DriverSettings/" ));
                     sCompleteNodePath += OConnection::getDriverImplementationName();
 
                     //=========================================================

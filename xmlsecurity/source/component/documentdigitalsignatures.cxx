@@ -320,7 +320,7 @@ DocumentDigitalSignatures::ImplVerifySignatures(
             if (!rSigInfo.Signer.is())
                 rSigInfo.Signer = xSecEnv->getCertificate( rInfo.ouX509IssuerName, xSerialNumberAdapter->toSequence( rInfo.ouX509SerialNumber ) );
 
-            // --> PB 2004-12-14 #i38744# time support again
+            // Time support again (#i38744#)
             Date aDate( rInfo.stDateTime.Day, rInfo.stDateTime.Month, rInfo.stDateTime.Year );
             Time aTime( rInfo.stDateTime.Hours, rInfo.stDateTime.Minutes,
                         rInfo.stDateTime.Seconds, rInfo.stDateTime.HundredthSeconds );

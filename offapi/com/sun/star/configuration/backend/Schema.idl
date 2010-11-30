@@ -41,7 +41,7 @@ module com { module sun { module star { module configuration { module backend {
 /**
   provides read only access to a configuration component schema.
 
-  <p>A component is a set of hierarchically organised and semantically
+  <p>A component is a set of hierarchically organized and semantically
   related configuration settings, e.g StarWriter settings.
   </p>
   <p>A component schema contains two separate sections, one which

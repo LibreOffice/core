@@ -283,7 +283,7 @@ ViewShell::~ViewShell()
                         for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
                             pFrm; pFrm = (SwFrm*)aIter.Next() )
                         {
-                            ASSERT( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
+                            OSL_ENSURE( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
                             ((SwNoTxtFrm*)pFrm)->StopAnimation( pOut );
                         }
                     }
@@ -312,7 +312,7 @@ ViewShell::~ViewShell()
 
         SwPaintQueue::Remove( this );
 
-        ASSERT( !nStartAction, "EndAction() pending." );
+        OSL_ENSURE( !nStartAction, "EndAction() pending." );
     }
 
     if ( pDoc )

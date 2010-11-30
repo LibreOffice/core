@@ -77,8 +77,7 @@ void OTitleWindow::setChildWindow(Window* _pChild)
 // -----------------------------------------------------------------------------
 void OTitleWindow::Resize()
 {
-    //////////////////////////////////////////////////////////////////////
-    // Abmessungen parent window
+    // parent window dimension
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();

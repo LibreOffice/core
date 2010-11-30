@@ -143,7 +143,6 @@ namespace dbaccess
         DECLARE_SERVICE_INFO();
 
     // com::sun::star::beans::XPropertySet
-        //  virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle) const;
 
     // ::com::sun::star::sdbcx::XRename,

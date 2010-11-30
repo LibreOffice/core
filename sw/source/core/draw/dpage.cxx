@@ -85,7 +85,7 @@ SwDPage::~SwDPage()
 SdrObject*  SwDPage::ReplaceObject( SdrObject* pNewObj, ULONG nObjNum )
 {
     SdrObject *pOld = GetObj( nObjNum );
-    ASSERT( pOld, "Oups, Object not replaced" );
+    OSL_ENSURE( pOld, "Oups, Object not replaced" );
     SdrObjUserCall* pContact;
     if ( 0 != ( pContact = GetUserCall(pOld) ) &&
          RES_DRAWFRMFMT == ((SwContact*)pContact)->GetFmt()->Which())
@@ -242,9 +242,7 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
     return bWeiter;
 }
-/* -----------------------------27.11.00 07:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XInterface > SwDPage::createUnoPage()
 {
     Reference < XInterface > xRet;

@@ -82,7 +82,6 @@
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y ) ;                                                         \
         Size = MAP_APPFONT ( 97 , EDIT_HEIGHT ) ;                                                       \
     };                                                                                                  \
-                                                                                                        \
     FixedText FT_PORTNUMBER                                                                             \
     {                                                                                                   \
         Pos = MAP_APPFONT ( 6 , AUTO_Y + UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + 2 ) ;                  \
@@ -725,8 +724,8 @@ TabPage PAGE_TEXT
     HelpId = HID_DSADMIN_PAGE_TEXT;
 
     AUTO_SEPARATORCONTROLGROUP(UNRELATED_CONTROLS, PAGE_X)
-
 };
+
 //.........................................................................
 TabPage PAGE_USERDRIVER
 {

@@ -36,7 +36,6 @@ ModalDialog DLG_AXIS_OR_GRID
     HelpID = SID_INSERT_AXIS ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    //Size = MAP_APPFONT ( 160 , 99 ) ;
     Size = MAP_APPFONT ( 160 , 113 ) ;
     Moveable = TRUE ;
 

@@ -217,7 +217,7 @@
             </node>
             <node oor:name="ooo-entrance-breaks" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Put on the Breaks</value>
+                    <value xml:lang="en-US">Put on the Brakes</value>
 
                 </prop>
             </node>
@@ -791,7 +791,7 @@
             </node>
             <node oor:name="ooo-exit-breaks" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Put on the Breaks</value>
+                    <value xml:lang="en-US">Put on the Brakes</value>
 
                 </prop>
             </node>

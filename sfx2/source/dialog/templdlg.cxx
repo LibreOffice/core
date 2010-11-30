@@ -2205,32 +2205,6 @@ IMPL_LINK( SfxCommonTemplateDialog_Impl, FmtSelectHdl, SvTreeListBox *, pListBox
     // HilfePI antriggern, wenn von Call als Handler und Bereich erlaubt ist
     if( !pListBox || pListBox->IsSelected( pListBox->GetHdlEntry() ) )
     {
-#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
-        SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
-        if ( pHelpPI && pListBox && IsInitialized() &&
-             GetSelectedEntry().Len() )
-        {
-            const SfxStyleFamilyItem *pItem = GetFamilyItem_Impl();
-            const SfxStyleFamily eFam = pItem->GetFamily();
-            DBG_ASSERT(pStyleSheetPool, "Kein Pool");
-            // SfxStyleSheetBase* pStyle = pStyleSheetPool
-            //      ? pStyleSheetPool->Find( GetSelectedEntry(), eFam ) : 0;
-            SfxStyleSheetBase *pStyle;
-            if ( pStyleSheetPool )
-                pStyle = pStyleSheetPool->Find ( GetSelectedEntry(), eFam );
-            else
-                pStyle = 0;
-
-            if ( pStyle )
-            {
-                String aHelpFile;
-                ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
-                if ( nHelpId )
-                    pHelpPI->LoadTopic( nHelpId );
-            }
-        }
-#endif
-
         // nur, wenn Giesskanne an ist
         if ( IsInitialized() &&
              IsCheckedItem(SID_STYLE_WATERCAN) &&
@@ -2401,8 +2375,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
         return;
 
     // let the families collection update the images
-    sal_Bool bIsHighContrast = m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode();
-    pStyleFamilies->updateImages( *m_pStyleFamiliesId, bIsHighContrast ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL );
+    pStyleFamilies->updateImages( *m_pStyleFamiliesId );
 
     // and set the new images on our toolbox
     USHORT nLoop = pStyleFamilies->Count();
@@ -2417,9 +2390,7 @@ void SfxTemplateDialog_Impl::updateFamilyImages()
 // ------------------------------------------------------------------------
 void SfxTemplateDialog_Impl::updateNonFamilyImages()
 {
-    m_aActionTbR.SetImageList( ImageList( SfxResId(
-        m_pFloat->GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_LST_STYLE_DESIGNER_HC
-                                                             : DLG_STYLE_DESIGNER ) ) );
+    m_aActionTbR.SetImageList( ImageList( SfxResId( DLG_STYLE_DESIGNER ) ) );
 }
 
 // ------------------------------------------------------------------------
@@ -2449,14 +2420,6 @@ void SfxCommonTemplateDialog_Impl::InvalidateBindings()
 
 SfxTemplateDialog_Impl::~SfxTemplateDialog_Impl()
 {
-/*
-    SfxImageManager* pImgMgr = pBindings->GetImageManager();
-    if ( pImgMgr )
-    {
-        pImgMgr->ReleaseToolBox( &m_aActionTbL );
-        pImgMgr->ReleaseToolBox( &m_aActionTbR );
-    }
-*/
 }
 
 //-------------------------------------------------------------------------
@@ -2476,10 +2439,6 @@ void SfxTemplateDialog_Impl::Resize()
     FloatingWindow *pF = m_pFloat->GetFloatingWindow();
     if ( pF )
     {
-//      if(pF->IsZoomedIn() && m_bZoomIn==FALSE)
-//          pF->SetText(String(SfxResId( DLG_STYLE_DESIGNER )));
-//      if(!pF->IsZoomedIn() && m_bZoomIn==TRUE && GetFamilyItem_Impl())
-//          UpdateStyles_Impl(UPDATE_FAMILY); //Bereich wieder in Titel schreiben
         m_bZoomIn = pF->IsRollUp();
         if ( m_bZoomIn )
             return;
@@ -2660,12 +2619,12 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         PopupMenu *pMenu = new PopupMenu;
         uno::Reference< container::XNameAccess > xNameAccess(
                     ::comphelper::getProcessServiceFactory()->
-                    createInstance( ::rtl::OUString::createFromAscii(
-                            "com.sun.star.frame.UICommandDescription") ), uno::UNO_QUERY );
+                    createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.UICommandDescription")) ), uno::UNO_QUERY );
         uno::Reference< container::XNameAccess > xUICommands;
         if ( xNameAccess.is() )
         {
-            rtl::OUString sTextDoc = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
+            rtl::OUString sTextDoc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument"));
             if(xNameAccess->hasByName(sTextDoc))
             {
                 uno::Any a = xNameAccess->getByName( sTextDoc );
@@ -2677,18 +2636,18 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
         try
         {
             uno::Sequence< beans::PropertyValue > aPropSeq;
-            uno::Any aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleNewByExample"));
+            uno::Any aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleNewByExample")));
             ::rtl::OUString sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_STYLE_NEW_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:StyleUpdateByExample"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:StyleUpdateByExample")));
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
             pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
-            aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
+            aCommand = xUICommands->getByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:LoadStyles")));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
             pMenu->SetHelpId(SID_TEMPLATE_LOAD, SID_TEMPLATE_LOAD);
@@ -2869,13 +2828,6 @@ void SfxTemplateCatalog_Impl::EnableItem( USHORT nMesId, BOOL bCheck )
         aOkBtn.Enable( bCheck );
     if ( nMesId > SFX_STYLE_FAMILY_PSEUDO || nMesId < SFX_STYLE_FAMILY_CHAR )
         return;
-
-/*      for(USHORT i=0;i<aFamIds.Count&&aFamIds[i]!=nMesId;i++);
-    if(i!=aFamIds.Count())
-        aFamList.SelectEntry(aFamIds[i]);
-    else
-        DBG_ERROR("Entry nicht gefunden");*/
-
 }
 
 //-------------------------------------------------------------------------
@@ -3015,24 +2967,17 @@ void SfxTemplateDialog::StateChanged( StateChangedType nStateChange )
     SfxDockingWindow::StateChanged( nStateChange );
 }
 
-/*-- 10.12.2003 11:44:35---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::DropToolBox_Impl(Window* pParent, SfxTemplateDialog_Impl* pTemplateDialog) :
     ToolBox(pParent),
     DropTargetHelper(this),
     rParent(*pTemplateDialog)
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 DropToolBox_Impl::~DropToolBox_Impl()
 {
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     sal_Int8 nReturn = DND_ACTION_NONE;
@@ -3052,9 +2997,7 @@ sal_Int8    DropToolBox_Impl::AcceptDrop( const AcceptDropEvent& rEvt )
     }
     return nReturn;
 }
-/*-- 10.12.2003 11:44:35---------------------------------------------------
 
-  -----------------------------------------------------------------------*/
 sal_Int8    DropToolBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 {
      return rParent.aFmtLb.ExecuteDrop(rEvt);

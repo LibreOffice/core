@@ -222,8 +222,6 @@
 #define LB_LANGUAGE             146
 #define FT_SORTALG              147
 #define LB_SORTALG              148
-#define IMG_SORTUP_HC           149
-#define IMG_SORTDOWN_HC         150
 #define ST_NO_BRACKET           151
 
 #define FT_LEVEL_OL             152

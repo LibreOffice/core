@@ -93,6 +93,7 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XLabelRanges.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
@@ -106,9 +107,10 @@
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::formula;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
 using ::rtl::OUString;
-
-using rtl::OUString;
+using ::rtl::OUStringBuffer;
 
 OUString SAL_CALL ScXMLImport_getImplementationName() throw()
 {
@@ -1640,8 +1642,8 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     } else if ( (XML_NAMESPACE_OFFICE == nPrefix) &&
         ( IsXMLToken(rLocalName, XML_DOCUMENT)) ) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-                mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-                "com.sun.star.xml.dom.SAXDocumentBuilder")),
+                mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "com.sun.star.xml.dom.SAXDocumentBuilder"))),
                 uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
@@ -1939,8 +1941,8 @@ SvXMLImportContext *ScXMLImport::CreateMetaContext(
     if( !IsStylesOnlyMode() && (getImportFlags() & IMPORT_META))
     {
         uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
-            mxServiceFactory->createInstance(::rtl::OUString::createFromAscii(
-            "com.sun.star.xml.dom.SAXDocumentBuilder")),
+            mxServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "com.sun.star.xml.dom.SAXDocumentBuilder"))),
             uno::UNO_QUERY_THROW);
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
             GetModel(), uno::UNO_QUERY_THROW);
@@ -2107,7 +2109,7 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
         sal_Int32 nCount(rChangeProps.getLength());
         if (nCount)
         {
-            LockSolarMutex();
+            ScXMLImport::MutexGuard aGuard(*this);
             sal_Int16 nTemp16(0);
             ScChangeViewSettings* pViewSettings(new ScChangeViewSettings());
             for (sal_Int32 i = 0; i < nCount; ++i)
@@ -2183,7 +2185,6 @@ void ScXMLImport::SetChangeTrackingViewSettings(const com::sun::star::uno::Seque
                 }
             }
             pDoc->SetChangeViewSettings(*pViewSettings);
-            UnlockSolarMutex();
         }
     }
 }
@@ -2316,18 +2317,19 @@ sal_Int32 ScXMLImport::SetCurrencySymbol(const sal_Int32 nKey, const rtl::OUStri
                     lang::Locale aLocale;
                     if (GetDocument() && (xProperties->getPropertyValue(sLocale) >>= aLocale))
                     {
-                        LockSolarMutex();
-                        LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
-                        rtl::OUStringBuffer aBuffer(15);
-                        aBuffer.appendAscii("#");
-                        aBuffer.append( aLocaleData.getNumThousandSep() );
-                        aBuffer.appendAscii("##0");
-                        aBuffer.append( aLocaleData.getNumDecimalSep() );
-                        aBuffer.appendAscii("00 [$");
-                        aBuffer.append(rCurrency);
-                        aBuffer.appendAscii("]");
-                        UnlockSolarMutex();
-                        sFormatString = aBuffer.makeStringAndClear();
+                        {
+                            ScXMLImport::MutexGuard aGuard(*this);
+                            LocaleDataWrapper aLocaleData( GetDocument()->GetServiceManager(), aLocale );
+                            rtl::OUStringBuffer aBuffer(15);
+                            aBuffer.appendAscii("#");
+                            aBuffer.append( aLocaleData.getNumThousandSep() );
+                            aBuffer.appendAscii("##0");
+                            aBuffer.append( aLocaleData.getNumDecimalSep() );
+                            aBuffer.appendAscii("00 [$");
+                            aBuffer.append(rCurrency);
+                            aBuffer.appendAscii("]");
+                            sFormatString = aBuffer.makeStringAndClear();
+                        }
                         sal_Int32 nNewKey = xLocalNumberFormats->queryKey(sFormatString, aLocale, sal_True);
                         if (nNewKey == -1)
                             nNewKey = xLocalNumberFormats->addNew(sFormatString, aLocale);
@@ -2601,7 +2603,7 @@ void ScXMLImport::SetStylesToRangesFinished()
 void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
 throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException)
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
 
     uno::Reference<frame::XModel> xModel(xDoc, uno::UNO_QUERY);
@@ -2615,7 +2617,6 @@ throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::R
     uno::Reference<document::XActionLockable> xActionLockable(xDoc, uno::UNO_QUERY);
     if (xActionLockable.is())
         xActionLockable->addActionLock();
-    UnlockSolarMutex();
 }
 
 // XServiceInfo
@@ -2645,7 +2646,7 @@ throw(::com::sun::star::uno::RuntimeException)
 void SAL_CALL ScXMLImport::startDocument(void)
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
     if (pDoc && !pDoc->IsImportingXML())
     {
@@ -2669,8 +2670,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
             pSheetData->StoreInitialNamespaces(rNamespaces);
         }
     }
-
-    UnlockSolarMutex();
 }
 
 sal_Int32 ScXMLImport::GetRangeType(const rtl::OUString sRangeType) const
@@ -2742,96 +2741,143 @@ void ScXMLImport::SetLabelRanges()
     }
 }
 
+namespace {
+
+/**
+ * Used to switch off document modify and broadcast while populating named
+ * ranges during import.
+ */
+class NamedRangesSwitch
+{
+public:
+    NamedRangesSwitch(Reference<beans::XPropertySet>& xPropSet) :
+        mxPropSet(xPropSet), maPropName(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_MODIFY_BROADCAST))
+    {
+        uno::Any any;
+        any <<= sal_False;
+        mxPropSet->setPropertyValue(maPropName, any);
+    }
+
+    ~NamedRangesSwitch()
+    {
+        uno::Any any;
+        any <<= sal_True;
+        mxPropSet->setPropertyValue(maPropName, any);
+    }
+
+private:
+    Reference<beans::XPropertySet>& mxPropSet;
+    OUString maPropName;
+};
+
+}
+
 void ScXMLImport::SetNamedRanges()
 {
-    ScMyNamedExpressions* pNamedExpressions(GetNamedExpressions());
-    if (pNamedExpressions)
+    ScMyNamedExpressions* pNamedExpressions = GetNamedExpressions();
+    if (!pNamedExpressions)
+        return;
+
+    Reference <beans::XPropertySet> xPropertySet (GetModel(), UNO_QUERY);
+    if (!xPropertySet.is())
+        return;
+
+    Reference <sheet::XNamedRanges> xNamedRanges(
+        xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), UNO_QUERY);
+
+    if (!xNamedRanges.is())
+        return;
+
+    Reference<beans::XPropertySet> xPropSet(xNamedRanges, UNO_QUERY);
+    if (!xPropSet.is())
+        return;
+
+    // Turn off broadcasting while adding imported range names.
+    NamedRangesSwitch aSwitch(xPropSet);
+
+    ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
+    ScMyNamedExpressions::const_iterator aEndItr(pNamedExpressions->end());
+    table::CellAddress aCellAddress;
+    OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
+
+    for (; aItr != aEndItr; ++aItr)
     {
-        uno::Reference <beans::XPropertySet> xPropertySet (GetModel(), uno::UNO_QUERY);
-        if (xPropertySet.is())
+        sal_Int32 nOffset = 0;
+        bool bSuccess = ScRangeStringConverter::GetAddressFromString(
+            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset);
+
+        if (!bSuccess)
+            // Conversion of base cell address failed.  Skip this.
+            continue;
+
+        try
         {
-            uno::Reference <sheet::XNamedRanges> xNamedRanges(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NAMEDRANGES))), uno::UNO_QUERY);
-            if (xNamedRanges.is())
+            xNamedRanges->addNewByName(
+                (*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
+        }
+        catch( uno::RuntimeException& )
+        {
+            DBG_ERROR("here are some Named Ranges with the same name");
+            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
+            if (xIndex.is())
             {
-                ScMyNamedExpressions::iterator aItr(pNamedExpressions->begin());
-                ScMyNamedExpressions::const_iterator aEndItr(pNamedExpressions->end());
-                table::CellAddress aCellAddress;
-                rtl::OUString sTempContent(RTL_CONSTASCII_USTRINGPARAM("0"));
-                while (aItr != aEndItr)
+                sal_Int32 nMax = xIndex->getCount();
+                bool bInserted = false;
+                sal_Int32 nCount = 1;
+                OUStringBuffer sName((*aItr)->sName);
+                sName.append(sal_Unicode('_'));
+                while (!bInserted && nCount <= nMax)
                 {
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
+                    OUStringBuffer sTemp(sName);
+                    sTemp.append(OUString::valueOf(nCount));
+                    try
                     {
-                        try
-                        {
-                            xNamedRanges->addNewByName((*aItr)->sName, sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
-                        }
-                        catch( uno::RuntimeException& )
-                        {
-                            DBG_ERROR("here are some Named Ranges with the same name");
-                            uno::Reference < container::XIndexAccess > xIndex(xNamedRanges, uno::UNO_QUERY);
-                            if (xIndex.is())
-                            {
-                                sal_Int32 nMax(xIndex->getCount());
-                                sal_Bool bInserted(sal_False);
-                                sal_Int32 nCount(1);
-                                rtl::OUStringBuffer sName((*aItr)->sName);
-                                sName.append(sal_Unicode('_'));
-                                while (!bInserted && nCount <= nMax)
-                                {
-                                    rtl::OUStringBuffer sTemp(sName);
-                                    sTemp.append(rtl::OUString::valueOf(nCount));
-                                    try
-                                    {
-                                        xNamedRanges->addNewByName(sTemp.makeStringAndClear(), sTempContent, aCellAddress, GetRangeType((*aItr)->sRangeType));
-                                        bInserted = sal_True;
-                                    }
-                                    catch( uno::RuntimeException& )
-                                    {
-                                        ++nCount;
-                                    }
-                                }
-                            }
-                        }
+                        xNamedRanges->addNewByName(
+                            sTemp.makeStringAndClear(), sTempContent, aCellAddress,
+                            GetRangeType((*aItr)->sRangeType));
+                        bInserted = true;
                     }
-                    ++aItr;
+                    catch( uno::RuntimeException& )
+                    {
+                        ++nCount;
+                    }
                 }
-                aItr = pNamedExpressions->begin();
-                while (aItr != aEndItr)
+                UnlockSolarMutex();
+            }
+        }
+    }
+
+    aItr = pNamedExpressions->begin();
+    while (aItr != aEndItr)
+    {
+        sal_Int32 nOffset(0);
+        if (ScRangeStringConverter::GetAddressFromString(
+            aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
+        {
+            uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
+            if (xNamedRange.is())
+            {
+                ScXMLImport::MutexGuard aGuard(*this);
+                ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
+                if (pNamedRangeObj)
                 {
-                    sal_Int32 nOffset(0);
-                    if (ScRangeStringConverter::GetAddressFromString(
-                        aCellAddress, (*aItr)->sBaseCellAddress, GetDocument(), FormulaGrammar::CONV_OOO, nOffset ))
-                    {
-                        uno::Reference <sheet::XNamedRange> xNamedRange(xNamedRanges->getByName((*aItr)->sName), uno::UNO_QUERY);
-                        if (xNamedRange.is())
-                        {
-                            LockSolarMutex();
-                            ScNamedRangeObj* pNamedRangeObj = ScNamedRangeObj::getImplementation( xNamedRange);
-                            if (pNamedRangeObj)
-                            {
-                                sTempContent = (*aItr)->sContent;
-                                // Get rid of leading sheet dots in simple ranges.
-                                if (!(*aItr)->bIsExpression)
-                                    ScXMLConverter::ParseFormula( sTempContent, false);
-                                pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
-                            }
-                            UnlockSolarMutex();
-                        }
-                    }
-                    delete *aItr;
-                    aItr = pNamedExpressions->erase(aItr);
+                    sTempContent = (*aItr)->sContent;
+                    // Get rid of leading sheet dots in simple ranges.
+                    if (!(*aItr)->bIsExpression)
+                        ScXMLConverter::ParseFormula( sTempContent, false);
+                    pNamedRangeObj->SetContentWithGrammar( sTempContent, (*aItr)->eGrammar);
                 }
             }
         }
+        delete *aItr;
+        aItr = pNamedExpressions->erase(aItr);
     }
 }
 
 void SAL_CALL ScXMLImport::endDocument(void)
 throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
 {
-    LockSolarMutex();
+    ScXMLImport::MutexGuard aGuard(*this);
     if (getImportFlags() & IMPORT_CONTENT)
     {
         if (GetModel().is())
@@ -2901,8 +2947,6 @@ throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeE
     {
         ScModelObj::getImplementation(GetModel())->AfterXMLLoading(sal_True);
     }
-
-    UnlockSolarMutex();
 }
 
 // XEventListener
@@ -2910,6 +2954,17 @@ void ScXMLImport::DisposingModel()
 {
     SvXMLImport::DisposingModel();
     pDoc = NULL;
+}
+
+ScXMLImport::MutexGuard::MutexGuard(ScXMLImport& rImport) :
+    mrImport(rImport)
+{
+    mrImport.LockSolarMutex();
+}
+
+ScXMLImport::MutexGuard::~MutexGuard()
+{
+    mrImport.UnlockSolarMutex();
 }
 
 void ScXMLImport::LockSolarMutex()

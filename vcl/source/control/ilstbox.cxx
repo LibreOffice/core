@@ -2711,25 +2711,17 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-BOOL ImplWin::SetModeImage( const Image& rImage, BmpColorMode eMode )
+BOOL ImplWin::SetModeImage( const Image& rImage )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetImage( rImage );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-        maImageHC = rImage;
-    else
-        return FALSE;
+    SetImage( rImage );
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& ImplWin::GetModeImage( BmpColorMode eMode ) const
+const Image& ImplWin::GetModeImage( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maImageHC;
-    else
-        return maImage;
+    return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -2746,7 +2738,6 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 {
     if( IsEnabled() )
     {
-//      Control::MouseButtonDown( rMEvt );
         MBDown();
     }
 }
@@ -2907,12 +2898,6 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
         // check for HC mode
         Image *pImage = &maImage;
-
-        if( !!maImageHC )
-        {
-            if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-                pImage = &maImageHC;
-        }
 
         if ( !IsZoom() )
         {
@@ -3147,6 +3132,11 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
             long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
             aFloatSz.Width() += nSBWidth;
         }
+
+        long nDesktopWidth = GetDesktopRectPixel().getWidth();
+        if (aFloatSz.Width() > nDesktopWidth)
+            // Don't exceed the desktop width.
+            aFloatSz.Width() = nDesktopWidth;
     }
 
     if ( aFloatSz.Height() > nMaxHeight )
@@ -3173,6 +3163,13 @@ Size ImplListBoxFloatingWindow::CalcFloatSize()
         aFloatSz.Height() = nInnerHeight + nTop + nBottom;
     }
 
+    if (aFloatSz.Width() < aSz.Width())
+    {
+        // The max width of list box entries exceeds the window width.
+        // Account for the scroll bar height.
+        long nSBWidth = GetSettings().GetStyleSettings().GetScrollBarSize();
+        aFloatSz.Height() += nSBWidth;
+    }
     return aFloatSz;
 }
 

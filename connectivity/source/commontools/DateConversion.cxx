@@ -233,7 +233,7 @@ Date DBTypeConversion::getNULLDate(const Reference< XNumberFormatsSupplier > &xS
         {
             // get the null date
             Date aDate;
-            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+            xSupplier->getNumberFormatSettings()->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
             return aDate;
         }
         catch ( const Exception&  )
@@ -274,7 +274,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
             {   // die Formatierung soll eigentlich als Prozent erfolgen, aber der String stellt nur eine
                 // einfache Nummer dar -> anpassen
                 ::rtl::OUString sExpanded(rString);
-                static ::rtl::OUString s_sPercentSymbol = ::rtl::OUString::createFromAscii("%");
+                static ::rtl::OUString s_sPercentSymbol( RTL_CONSTASCII_USTRINGPARAM( "%" ));
                     // need a method to add a sal_Unicode to a string, 'til then we use a static string
                 sExpanded += s_sPercentSymbol;
                 fValue = xFormatter->convertStringToNumber(nKeyToUse, sExpanded);

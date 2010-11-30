@@ -53,6 +53,7 @@ String STR_TABLE_PRIV_ALTER
 {
     Text [ en-US ] = "Alter structure";
 };
+
 String STR_TABLE_PRIV_SELECT
 {
     Text [ en-US ] = "Read data";
@@ -67,30 +68,3 @@ String STR_TABLE_PRIV_DROP
 {
     Text [ en-US ] = "Drop structure";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -236,12 +236,12 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
                 if(nPrecision)
                 {
                     eType = DataType::DECIMAL;
-                    aTypeName = ::rtl::OUString::createFromAscii("DECIMAL");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
                 }
                 else
                 {
                     eType = DataType::DOUBLE;
-                    aTypeName = ::rtl::OUString::createFromAscii("DOUBLE");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
                 }
             }
             else
@@ -255,21 +255,21 @@ void OEvoabTable::fillColumns(const ::com::sun::star::lang::Locale& _aLocale)
             {
                 case NUMBERFORMAT_DATE:
                     eType = DataType::DATE;
-                    aTypeName = ::rtl::OUString::createFromAscii("DATE");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
                     break;
                 case NUMBERFORMAT_DATETIME:
                     eType = DataType::TIMESTAMP;
-                    aTypeName = ::rtl::OUString::createFromAscii("TIMESTAMP");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
                     break;
                 case NUMBERFORMAT_TIME:
                     eType = DataType::TIME;
-                    aTypeName = ::rtl::OUString::createFromAscii("TIME");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
                     break;
                 default:
                     eType = DataType::VARCHAR;
                     nPrecision = 0; // nyi: Daten koennen aber laenger sein!
                     nScale = 0;
-                    aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
+                    aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
             };
             nFlags |= ColumnSearch::CHAR;
         }
@@ -338,8 +338,8 @@ void OEvoabTable::construct()
     Sequence< ::com::sun::star::uno::Any > aArg(1);
     aArg[0] <<= aAppLocale;
 
-    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatsSupplier"),aArg),UNO_QUERY);
-    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")),UNO_QUERY);
+    Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xSupplier(m_pConnection->getDriver()->getFactory()->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatsSupplier")),aArg),UNO_QUERY);
+    m_xNumberFormatter = Reference< ::com::sun::star::util::XNumberFormatter >(m_pConnection->getDriver()->getFactory()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))),UNO_QUERY);
     m_xNumberFormatter->attachNumberFormatsSupplier(xSupplier);
 
     INetURLObject aURL;
@@ -552,7 +552,7 @@ sal_Bool OEvoabTable::fetchRow(OValueRefRow& _rRow,const OSQLColumns & _rCols,sa
                         nRes = m_xNumberFormatter->convertStringToNumber(::com::sun::star::util::NumberFormat::ALL,aStr);
                         Reference<XPropertySet> xProp(m_xNumberFormatter->getNumberFormatsSupplier()->getNumberFormatSettings(),UNO_QUERY);
                         com::sun::star::util::Date aDate;
-                        xProp->getPropertyValue(::rtl::OUString::createFromAscii("NullDate")) >>= aDate;
+                        xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NullDate"))) >>= aDate;
 
                         switch(nType)
                         {
@@ -672,7 +672,7 @@ sal_Bool OEvoabTable::setColumnAliases()
 
         sal_Bool bCase = getConnection()->getMetaData()->storesMixedCaseQuotedIdentifiers();
         ::rtl::OUString aTypeName;
-        aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
+        aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
         sdbcx::OColumn* pColumn = new sdbcx::OColumn(sColumnFinalName,aTypeName,::rtl::OUString(),
                                                 ColumnValue::NULLABLE,
                                                 m_aPrecisions[i],

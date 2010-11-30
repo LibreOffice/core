@@ -44,8 +44,13 @@ CDEFS=$(CDEFS) -Dmydebug
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(SLO)$/css1atr.obj \
+        $(EXCEPTIONSFILES) \
         $(SLO)$/css1kywd.obj \
+        $(SLO)$/htmlflyt.obj
+
+EXCEPTIONSFILES = \
+        $(SLO)$/SwAppletImpl.obj \
+        $(SLO)$/css1atr.obj \
         $(SLO)$/htmlatr.obj \
         $(SLO)$/htmlbas.obj \
         $(SLO)$/htmlcss1.obj \
@@ -54,7 +59,6 @@ SLOFILES =  \
         $(SLO)$/htmlfld.obj \
         $(SLO)$/htmlfldw.obj \
         $(SLO)$/htmlfly.obj \
-        $(SLO)$/htmlflyt.obj \
         $(SLO)$/htmlform.obj \
         $(SLO)$/htmlforw.obj \
         $(SLO)$/htmlftn.obj \
@@ -66,14 +70,6 @@ SLOFILES =  \
         $(SLO)$/htmltabw.obj \
         $(SLO)$/parcss1.obj \
         $(SLO)$/svxcss1.obj \
-        $(SLO)$/swhtml.obj \
-        $(SLO)$/wrthtml.obj \
-        $(SLO)$/SwAppletImpl.obj \
-
-EXCEPTIONSFILES = \
-        $(SLO)$/htmlfld.obj \
-        $(SLO)$/htmlplug.obj \
-        $(SLO)$/htmlsect.obj \
         $(SLO)$/swhtml.obj \
         $(SLO)$/wrthtml.obj
 

@@ -39,11 +39,7 @@
 // immer ~ 20 * MAXENTRY == 20000 Eintraege
 const USHORT nBlockGrowSize = 20;
 
-#ifndef DBG_UTIL
-
-#define CHECKIDX( p, n, i, c )
-
-#else
+#if OSL_DEBUG_LEVEL > 2
 
 #define CHECKIDX( p, n, i, c ) CheckIdx( p, n, i, c );
 
@@ -62,6 +58,10 @@ void CheckIdx( BlockInfo** ppInf, USHORT nBlock, ULONG nSize, USHORT nCur )
 
     DBG_ASSERT( nIdx == nSize, "BigPtrArray: Anzahl ungueltig" );
 }
+
+#else
+
+#define CHECKIDX( p, n, i, c )
 
 #endif
 

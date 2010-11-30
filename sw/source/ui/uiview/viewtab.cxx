@@ -946,8 +946,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
     {
         switch ( nWhich )
         {
-//        case RES_LR_SPACE:
-//        case SID_ATTR_LRSPACE:
         case SID_ATTR_LONG_LRSPACE:
         {
             SvxLongLRSpaceItem aLongLR( (long)aPageLRSpace.GetLeft(),
@@ -1010,8 +1008,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
             break;
         }
         case SID_ATTR_LONG_ULSPACE:
-//        case SID_ATTR_ULSPACE:
-//        case RES_UL_SPACE:
         {
             // Rand Seite Oben Unten
             SvxULSpaceItem aUL( rDesc.GetMaster().GetULSpace() );

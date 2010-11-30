@@ -117,7 +117,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellRangeAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XL_A1_REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
@@ -131,7 +131,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
         {
             {MAP_CHAR_LEN(SC_UNONAME_ADDRESS),  0,  &getCppuType((table::CellAddress*)0), 0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {MAP_CHAR_LEN(SC_UNONAME_XL_A1_REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
+            {MAP_CHAR_LEN(SC_UNONAME_XLA1REPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {0,0,0,0,0,0}
@@ -193,11 +193,11 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
             bSuccess = ParseUIString( aUIString );
         }
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XL_A1_REPR ) )
+    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention aConv = ::formula::FormulaGrammar::CONV_OOO;
-        if ( aNameStr.EqualsAscii( SC_UNONAME_XL_A1_REPR ) )
-            aConv = ::formula::FormulaGrammar::CONV_XL_A1;
+        ::formula::FormulaGrammar::AddressConvention aConv = aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) ?
+            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
+
         //  parse the file format string
         rtl::OUString sRepresentation;
         if (aValue >>= sRepresentation)
@@ -271,24 +271,23 @@ uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const rtl::OUString&
             aRange.aStart.Format( aFormatStr, nFlags, pDoc );
         aRet <<= rtl::OUString( aFormatStr );
     }
-    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XL_A1_REPR ) )
+    else if ( aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) || aNameStr.EqualsAscii( SC_UNONAME_XLA1REPR ) )
     {
-        ::formula::FormulaGrammar::AddressConvention aConv = ::formula::FormulaGrammar::CONV_OOO;
-        if ( aNameStr.EqualsAscii( SC_UNONAME_XL_A1_REPR ) )
-            aConv = ::formula::FormulaGrammar::CONV_XL_A1;
+        ::formula::FormulaGrammar::AddressConvention eConv = aNameStr.EqualsAscii( SC_UNONAME_PERSREPR ) ?
+            ::formula::FormulaGrammar::CONV_OOO : ::formula::FormulaGrammar::CONV_XL_A1;
 
         //  generate file format string - always include sheet
         String aFormatStr;
-        aRange.aStart.Format( aFormatStr, SCA_VALID | SCA_TAB_3D, pDoc, aConv );
+        aRange.aStart.Format( aFormatStr, SCA_VALID | SCA_TAB_3D, pDoc, eConv );
         if ( bIsRange )
         {
             //  manually concatenate range so both parts always have the sheet name
             aFormatStr.Append( (sal_Unicode) ':' );
             String aSecond;
             USHORT nFlags = SCA_VALID;
-            if( aConv != ::formula::FormulaGrammar::CONV_XL_A1 )
-        nFlags |= SCA_TAB_3D;
-            aRange.aEnd.Format( aSecond, SCA_VALID | SCA_TAB_3D, pDoc, aConv );
+            if( eConv != ::formula::FormulaGrammar::CONV_XL_A1 )
+                nFlags |= SCA_TAB_3D;
+            aRange.aEnd.Format( aSecond, SCA_VALID | SCA_TAB_3D, pDoc, eConv );
             aFormatStr.Append( aSecond );
         }
         aRet <<= rtl::OUString( aFormatStr );
@@ -305,7 +304,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 rtl::OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString::createFromAscii( "ScAddressConversionObj" );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScAddressConversionObj" ));
 }
 
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const rtl::OUString& rServiceName )
@@ -321,8 +320,8 @@ uno::Sequence<rtl::OUString> SAL_CALL ScAddressConversionObj::getSupportedServic
 {
     uno::Sequence<rtl::OUString> aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString::createFromAscii( bIsRange ? SC_SERVICENAME_RANGEADDRESS
-                                                         : SC_SERVICENAME_CELLADDRESS );
+    pArray[0] = bIsRange ? rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_RANGEADDRESS))
+                         : rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_SERVICENAME_CELLADDRESS));
     return aRet;
 }
 

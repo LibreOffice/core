@@ -1223,20 +1223,17 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_100TH_MM:
         {
-            sal_Char aText[] = "/100mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("/100mm"));
             break;
         }
         case FUNIT_MM     :
         {
-            sal_Char aText[] = "mm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mm"));
             break;
         }
         case FUNIT_CM     :
         {
-            sal_Char aText[] = "cm";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("cm"));
             break;
         }
         case FUNIT_M      :
@@ -1247,26 +1244,22 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_KM     :
         {
-            sal_Char aText[] = "km";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("km"));
             break;
         }
         case FUNIT_TWIP   :
         {
-            sal_Char aText[] = "twip";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("twip"));
             break;
         }
         case FUNIT_POINT  :
         {
-            sal_Char aText[] = "pt";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pt"));
             break;
         }
         case FUNIT_PICA   :
         {
-            sal_Char aText[] = "pica";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("pica"));
             break;
         }
         case FUNIT_INCH   :
@@ -1277,14 +1270,12 @@ void SdrModel::TakeUnitStr(FieldUnit eUnit, XubString& rStr)
         }
         case FUNIT_FOOT   :
         {
-            sal_Char aText[] = "ft";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("ft"));
             break;
         }
         case FUNIT_MILE   :
         {
-            sal_Char aText[] = "mile(s)";
-            rStr = UniString(aText, sizeof(aText-1));
+            rStr = UniString(RTL_CONSTASCII_USTRINGPARAM("mile(s)"));
             break;
         }
         case FUNIT_PERCENT:

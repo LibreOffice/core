@@ -110,7 +110,7 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     nError = osl::File::getFileURLFromSystemPath( aFile, aFileURL );
     if (nError != osl::File::E_None)
         return NULL;
-    aFileURL = maSpoolDirName + rtl::OUString::createFromAscii ("/") + aFileURL;
+    aFileURL = maSpoolDirName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/")) + aFileURL;
 
     pFile = new osl::File (aFileURL);
     nError = pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
@@ -397,9 +397,9 @@ PrinterJob::StartJob (
     maSpoolDirName = createSpoolDir ();
     maJobTitle = rJobName;
 
-    rtl::OUString aExt = rtl::OUString::createFromAscii (".ps");
-    mpJobHeader  = CreateSpoolFile (rtl::OUString::createFromAscii("psp_head"), aExt);
-    mpJobTrailer = CreateSpoolFile (rtl::OUString::createFromAscii("psp_tail"), aExt);
+    rtl::OUString aExt(RTL_CONSTASCII_USTRINGPARAM (".ps"));
+    mpJobHeader  = CreateSpoolFile (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_head")), aExt);
+    mpJobTrailer = CreateSpoolFile (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_tail")), aExt);
     if( ! (mpJobHeader && mpJobTrailer) ) // existing files are removed in destructor
         return sal_False;
 
@@ -668,12 +668,12 @@ PrinterJob::StartPage (const JobData& rJobSetup)
     InitPaperSize (rJobSetup);
 
     rtl::OUString aPageNo = rtl::OUString::valueOf ((sal_Int32)maPageList.size()+1); // sequential page number must start with 1
-    rtl::OUString aExt    = aPageNo + rtl::OUString::createFromAscii (".ps");
+    rtl::OUString aExt    = aPageNo + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM (".ps"));
 
     osl::File* pPageHeader = CreateSpoolFile (
-                                              rtl::OUString::createFromAscii("psp_pghead"), aExt);
+                                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_pghead")), aExt);
     osl::File* pPageBody   = CreateSpoolFile (
-                                              rtl::OUString::createFromAscii("psp_pgbody"), aExt);
+                                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("psp_pgbody")), aExt);
 
     maHeaderList.push_back (pPageHeader);
     maPageList.push_back (pPageBody);

@@ -260,7 +260,7 @@ void SwUndoRedlineSort::_Undo( SwUndoIter& rIter )
         USHORT nFnd = rDoc.GetRedlinePos(
                             *rDoc.GetNodes()[ nSttNode + 1 ],
                             nsRedlineType_t::REDLINE_INSERT );
-        ASSERT( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
+        OSL_ENSURE( USHRT_MAX != nFnd && nFnd+1 < rDoc.GetRedlineTbl().Count(),
                     "kein Insert Object gefunden" );
         ++nFnd;
         rDoc.GetRedlineTbl()[nFnd]->Show( 1 );

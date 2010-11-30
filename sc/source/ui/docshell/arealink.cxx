@@ -271,7 +271,6 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     SfxMedium* pMed = new SfxMedium(aNewUrl, STREAM_STD_READ, FALSE, pFilter);
 
     ScDocShell* pSrcShell = new ScDocShell(SFX_CREATE_MODE_INTERNAL);
-//REMOVE        SvEmbeddedObjectRef aRef = pSrcShell;
     SfxObjectShellRef aRef = pSrcShell;
     pSrcShell->DoLoad(pMed);
 

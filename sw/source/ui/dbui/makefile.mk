@@ -69,38 +69,24 @@ EXCEPTIONSFILES= \
         $(SLO)$/dbmgr.obj \
         $(SLO)$/dbtablepreviewdialog.obj \
         $(SLO)$/dbtree.obj \
+        $(SLO)$/dbui.obj \
         $(SLO)$/maildispatcher.obj \
         $(SLO)$/mailmergechildwindow.obj \
-        $(SLO)$/mailmergehelper.obj \
-        $(SLO)$/mmaddressblockpage.obj \
-        $(SLO)$/mmconfigitem.obj \
-        $(SLO)$/mmlayoutpage.obj \
-        $(SLO)$/mmgreetingspage.obj \
-        $(SLO)$/mmoutputpage.obj
-
-SLOFILES =  \
-        $(SLO)$/addresslistdialog.obj \
-        $(SLO)$/createaddresslistdialog.obj \
-        $(SLO)$/customizeaddresslistdialog.obj \
-        $(SLO)$/dbinsdlg.obj \
-        $(SLO)$/dbmgr.obj \
-        $(SLO)$/dbtree.obj \
-        $(SLO)$/dbtablepreviewdialog.obj \
-        $(SLO)$/maildispatcher.obj \
         $(SLO)$/mailmergehelper.obj \
         $(SLO)$/mailmergewizard.obj \
-        $(SLO)$/mailmergechildwindow.obj \
+        $(SLO)$/mmaddressblockpage.obj \
         $(SLO)$/mmconfigitem.obj \
         $(SLO)$/mmdocselectpage.obj \
+        $(SLO)$/mmgreetingspage.obj \
         $(SLO)$/mmlayoutpage.obj \
+        $(SLO)$/mmmergepage.obj \
         $(SLO)$/mmoutputpage.obj \
         $(SLO)$/mmoutputtypepage.obj \
-        $(SLO)$/mmaddressblockpage.obj \
-        $(SLO)$/mmgreetingspage.obj \
-        $(SLO)$/mmmergepage.obj \
         $(SLO)$/mmpreparemergepage.obj \
-        $(SLO)$/dbui.obj \
-        $(SLO)$/selectdbtabledialog.obj \
+        $(SLO)$/selectdbtabledialog.obj
+
+SLOFILES =  \
+        $(EXCEPTIONSFILES) \
         $(SLO)$/swdbtoolsclient.obj
 
         

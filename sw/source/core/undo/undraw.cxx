@@ -149,7 +149,7 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
 
             // TextAttribut zerstoeren
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
-            ASSERT( pTxtNd, "Kein Textnode gefunden" );
+            OSL_ENSURE( pTxtNd, "Kein Textnode gefunden" );
             SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
                 pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
             // Attribut steht noch im TextNode, loeschen
@@ -196,7 +196,7 @@ void lcl_RestoreAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
         if (FLY_AS_CHAR == rAnchor.GetAnchorId())
         {
             SwTxtNode *pTxtNd = aIdx.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "no Text Node" );
+            OSL_ENSURE( pTxtNd, "no Text Node" );
             SwFmtFlyCnt aFmt( pFmt );
             pTxtNd->InsertItem( aFmt, nCntntPos, nCntntPos );
         }
@@ -264,7 +264,7 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
         // <--
         // --> OD 2005-05-10 #i45952# - notify that position attributes
         // are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
@@ -315,7 +315,7 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
     // <--
     // --> OD 2005-05-10 #i45952# - notify that position attributes
     // are already set
-    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+    OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
@@ -431,7 +431,7 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     // <--
     // --> OD 2005-05-10 #i45952# - notify that position attributes
     // are already set
-    ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
+    OSL_ENSURE( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
@@ -482,7 +482,7 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
         // <--
         // --> OD 2005-05-10 #i45952# - notify that position attributes
         // are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
@@ -517,7 +517,7 @@ void SwUndoDrawUnGroupConnectToLayout::Undo( SwUndoIter& )
     {
         SdrObject* pObj( aDrawFmtsAndObjs[i].second );
         SwDrawContact* pDrawContact( dynamic_cast<SwDrawContact*>(pObj->GetUserCall()) );
-        ASSERT( pDrawContact,
+        OSL_ENSURE( pDrawContact,
                 "<SwUndoDrawUnGroupConnectToLayout::Undo(..)> -- missing SwDrawContact instance" );
         if ( pDrawContact )
         {
@@ -589,7 +589,7 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         // <--
         // --> OD 2005-05-10 #i45952# - notify that position attributes
         // are already set
-        ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
+        OSL_ENSURE( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {

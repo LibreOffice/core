@@ -139,7 +139,7 @@ uno::Reference <awt::XLayoutConstrains> WidgetFactory::toolkitCreateWidget (uno:
         VCLXWindow* parentComponent = VCLXWindow::GetImplementation( xWinParent );
         if ( !parentComponent )
             throw uno::RuntimeException(
-                OUString::createFromAscii( "parent has no implementation" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("parent has no implementation")),
                 uno::Reference< uno::XInterface >() );
         desc.Parent = xWinParent;
     }
@@ -192,7 +192,7 @@ WidgetFactory::createWidget (uno::Reference< awt::XToolkit > xToolkit, uno::Refe
     OUString tName = name;
     // FIXME
     if ( name.equalsAscii( "fixedinfo" ) )
-        tName = OUString::createFromAscii( "fixedtext" );
+        tName = OUString(RTL_CONSTASCII_USTRINGPARAM("fixedtext"));
     xPeer = toolkitCreateWidget (xToolkit, xParent, tName, properties);
 #else
     xPeer = toolkitCreateWidget (xToolkit, xParent, name, properties);

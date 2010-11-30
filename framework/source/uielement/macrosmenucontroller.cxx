@@ -152,7 +152,7 @@ void MacrosMenuController::impl_select(const Reference< XDispatch >& /*_xDispatc
         pExecuteInfo->aTargetURL    = aTargetURL;
         //pExecuteInfo->aArgs         = aArgs;
         if(::comphelper::UiEventsLogger::isEnabled()) //#i88653#
-            UiEventLogHelper(::rtl::OUString::createFromAscii("MacrosMenuController")).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
+            UiEventLogHelper(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacrosMenuController"))).log(m_xServiceManager, m_xFrame, aTargetURL, pExecuteInfo->aArgs);
 //                xDispatch->dispatch( aTargetURL, aArgs );
         Application::PostUserEvent( STATIC_LINK(0, MacrosMenuController , ExecuteHdl_Impl), pExecuteInfo );
     }
@@ -188,10 +188,8 @@ void MacrosMenuController::addScriptItems( PopupMenu* pPopupMenu, USHORT startIt
 {
     const String aCmdBase = String::CreateFromAscii( ".uno:ScriptOrganizer?ScriptOrganizer.Language:string=" );
     const String ellipsis = String::CreateFromAscii( "..." );
-    const ::rtl::OUString providerKey =
-    ::rtl::OUString::createFromAscii("com.sun.star.script.provider.ScriptProviderFor" );
-    const ::rtl::OUString languageProviderName =
-        ::rtl::OUString::createFromAscii("com.sun.star.script.provider.LanguageScriptProvider" );
+    const ::rtl::OUString providerKey(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.ScriptProviderFor"));
+    const ::rtl::OUString languageProviderName(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.provider.LanguageScriptProvider"));
     USHORT itemId = startItemId;
     Reference< XContentEnumerationAccess > xEnumAccess = Reference< XContentEnumerationAccess >( m_xServiceManager, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration ( languageProviderName );

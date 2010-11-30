@@ -39,9 +39,7 @@
 #include <xmloff/xmluconv.hxx>
 #include <tools/debug.hxx>
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

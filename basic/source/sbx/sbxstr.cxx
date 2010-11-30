@@ -35,8 +35,8 @@
 #include "runtime.hxx"
 #include <rtl/ustrbuf.hxx>
 
-// Die Konversion eines Items auf String wird ueber die Put-Methoden
-// der einzelnen Datentypen abgewickelt, um doppelten Code zu vermeiden.
+// The conversion of an item onto String was handled via the Put-Methods
+// of the several data types to avoid double code.
 
 ::rtl::OUString ImpGetString( const SbxValues* p )
 {
@@ -101,7 +101,7 @@
             break;
         }
         case SbxERROR:
-            // Hier wird der String "Error n" erzeugt
+            // Here will be created the String "Error n"
             aRes = SbxRes( STRING_ERRORMSG );
             aRes += ::rtl::OUString( p->nUShort ); break;
         case SbxDATE:
@@ -138,10 +138,10 @@
     return aRes;
 }
 
-// AB 10.4.97, neue Funktion fuer SbxValue::GetCoreString()
+// From 1997-04-10, new function for SbxValue::GetCoreString()
 ::rtl::OUString ImpGetCoreString( const SbxValues* p )
 {
-    // Vorerst nur fuer double
+    // For now only for double
     if( ( p->eType & (~SbxBYREF) ) == SbxDOUBLE )
     {
         SbxValues aTmp;
@@ -162,7 +162,7 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
     SbxValues aTmp;
     aTmp.eType = SbxSTRING;
     ::rtl::OUString* pTmp = NULL;
-    // Sicherheitshalber, falls ein NULL-Ptr kommt
+    // as a precaution, if a NULL-Ptr appears
     if( !n )
         n = pTmp = new ::rtl::OUString;
     aTmp.pOUString = (::rtl::OUString*)n;

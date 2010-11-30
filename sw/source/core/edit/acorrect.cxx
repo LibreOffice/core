@@ -184,10 +184,6 @@ BOOL SwAutoCorrDoc::Replace( xub_StrLen nPos, const String& rTxt )
     {
         SwDoc* pDoc = rEditSh.GetDoc();
 
-//      if( !pDoc->IsAutoFmtRedline() &&
-//          pPam != &rCrsr )    // nur an akt. Position das Redline sichern
-//          pDoc->SetRedlineMode_intern( eOld | REDLINE_IGNORE );
-
         if( pDoc->IsAutoFmtRedline() )
         {
             if( nPos == pNd->GetTxt().Len() )       // am Ende erfolgt ein Insert
@@ -287,7 +283,6 @@ const String* SwAutoCorrDoc::GetPrevPara( BOOL bAtNormalPos )
         (*pIdx)--;
         pTNd = pIdx->GetNode().GetTxtNode();
     }
-    //if( pTNd && NO_NUMBERING == pTNd->GetTxtColl()->GetOutlineLevel() )
     if( pTNd && 0 == pTNd->GetAttrOutlineLevel() )//#outline level,zhaojianwei
         pStr = &pTNd->GetTxt();
 
@@ -307,7 +302,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
     // Absatz-Anfang oder ein Blank gefunden, suche nach dem Wort
     // Kuerzel im Auto
     SwTxtNode* pTxtNd = rCrsr.GetNode()->GetTxtNode();
-    ASSERT( pTxtNd, "wo ist denn der TextNode?" );
+    OSL_ENSURE( pTxtNd, "wo ist denn der TextNode?" );
 
     BOOL bRet = FALSE;
     if( nEndPos == rSttPos )
@@ -351,7 +346,7 @@ BOOL SwAutoCorrDoc::ChgAutoCorrWord( xub_StrLen & rSttPos, xub_StrLen nEndPos,
 
                 if( ppPara )
                 {
-                    ASSERT( !pIdx, "wer hat seinen Index nicht geloescht?" );
+                    OSL_ENSURE( !pIdx, "wer hat seinen Index nicht geloescht?" );
                     pIdx = new SwNodeIndex( rCrsr.GetPoint()->nNode, -1 );
                 }
 

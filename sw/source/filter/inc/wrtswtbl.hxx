@@ -260,7 +260,7 @@ protected:
 
     BOOL bRelWidths : 1;        // Breiten relativ ausgeben?
     BOOL bUseLayoutHeights : 1; // Layout zur Hoehenbestimmung nehmen?
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
     BOOL bGetLineHeightCalled : 1;
 #endif
 

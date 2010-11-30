@@ -88,7 +88,7 @@ xub_StrLen lcl_CalcCaseMap( const SwFont& rFnt,
 {
     int j = 0;
     const xub_StrLen nEnd = nOfst + nLen;
-    ASSERT( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" )
+    OSL_ENSURE( nEnd <= rOrigString.Len(), "lcl_CalcCaseMap: Wrong parameters" );
 
     // special case for title case:
     const bool bTitle = SVX_CASEMAP_TITEL == rFnt.GetCaseMap() &&
@@ -319,7 +319,7 @@ void SwDoDrawCapital::Do()
         rInf.SetBullet( bOldBullet );
     }
 
-    ASSERT( pUpperFnt, "No upper font, dying soon!");
+    OSL_ENSURE( pUpperFnt, "No upper font, dying soon!");
     rInf.Shift( pUpperFnt->GetFont()->GetOrientation() );
     rInf.SetWidth( nOrgWidth );
 }
@@ -557,7 +557,7 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
 
 void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 {
-    ASSERT( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
+    OSL_ENSURE( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
     Size aPartSize;
     long nKana = 0;
@@ -696,8 +696,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
-        ASSERT( nPos, "nextCharBlock not implemented?" );
-#ifdef DBG_UTIL
+        OSL_ENSURE( nPos, "nextCharBlock not implemented?" );
+#if OSL_DEBUG_LEVEL > 1
         if( !nPos )
             nPos = nMaxPos;
 #endif
@@ -810,8 +810,8 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                pBreakIt->GetLocale( eLng ), CharType::LOWERCASE_LETTER);
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
-        ASSERT( nPos, "endOfCharBlock not implemented?" );
-#ifdef DBG_UTIL
+        OSL_ENSURE( nPos, "endOfCharBlock not implemented?" );
+#if OSL_DEBUG_LEVEL > 1
         if( !nPos )
             nPos = nMaxPos;
 #endif

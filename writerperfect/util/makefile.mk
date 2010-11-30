@@ -42,6 +42,8 @@ SHL1LIBS=$(LIB1TARGET)
 SHL1STDLIBS+= \
     $(SOTLIB) \
     $(SO2LIB) \
+    $(SFXLIB) \
+    $(VCLLIB) \
     $(UNOTOOLSLIB) \
     $(TOOLSLIB) \
     $(UCBHELPERLIB) \
@@ -49,6 +51,7 @@ SHL1STDLIBS+= \
     $(CPPULIB) \
     $(SALLIB) \
     $(XMLOFFLIB) \
+    $(LIBWPG) \
     $(LIBWPD)
 
 SHL1TARGET = wpft$(DLLPOSTFIX)
@@ -78,6 +81,7 @@ SHL2STDLIBS+= \
     $(SALLIB) \
     $(XMLOFFLIB) \
     $(LIBWPS) \
+    $(LIBWPG) \
     $(LIBWPD)
 
 SHL2TARGET = msworks$(DLLPOSTFIX)
@@ -105,8 +109,8 @@ SHL3STDLIBS+= \
     $(CPPULIB) \
     $(SALLIB) \
     $(XMLOFFLIB) \
-    $(LIBWPD) \
-    $(LIBWPG)
+    $(LIBWPG) \
+    $(LIBWPD)
 
 SHL3TARGET = wpgimport$(DLLPOSTFIX)
 SHL3IMPLIB = i$(SHL3TARGET)

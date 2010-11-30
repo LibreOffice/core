@@ -77,6 +77,11 @@ void SAL_CALL LateInitThread::run()
     rCache->load(FilterCache::E_CONTAINS_ALL, sal_True);
 }
 
+void SAL_CALL LateInitThread::onTerminated()
+{
+    delete this;
+}
+
     } // namespace config
 } // namespace filter
 

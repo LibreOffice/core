@@ -33,6 +33,7 @@
 #include <sot/storage.hxx>
 #include "xlconst.hxx"
 #include "xltools.hxx"
+#include <boost/shared_ptr.hpp>
 
 namespace comphelper { class IDocPasswordVerifier; }
 
@@ -76,14 +77,14 @@ struct XclRootData
     : public XclDebugObjCounter
 #endif
 {
-    typedef ScfRef< ScEditEngineDefaulter > ScEEDefaulterRef;
-    typedef ScfRef< ScHeaderEditEngine >    ScHeaderEERef;
-    typedef ScfRef< EditEngine >            EditEngineRef;
-    typedef ScfRef< XclFontPropSetHelper >  XclFontPropSetHlpRef;
-    typedef ScfRef< XclChPropSetHelper >    XclChPropSetHlpRef;
-    typedef ScfRef< ScExtDocOptions >       ScExtDocOptRef;
-    typedef ScfRef< XclTracer >             XclTracerRef;
-    typedef ScfRef< RootData >              RootDataRef;
+    typedef boost::shared_ptr< ScEditEngineDefaulter > ScEEDefaulterRef;
+    typedef boost::shared_ptr< ScHeaderEditEngine >    ScHeaderEERef;
+    typedef boost::shared_ptr< EditEngine >            EditEngineRef;
+    typedef boost::shared_ptr< XclFontPropSetHelper >  XclFontPropSetHlpRef;
+    typedef boost::shared_ptr< XclChPropSetHelper >    XclChPropSetHlpRef;
+    typedef boost::shared_ptr< ScExtDocOptions >       ScExtDocOptRef;
+    typedef boost::shared_ptr< XclTracer >             XclTracerRef;
+    typedef boost::shared_ptr< RootData >              RootDataRef;
 
     XclBiff             meBiff;             /// Current BIFF version.
     XclOutput           meOutput;           /// Current Output format.

@@ -78,7 +78,7 @@ public:
         0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
         In rUndoRange wird der restaurierte Bereich gesetzt.
     */
-    virtual bool Undo( SwUndoIter& ) = 0; // -> #111827#
+    virtual bool Undo( SwUndoIter& ) = 0;
 
     /** Opens undo block.
 
@@ -109,7 +109,7 @@ public:
     */
     virtual SwUndoId EndUndo( SwUndoId eUndoId, const SwRewriter * pRewriter) = 0;
 
-    /** <- #111827#
+    /**
         loescht die gesamten UndoObjecte ( fuer Methoden die am Nodes
         Array drehen ohne entsprechendes Undo !!)
     */
@@ -137,7 +137,7 @@ public:
 
     virtual SwUndo* RemoveLastUndo(SwUndoId eUndoId) = 0;
 
-    /** 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
+    /** To prevent an undo array overflow when
         doing nested undos, undo may have to be disabled. Undo-intensive
         actions (like auto-format) should check this manually.
     */

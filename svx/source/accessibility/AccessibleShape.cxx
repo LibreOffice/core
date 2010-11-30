@@ -378,7 +378,7 @@ uno::Reference<XAccessible> SAL_CALL
     }
     else
         throw lang::IndexOutOfBoundsException (
-            ::rtl::OUString::createFromAscii ("shape has no child with index ")
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shape has no child with index "))
             + rtl::OUString::valueOf(nIndex),
             static_cast<uno::XWeak*>(this));
 
@@ -676,7 +676,7 @@ sal_Int32 SAL_CALL AccessibleShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")) );
             aColor >>= nColor;
         }
     }
@@ -702,7 +702,7 @@ sal_Int32 SAL_CALL AccessibleShape::getBackground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (OUString::createFromAscii ("FillColor"));
+            aColor = aSet->getPropertyValue (OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")) );
             aColor >>= nColor;
         }
     }
@@ -1034,7 +1034,7 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             uno::Reference<beans::XPropertySet> xSet (mxShape, uno::UNO_QUERY);
             if (xSet.is())
             {
-                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString::createFromAscii ("ZOrder")));
+                uno::Any aZOrder (xSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder")) ));
                 aZOrder >>= nIndex;
 
                 // Add one to be not zero based.
@@ -1104,10 +1104,10 @@ void AccessibleShape::ViewForwarderChanged (ChangeType aChangeType,
             break;
 
         case DRAWING_CONTROL:
-            aDG.AddProperty (OUString::createFromAscii ("ControlBackground"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBackground")),
                 DescriptionGenerator::COLOR,
                 OUString());
-            aDG.AddProperty (OUString::createFromAscii ("ControlBorder"),
+            aDG.AddProperty (OUString(RTL_CONSTASCII_USTRINGPARAM("ControlBorder")),
                 DescriptionGenerator::INTEGER,
                 OUString());
             break;

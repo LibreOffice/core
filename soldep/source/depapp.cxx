@@ -137,8 +137,8 @@ SAL_IMPLEMENT_MAIN()
     InitVCL( xMS );
     ::comphelper::setProcessServiceFactory(xMS);
     com::sun::star::uno::Sequence< com::sun::star::uno::Any > aArgs(2);
-    aArgs[0] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
-    aArgs[1] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
+    aArgs[0] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
+    aArgs[1] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
 
     ::ucbhelper::ContentBroker::initialize( xMS, aArgs );
 

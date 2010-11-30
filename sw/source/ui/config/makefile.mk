@@ -49,23 +49,23 @@ SRC1FILES =	\
         redlopt.src
 
 EXCEPTIONSFILES = \
-        $(SLO)$/mailconfigpage.obj \
-        $(SLO)$/optcomp.obj \
-        $(SLO)$/optload.obj
-
-SLOFILES =	\
-        $(EXCEPTIONSFILES) \
         $(SLO)$/barcfg.obj \
-        $(SLO)$/caption.obj \
         $(SLO)$/cfgitems.obj \
-        $(SLO)$/dbconfig.obj \
         $(SLO)$/fontcfg.obj \
+        $(SLO)$/mailconfigpage.obj \
         $(SLO)$/modcfg.obj \
+        $(SLO)$/optcomp.obj \
+        $(SLO)$/optload.obj \
         $(SLO)$/optpage.obj \
         $(SLO)$/prtopt.obj \
         $(SLO)$/uinums.obj \
         $(SLO)$/usrpref.obj \
         $(SLO)$/viewopt.obj
+
+SLOFILES =	\
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/caption.obj \
+        $(SLO)$/dbconfig.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 

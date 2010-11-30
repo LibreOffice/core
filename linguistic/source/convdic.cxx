@@ -305,7 +305,7 @@ void ConvDic::Save()
         {
             xSaxWriter = uno::Reference< io::XActiveDataSource >(
                     xServiceFactory->createInstance(
-                    OUString::createFromAscii( "com.sun.star.xml.sax.Writer" ) ), UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer")) ), UNO_QUERY );
         }
         catch (uno::Exception &)
         {

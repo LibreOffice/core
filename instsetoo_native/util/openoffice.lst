@@ -53,6 +53,7 @@ LibreOffice
 		variables
 		{
 			PRODUCTNAME LibreOffice
+			PRODUCTNAME_BR BrOffice
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -92,6 +93,8 @@ LibreOffice
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
+			DOWNLOADBANNER_BR	brobanner.bmp
+			DOWNLOADBITMAP_BR	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
@@ -118,6 +121,7 @@ LibreOffice_wJRE
 		variables
 		{
 			PRODUCTNAME LibreOffice
+			PRODUCTNAME_BR BrOffice
 			PRODUCTVERSION 3.3
 			PRODUCTEXTENSION 
 			LONG_PRODUCTEXTENSION 
@@ -300,6 +304,7 @@ LibreOffice_SDK
         variables
         {
             PRODUCTNAME LibreOffice
+            PRODUCTNAME_BR BrOffice
             PRODUCTVERSION 3.3
             PRODUCTEXTENSION
             LONG_PRODUCTEXTENSION

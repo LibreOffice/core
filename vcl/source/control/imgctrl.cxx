@@ -91,12 +91,6 @@ void ImageControl::UserDraw( const UserDrawEvent& rUDEvt )
 {
     USHORT nStyle = 0;
     BitmapEx* pBitmap = &maBmp;
-    if( !!maBmpHC )
-    {
-        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pBitmap = &maBmpHC;
-    }
-
     if ( !*pBitmap )
     {
         String  sText( GetText() );
@@ -201,28 +195,17 @@ void ImageControl::SetBitmap( const BitmapEx& rBmp )
 
 // -----------------------------------------------------------------------
 
-BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
+BOOL ImageControl::SetModeBitmap( const BitmapEx& rBitmap )
 {
-    if( eMode == BMP_COLOR_NORMAL )
-        SetBitmap( rBitmap );
-    else if( eMode == BMP_COLOR_HIGHCONTRAST )
-    {
-        maBmpHC = rBitmap;
-        StateChanged( STATE_CHANGE_DATA );
-    }
-    else
-        return FALSE;
+    SetBitmap( rBitmap );
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const BitmapEx& ImageControl::GetModeBitmap( BmpColorMode eMode ) const
+const BitmapEx& ImageControl::GetModeBitmap( ) const
 {
-    if( eMode == BMP_COLOR_HIGHCONTRAST )
-        return maBmpHC;
-    else
-        return maBmp;
+    return maBmp;
 }
 
 // -----------------------------------------------------------------------

@@ -185,14 +185,11 @@ public:
 
     ::rtl::OUString aODFVersion;
 
-    // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
+    // Boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
-    // for the OpenOffice.org file format.
+    // for the OpenOffice.org file format. (#i28749#)
     sal_Bool mbShapePositionInHoriL2R;
-    // <--
-    // --> OD 2007-12-19 #152540#
     sal_Bool mbTextDocInOOoFileFormat;
-    // <--
 
     const uno::Reference< uno::XComponentContext > mxComponentContext;
 
@@ -203,12 +200,9 @@ public:
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
         mStreamName(),
-        // --> OD 2004-08-11 #i28749#
+        // Convert drawing object positions from OOo file format to OASIS (#i28749#)
         mbShapePositionInHoriL2R( sal_False ),
-        // <--
-        // --> OD 2007-12-19 #152540#
         mbTextDocInOOoFileFormat( sal_False ),
-        // <--
         mxComponentContext( ::comphelper::getProcessComponentContext() ),
         mpRDFaHelper() // lazy
     {
@@ -999,22 +993,19 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                     mpImpl->aBaseURL.insertName( sName );
                 }
                 mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
-                // --> OD 2004-08-10 #i28749# - retrieve property <ShapePositionInHoriL2R>
+                // Retrieve property <ShapePositionInHoriL2R> (#i28749#)
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbShapePositionInHoriL2R);
                 }
-                // <--
-                // --> OD 2007-12-19 #152540#
                 sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat" ) );
                 if( xPropertySetInfo->hasPropertyByName(sPropName) )
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
-                // <--
             }
         }
     }
@@ -1898,20 +1889,16 @@ String SvXMLImport::GetDocumentBase() const
     return mpImpl->mStreamName;
 }
 
-// --> OD 2004-08-10 #i28749#
+// Convert drawing object positions from OOo file format to OASIS (#i28749#)
 sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
 }
-// <--
 
-// --> OD 2007-12-19 #152540#
 sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
 {
     return mpImpl->mbTextDocInOOoFileFormat;
 }
-
-// <--
 
 void SvXMLImport::initXForms()
 {

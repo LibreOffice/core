@@ -563,7 +563,7 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArray& rTokArr )
 
 XclExpStream& operator<<( XclExpStream& rStrm, const XclTokenArrayRef& rxTokArr )
 {
-    if( rxTokArr.is() )
+    if( rxTokArr )
         rxTokArr->Write( rStrm );
     else
         rStrm << sal_uInt16( 0 );

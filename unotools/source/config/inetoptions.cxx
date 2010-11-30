@@ -247,7 +247,7 @@ SvtInetOptions::Impl::notifyListeners(
             {
                 aEvents.realloc(nCount);
                 aNotifications.
-                    push_back(std::make_pair< List::value_type::first_type,
+                    push_back(std::pair< List::value_type::first_type,
                                               List::value_type::second_type >(
                                   aIt->first, aEvents));
             }

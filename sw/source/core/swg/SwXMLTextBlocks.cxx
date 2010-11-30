@@ -474,7 +474,7 @@ BOOL SwXMLTextBlocks::PutMuchEntries( BOOL bOn )
     {
         if( bInPutMuchBlocks )
         {
-            ASSERT( !this, "verschachtelte Aufrufe sind nicht erlaubt" );
+            OSL_ENSURE( !this, "verschachtelte Aufrufe sind nicht erlaubt" );
         }
         else if( !IsFileChanged() )
         {

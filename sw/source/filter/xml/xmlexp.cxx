@@ -195,7 +195,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-    ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+    OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
     if( !xTextTunnel.is() )
         return ERR_SWG_WRITE_ERROR;
 
@@ -221,7 +221,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
     SwXText *pText = reinterpret_cast< SwXText * >(
             sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-    ASSERT( pText, "SwXText missing" );
+    OSL_ENSURE( pText, "SwXText missing" );
     if( !pText )
         return ERR_SWG_WRITE_ERROR;
 
@@ -252,7 +252,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
                 {
                     const SvXMLAttrContainerItem *pUnknown =
                                 PTR_CAST( SvXMLAttrContainerItem, pItem );
-                    ASSERT( pUnknown, "illegal attribute container item" );
+                    OSL_ENSURE( pUnknown, "illegal attribute container item" );
                     if( pUnknown && (pUnknown->GetAttrCount() > 0) )
                     {
                         sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
@@ -321,7 +321,6 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
             nRef += pDoc->GetCharFmts()->Count() - 1;
             nRef += pDoc->GetFrmFmts()->Count() - 1;
             nRef += pDoc->GetTxtFmtColls()->Count() - 1;
-//          nRef += pDoc->GetPageDescCnt();
             nRef *= 2; // for the above styles, xmloff will increment by 2!
             // #i93174#: count all paragraphs for the progress bar
             nRef += aDocStat.nAllPara; // 1: only content, no autostyle
@@ -413,7 +412,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( pEmbeddedResolver )
         SvXMLEmbeddedObjectHelper::Destroy( pEmbeddedResolver );
 
-    ASSERT( !pTableLines, "there are table columns infos left" );
+    OSL_ENSURE( !pTableLines, "there are table columns infos left" );
 
     return nRet;
 }
@@ -453,7 +452,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
 {
     Reference< XMultiServiceFactory > xServiceFactory =
             comphelper::getProcessServiceFactory();
-    ASSERT( xServiceFactory.is(),
+    OSL_ENSURE( xServiceFactory.is(),
             "XMLReader::Read: got no service manager" );
     if( !xServiceFactory.is() )
         return;
@@ -479,12 +478,12 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
         xText = xTextDoc->getText();
         Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
             pText = reinterpret_cast< SwXText * >(
                     sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId()) ));
-            ASSERT( pText, "SwXText missing" );
+            OSL_ENSURE( pText, "SwXText missing" );
         }
     }
 
@@ -499,7 +498,7 @@ void SwXMLExport::GetViewSettings(Sequence<PropertyValue>& aProps)
         pDoc->GetDocShell()->GetVisArea( ASPECT_CONTENT );
     sal_Bool bTwip = pDoc->GetDocShell()->GetMapUnit ( ) == MAP_TWIP;
 
-    ASSERT ( bTwip, "Map unit for visible area is not in TWIPS!" );
+   OSL_ENSURE( bTwip, "Map unit for visible area is not in TWIPS!" );
 
     pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
     pValue[nIndex++].Value <<= bTwip ? TWIP_TO_MM100 ( rRect.Top() ) : rRect.Top();
@@ -575,12 +574,12 @@ void SwXMLExport::SetBodyAttributes()
     // export use of soft page breaks
     {
         Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
-        ASSERT( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
+        OSL_ENSURE( xTextTunnel.is(), "missing XUnoTunnel for Cursor" );
         if( xTextTunnel.is() )
         {
             SwXText *pText = reinterpret_cast< SwXText * >(
                     sal::static_int_cast< sal_IntPtr >( xTextTunnel->getSomething( SwXText::getUnoTunnelId() )));
-            ASSERT( pText, "SwXText missing" );
+            OSL_ENSURE( pText, "SwXText missing" );
             if( pText )
             {
                 SwDoc *pDoc = pText->GetDoc();
@@ -813,9 +812,6 @@ Reference< XInterface > SAL_CALL SwXMLExportStyles_createInstance(
     throw( Exception )
 {
     // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport( rSMgr,
         EXPORT_STYLES | EXPORT_MASTERSTYLES | EXPORT_AUTOSTYLES |
         EXPORT_FONTDECLS|EXPORT_OASIS );
@@ -840,9 +836,6 @@ Reference< XInterface > SAL_CALL SwXMLExportContent_createInstance(
     throw( Exception )
 {
     // #110680#
-    //return (cppu::OWeakObject*)new SwXMLExport(
-    //  EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
-    //  EXPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLExport(
         rSMgr,
         EXPORT_AUTOSTYLES | EXPORT_CONTENT | EXPORT_SCRIPTS |
@@ -956,7 +949,7 @@ void SwXMLExport::ExportCurPaM( sal_Bool bExportWholePaM )
         aNextNumInfo.Set( *pNd );
         ExportListChange( aPrevNumInfo, aNextNumInfo );
 
-        ASSERT( !(pNd->IsGrfNode() || pNd->IsOLENode()),
+        OSL_ENSURE( !(pNd->IsGrfNode() || pNd->IsOLENode()),
                 "SwXMLExport::exportCurPaM: grf or OLE node unexpected" );
         if( pNd->IsTxtNode() )
         {

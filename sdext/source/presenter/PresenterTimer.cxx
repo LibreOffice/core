@@ -68,7 +68,7 @@ typedef ::boost::shared_ptr<TimerTask> SharedTimerTask;
 class TimerTaskComparator
 {
 public:
-    bool operator() (const SharedTimerTask& rpTask1, const SharedTimerTask& rpTask2)
+    bool operator() (const SharedTimerTask& rpTask1, const SharedTimerTask& rpTask2) const
     {
         return rpTask1->maDueTime.Seconds < rpTask2->maDueTime.Seconds
             || (rpTask1->maDueTime.Seconds == rpTask2->maDueTime.Seconds

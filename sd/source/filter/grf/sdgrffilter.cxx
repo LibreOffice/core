@@ -276,7 +276,7 @@ sal_Bool SdGRFFilter::Export()
      uno::Reference< lang::XMultiServiceFactory >
         xSMgr( ::comphelper::getProcessServiceFactory() );
     uno::Reference< uno::XInterface > xComponent
-        ( xSMgr->createInstance( rtl::OUString::createFromAscii( "com.sun.star.drawing.GraphicExportFilter" ) ),
+        ( xSMgr->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.GraphicExportFilter" ) ) ),
             uno::UNO_QUERY );
     if ( xComponent.is() )
     {
@@ -440,7 +440,7 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
             switch( nGraphicType )
             {
             case ::com::sun::star::graphic::GraphicType::VECTOR:
-                aMimeType = OUString::createFromAscii( "image/x-svm" );
+                aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/x-svm" ) );
                 break;
 
             case ::com::sun::star::graphic::GraphicType::PIXEL:
@@ -450,14 +450,14 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
 
                     if( bAnimated )
                     {
-                        aMimeType = OUString::createFromAscii( "image/gif" );
+                        aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/gif" ) );
                         break;
                     }
                 }
                 // Fallthrough!
 //          case ::com::sun::star::graphic::GraphicType::EMPTY:
             default:
-                aMimeType = OUString::createFromAscii( "image/png" );
+                aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
                 break;
             }
         }

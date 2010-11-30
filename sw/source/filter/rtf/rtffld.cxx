@@ -139,7 +139,7 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 
     String sNm( rName );
     sNm = sNm.EraseLeadingChars().GetToken(0, ' ');
-    ASSERT( sNm.Len(), "Feldname hat keine Laenge!" );
+    OSL_ENSURE( sNm.Len(), "Feldname hat keine Laenge!" );
     if( !sNm.Len() )
         return RTFFLD_UNKNOWN;
 
@@ -155,7 +155,6 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
             ( !nFndPos || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos-1) )) ) &&
             ( nFndPos+nLen == sNm.Len() || !isalpha(sNm.GetChar( static_cast< xub_StrLen >(nFndPos+nLen) ) ) ) )
         {
-//          rName = sNm.Copy( nFndPos, nLen );
             rName = rName.Copy( nFndPos, static_cast< xub_StrLen >(nLen) );
             nFndPos += nTokenStt + static_cast< xub_StrLen >(nLen);
             while( rNext.GetChar( nFndPos ) == ' ' )    ++nFndPos;
@@ -181,7 +180,7 @@ static USHORT CheckNumberFmtStr( const String& rNStr )
         "\x04""PAGE"              /* PAGEDESC          */
     };
 
-    ASSERT(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
+    OSL_ENSURE(sizeof(aNumberTypeTab) / sizeof(sal_Char *)
            >= SVX_NUM_PAGEDESC - SVX_NUM_CHARS_UPPER_LETTER, "impossible");
 
     for (USHORT n = SVX_NUM_CHARS_UPPER_LETTER;  n <= SVX_NUM_PAGEDESC; ++n)
@@ -407,9 +406,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
         break;
     case RTFFLD_IMPORT:
         {
-//JP 11.03.96: vertraegt sich nicht so ganz mit Internet!
-//            if( STRING_NOTFOUND != ( nPos = aSaveStr.Search( '.' )))
-//                aSaveStr.Erase( nPos+4 );
 
             aSaveStr.EraseLeadingAndTrailingChars();
             if( aSaveStr.Len() )
@@ -425,7 +421,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                     INetURLObject(GetBaseURL()), aSaveStr,
                     URIHelper::GetMaybeFileHdl() );
             }
-//          SkipGroup();        // ueberlese den Rest
+
         }
         break;
 
@@ -502,7 +498,7 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
 
                 if( pFormatter )
                 {
-                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri);
+                    nFmtIdx = sw::ms::MSDateTimeFormatToSwFormat(aSaveStr, pFormatter, rLang, bHijri, rLang);
                     if (nFmtIdx)
                         nNumFmtType = pFormatter->GetType(nFmtIdx);
                 }
@@ -687,7 +683,6 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
                 case 1:     aData.nJustificationCode = 3;   break;
                 case 2:     aData.nJustificationCode = 4;   break;
                 case 4:     aData.nJustificationCode = 2;   break;
-//              case 3:
                 default:    aData.nJustificationCode = 0;   break;
                 }
 
@@ -1048,7 +1043,7 @@ void SwRTFParser::ReadField()
                         {
                             const SwField *pFld = pFldAttr->GetFld().GetFld();
                             SwFieldType *pTyp = pFld ? pFld->GetTyp() : 0;
-                            ASSERT(pTyp->Which() == RES_USERFLD, "expected a user field");
+                            OSL_ENSURE(pTyp->Which() == RES_USERFLD, "expected a user field");
                             if (pTyp->Which() == RES_USERFLD)
                             {
                                 SwUserFieldType *pUsrTyp = (SwUserFieldType*)pTyp;

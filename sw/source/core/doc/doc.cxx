@@ -142,7 +142,7 @@ SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
 /* IInterface */
 sal_Int32 SwDoc::acquire()
 {
-    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
     return osl_incrementInterlockedCount(&mReferenceCount);
 }
 
@@ -154,7 +154,7 @@ sal_Int32 SwDoc::release()
 
 sal_Int32 SwDoc::getReferenceCount() const
 {
-    OSL_ASSERT(mReferenceCount >= 0 && "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
+    OSL_ENSURE(mReferenceCount >= 0, "Negative reference count detected! This is a sign for unbalanced acquire/release calls.");
     return mReferenceCount;
 }
 
@@ -206,7 +206,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
         default:
-            ASSERT(false, "Invalid setting id");
+            OSL_ENSURE(false, "Invalid setting id");
     }
     return false;
 }
@@ -360,7 +360,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
 
         default:
-            ASSERT(false, "Invalid setting id");
+            OSL_ENSURE(false, "Invalid setting id");
     }
 }
 
@@ -643,6 +643,8 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 
 SwPrintData* SwDoc::getPrintData() const
 {
+    if(!pPrtData)
+        ((SwDoc*)this)->pPrtData = new SwPrintData;
     return pPrtData;
 }
 
@@ -771,7 +773,7 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
     _SaveCntntIdx( this, rPos.nNode.GetIndex(), rPos.nContent.GetIndex(),
                     aBkmkArr, SAVEFLY_SPLIT );
     // FIXME: only SwTxtNode has a valid implementation of SplitCntntNode!
-    ASSERT(pNode->IsTxtNode(), "splitting non-text node?");
+    OSL_ENSURE(pNode->IsTxtNode(), "splitting non-text node?");
     pNode = pNode->SplitCntntNode( rPos );
     if (pNode)
     {
@@ -1339,7 +1341,6 @@ void SwDoc::CalculatePagesForPrinting(
     OUString aPageRange;
     if (bIsPDFExport)
     {
-        // ?? rOptions.getValue( C2U("Selection") );
         aPageRange = rOptions.getStringValue( "PageRange", OUString() );
     }
     else
@@ -2081,7 +2082,7 @@ BOOL lcl_CheckSmartTagsAgain( const SwNodePtr& rpNd, void*  )
  ************************************************************************/
 void SwDoc::SpellItAgainSam( BOOL bInvalid, BOOL bOnlyWrong, BOOL bSmartTags )
 {
-    ASSERT( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
+    OSL_ENSURE( GetRootFrm(), "SpellAgain: Where's my RootFrm?" );
     if( bInvalid )
     {
         SwPageFrm *pPage = (SwPageFrm*)GetRootFrm()->Lower();
@@ -2155,8 +2156,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
         {
             ::SetProgressState( i, GetDocShell() );
             const ULONG nIndex = rOutNds[ i ]->GetIndex();
-            //BYTE nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetTxtColl()//#outline level,zhaojianwei
-                        // ->GetOutlineLevel();
+
             const int nLvl = ((SwTxtNode*)GetNodes()[ nIndex ])->GetAttrOutlineLevel()-1;//<-end,zhaojianwei
             if( nLvl > nLevel )
                 continue;
@@ -2195,7 +2195,7 @@ void SwDoc::Summary( SwDoc* pExtDoc, BYTE nLevel, BYTE nPara, BOOL bImpress )
                 if( bImpress )
                 {
                     SwTxtFmtColl* pMyColl = pNd->GetTxtColl();
-                    //USHORT nHeadLine = static_cast<USHORT>(pMyColl->GetOutlineLevel()==NO_NUMBERING ?//#outlinelevel,zhaojianwei
+
                     const USHORT nHeadLine = static_cast<USHORT>(
                                 !pMyColl->IsAssignedToListLevelOfOutlineStyle() //<-end,zhaojianwei
                                 ? RES_POOLCOLL_HEADLINE2

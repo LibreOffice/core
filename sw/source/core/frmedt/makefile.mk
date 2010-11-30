@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -57,18 +57,18 @@ CXXFILES = \
 
 
 
-SLOFILES =  $(EXCEPTIONSFILES) \
+SLOFILES =  $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES=\
+        $(SLO)$/fecopy.obj \
         $(SLO)$/fedesc.obj \
+        $(SLO)$/fefly1.obj \
         $(SLO)$/feflyole.obj \
         $(SLO)$/feshview.obj \
         $(SLO)$/fetab.obj \
+        $(SLO)$/fews.obj \
         $(SLO)$/tblsel.obj
-        
-EXCEPTIONSFILES=\
-        $(SLO)$/fecopy.obj \
-        $(SLO)$/fefly1.obj \
-        $(SLO)$/fews.obj
-        
+
 
 # --- Tagets -------------------------------------------------------
 

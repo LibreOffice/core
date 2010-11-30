@@ -61,7 +61,7 @@
 // Ein Follow, der auf der selben Seite steht, wie sein Master ist nasty.
 inline sal_Bool IsNastyFollow( const SwTxtFrm *pFrm )
 {
-    ASSERT( !pFrm->IsFollow() || !pFrm->GetPrev() ||
+    OSL_ENSURE( !pFrm->IsFollow() || !pFrm->GetPrev() ||
             ((const SwTxtFrm*)pFrm->GetPrev())->GetFollow() == pFrm,
             "IsNastyFollow: Was ist denn hier los?" );
     return  pFrm->IsFollow() && pFrm->GetPrev();
@@ -323,7 +323,7 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 {
     // OD 2004-02-25 #i16128# - Why member <pFrm> _*and*_ parameter <pFrame>??
     // Thus, assertion on situation, that these are different to figure out why.
-    ASSERT( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
+    OSL_ENSURE( pFrm == pFrame, "<WidowsAndOrphans::FindBreak> - pFrm != pFrame" );
 
     SWAP_IF_SWAPPED( pFrm )
 
@@ -378,8 +378,8 @@ sal_Bool WidowsAndOrphans::FindBreak( SwTxtFrm *pFrame, SwTxtMargin &rLine,
 
 sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 {
-    ASSERT( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
-            "WidowsAndOrphans::FindWidows with swapped frame" )
+    OSL_ENSURE( ! pFrame->IsVertical() || ! pFrame->IsSwapped(),
+            "WidowsAndOrphans::FindWidows with swapped frame" );
 
     if( !nWidLines || !pFrame->IsFollow() )
         return sal_False;
@@ -388,7 +388,7 @@ sal_Bool WidowsAndOrphans::FindWidows( SwTxtFrm *pFrame, SwTxtMargin &rLine )
 
     // Wir koennen noch was abzwacken
     SwTxtFrm *pMaster = pFrame->FindMaster();
-    ASSERT(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
+    OSL_ENSURE(pMaster, "+WidowsAndOrphans::FindWidows: Widows in a master?");
     if( !pMaster )
         return sal_False;
 
@@ -512,7 +512,7 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     // IsInside() takes care for itself
 
     // Wir erwarten, dass rLine auf der letzten Zeile steht!!
-    ASSERT( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
+    OSL_ENSURE( !rLine.GetNext(), "WouldFit: aLine::Bottom missed!" );
     MSHORT nLineCnt = rLine.GetLineNr();
 
     // Erstmal die Orphansregel und den Initialenwunsch erfuellen ...

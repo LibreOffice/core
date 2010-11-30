@@ -88,17 +88,15 @@ CFLAGS+=-GS
 
 CFLAGS+=-c -nologo -Gs $(NOLOGO)
 
+.IF "$(cl_x64)" == ""
 CDEFS+= -D_X86_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
+.ELSE
+CDEFS+= -D_AMD64_=1 -D_CRT_SECURE_NO_DEPRECATE -D_CRT_NONSTDC_NO_DEPRECATE -D_CRT_NON_CONFORMING_SWPRINTFS
+.ENDIF
 
 .IF "$(product)" != ""
 CFLAGS+= -Gy
 .ENDIF # "$(product)" != ""
-
-.IF "$(bndchk)" == ""
-.IF "$(VC_STANDARD)"==""
-CFLAGS+= -Ob1
-.ENDIF	# "$(VC_STANDARD)"==""
-.ENDIF
 
 # flags to enable build with symbols; required for crashdump feature
 #CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)/_ooo_st_$(TARGET).PDB
@@ -230,7 +228,11 @@ _VC_MANIFEST_BASENAME=__VC80
 _VC_MANIFEST_BASENAME=__VC90
 .ENDIF
 
+.IF "$(cl_x64)" == ""
 LINK=link /MACHINE:IX86
+.ELSE
+LINK=link /MACHINE:X64
+.ENDIF
     # do *not* add $(NOLOGO) to LINK or LINKFLAGS. Strangely, the wntmsci12 linker links fine then, but exits with
     # a return value 1, which makes dmake think it failed
 LINKOUTPUTFILTER= $(PIPEERROR) $(GREP) -v "LNK4197:"
@@ -240,7 +242,9 @@ LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
 # excetion handling protection
+.IF "$(cl_x64)" == ""
 LINKFLAGS+=-safeseh
+.ENDIF
 
 # enable DEP
 LINKFLAGS+=-nxcompat
@@ -338,7 +342,11 @@ LIBMGR=lib $(NOLOGO)
 IMPLIB=lib
 LIBFLAGS=
 
+.IF "$(cl_x64)" == ""
 IMPLIBFLAGS=-machine:IX86
+.ELSE
+IMPLIBFLAGS=-machine:X64
+.ENDIF
 
 MAPSYM=
 MAPSYMFLAGS=

@@ -526,11 +526,11 @@ public:
 
     Reference< XInterface > getParagraphTarget( const ParagraphTarget* pTarget ) const;
 
-    void convertPath( OUStringBuffer& sTmp, const Any& rPath );
-    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue );
-    void convertTiming( OUStringBuffer& sTmp, const Any& rTiming );
-    void convertSource( OUStringBuffer& sTmp, const Any& rSource );
-    void convertTarget( OUStringBuffer& sTmp, const Any& rTarget );
+    void convertPath( OUStringBuffer& sTmp, const Any& rPath ) const;
+    void convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const;
+    void convertTiming( OUStringBuffer& sTmp, const Any& rTiming ) const;
+    void convertSource( OUStringBuffer& sTmp, const Any& rSource ) const;
+    void convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const;
 
     void prepareValue( const Any& rValue );
 
@@ -1437,7 +1437,7 @@ Reference< XInterface > AnimationsExporterImpl::getParagraphTarget( const Paragr
     return xRef;
 }
 
-void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath )
+void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath ) const
 {
     OUString aStr;
     rPath >>= aStr;
@@ -1445,7 +1445,7 @@ void AnimationsExporterImpl::convertPath( OUStringBuffer& sTmp, const Any& rPath
     sTmp = aStr;
 }
 
-void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue )
+void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUStringBuffer& sTmp, const Any& rValue ) const
 {
     if( !rValue.hasValue() )
         return;
@@ -1581,7 +1581,7 @@ void AnimationsExporterImpl::convertValue( XMLTokenEnum eAttributeName, OUString
 */
 }
 
-void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue )
+void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rValue ) const
 {
     if( !rValue.hasValue() )
         return;
@@ -1648,12 +1648,12 @@ void AnimationsExporterImpl::convertTiming( OUStringBuffer& sTmp, const Any& rVa
     }
 }
 
-void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource )
+void AnimationsExporterImpl::convertSource( OUStringBuffer& sTmp, const Any& rSource ) const
 {
     convertTarget( sTmp, rSource );
 }
 
-void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget )
+void AnimationsExporterImpl::convertTarget( OUStringBuffer& sTmp, const Any& rTarget ) const
 {
     if( !rTarget.hasValue() )
         return;

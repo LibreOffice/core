@@ -419,8 +419,8 @@ MediaDescriptor::MediaDescriptor(const css::uno::Sequence< css::beans::NamedValu
 -----------------------------------------------*/
 sal_Bool MediaDescriptor::isStreamReadOnly() const
 {
-    static ::rtl::OUString CONTENTSCHEME_FILE     = ::rtl::OUString::createFromAscii("file");
-    static ::rtl::OUString CONTENTPROP_ISREADONLY = ::rtl::OUString::createFromAscii("IsReadOnly");
+    static ::rtl::OUString CONTENTSCHEME_FILE(     RTL_CONSTASCII_USTRINGPARAM( "file" ));
+    static ::rtl::OUString CONTENTPROP_ISREADONLY( RTL_CONSTASCII_USTRINGPARAM( "IsReadOnly" ));
     static sal_Bool        READONLY_FALLBACK      = sal_False;
 
     sal_Bool bReadOnly = READONLY_FALLBACK;
@@ -591,7 +591,7 @@ sal_Bool MediaDescriptor::impl_addInputStream( sal_Bool bLockFile )
         ::rtl::OUString sURL = getUnpackedValueOrDefault(MediaDescriptor::PROP_URL(), ::rtl::OUString());
         if (!sURL.getLength())
             throw css::uno::Exception(
-                    ::rtl::OUString::createFromAscii("Found no URL."),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found no URL." )),
                     css::uno::Reference< css::uno::XInterface >());
 
         // Parse URL! Only the main part has to be used further. E.g. a jumpmark can make trouble
@@ -622,7 +622,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
 {
     if ( !_rxPostData.is() )
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Found invalid PostData."),
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Found invalid PostData." )),
                 css::uno::Reference< css::uno::XInterface >(), 1);
 
     // PostData can't be used in read/write mode!
@@ -640,7 +640,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference
     ::rtl::OUString sMediaType = getUnpackedValueOrDefault(MediaDescriptor::PROP_MEDIATYPE(), ::rtl::OUString());
     if (!sMediaType.getLength())
     {
-        sMediaType = ::rtl::OUString::createFromAscii("application/x-www-form-urlencoded");
+        sMediaType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/x-www-form-urlencoded" ));
         (*this)[MediaDescriptor::PROP_MEDIATYPE()] <<= sMediaType;
     }
 
@@ -842,7 +842,7 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL( const ::rtl::OUString& sURL, s
        it parses the URL in another way. It's main part isnt enough
        and it's complete part contains the jumpmark (fragment) parameter ...
     */
-    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY = ::rtl::OUString::createFromAscii("com.sun.star.uri.UriReferenceFactory");
+    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.uri.UriReferenceFactory" ));
 
     try
     {

@@ -62,7 +62,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
         sal_uInt64 nSize = 0;
 
         osl_getFileSize(handle, &nSize);
-        OUString sectionName = OUString::createFromAscii("no name section");
+        OUString sectionName( RTL_CONSTASCII_USTRINGPARAM( "no name section" ));
         while (true)
         {
             sal_uInt64 nPos;
@@ -93,7 +93,7 @@ IniParser::IniParser(OUString const & rIniName) throw(com::sun::star::io::IOExce
                     sectionName =  OStringToOUString(
                         line.copy(nIndexStart + 1,nIndexEnd - nIndexStart -1).trim(), RTL_TEXTENCODING_ASCII_US );
                     if (!sectionName.getLength())
-                        sectionName = OUString::createFromAscii("no name section");
+                        sectionName = OUString(RTL_CONSTASCII_USTRINGPARAM("no name section"));
 
                     ini_Section *aSection = &mAllSection[sectionName];
                     aSection->sName = sectionName;

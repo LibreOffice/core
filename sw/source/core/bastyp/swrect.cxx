@@ -30,7 +30,7 @@
 #include "precompiled_sw.hxx"
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/stream.hxx>
 #endif
 #include <stdlib.h>
@@ -69,13 +69,6 @@ Point SwRect::Center() const
 {
     return Point( Left() + Width()  / 2,
                   Top()  + Height() / 2 );
-
-/*  Wer ruft schon ein Center auf ein "falsches" Rechteck?
-    const long nRight = Right();
-    const long nBottom= Bottom();
-    return Point( min( Left(), nRight ) + long(abs( (nRight - Left())/2) ),
-                  min( Top(),  nBottom) + long(abs( (nBottom - Top())/2)));
-*/
 }
 
 /*************************************************************************
@@ -317,7 +310,7 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { m_Point = Point(rNew.nA, rNew.nB - m_Size.getHeight()); }
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 /*************************************************************************
  *                  operator<<( ostream&, SwRect&)
  *************************************************************************/

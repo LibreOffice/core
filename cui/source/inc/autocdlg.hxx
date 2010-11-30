@@ -305,7 +305,7 @@ private:
     DECL_LINK(SelectHdl, ListBox*);
     DECL_LINK(ModifyHdl, Edit*);
 
-    void            RefillReplaceBoxes(BOOL bFromReset, //Box mit neuer Sprache fuellen
+    void            RefillReplaceBoxes(BOOL bFromReset, //Box filled with new language
                                         LanguageType eOldLanguage,
                                         LanguageType eNewLanguage);
 public:
@@ -417,7 +417,6 @@ class OfaAutoCompleteTabPage : public SfxTabPage
 
     CheckBox        aCBCollect;//Collect words
     CheckBox        aCBRemoveList;//...save the list for later use...
-    //--removed--CheckBox        aCBEndless;//
 
     FixedText       aFTExpandKey;
     ListBox         aDCBExpandKey;

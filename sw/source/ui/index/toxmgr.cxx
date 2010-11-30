@@ -400,7 +400,6 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                     pSh->DelRight();
                 pNewTOX = (SwTOXBase*)pCurTOX;
             }
-//          pTOX->SetOptions(rDesc.GetIndexOptions());
             pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
             pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }

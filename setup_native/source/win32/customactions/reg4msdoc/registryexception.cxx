@@ -23,16 +23,12 @@ RegistryException::RegistryException(long ErrorCode) :
 {
 }
 
-/**
-*/
 RegistryException::~RegistryException() throw()
 {
     if (m_ErrorMsg)
         LocalFree(m_ErrorMsg);
 }
 
-/**
-*/
 const char* RegistryException::what() const throw()
 {
     FormatMessage(
@@ -49,8 +45,6 @@ const char* RegistryException::what() const throw()
     return reinterpret_cast<char*>(m_ErrorMsg);
 }
 
-/**
-*/
 long RegistryException::GetErrorCode() const
 {
     return m_ErrorCode;
@@ -66,45 +60,25 @@ RegistryIOException::RegistryIOException(long ErrorCode) :
 {
 };
 
-//#######################################
-//
-//#######################################
-
 RegistryNoWriteAccessException::RegistryNoWriteAccessException(long ErrorCode) :
     RegistryException(ErrorCode)
 {
 };
-
-//#######################################
-//
-//#######################################
 
 RegistryAccessDeniedException::RegistryAccessDeniedException(long ErrorCode) :
     RegistryException(ErrorCode)
 {
 };
 
-//#######################################
-//
-//#######################################
-
 RegistryValueNotFoundException::RegistryValueNotFoundException(long ErrorCode) :
     RegistryException(ErrorCode)
 {
 };
 
-//#######################################
-//
-//#######################################
-
 RegistryKeyNotFoundException::RegistryKeyNotFoundException(long ErrorCode) :
     RegistryException(ErrorCode)
 {
 };
-
-//#######################################
-//
-//#######################################
 
 RegistryInvalidOperationException::RegistryInvalidOperationException(long ErrorCode) :
     RegistryException(ErrorCode)

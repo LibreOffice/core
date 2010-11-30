@@ -88,13 +88,6 @@ ImageList RID_SVXIMGLIST_RPTEXPL
     NAVIGATOR_IMAGEIDS;
 };
 
-ImageList RID_SVXIMGLIST_RPTEXPL_HC
-{
-    Prefix = "sxh";
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
-    NAVIGATOR_IMAGEIDS;
-};
-
 String RID_STR_FUNCTIONS
 {
     Text [ en-US ] = "Functions" ;

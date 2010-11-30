@@ -102,10 +102,10 @@ SwTxtFrm *SwTxtFrm::FindFtnRef( const SwTxtFtn *pFtn )
  *                              CalcFtnFlag()
  *************************************************************************/
 
-#ifndef DBG_UTIL
-void SwTxtFrm::CalcFtnFlag()
+#if OSL_DEBUG_LEVEL > 1
+void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//For testing the SplitFrm
 #else
-void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
+void SwTxtFrm::CalcFtnFlag()
 #endif
 {
     bFtn = sal_False;
@@ -116,11 +116,11 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
 
     const USHORT nSize = pHints->Count();
 
-#ifndef DBG_UTIL
-    const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
-#else
+#if OSL_DEBUG_LEVEL > 1
     const xub_StrLen nEnd = nStop != STRING_LEN ? nStop
                         : GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
+#else
+    const xub_StrLen nEnd = GetFollow() ? GetFollow()->GetOfst() : STRING_LEN;
 #endif
 
     for ( USHORT i = 0; i < nSize; ++i )
@@ -146,7 +146,7 @@ void SwTxtFrm::CalcFtnFlag( xub_StrLen nStop )//Fuer den Test von SplitFrm
 
 sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
 {
-    ASSERT( HasFtn(), "Wer ruft mich da?" );
+    OSL_ENSURE( HasFtn(), "Wer ruft mich da?" );
     SwFtnBossFrm *pBoss = FindFtnBossFrm( sal_True );
     const SwFtnFrm *pFtn = pBoss->FindFirstFtn( this );
     if( pFtn && FTNPOS_CHAPTER != GetNode()->GetDoc()->GetFtnInfo().ePos &&
@@ -195,7 +195,7 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
     // containing the footnote.
     SWRECTFN( pFrm )
 
-    ASSERT( !pFrm->IsVertical() || !pFrm->IsSwapped(),
+    OSL_ENSURE( !pFrm->IsVertical() || !pFrm->IsSwapped(),
             "lcl_GetFtnLower with swapped frame" );
 
     SwTwips nAdd;
@@ -221,8 +221,8 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
             pRow = pRow->GetUpper();
         const SwTabFrm* pTabFrm = (SwTabFrm*)pRow->GetUpper();
 
-        ASSERT( pTabFrm && pRow &&
-                pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" )
+        OSL_ENSURE( pTabFrm && pRow &&
+                pRow->GetUpper()->IsTabFrm(), "Upper of row should be tab" );
 
         const BOOL bDontSplit = !pTabFrm->IsFollow() &&
                                 !pTabFrm->IsLayoutSplitAllowed();
@@ -252,11 +252,11 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
     // #i10770#: If there are fly frames anchored at previous paragraphs,
     // the deadline should consider their lower borders.
     const SwFrm* pStartFrm = pFrm->GetUpper()->GetLower();
-    ASSERT( pStartFrm, "Upper has no lower" )
+    OSL_ENSURE( pStartFrm, "Upper has no lower" );
     SwTwips nFlyLower = bVert ? LONG_MAX : 0;
     while ( pStartFrm != pFrm )
     {
-        ASSERT( pStartFrm, "Frame chain is broken" )
+        OSL_ENSURE( pStartFrm, "Frame chain is broken" );
         if ( pStartFrm->GetDrawObjs() )
         {
             const SwSortedObjs &rObjs = *pStartFrm->GetDrawObjs();
@@ -293,8 +293,8 @@ SwTwips lcl_GetFtnLower( const SwTxtFrm* pFrm, SwTwips nLower )
 
 SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
-            "SwTxtFrm::GetFtnLine with swapped frame" )
+    OSL_ENSURE( ! IsVertical() || ! IsSwapped(),
+            "SwTxtFrm::GetFtnLine with swapped frame" );
 
     SwTxtFrm *pThis = (SwTxtFrm*)this;
 
@@ -336,7 +336,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn ) const
 
 SwTwips SwTxtFrm::_GetFtnFrmHeight() const
 {
-    ASSERT( !IsFollow() && IsInFtn(), "SwTxtFrm::SetFtnLine: moon walk" );
+    OSL_ENSURE( !IsFollow() && IsInFtn(), "SwTxtFrm::SetFtnLine: moon walk" );
 
     const SwFtnFrm *pFtnFrm = FindFtnFrm();
     const SwTxtFrm *pRef = (const SwTxtFrm *)pFtnFrm->GetRef();
@@ -360,7 +360,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
         if( nTmp < 0 )
         {
             sal_Bool bInvalidPos = sal_False;
@@ -373,7 +373,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                     break;
                 pTmp = pTmp->GetUpper();
             }
-            ASSERT( bInvalidPos, "Hanging below FtnCont" );
+            OSL_ENSURE( bInvalidPos, "Hanging below FtnCont" );
         }
 #endif
 
@@ -510,7 +510,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                 // Wir loeschen nicht, sondern wollen die Ftn verschieben.
                 // Drei Faelle koennen auftreten:
                 // 1) Es gibt weder Follow noch PrevFollow
-                //    -> RemoveFtn()  (vielleicht sogar ein ASSERT wert)
+                //    -> RemoveFtn()  (vielleicht sogar ein OSL_ENSURE(wert)
                 // 2) nStart > GetOfst, ich habe einen Follow
                 //    -> Ftn wandert in den Follow
                 // 3) nStart < GetOfst, ich bin ein Follow
@@ -538,7 +538,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                         while( pDest->GetFollow() && ((SwTxtFrm*)pDest->
                                GetFollow())->GetOfst() <= nIdx )
                             pDest = pDest->GetFollow();
-                        ASSERT( !pDest->FindFtnBossFrm( !bEndn )->FindFtn(
+                        OSL_ENSURE( !pDest->FindFtnBossFrm( !bEndn )->FindFtn(
                             pDest,pFtn),"SwTxtFrm::RemoveFtn: footnote exists");
 
                         //Nicht ummelden sondern immer Moven.
@@ -567,7 +567,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                         }
                         ((SwTxtFrm*)pDest)->SetFtn( sal_True );
 
-                        ASSERT( pDest->FindFtnBossFrm( !bEndn )->FindFtn( pDest,
+                        OSL_ENSURE( pDest->FindFtnBossFrm( !bEndn )->FindFtn( pDest,
                            pFtn),"SwTxtFrm::RemoveFtn: footnote ChgRef failed");
                     }
                     else
@@ -581,7 +581,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
                             else
                                 pFtnBoss->RemoveFtn( this, pFtn );
                             bRemove = bRemove || !bEndDoc;
-                            ASSERT( bEndn ? !pEndBoss->FindFtn( this, pFtn ) :
+                            OSL_ENSURE( bEndn ? !pEndBoss->FindFtn( this, pFtn ) :
                                     !pFtnBoss->FindFtn( this, pFtn ),
                             "SwTxtFrm::RemoveFtn: can't get off that footnote" );
                         }
@@ -631,7 +631,7 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 
 void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 {
-    ASSERT( !IsVertical() || !IsSwapped(),
+    OSL_ENSURE( !IsVertical() || !IsSwapped(),
             "SwTxtFrm::ConnectFtn with swapped frame" );
 
     bFtn = sal_True;
@@ -849,7 +849,7 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                              SwTxtAttr *pHint )
 {
-    ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "NewFtnPortion with unswapped frame" );
 
     if( !pFrm->IsFtnAllowed() )
@@ -996,7 +996,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
 SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 {
-    ASSERT( pFrm->IsInFtn() && !pFrm->GetIndPrev() && !rInf.IsFtnDone(),
+    OSL_ENSURE( pFrm->IsInFtn() && !pFrm->GetIndPrev() && !rInf.IsFtnDone(),
             "This is the wrong place for a ftnnumber" );
     if( rInf.GetTxtStart() != nStart ||
         rInf.GetTxtStart() != rInf.GetIdx() )
@@ -1052,7 +1052,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
 
 XubString lcl_GetPageNumber( const SwPageFrm* pPage )
 {
-    ASSERT( pPage, "GetPageNumber: Homeless TxtFrm" );
+    OSL_ENSURE( pPage, "GetPageNumber: Homeless TxtFrm" );
     MSHORT nVirtNum = pPage->GetVirtPageNum();
     const SvxNumberType& rNum = pPage->GetPageDesc()->GetNumType();
     return rNum.GetNumStr( nVirtNum );
@@ -1093,7 +1093,7 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
 
 xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 {
-    ASSERT( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
+    OSL_ENSURE( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
             "SwTxtFormatter::FormatQuoVadis with swapped frame" );
 
     if( !pFrm->IsInFtn() || pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
@@ -1167,8 +1167,8 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
         rInf.SetRest( 0 );
         pCurrPor->Move( rInf );
 
-        ASSERT( pFollow->IsQuoVadisPortion(),
-                "Quo Vadis, rest of QuoVadisPortion" )
+        OSL_ENSURE( pFollow->IsQuoVadisPortion(),
+                "Quo Vadis, rest of QuoVadisPortion" );
 
         // format the rest and append it to the other QuoVadis parts
         pFollow->Format( rInf );

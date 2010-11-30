@@ -61,8 +61,6 @@ class PushButton;
 class RadioButton;
 class ResId;
 struct SfxChildWinInfo;
-//class SvxFontListBox;
-//class SvxLanguageBox;
 class TabControl;
 class TabPage;
 class VCLXRadioButton;
@@ -170,8 +168,6 @@ public:
     void EnterWait ();
     void LeaveWait ();
     bool IsWait () const;
-    //void Enable (bool enable=true, bool child=true);
-    //void Disable (bool child=true);
     bool IsEnabled () const;
     void EnableInput (bool enable=true, bool child=true);
     bool IsInputEnabled () const;
@@ -268,7 +264,7 @@ public:
     static String GetStandardText (sal_uInt16 button_type);
     void SetText( rtl::OUString const& rStr );
     bool SetModeImage (Image const& image);
-    bool SetModeImage (::Image const& image, BmpColorMode mode=BMP_COLOR_NORMAL);
+    bool SetModeImage (::Image const& image);
     void SetImageAlign( ImageAlign eAlign );
 
     void SetClickHdl( Link const& rLink );
@@ -776,7 +772,6 @@ class PluginImpl;
 class TOOLKIT_DLLPUBLIC Plugin : public Control
 {
     DECL_GET_IMPL( Plugin );
-    //DECL_CONSTRUCTORS( Plugin, Control, 0 );
 public:
     ::Control *mpPlugin;
     Plugin( Context *context, char const* id, ::Control *plugin );

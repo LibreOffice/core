@@ -705,7 +705,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
             }
 
 #if OSL_DEBUG_LEVEL > 1
-            fprintf( stderr, "found %d/%d kern pairs for %s\n",
+            fprintf( stderr, "found %" SAL_PRI_SIZET "u/%" SAL_PRI_SIZET "u kern pairs for %s\n",
                      m_pMetrics->m_aXKernPairs.size(),
                      m_pMetrics->m_aYKernPairs.size(),
                      OUStringToOString( pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName ), RTL_TEXTENCODING_MS_1252 ).getStr() );
@@ -2405,7 +2405,7 @@ void PrintFontManager::initialize()
 
 #if OSL_DEBUG_LEVEL > 1
     aStep3 = times( &tms );
-    fprintf( stderr, "PrintFontManager::initialize: collected %d fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
+    fprintf( stderr, "PrintFontManager::initialize: collected %" SAL_PRI_SIZET "u fonts (%d builtin, %d cached)\n", m_aFonts.size(), nBuiltinFonts, nCached );
     double fTick = (double)sysconf( _SC_CLK_TCK );
     fprintf( stderr, "Step 1 took %lf seconds\n", (double)(aStep1 - aStart)/fTick );
     fprintf( stderr, "Step 2 took %lf seconds\n", (double)(aStep2 - aStep1)/fTick );

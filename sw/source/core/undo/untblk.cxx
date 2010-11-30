@@ -154,7 +154,7 @@ SwUndoInserts::~SwUndoInserts()
         if( pPos->nContent.GetIndex() )         // nicht den gesamten Node loeschen
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-            ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
+            OSL_ENSURE( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
             if( pTxtNd ) // Robust
             {
                 pTxtNd->EraseText( pPos->nContent );

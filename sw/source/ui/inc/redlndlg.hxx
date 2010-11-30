@@ -144,10 +144,6 @@ public:
     virtual void    Resize();
 };
 
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
 class SwModelessRedlineAcceptDlg : public SfxModelessDialog
 {
     SwRedlineAcceptDlg*     pImplDlg;
@@ -163,11 +159,6 @@ public:
     virtual void    FillInfo(SfxChildWinInfo&) const;
     void            Initialize (SfxChildWinInfo* pInfo);
 };
-
-
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
 
 class SwRedlineAcceptChild : public SwChildWinWrapper
 {

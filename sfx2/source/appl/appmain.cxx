@@ -178,7 +178,7 @@ bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bExceptio
             {
                 // maybe corrupted installation
                 throw (::com::sun::star::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("iso resource could not be loaded by SfxApplication"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("iso resource could not be loaded by SfxApplication")),
                     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >()));
             }
         }

@@ -954,7 +954,7 @@ OUString Model::getResultForExpression(
             pBinding->getMIPEvaluationContexts();
         for( std::vector<EvaluationContext>::iterator aIter = aContext.begin();
              aIter != aContext.end();
-             aIter ++ )
+             ++aIter )
         {
             aExpression.evaluate( *aIter );
             aBuffer.append( lcl_serializeForDisplay(aExpression.getXPath()) );

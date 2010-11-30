@@ -58,8 +58,6 @@ extern sal_Bool bNoInterrupt;       // in mainwn.cxx
 
 BOOL SwWrtShell::MoveBookMark( BookMarkMove eFuncId, const ::sw::mark::IMark* const pMark)
 {
-//JP 08.03.96: die Wizards brauchen die Selektion !!
-//  EndSelect();
     (this->*fnKillSel)( 0, sal_False );
 
     BOOL bRet = sal_True;

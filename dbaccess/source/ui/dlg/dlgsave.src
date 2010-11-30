@@ -138,4 +138,3 @@ ModalDialog DLG_SAVE_AS
         Text [ en-US ] = "Insert as";
     };
 };
-

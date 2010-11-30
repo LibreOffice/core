@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+    /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -241,7 +241,6 @@ const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKin
         GRAPHIC_PAGE_PROPERTIES
     };
 
-    //
     bool bWithoutBackground = ePageKind != PK_STANDARD && ePageKind != PK_HANDOUT;
     const SvxItemPropertySet* pRet = 0;
     if( bImpress )
@@ -372,9 +371,6 @@ sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const ::com::sun::star::uno:
         }
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdGenericDrawPage::SdGenericDrawPage( SdXImpressDocument* _pModel, SdPage* pInPage, const SvxItemPropertySet* _pSet ) throw()
 :       SvxFmDrawPage( (SdrPage*) pInPage ),
         SdUnoSearchReplaceShape(this),
@@ -995,9 +991,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
     GetModel()->SetModified();
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -1076,9 +1069,8 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     }
     case WID_PAGE_LDBITMAP:
         {
-            BOOL bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
             Reference< awt::XBitmap > xBitmap(
-                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( bHC ? BMP_PAGE_H : BMP_PAGE ) ) ) );
+                VCLUnoHelper::CreateBitmap( BitmapEx( SdResId( BMP_PAGE ) ) ) );
             aAny <<= xBitmap;
         }
         break;
@@ -2003,9 +1995,6 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
     return FindObject( aName ) != NULL;
 }
 
-/***********************************************************************
-*                                                                      *
-***********************************************************************/
 SdrObject* SdPageLinkTargets::FindObject( const String& rName ) const throw()
 {
     SdPage* pPage = mpUnoPage->GetPage();

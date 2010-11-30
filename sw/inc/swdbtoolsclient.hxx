@@ -33,9 +33,9 @@
 #include <osl/module.h>
 #include "swdllapi.h"
 
-/* -----------------------------30.08.2001 11:01------------------------------
+/*
     Client to use the dbtools library as load-on-call
- ---------------------------------------------------------------------------*/
+*/
 class SW_DLLPUBLIC SwDbtoolsClient
 {
 private:

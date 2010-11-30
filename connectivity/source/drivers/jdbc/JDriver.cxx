@@ -65,7 +65,7 @@ java_sql_Driver::~java_sql_Driver()
 //------------------------------------------------------------------------------
 rtl::OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdbc.JDBCDriver");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdbc.JDBCDriver"));
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }
@@ -73,7 +73,7 @@ rtl::OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeExc
 Sequence< ::rtl::OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 //------------------------------------------------------------------
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
     // I feel responsible for all jdbc url's
     sal_Bool bEnabled = sal_False;
     OSL_VERIFY_EQUALS( jfw_getEnabled( &bEnabled ), JFW_E_NONE, "error in jfw_getEnabled" );
-    static const ::rtl::OUString s_sJdbcPrefix = ::rtl::OUString::createFromAscii("jdbc:");
+    static const ::rtl::OUString s_sJdbcPrefix( RTL_CONSTASCII_USTRINGPARAM( "jdbc:" ));
     return bEnabled && 0 == url.compareTo(s_sJdbcPrefix, 5);
 }
 // -------------------------------------------------------------------------

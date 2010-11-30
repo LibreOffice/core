@@ -48,7 +48,7 @@ IMPL_LINK( SwObjectFactory, MakeObject, SdrObjFactory*, pObjFactory )
     if ( pObjFactory->nInventor == SWGInventor )
     {
         //Kein switch, derzeit gibt es nur einen.
-        ASSERT( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
+        OSL_ENSURE( pObjFactory->nIdentifier == SwFlyDrawObjIdentifier,
                                         "Falscher Inventor oder identifier." );
         pObjFactory->pNewObj = new SwFlyDrawObj();
     }

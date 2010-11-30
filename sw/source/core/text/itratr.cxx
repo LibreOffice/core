@@ -73,7 +73,7 @@ using namespace ::com::sun::star;
 
 void SwAttrIter::Chg( SwTxtAttr *pHt )
 {
-    ASSERT( pHt && pFnt, "No attribute of font available for change");
+    OSL_ENSURE( pHt && pFnt, "No attribute of font available for change");
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_True );
     else
@@ -87,7 +87,7 @@ void SwAttrIter::Chg( SwTxtAttr *pHt )
 
 void SwAttrIter::Rst( SwTxtAttr *pHt )
 {
-    ASSERT( pHt && pFnt, "No attribute of font available for reset");
+    OSL_ENSURE( pHt && pFnt, "No attribute of font available for reset");
     // get top from stack after removing pHt
     if( pRedln && pRedln->IsOn() )
         pRedln->ChangeTxtAttr( pFnt, *pHt, sal_False );
@@ -469,7 +469,7 @@ sal_Bool lcl_MinMaxNode( const SwFrmFmtPtr& rpNd, void* pArgs )
     {
         const SwMinMaxNodeArgs *pIn = (const SwMinMaxNodeArgs*)pArgs;
         const SwPosition *pPos = rFmtA.GetCntntAnchor();
-        ASSERT(pPos && pIn, "Unexpected NULL arguments");
+        OSL_ENSURE(pPos && pIn, "Unexpected NULL arguments");
         if (!pPos || !pIn || pIn->nIndx != pPos->nNode.GetIndex())
             bCalculate = false;
     }
@@ -846,7 +846,7 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
             pOut = getIDocumentDeviceAccess()->getReferenceDevice( true );
     }
 
-    ASSERT( pOut, "GetScalingOfSelectedText without outdev" )
+    OSL_ENSURE( pOut, "GetScalingOfSelectedText without outdev" );
 
     MapMode aOldMap( pOut->GetMapMode() );
     pOut->SetMapMode( MapMode( MAP_TWIP ) );

@@ -115,7 +115,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 default:
                     ;
             }
-            ASSERT( pSubStr, "ubekannter Subtyp fuer SwExtUserField" );
+            OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwExtUserField" );
             bFixed = ((const SwExtUserField*)pFld)->IsFixed();
             break;
 
@@ -126,7 +126,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                 case AF_NAME:     pFmtStr = OOO_STRING_SW_HTML_FF_name;     break;
                 case AF_SHORTCUT:  pFmtStr = OOO_STRING_SW_HTML_FF_shortcut;    break;
             }
-            ASSERT( pFmtStr, "ubekanntes Format fuer SwAuthorField" );
+            OSL_ENSURE( pFmtStr, "ubekanntes Format fuer SwAuthorField" );
             bFixed = ((const SwAuthorField*)pFld)->IsFixed();
             break;
 
@@ -150,7 +150,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     case PG_NEXT:       pSubStr = OOO_STRING_SW_HTML_FS_next;       break;
                     case PG_PREV:       pSubStr = OOO_STRING_SW_HTML_FS_prev;       break;
                 }
-                ASSERT( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
+                OSL_ENSURE( pSubStr, "ubekannter Subtyp fuer SwPageNumberField" );
                 pFmtStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(nFmt) );
 
                 if( (SvxExtNumType)nFmt==SVX_NUM_CHAR_SPECIAL )
@@ -217,7 +217,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     {
                         // Fuer ein fixes Feld och den Num-Value ausgeben.
                         // Fixe Felder ohne Zahlenformate sollte es
-                        // eigentlich nicht geben. ASSERT ist unten.
+                        // eigentlich nicht geben. OSL_ENSURE(ist unten.
                         dNumValue = ((const SwDocInfoField*)pFld)->GetValue();
                         bNumValue = TRUE;
                     }
@@ -262,7 +262,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
                     ;
             }
             bFixed = ((const SwFileNameField*)pFld)->IsFixed();
-            ASSERT( pFmtStr, "unbekanntes Format fuer SwFileNameField" );
+            OSL_ENSURE( pFmtStr, "unbekanntes Format fuer SwFileNameField" );
             break;
     }
 
@@ -292,7 +292,7 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
         }
         if( bNumFmt )
         {
-            ASSERT( nFmt, "Zahlenformat ist 0" );
+            OSL_ENSURE( nFmt, "Zahlenformat ist 0" );
             sOut = HTMLOutFuncs::CreateTableDataOptionsValNum( sOut,
                         bNumValue, dNumValue, nFmt,
                         *rHTMLWrt.pDoc->GetNumberFormatter(),
@@ -529,7 +529,7 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     else
     {
         const SwTxtFld *pTxtFld = rFld.GetTxtFld();
-        ASSERT( pTxtFld, "Where is the txt fld?" );
+        OSL_ENSURE( pTxtFld, "Where is the txt fld?" );
         if( pTxtFld )
             OutHTML_SwField( rWrt, pFld, pTxtFld->GetTxtNode(),
                              *pTxtFld->GetStart()  );

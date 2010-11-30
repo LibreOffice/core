@@ -414,7 +414,7 @@ namespace frm
 
                 ::rtl::OUString sValue = ::rtl::OUString::valueOf( sal_Int32( nCount ) );
                 if ( !bFinalCount )
-                    sValue += ::rtl::OUString::createFromAscii( " *" );
+                    sValue += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" *") );
 
                 aState.State <<= sValue;
                 aState.Enabled = sal_True;

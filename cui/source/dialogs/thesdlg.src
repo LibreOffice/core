@@ -138,9 +138,5 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         ImageBitmap = Bitmap { File = "vendor01.png"; };
     };
-    Image IMG_DEFAULT_VENDOR_HC
-    {
-        ImageBitmap = Bitmap { File = "vendor01h.png"; };
-    };
 };
 

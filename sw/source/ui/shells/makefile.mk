@@ -43,7 +43,9 @@ SRC1FILES =  \
         shells.src
 
 SLOFILES =  \
-        $(SLO)$/langhelper.obj \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES =  \
         $(SLO)$/annotsh.obj \
         $(SLO)$/basesh.obj \
         $(SLO)$/beziersh.obj \
@@ -56,8 +58,9 @@ SLOFILES =  \
         $(SLO)$/frmsh.obj \
         $(SLO)$/grfsh.obj \
         $(SLO)$/grfshex.obj \
-        $(SLO)$/mediash.obj \
+        $(SLO)$/langhelper.obj \
         $(SLO)$/listsh.obj \
+        $(SLO)$/mediash.obj \
         $(SLO)$/olesh.obj \
         $(SLO)$/slotadd.obj \
         $(SLO)$/tabsh.obj \
@@ -71,20 +74,6 @@ SLOFILES =  \
         $(SLO)$/txtattr.obj \
         $(SLO)$/txtcrsr.obj \
         $(SLO)$/txtnum.obj
-
-EXCEPTIONSFILES =  \
-        $(SLO)$/basesh.obj \
-        $(SLO)$/annotsh.obj \
-        $(SLO)$/drwtxtsh.obj \
-        $(SLO)$/textsh.obj \
-        $(SLO)$/textsh2.obj \
-        $(SLO)$/grfshex.obj \
-        $(SLO)$/drawsh.obj \
-        $(SLO)$/drwtxtsh.obj \
-        $(SLO)$/frmsh.obj \
-        $(SLO)$/drwtxtex.obj \
-        $(SLO)$/slotadd.obj \
-        $(SLO)$/textsh1.obj
 
 # --- Tagets -------------------------------------------------------
 

@@ -96,8 +96,8 @@ SmViewShell * SmGetActiveView();
 // SmFace
 //
 
-BOOL    IsItalic( const Font &rFont );
-BOOL    IsBold( const Font &rFont );
+bool    IsItalic( const Font &rFont );
+bool    IsBold( const Font &rFont );
 
 class SmFace : public Font
 {
@@ -170,7 +170,7 @@ protected:
     virtual void   *CreateItem(const void *pItem) = 0;
     virtual void    DestroyItem(void *pItem) = 0;
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
+    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const = 0;
 
     virtual String  GetStringItem(void *pItem) = 0;
 
@@ -214,7 +214,7 @@ protected:
     virtual void   *CreateItem(const void *pItem);
     virtual void    DestroyItem(void *pItem);
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
+    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
     virtual String  GetStringItem(void *pItem);
 
@@ -231,7 +231,7 @@ public:
     virtual void    Update(const String &rString, const String &rNewString);
     virtual void    Remove(const String &rString);
 
-    inline BOOL     Contains(const String &rString) const;
+    inline bool     Contains(const String &rString) const;
     inline String   Get(USHORT nPos = 0) const;
 
     inline SmStringPickList& operator = (const SmStringPickList& rList);
@@ -253,7 +253,7 @@ inline String SmStringPickList::Get(USHORT nPos) const
     return nPos < Count() ? *((String *)SmPickList::Get(nPos)) : String();
 }
 
-inline BOOL SmStringPickList::Contains(const String &rString) const
+inline bool SmStringPickList::Contains(const String &rString) const
 {
     return SmPickList::Contains((void *)&rString);
 }
@@ -273,7 +273,7 @@ protected:
     virtual void   *CreateItem(const void *pItem);
     virtual void    DestroyItem(void *pItem);
 
-    virtual BOOL    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
+    virtual bool    CompareItem(const void *pFirstItem, const void *pSecondItem) const;
 
     virtual String  GetStringItem(void *pItem);
 
@@ -294,7 +294,7 @@ public:
     virtual void    Remove(const Font &rFont);
 
     using   SmPickList::Contains;
-    inline BOOL     Contains(const Font &rFont) const;
+    inline bool     Contains(const Font &rFont) const;
     inline Font     Get(USHORT nPos = 0) const;
 
     inline SmFontPickList&  operator = (const SmFontPickList& rList);
@@ -320,7 +320,7 @@ inline Font SmFontPickList::Get(USHORT nPos) const
     return nPos < Count() ? *((Font *)SmPickList::Get(nPos)) : Font();
 }
 
-inline BOOL SmFontPickList::Contains(const Font &rFont) const
+inline bool SmFontPickList::Contains(const Font &rFont) const
 {
     return SmPickList::Contains((void *)&rFont);
 }

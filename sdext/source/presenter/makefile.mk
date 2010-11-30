@@ -42,13 +42,13 @@ MAXLINELENGTH:=100000
 
 PACKAGE=com.sun.PresenterScreen-$(PLATFORMID)
 
-.IF "$(L10N_framework)"==""
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
 .IF "$(ENABLE_PRESENTER_SCREEN)" == "NO"
 @all:
     @echo "Presenter Screen build disabled."
 .ELSE
+
+.IF "$(L10N_framework)"==""
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 DLLPRE=
 common_build_zip=
@@ -239,8 +239,7 @@ COMPONENT_BITMAPS=												\
     $(ZIP1DIR)$/bitmaps$/LabelMouseOverRight.png
 
 COMPONENT_IMAGES=\
-    $(ZIP1DIR)$/bitmaps$/extension_32.png \
-    $(ZIP1DIR)$/bitmaps$/extension_32_h.png
+    $(ZIP1DIR)$/bitmaps$/extension_32.png
 
 COMPONENT_MANIFEST= 							\
     $(ZIP1DIR)$/META-INF$/manifest.xml
@@ -379,10 +378,9 @@ $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
     @@-$(RM) $(DESCRIPTION_TMP)
 
-
-.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"
 .ELSE
 ivo:
     $(ECHO)
 .ENDIF # L10N_framework
 
+.ENDIF # "$(ENABLE_PRESENTER_SCREEN)" != "NO"

@@ -37,8 +37,8 @@
 #include <string.h>
 #include <limits.h>
 #include <boost/bind.hpp>
-#include <boost/spirit.hpp>
-#include <boost/spirit/dynamic/while.hpp>
+#include <boost/spirit/include/classic.hpp>
+#include <boost/spirit/include/classic_while.hpp>
 #include <numeric>
 #include <algorithm>
 
@@ -130,7 +130,7 @@ geometry::AffineMatrix2D multiplyMatrix( const geometry::AffineMatrix2D& rLHS,
 
 namespace
 {
-    struct ColorGrammar : public ::boost::spirit::grammar< ColorGrammar >
+    struct ColorGrammar : public ::boost::spirit::classic::grammar< ColorGrammar >
     {
     public:
         ARGBColor& m_rColor;
@@ -138,10 +138,10 @@ namespace
         template< typename ScannerT >
         struct definition
         {
-            ::boost::spirit::rule< ScannerT > colorExpression;
+            ::boost::spirit::classic::rule< ScannerT > colorExpression;
             definition( const ColorGrammar& self )
             {
-                using namespace ::boost::spirit;
+                using namespace ::boost::spirit::classic;
 
                 int_parser<sal_uInt8,10,1,3> byte_p;
                 colorExpression =
@@ -182,14 +182,14 @@ namespace
                          >> ')')
                      );
             }
-            ::boost::spirit::rule<ScannerT> const& start() const { return colorExpression; }
+            ::boost::spirit::classic::rule<ScannerT> const& start() const { return colorExpression; }
         };
     };
 }
 
 bool parseColor( const char* sColor, ARGBColor& rColor  )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     if( parse(sColor,
               ColorGrammar(rColor) >> end_p,
@@ -366,7 +366,7 @@ bool parseColor( const char* sColor, ARGBColor& rColor  )
 
 bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     if( parse(sOpacity,
               // Begin grammar
@@ -385,7 +385,7 @@ bool parseOpacity (const char* sOpacity, ARGBColor& rColor )
 
 bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     double fRefOffsetX(0.0);
     double fRefOffsetY(0.0);
@@ -501,7 +501,7 @@ bool parseTransform( const char* sTransform, basegfx::B2DHomMatrix& rTransform )
 
 bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     double x=0.0,y=0.0,w=0.0,h=0.0;
 
@@ -529,7 +529,7 @@ bool parseViewBox( const char* sViewbox, basegfx::B2DRange& rRect )
 
 bool parseDashArray( const char* sDashArray, std::vector<double>& rOutputVector )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     rOutputVector.clear();
     return parse(sDashArray,
@@ -555,7 +555,7 @@ bool parsePaintUri( std::pair<const char*,const char*>& o_rPaintUri,
                     std::pair<ARGBColor,bool>&          io_rColor,
                     const char*                         sPaintUri )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     const bool bRes = parse(sPaintUri,
         //  Begin grammar
@@ -587,7 +587,7 @@ void appendChar( std::string& str, char character)
 
 bool parseXlinkHref( const char* sXlinkHref, std::string& data )
 {
-    using namespace ::boost::spirit;
+    using namespace ::boost::spirit::classic;
 
     data.erase(data.begin(),data.end());
 

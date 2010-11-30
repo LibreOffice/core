@@ -46,8 +46,9 @@
 #include <stack>
 #include <string.h>
 
+#include "DocumentHandlerInterface.hxx"
+
 class DocumentElement;
-class DocumentHandler;
 class TagOpenElement;
 class FontStyle;
 class ListStyle;
@@ -64,11 +65,29 @@ struct _WriterDocumentState
     _WriterDocumentState();
 
     bool mbFirstElement;
+    bool mbFirstParagraphInPageSpan;
     bool mbInFakeSection;
     bool mbListElementOpenedAtCurrentLevel;
     bool mbTableCellOpened;
     bool mbHeaderRow;
     bool mbInNote;
+    bool mbInTextBox;
+    bool mbInFrame;
+};
+
+// list state
+typedef struct _WriterListState WriterListState;
+struct _WriterListState
+{
+    _WriterListState();
+
+    ListStyle *mpCurrentListStyle;
+    unsigned int miCurrentListLevel;
+    unsigned int miLastListLevel;
+    unsigned int miLastListNumber;
+    bool mbListContinueNumbering;
+    bool mbListElementParagraphOpened;
+    std::stack<bool> mbListElementOpened;
 };
 
 enum WriterListType { unordered, ordered };
@@ -81,20 +100,23 @@ struct ltstr
   }
 };
 
-class DocumentCollector : public WPXHLListenerImpl
+class DocumentCollector : public WPXDocumentInterface
 {
 public:
-    DocumentCollector(WPSInputStream *pInput, DocumentHandler *pHandler);
+    DocumentCollector(WPXInputStream *pInput, DocumentHandlerInterface *pHandler);
     virtual ~DocumentCollector();
     bool filter();
 
-     virtual void setDocumentMetaData(const WPXPropertyList & /* propList */) {}
+    // WPXDocumentInterface's callbacks
+    virtual void setDocumentMetaData(const WPXPropertyList &propList);
     virtual void startDocument() {}
     virtual void endDocument() {}
 
+    virtual void definePageStyle(const WPXPropertyList&) {}
     virtual void openPageSpan(const WPXPropertyList &propList);
     virtual void closePageSpan() {}
 
+    virtual void defineSectionStyle(const WPXPropertyList&, const WPXPropertyListVector&) {}
     virtual void openSection(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
     virtual void closeSection();
 
@@ -103,16 +125,19 @@ public:
     virtual void openFooter(const WPXPropertyList &propList);
     virtual void closeFooter();
 
+    virtual void defineParagraphStyle(const WPXPropertyList&, const WPXPropertyListVector&) {}
     virtual void openParagraph(const WPXPropertyList &propList, const WPXPropertyListVector &tabStops);
     virtual void closeParagraph();
 
+    virtual void defineCharacterStyle(const WPXPropertyList&) {}
     virtual void openSpan(const WPXPropertyList &propList);
     virtual void closeSpan();
 
-
     virtual void insertTab();
+    virtual void insertSpace();
     virtual void insertText(const WPXString &text);
      virtual void insertLineBreak();
+    virtual void insertField(const WPXString &type, const WPXPropertyList &propList);
 
     virtual void defineOrderedListLevel(const WPXPropertyList &propList);
     virtual void defineUnorderedListLevel(const WPXPropertyList &propList);
@@ -127,6 +152,10 @@ public:
     virtual void closeFootnote();
     virtual void openEndnote(const WPXPropertyList &propList);
     virtual void closeEndnote();
+    virtual void openComment(const WPXPropertyList &propList);
+    virtual void closeComment();
+    virtual void openTextBox(const WPXPropertyList &propList);
+    virtual void closeTextBox();
 
      virtual void openTable(const WPXPropertyList &propList, const WPXPropertyListVector &columns);
      virtual void openTableRow(const WPXPropertyList &propList);
@@ -135,25 +164,34 @@ public:
     virtual void closeTableCell();
     virtual void insertCoveredTableCell(const WPXPropertyList &propList);
      virtual void closeTable();
-    virtual bool parseSourceDocument(WPSInputStream &input) = 0;
+
+    virtual void openFrame(const WPXPropertyList & propList);
+    virtual void closeFrame();
+
+    virtual void insertBinaryObject(const WPXPropertyList &propList, const WPXBinaryData &data);
+    virtual void insertEquation(const WPXPropertyList & /* propList */, const WPXString & /* data */) {}
+
+    virtual bool parseSourceDocument(WPXInputStream &input) = 0;
 
 protected:
     void _resetDocumentState();
-    bool _writeTargetDocument(DocumentHandler *pHandler);
-    void _writeDefaultStyles(DocumentHandler *pHandler);
-    void _writeMasterPages(DocumentHandler *pHandler);
-    void _writePageMasters(DocumentHandler *pHandler);
+    bool _writeTargetDocument(DocumentHandlerInterface *pHandler);
+    void _writeDefaultStyles(DocumentHandlerInterface *pHandler);
+    void _writeMasterPages(DocumentHandlerInterface *pHandler);
+    void _writePageLayouts(DocumentHandlerInterface *pHandler);
     void _allocateFontName(const WPXString &);
 
 private:
     void _openListLevel(TagOpenElement *pListLevelOpenElement);
-    void _closeListLevel(const char *szListType);
+    void _closeListLevel();
 
-        WPSInputStream *mpInput;
-        DocumentHandler *mpHandler;
+    WPXInputStream *mpInput;
+    DocumentHandlerInterface *mpHandler;
     bool mbUsed; // whether or not it has been before (you can only use me once!)
 
-    WriterDocumentState mWriterDocumentState;
+    std::stack<WriterDocumentState> mWriterDocumentStates;
+
+    std::stack<WriterListState> mWriterListStates;
 
     // paragraph styles
     std::map<WPXString, ParagraphStyle *, ltstr> mTextStyleHash;
@@ -171,6 +209,14 @@ private:
     // table styles
     std::vector<TableStyle *> mTableStyles;
 
+    // frame styles
+    std::vector<DocumentElement *> mFrameStyles;
+
+    std::vector<DocumentElement *> mFrameAutomaticStyles;
+
+    // metadata
+    std::vector<DocumentElement *> mMetaData;
+
     // list styles
     unsigned int miNumListStyles;
 
@@ -186,18 +232,18 @@ private:
     PageSpan *mpCurrentPageSpan;
     int miNumPageStyles;
 
-    // list styles / state
-    ListStyle *mpCurrentListStyle;
-    unsigned int miCurrentListLevel;
-    unsigned int miLastListLevel;
-    unsigned int miLastListNumber;
+    // list styles
     std::vector<ListStyle *> mListStyles;
-    bool mbListContinueNumbering;
-    bool mbListElementOpened;
-    bool mbListElementParagraphOpened;
+
+    // object state
+    unsigned miObjectNumber;
 
     // table state
     TableStyle *mpCurrentTableStyle;
+
+    const bool mbIsFlatXML;
+
+    const char * mpPassword;
 };
 
 #endif

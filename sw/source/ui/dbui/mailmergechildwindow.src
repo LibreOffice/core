@@ -76,13 +76,6 @@ FloatingWindow DLG_MAILMERGECHILD\
         MaskColor = IMAGE_MASK_COLOR;
         IMGLIST1_IDS;
     };
-
-    ImageList ILIST_TBX_HC
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
-        IMGLIST1_IDS;
-    };
 };
 
 //FloatingWindow DLG_MM_SENDMAILS
@@ -194,13 +187,6 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Prefix = "sc";
         MaskColor = IMAGE_MASK_COLOR;
-        IMGLIST2_IDS;
-    };
-
-    ImageList ILIST_HC
-    {
-        Prefix = "sch";
-        MaskColor = IMAGE_MASK_COLOR ;
         IMGLIST2_IDS;
     };
     String ST_TASK

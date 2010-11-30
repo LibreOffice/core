@@ -1461,8 +1461,7 @@ ModulWindowLayout::ModulWindowLayout( Window* pParent ) :
     bVSplitted(FALSE),
     bHSplitted(FALSE),
     m_pModulWindow(0),
-    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT)),
-    m_aImagesHighContrast(IDEResId(RID_IMGLST_LAYOUT_HC))
+    m_aImagesNormal(IDEResId(RID_IMGLST_LAYOUT))
 {
     SetBackground(GetSettings().GetStyleSettings().GetWindowColor());
 
@@ -1750,10 +1749,9 @@ void ModulWindowLayout::updateSyntaxHighlighting()
     }
 }
 
-Image ModulWindowLayout::getImage(USHORT nId, bool bHighContrastMode) const
+Image ModulWindowLayout::getImage(USHORT nId) const
 {
-    return (bHighContrastMode ? m_aImagesHighContrast : m_aImagesNormal).
-        GetImage(nId);
+    return m_aImagesNormal.GetImage(nId);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

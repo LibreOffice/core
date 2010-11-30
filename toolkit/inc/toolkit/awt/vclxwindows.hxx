@@ -82,6 +82,8 @@
 #include <com/sun/star/awt/XComboBox.hpp>
 #include <com/sun/star/awt/XCheckBox.hpp>
 #include <com/sun/star/awt/XItemListListener.hpp>
+#include <com/sun/star/awt/XImageConsumer.hpp>
+#include <com/sun/star/awt/XSimpleTabController.hpp>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase2.hxx>
@@ -92,6 +94,7 @@
 
 #include <vcl/pointr.hxx>
 #include <vcl/image.hxx>
+#include <vcl/tabctrl.hxx>
 
 #include <com/sun/star/document/XVbaMethodParameter.hpp>  //liuchen 2009-6-22, add the support of input/output parameters to VBA Dialog_QueryClose event
 class Button;
@@ -372,6 +375,40 @@ public:
     virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
+//  ----------------------------------------------------
+//  class VCLXFrame
+//  ----------------------------------------------------
+class VCLXFrame :   public VCLXContainer
+{
+protected:
+    void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
+public:
+    VCLXFrame();
+    ~VCLXFrame();
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDevice,
+    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+};
+
 
 
 //  ----------------------------------------------------
@@ -449,6 +486,59 @@ public:
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 
+    TabPage*  getTabPage() const throw ( ::com::sun::star::uno::RuntimeException);
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+};
+
+class VCLXMultiPage : public ::com::sun::star::awt::XSimpleTabController, public VCLXContainer
+{
+    TabListenerMultiplexer maTabListeners;
+    sal_Int32 mTabId;
+protected:
+    void ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+public:
+    VCLXMultiPage();
+    ~VCLXMultiPage();
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL acquire() throw() { OWeakObject::acquire(); }
+    void SAL_CALL release() throw() { OWeakObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDevice,
+    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+    // XSimpleTabController
+    virtual ::sal_Int32 SAL_CALL insertTab() throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL setTabProps( ::sal_Int32 ID, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& Properties ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > SAL_CALL getTabProps( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL activateTab( ::sal_Int32 ID ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getActiveTabID() throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL addTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeTabListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTabListener >& Listener ) throw (::com::sun::star::uno::RuntimeException);
+    // C++
+    TabControl*  getTabControl() const throw ( ::com::sun::star::uno::RuntimeException);
+    USHORT insertTab( TabPage*, rtl::OUString& sTitle );
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------

@@ -743,21 +743,23 @@ void SaneDlg::AcquirePreview()
     maReslBox.SetValue( (ULONG)fResl );
 
     if( mbDragEnable )
+    {
         maPreviewRect = Rectangle( maTopLeft,
                                    Size( maBottomRight.X() - maTopLeft.X(),
                                          maBottomRight.Y() - maTopLeft.Y() )
                                    );
+    }
     else
     {
         Size aBMSize( maPreviewBitmap.GetSizePixel() );
-        if( aBMSize.Width() > aBMSize.Height() )
+        if( aBMSize.Width() > aBMSize.Height() && aBMSize.Width() )
         {
             int nVHeight = (maBottomRight.X() - maTopLeft.X()) * aBMSize.Height() / aBMSize.Width();
             maPreviewRect = Rectangle( Point( maTopLeft.X(), ( maTopLeft.Y() + maBottomRight.Y() )/2 - nVHeight/2 ),
                                        Size( maBottomRight.X() - maTopLeft.X(),
                                              nVHeight ) );
         }
-        else
+        else if (aBMSize.Height())
         {
             int nVWidth = (maBottomRight.Y() - maTopLeft.Y()) * aBMSize.Width() / aBMSize.Height();
             maPreviewRect = Rectangle( Point( ( maTopLeft.X() + maBottomRight.X() )/2 - nVWidth/2, maTopLeft.Y() ),

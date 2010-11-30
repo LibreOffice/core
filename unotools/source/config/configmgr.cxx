@@ -100,25 +100,18 @@ struct utl::ConfigMgr_Impl
     ConfigItemList                          aItemList;
 };
 
-/* -----------------------------28.08.00 15:35--------------------------------
-
- ---------------------------------------------------------------------------*/
 ConfigManager::ConfigManager() :
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
     GetConfigurationProvider(); // attempt to create the provider early
 }
-/* -----------------------------17.11.00 13:51--------------------------------
 
- ---------------------------------------------------------------------------*/
 ConfigManager::ConfigManager(Reference< XMultiServiceFactory > xConfigProv) :
     xConfigurationProvider(xConfigProv),
     pMgrImpl(new utl::ConfigMgr_Impl)
 {
 }
-/* -----------------------------28.08.00 15:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 ConfigManager::~ConfigManager()
 {
     //check list content -> should be empty!
@@ -136,9 +129,7 @@ ConfigManager::~ConfigManager()
     delete pMgrImpl;
 
 }
-/* -----------------------------28.08.00 16:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
 {
     if(!xConfigurationProvider.is())
@@ -174,9 +165,7 @@ Reference< XMultiServiceFactory > ConfigManager::GetConfigurationProvider()
     }
     return xConfigurationProvider;
 }
-/* -----------------------------03.12.02 -------------------------------------
 
- ---------------------------------------------------------------------------*/
 namespace
 {
     // helper to achieve exception - safe registration of a ConfigItem under construction
@@ -200,16 +189,12 @@ namespace
         void keep() { pCfgItem = 0; }
     };
 }
-/* -----------------------------12.12.00 17:19--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XMultiServiceFactory > ConfigManager::GetLocalConfigurationProvider()
 {
     return GetConfigurationProvider();
 }
-/* -----------------------------29.08.00 12:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigItem& rCfgItem)
 {
     RegisterConfigItemHelper registeredItem(*this,rCfgItem);
@@ -217,9 +202,7 @@ Reference< XHierarchicalNameAccess > ConfigManager::AddConfigItem(utl::ConfigIte
     registeredItem.keep();
     return xTree;
 }
-/* -----------------------------21.06.01 12:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
@@ -233,9 +216,7 @@ void    ConfigManager::RegisterConfigItem(utl::ConfigItem& rCfgItem)
 #endif
     pMgrImpl->aItemList.insert(aListIter, ConfigItemListEntry_Impl(&rCfgItem));
 }
-/* -----------------------------21.06.01 12:20--------------------------------
 
- ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& rCfgItem)
 {
     ConfigItemList::iterator aListIter = pMgrImpl->aItemList.begin();
@@ -313,9 +294,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::AcquireTree(utl::ConfigItem& 
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
-/* -----------------------------29.08.00 12:35--------------------------------
 
- ---------------------------------------------------------------------------*/
 void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
 {
     if( !pMgrImpl->aItemList.empty() )
@@ -332,9 +311,7 @@ void ConfigManager::RemoveConfigItem(utl::ConfigItem& rCfgItem)
         }
     }
 }
-/* -----------------------------30.08.00 15:04--------------------------------
 
- ---------------------------------------------------------------------------*/
 void ConfigManager::StoreConfigItems()
 {
     if(!pMgrImpl->aItemList.empty())
@@ -351,25 +328,19 @@ void ConfigManager::StoreConfigItems()
         }
     }
 }
-/* -----------------------------07.09.00 11:06--------------------------------
 
- ---------------------------------------------------------------------------*/
 struct theConfigManager : public rtl::Static<ConfigManager, theConfigManager> {};
 
 ConfigManager& ConfigManager::GetConfigManager()
 {
     return theConfigManager::get();
 }
-/* -----------------------------08.09.00 13:22--------------------------------
 
- ---------------------------------------------------------------------------*/
 rtl::OUString ConfigManager::GetConfigBaseURL()
 {
     return OUString::createFromAscii(pConfigBaseURL);
 }
-/* -----------------------------25.09.00 16:34--------------------------------
 
- ---------------------------------------------------------------------------*/
 Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 {
     switch(eProp)
@@ -626,9 +597,6 @@ void ConfigManager::getBasisAboutBoxProductVersion( OUString& rVersion )
     }
 }
 
-/* -----------------------------12.12.00 17:22--------------------------------
-
- ---------------------------------------------------------------------------*/
 Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUString& rFullPath)
 {
     Sequence< Any > aArgs(1);
@@ -658,9 +626,7 @@ Reference< XHierarchicalNameAccess> ConfigManager::GetHierarchyAccess(const OUSt
     }
     return Reference<XHierarchicalNameAccess>(xIFace, UNO_QUERY);
 }
-/* -----------------------------12.12.00 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 {
     OUString sPath(OUString::createFromAscii(pConfigBaseURL));
@@ -690,9 +656,7 @@ Any ConfigManager::GetLocalProperty(const OUString& rProperty)
 #endif
     return aRet;
 }
-/* -----------------------------12.12.00 17:17--------------------------------
 
- ---------------------------------------------------------------------------*/
 void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValue)
 {
     OUString sPath(OUString::createFromAscii(pConfigBaseURL));
@@ -722,9 +686,7 @@ void ConfigManager::PutLocalProperty(const OUString& rProperty, const Any& rValu
 #endif
     }
 }
-/* -----------------------------13.12.00 08:47--------------------------------
 
- ---------------------------------------------------------------------------*/
 sal_Bool    ConfigManager::IsLocalConfigProvider()
 {
     return false;

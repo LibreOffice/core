@@ -153,10 +153,10 @@ void displayException(const Any& _rExcept, Window* _pParent)
         Reference< XWindow > xParentWindow = VCLUnoHelper::GetInterface(pParentWindow);
 
         Sequence< Any > aArgs(2);
-        aArgs[0] <<= PropertyValue(::rtl::OUString::createFromAscii("SQLException"), 0, _rExcept, PropertyState_DIRECT_VALUE);
-        aArgs[1] <<= PropertyValue(::rtl::OUString::createFromAscii("ParentWindow"), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
+        aArgs[0] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SQLException")), 0, _rExcept, PropertyState_DIRECT_VALUE);
+        aArgs[1] <<= PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")), 0, makeAny(xParentWindow), PropertyState_DIRECT_VALUE);
 
-        static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+        static ::rtl::OUString s_sDialogServiceName( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog") );
         Reference< XExecutableDialog > xErrorDialog(
             ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
         if (xErrorDialog.is())

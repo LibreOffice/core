@@ -260,13 +260,6 @@ static typelib_TypeClass cpp_mediate(
 
       OSL_ENSURE( nFunctionIndex < pTypeDescr->nMapFunctionIndexToMemberIndex,
                 "### illegal vtable index!" );
-//      if (nFunctionIndex >= pTypeDescr->nMapFunctionIndexToMemberIndex)
-//      {
-//          RuntimeException aExc;
-//          aExc.Message = OUString::createFromAscii("illegal vtable index!");
-//          aExc.Context = (XInterface *)pThis;
-//          throw aExc;
-//      }
 
     // determine called method
     sal_Int32 nMemberPos = pTypeDescr->pMapFunctionIndexToMemberIndex[nFunctionIndex];
@@ -356,15 +349,6 @@ static typelib_TypeClass cpp_mediate(
         }
         break;
     }
-//      default:
-//      {
-//          RuntimeException aExc;
-//          aExc.Message = OUString::createFromAscii("no member description found!");
-//          aExc.Context = (XInterface *)pThis;
-//          throw aExc;
-//          // is here for dummy
-//          eRet = typelib_TypeClass_VOID;
-//      }
     }
 
     return eRet;

@@ -33,10 +33,6 @@
 
 #include <editeng/swafopt.hxx>
 
-/*------------------------------------------------------------------------
- Beschreibung:
-------------------------------------------------------------------------*/
-
 SvxSwAutoFmtFlags::SvxSwAutoFmtFlags()
     : aBulletFont( String::CreateFromAscii(
                         RTL_CONSTASCII_STRINGPARAM( "StarSymbol" )),

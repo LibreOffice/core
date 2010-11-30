@@ -128,7 +128,7 @@ void Uri::init() const
             if ( nSlash != - 1 )
                 m_aInternalPath = m_aPath.copy( nSlash );
             else
-                m_aInternalPath = rtl::OUString::createFromAscii( "/" );
+                m_aInternalPath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
         }
 
         m_eState = VALID;

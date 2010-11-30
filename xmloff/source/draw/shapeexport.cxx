@@ -173,10 +173,10 @@ uno::Reference< drawing::XShape > XMLShapeExport::checkForCustomShapeReplacement
                 {
                     uno::Sequence< uno::Any > aArgument( 1 );
                     uno::Sequence< beans::PropertyValue > aPropValues( 2 );
-                    aPropValues[ 0 ].Name = rtl::OUString::createFromAscii( "CustomShape" );
+                    aPropValues[ 0 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "CustomShape" ));
                     aPropValues[ 0 ].Value <<= xShape;
                     sal_Bool bForceGroupWithText = sal_True;
-                    aPropValues[ 1 ].Name = rtl::OUString::createFromAscii( "ForceGroupWithText" );
+                    aPropValues[ 1 ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ForceGroupWithText" ));
                     aPropValues[ 1 ].Value <<= bForceGroupWithText;
                     aArgument[ 0 ] <<= aPropValues;
                     uno::Reference< uno::XInterface > xInterface( xFactory->createInstanceWithArguments( aEngine, aArgument ) );
@@ -507,7 +507,6 @@ void XMLShapeExport::collectShapeAutoStyles(const uno::Reference< drawing::XShap
 
 ///////////////////////////////////////////////////////////////////////
 
-// --> OD 2008-05-08 #refactorlists#
 namespace
 {
     class NewTextListsHelper
@@ -584,9 +583,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
         return;
     }
 
-    // --> OD 2008-05-08 #refactorlists#
     NewTextListsHelper aNewTextListsHelper( mrExport );
-    // <--
 
     const ImplXMLShapeExportInfo& aShapeInfo = aShapeInfoVector[nZIndex];
 
@@ -619,16 +616,13 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     if( mxAnimationsExporter.is() )
         mxAnimationsExporter->collect( xShape, mrExport );
 
-    // -------------------------------
-    // export shapes name if he has one
-    // --> OD 2006-03-13 #i51726#
-    // Export of the shape name for text documents only if the OpenDocument
-    // file format is written - exceptions are group shapes.
-    // Note: Writer documents in OpenOffice.org file format doesn't contain
-    //       any names for shapes, except for group shapes.
-    // -------------------------------
+    /* Export shapes name if he has one (#i51726#)
+       Export of the shape name for text documents only if the OpenDocument
+       file format is written - exceptions are group shapes.
+       Note: Writer documents in OpenOffice.org file format doesn't contain
+             any names for shapes, except for group shapes.
+    */
     {
-        // --> OD 2006-03-10 #i51726#
         if ( ( GetExport().GetModelType() != SvtModuleOptions::E_WRITER &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERWEB &&
                GetExport().GetModelType() != SvtModuleOptions::E_WRITERGLOBAL ) ||
@@ -645,7 +639,6 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
                     mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_NAME, aName );
             }
         }
-        // <--
     }
 
     // ------------------
@@ -692,7 +685,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
             {
                 uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
                 OUString aLayerName;
-                xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
+                xProps->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM( "LayerName" )) ) >>= aLayerName;
                 mrExport.AddAttribute(XML_NAMESPACE_DRAW, XML_LAYER, aLayerName );
 
             }

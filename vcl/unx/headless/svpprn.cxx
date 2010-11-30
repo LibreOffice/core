@@ -883,7 +883,7 @@ BOOL PspSalPrinter::StartJob(
             nMode = S_IRUSR | S_IWUSR;
 
             ::std::hash_map< ::rtl::OUString, ::rtl::OUString, ::rtl::OUStringHash >::const_iterator it;
-            it = pJobSetup->maValueMap.find( ::rtl::OUString::createFromAscii( "FAX#" ) );
+            it = pJobSetup->maValueMap.find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FAX#")) );
             if( it != pJobSetup->maValueMap.end() )
                 m_aFaxNr = it->second;
 

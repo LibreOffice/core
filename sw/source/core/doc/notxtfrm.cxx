@@ -937,7 +937,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                     else
                         pVout = 0;
 
-                    ASSERT( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
+                    OSL_ENSURE( OUTDEV_VIRDEV != pOut->GetOutDevType() ||
                             pShell->GetViewOptions()->IsPDFExport(),
                             "pOut sollte kein virtuelles Device sein" );
 
@@ -1019,14 +1019,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         //TODO/LATER: is it a problem that the JopSetup isn't used?
         //xRef->DoDraw( pOut, aAlignedGrfArea.Pos(), aAlignedGrfArea.SSize(), *pJobSetup );
 
-        // get hi-contrast image, but never for printing
-        Graphic* pGraphic = NULL;
-        if (pOut && !bPrn && Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
-            pGraphic = pOLENd->GetHCGraphic();
-
-        // when it is not possible to get HC-representation, the original image should be used
-        if ( !pGraphic )
-               pGraphic = pOLENd->GetGraphic();
+        Graphic* pGraphic = pOLENd->GetGraphic();
 
         if ( pGraphic && pGraphic->GetType() != GRAPHIC_NONE )
         {
@@ -1050,7 +1043,7 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
                 nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
         {
             const SwFlyFrm *pFly = FindFlyFrm();
-            ASSERT( pFly, "OLE not in FlyFrm" );
+            OSL_ENSURE( pFly, "OLE not in FlyFrm" );
             ((SwFEShell*)pShell)->ConnectObj( pOLENd->GetOLEObj().GetObject(), pFly->Prt(), pFly->Frm());
         }
 

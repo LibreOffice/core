@@ -192,7 +192,6 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
         }
         catch(uno::Exception&)
         {
-            // OSL_ENSURE(0,"Exception catched while filling the report definition props");
         }
         m_xDelegatee->startElement(lcl_createAttribute(XML_NP_OFFICE,XML_CHART),NULL);
         bExport = false;
@@ -264,7 +263,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                 bHasCategories = sValue.equalsAscii("both");
                 break;
             }
-        } // for(sal_Int16 i = 0; i < nLength; ++i)
+        }
         beans::PropertyValue* pArgIter = m_aArguments.getArray();
         beans::PropertyValue* pArgEnd  = pArgIter + m_aArguments.getLength();
         for(;pArgIter != pArgEnd;++pArgIter)
@@ -274,8 +273,7 @@ void SAL_CALL ImportDocumentHandler::startElement(const ::rtl::OUString & _sName
                 pArgIter->Value <<= bHasCategories;
                 break;
             }
-        } // for(;pArgIter != pArgEnd;++pArgIter)
-
+        }
 
         SvXMLAttributeList* pList = new SvXMLAttributeList();
         xNewAttribs = pList;
@@ -358,7 +356,7 @@ void SAL_CALL ImportDocumentHandler::initialize( const uno::Sequence< uno::Any >
 
         uno::Reference< chart2::data::XDataReceiver > xReceiver(m_xModel,uno::UNO_QUERY_THROW);
         xReceiver->attachDataProvider(m_xDatabaseDataProvider.get());
-    } // if ( !m_xDatabaseDataProvider.is() )
+    }
 
     m_aArguments = m_xDatabaseDataProvider->detectArguments(NULL);
 

@@ -29,7 +29,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <stdio.h>
 #include <rtl/ustrbuf.hxx>
 #include <resourcemodel/Protocol.hxx>

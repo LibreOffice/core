@@ -536,7 +536,7 @@ void LanguageSelection::resetUserLanguage()
     try
     {
         Reference< XPropertySet > xProp(getConfigAccess("org.openoffice.Office.Linguistic/General", sal_True), UNO_QUERY_THROW);
-        xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(OUString::createFromAscii("")));
+        xProp->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("UILocale")), makeAny(OUString()));
         Reference< XChangesBatch >(xProp, UNO_QUERY_THROW)->commitChanges();
     }
     catch ( PropertyVetoException& )

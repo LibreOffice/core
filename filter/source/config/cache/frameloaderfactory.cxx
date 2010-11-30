@@ -173,7 +173,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FrameLoaderFactory::getAvailableS
 -----------------------------------------------*/
 ::rtl::OUString FrameLoaderFactory::impl_getImplementationName()
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.comp.filter.config.FrameLoaderFactory");
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.filter.config.FrameLoaderFactory" ));
 }
 
 /*-----------------------------------------------
@@ -182,7 +182,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL FrameLoaderFactory::getAvailableS
 css::uno::Sequence< ::rtl::OUString > FrameLoaderFactory::impl_getSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lServiceNames(1);
-    lServiceNames[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoaderFactory");
+    lServiceNames[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.FrameLoaderFactory" ));
     return lServiceNames;
 }
 

@@ -61,6 +61,8 @@ namespace oox {
     namespace xls { SERVICE( BiffDetector ); }
     namespace xls { SERVICE( ExcelFilter ); }
     namespace xls { SERVICE( ExcelBiffFilter ); }
+    namespace xls { SERVICE( ExcelVbaProjectFilter ); }
+    namespace ole { SERVICE( WordVbaProjectFilter ); }
     namespace shape { SERVICE( ShapeContextHandler ); }
     namespace shape { SERVICE( FastTokenHandlerService ); }
     namespace docprop { SERVICE2( OOXMLDocPropImportImpl ); }
@@ -104,6 +106,8 @@ OOX_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void * , void * pRegistryKe
             WRITEINFO( ::oox::xls::BiffDetector );
             WRITEINFO( ::oox::xls::ExcelFilter );
             WRITEINFO( ::oox::xls::ExcelBiffFilter );
+            WRITEINFO( ::oox::xls::ExcelVbaProjectFilter );
+            WRITEINFO( ::oox::ole::WordVbaProjectFilter );
             WRITEINFO( ::oox::shape::ShapeContextHandler );
             WRITEINFO( ::oox::shape::FastTokenHandlerService );
             WRITEINFO( ::oox::docprop::OOXMLDocPropImportImpl );
@@ -152,6 +156,8 @@ OOX_DLLPUBLIC void * SAL_CALL component_getFactory( const sal_Char * pImplName, 
         else SINGLEFACTORY( ::oox::xls::BiffDetector )
         else SINGLEFACTORY( ::oox::xls::ExcelFilter )
         else SINGLEFACTORY( ::oox::xls::ExcelBiffFilter )
+        else SINGLEFACTORY( ::oox::xls::ExcelVbaProjectFilter )
+        else SINGLEFACTORY( ::oox::ole::WordVbaProjectFilter )
         else SINGLEFACTORY( ::oox::shape::ShapeContextHandler)
         else SINGLEFACTORY( ::oox::shape::FastTokenHandlerService)
         else SINGLEFACTORY2( ::oox::docprop::OOXMLDocPropImportImpl )

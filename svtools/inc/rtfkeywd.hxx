@@ -1124,6 +1124,7 @@
 #define OOO_STRING_SVTOOLS_RTF_SHP "\\shp"
 #define OOO_STRING_SVTOOLS_RTF_SN "\\sn"
 #define OOO_STRING_SVTOOLS_RTF_SV "\\sv"
+#define OOO_STRING_SVTOOLS_RTF_SP "\\sp"
 
 // Support for overline attributes
 #define OOO_STRING_SVTOOLS_RTF_OL "\\ol"

@@ -87,10 +87,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/string.hxx>
 #include <com/sun/star/drawing/XEnhancedCustomShapeDefaulter.hpp>
-
-// --> OD 2006-02-22 #b6382898#
 #include <com/sun/star/text/XTextDocument.hpp>
-// <--
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -503,23 +500,22 @@ void SdXMLShapeContext::AddShape(const char* pServiceName )
     {
         try
         {
-            // --> OD 2006-02-22 #b6382898#
-            // Since fix for issue i33294 the Writer model doesn't support
-            // com.sun.star.drawing.OLE2Shape anymore.
-            // To handle Draw OLE objects it's decided to import these
-            // objects as com.sun.star.drawing.OLE2Shape and convert these
-            // objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            /* Since fix for issue i33294 the Writer model doesn't support
+               com.sun.star.drawing.OLE2Shape anymore.
+               To handle Draw OLE objects it's decided to import these
+               objects as com.sun.star.drawing.OLE2Shape and convert these
+               objects after the import into com.sun.star.drawing.GraphicObjectShape.
+            */
             uno::Reference< drawing::XShape > xShape;
             if ( OUString::createFromAscii(pServiceName).compareToAscii( "com.sun.star.drawing.OLE2Shape" ) == 0 &&
                  uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
             {
-                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii("com.sun.star.drawing.temporaryForXMLImportOLE2Shape")), uno::UNO_QUERY);
+                xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.temporaryForXMLImportOLE2Shape"))), uno::UNO_QUERY);
             }
             else
             {
                 xShape = uno::Reference< drawing::XShape >(xServiceFact->createInstance(OUString::createFromAscii(pServiceName)), uno::UNO_QUERY);
             }
-            // <--
             if( xShape.is() )
                 AddShape( xShape );
         }
@@ -1932,7 +1928,35 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             SetLayer();
 
             if ( maPath.hasValue() )
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
+            {
+                // --> OD #i115492#
+                // Ignore svg:d attribute for text documents created by OpenOffice.org
+                // versions before OOo 3.3, because these OOo versions are storing
+                // svg:d values not using the correct unit.
+                bool bApplySVGD( true );
+                if ( uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
+                {
+                    sal_Int32 nUPD( 0 );
+                    sal_Int32 nBuild( 0 );
+                    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+                    if ( GetImport().IsTextDocInOOoFileFormat() ||
+                         ( bBuildIdFound &&
+                           ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
+                             ( nUPD == 680 ) ||                     // OOo 2.x
+                             ( nUPD == 300 ) ||                     // OOo 3.0 - OOo 3.0.1
+                             ( nUPD == 310 ) ||                     // OOo 3.1 - OOo 3.1.1
+                             ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
+                    {
+                        bApplySVGD = false;
+                    }
+                }
+
+                if ( bApplySVGD )
+                {
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
+                }
+                // <--
+            }
 
             SdXMLShapeContext::StartElement(xAttrList);
         }

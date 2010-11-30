@@ -195,7 +195,6 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
 
     SvTreeListBox   (pParent, rResId),
     aImageList      (SW_RES(ILIST_DB_DLG    )),
-    aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
     sDefDBName      (rDefDBName),
     bInitialized    (FALSE),
     bShowColumns    (bShowCol),
@@ -221,9 +220,7 @@ void SwDBTreeList::InitTreeList()
     // Font nicht setzen, damit der Font des Controls uebernommen wird!
     SetSpaceBetweenEntries(0);
     SetNodeBitmaps( aImageList.GetImage(IMG_COLLAPSE),
-                    aImageList.GetImage(IMG_EXPAND  ), BMP_COLOR_NORMAL );
-    SetNodeBitmaps( aImageListHC.GetImage(IMG_COLLAPSE),
-                    aImageListHC.GetImage(IMG_EXPAND  ), BMP_COLOR_HIGHCONTRAST );
+                    aImageList.GetImage(IMG_EXPAND  ) );
 
     SetDragDropMode(SV_DRAGDROP_APP_COPY);
 
@@ -234,19 +231,15 @@ void SwDBTreeList::InitTreeList()
     long nCount = aDBNames.getLength();
 
     Image aImg = aImageList.GetImage(IMG_DB);
-    Image aHCImg = aImageListHC.GetImage(IMG_DB);
     for(long i = 0; i < nCount; i++)
     {
         String sDBName(pDBNames[i]);
-        SvLBoxEntry* pEntry = InsertEntry(sDBName, aImg, aImg, NULL, TRUE);
-        SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-        SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
+        InsertEntry(sDBName, aImg, aImg, NULL, TRUE);
     }
     String sDBName(sDefDBName.GetToken(0, DB_DELIM));
     String sTableName(sDefDBName.GetToken(1, DB_DELIM));
     String sColumnName(sDefDBName.GetToken(2, DB_DELIM));
     Select(sDBName, sTableName, sColumnName);
-
 
     bInitialized = TRUE;
 }
@@ -254,10 +247,7 @@ void SwDBTreeList::InitTreeList()
 void    SwDBTreeList::AddDataSource(const String& rSource)
 {
     Image aImg = aImageList.GetImage(IMG_DB);
-    Image aHCImg = aImageListHC.GetImage(IMG_DB);
     SvLBoxEntry* pEntry = InsertEntry(rSource, aImg, aImg, NULL, TRUE);
-    SetExpandedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-    SetCollapsedEntryBmp(pEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
     SvTreeListBox::Select(pEntry);
 }
 
@@ -386,15 +376,12 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                         long nCount = aTblNames.getLength();
                         const ::rtl::OUString* pTblNames = aTblNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBTABLE);
-                        Image aHCImg = aImageListHC.GetImage(IMG_DBTABLE);
                         for (long i = 0; i < nCount; i++)
                         {
                             sTableName = pTblNames[i];
                             SvLBoxEntry* pTableEntry = InsertEntry(sTableName, aImg, aImg, pParent, bShowColumns);
                             //to discriminate between queries and tables the user data of table entries is set
                             pTableEntry->SetUserData((void*)0);
-                            SetExpandedEntryBmp(pTableEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-                            SetCollapsedEntryBmp(pTableEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                         }
                     }
 
@@ -407,14 +394,11 @@ void  SwDBTreeList::RequestingChilds(SvLBoxEntry* pParent)
                         long nCount = aQueryNames.getLength();
                         const ::rtl::OUString* pQueryNames = aQueryNames.getConstArray();
                         Image aImg = aImageList.GetImage(IMG_DBQUERY);
-                        Image aHCImg = aImageListHC.GetImage(IMG_DBQUERY);
                         for (long i = 0; i < nCount; i++)
                         {
                             sQueryName = pQueryNames[i];
                             SvLBoxEntry* pQueryEntry = InsertEntry(sQueryName, aImg, aImg, pParent, bShowColumns);
                             pQueryEntry->SetUserData((void*)1);
-                            SetExpandedEntryBmp(pQueryEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
-                            SetCollapsedEntryBmp( pQueryEntry, aHCImg, BMP_COLOR_HIGHCONTRAST);
                         }
                     }
                 }
@@ -543,7 +527,7 @@ sal_Int8 SwDBTreeList::AcceptDrop( const AcceptDropEvent& /*rEvt*/ )
     return DND_ACTION_NONE;
 }
 
-void    SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
+void SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
 {
     pImpl->SetWrtShell(rSh);
     if (IsVisible() && !bInitialized)

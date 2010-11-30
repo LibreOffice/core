@@ -266,8 +266,8 @@ Reference< XPropertySet > OTableContainer::createDescriptor()
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "api", "Ocke.Janssen@sun.com", "OTableContainer::createDescriptor" );
     Reference< XPropertySet > xRet;
 
-    // frist we have to look if the master tables does support this
-    // and if then create a table object as well with the master tables
+    // first we have to look if the master tables support this
+    // and if so then create a table object as well with the master tables
     Reference<XColumnsSupplier > xMasterColumnsSup;
     Reference<XDataDescriptorFactory> xDataFactory(m_xMasterContainer,UNO_QUERY);
     if ( xDataFactory.is() && m_xMetaData.is() )

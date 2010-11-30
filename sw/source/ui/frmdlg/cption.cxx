@@ -419,7 +419,6 @@ void SwCaptionDialog::DrawSample()
             case SVX_NUM_CHARS_LOWER_LETTER_N:  aStr += 'a'; break;
             case SVX_NUM_ROMAN_UPPER:           aStr += 'I'; break;
             case SVX_NUM_ROMAN_LOWER:           aStr += 'i'; break;
-            //case ARABIC:
             default:                    aStr += '1'; break;
             }
             //#i61007# order of captions

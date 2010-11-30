@@ -787,7 +787,7 @@ void SAL_CALL SlideShow::end() throw(RuntimeException)
                     if( xProvider.is() )
                     {
                         util::URL aURL;
-                        aURL.Complete = ::rtl::OUString::createFromAscii(".uno:CloseFrame");
+                        aURL.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseFrame"));
 
                         uno::Reference< frame::XDispatch > xDispatch(
                             xProvider->queryDispatch(

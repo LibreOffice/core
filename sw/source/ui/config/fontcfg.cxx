@@ -264,10 +264,6 @@ String  SwStdFontConfig::GetDefaultFor(USHORT nFontType, LanguageType eLang)
         case FONT_INDEX_CTL   :
             nFontId = DEFAULTFONT_CTL_TEXT;
         break;
-//        case FONT_STANDARD:
-//        case FONT_LIST    :
-//        case FONT_CAPTION :
-//        case FONT_INDEX   :
         default:
             nFontId = DEFAULTFONT_LATIN_TEXT;
     }

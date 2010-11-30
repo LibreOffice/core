@@ -501,7 +501,6 @@ USHORT Ww1SingleSprmByteSized::Size(BYTE* pSprm)
     USHORT nRet;
     nRet = SVBT8ToByte(pSprm);
     nRet += sizeof(SVBT8);  // var. l. byte-size
-//  pSprm += sizeof(SVBT8); // var. l. byte-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
@@ -511,7 +510,6 @@ USHORT Ww1SingleSprmWordSized::Size(BYTE* pSprm)
     USHORT nRet;
     nRet = SVBT16ToShort(pSprm);
     nRet += sizeof(SVBT16);  // var. l. word-size
-//  pSprm += sizeof(SVBT16); // var. l. word-size
     nRet = nRet + nCountBytes;
     return nRet;
 }
@@ -520,7 +518,6 @@ static BYTE nLast = 0;
 static BYTE nCurrent = 0;
 USHORT Ww1Sprm::GetSize(BYTE nId, BYTE* pSprm)
 {
-    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm" );
     USHORT nL = 0;
     nL = GetTab(nId).Size(pSprm);
     nLast = nCurrent;
@@ -530,7 +527,6 @@ USHORT Ww1Sprm::GetSize(BYTE nId, BYTE* pSprm)
 
 BOOL Ww1Sprm::Fill(USHORT index, BYTE& nId, USHORT& nL, BYTE*& pSprm)
 {
-    //DBG_ASSERT( nId < sizeof(aTab) / sizeof(*aTab), "Ww1Sprm");
     DBG_ASSERT(index < Count(), "Ww1Sprm");
     pSprm = p + pArr[index];
     nId = SVBT8ToByte(pSprm);
@@ -993,7 +989,6 @@ BOOL Ww1FkpPap::Fill(USHORT nIndex, BYTE*& p, USHORT& rnCountBytes)
     if (nOffset)
     {
         DBG_ASSERT(nOffset>(USHORT)(Count()*sizeof(SVBT32)), "calc error");
-//      rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2 + 1;  // SH: +1 ?????
         rnCountBytes = SVBT8ToByte(aFkp+nOffset) * 2;
         nOffset += sizeof(SVBT8);
         if( nOffset + rnCountBytes < 511 )  // SH: Assert schlug 1 zu frueh zu
@@ -1095,7 +1090,6 @@ ULONG Ww1Pap::Where( BOOL bSetIndex )
                 nFkpIndex = 0;
         }
     if (pPap != NULL)
-//      if (nFkpIndex < pPap->Count())
         if (nFkpIndex <= pPap->Count())
             ulRet = pPap->Where(nFkpIndex) - rFib.GetFIB().fcMinGet();
     return ulRet;
@@ -1104,7 +1098,6 @@ ULONG Ww1Pap::Where( BOOL bSetIndex )
 void Ww1Pap::operator++(int)
 {
     if (pPap != NULL)
-//      if (++nFkpIndex >= pPap->Count())
         if (++nFkpIndex > pPap->Count())
         {
             delete pPap;
@@ -1196,7 +1189,6 @@ ULONG Ww1Chp::Where( BOOL bSetIndex )
                 nFkpIndex = 0;
         }
     if (pChp != NULL)
-//      if (nFkpIndex < pChp->Count())
         if (nFkpIndex <= pChp->Count())
             ulRet = pChp->Where(nFkpIndex) -
                      rFib.GetFIB().fcMinGet() - ulOffset;
@@ -1206,7 +1198,6 @@ ULONG Ww1Chp::Where( BOOL bSetIndex )
 void Ww1Chp::operator++(int)
 {
     if (pChp != NULL)
-//      if (++nFkpIndex >= pChp->Count())
         if (++nFkpIndex > pChp->Count())
         {
             delete pChp;

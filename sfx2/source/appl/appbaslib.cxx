@@ -175,7 +175,7 @@ Sequence< OUString > SfxApplicationDialogLibraryContainer::impl_getStaticSupport
     if( bNeedsInit )
     {
         OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString::createFromAscii( "com.sun.star.script.ApplicationDialogLibraryContainer" );
+        pSeq[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationDialogLibraryContainer"));
         bNeedsInit = sal_False;
     }
     return seqServiceNames;
@@ -189,7 +189,7 @@ OUString SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName(
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer"));
         bNeedsInit = sal_False;
     }
     return aImplName;
@@ -218,7 +218,7 @@ Sequence< OUString > SfxApplicationScriptLibraryContainer::impl_getStaticSupport
     if( bNeedsInit )
     {
         OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString::createFromAscii( "com.sun.star.script.ApplicationScriptLibraryContainer" );
+        pSeq[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationScriptLibraryContainer"));
         bNeedsInit = sal_False;
     }
     return seqServiceNames;
@@ -232,7 +232,7 @@ OUString SfxApplicationScriptLibraryContainer::impl_getStaticImplementationName(
     MutexGuard aGuard( Mutex::getGlobalMutex() );
     if( bNeedsInit )
     {
-        aImplName = OUString::createFromAscii( "com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer" );
+        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.ApplicationScriptLibraryContainer"));
         bNeedsInit = sal_False;
     }
     return aImplName;

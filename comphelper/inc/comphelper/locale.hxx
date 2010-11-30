@@ -70,40 +70,8 @@ class COMPHELPER_DLLPUBLIC Locale
 
         /** @short some predefined Locale objects. */
         static const Locale EN_US();
-        static const Locale EN();
-        static const Locale DE_DE();
-        static const Locale DE_CH();
-        static const Locale DE_AT();
-        static const Locale AR();
-        static const Locale CA();
-        static const Locale CS();
-        static const Locale DA();
-        static const Locale EL();
-        static const Locale ES();
-        static const Locale FI();
-        static const Locale FR();
-        static const Locale HE();
-        static const Locale HI_IN();
-        static const Locale HU();
-        static const Locale IT();
-        static const Locale JA();
-        static const Locale KO();
-        static const Locale NL();
-        static const Locale PL();
-        static const Locale PT();
-        static const Locale PT_BR();
-        static const Locale RU();
-        static const Locale SK();
-        static const Locale SL();
-        static const Locale SV();
-        static const Locale TH();
-        static const Locale TR();
         static const Locale X_DEFAULT();
-        static const Locale X_COMMENT();
-        static const Locale X_TRANSLATE();
         static const Locale X_NOTRANSLATE();
-        static const Locale ZH_CN();
-        static const Locale ZH_TW();
 
     //-------------------------------------------
     // types
@@ -379,29 +347,6 @@ class COMPHELPER_DLLPUBLIC Locale
         static ::std::vector< ::rtl::OUString >::const_iterator getFallback(const ::std::vector< ::rtl::OUString >& lISOList     ,
                                                                             const ::rtl::OUString&                  sReferenceISO)
             throw(MalFormedLocaleException);
-
-        //---------------------------------------
-        /** @short      search for the next possible fallback locale.
-
-            @descr      Instead of getFallback(vector<>, string) this method
-                        uses the given locale and decide by using an algorithm
-                        which locale can be the next possible one.
-
-                        Algorithm:
-                        - if locale has country return language only
-                        - if locale different "en-US" return "en-US"
-                        - if locale "en-US" return "en"
-
-            @param      aLocale [in/out]!
-                        the incoming value will be used to start
-                        search for a possible fallback ...
-                        and in case such fallback was found this parameter
-                        will be used for return too.
-
-            @return     TRUE if the parameter aLocale contains a new fallback value;
-                        FALSE otherwise.
-         */
-        static sal_Bool getFallback(Locale& aLocale);
 
         //---------------------------------------
         /** @short      assign elements of another locale

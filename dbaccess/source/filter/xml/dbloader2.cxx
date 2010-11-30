@@ -122,7 +122,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBTypeDetection");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBTypeDetection"));
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -231,7 +231,7 @@ Sequence< ::rtl::OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBTypeDetection::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExtendedTypeDetection");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExtendedTypeDetection"));
     return aSNS;
 }
 // -------------------------------------------------------------------------
@@ -262,7 +262,7 @@ public:
     // static methods
     static ::rtl::OUString          getImplementationName_Static() throw(  )
     {
-        return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbflt.DBContentLoader2");
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbflt.DBContentLoader2"));
     }
     static Sequence< ::rtl::OUString> getSupportedServiceNames_Static(void) throw(  );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
@@ -330,7 +330,7 @@ Sequence< ::rtl::OUString > SAL_CALL DBContentLoader::getSupportedServiceNames(v
 Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(void) throw(  )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.frame.FrameLoader");
+    aSNS.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.FrameLoader"));
     return aSNS;
 }
 
@@ -643,17 +643,17 @@ extern "C" void SAL_CALL writeDBLoaderInfo2(void* pRegistryKey)
     Reference< XRegistryKey> xKey(reinterpret_cast< XRegistryKey*>(pRegistryKey));
 
     // register content loader for dispatch
-    ::rtl::OUString aImpl = ::rtl::OUString::createFromAscii("/");
+    ::rtl::OUString aImpl(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += ::dbaxml::DBContentLoader::getImplementationName_Static();
 
     ::rtl::OUString aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/UNO/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/Loader"));
     Reference< XRegistryKey> xNewKey = xKey->createKey( aImpltwo );
     aImpltwo = aImpl;
-    aImpltwo += ::rtl::OUString::createFromAscii("/Loader");
+    aImpltwo += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Loader"));
     Reference< XRegistryKey >  xLoaderKey = xKey->createKey( aImpltwo );
-    xNewKey = xLoaderKey->createKey( ::rtl::OUString::createFromAscii("Pattern") );
-    xNewKey->setAsciiValue( ::rtl::OUString::createFromAscii("private:factory/sdatabase") );
+    xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
+    xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:factory/sdatabase")) );
 }
 // -----------------------------------------------------------------------------
 

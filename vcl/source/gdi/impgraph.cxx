@@ -388,7 +388,7 @@ void ImpGraphic::ImplClear()
                 ::ucbhelper::Content aCnt( mpSwapFile->aSwapURL.GetMainURL( INetURLObject::NO_DECODE ),
                                      ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                      ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
             }
             catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1069,7 +1069,7 @@ BOOL ImpGraphic::ImplReadEmbedded( SvStream& rIStm, BOOL bSwap )
                                     ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                          ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                                    aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                                    aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                          ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                                 }
                                 catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1253,7 +1253,7 @@ BOOL ImpGraphic::ImplSwapOut()
                             ::ucbhelper::Content aCnt( aTmpURL.GetMainURL( INetURLObject::NO_DECODE ),
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                            aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )
@@ -1355,7 +1355,7 @@ BOOL ImpGraphic::ImplSwapIn()
                             ::ucbhelper::Content aCnt( aSwapURL,
                                                  ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >() );
 
-                            aCnt.executeCommand( ::rtl::OUString::createFromAscii( "delete" ),
+                            aCnt.executeCommand( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),
                                                  ::com::sun::star::uno::makeAny( sal_Bool( sal_True ) ) );
                         }
                         catch( const ::com::sun::star::ucb::ContentCreationException& )

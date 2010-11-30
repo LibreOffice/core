@@ -96,7 +96,7 @@ static Reference< XCalendar > getLocaleCalendar( void )
         if( xSMgr.is() )
         {
             xCalendar = Reference< XCalendar >( xSMgr->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.i18n.LocaleCalendar" ) ), UNO_QUERY );
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.LocaleCalendar" )) ), UNO_QUERY );
         }
     }
 
@@ -2530,7 +2530,7 @@ void CallFunctionAccessFunction( const Sequence< Any >& aArgs, const rtl::OUStri
             Reference< XMultiServiceFactory > xFactory( getProcessServiceFactory() );
             if( xFactory.is() )
             {
-                xFunc.set( xFactory->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.sheet.FunctionAccess")), UNO_QUERY_THROW);
+                xFunc.set( xFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.FunctionAccess"))), UNO_QUERY_THROW);
             }
         }
         Any aRet = xFunc->callFunction( sFuncName, aArgs );

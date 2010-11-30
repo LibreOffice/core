@@ -57,7 +57,7 @@ using namespace ::com::sun::star::lang;
 {
      ::rtl::OUString aExceptionType = aExceptionType_;
      if( aExceptionType.getLength() == 0 )
-         aExceptionType =  ::rtl::OUString::createFromAscii("Unknown" ) ;
+         aExceptionType =  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unknown")) ;
 
      ::rtl::OUString aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: " ) );
      aTypeLine += aExceptionType;

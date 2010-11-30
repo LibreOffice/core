@@ -131,8 +131,6 @@ String STR_STATUSBAR_LOGOTEXT
 //       License Dialog
 // ***********************************************************************
 #define LICENSE_DIALOG_WIDTH  260
-//#define LICENSE_DIALOG_HEIGTH 185
-//#define LICENSE_DIALOG_HEIGTH 190
 #define LICENSE_RIGHT_BORDER  7
 #define LICENSE_BOTTOM_BORDER  0
 #define LICENSE_ROW_1 (7)
@@ -322,31 +320,37 @@ String STR_LANGSTATUS_MULTIPLE_LANGUAGES
     Text [ en-US ] = "Multiple Languages" ;
     Text [ x-comment ] = " ";
 };
+
 String STR_LANGSTATUS_NONE
 {
     Text [ en-US ] = "None (Do not check spelling)" ;
     Text [ x-comment ] = " ";
 };
+
 String STR_RESET_TO_DEFAULT_LANGUAGE
 {
     Text [ en-US ] = "Reset to Default Language" ;
     Text [ x-comment ] = " ";
 };
+
 String STR_LANGSTATUS_MORE
 {
     Text [ en-US ] = "More..." ;
     Text [ x-comment ] = " ";
 };
+
 String STR_SET_LANGUAGE_FOR_SELECTION
 {
     Text [ en-US ] = "Set Language for Selection" ;
     Text [ x-comment ] = " ";
 };
+
 String STR_SET_LANGUAGE_FOR_PARAGRAPH
 {
     Text [ en-US ] = "Set Language for Paragraph" ;
     Text [ x-comment ] = " ";
 };
+
 String STR_SET_LANGUAGE_FOR_ALL_TEXT
 {
     Text [ en-US ] = "Set Language for all Text" ;

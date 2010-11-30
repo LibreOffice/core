@@ -1311,17 +1311,7 @@ SwPagePreView::~SwPagePreView()
     delete pPageUpBtn;
     delete pPageDownBtn;
 
-/*    SfxObjectShell* pDocSh = GetDocShell();
-    for( SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pDocSh );
-        pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, pDocSh ) )
-        if( pFrame != GetViewFrame() )
-        {
-            // es gibt noch eine weitere Sicht auf unser Dokument, also
-            // aktiviere dieses
-            pFrame->GetFrame().Appear();
-            break;
-        }
-*/}
+}
 
 SwDocShell* SwPagePreView::GetDocShell()
 {
@@ -1811,30 +1801,6 @@ Size  SwPagePreView::GetOptimalSizePixel() const
 {
     OSL_ENSURE( false, "overloaded virtual method <SwPagePreView::GetOptimalSizePixel()> needed ??" );
     return Size( -1, -1 );
-/*
-    //JP 09.06.99: was wird hier errechnet ?????
-// ALT:
-//   SfxApplicationWindow* pWin = SFX_APPWINDOW ;
-//   Rectangle aRect = pWin->GetClientAreaPixel();
-
-    Window& rWin = GetViewFrame()->GetWindow();
-    Rectangle aRect( Point(0, 0), rWin.GetOutputSizePixel() );
-    Size aMaxSize( aRect.GetWidth(), aRect.GetHeight() );
-    Size aInSize = rWin.GetOutputSizePixel();
-    Size aOutSize = rWin.GetSizePixel();
-    USHORT nXBorder = USHORT(aOutSize.Width() - aInSize.Width());
-    USHORT nYBorder = USHORT(aOutSize.Height() - aInSize.Height());
-    aMaxSize.Width() -= nXBorder;
-    //'auf Verdacht' etwas vom Border abziehen (Menue)
-    nYBorder -= (nYBorder - nXBorder) / 2;
-    aMaxSize.Height() -= nYBorder;
-    //mit der max. moeglichen Outputsize guenstigstes Verhaeltnis ausrechnen
-    aViewWin.GetOptimalSize(aMaxSize);
-    // Border wieder dazuzaehlen
-    aMaxSize.Height() += nYBorder;
-    aMaxSize.Width() += nXBorder;
-    return aMaxSize;
-*/
 }
 
 // OD 12.12.2002 #103492#

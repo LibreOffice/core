@@ -51,11 +51,10 @@ private:
     sal_Bool            ImplGetURLObject( const String& rPath, const String& rBase, INetURLObject& aURLObject ) const;
     void                FillDocumentList ();
 
-    DECL_LINK (ClickNewHdl_Impl          , void * );        // Button : New
+    DECL_LINK (ClickNewHdl_Impl          , void * );
 
     Image GetImage( USHORT nId );
-    void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);//, String* pFrame, String* pOpenAs, String* pDefTempl, String* pDefURL );
-    //String ReadURL_Impl( Config& rURLFile, const DirEntry& rFile );
+    void ReadURLFile( const String& rFile, String& rTitle, String& rURL, sal_Int32& rIconId, BOOL* pShowAsFolder);
 
 protected:
     void FillDlgFields     ( String& aStrURL );

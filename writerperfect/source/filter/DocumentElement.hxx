@@ -28,30 +28,25 @@
 
 #ifndef _DOCUMENTELEMENT_H
 #define _DOCUMENTELEMENT_H
-#if defined _MSC_VER
-#pragma warning( push, 1 )
-#endif
 #include <libwpd/libwpd.h>
 #include <libwpd/WPXProperty.h>
 #include <libwpd/WPXString.h>
-#if defined _MSC_VER
-#pragma warning( pop )
-#endif
 #include <vector>
 
-#include "DocumentHandler.hxx"
+#include "DocumentHandlerInterface.hxx"
 
 class DocumentElement
 {
 public:
     virtual ~DocumentElement() {}
-    virtual void write(DocumentHandler *pHandler) const = 0;
+    virtual void write(DocumentHandlerInterface *pHandler) const = 0;
     virtual void print() const {}
 };
 
 class TagElement : public DocumentElement
 {
 public:
+    virtual ~TagElement() {}
     TagElement(const char *szTagName) : msTagName(szTagName) {}
     const WPXString & getTagName() const { return msTagName; }
     virtual void print() const;
@@ -63,9 +58,9 @@ class TagOpenElement : public TagElement
 {
 public:
     TagOpenElement(const char *szTagName) : TagElement(szTagName) {}
-    ~TagOpenElement() {}
+    virtual ~TagOpenElement() {}
     void addAttribute(const char *szAttributeName, const WPXString &sAttributeValue);
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual void write(DocumentHandlerInterface *pHandler) const;
     virtual void print () const;
 private:
     WPXPropertyList maAttrList;
@@ -75,14 +70,16 @@ class TagCloseElement : public TagElement
 {
 public:
     TagCloseElement(const char *szTagName) : TagElement(szTagName) {}
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual ~TagCloseElement() {}
+    virtual void write(DocumentHandlerInterface *pHandler) const;
 };
 
 class CharDataElement : public DocumentElement
 {
 public:
     CharDataElement(const char *sData) : DocumentElement(), msData(sData) {}
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual ~CharDataElement() {}
+    virtual void write(DocumentHandlerInterface *pHandler) const;
 private:
     WPXString msData;
 };
@@ -91,7 +88,8 @@ class TextElement : public DocumentElement
 {
 public:
     TextElement(const WPXString & sTextBuf);
-    virtual void write(DocumentHandler *pHandler) const;
+    virtual ~TextElement() {}
+    virtual void write(DocumentHandlerInterface *pHandler) const;
 
 private:
     WPXString msTextBuf;

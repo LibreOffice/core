@@ -32,10 +32,7 @@
 #include <xmloff/xmlictxt.hxx>
 #include <com/sun/star/uno/Reference.h>
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XAttributeList; } }

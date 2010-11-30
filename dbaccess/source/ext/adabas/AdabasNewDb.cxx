@@ -107,7 +107,6 @@ namespace adabasui
         catch(Exception&)
         {
             OSL_ASSERT(0);
-            //  showError(::dbtools::SQLExceptionInfo(e),this,);
         }
     }
     void SAL_CALL ODatabaseCreator::onTerminated()

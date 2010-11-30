@@ -52,7 +52,7 @@ public:
     inline TextParagraphPropertiesVector&       getAggregationListStyle() { return maAggregationListStyle; };
 
 #if OSL_DEBUG_LEVEL > 0
-    void dump( int nLevels=9 );
+    void dump( int nLevels=9 ) const;
 #endif
 
 protected:

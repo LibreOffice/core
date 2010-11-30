@@ -44,12 +44,3 @@
 #define IMG_VER_CENTER          19
 #define IMG_VER_DISTANCE        20
 #define IMG_VER_HIGH            21
-
-#define IMG_HOR_LOW_H           22
-#define IMG_HOR_CENTER_H        23
-#define IMG_HOR_DISTANCE_H      24
-#define IMG_HOR_HIGH_H          25
-#define IMG_VER_LOW_H           26
-#define IMG_VER_CENTER_H        27
-#define IMG_VER_DISTANCE_H      28
-#define IMG_VER_HIGH_H          29

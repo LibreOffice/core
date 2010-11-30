@@ -72,29 +72,34 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
     m_pPublisher( NULL ),
     m_xPackage( xPackage )
 {
-    m_sTitle = xPackage->getDisplayName();
-    m_sVersion = xPackage->getVersion();
-    m_sDescription = xPackage->getDescription();
+    try
+    {
+        m_sTitle = xPackage->getDisplayName();
+        m_sVersion = xPackage->getVersion();
+        m_sDescription = xPackage->getDescription();
 
-    beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
-    m_sPublisher = aInfo.First;
-    m_sPublisherURL = aInfo.Second;
+        beans::StringPair aInfo( m_xPackage->getPublisherInfo() );
+        m_sPublisher = aInfo.First;
+        m_sPublisherURL = aInfo.Second;
 
-    // get the icons for the package if there are any
-    uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
-    if ( xGraphic.is() )
-        m_aIcon = Image( xGraphic );
+        // get the icons for the package if there are any
+        uno::Reference< graphic::XGraphic > xGraphic = xPackage->getIcon( false );
+        if ( xGraphic.is() )
+            m_aIcon = Image( xGraphic );
 
-    xGraphic = xPackage->getIcon( true );
-    if ( xGraphic.is() )
-        m_aIconHC = Image( xGraphic );
-    else
-        m_aIconHC = m_aIcon;
+        xGraphic = xPackage->getIcon( true );
+        if ( xGraphic.is() )
+            m_aIconHC = Image( xGraphic );
+        else
+            m_aIconHC = m_aIcon;
 
-    if ( eState == AMBIGUOUS )
-        m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
-    else if ( eState == NOT_REGISTERED )
-        checkDependencies();
+        if ( eState == AMBIGUOUS )
+            m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
+        else if ( eState == NOT_REGISTERED )
+            checkDependencies();
+    }
+    catch (deployment::ExtensionRemovedException &) {}
+    catch (uno::RuntimeException &) {}
 }
 
 //------------------------------------------------------------------------------
@@ -179,13 +184,9 @@ ExtensionBox_Impl::ExtensionBox_Impl( Dialog* pParent, TheExtensionManager *pMan
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
     m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
-    m_aSharedImageHC( DialogHelper::getResId( RID_IMG_SHARED_HC ) ),
     m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
-    m_aLockedImageHC( DialogHelper::getResId( RID_IMG_LOCKED_HC ) ),
     m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
-    m_aWarningImageHC( DialogHelper::getResId( RID_IMG_WARNING_HC ) ),
     m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
-    m_aDefaultImageHC( DialogHelper::getResId( RID_IMG_EXTENSION_HC ) ),
     m_pScrollBar( NULL ),
     m_pManager( pManager )
 {
@@ -526,9 +527,9 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     aPos += Point( TOP_OFFSET, TOP_OFFSET );
     Image aImage;
     if ( ! pEntry->m_aIcon )
-        aImage = isHCMode() ? m_aDefaultImageHC : m_aDefaultImage;
+        aImage = m_aDefaultImage;
     else
-        aImage = isHCMode() ? pEntry->m_aIconHC : pEntry->m_aIcon;
+        aImage = pEntry->m_aIcon;
     Size aImageSize = aImage.GetSizePixel();
     if ( ( aImageSize.Width() <= ICON_WIDTH ) && ( aImageSize.Height() <= ICON_HEIGHT ) )
         DrawImage( Point( aPos.X()+((ICON_WIDTH-aImageSize.Width())/2), aPos.Y()+((ICON_HEIGHT-aImageSize.Height())/2) ), aImage );
@@ -634,14 +635,14 @@ void ExtensionBox_Impl::DrawRow( const Rectangle& rRect, const TEntry_Impl pEntr
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SMALL_ICON_SIZE), TOP_OFFSET );
         if ( pEntry->m_bLocked )
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aLockedImageHC : m_aLockedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aLockedImage );
         else
-            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aSharedImageHC : m_aSharedImage );
+            DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aSharedImage );
     }
     if ( ( pEntry->m_eState == AMBIGUOUS ) || pEntry->m_bMissingDeps || pEntry->m_bMissingLic )
     {
         aPos = rRect.TopRight() + Point( -(RIGHT_ICON_OFFSET + SPACE_BETWEEN + 2*SMALL_ICON_SIZE), TOP_OFFSET );
-        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), isHCMode() ? m_aWarningImageHC : m_aWarningImage );
+        DrawImage( aPos, Size( SMALL_ICON_SIZE, SMALL_ICON_SIZE ), m_aWarningImage );
     }
 
     SetLineColor( Color( COL_LIGHTGRAY ) );
@@ -964,6 +965,11 @@ long ExtensionBox_Impl::addEntry( const uno::Reference< deployment::XPackage > &
     bool         bLocked = m_pManager->isReadOnly( xPackage );
 
     TEntry_Impl pEntry( new Entry_Impl( xPackage, eState, bLocked ) );
+
+    // Don't add empty entries
+    if ( ! pEntry->m_sTitle.Len() )
+        return 0;
+
     xPackage->addEventListener( uno::Reference< lang::XEventListener > ( m_xRemoveListener, uno::UNO_QUERY ) );
 
     ::osl::ClearableMutexGuard guard(m_entriesMutex);
@@ -1173,11 +1179,6 @@ void ExtensionBox_Impl::checkEntries()
         if ( IsReallyVisible() )
             Invalidate();
     }
-}
-//------------------------------------------------------------------------------
-bool ExtensionBox_Impl::isHCMode()
-{
-    return (bool)GetSettings().GetStyleSettings().GetHighContrastMode();
 }
 
 //------------------------------------------------------------------------------

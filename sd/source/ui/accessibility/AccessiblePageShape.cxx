@@ -103,7 +103,7 @@ uno::Reference<XAccessible> SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     throw lang::IndexOutOfBoundsException (
-        ::rtl::OUString::createFromAscii ("page shape has no children"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("page shape has no children") ),
         static_cast<uno::XWeak*>(this));
 }
 
@@ -196,7 +196,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getForeground (void)
         if (aSet.is())
         {
             uno::Any aColor;
-            aColor = aSet->getPropertyValue (::rtl::OUString::createFromAscii ("LineColor"));
+            aColor = aSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LineColor")));
             aColor >>= nColor;
         }
     }
@@ -247,7 +247,7 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
             if (xBGSet.is())
             {
                 uno::Any aColor;
-                aColor = xBGSet->getPropertyValue (::rtl::OUString::createFromAscii ("FillColor"));
+                aColor = xBGSet->getPropertyValue (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FillColor")));
                 aColor >>= nColor;
             }
             else

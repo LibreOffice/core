@@ -43,7 +43,6 @@ ModalDialog DLG_PARAMETERS
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-
     FixedLine FL_PARAMS
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
@@ -97,4 +96,3 @@ ModalDialog DLG_PARAMETERS
         Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
     };
 };
-

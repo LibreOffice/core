@@ -2253,7 +2253,7 @@ Any SwXNumberingRules::getPropertyValue( const OUString& rPropertyName )
     // --> OD 2008-04-23 #refactorlists#
     else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEFAULT_LIST_ID)))
     {
-        ASSERT( pRule->GetDefaultListId().Len() != 0,
+        OSL_ENSURE( pRule->GetDefaultListId().Len() != 0,
                 "<SwXNumberingRules::getPropertyValue(..)> - no default list id found. Serious defect -> please inform OD." );
         aRet <<= OUString(pRule->GetDefaultListId());
     }

@@ -82,7 +82,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey
         try
         {
             Reference< XRegistryKey > pXNewKey( static_cast< XRegistryKey* >( pRegistryKey ) );
-            pXNewKey->createKey( OUString::createFromAscii( FILE_PICKER_REGKEY_NAME ) );
+            pXNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_REGKEY_NAME ) ));
         }
         catch( InvalidRegistryException& )
         {
@@ -105,7 +105,7 @@ void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* p
     if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FILE_PICKER_IMPL_NAME ) ) )
     {
         Sequence< OUString > aSNS( 1 );
-        aSNS.getArray( )[0] = OUString::createFromAscii( FILE_PICKER_SERVICE_NAME );
+        aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( FILE_PICKER_SERVICE_NAME ));
 
         Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),

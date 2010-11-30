@@ -135,7 +135,7 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
     throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< ::rtl::OUString > aRet(1);
-    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.security.CertificateContainer");
+    *aRet.getArray() = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.CertificateContainer"));
     return aRet;
 }
 
@@ -145,7 +145,7 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
 CertificateContainer::impl_getStaticImplementationName()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.security.CertificateContainer");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.security.CertificateContainer"));
 }
 
 //-------------------------------------------------------------------------

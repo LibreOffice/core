@@ -82,7 +82,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
 
     if (i >= sal::static_int_cast<sal_Int32>(lookupTable.size())) {
         Reference < XInterface > xI = xMSF->createInstance(
-                OUString::createFromAscii("com.sun.star.i18n.Calendar_") + uniqueID);
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Calendar_")) + uniqueID);
 
         if ( ! xI.is() ) {
             // check if the calendar is defined in localedata, load gregorian calendar service.
@@ -90,7 +90,7 @@ CalendarImpl::loadCalendar(const OUString& uniqueID, const Locale& rLocale ) thr
             for (i = 0; i < xC.getLength(); i++) {
                 if (uniqueID == xC[i].Name) {
                     xI = xMSF->createInstance(
-                        OUString::createFromAscii("com.sun.star.i18n.Calendar_gregorian"));
+                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Calendar_gregorian")));
                     break;
                 }
             }
@@ -304,7 +304,7 @@ CalendarImpl::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativ
 OUString SAL_CALL
 CalendarImpl::getImplementationName(void) throw( RuntimeException )
 {
-    return OUString::createFromAscii("com.sun.star.i18n.CalendarImpl");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CalendarImpl"));
 }
 
 const sal_Char cCalendar[] = "com.sun.star.i18n.LocaleCalendar";

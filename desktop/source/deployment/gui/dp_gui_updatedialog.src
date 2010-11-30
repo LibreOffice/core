@@ -212,11 +212,6 @@ ModalDialog RID_DLG_UPDATE {
             File = "caution_12.png";
         };
     };
-    Image RID_DLG_UPDATE_HIGHCONTRASTALERT {
-        ImageBitmap = Bitmap {
-            File = "caution_12_h.png";
-        };
-    };
     String RID_DLG_UPDATE_ERROR {
         Text[en-US] = "Error";
     };

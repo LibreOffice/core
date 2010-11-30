@@ -322,8 +322,6 @@ IMPL_LINK(SwMailMergeAddressBlockPage, InsertDataHdl_Impl, ImageButton*, pButton
         }
     }
     m_aPrevSetIB.Enable(bEnable);
-    //m_aNextSetIB.Enable(bEnable);
-    //m_aDocumentIndexFI.Enable(bEnable);
     String sTemp(m_sDocument);
     sTemp.SearchAndReplaceAscii("%1", String::CreateFromInt32(nPos));
     m_aDocumentIndexFI.SetText(sTemp);
@@ -1322,7 +1320,6 @@ DDListBox::DDListBox(SwCustomizeAddressBlockDialog* pParent, const ResId rResId)
 {
     SetWindowBits( /*WB_HASBUTTONS|WB_HASBUTTONSATROOT|*/
                             WB_CLIPCHILDREN );
-//    SetSpaceBetweenEntries(3);
     SetSelectionMode( SINGLE_SELECTION );
     SetDragDropMode(   SV_DRAGDROP_CTRL_COPY );
     EnableAsyncDrag(TRUE);
@@ -1372,7 +1369,6 @@ AddressMultiLineEdit::AddressMultiLineEdit(SwCustomizeAddressBlockDialog* pParen
 {
     GetTextView()->SupportProtectAttribute(sal_True);
     StartListening(*GetTextEngine());
-    //DisableSelectionOnFocus();
     EnableFocusSelectionHide(FALSE);
 }
 
@@ -1503,7 +1499,6 @@ void AddressMultiLineEdit::RemoveCurrentEntry()
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-//    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))
@@ -1597,7 +1592,6 @@ sal_uInt16  AddressMultiLineEdit::IsCurrentItemMoveable()
     ExtTextView* pTextView = GetTextView();
     const TextSelection& rSelection = pTextView->GetSelection();
     const TextCharAttrib* pBeginAttrib = pTextEngine->FindCharAttrib( rSelection.GetStart(), TEXTATTR_PROTECTED );
-//    const TextCharAttrib* pEndAttrib = pTextEngine->FindCharAttrib( rSelection.GetEnd(), TEXTATTR_PROTECTED );
     if(pBeginAttrib &&
             (pBeginAttrib->GetStart() <= rSelection.GetStart().GetIndex()
                             && pBeginAttrib->GetEnd() >= rSelection.GetEnd().GetIndex()))

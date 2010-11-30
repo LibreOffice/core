@@ -109,7 +109,7 @@ void SwIntrnlRefLink::DataChanged( const String& rMimeType,
         return;
     }
 
-    ASSERT( rFldType.GetDoc(), "Kein pDoc" );
+    OSL_ENSURE( rFldType.GetDoc(), "Kein pDoc" );
 
     // keine Abhaengigen mehr?
     if( rFldType.GetDepends() && !rFldType.IsModifyLocked() && !ChkNoDataFlag() )
@@ -299,7 +299,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
 
     if( pDoc && refLink.Is() )
     {
-        ASSERT( !nRefCnt, "wie kommen die Referenzen rueber?" );
+        OSL_ENSURE( !nRefCnt, "wie kommen die Referenzen rueber?" );
         pDoc->GetLinkManager().Remove( refLink );
     }
 
@@ -327,9 +327,7 @@ void SwDDEFieldType::_RefCntChgd()
         pDoc->GetLinkManager().Remove( refLink );
     }
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     BYTE nPart = 0;
@@ -354,9 +352,7 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
     return true;
 }
-/* -----------------------------28.08.00 16:23--------------------------------
 
- ---------------------------------------------------------------------------*/
 bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     BYTE nPart = 0;

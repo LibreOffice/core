@@ -192,8 +192,6 @@ namespace dbaui
         {
             pMenu.reset( new PopupMenu( ModuleRes( RID_MENU_APP_NEW ) ) );
 
-            sal_Bool bHighContrast = isHighContrast();
-
             try
             {
                 Reference<XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(getServiceManager()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ui.ModuleUIConfigurationManagerSupplier"))),UNO_QUERY);
@@ -202,8 +200,6 @@ namespace dbaui
 
 
                 short nImageType = hasBigImages() ? ImageType::SIZE_LARGE : ImageType::SIZE_DEFAULT;
-                if ( bHighContrast )
-                    nImageType |= ImageType::COLOR_HIGHCONTRAST;
 
                 Sequence< ::rtl::OUString> aSeq(1);
                 USHORT nCount = pMenu->GetItemCount();

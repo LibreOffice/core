@@ -505,7 +505,7 @@ bool UnlockControllerHack( StarBASIC* pBasic )
     if ( pBasic && pBasic->IsDocBasic() )
     {
         uno::Any aUnoVar;
-        ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( "ThisComponent" ) );
+        ::rtl::OUString sVarName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ThisComponent" )) );
         SbUnoObject* pGlobs = dynamic_cast<SbUnoObject*>( pBasic->Find( sVarName, SbxCLASS_DONTCARE ) );
         if ( pGlobs )
             aUnoVar = pGlobs->getUnoAny();
@@ -2075,7 +2075,7 @@ SbObjModule::SbObjModule( const String& rName, const com::sun::star::script::Mod
     SetModuleType( mInfo.ModuleType );
     if ( mInfo.ModuleType == script::ModuleType::FORM )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Form" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Form" )) );
     }
     else if ( mInfo.ModuleObject.is() )
         SetUnoObject( uno::makeAny( mInfo.ModuleObject ) );
@@ -2089,13 +2089,13 @@ SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException 
     pDocObject = new SbUnoObject( GetName(), uno::makeAny( aObj ) );
 
     com::sun::star::uno::Reference< com::sun::star::lang::XServiceInfo > xServiceInfo( aObj, com::sun::star::uno::UNO_QUERY_THROW );
-    if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Worksheet" ) ) )
+    if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Worksheet" )) ) )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Worksheet" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Worksheet" )) );
     }
-    else if( xServiceInfo->supportsService( rtl::OUString::createFromAscii( "ooo.vba.excel.Workbook" ) ) )
+    else if( xServiceInfo->supportsService( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Workbook" )) ) )
     {
-        SetClassName( rtl::OUString::createFromAscii( "Workbook" ) );
+        SetClassName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Workbook" )) );
     }
 }
 
@@ -2505,8 +2505,15 @@ void SbUserFormModule::InitObject()
             aArgs[ 0 ] <<= m_xModel;
             rtl::OUString sDialogUrl( RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.script:" ) );
             rtl::OUString sProjectName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
-            if ( this->GetParent()->GetName().Len() )
-                sProjectName = this->GetParent()->GetName();
+
+            try
+            {
+                Reference< beans::XPropertySet > xProps( m_xModel, UNO_QUERY_THROW );
+                uno::Reference< script::vba::XVBACompatibility > xVBAMode( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicLibraries") ) ), uno::UNO_QUERY_THROW );
+                sProjectName = xVBAMode->getProjectName();
+            }
+            catch( Exception& /*e*/) {}
+
             sDialogUrl = sDialogUrl.concat( sProjectName ).concat( rtl::OUString( '.') ).concat( GetName() ).concat( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("?location=document") ) );
 
             uno::Reference< awt::XDialogProvider > xProvider( xFactory->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.DialogProvider")), aArgs  ), uno::UNO_QUERY_THROW );

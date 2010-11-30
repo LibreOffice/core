@@ -43,38 +43,29 @@ CDEFS+=-Dmydebug
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
+        $(EXCEPTIONSFILES) \
+        $(SLO)$/atrref.obj \
+        $(SLO)$/chrfmt.obj \
+        $(SLO)$/modeltoviewhelper.obj \
+        $(SLO)$/ndhints.obj \
+        $(SLO)$/txatbase.obj
+
+EXCEPTIONSFILES = \
+        $(SLO)$/SwGrammarContact.obj \
         $(SLO)$/atrfld.obj \
         $(SLO)$/atrflyin.obj \
         $(SLO)$/atrftn.obj \
-        $(SLO)$/atrref.obj \
         $(SLO)$/atrtox.obj \
-        $(SLO)$/chrfmt.obj \
         $(SLO)$/fmtatr2.obj \
-        $(SLO)$/fntcap.obj \
         $(SLO)$/fntcache.obj \
-        $(SLO)$/swfntcch.obj \
-        $(SLO)$/SwGrammarContact.obj \
-                $(SLO)$/modeltoviewhelper.obj \
-                $(SLO)$/ndhints.obj \
+        $(SLO)$/fntcap.obj \
         $(SLO)$/ndtxt.obj \
+        $(SLO)$/swfntcch.obj \
         $(SLO)$/swfont.obj \
         $(SLO)$/thints.obj \
-        $(SLO)$/txatbase.obj \
         $(SLO)$/txatritr.obj \
         $(SLO)$/txtatr2.obj \
-                $(SLO)$/txtedt.obj
-
-
-EXCEPTIONSFILES = \
-        $(SLO)$/fmtatr2.obj \
-        $(SLO)$/atrtox.obj \
-        $(SLO)$/atrflyin.obj \
-        $(SLO)$/docnew.obj \
-        $(SLO)$/fntcache.obj \
-        $(SLO)$/ndtxt.obj \
-        $(SLO)$/thints.obj \
         $(SLO)$/txtedt.obj
-
 
 .IF "$(dbutil)" != ""
 OFILES+=$(SLO)$/dbchratr.$(QBJX)

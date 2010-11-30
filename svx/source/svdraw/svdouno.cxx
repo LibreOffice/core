@@ -344,21 +344,21 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
         if ( xObj.is() && xFactory.is() )
         {
             // creating a pipe
-            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.Pipe")), uno::UNO_QUERY);
+            uno::Reference< io::XOutputStream > xOutPipe(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe"))), uno::UNO_QUERY);
             uno::Reference< io::XInputStream > xInPipe(xOutPipe, uno::UNO_QUERY);
 
             // creating the mark streams
-            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableInputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XInputStream > xMarkIn(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableInputStream"))), uno::UNO_QUERY);
             uno::Reference< io::XActiveDataSink > xMarkSink(xMarkIn, uno::UNO_QUERY);
 
-            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.MarkableOutputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XOutputStream > xMarkOut(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.MarkableOutputStream"))), uno::UNO_QUERY);
             uno::Reference< io::XActiveDataSource > xMarkSource(xMarkOut, uno::UNO_QUERY);
 
             // connect mark and sink
-            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectInputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSink > xSink(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectInputStream"))), uno::UNO_QUERY);
 
             // connect mark and source
-            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString::createFromAscii("com.sun.star.io.ObjectOutputStream")), uno::UNO_QUERY);
+            uno::Reference< io::XActiveDataSource > xSource(xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.ObjectOutputStream"))), uno::UNO_QUERY);
 
             uno::Reference< io::XObjectOutputStream > xOutStrm(xSource, uno::UNO_QUERY);
             uno::Reference< io::XObjectInputStream > xInStrm(xSink, uno::UNO_QUERY);
@@ -388,7 +388,7 @@ void SdrUnoObj::operator = (const SdrObject& rObj)
     uno::Reference< beans::XPropertySet > xSet(xUnoControlModel, uno::UNO_QUERY);
     if (xSet.is())
     {
-        uno::Any aValue( xSet->getPropertyValue( rtl::OUString::createFromAscii("DefaultControl")) );
+        uno::Any aValue( xSet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultControl"))) );
         ::rtl::OUString aStr;
 
         if( aValue >>= aStr )

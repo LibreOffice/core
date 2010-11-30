@@ -831,7 +831,7 @@ public:
 
     SwFont& GetFont()
     {
-        ASSERT( pFnt, "No underline font" )
+        OSL_ENSURE( pFnt, "No underline font" );
         return *pFnt;
     }
     const Point& GetPos() const { return aPos; }
@@ -844,9 +844,7 @@ public:
  *                      class SvStatistics
  *************************************************************************/
 
-#ifndef DBG_UTIL
-#define SV_STAT(nWhich)
-#else
+#if OSL_DEBUG_LEVEL > 1
 
 class SvStatistics
 {
@@ -892,7 +890,9 @@ inline void SvStatistics::PrintOn( SvStream &rOS ) const //$ ostream
         rOS << "\tnDrawStretchText: "   << nDrawStretchText << '\n';        if( nChangeFont )
         rOS << "\tnChangeFont: "    << nChangeFont  << '\n';        if( nGetFontMetric  )
         rOS << "\tnGetFontMetric: " << nGetFontMetric   << '\n';        rOS << "}"  << '\n';    }
-#endif  /*  PRODUCT */
+#else
+#define SV_STAT(nWhich)
+#endif  /*  DEBUG   */
 
 #endif
 

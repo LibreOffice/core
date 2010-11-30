@@ -1221,7 +1221,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
     }
 
 #if DEBUG_CHANGETRACK
-    ::rtl::OUString aMessage = ::rtl::OUString::createFromAscii( "\nbefore merge:\n" );
+    ::rtl::OUString aMessage(RTL_CONSTASCII_USTRINGPARAM( "\nbefore merge:\n" ));
     aMessage += pThisTrack->ToString();
     ::rtl::OString aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
     OSL_ENSURE( false, aMsg.getStr() );
@@ -1398,7 +1398,7 @@ bool ScDocShell::MergeSharedDocument( ScDocShell* pSharedDocShell )
     }
 
 #if DEBUG_CHANGETRACK
-    aMessage = ::rtl::OUString::createFromAscii( "\nafter merge:\n" );
+    aMessage = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "\nafter merge:\n" ));
     aMessage += pThisTrack->ToString();
     aMsg = ::rtl::OUStringToOString( aMessage, RTL_TEXTENCODING_UTF8 );
     OSL_ENSURE( false, aMsg.getStr() );

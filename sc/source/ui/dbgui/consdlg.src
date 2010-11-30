@@ -214,4 +214,3 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         TabStop = TRUE ;
     };
 };
-

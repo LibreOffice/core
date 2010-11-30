@@ -57,7 +57,7 @@ namespace {
 
         if ( !rTxtFrm.GetTxtNode() )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<initChangeTrackTextMarkupLists(..) - missing <SwTxtNode> instance!" );
             return;
         }
@@ -66,7 +66,7 @@ namespace {
         const IDocumentRedlineAccess* pIDocChangeTrack( rTxtNode.getIDocumentRedlineAccess() );
         if ( !pIDocChangeTrack )
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<initChangeTrackTextMarkupLists(..) - missing <IDocumentRedlineAccess> instance!" );
             return;
         }
@@ -194,9 +194,9 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
 
     if ( mpChangeTrackInsertionTextMarkupList == 0 )
     {
-        ASSERT( mpChangeTrackDeletionTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackDeletionTextMarkupList == 0,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackDeletionTextMarkupList> expected to be NULL." );
-        ASSERT( mpChangeTrackFormatChangeTextMarkupList == 0,
+        OSL_ENSURE( mpChangeTrackFormatChangeTextMarkupList == 0,
                 "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..) - <mpChangeTrackFormatChangeTextMarkupList> expected to be NULL." );
         initChangeTrackTextMarkupLists( mrTxtFrm,
                                         mpChangeTrackInsertionTextMarkupList,
@@ -223,7 +223,7 @@ const SwWrongList* SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList( co
         break;
         default:
         {
-            ASSERT( false,
+            OSL_ENSURE( false,
                     "<SwParaChangeTrackingInfo::getChangeTrackingTextMarkupList(..)> - misusage - unexpected text markup type for change tracking." );
         }
     }

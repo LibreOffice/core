@@ -43,7 +43,7 @@ LIBSALCPPRT=
 LINK=$(CC)
 .ENDIF
 
-.IF "$(OS)"!="FREEBSD"
+.IF "$(OS)"!="FREEBSD" && "$(OS)"!="NETBSD"
 STDLIB= -ldl
 .ENDIF
 

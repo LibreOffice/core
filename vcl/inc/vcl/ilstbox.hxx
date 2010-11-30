@@ -60,7 +60,7 @@ enum LB_EVENT_TYPE
 // -----------------
 // - ImplEntryType -
 // -----------------
-
+
 struct ImplEntryType
 {
     XubString   maStr;
@@ -102,7 +102,7 @@ struct ImplEntryType
 // -----------------
 // - ImplEntryList -
 // -----------------
-
+
 class ImplEntryList : private List
 {
 private:
@@ -385,7 +385,7 @@ public:
 // ---------------
 // - ImplListBox -
 // ---------------
-
+
 class ImplListBox : public Control
 {
 private:
@@ -508,7 +508,7 @@ public:
 // -----------------------------
 // - ImplListBoxFloatingWindow -
 // -----------------------------
-
+
 class ImplListBoxFloatingWindow : public FloatingWindow
 {
 private:
@@ -551,7 +551,7 @@ public:
 // -----------
 // - ImplWin -
 // -----------
-
+
 class ImplWin : public Control
 {
 private:
@@ -559,7 +559,6 @@ private:
     USHORT          mnItemPos;  // wegen UserDraw muss ich wissen, welches Item ich darstelle.
     XubString       maString;
     Image           maImage;
-    Image           maImageHC;
 
     Rectangle       maFocusRect;
     Size            maUserItemSize;
@@ -595,8 +594,8 @@ public:
     const Image&    GetImage() const { return maImage; }
     void            SetImage( const Image& rImg ) { maImage = rImg; }
 
-    BOOL            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
-    const Image&    GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
+    BOOL            SetModeImage( const Image& rImage );
+    const Image&    GetModeImage( ) const;
 
 
     virtual void    MBDown();

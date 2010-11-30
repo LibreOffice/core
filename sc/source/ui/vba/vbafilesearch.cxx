@@ -56,7 +56,7 @@ static Reference< XSimpleFileAccess3 > getFileAccess( void )
         if( xSMgr.is() )
         {
             xSFI = Reference< XSimpleFileAccess3 >( xSMgr->createInstance
-                ( ::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ) ), UNO_QUERY );
+                ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ucb.SimpleFileAccess" )) ), UNO_QUERY );
         }
     }
     return xSFI;
@@ -171,7 +171,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
         return 0;
     }
 
-    if ( m_sFileName == ::rtl::OUString::createFromAscii( "" ) )
+    if ( m_sFileName == ::rtl::OUString() )
     {
         return 1;
     }
@@ -180,15 +180,15 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
     if ( IsWildCard( aTempFileName ) )
     {
         bool bEndWithAsterisk = aTempFileName.endsWithAsciiL("*", 1);
-        bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString::createFromAscii("*")) == 0);
+        bool bStartWithAsterisk = (aTempFileName.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"))) == 0);
         if ( !bEndWithAsterisk && !bStartWithAsterisk )
         {
-            aTempFileName = ::rtl::OUString::createFromAscii("*") + aTempFileName + ::rtl::OUString::createFromAscii("*");
+            aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")); + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
         }
     }
     else
     {
-        aTempFileName = ::rtl::OUString::createFromAscii("*") + aTempFileName + ::rtl::OUString::createFromAscii("*");
+        aTempFileName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")); + aTempFileName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*"));
     }
     WildCard wildCard( aTempFileName );
     SearchWildCard( wildCard, m_sLookIn, m_bSearchSubFolders, m_aSearchedFiles );
@@ -211,7 +211,7 @@ sal_Int32 SAL_CALL ScVbaFileSearch::Execute( )  throw (css::uno::RuntimeExceptio
 
 void SAL_CALL ScVbaFileSearch::NewSearch( )  throw (css::uno::RuntimeException)
 {
-    m_sFileName = ::rtl::OUString::createFromAscii( "" );
+    m_sFileName = ::rtl::OUString();
     m_sLookIn = getInitPath();
     m_bSearchSubFolders = false;
     m_bMatchTextExactly = false;

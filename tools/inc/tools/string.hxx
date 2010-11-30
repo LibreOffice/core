@@ -474,6 +474,8 @@ private:
     void                operator +=(int); // not implemented; to detect misuses
                                           // of operator +=(sal_Unicode)
 
+    //detect and reject use of RTL_CONSTASCII_STRINGPARAM instead of RTL_CONSTASCII_USTRINGPARAM
+    TOOLS_DLLPRIVATE UniString( const sal_Char*, sal_Int32 );
 public:
                         UniString();
                         UniString( const ResId& rResId );

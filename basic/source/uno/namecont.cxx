@@ -2824,6 +2824,18 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompa
         mbVBACompat = _vbacompatmodeon;
 }
 
+void SAL_CALL SfxLibraryContainer::setProjectName( const ::rtl::OUString& _projectname ) throw (RuntimeException)
+{
+    msProjectName = _projectname;
+    BasicManager* pBasMgr = getBasicManager();
+    // Temporary HACK
+    // Some parts of the VBA handling ( e.g. in core basic )
+    // code expect the name of the VBA project to be set as the name of
+    // the basic manager. Provide fail back here.
+    if( pBasMgr )
+        pBasMgr->SetName( msProjectName );
+}
+
 // Methods XServiceInfo
 ::sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const ::rtl::OUString& _rServiceName )
     throw (RuntimeException)

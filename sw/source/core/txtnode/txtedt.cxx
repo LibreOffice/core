@@ -334,7 +334,7 @@ static bool lcl_HaveCommonAttributes( IStyleAccess& rStyleAccess,
 
     if ( !pSet1 )
     {
-        ASSERT( nWhichId, "lcl_HaveCommonAttributes not used correctly" )
+        OSL_ENSURE( nWhichId, "lcl_HaveCommonAttributes not used correctly" );
         if ( SFX_ITEM_SET == rSet2.GetItemState( nWhichId, FALSE ) )
         {
             pNewSet = rSet2.Clone( TRUE );
@@ -634,7 +634,7 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
 XubString SwTxtNode::GetCurWord( xub_StrLen nPos ) const
 {
-    ASSERT( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
+    OSL_ENSURE( nPos <= m_Text.Len(), "SwTxtNode::GetCurWord: invalid index." );
 
     if (!m_Text.Len())
         return m_Text;
@@ -675,7 +675,7 @@ SwScanner::SwScanner( const SwTxtNode& rNd, const String& rTxt, const LanguageTy
                       USHORT nType, xub_StrLen nStart, xub_StrLen nEnde, BOOL bClp )
     : rNode( rNd ), rText( rTxt), pLanguage( pLang ), pConversionMap( pConvMap ), nLen( 0 ), nWordType( nType ), bClip( bClp )
 {
-    ASSERT( rText.Len(), "SwScanner: EmptyString" );
+    OSL_ENSURE( rText.Len(), "SwScanner: EmptyString" );
     nStartPos = nBegin = nStart;
     nEndPos = nEnde;
 
@@ -749,7 +749,7 @@ BOOL SwScanner::NextWord()
     // we have to differenciate between these cases:
     if ( aBound.startPos <= nBegin )
     {
-        ASSERT( aBound.endPos >= nBegin, "Unexpected aBound result" )
+        OSL_ENSURE( aBound.endPos >= nBegin, "Unexpected aBound result" );
 
         // restrict boundaries to script boundaries and nEndPos
         const USHORT nCurrScript =
@@ -1475,9 +1475,9 @@ BOOL SwTxtNode::Hyphenate( SwInterHyphInfo &rHyphInf )
     {
         // 4935: Seit der Trennung ueber Sonderbereiche sind Faelle
         // moeglich, in denen kein Frame zum Node vorliegt.
-        // Also kein ASSERT!
+        // Also keinOSL_ENSURE
 #if OSL_DEBUG_LEVEL > 1
-        ASSERT( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
+        OSL_ENSURE( pFrm, "!SwTxtNode::Hyphenate: can't find any frame" );
 #endif
         return FALSE;
     }
@@ -1864,116 +1864,129 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 void SwTxtNode::CountWords( SwDocStat& rStat,
                             xub_StrLen nStt, xub_StrLen nEnd ) const
 {
+    sal_Bool isCountAll = ( (0 == nStt) && (GetTxt().Len() == nEnd) );
+
     ++rStat.nAllPara; // #i93174#: count _all_ paragraphs
-    if( nStt < nEnd )
+    if( nStt >= nEnd )
+    {   // empty node or empty selection or bad call
+        return;
+    }
+    if ( IsHidden() )
+    {   // not counting hidden paras
+        return;
+    }
+    // Shortcut when counting whole paragraph and current count is clean
+    if ( isCountAll && !IsWordCountDirty() )
     {
-        if ( !IsHidden() )
+        // accumulate into DocStat record to return the values
+        rStat.nWord += GetParaNumberOfWords();
+        rStat.nChar += GetParaNumberOfChars();
+        rStat.nCharExcludingSpaces += GetParaNumberOfCharsExcludingSpaces();
+        return;
+    }
+
+    // make a copy of the text
+    String& rTextCopy = const_cast<String&>(m_Text);
+
+    // mask out the redlined and hidden text with ' '
+    const xub_Unicode cChar(' ');
+    const USHORT nNumOfMaskedChars = lcl_MaskRedlinesAndHiddenText( *this, rTextCopy, nStt, nEnd, cChar, false );
+
+    // expand text into pConversionMap for scanner
+    rtl::OUString aExpandText;
+    const ModelToViewHelper::ConversionMap* pConversionMap = BuildConversionMap( aExpandText );
+
+    // map start and end points onto the ConversionMap
+    const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
+    const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
+
+    if ( aExpandText.getLength() <= 0 )
+    {
+        OSL_ENSURE(aExpandText.getLength() >= 0, "Node text expansion error: length < 0." );
+        return;
+    }
+
+    //do the count
+    // all counts exclude hidden paras and hidden+redlined within para
+    // definition of space/white chars in SwScanner (and BreakIter!)
+    // uses both lcl_IsSkippableWhiteSpace and BreakIter getWordBoundary in SwScanner
+    sal_uInt32 nTmpWords = 0;        // count of all contiguous blocks of non-white chars
+    sal_uInt32 nTmpChars = 0;        // count of all chars
+    sal_uInt32 nTmpCharsExcludingSpaces = 0;  // all non-white chars
+
+    ++rStat.nPara;      // count of non-empty paras
+
+    // count words in masked and expanded text:
+    if( pBreakIt->GetBreakIter().is() )
+    {
+        const String aScannerText( aExpandText );
+        // zero is NULL for pLanguage -----------v               last param = true for clipping
+        SwScanner aScanner( *this, aScannerText, 0, pConversionMap, i18n::WordType::WORD_COUNT,
+                            (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd, true );
+
+        // used to filter out scanner returning almost empty strings (len=1; unichar=0x0001)
+        const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
+
+        while ( aScanner.NextWord() )
         {
-            ++rStat.nPara;
-            ULONG nTmpWords = 0;
-            ULONG nTmpChars = 0;
-            ULONG nTmpCharsExcludingSpaces = 0;  // Number of characters in actual words (i.e. excluding spaces)
-
-            // Shortcut: Whole paragraph should be considered and cached values
-            // are valid:
-            if ( 0 == nStt && GetTxt().Len() == nEnd && !IsWordCountDirty() )
+            //  1 is len(CH_TXTATR_BREAKWORD) : match returns length of match
+            if( 1 != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
             {
-                nTmpWords = GetParaNumberOfWords();
-                nTmpChars = GetParaNumberOfChars();
-                nTmpCharsExcludingSpaces = GetParaNumberOfCharsExcludingSpaces();
+                ++nTmpWords;
+                nTmpCharsExcludingSpaces += aScanner.GetLen();
             }
-            else
-            {
-                String aOldStr( m_Text );
-                String& rCastStr = const_cast<String&>(m_Text);
-
-                // fills the deleted redlines and hidden ranges with cChar:
-                const xub_Unicode cChar(' ');
-                const USHORT nNumOfMaskedChars =
-                        lcl_MaskRedlinesAndHiddenText( *this, rCastStr, nStt, nEnd, cChar, false );
-
-                // expand fields
-                rtl::OUString aExpandText;
-                const ModelToViewHelper::ConversionMap* pConversionMap =
-                        BuildConversionMap( aExpandText );
-
-                const sal_uInt32 nExpandBegin = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nStt );
-                const sal_uInt32 nExpandEnd   = ModelToViewHelper::ConvertToViewPosition( pConversionMap, nEnd );
-
-                const bool bCount = aExpandText.getLength() > 0;
-
-                // count words in 'regular' text:
-                if( bCount && pBreakIt->GetBreakIter().is() )
-                {
-                    const String aScannerText( aExpandText );
-                    SwScanner aScanner( *this, aScannerText, 0, pConversionMap,
-                                        i18n::WordType::WORD_COUNT,
-                                        (xub_StrLen)nExpandBegin, (xub_StrLen)nExpandEnd );
-
-                    const rtl::OUString aBreakWord( CH_TXTATR_BREAKWORD );
-
-                    while ( aScanner.NextWord() )
-                    {
-                        if( aScanner.GetLen()  > 1 ||
-                            CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
-                            ++nTmpWords;
-
-                        if( CH_TXTATR_BREAKWORD != aExpandText.match(aBreakWord, aScanner.GetBegin() ))
-                            nTmpCharsExcludingSpaces += aScanner.GetLen();
-
-                    }
-                }
-
-                ASSERT( aExpandText.getLength() >= nNumOfMaskedChars,
-                        "More characters hidden that characters in string!" )
-                nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
-
-                // count words in numbering string:
-                if ( nStt == 0 && bCount )
-                {
-                    // add numbering label
-                    const String aNumString = GetNumString();
-                    const xub_StrLen nNumStringLen = aNumString.Len();
-                    if ( nNumStringLen > 0 )
-                    {
-                        LanguageType aLanguage = GetLang( 0 );
-
-                        SwScanner aScanner( *this, aNumString, &aLanguage, 0,
-                                            i18n::WordType::WORD_COUNT,
-                                            0, nNumStringLen );
-
-                        while ( aScanner.NextWord() )
-                            ++nTmpWords;
-
-                        nTmpChars += nNumStringLen;
-                    }
-                    else if ( HasBullet() )
-                    {
-                        ++nTmpWords;
-                        ++nTmpChars;
-                    }
-                }
-
-                delete pConversionMap;
-
-                rCastStr = aOldStr;
-
-                // If the whole paragraph has been calculated, update cached
-                // values:
-                if ( 0 == nStt && GetTxt().Len() == nEnd )
-                {
-                    SetParaNumberOfWords( nTmpWords );
-                    SetParaNumberOfChars( nTmpChars );
-                    SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
-                    SetWordCountDirty( false );
-                }
-            }
-
-            rStat.nWord += nTmpWords;
-            rStat.nChar += nTmpChars;
-            rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
         }
     }
+
+    nTmpChars = nExpandEnd - nExpandBegin - nNumOfMaskedChars;
+
+    // no nTmpCharsExcludingSpaces adjust needed neither for blanked out MaskedChars
+    // nor for mid-word selection - set scanner bClip = true at creation
+
+    // count words in numbering string if started at beginning of para:
+    if ( nStt == 0 )
+    {
+        // count outline number label - ? no expansion into map
+        // always counts all of number-ish label
+        const String aNumString = GetNumString();
+        const xub_StrLen nNumStringLen = aNumString.Len();
+        if ( nNumStringLen > 0 )
+        {
+            LanguageType aLanguage = GetLang( 0 );
+
+            SwScanner aScanner( *this, aNumString, &aLanguage, 0,
+                                i18n::WordType::WORD_COUNT, 0, nNumStringLen, true );
+
+            while ( aScanner.NextWord() )
+            {
+                ++nTmpWords;
+                nTmpCharsExcludingSpaces += aScanner.GetLen();
+            }
+
+            nTmpChars += nNumStringLen;
+        }
+        else if ( HasBullet() )
+        {
+            ++nTmpWords;
+            ++nTmpChars;
+            ++nTmpCharsExcludingSpaces;
+        }
+    }
+
+    delete pConversionMap;
+
+    // If counting the whole para then update cached values and mark clean
+    if ( isCountAll )
+    {
+        SetParaNumberOfWords( nTmpWords );
+        SetParaNumberOfChars( nTmpChars );
+        SetParaNumberOfCharsExcludingSpaces( nTmpCharsExcludingSpaces );
+        SetWordCountDirty( false );
+    }
+    // accumulate into DocStat record to return the values
+    rStat.nWord += nTmpWords;
+    rStat.nChar += nTmpChars;
+    rStat.nCharExcludingSpaces += nTmpCharsExcludingSpaces;
 }
 
 //
@@ -1981,17 +1994,17 @@ void SwTxtNode::CountWords( SwDocStat& rStat,
 //
 struct SwParaIdleData_Impl
 {
-    SwWrongList* pWrong;            // for spell checking
+    SwWrongList* pWrong;                // for spell checking
     SwGrammarMarkUp* pGrammarCheck;     // for grammar checking /  proof reading
     SwWrongList* pSmartTags;
     ULONG nNumberOfWords;
     ULONG nNumberOfChars;
     ULONG nNumberOfCharsExcludingSpaces;
-    bool bWordCountDirty        : 1;
-    bool bWrongDirty            : 1;    // Ist das Wrong-Feld auf invalid?
-    bool bGrammarCheckDirty     : 1;
-    bool bSmartTagDirty         : 1;
-    bool bAutoComplDirty        : 1;    // die ACompl-Liste muss angepasst werden
+    bool bWordCountDirty;
+    bool bWrongDirty;                   // Ist das Wrong-Feld auf invalid?
+    bool bGrammarCheckDirty;
+    bool bSmartTagDirty;
+    bool bAutoComplDirty;               // die ACompl-Liste muss angepasst werden
 
     SwParaIdleData_Impl() :
         pWrong              ( 0 ),
@@ -1999,7 +2012,7 @@ struct SwParaIdleData_Impl
         pSmartTags          ( 0 ),
         nNumberOfWords      ( 0 ),
         nNumberOfChars      ( 0 ),
-        nNumberOfCharsExcludingSpaces      ( 0 ),
+        nNumberOfCharsExcludingSpaces ( 0 ),
         bWordCountDirty     ( true ),
         bWrongDirty         ( true ),
         bGrammarCheckDirty  ( true ),
@@ -2066,8 +2079,8 @@ SwGrammarMarkUp* SwTxtNode::GetGrammarCheck()
 
 void SwTxtNode::SetSmartTags( SwWrongList* pNew, bool bDelete )
 {
-    ASSERT( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
-            "Weird - we have a smart tag list without any recognizers?" )
+    OSL_ENSURE( !pNew || SwSmartTagMgr::Get().IsSmartTagsEnabled(),
+            "Weird - we have a smart tag list without any recognizers?" );
 
     if ( m_pParaIdleData_Impl )
     {

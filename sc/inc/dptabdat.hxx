@@ -93,7 +93,7 @@ class ScDPInitState;
 class ScDPResultMember;
 class ScDocument;
 
- class SC_DLLPUBLIC ScDPTableData
+class SC_DLLPUBLIC ScDPTableData
 {
     //  cached data for GetDatePart
     long    nLastDateVal;

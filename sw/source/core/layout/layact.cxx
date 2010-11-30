@@ -112,7 +112,7 @@
 
 
 //Sparen von Schreibarbeit um den Zugriff auf zerstoerte Seiten zu vermeiden.
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 
 static void BreakPoint()
 {
@@ -400,7 +400,7 @@ SwLayAction::SwLayAction( SwRootFrm *pRt, SwViewImp *pI ) :
 
 SwLayAction::~SwLayAction()
 {
-    ASSERT( !pWait, "Wait object not destroyed" );
+    OSL_ENSURE( !pWait, "Wait object not destroyed" );
     pImp->pLayAct = 0;      //Abmelden
 }
 
@@ -589,7 +589,7 @@ class NotifyLayoutOfPageInProgress
 
 void SwLayAction::InternalAction()
 {
-    ASSERT( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
+    OSL_ENSURE( pRoot->Lower()->IsPageFrm(), ":-( Keine Seite unterhalb der Root.");
 
     pRoot->Calc();
 
@@ -720,7 +720,8 @@ void SwLayAction::InternalAction()
                             if ( ++nLoopControlRuns_1 > nLoopControlMax )
                             {
 #if OSL_DEBUG_LEVEL > 1
-                                ASSERT( false, "LoopControl_1 in SwLayAction::InternalAction" )
+                                OSL_ENSURE( false, "LoopControl_1 in SwLayAction::InternalAction" );
+
 #endif
                                 break;
                             }
@@ -914,7 +915,7 @@ void SwLayAction::InternalAction()
                     if ( ++nLoopControlRuns_3 > nLoopControlMax )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        ASSERT( false, "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" )
+                        OSL_ENSURE( false, "LoopControl_3 in Interrupt formatting in SwLayAction::InternalAction" );
 #endif
                         break;
                     }
@@ -939,7 +940,7 @@ void SwLayAction::InternalAction()
                     if ( ++nLoopControlRuns_2 > nLoopControlMax )
                     {
 #if OSL_DEBUG_LEVEL > 1
-                        ASSERT( false, "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" )
+                        OSL_ENSURE( false, "LoopControl_2 in Interrupt formatting in SwLayAction::InternalAction" );
 #endif
                         break;
                     }
@@ -1086,7 +1087,7 @@ static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
 
 static const SwFrm *lcl_FindFirstInvaLay( const SwFrm *pFrm, long nBottom )
 {
-    ASSERT( pFrm->IsLayoutFrm(), "FindFirstInvaLay, no LayFrm" );
+    OSL_ENSURE( pFrm->IsLayoutFrm(), "FindFirstInvaLay, no LayFrm" );
 
     if (lcl_IsInvaLay(pFrm, nBottom))
         return pFrm;
@@ -1156,7 +1157,7 @@ static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBotto
 static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                                               long _nBottom )
 {
-    ASSERT( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" )
+    OSL_ENSURE( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" );
 
     for ( USHORT i = 0; i < _pPage->GetSortedObjs()->Count(); ++i )
     {
@@ -1417,7 +1418,7 @@ BOOL SwLayAction::IsShortCut( SwPageFrm *&prPage )
 // OD 15.11.2002 #105155# - introduce support for vertical layout
 BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 {
-    ASSERT( !IsAgain(), "Ungueltige Seite beachten." );
+    OSL_ENSURE( !IsAgain(), "Ungueltige Seite beachten." );
     if ( IsAgain() )
         return FALSE;
 
@@ -1632,7 +1633,7 @@ BOOL SwLayAction::FormatLayout( SwLayoutFrm *pLay, BOOL bAddRect )
 
 BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 {
-    ASSERT( !IsAgain(), "Ungueltige Seite beachten." );
+    OSL_ENSURE( !IsAgain(), "Ungueltige Seite beachten." );
     if ( IsAgain() )
         return FALSE;
 
@@ -1682,7 +1683,7 @@ BOOL SwLayAction::FormatLayoutFly( SwFlyFrm* pFly )
 // Implement vertical layout support
 BOOL SwLayAction::FormatLayoutTab( SwTabFrm *pTab, BOOL bAddRect )
 {
-    ASSERT( !IsAgain(), "8-) Ungueltige Seite beachten." );
+    OSL_ENSURE( !IsAgain(), "8-) Ungueltige Seite beachten." );
     if ( IsAgain() || !pTab->Lower() )
         return FALSE;
 
@@ -2142,7 +2143,7 @@ BOOL SwLayAction::IsStopPrt() const
 |*************************************************************************/
 BOOL SwLayIdle::_DoIdleJob( const SwCntntFrm *pCnt, IdleJobType eJob )
 {
-    ASSERT( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
+    OSL_ENSURE( pCnt->IsTxtFrm(), "NoTxt neighbour of Txt" );
     // robust against misuse by e.g. #i52542#
     if( !pCnt->IsTxtFrm() )
         return FALSE;
@@ -2280,7 +2281,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
                 !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 return FALSE;
             break;
-        default: ASSERT( false, "Unknown idle job type" )
+        default: OSL_ENSURE( false, "Unknown idle job type" );
     }
 
     SwPageFrm *pPage;
@@ -2345,7 +2346,7 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 }
 
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #if OSL_DEBUG_LEVEL > 1
 
 /*************************************************************************
@@ -2394,7 +2395,7 @@ void SwLayIdle::ShowIdle( ColorData eColorData )
 SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     pRoot( pRt ),
     pImp( pI )
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #if OSL_DEBUG_LEVEL > 1
     , bIndicator( FALSE )
 #endif
@@ -2578,7 +2579,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
     if( pImp->IsAccessible() )
         pImp->FireAccessibleEvents();
 
-#ifdef DBG_UTIL
+#if OSL_DEBUG_LEVEL > 1
 #if OSL_DEBUG_LEVEL > 1
     if ( bIndicator && pImp->GetShell()->GetWin() )
     {

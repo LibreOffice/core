@@ -104,7 +104,7 @@ using namespace nsFieldFlags;
 void WW8Export::OutputGrfNode( const SwGrfNode& /*rNode*/ )
 {
     OSL_TRACE("WW8Export::OutputGrfNode( const SwGrfNode& )\n" );
-    ASSERT( mpParentFrame, "frame not set!" );
+    OSL_ENSURE( mpParentFrame, "frame not set!" );
     if ( mpParentFrame )
     {
         OutGrf( *mpParentFrame );
@@ -697,21 +697,6 @@ void SwWW8WrGrf::WriteGrfFromGrfNode(SvStream& rStrm, const SwGrfNode &rGrfNd,
         String aFileN;
         rGrfNd.GetFileFilterNms( &aFileN, 0 );
 
-        // --> OD 2007-06-06 #i29408# - take the file URL as it is.
-//        aFileN = URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(),
-//                                          aFileN);
-//        INetURLObject aUrl( aFileN );
-//        if( aUrl.GetProtocol() == INET_PROT_FILE )
-//            aFileN = aUrl.PathToFileName();
-        // <--
-
-//JP 05.12.98: nach einigen tests hat sich gezeigt, das WW mit 99 nicht
-//              klarkommt. Sie selbst schreiben aber bei Verknuepfunfen,
-//              egal um welchen Type es sich handelt, immer den Wert 94.
-//              Bug 59859
-//      if ( COMPARE_EQUAL == aFiltN.ICompare( "TIF", 3 ) )
-//          mm = 99;                    // 99 = TIFF
-//      else
             UINT16 mm = 94;                    // 94 = BMP, GIF
 
         WritePICFHeader(rStrm, rFly, mm, nWidth, nHeight,
@@ -781,7 +766,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         {
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwGrfNode *pNd = pNode ? pNode->GetGrfNode() : 0;
-            ASSERT(pNd, "Impossible");
+            OSL_ENSURE(pNd, "Impossible");
             if (pNd)
                 WriteGrfFromGrfNode(rStrm, *pNd, rItem.maFly, nWidth, nHeight);
         }
@@ -791,11 +776,11 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 #ifdef OLE_PREVIEW_AS_EMF
             const SwNode *pNode = rItem.maFly.GetContent();
             const SwOLENode *pNd = pNode ? pNode->GetOLENode() : 0;
-            ASSERT(pNd, "Impossible");
+            OSL_ENSURE(pNd, "Impossible");
             if (!rWrt.bWrtWW8)
             {
                 SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-                ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
+                OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
                 SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
                 uno::Reference < embed::XEmbeddedObject > rObj(  rSObj.GetOleRef() );
 
@@ -838,7 +823,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
 #else
             // cast away const
             SwOLENode *pOleNd = const_cast<SwOLENode*>(pNd);
-            ASSERT( pOleNd, " Wer hat den OleNode versteckt ?" );
+            OSL_ENSURE( pOleNd, " Wer hat den OleNode versteckt ?" );
             SwOLEObj&                   rSObj= pOleNd->GetOLEObj();
 
             // TODO/LATER: do we need to load object?
@@ -864,7 +849,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
         case sw::Frame::eDrawing:
         case sw::Frame::eTxtBox:
         case sw::Frame::eFormControl:
-            ASSERT(rWrt.bWrtWW8,
+            OSL_ENSURE(rWrt.bWrtWW8,
                 "You can't try and export these in WW8 format, a filter bug");
             /*
             #i3958# We only export an empty dummy picture frame here, this is
@@ -881,7 +866,7 @@ void SwWW8WrGrf::WriteGraphicNode(SvStream& rStrm, const GraphicDetails &rItem)
             }
             break;
         default:
-            ASSERT(!this,
+            OSL_ENSURE(!this,
            "Some inline export not implemented, remind cmc before we ship :-)");
             break;
     }

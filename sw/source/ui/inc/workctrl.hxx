@@ -136,7 +136,6 @@ class SwScrollNaviPopup : public SfxPopupWindow
     FixedLine       aSeparator;
     FixedInfo       aInfoField;
     ImageList       aIList;
-    ImageList       aIListH;
 
     String          sQuickHelp[2 * NID_COUNT];
 
@@ -169,7 +168,6 @@ class SwNaviImageButton : public ImageButton
 {
         SwScrollNaviPopup*  pPopup;
         Image               aImage;
-        Image               aImageH;
         String              sQuickText;
         SfxPopupWindow*     pPopupWindow;
         SfxPopupWindow*     pFloatingWindow;
@@ -201,9 +199,7 @@ class SwHlpImageButton : public ImageButton
     virtual void    RequestHelp( const HelpEvent& rHEvt );
 
 };
-/* -----------------26.11.2002 09:25-----------------
- *
- * --------------------------------------------------*/
+
 class SwPreviewZoomControl : public SfxToolBoxControl
 {
 public:

@@ -144,7 +144,7 @@ namespace dbtools
         if ( !pReturn )
         {   // is it a text field ?
             sal_Int32 nType = DataType::OTHER;
-            _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "Type" ) ) >>= nType;
+            _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Type" )) ) >>= nType;
 
             if  (   ( DataType::CHAR        == nType )
                 ||  ( DataType::VARCHAR     == nType )
@@ -203,10 +203,10 @@ namespace dbtools
                 try
                 {
                     Reference< XPropertySetInfo > xPSI( _rxField->getPropertySetInfo() );
-                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString::createFromAscii( "FormatKey" ) ) )
+                    if ( xPSI.is() && xPSI->hasPropertyByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) )
                     {
                         sal_Int32 nFormatKey = 0;
-                        _rxField->getPropertyValue( ::rtl::OUString::createFromAscii( "FormatKey" ) ) >>= nFormatKey;
+                        _rxField->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormatKey" )) ) >>= nFormatKey;
                         if ( nFormatKey && m_xFormatter.is() )
                         {
                             Locale aFormatLocale;

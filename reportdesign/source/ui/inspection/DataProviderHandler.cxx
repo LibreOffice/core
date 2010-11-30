@@ -169,13 +169,6 @@ void SAL_CALL DataProviderHandler::inspect(const uno::Reference< uno::XInterface
 
             m_xMasterDetails = new OPropertyMediator( m_xDataProvider.get(), m_xReportComponent.get(), aPropertyMediation,sal_True );
         }
-
-        //const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
-        //if ( xNameCont->hasByName(sRowSet) )
-        //{
-        //    uno::Reference<beans::XPropertySet> xProp(m_xFormComponentHandler,uno::UNO_QUERY);
-        //    xProp->setPropertyValue(sRowSet,xNameCont->getByName(sRowSet));
-        //}
     }
     catch(uno::Exception)
     {
@@ -271,7 +264,7 @@ void DataProviderHandler::impl_updateChartTitle_throw(const uno::Any& _aValue)
             aArgs[0] = xFormatted;
             xTitle->setText(aArgs);
         }
-    } // if ( xTitled.is() )
+    }
 }
 
 beans::PropertyState SAL_CALL DataProviderHandler::getPropertyState(const ::rtl::OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
@@ -396,7 +389,6 @@ uno::Sequence< beans::Property > SAL_CALL DataProviderHandler::getSupportedPrope
             ,PROPERTY_MASTERFIELDS
             ,PROPERTY_DETAILFIELDS
             ,PROPERTY_PREVIEW_COUNT
-            //,PROPERTY_TITLE
         };
 
         for (size_t nPos = 0; nPos < SAL_N_ELEMENTS(s_pProperties) ;++nPos )
@@ -480,9 +472,9 @@ void SAL_CALL DataProviderHandler::actuatingPropertyChanged(const ::rtl::OUStrin
             xReceiver->setArguments( aArgs.getPropertyValues() );
             if ( !bModified )
                 xReport->setModified(sal_False);
-        } // if ( NewValue != OldValue )
+        }
         m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, InspectorUI, FirstTimeInit);
-    } // if ( ActuatingPropertyName == PROPERTY_COMMAND )
+    }
     else if ( ActuatingPropertyName == PROPERTY_TITLE )
     {
         if ( NewValue != OldValue )

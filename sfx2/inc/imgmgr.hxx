@@ -54,13 +54,13 @@ public:
 
                     // get images from resources
     void            SetImages( ToolBox& rToolBox );
-    void            SetImages( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
-    void            SetImagesForceSize( ToolBox& rToolBox, BOOL bHiContrast, BOOL bLarge );
+    void            SetImages( ToolBox& rToolBox, BOOL bLarge );
+    void            SetImagesForceSize( ToolBox& rToolBox, BOOL bLarge );
 
-    Image           GetImage( USHORT nId, BOOL bLarge, BOOL bHiContrast ) const;
-    Image           GetImage( USHORT nId, BOOL bHiContrast ) const;
-    Image           SeekImage( USHORT nId, BOOL bLarge, BOOL bHiContrast ) const;
-    Image           SeekImage( USHORT nId, BOOL bHiContrast ) const;
+    Image           GetImage( USHORT nId, BOOL bLarge ) const;
+    Image           GetImage( USHORT nId) const;
+    Image           SeekImage( USHORT nId, BOOL bLarge ) const;
+    Image           SeekImage( USHORT nId ) const;
 };
 
 #endif

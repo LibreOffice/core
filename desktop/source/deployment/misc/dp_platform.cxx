@@ -113,9 +113,7 @@ namespace
                 ::rtl::OUStringBuffer buf;
                 buf.append( StrOperatingSystem::get() );
                 buf.append( static_cast<sal_Unicode>('_') );
-                OUString arch( RTL_CONSTASCII_USTRINGPARAM("$_ARCH") );
-                ::rtl::Bootstrap::expandMacros( arch );
-                buf.append( arch );
+                buf.append( StrCPU::get() );
                 return buf.makeStringAndClear();
             }
     };

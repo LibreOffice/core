@@ -185,9 +185,6 @@ IMPL_LINK_INLINE_START( SwInsTableDlg, ModifyName, Edit *, pEdit )
 }
 IMPL_LINK_INLINE_END( SwInsTableDlg, ModifyName, Edit *, EMPTYARG )
 
-/*-----------------15.04.98 11:36-------------------
-
---------------------------------------------------*/
 IMPL_LINK( SwInsTableDlg, ModifyRowCol, NumericField *, pField )
 {
     if(pField == &aColEdit)

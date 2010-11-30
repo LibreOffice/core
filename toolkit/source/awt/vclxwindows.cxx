@@ -223,7 +223,7 @@ void VCLXGraphicControl::ImplSetNewImage()
 
 void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, short Flags ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -236,7 +236,7 @@ void VCLXGraphicControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, 
 
 void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Button* pButton = static_cast< Button* >( GetWindow() );
     if ( !pButton )
@@ -289,7 +289,7 @@ void VCLXGraphicControl::setProperty( const ::rtl::OUString& PropertyName, const
 
 ::com::sun::star::uno::Any VCLXGraphicControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     if ( !GetWindow() )
@@ -389,7 +389,7 @@ VCLXButton::~VCLXButton()
 
 void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -400,31 +400,31 @@ void VCLXButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXButton::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.addInterface( l );
 }
 
 void VCLXButton::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.removeInterface( l );
 }
 
 void VCLXButton::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l  )throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.addInterface( l );
 }
 
 void VCLXButton::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.removeInterface( l );
 }
 
 void VCLXButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -433,14 +433,14 @@ void VCLXButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::sta
 
 void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     maActionCommand = rCommand;
 }
 
 ::com::sun::star::awt::Size VCLXButton::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     PushButton* pButton = (PushButton*) GetWindow();
@@ -459,7 +459,7 @@ void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com
 
 ::com::sun::star::awt::Size VCLXButton::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
     PushButton* pButton = (PushButton*) GetWindow();
@@ -487,7 +487,7 @@ void VCLXButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com
 
 void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Button* pButton = (Button*)GetWindow();
     if ( pButton )
@@ -532,7 +532,7 @@ void VCLXButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::
 
 ::com::sun::star::uno::Any VCLXButton::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     Button* pButton = (Button*)GetWindow();
@@ -664,7 +664,7 @@ void VCLXImageControl::ImplSetNewImage()
 
 ::com::sun::star::awt::Size VCLXImageControl::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = GetBitmap().GetSizePixel();
     aSz = ImplCalcWindowSize( aSz );
@@ -679,7 +679,7 @@ void VCLXImageControl::ImplSetNewImage()
 
 ::com::sun::star::awt::Size VCLXImageControl::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz = rNewSize;
     ::com::sun::star::awt::Size aMinSz = getMinimumSize();
@@ -692,7 +692,7 @@ void VCLXImageControl::ImplSetNewImage()
 
 void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ImageControl* pImageControl = (ImageControl*)GetWindow();
 
@@ -728,7 +728,7 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 
 ::com::sun::star::uno::Any VCLXImageControl::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     ImageControl* pImageControl = (ImageControl*)GetWindow();
@@ -812,7 +812,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -822,37 +822,37 @@ void VCLXCheckBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXCheckBox::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.addInterface( l );
 }
 
 void VCLXCheckBox::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.removeInterface( l );
 }
 
 void VCLXCheckBox::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.addInterface( l );
 }
 
 void VCLXCheckBox::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.removeInterface( l );
 }
 
 void VCLXCheckBox::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionCommand = rCommand;
 }
 
 void VCLXCheckBox::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -861,7 +861,7 @@ void VCLXCheckBox::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::s
 
 void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
     if ( pCheckBox)
@@ -889,7 +889,7 @@ void VCLXCheckBox::setState( short n ) throw(::com::sun::star::uno::RuntimeExcep
 
 short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     short nState = -1;
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
@@ -909,7 +909,7 @@ short VCLXCheckBox::getState() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
     if ( pCheckBox)
@@ -918,7 +918,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
 
 ::com::sun::star::awt::Size VCLXCheckBox::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     CheckBox* pCheckBox = (CheckBox*) GetWindow();
@@ -934,7 +934,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
 
 ::com::sun::star::awt::Size VCLXCheckBox::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
     CheckBox* pCheckBox = (CheckBox*) GetWindow();
@@ -951,7 +951,7 @@ void VCLXCheckBox::enableTriState( sal_Bool b ) throw(::com::sun::star::uno::Run
 
 void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
     if ( pCheckBox )
@@ -987,7 +987,7 @@ void VCLXCheckBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
 ::com::sun::star::uno::Any VCLXCheckBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     CheckBox* pCheckBox = (CheckBox*)GetWindow();
@@ -1114,7 +1114,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -1124,7 +1124,7 @@ void VCLXRadioButton::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     RadioButton* pButton = (RadioButton*)GetWindow();
     if ( pButton )
@@ -1166,7 +1166,7 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
 
 ::com::sun::star::uno::Any VCLXRadioButton::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     RadioButton* pButton = (RadioButton*)GetWindow();
@@ -1195,31 +1195,31 @@ void VCLXRadioButton::setProperty( const ::rtl::OUString& PropertyName, const ::
 
 void VCLXRadioButton::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.addInterface( l );
 }
 
 void VCLXRadioButton::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.removeInterface( l );
 }
 
 void VCLXRadioButton::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.addInterface( l );
 }
 
 void VCLXRadioButton::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.removeInterface( l );
 }
 
 void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -1228,13 +1228,13 @@ void VCLXRadioButton::setLabel( const ::rtl::OUString& rLabel ) throw(::com::sun
 
 void VCLXRadioButton::setActionCommand( const ::rtl::OUString& rCommand ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionCommand = rCommand;
 }
 
 void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     RadioButton* pRadioButton = (RadioButton*)GetWindow();
     if ( pRadioButton)
@@ -1253,7 +1253,7 @@ void VCLXRadioButton::setState( sal_Bool b ) throw(::com::sun::star::uno::Runtim
 
 sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     RadioButton* pRadioButton = (RadioButton*)GetWindow();
     return pRadioButton ? pRadioButton->IsChecked() : sal_False;
@@ -1261,7 +1261,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 ::com::sun::star::awt::Size VCLXRadioButton::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     RadioButton* pRadioButton = (RadioButton*) GetWindow();
@@ -1277,7 +1277,7 @@ sal_Bool VCLXRadioButton::getState() throw(::com::sun::star::uno::RuntimeExcepti
 
 ::com::sun::star::awt::Size VCLXRadioButton::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
     RadioButton* pRadioButton = (RadioButton*) GetWindow();
@@ -1376,19 +1376,19 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXSpinField::addSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maSpinListeners.addInterface( l );
 }
 
 void VCLXSpinField::removeSpinListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XSpinListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maSpinListeners.removeInterface( l );
 }
 
 void VCLXSpinField::up() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     SpinField* pSpinField = (SpinField*) GetWindow();
     if ( pSpinField )
@@ -1397,7 +1397,7 @@ void VCLXSpinField::up() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXSpinField::down() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     SpinField* pSpinField = (SpinField*) GetWindow();
     if ( pSpinField )
@@ -1406,7 +1406,7 @@ void VCLXSpinField::down() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXSpinField::first() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     SpinField* pSpinField = (SpinField*) GetWindow();
     if ( pSpinField )
@@ -1415,7 +1415,7 @@ void VCLXSpinField::first() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXSpinField::last() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     SpinField* pSpinField = (SpinField*) GetWindow();
     if ( pSpinField )
@@ -1424,7 +1424,7 @@ void VCLXSpinField::last() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXSpinField::enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -1523,7 +1523,7 @@ VCLXListBox::VCLXListBox()
 
 void VCLXListBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -1534,31 +1534,31 @@ void VCLXListBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXListBox::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.addInterface( l );
 }
 
 void VCLXListBox::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.removeInterface( l );
 }
 
 void VCLXListBox::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.addInterface( l );
 }
 
 void VCLXListBox::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.removeInterface( l );
 }
 
 void VCLXListBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1567,7 +1567,7 @@ void VCLXListBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(
 
 void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1591,7 +1591,7 @@ void VCLXListBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStri
 
 void VCLXListBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1603,7 +1603,7 @@ void VCLXListBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::s
 
 sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     return pBox ? pBox->GetEntryCount() : 0;
@@ -1611,7 +1611,7 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
 
 ::rtl::OUString VCLXListBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     String aItem;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1622,7 +1622,7 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXListBox::getItems() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1641,7 +1641,7 @@ sal_Int16 VCLXListBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcept
 
 sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     return pBox ? pBox->GetSelectEntryPos() : 0;
@@ -1649,7 +1649,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
 
 ::com::sun::star::uno::Sequence<sal_Int16> VCLXListBox::getSelectedItemsPos() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence<sal_Int16> aSeq;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1665,7 +1665,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
 
 ::rtl::OUString VCLXListBox::getSelectedItem() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     String aItem;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1676,7 +1676,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXListBox::getSelectedItems() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1692,7 +1692,7 @@ sal_Int16 VCLXListBox::getSelectedItemPos() throw(::com::sun::star::uno::Runtime
 
 void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox && ( pBox->IsEntryPosSelected( nPos ) != bSelect ) )
@@ -1711,7 +1711,7 @@ void VCLXListBox::selectItemPos( sal_Int16 nPos, sal_Bool bSelect ) throw(::com:
 
 void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int16>& aPositions, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1742,7 +1742,7 @@ void VCLXListBox::selectItemsPos( const ::com::sun::star::uno::Sequence<sal_Int1
 
 void VCLXListBox::selectItem( const ::rtl::OUString& rItemText, sal_Bool bSelect ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1755,7 +1755,7 @@ void VCLXListBox::selectItem( const ::rtl::OUString& rItemText, sal_Bool bSelect
 
 void VCLXListBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1764,7 +1764,7 @@ void VCLXListBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::sta
 
 sal_Int16 VCLXListBox::getDropDownLineCount() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 nLines = 0;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1775,7 +1775,7 @@ sal_Int16 VCLXListBox::getDropDownLineCount() throw(::com::sun::star::uno::Runti
 
 sal_Bool VCLXListBox::isMutipleMode() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Bool bMulti = sal_False;
     ListBox* pBox = (ListBox*) GetWindow();
@@ -1786,7 +1786,7 @@ sal_Bool VCLXListBox::isMutipleMode() throw(::com::sun::star::uno::RuntimeExcept
 
 void VCLXListBox::setMultipleMode( sal_Bool bMulti ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1795,7 +1795,7 @@ void VCLXListBox::setMultipleMode( sal_Bool bMulti ) throw(::com::sun::star::uno
 
 void VCLXListBox::makeVisible( sal_Int16 nEntry ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pBox = (ListBox*) GetWindow();
     if ( pBox )
@@ -1854,14 +1854,14 @@ void VCLXListBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXListBox::CreateAccessibleContext()
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = (ListBox*)GetWindow();
     if ( pListBox )
@@ -1938,7 +1938,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 ::com::sun::star::uno::Any VCLXListBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     ListBox* pListBox = (ListBox*)GetWindow();
@@ -1992,7 +1992,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 ::com::sun::star::awt::Size VCLXListBox::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ListBox* pListBox = (ListBox*) GetWindow();
@@ -2003,7 +2003,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 ::com::sun::star::awt::Size VCLXListBox::getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ListBox* pListBox = (ListBox*) GetWindow();
@@ -2018,7 +2018,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 ::com::sun::star::awt::Size VCLXListBox::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
     ListBox* pListBox = (ListBox*) GetWindow();
@@ -2029,7 +2029,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 ::com::sun::star::awt::Size VCLXListBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ListBox* pListBox = (ListBox*) GetWindow();
@@ -2040,7 +2040,7 @@ void VCLXListBox::setProperty( const ::rtl::OUString& PropertyName, const ::com:
 
 void VCLXListBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
     ListBox* pListBox = (ListBox*) GetWindow();
@@ -2098,7 +2098,7 @@ namespace
 
 void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
 
@@ -2113,7 +2113,7 @@ void SAL_CALL VCLXListBox::listItemInserted( const ItemListEvent& i_rEvent ) thr
 
 void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
 
@@ -2126,7 +2126,7 @@ void SAL_CALL VCLXListBox::listItemRemoved( const ItemListEvent& i_rEvent ) thro
 
 void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
 
@@ -2145,7 +2145,7 @@ void SAL_CALL VCLXListBox::listItemModified( const ItemListEvent& i_rEvent ) thr
 
 void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
@@ -2157,7 +2157,7 @@ void SAL_CALL VCLXListBox::allItemsRemoved( const EventObject& i_rEvent ) throw 
 
 void SAL_CALL VCLXListBox::itemListChanged( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ListBox* pListBox = dynamic_cast< ListBox* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pListBox, "VCLXListBox::listItemModified: no ListBox?!" );
@@ -2228,7 +2228,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2237,7 +2237,7 @@ void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com:
 
 ::rtl::OUString VCLXMessageBox::getCaptionText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     String aText;
     Window* pWindow = GetWindow();
@@ -2248,7 +2248,7 @@ void VCLXMessageBox::setCaptionText( const ::rtl::OUString& rText ) throw(::com:
 
 void VCLXMessageBox::setMessageText( const ::rtl::OUString& rText ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     MessBox* pBox = (MessBox*)GetWindow();
     if ( pBox )
@@ -2257,7 +2257,7 @@ void VCLXMessageBox::setMessageText( const ::rtl::OUString& rText ) throw(::com:
 
 ::rtl::OUString VCLXMessageBox::getMessageText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     MessBox* pBox = (MessBox*)GetWindow();
@@ -2268,7 +2268,7 @@ void VCLXMessageBox::setMessageText( const ::rtl::OUString& rText ) throw(::com:
 
 sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     MessBox* pBox = (MessBox*)GetWindow();
     return pBox ? pBox->Execute() : 0;
@@ -2276,7 +2276,7 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
 
 ::com::sun::star::awt::Size SAL_CALL VCLXMessageBox::getMinimumSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     return ::com::sun::star::awt::Size( 250, 100 );
 }
 
@@ -2290,6 +2290,7 @@ void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 
 VCLXDialog::VCLXDialog()
 {
+    OSL_TRACE("XDialog created");
 }
 
 VCLXDialog::~VCLXDialog()
@@ -2319,7 +2320,7 @@ IMPL_XTYPEPROVIDER_END
 
 void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Dialog* pDialog = dynamic_cast< Dialog* >( GetWindow() );
     if ( pDialog )
@@ -2328,7 +2329,7 @@ void SAL_CALL VCLXDialog::endDialog( ::sal_Int32 i_result ) throw (RuntimeExcept
 
 void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2337,7 +2338,7 @@ void SAL_CALL VCLXDialog::setHelpId( ::sal_Int32 i_id ) throw (RuntimeException)
 
 void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2346,7 +2347,7 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
 
 ::rtl::OUString VCLXDialog::getTitle() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aTitle;
     Window* pWindow = GetWindow();
@@ -2357,7 +2358,7 @@ void VCLXDialog::setTitle( const ::rtl::OUString& Title ) throw(::com::sun::star
 
 sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 nRet = 0;
     if ( GetWindow() )
@@ -2394,7 +2395,7 @@ void VCLXDialog::endExecute() throw(::com::sun::star::uno::RuntimeException)
 
 void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -2414,7 +2415,7 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
 {
     ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
 
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     Dialog* pDlg = (Dialog*) GetWindow();
     if ( pDlg )
         pDlg->GetDrawWindowBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
@@ -2428,9 +2429,9 @@ void SAL_CALL VCLXDialog::setVbaMethodParameter(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    if (rtl::OUString::createFromAscii( "Cancel" ) == PropertyName)
+    if (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Cancel")) == PropertyName)
     {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         if ( GetWindow() )
         {
             sal_Int8 nCancel = 0;
@@ -2446,7 +2447,7 @@ throw(::com::sun::star::uno::RuntimeException)
     const ::rtl::OUString& /*PropertyName*/ )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aRet;
     return aRet;
@@ -2457,7 +2458,7 @@ void SAL_CALL VCLXDialog::setProperty(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Dialog* pDialog = (Dialog*)GetWindow();
     if ( pDialog )
@@ -2498,11 +2499,318 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
+
+//  ----------------------------------------------------
+//  class VCLXTabPage
+//  ----------------------------------------------------
+VCLXMultiPage::VCLXMultiPage() : maTabListeners( *this ), mTabId( 1 )
+{
+    OSL_TRACE("VCLXMultiPage::VCLXMultiPage()" );
+}
+
+void VCLXMultiPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_MULTIPAGEVALUE,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEALIGN,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_FOCUSONCLICK,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
+}
+
+VCLXMultiPage::~VCLXMultiPage()
+{
+}
+void SAL_CALL VCLXMultiPage::dispose() throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+    ::com::sun::star::lang::EventObject aObj;
+    aObj.Source = (::cppu::OWeakObject*)this;
+    maTabListeners.disposeAndClear( aObj );
+    VCLXContainer::dispose();
+}
+::com::sun::star::uno::Any SAL_CALL VCLXMultiPage::queryInterface(const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType, static_cast< awt::XSimpleTabController*>( this ) );
+
+    return ( aRet.hasValue() ? aRet : VCLXContainer::queryInterface( rType ) );
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXMultiPage )
+    VCLXContainer::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XView
+void SAL_CALL VCLXMultiPage::draw( sal_Int32 nX, sal_Int32 nY )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
+}
+
+// ::com::sun::star::awt::XDevice,
+::com::sun::star::awt::DeviceInfo SAL_CALL VCLXMultiPage::getInfo()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    return aInfo;
+}
+
+uno::Any SAL_CALL VCLXMultiPage::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    OSL_TRACE(" **** VCLXMultiPage::getProperty( %s )",
+        rtl::OUStringToOString( PropertyName,
+        RTL_TEXTENCODING_UTF8 ).getStr() );
+    ::com::sun::star::uno::Any aProp;
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+
+        case BASEPROPERTY_MULTIPAGEVALUE:
+        {
+            aProp <<= getActiveTabID();
+        }
+        break;
+        default:
+            aProp <<= VCLXContainer::getProperty( PropertyName );
+    }
+    return aProp;
+}
+
+void SAL_CALL VCLXMultiPage::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    OSL_TRACE(" **** VCLXMultiPage::setProperty( %s )", rtl::OUStringToOString( PropertyName, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    TabControl* pTabControl = (TabControl*)GetWindow();
+    if ( pTabControl )
+    {
+        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_MULTIPAGEVALUE:
+            {
+                OSL_TRACE("***MULTIPAGE VALUE");
+                sal_Int32 nId(0);
+                Value >>= nId;
+                // when the multipage is created we attempt to set the activepage
+                // but no pages created
+                if ( nId && nId <= getWindows().getLength() )
+                    activateTab( nId );
+            }
+            case BASEPROPERTY_GRAPHIC:
+            {
+                Reference< XGraphic > xGraphic;
+                if (( Value >>= xGraphic ) && xGraphic.is() )
+                {
+                    Image aImage( xGraphic );
+
+                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    pTabControl->SetBackground( aWallpaper );
+                }
+                else if ( bVoid || !xGraphic.is() )
+                {
+                    Color aColor = pTabControl->GetControlBackground().GetColor();
+                    if ( aColor == COL_AUTO )
+                        aColor = pTabControl->GetSettings().GetStyleSettings().GetDialogColor();
+
+                    Wallpaper aWallpaper( aColor );
+                    pTabControl->SetBackground( aWallpaper );
+                }
+            }
+            break;
+
+            default:
+            {
+                VCLXContainer::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+TabControl *VCLXMultiPage::getTabControl() const throw (uno::RuntimeException)
+{
+    TabControl *pTabControl = dynamic_cast< TabControl* >( GetWindow() );
+    if ( pTabControl )
+        return pTabControl;
+    throw uno::RuntimeException();
+}
+sal_Int32 SAL_CALL VCLXMultiPage::insertTab() throw (uno::RuntimeException)
+{
+    TabControl *pTabControl = getTabControl();
+    TabPage* pTab = new TabPage( pTabControl );
+    rtl::OUString title (RTL_CONSTASCII_USTRINGPARAM( "" ) );
+    return static_cast< sal_Int32 >( insertTab( pTab, title ) );
+}
+
+USHORT VCLXMultiPage::insertTab( TabPage* pPage, rtl::OUString& sTitle )
+{
+    TabControl *pTabControl = getTabControl();
+    USHORT id = sal::static_int_cast< USHORT >( mTabId++ );
+    pTabControl->InsertPage( id, sTitle.getStr(), TAB_APPEND );
+    pTabControl->SetTabPage( id, pPage );
+    return id;
+}
+
+void SAL_CALL VCLXMultiPage::removeTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+    pTabControl->RemovePage( sal::static_int_cast< USHORT >( ID ) );
+}
+
+void SAL_CALL VCLXMultiPage::activateTab( sal_Int32 ID ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    TabControl *pTabControl = getTabControl();
+    OSL_TRACE("Attempting to activate tab %d, active tab is %d, numtabs is %d", ID, getActiveTabID(), getWindows().getLength() );
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+    pTabControl->SelectTabPage( sal::static_int_cast< USHORT >( ID ) );
+}
+
+sal_Int32 SAL_CALL VCLXMultiPage::getActiveTabID() throw (uno::RuntimeException)
+{
+    return getTabControl()->GetCurPageId( );
+}
+
+void SAL_CALL VCLXMultiPage::addTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    maTabListeners.addInterface( xListener );
+}
+
+void SAL_CALL VCLXMultiPage::removeTabListener( const uno::Reference< awt::XTabListener >& xListener ) throw (uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    maTabListeners.addInterface( xListener );
+}
+
+void SAL_CALL VCLXMultiPage::setTabProps( sal_Int32 ID, const uno::Sequence< beans::NamedValue >& Properties ) throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
+{
+    SolarMutexGuard aGuard;
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+
+    for ( int i = 0; i < Properties.getLength(); i++ )
+    {
+        const rtl::OUString &name = Properties[i].Name;
+        const uno::Any &value = Properties[i].Value;
+
+        if ( name  == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ) )
+        {
+            rtl::OUString title = value.get<rtl::OUString>();
+            pTabControl->SetPageText( sal::static_int_cast< USHORT >( ID ), title.getStr() );
+        }
+    }
+}
+
+uno::Sequence< beans::NamedValue > SAL_CALL VCLXMultiPage::getTabProps( sal_Int32 ID )
+    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    TabControl *pTabControl = getTabControl();
+    if ( pTabControl->GetTabPage( sal::static_int_cast< USHORT >( ID ) ) == NULL )
+        throw lang::IndexOutOfBoundsException();
+
+#define ADD_PROP( seq, i, name, val ) {                                \
+        beans::NamedValue value;                                                  \
+        value.Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) ); \
+        value.Value = uno::makeAny( val );                                      \
+        seq[i] = value;                                                    \
+    }
+
+    uno::Sequence< beans::NamedValue > props( 2 );
+    ADD_PROP( props, 0, "Title", rtl::OUString( pTabControl->GetPageText( sal::static_int_cast< USHORT >( ID ) ) ) );
+    ADD_PROP( props, 1, "Position", pTabControl->GetPagePos( sal::static_int_cast< USHORT >( ID ) ) );
+#undef ADD_PROP
+    return props;
+}
+void VCLXMultiPage::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_TABPAGE_DEACTIVATE:
+        {
+            ULONG nPageID = (ULONG)( rVclWindowEvent.GetData() );
+            maTabListeners.deactivated( nPageID );
+            break;
+
+        }
+        case VCLEVENT_TABPAGE_ACTIVATE:
+        {
+            ULONG nPageID = (ULONG)( rVclWindowEvent.GetData() );
+            maTabListeners.activated( nPageID );
+            break;
+        }
+        default:
+            VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
+            break;
+    };
+}
+
 //  ----------------------------------------------------
 //  class VCLXTabPage
 //  ----------------------------------------------------
 VCLXTabPage::VCLXTabPage()
 {
+}
+
+void VCLXTabPage::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEALIGN,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_FOCUSONCLICK,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
 }
 
 VCLXTabPage::~VCLXTabPage()
@@ -2524,7 +2832,7 @@ IMPL_XTYPEPROVIDER_END
 void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     Window* pWindow = GetWindow();
 
     if ( pWindow )
@@ -2553,7 +2861,7 @@ void SAL_CALL VCLXTabPage::setProperty(
     const ::com::sun::star::uno::Any& Value )
 throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TabPage* pTabPage = (TabPage*)GetWindow();
     if ( pTabPage )
@@ -2594,9 +2902,18 @@ throw(::com::sun::star::uno::RuntimeException)
     }
 }
 
+TabPage *VCLXTabPage::getTabPage() const throw (uno::RuntimeException)
+{
+    TabPage *pTabPage = dynamic_cast< TabPage* >( GetWindow() );
+    if ( pTabPage )
+        return pTabPage;
+    throw uno::RuntimeException();
+}
+
 //  ----------------------------------------------------
 //  class VCLXFixedHyperlink
 //  ----------------------------------------------------
+
 VCLXFixedHyperlink::VCLXFixedHyperlink() :
 
     maActionListeners( *this )
@@ -2618,7 +2935,7 @@ VCLXFixedHyperlink::~VCLXFixedHyperlink()
 
 void VCLXFixedHyperlink::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
 
         ::com::sun::star::lang::EventObject aObj;
         aObj.Source = (::cppu::OWeakObject*)this;
@@ -2653,7 +2970,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     sURL = pBase->GetURL();
                 Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
                     ::comphelper::getProcessServiceFactory()->createInstance(
-                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), uno::UNO_QUERY );
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))), uno::UNO_QUERY );
                 if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
                 {
                     try
@@ -2682,7 +2999,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
 
 void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
     if ( pBase )
@@ -2691,7 +3008,7 @@ void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun
 
 ::rtl::OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     Window* pWindow = GetWindow();
@@ -2702,7 +3019,7 @@ void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun
 
 void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
     if ( pBase )
@@ -2711,7 +3028,7 @@ void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::
 
 ::rtl::OUString VCLXFixedHyperlink::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
@@ -2722,7 +3039,7 @@ void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::
 
 void VCLXFixedHyperlink::setAlignment( short nAlign ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2743,7 +3060,7 @@ void VCLXFixedHyperlink::setAlignment( short nAlign ) throw(::com::sun::star::un
 
 short VCLXFixedHyperlink::getAlignment() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     short nAlign = 0;
     Window* pWindow = GetWindow();
@@ -2762,19 +3079,19 @@ short VCLXFixedHyperlink::getAlignment() throw(::com::sun::star::uno::RuntimeExc
 
 void VCLXFixedHyperlink::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
 {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         maActionListeners.addInterface( l );
 }
 
 void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-        ::osl::SolarGuard aGuard( GetMutex() );
+        SolarMutexGuard aGuard;
         maActionListeners.removeInterface( l );
 }
 
 ::com::sun::star::awt::Size VCLXFixedHyperlink::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     FixedText* pFixedText = (FixedText*)GetWindow();
@@ -2790,7 +3107,7 @@ void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Refe
 
 ::com::sun::star::awt::Size VCLXFixedHyperlink::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz = rNewSize;
     ::com::sun::star::awt::Size aMinSz = getMinimumSize();
@@ -2802,7 +3119,7 @@ void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Refe
 
 void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
     if ( pBase )
@@ -2836,7 +3153,7 @@ void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const
 
 ::com::sun::star::uno::Any VCLXFixedHyperlink::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
@@ -2944,7 +3261,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2953,7 +3270,7 @@ void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::sta
 
 ::rtl::OUString VCLXFixedText::getText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     Window* pWindow = GetWindow();
@@ -2964,7 +3281,7 @@ void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::sta
 
 void VCLXFixedText::setAlignment( short nAlign ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -2985,7 +3302,7 @@ void VCLXFixedText::setAlignment( short nAlign ) throw(::com::sun::star::uno::Ru
 
 short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     short nAlign = 0;
     Window* pWindow = GetWindow();
@@ -3004,7 +3321,7 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
 
 ::com::sun::star::awt::Size VCLXFixedText::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     FixedText* pFixedText = (FixedText*)GetWindow();
@@ -3020,7 +3337,7 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
 
 ::com::sun::star::awt::Size VCLXFixedText::calcAdjustedSize( const ::com::sun::star::awt::Size& rMaxSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aAdjustedSize( VCLUnoHelper::ConvertToVCLSize( rMaxSize ) );
     FixedText* pFixedText = (FixedText*)GetWindow();
@@ -3087,7 +3404,7 @@ IMPL_XTYPEPROVIDER_END
 // ::com::sun::star::lang::XComponent
 void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -3098,19 +3415,19 @@ void VCLXScrollBar::dispose() throw(::com::sun::star::uno::RuntimeException)
 // ::com::sun::star::awt::XScrollbar
 void VCLXScrollBar::addAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maAdjustmentListeners.addInterface( l );
 }
 
 void VCLXScrollBar::removeAdjustmentListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XAdjustmentListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maAdjustmentListeners.removeInterface( l );
 }
 
 void VCLXScrollBar::setValue( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3119,7 +3436,7 @@ void VCLXScrollBar::setValue( sal_Int32 n ) throw(::com::sun::star::uno::Runtime
 
 void VCLXScrollBar::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 nMax ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3132,7 +3449,7 @@ void VCLXScrollBar::setValues( sal_Int32 nValue, sal_Int32 nVisible, sal_Int32 n
 
 sal_Int32 VCLXScrollBar::getValue() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     return pScrollBar ? pScrollBar->GetThumbPos() : 0;
@@ -3140,7 +3457,7 @@ sal_Int32 VCLXScrollBar::getValue() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXScrollBar::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3149,7 +3466,7 @@ void VCLXScrollBar::setMaximum( sal_Int32 n ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXScrollBar::getMaximum() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     return pScrollBar ? pScrollBar->GetRangeMax() : 0;
@@ -3157,7 +3474,7 @@ sal_Int32 VCLXScrollBar::getMaximum() throw(::com::sun::star::uno::RuntimeExcept
 
 void VCLXScrollBar::setMinimum( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
     if ( pScrollBar )
@@ -3166,7 +3483,7 @@ void VCLXScrollBar::setMinimum( sal_Int32 n ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXScrollBar::getMinimum() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = static_cast< ScrollBar* >( GetWindow() );
     return pScrollBar ? pScrollBar->GetRangeMin() : 0;
@@ -3174,7 +3491,7 @@ sal_Int32 VCLXScrollBar::getMinimum() throw(::com::sun::star::uno::RuntimeExcept
 
 void VCLXScrollBar::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3183,7 +3500,7 @@ void VCLXScrollBar::setLineIncrement( sal_Int32 n ) throw(::com::sun::star::uno:
 
 sal_Int32 VCLXScrollBar::getLineIncrement() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     return pScrollBar ? pScrollBar->GetLineSize() : 0;
@@ -3191,7 +3508,7 @@ sal_Int32 VCLXScrollBar::getLineIncrement() throw(::com::sun::star::uno::Runtime
 
 void VCLXScrollBar::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3200,7 +3517,7 @@ void VCLXScrollBar::setBlockIncrement( sal_Int32 n ) throw(::com::sun::star::uno
 
 sal_Int32 VCLXScrollBar::getBlockIncrement() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     return pScrollBar ? pScrollBar->GetPageSize() : 0;
@@ -3208,7 +3525,7 @@ sal_Int32 VCLXScrollBar::getBlockIncrement() throw(::com::sun::star::uno::Runtim
 
 void VCLXScrollBar::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     if ( pScrollBar )
@@ -3217,7 +3534,7 @@ void VCLXScrollBar::setVisibleSize( sal_Int32 n ) throw(::com::sun::star::uno::R
 
 sal_Int32 VCLXScrollBar::getVisibleSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*) GetWindow();
     return pScrollBar ? pScrollBar->GetVisibleSize() : 0;
@@ -3225,7 +3542,7 @@ sal_Int32 VCLXScrollBar::getVisibleSize() throw(::com::sun::star::uno::RuntimeEx
 
 void VCLXScrollBar::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Window* pWindow = GetWindow();
     if ( pWindow )
@@ -3244,7 +3561,7 @@ void VCLXScrollBar::setOrientation( sal_Int32 n ) throw(::com::sun::star::uno::R
 
 sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 n = 0;
     Window* pWindow = GetWindow();
@@ -3263,7 +3580,7 @@ sal_Int32 VCLXScrollBar::getOrientation() throw(::com::sun::star::uno::RuntimeEx
 // ::com::sun::star::awt::VclWindowPeer
 void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
     if ( pScrollBar )
@@ -3378,7 +3695,7 @@ void VCLXScrollBar::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
 ::com::sun::star::uno::Any VCLXScrollBar::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     ScrollBar* pScrollBar = (ScrollBar*)GetWindow();
@@ -3502,7 +3819,7 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::awt::Size SAL_CALL VCLXScrollBar::getMinimumSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     return implGetMinimumSize( GetWindow() );
 }
 
@@ -3575,7 +3892,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -3585,19 +3902,19 @@ void VCLXEdit::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXEdit::addTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetTextListeners().addInterface( l );
 }
 
 void VCLXEdit::removeTextListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetTextListeners().removeInterface( l );
 }
 
 void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*)GetWindow();
     if ( pEdit )
@@ -3614,7 +3931,7 @@ void VCLXEdit::setText( const ::rtl::OUString& aText ) throw(::com::sun::star::u
 
 void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*)GetWindow();
     if ( pEdit )
@@ -3632,7 +3949,7 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const :
 
 ::rtl::OUString VCLXEdit::getText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     Window* pWindow = GetWindow();
@@ -3643,7 +3960,7 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const :
 
 ::rtl::OUString VCLXEdit::getSelectedText() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aText;
     Edit* pEdit = (Edit*) GetWindow();
@@ -3655,7 +3972,7 @@ void VCLXEdit::insertText( const ::com::sun::star::awt::Selection& rSel, const :
 
 void VCLXEdit::setSelection( const ::com::sun::star::awt::Selection& aSelection ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     if ( pEdit )
@@ -3664,7 +3981,7 @@ void VCLXEdit::setSelection( const ::com::sun::star::awt::Selection& aSelection 
 
 ::com::sun::star::awt::Selection VCLXEdit::getSelection() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Selection aSel;
     Edit* pEdit = (Edit*) GetWindow();
@@ -3675,7 +3992,7 @@ void VCLXEdit::setSelection( const ::com::sun::star::awt::Selection& aSelection 
 
 sal_Bool VCLXEdit::isEditable() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     return ( pEdit && !pEdit->IsReadOnly() && pEdit->IsEnabled() ) ? sal_True : sal_False;
@@ -3683,7 +4000,7 @@ sal_Bool VCLXEdit::isEditable() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     if ( pEdit )
@@ -3693,7 +4010,7 @@ void VCLXEdit::setEditable( sal_Bool bEditable ) throw(::com::sun::star::uno::Ru
 
 void VCLXEdit::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     if ( pEdit )
@@ -3702,7 +4019,7 @@ void VCLXEdit::setMaxTextLen( sal_Int16 nLen ) throw(::com::sun::star::uno::Runt
 
 sal_Int16 VCLXEdit::getMaxTextLen() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     return pEdit ? pEdit->GetMaxTextLen() : 0;
@@ -3710,7 +4027,7 @@ sal_Int16 VCLXEdit::getMaxTextLen() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXEdit::setEchoChar( sal_Unicode cEcho ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*) GetWindow();
     if ( pEdit )
@@ -3719,7 +4036,7 @@ void VCLXEdit::setEchoChar( sal_Unicode cEcho ) throw(::com::sun::star::uno::Run
 
 void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Edit* pEdit = (Edit*)GetWindow();
     if ( pEdit )
@@ -3764,7 +4081,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 ::com::sun::star::uno::Any VCLXEdit::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     Edit* pEdit = (Edit*)GetWindow();
@@ -3796,7 +4113,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 ::com::sun::star::awt::Size VCLXEdit::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     Edit* pEdit = (Edit*) GetWindow();
@@ -3807,7 +4124,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 ::com::sun::star::awt::Size VCLXEdit::getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     Edit* pEdit = (Edit*) GetWindow();
@@ -3821,7 +4138,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 ::com::sun::star::awt::Size VCLXEdit::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::awt::Size aSz = rNewSize;
     ::com::sun::star::awt::Size aMinSz = getMinimumSize();
@@ -3833,7 +4150,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 ::com::sun::star::awt::Size VCLXEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     Edit* pEdit = (Edit*) GetWindow();
@@ -3849,7 +4166,7 @@ void VCLXEdit::setProperty( const ::rtl::OUString& PropertyName, const ::com::su
 
 void VCLXEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     nLines = 1;
     nCols = 0;
@@ -3937,14 +4254,14 @@ VCLXComboBox::~VCLXComboBox()
 
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXComboBox::CreateAccessibleContext()
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     return getAccessibleFactory().createAccessibleContext( this );
 }
 
 void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;
@@ -3956,31 +4273,31 @@ void VCLXComboBox::dispose() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXComboBox::addItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.addInterface( l );
 }
 
 void VCLXComboBox::removeItemListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XItemListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maItemListeners.removeInterface( l );
 }
 
 void VCLXComboBox::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.addInterface( l );
 }
 
 void VCLXComboBox::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     maActionListeners.removeInterface( l );
 }
 
 void VCLXComboBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
@@ -3989,7 +4306,7 @@ void VCLXComboBox::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw
 
 void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUString>& aItems, sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
@@ -4010,7 +4327,7 @@ void VCLXComboBox::addItems( const ::com::sun::star::uno::Sequence< ::rtl::OUStr
 
 void VCLXComboBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
@@ -4022,7 +4339,7 @@ void VCLXComboBox::removeItems( sal_Int16 nPos, sal_Int16 nCount ) throw(::com::
 
 sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pBox = (ComboBox*) GetWindow();
     return pBox ? pBox->GetEntryCount() : 0;
@@ -4030,7 +4347,7 @@ sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcep
 
 ::rtl::OUString VCLXComboBox::getItem( sal_Int16 nPos ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aItem;
     ComboBox* pBox = (ComboBox*) GetWindow();
@@ -4041,7 +4358,7 @@ sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcep
 
 ::com::sun::star::uno::Sequence< ::rtl::OUString> VCLXComboBox::getItems() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString> aSeq;
     ComboBox* pBox = (ComboBox*) GetWindow();
@@ -4060,7 +4377,7 @@ sal_Int16 VCLXComboBox::getItemCount() throw(::com::sun::star::uno::RuntimeExcep
 
 void VCLXComboBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pBox = (ComboBox*) GetWindow();
     if ( pBox )
@@ -4069,7 +4386,7 @@ void VCLXComboBox::setDropDownLineCount( sal_Int16 nLines ) throw(::com::sun::st
 
 sal_Int16 VCLXComboBox::getDropDownLineCount() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int16 nLines = 0;
     ComboBox* pBox = (ComboBox*) GetWindow();
@@ -4080,7 +4397,7 @@ sal_Int16 VCLXComboBox::getDropDownLineCount() throw(::com::sun::star::uno::Runt
 
 void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = (ComboBox*)GetWindow();
     if ( pComboBox )
@@ -4130,7 +4447,7 @@ void VCLXComboBox::setProperty( const ::rtl::OUString& PropertyName, const ::com
 
 ::com::sun::star::uno::Any VCLXComboBox::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     ComboBox* pComboBox = (ComboBox*)GetWindow();
@@ -4218,7 +4535,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::awt::Size VCLXComboBox::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ComboBox* pComboBox = (ComboBox*) GetWindow();
@@ -4229,7 +4546,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::awt::Size VCLXComboBox::getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ComboBox* pComboBox = (ComboBox*) GetWindow();
@@ -4244,7 +4561,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::awt::Size VCLXComboBox::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz = VCLSize(rNewSize);
     ComboBox* pComboBox = (ComboBox*) GetWindow();
@@ -4255,7 +4572,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::awt::Size VCLXComboBox::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     Size aSz;
     ComboBox* pComboBox = (ComboBox*) GetWindow();
@@ -4266,7 +4583,7 @@ void VCLXComboBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     nCols = nLines = 0;
     ComboBox* pComboBox = (ComboBox*) GetWindow();
@@ -4280,7 +4597,7 @@ void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thr
 }
 void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
 
@@ -4295,7 +4612,7 @@ void SAL_CALL VCLXComboBox::listItemInserted( const ItemListEvent& i_rEvent ) th
 
 void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
 
@@ -4308,7 +4625,7 @@ void SAL_CALL VCLXComboBox::listItemRemoved( const ItemListEvent& i_rEvent ) thr
 
 void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
 
@@ -4327,7 +4644,7 @@ void SAL_CALL VCLXComboBox::listItemModified( const ItemListEvent& i_rEvent ) th
 
 void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
@@ -4339,7 +4656,7 @@ void SAL_CALL VCLXComboBox::allItemsRemoved( const EventObject& i_rEvent ) throw
 
 void SAL_CALL VCLXComboBox::itemListChanged( const EventObject& i_rEvent ) throw (RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ComboBox* pComboBox = dynamic_cast< ComboBox* >( GetWindow() );
     ENSURE_OR_RETURN_VOID( pComboBox, "VCLXComboBox::listItemModified: no ComboBox?!" );
@@ -4398,7 +4715,7 @@ VCLXFormattedSpinField::~VCLXFormattedSpinField()
 
 void VCLXFormattedSpinField::setStrictFormat( sal_Bool bStrict )
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
@@ -4414,7 +4731,7 @@ sal_Bool VCLXFormattedSpinField::isStrictFormat()
 
 void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     FormatterBase* pFormatter = GetFormatter();
     if ( pFormatter )
@@ -4453,7 +4770,7 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
 
 ::com::sun::star::uno::Any VCLXFormattedSpinField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
@@ -4547,7 +4864,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -4616,7 +4933,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
 ::com::sun::star::uno::Any VCLXDateField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
@@ -4662,7 +4979,7 @@ void VCLXDateField::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
 void VCLXDateField::setDate( sal_Int32 nDate ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4679,7 +4996,7 @@ void VCLXDateField::setDate( sal_Int32 nDate ) throw(::com::sun::star::uno::Runt
 
 sal_Int32 VCLXDateField::getDate() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nDate = 0;
     DateField* pDateField = (DateField*) GetWindow();
@@ -4691,7 +5008,7 @@ sal_Int32 VCLXDateField::getDate() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXDateField::setMin( sal_Int32 nDate ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4700,7 +5017,7 @@ void VCLXDateField::setMin( sal_Int32 nDate ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXDateField::getMin() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nDate = 0;
     DateField* pDateField = (DateField*) GetWindow();
@@ -4712,7 +5029,7 @@ sal_Int32 VCLXDateField::getMin() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDateField::setMax( sal_Int32 nDate ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4721,7 +5038,7 @@ void VCLXDateField::setMax( sal_Int32 nDate ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXDateField::getMax() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nDate = 0;
     DateField* pDateField = (DateField*) GetWindow();
@@ -4733,7 +5050,7 @@ sal_Int32 VCLXDateField::getMax() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXDateField::setFirst( sal_Int32 nDate ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4742,7 +5059,7 @@ void VCLXDateField::setFirst( sal_Int32 nDate ) throw(::com::sun::star::uno::Run
 
 sal_Int32 VCLXDateField::getFirst() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nDate = 0;
     DateField* pDateField = (DateField*) GetWindow();
@@ -4754,7 +5071,7 @@ sal_Int32 VCLXDateField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXDateField::setLast( sal_Int32 nDate ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4763,7 +5080,7 @@ void VCLXDateField::setLast( sal_Int32 nDate ) throw(::com::sun::star::uno::Runt
 
 sal_Int32 VCLXDateField::getLast() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nDate = 0;
     DateField* pDateField = (DateField*) GetWindow();
@@ -4775,7 +5092,7 @@ sal_Int32 VCLXDateField::getLast() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXDateField::setLongFormat( sal_Bool bLong ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4784,7 +5101,7 @@ void VCLXDateField::setLongFormat( sal_Bool bLong ) throw(::com::sun::star::uno:
 
 sal_Bool VCLXDateField::isLongFormat() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     return pDateField ? pDateField->IsLongFormat() : sal_False;
@@ -4792,7 +5109,7 @@ sal_Bool VCLXDateField::isLongFormat() throw(::com::sun::star::uno::RuntimeExcep
 
 void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     if ( pDateField )
@@ -4809,7 +5126,7 @@ void VCLXDateField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
 
 sal_Bool VCLXDateField::isEmpty() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     DateField* pDateField = (DateField*) GetWindow();
     return pDateField ? pDateField->IsEmptyDate() : sal_False;
@@ -4889,7 +5206,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXTimeField::setTime( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -4906,7 +5223,7 @@ void VCLXTimeField::setTime( sal_Int32 nTime ) throw(::com::sun::star::uno::Runt
 
 sal_Int32 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
@@ -4918,7 +5235,7 @@ sal_Int32 VCLXTimeField::getTime() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXTimeField::setMin( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -4927,7 +5244,7 @@ void VCLXTimeField::setMin( sal_Int32 nTime ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
@@ -4939,7 +5256,7 @@ sal_Int32 VCLXTimeField::getMin() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXTimeField::setMax( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -4948,7 +5265,7 @@ void VCLXTimeField::setMax( sal_Int32 nTime ) throw(::com::sun::star::uno::Runti
 
 sal_Int32 VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
@@ -4960,7 +5277,7 @@ sal_Int32 VCLXTimeField::getMax() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXTimeField::setFirst( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -4969,7 +5286,7 @@ void VCLXTimeField::setFirst( sal_Int32 nTime ) throw(::com::sun::star::uno::Run
 
 sal_Int32 VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
@@ -4981,7 +5298,7 @@ sal_Int32 VCLXTimeField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXTimeField::setLast( sal_Int32 nTime ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -4990,7 +5307,7 @@ void VCLXTimeField::setLast( sal_Int32 nTime ) throw(::com::sun::star::uno::Runt
 
 sal_Int32 VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     sal_Int32 nTime = 0;
     TimeField* pTimeField = (TimeField*) GetWindow();
@@ -5002,7 +5319,7 @@ sal_Int32 VCLXTimeField::getLast() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXTimeField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     if ( pTimeField )
@@ -5011,7 +5328,7 @@ void VCLXTimeField::setEmpty() throw(::com::sun::star::uno::RuntimeException)
 
 sal_Bool VCLXTimeField::isEmpty() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     TimeField* pTimeField = (TimeField*) GetWindow();
     return pTimeField ? pTimeField->IsEmptyTime() : sal_False;
@@ -5030,7 +5347,7 @@ sal_Bool VCLXTimeField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 
 void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -5092,7 +5409,7 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
 
 ::com::sun::star::uno::Any VCLXTimeField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     if ( GetWindow() )
@@ -5193,7 +5510,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
@@ -5217,7 +5534,7 @@ void VCLXNumericField::setValue( double Value ) throw(::com::sun::star::uno::Run
 
 double VCLXNumericField::getValue() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     return pNumericFormatter
@@ -5227,7 +5544,7 @@ double VCLXNumericField::getValue() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXNumericField::setMin( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
@@ -5237,7 +5554,7 @@ void VCLXNumericField::setMin( double Value ) throw(::com::sun::star::uno::Runti
 
 double VCLXNumericField::getMin() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     return pNumericFormatter
@@ -5247,7 +5564,7 @@ double VCLXNumericField::getMin() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXNumericField::setMax( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
@@ -5257,7 +5574,7 @@ void VCLXNumericField::setMax( double Value ) throw(::com::sun::star::uno::Runti
 
 double VCLXNumericField::getMax() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     return pNumericFormatter
@@ -5267,7 +5584,7 @@ double VCLXNumericField::getMax() throw(::com::sun::star::uno::RuntimeException)
 
 void VCLXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
@@ -5277,7 +5594,7 @@ void VCLXNumericField::setFirst( double Value ) throw(::com::sun::star::uno::Run
 
 double VCLXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     return pNumericField
@@ -5287,7 +5604,7 @@ double VCLXNumericField::getFirst() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXNumericField::setLast( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
@@ -5297,7 +5614,7 @@ void VCLXNumericField::setLast( double Value ) throw(::com::sun::star::uno::Runt
 
 double VCLXNumericField::getLast() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     return pNumericField
@@ -5318,7 +5635,7 @@ sal_Bool VCLXNumericField::isStrictFormat() throw(::com::sun::star::uno::Runtime
 
 void VCLXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     if ( pNumericField )
@@ -5328,7 +5645,7 @@ void VCLXNumericField::setSpinSize( double Value ) throw(::com::sun::star::uno::
 
 double VCLXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericField* pNumericField = (NumericField*) GetWindow();
     return pNumericField
@@ -5338,7 +5655,7 @@ double VCLXNumericField::getSpinSize() throw(::com::sun::star::uno::RuntimeExcep
 
 void VCLXNumericField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     if ( pNumericFormatter )
@@ -5351,7 +5668,7 @@ void VCLXNumericField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::sta
 
 sal_Int16 VCLXNumericField::getDecimalDigits() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
@@ -5359,7 +5676,7 @@ sal_Int16 VCLXNumericField::getDecimalDigits() throw(::com::sun::star::uno::Runt
 
 void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -5428,7 +5745,7 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
 
 ::com::sun::star::uno::Any VCLXNumericField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
@@ -5553,12 +5870,12 @@ IMPL_XTYPEPROVIDER_END
 #define METRIC_MAP_PAIR(method,parent) \
     sal_Int64 VCLXMetricField::get##method( sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::SolarGuard aGuard( GetMutex() ); \
+        SolarMutexGuard aGuard; \
         return GetMetric##parent()->Get##method( MetricUnitUnoToVcl( nUnit ) ); \
     } \
     void VCLXMetricField::set##method( sal_Int64 nValue, sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException) \
     { \
-        ::osl::SolarGuard aGuard( GetMutex() ); \
+        SolarMutexGuard aGuard; \
         GetMetric##parent()->Set##method( nValue, MetricUnitUnoToVcl( nUnit ) ); \
     }
 
@@ -5571,13 +5888,13 @@ METRIC_MAP_PAIR(Last,  Field)
 
 ::sal_Int64 VCLXMetricField::getValue( ::sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     return GetMetricFormatter()->GetValue( MetricUnitUnoToVcl( nUnit ) );
 }
 
 ::sal_Int64 VCLXMetricField::getCorrectedValue( ::sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     return GetMetricFormatter()->GetCorrectedValue( MetricUnitUnoToVcl( nUnit ) );
 }
 
@@ -5597,14 +5914,14 @@ void VCLXMetricField::CallListeners()
 
 void VCLXMetricField::setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetMetricFormatter()->SetValue( Value, MetricUnitUnoToVcl( Unit ) );
     CallListeners();
 }
 
 void VCLXMetricField::setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetMetricFormatter()->SetUserValue( Value, MetricUnitUnoToVcl( Unit ) );
     CallListeners();
 }
@@ -5621,25 +5938,25 @@ sal_Bool VCLXMetricField::isStrictFormat() throw(::com::sun::star::uno::RuntimeE
 
 void VCLXMetricField::setSpinSize( sal_Int64 Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetMetricField()->SetSpinSize( Value );
 }
 
 sal_Int64 VCLXMetricField::getSpinSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     return GetMetricField()->GetSpinSize();
 }
 
 void VCLXMetricField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
     GetMetricFormatter()->SetDecimalDigits( Value );
 }
 
 sal_Int16 VCLXMetricField::getDecimalDigits() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
     return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
@@ -5647,7 +5964,7 @@ sal_Int16 VCLXMetricField::getDecimalDigits() throw(::com::sun::star::uno::Runti
 
 void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -5693,7 +6010,7 @@ void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::
 
 ::com::sun::star::uno::Any VCLXMetricField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
@@ -5788,7 +6105,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
@@ -5812,7 +6129,7 @@ void VCLXCurrencyField::setValue( double Value ) throw(::com::sun::star::uno::Ru
 
 double VCLXCurrencyField::getValue() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     return pCurrencyFormatter
@@ -5822,7 +6139,7 @@ double VCLXCurrencyField::getValue() throw(::com::sun::star::uno::RuntimeExcepti
 
 void VCLXCurrencyField::setMin( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
@@ -5832,7 +6149,7 @@ void VCLXCurrencyField::setMin( double Value ) throw(::com::sun::star::uno::Runt
 
 double VCLXCurrencyField::getMin() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     return pCurrencyFormatter
@@ -5842,7 +6159,7 @@ double VCLXCurrencyField::getMin() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXCurrencyField::setMax( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
@@ -5852,7 +6169,7 @@ void VCLXCurrencyField::setMax( double Value ) throw(::com::sun::star::uno::Runt
 
 double VCLXCurrencyField::getMax() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     return pCurrencyFormatter
@@ -5862,7 +6179,7 @@ double VCLXCurrencyField::getMax() throw(::com::sun::star::uno::RuntimeException
 
 void VCLXCurrencyField::setFirst( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     if ( pCurrencyField )
@@ -5872,7 +6189,7 @@ void VCLXCurrencyField::setFirst( double Value ) throw(::com::sun::star::uno::Ru
 
 double VCLXCurrencyField::getFirst() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     return pCurrencyField
@@ -5882,7 +6199,7 @@ double VCLXCurrencyField::getFirst() throw(::com::sun::star::uno::RuntimeExcepti
 
 void VCLXCurrencyField::setLast( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     if ( pCurrencyField )
@@ -5892,7 +6209,7 @@ void VCLXCurrencyField::setLast( double Value ) throw(::com::sun::star::uno::Run
 
 double VCLXCurrencyField::getLast() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     return pCurrencyField
@@ -5902,7 +6219,7 @@ double VCLXCurrencyField::getLast() throw(::com::sun::star::uno::RuntimeExceptio
 
 void VCLXCurrencyField::setSpinSize( double Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     if ( pCurrencyField )
@@ -5912,7 +6229,7 @@ void VCLXCurrencyField::setSpinSize( double Value ) throw(::com::sun::star::uno:
 
 double VCLXCurrencyField::getSpinSize() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyField* pCurrencyField = (LongCurrencyField*) GetWindow();
     return pCurrencyField
@@ -5933,7 +6250,7 @@ sal_Bool VCLXCurrencyField::isStrictFormat() throw(::com::sun::star::uno::Runtim
 
 void VCLXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     if ( pCurrencyFormatter )
@@ -5946,7 +6263,7 @@ void VCLXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::st
 
 sal_Int16 VCLXCurrencyField::getDecimalDigits() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     LongCurrencyFormatter* pCurrencyFormatter = (LongCurrencyFormatter*) GetFormatter();
     return pCurrencyFormatter ? pCurrencyFormatter->GetDecimalDigits() : 0;
@@ -5954,7 +6271,7 @@ sal_Int16 VCLXCurrencyField::getDecimalDigits() throw(::com::sun::star::uno::Run
 
 void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -6030,7 +6347,7 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
 
 ::com::sun::star::uno::Any VCLXCurrencyField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     FormatterBase* pFormatter = GetFormatter();
@@ -6136,7 +6453,7 @@ IMPL_XTYPEPROVIDER_END
 
 void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
@@ -6147,7 +6464,7 @@ void VCLXPatternField::setMasks( const ::rtl::OUString& EditMask, const ::rtl::O
 
 void VCLXPatternField::getMasks( ::rtl::OUString& EditMask, ::rtl::OUString& LiteralMask ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
@@ -6159,7 +6476,7 @@ void VCLXPatternField::getMasks( ::rtl::OUString& EditMask, ::rtl::OUString& Lit
 
 void VCLXPatternField::setString( const ::rtl::OUString& Str ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     PatternField* pPatternField = (PatternField*) GetWindow();
     if ( pPatternField )
@@ -6170,7 +6487,7 @@ void VCLXPatternField::setString( const ::rtl::OUString& Str ) throw(::com::sun:
 
 ::rtl::OUString VCLXPatternField::getString() throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::rtl::OUString aString;
     PatternField* pPatternField = (PatternField*) GetWindow();
@@ -6191,7 +6508,7 @@ sal_Bool VCLXPatternField::isStrictFormat() throw(::com::sun::star::uno::Runtime
 
 void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     if ( GetWindow() )
     {
@@ -6224,7 +6541,7 @@ void VCLXPatternField::setProperty( const ::rtl::OUString& PropertyName, const :
 
 ::com::sun::star::uno::Any VCLXPatternField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
 {
-    ::osl::SolarGuard aGuard( GetMutex() );
+    SolarMutexGuard aGuard;
 
     ::com::sun::star::uno::Any aProp;
     if ( GetWindow() )
@@ -6266,6 +6583,101 @@ VCLXToolBox::~VCLXToolBox()
 ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXToolBox::CreateAccessibleContext()
 {
     return getAccessibleFactory().createAccessibleContext( this );
+}
+
+//  ----------------------------------------------------
+//  class VCLXFrame
+//  ----------------------------------------------------
+VCLXFrame::VCLXFrame()
+{
+}
+
+void VCLXFrame::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_ENABLEVISIBLE,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_LABEL,
+                     0);
+    VCLXContainer::ImplGetPropertyIds( rIds );
+}
+
+VCLXFrame::~VCLXFrame()
+{
+}
+
+::com::sun::star::uno::Any SAL_CALL VCLXFrame::queryInterface(const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    return VCLXContainer::queryInterface( rType );
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXFrame )
+    VCLXContainer::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XView
+void SAL_CALL VCLXFrame::draw( sal_Int32 nX, sal_Int32 nY )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( getGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
+}
+
+// ::com::sun::star::awt::XDevice,
+::com::sun::star::awt::DeviceInfo SAL_CALL VCLXFrame::getInfo()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    return aInfo;
+}
+
+void SAL_CALL VCLXFrame::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    SolarMutexGuard aGuard;
+
+#if OSL_DEBUG_LEVEL > 0
+    sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+    (void)bVoid;
+#endif
+
+    sal_uInt16 nPropType = GetPropertyId( PropertyName );
+    switch ( nPropType )
+    {
+        default:
+        {
+            VCLXContainer::setProperty( PropertyName, Value );
+        }
+    }
+}
+
+void VCLXFrame::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > xKeepAlive( this );
+    VCLXContainer::ProcessWindowEvent( rVclWindowEvent );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

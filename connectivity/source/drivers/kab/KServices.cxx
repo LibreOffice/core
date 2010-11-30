@@ -63,9 +63,9 @@ void REGISTER_PROVIDER(
         const Reference< ::com::sun::star::registry::XRegistryKey > & xKey)
 {
     OUString aMainKeyName;
-    aMainKeyName = OUString::createFromAscii("/");
+    aMainKeyName = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aMainKeyName += aServiceImplName;
-    aMainKeyName += OUString::createFromAscii("/UNO/SERVICES");
+    aMainKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
     Reference< ::com::sun::star::registry::XRegistryKey >  xNewKey( xKey->createKey(aMainKeyName) );
     OSL_ENSURE(xNewKey.is(), "KAB::component_writeInfo : could not create a registry key !");

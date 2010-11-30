@@ -144,9 +144,6 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
 
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
-//      case XML_TOK_QUERY:
-//          pContext = new OXMLQuery( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer );
-//          break;
         case XML_TOK_COMPONENT:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLComponent( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sComponentServiceName );
@@ -155,7 +152,6 @@ SvXMLImportContext* OXMLHierarchyCollection::CreateChildContext(
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLColumn( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_xTable);
             break;
-        //  case XML_TOK_QUERY_COLLECTION:
         case XML_TOK_COMPONENT_COLLECTION:
             GetOwnImport().GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLHierarchyCollection( GetOwnImport(), nPrefix, rLocalName,xAttrList,m_xContainer,m_sCollectionServiceName,m_sComponentServiceName);

@@ -89,7 +89,7 @@ Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMul
 //-------------------------------------------------------------------------
 ::rtl::OUString OSQLMessageDialog::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.OSQLMessageDialog");
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OSQLMessageDialog"));
 }
 
 //-------------------------------------------------------------------------
@@ -102,7 +102,7 @@ Reference< XInterface > SAL_CALL OSQLMessageDialog::Create(const Reference< XMul
 ::comphelper::StringSequence OSQLMessageDialog::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
+    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.ErrorMessageDialog"));
     return aSupported;
 }
 

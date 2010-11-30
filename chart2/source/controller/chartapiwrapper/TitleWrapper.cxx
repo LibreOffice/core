@@ -197,7 +197,6 @@ const Sequence< Property > & lcl_GetPropertySequence()
         ::chart::CharacterProperties::AddPropertiesToVector( aProperties );
         ::chart::LineProperties::AddPropertiesToVector( aProperties );
         ::chart::FillProperties::AddPropertiesToVector( aProperties );
-//         ::chart::NamedProperties::AddPropertiesToVector( aProperties );
         ::chart::UserDefinedProperties::AddPropertiesToVector( aProperties );
         ::chart::wrapper::WrappedAutomaticPositionProperties::addProperties( aProperties );
         ::chart::wrapper::WrappedScaleTextProperties::addProperties( aProperties );
@@ -553,9 +552,6 @@ Sequence< OUString > TitleWrapper::getSupportedServiceNames_Static()
     aServices[ 1 ] = C2U( "com.sun.star.drawing.Shape" );
     aServices[ 2 ] = C2U( "com.sun.star.xml.UserDefinedAttributeSupplier" );
     aServices[ 3 ] = C2U( "com.sun.star.style.CharacterProperties" );
-//     aServices[ 4 ] = C2U( "com.sun.star.beans.PropertySet" );
-//     aServices[ 5 ] = C2U( "com.sun.star.drawing.FillProperties" );
-//     aServices[ 6 ] = C2U( "com.sun.star.drawing.LineProperties" );
 
     return aServices;
 }

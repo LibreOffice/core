@@ -181,7 +181,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
         if ( xRootReadAccess.is() )
         {
             rtl::OUString aTitlePath = m_aPath;
-            aTitlePath += rtl::OUString::createFromAscii( "/Title" );
+            aTitlePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"));
 
             // Note: Avoid NoSuchElementExceptions, because exceptions are
             //       relatively 'expensive'. Checking for availability of
@@ -206,7 +206,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
 
             // Get TargetURL value.
             rtl::OUString aTargetURLPath = m_aPath;
-            aTargetURLPath += rtl::OUString::createFromAscii( "/TargetURL" );
+            aTargetURLPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/TargetURL"));
             if ( !( xRootReadAccess->getByHierarchicalName( aTargetURLPath )
                     >>= aValue ) )
             {
@@ -226,7 +226,7 @@ sal_Bool HierarchyEntry::getData( HierarchyEntryData& rData )
             rData.setTargetURL( aValue );
 
             rtl::OUString aTypePath = m_aPath;
-            aTypePath += rtl::OUString::createFromAscii( "/Type" );
+            aTypePath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Type"));
             if ( xRootReadAccess->hasByHierarchicalName( aTypePath ) )
             {
                 // Might not be present since it was introduced long after
@@ -349,7 +349,7 @@ sal_Bool HierarchyEntry::setData(
                     else
                     {
                         xParentNameAccess->getByName(
-                            rtl::OUString::createFromAscii( "Children" ) )
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
                                 >>= xNameAccess;
                     }
 
@@ -397,8 +397,8 @@ sal_Bool HierarchyEntry::setData(
                         // Append new entry to parents child list,
                         // which is a set of entries.
                         xParentNameAccess->getByName(
-                                        rtl::OUString::createFromAscii(
-                                            "Children" ) ) >>= xFac;
+                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                            "Children" )) ) >>= xFac;
                     }
 
                     OSL_ENSURE( xFac.is(),
@@ -429,7 +429,7 @@ sal_Bool HierarchyEntry::setData(
                 {
                     // Set Title value.
                     xNameReplace->replaceByName(
-                        rtl::OUString::createFromAscii( "Title" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
                         uno::makeAny( rData.getTitle() ) );
 
                     // Set TargetURL value.
@@ -445,14 +445,14 @@ sal_Bool HierarchyEntry::setData(
                             = m_xOfficeInstDirs->makeRelocatableURL( aValue );
 
                     xNameReplace->replaceByName(
-                        rtl::OUString::createFromAscii( "TargetURL" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
                         uno::makeAny( aValue ) );
 
                     // Set Type value.
                     sal_Int32 nType
                         = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
                     xNameReplace->replaceByName(
-                        rtl::OUString::createFromAscii( "Type" ),
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
                         uno::makeAny( nType ) );
 
                     if ( xContainer.is() )
@@ -667,7 +667,7 @@ sal_Bool HierarchyEntry::move(
         else
         {
             xOldParentNameAccess->getByName(
-                 rtl::OUString::createFromAscii( "Children" ) )
+                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
                     >>= xOldNameContainer;
         }
 
@@ -749,7 +749,7 @@ sal_Bool HierarchyEntry::move(
             else
             {
                 xNewParentNameAccess->getByName(
-                     rtl::OUString::createFromAscii( "Children" ) )
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
                         >>= xNewNameContainer;
             }
         }
@@ -760,7 +760,7 @@ sal_Bool HierarchyEntry::move(
             return sal_False;
 
         xNewNameReplace->replaceByName(
-            rtl::OUString::createFromAscii( "Title" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
             uno::makeAny( rData.getTitle() ) );
 
         // TargetURL property may contain a reference to the Office
@@ -772,11 +772,11 @@ sal_Bool HierarchyEntry::move(
         if ( m_xOfficeInstDirs.is() && ( aValue.getLength() > 0 ) )
             aValue = m_xOfficeInstDirs->makeRelocatableURL( aValue );
         xNewNameReplace->replaceByName(
-            rtl::OUString::createFromAscii( "TargetURL" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TargetURL")),
             uno::makeAny( aValue ) );
         sal_Int32 nType = rData.getType() == HierarchyEntryData::LINK ? 0 : 1;
         xNewNameReplace->replaceByName(
-            rtl::OUString::createFromAscii( "Type" ),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Type")),
             uno::makeAny( nType ) );
 
         xNewNameContainer->insertByName( aNewKey, aEntry );
@@ -892,7 +892,7 @@ sal_Bool HierarchyEntry::remove()
                     // Append new entry to parents child list,
                     // which is a set of entries.
                      xParentNameAccess->getByName(
-                        rtl::OUString::createFromAscii( "Children" ) )
+                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Children")) )
                             >>= xContainer;
                 }
 
@@ -960,7 +960,7 @@ sal_Bool HierarchyEntry::first( iterator& it )
                 if ( m_aPath.getLength() > 0 )
                 {
                     rtl::OUString aPath = m_aPath;
-                    aPath += rtl::OUString::createFromAscii( "/Children" );
+                    aPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Children"));
 
                     xRootHierNameAccess->getByHierarchicalName( aPath )
                         >>= xNameAccess;
@@ -1172,9 +1172,9 @@ const HierarchyEntryData& HierarchyEntry::iterator::operator*() const
             rtl::OUString aTargetURL = aTitle;
             rtl::OUString aType      = aTitle;
 
-            aTitle     += rtl::OUString::createFromAscii( "/Title" );
-            aTargetURL += rtl::OUString::createFromAscii( "/TargetURL" );
-            aType      += rtl::OUString::createFromAscii( "/Type" );
+            aTitle     += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Title"));
+            aTargetURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/TargetURL"));
+            aType      += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/Type"));
 
             rtl::OUString aValue;
             m_pImpl->dir->getByHierarchicalName( aTitle ) >>= aValue;

@@ -136,10 +136,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSet,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_NOFACTORY_IMPL_1( SortedDynamicResultSet,
-                                   OUString::createFromAscii(
-                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" ),
-                                   OUString::createFromAscii(
-                                   DYNAMIC_RESULTSET_SERVICE_NAME ) );
+                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   "com.sun.star.comp.ucb.SortedDynamicResultSet" )),
+                                   OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                   DYNAMIC_RESULTSET_SERVICE_NAME )) );
 
 //--------------------------------------------------------------------------
 // XComponent methods.
@@ -255,8 +255,8 @@ SortedDynamicResultSet::connectToCache(
         {
             xStubFactory = Reference< XCachedDynamicResultSetStubFactory >(
                 mxSMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" ) ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.ucb.CachedDynamicResultSetStubFactory" )) ),
                 UNO_QUERY );
         }
         catch ( Exception const & )
@@ -341,7 +341,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     Any  aRet;
 
     try {
-        aRet = pCurSet->getPropertyValue( OUString::createFromAscii( "IsRowCountFinal" ) );
+        aRet = pCurSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("IsRowCountFinal")) );
     }
     catch ( UnknownPropertyException ) {}
     catch ( WrappedTargetException ) {}
@@ -512,10 +512,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                         OUString::createFromAscii(
-                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" ),
-                         OUString::createFromAscii(
-                         DYNAMIC_RESULTSET_FACTORY_NAME ) );
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         DYNAMIC_RESULTSET_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

@@ -29,8 +29,6 @@
 #ifndef _SBA_GRID_HXX
 #define _SBA_GRID_HXX
 
-//  #include <sdb/tools.hxx>
-
 #include <svx/fmgridcl.hxx>
 
 #include <svx/fmgridif.hxx>

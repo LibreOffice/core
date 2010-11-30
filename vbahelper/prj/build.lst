@@ -1,4 +1,4 @@
-vba     vbahelper       :       oovbaapi basic sfx2 svx filter cppuhelper vcl comphelper svtools tools sal NULL
+vba     vbahelper       :       oovbaapi oox basic sfx2 svx filter cppuhelper vcl comphelper svtools tools sal NULL
 vba	vbahelper									usr1	-	all	  vba_mkout NULL
 #vba	vbahelper\inc								nmake	-	all	vba_inc NULL
 vba	vbahelper\source\vbahelper                        nmake	-	all	vba_vbahelper NULL

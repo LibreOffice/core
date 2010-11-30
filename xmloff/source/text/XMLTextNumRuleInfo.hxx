@@ -55,10 +55,8 @@ class XMLTextNumRuleInfo
     const ::rtl::OUString msNumberingIsOutline;
     const ::rtl::OUString msPropNameListId;
     const ::rtl::OUString msPropNameStartWith;
-    // --> OD 2008-11-26 #158694#
     const ::rtl::OUString msContinueingPreviousSubTree;
     const ::rtl::OUString msListLabelStringProp;
-    // <--
 
     // numbering rules instance and its name
     ::com::sun::star::uno::Reference <
@@ -73,31 +71,25 @@ class XMLTextNumRuleInfo
     sal_Bool            mbIsRestart;
 
     // numbering rules' attributes
-    // --> OD 2008-05-07 #refactorlists#
     sal_Int16           mnListLevelStartValue;
-    // <--
 
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     sal_Bool mbOutlineStyleAsNormalListStyle;
-    // <--
 
-    // --> OD 2008-11-26 #158694#
     sal_Bool mbContinueingPreviousSubTree;
     ::rtl::OUString msListLabelString;
-    // <--
+
 public:
 
     XMLTextNumRuleInfo();
 
     inline XMLTextNumRuleInfo& operator=( const XMLTextNumRuleInfo& rInfo );
 
-    // --> OD 2008-11-26 #158694#
     void Set( const ::com::sun::star::uno::Reference <
                         ::com::sun::star::text::XTextContent > & rTextContnt,
               const sal_Bool bOutlineStyleAsNormalListStyle,
               const XMLTextListAutoStylePool& rListAutoPool,
               const sal_Bool bExportTextNumberElement );
-    // <--
     inline void Reset();
 
     inline const ::rtl::OUString& GetNumRulesName() const
@@ -149,7 +141,6 @@ public:
         return rCmp.msNumRulesName == msNumRulesName;
     }
 
-    // --> OD 2008-11-26 #158694#
     inline sal_Bool IsContinueingPreviousSubTree() const
     {
         return mbContinueingPreviousSubTree;
@@ -158,7 +149,6 @@ public:
     {
         return msListLabelString;
     }
-    // <--
 };
 
 inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
@@ -171,13 +161,10 @@ inline XMLTextNumRuleInfo& XMLTextNumRuleInfo::operator=(
     mnListLevel = rInfo.mnListLevel;
     mbIsNumbered = rInfo.mbIsNumbered;
     mbIsRestart = rInfo.mbIsRestart;
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbOutlineStyleAsNormalListStyle = rInfo.mbOutlineStyleAsNormalListStyle;
-    // <--
-    // --> OD 2008-11-26 #158694#
     mbContinueingPreviousSubTree = rInfo.mbContinueingPreviousSubTree;
     msListLabelString = rInfo.msListLabelString;
-    // <--
 
     return *this;
 }
@@ -189,14 +176,11 @@ inline void XMLTextNumRuleInfo::Reset()
     msListId = ::rtl::OUString();
     mnListStartValue = -1;
     mnListLevel = 0;
-    // --> OD 2006-09-27 #i69627#
+    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
     mbIsNumbered = mbIsRestart =
     mbOutlineStyleAsNormalListStyle = sal_False;
-    // <--
-    // --> OD 2008-11-26 #158694#
     mbContinueingPreviousSubTree = sal_False;
     msListLabelString = ::rtl::OUString();
-    // <--
 }
 #endif  //  _XMLOFF_XMLTEXTNUMRULEINFO_HXX
 

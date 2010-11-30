@@ -284,7 +284,7 @@ void SalAbort( const XubString& rErrorText )
         std::fprintf( stderr, "Application Error" );
     else
         std::fprintf( stderr, "%s", ByteString( rErrorText, gsl_getSystemTextEncoding() ).GetBuffer() );
-    abort();
+    exit(-1);
 }
 
 const OUString& SalGetDesktopEnvironment()

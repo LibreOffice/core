@@ -742,6 +742,9 @@ void SwGlossaryDlg::Init()
     SvLBoxEntry* pSelEntry = 0;
     const String sSelStr(::GetCurrGlosGroup()->GetToken(0, GLOS_DELIM));
     const sal_uInt16 nSelPath = static_cast< sal_uInt16 >(::GetCurrGlosGroup()->GetToken(1, GLOS_DELIM).ToInt32());
+    // #i66304# - "My AutoText" comes from mytexts.bau, but should be translated
+    const String sMyAutoTextEnglish(RTL_CONSTASCII_USTRINGPARAM("My AutoText"));
+    const String sMyAutoTextTranslated(SW_RESSTR(STR_MY_AUTOTEXT));
     for(sal_uInt16 nId = 0; nId < nCnt; ++nId )
     {
         String sTitle;
@@ -750,6 +753,8 @@ void SwGlossaryDlg::Init()
             continue;
         if(!sTitle.Len())
             sTitle = sGroupName.GetToken( 0, GLOS_DELIM );
+        if(sTitle == sMyAutoTextEnglish)
+            sTitle = sMyAutoTextTranslated;
         SvLBoxEntry* pEntry = aCategoryBox.InsertEntry( sTitle );
         sal_uInt16 nPath = static_cast< sal_uInt16 >(sGroupName.GetToken( 1, GLOS_DELIM ).ToInt32());
 

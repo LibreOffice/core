@@ -168,8 +168,8 @@ class CGM
 #endif
         void                ImplComment( sal_uInt32, const char* );
         sal_uInt32              GetBackGroundColor();
-        sal_Bool                IsValid() { return mbStatus; };
-        sal_Bool                IsFinished() { return mbIsFinished; };
+        sal_Bool                IsValid() const { return mbStatus; };
+        sal_Bool                IsFinished() const { return mbIsFinished; };
         sal_Bool                Write( SvStream& rIStm );
 
         friend SvStream& operator>>( SvStream& rOStm, CGM& rCGM );

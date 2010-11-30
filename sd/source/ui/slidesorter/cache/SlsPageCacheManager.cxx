@@ -147,7 +147,7 @@ public:
     class CompareWithCache { public:
         CompareWithCache(const ::boost::shared_ptr<PageCacheManager::Cache>& rpCache)
             : mpCache(rpCache) {}
-        bool operator () (const PageCacheContainer::value_type& rValue)
+        bool operator () (const PageCacheContainer::value_type& rValue) const
         { return rValue.second == mpCache; }
     private:
         ::boost::shared_ptr<PageCacheManager::Cache> mpCache;

@@ -102,10 +102,10 @@ public:
     const SvXMLTokenMap& GetFtnConfigAttrTokenMap();
 
     /// set configuration at document; calls ProcessSettings
-    // --> OD 2005-01-31 #i40579# - move code from <CreateAndInsertLate(..)>
-    // to <Finish(..)>, because at this time all styles it references have been set.
+    /* Move code from <CreateAndInsertLate(..)> to <Finish(..)>, because
+       at this time all styles it references have been set. (#i40579#)
+    */
     virtual void Finish( sal_Bool bOverwrite);
-    // <--
 
     /// set configuration at document
     void ProcessSettings(

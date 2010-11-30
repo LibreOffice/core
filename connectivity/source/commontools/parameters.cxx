@@ -241,7 +241,7 @@ namespace dbtools
         // format is:
         // <detail_column> = :<new_param_name>
         sFilter = quoteName( m_sIdentifierQuoteString, _rDetailLink );
-        sFilter += ::rtl::OUString::createFromAscii( " = :" );
+        sFilter += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " = :" ));
 
         // generate a parameter name which is not already used
         _rNewParamName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "link_from_" ) );
@@ -443,6 +443,7 @@ namespace dbtools
         {
 #if OSL_DEBUG_LEVEL > 0
             if ( aParam->second.aInnerIndexes.size() )
+            {
                 if ( aParam->second.eType == eLinkedByColumnName )
                 {
                     if ( nSmallestIndexLinkedByColumnName == -1 )
@@ -452,6 +453,7 @@ namespace dbtools
                 {
                     nLargestIndexNotLinkedByColumnName = aParam->second.aInnerIndexes[ aParam->second.aInnerIndexes.size() - 1 ];
                 }
+            }
 #endif
             if ( aParam->second.eType != eFilledExternally )
                 continue;

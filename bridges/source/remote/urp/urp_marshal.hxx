@@ -69,7 +69,7 @@ namespace bridges_urp
         return ( m_pos - m_base ) == 2*sizeof( sal_Int32 );
     }
 
-    inline sal_Int32 Marshal::getSize()
+    inline sal_Int32 Marshal::getSize() const
     {
         return ((sal_Int32) (m_pos - m_base));
     }

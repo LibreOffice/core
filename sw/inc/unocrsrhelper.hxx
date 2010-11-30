@@ -61,9 +61,6 @@ namespace com{ namespace sun{ namespace star{
     }
 }}}
 
-/* -----------------03.12.98 12:16-------------------
- *
- * --------------------------------------------------*/
 enum SwGetPropertyStatesCaller
 {
     SW_PROPERTY_STATE_CALLER_DEFAULT,
@@ -72,9 +69,6 @@ enum SwGetPropertyStatesCaller
     SW_PROPERTY_STATE_CALLER_SWX_TEXT_PORTION_TOLERANT
 };
 
-/* -----------------------------14.12.00 15:06--------------------------------
-
- ---------------------------------------------------------------------------*/
 namespace SwUnoCursorHelper
 {
     //  keep Any's mapped by (WhichId << 16 ) + (MemberId)

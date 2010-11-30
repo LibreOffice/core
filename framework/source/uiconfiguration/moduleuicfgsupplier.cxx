@@ -169,7 +169,7 @@ RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "framework", "Ocke.Janssen@sun.com", "Modul
         m_xDefaultCfgRootStorage = Reference< XStorage >( xStorageFactory->createInstanceWithArguments( aArgs ), UNO_QUERY_THROW );
 
         Reference < XOutputStream > xTempOut( m_xServiceManager->createInstance (
-                                                ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
+                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
                                               UNO_QUERY );
 
         Reference< XPackageStructureCreator > xPackageStructCreator( m_xServiceManager->createInstance(

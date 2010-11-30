@@ -557,7 +557,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
     if (!xWindow.is())
         throw css::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("Frame::initialize() called without a valid container window reference."),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame::initialize() called without a valid container window reference.")),
                     static_cast< css::frame::XFrame* >(this));
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -565,7 +565,7 @@ void SAL_CALL Frame::initialize( const css::uno::Reference< css::awt::XWindow >&
 
     if ( m_xContainerWindow.is() )
         throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Frame::initialized() is called more then once, which isnt usefull nor allowed."),
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Frame::initialized() is called more then once, which isnt usefull nor allowed.")),
                 static_cast< css::frame::XFrame* >(this));
 
     // Look for rejected calls first!
@@ -2614,7 +2614,7 @@ void SAL_CALL Frame::impl_setPropertyValue(const ::rtl::OUString& /*sProperty*/,
                                            const css::uno::Any&   aValue   )
 
 {
-    static ::rtl::OUString MATERIALPROP_TITLE = ::rtl::OUString::createFromAscii("title");
+    static ::rtl::OUString MATERIALPROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("title"));
 
     /* There is no need to lock any mutex here. Because we share the
        solar mutex with our base class. And we said to our base class: "dont release it on calling us" .-)

@@ -1502,7 +1502,7 @@ void CopyTableWizard::impl_doCopy_nothrow()
             sColumns.append(aDestColumnNames[aPosIter->second - 1]);
             sColumns.append(sQuote);
         }
-    } // for ( ; aPosIter != aColumnMapping.end() ; ++aPosIter )
+    }
     ::rtl::OUStringBuffer sSql;
     sSql.appendAscii("INSERT INTO ");
     const ::rtl::OUString sComposedTableName = ::dbtools::composeTableName( xDestMetaData, _xTable, ::dbtools::eInDataManipulation, false, false, true );

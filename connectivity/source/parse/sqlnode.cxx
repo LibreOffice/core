@@ -422,7 +422,7 @@ void OSQLParseNode::impl_parseNodeToString_throw(::rtl::OUStringBuffer& rString,
 
     case as:
         if ( rParam.aMetaData.generateASBeforeCorrelationName() )
-            rString.append(::rtl::OUString::createFromAscii( " AS" ));
+            rString.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS")));
         bHandled = true;
         break;
 
@@ -670,7 +670,7 @@ void OSQLParseNode::impl_parseTableRangeNodeToString_throw(::rtl::OUStringBuffer
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::impl_parseTableRangeNodeToString_throw" );
     OSL_PRECOND(  ( count() == 2 ) || ( count() == 3 ) || ( count() == 5 ) ,"Illegal count");
 
-    // rString += ::rtl::OUString::createFromAscii(" ");
+    // rString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
     ::std::for_each(m_aChildren.begin(),m_aChildren.end(),
         boost::bind( &OSQLParseNode::impl_parseNodeToString_throw, _1, boost::ref( rString ), boost::cref( rParam ) ));
 }
@@ -726,7 +726,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
     {
         ::rtl::OUString aStr = ConvertLikeToken(pParaNode, pEscNode, rParam.bInternational);
         rString.appendAscii(" ");
-        rString.append(SetQuotation(aStr,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'")));
+        rString.append(SetQuotation(aStr,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'\'"))));
     }
     else
         pParaNode->impl_parseNodeToString_throw( rString, aNewParam );
@@ -989,7 +989,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                             sal_Int16 nScale = 0;
                             try
                             {
-                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString::createFromAscii("Decimals") );
+                                Any aValue = getNumberFormatProperty( m_xFormatter, m_nFormatKey, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Decimals")) );
                                 aValue >>= nScale;
                             }
                             catch( Exception& )
@@ -1006,7 +1006,7 @@ sal_Int16 OSQLParser::buildLikeRule(OSQLParseNode*& pAppend, OSQLParseNode*& pLi
                         break;
                     default:
                         m_sErrorMessage = m_pContext->getErrorMessage(IParseContext::ERROR_VALUE_NO_LIKE);
-                        m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString::createFromAscii("#1")),2,pLiteral->getTokenValue());
+                        m_sErrorMessage = m_sErrorMessage.replaceAt(m_sErrorMessage.indexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#1"))),2,pLiteral->getTokenValue());
                         break;
                 }
             }
@@ -1022,10 +1022,10 @@ OSQLParseNode* OSQLParser::buildNode_Date(const double& fValue, sal_Int32 nType)
 {
     ::rtl::OUString aEmptyString;
     OSQLParseNode* pNewNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::set_fct_spec));
-    pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("{"), SQL_NODE_PUNCTUATION));
+    pNewNode->append(new OSQLInternalNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("{")), SQL_NODE_PUNCTUATION));
     OSQLParseNode* pDateNode = new OSQLInternalNode(aEmptyString, SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::odbc_fct_spec));
     pNewNode->append(pDateNode);
-    pNewNode->append(new OSQLInternalNode(::rtl::OUString::createFromAscii("}"), SQL_NODE_PUNCTUATION));
+    pNewNode->append(new OSQLInternalNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("}")), SQL_NODE_PUNCTUATION));
 
     switch (nType)
     {
@@ -1100,7 +1100,7 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
 {
     ::rtl::OUString aValue;
     if(!m_xCharClass.is())
-        m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.CharacterClassification")),UNO_QUERY);
+        m_xCharClass  = Reference<XCharacterClassification>(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.CharacterClassification"))),UNO_QUERY);
     if(m_xCharClass.is() && s_xLocaleData.is())
     {
         try
@@ -1109,10 +1109,10 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
             if((aResult.TokenType & KParseType::IDENTNAME) && aResult.EndPos == _rValue.getLength())
             {
                 aValue = ::rtl::OUString::valueOf(aResult.Value);
-                sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString::createFromAscii("."));
+                sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")));
                 if((nPos+_nScale) < aValue.getLength())
                     aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,::rtl::OUString());
-                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString::createFromAscii(".")),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
+                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."))),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
                 return aValue;
             }
         }
@@ -1319,7 +1319,7 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
         s_pGarbageCollector = new OSQLParseNodesGarbageCollector();
 
         if(!s_xLocaleData.is())
-            s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString::createFromAscii("com.sun.star.i18n.LocaleData")),UNO_QUERY);
+            s_xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData"))),UNO_QUERY);
 
         // auf 0 zuruecksetzen
         memset(OSQLParser::s_nRuleIDs,0,sizeof(OSQLParser::s_nRuleIDs[0]) * (OSQLParseNode::rule_count+1));
@@ -1484,7 +1484,7 @@ void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
         OSQLParseNode* pChildNode = _pNode->getChild(i);
         if(SQL_ISRULE(pChildNode,parameter) && pChildNode->count() > 1)
         {
-            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString::createFromAscii("?") ,SQL_NODE_PUNCTUATION,0);
+            OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("?")) ,SQL_NODE_PUNCTUATION,0);
             delete pChildNode->replace(pChildNode->getChild(0),pNewNode);
             sal_Int32 nChildCount = pChildNode->count();
             for(sal_Int32 j=1;j < nChildCount;++j)
@@ -1722,19 +1722,19 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUStringBuffer& rString, const SQLPa
             SQL_ISTOKEN(pODBCNodeChild, T) ||
             SQL_ISTOKEN(pODBCNodeChild, TS) ))
         {
-            ::rtl::OUString suQuote(::rtl::OUString::createFromAscii("'"));
+            ::rtl::OUString suQuote(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'")));
             if (rParam.bPredicate)
             {
                  if (rParam.aMetaData.shouldEscapeDateTime())
                  {
-                     suQuote = ::rtl::OUString::createFromAscii("#");
+                     suQuote = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("#"));
                  }
             }
             else
             {
                  if (rParam.aMetaData.shouldEscapeDateTime())
                  {
-                     // suQuote = ::rtl::OUString::createFromAscii("'");
+                     // suQuote = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
                      return sal_False;
                  }
             }
@@ -1771,7 +1771,7 @@ void OSQLParseNode::replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::
         {
             OSQLParseNode * pCol = removeAt((sal_uInt32)0);
             append(new OSQLParseNode(rTableAlias,SQL_NODE_NAME));
-            append(new OSQLParseNode(::rtl::OUString::createFromAscii("."),SQL_NODE_PUNCTUATION));
+            append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".")),SQL_NODE_PUNCTUATION));
             append(pCol);
         }
         else
@@ -1798,7 +1798,7 @@ OSQLParseNode* MakeANDNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
 {
     OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_term));
     pNewNode->append(pLeftLeaf);
-    pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("AND"),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+    pNewNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AND")),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
     pNewNode->append(pRightLeaf);
     return pNewNode;
 }
@@ -1807,7 +1807,7 @@ OSQLParseNode* MakeORNode(OSQLParseNode *pLeftLeaf,OSQLParseNode *pRightLeaf)
 {
     OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::search_condition));
     pNewNode->append(pLeftLeaf);
-    pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("OR"),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
+    pNewNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OR")),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
     pNewNode->append(pRightLeaf);
     return pNewNode;
 }
@@ -1909,7 +1909,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         {
             OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_term));
             pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
-            pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("AND"),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
+            pNewNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AND")),SQL_NODE_KEYWORD,SQL_TOKEN_AND));
             pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
             replaceAndReset(pSearchCondition,pNewNode);
 
@@ -1929,7 +1929,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         {
             OSQLParseNode* pNewNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::search_condition));
             pNewNode->append(pSearchCondition->removeAt((sal_uInt32)0));
-            pNewNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("OR"),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
+            pNewNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OR")),SQL_NODE_KEYWORD,SQL_TOKEN_OR));
             pNewNode->append(pSearchCondition->removeAt((sal_uInt32)1));
             replaceAndReset(pSearchCondition,pNewNode);
 
@@ -1961,22 +1961,22 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         switch(pComparison->getNodeType())
         {
             case SQL_NODE_EQUAL:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<>"),SQL_NODE_NOTEQUAL,SQL_NOTEQUAL);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<>")),SQL_NODE_NOTEQUAL,SQL_NOTEQUAL);
                 break;
             case SQL_NODE_LESS:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii(">="),SQL_NODE_GREATEQ,SQL_GREATEQ);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">=")),SQL_NODE_GREATEQ,SQL_GREATEQ);
                 break;
             case SQL_NODE_GREAT:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<="),SQL_NODE_LESSEQ,SQL_LESSEQ);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<=")),SQL_NODE_LESSEQ,SQL_LESSEQ);
                 break;
             case SQL_NODE_LESSEQ:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii(">"),SQL_NODE_GREAT,SQL_GREAT);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">")),SQL_NODE_GREAT,SQL_GREAT);
                 break;
             case SQL_NODE_GREATEQ:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("<"),SQL_NODE_LESS,SQL_LESS);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<")),SQL_NODE_LESS,SQL_LESS);
                 break;
             case SQL_NODE_NOTEQUAL:
-                pNewComparison = new OSQLParseNode(::rtl::OUString::createFromAscii("="),SQL_NODE_EQUAL,SQL_EQUAL);
+                pNewComparison = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=")),SQL_NODE_EQUAL,SQL_EQUAL);
                 break;
             default:
                 OSL_ENSURE( false, "OSQLParseNode::negateSearchCondition: unexpected node type!" );
@@ -2001,7 +2001,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         OSQLParseNode* pNot = pPart2->getChild(nNotPos);
         OSQLParseNode* pNotNot = NULL;
         if(pNot->isRule())
-            pNotNot = new OSQLParseNode(::rtl::OUString::createFromAscii("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
+            pNotNot = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NOT")),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
         else
             pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
         pPart2->replace(pNot, pNotNot);
@@ -2012,7 +2012,7 @@ void OSQLParseNode::negateSearchCondition(OSQLParseNode*& pSearchCondition,sal_B
         OSQLParseNode* pNot = pSearchCondition->getChild( 1 )->getChild( 0 );
         OSQLParseNode* pNotNot = NULL;
         if(pNot->isRule())
-            pNotNot = new OSQLParseNode(::rtl::OUString::createFromAscii("NOT"),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
+            pNotNot = new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NOT")),SQL_NODE_KEYWORD,SQL_TOKEN_NOT);
         else
             pNotNot = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::sql_not));
         pSearchCondition->getChild( 1 )->replace(pNot, pNotNot);
@@ -2104,9 +2104,9 @@ void OSQLParseNode::absorptions(OSQLParseNode*& pSearchCondition)
             OSQLParseNode* p2ndAnd = MakeANDNode(new OSQLParseNode(*pA),pC);
             pNewNode = MakeORNode(p1stAnd,p2ndAnd);
             OSQLParseNode* pNode = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(")),SQL_NODE_PUNCTUATION));
             pNode->append(pNewNode);
-            pNode->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            pNode->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")),SQL_NODE_PUNCTUATION));
             OSQLParseNode::eraseBraces(p1stAnd);
             OSQLParseNode::eraseBraces(p2ndAnd);
             replaceAndReset(pSearchCondition,pNode);
@@ -2184,9 +2184,9 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(")),SQL_NODE_PUNCTUATION));
             pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")),SQL_NODE_PUNCTUATION));
 
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
@@ -2201,9 +2201,9 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode* pNode = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(")),SQL_NODE_PUNCTUATION));
             pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")),SQL_NODE_PUNCTUATION));
 
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
@@ -2218,9 +2218,9 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(")),SQL_NODE_PUNCTUATION));
             pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")),SQL_NODE_PUNCTUATION));
 
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
@@ -2235,9 +2235,9 @@ void OSQLParseNode::compress(OSQLParseNode *&pSearchCondition)
             OSQLParseNode* pNode    = MakeORNode(pLeft,pRight);
 
             OSQLParseNode* pNewRule = new OSQLParseNode(::rtl::OUString(),SQL_NODE_RULE,OSQLParser::RuleID(OSQLParseNode::boolean_primary));
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii("("),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("(")),SQL_NODE_PUNCTUATION));
             pNewRule->append(pNode);
-            pNewRule->append(new OSQLParseNode(::rtl::OUString::createFromAscii(")"),SQL_NODE_PUNCTUATION));
+            pNewRule->append(new OSQLParseNode(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")),SQL_NODE_PUNCTUATION));
 
             OSQLParseNode::eraseBraces(pLeft);
             OSQLParseNode::eraseBraces(pRight);
@@ -2475,7 +2475,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
         case SQL_NODE_STRING:
             if (rString.getLength())
                 rString.appendAscii(" ");
-            rString.append(SetQuotation(m_aNodeValue,::rtl::OUString::createFromAscii("\'"),::rtl::OUString::createFromAscii("\'\'")));
+            rString.append(SetQuotation(m_aNodeValue,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'")),::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'\'"))));
             break;
         case SQL_NODE_NAME:
             if (rString.getLength())

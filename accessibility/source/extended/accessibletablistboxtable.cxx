@@ -283,7 +283,7 @@ namespace accessibility
     // -----------------------------------------------------------------------------
     ::rtl::OUString AccessibleTabListBoxTable::getImplementationName (void) throw (RuntimeException)
     {
-        return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.AccessibleTabListBoxTable");
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" ));
     }
     // -----------------------------------------------------------------------------
     // XAccessibleSelection

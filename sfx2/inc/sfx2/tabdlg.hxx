@@ -302,7 +302,7 @@ public:
     String              GetUserData() { return aUserString; }
     virtual void        FillUserData();
     virtual BOOL        IsReadOnly() const;
-    virtual void PageCreated (SfxAllItemSet aSet); //add CHINA001
+    virtual void PageCreated (SfxAllItemSet aSet);
     static const SfxPoolItem* GetItem( const SfxItemSet& rSet, USHORT nSlot, sal_Bool bDeep = sal_True );
 
     void SetFrame(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& xFrame);

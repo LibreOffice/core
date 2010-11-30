@@ -43,40 +43,37 @@ SRC1FILES =  \
         drformsh.src
 
 SLOFILES =  \
-        $(SLO)$/fupoor.obj \
-        $(SLO)$/fumark.obj \
-        $(SLO)$/fudraw.obj \
-        $(SLO)$/fusel.obj \
-        $(SLO)$/fusel2.obj \
-        $(SLO)$/fuconstr.obj \
-        $(SLO)$/fuconrec.obj \
-        $(SLO)$/fuconarc.obj \
-        $(SLO)$/fuconuno.obj \
-        $(SLO)$/fuconpol.obj \
-        $(SLO)$/fuconcustomshape.obj \
-        $(SLO)$/fuins1.obj \
-        $(SLO)$/fuins2.obj \
-        $(SLO)$/futext.obj \
-        $(SLO)$/futext2.obj \
-        $(SLO)$/futext3.obj \
+        $(EXCEPTIONSFILES)
+
+EXCEPTIONSFILES= \
+        $(SLO)$/chartsh.obj \
         $(SLO)$/drawsh.obj \
         $(SLO)$/drawsh2.obj \
         $(SLO)$/drawsh4.obj \
         $(SLO)$/drawsh5.obj \
+        $(SLO)$/drformsh.obj \
         $(SLO)$/drtxtob.obj \
         $(SLO)$/drtxtob1.obj \
         $(SLO)$/drtxtob2.obj \
-        $(SLO)$/drformsh.obj \
-        $(SLO)$/oleobjsh.obj \
-        $(SLO)$/chartsh.obj  \
-        $(SLO)$/graphsh.obj	\
-        $(SLO)$/mediash.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/fusel.obj \
+        $(SLO)$/fuconarc.obj \
+        $(SLO)$/fuconcustomshape.obj \
+        $(SLO)$/fuconpol.obj \
+        $(SLO)$/fuconrec.obj \
+        $(SLO)$/fuconstr.obj \
+        $(SLO)$/fuconuno.obj \
+        $(SLO)$/fudraw.obj \
+        $(SLO)$/fuins1.obj \
         $(SLO)$/fuins2.obj \
-        $(SLO)$/graphsh.obj	\
-        $(SLO)$/mediash.obj
+        $(SLO)$/fumark.obj \
+        $(SLO)$/fupoor.obj \
+        $(SLO)$/fusel.obj \
+        $(SLO)$/fusel2.obj \
+        $(SLO)$/futext.obj \
+        $(SLO)$/futext2.obj \
+        $(SLO)$/futext3.obj \
+        $(SLO)$/graphsh.obj \
+        $(SLO)$/mediash.obj \
+        $(SLO)$/oleobjsh.obj
 
 NOOPTFILES=\
     $(SLO)$/fusel.obj

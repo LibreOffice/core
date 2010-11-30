@@ -471,9 +471,6 @@ namespace dbaui
         // remove all grid columns and dispose them
         void clearGridColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _xColContainer);
 
-        sal_Bool isHiContrast() const;
-
-
         /** checks if the currently displayed entry changed
             @param  _sName
                     Name of the changed entry

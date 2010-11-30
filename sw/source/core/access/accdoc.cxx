@@ -99,7 +99,7 @@ void SwAccessibleDocumentBase::AddChild( Window *pWin, sal_Bool bFireEvent )
 {
     SolarMutexGuard aGuard;
 
-    ASSERT( !mpChildWin, "only one child window is supported" );
+    OSL_ENSURE( !mpChildWin, "only one child window is supported" );
     if( !mpChildWin )
     {
         mpChildWin = pWin;
@@ -118,7 +118,7 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 {
     SolarMutexGuard aGuard;
 
-    ASSERT( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
+    OSL_ENSURE( !mpChildWin || pWin == mpChildWin, "invalid child window to remove" );
     if( mpChildWin && pWin == mpChildWin )
     {
         AccessibleEventObject aEvent;
@@ -338,7 +338,7 @@ SwAccessibleDocument::~SwAccessibleDocument()
 
 void SwAccessibleDocument::Dispose( sal_Bool bRecursive )
 {
-    ASSERT( GetFrm() && GetMap(), "already disposed" );
+    OSL_ENSURE( GetFrm() && GetMap(), "already disposed" );
 
     Window *pWin = GetMap() ? GetMap()->GetShell()->GetWin() : 0;
     if( pWin )

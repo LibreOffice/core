@@ -286,7 +286,7 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
         ::ucbhelper::Content                       aCnt( rBaseURL.GetMainURL( INetURLObject::NO_DECODE ), xEnv );
 
         uno::Sequence< OUString > aProps( 1 );
-        aProps.getArray()[ 0 ] = OUString::createFromAscii( "Url" );
+        aProps.getArray()[ 0 ] = OUString(RTL_CONSTASCII_USTRINGPARAM("Url"));
 
         uno::Reference< sdbc::XResultSet > xResultSet( aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
 
@@ -334,10 +334,10 @@ void Gallery::ImplLoadSubDirs( const INetURLObject& rBaseURL, sal_Bool& rbDirIsR
 
                     if(aThmURL.GetExtension().equalsIgnoreAsciiCaseAscii("thm"))
                     {
-                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString::createFromAscii( "sdg" ) );
-                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString::createFromAscii( "sdv" ) );
-                        const OUString  aTitleProp( OUString::createFromAscii( "Title" ) );
-                        const OUString  aReadOnlyProp( OUString::createFromAscii( "IsReadOnly" ) );
+                        INetURLObject   aSdgURL( aThmURL); aSdgURL.SetExtension( OUString(RTL_CONSTASCII_USTRINGPARAM("sdg")) );
+                        INetURLObject   aSdvURL( aThmURL ); aSdvURL.SetExtension( OUString(RTL_CONSTASCII_USTRINGPARAM("sdv")) );
+                        const OUString aTitleProp( RTL_CONSTASCII_USTRINGPARAM("Title") );
+                        const OUString aReadOnlyProp( RTL_CONSTASCII_USTRINGPARAM("IsReadOnly") );
                         OUString        aTitle;
                         sal_Bool        bReadOnly = sal_False;
 

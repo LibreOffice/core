@@ -59,7 +59,7 @@ sdbcx::ObjectType ODbaseTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
     ODbaseTable* pRet = new ODbaseTable(this,(ODbaseConnection*)static_cast<OFileCatalog&>(m_rParent).getConnection(),
-                                        _rName,::rtl::OUString::createFromAscii("TABLE"));
+                                        _rName,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE")));
 
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();

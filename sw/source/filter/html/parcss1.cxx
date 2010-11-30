@@ -174,7 +174,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-'==cNextCh && !IsEOF() );
+                             ('-'==cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -272,7 +272,7 @@ CSS1Token CSS1Parser::GetNextToken()
                     } while( ('A' <= cNextCh && cNextCh <= 'Z') ||
                              ('a' <= cNextCh && cNextCh <= 'z') ||
                              ('0' <= cNextCh && cNextCh <= '9') ||
-                             '-' == cNextCh && !IsEOF() );
+                             ('-' == cNextCh && !IsEOF()) );
 
                     aToken += String(sTmpBuffer.makeStringAndClear());
 
@@ -424,7 +424,7 @@ CSS1Token CSS1Parser::GetNextToken()
 
                         // Ist es eine Einheit?
                         const sal_Char *pCmp1 = 0, *pCmp2 = 0, *pCmp3 = 0;
-                        double nScale1 = 1., nScale2 = 1., nScale3 = 1.;
+                        double nScale1 = 1., nScale2 = 1.;
                         CSS1Token nToken1 = CSS1_LENGTH,
                                   nToken2 = CSS1_LENGTH,
                                   nToken3 = CSS1_LENGTH;
@@ -482,7 +482,7 @@ CSS1Token CSS1Parser::GetNextToken()
                         else if( pCmp3 &&
                                  aIdent.EqualsIgnoreCaseAscii(pCmp3) )
                         {
-                            nScale = nScale3;
+                            nScale =  1.; // nScale3
                             nRet = nToken3;
                         }
                         else
@@ -524,8 +524,6 @@ CSS1Token CSS1Parser::GetNextToken()
         case '.': // DOT_W_WS | DOT_WO_WS
             nRet = bPrevWhiteSpace ? CSS1_DOT_W_WS : CSS1_DOT_WO_WS;
             break;
-
-        // case '/': siehe oben
 
         case '+': // '+'
             nRet = CSS1_PLUS;
@@ -1157,6 +1155,9 @@ CSS1Expression *CSS1Parser::ParseDeclaration( String& rProperty )
 /*  */
 
 CSS1Parser::CSS1Parser()
+    : nValue(0)
+    , eState(CSS1_PAR_ACCEPTED)
+    , nToken(CSS1_NULL)
 {
 }
 
@@ -1406,7 +1407,6 @@ BOOL CSS1Expression::GetColor( Color &rColor ) const
                         nColor += c;
                 }
             }
-            // bRet = i==6;
             bRet = TRUE;
         }
         break;
