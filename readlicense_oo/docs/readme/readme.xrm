@@ -92,47 +92,44 @@
 			</div>
 			<div class="LINUX" id="Linuxi2">
 			    <p id="s2we10"> xml:lang="en-US">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
+				<p id="s2we11">This “stand-alone” ${PRODUCTNAME} installer is provided for users in need of previews, having special needs, and for out-of-the-ordinary cases.</p>
 				<ul>
 					<li>
-						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher</p>
+						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s253we" xml:lang="en-US">glibc2 version 2.5 or higher</p>
+						<p id="s253we" xml:lang="en-US">glibc2 version 2.5 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s256we" xml:lang="en-US">gtk version 2.10.4 or higher</p>
+						<p id="s256we" xml:lang="en-US">gtk version 2.10.4 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</p>
+						<p id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended);</p>
 					</li>
 
 					<li>
-						<p id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+						<p id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended);</p>
 					</li>
 
 					<li>
-						<p id="n42dfgf" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
+						<p id="n42dfgf" xml:lang="en-US">Up to 1.55 GB available hard disk space;</p>
 					</li>
 
 					<li>
-						<p id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
+						<p id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors;</p>
 					</li>
 
 					<li>
-						<p id="fhrtz5" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff" xml:lang="en-US">Gnome 2.16 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
+						<p id="wd2dff" xml:lang="en-US">Gnome 2.16 or higher, with the gail 1.8.6 and the at-spi 1.7 packages (required for support for assistive technology [AT] tools), or another compatible GUI (such as KDE, among others).</p>
 					</li>
 				</ul>
-				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and even within the same distribution there may be different installation options (KDE vs Gnome, etc.). Some distributions ship with their own ‘native’ version of ${PRODUCTNAME}, which may have different features from this Community ${PRODUCTNAME}. Sometimes you can install the Community ${PRODUCTNAME} alongside the ‘native’ version. However, it’s usually safer to remove the ‘native’ version before installing this Community version. Consult the documentation for your distribution for details of how to do this.</p>
-				<p class="note" id="Linuxi4a" xml:lang="en-US">It is recommended that you always backup your system before you remove or install software.</p>
+				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and there may be different installation options (KDE vs Gnome, etc.) available from the same Linux vendor. Some distributions ship with their own “native” version of ${PRODUCTNAME}, which may have different features from this community-supplied version of ${PRODUCTNAME}. In many cases, you can install the community-supplied ${PRODUCTNAME} alongside a “native” version. However, you may prefer to remove the “native” version before installing this community-supplied version. For details on how to do that, please consult the user help resources provided by your particular Linux vendor.</p>
+				<p class="note" id="Linuxi4a" xml:lang="en-US">It is a recommended best practice to back-up your system and data before you remove or install software.</p>
 			</div>
-			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</p>
+			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system, and please ensure that read, write and run access rights have been granted. Close all other programs before starting the installation process.</p>
 		</div>
 
 		<div class="LINUX WIN" id="StartupProblems">
