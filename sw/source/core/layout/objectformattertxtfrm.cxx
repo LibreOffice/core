@@ -103,7 +103,7 @@ SwObjectFormatterTxtFrm* SwObjectFormatterTxtFrm::CreateObjFormatter(
     if ( _rAnchorTxtFrm.IsFollow() )
     {
         pMasterOfAnchorFrm = _rAnchorTxtFrm.FindMaster();
-        while ( pMasterOfAnchorFrm->IsFollow() )
+        while ( pMasterOfAnchorFrm && pMasterOfAnchorFrm->IsFollow() )
         {
             pMasterOfAnchorFrm = pMasterOfAnchorFrm->FindMaster();
         }
