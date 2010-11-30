@@ -35,7 +35,6 @@
 #include <boost/scoped_ptr.hpp>
 
 #include <vector>
-#include <memory>
 
 //====================================================================
 
@@ -396,18 +395,8 @@ public:
     void            RemoveOldestUndoActions( USHORT const i_count );
 
 protected:
-    /** retrieve the context for a to-be-executed Undo or Redo operation
-
-        This method is called immediately before an SfxUndoAction is undo or redone. If a derived class provides a non-<NULL/>
-        context here, it is passed to SfxUndoAction's UndoWithContext resp. RedoWithContext. If no context is provided,
-        the SfxUndoAction's normal Undo/Redo is called.
-
-        The method is called with the UndoManager's mutex locked.
-
-        The default implementation of the method returns a <NULL/> context.
-    */
-    virtual ::std::auto_ptr< SfxUndoContext >
-                    GetUndoContext();
+    BOOL    UndoWithContext( SfxUndoContext& i_context );
+    BOOL    RedoWithContext( SfxUndoContext& i_context );
 
 private:
     USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
@@ -419,6 +408,9 @@ private:
     bool    ImplIsUndoEnabled_Lock() const;
     bool    ImplIsInListAction_Lock() const;
     void    ImplEnableUndo_Lock( bool const i_enable );
+
+    BOOL    ImplUndo( SfxUndoContext* i_contextOrNull );
+    BOOL    ImplRedo( SfxUndoContext* i_contextOrNull );
 
     friend class ::svl::undo::impl::LockGuard;
 };

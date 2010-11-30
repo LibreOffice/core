@@ -729,6 +729,20 @@ bool SfxUndoManager::IsDoing() const
 
 BOOL SfxUndoManager::Undo()
 {
+    return ImplUndo( NULL );
+}
+
+//------------------------------------------------------------------------
+
+BOOL SfxUndoManager::UndoWithContext( SfxUndoContext& i_context )
+{
+    return ImplUndo( &i_context );
+}
+
+//------------------------------------------------------------------------
+
+BOOL SfxUndoManager::ImplUndo( SfxUndoContext* i_contextOrNull )
+{
     UndoManagerGuard aGuard( *m_pData );
     OSL_ENSURE( !IsDoing(), "SfxUndoManager::Undo: *nested* Undo/Redo actions? How this?" );
 
@@ -751,12 +765,11 @@ BOOL SfxUndoManager::Undo()
     const String sActionComment = pAction->GetComment();
     try
     {
-        ::std::auto_ptr< SfxUndoContext > pUndoContext( GetUndoContext() );
         // clear the guard/mutex before calling into the SfxUndoAction - this can be an extension-implemented UNO component
         // nowadays ...
         aGuard.clear();
-        if ( pUndoContext.get() != NULL )
-            pAction->UndoWithContext( *pUndoContext );
+        if ( i_contextOrNull != NULL )
+            pAction->UndoWithContext( *i_contextOrNull );
         else
             pAction->Undo();
         aGuard.reset();
@@ -816,6 +829,20 @@ XubString SfxUndoManager::GetRedoActionComment( USHORT nNo, bool const i_current
 
 BOOL SfxUndoManager::Redo()
 {
+    return ImplRedo( NULL );
+}
+
+//------------------------------------------------------------------------
+
+BOOL SfxUndoManager::RedoWithContext( SfxUndoContext& i_context )
+{
+    return ImplRedo( &i_context );
+}
+
+//------------------------------------------------------------------------
+
+BOOL SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
+{
     UndoManagerGuard aGuard( *m_pData );
     OSL_ENSURE( !IsDoing(), "SfxUndoManager::Redo: *nested* Undo/Redo actions? How this?" );
 
@@ -838,12 +865,11 @@ BOOL SfxUndoManager::Redo()
     const String sActionComment = pAction->GetComment();
     try
     {
-        ::std::auto_ptr< SfxUndoContext > pUndoContext( GetUndoContext() );
         // clear the guard/mutex before calling into the SfxUndoAction - this can be a extension-implemented UNO component
         // nowadays ...
         aGuard.clear();
-        if ( pUndoContext.get() != NULL )
-            pAction->RedoWithContext( *pUndoContext );
+        if ( i_contextOrNull != NULL )
+            pAction->RedoWithContext( *i_contextOrNull );
         else
             pAction->Redo();
         aGuard.reset();
@@ -1185,13 +1211,6 @@ void SfxUndoManager::RemoveOldestUndoActions( USHORT const i_count )
         --m_pData->pUndoArray->nCurUndoAction;
         --nActionsToRemove;
     }
-}
-
-//------------------------------------------------------------------------
-
-::std::auto_ptr< SfxUndoContext > SfxUndoManager::GetUndoContext()
-{
-    return ::std::auto_ptr< SfxUndoContext >();
 }
 
 //------------------------------------------------------------------------
