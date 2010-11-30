@@ -38,6 +38,9 @@
 #include <com/sun/star/sheet/ValidationAlertStyle.hpp>
 #include <com/sun/star/sheet/ValidationType.hpp>
 
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <mdds/flat_segment_tree.hpp>
+
 class ScDocument;
 class ScXMLExport;
 
@@ -272,9 +275,8 @@ public:
 
 class ScRowStyles : public ScColumnRowStylesBase
 {
-    typedef std::vector<sal_Int32>          ScMysalInt32Vec;
-    typedef std::vector<ScMysalInt32Vec>    ScMyRowVectorVec;
-    ScMyRowVectorVec                aTables;
+    typedef std::vector<sal_Int32>       ScMysalInt32Vec;
+    ::boost::ptr_vector<ScMysalInt32Vec> aTables;
 
 public:
     ScRowStyles();

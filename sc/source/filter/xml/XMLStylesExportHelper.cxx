@@ -1204,8 +1204,7 @@ rtl::OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_In
 //===========================================================================
 
 ScRowStyles::ScRowStyles()
-    : ScColumnRowStylesBase(),
-    aTables()
+    : ScColumnRowStylesBase()
 {
 }
 
@@ -1219,8 +1218,7 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
     if (nTable > nSize)
         for (sal_Int32 i = nSize; i < nTable; ++i)
         {
-            ScMysalInt32Vec aFieldsVec(nFields + 1, -1);
-            aTables.push_back(aFieldsVec);
+            aTables.push_back(new ScMysalInt32Vec(nFields + 1, -1));
         }
 }
 
