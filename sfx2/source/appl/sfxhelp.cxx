@@ -778,23 +778,6 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
     INetURLObject aParser( aHelpURL );
     INetProtocol nProtocol = aParser.GetProtocol();
 
-    // check if help is available
-    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( aHelpRootURL, sal_True );
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
-    if ( 0 == aFactories.getLength() )
-    {
-        // no factories -> no help -> try online
-        if ( nProtocol == INET_PROT_VND_SUN_STAR_HELP && impl_showOnlineHelp( rURL ) )
-            return TRUE;
-        else
-        {
-            NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
-            aErrBox.Execute();
-            return FALSE;
-        }
-    }
-
     // check if it's an URL or a jump mark!
     ::rtl::OUString sKeyword;
     if ( nProtocol != INET_PROT_VND_SUN_STAR_HELP )
@@ -818,13 +801,30 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         }
         else
         {
-            aHelpURL  = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
+            aHelpURL = CreateHelpURL_Impl( 0, GetHelpModuleName_Impl( ) );
 
             // pb i91715: strings begin with ".HelpId:" are not words of the basic ide
             // they are helpid-strings used by the testtool -> so we ignore them
             static const String sHelpIdScheme( DEFINE_CONST_OUSTRING(".HelpId:") );
             if ( rURL.Search( sHelpIdScheme ) != 0 )
                 sKeyword = ::rtl::OUString( rURL );
+        }
+    }
+
+    // check if help is available
+    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
+    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
+    if ( 0 == aFactories.getLength() )
+    {
+        // no factories -> no help -> try online
+        if ( impl_showOnlineHelp( aHelpURL ) )
+            return TRUE;
+        else
+        {
+            NoHelpErrorBox aErrBox( const_cast< Window* >( pWindow ) );
+            aErrBox.Execute();
+            return FALSE;
         }
     }
 
