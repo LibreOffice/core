@@ -37,6 +37,8 @@
 #include <tools/debug.hxx>
 #include <salframe.h>
 #include <tools/poly.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #ifndef _RTL_STRINGBUF_HXX
 #include <rtl/strbuf.hxx>
 #endif
@@ -927,10 +929,34 @@ BOOL WinSalGraphics::unionClipRegion( long nX, long nY, long nWidth, long nHeigh
 
 // -----------------------------------------------------------------------
 
-bool WinSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
+bool WinSalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& rPolyPolygon )
 {
-    // TODO: implement and advertise OutDevSupport_B2DClip support
-    return false;
+    const sal_uInt32 nCount(rPolyPolygon.count());
+
+    if( nCount )
+    {
+        std::vector< POINT > aPolyPoints;
+        aPolyPoints.reserve( 1024 );
+        std::vector< INT > aPolyCounts( nCount, 0 );
+        for(sal_uInt32 a(0); a < nCount; a++)
+        {
+            basegfx::B2DPolygon aPoly( rPolyPolygon.getB2DPolygon(a) );
+            aPoly = basegfx::tools::adaptiveSubdivideByDistance( aPoly, 1 );
+            const sal_uInt32 nPoints = aPoly.count();
+            aPolyCounts[a] = nPoints;
+            for( sal_uInt32 b = 0; b < nPoints; b++ )
+            {
+                basegfx::B2DPoint aPt( aPoly.getB2DPoint( b ) );
+                POINT aPOINT;
+                aPOINT.x = (LONG)aPt.getX();
+                aPOINT.y = (LONG)aPt.getY();
+                aPolyPoints.push_back( aPOINT );
+            }
+        }
+        mhRegion = CreatePolyPolygonRgn( &aPolyPoints[0], &aPolyCounts[0], nCount, ALTERNATE );
+    }
+
+     return true;
 }
 
 // -----------------------------------------------------------------------
@@ -944,7 +970,7 @@ void WinSalGraphics::EndSetClipRegion()
         mhRegion = CreateRectRgn( pRect->left, pRect->top,
                                                  pRect->right, pRect->bottom );
     }
-    else
+    else if( mpClipRgnData->rdh.nCount > 1 )
     {
         ULONG nSize = mpClipRgnData->rdh.nRgnSize+sizeof(RGNDATAHEADER);
         mhRegion = ExtCreateRegion( NULL, nSize, mpClipRgnData );
@@ -973,7 +999,8 @@ void WinSalGraphics::EndSetClipRegion()
             delete [] mpClipRgnData;
     }
 
-    SelectClipRgn( mhDC, mhRegion );
+    if( mhRegion )
+        SelectClipRgn( mhDC, mhRegion );
 }
 
 // -----------------------------------------------------------------------
