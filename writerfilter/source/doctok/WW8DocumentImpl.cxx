@@ -185,16 +185,16 @@ WW8DocumentImpl::WW8DocumentImpl(WW8Stream::Pointer_t rpStream)
 : bSubDocument(false), mfcPicLoc(0), mbPicIsData(false), mpStream(rpStream),
 mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 {
-    mpDocStream = getSubStream(::rtl::OUString::createFromAscii
-                               ("WordDocument"));
+    mpDocStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                               ("WordDocument")));
 
-    mpSummaryInformationStream = getSubStream(::rtl::OUString::createFromAscii
-                                              ("\5SummaryInformation"));
+    mpSummaryInformationStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                              ("\5SummaryInformation")));
 
     try
     {
-        mpDataStream = getSubStream(::rtl::OUString::createFromAscii
-                                    ("Data"));
+        mpDataStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                    ("Data")));
     }
     catch (ExceptionNotFound e)
     {
@@ -202,8 +202,8 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
 
     try
     {
-        mpCompObjStream = getSubStream(::rtl::OUString::createFromAscii
-                                       ("\1CompObj"));
+        mpCompObjStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                       ("\1CompObj")));
     }
     catch (ExceptionNotFound e)
     {
@@ -219,14 +219,14 @@ mbInSection(false), mbInParagraphGroup(false), mbInCharacterGroup(false)
     switch (mpFib->get_fWhichTblStm())
     {
     case 0:
-        mpTableStream = getSubStream(::rtl::OUString::createFromAscii
-                                     ("0Table"));
+        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                     ("0Table")));
 
         break;
 
     case 1:
-        mpTableStream = getSubStream(::rtl::OUString::createFromAscii
-                                     ("1Table"));
+        mpTableStream = getSubStream(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                                     ("1Table")));
 
         break;
 
