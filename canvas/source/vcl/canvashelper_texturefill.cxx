@@ -211,8 +211,6 @@ namespace vclcanvas
             if( (rColors.size() % 2) != (nStepCount % 2) )
                 ++nStepCount;
 
-            rOutDev.SetLineColor();
-
             basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
             // only iterate nStepCount-1 steps, as the last strip is
@@ -368,10 +366,60 @@ namespace vclcanvas
             // color).
             ++nStepCount;
 
-            rOutDev.SetLineColor();
-
             basegfx::tools::KeyStopLerp aLerper(rValues.maStops);
 
+            rOutDev.SetLineColor();
+
+#if 0 // draw gradients using overlapping b2dpolygon painting, TODO: use gradient methods directly
+            if( !bFillNonOverlapping && rOutDev.supportsOperation( OutDevSupport_B2DDraw ) )
+            {
+                ::basegfx::B2DPolygon aB2DTempPoly = aInnerPoly;
+
+                // fill background
+                rOutDev.SetFillColor( rColors.front() );
+                rOutDev.DrawRect( rBounds );
+
+                // render polygon
+                // ==============
+                for( unsigned int i=1,p; i<nStepCount; ++i )
+                {
+                    const double fT( i/double(nStepCount) );
+
+                    std::ptrdiff_t nIndex;
+                    double fAlpha;
+                    boost::tuples::tie(nIndex,fAlpha)=aLerper.lerp(fT);
+
+                    // lerp color
+                    rOutDev.SetFillColor(
+                        Color( (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetRed(),rColors[nIndex+1].GetRed(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetGreen(),rColors[nIndex+1].GetGreen(),fAlpha)),
+                               (UINT8)(basegfx::tools::lerp(rColors[nIndex].GetBlue(),rColors[nIndex+1].GetBlue(),fAlpha)) ));
+
+                    // scale and render polygon, by interpolating between
+                    // outer and inner polygon.
+
+                    for( p=0; p<nNumPoints; ++p )
+                    {
+                        const ::basegfx::B2DPoint& rOuterPoint( aOuterPoly.getB2DPoint(p) );
+                        const ::basegfx::B2DPoint& rInnerPoint( aInnerPoly.getB2DPoint(p) );
+
+                        aB2DTempPoly.setB2DPoint( p, ::basegfx::B2DPoint(
+                            fT*rInnerPoint.getX() + (1-fT)*rOuterPoint.getX(),
+                            fT*rInnerPoint.getY() + (1-fT)*rOuterPoint.getY() ) );
+                    }
+
+                    // close polygon explicitely
+                    //aTempPoly[(USHORT)p] = aTempPoly[0];
+
+                    // TODO(P1): compare with vcl/source/gdi/outdev4.cxx,
+                    // OutputDevice::ImplDrawComplexGradient(), there's a note
+                    // that on some VDev's, rendering disjunct poly-polygons
+                    // is faster!
+                    rOutDev.DrawPolygon( aB2DTempPoly );
+                }
+            } else
+#endif
+            // draw gradients using overlapping tools::polygon painting
             if( !bFillNonOverlapping )
             {
                 // fill background
@@ -380,7 +428,6 @@ namespace vclcanvas
 
                 // render polygon
                 // ==============
-
                 for( unsigned int i=1,p; i<nStepCount; ++i )
                 {
                     const double fT( i/double(nStepCount) );
@@ -418,7 +465,7 @@ namespace vclcanvas
                     rOutDev.DrawPolygon( aTempPoly );
                 }
             }
-            else
+            else // draw gradients using non-overlapping tools::polygon painting
             {
                 // render polygon
                 // ==============
@@ -621,8 +668,8 @@ namespace vclcanvas
                     p2ndOutDev->Pop();
                 }
             }
-            else
-#if defined(QUARTZ) // TODO: other ports should avoid the XOR-trick too (implementation vs. interface!)
+#if 1 // use complex clipping directly if available
+            else if( rOutDev.supportsOperation( OutDevSupport_B2DClip ) )
             {
                 const Region aPolyClipRegion( rPoly );
 
@@ -652,7 +699,9 @@ namespace vclcanvas
                     p2ndOutDev->Pop();
                 }
             }
-#else // TODO: remove once doing the XOR-trick in the canvas-layer becomes redundant
+#endif // using complex clipping directly
+#if 1  // fall back to complex clipping using the XOR-trick
+            else // TODO: remove when no longer needed
             {
                 // output gradient the hard way: XORing out the polygon
                 rOutDev.Push( PUSH_RASTEROP );
@@ -702,7 +751,7 @@ namespace vclcanvas
                     p2ndOutDev->Pop();
                 }
             }
-#endif // complex-clipping vs. XOR-trick
+#endif // XOR-trick for complex clipping
 
 #if 0 //defined(VERBOSE) && OSL_DEBUG_LEVEL > 0
             {
