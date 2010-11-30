@@ -1468,12 +1468,16 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
 
     if ( bOk )
     {
-        // PersistPtrs lesen (alle)
-        nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;  // 1 mehr, damit ich immer direkt indizieren kann
-        pPersistPtr = new UINT32[ nPersistPtrAnz ];             // (die fangen naemlich eigentlich bei 1 an)
+        nPersistPtrAnz = aUserEditAtom.nMaxPersistWritten + 1;
+        if ( ( nPersistPtrAnz >> 2 ) > nStreamLen )     // sj: at least nPersistPtrAnz is not allowed to be greater than filesize
+            bOk = FALSE;                                // (it should not be greater than the PPT_PST_PersistPtrIncrementalBlock, but
+                                                        // we are reading this block later, so we do not have access yet)
+
+        if ( bOk && ( nPersistPtrAnz < ( SAL_MAX_UINT32 / sizeof( UINT32 ) ) ) )
+            pPersistPtr = new (std::nothrow) UINT32[ nPersistPtrAnz ];
         if ( !pPersistPtr )
             bOk = FALSE;
-        else
+        if ( bOk )
         {
             memset( pPersistPtr, 0x00, nPersistPtrAnz * 4 );
 
@@ -5087,8 +5091,8 @@ void PPTStyleTextPropReader::ReadParaProps( SvStream& rIn, SdrPowerPointImport& 
             rIn >> nCharCount
                 >> aParaPropSet.pParaSet->mnDepth;  // Einruecktiefe
 
-            aParaPropSet.pParaSet->mnDepth =
-                std::min(sal_uInt16(9),
+            aParaPropSet.pParaSet->mnDepth =        // taking care of about using not more than 9 outliner levels
+                std::min(sal_uInt16(8),
                     aParaPropSet.pParaSet->mnDepth);
 
             nCharCount--;
