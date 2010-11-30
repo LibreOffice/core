@@ -2255,7 +2255,7 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
             {
                 case EE_CHAR_ESCAPEMENT:    // Specifically for xlsx import
                     {
-                        int nValue;
+                        sal_Int32 nValue(0);
                         aValue >>= nValue;
                         if( nValue )
                         {
