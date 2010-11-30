@@ -1,0 +1,139 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Kálmán Szalai - KAMI <kami911@gmail.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Kálmán Szalai - KAMI <kami911@gmail.com>
+ *
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+/* *** Accessories Extras *** */
+
+/* ** Gallery ** */
+
+#ifdef WITH_EXTRA_GALLERY
+
+File gid_File_Extra_Gallery_Accessories
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigallery.zip";
+End
+
+File gid_File_Extra_Gallery_Draws_People_Accessories
+    Dir = gid_Dir_Gallery_Draws_People;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigallerydrawspeople.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Plants_Accessories
+    Dir = gid_Dir_Gallery_Photos_Plants;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosplants.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Celebration_Accessories
+    Dir = gid_Dir_Gallery_Photos_Celebration;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotoscelebration.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Fauna_Accessories
+    Dir = gid_Dir_Gallery_Photos_Fauna;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosfauna.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Flowers_Accessories
+    Dir = gid_Dir_Gallery_Photos_Flowers;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosflowers.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_FoodsandDrinks_Accessories
+    Dir = gid_Dir_Gallery_Photos_FoodsandDrinks;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosfoodsanddrinks.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Humans_Accessories
+    Dir = gid_Dir_Gallery_Photos_Humans;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotoshumans.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Landscapes_Accessories
+    Dir = gid_Dir_Gallery_Photos_Landscapes;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotoslandscapes.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Buildings_Accessories
+    Dir = gid_Dir_Gallery_Photos_Buildings;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosbuildings.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Objects_Accessories
+    Dir = gid_Dir_Gallery_Photos_Objects;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosobjects.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Cities_Accessories
+    Dir = gid_Dir_Gallery_Photos_Cities;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotoscities.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Space_Accessories
+    Dir = gid_Dir_Gallery_Photos_Space;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosspace.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Statues_Accessories
+    Dir = gid_Dir_Gallery_Photos_Statues;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotosstatues.zip";
+End
+
+File gid_File_Extra_Gallery_Photos_Travel_Accessories
+    Dir = gid_Dir_Gallery_Photos_Travel;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryphotostravel.zip";
+End
+
+File gid_File_Extra_Gallery_Elements_Bullets2_Accessories
+    Dir = gid_Dir_Gallery_Elements_Bullets2;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigalleryelementsbullets2.zip";
+End
+
+File gid_File_Extra_Gallery_NONFREE_Accessories
+    Dir = gid_Dir_Gallery;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "kamigallerynonfree.zip";
+End
+
+#endif

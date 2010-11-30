@@ -1,0 +1,272 @@
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Kálmán Szalai - KAMI <kami911@gmail.com>
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s): Kálmán Szalai - KAMI <kami911@gmail.com>
+ *
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include "macros.inc"
+
+/* *** Accessories Extras *** */
+
+/* ** Templates ** */
+
+#ifdef WITH_EXTRA_TEMPLATE
+
+File gid_File_Extra_Templates_Accessories
+    Dir = gid_Dir_Template_Language;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplates,zip);
+End
+
+File gid_File_Extra_Templates_Layout_Accessories
+    Dir = gid_Dir_Template_Layout;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateslayout,zip);
+End
+
+File gid_File_Extra_Templates_Present_Accessories
+    Dir = gid_Dir_Template_Presnt;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatespresent,zip);
+End
+
+File gid_File_Extra_Templates_Educate_Accessories
+    Dir = gid_Dir_Template_Educate;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateseducate,zip);
+End
+
+File gid_File_Extra_Templates_Finance_Accessories
+    Dir = gid_Dir_Template_Finance;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesfinance,zip);
+End
+
+File gid_File_Extra_Templates_Forms_Accessories
+    Dir = gid_Dir_Template_Forms;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesforms,zip);
+End
+
+File gid_File_Extra_Templates_Labels_Accessories
+    Dir = gid_Dir_Template_Labels;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplateslabels,zip);
+End
+
+File gid_File_Extra_Templates_Misc_Accessories
+    Dir = gid_Dir_Template_Misc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesmisc,zip);
+End
+
+File gid_File_Extra_Templates_Officorr_Accessories
+    Dir = gid_Dir_Template_Officorr;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesofficorr,zip);
+End
+
+File gid_File_Extra_Templates_Offimisc_Accessories
+    Dir = gid_Dir_Template_Offimisc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesoffimisc,zip);
+End
+
+File gid_File_Extra_Templates_Personal_Accessories
+    Dir = gid_Dir_Template_Personal;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatespersonal,zip);
+End
+
+/* ** Templates - Common ** */
+
+File gid_File_Extra_Templates_Common
+    Dir = gid_Dir_Template_Common;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommon.zip";
+End
+
+File gid_File_Extra_Templates_Common_Layout
+    Dir = gid_Dir_Template_Common_Layout;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonlayout.zip";
+End
+
+File gid_File_Extra_Templates_Common_Present
+    Dir = gid_Dir_Template_Common_Presnt;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonpresent.zip";
+End
+
+File gid_File_Extra_Templates_Common_Educate
+    Dir = gid_Dir_Template_Common_Educate;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommoneducate.zip";
+End
+
+File gid_File_Extra_Templates_Common_Finance
+    Dir = gid_Dir_Template_Common_Finance;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonfinance.zip";
+End
+
+File gid_File_Extra_Templates_Common_Forms
+    Dir = gid_Dir_Template_Common_Forms;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonforms.zip";
+End
+
+File gid_File_Extra_Templates_Common_Labels
+    Dir = gid_Dir_Template_Common_Labels;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonlabels.zip";
+End
+
+File gid_File_Extra_Templates_Common_Misc
+    Dir = gid_Dir_Template_Common_Misc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonmisc.zip";
+End
+
+File gid_File_Extra_Templates_Common_Officorr
+    Dir = gid_Dir_Template_Common_Officorr;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonofficorr.zip";
+End
+
+File gid_File_Extra_Templates_Common_Offimisc
+    Dir = gid_Dir_Template_Common_Offimisc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonoffimisc.zip";
+End
+
+File gid_File_Extra_Templates_Common_Personal
+    Dir = gid_Dir_Template_Common_Personal;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    Name = "accessoriestemplatescommonpersonal.zip";
+End
+
+/* ** Templates - NON FREE ** */
+
+File gid_File_Extra_Templates_NONFREE_Accessories
+    Dir = gid_Dir_Template_Language;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfree,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Layout_Accessories
+    Dir = gid_Dir_Template_Layout;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreelayout,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Present_Accessories
+    Dir = gid_Dir_Template_Presnt;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreepresent,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Educate_Accessories
+    Dir = gid_Dir_Template_Educate;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeeducate,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Finance_Accessories
+    Dir = gid_Dir_Template_Finance;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreefinance,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Forms_Accessories
+    Dir = gid_Dir_Template_Forms;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeforms,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Labels_Accessories
+    Dir = gid_Dir_Template_Labels;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreelabels,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Misc_Accessories
+    Dir = gid_Dir_Template_Misc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreemisc,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Officorr_Accessories
+    Dir = gid_Dir_Template_Officorr;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeofficorr,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Offimisc_Accessories
+    Dir = gid_Dir_Template_Offimisc;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreeoffimisc,zip);
+End
+
+File gid_File_Extra_Templates_NONFREE_Personal_Accessories
+    Dir = gid_Dir_Template_Personal;
+    TXT_FILE_BODY;
+    Styles = (ARCHIVE, DONT_OVERWRITE);
+    EXTRA_ALL_LANG(accessoriestemplatesnonfreepersonal,zip);
+End
+
+#endif
