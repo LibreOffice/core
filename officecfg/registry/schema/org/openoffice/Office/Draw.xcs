@@ -282,7 +282,7 @@
 					<desc>Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 					<label>Copy while moving</label>
 				</info>
-				<value>false</value>
+				<value>true</value>
 			</prop>
 			<prop oor:name="ObjectMoveable" oor:type="xs:boolean">
 				<!-- OldPath: Draw/Other -->
