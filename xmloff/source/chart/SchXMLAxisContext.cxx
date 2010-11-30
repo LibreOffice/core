@@ -1207,7 +1207,6 @@ void DateScaleContext::StartElement( const Reference< xml::sax::XAttributeList >
 
     // parse attributes
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
-    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
     const SvXMLTokenMap& rAttrTokenMap = theDateScaleAttributeTokenMap::get();
 
     bool bSetNewIncrement=false;

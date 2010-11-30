@@ -1858,6 +1858,8 @@ Reference< chart2::XAxis > lcl_getAxis( const Reference< chart2::XCoordinateSyst
             case XML_Z:
                 nDimensionIndex=2;
                 break;
+            default:
+                break;
             }
 
             xNewAxis = xCooSys->getAxisByDimension( nDimensionIndex, bPrimary ? 0 : 1 );
