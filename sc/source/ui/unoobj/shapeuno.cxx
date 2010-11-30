@@ -74,6 +74,8 @@ const SfxItemPropertyMapEntry* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_MOVEPROTECT), 0, &getCppuType((sal_Bool*)0), 0, 0 },
         // #i66550 HLINK_FOR_SHAPES
         {MAP_CHAR_LEN(SC_UNONAME_HYPERLINK), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_URL), 0, &getCppuType((rtl::OUString*)0), 0, 0 },
+
         {0,0,0,0,0,0}
     };
     return aShapeMap_Impl;
@@ -647,7 +649,8 @@ void SAL_CALL ScShapeObj::setPropertyValue(
             }
         }
     }
-    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    else if  ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
+               aNameString.EqualsAscii( SC_UNONAME_URL) )
     {
         rtl::OUString sHlink;
         ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this, TRUE);
@@ -844,7 +847,8 @@ uno::Any SAL_CALL ScShapeObj::getPropertyValue( const rtl::OUString& aPropertyNa
             }
         }
     }
-    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) )
+    else if ( aNameString.EqualsAscii( SC_UNONAME_HYPERLINK ) ||
+              aNameString.EqualsAscii( SC_UNONAME_URL ) )
     {
         rtl::OUString sHlink;
         if ( ScMacroInfo* pInfo = lcl_getShapeHyperMacroInfo(this) )
