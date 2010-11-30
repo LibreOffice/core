@@ -55,14 +55,14 @@ public class TitlesComponent extends ControlScroller
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                    new Integer(8), _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, new Integer(60)
+                    8, _slblColumnNames, new Integer(iLabelPosX), new Integer(iCompPosY - 10), IStep, 60
                 });
         CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlFixedTextModel", "lblColumnTitles", new String[]
                 {
                     PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_WIDTH
                 }, new Object[]
                 {
-                    new Integer(8), _slblColumnTitles, new Integer(90), new Integer(iCompPosY - 10), IStep, new Integer(152)
+                    8, _slblColumnTitles, 90, new Integer(iCompPosY - 10), IStep, 152
                 });
     }
 
@@ -111,7 +111,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        new Integer(16), new Boolean(true), new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(30)
+                        16, new Boolean(true), new Integer(iLabelPosX), new Integer(_iCompPosY + 1), UIConsts.INVISIBLESTEP, new Short(curtabindex++), 30
                     });
 
             xTextComponent = CurUnoDialog.insertTextField(stextfieldname, 0, null,
@@ -121,7 +121,7 @@ public class TitlesComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        new Integer(12), HelpIds.getHelpIdString(curHelpIndex++), new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
+                        12, HelpIds.getHelpIdString(curHelpIndex++), new Integer(iLabelPosX + 30), new Integer(_iCompPosY), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(iCompWidth - 90 - 20)
                     });
         }
     }

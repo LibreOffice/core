@@ -324,7 +324,7 @@ public abstract class DataAware {
                 if (getMethod.getReturnType().equals(Short.class))
                     return new Short((short) 0);
                 if (getMethod.getReturnType().equals(Integer.class))
-                    return new Integer(0);
+                    return 0;
                 if (getMethod.getReturnType().equals(short[].class))
                     return new short[0];
             }

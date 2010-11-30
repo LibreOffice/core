@@ -102,7 +102,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_LABEL, "Orientation", PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), new Integer(8), sSortHeader[i], new Integer(0), ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
+                            new Boolean(bDoEnable), 8, sSortHeader[i], 0, ICompPosX, new Integer(iCurPosY), IStep, new Short(curtabindex++), ICompWidth
                         });
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex);
@@ -111,7 +111,7 @@ public class SortingComponent
                             "Dropdown", PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, "LineCount", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(true), new Boolean(bDoEnable), new Integer(12), HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
+                            new Boolean(true), new Boolean(bDoEnable), 12, HIDString, new Short(UnoDialog.getListBoxLineCount()), "lstSort" + new Integer(i + 1), IListBoxPosX, new Integer(iCurPosY + 14), IStep, new Short(curtabindex++), IListBoxWidth
                         }); //new Short((short) (17+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 1);
@@ -120,7 +120,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), new Integer(10), HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), new String("ASC"), IOptButtonWidth
+                            new Boolean(bDoEnable), 10, HIDString, sSortAscend[i], IOptButtonPosX, new Integer(iCurPosY + 10), new Short((short) 1), IStep, new Short(curtabindex++), new String("ASC"), IOptButtonWidth
                         }); //, new Short((short) (18+i*4))
 
                 HIDString = HelpIds.getHelpIdString(FirstHelpIndex + 2);
@@ -129,7 +129,7 @@ public class SortingComponent
                             PropertyNames.PROPERTY_ENABLED, PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_HELPURL, PropertyNames.PROPERTY_LABEL, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STATE, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, "Tag", PropertyNames.PROPERTY_WIDTH
                         }, new Object[]
                         {
-                            new Boolean(bDoEnable), new Integer(10), HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), new String("DESC"), IOptButtonWidth
+                            new Boolean(bDoEnable), 10, HIDString, sSortDescend[i], IOptButtonPosX, new Integer(iCurPosY + 24), new Short((short) 0), IStep, new Short(curtabindex++), new String("DESC"), IOptButtonWidth
                         }); //, new Short((short) (19+i*4))
                 iCurPosY = iCurPosY + 36;
                 FirstHelpIndex += 3;
@@ -276,7 +276,7 @@ public class SortingComponent
             {
                 String sLocSortCriteriaisduplicate = JavaTools.replaceSubString(sSortCriteriaisduplicate, SortFieldNames.get(iduplicate)[0], "<FIELDNAME>");
                 CurUnoDialog.showMessageBox("WarningBox", VclWindowPeerAttribute.OK, sLocSortCriteriaisduplicate);
-                CurUnoDialog.vetoableChange(new PropertyChangeEvent(CurUnoDialog, "Steps", new Integer(1), new Integer(2)));
+                CurUnoDialog.vetoableChange(new PropertyChangeEvent(CurUnoDialog, "Steps", 1, 2));
                 CurUnoDialog.setFocus("lstSort" + (iduplicate + 1));
                 return new String[][]
                         {

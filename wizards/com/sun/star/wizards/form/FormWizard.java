@@ -82,11 +82,11 @@ public class FormWizard extends DatabaseObjectWizard
         Helper.setUnoPropertyValues(xDialogModel,
                 new String[]
                 {
-                    PropertyNames.PROPERTY_HEIGHT, "Moveable", PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
+                    PropertyNames.PROPERTY_HEIGHT, PropertyNames.PROPERTY_MOVEABLE, PropertyNames.PROPERTY_NAME, PropertyNames.PROPERTY_POSITION_X, PropertyNames.PROPERTY_POSITION_Y, PropertyNames.PROPERTY_STEP, PropertyNames.PROPERTY_TABINDEX, PropertyNames.PROPERTY_TITLE, PropertyNames.PROPERTY_WIDTH
                 },
                 new Object[]
                 {
-                    new Integer(210), Boolean.TRUE, "DialogForm", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), m_oResource.getResText(UIConsts.RID_FORM), new Integer(310)
+                    210, Boolean.TRUE, "DialogForm", 102, 41, 1, new Short((short) 0), m_oResource.getResText(UIConsts.RID_FORM), 310
                 });
         drawNaviBar();
         if (getFormResources() == true)
@@ -237,7 +237,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOMAIN_PAGE), new Integer(210)
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOMAIN_PAGE), 210
                 });
 
         curFormConfiguration = new FormConfiguration(this);
@@ -252,7 +252,7 @@ public class FormWizard extends DatabaseObjectWizard
                 },
                 new Object[]
                 {
-                    new Integer(28), sShowBinaryFields, Boolean.TRUE, new Integer(95), new Integer(154), new Integer(SOSUBFORMFIELDS_PAGE), new Integer(210)
+                    28, sShowBinaryFields, Boolean.TRUE, 95, 154, new Integer(SOSUBFORMFIELDS_PAGE), 210
                 });
 
         curFormDocument.xProgressBar.setValue(40);

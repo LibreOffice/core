@@ -558,7 +558,7 @@ public class FormDocument extends TextDocument
                 {
                     oGridControl = new GridControl(xMSF, Name + "_Grid", oFormHandler, xFormContainer, oDBMetaData.FieldColumns, aStartPoint, getSubFormSize());
                 }
-                oGridControl.xPropertySet.setPropertyValue("Border", _NBorderType);
+                oGridControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_BORDER, _NBorderType);
             }
             catch (Exception e)
             {

@@ -104,7 +104,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(32), sExplanation, Boolean.TRUE, new Integer(91), new Integer(27), IMAINSTEP, new Short(pretabindex++), new Integer(233)
+                    32, sExplanation, Boolean.TRUE, 91, 27, IMAINSTEP, new Short(pretabindex++), 233
                 });
 
         lblCategories = CurUnoDialog.insertLabel("lblCategories",
@@ -114,7 +114,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(8), sCategories, new Integer(91), new Integer(60), IMAINSTEP, new Short(pretabindex++), new Integer(100)
+                    8, sCategories, 91, 60, IMAINSTEP, new Short(pretabindex++), 100
                 });
 
         optBusiness = CurTableWizardUnoDialog.insertRadioButton("optBusiness", SELECTCATEGORY, this,
@@ -124,7 +124,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, new Integer(98), new Integer(70), new Short((short) 1), IMAINSTEP, new Short(pretabindex++), new Integer(78)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTBUSINESS", sBusiness, 98, 70, new Short((short) 1), IMAINSTEP, new Short(pretabindex++), 78
                 });
 
         optPrivate = CurTableWizardUnoDialog.insertRadioButton("optPrivate", SELECTCATEGORY, this,
@@ -134,7 +134,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, new Integer(182), new Integer(70), IMAINSTEP, new Short(pretabindex++), new Integer(90)
+                    UIConsts.INTEGERS[8], "HID:WIZARDS_HID_DLGTABLE_OPTPRIVATE", sPrivate, 182, 70, IMAINSTEP, new Short(pretabindex++), 90
                 });
 
         CurUnoDialog.insertLabel("lblTableNames",
@@ -144,7 +144,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                 },
                 new Object[]
                 {
-                    new Integer(8), sTableNames, new Integer(91), new Integer(82), IMAINSTEP, new Short(pretabindex++), new Integer(80)
+                    8, sTableNames, 91, 82, IMAINSTEP, new Short(pretabindex++), 80
                 });
 
         try
@@ -156,7 +156,7 @@ public class ScenarioSelector extends FieldSelection implements XItemListener, X
                     },
                     new Object[]
                     {
-                        Boolean.TRUE, new Integer(12), "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), new Integer(91), new Integer(92), IMAINSTEP, new Short(pretabindex++), getListboxWidth()
+                        Boolean.TRUE, 12, "HID:WIZARDS_HID_DLGTABLE_LBTABLES", new Short(UnoDialog.getListBoxLineCount()), 91, 92, IMAINSTEP, new Short(pretabindex++), getListboxWidth()
                     });
         }
         catch (Exception e)
