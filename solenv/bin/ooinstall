@@ -22,7 +22,7 @@ if ( $ENV{'SYSTEM_MOZILLA'} eq 'YES' ) {
 }
 
 # Workaround for the Python
-$ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
+$ENV{'PYTHONPATH'} = "$ENV{'SRC_ROOT'}/instsetoo_native/$ENV{'INPATH'}/bin:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python:$ENV{'SOLARVERSION'}/$ENV{'INPATH'}/lib/python/lib-dynload";
 
 for $arg (@ARGV) {
     if ($arg eq '-l') {
