@@ -76,6 +76,10 @@ private:
     SAL_DLLPRIVATE void             ImplBeginAddRect( );
     SAL_DLLPRIVATE BOOL             ImplAddRect( const Rectangle& rRect );
     SAL_DLLPRIVATE void             ImplEndAddRect( );
+    SAL_DLLPRIVATE void             ImplIntersectWithPolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplExcludePolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplUnionPolyPolygon( const Region& );
+    SAL_DLLPRIVATE void             ImplXOrPolyPolygon( const Region& );
 
 #ifdef DBG_UTIL
     friend const char*  ImplDbgTestRegion( const void* pObj );
