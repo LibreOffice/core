@@ -18,7 +18,6 @@ requote()
         echo "$*"
 }
 
-
 old_args=""
 if test $# -eq 0 && test -f autogen.lastrun; then
     old_args=$(cat autogen.lastrun)
@@ -34,6 +33,20 @@ if test "z`uname -s`" != "zDarwin" ; then
     AUTOMAKE_EXTRA_FLAGS=--warnings=no-portability
 fi
 
+conf_args=$(requote "$@")
+distro_name=$(requote "$@" | sed -n -e "s/.*'--with-distro=\([^']*\)'.*/\1/p")
+if test "z${distro_name}" != "z" ; then
+    cumul=""
+    if test -f "./distro-configs/${distro_name}.conf" ; then
+        IFS=$'\n'
+        for opt in $(cat distro-configs/${distro_name}.conf) ; do cumul="$cumul $opt" ; done ;
+        unset IFS
+        conf_args=$(requote "$@" | sed -e "s/'--with-distro=[^']*'/$cumul/")
+    else
+        echo "Warning: there is no pre-set configuration for ${distro_config}, ignoring --with-distro=${distro_config}"
+    fi
+fi
+
 aclocal $ACLOCAL_FLAGS || exit 1;
 #automake --gnu --add-missing --copy || exit 1;
 #intltoolize --copy --force --automake
@@ -43,7 +56,8 @@ if test "x$NOCONFIGURE" = "x"; then
         eval `echo ./configure $old_args`
     else
         echo "$(requote "$@")" > autogen.lastrun
-        ./configure "$@"
+        echo "./configure ${conf_args}"
+        eval `echo ./configure ${conf_args}`
     fi
 else
     echo "Skipping configure process."
