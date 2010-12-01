@@ -169,13 +169,9 @@ BOOL SwCursor::IsSkipOverProtectSections() const
 }
 
 
-// Sicher die aktuelle Position, damit ggfs. auf diese zurueck
-// gefallen werden kann. Die SavePos Objekte werden als Stack verwaltet,
-// damit das auch alles bei verschachtelten Aufrufen funktioniert.
 // Das CreateNewSavePos ist virtual, damit abgeleitete Klassen vom Cursor
 // gegebenenfalls eigene SaveObjecte anlegen und in den virtuellen
 // Check-Routinen verwenden koennen.
-
 void SwCursor::SaveState()
 {
     _SwCursor_SavePos* pNew = CreateNewSavePos();
@@ -2096,7 +2092,7 @@ BOOL SwCursor::MoveSection( SwWhichSection fnWhichSect,
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
-void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
+void SwCursor::RestoreSavePos()
 {
     if( pSavePos )
     {

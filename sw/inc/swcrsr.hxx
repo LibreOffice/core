@@ -207,7 +207,8 @@ public:
                                         BOOL bChgCrsr = TRUE );
     BOOL IsNoCntnt() const;
 
-    void RestoreSavePos();      // Point auf die SavePos setzen
+    /** Restore cursor state to the one saved by SwCrsrSaveState **/
+    void RestoreSavePos();
 
     // TRUE: an die Position kann der Cursor gesetzt werden
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
@@ -231,6 +232,13 @@ public:
 };
 
 
+/**
+ A helper class to save cursor state (position). Create SwCrsrSaveState
+ object to save current state, use SwCursor::RestoreSavePos() to actually
+ restore cursor state to the saved state (SwCrsrSaveState destructor only
+ removes the saved state from an internal stack). It is possible to stack
+ several SwCrsrSaveState objects.
+**/
 class SwCrsrSaveState
 {
     SwCursor& rCrsr;
@@ -239,6 +247,7 @@ public:
     ~SwCrsrSaveState() { rCrsr.RestoreState(); }
 };
 
+// internal, used by SwCursor::SaveState() etc.
 struct _SwCursor_SavePos
 {
     ULONG nNode;
