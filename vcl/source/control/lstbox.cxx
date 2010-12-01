@@ -44,9 +44,10 @@
 
 #include "tools/debug.hxx"
 
+#include <vcl/dndevdis.hxx>
+#include <com/sun/star/datatransfer/dnd/XDropTarget.hpp>
 
-
-// =======================================================================
+// =======================================================================
 
 ListBox::ListBox( WindowType nType ) : Control( nType )
 {
@@ -119,6 +120,8 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     Control::ImplInit( pParent, nStyle, NULL );
     SetBackground();
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDropTargetListener> xDrop = new DNDEventDispatcher(this);
+
     if( nStyle & WB_DROPDOWN )
     {
         sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -145,16 +148,19 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
         mpFloatWin = new ImplListBoxFloatingWindow( this );
         mpFloatWin->SetAutoWidth( TRUE );
         mpFloatWin->SetPopupModeEndHdl( LINK( this, ListBox, ImplPopupModeEndHdl ) );
+        mpFloatWin->GetDropTarget()->addDropTargetListener(xDrop);
 
         mpImplWin = new ImplWin( this, (nStyle & (WB_LEFT|WB_RIGHT|WB_CENTER))|WB_NOBORDER );
         mpImplWin->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
         mpImplWin->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
         mpImplWin->Show();
+        mpImplWin->GetDropTarget()->addDropTargetListener(xDrop);
 
         mpBtn = new ImplBtn( this, WB_NOLIGHTBORDER | WB_RECTSTYLE );
         ImplInitDropDownButton( mpBtn );
         mpBtn->SetMBDownHdl( LINK( this, ListBox, ImplClickBtnHdl ) );
         mpBtn->Show();
+        mpBtn->GetDropTarget()->addDropTargetListener(xDrop);
 
     }
 
@@ -169,6 +175,9 @@ void ListBox::ImplInit( Window* pParent, WinBits nStyle )
     mpImplLB->SetUserDrawHdl( LINK( this, ListBox, ImplUserDrawHdl ) );
     mpImplLB->SetPosPixel( Point() );
     mpImplLB->Show();
+
+    mpImplLB->GetDropTarget()->addDropTargetListener(xDrop);
+    mpImplLB->SetDropTraget(xDrop);
 
     if ( mpFloatWin )
     {
@@ -1612,7 +1621,6 @@ const Wallpaper& ListBox::GetDisplayBackground() const
 }
 
 // =======================================================================
-
 MultiListBox::MultiListBox( Window* pParent, WinBits nStyle ) :
     ListBox( WINDOW_MULTILISTBOX )
 {

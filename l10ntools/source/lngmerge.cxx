@@ -38,15 +38,14 @@ using namespace std;
 // class LngParser
 //
 /*****************************************************************************/
-LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat , bool bQuiet_in )
+LngParser::LngParser( const ByteString &rLngFile, BOOL bUTF8, BOOL bULFFormat )
 /*****************************************************************************/
                 :
                 nError( LNG_OK ),
                 pLines( NULL ),
                 sSource( rLngFile ),
                 bDBIsUTF8( bUTF8 ),
-                bULF( bULFFormat ),
-                bQuiet( bQuiet_in )
+                bULF( bULFFormat )
 {
     pLines = new LngLineList( 100, 100 );
     DirEntry aEntry( String( sSource, RTL_TEXTENCODING_ASCII_US ));

@@ -29,7 +29,6 @@
 #include "precompiled_tools.hxx"
 #include <tools/svwin.h>
 #include <dll.hxx>
-#include <toolsdll.hxx>
 #include <tools/shl.hxx>
 
 // =======================================================================

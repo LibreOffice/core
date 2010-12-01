@@ -474,10 +474,8 @@ ERRTYPE RscCompiler::Start()
 
     if( PRINTSYNTAX_FLAG & pCL->nCommands )
     {
-#ifndef W30
         pTC->WriteSyntax( stdout );
-printf( "khg\n" );
-#endif
+        printf( "khg\n" );
         return ERR_OK;
     }
 

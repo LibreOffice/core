@@ -323,10 +323,9 @@ void ImplSalAcquireYieldMutex( ULONG nCount )
 
 // -----------------------------------------------------------------------
 
-#ifdef DBG_UTIL
-
-void ImplDbgTestSolarMutex()
+bool WinSalInstance::CheckYieldMutex()
 {
+    bool bRet = true;
     SalData*    pSalData = GetSalData();
     DWORD       nCurThreadId = GetCurrentThreadId();
     if ( pSalData->mnAppThreadId != nCurThreadId )
@@ -336,7 +335,7 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked, and not thread save code in VCL is called from outside of the main thread" );
+                bRet = false;
             }
         }
     }
@@ -347,13 +346,12 @@ void ImplDbgTestSolarMutex()
             SalYieldMutex* pYieldMutex = pSalData->mpFirstInstance->mpSalYieldMutex;
             if ( pYieldMutex->mnThreadId != nCurThreadId )
             {
-                DBG_ERROR( "SolarMutex not locked in the main thread" );
+                bRet = false;
             }
         }
     }
+    return bRet;
 }
-
-#endif
 
 // =======================================================================
 

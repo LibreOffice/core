@@ -65,10 +65,10 @@ DBG_NAME(SvTreeListBox)
 #define SV_LBOX_DEFAULT_INDENT_PIXEL 20
 
 SvTreeListBox::SvTreeListBox( Window* pParent, WinBits nWinStyle )
-    : SvLBox(pParent,nWinStyle )
+    : SvLBox( pParent, nWinStyle )
 {
     DBG_CTOR(SvTreeListBox,0);
-    InitTreeView( nWinStyle );
+    InitTreeView();
 
     SetSublistOpenWithLeftRight();
 }
@@ -78,13 +78,13 @@ SvTreeListBox::SvTreeListBox( Window* pParent , const ResId& rResId )
 {
     DBG_CTOR(SvTreeListBox,0);
 
-    InitTreeView( 0 );
+    InitTreeView();
     Resize();
 
     SetSublistOpenWithLeftRight();
 }
 
-void SvTreeListBox::InitTreeView( WinBits nWinStyle )
+void SvTreeListBox::InitTreeView()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     pCheckButtonData = NULL;
@@ -102,7 +102,7 @@ void SvTreeListBox::InitTreeView( WinBits nWinStyle )
     nTreeFlags = TREEFLAG_RECALCTABS;
     nIndent = SV_LBOX_DEFAULT_INDENT_PIXEL;
     nEntryHeightOffs = SV_ENTRYHEIGHTOFFS_PIXEL;
-    pImp = new SvImpLBox( this, GetModel(), nWinStyle );
+    pImp = new SvImpLBox( this, GetModel(), GetStyle() );
 
     aContextBmpMode = SVLISTENTRYFLAG_EXPANDED;
     nContextBmpWidthMax = 0;
@@ -110,7 +110,7 @@ void SvTreeListBox::InitTreeView( WinBits nWinStyle )
     SetSpaceBetweenEntries( 0 );
     SetLineColor();
     InitSettings( TRUE, TRUE, TRUE );
-    SetWindowBits( nWinStyle );
+    ImplInitStyle();
     SetTabs();
 }
 
@@ -227,8 +227,9 @@ void SvTreeListBox::SetTabs()
         EndEditing( TRUE );
     nTreeFlags &= (~TREEFLAG_RECALCTABS);
     nFocusWidth = -1;
-    BOOL bHasButtons = (nWindowStyle & WB_HASBUTTONS)!=0;
-    BOOL bHasButtonsAtRoot = (nWindowStyle & (WB_HASLINESATROOT |
+    const WinBits nStyle( GetStyle() );
+    BOOL bHasButtons = (nStyle & WB_HASBUTTONS)!=0;
+    BOOL bHasButtonsAtRoot = (nStyle & (WB_HASLINESATROOT |
                                               WB_HASBUTTONSATROOT))!=0;
     long nStartPos = TAB_STARTPOS;
     long nNodeWidthPixel = GetExpandedNodeBmp().GetSizePixel().Width();
@@ -1492,12 +1493,14 @@ SvLBoxEntry* SvTreeListBox::GetCurEntry() const
     return pImp->GetCurEntry();
 }
 
-void SvTreeListBox::SetWindowBits( WinBits nWinStyle )
+void SvTreeListBox::ImplInitStyle()
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    nWindowStyle = nWinStyle;
+
+    const WinBits nWindowStyle = GetStyle();
+
     nTreeFlags |= TREEFLAG_RECALCTABS;
-    if( nWinStyle & WB_SORT )
+    if( nWindowStyle & WB_SORT )
     {
         GetModel()->SetSortMode( SortAscending );
         GetModel()->SetCompareHdl( LINK(this,SvTreeListBox,DefaultCompare));
@@ -1508,9 +1511,9 @@ void SvTreeListBox::SetWindowBits( WinBits nWinStyle )
         GetModel()->SetCompareHdl( Link() );
     }
 #ifdef OS2
-    nWinStyle |= WB_VSCROLL;
+    nWindowStyle |= WB_VSCROLL;
 #endif
-    pImp->SetWindowBits( nWinStyle );
+    pImp->SetStyle( nWindowStyle );
     pImp->Resize();
     Invalidate();
 }
@@ -1578,8 +1581,9 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     BOOL bInUse = pEntry->HasInUseEmphasis();
     // wenn eine ClipRegion von aussen gesetzt wird, dann
     // diese nicht zuruecksetzen
-    BOOL bResetClipRegion = !bHasClipRegion;
-    BOOL bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
+    const WinBits nWindowStyle = GetStyle();
+    const BOOL bResetClipRegion = !bHasClipRegion;
+    const BOOL bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
     Font aHighlightFont( GetFont() );
@@ -2367,6 +2371,7 @@ void SvTreeListBox::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
 long SvTreeListBox::GetTextOffset() const
 {
     DBG_CHKTHIS(SvTreeListBox,0);
+    const WinBits nWindowStyle = GetStyle();
     BOOL bHasButtons = (nWindowStyle & WB_HASBUTTONS)!=0;
     BOOL bHasButtonsAtRoot = (nWindowStyle & (WB_HASLINESATROOT |
                                               WB_HASBUTTONSATROOT))!=0;
@@ -2514,6 +2519,13 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
     }
     else
         Control::DataChanged( rDCEvt );
+}
+
+void SvTreeListBox::StateChanged( StateChangedType i_nStateChange )
+{
+    SvLBox::StateChanged( i_nStateChange );
+    if ( i_nStateChange == STATE_CHANGE_STYLE )
+        ImplInitStyle();
 }
 
 void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)

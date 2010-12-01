@@ -67,13 +67,13 @@
 #include <unicode/uscript.h>
 
 // Graphite Libraries (must be after vcl headers on windows)
-#include <tools/preextstl.h>
+#include <preextstl.h>
 #include <graphite/GrClient.h>
 #include <graphite/Font.h>
 #include <graphite/ITextSource.h>
 #include <graphite/Segment.h>
 #include <graphite/SegmentPainter.h>
-#include <tools/postextstl.h>
+#include <postextstl.h>
 
 #include <vcl/graphite_layout.hxx>
 #include <vcl/graphite_features.hxx>
@@ -594,21 +594,39 @@ bool GraphiteLayout::LayoutText(ImplLayoutArgs & rArgs)
 {
 #ifdef GRCACHE
     GrSegRecord * pSegRecord = NULL;
-    gr::Segment * pSegment = CreateSegment(rArgs, &pSegRecord);
-    if (!pSegment)
-       return false;
-
+    gr::Segment * pSegment = NULL;
+    // Graphite can in rare cases crash with a zero length
+    if (rArgs.mnMinCharPos < rArgs.mnEndCharPos)
+    {
+        pSegment = CreateSegment(rArgs, &pSegRecord);
+        if (!pSegment)
+            return false;
+    }
+    else
+    {
+        clear();
+        return true;
+    }
     // layout the glyphs as required by OpenOffice
     bool success = LayoutGlyphs(rArgs, pSegment, pSegRecord);
 
     if (pSegRecord) pSegRecord->unlock();
     else delete pSegment;
 #else
-    gr::Segment * pSegment = CreateSegment(rArgs);
-    if (!pSegment)
-        return false;
-    bool success = LayoutGlyphs(rArgs, pSegment);
-    delete pSegment;
+    gr::Segment * pSegment = NULL;
+    bool success = true;
+    if (rArgs.mnMinCharPos < rArgs.mnEndCharPos)
+    {
+        pSegment = CreateSegment(rArgs);
+        if (!pSegment)
+            return false;
+        success = LayoutGlyphs(rArgs, pSegment);
+        if (pSegment) delete pSegment;
+    }
+    else
+    {
+        clear();
+    }
 #endif
     return success;
 }
@@ -659,7 +677,7 @@ public:
         return hash;
     };
 protected:
-    virtual void UniqueCacheInfo(std::wstring & stuFace, bool & fBold, bool & fItalic)
+    virtual void UniqueCacheInfo( ext_std::wstring& stuFace, bool& fBold, bool& fItalic )
     {
 #ifdef WIN32
         dynamic_cast<GraphiteWinFont&>(mrRealFont).UniqueCacheInfo(stuFace, fBold, fItalic);
@@ -722,7 +740,7 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
             (GraphiteCacheHandler::instance).getCache(aFontHash);
         if (pCache)
         {
-            *pSegRecord = pCache->getSegment(rArgs, bRtl, nSegCharLimit);
+            *pSegRecord = pCache->getSegment(rArgs, bRtl, limit);
             if (*pSegRecord)
             {
                 pSegment = (*pSegRecord)->getSegment();
@@ -736,7 +754,34 @@ gr::Segment * GraphiteLayout::CreateSegment(ImplLayoutArgs& rArgs)
                     (*pSegRecord)->clearVectors();
                 }
                 mpTextSrc->switchLayoutArgs(rArgs);
-                return pSegment;
+                if (limit > rArgs.mnMinCharPos && limit == rArgs.mnEndCharPos
+                    && pSegment->stopCharacter() != limit)
+                {
+                    // check that the last character is not part of a ligature
+                    glyph_set_range_t aGlyphSet = pSegment->charToGlyphs(limit - 1);
+                    if (aGlyphSet.first == aGlyphSet.second)
+                    {
+                        // no glyphs associated with this glyph - occurs mid ligature
+                        pSegment = NULL;
+                        *pSegRecord = NULL;
+                    }
+                    else
+                    {
+                        while (aGlyphSet.first != aGlyphSet.second)
+                        {
+                            int lastChar = static_cast<int>((*aGlyphSet.first).lastChar());
+                            if (lastChar >= limit)
+                            {
+                                pSegment = NULL;
+                                *pSegRecord = NULL;
+                                break;
+                            }
+                            aGlyphSet.first++;
+                        }
+                    }
+                }
+                if (pSegment)
+                    return pSegment;
             }
         }
 #endif
@@ -1040,6 +1085,7 @@ void GraphiteLayout::expandOrCondense(ImplLayoutArgs &rArgs)
             mvCharDxs[i] = FRound( fXFactor * mvCharDxs[i] );
         }
     }
+    mnWidth = rArgs.mnLayoutWidth;
 }
 
 void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDeltaWidth)
@@ -1058,7 +1104,7 @@ void GraphiteLayout::ApplyDXArray(ImplLayoutArgs &args, std::vector<int> & rDelt
     {
         nXOffset = args.mpDXArray[nChars - 1] - mvCharDxs[nChars - 1];
     }
-    int nPrevClusterGlyph = (bRtl)? mvGlyphs.size() : -1;
+    int nPrevClusterGlyph = (bRtl)? (signed)mvGlyphs.size() : -1;
     int nPrevClusterLastChar = -1;
     for (size_t i = 0; i < nChars; i++)
     {

@@ -62,7 +62,6 @@ BOOL bErrorLog;
 BOOL bBreakWhenHelpText;
 BOOL bUnmerge;
 BOOL bUTF8;
-bool bQuiet;
 ByteString sPrj;
 ByteString sPrjRoot;
 ByteString sActFileName;
@@ -98,7 +97,6 @@ extern char *GetOutputFile( int argc, char* argv[])
     Export::sForcedLanguages = "";
     sTempFile = "";
     pTempFile = NULL;
-    bQuiet = false;
     USHORT nState = STATE_NON;
     BOOL bInput = FALSE;
 
@@ -114,9 +112,6 @@ extern char *GetOutputFile( int argc, char* argv[])
         }
         else if (sSwitch == "-p"  || sSwitch == "-P" ) {
             nState = STATE_PRJ; // next token specifies the cur. project
-        }
-        else if (sSwitch == "-qq"  || sSwitch == "-QQ" ) {
-            bQuiet = true;
         }
 
         else if (sSwitch == "-r"  || sSwitch == "-R" ) {
@@ -194,12 +189,6 @@ extern char *GetOutputFile( int argc, char* argv[])
 
     // command line is not valid
     return NULL;
-}
-/*****************************************************************************/
-int isQuiet(){
-/*****************************************************************************/
-   if( bQuiet ) return 1;
-   else         return 0;
 }
 /*****************************************************************************/
 int InitExport( char *pOutput , char* pFilename )
@@ -282,7 +271,6 @@ extern FILE *GetNextFile()
             // (e.g.: source\ui\src\menue.src)
             sActFileName = sFullEntry.Copy( sPrjEntry.Len() + 1 );
 
-            if( !bQuiet ) fprintf( stdout, "\nProcessing File %s ...\n", sOrigFile.GetBuffer());
 
             sActFileName.SearchAndReplaceAll( "/", "\\" );
             sFile = sActFileName;

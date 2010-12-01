@@ -44,8 +44,6 @@ const int MAX_TOKEN_LEN = 128;
 #define RTF_ISDIGIT( c ) (c >= '0' && c <= '9')
 #define RTF_ISALPHA( c ) ( (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') )
 
-SV_IMPL_VARARR( RtfParserStates_Impl, RtfParserState_Impl )
-
 SvRTFParser::SvRTFParser( SvStream& rIn, BYTE nStackSize )
     : SvParser( rIn, nStackSize ),
     eUNICodeSet( RTL_TEXTENCODING_MS_1252 ),    // default ist ANSI-CodeSet
@@ -175,14 +173,13 @@ int SvRTFParser::_GetNextToken()
                                 nUCharOverread = (BYTE)nTokenValue;
 #if 1
                                 //cmc: other ifdef breaks #i3584
-                                aParserStates[ aParserStates.Count()-1].
+                                aParserStates.top().
                                     nUCharOverread = nUCharOverread;
 #else
                                 if( !nUCharOverread )
-                                    nUCharOverread = aParserStates[
-                                        aParserStates.Count()-1].nUCharOverread;
+                                    nUCharOverread = aParserStates.top().nUCharOverread;
                                 else
-                                    aParserStates[ aParserStates.Count()-1].
+                                    aParserStates.top().
                                         nUCharOverread = nUCharOverread;
 #endif
                             }
@@ -252,12 +249,12 @@ int SvRTFParser::_GetNextToken()
                 if( 0 <= nOpenBrakets )
                 {
                     RtfParserState_Impl aState( nUCharOverread, GetSrcEncoding() );
-                    aParserStates.Insert(
-                        aState, sal::static_int_cast< USHORT >(nOpenBrakets) );
+                    aParserStates.push( aState );
                 }
                 ++nOpenBrakets;
-                DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
-                            "ParserStateStack unequal to bracket count" );
+                DBG_ASSERT(
+                    static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                    "ParserStateStack unequal to bracket count" );
                 nRet = nNextCh;
             }
             break;
@@ -266,12 +263,11 @@ int SvRTFParser::_GetNextToken()
             --nOpenBrakets;
             if( 0 <= nOpenBrakets )
             {
-                aParserStates.Remove(
-                    sal::static_int_cast< USHORT >(nOpenBrakets) );
-                if( aParserStates.Count() )
+                aParserStates.pop();
+                if( !aParserStates.empty() )
                 {
                     const RtfParserState_Impl& rRPS =
-                            aParserStates[ aParserStates.Count() - 1 ];
+                            aParserStates.top();
                     nUCharOverread = rRPS.nUCharOverread;
                     SetSrcEncoding( rRPS.eCodeSet );
                 }
@@ -281,8 +277,9 @@ int SvRTFParser::_GetNextToken()
                     SetSrcEncoding( GetCodeSet() );
                 }
             }
-            DBG_ASSERT( nOpenBrakets == aParserStates.Count(),
-                        "ParserStateStack unequal to bracket count" );
+            DBG_ASSERT(
+                static_cast<size_t>(nOpenBrakets) == aParserStates.size(),
+                "ParserStateStack unequal to bracket count" );
             nRet = nNextCh;
             break;
 
@@ -690,8 +687,8 @@ void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
     if (eEnc == RTL_TEXTENCODING_DONTKNOW)
         eEnc = GetCodeSet();
 
-    if (aParserStates.Count())
-        aParserStates[aParserStates.Count() - 1].eCodeSet = eEnc;
+    if (!aParserStates.empty())
+        aParserStates.top().eCodeSet = eEnc;
     SetSrcEncoding(eEnc);
 }
 

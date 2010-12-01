@@ -122,6 +122,7 @@ struct DDInfo
     BOOL            bStarterOfDD;
     BOOL            bDroppedInMe;
     BOOL            bVisCursor;
+    BOOL            bIsStringSupported;
 
     DDInfo()
     {
@@ -130,6 +131,7 @@ struct DDInfo
         bStarterOfDD = FALSE;
         bDroppedInMe = FALSE;
         bVisCursor = FALSE;
+        bIsStringSupported = FALSE;
     }
 };
 
@@ -1799,6 +1801,9 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
             }
             break;
 
+            /* #i101255# disable autocomplete tab forward/backward
+               users expect tab/shif-tab to move the focus to other controls
+               not suddenly to cycle the autocompletion
             case KEY_TAB:
             {
                 if ( !mbReadOnly && maAutocompleteHdl.IsSet() &&
@@ -1820,6 +1825,7 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                 }
             }
             break;
+            */
 
             default:
             {
@@ -3062,17 +3068,26 @@ void Edit::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent&
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (::com::sun::star::uno::RuntimeException)
+void Edit::dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !mpDDInfo )
     {
         mpDDInfo = new DDInfo;
     }
-//    sal_Bool bTextContent = mbReadOnly ? sal_False : sal_True;   // quiery from rDTDEE.SupportedDataFlavors()
-//    if ( bTextContent )
-//        rDTDEE.Context->acceptDrop(datatransfer::dnd::DNDConstants::ACTION_COPY_OR_MOVE);
-//    else
-//        rDTDEE.Context->rejectDrop();
+    // search for string data type
+    const Sequence< com::sun::star::datatransfer::DataFlavor >& rFlavors( rDTDE.SupportedDataFlavors );
+    sal_Int32 nEle = rFlavors.getLength();
+    mpDDInfo->bIsStringSupported = FALSE;
+    for( sal_Int32 i = 0; i < nEle; i++ )
+    {
+        sal_Int32 nIndex = 0;
+        rtl::OUString aMimetype = rFlavors[i].MimeType.getToken( 0, ';', nIndex );
+        if( aMimetype.equalsAscii( "text/plain" ) )
+        {
+            mpDDInfo->bIsStringSupported = TRUE;
+            break;
+        }
+    }
 }
 
 void Edit::dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& ) throw (::com::sun::star::uno::RuntimeException)
@@ -3104,7 +3119,7 @@ void Edit::dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEv
     aSel.Justify();
 
     // Don't accept drop in selection or read-only field...
-    if ( IsReadOnly() || aSel.IsInside( mpDDInfo->nDropPos ) )
+    if ( IsReadOnly() || aSel.IsInside( mpDDInfo->nDropPos ) || ! mpDDInfo->bIsStringSupported )
     {
         ImplHideDDCursor();
         rDTDE.Context->rejectDrag();

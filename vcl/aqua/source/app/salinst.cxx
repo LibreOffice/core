@@ -371,13 +371,13 @@ SalYieldMutex::SalYieldMutex()
 void SalYieldMutex::acquire()
 {
     OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnThreadId = vos::OThread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
@@ -390,7 +390,7 @@ sal_Bool SalYieldMutex::tryToAcquire()
 {
     if ( OMutex::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }
@@ -450,7 +450,6 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
     ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset = 10;
-    ImplGetSVData()->maGDIData.mbPrinterPullModel = true;
     ImplGetSVData()->maGDIData.mbNoXORClipping = true;
     ImplGetSVData()->maWinData.mbNoSaveBackground = true;
 
@@ -537,7 +536,7 @@ ULONG AquaSalInstance::ReleaseYieldMutex()
 {
     SalYieldMutex* pYieldMutex = mpSalYieldMutex;
     if ( pYieldMutex->GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         ULONG nCount = pYieldMutex->GetAcquireCount();
         ULONG n = nCount;
@@ -563,6 +562,22 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
         pYieldMutex->acquire();
         nCount--;
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
@@ -976,6 +991,9 @@ void AquaSalInstance::DeletePrinterQueueInfo( SalPrinterQueueInfo* pInfo )
 
 XubString AquaSalInstance::GetDefaultPrinter()
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     if( ! maDefaultPrinter.getLength() )
     {
         NSPrintInfo* pPI = [NSPrintInfo sharedPrintInfo];
@@ -1000,6 +1018,9 @@ XubString AquaSalInstance::GetDefaultPrinter()
 SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueInfo,
                                                 ImplJobSetup* pSetupData )
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     SalInfoPrinter* pNewInfoPrinter = NULL;
     if( pQueueInfo )
     {
@@ -1015,6 +1036,9 @@ SalInfoPrinter* AquaSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueI
 
 void AquaSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 {
+    // #i113170# may not be the main thread if called from UNO API
+    SalData::ensureThreadAutoreleasePool();
+
     delete pPrinter;
 }
 

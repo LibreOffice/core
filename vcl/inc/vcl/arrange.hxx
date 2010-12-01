@@ -48,7 +48,7 @@ namespace vcl
          or a child WindowArranger (a node in the hierarchy), but never both
     */
 
-    class WindowArranger
+    class VCL_DLLPUBLIC WindowArranger
     {
     protected:
         struct Element
@@ -189,7 +189,7 @@ namespace vcl
         }
     };
 
-    class RowOrColumn : public WindowArranger
+    class VCL_DLLPUBLIC RowOrColumn : public WindowArranger
     {
         long    m_nBorderWidth;
         bool    m_bColumn;
@@ -230,7 +230,7 @@ namespace vcl
         long getBorderWidth() const { return m_nBorderWidth; }
     };
 
-    class LabeledElement : public WindowArranger
+    class VCL_DLLPUBLIC LabeledElement : public WindowArranger
     {
         WindowArranger::Element m_aLabel;
         WindowArranger::Element m_aElement;
@@ -274,7 +274,7 @@ namespace vcl
         { return m_aElement.getOptimalSize( i_eType ); }
     };
 
-    class LabelColumn : public RowOrColumn
+    class VCL_DLLPUBLIC LabelColumn : public RowOrColumn
     {
         long getLabelWidth() const;
     public:
@@ -291,7 +291,7 @@ namespace vcl
         size_t addRow( Window* i_pLabel, Window* i_pElement, long i_nIndent = 0 );
     };
 
-    class Indenter : public WindowArranger
+    class VCL_DLLPUBLIC Indenter : public WindowArranger
     {
         long                        m_nIndent;
         WindowArranger::Element     m_aElement;
@@ -325,7 +325,7 @@ namespace vcl
         { setChild( boost::shared_ptr<WindowArranger>( i_pChild ), i_nExpandPrio ); }
     };
 
-    class Spacer : public WindowArranger
+    class VCL_DLLPUBLIC Spacer : public WindowArranger
     {
         WindowArranger::Element     m_aElement;
         Size                        m_aSize;
@@ -351,7 +351,7 @@ namespace vcl
         virtual bool isVisible() const { return true; }
     };
 
-    class MatrixArranger : public WindowArranger
+    class VCL_DLLPUBLIC MatrixArranger : public WindowArranger
     {
         long    m_nBorderX;
         long    m_nBorderY;
@@ -385,7 +385,12 @@ namespace vcl
         sal_uInt64 getMap( sal_uInt32 i_nX, sal_uInt32 i_nY )
         { return static_cast< sal_uInt64 >(i_nX) | (static_cast< sal_uInt64>(i_nY) << 32 ); }
 
-        Size getOptimalSize( WindowSizeType, std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights ) const;
+        static void distributeExtraSize( std::vector<long>& io_rSizes, const std::vector<sal_Int32>& i_rPrios, long i_nExtraWidth );
+
+        Size getOptimalSize( WindowSizeType,
+                             std::vector<long>& o_rColumnWidths, std::vector<long>& o_rRowHeights,
+                             std::vector<sal_Int32>& o_rColumnPrio, std::vector<sal_Int32>& o_rRowPrio
+                            ) const;
     protected:
         virtual Element* getElement( size_t i_nIndex )
         { return i_nIndex < m_aElements.size() ? &m_aElements[ i_nIndex ] : 0; }

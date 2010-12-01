@@ -685,6 +685,7 @@ SvLBox_Impl::SvLBox_Impl( SvLBox& _rBox )
     ,m_bEntryMnemonicsEnabled( false )
     ,m_pLink( NULL )
     ,m_aMnemonicEngine( _rBox )
+    ,m_aQuickSelectionEngine( _rBox )
 {
 }
 
@@ -699,7 +700,6 @@ SvLBox::SvLBox( Window* pParent, WinBits nWinStyle  ) :
     DropTargetHelper( this ), DragSourceHelper( this ), eSelMode( NO_SELECTION )
 {
     DBG_CTOR(SvLBox,0);
-    nWindowStyle = nWinStyle;
     nDragOptions =  DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nImpFlags = 0;
     pTargetEntry = 0;
@@ -724,7 +724,6 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     DBG_CTOR(SvLBox,0);
     pTargetEntry = 0;
     nImpFlags = 0;
-    nWindowStyle = 0;
     pLBoxImpl = new SvLBox_Impl( *this );
     nDragOptions = DND_ACTION_COPYMOVE | DND_ACTION_LINK;
     nDragDropMode = 0;
@@ -1251,6 +1250,12 @@ ULONG SvLBox::SelectChilds( SvLBoxEntry* , BOOL  )
     return 0;
 }
 
+void SvLBox::OnCurrentEntryChanged()
+{
+    if ( !pLBoxImpl->m_bDoingQuickSelection )
+        pLBoxImpl->m_aQuickSelectionEngine.Reset();
+}
+
 void SvLBox::SelectAll( BOOL /* bSelect */ , BOOL /* bPaint */ )
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -1518,6 +1523,13 @@ void SvLBox::MakeVisible( SvLBoxEntry* )
 void SvLBox::Command( const CommandEvent& i_rCommandEvent )
 {
     DBG_CHKTHIS(SvLBox,0);
+
+    if ( COMMAND_STARTDRAG == i_rCommandEvent.GetCommand() )
+    {
+        Point aEventPos( i_rCommandEvent.GetMousePosPixel() );
+        MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+        MouseButtonUp( aMouseEvt );
+    }
     Control::Command( i_rCommandEvent );
 }
 
@@ -1528,15 +1540,14 @@ void SvLBox::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-const void* SvLBox::FirstSearchEntry( String& _rEntryText )
+const void* SvLBox::FirstSearchEntry( String& _rEntryText ) const
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     if ( pEntry )
         pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( NextSearchEntry( pEntry, _rEntryText ) ) );
     else
     {
-        if ( !pEntry )
-            pEntry = FirstSelected();
+        pEntry = FirstSelected();
         if ( !pEntry )
             pEntry = First();
     }
@@ -1547,11 +1558,23 @@ const void* SvLBox::FirstSearchEntry( String& _rEntryText )
     return pEntry;
 }
 
-const void* SvLBox::NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText )
+const void* SvLBox::NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText ) const
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pCurrentSearchEntry ) );
 
-    pEntry = Next( pEntry );
+    if  (   (   ( GetChildCount( pEntry ) > 0 )
+            ||  ( pEntry->HasChildsOnDemand() )
+            )
+        &&  !IsExpanded( pEntry )
+        )
+    {
+        pEntry = NextSibling( pEntry );
+    }
+    else
+    {
+        pEntry = Next( pEntry );
+    }
+
     if ( !pEntry )
         pEntry = First();
 
@@ -1565,7 +1588,7 @@ void SvLBox::SelectSearchEntry( const void* _pEntry )
 {
     SvLBoxEntry* pEntry = const_cast< SvLBoxEntry* >( static_cast< const SvLBoxEntry* >( _pEntry ) );
     DBG_ASSERT( pEntry, "SvLBox::SelectSearchEntry: invalid entry!" );
-    if ( pEntry )
+    if ( !pEntry )
         return;
 
     SelectAll( FALSE );
@@ -1573,17 +1596,50 @@ void SvLBox::SelectSearchEntry( const void* _pEntry )
     Select( pEntry );
 }
 
-void SvLBox::ExecuteSearchEntry( const void* /*_pEntry*/ )
+void SvLBox::ExecuteSearchEntry( const void* /*_pEntry*/ ) const
 {
     // nothing to do here, we have no "execution"
 }
 
+::vcl::StringEntryIdentifier SvLBox::CurrentEntry( String& _out_entryText ) const
+{
+    // always accept the current entry if there is one
+    SvLBoxEntry* pCurrentEntry( GetCurEntry() );
+    if ( pCurrentEntry )
+    {
+        _out_entryText = GetEntryText( pCurrentEntry );
+        return pCurrentEntry;
+    }
+    return FirstSearchEntry( _out_entryText );
+}
+
+::vcl::StringEntryIdentifier SvLBox::NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const
+{
+    return NextSearchEntry( _currentEntry, _out_entryText );
+}
+
+void SvLBox::SelectEntry( ::vcl::StringEntryIdentifier _entry )
+{
+    SelectSearchEntry( _entry );
+}
+
 bool SvLBox::HandleKeyInput( const KeyEvent& _rKEvt )
 {
-    if ( !IsEntryMnemonicsEnabled() )
-        return false;
+    if  (   IsEntryMnemonicsEnabled()
+        &&  pLBoxImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt )
+        )
+        return true;
 
-    return pLBoxImpl->m_aMnemonicEngine.HandleKeyEvent( _rKEvt );
+    if ( ( GetStyle() & WB_QUICK_SEARCH ) != 0 )
+    {
+        pLBoxImpl->m_bDoingQuickSelection = true;
+        const bool bHandled = pLBoxImpl->m_aQuickSelectionEngine.HandleKeyEvent( _rKEvt );
+        pLBoxImpl->m_bDoingQuickSelection = false;
+        if ( bHandled )
+            return true;
+    }
+
+    return false;
 }
 
 SvLBoxEntry* SvLBox::GetEntry( const Point&, BOOL ) const
@@ -1774,6 +1830,10 @@ sal_Int8 SvLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 void SvLBox::StartDrag( sal_Int8, const Point& rPosPixel )
 {
     DBG_CHKTHIS(SvLBox,0);
+
+    Point aEventPos( rPosPixel );
+    MouseEvent aMouseEvt( aEventPos, 1, MOUSE_SELECT, MOUSE_LEFT );
+    MouseButtonUp( aMouseEvt );
 
     nOldDragMode = GetDragDropMode();
     if ( !nOldDragMode )
