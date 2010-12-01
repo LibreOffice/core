@@ -42,6 +42,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_DRAW
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_DRAW";
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -49,6 +50,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_NOTES
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_NOTES";
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
@@ -56,6 +58,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_HANDOUTS
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_HANDOUTS";
         Pos = MAP_APPFONT ( 12 , 42  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
@@ -63,6 +66,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_OUTLINE
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_OUTLINE";
         Pos = MAP_APPFONT ( 12 , 56  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
@@ -82,6 +86,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_COLOR
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_COLOR";
         Pos = MAP_APPFONT ( 136 , 14  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Default" ;
@@ -89,6 +94,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_GRAYSCALE
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_GRAYSCALE";
         Pos = MAP_APPFONT ( 136 , 28  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Gra~yscale" ;
@@ -96,6 +102,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_BLACKWHITE
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_BLACKWHITE";
         Pos = MAP_APPFONT ( 136 , 42  ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Text [ en-US ] = "Black & ~white" ;
@@ -109,6 +116,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_PAGENAME
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAGENAME";
         Pos = MAP_APPFONT ( 12 , 83  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "~Page name" ;
@@ -116,6 +124,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_DATE
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_DATE";
         Pos = MAP_APPFONT ( 12 , 97  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "D~ate" ;
@@ -123,6 +132,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_TIME
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_TIME";
         Pos = MAP_APPFONT ( 12 , 111  ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Text [ en-US ] = "Ti~me" ;
@@ -130,6 +140,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_HIDDEN_PAGES
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_HIDDEN_PAGES";
         Pos = MAP_APPFONT ( 12 , 125  ) ;
          // 120 , 14
         Size = MAP_APPFONT ( 90 , 10 ) ;
@@ -150,6 +161,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_DEFAULT
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_DEFAULT";
         Pos = MAP_APPFONT ( 136 , 83  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -157,6 +169,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_PAGESIZE
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_PAGESIZE";
         Pos = MAP_APPFONT ( 136 , 97  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         Text [ en-US ] = "~Fit to page" ;
@@ -164,6 +177,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_PAGETILE
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_PAGETILE";
         Pos = MAP_APPFONT ( 136 , 111 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -171,6 +185,7 @@ TabPage TP_PRINT_OPTIONS
     };
     RadioButton RBT_BOOKLET
     {
+        HelpID = "sd:RadioButton:TP_PRINT_OPTIONS:RBT_BOOKLET";
         Pos = MAP_APPFONT ( 136, 125  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         TabStop = TRUE ;
@@ -178,6 +193,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_FRONT
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_FRONT";
         Pos = MAP_APPFONT ( 145 , 139  ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         TabStop = TRUE ;
@@ -185,6 +201,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_BACK
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_BACK";
         Pos = MAP_APPFONT ( 202 , 139  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
@@ -192,6 +209,7 @@ TabPage TP_PRINT_OPTIONS
     };
     CheckBox CBX_PAPERBIN
     {
+        HelpID = "sd:CheckBox:TP_PRINT_OPTIONS:CBX_PAPERBIN";
         Pos = MAP_APPFONT ( 136 , 153  ) ;
         Size = MAP_APPFONT ( 118 , 30 ) ;
         Text [ en-US ] = "Paper tray from printer s~ettings" ;

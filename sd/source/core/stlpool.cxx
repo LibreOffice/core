@@ -76,6 +76,7 @@
 #include "sdpage.hxx"
 #include "helpids.h"
 #include <svl/itemset.hxx>
+#include "app.hrc"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star::uno;
@@ -518,8 +519,8 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         SfxItemSet& rBackgroundObjectsSet = pSheet->GetItemSet();
         rBackgroundObjectsSet.Put(SdrShadowItem(FALSE));
         rBackgroundObjectsSet.Put(SdrShadowColorItem(String(), Color(COL_GRAY)));
-        rBackgroundObjectsSet.Put(SdrShadowXDistItem(300)); // 3 mm Schattendistanz
-        rBackgroundObjectsSet.Put(SdrShadowYDistItem(300));
+        rBackgroundObjectsSet.Put(SdrShadowXDistItem(200)); // 3 mm Schattendistanz
+        rBackgroundObjectsSet.Put(SdrShadowYDistItem(200));
         // #i16874# enable kerning by default but only for new documents
         rBackgroundObjectsSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
         rBackgroundObjectsSet.Put(SdrTextHorzAdjustItem(SDRTEXTHORZADJUST_BLOCK));

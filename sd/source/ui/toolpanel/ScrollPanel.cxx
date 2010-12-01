@@ -41,25 +41,6 @@
 namespace sd { namespace toolpanel {
 
 ScrollPanel::ScrollPanel (
-    TreeNode* pParent)
-    : Control (pParent->GetWindow(), WB_DIALOGCONTROL),
-      TreeNode(pParent),
-      maScrollWindow(this, WB_DIALOGCONTROL),
-      maVerticalScrollBar(this, WB_VERT),
-      maHorizontalScrollBar(this, WB_HORZ),
-      maScrollBarFiller(this),
-      maScrollWindowFiller(&maScrollWindow),
-      mbIsRearrangePending(true),
-      mbIsLayoutPending(true),
-      mnChildrenWidth(0),
-      mnVerticalBorder(2),
-      mnVerticalGap(3),
-      mnHorizontalBorder(2)
-{
-    Construct();
-}
-
-ScrollPanel::ScrollPanel (
     ::Window& i_rParentWindow)
     : Control (&i_rParentWindow, WB_DIALOGCONTROL),
       TreeNode(NULL),
@@ -137,7 +118,7 @@ ScrollPanel::~ScrollPanel (void)
 TitledControl* ScrollPanel::AddControl (
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
-    ULONG nHelpId)
+    const rtl::OString& rHelpId)
 {
     // We are interested only in the title.  The control itself is
     // managed by the content object.
@@ -147,7 +128,7 @@ TitledControl* ScrollPanel::AddControl (
         rTitle,
         TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
-    pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
+    pTitledControl->GetTitleBar()->SetHelpId(rHelpId);
 
     AddControl(::std::auto_ptr<TreeNode>(pTitledControl));
 

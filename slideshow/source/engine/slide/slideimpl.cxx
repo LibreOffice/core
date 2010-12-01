@@ -454,9 +454,7 @@ void SlideImpl::dispose()
     mpShapeManager.reset();
     mxRootNode.clear();
     mxDrawPage.clear();
-#ifndef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier.clear();
-#endif
 }
 
 bool SlideImpl::prefetch()
@@ -1259,12 +1257,7 @@ SlideSharedPtr createSlide( const uno::Reference< drawing::XDrawPage >&         
                             bool                                                bIntrinsicAnimationsAllowed,
                             bool                                                bDisableAnimationZOrder )
 {
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, xDrawPages, xRootNode, rEventQueue,
-#else
-    (void)xDrawPages;
-    boost::shared_ptr<SlideImpl> pRet( new SlideImpl( xDrawPage, NULL, xRootNode, rEventQueue,
-#endif
                                                       rEventMultiplexer, rScreenUpdater,
                                                       rActivitiesQueue, rUserEventQueue,
                                                       rCursorManager, rViewContainer,

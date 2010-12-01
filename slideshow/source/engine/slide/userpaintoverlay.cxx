@@ -156,7 +156,7 @@ namespace slideshow
                         ++aIter )
                     {
                         // fully clear view content to background color
-                        (*aIter)->getCanvas()->clear();
+                        //(*aIter)->getCanvas()->clear();
 
                         //get via SlideImpl instance the bitmap of the slide unmodified to redraw it
                         SlideBitmapSharedPtr         pBitmap( mrSlide.getCurrentSlideBitmap( (*aIter) ) );

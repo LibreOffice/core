@@ -66,7 +66,7 @@
 
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
-
+#include "app.hrc"
 #include "misc.hxx"
 #include "eetext.hxx"
 #include "drawdoc.hxx"
@@ -2355,7 +2355,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
         }
     }
 
-    if ( pObj && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
+    if ( pObj && (pObj->GetUserCall() || bInit) && ( pObj->IsEmptyPresObj() || !pObj->ISA(SdrGrafObj) ) )
         pObj->AdjustToMaxRect( aRect );
 
     return pObj;

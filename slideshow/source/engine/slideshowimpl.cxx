@@ -1112,11 +1112,7 @@ void SlideShowImpl::displaySlide(
     // precondition: must only be called from the main thread!
     DBG_TESTSOLARMUTEX();
 
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxDrawPagesSupplier = xDrawPages;
-#else
-    mxDrawPagesSupplier = NULL;
-#endif
 
     stopShow();  // MUST call that: results in
     // maUserEventQueue.clear(). What's more,

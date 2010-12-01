@@ -646,20 +646,13 @@ ShapeImporter::ShapeImporter( uno::Reference<drawing::XDrawPage> const&         
                               sal_Int32                                          nOrdNumStart,
                               bool                                               bConvertingMasterPage ) :
     mxPage( xActualPage ),
-#ifdef ENABLE_PRESENTER_EXTRA_UI
     mxPagesSupplier( xPagesSupplier ),
-#else
-    mxPagesSupplier( NULL ),
-#endif
     mrContext( rContext ),
     maPolygons(),
     maShapesStack(),
     mnAscendingPrio( nOrdNumStart ),
     mbConvertingMasterPage( bConvertingMasterPage )
 {
-#ifndef ENABLE_PRESENTER_EXTRA_UI
-    (void)xPagesSupplier;
-#endif
     uno::Reference<drawing::XShapes> const xShapes(
         xPage, uno::UNO_QUERY_THROW );
     maShapesStack.push( XShapesEntry(xShapes) );

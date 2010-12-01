@@ -512,12 +512,25 @@ ToolPanelViewShell::ToolPanelViewShell( SfxViewFrame* pFrame, ViewShellBase& rVi
 
     SetName( String( RTL_CONSTASCII_USTRINGPARAM( "ToolPanelViewShell" ) ) );
 
+    // enforce the creation of the Accessible object here.
+    // In some not-always-to-reproduce situations, creating the accessible on demand only leads to some
+    // cycliy parenthood references between the involved objects, which make some AT tools (accerciser, in particular)
+    // loop (which is /not/ a bug in the tool, of course).
+    // However, since those situations were not reproducible anymore, we deliberately leave the Accessible creation
+    // (which originally was intended as a workaround) herein. Better to be safe ...
+    // Note that this is not a performance problem: The implementation of the ToolPanelDeck's Accessible
+    // is separated from the implementation of its AccessibleContext (which even is in a separate library) - we only
+    // create the former here, the latter is still created on demand, when somebody requests it.
+    // #i113671# / 2010-09-17 / frank.schoenheit@oracle.com
+    if (mpContentWindow.get())
+        mpContentWindow->GetAccessible( TRUE );
+
     // For accessibility we have to shortly hide the content window.  This
     // triggers the construction of a new accessibility object for the new
     // view shell.  (One is created earlier while the construtor of the base
     // class is executed.  At that time the correct accessibility object can
     // not be constructed.)
-    if ( mpContentWindow.get() )
+    if (mpContentWindow.get())
     {
         mpContentWindow->Hide();
         mpContentWindow->Show();
@@ -599,18 +612,6 @@ SdPage* ToolPanelViewShell::getCurrentPage() const
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::Execute( SfxRequest& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::Execute: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
-void ToolPanelViewShell::GetState( SfxItemSet& )
-{
-    OSL_ENSURE( false, "ToolPanelViewShell::GetState: not to be called! (right?)" );
-}
-
-// ---------------------------------------------------------------------------------------------------------------------
 TaskPaneShellManager& ToolPanelViewShell::GetSubShellManager() const
 {
     return *mpSubShellManager.get();
@@ -680,10 +681,10 @@ namespace
     struct PanelFactory
     {
         ControlFactoryFactory   pFactory;
-        ULONG                   nHelpID;
-        PanelFactory( const ControlFactoryFactory i_pFactory, const ULONG i_nHelpID )
+        rtl::OString            sHelpID;
+        PanelFactory( const ControlFactoryFactory i_pFactory, const rtl::OString& i_nHelpID )
             :pFactory( i_pFactory )
-            ,nHelpID( i_nHelpID )
+            ,sHelpID( i_nHelpID )
         {
         }
     };
@@ -721,7 +722,7 @@ Reference< XUIElement > ToolPanelViewShell::CreatePanelUIElement( const Referenc
     ::std::auto_ptr< TreeNode > pNode( pControlFactory->CreateControl( mpImpl->GetToolPanelDeck().GetPanelWindowAnchor() ) );
     ENSURE_OR_THROW( ( pNode.get() != NULL ) && ( pNode->GetWindow() != NULL ),
         "illegal node returned by the control factory" );
-    pNode->GetWindow()->SetHelpId( aPanelFactory.nHelpID );
+    pNode->GetWindow()->SetHelpId( aPanelFactory.sHelpID );
 
     // create an XToolPanel
     Reference< XToolPanel > xPanel( new ToolPanel( pNode ) );
