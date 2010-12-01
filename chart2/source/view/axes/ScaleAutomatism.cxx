@@ -651,6 +651,8 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     if( !bAutoMajor )
     {
         long nIntervalDayCount = rExplicitIncrement.MajorTimeInterval.Number;
+        if( rExplicitIncrement.MajorTimeInterval.TimeUnit < rExplicitScale.TimeResolution )
+            rExplicitIncrement.MajorTimeInterval.TimeUnit = rExplicitScale.TimeResolution;
         switch( rExplicitIncrement.MajorTimeInterval.TimeUnit )
         {
         case DAY:
@@ -671,12 +673,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
         long nNumer = 1;
         long nIntervalDays =  nDayCount / nMaxMainIncrementCount;
         double nDaysPerInterval = 1.0;
-        if( nIntervalDays>365 )
+        if( nIntervalDays>365 || YEAR==rExplicitScale.TimeResolution )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = YEAR;
             nDaysPerInterval = 365.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
         }
-        else if( nIntervalDays>31 )
+        else if( nIntervalDays>31 || MONTH==rExplicitScale.TimeResolution )
         {
             rExplicitIncrement.MajorTimeInterval.TimeUnit = MONTH;
             nDaysPerInterval = 31.0;//todo: maybe different for other calendars... get localized calendar according to set number format at axis ...
@@ -697,6 +699,8 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
     //choose minor time interval:
     if( !bAutoMinor )
     {
+        if( rExplicitIncrement.MinorTimeInterval.TimeUnit > rExplicitIncrement.MajorTimeInterval.TimeUnit )
+            rExplicitIncrement.MinorTimeInterval.TimeUnit = rExplicitIncrement.MajorTimeInterval.TimeUnit;
         long nIntervalDayCount = rExplicitIncrement.MinorTimeInterval.Number;
         switch( rExplicitIncrement.MinorTimeInterval.TimeUnit )
         {
@@ -738,10 +742,12 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForDateTimeAxis(
                     case DAY:
                         break;
                     case MONTH:
-                        rExplicitIncrement.MinorTimeInterval.TimeUnit = DAY;
+                        if( rExplicitScale.TimeResolution == DAY )
+                            rExplicitIncrement.MinorTimeInterval.TimeUnit = DAY;
                         break;
                     case YEAR:
-                        rExplicitIncrement.MinorTimeInterval.TimeUnit = MONTH;
+                        if( rExplicitScale.TimeResolution <= MONTH )
+                            rExplicitIncrement.MinorTimeInterval.TimeUnit = MONTH;
                         break;
                 }
             }
