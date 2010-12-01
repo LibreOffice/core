@@ -326,6 +326,7 @@ MY_FILES_main += $(MY_MOD)/DataAccess/adabas.xcu
 .END
 .IF "$(ENABLE_EVOAB2)" == "TRUE"
 MY_FILES_main += $(MY_MOD)/DataAccess/evoab2.xcu
+MY_FILES_main += $(MY_MOD)/org/openoffice/Office/DataAccess-evoab2.xcu
 .END
 .IF "$(SOLAR_JAVA)" == "TRUE"
 MY_FILES_main += \
