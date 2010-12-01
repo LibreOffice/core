@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XContainerQuery.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
@@ -49,6 +50,8 @@ class COMPHELPER_DLLPUBLIC MimeConfigurationHelper
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xObjectConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xVerbsConfig;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xMediaTypeConfig;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > m_xFilterFactory;
 
 public:
 
@@ -106,6 +109,10 @@ public:
     ::rtl::OUString GetFactoryNameByMediaType( const ::rtl::OUString& aMediaType );
 
     // typedetection related
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterFactory();
+
+    sal_Int32 GetFilterFlags( const ::rtl::OUString& aFilterName );
+
     ::rtl::OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         sal_Bool bIgnoreType );
@@ -116,6 +123,14 @@ public:
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
 
     ::rtl::OUString GetDefaultFilterFromServiceName( const ::rtl::OUString& aServName, sal_Int32 nVersion );
+
+    ::rtl::OUString GetExportFilterFromImportFilter( const ::rtl::OUString& aImportFilterName );
+
+    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
+                        const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
+                        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aSearchRequest,
+                        sal_Int32 nMustFlags,
+                        sal_Int32 nDontFlags );
 
     static sal_Bool ClassIDsEqual( const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID1,
                         const ::com::sun::star::uno::Sequence< sal_Int8 >& aClassID2 );
