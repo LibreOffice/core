@@ -2393,7 +2393,7 @@ void SAL_CALL SfxBaseModel::removeDocumentEventListener( const uno::Reference< d
 }
 
 // ---------------------------------
-void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString& _EventName, const uno::Reference< frame::XController2 >& _ViewController, const uno::Any& _Supplement )
+void SAL_CALL SfxBaseModel::notifyDocumentEvent( const ::rtl::OUString&, const uno::Reference< frame::XController2 >&, const uno::Any& )
     throw ( lang::IllegalArgumentException, lang::NoSupportException, uno::RuntimeException )
 {
     throw lang::NoSupportException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SfxBaseModel controlls all the sent notifications itself!" ) ), uno::Reference< uno::XInterface >() );

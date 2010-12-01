@@ -39,6 +39,7 @@
 
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <comphelper/mimeconfighelper.hxx>
 
 #include "closepreventer.hxx"
 #include "intercept.hxx"
@@ -239,6 +240,14 @@ void OCommonEmbeddedObject::LinkInit_Impl(
             aMediaDescr[nInd].Value >>= m_aLinkFilterName;
 
     OSL_ENSURE( m_aLinkURL.getLength() && m_aLinkFilterName.getLength(), "Filter and URL must be provided!\n" );
+
+    m_bReadOnly = sal_True;
+    if ( m_aLinkFilterName.getLength() )
+    {
+        ::comphelper::MimeConfigurationHelper aHelper( m_xFactory );
+        ::rtl::OUString aExportFilterName = aHelper.GetExportFilterFromImportFilter( m_aLinkFilterName );
+        m_bReadOnly = !( aExportFilterName.equals( m_aLinkFilterName ) );
+    }
 
     m_aDocMediaDescriptor = GetValuableArgs_Impl( aMediaDescr, sal_False );
 
