@@ -277,6 +277,17 @@ class ScRowStyles : public ScColumnRowStylesBase
 {
     typedef ::mdds::flat_segment_tree<sal_Int32, sal_Int32> StylesType;
     ::boost::ptr_vector<StylesType> aTables;
+    struct Cache
+    {
+        sal_Int32 mnTable;
+        sal_Int32 mnStart;
+        sal_Int32 mnEnd;
+        sal_Int32 mnStyle;
+        Cache();
+
+        bool hasCache(sal_Int32 nTable, sal_Int32 nField) const;
+    };
+    Cache maCache;
 
 public:
     ScRowStyles();

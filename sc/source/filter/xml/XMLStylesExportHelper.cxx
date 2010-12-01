@@ -1203,6 +1203,14 @@ rtl::OUString* ScColumnStyles::GetStyleName(const sal_Int32 nTable, const sal_In
 
 //===========================================================================
 
+ScRowStyles::Cache::Cache() :
+    mnTable(-1), mnStart(-1), mnEnd(-1), mnStyle(-1) {}
+
+bool ScRowStyles::Cache::hasCache(sal_Int32 nTable, sal_Int32 nField) const
+{
+    return mnTable == nTable && mnStart <= nField && nField <= mnEnd;
+}
+
 ScRowStyles::ScRowStyles()
     : ScColumnRowStylesBase()
 {
@@ -1225,12 +1233,24 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
     DBG_ASSERT(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    if (maCache.hasCache(nTable, nField))
+        // Cache hit !
+        return maCache.mnStyle;
+
     StylesType& r = aTables[nTable];
     if (!r.is_tree_valid())
         r.build_tree();
     sal_Int32 nStyle;
-    if (r.search_tree(nField, nStyle))
+    sal_Int32 nStart, nEnd;
+    if (r.search_tree(nField, nStyle, &nStart, &nEnd))
+    {
+        // Cache this value for better performance.
+        maCache.mnTable = nTable;
+        maCache.mnStart = nStart;
+        maCache.mnEnd = nEnd;
+        maCache.mnStyle = nStyle;
         return nStyle;
+    }
 
     return -1;
 }
