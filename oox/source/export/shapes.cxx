@@ -637,6 +637,8 @@ ShapeExport& ShapeExport::WriteGraphicObjectShape( Reference< XShape > xShape )
     pFS->startElementNS( mnXmlNamespace, XML_spPr, FSEND );
     WriteShapeTransformation( xShape, XML_a );
     WritePresetShape( "rect" );
+    // graphic object can come with the frame (bnc#654525)
+    WriteOutline( xShapeProps );
     pFS->endElementNS( mnXmlNamespace, XML_spPr );
 
     pFS->endElementNS( mnXmlNamespace, XML_pic );
