@@ -2031,11 +2031,16 @@ sub quoting_illegal_filenames
 sub optimize_list
 {
     my ( $longlist ) = @_;
-
+    my %tmpHash;
     my $shortlist = "";
-    my $hashref = installer::converter::convert_stringlist_into_hash(\$longlist, ",");
-    foreach my $key (sort keys %{$hashref} ) { $shortlist = "$shortlist,$key"; }
-    $shortlist =~ s/^\s*\,//;
+
+    $longlist =~ s/^\s*|\s*$//g;
+    $longlist =~ s/\s*,\s*/,/g;
+
+    foreach ( split /,/, $longlist ) { $tmpHash{$_} = 1; }
+
+    foreach (sort keys %tmpHash ) { $shortlist .= "$_,"; }
+    chop( $shortlist );
 
     return $shortlist;
 }
