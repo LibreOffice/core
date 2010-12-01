@@ -116,8 +116,6 @@ endif
 # Helper class
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
-gb_Deliver_GNUCOPY := $(or $(GNUCOPY),gnucp)
-
 
 # CObject class
 
