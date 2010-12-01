@@ -102,8 +102,6 @@ interface XUndoManager
         <p>Undo contexts can be nested, i.e. it is legitimate to call <code>enterUndoContext</code> and
         <member>enterHiddenUndoContext</member> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
 
-        <p>The redo stack is cleared when a new Undo context is entered.</p>
-
         @see leaveUndoContext
     */
     void    enterUndoContext(
@@ -132,8 +130,6 @@ interface XUndoManager
         <p>Undo contexts can be nested, i.e. it is legitimate to call <member>enterUndoContext</member> and
         <code>enterHiddenUndoContext</code> multiple times without calling <member>leaveUndoContext</member> inbetween.</p>
 
-        <p>The redo stack is cleared when a new hidden Undo context is entered.</p>
-
         @throws EmptyUndoStackException
             if the undo stack is currently empty, in which case it is impossible to push a hidden undo action onto
             it.
@@ -149,8 +145,11 @@ interface XUndoManager
 
         <p>If no undo action has been added since the context has been opened, the context is not only left,
         but silently removed, and does not contribute to the undo stack at all. In this case, possible
-        listeners will be notified via <member>XUndoManagerListener::cancelledContext</member>,
-        instead of <member>XUndoManagerListener::leftContext</member>.</p>
+        listeners will be notified via <member>XUndoManagerListener::cancelledContext</member>.</p>
+
+        <p>Otherwise, the undo context will be closed, and added to the Undo stack; the redo stack will be cleared,
+        and listeners will be notified via <member>XUndoManagerListener::leftContext</member> resp.
+        <member>XUndoManagerListener::leftHiddenContext</member></p>
 
         @throws ::com::sun::star::util::InvalidStateException
             if no undo context is currently open.
