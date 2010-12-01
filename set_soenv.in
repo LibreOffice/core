@@ -2160,7 +2160,8 @@ print "*********************************************************".
       "******************* $newline";
 
 print "To build, issue:\nmake\n\n";
-print "For the developer installation, issue:\nmake dev-install\n\n";
+print "To install when the build is finished, issue:\nmake install\n\n";
+print "If you want to develop LibreOffice, you might prefer:\nmake dev-install\n\n";
 
 $bootfile = "bootstrap";
 open( OUT, ">$bootfile" ) ||

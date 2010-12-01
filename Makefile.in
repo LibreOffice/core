@@ -3,19 +3,18 @@
 
 SHELL=/bin/sh
 
-all:
+all: dmake/dmake@EXEEXT@
 	@. ./*[Ee]nv.[Ss]et.sh && \
-        ./bootstrap && \
         cd instsetoo_native && \
         ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
-distclean:
+install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-        dmake distclean
-
-clean:
-	@. ./*[Ee]nv.[Ss]et.sh && \
-        dmake clean
+	echo "Installing in $${prefix:-@prefix@}..."
+	ooinstall "$${prefix:-@prefix@}" && \
+	echo "" && \
+	echo "Installation finished, you can now execute:" && \
+	echo "$${prefix:-@prefix@}/program/soffice"
 
 dev-install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
@@ -23,3 +22,15 @@ dev-install:
         echo "" && \
         echo "Developer installation finished, you can now execute:" && \
         echo "@abs_builddir@/install/program/soffice"
+
+distclean: dmake/dmake@EXEEXT@
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        dmake distclean
+
+clean: dmake/dmake@EXEEXT@
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        dmake clean
+
+dmake/dmake@EXEEXT@:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+        ./bootstrap
