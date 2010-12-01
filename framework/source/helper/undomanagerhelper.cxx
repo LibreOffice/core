@@ -595,6 +595,7 @@ namespace framework
         const bool isHiddenContext = m_aContextVisibilities.top();;
         m_aContextVisibilities.pop();
 
+        const bool bHadRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0 );
         {
             ::comphelper::FlagGuard aNotificationGuard( m_bAPIActionRunning );
             if ( isHiddenContext )
@@ -602,11 +603,13 @@ namespace framework
             else
                 nContextElements = rUndoManager.LeaveListAction();
         }
+        const bool bHasRedoActions = ( rUndoManager.GetRedoActionCount( IUndoManager::TopLevel ) > 0 );
 
         // prepare notification
         void ( SAL_CALL XUndoManagerListener::*notificationMethod )( const UndoManagerEvent& ) = NULL;
 
-        UndoManagerEvent aEvent( buildEvent( ::rtl::OUString() ) );
+        UndoManagerEvent aContextEvent( buildEvent( ::rtl::OUString() ) );
+        const EventObject aClearedEvent( getXUndoManager() );
         if ( nContextElements == 0 )
         {
             notificationMethod = &XUndoManagerListener::cancelledContext;
@@ -617,14 +620,16 @@ namespace framework
         }
         else
         {
-            aEvent.UndoActionTitle = rUndoManager.GetUndoActionComment( 0, IUndoManager::CurrentLevel );
+            aContextEvent.UndoActionTitle = rUndoManager.GetUndoActionComment( 0, IUndoManager::CurrentLevel );
             notificationMethod = &XUndoManagerListener::leftContext;
         }
 
         aGuard.clear();
         // <--- SYNCHRONIZED
 
-        m_aUndoListeners.notifyEach( notificationMethod, aEvent );
+        if ( bHadRedoActions && !bHasRedoActions )
+            m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aClearedEvent );
+        m_aUndoListeners.notifyEach( notificationMethod, aContextEvent );
         impl_notifyModified();
     }
 
@@ -702,7 +707,7 @@ namespace framework
 
         m_aUndoListeners.notifyEach( &XUndoManagerListener::undoActionAdded, aEventAdd );
         if ( bHadRedoActions && !bHasRedoActions )
-            m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared , aEventClear );
+            m_aUndoListeners.notifyEach( &XUndoManagerListener::redoActionsCleared, aEventClear );
         impl_notifyModified();
     }
 

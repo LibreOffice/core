@@ -833,9 +833,9 @@ public class UndoManager
         m_undoListener.reset();
 
         // put one action on the undo and one on the redo stack, as precondition for the following tests
-        XUndoAction undoAction1 = new CustomUndoAction( "Undo Action 1" );
+        final XUndoAction undoAction1 = new CustomUndoAction( "Undo Action 1" );
         i_undoManager.addUndoAction( undoAction1 );
-        XUndoAction undoAction2 = new CustomUndoAction( "Undo Action 2" );
+        final XUndoAction undoAction2 = new CustomUndoAction( "Undo Action 2" );
         i_undoManager.addUndoAction( undoAction2 );
         i_undoManager.undo();
         assertTrue( "precondition for context handling tests not met (1)", i_undoManager.isUndoPossible() );
@@ -843,11 +843,19 @@ public class UndoManager
         assertArrayEquals( new String[] { undoAction1.getTitle() }, i_undoManager.getAllUndoActionTitles() );
         assertArrayEquals( new String[] { undoAction2.getTitle() }, i_undoManager.getAllRedoActionTitles() );
 
-        // enter a context, add a single action
+        final String[] expectedRedoActionComments = new String[] { undoAction2.getTitle() };
+        assertArrayEquals( expectedRedoActionComments, i_undoManager.getAllRedoActionTitles() );
+
+        // enter a context
         i_undoManager.enterUndoContext( "Undo Context" );
+        // this should not (yet) touch the redo stack
+        assertArrayEquals( expectedRedoActionComments, i_undoManager.getAllRedoActionTitles() );
         assertEquals( "unexpected undo context depth after entering a context", 1, m_undoListener.getCurrentUndoContextDepth() );
+        // add a single action
         XUndoAction undoAction3 = new CustomUndoAction( "Undo Action 3" );
         i_undoManager.addUndoAction( undoAction3 );
+        // still, the redo stack should be untouched - added at a lower level does not affect it at all
+        assertArrayEquals( expectedRedoActionComments, i_undoManager.getAllRedoActionTitles() );
 
         // while the context is open, its title should already contribute to the stack, ...
         assertEquals( "Undo Context", i_undoManager.getCurrentUndoActionTitle() );
@@ -855,8 +863,6 @@ public class UndoManager
         // context,  ...
         assertArrayEquals( new String[] { "Undo Context", undoAction1.getTitle() },
             i_undoManager.getAllUndoActionTitles() );
-        assertArrayEquals( new String[] {}, i_undoManager.getAllRedoActionTitles() );
-            // (the redo stack has been cleared when a new context was entered)
         // ... but Undo and Redo should be impossible as long as the context is open
         assertFalse( i_undoManager.isUndoPossible() );
         assertFalse( i_undoManager.isRedoPossible() );
@@ -867,6 +873,9 @@ public class UndoManager
         assertFalse( m_undoListener.wasHiddenContextLeft() );
         assertFalse( m_undoListener.hasContextBeenCancelled() );
         assertEquals( "unexpected undo context depth leaving a non-empty context", 0, m_undoListener.getCurrentUndoContextDepth() );
+        // leaving a non-empty context should have cleare the redo stack
+        assertArrayEquals( new String[0], i_undoManager.getAllRedoActionTitles() );
+        assertTrue( m_undoListener.wasRedoStackCleared() );
 
         // .............................................................................................................
         // part II: empty contexts
