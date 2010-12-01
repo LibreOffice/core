@@ -46,21 +46,20 @@ namespace {
 
 class Test : public CppUnit::TestFixture {
 public:
-    // init
     virtual void setUp();
     virtual void tearDown();
 
-    // tests
-    void testDocument();
-    void testSUM(ScDocument &rDoc);
-    void testNamedRange(ScDocument &rDoc);
+    void testSUM();
+    void testNamedRange();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testDocument);
+    CPPUNIT_TEST(testSUM);
+    CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST_SUITE_END();
 
 private:
     uno::Reference< uno::XComponentContext > m_context;
+    ScDocument *m_pDoc;
 };
 
 void Test::setUp()
@@ -78,64 +77,59 @@ void Test::setUp()
     InitVCL(xSM);
 
     ScDLL::Init();
+
+    m_pDoc = new ScDocument;
 }
 
 void Test::tearDown()
 {
+    delete m_pDoc;
     uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
 }
 
-void Test::testSUM(ScDocument &rDoc)
+void Test::testSUM()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("foo"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            rDoc.InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, aTabName));
     double val = 1;
-    rDoc.SetValue (0, 0, 0, val);
-    rDoc.SetValue (0, 1, 0, val);
-    rDoc.SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
-    rDoc.CalcAll();
+    m_pDoc->SetValue (0, 0, 0, val);
+    m_pDoc->SetValue (0, 1, 0, val);
+    m_pDoc->SetString (0, 2, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=SUM(A1:A2)")));
+    m_pDoc->CalcAll();
     double result;
-    rDoc.GetValue (0, 2, 0, result);
+    m_pDoc->GetValue (0, 2, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 2.0);
 
-    rDoc.DeleteTab(0);
+    m_pDoc->DeleteTab(0);
 }
 
-void Test::testNamedRange(ScDocument &rDoc)
+void Test::testNamedRange()
 {
     rtl::OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("Sheet1"));
     CPPUNIT_ASSERT_MESSAGE ("failed to insert sheet",
-                            rDoc.InsertTab (0, aTabName));
+                            m_pDoc->InsertTab (0, aTabName));
 
-    rDoc.SetValue (0, 0, 0, 101);
+    m_pDoc->SetValue (0, 0, 0, 101);
 
     ScAddress aA1(0, 0, 0);
     ScRangeName* pNewRanges = new ScRangeName();
-    ScRangeData* pNew = new ScRangeData(&rDoc,
+    ScRangeData* pNew = new ScRangeData(m_pDoc,
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Divisor")),
         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$Sheet1.$A$1:$A$1048576")), aA1, 0, formula::FormulaGrammar::GRAM_PODF_A1);
     bool bSuccess = pNewRanges->Insert(pNew);
     CPPUNIT_ASSERT_MESSAGE ("insertion failed", bSuccess);
 
-    rDoc.SetRangeName(pNewRanges);
+    m_pDoc->SetRangeName(pNewRanges);
 
-    rDoc.SetString (1, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1/Divisor")));
+    m_pDoc->SetString (1, 0, 0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("=A1/Divisor")));
 
-    rDoc.CalcAll();
+    m_pDoc->CalcAll();
     double result;
-    rDoc.GetValue (1, 0, 0, result);
+    m_pDoc->GetValue (1, 0, 0, result);
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 1.0);
 
-    rDoc.DeleteTab(0);
-}
-
-void Test::testDocument()
-{
-    ScDocument aDoc;
-
-    testSUM(aDoc);
-    testNamedRange(aDoc);
+    m_pDoc->DeleteTab(0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
