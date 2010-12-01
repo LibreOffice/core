@@ -44,7 +44,6 @@ namespace frm
 class OEditModel
                 :public OEditBaseModel
 {
-    ::com::sun::star::uno::Any  m_aLastKnownValue;
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                 m_pValueFormatter;
     sal_Bool                    m_bMaxTextLenModified : 1;  // set to <TRUE/> when we change the MaxTextLen of the aggregate
