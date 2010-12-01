@@ -403,6 +403,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbType.Disable();
 
     // *** table box preview ***
+    maTableBox.Init();
     maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     maTableBox.InitTypes( aLbType );
     maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );

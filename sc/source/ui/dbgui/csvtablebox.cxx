@@ -48,7 +48,27 @@ ScCsvTableBox::ScCsvTableBox( Window* pParent, const ResId& rResId ) :
     maVScroll( this, WB_VERT | WB_DRAG ),
     maScrollBox( this )
 {
-    Init();
+    mbFixedMode = false;
+    mnFixedWidth = 1;
+
+    maHScroll.EnableRTL( false ); // #107812# RTL
+    maHScroll.SetLineSize( 1 );
+    maVScroll.SetLineSize( 1 );
+
+    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
+    SetCmdHdl( aLink );
+    maRuler.SetCmdHdl( aLink );
+    maGrid.SetCmdHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
+    maHScroll.SetScrollHdl( aLink );
+    maVScroll.SetScrollHdl( aLink );
+
+    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
+    maHScroll.SetEndScrollHdl( aLink );
+    maVScroll.SetEndScrollHdl( aLink );
+
+    InitControls();
 }
 
 
@@ -95,27 +115,7 @@ void ScCsvTableBox::SetFixedWidthMode()
 
 void ScCsvTableBox::Init()
 {
-    mbFixedMode = false;
-    mnFixedWidth = 1;
-
-    maHScroll.EnableRTL( false ); // #107812# RTL
-    maHScroll.SetLineSize( 1 );
-    maVScroll.SetLineSize( 1 );
-
-    Link aLink = LINK( this, ScCsvTableBox, CsvCmdHdl );
-    SetCmdHdl( aLink );
-    maRuler.SetCmdHdl( aLink );
-    maGrid.SetCmdHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollHdl );
-    maHScroll.SetScrollHdl( aLink );
-    maVScroll.SetScrollHdl( aLink );
-
-    aLink = LINK( this, ScCsvTableBox, ScrollEndHdl );
-    maHScroll.SetEndScrollHdl( aLink );
-    maVScroll.SetEndScrollHdl( aLink );
-
-    InitControls();
+    maGrid.Init();
 }
 
 void ScCsvTableBox::InitControls()

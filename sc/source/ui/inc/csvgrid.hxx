@@ -105,7 +105,7 @@ private:
     VirtualDevice               maGridDev;          /// Data grid with selection and cursor.
     PopupMenu                   maPopup;            /// Popup menu for column types.
 
-    ::svtools::ColorConfig&     mrColorConfig;      /// Application color configuration.
+    ::svtools::ColorConfig*     mpColorConfig;      /// Application color configuration.
     Color                       maBackColor;        /// Cell background color.
     Color                       maGridColor;        /// Table grid color.
     Color                       maGridPBColor;      /// Grid color for "first imported line" delimiter.
@@ -136,6 +136,9 @@ private:
 public:
     explicit                    ScCsvGrid( ScCsvControl& rParent );
     virtual                     ~ScCsvGrid();
+
+    /** Finishes initialization. Must be called after constructing a new object. */
+    void Init();
 
     // common grid handling ---------------------------------------------------
 public:

@@ -34,6 +34,8 @@
 #include "csvgrid.hxx"
 
 #include <algorithm>
+#include <memory>
+
 #include <svtools/colorcfg.hxx>
 #include <svl/smplhint.hxx>
 #include <tools/poly.hxx>
@@ -78,7 +80,7 @@ struct Func_Select
 
 ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     ScCsvControl( rParent ),
-    mrColorConfig( SC_MOD()->GetColorConfig() ),
+    mpColorConfig( 0 ),
     mpEditEngine( new ScEditEngineDefaulter( EditEngine::CreatePool(), TRUE ) ),
     maHeaderFont( GetFont() ),
     maColStates( 1 ),
@@ -93,17 +95,25 @@ ScCsvGrid::ScCsvGrid( ScCsvControl& rParent ) :
     maPopup.SetMenuFlags( maPopup.GetMenuFlags() | MENU_FLAG_NOAUTOMNEMONICS );
 
     EnableRTL( false ); // #107812# RTL
-    InitColors();
     InitFonts();
     ImplClearSplits();
-    mrColorConfig.AddListener(this);
 }
 
 ScCsvGrid::~ScCsvGrid()
 {
-    mrColorConfig.RemoveListener(this);
+    OSL_ENSURE(mpColorConfig, "the object hasn't been initialized properly");
+    if (mpColorConfig)
+        mpColorConfig->RemoveListener(this);
 }
 
+void
+ScCsvGrid::Init()
+{
+    OSL_PRECOND(!mpColorConfig, "the object has already been initialized");
+    mpColorConfig = &SC_MOD()->GetColorConfig();
+    InitColors();
+    mpColorConfig->AddListener(this);
+}
 
 // common grid handling -------------------------------------------------------
 
@@ -202,11 +212,14 @@ sal_Int32 ScCsvGrid::GetNoScrollCol( sal_Int32 nPos ) const
 
 void ScCsvGrid::InitColors()
 {
-    maBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::DOCCOLOR ).nColor ) );
-    maGridColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCGRID ).nColor ) );
-    maGridPBColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::CALCPAGEBREAK ).nColor ) );
-    maAppBackColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::APPBACKGROUND ).nColor ) );
-    maTextColor.SetColor( static_cast< sal_uInt32 >( mrColorConfig.GetColorValue( ::svtools::FONTCOLOR ).nColor ) );
+    OSL_PRECOND(mpColorConfig, "the object hasn't been initialized properly");
+    if ( !mpColorConfig )
+        return;
+    maBackColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::DOCCOLOR ).nColor ) );
+    maGridColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCGRID ).nColor ) );
+    maGridPBColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::CALCPAGEBREAK ).nColor ) );
+    maAppBackColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::APPBACKGROUND ).nColor ) );
+    maTextColor.SetColor( static_cast< sal_uInt32 >( mpColorConfig->GetColorValue( ::svtools::FONTCOLOR ).nColor ) );
 
     const StyleSettings& rSett = GetSettings().GetStyleSettings();
     maHeaderBackColor = rSett.GetFaceColor();
@@ -1350,7 +1363,9 @@ void ScCsvGrid::ImplDrawTrackingRect( sal_uInt32 nColIndex )
 
 ScAccessibleCsvControl* ScCsvGrid::ImplCreateAccessible()
 {
-    return new ScAccessibleCsvGrid( *this );
+    std::auto_ptr<ScAccessibleCsvControl> pControl(new ScAccessibleCsvGrid( *this ));
+    pControl->Init();
+    return pControl.release();
 }
 
 
