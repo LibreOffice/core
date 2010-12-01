@@ -445,6 +445,8 @@ void ScaleTabPage::Reset(const SfxItemSet& rInAttrs)
     m_nAxisType=chart2::AxisType::REALNUMBER;
     if (rInAttrs.GetItemState(SCHATTR_AXISTYPE, TRUE, &pPoolItem) == SFX_ITEM_SET)
         m_nAxisType = (int) ((const SfxInt32Item*)pPoolItem)->GetValue();
+    if( m_nAxisType==chart2::AxisType::DATE && !m_bAllowDateAxis )
+        m_nAxisType=chart2::AxisType::CATEGORY;
     if( m_bAllowDateAxis )
     {
         bool bAutoDateAxis = false;
