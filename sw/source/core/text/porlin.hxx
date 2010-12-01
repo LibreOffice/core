@@ -30,6 +30,10 @@
 
 #include "possiz.hxx"       // SwPosSize
 
+#if OSL_DEBUG_LEVEL > 1
+#include <libxml/xmlwriter.h>
+#endif
+
 class XubString;
 class SwTxtSizeInfo;
 class SwTxtPaintInfo;
@@ -196,6 +200,9 @@ public:
     // Accessibility: pass information about this portion to the PortionHandler
     virtual void HandlePortion( SwPortionHandler& rPH ) const;
 
+#if OSL_DEBUG_LEVEL > 1
+    void dumpPortionAsXml(USHORT ofs, String& aText, xmlTextWriter* writer);
+#endif
     OUTPUT_OPERATOR
 };
 

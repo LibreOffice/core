@@ -189,6 +189,23 @@ void SwBodyFrm::Format( const SwBorderAttrs * )
     bValidSize = bValidPrtArea = TRUE;
 }
 
+void SwBodyFrm::Paint( const SwRect& rRect, const SwPrtOptions* ) const
+{
+#if OSL_DEBUG_LAYOUT > 1
+    fprintf( stderr, "SwBodyFrm::Paint()\n" );
+#endif
+    ViewShell *pSh = GetShell();
+    OutputDevice* pOut =  pSh->GetOut();
+    pOut->Push();
+    pOut->SetLineColor(Color(255, 0, 0));
+    pOut->SetFillColor(COL_TRANSPARENT);
+    SwRect aRect(Frm().Left()+5, Frm().Top()+5, Frm().Width()-5, Frm().Height()-5);
+//    SwRect aRect = Frm();
+    pOut->DrawRect(aRect.SVRect());
+    pOut->Pop();
+    SwLayoutFrm::Paint(rRect);
+}
+
 /*************************************************************************
 |*
 |*  SwPageFrm::SwPageFrm(), ~SwPageFrm()

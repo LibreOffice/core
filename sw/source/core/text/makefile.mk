@@ -91,6 +91,7 @@ SLOFILES =  \
 
 .IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
+        $(SLO)$/xmldump.obj \
         $(SLO)$/txtio.obj
 .ENDIF
 

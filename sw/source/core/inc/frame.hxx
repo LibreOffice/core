@@ -33,6 +33,11 @@
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
 
+#if OSL_DEBUG_LEVEL > 1
+#include <libxml/encoding.h>
+#include <libxml/xmlwriter.h>
+#endif
+
 class SwLayoutFrm;
 class SwRootFrm;
 class SwPageFrm;
@@ -915,6 +920,10 @@ public:
     void ValidateThisAndAllLowers( const USHORT nStage );
 
 public:
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpAsXml(xmlTextWriterPtr writer);
+    void dumpChildrenAsXml(xmlTextWriterPtr writer);
+#endif
     bool IsCollapse() const;
 };
 

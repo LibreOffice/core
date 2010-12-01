@@ -140,6 +140,8 @@
 
 #include <PostItMgr.hxx>
 
+#include "../../core/inc/rootfrm.hxx"
+
 using namespace sw::mark;
 using namespace ::com::sun::star;
 
@@ -1334,6 +1336,23 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
     BOOL bNormalChar = FALSE;
     BOOL bChkInsBlank = pQuickHlpData->bChkInsBlank;
     pQuickHlpData->bChkInsBlank = FALSE;
+
+#if OSL_DEBUG_LEVEL > 1
+    if (rKEvt.GetKeyCode().GetCode() == KEY_F12)
+    {
+        SwRootFrm* pLayout = GetView().GetDocShell()->GetWrtShell()->GetLayout();
+        xmlTextWriterPtr writer = xmlNewTextWriterFilename("layout.xml", 0);
+        if (writer!=NULL)
+        {
+            printf("dumping layout in \"layout.xml\"\n");
+            xmlTextWriterStartDocument(writer, NULL, NULL, NULL);
+            pLayout->dumpAsXml(writer);
+            xmlTextWriterEndDocument(writer);
+            xmlFreeTextWriter(writer);
+        }
+        return;
+    }
+#endif
 
     KeyEvent aKeyEvent( rKEvt );
     // look for vertical mappings
