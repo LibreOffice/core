@@ -46,13 +46,13 @@ java_sql_Date::java_sql_Date( const ::com::sun::star::util::Date& _rOut ) : java
     if( !t.pEnv )
         return;
     jvalue args[1];
-    // Parameter konvertieren
+    // Convert parameters
     ::rtl::OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toDateString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // initialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Date;";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -111,13 +111,13 @@ java_sql_Time::java_sql_Time( const ::com::sun::star::util::Time& _rOut ): java_
     if( !t.pEnv )
         return;
     jvalue args[1];
-    // Parameter konvertieren
+    // Convert parameters
     ::rtl::OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toTimeString(_rOut);
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // intialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Time;";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -147,6 +147,7 @@ jclass java_sql_Timestamp::getMyClass() const
 {
     return st_getMyClass();
 }
+
 jclass java_sql_Timestamp::st_getMyClass()
 {
     // die Klasse muss nur einmal geholt werden, daher statisch
@@ -154,6 +155,7 @@ jclass java_sql_Timestamp::st_getMyClass()
         theClass = findMyClass("java/sql/Timestamp");
     return theClass;
 }
+
 java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _rOut)
                    :java_util_Date( NULL, (jobject)NULL )
 {
@@ -161,14 +163,14 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     if( !t.pEnv )
         return;
     jvalue args[1];
-    // Parameter konvertieren
+    // Convert parameters
     ::rtl::OUString sDateStr;
     sDateStr = ::dbtools::DBTypeConversion::toDateTimeString(_rOut);
 
     args[0].l = convertwchar_tToJavaString(t.pEnv,sDateStr);
 
     // Java-Call fuer den Konstruktor absetzen
-    // temporaere Variable initialisieren
+    // initialise temporary variables
     static const char * cSignature = "(Ljava/lang/String;)Ljava/sql/Timestamp;";
     jobject tempObj;
     static jmethodID mID(NULL);
@@ -181,17 +183,6 @@ java_sql_Timestamp::java_sql_Timestamp(const ::com::sun::star::util::DateTime& _
     // und aufraeumen
 }
 
-sal_Int32 java_sql_Timestamp::getNanos()
-{
-    static jmethodID mID(NULL);
-    return callIntMethod("getNanos",mID);
-}
-
-void java_sql_Timestamp::setNanos( sal_Int32 _par0 )
-{
-    static jmethodID mID(NULL);
-    callVoidMethodWithIntArg("setNanos",mID,_par0);
-}
 // -----------------------------------------------------------------------------
 java_sql_Timestamp::operator ::com::sun::star::util::DateTime()
 {
