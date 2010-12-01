@@ -2,8 +2,9 @@
 *~
 .*.sw[op]
 
-# where the 'subrepos' are located
+# where the 'subrepos' and downloads are located
 /clone
+/src
 
 # the build directories
 /*/unxlng??
@@ -35,7 +36,6 @@
 /set_soenv.stamp
 /warn
 /build.log
-
 
 /*.Set.sh
 
