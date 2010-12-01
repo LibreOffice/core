@@ -388,7 +388,7 @@ public class DataAwareFields
                     }
                     if (field.getType().equals(Integer.class))
                     {
-                        return new Integer(0);
+                        return 0;
                     }
                     if (field.getType().equals(short[].class))
                     {
