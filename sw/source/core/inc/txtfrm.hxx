@@ -610,6 +610,10 @@ public:
     {
         return mnHeightOfLastLine;
     }
+
+#if OSL_DEBUG_LEVEL > 1
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
+#endif
 };
 
 /*************************************************************************

@@ -922,6 +922,7 @@ public:
 public:
 #if OSL_DEBUG_LEVEL > 1
     virtual void dumpAsXml(xmlTextWriterPtr writer);
+    virtual void dumpAsXmlAttributes(xmlTextWriterPtr writer);
     void dumpChildrenAsXml(xmlTextWriterPtr writer);
 #endif
     bool IsCollapse() const;

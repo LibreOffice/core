@@ -260,6 +260,9 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
     if ( name != NULL )
     {
         xmlTextWriterStartElement( writer, ( const xmlChar * ) name );
+
+        dumpAsXmlAttributes( writer );
+
         if ( IsTxtFrm(  ) )
         {
             SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
@@ -284,6 +287,15 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
     }
 }
 
+void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+{
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%p", GetNext() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%p", GetPrev() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%p", this->GetUpper() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%p", this->GetLower() );
+}
+
 void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer )
 {
     SwFrm *pFrm = GetLower(  );
@@ -291,4 +303,11 @@ void SwFrm::dumpChildrenAsXml( xmlTextWriterPtr writer )
     {
         pFrm->dumpAsXml( writer );
     }
+}
+
+void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
+{
+    SwFrm::dumpAsXmlAttributes( writer );
+    if ( HasFollow() )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
 }
