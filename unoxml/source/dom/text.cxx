@@ -54,7 +54,7 @@ namespace DOM
 
     OUString SAL_CALL CText::getNodeName()throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#text"));
+        return OUString::createFromAscii("#text");
     }
 
     void SAL_CALL CText::fastSaxify( Context& io_rContext )

@@ -190,7 +190,7 @@ start:
         case SbxBYREF | SbxUSHORT:
             nRes = *p->pUShort; break;
 
-        // from here on will be tested
+        // ab hier wird getestet
         case SbxBYREF | SbxCHAR:
             aTmp.nChar = *p->pChar; goto ref;
         case SbxBYREF | SbxINTEGER:
@@ -258,7 +258,7 @@ start:
             ImpCreateDecimal( p )->setUInt( n );
             break;
 
-        // from here on tests
+        // Tests ab hier
         case SbxCHAR:
             aTmp.pChar = &p->nChar; goto direct;
         case SbxBYTE:

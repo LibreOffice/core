@@ -41,6 +41,15 @@
 #include <i18npool/paper.hxx>
 #include <svx/flagsdef.hxx>
 
+// enum ------------------------------------------------------------------
+
+//CHINA001 enum SvxModeType
+//CHINA001 {
+//CHINA001  SVX_PAGE_MODE_STANDARD,
+//CHINA001  SVX_PAGE_MODE_CENTER,
+//CHINA001  SVX_PAGE_MODE_PRESENTATION
+//CHINA001 };
+
 // class SvxPageDescPage -------------------------------------------------
 
 /*  {k:\svx\prototyp\dialog\page.bmp}
@@ -223,7 +232,7 @@ public:
                             { ePaperStart = eStart, ePaperEnd = eEnd; }
 
     void                SetCollectionList(const List* pList);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 };
 
 #endif // #ifndef _SVX_PAGE_HXX

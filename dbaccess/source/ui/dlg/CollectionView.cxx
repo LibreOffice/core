@@ -107,7 +107,9 @@ OCollectionView::OCollectionView( Window * pParent
 
     m_aNewFolder.SetStyle( m_aNewFolder.GetStyle() | WB_NOPOINTERFOCUS );
     m_aUp.SetModeImage(ModuleRes(IMG_NAVIGATION_BTN_UP_SC));
+    m_aUp.SetModeImage(ModuleRes(IMG_NAVIGATION_BTN_UP_SCH),BMP_COLOR_HIGHCONTRAST);
     m_aNewFolder.SetModeImage(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC));
+    m_aNewFolder.SetModeImage(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SCH),BMP_COLOR_HIGHCONTRAST);
 
     m_aView.SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_aView.EnableAutoResize();
@@ -211,6 +213,7 @@ IMPL_LINK( OCollectionView, Save_Click, PushButton*, EMPTYARG )
                 QueryBox aBox( this, WB_YES_NO, ModuleRes( STR_ALREADYEXISTOVERWRITE ) );
                 if ( aBox.Execute() != RET_YES )
                     return 0;
+                // xNameContainer->removeByName(sName);
             }
             m_aName.SetText(sName);
             EndDialog( TRUE );

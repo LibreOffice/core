@@ -87,9 +87,13 @@ void ShowErrorDialog( const Any& aException )
 SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rResId ) :
     SvTreeListBox( pParent, ResId( rResId.GetId(),*rResId.GetResMgr() ) ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
+    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
     m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
+    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
     m_docImage(ResId(IMG_DOCUMENT,*rResId.GetResMgr())),
+    m_docImage_hc(ResId(IMG_DOCUMENT_HC,*rResId.GetResMgr())),
     m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
     m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
@@ -172,10 +176,11 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
 
     Sequence< Reference< browse::XBrowseNode > > children;
 
-    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
-    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
+    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
+    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
 
-    ::rtl::OUString singleton( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.script.browse.theBrowseNodeFactory" ) );
+    ::rtl::OUString singleton = ::rtl::OUString::createFromAscii(
+        "/singletons/com.sun.star.script.browse.theBrowseNodeFactory" );
 
     try
     {
@@ -230,7 +235,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
             {
                 Reference< ::com::sun::star::frame::XModuleManager >
                     xModuleManager( xCtx->getServiceManager()->createInstanceWithContext(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager") ), xCtx ),
+                        ::rtl::OUString::createFromAscii("com.sun.star.frame.ModuleManager"), xCtx ),
                                     UNO_QUERY_THROW );
 
                 Reference<container::XNameAccess> xModuleConfig(
@@ -262,6 +267,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
+        /*SvLBoxEntry* pBasicManagerRootEntry =*/
             insertEntry( uiName, app ? IMG_HARDDISK : IMG_DOCUMENT,
                 0, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries, xDocumentModel )), factoryURL );
     }
@@ -277,7 +283,7 @@ SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OU
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ),                 xCtx ),
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -387,10 +393,17 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     SvLBoxEntry * p;
     if( nBitmap == IMG_DOCUMENT && factoryURL.getLength() > 0 )
     {
-        Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+        Image aImage = SvFileInformationManager::GetFileImage(
+            INetURLObject(factoryURL), false,
+            BMP_COLOR_NORMAL );
+        Image aHCImage = SvFileInformationManager::GetFileImage(
+            INetURLObject(factoryURL), false,
+            BMP_COLOR_HIGHCONTRAST );
         p = InsertEntry(
             rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
             aUserData.release()); // XXX possible leak
+        SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+        SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
     }
     else
     {
@@ -403,27 +416,33 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     String const & rText, USHORT nBitmap, SvLBoxEntry * pParent,
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
-    Image aImage;
+    Image aHCImage, aImage;
     if( nBitmap == IMG_HARDDISK )
     {
         aImage = m_hdImage;
+        aHCImage = m_hdImage_hc;
     }
     else if( nBitmap == IMG_LIB )
     {
         aImage = m_libImage;
+        aHCImage = m_libImage_hc;
     }
     else if( nBitmap == IMG_MACRO )
     {
         aImage = m_macImage;
+        aHCImage = m_macImage_hc;
     }
     else if( nBitmap == IMG_DOCUMENT )
     {
         aImage = m_docImage;
+        aHCImage = m_docImage_hc;
     }
     SvLBoxEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
         aUserData.release()); // XXX possible leak
-   return p;
+    SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+    SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
+    return p;
 }
 
 void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
@@ -448,6 +467,18 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
 void __EXPORT SFTreeListBox::ExpandedHdl()
 {
+/*        SvLBoxEntry* pEntry = GetHdlEntry();
+        DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );
+
+        if ( !IsExpanded( pEntry ) && pEntry->HasChildsOnDemand() )
+        {
+                SvLBoxEntry* pChild = FirstChild( pEntry );
+                while ( pChild )
+                {
+                        GetModel()->Remove( pChild );   // Ruft auch den DTOR
+                        pChild = FirstChild( pEntry );
+                }
+        }*/
 }
 
 // ----------------------------------------------------------------------------
@@ -834,7 +865,7 @@ IMPL_LINK( SvxScriptOrgDialog, ButtonHdl, Button *, pButton )
                         try
                         {
                             // ISSUE need code to run script here
-                            xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Editable" ) ), args, outIndex, outArgs );
+                            xInv->invoke( ::rtl::OUString::createFromAscii( "Editable" ), args, outIndex, outArgs );
                         }
                         catch( Exception& e )
                         {
@@ -899,7 +930,7 @@ SvxScriptOrgDialog::getDocumentModel( Reference< XComponentContext >& xCtx, ::rt
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop") ), xCtx ),
+            ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -937,11 +968,11 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         USHORT nMode = INPUTMODE_NEWLIB;
         if( aScriptsBox.GetModel()->GetDepth( pEntry ) == 0 )
         {
-            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Library") ) ;
+            aNewStdName = ::rtl::OUString::createFromAscii( "Library" ) ;
         }
         else
         {
-            aNewStdName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Macro") ) ;
+            aNewStdName = ::rtl::OUString::createFromAscii( "Macro" ) ;
             nMode = INPUTMODE_NEWMACRO;
         }
         //do we need L10N for this? ie somethng like:
@@ -1045,7 +1076,7 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Creatable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Creatable" ), args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -1135,6 +1166,21 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
             {
                 ::rtl::OUString aUserSuppliedName = xNewDlg->GetObjectName();
                 bValid = TRUE;
+                /*
+                for( sal_Int32 index = 0; index < childNodes.getLength(); index++ )
+                {
+                    if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
+                    {
+                        bValid = FALSE;
+                        String aError( m_createErrStr );
+                        aError.Append( m_createDupStr );
+                        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
+                        aErrorBox.SetText( m_createErrTitleStr );
+                        aErrorBox.Execute();
+                        xNewDlg->SetObjectName( aNewName );
+                        break;
+                    }
+                } */
                 if( bValid )
                     aNewName = aUserSuppliedName;
             }
@@ -1153,7 +1199,7 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Renamable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Renamable" ), args, outIndex, outArgs );
             Reference< browse::XBrowseNode > newNode( aResult, UNO_QUERY );
             aChildNode = newNode;
 
@@ -1204,7 +1250,7 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
         try
         {
             Any aResult;
-            aResult = xInv->invoke( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Deletable") ), args, outIndex, outArgs );
+            aResult = xInv->invoke( ::rtl::OUString::createFromAscii( "Deletable" ), args, outIndex, outArgs );
             aResult >>= result; // or do we just assume true if no exception ?
         }
         catch( Exception& e )
@@ -1329,8 +1375,8 @@ void SvxScriptOrgDialog::RestorePreviousSelection()
 BOOL SFTreeListBox::dialogSort1( Reference< browse::XBrowseNode > node1,
     Reference< browse::XBrowseNode > node2 )
 {
-    ::rtl::OUString userStr( RTL_CONSTASCII_USTRINGPARAM("user") );
-    ::rtl::OUString shareStr( RTL_CONSTASCII_USTRINGPARAM("share") );
+    ::rtl::OUString userStr = ::rtl::OUString::createFromAscii("user");
+    ::rtl::OUString shareStr = ::rtl::OUString::createFromAscii("share");
     if( node1->getName().equals( userStr ) )
         return true;
     if( node2->getName().equals( userStr ) )
@@ -1376,25 +1422,25 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString result = unformatted.copy( 0 );
 
     result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
+        result, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
     result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%SCRIPTNAME") ), script );
+        result, ::rtl::OUString::createFromAscii( "%SCRIPTNAME" ), script );
     result = ReplaceString(
-        result, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LINENUMBER") ), line );
+        result, ::rtl::OUString::createFromAscii( "%LINENUMBER" ), line );
 
     if ( type.getLength() != 0 )
     {
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
+        result += ::rtl::OUString::createFromAscii( "\n\n" );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_TYPE_LABEL)));
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
+        result += ::rtl::OUString::createFromAscii( " " );
         result += type;
     }
 
     if ( message.getLength() != 0 )
     {
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n\n") );
+        result += ::rtl::OUString::createFromAscii( "\n\n" );
         result += ::rtl::OUString(String(CUI_RES(RID_SVXSTR_ERROR_MESSAGE_LABEL)));
-        result += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ") );
+        result += ::rtl::OUString::createFromAscii( " " );
         result += message;
     }
 
@@ -1406,7 +1452,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
 {
     ::rtl::OUString unformatted = String( CUI_RES( RID_SVXSTR_ERROR_AT_LINE ) );
 
-    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
     ::rtl::OUString script = unknown;
     ::rtl::OUString line = unknown;
@@ -1449,7 +1495,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unformatted =
           String( CUI_RES( RID_SVXSTR_EXCEPTION_AT_LINE ) );
 
-    ::rtl::OUString unknown( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    ::rtl::OUString unknown = ::rtl::OUString::createFromAscii( "UNKNOWN" );
     ::rtl::OUString language = unknown;
     ::rtl::OUString script = unknown;
     ::rtl::OUString line = unknown;
@@ -1497,9 +1543,11 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     ::rtl::OUString unformatted = String(
         CUI_RES( RID_SVXSTR_FRAMEWORK_ERROR_RUNNING ) );
 
-    ::rtl::OUString language( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    ::rtl::OUString language =
+        ::rtl::OUString::createFromAscii( "UNKNOWN" );
 
-    ::rtl::OUString script( RTL_CONSTASCII_USTRINGPARAM("UNKNOWN") );
+    ::rtl::OUString script =
+        ::rtl::OUString::createFromAscii( "UNKNOWN" );
 
     ::rtl::OUString message;
 
@@ -1516,7 +1564,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
         message = String(
             CUI_RES(  RID_SVXSTR_ERROR_LANG_NOT_SUPPORTED ) );
         message =  ReplaceString(
-            message, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%LANGUAGENAME") ), language );
+            message, ::rtl::OUString::createFromAscii( "%LANGUAGENAME" ), language );
 
     }
     else

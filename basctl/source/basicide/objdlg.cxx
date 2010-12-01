@@ -88,7 +88,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
 ObjectCatalog::ObjectCatalog( Window * pParent )
     :FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
     ,aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) )
-    ,aToolBox(this, IDEResId(RID_TB_TOOLBOX))
+    ,aToolBox(this, IDEResId(RID_TB_TOOLBOX), IDEResId(RID_IMGLST_TB_HC))
     ,aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
 {
     FreeResource();
@@ -270,9 +270,12 @@ void ObjectCatalog::SetCurrentEntry( BasicEntryDescriptor& rDesc )
 }
 
 ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
-    Window * pParent, ResId const & rResId)
-    : ToolBox(pParent, rResId)
-    , m_aImagesNormal(GetImageList())
+    Window * pParent, ResId const & rResId,
+    ResId const & rImagesHighContrastId):
+    ToolBox(pParent, rResId),
+    m_aImagesNormal(GetImageList()),
+    m_aImagesHighContrast(rImagesHighContrastId),
+    m_bHighContrast(false)
 {
     setImages();
 }
@@ -289,7 +292,12 @@ void ObjectCatalogToolBox_Impl::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ObjectCatalogToolBox_Impl::setImages()
 {
-    SetImageList(m_aImagesNormal);
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
+    if (bHC != m_bHighContrast)
+    {
+        SetImageList(bHC ? m_aImagesHighContrast : m_aImagesNormal);
+        m_bHighContrast = bHC;
+    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

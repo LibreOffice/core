@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "solvrdlg.hrc"
-
 ModelessDialog RID_SCDLG_SOLVER
 {
     OutputSize = TRUE ;

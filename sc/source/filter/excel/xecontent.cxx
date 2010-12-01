@@ -263,8 +263,8 @@ void XclExpSstImpl::SaveXml( XclExpXmlStream& rStrm )
         return;
 
     sax_fastparser::FSHelperPtr pSst = rStrm.CreateOutputStream(
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "xl/sharedStrings.xml") ),
-            OUString(RTL_CONSTASCII_USTRINGPARAM( "sharedStrings.xml" )),
+            OUString::createFromAscii( "xl/sharedStrings.xml" ),
+            OUString::createFromAscii( "sharedStrings.xml" ),
             rStrm.GetCurrentStream()->getOutputStream(),
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sharedStrings+xml",
             "http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings" );
@@ -410,19 +410,11 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INET_PROT_FILE || eProtocol == INET_PROT_SMB )
+    if( eProtocol == INET_PROT_FILE )
     {
         sal_uInt16 nLevel;
         bool bRel;
         String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
-
-        if( eProtocol == INET_PROT_SMB )
-        {
-            // #n382718# (and #n261623#) Convert smb notation to '\\'
-            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
-            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
-            aFileName.SearchAndReplaceAll( '/', '\\' );
-        }
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;

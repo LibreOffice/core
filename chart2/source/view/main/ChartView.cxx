@@ -694,8 +694,7 @@ void SeriesPlotterContainer::initializeCooSysAndSeriesPlotter(
             m_aSeriesPlotterList.push_back( pPlotter );
             pPlotter->setNumberFormatsSupplier( xNumberFormatsSupplier );
             pPlotter->setColorScheme( xColorScheme );
-            if(pVCooSys)
-                pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
+            pPlotter->setExplicitCategoriesProvider( pVCooSys->getExplicitCategoriesProvider() );
             sal_Int32 nMissingValueTreatment = DiagramHelper::getCorrectedMissingValueTreatment( xDiagram, xChartType );
 
             if(pVCooSys)

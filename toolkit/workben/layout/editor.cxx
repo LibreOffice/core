@@ -1707,7 +1707,7 @@ void EditorImpl::loadFile( const rtl::OUString &aTestFile )
 
 /*
   mxMSF->createInstance
-  ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout")) ),
+  ( ::rtl::OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
   uno::UNO_QUERY );
 */
     if ( !xRoot.is() )

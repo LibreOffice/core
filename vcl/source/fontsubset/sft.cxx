@@ -1842,7 +1842,7 @@ static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
         {
 #if OSL_DEBUG_LEVEL > 1
             if( t->tables[i] )
-                fprintf( stderr, "font file %s has bad table offset %" SAL_PRI_PTRDIFFT "d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
+                fprintf( stderr, "font file %s has bad table offset %d (tagnum=%d)\n", t->fname, (sal_uInt8*)t->tables[i]-t->ptr, i );
 #endif
             t->tlens[i] = 0;
             t->tables[i] = NULL;
@@ -2058,7 +2058,7 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
     fprintf(outf, h02, modname, modver, modextra);
     fprintf(outf, h09, ttf->psname);
 
-    fprintf(outf, "%s", h10);
+    fprintf(outf, h10);
     fprintf(outf, h11, fname);
 /*    fprintf(outf, h12, 4000000); */
 
@@ -2073,17 +2073,17 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
      */
 
     fprintf(outf, h17, rtl_crc32(0, ttf->ptr, ttf->fsize), nGlyphs, rtl_crc32(0, glyphArray, nGlyphs * 2), rtl_crc32(0, encoding, nGlyphs));
-    fprintf(outf, "%s", h13);
+    fprintf(outf, h13);
     fprintf(outf, h14, XUnits(UPEm, GetInt16(table, 36, 1)), XUnits(UPEm, GetInt16(table, 38, 1)), XUnits(UPEm, GetInt16(table, 40, 1)), XUnits(UPEm, GetInt16(table, 42, 1)));
-    fprintf(outf, "%s", h15);
+    fprintf(outf, h15);
 
     for (i = 0; i < nGlyphs; i++) {
         fprintf(outf, h16, encoding[i], i);
     }
 
     fprintf(outf, h30, nGlyphs+1);
-    fprintf(outf, "%s", h31);
-    fprintf(outf, "%s", h32);
+    fprintf(outf, h31);
+    fprintf(outf, h32);
 
     for (i = 0; i < nGlyphs; i++) {
         fprintf(outf, h33, i);
@@ -2131,14 +2131,14 @@ int  CreateT3FromTTGlyphs(TrueTypeFont *ttf, FILE *outf, const char *fname, /*FO
         }
         if (n > 0) fprintf(outf, "\tfill\n");     /* if glyph is not a whitespace character */
 
-        fprintf(outf, "%s", h34);
+        fprintf(outf, h34);
 
         free(pa);
         free(path);
     }
-    fprintf(outf, "%s", h35);
+    fprintf(outf, h35);
 
-    fprintf(outf, "%s", h40);
+    fprintf(outf, h40);
     fprintf(outf, h41, fname);
 
     return SF_OK;

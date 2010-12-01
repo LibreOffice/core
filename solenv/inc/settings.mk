@@ -386,6 +386,10 @@ COMPILER_WARN_ALL=TRUE
 COMPILER_WARN_ERRORS=TRUE
 .ENDIF
 
+.IF "$(RSC_ONCE)"!=""
+rsc_once*=$(RSC_ONCE)
+.ENDIF
+
 .IF "$(COMMON_BUILD)"!=""
 common_build*=$(COMMON_BUILD)
 .ENDIF
@@ -459,7 +463,7 @@ product=full
 .ENDIF
 
 .IF "$(debug)"!=""
-DBG_LEVEL*=1
+DBG_LEVEL*=2
 .ENDIF
 
 # Produkt auf einen Wert setzen (alles klein)

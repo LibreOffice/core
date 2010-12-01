@@ -156,7 +156,7 @@ private:
     USHORT                          nMode;
     ::basctl::DocumentEventNotifier m_aNotifier;
 
-    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage );
+    void            SetEntryBitmaps( SvLBoxEntry * pEntry, const Image& rImage, const Image& rImageHC );
 
 protected:
     virtual void            RequestingChilds( SvLBoxEntry* pParent );
@@ -204,12 +204,12 @@ public:
     USHORT          ConvertType( BasicEntryType eType );
     bool            IsValidEntry( SvLBoxEntry* pEntry );
 
-    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage,
+    SvLBoxEntry*    AddEntry( const String& rText, const Image& rImage, const Image& rImageHC,
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
     String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation ) const;
-    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage );
+    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 

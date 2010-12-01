@@ -576,6 +576,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaSelection::GoTo( const uno::Any& _w
             uno::Reference< word::XApplication > xApplication( Application(), uno::UNO_QUERY_THROW );
             uno::Reference< word::XBookmark > xBookmark( xApplication->getActiveDocument()->Bookmarks(_name), uno::UNO_QUERY_THROW );
             xBookmark->Select();
+            //return uno::Reference< word::XRange >( xBookmark->Range(), uno::UNO_QUERY_THROW );
             break;
         }
         case word::WdGoToItem::wdGoToPage:
@@ -682,6 +683,8 @@ void SAL_CALL SwVbaSelection::setLanguageID( ::sal_Int32 _languageid ) throw (un
 uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::RuntimeException)
 {
     uno::Any result;
+    //uno::Reference< view::XSelectionSupplier > xSel( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
+    //uno::Any aSelectedObject = xSel->getSelection();
     switch( _type )
     {
         case word::WdInformation::wdActiveEndPageNumber:
@@ -778,6 +781,8 @@ uno::Any SAL_CALL SwVbaSelection::Information( sal_Int32 _type ) throw (uno::Run
         default:
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
     }
+    // This method fails to restore the previouse selection
+    //xSel->select( aSelectedObject );
     return result;
 }
 

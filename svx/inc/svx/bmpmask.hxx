@@ -128,6 +128,7 @@ class SVX_DLLPUBLIC SvxBmpMask : public SfxDockingWindow
     SvxBmpMaskSelectItem aSelItem;
 
     Image               maImgPipette;
+    Image               maImgPipetteH;
 
     virtual BOOL        Close();
 

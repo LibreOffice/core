@@ -126,7 +126,11 @@ SAL_CALL XMLSignature_NssImpl :: generate(
          throw RuntimeException() ;
     }
 
-    //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+#if 0 //i39448 : the key manager should be retrieved from SecurityEnvironment, instead of SecurityContext
+    XMLSecurityContext_NssImpl* pSecCtxt = ( XMLSecurityContext_NssImpl* )xSecTunnel->getSomething( XMLSecurityContext_NssImpl::getUnoTunnelId() ) ;
+    if( pSecCtxt == NULL )
+        throw RuntimeException() ;
+#endif
 
     SecurityEnvironment_NssImpl* pSecEnv =
         reinterpret_cast<SecurityEnvironment_NssImpl*>(
@@ -321,12 +325,12 @@ Sequence< OUString > SAL_CALL XMLSignature_NssImpl :: getSupportedServiceNames()
 Sequence< OUString > XMLSignature_NssImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignature")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignature" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLSignature_NssImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl" ) ;
 }
 
 //Helper for registry

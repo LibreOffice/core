@@ -41,9 +41,6 @@ CXXFILES = \
         namedlg.cxx
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
         $(SLO)$/namedlg.obj
 
 # --- Tagets -------------------------------------------------------

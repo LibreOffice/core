@@ -29,7 +29,7 @@
 #ifndef INCLUDED_DOCTOK_LOGGERS_HXX
 #define INCLUDED_DOCTOK_LOGGERS_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 
 #include <resourcemodel/TagLogger.hxx>
 

@@ -1,472 +1,372 @@
-dnl configure.in serves as input for the GNU autoconf package
-dnl in order to create a configure script.
-
-AC_INIT([LibreOffice], [3.3],,, [http://documentfoundation.org/])
+dnl /******************************************************************
+dnl *     vi:set sw=3 ts=3 et:
+dnl *
+dnl * Name: configure.in
+dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
+dnl * Date: $Date: 2008-09-08 07:38:40 $
+dnl *
+dnl * Desc: This file serves as input for the GNU autoconf package
+dnl *       in order to create a configure script.
+dnl *       In this stage configure just checks the pre-requisites
+dnl *       necessary to build LibreOffice
+dnl *
+dnl *
+dnl ******************************************************************/
+AC_REVISION( $Revision: 1.290 $ )
 AC_PREREQ(2.50)
+AC_INIT()
 echo "$@" >config.parms
 
 dnl ===================================================================
 dnl Optional Features (--enable/disable-)
 dnl ===================================================================
-
-dnl ---------- Extensions ----------
-
-AC_ARG_ENABLE(ext-barcode,
-    AS_HELP_STRING([--enable-ext-barcode],
-        [Enables the Barcode extension.]),
-,)
-
-AC_ARG_ENABLE(ext-diagram,
-    AS_HELP_STRING([--enable-ext-diagram],
-        [Enables the Diagram extension.]),
-,)
-
-AC_ARG_ENABLE(ext-google-docs,
-    AS_HELP_STRING([--enable-ext-google-docs],
-        [Download and enables the Google Documents extension.]),
-,)
-
-AC_ARG_ENABLE(ext-hunart,
-    AS_HELP_STRING([--enable-ext-hunart],
-        [Enables the Hungarian Cross-reference Toolbar extension.]),
-,)
-
-AC_ARG_ENABLE(ext-lightproof,
-    AS_HELP_STRING([--enable-ext-lightproof],
-        [Enables the Lightproof extension.]),
-,)
-
-AC_ARG_ENABLE(ext-mysql-connector,
-    AS_HELP_STRING([--enable-ext-mysql-connector],
-        [Enables the build of the MySQL Connector/LibO extension. This requires
-         access to the MySQL Connector/C (aka libmysql) to be given, too, with
-         either the --with-system-mysql or --with-libmysql-path option.]),
-,)
-
-AC_ARG_ENABLE(ext-nlpsolver,
-    AS_HELP_STRING([--enable-ext-nlpsolver],
-        [Download and enables the NLPSolver extension.]),
-,)
-
-AC_ARG_ENABLE(ext-numbertext,
-    AS_HELP_STRING([--enable-ext-numbertext],
-        [Enables the Numbertext extension.]),
-,)
-
-AC_ARG_ENABLE(ext-oooblogger,
-    AS_HELP_STRING([--enable-ext-oooblogger],
-        [Download and enables the OOo Blogger extension.]),
-,)
-
-AC_ARG_ENABLE(ext-pdfimport,
-    AS_HELP_STRING([--enable-ext-pdfimport],
-        [Enables the PDF Import extension and xpdf.]),
-,)
-
-AC_ARG_ENABLE(ext-presenter-console,
-    AS_HELP_STRING([--enable-ext-presenter-console],
-        [Enables the Presenter Console extension.]),
-,)
-
-AC_ARG_ENABLE(ext-presenter-minimizer,
-    AS_HELP_STRING([--enable-ext-presenter-minimizer],
-        [Enables the Presentation Minimizer extension.]),
-,)
-
-AC_ARG_ENABLE(ext-presenter-ui,
-    AS_HELP_STRING([--enable-ext-presenter-ui],
-        [Enables extra functionality during slideshows, e.g. selecting pen color.]),
-,)
-
-AC_ARG_ENABLE(ext-report-builder,
-    AS_HELP_STRING([--enable-ext-report-builder],
-        [Enables the build of the Report Builder extension.]),
-,)
-
-AC_ARG_ENABLE(ext-typo,
-    AS_HELP_STRING([--enable-ext-typo],
-        [Enables the Typography Toolbar extension.]),
-,)
-
-AC_ARG_ENABLE(ext-validator,
-    AS_HELP_STRING([--enable-ext-validator],
-        [Enables the Validator extension.]),
-,)
-
-AC_ARG_ENABLE(ext-watch-window,
-    AS_HELP_STRING([--enable-ext-watch-window],
-        [Enables the Watch Window extension to Calc.]),
-,)
-
-AC_ARG_ENABLE(ext-wiki-publisher,
-    AS_HELP_STRING([--enable-ext-wiki-publisher],
-        [Enables the Wiki Publisher extension.]),
-,)
-
-dnl ---------- *** ----------
-
 AC_ARG_ENABLE(graphite,
-    AS_HELP_STRING([--enable-graphite],
-        [Enables the compilation of Graphite smart font rendering.]),
-,)
+[  --enable-graphite       Enables the compilation of Graphite smart font rendering
+],,)
 
 AC_ARG_ENABLE(ldap,
-    AS_HELP_STRING([--disable-ldap],
-        [Disables the use of LDAP backend via Netscape/Mozilla or OpenLDAP LDAP SDK]),
-,)
+[  --disable-ldap          Disables the use of LDAP backend via Netscape/Mozilla
+                          or OpenLDAP LDAP SDK
+],,)
 
 AC_ARG_ENABLE(fetch-external,
-    AS_HELP_STRING([--disable-fetch-external],
-        [Disables fetching external tarballs from web sources.]),
-,)
+[  --disable-fetch-external Disables fetching external tarballs from web sources.
+],,)
 
 AC_ARG_ENABLE(lockdown,
-    AS_HELP_STRING([--enable-lockdown],
-        [Enables the gconf integration work in LibO.]),
-,)
+[  --enable-lockdown       Enables the gconf integration work in OOo
+],,)
 
 AC_ARG_ENABLE(vba,
-    AS_HELP_STRING([--disable-vba],
-        [Disables the vba compatibility feature.]),
-,)
+[  --disable-vba           disables the vba compatibility feature
+],,)
 
 AC_ARG_ENABLE(pch,
-    AS_HELP_STRING([--enable-pch],
-        [EXPERIMENTAL: Enables precompiled header support for C++.]),
-,)
+[  --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
+],,)
 
 AC_ARG_ENABLE(hids,
-    AS_HELP_STRING([--enable-hids],
-        [Enables generation of HelpId lists.]),
-,)
+[  --enable-hids            Enables generation of HelpId lists.
+],,)
 
 AC_ARG_ENABLE(mozilla,
-    AS_HELP_STRING([--disable-mozilla],
-        [LibO usually includes a strangely hacked up mozilla binary for your
-         platform, to build without this version, use this option.]),
-,enable_mozilla=yes)
+[  --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
+                          binary for your platform, to build without this
+                          version, use this option.
+],,enable_mozilla="yes")
 
 AC_ARG_ENABLE(epm,
-    AS_HELP_STRING([--disable-epm],
-        [LibO includes self-packaging code, that requires epm, however epm is
-         useless for large scale package building.]),
-,enable_epm=yes)
+[  --disable-epm           OO.o includes self-packaging code, that requires
+                          epm, however epm is useless for large scale
+                          package building.
+],,enable_epm="yes")
 
 AC_ARG_ENABLE(activex_component,
-    AS_HELP_STRING([--disable-activex-component],
-        [Remove support for ActiveX embedding of LibO.]),
-,enable_activex_component=yes)
+[  --disable-activex-component Remove support for ActiveX embedding of OOo
+],,enable_activex_component=yes)
 
 AC_ARG_ENABLE(odk,
-    AS_HELP_STRING([--disable-odk],
-        [LibO includes an ODK, office development kit which some packagers may
-         with to build without.]),
-,enable_odk=yes)
+[  --disable-odk           OO.o includes an ODK, office development kit
+                          which some packagers may with to build without
+],,enable_odk="yes")
 
 AC_ARG_ENABLE(mathmldtd,
-    AS_HELP_STRING([--disable-mathmldtd],
-        [Disable mathmldtd (useful for distributions that want to avoid
-         packaging it).]),
-,enable_mathmldtd=yes)
+[  --disable-mathmldtd     disable mathmldtd
+                          (useful for distributions that want to avoid packaging
+                          it)
+],,enable_mathmldtd="yes")
 
 AC_ARG_ENABLE(evolution2,
-    AS_HELP_STRING([--enable-evolution2],
-        [Allows the built-in evolution 2 addressbook connectivity build to be
-         enabled.]),
-,)
+[  --enable-evolution2     Allows the built-in evolution 2 addressbook
+                          connectivity build to be enabled.
+],,)
 
 AC_ARG_ENABLE(cups,
-    AS_HELP_STRING([--disable-cups],
-        [Disable cups support in the psprint project.]),
-,enable_cups=yes)
+[  --disable-cups          disable cups support in the psprint project
+],,enable_cups=yes)
 
 AC_ARG_ENABLE(fontconfig,
-    AS_HELP_STRING([--disable-fontconfig],
-        [Disable support for the fontconfig library.]),
-,enable_fontconfig=yes)
+[  --disable-fontconfig    disable support for the fontconfig library
+],,enable_fontconfig=yes)
 
 AC_ARG_ENABLE(directx,
-    AS_HELP_STRING([--disable-directx],
-        [Remove DirectX implementation for the new XCanvas interface.
-         The DirectX support requires more stuff installed on Windows to
-         compile. (DirectX SDK, GDI+ libs)]),
-,enable_directx=yes)
+[  --disable-directx       Remove DirectX implementation for the new XCanvas
+                          interface. The DirectX support requires more stuff
+                          installed on Windows to compile.
+                          (DirectX SDK, GDI+ libs)
+],,enable_directx=yes)
 
 AC_ARG_ENABLE(activex,
-    AS_HELP_STRING([--disable-activex],
-        [Disable the use of ActiveX for windows build.])
-    [
-                          This switch is mandatory when using VC++ 2008 Express.
-    ],
-,)
+[  --disable-activex       Disable the use of ActiveX for windows build.
+                          This switch is mandatory when using VC++ 2005/2008 Express.
+],,)
 
 AC_ARG_ENABLE(atl,
-    AS_HELP_STRING([--disable-atl],
-        [Disable the use of ATL for windows build.])
-    [
-                          This switch is mandatory when using VC++ 2008 Express.
-    ],
-,)
+[  --disable-atl          Disable the use of ATL for windows build.
+                          This switch is mandatory when using VC++ 2005/2008 Express.
+],,)
 
 AC_ARG_ENABLE(symbols,
-    AS_HELP_STRING([--enable-symbols],
-        [Include debugging symbols in output. WARNING - a complete build needs
-         8 Gb of space and takes much longer (enables -g compiler flag).])
-    [
-                          --enable-symbols=SMALL
-                                     sets the gcc -g1 setting which is smaller.
+[  --enable-symbols        Include debugging symbols in output.
+                          WARNING - a complete build needs 8 Gb of space and
+                          takes much longer. (enables -g compiler flag)
+
+                          --enable-symbols=SMALL sets the gcc -g1 setting
+                          which is smaller.
 
                           Enabling symbols disables the stripping of the solver
                           (--disable-strip-solver).
-    ],
-,)
+],,)
 
 AC_ARG_ENABLE(strip-solver,
-    AS_HELP_STRING([--disable-strip-solver],
-        [Disable the stripping of the solver. By default the solver is stripped
-         unless a build with debugging symbols (--enable-symbols) is requested.])
-    [
+[  --disable-strip-solver  Disable the stripping of the solver.
+                          By default the solver is stripped unless a build with
+                          debugging symbols (--enable-symbols) is requested.
+
                           This switch allows to override this setting.
-    ],
-,)
+],,)
 
 AC_ARG_ENABLE(werror,
-    AS_HELP_STRING([--enable-werror],
-        [Turn warnings to errors. (Has no effect in modules where the treating
-         of warnings as errors is disabled explicitely.)]),
-,)
+[  --enable-werror         Turn warnings to errors. (Has no effect in modules
+                          where the treating of warnings as errors is disabled
+                          explicitely)
+],,)
 
 AC_ARG_ENABLE(debug,
-    AS_HELP_STRING([--enable-debug],
-        [Include debugging symbols from --enable-symbols plus extra debugging
-         code. Extra large build! (enables -g compiler flag and dmake debug=true)]),
-,)
+[  --enable-debug          Include debugging symbols from --enable-symbols
+                          plus extra debugging code.  Extra large build!
+                          (enables -g compiler flag and dmake debug=true)
+],,)
 
 AC_ARG_ENABLE(dbgutil,
-    AS_HELP_STRING([--enable-dbgutil],
-        [Include additional debugging utilities, such as assertions, object
-         counting, etc. Larger build. Independent from --enable-debug]),
-,)
+[  --enable-dbgutil        Include additional debugging utilities, such as
+                          assertions, object counting, etc. Larger build.
+                          Independent from --enable-debug
+],,)
 
 AC_ARG_ENABLE(crashdump,
-    AS_HELP_STRING([--enable-crashdump],
-        [Enable the crashdump feature code.]),
-,)
+[  --enable-crashdump      Enable the crashdump feature code.
+],,)
+
+AC_ARG_ENABLE(cl-standard,
+[  --enable-cl-standard    For Microsoft C/C++ compiler users, use non-optimizing
+                          standard compiler. ( This just disavles optimization
+                          options and therefore removes a lot of warnings when
+                          using the cheaper standard compiler. )
+],,)
 
 AC_ARG_ENABLE(gtk,
-    AS_HELP_STRING([--disable-gtk],
-        [Determines whether to use Gtk+ vclplug on platforms where Gtk+ is available.]),
-,enable_gtk=yes)
+[  --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
+                          where Gtk+ is available.
+],,enable_gtk=yes)
 
 AC_ARG_ENABLE(systray,
-    AS_HELP_STRING([--disable-systray],
-        [Determines whether to build the systray quickstarter.]),
-,enable_systray=yes)
+[  --disable-systray       Determines whether to build the systray quickstarter.
+],,enable_systray=yes)
 
 AC_ARG_ENABLE(unix-qstart,
-    AS_HELP_STRING([--disable-unix-qstart],
-        [On UNIX systems, we can enable a faster splash app that accelerates
-         startup, if we can link to the system libpng, use this if you are
-         a Linux Distro packager.]),
-,enable_unix_quickstarter=yes)
+[  --disable-unix-qstart    On UNIX systems, we can enable a faster splash app
+                          that accelerates startup, if we can link to the system
+                          libpng, use this if you are a Linux Distro packager.
+],,enable_unix_quickstarter="yes")
 
 AC_ARG_ENABLE(broffice,
-    AS_HELP_STRING([--enable-broffice],
-        [When enabled, this will include broffice branded artwork into packages,
-         that will only be seen in the pt_BR locale.]),
-,)
+[  --enable-broffice       When enabled, this will include broffice branded
+                          artwork into packages, that will only be seen in the
+                          pt_BR locale.
+],,)
 
 AC_ARG_ENABLE(cairo,
-    AS_HELP_STRING([--enable-cairo],
-        [Determines whether to use Cairo library on platforms where Cairo is
-         available.]),
-,enable_cairo=no)
+[  --enable-cairo          Determines whether to use Cairo library on
+                          platforms where Cairo is available.
+],,enable_cairo=no)
 
 AC_ARG_ENABLE(opengl,
-    AS_HELP_STRING([--enable-opengl],
-        [Determines whether to build the OpenGL 3D slide transitions component.]),
-,enable_opengl=no)
+[  --enable-opengl         Determines whether to build the OpenGL 3D slide
+                          transitions component
+],,enable_opengl=no)
 
 AC_ARG_ENABLE(dbus,
-    AS_HELP_STRING([--enable-dbus],
-        [Determines whether to enable presentation mode screensaver control
-         under GNOME via DBUS.]),
-,enable_dbus=no)
+[  --enable-dbus           Determines whether to enable presentation mode
+                          screensaver control under GNOME via DBUS
+],,enable_dbus=no)
 
 AC_ARG_ENABLE(gconf,
-    AS_HELP_STRING([--disable-gconf],
-        [Determines whether to use the GConf support.]),
-,enable_gconf=yes)
+[  --disable-gconf         Determines whether to use the GConf support
+],,enable_gconf=yes)
 
 AC_ARG_ENABLE(gnome-vfs,
-    AS_HELP_STRING([--disable-gnome-vfs],
-        [Determines whether to use the Gnome Virtual Filing System on platforms
-         where that VFS is available.]),
-,enable_gnome_vfs=yes)
+[  --disable-gnome-vfs     Determines whether to use the Gnome Virtual Filing
+                          System on platforms where that VFS is available
+],,enable_gnome_vfs=yes)
 
 AC_ARG_ENABLE(gio,
-    AS_HELP_STRING([--enable-gio],
-        [Determines whether to use the GIO support.]),
-,enable_gio=no)
+[  --enable-gio            Determines whether to use the GIO support
+],,enable_gio=no)
 
 AC_ARG_ENABLE(static-gtk,
-    AS_HELP_STRING([--enable-static-gtk],
-        [Modules that are linked against gtk libraries use the static libraries
-         instead of the dynamic ones. (Enables -Bstatic linker flag for gtk libraries.)]),
-,)
+[  --enable-static-gtk     Modules that are linked against gtk libraries use
+                          the static libraries instead of the dynamic ones.
+                          (enables -Bstatic linker flag for gtk libraries)
+],,)
 
 AC_ARG_ENABLE(layout,
-    AS_HELP_STRING([--enable-layout],
-        [Enable the compilation and use of layout dialogs.]),
-,)
+[  --enable-layout         Enable the compilation and use of layout dialogs
+],,)
 
 AC_ARG_ENABLE(build-mozilla,
-    AS_HELP_STRING([--disable-build-mozilla],
-        [Use this option if you do not want to build the mozilla components from
-         the mozilla source code but take precompiled zips.]),
-,)
+[  --disable-build-mozilla Use this option if you do not want to build the
+                          mozilla components from the mozilla source code but
+                          take precompiled zips
+],,)
 
 AC_ARG_ENABLE(nss_module,
-    AS_HELP_STRING([--disable-nss-module],
-        [Whether to use provided NSS module.]),
-,enable_nss_module=yes)
+[  --disable-nss-module    Whether to use provided NSS module
+],,enable_nss_module=yes)
 
 AC_ARG_ENABLE(kde,
-    AS_HELP_STRING([--enable-kde],
-        [Determines whether to use Qt3/KDE3 vclplug on platforms where Qt3 and
-         KDE3 are available.]),
-,)
+[  --enable-kde            Determines whether to use Qt3/KDE3 vclplug on platforms
+                          where Qt3 and KDE3 are available.
+],,)
 
 AC_ARG_ENABLE(kdeab,
-    AS_HELP_STRING([--disable-kdeab],
-        [Disable the KDE3 address book support.]),
-,
-    if test "$enable_kde" = "yes"; then
-        enable_kdeab=yes;
-    fi
-)
+[  --disable-kdeab         Disable the KDE3 address book support
+],,if test "$enable_kde" = "yes"; then enable_kdeab=yes; fi)
 
 AC_ARG_ENABLE(kde4,
-    AS_HELP_STRING([--enable-kde4],
-        [Determines whether to use Qt4/KDE4 vclplug on platforms where Qt4 and
-         KDE4 are available. May be used with --enable-kde if you want to support
-         both KDE3 and KDE4.]),
-,)
+[  --enable-kde4            Determines whether to use Qt4/KDE4 vclplug on platforms
+                          where Qt4 and KDE4 are available. May be used with --enable-kde
+                          if you want to support both KDE3 and KDE4.
+],,)
 
 AC_ARG_ENABLE(binfilter,
-    AS_HELP_STRING([--disable-binfilter],
-        [Disable legacy binary file formats filters.]),
-,
-    if ! test -d ./binfilter; then
-        enable_binfilter=no;
-    fi
-)
+[  --disable-binfilter     Disable legacy binary file formats filters
+],,if ! test -d ./binfilter; then enable_binfilter=no; fi)
 
 AC_ARG_ENABLE(rpath,
-    AS_HELP_STRING([--disable-rpath],
-        [Disable the use of relative paths in shared libraries.]),
-,)
+[  --disable-rpath         Disable the use of relative paths in shared libraries
+],,)
 
 AC_ARG_ENABLE(pam,
-    AS_HELP_STRING([--disable-pam],
-        [Disable pam support.]),
-,)
+[  --disable-pam           Disable pam support.
+],,)
 
 AC_ARG_ENABLE(pam-link,
-    AS_HELP_STRING([--enable-pam-link],
-        [Link with libpam instead of dynamically open it.]),
-,)
+[  --enable-pam-link       link with libpam instead of dynamically open it
+],,)
 
 AC_ARG_ENABLE(crypt-link,
-    AS_HELP_STRING([--disable-crypt-link],
-        [Disable linking with libcrypt instead of dynamically open it (needed for
-         ancient GNU/Linux distributions without crypt()/libcrypt).]),
-,enable_crypt_link=yes)
+[  --disable-crypt-link    disable linking with libcrypt instead of dynamically
+                          open it (needed for ancient GNU/Linux distributions
+                          without crypt()/libcrypt)
+],,enable_crypt_link=yes)
 
 AC_ARG_ENABLE(xrender-link,
-    AS_HELP_STRING([--enable-xrender-link],
-        [Link with libXrender instead of dynamically open it.]),
-,)
+[  --enable-xrender-link   link with libXrender instead of dynamically open it
+],,)
 
 AC_ARG_ENABLE(randr,
-    AS_HELP_STRING([--disable-randr],
-        [Disable RandR support in the vcl project.]),
-,enable_randr=yes)
+[  --disable-randr         disable RandR support in the vcl project
+],,enable_randr=yes)
 
 AC_ARG_ENABLE(randr-link,
-    AS_HELP_STRING([--disable-randr-link],
-        [Disable linking with libXrandr, instead dynamically open it at runtime.]),
-,enable_randr_link=yes)
+[  --disable-randr-link    disable linking with libXrandr, instead dynamically
+                           open it at runtime
+],,enable_randr_link=yes)
 
 AC_ARG_ENABLE(gstreamer,
-    AS_HELP_STRING([--disable-gstreamer],
-        [Disable building the gstreamer avmedia backend.]),
-,enable_gstreamer=yes)
+[  --disable-gstreamer     disable building the gstreamer avmedia backend
+],,enable_gstreamer=yes)
+
+AC_ARG_ENABLE(mysql-connector,
+[  --enable-mysql-connector     enables the build of the MySQL Connector/OOo extension.
+                                This requires access to the MySQL Connector/C (aka libmysql) to be given, too, with
+                                either the --with-system-mysql or --with-libmysql-path option.
+],,)
+
+AC_ARG_ENABLE(presenter-extra-ui,
+[  --enable-presenter-extra-ui   enables extra functionality during slideshow,
+                                 e.g. selecting pen color, erasing drawings etc.
+],,enable_presenter_extra_ui=no)
+
+AC_ARG_ENABLE(minimizer,
+[  --enable-minimizer          enables the build of the Presentation Minimizer extension
+],,)
+
+AC_ARG_ENABLE(presenter-console,
+[  --enable-presenter-console          enables the build of the Presenter Console extension
+],,)
+
+AC_ARG_ENABLE(pdfimport,
+[  --enable-pdfimport          enables the build of the PDF Import extension and xpdf
+],,)
+
+AC_ARG_ENABLE(wiki-publisher,
+[  --enable-wiki-publisher      enables the build of the Wiki Publisher extension
+],,)
+
+AC_ARG_ENABLE(report-builder,
+[  --enable-report-builder  enables the build of the Report Builder extension
+],,)
 
 AC_ARG_ENABLE(neon,
-    AS_HELP_STRING([--disable-neon],
-        [Disable neon and the compilation of webdav binding.]),
-,)
+[  --disable-neon          Disable neon and the compilation of webdav binding
+],,)
 
 AC_ARG_ENABLE(Xaw,
-    AS_HELP_STRING([--disable-Xaw],
-        [Disables the use of Xaw for the Netscape/Mozilla plugin.]),
-,)
+[  --disable-Xaw           Disables the use of Xaw for the Netscape/Mozilla
+                           plugin
+],,)
 
 AC_ARG_ENABLE(gcjaot,
-    AS_HELP_STRING([--enable-gcjaot],
-        [Build with[[out]] using Ahead of Time java compilation support to speed
-         up buildsi by compiling the jars also to native code.. --enable-gcjaot
-         is only known to work with bytecode created with gcj or ecj.]),
-,)
+[  --enable-gcjaot         Build with[[out]] using Ahead of Time java compilation
+                          support to speed up buildsi by compiling the jars also
+                          to native code..
+                          --enable-gcjaot is only known to work with bytecode
+                          created with gcj or ecj
+],,)
 
 AC_ARG_ENABLE(check-only,
-    AS_HELP_STRING([--enable-check-only],
-        [Use this option option if you just want to check your environment.
-         This option stops the generation of an ????env.set.])
-    [
-                          Usage:     --enable-check-only=yes
-    ],
-,)
+[  --enable-check-only     Use this option option if you just want to check your
+                          environment.  This option stops the generation of an
+                          ????env.set
+
+                          Usage: --enable-check-only=yes
+],,)
 
 AC_ARG_ENABLE(ccache-skip,
-    AS_HELP_STRING([--enable-ccache-skip],
-        [Allow the use of --ccache-skip to escape compiler flags that would
-         otherwise prevent caching of the result (currently used on Mac only)
-         NOTE: requires patched version because of a bug in ccache (see issue
-         104567 for details and patch) explicitly enable if your version of
-         ccache doesn't identify as version 2.4_OOo. (default=auto)]),
-,enable_ccache_skip=auto)
+[[  --enable-ccache-skip    [default=auto] allow the use of --ccache-skip to
+                          escape compiler flags that would otherwise prevent
+                          caching of the result (currently used on Mac only)
+                          NOTE: requires patched version because of a bug in
+                          ccache (see issue 104567 for details and patch)
+                          explicitly enable if your version of ccache doesn't
+                          identify as version 2.4_OOo
+]],,enable_ccache_skip=auto)
 
 AC_ARG_ENABLE(build-unowinreg,
-    AS_HELP_STRING([--enable-build-unowinreg],
-        [Do not use the prebuilt unowinreg.dll. Build it instead. The MinGW C++
-         compiler is needed on Linux.])
-    [
-                          Usage:     --enable-build-unowinreg
-    ],
-,)
+[  --enable-build-unowinreg Do not use the prebuilt unowinreg.dll. Build it instead.
+                          The MinGW C++ compiler is needed on Linux.
+
+                          Usage: --enable-build-unowinreg
+],,)
 
 AC_ARG_ENABLE(verbose,
-    AS_HELP_STRING([--enable-verbose],
-        [Increase build verbosity.])[
-  --disable-verbose       Decrease build verbosity.],
-,)
+[  --enable-verbose        Increase build verbosity.
+  --disable-verbose       Decrease build verbosity.
+],,)
 
 AC_ARG_ENABLE(dependency-tracking,
-    AS_HELP_STRING([--enable-dependency-tracking],
-        [Do not reject slow dependency extractors.])[
-  --disable-dependency-tracking
-                          Disables generation of dependency information.
-                          Speed up one-time builds.],
-,)
+[  --disable-dependency-tracking  Disables generation of dependency information.
+],,)
 
 AC_ARG_ENABLE(icecream,
-    AS_HELP_STRING([--enable-icecream],
-        [Use the 'icecream' distributed compiling tool to speedup the compilation.
-         It defaults to /opt/icecream for the location of the icecream gcc/g++
-         wrappers, you can override that using --with-gcc-home=/the/path switch.]),
-,)
+[  --enable-icecream       Use the 'icecream' distributed compiling tool to
+                          speedup the compilation.  It defaults to
+                          /opt/icecream for the location of the icecream
+                          gcc/g++ wrappers, you can override that using
+                          --with-gcc-home=/the/path switch.
+],,)
 
 AC_ARG_ENABLE(zenity,
     AS_HELP_STRING([--enable-zenity],
@@ -560,937 +460,802 @@ dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
 AC_ARG_WITH(gnu-patch,
-    AS_HELP_STRING([--with-gnu-patch],
-        [Specify location of GNU patch on Solaris or FreeBSD.]),
-,)
+[  --with-gnu-patch        Specify location of GNU patch on Solaris or FreeBSD
+],,)
 
 AC_ARG_WITH(gnu-cp,
-    AS_HELP_STRING([--with-gnu-cp],
-        [Specify location of GNU cp on Solaris or FreeBSD.]),
-,)
+[  --with-gnu-cp           Specify location of GNU cp on Solaris or FreeBSD
+],,)
 
 AC_ARG_WITH(system-graphite,
-    AS_HELP_STRING([--with-system-graphite],
-        [Use graphite library already installed on system.]),
-,)
+[  --with-system-graphite    use graphite library already installed on system
+],,)
 
 AC_ARG_WITH(external-tar,
-    AS_HELP_STRING([--with-external-tar=<TARFILE PATH>],
-        [Specify path to tarfiles manually.]),
-    TARFILE_LOCATION=$withval ,
-)
+[  --with-external-tar=<TARFILE PATH>   Specify path to tarfiles manually ],
+[ TARFILE_LOCATION="$withval"
+])
 
 AC_ARG_WITH(openldap,
-    AS_HELP_STRING([--with-openldap],
-        [Enables the use of the OpenLDAP LDAP SDK instead of the Netscape/Mozilla one.]),
-,)
+[  --with-openldap         Enables the use of the OpenLDAP LDAP SDK instead
+                          of the Netscape/Mozilla one
+],,)
 
 AC_ARG_WITH(vba-package-format,
-    AS_HELP_STRING([--with-vba-package-format],
-        [Specify package format for vba compatibility api. Specifying  "builtin"
-         means the api component and associated type library are  part of the
-         installation set. Specifying "extn" creates an uno extension that is
-         part of the installation set (located in the program directory) that
-         MUST be optionly registered using either the unopkg executeable or the
-         extension manager gui.])
-    [
+[  --with-vba-package-format   specify package format for vba compatibility api.
+                          Specifying  "builtin" means the api component and
+                          associated type library are  part of the installation set.
+                          Specifying "extn" creates an uno extension that is
+                          part of the installation set ( located in the program
+                          directory ) that MUST be optionly registered using
+                          either the unopkg executeable or the extension manager
+                          gui.
+
                           Note: "builtin" is the default, "extn" can cause
                           problems.
-
-                          Usage:     --with-vba-package-format="builtin" or
-                                     --with-vba-package-format="extn"
-    ],
-,)
+                          Usage: --with-vba-package-format="builtin" or
+                                 --with-vba-package-format="extn"
+],,)
 
 AC_ARG_WITH(extension-integration,
-    AS_HELP_STRING([--with-extension-integration],
-        [It will integrate the builded extensions to the installer of the product.]),
+[
+  --with-extension-integration      It will integrate the builded extensions
+              to the installer of the product.],
 ,)
 
 AC_ARG_WITH(fonts,
-    AS_HELP_STRING([--without-fonts],
-        [LibO includes some third-party fonts to provide a reliable basis for
-         help content, templates, samples, etc. When these fonts are already
-         known to be available on the system then you should use this option.]),
-,)
+[  --without-fonts         OOo includes some third-party fonts to provide a reliable
+                          basis for help content, templates, samples, etc.
+                          When these fonts are already known to be available on the
+                          system then you should use this option.
+],,)
 
 AC_ARG_WITH(ppds,
-    AS_HELP_STRING([--without-ppds],
-        [Removes Postscript Printer definition files from LibreOffice
-         installation set, for people building for specific distributions where
-         PPDs are known to be already available (every recent distro with CUPS backend).]),
-,)
+[  --without-ppds          Removes Postscript Printer definition files from
+                          openoffice.org installation set, for people building
+                          for specific distributions where PPDs are known to be
+                          already available (every recent distro with CUPS
+                          backend)
+],,)
 
 AC_ARG_WITH(afms,
-    AS_HELP_STRING([--without-afms],
-        [Removes bitmap font files from LibreOffice installation set, for people
-         building for specific distributions where AFM files or TrueType Fonts
-         are known to be available.]),
-,)
+[  --without-afms          Removes bitmap font files from openoffice.org
+                          installation set, for people building for specific
+                          distributions where AFM files or TrueType Fonts
+                          are known to be available.
+],,)
 
 AC_ARG_WITH(epm,
-    AS_HELP_STRING([--with-epm],
-        [Decides which epm to use. Default is to use the one from the system if
-         one is built. When either this is not there or you say =internal epm
-         will be built.]),
-,)
+[  --with-epm          Decides which epm to use. Default is to use
+              the one from the system if one is built. When
+              either this is not there or you say =internal
+              epm will be built.
+],,)
 
 AC_ARG_WITH(package-format,
-    AS_HELP_STRING([--with-package-format],
-        [Specify package format(s) for LibO installsets. Default is the
-         "normal" one of the OS/Distribution. Possible values: aix, bsd, deb,
-         inst, tardist, osx, pkg, rpm, setld, native, portable, archive, dmg,
-          installed, msi. Example: --with-package-format="deb dmg"]),
-,)
+[  --with-package-format   specify package format(s) for OOo installsets.
+                          Default is "normal" one of the OS/Distribution.
+
+                          Usage: --with-package-format="foo bar"
+],,)
 
 AC_ARG_WITH(system-stdlibs,
-    AS_HELP_STRING([--with-system-stdlibs],
-        [Use libstdc++/libgcc_s already on system.]),
-,)
+[  --with-system-stdlibs   use libstdc++/libgcc_s already on system
+],,)
 
 AC_ARG_WITH(system-cairo,
-    AS_HELP_STRING([--with-system-cairo],
-        [Use Cairo libraries already on system.]),
-,)
+[  --with-system-cairo      Use Cairo libraries already on system
+],,)
 
 AC_ARG_WITH(mozilla-version,
-    AS_HELP_STRING([--with-mozilla-version],
-        [Choose which version of mozilla to use while building mozilla.
-         (default=1.7.5) Note that not all versions are supported.]),
-,)
+[  --with-mozilla-version  Choose which version of mozilla to use while building
+                          mozilla. Default: 1.7.5.
+                          Note that not all versions are supported.
+],,)
 
 AC_ARG_WITH(mozilla-toolkit,
-    AS_HELP_STRING([--with-mozilla-toolkit],
-        [Choose which GUI toolkit to use while building mozilla components. (default=gtk2)]),
-,)
+[  --with-mozilla-toolkit  Choose which GUI toolkit to use while building mozilla
+                          components. Default: gtk2
+],,)
 
 AC_ARG_WITH(myspell-dicts,
-    AS_HELP_STRING([--without-myspell-dicts],
-        [Removes myspell dictionaries from LibreOffice installation set, for
-         people building for specific distributions where the myspell dictionaries
-         are installed from other sources.]),
-,)
+[  --without-myspell-dicts Removes myspell dictionaries from openoffice.org
+                          installation set, for people building for specific
+                          distributions where the myspell dictionaries are
+                          installed from other sources
+],,)
 
 AC_ARG_WITH(system-dicts,
-    AS_HELP_STRING([--with-system-dicts],
-        [Use dictionaries from system paths- Specify them via
-         --with-{dict,hyph,thes}-path=/path if you want to override the default ones.]),
-,)
+[  --with-system-dicts    Use dictionaries from system paths- Specify
+                         them via --with-{dict,hyph,thes}-path=/path
+             if you want to override the default ones
+],,)
 
 AC_ARG_WITH(external-dict-dir,
-    AS_HELP_STRING([--with-external-dict-dir],
-        [Specify external dictionary dir.]),
-,)
+[  --with-external-dict-dir Specify external dictionary dir
+],,)
 
 AC_ARG_WITH(external-hyph-dir,
-    AS_HELP_STRING([--with-external-hyph-dir],
-        [Specify external hyphenation pattern dir.]),
-,)
+[  --with-external-hyph-dir Specify external hyphenation pattern dir
+],,)
 
 AC_ARG_WITH(external-thes-dir,
-    AS_HELP_STRING([--with-external-thes-dir],
-        [Specify external thesaurus dir.]),
-,)
+[  --with-external-thes-dir Specify external thesaurus dir
+],,)
 
 AC_ARG_WITH(system-libs,
-    AS_HELP_STRING([--with-system-libs],
-        [Use libs already on system -- enables all --with-system-* flags except
-         mozilla and odbc/sane/xrender-header(s).]),
-,)
+[  --with-system-libs      Use libs already on system -- enables all
+                          --with-system-* flags except mozilla and
+                          odbc/sane/xrender-header(s)
+],,)
 
 AC_ARG_WITH(system-headers,
-    AS_HELP_STRING([--with-system-headers],
-        [Use headers already on system -- enables all --with-system-* flags for
-         external packages whose headers are the only entities used i.e.
-         boost/vigra/odbc/sane/xrender-header(s).]),
-,)
+[  --with-system-headers   Use headers already on system -- enables all
+                          --with-system-* flags for external packages
+                          whose headers are the only entities used i.e.
+                          boost/vigra/odbc/sane/xrender-header(s)
+],,)
 
 AC_ARG_WITH(system-jars,
-    AS_HELP_STRING([--without-system-jars],
-        [When building with --with-system-libs, also the needed jars are expected
-         on the system. Use this to disable that (except for the db case where
-         --with-system-db *has to* imply using the db.jar from there, too).]),
-,)
+[  --without-system-jars   When building with --with-system-libs, also the
+                          needed jars are expected on the system. Use this to
+                          disable that.
+                          (except for the db case where --with-system-db
+                          *has to* imply using the db.jar from there, too)
+],,)
 
 AC_ARG_WITH(system-zlib,
-    AS_HELP_STRING([--with-system-zlib],
-        [Use zlib already on system.]),
-,)
+[  --with-system-zlib      Use zlib already on system
+],,)
 
 AC_ARG_WITH(system-openssl,
-    AS_HELP_STRING([--with-system-openssl],
-        [Use OpenSSL already on system.]),
-,)
+[  --with-system-openssl   Use OpenSSL already on system
+],,)
 
 AC_ARG_WITH(system-jpeg,
-    AS_HELP_STRING([--with-system-jpeg],
-        [Use jpeg already on system.]),
-,)
+[  --with-system-jpeg      Use jpeg already on system
+],,)
 
 AC_ARG_WITH(system-expat,
-    AS_HELP_STRING([--with-system-expat],
-        [Use expat already on system.]),
-,)
+[  --with-system-expat     Use expat already on system
+],,)
 
 AC_ARG_WITH(system-libwpd,
-    AS_HELP_STRING([--with-system-libwpd],
-        [Use libwpd already on system.]),
-,)
+[  --with-system-libwpd    Use libwpd already on system
+],,)
 
 AC_ARG_WITH(system-libwps,
-    AS_HELP_STRING([--with-system-libwps],
-        [Use libwps already on system.]),
-,)
+[  --with-system-libwps    Use libwps already on system
+],,)
 
 AC_ARG_WITH(system-libwpg,
-    AS_HELP_STRING([--with-system-libwpg],
-        [Use libwpg already on system.]),
-,)
+[  --with-system-libwpg    Use libwpg already on system
+],,)
 
 AC_ARG_WITH(system-libxml,
-    AS_HELP_STRING([--with-system-libxml],
-        [Use libxml already on system.]),
-,)
+[  --with-system-libxml    Use libxml already on system
+],,)
 
 AC_ARG_WITH(system-python,
-    AS_HELP_STRING([--with-system-python],
-        [Use python already on system.]),
-,)
+[  --with-system-python    Use python already on system
+],,)
 
 AC_ARG_WITH(system-icu,
-    AS_HELP_STRING([--with-system-icu],
-        [Use icu already on system.]),
-,)
+[  --with-system-icu       Use icu already on system
+],,)
 
 AC_ARG_WITH(system-poppler,
-    AS_HELP_STRING([--with-system-poppler],
-        [Use system poppler. (only needed for pdfimport extension)]),
-,)
+[  --with-system-poppler   Use poppler already on system
+],,)
 
 AC_ARG_WITH(system-db,
-    AS_HELP_STRING([--with-system-db],
-        [Use berkeley db already on system.]),
-,)
+[  --with-system-db        Use berkeley db already on system
+],,)
 
 AC_ARG_WITH(system-lucene,
-    AS_HELP_STRING([--with-system-lucene],
-        [Use lucene already on system.]),
-,)
+[  --with-system-lucene    Use lucene already on system
+],,)
 
 AC_ARG_WITH(system-apache-commons,
-    AS_HELP_STRING([--with-system-apache-commons],
-        [Use apache commons libraries already on system.]),
-,)
+[  --with-system-apache-commons  Use apache commons libraries already on system
+],,)
 
 AC_ARG_WITH(lucene-core-jar,
-    AS_HELP_STRING([--with-lucene-core-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LUCENE_CORE_JAR=$withval ,
-)
+[  --with-lucene-core-jar=JARFILE   Specify path to jarfile manually ],
+[ LUCENE_CORE_JAR="$withval"
+])
 
 AC_ARG_WITH(lucene-analyzers-jar,
-    AS_HELP_STRING([--with-lucene-analyzers-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LUCENE_ANALYZERS_JAR=$withval ,
-)
+[  --with-lucene-analyzers-jar=JARFILE   Specify path to jarfile manually ],
+[ LUCENE_ANALYZERS_JAR="$withval"
+])
 
 AC_ARG_WITH(system-mysql,
-    AS_HELP_STRING([--with-system-mysql],
-        [Use MySQL libraries already on system, for building the MySQL Connector/LibO
-         extension. Requires MYSQLCONFIG to point to the mysql_config executable.]),
-,)
+[  --with-system-mysql          Use MySQL libraries already on system, for building the MySQL Connector/OOo extension.
+                                Requires MYSQLCONFIG to point to the mysql_config executable.
+],,)
 
 AC_ARG_WITH(libmysql-path,
-    AS_HELP_STRING([--with-libmysql-path],
-        [Use Connector/C (libmysql) installation for building the MySQL
-         Connector/LibO extension.])
-    [
-                          Usage:     --with-libmysql-path=<absolute path to
-                                                  your Connector/C installation>
-    ],
-,)
+[  --with-libmysql-path         Use Connector/C (libmysql) installation for building the MySQL Connector/OOo extension.
+
+                                Usage: --with-libmysql-path=<absolute path to your Connector/C installation>
+],,)
 
 AC_ARG_WITH(system-mysql-cppconn,
-    AS_HELP_STRING([--with-system-mysql-cppconn],
-        [Use MySQL C++ Connector libraries already on system.]),
-,)
+[  --with-system-mysql-cppconn  Use MySQL C++ Connector libraries already on system
+],,)
 
 AC_ARG_WITH(system-hsqldb,
-    AS_HELP_STRING([--with-system-hsqldb],
-        [Use hsqldb already on system.]),
-,)
+[  --with-system-hsqldb    Use hsqldb already on system
+],,)
 
 AC_ARG_WITH(hsqldb-jar,
-    AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    HSQLDB_JAR=$withval ,
-)
+[  --with-hsqldb-jar=JARFILE   Specify path to jarfile manually ],
+[ HSQLDB_JAR="$withval"
+])
 
 AC_ARG_WITH(system-beanshell,
-    AS_HELP_STRING([--with-system-beanshell],
-        [Use beanshell already on system.]),
-,)
+[  --with-system-beanshell Use beanshell already on system
+],,)
 
 AC_ARG_WITH(beanshell-jar,
-    AS_HELP_STRING([--with-beanshell-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    BSH_JAR=$withval ,
-)
+[  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
+[ BSH_JAR="$withval"
+])
 
 AC_ARG_WITH(commons-codec-jar,
-    AS_HELP_STRING([--with-commons-codec-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_CODEC_JAR=$withval ,
-)
+[  --with-commons-codec-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_CODEC_JAR="$withval"
+])
 
 AC_ARG_WITH(commons-lang-jar,
-    AS_HELP_STRING([--with-commons-lang-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_LANG_JAR=$withval ,
-)
+[  --with-commons-lang-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_LANG_JAR="$withval"
+])
 
 AC_ARG_WITH(commons-httpclient-jar,
-    AS_HELP_STRING([--with-commons-httpclient-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_HTTPCLIENT_JAR=$withval ,
-)
+[  --with-commons-httpclient-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_HTTPCLIENT_JAR="$withval"
+])
 
 AC_ARG_WITH(commons-logging-jar,
-    AS_HELP_STRING([--with-commons-logging-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    COMMONS_LOGGING_JAR=$withval ,
-)
+[  --with-commons-logging-jar=JARFILE   Specify path to jarfile manually ],
+[ COMMONS_LOGGING_JAR="$withval"
+])
 
 AC_ARG_WITH(servlet-api-jar,
-    AS_HELP_STRING([--with-servlet-api-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    SERVLETAPI_JAR=$withval ,
-)
+[  --with-servlet-api-jar=JARFILE   Specify path to jarfile manually ],
+[ SERVLETAPI_JAR="$withval"
+])
 
 AC_ARG_WITH(system-jfreereport,
-    AS_HELP_STRING([--with-system-jfreereport],
-        [Use JFreeReport already on system.]),
-,)
+[  --with-system-jfreereport      Use JFreeReport already on system
+],,)
 
 AC_ARG_WITH(sac-jar,
-    AS_HELP_STRING([--with-sac-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    SAC_JAR=$withval ,
-)
+[  --with-sac-jar=JARFILE   Specify path to jarfile manually ],
+[ SAC_JAR="$withval"
+])
 
 AC_ARG_WITH(libxml-jar,
-    AS_HELP_STRING([--with-libxml-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBXML_JAR=$withval ,
-)
+[  --with-libxml-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBXML_JAR="$withval"
+])
 
 AC_ARG_WITH(flute-jar,
-    AS_HELP_STRING([--with-flute-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    FLUTE_JAR=$withval ,
-)
+[  --with-flute-jar=JARFILE   Specify path to jarfile manually ],
+[ FLUTE_JAR="$withval"
+])
 
 AC_ARG_WITH(jfreereport-jar,
-    AS_HELP_STRING([--with-jfreereport-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    JFREEREPORT_JAR=$withval ,
-)
+[  --with-jfreereport-jar=JARFILE   Specify path to jarfile manually ],
+[ JFREEREPORT_JAR="$withval"
+])
 
 AC_ARG_WITH(liblayout-jar,
-    AS_HELP_STRING([--with-liblayout-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLAYOUT_JAR=$withval ,
-)
+[  --with-liblayout-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLAYOUT_JAR="$withval"
+])
 
 AC_ARG_WITH(libloader-jar,
-    AS_HELP_STRING([--with-libloader-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval ,
-)
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
 
 AC_ARG_WITH(libloader-jar,
-    AS_HELP_STRING([--with-libloader-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval ,
-)
+[  --with-libloader-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLOADER_JAR="$withval"
+])
 
 AC_ARG_WITH(libformula-jar,
-    AS_HELP_STRING([--with-libformula-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBFORMULA_JAR=$withval ,
-)
+[  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBFORMULA_JAR="$withval"
+])
 
 AC_ARG_WITH(librepository-jar,
-    AS_HELP_STRING([--with-librepository-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBREPOSITORY_JAR=$withval ,
-)
+[  --with-librepository-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBREPOSITORY_JAR="$withval"
+])
 
 AC_ARG_WITH(libfonts-jar,
-    AS_HELP_STRING([--with-libfonts-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBFONTS_JAR=$withval ,
-)
+[  --with-libfonts-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBFONTS_JAR="$withval"
+])
 
 AC_ARG_WITH(libserializer-jar,
-    AS_HELP_STRING([--with-libserializer-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBSERIALIZER_JAR=$withval ,
-)
+[  --with-libserializer-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBSERIALIZER_JAR="$withval"
+])
 
 AC_ARG_WITH(libbase-jar,
-    AS_HELP_STRING([--with-libbase-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    LIBBASE_JAR=$withval ,
-)
+[  --with-libbase-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBBASE_JAR="$withval"
+])
 
 AC_ARG_WITH(system-saxon,
-    AS_HELP_STRING([--with-system-saxon],
-        [Use saxon already on system.]),
-,)
+[  --with-system-saxon     Use saxon already on system
+],,)
 
 AC_ARG_WITH(saxon-jar,
-    AS_HELP_STRING([--with-saxon-jar=JARFILE],
-        [Specify path to jarfile manually.]),
-    SAXON_JAR=$withval ,
-)
+[  --with-saxon-jar=JARFILE   Specify path to jarfile manually ],
+[ SAXON_JAR="$withval"
+])
 
 AC_ARG_WITH(system-libxslt,
-    AS_HELP_STRING([--with-system-libxslt],
-        [Use libxslt already on system.]),
-,)
+[  --with-system-libxslt   Use libxslt already on system
+],,)
 
 AC_ARG_WITH(system-odbc,
-    AS_HELP_STRING([--with-system-odbc-headers],
-        [Use the odbc headers already on system.]),
-,)
+[  --with-system-odbc-headers     Use the odbc headers already on system
+],,)
 
 AC_ARG_WITH(system-sane,
-    AS_HELP_STRING([--with-system-sane-header],
-        [Use sane.h already on system.]),
-,)
+[  --with-system-sane-header      Use sane.h already on system
+],,)
 
 AC_ARG_WITH(system-xrender,
-    AS_HELP_STRING([--with-system-xrender-headers],
-        [Use XRender headers already on system.]),
-,)
+[  --with-system-xrender-headers  Use XRender headers already on system
+],,)
 
 AC_ARG_WITH(system-mesa-headers,
-    AS_HELP_STRING([--with-system-mesa-headers],
-        [Use Mesa headers already on system.]),
-,)
+[  --with-system-mesa-headers     Use Mesa headers already on system
+],,)
 
 AC_ARG_WITH(system-curl,
-    AS_HELP_STRING([--with-system-curl],
-        [Use curl already on system.]),
-,)
+[  --with-system-curl      Use curl already on system
+],,)
 
 AC_ARG_WITH(system-boost,
-    AS_HELP_STRING([--with-system-boost],
-        [Use boost already on system.]),
-,)
+[  --with-system-boost     Use boost already on system
+],,)
 
 AC_ARG_WITH(system-mdds,
-    AS_HELP_STRING([--with-system-mdds],
-        [Use mdds already on system.]),
-,)
+[  --with-system-mdds      Use mdds already on system
+],,)
 
 AC_ARG_WITH(system-vigra,
-    AS_HELP_STRING([--with-system-vigra],
-        [Use vigra already on system.]),
-,)
+[  --with-system-vigra     Use vigra already on system
+],,)
 
 AC_ARG_WITH(system-neon,
-    AS_HELP_STRING([--with-system-neon],
-        [Use neon already on system.]),
-,)
+[  --with-system-neon      Use neon already on system
+],,)
 
 AC_ARG_WITH(system-hunspell,
-    AS_HELP_STRING([--with-system-hunspell],
-        [Use libhunspell already on system.]),
-,)
+[  --with-system-hunspell   Use libhunspell already on system
+],,)
 
 AC_ARG_WITH(system-mythes,
-    AS_HELP_STRING([--with-system-mythes],
-        [Use mythes already on system.]),
-,)
+[  --with-system-mythes    Use mythes already on system
+],,)
 
 AC_ARG_WITH(system-altlinuxhyph,
-    AS_HELP_STRING([--with-system-altlinuxhyph],
-        [Use ALTLinuxhyph already on system.]),
-,)
+[  --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
+],,)
 
 AC_ARG_WITH(system-lpsolve,
-    AS_HELP_STRING([--with-system-lpsolve],
-        [Use lpsolve already on system.]),
-,)
+[  --with-system-lpsolve         Use lpsolve already on system
+],,)
 
 AC_ARG_WITH(system-libtextcat,
-    AS_HELP_STRING([--with-system-libtextcat],
-        [Use libtextcat already on system.]),
-,)
+[  --with-system-libtextcat      Use libtextcat already on system
+],,)
 
 AC_ARG_WITH(external-libtextcat-data,
-    AS_HELP_STRING([--with-external-libtextcat-data],
-        [Use libtextcat data already on system.]),
-,)
+[  --with-external-libtextcat-data Use libtextcat data already on system
+],,)
 
 AC_ARG_WITH(system-cppunit,
-    AS_HELP_STRING([--with-system-cppunit],
-        [Use cppunit already on system.]),
-,)
+[  --with-system-cppunit         Use cppunit already on system
+],,)
 
 AC_ARG_WITH(system-redland,
-    AS_HELP_STRING([--with-system-redland],
-        [Use redland library already on system.]),
-,)
+[  --with-system-redland   Use redland library already on system
+],,)
 
 AC_ARG_WITH(system-mozilla,
-    AS_HELP_STRING([--with-system-mozilla],
-        [Use mozilla already on system. Note that some components cannot be built
-         against a contemporary mozilla. The flavour used can be specified by
-         --with-system-mozilla=<flavour>. Supported are: libxul (default),
-         xulrunner, firefox, seamonkey, mozilla.]),
-    WITH_SYSTEM_MOZILLA=$withval ,
-WITH_SYSTEM_MOZILLA=no)
+[  --with-system-mozilla   Use mozilla already on system. Note that some
+                          components cannot be built against a contemporary
+                          mozilla. The flavour used can be specified by
+                          --with-system-mozilla=<flavour>. Supported are:
+                          libxul (default), xulrunner, firefox, seamonkey,
+                          mozilla
+], WITH_SYSTEM_MOZILLA=$withval, WITH_SYSTEM_MOZILLA=no)
 
 AC_ARG_WITH(stlport,
-    AS_HELP_STRING([--with-stlport],
-        [The location that STLport is installed in. The STL header files are assumed
-         to be in stlport-home/stlport and the STLPort library in stlport-home/lib.])
-    [
-                          Usage:     --with-stlport=<abs. path to stlport home>
+[  --with-stlport         The location that STLport is installed in. The STL
+                          header files are assumed to be in
+                          stlport-home/stlport and the STLPort library in
+                          stlport-home/lib.
+
+                          Usage: --with-stlport=<absolute path to stlport home>
 
                           Warning!!, disabling using --without-stlport or
                           enabling using --with-stlport on a platform that
-                          defaults to the opposite will break ABI compatability.
-    ],
-    WITH_STLPORT=$withval ,
-WITH_STLPORT=auto)
+                          defaults to the opposite will break ABI compatability
+], WITH_STLPORT=$withval , WITH_STLPORT=auto)
 
 AC_ARG_WITH(jdk-home,
-    AS_HELP_STRING([--with-jdk-home],
-        [If you have installed JDK 1.3 or later on your system please supply the
-         path here. Note that this is not the location of the Java binary but the
-         location of the entire distribution.])
-    [
-                          Usage:     --with-jdk-home=<absolute path to JDK home>
-    ],
-,)
+[  --with-jdk-home         if you have installed JDK 1.3 or later on your system
+                          please supply the path here.
+                          Note that this is not the location of the Java binary
+                          but the location of the entire distribution.
+
+                          Usage: --with-jdk-home=<absolute path to JDK home>
+],,)
 
 AC_ARG_WITH(gxx_include_path,
-    AS_HELP_STRING([--with-gxx-include-path],
-        [If you want to override the autodetected g++ include path.])
-    [
-                          Usage:     --with-gxx-include-path=<absolute path to
-                                                                g++ include dir>
-    ],
-,)
+[  --with-gxx-include-path if you want to override the autodetected g++ include
+                          path.
+
+                          Usage: --with-gxx-include-path=<absolute path to g++ include dir>
+],,)
 
 AC_ARG_WITH(java,
-    AS_HELP_STRING([--with-java],
-        [Build with(out) Java support. If you use --without-java/--with-java=no
-         then the build will have no support for Java components, applets,
-         accessibility or XML filters.]),
-    if test "$withval" = "yes"; then
-        WITH_JAVA=java;
-    else
-        WITH_JAVA=$withval;
-    fi ,
-WITH_JAVA=java)
+[  --with-java             Build with[[out]] Java support.  If you use
+                          --without-java/--with-java=no then the build will have
+                          no support for Java components, applets, accessibility
+                          or XML filters.
+], if test "$withval" = "yes"; then WITH_JAVA=java; else WITH_JAVA=$withval; fi, WITH_JAVA=java)
 
 AC_ARG_WITH(java_target_version,
-    AS_HELP_STRING([--with-java-target-version],
-        [Generate class files that will work on JVMs with the specified version.
-         For example, use --with-java-target-version=1.4 to make sure that the
-         application will work with JVM 1.4 even when compiled with JDK 1.5.])
-    [
-                          This option is ignored when you compile with gcj/gij.
+[  --with-java-target-version   Generate class files that will work on JVMs with
+              the specified version. For example, use
+              --with-java-target-version=1.4 to make sure that the
+              application will work with JVM 1.4 even when compiled
+              with JDK 1.5.
 
-                          Usage:     --with-java-target-version=<jvm version>
-    ],
-,)
+              This option is ignored when you compile with gcj/gij.
+
+                          Usage: --with-java-target-version=<jvm version>
+],,)
 
 AC_ARG_WITH(ant-home,
-    AS_HELP_STRING([--with-ant-home],
-        [If you have installed Jakarta Ant on your system, please supply the path here.
-         Note that this is not the location of the Ant binary but the location
-         of the entire distribution.])
-    [
-                          Usage:     --with-ant-home=<absolute path to Ant home>
-    ],
-,)
+[  --with-ant-home         If you have installed Jakarta Ant on your system,
+                          please supply the path here.
+                          Note that this is not the location of the Ant binary
+                          but the location of the entire distribution.
+
+                          Usage: --with-ant-home=<absolute path to Ant home>
+],,)
 
 AC_ARG_WITH(junit,
-    AS_HELP_STRING([--with-junit],
-        [Specifies the JUnit 4 jar file to use for JUnit-based tests.
-         --without-junit disables those tests. Not relevant in the --without-java case.])
-    [
-                          Usage:     --with-junit=<absolute path to JUnit 4 jar>
-    ],
-,with_junit=yes)
+[  --with-junit            Specifies the JUnit 4 jar file to use for JUnit-based
+                          tests.  --without-junit disables those tests.  Not
+                          relevant in the --without-java case.
+
+                          Usage: --with-junit=<absolute path to JUnit 4 jar>
+],,with_junit=yes)
 
 AC_ARG_WITH(perl-home,
-    AS_HELP_STRING([--with-perl-home],
-        [If you have installed the Perl 5 Distribution, on your system, please
-         supply the path here. Note that this is not the location of the Perl
-         binary but the location of the entire distribution.])
-    [
-                          Usage:     --with-perl-home=<abs. path to Perl 5 home>
-    ],
-,)
+[  --with-perl-home        If you have installed the Perl 5 Distribution, on your
+                          system, please supply the path here.
+                          Note that this is not the location of the Perl binary
+                          but the location of the entire distribution.
+
+                          Usage: --with-perl-home=<absolute path to Perl 5 home>
+],,)
 
 AC_ARG_WITH(cl-home,
-    AS_HELP_STRING([--with-cl-home],
-        [For Windows NT users, please supply the path for the Microsoft C/C++
-         compiler. Note that this is not the location of the compiler binary but
-         the location of the entire distribution.])
-    [
-                          Usage:     --with-cl-home=<absolute path to Microsoft
-                                                            C/C++ compiler home>
-    ],
-,)
+[  --with-cl-home          For Windows NT users, please supply the path
+                          for the Microsoft C/C++ compiler.
+                          Note that this is not the location of the compiler
+                          binary but the location of the entire distribution.
+
+                          Usage: --with-cl-home=<absolute path to Microsoft C/C++ compiler home>
+],,)
 
 AC_ARG_WITH(mspdb-path,
-    AS_HELP_STRING([--with-mspdb-path],
-        [For Microsoft C/C++ compiler users, please supply the path pointing to
-         the mspdb80.dll (if using Visual Studio 2008) or mspdb100.dl (if using
-         Visual Studio 2010).])
-    [
-                          Usage:     --with-mspdb-path=<path to
-                                                       mspdb80.dll/mspdb100.dll>
-    ],
-,)
+[  --with-mspdb-path       For Microsoft C/C++ compiler users, please supply the
+                          path pointing to the mspdb80.dll (if using Visual
+                          Studio 2008) or mspdb100.dl (if using Visual Studio
+                          2010).
+
+                          Usage: --with-mspdb-path=<path to mspdb80.dll/mspdb100.dll>
+],,)
 
 AC_ARG_WITH(midl-path,
-    AS_HELP_STRING([--with-midl-path],
-        [For Microsoft compiler users, please supply the path pointing to the midl.exe.])
-    [
-                          Usage:     --with-midl-path=<abs. path to midl.exe>
-    ],
-,)
+[  --with-midl-path        For Microsoft compiler users, please supply
+                          the path pointing to the midl.exe.
+
+                          Usage: --with-midl-path=<absolute path to midl.exe>
+],,)
 
 AC_ARG_WITH(csc-path,
-    AS_HELP_STRING([--with-csc-path],
-        [For Windows builds, please supply the path pointing to the csc.exe.
-         Usually found automatically.])
-    [
-                          Usage:     --with-csc-path=<abs. path to csc.exe>
-    ],
-,)
+[  --with-csc-path         For Windows builds, please supply
+                          the path pointing to the csc.exe.
+                          Usually found automatically
+
+                          Usage: --with-csc-path=<absolute path to csc.exe>
+],,)
 
 AC_ARG_WITH(nsis-path,
-    AS_HELP_STRING([--with-nsis-path],
-        [For Windows users, please supply the path to the "Nullsoft Scriptable
-         Install System" (NSIS). If NSIS is found in the path or this option is
-         supplied a self contained executable installer for LibreOffice will
-         be created.])
-    [
-                          Usage:     --with-nsis-path=<abs. path to nsis.exe>
-    ],
-,)
+[  --with-nsis-path        For Windows users, please supply the path to the
+                          "Nullsoft Scriptable Install System" (NSIS). If NSIS
+                          is found in the path or this option is supplied a self
+                          contained executable installer for LibreOffice will
+                          be created.
+
+                          Usage: --with-nsis-path=<absolute path to nsis.exe>
+],,)
 
 AC_ARG_WITH(frame-home,
-    AS_HELP_STRING([--with-frame-home],
-        [For Microsoft compiler users, please supply the path pointing to
-         lib/mscoree.lib, usually something like:
-         "/cygdrive/c/Program Files/Windows SDKs/Windows/v7.0"])
-    [
-                          Note that in most cases it will be automatically
-                          found, though.
+[  --with-frame-home       For Microsoft compiler users, please supply
+                          the path pointing to lib/mscoree.lib, usually
+                          something like:
+                          "/cygdrive/c/Program Files/Windows SDKs/Windows/v7.0"
 
-                          Usage:     --with-frame-home=<absolute path to .NET
-                                                                      Framework>
-    ],
-,)
+                          Note that in most cases it will be automatically found,
+                          though.
+
+                          Usage: --with-frame-home=<absolute path to .NET Framework>]
+,,)
 
 AC_ARG_WITH(psdk-home,
-    AS_HELP_STRING([--with-psdk-home],
-        [For Windows users, please supply the path to the Windnows SDK.
-         Usually found automatically.])
-    [
-                          Usage:     --with-psdk-home=<abs. path to Windows SDK>
-    ],
-,)
+[  --with-psdk-home        For Windows users, please supply the path to the
+                          Windnows SDK. Usually found automatically.
+
+                          Usage: --with-psdk-home=<absolute path to Windows SDK>
+],,)
 
 AC_ARG_WITH(directx-home,
-    AS_HELP_STRING([--with-directx-home],
-        [For Windows users, please supply the path to the Microsoft DirectX SDK.])
-    [
-                          Usage:     --with-directx-home=<absolute path to
-                                                          Microsoft DirectX SDK>
-    ],
-,)
+[  --with-directx-home     For Windows users, please supply the path to the
+                          Microsoft DirectX SDK.
+
+                          Usage: --with-directx-home=<absolute path to Microsoft DirectX SDK>
+],,)
 
 AC_ARG_WITH(mozilla-build,
-    AS_HELP_STRING([--with-mozilla-build],
-        [For Windows users, please supply the path to the mozilla build tools.])
-    [
-                          Usage:     --with-mozilla-build=<absolute path to
-                                                            mozilla build tools>
+[  --with-mozilla-build    For Windows users, please supply the path to the
+                          mozilla build tools.
 
-                          At the moment of this writing, an installer for the
-                          mozilla build tools can be obtained from http://ftp.
-                          mozilla.org/pub/mozilla.org/mozilla/libraries/win32.
-    ],
-    MOZILLABUILD=$withval ,
-)
+                          Usage: --with-mozilla-build=<absolute path to mozilla build tools>
+
+                          At the moment of this writing, an installer for the mozilla build tools
+                          can be obtained from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32.
+],[MOZILLABUILD=$withval],)
 
 AC_ARG_WITH(local-solenv,
-    AS_HELP_STRING([--with-local-solenv],
-        [If you have solenv in a location other than ./solenv, please supply the path here.])
-    [
-                          Usage:     --with-local-solenv=<abs. path to solenv>
-    ],
-,)
+[  --with-local-solenv     If you have solenv in a location other than ./solenv,
+                          please supply the path here.
+
+                          Usage: --with-local-solenv=<absolute path to solenv>
+],,)
 
 AC_ARG_WITH(local-solver,
-    AS_HELP_STRING([--with-local-solver],
-        [If you have solver in a location other than ./solver, please supply the path here.])
-    [
-                          Usage:     --with-local-solver=<abs. path to solver>
-    ],
-,)
+[  --with-local-solver     if you have solver in a location other than ./solver,
+                          please supply the path here.
+
+                          Usage: --with-local-solver=<absolute path to solver>
+],,)
 
 AC_ARG_WITH(lang,
-    AS_HELP_STRING([--with-lang],
-        [Use this option to build LibreOffice with additional language support.
-         English (US) is always included by default.
-         Separate multiple languages with space.
-         For all languages, use --with-lang=ALL.])
-    [
-                          Usage:     --with-lang="es sw tu cs sk"
-    ],
-,)
+[  --with-lang             Use this option to build LibreOffice with
+                          additional language support. English (US) is always
+                          included by default. Separate multiple languages with
+                          space. For all languages, use --with-lang=ALL.
+
+                          Usage: --with-lang="es sw tu cs sk"
+],,)
 
 AC_ARG_WITH(poor-help-localizations,
-    AS_HELP_STRING([--with-poor-help-localizations],
-        [Use this option to specify which languages have unusable help localizations.
-         Separate multiple languages with space.])
-    [
-                          Usage:     --with-poor-help-localizations="af be-BY"
-    ],
-,)
+[  --with-poor-help-localizations
+                           Use this option to specify which languages have
+                          unusable help localizations. Separate multiple
+                          languages with space.
+
+                          Usage: --with-poor-help-localizations="af ar be-BY ca"
+],,)
 
 AC_ARG_WITH(dict,
-    AS_HELP_STRING([--with-dict],
-        [Use this option to build LibreOffice with dictionary support.
-         ALL dictionaries are always included by default unless overridden with this option.
-         Separate multiple dictionaries with commas.
-         For all dictionaries, use --with-dict=ALL.])
-    [
-                          Usage:     --with-dict=ENGB,ENUS,ITIT
-    ],
-,)
+[  --with-dict             Use this option to build LibreOffice with
+                          dictionary support. ALL dictionaries are always
+                          included by default unless overridden with
+                          this option. Separate multiple dictionaries with
+                          commas. For all dictionaries, use --with-dict=ALL.
+
+                          Usage: --with-dict=ENGB,ENUS,ITIT
+],,)
 
 AC_ARG_WITH(intro-bitmaps,
-    AS_HELP_STRING([--with-intro-bitmaps],
-        [Prefer the specified intro bitmaps over the the default one.
-         Can be more than one (separated by commas), the order means priority of
-         fallback if the first does not exist (in the installed tree).])
-    [
-                          Usage:     --with-intro-bitmaps=/path/my_lo_intro.bmp
-    ],
-,)
+[  --with-intro-bitmaps    Prefer the specified intro bitmaps over the
+                          the default one.  Can be more than one (separated by
+                          commas), the order means priority of fallback if the
+                          first does not exist (in the installed tree).
+
+                          Usage: --with-intro-bitmaps=/path/my_ooo_intro.bmp
+],,)
 
 AC_ARG_WITH(about-bitmaps,
-    AS_HELP_STRING([--with-about-bitmaps],
-        [Similarly to --with-intro-bitmaps, this allows specification of bitmaps for the About box.])
-    [
-                          Usage:     --with-about-bitmaps=/path/my_lo_about.bmp
-    ],
-,)
+[  --with-about-bitmaps    Similarly to --with-intro-bitmaps, this allows
+                          specification of bitmaps for the About box.
+
+                          Usage: --with-about-bitmaps=/path/my_ooo_about.bmp
+],,)
 
 AC_ARG_WITH(vendor,
-    AS_HELP_STRING([--with-vendor],
-        [Set vendor of the build.])
-    [
-                          Usage:     --with-vendor="John the Builder"
-    ],
-,)
+[  --with-vendor           Set vendor of the build.
+
+                          Usage: --with-vendor="John the Builder"
+],,)
 
 AC_ARG_WITH(unix-wrapper,
-    AS_HELP_STRING([--with-unix-wrapper],
-        [Redefines the name of the UNIX wrapper that will be used in the desktop
-         files and in the desktop-integration RPMs.])
-    [
-                          Usage:     --with-unix-wrapper=ooffice
-    ],
-,)
+[  --with-unix-wrapper    Redefines the name of the UNIX wrapper that will be used
+                          in the desktop files and in the desktop-integration RPMs.
+
+                          Usage: --with-unix-wrapper=ooffice
+],,)
 
 AC_ARG_WITH(asm-home,
-    AS_HELP_STRING([--with-asm-home],
-        [For Windows users, please supply the path for the ml.exe assembler.])
-    [
-                          Usage:     --with-asm-home=<path to ml.exe directory>
-    ],
-,)
+[  --with-asm-home         For Windows users, please supply the path for the
+                          ml.exe assembler.
+
+                          Usage: --with-asm-home=<path to ml.exe directory>
+],,)
 
 AC_ARG_WITH(os-version,
-    AS_HELP_STRING([--with-os-version],
-        [For FreeBSD users, use this option option to override the detected OSVERSION.])
-    [
-                          Usage:     --with-os-version=<OSVERSION>
-    ],
-,)
+[  --with-os-version       For FreeBSD users, use this option option to override
+                          the detected OSVERSION.
+
+                          Usage: --with-os-version=<OSVERSION>
+],,)
 
 AC_ARG_WITH(zip-home,
-    AS_HELP_STRING([--with-zip-home],
-        [If you use a non standard zip, for example windows please supply the path for zip.])
-    [
-                          Usage:     --with-zip-home=<path to zip executable>
-    ],
-,)
+[  --with-zip-home         If you use a non standard zip, for example windows
+                          please supply the path for zip
+
+                          Usage: --with-zip-home=<path to zip executable>
+],,)
 
 AC_ARG_WITH(mingwin,
-    AS_HELP_STRING([--with-mingwin],
-        [For Windows users, use the mingwin32 compiler within cygwin environment.])
-    [
-                          Usage:     --with-mingwin=yes
+[  --with-mingwin          For Windows users, use the mingwin32 compiler within
+                          cygwin environment
+
+                          Usage: --with-mingwin=yes
 
                           For !Windows use, use the mingw32 C++ compiler to
-                          (re-)build unowinreg.dll. Specify the MinGW C++
+                          (re-) build unowinreg.dll. Specify the MinGW C++
                           Compilers name.
 
-                          Usage:     --with-mingwin=i586-mingw32msvc-g++
-    ],
-    WITH_MINGWIN=$withval ,
-WITH_MINGWIN=0)
+                          Usage: --with-mingwin=i586-mingw32msvc-g++
+],WITH_MINGWIN=$withval,WITH_MINGWIN=0)
 
 AC_ARG_WITH(build-version,
-    AS_HELP_STRING([--with-build-version],
-        [Allows the builder to add a custom version tag that will appear in the
-         Help/About box for QA purposes.])
-    [
-                          Usage:     --with-build-version="Built by Jim"
-    ],
-    with_build_version=$withval ,
-)
+[  --with-build-version    Allows the builder to add a custom version tag
+                          that will appear in the Help/About box for QA
+                          purposes.
+
+                          Usage: --with-build-version="Built by Jim"
+],with_build_version=$withval)
 
 AC_ARG_WITH(alloc,
-    AS_HELP_STRING([--with-alloc],
-        [Define which allocator to build with (choices are oo, system, tcmalloc, jemalloc).
-         Note that on FreeBSD/NetBSD system==jemalloc]),
-,)
+[  --with-alloc            Define which allocator to build with
+                          (choices are oo, system, tcmalloc, jemalloc)
+
+                          Note that on FreeBSD/NetBSD system==jemalloc
+],,)
 
 AC_ARG_WITH(sun-templates,
-    AS_HELP_STRING([--with-sun-templates],
-        [Integrate Sun template packages.]),
+[
+  --with-sun-templates      Integrate Sun template packages.],
+,)
+
+AC_ARG_WITH(lightproof,
+[
+  --with-lightproof      Integrate Lightproof extension],
+,)
+
+AC_ARG_WITH(numbertext,
+[
+  --with-numbertext      Integrate Numbertext extension],
+,)
+
+AC_ARG_WITH(hunart,
+[
+  --with-hunart      Integrate Hungarian Cross-reference Toolbar extension],
+,)
+
+AC_ARG_WITH(typo,
+[
+  --with-typo      Integrate Typography Toolbar extension],
+,)
+
+AC_ARG_WITH(watch-window,
+[
+  --with-watch-window      Integrate Watch Window extension to Calc],
+,)
+
+AC_ARG_WITH(diagram,
+[
+  --with-diagram      Integrate Diagram extension],
+,)
+
+AC_ARG_WITH(validator,
+[
+  --with-validator      Integrate Validator extension],
+,)
+
+AC_ARG_WITH(barcode,
+[
+  --with-barcode      Integrate Barcode extension],
+,)
+
+AC_ARG_WITH(google-docs,
+[
+  --with-google-docs      Download and integrate Google Documents extension.],
+,)
+
+AC_ARG_WITH(nlpsolver,
+[
+  --with-nlpsolver      Download and integrate NLPSolver extension.],
+,)
+
+AC_ARG_WITH(oooblogger,
+[
+  --with-oooblogger      Download and integrate oooblogger extension.],
 ,)
 
 AC_ARG_WITH(num-cpus,
-    AS_HELP_STRING([--with-num-cpus],
-        [Number of build processes/cpus to use (number of projects that will build at the same time).
-         Multi-process/multi-cpu builds can save a lot of time on multi-cpu machines.
-         Defaults to the number of CPUs on the machine.]),
-,)
+[  --with-num-cpus         Number of build processes/cpus to use (number of
+                          projects that will build at the same time).
+                          Multi-process/multi-cpu builds can save a lot of
+                          time on multi-cpu machines. Defaults to the number
+                          of CPUs on the machine
+],,)
 
 AC_ARG_WITH(max-jobs,
-    AS_HELP_STRING([--with-max-jobs],
-        [Maximum number of jobs per one CPU that will be issued at the same time my dmake.
-         The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
-         Defaults to 1, unless you configure --enable-icecream - then to 10.]),
-,)
+[  --with-max-jobs         Maximum number of jobs per one CPU that will be
+                          issued at the same time my dmake. The real number of
+                          the jobs is affected by the --with-num-cpus too, it
+                          can get up to CPUS*max_jobs. Defaults to 1, unless
+                          you configure --enable-icecream - then to 10.
+],,)
 
-dnl ---------- Deprecated since 2010-11-05 ----------
-
-AC_ARG_WITH(barcode,
-    AS_HELP_STRING([--with-barcode],
-        [Deprecated: use --enable-ext-barcode instead.]),
-    if test -z "$enable_ext_barcode"; then
-        enable_ext_barcode=$with_barcode;
-    fi ,
-)
-
-AC_ARG_WITH(diagram,
-    AS_HELP_STRING([--with-diagram],
-        [Deprecated: use --enable-ext-diagram instead.]),
-    if test -z "$enable_ext_diagram"; then
-        enable_ext_diagram=$with_diagram;
-    fi ,
-)
-
-AC_ARG_WITH(google-docs,
-    AS_HELP_STRING([--with-google-docs],
-        [Deprecated: use --enable-ext-google-docs instead.]),
-    if test -z "$enable_ext_google_docs"; then
-        enable_ext_google_docs=$with_google_docs;
-    fi ,
-)
-
-AC_ARG_WITH(hunart,
-    AS_HELP_STRING([--with-hunart],
-        [Deprecated: use --enable-ext-hunart instead.]),
-    if test -z "$enable_ext_hunart"; then
-        enable_ext_hunart=$with_hunart;
-    fi ,
-)
-
-AC_ARG_WITH(lightproof,
-    AS_HELP_STRING([--with-lightproof],
-        [Deprecated: use --enable-ext-lightproof instead.]),
-    if test -z "$enable_ext_lightproof"; then
-        enable_ext_lightproof=$with_lightproof;
-    fi ,
-)
-
-AC_ARG_WITH(nlpsolver,
-    AS_HELP_STRING([--with-nlpsolver],
-        [Deprecated: use --enable-ext-nlpsolver instead.]),
-    if test -z "$enable_ext_nlpsolver"; then
-        enable_ext_nlpsolver=$with_nlpsolver;
-    fi ,
-)
-
-AC_ARG_WITH(numbertext,
-    AS_HELP_STRING([--with-numbertext],
-        [Deprecated: use --enable-ext-numbertext instead.]),
-    if test -z "$enable_ext_numbertext"; then
-        enable_ext_numbertext=$with_numbertext;
-    fi ,
-)
-
-AC_ARG_WITH(oooblogger,
-    AS_HELP_STRING([--with-oooblogger],
-        [Deprecated: use --enable-ext-oooblogger instead.]),
-    if test -z "$enable_ext_oooblogger"; then
-        enable_ext_oooblogger=$with_oooblogger;
-    fi ,
-)
-
-AC_ARG_WITH(typo,
-    AS_HELP_STRING([--with-typo],
-        [Deprecated: use --enable-ext-typo instead.]),
-    if test -z "$enable_ext_typo"; then
-        enable_ext_typo=$with_typo;
-    fi ,
-)
-
-AC_ARG_WITH(validator,
-    AS_HELP_STRING([--with-validator],
-        [Deprecated: use --enable-ext-validator instead.]),
-    if test -z "$enable_ext_validator"; then
-        enable_ext_validator=$with_validator;
-    fi ,
-)
-
-AC_ARG_WITH(watch-window,
-    AS_HELP_STRING([--with-watch-window],
-        [Deprecated: use --enable-ext-watch-window instead.]),
-    if test -z "$enable_ext_watch_window"; then
-        enable_ext_watch_window=$with_watch_window;
-    fi ,
-)
-
-BUILD_TYPE="LibO"
+BUILD_TYPE="OOo"
 
 dnl ===================================================================
 dnl Message.
 dnl ===================================================================
 echo "********************************************************************"
-echo "*"
-echo "*   Running ${PACKAGE_NAME} build configuration."
-echo "*"
+echo "*                                                                  *"
+echo "*   LibreOffice build configuration.                               *"
+echo "*                                                                  *"
+echo "*   The configure process checks your platform to see whether      *"
+echo "*   you can build LibreOffice on it.                               *"
+echo "*   This process checks all pre-requisites and generates a file    *"
+echo "*   containing the necessary environment variables.                *"
+echo "*   Source this file after configure has ended successfully.       *"
+echo "*                                                                  *"
+echo "*   Any warning that is generated during the configure process     *"
+echo "*   must be taken into account since it can be a reason for        *"
+echo "*   an unsuccessful build of LibreOffice.                          *"
+echo "*                                                                  *"
+echo "********************************************************************"
+echo ""
+echo "********************************************************************"
+echo "*                                                                  *"
+echo "*   Checking the platform pre-requisites.                          *"
+echo "*                                                                  *"
 echo "********************************************************************"
 echo ""
 dnl ===================================================================
@@ -1567,16 +1332,14 @@ dnl The following is a list of supported systems.
 dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
 dnl ===================================================================
-#defaults unless the os test overrides this:
-test_cairo=yes
-test_randr=yes
-
 case "$build_os" in
     solaris*)
         test_gtk=yes
+        test_cairo=yes
         build_gstreamer=yes
         test_kde=yes
         test_cups=yes
+        test_randr=yes
         test_freetype=yes
         _os=SunOS
         AC_PATH_PROG( GNUTAR, gtar,,$PATH:/usr/sfw/bin)
@@ -1606,29 +1369,30 @@ case "$build_os" in
         ;;
     linux-gnu*|k*bsd*-gnu*)
         test_gtk=yes
+        test_cairo=yes
         build_gstreamer=yes
         test_kde=yes
         test_kde4=yes
         test_cups=yes
+        test_randr=yes
         test_freetype=yes
         test_unix_quickstarter=yes
         _os=Linux
         ;;
     gnu)
-        test_randr=no
-        test_cairo=no
         test_cups=no
         _os=GNU
         ;;
     cygwin*) # Windows
         test_cups=no
-        test_randr=no
+        test_cairo=yes
         test_freetype=no
         _os=WINNT
         ;;
     darwin*) # Mac OS X
         test_cups=yes
         test_gtk=yes
+        test_cairo=yes
         test_randr=no
         test_freetype=no
         _os=Darwin
@@ -1639,19 +1403,21 @@ case "$build_os" in
       fi
         ;;
     os2*)
+        test_x=no
         test_cups=no
         test_randr=no
         test_gtk=no
-        test_cairo=no
         test_freetype=no
         _os=OS2
         ;;
     freebsd*)
         test_gtk=yes
+        test_cairo=yes
         build_gstreamer=yes
         test_kde=yes
         test_kde4=yes
         test_cups=yes
+        test_randr=yes
         test_freetype=yes
         AC_MSG_CHECKING([the FreeBSD operating system release])
         if test -n "$with_os_version"; then
@@ -1676,16 +1442,17 @@ case "$build_os" in
         ;;
     osf)
         test_cups=no
-        test_cairo=no
         test_randr=no
         _os=OSF1
         ;;
     *netbsd*)
         test_gtk=yes
+        test_cairo=yes
         build_gstreamer=yes
         test_kde=yes
         test_kde4=yes
         test_cups=yes
+        test_randr=yes
         test_freetype=yes
         PTHREAD_CFLAGS="-pthread"
         PTHREAD_LIBS="-pthread -lpthread"
@@ -1694,16 +1461,18 @@ case "$build_os" in
     aix*)
         test_cups=no
         test_randr=no
-        test_cairo=no
         test_freetype=yes
         PTHREAD_LIBS=-pthread
         _os=AIX
         ;;
     openbsd*)
+        test_x=yes
         test_gtk=yes
+        build_cairo=yes
         test_kde=yes
         test_cups=yes
         test_freetype=yes
+        test_randr=yes
         PTHREAD_CFLAGS="-pthread -D_THREAD_SAFE"
         PTHREAD_LIBS="-pthread"
         _os=OpenBSD
@@ -1737,17 +1506,17 @@ fi
 
 if test "$_os" = "WINNT"; then
    dnl ===================================================================
-   dnl Set the CL_X64 variable.
+   dnl Set the VC_STANDARD variable.
    dnl ===================================================================
-   AC_MSG_CHECKING([whether to use the Microsoft C/C++ x64 compiler])
-   if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
-      CL_X64=""
+   AC_MSG_CHECKING([whether to use the standard non-optimizing compiler])
+   if test "$enable_cl_standard" = "" -o "$enable_cl_standard" = "no"; then
+      VC_STANDARD=""
       AC_MSG_RESULT([no])
    else
-      CL_X64="TRUE"
+      VC_STANDARD="TRUE"
       AC_MSG_RESULT([yes])
    fi
-   AC_SUBST(CL_X64)
+   AC_SUBST(VC_STANDARD)
 fi
 
 dnl ===================================================================
@@ -2036,7 +1805,7 @@ AC_SUBST(WITH_MINGWIN)
 dnl ===================================================================
 dnl Extra check for Windows. cygwin builds need gcc to build dmake
 dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
-dnl build LibO.
+dnl build OOo.
 dnl ===================================================================
 if test "$_os" = "WINNT" ; then
    AC_MSG_CHECKING([for cygwin gcc/g++])
@@ -2263,7 +2032,7 @@ if test "$_os" = "SunOS"; then
       COMPATH=`echo $_cc | $SED -n "s/\/bin\/cc//p"`
       AC_MSG_CHECKING([the SunStudio C/C++ compiler version])
       dnl cc -V outputs to standard error!!!!
-      _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | $SED -e 's/.* C //'`
+      _sunstudio_string=`$CC -V 2>&1 | grep '^cc' | sed -e 's/.* C //'`
       _sunstudio_version=`echo $_sunstudio_string | $AWK '{ print $1 }'`
       _sunstudio_major=`echo $_sunstudio_version | $AWK -F. '{ print $1 }'`
       if test "$_sunstudio_major" != "5"; then
@@ -2368,17 +2137,14 @@ dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
     if test "$WITH_MINGWIN" != "yes"; then
-        AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
+        AC_MSG_CHECKING([for friendly registry keys])
+        # VS.Net 2003, VS.Net 2005
+        # (is that just a misleading comment, or does this really apply
+        # only to .NET 2003 and MSVS 2005? which we don't support any more?)
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`;
-            if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
-                if test -x "$vctest/bin/cl.exe"; then
-                    with_cl_home=$vctest;
-                fi
-            else
-                if test -x "$vctest/bin/x86_amd64/cl.exe"; then
-                    with_cl_home=$vctest;
-                fi
+            if test -x "$vctest/bin/cl.exe"; then
+                with_cl_home=$vctest;
             fi
         else
             with_cl_home=`cygpath -u "$with_cl_home"`
@@ -2424,32 +2190,18 @@ if test "$_os" = "WINNT"; then
         PATH="$MSPDB_PATH:$PATH"
 
         AC_MSG_CHECKING([the Microsoft C/C++ Compiler])
-        if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
-            if test -x "$with_cl_home/bin/cl.exe"; then
-                CC="$with_cl_home/bin/cl.exe"
-            fi
-		else
-            if test -x "$with_cl_home/bin/x86_amd64/cl.exe"; then
-                CC="$with_cl_home/bin/x86_amd64/cl.exe"
-            fi
-		fi
-        if test -z "$CC"; then
-            AC_PATH_PROG(CC, cl.exe)
-        fi
-
+           if test -x "$with_cl_home/bin/cl.exe"; then
+               CC="$with_cl_home/bin/cl.exe"
+           else
+               AC_PATH_PROG(CC, cl.exe)
+           fi
           if test -e "$CC"; then
             # This gives us a posix path with 8.3 filename restrictions
             CC=`cygpath -d "$CC"`
             CC=`cygpath -u "$CC"`
             # Remove /cl.exe from CC case insensitive
             AC_MSG_RESULT([found ($CC)])
-            if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
-                COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
-            else
-                if test -n "$with_cl_home"; then
-                    COMPATH=`echo $with_cl_home`
-                fi
-            fi
+            COMPATH=`echo $CC | $SED 's@\/[[Bb]][[Ii]][[Nn]]\/[[cC]][[lL]]\.[[eE]][[xX]][[eE]]@@'`
             export INCLUDE=`cygpath -d "$COMPATH/Include"`
             dnl  Check which Microsoft C/C++ compiler is found
             AC_MSG_CHECKING([the Version of Microsoft C/C++ Compiler])
@@ -2848,7 +2600,7 @@ _ACEOF
   AC_MSG_CHECKING([whether to use dynamic libgcc])
   if test -e "$MINGW_CLIB_DIR/libgcc_s.a"; then
     AC_MSG_CHECKING([dynamic libgcc name])
-    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | $SED -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | $SED -e 's@_@?@g'`
+    MINGW_GCCDLL_pattern=`nm $MINGW_CLIB_DIR/libgcc_s.a | sed -ne 's@.* _libgcc\(.*\)_dll_iname@libgcc\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GCCDLL=`cd $COMPATH/bin && ls $MINGW_GCCDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GCCDLL"; then
         MINGW_SHARED_GCCLIB=YES
@@ -2865,7 +2617,7 @@ _ACEOF
   AC_MSG_CHECKING([whether to use dynamic libstdc++])
   if test -e "$MINGW_CLIB_DIR/libstdc++_s.a" ; then
     AC_MSG_CHECKING([dynamic libstdc++ name])
-    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | $SED -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | $SED -e 's@_@?@g'`
+    MINGW_GXXDLL_pattern=`nm $MINGW_CLIB_DIR/libstdc++_s.a | sed -ne 's@.* _libstdc__\(.*\)_dll_iname@libstdc++\1.dll@p' | uniq | sed -e 's@_@?@g'`
     MINGW_GXXDLL=`cd $COMPATH/bin && ls $MINGW_GXXDLL_pattern 2>/dev/null`
     if test -n "$MINGW_GXXDLL"; then
         MINGW_SHARED_GXXLIB=YES
@@ -3225,7 +2977,6 @@ fi
 dnl ===================================================================
 dnl system stl sanity tests
 dnl ===================================================================
-HAVE_GCC_VISIBILITY_BROKEN=
 if test "$USE_SYSTEM_STL" = "YES"; then
    AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
    AC_LANG_PUSH([C++])
@@ -3265,9 +3016,9 @@ using namespace std;
       gccvisok=no)
       AC_MSG_RESULT([$gccvisok])
       if test "$gccvisok" = "no"; then
-         AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe, disabling that.])
-         echo "Your gcc is not -fvisibility-inlines-hidden safe, disabling that." >> warn
-         HAVE_GCC_VISIBILITY_BROKEN="TRUE"
+         AC_MSG_WARN([Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility])
+         echo "Your gcc is not -fvisibility-inlines-hidden safe. Disabling visibility" >> warn
+         unset HAVE_GCC_VISIBILITY_FEATURE
       fi
 
       LDFLAGS=$sharedlink_ldflags_save
@@ -3314,7 +3065,6 @@ _ACEOF
 fi
 
 AC_SUBST(HAVE_GCC_VISIBILITY_FEATURE)
-AC_SUBST(HAVE_GCC_VISIBILITY_BROKEN)
 
 dnl ===================================================================
 dnl allocator
@@ -3424,9 +3174,9 @@ if test "$SOLAR_JAVA" != ""; then
       JAVAINTERPRETER=`cygpath -d "$JAVAINTERPRETER"`
       JAVAINTERPRETER=`cygpath -u "$JAVAINTERPRETER"`
    elif test "$_os" = "Darwin"; then
-      dnl HACK:  There currently is only a 32 bit version of LibO for Mac OS X,
+      dnl HACK:  There currently is only a 32 bit version of OOo for Mac OS X,
       dnl and Tiger java complains about -d32 while Snow Leopard java needs it
-      dnl to run in 32 bit mode and be able to load LibO jnilibs:
+      dnl to run in 32 bit mode and be able to load OOo jnilibs:
       AC_MSG_CHECKING([whether to pass -d32 to Java interpreter])
       if "$JAVAINTERPRETER" -d32 >&5 2>&5; then
          AC_MSG_RESULT([yes])
@@ -3470,9 +3220,9 @@ if test "$SOLAR_JAVA" != ""; then
         _gij_version=`$JAVAINTERPRETER --version | grep GNU | $SED -e 's@^[[^0-9]]*@@' -e 's@ .*@@' -e 's@,.*@@'`;
         _gij_longver=`echo $_gij_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-      elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | grep -c "BEA"` -gt 0; then
+      elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "BEA"` -gt 0; then
          AC_MSG_ERROR([No valid check available. Please check the block for your desired java in configure.in])
-      elif test `$JAVAINTERPRETER -version 2>&1 | $AWK '{ print }' | grep -c "IBM"` -gt 0; then
+      elif test `$JAVAINTERPRETER -version 2>&1 | awk '{ print }' | grep -c "IBM"` -gt 0; then
         JDK=ibm
 
         dnl IBM JDK specific tests
@@ -4006,7 +3756,7 @@ rpm - RedHat software distribution
 setld - Tru64 (setld) software distribution
 native - "Native" software distribution for the platform
 portable - Portable software distribution
-LibO additionally supports:
+OOo additionally supports:
 archive - .tar.gz or .zip
 dmg - Mac OS X .dmg
 installed - installation tree
@@ -4064,7 +3814,7 @@ msi - Windows .msi
       echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
           if test "$EPM" != "no" && test "$EPM" != "internal"; then
            if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
-               AC_MSG_CHECKING([whether epm is patched for LibOs needs])
+               AC_MSG_CHECKING([whether epm is patched for OOos needs])
                if grep "Patched for LibreOffice" $EPM >/dev/null 2>/dev/null; then
                   AC_MSG_RESULT([yes])
                else
@@ -4511,7 +4261,7 @@ fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
 AC_SUBST(PYTHON_LIBS)
-HOME=`echo $HOME | $SED 's:\\\\:/:g'`
+HOME=`echo $HOME | sed 's:\\\\:/:g'`
 AC_SUBST(HOME)
 
 dnl ===================================================================
@@ -4619,7 +4369,7 @@ AC_SUBST(LUCENE_CORE_JAR)
 AC_SUBST(LUCENE_ANALYZERS_JAR)
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
-if test -n "$enable_ext_mysql_connector" -a "$enable_ext_mysql_connector" != "no"; then
+if test -n "$enable_mysql_connector" -a "$enable_mysql_connector" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_MYSQLC=YES
   AC_MSG_CHECKING([for mysqlc module])
@@ -4659,7 +4409,7 @@ if test -n "$with_system_mysql" -o -n "$with_system_libs" && \
     AC_MSG_CHECKING([for MySQL Client library])
     MYSQL_INC=`$MYSQLCONFIG --include`
     MYSQL_LIB=`$MYSQLCONFIG --libs`
-    MYSQL_DEFINES=`$MYSQLCONFIG --cflags | $SED -e s,$MYSQL_INC,,`
+    MYSQL_DEFINES=`$MYSQLCONFIG --cflags | sed -e s,$MYSQL_INC,,`
     AC_MSG_RESULT([includes $MYSQL_INC, libraries $MYSQL_LIB])
 else
     SYSTEM_MYSQL=NO
@@ -4839,7 +4589,7 @@ if test -n "$with_system_saxon" -o -n "$with_system_libs" && \
         fi
 
 dnl Saxon comes in two practically available versions, the out-of-date saxonb which
-dnl supports the java extensions that LibO uses, and the up-to-date saxon he
+dnl supports the java extensions that OOo uses, and the up-to-date saxon he
 dnl "home edition" version, which is crippled to not support those java extensions.
 dnl And as an aside the he one also needs to be tweaked to include
 dnl a META-INF/services to broadcast that it supports the jaxp transform factory
@@ -5645,9 +5395,8 @@ AC_MSG_CHECKING([whether to enable RandR support])
 if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" = "TRUE" \) ; then
    if test -z "$enable_randr_link" -o "$enable_randr_link" = "no"; then
       XRANDR_DLOPEN="TRUE"
-      AC_MSG_RESULT([configured to dlopen libXrandr at runtime])
+      AC_MSG_RESULT([resorting to dlopen libXrandr at runtime])
    else
-      AC_MSG_RESULT([yes])
       XRANDR_DLOPEN="FALSE"
       PKG_CHECK_MODULES(XRANDR, xrandr >= 1.2, ENABLE_RANDR="TRUE", ENABLE_RANDR="")
       if test "$ENABLE_RANDR" != "TRUE"; then
@@ -5658,6 +5407,7 @@ if test "$test_randr" = "yes" -a \( "$enable_randr" = "yes" -o "$enable_randr" =
               [ AC_MSG_ERROR(libXrandr not found or functional) ], [])
          XRANDR_LIBS="-lXrandr "
          ENABLE_RANDR="TRUE"
+         AC_MSG_RESULT([enabling RandR support])
       fi
    fi
 else
@@ -6569,44 +6319,40 @@ fi
 
 AC_SUBST(ENABLE_OPENGL)
 
-# presenter extra ui extension?
 AC_MSG_CHECKING([whether to build extra presenter ui])
-AS_IF([test "x$enable_ext_presenter_ui" = "xyes"], [
+if test -n "$enable_presenter_extra_ui" -a "$enable_presenter_extra_ui" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_EXTRA_UI=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_EXTRA_UI=NO
-])
+fi
 AC_SUBST(ENABLE_PRESENTER_EXTRA_UI)
 
-# presenter minimizer extension?
 AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
-AS_IF([test "x$enable_ext_presenter_minimizer" = "xyes"], [
+if test -n "$enable_minimizer" -a "$enable_minimizer" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_MINIMIZER=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_MINIMIZER=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MINIMIZER"
-])
+fi
 AC_SUBST(ENABLE_MINIMIZER)
 
-# presenter console extension?
-AC_MSG_CHECKING([whether to build the Presenter Console extension])
-AS_IF([test "x$enable_ext_presenter_console" = "xyes"], [
+AC_MSG_CHECKING([whether to build the Presenter Screen extension])
+if test -n "$enable_presenter_console" -a "$enable_presenter_screen" != "no"; then
    AC_MSG_RESULT([yes])
    ENABLE_PRESENTER_SCREEN=YES
-],[
+else
    AC_MSG_RESULT([no])
    ENABLE_PRESENTER_SCREEN=NO
    SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PRESENTER_SCREEN"
-])
+fi
 AC_SUBST(ENABLE_PRESENTER_SCREEN)
 
-# pdf import extension?
 AC_MSG_CHECKING([whether to build the PDF Import extension])
-AS_IF([test "x$enable_ext_pdfimport" = "xyes"], [
+if test -n "$enable_pdfimport" -a "$enable_pdfimport" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_PDFIMPORT=YES
 
@@ -6623,23 +6369,22 @@ AS_IF([test "x$enable_ext_pdfimport" = "xyes"], [
       AC_MSG_RESULT([internal])
       SYSTEM_POPPLER=NO
       BUILD_TYPE="$BUILD_TYPE XPDF"
-      AC_MSG_CHECKING([for internal xpdf module])
+      AC_MSG_CHECKING([for xpdf module])
       if test -d ./xpdf; then
-        AC_MSG_RESULT([OK])
+       AC_MSG_RESULT([OK])
       else
-        AC_MSG_ERROR([not existing! (Did you get the -extensions tarball?)])
+        AC_MSG_ERROR([not existing. get it (did you get the -extensions tarball?)])
       fi
   fi
-],[
-  AC_MSG_RESULT([no])
-  ENABLE_PDFIMPORT=NO
-  SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
-])
+else
+   AC_MSG_RESULT([no])
+   ENABLE_PDFIMPORT=NO
+   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_PDFIMPORT"
+fi
 AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
-
 
 if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$ENABLE_PDFIMPORT" = "YES"; then
   AC_MSG_CHECKING([for sdext module])
@@ -6652,7 +6397,7 @@ if test "$ENABLE_PRESENTER_SCREEN" = "YES" -o "$ENABLE_MINIMIZER" = "YES" -o "$E
 fi
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
-AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
+if test -n "$enable_wiki_publisher" -a "$enable_wiki_publisher" != "no" && test  "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   AC_MSG_CHECKING([for swext module])
   if test -d ./swext; then
@@ -6662,14 +6407,11 @@ AS_IF([test "x$enable_ext_wiki_publisher" = "xyes"], [
   fi
   ENABLE_MEDIAWIKI=YES
   BUILD_TYPE="$BUILD_TYPE SWEXT"
-  if test  "x$WITH_JAVA" = "xno"; then
-    AC_MSG_ERROR([wiki publisher requires Java! Enable java if you want to build it.])
-  fi
-],[
+else
   AC_MSG_RESULT([no])
   ENABLE_MEDIAWIKI=NO
   SCPDEFS="$SCPDEFS -DWITHOUT_EXTENSION_MEDIAWIKI"
-])
+fi
 AC_SUBST(ENABLE_MEDIAWIKI)
 
 if test "$ENABLE_MEDIAWIKI" = "YES"; then
@@ -6692,7 +6434,7 @@ AC_SUBST(SYSTEM_SERVLETAPI)
 AC_SUBST(SERVLETAPI_JAR)
 
 AC_MSG_CHECKING([whether to build the Report Builder extension])
-if test -n "$enable_ext_report_builder" -a "$enable_ext_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
+if test -n "$enable_report_builder" -a "$enable_report_builder" != "no" && test "$WITH_JAVA" != "no"; then
   AC_MSG_RESULT([yes])
   ENABLE_REPORTBUILDER=YES
   AC_MSG_CHECKING([for reportbuilder module])
@@ -7331,18 +7073,18 @@ dnl ===================================================================
 dnl Test whether to include Lightproof extensions
 dnl ===================================================================
 AC_MSG_CHECKING([for Lightproof extensions integration (only supported languages displayed)])
-if test "z$enable_ext_lightproof" = "z" -o "z$enable_ext_lightproof" = "zno" ; then
+if test "z$with_lightproof" = "z" -o "z$with_lightproof" = "zno" ; then
     LIGHTPROOF_LANG=""
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_LIGHTPROOF"
     lightproof_supported_langs="hu"
-    if test "z$enable_ext_lightproof" = "zyes" ; then
+    if test "z$with_lightproof" = "zyes" ; then
         wanted_lightproof="$lightproof_supported_langs"
     else
     # check whether the langs are supported by Lightproof
     wanted_lightproof=
-    for lang in $enable_ext_lightproof ; do
+    for lang in $with_lightproof ; do
         if test -n "`echo $lightproof_supported_langs | grep "$lang"`" ; then
             wanted_lightproof="$wanted_lightproof $lang"
         fi
@@ -7363,7 +7105,7 @@ dnl ===================================================================
 dnl Test whether to include Watch Window extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Watch Window extension integration])
-if test "z$enable_ext_watch_window" = "z" -o "z$enable_ext_watch_window" = "zno" ; then
+if test "z$with_watch_window" = "z" -o "z$with_watch_window" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7375,7 +7117,7 @@ dnl ===================================================================
 dnl Test whether to include Diagram extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Diagram extension integration])
-if test "z$enable_ext_diagram" = "z" -o "z$enable_ext_diagram" = "zno" ; then
+if test "z$with_diagram" = "z" -o "z$with_diagram" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7387,7 +7129,7 @@ dnl ===================================================================
 dnl Test whether to include Validator extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Validator extension integration])
-if test "z$enable_ext_validator" = "z" -o "z$enable_ext_validator" = "zno" ; then
+if test "z$with_validator" = "z" -o "z$with_validator" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7399,7 +7141,7 @@ dnl ===================================================================
 dnl Test whether to include Barcode extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Barcode extension integration])
-if test "z$enable_ext_barcode" = "z" -o "z$enable_ext_barcode" = "zno" ; then
+if test "z$with_barcode" = "z" -o "z$with_barcode" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7423,7 +7165,7 @@ dnl ===================================================================
 dnl Test whether to include Numbertext extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Numbertext extension integration])
-if test "z$enable_ext_numbertext" = "z" -o "z$enable_ext_numbertext" = "zno" ; then
+if test "z$with_numbertext" = "z" -o "z$with_numbertext" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7435,7 +7177,7 @@ dnl ===================================================================
 dnl Test whether to include Hungarian Cross-reference Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Hungarian Cross-reference Toolbar extension integration])
-if test "z$enable_ext_hunart" = "z" -o "z$enable_ext_hunart" = "zno" ; then
+if test "z$with_hunart" = "z" -o "z$with_hunart" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7447,7 +7189,7 @@ dnl ===================================================================
 dnl Test whether to include Typography Toolbar extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Typography Toolbar extension integration])
-if test "z$enable_ext_typo" = "z" -o "z$enable_ext_typo" = "zno" ; then
+if test "z$with_typo" = "z" -o "z$with_typo" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7459,7 +7201,7 @@ dnl ===================================================================
 dnl Test whether to include Google Docs extension
 dnl ===================================================================
 AC_MSG_CHECKING([for Google Docs extension integration])
-if test "z$enable_ext_google_docs" = "z" -o "z$enable_ext_google_docs" = "zno" ; then
+if test "z$with_google_docs" = "z" -o "z$with_google_docs" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7470,7 +7212,7 @@ dnl ===================================================================
 dnl Test whether to include NLPSolver extension
 dnl ===================================================================
 AC_MSG_CHECKING([for NLPSolver extension integration])
-if test "z$enable_ext_nlpsolver" = "z" -o "z$enable_ext_nlpsolver" = "zno" ; then
+if test "z$with_nlpsolver" = "z" -o "z$with_nlpsolver" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7494,7 +7236,7 @@ dnl ===================================================================
 dnl Test whether to include oooblogger extension
 dnl ===================================================================
 AC_MSG_CHECKING([for oooblogger extension integration])
-if test "z$enable_ext_oooblogger" = "z" -o "z$enable_ext_oooblogger" = "zno" ; then
+if test "z$with_oooblogger" = "z" -o "z$with_oooblogger" = "zno" ; then
   AC_MSG_RESULT([no])
 else
   AC_MSG_RESULT([yes])
@@ -7638,7 +7380,7 @@ AC_SUBST(WITH_EXTRA_FONT)
 AC_SUBST(SCPDEFS)
 
 if test "$_os" = "WINNT"; then
-  AC_MSG_CHECKING([whether to enable ActiveX embedding of LibO components])
+  AC_MSG_CHECKING([whether to enable ActiveX embedding of OOo components])
   if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then
     ENABLE_ACTIVEX_COMPONENT="TRUE"
     AC_MSG_RESULT([yes])
@@ -7733,7 +7475,7 @@ else
   while test -h "$ANT"; do
      a_cwd=`pwd`
      a_basename=`basename "$ANT"`
-     a_script=`ls -l "$ANT" | $SED "s/.*${a_basename} -> //g"`
+     a_script=`ls -l "$ANT" | sed "s/.*${a_basename} -> //g"`
      cd "`dirname "$ANT"`"
      cd "`dirname "$a_script"`"
      ANT="`pwd`"/"`basename "$a_script"`"
@@ -8061,7 +7803,7 @@ AC_SUBST(ENABLE_ZENITY)
 
 
 dnl ===================================================================
-dnl Hook up LibOs nodep environmental variable to automake's equivalent
+dnl Hook up OOos nodep environmental variable to automake's equivalent
 dnl --enable-dependency-tracking configure option
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable dependency tracking])

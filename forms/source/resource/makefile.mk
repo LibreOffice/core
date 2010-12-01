@@ -42,9 +42,7 @@ SRC1FILES= \
     strings.src 	\
     xforms.src
 
-EXCEPTIONSFILES=	$(SLO)$/frm_resource.obj
-
-SLOFILES=		$(EXCEPTIONSFILES)
+SLOFILES=	$(SLO)$/frm_resource.obj \
 
 # --- Targets ----------------------------------
 

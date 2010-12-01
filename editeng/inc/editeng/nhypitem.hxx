@@ -34,6 +34,12 @@
 #include <editeng/editengdllapi.h>
 
 // class SvxNoHyphenItem -------------------------------------------------
+
+/*  [Beschreibung]
+
+    PB: ???
+*/
+
 class EDITENG_DLLPUBLIC SvxNoHyphenItem : public SfxBoolItem
 {
 public:

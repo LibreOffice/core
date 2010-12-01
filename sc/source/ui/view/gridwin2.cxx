@@ -471,7 +471,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
     const ScDPLabelData& rLabelData = *pDPData->maDPParam.maLabelArray[pDPData->mnDim];
 
     mpDPFieldPopup.reset(new ScDPFieldPopupWindow(this, pViewData->GetDocument()));
-    mpDPFieldPopup->setName(OUString(RTL_CONSTASCII_USTRINGPARAM("DataPilot field member popup")));
+    mpDPFieldPopup->setName(OUString::createFromAscii("DataPilot field member popup"));
     mpDPFieldPopup->setExtendedData(pDPData.release());
     mpDPFieldPopup->setOKAction(new DPFieldPopupOKAction(this));
     {
@@ -592,6 +592,22 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
 
     ScDBDocFunc aFunc(*pViewData->GetDocShell());
     aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
+}
+
+void ScGridWindow::UpdateVisibleRange()
+{
+    SCCOL nPosX = pViewData->GetPosX(eHWhich);
+    SCROW nPosY = pViewData->GetPosY(eVWhich);
+    SCCOL nXRight = nPosX + pViewData->VisibleCellsX(eHWhich);
+    if (nXRight > MAXCOL) nXRight = MAXCOL;
+    SCROW nYBottom = nPosY + pViewData->VisibleCellsY(eVWhich);
+    if (nYBottom > MAXROW) nYBottom = MAXROW;
+
+    // Store the current visible range.
+    maVisibleRange.mnCol1 = nPosX;
+    maVisibleRange.mnCol2 = nXRight;
+    maVisibleRange.mnRow1 = nPosY;
+    maVisibleRange.mnRow2 = nYBottom;
 }
 
 void ScGridWindow::DPMouseMove( const MouseEvent& rMEvt )

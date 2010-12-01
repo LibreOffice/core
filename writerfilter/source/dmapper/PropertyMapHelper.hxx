@@ -29,7 +29,7 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 #include "PropertyMap.hxx"
 #include <com/sun/star/beans/PropertyValues.hpp>
 

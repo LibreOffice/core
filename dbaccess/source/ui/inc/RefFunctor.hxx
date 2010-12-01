@@ -47,6 +47,10 @@ namespace dbaui
         {
             m_aFunction(_aType.get());
         }
+//      inline void operator()(const ::rtl::Reference<T>& _aType)
+//      {
+//          m_aFunction(_aType.get());
+//      }
     };
 // -----------------------------------------------------------------------------
 } // namespace dbaui

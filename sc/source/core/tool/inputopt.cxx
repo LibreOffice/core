@@ -155,7 +155,7 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 }
 
 ScInputCfg::ScInputCfg() :
-    ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_INPUT )) )
+    ConfigItem( OUString::createFromAscii( CFGPATH_INPUT ) )
 {
     sal_Int32 nIntVal = 0;
 

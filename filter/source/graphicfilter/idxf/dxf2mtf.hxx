@@ -65,6 +65,8 @@ private:
 
     ULONG CountEntities(const DXFEntities & rEntities);
 
+    void MayCallback(ULONG nMainEntitiesProcessed);
+
     Color ConvertColor(BYTE nColor);
 
     long GetEntityColor(const DXFBasicEntity & rE);
@@ -109,7 +111,8 @@ private:
     void DrawHatchEntity( const DXFHatchEntity & rE, const DXFTransform & rTransform );
 
     void DrawEntities(const DXFEntities & rEntities,
-                      const DXFTransform & rTransform);
+                      const DXFTransform & rTransform,
+                      BOOL bTopEntities);
 
 public:
 

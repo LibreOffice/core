@@ -75,6 +75,7 @@ namespace
 {
     static ::comphelper::ItemPropertyMapType aDataPointPropertyMap(
         ::comphelper::MakeItemPropertyMap
+//        IPM_MAP_ENTRY( CHATTR_PIE_SEGMENT_OFFSET, "Offset", 0 )
         IPM_MAP_ENTRY( SCHATTR_STYLE_SHAPE, "Geometry3D", 0 )
         );
 

@@ -57,25 +57,13 @@ namespace css = ::com::sun::star;
 static char const xmlNamespace[] =
     "http://openoffice.org/extensions/description/2006";
 
-bool
-lcl_versionIsNot(dp_misc::Order i_eOrder, ::rtl::OUString const& i_rVersion)
-{
-    ::rtl::OUString aVersion(
+bool satisfiesMinimalVersion(::rtl::OUString const & version) {
+    ::rtl::OUString v(
         RTL_CONSTASCII_USTRINGPARAM(
             "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
             ":Version:OOOPackageVersion}"));
-    ::rtl::Bootstrap::expandMacros(aVersion);
-    return ::dp_misc::compareVersions(aVersion, i_rVersion) != i_eOrder;
-}
-
-bool satisfiesMinimalVersion(::rtl::OUString const& i_rVersion)
-{
-    return lcl_versionIsNot(dp_misc::LESS, i_rVersion);
-}
-
-bool satisfiesMaximalVersion(::rtl::OUString const& i_rVersion)
-{
-    return lcl_versionIsNot(dp_misc::GREATER, i_rVersion);
+    ::rtl::Bootstrap::expandMacros(v);
+    return ::dp_misc::compareVersions(v, version) != ::dp_misc::LESS;
 }
 
 }
@@ -93,14 +81,14 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
         unsatisfied(n);
     ::sal_Int32 unsat = 0;
     for (::sal_Int32 i = 0; i < n; ++i) {
-        static rtl::OUString const minimalVersion(
-                RTL_CONSTASCII_USTRINGPARAM("OpenOffice.org-minimal-version"));
+        static char const minimalVersion[] = "OpenOffice.org-minimal-version";
         css::uno::Reference< css::xml::dom::XElement > e(
             deps->item(i), css::uno::UNO_QUERY_THROW);
         bool sat = false;
         if (e->getNamespaceURI().equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM(xmlNamespace))
-            && (e->getTagName() == minimalVersion))
+            && e->getTagName().equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM(minimalVersion)))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttribute(
@@ -111,18 +99,28 @@ check(::dp_misc::DescriptionInfoset const & infoset) {
                        RTL_CONSTASCII_STRINGPARAM(
                            "OpenOffice.org-maximal-version")))
         {
-            sat = satisfiesMaximalVersion(
+            ::rtl::OUString v(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version")
+                    ":Version:OOOBaseVersion}"));
+            ::rtl::Bootstrap::expandMacros(v);
+            sat =
+                ::dp_misc::compareVersions(
+                    v,
                     e->getAttribute(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))));
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("value"))))
+                != ::dp_misc::GREATER;
         } else if (e->hasAttributeNS(
                        ::rtl::OUString(
                            RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                        minimalVersion))
+                       ::rtl::OUString(
+                           RTL_CONSTASCII_USTRINGPARAM(minimalVersion))))
         {
             sat = satisfiesMinimalVersion(
                 e->getAttributeNS(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(xmlNamespace)),
-                    minimalVersion));
+                    ::rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(minimalVersion))));
         }
         if (!sat) {
             unsatisfied[unsat++] = e;

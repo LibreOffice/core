@@ -211,7 +211,7 @@ void xforms_countNonEmptyFunction(xmlXPathParserContextPtr ctxt, int nargs)
     for (int i = 0; i <  xmlXPathNodeSetGetLength(pNodeSet); i++)
     {
         aString = xmlXPathCastNodeToString(xmlXPathNodeSetItem(pNodeSet, i));
-        if (*aString != 0) nNotEmpty++;
+        if (strlen((char*)aString) > 0) nNotEmpty++;
     }
     xmlXPathReturnNumber(ctxt, nNotEmpty);
 }
@@ -311,10 +311,10 @@ static sal_Bool parseDateTime(const ::rtl::OUString& aString, DateTime& aDateTim
     sal_Int32 nDateLength = 10;
     sal_Int32 nTimeLength = 8;
 
-    ::rtl::OUString aDateTimeSep(RTL_CONSTASCII_USTRINGPARAM("T"));
-    ::rtl::OUString aDateSep(RTL_CONSTASCII_USTRINGPARAM("-"));
-    ::rtl::OUString aTimeSep(RTL_CONSTASCII_USTRINGPARAM(":"));
-    ::rtl::OUString aUTCString(RTL_CONSTASCII_USTRINGPARAM("Z"));
+    ::rtl::OUString aDateTimeSep = ::rtl::OUString::createFromAscii("T");
+    ::rtl::OUString aDateSep = ::rtl::OUString::createFromAscii("-");
+    ::rtl::OUString aTimeSep = ::rtl::OUString::createFromAscii(":");
+    ::rtl::OUString aUTCString = ::rtl::OUString::createFromAscii("Z");
 
     ::rtl::OUString aDateString = aDateTimeString.copy(0, nDateLength);
     ::rtl::OUString aTimeString = aDateTimeString.copy(nDateLength+1, nTimeLength);

@@ -31,7 +31,6 @@
 
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/noncopyable.hpp>
 
 class SfxObjectShell;
 
@@ -90,7 +89,7 @@ class SvStream;
 class ScDocument;
 
 /** This class contains static helper methods for the Excel import and export filters. */
-class XclTools : boost::noncopyable
+class XclTools : ScfNoInstance
 {
 public:
     // GUID's -----------------------------------------------------------------
@@ -251,11 +250,6 @@ private:
     static const String maCFStyleNamePrefix2;       /// Prefix for cond. formatting style names from OOX filter.
     static const ::rtl::OUString maSbMacroPrefix;   /// Prefix for StarBasic macros.
     static const ::rtl::OUString maSbMacroSuffix;   /// Suffix for StarBasic macros.
-
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static items. To enforce this, the default constructor
-        is made private */
-    XclTools();
 };
 
 // read/write colors ----------------------------------------------------------

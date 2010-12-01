@@ -76,7 +76,7 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
     throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME));
+    return OUString::createFromAscii(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
 // ------------------------------------------------------------------------
@@ -193,7 +193,7 @@ void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipb
 Sequence< OUString > SAL_CALL GenericClipboard_getSupportedServiceNames()
 {
     Sequence< OUString > aRet(1);
-    aRet[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.GenericClipboard"));
+    aRet[0] = OUString::createFromAscii("com.sun.star.datatransfer.clipboard.GenericClipboard");
     return aRet;
 }
 

@@ -46,7 +46,13 @@
 #include <memory>
 #include <map>
 #include <set>
+
+// Wang Xu Ming -- 2009-8-17
+// DataPilot Migration - Cache&&Performance
 #include <list>
+#include "dpobject.hxx"
+#include "dptabdat.hxx"
+// End Comments
 
 class KeyEvent;
 class OutputDevice;
@@ -146,8 +152,6 @@ class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
-class ScDPTableDataCache;
-struct ScCopyBlockFromClipParams;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -172,6 +176,14 @@ namespace com { namespace sun { namespace star {
 } } }
 
 #include <svl/zforlist.hxx>
+/*
+#ifdef _ZFORLIST_DECLARE_TABLE
+class SvNumberFormatterIndexTable;
+#else
+class Table;
+typedef Table SvNumberFormatterIndexTable;
+#endif
+*/
 
 #define SC_DOC_NEW          0xFFFF
 
@@ -199,6 +211,27 @@ struct ScDocStat
     USHORT  nPageCount;
 };
 
+// The constant parameters to CopyBlockFromClip
+struct ScCopyBlockFromClipParams
+{
+    ScDocument* pRefUndoDoc;
+    ScDocument* pClipDoc;
+    USHORT      nInsFlag;
+    SCTAB       nTabStart;
+    SCTAB       nTabEnd;
+    BOOL        bAsLink;
+    BOOL        bSkipAttrForEmpty;
+};
+
+
+// for loading of binary file format symbol string cells which need font conversion
+struct ScSymbolStringCellEntry
+{
+    ScStringCell*   pCell;
+    SCROW           nRow;
+};
+
+
 // -----------------------------------------------------------------------
 
 // DDE link modes
@@ -206,6 +239,7 @@ const BYTE SC_DDE_DEFAULT       = 0;
 const BYTE SC_DDE_ENGLISH       = 1;
 const BYTE SC_DDE_TEXT          = 2;
 const BYTE SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
+
 
 // -----------------------------------------------------------------------
 
@@ -246,6 +280,7 @@ private:
     ScDPCollection*     pDPCollection;
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
+    std::list<ScDPObject>        m_listDPObjectsInClip;
     std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
     // End Comments
     ScChartCollection*  pChartCollection;
@@ -434,7 +469,7 @@ public:
     SC_DLLPUBLIC const String&  GetName() const { return aDocName; }
     void            SetName( const String& r ) { aDocName = r; }
     const String&   GetCodeName() const { return aDocCodeName; }
-    void                SetCodeName( const String& r ) { aDocCodeName = r; }
+    void            SetCodeName( const String& r ) { aDocCodeName = r; }
 
     SC_DLLPUBLIC NameToNameMap*              GetLocalNameMap( SCTAB& rTab );
 
@@ -532,7 +567,7 @@ public:
     SC_DLLPUBLIC BOOL           HasTable( SCTAB nTab ) const;
     SC_DLLPUBLIC BOOL           GetName( SCTAB nTab, String& rName ) const;
     SC_DLLPUBLIC BOOL           GetCodeName( SCTAB nTab, String& rName ) const;
-    SC_DLLPUBLIC BOOL                   SetCodeName( SCTAB nTab, const String& rName );
+    SC_DLLPUBLIC BOOL           SetCodeName( SCTAB nTab, String& rName );
     SC_DLLPUBLIC BOOL           GetTable( const String& rName, SCTAB& rTab ) const;
     SC_DLLPUBLIC inline SCTAB   GetTableCount() const { return nMaxTableNumber; }
     SvNumberFormatterIndexTable* GetFormatExchangeList() const { return pFormatExchangeList; }

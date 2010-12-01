@@ -40,17 +40,14 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES = \
+SLOFILES =  \
+        $(SLO)$/calbck.obj \
         $(SLO)$/cellatr.obj \
-        $(SLO)$/format.obj \
+                $(SLO)$/fmtfollowtextflow.obj \
+                $(SLO)$/fmtwrapinfluenceonobjpos.obj \
+                $(SLO)$/format.obj \
         $(SLO)$/hints.obj \
         $(SLO)$/swatrset.obj
-
-SLOFILES =  \
-        $(EXCEPTIONSFILES) \
-        $(SLO)$/calbck.obj \
-        $(SLO)$/fmtfollowtextflow.obj \
-        $(SLO)$/fmtwrapinfluenceonobjpos.obj
 
 # --- Tagets -------------------------------------------------------
 

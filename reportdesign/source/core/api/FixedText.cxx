@@ -97,6 +97,7 @@ uno::Any SAL_CALL OFixedText::queryInterface( const uno::Type& _rType ) throw (u
     return aReturn.hasValue() ? aReturn : (m_aProps.aComponent.m_xProxy.is() ? m_aProps.aComponent.m_xProxy->queryAggregation(_rType) : aReturn);
 }
 
+//IMPLEMENT_FORWARD_XINTERFACE2(OFixedText,FixedTextBase,FixedTextPropertySet)
 // -----------------------------------------------------------------------------
 void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
 {
@@ -118,8 +119,9 @@ void SAL_CALL OFixedText::dispose() throw(uno::RuntimeException)
 //--------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > OFixedText::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
 {
-    uno::Sequence< ::rtl::OUString > aServices(1);
+    uno::Sequence< ::rtl::OUString > aServices(1);//2);
     aServices.getArray()[0] = SERVICE_FIXEDTEXT;
+    //aServices.getArray()[1] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText"));
 
     return aServices;
 }

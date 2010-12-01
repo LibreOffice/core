@@ -39,6 +39,10 @@
 
 #include "fldpage.hxx"
 
+/*--------------------------------------------------------------------
+   Beschreibung:
+ --------------------------------------------------------------------*/
+
 class SwFldDBPage : public SwFldPage
 {
     FixedText           aTypeFT;

@@ -122,10 +122,12 @@ TextRanger::~TextRanger()
     delete mpLinePolyPolygon;
 }
 
-/* TextRanger::SetVertical(..)
-   If there's is a change in the writing direction,
-   the cache has to be cleared.
-*/
+/*-----------------17.11.00 09:49-------------------
+ * TextRanger::SetVertical(..)
+ * If there's is a change in the writing direction,
+ * the cache has to be cleared.
+ * --------------------------------------------------*/
+
 void TextRanger::SetVertical( BOOL bNew )
 {
     if( IsVertical() != bNew )

@@ -61,10 +61,14 @@ StructListBox::StructListBox(Window* pParent, const ResId& rResId ):
 
 SvLBoxEntry* StructListBox::InsertStaticEntry(
         const XubString& rText,
-        const Image& rEntryImg,
+        const Image& rEntryImg, const Image& rEntryImgHC,
         SvLBoxEntry* pParent, ULONG nPos, IFormulaToken* pToken )
 {
     SvLBoxEntry* pEntry = InsertEntry( rText, rEntryImg, rEntryImg, pParent, FALSE, nPos, pToken );
+    SvLBoxContextBmp* pBmpItem = static_cast< SvLBoxContextBmp* >( pEntry->GetFirstItem( SV_ITEM_ID_LBOXCONTEXTBMP ) );
+    DBG_ASSERT( pBmpItem, "StructListBox::InsertStaticEntry - missing item" );
+    pBmpItem->SetBitmap1( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
+    pBmpItem->SetBitmap2( rEntryImgHC, BMP_COLOR_HIGHCONTRAST );
     return pEntry;
 }
 
@@ -105,14 +109,18 @@ StructPage::StructPage(Window* pParent):
     aTlbStruct      ( this, ModuleRes( TLB_STRUCT ) ),
     maImgEnd        ( ModuleRes( BMP_STR_END ) ),
     maImgError      ( ModuleRes( BMP_STR_ERROR ) ),
+    maImgEndHC      ( ModuleRes( BMP_STR_END_H ) ),
+    maImgErrorHC    ( ModuleRes( BMP_STR_ERROR_H ) ),
     pSelectedToken  ( NULL )
 {
     aTlbStruct.SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|
                         WB_HASBUTTONS|WB_HSCROLL|WB_NOINITIALSELECTION);
 
     aTlbStruct.SetNodeDefaultImages();
-    aTlbStruct.SetDefaultExpandedEntryBmp(  Image( ModuleRes( BMP_STR_OPEN  ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN ) ) );
     aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE ) ) );
+    aTlbStruct.SetDefaultExpandedEntryBmp( Image( ModuleRes( BMP_STR_OPEN_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aTlbStruct.SetDefaultCollapsedEntryBmp( Image( ModuleRes( BMP_STR_CLOSE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -137,10 +145,10 @@ SvLBoxEntry* StructPage::InsertEntry( const XubString& rText, SvLBoxEntry* pPare
             pEntry = aTlbStruct.InsertEntry( rText, pParent, FALSE, nPos, pIFormulaToken );
         break;
         case STRUCT_END:
-            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, pParent, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgEnd, maImgEndHC, pParent, nPos, pIFormulaToken );
         break;
         case STRUCT_ERROR:
-            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgError, pParent, nPos, pIFormulaToken );
+            pEntry = aTlbStruct.InsertStaticEntry( rText, maImgError, maImgErrorHC, pParent, nPos, pIFormulaToken );
         break;
     }
 

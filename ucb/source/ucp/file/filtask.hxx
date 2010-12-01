@@ -93,7 +93,7 @@ namespace fileaccess
                 m_bHandled = true;
             }
 
-            bool isHandled() const
+            bool isHandled()
             {
                 return true;
             }

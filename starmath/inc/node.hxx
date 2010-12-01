@@ -119,10 +119,10 @@ class SmNode : public SmRect
     RectHorAlign    eRectHorAlign;
     USHORT          nFlags,
                     nAttributes;
-    bool            bIsPhantom,
+    BOOL            bIsPhantom,
                     bIsDebug;
 
-    bool            bIsSelected;
+    BOOL            bIsSelected;
 
 protected:
     SmNode(SmNodeType eNodeType, const SmToken &rNodeToken);
@@ -133,7 +133,7 @@ protected:
 public:
     virtual             ~SmNode();
 
-    virtual bool        IsVisible() const;
+    virtual BOOL        IsVisible() const;
 
     virtual USHORT      GetNumSubNodes() const;
     virtual SmNode *    GetSubNode(USHORT nIndex);
@@ -151,9 +151,9 @@ public:
             USHORT &    Flags() { return nFlags; }
             USHORT &    Attributes() { return nAttributes; }
 
-            bool IsDebug() const { return bIsDebug; }
-            bool IsPhantom() const { return bIsPhantom; }
-            void SetPhantom(bool bIsPhantom);
+            BOOL IsDebug() const { return bIsDebug; }
+            BOOL IsPhantom() const { return bIsPhantom; }
+            void SetPhantom(BOOL bIsPhantom);
             void SetColor(const Color &rColor);
 
             void SetAttribut(USHORT nAttrib);
@@ -173,7 +173,7 @@ public:
             void ToggleDebug() const;
 #endif
 
-    void         SetRectHorAlign(RectHorAlign eHorAlign, bool bApplyToSubTree = true );
+    void         SetRectHorAlign(RectHorAlign eHorAlign, BOOL bApplyToSubTree = TRUE );
     RectHorAlign GetRectHorAlign() const { return eRectHorAlign; }
 
     const SmRect & GetRect() const { return *this; }
@@ -213,8 +213,8 @@ public:
     virtual void Accept(SmVisitor* pVisitor);
 
     /** True if this node is selected */
-    bool IsSelected() const {return bIsSelected;}
-    void SetSelected(bool Selected = true) {bIsSelected = Selected;}
+    BOOL IsSelected() const {return bIsSelected;}
+    void SetSelected(BOOL Selected = true) {bIsSelected = Selected;}
 
 #ifdef DEBUG_ENABLE_DUMPASDOT
     /** The tree as dot graph for graphviz, usable for debugging
@@ -341,7 +341,7 @@ public:
             SmStructureNode( const SmStructureNode &rNode );
     virtual ~SmStructureNode();
 
-    virtual bool        IsVisible() const;
+    virtual BOOL        IsVisible() const;
 
     virtual USHORT      GetNumSubNodes() const;
             void        SetNumSubNodes(USHORT nSize) { aSubNodes.resize(nSize); }
@@ -386,7 +386,7 @@ protected:
 
 public:
 
-    virtual bool        IsVisible() const;
+    virtual BOOL        IsVisible() const;
     virtual USHORT      GetNumSubNodes() const;
     using   SmNode::GetSubNode;
     virtual SmNode *    GetSubNode(USHORT nIndex);
@@ -725,24 +725,24 @@ public:
  */
 class SmLineNode : public SmStructureNode
 {
-    bool  bUseExtraSpaces;
+    BOOL  bUseExtraSpaces;
 
 protected:
     SmLineNode(SmNodeType eNodeType, const SmToken &rNodeToken)
     :   SmStructureNode(eNodeType, rNodeToken)
     {
-        bUseExtraSpaces = true;
+        bUseExtraSpaces = TRUE;
     }
 
 public:
     SmLineNode(const SmToken &rNodeToken)
     :   SmStructureNode(NLINE, rNodeToken)
     {
-        bUseExtraSpaces = true;
+        bUseExtraSpaces = TRUE;
     }
 
-    void  SetUseExtraSpaces(bool bVal) { bUseExtraSpaces = bVal; }
-    bool  IsUseExtraSpaces() const { return bUseExtraSpaces; };
+    void  SetUseExtraSpaces(BOOL bVal) { bUseExtraSpaces = bVal; }
+    BOOL  IsUseExtraSpaces() const { return bUseExtraSpaces; };
 
     virtual void Prepare(const SmFormat &rFormat, const SmDocShell &rDocShell);
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
@@ -897,7 +897,7 @@ public:
  */
 class SmBinDiagonalNode : public SmStructureNode
 {
-    bool    bAscending;
+    BOOL    bAscending;
 
     void    GetOperPosSize(Point &rPos, Size &rSize,
                            const Point &rDiagPoint, double fAngleDeg) const;
@@ -905,8 +905,8 @@ class SmBinDiagonalNode : public SmStructureNode
 public:
     SmBinDiagonalNode(const SmToken &rNodeToken);
 
-    bool    IsAscending() const { return bAscending; }
-    void    SetAscending(bool bVal)  { bAscending = bVal; }
+    BOOL    IsAscending() const { return bAscending; }
+    void    SetAscending(BOOL bVal)  { bAscending = bVal; }
 
     virtual void Arrange(const OutputDevice &rDev, const SmFormat &rFormat);
     void Accept(SmVisitor* pVisitor);
@@ -958,14 +958,14 @@ enum SmSubSup
  */
 class SmSubSupNode : public SmStructureNode
 {
-    bool  bUseLimits;
+    BOOL  bUseLimits;
 
 public:
     SmSubSupNode(const SmToken &rNodeToken)
     :   SmStructureNode(NSUBSUP, rNodeToken)
     {
         SetNumSubNodes(1 + SUBSUP_NUM_ENTRIES);
-        bUseLimits = false;
+        bUseLimits = FALSE;
     }
 
     /** Get body (Not NULL) */
@@ -976,8 +976,8 @@ public:
         return ((SmSubSupNode *) this)->GetBody();
     }
 
-    void  SetUseLimits(bool bVal) { bUseLimits = bVal; }
-    bool  IsUseLimits() const { return bUseLimits; };
+    void  SetUseLimits(BOOL bVal) { bUseLimits = bVal; }
+    BOOL  IsUseLimits() const { return bUseLimits; };
 
     /** Get super- or subscript
      * @remarks this method may return NULL.

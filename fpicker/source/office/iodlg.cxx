@@ -521,7 +521,7 @@ SvtFileDialog::~SvtFileDialog()
         SvtViewOptions aDlgOpt( E_DIALOG, _pImp->_aIniKey );
         aDlgOpt.SetWindowState( String( GetWindowState(), osl_getThreadTextEncoding() ) );
         String sUserData = _pFileView->GetConfigString();
-        aDlgOpt.SetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" )),
+        aDlgOpt.SetUserItem( ::rtl::OUString::createFromAscii( "UserData" ),
                              makeAny( ::rtl::OUString( sUserData ) ) );
     }
 
@@ -548,7 +548,8 @@ void SvtFileDialog::Init_Impl
     WinBits nStyle
 )
 {
-    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
+    sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+    m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
 
     _pImp->_nStyle = nStyle;
     _pImp->_a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
@@ -2071,8 +2072,8 @@ short SvtFileDialog::PrepareExecute()
                                                     INetURLObject::NO_DECODE ) ),
                                  Reference< XCommandEnvironment >() );
             Sequence< rtl::OUString > aProps(2);
-            aProps[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsVolume" ));
-            aProps[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "IsRemoveable" ));
+            aProps[0] = rtl::OUString::createFromAscii( "IsVolume" );
+            aProps[1] = rtl::OUString::createFromAscii( "IsRemoveable" );
 
             Reference< XResultSet > xResultSet
                 = aCnt.createCursor( aProps, ::ucbhelper::INCLUDE_FOLDERS_ONLY );
@@ -2502,7 +2503,7 @@ void SvtFileDialog::InitSize()
     {
         SetWindowState( ByteString( String( aDlgOpt.GetWindowState() ), osl_getThreadTextEncoding() ) );
 
-        Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UserData" ) ));
+        Any aUserData = aDlgOpt.GetUserItem( ::rtl::OUString::createFromAscii( "UserData" ) );
         ::rtl::OUString sCfgStr;
         if ( aUserData >>= sCfgStr )
             _pFileView->SetConfigString( String( sCfgStr ) );
@@ -2671,7 +2672,11 @@ BOOL SvtFileDialog::IsolateFilterFromPath_Impl( String& rPath, String& rFilter )
 //-----------------------------------------------------------------------------
 void SvtFileDialog::implUpdateImages( )
 {
-    m_aImages = ImageList( SvtResId( RID_FILEPICKER_IMAGES ) );
+    // determine high contrast mode
+    {
+        sal_Bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+        m_aImages = ImageList( SvtResId( bIsHighContrast ? RID_FILEPICKER_IMAGES_HC : RID_FILEPICKER_IMAGES ) );
+    }
 
     // set the appropriate images on the buttons
     if ( _pImp->_pBtnUp )

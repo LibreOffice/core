@@ -189,11 +189,21 @@ void DrawDocShell::UpdateFontList()
     PutItem( aFontListItem );
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 Printer* DrawDocShell::GetDocumentPrinter()
 {
     return GetPrinter(FALSE);
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
 {
     // if we already have a printer, see if its the same
@@ -219,6 +229,11 @@ void DrawDocShell::OnDocumentPrinterChanged(Printer* pNewPrinter)
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 void DrawDocShell::UpdateRefDevice()
 {
     if( mpDoc )

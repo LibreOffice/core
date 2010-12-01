@@ -266,6 +266,14 @@ namespace dbaui
     */
     void adjustToolBoxSize(ToolBox* _pToolBox);
 
+    /** isHiContrast check if we are in hi contrast mode.
+        @param  _pWindow
+            The window we have to check on.
+        @return
+            <TRUE/> if so, otherwise <FALSE/>
+    */
+    sal_Bool isHiContrast(Window* _pWindow);
+
     void adjustBrowseBoxColumnWidth( ::svt::EditBrowseBox* _pBox, sal_uInt16 _nColId );
 
     /** check if SQL92 name checking is enabled

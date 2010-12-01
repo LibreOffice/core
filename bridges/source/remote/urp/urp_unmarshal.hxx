@@ -76,9 +76,9 @@ public:
         remote_createStubFunc callback );
     ~Unmarshal();
 
-    inline sal_Bool finished() const
+    inline sal_Bool finished()
         { return m_base + m_nLength == m_pos; }
-    inline sal_uInt32 getPos() const
+    inline sal_uInt32 getPos()
         { return (sal_uInt32 ) (m_pos - m_base); }
 
     inline sal_Bool setSize( sal_Int32 nSize );
@@ -97,7 +97,7 @@ public:
 
     sal_Int8 *getBuffer()
         { return m_base; }
-    inline sal_Bool isSystemLittleEndian() const
+    inline sal_Bool isSystemLittleEndian()
         { return g_bSystemIsLittleEndian; }
 
 private:

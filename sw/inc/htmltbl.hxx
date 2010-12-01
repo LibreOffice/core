@@ -34,7 +34,7 @@
 #include <editeng/svxenum.hxx>
 
 #include "swtypes.hxx"
-#include "node.hxx"     // For SwStartNode
+#include "node.hxx"     // Fuer SwStartNode
 
 
 class SwTableBox;
@@ -92,6 +92,8 @@ public:
     BOOL HasNoBreakTag() const { return bNoBreakTag; }
 };
 
+/*  */
+
 class SwHTMLTableLayoutCell
 {
     SwHTMLTableLayoutCnts *pContents;       // der Inhalt der Zelle
@@ -128,6 +130,8 @@ public:
 
     BOOL HasNoWrapOption() const { return bNoWrapOption; }
 };
+
+/*  */
 
 class SwHTMLTableLayoutColumn
 {
@@ -180,6 +184,8 @@ public:
 
     BOOL HasLeftBorder() const { return bLeftBorder; }
 };
+
+/*  */
 
 class SwHTMLTableLayout
 {
@@ -243,6 +249,9 @@ class SwHTMLTableLayout
     BOOL bMustNotResize : 1;        // Die Tabelle darf nicht reseized werden
     BOOL bMustNotRecalc : 1;        // Tabelle darf nicht an Inhalt angepasst
                                     // werden
+
+//  USHORT GetLeftBorderWidth( USHORT nCol ) const;
+//  USHORT GetRightBorderWidth( USHORT nCol, USHORT nColSpan ) const;
 
     void AddBorderWidth( ULONG &rMin, ULONG &rMax, ULONG& rAbsMin,
                          USHORT nCol, USHORT nColSpan,
@@ -369,6 +378,8 @@ public:
     BOOL MayBeInFlyFrame() const { return bMayBeInFlyFrame; }
 };
 
+/*  */
+
 inline void SwHTMLTableLayoutCell::SetProtected()
 {
     nRowSpan = 1;
@@ -376,6 +387,8 @@ inline void SwHTMLTableLayoutCell::SetProtected()
 
     pContents = 0;
 }
+
+/*  */
 
 inline void SwHTMLTableLayoutColumn::MergeMinMaxNoAlign( ULONG nCMin,
     ULONG nCMax,    ULONG nAbsMin )
@@ -415,6 +428,8 @@ inline void SwHTMLTableLayoutColumn::SetMinMax( ULONG nMn, ULONG nMx )
     nMin = nMn;
     nMax = nMx;
 }
+
+/*  */
 
 inline USHORT SwHTMLTableLayout::GetInhCellSpace( USHORT nCol,
                                                   USHORT nColSpan ) const

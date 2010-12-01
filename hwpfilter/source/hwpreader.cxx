@@ -128,12 +128,12 @@ throw(SAXException, IOException, RuntimeException)
     Reference< XInputStream> rInputStream;
     for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        if ( aDescriptor[i].Name == OUString::createFromAscii( "InputStream" ) )
         {
             aDescriptor[i].Value >>= rInputStream;
             break;
         }
-        else if ( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        else if ( aDescriptor[i].Name == OUString::createFromAscii( "URL" ) )
         {
             OUString sURL;
             aDescriptor[i].Value >>= sURL;
@@ -3208,25 +3208,25 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* ???????? */
     else if( hbox->type[0] == 3 && hbox->type[1] == 0 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("title"))))
+        if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("title")))
         {
             rstartEl( ascii("text:title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("subject"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("subject")))
         {
             rstartEl( ascii("text:subject"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:subject") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("author"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("author")))
         {
             rstartEl( ascii("text:author-name"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:author-name") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("keywords"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("keywords")))
         {
             rstartEl( ascii("text:keywords"), rList );
             rchars(  hconv(hbox->str2, gstr) );
@@ -3236,61 +3236,61 @@ void HwpReader::makeFieldCode(FieldCode *hbox)
 /* ???????? */
     else if( hbox->type[0] == 3 && hbox->type[1] == 1 )
     {
-        if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("User"))))
+        if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("User")))
         {
             rstartEl( ascii("text:sender-lastname"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-lastname") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Company"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Company")))
         {
             rstartEl( ascii("text:sender-company"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-company") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Position"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Position")))
         {
             rstartEl( ascii("text:sender-title"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-title") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Division"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Division")))
         {
             rstartEl( ascii("text:sender-position"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-position") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Fax"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Fax")))
         {
             rstartEl( ascii("text:sender-fax"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-fax") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Pager"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Pager")))
         {
             rstartEl( ascii("text:phone-private"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:phone-private") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("E-mail"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("E-mail")))
         {
             rstartEl( ascii("text:sender-email"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-email") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Zipcode(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Zipcode(office)")))
         {
             rstartEl( ascii("text:sender-postal-code"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-postal-code") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Phone(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Phone(office)")))
         {
             rstartEl( ascii("text:sender-phone-work"), rList );
             rchars(  hconv(hbox->str2, gstr) );
             rendEl( ascii("text:sender-phone-work") );
         }
-        else if( hconv( hbox->str3, gstr ).equals(OUString(RTL_CONSTASCII_USTRINGPARAM("Address(office)"))))
+        else if( hconv( hbox->str3, gstr ).equals(OUString::createFromAscii("Address(office)")))
         {
             rstartEl( ascii("text:sender-street"), rList );
             rchars(  hconv(hbox->str2, gstr) );

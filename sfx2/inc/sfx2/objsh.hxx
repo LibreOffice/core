@@ -552,24 +552,36 @@ public:
     virtual void                SetOrganizerSearchMask(
                                     SfxStyleSheetBasePool* ) const;
 
-    virtual sal_uInt16          GetContentCount( sal_uInt16 nIdx1 = INDEX_IGNORE );
 
+    virtual sal_uInt16          GetContentCount(
+                                        sal_uInt16 nIdx1 = INDEX_IGNORE,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
     virtual sal_Bool            CanHaveChilds(
                                         sal_uInt16 nIdx1,
-                                        sal_uInt16 nIdx2 = INDEX_IGNORE
-                                );
-
+                                            sal_uInt16 nIdx2 = INDEX_IGNORE );
     virtual void                GetContent( String &,
                                         Bitmap &rClosedBitmap,
                                         Bitmap &rOpenedBitmap,
                                         sal_Bool   &bCanDelete,
                                         sal_uInt16 nPos,
-                                        sal_uInt16 nIdx1
-                                );
+                                        sal_uInt16 nIdx1,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
 
-    virtual void                TriggerHelpPI( sal_uInt16 nIdx1, sal_uInt16 nIdx2 );
+    virtual void                GetContent( String &,
+                                        Bitmap &rClosedBitmap,
+                                        Bitmap &rOpenedBitmap,
+                                        BmpColorMode eColorMode,
+                                        sal_Bool   &bCanDelete,
+                                        sal_uInt16 nPos,
+                                        sal_uInt16 nIdx1,
+                                        sal_uInt16 nIdx2 = INDEX_IGNORE );
 
-    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily);
+    virtual void                TriggerHelpPI(
+                                    sal_uInt16 nIdx1, sal_uInt16 nIdx2, sal_uInt16 nIdx3);
+
+    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily );
+
+    virtual Bitmap              GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode );
 
     virtual sal_Bool            Insert( SfxObjectShell &rSource,
                                         sal_uInt16 nSourceIdx1,
@@ -597,6 +609,10 @@ public:
                                 // F"ur Docs, die zum Formatieren die Viewgr"o\se
                                 // ben"otigen
     virtual SfxObjectShell*     GetObjectShell();
+    //void                        SetBaseURL( const String& rURL );
+    //const String&               GetBaseURL() const;
+    //const String&               GetBaseURLForSaving() const;
+    //void                        SetEmptyBaseURL();
 
     virtual SfxFrame*           GetSmartSelf( SfxFrame* pSelf, SfxMedium& rMedium );
 
@@ -640,6 +656,7 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetStorage();
 
+//REMOVE        void SetFileName( const ::rtl::OUString& );
     SvGlobalName    GetClassName() const;
 
     // comphelper::IEmbeddedHelper
@@ -700,7 +717,7 @@ public:
 
     // =================================
 
-    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const;
+    SAL_DLLPRIVATE ::boost::shared_ptr<GDIMetaFile> CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const;
 
     SAL_DLLPRIVATE sal_Bool IsOwnStorageFormat_Impl(const SfxMedium &) const;
 

@@ -53,9 +53,9 @@ extern "C"
 //---------------------------------------------------------------------------------------
 sal_Bool SAL_CALL component_writeInfo(void* /*_pServiceManager*/, com::sun::star::registry::XRegistryKey* _pRegistryKey)
 {
-    ::rtl::OUString sMainKeyName( RTL_CONSTASCII_USTRINGPARAM( "/" ));
+    ::rtl::OUString sMainKeyName = ::rtl::OUString::createFromAscii("/");
     sMainKeyName += OPoolCollection::getImplementationName_Static();
-    sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    sMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
 
     try
     {

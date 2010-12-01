@@ -125,6 +125,7 @@ SvxBrushItem*   ScGlobal::pEmbeddedBrushItem = NULL;
 SvxBrushItem*   ScGlobal::pProtectedBrushItem = NULL;
 
 ImageList*      ScGlobal::pOutlineBitmaps = NULL;
+ImageList*      ScGlobal::pOutlineBitmapsHC = NULL;
 
 ScFunctionList* ScGlobal::pStarCalcFunctionList = NULL;
 ScFunctionMgr*  ScGlobal::pStarCalcFunctionMgr  = NULL;
@@ -522,11 +523,11 @@ const String& ScGlobal::GetEmptyString()
     return *pEmptyString;
 }
 
-ImageList* ScGlobal::GetOutlineSymbols()
+ImageList* ScGlobal::GetOutlineSymbols( bool bHC )
 {
-    ImageList*& rpImageList = pOutlineBitmaps;
+    ImageList*& rpImageList = bHC ? pOutlineBitmapsHC : pOutlineBitmaps;
     if( !rpImageList )
-        rpImageList = new ImageList( ScResId( RID_OUTLINEBITMAPS ) );
+        rpImageList = new ImageList( ScResId( bHC ? RID_OUTLINEBITMAPS_H : RID_OUTLINEBITMAPS ) );
     return rpImageList;
 }
 
@@ -658,6 +659,9 @@ void ScGlobal::Clear()
     DELETEZ(pEmbeddedBrushItem);
     DELETEZ(pProtectedBrushItem);
     DELETEZ(pOutlineBitmaps);
+    DELETEZ(pOutlineBitmapsHC);
+//  DELETEZ(pAnchorBitmap);
+//  DELETEZ(pGrayAnchorBitmap);
     DELETEZ(pEnglishFormatter);
     DELETEZ(pCaseTransliteration);
     DELETEZ(pTransliteration);
@@ -703,6 +707,7 @@ CharSet ScGlobal::GetCharsetValue( const String& rCharSet )
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_861")) return RTL_TEXTENCODING_IBM_861;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_863")) return RTL_TEXTENCODING_IBM_863;
     else if (rCharSet.EqualsIgnoreCaseAscii("IBMPC_865")) return RTL_TEXTENCODING_IBM_865;
+//  else if (rCharSet.EqualsIgnoreCaseAscii("SYSTEM")   ) return gsl_getSystemTextEncoding();
     else return gsl_getSystemTextEncoding();
 }
 
@@ -1261,18 +1266,18 @@ ScFunctionList::ScFunctionList() :
     USHORT nNextId = SC_OPCODE_LAST_OPCODE_ID + 1;      // FuncID for AddIn functions
 
     // Auswertung AddIn-Liste
-    String aDefArgNameValue(RTL_CONSTASCII_USTRINGPARAM("value"));
-    String aDefArgNameString(RTL_CONSTASCII_USTRINGPARAM("string"));
-    String aDefArgNameValues(RTL_CONSTASCII_USTRINGPARAM("values"));
-    String aDefArgNameStrings(RTL_CONSTASCII_USTRINGPARAM("strings"));
-    String aDefArgNameCells(RTL_CONSTASCII_USTRINGPARAM("cells"));
-    String aDefArgNameNone(RTL_CONSTASCII_USTRINGPARAM("none"));
-    String aDefArgDescValue(RTL_CONSTASCII_USTRINGPARAM("a value"));
-    String aDefArgDescString(RTL_CONSTASCII_USTRINGPARAM("a string"));
-    String aDefArgDescValues(RTL_CONSTASCII_USTRINGPARAM("array of values"));
-    String aDefArgDescStrings(RTL_CONSTASCII_USTRINGPARAM("array of strings"));
-    String aDefArgDescCells(RTL_CONSTASCII_USTRINGPARAM("range of cells"));
-    String aDefArgDescNone(RTL_CONSTASCII_USTRINGPARAM("none"));
+    String aDefArgNameValue(RTL_CONSTASCII_STRINGPARAM("value"));
+    String aDefArgNameString(RTL_CONSTASCII_STRINGPARAM("string"));
+    String aDefArgNameValues(RTL_CONSTASCII_STRINGPARAM("values"));
+    String aDefArgNameStrings(RTL_CONSTASCII_STRINGPARAM("strings"));
+    String aDefArgNameCells(RTL_CONSTASCII_STRINGPARAM("cells"));
+    String aDefArgNameNone(RTL_CONSTASCII_STRINGPARAM("none"));
+    String aDefArgDescValue(RTL_CONSTASCII_STRINGPARAM("a value"));
+    String aDefArgDescString(RTL_CONSTASCII_STRINGPARAM("a string"));
+    String aDefArgDescValues(RTL_CONSTASCII_STRINGPARAM("array of values"));
+    String aDefArgDescStrings(RTL_CONSTASCII_STRINGPARAM("array of strings"));
+    String aDefArgDescCells(RTL_CONSTASCII_STRINGPARAM("range of cells"));
+    String aDefArgDescNone(RTL_CONSTASCII_STRINGPARAM("none"));
     String aArgName, aArgDesc;
     pFuncColl = ScGlobal::GetFuncCollection();
     for (i = 0; i < pFuncColl->GetCount(); i++)
@@ -1355,6 +1360,7 @@ ScFunctionList::ScFunctionList() :
                 }
             }
         }
+//      pDesc->nHelpId    = 0;
 
         aFunctionList.Insert(pDesc, LIST_APPEND);
         nStrLen = (*(pDesc->pFuncName)).Len();
@@ -1852,7 +1858,7 @@ String ScFunctionMgr::GetCategoryName(sal_uInt32 _nCategoryNumber )
     {
         DBG_ERROR("Invalid category number!");
         return String();
-    }
+    } // if ( _nCategoryNumber >= SC_FUNCGROUP_COUNT )
 
     ::std::auto_ptr<ScResourcePublisher> pCategories( new ScResourcePublisher( ScResId( RID_FUNCTION_CATEGORIES ) ) );
     return String(ScResId((USHORT)_nCategoryNumber));
@@ -1871,7 +1877,7 @@ sal_Unicode ScFunctionMgr::getSingleToken(const formula::IFunctionManager::EToke
             return ScCompiler::GetNativeSymbol(ocArrayOpen).GetChar(0);
         case eArrayClose:
             return ScCompiler::GetNativeSymbol(ocArrayClose).GetChar(0);
-    }
+    } // switch(_eToken)
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -1946,7 +1952,7 @@ CollatorWrapper*        ScGlobal::GetCollator()
     {
         pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
         pCollator->loadDefaultCollator( *GetLocale(), SC_COLLATOR_IGNORES );
-    }
+    } // if ( !pCollator )
     return pCollator;
 }
 CollatorWrapper*        ScGlobal::GetCaseCollator()
@@ -1955,7 +1961,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
     {
         pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
         pCaseCollator->loadDefaultCollator( *GetLocale(), 0 );
-    }
+    } // if ( !pCaseCollator )
     return pCaseCollator;
 }
 ::utl::TransliterationWrapper* ScGlobal::GetCaseTransliteration()
@@ -1965,7 +1971,7 @@ CollatorWrapper*        ScGlobal::GetCaseCollator()
         const LanguageType eOfficeLanguage = Application::GetSettings().GetLanguage();
         pCaseTransliteration = new ::utl::TransliterationWrapper(::comphelper::getProcessServiceFactory(), SC_TRANSLITERATION_CASESENSE );
         pCaseTransliteration->loadModuleIfNeeded( eOfficeLanguage );
-    }
+    } // if ( !pCaseTransliteration )
     return pCaseTransliteration;
 }
 IntlWrapper*         ScGlobal::GetScIntlWrapper()

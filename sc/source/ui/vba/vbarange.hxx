@@ -288,7 +288,7 @@ public:
     // XDefaultMethod
     ::rtl::OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException);
         // XDefaultProperty
-        ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Value")); }
+        ::rtl::OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) { return ::rtl::OUString::createFromAscii("Value"); }
 
 
 // #TODO completely rewrite ScVbaRange, its become a hackfest

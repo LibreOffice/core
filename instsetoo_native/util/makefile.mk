@@ -72,6 +72,7 @@ LOCALPYFILES= \
     $(BIN)$/uno.py \
     $(BIN)$/unohelper.py \
     $(BIN)$/pythonloader.py \
+    $(BIN)$/pythonscript.py \
     $(BIN)$/officehelper.py \
     $(BIN)$/mailmerge.py
 

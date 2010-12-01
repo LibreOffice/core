@@ -116,12 +116,20 @@ TabControl::~TabControl()
 {
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
     pDispatcher->Execute(SID_SWITCHPAGE, SFX_CALLMODE_ASYNCHRON |
                             SFX_CALLMODE_RECORD);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -168,6 +176,10 @@ void  TabControl::MouseButtonDown(const MouseEvent& rMEvt)
 
     TabBar::MouseButtonDown(rMEvt);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void TabControl::DoubleClick()
 {
@@ -331,6 +343,10 @@ sal_Int8 TabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
     return nRet;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::Command(const CommandEvent& rCEvt)
 {
     USHORT nCmd = rCEvt.GetCommand();
@@ -344,6 +360,10 @@ void TabControl::Command(const CommandEvent& rCEvt)
         pDispatcher->ExecutePopup( SdResId( nResId ) );
     }
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 long TabControl::StartRenaming()
 {
@@ -361,6 +381,10 @@ long TabControl::StartRenaming()
 
     return( bOK );
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 long TabControl::AllowRenaming()
 {
@@ -385,11 +409,20 @@ long TabControl::AllowRenaming()
     return( bOK );
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void TabControl::EndRenaming()
 {
     if( !IsEditModeCanceled() )
         pDrViewSh->RenameSlide( GetEditPageId(), GetEditText() );
 }
+
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void TabControl::ActivatePage()
 {
@@ -400,6 +433,11 @@ void TabControl::ActivatePage()
                              SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
     }
 }
+
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 long TabControl::DeactivatePage()
 {

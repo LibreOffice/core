@@ -1795,7 +1795,7 @@ uno::Sequence< OUString > SAL_CALL
     OUString *pNames = aNames.getArray();
     if ( 0 == rServiceName.compareToAscii( SN_SPELLCHECKER ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/SpellCheckerList"));
+        OUString aNode( OUString::createFromAscii( "ServiceManager/SpellCheckerList" ));
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1810,7 +1810,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/GrammarCheckerList"));
+        OUString aNode( OUString::createFromAscii( "ServiceManager/GrammarCheckerList" ));
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1825,7 +1825,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_HYPHENATOR ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/HyphenatorList"));
+        OUString aNode( OUString::createFromAscii( "ServiceManager/HyphenatorList" ));
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {
@@ -1840,7 +1840,7 @@ uno::Sequence< OUString > SAL_CALL
     }
     else if ( 0 == rServiceName.compareToAscii( SN_THESAURUS ) )
     {
-        OUString aNode( RTL_CONSTASCII_USTRINGPARAM("ServiceManager/ThesaurusList"));
+        OUString aNode( OUString::createFromAscii( "ServiceManager/ThesaurusList" ));
         const uno::Sequence< OUString > aNodeEntries( GetNodeNames( aNode ) );
         if (lcl_SeqHasString( aNodeEntries, aCfgLocale ))
         {

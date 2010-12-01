@@ -146,21 +146,30 @@ static sal_Int32            nRefCount = 0;
 
 #define READONLY_DEFAULT    sal_False
 
+/*-- 16.06.2009 14:22:56---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 SvtUserConfigChangeListener_Impl::SvtUserConfigChangeListener_Impl(SvtUserOptions_Impl& rParent) :
     m_rParent( rParent )
 {
 }
+/*-- 16.06.2009 14:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 SvtUserConfigChangeListener_Impl::~SvtUserConfigChangeListener_Impl()
 {
 }
+/*-- 16.06.2009 14:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtUserConfigChangeListener_Impl::changesOccurred( const util::ChangesEvent& rEvent ) throw(RuntimeException)
 {
     if(rEvent.Changes.getLength())
         m_rParent.Notify();
 }
+/*-- 16.06.2009 14:22:56---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SvtUserConfigChangeListener_Impl::disposing( const lang::EventObject& rSource ) throw(RuntimeException)
 {
     try
@@ -750,7 +759,7 @@ void SvtUserOptions_Impl::SetApartment( const ::rtl::OUString& sApartment )
     sFullName = GetFirstName();
     sFullName.trim();
     if ( sFullName.getLength() )
-        sFullName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+        sFullName += ::rtl::OUString::createFromAscii(" ");
     sFullName += GetLastName();
     sFullName.trim();
 

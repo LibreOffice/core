@@ -38,42 +38,42 @@ TARGET=querydesign
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES =\
-            $(SLO)$/ConnectionLine.obj		\
             $(SLO)$/ConnectionLineAccess.obj	\
-            $(SLO)$/JAccess.obj			\
-            $(SLO)$/JoinController.obj		\
-            $(SLO)$/JoinDesignView.obj		\
-            $(SLO)$/JoinExchange.obj		\
-            $(SLO)$/JoinTableView.obj		\
-            $(SLO)$/QTableConnection.obj	\
-            $(SLO)$/QTableConnectionData.obj	\
-            $(SLO)$/QTableWindow.obj		\
-            $(SLO)$/QTableWindowData.obj	\
-            $(SLO)$/QueryDesignView.obj		\
+            $(SLO)$/TableWindowAccess.obj		\
+            $(SLO)$/JAccess.obj					\
+            $(SLO)$/JoinDesignView.obj			\
+            $(SLO)$/JoinController.obj			\
+            $(SLO)$/QueryDesignView.obj			\
+            $(SLO)$/SelectionBrowseBox.obj		\
+            $(SLO)$/querydlg.obj				\
+            $(SLO)$/QueryTabWinUndoAct.obj		\
             $(SLO)$/QueryMoveTabWinUndoAct.obj	\
             $(SLO)$/QueryTabConnUndoAction.obj	\
-            $(SLO)$/QueryTabWinUndoAct.obj	\
-            $(SLO)$/QueryTableView.obj		\
-            $(SLO)$/QueryTextView.obj		\
-            $(SLO)$/QueryViewSwitch.obj		\
-            $(SLO)$/SelectionBrowseBox.obj	\
-            $(SLO)$/TableConnection.obj		\
-            $(SLO)$/TableConnectionData.obj	\
             $(SLO)$/TableFieldDescription.obj	\
-            $(SLO)$/TableWindow.obj		\
-            $(SLO)$/TableWindowAccess.obj	\
-            $(SLO)$/TableWindowData.obj		\
-            $(SLO)$/TableWindowListBox.obj	\
-            $(SLO)$/TableWindowTitle.obj	\
+            $(SLO)$/JoinTableView.obj			\
+            $(SLO)$/QueryViewSwitch.obj			\
+            $(SLO)$/QueryTableView.obj			\
+            $(SLO)$/TableWindowData.obj			\
+            $(SLO)$/QTableWindow.obj			\
+            $(SLO)$/TableWindow.obj				\
+            $(SLO)$/JoinExchange.obj			\
+            $(SLO)$/TableWindowListBox.obj		\
+            $(SLO)$/TableWindowTitle.obj		\
+            $(SLO)$/QueryTextView.obj			\
+            $(SLO)$/QTableConnection.obj		\
+            $(SLO)$/querycontroller.obj			\
             $(SLO)$/querycontainerwindow.obj    \
-            $(SLO)$/querycontroller.obj		\
-            $(SLO)$/querydlg.obj		\
-            $(SLO)$/queryview.obj
+            $(SLO)$/queryview.obj               \
+            $(SLO)$/TableConnection.obj			\
+            $(SLO)$/TableConnectionData.obj
 
 SLOFILES =\
-            $(EXCEPTIONSFILES)			\
-            $(SLO)$/ConnectionLineData.obj	\
-            $(SLO)$/TableFieldInfo.obj
+            $(EXCEPTIONSFILES)					\
+            $(SLO)$/TableFieldInfo.obj			\
+            $(SLO)$/QTableConnectionData.obj	\
+            $(SLO)$/QTableWindowData.obj		\
+            $(SLO)$/ConnectionLine.obj			\
+            $(SLO)$/ConnectionLineData.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  query.src		\

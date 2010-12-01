@@ -685,7 +685,7 @@ void testRemote( const Reference< XInterface > &rRemote )
       //--------------------
       // Test attributes
       //----------------------
-       OUString ow( RTL_CONSTASCII_USTRINGPARAM( "dum didel dum dideldei" ));
+       OUString ow = OUString::createFromAscii( "dum didel dum dideldei" );
        rLCallMe->setsAttribute( ow );
        OSL_ASSERT( rLCallMe->getsAttribute() == ow );
 
@@ -774,7 +774,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         // erst registrieren
         Reference < XImplementationRegistration > rReg (
             rSMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.registry.ImplementationRegistration" ))),
+                OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )),
             UNO_QUERY );
 
         OSL_ASSERT( rReg.is() );
@@ -783,7 +783,7 @@ Reference <XInterface > createComponent( const ::rtl::OUString &sService ,
         try
         {
             rReg->registerImplementation(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" )),
+                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
                 aDllName,
                 Reference< XSimpleRegistry > () );
             rInterface = rSMgr->createInstance( sService );

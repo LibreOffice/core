@@ -53,7 +53,7 @@ using namespace ::com::sun::star::i18n;
 
 ///////////////////////////////////////////////////////////////////////////
 
-static inline bool strnccmp(const String &u1, xub_StrLen nIdx,
+static inline BOOL strnccmp(const String &u1, xub_StrLen nIdx,
                               const sal_Char *s2, xub_StrLen nLen)
 {
     return u1.EqualsIgnoreCaseAscii( s2, nIdx, nLen );
@@ -68,7 +68,7 @@ static const sal_Unicode aDelimiterTable[] =
 };
 
 
-static inline bool IsDigit( sal_Unicode cChar )
+static inline BOOL IsDigit( sal_Unicode cChar )
 {
     return '0' <= cChar && cChar <= '9';
 }
@@ -335,14 +335,14 @@ const SmTokenTableEntry * SmParser::GetTokenTableEntry( const String &rName )
 
 #if OSL_DEBUG_LEVEL
 
-bool SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
-    // returns 'true' iff cChar is '\0' or a delimeter
+BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
+    // returns 'TRUE' iff cChar is '\0' or a delimeter
 {
     OSL_ENSURE( nPos <= rTxt.Len(), "index out of range" );
 
     sal_Unicode cChar = rTxt.GetChar( nPos );
     if(!cChar)
-        return true;
+        return TRUE;
 
     // check if 'cChar' is in the delimeter table
     const sal_Unicode *pDelim = &aDelimiterTable[0];
@@ -350,11 +350,11 @@ bool SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
         if (*pDelim == cChar)
             break;
 
+    BOOL bIsDelim = *pDelim != 0;
 
     INT16 nTypJp = SM_MOD()->GetSysLocale().GetCharClass().getType( rTxt, nPos );
-    bool bIsDelim = (*pDelim != 0 ||
-            nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
-            nTypJp == com::sun::star::i18n::UnicodeType::CONTROL);
+    bIsDelim |= nTypJp == com::sun::star::i18n::UnicodeType::SPACE_SEPARATOR ||
+                nTypJp == com::sun::star::i18n::UnicodeType::CONTROL;
 
     return bIsDelim;
 }
@@ -408,8 +408,8 @@ void SmParser::NextToken()
     xub_StrLen  nBufLen = BufferString.Len();
     ParseResult aRes;
     xub_StrLen  nRealStart;
-    bool        bCont;
-    bool        bNumStart = false;
+    BOOL        bCont;
+    BOOL        bNumStart = FALSE;
     CharClass   aCC(SM_MOD()->GetSysLocale().GetCharClass().getLocale());
     do
     {
@@ -449,7 +449,7 @@ void SmParser::NextToken()
         nRealStart = BufferIndex + sal::static_int_cast< xub_StrLen >(aRes.LeadingWhiteSpace);
         BufferIndex = nRealStart;
 
-        bCont = false;
+        bCont = FALSE;
         if ( aRes.TokenType == 0  &&
                 nRealStart < nBufLen &&
                 '\n' == BufferString.GetChar( nRealStart ) )
@@ -457,7 +457,7 @@ void SmParser::NextToken()
             // keep data needed for tokens row and col entry up to date
             ++Row;
             BufferIndex = ColOff = nRealStart + 1;
-            bCont = true;
+            bCont = TRUE;
         }
         else if (aRes.TokenType & KParseType::ONE_SINGLE_CHAR)
         {
@@ -469,7 +469,7 @@ void SmParser::NextToken()
                 while (BufferIndex < nBufLen  &&
                     '\n' != BufferString.GetChar( BufferIndex ))
                     ++BufferIndex;
-                bCont = true;
+                bCont = TRUE;
             }
         }
 
@@ -481,7 +481,7 @@ void SmParser::NextToken()
     CurToken.nRow   = Row;
     CurToken.nCol   = nRealStart - ColOff + 1;
 
-    bool bHandled = true;
+    BOOL bHandled = TRUE;
     if (nRealStart >= nBufLen)
     {
         CurToken.eType     = TEND;
@@ -660,7 +660,7 @@ void SmParser::NextToken()
                     }
                     break;
                 default:
-                    bHandled = false;
+                    bHandled = FALSE;
             }
         }
     }
@@ -953,12 +953,12 @@ void SmParser::NextToken()
                     }
                     break;
                 default:
-                    bHandled = false;
+                    bHandled = FALSE;
             }
         }
     }
     else
-        bHandled = false;
+        bHandled = FALSE;
 
     if (!bHandled)
     {
@@ -1012,7 +1012,7 @@ void SmParser::Align()
     // parse alignment info (if any), then go on with rest of expression
 {
     SmStructureNode *pSNode = 0;
-    bool    bNeedGroupClose = false;
+    BOOL    bNeedGroupClose = FALSE;
 
     if (TokenInGroup(TGALIGN))
     {
@@ -1020,7 +1020,7 @@ void SmParser::Align()
             // encapsulate expression to be aligned in group braces
             // (here group-open brace)
         {   Insert('{', GetTokenIndex());
-            bNeedGroupClose = true;
+            bNeedGroupClose = TRUE;
 
             // get first valid align statement in sequence
             // (the dominant one in 4.0) and erase all others (especially old
@@ -1102,12 +1102,12 @@ void SmParser::Line()
 
 void SmParser::Expression()
 {
-    bool bUseExtraSpaces = true;
+    BOOL bUseExtraSpaces = TRUE;
     SmNode *pNode = NodeStack.Pop();
     if (pNode)
     {
         if (pNode->GetToken().eType == TNOSPACE)
-            bUseExtraSpaces = false;
+            bUseExtraSpaces = FALSE;
         else
             NodeStack.Push(pNode);  // push the node from above again (now to be used as argument to this current 'nospace' node)
     }
@@ -1180,7 +1180,7 @@ void SmParser::Product()
     {   SmStructureNode *pSNode;
         SmNode *pFirst = NodeStack.Pop(),
                *pOper;
-        bool bSwitchArgs = false;
+        BOOL bSwitchArgs = FALSE;
 
         SmTokenType eType = CurToken.eType;
         switch (eType)
@@ -1222,7 +1222,7 @@ void SmParser::Product()
                 pOper = new SmPolyLineNode(CurToken);
                 NextToken();
 
-                bSwitchArgs = true;
+                bSwitchArgs =TRUE;
                 break;
             }
 
@@ -1296,7 +1296,7 @@ void SmParser::SubSup(ULONG nActiveGroup)
             case TLSUB :    nIndex = (int) LSUB;    break;
             case TLSUP :    nIndex = (int) LSUP;    break;
             default :
-                OSL_ENSURE(false, "Sm: unknown case");
+                OSL_ENSURE(FALSE, "Sm: unknown case");
         }
         nIndex++;
         OSL_ENSURE(1 <= nIndex  &&  nIndex <= 1 + SUBSUP_NUM_ENTRIES,
@@ -1500,9 +1500,9 @@ void SmParser::Term()
                      ||  TokenInGroup(TGFONTATTR))
             {   SmStructureNodeArray  aArray;
 
-                bool    bIsAttr;
+                BOOL    bIsAttr;
                 USHORT  n = 0;
-                while (true == (bIsAttr = TokenInGroup(TGATTRIBUT))
+                while (TRUE == (bIsAttr = TokenInGroup(TGATTRIBUT))
                        ||  TokenInGroup(TGFONTATTR))
                 {   aArray.resize(n + 1);
 
@@ -1688,7 +1688,7 @@ void SmParser::UnOper()
 
     SmToken      aNodeToken = CurToken;
     SmTokenType  eType      = CurToken.eType;
-    bool         bIsPostfix = eType == TFACT;
+    BOOL         bIsPostfix = eType == TFACT;
 
     SmStructureNode *pSNode;
     SmNode *pOper   = 0,
@@ -1884,9 +1884,9 @@ void SmParser::Font()
 
 // gets number used as arguments in Math formulas (e.g. 'size' command)
 // Format: no negative numbers, must start with a digit, no exponent notation, ...
-bool lcl_IsNumber(const UniString& rText)
+BOOL lcl_IsNumber(const UniString& rText)
 {
-    bool bPoint = false;
+    BOOL bPoint = FALSE;
     const sal_Unicode* pBuffer = rText.GetBuffer();
     for(xub_StrLen nPos = 0; nPos < rText.Len(); nPos++, pBuffer++)
     {
@@ -1894,14 +1894,14 @@ bool lcl_IsNumber(const UniString& rText)
         if(cChar == '.')
         {
             if(bPoint)
-                return false;
+                return FALSE;
             else
-                bPoint = true;
+                bPoint = TRUE;
         }
         else if ( !IsDigit( cChar ) )
-            return false;
+            return FALSE;
     }
-    return true;
+    return TRUE;
 }
 
 void SmParser::FontSize()
@@ -1996,7 +1996,7 @@ void SmParser::Brace()
             pLeft = new SmMathSymbolNode(CurToken);
 
             NextToken();
-            Bracebody(true);
+            Bracebody(TRUE);
             pBody = NodeStack.Pop();
 
             if (CurToken.eType == TRIGHT)
@@ -2024,7 +2024,7 @@ void SmParser::Brace()
             pLeft = new SmMathSymbolNode(CurToken);
 
             NextToken();
-            Bracebody(false);
+            Bracebody(FALSE);
             pBody = NodeStack.Pop();
 
             SmTokenType  eExpectedType = TUNKNOWN;
@@ -2072,7 +2072,7 @@ void SmParser::Brace()
 }
 
 
-void SmParser::Bracebody(bool bIsLeftRight)
+void SmParser::Bracebody(BOOL bIsLeftRight)
 {
     SmStructureNode *pBody = new SmBracebodyNode(CurToken);
     SmNodeArray      aNodes;
@@ -2288,7 +2288,7 @@ void SmParser::Matrix()
 
 void SmParser::Special()
 {
-    bool bReplace = false;
+    BOOL bReplace = FALSE;
     String &rName = CurToken.aText;
     String aNewName;
 
@@ -2301,13 +2301,13 @@ void SmParser::Special()
         {
             const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetUiSymbolName( rName );
-            bReplace = true;
+            bReplace = TRUE;
         }
         else if (IsExportSymbolNames())
         {
             const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
             aNewName = rLSD.GetExportSymbolName( rName );
-            bReplace = true;
+            bReplace = TRUE;
         }
     }
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
@@ -2336,7 +2336,7 @@ void SmParser::Special()
                 if (pFrom->GetString(i) == rName)
                 {
                     aNewName = pTo->GetString(i);
-                    bReplace = true;
+                    bReplace = TRUE;
                 }
             }
         }
@@ -2386,7 +2386,7 @@ void SmParser::Error(SmParseError eError)
 SmParser::SmParser()
 {
     eConversion = CONVERT_NONE;
-    bImportSymNames = bExportSymNames = false;
+    bImportSymNames = bExportSymNames = FALSE;
     nLang = Application::GetSettings().GetUILanguage();
 }
 

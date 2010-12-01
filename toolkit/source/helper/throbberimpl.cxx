@@ -41,6 +41,7 @@ namespace toolkit
     Throbber_Impl::Throbber_Impl( uno::Reference< VCLXWindow > xParent,
                                   sal_Int32 nStepTime,
                                   sal_Bool bRepeat )
+        :mrMutex( Application::GetSolarMutex() )
     {
         mxParent = xParent;
         mbRepeat = bRepeat;
@@ -59,7 +60,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::start() throw ( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         mnCurStep = 0;
         maWaitTimer.Start();
@@ -68,7 +69,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     void Throbber_Impl::stop() throw ( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         maWaitTimer.Stop();
     }
@@ -77,7 +78,7 @@ namespace toolkit
     void Throbber_Impl::setImageList( const uno::Sequence< uno::Reference< graphic::XGraphic > >& rImageList )
         throw ( uno::RuntimeException )
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         maImageList = rImageList;
 
@@ -101,10 +102,21 @@ namespace toolkit
             pImage->SetImage( maImageList[ 0 ] );
     }
 
+    //--------------------------------------------------------------------
+    sal_Bool Throbber_Impl::isHCMode()
+        throw ( uno::RuntimeException )
+    {
+        FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
+        if ( pImage )
+            return pImage->GetSettings().GetStyleSettings().GetHighContrastMode();
+        else
+            return Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+    }
+
     // -----------------------------------------------------------------------
     IMPL_LINK( Throbber_Impl, TimeOutHdl, Throbber_Impl*, EMPTYARG )
     {
-        SolarMutexGuard aGuard;
+        ::osl::SolarGuard aGuard( GetMutex() );
 
         FixedImage* pImage = static_cast< FixedImage* >( mxParent->GetWindow() );
 

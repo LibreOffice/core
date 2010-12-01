@@ -146,12 +146,12 @@ Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl :: getSupportedServiceNam
 Sequence< OUString > XMLSignatureTemplateImpl :: impl_getSupportedServiceNames() {
     ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() ) ;
     Sequence< OUString > seqServiceNames( 1 ) ;
-    seqServiceNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignatureTemplate")) ;
+    seqServiceNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignatureTemplate" ) ;
     return seqServiceNames ;
 }
 
 OUString XMLSignatureTemplateImpl :: impl_getImplementationName() throw( RuntimeException ) {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.framework.XMLSignatureTemplateImpl")) ;
+    return OUString::createFromAscii( "com.sun.star.xml.security.framework.XMLSignatureTemplateImpl" ) ;
 }
 
 //Helper for registry

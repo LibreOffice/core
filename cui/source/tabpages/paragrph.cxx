@@ -1378,8 +1378,9 @@ void    SvxParaAlignTabPage::UpdateExample_Impl( BOOL bAll )
 
     aExampleWin.Draw( bAll );
 }
-
-// Erweiterungen fuer den Blocksatz einschalten
+/*-----------------17.01.97 08.04-------------------
+    Erweiterungen fuer den Blocksatz einschalten
+--------------------------------------------------*/
 void SvxParaAlignTabPage::EnableJustifyExt()
 {
     aLastLineFT.Show();
@@ -2331,7 +2332,9 @@ void SvxAsianTabPage::Reset( const SfxItemSet& rSet )
 //  aPuntuationCB       .Enable(FALSE);
 //  aAdjustNumbersCB    .Enable(FALSE);
 }
+/* -----------------------------19.12.00 12:59--------------------------------
 
+ ---------------------------------------------------------------------------*/
 IMPL_LINK( SvxAsianTabPage, ClickHdl_Impl, TriStateBox*, pBox )
 {
     pBox->EnableTriState( FALSE );

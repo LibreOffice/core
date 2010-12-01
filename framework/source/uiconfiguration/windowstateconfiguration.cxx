@@ -1224,7 +1224,7 @@ void ConfigurationAccess_WindowState::impl_putPropertiesFromStruct( const Window
     sal_Int32                 i( 0 );
     sal_Int32                 nCount( m_aPropArray.size() );
     Sequence< PropertyValue > aPropSeq;
-    ::rtl::OUString                  aDelim( RTL_CONSTASCII_USTRINGPARAM(",") );
+    ::rtl::OUString                  aDelim( ::rtl::OUString::createFromAscii( "," ));
 
     for ( i = 0; i < nCount; i++ )
     {
@@ -1374,14 +1374,7 @@ WindowStateConfiguration::WindowStateConfiguration( const Reference< XMultiServi
                                                     UNO_QUERY );
     Reference< XNameAccess > xEmptyNameAccess;
     Reference< XNameAccess > xNameAccess( m_xModuleManager, UNO_QUERY_THROW );
-    Sequence< rtl::OUString > aElementNames;
-    try
-    {
-        aElementNames = xNameAccess->getElementNames();
-    }
-    catch (::com::sun::star::uno::RuntimeException &)
-    {
-    }
+    Sequence< rtl::OUString > aElementNames = xNameAccess->getElementNames();
     Sequence< PropertyValue > aSeq;
     ::rtl::OUString                  aModuleIdentifier;
 

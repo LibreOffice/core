@@ -197,6 +197,8 @@ USHORT MSWordStyles::BuildGetSlot( const SwFmt& rFmt )
             nRet -= RES_POOLCOLL_HEADLINE1-1;
             break;
 
+        //case RES_POOLCHR_FOOTNOTE_ANCHOR:   nRet =
+        //case RES_POOLCHR_ENDNOTE_ANCHOR:
         default:
             nRet = nUsedSlots++;
             break;
@@ -2164,6 +2166,7 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, BYTE nTTyp,
                 const SvULongs* pShapeIds = GetShapeIdArr();
                 OSL_ENSURE( pShapeIds, "wo sind die ShapeIds?" );
 
+                // nLen = pTxtPos->Count();
                 for ( i = 0; i < nLen; ++i )
                 {
                     // write textbox story - FTXBXS
@@ -2253,6 +2256,11 @@ void WW8_WrPlcSubDoc::WriteGenericPlc( WW8Export& rWrt, BYTE nTTyp,
                             false, RTL_TEXTENCODING_MS_1252);
                     SwWW8Writer::FillCount(*rWrt.pTableStrm, 9 - nNameLen);
                 }
+
+                //SVBT16 ibst;      // index into GrpXstAtnOwners
+                //SVBT16 ak;        // not used
+                //SVBT16 grfbmc;    // not used
+                //SVBT32 ITagBkmk;  // when not -1, this tag identifies the
 
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, nFndPos );
                 SwWW8Writer::WriteShort( *rWrt.pTableStrm, 0 );

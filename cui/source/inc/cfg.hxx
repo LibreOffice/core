@@ -437,7 +437,7 @@ protected:
     ::com::sun::star::uno::Reference
         < ::com::sun::star::frame::XFrame > m_xFrame;
 
-    SvxConfigPage( Window*, const SfxItemSet& );
+    SvxConfigPage( Window*, /* const ResId&, */ const SfxItemSet& );
     virtual ~SvxConfigPage();
 
     DECL_LINK( MoveHdl, Button * );
@@ -582,6 +582,7 @@ class SvxToolbarEntriesListBox : public SvxMenuEntriesListBox
     Size            m_aCheckBoxImageSizePixel;
     Link            m_aChangedListener;
     SvLBoxButtonData*   m_pButtonData;
+    BOOL            m_bHiContrastMode;
     SvxConfigPage*  pPage;
 
     void            ChangeVisibility( SvLBoxEntry* pEntry );
@@ -782,7 +783,7 @@ private:
     void ImportGraphics(
         const com::sun::star::uno::Sequence< rtl::OUString >& aURLs );
 
-    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);
+    BitmapEx AutoScaleBitmap(BitmapEx & aBitmap, const long aStandardSize);// Added by shizhoubo
 
 public:
 

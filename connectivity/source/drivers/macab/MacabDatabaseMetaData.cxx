@@ -217,7 +217,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQ
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
 {
     // normally this is "
-    ::rtl::OUString aVal(RTL_CONSTASCII_USTRINGPARAM("\""));
+    ::rtl::OUString aVal = ::rtl::OUString::createFromAscii("\"");
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw
 {
     // if someday we support more than the default address book,
     // this method should return the URL which was used to create it
-    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:address:macab:" ));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:address:macab:");
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -576,13 +576,13 @@ sal_Bool SAL_CALL MacabDatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getDriverName(  ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "macab" ));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("macab");
     return aValue;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL MacabDatabaseMetaData::getDriverVersion() throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aValue(RTL_CONSTASCII_USTRINGPARAM(MACAB_DRIVER_VERSION));
+    ::rtl::OUString aValue = ::rtl::OUString::createFromAscii(MACAB_DRIVER_VERSION);
     return aValue;
 }
 // -------------------------------------------------------------------------
@@ -789,7 +789,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  ) throw(
     Reference< XResultSet > xRef = pResult;
 
     static ODatabaseMetaDataResultSet::ORows aRows;
-    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
 
     if (aRows.empty())
     {
@@ -814,7 +814,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  ) throw(SQ
 
         // We support four types: char, timestamp, integer, float
         aRow[0] = ODatabaseMetaDataResultSet::getEmptyValue();
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CHAR"));
         aRow[2] = new ORowSetValueDecorator(DataType::CHAR);
         aRow[3] = new ORowSetValueDecorator((sal_Int32) 254);
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
@@ -835,20 +835,20 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  ) throw(SQ
 
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
         aRow[2] = new ORowSetValueDecorator(DataType::TIMESTAMP);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)19);
         aRow[4] = ODatabaseMetaDataResultSet::getQuoteValue();
         aRow[5] = ODatabaseMetaDataResultSet::getQuoteValue();
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INTEGER")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("INTEGER"));
         aRow[2] = new ORowSetValueDecorator(DataType::INTEGER);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)20);
         aRow[15] = new ORowSetValueDecorator((sal_Int32)20);
         aRows.push_back(aRow);
 
-        aRow[1] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FLOAT")));
+        aRow[1] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("FLOAT"));
         aRow[2] = new ORowSetValueDecorator(DataType::FLOAT);
         aRow[3] = new ORowSetValueDecorator((sal_Int32)20);
         aRow[15] = new ORowSetValueDecorator((sal_Int32)15);
@@ -909,7 +909,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
         aRow[14] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[15] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[16] = new ORowSetValueDecorator((sal_Int32) 254);
-        aRow[18] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("YES")));
+        aRow[18] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("YES"));
 
         sal_Int32 nPosition = 1;
         ::rtl::OUString sName;
@@ -930,24 +930,24 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
                 {
                     case kABStringProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::CHAR);
-                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR")));
+                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("CHAR"));
                         aRow[7] = new ORowSetValueDecorator((sal_Int32) 256);
                         aRows.push_back(aRow);
                         break;
                     case kABDateProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
                         aRows.push_back(aRow);
                         break;
                     case kABIntegerProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::INTEGER);
-                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INTEGER")));
+                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("INTEGER"));
                         aRow[7] = new ORowSetValueDecorator((sal_Int32) 20);
                         aRows.push_back(aRow);
                         break;
                     case kABRealProperty:
                         aRow[5] = new ORowSetValueDecorator(DataType::FLOAT);
-                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FLOAT")));
+                        aRow[6] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("FLOAT"));
                         aRow[7] = new ORowSetValueDecorator((sal_Int32) 15);
                         aRows.push_back(aRow);
                         break;
@@ -974,7 +974,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
     // when no types are given at all, we return all the tables
-    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
     sal_Bool bTableFound = sal_False;
     const ::rtl::OUString* p = types.getConstArray(),
                          * pEnd = p + types.getLength();
@@ -1058,7 +1058,7 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
         aRow[1] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[2] = new ORowSetValueDecorator(sName);
         aRow[3] = new ORowSetValueDecorator(DataType::TIMESTAMP);
-        aRow[4] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP")));
+        aRow[4] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TIMESTAMP"));
 
         aRow[5] = ODatabaseMetaDataResultSet::getEmptyValue();
         aRow[6] = ODatabaseMetaDataResultSet::getEmptyValue();

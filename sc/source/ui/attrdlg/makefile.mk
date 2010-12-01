@@ -42,16 +42,12 @@ CXXFILES =  attrdlg.cxx		\
             tabpages.cxx	\
             condfrmt.cxx
 
-SLOFILES = \
-            $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
-            $(SLO)$/attrdlg.obj		\
+SLOFILES =  $(SLO)$/attrdlg.obj	\
+            $(SLO)$/tabpages.obj	\
             $(SLO)$/condfrmt.obj	\
             $(SLO)$/scabstdlg.obj	\
-            $(SLO)$/scdlgfact.obj	\
-            $(SLO)$/scuiexp.obj		\
-            $(SLO)$/tabpages.obj
+        $(SLO)$/scuiexp.obj		\
+        $(SLO)$/scdlgfact.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

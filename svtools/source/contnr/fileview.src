@@ -83,7 +83,7 @@ String STR_SVT_GB
 
 Image IMG_SVT_FOLDER
 {
-    ImageBitmap = Bitmap { File = "folder.png" ; };
+    ImageBitmap = Bitmap { File = "folder.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 };
 
@@ -173,3 +173,24 @@ ModalDialog DLG_SVT_QUERYDELETE
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

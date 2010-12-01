@@ -82,12 +82,15 @@ namespace dbaui
     {
         //................................................................
         static void lcl_getConnectionProvidedTableIcon_nothrow(  const ImageProvider_Data& _rData,
-            const ::rtl::OUString& _rName, Reference< XGraphic >& _out_rxGraphic )
+            const ::rtl::OUString& _rName, Reference< XGraphic >& _out_rxGraphic, Reference< XGraphic >& _out_rxGraphicHC )
         {
             try
             {
                 if ( _rData.xTableUI.is() )
+                {
                     _out_rxGraphic = _rData.xTableUI->getTableIcon( _rName, GraphicColorMode::NORMAL );
+                    _out_rxGraphicHC = _rData.xTableUI->getTableIcon( _rName, GraphicColorMode::HIGH_CONTRAST );
+                }
             }
             catch( const Exception& )
             {
@@ -97,19 +100,21 @@ namespace dbaui
 
         //................................................................
         static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const ::rtl::OUString& _rName,
-            USHORT& _out_rResourceID )
+            USHORT& _out_rResourceID, USHORT& _out_rResourceID_HC )
         {
-            _out_rResourceID = 0;
+            _out_rResourceID = _out_rResourceID_HC = 0;
             try
             {
                 bool bIsView = _rData.xViews.is() && _rData.xViews->hasByName( _rName );
                 if ( bIsView )
                 {
                     _out_rResourceID = VIEW_TREE_ICON;
+                    _out_rResourceID_HC = VIEW_TREE_ICON_SCH;
                 }
                 else
                 {
                     _out_rResourceID = TABLE_TREE_ICON;
+                    _out_rResourceID_HC = TABLE_TREE_ICON_SCH;
                 }
             }
             catch( const Exception& )
@@ -147,60 +152,67 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    void ImageProvider::getImages( const String& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage )
+    void ImageProvider::getImages( const String& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage, Image& _out_rImageHC )
     {
         if ( _nDatabaseObjectType != DatabaseObject::TABLE )
         {
             // for types other than tables, the icon does not depend on the concrete object
-            _out_rImage = getDefaultImage( _nDatabaseObjectType );
+            _out_rImage = getDefaultImage( _nDatabaseObjectType, false );
+            _out_rImageHC = getDefaultImage( _nDatabaseObjectType, true );
         }
         else
         {
             // check whether the connection can give us an icon
             Reference< XGraphic > xGraphic;
-            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic );
+            Reference< XGraphic > xGraphicHC;
+            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic, xGraphicHC );
             if ( xGraphic.is() )
                 _out_rImage = Image( xGraphic );
+            if ( xGraphicHC.is() )
+                _out_rImageHC = Image( xGraphicHC );
 
-            if ( !_out_rImage )
+            if ( !_out_rImage || !_out_rImageHC )
             {
                 // no -> determine by type
                 USHORT nImageResourceID = 0;
-                lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID );
+                USHORT nImageResourceID_HC = 0;
+                lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID, nImageResourceID_HC );
 
                 if ( nImageResourceID && !_out_rImage )
                     _out_rImage = Image( ModuleRes( nImageResourceID ) );
+                if ( nImageResourceID_HC && !_out_rImageHC )
+                    _out_rImageHC = Image( ModuleRes( nImageResourceID_HC ) );
             }
         }
     }
 
     //--------------------------------------------------------------------
-    Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType )
+    Image ImageProvider::getDefaultImage( sal_Int32 _nDatabaseObjectType, bool _bHighContrast )
     {
         Image aObjectImage;
-        USHORT nImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType ) );
+        USHORT nImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType, _bHighContrast ) );
         if ( nImageResourceID )
             aObjectImage = Image( ModuleRes( nImageResourceID ) );
         return aObjectImage;
     }
 
     //--------------------------------------------------------------------
-    USHORT ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType )
+    USHORT ImageProvider::getDefaultImageResourceID( sal_Int32 _nDatabaseObjectType, bool _bHighContrast )
     {
         USHORT nImageResourceID( 0 );
         switch ( _nDatabaseObjectType )
         {
         case DatabaseObject::QUERY:
-            nImageResourceID = QUERY_TREE_ICON;
+            nImageResourceID = _bHighContrast ? QUERY_TREE_ICON_SCH : QUERY_TREE_ICON;
             break;
         case DatabaseObject::FORM:
-            nImageResourceID = FORM_TREE_ICON;
+            nImageResourceID = _bHighContrast ? FORM_TREE_ICON_SCH : FORM_TREE_ICON;
             break;
         case DatabaseObject::REPORT:
-            nImageResourceID = REPORT_TREE_ICON;
+            nImageResourceID = _bHighContrast ? REPORT_TREE_ICON_SCH : REPORT_TREE_ICON;
             break;
         case DatabaseObject::TABLE:
-            nImageResourceID = TABLE_TREE_ICON;
+            nImageResourceID = _bHighContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON;
             break;
         default:
             OSL_ENSURE( false, "ImageProvider::getDefaultImage: invalid database object type!" );
@@ -210,22 +222,22 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    Image ImageProvider::getFolderImage( sal_Int32 _nDatabaseObjectType )
+    Image ImageProvider::getFolderImage( sal_Int32 _nDatabaseObjectType, bool _bHighContrast )
     {
         USHORT nImageResourceID( 0 );
         switch ( _nDatabaseObjectType )
         {
         case DatabaseObject::QUERY:
-            nImageResourceID = QUERYFOLDER_TREE_ICON;
+            nImageResourceID = _bHighContrast ? QUERYFOLDER_TREE_ICON_SCH : QUERYFOLDER_TREE_ICON;
             break;
         case DatabaseObject::FORM:
-            nImageResourceID = FORMFOLDER_TREE_ICON;
+            nImageResourceID = _bHighContrast ? FORMFOLDER_TREE_ICON_SCH : FORMFOLDER_TREE_ICON;
             break;
         case DatabaseObject::REPORT:
-            nImageResourceID = REPORTFOLDER_TREE_ICON;
+            nImageResourceID = _bHighContrast ? REPORTFOLDER_TREE_ICON_SCH : REPORTFOLDER_TREE_ICON;
             break;
         case DatabaseObject::TABLE:
-            nImageResourceID = TABLEFOLDER_TREE_ICON;
+            nImageResourceID = _bHighContrast ? TABLEFOLDER_TREE_ICON_SCH : TABLEFOLDER_TREE_ICON;
             break;
         default:
             OSL_ENSURE( false, "ImageProvider::getDefaultImage: invalid database object type!" );
@@ -239,9 +251,9 @@ namespace dbaui
     }
 
     //--------------------------------------------------------------------
-    Image ImageProvider::getDatabaseImage()
+    Image ImageProvider::getDatabaseImage( bool _bHighContrast )
     {
-        return Image( ModuleRes( DATABASE_TREE_ICON ) );
+        return Image( ModuleRes( _bHighContrast ? DATABASE_TREE_ICON_SCH : DATABASE_TREE_ICON ) );
     }
 
 //........................................................................

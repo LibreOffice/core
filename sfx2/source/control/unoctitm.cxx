@@ -109,7 +109,7 @@ SfxUnoControllerItem::SfxUnoControllerItem( SfxControllerItem *pItem, SfxBinding
     DBG_ASSERT( !pCtrlItem || !pCtrlItem->IsBound(), "ControllerItem fehlerhaft!" );
 
     aCommand.Complete = rCmd;
-    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+    Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
     xTrans->parseStrict( aCommand );
     pBindings->RegisterUnoController_Impl( this );
 }
@@ -340,6 +340,28 @@ sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const ::com::sun::star::uno:
         return 0;
 }
 
+/* ASDBG
+void* SfxOfficeDispatch::getImplementation(Reflection *p)
+{
+    if( p == ::getCppuType((const SfxOfficeDispatch*)0) )
+        return this;
+    else
+        return ::cppu::OWeakObject::getImplementation(p);
+
+}
+
+Reflection* ::getCppuType((const SfxOfficeDispatch*)0)
+{
+    static StandardClassReflection aRefl(
+        0,
+        createStandardClass(
+            "SfxOfficeDispatch", ::cppu::OWeakObject::get::cppu::OWeakObjectIdlClass(),
+            1,
+            ::getCppuType((const ::com::sun::star::frame::XDispatch*)0) ) );
+    return &aRefl;
+}
+*/
+
 SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDispat, const SfxSlot* pSlot, const ::com::sun::star::util::URL& rURL )
 {
 //    nOfficeDispatchCount++;
@@ -490,7 +512,7 @@ SfxDispatchController_Impl::SfxDispatchController_Impl(
         ByteString aTmp(".uno:");
         aTmp += pUnoName;
         aDispatchURL.Complete = ::rtl::OUString::createFromAscii( aTmp.GetBuffer() );
-        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY );
+        Reference < ::com::sun::star::util::XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), UNO_QUERY );
         xTrans->parseStrict( aDispatchURL );
     }
 
@@ -787,10 +809,10 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                         bFailure = aReq.IsCancelled();
                         if ( bVBARequest )
                         {
-                            SFX_REQUEST_ARG( aReq, pDlgRet, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
-                            if ( pDlgRet )
+                            SFX_REQUEST_ARG( aReq, pItem, SfxBoolItem, SID_DIALOG_RETURN, FALSE );
+                            if ( pItem )
                             {
-                                bSuccess = pDlgRet->GetValue();
+                                bSuccess = pItem->GetValue();
                             }
                         }
                     }

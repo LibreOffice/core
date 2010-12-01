@@ -116,7 +116,6 @@
 
 #include <tools/debug.hxx>
 #include <comphelper/processfactory.hxx>
-#include "awt/vclxtabcontrol.hxx"
 
 namespace css = ::com::sun::star;
 
@@ -284,7 +283,6 @@ static ComponentInfo __FAR_DATA aComponentInfos [] =
     { "floatingwindow",     WINDOW_FLOATINGWINDOW },
     { "framewindow",        VCLWINDOW_FRAMEWINDOW },
     { "groupbox",           WINDOW_GROUPBOX },
-    { "frame",          WINDOW_GROUPBOX },
     { "helpbutton",         WINDOW_HELPBUTTON },
     { "imagebutton",        WINDOW_IMAGEBUTTON },
     { "imageradiobutton",   WINDOW_IMAGERADIOBUTTON },
@@ -625,14 +623,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
     Window* pNewWindow = NULL;
     sal_uInt16 nType = ImplGetComponentType( aServiceName );
-    bool bFrameControl = false;
-    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("frame") ) )
-        bFrameControl = true;
-    if ( aServiceName == String( RTL_CONSTASCII_USTRINGPARAM("tabcontrolnotabs") ) )
-    {
-        nWinBits |= WB_NOBORDER;
-        nType = ImplGetComponentType( String( RTL_CONSTASCII_USTRINGPARAM("tabcontrol") ) );
-    }
+
     if ( !pParent )
     {
         // Wenn die Component einen Parent braucht, dann NULL zurueckgeben,
@@ -729,17 +720,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                 pNewWindow = new FloatingWindow( pParent, nWinBits );
             break;
             case WINDOW_GROUPBOX:
-                        {
                 pNewWindow = new GroupBox( pParent, nWinBits );
-                                if ( bFrameControl )
-                                {
-                                    GroupBox* pGroupBox =  static_cast< GroupBox* >( pNewWindow );
-                                    *ppNewComp = new VCLXFrame;
-                                    // Frame control needs to recieve
-                                    // Mouse events
-                                    pGroupBox->SetMouseTransparent( FALSE );
-                                }
-                        }
             break;
             case WINDOW_HELPBUTTON:
                 pNewWindow = new HelpButton( pParent, nWinBits );
@@ -879,7 +860,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABCONTROL:
                 pNewWindow = new TabControl( pParent, nWinBits );
-                *ppNewComp = new VCLXMultiPage;
             break;
             case WINDOW_TABDIALOG:
                 pNewWindow = new TabDialog( pParent, nWinBits );
@@ -1002,14 +982,14 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_CONTROL:
                 if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simpleanimation")) ) )
+                        ::rtl::OUString::createFromAscii("simpleanimation") ) )
                 {
                     nWinBits |= WB_SCALE;
                     pNewWindow = new FixedImage( pParent, nWinBits );
                     *ppNewComp = new ::toolkit::XSimpleAnimation;
                 }
                 else if ( rDescriptor.WindowServiceName.equalsIgnoreAsciiCase(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("throbber")) ) )
+                        ::rtl::OUString::createFromAscii("throbber") ) )
                 {
                     nWinBits |= WB_SCALE;
                     pNewWindow = new FixedImage( pParent, nWinBits );
@@ -1328,14 +1308,14 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             {
                 // remember clipboard here
                 mxClipboard = ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > (
-                    xFactory->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.datatransfer.clipboard.SystemClipboard")) ), ::com::sun::star::uno::UNO_QUERY );
+                    xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.datatransfer.clipboard.SystemClipboard" ) ), ::com::sun::star::uno::UNO_QUERY );
             }
         }
 
         return mxClipboard;
     }
 
-    else if( clipboardName.equals( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Selection")) ) )
+    else if( clipboardName.equals( ::rtl::OUString::createFromAscii("Selection") ) )
     {
         return mxSelection;
     }
@@ -1346,7 +1326,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
 // XServiceInfo
 ::rtl::OUString VCLXToolkit::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("stardiv.Toolkit.VCLXToolkit"));
+    return rtl::OUString::createFromAscii( "stardiv.Toolkit.VCLXToolkit" );
 }
 
 sal_Bool VCLXToolkit::supportsService( const ::rtl::OUString& rServiceName ) throw(::com::sun::star::uno::RuntimeException)

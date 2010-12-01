@@ -758,6 +758,11 @@ void FixedBitmap::ImplDraw( OutputDevice* pDev, ULONG /* nDrawFlags */,
     USHORT nStyle = 0;
     Bitmap* pBitmap = &maBitmap;
     Color aCol;
+    if( !!maBitmapHC )
+    {
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pBitmap = &maBitmapHC;
+    }
 
     if( nStyle & IMAGE_DRAW_COLORTRANSFORM )
     {
@@ -879,17 +884,28 @@ void FixedBitmap::SetBitmap( const Bitmap& rBitmap )
 
 // -----------------------------------------------------------------------
 
-BOOL FixedBitmap::SetModeBitmap( const Bitmap& rBitmap )
+BOOL FixedBitmap::SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode )
 {
-    SetBitmap( rBitmap );
+    if( eMode == BMP_COLOR_NORMAL )
+        SetBitmap( rBitmap );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        maBitmapHC = rBitmap;
+        StateChanged( STATE_CHANGE_DATA );
+    }
+    else
+        return FALSE;
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Bitmap& FixedBitmap::GetModeBitmap( ) const
+const Bitmap& FixedBitmap::GetModeBitmap( BmpColorMode eMode) const
 {
-    return maBitmap;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maBitmapHC;
+    else
+        return maBitmap;
 }
 
 // =======================================================================
@@ -993,6 +1009,11 @@ void FixedImage::ImplDraw( OutputDevice* pDev, ULONG nDrawFlags,
 
     Image *pImage = &maImage;
     Color aCol;
+    if( !!maImageHC )
+    {
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pImage = &maImageHC;
+    }
 
     // Haben wir ueberhaupt ein Image
     if ( !(!(*pImage)) )
@@ -1023,7 +1044,7 @@ void FixedImage::Paint( const Rectangle& )
 
 Size FixedImage::GetOptimalSize( WindowSizeType ) const
 {
-    const Image* pImage = &maImage;
+    const Image* pImage = GetSettings().GetStyleSettings().GetHighContrastMode() ? &maImageHC : &maImage;
     return pImage->GetSizePixel();
 }
 
@@ -1118,17 +1139,31 @@ void FixedImage::SetImage( const Image& rImage )
 
 // -----------------------------------------------------------------------
 
-BOOL FixedImage::SetModeImage( const Image& rImage )
+BOOL FixedImage::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    SetImage( rImage );
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& FixedImage::GetModeImage( ) const
+const Image& FixedImage::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------

@@ -60,8 +60,10 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-static ::rtl::OUString aVndSunStarUNO( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.UNO:") );
-static ::rtl::OUString aVndSunStarScript( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:") );
+static ::rtl::OUString aVndSunStarUNO =
+    ::rtl::OUString::createFromAscii( "vnd.sun.star.UNO:" );
+static ::rtl::OUString aVndSunStarScript =
+    ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
 
 _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pAssignFT( NULL ),
@@ -70,6 +72,8 @@ _SvxMacroTabPage_Impl::_SvxMacroTabPage_Impl( const SfxItemSet& rAttrSet ) :
     pDeletePB( NULL ),
     pMacroImg( NULL ),
     pComponentImg( NULL ),
+    pMacroImg_h( NULL ),
+    pComponentImg_h( NULL ),
     pStrEvent( NULL ),
     pAssignedMacro( NULL ),
     pEventLB( NULL ),
@@ -89,6 +93,8 @@ _SvxMacroTabPage_Impl::~_SvxMacroTabPage_Impl()
     delete pDeletePB;
     delete pMacroImg;
     delete pComponentImg;
+    delete pMacroImg_h;
+    delete pComponentImg_h;
     delete pStrEvent;
     delete pAssignedMacro;
     delete pEventLB;
@@ -124,6 +130,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
     {
         Size    aSz;
         USHORT    _nTabs = maHeaderBar.GetItemCount();
+        long    nTmpSz = 0;
         long    nWidth = maHeaderBar.GetItemSize( ITEMID_EVENT );
         long    nBarWidth = maHeaderBar.GetSizePixel().Width();
 
@@ -133,7 +140,7 @@ IMPL_LINK( _HeaderTabListBox, HeaderEndDrag_Impl, HeaderBar*, pBar )
             maHeaderBar.SetItemSize( ITEMID_EVENT, nBarWidth - TAB_WIDTH_MIN );
 
         {
-            long _nWidth, nTmpSz = 0;
+            long    _nWidth;
             for( USHORT i = 1 ; i < _nTabs ; ++i )
             {
                 _nWidth = maHeaderBar.GetItemSize( i );
@@ -277,6 +284,9 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnPrint",               RID_SVXSTR_EVENT_PRINTDOC ) );
     aDisplayNames.push_back( EventDisplayName( "OnModifyChanged",       RID_SVXSTR_EVENT_MODIFYCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnTitleChanged",        RID_SVXSTR_EVENT_TITLECHANGED ) );
+//    aDisplayNames.push_back( EventDisplayName( "OnModeChanged",         RID_SVXSTR_EVENT_MODECHANGED ) );
+//    aDisplayNames.push_back( EventDisplayName( "OnVisAreaChanged",      RID_SVXSTR_EVENT_VISAREACHANGED ) );
+//    aDisplayNames.push_back( EventDisplayName( "OnStorageChanged",      RID_SVXSTR_EVENT_STORAGECHANGED ) );
 
     // application specific events
     aDisplayNames.push_back( EventDisplayName( "OnMailMerge",           RID_SVXSTR_EVENT_MAILMERGE ) );
@@ -286,6 +296,7 @@ void _SvxMacroTabPage::InitResources()
     aDisplayNames.push_back( EventDisplayName( "OnPageCountChange",     RID_SVXSTR_EVENT_PAGECOUNTCHANGE ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentOpened",  RID_SVXSTR_EVENT_SUBCOMPONENT_OPENED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSubComponentClosed",  RID_SVXSTR_EVENT_SUBCOMPONENT_CLOSED ) );
+//    aDisplayNames.push_back( EventDisplayName( "OnLayoutFinished",        RID_SVXSTR_EVENT_LAYOUT_FINISHED ) );
     aDisplayNames.push_back( EventDisplayName( "OnSelect",              RID_SVXSTR_EVENT_SELECTIONCHANGED ) );
     aDisplayNames.push_back( EventDisplayName( "OnDoubleClick",         RID_SVXSTR_EVENT_DOUBLECLICK ) );
     aDisplayNames.push_back( EventDisplayName( "OnRightClick",          RID_SVXSTR_EVENT_RIGHTCLICK ) );
@@ -444,20 +455,25 @@ class IconLBoxString : public SvLBoxString
 {
     Image* m_pMacroImg;
     Image* m_pComponentImg;
+    Image* m_pMacroImg_h;
+    Image* m_pComponentImg_h;
     int m_nxImageOffset;
 
     public:
         IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
-            Image* pMacroImg, Image* pComponentImg );
+            Image* pMacroImg, Image* pComponentImg,
+            Image* pMacroImg_h, Image* pComponentImg_h );
         virtual void Paint(const Point& aPos, SvLBox& aDevice, USHORT nFlags, SvLBoxEntry* pEntry );
 };
 
 
 IconLBoxString::IconLBoxString( SvLBoxEntry* pEntry, USHORT nFlags, const String& sText,
-    Image* pMacroImg, Image* pComponentImg )
+    Image* pMacroImg, Image* pComponentImg, Image* pMacroImg_h, Image* pComponentImg_h )
         : SvLBoxString( pEntry, nFlags, sText )
         , m_pMacroImg( pMacroImg )
         , m_pComponentImg( pComponentImg )
+        , m_pMacroImg_h( pMacroImg_h )
+        , m_pComponentImg_h( pComponentImg_h )
 {
     m_nxImageOffset = 20;
 }
@@ -473,7 +489,12 @@ void IconLBoxString::Paint( const Point& aPos, SvLBox& aDevice,
         sal_Int32 nIndex = aURL.indexOf( aVndSunStarUNO );
         bool bUNO = nIndex == 0;
 
-        const Image* pImg = bUNO ? m_pComponentImg : m_pMacroImg;
+        BOOL bHC = aDevice.GetSettings().GetStyleSettings().GetHighContrastMode();
+        const Image* pImg;
+        if( bHC )
+            pImg = bUNO ? m_pComponentImg_h : m_pMacroImg_h;
+        else
+            pImg = bUNO ? m_pComponentImg : m_pMacroImg;
         aDevice.DrawImage( aPos, *pImg );
 
         ::rtl::OUString aPureMethod;
@@ -557,7 +578,8 @@ void _SvxMacroTabPage::DisplayAppEvents( bool appEvents)
         _pE->SetUserData( (void*)pEventName );
         String sNew( eventURL );
         _pE->ReplaceItem( new IconLBoxString( _pE, 0, sNew,
-            mpImpl->pMacroImg, mpImpl->pComponentImg ), LB_MACROS_ITEMPOS );
+            mpImpl->pMacroImg, mpImpl->pComponentImg,
+            mpImpl->pMacroImg_h, mpImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
         rListBox.GetModel()->InvalidateEntry( _pE );
         rListBox.Select( _pE );
         rListBox.MakeVisible( _pE );
@@ -647,7 +669,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
     if( pBtn == pImpl->pDeletePB )
     {
         // delete pressed
-        sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script") );
+        sEventType = ::rtl::OUString::createFromAscii("Script");
         sEventURL = ::rtl::OUString();
         if(!pThis->bAppEvents)
             pThis->bDocModified = true;
@@ -665,7 +687,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
         short ret = pAssignDlg->Execute();
         if( ret )
         {
-            sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UNO"));
+            sEventType = ::rtl::OUString::createFromAscii("UNO");
             sEventURL = pAssignDlg->getURL();
             if(!pThis->bAppEvents)
                 pThis->bDocModified = true;
@@ -681,7 +703,7 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
             short ret = pDlg->Execute();
             if ( ret )
             {
-                sEventType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+                sEventType = ::rtl::OUString::createFromAscii("Script");
                 sEventURL = pDlg->GetScriptURL();
                 if(!pThis->bAppEvents)
                     pThis->bDocModified = true;
@@ -705,8 +727,10 @@ long _SvxMacroTabPage::GenericHandler_Impl( _SvxMacroTabPage* pThis, PushButton*
 
     // update the listbox entry
     pImpl->pEventLB->SetUpdateMode( FALSE );
+    // pE->ReplaceItem( new SvLBoxString( pE, 0, sEventURL ), LB_MACROS_ITEMPOS );
     pE->ReplaceItem( new IconLBoxString( pE, 0, sEventURL,
-            pImpl->pMacroImg, pImpl->pComponentImg ), LB_MACROS_ITEMPOS );
+            pImpl->pMacroImg, pImpl->pComponentImg,
+            pImpl->pMacroImg_h, pImpl->pComponentImg_h ), LB_MACROS_ITEMPOS );
 
     rListBox.GetModel()->InvalidateEntry( pE );
     rListBox.Select( pE );
@@ -829,6 +853,8 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
     mpImpl->pAssignComponentPB  = new PushButton( this,         CUI_RES( PB_ASSIGN_COMPONENT ) );
     mpImpl->pMacroImg           = new Image(                        CUI_RES(IMG_MACRO) );
     mpImpl->pComponentImg       = new Image(                        CUI_RES(IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image(                        CUI_RES(IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image(                        CUI_RES(IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -836,6 +862,9 @@ SvxMacroTabPage::SvxMacroTabPage( Window* pParent, const Reference< frame::XFram
 
     if( !mpImpl->bIDEDialogMode )
     {
+        // Size aSizeAssign;
+        // Point aPosAssign;
+        // mpImpl->pAssignPB->GetPosSizePixel( aPosAssign, aSizeAssign );
         Point aPosAssign = mpImpl->pAssignPB->GetPosPixel();
         Point aPosComp = mpImpl->pAssignComponentPB->GetPosPixel();
 

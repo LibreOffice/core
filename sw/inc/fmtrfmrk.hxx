@@ -41,7 +41,7 @@ class SwFmtRefMark : public SfxPoolItem
     friend class SwTxtRefMark;
     SwTxtRefMark* pTxtAttr;     // mein TextAttribut
 
-    // protected CopyCtor
+    // geschuetzter CopyCtor
     SwFmtRefMark& operator=(const SwFmtRefMark& rRefMark);
     String aRefName;
 
@@ -50,7 +50,7 @@ public:
     SwFmtRefMark( const SwFmtRefMark& rRefMark );
     ~SwFmtRefMark( );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

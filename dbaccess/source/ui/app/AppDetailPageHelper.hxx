@@ -119,7 +119,7 @@ namespace dbaui
 
         /** retrieves the resource ids of the images representing elements of the given type
         */
-        void getElementIcons( ElementType _eType, USHORT& _rImageId );
+        void getElementIcons( ElementType _eType, USHORT& _rImageId, USHORT& _rHighContrastImageId );
 
         /** fills the names in the listbox
             @param  _xContainer
@@ -128,12 +128,15 @@ namespace dbaui
                 the type of elements which are being filled
             @param _nImageId
                 the resource id of the image to use for non-container entries
+            @param _nHighContrastImageId
+                the resource id of the high contrast image to use for non-container entries
             @param  _pParent
                 The parent of the entries to be inserted.
         */
         void fillNames( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _xContainer,
                         const ElementType _eType,
                         const USHORT _nImageId,
+                        const USHORT _nHighContrastImageId,
                         SvLBoxEntry* _pParent );
 
         /** sets the detail page
@@ -147,20 +150,24 @@ namespace dbaui
                 The newly created DBTreeListBox
             @param  _rImage
                 the resource id of the default icon
+            @param  _rImageHC
+                the resource id of the default icon (HC version)
             @return
                 The new tree.
         */
-        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage );
+        DBTreeListBox* createTree( DBTreeListBox* _pTreeView, const Image& _rImage, const Image& _rImageHC );
 
         /** creates the tree and sets all HandleCallbacks
             @param  _nHelpId
                 The help id of the control
             @param  _nCollapsedBitmap
+                The image to use for tree entries.
+            @param  _rImageHC
                 The image to use in high contrast mode.
             @return
                 The new tree.
         */
-        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage );
+        DBTreeListBox* createSimpleTree( ULONG _nHelpId, const Image& _rImage, const Image& _rImageHC );
 
         DECL_LINK( OnEntryDoubleClick,          SvTreeListBox* );
         DECL_LINK( OnEntrySelChange,            void* );

@@ -1649,6 +1649,12 @@ void DrawViewShell::InsertURLButton(const String& rURL, const String& rText,
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::ShowUIControls (bool bVisible)
 {
     ViewShell::ShowUIControls (bVisible);

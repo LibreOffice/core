@@ -53,8 +53,8 @@ ChildrenManager::ChildrenManager (
         mpImpl->Init ();
     else
         throw uno::RuntimeException(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "ChildrenManager::ChildrenManager can't create implementation object")), NULL);
+            ::rtl::OUString::createFromAscii(
+                "ChildrenManager::ChildrenManager can't create implementation object"), NULL);
 }
 
 

@@ -169,6 +169,7 @@ class SwPostItMgr: public SfxListener
         typedef std::list<sw::sidebarwindows::SwSidebarWin*>::iterator  SwSidebarWin_iterator;
 
         void            AddPostIts(bool bCheckExistance = true,bool bFocus = true);
+        //void          AddRedlineComments(bool bCheckExistance, bool bFocus);
         void            RemoveSidebarWin();
         void            PreparePageContainer();
         void            Scroll(const long lScroll,const unsigned long aPage );

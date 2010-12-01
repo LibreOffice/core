@@ -101,10 +101,12 @@ class SwFmtNoBalancedColumns;
 class SvxFrameDirectionItem;
 class SwTextGridItem;
 class SwHeaderAndFooterEatSpacingItem;
+// OD 18.09.2003 #i18732#
 class SwFmtFollowTextFlow;
+// OD 2004-05-05 #i28701#
 class SwFmtWrapInfluenceOnObjPos;
 
-// Graphic attributes
+// Grafik-Attribute
 class SwMirrorGrf;
 class SwCropGrf;
 class SwRotationGrf;
@@ -118,7 +120,7 @@ class SwInvertGrf;
 class SwTransparencyGrf;
 class SwDrawModeGrf;
 
-// Paragraph attributes
+// Paragraph-Attribute
 class SvxLineSpacingItem;
 class SvxAdjustItem;
 class SvxFmtSplitItem;
@@ -136,7 +138,7 @@ class SvxParaVertAlignItem;
 class SvxParaGridItem;
 class SwParaConnectBorderItem;
 
-// TableBox attributes
+// TabellenBox-Attribute
 class SwTblBoxNumFormat;
 class SwTblBoxFormula;
 class SwTblBoxValue;
@@ -149,7 +151,7 @@ class SwAttrPool : public SfxItemPool
     static USHORT* pVersionMap2;
     static USHORT* pVersionMap3;
     static USHORT* pVersionMap4;
-    // due to extension of attribute set a new version
+    // OD 2004-01-21 #i18732# - due to extension of attribute set a new version
     // map for binary filter is necessary (version map 5).
     static USHORT* pVersionMap5;
     static USHORT* pVersionMap6;
@@ -174,7 +176,7 @@ public:
 
 class SW_DLLPUBLIC SwAttrSet : public SfxItemSet
 {
-    // Pointer for Modify-System
+    // Pointer fuers Modify-System
     SwAttrSet *pOldSet, *pNewSet;
 
     // Notification-Callback
@@ -224,6 +226,7 @@ public:
     //              den Parents gesucht werden soll. Wird nichts gefunden,
     //              wird das deflt. Attribut returnt.
     // Charakter-Attribute  - impl. steht im charatr.hxx
+    // AMA 12.10.94: Umstellung von SwFmt... auf Svx...
     inline const SvxPostureItem           &GetPosture( BOOL = TRUE ) const;
     inline const SvxWeightItem          &GetWeight( BOOL = TRUE ) const;
     inline const SvxShadowedItem        &GetShadowed( BOOL = TRUE ) const;
@@ -299,10 +302,12 @@ public:
     inline const SvxFrameDirectionItem    &GetFrmDir( BOOL = TRUE ) const;
     inline const SwTextGridItem         &GetTextGrid( BOOL = TRUE ) const;
     inline const SwHeaderAndFooterEatSpacingItem &GetHeaderAndFooterEatSpacing( BOOL = TRUE ) const;
+    // OD 18.09.2003 #i18732#
     inline const SwFmtFollowTextFlow    &GetFollowTextFlow(BOOL = TRUE) const;
+    // OD 2004-05-05 #i28701#
     inline const SwFmtWrapInfluenceOnObjPos& GetWrapInfluenceOnObjPos(BOOL = TRUE) const;
 
-    // Graphic attributes   - implementation in grfatr.hxx
+    // Grafik-Attribute - impl. steht im grfatr.hxx
     inline const SwMirrorGrf            &GetMirrorGrf( BOOL = TRUE ) const;
     inline const SwCropGrf            &GetCropGrf( BOOL = TRUE ) const;
     inline const SwRotationGrf            &GetRotationGrf(BOOL = TRUE ) const;
@@ -316,7 +321,7 @@ public:
     inline const SwTransparencyGrf        &GetTransparencyGrf(BOOL = TRUE ) const;
     inline const SwDrawModeGrf            &GetDrawModeGrf(BOOL = TRUE ) const;
 
-    // Paragraph attributes - implementation in paratr.hxx
+    // Paragraph-Attribute  - impl. steht im paratr.hxx
     inline const SvxLineSpacingItem       &GetLineSpacing( BOOL = TRUE ) const;
     inline const SvxAdjustItem            &GetAdjust( BOOL = TRUE ) const;
     inline const SvxFmtSplitItem      &GetSplit( BOOL = TRUE ) const;
@@ -334,7 +339,7 @@ public:
     inline const SvxParaGridItem        &GetParaGrid(BOOL = TRUE) const;
     inline const SwParaConnectBorderItem &GetParaConnectBorder(BOOL = TRUE ) const;
 
-    // Tablebox attributes  - implementation in cellatr.hxx
+    // TabellenBox-Attribute    - impl. steht im cellatr.hxx
     inline  const SwTblBoxNumFormat       &GetTblBoxNumFmt( BOOL = TRUE ) const;
     inline  const SwTblBoxFormula     &GetTblBoxFormula( BOOL = TRUE ) const;
     inline  const SwTblBoxValue           &GetTblBoxValue( BOOL = TRUE ) const;

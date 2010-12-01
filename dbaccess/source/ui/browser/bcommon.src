@@ -32,3 +32,4 @@ String RID_STR_TBL_TITLE
 {
     Text [ en-US ] = "Table #" ;
 };
+

@@ -104,6 +104,9 @@ SvxHatchTabPage::SvxHatchTabPage
     rXFSet              ( aXFillAttr.GetItemSet() )
 
 {
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -738,36 +741,39 @@ IMPL_LINK( SvxHatchTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pHatchList->SetName( aURL.getName() );
             if( pHatchList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pHatchingList != ( (SvxAreaTabDialog*) DLGWIN )->GetHatchingList() )
-                    delete pHatchingList;
-
-                pHatchingList = pHatchList;
-                ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
-
-                aLbHatchings.Clear();
-                aLbHatchings.Fill( pHatchingList );
-                Reset( rOutAttrs );
-
-                pHatchingList->SetName( aURL.getName() );
-
-                // Ermitteln (evtl. abschneiden) des Namens und in
-                // der GroupBox darstellen
-                String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
-                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
-
-                if ( aURL.getBase().getLength() > 18 )
+                if( pHatchList )
                 {
-                    aString += String(aURL.getBase()).Copy( 0, 15 );
-                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
-                }
-                else
-                    aString += String(aURL.getBase());
+                    // Pruefen, ob Tabelle geloescht werden darf:
+                    if( pHatchingList != ( (SvxAreaTabDialog*) DLGWIN )->GetHatchingList() )
+                        delete pHatchingList;
 
-                // Flag fuer gewechselt setzen
-                *pnHatchingListState |= CT_CHANGED;
-                // Flag fuer modifiziert entfernen
-                *pnHatchingListState &= ~CT_MODIFIED;
+                    pHatchingList = pHatchList;
+                    ( (SvxAreaTabDialog*) DLGWIN )->SetNewHatchingList( pHatchingList );
+
+                    aLbHatchings.Clear();
+                    aLbHatchings.Fill( pHatchingList );
+                    Reset( rOutAttrs );
+
+                    pHatchingList->SetName( aURL.getName() );
+
+                    // Ermitteln (evtl. abschneiden) des Namens und in
+                    // der GroupBox darstellen
+                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+                    if ( aURL.getBase().getLength() > 18 )
+                    {
+                        aString += String(aURL.getBase()).Copy( 0, 15 );
+                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                    }
+                    else
+                        aString += String(aURL.getBase());
+
+                    // Flag fuer gewechselt setzen
+                    *pnHatchingListState |= CT_CHANGED;
+                    // Flag fuer modifiziert entfernen
+                    *pnHatchingListState &= ~CT_MODIFIED;
+                }
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),

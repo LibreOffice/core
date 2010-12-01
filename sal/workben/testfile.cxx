@@ -72,17 +72,17 @@ rtl::OUString   file_not_exist;
 
 
 
-void print_error(const ::rtl::OString& str, FileBase::RC rc);
+void print_error(::rtl::OString& str, FileBase::RC rc);
 
 void PressKey()
 {
     printf("\nPress Return !\n");
-    getchar();
+    int i=getchar();
 }
 
-void printFileName(const ::rtl::OUString& str)
+void printFileName(::rtl::OUString& str)
 {
-    rtl::OString aString;
+    rtl::OString        aString;
 
     aString = rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
 
@@ -208,13 +208,13 @@ sal_Bool Initialize( void )
     for ( int i=0 ; i<12 ; i++ )
     {
         sal_uInt32      cLineBrake=0;
-        while ( (static_cast<sal_uInt64>(pCount-pBuffer) < uBytesRead) && *pCount!='=')
+        while ( (pCount-pBuffer < uBytesRead) && *pCount!='=')
             pCount++;
 
         pCount++;
         pBegin=pCount;
 
-        while ( (static_cast<sal_uInt64>(pCount-pBuffer) < uBytesRead) && !testLineBreak(pCount,uBytesRead-(pCount-pBuffer), &cLineBrake))
+        while ( (pCount-pBuffer < uBytesRead) && !testLineBreak(pCount,uBytesRead-(pCount-pBuffer), &cLineBrake))
             pCount++;
 
         dir[i]=rtl::OUString(pBegin, pCount-pBegin, RTL_TEXTENCODING_ASCII_US);
@@ -460,6 +460,7 @@ TimeValue getSystemTime()
 void DirectoryOpenAndCloseTest( void )
 {
     FileBase::RC    rc;
+    int i=0;
     Directory   *pDir;
 
     printf( "--------------------------------------------\n");
@@ -584,6 +585,7 @@ void DirectoryOpenAndCloseTest( void )
 void DirectoryCreateAndRemoveTest( void )
 {
     FileBase::RC    rc,rc1;
+    int i=0;
     Directory   *pDir;
 
     printf( "--------------------------------------------\n" );
@@ -671,6 +673,7 @@ void DirectoryCreateAndRemoveTest( void )
 static void FileOpenAndCloseTest( void )
 {
     FileBase::RC    rc;
+    int i=0;
 
     printf( "--------------------------------------------\n" );
     printf( "File-Open-And-Close-Test\n" );
@@ -803,7 +806,7 @@ void FileWriteAndReadTest( void )
 
     sal_uInt64 uWritten;
     sal_uInt64 uRead;
-    const sal_Char *pWriteBuffer="Hier kommt der Osterhase !";
+    sal_Char    *pWriteBuffer="Hier kommt der Osterhase !";
     sal_uInt64  nLen=strlen( pWriteBuffer );
     sal_Char *pReadBuffer;
 
@@ -944,9 +947,7 @@ void FileCopyAndMoveTest( void )
     destPath+=file3;
 
     printf( "Copy a file to a not existing directory \n");
-    printf( "Copy the file %s to %s\n",
-        rtl::OUStringToOString( file1, RTL_TEXTENCODING_ASCII_US ).getStr(),
-        rtl::OUStringToOString( destPath, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    printf( "Copy the file  %s to %s\n", file1.getStr(), destPath.getStr() );
 
     rc=File::copy( file1, destPath );
     print_error( rtl::OString( "FileCopy" ), rc );
@@ -1119,9 +1120,9 @@ void FileSizeTest( void )
                 filesize=rStatus.getFileSize();
 
                 if ( filesize == 5000 )
-                    printf( "\nOK : FileSize: %" SAL_PRIuUINT64 "\n", filesize );
+                    printf( "\nOK : FileSize: %i\n", filesize );
                 else
-                    printf( "\nError : FileSize: %" SAL_PRIuUINT64 "\n", filesize );
+                    printf( "\nError : FileSize: %i\n", filesize );
             }
         }
 
@@ -1185,7 +1186,7 @@ void FilePointerTest( void )
 
         rc =rFile.getPos( filepointer );
         print_error( rtl::OString( "GetPos" ), rc );
-        printf( "Position of the FilePointer: %" SAL_PRIuUINT64 "\n", filepointer );
+        printf( "Position of the FilePointer: %i\n", filepointer );
 
         printf( "\n" );
 
@@ -1206,13 +1207,13 @@ void FilePointerTest( void )
         {
             print_error( rtl::OString( "GetPos" ), rc );
             printf( "\nVerify: OK !\n" );
-            printf( "Filepointer-Position: %" SAL_PRIuUINT64 "\n",filepointer );
+            printf( "Filepointer-Position: %llu\n",filepointer );
         }
         else
         {
             print_error( rtl::OString( "GetPos" ), rc );
             printf( "\nFilePointer-Test: Error\n" );
-            printf( "Filepointer-Position: %" SAL_PRIuUINT64 " != 5000 \n",filepointer );
+            printf( "Filepointer-Position: %i != 5000 \n",filepointer );
         }
 
         printf( "\n" );
@@ -1431,29 +1432,9 @@ void FileTimeTest( void )
 
     DirectoryItem   aItem;
 
-    struct tm sSysCreationTime;
-    sSysCreationTime.tm_sec = 0;
-    sSysCreationTime.tm_min = 20;
-    sSysCreationTime.tm_hour = 12;
-    sSysCreationTime.tm_mday = 4;
-    sSysCreationTime.tm_mon = 9;
-    sSysCreationTime.tm_year = 99;
-
-    struct tm sSysAccessTime;
-    sSysAccessTime.tm_sec = 0;
-    sSysAccessTime.tm_min = 40;
-    sSysAccessTime.tm_hour = 1;
-    sSysAccessTime.tm_mday = 6;
-    sSysAccessTime.tm_mon = 5;
-    sSysAccessTime.tm_year = 98;
-
-    struct tm sSysModifyTime;
-    sSysModifyTime.tm_sec = 0;
-    sSysModifyTime.tm_min = 1;
-    sSysModifyTime.tm_hour = 24;
-    sSysModifyTime.tm_mday = 13;
-    sSysModifyTime.tm_mon = 11;
-    sSysModifyTime.tm_year = 95;
+    struct tm sSysCreationTime = { 0, 20, 12, 4, 9, 100 };
+    struct tm sSysAccessTime = { 0, 40, 1, 6, 5, 98 };
+    struct tm sSysModifyTime = { 0, 1, 24, 13, 11, 95 };
 
     time_t aSysCreationTime =  mktime( &sSysCreationTime );
     time_t aSysAccessTime =  mktime( &sSysAccessTime );
@@ -1679,7 +1660,7 @@ void DirectoryItemTest( void )
         printFileName( file1 );
         printf( "\n" );
 
-        rc=DirectoryItem::get( file1 , aItem );
+        rc=DirectoryItem::get( *pFile , aItem );
         print_error( rtl::OString( "GetDirectoryItem" ), rc );
 
         pStatus=new FileStatus( FileStatusMask_All );
@@ -1702,12 +1683,16 @@ void DirectoryItemTest( void )
     printf( "\n" );
 
     //---------------------------------------------------
-    // get DirectoryItem
+    // get DirectoryItem from an empty file-handle
     //--------------------------------------------------
 
+    pFile=new File( file1 );
+
     printf( "Get DirectoryItem from an empty File-Handle\n" );
-    rc=DirectoryItem::get( file1 , aItem );
+    rc=DirectoryItem::get( *pFile , aItem );
     print_error( rtl::OString( "GetDirectoryItem" ), rc );
+
+    delete pFile;
 
     printf( "\n" );
 
@@ -1876,7 +1861,7 @@ void FileStatusTest( FileStatus *pStatus )
     printf( "\ngetFileSize:\n" );
 
     FileSize=pStatus->getFileSize();
-    printf( "FileSize: %" SAL_PRIuUINT64 "\n", FileSize);
+    printf( "FileSize: %i\n", FileSize);
 
     //--------------------------------------------------
     // GetFileName
@@ -2085,7 +2070,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  TotalSpace;
     TotalSpace=rInfo.getTotalSpace();
-    printf( "Total Space: %" SAL_PRIuUINT64 "\n",TotalSpace );
+    printf( "Total Space: %i\n",TotalSpace );
 
     //--------------------------------------------------
     // getFreeSpace
@@ -2093,7 +2078,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  FreeSpace;
     FreeSpace=rInfo.getFreeSpace();
-    printf( "Free Space: %" SAL_PRIuUINT64 "\n",FreeSpace );
+    printf( "Free Space: %i\n",FreeSpace );
 
     //--------------------------------------------------
     // getUsedSpace
@@ -2101,7 +2086,7 @@ void VolumeInfoTest( void )
 
     sal_uInt64  UsedSpace;
     UsedSpace=rInfo.getUsedSpace();
-    printf( "Used Space: %" SAL_PRIuUINT64 "\n",UsedSpace );
+    printf( "Used Space: %i\n",UsedSpace );
 
     //--------------------------------------------------
     // getMaxNameLength
@@ -2109,7 +2094,7 @@ void VolumeInfoTest( void )
 
     sal_uInt32  MaxNameLength;
     MaxNameLength=rInfo.getMaxNameLength();
-    printf( "MaxNameLength: %" SAL_PRIuUINT32 "\n",MaxNameLength );
+    printf( "MaxNameLength: %i\n",MaxNameLength );
 
     //--------------------------------------------------
     // getMaxPathLength
@@ -2117,7 +2102,7 @@ void VolumeInfoTest( void )
 
     sal_uInt32  MaxPathLength;
     MaxPathLength=rInfo.getMaxPathLength();
-    printf( "MaxPathLength: %" SAL_PRIuUINT32 "\n",MaxPathLength );
+    printf( "MaxPathLength: %i\n",MaxPathLength );
 
     //--------------------------------------------------
     // getFileSystemName
@@ -2548,10 +2533,10 @@ void CanonicalNameTest(void)
 // print_error
 //--------------------------------------------------
 
-void print_error( const ::rtl::OString& str, FileBase::RC rc )
+void print_error( ::rtl::OString& str, FileBase::RC rc )
 {
 
-    printf( "%s : ", str.getStr() );
+    printf( "%s : ",str.getStr() );
     switch(rc)
     {
     case FileBase::E_None:

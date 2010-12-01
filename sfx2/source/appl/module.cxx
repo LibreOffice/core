@@ -66,10 +66,12 @@ public:
     SfxChildWinFactArr_Impl*    pFactArr;
     ImageList*                  pImgListSmall;
     ImageList*                  pImgListBig;
+    ImageList*                  pImgListHiSmall;
+    ImageList*                  pImgListHiBig;
 
                                 SfxModule_Impl();
                                 ~SfxModule_Impl();
-    ImageList*                  GetImageList( ResMgr* pResMgr, BOOL bBig );
+    ImageList*                  GetImageList( ResMgr*, BOOL, BOOL bHiContrast = FALSE );
 };
 
 SfxModule_Impl::SfxModule_Impl()
@@ -86,15 +88,18 @@ SfxModule_Impl::~SfxModule_Impl()
     delete pFactArr;
     delete pImgListSmall;
     delete pImgListBig;
+    delete pImgListHiSmall;
+    delete pImgListHiBig;
 }
 
-ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig )
+ImageList* SfxModule_Impl::GetImageList( ResMgr* pResMgr, BOOL bBig, BOOL bHiContrast )
 {
-    ImageList*& rpList = bBig ? pImgListBig : pImgListSmall;
+    ImageList*& rpList = bBig ? ( bHiContrast ? pImgListHiBig: pImgListBig ) :
+                                ( bHiContrast ? pImgListHiSmall : pImgListSmall );
     if ( !rpList )
     {
-        ResId aResId( bBig ? ( RID_DEFAULTIMAGELIST_LC ) : ( RID_DEFAULTIMAGELIST_SC ), *pResMgr );
-
+        ResId aResId( bBig ? ( bHiContrast ? RID_DEFAULTIMAGELIST_LCH : RID_DEFAULTIMAGELIST_LC ) :
+                             ( bHiContrast ? RID_DEFAULTIMAGELIST_SCH : RID_DEFAULTIMAGELIST_SC ), *pResMgr );
         aResId.SetRT( RSC_IMAGELIST );
 
         DBG_ASSERT( pResMgr->IsAvailable(aResId), "No default ImageList!" );
@@ -123,7 +128,16 @@ ResMgr* SfxModule::GetResMgr()
 }
 
 //====================================================================
-
+/*
+SfxModule::SfxModule( ResMgr* pMgrP, BOOL bDummyP,
+                      SfxObjectFactory* pFactoryP )
+    : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
+{
+    Construct_Impl();
+    if ( pFactoryP )
+        pFactoryP->SetModule_Impl( this );
+}
+*/
 SfxModule::SfxModule( ResMgr* pMgrP, BOOL bDummyP,
                       SfxObjectFactory* pFactoryP, ... )
     : pResMgr( pMgrP ), bDummy( bDummyP ), pImpl(0L)
@@ -154,6 +168,8 @@ void SfxModule::Construct_Impl()
         pImpl->pFactArr=0;
         pImpl->pImgListSmall=0;
         pImpl->pImgListBig=0;
+        pImpl->pImgListHiSmall=0;
+        pImpl->pImgListHiBig=0;
 
         SetPool( &pApp->GetPool() );
     }
@@ -201,6 +217,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
     if (!pImpl->pFactArr)
         pImpl->pFactArr = new SfxChildWinFactArr_Impl;
 
+//#ifdef DBG_UTIL
     for (USHORT nFactory=0; nFactory<pImpl->pFactArr->Count(); ++nFactory)
     {
         if (pFact->nId ==  (*pImpl->pFactArr)[nFactory]->nId)
@@ -210,6 +227,7 @@ void SfxModule::RegisterChildWindow(SfxChildWinFactory *pFact)
             return;
         }
     }
+//#endif
 
     pImpl->pFactArr->C40_INSERT(
         SfxChildWinFactory, pFact, pImpl->pFactArr->Count() );
@@ -334,7 +352,12 @@ SfxChildWinFactArr_Impl* SfxModule::GetChildWinFactories_Impl() const
 
 ImageList* SfxModule::GetImageList_Impl( BOOL bBig )
 {
-    return pImpl->GetImageList( pResMgr, bBig );
+    return pImpl->GetImageList( pResMgr, bBig, FALSE );
+}
+
+ImageList* SfxModule::GetImageList_Impl( BOOL bBig, BOOL bHiContrast )
+{
+    return pImpl->GetImageList( pResMgr, bBig, bHiContrast );
 }
 
 SfxTabPage* SfxModule::CreateTabPage( USHORT, Window*, const SfxItemSet& )

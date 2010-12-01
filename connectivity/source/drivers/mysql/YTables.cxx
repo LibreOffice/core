@@ -157,14 +157,14 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         ::rtl::OUString sCatalog,sSchema,sTable;
         ::dbtools::qualifiedNameComponents(m_xMetaData,_sElementName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
 
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
+        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
-        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
+        sal_Bool bIsView = xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW");
         if(bIsView) // here we have a view
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+            aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
+            aSql += ::rtl::OUString::createFromAscii("TABLE ");
 
         ::rtl::OUString sComposedName(
             ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInDataManipulation ) );

@@ -36,7 +36,9 @@
 #include <svl/svstdarr.hxx>
 
 class SwAuthDataArr;
+/* -----------------21.09.99 13:32-------------------
 
+ --------------------------------------------------*/
 class SwAuthEntry
 {
     String      aAuthFields[AUTH_FIELD_END];
@@ -54,7 +56,9 @@ public:
     void            RemoveRef()             { --nRefCount; }
     USHORT          GetRefCount()           { return nRefCount; }
 };
+/* -----------------20.10.99 16:49-------------------
 
+ --------------------------------------------------*/
 struct SwTOXSortKey
 {
     ToxAuthorityField   eField;
@@ -64,6 +68,9 @@ struct SwTOXSortKey
         bSortAscending(TRUE){}
 };
 
+/* -----------------14.09.99 16:15-------------------
+
+ --------------------------------------------------*/
 class SwAuthorityField;
 class SortKeyArr;
 
@@ -153,7 +160,9 @@ public:
     void            SetSortAlgorithm(const String& rSet) {m_sSortAlgorithm = rSet;}
 
 };
+/* -----------------14.09.99 16:15-------------------
 
+ --------------------------------------------------*/
 class SwAuthorityField : public SwField
 {
     long            m_nHandle;

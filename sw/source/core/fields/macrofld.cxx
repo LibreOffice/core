@@ -176,6 +176,9 @@ String SwMacroField::GetPar2() const
     return aText;
 }
 
+/*-----------------05.03.98 13:38-------------------
+
+--------------------------------------------------*/
 bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -197,7 +200,9 @@ bool SwMacroField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 13:38-------------------
 
+--------------------------------------------------*/
 bool SwMacroField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;

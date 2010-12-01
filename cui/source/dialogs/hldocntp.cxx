@@ -124,6 +124,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
     maLbDocTypes    ( this, CUI_RES (LB_DOCUMENT_TYPES) )
 {
     // Set HC bitmaps and disable display of bitmap names.
+    maBtCreate.SetModeImage( Image( CUI_RES( IMG_CREATE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtCreate.EnableTextDisplay (FALSE);
 
     InitStdControls();
@@ -135,6 +136,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( Window *pParent, const SfxItemSet& 
                                 LogicToPixel( Size ( 176 - COL_DIFF, 60), MAP_APPFONT ) );
     maCbbPath.Show();
     maCbbPath.SetBaseURL(SvtPathOptions().GetWorkPath());
+//  maCbbPath.SetHelpId( HID_HYPERDLG_DOC_PATH );
 
     // set defaults
     maRbtEditNow.Check();
@@ -389,6 +391,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                     SfxStringItem aReferer( SID_REFERER, UniString::CreateFromAscii(
                                                 RTL_CONSTASCII_STRINGPARAM( "private:user" ) ) );
                     SfxStringItem aFrame( SID_TARGETNAME, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "_blank" ) ) );
+                    //SfxBoolItem aFrame( SID_OPEN_NEW_VIEW, TRUE );
 
                     String aStrFlags ( sal_Unicode('S') );
                     if ( maRbtEditLater.IsChecked() )
@@ -410,6 +413,7 @@ void SvxHyperlinkNewDocTp::DoApply ()
                         pViewFrame = pItem->GetFrame();
                         if (pViewFrame)
                         {
+                            //SfxViewFrame *pViewFrame = pFrame->GetCurrentViewFrame();
                             SfxStringItem aNewName( SID_FILE_NAME, aURL.GetMainURL( INetURLObject::NO_DECODE ) );
 
                             pViewFrame->GetDispatcher()->Execute( SID_SAVEASDOC,

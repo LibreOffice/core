@@ -242,7 +242,7 @@ ULONG SmXMLImportWrapper::Import(SfxMedium &rMedium)
             xStatusIndicator->setValue(nSteps++);
 
         nError = ReadThroughComponent( xInputStream, xModelComp,
-            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", false );
+            xServiceFactory, xInfoSet, "com.sun.star.comp.Math.XMLImporter", FALSE );
     }
 
     if (xStatusIndicator.is())
@@ -591,8 +591,8 @@ void SmXMLImport::endDocument(void)
 
             // Convert symbol names
             SmParser &rParser = pDocShell->GetParser();
-            bool bVal = rParser.IsImportSymbolNames();
-            rParser.SetImportSymbolNames( true );
+            BOOL bVal = rParser.IsImportSymbolNames();
+            rParser.SetImportSymbolNames( TRUE );
             SmNode *pTmpTree = rParser.Parse( aText );
             aText = rParser.GetText();
             delete pTmpTree;
@@ -1688,13 +1688,13 @@ public:
 
 class SmXMLMultiScriptsContext_Impl : public SmXMLSubSupContext_Impl
 {
-    bool bHasPrescripts;
+    sal_Bool bHasPrescripts;
 
 public:
     SmXMLMultiScriptsContext_Impl(SmXMLImport &rImport,sal_uInt16 nPrefix,
         const OUString& rLName) :
         SmXMLSubSupContext_Impl(rImport,nPrefix,rLName),
-        bHasPrescripts(false) {}
+        bHasPrescripts(FALSE) {}
 
     void EndElement();
     void MiddleElement();
@@ -2453,7 +2453,7 @@ SvXMLImportContext *SmXMLMultiScriptsContext_Impl::CreateChildContext(
 
 void SmXMLMultiScriptsContext_Impl::MiddleElement()
 {
-    bHasPrescripts=true;
+    bHasPrescripts=sal_True;
 
     OSL_ENSURE(GetSmImport().GetNodeStack().Count() - nElementCount > 0,
         "Sub has no arguments");

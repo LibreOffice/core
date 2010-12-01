@@ -82,6 +82,7 @@ public:
     using SfxTabPage::DeactivatePage;
 
     virtual void        ActivatePage( const SfxItemSet& rSet );
+//    virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 };
 
@@ -253,8 +254,10 @@ private:
     DECL_LINK(          ColorBoxSelectHdl_Impl, ColorListBox* );
 
 public:
+//    using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;
 
+//    virtual void        ActivatePage( const SfxItemSet& rSet );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:

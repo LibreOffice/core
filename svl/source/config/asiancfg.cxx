@@ -73,7 +73,9 @@ struct SvxAsianConfig_Impl
         bKerningWesternTextOnly(sal_True),
         nCharDistanceCompression(0) {}
 };
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Sequence<OUString> lcl_GetPropertyNames()
 {
     Sequence<OUString> aNames(2);
@@ -91,12 +93,16 @@ SvxAsianConfig::SvxAsianConfig(sal_Bool bEnableNotify) :
         EnableNotification(lcl_GetPropertyNames());
     Load();
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvxAsianConfig::~SvxAsianConfig()
 {
     delete pImpl;
 }
+/* -----------------------------17.01.01 09:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxAsianConfig::Load()
 {
     Sequence<Any> aValues = GetProperties(lcl_GetPropertyNames());
@@ -138,12 +144,16 @@ void SvxAsianConfig::Load()
         pImpl->aForbiddenArr.Insert(pInsert, pImpl->aForbiddenArr.Count());
     }
 }
+/* -----------------------------17.01.01 09:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void    SvxAsianConfig::Notify( const Sequence<OUString>& )
 {
     Load();
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxAsianConfig::Commit()
 {
     Sequence<Any> aValues(2);
@@ -180,30 +190,40 @@ void SvxAsianConfig::Commit()
         ReplaceSetProperties(sNode, aSetValues);
     }
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool    SvxAsianConfig::IsKerningWesternTextOnly() const
 {
     return pImpl->bKerningWesternTextOnly;
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void        SvxAsianConfig::SetKerningWesternTextOnly(sal_Bool bSet)
 {
     pImpl->bKerningWesternTextOnly = bSet;
     SetModified();
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Int16   SvxAsianConfig::GetCharDistanceCompression() const
 {
     return pImpl->nCharDistanceCompression;
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void        SvxAsianConfig::SetCharDistanceCompression(sal_Int16 nSet)
 {
     DBG_ASSERT(nSet >= 0 && nSet < 3, "compression value illegal");
     SetModified();
     pImpl->nCharDistanceCompression = nSet;
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
 {
     Sequence<Locale> aRet(pImpl->aForbiddenArr.Count());
@@ -214,7 +234,9 @@ uno::Sequence<lang::Locale> SvxAsianConfig::GetStartEndCharLocales()
     }
     return aRet;
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
                                     OUString& rStartChars,
                                     OUString& rEndChars )
@@ -231,7 +253,9 @@ sal_Bool    SvxAsianConfig::GetStartEndChars( const Locale& rLocale,
     }
     return sal_False;
 }
+/* -----------------------------16.01.01 15:36--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxAsianConfig::SetStartEndChars( const Locale& rLocale,
                                     const OUString* pStartChars,
                                     const OUString* pEndChars )

@@ -35,6 +35,7 @@
 #include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
+//class SvNumberFormatter;
 
 //.............................................................................
 namespace chart

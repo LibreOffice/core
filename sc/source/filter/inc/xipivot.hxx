@@ -32,7 +32,6 @@
 #include <list>
 #include "xlpivot.hxx"
 #include "xiroot.hxx"
-#include <boost/shared_ptr.hpp>
 
 class ScDPSaveData;
 class ScDPSaveDimension;
@@ -67,7 +66,7 @@ private:
     void                ReadSxempty( XclImpStream& rStrm );
 };
 
-typedef boost::shared_ptr< XclImpPCItem > XclImpPCItemRef;
+typedef ScfRef< XclImpPCItem > XclImpPCItemRef;
 
 // ============================================================================
 
@@ -154,7 +153,7 @@ private:
     bool                mbNumGroupInfoRead; /// true = Numeric grouping info read (SXNUMGROUP record).
 };
 
-typedef boost::shared_ptr< XclImpPCField > XclImpPCFieldRef;
+typedef ScfRef< XclImpPCField > XclImpPCFieldRef;
 
 // ============================================================================
 
@@ -200,7 +199,7 @@ private:
     bool                mbSelfRef;          /// true = Source data from own document.
 };
 
-typedef boost::shared_ptr< XclImpPivotCache > XclImpPivotCacheRef;
+typedef ScfRef< XclImpPivotCache > XclImpPivotCacheRef;
 
 // ============================================================================
 // Pivot table
@@ -231,7 +230,7 @@ private:
     const XclImpPCField* mpCacheField;      /// Corresponding pivot cache field.
 };
 
-typedef boost::shared_ptr< XclImpPTItem > XclImpPTItemRef;
+typedef ScfRef< XclImpPTItem > XclImpPTItemRef;
 
 // ============================================================================
 
@@ -310,7 +309,7 @@ private:
     XclImpPTItemVec     maItems;            /// List of all items of this field.
 };
 
-typedef boost::shared_ptr< XclImpPTField > XclImpPTFieldRef;
+typedef ScfRef< XclImpPTField > XclImpPTFieldRef;
 
 // ============================================================================
 
@@ -386,7 +385,7 @@ private:
     ScDPObject*         mpDPObj;
 };
 
-typedef boost::shared_ptr< XclImpPivotTable > XclImpPivotTableRef;
+typedef ScfRef< XclImpPivotTable > XclImpPivotTableRef;
 
 // ============================================================================
 // ============================================================================

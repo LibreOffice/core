@@ -44,11 +44,11 @@ SRC1FILES =  \
         selglos.src
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES =  \
         $(SLO)$/gloshdl.obj \
         $(SLO)$/selglos.obj \
+        $(SLO)$/swdtflvr.obj
+
+EXCEPTIONSFILES =  \
         $(SLO)$/swdtflvr.obj
 
 #        $(SLO)$/dataex.obj \

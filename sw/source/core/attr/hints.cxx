@@ -206,6 +206,17 @@ SwVirtPageNumInfo::SwVirtPageNumInfo( const SwPageFrm *pPg ) :
 {
 }
 
+// --> OD 2008-02-19 #refactorlists#
+//SwNumRuleInfo::SwNumRuleInfo( const String& rRuleName )
+//    : SwMsgPoolItem( RES_GETNUMNODES ), rName( rRuleName )
+//{
+//}
+
+//void SwNumRuleInfo::AddNode( SwTxtNode& rNd )
+//{
+//    aList.Insert(rNd.GetIndex(), &rNd);
+//}
+
 
 SwFindNearestNode::SwFindNearestNode( const SwNode& rNd )
     : SwMsgPoolItem( RES_FINDNEARESTNODE ), pNd( &rNd ), pFnd( 0 )

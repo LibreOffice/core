@@ -69,16 +69,16 @@ Reference< XPropertySet > OUsers::createDescriptor()
 // XAppend
 sdbcx::ObjectType OUsers::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE USER " ));
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE USER ");
     ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sUserName( _rForName );
     sUserName = sUserName.toAsciiUpperCase();
     descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME),makeAny(sUserName));
     aSql += ::dbtools::quoteName(aQuote,sUserName)
-                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PASSWORD "))
+                + ::rtl::OUString::createFromAscii(" PASSWORD ")
                 + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PASSWORD)));
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" RESOURCE NOT EXCLUSIVE"));
+    aSql += ::rtl::OUString::createFromAscii(" RESOURCE NOT EXCLUSIVE");
 
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
     if(xStmt.is())
@@ -94,8 +94,8 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
     {
         // first we have to check if this user is live relevaant for the database
         // which means with out these users the database will miss more than one important system table
-        ::rtl::OUString sUsers( RTL_CONSTASCII_USTRINGPARAM( "SELECT USERMODE,USERNAME FROM DOMAIN.USERS WHERE USERNAME = '" ));
-        sUsers += _sElementName + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+        ::rtl::OUString sUsers = ::rtl::OUString::createFromAscii("SELECT USERMODE,USERNAME FROM DOMAIN.USERS WHERE USERNAME = '");
+        sUsers += _sElementName + ::rtl::OUString::createFromAscii("'");
         Reference< XStatement > xStmt = m_pConnection->createStatement();
         if(xStmt.is())
         {
@@ -103,7 +103,7 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
             Reference<XRow> xRow(xRes,UNO_QUERY);
             if(xRes.is() && xRow.is() && xRes->next()) // there can only be one user with this name
             {
-                static const ::rtl::OUString sDbaUser( RTL_CONSTASCII_USTRINGPARAM( "DBA" ));
+                static const ::rtl::OUString sDbaUser = ::rtl::OUString::createFromAscii("DBA");
                 if(xRow->getString(1) == sDbaUser)
                 {
                     ::comphelper::disposeComponent(xStmt);
@@ -115,7 +115,7 @@ void OUsers::dropObject(sal_Int32 /*_nPos*/,const ::rtl::OUString _sElementName)
     }
 
     {
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP USER " ));
+        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("DROP USER ");
         ::rtl::OUString aQuote  = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
         aSql += ::dbtools::quoteName(aQuote,_sElementName);
 

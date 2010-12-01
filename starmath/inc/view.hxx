@@ -35,10 +35,10 @@
 #include <sfx2/shell.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>
-#include <vcl/timer.hxx>
 #include <svtools/colorcfg.hxx>
 #include "edit.hxx"
 #include "node.hxx"
+#include "accessibility.hxx"
 
 class Menu;
 class DataChangedEvent;
@@ -46,7 +46,6 @@ class SmClipboardChangeListener;
 class SmDocShell;
 class SmViewShell;
 class SmPrintUIOptions;
-class SmGraphicAccessible;
 
 /**************************************************************************/
 
@@ -57,16 +56,12 @@ class SmGraphicWindow : public ScrollableWindow
     // old style editing pieces
     Rectangle aCursorRect;
     bool      bIsCursorVisible;
-    bool      bIsLineVisible;
-    AutoTimer aCaretBlinkTimer;
 public:
-    bool IsCursorVisible() const { return bIsCursorVisible; }
-    void ShowCursor(bool bShow);
-    bool IsLineVisible() const { return bIsLineVisible; }
-    void ShowLine(bool bShow);
+    BOOL IsCursorVisible() const { return bIsCursorVisible; }
+    void ShowCursor(BOOL bShow);
     const SmNode * SetCursorPos(USHORT nRow, USHORT nCol);
 protected:
-    void        SetIsCursorVisible(bool bVis) { bIsCursorVisible = bVis; }
+    void        SetIsCursorVisible(BOOL bVis) { bIsCursorVisible = bVis; }
     using   Window::SetCursor;
     void        SetCursor(const SmNode *pNode);
     void        SetCursor(const Rectangle &rRect);
@@ -91,12 +86,6 @@ protected:
     virtual void StateChanged( StateChangedType eChanged );
     DECL_LINK(MenuSelectHdl, Menu *);
 
-private:
-    void RepaintViewShellDoc();
-    DECL_LINK(CaretBlinkTimerHdl, AutoTimer *);
-    void CaretBlinkInit();
-    void CaretBlinkStart();
-    void CaretBlinkStop();
 public:
     SmGraphicWindow(SmViewShell* pShell);
     ~SmGraphicWindow();
@@ -165,7 +154,7 @@ class SmCmdBoxWindow : public SfxDockingWindow
 {
     SmEditWindow        aEdit;
     SmEditController    aController;
-    bool                bExiting;
+    BOOL                bExiting;
 
     Timer               aInitialFocusTimer;
 
@@ -241,7 +230,7 @@ class SmViewShell: public SfxViewShell
             ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
     SmClipboardChangeListener*  pClipEvtLstnr;
     SmViewShell_Impl*   pImpl;
-    bool                bPasteState;
+    BOOL                bPasteState;
 
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -250,7 +239,7 @@ class SmViewShell: public SfxViewShell
      * should be inserted into SmEditWindow or directly into the SmDocShell as done if the
      * visual editor was last to have focus.
      */
-    bool bInsertIntoEditWindow;
+    BOOL bInsertIntoEditWindow;
 protected:
 
     Size GetTextLineSize(OutputDevice& rDevice,
@@ -271,8 +260,8 @@ protected:
     virtual USHORT SetPrinter(SfxPrinter *pNewPrinter,
                               USHORT     nDiffFlags = SFX_PRINTER_ALL, bool bIsAPI=false);
 
-    bool        Insert( SfxMedium& rMedium );
-    bool        InsertFrom(SfxMedium &rMedium);
+    BOOL        Insert( SfxMedium& rMedium );
+    BOOL        InsertFrom(SfxMedium &rMedium);
 
     virtual SfxTabPage *CreatePrintOptionsPage(Window           *pParent,
                                                const SfxItemSet &rOptions);
@@ -321,7 +310,7 @@ public:
      * so that when text is inserted from catalog or elsewhere we know whether to
      * insert for the visual editor, or the text editor.
      */
-    void SetInsertIntoEditWindow(bool bEditWindowHadFocusLast = true){
+    void SetInsertIntoEditWindow(BOOL bEditWindowHadFocusLast = TRUE){
         bInsertIntoEditWindow = bEditWindowHadFocusLast;
     }
     bool IsInlineEditEnabled() const;

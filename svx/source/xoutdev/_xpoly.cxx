@@ -1385,8 +1385,9 @@ void XPolygon::Distort(const Rectangle& rRefRect,
     pImpXPolygon->CheckPointDelete();
     CheckReference();
 
-    long    Xr, Wr;
-    long    Yr, Hr;
+    long    Xr, Wr, X1, X2, X3, X4;
+    long    Yr, Hr, Y1, Y2, Y3, Y4;
+    double  fTx, fTy, fUx, fUy;
 
     Xr = rRefRect.Left();
     Yr = rRefRect.Top();
@@ -1395,8 +1396,6 @@ void XPolygon::Distort(const Rectangle& rRefRect,
 
     if ( Wr && Hr )
     {
-        long    X1, X2, X3, X4;
-        long    Y1, Y2, Y3, Y4;
         DBG_ASSERT(rDistortedRect.pImpXPolygon->nPoints >= 4,
                    "Distort-Rechteck zu klein");
 
@@ -1413,7 +1412,6 @@ void XPolygon::Distort(const Rectangle& rRefRect,
 
         for (USHORT i = 0; i < nPntCnt; i++)
         {
-            double  fTx, fTy, fUx, fUy;
             Point& rPnt = pImpXPolygon->pPointAry[i];
 
             fTx = (double)(rPnt.X() - Xr) / Wr;

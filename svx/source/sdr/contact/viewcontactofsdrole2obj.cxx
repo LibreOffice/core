@@ -69,7 +69,8 @@ namespace sdr
         {
         }
 
-        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters() const
+        drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createPrimitive2DSequenceWithParameters(
+            bool bHighContrast) const
         {
             // take unrotated snap rect (direct model data) for position and size
             const Rectangle& rRectangle = GetOle2Obj().GetGeoRect();
@@ -101,8 +102,9 @@ namespace sdr
 
                     // #i104867# add GraphicVersion number to be able to check for
                     // content change in the primitive later
-                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion()
-                ));
+                    GetOle2Obj().getEmbeddedObjectRef().getGraphicVersion(),
+
+                    bHighContrast));
 
             // create primitive. Use Ole2 primitive here. Prepare attribute settings, will
             // be used soon anyways. Always create primitives to allow the decomposition of
@@ -119,7 +121,8 @@ namespace sdr
 
         drawinglayer::primitive2d::Primitive2DSequence ViewContactOfSdrOle2Obj::createViewIndependentPrimitive2DSequence() const
         {
-            return createPrimitive2DSequenceWithParameters();
+            // do as if no HC and call standard creator
+            return createPrimitive2DSequenceWithParameters(false);
         }
     } // end of namespace contact
 } // end of namespace sdr

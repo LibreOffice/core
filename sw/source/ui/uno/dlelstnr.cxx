@@ -56,6 +56,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;
 using namespace ::com::sun::star::linguistic2::LinguServiceEventFlags;
 
+#define A2OU(x) OUString::createFromAscii(x)
+
 SwLinguServiceEventListener::SwLinguServiceEventListener()
 {
     Reference< XMultiServiceFactory > xMgr( comphelper::getProcessServiceFactory() );
@@ -63,20 +65,20 @@ SwLinguServiceEventListener::SwLinguServiceEventListener()
     {
         try
         {
-            OUString aSvcName( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) );
+            OUString aSvcName( A2OU( "com.sun.star.frame.Desktop" ) );
             xDesktop = Reference< frame::XDesktop >(
                     xMgr->createInstance( aSvcName ), UNO_QUERY );
             if (xDesktop.is())
                 xDesktop->addTerminateListener( this );
 
-            aSvcName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ));
+            aSvcName = A2OU( "com.sun.star.linguistic2.LinguServiceManager" );
             xLngSvcMgr = Reference< XLinguServiceManager >( xMgr->createInstance( aSvcName ), UNO_QUERY );
             if (xLngSvcMgr.is())
                 xLngSvcMgr->addLinguServiceManagerListener( (XLinguServiceEventListener *) this );
 
             if (SvtLinguConfig().HasGrammarChecker())
             {
-                aSvcName = OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.ProofreadingIterator" ));
+                aSvcName = A2OU( "com.sun.star.linguistic2.ProofreadingIterator" );
                 xGCIterator = Reference< XProofreadingIterator >( xMgr->createInstance( aSvcName ), UNO_QUERY );
                 Reference< XLinguServiceEventBroadcaster > xBC( xGCIterator, UNO_QUERY );
                 if (xBC.is())
@@ -165,6 +167,7 @@ void SAL_CALL SwLinguServiceEventListener::queryTermination(
             const EventObject& /*rEventObj*/ )
         throw(TerminationVetoException, RuntimeException)
 {
+    //SolarMutexGuard aGuard;
 }
 
 void SAL_CALL SwLinguServiceEventListener::notifyTermination(

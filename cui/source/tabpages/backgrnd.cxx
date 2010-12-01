@@ -113,7 +113,9 @@ struct SvxBackgroundPage_Impl
     SvxBackgroundPage_Impl() :
         pLoadTimer(NULL), bIsImportDlgInExecute(FALSE) {}
 };
+/* -----------------------------15.08.2002 12:21------------------------------
 
+ ---------------------------------------------------------------------------*/
 inline BYTE lcl_PercentToTransparency(long nPercent)
 {
     //0xff must not be returned!
@@ -130,6 +132,10 @@ void lcl_SetTransparency(SvxBrushItem& rBrush, long nTransparency)
     rBrush.PutValue(aTransparency, MID_GRAPHIC_TRANSPARENCY);
 }
 //-------------------------------------------------------------------------
+
+/*  [Beschreibung]
+
+*/
 
 USHORT GetItemId_Impl( ValueSet& rValueSet, const Color& rCol )
 {
@@ -190,6 +196,10 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
     BOOL bIsBmpPreview
 ) :
 
+/*  [Beschreibung]
+
+*/
+
     Window( pParent, rResId ),
 
     bIsBmp   ( bIsBmpPreview ),
@@ -205,6 +215,11 @@ BackgroundPreviewImpl::BackgroundPreviewImpl
 //-----------------------------------------------------------------------
 
 BackgroundPreviewImpl::~BackgroundPreviewImpl()
+
+/*  [Beschreibung]
+
+*/
+
 {
     delete pBitmap;
 }
@@ -226,6 +241,10 @@ void BackgroundPreviewImpl::NotifyChange( const Color& rColor )
 //-----------------------------------------------------------------------
 
 void BackgroundPreviewImpl::NotifyChange( const Bitmap* pNewBitmap )
+/*  [Beschreibung]
+
+*/
+
 {
     if ( bIsBmp && (pNewBitmap || pBitmap) )
     {
@@ -299,7 +318,9 @@ void BackgroundPreviewImpl::Paint( const Rectangle& )
         }
     }
 }
+/* -----------------------------27.02.2002 11:07------------------------------
 
+ ---------------------------------------------------------------------------*/
 void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -316,6 +337,10 @@ void BackgroundPreviewImpl::DataChanged( const DataChangedEvent& rDCEvt )
 
 SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
                                             const SfxItemSet& rCoreSet ) :
+
+/*  [Beschreibung]
+
+*/
 
     SvxTabPage( pParent, CUI_RES( RID_SVXPAGE_BACKGROUND ), rCoreSet ),
 
@@ -383,6 +408,11 @@ SvxBackgroundTabPage::SvxBackgroundTabPage( Window* pParent,
 //------------------------------------------------------------------------
 
 SvxBackgroundTabPage::~SvxBackgroundTabPage()
+
+/*  [Beschreibung]
+
+*/
+
 {
     delete pPreviewWin1;
     delete pPreviewWin2;
@@ -436,6 +466,11 @@ SfxTabPage* SvxBackgroundTabPage::Create( Window* pParent,
 //------------------------------------------------------------------------
 
 void SvxBackgroundTabPage::Reset( const SfxItemSet& rSet )
+
+/*  [Beschreibung]
+
+*/
+
 {
 // os: So ein Unsinn! Irgendwo laesst sich so ein Item immer finden,
 //      es muss aber im rSet vorhanden sein!
@@ -704,6 +739,11 @@ void SvxBackgroundTabPage::FillUserData()
 //------------------------------------------------------------------------
 
 BOOL SvxBackgroundTabPage::FillItemSet( SfxItemSet& rCoreSet )
+
+/*  [Beschreibung]
+
+*/
+
 {
     if ( pPageImpl->pLoadTimer && pPageImpl->pLoadTimer->IsActive() )
     {
@@ -1052,6 +1092,11 @@ int SvxBackgroundTabPage::DeactivatePage( SfxItemSet* _pSet )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
+
+/*  [Beschreibung]
+
+*/
+
 {
     // muss implementiert werden, damit Position-Control funktioniert
 }
@@ -1059,6 +1104,11 @@ void SvxBackgroundTabPage::PointChanged( Window* , RECT_POINT  )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowSelector()
+
+/*  [Beschreibung]
+
+*/
+
 {
     if( bAllowShowSelector)
     {
@@ -1093,6 +1143,11 @@ void SvxBackgroundTabPage::ShowSelector()
 
 
 void SvxBackgroundTabPage::RaiseLoadError_Impl()
+
+/*  [Beschreibung]
+
+*/
+
 {
     SfxErrorContext aContext( ERRCTX_SVX_BACKGROUND,
                               String(),
@@ -1108,6 +1163,11 @@ void SvxBackgroundTabPage::RaiseLoadError_Impl()
 //------------------------------------------------------------------------
 
 BOOL SvxBackgroundTabPage::LoadLinkedGraphic_Impl()
+
+/*  [Beschreibung]
+
+*/
+
 {
     BOOL bResult = ( aBgdGraphicPath.Len() > 0 ) &&
                    ( GRFILTER_OK == GraphicFilter::LoadGraphic( aBgdGraphicPath,
@@ -1370,6 +1430,11 @@ IMPL_LINK( SvxBackgroundTabPage, BackgroundColorHdl_Impl, ValueSet*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
+
+/*  [Beschreibung]
+
+*/
+
 {
     if ( 0 == aLbSelect.GetSelectEntryPos() )
     {
@@ -1387,6 +1452,11 @@ IMPL_LINK( SvxBackgroundTabPage, SelectHdl_Impl, ListBox*, EMPTYARG )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
+
+/*  [Beschreibung]
+
+*/
+
 {
     if ( &aBtnLink == pBox )
     {
@@ -1431,6 +1501,11 @@ IMPL_LINK( SvxBackgroundTabPage, FileClickHdl_Impl, CheckBox*, pBox )
 //------------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, RadioClickHdl_Impl, RadioButton*, pBtn )
+
+/*  [Beschreibung]
+
+*/
+
 {
     if ( pBtn == &aBtnPosition )
     {
@@ -1553,6 +1628,11 @@ IMPL_LINK( SvxBackgroundTabPage, LoadTimerHdl_Impl, Timer* , pTimer )
 //-----------------------------------------------------------------------
 
 void SvxBackgroundTabPage::ShowTblControl()
+
+/*  [Beschreibung]
+
+*/
+
 {
     aTblLBox            .SetSelectHdl( HDL(TblDestinationHdl_Impl) );
     aTblLBox            .SelectEntryPos(0);
@@ -1576,6 +1656,11 @@ void SvxBackgroundTabPage::ShowParaControl(BOOL bCharOnly)
 //-----------------------------------------------------------------------
 
 IMPL_LINK( SvxBackgroundTabPage, TblDestinationHdl_Impl, ListBox*, pBox )
+
+/*  [Beschreibung]
+
+*/
+
 {
     USHORT nSelPos = pBox->GetSelectEntryPos();
     if( pTableBck_Impl && pTableBck_Impl->nActPos != nSelPos)
@@ -1717,6 +1802,11 @@ IMPL_LINK( SvxBackgroundTabPage, ParaDestinationHdl_Impl, ListBox*, pBox )
 
 void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
                                               const String& rUserData )
+
+/*  [Beschreibung]
+
+*/
+
 {
     SvxGraphicPosition  ePos = rBgdAttr.GetGraphicPos();
     const Color& rColor = rBgdAttr.GetColor();
@@ -1845,7 +1935,9 @@ void SvxBackgroundTabPage::FillControls_Impl( const SvxBrushItem& rBgdAttr,
         SetGraphicPosition_Impl( ePos );
     }
 }
+/* -----------------------------09.08.2002 14:04------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxBackgroundTabPage::EnableTransparency(BOOL bColor, BOOL bGraphic)
 {
     bColTransparency  = bColor;

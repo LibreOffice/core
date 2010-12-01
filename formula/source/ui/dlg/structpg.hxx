@@ -63,6 +63,7 @@ public:
     SvLBoxEntry*    InsertStaticEntry(
                         const XubString& rText,
                         const Image& rEntryImg,
+                        const Image& rEntryImgHC,
                         SvLBoxEntry* pParent = NULL,
                         ULONG nPos = LIST_APPEND,
                         IFormulaToken* pToken = NULL );
@@ -86,6 +87,8 @@ private:
     StructListBox   aTlbStruct;
     Image           maImgEnd;
     Image           maImgError;
+    Image           maImgEndHC;
+    Image           maImgErrorHC;
 
     IFormulaToken*  pSelectedToken;
 

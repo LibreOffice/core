@@ -251,6 +251,16 @@ struct SW_DLLPUBLIC SwFormToken
     String GetString() const;
 };
 
+// -> #i21237#
+/**
+    Functor that is true when a given token has a certain token type.
+
+    @param _eType  the type to check for
+    @param rToken  the token to check
+
+    @retval TRUE   the token has the given type
+    @retval FALSE  else
+*/
 struct SwFormTokenEqualToFormTokenType
 {
     FormTokenType eType;
@@ -345,6 +355,7 @@ public:
     */
     const SwFormTokens & GetTokens() const { return aTokens; }
 };
+// <- #i21237#
 
 class SW_DLLPUBLIC SwForm
 {
@@ -354,6 +365,8 @@ class SW_DLLPUBLIC SwForm
     TOXTypes    eType;
     USHORT      nFormMaxLevel;
 
+    //USHORT    nFirstTabPos; -> Value in tab token
+//  BOOL    bHasFirstTabPos : 1;
     BOOL    bGenerateTabPos : 1;
     BOOL    bIsRelTabPos : 1;
     BOOL    bCommaSeparated : 1;
@@ -454,10 +467,11 @@ namespace nsSwTOOElements
     const SwTOOElements TOO_CHART           = 0x02;
     const SwTOOElements TOO_CALC            = 0x08;
     const SwTOOElements TOO_DRAW_IMPRESS    = 0x10;
+//  const SwTOOElements TOO_IMPRESS         = 0x20;
     const SwTOOElements TOO_OTHER           = 0x80;
 }
 
-#define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)
+#define TOX_STYLE_DELIMITER ((sal_Unicode)0x01)     //JP 19.07.00: use a control char
 
 /*--------------------------------------------------------------------
      Description:  Class for all indexes
@@ -757,8 +771,12 @@ inline USHORT SwTOXBase::GetLevel() const
 
 inline void SwTOXBase::SetTemplateName(const String& rName)
 {
+// OSL_ENSURE(GetTOXType()->GetType() == TOX_USER, "Falscher Feldtyp");
+// OSL_ENSURE(aData.pTemplateName, "pTemplateName == 0");
+//  (*aData.pTemplateName) = rName;
     DBG_WARNING("SwTOXBase::SetTemplateName obsolete");
     aStyleNames[0] = rName;
+
 }
 
 inline USHORT SwTOXBase::GetOptions() const

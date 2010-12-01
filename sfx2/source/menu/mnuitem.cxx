@@ -443,6 +443,7 @@ SfxAppMenuControl_Impl::SfxAppMenuControl_Impl(
     // Determine the current background color setting for menus
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     m_nSymbolsStyle         = rSettings.GetSymbolsStyle();
+    m_bWasHiContrastMode    = rSettings.GetHighContrastMode();
     m_bShowMenuImages       = rSettings.GetUseImagesInMenus();
 
     Reference<com::sun::star::lang::XMultiServiceFactory> aXMultiServiceFactory(::comphelper::getProcessServiceFactory());
@@ -468,12 +469,15 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
     {
         const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
         ULONG nSymbolsStyle = rSettings.GetSymbolsStyle();
+        BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
         BOOL bShowMenuImages = rSettings.GetUseImagesInMenus();
 
         if (( nSymbolsStyle != m_nSymbolsStyle ) ||
+            ( bIsHiContrastMode != m_bWasHiContrastMode ) ||
             ( bShowMenuImages != m_bShowMenuImages ))
         {
             m_nSymbolsStyle         = nSymbolsStyle;
+            m_bWasHiContrastMode    = bIsHiContrastMode;
             m_bShowMenuImages       = bShowMenuImages;
 
             USHORT nCount = pActMenu->GetItemCount();
@@ -495,7 +499,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( aImageId.getLength() > 0 )
                         {
                             Reference< ::com::sun::star::frame::XFrame > xFrame;
-                            Image aImage = GetImage( xFrame, aImageId, FALSE );
+                            Image aImage = GetImage( xFrame, aImageId, FALSE, bIsHiContrastMode );
                             if ( !!aImage )
                             {
                                 bImageSet = sal_True;
@@ -507,7 +511,7 @@ IMPL_LINK( SfxAppMenuControl_Impl, Activate, Menu *, pActMenu )
                         if ( !bImageSet && aCmd.Len() )
                         {
                             Image aImage = SvFileInformationManager::GetImage(
-                                INetURLObject(aCmd), FALSE );
+                                INetURLObject(aCmd), FALSE, bIsHiContrastMode );
                             if ( !!aImage )
                                 pActMenu->SetItemImage( nItemId, aImage );
                         }

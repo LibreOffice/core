@@ -178,14 +178,14 @@ int SAL_CALL main( int argc, char **argv )
         Reference< XMultiComponentFactory > xManager = NULL ;
         Reference< XComponentContext > xContext = NULL ;
 
-        xManager = serviceManager( xContext , OUString(RTL_CONSTASCII_USTRINGPARAM("local")), OUString::createFromAscii( argv[3] ) ) ;
+        xManager = serviceManager( xContext , OUString::createFromAscii( "local" ), OUString::createFromAscii( argv[3] ) ) ;
         OSL_ENSURE( xManager.is() ,
             "ServicesManager - "
             "Cannot get service manager" ) ;
 
         //Create signature template
         Reference< XInterface > element =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl")) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.security.bridge.xmlsec.XMLElementWrapper_XmlSecImpl" ) , xContext ) ;
         OSL_ENSURE( element.is() ,
             "Signer - "
             "Cannot get service instance of \"wrapper.XMLElementWrapper\"" ) ;
@@ -210,7 +210,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Signature template
         Reference< XInterface > signtpl =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.crypto.XMLSignatureTemplate")) , xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.xml.crypto.XMLSignatureTemplate" ) , xContext ) ;
         OSL_ENSURE( signtpl.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSignatureTemplate\"" ) ;
@@ -230,7 +230,7 @@ int SAL_CALL main( int argc, char **argv )
         //Create security environment
         //Build Security Environment
         Reference< XInterface > xsecenv =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.SecurityEnvironment_MSCryptImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.SecurityEnvironment\"" ) ;
@@ -261,7 +261,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Build XML Security Context
         Reference< XInterface > xmlsecctx =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLSecurityContext_MSCryptImpl"), xContext ) ;
         OSL_ENSURE( xsecenv.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSecurityContext\"" ) ;
@@ -275,7 +275,7 @@ int SAL_CALL main( int argc, char **argv )
 
         //Generate XML signature
         Reference< XInterface > xmlsigner =
-            xManager->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl")), xContext ) ;
+            xManager->createInstanceWithContext( OUString::createFromAscii("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl"), xContext ) ;
         OSL_ENSURE( xmlsigner.is() ,
             "Signer - "
             "Cannot get service instance of \"xsec.XMLSignature\"" ) ;

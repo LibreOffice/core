@@ -44,7 +44,9 @@
 #include "optgrid.hrc"
 #include "dlgutil.hxx"
 
-// local functions
+/* -----------------18.08.98 17:41-------------------
+ * local functions
+ * --------------------------------------------------*/
 void    lcl_GetMinMax(MetricField& rField, long& nFirst, long& nLast, long& nMin, long& nMax)
 {
     nFirst  = static_cast<long>(rField.Denormalize( rField.GetFirst( FUNIT_TWIP ) ));
@@ -108,10 +110,18 @@ SvxGridItem::SvxGridItem( const SvxGridItem& rItem )
 
 };
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SfxPoolItem*  SvxGridItem::Clone( SfxItemPool* ) const
 {
     return new SvxGridItem( *this );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
 {
@@ -130,6 +140,10 @@ int SvxGridItem::operator==( const SfxPoolItem& rAttr ) const
                 nFldSnapX    == rItem.nFldSnapX    &&
                 nFldSnapY    == rItem.nFldSnapY     );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 SfxItemPresentation  SvxGridItem::GetPresentation
 (
@@ -153,7 +167,11 @@ SfxItemPresentation  SvxGridItem::GetPresentation
     }
 }
 
-// TabPage Rastereinstellungen
+
+/*----------------- OS 23.02.95  -----------------------
+ TabPage Rastereinstellungen
+-------------------------------------------------------*/
+
 SvxGridTabPage::SvxGridTabPage( Window* pParent, const SfxItemSet& rCoreSet) :
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_GRID ), rCoreSet ),

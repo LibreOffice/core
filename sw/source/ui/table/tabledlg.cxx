@@ -318,7 +318,9 @@ IMPL_LINK( SwFormatTablePage, RightModifyHdl, MetricField *, EMPTYARG )
     if(aFreeBtn.IsChecked())
     {
         BOOL bEnable = aRightMF.GetValue() == 0;
+//      aWidthMF.Enable(bEnable);
         aRelWidthCB.Enable(bEnable);
+//      aWidthFT.Enable(bEnable);
         if ( !bEnable )
         {
             aRelWidthCB.Check(FALSE);
@@ -783,6 +785,8 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* _pSet )
                 pTblData->SetAlign(nAlign);
             }
 
+
+    //      if(  text::HoriOrientation::CENTER && lWidth != (SwTwips)aWidthMF.GetSavedValue())
             if(pTblData->GetWidth() != lWidth )
             {
                 pTblData->SetWidthChanged();
@@ -1161,6 +1165,29 @@ void   SwTableColumnPage::UpdateCols( USHORT nAktPos )
 
             }
         nTableWidth += nAdd;
+
+    }
+    else
+    {
+//      Die Differenz wird gleichmaessig auf alle anderen Spalten aufgeteilt
+//      die Tabellenbreite bleibt konstant
+/*
+        SwTwips nDiffn = nDiff/(nNoOfVisibleCols - 1);
+        if(nDiff < 0 && (nNoOfVisibleCols - 1) * nDiffn != nDiff)
+            nDiffn-- ;
+        USHORT nStart = nAktPos++;
+        if(nAktPos == nNoOfVisibleCols)
+            nStart = 0;
+        for(USHORT i = 0; i < nNoOfVisibleCols; i++ )
+        {
+            if((nVisWidth = GetVisibleWidth(i)) + nDiff < MINLAY)
+            {
+                nAdd += nVisWidth - MINLAY;
+                SetVisibleWidth(i, MINLAY);
+            }
+        }
+*/
+
     }
 
 #ifdef DEBUG_TBLDLG
@@ -1219,6 +1246,10 @@ void    SwTableColumnPage::ActivatePage( const SfxItemSet& )
     aModifyTableCB.Enable( !bPercentMode && bModifyTbl );
     aProportionalCB.Enable(!bPercentMode && bModifyTbl );
 
+/*  if(pTblData->IsLineSelected() && pTblData->IsComplex())
+    {
+
+    }*/
     aSpaceED.SetValue(aSpaceED.Normalize(
                 pTblData->GetSpace() - nTableWidth) , FUNIT_TWIP);
 
@@ -1308,6 +1339,7 @@ SwTwips  SwTableColumnPage::GetVisibleWidth(USHORT nPos)
     while(!pTblData->GetColumns()[i].bVisible && (i + 1) < nNoOfCols)
         nReturn += pTblData->GetColumns()[++i].nWidth;
 
+//  return (*ppTableColumns)[i].nWidth;
     return nReturn;
 }
 
@@ -1376,6 +1408,8 @@ void  SwTableTabDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
     }
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 SwTextFlowPage::SwTextFlowPage( Window* pParent,
                                 const SfxItemSet& rSet ) :
     SfxTabPage(pParent, SW_RES( TP_TABLE_TEXTFLOW ), rSet ),
@@ -1445,16 +1479,22 @@ SwTextFlowPage::SwTextFlowPage( Window* pParent,
     HeadLineCBClickHdl();
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
  SwTextFlowPage::~SwTextFlowPage()
 {
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 SfxTabPage*   SwTextFlowPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new SwTextFlowPage(pParent, rAttrSet);
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bModified = FALSE;
@@ -1571,6 +1611,8 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
 
 }
 
+/*-----------------12.12.96 12.22-------------------
+--------------------------------------------------*/
 void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 {
     const SfxPoolItem* pItem;
@@ -1755,6 +1797,9 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
 
     HeadLineCBClickHdl();
 }
+/*-----------------16.04.98 14:48-------------------
+
+--------------------------------------------------*/
 
 void SwTextFlowPage::SetShell(SwWrtShell* pSh)
 {
@@ -1767,6 +1812,8 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     }
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
 {
     if( aPgBrkCB.IsChecked() )
@@ -1805,6 +1852,8 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
 {
     BOOL bEnable = FALSE;
@@ -1827,6 +1876,8 @@ IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
 {
     if ( aPgBrkCB.IsChecked() )
@@ -1857,6 +1908,8 @@ IMPL_LINK( SwTextFlowPage, PageBreakPosHdl_Impl, RadioButton*, pBtn )
     return 0;
 }
 
+/*-----------------12.12.96 16.18-------------------
+--------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
 {
     if ( pBtn == &aColBrkRB || aPgBrkAfterRB.IsChecked() )
@@ -1871,13 +1924,17 @@ IMPL_LINK( SwTextFlowPage, PageBreakTypeHdl_Impl, RadioButton*, pBtn )
         PageBreakPosHdl_Impl( &aPgBrkBeforeRB );
     return 0;
 }
-
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, SplitHdl_Impl, CheckBox*, pBox )
 {
     aSplitRowCB.Enable(pBox->IsChecked());
     return 0;
 }
-
+/*-----------------17.11.2003 11:30-----------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
 {
     pBox->EnableTriState(FALSE);
@@ -1891,6 +1948,9 @@ IMPL_LINK( SwTextFlowPage, HeadLineCBClickHdl, void*, EMPTYARG )
     return 0;
 }
 
+/*-----------------30.05.97 07:37-------------------
+
+--------------------------------------------------*/
 void SwTextFlowPage::DisablePageBreak()
 {
     bPageBreak = FALSE;

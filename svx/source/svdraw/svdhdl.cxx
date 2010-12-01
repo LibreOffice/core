@@ -286,6 +286,12 @@ SdrHdlBitmapSet& getModernSet()
     return *aModernSet.get();
 }
 
+SdrHdlBitmapSet& getHighContrastSet()
+{
+    static vcl::DeleteOnDeinit< SdrHdlBitmapSet > aHighContrastSet(new SdrHdlBitmapSet(SIP_SA_ACCESSIBILITY_MARKERS));
+    return *aHighContrastSet.get();
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 SdrHdl::SdrHdl():
@@ -619,16 +625,24 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
         case Rect_7x7:          eRetval = Rect_9x9;         break;
         case Rect_9x9:          eRetval = Rect_11x11;       break;
         case Rect_11x11:        eRetval = Rect_13x13;       break;
+        //case Rect_13x13:      eRetval = ; break;
 
         case Circ_7x7:          eRetval = Circ_9x9;         break;
         case Circ_9x9:          eRetval = Circ_11x11;       break;
+        //case Circ_11x11:      eRetval = ; break;
 
         case Elli_7x9:          eRetval = Elli_9x11;        break;
+        //case Elli_9x11:           eRetval = ; break;
 
         case Elli_9x7:          eRetval = Elli_11x9;        break;
+        //case Elli_11x9:           eRetval = ; break;
 
         case RectPlus_7x7:      eRetval = RectPlus_9x9;     break;
         case RectPlus_9x9:      eRetval = RectPlus_11x11;   break;
+        //case RectPlus_11x11:  eRetval = ; break;
+
+        //case Crosshair:           eRetval = ; break;
+        //case Glue:                eRetval = ; break;
 
         // #98388# let anchor blink with it's pressed state
         case Anchor:            eRetval = AnchorPressed;    break;
@@ -643,15 +657,22 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 }
 
 // #101928#
-BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine )
+BitmapEx SdrHdl::ImpGetBitmapEx(BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd, sal_Bool bFine, sal_Bool bIsHighContrast)
 {
-    if(bFine)
+    if(bIsHighContrast)
     {
-        return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
+        return getHighContrastSet().GetBitmapEx(eKindOfMarker, nInd);
     }
     else
     {
-        return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
+        if(bFine)
+        {
+            return getModernSet().GetBitmapEx(eKindOfMarker, nInd);
+        }
+        else
+        {
+            return getSimpleSet().GetBitmapEx(eKindOfMarker, nInd);
+        }
     }
 }
 
@@ -661,6 +682,8 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 {
     ::sdr::overlay::OverlayObject* pRetval = 0L;
     sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
 
     // support bigger sizes
     sal_Bool bForceBiggerSize(sal_False);
@@ -668,6 +691,17 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     if(pHdlList->GetHdlSize() > 3)
     {
         bForceBiggerSize = sal_True;
+    }
+
+    // #101928# ...for high contrast, too.
+    if(!bForceBiggerSize && bIsHighContrast)
+    {
+        // #107925#
+        // ...but not for anchors, else they will not blink when activated
+        if(Anchor != eKindOfMarker && AnchorTR != eKindOfMarker)
+        {
+            bForceBiggerSize = sal_True;
+        }
     }
 
     if(bForceBiggerSize)
@@ -707,12 +741,11 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
 
         // create animated hdl
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx1 = ImpGetBitmapEx( eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
-        BitmapEx aBmpEx2 = ImpGetBitmapEx( eNextBigger,   (sal_uInt16)eColIndex, bIsFineHdl );
+        BitmapEx aBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
+        BitmapEx aBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         // #i53216# Use system cursor blink time. Use the unsigned value.
-        const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-        const sal_uInt32 nBlinkTime((sal_uInt32)rStyleSettings.GetCursorBlinkTime());
+        const sal_uInt32 nBlinkTime((sal_uInt32)Application::GetSettings().GetStyleSettings().GetCursorBlinkTime());
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -740,7 +773,7 @@ BitmapEx SdrHdl::ImpGetBitmapEx( BitmapMarkerKind eKindOfMarker, sal_uInt16 nInd
     {
         // create normal handle
         // #101928# use ImpGetBitmapEx(...) now
-        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl );
+        BitmapEx aBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
         if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
         {
@@ -2244,9 +2277,16 @@ SdrCropHdl::SdrCropHdl(const Point& rPnt, SdrHdlKind eNewKind)
 
 // --------------------------------------------------------------------
 
-BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl )
+BitmapEx SdrCropHdl::GetHandlesBitmap( bool bIsFineHdl, bool bIsHighContrast )
 {
-    if( bIsFineHdl )
+    if( bIsHighContrast )
+    {
+        static BitmapEx* pHighContrastBitmap = 0;
+        if( pHighContrastBitmap == 0 )
+            pHighContrastBitmap = new BitmapEx(ResId(SIP_SA_ACCESSIBILITY_CROP_MARKERS, *ImpGetResMgr()));
+        return *pHighContrastBitmap;
+    }
+    else if( bIsFineHdl )
     {
         static BitmapEx* pModernBitmap = 0;
         if( pModernBitmap == 0 )
@@ -2318,9 +2358,12 @@ void SdrCropHdl::CreateB2dIAObject()
     {
         sal_Bool bIsFineHdl(pHdlList->IsFineHdl());
         const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+        sal_Bool bIsHighContrast(rStyleSettings.GetHighContrastMode());
         int nHdlSize = pHdlList->GetHdlSize();
+        if( bIsHighContrast )
+            nHdlSize = 4;
 
-        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl ) );
+        const BitmapEx aHandlesBitmap( GetHandlesBitmap( bIsFineHdl, bIsHighContrast ) );
         BitmapEx aBmpEx1( GetBitmapForHandle( aHandlesBitmap, nHdlSize ) );
 
         for(sal_uInt32 b(0L); b < pPageView->PageWindowCount(); b++)

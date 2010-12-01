@@ -70,9 +70,9 @@ void OAdabasUser::refreshGroups()
     TStringVector aVector;
     aVector.reserve(7); // we don't know the excatly count of users but this should fit the normal need
     Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '" ));
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT GROUPNAME FROM DOMAIN.USERS WHERE GROUPNAME IS NOT NULL AND GROUPNAME <> ' ' AND USERNAME = '");
     aSql += getName( );
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    aSql += ::rtl::OUString::createFromAscii("'");
 
     Reference< XResultSet > xResult = xStmt->executeQuery(aSql);
     if(xResult.is())
@@ -136,11 +136,11 @@ void OAdabasUser::getAnyTablePrivileges(const ::rtl::OUString& objName, sal_Int3
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(xMeta,objName,sCatalog,sSchema,sTable,::dbtools::eInDataManipulation);
     Reference<XStatement> xStmt = m_pConnection->createStatement();
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '" ));
+    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("SELECT REFTABLENAME,PRIVILEGES FROM DOMAIN.USR_USES_TAB WHERE REFOBJTYPE <> 'SYSTEM' AND DEFUSERNAME = '");
     sSql += m_Name;
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' AND REFTABLENAME = '"));
+    sSql += ::rtl::OUString::createFromAscii("' AND REFTABLENAME = '");
     sSql += sTable;
-    sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    sSql += ::rtl::OUString::createFromAscii("'");
     if(xStmt.is())
     {
         Reference<XResultSet> xRes = xStmt->executeQuery(sSql);
@@ -203,12 +203,13 @@ void SAL_CALL OAdabasUser::grantPrivileges( const ::rtl::OUString& objName, sal_
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
     if(sPrivs.getLength())
     {
-        ::rtl::OUString sGrant(RTL_CONSTASCII_USTRINGPARAM("GRANT "));
+        ::rtl::OUString sGrant;
+        sGrant += ::rtl::OUString::createFromAscii("GRANT ");
         sGrant += sPrivs;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "));
+        sGrant += ::rtl::OUString::createFromAscii(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
         sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TO "));
+        sGrant += ::rtl::OUString::createFromAscii(" TO ");
         sGrant += m_Name;
 
         Reference<XStatement> xStmt = m_pConnection->createStatement();
@@ -228,12 +229,13 @@ void SAL_CALL OAdabasUser::revokePrivileges( const ::rtl::OUString& objName, sal
     ::rtl::OUString sPrivs = getPrivilegeString(objPrivileges);
     if(sPrivs.getLength())
     {
-        ::rtl::OUString sGrant(RTL_CONSTASCII_USTRINGPARAM("REVOKE "));
+        ::rtl::OUString sGrant;
+        sGrant += ::rtl::OUString::createFromAscii("REVOKE ");
         sGrant += sPrivs;
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON "));
+        sGrant += ::rtl::OUString::createFromAscii(" ON ");
         Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
         sGrant += ::dbtools::quoteTableName(xMeta,objName,::dbtools::eInDataManipulation);
-        sGrant += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "));
+        sGrant += ::rtl::OUString::createFromAscii(" FROM ");
         sGrant += m_Name;
 
         Reference<XStatement> xStmt = m_pConnection->createStatement();
@@ -248,11 +250,12 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OUser_BASE_RBHELPER::rBHelper.bDisposed);
-    ::rtl::OUString sAlterPwd(RTL_CONSTASCII_USTRINGPARAM("ALTER PASSWORD \""));
+    ::rtl::OUString sAlterPwd;
+    sAlterPwd = ::rtl::OUString::createFromAscii("ALTER PASSWORD \"");
     sAlterPwd += objPassword.toAsciiUpperCase();
-    sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\" TO \"")) ;
+    sAlterPwd += ::rtl::OUString::createFromAscii("\" TO \"") ;
     sAlterPwd += newPassword.toAsciiUpperCase();
-    sAlterPwd += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"")) ;
+    sAlterPwd += ::rtl::OUString::createFromAscii("\"") ;
 
     sal_Bool bDisposeConnection = sal_False;
     Reference<XConnection> xConnection = m_pConnection;
@@ -263,9 +266,9 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
         if(pNewConnection)
         {
             Sequence< PropertyValue> aSeq(2);
-            aSeq.getArray()[0].Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")) ;
+            aSeq.getArray()[0].Name     = ::rtl::OUString::createFromAscii("user") ;
             aSeq.getArray()[0].Value    <<= m_Name;
-            aSeq.getArray()[1].Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("password")) ;
+            aSeq.getArray()[1].Name     = ::rtl::OUString::createFromAscii("password") ;
             aSeq.getArray()[1].Value    <<= objPassword;
             pNewConnection->Construct(m_pConnection->getMetaData()->getURL(),aSeq);
         }
@@ -288,41 +291,41 @@ void SAL_CALL OAdabasUser::changePassword( const ::rtl::OUString& objPassword, c
 {
     ::rtl::OUString sPrivs;
     if((nRights & Privilege::INSERT) == Privilege::INSERT)
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INSERT"));
+        sPrivs += ::rtl::OUString::createFromAscii("INSERT");
 
     if((nRights & Privilege::DELETE) == Privilege::DELETE)
     {
         if(sPrivs.getLength())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DELETE"));
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("DELETE");
     }
 
     if((nRights & Privilege::UPDATE) == Privilege::UPDATE)
     {
         if(sPrivs.getLength())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UPDATE"));
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("UPDATE");
     }
 
     if((nRights & Privilege::ALTER) == Privilege::ALTER)
     {
         if(sPrivs.getLength())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ALTER"));
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("ALTER");
     }
 
     if((nRights & Privilege::SELECT) == Privilege::SELECT)
     {
         if(sPrivs.getLength())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT"));
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("SELECT");
     }
 
     if((nRights & Privilege::REFERENCE) == Privilege::REFERENCE)
     {
         if(sPrivs.getLength())
-            sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
-        sPrivs += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REFERENCES"));
+            sPrivs += ::rtl::OUString::createFromAscii(",");
+        sPrivs += ::rtl::OUString::createFromAscii("REFERENCES");
     }
 
     return sPrivs;

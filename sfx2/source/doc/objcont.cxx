@@ -119,14 +119,16 @@ bool operator> (const util::DateTime& i_rLeft, const util::DateTime& i_rRight)
     return sal_False;
 }
 
+
 ::boost::shared_ptr<GDIMetaFile>
 SfxObjectShell::GetPreviewMetaFile( sal_Bool bFullContent ) const
 {
-    return CreatePreviewMetaFile_Impl( bFullContent );
+    return CreatePreviewMetaFile_Impl( bFullContent, sal_False );
 }
 
+
 ::boost::shared_ptr<GDIMetaFile>
-SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
+SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, sal_Bool bHighContrast ) const
 {
     // Nur wenn gerade nicht gedruckt wird, darf DoDraw aufgerufen
     // werden, sonst wird u.U. der Printer abgeschossen !
@@ -140,6 +142,10 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent ) const
 
     VirtualDevice aDevice;
     aDevice.EnableOutput( FALSE );
+
+    // adjust the output device if HC-metafile is requested
+    if ( bHighContrast )
+        aDevice.SetDrawMode( aDevice.GetDrawMode() | DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     MapMode aMode( ((SfxObjectShell*)this)->GetMapUnit() );
     aDevice.SetMapMode( aMode );
@@ -323,9 +329,11 @@ void SfxObjectShell::SetOrganizerSearchMask(
 
 //--------------------------------------------------------------------
 
-sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
+USHORT SfxObjectShell::GetContentCount(
+    USHORT nIdx1,
+    USHORT /*nIdx2*/)
 {
-    switch(nIdx)
+    switch(nIdx1)
     {
         case INDEX_IGNORE:
             return DEF_CONTENT_COUNT;
@@ -339,34 +347,56 @@ sal_uInt16 SfxObjectShell::GetContentCount(sal_uInt16 nIdx)
         }
         case CONTENT_MACRO:
             break;
+/*
+        case CONTENT_CONFIG:
+            return ( GetConfigManager() ) ?
+                        GetConfigManager()->GetItemCount() : 0;
+            break;
+ */
     }
     return 0;
 }
 
 
 //--------------------------------------------------------------------
-//TODO/CLEANUP: remove this method
-void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2)
+//TODO/CLEANUP: remove this method (it's virtual)
+void  SfxObjectShell::TriggerHelpPI(USHORT nIdx1, USHORT nIdx2, USHORT)
 {
     if(nIdx1==CONTENT_STYLE && nIdx2 != INDEX_IGNORE) //StyleSheets
     {
         SfxStyleSheetBasePool *pStylePool = GetStyleSheetPool();
         SetOrganizerSearchMask(pStylePool);
+#ifdef WIR_KOENNEN_WIEDER_HILFE_FUER_STYLESHEETS
+        SfxStyleSheetBase *pStyle = (*pStylePool)[nIdx2];
+        if(pStyle)
+        {
+            String aHelpFile;
+            ULONG nHelpId=pStyle->GetHelpId(aHelpFile);
+            SfxHelpPI* pHelpPI = SFX_APP()->GetHelpPI();
+            if ( pHelpPI && nHelpId )
+                pHelpPI->LoadTopic( nHelpId );
+        }
+#endif
     }
 }
 
-sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
+BOOL   SfxObjectShell::CanHaveChilds(USHORT nIdx1,
+                                       USHORT nIdx2)
 {
-    switch(nIdx1)
-    {
+    switch(nIdx1) {
     case INDEX_IGNORE:
-        return true;
+        return TRUE;
     case CONTENT_STYLE:
-        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool() ? false : true;
+        return INDEX_IGNORE == nIdx2 || !GetStyleSheetPool()? FALSE: TRUE;
     case CONTENT_MACRO:
-        return false;
+//!!    return INDEX_IGNORE == nIdx2? FALSE: TRUE;
+        return FALSE;
+/*
+    case CONTENT_CONFIG:
+        return INDEX_IGNORE == nIdx2 ? FALSE : TRUE;
+ */
     }
-    return false;
+    return FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -374,14 +404,29 @@ sal_Bool SfxObjectShell::CanHaveChilds(sal_uInt16 nIdx1, sal_uInt16 nIdx2)
 void SfxObjectShell::GetContent(String &rText,
                                 Bitmap &rClosedBitmap,
                                 Bitmap &rOpenedBitmap,
-                                sal_Bool &bCanDel,
-                                sal_uInt16 i,
-                                sal_uInt16 nIdx
-)
+                                BOOL &bCanDel,
+                                USHORT i,
+                                USHORT nIdx1,
+                                USHORT nIdx2 )
 {
-    bCanDel=true;
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    SfxObjectShell::GetContent( rText, rClosedBitmap, rOpenedBitmap, BMP_COLOR_NORMAL, bCanDel, i, nIdx1, nIdx2 );
+}
 
-    switch(nIdx)
+//--------------------------------------------------------------------
+
+void   SfxObjectShell::GetContent(String &rText,
+                                  Bitmap &rClosedBitmap,
+                                  Bitmap &rOpenedBitmap,
+                                  BmpColorMode eColorMode,
+                                  BOOL &bCanDel,
+                                  USHORT i,
+                                  USHORT nIdx1,
+                                  USHORT /*nIdx2*/ )
+{
+    bCanDel=TRUE;
+
+    switch(nIdx1)
     {
         case INDEX_IGNORE:
         {
@@ -392,14 +437,37 @@ void SfxObjectShell::GetContent(String &rText,
             {
                 case CONTENT_STYLE:
                     nTextResId = STR_STYLES;
-                    nClosedBitmapResId= BMP_STYLES_CLOSED;
-                    nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
                     break;
                 case CONTENT_MACRO:
                     nTextResId = STR_MACROS;
+                    if ( eColorMode == BMP_COLOR_NORMAL )
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED;
+                    }
+                    else
+                    {
+                        nClosedBitmapResId= BMP_STYLES_CLOSED_HC;
+                        nOpenedBitmapResId= BMP_STYLES_OPENED_HC;
+                    }
+                    break;
+/*
+                case CONTENT_CONFIG:
+                    nTextResId = STR_CONFIG;
                     nClosedBitmapResId= BMP_STYLES_CLOSED;
                     nOpenedBitmapResId= BMP_STYLES_OPENED;
                     break;
+ */
             }
 
             if ( nTextResId )
@@ -420,32 +488,52 @@ void SfxObjectShell::GetContent(String &rText,
             bCanDel=((pStyle->GetMask() & SFXSTYLEBIT_USERDEF)
                      == SFXSTYLEBIT_USERDEF);
             rClosedBitmap = rOpenedBitmap =
-                GetStyleFamilyBitmap(pStyle->GetFamily());
+                GetStyleFamilyBitmap(pStyle->GetFamily(), eColorMode );
         }
             break;
         case CONTENT_MACRO:
             break;
+/*
+        case CONTENT_CONFIG:
+            if ( GetConfigManager() )
+            {
+                rText = GetConfigManager()->GetItem(i);
+                bCanDel = GetConfigManager()->CanDelete(i);
+            }
+            else
+                rText = String();
+            rClosedBitmap = Bitmap(SfxResId(BMP_STYLES_CLOSED));
+            rOpenedBitmap = Bitmap(SfxResId(BMP_STYLES_OPENED));
+            break;
+*/
     }
 }
 
 //--------------------------------------------------------------------
+Bitmap SfxObjectShell::GetStyleFamilyBitmap( SfxStyleFamily eFamily )
+{
+    DBG_ERRORFILE( "Non high contrast method called. Please update calling code!" );
+    return SfxObjectShell::GetStyleFamilyBitmap( eFamily, BMP_COLOR_NORMAL );
+}
 
-Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily)
+//--------------------------------------------------------------------
+
+Bitmap SfxObjectShell::GetStyleFamilyBitmap(SfxStyleFamily eFamily, BmpColorMode eColorMode )
 {
     USHORT nResId = 0;
     switch(eFamily)
     {
         case SFX_STYLE_FAMILY_CHAR:
-            nResId = BMP_STYLES_FAMILY1;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY1 : BMP_STYLES_FAMILY1_HC;
             break;
         case SFX_STYLE_FAMILY_PARA:
-            nResId = BMP_STYLES_FAMILY2;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY2 : BMP_STYLES_FAMILY2_HC;
             break;
         case SFX_STYLE_FAMILY_FRAME:
-            nResId = BMP_STYLES_FAMILY3;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY3 : BMP_STYLES_FAMILY3_HC;
             break;
         case SFX_STYLE_FAMILY_PAGE :
-            nResId = BMP_STYLES_FAMILY4;
+            nResId = ( eColorMode == BMP_COLOR_NORMAL ) ? BMP_STYLES_FAMILY4 : BMP_STYLES_FAMILY4_HC;
             break;
         case SFX_STYLE_FAMILY_PSEUDO:
         case SFX_STYLE_FAMILY_ALL:
@@ -674,6 +762,10 @@ BOOL SfxObjectShell::Print
     USHORT          /*nIdx3*/,
     const String*   pObjectName
 )
+
+/*  [Beschreibung]
+*/
+
 {
     switch(nIdx1)
     {

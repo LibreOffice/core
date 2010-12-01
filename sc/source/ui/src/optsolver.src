@@ -402,6 +402,8 @@ ModelessDialog RID_SCDLG_OPTSOLVER
         DefButton = TRUE ;
     };
 
+    // IMG_DEL_H not used - image is set dynamically
+
     String STR_INVALIDINPUT
     {
         Text [ en-US ] = "Invalid input." ;

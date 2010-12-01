@@ -42,5 +42,6 @@
 #define TBI_DATA_SWAP_ROW 6
 #define TBI_DATA_INSERT_TEXT_COL 7
 
-// image lists for toolbox
+// image lists (normal and high-contrast) for toolbox
 #define IL_DIAGRAM_DATA     1
+#define IL_HC_DIAGRAM_DATA  2

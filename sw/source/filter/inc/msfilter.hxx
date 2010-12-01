@@ -119,7 +119,7 @@ namespace sw
             @author
                 <a href="mailto:mmaher@openoffice.org">Martin Maher</a
         */
-        ULONG MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri, USHORT nDocLang);
+        ULONG MSDateTimeFormatToSwFormat(String& rParams, SvNumberFormatter *pFormatter, USHORT &rLang, bool bHijri);
 
         /** Used by MSDateTimeFormatToSwFormat to identify AM time fields
 

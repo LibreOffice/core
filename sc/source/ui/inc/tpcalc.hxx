@@ -71,6 +71,7 @@ private:
     RadioButton     aBtnDateSc10;
     RadioButton     aBtnDate1904;
 
+    FixedLine       aHSeparatorFL;
     CheckBox        aBtnCase;
     CheckBox        aBtnCalc;
     CheckBox        aBtnMatch;

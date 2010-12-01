@@ -53,7 +53,9 @@ namespace drawinglayer
 
             if(pSource)
             {
-                Graphic* pOLEGraphic = pSource->GetGraphic();
+                Graphic* pOLEGraphic = (getHighContrast())
+                    ? pSource->getEmbeddedObjectRef().GetHCGraphic()
+                    : pSource->GetGraphic();
 
                 if(pOLEGraphic)
                 {
@@ -150,18 +152,19 @@ namespace drawinglayer
         SdrOleContentPrimitive2D::SdrOleContentPrimitive2D(
             const SdrOle2Obj& rSdrOle2Obj,
             const basegfx::B2DHomMatrix& rObjectTransform,
-            sal_uInt32 nGraphicVersion
-        )
+            sal_uInt32 nGraphicVersion,
+            bool bHighContrast)
         :   BufferedDecompositionPrimitive2D(),
             mpSdrOle2Obj(const_cast< SdrOle2Obj* >(&rSdrOle2Obj)),
             maObjectTransform(rObjectTransform),
-            mnGraphicVersion(nGraphicVersion)
+            mnGraphicVersion(nGraphicVersion),
+            mbHighContrast(bHighContrast)
         {
         }
 
         bool SdrOleContentPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
         {
-            if( BufferedDecompositionPrimitive2D::operator==(rPrimitive) )
+            if(BufferedDecompositionPrimitive2D::operator==(rPrimitive))
             {
                 const SdrOleContentPrimitive2D& rCompare = (SdrOleContentPrimitive2D&)rPrimitive;
                 const bool bBothNot(!mpSdrOle2Obj.is() && !rCompare.mpSdrOle2Obj.is());
@@ -174,7 +177,8 @@ namespace drawinglayer
                     // #i104867# to find out if the Graphic content of the
                     // OLE has changed, use GraphicVersion number
                     && getGraphicVersion() == rCompare.getGraphicVersion()
-                );
+
+                    && getHighContrast() == rCompare.getHighContrast());
             }
 
             return false;

@@ -29,25 +29,36 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
+// -----------------------------------------------------------------------------
 #include <rtl/string.hxx>
 #include <rtl_String_Const.h>
 #include <rtl_String_Utils.hxx>
+
 #include <rtl/strbuf.hxx>
 
 #include "cppunit/TestAssert.h"
 #include "cppunit/TestFixture.h"
 #include "cppunit/extensions/HelperMacros.h"
 #include "cppunit/plugin/TestPlugIn.h"
+
 #include <string.h>
 
 using namespace rtl;
 
-// This file contains cppunit tests for the
-// OString and OStringBuffer classes
+//------------------------------------------------------------------------
+// test classes
+//------------------------------------------------------------------------
+// const MAXBUFLENGTH = 255;
+//------------------------------------------------------------------------
+// helper functions
+//------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 // testing constructors
 //------------------------------------------------------------------------
+
+// LLA: there exist some #if WITH_CORE #endif envelopes, which contain test code, which will core dump
+//      due to the fact, that we can't handle MAXINT32 right.
 
 namespace rtl_OStringBuffer
 {
@@ -93,11 +104,29 @@ namespace rtl_OStringBuffer
         void ctor_003()
         {
             ::rtl::OStringBuffer aStrBuf1(kTestStr2Len);
+#ifdef WITH_CORE
+            ::rtl::OStringBuffer aStrBuf2(kSInt32Max);     //will core dump
+            // LLA: will core, due to the fact, that ksint32max is too big, the max length can't
+            //      use, because there are some internal bytes, which we can't calculate.
+
+#else
             ::rtl::OStringBuffer aStrBuf2(0);
+#endif
 
             const sal_Char* pStr1 = aStrBuf1.getStr();
             const sal_Char* pStr2 = aStrBuf2.getStr();
 
+#ifdef WITH_CORE
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "New OStringBuffer containing no characters and contain assigned capacity",
+                aStrBuf1.getLength() == 0 &&
+                ! *(aStrBuf1.getStr()) && aStrBuf1.getCapacity() == kTestStr2Len &&
+                aStrBuf2.getLength() == 0 &&
+                ! *(aStrBuf2.getStr()) && aStrBuf2.getCapacity() == kSInt32Max
+
+            );
+#else
             CPPUNIT_ASSERT_MESSAGE
             (
                 "New OStringBuffer containing no characters and contain assigned capacity",
@@ -108,13 +137,13 @@ namespace rtl_OStringBuffer
                 *pStr2 == '\0' &&
                 aStrBuf2.getCapacity() == 0
             );
+#endif
 
         }
 
         void ctor_003_1()
         {
-            // StringBuffer with created negative size are the
-            // same as empty StringBuffers
+            // LLA: StringBuffer with created negativ size are the same as empty StringBuffers
             ::rtl::OStringBuffer aStrBuf3(kNonSInt32Max);
 
             const sal_Char* pStr = aStrBuf3.getStr();
@@ -159,6 +188,8 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST(ctor_005);
         CPPUNIT_TEST_SUITE_END();
     };
+
+
 
 // -----------------------------------------------------------------------------
 
@@ -560,7 +591,19 @@ namespace rtl_OStringBuffer
                 aStrBuf.getCapacity() == expVal
             );
         }
+#ifdef WITH_CORE
+        void getCapacity_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf ( kSInt32Max );
+            sal_Int32              expVal = kSInt32Max;
 
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity of empty string (with capacity 2147483647)(code will core dump)",
+                aStrBuf.getCapacity() == expVal
+            );
+        }
+#endif
         void getCapacity_009()
         {
             ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
@@ -629,6 +672,9 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( getCapacity_005 );
         CPPUNIT_TEST( getCapacity_006 );
         CPPUNIT_TEST( getCapacity_007 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( getCapacity_008 );
+#endif
         CPPUNIT_TEST( getCapacity_009 );
         CPPUNIT_TEST( getCapacity_010 );
         CPPUNIT_TEST( getCapacity_011 );
@@ -831,7 +877,87 @@ namespace rtl_OStringBuffer
             );
 
         }
+#ifdef WITH_CORE
+        void ensureCapacity_013()             //will core dump
+        {
+            sal_Int32          expVal = kSInt32Max;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            sal_Int32              input = 65535;
 
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to 2147483647, minimum is 65535",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+
+        void ensureCapacity_014()             //will core dump
+        {
+            sal_Int32          expVal = kSInt32Max;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            sal_Int32              input = kSInt32Max;
+
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to 2147483647, minimum is 2147483647",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+
+        void ensureCapacity_015()             //will core dump
+        {
+            sal_Int32          expVal = kSInt32Max;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            sal_Int32              input = -1;
+
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to 2147483647, minimum is -1",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+
+        void ensureCapacity_016()             //will core dump
+        {
+            sal_Int32          expVal = kSInt32Max;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            sal_Int32              input = 0;
+
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to 2147483647, minimum is 0",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+
+        void ensureCapacity_017()             //will core dump
+        {
+            sal_Int32          expVal = kSInt32Max;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            sal_Int32              input = kNonSInt32Max;
+
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to 2147483647, minimum is -2147483648",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+#endif
         void ensureCapacity_018()
         {
             sal_Int32          expVal = 65535;
@@ -847,7 +973,23 @@ namespace rtl_OStringBuffer
             );
 
         }
+#ifdef WITH_CORE
+        void ensureCapacity_019()               //will core dump
+        {
+            sal_Int32          expVal = 2147483647;
+            ::rtl::OStringBuffer   aStrBuf( kNonSInt32Max );
+            sal_Int32              input = 2147483647;
 
+            aStrBuf.ensureCapacity( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "capacity equal to -2147483648, minimum is 2147483647",
+                aStrBuf.getCapacity() == expVal
+            );
+
+        }
+#endif
         void ensureCapacity_020()
         {
             sal_Int32          expVal = 2;
@@ -909,7 +1051,17 @@ namespace rtl_OStringBuffer
         CPPUNIT_TEST( ensureCapacity_010 );
         CPPUNIT_TEST( ensureCapacity_011 );
         CPPUNIT_TEST( ensureCapacity_012 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( ensureCapacity_013 );
+        CPPUNIT_TEST( ensureCapacity_014 );
+        CPPUNIT_TEST( ensureCapacity_015 );
+        CPPUNIT_TEST( ensureCapacity_016 );
+        CPPUNIT_TEST( ensureCapacity_017 );
+#endif
         CPPUNIT_TEST( ensureCapacity_018 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( ensureCapacity_019 );
+#endif
         CPPUNIT_TEST( ensureCapacity_020 );
         CPPUNIT_TEST( ensureCapacity_021 );
         CPPUNIT_TEST( ensureCapacity_022 );
@@ -1380,6 +1532,8 @@ namespace rtl_OStringBuffer
 
         }
 
+
+
         CPPUNIT_TEST_SUITE( setLength );
         CPPUNIT_TEST( setLength_001 );
         CPPUNIT_TEST( setLength_002 );
@@ -1549,6 +1703,7 @@ namespace rtl_OStringBuffer
     };
 // -----------------------------------------------------------------------------
 
+
     class  csuc : public CppUnit::TestFixture
     {
         void csuc_001()
@@ -1587,11 +1742,13 @@ namespace rtl_OStringBuffer
 
         }
 
+
         CPPUNIT_TEST_SUITE( csuc );
         CPPUNIT_TEST( csuc_001 );
         CPPUNIT_TEST( csuc_002 );
         CPPUNIT_TEST_SUITE_END();
     };
+
 
 // -----------------------------------------------------------------------------
 
@@ -1632,6 +1789,7 @@ namespace rtl_OStringBuffer
             );
 
         }
+
 
         CPPUNIT_TEST_SUITE( getStr );
         CPPUNIT_TEST( getStr_001 );
@@ -1706,6 +1864,7 @@ namespace rtl_OStringBuffer
 
         }
 
+
         void setCharAt_004()
         {
             OString                expVal( kTestStr33 );
@@ -1720,6 +1879,7 @@ namespace rtl_OStringBuffer
             );
 
         }
+
 
         void setCharAt_005()
         {
@@ -2703,6 +2863,24 @@ namespace rtl_OStringBuffer
 
         }
 
+        void append_003_005()
+        {
+            // LLA: this is an illegal test, the input2 value must non-negative
+            // LLA: OString                expVal( kTestStr41 );
+            // LLA: ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: const sal_Char*        input1 = kTestStr2;
+            // LLA: sal_Int32              input2 = -1;
+            // LLA:
+            // LLA: aStrBuf.append( input1, input2 );
+            // LLA:
+            // LLA: CPPUNIT_ASSERT_MESSAGE
+            // LLA: (
+            // LLA:     "Appends the string(length less than 0) to the string buffer arrOUS[0]",
+            // LLA:     ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            // LLA: );
+
+        }
+
         void append_003_006()
         {
             OString                expVal( kTestStr7 );
@@ -2771,6 +2949,23 @@ namespace rtl_OStringBuffer
 
         }
 
+        void append_003_010()
+        {
+            // LLA: this is an illegal test, the input2 value must non-negative
+            // LLA: OString                expVal;
+            // LLA: ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: const sal_Char*        input1 = kTestStr2;
+            // LLA: sal_Int32              input2 = -1;
+            // LLA:
+            // LLA: aStrBuf.append( input1, input2 );
+            // LLA:
+            // LLA: CPPUNIT_ASSERT_MESSAGE
+            // LLA: (
+            // LLA:     "Appends the string(length less than 0) to the string buffer arrOUS[1]",
+            // LLA:     ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            // LLA: );
+        }
+
         void append_003_011()
         {
             OString                expVal( kTestStr7 );
@@ -2836,6 +3031,24 @@ namespace rtl_OStringBuffer
                 "Appends the string(length equal to 0) to the string buffer arrOUS[2]",
                 ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
             );
+
+        }
+
+        void append_003_015()
+        {
+            // LLA: this is an illegal test, the input2 value must non-negative
+            // LLA: OString                expVal;
+            // LLA: ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: const sal_Char*        input1 = kTestStr2;
+            // LLA: sal_Int32              input2 = -1;
+            // LLA:
+            // LLA: aStrBuf.append( input1, input2 );
+            // LLA:
+            // LLA: CPPUNIT_ASSERT_MESSAGE
+            // LLA: (
+            // LLA:     "Appends the string(length less than 0) to the string buffer arrOUS[2]",
+            // LLA:     ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            // LLA: );
 
         }
 
@@ -2907,6 +3120,24 @@ namespace rtl_OStringBuffer
 
         }
 
+        void append_003_020()
+        {
+            // LLA: this is an illegal test, the input2 value must non-negative
+            // LLA: OString                expVal;
+            // LLA: ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: const sal_Char*        input1 = kTestStr2;
+            // LLA: sal_Int32              input2 = -1;
+            // LLA:
+            // LLA: aStrBuf.append( input1, input2 );
+            // LLA:
+            // LLA: CPPUNIT_ASSERT_MESSAGE
+            // LLA: (
+            // LLA:     "Appends the string(length less than 0) to the string buffer arrOUS[3]",
+            // LLA:     ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            // LLA: );
+
+        }
+
         void append_003_021()
         {
             OString                expVal( kTestStr29 );
@@ -2975,30 +3206,75 @@ namespace rtl_OStringBuffer
 
         }
 
+        void append_003_025()
+        {
+            // LLA: this is an illegal test, the input2 value must non-negative
+            // LLA: OString                expVal( kTestStr42 );
+            // LLA: ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: const sal_Char*        input1 = kTestStr2;
+            // LLA: sal_Int32              input2 = -1;
+            // LLA:
+            // LLA: aStrBuf.append( input1, input2 );
+            // LLA:
+            // LLA: CPPUNIT_ASSERT_MESSAGE
+            // LLA: (
+            // LLA:     "Appends the string(length less than 0) to the string buffer arrOUS[4]",
+            // LLA:     ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            // LLA: );
+
+        }
+
+#ifdef WITH_CORE
+        void append_003_026()
+        {
+            OString                expVal;
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            const sal_Char*        input1 = kTestStr25;
+            sal_Int32              input2 = 0;
+
+            aStrBuf.append( input1, input2 );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "Appends the string(length equal to 0) to the string buffer(with INT_MAX)",
+                ( aStrBuf.getStr()== expVal) &&( aStrBuf.getLength() == expVal.getLength() )
+            );
+
+        }
+#endif
+
         CPPUNIT_TEST_SUITE( append_003 );
         CPPUNIT_TEST( append_003_001 );
         CPPUNIT_TEST( append_003_002 );
         CPPUNIT_TEST( append_003_003 );
         CPPUNIT_TEST( append_003_004 );
+        CPPUNIT_TEST( append_003_005 );
         CPPUNIT_TEST( append_003_006 );
         CPPUNIT_TEST( append_003_007 );
         CPPUNIT_TEST( append_003_008 );
         CPPUNIT_TEST( append_003_009 );
+        CPPUNIT_TEST( append_003_010 );
         CPPUNIT_TEST( append_003_011 );
         CPPUNIT_TEST( append_003_012 );
         CPPUNIT_TEST( append_003_013 );
         CPPUNIT_TEST( append_003_014 );
+        CPPUNIT_TEST( append_003_015 );
         CPPUNIT_TEST( append_003_016 );
         CPPUNIT_TEST( append_003_017 );
         CPPUNIT_TEST( append_003_018 );
         CPPUNIT_TEST( append_003_019 );
+        CPPUNIT_TEST( append_003_020 );
         CPPUNIT_TEST( append_003_021 );
         CPPUNIT_TEST( append_003_022 );
         CPPUNIT_TEST( append_003_023 );
         CPPUNIT_TEST( append_003_024 );
+        CPPUNIT_TEST( append_003_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_003_026 );
+#endif
         CPPUNIT_TEST_SUITE_END();
     };
-//-----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
     class  append_004 : public CppUnit::TestFixture
     {
@@ -3467,7 +3743,82 @@ namespace rtl_OStringBuffer
 #endif
         CPPUNIT_TEST_SUITE_END();
     };
+/**
+ * Calls the method append(T, radix) and compares
+ * returned OUString with OUString that passed in the array resArray.
+ *
+ * @param T, type of argument, passed to append
+ * @param resArray, array of result ustrings to compare to
+ * @param n the number of elements in the array resArray (testcases)
+ * @param pTestResult the instance of the class TestResult
+ * @param inArray [optional], array of value that is passed as first argument
+ *                            to append
+ *
+ * @return true, if all returned OUString are equal to corresponding OUString in
+ *               resArray else, false.
+ */
+/*template <class T>
+sal_Bool test_append( const char** resArray, int n, sal_Int16 radix,
+                            const T *inArray, OStringBuffer &aStr1 )
+{
+    sal_Bool    bRes = sal_True;
 
+    //sal_Char    methName[MAXBUFLENGTH];
+    //sal_Char*   pMeth = methName;
+    sal_Int32   i;
+//    static sal_Unicode aUchar[80]={0x12};
+
+    for (i = 0; i < n; i++)
+    {
+
+    OSL_ENSURE( i < 80, "ERROR: leave aUchar bound");
+
+//        AStringToUStringCopy(aUchar,resArray[i]);
+
+        ::rtl::OString aStr2(aStr1.getStr());
+        ::rtl::OString aStr3( "-" );
+
+        if (inArray == 0)
+    {
+            aStr2 += OString(resArray[i]);
+            aStr1.append((T)i, radix);
+    }
+        else
+        {
+ //           sal_Unicode   aStr4[100];
+            if ( inArray[i] < 0 )
+            {
+                aStr2 += aStr3;
+
+            }
+//          if(AStringToUStringCopy(aStr4,resArray[i]))
+//            {
+                aStr2 += OString(resArray[i]);
+//            }
+            aStr1.append((T)inArray[i], radix);
+        }
+
+        CPPUNIT_ASSERT_MESSAGE
+            (
+                "append(sal_Int32, radix 2)_006_kRadixBinary for arrOUS[0]",
+                aStr1.getStr()== aStr2 &&
+                    aStr1.getLength() == aStr2.getLength()
+            );
+    }
+
+    return (bRes);
+}
+#define test_append_Int32      test_append<sal_Int32>
+#define test_append_Int64      test_append<sal_Int64>
+#define test_append_float      test_append<float>
+#define test_append_double     test_append<double>*/
+//------------------------------------------------------------------------
+// testing the method append( sal_Int32 i, sal_Int16 radix=2 )
+// testing the method append( sal_Int32 i, sal_Int16 radix=8 )
+// testing the method append( sal_Int32 i, sal_Int16 radix=10 )
+// testing the method append( sal_Int32 i, sal_Int16 radix=16 )
+// testing the method append( sal_Int32 i, sal_Int16 radix=36 )
+//------------------------------------------------------------------------
     class  append_006_Int32 : public CppUnit::TestFixture
     {
         OString* arrOUS[5];
@@ -3498,6 +3849,10 @@ namespace rtl_OStringBuffer
 
             expVal += OString( "0" );
             aStrBuf.append( input, radix );
+
+            /*test_append_Int32((const char**)kBinaryNumsStr,
+                                kBinaryNumsCount, kRadixBinary,
+                                0, aStrBuf );*/
 
             CPPUNIT_ASSERT_MESSAGE
             (
@@ -14960,6 +15315,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr74 );
             float                  input = (float)atof("3.0");
 
             // LLA:
@@ -14980,6 +15336,7 @@ namespace rtl_OStringBuffer
         void append_002()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr75 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -14996,6 +15353,7 @@ namespace rtl_OStringBuffer
         void append_003()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr76 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15012,6 +15370,7 @@ namespace rtl_OStringBuffer
         void append_004()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr77 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15028,6 +15387,7 @@ namespace rtl_OStringBuffer
         void append_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr78 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15044,6 +15404,7 @@ namespace rtl_OStringBuffer
         void append_006()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr79 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15060,6 +15421,7 @@ namespace rtl_OStringBuffer
         void append_007()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr80 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15076,6 +15438,7 @@ namespace rtl_OStringBuffer
         void append_008()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr81 );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15092,6 +15455,7 @@ namespace rtl_OStringBuffer
         void append_009()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr82 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15108,6 +15472,7 @@ namespace rtl_OStringBuffer
         void append_010()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr83 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15124,6 +15489,7 @@ namespace rtl_OStringBuffer
         void append_011()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr84 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15140,6 +15506,7 @@ namespace rtl_OStringBuffer
         void append_012()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr85 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15156,6 +15523,7 @@ namespace rtl_OStringBuffer
         void append_013()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr86 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15172,6 +15540,7 @@ namespace rtl_OStringBuffer
         void append_014()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr87 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15188,6 +15557,7 @@ namespace rtl_OStringBuffer
         void append_015()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr81 );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15204,6 +15574,7 @@ namespace rtl_OStringBuffer
         void append_016()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr82 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15220,6 +15591,7 @@ namespace rtl_OStringBuffer
         void append_017()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr83 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15236,6 +15608,7 @@ namespace rtl_OStringBuffer
         void append_018()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr84 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15252,6 +15625,7 @@ namespace rtl_OStringBuffer
         void append_019()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr85 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15268,6 +15642,7 @@ namespace rtl_OStringBuffer
         void append_020()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr86 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15284,6 +15659,7 @@ namespace rtl_OStringBuffer
         void append_021()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr87 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15300,6 +15676,7 @@ namespace rtl_OStringBuffer
         void append_022()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr81 );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15316,6 +15693,7 @@ namespace rtl_OStringBuffer
         void append_023()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr82 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15332,6 +15710,7 @@ namespace rtl_OStringBuffer
         void append_024()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr83 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15348,6 +15727,7 @@ namespace rtl_OStringBuffer
         void append_025()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr84 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15364,6 +15744,7 @@ namespace rtl_OStringBuffer
         void append_026()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr85 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15380,6 +15761,7 @@ namespace rtl_OStringBuffer
         void append_027()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr86 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15396,6 +15778,7 @@ namespace rtl_OStringBuffer
         void append_028()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr87 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15412,6 +15795,7 @@ namespace rtl_OStringBuffer
         void append_029()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr88 );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15428,6 +15812,7 @@ namespace rtl_OStringBuffer
         void append_030()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr89 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15444,6 +15829,7 @@ namespace rtl_OStringBuffer
         void append_031()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr90 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15460,6 +15846,7 @@ namespace rtl_OStringBuffer
         void append_032()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr91 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15476,6 +15863,7 @@ namespace rtl_OStringBuffer
         void append_033()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr92 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15492,6 +15880,7 @@ namespace rtl_OStringBuffer
         void append_034()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr93 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15508,6 +15897,7 @@ namespace rtl_OStringBuffer
         void append_035()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr94 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15524,6 +15914,7 @@ namespace rtl_OStringBuffer
         void append_036()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr81 );
             float                  input = (float)atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15540,6 +15931,7 @@ namespace rtl_OStringBuffer
         void append_037()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr82 );
             float                  input = (float)atof("3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15556,6 +15948,7 @@ namespace rtl_OStringBuffer
         void append_038()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr83 );
             float                  input = (float)atof("3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15572,6 +15965,7 @@ namespace rtl_OStringBuffer
         void append_039()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr84 );
             float                  input = (float)atof("3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15588,6 +15982,7 @@ namespace rtl_OStringBuffer
         void append_040()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr85 );
             float                  input = (float)atof("3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15604,6 +15999,7 @@ namespace rtl_OStringBuffer
         void append_041()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr86 );
             float                  input = (float)atof("3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15620,6 +16016,7 @@ namespace rtl_OStringBuffer
         void append_042()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr87 );
             float                  input = (float)atof("3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15696,6 +16093,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr95 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15712,6 +16110,7 @@ namespace rtl_OStringBuffer
         void append_002()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr96 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15728,6 +16127,7 @@ namespace rtl_OStringBuffer
         void append_003()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr97 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15744,6 +16144,7 @@ namespace rtl_OStringBuffer
         void append_004()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr98 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15760,6 +16161,7 @@ namespace rtl_OStringBuffer
         void append_005()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr99 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15776,6 +16178,7 @@ namespace rtl_OStringBuffer
         void append_006()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr100 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15792,6 +16195,7 @@ namespace rtl_OStringBuffer
         void append_007()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr101 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15808,6 +16212,7 @@ namespace rtl_OStringBuffer
         void append_008()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr102 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15824,6 +16229,7 @@ namespace rtl_OStringBuffer
         void append_009()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr103 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15840,6 +16246,7 @@ namespace rtl_OStringBuffer
         void append_010()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr104 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15856,6 +16263,7 @@ namespace rtl_OStringBuffer
         void append_011()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr105 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15872,6 +16280,7 @@ namespace rtl_OStringBuffer
         void append_012()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr106 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15888,6 +16297,7 @@ namespace rtl_OStringBuffer
         void append_013()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr107 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15904,6 +16314,7 @@ namespace rtl_OStringBuffer
         void append_014()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            // LLA: OString                expVal( kTestStr108 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15920,6 +16331,7 @@ namespace rtl_OStringBuffer
         void append_015()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr102 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15936,6 +16348,7 @@ namespace rtl_OStringBuffer
         void append_016()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr103 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15952,6 +16365,7 @@ namespace rtl_OStringBuffer
         void append_017()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr104 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15968,6 +16382,7 @@ namespace rtl_OStringBuffer
         void append_018()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr105 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -15984,6 +16399,7 @@ namespace rtl_OStringBuffer
         void append_019()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr106 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16000,6 +16416,7 @@ namespace rtl_OStringBuffer
         void append_020()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr107 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16016,6 +16433,7 @@ namespace rtl_OStringBuffer
         void append_021()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            // LLA: OString                expVal( kTestStr108 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16032,6 +16450,7 @@ namespace rtl_OStringBuffer
         void append_022()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr102 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16048,6 +16467,7 @@ namespace rtl_OStringBuffer
         void append_023()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr103 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16064,6 +16484,7 @@ namespace rtl_OStringBuffer
         void append_024()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr104 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16080,6 +16501,7 @@ namespace rtl_OStringBuffer
         void append_025()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr105 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16096,6 +16518,7 @@ namespace rtl_OStringBuffer
         void append_026()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr106 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16112,6 +16535,7 @@ namespace rtl_OStringBuffer
         void append_027()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr107 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16128,6 +16552,7 @@ namespace rtl_OStringBuffer
         void append_028()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            // LLA: OString                expVal( kTestStr108 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16144,6 +16569,7 @@ namespace rtl_OStringBuffer
         void append_029()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr109 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16160,6 +16586,7 @@ namespace rtl_OStringBuffer
         void append_030()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr110 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16176,6 +16603,7 @@ namespace rtl_OStringBuffer
         void append_031()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr111 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16192,6 +16620,7 @@ namespace rtl_OStringBuffer
         void append_032()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr112 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16208,6 +16637,7 @@ namespace rtl_OStringBuffer
         void append_033()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr113 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16224,6 +16654,7 @@ namespace rtl_OStringBuffer
         void append_034()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr114 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16240,6 +16671,7 @@ namespace rtl_OStringBuffer
         void append_035()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr115 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16256,6 +16688,7 @@ namespace rtl_OStringBuffer
         void append_036()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr102 );
             float                  input = (float)atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16272,6 +16705,7 @@ namespace rtl_OStringBuffer
         void append_037()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr103 );
             float                  input = (float)atof("-3.5");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16288,6 +16722,7 @@ namespace rtl_OStringBuffer
         void append_038()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr104 );
             float                  input = (float)atof("-3.0625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16304,6 +16739,7 @@ namespace rtl_OStringBuffer
         void append_039()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr105 );
             float                  input = (float)atof("-3.502525");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16320,6 +16756,7 @@ namespace rtl_OStringBuffer
         void append_040()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr106 );
             float                  input = (float)atof("-3.141592");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16336,6 +16773,7 @@ namespace rtl_OStringBuffer
         void append_041()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr107 );
             float                  input = (float)atof("-3.5025255");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16352,6 +16790,7 @@ namespace rtl_OStringBuffer
         void append_042()
         {
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            // LLA: OString                expVal( kTestStr108 );
             float                  input = (float)atof("-3.00390625");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16447,6 +16886,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr74 );
             double                 input = atof("3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16460,9 +16900,562 @@ namespace rtl_OStringBuffer
 
         }
 
+/*
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr75 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr76 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr122 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr123 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr124 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr125 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+            OString     *result = new OString( aStrBuf.getStr());
+            double      output = result->toDouble();
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+t_print("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    t_print("%c",final->pData->buffer[m]);
+}
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    t_print("%c",*(aStrBuf.getStr()+j));
+}
+t_print("\n");
+t_print("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    t_print("%c",expVal.pData->buffer[k]);
+}
+t_print("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr128 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr88 );
+            double                 input = atof("3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr89 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr90 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr130 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr131 );
+            double                 input = atof("3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr132 );
+            double                  input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+*/
         void append_035()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr133 );
             double                 input = atof("3.141592653589793238462643");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16475,13 +17468,159 @@ namespace rtl_OStringBuffer
             );
 
         }
+/*
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr81 );
+            double                 input = atof("3.0");
 
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr82 );
+            double                 input = atof("3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr83 );
+            double                 input = atof("3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr126 );
+            double                 input = atof("3.1415926535");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.1415926535",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr127 );
+            double                 input = atof("3.141592653589793";
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr128 );
+            double                 input = atof("3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr129 );
+            double                 input = atof("3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append 3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+*/
         CPPUNIT_TEST_SUITE( append_009_double );
         CPPUNIT_TEST( append_001 );
+/*
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+*/
         CPPUNIT_TEST( append_035 );
         CPPUNIT_TEST_SUITE_END();
     };
-
 //------------------------------------------------------------------------
 // testing the method append( double f ) for negative value
 //------------------------------------------------------------------------
@@ -16509,6 +17648,7 @@ namespace rtl_OStringBuffer
         void append_001()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            // LLA: OString                expVal( kTestStr95 );
             double                 input = atof("-3.0");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16521,10 +17661,586 @@ namespace rtl_OStringBuffer
             );
 
         }
+/*
+        void append_002()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr96 );
+            double                 input = atof("-3.5");
 
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_003()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr97 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_004()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr98 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_005()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr134 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_006()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr135 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_007()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
+            OString                expVal( kTestStr136 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[0] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_008()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_009()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_010()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+            OString     *result = new OString( aStrBuf.getStr());
+            double      output = result->toDouble();
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+t_print("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    t_print("%c",final->pData->buffer[m]);
+}
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    t_print("%c",*(aStrBuf.getStr()+j));
+}
+t_print("\n");
+t_print("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    t_print("%c",expVal.pData->buffer[k]);
+}
+t_print("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_011()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            double      output = atof("-3.50252");
+            OString     *final = new OString();
+            *final = final->valueOf(output);
+t_print("the OStringvalus is:");
+for(int m=0;m<final->getLength();m++)
+{
+    t_print("%c",final->pData->buffer[m]);
+}
+t_print("\n");
+t_print("the OStringBuffer is %d\n", aStrBuf.getLength());
+t_print("the expVal is %d\n", expVal.getLength());
+t_print("the OStringbuffervalus is:");
+for(int j=0;j<aStrBuf.getLength();j++)
+{
+    t_print("%c",*(aStrBuf.getStr()+j));
+}
+t_print("\n");
+t_print("the expVlavalus is:");
+for(int k=0;k<expVal.getLength();k++)
+{
+    t_print("%c",expVal.pData->buffer[k]);
+}
+t_print("\n");
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_012()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_013()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_014()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_015()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_016()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_017()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_018()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_019()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_020()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_021()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[2] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_022()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_023()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_024()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_025()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_026()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_027()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr138 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[1] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_028()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[3] append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_029()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr109 );
+            double                 input = atof("-3.0");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_030()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr110 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_031()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr111 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_032()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr112 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_033()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr140 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_034()
+        {
+            ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            OString                expVal( kTestStr141 );
+            double                  input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "arrOUS[4] append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+*/
         void append_035()
         {
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
+            // LLA: OString                expVal( kTestStr142 );
             double                 input = atof("-3.141592653589793238462643");
 
             sal_Int32 nLen = aStrBuf.getLength();
@@ -16537,13 +18253,161 @@ namespace rtl_OStringBuffer
             );
 
         }
+/*
+#ifdef WITH_CORE
+        void append_036()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr102 );
+            double                 input = atof("-3.0");
 
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_037()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr103 );
+            double                 input = atof("-3.5");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.5",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_038()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr104 );
+            double                 input = atof("-3.0625");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.0625",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_039()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr105 );
+            double                 input = atof("-3.502525");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.502525",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_040()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr137 );
+            double                 input = atof("-3.141592653589793");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.141592653589793",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_041()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr138 );
+            double                 input = atof("-3.14159265358979323");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.14159265358979323",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+
+        void append_042()
+        {
+            ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
+            OString                expVal( kTestStr139 );
+            double                 input = atof("-3.141592653589793238462643");
+
+            aStrBuf.append( input );
+
+            CPPUNIT_ASSERT_MESSAGE
+            (
+                "OStringBuffer( kSInt32Max ) append -3.141592653589793238462643",
+                aStrBuf == expVal && aStrBuf.getLength() == expVal.getLength()
+            );
+
+        }
+#endif
+*/
         CPPUNIT_TEST_SUITE( append_009_Double_Negative );
         CPPUNIT_TEST( append_001 );
+/*
+        CPPUNIT_TEST( append_002 );
+        CPPUNIT_TEST( append_003 );
+        CPPUNIT_TEST( append_004 );
+        CPPUNIT_TEST( append_005 );
+        CPPUNIT_TEST( append_006 );
+        CPPUNIT_TEST( append_007 );
+        CPPUNIT_TEST( append_008 );
+        CPPUNIT_TEST( append_009 );
+        CPPUNIT_TEST( append_010 );
+        CPPUNIT_TEST( append_011 );
+        CPPUNIT_TEST( append_012 );
+        CPPUNIT_TEST( append_013 );
+        CPPUNIT_TEST( append_014 );
+        CPPUNIT_TEST( append_015 );
+        CPPUNIT_TEST( append_016 );
+        CPPUNIT_TEST( append_017 );
+        CPPUNIT_TEST( append_018 );
+        CPPUNIT_TEST( append_019 );
+        CPPUNIT_TEST( append_020 );
+        CPPUNIT_TEST( append_021 );
+        CPPUNIT_TEST( append_022 );
+        CPPUNIT_TEST( append_023 );
+        CPPUNIT_TEST( append_024 );
+        CPPUNIT_TEST( append_025 );
+#ifdef WITH_CORE
+        CPPUNIT_TEST( append_026 );
+        CPPUNIT_TEST( append_027 );
+        CPPUNIT_TEST( append_028 );
+        CPPUNIT_TEST( append_029 );
+        CPPUNIT_TEST( append_030 );
+#endif
+*/
         CPPUNIT_TEST( append_035 );
         CPPUNIT_TEST_SUITE_END();
     };
 } // namespace rtl_OStringBuffer
+
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(rtl_OStringBuffer::ctors);

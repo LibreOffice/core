@@ -42,7 +42,17 @@ EXCEPTIONSFILES=        \
         $(SLO)$/cancellablejob.obj \
         $(SLO)$/finalthreadmanager.obj \
         $(SLO)$/ndcopy.obj \
+        $(SLO)$/ndtbl.obj \
+        $(SLO)$/node.obj \
+        $(SLO)$/observablethread.obj \
+        $(SLO)$/retrieveinputstream.obj \
+        $(SLO)$/retrievedinputstreamdata.obj \
+        $(SLO)$/swbaslnk.obj \
+        $(SLO)$/threadmanager.obj
+
+SLOFILES =	\
         $(SLO)$/ndindex.obj \
+        $(SLO)$/ndcopy.obj \
         $(SLO)$/ndnotxt.obj \
         $(SLO)$/ndnum.obj \
         $(SLO)$/ndsect.obj \
@@ -51,20 +61,19 @@ EXCEPTIONSFILES=        \
         $(SLO)$/node.obj \
         $(SLO)$/node2lay.obj \
         $(SLO)$/nodes.obj \
-        $(SLO)$/observablethread.obj \
-        $(SLO)$/retrievedinputstreamdata.obj \
-        $(SLO)$/retrieveinputstream.obj \
-        $(SLO)$/retrieveinputstreamconsumer.obj \
         $(SLO)$/section.obj \
         $(SLO)$/swbaslnk.obj \
-        $(SLO)$/swthreadmanager.obj \
+        $(SLO)$/retrievedinputstreamdata.obj \
+        $(SLO)$/observablethread.obj \
+        $(SLO)$/cancellablejob.obj \
+        $(SLO)$/retrieveinputstream.obj \
+        $(SLO)$/retrieveinputstreamconsumer.obj \
         $(SLO)$/threadlistener.obj \
-        $(SLO)$/threadmanager.obj
-
-SLOFILES =	\
-        $(EXCEPTIONSFILES) \
+        $(SLO)$/threadmanager.obj \
+        $(SLO)$/swthreadmanager.obj \
+        $(SLO)$/swthreadjoiner.obj \
         $(SLO)$/pausethreadstarting.obj \
-        $(SLO)$/swthreadjoiner.obj
+        $(SLO)$/finalthreadmanager.obj
 
 
 # --- Targets -------------------------------------------------------

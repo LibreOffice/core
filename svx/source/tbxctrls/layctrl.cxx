@@ -382,7 +382,7 @@ void TableWindow::TableDialog( const Sequence< PropertyValue >& rArgs )
     {
         com::sun::star::util::URL aTargetURL;
         Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))),
+                    rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )),
                 UNO_QUERY );
         aTargetURL.Complete = maCommand;
         xTrans->parseStrict( aTargetURL );
@@ -511,10 +511,14 @@ void ColumnsWindow::MouseMove( const MouseEvent& rMEvt )
         nNewCol = 20;
     UpdateSize_Impl( nNewCol );
 }
+/* -----------------------------21.05.2002 16:16------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ColumnsWindow::UpdateSize_Impl( long nNewCol )
 {
     Size    aWinSize = GetOutputSizePixel();
+    long    nMinCol = 0;
+    long    nMaxCol = 0;
     Point   aWinPos;// = GetPosPixel();
 
     if ( nWidth <= nNewCol )
@@ -545,8 +549,6 @@ void ColumnsWindow::UpdateSize_Impl( long nNewCol )
         Invalidate( Rectangle( 0, aWinSize.Height()-nTextHeight+2,
                                aWinSize.Width(), aWinSize.Height() ) );
 
-        long nMinCol = 0, nMaxCol = 0;
-
         if ( nNewCol < nCol )
         {
             nMinCol = nNewCol;
@@ -571,7 +573,9 @@ void ColumnsWindow::MouseButtonDown( const MouseEvent& rMEvt )
     SfxPopupWindow::MouseButtonDown( rMEvt );
     CaptureMouse();
 }
+/* -----------------------------21.05.2002 16:11------------------------------
 
+ ---------------------------------------------------------------------------*/
 void ColumnsWindow::KeyInput( const KeyEvent& rKEvt )
 {
     BOOL bHandled = FALSE;
@@ -832,7 +836,9 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     }
     return pWin;
 }
+/* -----------------18.11.99 16:38-------------------
 
+ --------------------------------------------------*/
 void SvxColumnsToolBoxControl::StateChanged( USHORT nSID,
                                               SfxItemState eState,
                                               const SfxPoolItem* pState )

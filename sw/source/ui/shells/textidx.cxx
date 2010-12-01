@@ -213,7 +213,7 @@ void SwTextShell::GetIdxState(SfxItemSet &rSet)
             rSet.Put(SfxBoolItem(FN_INSERT_AUTH_ENTRY_DLG, TRUE));
 
     }
-    else
+    else //if( SFX_ITEM_UNKNOWN != rSet.GetItemState( FN_EDIT_IDX_ENTRY_DLG ))
     {
 
         BOOL bEnableEdit = TRUE;

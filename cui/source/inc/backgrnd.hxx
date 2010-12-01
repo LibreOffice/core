@@ -69,11 +69,11 @@ public:
     virtual void        FillUserData();
     virtual void        PointChanged( Window* pWindow, RECT_POINT eRP );
 
-    void                ShowSelector(); // Shift-ListBox activation
-    void                ShowTblControl(); // for the Writer (cells/rows/tables)
-    void                ShowParaControl(BOOL bCharOnly = FALSE); // for the Writer (paragraph/characters)
+    void                ShowSelector(); // Umschalt-ListBox aktivieren
+    void                ShowTblControl(); // fuer den Writer (Zellen/Zeilen/Tabelle)
+    void                ShowParaControl(BOOL bCharOnly = FALSE); // fuer den Writer (Absatz/Zeichen)
     void                EnableTransparency(BOOL bColor, BOOL bGraphic);
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -81,7 +81,7 @@ private:
     SvxBackgroundTabPage( Window* pParent, const SfxItemSet& rCoreSet );
     ~SvxBackgroundTabPage();
 
-    // Background color ------------------------------------
+    // Hintergrundfarbe ------------------------------------
     Control                 aBorderWin;
     ValueSet                aBackgroundColorSet;
     FixedLine               aBackgroundColorBox;
@@ -89,7 +89,7 @@ private:
     //color transparency
     FixedText               aColTransFT;
     MetricField             aColTransMF;
-    // Background Bitmap ----------------------------------
+    // Hintergrund-Bitmap ----------------------------------
     PushButton              aBtnBrowse;
     CheckBox                aBtnLink;
     CheckBox                aBtnPreview;
@@ -105,13 +105,13 @@ private:
     MetricField             aGraphTransMF;
 
     BackgroundPreviewImpl*  pPreviewWin2;
-    // Selector --------------------------------------------
+    // Selektor --------------------------------------------
     FixedText               aSelectTxt;
     ListBox                 aLbSelect;
     const String            aStrBrowse;
     const String            aStrUnlinked;
 
-    // DDListBox for Writer -------------------------------
+    // DDListBox fuer Writer -------------------------------
 
     FixedText               aTblDesc;
     ListBox                 aTblLBox;
@@ -133,9 +133,9 @@ private:
     SvxBackgroundPage_Impl* pPageImpl;
     SvxOpenGraphicDialog* pImportDlg;
 
-    // Items for Sw-Table must be corrected
+    // Items fuer Sw-Tabelle muessen gesammelt werden
     SvxBackgroundTable_Impl*    pTableBck_Impl;
-    // also for the paragraph style
+    // auch fuer die Absatzvorlage
     SvxBackgroundPara_Impl* pParaBck_Impl;
 
 #ifdef _SVX_BACKGRND_CXX

@@ -198,6 +198,7 @@ OFixedLine::~OFixedLine()
     DBG_DTOR(rpt_OFixedLine,NULL);
 }
 // -----------------------------------------------------------------------------
+//IMPLEMENT_FORWARD_XINTERFACE2(OFixedLine,FixedLineBase,FixedLinePropertySet)
 IMPLEMENT_FORWARD_REFCOUNT( OFixedLine, FixedLineBase )
 // --------------------------------------------------------------------------------
 uno::Any SAL_CALL OFixedLine::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException)

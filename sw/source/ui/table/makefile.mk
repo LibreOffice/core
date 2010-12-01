@@ -38,6 +38,9 @@ LIBTARGET=no
 
 # --- Files --------------------------------------------------------
 
+EXCEPTIONSFILES=   \
+        $(SLO)$/chartins.obj\
+
 SRS1NAME=$(TARGET)
 SRC1FILES =  \
         colwd.src \
@@ -51,21 +54,18 @@ SRC1FILES =  \
         tabledlg.src \
         tautofmt.src
 
-EXCEPTIONSFILES=   \
-        $(SLO)$/chartins.obj \
+SLOFILES =  \
         $(SLO)$/colwd.obj \
         $(SLO)$/convert.obj \
+        $(SLO)$/chartins.obj \
         $(SLO)$/instable.obj \
         $(SLO)$/mergetbl.obj \
         $(SLO)$/rowht.obj \
         $(SLO)$/splittbl.obj \
-        $(SLO)$/swtablerep.obj \
         $(SLO)$/tabledlg.obj \
         $(SLO)$/tablemgr.obj \
+        $(SLO)$/swtablerep.obj \
         $(SLO)$/tautofmt.obj
-
-SLOFILES =  \
-        $(EXCEPTIONSFILES)
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

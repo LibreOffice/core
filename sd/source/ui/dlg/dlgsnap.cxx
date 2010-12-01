@@ -74,6 +74,10 @@ SdSnapLineDlg::SdSnapLineDlg(
       eUIUnit(pView->GetDoc()->GetUIUnit()),
       aUIScale(pView->GetDoc()->GetUIScale())
 {
+    aRbPoint.SetModeRadioImage( Image( SdResId( BMP_POINT_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbVert.SetModeRadioImage( Image( SdResId( BMP_VERTICAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aRbHorz.SetModeRadioImage( Image( SdResId( BMP_HORIZONTAL_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 
     aRbHorz.SetClickHdl(LINK(this, SdSnapLineDlg, ClickHdl));

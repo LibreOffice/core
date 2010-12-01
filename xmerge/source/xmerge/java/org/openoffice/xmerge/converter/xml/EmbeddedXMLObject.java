@@ -138,7 +138,7 @@ public class EmbeddedXMLObject extends EmbeddedObject {
     /**
      * Sets the settings data for the embedded object.
      *
-     * @param   settings     DOM representation of the object's styles.
+     * @param   styles     DOM representation of the object's styles.
      */
     public void setSettingsDOM(Document settings) {
         settingsDOM = settings;

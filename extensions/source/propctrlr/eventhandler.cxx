@@ -447,9 +447,9 @@ namespace pcr
 
         Any aRet;
         Sequence< PropertyValue > aScriptDescriptor( 2 );
-        aScriptDescriptor[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EventType"));
+        aScriptDescriptor[0].Name = ::rtl::OUString::createFromAscii( "EventType" );
         aScriptDescriptor[0].Value <<= aDescriptor.ScriptType;
-        aScriptDescriptor[1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Script"));
+        aScriptDescriptor[1].Name = ::rtl::OUString::createFromAscii( "Script" );
         aScriptDescriptor[1].Value <<= aDescriptor.ScriptCode;
 
         return makeAny( aScriptDescriptor );

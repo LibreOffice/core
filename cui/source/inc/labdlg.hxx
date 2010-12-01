@@ -61,6 +61,7 @@ private:
     CheckBox        aCB_LAENGE;
 
     Image*          mpBmpCapTypes[CAPTYPE_BITMAPS_COUNT];
+    Image*          mpBmpCapTypesH[CAPTYPE_BITMAPS_COUNT];
 
     String          aStrHorzList;
     String          aStrVertList;
@@ -114,6 +115,7 @@ public:
 class SvxCaptionTabDialog : public SfxTabDialog
 {
 private:
+//  const SfxItemSet&   rOutAttrs;
     const SdrView*      pView;
     USHORT              nAnchorCtrls;
 

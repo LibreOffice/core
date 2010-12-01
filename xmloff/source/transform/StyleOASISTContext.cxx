@@ -495,7 +495,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                 case XML_ATACTION_DRAW_MIRROR_OASIS: // renames style:mirror to draw:mirror and adapts values
                     {
                         // keep original for writer graphic objects
-                        // Adapts attribute values (#i49139#)
+                        // --> OD 2005-05-12 #i49139# - adapts attribute values,
                         OUString aNewAttrValue;
                         SvXMLTokenEnumerator aTokenEnum( rAttrValue );
                         OUString aToken;
@@ -503,7 +503,7 @@ void XMLPropertiesTContext_Impl::StartElement(
                         {
                             if ( aNewAttrValue.getLength() > 0 )
                             {
-                                aNewAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                                aNewAttrValue += rtl::OUString::createFromAscii( " " );
                             }
 
                             if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_EVEN ) )

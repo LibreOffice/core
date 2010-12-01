@@ -29,6 +29,9 @@
 #ifndef SC_FUSEL_HXX
 #define SC_FUSEL_HXX
 
+#ifndef _SV_HXX
+#endif
+
 #include "fudraw.hxx"
 
 //class Outliner;

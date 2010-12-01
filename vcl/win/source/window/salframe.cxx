@@ -3009,14 +3009,11 @@ void WinSalFrame::UpdateSettings( AllSettings& rSettings )
     // High contrast
     HIGHCONTRAST hc;
     hc.cbSize = sizeof( HIGHCONTRAST );
-    if(    SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0)
-        && (hc.dwFlags & HCF_HIGHCONTRASTON)
-    ) {
+    if( SystemParametersInfo( SPI_GETHIGHCONTRAST, hc.cbSize, &hc, 0) && (hc.dwFlags & HCF_HIGHCONTRASTON) )
         aStyleSettings.SetHighContrastMode( 1 );
-        aStyleSettings.SetSymbolsStyle( STYLE_SYMBOLS_HICONTRAST );
-    } else {
+    else
         aStyleSettings.SetHighContrastMode( 0 );
-    }
+
 
     // Query Fonts
     Font    aMenuFont = aStyleSettings.GetMenuFont();

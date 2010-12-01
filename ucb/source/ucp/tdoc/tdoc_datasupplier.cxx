@@ -110,7 +110,7 @@ DataSupplier_Impl::~DataSupplier_Impl()
     while ( it != end )
     {
         delete (*it);
-        ++it;
+        it++;
     }
 
     delete m_pNamesOfChildren;
@@ -462,7 +462,7 @@ ResultSetDataSupplier::assembleChildURL( const ::rtl::OUString& aName )
 
     sal_Int32 nUrlEnd = aURL.lastIndexOf( '/' );
     if ( nUrlEnd != aURL.getLength() - 1 )
-        aURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += rtl::OUString::createFromAscii( "/" );
 
     aURL += aName;
     return aURL;

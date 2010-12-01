@@ -64,6 +64,8 @@ class FileParsePerformers
     void                ParseFile(
                             const char *        i_sFullPath );
 
+    void                ConnectLinks();
+
   private:
     CharacterSource     aFileLoader;
     Dyn<csi::uidl::TokenParser_Uidl>
@@ -124,6 +126,8 @@ IdlParser::Run( const autodoc::FileCollector_Ifc & i_rFiles )
 //          pFileParsePerformers = new FileParsePerformers( *pRepository );
         }
     }
+
+    pFileParsePerformers->ConnectLinks();
 }
 
 FileParsePerformers::FileParsePerformers( ary::Repository & io_rRepository,
@@ -161,6 +165,13 @@ FileParsePerformers::ParseFile( const char * i_sFullPath )
     do {
         aDistributor.TradeToken();
     } while ( NOT aFileLoader.IsFinished() );
+}
+
+void
+FileParsePerformers::ConnectLinks()
+{
+    // KORR_FUTURE ?
+//  rRepository.RwGate_Idl().ConnectAdditionalLinks();
 }
 
 }   // namespace autodoc

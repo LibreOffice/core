@@ -40,14 +40,13 @@
 namespace toolkit
 //........................................................................
 {
-#define CSS_UNO     ::com::sun::star::uno
-#define CSS_GRAPHIC ::com::sun::star::graphic
 
     class Throbber_Impl
     {
     private:
-        CSS_UNO::Sequence< CSS_UNO::Reference< CSS_GRAPHIC::XGraphic > > maImageList;
-        CSS_UNO::Reference< VCLXWindow > mxParent;
+        osl::SolarMutex&    mrMutex;    // Reference to SolarMutex
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > > maImageList;
+        ::com::sun::star::uno::Reference< VCLXWindow > mxParent;
 
         sal_Bool    mbRepeat;
         sal_Int32   mnStepTime;
@@ -57,8 +56,10 @@ namespace toolkit
 
         DECL_LINK( TimeOutHdl, Throbber_Impl* );
 
+        osl::SolarMutex&    GetMutex() { return mrMutex; }
+
     public:
-             Throbber_Impl( CSS_UNO::Reference< VCLXWindow > xParent,
+             Throbber_Impl( ::com::sun::star::uno::Reference< VCLXWindow > xParent,
                             sal_Int32 nStepTime,
                             sal_Bool bRepeat );
             ~Throbber_Impl();
@@ -68,17 +69,15 @@ namespace toolkit
         void setRepeat( sal_Bool bRepeat ) { mbRepeat = bRepeat; }
 
         // XSimpleAnimation
-        void start() throw ( CSS_UNO::RuntimeException );
-        void stop()  throw ( CSS_UNO::RuntimeException );
-        void setImageList( const CSS_UNO::Sequence< CSS_UNO::Reference< CSS_GRAPHIC::XGraphic > >& ImageList )
-                     throw ( CSS_UNO::RuntimeException );
+        void start() throw ( ::com::sun::star::uno::RuntimeException );
+        void stop() throw ( ::com::sun::star::uno::RuntimeException );
+        void setImageList( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > >& ImageList )
+                    throw ( ::com::sun::star::uno::RuntimeException );
         // Helpers
-        void initImage() throw ( CSS_UNO::RuntimeException );
+        void initImage() throw ( ::com::sun::star::uno::RuntimeException );
+        sal_Bool isHCMode() throw ( ::com::sun::star::uno::RuntimeException );
     };
 //........................................................................
-#undef CSS_UNO
-#undef CSS_GRAPHIC
-
 } // namespacetoolkit
 //........................................................................
 

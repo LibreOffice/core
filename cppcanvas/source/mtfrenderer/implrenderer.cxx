@@ -681,7 +681,7 @@ namespace cppcanvas
                             // map odf to svg gradient orientation - x
                             // instead of y direction
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aRot90;
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LinearGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
                             break;
 
                         case GRADIENT_AXIAL:
@@ -701,7 +701,7 @@ namespace cppcanvas
                             aShift.translate(-0.5,0);
                             aGradInfo.maTextureTransform = aGradInfo.maTextureTransform * aShift;
 
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LinearGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("LinearGradient");
                             break;
                         }
 
@@ -711,7 +711,7 @@ namespace cppcanvas
                                                                         aOffset,
                                                                         nSteps,
                                                                         fBorder);
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EllipticalGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
                             break;
 
                         case GRADIENT_ELLIPTICAL:
@@ -721,7 +721,7 @@ namespace cppcanvas
                                                                             nSteps,
                                                                             fBorder,
                                                                             fRotation);
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EllipticalGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("EllipticalGradient");
                             break;
 
                         case GRADIENT_SQUARE:
@@ -731,7 +731,7 @@ namespace cppcanvas
                                                                         nSteps,
                                                                         fBorder,
                                                                         fRotation);
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RectangularGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
                             break;
 
                         case GRADIENT_RECT:
@@ -741,7 +741,7 @@ namespace cppcanvas
                                                                              nSteps,
                                                                              fBorder,
                                                                              fRotation);
-                            aGradientService = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RectangularGradient"));
+                            aGradientService = rtl::OUString::createFromAscii("RectangularGradient");
                             break;
 
                         default:
@@ -764,13 +764,13 @@ namespace cppcanvas
 
                     uno::Sequence<uno::Any> args(3);
                     beans::PropertyValue aProp;
-                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Colors"));
+                    aProp.Name = rtl::OUString::createFromAscii("Colors");
                     aProp.Value <<= aColors;
                     args[0] <<= aProp;
-                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Stops"));
+                    aProp.Name = rtl::OUString::createFromAscii("Stops");
                     aProp.Value <<= aStops;
                     args[1] <<= aProp;
-                    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AspectRatio"));
+                    aProp.Name = rtl::OUString::createFromAscii("AspectRatio");
                     aProp.Value <<= aGradInfo.mfAspectRatio;
                     args[2] <<= aProp;
 
@@ -2699,7 +2699,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result() const
+                bool result()
                 {
                     return mbRet;
                 }
@@ -2734,7 +2734,7 @@ namespace cppcanvas
                 {
                 }
 
-                bool result() const
+                bool result()
                 {
                     return true; // nothing can fail here
                 }

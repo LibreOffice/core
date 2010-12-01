@@ -152,4 +152,10 @@ Window FLT_NAVIGATOR
         MaskColor = IMAGE_STDBTN_COLOR ;
         NAVIGATR_IDLIST
     };
+    ImageList ILH_NAVIGATR
+    {
+        Prefix = "nvh";
+        MaskColor = IMAGE_STDBTN_COLOR ;
+           NAVIGATR_IDLIST
+    };
 };

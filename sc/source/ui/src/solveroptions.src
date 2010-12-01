@@ -95,6 +95,7 @@ ModalDialog RID_SCDLG_SOLVEROPTIONS
     Text [ en-US ] = "Options" ;
 };
 
+
 ModalDialog RID_SCDLG_SOLVER_INTEGER
 {
     OutputSize = TRUE ;
@@ -185,3 +186,4 @@ ModalDialog RID_SCDLG_SOLVER_DOUBLE
     };
     Text [ en-US ] = "Edit Setting" ;
 };
+

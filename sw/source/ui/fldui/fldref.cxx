@@ -70,6 +70,11 @@ USHORT  nFldDlgFmtSel       = 0;
 #define USER_DATA_VERSION_1 "1"
 #define USER_DATA_VERSION USER_DATA_VERSION_1
 
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     SwFldPage( pParent, SW_RES( TP_FLD_REF ), rCoreSet ),
 
@@ -117,6 +122,10 @@ SwFldRefPage::SwFldRefPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aSelectionToolTipLB.SetHighlightRange();
     // <--
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 SwFldRefPage::~SwFldRefPage()
 {
@@ -169,6 +178,10 @@ sal_uInt16 SwFldRefPage::GetSavedSelectedPos() const
 }
 
 // <--
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SwFldRefPage::Reset(const SfxItemSet& )
 {
@@ -287,6 +300,10 @@ void SwFldRefPage::Reset(const SfxItemSet& )
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 {
     // Alte ListBoxPos sichern
@@ -308,6 +325,8 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
                 case REF_BOOKMARK:
                 {
                     // --> OD 2007-11-14 #i83479#
+//                    sName = sBookmarkTxt;
+//                    nFlag = REFFLDFLAG_BOOKMARK;
                     SwGetRefField* pRefFld = dynamic_cast<SwGetRefField*>(GetCurField());
                     if ( pRefFld &&
                          pRefFld->IsRefToHeadingCrossRefBookmark() )
@@ -425,6 +444,10 @@ IMPL_LINK( SwFldRefPage, TypeHdl, ListBox *, EMPTYARG )
 
     return 0;
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 IMPL_LINK( SwFldRefPage, SubTypeHdl, ListBox *, EMPTYARG )
 {
@@ -696,6 +719,10 @@ void SwFldRefPage::UpdateSubType()
     // <--
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 {
     String sOldSel;
@@ -728,7 +755,9 @@ USHORT SwFldRefPage::FillFormatLB(USHORT nTypeId)
 
         default:
             // --> OD 2007-11-16 #i83479#
-
+//            nSize = GetFldMgr().GetFormatCount( (REFFLDFLAG & nTypeId)
+//                                                    ? (USHORT)TYP_GETREFFLD : nTypeId,
+//                                                FALSE, IsFldDlgHtmlMode() );
             if ( REFFLDFLAG & nTypeId )
             {
                 nSize = FMT_REF_ONLYSEQNO - FMT_REF_BEGIN + 1;
@@ -807,6 +836,10 @@ IMPL_LINK( SwFldRefPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
 {
     BOOL bModified = FALSE;
@@ -828,6 +861,7 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
     switch(nTypeId)
     {
         case TYP_GETREFFLD:
+            // aName = aSelectionLB.GetSelectEntry();
             nSubType = REF_SETREFATTR;
             break;
 
@@ -994,17 +1028,28 @@ BOOL SwFldRefPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SfxTabPage* SwFldRefPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldRefPage( pParent, rAttrSet ) );
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 USHORT SwFldRefPage::GetGroup()
 {
     return GRP_REF;
 }
 
+/* -----------------12.01.99 10:09-------------------
+ *
+ * --------------------------------------------------*/
 void    SwFldRefPage::FillUserData()
 {
     String sData( String::CreateFromAscii(

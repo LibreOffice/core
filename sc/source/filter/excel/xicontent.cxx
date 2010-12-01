@@ -1124,11 +1124,11 @@ ErrCode XclImpDecryptHelper::ReadFilepass( XclImpStream& rStrm )
     rStrm.SetDecrypter( xDecr );
 
     // request and verify a password (decrypter implements IDocPasswordVerifier)
-    if( xDecr )
+    if( xDecr.is() )
         rStrm.GetRoot().RequestPassword( *xDecr );
 
     // return error code (success, wrong password, etc.)
-    return xDecr ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
+    return xDecr.is() ? xDecr->GetError() : EXC_ENCR_ERROR_UNSUPP_CRYPT;
 }
 
 // Document protection ========================================================
@@ -1167,6 +1167,7 @@ void XclImpDocProtectBuffer::Apply() const
     auto_ptr<ScDocProtection> pProtect(new ScDocProtection);
     pProtect->setProtected(true);
 
+#if ENABLE_SHEET_PROTECTION
     if (mnPassHash)
     {
         // 16-bit password pash.
@@ -1175,6 +1176,7 @@ void XclImpDocProtectBuffer::Apply() const
         aPass[1] = mnPassHash & 0xFF;
         pProtect->setPasswordHash(aPass, PASSHASH_XL);
     }
+#endif
 
     // document protection options
     pProtect->setOption(ScDocProtection::STRUCTURE, mbDocProtect);
@@ -1270,6 +1272,7 @@ void XclImpSheetProtectBuffer::Apply() const
         auto_ptr<ScTableProtection> pProtect(new ScTableProtection);
         pProtect->setProtected(true);
 
+#if ENABLE_SHEET_PROTECTION
         // 16-bit hash password
         const sal_uInt16 nHash = itr->second.mnPasswordHash;
         if (nHash)
@@ -1279,6 +1282,7 @@ void XclImpSheetProtectBuffer::Apply() const
             aPass[1] = nHash & 0xFF;
             pProtect->setPasswordHash(aPass, PASSHASH_XL);
         }
+#endif
 
         // sheet protection options
         const sal_uInt16 nOptions = itr->second.mnOptions;

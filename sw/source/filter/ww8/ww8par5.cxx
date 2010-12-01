@@ -153,12 +153,13 @@ _ReadFieldParams::_ReadFieldParams( const String& _rData )
 
     nFnd      = nNext;
     nSavPtr   = nNext;
+//  cLastChar = aData.GetChar( nSavPtr );
 }
 
 
 _ReadFieldParams::~_ReadFieldParams()
 {
-
+//  aData.SetChar( nSavPtr, cLastChar );
 }
 
 
@@ -653,8 +654,7 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
     }
 
     ULONG nFmtIdx =
-        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri,
-                GetFib().lid);
+        sw::ms::MSDateTimeFormatToSwFormat(sParams, pFormatter, rLang, bHijri);
     short nNumFmtType = NUMBERFORMAT_UNDEFINED;
     if (nFmtIdx)
         nNumFmtType = pFormatter->GetType(nFmtIdx);
@@ -669,6 +669,10 @@ short SwWW8ImplReader::GetTimeDatePara(String& rStr, sal_uInt32& rFormat,
 // Am Ende des Einlesens entsprechende Felder updaten ( z.Zt. die Referenzen )
 void SwWW8ImplReader::UpdateFields()
 {
+//  rDoc.GetSysFldType( RES_GETREFFLD )->UpdateFlds();  // Referenzen
+//  rDoc.UpdateFlds();                                  // SetExp-Fields
+//  rDoc.UpdateFlds();              // alles ???
+//  rDoc.UpdateExpFlds();                               // SetExp-Fields
     rDoc.SetUpdateExpFldStat(true);                 // JP: neu fuer alles wichtige
     rDoc.SetInitDBFields(true);             // Datenbank-Felder auch
 }
@@ -701,7 +705,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
             SwPaM aFldPam( maFieldStack.back().GetPtNode(), maFieldStack.back().GetPtCntnt(), aEndPos.nNode, aEndPos.nContent.GetIndex());
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeFieldBookmark(
-                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT )) ) );
+                        aFldPam, maFieldStack.back().GetBookmarkName(), ::rtl::OUString::createFromAscii(ODF_FORMTEXT ) ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if (pFieldmark!=NULL) {
                 const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
@@ -751,7 +755,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                     IFieldmark* pFieldmark = pMarksAccess->makeFieldBookmark(
                                 aFldPam,
                                 maFieldStack.back().GetBookmarkName(),
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_UNHANDLED )) );
+                                rtl::OUString::createFromAscii( ODF_UNHANDLED ) );
                     if ( pFieldmark )
                     {
                         const IFieldmark::parameter_map_t& pParametersToAdd = maFieldStack.back().getParameters();
@@ -759,11 +763,11 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                         rtl::OUString sFieldId = rtl::OUString::valueOf( sal_Int32( maFieldStack.back().mnFieldId ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )),
+                                    rtl::OUString::createFromAscii( ODF_ID_PARAM ),
                                     uno::makeAny( sFieldId ) ) );
                         pFieldmark->GetParameters()->insert(
                                 std::pair< rtl::OUString, uno::Any > (
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )),
+                                    rtl::OUString::createFromAscii( ODF_CODE_PARAM ),
                                     uno::makeAny( aCode ) ) );
 
                         if ( maFieldStack.back().mnObjLocFc > 0 )
@@ -796,7 +800,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                             // Store the OLE Id as a parameter
                             pFieldmark->GetParameters()->insert(
                                     std::pair< rtl::OUString, uno::Any >(
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )),
+                                        rtl::OUString::createFromAscii( ODF_OLE_PARAM ),
                                         uno::makeAny( rtl::OUString( sOleId ) ) ) );
                         }
 
@@ -1720,6 +1724,13 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
         if( !bFldFound )
         {
+/*
+            SwUserFieldType aTmp( &rDoc, aDocProperty );
+            aTmp.SetContent(GetFieldResult( pF ));
+            SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
+            aUFld.ChangeFormat( UF_STRING );
+            rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
+*/
             SwDocInfoField aFld( (SwDocInfoFieldType*)
                 rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty, GetFieldResult( pF ) );
             rDoc.InsertPoolItem(*pPaM, SwFmtFld(aFld), 0);
@@ -2244,7 +2255,7 @@ eF_ResT SwWW8ImplReader::Read_F_PgRef( WW8FieldDesc*, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_REF"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_PAGEREF)));
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_PAGEREF));
     maFieldStack.back().AddParam(rtl::OUString(), sName);
     return FLD_TEXT;
     }
@@ -2804,6 +2815,7 @@ bool SwWW8ImplReader::AddExtraOutlinesAsExtraStyles(SwTOXBase& rBase)
             sal_uInt16 nStyleLevel = rSI.nOutlineLevel;
             sal_uInt16 nMaxLevel = rBase.GetLevel();
             if (
+                 //nStyleLevel != pFmt->GetOutlineLevel() &&        //#outline level,zhaojianwei
                  nStyleLevel != (pFmt->GetAttrOutlineLevel()-1) &&  //<-end,zhaojianwei
                  nStyleLevel < nMaxLevel
                )
@@ -2954,7 +2966,8 @@ eF_ResT SwWW8ImplReader::Read_F_Tox( WW8FieldDesc* pF, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_TOC"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_TOC)));
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_TOC));
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif
@@ -3481,7 +3494,8 @@ eF_ResT SwWW8ImplReader::Read_F_Hyperlink( WW8FieldDesc* /*pF*/, String& rStr )
     if (1) {
     ::rtl::OUString aBookmarkName=(RTL_CONSTASCII_USTRINGPARAM("_HYPERLINK"));
     maFieldStack.back().SetBookmarkName(aBookmarkName);
-    maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_HYPERLINK)));
+    maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_HYPERLINK));
+//     maFieldStack.back().AddParam(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description")), aFormula.sToolTip);
     return FLD_TEXT;
     }
 #endif

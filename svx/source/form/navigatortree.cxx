@@ -204,17 +204,24 @@ namespace svxform
         SetHelpId( HID_FORM_NAVIGATOR );
 
         m_aNavigatorImages = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL ) );
+        m_aNavigatorImagesHC = ImageList( SVX_RES( RID_SVXIMGLIST_FMEXPL_HC ) );
 
         SetNodeBitmaps(
             m_aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
+            m_aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_NORMAL
+        );
+        SetNodeBitmaps(
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+            m_aNavigatorImagesHC.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+            BMP_COLOR_HIGHCONTRAST
         );
 
         SetDragDropMode(0xFFFF);
         EnableInplaceEditing( sal_True );
         SetSelectionMode(MULTIPLE_SELECTION);
 
-        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages );
+        m_pNavModel = new NavigatorTreeModel( m_aNavigatorImages, m_aNavigatorImagesHC );
         Clear();
 
         StartListening( *m_pNavModel );
@@ -661,8 +668,11 @@ namespace svxform
             SvLBoxEntry* pEntry = FindEntry( pData );
             if (pEntry)
             {   // das Image neu setzen
-                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage() );
-                SetExpandedEntryBmp( pEntry, pData->GetNormalImage() );
+                SetCollapsedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pEntry, pData->GetNormalImage(), BMP_COLOR_NORMAL );
+
+                SetCollapsedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pEntry, pData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
             }
         }
 
@@ -682,6 +692,13 @@ namespace svxform
             Image aRootImage( m_aNavigatorImages.GetImage( RID_SVXIMG_FORMS ) );
             m_pRootEntry = InsertEntry( SVX_RES(RID_STR_FORMS), aRootImage, aRootImage,
                 NULL, sal_False, 0, NULL );
+
+            if ( m_pRootEntry )
+            {
+                Image aHCRootImage( m_aNavigatorImagesHC.GetImage( RID_SVXIMG_FORMS ) );
+                SetExpandedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( m_pRootEntry, aHCRootImage, BMP_COLOR_HIGHCONTRAST );
+            }
         }
         else if (!m_bMarkingObjects && rHint.ISA(FmNavRequestSelectHint))
         {   // wenn m_bMarkingObjects sal_True ist, markiere ich gerade selber Objekte, und da der ganze Mechanismus dahinter synchron ist,
@@ -715,6 +732,12 @@ namespace svxform
             pNewEntry = InsertEntry( pEntryData->GetText(),
                 pEntryData->GetNormalImage(), pEntryData->GetNormalImage(),
                 pParentEntry, sal_False, nRelPos, pEntryData );
+
+        if ( pNewEntry )
+        {
+            SetExpandedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+            SetCollapsedEntryBmp( pNewEntry, pEntryData->GetHCImage(), BMP_COLOR_HIGHCONTRAST );
+        }
 
         //////////////////////////////////////////////////////////////////////
         // Wenn Root-Eintrag Root expandieren
@@ -1441,7 +1464,7 @@ namespace svxform
         if (!xNewForm.is())
             return;
 
-        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, pParentFormData );
+        FmFormData* pNewFormData = new FmFormData( xNewForm, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -1506,7 +1529,7 @@ namespace svxform
         if (!xNewComponent.is())
             return NULL;
 
-        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, pParentFormData );
+        FmControlData* pNewFormControlData = new FmControlData( xNewComponent, m_aNavigatorImages, m_aNavigatorImagesHC, pParentFormData );
 
         //////////////////////////////////////////////////////////////////////
         // Namen setzen
@@ -1560,7 +1583,7 @@ namespace svxform
             aNewName = aBaseName;
             if( i>0 )
             {
-                aNewName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                aNewName += ::rtl::OUString::createFromAscii(" ");
                 aNewName += ::rtl::OUString::valueOf(i).getStr();
             }
 

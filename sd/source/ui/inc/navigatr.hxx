@@ -135,6 +135,7 @@ private:
     SdPageNameControllerItem*   mpPageNameCtrlItem;
 
     ImageList                   maImageList;
+    ImageList                   maImageListH;
 
     /** This flag controls whether all shapes or only the named shapes are
         shown.

@@ -42,6 +42,7 @@ using namespace comphelper;
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+//  using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
@@ -255,8 +256,10 @@ sdbcx::ObjectType ORowSetDataColumns::createObject(const ::rtl::OUString& _rName
 
 void SAL_CALL ORowSetDataColumns::disposing(void)
 {
+    //  clear_NoDispose();
     ORowSetDataColumns_BASE::disposing();
     m_aColumns = NULL;
+    //  m_aColumns.clear();
 }
 
 void ORowSetDataColumns::assign(const ::rtl::Reference< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)

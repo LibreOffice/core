@@ -704,6 +704,7 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                     case POS_COLLIDE_START:
                     case POS_COLLIDE_END:
                         if( pRedl->IsOwnRedline( *pNewRedl ) &&
+//                          1 == pRedl->GetStackCount() &&
                             pRedl->CanCombine( *pNewRedl ) )
                         {
                             if( IsHideChanges( eRedlineMode ))
@@ -1024,6 +1025,8 @@ bool SwDoc::AppendRedline( SwRedline* pNewRedl, bool bCallDelete )
                         // insert the pNew part (if it exists)
                         if( pNew )
                         {
+                            // AppendRedline( pNew, bCallDelete );
+                            //sal_Bool bRet =
                             pRedlineTbl->Insert( pNew );
 
                             // pNew must be deleted if Insert() wasn't
@@ -3729,6 +3732,8 @@ BOOL SwRedline::CanCombine( const SwRedline& rRedl ) const
 
 void SwRedline::PushData( const SwRedline& rRedl, BOOL bOwnAsNext )
 {
+//  SwRedlineData* pNew = new SwRedlineData( rRedl.GetType(),
+//                                           rRedl.GetAuthor() );
     SwRedlineData* pNew = new SwRedlineData( *rRedl.pRedlineData, FALSE );
     if( bOwnAsNext )
     {

@@ -49,7 +49,7 @@ protected:
     virtual void    PageCreated( USHORT nPageId, SfxTabPage& rTabPage );
 
 private:
-    BOOL    bEnableBackgroundSelector; // for Border/Background
+    BOOL    bEnableBackgroundSelector; // fuer Border/Background-Dlg
 };
 
 

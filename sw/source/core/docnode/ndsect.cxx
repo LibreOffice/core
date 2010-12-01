@@ -464,6 +464,7 @@ USHORT SwDoc::IsInsRegionAvailable( const SwPaM& rRange,
                         aIdx++;
                     } while( aIdx.GetNode().IsEndNode() &&
                                 0 != aIdx.GetNode().FindSectionNode() );
+//                  if( !aIdx.GetNode().IsEndNode() )
                     {
                         nRet = 2;
                         if( ppSttNd )
@@ -1263,6 +1264,8 @@ void SwSectionNode::DelFrms()
     ULONG nStt = GetIndex()+1, nEnd = EndOfSectionIndex();
     if( nStt >= nEnd )
     {
+        // unser Flag muessen wir noch aktualisieren
+        // pSection->bHiddenFlag = TRUE;
         return ;
     }
 

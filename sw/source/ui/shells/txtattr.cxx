@@ -108,8 +108,8 @@ void SwTextShell::ExecCharAttr(SfxRequest &rReq)
                 eEscape = nWhich == FN_SET_SUPER_SCRIPT ?
                                 SVX_ESCAPEMENT_SUPERSCRIPT:
                                 SVX_ESCAPEMENT_SUBSCRIPT;
-                if( (nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0) ||
-                            (nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0) )
+                if( nWhich == FN_SET_SUB_SCRIPT && nTmpEsc < 0 ||
+                            nWhich == FN_SET_SUPER_SCRIPT && nTmpEsc > 0 )
                     eEscape = SVX_ESCAPEMENT_OFF;
 
                 SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
@@ -420,7 +420,14 @@ SET_LINESPACE:
             int eState = pArgs ? pArgs->GetItemState(nSlot) : SFX_ITEM_DISABLED;
             if (pArgs && SFX_ITEM_SET == eState)
                 bSet = ((const SfxBoolItem&)pArgs->Get(nSlot)).GetValue();
+/*
+// toggling of the slots not used anymore
 
+           if(!bSet)
+                nSlot = SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot ?
+                    SID_ATTR_PARA_RIGHT_TO_LEFT :
+                    SID_ATTR_PARA_LEFT_TO_RIGHT;
+*/
             SfxItemSet aAdjustSet( GetPool(),
                     RES_PARATR_ADJUST, RES_PARATR_ADJUST );
             GetShell().GetCurAttr(aAdjustSet);
@@ -430,6 +437,7 @@ SET_LINESPACE:
             {
                 int eAdjust = (int)(( const SvxAdjustItem& )
                         aAdjustSet.Get(RES_PARATR_ADJUST)).GetAdjust();
+//                bChgAdjust = SVX_ADJUST_CENTER  != eAdjust  &&  SVX_ADJUST_BLOCK != eAdjust;
                 bChgAdjust = (SVX_ADJUST_LEFT  == eAdjust  &&  SID_ATTR_PARA_RIGHT_TO_LEFT == nSlot) ||
                              (SVX_ADJUST_RIGHT == eAdjust  &&  SID_ATTR_PARA_LEFT_TO_RIGHT == nSlot);
             }

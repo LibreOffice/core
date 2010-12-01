@@ -119,7 +119,7 @@ uno::Any DatabaseDataProvider::queryInterface(uno::Type const & type) throw (uno
 //------------------------------------------------------------------------------
 rtl::OUString DatabaseDataProvider::getImplementationName_Static(  ) throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.chart2.data.DatabaseDataProvider"));
+    return rtl::OUString::createFromAscii("com.sun.star.comp.chart2.data.DatabaseDataProvider");
 }
 // -----------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -173,6 +173,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
 // chart2::data::XDataProvider:
 ::sal_Bool SAL_CALL DatabaseDataProvider::createDataSourcePossible(const uno::Sequence< beans::PropertyValue > & _aArguments) throw (uno::RuntimeException)
 {
+    //::osl::ResettableMutexGuard aClearForNotifies(m_aMutex);
     const beans::PropertyValue* pArgIter = _aArguments.getConstArray();
     const beans::PropertyValue* pArgEnd  = pArgIter + _aArguments.getLength();
     for(;pArgIter != pArgEnd;++pArgIter)
@@ -183,7 +184,7 @@ void SAL_CALL DatabaseDataProvider::initialize(const uno::Sequence< uno::Any > &
             pArgIter->Value >>= eRowSource;
             if ( eRowSource != ::com::sun::star::chart::ChartDataRowSource_COLUMNS )
                 return sal_False;
-        }
+        } // if ( pArgIter->Name.equalsAscii("DataRowSource") )
         else if ( pArgIter->Name.equalsAscii("CellRangeRepresentation") )
         {
             ::rtl::OUString sRange;

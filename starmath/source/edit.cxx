@@ -64,7 +64,6 @@
 #include "view.hxx"
 #include "document.hxx"
 #include "config.hxx"
-#include "accessibility.hxx"
 
 #define SCROLL_LINE         24
 
@@ -119,7 +118,7 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     SetMapMode(MAP_PIXEL);
 
     // Even RTL languages don't use RTL for math
-    rCmdBox.GetEditWindow()->EnableRTL( false );
+    rCmdBox.GetEditWindow()->EnableRTL( FALSE );
 
     ApplyColorConfigValues( SM_MOD()->GetColorConfig() );
 
@@ -352,7 +351,7 @@ void SmEditWindow::MouseButtonDown(const MouseEvent &rEvt)
 
 void SmEditWindow::Command(const CommandEvent& rCEvt)
 {
-    bool bForwardEvt = true;
+    BOOL bForwardEvt = TRUE;
     if (rCEvt.GetCommand() == COMMAND_CONTEXTMENU)
     {
         GetParent()->ToTop();
@@ -380,7 +379,7 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 
         pPopupMenu->Execute( this, aPoint );
         delete pPopupMenu;
-        bForwardEvt = false;
+        bForwardEvt = FALSE;
     }
     else if (rCEvt.GetCommand() == COMMAND_WHEEL)
         bForwardEvt = !HandleWheelCommands( rCEvt );
@@ -395,9 +394,9 @@ void SmEditWindow::Command(const CommandEvent& rCEvt)
 }
 
 
-bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
+BOOL SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
 {
-    bool bCommandHandled = false;    // true if the CommandEvent needs not
+    BOOL bCommandHandled = FALSE;    // true if the CommandEvent needs not
                                     // to be passed on (because it has fully
                                     // been taken care of).
 
@@ -405,7 +404,7 @@ bool SmEditWindow::HandleWheelCommands( const CommandEvent &rCEvt )
     if (pWData)
     {
         if (COMMAND_WHEEL_ZOOM == pWData->GetMode())
-            bCommandHandled = true;     // no zooming in Command window
+            bCommandHandled = TRUE;     // no zooming in Command window
         else
             bCommandHandled = HandleScrollCommand( rCEvt, pHScrollBar, pVScrollBar);
     }
@@ -429,7 +428,7 @@ void SmEditWindow::KeyInput(const KeyEvent& rKEvt)
 {
     if (rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE)
     {
-        bool bCallBase = true;
+        BOOL bCallBase = TRUE;
         SfxViewShell* pViewShell = GetView();
         if ( pViewShell && pViewShell->ISA(SmViewShell) )
         {
@@ -509,8 +508,8 @@ void SmEditWindow::CreateEditView()
             pScrollBox  = new ScrollBarBox(this);
         pVScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
         pHScrollBar->SetScrollHdl(LINK(this, SmEditWindow, ScrollHdl));
-        pVScrollBar->EnableDrag( true );
-        pHScrollBar->EnableDrag( true );
+        pVScrollBar->EnableDrag( TRUE );
+        pHScrollBar->EnableDrag( TRUE );
 
         pEditView->SetOutputArea(AdjustScrollBars());
 
@@ -518,7 +517,7 @@ void SmEditWindow::CreateEditView()
 
         pEditView->SetSelection(eSelection);
         Update();
-        pEditView->ShowCursor(true, true);
+        pEditView->ShowCursor(TRUE, TRUE);
 
         pEditEngine->SetStatusEventHdl( LINK(this, SmEditWindow, EditStatusHdl) );
         SetPointer(pEditView->GetPointer());
@@ -670,7 +669,7 @@ void SmEditWindow::GetFocus()
 
     //Let SmViewShell know we got focus
     if(GetView() && IsInlineEditEnabled())
-        GetView()->SetInsertIntoEditWindow(true);
+        GetView()->SetInsertIntoEditWindow(TRUE);
 }
 
 
@@ -692,9 +691,9 @@ void SmEditWindow::LoseFocus()
 }
 
 
-bool SmEditWindow::IsAllSelected() const
+BOOL SmEditWindow::IsAllSelected() const
 {
-    bool bRes = false;
+    BOOL bRes = FALSE;
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
     OSL_ENSURE( pEditView, "NULL pointer" );
     OSL_ENSURE( pEditEngine, "NULL pointer" );
@@ -842,7 +841,7 @@ void SmEditWindow::SelPrevMark()
     }
 }
 
-bool SmEditWindow::HasMark(const String& rText) const
+BOOL SmEditWindow::HasMark(const String& rText) const
     // returns true iff 'rText' contains a mark
 {
     return rText.SearchAscii("<?>", 0) != STRING_NOTFOUND;
@@ -883,16 +882,17 @@ void SmEditWindow::SetSelection(const ESelection &rSel)
     InvalidateSlots();
 }
 
-bool SmEditWindow::IsEmpty() const
+BOOL SmEditWindow::IsEmpty() const
 {
     EditEngine *pEditEngine = ((SmEditWindow *) this)->GetEditEngine();
-    bool bEmpty = ( pEditEngine ? pEditEngine->GetTextLen() == 0 : false);
+    BOOL bEmpty = sal::static_int_cast< BOOL >(
+                    pEditEngine ? pEditEngine->GetTextLen() == 0 : FALSE);
     return bEmpty;
 }
 
-bool SmEditWindow::IsSelected() const
+BOOL SmEditWindow::IsSelected() const
 {
-    return pEditView ? pEditView->HasSelection() : false;
+    return pEditView ? pEditView->HasSelection() : FALSE;
 }
 
 void SmEditWindow::Cut()
@@ -901,7 +901,7 @@ void SmEditWindow::Cut()
     if (pEditView)
     {
         pEditView->Cut();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 
@@ -918,7 +918,7 @@ void SmEditWindow::Paste()
     if (pEditView)
     {
         pEditView->Paste();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 
@@ -928,7 +928,7 @@ void SmEditWindow::Delete()
     if (pEditView)
     {
         pEditView->DeleteSelected();
-        GetDoc()->SetModified( true );
+        GetDoc()->SetModified( TRUE );
     }
 }
 

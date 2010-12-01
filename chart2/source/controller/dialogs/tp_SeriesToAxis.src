@@ -30,16 +30,15 @@
 TabPage TP_OPTIONS
 {
     Hide = TRUE ;
+//    HelpID = HID_LAYOUT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-
     FixedLine 1
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Align data series to";
     };
-
     RadioButton RBT_OPT_AXIS_1
     {
         Pos = MAP_APPFONT ( 12 , 20  ) ;
@@ -47,7 +46,6 @@ TabPage TP_OPTIONS
         TabStop = TRUE ;
         Text [ en-US ] = "Primary Y axis";
     };
-
     RadioButton RBT_OPT_AXIS_2
     {
         Pos = MAP_APPFONT ( 12 , 34  ) ;
@@ -62,7 +60,6 @@ TabPage TP_OPTIONS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Settings";
     };
-
     FixedText FT_OVERLAP
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;

@@ -64,7 +64,7 @@ Reference<XInterface> SAL_CALL PresenterCanvas_createInstance (
 
 ::rtl::OUString PresenterCanvas_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterCanvasFactory"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.PresenterCanvasFactory");
 }
 
 
@@ -74,7 +74,7 @@ Sequence<rtl::OUString> SAL_CALL PresenterCanvas_getSupportedServiceNames (void)
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.rendering.Canvas")));
+        ::rtl::OUString::createFromAscii("com.sun.star.rendering.Canvas"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -233,7 +233,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[2] >>= mxSharedWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid shared window")),
+                    OUString::createFromAscii("PresenterCanvas: invalid shared window"),
                     static_cast<XWeak*>(this),
                     1);
             }
@@ -241,7 +241,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[3] >>= mxSharedCanvas))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid shared canvas")),
+                    OUString::createFromAscii("PresenterCanvas: invalid shared canvas"),
                     static_cast<XWeak*>(this),
                     2);
             }
@@ -249,7 +249,7 @@ void SAL_CALL PresenterCanvas::initialize (
             if ( ! (rArguments[4] >>= mxWindow))
             {
                 throw lang::IllegalArgumentException(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid window")),
+                    OUString::createFromAscii("PresenterCanvas: invalid window"),
                     static_cast<XWeak*>(this),
                     3);
             }
@@ -270,7 +270,7 @@ void SAL_CALL PresenterCanvas::initialize (
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterCanvas: invalid number of arguments")),
+            OUString::createFromAscii("PresenterCanvas: invalid number of arguments"),
                 static_cast<XWeak*>(this));
     }
 }

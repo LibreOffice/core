@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 #include "crnrdlg.hrc"
-
 ModelessDialog RID_SCDLG_COLROWNAMERANGES
 {
     OutputSize = TRUE ;
@@ -132,3 +131,36 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     Text [ en-US ] = "Define Label Range" ;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

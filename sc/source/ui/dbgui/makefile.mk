@@ -39,37 +39,45 @@ LIBTARGET=no
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-    $(EXCEPTIONSFILES)
+    $(SLO)$/sortdlg.obj		\
+    $(SLO)$/tpsort.obj		\
+    $(SLO)$/filtdlg.obj		\
+    $(SLO)$/sfiltdlg.obj	\
+    $(SLO)$/foptmgr.obj		\
+    $(SLO)$/pfiltdlg.obj	\
+    $(SLO)$/dbnamdlg.obj	\
+    $(SLO)$/expftext.obj	\
+    $(SLO)$/textimportoptions.obj \
+    $(SLO)$/subtdlg.obj		\
+    $(SLO)$/tpsubt.obj		\
+    $(SLO)$/fieldwnd.obj	\
+    $(SLO)$/pvlaydlg.obj	\
+    $(SLO)$/pvfundlg.obj	\
+    $(SLO)$/dpgroupdlg.obj	\
+    $(SLO)$/dapitype.obj	\
+    $(SLO)$/dapidata.obj	\
+    $(SLO)$/consdlg.obj		\
+    $(SLO)$/scendlg.obj		\
+    $(SLO)$/imoptdlg.obj	\
+    $(SLO)$/validate.obj	\
+    $(SLO)$/csvsplits.obj	\
+    $(SLO)$/csvcontrol.obj	\
+    $(SLO)$/csvruler.obj	\
+    $(SLO)$/csvgrid.obj		\
+    $(SLO)$/csvtablebox.obj	\
+    $(SLO)$/asciiopt.obj	\
+    $(SLO)$/scuiasciiopt.obj	\
+     $(SLO)$/scuiimoptdlg.obj
 
 EXCEPTIONSFILES= \
-    $(SLO)$/asciiopt.obj	\
-    $(SLO)$/consdlg.obj		\
-    $(SLO)$/csvcontrol.obj	\
-    $(SLO)$/csvgrid.obj		\
-    $(SLO)$/csvruler.obj	\
-    $(SLO)$/csvsplits.obj	\
-    $(SLO)$/csvtablebox.obj	\
-    $(SLO)$/dapidata.obj	\
-    $(SLO)$/dapitype.obj	\
-    $(SLO)$/dbnamdlg.obj	\
-    $(SLO)$/dpgroupdlg.obj	\
-    $(SLO)$/expftext.obj	\
-    $(SLO)$/fieldwnd.obj	\
-    $(SLO)$/filtdlg.obj		\
-    $(SLO)$/foptmgr.obj		\
-    $(SLO)$/imoptdlg.obj	\
-    $(SLO)$/pfiltdlg.obj	\
+    $(SLO)$/csvgrid.obj \
+    $(SLO)$/csvruler.obj \
+    $(SLO)$/csvsplits.obj \
+    $(SLO)$/csvtablebox.obj \
+    $(SLO)$/fieldwnd.obj \
     $(SLO)$/pvfundlg.obj	\
     $(SLO)$/pvlaydlg.obj	\
-    $(SLO)$/scendlg.obj		\
-    $(SLO)$/scuiasciiopt.obj	\
-    $(SLO)$/scuiimoptdlg.obj	\
-    $(SLO)$/sfiltdlg.obj	\
-    $(SLO)$/sortdlg.obj		\
-    $(SLO)$/subtdlg.obj		\
-    $(SLO)$/textimportoptions.obj \
-    $(SLO)$/tpsort.obj		\
-    $(SLO)$/tpsubt.obj		\
+    $(SLO)$/dapidata.obj	\
     $(SLO)$/validate.obj
 
 SRS1NAME=$(TARGET)

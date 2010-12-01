@@ -560,7 +560,7 @@ void ORowSet::freeResources( bool _bComplete )
 
     // free all clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XComponent > xComp(i->get(), UNO_QUERY);
         if (xComp.is())
@@ -1809,7 +1809,9 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
         }
 
         // get the locale
+        //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
         Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
+        //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
 
         // get the numberformatTypes
         OSL_ENSURE(m_xActiveConnection.is(),"No ActiveConnection");
@@ -1926,6 +1928,8 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
                     if(!xColumn.is())
                     {
                         // no column found so we could look at the position i
+                        //bReFetchName = sal_True;
+                        //sColumnLabel = ::rtl::OUString();
                         Reference<XIndexAccess> xIndexAccess(m_xColumns,UNO_QUERY);
                         if(xIndexAccess.is() && i <= xIndexAccess->getCount())
                         {
@@ -2118,7 +2122,7 @@ void ORowSet::notifyRowSetAndClonesRowDelete( const Any& _rBookmark )
     onDeleteRow( _rBookmark );
     // notify the clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2136,7 +2140,7 @@ void ORowSet::notifyRowSetAndClonesRowDeleted( const Any& _rBookmark, sal_Int32 
     onDeletedRow( _rBookmark, _nPos );
     // notify the clones
     connectivity::OWeakRefArray::iterator aEnd = m_aClones.end();
-    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; ++i)
+    for (connectivity::OWeakRefArray::iterator i = m_aClones.begin(); aEnd != i; i++)
     {
         Reference< XUnoTunnel > xTunnel(i->get(),UNO_QUERY);
         if(xTunnel.is())
@@ -2637,6 +2641,7 @@ void SAL_CALL ORowSet::clearWarnings(  ) throw (SQLException, RuntimeException)
 
 void ORowSet::doCancelModification( )
 {
+    //OSL_ENSURE( isModification(), "ORowSet::doCancelModification: invalid call (no cache!)!" );
     if ( isModification() )
     {
         // read-only flag restored
@@ -2673,8 +2678,8 @@ void ORowSet::checkUpdateIterator()
         m_pCache->setUpdateIterator(m_aCurrentRow);
         m_aCurrentRow = m_pCache->m_aInsertRow;
         m_bModified = sal_True;
-    }
-    else if ( m_bNew ) // here we are modifying a value
+    } // if(!m_bModified && !m_bNew)
+    else if ( m_bNew ) // here we are modifing a value
         m_bModified = sal_True;
 }
 
@@ -2751,6 +2756,9 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;
+    //  ConfigManager*  pConfigMgr = ConfigManager::GetConfigManager();
+    //  Locale aLocale;
+    //  pConfigMgr->GetDirectConfigProperty(ConfigManager::LOCALE) >>= aLocale;
     Locale aLocale = SvtSysLocale().GetLocaleData().getLocale();
 
     if ( rParent.m_pColumns )
@@ -2793,7 +2801,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_HELPTEXT,xColumn->getPropertyValue(PROPERTY_HELPTEXT));
             pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_CONTROLDEFAULT,xColumn->getPropertyValue(PROPERTY_CONTROLDEFAULT));
 
-        }
+        } // for(sal_Int32 i=1;pIter != pEnd ;++pIter,++i)
     }
     Reference<XDatabaseMetaData> xMeta = rParent.m_xActiveConnection->getMetaData();
     m_pColumns = new ORowSetDataColumns(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers(),
@@ -2802,6 +2810,7 @@ ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORo
     sal_Int32 nRT   = PropertyAttribute::READONLY   | PropertyAttribute::TRANSIENT;
 
     // sdb.RowSet Properties
+    //  registerProperty(PROPERTY_CURSORNAME,       PROPERTY_ID_CURSORNAME,         PropertyAttribute::READONLY,        &m_aDataSourceName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   &rParent.m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
     registerProperty(PROPERTY_RESULTSETCONCURRENCY, PROPERTY_ID_RESULTSETCONCURRENCY,   PropertyAttribute::READONLY,    &m_nResultSetConcurrency,::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_RESULTSETTYPE,        PROPERTY_ID_RESULTSETTYPE,          PropertyAttribute::READONLY,    &m_nResultSetType,      ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
@@ -2933,6 +2942,7 @@ void SAL_CALL ORowSetClone::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,c
 
 void ORowSetClone::doCancelModification( )
 {
+    //OSL_ENSURE( sal_False, "ORowSetClone::doCancelModification: invalid call!" );
 }
 
 sal_Bool ORowSetClone::isModification( )

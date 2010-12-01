@@ -923,7 +923,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     SwWW8Writer::WriteLong( *m_rWW8Export.pDataStrm, nFlag );
 
     INetProtocol eProto = aURL.GetProtocol();
-    if ( eProto == INET_PROT_FILE || eProto == INET_PROT_SMB )
+    if ( eProto == INET_PROT_FILE )
     {
         // version 1 (for a document)
 
@@ -941,7 +941,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
 
         // save the links to files as relative
         sURL = URIHelper::simpleNormalizedMakeRelative( m_rWW8Export.GetWriter().GetBaseURL(), sURL );
-        if ( eProto == INET_PROT_FILE && sURL.EqualsAscii( "/", 0, 1 ) )
+        if ( sURL.EqualsAscii( "/", 0, 1 ) )
             sURL = aURL.PathToFileName();
 
         // special case for the absolute windows names
@@ -952,15 +952,6 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
              sURL.EqualsAscii( ":", 2, 1 ) )
         {
             sURL.Erase( 0, 1 );
-            sURL.SearchAndReplaceAll( '/', '\\' );
-        }
-
-        // n#261623 convert smb notation to '\\'
-        const char pSmb[] = "smb://";
-        if ( eProto == INET_PROT_SMB &&
-             sURL.EqualsAscii( pSmb, 0, sizeof( pSmb ) - 1 ) )
-        {
-            sURL.Erase( 0, sizeof( pSmb ) - 3 );
             sURL.SearchAndReplaceAll( '/', '\\' );
         }
 
@@ -1790,6 +1781,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
         AppendWordBookmark( sBkmkName );
     }
 
+    //Would need to move into WW8Export, probably not worth it
+    // OSL_ENSURE( pO->Count(), " pO ist am Zeilenanfang nicht leer" );
+
     String aStr( rNode.GetTxt() );
 
     xub_StrLen nAktPos = 0;
@@ -1838,7 +1832,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
@@ -1847,7 +1841,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
 
                     it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )) );
+                            rtl::OUString::createFromAscii( ODF_CODE_PARAM ) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOUCode;
@@ -1866,7 +1860,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 {
                     // Check for the presence of a linked OLE object
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )) );
+                            rtl::OUString::createFromAscii( ODF_OLE_PARAM ) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOleId;
@@ -1887,7 +1881,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 if ( pFieldmark->GetFieldname().equalsAscii( ODF_UNHANDLED ) )
                 {
                     IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
+                            rtl::OUString::createFromAscii( ODF_ID_PARAM ) );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
@@ -2574,6 +2568,13 @@ void WW8AttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFmt, const Point
         }
         if( !bDone )
         {
+            // ein NICHT zeichengebundener Rahmen liegt vor
+
+            // --> OD 2007-04-19 #i43447# - removed
+//            const SwFmtFrmSize& rS = rFrmFmt.GetFrmSize();
+//            nFlyWidth  = rS.GetWidth();  // Fuer Anpassung Graphic-Groesse
+//            nFlyHeight = rS.GetHeight();
+            // <--
 
             m_rWW8Export.SaveData( nStt, nEnd );
 

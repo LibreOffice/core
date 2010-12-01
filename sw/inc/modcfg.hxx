@@ -41,6 +41,7 @@
 #include <tools/globname.hxx>
 class SwModuleOptions;
 
+//-----------------------------------------------------------------------------
 class InsCaptionOpt;
 typedef InsCaptionOpt* InsCaptionOptPtr;
 SV_DECL_PTRARR_SORT_DEL(InsCapOptArr, InsCaptionOptPtr, 0, 5)
@@ -53,6 +54,9 @@ protected:
     InsCaptionOpt* Find(const SwCapObjType eType, const SvGlobalName *pOleId = 0) const;
 };
 
+/* -----------------------------10.10.00 16:14--------------------------------
+
+ ---------------------------------------------------------------------------*/
 class SwRevisionConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -76,7 +80,9 @@ class SwRevisionConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
+/* -----------------------------11.10.00 09:00--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwInsertConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -88,7 +94,10 @@ class SwInsertConfig : public utl::ConfigItem
 
     sal_Bool            bInsWithCaption;       //Insert/Caption/Automatic   // Objekte beschriftet einfuegen
     sal_Bool            bCaptionOrderNumberingFirst; //#i61007# caption order starting with numbering
-
+//  sal_uInt16          nInsTblFlags;           //Insert/Table/Header       // Flags fuer Tabellen einfuegen
+                                                //Insert/Table/RepeatHeader
+                                                //Insert/Table/Split
+                                                //Insert/Table/Border
     SwInsertTableOptions    aInsTblOpts;
     sal_Bool            bIsWeb;
 
@@ -102,7 +111,9 @@ class SwInsertConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
+/* -----------------------------11.10.00 09:00--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwTableConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -127,7 +138,9 @@ class SwTableConfig : public utl::ConfigItem
     void                    Load();
     void                    SetModified(){ConfigItem::SetModified();}
 };
+/* -----------------------------18.01.01 16:57--------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SwMiscConfig : public utl::ConfigItem
 {
     friend class SwModuleOptions;
@@ -156,6 +169,9 @@ class SwMiscConfig : public utl::ConfigItem
     void                    SetModified(){ConfigItem::SetModified();}
 };
 
+/* ---------------------------------------------------------------------------
+
+ ---------------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwModuleOptions
 {
     SwRevisionConfig                aRevisionConfig;

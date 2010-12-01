@@ -39,8 +39,8 @@ LIBTARGET=no
 # --- Files --------------------------------------------------------
 
 CXXFILES = \
-        areasdlg.cxx	\
-        hfedtdlg.cxx	\
+    areasdlg.cxx	\
+    hfedtdlg.cxx	\
         tptable.cxx	\
         tphf.cxx 	\
         tphfedit.cxx
@@ -48,15 +48,13 @@ CXXFILES = \
             
 
 SLOFILES = \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
-        $(SLO)$/areasdlg.obj		\
-        $(SLO)$/hfedtdlg.obj		\
-        $(SLO)$/scuitphfedit.obj	\
+        $(SLO)$/areasdlg.obj	\
+    $(SLO)$/hfedtdlg.obj	\
+        $(SLO)$/tptable.obj	\
         $(SLO)$/tphf.obj		\
-        $(SLO)$/tphfedit.obj		\
-        $(SLO)$/tptable.obj		\
+        $(SLO)$/tphfedit.obj	\
+        $(SLO)$/scuitphfedit.obj
+
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  pagedlg.src     	\
@@ -67,7 +65,7 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 
 LIB1OBJFILES = \
         $(SLO)$/areasdlg.obj	\
-        $(SLO)$/tphfedit.obj
+    $(SLO)$/tphfedit.obj
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk

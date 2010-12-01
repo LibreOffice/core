@@ -118,7 +118,8 @@ BackendImpl::BackendImpl(
                                 OUSTR("application/vnd.sun.star.executable"),
                                 OUSTR(""),
                                 OUSTR("Executable"),
-                                RID_IMG_COMPONENT ) )
+                                RID_IMG_COMPONENT,
+                                RID_IMG_COMPONENT_HC ) )
 {
     if (!transientMode())
     {

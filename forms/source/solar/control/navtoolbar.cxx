@@ -369,6 +369,8 @@ namespace frm
         if ( !m_pImageProvider )
             return;
 
+        const bool bIsHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+
         const USHORT nItemCount = m_pToolbar->GetItemCount();
 
         // collect the FormFeatures in the toolbar
@@ -394,7 +396,7 @@ namespace frm
         }
 
         // retrieve the images for the command URLs
-        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge );
+        CommandImages aCommandImages = m_pImageProvider->getCommandImages( aCommandURLs, m_eImageSize == eLarge, bIsHighContrast );
 
         // and set them at the toolbar
         CommandImages::const_iterator commandImage = aCommandImages.begin();
@@ -545,6 +547,9 @@ namespace frm
         m_pToolbar->SetControlBackground();
         forEachItemWindow( &NavigationToolBar::setItemBackground, NULL );
 
+        // the contrast of the background color may have changed, so force
+        // the images to be rebuild (high contrast requires a possibly different
+        // image set)
         implUpdateImages();
     }
 
@@ -555,6 +560,9 @@ namespace frm
         m_pToolbar->SetControlBackground( _rColor );
         forEachItemWindow( &NavigationToolBar::setItemBackground, &_rColor );
 
+        // the contrast of the background color may have changed, so force
+        // the images to be rebuild (high contrast requires a possibly different
+        // image set)
         implUpdateImages();
     }
 

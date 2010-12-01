@@ -30,7 +30,7 @@
 /*************************************************************************
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
+JP 20.07.95:
 
     Die akt. Struktur der Autoformatierung darf nicht mehr veraendert werden.
     Diese wird durch unterschiedlichen Code vom StartWriter und vom StarCalc
@@ -247,7 +247,7 @@ public:
     BOOL Save( SvStream& rStream ) const;
 
 #ifdef READ_OLDVERS
-    // load old versions
+    // lade alte Version
     BOOL LoadOld( SvStream& rStream, USHORT aLoadVer[] );
 #endif
 };

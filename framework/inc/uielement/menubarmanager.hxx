@@ -248,6 +248,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                                                                m_bDeleteChildren : 1,
                                                                                                m_bActive : 1,
                                                                                                m_bIsBookmarkMenu : 1,
+                                                                                               m_bWasHiContrast : 1,
                                                                                                m_bShowMenuImages : 1;
         sal_Bool                                                                               m_bRetrieveImages : 1,
                                                                                                m_bAcceleratorCfg : 1;

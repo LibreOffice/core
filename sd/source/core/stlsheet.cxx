@@ -955,7 +955,7 @@ void SdStyleSheet::notifyModifyListener()
 
 OUString SAL_CALL SdStyleSheet::getImplementationName() throw(RuntimeException)
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "SdStyleSheet" ) );
+    return OUString::createFromAscii( "SdStyleSheet" );
 }
 
 // --------------------------------------------------------------------

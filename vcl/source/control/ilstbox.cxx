@@ -2711,17 +2711,25 @@ ImplWin::ImplWin( Window* pParent, WinBits nWinStyle ) :
 
 // -----------------------------------------------------------------------
 
-BOOL ImplWin::SetModeImage( const Image& rImage )
+BOOL ImplWin::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    SetImage( rImage );
+    if( eMode == BMP_COLOR_NORMAL )
+        SetImage( rImage );
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+        maImageHC = rImage;
+    else
+        return FALSE;
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& ImplWin::GetModeImage( ) const
+const Image& ImplWin::GetModeImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -2738,6 +2746,7 @@ void ImplWin::MouseButtonDown( const MouseEvent& )
 {
     if( IsEnabled() )
     {
+//      Control::MouseButtonDown( rMEvt );
         MBDown();
     }
 }
@@ -2898,6 +2907,12 @@ void ImplWin::DrawEntry( BOOL bDrawImage, BOOL bDrawText, BOOL bDrawTextAtImageP
 
         // check for HC mode
         Image *pImage = &maImage;
+
+        if( !!maImageHC )
+        {
+            if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+                pImage = &maImageHC;
+        }
 
         if ( !IsZoom() )
         {

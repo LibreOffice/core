@@ -327,7 +327,9 @@ void SwDDEFieldType::_RefCntChgd()
         pDoc->GetLinkManager().Remove( refLink );
     }
 }
+/* -----------------------------28.08.00 16:23--------------------------------
 
+ ---------------------------------------------------------------------------*/
 bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     BYTE nPart = 0;
@@ -352,7 +354,9 @@ bool SwDDEFieldType::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
         rVal <<= OUString(GetCmd().GetToken(nPart-1, sfx2::cTokenSeperator));
     return true;
 }
+/* -----------------------------28.08.00 16:23--------------------------------
 
+ ---------------------------------------------------------------------------*/
 bool SwDDEFieldType::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     BYTE nPart = 0;

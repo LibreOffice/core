@@ -63,6 +63,13 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
+    /** state whether a system setting for high contrast should be evaluated
+        and taken into account for this window.
+
+        The default implementation uses the accessibility option IsForDrawings
+      */
+    virtual bool    UseHighContrastSetting() const;
+
 public:
     SfxPreviewWin( Window* pParent,
                    const ResId& rResId,

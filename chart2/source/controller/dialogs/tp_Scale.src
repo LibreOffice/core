@@ -56,14 +56,12 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Scale" ;
     };
-
     FixedText TXT_MIN
     {
         Pos = MAP_APPFONT ( X2 , Y1  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "~Minimum:" ;
     };
-
     SpinField EDT_MIN
     {
         Border = TRUE ;
@@ -72,7 +70,6 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
-
     CheckBox CBX_AUTO_MIN
     {
         Pos = MAP_APPFONT ( X4 , Y1-1  ) ;
@@ -87,7 +84,6 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~ximum:" ;
     };
-
     SpinField EDT_MAX
     {
         Border = TRUE ;
@@ -96,7 +92,6 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
-
     CheckBox CBX_AUTO_MAX
     {
         Pos = MAP_APPFONT ( X4 , Y2-1  ) ;
@@ -104,14 +99,12 @@ TabPage TP_SCALE
         TabStop = TRUE ;
         Text [ en-US ] = "A~utomatic" ;
     };
-
     FixedText TXT_STEP_MAIN
     {
         Pos = MAP_APPFONT ( X2 , Y3  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Ma~jor interval:" ;
     };
-
     SpinField EDT_STEP_MAIN
     {
         Border = TRUE ;
@@ -119,7 +112,6 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( EDITWIDTH , 12 ) ;
         TabStop = TRUE ;
     };
-
     CheckBox CBX_AUTO_STEP_MAIN
     {
         Pos = MAP_APPFONT ( X4 , Y3-1  ) ;
@@ -127,14 +119,12 @@ TabPage TP_SCALE
         TabStop = TRUE ;
         Text [ en-US ] = "Au~tomatic" ;
     };
-
     FixedText TXT_STEP_HELP
     {
         Pos = MAP_APPFONT ( X2 , Y4  ) ;
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Minor interval ~count:" ;
     };
-
     MetricField MT_STEPHELP
     {
         Border = TRUE ;
@@ -151,7 +141,6 @@ TabPage TP_SCALE
         Last = 100 ;
         SpinSize = 1 ;
     };
-
     CheckBox CBX_AUTO_STEP_HELP
     {
         Pos = MAP_APPFONT ( X4 , Y4-1  ) ;
@@ -166,7 +155,6 @@ TabPage TP_SCALE
         Size = MAP_APPFONT ( LABELWIDTH , 8 ) ;
         Text [ en-US ] = "Reference ~value:" ;
     };
-
     SpinField EDT_ORIGIN
     {
         Border = TRUE ;
@@ -198,4 +186,5 @@ TabPage TP_SCALE
         TabStop = TRUE ;
         Text [ en-US ] = "~Reverse direction" ;
     };
+
 };

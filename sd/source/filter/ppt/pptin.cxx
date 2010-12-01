@@ -389,7 +389,7 @@ sal_Bool ImplSdPPTImport::Import()
                 Dictionary aDict;
                 if ( pSection->GetDictionary( aDict ) )
                 {
-                    UINT32 nPropId = aDict.GetProperty( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_PID_HLINKS" )));
+                    UINT32 nPropId = aDict.GetProperty( rtl::OUString::createFromAscii("_PID_HLINKS" ));
                     if ( nPropId )
                     {
                         if ( pSection->GetProperty( nPropId, aPropItem ) )
@@ -430,11 +430,6 @@ sal_Bool ImplSdPPTImport::Import()
                                         aPropItem >> pHyperlink->nInfo;
                                         if ( !aPropItem.Read( pHyperlink->aTarget, VT_EMPTY ) )
                                             break;
-
-                                        // #n382718# (and #n261623#) Convert '\\' notation to 'smb://'
-                                        INetURLObject aUrl( pHyperlink->aTarget, INET_PROT_FILE );
-                                        pHyperlink->aTarget = aUrl.GetMainURL( INetURLObject::NO_DECODE );
-
                                         if ( !aPropItem.Read( pHyperlink->aSubAdress, VT_EMPTY ) )
                                             break;
                                         pHyperlink->nStartPos = pHyperlink->nEndPos = -1;
@@ -778,7 +773,7 @@ sal_Bool ImplSdPPTImport::Import()
                 if ( SeekToAktPage( &aPageHd ) )
                 {
                     if ( mbTracing )
-                        mpTracer->AddAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
+                        mpTracer->AddAttribute( rtl::OUString::createFromAscii( "MasterPage" ), rtl::OUString::valueOf( (sal_Int32) (nAktPageNum + 1) ) );
 
                     while( ( rStCtrl.GetError() == 0 ) && ( rStCtrl.Tell() < aPageHd.GetRecEndFilePos() ) )
                     {
@@ -856,7 +851,7 @@ sal_Bool ImplSdPPTImport::Import()
                         aHd.SeekToEndOfRecord( rStCtrl );
                     }
                     if ( mbTracing )
-                        mpTracer->RemoveAttribute( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MasterPage" )) );
+                        mpTracer->RemoveAttribute( rtl::OUString::createFromAscii( "MasterPage" ) );
                 }
                 rStCtrl.Seek( nFPosMerk );
                 ImportPageEffect( (SdPage*)pMPage, bNewAnimationsUsed );

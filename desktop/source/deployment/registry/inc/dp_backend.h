@@ -56,7 +56,8 @@ namespace css = ::com::sun::star;
 
 class PackageRegistryBackend;
 
-#define BACKEND_SERVICE_NAME "com.sun.star.deployment.PackageRegistryBackend"
+char const* const BACKEND_SERVICE_NAME =
+"com.sun.star.deployment.PackageRegistryBackend";
 
 typedef ::cppu::WeakComponentImplHelper1<
     css::deployment::XPackage > t_PackageBase;
@@ -121,16 +122,16 @@ public:
         const ::rtl::OUString m_mediaType;
         const ::rtl::OUString m_fileFilter;
         const ::rtl::OUString m_shortDescr;
-        const sal_uInt16 m_smallIcon;
+        const sal_uInt16 m_smallIcon, m_smallIcon_HC;
     public:
         virtual ~TypeInfo();
         TypeInfo( ::rtl::OUString const & mediaType,
                   ::rtl::OUString const & fileFilter,
                   ::rtl::OUString const & shortDescr,
-                  sal_uInt16 smallIcon)
+                  sal_uInt16 smallIcon, sal_uInt16 smallIcon_HC )
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
               m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon)
+              m_smallIcon(smallIcon), m_smallIcon_HC(smallIcon_HC)
             {}
         // XPackageTypeInfo
         virtual ::rtl::OUString SAL_CALL getMediaType()

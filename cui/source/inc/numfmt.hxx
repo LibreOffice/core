@@ -42,6 +42,13 @@
 #include <svx/langbox.hxx>
 #include <svx/fontlb.hxx>
 
+//CHINA001 #define SVX_NUMVAL_STANDARD      -1234.12345678901234
+//CHINA001 #define SVX_NUMVAL_CURRENCY      -1234
+//CHINA001 #define SVX_NUMVAL_PERCENT       -0.1295
+//CHINA001 #define SVX_NUMVAL_TIME      36525.5678935185
+//CHINA001 #define SVX_NUMVAL_DATE      36525.5678935185
+//CHINA001 #define SVX_NUMVAL_BOOLEAN       1
+
 //------------------------------------------------------------------------
 
 class SvxNumberFormatShell;
@@ -101,7 +108,7 @@ public:
     void                    SetOkHdl( const Link& rOkHandler );
     void                    HideLanguage(BOOL nFlag=TRUE);
     virtual long            PreNotify( NotifyEvent& rNEvt );
-    virtual void            PageCreated (SfxAllItemSet aSet);
+    virtual void            PageCreated (SfxAllItemSet aSet); //add CHINA001
 private:
     SvxNumberFormatTabPage( Window* pParent,
                             const SfxItemSet& rCoreAttrs );

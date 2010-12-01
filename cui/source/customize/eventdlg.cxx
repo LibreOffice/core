@@ -82,6 +82,8 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
     mpImpl->pDeletePB           = new PushButton( this, CUI_RES( PB_DELETE ));
     mpImpl->pMacroImg           = new Image( CUI_RES( IMG_MACRO) );
     mpImpl->pComponentImg       = new Image( CUI_RES( IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image( CUI_RES( IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image( CUI_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 
@@ -95,10 +97,11 @@ SvxEventConfigPage::SvxEventConfigPage( Window *pParent, const SfxItemSet& rSet,
 
     uno::Reference< document::XEventsSupplier > xSupplier;
 
+//    xSupplier = uno::Reference< document::XEventsSupplier >( new GlobalEventConfig());
     xSupplier = uno::Reference< document::XEventsSupplier > (
         ::comphelper::getProcessServiceFactory()->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.frame.GlobalEventBroadcaster" )) ),
+            OUString::createFromAscii(
+                "com.sun.star.frame.GlobalEventBroadcaster" ) ),
         uno::UNO_QUERY );
 
     USHORT nPos(0);
@@ -202,7 +205,7 @@ IMPL_LINK( SvxEventConfigPage, SelectHdl_Impl, ListBox *, pBox )
 
         uno::Reference< frame::XFramesSupplier > xFramesSupplier(
             ::comphelper::getProcessServiceFactory()->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
+                OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
             uno::UNO_QUERY );
 
         uno::Reference< frame::XFrame > xFrame =

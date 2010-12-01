@@ -175,84 +175,84 @@ namespace sd { namespace framework {
 // Pane URLS.
 
 const OUString FrameworkHelper::msPaneURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/"));
+    OUString::createFromAscii("private:resource/pane/"));
 const OUString FrameworkHelper::msCenterPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CenterPane")));
+    msPaneURLPrefix + OUString::createFromAscii("CenterPane"));
 const OUString FrameworkHelper::msFullScreenPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("FullScreenPane")));
+    msPaneURLPrefix + OUString::createFromAscii("FullScreenPane"));
 const OUString FrameworkHelper::msLeftImpressPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("LeftImpressPane")));
+    msPaneURLPrefix + OUString::createFromAscii("LeftImpressPane"));
 const OUString FrameworkHelper::msLeftDrawPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("LeftDrawPane")));
+    msPaneURLPrefix + OUString::createFromAscii("LeftDrawPane"));
 const OUString FrameworkHelper::msRightPaneURL(
-    msPaneURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("RightPane")));
+    msPaneURLPrefix + OUString::createFromAscii("RightPane"));
 
 
 // View URLs.
 
 const OUString FrameworkHelper::msViewURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/view/"));
+    OUString::createFromAscii("private:resource/view/"));
 const OUString FrameworkHelper::msImpressViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("ImpressView")));
+    msViewURLPrefix + OUString::createFromAscii("ImpressView"));
 const OUString FrameworkHelper::msDrawViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicView")));
+    msViewURLPrefix + OUString::createFromAscii("GraphicView"));
 const OUString FrameworkHelper::msOutlineViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("OutlineView")));
+    msViewURLPrefix + OUString::createFromAscii("OutlineView"));
 const OUString FrameworkHelper::msNotesViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("NotesView")));
+    msViewURLPrefix + OUString::createFromAscii("NotesView"));
 const OUString FrameworkHelper::msHandoutViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("HandoutView")));
+    msViewURLPrefix + OUString::createFromAscii("HandoutView"));
 const OUString FrameworkHelper::msSlideSorterURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorter")));
+    msViewURLPrefix + OUString::createFromAscii("SlideSorter"));
 const OUString FrameworkHelper::msPresentationViewURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("PresentationView")));
+    msViewURLPrefix + OUString::createFromAscii("PresentationView"));
 const OUString FrameworkHelper::msTaskPaneURL(
-    msViewURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("TaskPane")));
+    msViewURLPrefix + OUString::createFromAscii("TaskPane"));
 
 
 // Tool bar URLs.
 
 const OUString FrameworkHelper::msToolBarURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/"));
+    OUString::createFromAscii("private:resource/toolbar/"));
 const OUString FrameworkHelper::msViewTabBarURL(
-    msToolBarURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("ViewTabBar")));
+    msToolBarURLPrefix + OUString::createFromAscii("ViewTabBar"));
 
 
 // Task panel URLs.
 const ::rtl::OUString FrameworkHelper::msTaskPanelURLPrefix(
-    RTL_CONSTASCII_USTRINGPARAM("private:resource/toolpanel/DrawingFramework/"));
+    OUString::createFromAscii("private:resource/toolpanel/DrawingFramework/"));
 const ::rtl::OUString FrameworkHelper::msMasterPagesTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("MasterPages")));
+    msTaskPanelURLPrefix + OUString::createFromAscii("MasterPages"));
 const ::rtl::OUString FrameworkHelper::msLayoutTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("Layouts")));
+    msTaskPanelURLPrefix + OUString::createFromAscii("Layouts"));
 const ::rtl::OUString FrameworkHelper::msTableDesignPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("TableDesign")));
+    msTaskPanelURLPrefix + OUString::createFromAscii("TableDesign"));
 const ::rtl::OUString FrameworkHelper::msCustomAnimationTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("CustomAnimations")));
+    msTaskPanelURLPrefix + OUString::createFromAscii("CustomAnimations"));
 const ::rtl::OUString FrameworkHelper::msSlideTransitionTaskPanelURL(
-    msTaskPanelURLPrefix + OUString(RTL_CONSTASCII_USTRINGPARAM("SlideTransitions")));
+    msTaskPanelURLPrefix + OUString::createFromAscii("SlideTransitions"));
 
 
 // Event URLs.
 const OUString FrameworkHelper::msResourceActivationRequestEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivationRequested"));
+    OUString::createFromAscii("ResourceActivationRequested"));
 const OUString FrameworkHelper::msResourceDeactivationRequestEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivationRequest"));
+    OUString::createFromAscii("ResourceDeactivationRequest"));
 const OUString FrameworkHelper::msResourceActivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceActivation"));
+    OUString::createFromAscii("ResourceActivation"));
 const OUString FrameworkHelper::msResourceDeactivationEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ResourceDeactivation"));
+    OUString::createFromAscii("ResourceDeactivation"));
 const OUString FrameworkHelper::msConfigurationUpdateStartEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateStart"));
+    OUString::createFromAscii("ConfigurationUpdateStart"));
 const OUString FrameworkHelper::msConfigurationUpdateEndEvent(
-    RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd"));
+    OUString::createFromAscii("ConfigurationUpdateEnd"));
 
 
 // Service names of controllers.
 const OUString FrameworkHelper::msModuleControllerService(
-    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ModuleController"));
+    OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController"));
 const OUString FrameworkHelper::msConfigurationControllerService(
-    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.framework.ConfigurationController"));
+    OUString::createFromAscii("com.sun.star.drawing.framework.ConfigurationController"));
 
 //----- helper ----------------------------------------------------------------
 namespace
@@ -786,7 +786,7 @@ class FlagUpdater
 {
 public:
     FlagUpdater (bool& rFlag) : mrFlag(rFlag) {}
-    void operator() (bool) const {mrFlag = true;}
+    void operator() (bool) {mrFlag = true;}
 private:
     bool& mrFlag;
 };
@@ -892,7 +892,7 @@ OUString FrameworkHelper::ResourceIdToString (const Reference<XResourceId>& rxRe
             Sequence<OUString> aAnchorURLs (rxResourceId->getAnchorURLs());
             for (sal_Int32 nIndex=0; nIndex<aAnchorURLs.getLength(); ++nIndex)
             {
-                sString += OUString(RTL_CONSTASCII_USTRINGPARAM(" | "));
+                sString += OUString::createFromAscii(" | ");
                 sString += aAnchorURLs[nIndex];
             }
         }

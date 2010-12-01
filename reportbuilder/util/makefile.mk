@@ -76,7 +76,8 @@ COMPONENT_OTR_FILES= \
     $(EXTENSIONDIR)$/template$/en-US$/wizard$/report$/default.otr
     
 COMPONENT_IMAGES= \
-    $(EXTENSIONDIR)$/images$/extension_32.png
+    $(EXTENSIONDIR)$/images$/extension_32.png \
+    $(EXTENSIONDIR)$/images$/extension_32_h.png
 
 COMPONENT_HTMLFILES = $(EXTENSIONDIR)$/THIRDPARTYREADMELICENSE.html \
             $(EXTENSIONDIR)$/readme_en-US.html \

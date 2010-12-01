@@ -33,14 +33,14 @@ using namespace com::sun::star;
 
 SysCredentialsConfigItem::SysCredentialsConfigItem(
     SysCredentialsConfig * pOwner )
-: utl::ConfigItem( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Passwords")),
+: utl::ConfigItem( rtl::OUString::createFromAscii( "Office.Common/Passwords" ),
                    CONFIG_MODE_IMMEDIATE_UPDATE ),
   m_bInited( false ),
   m_pOwner( pOwner )
 {
     uno::Sequence< ::rtl::OUString > aNode( 1 );
-    aNode[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" ));
+    aNode[ 0 ] = rtl::OUString::createFromAscii(
+        "Office.Common/Passwords/AuthenticateUsingSystemCredentials" );
     EnableNotification( aNode );
 }
 
@@ -70,8 +70,8 @@ SysCredentialsConfigItem::getSystemCredentialsURLs()
     {
         // read config item
         uno::Sequence< ::rtl::OUString > aPropNames( 1 );
-        aPropNames[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "AuthenticateUsingSystemCredentials" ));
+        aPropNames[ 0 ] = rtl::OUString::createFromAscii(
+            "AuthenticateUsingSystemCredentials" );
         uno::Sequence< uno::Any > aAnyValues(
             utl::ConfigItem::GetProperties( aPropNames ) );
 
@@ -100,8 +100,8 @@ void SysCredentialsConfigItem::setSystemCredentialsURLs(
     uno::Sequence< rtl::OUString > aPropNames( 1 );
     uno::Sequence< uno::Any > aPropValues( 1 );
     aPropNames[ 0 ]
-        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "AuthenticateUsingSystemCredentials" ));
+        = ::rtl::OUString::createFromAscii(
+            "AuthenticateUsingSystemCredentials" );
     aPropValues[ 0 ] <<= seqURLList;
 
     utl::ConfigItem::SetModified();
@@ -123,7 +123,7 @@ namespace
         if( aInd > 0  )
         {
             sal_Int32 aPrevInd = aURL.lastIndexOf( sal_Unicode( '/' ), aInd );
-            if ( aURL.indexOf( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("://")) )
+            if ( aURL.indexOf( ::rtl::OUString::createFromAscii( "://" ) )
                     != aPrevInd - 2 ||
                  aInd != aURL.getLength() - 1 )
             {
@@ -157,7 +157,7 @@ namespace
                 {
                     ::rtl::OUString tmpUrl( aUrl );
                     if ( tmpUrl.getStr()[tmpUrl.getLength() - 1] != (sal_Unicode)'/' )
-                      tmpUrl += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+                      tmpUrl += ::rtl::OUString::createFromAscii( "/" );
 
                     aIter = rContainer.lower_bound( tmpUrl );
                     if( aIter != rContainer.end() && aIter->match( tmpUrl ) )

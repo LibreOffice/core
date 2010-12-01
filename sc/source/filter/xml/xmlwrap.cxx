@@ -180,7 +180,7 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
 
         // get a pipe for connecting the data source to the parser
         xPipe = xServiceFactory->createInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.Pipe")) );
+                OUString::createFromAscii("com.sun.star.io.Pipe") );
         DBG_ASSERT( xPipe.is(),
                 "XMLReader::Read: com.sun.star.io.Pipe service missing" );
         if( !xPipe.is() )
@@ -450,7 +450,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
                     aName = pDocHierarchItem->GetValue();
             }
             else
-                aName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "dummyObjectName" ));
+                aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
 
             if( aName.getLength() )
             {
@@ -842,7 +842,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
         // TODO/LATER: do not do it for embedded links
         if( SFX_CREATE_MODE_EMBEDDED == pObjSh->GetCreateMode() )
         {
-            OUString aName(RTL_CONSTASCII_USTRINGPARAM("dummyObjectName"));
+            OUString aName = ::rtl::OUString::createFromAscii( "dummyObjectName" );
             if ( pMedium && pMedium->GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -992,6 +992,7 @@ sal_Bool ScXMLImportWrapper::Export(sal_Bool bStylesOnly)
 
     return sal_False;
 }
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

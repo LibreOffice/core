@@ -35,9 +35,9 @@
 
 const static UINT32 UP_LIMIT=0xFFFFFF00L;
 
-// The SbiBuffer will be expanded in increments of at least 16 Bytes.
-// This is necessary, because many classes emanate from a buffer length
-// of x*16 Bytes.
+// Der SbiBuffer wird in Inkrements von mindestens 16 Bytes erweitert.
+// Dies ist notwendig, da viele Klassen von einer Pufferlaenge
+// von x*16 Bytes ausgehen.
 
 SbiBuffer::SbiBuffer( SbiParser* p, short n )
 {
@@ -56,8 +56,8 @@ SbiBuffer::~SbiBuffer()
     delete[] pBuf;
 }
 
-// Reach out the buffer
-// This lead to the deletion of the buffer!
+// Rausreichen des Puffers
+// Dies fuehrt zur Loeschung des Puffers!
 
 char* SbiBuffer::GetBuffer()
 {
@@ -67,8 +67,8 @@ char* SbiBuffer::GetBuffer()
     return p;
 }
 
-// Test, if the buffer can contain n Bytes.
-// In case of doubt it will be enlarged
+// Test, ob der Puffer n Bytes aufnehmen kann.
+// Im Zweifelsfall wird er vergroessert
 
 BOOL SbiBuffer::Check( USHORT n )
 {
@@ -101,7 +101,7 @@ BOOL SbiBuffer::Check( USHORT n )
     return TRUE;
 }
 
-// Conditioning of the buffer onto the passed Byte limit
+// Angleich des Puffers auf die uebergebene Byte-Grenze
 
 void SbiBuffer::Align( INT32 n )
 {
@@ -120,7 +120,7 @@ void SbiBuffer::Align( INT32 n )
     }
 }
 
-// Patch of a Location
+// Patch einer Location
 
 void SbiBuffer::Patch( UINT32 off, UINT32 val )
 {
@@ -136,9 +136,9 @@ void SbiBuffer::Patch( UINT32 off, UINT32 val )
     }
 }
 
-// Forward References upon label und procedures
-// establish a linkage. The beginning of the linkage is at the passed parameter,
-// the end of the linkage is 0.
+// Forward References auf Labels und Prozeduren
+// bauen eine Kette auf. Der Anfang der Kette ist beim uebergebenen
+// Parameter, das Ende der Kette ist 0.
 
 void SbiBuffer::Chain( UINT32 off )
 {

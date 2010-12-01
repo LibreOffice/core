@@ -38,6 +38,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.SheetSettings;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
+
 /**
  *  This class is used by <code>PxlDocument</code> to maintain pexcel
  *  worksheets.
@@ -60,16 +61,18 @@ public class Worksheet {
     private Eof eof;
 
     /**
-      * Creates a worksheet in a given workbook.
+      * Writes the current workbook to the <code>Outputstream</code>
       *
-      * @param  wb The destination workbook.
+      * @param  os The destination outputstream
       */
     public Worksheet(Workbook wb) {
         this.wb = wb;
     }
 
     /**
-      * Default Contructor. Creates a worksheet not attached to any workbook.
+      * Default Contructor
+      *
+      * @param  os The destination outputstream
       */
     public Worksheet() {
     }
@@ -105,12 +108,11 @@ public class Worksheet {
     }
 
     /**
-     *  Reads a worksheet from the <code>InputStream</code> and contructs a
+      * Reads a worksheet from the <code>InputStream</code> and contructs a
      *  workbook object from it
      *
-     * @param   is InputStream containing a Pocket Excel Data file.
-     * @return True if we read anything. False if not.
-     */
+      * @param  is InputStream containing a Pocket Excel Data file.
+      */
     public boolean read(InputStream is) throws IOException {
 
         int b = is.read();
@@ -228,38 +230,38 @@ public class Worksheet {
     }
 
     /**
-     * Adds a cell to this worksheet based on a <code>BIFFRecord</code>.
-     * Current valdid celltypes are <code>FloatNumber</code>,
-     * <code>LabelCell</code> or <code>Formula</code>
+      * Adds a cell to this worksheet. Current valdid celltypes are
+     * <code>FloatNumber</code>, <code>LabelCell</code> or <code>Formula</code>
      *
-     * @param br The <code>BIFFRecord</code> to read from.
-     */
+      * @param  f the font recrod to add
+      */
     public void addCell(BIFFRecord br) {
         cells.add(br);
     }
 
     /**
-     * Adds a row to the worksheet.
+      * Adds a number of ColInfo Records to the worksheet base on a list of
+     * clumnwidths passed in
      *
-     * @param r The row to add.
-     */
+      * @param  list of column widths
+      */
     public void addRow(Row r) {
         rows.add(r);
     }
 
     /**
-     * Adds a ColInfo record to the worksheet. This may effec more than one column.
+      * Adds a number of ColInfo Records to the worksheet base on a list of
+     * clumnwidths passed in
      *
-     * @param c ColInfo structure defining widths, format etc.
-     */
+      * @param  list of column widths
+      */
     public void addCol(ColInfo c) {
         colInfo.add(c);
     }
-
     /**
-     * Add various settings to this worksheet.
+     * Returns an <code>Enumeration</code> to the ColInfo's for this worksheet
      *
-     * @param s SheetSettings object defining pane number, splits etc.
+     * @return an <code>Enumeration</code> to the ColInfo's
      */
     public void addSettings(SheetSettings s) {
 

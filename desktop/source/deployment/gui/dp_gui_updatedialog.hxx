@@ -122,7 +122,8 @@ private:
     public:
         CheckListBox(
             UpdateDialog & dialog, ResId const & resource,
-            Image const & normalStaticImage);
+            Image const & normalStaticImage,
+            Image const & highContrastStaticImage);
 
         virtual ~CheckListBox();
 

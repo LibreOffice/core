@@ -33,6 +33,7 @@
 #endif
 #include "dbaccess_helpid.hrc"
 
+
 ModalDialog DLG_REL_PROPERTIES
 {
     OutputSize = TRUE ;
@@ -41,6 +42,7 @@ ModalDialog DLG_REL_PROPERTIES
     Text [ en-US ] = "Relations" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
+
 
     Window WND_CONTROL
     {
@@ -84,6 +86,9 @@ ModalDialog DLG_REL_PROPERTIES
         };
     };
 
+
+
+
     FixedLine FL_CASC_UPD
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
@@ -119,6 +124,7 @@ ModalDialog DLG_REL_PROPERTIES
         HelpId  = HID_DLG_REL_CASC_UPD_DEFAULT ;
         Text [ en-US ] = "Set ~default" ;
     };
+// zweite FixedLine
     FixedLine FL_CASC_DEL
     {
         Pos = MAP_APPFONT ( 96 , 114 ) ;
@@ -176,3 +182,4 @@ ModalDialog DLG_REL_PROPERTIES
     };
 
 };
+

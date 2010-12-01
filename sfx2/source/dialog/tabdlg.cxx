@@ -63,7 +63,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
 
-#define USERITEM_NAME           OUString(RTL_CONSTASCII_USTRINGPARAM("UserItem"))
+#define USERITEM_NAME           OUString::createFromAscii( "UserItem" )
 
 TYPEINIT1(LAYOUT_NS_SFX_TABDIALOG SfxTabDialogItem,SfxSetItem);
 
@@ -369,6 +369,11 @@ void SfxTabPage::FillUserData()
 // -----------------------------------------------------------------------
 
 BOOL SfxTabPage::IsReadOnly() const
+
+/*  [Description]
+
+*/
+
 {
     return FALSE;
 }
@@ -1049,6 +1054,11 @@ SfxTabPage* SfxTabDialog::GetTabPage( USHORT nPageId ) const
 // -----------------------------------------------------------------------
 
 BOOL SfxTabDialog::IsInOK() const
+
+/*  [Beschreibung]
+
+*/
+
 {
     return pImpl->bInOK;
 }

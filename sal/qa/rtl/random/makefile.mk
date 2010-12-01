@@ -28,6 +28,8 @@ PRJ=..$/..$/..
 
 PRJNAME=sal
 TARGET=qa_rtl_random
+# this is removed at the moment because we need some enhancements
+# TESTDIR=TRUE
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -35,16 +37,13 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-#building with stlport, but cppunit was not built with stlport
-.IF "$(USE_SYSTEM_STL)"!="YES"
-.IF "$(SYSTEM_CPPUNIT)"=="YES"
-CFLAGSCXX+=-DADAPT_EXT_STL
-.ENDIF
-.ENDIF
+CFLAGS+= $(LFS_CFLAGS)
+CXXFLAGS+= $(LFS_CFLAGS)
 
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
-DLLPRE = # no leading "lib" on .so files
 
+# BEGIN ----------------------------------------------------------------
+# auto generated Target:job by codegen.pl
 SHL1OBJS=  \
     $(SLO)$/rtl_random.obj
 
@@ -54,10 +53,12 @@ SHL1STDLIBS= $(SALLIB) $(CPPUNITLIB) $(TESTSHL2LIB)
 SHL1IMPLIB= i$(SHL1TARGET)
 DEF1NAME    =$(SHL1TARGET)
 SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
+# auto generated Target:job
+# END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
-SLOFILES= \
-    $(SHL1OBJS)
+# do this here, so we get right dependencies
+# SLOFILES=$(SHL1OBJS)
 
 # --- Targets ------------------------------------------------------
 

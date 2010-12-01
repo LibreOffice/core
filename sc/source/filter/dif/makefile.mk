@@ -42,13 +42,9 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-SLOFILES = \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
+SLOFILES =					\
         $(SLO)$/difimp.obj	\
         $(SLO)$/difexp.obj
-
 
 # --- Targets -------------------------------------------------------
 

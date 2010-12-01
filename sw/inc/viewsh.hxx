@@ -55,8 +55,10 @@ class IDocumentContentOperations;
 class IDocumentStylePoolAccess;
 class IDocumentStatistics;
 class IDocumentUndoRedo;
+// --> OD 2007-11-14 #i83479#
 class IDocumentListItems;
 class IDocumentOutlineNodes;
+// <--
 class SfxPrinter;
 class SfxProgress;
 class SwRootFrm;
@@ -92,6 +94,7 @@ namespace vcl
 }
 
 
+//JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
 // benoetigt werden.
 // Zur Zeit wird fuer die DrawPage das PreView Flag benoetigt
@@ -107,15 +110,17 @@ class SW_DLLPUBLIC ViewShell : public Ring
     friend class SwViewImp;
     friend class SwLayIdle;
 
-    // for setting visible area for page preview paint
+    // OD 12.12.2002 #103492# - for setting visible area for page preview paint
     friend class SwPagePreviewLayout;
 
     //Umsetzen der SwVisArea, damit vor dem Drucken sauber formatiert
     //werden kann.
     friend void SetSwVisArea( ViewShell *pSh, const SwRect &, BOOL bPDFExport = FALSE );
 
+    // --> PB 2007-05-30 #146850#
     static BitmapEx*    pReplaceBmp;    // replaced display of still loaded images
     static BitmapEx*    pErrorBmp;      // error display of missed images
+    // <--
 
     static sal_Bool bLstAct;            // sal_True wenn Das EndAction der letzten Shell
                                     // laeuft; also die EndActions der
@@ -159,9 +164,10 @@ class SW_DLLPUBLIC ViewShell : public Ring
 
                                 //Device (etwa beim Browsen)
 
-    // boolean, indicating that class in in constructor
+    // OD 2004-06-01 #i26791# - boolean, indicating that class in in constructor
     bool mbInConstructor:1;
 
+    // #i74769#
     SdrPaintWindow*         mpTargetPaintWindow;
     OutputDevice*           mpBufferedOut;
 
@@ -332,6 +338,7 @@ public:
      */
     IDocumentUndoRedo* getIDocumentUndoRedoAccess();
 
+    // --> OD 2007-11-14 #i83479#
     const IDocumentListItems* getIDocumentListItemsAccess() const;
     const IDocumentOutlineNodes* getIDocumentOutlineNodesAccess() const;
     // <--
@@ -395,22 +402,26 @@ public:
     // formatting by virtual device or printer
     void SetUseVirDev( bool nNew );
 
-    // adding paragraph and table spacing at bottom
+    // OD 2004-02-16 #106629# - adding paragraph and table spacing at bottom
     // of table cells
     void SetAddParaSpacingToTableCells( bool _bAddParaSpacingToTableCells );
 
-    // former formatting of text lines with
+    // OD 06.01.2004 #i11859# - former formatting of text lines with
     // proportional line spacing or not
     void SetUseFormerLineSpacing( bool _bUseFormerLineSpacing );
 
-    // former object positioning
+    // OD 2004-03-12 #i11860# - former object positioning
     void SetUseFormerObjectPositioning( bool _bUseFormerObjPos );
 
+    // OD 2004-05-05 #i28701#
     void SetConsiderWrapOnObjPos( bool _bConsiderWrapOnObjPos );
 
+    // --> FME #108724#
     void SetUseFormerTextWrapping( bool _bUseFormerTextWrapping );
 
+    // -> PB 2007-06-11 #i45491#
     void SetDoNotJustifyLinesWithManualBreak( bool _bDoNotJustifyLinesWithManualBreak );
+    // <--
 
     //
     // DOCUMENT COMPATIBILITY FLAGS END
@@ -443,10 +454,12 @@ public:
     // Selektion der Draw ::com::sun::star::script::Engine geaendert
     virtual void DrawSelChanged();
 
+    // OD 12.12.2002 #103492#
     SwPagePreviewLayout* PagePreviewLayout();
 
     /** adjust view options for page preview
 
+        OD 09.01.2003 #i6467#
         Because page preview should show the document as it is printed -
         page preview is print preview -, the view options are adjusted to the
         same as for printing.
@@ -499,6 +512,8 @@ public:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 
+    // OD 15.01.2003 #103492# - change method signature due to new page preview
+    // functionality.
     ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible >
             CreateAccessiblePreview();
@@ -510,6 +525,8 @@ public:
     void ApplyAccessiblityOptions(SvtAccessibilityOptions& rAccessibilityOptions);
 
     /** invalidate CONTENT_FLOWS_FROM/_TO relation for paragraphs
+
+        OD 2005-12-01 #i27138#
 
         @author OD
 
@@ -528,13 +545,16 @@ public:
 
     /** invalidate text selection for paragraphs
 
+        OD 2005-12-12 #i27301#
+
         @author OD
     */
     void InvalidateAccessibleParaTextSelection();
 
     /** invalidate attributes for paragraphs and paragraph's characters
 
-        usage also for changes of the attributes of
+        OD 2009-01-06 #i88069#
+        OD 2010-02-16 #i104008# - usage also for changes of the attributes of
         paragraph's characters.
 
         @author OD
@@ -553,12 +573,16 @@ public:
                long nFlags = 0 );
     virtual ~ViewShell();
 
+    // --> FME 2004-06-15 #i12836# enhanced pdf export
     sal_Int32 GetPageNumAndSetOffsetForPDF( OutputDevice& rOut, const SwRect& rRect ) const;
+    // <--
 
     inline bool IsInConstructor() const { return mbInConstructor; }
 
+    // --> PB 2007-05-30 #146850#
     static const BitmapEx& GetReplacementBitmap( bool bIsErrorState );
     static void DeleteReplacementBitmaps();
+    // <--
 
     const SwPostItMgr* GetPostItMgr() const { return (const_cast<ViewShell*>(this))->GetPostItMgr(); }
     SwPostItMgr* GetPostItMgr();

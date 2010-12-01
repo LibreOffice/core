@@ -126,7 +126,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
                         nTopBorder,
                         nBottomBorder;
     USHORT              nModifyCount;
-    bool                bIsFormulaArranged;
+    BOOL                bIsFormulaArranged;
     SmCursor           *pCursor;
 
 
@@ -134,7 +134,7 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
                         const SfxHint& rHint, const TypeId& rHintType);
 
-    bool        WriteAsMathType3( SfxMedium& );
+    BOOL        WriteAsMathType3( SfxMedium& );
 
     virtual void        Draw(OutputDevice *pDevice,
                              const JobSetup & rSetup,
@@ -162,8 +162,8 @@ class SmDocShell : public SfxObjectShell, public SfxListener
     Printer             *GetPrt();
     OutputDevice*       GetRefDev();
 
-    bool                IsFormulaArranged() const { return bIsFormulaArranged; }
-    void                SetFormulaArranged(bool bVal) { bIsFormulaArranged = bVal; }
+    BOOL                IsFormulaArranged() const { return bIsFormulaArranged; }
+    void                SetFormulaArranged(BOOL bVal) { bIsFormulaArranged = bVal; }
 
     virtual BOOL        ConvertFrom(SfxMedium &rMedium);
 
@@ -190,7 +190,7 @@ public:
     //und fuer die Kommunikation mit dem SFX!
     //Alle internen Verwendungen des Printers sollten ausschlieslich uber
     //den SmPrinterAccess funktionieren.
-    bool        HasPrinter()    { return 0 != pPrinter; }
+    BOOL        HasPrinter()    { return 0 != pPrinter; }
     SfxPrinter *GetPrinter()    { GetPrt(); return pPrinter; }
     void        SetPrinter( SfxPrinter * );
 
@@ -215,7 +215,7 @@ public:
     EditEngine &    GetEditEngine();
     SfxItemPool &   GetEditEngineItemPool();
 
-    void        DrawFormula(OutputDevice &rDev, Point &rPosition, bool bDrawSelection = false);
+    void        DrawFormula(OutputDevice &rDev, Point &rPosition, BOOL bDrawSelection = FALSE);
     Size        GetSize();
 
     void        Repaint();
@@ -237,7 +237,7 @@ public:
     /** True, if cursor have previously been requested and thus
      * has some sort of position.
      */
-    bool        HasCursor() { return pCursor != NULL; }
+    BOOL        HasCursor() { return pCursor != NULL; }
 };
 
 #endif

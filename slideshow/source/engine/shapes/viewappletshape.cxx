@@ -150,7 +150,7 @@ namespace slideshow
 
                 uno::Reference< awt::XWindow2 > xParentWindow(
                     xPropSet->getPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))),
+                        ::rtl::OUString::createFromAscii( "Window" )),
                     uno::UNO_QUERY_THROW );
 
                 uno::Reference<lang::XMultiComponentFactory> xFactory(
@@ -163,7 +163,7 @@ namespace slideshow
 
                     uno::Reference< awt::XToolkit > xToolkit(
                         xFactory->createInstanceWithContext(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.awt.Toolkit" )),
+                            ::rtl::OUString::createFromAscii( "com.sun.star.awt.Toolkit" ),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 
@@ -187,7 +187,7 @@ namespace slideshow
 
                     mxFrame.set(
                         xFactory->createInstanceWithContext(
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Frame" )),
+                            ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ),
                             mxComponentContext ),
                         uno::UNO_QUERY_THROW );
 

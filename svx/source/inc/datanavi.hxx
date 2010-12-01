@@ -152,6 +152,7 @@ namespace svxform
         bool                        m_bHasModel;
         DataGroupType               m_eGroup;
         ImageList                   m_TbxImageList;
+        ImageList                   m_TbxHCImageList;
         // these strings are not valid on the Submission and Binding Page
         // mb: furthermore these are properties of an instance, thus
         // it would be much better to get/set them through the UIHelper
@@ -233,6 +234,7 @@ namespace svxform
         Size                        m_a2Size;
         Size                        m_a3Size;
         ImageList                   m_aItemImageList;
+        ImageList                   m_aItemHCImageList;
         PageList                    m_aPageList;
         ContainerList               m_aContainerList;
         EventTargetList             m_aEventTargetList;
@@ -272,6 +274,7 @@ namespace svxform
         void                        RemoveBroadcaster();
 
         inline const ImageList&     GetItemImageList() const { return m_aItemImageList; }
+        inline const ImageList&     GetItemHCImageList() const { return m_aItemHCImageList; }
         inline bool                 IsShowDetails() const { return m_bShowDetails; }
         inline void                 DisableNotify( bool _bDisable ) { m_bIsNotifyDisabled = _bDisable; }
     };

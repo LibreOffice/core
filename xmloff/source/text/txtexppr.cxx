@@ -409,12 +409,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pHoriOrientRelState = NULL;
     XMLPropertyState* pHoriOrientRelFrameState = NULL;
     XMLPropertyState* pHoriOrientMirrorState = NULL;
-    // Horizontal position and relation for shapes (#i28749#)
+    // --> OD 2004-08-09 #i28749# - horizontal position and relation for shapes
     XMLPropertyState* pShapeHoriOrientState = NULL;
     XMLPropertyState* pShapeHoriOrientMirroredState = NULL;
     XMLPropertyState* pShapeHoriOrientRelState = NULL;
     XMLPropertyState* pShapeHoriOrientRelFrameState = NULL;
     XMLPropertyState* pShapeHoriOrientMirrorState = NULL;
+    // <--
 
     // vertical position and relation
     XMLPropertyState* pVertOrientState = NULL;
@@ -424,12 +425,13 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     XMLPropertyState* pVertOrientRelFrameState = NULL;
     XMLPropertyState* pVertOrientRelAsCharState = NULL;
 
-    // Vertical position and relation for shapes (#i28749#)
+    // --> OD 2004-08-09 #i28749# - vertical position and relation for shapes
     XMLPropertyState* pShapeVertOrientState = NULL;
     XMLPropertyState* pShapeVertOrientAtCharState = NULL;
     XMLPropertyState* pShapeVertOrientRelState = NULL;
     XMLPropertyState* pShapeVertOrientRelPageState = NULL;
     XMLPropertyState* pShapeVertOrientRelFrameState = NULL;
+    // <--
 
     // filter underline color
     XMLPropertyState* pUnderlineState = NULL;
@@ -520,7 +522,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_ASCHAR:    pVertOrientRelAsCharState = propertie; bNeedsAnchor = sal_True; break;
 
-        // Handle new CTFs for shape positioning properties (#i28749#)
+        // --> OD 2004-08-09 #i28749# - handle new CTFs for shape positioning properties
         case CTF_SHAPE_HORIZONTALPOS:             pShapeHoriOrientState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALPOS_MIRRORED:    pShapeHoriOrientMirroredState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_HORIZONTALREL:             pShapeHoriOrientRelState = propertie; bNeedsAnchor = sal_True; break;
@@ -531,6 +533,8 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_SHAPE_VERTICALREL:           pShapeVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_VERTICALREL_PAGE:      pShapeVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_SHAPE_VERTICALREL_FRAME:     pShapeVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
+        // <--
+
         case CTF_FONTNAME:              pFontNameState = propertie; break;
         case CTF_FONTFAMILYNAME:        pFontFamilyNameState = propertie; break;
         case CTF_FONTSTYLENAME:         pFontStyleNameState = propertie; break;
@@ -929,7 +933,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
             pVertOrientRelAsCharState->mnIndex = -1;
     }
 
-    // States for shape positioning properties (#i28749#)
+    // --> OD 2004-08-09 #i28749# - states for shape positioning properties
     if ( eAnchor != TextContentAnchorType_AS_CHARACTER &&
          ( GetExport().getExportFlags() & EXPORT_OASIS ) == 0 )
     {
@@ -988,6 +992,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         if( pShapeVertOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
             pShapeVertOrientRelFrameState->mnIndex = -1;
     }
+    // <--
 
     // list style name: remove list style if it is the default outline style
     if( pListStyleName != NULL )

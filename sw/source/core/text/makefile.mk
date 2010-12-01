@@ -47,20 +47,8 @@ CFLAGS+=-DENABLE_GRAPHITE
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES) \
-        $(SLO)$/txtcache.obj \
-        $(SLO)$/txtinit.obj
-
-.IF "$(DBG_LEVEL)">="2"
-SLOFILES +=  \
-        $(SLO)$/txtio.obj
-.ENDIF
-
-EXCEPTIONSFILES = \
-        $(SLO)$/EnhancedPDFExportHelper.obj \
-        $(SLO)$/SwGrammarMarkUp.obj \
-        $(SLO)$/atrstck.obj \
-        $(SLO)$/blink.obj \
+                $(SLO)$/atrstck.obj \
+                $(SLO)$/EnhancedPDFExportHelper.obj \
         $(SLO)$/frmcrsr.obj \
         $(SLO)$/frmform.obj \
         $(SLO)$/frminf.obj \
@@ -73,7 +61,6 @@ EXCEPTIONSFILES = \
         $(SLO)$/itrform2.obj \
         $(SLO)$/itrpaint.obj \
         $(SLO)$/itrtxt.obj \
-        $(SLO)$/noteurl.obj \
         $(SLO)$/porexp.obj \
         $(SLO)$/porfld.obj \
         $(SLO)$/porfly.obj \
@@ -86,17 +73,45 @@ EXCEPTIONSFILES = \
         $(SLO)$/portox.obj \
         $(SLO)$/portxt.obj \
         $(SLO)$/redlnitr.obj \
+        $(SLO)$/txtcache.obj \
         $(SLO)$/txtdrop.obj \
         $(SLO)$/txtfld.obj \
         $(SLO)$/txtfly.obj \
         $(SLO)$/txtfrm.obj \
         $(SLO)$/txtftn.obj \
         $(SLO)$/txthyph.obj \
+        $(SLO)$/txtinit.obj \
         $(SLO)$/txtpaint.obj \
         $(SLO)$/txttab.obj \
         $(SLO)$/widorp.obj \
+        $(SLO)$/blink.obj \
+        $(SLO)$/noteurl.obj \
+        $(SLO)$/SwGrammarMarkUp.obj \
         $(SLO)$/wrong.obj
 
+.IF "$(DBG_LEVEL)">="2"
+SLOFILES +=  \
+        $(SLO)$/txtio.obj
+.ENDIF
+
+EXCEPTIONSFILES = \
+        $(SLO)$/EnhancedPDFExportHelper.obj \
+        $(SLO)$/inftxt.obj \
+        $(SLO)$/itradj.obj \
+        $(SLO)$/itrcrsr.obj \
+        $(SLO)$/porlay.obj \
+        $(SLO)$/pormulti.obj \
+        $(SLO)$/SwGrammarMarkUp.obj \
+        $(SLO)$/txtfly.obj \
+        $(SLO)$/wrong.obj
+
+
+.IF "$(CPUNAME)" == "SPARC"
+.IF "$(OS)" == "NETBSD"
+NOOPTFILES = \
+    $(SLO)$/txtftn.obj
+.ENDIF
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 

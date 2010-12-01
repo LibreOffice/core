@@ -251,6 +251,15 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
 
             AddTabPage( TP_MACRO_ASSIGN, pFact->GetTabPageCreatorFunc(RID_SVXPAGE_MACROASSIGN), 0);
 
+            // Auskommentiert wegen Bug #45776 (per default keine Breite&Groesse in Rahmenvorlagen)
+/*          SwFmtFrmSize aSize( (const SwFmtFrmSize&)rBase.
+                                            GetItemSet().Get(RES_FRM_SIZE));
+            if( !aSize.GetWidth() )
+            {
+                aSize.SetWidth( DFLT_WIDTH );
+                aSize.SetHeight( DFLT_HEIGHT );
+                rBase.GetItemSet().Put( aSize );
+            }*/
         break;
         }
         // Seitenvorlagen
@@ -308,6 +317,14 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
             AddTabPage( RID_SVXPAGE_NUM_OPTIONS );
             AddTabPage( RID_SVXPAGE_NUM_POSITION );
 
+
+/*          const SfxPoolItem* pItem;
+            if(SFX_ITEM_SET == rBase.GetItemSet().GetItemState(
+                FN_PARAM_ACT_NUMBER, FALSE, &pItem ))
+            {
+//              pActNum = (ActNumberFormat*)((const SwPtrItem*)pItem)->GetValue();
+            }
+*/
         }
         break;
 
@@ -317,9 +334,17 @@ SwTemplateDlg::SwTemplateDlg(Window*            pParent,
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SwTemplateDlg::~SwTemplateDlg()
 {
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 short SwTemplateDlg::Ok()
 {
@@ -347,6 +372,10 @@ short SwTemplateDlg::Ok()
     return nRet;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
 {
     SfxItemSet* pInSet = GetInputSetImpl();
@@ -354,6 +383,10 @@ const SfxItemSet* SwTemplateDlg::GetRefreshedSet()
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
     return pInSet;
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SwTemplateDlg::PageCreated( USHORT nId, SfxTabPage &rPage )
 {

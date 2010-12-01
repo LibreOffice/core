@@ -54,7 +54,7 @@ class HStream
 /**
  * @returns Size of remained stream
  */
-        int available() const;
+        int available();
 /**
  * remove the stream from this object.
  */

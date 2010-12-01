@@ -306,12 +306,14 @@ namespace svxform
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) )
+        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
+        m_TbxHCImageList( SVX_RES( IL_TBX_BMPS_HC ) )
 
     {
         FreeResource();
 
-        const ImageList& rImageList = m_TbxImageList;
+        const ImageList& rImageList =
+            GetBackground().GetColor().IsDark() ? m_TbxHCImageList : m_TbxImageList;
         m_aToolBox.SetItemImage( TBI_ITEM_ADD, rImageList.GetImage( IID_ITEM_ADD ) );
         m_aToolBox.SetItemImage( TBI_ITEM_ADD_ELEMENT, rImageList.GetImage( IID_ITEM_ADD_ELEMENT ) );
         m_aToolBox.SetItemImage( TBI_ITEM_ADD_ATTRIBUTE, rImageList.GetImage( IID_ITEM_ADD_ATTRIBUTE ) );
@@ -708,7 +710,7 @@ namespace svxform
                         {
                             try
                             {
-                                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                                 ::rtl::OUString sTemp;
                                 pNode->m_xPropSet->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                                 sNewName += String( sTemp );
@@ -775,7 +777,9 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( ItemNode* _pNewNode, bool _bIsElement )
     {
         SvLBoxEntry* pParent = m_aItemList.FirstSelected();
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
         USHORT nImageID = ( _bIsElement ) ? IID_ELEMENT : IID_ATTRIBUTE;
         Image aImage = rImageList.GetImage( nImageID );
         ::rtl::OUString sName;
@@ -983,7 +987,9 @@ namespace svxform
     SvLBoxEntry* XFormsPage::AddEntry( const Reference< XPropertySet >& _rEntry )
     {
         SvLBoxEntry* pEntry = NULL;
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
         Image aImage = rImageList.GetImage( IID_ELEMENT );
 
         ItemNode* pNode = new ItemNode( _rEntry );
@@ -1031,7 +1037,7 @@ namespace svxform
         {
             try
             {
-                String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                 ::rtl::OUString sName;
                 _rEntry->getPropertyValue( PN_BINDING_ID ) >>= sTemp;
                 sName += String( sTemp );
@@ -1237,7 +1243,9 @@ namespace svxform
         m_xUIHelper = Reference< css::xforms::XFormsUIHelper1 >( _xModel, UNO_QUERY );
         String sRet;
         m_bHasModel = true;
-        const ImageList& rImageList = m_pNaviWin->GetItemImageList();
+        const ImageList& rImageList = GetSettings().GetStyleSettings().GetHighContrastMode()
+            ? m_pNaviWin->GetItemHCImageList()
+            : m_pNaviWin->GetItemImageList();
 
         switch ( m_eGroup )
         {
@@ -1336,7 +1344,7 @@ namespace svxform
                         {
                             Image aImage1 = rImageList.GetImage( IID_ELEMENT );
                             Image aImage2 = rImageList.GetImage( IID_ELEMENT );
-                            String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                            String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                             while ( xNum->hasMoreElements() )
                             {
                                 Reference< XPropertySet > xPropSet;
@@ -1553,6 +1561,7 @@ namespace svxform
         m_bIsNotifyDisabled ( false ),
 
         m_aItemImageList    (       SVX_RES( IL_ITEM_BMPS ) ),
+        m_aItemHCImageList  (       SVX_RES( IL_ITEM_BMPS_HC ) ),
         m_xDataListener     ( new DataListener( this ) )
 
     {
@@ -3527,7 +3536,7 @@ namespace svxform
                     Reference < XEnumeration > xNum = xNumAccess->createEnumeration();
                     if ( xNum.is() && xNum->hasMoreElements() )
                     {
-                        String sDelim( RTL_CONSTASCII_USTRINGPARAM( ": " ) );
+                        String sDelim( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                         while ( xNum->hasMoreElements() )
                         {
                             Reference< XPropertySet > xPropSet;

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#include "oox/ppt/customshowlistcontext.hxx"
+#include "customshowlistcontext.hxx"
 #include "oox/core/namespaces.hxx"
 #include "tokens.hxx"
 

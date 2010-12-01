@@ -183,9 +183,9 @@ FastSerializerHelper* FastSerializerHelper::writeId(sal_Int32 tokenId)
     return mpSerializer->getOutputStream();
 }
 
-void FastSerializerHelper::mark( Sequence< sal_Int32 > aOrder )
+void FastSerializerHelper::mark()
 {
-    mpSerializer->mark( aOrder );
+    mpSerializer->mark();
 }
 
 void FastSerializerHelper::mergeTopMarks( MergeMarksEnum eMergeType )

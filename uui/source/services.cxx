@@ -48,9 +48,9 @@ sal_Bool writeInfo( void * pRegistryKey,
                     const OUString & rImplementationName,
                     Sequence< OUString > const & rServiceNames )
 {
-    OUString aKeyName( OUString(RTL_CONSTASCII_USTRINGPARAM( "/" )) );
+    OUString aKeyName( OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
-    aKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES" ));
+    aKeyName += OUString::createFromAscii( "/UNO/SERVICES" );
 
     Reference< XRegistryKey > xKey;
     try

@@ -31,7 +31,7 @@
 #ifndef INCLUDE_WRITERFILTER_PROTOCOL_HXX
 #define INCLUDE_WRITERFILTER_PROTOCOL_HXX
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 
 #include <boost/shared_ptr.hpp>
 #include "WW8ResourceModel.hxx"

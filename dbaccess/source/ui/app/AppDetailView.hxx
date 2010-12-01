@@ -171,6 +171,7 @@ namespace dbaui
         OApplicationDetailView(OAppBorderWindow& _rParent,PreviewMode _ePreviewMode);
         virtual ~OApplicationDetailView();
         // window overloads
+        //  virtual void Resize();
         virtual void GetFocus();
 
         /** creates the tables page

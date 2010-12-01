@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
+# 
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -56,6 +56,15 @@ SRC1FILES=\
     titlepage.src
 
 EXCEPTIONSFILES = \
+        $(SLO)$/glossary.obj \
+        $(SLO)$/glosdoc.obj \
+        $(SLO)$/glshell.obj \
+        $(SLO)$/numberingtypelistbox.obj \
+        $(SLO)$/outline.obj \
+        $(SLO)$/redlndlg.obj
+        
+
+SLOFILES =	\
         $(SLO)$/bookmark.obj \
         $(SLO)$/docfnote.obj \
         $(SLO)$/glosbib.obj \
@@ -65,19 +74,15 @@ EXCEPTIONSFILES = \
         $(SLO)$/insfnote.obj \
         $(SLO)$/insrule.obj \
         $(SLO)$/linenum.obj \
+        $(SLO)$/titlepage.obj \
         $(SLO)$/num.obj \
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/outline.obj \
         $(SLO)$/pgfnote.obj \
         $(SLO)$/pggrid.obj \
         $(SLO)$/redlndlg.obj \
-        $(SLO)$/srtdlg.obj \
-        $(SLO)$/swmodalredlineacceptdlg.obj \
-        $(SLO)$/titlepage.obj
-
-
-SLOFILES =	\
-        $(EXCEPTIONSFILES)
+        $(SLO)$/swmodalredlineacceptdlg.obj	\
+        $(SLO)$/srtdlg.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 
@@ -86,7 +91,7 @@ LIB1OBJFILES =	\
         $(SLO)$/glshell.obj \
         $(SLO)$/numberingtypelistbox.obj \
         $(SLO)$/redlndlg.obj
-
+       
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :	target.mk

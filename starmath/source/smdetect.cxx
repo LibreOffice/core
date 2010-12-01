@@ -199,9 +199,9 @@ SmFilterDetect::~SmFilterDetect()
     {
         // ctor of SfxMedium uses owner transition of ItemSet
         SfxMedium aMedium( aURL, bWasReadOnly ? STREAM_STD_READ : STREAM_STD_READWRITE, FALSE, NULL, pSet );
-        aMedium.UseInteractionHandler( true );
+        aMedium.UseInteractionHandler( TRUE );
 
-        bool bIsStorage = aMedium.IsStorage();
+        BOOL bIsStorage = aMedium.IsStorage();
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -468,14 +468,14 @@ UNOSEQUENCE< UNOOUSTRING > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOMUTEXGUARD aGuard( UNOMUTEX::getGlobalMutex() );
     UNOSEQUENCE< UNOOUSTRING > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [0] = UNOOUSTRING::createFromAscii( "com.sun.star.frame.ExtendedTypeDetection"  );
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 UNOOUSTRING SmFilterDetect::impl_getStaticImplementationName()
 {
-    return UNOOUSTRING(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.math.FormatDetector" ));
+    return UNOOUSTRING::createFromAscii( "com.sun.star.comp.math.FormatDetector" );
 }
 
 /* Helper for registry */

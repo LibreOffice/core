@@ -171,6 +171,8 @@ void BmkMenu::Initialize()
     ::rtl::OUString aTargetFrame;
     ::rtl::OUString aImageId;
 
+    BOOL bIsHiContrastMode = rSettings.GetHighContrastMode();
+
     UINT32 i, nCount = aDynamicMenuEntries.getLength();
     for ( i = 0; i < nCount; ++i )
     {
@@ -190,7 +192,7 @@ void BmkMenu::Initialize()
             {
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE );
+                    Image aImage = GetImageFromURL( m_xFrame, aImageId, FALSE, bIsHiContrastMode );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -200,7 +202,7 @@ void BmkMenu::Initialize()
 
                 if ( !bImageSet )
                 {
-                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE );
+                    Image aImage = GetImageFromURL( m_xFrame, aURL, FALSE, bIsHiContrastMode );
                     if ( !aImage )
                         InsertItem( nId, aTitle );
                     else
@@ -210,6 +212,8 @@ void BmkMenu::Initialize()
             else
                 InsertItem( nId, aTitle );
 
+            // Store values from configuration to the New and Wizard menu entries to enable
+            // sfx2 based code to support high contrast mode correctly!
             MenuConfiguration::Attributes* pUserAttributes = new MenuConfiguration::Attributes( aTargetFrame, aImageId );
             SetUserValue( nId, (ULONG)pUserAttributes );
 

@@ -398,6 +398,11 @@ static ULONG SwDocStat::* __READONLY_DATA aDocStat2[ 4 ] =
     sTmpStr.AssignAscii( sNTypeTab[ 25 ] );
     VarTable[ aHashValue[ 25 ] ]->pNext = new SwCalcExp( sTmpStr, nVal, 0 );
 
+// at time its better not to use "graph", because then the im-/export have
+// to change in all formulas this name.
+//  nVal.PutLong( rDocStat.*aDocStat1[ 1 ]  );
+//  VarTable[ aHashValue[ 26 ] ]->pNext = new SwCalcExp(
+//                                              sNTypeTab[ 26 ], nVal, 0 );
 }
 
 /******************************************************************************
@@ -1096,7 +1101,8 @@ else
                     }
                     break;
 
-        default:    if (ch && (pCharClass->isLetter( sCommand, nCommandPos - 1) || '_' == ch))
+        default:    if( ch && pCharClass->isLetter( sCommand, nCommandPos - 1)
+                            || '_' == ch )
                     {
                         xub_StrLen nStt = nCommandPos-1;
                         while( 0 != (ch = NextCh( sCommand, nCommandPos )) &&
@@ -1171,6 +1177,10 @@ SwSbxValue SwCalc::Term()
 
         switch( eCurrOper )
         {
+// wir haben kein Bitweises verodern, oder ?
+//          case CALC_AND:  eSbxOper = SbxAND;  break;
+//          case CALC_OR:   eSbxOper = SbxOR;   break;
+//          case CALC_XOR:  eSbxOper = SbxXOR;  break;
             case CALC_AND:  {
                                 GetToken();
                                 BOOL bB = Prim().GetBool();
@@ -1298,8 +1308,33 @@ SwSbxValue SwCalc::Term()
                             }
                             break;
 
-//#77448# (=2*3^2 != 18)
+/*
+// removed here because of #77448# (=2*3^2 != 18)
+            case CALC_POW:  {
+                                GetToken();
+                                double fraction, integer;
+                                double right = Prim().GetDouble(),
+                                       dleft = left.GetDouble();
 
+                                fraction = modf( right, &integer );
+                                if( ( dleft < 0.0 && 0.0 != fraction ) ||
+                                    ( 0.0 == dleft && right < 0.0 ) )
+                                {
+                                    eError = CALC_OVERFLOW;
+                                    left.Clear();
+                                    return left;
+                                }
+                                dleft = pow(dleft, right );
+                                if( dleft == HUGE_VAL )
+                                {
+                                    eError = CALC_POWERR;
+                                    left.Clear();
+                                    return left;
+                                }
+                                left.PutDouble( dleft );
+                            }
+                            break;
+*/
             default:        return left;
         }
 

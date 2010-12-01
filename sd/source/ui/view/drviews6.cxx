@@ -412,6 +412,12 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
     }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::GetBmpMaskState( SfxItemSet& rSet )
 {
     const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();

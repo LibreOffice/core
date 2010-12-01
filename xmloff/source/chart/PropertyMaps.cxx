@@ -226,24 +226,24 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // if Auto... is set the corresponding properties mustn't be exported
             case XML_SCH_CONTEXT_MIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoMin" ));
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoMin" );
                 break;
             case XML_SCH_CONTEXT_MAX:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoMax" ));
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoMax" );
                 break;
             case XML_SCH_CONTEXT_STEP_MAIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoStepMain" ));
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepMain" );
                 break;
             case XML_SCH_CONTEXT_STEP_HELP_COUNT:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoStepHelp" ));
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoStepHelp" );
                 break;
 
             case XML_SCH_CONTEXT_ORIGIN:
                 bCheckAuto = sal_True;
-                aAutoPropName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "AutoOrigin" ));
+                aAutoPropName = ::rtl::OUString::createFromAscii( "AutoOrigin" );
                 break;
 
             // the following property is deprecated

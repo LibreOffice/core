@@ -268,9 +268,7 @@ void ScXMLBodyContext::EndElement()
         SvXMLImportContext *pContext = new ScXMLCalculationSettingsContext( GetScImport(), XML_NAMESPACE_TABLE, GetXMLToken(XML_CALCULATION_SETTINGS), NULL );
         pContext->EndElement();
     }
-
-    ScXMLImport::MutexGuard aGuard(GetScImport());
-
+    GetScImport().LockSolarMutex();
     ScMyImpDetectiveOpArray*    pDetOpArray = GetScImport().GetDetectiveOpArray();
     ScDocument*                 pDoc        = GetScImport().GetDocument();
     ScMyImpDetectiveOp          aDetOp;
@@ -306,6 +304,7 @@ void ScXMLBodyContext::EndElement()
             pDoc->SetDocProtection(pProtection.get());
         }
     }
+    GetScImport().UnlockSolarMutex();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

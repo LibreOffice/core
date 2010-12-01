@@ -154,8 +154,9 @@ ScXMLDetectiveHighlightedContext::ScXMLDetectiveHighlightedContext(
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_CELL_RANGE:
             {
                 sal_Int32 nOffset(0);
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                GetScImport().LockSolarMutex();
                 bValid = ScRangeStringConverter::GetRangeFromString( aDetectiveObj.aSourceRange, sValue, GetScImport().GetDocument(), ::formula::FormulaGrammar::CONV_OOO, nOffset );
+                GetScImport().UnlockSolarMutex();
             }
             break;
             case XML_TOK_DETECTIVE_HIGHLIGHTED_ATTR_DIRECTION:

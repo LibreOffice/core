@@ -146,7 +146,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoSpinButtonControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SpinButton"));
+        return ::rtl::OUString::createFromAscii( "SpinButton" );
     }
 
     //--------------------------------------------------------------------

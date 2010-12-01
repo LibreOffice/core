@@ -129,7 +129,7 @@ SAL_THROW (())
     if ( xRadio.is() )
     {
         if (!bSetRadioGroup)
-            aRadioGroup = OUString(RTL_CONSTASCII_USTRINGPARAM ("default"));
+            aRadioGroup = OUString::createFromAscii ("default");
         pImport->mxRadioGroups.addItem( aRadioGroup, xRadio );
     }
 }
@@ -174,9 +174,9 @@ WidgetElement::characters( OUString const& rChars )
         if ( xDialog.is() )
             xDialog->setTitle( rChars );
         else if ( xButton.is() )
-            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("label")), rChars );
+            mpWidget->setProperty( OUString::createFromAscii( "label" ), rChars );
         else
-            mpWidget->setProperty( OUString(RTL_CONSTASCII_USTRINGPARAM("text")), rChars );
+            mpWidget->setProperty( OUString::createFromAscii( "text" ), rChars );
     }
 }
 // ---- ElementBase ----

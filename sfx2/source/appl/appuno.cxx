@@ -136,6 +136,7 @@ using namespace ::com::sun::star::io;
 #include "SfxDocumentMetaData.hxx"
 
 
+#define FRAMELOADER_SERVICENAME         "com.sun.star.frame.FrameLoader"
 #define PROTOCOLHANDLER_SERVICENAME     "com.sun.star.frame.ProtocolHandler"
 
 static char const sTemplateRegionName[] = "TemplateRegionName";
@@ -860,7 +861,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
         }
-        // API to raise options dialog with a specified options ab page (#i83757#)
+        // --> PB 2007-12-09 #i83757#
         else
         {
             // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
@@ -882,6 +883,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 }
             }
         }
+        // <--
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {
@@ -2153,7 +2155,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SpecialEmbeddedObject")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
 
     // IFrameObject
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2162,7 +2164,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.SpecialEmbeddedObject")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.SpecialEmbeddedObject") );
 
     // global app event broadcaster
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2171,7 +2173,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.GlobalEventBroadcaster") );
 
     // global app dispatcher
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2180,7 +2182,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ProtocolHandler")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
 
     // standalone document info
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2189,7 +2191,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.StandaloneDocumentInfo")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.StandaloneDocumentInfo") );
 
     // frame loader
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2210,7 +2212,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ProtocolHandler")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.ProtocolHandler") );
 
     // - sfx document templates
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2219,7 +2221,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.DocumentTemplates")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
 
     // quickstart wrapper service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2228,7 +2230,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.office.Quickstart") );
 
     // application script library container service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2237,7 +2239,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationScriptLibraryContainer")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationScriptLibraryContainer") );
 
     // application dialog library container service
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2246,7 +2248,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.ApplicationDialogLibraryContainer")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.script.ApplicationDialogLibraryContainer") );
 
     // converter of fs folders to packages
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
@@ -2277,7 +2279,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.DocumentProperties")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.document.DocumentProperties") );
 
 
     // writer compatable document properties
@@ -2287,7 +2289,7 @@ SFX2_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo(
     aTempStr = aImpl;
     aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
     xNewKey = xKey->createKey( aTempStr );
-    xNewKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.writer.DocumentProperties")) );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.writer.DocumentProperties") );
 
     return sal_True;
 }

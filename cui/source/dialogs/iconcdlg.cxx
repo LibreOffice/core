@@ -268,12 +268,12 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
 
 IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
                                      const EIconChoicePos ePos,
-                                     const SfxItemSet *pItemSet )
+                                     const SfxItemSet *pItemSet )//, BOOL bEditFmt, const String *pUserButtonText = 0 )
 :   ModalDialog         ( pParent, rResId ),
     meChoicePos     ( ePos ),
     maIconCtrl      ( this, WB_3DLOOK | WB_ICON | WB_BORDER |
                             WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME |
-                            WB_NODRAGSELECTION | WB_TABSTOP ),
+                            /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP ),
     mnCurrentPageId ( USHRT_MAX ),
 
     aOKBtn          ( this, WB_DEFBUTTON ),
@@ -292,8 +292,10 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
     bModified       ( FALSE ),
     bItemsReset     ( FALSE )
 {
+    // IconChoiceCtrl-Settings
+    //maIconCtrl.SetBackground ( Wallpaper( Color (146, 146, 186) ) );
 
-    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
+    maIconCtrl.SetStyle (WB_3DLOOK | WB_ICON | WB_BORDER | WB_NOCOLUMNHEADER | WB_HIGHLIGHTFRAME | /* WB_NOSELECTION | */ WB_NODRAGSELECTION | WB_TABSTOP | WB_CLIPCHILDREN );
     SetCtrlPos ( meChoicePos );
     maIconCtrl.SetClickHdl ( LINK ( this, IconChoiceDialog , ChosePageHdl_Impl ) );
     maIconCtrl.Show();
@@ -322,6 +324,26 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
 
     SetPosSizeCtrls ( TRUE );
 }
+
+// -----------------------------------------------------------------------
+
+/*
+IconChoiceDialog ::IconChoiceDialog ( SfxViewFrame *pViewFrame, Window* pParent, const ResId &rResId,
+                   const SfxItemSet * = 0, BOOL bEditFmt = FALSE,
+                   const String *pUserButtonText = 0 )
+:   meChoicePos     ( PosLeft ),    // Default erst ma Links
+    maIconCtrl      ( this, Die_Winbits ),
+    aOKBtn          ( this ),
+    pUserBtn        ( pUserButtonText? new PushButton(this): 0 ),
+    aCancelBtn      ( this ),
+    aHelpBtn        ( this ),
+    aResetBtn       ( this ),
+    aBaseFmtBtn     ( this ),
+    mnCurrentPageId ( 0 )
+{
+    FreeResource();
+}
+*/
 
 // -----------------------------------------------------------------------
 
@@ -359,6 +381,18 @@ IconChoiceDialog ::~IconChoiceDialog ()
         delete pData;
     }
 
+    // remove Pagelist
+/*  for ( i=0; i<maPageList.Count(); i++ )
+    {
+        IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
+
+        if ( pData->bOnDemand )
+            delete ( SfxItemSet * )&( pData->pPage->GetItemSet() );
+
+        delete pData->pPage;
+        delete pData;
+    }*/
+
     // remove Userdata from Icons
     for ( i=0; i<maIconCtrl.GetEntryCount(); i++)
     {
@@ -380,15 +414,11 @@ IconChoiceDialog ::~IconChoiceDialog ()
 |
 \**********************************************************************/
 
-SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
-    USHORT          nId,
-    const String&   rIconText,
-    const Image&    rChoiceIcon,
-    CreatePage      pCreateFunc /* != 0 */,
-    GetPageRanges   pRangesFunc /* darf 0 sein */,
-    BOOL            bItemsOnDemand,
-    ULONG           /*nPos*/
-)
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+                                   const Image& rChoiceIcon,
+                                   CreatePage pCreateFunc /* != 0 */,
+                                   GetPageRanges pRangesFunc /* darf 0 sein */,
+                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
 {
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
@@ -400,6 +430,27 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
 
     USHORT *pId = new USHORT ( nId );
     SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon );
+    pEntry->SetUserData ( (void*) pId );
+    return pEntry;
+}
+
+SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage( USHORT nId, const String& rIconText,
+                                   const Image& rChoiceIcon,
+                                   const Image& rChoiceIconHC,
+                                   CreatePage pCreateFunc /* != 0 */,
+                                   GetPageRanges pRangesFunc /* darf 0 sein */,
+                                   BOOL bItemsOnDemand, ULONG /*nPos*/ )
+{
+    IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
+                                                         pRangesFunc,
+                                                         bItemsOnDemand );
+    maPageList.Insert ( pData, LIST_APPEND );
+
+    pData->fnGetRanges = pRangesFunc;
+    pData->bOnDemand = bItemsOnDemand;
+
+    USHORT *pId = new USHORT ( nId );
+    SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.InsertEntry( rIconText, rChoiceIcon, rChoiceIconHC );
     pEntry->SetUserData ( (void*) pId );
     return pEntry;
 }
@@ -1199,7 +1250,7 @@ void IconChoiceDialog::Start_Impl()
     USHORT nActPage;
 
     if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )
-        nActPage = maPageList.GetObject(0)->nId;
+        nActPage = maPageList.GetObject(0)->nId;//First()->nId;
     else
         nActPage = mnCurrentPageId;
 

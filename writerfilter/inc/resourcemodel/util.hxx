@@ -40,7 +40,7 @@ namespace writerfilter
 
     string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
     string WRITERFILTER_DLLPUBLIC propertysetToString
     (uno::Reference<beans::XPropertySet> const & rProps);
 

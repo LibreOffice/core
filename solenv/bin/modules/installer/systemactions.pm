@@ -43,7 +43,108 @@ sub create_directory
 {
     my ($directory) = @_;
 
-    create_directory_with_privileges( $directory, "755" );
+    my $returnvalue = 1;
+    my $infoline = "";
+
+    if (!(-d $directory))
+    {
+        $returnvalue = mkdir($directory, 0775);
+
+        if ($returnvalue)
+        {
+            $infoline = "\nCreated directory: $directory\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+        }
+        else
+        {
+            # New solution in parallel packing: It is possible, that the directory now exists, although it
+            # was not created in this process. There is only an important error, if the directory does not
+            # exist now.
+
+            $infoline = "\nDid not succeed in creating directory: \"$directory\". Further attempts will follow.\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            if (!(-d $directory))
+            {
+                # Problem with parallel packaging? -> Try a little harder, before exiting.
+                # Did someone else remove the parent directory in the meantime?
+                my $parentdir = $directory;
+                installer::pathanalyzer::get_path_from_fullqualifiedname(\$parentdir);
+                if (!(-d $parentdir))
+                {
+                    $returnvalue = mkdir($parentdir, 0775);
+
+                    if ($returnvalue)
+                    {
+                        $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+
+                        my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
+                    }
+                    else
+                    {
+                        $infoline = "\Error: \"$directory\" could not be created. Even the parent directory \"$parentdir\" does not exist and could not be created.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                        if ( -d $parentdir )
+                        {
+                            $infoline = "\nAttention: Finally the parent directory \"$parentdir\" exists, but I could not create it.\n";
+                            push(@installer::globals::logfileinfo, $infoline);
+                        }
+                        else
+                        {
+                            # Now it is time to exit, even the parent could not be created.
+                            installer::exiter::exit_program("ERROR: Could not create parent directory \"$parentdir\"", "create_directory");
+                        }
+                    }
+                }
+
+                # At this point we have to assume, that the parent directory exist.
+                # Trying once more to create the desired directory
+
+                $returnvalue = mkdir($directory, 0775);
+
+                if ($returnvalue)
+                {
+                    $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
+                    push(@installer::globals::logfileinfo, $infoline);
+
+                    my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
+                }
+                else
+                {
+                    if ( -d $directory )
+                    {
+                        $infoline = "\nAttention: Finally the directory \"$directory\" exists, but I could not create it.\n";
+                        push(@installer::globals::logfileinfo, $infoline);
+                    }
+                    else
+                    {
+                        # It is time to exit, even the second try failed.
+                        installer::exiter::exit_program("ERROR: Failed to create the directory: $directory", "create_directory");
+                    }
+                }
+            }
+            else
+            {
+                $infoline = "\nAnother process created this directory in exactly this moment :-) : $directory\n";
+                push(@installer::globals::logfileinfo, $infoline);
+            }
+        }
+    }
+    else
+    {
+        $infoline = "\nAlready existing directory, did not create: $directory\n";
+        push(@installer::globals::logfileinfo, $infoline);
+    }
 }
 
 ######################################################
@@ -56,10 +157,10 @@ sub create_directory_with_privileges
 
     my $returnvalue = 1;
     my $infoline = "";
-    my $localprivileges = oct("0".$privileges); # changes "777" to 0777
 
     if (!(-d $directory))
     {
+        my $localprivileges = oct("0".$privileges); # changes "777" to 0777
         $returnvalue = mkdir($directory, $localprivileges);
 
         if ($returnvalue)
@@ -67,7 +168,8 @@ sub create_directory_with_privileges
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            chmod $localprivileges, $directory;
+            my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {
@@ -93,7 +195,8 @@ sub create_directory_with_privileges
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        chmod $localprivileges, $parentdir;
+                        my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
+                        system($localcall);
                     }
                     else
                     {
@@ -122,7 +225,8 @@ sub create_directory_with_privileges
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    chmod $localprivileges, $directory;
+                    my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
                 else
                 {
@@ -150,7 +254,8 @@ sub create_directory_with_privileges
         $infoline = "\nAlready existing directory, did not create: $directory\n";
         push(@installer::globals::logfileinfo, $infoline);
 
-        chmod $localprivileges, $directory;
+        my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
+        system($localcall);
     }
 }
 
@@ -307,6 +412,7 @@ sub create_directories
                 {
                     my $number_of_languages = get_number_of_langs($languagestring);
                     chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
+                    # $languagestring = $shorter;
                     my $id = substr($shorter, 0, 8); # taking only the first 8 digits
                     $languagestring = "lang_" . $number_of_languages . "_id_" . $id;
                 }
@@ -1099,6 +1205,8 @@ sub rename_directory
     else
     {
         installer::exiter::exit_program("ERROR: Could not move directory from $olddir to $newdir", "rename_directory");
+        # $infoline = "\nATTENTION: Could not move directory from $olddir to $newdir, \"rename_directory\"\n";
+        # push(@installer::globals::logfileinfo, $infoline);
     }
 
     return $newdir;
@@ -1335,7 +1443,12 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            chmod 0775, $directory;
+            my $localcall = "chmod 0775 $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
+
+            # chmod 0775 is not sufficient on mac to remove sticky tag
+            $localcall = "chmod a-s $directory \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
         else
         {

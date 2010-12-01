@@ -58,7 +58,7 @@ void ConfigurationControllerBroadcaster::AddListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid listener")),
+            OUString::createFromAscii("invalid listener"),
             mxConfigurationController,
             0);
 
@@ -78,7 +78,7 @@ void ConfigurationControllerBroadcaster::RemoveListener(
 {
     if ( ! rxListener.is())
         throw lang::IllegalArgumentException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("invalid listener")),
+            OUString::createFromAscii("invalid listener"),
             mxConfigurationController,
             0);
 

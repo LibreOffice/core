@@ -2048,7 +2048,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
         return;
 
     // emit the line head
-    mpPtr += sprintf( mpPtr, "%s", pLineHead);
+    mpPtr += sprintf( mpPtr, pLineHead);
     // emit the vector values
     ValVector::value_type aVal = 0;
     for( ValVector::const_iterator it = rVector.begin();;) {
@@ -2061,7 +2061,7 @@ void Type1Emitter::emitValVector( const char* pLineHead, const char* pLineTail,
     // emit the last value
     mpPtr += dbl2str( mpPtr, aVal);
     // emit the line tail
-    mpPtr += sprintf( mpPtr, "%s", pLineTail);
+    mpPtr += sprintf( mpPtr, pLineTail);
 }
 
 // --------------------------------------------------------------------

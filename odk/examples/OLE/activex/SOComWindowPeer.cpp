@@ -38,7 +38,6 @@
 #include "stdafx2.h"
 #include "so_activex.h"
 #include "SOComWindowPeer.h"
-#include <sal/macros.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -50,7 +49,7 @@ STDMETHODIMP SOComWindowPeer::InterfaceSupportsErrorInfo(REFIID riid)
         &IID_ISOComWindowPeer,
     };
 
-    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
     {
         if (InlineIsEqualGUID(*arr[i],riid))
             return S_OK;

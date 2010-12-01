@@ -73,6 +73,7 @@ void OColumnControlWindow::ActivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
+//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:
@@ -86,6 +87,7 @@ void OColumnControlWindow::DeactivateAggregate( EControlType eType )
     {
         case tpFormat:
         case tpDefault:
+//      case tpAutoIncrement:
         case tpColumnName:
             break;
         default:

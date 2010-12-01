@@ -63,6 +63,9 @@ class UpDownBarWrapper : public MutexContainer
                         , ::com::sun::star::beans::XMultiPropertySet
                         , ::com::sun::star::beans::XPropertyState
                         , ::com::sun::star::beans::XMultiPropertyStates
+                        //  , ::com::sun::star::uno::XWeak          // implemented by WeakImplHelper(optional interface)
+                        //  , ::com::sun::star::uno::XInterface     // implemented by WeakImplHelper
+                        //  , ::com::sun::star::lang::XTypeProvider // implemented by WeakImplHelper
                         >
 {
 public:

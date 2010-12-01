@@ -423,7 +423,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                 nSttCnt <= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.GetNumStr() != rNumStr ||
+            if( /*rFtn.GetNumber() != nNumber ||*/
+                rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
                 bChg = TRUE;
@@ -454,7 +455,8 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
             nEndCnt >= *pTxtFtn->GetStart() ) )
         {
             const SwFmtFtn& rFtn = pTxtFtn->GetFtn();
-            if( rFtn.GetNumStr() != rNumStr ||
+            if( /*rFtn.GetNumber() != nNumber ||*/
+                rFtn.GetNumStr() != rNumStr ||
                 rFtn.IsEndNote() != bIsEndNote )
             {
                 bChg = TRUE;

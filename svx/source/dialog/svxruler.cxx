@@ -753,7 +753,9 @@ void SvxRuler::Update( const SvxProtectItem* pItem )
 {
     if( pItem ) pRuler_Imp->aProtectItem = *pItem;
 }
+/* -----------------------------22.08.2002 13:10------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxRuler::UpdateTextRTL(const SfxBoolItem* pItem)
 {
   if(bActive && bHorz)
@@ -3948,8 +3950,9 @@ long SvxRuler::CalcPropMaxRight(USHORT nCol) const
         }
     }
 }
-
-// Tab stops relative to indent (#i24363#)
+/*-- 29.11.2007 08:24:23---------------------------------------------------
+    //#i24363# tab stops relative to indent
+  -----------------------------------------------------------------------*/
 void SvxRuler::SetTabsRelativeToIndent( BOOL bRel )
 {
     pRuler_Imp->bIsTabsRelativeToIndent = bRel;

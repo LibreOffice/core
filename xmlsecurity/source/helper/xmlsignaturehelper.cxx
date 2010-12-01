@@ -89,7 +89,7 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
 
 void XMLSignatureHelper::ImplCreateSEInitializer()
 {
-    rtl::OUString sSEInitializer(RTL_CONSTASCII_USTRINGPARAM( SEINITIALIZER_COMPONENT ));
+    rtl::OUString sSEInitializer(rtl::OUString::createFromAscii( SEINITIALIZER_COMPONENT ));
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     mxSEInitializer = uno::Reference< com::sun::star::xml::crypto::XSEInitializer > (
         xMCF->createInstanceWithContext( sSEInitializer,  mxCtx ), uno::UNO_QUERY );
@@ -170,6 +170,11 @@ void XMLSignatureHelper::SetX509Certificate(
 
 void XMLSignatureHelper::SetDateTime( sal_Int32 nSecurityId, const Date& rDate, const Time& rTime )
 {
+    /*
+    rtl::OUString aDate = String::CreateFromInt32( rDate.GetDate() );
+    rtl::OUString aTime = String::CreateFromInt32( rTime.GetTime() );
+    mpXSecController->setDateTime( nSecurityId, aDate, aTime );
+    */
     ::com::sun::star::util::DateTime stDateTime;
     stDateTime.HundredthSeconds = (::sal_uInt16)rTime.Get100Sec();
     stDateTime.Seconds = (::sal_uInt16)rTime.GetSec();
@@ -195,8 +200,8 @@ uno::Reference<xml::sax::XDocumentHandler> XMLSignatureHelper::CreateDocumentHan
      */
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< io::XActiveDataSource > xSaxWriter(
-        xMCF->createInstanceWithContext(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.xml.sax.Writer")), mxCtx ), uno::UNO_QUERY );
+        xMCF->createInstanceWithContext(rtl::OUString::createFromAscii(
+            "com.sun.star.xml.sax.Writer"), mxCtx ), uno::UNO_QUERY );
 
     DBG_ASSERT( xSaxWriter.is(), "can't instantiate XML writer" );
 
@@ -256,10 +261,16 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     /*
      * create a signature listener
      */
-
+/*
+    ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
+                                                    LINK( this, XMLSignatureHelper, SignatureCreationResultListener ),
+                                                    LINK( this, XMLSignatureHelper, SignatureVerifyResultListener ),
+                                                    LINK( this, XMLSignatureHelper, StartVerifySignatureElement ) );
+*/
     /*
      * configure the signature creation listener
      */
+    //mpXSecController->setSignatureCreationResultListener( pSignatureListener );
 
     /*
      * write signatures
@@ -272,6 +283,7 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     /*
      * clear up the signature creation listener
      */
+    //mpXSecController->setSignatureCreationResultListener( NULL );
 
     return !mbError;
 }
@@ -298,6 +310,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
      * prepare ParserInputSrouce
      */
     xml::sax::InputSource aParserInput;
+    // aParserInput.sSystemId = ouName;
     aParserInput.aInputStream = xInputStream;
 
     /*
@@ -306,7 +319,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     uno::Reference< lang::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     uno::Reference< xml::sax::XParser > xParser(
         xMCF->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser") ), mxCtx ),
+            rtl::OUString::createFromAscii("com.sun.star.xml.sax.Parser"), mxCtx ),
         uno::UNO_QUERY );
 
     DBG_ASSERT( xParser.is(), "Can't create parser" );
@@ -328,6 +341,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * configure the signature verify listener
      */
+    //mpXSecController->setSignatureVerifyResultListener( pSignatureListener );
 
     /*
      * setup the connection:
@@ -368,6 +382,7 @@ bool XMLSignatureHelper::ReadAndVerifySignature( const com::sun::star::uno::Refe
     /*
      * clear up the signature verify listener
      */
+    //mpXSecController->setSignatureVerifyResultListener( NULL );
 
     /*
      * release the signature reader
@@ -402,6 +417,24 @@ sal_Int32 XMLSignatureHelper::GetSecurityEnvironmentNumber()
     return (mxSecurityContext.is()?(mxSecurityContext->getSecurityEnvironmentNumber()): 0);
 }
 
+
+/*
+void XMLSignatureHelper::createSecurityContext( rtl::OUString tokenPath )
+{
+    if ( !mxSEInitializer.is() )
+        ImplCreateSEInitializer();
+
+    mxSecurityContext = mxSEInitializer->createSecurityContext(tokenPath);
+}
+
+void XMLSignatureHelper::freeSecurityContext()
+{
+    if ( !mxSEInitializer.is() )
+        ImplCreateSEInitializer();
+
+    mxSEInitializer->freeSecurityContext( mxSecurityContext );
+}
+*/
 
 IMPL_LINK( XMLSignatureHelper, SignatureCreationResultListener, XMLSignatureCreationResult*, pResult )
 {

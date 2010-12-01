@@ -129,6 +129,7 @@ void OTableStyleContext::FillPropertySet(
                     uno::Any aNumberFormat;
                     m_nNumberFormat = pStyle->GetKey();
                     aNumberFormat <<= m_nNumberFormat;
+                    //rPropSet->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_NUMBERFORMAT)), aNumberFormat);
                     AddProperty(CTF_DB_NUMBERFORMAT, aNumberFormat);
                 }
             }

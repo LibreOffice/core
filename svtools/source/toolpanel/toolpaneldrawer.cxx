@@ -159,18 +159,25 @@ namespace svt
         return aExpansionIndicatorArea;
     }
 
-
+    //------------------------------------------------------------------------------------------------------------------
     Image ToolPanelDrawer::impl_getExpansionIndicator() const
     {
+        const bool bHighContrastMode( GetSettings().GetStyleSettings().GetHighContrastMode() != 0 );
         USHORT nResourceId = 0;
         if ( m_bExpanded )
-            nResourceId = IMG_TRIANGLE_DOWN;
+            if ( bHighContrastMode )
+                nResourceId = IMG_TRIANGLE_DOWN_HC;
+            else
+                nResourceId = IMG_TRIANGLE_DOWN;
         else
-            nResourceId = IMG_TRIANGLE_RIGHT;
+            if ( bHighContrastMode )
+                nResourceId = IMG_TRIANGLE_RIGHT_HC;
+            else
+                nResourceId = IMG_TRIANGLE_RIGHT;
         return Image( SvtResId( nResourceId ) );
     }
 
-
+    //------------------------------------------------------------------------------------------------------------------
     USHORT ToolPanelDrawer::impl_getTextStyle() const
     {
         const USHORT nBasicStyle =  TEXT_DRAW_LEFT

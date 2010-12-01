@@ -46,3 +46,5 @@
 #define STR_WRONGROWCOL         4
 #define STR_NOCOLFORMULA        5
 #define STR_NOROWFORMULA        6
+
+

@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "acredlin.hrc"
-
 ModelessDialog RID_SCDLG_CHANGES
 {
     OutputSize = TRUE ;
@@ -141,23 +140,22 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     Bitmap BMP_STR_CLOSE
     {
-        File = "dir-clos.png" ;
+        File = "dir-clos.bmp" ;
     };
     Bitmap BMP_STR_OPEN
     {
-        File = "dir-open.png" ;
+        File = "dir-open.bmp" ;
     };
     Bitmap BMP_STR_END
     {
-        File = "basobj2.png" ;
+        File = "basobj2.bmp" ;
     };
     Bitmap BMP_STR_ERROR
     {
-        File = "basbrk.png" ;
+        File = "basbrk.bmp" ;
     };
     Text [ en-US ] = "Accept or Reject Changes" ;
 };
-
 Menu RID_POPUP_CHANGES
 {
     ItemList =
@@ -217,3 +215,44 @@ Menu RID_POPUP_CHANGES
         };
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

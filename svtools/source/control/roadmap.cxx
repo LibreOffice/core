@@ -34,7 +34,9 @@
 #define _STRING_HXX
 #endif
 
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 
 #include <algorithm>
 #include <vcl/bitmap.hxx>
@@ -831,7 +833,7 @@ namespace svt
 
         if ( mpID )
         {
-            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "." ));
+            ::rtl::OUString aIDText = ::rtl::OUString::valueOf( (sal_Int32)( _nIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
              mpID->SetText( aIDText );
         }
 
@@ -929,7 +931,7 @@ namespace svt
     {
         // calculate widths
         long nIDWidth = mpID->GetTextWidth( mpID->GetText() );
-        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "100." )) );
+        long nMaxIDWidth = mpID->GetTextWidth( ::rtl::OUString::createFromAscii( "100." ) );
         nIDWidth = ::std::min( nIDWidth, nMaxIDWidth );
 
         // check how many space the description would need

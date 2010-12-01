@@ -2200,9 +2200,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, const ScMarkData* pTabMark, 
 
         if( !pDoc->HasAttrib( aRange, HASATTR_OVERLAPPED | HASATTR_MERGED ) )
         {
-            ScCellMergeOption aMergeOption(
-                aRange.aStart.Col(), aRange.aStart.Row(),
-                aRange.aEnd.Col(), aRange.aEnd.Row() );
+            ScCellMergeOption aMergeOption(aRange);
             MergeCells( aMergeOption, FALSE, TRUE, TRUE );
         }
         qDecreaseRange.pop_back();
@@ -2674,14 +2672,14 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         sal_Int32 nNum = 0;
         String genModuleName;
         if ( sModuleName.Len() )
-            genModuleName = sModuleName;
+            sModuleName = sModuleName;
         else
         {
              genModuleName = String::CreateFromAscii( "Sheet1" );
              nNum = 1;
         }
-        while( xLib->hasByName( genModuleName ) )
-            genModuleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Sheet")) + rtl::OUString::valueOf( ++nNum );
+        while( xLib->hasByName( genModuleName  ) )
+            genModuleName = rtl::OUString::createFromAscii( "Sheet" ) + rtl::OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
         rtl::OUString sTmpSource = sSource;
@@ -2691,7 +2689,8 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         uno::Reference< script::vba::XVBAModuleInfo > xVBAModuleInfo( xLib, uno::UNO_QUERY );
         if ( xVBAModuleInfo.is() )
         {
-            rDoc.SetCodeName( nTab, genModuleName );
+            String sCodeName( genModuleName );
+            rDoc.SetCodeName( nTab, sCodeName );
             script::ModuleInfo sModuleInfo = lcl_InitModuleInfo(  rDocSh, genModuleName );
             xVBAModuleInfo->insertModuleInfo( genModuleName, sModuleInfo );
             xLib->insertByName( genModuleName, aSourceAny );
@@ -3745,6 +3744,13 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bSize)
         {
+/*          SCCOL nCols[2];
+            nCols[0] = nStartCol;
+            nCols[1] = nEndCol;
+            SCROW nRows[2];
+            nRows[0] = nStartRow;
+            nRows[1] = nEndRow;
+*/
             SCCOLROW nCols[2] = { nStartCol, nEndCol };
             SCCOLROW nRows[2] = { nStartRow, nEndRow };
 

@@ -162,7 +162,7 @@ sal_Bool XFlatXml::importer(
     // create SAX parser that will read the document file
     // and provide events to xHandler passed to this call
     Reference < XParser > xSaxParser( m_rServiceFactory->createInstance(
-        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser"))), UNO_QUERY );
+        OUString::createFromAscii("com.sun.star.xml.sax.Parser")), UNO_QUERY );
     OSL_ASSERT(xSaxParser.is());
     if(!xSaxParser.is())return sal_False;
 
@@ -213,7 +213,7 @@ sal_Bool XFlatXml::exporter(
         // get the document writer
         m_rDocumentHandler = Reference<XExtendedDocumentHandler>(
             m_rServiceFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer"))),
+            OUString::createFromAscii("com.sun.star.xml.sax.Writer")),
                 UNO_QUERY);
         OSL_ASSERT(m_rDocumentHandler.is());
         if (!m_rDocumentHandler.is()) return sal_False;
@@ -303,8 +303,8 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(1);
-            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "devguide.officedev.samples.filter.FlatXmlCpp"));
+            seqNames.getArray()[0] = OUString::createFromAscii(
+                "devguide.officedev.samples.filter.FlatXmlCpp");
             pNames = &seqNames;
         }
     }
@@ -333,7 +333,7 @@ sal_Bool SAL_CALL component_writeInfo(void * pServiceManager, void * pRegistryKe
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
+                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
 
             const Sequence< OUString > & rSNL = getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

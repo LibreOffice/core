@@ -222,6 +222,8 @@ SwOutlineTabDialog::SwOutlineTabDialog(Window* pParent,
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if(!rTxtColl.IsDefault())
         {
+            //BYTE nOutLevel = rTxtColl.GetOutlineLevel();  //<-#outline level, removed out by zhaojianwei
+            //if(nOutLevel != NO_NUMBERING)
             //->added by zhaojianwei
             if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
             {
@@ -367,10 +369,28 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl &rTxtColl = rWrtSh.GetTxtFmtColl(i);
         if( !rTxtColl.IsDefault() )
         {
+            //rTxtColl.SetOutlineLevel( (BYTE)GetLevel(rTxtColl.GetName()));//#outline level,removed by zhaojianwei
 
             const SfxPoolItem & rItem =
                 rTxtColl.GetFmtAttr(RES_PARATR_NUMRULE, FALSE);
 
+            //if ((BYTE)GetLevel(rTxtColl.GetName()) == NO_NUMBERING)   //#outline level,removed by zhaojianwei
+            //{
+            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() ==
+            //      pOutlineRule->GetName())
+            //  {
+            //      rTxtColl.ResetFmtAttr(RES_PARATR_NUMRULE);
+            //  }
+            //}
+            //else
+            //{
+            //  if (static_cast<const SwNumRuleItem &>(rItem).GetValue() !=
+            //      pOutlineRule->GetName())
+            //  {
+            //      SwNumRuleItem aItem(pOutlineRule->GetName());
+            //      rTxtColl.SetFmtAttr(aItem);
+            //  }
+            //}
            if ((BYTE)GetLevel(rTxtColl.GetName()) == MAXLEVEL) //add by zhaojianwei
             {
                 if(rTxtColl.IsAssignedToListLevelOfOutlineStyle())
@@ -405,6 +425,25 @@ short SwOutlineTabDialog::Ok()
         SwTxtFmtColl* pColl = rWrtSh.FindTxtFmtCollByName( sHeadline );
         if( !pColl )
         {
+            //if( !aCollNames[i].Len() )            //#outline level,removed by zhaojianwei
+            //{
+            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
+            //      static_cast< USHORT >(RES_POOLCOLL_HEADLINE1 + i) );
+            //  pTxtColl->SetOutlineLevel( NO_NUMBERING );
+            //  pTxtColl->ResetFmtAttr(RES_PARATR_NUMRULE);
+            //}
+            //else if(aCollNames[i] != sHeadline)
+            //{
+            //  SwTxtFmtColl* pTxtColl = rWrtSh.GetParaStyle(
+            //      aCollNames[i], SwWrtShell::GETSTYLE_CREATESOME);
+            //  if(pTxtColl)
+            //  {
+            //      pTxtColl->SetOutlineLevel( static_cast< BYTE >(i) );
+
+            //      SwNumRuleItem aItem(pOutlineRule->GetName());
+            //      pTxtColl->SetFmtAttr(aItem);
+            //  }
+            //}
             if(aCollNames[i] != sHeadline)//->added by zhaojianwei
             {
                 SwTxtFmtColl* pTxtColl = rWrtSh.GetTxtCollFromPool(
@@ -510,8 +549,8 @@ void    SwOutlineSettingsTabPage::Update()
                 bSameSuffix &= aNumFmtArr[i]->GetSuffix() == aNumFmtArr[0]->GetSuffix();
                 bSameComplete &= aNumFmtArr[i]->GetIncludeUpperLevels() == aNumFmtArr[0]->GetIncludeUpperLevels();
                 const SwCharFmt* pFmt = aNumFmtArr[i]->GetCharFmt();
-                bSameCharFmt &=     (!pFirstFmt && !pFmt)
-                                    || (pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName());
+                bSameCharFmt &=     !pFirstFmt && !pFmt
+                                    || pFirstFmt && pFmt && pFmt->GetName() == pFirstFmt->GetName();
             }
         }
         CheckForStartValue_Impl(aNumFmtArr[0]->GetNumberingType());
@@ -684,7 +723,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, CollSelectGetFocus, ListBox *, EMPTYARG )
 IMPL_LINK( SwOutlineSettingsTabPage, NumberSelect, SwNumberingTypeListBox *, pBox )
 {
     USHORT nMask = 1;
-    sal_Int16 nNumberType = pBox->GetSelectedNumberingType();
+    sal_Int16 nNumberType = pBox->GetSelectedNumberingType();//(sal_Int16)(ULONG)pBox->GetEntryData(pBox->GetSelectEntryPos());
     for(USHORT i = 0; i < MAXLEVEL; i++)
     {
         if(nActLevel & nMask)
@@ -737,6 +776,7 @@ IMPL_LINK( SwOutlineSettingsTabPage, StartModified, NumericField *, pFld )
 
 IMPL_LINK( SwOutlineSettingsTabPage, CharFmtHdl, ListBox *, EMPTYARG )
 {
+//  bAutomaticCharStyles = FALSE;
     String sEntry = aCharFmtLB.GetSelectEntry();
     USHORT nMask = 1;
     BOOL bFormatNone = sEntry == ViewShell::GetShellRes()->aStrNone;
@@ -791,6 +831,8 @@ void SwOutlineSettingsTabPage::SetWrtShell(SwWrtShell* pShell)
     // Erfragen der NumRules dieses Dokumentes
     pNumRule = ((SwOutlineTabDialog*)GetTabDialog())->GetNumRule();
     pCollNames = ((SwOutlineTabDialog*)GetTabDialog())->GetCollNames();
+
+    //pNumRule = new SwNumRule( *rSh.GetOutlineNumRule() );
 
     aPreviewWIN.SetNumRule(pNumRule);
     aPreviewWIN.SetOutlineNames(pCollNames);

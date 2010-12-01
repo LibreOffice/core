@@ -94,7 +94,7 @@ SvxConfigFunctionListBox_Impl::SvxConfigFunctionListBox_Impl( Window* pParent, c
     SetWindowBits( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_SORT );
     GetModel()->SetSortMode( SortAscending );
 
-    // Timer for the BallonHelp
+    // Timer f"ur die BallonHelp
     aTimer.SetTimeout( 200 );
     aTimer.SetTimeoutHdl(
         LINK( this, SvxConfigFunctionListBox_Impl, TimerHdl ) );
@@ -246,9 +246,13 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
         : SvTreeListBox( pParent, rResId )
         , m_bShowSlots( _bShowSlots ),
     m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
     m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
+    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
     m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
+    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
     m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
+    m_docImage_hc(ResId(IMG_DOC_HC,*rResId.GetResMgr())),
     m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
     m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
@@ -265,8 +269,13 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
 
     SetNodeBitmaps(
         aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
-        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE )
-    );
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_NORMAL );
+
+    SetNodeBitmaps(
+        aNavigatorImages.GetImage( RID_SVXIMG_COLLAPSEDNODE ),
+        aNavigatorImages.GetImage( RID_SVXIMG_EXPANDEDNODE ),
+        BMP_COLOR_HIGHCONTRAST );
 }
 
 
@@ -410,9 +419,13 @@ void SvxConfigGroupListBox_Impl::fillScriptList( const Reference< browse::XBrows
                 SvLBoxEntry* pNewEntry = InsertEntry( sUIName, _pParentEntry );
 
                 ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
-                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode );
-                SetExpandedEntryBmp( pNewEntry, aImage );
-                SetCollapsedEntryBmp( pNewEntry, aImage );
+                Image aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_NORMAL );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+
+                aImage = GetImage( theChild, aContext.getUNOContext(), bIsRootNode, BMP_COLOR_HIGHCONTRAST );
+                SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
+                SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST );
 
                 SvxGroupInfo_Impl* pInfo =
                     new SvxGroupInfo_Impl( SVX_CFGGROUP_SCRIPTCONTAINER, 0, theChild );
@@ -476,8 +489,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< ::com::sun::star::frame::XModuleManager >
             xModuleManager( xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.ModuleManager" )),
+                OUString::createFromAscii(
+                    "com.sun.star.frame.ModuleManager" ),
                 xContext ),
             UNO_QUERY );
 
@@ -489,8 +502,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xNameAccess(
             xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.frame.UICommandDescription" )),
+                OUString::createFromAscii(
+                    "com.sun.star.frame.UICommandDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -501,8 +514,8 @@ void SvxConfigGroupListBox_Impl::Init()
 
         Reference< container::XNameAccess > xAllCategories(
             xMCF->createInstanceWithContext(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.ui.UICategoryDescription" )),
+                OUString::createFromAscii(
+                    "com.sun.star.ui.UICategoryDescription" ),
                 xContext ),
             UNO_QUERY );
 
@@ -584,7 +597,7 @@ void SvxConfigGroupListBox_Impl::Init()
                 ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
             xCtx.set( _xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
             Reference< browse::XBrowseNodeFactory > xFac( xCtx->getValueByName(
-                OUString(RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory")) ), UNO_QUERY_THROW );
+                OUString::createFromAscii( "/singletons/com.sun.star.script.browse.theBrowseNodeFactory") ), UNO_QUERY_THROW );
             rootNode.set( xFac->createView( browse::BrowseNodeFactoryViewTypes::MACROSELECTOR ) );
         }
         catch( const Exception& )
@@ -617,18 +630,17 @@ void SvxConfigGroupListBox_Impl::Init()
     SetUpdateMode( TRUE );
 }
 
-Image SvxConfigGroupListBox_Impl::GetImage(
-    Reference< browse::XBrowseNode > node,
-    Reference< XComponentContext > xCtx,
-    bool bIsRootNode
-)
+Image SvxConfigGroupListBox_Impl::GetImage( Reference< browse::XBrowseNode > node, Reference< XComponentContext > xCtx, bool bIsRootNode, bool bHighContrast )
 {
     Image aImage;
     if ( bIsRootNode )
     {
         if ( node->getName().equalsAscii( "user" ) || node->getName().equalsAscii( "share" ) )
         {
-            aImage = m_hdImage;
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_hdImage;
+            else
+                aImage = m_hdImage_hc;
         }
         else
         {
@@ -641,7 +653,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                     xModuleManager(
                         xCtx->getServiceManager()
                             ->createInstanceWithContext(
-                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")),
+                                OUString::createFromAscii("com.sun.star.frame.ModuleManager"),
                                 xCtx ),
                             UNO_QUERY_THROW );
                 Reference<container::XNameAccess> xModuleConfig(
@@ -653,7 +665,7 @@ Image SvxConfigGroupListBox_Impl::GetImage(
                 Any aAny = xModuleConfig->getByName(appModule);
                 if( sal_True != ( aAny >>= moduleDescr ) )
                 {
-                    throw RuntimeException(OUString(RTL_CONSTASCII_USTRINGPARAM("SFTreeListBox::Init: failed to get PropertyValue")), Reference< XInterface >());
+                    throw RuntimeException(OUString::createFromAscii("SFTreeListBox::Init: failed to get PropertyValue"), Reference< XInterface >());
                 }
                 beans::PropertyValue const * pmoduleDescr =
                     moduleDescr.getConstArray();
@@ -670,20 +682,40 @@ Image SvxConfigGroupListBox_Impl::GetImage(
             }
             if( factoryURL.getLength() > 0 )
             {
-                aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL), false );
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_NORMAL );
+                else
+                    aImage = SvFileInformationManager::GetFileImage(
+                        INetURLObject(factoryURL), false,
+                        BMP_COLOR_HIGHCONTRAST );
             }
             else
             {
-                aImage = m_docImage;
+                if( bHighContrast == BMP_COLOR_NORMAL )
+                    aImage = m_docImage;
+                else
+                    aImage = m_docImage_hc;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-            aImage = m_macImage;
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_macImage;
+            else
+                aImage = m_macImage_hc;
+        }
         else
-            aImage = m_libImage;
+        {
+            if( bHighContrast == BMP_COLOR_NORMAL )
+                aImage = m_libImage;
+            else
+                aImage = m_libImage_hc;
+        }
     }
     return aImage;
 }
@@ -697,7 +729,7 @@ SvxConfigGroupListBox_Impl::getDocumentModel(
             xCtx->getServiceManager();
     Reference< frame::XDesktop > desktop (
         mcf->createInstanceWithContext(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")),                 xCtx ),
+            OUString::createFromAscii("com.sun.star.frame.Desktop"),                 xCtx ),
             UNO_QUERY );
 
     Reference< container::XEnumerationAccess > componentsAccess =
@@ -867,11 +899,14 @@ void SvxConfigGroupListBox_Impl::GroupSelected()
                                 new SvxGroupInfo_Impl(
                                     SVX_CFGFUNCTION_SCRIPT, 123, uri, description );
 
-                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False );
+                            Image aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_NORMAL );
                             SvLBoxEntry* pNewEntry =
                                 pFunctionListBox->InsertEntry( children[n]->getName(), NULL );
-                            pFunctionListBox->SetExpandedEntryBmp( pNewEntry, aImage );
-                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_NORMAL);
+                            aImage = GetImage( children[n], Reference< XComponentContext >(), sal_False, BMP_COLOR_HIGHCONTRAST );
+                            pFunctionListBox->SetExpandedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
+                            pFunctionListBox->SetCollapsedEntryBmp(pNewEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 
                             pNewEntry->SetUserData( _pGroupInfo );
 
@@ -1005,6 +1040,7 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
 
     aCategories.SetFunctionListBox( &aCommands );
     aCategories.Init();
+    // aCategories.Select( aCategories.GetEntry( 0, 0 ) );
 
     aCategories.SetSelectHdl(
             LINK( this, SvxScriptSelectorDialog, SelectHdl ) );

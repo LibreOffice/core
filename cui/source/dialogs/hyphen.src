@@ -122,3 +122,5 @@ ModalDialog RID_SVXDLG_HYPHENATE
         TABSTOP = TRUE ;
     };
 };
+
+

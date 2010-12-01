@@ -301,6 +301,7 @@ void ScDPSource::SetOrientation(long nColumn, USHORT nNew)
         case sheet::DataPilotFieldOrientation_PAGE:
             nPageDims[nPageDimCount++] = nColumn;
             break;
+            // Wang Xu Ming -- 2009-9-1
             // DataPilot Migration - Cache&&Performance
         case sheet::DataPilotFieldOrientation_HIDDEN:
             break;
@@ -905,8 +906,8 @@ void ScDPSource::CreateRes_Impl()
                 aInitState.AddMember( nPageDims[i], GetMemberId( nPageDims[i],  pDim->GetSelectedData() ) );
         }
 
-        pColResRoot = new ScDPResultMember( pResData, bColumnGrand );
-        pRowResRoot = new ScDPResultMember( pResData, bRowGrand );
+        pColResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bColumnGrand );
+        pRowResRoot = new ScDPResultMember( pResData, /*NULL, NULL, NULL, */bRowGrand );
 
         FillCalcInfo(false, aInfo, bHasAutoShow);
         long nColLevelCount = aInfo.aColLevels.size();
@@ -1088,6 +1089,8 @@ void ScDPSource::FillMemberResults()
             for (long i=0; i<nColLevelCount; i++)
                 pColResults[i].realloc(nColDimSize);
 
+            // ScDPResultDimension* pColResDim = pColResRoot->GetChildDimension();
+            // pColResDim->FillMemberResults( pColResults, 0, pResData->GetColStartMeasure() );
             long nPos = 0;
             pColResRoot->FillMemberResults( pColResults, nPos, pResData->GetColStartMeasure(),
                                             TRUE, NULL, NULL );
@@ -1102,6 +1105,8 @@ void ScDPSource::FillMemberResults()
             for (long i=0; i<nRowLevelCount; i++)
                 pRowResults[i].realloc(nRowDimSize);
 
+            // ScDPResultDimension* pRowResDim = pRowResRoot->GetChildDimension();
+            // pRowResDim->FillMemberResults( pRowResults, 0, pResData->GetRowStartMeasure() );
             long nPos = 0;
             pRowResRoot->FillMemberResults( pRowResults, nPos, pResData->GetRowStartMeasure(),
                                             TRUE, NULL, NULL );
@@ -1461,6 +1466,7 @@ long ScDPDimension::getUsedHierarchy() const
 void ScDPDimension::setUsedHierarchy(long /* nNew */)
 {
     // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
+    // nUsedHier = nNew;
 }
 
 ScDPDimension* ScDPDimension::CreateCloneObject()
@@ -1726,9 +1732,9 @@ uno::Any SAL_CALL ScDPDimension::getPropertyValue( const rtl::OUString& aPropert
             aRet <<= uno::Sequence<sheet::TableFilterField>(0);
     }
     else if (aNameStr.EqualsAscii(SC_UNO_LAYOUTNAME))
-        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpLayoutName.get() ? *mpLayoutName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_FIELD_SUBTOTALNAME))
-        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString(RTL_CONSTASCII_USTRINGPARAM(""));
+        aRet <<= mpSubtotalName.get() ? *mpSubtotalName : OUString::createFromAscii("");
     else if (aNameStr.EqualsAscii(SC_UNO_HAS_HIDDEN_MEMBER))
         aRet <<= mbHasHiddenMember;
     else if (aNameStr.EqualsAscii(SC_UNO_FLAGS))
@@ -1755,7 +1761,14 @@ ScDPHierarchies::ScDPHierarchies( ScDPSource* pSrc, long nD ) :
 {
     //! hold pSource
 
+#if 0
     //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
+    long nSrcDim = pSource->GetSourceDim( nDim );
+    if ( pSource->IsDateDimension( nSrcDim ) )
+        nHierCount = SC_DAPI_DATE_HIERARCHIES;
+    else
+        nHierCount = 1;
+#endif
 
     // #i52547# don't offer the incomplete date hierarchy implementation
     nHierCount = 1;
@@ -2853,7 +2866,7 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScDPMember )
 ScDPTableDataCache* ScDPSource::GetCache()
 {
     DBG_ASSERT( GetData() , "empty ScDPTableData pointer");
-    return ( GetData()!=NULL) ? GetData()->GetCacheTable().getCache() : NULL ;
+    return ( GetData()!=NULL) ? GetData()->GetCacheTable().GetCache() : NULL ;
 }
 
 const ScDPItemData& ScDPMember::GetItemData() const

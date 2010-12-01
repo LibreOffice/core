@@ -638,7 +638,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Description"));
+    return ::rtl::OUString::createFromAscii ("Empty Description");
 }
 
 
@@ -647,7 +647,7 @@ void AccessibleContextBase::SetAccessibleName (
 ::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("Empty Name"));
+    return ::rtl::OUString::createFromAscii ("Empty Name");
 }
 
 

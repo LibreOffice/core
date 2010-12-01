@@ -105,6 +105,9 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList( NULL )
 {
+    aBtnLoad.SetModeImage( Image( CUI_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( CUI_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
 
     // diese Page braucht ExchangeSupport
@@ -187,6 +190,20 @@ void SvxLineEndDefTabPage::ActivatePage( const SfxItemSet& )
 
             aURL.Append( pLineEndList->GetName() );
             DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "invalid URL" );
+/*          // Ermitteln (evtl. abschneiden) des Namens und in
+            // der GroupBox darstellen
+            String          aString( CUI_RES( RID_SVXSTR_TABLE ) ); aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+            if ( aURL.getBase().Len() > 18 )
+            {
+                aString += aURL.getBase().Copy( 0, 15 );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+            }
+            else
+                aString += aURL.getBase();
+
+            aGrpLineEnds.SetText( aString );
+*/
             *pPageType = 0; // 3
             *pPosLineEndLb = LISTBOX_ENTRY_NOTFOUND;
         }
@@ -598,22 +615,39 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             pLeList->SetName( aURL.getName() );
             if( pLeList->Load() )
             {
-                // Pruefen, ob Tabelle geloescht werden darf:
-                if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
-                    delete pLineEndList;
+                if( pLeList )
+                {
+                    // Pruefen, ob Tabelle geloescht werden darf:
+                    if( pLineEndList != ( (SvxLineTabDialog*) DLGWIN )->GetLineEndList() )
+                        delete pLineEndList;
 
-                pLineEndList = pLeList;
-                ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
-                aLbLineEnds.Clear();
-                aLbLineEnds.Fill( pLineEndList );
-                Reset( rOutAttrs );
+                    pLineEndList = pLeList;
+                    ( (SvxLineTabDialog*) DLGWIN )->SetNewLineEndList( pLineEndList );
+                    aLbLineEnds.Clear();
+                    aLbLineEnds.Fill( pLineEndList );
+                    Reset( rOutAttrs );
 
-                pLineEndList->SetName( aURL.getName() );
+                    pLineEndList->SetName( aURL.getName() );
 
-                // Flag fuer gewechselt setzen
-                *pnLineEndListState |= CT_CHANGED;
-                // Flag fuer modifiziert entfernen
-                *pnLineEndListState &= ~CT_MODIFIED;
+/*                  // Ermitteln (evtl. abschneiden) des Namens und in
+                    // der GroupBox darstellen
+                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
+                    aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+                    if( aURL.getBase().Len() > 18 )
+                    {
+                        aString += aURL.getBase().Copy( 0, 15 );
+                        aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+                    }
+                    else
+                        aString += aURL.getBase();
+
+                    aGrpLineEnds.SetText( aString );
+*/
+                    // Flag fuer gewechselt setzen
+                    *pnLineEndListState |= CT_CHANGED;
+                    // Flag fuer modifiziert entfernen
+                    *pnLineEndListState &= ~CT_MODIFIED;
+                }
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
@@ -671,6 +705,20 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickSaveHdl_Impl, void *, EMPTYARG )
 
         if( pLineEndList->Save() )
         {
+/*          // Ermitteln (evtl. abschneiden) des Namens und in
+            // der GroupBox darstellen
+            String aString( CUI_RES( RID_SVXSTR_TABLE ) );
+            aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
+
+            if ( aURL.getBase().Len() > 18 )
+            {
+                aString += aURL.getBase().Copy( 0, 15 );
+                aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "..." ) );
+            }
+            else
+                aString += aURL.getBase();
+            aGrpLineEnds.SetText( aString );
+*/
             // Flag fuer gespeichert setzen
             *pnLineEndListState |= CT_SAVED;
             // Flag fuer modifiziert entfernen

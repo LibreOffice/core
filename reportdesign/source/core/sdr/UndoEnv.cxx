@@ -213,6 +213,8 @@ void SAL_CALL OXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeE
             RemoveSection(xSection);
         else
             RemoveElement(xSourceSet);
+        /*if (!m_pImpl->m_aPropertySetCache.empty())
+            m_pImpl->m_aPropertySetCache.erase(xSourceSet);*/
     }
 }
 
@@ -381,6 +383,7 @@ void SAL_CALL OXUndoEnvironment::elementInserted(const ContainerEvent& evt) thro
 //------------------------------------------------------------------------------
 void OXUndoEnvironment::implSetModified()
 {
+    //if ( !IsLocked() )
     m_pImpl->m_rModel.SetModified( sal_True );
 }
 

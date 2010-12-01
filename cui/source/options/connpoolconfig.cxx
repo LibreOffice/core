@@ -51,42 +51,42 @@ namespace offapp
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getConnectionPoolNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ConnectionPool") );
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("org.openoffice.Office.DataAccess/ConnectionPool");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getEnablePoolingNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("EnablePooling"));
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("EnablePooling");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getDriverSettingsNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverSettings"));
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverSettings");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getDriverNameNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DriverName"));
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("DriverName");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getEnableNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Enable"));
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Enable");
         return s_sNodeName;
     }
 
     //--------------------------------------------------------------------
     static const ::rtl::OUString& getTimeoutNodeName()
     {
-        static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("Timeout"));
+        static ::rtl::OUString s_sNodeName = ::rtl::OUString::createFromAscii("Timeout");
         return s_sNodeName;
     }
 

@@ -161,6 +161,12 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 //  }
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
 {
     Rectangle aVisArea;
@@ -218,6 +224,12 @@ void DrawDocShell::Disconnect(ViewShell* pViewSh)
         mpViewShell = NULL;
     }
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 FrameView* DrawDocShell::GetFrameView()
 {

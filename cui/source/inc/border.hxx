@@ -59,7 +59,7 @@ public:
     virtual void        Reset( const SfxItemSet& );
 
     void                HideShadowControls();
-    virtual void        PageCreated (SfxAllItemSet aSet);
+    virtual void        PageCreated (SfxAllItemSet aSet); //add CHINA001
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
     virtual void        DataChanged( const DataChangedEvent& rDCEvt );
@@ -105,7 +105,7 @@ private:
     //properties - "Merge with next paragraph" in Writer
     FixedLine           aPropertiesFL;
     CheckBox            aMergeWithNextCB;
-    // --> collapsing table borders #i29550#
+    // --> collapsing table borders FME 2005-05-27 #i29550#
     CheckBox            aMergeAdjacentBordersCB;
     // <--
 
@@ -145,7 +145,7 @@ private:
     // Filler
     void                FillLineListBox_Impl();
 
-    // share for individual Frame-/Core-Line
+    // Setzen von einzelnen Frame-/Core-Linien
     void                ResetFrameLine_Impl( svx::FrameBorderType eBorder,
                                              const SvxBorderLine* pCurLine,
                                              bool bValid );

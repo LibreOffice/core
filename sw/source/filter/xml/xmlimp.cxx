@@ -240,7 +240,10 @@ SvXMLImportContext *SwXMLDocContext_Impl::CreateChildContext(
         pContext = GetSwImport().CreateStylesContext( rLocalName, xAttrList,
                                                       sal_True );
         break;
-
+//  case XML_TOK_DOC_USESTYLES:
+//      pContext = GetSwImport().CreateUseStylesContext( rLocalName,
+//                                                       xAttrList );
+//      break;
     case XML_TOK_DOC_MASTERSTYLES:
         pContext = GetSwImport().CreateMasterStylesContext( rLocalName,
                                                             xAttrList );
@@ -404,7 +407,10 @@ SvXMLImportContext *SwXMLImport::CreateContext(
     // --> OD 2006-10-11 #i69629#
     // own subclasses for <office:document> and <office:document-styles>
     if( XML_NAMESPACE_OFFICE==nPrefix &&
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT ) ||
+//        ( IsXMLToken( rLocalName, XML_DOCUMENT_META ) ||
         ( IsXMLToken( rLocalName, XML_DOCUMENT_SETTINGS ) ||
+//          IsXMLToken( rLocalName, XML_DOCUMENT_STYLES ) ||
           IsXMLToken( rLocalName, XML_DOCUMENT_CONTENT ) ))
         pContext = new SwXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
@@ -915,6 +921,10 @@ void SwXMLImport::endDocument( void )
                     if( pNextNd->CanJoinPrev(/* &pPos->nNode*/ ) &&
                          *pSttNdIdx != pPos->nNode )
                     {
+//                      SwTxtNode* pPrevNd = pPos->nNode.GetNode().GetTxtNode();
+//                      pPos->nContent.Assign( pPrevNd, 0 );
+//                      pPaM->SetMark(); pPaM->DeleteMark();
+//                      pPrevNd->JoinNext();
                         pNextNd->JoinPrev();
                     }
                 }
@@ -1137,6 +1147,8 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
             bChangeShowRedline = sal_True;
         }
 // #105372#: Headers and footers are not displayed in BrowseView anymore
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowHeaderWhileBrowsing" ) ) )
+//        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ShowFooterWhileBrowsing" ) ) )
         else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "InBrowseMode" ) ) )
         {
             bBrowseMode = *(sal_Bool *)(pValue->Value.getValue());
@@ -1568,6 +1580,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImport_createInstance(
     throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport(IMPORT_ALL);
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_ALL );
 }
 
@@ -1590,6 +1603,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportStyles_createInstance(
     throw( uno::Exception )
 {
     // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //  IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
+    //  IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
         IMPORT_STYLES | IMPORT_MASTERSTYLES | IMPORT_AUTOSTYLES |
@@ -1615,6 +1631,9 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportContent_createInstance(
     throw( uno::Exception )
 {
     // #110680#
+    //return (cppu::OWeakObject*)new SwXMLImport(
+    //  IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
+    //  IMPORT_FONTDECLS );
     return (cppu::OWeakObject*)new SwXMLImport(
         rSMgr,
         IMPORT_AUTOSTYLES | IMPORT_CONTENT | IMPORT_SCRIPTS |
@@ -1640,6 +1659,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportMeta_createInstance(
     throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_META );
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_META );
 }
 
@@ -1662,6 +1682,7 @@ uno::Reference< uno::XInterface > SAL_CALL SwXMLImportSettings_createInstance(
     throw( uno::Exception )
 {
     // #110680#
+    // return (cppu::OWeakObject*)new SwXMLImport( IMPORT_SETTINGS );
     return (cppu::OWeakObject*)new SwXMLImport( rSMgr, IMPORT_SETTINGS );
 }
 

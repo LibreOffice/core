@@ -172,7 +172,7 @@ Reference < XTextContent > XMLTextFrameHyperlinkContext::GetTextContent() const
     return xTxt;
 }
 
-// Frame "to character": anchor moves from first to last char after saving (#i33242#)
+// --> OD 2004-08-24 #33242#
 Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 {
     Reference < drawing::XShape > xShape;
@@ -184,5 +184,7 @@ Reference < drawing::XShape > XMLTextFrameHyperlinkContext::GetShape() const
 
     return xShape;
 }
+// <--
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

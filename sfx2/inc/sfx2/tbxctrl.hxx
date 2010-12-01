@@ -56,6 +56,7 @@ class SfxUnoControllerItem;
 
 svt::ToolboxController* SAL_CALL SfxToolBoxControllerFactory( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, ToolBox* pToolbox, unsigned short nID, const ::rtl::OUString& aCommandURL );
 
+//typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nId, ToolBox &rTbx, SfxBindings & );
 typedef SfxToolBoxControl* (*SfxToolBoxControlCtor)( USHORT nSlotId, USHORT nId, ToolBox& rBox );
 
 struct SfxTbxCtrlFactory
@@ -325,6 +326,10 @@ public:
 };
 
 class SfxDragToolBoxControl_Impl : public SfxToolBoxControl
+/*  [Beschreibung]
+
+*/
+
 {
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
@@ -366,12 +371,13 @@ protected:
     virtual void            Select( BOOL );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
     virtual SfxPopupWindow* CreatePopupWindow();
-                            DECL_LINK( Activate, Menu * );
+                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
 private:
     String                  aLastURL;
     BOOL                    bBigImages;
     PopupMenu*              pMenu;
     ULONG                   m_nSymbolsStyle;
+    BOOL                    m_bWasHiContrastMode;
     BOOL                    m_bShowMenuImages;
 };
 
@@ -415,6 +421,7 @@ class SfxAddonsToolBoxControl_Impl : public SfxToolBoxControl
 {
     BOOL        bBigImages;
     PopupMenu*  pMenu;
+    BOOL        m_bWasHiContrastMode;
     BOOL        m_bShowMenuImages;
 
 protected:
@@ -422,7 +429,7 @@ protected:
     using SfxToolBoxControl::Select;
     virtual void            Select( BOOL );
     virtual void            StateChanged( USHORT nSID, SfxItemState eState, const SfxPoolItem* pState );
-                            DECL_LINK( Activate, Menu * );
+                            DECL_LINK( Activate, Menu * ); // Needed to support high contrast images
 public:
                             SFX_DECL_TOOLBOX_CONTROL();
                             SfxAddonsToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox );

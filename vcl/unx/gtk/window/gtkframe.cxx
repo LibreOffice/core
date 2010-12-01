@@ -1114,6 +1114,13 @@ void GtkSalFrame::SetIcon( USHORT nIcon )
     USHORT nOffsets[2] = { SV_ICON_SMALL_START, SV_ICON_LARGE_START };
     USHORT nIndex;
 
+    // Use high contrast icons where appropriate
+    if( Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        nOffsets[0] = SV_ICON_LARGE_HC_START;
+        nOffsets[1] = SV_ICON_SMALL_HC_START;
+    }
+
     for( nIndex = 0; nIndex < sizeof(nOffsets)/ sizeof(USHORT); nIndex++ )
     {
         // #i44723# workaround gcc temporary problem
@@ -2138,8 +2145,6 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
 
 void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
 {
-    static const char* pEnv = getenv( "SAL_NO_MOUSEGRABS" );
-
     if( m_pWindow )
     {
         if( bGrab )
@@ -2162,10 +2167,9 @@ void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
             {
                 const int nMask = ( GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK );
 
-                if( !pEnv || !*pEnv )
-                    gdk_pointer_grab( m_pWindow->window, bOwnerEvents,
-                                      (GdkEventMask) nMask, NULL, m_pCurrentCursor,
-                                      GDK_CURRENT_TIME );
+                gdk_pointer_grab( m_pWindow->window, bOwnerEvents,
+                                  (GdkEventMask) nMask, NULL, m_pCurrentCursor,
+                                  GDK_CURRENT_TIME );
             }
             else
             {
@@ -2175,25 +2179,23 @@ void GtkSalFrame::grabPointer( BOOL bGrab, BOOL bOwnerEvents )
                 //
                 // this is of course a bad hack, especially as we cannot
                 // set the right cursor this way
-                if( !pEnv || !*pEnv )
-                    XGrabPointer( getDisplay()->GetDisplay(),
-                                  GDK_WINDOW_XWINDOW( m_pWindow->window),
-                                  bOwnerEvents,
-                                  PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
-                                  GrabModeAsync,
-                                  GrabModeAsync,
-                                  None,
-                                  None,
-                                  CurrentTime
-                        );
+                XGrabPointer( getDisplay()->GetDisplay(),
+                              GDK_WINDOW_XWINDOW( m_pWindow->window),
+                              bOwnerEvents,
+                              PointerMotionMask | ButtonPressMask | ButtonReleaseMask,
+                              GrabModeAsync,
+                              GrabModeAsync,
+                              None,
+                              None,
+                              CurrentTime
+                              );
 
             }
         }
         else
         {
             // Two GdkDisplays may be open
-            if( !pEnv || !*pEnv )
-                gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
+            gdk_display_pointer_ungrab( getGdkDisplay(), GDK_CURRENT_TIME);
         }
     }
 }

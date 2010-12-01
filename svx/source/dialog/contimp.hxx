@@ -67,6 +67,7 @@ class SvxSuperContourDlg : public SvxContourDlg
     BOOL                bUpdateGraphicLinked;
     BOOL                bGraphicLinked;
     ImageList           maImageList;
+    ImageList           maImageListH;
 
     virtual void        Resize();
     virtual BOOL        Close();

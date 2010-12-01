@@ -81,7 +81,7 @@ public:
 
         uno::Reference< lang::XSingleServiceFactory > xFactory(
             comphelper::createProcessComponent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.Layout")) ),
+                OUString::createFromAscii( "com.sun.star.awt.Layout" ) ),
             uno::UNO_QUERY );
         if ( !xFactory.is() )
         {

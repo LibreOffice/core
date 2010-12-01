@@ -57,7 +57,7 @@ ScXMLConsolidationContext::ScXMLConsolidationContext(
     bLinkToSource( sal_False ),
     bTargetAddr(sal_False)
 {
-    ScXMLImport::MutexGuard aGuard(GetScImport());
+    rImport.LockSolarMutex();
     if( !xAttrList.is() ) return;
 
     sal_Int16               nAttrCount      = xAttrList->getLength();

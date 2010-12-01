@@ -283,7 +283,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
     {
         maTrustFileLocLB.RemoveEntry( nSel );
-        // Trusted Path could not be removed (#i33584#)
+        // --> PB 2004-09-21 #i33584#
         // after remove an entry, select another one if exists
         USHORT nNewCount = maTrustFileLocLB.GetEntryCount();
         if ( nNewCount > 0 )
@@ -292,6 +292,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
                 nSel = nNewCount - 1;
             maTrustFileLocLB.SelectEntryPos( nSel );
         }
+        // <--
         ImplCheckButtons();
     }
 
@@ -412,24 +413,33 @@ void MacroSecurityTrustedSourcesTP::ClosePage( void )
 
         mpDlg->maSecOptions.SetSecureURLs( aSecureURLs );
     }
-    // Trusted Path could not be removed (#i33584#)
+    // --> PB 2004-09-21 #i33584#
     // don't forget to remove the old saved SecureURLs
     else
         mpDlg->maSecOptions.SetSecureURLs( cssu::Sequence< rtl::OUString >() );
+    // <--
 
     mpDlg->maSecOptions.SetTrustedAuthors( maTrustedAuthors );
 }
+/*-- 26.02.2004 13:31:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 ReadOnlyImage::ReadOnlyImage(Window* pParent, const ResId rResId) :
             FixedImage(pParent, rResId)
 {
-    SetImage( Image(XMLSEC_RES( RID_XMLSECTP_LOCK )));
+    sal_Bool bHighContrast = pParent->GetSettings().GetStyleSettings().GetHighContrastMode();
+    SetImage( Image(XMLSEC_RES( bHighContrast ? RID_XMLSECTP_LOCK_HC : RID_XMLSECTP_LOCK )));
 }
 
+/*-- 26.02.2004 13:31:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 ReadOnlyImage::~ReadOnlyImage()
 {
 }
+/*-- 26.02.2004 13:31:04---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
 {
     if( Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled() )
@@ -449,6 +459,9 @@ void ReadOnlyImage::RequestHelp( const HelpEvent& rHEvt )
         Window::RequestHelp( rHEvt );
 }
 
+/*-- 26.02.2004 14:20:21---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 const String& ReadOnlyImage::GetHelpTip()
 {
      static String  aStr(XMLSEC_RES( RID_XMLSECTP_READONLY_CONFIG_TIP));

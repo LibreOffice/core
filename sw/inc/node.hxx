@@ -44,7 +44,7 @@
 #include <fmtcol.hxx>
 
 // ---------------------
-// forward declarations
+// forward Deklarationen
 // ---------------------
 
 class SvUShorts;
@@ -82,7 +82,9 @@ class IDocumentLineNumberAccess;
 class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
+// --> OD 2007-10-31 #i83479#
 class IDocumentListItems;
+// <--
 
 // --------------------
 // class SwNode
@@ -98,6 +100,7 @@ class SW_DLLPUBLIC SwNode : private /* public*/ BigPtrEntry
 
     BYTE nNodeType;
 
+    // JP 28.03.96
     // fuer Textnodes: Stufungslevel der Autoformatierung. Ist erstmal hier
     //                  gelandet, weil noch Bits frei sind
     BYTE nAFmtNumLvl : 3;
@@ -109,7 +112,7 @@ protected:
 
     SwNode( const SwNodeIndex &rWhere, const BYTE nNodeId );
 
-    // for the initial StartNode
+    // fuer den initialen StartNode
     SwNode( SwNodes& rNodes, ULONG nPos, const BYTE nNodeId );
 
 public:
@@ -267,6 +270,8 @@ public:
 
     /** Provides access to the document's numbered items interface
 
+        OD 2007-10-31 #i83479#
+
         @author OD
     */
     IDocumentListItems& getIDocumentListItems();
@@ -282,7 +287,7 @@ public:
     // suche den PageDesc, mit dem dieser Node formatiert ist. Wenn das
     // Layout vorhanden ist wird ueber das gesucht, ansonsten gibt es nur
     // die harte Tour ueber die Nodes nach vorne suchen!!
-
+    // OD 18.03.2003 #106326#
     const SwPageDesc* FindPageDesc( BOOL bCalcLay, sal_uInt32* pPgDescNdIdx = 0 ) const;
 
     // falls der Node in einem Fly steht, dann wird das entsprechende Format
@@ -312,12 +317,12 @@ class SwStartNode: public SwNode
 {
     friend class SwNode;
     friend class SwNodes;
-    friend class SwEndNode;     // to set the theEndOfSection !!
+    friend class SwEndNode;     // um theEndOfSection zu setzen !!
 
     SwEndNode* pEndOfSection;
     SwStartNodeType eSttNdTyp;
 
-    // for the initial StartNode
+    // fuer den initialen StartNode
     SwStartNode( SwNodes& rNodes, ULONG nPos );
 
 protected:
@@ -348,7 +353,7 @@ class SwEndNode : public SwNode
     friend class SwTableNode;       // um seinen EndNode anlegen zukoennen
     friend class SwSectionNode;     // um seinen EndNode anlegen zukoennen
 
-    // for the initial StartNode
+    // fuer den initialen StartNode
     SwEndNode( SwNodes& rNodes, ULONG nPos, SwStartNode& rSttNd );
 
 protected:
@@ -368,6 +373,9 @@ private:
 // --------------------
 class SW_DLLPUBLIC SwCntntNode: public SwModify, public SwNode, public SwIndexReg
 {
+    // Der Reader darf NewAttrSet() aufrufen!
+//  friend class SwSwgReader;
+//  friend class Sw3IoImp;
 
 //FEATURE::CONDCOLL
     SwDepend* pCondColl;
@@ -443,7 +451,7 @@ public:
     virtual xub_StrLen Len() const;
 
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const = 0;
-    // erfrage vom Client Informationen
+        // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     // SS fuer die PoolItems: (Harte-(Fmt)Attrbutierung)
@@ -451,12 +459,14 @@ public:
     // Ist bInParent FALSE, wird nur in diesem Node nach dem Attribut gesucht.
     const SfxPoolItem& GetAttr( USHORT nWhich, BOOL bInParent=TRUE ) const;
     BOOL GetAttr( SfxItemSet& rSet, BOOL bInParent=TRUE ) const;
+    // --> OD 2008-03-13 #refactorlists#
     // made virtual
     virtual BOOL SetAttr( const SfxPoolItem& );
     virtual BOOL SetAttr( const SfxItemSet& rSet );
     virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
     virtual USHORT ResetAllAttr();
+    // <--
 
     // liefert das Attribut, das nicht ueber die bedingte Vorlage kommt!
     const SfxPoolItem* GetNoCondAttr( USHORT nWhich, BOOL bInParents ) const;
@@ -483,10 +493,11 @@ public:
     // spaetestend in EndAction einer Shell geupdatet
     BOOL InvalidateNumRule();
 
-    // determines the text direction for a certain
+    // --> OD 2005-02-21 #i42921# - determines the text direction for a certain
     // position. Return -1, if text direction could *not* be determined.
     short GetTextDirection( const SwPosition& rPos,
                             const Point* pPt ) const;
+    // <--
 
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
@@ -593,6 +604,7 @@ public:
 
 
 
+// ---------------------- einige inline Methoden ----------------------
 inline       SwEndNode   *SwNode::GetEndNode()
 {
      return ND_ENDNODE == nNodeType ? (SwEndNode*)this : 0;

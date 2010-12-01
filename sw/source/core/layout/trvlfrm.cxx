@@ -580,10 +580,10 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             while ( pCell && !pCell->IsCellFrm() )
                 pCell = pCell->GetUpper();
             if ( !pCell ||
-                    (( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
+                    ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
                       ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) &&
-                        !pCell->IsCoveredCell()) )
+                        !pCell->IsCoveredCell() )
                 bProtect = FALSE;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -702,14 +702,14 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const long nPrtLeft = bRTL ?
                                 (pTable->*fnRect->fnGetPrtRight)() :
                                 (pTable->*fnRect->fnGetPrtLeft)();
-            if ( bRTL != (nX < nPrtLeft) )
+            if ( bRTL != nX < nPrtLeft )
                 nX = nPrtLeft;
             else
             {
                    const long nPrtRight = bRTL ?
                                     (pTable->*fnRect->fnGetPrtLeft)() :
                                     (pTable->*fnRect->fnGetPrtRight)();
-                if ( bRTL != (nX > nPrtRight) )
+                if ( bRTL != nX > nPrtRight )
                     nX = nPrtRight;
             }
         }
@@ -2030,6 +2030,19 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
           ( !pEndPos->nNode.GetNode().IsCntntNode() ||
             !pEndPos->nNode.GetNode().GetCntntNode()->GetFrm() ) ) )
     {
+        /* For SelectAll we will need something like this later on...
+        const SwFrm* pPageFrm = GetLower();
+        while( pPageFrm )
+        {
+            SwRect aTmp( pPageFrm->Prt() );
+            aTmp.Pos() += pPageFrm->Frm().Pos();
+            Sub( aRegion, aTmp );
+            pPageFrm = pPageFrm->GetNext();
+        }
+        aRegion.Invert();
+        rCrsr.Remove( 0, rCrsr.Count() );
+        rCrsr.Insert( &aRegion, 0 );
+        */
         return;
     }
 
@@ -2298,14 +2311,12 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                         (aTmp.*fnRectX->fnSetTop)( nTmp );
                         if( (aEndRect.*fnRectX->fnGetTop)() !=
                             (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
-                        {
-                            if( bPorR2L )
-                                (aTmp.*fnRectX->fnSetLeft)(
-                                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                            else
-                                (aTmp.*fnRectX->fnSetRight)(
-                                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
-                        }
+                        if( bPorR2L )
+                            (aTmp.*fnRectX->fnSetLeft)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                        else
+                            (aTmp.*fnRectX->fnSetRight)(
+                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
                         aTmp.Intersection( aEndFrm );
                         Sub( aRegion, aTmp );
                     }

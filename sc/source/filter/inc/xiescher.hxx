@@ -38,7 +38,6 @@
 #include "xlescher.hxx"
 #include "xiroot.hxx"
 #include "xistring.hxx"
-#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace drawing { class XShape; }
@@ -55,7 +54,7 @@ class XclImpDrawing;
 // Drawing objects ============================================================
 
 class XclImpDrawObjBase;
-typedef boost::shared_ptr< XclImpDrawObjBase > XclImpDrawObjRef;
+typedef ScfRef< XclImpDrawObjBase > XclImpDrawObjRef;
 
 /** Base class for drawing objects (OBJ records). */
 class XclImpDrawObjBase : protected XclImpRoot
@@ -449,7 +448,7 @@ private:
     void                FinalizeTabChart();
 
 private:
-    typedef boost::shared_ptr< XclImpChart > XclImpChartRef;
+    typedef ScfRef< XclImpChart > XclImpChartRef;
 
     XclImpChartRef      mxChart;        /// The chart itself (BOF/EOF substream data).
     bool                mbOwnTab;       /// true = own sheet; false = embedded object.
@@ -485,9 +484,9 @@ public:
     virtual             ~XclImpControlHelper();
 
     /** Returns true, if a linked cell address is present. */
-    inline bool         HasCellLink() const { return mxCellLink != 0; }
+    inline bool         HasCellLink() const { return mxCellLink.is(); }
     /** Returns true, if a linked source cell range is present. */
-    inline bool         HasSourceRange() const { return mxSrcRange != 0; }
+    inline bool         HasSourceRange() const { return mxSrcRange.is(); }
 
     /** Returns the SdrObject from the passed control shape and sets the bounding rectangle. */
     SdrObject*          CreateSdrObjectFromShape(
@@ -508,8 +507,8 @@ protected:
 
     void ApplySheetLinkProps() const;
     mutable ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                                   mxShape;        /// The UNO wrapper of the control shape.
-    boost::shared_ptr< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
+                        mxShape;        /// The UNO wrapper of the control shape.
+    ScfRef< ScAddress > mxCellLink;     /// Linked cell in the Calc document.
 private:
     /** Reads a list of cell ranges from a formula at the current stream position. */
     void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm );
@@ -517,9 +516,9 @@ private:
     void                ReadRangeList( ScRangeList& rScRanges, XclImpStream& rStrm, bool bWithBoundSize );
 
 private:
-    const XclImpRoot&            mrRoot;     /// Not derived from XclImpRoot to allow multiple inheritance.
-    boost::shared_ptr< ScRange > mxSrcRange; /// Source data range in the Calc document.
-    XclCtrlBindMode              meBindMode; /// Value binding mode.
+    const XclImpRoot&   mrRoot;         /// Not derived from XclImpRoot to allow multiple inheritance.
+    ScfRef< ScRange >   mxSrcRange;     /// Source data range in the Calc document.
+    XclCtrlBindMode     meBindMode;     /// Value binding mode.
 };
 
 // ----------------------------------------------------------------------------
@@ -978,7 +977,7 @@ public:
 
 protected:
     /** Returns a color from the Excel color palette. */
-    virtual bool        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
+    virtual int        GetColorFromPalette( USHORT nIndex, Color& rColor ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -1092,8 +1091,8 @@ private:
     void                InitControlForm();
 
 private:
-    typedef boost::shared_ptr< ScfProgressBar >     ScfProgressBarRef;
-    typedef boost::shared_ptr< XclImpDffConvData >  XclImpDffConvDataRef;
+    typedef ScfRef< ScfProgressBar >                ScfProgressBarRef;
+    typedef ScfRef< XclImpDffConvData >             XclImpDffConvDataRef;
     typedef ::std::vector< XclImpDffConvDataRef >   XclImpDffConvDataStack;
 
     const ::rtl::OUString maStdFormName;    /// Standard name of control forms.
@@ -1163,7 +1162,7 @@ private:
 private:
     typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
     typedef ::std::map< sal_uInt16, XclImpDrawObjRef >  XclImpObjMapById;
-    typedef boost::shared_ptr< XclImpObjTextData >      XclImpObjTextRef;
+    typedef ScfRef< XclImpObjTextData >                 XclImpObjTextRef;
     typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
 
     XclImpDrawObjVector maRawObjs;          /// BIFF5 objects without DFF data.
@@ -1214,6 +1213,8 @@ private:
 /** Stores all drawing and OLE objects and additional data related to these objects. */
 class XclImpObjectManager : protected XclImpRoot
 {
+typedef std::hash_map< sal_Int32, String >  CntrlObjIdToName;
+typedef std::map< String, CntrlObjIdToName > CodeNameToCntrlObjIdInfo;
 public:
     explicit            XclImpObjectManager( const XclImpRoot& rRoot );
     virtual             ~XclImpObjectManager();
@@ -1230,14 +1231,12 @@ public:
     String              GetDefaultObjName( const XclImpDrawObjBase& rDrawObj ) const;
     /** Returns the used area in the sheet with the passed index. */
     ScRange             GetUsedArea( SCTAB nScTab ) const;
-    /** Sets the container to receive overridden shape/ctrl names from
-        the filter. */
-    void SetOleNameOverrideInfo( const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& rxOverrideInfo ) {  mxOleCtrlNameOverride = rxOverrideInfo; }
-    /** Returns the name of overridden name ( or zero length string ) for
-        associated object id. */
+    void SetOleNameOverrideInfo( const CodeNameToCntrlObjIdInfo& rOverrideInfo ) {  maOleCtrlNameOverride = rOverrideInfo; }
     String GetOleNameOverride( SCTAB nTab, sal_uInt16 nObjId );
     // ------------------------------------------------------------------------
 private:
+
+    CodeNameToCntrlObjIdInfo maOleCtrlNameOverride;
 
     /** Reads and returns a bitmap from WMF/PICT format. */
     static void         ReadWmf( Graphic& rGraphic, XclImpStream& rStrm );
@@ -1263,15 +1262,14 @@ private:
 private:
     typedef ::std::map< sal_Size, XclImpDrawObjRef >    XclImpObjMap;
     typedef ::std::map< XclObjId, XclImpDrawObjRef >    XclImpObjMapById;
-    typedef boost::shared_ptr< XclImpObjTextData >      XclImpObjTextRef;
+    typedef ScfRef< XclImpObjTextData >                 XclImpObjTextRef;
     typedef ::std::map< sal_Size, XclImpObjTextRef >    XclImpObjTextMap;
     typedef ::std::vector< XclObjId >                   XclObjIdVec;
 
     typedef ::std::map< sal_uInt16, String >            DefObjNameMap;
-    typedef boost::shared_ptr< XclImpSheetDrawing >     XclImpSheetDrawingRef;
+    typedef ScfRef< XclImpSheetDrawing >                XclImpSheetDrawingRef;
     typedef ::std::map< SCTAB, XclImpSheetDrawingRef >  XclImpSheetDrawingMap;
 
-    com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > mxOleCtrlNameOverride;
     DefObjNameMap       maDefObjNames;      /// Default base names for all object types.
     SvMemoryStream      maDggStrm;          /// Copy of global DFF data (DGG container) in memory.
     XclImpSheetDrawingMap maSheetDrawings;  /// Drawing managers of all sheets.

@@ -26,7 +26,7 @@
  *
  ************************************************************************/
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 #include <fstream>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>

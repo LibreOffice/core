@@ -198,6 +198,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aPrevSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   PrevSameHdl));
     aNextBT.SetClickHdl(LINK(this,SwIndexMarkDlg,       NextHdl));
     aNextSameBT.SetClickHdl(LINK(this,SwIndexMarkDlg,   NextSameHdl));
+    //aTypeDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,   ModifyHdl));
     aTypeDCB.SetSelectHdl(LINK(this,SwIndexMarkDlg,     ModifyHdl));
     aKeyDCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,      KeyDCBModifyHdl));
     aKey2DCB.SetModifyHdl(LINK(this,SwIndexMarkDlg,     KeyDCBModifyHdl));
@@ -213,8 +214,16 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     if(bNewMark)
     {
         aDelBT.Hide();
-        ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMP ) );
-        aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ) );
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMPH ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_HIGHCONTRAST );
+        }
+
+        {
+            ImageList aTempList( SW_RES( IMG_NAVI_ENTRYBMP ) );
+            aNewBT.SetModeImage( aTempList.GetImage( SID_SW_START + CONTENT_TYPE_INDEX ), BMP_COLOR_NORMAL );
+        }
     }
     else
     {
@@ -385,6 +394,7 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
         {
             case SCRIPTTYPE_ASIAN: nWhich = RES_CHRATR_CJK_LANGUAGE; break;
             case SCRIPTTYPE_COMPLEX:nWhich = RES_CHRATR_CTL_LANGUAGE; break;
+            //case SCRIPTTYPE_LATIN:
             default:nWhich = RES_CHRATR_LANGUAGE; break;
         }
         SfxItemSet aLangSet(pSh->GetAttrPool(), nWhich, nWhich);
@@ -392,6 +402,13 @@ void    SwIndexMarkDlg::UpdateLanguageDependenciesForPhoneticReading()
         nLangForPhoneticReading = ((const SvxLanguageItem&)aLangSet.Get(nWhich)).GetLanguage();
     }
 
+    /*
+    //enable phonetic reading dependent on the current language
+    {
+        lang::Locale aLocale( SvxCreateLocale( LanguageType( nLangForPhoneticReading ) ) );
+        bIsPhoneticReadingEnabled = xExtendedIndexEntrySupplier->usePhoneticEntry( aLocale );
+    }
+    */
 }
 
 String  SwIndexMarkDlg::GetDefaultPhoneticReading( const String& rText )
@@ -1709,6 +1726,7 @@ SwCreateAuthEntryDlg_Impl::SwCreateAuthEntryDlg_Impl(Window* pParent,
     long nHeightDiff = - aFLSz.Height();
     aFLSz.Height() = aTL1.Y();
     nHeightDiff += aFLSz.Height();
+//    aEntriesFL.SetSizePixel(aFLSz);
     Size aDlgSize(GetSizePixel());
     aDlgSize.Height() += nHeightDiff;
     SetSizePixel(aDlgSize);

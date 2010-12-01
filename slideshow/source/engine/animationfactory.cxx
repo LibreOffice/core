@@ -592,13 +592,6 @@ namespace slideshow
                 bool                               mbAnimationStarted;
             };
 
-            //Current c++0x draft (apparently) has std::identity, but not operator()
-            template<typename T> struct SGI_identity : public std::unary_function<T,T>
-            {
-                T& operator()(T& x) const { return x; }
-                const T& operator()(const T& x) const { return x; }
-            };
-
             /** Function template wrapper around GenericAnimation template
 
                 @tpl AnimationBase
@@ -615,7 +608,7 @@ namespace slideshow
             {
                 return ::boost::shared_ptr< AnimationBase >(
                     new GenericAnimation< AnimationBase,
-                                          SGI_identity< typename AnimationBase::ValueType > >(
+                                          ::std::identity< typename AnimationBase::ValueType > >(
                                               rShapeManager,
                                               nFlags,
                                               pIsValid,
@@ -623,8 +616,8 @@ namespace slideshow
                                               pGetValue,
                                               pSetValue,
                                               // no modification necessary, use identity functor here
-                                              SGI_identity< typename AnimationBase::ValueType >(),
-                                              SGI_identity< typename AnimationBase::ValueType >() ) );
+                                              ::std::identity< typename AnimationBase::ValueType >(),
+                                              ::std::identity< typename AnimationBase::ValueType >() ) );
             }
 
             class Scaler

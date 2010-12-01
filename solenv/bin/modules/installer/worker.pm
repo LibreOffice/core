@@ -31,7 +31,6 @@ use Cwd;
 use File::Copy;
 use File::stat;
 use File::Temp qw(tmpnam);
-use File::Path;
 use installer::control;
 use installer::converter;
 use installer::existence;
@@ -108,7 +107,8 @@ sub copy_install_sets_to_ship
     if (( ! $installer::globals::iswindowsbuild ) && ( $installer::globals::addjavainstaller ))
     {
         # Setting Unix rights for Java starter ("setup")
-        chmod 0775, "$localshipinstalldir/setup";
+        my $localcall = "chmod 775 $localshipinstalldir/setup \>\/dev\/null 2\>\&1";
+        system($localcall);
     }
 
     # unpacking the tar.gz file for Solaris
@@ -183,6 +183,17 @@ sub make_checksum_file
 
     my $checksumfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$installer::globals::checksumfile, $includepatharrayref, 1);
     if ( $$checksumfileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $installer::globals::checksumfile !", "make_checksum_file"); }
+
+#   # very slow on Windows
+#   for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+#   {
+#       my $onefile = ${$filesref}[$i];
+#       my $systemcall = "$$checksumfileref $onefile->{'sourcepath'} |";
+#       open (CHECK, "$systemcall");
+#       my $localchecksum = <CHECK>;
+#       close (CHECK);
+#       push(@checksum, $localchecksum);
+#   }
 
     my $systemcall = "$$checksumfileref";
 
@@ -762,6 +773,7 @@ sub install_simple ($$$$$$)
 
         if ((!($dir =~ /\bPREDEFINED_/ )) || ( $dir =~ /\bPREDEFINED_PROGDIR\b/ ))
         {
+            # printf "mkdir $destdir$onedir->{'HostName'}\n";
             mkdir $destdir . $onedir->{'HostName'};
             push @lines, "%dir " . $onedir->{'HostName'} . "\n";
         }
@@ -781,18 +793,12 @@ sub install_simple ($$$$$$)
         $sourcepath =~ s/\$\$/\$/;
 
         push @lines, "$destination\n";
-        if(-d  "$destdir$destination"){
-            rmtree("$destdir$destination");
-        }
-        if(-e "$destdir$destination") {
-            unlink "$destdir$destination";
-        }
-
+        # printf "cp $sourcepath $destdir$destination\n";
         copy ("$sourcepath", "$destdir$destination") || die "Can't copy file: $sourcepath -> $destdir$destination $!";
         my $sourcestat = stat($sourcepath);
         utime ($sourcestat->atime, $sourcestat->mtime, "$destdir$destination");
         chmod (oct($unixrights), "$destdir$destination") || die "Can't change permissions: $!";
-        push @lines, "$destination\n";
+         push @lines, "$destination\n";
     }
 
     for ( my $i = 0; $i <= $#{$linksarray}; $i++ )
@@ -801,9 +807,7 @@ sub install_simple ($$$$$$)
         my $destination = $onelink->{'destination'};
         my $destinationfile = $onelink->{'destinationfile'};
 
-        if(-e "$destdir$destination") {
-            unlink "$destdir$destination";
-        }
+        # print "link $destinationfile -> $destdir$destination\n";
         symlink ("$destinationfile", "$destdir$destination") || die "Can't create symlink: $!";
         push @lines, "$destination\n";
     }
@@ -814,6 +818,7 @@ sub install_simple ($$$$$$)
         my $target = $onelink->{'Target'};
         my $destination = $onelink->{'destination'};
 
+        # print "Unix link $target -> $destdir$destination\n";
         `ln -sf '$target' '$destdir$destination'`;
         push @lines, "$destination\n";
     }
@@ -1486,6 +1491,7 @@ sub reorg_patchfile
 
         for ( my $j = 0; $j <= $#{$patchfiles}; $j++ )
         {
+            # "\tXXXXX\t" . $olddestination . "\n";
             if ( ${$patchfiles}[$j] =~ /^\s*(.*?)\s*\tXXXXX\t\Q$directory\E\s*$/ )
             {
                 $line = $1 . "\n";
@@ -1619,6 +1625,7 @@ sub prepare_windows_patchfiles
     my $patchfilename2 = "patchmsi.dll";
 
     if ( ! $allvariableshashref->{'WINDOWSPATCHLEVEL'} ) { installer::exiter::exit_program("ERROR: No Windows patch level defined in list file (WINDOWSPATCHLEVEL) !", "prepare_windows_patchfiles"); }
+    # my $windowspatchlevel = $allvariableshashref->{'WINDOWSPATCHLEVEL'};
     my $windowspatchlevel = $installer::globals::buildid;
 
     # the environment variable CWS_WORK_STAMP is set only in CWS
@@ -1694,6 +1701,9 @@ sub prepare_windows_patchfiles
         $infoline = "Size of patch file list: $filesize\n\n";
         push( @installer::globals::logfileinfo, $infoline);
         installer::logger::print_message( "... size of patch list file: $filesize Byte ... \n" );
+
+        # Win 98: Maximum size of ini file is 65 kB
+        # if ( $filesize > 64000 ) { installer::exiter::exit_program("ERROR: Maximum size of patch file list is 65 kB (Win98), now reached: $filesize Byte !", "prepare_windows_patchfiles"); }
     }
 
 }
@@ -1932,6 +1942,8 @@ sub copy_all_packages
                 {
                     my $destinationdir = $destdir . $installer::globals::separator . $packagename;
                     if ( ! -d $onepackage ) { installer::exiter::exit_program("ERROR: Could not find Solaris package $onepackage!", "copy_all_packages"); }
+                    # installer::systemactions::hardlink_complete_directory($onepackage, $destinationdir);
+                    # installer::systemactions::copy_complete_directory($onepackage, $destinationdir);
 
                     my $systemcall = "cp -p -R $onepackage $destinationdir";
                      make_systemcall($systemcall);
@@ -2096,6 +2108,8 @@ sub check_jds_language
 
     my $infoline = "";
 
+    # languagesarrayref and $allvariableshashref->{'JDSLANG'}
+
     if ( ! $allvariableshashref->{'JDSLANG'} ) { installer::exiter::exit_program("ERROR: For building JDS installation sets \"JDSLANG\" must be defined!", "check_jds_language"); }
     my $languagestring = $allvariableshashref->{'JDSLANG'};
 
@@ -2193,7 +2207,8 @@ sub put_scpactions_into_installset
 
         if ( $onescpaction->{'UnixRights'} )
         {
-            chmod oct($onescpaction->{'UnixRights'}), $destfile;
+            my $localcall = "chmod $onescpaction->{'UnixRights'} $destfile \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
 
     }
@@ -2258,6 +2273,7 @@ sub get_platform_name
     }
     else
     {
+        # $platformname = $installer::globals::packageformat;
         $platformname = $installer::globals::compiler;
     }
 
@@ -2353,6 +2369,7 @@ sub collect_all_files_from_includepathes
 
         my @sourcefiles = ();
         my $pathstring = "";
+        # installer::systemactions::read_complete_directory($includepath, $pathstring, \@sourcefiles);
         installer::systemactions::read_full_directory($includepath, $pathstring, \@sourcefiles);
 
         if ( ! ( $#sourcefiles > -1 ))
@@ -2406,6 +2423,9 @@ sub find_file_by_id
             last;
         }
     }
+
+    # It does not need to exist. For example products that do not contain the libraries.
+    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
 
     if (! $foundfile ) { $onefile  = ""; }
 
@@ -2954,6 +2974,7 @@ sub resolving_hidden_flag
 
             if ( $copysuccess )
             {
+                # $onefile->{'Name'} = $newfilename;
                 $onefile->{'sourcepath'} = $destfile;
                 $destination = $onefile->{'destination'};
                 installer::pathanalyzer::get_path_from_fullqualifiedname(\$destination);
@@ -3111,6 +3132,7 @@ sub put_license_into_setup
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
+    # my $licensefilename = "LICENSE_" . $licenselanguage;
     my $licensefilename = "license_" . $licenselanguage . ".txt";
     my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
 
@@ -3162,6 +3184,7 @@ sub tar_package
     if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
 
     my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - $packagename > $tarfilename";
+    # my $systemcall = "cd $installdir; $ldpreloadstring tar -cf - * > $tarfilename";
 
     my $returnvalue = system($systemcall);
 
@@ -3179,7 +3202,8 @@ sub tar_package
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    chmod 0775, $tarfilename;
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
 
     my $fulltarfile = $installdir . $installer::globals::separator . $tarfilename;
     my $filesize = ( -s $fulltarfile );
@@ -3216,7 +3240,8 @@ sub untar_package
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    chmod 0775, $tarfilename;
+    my $localcall = "chmod 775 $tarfilename \>\/dev\/null 2\>\&1";
+    $returnvalue = system($localcall);
 }
 
 #########################################################
@@ -3227,12 +3252,32 @@ sub shuffle_array
 {
     my ( $arrayref ) = @_;
 
+    # my $counter = 0;
+    # my $infoline = "Old package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
+
     my $i = @$arrayref;
     while (--$i)
     {
         my $j = int rand ($i+1);
         @$arrayref[$i,$j] = @$arrayref[$j,$i];
     }
+
+    # $counter = 0;
+    # $infoline = "New package order: \n";
+    # push( @installer::globals::logfileinfo, $infoline);
+    # foreach my $onepackage ( @{$arrayref} )
+    # {
+    #   $counter++;
+    #   $infoline = "$counter: $onepackage->{'module'}\n";
+    #   push( @installer::globals::logfileinfo, $infoline);
+    # }
 }
 
 ################################################
@@ -3382,6 +3427,7 @@ sub collectpackagemaps
     # Create a tar gz file with all package maps
     my $tarfilename = $subdirname . ".tar";
     my $targzname = $tarfilename . ".gz";
+    # my $systemcall = "cd $pkgmapdir; tar -cf - $subdirname > $tarfilename";
     $systemcall = "cd $pkgmapdir; tar -cf - $subdirname | gzip > $targzname";
     make_systemcall($systemcall);
     installer::systemactions::remove_complete_directory($pkgmapsubdir, 1);

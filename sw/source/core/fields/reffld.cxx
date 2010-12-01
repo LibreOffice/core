@@ -581,6 +581,9 @@ String SwGetRefField::GetPar2() const
     return Expand();
 }
 
+/*-----------------06.03.98 13:34-------------------
+
+--------------------------------------------------*/
 bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -652,7 +655,9 @@ bool SwGetRefField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------06.03.98 13:34-------------------
 
+--------------------------------------------------*/
 bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     String sTmp;
@@ -727,7 +732,9 @@ bool SwGetRefField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     }
     return true;
 }
+/* -----------------------------11.01.2002 12:50------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SwGetRefField::ConvertProgrammaticToUIName()
 {
     if(GetTyp() && REF_SEQUENCEFLD == nSubType)

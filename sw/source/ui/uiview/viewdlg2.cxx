@@ -61,6 +61,10 @@ extern String* pOldTabCat;
 extern String* pOldFrmCat;
 extern String* pOldDrwCat;
 
+/* -----------------06.11.98 13:45-------------------
+ *
+ * --------------------------------------------------*/
+
 void SwView::ExecDlgExt(SfxRequest &rReq)
 {
     Window *pMDI = &GetViewFrame()->GetWindow();
@@ -98,6 +102,10 @@ void SwView::ExecDlgExt(SfxRequest &rReq)
     }
 }
 
+/* -----------------06.11.98 14:53-------------------
+ *
+ * --------------------------------------------------*/
+
 void SwView::AutoCaption(const USHORT nType, const SvGlobalName *pOleId)
 {
     SwModuleOptions* pModOpt = SW_MOD()->GetModuleConfig();
@@ -110,6 +118,10 @@ void SwView::AutoCaption(const USHORT nType, const SvGlobalName *pOleId)
             InsertCaption(pOpt);
     }
 }
+
+/* -----------------06.11.98 12:58-------------------
+ *
+ * --------------------------------------------------*/
 
 void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 {

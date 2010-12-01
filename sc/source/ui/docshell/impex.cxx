@@ -2058,7 +2058,7 @@ ScFormatFilterPlugin &ScFormatFilter::Get()
     if ( aModule.loadRelative( &thisModule,
                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "scfilt" ) ) ) ) )
     {
-    oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScFilterCreate" )) );
+    oslGenericFunction fn = aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( "ScFilterCreate" ) );
     if (fn != NULL)
         plugin = reinterpret_cast<FilterFn>(fn)();
     }

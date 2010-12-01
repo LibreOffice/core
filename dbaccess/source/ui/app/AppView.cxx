@@ -101,7 +101,8 @@ OAppBorderWindow::OAppBorderWindow(OApplicationView* _pParent,PreviewMode _ePrev
 // -----------------------------------------------------------------------------
 OAppBorderWindow::~OAppBorderWindow()
 {
-    // destroy children
+    //////////////////////////////////////////////////////////////////////
+    // Childs zerstoeren
     if ( m_pPanel )
     {
         m_pPanel->Hide();
@@ -126,7 +127,8 @@ void OAppBorderWindow::GetFocus()
 // -----------------------------------------------------------------------------
 void OAppBorderWindow::Resize()
 {
-    // parent window dimension
+    //////////////////////////////////////////////////////////////////////
+    // Abmessungen parent window
     Size aOutputSize( GetOutputSize() );
     long nOutputWidth   = aOutputSize.Width();
     long nOutputHeight  = aOutputSize.Height();
@@ -183,6 +185,10 @@ void OAppBorderWindow::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetDialogColor() );
+
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 // -----------------------------------------------------------------------------
 OApplicationView* OAppBorderWindow::getView() const
@@ -595,6 +601,9 @@ void OApplicationView::ImplInitSettings()
 
     if( true )
         SetBackground( rStyleSettings.GetFieldColor() );
+    /*SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );*/
 }
 //-----------------------------------------------------------------------------
 

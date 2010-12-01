@@ -54,7 +54,8 @@ namespace frm
     public:
         virtual CommandImages   getCommandImages(
                                     const CommandURLs& _rCommandURLs,
-                                    const bool _bLarge
+                                    const bool _bLarge,
+                                    const bool _bHiContrast
                                 ) const = 0;
 
         virtual ~ICommandImageProvider() { }

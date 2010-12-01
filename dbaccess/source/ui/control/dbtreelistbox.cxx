@@ -515,7 +515,7 @@ namespace
             {
                 lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
                 continue;
-            }
+            } // if ( pPopup )
 
             const USHORT nCommandId = _rCommandController.registerCommandURL( aCommand );
             _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
@@ -533,6 +533,8 @@ namespace
     }
     void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
     {
+        const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+        const BOOL bHiContrast = rSettings.GetHighContrastMode();
         uno::Reference< frame::XController > xController = _rCommandController.getXController();
         uno::Reference< frame::XFrame> xFrame;
         if ( xController.is() )
@@ -551,10 +553,10 @@ namespace
             {
                 lcl_insertMenuItemImages( *pPopup, _rCommandController );
                 continue;
-            }
+            } // if ( pPopup )
 
             if ( xFrame.is() )
-                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,FALSE));
+                _rMenu.SetItemImage(nId,framework::GetImageFromURL(xFrame,aCommand,FALSE,bHiContrast));
         }
     }
     // =========================================================================
@@ -692,7 +694,7 @@ PopupMenu* DBTreeListBox::CreateContextMenu( void )
         // the interceptors only know command URLs, but our menus primarily work
         // with IDs -> we need to translate the commands to IDs
         lcl_adjustMenuItemIDs( *pModifiedMenu, m_pContextMenuProvider->getCommandController() );
-    }
+    } // if ( bModifiedMenu )
 
     return pContextMenu.release();
 }

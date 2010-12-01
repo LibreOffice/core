@@ -44,7 +44,7 @@ namespace writerfilter {
 namespace ooxml
 {
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 TagLogger::Pointer_t debug_logger(TagLogger::getInstance("DEBUG"));
 #endif
 

@@ -203,6 +203,12 @@ void SdTbxCtlGlueEscDir::StateChanged( USHORT nSId,
     SfxToolBoxControl::StateChanged( nSId, eState, pState );
 }
 
+/*************************************************************************
+|*
+|* No Comment
+|*
+\************************************************************************/
+
 Window* SdTbxCtlGlueEscDir::CreateItemWindow( Window *pParent )
 {
     if( GetSlotId() == SID_GLUE_ESCDIR )

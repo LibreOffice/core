@@ -407,7 +407,7 @@ Reference< ::com::sun::star::frame::XLayoutManager>
                 try
                 {
                     Any aValue (xFrameProperties->getPropertyValue(
-                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager"))));
+                        ::rtl::OUString::createFromAscii("LayoutManager")));
                     aValue >>= xLayoutManager;
                 }
                 catch (const beans::UnknownPropertyException& rException)

@@ -81,7 +81,7 @@ Reference< uno::XComponentContext > lcl_getComponentContext()
     {
         Reference< beans::XPropertySet > xFactProp( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
         if( xFactProp.is())
-            xFactProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
+            xFactProp->getPropertyValue(OUString::createFromAscii("DefaultContext")) >>= xContext;
     }
     catch( uno::Exception& )
     {}
@@ -621,7 +621,7 @@ Reference< chart2::XDataSeries > SchXMLImportHelper::GetNewDataSeries(
                 {
                     xResult.set(
                         xContext->getServiceManager()->createInstanceWithContext(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.DataSeries" )),
+                            OUString::createFromAscii("com.sun.star.chart2.DataSeries"),
                             xContext ), uno::UNO_QUERY_THROW );
                 }
                 if( xResult.is() )
@@ -740,8 +740,8 @@ SvXMLImportContext *SchXMLImport::CreateContext( USHORT nPrefix, const OUString&
         if (xDPS.is()) {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+                    ::rtl::OUString::createFromAscii(
+                        "com.sun.star.xml.dom.SAXDocumentBuilder")),
                     uno::UNO_QUERY_THROW);
             pContext = (IsXMLToken(rLocalName, XML_DOCUMENT_META))
                 ? new SvXMLMetaDocumentContext(*this,
@@ -956,7 +956,7 @@ OUString SAL_CALL SchXMLImport::getImplementationName() throw( uno::RuntimeExcep
         case IMPORT_SETTINGS:
         // there is no settings component in chart
         default:
-            return OUString(RTL_CONSTASCII_USTRINGPARAM( "SchXMLImport" ));
+            return OUString::createFromAscii( "SchXMLImport" );
     }
 }
 

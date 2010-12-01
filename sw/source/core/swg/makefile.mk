@@ -40,16 +40,21 @@ TARGET=swg
 
 # --- Files --------------------------------------------------------
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/swblocks.obj    \
+        $(SLO)$/SwXMLBlockImport.obj	\
+        $(SLO)$/SwXMLSectionList.obj	\
+        $(SLO)$/SwXMLBlockExport.obj	\
+        $(SLO)$/SwXMLBlockListContext.obj	\
+        $(SLO)$/SwXMLTextBlocks.obj \
+        $(SLO)$/SwXMLTextBlocks1.obj
 
 EXCEPTIONSFILES = \
-        $(SLO)$/SwXMLBlockExport.obj	\
         $(SLO)$/SwXMLBlockImport.obj	\
-        $(SLO)$/SwXMLBlockListContext.obj	\
         $(SLO)$/SwXMLSectionList.obj	\
-        $(SLO)$/SwXMLTextBlocks.obj	\
-        $(SLO)$/SwXMLTextBlocks1.obj	\
-        $(SLO)$/swblocks.obj
+        $(SLO)$/SwXMLBlockExport.obj	\
+        $(SLO)$/SwXMLBlockListContext.obj	\
+        $(SLO)$/SwXMLTextBlocks.obj \
+        $(SLO)$/SwXMLTextBlocks1.obj
 
 # --- Tagets -------------------------------------------------------
 

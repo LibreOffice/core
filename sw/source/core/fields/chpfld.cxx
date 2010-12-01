@@ -102,7 +102,22 @@ SwField* SwChapterField::Copy() const
     return pTmp;
 }
 
-// #i53420#
+// --> OD 2008-02-14 #i53420#
+//void SwChapterField::ChangeExpansion( const SwFrm* pFrm,
+//                                      const SwTxtNode* pTxtNd,
+//                                      sal_Bool bSrchNum )
+//{
+//    OSL_ENSURE( pFrm, "in welchem Frame stehe ich denn?" )
+//    SwDoc* pDoc = (SwDoc*)pTxtNd->GetDoc();
+//    SwPosition aPos( pDoc->GetNodes().GetEndOfContent() );
+
+//    if( pFrm->IsInDocBody() )
+//        aPos.nNode = *pTxtNd;
+//    else if( 0 == (pTxtNd = GetBodyTxtNode( *pDoc, aPos, *pFrm )) )
+//        // kein TxtNode (Formatierung Kopf/Fusszeile)
+//        return;
+//    ChangeExpansion(*pTxtNd, bSrchNum);
+//}
 void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
                                       const SwCntntNode* pCntntNode,
                                       sal_Bool bSrchNum )
@@ -122,6 +137,7 @@ void SwChapterField::ChangeExpansion(const SwFrm* pFrm,
         ChangeExpansion( *pTxtNode, bSrchNum );
     }
 }
+// <--
 
 void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
 {
@@ -137,9 +153,16 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
                 {
                     BYTE nPrevLvl = nLevel;
 
+                    // --> OD 2008-04-02 #refactorlists#
+//                    nLevel = GetRealLevel( pONd->GetTxtColl()->
+//                                            GetOutlineLevel() );
+                    // OSL_ENSURE( pONd->GetOutlineLevel() >= 0 && pONd->GetOutlineLevel() < MAXLEVEL,  //#outline level,zhaojianwei
+                    //        "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
+                    //nLevel = static_cast<BYTE>(pONd->GetOutlineLevel());
                     OSL_ENSURE( pONd->GetAttrOutlineLevel() >= 0 && pONd->GetAttrOutlineLevel() <= MAXLEVEL,
                             "<SwChapterField::ChangeExpansion(..)> - outline node with inconsistent outline level. Serious defect -> please inform OD." );
-                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());
+                    nLevel = static_cast<BYTE>(pONd->GetAttrOutlineLevel());                            //<-end,zhaojianwei
+                    // <--
 
                     if( nPrevLvl < nLevel )
                         nLevel = nPrevLvl;
@@ -202,6 +225,9 @@ void SwChapterField::ChangeExpansion(const SwTxtNode &rTxtNd, sal_Bool bSrchNum)
     }
 }
 
+/*-----------------05.03.98 16:19-------------------
+
+--------------------------------------------------*/
 bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -235,7 +261,9 @@ bool SwChapterField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 16:19-------------------
 
+--------------------------------------------------*/
 bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     BOOL bRet = TRUE;
@@ -266,7 +294,7 @@ bool SwChapterField::PutValue( const uno::Any& rAny, USHORT nWhichId )
                 case text::ChapterFormat::DIGIT:
                         SetFormat(CF_NUMBER_NOPREPST);
                 break;
-
+                //case text::ChapterFormat::NAME_NUMBER:
                 default:        SetFormat(CF_NUM_TITLE);
             }
         }

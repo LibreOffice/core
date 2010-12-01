@@ -30,8 +30,13 @@
 #ifndef _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
 #define _XMLOFF_XMLPROPERTYBACKPATCHER_HXX
 
+#ifndef __SGI_STL_MAP
 #include <map>
+#endif
+
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include <comphelper/stl_types.hxx>
 
 namespace rtl { class OUString; }

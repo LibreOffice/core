@@ -47,14 +47,11 @@ CDEFS+=-DDEBUG
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-                $(EXCEPTIONSFILES) \
-                $(SLO)$/ascharanchoredobjectposition.obj \
-                $(SLO)$/environmentofanchoredobject.obj \
-                $(SLO)$/tolayoutanchoredobjectposition.obj
-
-EXCEPTIONSFILES = \
                 $(SLO)$/anchoredobjectposition.obj \
-                $(SLO)$/tocntntanchoredobjectposition.obj
+                $(SLO)$/ascharanchoredobjectposition.obj \
+                $(SLO)$/tolayoutanchoredobjectposition.obj \
+                $(SLO)$/tocntntanchoredobjectposition.obj \
+                $(SLO)$/environmentofanchoredobject.obj
 
 # --- Targets -------------------------------------------------------
 

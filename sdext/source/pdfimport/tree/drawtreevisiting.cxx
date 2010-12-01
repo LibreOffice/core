@@ -98,7 +98,7 @@ void DrawXmlEmitter::visit( HyperlinkElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
     m_rEmitContext.rEmitter.endTag( pType );
 }
@@ -119,6 +119,15 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     }
 
     rtl::OUString str(elem.Text.getStr());
+
+    // Check for CTL
+    bool isComplex = false;
+    for(int i=0; i< elem.Text.getLength(); i++)
+    {
+    sal_Int16 nType = GetBreakIterator()->getScriptType( str, i + 1);
+    if (nType == ::com::sun::star::i18n::ScriptType::COMPLEX)
+        isComplex = true;
+    }
 
     m_rEmitContext.rEmitter.beginTag( "text:span", aProps );
 
@@ -149,7 +158,7 @@ void DrawXmlEmitter::visit( TextElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
 
     m_rEmitContext.rEmitter.endTag( "text:span" );
@@ -171,7 +180,7 @@ void DrawXmlEmitter::visit( ParagraphElement& elem, const std::list< Element* >:
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
 
     m_rEmitContext.rEmitter.endTag( pTagType );
@@ -256,7 +265,7 @@ void DrawXmlEmitter::visit( FrameElement& elem, const std::list< Element* >::con
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
 
     if( bTextBox )
@@ -354,7 +363,7 @@ void DrawXmlEmitter::visit( PageElement& elem, const std::list< Element* >::cons
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
 
     m_rEmitContext.rEmitter.endTag("draw:page");
@@ -370,7 +379,7 @@ void DrawXmlEmitter::visit( DocumentElement& elem, const std::list< Element* >::
     while( this_it !=elem.Children.end() && *this_it != &elem )
     {
         (*this_it)->visitedBy( *this, this_it );
-        ++this_it;
+        this_it++;
     }
 
     m_rEmitContext.rEmitter.endTag( m_bWriteDrawDocument ? "office:drawing" : "office:presentation" );
@@ -678,7 +687,14 @@ void DrawXmlOptimizer::optimizeTextElements(Element& rParent)
     // concatenate child elements with same font id
     std::list< Element* >::iterator next = rParent.Children.begin();
     std::list< Element* >::iterator it = next++;
-
+    FrameElement* pFrame = dynamic_cast<FrameElement*>(rParent.Parent);
+    bool bRotatedFrame = false;
+    if( pFrame )
+    {
+        const GraphicsContext& rFrameGC = m_rProcessor.getGraphicsContext( pFrame->GCId );
+        if( rFrameGC.isRotatedOrSkewed() )
+            bRotatedFrame = true;
+    }
     while( next != rParent.Children.end() )
     {
         bool bConcat = false;
@@ -890,6 +906,26 @@ void DrawXmlFinalizer::visit( ParagraphElement& elem, const std::list< Element* 
     aStyle.SubStyles.push_back( &aSubStyle );
 
     elem.StyleId = m_rStyleContainer.getStyleId( aStyle );
+
+    // update page boundaries
+    if( elem.Parent )
+    {
+        // check for center alignement
+        // criterion: paragraph is small relative to parent and distributed around its center
+        double p_x = elem.Parent->x;
+        double p_y = elem.Parent->y;
+        double p_w = elem.Parent->w;
+        double p_h = elem.Parent->h;
+
+        PageElement* pPage = dynamic_cast<PageElement*>(elem.Parent);
+        if( pPage )
+        {
+            p_x += pPage->LeftMargin;
+            p_y += pPage->TopMargin;
+            p_w -= pPage->LeftMargin+pPage->RightMargin;
+            p_h -= pPage->TopMargin+pPage->BottomMargin;
+        }
+    }
 
     elem.applyToChildren(*this);
 }

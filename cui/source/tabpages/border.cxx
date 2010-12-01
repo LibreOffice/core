@@ -215,7 +215,9 @@ SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
         aPropertiesFL   ( this, CUI_RES( FL_PROPERTIES ) ),
         aMergeWithNextCB( this, CUI_RES( CB_MERGEWITHNEXT ) ),
         aMergeAdjacentBordersCB( this, CUI_RES( CB_MERGEADJACENTBORDERS ) ),
+        aShadowImgLstH( CUI_RES(ILH_SDW_BITMAPS)),
         aShadowImgLst( CUI_RES(IL_SDW_BITMAPS)),
+        aBorderImgLstH( CUI_RES(ILH_PRE_BITMAPS)),
         aBorderImgLst( CUI_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
         nSWMode(0),
@@ -1042,7 +1044,9 @@ USHORT SvxBorderTabPage::GetPresetStringId( USHORT nValueSetIdx ) const
 
 void SvxBorderTabPage::FillPresetVS()
 {
-    ImageList& rImgList = aBorderImgLst;
+    // find correct image list
+    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
+    ImageList& rImgList = bHC ? aBorderImgLstH : aBorderImgLst;
     Size aImgSize( rImgList.GetImage( IID_PRE_CELL_NONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet
@@ -1067,7 +1071,9 @@ void SvxBorderTabPage::FillPresetVS()
 
 void SvxBorderTabPage::FillShadowVS()
 {
-    ImageList& rImgList = aShadowImgLst;
+    // find correct image list
+    bool bHC = aWndPresets.GetSettings().GetStyleSettings().GetHighContrastMode();
+    ImageList& rImgList = bHC ? aShadowImgLstH : aShadowImgLst;
     Size aImgSize( rImgList.GetImage( IID_SHADOWNONE ).GetSizePixel() );
 
     // basic initialization of the ValueSet

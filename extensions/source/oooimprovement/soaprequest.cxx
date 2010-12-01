@@ -116,7 +116,7 @@ namespace
     static void writeFile(const Reference<XMultiServiceFactory>& sf, const Reference<XOutputStream>& target, const OUString& fileurl)
     {
         Reference<XSimpleFileAccess> file_access(
-            sf->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess"))),
+            sf->createInstance(OUString::createFromAscii("com.sun.star.ucb.SimpleFileAccess")),
             UNO_QUERY);
         Reference<XInputStream> file = file_access->openFileRead(fileurl);
         const sal_Int32 bufsize = 3;

@@ -243,7 +243,8 @@ void ScLinkTargetTypeObj::SetLinkTargetBitmap( uno::Any& rRet, sal_uInt16 nType 
     }
     if (nImgId)
     {
-        ImageList aEntryImages( ScResId( RID_IMAGELIST_NAVCONT ) );
+        BOOL bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
+        ImageList aEntryImages( ScResId( bHighContrast ? RID_IMAGELIST_H_NAVCONT : RID_IMAGELIST_NAVCONT ) );
         const Image& rImage = aEntryImages.GetImage( nImgId );
         rRet <<= uno::Reference< awt::XBitmap > (VCLUnoHelper::CreateBitmap( rImage.GetBitmapEx() ));
     }

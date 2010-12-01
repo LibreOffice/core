@@ -46,6 +46,10 @@ typedef ::cppu::WeakImplHelper2
 >
 SwSimpleEnumeration_Base;
 
+
+/* -----------------29.04.98 07:35-------------------
+ *
+ * --------------------------------------------------*/
 enum CursorType
 {
     CURSOR_INVALID,
@@ -63,9 +67,9 @@ enum CursorType
     CURSOR_META,         // meta/meta-field
 };
 
-/*
+/*-----------------04.03.98 11:54-------------------
     Start/EndAction or Start/EndAllAction
-*/
+  -------------------------------------------------- */
 class UnoActionContext
 {
     private:
@@ -78,9 +82,9 @@ class UnoActionContext
         void InvalidateDocument() { m_pDoc = 0; }
 };
 
-/*
+/* -----------------07.07.98 12:03-------------------
     interrupt Actions for a little while
-*/
+   -------------------------------------------------- */
 class UnoActionRemoveContext
 {
     private:

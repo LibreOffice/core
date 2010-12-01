@@ -36,6 +36,7 @@
 
 TabPage RID_SVXPAGE_MACROASSIGN
 {
+     // HelpID = HID_MACROASSIGN ;
     Hide = TRUE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -95,6 +96,16 @@ TabPage RID_SVXPAGE_MACROASSIGN
     Image IMG_COMPONENT
     {
         ImageBitmap = Bitmap { File = "component_16.png"; };
+        MASKCOLOR
+    };
+    Image IMG_MACRO_H
+    {
+        ImageBitmap = Bitmap { File = "idh018.png"; };
+        MASKCOLOR
+    };
+    Image IMG_COMPONENT_H
+    {
+        ImageBitmap = Bitmap { File = "component_16_h.png"; };
         MASKCOLOR
     };
 };

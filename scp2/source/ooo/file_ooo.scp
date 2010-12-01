@@ -453,6 +453,10 @@ UNO_JAR_FILE( gid_File_Jar_Lucenehelpwrapper, LuceneHelpWrapper )
 #endif
 
 #ifdef SOLAR_JAVA
+STD_JAR_FILE( gid_File_Jar_Js, js )
+#endif
+
+#ifdef SOLAR_JAVA
 
 #ifndef MACOSX
 
@@ -497,7 +501,9 @@ End
 
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
 UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -1868,6 +1874,13 @@ File gid_File_ImagesTango_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_tango.zip";
+    Styles = (PACKED);
+End
+
+File gid_File_ImagesClassic8_Zip
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Share_Config;
+    Name = "images_classic.zip";
     Styles = (PACKED);
 End
 

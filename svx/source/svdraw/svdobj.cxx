@@ -712,7 +712,8 @@ void SdrObject::SetName(const String& rStr)
 
     if(pPlusData && pPlusData->aObjName != rStr)
     {
-        // Undo/Redo for setting object's name (#i73249#)
+        // --> OD 2009-07-09 #i73249#
+        // Undo/Redo for setting object's name
         bool bUndo( false );
         if ( GetModel() && GetModel()->IsUndoEnabled() )
         {
@@ -726,12 +727,14 @@ void SdrObject::SetName(const String& rStr)
             GetModel()->BegUndo( pUndoAction->GetComment() );
             GetModel()->AddUndo( pUndoAction );
         }
+        // <--
         pPlusData->aObjName = rStr;
-        // Undo/Redo for setting object's name (#i73249#)
+        // --> OD 2009-07-09 #i73249#
         if ( bUndo )
         {
             GetModel()->EndUndo();
         }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -756,7 +759,8 @@ void SdrObject::SetTitle(const String& rStr)
 
     if(pPlusData && pPlusData->aObjTitle != rStr)
     {
-        // Undo/Redo for setting object's title (#i73249#)
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's title
         bool bUndo( false );
         if ( GetModel() && GetModel()->IsUndoEnabled() )
         {
@@ -770,12 +774,14 @@ void SdrObject::SetTitle(const String& rStr)
             GetModel()->BegUndo( pUndoAction->GetComment() );
             GetModel()->AddUndo( pUndoAction );
         }
+        // <--
         pPlusData->aObjTitle = rStr;
-        // Undo/Redo for setting object's title (#i73249#)
+        // --> OD 2009-07-13 #i73249#
         if ( bUndo )
         {
             GetModel()->EndUndo();
         }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }
@@ -800,7 +806,8 @@ void SdrObject::SetDescription(const String& rStr)
 
     if(pPlusData && pPlusData->aObjDescription != rStr)
     {
-        // Undo/Redo for setting object's description (#i73249#)
+        // --> OD 2009-07-13 #i73249#
+        // Undo/Redo for setting object's description
         bool bUndo( false );
         if ( GetModel() && GetModel()->IsUndoEnabled() )
         {
@@ -814,12 +821,14 @@ void SdrObject::SetDescription(const String& rStr)
             GetModel()->BegUndo( pUndoAction->GetComment() );
             GetModel()->AddUndo( pUndoAction );
         }
+        // <--
         pPlusData->aObjDescription = rStr;
-        // Undo/Redo for setting object's description (#i73249#)
+        // --> OD 2009-07-13 #i73249#
         if ( bUndo )
         {
             GetModel()->EndUndo();
         }
+        // <--
         SetChanged();
         BroadcastObjectChange();
     }

@@ -68,11 +68,7 @@ typedef std::hash_map< ::rtl::OUString,
                        ::std::equal_to< ::rtl::OUString > > ModuleIdToImagegMgr;
 
 
-Image SAL_CALL GetImage(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
-    BOOL bBig
-)
+Image SAL_CALL GetImage( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast )
 {
     // TODO/LATeR: shouldn't this become a method at SfxViewFrame?! That would save the UnoTunnel
     if ( !rFrame.is() )
@@ -132,6 +128,8 @@ Image SAL_CALL GetImage(
                             ::com::sun::star::ui::ImageType::SIZE_DEFAULT );
     if ( bBig )
         nImageType |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+    if ( bHiContrast )
+        nImageType |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
 
     if ( xDocImgMgr.is() )
     {
@@ -213,7 +211,7 @@ Image SAL_CALL GetImage(
             if ( !!aImage )
                 return aImage;
             else if ( nProtocol != INET_PROT_UNO && nProtocol != INET_PROT_SLOT )
-                return SvFileInformationManager::GetImageNoDefault( aObj, bBig );
+                return SvFileInformationManager::GetImageNoDefault( aObj, bBig, bHiContrast );
         }
     }
     catch ( Exception& )

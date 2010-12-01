@@ -208,7 +208,11 @@ void SvxFmTbxCtlConfig::StateChanged(USHORT nSID, SfxItemState eState, const Sfx
             {   // set a new image, matching to this slot
                 rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 aSlotURL += rtl::OUString::valueOf( sal_Int32( nSlot ));
-                Image aImage = GetImage( m_xFrame, aSlotURL, hasBigImages() );
+                Image aImage = GetImage( m_xFrame,
+                                        aSlotURL,
+                                        hasBigImages(),
+                                        GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+
                 GetToolBox().SetItemImage( GetId(), aImage );
                 nLastSlot = nSlot;
             }
@@ -405,7 +409,7 @@ SvxFmTbxCtlRecTotal::~SvxFmTbxCtlRecTotal()
 Window* SvxFmTbxCtlRecTotal::CreateItemWindow( Window* pParent )
 {
     pFixedText = new FixedText( pParent );
-    String aSample(RTL_CONSTASCII_USTRINGPARAM("123456"));
+    String aSample( "123456", sizeof( "123456" ) - 1 );
     Size aSize( pFixedText->GetTextWidth( aSample ), pFixedText->GetTextHeight( ) );
     aSize.Width() += 12;
     pFixedText->SetSizePixel( aSize );

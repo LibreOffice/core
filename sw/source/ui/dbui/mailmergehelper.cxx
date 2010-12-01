@@ -169,7 +169,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetMailServer(),
                         rConfigItem.GetMailPort(),
-                        rConfigItem.IsSecureConnection() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")) );
+                        ::rtl::OUString::createFromAscii( rConfigItem.IsSecureConnection() ? "Ssl" : "Insecure"));
             xSmtpServer->connect(xConnectionContext, xAuthenticator);
             rxInMailService = uno::Reference< mail::XMailService >( xSmtpServer, uno::UNO_QUERY );
         }
@@ -662,11 +662,13 @@ SwConnectionListener::~SwConnectionListener()
 void SwConnectionListener::connected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
+    //OSL_ENSURE(false, "Connection opened");
 }
 
 void SwConnectionListener::disconnected(const lang::EventObject& /*aEvent*/)
     throw (uno::RuntimeException)
 {
+    //OSL_ENSURE(false, "Connection closed");
 }
 
 void SwConnectionListener::disposing(const lang::EventObject& /*aEvent*/)

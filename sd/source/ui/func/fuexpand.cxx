@@ -196,6 +196,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     // Title-Textobjekt erstellen
                     SdrTextObj* pTextObj = (SdrTextObj*) pPage->GetPresObj(PRESOBJ_TITLE);
 
+//
                     OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( (USHORT) nParaPos, 1);
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
@@ -230,6 +231,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                         OutlinerParaObject* pOPO = pOutl->CreateParaObject( (USHORT) nParaPos, (USHORT) nChildCount);
 
+// --
                         SdrOutliner* pTempOutl = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, mpDoc );
                         pTempOutl->SetText( *pOPO );
 
@@ -246,6 +248,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                         pOPO = pTempOutl->CreateParaObject();
                         delete pTempOutl;
 
+// --
                         pOutlineObj->SetOutlinerParaObject( pOPO );
                         pOutlineObj->SetEmptyPresObj(FALSE);
 

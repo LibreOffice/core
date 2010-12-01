@@ -253,20 +253,21 @@ struct CommandToRID
 {
     const char* pCommand;
     USHORT      nResId;
+    USHORT      nHCResId;
 };
 
-static USHORT ImplGetRID( const OUString& aCommand )
+static USHORT ImplGetRID( const OUString& aCommand, bool bHighContrast )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
-        { ".uno:GrafRed",           RID_SVXIMG_GRAF_RED             },
-        { ".uno:GrafGreen",         RID_SVXIMG_GRAF_GREEN           },
-        { ".uno:GrafBlue",          RID_SVXIMG_GRAF_BLUE            },
-        { ".uno:GrafLuminance",     RID_SVXIMG_GRAF_LUMINANCE       },
-        { ".uno:GrafContrast",      RID_SVXIMG_GRAF_CONTRAST        },
-        { ".uno:GrafGamma",         RID_SVXIMG_GRAF_GAMMA           },
-        { ".uno:GrafTransparence",  RID_SVXIMG_GRAF_TRANSPARENCE    },
-        { 0, 0 }
+        { ".uno:GrafRed", RID_SVXIMG_GRAF_RED, RID_SVXIMG_GRAF_RED_H },
+        { ".uno:GrafGreen", RID_SVXIMG_GRAF_GREEN, RID_SVXIMG_GRAF_GREEN_H },
+        { ".uno:GrafBlue", RID_SVXIMG_GRAF_BLUE, RID_SVXIMG_GRAF_BLUE_H },
+        { ".uno:GrafLuminance", RID_SVXIMG_GRAF_LUMINANCE, RID_SVXIMG_GRAF_LUMINANCE_H },
+        { ".uno:GrafContrast", RID_SVXIMG_GRAF_CONTRAST, RID_SVXIMG_GRAF_CONTRAST_H },
+        { ".uno:GrafGamma", RID_SVXIMG_GRAF_GAMMA, RID_SVXIMG_GRAF_GAMMA_H },
+        { ".uno:GrafTransparence", RID_SVXIMG_GRAF_TRANSPARENCE, RID_SVXIMG_GRAF_TRANSPARENCE_H },
+        { 0, 0, 0 }
     };
 
     USHORT nRID = 0;
@@ -276,7 +277,10 @@ static USHORT ImplGetRID( const OUString& aCommand )
     {
         if ( aCommand.equalsAscii( aImplCommandToResMap[ i ].pCommand ))
         {
-            nRID = aImplCommandToResMap[ i ].nResId;
+            if ( bHighContrast )
+                nRID = aImplCommandToResMap[ i ].nHCResId;
+            else
+                nRID = aImplCommandToResMap[ i ].nResId;
             break;
         }
         ++i;
@@ -309,23 +313,23 @@ public:
 
 // -----------------------------------------------------------------------------
 
-ImplGrafControl::ImplGrafControl(
-    Window* pParent,
-    USHORT nSlotId,
-    const rtl::OUString& rCmd,
-    const Reference< XFrame >& rFrame
-)   : Control( pParent, WB_TABSTOP )
-    , maImage( this )
-    , maField( this, rCmd, rFrame )
+ImplGrafControl::ImplGrafControl( Window* pParent, USHORT nSlotId, const rtl::OUString& rCmd, const Reference< XFrame >& rFrame ) :
+    Control( pParent, WB_TABSTOP ),
+    maImage     ( this ),
+    maField     ( this, rCmd, rFrame )
 {
-    ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
+    ResId   aResId( ImplGetRID( rCmd, false ), DIALOG_MGR() ) ;
     Image   aImage( aResId );
+
+    ResId   aResIdHC( ImplGetRID( rCmd, true ), DIALOG_MGR() ) ;
+    Image   aImageHC( aResIdHC );
 
     Size    aImgSize( aImage.GetSizePixel() );
     Size    aFldSize( maField.GetSizePixel() );
     long    nFldY, nImgY;
 
     maImage.SetImage( aImage );
+    maImage.SetModeImage( aImageHC, BMP_COLOR_HIGHCONTRAST );
     maImage.SetSizePixel( aImgSize );
     // we want to see the backbround of the toolbox, not of the FixedImage or Control
     maImage.SetBackground( Wallpaper( COL_TRANSPARENT ) );
@@ -397,9 +401,9 @@ ImplGrafModeControl::ImplGrafModeControl( Window* pParent, const Reference< XFra
 {
     SetSizePixel( Size( 100, 260 ) );
 
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD  ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS     ) );
-    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO      ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_STANDARD ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_GREYS ) );
+    InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_MONO ) );
     InsertEntry( SVX_RESSTR( RID_SVXSTR_GRAFMODE_WATERMARK ) );
 
     Show();

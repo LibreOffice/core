@@ -182,7 +182,7 @@ OUString getAnnotationDateTimeString( const Reference< XAnnotation >& xAnnotatio
 
         Time aTime( aDateTime.Hours, aDateTime.Minutes, aDateTime.Seconds, aDateTime.HundredthSeconds );
         if(aTime.GetTime() != 0)
-            sRet = sRet + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "))  + rLocalData.getTime( aTime,false );
+            sRet = sRet + rtl::OUString::createFromAscii(" ")  + rLocalData.getTime( aTime,false );
     }
     return sRet;
 }
@@ -398,7 +398,7 @@ void AnnotationManagerImpl::InsertAnnotation()
                 Rectangle aNewRect( x, y, x + width - 1, y + height - 1 );
                    bool bFree = true;
 
-                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+                   for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
                    {
                        RealPoint2D aPoint( (*iter)->getPosition() );
                        aTagRect.nLeft   = sal::static_int_cast< long >( aPoint.X * 100.0 );
@@ -554,7 +554,7 @@ void AnnotationManagerImpl::DeleteAnnotationsByAuthor( const rtl::OUString& sAut
         if( pPage && !pPage->getAnnotations().empty() )
         {
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
             {
                 Reference< XAnnotation > xAnnotation( *iter );
                 if( xAnnotation->getAuthor() == sAuthor )
@@ -585,7 +585,7 @@ void AnnotationManagerImpl::DeleteAllAnnotations()
         {
 
             AnnotationVector aAnnotations( pPage->getAnnotations() );
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
             {
                 pPage->removeAnnotation( (*iter) );
             }
@@ -663,11 +663,11 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
+               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
                {
                    if( (*iter) == xCurrent )
                    {
-                       ++iter;
+                       iter++;
                        if( iter != aAnnotations.end() )
                        {
                            SelectAnnotation( (*iter) );
@@ -687,19 +687,20 @@ void AnnotationManagerImpl::SelectNextAnnotation(bool bForeward)
     {
         if( xCurrent.is() )
         {
-            for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); ++iter )
-            {
-                if( (*iter) == xCurrent )
-                {
-                    if( iter != aAnnotations.begin() )
-                    {
-                        --iter;
+               for( AnnotationVector::iterator iter = aAnnotations.begin(); iter != aAnnotations.end(); iter++ )
+               {
+                   if( (*iter) == xCurrent )
+                   {
+                       if( iter != aAnnotations.begin() )
+                       {
+                           iter--;
                         SelectAnnotation( (*iter) );
                         return;
-                    }
-                    break;
-                }
-            }
+
+                       }
+                       break;
+                   }
+               }
         }
         else if( !aAnnotations.empty() )
         {
@@ -1052,6 +1053,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
     Reference< ::com::sun::star::frame::XFrame > xFrame( mrBase.GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface() );
     if( xFrame.is() )
     {
+        const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
         for( USHORT nPos = 0; nPos < pMenu->GetItemCount(); nPos++ )
         {
             nId = pMenu->GetItemId( nPos );
@@ -1060,7 +1062,7 @@ void AnnotationManagerImpl::ExecuteAnnotationContextMenu( Reference< XAnnotation
                 OUString sSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
                 sSlotURL += OUString::valueOf( sal_Int32( nId ));
 
-                Image aImage( GetImage( xFrame, sSlotURL, false ) );
+                Image aImage( GetImage( xFrame, sSlotURL, false, bHighContrast ) );
                 if( !!aImage )
                     pMenu->SetItemImage( nId, aImage );
             }

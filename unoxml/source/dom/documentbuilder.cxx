@@ -297,7 +297,7 @@ namespace DOM
     // default warning handler triggers assertion
     static void warning_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 warning\n")));
+        OUStringBuffer buf(OUString::createFromAscii("libxml2 warning\n"));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, msg.getStr());
@@ -306,7 +306,7 @@ namespace DOM
     // default error handler triggers assertion
     static void error_func(void * ctx, const char * /*msg*/, ...)
     {
-        OUStringBuffer buf(OUString(RTL_CONSTASCII_USTRINGPARAM("libxml2 error\n")));
+        OUStringBuffer buf(OUString::createFromAscii("libxml2 error\n"));
         buf.append(make_error_message(static_cast< xmlParserCtxtPtr >(ctx)));
         OString msg = OUStringToOString(buf.makeStringAndClear(), RTL_TEXTENCODING_ASCII_US);
         OSL_ENSURE(sal_False, msg.getStr());

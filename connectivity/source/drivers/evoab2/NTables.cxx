@@ -60,10 +60,10 @@ typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
 ObjectType OEvoabTables::createObject(const ::rtl::OUString& aName)
 {
-    ::rtl::OUString aSchema( RTL_CONSTASCII_USTRINGPARAM( "%" ));
+    ::rtl::OUString aSchema = ::rtl::OUString::createFromAscii("%");
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
     ::rtl::OUString sEmpty;
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);

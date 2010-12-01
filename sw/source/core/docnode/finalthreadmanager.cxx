@@ -396,6 +396,8 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
             mpCancelJobsThread = new CancelJobsThread( aThreads );;
             if ( !mpCancelJobsThread->create() )
             {
+                // error handling
+                // OSL_ENSURE( false, "<FinalThreadManager::cancelAllJobs()> - thread to cancel jobs can't be setup --> synchron cancellation of jobs" );
                 delete mpCancelJobsThread;
                 mpCancelJobsThread = 0;
                 while ( !aThreads.empty() )
@@ -448,6 +450,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
                                                  m_xContext );
         if ( !mpTerminateOfficeThread->create() )
         {
+            // OSL_ENSURE( false, "FinalThreadManager::queryTermination(..) - thread to terminate office can't be started!" );
             delete mpTerminateOfficeThread;
             mpTerminateOfficeThread = 0;
         }
@@ -477,6 +480,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
     {
         if ( mpTerminateOfficeThread->isRunning() )
         {
+            // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - office termination thread still running!" );
             mpTerminateOfficeThread->StopOfficeTermination(); // thread kills itself.
         }
         else
@@ -488,11 +492,17 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
 
     if ( !maThreads.empty() )
     {
+        // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - still registered jobs are existing" );
         cancelAllJobs();
     }
 
     if ( mpCancelJobsThread != 0 )
     {
+        if ( !mpCancelJobsThread->allJobsCancelled() )
+        {
+            // OSL_ENSURE( false, "<FinalThreadManager::notifyTermination()> - cancellation of registered jobs not yet finished -> wait for its finish" );
+        }
+
         mpCancelJobsThread->stopWhenAllJobsCancelled();
         mpCancelJobsThread->join();
         delete mpCancelJobsThread;

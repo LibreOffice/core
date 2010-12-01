@@ -80,6 +80,7 @@ public:                                             \
                      {}                             \
     virtual         ~Class();                       \
     virtual short   Execute() ;
+//  virtual void    Show( BOOL bVisible = TRUE, USHORT nFlags = 0 )
 
 #define IMPL_ABSTDLG_BASE(Class)                    \
 Class::~Class()                                     \
@@ -135,11 +136,11 @@ class AbstractTabDialog_Impl : public SfxAbstractTabDialog
     DECL_ABSTDLG_BASE(AbstractTabDialog_Impl,SfxTabDialog)
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
-    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem );
-    virtual void                SetInputSet( const SfxItemSet* pInSet );
+    virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
+    virtual void                SetInputSet( const SfxItemSet* pInSet );   //add by CHINA001
         //From class Window.
-    virtual void        SetText( const XubString& rStr );
-    virtual String      GetText() const;
+    virtual void        SetText( const XubString& rStr ); //add by CHINA001
+    virtual String      GetText() const; //add by CHINA001
 };
 
 //for SvxDistributeDialog begin
@@ -234,7 +235,24 @@ class AbstractSpellDialog_Impl : public AbstractSpellDialog
     virtual Window*     GetWindow();
     virtual SfxBindings& GetBindings();
 };
-//for SvxSpellDialog end
+
+//for SvxSpellCheckDialog begin
+//STRIP001 class AbstractSvxSpellCheckDialog_Impl : public AbstractSvxSpellCheckDialog //add for FmShowColsDialog
+//STRIP001 {
+//STRIP001 SvxSpellCheckDialog * pDlg;
+//STRIP001 public
+//STRIP001 AbstractSvxSpellCheckDialog_Impl ( SvxSpellCheckDialog* p)
+//STRIP001 : pDlg(p)
+//STRIP001 {}
+//STRIP001 virtual  USHORT          Execute() ;
+//STRIP001 virtual  void SetNewEditWord( const String& _rNew ) ;
+//STRIP001 virtual void SetLanguage( sal_uInt16 nLang ) ;
+//STRIP001 virtual void HideAutoCorrect() ;
+//STRIP001 virtual String   GetNewEditWord();
+//STRIP001 virtual void SetNewEditWord( const String& _rNew );
+//STRIP001 }
+//for SvxSpellCheckDialog end
+
 
 //for SearchProgress begin
 class SearchProgress;
@@ -624,10 +642,10 @@ public:
                                             SdrModel* pModel=0 ); //add for SvxTextTabDialog
     virtual SfxAbstractTabDialog*       CreateTabItemDialog( Window* pParent,
                                             const SfxItemSet& rSet,
-                                            sal_uInt32 nResId);
+                                            sal_uInt32 nResId); //add by CHINA001
     virtual AbstractSvxCaptionDialog*   CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
-                                            USHORT nAnchorTypes = 0 ); //add for SvxCaptionTabDialog
+                                            USHORT nAnchorTypes = 0 );      //add for SvxCaptionTabDialog CHINA001
     virtual AbstractSvxDistributeDialog*    CreateSvxDistributeDialog(Window* pParent,
                                             const SfxItemSet& rAttr,
                                             SvxDistributeHorizontal eHor = SvxDistributeHorizontalNone,
@@ -640,7 +658,7 @@ public:
    virtual  SfxAbstractPasteDialog*         CreatePasteDialog( Window* pParent );
    virtual  SfxAbstractLinksDialog*         CreateLinksDialog( Window* pParent, sfx2::LinkManager* pMgr, BOOL bHTML, sfx2::SvBaseLink* p=0  );
 
-   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog
+   virtual AbstractHangulHanjaConversionDialog * CreateHangulHanjaConversionDialog( Window* _pParent,  //add for HangulHanjaConversionDialog CHINA001
                                             editeng::HangulHanjaConversion::ConversionDirection _ePrimaryDirection );
     virtual AbstractThesaurusDialog*        CreateThesaurusDialog( Window*, ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XThesaurus >  xThesaurus,
                                                 const String &rWord, sal_Int16 nLanguage );
@@ -671,6 +689,11 @@ public:
                             SfxBindings* pBindings,
                             svx::SpellDialogChildWindow* pSpellChildWindow );
 
+//STRIP001    virtual AbstractSvxSpellCheckDialog * CreateSvxSpellCheckDialog( Window* pParent, //add for SvxSpellCheckDialog
+//STRIP001    ::com::sun::star::uno::Reference<
+//STRIP001    ::com::sun::star::linguistic2::XSpellChecker1 >  &xChecker,
+//STRIP001    SvxSpellWrapper* pWrapper,
+//STRIP001    sal_uInt32 nResId);
     virtual VclAbstractRefreshableDialog * CreateActualizeProgressDialog( Window* pParent, GalleryTheme* pThm );
     virtual AbstractSearchProgress * CreateSearchProgressDialog( Window* pParent,
                                             const INetURLObject& rStartURL);

@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <vcl/window.hxx>
 #include <tools/resid.hxx>
+// #95343# --------------------
 #include <com/sun/star/awt/Size.hpp>
 
 //............................................................................
@@ -73,6 +74,7 @@ namespace pcr
         void    setPageActivationHandler(const Link& _rHdl) { m_aPageActivationHandler = _rHdl; }
         Link    getPageActivationHandler() const { return m_aPageActivationHandler; }
 
+        // #95343# ------------------
         ::com::sun::star::awt::Size getMinimumSize();
 
     protected:

@@ -226,7 +226,8 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     ::svtools::VolumeInfo aVolInfo( sal_True /* volume */, sal_False /* remote */,
                                     sal_False /* removable */, sal_False /* floppy */,
                                     sal_False /* compact disk */ );
-    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo ) );
+    sal_Bool bIsHighContrast = pBox->GetSettings().GetStyleSettings().GetHighContrastMode();
+    Image aVolumeImage( SvFileInformationManager::GetFolderImage( aVolInfo, bIsHighContrast ) );
 
     while ( nCount >= 1 )
     {
@@ -241,7 +242,8 @@ void SvtUpButton_Impl::FillURLMenu( PopupMenu* _pMenu )
                 aTitle = aObject.getName();
 
             Image aImage = ( nCount > 1 ) // if nCount == 1 means workplace, which detects the wrong image
-                ? SvFileInformationManager::GetImage( aObject ) : aVolumeImage;
+                ? SvFileInformationManager::GetImage( aObject, bIsHighContrast )
+                : aVolumeImage;
 
             _pMenu->InsertItem( nItemId++, aTitle, aImage );
             _pURLs->Insert( pParentURL, _pURLs->Count() );
@@ -312,6 +314,8 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
 
     _pMenu->Clear();
 
+    sal_Bool bIsHighContrast = GetDialogParent()->GetView()->GetSettings().GetStyleSettings().GetHighContrastMode();
+
     USHORT nItemId = 1;
     String sDisplayName;
 
@@ -320,7 +324,8 @@ void SvtTravelButton_Impl::FillURLMenu( PopupMenu* _pMenu )
     {
         if ( GetDialogParent()->isUrlAllowed( *aLoop ) )
         {
-            Image aImage = SvFileInformationManager::GetImage( INetURLObject(*aLoop) );
+            Image aImage = SvFileInformationManager::GetImage(
+                INetURLObject(*aLoop), bIsHighContrast );
             if ( LocalFileHelper::ConvertURLToSystemPath(*aLoop, sDisplayName) )
                 _pMenu->InsertItem( nItemId, sDisplayName, aImage );
             else

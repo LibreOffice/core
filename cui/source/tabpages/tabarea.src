@@ -1463,4 +1463,77 @@ TabDialog RID_SVXDLG_AREA
     };
 };
 
+Image RID_SVXIMG_LOAD_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05501.bmp" ;
+    };
+    MASKCOLOR
+};
+
+Image RID_SVXIMG_SAVE_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sch05502.bmp" ;
+    };
+    MASKCOLOR
+};
+
  // ********************************************************************** EOF
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

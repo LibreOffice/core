@@ -312,6 +312,12 @@ ModalDialog MD_EDIT_REGION
         MaskColor = IMAGE_MASK_COLOR ;
         DLG_IMAGE_IDLIST
     };
+    ImageList ILH_BITMAPS
+    {
+        Prefix = "reh";
+        MaskColor = IMAGE_MASK_COLOR ;
+        DLG_IMAGE_IDLIST
+    };
 };
 String STR_REG_DUPLICATE
 {

@@ -442,14 +442,14 @@ void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 void XclImpStream::CopyDecrypterFrom( const XclImpStream& rStrm )
 {
     XclImpDecrypterRef xNewDecr;
-    if( rStrm.mxDecrypter )
+    if( rStrm.mxDecrypter.is() )
         xNewDecr = rStrm.mxDecrypter->Clone();
     SetDecrypter( xNewDecr );
 }
 
 bool XclImpStream::HasValidDecrypter() const
 {
-    return mxDecrypter && mxDecrypter->IsValid();
+    return mxDecrypter.is() && mxDecrypter->IsValid();
 }
 
 void XclImpStream::EnableDecryption( bool bEnable )
@@ -998,7 +998,7 @@ bool XclImpStream::ReadNextRawRecHeader()
 
 void XclImpStream::SetupDecrypter()
 {
-    if( mxDecrypter )
+    if( mxDecrypter.is() )
         mxDecrypter->Update( mrStrm, mnRawRecSize );
 }
 

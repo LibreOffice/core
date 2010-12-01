@@ -31,7 +31,6 @@
 
 #include <comphelper/docpasswordhelper.hxx>
 #include <filter/msfilter/mscodec.hxx>
-#include <boost/shared_ptr.hpp>
 #include "xlstream.hxx"
 #include "xlconst.hxx"
 
@@ -49,7 +48,7 @@ Input stream class for Excel import
 // ============================================================================
 
 class XclImpDecrypter;
-typedef boost::shared_ptr< XclImpDecrypter > XclImpDecrypterRef;
+typedef ScfRef< XclImpDecrypter > XclImpDecrypterRef;
 
 /** Base class for BIFF stream decryption. */
 class XclImpDecrypter : public ::comphelper::IDocPasswordVerifier

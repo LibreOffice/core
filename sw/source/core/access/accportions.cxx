@@ -466,7 +466,9 @@ size_t SwAccessiblePortionData::FindLastBreak(
     size_t nResult = FindBreak( rPositions, nValue );
 
     // skip 'zero-length' portions
-    // #i70538# consider size of <rPosition> and ignore last entry
+    // --> OD 2006-10-19 #i70538#
+    // consider size of <rPosition> and ignore last entry
+//    while( rPositions[nResult+1] <= nValue )
     while ( nResult < rPositions.size() - 2 &&
             rPositions[nResult+1] <= nValue )
     {

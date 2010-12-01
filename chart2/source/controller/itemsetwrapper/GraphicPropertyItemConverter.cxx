@@ -66,9 +66,14 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "Color", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "Transparency", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "Gradient", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "Hatch", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "BorderColor", 0 )
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "BorderStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "BorderWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "BorderDash", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "BorderTransparency", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
@@ -87,8 +92,10 @@ namespace
     static ::comphelper::ItemPropertyMapType aDataPointPropertyLineMap(
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "Color", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "Transparency", 0 )
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
         );
 
     return aDataPointPropertyLineMap;
@@ -99,7 +106,9 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_LINESTYLE, "LineStyle", 0 )
         IPM_MAP_ENTRY( XATTR_LINEWIDTH, "LineWidth", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINEDASH, "LineDash", 0 )
         IPM_MAP_ENTRY( XATTR_LINECOLOR, "LineColor", 0 )
+//         IPM_MAP_ENTRY( XATTR_LINETRANSPARENCE, "LineTransparence", 0 )
         IPM_MAP_ENTRY( XATTR_LINEJOINT, "LineJoint", 0 )
         );
 
@@ -111,6 +120,10 @@ namespace
         ::comphelper::MakeItemPropertyMap
         IPM_MAP_ENTRY( XATTR_FILLSTYLE, "FillStyle", 0 )
         IPM_MAP_ENTRY( XATTR_FILLCOLOR, "FillColor", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLTRANSPARENCE, "FillTransparence", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLBITMAP, "FillBitmapName", MID_NAME )
+//         IPM_MAP_ENTRY( XATTR_FILLGRADIENT, "FillGradient", 0 )
+//         IPM_MAP_ENTRY( XATTR_FILLHATCH, "FillHatch", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBACKGROUND, "FillBackground", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_POS, "FillBitmapRectanglePoint", 0 )
         IPM_MAP_ENTRY( XATTR_FILLBMP_SIZEX, "FillBitmapSizeX", 0 )
@@ -254,6 +267,10 @@ void GraphicPropertyItemConverter::FillSpecialItem(
     USHORT nWhichId, SfxItemSet & rOutItemSet ) const
     throw( uno::Exception )
 {
+//     if( m_eGraphicObjectType == LINE_DATA_POINT ||
+//         m_eGraphicObjectType == LINE_PROPERTIES )
+//         return;
+
     switch( nWhichId )
     {
         // bitmap property

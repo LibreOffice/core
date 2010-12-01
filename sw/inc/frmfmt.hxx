@@ -28,7 +28,9 @@
 #ifndef _FRMFMT_HXX
 #define _FRMFMT_HXX
 
+// --> OD 2004-08-06 #i28749#
 #include <com/sun/star/text/PositionLayoutDir.hpp>
+// <--
 
 #include <cppuhelper/weakref.hxx>
 
@@ -116,6 +118,7 @@ public:
 
     BOOL IsLowerOf( const SwFrmFmt& rFmt ) const;
 
+    // --> OD 2004-07-27 #i31698#
     enum tLayoutDir
     {
         HORI_L2R,
@@ -126,9 +129,12 @@ public:
 
     virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
     virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    // <--
 
+    // --> OD 2004-08-06 #i28749#
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    // <--
 
     virtual String GetDescription() const;
 
@@ -179,16 +185,18 @@ public:
 
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
+    // --> OD 2009-07-14 #i73249#
     const String GetObjTitle() const;
     void SetObjTitle( const String& rTitle,
                       bool bBroadcast = false );
     const String GetObjDescription() const;
     void SetObjDescription( const String& rDescription,
                             bool bBroadcast = false );
+    // <--
 
-    /** SwFlyFrmFmt::IsBackgroundTransparent
+    /** SwFlyFrmFmt::IsBackgroundTransparent - for #99657#
 
-        overloading virtual method and its default implementation,
+        OD 22.08.2002 - overloading virtual method and its default implementation,
         because format of fly frame provides transparent backgrounds.
         Method determines, if background of fly frame is transparent.
 
@@ -199,9 +207,9 @@ public:
     */
     virtual sal_Bool IsBackgroundTransparent() const;
 
-    /** SwFlyFrmFmt::IsBackgroundBrushInherited
+    /** SwFlyFrmFmt::IsBackgroundBrushInherited - for #103898#
 
-        method to determine, if the brush for drawing the
+        OD 08.10.2002 - method to determine, if the brush for drawing the
         background is "inherited" from its parent/grandparent.
         This is the case, if no background graphic is set and the background
         color is "no fill"/"auto fill"
@@ -228,34 +236,46 @@ class SW_DLLPUBLIC SwDrawFrmFmt: public SwFrmFmt
     SwDrawFrmFmt( const SwDrawFrmFmt &rCpy );
     SwDrawFrmFmt &operator=( const SwDrawFrmFmt &rCpy );
 
+    // --> OD 2004-07-27 #i31698#
     SwFrmFmt::tLayoutDir meLayoutDir;
-
+    // <--
+    // --> OD 2004-08-06 #i28749#
     sal_Int16 mnPositionLayoutDir;
-
+    // <--
+    // --> OD 2005-03-11 #i44334#, #i44681#
     bool mbPosAttrSet;
-
+    // <--
 protected:
     SwDrawFrmFmt( SwAttrPool& rPool, const sal_Char* pFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, pFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
           pSdrObjCached(NULL),
-
+          // --> OD 2004-07-28 #i31698#
           meLayoutDir( SwFrmFmt::HORI_L2R ),
-
+          // <--
+          // --> OD 2004-08-06 #i28749#
+          // --> OD 2005-03-10 #i44344#, #i44681# - undo change of issue #i36010#
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
-
+          // <--
+          // --> OD 2005-03-11 #i44334#, #i44681#
           mbPosAttrSet( false )
+          // <--
 
     {}
     SwDrawFrmFmt( SwAttrPool& rPool, const String &rFmtNm,
                     SwFrmFmt *pDrvdFrm )
         : SwFrmFmt( rPool, rFmtNm, pDrvdFrm, RES_DRAWFRMFMT ),
           pSdrObjCached(NULL),
+          // --> OD 2004-07-28 #i31698#
           meLayoutDir( SwFrmFmt::HORI_L2R ),
-
+          // <--
+          // --> OD 2004-08-06 #i28749#
+          // --> OD 2005-03-10 #i44344#, #i44681# - undo change of issue #i36010#
           mnPositionLayoutDir( com::sun::star::text::PositionLayoutDir::PositionInLayoutDirOfAnchor ),
-
+          // <--
+          // --> OD 2005-03-11 #i44334#, #i44681#
           mbPosAttrSet( false )
+          // <--
     {}
 
 public:
@@ -272,19 +292,27 @@ public:
 
     virtual Graphic MakeGraphic( ImageMap* pMap = NULL );
 
+    // --> OD 2004-07-27 #i31698#
     virtual SwFrmFmt::tLayoutDir GetLayoutDir() const;
     virtual void SetLayoutDir( const SwFrmFmt::tLayoutDir _eLayoutDir );
+    // <--
 
+    // --> OD 2004-08-06 #i28749#
     virtual sal_Int16 GetPositionLayoutDir() const;
     virtual void SetPositionLayoutDir( const sal_Int16 _nPositionLayoutDir );
+    // <--
 
+    // --> OD 2005-03-11 #i44334#, #i44681#
     inline bool IsPosAttrSet() const { return mbPosAttrSet; }
     inline void PosAttrSet() { mbPosAttrSet = true; }
+    // <--
 
+    // --> OD 2005-08-16 #i53320#
     inline void ResetPosAttr()
     {
         mbPosAttrSet = false;
     }
+    // <--
 
     virtual String GetDescription() const;
 

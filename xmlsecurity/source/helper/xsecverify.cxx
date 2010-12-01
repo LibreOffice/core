@@ -71,7 +71,7 @@ cssu::Reference< cssxc::sax::XReferenceResolvedListener > XSecController::prepar
     cssu::Reference< cssl::XMultiComponentFactory > xMCF( mxCtx->getServiceManager() );
     xReferenceResolvedListener = cssu::Reference< cssxc::sax::XReferenceResolvedListener >(
         xMCF->createInstanceWithContext(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SIGNATUREVERIFIER_COMPONENT )), mxCtx),
+            rtl::OUString::createFromAscii( SIGNATUREVERIFIER_COMPONENT ), mxCtx),
         cssu::UNO_QUERY);
 
     cssu::Reference<cssl::XInitialization> xInitialization(xReferenceResolvedListener, cssu::UNO_QUERY);
@@ -219,6 +219,14 @@ void XSecController::setDate( rtl::OUString& ouDate )
     convertDateTime( isi.signatureInfor.stDateTime, ouDate );
     isi.signatureInfor.ouDateTime = ouDate;
 }
+
+/*
+void XSecController::setTime( rtl::OUString& ouTime )
+{
+    InternalSignatureInformation &isi = m_vInternalSignatureInformations[m_vInternalSignatureInformations.size()-1];
+    isi.signatureInfor.ouTime = ouTime;
+}
+*/
 
 void XSecController::setId( rtl::OUString& ouId )
 {

@@ -66,16 +66,16 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
     aSchema = _rName.copy(0,nLen);
     aName   = _rName.copy(nLen+1);
 
-    ::rtl::OUString sStmt( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT * FROM DOMAIN.SHOW_VIEW WHERE " ));
+    ::rtl::OUString sStmt = ::rtl::OUString::createFromAscii("SELECT DISTINCT * FROM DOMAIN.SHOW_VIEW WHERE ");
     if(aSchema.getLength())
     {
-        sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OWNER = '"));
+        sStmt += ::rtl::OUString::createFromAscii("OWNER = '");
         sStmt += aSchema;
-        sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("' AND "));
+        sStmt += ::rtl::OUString::createFromAscii("' AND ");
     }
-    sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEWNAME = '"));
+    sStmt += ::rtl::OUString::createFromAscii("VIEWNAME = '");
     sStmt += aName;
-    sStmt += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    sStmt += ::rtl::OUString::createFromAscii("'");
     Reference<XConnection> xConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
     Reference< XStatement > xStmt = xConnection->createStatement(  );
     Reference< XResultSet > xResult = xStmt->executeQuery(sStmt);
@@ -142,7 +142,7 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP VIEW" ));
+        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
@@ -162,7 +162,7 @@ void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
 // -----------------------------------------------------------------------------
 void OViews::createView( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE VIEW " ));
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
     ::rtl::OUString sSchema,sCommand;
@@ -174,7 +174,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
         descriptor->setPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME),makeAny(sSchema = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getUserName()));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
-                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" AS "));
+                + ::rtl::OUString::createFromAscii(" AS ");
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_COMMAND)) >>= sCommand;
     aSql += sCommand;
 

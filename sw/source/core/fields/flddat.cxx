@@ -46,6 +46,10 @@ SwDateTimeFieldType::SwDateTimeFieldType(SwDoc* pInitDoc)
     : SwValueFieldType( pInitDoc, RES_DATETIMEFLD )
 {}
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SwFieldType* SwDateTimeFieldType::Copy() const
 {
     SwDateTimeFieldType *pTmp = new SwDateTimeFieldType(GetDoc());
@@ -76,6 +80,10 @@ SwDateTimeField::SwDateTimeField(SwDateTimeFieldType* pInitType, USHORT nSub, UL
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 String SwDateTimeField::Expand() const
 {
     double fVal;
@@ -94,6 +102,10 @@ String SwDateTimeField::Expand() const
     return ExpandValue(fVal, GetFormat(), GetLanguage());
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 SwField* SwDateTimeField::Copy() const
 {
     SwDateTimeField *pTmp =
@@ -107,20 +119,35 @@ SwField* SwDateTimeField::Copy() const
     return pTmp;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 USHORT SwDateTimeField::GetSubType() const
 {
     return nSubType;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SwDateTimeField::SetSubType(USHORT nType)
 {
     nSubType = nType;
 }
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SwDateTimeField::SetPar2(const String& rStr)
 {
     nOffset = rStr.ToInt32();
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 String SwDateTimeField::GetPar2() const
 {
@@ -130,10 +157,18 @@ String SwDateTimeField::GetPar2() const
         return aEmptyStr;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SwDateTimeField::SetDateTime(const DateTime& rDT)
 {
     SetValue(GetDateTime(GetDoc(), rDT));
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
 {
@@ -145,6 +180,10 @@ double SwDateTimeField::GetDateTime(SwDoc* pDoc, const DateTime& rDT)
     return fResult;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 double SwDateTimeField::GetValue() const
 {
     if (IsFixed())
@@ -152,6 +191,10 @@ double SwDateTimeField::GetValue() const
     else
         return GetDateTime(GetDoc(), DateTime());
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 Date SwDateTimeField::GetDate(BOOL bUseOffset) const
 {
@@ -168,6 +211,10 @@ Date SwDateTimeField::GetDate(BOOL bUseOffset) const
     return aDate;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 Time SwDateTimeField::GetTime(BOOL bUseOffset) const
 {
     double fDummy;
@@ -179,6 +226,9 @@ Time SwDateTimeField::GetTime(BOOL bUseOffset) const
     return (Time)aDT;
 }
 
+/*-----------------04.03.98 11:05-------------------
+
+--------------------------------------------------*/
 bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -221,7 +271,9 @@ bool SwDateTimeField::QueryValue( uno::Any& rVal, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------04.03.98 11:05-------------------
 
+--------------------------------------------------*/
 bool SwDateTimeField::PutValue( const uno::Any& rVal, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;

@@ -90,9 +90,9 @@ static NS_DEFINE_CID(kCharsetConverterManagerCID, NS_ICHARSETCONVERTERMANAGER_CI
 
 // Registry Keys
 
-static ::rtl::OUString szProfileSubtreeString( RTL_CONSTASCII_USTRINGPARAM( "Profiles" ));
-static ::rtl::OUString szCurrentProfileString( RTL_CONSTASCII_USTRINGPARAM( "CurrentProfile" ));
-static ::rtl::OUString szDirectoryString( RTL_CONSTASCII_USTRINGPARAM( "directory" ));
+static ::rtl::OUString szProfileSubtreeString=::rtl::OUString::createFromAscii("Profiles");
+static ::rtl::OUString szCurrentProfileString= ::rtl::OUString::createFromAscii("CurrentProfile");
+static ::rtl::OUString szDirectoryString =::rtl::OUString::createFromAscii("directory");
 
 #ifndef MAXPATHLEN
 #define MAXPATHLEN 1024
@@ -280,7 +280,7 @@ namespace connectivity
 #endif
             ::rtl::OUString regDir = getRegistryDir(product);
             ::rtl::OUString profilesIni( regDir );
-            profilesIni += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("profiles.ini"));
+            profilesIni += ::rtl::OUString::createFromAscii( "profiles.ini" );
             IniParser parser( profilesIni );
             IniSectionMap &mAllSection = *(parser.getAllSection());
 
@@ -299,19 +299,19 @@ namespace connectivity
                     itor++)
                 {
                         struct ini_NameValue * aValue = &(*itor);
-                        if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))))
+                        if (aValue->sName.equals(::rtl::OUString::createFromAscii("Name")))
                         {
                             profileName = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsRelative"))))
+                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("IsRelative")))
                         {
                             sIsRelative = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Path"))))
+                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Path")))
                         {
                             profilePath = aValue->sValue;
                         }
-                        else if (aValue->sName.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Default"))))
+                        else if (aValue->sName.equals(::rtl::OUString::createFromAscii("Default")))
                         {
                             sIsDefault = aValue->sValue;
                         }

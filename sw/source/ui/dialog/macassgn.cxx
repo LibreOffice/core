@@ -60,8 +60,11 @@
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::frame::XFrame;
 
+// SvStringsDtor* __EXPORT _GetRangeHdl( _SfxMacroTabPage*, const String& );
+
 SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
 {
+    // const SfxItemSet& rSet = rPg.GetItemSet();
     SfxEventNamesItem aItem(SID_EVENTCONFIG);
 
     BOOL bHtmlMode = FALSE;
@@ -71,11 +74,13 @@ SfxEventNamesItem SwMacroAssignDlg::AddEvents( DlgEventType eType )
     switch( eType )
     {
     case MACASSGN_TEXTBAUST:            // Textbausteine
+        // rPg.SetGetRangeLink( &_GetRangeHdl );
         aItem.AddEvent( String( SW_RES(STR_EVENT_START_INS_GLOSSARY) ), String(),
                             SW_EVENT_START_INS_GLOSSARY );
         aItem.AddEvent( String( SW_RES(STR_EVENT_END_INS_GLOSSARY) ), String(),
                             SW_EVENT_END_INS_GLOSSARY);
         // damit der neue Handler aktiv wird!
+        // rPg.Reset( rSet );
         break;
     case MACASSGN_ALLFRM:
     case MACASSGN_GRAPHIC:          // Grafiken

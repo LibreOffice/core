@@ -201,6 +201,7 @@ SubstitutionOverlay::SubstitutionOverlay (ViewOverlay& rViewOverlay)
       maPosition(0,0),
       maShapes()
 {
+    allowAntiAliase(false);
 }
 
 

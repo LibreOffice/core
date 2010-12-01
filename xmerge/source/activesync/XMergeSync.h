@@ -20,7 +20,7 @@ protected:
     long  m_lObjs;
 
 public:
-    long GetLockCount() const;
+    long GetLockCount();
     long LockServer(BOOL fLock);
     HINSTANCE m_hInst;
     CXMergeSyncModule();

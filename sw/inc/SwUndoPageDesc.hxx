@@ -58,12 +58,12 @@ public:
 
 class SwUndoPageDescCreate : public SwUndo
 {
-    const SwPageDesc * pDesc;
+    const SwPageDesc * pDesc; // #116530#
     SwPageDescExt aNew;
     SwDoc * pDoc;
 
 public:
-    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc);
+    SwUndoPageDescCreate(const SwPageDesc * pNew, SwDoc * pDoc); // #116530#
     virtual ~SwUndoPageDescCreate();
 
     virtual void Undo(SwUndoIter & rIt);

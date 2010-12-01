@@ -77,7 +77,6 @@ XFList::XFList(sal_Bool ordered)
 {
     m_bOrdered = ordered;
     m_bContinueNumber = sal_False;
-    m_pHeader = NULL;
 }
 
 XFList::~XFList()

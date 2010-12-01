@@ -44,7 +44,8 @@ namespace chart
 class ObjectIdentifier;
 
 //-----------------------------------------------------------------------------
-
+/**
+*/
 class Selection
 {
 public: //methods

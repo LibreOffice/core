@@ -36,6 +36,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
+
 /**
  * Represents a BIFF Record that describes the value of a formula that
  * evaluates to a string
@@ -46,9 +47,9 @@ public class StringValue implements BIFFRecord {
     private byte[]  rgch;
 
     /**
-      * Constructs a StringValue Record from a string
+      * Constructs a StringValue Record from an <code>InputStream</code>
       *
-      * @param  str String containing value
+      * @param  is InputStream containing a StringValue Record
       */
     public StringValue(String str) throws IOException {
         cch = EndianConverter.writeShort((short) str.length());
@@ -77,7 +78,7 @@ public class StringValue implements BIFFRecord {
        /**
       * Reads a StringVlaue Record from an <code>InputStream</code>
       *
-      * @param  input InputStream containing a StringValue Record
+      * @param  is InputStream containing a StringValue Record
       */
     public int read(InputStream input) throws IOException {
 

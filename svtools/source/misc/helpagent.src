@@ -31,10 +31,11 @@
 
 Bitmap BMP_HELP_AGENT_IMAGE
 {
-    File = "helpagent.png";
+    File = "helpagent.bmp";
 };
 
 Bitmap BMP_HELP_AGENT_CLOSER
 {
-    File = "closer.png";
+    File = "closer.bmp";
 };
+

@@ -113,6 +113,7 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
             aCbSecondaryZ.Hide();
 
             Size aSize( GetSizePixel() );
+            //aSize.Height() -= aCbSecondaryZ.GetSizePixel().Height();
             aSize.Height() -= ( aCbSecondaryZ.GetPosPixel().Y() - aCbSecondaryY.GetPosPixel().Y() );
             SetSizePixel(aSize);
         }

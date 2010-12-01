@@ -51,6 +51,8 @@ private:
     SdrModel*                       pModel;
     TransferableDataHelper          aOleData;
     TransferableObjectDescriptor    aObjDesc;
+//REMOVE        SvEmbeddedObjectRef             aDocShellRef;
+//REMOVE        SvEmbeddedObjectRef             aDrawPersistRef;
     SfxObjectShellRef               aDocShellRef;
     SfxObjectShellRef               aDrawPersistRef;
 
@@ -70,6 +72,7 @@ private:
 
 
     void                InitDocShell();
+//REMOVE        SvInPlaceObjectRef  GetSingleObject();
     SdrOle2Obj* GetSingleObject();
 
 public:

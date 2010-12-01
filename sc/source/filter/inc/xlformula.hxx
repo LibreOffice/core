@@ -33,7 +33,6 @@
 #include <formula/opcode.hxx>
 #include "address.hxx"
 #include "ftools.hxx"
-#include <boost/shared_ptr.hpp>
 
 // Constants ==================================================================
 
@@ -410,7 +409,7 @@ private:
     bool                mbVolatile;     /// True = Formula contains volatile function.
 };
 
-typedef boost::shared_ptr< XclTokenArray > XclTokenArrayRef;
+typedef ScfRef< XclTokenArray > XclTokenArrayRef;
 
 /** Calls the Read() function at the passed token array. */
 XclImpStream& operator>>( XclImpStream& rStrm, XclTokenArray& rTokArr );

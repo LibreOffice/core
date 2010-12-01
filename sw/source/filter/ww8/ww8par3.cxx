@@ -173,7 +173,7 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
+        maFieldStack.back().SetBookmarkType(::rtl::OUString::createFromAscii(ODF_FORMTEXT));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
         maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
@@ -223,13 +223,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
                 *pPaM, aBookmarkName,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX )) ) );
+                rtl::OUString::createFromAscii( ODF_FORMCHECKBOX ) ) );
         OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_NAME))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_HELPTEXT))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_NAME)] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[::rtl::OUString::createFromAscii(ODF_FORMCHECKBOX_HELPTEXT)] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
             // set field data here...
@@ -296,15 +296,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
                     pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
-                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN )) ) );
+                           ::rtl::OUString::createFromAscii( ODF_FORMDROPDOWN ) ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
                 uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY)] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = uno::makeAny(nIndex);
+                (*pFieldmark->GetParameters())[::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_RESULT)] = uno::makeAny(nIndex);
                 // set field data here...
             }
         }
@@ -1033,6 +1033,7 @@ void WW8ListManager::AdjustLVL( sal_uInt8 nLevel, SwNumRule& rNumRule,
         if( !pFmt )
         {
             // --> OD 2006-06-27 #b6440955#
+//            aFont = SwNumRule::GetDefBulletFont();
             aFont = numfunc::GetDefBulletFont();
             // <--
         }
@@ -1059,6 +1060,7 @@ SwNumRule* WW8ListManager::CreateNextRule(bool bSimple)
     String sPrefix(CREATE_CONST_ASC("WW8Num"));
     sPrefix += String::CreateFromInt32(nUniqueList++);
     // --> OD 2008-06-04 #i86652#
+//    sal_uInt16 nRul = rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName(&sPrefix));
     sal_uInt16 nRul =
             rDoc.MakeNumRule( rDoc.GetUniqueNumRuleName(&sPrefix), 0, FALSE,
                               SvxNumberFormat::LABEL_ALIGNMENT );
@@ -1516,6 +1518,7 @@ SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
 
     // #i25545#
     // --> OD 2009-03-12 #i100132# - a number format does not have to exist on given list level
+//    SwNumFmt pFmt(*(pLFOInfo->pNumRule->GetNumFmt(nLevel)));
     SwNumFmt pFmt(pLFOInfo->pNumRule->Get(nLevel));
     // <--
     if (rReader.IsRightToLeft() && nLastLFOPosition != nLFOPosition) {
@@ -1663,6 +1666,8 @@ bool SwWW8ImplReader::SetTxtFmtCollAndListLevel(const SwPaM& rRg,
             // could contain more than one outline numbering rule and the one
             // of the text format isn't the one, which a chosen as the Writer
             // outline rule.
+//            pTxtNode->
+//                SetLevel(((SwTxtFmtColl*) rStyleInfo.pFmt)->GetOutlineLevel());
             pTxtNode->SetAttrListLevel( rStyleInfo.nOutlineLevel );
             // <--
         }
@@ -1840,6 +1845,11 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
                 }
             }
             // --> OD 2005-10-17 #126238#
+            // - re-introduce fix for issue #i49037#, which got lost by
+            // accident on a re-synchronisation on the master.
+//            if (pTxtNd->IsOutline() && pTxtNd->Len() == 0)
+//                pTxtNd->SetCounted(false);
+            // <--
 
             pTxtNd->SetAttrListLevel(nActLevel);
             // --> OD 2005-11-01 #126924#
@@ -2004,6 +2014,10 @@ void SwWW8ImplReader::Read_LFOPosition(sal_uInt16, const sal_uInt8* pData,
             else if (SwTxtNode* pTxtNode = pPaM->GetNode()->GetTxtNode())
             {
                 // --> OD 2005-10-21 #i54393#
+                // - Reset hard set numbering rule at paragraph instead of
+                //   setting hard no numbering.
+//                pTxtNode->SwCntntNode::SetAttr
+//                    (*GetDfltAttr(RES_PARATR_NUMRULE));
                 pTxtNode->ResetAttr( RES_PARATR_NUMRULE );
                 // <--
                 pTxtNode->SetCountedInList(false);

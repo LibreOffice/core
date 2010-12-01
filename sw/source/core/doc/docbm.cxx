@@ -353,28 +353,28 @@ namespace sw { namespace mark
         switch(eType)
         {
             case IDocumentMarkAccess::TEXT_FIELDMARK:
-                pMark = boost::shared_ptr<IMark>(new TextFieldmark(rPaM));
+                pMark = shared_ptr<IMark>(new TextFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
-                pMark = boost::shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
+                pMark = shared_ptr<IMark>(new CheckboxFieldmark(rPaM));
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
-                pMark = boost::shared_ptr<IMark>(new NavigatorReminder(rPaM));
+                pMark = shared_ptr<IMark>(new NavigatorReminder(rPaM));
                 break;
             case IDocumentMarkAccess::BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = shared_ptr<IMark>(new Bookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::DDE_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new DdeBookmark(rPaM));
+                pMark = shared_ptr<IMark>(new DdeBookmark(rPaM));
                 break;
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = shared_ptr<IMark>(new CrossRefHeadingBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
+                pMark = shared_ptr<IMark>(new CrossRefNumItemBookmark(rPaM, KeyCode(), rName, ::rtl::OUString()));
                 break;
             case IDocumentMarkAccess::UNO_BOOKMARK:
-                pMark = boost::shared_ptr<IMark>(new UnoMark(rPaM));
+                pMark = shared_ptr<IMark>(new UnoMark(rPaM));
                 break;
         }
         OSL_ENSURE(pMark.get(),
@@ -396,10 +396,12 @@ namespace sw { namespace mark
             case IDocumentMarkAccess::BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_NUMITEM_BOOKMARK:
             case IDocumentMarkAccess::CROSSREF_HEADING_BOOKMARK:
+            // if(dynamic_cast<IBookmark*>)
                 lcl_InsertMarkSorted(m_vBookmarks, pMark);
                 break;
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
+            // if(dynamic_cast<IFieldmark*>
                 lcl_InsertMarkSorted(m_vFieldmarks, pMark);
                 break;
             case IDocumentMarkAccess::NAVIGATOR_REMINDER:
@@ -667,7 +669,7 @@ namespace sw { namespace mark
         }
 
         // we just remembered the iterators to delete, so we do not need to search
-        // for the boost::shared_ptr<> (the entry in m_vMarks) again
+        // for the shared_ptr<> (the entry in m_vMarks) again
         // reverse iteration, since erasing an entry invalidates iterators
         // behind it (the iterators in vMarksToDelete are sorted)
         for(vector<const_iterator_t>::reverse_iterator pppMark = vMarksToDelete.rbegin();
@@ -704,6 +706,7 @@ namespace sw { namespace mark
             }
             case IDocumentMarkAccess::TEXT_FIELDMARK:
             case IDocumentMarkAccess::CHECKBOX_FIELDMARK:
+            // if(dynamic_cast<IFieldmark*>
             {
                 IDocumentMarkAccess::iterator_t ppFieldmark = lcl_FindMark(m_vFieldmarks, *ppMark);
                 OSL_ENSURE(ppFieldmark != m_vFieldmarks.end(),
@@ -746,7 +749,7 @@ namespace sw { namespace mark
         iterator_t pMarkHigh = m_vMarks.end();
         iterator_t pMarkFound = find_if(
             pMarkLow, pMarkHigh,
-            bind(equal_to<const IMark*>(), bind(&boost::shared_ptr<IMark>::get, _1), pMark));
+            bind(equal_to<const IMark*>(), bind(&shared_ptr<IMark>::get, _1), pMark));
         if(pMarkFound != pMarkHigh)
             deleteMark(pMarkFound);
     }
@@ -836,6 +839,10 @@ namespace sw { namespace mark
 
 }} // namespace ::sw::mark
 
+
+// old implementation
+
+//SV_IMPL_OP_PTRARR_SORT(SwBookmarks, SwBookmarkPtr)
 
 #define PCURCRSR (_pCurrCrsr)
 #define FOREACHPAM_START(pSttCrsr) \

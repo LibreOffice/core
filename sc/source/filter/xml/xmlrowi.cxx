@@ -349,11 +349,12 @@ void ScXMLTableRowsContext::EndElement()
             ScDocument* pDoc(GetScImport().GetDocument());
             if (pDoc)
             {
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                GetScImport().LockSolarMutex();
                 ScOutlineTable* pOutlineTable(pDoc->GetOutlineTable(static_cast<SCTAB>(nSheet), sal_True));
                 ScOutlineArray* pRowArray(pOutlineTable->GetRowArray());
                 sal_Bool bResized;
                 pRowArray->Insert(static_cast<SCROW>(nGroupStartRow), static_cast<SCROW>(nGroupEndRow), bResized, !bGroupDisplay, sal_True);
+                GetScImport().UnlockSolarMutex();
             }
         }
     }

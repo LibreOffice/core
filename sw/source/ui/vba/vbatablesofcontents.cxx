@@ -143,6 +143,8 @@ SwVbaTablesOfContents::Add( const uno::Reference< word::XRange >& Range, const u
     xToc->setUseFields( bUseFields );
 
     sal_Bool bUseOutlineLevels = sal_True;
+    //if( UseOutlineLevels.hasValue() )
+    //    UseOutlineLevels >>= bUseOutlineLevels;
     xToc->setUseOutlineLevels( bUseOutlineLevels );
 
     SwVbaRange* pVbaRange = dynamic_cast<SwVbaRange*>( Range.get() );

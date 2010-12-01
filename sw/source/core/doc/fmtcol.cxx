@@ -77,6 +77,7 @@ namespace TxtFmtCollFunc
         }
 
         // --> OD 2007-01-24 #i73790#
+    //    if ( pTxtFmtColl->AssignedToListLevelOfOutlineStyle() )
         if ( !pTxtFmtColl->StayAssignedToListLevelOfOutlineStyle() &&
              pTxtFmtColl->IsAssignedToListLevelOfOutlineStyle() )
         // <--

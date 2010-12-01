@@ -41,6 +41,8 @@
 #include <com/sun/star/uno/Reference.h>
 #include "swdllapi.h"
 #include <i18npool/lang.h>
+// wenn das hier geaendert wird, dann auch im globals.hrc aendern!!!
+//#define SW_FILEFORMAT_40 SOFFICE_FILEFORMAT_40
 
 namespace com { namespace sun { namespace star {
     namespace linguistic2{
@@ -73,7 +75,7 @@ typedef long SwTwips;
 #define TWIPS_MAX       (LONG_MAX - 1)
 
 #define MM50   283  // 1/2 cm in TWIPS
-
+// --> OD 2004-06-18 #i19922# - constant for minimal page header/footer height of 1mm
 const SwTwips cMinHdFtHeight = 56;
 
 #define MINFLY 23   //Minimalgroesse fuer FlyFrms
@@ -118,6 +120,8 @@ enum SwLabelType
 const BYTE OLD_MAXLEVEL = 5;
 const BYTE MAXLEVEL = 10;       //Ehemals numrule.hxx
 const BYTE NO_NUM       = 200;  //Ehemals numrule.hxx
+//const BYTE NO_NUMBERING = 201;  //Ehemals numrule.hxx //#outline level,removed by zhaojianwei
+//const BYTE NO_INIT        = 202;  //Ehemals numrule.hxx
 
 // fuer Absaetze mit NO_NUM aber auf unterschiedlichen Leveln
 // DAMIT entfaellt das NO_NUM !!!!
@@ -141,11 +145,13 @@ extern SwPathFinder *pPathFinder;
 // (fuer die weiteren Ebenen sind die Werte mit den Ebenen+1 zu
 //  multiplizieren; Ebenen 0..4 !!!)
 
+// -> #i30312#
 const USHORT lBullIndent = 1440/4;
 const short lBullFirstLineOffset = -lBullIndent;
 const USHORT lNumIndent = 1440/4;
 const short lNumFirstLineOffset = -lNumIndent;
 const short lOutlineMinTextDistance = 216; // 0.15 inch = 0.38 cm
+// <- #i30312#
 
 // Anzahl der SystemField-Types vom SwDoc
 #define INIT_FLDTYPES   32
@@ -272,6 +278,7 @@ SW_DLLPUBLIC CollatorWrapper& GetAppCaseCollator();
 
 SW_DLLPUBLIC const ::utl::TransliterationWrapper& GetAppCmpStrIgnore();
 
+// --> OD 2004-06-30 #i28701# - moved from <frame.hxx>
 //fuer Prepare() zur Benachrichtigung des Inhaltes durch das Layout auf
 //dem kurzen Dienstweg.
 //Der Inhalt sorgt dafuer, dass beim naechsten Aufruf von ::Format() das
@@ -327,6 +334,7 @@ enum PrepareHint
     PREP_ERGOSUM,           //wg. Bewegung in FtnFrms QuoVadis/ErgoSum pruefen
     PREP_END                //END
 };
+// <--
 
 #endif
 

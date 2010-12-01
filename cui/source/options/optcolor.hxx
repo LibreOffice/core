@@ -35,6 +35,9 @@
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 
+/* -----------------------------25.03.2002 10:40------------------------------
+
+ ---------------------------------------------------------------------------*/
 namespace svtools {class EditableColorConfig;class EditableExtendedColorConfig;}
 class ColorConfigCtrl_Impl;
 class AbstractSvxNameDialog; //CHINA001 class SvxNameDialog;

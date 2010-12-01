@@ -530,7 +530,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||
-                 bVert == (rL2.Height() > rL2.Width()) )
+                 bVert == rL2.Height() > rL2.Width() )
                 continue;
 
             long nL2a, nL2b, nL2c, nL2d;
@@ -704,12 +704,12 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             if ( rLine.IsLocked () )
                 continue;
 
-            if ( !bVerticalSubs == (rLine.Height() > rLine.Width()) ) // same direction?
+            if ( !bVerticalSubs == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
                 continue;
 
             if ( aSubsRect.IsOver( rLine ) )
             {
-                if ( bVerticalSubs ) // Vertical?
+                if ( bVerticalSubs ) //Vertikal?
                 {
                     if ( aSubsRect.Left()  <= rLine.Right() &&
                          aSubsRect.Right() >= rLine.Left() )
@@ -949,7 +949,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 SwLineRect &rLk = operator[](k);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
-                    if ( bVerticalSubs == (rLk.Height() > rLk.Width()) )
+                    if ( bVerticalSubs == rLk.Height() > rLk.Width() )
                     {
                         if ( bVerticalSubs )
                         {
@@ -2894,6 +2894,20 @@ void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) con
 
                 aPaintRect._Intersection( aRect );
 
+                // --> OD 2007-11-14 #i82616#
+                // Invalidate area for extra data (line numbers or change tracking
+                // marks), if painting on a window and the paint is trigger by an
+                // end action. The inefficient and simple enlargement of the
+                // paint area is replaced by this invalidation.
+    //            if ( bExtraData )
+    //            {
+    //                //Ja, das ist grob, aber wie macht man es besser?
+    //                SWRECTFN( pPage )
+    //                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
+    //                    (pPage->Frm().*fnRect->fnGetLeft)(),
+    //                    (pPage->Frm().*fnRect->fnGetWidth)() );
+    //                aPaintRect._Intersection( pSh->VisArea() );
+    //            }
                 if ( bExtraData &&
                      pSh->GetWin() && pSh->IsInEndAction() )
                 {
@@ -6291,7 +6305,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
-    BOOL bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
+    BOOL bLineInFly = rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys()
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );

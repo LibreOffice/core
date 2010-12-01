@@ -142,25 +142,25 @@ static sal_Bool IsCorrectContext( const ::rtl::OUString& rModuleIdentifier, cons
 static Image RetrieveImage( Reference< com::sun::star::frame::XFrame >& rFrame,
                             const rtl::OUString& aImageId,
                             const rtl::OUString& aURL,
-                            BOOL bBigImage
-)
+                            BOOL bBigImage,
+                            BOOL bHiContrast )
 {
     Image aImage;
 
     if ( aImageId.getLength() > 0 )
     {
-        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage );
+        aImage = framework::AddonsOptions().GetImageFromURL( aImageId, bBigImage, bHiContrast );
         if ( !!aImage )
             return aImage;
         else
-            aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+            aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
         if ( !!aImage )
             return aImage;
     }
 
-    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage );
+    aImage = framework::AddonsOptions().GetImageFromURL( aURL, bBigImage, bHiContrast );
     if ( !aImage )
-        aImage = GetImageFromURL( rFrame, aImageId, bBigImage );
+        aImage = GetImageFromURL( rFrame, aImageId, bBigImage, bHiContrast );
 
     return aImage;
 }
@@ -215,10 +215,11 @@ void AddonsToolBarManager::RefreshImages()
             if ( pRuntimeItemData )
                 aImageId  = pRuntimeItemData->aImageId;
 
-            m_pToolBar->SetItemImage(
-                nId,
-                RetrieveImage( m_xFrame, aImageId, aCommandURL, bBigImages )
-            );
+            m_pToolBar->SetItemImage( nId, RetrieveImage( m_xFrame,
+                                                          aImageId,
+                                                          aCommandURL,
+                                                          bBigImages,
+                                                          m_bIsHiContrast ));
         }
     }
 }
@@ -297,7 +298,7 @@ void AddonsToolBarManager::FillToolbar( const Sequence< Sequence< PropertyValue 
 
                 m_pToolBar->InsertItem( nId, aTitle );
 
-                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols );
+                Image aImage = RetrieveImage( m_xFrame, aImageId, aURL, !m_bSmallSymbols, m_bIsHiContrast );
                 if ( !!aImage )
                     m_pToolBar->SetItemImage( nId, aImage );
 
@@ -507,6 +508,7 @@ IMPL_LINK( AddonsToolBarManager, StateChanged, StateChangedType*, pStateChangedT
 {
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     return 1;
@@ -518,6 +520,7 @@ IMPL_LINK( AddonsToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEve
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 

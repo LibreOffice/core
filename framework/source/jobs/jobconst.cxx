@@ -56,19 +56,19 @@ namespace framework{
 
 const ::rtl::OUString JobConst::ANSWER_DEACTIVATE_JOB()
 {
-    static const ::rtl::OUString PROP(RTL_CONSTASCII_USTRINGPARAM("Deactivate"));
+    static const ::rtl::OUString PROP = ::rtl::OUString::createFromAscii("Deactivate");
     return PROP;
 }
 
 const ::rtl::OUString JobConst::ANSWER_SAVE_ARGUMENTS()
 {
-    static const ::rtl::OUString PROP(RTL_CONSTASCII_USTRINGPARAM("SaveArguments"));
+    static const ::rtl::OUString PROP = ::rtl::OUString::createFromAscii("SaveArguments");
     return PROP;
 }
 
 const ::rtl::OUString JobConst::ANSWER_SEND_DISPATCHRESULT()
 {
-    static const ::rtl::OUString PROP(RTL_CONSTASCII_USTRINGPARAM("SendDispatchResult"));
+    static const ::rtl::OUString PROP = ::rtl::OUString::createFromAscii("SendDispatchResult");
     return PROP;
 }
 

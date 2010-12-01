@@ -43,7 +43,6 @@
 #include <svl/smplhint.hxx>
 
 #include <com/sun/star/sdbc/XResultSet.hpp>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -71,12 +70,6 @@
 
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
-
-using com::sun::star::script::XLibraryContainer;
-using com::sun::star::script::vba::XVBACompatibility;
-using com::sun::star::container::XNameContainer;
-using com::sun::star::uno::Reference;
-using com::sun::star::uno::UNO_QUERY;
 
 // ---------------------------------------------------------------------------
 
@@ -947,21 +940,18 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
                         {
                 StarBASIC* pStarBASIC = GetBasic();
                             String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                            Reference< XLibraryContainer > xLibContainer = GetBasicContainer();
-                            Reference< XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY );
-
-                            if ( xVBACompat.is() )
+                            if ( GetBasicManager()->GetName().Len() > 0 )
                             {
-                                aLibName = xVBACompat->getProjectName();
+                                aLibName = GetBasicManager()->GetName();
                                 pStarBASIC = GetBasicManager()->GetLib( aLibName );
                             }
-
                             SCTAB nTabToUse = nDestTab;
                             if ( nDestTab == SC_TAB_APPEND )
                                 nTabToUse = aDocument.GetMaxTableNumber() - 1;
                             String sCodeName;
                             String sSource;
-                            Reference< XNameContainer > xLib;
+                            com::sun::star::uno::Reference< com::sun::star::script::XLibraryContainer > xLibContainer = GetBasicContainer();
+                            com::sun::star::uno::Reference< com::sun::star::container::XNameContainer > xLib;
                             if( xLibContainer.is() )
                             {
                                 com::sun::star::uno::Any aLibAny = xLibContainer->getByName( aLibName );
@@ -1028,7 +1018,7 @@ IMPL_LINK( ScDocShell, RefreshDBDataHdl, ScRefreshTimer*, pRefreshTimer )
     {
         ScRange aRange;
         pDBData->GetArea( aRange );
-                Reference< ::com::sun::star::sdbc::XResultSet> xResultSet;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet> xResultSet;
         bContinue = aFunc.DoImport( aRange.aStart.Tab(), aImportParam, xResultSet, NULL, TRUE, FALSE ); //! Api-Flag as parameter
         // internal operations (sort, query, subtotal) only if no error
         if (bContinue)

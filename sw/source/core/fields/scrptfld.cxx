@@ -105,7 +105,9 @@ String SwScriptField::GetPar2() const
 {
     return sCode;
 }
+/*-----------------05.03.98 15:00-------------------
 
+--------------------------------------------------*/
 bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -124,7 +126,9 @@ bool SwScriptField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 15:00-------------------
 
+--------------------------------------------------*/
 bool SwScriptField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )

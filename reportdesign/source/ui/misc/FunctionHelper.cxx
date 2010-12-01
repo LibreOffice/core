@@ -58,7 +58,7 @@ sal_Unicode FunctionManager::getSingleToken(const formula::IFunctionManager::ETo
             return sal_Unicode('{');
         case eArrayClose:
             return sal_Unicode('}');
-    }
+    } // switch(_eToken)
     return 0;
 }
 // -----------------------------------------------------------------------------
@@ -93,6 +93,11 @@ const formula::IFunctionDescription* FunctionManager::getFunctionByName(const ::
 // -----------------------------------------------------------------------------
 void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula::IFunctionDescription*>& /*_rLastRUFunctions*/) const
 {
+    //const sal_uInt32 nCount = getCount();
+    //for(sal_uInt32 i = 0 ; i < nCount ; ++i)
+    //{
+    //    const formula::IFunctionCategory* pCategory = getCategory(
+    //}
 }
 // -----------------------------------------------------------------------------
 ::boost::shared_ptr< FunctionDescription > FunctionManager::get(const uno::Reference< report::meta::XFunctionDescription>& _xFunctionDescription) const
@@ -113,9 +118,9 @@ void FunctionManager::fillLastRecentlyUsedFunctions(::std::vector< const formula
                 m_aCategoryIndex.push_back( aCategoryFind );
             }
             aFunctionFind = m_aFunctions.insert(TFunctionsMap::value_type(sFunctionName,::boost::shared_ptr<FunctionDescription>(new FunctionDescription(aCategoryFind->second.get(),_xFunctionDescription)))).first;
-        }
+        } // if ( aFind == m_aFunctions.end() )
         pDesc = aFunctionFind->second;
-    }
+    } // if ( _xFunctionDescription.is() )
     return pDesc;
 }
 // -----------------------------------------------------------------------------

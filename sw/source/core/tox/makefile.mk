@@ -43,12 +43,13 @@ CDEFS+=-Dmydebug
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES= \
         $(SLO)$/tox.obj \
         $(SLO)$/toxhlp.obj \
         $(SLO)$/txmsrt.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/toxhlp.obj \
+        $(SLO)$/tox.obj
 
 # --- Tagets -------------------------------------------------------
 

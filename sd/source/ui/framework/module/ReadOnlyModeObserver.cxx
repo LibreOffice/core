@@ -66,7 +66,7 @@ ReadOnlyModeObserver::ReadOnlyModeObserver (
       mpBroadcaster(new ModifyBroadcaster(maMutex))
 {
     // Create a URL object for the slot name.
-    maSlotNameURL.Complete = OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:EditDoc"));
+    maSlotNameURL.Complete = OUString::createFromAscii(".uno:EditDoc");
     uno::Reference<lang::XMultiServiceFactory> xServiceManager (
         ::comphelper::getProcessServiceFactory());
     if (xServiceManager.is())

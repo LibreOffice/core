@@ -44,17 +44,6 @@
 #include "properties.hxx"
 #include "tokens.hxx"
 
-#if OSL_DEBUG_LEVEL > 0
-#include <vcl/unohelp.hxx>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/text/XText.hpp>
-#include <com/sun/star/drawing/XShape.hpp>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/processfactory.hxx>
-#include <oox/ppt/pptimport.hxx>
-#include <oox/ppt/slidepersist.hxx>
-#endif
-
 using rtl::OUString;
 using namespace ::oox::core;
 using namespace ::com::sun::star::uno;
@@ -291,7 +280,7 @@ void BulletList::apply( const BulletList& rSource )
         maGraphic = rSource.maGraphic;
 }
 
-void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, PropertyMap& rPropMap ) const
+void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase& rFilterBase, PropertyMap& rPropMap ) const
 {
     if( msNumberingPrefix.hasValue() )
         rPropMap[ PROP_Prefix ] = msNumberingPrefix;
@@ -307,21 +296,19 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
     OUString aBulletFontName;
     sal_Int16 nBulletFontPitch = 0;
     sal_Int16 nBulletFontFamily = 0;
-    if( pFilterBase) {
-        if (maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, *pFilterBase ) )
-        {
-            FontDescriptor aFontDesc;
-            sal_Int16 nFontSize = 0;
-            if( mnFontSize >>= nFontSize )
-                aFontDesc.Height = nFontSize;
+    if( maBulletFont.getFontData( aBulletFontName, nBulletFontPitch, nBulletFontFamily, rFilterBase ) )
+    {
+        FontDescriptor aFontDesc;
+        sal_Int16 nFontSize = 0;
+        if( mnFontSize >>= nFontSize )
+            aFontDesc.Height = nFontSize;
 
-            // TODO move the to the TextFont struct.
-            aFontDesc.Name = aBulletFontName;
-            aFontDesc.Pitch = nBulletFontPitch;
-            aFontDesc.Family = nBulletFontFamily;
-            rPropMap[ PROP_BulletFont ] <<= aFontDesc;
-            rPropMap[ PROP_BulletFontName ] <<= aBulletFontName;
-        }
+        // TODO move the to the TextFont struct.
+        aFontDesc.Name = aBulletFontName;
+        aFontDesc.Pitch = nBulletFontPitch;
+        aFontDesc.Family = nBulletFontFamily;
+        rPropMap[ PROP_BulletFont ] <<= aFontDesc;
+        rPropMap[ PROP_BulletFontName ] <<= aBulletFontName;
     }
     if ( msBulletChar.hasValue() )
         rPropMap[ PROP_BulletChar ] = msBulletChar;
@@ -335,10 +322,8 @@ void BulletList::pushToPropMap( const ::oox::core::XmlFilterBase* pFilterBase, P
         rPropMap[ PROP_BulletRelSize ] = mnSize;
     if ( maStyleName.hasValue() )
         rPropMap[ PROP_CharStyleName ] <<= maStyleName;
-    if (pFilterBase ) {
-        if ( maBulletColorPtr->isUsed() )
-            rPropMap[ PROP_BulletColor ] <<= maBulletColorPtr->getColor( pFilterBase->getGraphicHelper() );
-    }
+    if ( maBulletColorPtr->isUsed() )
+        rPropMap[ PROP_BulletColor ] <<= maBulletColorPtr->getColor( rFilterBase.getGraphicHelper() );
 }
 
 TextParagraphProperties::TextParagraphProperties()
@@ -365,7 +350,7 @@ void TextParagraphProperties::apply( const TextParagraphProperties& rSourceProps
         moFirstLineIndentation = rSourceProps.moFirstLineIndentation;
 }
 
-void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* pFilterBase,
+void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
     const Reference < XPropertySet >& xPropSet, PropertyMap& rioBulletMap, const BulletList* pMasterBuList, sal_Bool bApplyBulletMap, float fCharacterSize ) const
 {
     PropertySet aPropSet( xPropSet );
@@ -379,7 +364,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( nNumberingType == NumberingType::NUMBER_NONE )
         aPropSet.setProperty< sal_Int16 >( PROP_NumberingLevel, -1 );
 
-    maBulletList.pushToPropMap( pFilterBase, rioBulletMap );
+    maBulletList.pushToPropMap( rFilterBase, rioBulletMap );
 
     if ( maParaTopMargin.bHasValue )
         aPropSet.setProperty( PROP_ParaTopMargin, maParaTopMargin.toMargin( getCharHeightPoints( 18.0 ) ) );
@@ -429,7 +414,7 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
         }
     }
     if ( noParaLeftMargin )
-        aPropSet.setProperty( PROP_ParaLeftMargin, sal_Int32(0) /**noParaLeftMargin*/ );
+        aPropSet.setProperty( PROP_ParaLeftMargin, *noParaLeftMargin );
     if ( noFirstLineIndentation )
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
 }
@@ -439,30 +424,6 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
     return maTextCharacterProperties.getCharHeightPoints( fDefault );
 }
 
-
-#if OSL_DEBUG_LEVEL > 0
-
-void TextParagraphProperties::dump()
-{
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.presentation.TitleTextShape" ) ), UNO_QUERY );
-    Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
-
-    ppt::SlidePersist::mxDebugPage->add( xShape );
-
-    PropertyMap emptyMap;
-
-    const OUString sText = CREATE_OUSTRING("debug");
-    xText->setString( sText );
-    Reference< ::com::sun::star::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
-    Reference< ::com::sun::star::text::XTextRange > xRange( xStart, UNO_QUERY );
-    xStart->gotoEnd( sal_True );
-    Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
-    pushToPropSet( NULL, xPropSet, emptyMap, NULL, false, 0 );
-    PropertySet pSet( xPropSet );
-    pSet.dump();
-}
-#endif
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

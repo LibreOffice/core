@@ -40,9 +40,12 @@
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/SinglePropertySetInfoCache.hxx>
 #include <xmloff/XMLStringVector.hxx>
-#include <vector>
 
+// --> OD 2008-04-25 #refactorlists#
 class XMLTextListsHelper;
+#include <vector>
+// <--
+
 class SvXMLExport;
 class SvXMLAutoStylePoolP;
 class XMLTextFieldExport;
@@ -89,6 +92,9 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     const ::std::auto_ptr< ::xmloff::BoundFrameSets > pBoundFrameSets;
     XMLTextFieldExport          *pFieldExport;
     OUStrings_Impl              *pListElements;
+    // --> OD 2008-05-07 #refactorlists# - no longer needed
+//    OUStringsSort_Impl          *pExportedLists;
+    // <--
     XMLTextListAutoStylePool    *pListAutoPool;
     XMLSectionExport            *pSectionExport;
     XMLIndexMarkExport          *pIndexMarkExport;
@@ -106,17 +112,21 @@ class XMLOFF_DLLPUBLIC XMLTextParagraphExport : public XMLStyleExport
     ::rtl::OUString             sOpenRubyCharStyle;
     sal_Bool                    bOpenRuby;
 
+    // --> OD 2008-05-07 #refactorlists#
     XMLTextListsHelper* mpTextListsHelper;
     ::std::vector< XMLTextListsHelper* > maTextListsHelperStack;
+    // <--
 
     enum FrameType { FT_TEXT, FT_GRAPHIC, FT_EMBEDDED, FT_SHAPE };
 
 protected:
 
     const ::rtl::OUString sActualSize;
-    // Implement Title/Description Elements UI (#i73249#)
+    // --> OD 2009-07-22 #i73249#
+//    const ::rtl::OUString sAlternativeText;
     const ::rtl::OUString sTitle;
     const ::rtl::OUString sDescription;
+    // <--
     const ::rtl::OUString sAnchorCharStyleName;
     const ::rtl::OUString sAnchorPageNo;
     const ::rtl::OUString sAnchorType;
@@ -604,10 +614,12 @@ public:
     virtual void exportTextAutoStyles();
 
     void exportEvents( const ::com::sun::star::uno::Reference < com::sun::star::beans::XPropertySet > & rPropSet );
-
-    // Implement Title/Description Elements UI (#i73249#)
+    // --> OD 2009-07-22 #i73249#
+//    void exportAlternativeText( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
+//                                const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
     void exportTitleAndDescription( const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & rPropSet,
                                     const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySetInfo > & rPropSetInfo );
+    // <--
 
     // This method exports the given XText
     void exportText(
@@ -673,11 +685,11 @@ public:
 
     sal_Int32 GetHeadingLevel( const ::rtl::OUString& rStyleName );
 
+    // --> OD 2008-05-08 #refactorlists#
     void PushNewTextListsHelper();
-
     void PopTextListsHelper();
-
-private:
+    // <--
+    private:
         XMLTextParagraphExport(XMLTextParagraphExport &); // private copy-ctor because of explicit copy-ctor of auto_ptr
 };
 

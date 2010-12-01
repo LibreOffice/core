@@ -106,6 +106,7 @@ class SwXMailMerge :
     cppu::OInterfaceContainerHelper     aMergeListeners;
     OPropertyListenerContainerHelper    aPropListeners;
 
+    //SfxItemPropertySet          aPropSet;
     const SfxItemPropertySet*   pPropSet;
 
     SfxObjectShellRef xDocSh;   // the document

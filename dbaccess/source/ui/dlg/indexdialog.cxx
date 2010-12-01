@@ -186,7 +186,7 @@ DBG_NAME(DbaIndexDialog)
                                     const Reference< XMultiServiceFactory >& _rxORB,sal_Int32 _nMaxColumnsInIndex)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
-        ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dbaccess.tabledesign.indexdialog")))
+        ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
         ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
         ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
         ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))
@@ -238,6 +238,14 @@ DBG_NAME(DbaIndexDialog)
         m_pFields->SetModifyHdl(LINK(this, DbaIndexDialog, OnModified));
 
         m_aClose.SetClickHdl(LINK(this, DbaIndexDialog, OnCloseDialog));
+
+        // get our most recent geometry settings
+//      if (m_aGeometrySettings.Exists())
+//      {
+//          Point aPos;
+//          m_aGeometrySettings.GetPosition(aPos.X(), aPos.Y());
+//          SetPosPixel(aPos);
+//      }
 
         // if all of the indexes have an empty description, we're not interested in displaying it
         Indexes::const_iterator aCheck;
@@ -308,7 +316,8 @@ DBG_NAME(DbaIndexDialog)
     //------------------------------------------------------------------
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
+        sal_Bool bHiContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+        Image aPKeyIcon(ModuleRes( bHiContrast ? IMG_PKEYICON_SCH : IMG_PKEYICON));
         // fill the list with the index names
         m_aIndexes.Clear();
         Indexes::iterator aIndexLoop = m_pIndexes->begin();
@@ -333,6 +342,10 @@ DBG_NAME(DbaIndexDialog)
         setToolBox(NULL);
         delete m_pIndexes;
         delete m_pFields;
+
+        // save our geometry settings
+//      Point aPos = GetPosPixel();
+//      m_aGeometrySettings.SetPosition(aPos.X(), aPos.Y());
 
         DBG_DTOR(DbaIndexDialog,NULL);
     }
@@ -876,14 +889,16 @@ DBG_NAME(DbaIndexDialog)
         }
     }
     //------------------------------------------------------------------
-    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet) const
+    ImageList DbaIndexDialog::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
     {
         sal_Int16 nN = IMG_INDEX_DLG_SC;
+        sal_Int16 nH = IMG_INDEX_DLG_SCH;
         if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
         {
             nN = IMG_INDEX_DLG_LC;
-        }
-        return ImageList( nN );
+            nH = IMG_INDEX_DLG_LCH;
+        } // if ( _eBitmapSet == SFX_SYMBOLS_LARGE )
+        return ImageList(ModuleRes( _bHiContast ? nH : nN ));
     }
     //------------------------------------------------------------------
     void DbaIndexDialog::resizeControls(const Size& _rDiff)

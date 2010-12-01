@@ -307,6 +307,10 @@ SvStorageStreamRef SdModule::GetOptionStream( const String& rOptionName,
     return xStm;
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 SvNumberFormatter* SdModule::GetNumberFormatter()
 {
     if( !pNumberFormatter )
@@ -314,6 +318,10 @@ SvNumberFormatter* SdModule::GetNumberFormatter()
 
     return pNumberFormatter;
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 OutputDevice* SdModule::GetVirtualRefDevice (void)
 {

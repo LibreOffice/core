@@ -42,14 +42,15 @@ class ScDrawObjData;
 class ScDrawView: public FmFormView
 {
     ScViewData*             pViewData;
-    OutputDevice*           pDev;                   //! needed ?
+    OutputDevice*           pDev;                   //! noetig ?
     ScDocument*             pDoc;
     SCTAB                   nTab;
-    Fraction                aScaleX;                // Factor for Drawing-MapMode
+    Fraction                aScaleX;                // Faktor fuer Drawing-MapMode
     Fraction                aScaleY;
     SdrDropMarkerOverlay*   pDropMarker;
     SdrObject*              pDropMarkObj;
     BOOL                    bInConstruct;
+    //HMHBOOL                   bDisableHdl;
 
     void            Construct();
     void            UpdateBrowser();
@@ -75,7 +76,11 @@ public:
 
     virtual void    DeleteMarked();
 
+    void            DrawMarks( OutputDevice* pOut ) const;
+
     void            MarkDropObj( SdrObject* pObj );
+
+    //HMHBOOL           IsDisableHdl() const    { return bDisableHdl; }
 
     void            SetMarkedToLayer( BYTE nLayerNo );
 
@@ -134,7 +139,7 @@ public:
     /** Unlocks the internal layer that contains caption objects of cell notes. */
     inline void     UnlockInternalLayer() { LockInternalLayer( false ); }
 
-    SdrEndTextEditKind  ScEndTextEdit();    // calls SetDrawTextUndo(0)
+    SdrEndTextEditKind  ScEndTextEdit();    // ruft SetDrawTextUndo(0)
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CopyToTransferable();
 };
 

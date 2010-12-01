@@ -504,11 +504,15 @@ ContextMenuHelper::associateUIConfigurationManagers()
 }
 
 Image
-ContextMenuHelper::getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) const
+ContextMenuHelper::getImageFromCommandURL(
+    const ::rtl::OUString& aCmdURL,
+    bool                   bHiContrast ) const
 {
     Image     aImage;
     sal_Int16 nImageType( ui::ImageType::COLOR_NORMAL|
                           ui::ImageType::SIZE_DEFAULT );
+    if ( bHiContrast )
+        nImageType |= ui::ImageType::COLOR_HIGHCONTRAST;
 
     uno::Sequence< uno::Reference< graphic::XGraphic > > aGraphicSeq;
     uno::Sequence< ::rtl::OUString > aImageCmdSeq( 1 );
@@ -540,7 +544,7 @@ ContextMenuHelper::getImageFromCommandURL( const ::rtl::OUString& aCmdURL ) cons
         {
             aGraphicSeq = m_xModuleImageMgr->getImages( nImageType, aImageCmdSeq );
             uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic = aGraphicSeq[0];
-            aImage = Image( xGraphic );
+        aImage = Image( xGraphic );
 
             if ( !!aImage )
                 return aImage;
@@ -605,6 +609,7 @@ ContextMenuHelper::completeMenuProperties(
     // menu correctly.
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
     bool  bShowMenuImages( rSettings.GetUseImagesInMenus() );
+    bool  bIsHiContrast( rSettings.GetHighContrastMode() );
 
     if ( pMenu )
     {
@@ -634,7 +639,7 @@ ContextMenuHelper::completeMenuProperties(
                 {
                     Image aImage;
                     if ( aCmdURL.getLength() > 0 )
-                        aImage = getImageFromCommandURL( aCmdURL );
+                        aImage = getImageFromCommandURL( aCmdURL, bIsHiContrast );
                     pMenu->SetItemImage( nId, aImage );
                 }
                 else

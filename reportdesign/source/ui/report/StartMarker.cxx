@@ -51,6 +51,8 @@ namespace rptui
 
 Image*  OStartMarker::s_pDefCollapsed       = NULL;
 Image*  OStartMarker::s_pDefExpanded        = NULL;
+Image*  OStartMarker::s_pDefCollapsedHC = NULL;
+Image*  OStartMarker::s_pDefExpandedHC  = NULL;
 oslInterlockedCount OStartMarker::s_nImageRefCount  = 0;
 
 DBG_NAME( rpt_OStartMarker )
@@ -92,7 +94,9 @@ OStartMarker::~OStartMarker()
     {
         DELETEZ(s_pDefCollapsed);
         DELETEZ(s_pDefExpanded);
-    }
+        DELETEZ(s_pDefCollapsedHC);
+        DELETEZ(s_pDefExpandedHC);
+    } // if ( osl_decrementInterlockedCount(&s_nImageRefCount) == 0 )
 }
 // -----------------------------------------------------------------------------
 sal_Int32 OStartMarker::getMinHeight() const
@@ -105,6 +109,7 @@ sal_Int32 OStartMarker::getMinHeight() const
 void OStartMarker::Paint( const Rectangle& rRect )
 {
     Window::Paint( rRect );
+    //SetUpdateMode(FALSE);
     Size aSize = GetOutputSizePixel();
     long nSize = aSize.Width();
     const long nCornerWidth = long(CORNER_SPACE * (double)GetMapMode().GetScaleX());
@@ -112,10 +117,10 @@ void OStartMarker::Paint( const Rectangle& rRect )
     if ( !isCollapsed() )
     {
         const long nVRulerWidth = m_aVRuler.GetSizePixel().Width();
-        nSize = aSize.Width() - nVRulerWidth;
+        nSize = aSize.Width() - nVRulerWidth/* - m_nCornerSize*/;
         SetClipRegion(Region(PixelToLogic(Rectangle(Point(),Size( nSize,aSize.Height())))));
         aSize.Width() += nCornerWidth;
-    }
+    } // if ( !isCollapsed() )
     else
         SetClipRegion();
 
@@ -186,7 +191,11 @@ void OStartMarker::MouseButtonUp( const MouseEvent& rMEvt )
 // -----------------------------------------------------------------------------
 void OStartMarker::changeImage()
 {
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    Image* pImage = NULL;
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    else
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
     m_aImage.SetImage(*pImage);
 }
 // -----------------------------------------------------------------------
@@ -195,10 +204,20 @@ void OStartMarker::initDefaultNodeImages()
     if ( !s_pDefCollapsed )
     {
         s_pDefCollapsed     = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED      ) );
+        s_pDefCollapsedHC   = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED_HC   ) );
         s_pDefExpanded      = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED       ) );
+        s_pDefExpandedHC    = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED_HC    ) );
     }
 
-    Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    Image* pImage = NULL;
+    if ( GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        pImage = m_bCollapsed ? s_pDefCollapsedHC : s_pDefExpandedHC;
+    }
+    else
+    {
+        pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;
+    }
     m_aImage.SetImage(*pImage);
     m_aImage.SetMouseTransparent(TRUE);
     m_aImage.SetBackground();
@@ -208,6 +227,7 @@ void OStartMarker::initDefaultNodeImages()
 // -----------------------------------------------------------------------
 void OStartMarker::ImplInitSettings()
 {
+    // SetBackground( Wallpaper( COL_YELLOW ));
     SetBackground( );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     setColor();
@@ -253,6 +273,7 @@ void OStartMarker::Notify(SfxBroadcaster & rBc, SfxHint const & rHint)
             == SFX_HINT_COLORS_CHANGED))
     {
         setColor();
+        //m_aText.Invalidate();
         Invalidate(INVALIDATE_CHILDREN);
     }
 }
@@ -269,6 +290,7 @@ void OStartMarker::RequestHelp( const HelpEvent& rHEvt )
     {
         // Hilfe anzeigen
         Rectangle aItemRect(rHEvt.GetMousePosPixel(),Size(GetSizePixel().Width(),getMinHeight()));
+        //aItemRect = LogicToPixel( aItemRect );
         Point aPt = OutputToScreenPixel( aItemRect.TopLeft() );
         aItemRect.Left()   = aPt.X();
         aItemRect.Top()    = aPt.Y();

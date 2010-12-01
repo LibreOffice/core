@@ -47,6 +47,7 @@
 //***********************************************************
 
 struct CollName {
+//      const char* pStr;
         ULONG nCnd;
         ULONG nSubCond;
     };

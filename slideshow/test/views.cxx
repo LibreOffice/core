@@ -26,10 +26,7 @@
  *
  ************************************************************************/
 
-#include <cppunit/TestAssert.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
-
+#include <testshl/simpleheader.hxx>
 #include <cppuhelper/compbase1.hxx>
 #include <comphelper/broadcasthelper.hxx>
 
@@ -84,5 +81,12 @@ public:
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(UnoViewContainerTest, "UnoViewContainerTest");
 } // namespace
+
+
+// -----------------------------------------------------------------------------
+
+// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// to let the user the possibility to also register some functions by hand.
+NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

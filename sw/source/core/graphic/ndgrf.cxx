@@ -287,7 +287,10 @@ BOOL SwGrfNode::ReRead(
                 // der neue Kink nicht geladen werden konnte.
                 Graphic aGrf; aGrf.SetDefaultType();
                 aGrfObj.SetGraphic( aGrf, rGrfName );
-                // #i59688# - do not load linked graphic, if it isn't a new linked graphic.
+                // --> OD 2006-11-03 #i59688#
+                // do not load linked graphic, if it isn't a new linked graphic.
+//                //TODO refLink->setInputStream(getInputStream());
+//                ((SwBaseLink*)&refLink)->SwapIn();
                 if ( bNewGrf )
                 {
                     ((SwBaseLink*)&refLink)->SwapIn();
@@ -456,7 +459,10 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
             // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
-                // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
+                // --> OD, MAV 2005-08-17 #i53025# - needed correction of new
+                // method <_GetStreamForEmbedGrf(..)>
+//                bool bGraphic(false);
+//                SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
                 String aStrmName, aPicStgName;
                 _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -634,6 +640,8 @@ void SwGrfNode::ReleaseLink()
 {
     if( refLink.Is() )
     {
+        // erst die Grafik reinswappen!
+//      if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
         {
             bInSwapIn = TRUE;
             SwBaseLink* pLink = (SwBaseLink*)(::sfx2::SvBaseLink*) refLink;
@@ -853,7 +861,7 @@ void SwGrfNode::_GetStreamStorageNames( String& rStrmName,
         aUserData=aNewStrmName;
     }
 
-    String aProt( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.Package:" ) );
+    String aProt( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.Package:" ) );
     if( 0 == aUserData.CompareTo( aProt, aProt.Len() ) )
     {
         // 6.0 (XML) Package
@@ -893,7 +901,10 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
         try
         {
-            // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
+            // --> OD, MAV 2005-08-17 #i53025# - needed correction of new
+            // method <_GetStreamForEmbedGrf(..)>
+//            bool bGraphic(false);
+//            SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
             String aStrmName, aPicStgName;
             _GetStreamStorageNames( aStrmName, aPicStgName );
             uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -977,7 +988,10 @@ IMPL_LINK( SwGrfNode, SwapGraphic, GraphicObject*, pGrfObj )
             // --> OD 2005-05-04 #i48434# - usage of new method <_GetStreamForEmbedGrf(..)>
             try
             {
-                // #i53025# - needed correction of new method <_GetStreamForEmbedGrf(..)>
+                // --> OD, MAV 2005-08-17 #i53025# - needed correction of new
+                // method <_GetStreamForEmbedGrf(..)>
+//                bool bGraphic(false);
+//                SvStream* pStrm = _GetStreamForEmbedGrf( bGraphic );
                 String aStrmName, aPicStgName;
                 _GetStreamStorageNames( aStrmName, aPicStgName );
                 uno::Reference < embed::XStorage > refPics = _GetDocSubstorageOrRoot( aPicStgName );
@@ -1198,7 +1212,7 @@ bool SwGrfNode::IsAsyncRetrieveInputStreamPossible() const
     {
         String sGrfNm;
         refLink->GetLinkManager()->GetDisplayNames( refLink, 0, &sGrfNm, 0, 0 );
-        String sProtocol( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.pkg:" ) );
+        String sProtocol( RTL_CONSTASCII_STRINGPARAM( "vnd.sun.star.pkg:" ) );
         if ( sGrfNm.CompareTo( sProtocol, sProtocol.Len() ) != 0 )
         {
             bRet = true;

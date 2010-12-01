@@ -35,7 +35,7 @@
 #include <limits>
 #include <com/sun/star/script/ModuleType.hpp>
 
-// nInc is the increment size of the buffers
+// nInc ist die Inkrementgroesse der Puffer
 
 SbiCodeGen::SbiCodeGen( SbModule& r, SbiParser* p, short nInc )
          : rMod( r ), aCode( p, nInc )
@@ -52,7 +52,7 @@ UINT32 SbiCodeGen::GetPC()
     return aCode.GetSize();
 }
 
-// memorize the statement
+// Statement merken
 
 void SbiCodeGen::Statement()
 {
@@ -61,12 +61,12 @@ void SbiCodeGen::Statement()
     nLine = pParser->GetLine();
     nCol  = pParser->GetCol1();
 
-    // #29955 Store the information of the for-loop-layer
-    // in the uppper Byte of the column
+    // #29955 Information der for-Schleifen-Ebene
+    // in oberen Byte der Spalte speichern
     nCol = (nCol & 0xff) + 0x100 * nForLevel;
 }
 
-// Mark the beginning of a statement
+// Anfang eines Statements markieren
 
 void SbiCodeGen::GenStmnt()
 {
@@ -77,8 +77,8 @@ void SbiCodeGen::GenStmnt()
     }
 }
 
-// The Gen-Routines return the offset of the 1. operand,
-// so that jumps can sink their backchain there.
+// Die Gen-Routinen returnen den Offset des 1. Operanden,
+// damit Jumps dort ihr Backchain versenken koennen
 
 UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode )
 {
@@ -118,15 +118,15 @@ UINT32 SbiCodeGen::Gen( SbiOpcode eOpcode, UINT32 nOpnd1, UINT32 nOpnd2 )
     return n;
 }
 
-// Storing of the created image in the module
+// Abspeichern des erzeugten Images im Modul
 
 void SbiCodeGen::Save()
 {
     SbiImage* p = new SbiImage;
     rMod.StartDefinitions();
-    // OPTION BASE-Value:
+    // OPTION BASE-Wert:
     p->nDimBase = pParser->nBase;
-    // OPTION take over the EXPLICIT-Flag
+    // OPTION EXPLICIT-Flag uebernehmen
     if( pParser->bExplicit )
         p->SetFlag( SBIMG_EXPLICIT );
 
@@ -267,22 +267,22 @@ void SbiCodeGen::Save()
                     pMeth->nStart = pProc->GetAddr();
                     pMeth->nLine1 = pProc->GetLine1();
                     pMeth->nLine2 = pProc->GetLine2();
-                    // The parameter:
+                    // Die Parameter:
                     SbxInfo* pInfo = pMeth->GetInfo();
                     String aHelpFile, aComment;
                     ULONG nHelpId = 0;
                     if( pInfo )
                     {
-                        // Rescue the additional data
+                        // Die Zusatzdaten retten
                         aHelpFile = pInfo->GetHelpFile();
                         aComment  = pInfo->GetComment();
                         nHelpId   = pInfo->GetHelpId();
                     }
-                    // And reestablish the parameter list
+                    // Und die Parameterliste neu aufbauen
                     pInfo = new SbxInfo( aHelpFile, nHelpId );
                     pInfo->SetComment( aComment );
                     SbiSymPool* pPool = &pProc->GetParams();
-                    // The first element is always the value of the function!
+                    // Das erste Element ist immer der Funktionswert!
                     for( USHORT i = 1; i < pPool->GetSize(); i++ )
                     {
                         SbiSymDef* pPar = pPool->Get( i );
@@ -291,7 +291,7 @@ void SbiCodeGen::Save()
                             t = (SbxDataType) ( t | SbxBYREF );
                         if( pPar->GetDims() )
                             t = (SbxDataType) ( t | SbxARRAY );
-                        // #33677 hand-over an Optional-Info
+                        // #33677 Optional-Info durchreichen
                         USHORT nFlags = SBX_READ;
                         if( pPar->IsOptional() )
                             nFlags |= SBX_OPTIONAL;
@@ -316,10 +316,10 @@ void SbiCodeGen::Save()
             }   // for( iPass...
         }
     }
-    // The code
+    // Der Code
     p->AddCode( aCode.GetBuffer(), aCode.GetSize() );
 
-    // The global StringPool. 0 is not occupied.
+    // Der globale StringPool. 0 ist nicht belegt.
     SbiStringPool* pPool = &pParser->aGblStrings;
     USHORT nSize = pPool->GetSize();
     p->MakeStrings( nSize );
@@ -327,7 +327,7 @@ void SbiCodeGen::Save()
     for( i = 1; i <= nSize; i++ )
         p->AddString( pPool->Find( i ) );
 
-    // Insert types
+    // Typen einfuegen
     USHORT nCount = pParser->rTypeArray->Count();
     for (i = 0; i < nCount; i++)
          p->AddType((SbxObject *)pParser->rTypeArray->Get(i));

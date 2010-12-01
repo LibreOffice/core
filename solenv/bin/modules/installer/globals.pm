@@ -306,6 +306,7 @@ BEGIN
     $productxpdfile = "setup.xpd";
     $xpd_files_prepared = 0;
     $defaultlanguage = "";
+    # @emptyxpdparents = ();
     @createdxpdfiles = ();
     @allxpdfiles = ();
     $isxpdplatform = 0;
@@ -530,6 +531,9 @@ BEGIN
         $isunix = 1;
         $iswin = 0;
     }
+    # WRAPCMD is gone - remove this and all related
+    # $installer::globals::wrapcmd entries
+    $wrapcmd = "";
 
     if ( $plat =~ /linux/i ) { $islinux = 1; }
     if ( $plat =~ /kfreebsd/i ) { $islinux = 1; }

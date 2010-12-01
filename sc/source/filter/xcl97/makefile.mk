@@ -44,13 +44,14 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =					\
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES =				\
+SLOFILES =									\
+        $(SLO)$/xcl97esc.obj				\
+        $(SLO)$/xcl97rec.obj				\
         $(SLO)$/XclImpChangeTrack.obj		\
-        $(SLO)$/XclExpChangeTrack.obj		\
-        $(SLO)$/xcl97esc.obj			\
+        $(SLO)$/XclExpChangeTrack.obj
+
+EXCEPTIONSFILES =							\
+        $(SLO)$/xcl97esc.obj				\
         $(SLO)$/xcl97rec.obj
 
 # --- Targets -------------------------------------------------------

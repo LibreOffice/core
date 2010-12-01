@@ -99,7 +99,7 @@ void applyBorder( TableStylePart& rTableStylePart, sal_Int32 nLineType, oox::dra
         rLineProperties.assignUsed( *aIter->second );
 }
 
-void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < text::XTextRange >& rxStart, oox::drawingml::FillProperties& rFillProperties,
+void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const Reference < ::com::sun::star::table::XCell >& rxCell, oox::drawingml::FillProperties& rFillProperties,
      oox::drawingml::LineProperties& rLeftBorder,
      oox::drawingml::LineProperties& rRightBorder,
      oox::drawingml::LineProperties& rTopBorder,
@@ -125,13 +125,9 @@ void applyTableStylePart( const ::oox::core::XmlFilterBase& rFilterBase, const R
     aTextCharProps.maComplexFont = rTableStylePart.getComplexFont();
     aTextCharProps.maSymbolFont = rTableStylePart.getSymbolFont();
     aTextCharProps.maCharColor = rTableStylePart.getTextColor();
-    if( rTableStylePart.getTextBoldStyle().is_initialized() )
-        aTextCharProps.moBold = rTableStylePart.getTextBoldStyle();
-    if( rTableStylePart.getTextItalicStyle().is_initialized() )
-        aTextCharProps.moItalic = rTableStylePart.getTextItalicStyle();
 
-    PropertySet aPropSet( rxStart );
-    aTextCharProps.pushToPropSet( aPropSet, rFilterBase, true );
+    PropertySet aPropSet( rxCell );
+    aTextCharProps.pushToPropSet( aPropSet, rFilterBase );
 }
 
 void applyTableCellProperties( const Reference < ::com::sun::star::table::XCell >& rxCell, const TableCell& rTableCell )
@@ -174,9 +170,6 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     applyTableCellProperties( rxCell, *this );
     TextCharacterProperties aTextStyleProps;
     getTextBody()->insertAt( rFilterBase, xText, xAt, aTextStyleProps, pMasterTextListStyle );
-    xAt->gotoStart( sal_True );
-    Reference< text::XTextRange > xStart( xAt, UNO_QUERY );
-    xAt->gotoEnd( sal_True );
 
     Reference< XPropertySet > xPropSet( rxCell, UNO_QUERY_THROW );
     oox::drawingml::FillProperties aFillProperties;
@@ -191,7 +184,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     if ( rBackgroundFillPropertiesPtr.get() )
         aFillProperties.assignUsed( *rBackgroundFillPropertiesPtr );
 
-    applyTableStylePart( rFilterBase, xStart, aFillProperties,
+    applyTableStylePart( rFilterBase, rxCell, aFillProperties,
         aLinePropertiesLeft,
         aLinePropertiesRight,
         aLinePropertiesTop,
@@ -202,7 +195,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
 
     if ( rProperties.isFirstRow() && ( nRow == 0 ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -213,7 +206,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( rProperties.isLastRow() && ( nRow == nMaxRow ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -224,7 +217,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( rProperties.isFirstCol() && ( nColumn == 0 ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -235,7 +228,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( rProperties.isLastCol() && ( nColumn == nMaxColumn ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -254,7 +247,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                 nBand++;
             if ( nBand & 1 )
             {
-                applyTableStylePart( rFilterBase, xStart, aFillProperties,
+                applyTableStylePart( rFilterBase, rxCell, aFillProperties,
                     aLinePropertiesLeft,
                     aLinePropertiesRight,
                     aLinePropertiesTop,
@@ -265,7 +258,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             }
             else
             {
-                applyTableStylePart( rFilterBase, xStart, aFillProperties,
+                applyTableStylePart( rFilterBase, rxCell, aFillProperties,
                     aLinePropertiesLeft,
                     aLinePropertiesRight,
                     aLinePropertiesTop,
@@ -278,7 +271,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( ( nRow == 0 ) && ( nColumn == 0 ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -289,7 +282,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( ( nRow == nMaxRow ) && ( nColumn == 0 ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -300,7 +293,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( ( nRow == 0 ) && ( nColumn == nMaxColumn ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -311,7 +304,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
     }
     if ( ( nRow == nMaxColumn ) && ( nColumn == nMaxColumn ) )
     {
-        applyTableStylePart( rFilterBase, xStart, aFillProperties,
+        applyTableStylePart( rFilterBase, rxCell, aFillProperties,
             aLinePropertiesLeft,
             aLinePropertiesRight,
             aLinePropertiesTop,
@@ -330,7 +323,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
                 nBand++;
             if ( nBand & 1 )
             {
-                applyTableStylePart( rFilterBase, xStart, aFillProperties,
+                applyTableStylePart( rFilterBase, rxCell, aFillProperties,
                     aLinePropertiesLeft,
                     aLinePropertiesRight,
                     aLinePropertiesTop,
@@ -341,7 +334,7 @@ void TableCell::pushToXCell( const ::oox::core::XmlFilterBase& rFilterBase, ::oo
             }
             else
             {
-                applyTableStylePart( rFilterBase, xStart, aFillProperties,
+                applyTableStylePart( rFilterBase, rxCell, aFillProperties,
                     aLinePropertiesLeft,
                     aLinePropertiesRight,
                     aLinePropertiesTop,

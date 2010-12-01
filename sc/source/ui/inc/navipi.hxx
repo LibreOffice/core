@@ -244,6 +244,7 @@ private:
     SfxBindings&        rBindings;      // must be first member
 
     ImageList           aCmdImageList;  // must be before aTbxCmd
+    ImageList           aCmdImageListH;
     FixedInfo           aFtCol;
     ColumnEdit          aEdCol;
     FixedInfo           aFtRow;

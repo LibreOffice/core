@@ -256,6 +256,18 @@ void SwWrtShell::Insert( const String &rStr )
         bDeleted = DelRight() != 0;
     }
 
+    /*
+JP 21.01.98: Ueberschreiben ueberschreibt nur die Selektion, nicht das
+            naechste Zeichen.
+    if( bHasSel && !bIns && 1 < rStr.Len() )
+    {
+        // falls mehrere Zeichen anstehen, nur das erste einfuegen,
+        // der Rest muss dann aber Ueberschrieben werden.
+        SwEditShell::Insert( rStr.GetChar( 0 ) );
+        SwEditShell::Overwrite( rStr.Copy( 1 ) );
+    }
+    else
+*/
     bCallIns ?
         SwEditShell::Insert2( rStr, bDeleted ) : SwEditShell::Overwrite( rStr );
 
@@ -265,6 +277,7 @@ void SwWrtShell::Insert( const String &rStr )
         EndAllAction();
         EndUndo(UNDO_REPLACE);
     }
+//    delete pChgFlg;
 }
 
 /* Begrenzung auf maximale Hoehe geht nicht, da die maximale Hoehe
@@ -1039,6 +1052,7 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 // extern void SetNumChrFmt( SwWrtShell*, SwNumRules& );
 
 // -> #i40041#
+// --> OD 2005-10-25 #b6340308#
 // Preconditions (as far as OD has figured out):
 // - <SwEditShell::HasNumber()> is FALSE, if <bNum> is TRUE
 // - <SwEditShell::HasBullet()> is FALSE, if <bNum> is FALSE
@@ -1053,6 +1067,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
     const SwNumRule * pNumRule = pCurRule;
 
+    // --> OD 2005-10-25 #b6340308#
     // - activate outline rule respectively turning on outline rule for
     //   current text node. But, only for turning on a numbering (<bNum> == TRUE).
     // - overwrite found numbering rule at current cursor position, if
@@ -1063,7 +1078,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
     SwTxtFmtColl * pColl = GetCurTxtFmtColl();
     if ( pColl )
     {
-        // retrieve numbering rule at paragraph
+        // --> OD 2005-10-25 #b6340308# - retrieve numbering rule at paragraph
         // style, which is found at current cursor position in the document.
         SwNumRule* pCollRule = pDoc->FindNumRulePtr(pColl->GetNumRule().GetValue());
         // --> OD 2005-10-25 #125993# - The outline numbering rule isn't allowed
@@ -1079,15 +1094,29 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                 pCollRule = 0;
             }
         }
+        // --> OD 2006-11-20 #i71764#
+        // Document setting OUTLINE_LEVEL_YIELDS_OUTLINE_RULE has no influence
+        // any more.
+//        if ( pCollRule == NULL &&
+//             NO_NUMBERING != pColl->GetOutlineLevel() &&
+//             GetDoc()->get(IDocumentSettingAccess::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE) )
+//        {
+//            pCollRule = GetDoc()->GetOutlineNumRule();
+//        }
+        // <--
 
+        // <--
+        // --> OD 2005-10-25 #b6340308#
         if ( !pCollRule )
         {
             pNumRule = pCollRule;
         }
+        // --> OD 2006-06-12 #b6435904#
         // no activation or continuation of outline numbering in Writer/Web document
         else if ( bNum &&
                   !dynamic_cast<SwWebDocShell*>(GetDoc()->GetDocShell()) &&
                   pCollRule == GetDoc()->GetOutlineNumRule() )
+        // <--
         {
             if ( pNumRule == pCollRule )
             {
@@ -1169,6 +1198,7 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         }
     }
 
+    // --> OD 2005-10-25 #b6340308#
     // Only automatic numbering/bullet rules should be changed.
     // Note: The outline numbering rule is also an automatic one. It's only
     //       changed, if it has to be activated.
@@ -1184,8 +1214,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
             pNumRule = 0;
         }
     }
+    // <--
 
+    // --> OD 2005-10-25 #b6340308#
     // Search for a previous numbering/bullet rule to continue it.
+    // --> OD 2008-03-18 #refactorlists#
     String sContinuedListId;
     if ( !pNumRule )
     {
@@ -1194,11 +1227,13 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                                             sContinuedListId );
         bContinueFoundNumRule = pNumRule != 0;
     }
+    // <--
 
     if (pNumRule)
     {
         SwNumRule aNumRule(*pNumRule);
 
+        // --> OD 2005-10-25 #b6340308#
         // do not change found numbering/bullet rule, if it should only be continued.
         if ( !bContinueFoundNumRule )
         {
@@ -1206,10 +1241,12 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
 
             if (pTxtNode)
             {
-                // use above retrieve outline level, if outline numbering has to be activated.
-                int nLevel = bActivateOutlineRule
+                // --> OD 2005-10-26 #b6340308# - use above retrieve outline
+                // level, if outline numbering has to be activated.
+                int nLevel = bActivateOutlineRule  ////#outline level,zhaojianwei,need more consideration
                               ? nActivateOutlineLvl
                               : pTxtNode->GetActualListLevel();
+                // <--
 
                 if (nLevel < 0)
                     nLevel = 0;
@@ -1223,28 +1260,36 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
                     aFmt.SetNumberingType(SVX_NUM_ARABIC);
                 else
                 {
-                    // #i63395# Only apply user defined default bullet font
+                    // --> OD 2008-06-03 #i63395#
+                    // Only apply user defined default bullet font
                     if ( numfunc::IsDefBulletFontUserDefined() )
                     {
                         const Font* pFnt = &numfunc::GetDefBulletFont();
                         aFmt.SetBulletFont( pFnt );
                     }
+                    // <--
                     aFmt.SetBulletChar( numfunc::GetBulletChar(static_cast<BYTE>(nLevel)));
                     aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
                 }
                 aNumRule.Set(static_cast<USHORT>(nLevel), aFmt);
             }
         }
+        // <--
 
+        // --> OD 2008-02-08 #newlistlevelattrs#
         // reset indent attribute on applying list style
+        // --> OD 2008-03-27 #refactorlists#
         SetCurNumRule( aNumRule, false, sContinuedListId, true );
+        // <--
     }
     else
     {
         // --> OD 2009-08-27 #i95907#
         const SvxNumberFormat::SvxNumPositionAndSpaceMode ePosAndSpaceMode(
                                     numfunc::GetDefaultPositionAndSpaceMode() );
+        // --> OD 2008-02-11 #newlistlevelattrs#
         SwNumRule aNumRule( GetUniqueNumRuleName(), ePosAndSpaceMode );
+        // <--
         // <--
         // Zeichenvorlage an die Numerierung haengen
         SwCharFmt* pChrFmt;
@@ -1321,7 +1366,11 @@ void SwWrtShell::NumOrBulletOn(BOOL bNum)
         if ( pTxtNode &&
              ePosAndSpaceMode == SvxNumberFormat::LABEL_ALIGNMENT )
         {
-
+            // --> OD 2010-01-05 #b6884103#
+//            short nTxtNodeFirstLineOffset( 0 );
+//            pTxtNode->GetFirstLineOfsWithNum( nTxtNodeFirstLineOffset );
+//            const SwTwips nTxtNodeIndent = pTxtNode->GetLeftMarginForTabCalculation() +
+//                                           nTxtNodeFirstLineOffset;
             const SwTwips nTxtNodeIndent = pTxtNode->GetAdditionalIndentForStartingNewList();
             // <--
             if ( ( nTxtNodeIndent + nWidthOfTabs ) != 0 )
@@ -1423,6 +1472,9 @@ SelectionType SwWrtShell::GetSelectionType() const
 
     if ( BasicActionPend() )
         return IsSelFrmMode() ? nsSelectionType::SEL_FRM : nsSelectionType::SEL_TXT;
+
+//  if ( IsTableMode() )
+//      return nsSelectionType::SEL_TBL | nsSelectionType::SEL_TBL_CELLS;
 
     SwView &_rView = ((SwView&)GetView());
     if (_rView.GetPostItMgr() && _rView.GetPostItMgr()->HasActiveSidebarWin() )
@@ -1651,6 +1703,10 @@ void SwWrtShell::AutoUpdatePara(SwTxtFmtColl* pColl, const SfxItemSet& rStyleSet
     EndAction();
 }
 
+/*-----------------12.03.97 12.24-------------------
+
+--------------------------------------------------*/
+
 void SwWrtShell::AutoUpdateFrame( SwFrmFmt* pFmt, const SfxItemSet& rStyleSet )
 {
     StartAction();
@@ -1754,6 +1810,9 @@ BOOL SwWrtShell::Pop( BOOL bOldCrsr )
     return bRet;
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 BOOL SwWrtShell::CanInsert()
 {
     return (!(IsSelFrmMode() | IsObjSelected() | (GetView().GetDrawFuncPtr() != NULL) | (GetView().GetPostItMgr()->GetActiveSidebarWin()!= NULL)));

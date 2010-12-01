@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
+
 import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
@@ -45,11 +46,11 @@ public class BoolErrCell extends CellValue {
      /**
      * Constructs a BoolErrCell from arguments
       *
-     * @param row      row number
-     * @param column   column number
-     * @param ixfe     font index
+     * @param row row number
+     * @param col column number
+     * @param ixfe font index
      * @param bBoolErr Boolean value or error value
-     * @param fError   Boolean error flag
+     * @param fError Boolean error flag
       */
     public BoolErrCell(int row, int column, int ixfe, int bBoolErr, int fError) throws IOException {
 
@@ -81,7 +82,7 @@ public class BoolErrCell extends CellValue {
     /**
      * Writes a <code>BoolErrCell</code> to the specified <code>Outputstream</code>
      *
-     * @param output the <code>OutputStream</code> to write to
+     * @param os the <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
@@ -98,7 +99,7 @@ public class BoolErrCell extends CellValue {
     /**
      * Reads a BoolErrCell from the <code>InputStream</code>
       *
-      * @param  input InputStream containing a BoolErrCell
+      * @param  is InputStream containing a BoolErrCell
       */
     public int read(InputStream input) throws IOException {
 

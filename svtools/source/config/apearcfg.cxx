@@ -49,6 +49,9 @@ using namespace ::com::sun::star::uno;
 
 sal_Bool SvtTabAppearanceCfg::bInitialized = sal_False;
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
     :ConfigItem(OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/View")))
     ,nLookNFeel         ( DEFAULT_LOOKNFEEL )
@@ -98,11 +101,15 @@ SvtTabAppearanceCfg::SvtTabAppearanceCfg()
         }
     }
 }
+/* -----------------------------22.05.01 11:53--------------------------------
 
+ ---------------------------------------------------------------------------*/
 SvtTabAppearanceCfg::~SvtTabAppearanceCfg( )
 {
 }
+/* -----------------------------22.05.01 11:54--------------------------------
 
+ ---------------------------------------------------------------------------*/
 const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -133,7 +140,9 @@ const Sequence<OUString>& SvtTabAppearanceCfg::GetPropertyNames()
     }
     return aNames;
 }
+/* -----------------------------22.05.01 11:54--------------------------------
 
+ ---------------------------------------------------------------------------*/
 void  SvtTabAppearanceCfg::Commit()
 {
     const Sequence<OUString>& rNames = GetPropertyNames();
@@ -166,11 +175,19 @@ void SvtTabAppearanceCfg::Notify( const com::sun::star::uno::Sequence< rtl::OUSt
 {
 }
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SvtTabAppearanceCfg::SetLookNFeel ( USHORT nSet )
 {
     nLookNFeel = nSet;
     SetModified();
 }
+
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SvtTabAppearanceCfg::SetDragMode  ( USHORT nSet )
 {
@@ -178,23 +195,36 @@ void SvtTabAppearanceCfg::SetDragMode  ( USHORT nSet )
     SetModified();
 }
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SvtTabAppearanceCfg::SetScaleFactor ( USHORT nSet )
 {
     nScaleFactor = nSet;
     SetModified();
 }
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
+
 void SvtTabAppearanceCfg::SetSnapMode ( USHORT nSet )
 {
     nSnapMode = nSet;
     SetModified();
 }
-
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 void SvtTabAppearanceCfg::SetMiddleMouseButton ( USHORT nSet )
 {
     nMiddleMouse = nSet;
     SetModified();
 }
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SvtTabAppearanceCfg::SetApplicationDefaults ( Application* pApp )
 {

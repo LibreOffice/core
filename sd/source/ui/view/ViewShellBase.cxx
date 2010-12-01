@@ -1330,7 +1330,7 @@ void ViewShellBase::Implementation::ProcessRestoreEditingViewSlot (void)
                 pHelper->GetViewURL(pFrameView->GetViewShellTypeOnLoad()),
                 FrameworkHelper::msCenterPaneURL);
             pHelper->RunOnConfigurationEvent(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ConfigurationUpdateEnd")),
+                ::rtl::OUString::createFromAscii("ConfigurationUpdateEnd"),
                 CurrentPageSetter(mrBase));
         }
     }

@@ -66,6 +66,7 @@ struct SW_DLLPUBLIC SwPosition
     SwPosition( const SwPosition & );
     SwPosition &operator=(const SwPosition &);
 
+    // #111827#
     /**
        Returns the document this position is in.
 

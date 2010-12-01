@@ -789,7 +789,7 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
     ::com::sun::star::uno::Any aAny;
     if ( GetPropertyValue( aAny, mXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "ParaLeftMargin" ) ) ) )
     {
-        sal_Int32 nVal(0);
+        sal_Int32 nVal;
         if ( aAny >>= nVal )
             nTextOfs = static_cast< sal_Int16 >( nVal / ( 2540.0 / 576 ) + 0.5 ) ;
     }
@@ -1409,12 +1409,12 @@ FontCollection::FontCollection() :
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
         xMSF = ::comphelper::getProcessServiceFactory();
     com::sun::star::uno::Reference< com::sun::star::uno::XInterface >
-        xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.BreakIterator" ) ) );
+        xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.BreakIterator" ) );
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
 
-    xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ) ) );
+    xInterface = xMSF->createInstance( rtl::OUString::createFromAscii( "com.sun.star.i18n.ScriptTypeDetector" ) );
     if ( xInterface.is() )
         xScriptTypeDetector = com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector >
             ( xInterface, com::sun::star::uno::UNO_QUERY );

@@ -63,6 +63,7 @@ OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pC
         sName += OAdabasCatalog::getDot();
     sName += _xRow->getString(3);
 
+
     return sName;
 }
 // -----------------------------------------------------------------------------
@@ -157,7 +158,7 @@ void OAdabasCatalog::correctColumnProperties(sal_Int32 /*_nPrec*/, sal_Int32& _r
         }
 //      else if(_nPrec > 15)
 //      {
-//          static const ::rtl::OUString sReal( RTL_CONSTASCII_USTRINGPARAM( "REAL" ));
+//          static const ::rtl::OUString sReal = ::rtl::OUString::createFromAscii("REAL");
 //          _rsTypeName = sReal;
 //          _rnType = DataType::REAL;
 //      }

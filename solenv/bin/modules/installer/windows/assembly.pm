@@ -81,6 +81,7 @@ sub get_msiassembly_filemanifest
     my $filemanifest = "";
 
     $filemanifest = $onefile->{'uniquename'};
+    # $filemanifest = $onefile->{'Name'};
 
     return $filemanifest;
 }
@@ -138,6 +139,8 @@ sub get_msiassembly_file
     }
 
     # It does not need to exist. For example products that do not contain the libraries.
+    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
+
     if (! $foundfile ) { $onefile  = ""; }
 
     return $onefile;
@@ -167,6 +170,8 @@ sub get_msiassembly_file_by_gid
     }
 
     # It does not need to exist. For example products that do not contain the libraries.
+    # if (! $foundfile ) { installer::exiter::exit_program("ERROR: No unique file name found for $filename !", "get_selfreg_file"); }
+
     if (! $foundfile ) { $onefile  = ""; }
 
     return $onefile;
@@ -339,6 +344,7 @@ sub add_assembly_condition_into_component_table
                 {
                     # setting the condition
 
+                    # $condition = "MsiNetAssemblySupport";
                     $condition = "DOTNET_SUFFICIENT=1";
                     $oneline = $component . "\t" . $componentid . "\t" . $directory . "\t" . $attributes . "\t" . $condition . "\t" . $keypath . "\n";
                     ${$componenttable}[$j] = $oneline;

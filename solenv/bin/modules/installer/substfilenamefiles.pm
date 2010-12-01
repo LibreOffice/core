@@ -82,6 +82,7 @@ sub resolving_subst_filename_flag
 
             my $sourcepath = $onefile->{'sourcepath'};
 
+            # if ( $onefilename =~ /^\s*\Q$installer::globals::separator\E/ )   # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
             if ( $onefilename =~ /\Q$installer::globals::separator\E/ ) # filename begins with a slash, for instance /registry/schema/org/openoffice/VCL.xcs
             {
                 $onefilename =~ s/^\s*\Q$installer::globals::separator\E//;

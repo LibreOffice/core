@@ -43,9 +43,6 @@ SRC1FILES =  \
         tmpdlg.src
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
         $(SLO)$/tmpdlg.obj
 
 # --- Tagets -------------------------------------------------------

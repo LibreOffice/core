@@ -222,7 +222,7 @@ ImpTwain::ImpTwain( ScannerManager& rMgr, const Link& rNotifyLink ) :
     hTwainWnd = CreateWindowEx( WS_EX_TOPMOST, aWc.lpszClassName, "TWAIN", 0, 0, 0, 0, 0, HWND_DESKTOP, NULL, aWc.hInstance, 0 );
     hTwainHook = SetWindowsHookEx( WH_GETMESSAGE, &TwainMsgProc, NULL, GetCurrentThreadId() );
 
-    // block destruction until ImplDestroyHdl is called
+    // #107835# block destruction until ImplDestroyHdl is called
     mxSelfRef = static_cast< ::cppu::OWeakObject* >( this );
 }
 
@@ -347,7 +347,7 @@ bool ImpTwain::ImplEnableSource()
         aNotifyLink.Call( (void*) TWAIN_EVENT_SCANNING );
         nCurState = 5;
 
-        // register as vetoable close listener, to prevent application to die under us
+        // #107835# register as vetoable close listener, to prevent application to die under us
         ImplRegisterCloseListener();
 
         if( PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_USERINTERFACE, MSG_ENABLEDS, &aUI ) == TWRC_SUCCESS )
@@ -358,7 +358,7 @@ bool ImpTwain::ImplEnableSource()
         {
             nCurState = 4;
 
-            // deregister as vetoable close listener, dialog failed
+            // #107835# deregister as vetoable close listener, dialog failed
             ImplDeregisterCloseListener();
         }
     }
@@ -506,7 +506,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
             PFUNC( &aAppIdent, &aSrcIdent, DG_CONTROL, DAT_USERINTERFACE, MSG_DISABLEDS, &aUI );
             nCurState = 4;
 
-            // deregister as vetoable close listener
+            // #107835# deregister as vetoable close listener
             ImplDeregisterCloseListener();
         }
         break;
@@ -559,7 +559,7 @@ IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, /*p*/ )
     if( hTwainHook )
         UnhookWindowsHookEx( hTwainHook );
 
-    // permit destruction of ourselves (normally, refcount
+    // #107835# permit destruction of ourselves (normally, refcount
     // should drop to zero exactly here)
     mxSelfRef = NULL;
     pImpTwainInstance = NULL;
@@ -579,7 +579,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
         {
             // query desktop instance
             uno::Reference< frame::XDesktop > xDesktop( xMgr->createInstance(
-                                                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")) ), uno::UNO_QUERY );
+                                                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ), uno::UNO_QUERY );
 
             if( xDesktop.is() )
             {
@@ -593,7 +593,7 @@ uno::Reference< frame::XFrame > ImpTwain::ImplGetActiveFrame()
                     try
                     {
                         aActiveFrame = xDesktopProps->getPropertyValue(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveFrame")) );
+                            OUString::createFromAscii( "ActiveFrame" ) );
                     }
                     catch( const beans::UnknownPropertyException& )
                     {
@@ -787,7 +787,7 @@ bool Twain::SelectSource( ScannerManager& rMgr )
 
     if( !mpImpTwain )
     {
-        // hold reference to ScannerManager, to prevent premature death
+        // #107835# hold reference to ScannerManager, to prevent premature death
         mxMgr = uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
                                                             uno::UNO_QUERY ),
 
@@ -809,7 +809,7 @@ bool Twain::PerformTransfer( ScannerManager& rMgr, const uno::Reference< lang::X
 
     if( !mpImpTwain )
     {
-        // hold reference to ScannerManager, to prevent premature death
+        // #107835# hold reference to ScannerManager, to prevent premature death
         mxMgr = uno::Reference< scanner::XScannerManager >( static_cast< OWeakObject* >( const_cast< ScannerManager* >( mpCurMgr = &rMgr ) ),
                                                             uno::UNO_QUERY ),
 

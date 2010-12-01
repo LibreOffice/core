@@ -158,9 +158,12 @@ void SwGlossaryHdl::SetCurGroup(const String &rGrp, BOOL bApi, BOOL bAlwaysCreat
                 sGroup.GetToken(0, GLOS_DELIM) == sCurBase)
                 bPathEqual = TRUE;
         }
-
+//      const String aMac_Tmp(pCurGrp->GetName());
         // Beim Pfadwechsel kann man sich auf den Namen nicht verlassen
-        if(!bAlwaysCreateNew && bPathEqual)
+        if(!bAlwaysCreateNew &&
+                bPathEqual
+//      aMac_Tmp == sGroup
+        )
             return;
     }
     aCurGrp = sGroup;
@@ -247,6 +250,10 @@ BOOL SwGlossaryHdl::CopyOrMove( const String& rSourceGroupName,  String& rSource
     SwTextBlocks* pDestGroup = rStatGlossaries.GetGroupDoc(rDestGroupName, FALSE);
     if(pDestGroup->IsReadOnly() || (bMove && pSourceGroup->IsReadOnly()) )
         return FALSE;
+    /*if(pDestGroup->IsOld()&& 0!= pDestGroup->ConvertToNew())
+        return FALSE;
+    if(bMove && pSourceGroup->IsOld() && 0 != pSourceGroup->ConvertToNew())
+        return FALSE;*/
 
     //Der Index muss hier ermittelt werden, weil rSourceShortName in CopyBlock evtl veraendert wird
     USHORT nDeleteIdx = pSourceGroup->GetIndex( rSourceShortName );
@@ -337,6 +344,20 @@ BOOL SwGlossaryHdl::HasShortName(const String& rShortName) const
 
 BOOL    SwGlossaryHdl::ConvertToNew(SwTextBlocks& /*rOld*/)
 {
+    /*if( rOld.IsOld() )
+    {
+        QueryBox aAsk( pWrtShell->GetView().GetWindow(), SW_RES( MSG_UPDATE_NEW_GLOS_FMT ) );
+        if( aAsk.Execute() == RET_YES )
+        {
+            if( rOld.ConvertToNew() )
+            {
+                InfoBox(pWrtShell->GetView().GetWindow(), SW_RES(MSG_ERR_INSERT_GLOS)).Execute();
+                return FALSE;
+            }
+        }
+        else
+            return FALSE;
+    }*/
     return TRUE;
 }
 

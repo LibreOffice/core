@@ -72,9 +72,12 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
 using ::rtl::OUString;
 
-static ::rtl::OUString aResourceResolverPropName( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ));
-static ::rtl::OUString aDecorationPropName( RTL_CONSTASCII_USTRINGPARAM( "Decoration" ));
-static ::rtl::OUString aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
+static ::rtl::OUString aResourceResolverPropName =
+    ::rtl::OUString::createFromAscii( "ResourceResolver" );
+static ::rtl::OUString aDecorationPropName =
+    ::rtl::OUString::createFromAscii( "Decoration" );
+static ::rtl::OUString aTitlePropName =
+    ::rtl::OUString::createFromAscii( "Title" );
 
 
 //============================================================================
@@ -83,11 +86,14 @@ static ::rtl::OUString aTitlePropName( RTL_CONSTASCII_USTRINGPARAM( "Title" ));
 
 TYPEINIT1( DlgEdHint, SfxHint );
 
+//----------------------------------------------------------------------------
+
 DlgEdHint::DlgEdHint( DlgEdHintKind eHint )
     :eHintKind( eHint )
 {
 }
 
+//----------------------------------------------------------------------------
 
 DlgEdHint::DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj )
     :eHintKind( eHint )
@@ -95,6 +101,7 @@ DlgEdHint::DlgEdHint( DlgEdHintKind eHint, DlgEdObj* pObj )
 {
 }
 
+//----------------------------------------------------------------------------
 
 DlgEdHint::~DlgEdHint()
 {
@@ -165,6 +172,7 @@ void DlgEditor::ShowDialog()
         xComponent->dispose();
 }
 
+//----------------------------------------------------------------------------
 
 BOOL DlgEditor::UnmarkDialog()
 {
@@ -179,6 +187,7 @@ BOOL DlgEditor::UnmarkDialog()
     return bWasMarked;
 }
 
+//----------------------------------------------------------------------------
 
 BOOL DlgEditor::RemarkDialog()
 {
@@ -193,6 +202,7 @@ BOOL DlgEditor::RemarkDialog()
     return bWasMarked;
 }
 
+//----------------------------------------------------------------------------
 
 DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel )
     :pHScroll(NULL)
@@ -234,14 +244,14 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     pFunc = new DlgEdFuncSelect( this );
 
     // set clipboard data flavors
-    m_ClipboardDataFlavors[0].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialog" ));
-    m_ClipboardDataFlavors[0].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 6.0" ));
-    m_ClipboardDataFlavors[0].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavors[0].MimeType =                ::rtl::OUString::createFromAscii("application/vnd.sun.xml.dialog");
+    m_ClipboardDataFlavors[0].HumanPresentableName =    ::rtl::OUString::createFromAscii("Dialog 6.0");
+    m_ClipboardDataFlavors[0].DataType =                ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
-    m_ClipboardDataFlavorsResource[0] =                      m_ClipboardDataFlavors[0];
-    m_ClipboardDataFlavorsResource[1].MimeType =             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.xml.dialogwithresource" ));
-    m_ClipboardDataFlavorsResource[1].HumanPresentableName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Dialog 8.0" ));
-    m_ClipboardDataFlavorsResource[1].DataType =             ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
+    m_ClipboardDataFlavorsResource[0] =                         m_ClipboardDataFlavors[0];
+    m_ClipboardDataFlavorsResource[1].MimeType =                ::rtl::OUString::createFromAscii("application/vnd.sun.xml.dialogwithresource");
+    m_ClipboardDataFlavorsResource[1].HumanPresentableName =    ::rtl::OUString::createFromAscii("Dialog 8.0");
+    m_ClipboardDataFlavorsResource[1].DataType =                ::getCppuType( (const Sequence< sal_Int8 >*) 0 );
 
     aPaintTimer.SetTimeout( 1 );
     aPaintTimer.SetTimeoutHdl( LINK( this, DlgEditor, PaintTimeout ) );
@@ -250,6 +260,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
     aMarkTimer.SetTimeoutHdl( LINK( this, DlgEditor, MarkTimeout ) );
 }
 
+//----------------------------------------------------------------------------
 
 DlgEditor::~DlgEditor()
 {
@@ -264,6 +275,7 @@ DlgEditor::~DlgEditor()
     delete pDlgEdModel;
 }
 
+//----------------------------------------------------------------------------
 
 Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
 {
@@ -272,6 +284,7 @@ Reference< awt::XControlContainer > DlgEditor::GetWindowControlContainer()
     return m_xControlContainer;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::SetWindow( Window* pWindow_ )
 {
@@ -296,6 +309,7 @@ void DlgEditor::SetWindow( Window* pWindow_ )
     ::comphelper::disposeComponent( m_xControlContainer );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
 {
@@ -305,6 +319,7 @@ void DlgEditor::SetScrollBars( ScrollBar* pHS, ScrollBar* pVS )
     InitScrollBars();
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::InitScrollBars()
 {
@@ -330,6 +345,7 @@ void DlgEditor::InitScrollBars()
     DoScroll( pVScroll );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::DoScroll( ScrollBar* )
 {
@@ -359,15 +375,18 @@ void DlgEditor::DoScroll( ScrollBar* )
     //  pWindow->SetBackground();
 
     // #i74769# children should be scrolled
-    pWindow->Scroll( -nX, -nY, SCROLL_CHILDREN);
+    pWindow->Scroll( -nX, -nY, SCROLL_CHILDREN); // SCROLL_NOCHILDREN );
     aMap.SetOrigin( Point( -aScrollPos.Width(), -aScrollPos.Height() ) );
     pWindow->SetMapMode( aMap );
     pWindow->Update();
+
+    // pWindow->SetBackground( aOldBackground );
 
     DlgEdHint aHint( DLGED_HINT_WINDOWSCROLLED );
     Broadcast( aHint );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::UpdateScrollBars()
 {
@@ -381,6 +400,7 @@ void DlgEditor::UpdateScrollBars()
         pVScroll->SetThumbPos( -aOrg.Y() );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::SetDialog( uno::Reference< container::XNameContainer > xUnoControlDialogModel )
 {
@@ -464,6 +484,8 @@ void DlgEditor::ResetDialog( void )
 }
 
 
+//----------------------------------------------------------------------------
+
 Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSupplier()
 {
     if ( !m_xSupplier.is() )
@@ -481,6 +503,7 @@ Reference< util::XNumberFormatsSupplier > const & DlgEditor::GetNumberFormatsSup
     return m_xSupplier;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
 {
@@ -489,6 +512,7 @@ void DlgEditor::MouseButtonDown( const MouseEvent& rMEvt )
     pFunc->MouseButtonDown( rMEvt );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
 {
@@ -498,18 +522,21 @@ void DlgEditor::MouseButtonUp( const MouseEvent& rMEvt )
         bCreateOK = bRet;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::MouseMove( const MouseEvent& rMEvt )
 {
     pFunc->MouseMove( rMEvt );
 }
 
+//----------------------------------------------------------------------------
 
 BOOL DlgEditor::KeyInput( const KeyEvent& rKEvt )
 {
     return pFunc->KeyInput( rKEvt );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::Paint( const Rectangle& rRect )
 {
@@ -517,6 +544,7 @@ void DlgEditor::Paint( const Rectangle& rRect )
     PaintTimeout( &aPaintTimer );
 }
 
+//----------------------------------------------------------------------------
 
 IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 {
@@ -628,6 +656,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
     return 0;
 }
 
+//----------------------------------------------------------------------------
 
 IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
 {
@@ -643,6 +672,7 @@ IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
     return 1;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::SetMode( DlgEdMode eNewMode )
 {
@@ -667,6 +697,7 @@ void DlgEditor::SetMode( DlgEdMode eNewMode )
     eMode = eNewMode;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::SetInsertObj( USHORT eObj )
 {
@@ -676,12 +707,14 @@ void DlgEditor::SetInsertObj( USHORT eObj )
         pDlgEdView->SetCurrentObj( eActObj, DlgInventor );
 }
 
+//----------------------------------------------------------------------------
 
 USHORT DlgEditor::GetInsertObj() const
 {
     return eActObj;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::CreateDefaultObject()
 {
@@ -710,6 +743,7 @@ void DlgEditor::CreateDefaultObject()
     }
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::Cut()
 {
@@ -717,6 +751,7 @@ void DlgEditor::Cut()
     Delete();
 }
 
+//----------------------------------------------------------------------------
 
 void implCopyStreamToByteSequence( Reference< XInputStream > xStream,
     Sequence< sal_Int8 >& bytes )
@@ -890,6 +925,7 @@ void DlgEditor::Copy()
     }
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::Paste()
 {
@@ -994,7 +1030,7 @@ void DlgEditor::Paste()
                     {
                         Reference< lang::XMultiServiceFactory > xSMgr = getProcessServiceFactory();
                         xStringResourcePersistence = Reference< resource::XStringResourcePersistence >( xSMgr->createInstance
-                            ( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.resource.StringResource" )) ), UNO_QUERY );
+                            ( ::rtl::OUString::createFromAscii( "com.sun.star.resource.StringResource" ) ), UNO_QUERY );
                         if( xStringResourcePersistence.is() )
                             xStringResourcePersistence->importBinary( aResData );
                     }
@@ -1054,7 +1090,7 @@ void DlgEditor::Paste()
                         pDlgEdModel->GetPage(0)->InsertObject( pCtrlObj );
                         pCtrlObj->SetRectFromProps();
                         pCtrlObj->UpdateStep();
-                        pDlgEdForm->UpdateTabOrderAndGroups();
+                        pDlgEdForm->UpdateTabOrderAndGroups();              // #110559#
                         pCtrlObj->StartListening();                         // start listening
 
                         // mark object
@@ -1078,6 +1114,7 @@ void DlgEditor::Paste()
     }
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::Delete()
 {
@@ -1134,6 +1171,7 @@ void DlgEditor::Delete()
         RemarkDialog();
 }
 
+//----------------------------------------------------------------------------
 
 BOOL DlgEditor::IsPasteAllowed()
 {
@@ -1159,6 +1197,7 @@ BOOL DlgEditor::IsPasteAllowed()
     return bPaste;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::ShowProperties()
 {
@@ -1168,18 +1207,21 @@ void DlgEditor::ShowProperties()
         pViewFrame->ToggleChildWindow( SID_SHOW_PROPERTYBROWSER );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::UpdatePropertyBrowserDelayed()
 {
     aMarkTimer.Start();
 }
 
+//----------------------------------------------------------------------------
 
 BOOL DlgEditor::IsModified() const
 {
     return pDlgEdModel->IsChanged() || bDialogModelChanged;
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::ClearModifyFlag()
 {
@@ -1187,6 +1229,7 @@ void DlgEditor::ClearModifyFlag()
     bDialogModelChanged = FALSE;
 }
 
+//----------------------------------------------------------------------------
 
 #define LMARGPRN        1700
 #define RMARGPRN         900
@@ -1194,6 +1237,7 @@ void DlgEditor::ClearModifyFlag()
 #define BMARGPRN        1000
 #define BORDERPRN       300
 
+//----------------------------------------------------------------------------
 
 void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working yet
 {
@@ -1234,6 +1278,7 @@ void lcl_PrintHeader( Printer* pPrinter, const String& rTitle ) // not working y
     pPrinter->Pop();
 }
 
+//----------------------------------------------------------------------------
 
 sal_Int32 DlgEditor::countPages( Printer* )
 {
@@ -1246,6 +1291,7 @@ void DlgEditor::printPage( sal_Int32 nPage, Printer* pPrinter, const String& rTi
         Print( pPrinter, rTitle );
 }
 
+//----------------------------------------------------------------------------
 
 void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not working yet
 {
@@ -1257,6 +1303,9 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
         MapMode aMap( MAP_100TH_MM );
         pPrinter->SetMapMode( aMap );
         Font aFont;
+#ifdef OS2
+        //aFont.SetName( System::GetStandardFont( STDFONT_SWISS ).GetName() );
+#endif
         aFont.SetAlign( ALIGN_BOTTOM );
         aFont.SetSize( Size( 0, 360 ));
         pPrinter->SetFont( aFont );
@@ -1270,12 +1319,15 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
         Bitmap aDlg;
 #ifdef OS2
         Bitmap* pDlg = new Bitmap;
+        //pSbxForm->SnapShot( *pDlg );
         SvMemoryStream* pStrm = new SvMemoryStream;
         *pStrm << *pDlg;
         delete pDlg;
         pStrm->Seek(0);
         *pStrm >> aDlg;
         delete pStrm;
+#else
+        //pSbxForm->SnapShot( aDlg );
 #endif
         Size aBmpSz( pPrinter->PixelToLogic( aDlg.GetSizePixel() ) );
         double nPaperSzWidth = aPaperSz.Width();
@@ -1311,6 +1363,7 @@ void DlgEditor::Print( Printer* pPrinter, const String& rTitle )    // not worki
     }
 }
 
+//----------------------------------------------------------------------------
 
 bool DlgEditor::AdjustPageSize()
 {
@@ -1366,5 +1419,7 @@ bool DlgEditor::AdjustPageSize()
 
     return bAdjustedPageSize;
 }
+
+//----------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

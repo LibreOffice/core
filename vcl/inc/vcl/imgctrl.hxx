@@ -42,6 +42,7 @@ class VCL_DLLPUBLIC ImageControl : public FixedImage
 {
 private:
     BitmapEx        maBmp;
+    BitmapEx        maBmpHC;
     ::sal_Int16     mnScaleMode;
 
 public:
@@ -60,8 +61,8 @@ public:
     void            SetBitmap( const BitmapEx& rBmp );
     using OutputDevice::GetBitmap;
     const BitmapEx& GetBitmap() const { return maBmp; }
-    BOOL            SetModeBitmap( const BitmapEx& rBitmap );
-    const BitmapEx& GetModeBitmap( ) const;
+    BOOL            SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const BitmapEx& GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 
 #endif  // _SV_IMGCTRL_HXX

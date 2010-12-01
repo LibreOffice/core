@@ -411,9 +411,13 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                         xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode")),
                             uno::makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
+                    //if ( aFrmDescr.IsFrameBorderSet() )
                     if ( pBorderItem )
                         xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder")),
                             uno::makeAny( (sal_Bool) pBorderItem->GetValue() ) );
+                    /*else
+                        xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder")),
+                            makeAny( sal_True ) );*/
 
                     if ( pMarginItem )
                     {
@@ -457,6 +461,9 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
                 {
                     SwFrmFmt* pTblFmt = GetShell().GetTableFmt();
                     String aCurrentTblName = pTblFmt->GetName();
+        //             String aText( String::CreateFromAscii("<.>") );   // was used for UI
+        //             aText.Insert( rWrtShell.GetBoxNms(), 2);
+        //             aText.Insert( aCurrentTblName, 1 );
                     aRangeString = aCurrentTblName;
                     aRangeString += OUString::valueOf( sal_Unicode('.') );
                     aRangeString += GetShell().GetBoxNms();
@@ -916,7 +923,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                 }
             break;
             case FN_INSERT_HRULER :
-                if ( (rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel()) || bCrsrInHidden )
+                if(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel() || bCrsrInHidden )
                     rSet.DisableItem(nWhich);
             break;
             case FN_FORMAT_COLUMN :

@@ -31,6 +31,8 @@
 
 #include "prcntfld.hxx"
 
+// STATIC DATA -----------------------------------------------------------
+
 PercentField::PercentField( Window* pWin, const ResId& rResId ) :
         MetricField ( pWin, rResId ),
 
@@ -82,7 +84,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         SetDecimalDigits( 0 );
 
         nAktWidth = ConvertValue(nOldMin, 0, nOldDigits, eOldUnit, FUNIT_TWIP);
-        // round to 0.5 percent
+        // Um 0.5 Prozent aufrunden
         nPercent = ((nAktWidth * 10) / nRefValue + 5) / 10;
 
         MetricField::SetMin(Max(static_cast< sal_Int64 >(1), nPercent));
@@ -99,6 +101,7 @@ void PercentField::ShowPercent(BOOL bPercent)
         }
         else
             MetricFormatter::SetValue(nLastPercent);
+//      SetValue(100, FUNIT_CUSTOM);
     }
     else
     {
@@ -212,6 +215,7 @@ void PercentField::SetMax(sal_Int64 nNewMax, FieldUnit eInUnit)
     {
         if (eInUnit == FUNIT_NONE)
             eInUnit = eOldUnit;
+//      SetRefValue(Convert(nNewMax, eInUnit, FUNIT_TWIP));
     }
 }
 
@@ -293,7 +297,7 @@ sal_Int64 PercentField::Convert(sal_Int64 nValue, FieldUnit eInUnit, FieldUnit e
             nAktWidth = nValue;
         else
             nAktWidth = ConvertValue(nValue, 0, nOldDigits, eInUnit, FUNIT_TWIP);
-        // Round to 0.5 percent
+        // Um 0.5 Prozent runden
         return ((nAktWidth * 1000) / nRefValue + 5) / 10;
     }
 

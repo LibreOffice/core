@@ -42,15 +42,17 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/dview.obj	\
+        $(SLO)$/dcontact.obj	\
+        $(SLO)$/dflyobj.obj \
+        $(SLO)$/drawdoc.obj \
+        $(SLO)$/dobjfac.obj \
+        $(SLO)$/dpage.obj
 
 EXCEPTIONSFILES= \
-        $(SLO)$/dcontact.obj	\
-        $(SLO)$/dflyobj.obj	\
-        $(SLO)$/dobjfac.obj	\
-        $(SLO)$/dpage.obj	\
-        $(SLO)$/drawdoc.obj	\
-        $(SLO)$/dview.obj	\
+                $(SLO)$/dview.obj	\
+                $(SLO)$/dcontact.obj	\
+                $(SLO)$/drawdoc.obj
 
 # --- Tagets -------------------------------------------------------
 

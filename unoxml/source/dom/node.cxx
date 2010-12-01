@@ -466,8 +466,8 @@ namespace DOM
         {
             Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))), UNO_QUERY);
-            event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeInserted"))
+                OUString::createFromAscii("DOMNodeInserted")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeInserted")
                 , sal_True, sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -861,8 +861,8 @@ namespace DOM
         {
             Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
             Reference< XMutationEvent > event(docevent->createEvent(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved"))), UNO_QUERY);
-            event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMNodeRemoved")), sal_True,
+                OUString::createFromAscii("DOMNodeRemoved")), UNO_QUERY);
+            event->initMutationEvent(OUString::createFromAscii("DOMNodeRemoved"), sal_True,
                 sal_False, Reference< XNode >(CNode::get(m_aNodePtr)),
                 OUString(), OUString(), OUString(), (AttrChangeType)0 );
             dispatchEvent(Reference< XEvent >(event, UNO_QUERY));
@@ -950,8 +950,8 @@ namespace DOM
         // target is _this_ node
         Reference< XDocumentEvent > docevent(getOwnerDocument(), UNO_QUERY);
         Reference< XMutationEvent > event(docevent->createEvent(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified"))), UNO_QUERY);
-        event->initMutationEvent(OUString(RTL_CONSTASCII_USTRINGPARAM("DOMSubtreeModified")), sal_True,
+            OUString::createFromAscii("DOMSubtreeModified")), UNO_QUERY);
+        event->initMutationEvent(OUString::createFromAscii("DOMSubtreeModified"), sal_True,
             sal_False, Reference< XNode >(),
             OUString(), OUString(), OUString(), (AttrChangeType)0 );
         dispatchEvent(Reference< XEvent >(event, UNO_QUERY));

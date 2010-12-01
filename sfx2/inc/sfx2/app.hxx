@@ -239,6 +239,9 @@ public:
     void                        EnterBasicCall();
     bool                        IsInBasicCall() const;
     void                        LeaveBasicCall();
+    void                        RegisterBasicConstants( const char *pPrefix,
+                                                        const SfxConstant *pConsts,
+                                                        USHORT nCount );
 
     // misc.
     BOOL                        GetOptions(SfxItemSet &);

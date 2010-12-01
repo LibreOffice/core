@@ -1114,7 +1114,7 @@ void SwRedlineSaveData::RedlineToDoc( SwPaM& rPam )
     RedlineMode_t eOld = rDoc.GetRedlineMode();
     rDoc.SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_DONTCOMBINE_REDLINES));
     //#i92154# let UI know about a new redline with comment
-    if (rDoc.GetDocShell() && (pRedl->GetComment() != String()) )
+    if (rDoc.GetDocShell() && (pRedl->GetComment() != String(::rtl::OUString::createFromAscii(""))) )
         rDoc.GetDocShell()->Broadcast(SwRedlineHint(pRedl,SWREDLINE_INSERTED));
     //
 #if OSL_DEBUG_LEVEL > 0
@@ -1197,12 +1197,10 @@ void SwUndo::SetSaveData( SwDoc& rDoc, const SwRedlineSaveDatas& rSData )
     for( USHORT n = rSData.Count(); n; )
         rSData[ --n ]->RedlineToDoc( aPam );
 
-#if OSL_DEBUG_LEVEL > 1
     // check redline count against count saved in RedlineSaveData object
-    OSL_ENSURE( (rSData.Count() == 0) ||
+    DBG_ASSERT( (rSData.Count() == 0) ||
                 (rSData[0]->nRedlineCount == rDoc.GetRedlineTbl().Count()),
                 "redline count not restored properly" );
-#endif
 
     rDoc.SetRedlineMode_intern( eOld );
 }

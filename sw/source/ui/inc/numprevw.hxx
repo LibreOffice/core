@@ -33,6 +33,9 @@
 #include <vcl/window.hxx>
 
 class SwNumRule;
+/*-----------------02.12.97 10:31-------------------
+
+--------------------------------------------------*/
 
 class NumberingPreview : public Window
 {

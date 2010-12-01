@@ -899,7 +899,7 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
 /*****************************************************************************/
     //YD FIXME somewhere COMMENT is defined as 4!
     static const String _COMMENT = String::CreateFromAscii("comment");
-    static const OUString XML_LANG ( RTL_CONSTASCII_USTRINGPARAM("xml-lang") );
+    static const OUString XML_LANG ( OUString::createFromAscii("xml-lang") );
 
     if(pCur!=NULL){
         if(rootelement){
@@ -921,34 +921,34 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
                 XMLElement *pElement = ( XMLElement * ) pCur;
 
                 if(  !pElement->GetName().EqualsIgnoreCaseAscii( _COMMENT ) ){
-                    buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\<")) );
+                    buffer.append( OUString::createFromAscii("\\<") );
                     buffer.append( pElement->GetName() );
                     if ( pElement->GetAttributeList()){
                         for ( ULONG j = 0; j < pElement->GetAttributeList()->Count(); j++ ){
 
                             OUString aAttrName( *pElement->GetAttributeList()->GetObject( j ) );
                             if( !aAttrName.equalsIgnoreAsciiCase( XML_LANG ) ) {
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" ")) );
+                                buffer.append( OUString::createFromAscii(" ") );
                                 buffer.append( aAttrName );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("=")) );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
+                                buffer.append( OUString::createFromAscii("=") );
+                                buffer.append( OUString::createFromAscii("\\\"") );
                                 buffer.append( pElement->GetAttributeList()->GetObject( j )->GetValue() );
-                                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\\"")) );
+                                buffer.append( OUString::createFromAscii("\\\"") );
                             }
                         }
                     }
                     if ( !pElement->GetChildList())
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("/\\>")) );
+                        buffer.append( OUString::createFromAscii("/\\>") );
                     else {
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\>")) );
+                        buffer.append( OUString::createFromAscii("\\>") );
                         XMLChildNode* tmp=NULL;
                         for ( ULONG k = 0; k < pElement->GetChildList()->Count(); k++ ){
                             tmp=pElement->GetChildList()->GetObject( k );
                             Print( tmp, buffer , false);
                         }
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\</")) );
+                        buffer.append( OUString::createFromAscii("\\</") );
                         buffer.append( pElement->GetName() );
-                        buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("\\>")) );
+                        buffer.append( OUString::createFromAscii("\\>") );
                     }
                 }
             }
@@ -961,9 +961,9 @@ void XMLElement::Print(XMLNode *pCur, OUStringBuffer& buffer , bool rootelement 
             break;
             case XML_NODE_TYPE_COMMENT: {
                 XMLComment *pComment = ( XMLComment * ) pCur;
-                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("<!--")) );
+                buffer.append( OUString::createFromAscii("<!--") );
                 buffer.append( pComment->GetComment() );
-                buffer.append( OUString(RTL_CONSTASCII_USTRINGPARAM("-->")) );
+                buffer.append( OUString::createFromAscii("-->") );
             }
             break;
             case XML_NODE_TYPE_DEFAULT: {

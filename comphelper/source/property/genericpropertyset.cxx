@@ -39,6 +39,9 @@
 #include <comphelper/stl_types.hxx>
 #include <osl/mutex.hxx>
 #include <rtl/uuid.h>
+#include <boost/mem_fn.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp>
 
 ///////////////////////////////////////////////////////////////////////
 

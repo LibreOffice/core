@@ -37,12 +37,12 @@
 
 class SW_DLLPUBLIC SwTblBoxNumFormat : public SfxUInt32Item
 {
-    BOOL bAuto;     // automatically given flag
+    BOOL bAuto;     // automatisch vergebenes Flag
 public:
     SwTblBoxNumFormat( UINT32 nFormat = NUMBERFORMAT_TEXT,
                         BOOL bAuto = FALSE );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
@@ -59,19 +59,21 @@ public:
 
 class SwTblBoxFormula : public SfxPoolItem, public SwTableFormula
 {
-    SwModify* pDefinedIn;   // Modify object where the formula is located
-                            // can only be TableBoxFormat
+    SwModify* pDefinedIn;   // Modify-Object, in dem die Formel steht
+                            // kann nur TablenBoxFormat sein
 
 public:
     SwTblBoxFormula( const String& rFormula );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
+    // erfrage und setze den Modify-Pointer
     inline const SwModify* GetDefinedIn() const { return pDefinedIn; }
     inline void ChgDefinedIn( const SwModify* pNew )
                                             { pDefinedIn = (SwModify*)pNew; }
+    // suche den Node, in dem die Formel steht:
     //  BoxAttribut -> BoxStartNode
     virtual const SwNode* GetNodeOfFormula() const;
 
@@ -79,7 +81,9 @@ public:
     const SwTableBox* GetTableBox() const
         { return ((SwTblBoxFormula*)this)->GetTableBox(); }
 
+    // Status aendern
     void ChangeState( const SfxPoolItem* pItem );
+    // berechne die Formel
     void Calc( SwTblCalcPara& rCalcPara, double& rValue );
 };
 
@@ -90,7 +94,7 @@ public:
     SwTblBoxValue();
     SwTblBoxValue( const double aVal );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

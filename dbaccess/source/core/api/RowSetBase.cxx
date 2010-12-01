@@ -608,7 +608,7 @@ sal_Int32 SAL_CALL ORowSetBase::findColumn( const ::rtl::OUString& columnName ) 
     ::connectivity::checkDisposed(m_rBHelper.bDisposed);
 
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
-    // it is possible to save some time here when we remember the names - position relation in a map
+    // it is possible to save some time her when we remember the names - position relation in a map
     return m_pColumns ? m_pColumns->findColumn(columnName) : sal_Int32(0);
 }
 
@@ -1108,6 +1108,7 @@ void ORowSetBase::setCurrentRow( sal_Bool _bMoved, sal_Bool _bDoNotify, const OR
     DBG_TRACE2("DBACCESS ORowSetBase::setCurrentRow() Clone = %i ID = %i\n",m_bClone,osl_getThreadIdentifier(NULL));
     m_bBeforeFirst  = m_pCache->isBeforeFirst();
     m_bAfterLast    = m_pCache->isAfterLast();
+    //m_pCache->resetInsertRow(sal_True);
 
     if(!(m_bBeforeFirst || m_bAfterLast))
     {

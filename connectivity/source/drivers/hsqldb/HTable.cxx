@@ -327,7 +327,7 @@ void OHSQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OHSQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName( ::dbtools::composeTableName( getMetaData(), m_CatalogName, m_SchemaName, m_Name, sal_True, ::dbtools::eInTableDefinitions ) );
@@ -340,7 +340,7 @@ void OHSQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )

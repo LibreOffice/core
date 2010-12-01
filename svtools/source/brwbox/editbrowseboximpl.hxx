@@ -37,6 +37,7 @@ namespace svt
     {
     public:
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >    m_xActiveCell;
+        sal_Bool                                                                            m_bHiContrast;
 
         void clearActiveCell();
     };

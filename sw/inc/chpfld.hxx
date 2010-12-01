@@ -39,13 +39,17 @@ class SwTxtNode;
 enum SwChapterFormat
 {
     CF_BEGIN,
-    CF_NUMBER = CF_BEGIN,       // only the chapter number
-    CF_TITLE,                   // only the title
-    CF_NUM_TITLE,               // number and title
-    CF_NUMBER_NOPREPST,         // only chapter number without post-/prefix
-    CF_NUM_NOPREPST_TITLE,      // chapter number without post-/prefix and title
+    CF_NUMBER = CF_BEGIN,       // nur die Kapitelnummer
+    CF_TITLE,                   // nur die "Ueberschrift"
+    CF_NUM_TITLE,               // Kapitelnummer und "Ueberschrift"
+    CF_NUMBER_NOPREPST,         // nur die Kapitelnummer ohne Post/Prefix
+    CF_NUM_NOPREPST_TITLE,      // Kapitelnummer ohne Post/Prefix und "Ueberschrift"
     CF_END
 };
+
+/*--------------------------------------------------------------------
+    Beschreibung: Kapitel
+ --------------------------------------------------------------------*/
 
 class SwChapterFieldType : public SwFieldType
 {
@@ -56,6 +60,11 @@ public:
 
 };
 
+
+
+/*--------------------------------------------------------------------
+    Beschreibung: Kapitelnummer
+ --------------------------------------------------------------------*/
 class SW_DLLPUBLIC SwChapterField : public SwField
 {
     friend class SwChapterFieldType;
@@ -64,10 +73,14 @@ class SW_DLLPUBLIC SwChapterField : public SwField
 public:
     SwChapterField(SwChapterFieldType*, sal_uInt32 nFmt = 0);
 
-    // #i53420#
+    // --> OD 2008-02-14 #i53420#
+//    void ChangeExpansion( const SwFrm*,
+//                          const SwTxtNode*,
+//                          BOOL bSrchNum = FALSE);
     void ChangeExpansion( const SwFrm*,
                           const SwCntntNode*,
         BOOL bSrchNum = FALSE);
+    // <--
     void ChangeExpansion(const SwTxtNode &rNd, BOOL bSrchNum);
 
     virtual String   Expand() const;

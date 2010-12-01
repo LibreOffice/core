@@ -997,10 +997,23 @@ void  DrawViewShell::GetSnapItemState( SfxItemSet &rSet )
     }
 }
 
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void DrawViewShell::AddWindow (::sd::Window* pWin)
 {
     mpDrawView->AddWindowToPaintView(pWin);
 }
+
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
 
 void DrawViewShell::RemoveWindow(::sd::Window* pWin)
 {

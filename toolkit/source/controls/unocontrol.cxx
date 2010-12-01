@@ -1119,7 +1119,7 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
     if ( !mxModel.is() )
     {
         RuntimeException aException;
-        aException.Message = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("createPeer: no model!"));
+        aException.Message = ::rtl::OUString::createFromAscii( "createPeer: no model!" );
         aException.Context = (XAggregation*)(::cppu::OWeakAggObject*)this;
         throw( aException );
     }
@@ -1428,7 +1428,7 @@ void UnoControl::setDesignMode( sal_Bool bOn ) throw(RuntimeException)
         disposeAccessibleContext();
 
         aModeChangeEvent.Source = *this;
-        aModeChangeEvent.NewMode = mbDesignMode ? ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("design")) : ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("alive" ));
+        aModeChangeEvent.NewMode = ::rtl::OUString::createFromAscii( mbDesignMode ? "design" : "alive" );
     }
 
     // ajust the visibility of our window

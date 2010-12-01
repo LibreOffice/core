@@ -50,7 +50,7 @@ sal_Bool FStatHelper::GetModifiedDateTimeOfFile( const UniString& rURL,
         ::ucbhelper::Content aTestContent( rURL,
                                 uno::Reference< XCommandEnvironment > ());
         uno::Any aAny = aTestContent.getPropertyValue(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("DateModified")) );
+            OUString::createFromAscii(  "DateModified" ) );
         if( aAny.hasValue() )
         {
             bRet = sal_True;

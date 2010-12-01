@@ -59,7 +59,7 @@ ObjectType OIndexColumns::createObject(const ::rtl::OUString& _rName)
     if(xResult.is())
     {
                 Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aD(RTL_CONSTASCII_USTRINGPARAM("D"));
+        ::rtl::OUString aD(::rtl::OUString::createFromAscii("D"));
         while(xResult->next())
         {
             if(xRow->getString(9) == _rName)

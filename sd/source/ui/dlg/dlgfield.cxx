@@ -184,6 +184,12 @@ SvxFieldData* SdModifyFieldDlg::GetField()
     return( pNewField );
 }
 
+/*************************************************************************
+|*
+|*
+|*
+\************************************************************************/
+
 void SdModifyFieldDlg::FillFormatList()
 {
     LanguageType eLangType = maLbLanguage.GetSelectLanguage();

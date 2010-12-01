@@ -90,10 +90,8 @@
  * @descr   Constructor of class LwpDrawObj
  * @param   pStream   The memory stream which contains the lwp-sdw draw objects
  */
-LwpDrawObj::LwpDrawObj(SvStream * pStream, DrawingOffsetAndScale* pTransData)
-    : m_eType(OT_UNDEFINED)
-    , m_pStream(pStream)
-    , m_pTransData(pTransData)
+LwpDrawObj::LwpDrawObj(SvStream * pStream, DrawingOffsetAndScale* pTransData) :
+m_pStream(pStream), m_pTransData(pTransData), m_eType(OT_UNDEFINED)
 {
     this->ReadObjHeaderRecord();
 }
@@ -340,31 +338,31 @@ rtl::OUString LwpDrawObj::GetArrowName(sal_uInt8 nArrowStyle)
     {
     default:
     case AH_ARROW_FULLARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Symmetric arrow"));
+        aArrowName = rtl::OUString::createFromAscii("Symmetric arrow");
         break;
     case AH_ARROW_HALFARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Arrow concave"));
+        aArrowName = rtl::OUString::createFromAscii("Arrow concave");
         break;
     case AH_ARROW_LINEARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("arrow100"));
+        aArrowName = rtl::OUString::createFromAscii("arrow100");
         break;
     case AH_ARROW_INVFULLARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse arrow"));
+        aArrowName = rtl::OUString::createFromAscii("reverse arrow");
         break;
     case AH_ARROW_INVHALFARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse concave arrow"));
+        aArrowName = rtl::OUString::createFromAscii("reverse concave arrow");
         break;
     case AH_ARROW_INVLINEARROW:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reverse line arrow"));
+        aArrowName = rtl::OUString::createFromAscii("reverse line arrow");
         break;
     case AH_ARROW_TEE:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Dimension lines"));
+        aArrowName = rtl::OUString::createFromAscii("Dimension lines");
         break;
     case AH_ARROW_SQUARE:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Square"));
+        aArrowName = rtl::OUString::createFromAscii("Square");
         break;
     case AH_ARROW_CIRCLE:
-        aArrowName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Circle"));
+        aArrowName = rtl::OUString::createFromAscii("Circle");
         break;
     }
 

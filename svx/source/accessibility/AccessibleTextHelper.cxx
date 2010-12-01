@@ -178,7 +178,7 @@ namespace accessibility
         // checks all children for visibility, throws away invisible ones
         void UpdateVisibleChildren( bool bBroadcastEvents=true );
 
-        // check all children for changes in position and size
+        // check all children for changes in positíon and size
         void UpdateBoundRect();
 
         // calls SetSelection on the forwarder and updates maLastSelection
@@ -641,15 +641,18 @@ namespace accessibility
                         makeSortedPair(::std::min( maLastSelection.nStartPara, nMaxValidParaIndex ),
                                        ::std::min( maLastSelection.nEndPara, nMaxValidParaIndex ) ) );
 
-                    // event TEXT_SELECTION_CHANGED has to be submitted. (#i27299#)
+                    // --> OD 2005-12-15 #i27299#
+                    // event TEXT_SELECTION_CHANGED has to be submitted.
                     const sal_Int16 nTextSelChgEventId =
                                     AccessibleEventId::TEXT_SELECTION_CHANGED;
+                    // <--
                     // #107037# notify selection change
                     if( maLastSelection.nStartPara == EE_PARA_NOT_FOUND )
                     {
                         // last selection is undefined
-                        // use method <ESelection::HasRange()> (#i27299#)
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
                         if ( aSelection.HasRange() )
+                        // <--
                         {
                             // selection was undefined, now is on
                             maParaManager.FireEvent( sortedSelection.first,
@@ -660,31 +663,36 @@ namespace accessibility
                     else
                     {
                         // last selection is valid
-                        // use method <ESelection::HasRange()> (#i27299#)
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
                         if ( maLastSelection.HasRange() &&
                              !aSelection.HasRange() )
+                        // <--
                         {
                             // selection was on, now is empty
                             maParaManager.FireEvent( sortedLastSelection.first,
                                                      sortedLastSelection.second+1,
                                                      nTextSelChgEventId );
                         }
-                        // use method <ESelection::HasRange()> (#i27299#)
+                        // --> OD 2005-12-15 #i27299# - use method <ESelection::HasRange()>
                         else if( !maLastSelection.HasRange() &&
                                  aSelection.HasRange() )
+                        // <--
                         {
                             // selection was empty, now is on
                             maParaManager.FireEvent( sortedSelection.first,
                                                      sortedSelection.second+1,
                                                      nTextSelChgEventId );
                         }
-                        // no event TEXT_SELECTION_CHANGED event, if new and
-                        // last selection are empty. (#i27299#)
+                        // --> OD 2005-12-15 #i27299#
+                        // - no event TEXT_SELECTION_CHANGED event, if new and
+                        //   last selection are empty.
                         else if ( maLastSelection.HasRange() &&
                                   aSelection.HasRange() )
+                        // <--
                         {
-                            // send event TEXT_SELECTION_CHANGED for difference
-                            // between last and new selection. (#i27299#)
+                            // --> OD 2005-12-16 #i27299#
+                            // - send event TEXT_SELECTION_CHANGED for difference
+                            //   between last and new selection.
 //                            // selection was on, now is different: take union of ranges
 //                            maParaManager.FireEvent( ::std::min(sortedSelection.first,
 //                                                           sortedLastSelection.second),
@@ -1454,9 +1462,10 @@ namespace accessibility
             if( pEditSourceHint )
             {
                 maEventQueue.Append( *pEditSourceHint );
-                // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
+                // --> OD 2005-12-19 #i27299#
                 if( maEventOpenFrames == 0 )
                     ProcessQueue();
+                // <--
             }
             else if( pTextHint )
             {
@@ -1493,14 +1502,17 @@ namespace accessibility
                     case TEXT_HINT_BLOCKNOTIFICATION_START:
                     case TEXT_HINT_INPUT_START:
                         ++maEventOpenFrames;
-                        // no FALLTHROUGH reason: event will not be processed,
-                        // thus appending the event isn't necessary. (#i27299#)
+                        // --> OD 2005-12-19 #i27299# - no FALLTROUGH
+                        // reason: event will not be processes, thus appending
+                        // the event isn't necessary.
                         break;
+                        // <--
                     default:
                         maEventQueue.Append( *pTextHint );
-                        // EditEngine should emit TEXT_SELECTION_CHANGED events (#i27299#)
+                        // --> OD 2005-12-19 #i27299#
                         if( maEventOpenFrames == 0 )
                             ProcessQueue();
+                        // <--
                         break;
                 }
             }

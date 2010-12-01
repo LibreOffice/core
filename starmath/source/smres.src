@@ -33,6 +33,8 @@
 #include "toolbox.hrc"
 
 #define IMAGE_STDBTN_COLOR Color { Red = 0xff00; Green = 0x0000; Blue = 0xff00; }
+#define IMAGE_STDBTN_COLOR_HC IMAGE_STDBTN_COLOR
+
 #define MN_SUB_TOOLBAR 32
 #define WORKARROUND_1 1
 #define WORKARROUND_3 3
@@ -565,6 +567,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist11.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist11_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Line spacing";
@@ -573,6 +579,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist12.bmp" ;
         };
+        Bitmap 31
+        {
+            File = "dist12_h.bmp" ;
+        };
         String 4
         {
             Text [ en-US ] = "~Root spacing";
@@ -580,6 +590,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 40
         {
             File = "dist13.bmp" ;
+        };
+        Bitmap 41
+        {
+            File = "dist13_h.bmp" ;
         };
     };
     Resource 2
@@ -596,6 +610,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist21.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist21_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "S~ubscript";
@@ -603,6 +621,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist22.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist22_h.bmp" ;
         };
     };
     Resource 3
@@ -619,6 +641,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist31.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist31_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Denominator";
@@ -626,6 +652,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist32.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist32_h.bmp" ;
         };
     };
     Resource 4
@@ -642,6 +672,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist41.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist41_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Weight";
@@ -649,6 +683,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist42.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist42_h.bmp" ;
         };
     };
     Resource 5
@@ -665,6 +703,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist51.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist51_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Lower limit";
@@ -672,6 +714,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist52.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist52_h.bmp" ;
         };
     };
     Resource 6
@@ -688,6 +734,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist61.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist61_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Spacing";
@@ -696,6 +746,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist62.bmp" ;
         };
+        Bitmap 31
+        {
+            File = "dist62_h.bmp" ;
+        };
         String 5
         {
             Text [ en-US ] = "~Excess size";
@@ -703,6 +757,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 50
         {
             File = "dist61.bmp" ;
+        };
+        Bitmap 51
+        {
+            File = "dist61_h.bmp" ;
         };
     };
     Resource 7
@@ -719,6 +777,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist71.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist71_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Column spacing";
@@ -726,6 +788,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist72.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist72_h.bmp" ;
         };
     };
     Resource 8
@@ -742,6 +808,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist81.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist81_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Minimum spacing";
@@ -749,6 +819,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist82.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist82_h.bmp" ;
         };
     };
     Resource 9
@@ -765,6 +839,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist91.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist91_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Spacing";
@@ -772,6 +850,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist92.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist92_h.bmp" ;
         };
     };
     Resource 10
@@ -788,6 +870,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist101.bmp" ;
         };
+        Bitmap 21
+        {
+            File = "dist101_h.bmp" ;
+        };
         String 3
         {
             Text [ en-US ] = "~Right";
@@ -795,6 +881,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 30
         {
             File = "dist102.bmp" ;
+        };
+        Bitmap 31
+        {
+            File = "dist102_h.bmp" ;
         };
         String 4
         {
@@ -804,6 +894,10 @@ ModalDialog RID_DISTANCEDIALOG
         {
             File = "dist103.bmp" ;
         };
+        Bitmap 41
+        {
+            File = "dist103_h.bmp" ;
+        };
         String 5
         {
             Text [ en-US ] = "~Bottom";
@@ -811,6 +905,10 @@ ModalDialog RID_DISTANCEDIALOG
         Bitmap 50
         {
             File = "dist104.bmp" ;
+        };
+        Bitmap 51
+        {
+            File = "dist104_h.bmp" ;
         };
     };
 };
@@ -1177,6 +1275,11 @@ ModalDialog RID_SYMDEFINEDIALOG
     Image 1
     {
         ImageBitmap = Bitmap { File = "ar_right.bmp" ; };
+        MaskColor = IMAGE_STDBTN_COLOR ;
+    };
+    Image 2
+    {
+        ImageBitmap = Bitmap { File = "ar_right_h.bmp" ; };
         MaskColor = IMAGE_STDBTN_COLOR ;
     };
     FixedImage BMP_ARROW_RIGHT
@@ -2899,6 +3002,12 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         UNBINOPS_IDLIST
     };
+    ImageList RID_ILH_UNBINOPS
+    {
+        Prefix = "unh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        UNBINOPS_IDLIST
+    };
 
 #define RELATIONS_IDLIST         \
     IdList =                \
@@ -2931,6 +3040,12 @@ DockingWindow RID_CMDBOXWINDOW\
     {
         Prefix = "bi";
         MaskColor = IMAGE_STDBTN_COLOR ;
+        RELATIONS_IDLIST
+    };
+    ImageList RID_ILH_RELATIONS
+    {
+        Prefix = "bih";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         RELATIONS_IDLIST
     };
 
@@ -2966,6 +3081,12 @@ DockingWindow RID_CMDBOXWINDOW\
     {
         Prefix = "op";
         MaskColor = IMAGE_STDBTN_COLOR ;
+        SETOPERATIONS_IDLIST
+    };
+    ImageList RID_ILH_SETOPERATIONS
+    {
+        Prefix = "oph";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         SETOPERATIONS_IDLIST
     };
 
@@ -3006,6 +3127,12 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         FUNCTIONS_IDLIST
     };
+    ImageList RID_ILH_FUNCTIONS
+    {
+        Prefix = "fuh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        FUNCTIONS_IDLIST
+    };
 
 #define OPERATORS_IDLIST         \
     IdList =                \
@@ -3030,6 +3157,12 @@ DockingWindow RID_CMDBOXWINDOW\
     {
         Prefix = "fo";
         MaskColor = IMAGE_STDBTN_COLOR ;
+        OPERATORS_IDLIST
+    };
+    ImageList RID_ILH_OPERATORS
+    {
+        Prefix = "foh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         OPERATORS_IDLIST
     };
 
@@ -3068,6 +3201,12 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         ATTRIBUTES_IDLIST
     };
+    ImageList RID_ILH_ATTRIBUTES
+    {
+        Prefix = "ath";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        ATTRIBUTES_IDLIST
+    };
 
 #define BRACKETS_IDLIST             \
     IdList =                    \
@@ -3100,6 +3239,12 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         BRACKETS_IDLIST
     };
+    ImageList RID_ILH_BRACKETS
+    {
+        Prefix = "alh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        BRACKETS_IDLIST
+    };
 
 #define FORMAT_IDLIST         \
     IdList =                \
@@ -3126,6 +3271,12 @@ DockingWindow RID_CMDBOXWINDOW\
     {
         Prefix = "co";
         MaskColor = IMAGE_STDBTN_COLOR ;
+        FORMAT_IDLIST
+    };
+    ImageList RID_ILH_FORMAT
+    {
+        Prefix = "coh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
         FORMAT_IDLIST
     };
 
@@ -3160,6 +3311,12 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         MISC_IDLIST
     };
+    ImageList RID_ILH_MISC
+    {
+        Prefix = "mih";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        MISC_IDLIST
+    };
 
 #define CATALOG_IDLIST                  \
     IdList =                        \
@@ -3182,6 +3339,14 @@ DockingWindow RID_CMDBOXWINDOW\
         MaskColor = IMAGE_STDBTN_COLOR ;
         CATALOG_IDLIST
     };
+    ImageList RID_ILH_CATALOG
+    {
+        Prefix = "imh";
+        MaskColor = IMAGE_STDBTN_COLOR_HC ;
+        CATALOG_IDLIST
+    };
+
+
 
 String STR_CMDBOXWINDOW
 {

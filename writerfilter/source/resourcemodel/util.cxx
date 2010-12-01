@@ -95,7 +95,7 @@ void logger(string prefix, string message)
         return result;
     }
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
 {
     string sResult;

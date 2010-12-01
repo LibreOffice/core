@@ -81,7 +81,9 @@ public:
     BOOL            mbSmallSymbol;
 
     Image           maImage;
+    Image           maImageHC;
     BitmapEx*       mpBitmapEx;
+    BitmapEx*       mpBitmapExHC;
     ImageAlign      meImageAlign;
     SymbolAlign     meSymbolAlign;
 
@@ -97,6 +99,7 @@ ImplCommonButtonData::ImplCommonButtonData()
     mbSmallSymbol = FALSE;
 
     mpBitmapEx = NULL;
+    mpBitmapExHC = NULL;
     meImageAlign = IMAGEALIGN_TOP;
     meSymbolAlign = SYMBOLALIGN_LEFT;
 }
@@ -105,6 +108,7 @@ ImplCommonButtonData::ImplCommonButtonData()
 ImplCommonButtonData::~ImplCommonButtonData()
 {
     delete mpBitmapEx;
+    delete mpBitmapExHC;
 }
 
 // =======================================================================
@@ -199,24 +203,51 @@ XubString Button::GetStandardHelpText( StandardButtonType /* eButton */ )
     return aHelpText;
 }
 // -----------------------------------------------------------------------
-BOOL Button::SetModeImage( const Image& rImage )
+BOOL Button::SetModeImage( const Image& rImage, BmpColorMode eMode )
 {
-    if ( rImage != mpButtonData->maImage )
+    if( eMode == BMP_COLOR_NORMAL )
     {
-        delete mpButtonData->mpBitmapEx;
+        if ( rImage != mpButtonData->maImage )
+        {
+            delete mpButtonData->mpBitmapEx;
 
-        mpButtonData->mpBitmapEx = NULL;
-        mpButtonData->maImage = rImage;
+            mpButtonData->mpBitmapEx = NULL;
+            mpButtonData->maImage = rImage;
 
-        StateChanged( STATE_CHANGE_DATA );
+            StateChanged( STATE_CHANGE_DATA );
+        }
     }
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( rImage != mpButtonData->maImageHC )
+        {
+            delete mpButtonData->mpBitmapExHC;
+
+            mpButtonData->mpBitmapExHC = NULL;
+            mpButtonData->maImageHC = rImage;
+
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
-const Image Button::GetModeImage( ) const
+const Image Button::GetModeImage( BmpColorMode eMode ) const
 {
-    return mpButtonData->maImage;
+    if( eMode == BMP_COLOR_NORMAL )
+    {
+        return mpButtonData->maImage;
+    }
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        return mpButtonData->maImageHC;
+    }
+    else
+        return Image();
 }
 
 // -----------------------------------------------------------------------
@@ -242,24 +273,43 @@ ImageAlign Button::GetImageAlign() const
 }
 
 // -----------------------------------------------------------------------
-BOOL Button::SetModeBitmap( const BitmapEx& rBitmap )
+BOOL Button::SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode )
 {
-    if ( SetModeImage( rBitmap ) )
+    if ( SetModeImage( rBitmap, eMode ) )
     {
-        if ( !mpButtonData->mpBitmapEx )
-            mpButtonData->mpBitmapEx = new BitmapEx( rBitmap );
+        if( eMode == BMP_COLOR_NORMAL )
+        {
+            if ( !mpButtonData->mpBitmapEx )
+                mpButtonData->mpBitmapEx = new BitmapEx( rBitmap );
+        }
+        else if ( eMode == BMP_COLOR_HIGHCONTRAST )
+        {
+            if ( !mpButtonData->mpBitmapExHC )
+                mpButtonData->mpBitmapExHC = new BitmapEx( rBitmap );
+        }
+        else
+            return FALSE;
+
         return TRUE;
     }
     return FALSE;
 }
 
 // -----------------------------------------------------------------------
-BitmapEx Button::GetModeBitmap( ) const
+BitmapEx Button::GetModeBitmap( BmpColorMode eMode ) const
 {
     BitmapEx aBmp;
 
-    if ( mpButtonData->mpBitmapEx )
-        aBmp = *( mpButtonData->mpBitmapEx );
+    if ( eMode == BMP_COLOR_NORMAL )
+    {
+        if ( mpButtonData->mpBitmapEx )
+            aBmp = *( mpButtonData->mpBitmapEx );
+    }
+    else if ( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if ( mpButtonData->mpBitmapExHC )
+            aBmp = *( mpButtonData->mpBitmapExHC );
+    }
 
     return aBmp;
 }
@@ -373,6 +423,15 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
     Image    *pImage    = &(mpButtonData->maImage);
     BitmapEx *pBitmapEx = mpButtonData->mpBitmapEx;
 
+    if( !!(mpButtonData->maImageHC) )
+    {
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+        {
+            pImage = &(mpButtonData->maImageHC);
+            pBitmapEx = mpButtonData->mpBitmapExHC;
+        }
+    }
+
     if ( pBitmapEx && ( pDev->GetOutDevType() == OUTDEV_PRINTER ) )
     {
         // Die Groesse richtet sich nach dem Bildschirm, soll auf
@@ -424,21 +483,21 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
 
         if ( bDrawText )
         {
-            if ( ( eImageAlign == IMAGEALIGN_LEFT_TOP     ) ||
-                 ( eImageAlign == IMAGEALIGN_LEFT         ) ||
-                 ( eImageAlign == IMAGEALIGN_LEFT_BOTTOM  ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT_TOP    ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT        ) ||
-                 ( eImageAlign == IMAGEALIGN_RIGHT_BOTTOM ) )
+            if ( ( eImageAlign == IMAGEALIGN_LEFT_TOP ) ||
+                ( eImageAlign == IMAGEALIGN_LEFT ) ||
+                ( eImageAlign == IMAGEALIGN_LEFT_BOTTOM ) ||
+                ( eImageAlign == IMAGEALIGN_RIGHT_TOP ) ||
+                ( eImageAlign == IMAGEALIGN_RIGHT ) ||
+                ( eImageAlign == IMAGEALIGN_RIGHT_BOTTOM ) )
             {
                 aRect.Right() -= ( aImageSize.Width() + nImageSep );
             }
-            else if ( ( eImageAlign == IMAGEALIGN_TOP_LEFT     ) ||
-                      ( eImageAlign == IMAGEALIGN_TOP          ) ||
-                      ( eImageAlign == IMAGEALIGN_TOP_RIGHT    ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM_LEFT  ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM       ) ||
-                      ( eImageAlign == IMAGEALIGN_BOTTOM_RIGHT ) )
+            else if ( ( eImageAlign == IMAGEALIGN_TOP_LEFT ) ||
+                ( eImageAlign == IMAGEALIGN_TOP ) ||
+                ( eImageAlign == IMAGEALIGN_TOP_RIGHT ) ||
+                ( eImageAlign == IMAGEALIGN_BOTTOM_LEFT ) ||
+                ( eImageAlign == IMAGEALIGN_BOTTOM ) ||
+                ( eImageAlign == IMAGEALIGN_BOTTOM_RIGHT ) )
             {
                 aRect.Bottom() -= ( aImageSize.Height() + nImageSep );
             }
@@ -459,7 +518,7 @@ void Button::ImplDrawAlignedImage( OutputDevice* pDev, Point& rPos,
             }
         }
 
-        aMax.Width()  = aTSSize.Width()  > aImageSize.Width()  ? aTSSize.Width()  : aImageSize.Width();
+        aMax.Width() = aTSSize.Width() > aImageSize.Width() ? aTSSize.Width() : aImageSize.Width();
         aMax.Height() = aTSSize.Height() > aImageSize.Height() ? aTSSize.Height() : aImageSize.Height();
 
         // Now calculate the output area for the image and the text acording to the image align flags
@@ -625,9 +684,9 @@ void Button::ImplSetFocusRect( const Rectangle &rFocusRect )
         aFocusRect.Bottom()++;
     }
 
-    if ( aFocusRect.Left()   < aOutputRect.Left()   ) aFocusRect.Left()   = aOutputRect.Left();
-    if ( aFocusRect.Top()    < aOutputRect.Top()    ) aFocusRect.Top()    = aOutputRect.Top();
-    if ( aFocusRect.Right()  > aOutputRect.Right()  ) aFocusRect.Right()  = aOutputRect.Right();
+    if ( aFocusRect.Left() < aOutputRect.Left() )   aFocusRect.Left() = aOutputRect.Left();
+    if ( aFocusRect.Top() < aOutputRect.Top() )     aFocusRect.Top() = aOutputRect.Top();
+    if ( aFocusRect.Right() > aOutputRect.Right() ) aFocusRect.Right() = aOutputRect.Right();
     if ( aFocusRect.Bottom() > aOutputRect.Bottom() ) aFocusRect.Bottom() = aOutputRect.Bottom();
 
     mpButtonData->maFocusRect = aFocusRect;
@@ -666,7 +725,6 @@ SymbolAlign Button::ImplGetSymbolAlign() const
 {
     return mpButtonData->meSymbolAlign;
 }
-
 // -----------------------------------------------------------------------
 void Button::ImplSetSmallSymbol( BOOL bSmall )
 {
@@ -797,10 +855,10 @@ WinBits PushButton::ImplInitStyle( const Window* pPrevWindow, WinBits nStyle )
 
     if ( !(nStyle & WB_NOGROUP) &&
          (!pPrevWindow ||
-          ((pPrevWindow->GetType() != WINDOW_PUSHBUTTON  ) &&
-           (pPrevWindow->GetType() != WINDOW_OKBUTTON    ) &&
+          ((pPrevWindow->GetType() != WINDOW_PUSHBUTTON) &&
+           (pPrevWindow->GetType() != WINDOW_OKBUTTON) &&
            (pPrevWindow->GetType() != WINDOW_CANCELBUTTON) &&
-           (pPrevWindow->GetType() != WINDOW_HELPBUTTON  )) ) )
+           (pPrevWindow->GetType() != WINDOW_HELPBUTTON)) ) )
         nStyle |= WB_GROUP;
     return nStyle;
 }
@@ -2254,6 +2312,9 @@ void RadioButton::ImplInitSettings( BOOL bFont,
     }
 }
 
+//---------------------------------------------------------------------
+//--- 12.03.2003 18:46:14 ---------------------------------------------
+
 void RadioButton::DrawRadioButtonState( )
 {
     ImplDrawRadioButtonState( );
@@ -2344,7 +2405,13 @@ if ( bNativeOK == FALSE )
         if ( !bEnabled )
             nButtonStyle |= IMAGE_DRAW_DISABLE;
 
+        // check for HC mode
         Image *pImage = &maImage;
+        if( !!maImageHC )
+        {
+            if( rStyleSettings.GetHighContrastMode() )
+                pImage = &maImageHC;
+        }
 
         Point aImagePos( aImageRect.TopLeft() );
         aImagePos.X() += (aImageRect.GetWidth()-aImageSize.Width())/2;
@@ -3040,21 +3107,38 @@ void RadioButton::Toggle()
 
 // -----------------------------------------------------------------------
 
-BOOL RadioButton::SetModeRadioImage( const Image& rImage )
+BOOL RadioButton::SetModeRadioImage( const Image& rImage, BmpColorMode eMode )
+{
+    if( eMode == BMP_COLOR_NORMAL )
 {
     if ( rImage != maImage )
     {
         maImage = rImage;
         StateChanged( STATE_CHANGE_DATA );
     }
+}
+    else if( eMode == BMP_COLOR_HIGHCONTRAST )
+    {
+        if( maImageHC != rImage )
+        {
+            maImageHC = rImage;
+            StateChanged( STATE_CHANGE_DATA );
+        }
+    }
+    else
+        return FALSE;
+
     return TRUE;
 }
 
 // -----------------------------------------------------------------------
 
-const Image& RadioButton::GetModeRadioImage( ) const
+const Image& RadioButton::GetModeRadioImage( BmpColorMode eMode ) const
 {
-    return maImage;
+    if( eMode == BMP_COLOR_HIGHCONTRAST )
+        return maImageHC;
+    else
+        return maImage;
 }
 
 // -----------------------------------------------------------------------
@@ -3207,11 +3291,10 @@ Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
         ResMgr* pResMgr = ImplGetResMgr();
         pSVData->maCtrlData.mpRadioImgList = new ImageList();
         if( pResMgr )
-            LoadThemedImageList( rStyleSettings,
+        LoadThemedImageList( rStyleSettings,
                  pSVData->maCtrlData.mpRadioImgList,
-                 ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ), 6
-            );
-        pSVData->maCtrlData.mnRadioStyle = nStyle;
+                 ResId( SV_RESID_BITMAP_RADIO+nStyle, *pResMgr ), 6 );
+    pSVData->maCtrlData.mnRadioStyle = nStyle;
     }
 
     USHORT nId;
@@ -3295,13 +3378,13 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
         if ( aSize.Height() < aTextSize.Height() )
             aSize.Height() = aTextSize.Height();
     }
-//  else if ( !maImage )
-//  {
+    else if ( !maImage )
+    {
 /* da ansonsten im Writer die Control zu weit oben haengen
         aSize.Width() += 2;
         aSize.Height() += 2;
 */
-//  }
+    }
 
     return CalcWindowSize( aSize );
 }
@@ -4382,11 +4465,18 @@ void DisclosureButton::ImplDrawCheckBoxState()
         ImplSVCtrlData& rCtrlData( ImplGetSVData()->maCtrlData );
         if( ! rCtrlData.mpDisclosurePlus )
             rCtrlData.mpDisclosurePlus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS ) ) );
+        if( ! rCtrlData.mpDisclosurePlusHC )
+            rCtrlData.mpDisclosurePlusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_PLUS_HC ) ) );
         if( ! rCtrlData.mpDisclosureMinus )
             rCtrlData.mpDisclosureMinus = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS ) ) );
+        if( ! rCtrlData.mpDisclosureMinusHC )
+            rCtrlData.mpDisclosureMinusHC = new Image( BitmapEx( VclResId( SV_DISCLOSURE_MINUS_HC ) ) );
 
         Image* pImg = NULL;
-        pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
+        if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+            pImg = IsChecked() ? rCtrlData.mpDisclosureMinusHC : rCtrlData.mpDisclosurePlusHC;
+        else
+            pImg = IsChecked() ? rCtrlData.mpDisclosureMinus : rCtrlData.mpDisclosurePlus;
 
         DBG_ASSERT( pImg, "no disclosure image" );
         if( ! pImg )
@@ -4421,5 +4511,6 @@ void DisclosureButton::KeyInput( const KeyEvent& rKEvt )
     else
         Button::KeyInput( rKEvt );
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

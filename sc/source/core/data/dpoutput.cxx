@@ -215,14 +215,14 @@ void lcl_FillNumberFormats( UINT32*& rFormats, long& rCount,
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
                     (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                        xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
                 {
                     aDataNames[nDataCount] = String( xDimName->getName() );
                     long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                             xDimProp,
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_NUMBERFORMAT)) );
+                                            rtl::OUString::createFromAscii(DP_PROP_NUMBERFORMAT) );
                     nDataFormats[nDataCount] = nFormat;
                     if ( nFormat != 0 )
                         bAnySet = TRUE;
@@ -282,13 +282,13 @@ UINT32 lcl_GetFirstNumberFormat( const uno::Reference<container::XIndexAccess>& 
         {
             sheet::DataPilotFieldOrientation eDimOrient =
                 (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                    xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                    xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
                     sheet::DataPilotFieldOrientation_HIDDEN );
             if ( eDimOrient == sheet::DataPilotFieldOrientation_DATA )
             {
                 long nFormat = ScUnoHelpFunctions::GetLongProperty(
                                         xDimProp,
-                                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_NUMBERFORMAT)) );
+                                        rtl::OUString::createFromAscii(DP_PROP_NUMBERFORMAT) );
 
                 return nFormat;     // use format from first found data dimension
             }
@@ -330,7 +330,7 @@ uno::Sequence<sheet::MemberResult> lcl_GetSelectedPageAsResult( const uno::Refer
         {
             //! merge with ScDPDimension::setPropertyValue?
 
-            uno::Any aValue = xDimProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_FILTER)) );
+            uno::Any aValue = xDimProp->getPropertyValue( rtl::OUString::createFromAscii(DP_PROP_FILTER) );
 
             uno::Sequence<sheet::TableFilterField> aSeq;
             if (aValue >>= aSeq)
@@ -402,15 +402,15 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
                     (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                        xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 long nDimPos = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_POSITION)) );
+                        rtl::OUString::createFromAscii(DP_PROP_POSITION) );
                 BOOL bIsDataLayout = ScUnoHelpFunctions::GetBoolProperty(
                                                 xDimProp,
-                                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) );
+                                                rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) );
                 bool bHasHiddenMember = ScUnoHelpFunctions::GetBoolProperty(
-                    xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_HAS_HIDDEN_MEMBER)));
+                    xDimProp, OUString::createFromAscii(SC_UNO_HAS_HIDDEN_MEMBER));
 
                 if ( eDimOrient != sheet::DataPilotFieldOrientation_HIDDEN )
                 {
@@ -418,7 +418,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                             new ScNameToIndexAccess( xDimSupp->getHierarchies() );
                     long nHierarchy = ScUnoHelpFunctions::GetLongProperty(
                                             xDimProp,
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_USEDHIERARCHY)) );
+                                            rtl::OUString::createFromAscii(DP_PROP_USEDHIERARCHY) );
                     if ( nHierarchy >= xHiers->getCount() )
                         nHierarchy = 0;
 
@@ -447,7 +447,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                 // #i108948# use ScUnoHelpFunctions::GetStringProperty, because
                                 // LayoutName is new and may not be present in external implementation
                                 OUString aCaption = ScUnoHelpFunctions::GetStringProperty( xPropSet,
-                                    OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_LAYOUTNAME)), aName );
+                                    OUString::createFromAscii(SC_UNO_LAYOUTNAME), aName );
 
                                 bool bRowFieldHasMember = false;
                                 switch ( eDimOrient )
@@ -546,7 +546,7 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
         try
         {
             uno::Any aAny = xSrcProp->getPropertyValue(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATADESC)) );
+                    rtl::OUString::createFromAscii(SC_UNO_DATADESC) );
             rtl::OUString aUStr;
             aAny >>= aUStr;
             aDataDescription = String( aUStr );
@@ -1101,12 +1101,12 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
 
     uno::Reference<beans::XPropertySet> xSrcProp( xSource, uno::UNO_QUERY );
     BOOL bColGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
-                                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_COLUMNGRAND)) );
+                                         rtl::OUString::createFromAscii(DP_PROP_COLUMNGRAND) );
     if ( bColGrand )
         rGrandTotalCols = 1;    // default if data layout not in columns
 
     BOOL bRowGrand = ScUnoHelpFunctions::GetBoolProperty( xSrcProp,
-                                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ROWGRAND)) );
+                                         rtl::OUString::createFromAscii(DP_PROP_ROWGRAND) );
     if ( bRowGrand )
         rGrandTotalRows = 1;    // default if data layout not in rows
 
@@ -1127,10 +1127,10 @@ void lcl_GetTableVars( sal_Int32& rGrandTotalCols, sal_Int32& rGrandTotalRows, s
             {
                 sheet::DataPilotFieldOrientation eDimOrient =
                     (sheet::DataPilotFieldOrientation) ScUnoHelpFunctions::GetEnumProperty(
-                        xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ORIENTATION)),
+                        xDimProp, rtl::OUString::createFromAscii(DP_PROP_ORIENTATION),
                         sheet::DataPilotFieldOrientation_HIDDEN );
                 if ( ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_ISDATALAYOUT)) ) )
+                                         rtl::OUString::createFromAscii(DP_PROP_ISDATALAYOUT) ) )
                 {
                     rDataLayoutIndex = nDim;
                     rDataOrient = eDimOrient;
@@ -1188,7 +1188,7 @@ void ScDPOutput::GetPositionData(const ScAddress& rPos, DataPilotTablePositionDa
             if (xPropSet.is())
             {
                 sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATAFIELDCOUNT)) );
+                                            rtl::OUString::createFromAscii(SC_UNO_DATAFIELDCOUNT) );
                 if (nDataFieldCount > 0)
                     aResData.DataFieldIndex = (nRow - nDataStartRow) % nDataFieldCount;
             }
@@ -1270,7 +1270,7 @@ bool ScDPOutput::GetDataResultPositionData(vector<sheet::DataPilotFieldFilter>& 
         return false;
 
     sal_Int32 nDataFieldCount = ScUnoHelpFunctions::GetLongProperty( xPropSet,
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DATAFIELDCOUNT)) );
+                                rtl::OUString::createFromAscii(SC_UNO_DATAFIELDCOUNT) );
     if (nDataFieldCount == 0)
         // No data field is present in this datapilot table.
         return false;
@@ -1450,7 +1450,7 @@ uno::Sequence<sheet::GeneralFunction> lcl_GetSubTotals(
     {
         try
         {
-            uno::Any aValue = xLevelProp->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_SUBTOTALS)) );
+            uno::Any aValue = xLevelProp->getPropertyValue( rtl::OUString::createFromAscii(DP_PROP_SUBTOTALS) );
             aValue >>= aSubTotals;
         }
         catch(uno::Exception&)
@@ -1707,7 +1707,7 @@ void ScDPOutput::GetDataDimensionNames( String& rSourceName, String& rGivenName,
         //! Should use a stored name when available
 
         sheet::GeneralFunction eFunc = (sheet::GeneralFunction)ScUnoHelpFunctions::GetEnumProperty(
-                                xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(DP_PROP_FUNCTION)),
+                                xDimProp, rtl::OUString::createFromAscii(DP_PROP_FUNCTION),
                                 sheet::GeneralFunction_NONE );
         rGivenName = lcl_GetDataFieldName( rSourceName, eFunc );
     }
@@ -2057,6 +2057,7 @@ BOOL ScDPOutput::GetHeaderDrag( const ScAddress& rPos, BOOL bMouseLeft, BOOL bMo
 
     return FALSE;
 }
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

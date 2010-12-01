@@ -66,11 +66,13 @@ class XMLTextListsHelper : private boost::noncopyable
 
 
         // keeping track of processed lists for import and export
-        // Add optional parameter <sListStyleDefaultListId> (#i92811#)
+        // --> OD 2008-08-15 #i92811#
+        // - add optional parameter <sListStyleDefaultListId>
         void KeepListAsProcessed( ::rtl::OUString sListId,
                                   ::rtl::OUString sListStyleName,
                                   ::rtl::OUString sContinueListId,
                                   ::rtl::OUString sListStyleDefaultListId = ::rtl::OUString() );
+        // <--
 
         sal_Bool IsListProcessed( const ::rtl::OUString sListId ) const;
         ::rtl::OUString GetListStyleOfProcessedList(
@@ -82,8 +84,11 @@ class XMLTextListsHelper : private boost::noncopyable
 
         ::rtl::OUString GenerateNewListId() const;
 
-        // Provide list id for a certain list block for import (#i92811#)
+        // --> OD 2008-08-15 #i92811#
+        // provide list id for a certain list block for import
         ::rtl::OUString GetListIdForListBlock( XMLTextListBlockContext& rListBlock );
+        // <--
+
 
         // keep track of continue list chain for export
         void StoreLastContinuingList( ::rtl::OUString sListId,
@@ -153,11 +158,12 @@ class XMLTextListsHelper : private boost::noncopyable
         ::rtl::OUString msLastProcessedListId;
         ::rtl::OUString msListStyleOfLastProcessedList;
 
-        /* additional container for processed lists.
-           map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
-           as value. (#i92811#)
-        */
+        // --> OD 2008-08-15 #i92811#
+        // additional container for processed lists.
+        // map with <ListStyleName> as key and pair( <ListId, ListStyleDefaultListId> )
+        // as value.
         tMapForLists* mpMapListIdToListStyleDefaultListId;
+        // <--
 
         // container type to build up continue list chain:
         // map with <ListId> of master list as key and <ListId> of last list

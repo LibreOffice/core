@@ -738,16 +738,16 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //create data
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellRangeRepresentation" )), -1,
+                ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
                 uno::makeAny( C2U("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HasCategories" )), -1,
+                ::rtl::OUString::createFromAscii("HasCategories"), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[2] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstCellAsLabel" )), -1,
+                ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
                 uno::makeAny( true ), beans::PropertyState_DIRECT_VALUE );
             aArgs[3] = beans::PropertyValue(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRowSource" )), -1,
+                ::rtl::OUString::createFromAscii("DataRowSource"), -1,
                 uno::makeAny( ::com::sun::star::chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
             xDataSource = m_xInternalDataProvider->createDataSource( aArgs );
         }
@@ -1170,6 +1170,9 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
+//     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
+//         C2U( "GDIMetaFile" ),
+//      ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1180,6 +1183,8 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 ::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException)
 {
+//     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
+//              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
 }
 

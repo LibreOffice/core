@@ -144,7 +144,7 @@ sal_Bool SdPPTFilter::Export()
         if( mxModel.is() )
         {
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
-            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportPPT")) ));
+            ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("ExportPPT") ));
 
             /* !!!
             if ( pViewShell && pViewShell->GetView() )
@@ -190,7 +190,7 @@ void SdPPTFilter::PreSaveBasic()
         ::osl::Module* pLibrary = OpenLibrary( mrMedium.GetFilter()->GetUserData() );
         if( pLibrary )
         {
-            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveVBA")) ));
+            SaveVBA pSaveVBA= reinterpret_cast<SaveVBA>(pLibrary->getFunctionSymbol( ::rtl::OUString::createFromAscii("SaveVBA") ));
             if( pSaveVBA )
             {
                 pSaveVBA( (SfxObjectShell&) mrDocShell, pBas );

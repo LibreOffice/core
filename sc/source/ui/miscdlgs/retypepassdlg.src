@@ -27,6 +27,7 @@
 
 #include "retypepassdlg.hrc"
 
+
 ModalDialog RID_SCDLG_RETYPEPASS
 {
     Text [ en-US ] = "Re-type Password" ;
@@ -308,3 +309,5 @@ ModalDialog RID_SCDLG_RETYPEPASS_INPUT
         Text [ en-US ] = "Remove password from this protected item." ;
     };
 };
+
+

@@ -2090,7 +2090,6 @@ PolyArgs::PolyArgs( PolyPolygon& rPolyPoly, USHORT nMaxPoints )
     mnMaxPoints(nMaxPoints),
     mnPoints(0),
     mnPoly(0),
-    mnHeight(0),
     bHasOffline(false)
 {
     mpPointAry  = new Point[ mnMaxPoints ];

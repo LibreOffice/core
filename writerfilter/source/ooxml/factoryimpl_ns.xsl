@@ -177,6 +177,15 @@ for a rng:define
       <xsl:for-each select=".//rng:data[@type='base64Binary']">
         <xsl:text>String</xsl:text>
       </xsl:for-each>
+      <xsl:for-each select=".//rng:data[@type='boolean']">
+        <xsl:text>Boolean</xsl:text>
+      </xsl:for-each>
+      <xsl:for-each select=".//rng:data[@type='string']">
+        <xsl:text>String</xsl:text>
+      </xsl:for-each>
+      <xsl:for-each select=".//rng:data[@type='integer']">
+        <xsl:text>Integer</xsl:text>
+      </xsl:for-each>
     </xsl:variable>
 
     <xsl:variable name="refdefine1">

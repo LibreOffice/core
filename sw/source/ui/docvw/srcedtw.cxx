@@ -66,7 +66,15 @@ struct SwTextPortion
 
 SV_DECL_VARARR(SwTextPortions, SwTextPortion,16,16)
 
+/* -----------------15.01.97 12.07-------------------
+
+--------------------------------------------------*/
+
 SV_IMPL_VARARR(SwTextPortions, SwTextPortion)
+
+/*-----------------15.01.97 12.08-------------------
+
+--------------------------------------------------*/
 
 static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
@@ -211,6 +219,11 @@ static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+
 SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     Window( pParent, WB_BORDER|WB_CLIPCHILDREN ),
 
@@ -233,7 +246,9 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     CreateTextEngine();
     pSourceViewConfig->AddListener(this);
 }
-
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
  SwSrcEditWindow::~SwSrcEditWindow()
 {
     pSourceViewConfig->RemoveListener(this);
@@ -252,6 +267,10 @@ SwSrcEditWindow::SwSrcEditWindow( Window* pParent, SwSrcView* pParentView ) :
     }
     delete pOutWin;
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
 
 void SwSrcEditWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
@@ -322,6 +341,10 @@ void  SwSrcEditWindow::Resize()
 
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 void TextViewOutWin::DataChanged( const DataChangedEvent& rDCEvt )
 {
     Window::DataChanged( rDCEvt );
@@ -348,6 +371,11 @@ void  TextViewOutWin::MouseMove( const MouseEvent &rEvt )
         pTextView->MouseMove( rEvt );
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+
 void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
 {
     if ( pTextView )
@@ -360,12 +388,22 @@ void  TextViewOutWin::MouseButtonUp( const MouseEvent &rEvt )
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+
 void  TextViewOutWin::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
     if ( pTextView )
         pTextView->MouseButtonDown( rEvt );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 void  TextViewOutWin::Command( const CommandEvent& rCEvt )
 {
@@ -394,6 +432,12 @@ void  TextViewOutWin::Command( const CommandEvent& rCEvt )
             Window::Command(rCEvt);
     }
 }
+
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
 {
@@ -433,10 +477,20 @@ void  TextViewOutWin::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+
 void  TextViewOutWin::Paint( const Rectangle& rRect )
 {
     pTextView->Paint( rRect );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 void SwSrcEditWindow::CreateTextEngine()
 {
@@ -448,12 +502,12 @@ void SwSrcEditWindow::CreateTextEngine()
 
     //Scrollbars anlegen
     pHScrollbar = new ScrollBar(this, WB_3DLOOK |WB_HSCROLL|WB_DRAG);
-        pHScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+        pHScrollbar->EnableRTL( false ); // #107300# --- RTL --- no mirroring for scrollbars
     pHScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->Show();
 
     pVScrollbar = new ScrollBar(this, WB_3DLOOK |WB_VSCROLL|WB_DRAG);
-        pVScrollbar->EnableRTL( false ); // --- RTL --- no mirroring for scrollbars
+        pVScrollbar->EnableRTL( false ); // #107300# --- RTL --- no mirroring for scrollbars
     pVScrollbar->SetScrollHdl(LINK(this, SwSrcEditWindow, ScrollHdl));
     pHScrollbar->EnableDrag();
     pVScrollbar->Show();
@@ -487,7 +541,17 @@ void SwSrcEditWindow::CreateTextEngine()
 
     SfxBindings& rBind = GetSrcView()->GetViewFrame()->GetBindings();
     rBind.Invalidate( SID_TABLE_CELL );
+//  rBind.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 void SwSrcEditWindow::SetScrollBarRanges()
 {
@@ -496,6 +560,11 @@ void SwSrcEditWindow::SetScrollBarRanges()
     pHScrollbar->SetRange( Range( 0, nCurTextWidth-1 ) );
     pVScrollbar->SetRange( Range(0, pTextEngine->GetTextHeight()-1) );
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 void SwSrcEditWindow::InitScrollBars()
 {
@@ -512,6 +581,11 @@ void SwSrcEditWindow::InitScrollBars()
     pHScrollbar->SetThumbPos( pTextView->GetStartDocPos().X() );
 
 }
+
+/*--------------------------------------------------------------------
+    Beschreibung:
+ --------------------------------------------------------------------*/
+
 
 IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
 {
@@ -533,10 +607,15 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
+/*-----------------15.01.97 09.22-------------------
+
+--------------------------------------------------*/
+
 IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 {
     Time aSyntaxCheckStart;
     OSL_ENSURE( pTextView, "Noch keine View, aber Syntax-Highlight ?!" );
+    // pTextEngine->SetUpdateMode( FALSE );
 
     bHighlighting = TRUE;
     USHORT nLine;
@@ -583,6 +662,16 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
             break;
         }
     }
+    // os: #43050# hier wird ein TextView-Problem umpopelt:
+    // waehrend des Highlightings funktionierte das Scrolling nicht
+    /* MT: Shouldn't be a oproblem any more, using IdeFormatter in Insert/RemoveAttrib now.
+
+        TextView* pTmp = pTextEngine->GetActiveView();
+        pTextEngine->SetActiveView(0);
+        // pTextEngine->SetUpdateMode( TRUE );
+        pTextEngine->SetActiveView(pTmp);
+        pTextView->ShowCursor(FALSE, FALSE);
+    */
 
     if(aSyntaxLineTable.Count() && !pTimer->IsActive())
         pTimer->Start();
@@ -596,6 +685,9 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
 
     return 0;
 }
+/*-----------------15.01.97 10.01-------------------
+
+--------------------------------------------------*/
 
 void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
 {
@@ -608,11 +700,14 @@ void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
         String aSource( pTextEngine->GetText( nPara ) );
         pTextEngine->SetUpdateMode( FALSE );
         ImpDoHighlight( aSource, nPara );
+        // os: #43050# hier wird ein TextView-Problem umpopelt:
+        // waehrend des Highlightings funktionierte das Scrolling nicht
         TextView* pTmp = pTextEngine->GetActiveView();
         pTmp->SetAutoScroll(FALSE);
         pTextEngine->SetActiveView(0);
         pTextEngine->SetUpdateMode( TRUE );
         pTextEngine->SetActiveView(pTmp);
+        // Bug 72887 show the cursor
         pTmp->SetAutoScroll(TRUE);
         pTmp->ShowCursor( FALSE/*pTmp->IsAutoScroll()*/ );
 
@@ -620,6 +715,10 @@ void SwSrcEditWindow::DoSyntaxHighlight( USHORT nPara )
             ClearModifyFlag();
     }
 }
+
+/*-----------------15.01.97 09.49-------------------
+
+--------------------------------------------------*/
 
 void SwSrcEditWindow::DoDelayedSyntaxHighlight( USHORT nPara )
 {
@@ -629,6 +728,10 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( USHORT nPara )
         aSyntaxIdleTimer.Start();
     }
 }
+
+/*-----------------15.01.97 11.32-------------------
+
+--------------------------------------------------*/
 
 void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
 {
@@ -698,6 +801,10 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
     }
 }
 
+/*-----------------30.06.97 09:12-------------------
+
+--------------------------------------------------*/
+
 void SwSrcEditWindow::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 {
     if ( rHint.ISA( TextHint ) )
@@ -728,6 +835,10 @@ void SwSrcEditWindow::ConfigurationChanged( utl::ConfigurationBroadcaster* pBrdC
     if( pBrdCst == pSourceViewConfig)
         SetFont();
 }
+
+/*-----------------30.06.97 13:22-------------------
+
+--------------------------------------------------*/
 
 void    SwSrcEditWindow::Invalidate(USHORT )
 {
@@ -765,6 +876,15 @@ void SwSrcEditWindow::GetFocus()
     pOutWin->GrabFocus();
 }
 
+/*void SwSrcEditWindow::LoseFocus()
+{
+    Window::LoseFocus();
+//  pOutWin->LoseFocus();
+//  rView.LostFocus();
+} */
+/* -----------------------------29.08.2002 13:21------------------------------
+
+ ---------------------------------------------------------------------------*/
 BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages[])
 {
     switch(eEnc)
@@ -921,6 +1041,8 @@ BOOL  lcl_GetLanguagesForEncoding(rtl_TextEncoding eEnc, LanguageType aLanguages
         case RTL_TEXTENCODING_TIS_620          :
             aLanguages[0] = LANGUAGE_THAI;
         break;
+//        case RTL_TEXTENCODING_SYMBOL      :
+//        case RTL_TEXTENCODING_DONTKNOW:        :
         default: aLanguages[0] = Application::GetSettings().GetUILanguage();
     }
     return aLanguages[0] != LANGUAGE_SYSTEM;
@@ -959,7 +1081,9 @@ void SwSrcEditWindow::SetFont()
     GetTextEngine()->SetFont( aFont );
     pOutWin->SetFont(aFont);
 }
+/* -----------------------------29.08.2002 13:47------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SwSrcEditWindow::SetTextEncoding(rtl_TextEncoding eEncoding)
 {
     eSourceEncoding = eEncoding;

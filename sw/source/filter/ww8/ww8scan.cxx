@@ -5622,6 +5622,11 @@ WW8Fib::WW8Fib(BYTE nVer)
         fExtChar = true;
         fWord97Saved = fWord2000Saved = true;
 
+        // diese Flags muessen nicht gesetzt werden; koennen aber.
+        //  wMagicCreated = wMagicRevised = 0x6a62;
+        //  wMagicCreatedPrivate = wMagicRevisedPrivate = 0xb3b2;
+        //
+
         wMagicCreated = 0x6143;
         wMagicRevised = 0x6C6F;
         wMagicCreatedPrivate = 0x6E61;
@@ -5999,7 +6004,7 @@ rtl_TextEncoding WW8Fib::GetFIBCharset(UINT16 chs)
 WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
     : rFib(rFibPara), rSt(rStream), cstd(0), cbSTDBaseInFile(0),
     stiMaxWhenSaved(0), istdMaxFixedWhenSaved(0), nVerBuiltInNamesWhenSaved(0),
-    ftcAsci(0), ftcFE(0), ftcOther(0), ftcBi(0)
+    ftcStandardChpStsh(0), ftcStandardChpCJKStsh(0), ftcStandardChpCTLStsh(0)
 {
     nStyleStart = rFib.fcStshf;
     nStyleLen = rFib.lcbStshf;
@@ -6044,22 +6049,17 @@ WW8Style::WW8Style(SvStream& rStream, WW8Fib& rFibPara)
         rSt >> nVerBuiltInNamesWhenSaved;
 
         if( 14 > nRead ) break;
-        rSt >> ftcAsci;
+        rSt >> ftcStandardChpStsh;
 
         if( 16 > nRead ) break;
-        rSt >> ftcFE;
+        rSt >> ftcStandardChpCJKStsh;
 
         if ( 18 > nRead ) break;
-        rSt >> ftcOther;
-
-        ftcBi = ftcOther;
-
-        if ( 20 > nRead ) break;
-        rSt >> ftcBi;
+        rSt >> ftcStandardChpCTLStsh;
 
         // ggfs. den Rest ueberlesen
-        if( 20 < nRead )
-            rSt.SeekRel( nRead-20 );
+        if( 18 < nRead )
+            rSt.SeekRel( nRead-18 );
     }
     while( !this ); // Trick: obiger Block wird genau einmal durchlaufen
                     //   und kann vorzeitig per "break" verlassen werden.
@@ -6745,6 +6745,7 @@ WW8Dop::WW8Dop(SvStream& rSt, INT16 nFib, INT32 nPos, sal_uInt32 nSize) : bUseTh
                 a32Bit = Get_Long( pData );      // 512 0x200
 
                 // i#78591#
+                // fDontUseHTMLAutoSpacing = (a32Bit & 0x4) >> 2;
                 SetCompatabilityOptions2(a32Bit);
             }
             if (nRead >= 550)

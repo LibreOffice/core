@@ -79,7 +79,7 @@ Reference<XInterface> SAL_CALL SlideSorterService_createInstance (
 
 ::rtl::OUString SlideSorterService_getImplementationName (void) throw(RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.SlideSorter"));
+    return OUString::createFromAscii("com.sun.star.comp.Draw.SlideSorter");
 }
 
 
@@ -89,7 +89,7 @@ Sequence<rtl::OUString> SAL_CALL SlideSorterService_getSupportedServiceNames (vo
     throw (RuntimeException)
 {
     static const ::rtl::OUString sServiceName(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideSorter")));
+        ::rtl::OUString::createFromAscii("com.sun.star.drawing.SlideSorter"));
     return Sequence<rtl::OUString>(&sServiceName, 1);
 }
 
@@ -175,7 +175,7 @@ void SAL_CALL SlideSorterService::initialize (const Sequence<Any>& rArguments)
     else
     {
         throw RuntimeException(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("SlideSorterService: invalid number of arguments")),
+            OUString::createFromAscii("SlideSorterService: invalid number of arguments"),
             static_cast<drawing::XDrawView*>(this));
     }
 }

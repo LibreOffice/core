@@ -422,7 +422,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                         rDescr.Description = aComment;
 
                         sal_Int32 nPos = 0, nLen = aExtToken.getLength();
-                        OUString aExtensions(nLen ?  RTL_CONSTASCII_USTRINGPARAM( "*.") : RTL_CONSTASCII_USTRINGPARAM( "*.*" ) );
+                        OUString aExtensions( OUString::createFromAscii( nLen ? "*." : "*.*" ) );
 
                         for ( ; nPos < nLen; ++nPos )
                         {
@@ -431,7 +431,7 @@ Sequence< PluginDescription > XPluginManager_Impl::impl_getPluginDescriptions(vo
                             {
                             case ',':
                             case ';':
-                                aExtensions += OUString(RTL_CONSTASCII_USTRINGPARAM(";*."));
+                                aExtensions += OUString::createFromAscii( ";*." );
                             case ' ':
                                 break;
                             case '*':

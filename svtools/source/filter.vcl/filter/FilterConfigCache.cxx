@@ -107,7 +107,7 @@ sal_Bool FilterConfigCache::FilterConfigCacheEntry::CreateFilterName( const OUSt
             if ( sFilterName.EqualsIgnoreCaseAscii( *pPtr ) )
                 bIsPixelFormat = sal_True;
         }
-        String aTemp( OUString(RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "?" ) )) );
+        String aTemp( OUString::createFromAscii( SVLIBRARY( "?" ) ) );
         xub_StrLen nIndex = aTemp.Search( (sal_Unicode)'?' );
         aTemp.Replace( nIndex, 1, sFilterName );
         sFilterName = aTemp;
@@ -151,7 +151,7 @@ Reference< XInterface > openConfig(const char* sPackage)
     {
         // get access to config API (not to file!)
         Reference< XMultiServiceFactory > xConfigProvider( xSMGR->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))), UNO_QUERY);
+            OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider")), UNO_QUERY);
 
         if (xConfigProvider.is())
         {
@@ -159,16 +159,16 @@ Reference< XInterface > openConfig(const char* sPackage)
             PropertyValue   aParam    ;
 
             // define cfg path for open
-            aParam.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ));
+            aParam.Name = OUString::createFromAscii("nodepath");
             if (TYPEPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.Types/Types" ));
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.Types/Types");
             if (FILTERPKG.equalsIgnoreAsciiCaseAscii(sPackage))
-                aParam.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.TypeDetection.GraphicFilter/Filters" ));
+                aParam.Value <<= OUString::createFromAscii("/org.openoffice.TypeDetection.GraphicFilter/Filters");
             lParams[0] = makeAny(aParam);
 
             // get access to file
             xCfg = xConfigProvider->createInstanceWithArguments(
-                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" )), lParams);
+                OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess"), lParams);
         }
     }
     catch(const RuntimeException&)

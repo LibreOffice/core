@@ -186,7 +186,7 @@ sal_Bool GetHelpAnchor_Impl( const String& _rURL, String& _rAnchor )
     {
         ::ucbhelper::Content aCnt( INetURLObject( _rURL ).GetMainURL( INetURLObject::NO_DECODE ),
                              Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
-        if ( ( aCnt.getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorName")) ) >>= sAnchor ) )
+        if ( ( aCnt.getPropertyValue( ::rtl::OUString::createFromAscii( "AnchorName" ) ) >>= sAnchor ) )
         {
 
             if ( sAnchor.getLength() > 0 )
@@ -240,7 +240,7 @@ static Sequence< ::rtl::OUString > GetPropertyNames()
 }
 
 SfxHelpOptions_Impl::SfxHelpOptions_Impl()
-    : ConfigItem( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Office.SFX/Help")) )
+    : ConfigItem( ::rtl::OUString::createFromAscii("Office.SFX/Help") )
     , m_pIds( NULL )
 {
     Sequence< ::rtl::OUString > aNames = GetPropertyNames();
@@ -643,7 +643,28 @@ String  SfxHelp::CreateHelpURL_Impl( const String& aCommandURL, const String& rM
 
     String aModuleName( rModuleName );
     if ( aModuleName.Len() == 0 )
-        aModuleName = getDefaultModule_Impl();
+    {
+        // no active module (quicklaunch?) -> detect default module
+        SvtModuleOptions aModOpt;
+        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aModuleName = DEFINE_CONST_UNICODE("swriter");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            aModuleName = DEFINE_CONST_UNICODE("scalc");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            aModuleName = DEFINE_CONST_UNICODE("simpress");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            aModuleName = DEFINE_CONST_UNICODE("sdraw");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
+            aModuleName = DEFINE_CONST_UNICODE("smath");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
+            aModuleName = DEFINE_CONST_UNICODE("schart");
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
+            aModuleName = DEFINE_CONST_UNICODE("sbasic");
+        else
+        {
+            DBG_ERRORFILE( "no installed module found" );
+        }
+    }
 
     aHelpURL = String::CreateFromAscii("vnd.sun.star.help://");
     aHelpURL += aModuleName;
@@ -970,7 +991,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
                 URL aURL;
                 aURL.Complete = CreateHelpURL_Impl( nHelpId, GetHelpModuleName_Impl() );
                 Reference < XURLTransformer > xTrans( ::comphelper::getProcessServiceFactory()->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer")) ), UNO_QUERY );
+                    ::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" ) ), UNO_QUERY );
                 xTrans->parseStrict(aURL);
 
                 Reference < XFrame > xCurrentFrame;
@@ -983,7 +1004,7 @@ void SfxHelp::OpenHelpAgent( ULONG nHelpId )
                 Reference< XDispatch > xHelpDispatch;
                 if ( xDispProv.is() )
                     xHelpDispatch = xDispProv->queryDispatch(
-                        aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_helpagent")),
+                        aURL, ::rtl::OUString::createFromAscii("_helpagent"),
                         FrameSearchFlag::PARENT | FrameSearchFlag::SELF );
 
                 DBG_ASSERT( xHelpDispatch.is(), "OpenHelpAgent: could not get a dispatcher!" );

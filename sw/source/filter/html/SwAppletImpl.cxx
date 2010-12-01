@@ -191,6 +191,7 @@ SwApplet_Impl::~SwApplet_Impl()
 }
 void SwApplet_Impl::FinishApplet()
 {
+    //xApplet->EnableSetModified( TRUE );
     uno::Reference < beans::XPropertySet > xSet( xApplet->getComponent(), uno::UNO_QUERY );
     if ( xSet.is() )
     {

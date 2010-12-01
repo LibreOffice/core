@@ -46,20 +46,22 @@ SRC1FILES =  \
         workctrl.src
 
 EXCEPTIONSFILES = \
-        $(SLO)$/conarc.obj \
-        $(SLO)$/concustomshape.obj \
-        $(SLO)$/conform.obj \
-        $(SLO)$/conpoly.obj \
-        $(SLO)$/conrect.obj \
-        $(SLO)$/drawbase.obj \
-        $(SLO)$/dselect.obj \
-        $(SLO)$/inputwin.obj \
         $(SLO)$/tblctrl.obj \
         $(SLO)$/tbxanchr.obj \
         $(SLO)$/workctrl.obj
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/inputwin.obj \
+        $(SLO)$/tbxanchr.obj \
+        $(SLO)$/conrect.obj \
+        $(SLO)$/conform.obj \
+        $(SLO)$/conpoly.obj \
+        $(SLO)$/conarc.obj \
+        $(SLO)$/concustomshape.obj \
+        $(SLO)$/dselect.obj \
+        $(SLO)$/drawbase.obj \
+        $(SLO)$/tblctrl.obj \
+        $(SLO)$/workctrl.obj
 
 # --- Tagets -------------------------------------------------------
 

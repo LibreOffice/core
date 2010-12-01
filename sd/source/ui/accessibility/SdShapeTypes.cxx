@@ -76,59 +76,59 @@ AccessibleShape*
 ShapeTypeDescriptor aSdShapeTypeList[] = {
     ShapeTypeDescriptor (
         PRESENTATION_OUTLINER,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.OutlinerShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OutlinerShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_SUBTITLE,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.SubtitleShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SubtitleShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_GRAPHIC_OBJECT,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.GraphicObjectShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.GraphicObjectShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_PAGE,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.PageShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.PageShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_OLE,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.OLE2Shape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.OLE2Shape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_CHART,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.ChartShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.ChartShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_TABLE,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.TableShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TableShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_NOTES,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ("com.sun.star.presentation.NotesShape"))),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.NotesShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_TITLE,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.TitleTextShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.TitleTextShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_HANDOUT,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.HandoutShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HandoutShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_HEADER,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.HeaderShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.HeaderShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_FOOTER,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.FooterShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.FooterShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_DATETIME,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.DateTimeShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.DateTimeShape"),
         CreateSdAccessibleShape ),
     ShapeTypeDescriptor (
         PRESENTATION_PAGENUMBER,
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("com.sun.star.presentation.SlideNumberShape")),
+        ::rtl::OUString::createFromAscii ("com.sun.star.presentation.SlideNumberShape"),
         CreateSdAccessibleShape )
 };
 

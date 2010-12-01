@@ -290,4 +290,17 @@ bool SwList::IsListLevelMarked( const int nListLevel ) const
     return mpListImpl->IsListLevelMarked( nListLevel );
 }
 
+//void SwList::ContinueList( SwList& rList )
+//{
+//    mpListImpl->ContinueList( rList );
+//}
+//const SwList* SwList::GetContinuedList() const
+//{
+//    return mpListImpl->GetContinuedList();
+//}
+//void SwList::ClearContinuation()
+//{
+//    mpListImpl->ClearContinuation();
+//}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

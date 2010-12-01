@@ -125,7 +125,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     ::rtl::OUString UnoThrobberControl::GetComponentServiceName()
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Throbber"));
+        return ::rtl::OUString::createFromAscii( "Throbber" );
     }
 
     //--------------------------------------------------------------------

@@ -72,7 +72,7 @@ private:
     SwFmtDrop & operator= (const SwFmtDrop &);
 public:
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -118,7 +118,7 @@ public:
     // @@@ public copy assignment, but no copy ctor?
     inline SwRegisterItem& operator=( const SwRegisterItem& rRegister );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,
@@ -143,6 +143,7 @@ class SW_DLLPUBLIC SwNumRuleItem : public SfxStringItem
 public:
     TYPEINFO();
 
+    // --> OD 2008-03-04 #refactorlists# - removed <pDefinedIn>
     SwNumRuleItem()
         : SfxStringItem( RES_PARATR_NUMRULE, aEmptyStr ) {}
 
@@ -154,8 +155,9 @@ public:
 
     SwNumRuleItem& operator=( const SwNumRuleItem& rCpy )
     { SetValue( rCpy.GetValue() ); return *this; }
+    // <--
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -178,7 +180,7 @@ public:
     // @@@ public copy assignment, but no copy ctor?
     inline SwParaConnectBorderItem& operator=( const SwParaConnectBorderItem& rConnect );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
                                     SfxMapUnit eCoreMetric,

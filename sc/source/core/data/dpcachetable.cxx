@@ -80,7 +80,6 @@ ScDPCacheTable::FilterItem::FilterItem() :
     mbHasValue(false)
 {
 }
-
 bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
 {
     if (rCellData.GetString()!= maString &&
@@ -88,7 +87,6 @@ bool  ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
             return false;
     return true;
 }
-
 // ----------------------------------------------------------------------------
 
 ScDPCacheTable::SingleFilter::SingleFilter(String aString, double fValue, bool bHasValue)
@@ -103,7 +101,7 @@ bool ScDPCacheTable::SingleFilter::match( const  ScDPItemData& rCellData ) const
       return maItem.match(rCellData);
 }
 
-const String& ScDPCacheTable::SingleFilter::getMatchString()
+const String ScDPCacheTable::SingleFilter::getMatchString()
 {
     return maItem.maString;
 }
@@ -160,15 +158,15 @@ ScDPCacheTable::Criterion::Criterion() :
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc, long nId ) :
+ScDPCacheTable::ScDPCacheTable( ScDocument* pDoc,long nId ) :
     mpCache( NULL ),
     mpNoneCache( NULL )
 {
-    if ( nId >= 0 )
+     if ( nId >= 0 )
         mpCache = pDoc->GetDPObjectCache( nId );
     else
     { //create a temp cache object
-        initNoneCache( NULL );
+        InitNoneCache( NULL );
     }
 }
 
@@ -178,21 +176,20 @@ ScDPCacheTable::~ScDPCacheTable()
 
 sal_Int32 ScDPCacheTable::getRowSize() const
 {
-    return getCache()->GetRowCount();
+    return GetCache()->GetRowCount();
 }
 
 sal_Int32 ScDPCacheTable::getColSize() const
 {
-    return getCache()->GetColumnCount();
+    return GetCache()->GetColumnCount();
 }
 
-void ScDPCacheTable::fillTable(
-    const ScQueryParam& rQuery, bool* pSpecial, bool bIgnoreEmptyRows, bool bRepeatIfEmpty)
+void ScDPCacheTable::fillTable(  const ScQueryParam& rQuery, BOOL* pSpecial,
+                               bool bIgnoreEmptyRows, bool bRepeatIfEmpty )
 {
-    // check cache
     if ( mpCache == NULL )
-        initNoneCache( NULL );
-
+        InitNoneCache( NULL );
+//check cache
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -201,6 +198,7 @@ void ScDPCacheTable::fillTable(
     maRowsVisible.clear();
     maRowsVisible.reserve(nRowCount);
 
+
     // Initialize field entries container.
     maFieldEntries.clear();
     maFieldEntries.reserve(nColCount);
@@ -208,23 +206,23 @@ void ScDPCacheTable::fillTable(
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
-        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+        SCROW nMemCount = GetCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
             std::vector< SCROW > pAdded( nMemCount, -1 );
 
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, bRepeatIfEmpty );
-                SCROW nOrder = getCache()->GetOrder( nCol, nIndex );
+                SCROW nIndex = GetCache()->GetItemDataId( nCol, nRow, bRepeatIfEmpty );
+                SCROW nOrder = GetCache()->GetOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
                          maRowsVisible.push_back(false);
 
                 if ( lcl_HasQueryEntry(rQuery) &&
-                    !getCache()->ValidQuery( nRow , rQuery, pSpecial ) )
+                    !GetCache()->ValidQuery( nRow , rQuery, pSpecial ) )
                     continue;
-                if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
+                if ( bIgnoreEmptyRows &&  GetCache()->IsRowEmpty( nRow ) )
                     continue;
                 // Insert a new row into cache table.
                 if ( nCol == 0 )
@@ -244,10 +242,9 @@ void ScDPCacheTable::fillTable(
 
 void ScDPCacheTable::fillTable()
 {
-    // check cache
     if ( mpCache == NULL )
-        initNoneCache( NULL );
-
+        InitNoneCache( NULL );
+//check cache
    const SCROW  nRowCount = getRowSize();
    const SCCOL  nColCount = (SCCOL) getColSize();
    if ( nRowCount <= 0 || nColCount <= 0)
@@ -264,15 +261,15 @@ void ScDPCacheTable::fillTable()
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
-        SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
+        SCROW nMemCount = GetCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
             std::vector< SCROW > pAdded( nMemCount, -1 );
 
             for (SCROW nRow = 0; nRow < nRowCount; ++nRow )
             {
-                SCROW nIndex = getCache()->GetItemDataId( nCol, nRow, false );
-                SCROW nOrder = getCache()->GetOrder( nCol, nIndex );
+                SCROW nIndex = GetCache()->GetItemDataId( nCol, nRow, false );
+                SCROW nOrder = GetCache()->GetOrder( nCol, nIndex );
 
                 if ( nCol == 0 )
                      maRowsVisible.push_back(true);
@@ -288,6 +285,7 @@ void ScDPCacheTable::fillTable()
             }
         }
     }
+        return;
 }
 
 bool ScDPCacheTable::isRowActive(sal_Int32 nRow) const
@@ -314,8 +312,8 @@ void ScDPCacheTable::filterByPageDimension(const vector<Criterion>& rCriteria, c
 
 const ScDPItemData* ScDPCacheTable::getCell(SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
 {
-   SCROW nId= getCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
-   return getCache()->GetItemDataById( nCol, nId );
+   SCROW nId= GetCache()->GetItemDataId(nCol, nRow, bRepeatIfEmpty);
+   return GetCache()->GetItemDataById( nCol, nId );
 }
 
 void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, bool bRepeatIfEmpty) const
@@ -332,23 +330,23 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
 }
 String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
 {
-    return getCache()->GetDimensionName( nIndex );
+    return (GetCache()->GetDimensionName( nIndex ));
 }
 
 sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
 {
-    return getCache()->GetDimensionIndex( rStr );
+    return GetCache()->GetDimensionIndex( rStr );
 }
 
 const ::std::vector<SCROW>&  ScDPCacheTable::getFieldEntries( sal_Int32 nColumn ) const
 {
-    if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
+     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
     {
         // index out of bound.  Hopefully this code will never be reached.
         static const ::std::vector<SCROW> emptyEntries;
         return emptyEntries;
     }
-    return maFieldEntries[nColumn];
+     return maFieldEntries[nColumn];
 }
 
 void ScDPCacheTable::filterTable(const vector<Criterion>& rCriteria, Sequence< Sequence<Any> >& rTabData,
@@ -454,7 +452,7 @@ bool ScDPCacheTable::isRowQualified(sal_Int32 nRow, const vector<Criterion>& rCr
 }
 
 
-void ScDPCacheTable::initNoneCache( ScDocument* pDoc )
+void ScDPCacheTable::InitNoneCache( ScDocument* pDoc )
 {
     mpCache = NULL;
     if ( mpNoneCache )
@@ -462,11 +460,12 @@ void ScDPCacheTable::initNoneCache( ScDocument* pDoc )
     mpNoneCache = new ScDPTableDataCache( pDoc );
 }
 
-ScDPTableDataCache* ScDPCacheTable::getCache() const
+ScDPTableDataCache* ScDPCacheTable::GetCache() const
 {
     if ( mpCache )
         return mpCache;
     return mpNoneCache;
 }
+// End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

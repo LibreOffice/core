@@ -87,14 +87,14 @@ public:
     static XubString    GetStandardText( StandardButtonType eButton );
     static XubString    GetStandardHelpText( StandardButtonType eButton );
 
-    BOOL                SetModeImage( const Image& rImage );
-    const Image         GetModeImage( ) const;
+    BOOL                SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const Image         GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
     BOOL                HasImage() const;
     void                SetImageAlign( ImageAlign eAlign );
     ImageAlign          GetImageAlign() const;
 
-    BOOL                SetModeBitmap( const BitmapEx& rBitmap );
-    BitmapEx            GetModeBitmap( ) const;
+    BOOL                SetModeBitmap( const BitmapEx& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    BitmapEx            GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 
     void                EnableImageDisplay( BOOL bEnable );
     BOOL                IsImageDisplayEnabled();
@@ -298,6 +298,7 @@ private:
     Rectangle       maStateRect;
     Rectangle       maMouseRect;
     Image           maImage;
+    Image           maImageHC;
     BOOL            mbChecked;
     BOOL            mbSaveValue;
     BOOL            mbRadioCheck;
@@ -373,8 +374,8 @@ public:
     void            EnableRadioCheck( BOOL bRadioCheck = TRUE ) { mbRadioCheck = bRadioCheck; }
     BOOL            IsRadioCheckEnabled() const { return mbRadioCheck; }
 
-    BOOL            SetModeRadioImage( const Image& rImage );
-    const Image&    GetModeRadioImage( ) const;
+    BOOL            SetModeRadioImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const Image&    GetModeRadioImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 
     void            SetState( BOOL bCheck );
     void            Check( BOOL bCheck = TRUE );

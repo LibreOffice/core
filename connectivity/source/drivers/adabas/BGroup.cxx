@@ -70,9 +70,9 @@ void OAdabasGroup::refreshUsers()
     TStringVector aVector;
         Reference< XStatement > xStmt = m_pConnection->createStatement(  );
 
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '" ));
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("SELECT DISTINCT USERNAME FROM DOMAIN.USERS WHERE USERNAME IS NOT NULL AND USERNAME <> ' ' AND USERNAME <> 'CONTROL' AND GROUPNAME = '");
     aSql += getName( );
-    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+    aSql += ::rtl::OUString::createFromAscii("'");
 
     Reference< XResultSet >  xResult = xStmt->executeQuery(aSql);
     if(xResult.is())

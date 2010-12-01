@@ -97,6 +97,7 @@ SwOneExampleFrame::SwOneExampleFrame( Window& rWin,
 
     // the controller is asynchronously set
     aLoadedTimer.SetTimeoutHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
+//      aLoadedTimer.SetTimeout(500);
     aLoadedTimer.SetTimeout(200);
 
     rWin.Enable(sal_False);
@@ -145,6 +146,7 @@ void    SwOneExampleFrame::CreateControl()
 
             uno::Reference< beans::XPropertySet >  xPrSet(xInst, uno::UNO_QUERY);
             uno::Any aURL;
+            //
             // create new doc
             String sTempURL = C2S(cFactory);
             if(sArgumentURL.Len())
@@ -308,6 +310,7 @@ IMPL_LINK( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer )
         if( aInitializedLink.IsSet() )
         {
             rWindow.Enable(sal_False, sal_True);
+            //rWindow.Enable(sal_True, sal_False);
                aInitializedLink.Call(this);
         }
 

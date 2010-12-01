@@ -120,6 +120,7 @@ class BibToolBar:   public ToolBox
         BibToolBarListenerArr   aListenerArr;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            xController;
         Timer                   aTimer;
+//      Timer                   aMenuTimer;
         ImageList               aImgLst;
         ImageList               aImgLstHC;
         ImageList               aBigImgLst;

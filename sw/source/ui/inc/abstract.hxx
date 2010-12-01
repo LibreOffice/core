@@ -36,6 +36,10 @@
 
 #include <vcl/button.hxx>
 
+
+/*-----------------22.02.97 15.06-------------------
+
+--------------------------------------------------*/
 class SwInsertAbstractDlg  : public SfxModalDialog
 {
     FixedLine       aFL;

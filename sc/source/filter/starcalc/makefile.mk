@@ -44,11 +44,8 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =			\
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
-        $(SLO)$/scflt.obj	\
+SLOFILES =						\
+        $(SLO)$/scflt.obj		\
         $(SLO)$/scfobj.obj
 
 # --- Tagets -------------------------------------------------------

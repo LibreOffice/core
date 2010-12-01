@@ -52,7 +52,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, SbiExprNode* l, SbiToken t, SbiExprNode*
     pRight    = r;
     eTok      = t;
     nVal      = 0;
-    eType     = SbxVARIANT;     // Nodes are always Variant
+    eType     = SbxVARIANT;     // Nodes sind immer Variant
     eNodeType = SbxNODE;
     bComposite= TRUE;
 }
@@ -86,7 +86,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, const SbiSymDef& r, SbxDataType t, SbiEx
     aVar.pvMorePar = NULL;
     aVar.pNext= NULL;
 
-    // Results of functions are at no time fixed
+    // Funktionsergebnisse sind nie starr
     bComposite= BOOL( aVar.pDef->GetProcDef() != NULL );
 }
 
@@ -111,7 +111,7 @@ SbiExprNode::SbiExprNode( SbiParser* p, USHORT nId )
     nTypeStrId = nId;
 }
 
-// From 1995-12-17, auxiliary function for Ctor for the uniform initialisation
+// AB: 17.12.95, Hilfsfunktion fuer Ctor fuer einheitliche Initialisierung
 void SbiExprNode::BaseInit( SbiParser* p )
 {
     pGen = &p->aGen;
@@ -159,7 +159,7 @@ SbiSymDef* SbiExprNode::GetRealVar()
         return NULL;
 }
 
-// From 1995-12-18
+// AB: 18.12.95
 SbiExprNode* SbiExprNode::GetRealNode()
 {
     if( eNodeType == SbxVARVAL )
@@ -173,7 +173,7 @@ SbiExprNode* SbiExprNode::GetRealNode()
         return NULL;
 }
 
-// This method transform the type, if it fits into the Integer range
+// Diese Methode setzt den Typ um, falls er in den Integer-Bereich hineinpasst
 
 BOOL SbiExprNode::IsIntConst()
 {
@@ -213,7 +213,7 @@ BOOL SbiExprNode::IsLvalue()
     return IsVariable();
 }
 
-// Identify of the depth of a tree
+// Ermitteln der Tiefe eines Baumes
 
 short SbiExprNode::GetDepth()
 {
@@ -227,11 +227,11 @@ short SbiExprNode::GetDepth()
 }
 
 
-// Adjustment of a tree:
+// Abgleich eines Baumes:
 // 1. Constant Folding
-// 2. Type-Adjustment
-// 3. Conversion of the operans into Strings
-// 4. Lifting of the composite- and error-bits
+// 2. Typabgleich
+// 3. Umwandlung der Operanden in Strings
+// 4. Hochziehen der Composite- und Error-Bits
 
 void SbiExprNode::Optimize()
 {
@@ -239,7 +239,7 @@ void SbiExprNode::Optimize()
     CollectBits();
 }
 
-// Lifting of the composite- and error-bits
+// Hochziehen der Composite- und Fehlerbits
 
 void SbiExprNode::CollectBits()
 {
@@ -257,8 +257,8 @@ void SbiExprNode::CollectBits()
     }
 }
 
-// If a twig can be converted, True will be returned. In this case
-// the result is in the left twig.
+// Kann ein Zweig umgeformt werden, wird TRUE zurueckgeliefert. In diesem
+// Fall ist das Ergebnis im linken Zweig.
 
 void SbiExprNode::FoldConstants()
 {
@@ -273,10 +273,10 @@ void SbiExprNode::FoldConstants()
         {
             CollectBits();
             if( eTok == CAT )
-                // CAT affiliate also two numbers!
+                // CAT verbindet auch zwei Zahlen miteinander!
                 eType = SbxSTRING;
             if( pLeft->eType == SbxSTRING )
-                // No Type Mismatch!
+                // Kein Type Mismatch!
                 eType = SbxSTRING;
             if( eType == SbxSTRING )
             {
@@ -288,7 +288,7 @@ void SbiExprNode::FoldConstants()
                 if( eTok == PLUS || eTok == CAT )
                 {
                     eTok = CAT;
-                    // Linking:
+                    // Verkettung:
                     aStrVal = rl;
                     aStrVal += rr;
                     eType = SbxSTRING;
@@ -334,7 +334,7 @@ void SbiExprNode::FoldConstants()
                 if( ( eTok >= AND && eTok <= IMP )
                    || eTok == IDIV || eTok == MOD )
                 {
-                    // Integer operations
+                    // Integer-Operationen
                     BOOL err = FALSE;
                     if( nl > SbxMAXLNG ) err = TRUE, nl = SbxMAXLNG;
                     else
@@ -428,11 +428,12 @@ void SbiExprNode::FoldConstants()
                 if( !::rtl::math::isFinite( nVal ) )
                     pGen->GetParser()->Error( SbERR_MATH_OVERFLOW );
 
-                // Recover the data type to kill rounding error
+                // Den Datentyp wiederherstellen, um Rundungsfehler
+                // zu killen
                 if( bCheckType && bBothInt
                  && nVal >= SbxMINLNG && nVal <= SbxMAXLNG )
                 {
-                    // Decimal place away
+                    // NK-Stellen weg
                     long n = (long) nVal;
                     nVal = n;
                     eType = ( n >= SbxMININT && n <= SbxMAXINT )
@@ -454,7 +455,7 @@ void SbiExprNode::FoldConstants()
             case NEG:
                 nVal = -nVal; break;
             case NOT: {
-                // Integer operation!
+                // Integer-Operation!
                 BOOL err = FALSE;
                 if( nVal > SbxMAXLNG ) err = TRUE, nVal = SbxMAXLNG;
                 else
@@ -472,7 +473,7 @@ void SbiExprNode::FoldConstants()
     }
     if( eNodeType == SbxNUMVAL )
     {
-        // Potentially convolve in INTEGER (because of better opcode)?
+        // Evtl auf INTEGER falten (wg. besserem Opcode)?
         if( eType == SbxSINGLE || eType == SbxDOUBLE )
         {
             double x;

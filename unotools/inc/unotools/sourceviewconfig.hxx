@@ -35,6 +35,9 @@
 #include <rtl/ustring.hxx>
 #include <unotools/options.hxx>
 
+/* -----------------------------12.10.00 11:40--------------------------------
+
+ ---------------------------------------------------------------------------*/
 namespace utl
 {
     class SourceViewConfig_Impl;

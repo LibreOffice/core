@@ -1648,7 +1648,9 @@ MultiLineEdit::GetComponentInterface(BOOL bCreate)
     }
     return xPeer;
 }
+/*-- 11.08.2004 11:29:23---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void MultiLineEdit::DisableSelectionOnFocus()
 {
     pImpSvMEdit->GetTextWindow()->DisableSelectionOnFocus();

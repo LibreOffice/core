@@ -44,13 +44,14 @@ VISIBILITY_HIDDEN=TRUE
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =				\
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES =			\
+SLOFILES =						\
         $(SLO)$/htmlexp.obj		\
-        $(SLO)$/htmlexp2.obj		\
+        $(SLO)$/htmlexp2.obj	\
         $(SLO)$/htmlimp.obj		\
+        $(SLO)$/htmlpars.obj
+
+EXCEPTIONSFILES =				\
+        $(SLO)$/htmlexp.obj		\
         $(SLO)$/htmlpars.obj
 
 # --- Targets -------------------------------------------------------

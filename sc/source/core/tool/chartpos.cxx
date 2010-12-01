@@ -125,6 +125,7 @@ void ScChartPositioner::GlueState()
         }
         return;
     }
+//  ULONG nOldPos = aRangeListRef->GetCurPos();
 
     pR = aRangeListRef->First();
     nStartCol = pR->aStart.Col();

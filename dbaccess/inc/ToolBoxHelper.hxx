@@ -43,6 +43,7 @@ namespace dbaui
 {
     class DBACCESS_DLLPUBLIC OToolBoxHelper
     {
+        sal_Bool        m_bIsHiContrast;// true when the toolbox is in hi contrast mode
         sal_Int16       m_nSymbolsSize; // shows the toolbox large or small bitmaps
         ToolBox*        m_pToolBox;     // our toolbox (may be NULL)
     public:
@@ -61,7 +62,7 @@ namespace dbaui
             @param  _bHiContast
                 <TRUE/> when in high contrast mode.
         */
-        virtual ImageList getImageList(sal_Int16 _eSymbolsSize) const = 0;
+        virtual ImageList getImageList(sal_Int16 _eSymbolsSize,sal_Bool _bHiContast) const = 0;
 
         /** only the member will be set, derived classes can overload this function and do what need to be done.
             @param  _pTB
@@ -71,12 +72,13 @@ namespace dbaui
         */
         virtual void    setToolBox(ToolBox* _pTB);
 
-        inline ToolBox* getToolBox() const  { return m_pToolBox; }
+        inline ToolBox* getToolBox() const          { return m_pToolBox; }
 
         /** checks if the toolbox needs a new imagelist.
         */
         void checkImageList();
 
+        inline sal_Bool isToolBoxHiContrast() const { return m_bIsHiContrast; }
     protected:
         DECL_LINK(ConfigOptionsChanged, SvtMiscOptions*);
         DECL_LINK(SettingsChanged, VclWindowEvent* );

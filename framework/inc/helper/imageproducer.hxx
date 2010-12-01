@@ -40,22 +40,14 @@
 namespace framework
 {
 
-typedef Image ( *pfunc_getImage)(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
-    BOOL bBig
-);
+typedef Image ( *pfunc_getImage)( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
 pfunc_getImage SAL_CALL SetImageProducer( pfunc_getImage pGetImageFunc );
 
-Image SAL_CALL GetImageFromURL(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
-    const ::rtl::OUString& aURL,
-    BOOL bBig
-);
+Image SAL_CALL GetImageFromURL( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const ::rtl::OUString& aURL, BOOL bBig, BOOL bHiContrast );
 
 }
 
-#endif
+#endif // __FRAMEWORK_HELPER_IMAGEPRODUCER_HXX_
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

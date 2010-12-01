@@ -990,6 +990,7 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
         {
             // Ist das erste Element wieder eine OR-Verknuepfung?
             // Dann rekursiv absteigen ...
+            //if (!i && SQL_ISRULE(pCondition->getChild(i),search_condition))
             if (SQL_ISRULE(pCondition->getChild(i),search_condition))
                 bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
@@ -1041,7 +1042,9 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             ::rtl::OUString aColumnName;
 
 
+            //  pCondition->parseNodeToStr(aValue,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->parseNodeToStr( aValue, m_xConnection, NULL );
+            //  pCondition->getChild(0)->parseNodeToStr(aColumnName,m_xMetaData, xFormatter, m_aLocale,static_cast<sal_Char>(m_sDecimalSep.toChar()));
             pCondition->getChild(0)->parseNodeToStr( aColumnName, m_xConnection, NULL );
 
             // don't display the column name
@@ -1311,7 +1314,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         const ::rtl::OUString* pEnd     = pBegin + aNames.getLength();
 
         if(!aTable.getLength())
-        { // we haven't found a table name, now we must search every table for this column
+        { // we don't found a table name, now we must search every table for this column
             for(;pBegin != pEnd;++pBegin)
             {
                 Reference<XColumnsSupplier> xColumnsSupp;
@@ -1319,6 +1322,10 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
 
                 if(xColumnsSupp.is() && xColumnsSupp->getColumns()->hasByName(aColumnName))
                 {
+//                  Reference<XPropertySet> xTableProp(xColumnsSupp,UNO_QUERY);
+//                  xTableProp->getPropertyValue(PROPERTY_CATALOGNAME)  >>= aCatalog;
+//                  xTableProp->getPropertyValue(PROPERTY_SCHEMANAME)   >>= aSchema;
+//                  xTableProp->getPropertyValue(PROPERTY_NAME)         >>= aTable;
                     aTable = *pBegin;
                     break;
                 }

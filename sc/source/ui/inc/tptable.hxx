@@ -78,6 +78,8 @@ private:
     FixedImage      aBmpPageDir;
     Image           aImgLeftRight;
     Image           aImgTopDown;
+    Image           aImgLeftRightHC;
+    Image           aImgTopDownHC;
     CheckBox        aBtnPageNo;
     NumericField    aEdPageNo;
 

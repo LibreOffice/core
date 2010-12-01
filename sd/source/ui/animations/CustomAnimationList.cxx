@@ -257,6 +257,7 @@ void CustomAnimationListEntryItem::InitViewData( SvLBox* pView, SvLBoxEntry* pEn
 
 void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
 {
+    const bool bHighContrast = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     SvViewDataItem* pViewData = mpParent->GetViewDataItem( pEntry, this );
 
@@ -266,11 +267,11 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHOR
     sal_Int16 nNodeType = mpEffect->getNodeType();
     if( nNodeType == EffectNodeType::ON_CLICK )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_ON_CLICK, bHighContrast ) );
     }
     else if( nNodeType == EffectNodeType::AFTER_PREVIOUS )
     {
-        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS ) );
+        rDev.DrawImage( aPos, mpParent->getImage( IMG_CUSTOMANIMATION_AFTER_PREVIOUS, bHighContrast ) );
     }
 
     aPos.X() += 19;
@@ -297,7 +298,7 @@ void CustomAnimationListEntryItem::Paint( const Point& rPos, SvLBox& rDev, USHOR
 
     if( nImage != 0xffff )
     {
-        const Image& rImage = mpParent->getImage( nImage );
+        const Image& rImage = mpParent->getImage( nImage, bHighContrast );
         Point aImagePos( aPos );
         aImagePos.Y() += ( aSize.Height() - rImage.GetSizePixel().Height() ) >> 1;
         rDev.DrawImage( aImagePos, rImage );
@@ -483,9 +484,12 @@ CustomAnimationList::CustomAnimationList( ::Window* pParent, const ResId& rResId
 
 // --------------------------------------------------------------------
 
-const Image&  CustomAnimationList::getImage( USHORT nId )
+const Image&  CustomAnimationList::getImage( USHORT nId, bool bHighContrast )
 {
     DBG_ASSERT( (nId >= IMG_CUSTOMANIMATION_ON_CLICK) && (nId <= IMG_CUSTOMANIMATION_MEDIA_STOP), "sd::CustomAnimationList::getImage(), illegal index!" );
+
+    if( bHighContrast )
+        nId += 1;
 
     Image& rImage = maImages[nId - IMG_CUSTOMANIMATION_ON_CLICK];
 

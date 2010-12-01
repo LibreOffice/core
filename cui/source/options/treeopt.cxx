@@ -288,6 +288,9 @@ static USHORT getGroupNodeId( const rtl::OUString& rModule )
     return nNodeId;
 }
 
+/*-- 29.10.2004 13:57:25---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 class MailMergeCfg_Impl : public utl::ConfigItem
 {
     friend class SvxEMailTabPage;
@@ -304,7 +307,9 @@ public:
     sal_Bool IsEmailSupported() const {return bIsEmailSupported;}
 
 };
+/*-- 29.10.2004 13:57:25---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 MailMergeCfg_Impl::MailMergeCfg_Impl() :
     utl::ConfigItem(C2U("Office.Writer/MailMergeWizard")),
     bIsEmailSupported(sal_False)
@@ -316,7 +321,9 @@ MailMergeCfg_Impl::MailMergeCfg_Impl() :
     if(aValues.getLength() && pValues[0].hasValue())
         pValues[0] >>= bIsEmailSupported;
 }
+/*-- 29.10.2004 13:57:25---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 MailMergeCfg_Impl::~MailMergeCfg_Impl()
 {
 }
@@ -504,6 +511,9 @@ static sal_Bool lcl_isOptionHidden( USHORT _nPageId, const SvtOptionsDialogOptio
     return bIsHidden;
 }
 
+/* -----------------11.02.99 09:56-------------------
+ *
+ * --------------------------------------------------*/
 struct OptionsPageInfo
 {
     SfxTabPage*         m_pPage;
@@ -533,6 +543,9 @@ struct OptionsGroupInfo
     ~OptionsGroupInfo() { delete m_pInItemSet; delete m_pOutItemSet; }
 };
 
+/* -----------------04.05.99 15:51-------------------
+ *
+ * --------------------------------------------------*/
 sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
 {
     bInCollapse = sal_True;
@@ -608,6 +621,10 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const rtl::OUString
     ActivateLastSelection();
 }
 
+/* -----------------11.02.99 07:58-------------------
+ *
+ * --------------------------------------------------*/
+
 OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
 {
     SvLBoxEntry* pEntry = aTreeLB.First();
@@ -665,6 +682,9 @@ OfaTreeOptionsDialog::~OfaTreeOptionsDialog()
     deleteGroupNames();
 }
 
+/* -----------------11.02.99 08:21-------------------
+ *
+ * --------------------------------------------------*/
 OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     sal_uInt16 nId, const String& rPageName, sal_uInt16 nGroup )
 {
@@ -676,7 +696,9 @@ OptionsPageInfo* OfaTreeOptionsDialog::AddTabPage(
     return pPageInfo;
 }
 
-// der ItemSet* geht in den Besitz des Dialogs
+/* -----------------11.02.99 10:02-------------------
+ *  der ItemSet* geht in den Besitz des Dialogs
+ * --------------------------------------------------*/
 sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
                                         SfxShell* pCreateShell,
                                         SfxModule* pCreateModule,
@@ -697,6 +719,9 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
     return nRet - 1;
 }
 
+/* -----------------11.02.99 10:31-------------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 {
     if ( aSelectTimer.GetTimeout() == SELECT_FIRST_TIMEOUT )
@@ -709,7 +734,9 @@ IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
 
     return 0;
 }
-
+/* -----------------11.02.99 10:49-------------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
 {
     if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
@@ -729,7 +756,9 @@ IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
     }
     return 0;
 }
-
+/* -----------------11.02.99 16:45-------------------
+ *
+ * --------------------------------------------------*/
 IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
 {
     aTreeLB.EndSelection();
@@ -780,7 +809,9 @@ IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
     return 0;
 }
 
-// Eine aufgeklappte Gruppe soll vollstaendig sichtbar sein
+/* -----------------17.02.99 09:15-------------------
+ * Eine aufgeklappte Gruppe soll vollstaendig sichtbar sein
+ * --------------------------------------------------*/
 IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
 {
     pBox->Update();
@@ -815,6 +846,9 @@ IMPL_LINK(OfaTreeOptionsDialog, ExpandedHdl_Impl, SvTreeListBox*, pBox )
     return 0;
 }
 
+/* -----------------11.02.99 10:49-------------------
+ *
+ * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ApplyItemSets()
 {
     SvLBoxEntry* pEntry = aTreeLB.First();
@@ -853,6 +887,10 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aImgLstRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstRes ) )
         aPageImages = ImageList( ResId( RID_IMGLIST_TREEOPT, *pIsoRes ) );
+    ResId aImgLstHCRes( RID_IMGLIST_TREEOPT_HC, *pIsoRes );
+    aImgLstHCRes.SetRT( RSC_IMAGELIST );
+    if ( pIsoRes->IsAvailable( aImgLstHCRes ) )
+        aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
     delete pIsoRes;
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
@@ -872,6 +910,9 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     aSelectTimer.SetTimeoutHdl( LINK( this, OfaTreeOptionsDialog, SelectHdl_Impl ) );
 }
 
+/* -----------------17.02.99 09:51-------------------
+ *
+ * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
 {
     bIsForSetDocumentLanguage = false;
@@ -902,12 +943,15 @@ void OfaTreeOptionsDialog::ActivatePage( const String& rPageURL )
     ActivateLastSelection();
 }
 
+/* -----------------16.02.99 13:17-------------------
+ *
+ * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivateLastSelection()
 {
     SvLBoxEntry* pEntry = NULL;
     if ( pLastPageSaver )
     {
-        String sExpand( RTL_CONSTASCII_USTRINGPARAM( EXPAND_PROTOCOL ) );
+        String sExpand( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL ) );
         String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
                                                   : pLastPageSaver->m_sLastPageURL_Tools;
         if ( sLastURL.Len() == 0 )
@@ -976,6 +1020,9 @@ void OfaTreeOptionsDialog::ActivateLastSelection()
     aTreeLB.GrabFocus();
 }
 
+/* -----------------22.02.99 08:52-------------------
+ *
+ * --------------------------------------------------*/
 long    OfaTreeOptionsDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_KEYINPUT )
@@ -1028,7 +1075,8 @@ void OfaTreeOptionsDialog::DataChanged( const DataChangedEvent& rDCEvt )
         !aTreeLB.GetParent(pEntry))
     {
         OptionsGroupInfo* pInfo = static_cast<OptionsGroupInfo*>(pEntry->GetUserData());
-        ImageList* pImgLst = &aPageImages;
+        bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+        ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
         for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
         {
             if ( aHelpTextsArr.GetValue(i) == pInfo->m_nDialogId )
@@ -1285,7 +1333,8 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
         OptionsGroupInfo* pTGInfo = (OptionsGroupInfo *)pEntry->GetUserData();
         if ( pTGInfo->m_sPageURL.getLength() == 0 )
         {
-            ImageList* pImgLst = &aPageImages;
+            bool bHighContrast = GetSettings().GetStyleSettings().GetHighContrastMode();
+            ImageList* pImgLst = bHighContrast ? &aPageImagesHC : &aPageImages;
             //hier den Hilfetext anzeigen
             for ( sal_uInt16 i = 0; i < aHelpTextsArr.Count(); ++i )
             {
@@ -1393,6 +1442,10 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
     return 0;
 }
 
+/* -----------------11.02.99 15:51-------------------
+ *
+ * --------------------------------------------------*/
+
 OfaPageResource::OfaPageResource() :
     Resource(CUI_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),
     aGeneralDlgAry(CUI_RES(SID_GENERAL_OPTIONS)),
@@ -1423,30 +1476,30 @@ BOOL EnableSSO( void )
     rtl::OUString theIniFile;
     osl_getExecutableFile( &theIniFile.pData );
     theIniFile = theIniFile.copy( 0, theIniFile.lastIndexOf( '/' ) + 1 ) +
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SAL_CONFIGFILE( "configmgr" )) );
+                 rtl::OUString::createFromAscii( SAL_CONFIGFILE( "configmgr" ) );
     ::rtl::Bootstrap theBootstrap( theIniFile );
 
     rtl::OUString theOfflineValue;
-    rtl::OUString theDefaultOfflineValue (RTL_CONSTASCII_USTRINGPARAM("false") );
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_Offline") ),
+    rtl::OUString theDefaultOfflineValue = rtl::OUString::createFromAscii( "false" );
+    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_Offline" ),
                           theOfflineValue,
                           theDefaultOfflineValue );
 
     rtl::OUString theServerTypeValue;
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_ServerType") ),
+    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_ServerType" ),
                           theServerTypeValue );
 
     rtl::OUString theBackendServiceTypeValue;
-    theBootstrap.getFrom( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_BackendService") ),
+    theBootstrap.getFrom( rtl::OUString::createFromAscii( "CFG_BackendService" ),
                           theBackendServiceTypeValue );
 
     BOOL bSSOEnabled =
         ( theOfflineValue == theDefaultOfflineValue                     &&
           ( theServerTypeValue.getLength() == 0 ||
-          theServerTypeValue == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno") ) ) &&
+          theServerTypeValue == rtl::OUString::createFromAscii( "uno" ) ) &&
           theBackendServiceTypeValue ==
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "com.sun.star.comp.configuration.backend.LdapSingleBackend") ) );
+            rtl::OUString::createFromAscii(
+                "com.sun.star.comp.configuration.backend.LdapSingleBackend" ) );
     if ( bSSOEnabled && GetSSOCreator() == 0 )
     {
         bSSOEnabled = FALSE;
@@ -1466,7 +1519,7 @@ CreateTabPage GetSSOCreator( void )
         if( aModule.loadRelative(
                 &thisModule, theModuleName, SAL_LOADMODULE_DEFAULT ) )
         {
-            rtl::OUString theSymbolName( RTL_CONSTASCII_USTRINGPARAM("CreateSSOTabPage" ) );
+            rtl::OUString theSymbolName( rtl::OUString::createFromAscii( "CreateSSOTabPage" ) );
             theSymbol = reinterpret_cast<CreateTabPage>(aModule.getFunctionSymbol( theSymbolName ));
         }
     }
@@ -1713,8 +1766,8 @@ void OfaTreeOptionsDialog::ApplyLanguageOptions(const SfxItemSet& rSet)
     }
     Reference< XMultiServiceFactory >  xMgr( ::comphelper::getProcessServiceFactory() );
     Reference< XPropertySet >  xProp(
-            xMgr->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.linguistic2.LinguProperties") ) ),
+            xMgr->createInstance( ::rtl::OUString::createFromAscii(
+                    "com.sun.star.linguistic2.LinguProperties") ),
             UNO_QUERY );
     if ( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_HYPHENREGION, sal_False, &pItem ) )
     {

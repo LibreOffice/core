@@ -156,7 +156,7 @@ void SmFontPickList::DestroyItem(void *pItem)
     delete (Font *)pItem;
 }
 
-bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
+BOOL SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem) const
 {
     Font    *pFirstFont, *pSecondFont;
 
@@ -168,9 +168,9 @@ bool SmFontPickList::CompareItem(const void *pFirstItem, const void *pSecondItem
             (pFirstFont->GetCharSet() == pSecondFont->GetCharSet()) &&
             (pFirstFont->GetWeight()  == pSecondFont->GetWeight())  &&
             (pFirstFont->GetItalic()  == pSecondFont->GetItalic()))
-            return (true);
+            return (TRUE);
 
-    return false;
+    return FALSE;
 }
 
 String SmFontPickList::GetStringItem(void *pItem)
@@ -309,7 +309,7 @@ void SmFontPickListBox::Remove(const Font &rFont)
 
 ////////////////////////////////////////
 
-bool IsItalic( const Font &rFont )
+BOOL IsItalic( const Font &rFont )
 {
     FontItalic eItalic = rFont.GetItalic();
     // the code below leaves only _NONE and _DONTKNOW as not italic
@@ -317,7 +317,7 @@ bool IsItalic( const Font &rFont )
 }
 
 
-bool IsBold( const Font &rFont )
+BOOL IsBold( const Font &rFont )
 {
     FontWeight eWeight = rFont.GetWeight();
     return eWeight != WEIGHT_DONTKNOW && eWeight > WEIGHT_NORMAL;
@@ -327,7 +327,7 @@ bool IsBold( const Font &rFont )
 void SmFace::Impl_Init()
 {
     SetSize( GetSize() );
-    SetTransparent( true );
+    SetTransparent( TRUE );
     SetAlign( ALIGN_BASELINE );
     SetColor( COL_AUTO );
 }

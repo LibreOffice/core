@@ -46,9 +46,6 @@ CXXFILES = \
 
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
         $(SLO)$/paratr.obj
 
 # --- Tagets -------------------------------------------------------

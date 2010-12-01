@@ -41,10 +41,11 @@ private:
 public:
     TYPEINFO();
 
-    // #i35017# - constant name has changed
+    // --> OD 2004-10-18 #i35017# - constant name has changed
     SwFmtWrapInfluenceOnObjPos(
             sal_Int16 _nWrapInfluenceOnPosition =
             com::sun::star::text::WrapInfluenceOnPosition::ONCE_CONCURRENT );
+    // <--
     SwFmtWrapInfluenceOnObjPos(
             const SwFmtWrapInfluenceOnObjPos& _rCpy );
     ~SwFmtWrapInfluenceOnObjPos();
@@ -61,10 +62,11 @@ public:
 
     // direct accessors to data
     void SetWrapInfluenceOnObjPos( sal_Int16 _nWrapInfluenceOnPosition );
-    // #i35017# - add parameter <_bIterativeAsOnceConcurrent>
+    // --> OD 2004-10-18 #i35017# - add parameter <_bIterativeAsOnceConcurrent>
     // to control, if value <ITERATIVE> has to be treated as <ONCE_CONCURRENT>
     sal_Int16 GetWrapInfluenceOnObjPos(
                         const bool _bIterativeAsOnceConcurrent = false ) const;
+    // <--
 };
 
 inline const SwFmtWrapInfluenceOnObjPos& SwAttrSet::GetWrapInfluenceOnObjPos(BOOL bInP) const

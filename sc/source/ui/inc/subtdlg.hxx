@@ -29,6 +29,9 @@
 #ifndef SC_SUBTDLG_HXX
 #define SC_SUBTDLG_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/tabdlg.hxx>
 
 #include "scui_def.hxx"

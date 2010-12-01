@@ -65,7 +65,7 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
 
     sal_Int32 nKeyType      = getINT32(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)));
 
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString aQuote    = getTable()->getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
@@ -73,11 +73,11 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
 
     if(nKeyType == KeyType::PRIMARY)
     {
-        aSql = aSql + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ALTER PRIMARY KEY ("));
+        aSql = aSql + ::rtl::OUString::createFromAscii(" ALTER PRIMARY KEY (");
     }
     else if(nKeyType == KeyType::FOREIGN)
     {
-        aSql = aSql + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY ("));
+        aSql = aSql + ::rtl::OUString::createFromAscii(" FOREIGN KEY (");
     }
     else
         throw SQLException();
@@ -90,9 +90,9 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
         Reference< XPropertySet > xColProp;
         xColumns->getByIndex(i) >>= xColProp;
         aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                    +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                    +   ::rtl::OUString::createFromAscii(",");
     }
-    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
     sal_Int32 nUpdateRule = 0, nDeleteRule = 0;
     ::rtl::OUString sReferencedName;
@@ -106,32 +106,32 @@ sdbcx::ObjectType OKeys::appendObject( const ::rtl::OUString& _rForName, const R
         sal_Int32 nLen = sReferencedName.indexOf('.');
         aSchema = sReferencedName.copy(0,nLen);
         aName   = sReferencedName.copy(nLen+1);
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" REFERENCES "))
+        aSql += ::rtl::OUString::createFromAscii(" REFERENCES ")
                     + aQuote + aSchema + aQuote + sDot + aQuote + aName + aQuote;
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
+        aSql += ::rtl::OUString::createFromAscii(" (");
 
         for(sal_Int32 i=0;i<xColumns->getCount();++i)
         {
             Reference< XPropertySet > xColProp;
             xColumns->getByIndex(i) >>= xColProp;
             aSql = aSql + aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_RELATEDCOLUMN))) + aQuote
-                        +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                        +   ::rtl::OUString::createFromAscii(",");
         }
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
         switch(nDeleteRule)
         {
             case KeyRule::CASCADE:
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE CASCADE "));
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
                 break;
             case KeyRule::RESTRICT:
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE RESTRICT "));
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
                 break;
             case KeyRule::SET_NULL:
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET NULL "));
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
                 break;
             case KeyRule::SET_DEFAULT:
-                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET DEFAULT "));
+                aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
                 break;
             default:
                 ;

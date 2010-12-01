@@ -111,14 +111,29 @@ SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 
 TYPEINIT1(SwWebView,SwView)
 
+/*-----------------22.01.97 14.27-------------------
+
+--------------------------------------------------*/
+
+
 SwWebView::SwWebView(SfxViewFrame* _pFrame, SfxViewShell* _pShell) :
     SwView(_pFrame, _pShell)
 {
 }
 
+/*-----------------22.01.97 14.27-------------------
+
+--------------------------------------------------*/
+
+
 SwWebView::~SwWebView()
 {
 }
+
+/*-----------------23.01.97 09.01-------------------
+
+--------------------------------------------------*/
+
 
 void SwWebView::SelectShell()
 {
@@ -145,6 +160,8 @@ void SwWebView::SelectShell()
     }
     else
     {
+
+    //  DELETEZ(pxSelectionObj); //Selektionsobjekt loeschen
         SfxDispatcher &rDispatcher = *GetViewFrame()->GetDispatcher();
         SwToolbarConfigItem *pBarCfg = SW_MOD()->GetWebToolbarConfig();
 

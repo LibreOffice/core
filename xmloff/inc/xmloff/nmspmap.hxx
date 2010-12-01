@@ -34,7 +34,9 @@
 #include "sal/types.h"
 #include <rtl/ustring.hxx>
 #include <hash_map>
+#ifndef __SGI_STL_MAP
 #include <map>
+#endif
 #include <rtl/ref.hxx>
 #include <cppuhelper/weak.hxx>
 

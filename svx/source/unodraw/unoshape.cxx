@@ -471,12 +471,14 @@ void SvxShape::Create( SdrObject* pNewObj, SvxDrawPage* /*pNewPage*/ )
     OSL_ENSURE( ( mpImpl->mpCreatedObj == NULL ) || ( mpImpl->mpCreatedObj == pNewObj ),
         "SvxShape::Create: the same shape used for two different objects?! Strange ..." );
 
-    // Correct condition (#i52126#)
+    // --> CL, OD 2005-07-19 #i52126# - correct condition
     if ( mpImpl->mpCreatedObj != pNewObj )
+    // <--
     {
         DBG_ASSERT( pNewObj->GetModel(), "no model for SdrObject?" );
-        // Correct condition (#i52126#)
+        // --> CL, OD 2005-07-19 #i52126#
         mpImpl->mpCreatedObj = pNewObj;
+        // <--
 
         if( mpObj.is() && mpObj->GetModel() )
         {
@@ -525,11 +527,12 @@ void SvxShape::ChangeModel( SdrModel* pNewModel )
         }
     }
 
-    // Always listen to new model (#i52126#)
+    // --> CL, OD 2005-07-19 #i52126# - always listen to new model
     if( pNewModel )
     {
         StartListening( *pNewModel );
     }
+    // <--
 
     // HACK #i53696# ChangeModel should be virtual, but it isn't. can't change that for 2.0.1
     SvxShapeText* pShapeText = dynamic_cast< SvxShapeText* >( this );
@@ -573,7 +576,8 @@ void SvxShape::ForceMetricToItemPoolMetric(Pair& rPoint) const throw()
     }
 }
 
-// Reintroduction of fix for issue i59051 (#i108851#)
+//----------------------------------------------------------------------
+// --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
 void SvxShape::ForceMetricToItemPoolMetric(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -630,7 +634,8 @@ void SvxShape::ForceMetricTo100th_mm(Pair& rPoint) const throw()
     }
 }
 
-// Reintroduction of fix for issue i59051 (#i108851#)
+//----------------------------------------------------------------------
+// --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
 void SvxShape::ForceMetricTo100th_mm(basegfx::B2DPolyPolygon& rPolyPolygon) const throw()
 {
     DBG_TESTSOLARMUTEX();
@@ -2550,10 +2555,11 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     {
                         Point aPoint( aUnoPoint.X, aUnoPoint.Y );
 
-                        // Reintroduction of fix for issue i59051 (#i108851#)
+                        // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
                         // perform metric change before applying anchor position,
                         // because the anchor position is in pool metric.
                         ForceMetricToItemPoolMetric( aPoint );
+                        // <--
                         if( mpModel->IsWriter() )
                             aPoint += mpObj->GetAnchorPos();
 
@@ -2580,8 +2586,9 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                     if ( rValue >>= aPolyPoly )
                     {
                         basegfx::B2DPolyPolygon aNewPolyPolygon( SvxConvertPolyPolygonBezierToB2DPolyPolygon( &aPolyPoly ) );
-                        // Reintroduction of fix for issue i59051 (#i108851#)
+                        // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
                         ForceMetricToItemPoolMetric( aNewPolyPolygon );
+                        // <--
                         if( mpModel->IsWriter() )
                         {
                             Point aPoint( mpObj->GetAnchorPos() );
@@ -2604,8 +2611,9 @@ bool SvxShape::setPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
         {
             Point aPoint( aUnoPoint.X, aUnoPoint.Y );
 
-            // Reintroduction of fix for issue #i59051# (#i108851#)
+            // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue i59051
             ForceMetricToItemPoolMetric( aPoint );
+            // <--
             if( mpModel->IsWriter() )
                 aPoint += mpObj->GetAnchorPos();
 
@@ -3032,8 +3040,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
                         Point aPoint( mpObj->GetAnchorPos() );
                         aPolyPoly.transform(basegfx::tools::createTranslateB2DHomMatrix(-aPoint.X(), -aPoint.Y()));
                     }
-                    // Reintroduction of fix for issue #i59051# (#i108851#)
+                    // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue 59051
                     ForceMetricTo100th_mm( aPolyPoly );
+                    // <--
                     drawing::PolyPolygonBezierCoords aRetval;
                     SvxConvertB2DPolyPolygonToPolyPolygonBezier( aPolyPoly, aRetval);
                     rValue <<= aRetval;
@@ -3054,8 +3063,9 @@ bool SvxShape::getPropertyValueImpl( const ::rtl::OUString&, const SfxItemProper
             if( mpModel->IsWriter() )
                 aPoint -= mpObj->GetAnchorPos();
 
-            // Reintroduction of fix for issue #i59051# (#i108851#)
+            // --> OD 2010-02-19 #i108851# - reintroduction of fix for issue 59051
             ForceMetricTo100th_mm( aPoint );
+            // <--
             awt::Point aUnoPoint( aPoint.X(), aPoint.Y() );
 
             rValue <<= aUnoPoint;

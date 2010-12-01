@@ -9,6 +9,8 @@ public:
     virtual void  funcB();
 protected:
     virtual void  funcC();
+private:
+    virtual void  funcD();
 };
 
 
@@ -19,6 +21,9 @@ public:
     virtual void  funcB();
 protected:
     virtual void  funcC();
+private:
+    virtual void  funcD();
+
 };
 
 #endif

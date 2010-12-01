@@ -30,7 +30,6 @@
 #define SC_XLPAGE_HXX
 
 #include <tools/gen.hxx>
-#include <boost/noncopyable.hpp>
 #include "xltools.hxx"
 
 // Constants and Enumerations =================================================
@@ -101,7 +100,7 @@ class SvxBrushItem;
 class SfxPrinter;
 
 /** Contains all page (print) settings for a single sheet. */
-struct XclPageData : private boost::noncopyable
+struct XclPageData : ScfNoCopy
 {
     typedef ::std::auto_ptr< SvxBrushItem > SvxBrushItemPtr;
 

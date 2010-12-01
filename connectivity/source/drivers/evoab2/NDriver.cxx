@@ -46,6 +46,7 @@
 
 using namespace osl;
 using namespace connectivity::evoab;
+//using namespace connectivity::file;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbcx;
@@ -90,7 +91,7 @@ void OEvoabDriver::disposing()
 //------------------------------------------------------------------------------
 rtl::OUString OEvoabDriver::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(EVOAB_DRIVER_IMPL_NAME));
+    return rtl::OUString::createFromAscii(EVOAB_DRIVER_IMPL_NAME);
     // this name is referenced in the configuration and in the evoab.xml
     // Please take care when changing it.
 }
@@ -101,7 +102,7 @@ Sequence< ::rtl::OUString > OEvoabDriver::getSupportedServiceNames_Static(  ) th
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
+    aSNS[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdbc.Driver");
     return aSNS;
 }
 //------------------------------------------------------------------

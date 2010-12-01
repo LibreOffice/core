@@ -58,6 +58,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     ,m_rBorderWin( _rBorderWindow )
 {
     DBG_CTOR(OApplicationSwapWindow,NULL);
+//  SetCompoundControl( TRUE );
 
     ImplInitSettings( sal_True, sal_True, sal_True );
 
@@ -65,6 +66,7 @@ OApplicationSwapWindow::OApplicationSwapWindow( Window* _pParent, OAppBorderWind
     m_aIconControl.setControlActionListener( &m_rBorderWin.getView()->getAppController() );
     m_aIconControl.SetHelpId(HID_APP_SWAP_ICONCONTROL);
     m_aIconControl.Show();
+    //m_aIconControl.Enable(TRUE);
 }
 // -----------------------------------------------------------------------------
 OApplicationSwapWindow::~OApplicationSwapWindow()
@@ -167,7 +169,7 @@ bool OApplicationSwapWindow::onContainerSelected( ElementType _eType )
         if ( _eType != E_NONE )
             m_eLastType = _eType;
         return true;
-    }
+    } // if ( m_rBorderWin.getView()->getAppController().onContainerSelect( _eType ) )
 
     PostUserEvent( LINK( this, OApplicationSwapWindow, ChangeToLastSelected ) );
     return false;

@@ -313,6 +313,10 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
     aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
 
+    // ruby height is not supported in ww8
+    //sal_Int32 nRubyHeight = nLinePitch - nCharWidth;
+    //if (nRubyHeight < 0)
+    //    nRubyHeight = 0;
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
 
@@ -1230,6 +1234,12 @@ static bool _SetWW8_BRC(bool bVer67, WW8_BRC& rVar, const BYTE* pS)
 BYTE lcl_ReadBorders(bool bVer67, WW8_BRC* brc, WW8PLCFx_Cp_FKP* pPap,
     const WW8RStyle* pSty, const WW8PLCFx_SEPX* pSep)
 {
+// Ausgegend von diesen defines:
+//      #define WW8_TOP 0
+//      #define WW8_LEFT 1
+//      #define WW8_BOT 2
+//      #define WW8_RIGHT 3
+//      #define WW8_BETW 4
 
 //returns a BYTE filled with a bit for each position that had a sprm
 //setting that border
@@ -3680,18 +3690,18 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
+    //      case 0x4a51:    //font to bias towards all else being equal ?
             case 113:
-            case 0x4A51:    //"Other" font, override with BiDi if it exists
-            case 0x4A5E:    //BiDi Font
+            case 0x4a5E:
                 nId = RES_CHRATR_CTL_FONT;
                 break;
             case 93:
             case 111:
-            case 0x4A4f:
+            case 0x4a4f:
                 nId = RES_CHRATR_FONT;
                 break;
             case 112:
-            case 0x4A50:
+            case 0x4a50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
             default:
@@ -4756,6 +4766,7 @@ sal_uInt32 SwWW8ImplReader::ExtractColour(const BYTE* &rpData,
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE(bVer67 == false, "Impossible");
 #endif
+    // OSL_ENSURE(SVBT32ToUInt32(rpData) == 0xFF000000, "Unknown 1 not 0xff000000");
     sal_uInt32 nFore = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
     rpData+=4;
     sal_uInt32 nBack = wwUtility::BGRToRGB(SVBT32ToUInt32(rpData));
@@ -5905,8 +5916,8 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x085B, 0},                                 //"sprmCFDiacColor"
         {0x085C, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFBoldBi"
         {0x085D, &SwWW8ImplReader::Read_BoldBiDiUsw},//"sprmCFItalicBi"
-        {0x4A5E, &SwWW8ImplReader::Read_FontCode},   //"sprmCFtcBi"
-        {0x485F, &SwWW8ImplReader::Read_Language},   //"sprmCLidBi"
+        {0x4A5E, &SwWW8ImplReader::Read_FontCode},
+        {0x485F, &SwWW8ImplReader::Read_Language},   // "sprmCLidBi"
       //0x4A60, ? ? ?,                               //"sprmCIcoBi",
         {0x4A61, &SwWW8ImplReader::Read_FontSize},   //"sprmCHpsBi"
         {0xCA62, 0},                                 //"sprmCDispFldRMark"

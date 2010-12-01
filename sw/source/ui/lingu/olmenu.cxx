@@ -334,8 +334,9 @@ static Image lcl_GetImageFromPngUrl( const OUString &rFileUrl )
     Image aRes;
     OUString aTmp;
     osl::FileBase::getSystemPathFromFileURL( rFileUrl, aTmp );
+//    ::rtl::OString aPath = OString( aTmp.getStr(), aTmp.getLength(), osl_getThreadTextEncoding() );
 #if defined(WNT)
-
+//    aTmp = lcl_Win_GetShortPathName( aTmp );
 #endif
     Graphic aGraphic;
     const String aFilterName( RTL_CONSTASCII_USTRINGPARAM( IMP_PNG ) );
@@ -391,14 +392,15 @@ OUString RetrieveLabelFromCommand( const OUString& aCmdURL )
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
-        const String &rParaText
-)   : PopupMenu( SW_RES(MN_SPELL_POPUP) )
-    , pSh( pWrtSh )
-    , xSpellAlt(xAlt)
-    , bGrammarResults(false)
+        const String &rParaText ) :
+PopupMenu( SW_RES(MN_SPELL_POPUP) ),
+pSh( pWrtSh ),
+xSpellAlt(xAlt),
+bGrammarResults(false)
 {
     OSL_ENSURE(xSpellAlt.is(), "no spelling alternatives available");
 
+//    CreateAutoMnemonics();
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 
     nCheckedLanguage = LANGUAGE_NONE;
@@ -410,6 +412,7 @@ SwSpellPopup::SwSpellPopup(
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aSuggestions.getLength() );
 
     SvtLinguConfig aCfg;
+    const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
@@ -421,7 +424,7 @@ SwSpellPopup::SwSpellPopup(
         uno::Reference< container::XNamed > xNamed( xSpellAlt, uno::UNO_QUERY );
         if (xNamed.is())
         {
-            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName() );
+            aSuggestionImageUrl = aCfg.GetSpellAndGrammarContextSuggestionImage( xNamed->getName(), bHC );
             aImage = Image( lcl_GetImageFromPngUrl( aSuggestionImageUrl ) );
         }
 
@@ -472,6 +475,7 @@ SwSpellPopup::SwSpellPopup(
     }
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
+//    pMenu->CreateAutoMnemonics();
     pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
     bEnable = FALSE;    // enable MN_ADD_TO_DIC?
     uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
@@ -511,7 +515,7 @@ SwSpellPopup::SwSpellPopup(
                 if (xSvcInfo.is())
                 {
                     OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                            xSvcInfo->getImplementationName() ) );
+                            xSvcInfo->getImplementationName(), bHC) );
                     if (aDictionaryImageUrl.getLength() > 0)
                     {
                         Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );
@@ -559,10 +563,15 @@ SwSpellPopup::SwSpellPopup(
     pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
     EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
-
+/*
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_ALL_TEXT);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
+    EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
+*/
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -594,6 +603,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
     SetItemImage( MN_SHORT_COMMENT, aInfo16 );
 
+//    CreateAutoMnemonics();
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 
     InsertSeparator( nPos++ );
@@ -637,6 +647,7 @@ aInfo16( SW_RES(IMG_INFO_16) )
     nGuessLangPara = LANGUAGE_NONE;
     if (xLG.is())
     {
+//        nGuessLangWord = lcl_CheckLanguage( xSpellAlt->getWord(), ::GetSpellChecker(), xLG, sal_False );
         nGuessLangPara = lcl_CheckLanguage( rParaText, ::GetSpellChecker(), xLG, sal_True );
     }
     if (nGuessLangWord != LANGUAGE_NONE || nGuessLangPara != LANGUAGE_NONE)
@@ -685,10 +696,15 @@ aInfo16( SW_RES(IMG_INFO_16) )
     pMenu = GetPopupMenu(MN_SET_LANGUAGE_PARAGRAPH);
     fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, aLangTable_Paragraph );
     EnableItem( MN_SET_LANGUAGE_PARAGRAPH, true );
-
+/*
+    pMenu = GetPopupMenu(MN_SET_LANGUAGE_ALL_TEXT);
+    fillLangPopupMenu( pMenu, MN_SET_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, aLangTable_Document );
+    EnableItem( MN_SET_LANGUAGE_ALL_TEXT, true );
+*/
     uno::Reference< frame::XFrame > xFrame = pWrtSh->GetView().GetViewFrame()->GetFrame().GetFrameInterface();
     Image rImg = ::GetImage( xFrame,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False );
+            OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:SpellingAndGrammarDialog")), sal_False,
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() );
     SetItemImage( MN_SPELLING_DLG, rImg );
 
     //////////////////////////////////////////////////////////////////////////////////
@@ -701,11 +717,14 @@ aInfo16( SW_RES(IMG_INFO_16) )
 ---------------------------------------------------------------------------*/
 sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 {
+//    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
     sal_uInt16 nRet = PopupMenu::Execute(pWin, pWin->LogicToPixel(rWordPos));
     Execute( nRet );
     return nRet;
 }
+/*-- 19.01.2006 08:15:48---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SwSpellPopup::Execute( USHORT nId )
 {
     if (nId == USHRT_MAX)
@@ -806,6 +825,7 @@ void SwSpellPopup::Execute( USHORT nId )
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
+//            OSL_ENSURE( nDicIdx < aDics.getLength(), "dictionary index out of range" );
 
             PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
             String aDicName ( pMenu->GetItemText(nId) );

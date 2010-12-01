@@ -47,7 +47,6 @@
 #include "root.hxx"
 #include "excdefs.hxx"
 #include "cell.hxx"
-#include <boost/shared_ptr.hpp>
 
 //------------------------------------------------------------------ Forwards -
 
@@ -501,7 +500,7 @@ public:
 private:
     using               XclExpRoot::CreateRecord;
 
-    typedef boost::shared_ptr< ExcAutoFilterRecs >  XclExpTabFilterRef;
+    typedef ScfRef< ExcAutoFilterRecs >             XclExpTabFilterRef;
     typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
     XclExpTabFilterMap  maFilterMap;

@@ -30,6 +30,11 @@
 
 #include <vcl/scrbar.hxx>
 
+//REMOVE    #ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
+//REMOVE    #define SO2_DECL_SVINPLACECLIENT_DEFINED
+//REMOVE    SO2_DECL_REF(SvInPlaceClient)
+//REMOVE    #endif
+
 #include <sfx2/ipclient.hxx>
 
 #include "viewutil.hxx"
@@ -196,6 +201,9 @@ private:
     void            GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
                                            SCsCOL& rAreaX, SCsROW& rAreaY, ScFollowMode& rMode);
 
+    void            SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX);
+    void            SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY);
+
 protected:
     void            UpdateHeaderWidth( const ScVSplitPos* pWhich = NULL,
                                         const SCROW* pPosY = NULL );
@@ -205,6 +213,7 @@ protected:
 
     void            ZoomChanged();
     void            UpdateShow();
+    void            UpdateVisibleRange();
     void            GetBorderSize( SvBorder& rBorder, const Size& rSize );
 
     void            ResetDrawDragMode();

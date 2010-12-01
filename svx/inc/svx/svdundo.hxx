@@ -480,7 +480,7 @@ public:
     virtual bool CanSdrRepeat(SdrView& rView) const;
 };
 
-// Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
+// --> OD 2009-07-09 #i73249#
 class SdrUndoObjStrAttr : public SdrUndoObj
 {
 public:
@@ -507,6 +507,7 @@ public:
 
     virtual String GetComment() const;
 };
+// <--
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -851,11 +852,12 @@ public:
     virtual SdrUndoAction* CreateUndoObjectLayerChange( SdrObject& rObject, SdrLayerID aOldLayer, SdrLayerID aNewLayer );
     virtual SdrUndoAction* CreateUndoObjectSetText( SdrObject& rNewObj, sal_Int32 nText );
 
-    // Implement Title/Description Elements UI for Writer text frames, graphics and embedded objects (#i73249#)
+    // --> OD 2009-07-09 #i73249#
     virtual SdrUndoAction* CreateUndoObjectStrAttr( SdrObject& rObject,
                                                     SdrUndoObjStrAttr::ObjStrAttrType eObjStrAttrType,
                                                     String sOldStr,
                                                     String sNewStr );
+    // <--
 
     // layer
     virtual SdrUndoAction* CreateUndoNewLayer(sal_uInt16 nLayerNum, SdrLayerAdmin& rNewLayerAdmin, SdrModel& rNewModel);

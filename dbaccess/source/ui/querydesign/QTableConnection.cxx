@@ -46,6 +46,7 @@ OQueryTableConnection::OQueryTableConnection(OQueryTableView* pContainer, const 
     DBG_CTOR(OQueryTableConnection,NULL);
 }
 
+
 //------------------------------------------------------------------------
 OQueryTableConnection::OQueryTableConnection(const OQueryTableConnection& rConn)
     :OTableConnection( rConn )
@@ -95,5 +96,10 @@ sal_Bool OQueryTableConnection::operator==(const OQueryTableConnection& rCompare
             );
 }
 // -----------------------------------------------------------------------------
+
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

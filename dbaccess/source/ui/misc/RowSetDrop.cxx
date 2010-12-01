@@ -48,6 +48,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
+//  using namespace ::com::sun::star::sdbcx;
 
 // export data
 ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
@@ -83,7 +84,7 @@ void ORowSetImportExport::initialize()
     m_aColumnTypes.reserve(nCount);
     for (sal_Int32 i = 1;i <= nCount; ++i)
     {
-        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exist
+        sal_Int32 nPos = -1; // -1 means column is autoincrement or doesn't exists
         if(!m_xTargetResultSetMetaData->isAutoIncrement(i))
         {
             try
@@ -94,7 +95,7 @@ void ORowSetImportExport::initialize()
             catch(const SQLException&)
             {
                 if(m_xTargetResultSetMetaData->isNullable(i))
-                    nPos = 0; // column doesn't exist but we could set it to null
+                    nPos = 0; // column doesn't exists but we could set it to null
             }
         }
 
@@ -130,7 +131,7 @@ BOOL ORowSetImportExport::Read()
         {
             sal_Int32 nPos = -1;
             *pBegin >>= nPos;
-            OSL_ENSURE(nPos != -1,"Invalid position!");
+            OSL_ENSURE(nPos != -1,"Invalid posiotion!");
             bContinue = (m_xResultSet.is() && m_xResultSet->absolute(nPos) && insertNewRow());
         }
     }

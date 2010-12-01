@@ -126,7 +126,7 @@ static char* platformSpecific()
     const int SEPARATOR = '/';
     const char* PATHSEPARATOR = ":";
     const char* PATHVARNAME = "PATH";
-    const char* APPENDIX = "/libreoffice";
+    const char* APPENDIX = "/soffice";
 
     char* path = NULL;
     char* env = NULL;
@@ -197,8 +197,10 @@ char const* cppuhelper_detail_findSofficePath()
     /* get the installation path from the UNO_PATH environment variable */
     path = getenv( UNOPATHVARNAME );
 
-    if (!path || !path[0])
+    if ( path == NULL || strlen( path ) == 0 )
+    {
         path = platformSpecific();
+    }
 
     return path;
 }

@@ -162,17 +162,23 @@ sub add_lowercase_productname_setupscriptvariable
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%UNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $newline = "\%SYSTEMINTUNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%UNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $value = $original;
                 $value =~ s/\s/\_/g;
                 $value =~ s/\.//g;
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPRODUCTNAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $1 . $2 . $4; }
+                # if ( $value =~ /^\s*(.*?)\_(\w)(.*?)\_(\w)(.*)\s*$/ ) { $value = $2 . $4; }
                 $newline = "\%WITHOUTDOTUNIXPACKAGENAME " . lc($value) . "\n";
                 push(@{$variablesref} ,$newline);
                 $newline = "\%SOLARISBRANDPACKAGENAME " . lc($value) . "\n";
@@ -286,6 +292,7 @@ sub replace_all_setupscriptvariables_in_script
             if (( $check =~ /%1/ ) || ( $check =~ /%2/ ) || ( $check =~ /%verify/ )) { next; }
             my $infoline = "WARNING: mis-named or un-known '%' variable in setup script at line $num:\n$check\n";
             push( @installer::globals::globallogfileinfo, $infoline);
+            # print STDERR "Warning: mis-named or un-known '%' variable at line $num:\n$check\n";
         }
     }
 
@@ -514,6 +521,10 @@ sub replace_preset_properties
     my @presetproperties = ();
     push(@presetproperties, "SOLARISBRANDPACKAGENAME");
     push(@presetproperties, "SYSTEMINTUNIXPACKAGENAME");
+    # push(@presetproperties, "UNIXPACKAGENAME");
+    # push(@presetproperties, "WITHOUTDOTUNIXPACKAGENAME");
+    # push(@presetproperties, "UNIXPRODUCTNAME");
+    # push(@presetproperties, "WITHOUTDOTUNIXPRODUCTNAME");
 
 
     foreach $property ( @presetproperties )

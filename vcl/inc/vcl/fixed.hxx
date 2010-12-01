@@ -118,6 +118,7 @@ class VCL_DLLPUBLIC FixedBitmap : public Control
 {
 private:
     Bitmap          maBitmap;
+    Bitmap          maBitmapHC;
 
     using Control::ImplInitSettings;
     using Window::ImplInit;
@@ -144,8 +145,8 @@ public:
     void            SetBitmap( const Bitmap& rBitmap );
     using OutputDevice::GetBitmap;
     const Bitmap&   GetBitmap() const { return maBitmap; }
-    BOOL            SetModeBitmap( const Bitmap& rBitmap );
-    const Bitmap&   GetModeBitmap( ) const;
+    BOOL            SetModeBitmap( const Bitmap& rBitmap, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const Bitmap&   GetModeBitmap( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 };
 
 // --------------
@@ -156,6 +157,7 @@ class VCL_DLLPUBLIC FixedImage : public Control
 {
 private:
     Image           maImage;
+    Image           maImageHC;
     BOOL            mbInUserDraw;
 
 private:
@@ -186,8 +188,8 @@ public:
     void            SetImage( const Image& rImage );
     const Image&    GetImage() const { return maImage; }
 
-    BOOL            SetModeImage( const Image& rImage );
-    const Image&    GetModeImage( ) const;
+    BOOL            SetModeImage( const Image& rImage, BmpColorMode eMode = BMP_COLOR_NORMAL );
+    const Image&    GetModeImage( BmpColorMode eMode = BMP_COLOR_NORMAL ) const;
 
     Point           CalcImagePos( const Point& rPos,
                                   const Size& rObjSize, const Size& rWinSize );

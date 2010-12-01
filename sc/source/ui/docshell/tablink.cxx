@@ -404,6 +404,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
 
     //  aufraeumen
 
+//  pSrcShell->DoClose();
     aRef->DoClose();
 
     //  Undo
@@ -576,6 +577,9 @@ ScDocumentLoader::ScDocumentLoader( const String& rFileName,
 
 ScDocumentLoader::~ScDocumentLoader()
 {
+/*  if ( pDocShell )
+        pDocShell->DoClose();
+*/
     if ( aRef.Is() )
         aRef->DoClose();
     else if ( pMedium )

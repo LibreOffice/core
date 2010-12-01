@@ -113,11 +113,12 @@ namespace framework
                                                      std::vector< KeyCode >& aMenuShortCuts );
             void setAccelerators( PopupMenu* pPopupMenu );
             void determineAndSetNewDocAccel( PopupMenu* pPopupMenu, const KeyCode& rKeyCode );
-            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages );
+            void setMenuImages( PopupMenu* pPopupMenu, sal_Bool bSetImages, sal_Bool bHiContrast );
 
         private:
             // members
             sal_Bool            m_bShowImages : 1,
+                                m_bHiContrast : 1,
                                 m_bNewMenu    : 1,
                                 m_bModuleIdentified : 1,
                                 m_bAcceleratorCfg : 1;

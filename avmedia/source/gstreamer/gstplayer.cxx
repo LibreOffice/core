@@ -73,8 +73,7 @@ Player::Player( const uno::Reference< lang::XMultiServiceFactory >& rxMgr ) :
 {
     // Initialize GStreamer library
     int argc = 1;
-    char name[] = "libreoffice";
-    char *arguments[] = { name };
+    char *arguments[] = { "libreoffice.org" };
     char** argv = arguments;
     GError* pError = NULL;
 

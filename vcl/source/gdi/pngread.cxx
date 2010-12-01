@@ -158,6 +158,7 @@ private:
 
     bool                ReadNextChunk();
     void                ReadRemainingChunks();
+    void                SkipRemainingChunks();
 
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, const BitmapColor & );
     void                ImplSetPixel( sal_uInt32 y, sal_uInt32 x, BYTE nPalIndex );
@@ -200,9 +201,7 @@ PNGReaderImpl::PNGReaderImpl( SvStream& rPNGStream )
     mpInflateInBuf  ( NULL ),
     mpScanPrior     ( NULL ),
     mpTransTab      ( NULL ),
-    mpScanCurrent   ( NULL ),
     mpColorTable    ( (sal_uInt8*) mpDefaultColorTable ),
-    mnPass ( 0 ),
     mbzCodecInUse   ( sal_False ),
     mbStatus( TRUE),
     mbIDAT( FALSE ),
@@ -331,6 +330,30 @@ bool PNGReaderImpl::ReadNextChunk()
 void PNGReaderImpl::ReadRemainingChunks()
 {
     while( ReadNextChunk() ) ;
+}
+
+// ------------------------------------------------------------------------
+
+// move position of mrPNGStream to the end of the file
+void PNGReaderImpl::SkipRemainingChunks()
+{
+    // nothing to skip if the last chunk was read
+    if( !maChunkSeq.empty() && (maChunkSeq.back().nType == PNGCHUNK_IEND) )
+        return;
+
+    // read from the stream until the IEND chunk is found
+    const sal_Size nStreamPos = mrPNGStream.Tell();
+    while( !mrPNGStream.IsEof() && (mrPNGStream.GetError() == ERRCODE_NONE) )
+    {
+        mrPNGStream >> mnChunkLen >> mnChunkType;
+        if( mnChunkLen < 0 )
+            break;
+        if( nStreamPos + mnChunkLen >= mnStreamSize )
+            break;
+        mrPNGStream.SeekRel( mnChunkLen + 4 );  // skip data + CRC
+        if( mnChunkType == PNGCHUNK_IEND )
+            break;
+    }
 }
 
 // ------------------------------------------------------------------------

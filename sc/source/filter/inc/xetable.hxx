@@ -100,7 +100,7 @@ protected:
     XclAddress          maBaseXclPos;   /// Address of base cell (first FORMULA record).
 };
 
-typedef boost::shared_ptr< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
+typedef ScfRef< XclExpRangeFmlaBase > XclExpRangeFmlaRef;
 
 // Array formulas =============================================================
 
@@ -130,7 +130,7 @@ private:
     XclTokenArrayRef    mxTokArr;       /// The token array of a matrix formula.
 };
 
-typedef boost::shared_ptr< XclExpArray > XclExpArrayRef;
+typedef ScfRef< XclExpArray > XclExpArrayRef;
 
 // ----------------------------------------------------------------------------
 
@@ -181,7 +181,7 @@ private:
     sal_uInt8           mnUsedCount;    /// Number of FORMULA records referring to this record.
 };
 
-typedef boost::shared_ptr< XclExpShrfmla > XclExpShrfmlaRef;
+typedef ScfRef< XclExpShrfmla > XclExpShrfmlaRef;
 
 // ----------------------------------------------------------------------------
 
@@ -248,7 +248,7 @@ private:
     bool                mbValid;        /// true = Contains valid references.
 };
 
-typedef boost::shared_ptr< XclExpTableop > XclExpTableopRef;
+typedef ScfRef< XclExpTableop > XclExpTableopRef;
 
 // ----------------------------------------------------------------------------
 
@@ -324,7 +324,7 @@ private:
     XclAddress          maXclPos;       /// Address of the cell.
 };
 
-typedef boost::shared_ptr< XclExpCellBase > XclExpCellRef;
+typedef ScfRef< XclExpCellBase > XclExpCellRef;
 
 // Single cell records ========================================================
 
@@ -1046,11 +1046,11 @@ private:
     typedef XclExpRecordList< XclExpNote >      XclExpNoteList;
     typedef XclExpRecordList< XclExpHyperlink > XclExpHyperlinkList;
 
-    typedef boost::shared_ptr< XclExpDefrowheight >        XclExpDefrowhRef;
-    typedef boost::shared_ptr< XclExpNoteList >            XclExpNoteListRef;
-    typedef boost::shared_ptr< XclExpMergedcells >         XclExpMergedcellsRef;
-    typedef boost::shared_ptr< XclExpHyperlinkList >       XclExpHyperlinkRef;
-    typedef boost::shared_ptr< XclExpDval >                XclExpDvalRef;
+    typedef ScfRef< XclExpDefrowheight >        XclExpDefrowhRef;
+    typedef ScfRef< XclExpNoteList >            XclExpNoteListRef;
+    typedef ScfRef< XclExpMergedcells >         XclExpMergedcellsRef;
+    typedef ScfRef< XclExpHyperlinkList >       XclExpHyperlinkRef;
+    typedef ScfRef< XclExpDval >                XclExpDvalRef;
 
     XclExpColinfoBuffer maColInfoBfr;       /// Buffer for column formatting.
     XclExpRowBuffer     maRowBfr;           /// Rows and cell records.

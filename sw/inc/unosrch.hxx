@@ -47,6 +47,9 @@ namespace com{namespace sun{namespace star{namespace util{
 }}}}
 
 
+/*-----------------19.12.97 12:58-------------------
+
+--------------------------------------------------*/
 class SwXTextSearch : public cppu::WeakImplHelper3
 <
     ::com::sun::star::util::XPropertyReplace,
@@ -69,6 +72,7 @@ class SwXTextSearch : public cppu::WeakImplHelper3
     sal_Bool                    bBack : 1;
     sal_Bool                    bExpr : 1;
     sal_Bool                    bCase : 1;
+//  sal_Bool                    bInSel: 1;  // wie geht Suchen in Selektionen?
     sal_Bool                    bStyles:1;
     sal_Bool                    bSimilarity : 1;
     sal_Bool                    bLevRelax       :1;

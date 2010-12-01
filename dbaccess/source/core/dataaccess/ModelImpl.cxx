@@ -440,9 +440,9 @@ ODatabaseModelImpl::ODatabaseModelImpl( const Reference< XMultiServiceFactory >&
 {
     // some kind of default
     DBG_CTOR(ODatabaseModelImpl,NULL);
-    m_sConnectURL = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("jdbc:"));
+    m_sConnectURL = ::rtl::OUString::createFromAscii("jdbc:");
     m_aTableFilter.realloc(1);
-    m_aTableFilter[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+    m_aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
     impl_construct_nothrow();
 }
 

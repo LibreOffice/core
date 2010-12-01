@@ -56,6 +56,15 @@ namespace chart
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
 
+// macro for selecting a normal or high contrast bitmap the stack variable
+// bIsHighContrast must exist and reflect the correct state
+#define SELECT_BITMAP(name) Bitmap( SchResId( bIsHighContrast ? name ## _HC : name ))
+#define SELECT_IMAGE(name) Image( SchResId( bIsHighContrast ? name ## _HC : name ))
+
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+//--------------------------------------------------------------------------
+
 namespace
 {
     long lcl_getDistance()
@@ -841,6 +850,8 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     m_aSubTypeList.SetColCount(4);
     m_aSubTypeList.SetLineCount(1);
 
+    bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
+
     bool bDisableComplexChartTypes = false;
     uno::Reference< beans::XPropertySet > xProps( m_xChartModel, uno::UNO_QUERY );
     if ( xProps.is() )
@@ -876,7 +887,7 @@ ChartTypeTabPage::ChartTypeTabPage( Window* pParent
     const ::std::vector< ChartTypeDialogController* >::const_iterator aEnd  = m_aChartTypeDialogControllerList.end();
     for( ; aIter != aEnd; aIter++ )
     {
-        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage() );
+        m_aMainTypeList.InsertEntry( (*aIter)->getName(), (*aIter)->getImage( bIsHighContrast ) );
         (*aIter)->setChangeListener( this );
     }
 
@@ -1074,7 +1085,10 @@ void ChartTypeTabPage::fillAllControls( const ChartTypeParameter& rParameter, bo
 {
     m_nChangingCalls++;
     if( m_pCurrentMainType && bAlsoResetSubTypeList )
-        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, rParameter );
+    {
+        bool bIsHighContrast = ( true && GetSettings().GetStyleSettings().GetHighContrastMode() );
+        m_pCurrentMainType->fillSubTypeList( m_aSubTypeList, bIsHighContrast, rParameter );
+    }
     m_aSubTypeList.SelectItem( static_cast<USHORT>( rParameter.nSubTypeIndex) );
     m_pAxisTypeResourceGroup->fillControls( rParameter );
     m_pDim3DLookResourceGroup->fillControls( rParameter );

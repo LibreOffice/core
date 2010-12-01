@@ -255,12 +255,12 @@ IMPL_LINK( DlgQryJoin, LBChangeHdl, ListBox*, /*pListBox*/ )
     String sHelpText = String( ModuleRes( nResId ) );
     if( nPos )
     {
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%1" ) ), sFirstWinName );
-        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%2" ) ), sSecondWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%1" ) ), sFirstWinName );
+        sHelpText.SearchAndReplace( String( RTL_CONSTASCII_STRINGPARAM( "%2" ) ), sSecondWinName );
     }
     if ( bAddHint )
     {
-        sHelpText += String( RTL_CONSTASCII_USTRINGPARAM( "\n" ) );
+        sHelpText += String( RTL_CONSTASCII_STRINGPARAM( "\n" ) );
         sHelpText += String( ModuleRes( STR_JOIN_TYPE_HINT ) );
     }
 
@@ -320,6 +320,8 @@ TTableConnectionData::value_type DlgQryJoin::getConnectionData() const
 // -----------------------------------------------------------------------------
 void DlgQryJoin::setValid(sal_Bool _bValid)
 {
+    //LBChangeHdl(&aLB_JoinType);
+
     aPB_OK.Enable(_bValid || eJoinType == CROSS_JOIN );
 }
 // -----------------------------------------------------------------------------

@@ -275,13 +275,14 @@ inline void TypeDescriptor_Init_Impl::callChain(
 //__________________________________________________________________________________________________
 TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 {
+#ifndef CPPU_LEAK_STATIC_DATA
     if( pCache )
     {
         TypeDescriptionList_Impl::const_iterator aIt = pCache->begin();
         while( aIt != pCache->end() )
         {
             typelib_typedescription_release( (*aIt) );
-            ++aIt;
+            aIt++;
         }
         delete pCache;
         pCache = 0;
@@ -354,6 +355,7 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 #endif
     delete pCallbacks;
     pCallbacks = 0;
+#endif // CPPU_LEAK_STATIC_DATA
 
     if( pMutex )
     {

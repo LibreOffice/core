@@ -43,13 +43,14 @@ CDEFS+=-Dmydebug
 # --- Files --------------------------------------------------------
 
 SLOFILES = \
-        $(EXCEPTIONSFILES) \
-
-EXCEPTIONSFILES = \
         $(SLO)$/docfact.obj \
         $(SLO)$/fltini.obj \
-        $(SLO)$/iodetect.obj \
-        $(SLO)$/shellio.obj
+        $(SLO)$/shellio.obj \
+        $(SLO)$/iodetect.obj
+
+EXCEPTIONSFILES = \
+        $(SLO)$/fltini.obj \
+        $(SLO)$/iodetect.obj
 
 # --- Tagets -------------------------------------------------------
 

@@ -62,19 +62,19 @@ namespace framework{
 // definitions
 
 /** adress job configuration inside argument set provided on method execute(). */
-static const ::rtl::OUString PROP_JOBCONFIG(RTL_CONSTASCII_USTRINGPARAM("JobConfig"));
+static const ::rtl::OUString PROP_JOBCONFIG = ::rtl::OUString::createFromAscii("JobConfig");
 
 /** adress job configuration property "Command". */
-static const ::rtl::OUString PROP_COMMAND(RTL_CONSTASCII_USTRINGPARAM("Command"));
+static const ::rtl::OUString PROP_COMMAND = ::rtl::OUString::createFromAscii("Command");
 
 /** adress job configuration property "Arguments". */
-static const ::rtl::OUString PROP_ARGUMENTS(RTL_CONSTASCII_USTRINGPARAM("Arguments"));
+static const ::rtl::OUString PROP_ARGUMENTS = ::rtl::OUString::createFromAscii("Arguments");
 
 /** adress job configuration property "DeactivateJobIfDone". */
-static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE(RTL_CONSTASCII_USTRINGPARAM("DeactivateJobIfDone"));
+static const ::rtl::OUString PROP_DEACTIVATEJOBIFDONE = ::rtl::OUString::createFromAscii("DeactivateJobIfDone");
 
 /** adress job configuration property "CheckExitCode". */
-static const ::rtl::OUString PROP_CHECKEXITCODE(RTL_CONSTASCII_USTRINGPARAM("CheckExitCode"));
+static const ::rtl::OUString PROP_CHECKEXITCODE = ::rtl::OUString::createFromAscii("CheckExitCode");
 
 //-----------------------------------------------
 

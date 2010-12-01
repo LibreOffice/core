@@ -160,6 +160,7 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
                  pAction );
     }
 #endif
+//  if( nInfo & ( SANE_INFO_RELOAD_OPTIONS | SANE_INFO_RELOAD_PARAMS ) )
     if( nInfo &  SANE_INFO_RELOAD_OPTIONS )
         ReloadOptions();
     return nStatus;
@@ -187,17 +188,17 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    ::rtl::OUString sSaneLibName( RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ) );
+    ::rtl::OUString sSaneLibName( ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ) );
     pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
     {
-        sSaneLibName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "libsane" SAL_DLLEXTENSION ".1" ));
+        sSaneLibName = ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ".1" );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
     {
-        ::rtl::OUString sSaneLibSystemPath( RTL_CONSTASCII_USTRINGPARAM( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
+        ::rtl::OUString sSaneLibSystemPath( ::rtl::OUString::createFromAscii( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
         osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
         pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     }

@@ -216,11 +216,12 @@ namespace svxform
     //========================================================================
 
     //------------------------------------------------------------------------
-    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages )
+    NavigatorTreeModel::NavigatorTreeModel( const ImageList& _rNormalImages, const ImageList& _rHCImages )
                     :m_pFormShell(NULL)
                     ,m_pFormPage(NULL)
                     ,m_pFormModel(NULL)
                     ,m_aNormalImages( _rNormalImages )
+                    ,m_aHCImages( _rHCImages )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::NavigatorTreeModel" );
         m_pPropChangeList = new OFormComponentObserver(this);
@@ -577,7 +578,7 @@ namespace svxform
                     "NavigatorTreeModel::FillBranch : the root container should supply only elements of type XForm");
 
                 xForms->getByIndex(i) >>= xSubForm;
-                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, pFormData );
+                pSubFormData = new FmFormData( xSubForm, m_aNormalImages, m_aHCImages, pFormData );
                 Insert( pSubFormData, LIST_APPEND );
 
                 //////////////////////////////////////////////////////////////
@@ -607,7 +608,7 @@ namespace svxform
 
                 if (xSubForm.is())
                 {   // die aktuelle Component ist eine Form
-                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, pFormData);
+                    pSubFormData = new FmFormData(xSubForm, m_aNormalImages, m_aHCImages, pFormData);
                     Insert(pSubFormData, LIST_APPEND);
 
                     //////////////////////////////////////////////////////////////
@@ -616,7 +617,7 @@ namespace svxform
                 }
                 else
                 {
-                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, pFormData);
+                    pNewControlData = new FmControlData(xCurrentComponent, m_aNormalImages, m_aHCImages, pFormData);
                     Insert(pNewControlData, LIST_APPEND);
                 }
             }
@@ -639,7 +640,7 @@ namespace svxform
         if (xParentForm.is())
             pParentData = (FmFormData*)FindData( xParentForm, GetRootList() );
 
-        pFormData = new FmFormData( xForm, m_aNormalImages, pParentData );
+        pFormData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, pParentData );
         Insert( pFormData, nRelPos );
     }
 
@@ -657,7 +658,7 @@ namespace svxform
         FmFormData* pParentData = (FmFormData*)FindData( xForm, GetRootList() );
         if( !pParentData )
         {
-            pParentData = new FmFormData( xForm, m_aNormalImages, NULL );
+            pParentData = new FmFormData( xForm, m_aNormalImages, m_aHCImages, NULL );
             Insert( pParentData, LIST_APPEND );
         }
 
@@ -665,7 +666,7 @@ namespace svxform
         {
             //////////////////////////////////////////////////////////
             // Neue EntryData setzen
-            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, pParentData );
+            FmEntryData* pNewEntryData = new FmControlData( xComp, m_aNormalImages, m_aHCImages, pParentData );
 
             //////////////////////////////////////////////////////////
             // Neue EntryData einfuegen
@@ -674,15 +675,12 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    void NavigatorTreeModel::ReplaceFormComponent(
-        const Reference< XFormComponent > & xOld,
-        const Reference< XFormComponent > & xNew
-    )
+    void NavigatorTreeModel::ReplaceFormComponent(const Reference< XFormComponent > & xOld, const Reference< XFormComponent > & xNew)
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTreeModel::ReplaceFormComponent" );
         FmEntryData* pData = FindData(xOld, GetRootList(), sal_True);
         DBG_ASSERT(pData && pData->ISA(FmControlData), "NavigatorTreeModel::ReplaceFormComponent : invalid argument !");
-        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages );
+        ((FmControlData*)pData)->ModelReplaced( xNew, m_aNormalImages, m_aHCImages );
 
         FmNavModelReplacedHint aReplacedHint( pData );
         Broadcast( aReplacedHint );

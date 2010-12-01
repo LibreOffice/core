@@ -48,7 +48,7 @@ class SW_DLLPUBLIC SwFmtAnchor: public SfxPoolItem
     RndStdIds  nAnchorId;
     USHORT     nPageNum;        //Seitennummer bei Seitengeb. Rahmen.
 
-    // #i28701# - getting anchor positions ordered
+    // OD 2004-05-05 #i28701# - getting anchor positions ordered
     sal_uInt32 mnOrder;
     static sal_uInt32 mnOrderCounter;
 
@@ -60,7 +60,7 @@ public:
     //  Zuweisungsoperator
     SwFmtAnchor &operator=( const SwFmtAnchor& );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,
@@ -75,7 +75,7 @@ public:
     RndStdIds GetAnchorId() const { return nAnchorId; }
     USHORT GetPageNum() const { return nPageNum; }
     const SwPosition *GetCntntAnchor() const { return pCntntAnchor; }
-    // #i28701#
+    // OD 2004-05-05 #i28701#
     sal_uInt32 GetOrder() const;
 
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }

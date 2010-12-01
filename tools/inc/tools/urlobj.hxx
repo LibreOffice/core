@@ -1533,9 +1533,6 @@ private:
 
     TOOLS_DLLPRIVATE static bool scanIPv6reference(
         sal_Unicode const *& rBegin, sal_Unicode const * pEnd);
-
-private:
-    void changeScheme(INetProtocol eTargetScheme);
 };
 
 // static

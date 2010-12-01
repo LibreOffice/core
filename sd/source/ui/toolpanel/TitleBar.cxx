@@ -252,6 +252,7 @@ bool TitleBar::HasExpansionIndicator (void) const
 Image TitleBar::GetExpansionIndicator (void) const
 {
     Image aIndicator;
+    bool bHighContrastMode (GetSettings().GetStyleSettings().GetHighContrastMode() != 0);
     if (mbIsExpandable)
     {
         USHORT nResourceId = 0;
@@ -259,9 +260,15 @@ Image TitleBar::GetExpansionIndicator (void) const
         {
             case TBT_SUB_CONTROL_HEADLINE:
                 if (mbExpanded)
-                    nResourceId = BMP_COLLAPSE;
+                    if (bHighContrastMode)
+                        nResourceId = BMP_COLLAPSE_H;
+                    else
+                        nResourceId = BMP_COLLAPSE;
                 else
-                    nResourceId = BMP_EXPAND;
+                    if (bHighContrastMode)
+                        nResourceId = BMP_EXPAND_H;
+                    else
+                        nResourceId = BMP_EXPAND;
 
                 aIndicator = IconCache::Instance().GetIcon(nResourceId);
                 break;

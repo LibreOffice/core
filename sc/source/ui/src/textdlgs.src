@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+
+
 #include <svx/dialogs.hrc>
 #include "sc.hrc"
 
@@ -110,6 +112,13 @@ TabDialog RID_SCDLG_PARAGRAPH
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
             };
+            /*
+            PageItem  {
+                    Identifier = RID_SVXPAGE_EXT_PARAGRAPH;
+                    Text [ en-US ] = "Paragraph (Extensions)";
+                    PageResID = RID_SVXPAGE_EXT_PARAGRAPH;
+                };
+*/
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
@@ -156,3 +165,33 @@ TabDialog RID_SCDLG_PARAGRAPH
         TabStop = TRUE ;
     };
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -266,7 +266,7 @@ namespace COMPMOD_NAMESPACE
         {
             ::rtl::OUString aMainKeyName(sRootKey);
             aMainKeyName += *pImplName;
-            aMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+            aMainKeyName += ::rtl::OUString::createFromAscii("/UNO/SERVICES");
 
             try
             {

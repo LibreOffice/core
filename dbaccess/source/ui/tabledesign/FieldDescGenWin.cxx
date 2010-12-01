@@ -110,6 +110,11 @@ OTableEditorCtrl* OFieldDescGenWin::GetEditorCtrl()
 }
 #endif
 //------------------------------------------------------------------------------
+//short OFieldDescGenWin::GetFormatCategory(OFieldDescription* pFieldDescr)
+//{
+//  return m_pFieldControl->GetFormatCategory(pFieldDescr);
+//}
+//------------------------------------------------------------------------------
 void OFieldDescGenWin::SaveData( OFieldDescription* pFieldDescr )
 {
     DBG_CHKTHIS(OFieldDescGenWin,NULL);
@@ -178,5 +183,9 @@ void OFieldDescGenWin::paste()
         m_pFieldControl->paste();
 }
 // -----------------------------------------------------------------------------
+
+
+
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -1069,7 +1069,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
         // implementation here by providing an additional parameter.
         Sequence< PropertyValue > aPropVals(1);
         PropertyValue &rVal = aPropVals.getArray()[0];
-        rVal.Name = OUString(RTL_CONSTASCII_USTRINGPARAM( UPN_MAX_NUMBER_OF_SUGGESTIONS ));
+        rVal.Name = OUString::createFromAscii( UPN_MAX_NUMBER_OF_SUGGESTIONS );
         rVal.Value <<= (INT16) 7;
         //
         // Gibt es Replace-Vorschlaege?
@@ -1145,6 +1145,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
             aPopupMenu.RemoveItem( MN_AUTOCORR );   // Loeschen?
 
         SvtLinguConfig aCfg;
+        const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
         Reference< XDictionaryList >  xDicList( SvxGetDictionaryList() );
         Sequence< Reference< XDictionary >  > aDics;
@@ -1184,7 +1185,7 @@ void EditView::ExecuteSpellPopup( const Point& rPosPixel, Link* pCallBack )
                     if (xSvcInfo.is())
                     {
                         OUString aDictionaryImageUrl( aCfg.GetSpellAndGrammarContextDictionaryImage(
-                                xSvcInfo->getImplementationName()) );
+                                xSvcInfo->getImplementationName(), bHC) );
                         if (aDictionaryImageUrl.getLength() > 0)
                         {
                             Image aImage( lcl_GetImageFromPngUrl( aDictionaryImageUrl ) );

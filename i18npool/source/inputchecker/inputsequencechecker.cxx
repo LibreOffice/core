@@ -129,7 +129,7 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
             }
 
             Reference < uno::XInterface > xI = xMSF->createInstance(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.InputSequenceChecker_")) +
+                        OUString::createFromAscii("com.sun.star.i18n.InputSequenceChecker_") +
                         OUString::createFromAscii(rLanguage));
 
             if ( xI.is() ) {

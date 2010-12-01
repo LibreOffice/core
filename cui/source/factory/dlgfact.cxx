@@ -132,6 +132,7 @@ short AbstractSvxZoomDialog_Impl::Execute()
     return pDlg->Execute();
 }
 
+//IMPL_ABSTDLG_BASE(AbstractSvxZoomDialog_Impl);
 IMPL_ABSTDLG_BASE(AbstractSearchProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTakeProgress_Impl);
 IMPL_ABSTDLG_BASE(AbstractTitleDialog_Impl);
@@ -1128,7 +1129,7 @@ SfxAbstractTabDialog* AbstractDialogFactory_Impl::CreateTextTabDialog( Window* p
     return new AbstractTabDialog_Impl( pDlg );
 }
 
-// TabDialog that use functionality of the drawing layer and add AnchorTypes -- for SvxCaptionTabDialog
+//TabDialog that use functionality of the drawing layer and add AnchorTypes  -- for SvxCaptionTabDialog CHINA001
 AbstractSvxCaptionDialog*       AbstractDialogFactory_Impl::CreateCaptionDialog( Window* pParent,
                                             const SdrView* pView,
                                             USHORT nAnchorTypes )

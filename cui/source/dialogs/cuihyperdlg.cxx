@@ -112,24 +112,29 @@ SvxHpLinkDlg::SvxHpLinkDlg (Window* pParent, SfxBindings* pBindings)
     mbGrabFocus = sal_True;
     // insert pages
     Image aImage;
+    Image aImageHC;
     String aStrTitle;
     SvxIconChoiceCtrlEntry* pEntry = NULL;
 
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLINETTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, SvxHyperlinkInternetTp::Create );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLINETTP_H ) );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_INTERNET, aStrTitle, aImage, aImageHC, SvxHyperlinkInternetTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLINETTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLMAILTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, SvxHyperlinkMailTp::Create );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLMAILTP_H ) );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_MAIL, aStrTitle, aImage, aImageHC, SvxHyperlinkMailTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLMAILTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, SvxHyperlinkDocTp::Create );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCTP_H ) );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_DOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCTP_HELP ) );
     aStrTitle = CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP );
     aImage = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP ) );
-    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, SvxHyperlinkNewDocTp::Create );
+    aImageHC = Image( CUI_RES ( RID_SVXBMP_HLDOCNTP_H ) );
+    pEntry = AddTabPage ( RID_SVXPAGE_HYPERLINK_NEWDOCUMENT, aStrTitle, aImage, aImageHC, SvxHyperlinkNewDocTp::Create );
     pEntry->SetQuickHelpText( CUI_RESSTR( RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP ) );
 
     // all tab pages set -> create mnemonics
@@ -232,6 +237,26 @@ void SvxHpLinkDlg::Move()
 
     Window::Move();
 }
+
+/*long SvxHpLinkDlg::PreNotify( NotifyEvent& rNEvt )
+{
+    long nRet = 0;
+
+    if( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        DBG_ASSERT( rNEvt.GetKeyEvent(), "-SvxHpLinkDlg::PreNotify(): no KeyEvent for key event?!" );
+
+        const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+
+        if( KEY_MOD2 == pKEvt->GetKeyCode().GetModifier() && pKEvt->GetCharCode() && HandleShortCutKey( *pKEvt ) )
+            nRet = 1;
+    }
+
+    if( !nRet )
+        nRet = IconChoiceDialog::PreNotify( rNEvt );
+
+    return nRet;
+}*/
 
 /*************************************************************************
 |*

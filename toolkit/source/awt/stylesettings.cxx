@@ -39,7 +39,6 @@
 #include <osl/mutex.hxx>
 #include <vcl/window.hxx>
 #include <vcl/settings.hxx>
-#include <vcl/svapp.hxx>
 
 //......................................................................................................................
 namespace toolkit
@@ -70,11 +69,13 @@ namespace toolkit
     //==================================================================================================================
     struct WindowStyleSettings_Data
     {
+        ::osl::SolarMutex&                      rMutex;
         VCLXWindow*                         pOwningWindow;
         ::cppu::OInterfaceContainerHelper   aStyleChangeListeners;
 
-        WindowStyleSettings_Data( ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
-            : pOwningWindow( &i_rOwningWindow )
+        WindowStyleSettings_Data( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
+            :rMutex( i_rWindowMutex )
+            ,pOwningWindow( &i_rOwningWindow )
             ,aStyleChangeListeners( i_rListenerMutex )
         {
         }
@@ -105,6 +106,7 @@ namespace toolkit
     {
     public:
         StyleMethodGuard( WindowStyleSettings_Data& i_rData )
+            :m_aGuard( i_rData.rMutex )
         {
             if ( i_rData.pOwningWindow == NULL )
                 throw DisposedException();
@@ -115,15 +117,15 @@ namespace toolkit
         }
 
     private:
-        SolarMutexGuard  m_aGuard;
+        ::osl::SolarGuard   m_aGuard;
     };
 
     //==================================================================================================================
     //= WindowStyleSettings
     //==================================================================================================================
     //------------------------------------------------------------------------------------------------------------------
-    WindowStyleSettings::WindowStyleSettings(::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
-        :m_pData( new WindowStyleSettings_Data(i_rListenerMutex, i_rOwningWindow ) )
+    WindowStyleSettings::WindowStyleSettings( ::osl::SolarMutex& i_rWindowMutex, ::osl::Mutex& i_rListenerMutex, VCLXWindow& i_rOwningWindow )
+        :m_pData( new WindowStyleSettings_Data( i_rWindowMutex, i_rListenerMutex, i_rOwningWindow ) )
     {
         Window* pWindow = i_rOwningWindow.GetWindow();
         if ( !pWindow )

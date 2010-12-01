@@ -197,7 +197,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE
 
-    static const ::rtl::OUString aTable(RTL_CONSTASCII_USTRINGPARAM("TABLE"));
+    static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
 
     sal_Bool bTableFound = sal_True;
     sal_Int32 nLength = types.getLength();
@@ -221,7 +221,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     Reference<XDynamicResultSet> xContent = m_pConnection->getDir();
     Reference < XSortedDynamicResultSetFactory > xSRSFac(
-                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SortedDynamicResultSetFactory")) ), UNO_QUERY );
+                m_pConnection->getDriver()->getFactory()->createInstance( ::rtl::OUString::createFromAscii("com.sun.star.ucb.SortedDynamicResultSetFactory") ), UNO_QUERY );
 
     Sequence< NumberedSortingInfo > aSortInfo( 1 );
     NumberedSortingInfo* pInfo = aSortInfo.getArray();
@@ -432,7 +432,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
                 aRow[2] = new ORowSetValueDecorator(*pBegin);
                 aRow[6] = ODatabaseMetaDataResultSet::getSelectValue();
-                aRow[7] = new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NO")));
+                aRow[7] = new ORowSetValueDecorator(::rtl::OUString::createFromAscii("NO"));
                 aRows.push_back(aRow);
 
                 Reference< XPropertySet> xTable;
@@ -551,7 +551,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::impl_getIdentifierQuoteString_throw" );
-    static const ::rtl::OUString sQuote(RTL_CONSTASCII_USTRINGPARAM("\""));
+    static const ::rtl::OUString sQuote = ::rtl::OUString::createFromAscii("\"");
     return sQuote;
 }
 // -------------------------------------------------------------------------
@@ -711,7 +711,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     {
         ODatabaseMetaDataResultSet::ORow aRow;
         aRow.push_back(ODatabaseMetaDataResultSet::getEmptyValue());
-        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE"))));
+        aRow.push_back(new ORowSetValueDecorator(::rtl::OUString::createFromAscii("TABLE")));
         aRows.push_back(aRow);
     }
     pResult->setRows(aRows);
@@ -973,7 +973,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw(SQL
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "file", "Ocke.Janssen@sun.com", "ODatabaseMetaData::getURL" );
-    static const ::rtl::OUString aValue( RTL_CONSTASCII_USTRINGPARAM( "sdbc:file:" ));
+    static const ::rtl::OUString aValue = ::rtl::OUString::createFromAscii("sdbc:file:");
     return aValue;
 }
 // -------------------------------------------------------------------------

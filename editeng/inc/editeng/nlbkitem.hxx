@@ -35,6 +35,13 @@
 #include "editeng/editengdllapi.h"
 
 // class SvxNoLinebreakItem ----------------------------------------------
+
+
+/*  [Beschreibung]
+
+    PB: ???
+*/
+
 class EDITENG_DLLPUBLIC SvxNoLinebreakItem : public SfxBoolItem
 {
 public:

@@ -73,7 +73,7 @@ public:
                   SwTwips nWidth = 0, SwTwips nHeight = 0 );
     SwFmtFrmSize& operator=( const SwFmtFrmSize& rCpy );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
     virtual SfxItemPresentation GetPresentation( SfxItemPresentation ePres,

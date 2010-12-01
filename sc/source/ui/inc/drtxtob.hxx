@@ -29,6 +29,9 @@
 #ifndef SC_DRTXTOB_HXX
 #define SC_DRTXTOB_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/shell.hxx>
 #include <sfx2/module.hxx>
 #include <tools/link.hxx>

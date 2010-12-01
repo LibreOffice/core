@@ -70,6 +70,7 @@ ModalDialog WIZ_RTFCOPYTABLE
 
     Text [ en-US ] = "Copy RTF Table" ;
 
+
     OutputSize      = TRUE ;
     SVLook          = TRUE ;
     Moveable        = TRUE ;
@@ -122,10 +123,11 @@ TabPage TAB_WIZ_COLUMN_SELECT
 
     FixedLine FL_COLUMN_SELECT
     {
-        Pos             = MAP_APPFONT ( 6 , 3  ) ;
-        Size            = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
-        Text [ en-US ]  = "Existing columns" ;
+        Pos                 = MAP_APPFONT ( 6 , 3  ) ;
+        Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
+        Text [ en-US ] = "Existing columns" ;
     };
+
     MultiListBox LB_ORG_COLUMN_NAMES
     {
         Border              = TRUE ;
@@ -147,7 +149,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         {
             ImageBitmap = Bitmap
             {
-                File = "one_right.png" ;
+                File = "one_right.bmp" ;
             };
             MaskColor = Color
             {
@@ -167,7 +169,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         {
             ImageBitmap = Bitmap
             {
-                File = "all_right.png" ;
+                File = "all_right.bmp" ;
             };
             MaskColor = Color
             {
@@ -186,7 +188,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         {
             ImageBitmap = Bitmap
             {
-                File = "one_left.png1" ;
+                File = "one_left.bmp" ;
             };
             MaskColor = Color
             {
@@ -205,7 +207,7 @@ TabPage TAB_WIZ_COLUMN_SELECT
         {
             ImageBitmap = Bitmap
             {
-                File = "all_left.png" ;
+                File = "all_left.bmp" ;
             };
             MaskColor = Color
             {
@@ -312,7 +314,6 @@ Menu RID_SBA_RTF_PKEYPOPUP
         };
     };
 };
-
 //==================================================================
  // TAB_WIZ_NAME_MATCHING
  //==================================================================
@@ -367,7 +368,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         {
             ImageBitmap = Bitmap
             {
-                File = "sortup.png" ;
+                File = "sortup.bmp" ;
             };
             MaskColor = Color
             {
@@ -386,7 +387,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         {
             ImageBitmap = Bitmap
             {
-                File = "sortdown.png" ;
+                File = "sortdown.bmp" ;
             };
             MaskColor = Color
             {
@@ -406,7 +407,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         {
             ImageBitmap = Bitmap
             {
-                File = "sortup.png" ;
+                File = "sortup.bmp" ;
             };
             MaskColor = Color
             {
@@ -425,7 +426,7 @@ TabPage TAB_WIZ_NAME_MATCHING
         {
             ImageBitmap = Bitmap
             {
-                File = "sortdown.png" ;
+                File = "sortdown.bmp" ;
             };
             MaskColor = Color
             {
@@ -452,7 +453,6 @@ TabPage TAB_WIZ_NAME_MATCHING
         Text [ en-US ]  = "Non~e" ;
     };
 };
-
 TabPage TAB_WIZ_COPYTABLE
 {
     SVLook  = TRUE ;
@@ -562,3 +562,69 @@ String STR_INVALID_TABLE_NAME_LENGTH
 {
     Text [ en-US ] = "Please change the table name. It is too long.";
 };
+
+Image IMG_SORTUP_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sortup_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
+    };
+};
+
+Image IMG_SORTDOWN_H
+{
+    ImageBitmap = Bitmap
+    {
+        File = "sortdown_h.bmp" ;
+    };
+    MaskColor = Color
+    {
+        Red = 0xFFFF ;
+        Green = 0x0000 ;
+        Blue = 0xFFFF ;
+    };
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

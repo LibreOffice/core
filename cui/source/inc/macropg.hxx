@@ -134,6 +134,10 @@ public:
     virtual             ~SvxMacroAssignSingleTabDialog();
 
     void                SetTabPage( SfxTabPage* pTabPage );
+    // SfxTabPage*          GetTabPage() const { return pPage; }
+
+    // OKButton*            GetOKButton() const { return pOKBtn; }
+    // CancelButton*        GetCancelButton() const { return pCancelBtn; }
 
 private:
     SfxViewFrame*       pFrame;

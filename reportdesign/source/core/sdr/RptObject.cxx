@@ -207,7 +207,7 @@ namespace
                     default:
                         OSL_ENSURE(0,"Illegal text alignment value!");
                         break;
-                }
+                } // switch(nTextAlign)
                 aRet <<= (style::ParagraphAdjust)nTextAlign;
             }
             else
@@ -230,7 +230,7 @@ namespace
                     default:
                         OSL_ENSURE(0,"Illegal text alignment value!");
                         break;
-                }
+                } // switch(eParagraphAdjust)
                 aRet <<= nTextAlign;
             }
             return aRet;
@@ -251,6 +251,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBACKGROUND,TPropertyConverter(PROPERTY_BACKGROUNDCOLOR,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,PROPERTY_ALIGN));
                 }
                 return s_aNameMap;
             }
@@ -291,6 +292,7 @@ const TPropertyNamePair& getPropertyNameMap(sal_uInt16 _nObjectId)
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLTEXTEMPHASISMARK,TPropertyConverter(PROPERTY_FONTEMPHASISMARK,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDER,TPropertyConverter(PROPERTY_BORDER,aNoConverter)));
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_CONTROLBORDERCOLOR,TPropertyConverter(PROPERTY_BORDERCOLOR,aNoConverter)));
+                    //s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aNoConverter)));
                     ::boost::shared_ptr<AnyConverter> aParaAdjust(new ParaAdjust());
                     s_aNameMap.insert(TPropertyNamePair::value_type(PROPERTY_PARAADJUST,TPropertyConverter(PROPERTY_ALIGN,aParaAdjust)));
                 }
@@ -747,6 +749,11 @@ void OUnoObject::NbcMove( const Size& rSize )
 
             // LLA: why there exists getPositionX and getPositionY and NOT getPosition() which return a Point?
             int nNewX = m_xReportComponent->getPositionX() + rSize.A();
+            // can this hinder us to set components outside the area?
+            // if (nNewX < 0)
+            // {
+            //     nNewX = 0;
+            // }
             m_xReportComponent->setPositionX(nNewX);
             int nNewY = m_xReportComponent->getPositionY() + rSize.B();
             if (nNewY < 0 && !bUndoMode)
@@ -759,7 +766,14 @@ void OUnoObject::NbcMove( const Size& rSize )
         }
         if (bPositionFixed)
         {
-            GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
+            // OReportModel* pRptModel = static_cast<OReportModel*>(GetModel());
+            // if ( pRptModel )
+            // {
+            //    if (! pRptModel->GetUndoEnv().IsLocked())
+            //    {
+                    GetModel()->AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoMoveObject(*this, aUndoSize));
+            //    }
+            // }
         }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
@@ -951,7 +965,7 @@ SdrObject* OUnoObject::Clone() const
         Reference<XPropertySet> xDest(pClone->getUnoShape(),uno::UNO_QUERY);
         if ( xSource.is() && xDest.is() )
             comphelper::copyProperties(xSource.get(),xDest.get());
-    }
+    } // if ( pClone )
     return pClone;
 }
 //----------------------------------------------------------------------------
@@ -1125,7 +1139,7 @@ uno::Reference< chart2::data::XDatabaseDataProvider > lcl_getDataProvider(const 
         {
             xSource.set(xChartDoc->getDataProvider(),uno::UNO_QUERY);
         }
-    }
+    } // if( xCompSupp.is())
     return xSource;
 }
 // -----------------------------------------------------------------------------
@@ -1161,7 +1175,7 @@ void OOle2Obj::impl_createDataProvider_nothrow(const uno::Reference< frame::XMod
             uno::Reference< lang::XMultiServiceFactory> xFac(_xModel,uno::UNO_QUERY);
             uno::Reference< chart2::data::XDatabaseDataProvider > xDataProvider( xFac->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.chart2.data.DataProvider"))),uno::UNO_QUERY);
             xReceiver->attachDataProvider( xDataProvider.get() );
-        }
+        } // if( xReceiver.is() )
     }
     catch(uno::Exception)
     {

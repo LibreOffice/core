@@ -546,7 +546,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
             aTmpDim.MakeDateHelper( rNumInfo, nDatePart );
-        const std::vector< SCROW > aMemberIds = aTmpDim.GetNumEntries(  static_cast< SCCOL >( GetBaseFieldIndex() ), aDPData.GetCacheTable().getCache(), aOrignial );
+        const std::vector< SCROW > aMemberIds = aTmpDim.GetNumEntries(  static_cast< SCCOL >( GetBaseFieldIndex() ), aDPData.GetCacheTable().GetCache(), aOrignial );
         for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )
         {
             const ScDPItemData* pData = aDPData.GetMemberById(  static_cast< long >( GetBaseFieldIndex() ) , aMemberIds[ nIdx] );
@@ -1685,7 +1685,7 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
         for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
         {
             XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
-            if( xField )
+            if( xField.is() )
                 xField->WriteSxpiEntry( rStrm );
         }
         rStrm.EndRecord();
@@ -1697,7 +1697,7 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
     {
         XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
-        if( xField )
+        if( xField.is() )
             xField->WriteSxdi( rStrm, aIt->second );
     }
 }

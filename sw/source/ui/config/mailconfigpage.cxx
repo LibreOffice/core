@@ -268,7 +268,7 @@ SwTestAccountSettingsDialog::SwTestAccountSettingsDialog(SwMailConfigPage* pPare
 #ifdef MSC
 #pragma warning (default : 4355)
 #endif
-    m_aImageList( SW_RES(ILIST) ),
+    m_aImageList( SW_RES( GetSettings().GetStyleSettings().GetHighContrastMode() ? ILIST_HC : ILIST) ),
     m_sTask( SW_RES(        ST_TASK          )),
     m_sStatus( SW_RES(      ST_STATUS        )),
     m_sEstablish( SW_RES(   ST_ESTABLISH     )),
@@ -404,7 +404,8 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_aServerED.GetText(),
                         sal::static_int_cast< sal_Int16, sal_Int64 >(m_pParent->m_aPortNF.GetValue()),
-                        m_pParent->m_aSecureCB.IsChecked() ? OUString(RTL_CONSTASCII_USTRINGPARAM("Ssl")) : OUString(RTL_CONSTASCII_USTRINGPARAM("Insecure")));
+                        ::rtl::OUString::createFromAscii(
+                                m_pParent->m_aSecureCB.IsChecked() ? "Ssl" : "Insecure"));
             xMailService->connect(xConnectionContext, xAuthenticator);
             bIsLoggedIn = xMailService->isConnected();
             if( xInMailService.is() )

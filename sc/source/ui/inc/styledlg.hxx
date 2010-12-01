@@ -29,6 +29,9 @@
 #ifndef SC_STYLEDLG_HXX
 #define SC_STYLEDLG_HXX
 
+#ifndef _SFX_HXX
+#endif
+
 #include <sfx2/styledlg.hxx>
 
 //==================================================================

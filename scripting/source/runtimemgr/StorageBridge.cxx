@@ -82,7 +82,7 @@ StorageBridge::initStorage() throw ( ::com::sun::star::uno::RuntimeException )
         Reference< XInterface > temp;
 
         Any a = m_xContext->getValueByName(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM( SCRIPTSTORAGEMANAGER_SERVICE )) );
+                    OUString::createFromAscii( SCRIPTSTORAGEMANAGER_SERVICE ) );
         if ( sal_False == ( a >>= temp ) )
         {
             throw RuntimeException(

@@ -178,6 +178,14 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
                 {
                     nEndCPos = nCheckPos;
                 }
+                else
+                {
+                    /*
+                    OSL_ENSURE( SwXMLTableColumn_impl(nCheckPos) ==
+                                        SwXMLTableColumn_Impl(nEndCPos),
+                    "rows have different total widths" );
+                    */
+                }
 #endif
                 nCPos = (sal_uInt16)nWidth;
 #if OSL_DEBUG_LEVEL > 1

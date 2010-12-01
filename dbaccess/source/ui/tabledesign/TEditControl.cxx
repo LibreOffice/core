@@ -241,6 +241,11 @@ void OTableEditorCtrl::SetReadOnly( sal_Bool bRead )
     DeactivateCell();
 
     //////////////////////////////////////////////////////////////////////
+    // ::com::sun::star::beans::Property Controls disablen
+//  if (pDescrWin)
+//      pDescrWin->SetReadOnly(bReadOnly || !SetDataPtr(nRow) || GetActRow()->IsReadOnly());
+
+    //////////////////////////////////////////////////////////////////////
     // Cursor des Browsers anpassen
     BrowserMode nMode(BROWSER_COLUMNSELECTION | BROWSER_MULTISELECTION | BROWSER_KEEPSELECTION |
                       BROWSER_HLINESFULL      | BROWSER_VLINESFULL|BROWSER_AUTOSIZE_LASTCOL);
@@ -308,7 +313,7 @@ void OTableEditorCtrl::InitCellController()
         const Size aTemp( pControls[i]->GetOptimalSize(WINDOWSIZE_PREFERRED) );
         if ( aTemp.Height() > aHeight.Height() )
             aHeight.Height() = aTemp.Height();
-    }
+    } // for(int i= 0; i < SAL_N_ELEMENTS(pControls);++i
     SetDataRowHeight(aHeight.Height());
 
     ClearModified();
@@ -397,6 +402,8 @@ void OTableEditorCtrl::PaintCell(OutputDevice& rDev, const Rectangle& rRect,
 
     if (rDev.IsClipRegion())
         rDev.SetClipRegion();
+//  rDev.DrawText(rRect.TopLeft(), aText);
+//  rDev.SetClipRegion( );
 }
 
 //------------------------------------------------------------------------------
@@ -408,7 +415,7 @@ CellController* OTableEditorCtrl::GetController(long nRow, sal_uInt16 nColumnId)
     Reference<XPropertySet> xTable = GetView()->getController().getTable();
     if (IsReadOnly() || (   xTable.is() &&
                             xTable->getPropertySetInfo()->hasPropertyByName(PROPERTY_TYPE) &&
-                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
+                            ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
         return NULL;
 
     //////////////////////////////////////////////////////////////////////
@@ -703,6 +710,15 @@ sal_Bool OTableEditorCtrl::SaveModified()
 
     switch( nColId )
     {
+        //////////////////////////////////////////////////////////////
+        // NameCell
+        case FIELD_NAME:
+        {
+            // removed the former duplicate-check. this is done in OTableDocShell::CheckDefConsistency now.
+            // FS - 07.12.99 - 69575
+
+        } break;
+
         //////////////////////////////////////////////////////////////
         // TypeCell
         case FIELD_TYPE:
@@ -1175,6 +1191,7 @@ void OTableEditorCtrl::SetCellData( long nRow, sal_uInt16 nColId, const ::com::s
             break;
 
         case FIELD_PROPERTY_NUMTYPE:
+            //  pFieldDescr->SetNumType( _rNewData );
             OSL_ENSURE(sal_False, "OTableEditorCtrl::SetCellData: invalid column!");
             break;
 
@@ -1259,7 +1276,7 @@ Any OTableEditorCtrl::GetCellData( long nRow, sal_uInt16 nColId )
 
         case FIELD_PROPERTY_NUMTYPE:
             OSL_ENSURE(sal_False, "OTableEditorCtrl::GetCellData: invalid column!");
-            break;
+            //  return pFieldDescr->GetNumType();
 
         case FIELD_PROPERTY_AUTOINC:
             sValue = pFieldDescr->IsAutoIncrement() ? strYes : strNo;
@@ -1343,6 +1360,11 @@ sal_Bool OTableEditorCtrl::IsCutAllowed( long nRow )
         }
     }
 
+//  Reference<XPropertySet> xTable = GetView()->getController().getTable();
+//  if( !IsCopyAllowed(nRow) || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
+//      return sal_False;
+
+    //  return bCutAllowed && IsDeleteAllowed( nRow );
     return bIsCutAllowed;
 }
 
@@ -1360,7 +1382,7 @@ sal_Bool OTableEditorCtrl::IsCopyAllowed( long /*nRow*/ )
     else if(m_eChildFocus == ROW)
     {
         Reference<XPropertySet> xTable = GetView()->getController().getTable();
-        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))
+        if( !GetSelectRowCount() || (xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW")))
             return sal_False;
 
         //////////////////////////////////////////////////////////////////////
@@ -1529,7 +1551,7 @@ sal_Bool OTableEditorCtrl::IsPrimaryKeyAllowed( long /*nRow*/ )
     // Key darf nicht veraendert werden
     // Dies gilt jedoch nur, wenn die Tabelle nicht neu ist und keine ::com::sun::star::sdbcx::View. Ansonsten wird kein DROP ausgeführt
 
-    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")))
+    if(xTable.is() && ::comphelper::getString(xTable->getPropertyValue(PROPERTY_TYPE)) == ::rtl::OUString::createFromAscii("VIEW"))
         return sal_False;
     //////////////////////////////////////////////////////////////
     // Wenn leeres Feld, kein PrimKey
@@ -1757,7 +1779,7 @@ void OTableEditorCtrl::AdjustFieldDescription(OFieldDescription* _pFieldDesc,
     {
         _pFieldDesc->SetIsNullable(ColumnValue::NO_NULLS);
         _pFieldDesc->SetControlDefault(Any());
-    }
+    } // if(!_bSet && _pFieldDesc->getTypeInfo()->bNullable)
     if ( _pFieldDesc->IsAutoIncrement() && !_bPrimaryKey )
     {
         OTableController& rController = GetView()->getController();
@@ -1781,6 +1803,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     // Evtl. vorhandene Primary Keys loeschen
     MultiSelection aDeletedPrimKeys;
     aDeletedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
+    long nIndex = 0;
 
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aIter = m_pRowList->begin();
     ::std::vector< ::boost::shared_ptr<OTableRow> >::const_iterator aEnd = m_pRowList->end();
@@ -1799,7 +1822,7 @@ void OTableEditorCtrl::SetPrimaryKey( sal_Bool bSet )
     aInsertedPrimKeys.SetTotalRange( Range(0,GetRowCount()) );
     if( bSet )
     {
-        long nIndex = FirstSelectedRow();
+        nIndex = FirstSelectedRow();
         while( nIndex >= 0 && nIndex < static_cast<long>(m_pRowList->size()) )
         {
             //////////////////////////////////////////////////////////////////////

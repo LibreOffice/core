@@ -7,7 +7,6 @@
 #include "SOActiveX.h"
 #include "SODispatchInterceptor.h"
 #include "com_uno_helper.h"
-#include <sal/macros.h>
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -19,7 +18,7 @@ STDMETHODIMP SODispatchInterceptor::InterfaceSupportsErrorInfo(REFIID riid)
         &IID_ISODispatchInterceptor,
     };
 
-    for (int i=0;i<SAL_N_ELEMENTS(arr);i++)
+    for (int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
     {
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
         if (InlineIsEqualGUID(*arr[i],riid))

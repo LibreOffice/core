@@ -43,9 +43,6 @@ SRC1FILES =  \
         globdoc.src
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
-
-EXCEPTIONSFILES = \
         $(SLO)$/globdoc.obj
 
 # --- Tagets -------------------------------------------------------

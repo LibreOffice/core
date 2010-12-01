@@ -253,6 +253,13 @@ void SwFEShell::SelectFlyFrm( SwFlyFrm& rFrm, sal_Bool bNew )
         if( rFrm.IsFlyInCntFrm() && rFrm.GetAnchorFrm() )
              rFrm.GetAnchorFrm()->SetCompletePaint();
 
+        // --> OD 2004-06-11 #i28701# - no format at all.
+//        //Hier wurde immer kalkuliert. Leider ist der Sonderfall Fly in Fly mit
+//        //Spalten u.U. sehr kritisch wenn der innenliegende zuerst formatiert
+//        //wird. Um kein Risiko einzugehen entschaerfen wir nur diesen Sonderfall.
+//        if( !rFrm.GetAnchorFrm()->IsInFly() )
+//            rFrm.Calc();
+
         if( pImpl->GetDrawView()->AreObjectsMarked() )
             pImpl->GetDrawView()->UnmarkAll();
 
@@ -345,7 +352,9 @@ const SwFrmFmt* SwFEShell::IsFlyInFly()
         Point aPoint( aTmpPos );
         aPoint.X() -= 1;                    //nicht im Fly landen!!
         GetLayout()->GetCrsrOfst( &aPos, aPoint, &aState );
-        // #108784# - determine text frame by left-top-corner of object
+        // OD 01.07.2003 #108784# - determine text frame by left-top-corner
+        // of object
+        //pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( 0, 0, sal_False );
         pTxtFrm = aPos.nNode.GetNode().GetCntntNode()->GetFrm( &aTmpPos, 0, sal_False );
     }
     const SwFrm *pTmp = ::FindAnchor( pTxtFrm, aTmpPos );
@@ -386,6 +395,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
     else
     {
             const SwFrm *pAnch = pFly->GetAnchorFrm();
+            // --> OD 2004-06-11 #i28701# - no format here
+//          pAnch->Calc();
             Point aOrient( pAnch->Frm().Pos() );
 
         if ( pFly->IsFlyInCntFrm() )
@@ -396,6 +407,8 @@ void SwFEShell::SetFlyPos( const Point& rAbsPos )
         aOrient.Y() = rAbsPos.Y() - aOrient.Y();
         pFly->ChgRelPos( aOrient );
     }
+    // --> OD 2004-06-11 #i28701# - no format here
+//    pFly->Calc();
     CallChgLnk();       // rufe das AttrChangeNotify auf der UI-Seite.
 }
 
@@ -643,6 +656,9 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
             // we better get the current pCurCrsr instead of working with the
             // deleted one:
             pCrsr = GetCrsr();
+            // <--
+
+//          KillPams();
         }
         else
             bMoveCntnt = sal_False;
@@ -1071,6 +1087,7 @@ sal_Bool SwFEShell::GetFlyFrmAttr( SfxItemSet &rSet ) const
         {
             // OD 12.11.2003 #i22341# - content anchor of anchor item is needed.
             // Thus, don't overwrite anchor item by default contructed anchor item.
+            //rSet.Put( SwFmtAnchor( eType ) );
             if ( FLY_AS_CHAR == eType )
             {
                 rSet.ClearItem( RES_OPAQUE );
@@ -1132,7 +1149,9 @@ sal_Bool SwFEShell::SetFlyFrmAttr( SfxItemSet& rSet )
     }
     return bRet;
 }
+/*-- 30.03.2004 15:05:07---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 sal_Bool SwFEShell::SetDrawingAttr( SfxItemSet& rSet )
 {
     sal_Bool bRet = sal_False;
@@ -1911,6 +1930,11 @@ sal_Bool SwFEShell::ReplaceSdrObj( const String& rGrfName, const String& rFltNam
         DelSelectedObj();
 
         pFmt = GetDoc()->Insert( *GetCrsr(), rGrfName, rFltName, pGrf, &aFrmSet, NULL, NULL );
+
+        // die Ordnungsnummer (Z-Order) noch uebertragen
+        // JP 04.07.98: klappt aber nicht richtig!
+        //SdrObject* pNewObj = ::FindSdrObject( pFmt );
+        //pNewObj->SetOrdNum( nOrdNum );
 
         EndUndo();
         EndAllAction();

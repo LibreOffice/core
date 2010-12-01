@@ -106,6 +106,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aFilterCtr.HideRange(FALSE);
     aFilterCtr.Show();
     SetDispatcherLock( TRUE );
+    //SFX_APPWINDOW->Disable(FALSE);
 
     Init();
 
@@ -113,6 +114,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
     SetDispatcherLock( FALSE );
+    //SFX_APPWINDOW->Enable();
 }
 
 void __EXPORT ScHighlightChgDlg::Init()
@@ -212,6 +214,17 @@ void ScHighlightChgDlg::RefInputDone( BOOL bForced)
 
 void ScHighlightChgDlg::SetActive()
 {
+    /*
+    if(pTPFilter!=NULL)
+    {
+        aAcceptChgCtr.GetFilterPage()->SetFocusToRange();
+        aEdAssign.Hide();
+        aRbAssign.Hide();
+        SFX_APPWINDOW->Enable();
+        SetDispatcherLock( FALSE );
+    }
+    //RefInputDone();
+    */
 }
 
 BOOL ScHighlightChgDlg::IsRefInputMode() const
@@ -244,6 +257,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
     if(pRef!=NULL)
     {
         SetDispatcherLock( TRUE );
+        //SFX_APPWINDOW->Disable(FALSE);
         aEdAssign.Show();
         aRbAssign.Show();
         aEdAssign.SetText(aFilterCtr.GetRange());

@@ -35,6 +35,8 @@
 #include "global.hxx"
 #include <boost/shared_ptr.hpp>
 
+#define ENABLE_SHEET_PROTECTION 1
+
 class ScDocument;
 class ScTableProtectionImpl;
 

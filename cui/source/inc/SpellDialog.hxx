@@ -70,7 +70,7 @@ namespace svx{
 class SpellDialog;
 struct SpellErrorDescription;
 // ------------------------------------------------------------------
-class SentenceEditWindow_Impl : public MultiLineEdit
+class SentenceEditWindow_Impl : public MultiLineEdit/*, public SfxListener*/
 {
     using MultiLineEdit::SetText;
 
@@ -184,6 +184,7 @@ private:
     GroupBox        aBackgroundGB;
 
     Image           aVendorImage;
+    Image           aVendorImageHC;
 
     String          aResumeST;
     String          aIgnoreOnceST;
@@ -235,7 +236,7 @@ private:
 
     /** Retrieves the next sentence.
      */
-    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the current sentence*/);
+    bool            GetNextSentence_Impl(bool bUseSavedSentence, bool bRechek /*for rechecking the curretn sentence*/);
     /** Corrects all errors that have been selected to be changed always
      */
     bool            ApplyChangeAllList_Impl(SpellPortions& rSentence, bool& bHasReplaced);

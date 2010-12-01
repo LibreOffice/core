@@ -128,6 +128,9 @@ void SwUserField::SetSubType(sal_uInt16 nSub)
     nSubType = nSub & 0xff00;
 }
 
+/*-----------------09.03.98 08:04-------------------
+
+--------------------------------------------------*/
 bool SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -152,7 +155,9 @@ bool SwUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------09.03.98 08:04-------------------
 
+--------------------------------------------------*/
 bool SwUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -303,6 +308,9 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
     }
 }
 
+/*-----------------04.03.98 17:05-------------------
+
+--------------------------------------------------*/
 bool SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -324,7 +332,9 @@ bool SwUserFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------04.03.98 17:05-------------------
 
+--------------------------------------------------*/
 bool SwUserFieldType::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )

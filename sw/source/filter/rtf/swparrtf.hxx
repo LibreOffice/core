@@ -29,9 +29,15 @@
 #ifndef _SWPARRTF_HXX
 #define _SWPARRTF_HXX
 
+#ifndef __SGI_STL_MAP
 #include <map>
+#endif
+#ifndef __SGI_STL_DEQUE
 #include <deque>
+#endif
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 
 #ifndef _SVSTDARR_HXX
 #define _SVSTDARR_BOOLS
@@ -41,7 +47,9 @@
 #include <editeng/numitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <redline.hxx>
+#ifndef __SGI_STL_ALGORITHM
 #include <algorithm>
+#endif
 #include <fltshell.hxx>         // fuer den Attribut Stack
 #include <ndindex.hxx>
 #include "../inc/msfilter.hxx"

@@ -207,18 +207,18 @@ ODbDataSourceAdministrationHelper::ODbDataSourceAdministrationHelper(const Refer
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_NAMED_PIPE, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "NamedPipe" ) ) ) );
 
     // special settings for adabas
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ShutdownDatabase"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSizeIncrement"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataCacheSize"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlUser"))));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlPassword"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_SHUTSERVICE, ::rtl::OUString::createFromAscii("ShutdownDatabase")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_DATAINC, ::rtl::OUString::createFromAscii("DataCacheSizeIncrement")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CACHESIZE, ::rtl::OUString::createFromAscii("DataCacheSize")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLUSER, ::rtl::OUString::createFromAscii("ControlUser")));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_CTRLPWD, ::rtl::OUString::createFromAscii("ControlPassword")));
 
     // extra settings for odbc
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_USECATALOG, INFO_USECATALOG));
     // extra settings for a ldap address book
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_BASEDN, INFO_CONN_LDAP_BASEDN));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_ROWCOUNT, INFO_CONN_LDAP_ROWCOUNT));
-    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UseSSL"))));
+    m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_CONN_LDAP_USESSL, ::rtl::OUString::createFromAscii("UseSSL")));
     m_aIndirectPropTranslator.insert(MapInt2String::value_type(DSID_DOCUMENT_URL, PROPERTY_URL));
 
     // oracle
@@ -586,6 +586,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             break;
         case  ::dbaccess::DST_LDAP:
             {
+                //  SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pHostName, SfxStringItem, DSID_CONN_HOSTNAME, sal_True);
                 SFX_ITEMSET_GET(*m_pItemSetHelper->getOutputSet(), pPortNumber, SfxInt32Item, DSID_CONN_LDAP_PORTNUMBER, sal_True);
                 sNewUrl = pCollection->cutPrefix(pUrlItem->GetValue());
                 sNewUrl += lcl_createHostWithPort(NULL,pPortNumber);
@@ -663,7 +664,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const Reference< XPr
             if (0 == pAdditionalInfo->Name.compareToAscii("JDBCDRV"))
             {   // compatibility
                 PropertyValue aCompatibility(*pAdditionalInfo);
-                aCompatibility.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
+                aCompatibility.Name = ::rtl::OUString::createFromAscii("JavaDriverClass");
                 aInfos.insert(aCompatibility);
             }
             else
@@ -1118,6 +1119,7 @@ void ODbDataSourceAdministrationHelper::convertUrl(SfxItemSet& _rDest)
     USHORT nPortNumberId    = 0;
     sal_Int32 nPortNumber   = -1;
     String sNewHostName;
+    //String sUrl = pCollection->cutPrefix(pUrlItem->GetValue());
     String sUrlPart;
 
     pCollection->extractHostNamePort(pUrlItem->GetValue(),sUrlPart,sNewHostName,nPortNumber);

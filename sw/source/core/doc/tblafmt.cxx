@@ -1079,7 +1079,9 @@ BOOL SwTableAutoFmtTbl::Save( SvStream& rStream ) const
         rStream << nVal
                 << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
                 << (BYTE)GetStoreCharSet( ::gsl_getSystemTextEncoding() );
-
+//              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
+//              << (BYTE)::GetSystemCharSet()
+//              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
         bRet = 0 == rStream.GetError();
 
         //-----------------------------------------------------------

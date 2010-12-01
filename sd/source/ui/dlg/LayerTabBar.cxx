@@ -97,11 +97,19 @@ LayerTabBar::~LayerTabBar()
 {
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void LayerTabBar::Select()
 {
     SfxDispatcher* pDispatcher = pDrViewSh->GetViewFrame()->GetDispatcher();
     pDispatcher->Execute(SID_SWITCHLAYER, SFX_CALLMODE_ASYNCHRON);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
 {
@@ -135,6 +143,10 @@ void LayerTabBar::MouseButtonDown(const MouseEvent& rMEvt)
     if( !bSetPageID )
         TabBar::MouseButtonDown(rMEvt);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void LayerTabBar::DoubleClick()
 {
@@ -191,6 +203,10 @@ sal_Int8 LayerTabBar::ExecuteDrop( const ExecuteDropEvent& rEvt )
 
 }
 
+/*************************************************************************
+|*
+\************************************************************************/
+
 void  LayerTabBar::Command(const CommandEvent& rCEvt)
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
@@ -200,6 +216,10 @@ void  LayerTabBar::Command(const CommandEvent& rCEvt)
     }
 }
 
+
+/*************************************************************************
+|*
+\************************************************************************/
 long LayerTabBar::StartRenaming()
 {
     BOOL bOK = TRUE;
@@ -229,6 +249,10 @@ long LayerTabBar::StartRenaming()
 
     return(bOK);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 long LayerTabBar::AllowRenaming()
 {
@@ -270,6 +294,10 @@ long LayerTabBar::AllowRenaming()
 
     return(bOK);
 }
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void LayerTabBar::EndRenaming()
 {
@@ -319,6 +347,11 @@ void LayerTabBar::EndRenaming()
         }
     }
 }
+
+
+/*************************************************************************
+|*
+\************************************************************************/
 
 void LayerTabBar::ActivatePage()
 {

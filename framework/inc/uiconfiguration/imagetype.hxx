@@ -39,6 +39,8 @@ enum ImageType
 {
     ImageType_Color = 0,
     ImageType_Color_Large,
+    ImageType_HC,
+    ImageType_HC_Large,
     ImageType_COUNT
 };
 

@@ -201,7 +201,7 @@ public:
             return *this;
         }
 
-        bool operator==( const BitmapID& rComp ) const
+        bool operator==( const BitmapID& rComp )
         {
             return (m_aPixelSize == rComp.m_aPixelSize &&
                     m_nSize == rComp.m_nSize &&
@@ -228,7 +228,7 @@ public:
         sal_Int32           m_nObject;
         bool                m_bTrueColor;
 
-        JPGEmit() : m_pStream( NULL ), m_bTrueColor( false ) {}
+        JPGEmit() : m_pStream( NULL ) {}
         ~JPGEmit() { delete m_pStream; }
     };
 

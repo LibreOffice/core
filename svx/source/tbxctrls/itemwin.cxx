@@ -72,6 +72,7 @@ using namespace ::com::sun::star::beans;
 
 SvxLineBox::SvxLineBox( Window* pParent, const Reference< XFrame >& rFrame, WinBits nBits ) :
     LineLB( pParent, nBits ),
+    meBmpMode   ( GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL ),
     nCurPos     ( 0 ),
     aLogicalSize(40,140),
     bRelease    ( TRUE ),
@@ -115,6 +116,8 @@ void SvxLineBox::Select()
     {
         XLineStyle eXLS;
         USHORT nPos = GetSelectEntryPos();
+//      SfxDispatcher* pDisp = rBindings.GetDispatcher();
+        //DBG_ASSERT( pDisp, "invalid Dispatcher" );
 
         switch ( nPos )
         {
@@ -149,6 +152,7 @@ void SvxLineBox::Select()
                     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineDash" )),
                                                  aArgs );
+//                    pDisp->Execute( SID_ATTR_LINE_DASH, SFX_CALLMODE_RECORD, &aLineDashItem, 0L );
                 }
             }
             break;
@@ -163,6 +167,7 @@ void SvxLineBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:XLineStyle" )),
                                      aArgs );
+//      pDisp->Execute( SID_ATTR_LINE_STYLE, SFX_CALLMODE_RECORD, &aLineStyleItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -243,7 +248,9 @@ void SvxLineBox::ReleaseFocus_Impl()
             pShellWnd->GrabFocus();
     }
 }
+/* -----------------------------08.03.2002 15:39------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -252,9 +259,20 @@ void SvxLineBox::DataChanged( const DataChangedEvent& rDCEvt )
         SetSizePixel(LogicToPixel(aLogicalSize, MAP_APPFONT));
         Size aDropSize( aLogicalSize.Width(), LOGICAL_EDIT_HEIGHT);
         SetDropDownSizePixel(LogicToPixel(aDropSize, MAP_APPFONT));
-    }
+   }
 
     LineLB::DataChanged( rDCEvt );
+
+    if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
+         (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+    {
+        BmpColorMode eMode = GetSettings().GetStyleSettings().GetHighContrastMode() ? BMP_COLOR_HIGHCONTRAST : BMP_COLOR_NORMAL;
+        if( eMode != meBmpMode )
+        {
+            meBmpMode = eMode;
+            FillControl();
+        }
+     }
 }
 
 void SvxLineBox::FillControl()
@@ -269,8 +287,10 @@ void SvxLineBox::FillControl()
         if ( pItem )
             Fill( pItem->GetDashList() );
     }
-}
 
+
+//  rBindings.Invalidate( SID_ATTR_LINE_DASH );
+}
 //========================================================================
 // SvxColorBox
 //========================================================================
@@ -312,6 +332,7 @@ IMPL_LINK( SvxColorBox, DelayHdl_Impl, Timer *, EMPTYARG )
         const SvxColorTableItem* pItem = (const SvxColorTableItem*)( pSh->GetItem( SID_COLOR_TABLE ) );
         if ( pItem )
             Fill( pItem->GetColorTable() );
+//      rBindings.Invalidate( nId );
     }
     return 0;
 }
@@ -352,6 +373,7 @@ void SvxColorBox::Select()
         SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                      maCommand,
                                      aArgs );
+//        rBindings.GetDispatcher()->Execute( nId, SFX_CALLMODE_RECORD, &aLineColorItem, 0L );
 
         nCurPos = GetSelectEntryPos();
         ReleaseFocus_Impl();
@@ -414,7 +436,9 @@ long SvxColorBox::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
+/* -----------------------------08.03.2002 15:35------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxColorBox::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
@@ -508,6 +532,7 @@ void SvxMetricField::Modify()
     SfxToolBoxControl::Dispatch( Reference< XDispatchProvider >( mxFrame->getController(), UNO_QUERY ),
                                  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:LineWidth" )),
                                  aArgs );
+//  rBindings.GetDispatcher()->Execute( SID_ATTR_LINE_WIDTH, SFX_CALLMODE_RECORD, &aLineWidthItem, 0L );
 }
 
 // -----------------------------------------------------------------------
@@ -613,7 +638,9 @@ long SvxMetricField::Notify( NotifyEvent& rNEvt )
     }
     return nHandled;
 }
+/* -----------------------------08.03.2002 15:32------------------------------
 
+ ---------------------------------------------------------------------------*/
 void SvxMetricField::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&

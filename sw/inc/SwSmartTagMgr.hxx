@@ -56,6 +56,13 @@ public:
       virtual void SAL_CALL changesOccurred( const ::com::sun::star::util::ChangesEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 };
 
+/*
+namespace SwSmartTagMgr
+{
+    SmartTagMgr& Get();
+}
+*/
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

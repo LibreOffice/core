@@ -54,7 +54,8 @@ public:
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
-    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId);
+    ObjectCatalogToolBox_Impl(Window * pParent, ResId const & rResId,
+                              ResId const & rImagesHighContrastId);
 
 private:
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
@@ -62,6 +63,8 @@ private:
     void setImages();
 
     ImageList m_aImagesNormal;
+    ImageList m_aImagesHighContrast;
+    bool m_bHighContrast;
 };
 
 class ObjectCatalog : public FloatingWindow

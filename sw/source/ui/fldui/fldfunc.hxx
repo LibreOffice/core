@@ -38,6 +38,9 @@
 #include "condedit.hxx"
 #include "fldpage.hxx"
 #include <actctrl.hxx>
+/*--------------------------------------------------------------------
+   Beschreibung:
+ --------------------------------------------------------------------*/
 
 class SwFldFuncPage : public SwFldPage
 {

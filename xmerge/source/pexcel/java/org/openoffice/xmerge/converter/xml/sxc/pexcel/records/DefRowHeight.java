@@ -44,7 +44,10 @@ public class DefRowHeight implements BIFFRecord {
     private byte[] unknown2 = new byte[2];
 
     /**
-      * Default constructor. Sets something unknown to 255.
+      * Constructs a pocket Excel Document from the
+      * <code>InputStream</code> and assigns it the document name passed in
+      *
+      * @param  is InputStream containing a Pocket Excel Data file.
       */
     public DefRowHeight() {
         unknown1 = new byte[] {(byte)0x00, (byte)0x00};

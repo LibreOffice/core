@@ -165,7 +165,7 @@ void ScOutlineWindow::InitSettings()
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
     SetBackground( rStyleSettings.GetFaceColor() );
     maLineColor = rStyleSettings.GetButtonTextColor();
-    mpSymbols = ScGlobal::GetOutlineSymbols();
+    mpSymbols = ScGlobal::GetOutlineSymbols( rStyleSettings.GetHighContrastMode() );
     Invalidate();
 }
 

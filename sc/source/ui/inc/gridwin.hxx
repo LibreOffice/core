@@ -394,6 +394,7 @@ public:
     void            CheckNeedsRepaint();
 
     void            UpdateDPFromFieldPopupMenu();
+    void            UpdateVisibleRange();
 
     // #114409#
     void CursorChanged();

@@ -29,10 +29,13 @@
 #define _CHARATR_HXX
 
 #include <format.hxx>
-#include <hintids.hxx>
+#include <hintids.hxx>      // fuer die WhichIds
 
 
-// implementation of the character attribute methods of SwAttrSet
+/******************************************************************************
+ *  Implementierung der Charakter-Attribut Methoden vom SwAttrSet
+ *  AMA 12.10.94: Umstellung auf SvxItems.
+ ******************************************************************************/
 
 inline const SvxPostureItem      &SwAttrSet::GetPosture(BOOL bInP) const
     {   return (const SvxPostureItem&)Get( RES_CHRATR_POSTURE,bInP); }
@@ -109,7 +112,10 @@ inline const SvxCharReliefItem  &SwAttrSet::GetCharRelief( BOOL bInP ) const
 inline const SvxCharHiddenItem  &SwAttrSet::GetCharHidden( BOOL bInP ) const
     {   return (const SvxCharHiddenItem&)Get( RES_CHRATR_HIDDEN, bInP ); }
 
-// implementation of the character attribute methods of SwFmt
+/******************************************************************************
+ *  Implementierung der Charakter-Attribut Methoden vom SwFmt
+ *  AMA: 12.10.94: Umstellung auf SvxItems.
+ ******************************************************************************/
 
 inline const SvxPostureItem          &SwFmt::GetPosture(BOOL bInP) const
     {   return aSet.GetPosture(bInP); }

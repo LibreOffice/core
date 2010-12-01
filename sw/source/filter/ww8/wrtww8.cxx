@@ -209,6 +209,7 @@ public:
     void Write( WW8Export& rWrt );
     void MoveFieldMarks(ULONG nFrom,ULONG nTo);
 
+//  String GetWWBkmkName( const String& rName ) const;
 };
 
 #define ANZ_DEFAULT_STYLES 16
@@ -1796,6 +1797,7 @@ void MSWordExportBase::SaveData( ULONG nStt, ULONG nEnd )
     bOutTable = false;
     // Caution: bIsInTable should not be set here
     bOutFlyFrmAttrs = false;
+//  pAttrSet = 0;
     bStartTOX = false;
     bInWriteTOX = false;
 
@@ -2885,6 +2887,9 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
     pFlyOffset = 0;
     eNewAnchorType = FLY_AT_PAGE;
     nTxtTyp = TXT_MAINTEXT;
+    // --> OD 2007-04-19 #i43447# - removed
+//    nFlyWidth = nFlyHeight = 0;
+    // <--
     nStyleBeforeFly = nLastFmtId = 0;
     pStyAttr = 0;
     pCurrentStyle = NULL;
@@ -3561,7 +3566,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN));
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3574,7 +3579,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         aFldHeader[5] |= 0x80; // ffhaslistbox
         const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString::createFromAscii(ODF_FORMDROPDOWN_LISTENTRY));
         if(pListEntries != pParameters->end())
         {
             uno::Sequence< ::rtl::OUString > vListEntries;

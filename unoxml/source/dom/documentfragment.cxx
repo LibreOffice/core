@@ -37,7 +37,7 @@ namespace DOM
     }
     OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException)
     {
-        return OUString(RTL_CONSTASCII_USTRINGPARAM("#document-fragment"));
+        return OUString::createFromAscii("#document-fragment");
     }
     OUString SAL_CALL CDocumentFragment::getNodeValue() throw (RuntimeException)
     {

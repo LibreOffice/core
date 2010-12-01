@@ -35,7 +35,6 @@
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
-#include <vcl/svapp.hxx>
 
 //........................................................................
 namespace svt
@@ -76,7 +75,7 @@ namespace svt
     //------------------------------------------------------------------------------------------------------------------
     Reference< XAccessibleContext > PanelTabBarPeer::CreateAccessibleContext()
     {
-        SolarMutexGuard aSolarGuard;
+        ::osl::SolarGuard aSolarGuard( GetMutex() );
         if ( m_pTabBar == NULL )
             throw DisposedException( ::rtl::OUString(), *this );
 
@@ -92,7 +91,7 @@ namespace svt
     void SAL_CALL PanelTabBarPeer::dispose() throw(RuntimeException)
     {
         {
-            SolarMutexGuard aSolarGuard;
+            ::osl::SolarGuard aSolarGuard( GetMutex() );
             m_pTabBar = NULL;
         }
         VCLXWindow::dispose();

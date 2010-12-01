@@ -164,7 +164,9 @@ void SfxTemplateControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
         }
     }
 }
+/* -----------------------------05.09.2001 10:48------------------------------
 
+ ---------------------------------------------------------------------------*/
 IMPL_STATIC_LINK(SfxTemplateControllerItem, SetWaterCanStateHdl_Impl,
                                     SfxTemplateControllerItem*, EMPTYARG)
 {

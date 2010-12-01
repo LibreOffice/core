@@ -36,6 +36,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
+
 /**
  * Represents a BIFF Record that describes the selected area of a worksheet
  */
@@ -80,9 +81,9 @@ public class Selection implements BIFFRecord {
     }
 
     /**
-     * Get the active cell for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code>
      *
-     * @return the cell position
+     * @return the hex code for <code>Selection</code>
      */
     public Point getActiveCell() {
         Point p = new Point(colActive, EndianConverter.readShort(rwActive));
@@ -90,9 +91,9 @@ public class Selection implements BIFFRecord {
     }
 
     /**
-     * Set the active cell position for this particular <code>BIFFRecord</code>
+     * Get the hex code for this particular <code>BIFFRecord</code>
      *
-     * @param p The active cell position
+     * @return the hex code for <code>Selection</code>
      */
     public void setActiveCell(Point p) {
 
@@ -103,7 +104,7 @@ public class Selection implements BIFFRecord {
     /**
      * Reads a Selection Record from the <code>InputStream</code>
      *
-     * @param   input InputStream containing a Pocket Excel Data file.
+     * @param   is InputStream containing a Pocket Excel Data file.
      */
     public int read(InputStream input) throws IOException {
 

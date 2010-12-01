@@ -396,7 +396,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
             if( !pGraphicFilter->ImportGraphic( aGraphic, aURL ) )
             {
                 sal_Int8    nTempAction = ( aIter == maDropFileVector.begin() ) ? mnAction : 0;
-                InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
+                SdrGrafObj* pGrafObj = InsertGraphic( aGraphic, nTempAction, maDropPos, NULL, NULL );
 
                 // return action from first inserted graphic
                 if( aIter == maDropFileVector.begin() )

@@ -38,13 +38,10 @@ TARGET=formdlgs
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(EXCEPTIONSFILES) \
-        $(SLO)$/formdata.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/dwfunctr.obj \
-        $(SLO)$/formula.obj \
-        $(SLO)$/privsplt.obj
+        $(SLO)$/formula.obj  \
+        $(SLO)$/formdata.obj  \
+        $(SLO)$/privsplt.obj	\
+        $(SLO)$/dwfunctr.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES =	\

@@ -45,10 +45,15 @@
 #include <vector>
 #include <set>
 
+
 class SwNumRule;
 class SwNodeNum;
+// --> OD 2008-05-06 #refactorlists#
 class SwList;
+// <--
+// --> OD 2008-12-02 #i96772#
 class SvxLRSpaceItem;
+// <--
 
 namespace utl {
     class TransliterationWrapper;
@@ -59,6 +64,7 @@ class SwCntntFrm;
 class SwTxtFld;          // Fuer GetTxtFld()
 class SfxItemSet;
 class SwUndoTransliterate;
+
 
 struct SwSpellArgs;             // for Spell(), splargs.hxx
 struct SwConversionArgs;        // for Convert(), splargs.hxx
@@ -95,8 +101,9 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     //Also niemals direkt zugreifen!
     SwpHints    *m_pSwpHints;
 
+    // --> OD 2005-11-02 #i51089 - TUNING#
     mutable SwNodeNum* mpNodeNum;  // Numerierung fuer diesen Absatz
-
+    // <--
     XubString   m_Text;
 
     SwParaIdleData_Impl* m_pParaIdleData_Impl;
@@ -113,16 +120,21 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
     bool m_bNotifiable;
 
     // BYTE nOutlineLevel; //#outline level, removed by zhaojianwei.
+    // --> OD 2008-11-19 #i70748#
     bool mbEmptyListStyleSetDueToSetOutlineLevelAttr;
+    // <--
 
+    // --> OD 2008-03-27 #refactorlists#
     // boolean, indicating that a <SetAttr(..)> or <ResetAttr(..)> or
     // <ResetAllAttr(..)> method is running.
     // Needed to avoid duplicate handling of attribute change actions.
     bool mbInSetOrResetAttr;
-
+    // <--
+    // --> OD 2008-05-06 #refactorlists#
     // pointer to the list, to whose the text node is added to
     SwList* mpList;
-
+    // <--
+    /// #i111677# cached expansion (for clipboard)
     ::std::auto_ptr< ::rtl::OUString > m_pNumStringCache;
 
     ::com::sun::star::uno::WeakReference<
@@ -183,6 +195,9 @@ class SW_DLLPUBLIC SwTxtNode: public SwCntntNode, public ::sfx2::Metadatable
 
     /** create number for this text node, if not already existing
 
+        OD 2005-11-02 #i51089 - TUNING#
+        OD 2007-10-26 #i83479# - made private
+
         @return number of this node
     */
     SwNodeNum* CreateNum() const;
@@ -204,7 +219,9 @@ public:
     void SetAutoCompleteWordDirty( bool bNew ) const;
     void SetWrong( SwWrongList* pNew, bool bDelete = true );
     SwWrongList* GetWrong();
+    // --> OD 2008-05-23 #i71360#
     const SwWrongList* GetWrong() const;
+    // <--
     void SetGrammarCheck( SwGrammarMarkUp* pNew, bool bDelete = true );
     SwGrammarMarkUp* GetGrammarCheck();
     // SMARTTAGS
@@ -236,12 +253,14 @@ public:
     void GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax, ULONG &rAbs,
                         OutputDevice* pOut = 0 ) const;
 
+    // --> OD 2008-03-13 #refactorlists#
     // overriding to handle change of certain paragraph attributes
     virtual BOOL SetAttr( const SfxPoolItem& );
     virtual BOOL SetAttr( const SfxItemSet& rSet );
     virtual BOOL ResetAttr( USHORT nWhich1, USHORT nWhich2 = 0 );
     virtual BOOL ResetAttr( const SvUShorts& rWhichArr );
     virtual USHORT ResetAllAttr();
+    // <--
 
     /// insert text content
     void InsertText( const XubString & rStr, const SwIndex & rIdx,
@@ -274,7 +293,7 @@ public:
     // loesche das Text-Attribut (muss beim Pool abgemeldet werden!)
     void    DestroyAttr( SwTxtAttr* pAttr );
 
-    // delete all attributes from SwpHintsArray.
+    // loesche alle Attribute aus dem SwpHintsArray.
     void    ClearSwpHintsArr( bool bDelFields );
 
     /// Insert pAttr into hints array. @return true iff inserted successfully
@@ -292,6 +311,7 @@ public:
                   xub_StrLen nStt, xub_StrLen nEnd,
                   const SetAttrMode nMode = nsSetAttrMode::SETATTR_DEFAULT );
     // erfrage die Attribute vom TextNode ueber den Bereich
+    // --> OD 2008-01-16 #newlistlevelattrs#
     // Introduce 4th optional parameter <bMergeIndentValuesOfNumRule>.
     // If <bMergeIndentValuesOfNumRule> == TRUE, the indent attributes of
     // the corresponding list level of an applied list style is merged into
@@ -302,6 +322,7 @@ public:
                   BOOL bOnlyTxtAttr  = FALSE,
                   BOOL bGetFromChrFmt = TRUE,
                   const bool bMergeIndentValuesOfNumRule = false ) const;
+    // <--
 
     // uebertrage Attribute eines AttrSets ( AutoFmt ) in das SwpHintsArray
     void FmtToTxtAttr( SwTxtNode* pNd );
@@ -313,6 +334,7 @@ public:
     void DeleteAttribute ( SwTxtAttr * const pTxtAttr );
 
     // Aktionen auf Text und Attributen
+    // --> OD 2008-11-18 #i96213#
     // introduce optional parameter to control, if all attributes have to be copied.
     void CopyText( SwTxtNode * const pDest,
                const SwIndex &rStart,
@@ -323,6 +345,7 @@ public:
                const SwIndex &rStart,
                xub_StrLen nLen,
                const bool bForceCopyOfAllAttrs = false );
+    // <--
 
     void        CutText(SwTxtNode * const pDest,
                     const SwIndex & rStart, const xub_StrLen nLen);
@@ -431,7 +454,9 @@ public:
 
     void UpdateOutlineState();
 
-    /** Returns if this text node may be numbered.
+    /** -> #i23730#
+
+        Returns if this text node may be numbered.
 
         A text node may be numbered if
           - it has no SwNodeNum
@@ -450,6 +475,7 @@ public:
 
     /** Returns outline of numbering string
 
+        OD 2005-11-17 #128041#
         Introduce parameter <_bInclPrefixAndSuffixStrings> in order to control,
         if the prefix and the suffix strings have to been included or not.
 
@@ -485,12 +511,17 @@ public:
      */
     BOOL GetFirstLineOfsWithNum( short& rFirstOffset ) const;
 
+    // --> OD 2010-01-05 #b6884103#
     SwTwips GetAdditionalIndentForStartingNewList() const;
+    // <--
 
+    // --> OD 2008-12-02 #i96772#
     void ClearLRSpaceItemDueToListLevelIndents( SvxLRSpaceItem& o_rLRSpaceItem ) const;
+    // <--
 
     /** return left margin for tab stop position calculation
 
+        OD 2008-06-30 #i91133#
         Needed for text formatting
         Method considers new list level attributes, which also can provide a left margin value
 
@@ -498,7 +529,8 @@ public:
     */
     long GetLeftMarginForTabCalculation() const;
 
-    /** Returns if this text node has a number.
+    /** -> #i29560
+        Returns if this text node has a number.
 
         This text node has a number if it has a SwNodeNum and a
         numbering rule and the numbering format specified for the
@@ -509,7 +541,8 @@ public:
      */
     BOOL HasNumber() const;
 
-    /** Returns if this text node has a bullet.
+    /** -> #i29560
+        Returns if this text node has a bullet.
 
         This text node has a bullet if it has a SwNodeNum and a
         numbering rule and the numbering format specified for the
@@ -520,7 +553,8 @@ public:
      */
     BOOL HasBullet() const;
 
-    /** Returns is this text node is numbered.
+    /** -> #i27615#
+        Returns is this text node is numbered.
 
         This node is numbered if it has a SwNodeNum and it has a
         numbering rule and has not a hidden SwNodeNum.
@@ -533,7 +567,8 @@ public:
      */
     BOOL IsNumbered() const;
 
-    /** Returns if this text node has a marked label.
+    /** -> #i27615#
+        Returns if this text node has a marked label.
 
         @retval true       This text node has a marked label.
         @retval false      else
@@ -596,11 +631,14 @@ public:
 
        NOTE: This is subject to change, see GetOutlineLevel.
      */
-    void SetAttrOutlineLevel(int nLevel);//#OutlineLevel,added by zhaojianwei
+    //void SetOutlineLevel(int nLevel);
+      void SetAttrOutlineLevel(int nLevel);//#OutlineLevel,added by zhaojianwei
 
+    // --> OD 2008-11-19 #i70748#
     bool IsEmptyListStyleDueToSetOutlineLevelAttr();
     void SetEmptyListStyleDueToSetOutlineLevelAttr();
     void ResetEmptyListStyleDueToResetOutlineLevelAttr();
+    // <--
 
     /**
        Returns the width of leading tabs/blanks in this paragraph.
@@ -610,6 +648,7 @@ public:
        @return     the width of the leading whitespace
      */
     USHORT GetWidthOfLeadingTabs() const;
+
 
     /**
        Returns if the paragraph has a visible numbering or bullet.
@@ -621,12 +660,15 @@ public:
      */
     bool HasVisibleNumberingOrBullet() const;
 
+    // --> OD 2008-02-19 #refactorlists#
     void SetListId( const String sListId );
     String GetListId() const;
+    // <--
 
     /** Determines, if the list level indent attributes can be applied to the
         paragraph.
 
+        OD 2008-01-17 #newlistlevelattrs#
         The list level indents can be applied to the paragraph under the one
         of following conditions:
         - the list style is directly applied to the paragraph and the paragraph
@@ -645,6 +687,8 @@ public:
     /** Retrieves the list tab stop position, if the paragraph's list level defines
         one and this list tab stop has to merged into the tap stops of the paragraph
 
+        OD 2008-01-17 #newlistlevelattrs#
+
         @author OD
 
         @param nListTabStopPosition
@@ -656,6 +700,8 @@ public:
 
     /** Retrieves the character following the list label, if the paragraph's
         list level defines one.
+
+        OD 2008-01-17 #newlistlevelattrs#
 
         @author OD
 
@@ -672,7 +718,7 @@ public:
     USHORT GetLang( const xub_StrLen nBegin, const xub_StrLen nLen = 0,
                     USHORT nScript = 0 ) const;
 
-    // in ndcopy.cxx
+    // steht in ndcopy.cxx
     BOOL IsSymbol( const xub_StrLen nBegin ) const; // steht in itratr.cxx
     virtual SwCntntNode* MakeCopy( SwDoc*, const SwNodeIndex& ) const;
 
@@ -680,6 +726,7 @@ public:
     BOOL Hyphenate( SwInterHyphInfo &rHyphInf );
     void DelSoftHyph( const xub_StrLen nStart, const xub_StrLen nEnd );
 
+    // --> OD 2007-11-15 #i83479#
     // add 4th optional parameter <bAddSpaceAfterListLabelStr> indicating,
     // when <bWithNum = true> that a space is inserted after the string for
     // the list label.
@@ -691,11 +738,15 @@ public:
                             const bool bWithNum = false,
                             const bool bAddSpaceAfterListLabelStr = false,
                             const bool bWithSpacesForLevel = false ) const;
+    // <--
     BOOL GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx = 0,
                         xub_StrLen nIdx = 0, xub_StrLen nLen = STRING_LEN,
                        BOOL bWithNum = FALSE, BOOL bWithFtn = TRUE,
                        BOOL bReplaceTabsWithSpaces = FALSE ) const;
 
+    /*
+     *
+     */
     const ModelToViewHelper::ConversionMap*
             BuildConversionMap( rtl::OUString& rExpandText ) const;
 
@@ -734,6 +785,7 @@ public:
     inline void SetCalcHiddenCharFlags() const
         { m_bRecalcHiddenCharFlags = true; }
 
+// --> FME 2004-06-08 #i12836# enhanced pdf
     //
     // Returns if the node is hidden due to
     // 1. HiddenParaField
@@ -741,6 +793,7 @@ public:
     // 3. HiddenSection
     //
     bool IsHidden() const;
+// <--
 
     TYPEINFO(); // fuer rtti
 
@@ -767,7 +820,9 @@ public:
     bool IsNotifiable() const;
 
     void SetListRestart( bool bRestart );
+    // --> OD 2005-11-02 #i51089 - TUNING#
     bool IsListRestart() const;
+    // <--
 
     void SetAttrListRestartValue( SwNumberTree::tSwNumTreeNumber nNum );
     bool HasAttrListRestartValue() const;
@@ -777,9 +832,13 @@ public:
     void SetCountedInList( bool bCounted );
     bool IsCountedInList() const;
 
+    // --> OD 2008-03-13 #refactorlists#
+//    void SyncNumberAndNumRule();
+//    void UnregisterNumber();
     void AddToList();
     void RemoveFromList();
     bool IsInList() const;
+    // <--
 
     bool IsFirstOfNumRule() const;
 

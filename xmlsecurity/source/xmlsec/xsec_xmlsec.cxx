@@ -125,7 +125,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
         // XMLElementWrapper_XmlSecImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLElementWrapper_XmlSecImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
+        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -137,7 +137,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
         // XMLDocumentWrapper_XmlSecImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += XMLDocumentWrapper_XmlSecImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
+        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {
@@ -149,7 +149,7 @@ sal_Bool SAL_CALL component_writeInfo( void* pServiceManager , void* pRegistryKe
         // SerialNumberAdapterImpl
         sKeyName = OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) ;
         sKeyName += SerialNumberAdapterImpl_getImplementationName() ;
-        sKeyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) ;
+        sKeyName += OUString::createFromAscii( "/UNO/SERVICES" ) ;
 
         xNewKey = xKey->createKey( sKeyName ) ;
         if( xNewKey.is() ) {

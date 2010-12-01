@@ -580,7 +580,7 @@ void EscherPropertyContainer::CreateTextProperties(
 
 /*
     if ( rObj.ImplGetPropertyValue(
-        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextWritingMode")) ) )
+        ::rtl::OUString::createFromAscii("TextWritingMode") ) )
     {
         ::com::sun::star::text::WritingMode eMode;
         rObj.GetUsrAny() >>= eMode;
@@ -3011,7 +3011,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             if ( xText.is() )
                                 aText = xText->getString();
                             if ( !aText.getLength() )
-                                aText = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "your text" ));   // todo: moving into a resource
+                                aText = ::rtl::OUString::createFromAscii( "your text" );    // todo: moving into a resource
                             AddOpt( DFF_Prop_gtextUNICODE, aText );
 
                             // FontWork Font
@@ -3020,7 +3020,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                             uno::Any aAny = aXPropSet->getPropertyValue( sCharFontName );
                             aAny >>= aFontName;
                             if ( !aFontName.getLength() )
-                                aFontName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Arial Black" ));
+                                aFontName = ::rtl::OUString::createFromAscii( "Arial Black" );
                             AddOpt( DFF_Prop_gtextFont, aFontName );
 
                             sal_Int16 nCharScaleWidth = 100;

@@ -57,7 +57,7 @@ sal_Bool SAL_CALL component_writeInfo(
             sal_Int32 nPos = 0;
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( WordPerfectImportFilter_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
             const Sequence< OUString > & rSNL = WordPerfectImportFilter_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();
@@ -65,7 +65,7 @@ sal_Bool SAL_CALL component_writeInfo(
                 xNewKey->createKey( pArray[nPos] );
 #if 0
             xNewKey = reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( WordPerfectImportFilterDialog_getImplementationName() );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
             const Sequence< OUString > & rSNL2 = WordPerfectImportFilterDialog_getSupportedServiceNames();
             pArray = rSNL2.getConstArray();

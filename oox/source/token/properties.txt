@@ -6,7 +6,6 @@ Adjust
 AdjustContrast
 AdjustLuminance
 AdjustmentValues
-Address
 Align
 AnchorPosition
 ArrangeOrder
@@ -335,7 +334,6 @@ RefX
 RefY
 Reference
 ReferenceDevice
-ReferenceSheet
 RegularExpressions
 RelId
 RelativeHorizontalTabbarWidth
@@ -465,6 +463,5 @@ Weight
 WhiteDay
 Width
 WritingMode
-XLA1Representation
 ZoomType
 ZoomValue

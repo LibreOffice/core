@@ -29,6 +29,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
+
 #include "scitems.hxx"
 #include <editeng/eeitem.hxx>
 #include <svx/svdpool.hxx>
@@ -125,13 +126,13 @@
 #include "formula/errorcodes.hxx"
 #include "unoreflist.hxx"
 #include "formula/grammar.hxx"
-#include "editeng/escpitem.hxx"
 
 #include <list>
 
 using namespace com::sun::star;
 
 //------------------------------------------------------------------------
+
 
 class ScNamedEntry
 {
@@ -145,6 +146,7 @@ public:
     const String&   GetName() const     { return aName; }
     const ScRange&  GetRange() const    { return aRange; }
 };
+
 
 //------------------------------------------------------------------------
 
@@ -454,7 +456,6 @@ const SfxItemPropertySet* lcl_GetCellPropertySet()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,   &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS_METHOD), ATTR_VER_JUSTIFY_METHOD, &::getCppuType((const sal_Int32*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_WRITING),  ATTR_WRITINGDIR,    &getCppuType((sal_Int16*)0),            0, 0 },
-        {MAP_CHAR_LEN(UNO_NAME_EDIT_CHAR_ESCAPEMENT),   EE_CHAR_ESCAPEMENT, &getCppuType((sal_Int32*)0),            0, 0 },
         {0,0,0,0,0,0}
     };
     static SfxItemPropertySet aCellPropertySet( aCellPropertyMap_Impl );
@@ -811,6 +812,7 @@ const SvxItemPropertySet* lcl_GetEditPropertySet()
     static SvxItemPropertySet aEditPropertySet( lcl_GetEditPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool() );
     return &aEditPropertySet;
 }
+
 
 //------------------------------------------------------------------------
 
@@ -2088,6 +2090,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScCellRangesBase::getPropertySe
     return aRef;
 }
 
+
 void lcl_SetCellProperty( const SfxItemPropertySimpleEntry& rEntry, const uno::Any& rValue,
                             ScPatternAttr& rPattern, ScDocument* pDoc,
                             USHORT& rFirstItemId, USHORT& rSecondItemId )
@@ -2253,40 +2256,6 @@ void ScCellRangesBase::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pE
         else        // implemented here
             switch ( pEntry->nWID )
             {
-                case EE_CHAR_ESCAPEMENT:    // Specifically for xlsx import
-                    {
-                        sal_Int32 nValue(0);
-                        aValue >>= nValue;
-                        if( nValue )
-                        {
-                            int n = aRanges.Count();
-                            for(int i=0; i<n; i++ )
-                            {
-                                ScRange aRange( *aRanges.GetObject(i) );
-                                /* TODO: Iterate through the range */
-                                ScAddress  aAddr = aRange.aStart;
-                                ScDocument *pDoc = pDocShell->GetDocument();
-                                ScBaseCell *pCell = pDoc->GetCell( aAddr );
-                                String aStr( pCell->GetStringData() );
-                                EditEngine aEngine( pDoc->GetEnginePool() );
-                                /* EE_CHAR_ESCAPEMENT seems to be set on the cell _only_ when
-                                 * there are no other attribs for the cell.
-                                 * So, it is safe to overwrite the complete attribute set.
-                                 * If there is a need - getting CellType and processing
-                                 * the attributes could be considered.
-                                 */
-                                SfxItemSet aAttr = aEngine.GetEmptyItemSet();
-                                aEngine.SetText( aStr );
-                                if( nValue < 0 )    // Subscript
-                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUBSCRIPT, EE_CHAR_ESCAPEMENT ) );
-                                else                // Superscript
-                                    aAttr.Put( SvxEscapementItem( SVX_ESCAPEMENT_SUPERSCRIPT, EE_CHAR_ESCAPEMENT ) );
-                                aEngine.QuickSetAttribs( aAttr, ESelection( 0, 0, 0, aStr.Len()));
-                                pDoc->PutCell( (aRanges.GetObject(0))->aStart, new ScEditCell( aEngine.CreateTextObject(), pDoc, NULL ) );
-                            }
-                        }
-                    }
-                    break;
                 case SC_WID_UNO_CHCOLHDR:
                     // chart header flags are set for this object, not stored with document
                     bChartColAsHdr = ScUnoHelpFunctions::GetBoolFromAny( aValue );
@@ -4391,6 +4360,7 @@ void SAL_CALL ScCellRangesObj::removeRangeAddresses( const uno::Sequence<table::
     // with this implementation not needed
 //  SolarMutexGuard aGuard;
 
+
     // use sometimes a better/faster implementation
     sal_uInt32 nCount(rRangeSeq.getLength());
     if (nCount)
@@ -4745,7 +4715,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasElements() throw(uno::RuntimeException)
 
 rtl::OUString SAL_CALL ScCellRangesObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangesObj" ));
+    return rtl::OUString::createFromAscii( "ScCellRangesObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangesObj::supportsService( const rtl::OUString& rServiceName )
@@ -4763,10 +4733,10 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangesObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(4);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGES_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELLRANGES_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
+    pArray[2] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
+    pArray[3] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
     return aRet;
 }
 
@@ -4959,6 +4929,7 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByPositio
     throw lang::IndexOutOfBoundsException();
 //    return NULL;
 }
+
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellRangeObj::getCellRangeByName(
                         const rtl::OUString& aName ) throw(uno::RuntimeException)
@@ -6056,7 +6027,7 @@ const SfxItemPropertyMap* ScCellRangeObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellRangeObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellRangeObj" ));
+    return rtl::OUString::createFromAscii( "ScCellRangeObj" );
 }
 
 sal_Bool SAL_CALL ScCellRangeObj::supportsService( const rtl::OUString& rServiceName )
@@ -6075,11 +6046,11 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellRangeObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(5);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
+    pArray[2] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
+    pArray[3] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
+    pArray[4] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
     return aRet;
 }
 
@@ -6733,7 +6704,7 @@ const SfxItemPropertyMap* ScCellObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScCellObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScCellObj" ));
+    return rtl::OUString::createFromAscii( "ScCellObj" );
 }
 
 sal_Bool SAL_CALL ScCellObj::supportsService( const rtl::OUString& rServiceName )
@@ -6758,13 +6729,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScCellObj::getSupportedServiceNames()
 {
     uno::Sequence<rtl::OUString> aRet(7);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELL_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELL_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
-    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCSHEETCELL_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCCELL_SERVICE );
+    pArray[2] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
+    pArray[3] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
+    pArray[4] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
+    pArray[5] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
+    pArray[6] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
     return aRet;
 }
 
@@ -8523,7 +8494,8 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEn
             rtl::OUString aCodeName;
             if ( pDocSh && ( aValue >>= aCodeName ) )
             {
-                pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), aCodeName );
+                String sNewName( aCodeName );
+                pDocSh->GetDocument()->SetCodeName( GetTab_Impl(), sNewName );
             }
         }
         else
@@ -8689,7 +8661,7 @@ const SfxItemPropertyMap* ScTableSheetObj::GetItemPropertyMap()
 
 rtl::OUString SAL_CALL ScTableSheetObj::getImplementationName() throw(uno::RuntimeException)
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ScTableSheetObj" ));
+    return rtl::OUString::createFromAscii( "ScTableSheetObj" );
 }
 
 sal_Bool SAL_CALL ScTableSheetObj::supportsService( const rtl::OUString& rServiceName )
@@ -8710,13 +8682,13 @@ uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetObj::getSupportedServiceNames(
 {
     uno::Sequence<rtl::OUString> aRet(7);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSPREADSHEET_SERVICE ));
-    pArray[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCSHEETCELLRANGE_SERVICE ));
-    pArray[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLRANGE_SERVICE ));
-    pArray[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCELLPROPERTIES_SERVICE ));
-    pArray[4] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCCHARPROPERTIES_SERVICE ));
-    pArray[5] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCPARAPROPERTIES_SERVICE ));
-    pArray[6] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SCLINKTARGET_SERVICE ));
+    pArray[0] = rtl::OUString::createFromAscii( SCSPREADSHEET_SERVICE );
+    pArray[1] = rtl::OUString::createFromAscii( SCSHEETCELLRANGE_SERVICE );
+    pArray[2] = rtl::OUString::createFromAscii( SCCELLRANGE_SERVICE );
+    pArray[3] = rtl::OUString::createFromAscii( SCCELLPROPERTIES_SERVICE );
+    pArray[4] = rtl::OUString::createFromAscii( SCCHARPROPERTIES_SERVICE );
+    pArray[5] = rtl::OUString::createFromAscii( SCPARAPROPERTIES_SERVICE );
+    pArray[6] = rtl::OUString::createFromAscii( SCLINKTARGET_SERVICE );
     return aRet;
 }
 
@@ -9878,5 +9850,6 @@ uno::Any SAL_CALL ScUniqueCellFormatsEnumeration::nextElement() throw(container:
 
     return uno::makeAny(uno::Reference<sheet::XSheetCellRangeContainer>(new ScCellRangesObj(pDocShell, aRangeLists[nCurrentPosition++])));
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

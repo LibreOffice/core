@@ -1157,8 +1157,9 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                     else
                                     {
-                                        SwMailMessage* pMessage = new SwMailMessage;
-                                        uno::Reference< mail::XMailMessage > xMessage = pMessage;
+                                        SwMailMessage* pMessage = 0;
+                                        uno::Reference< mail::XMailMessage > xMessage =
+                                                                pMessage = new SwMailMessage;
                                         if(rMergeDescriptor.pMailMergeConfigItem->IsMailReplyTo())
                                             pMessage->setReplyToAddress(rMergeDescriptor.pMailMergeConfigItem->GetMailReplyTo());
                                         pMessage->addRecipient( sMailAddress );
@@ -1287,6 +1288,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                     aOptions.realloc( nOpts + 1 );
                     aOptions[ nOpts ].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Wait"));
                     aOptions[ nOpts ].Value <<= sal_True ;
+//                    aPrintArgs.Put(SfxBoolItem(FN_QRY_MERGE, TRUE) );
+//                    // #i52629# aynchronous printing should only be done in silent mode - otherwise
+//                    // the printer dialog does not come up
+//                    aPrintArgs.Put( SfxBoolItem( SID_ASYNCHRON, rMergeDescriptor.bPrintAsync ));
                     // move print options
                     const beans::PropertyValue* pPrintOptions = rMergeDescriptor.aPrintOptions.getConstArray();
                     for( sal_Int32 nOption = 0; nOption < rMergeDescriptor.aPrintOptions.getLength(); ++nOption)
@@ -1303,7 +1308,14 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                         }
                     }
 
+//                    const SwModuleOptions * pModOpt = SW_MOD()->GetModuleConfig();
+//                    if (pModOpt->IsSinglePrintJob())
+//                    {
+//                    }
+//                    else
+//                    {
                         pTargetView->ExecPrint( aOptions, IsMergeSilent(), rMergeDescriptor.bPrintAsync );
+//                    }
                 }
                 xTargetDocShell->DoClose();
             }
@@ -2738,6 +2750,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
         Window& rSourceWindow = rSourceView.GetViewFrame()->GetFrame().GetWindow();
         rTargetWindow.SetPosPixel(rSourceWindow.GetPosPixel());
 
+//        pTargetFrame->GetFrame().Appear();
         SwView* pTargetView = static_cast<SwView*>( pTargetFrame->GetViewShell() );
         rMMConfig.SetTargetView(pTargetView);
         //initiate SelectShell() to create sub shells

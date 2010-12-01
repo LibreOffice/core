@@ -529,11 +529,11 @@ short SvInsertPlugInDialog::Execute()
             uno::Reference < beans::XPropertySet > xSet( m_xObj->getComponent(), uno::UNO_QUERY );
             if ( xSet.is() )
             {
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginURL") ),
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginURL"),
                         makeAny( ::rtl::OUString( m_pURL->GetMainURL( INetURLObject::NO_DECODE ) ) ) );
                 uno::Sequence< beans::PropertyValue > aCommandSequence;
                 Plugin_ImplFillCommandSequence( m_aCommands, aCommandSequence );
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PluginCommands") ), makeAny( aCommandSequence ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("PluginCommands"), makeAny( aCommandSequence ) );
             }
         }
         else
@@ -658,14 +658,14 @@ short SvInsertAppletDialog::Execute()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
             ::rtl::OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode") ) );
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCode") );
             if ( aAny >>= aStr )
                 SetClass( aStr );
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase") );
             if ( aAny >>= aStr )
                 SetClassLocation( aStr );
             uno::Sequence< beans::PropertyValue > aCommands;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands") );
             if ( aAny >>= aCommands )
             {
                 SvCommandList aList;
@@ -712,17 +712,17 @@ short SvInsertAppletDialog::Execute()
 
                 // Hack, aFileName wird auch fuer Class benutzt
                 m_aClass = GetClass();
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCode") ), makeAny( ::rtl::OUString( m_aClass ) ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCode"), makeAny( ::rtl::OUString( m_aClass ) ) );
 
                 ::rtl::OUString tmp = aClassLocation;
                 ::osl::File::getFileURLFromSystemPath(tmp, tmp);
                 aClassLocation = tmp;
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCodeBase") ), makeAny( tmp ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase"), makeAny( tmp ) );
                 m_aCommands = GetAppletOptions();
 
                 uno::Sequence< beans::PropertyValue > aCommandSequence;
                 Plugin_ImplFillCommandSequence( m_aCommands, aCommandSequence );
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AppletCommands") ), makeAny( aCommandSequence ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("AppletCommands"), makeAny( aCommandSequence ) );
 
                 if ( bIPActive )
                     m_xObj->changeState( embed::EmbedStates::INPLACE_ACTIVE );
@@ -841,15 +841,15 @@ short SfxInsertFloatingFrameDialog::Execute()
                 m_xObj->changeState( embed::EmbedStates::RUNNING );
             xSet = uno::Reference < beans::XPropertySet >( m_xObj->getComponent(), uno::UNO_QUERY );
             ::rtl::OUString aStr;
-            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ) );
+            uno::Any aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameURL") );
             if ( aAny >>= aStr )
                 aEDURL.SetText( aStr );
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameName") );
             if ( aAny >>= aStr )
                 aEDName.SetText( aStr );
 
             sal_Int32 nSize = SIZE_NOT_SET;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth") );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
@@ -862,7 +862,7 @@ short SfxInsertFloatingFrameDialog::Execute()
             else
                 aNMMarginWidth.SetText( String::CreateFromInt32( nSize ) );
 
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight") );
             aAny >>= nSize;
 
             if ( nSize == SIZE_NOT_SET )
@@ -880,11 +880,11 @@ short SfxInsertFloatingFrameDialog::Execute()
             BOOL bScrollAuto = FALSE;
 
             sal_Bool bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll") );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ) );
+                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode") );
                 aAny >>= bSet;
                 bScrollOn = bSet;
                 bScrollOff = !bSet;
@@ -897,11 +897,11 @@ short SfxInsertFloatingFrameDialog::Execute()
             aRBScrollingAuto.Check( bScrollAuto );
 
             bSet = sal_False;
-            aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoBorder") ) );
+            aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder") );
             aAny >>= bSet;
             if ( !bSet )
             {
-                aAny = xSet->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ) );
+                aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder") );
                 aAny >>= bSet;
                 aRBFrameBorderOn.Check( bSet );
                 aRBFrameBorderOff.Check( !bSet );
@@ -975,23 +975,27 @@ short SfxInsertFloatingFrameDialog::Execute()
                 else
                     lMarginHeight = SIZE_NOT_SET;
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameURL") ), makeAny( aURL ) );
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameName") ), makeAny( aName ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameURL"), makeAny( aURL ) );
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameName"), makeAny( aName ) );
 
                 if ( eScroll == ScrollingAuto )
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsAutoScroll") ),
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoScroll"),
                         makeAny( sal_True ) );
                 else
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsScrollingMode") ),
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsScrollingMode"),
                         makeAny( (sal_Bool) ( eScroll == ScrollingYes) ) );
 
-                    xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameIsBorder") ),
+                //if ( aFrmDescr.IsFrameBorderSet() )
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsBorder"),
                         makeAny( bHasBorder ) );
+                /*else
+                    xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameIsAutoBorder"),
+                        makeAny( sal_True ) );*/
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginWidth") ),
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginWidth"),
                     makeAny( sal_Int32( lMarginWidth ) ) );
 
-                xSet->setPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FrameMarginHeight") ),
+                xSet->setPropertyValue( ::rtl::OUString::createFromAscii("FrameMarginHeight"),
                     makeAny( sal_Int32( lMarginHeight ) ) );
 
                 if ( bIPActive )

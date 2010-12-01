@@ -38,13 +38,13 @@ TARGET=lingu
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
-        $(SLO)$/hhcwrp.obj \
-        $(SLO)$/hyp.obj \
         $(SLO)$/olmenu.obj \
-        $(SLO)$/sdrhhcwrap.obj
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/hyp.obj \
+        $(SLO)$/olmenu.obj \
+        $(SLO)$/sdrhhcwrap.obj \
+        $(SLO)$/hhcwrp.obj 
 
 SRS1NAME=$(TARGET)
 SRC1FILES =  \

@@ -207,13 +207,13 @@ void SafeRemovePropertyListener(const Reference< XPropertySet > & xSet, const ::
 // -------------------------------------------------------------------------
 ::rtl::OUString SbaTableQueryBrowser::getImplementationName_Static() throw(RuntimeException)
 {
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.ODatasourceBrowser"));
+    return ::rtl::OUString::createFromAscii("org.openoffice.comp.dbu.ODatasourceBrowser");
 }
 //-------------------------------------------------------------------------
 ::comphelper::StringSequence SbaTableQueryBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
 {
     ::comphelper::StringSequence aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DataSourceBrowser"));
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.DataSourceBrowser");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -369,7 +369,7 @@ sal_Bool SbaTableQueryBrowser::Construct(Window* pParent)
         xDatabaseRegistrations->addDatabaseRegistrationsListener( this );
 
         // the collator for the string compares
-        m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.Collator")) ), UNO_QUERY_THROW );
+        m_xCollator = Reference< XCollator >( getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ), UNO_QUERY_THROW );
         m_xCollator->loadDefaultCollator( Application::GetSettings().GetLocale(), 0 );
     }
     catch(Exception&)
@@ -608,7 +608,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BIT:
                     case DataType::BOOLEAN:
                     {
-                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CheckBox"));
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("CheckBox");
                         aInitialValues.push_back( NamedValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "VisualEffect" ) ), makeAny( VisualEffect::FLAT ) ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
@@ -628,7 +628,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                     case DataType::BINARY:
                     case DataType::VARBINARY:
                     case DataType::LONGVARBINARY:
-                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TextField"));
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("TextField");
                         sDefaultProperty = PROPERTY_DEFAULTTEXT;
                         break;
 
@@ -637,12 +637,12 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
                         bFormattedIsNumeric = sal_False;
                         // NO break!
                     default:
-                        aCurrentModelType = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormattedField"));
+                        aCurrentModelType = ::rtl::OUString::createFromAscii("FormattedField");
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FormatsSupplier")), makeAny( xSupplier ) ) );
-                        aInitialValues.push_back( NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TreatAsNumber")), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
+                            aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "FormatsSupplier" ), makeAny( xSupplier ) ) );
+                        aInitialValues.push_back( NamedValue( ::rtl::OUString::createFromAscii( "TreatAsNumber" ), makeAny( (sal_Bool)bFormattedIsNumeric ) ) );
                         aCopyProperties.push_back( PROPERTY_FORMATKEY );
                         break;
                 }
@@ -955,7 +955,7 @@ void SbaTableQueryBrowser::checkDocumentDataSource()
     if (!bKnownDocDataSource)
     {
         if (NULL != pDataSourceEntry)
-        {   // at least the data source is known
+        {   // at least the data source is know
             if (NULL != pContainerEntry)
                 bKnownDocDataSource = sal_True; // assume we know it.
                 // TODO: should we expand the object container? This may be too expensive just for checking ....
@@ -1006,6 +1006,7 @@ namespace
         if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
         {
             _rDisplayName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+            //  _rDisplayName = aURL.getName(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
             _rUniqueId = aURL.GetMainURL( INetURLObject::NO_DECODE );
             return true;
         }
@@ -1148,6 +1149,7 @@ SvLBoxEntry* SbaTableQueryBrowser::getObjectEntry(const ::rtl::OUString& _rDataS
                             }
                         }
                     }
+                     //   m_pTreeView->getListBox().Expand(pCommandType);
                 }
                 while ( nIndex >= 0 );
             }
@@ -1209,7 +1211,7 @@ void SbaTableQueryBrowser::connectExternalDispatches()
             )
         {
             feature->second.xDispatcher = xProvider->queryDispatch(
-                feature->second.aURL, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_parent")), FrameSearchFlag::PARENT
+                feature->second.aURL, ::rtl::OUString::createFromAscii("_parent"), FrameSearchFlag::PARENT
             );
 
             if ( feature->second.xDispatcher.get() == static_cast< XDispatch* >( this ) )
@@ -1306,7 +1308,7 @@ void SAL_CALL SbaTableQueryBrowser::disposing( const EventObject& _rSource ) thr
                     DBTreeListUserData* pData = static_cast<DBTreeListUserData*>(pDSLoop->GetUserData());
                     if ( pData && pData->xConnection == xCon )
                     {
-                        // we set the connection to null to avoid a second disposing of the connection
+                        // we set the conenction to null to avoid a second disposing of the connection
                         pData->xConnection.clear();
                         closeConnection(pDSLoop,sal_False);
                         break;
@@ -1426,7 +1428,7 @@ void SbaTableQueryBrowser::attachFrame(const Reference< ::com::sun::star::frame:
     Reference< XFrame > xCurrentFrame( getFrame() );
     if ( xCurrentFrame.is() )
     {
-        m_xCurrentFrameParent = xCurrentFrame->findFrame(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_parent")),FrameSearchFlag::PARENT);
+        m_xCurrentFrameParent = xCurrentFrame->findFrame(::rtl::OUString::createFromAscii("_parent"),FrameSearchFlag::PARENT);
         if ( m_xCurrentFrameParent.is() )
             m_xCurrentFrameParent->addFrameActionListener((::com::sun::star::frame::XFrameActionListener*)this);
 
@@ -1748,7 +1750,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     {
                         aReturn.bEnabled = m_aCurrentFrame.isActive();
                         break;
-                    }
+                    } // if ( getBrowserView()->getVclControl()->GetSelectRowCount() )
                     else
                         aReturn.bEnabled = pControl->canCopyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
                     break;
@@ -1978,12 +1980,12 @@ void SbaTableQueryBrowser::implAddDatasource(const String& _rDbName, Image& _rDb
 
     ImageProvider aImageProvider;
     if (!_rQueryImage)
-        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY );
+        _rQueryImage = aImageProvider.getFolderImage( DatabaseObject::QUERY, isHiContrast() );
     if (!_rTableImage)
-        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE );
+        _rTableImage = aImageProvider.getFolderImage( DatabaseObject::TABLE, isHiContrast() );
 
     if (!_rDbImage)
-        _rDbImage = aImageProvider.getDatabaseImage();
+        _rDbImage = aImageProvider.getDatabaseImage( isHiContrast() );
 
     // add the entry for the data source
     // special handling for data sources denoted by URLs - we do not want to display this ugly URL, do we?
@@ -2075,13 +2077,15 @@ SvLBoxEntry* SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
 
-    Image aImage;
-    pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage );
+    Image aImage, aImageHC;
+    pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage, aImageHC );
 
     SvLBoxEntry* pNewEntry = m_pTreeView->getListBox().InsertEntry( _rName, _pParent, _eEntryType == etQueryContainer , LIST_APPEND, _pUserData );
 
-    m_pTreeView->getListBox().SetExpandedEntryBmp(  pNewEntry, aImage );
-    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage );
+    m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImage, BMP_COLOR_NORMAL );
+    m_pTreeView->getListBox().SetExpandedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
+    m_pTreeView->getListBox().SetCollapsedEntryBmp( pNewEntry, aImageHC, BMP_COLOR_HIGHCONTRAST );
 
     return pNewEntry;
 }
@@ -3496,7 +3500,7 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
 
     try
     {
-        // contain the dss (data source signature) of the form
+        // ontain the dss (data source signature) of the form
         ::rtl::OUString sDataSourceName;
         ::rtl::OUString sCommand;
         sal_Int32       nCommandType = CommandType::COMMAND;
@@ -3566,6 +3570,14 @@ void SbaTableQueryBrowser::clearGridColumns(const Reference< XNameContainer >& _
     }
 }
 // -----------------------------------------------------------------------------
+sal_Bool SbaTableQueryBrowser::isHiContrast() const
+{
+    sal_Bool bRet = sal_False;
+    if ( m_pTreeView )
+        bRet = m_pTreeView->getListBox().GetSettings().GetStyleSettings().GetHighContrastMode();
+    return bRet;
+}
+// -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
 {
     if ( m_bShowMenu )
@@ -3602,7 +3614,7 @@ void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
             sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
         if ( sName.getLength() )
         {
-            sName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" - "));
+            sName += ::rtl::OUString::createFromAscii(" - ");
             sName += sTitle;
             sTitle = sName;
         }
@@ -3643,6 +3655,7 @@ void SbaTableQueryBrowser::postReloadForm()
 {
     InitializeGridModel(getFormComponent());
     LoadFinished(sal_True);
+    //updateTitle();
 }
 
 //------------------------------------------------------------------------------

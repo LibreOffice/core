@@ -254,6 +254,7 @@ SwSrcView::~SwSrcView()
     sal_Int32 delay = xDocProps->getAutoloadSecs();
     pDocShell->SetAutoLoad(INetURLObject(url), delay,
                             (delay != 0) || !url.equalsAscii(""));
+//  EndListening(*GetViewFrame());
     EndListening(*pDocShell);
     delete pSearchItem;
 }
@@ -280,6 +281,7 @@ void SwSrcView::Init()
         aEditWin.SetReadonly(TRUE);
     }
 
+//  StartListening(*GetViewFrame());
     StartListening(*pDocShell,TRUE);
 }
 
@@ -312,6 +314,7 @@ void SwSrcView::Execute(SfxRequest& rReq)
                 TemplateDescription::FILESAVE_AUTOEXTENSION,
                 TemplateDescription::FILESAVE_SIMPLE );
             uno::Reference < XFilePicker > xFP = aDlgHelper.GetFilePicker();
+//          pFileDlg->SetHelpId(HID_FILEDLG_SRCVIEW);
             uno::Reference<XFilterManager> xFltMgr(xFP, UNO_QUERY);
 
             // search for an html filter for export

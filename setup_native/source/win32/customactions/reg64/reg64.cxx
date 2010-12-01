@@ -254,6 +254,13 @@ bool DeleteRegistryKey(HKEY RootKey, const wchar_t* KeyName)
     return (ERROR_SUCCESS == rc);
 }
 
+
+
+
+//---------------------------------------
+//
+//---------------------------------------
+
 bool SetRegistryKey(HKEY RootKey, const wchar_t* KeyName, const wchar_t* ValueName, const wchar_t* Value)
 {
     HKEY hSubKey;

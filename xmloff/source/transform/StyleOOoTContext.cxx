@@ -429,15 +429,15 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
     OUString aProtectAttrValue;
     XMLTypedPropertiesOOoTContext_Impl * pProtectContext = 0;
 
-    /* Attribute <style:mirror> has to be priority over attribute <style:draw>.
-       The filter from OpenDocument file format to OpenOffice.org file format
-       produces styles with both attributes. (#i49139#)
-    */
+    // --> OD 2005-05-13 #i49139# - attribute <style:mirror> has to be priority
+    // over attribute <style:draw>. The filter from OpenDocument file format
+    // to OpenOffice.org file format produces styles with both attributes.
     sal_Bool bExistStyleMirror( sal_False );
     OUString aStyleMirrorAttrValue;
     sal_Bool bExistDrawMirror( sal_False );
     OUString aDrawMirrorAttrValue;
     XMLTypedPropertiesOOoTContext_Impl* pMirrorContext( 0L );
+    // <--
 
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -889,15 +889,16 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
             break;
         case XML_ATACTION_DRAW_MIRROR_OOO:   // renames draw:mirror to style:mirror and adapts values
             {
-                // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+                // --> OD 2005-05-13 #i49139#
                 aDrawMirrorAttrValue =
                                 GetXMLToken( IsXMLToken( sAttrValue, XML_TRUE )
                                              ? XML_HORIZONTAL : XML_NONE );
                 bExistDrawMirror = sal_True;
                 pMirrorContext = pContext;
+                // <--
             }
             break;
-        // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+        // --> OD 2005-05-12 #i49139#
         case XML_ATACTION_STYLE_MIRROR_OOO:   // adapts style:mirror values
             {
                 SvXMLTokenEnumerator aTokenEnum( sAttrValue );
@@ -906,7 +907,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 {
                     if ( aStyleMirrorAttrValue.getLength() > 0 )
                     {
-                        aStyleMirrorAttrValue += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( " " ));
+                        aStyleMirrorAttrValue += rtl::OUString::createFromAscii( " " );
                     }
 
                     if ( IsXMLToken( aToken, XML_HORIZONTAL_ON_LEFT_PAGES ) )
@@ -926,6 +927,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                 pMirrorContext = pContext;
             }
             break;
+        // <--
         case XML_ATACTION_GAMMA_OOO:        // converts double value to percentage
             {
                 double fValue = sAttrValue.toDouble();
@@ -961,7 +963,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
         }
     }
 
-    // OpenDocument file format: attribute value of <style:mirror> wrong (#i49139#)
+    // --> OD 2005-05-13 #i49139#
     if ( bExistStyleMirror )
     {
         pMirrorContext->AddAttribute(
@@ -976,6 +978,7 @@ void XMLPropertiesOOoTContext_Impl::StartElement(
                                 XML_NAMESPACE_STYLE, GetXMLToken( XML_MIRROR ) ),
                         aDrawMirrorAttrValue);
     }
+    // <--
 
     if( bMoveProtect || bSizeProtect || aProtectAttrValue.getLength() )
     {

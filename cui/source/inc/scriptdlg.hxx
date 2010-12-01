@@ -47,7 +47,13 @@
 #include <hash_map>
 
 #define OBJTYPE_BASICMANAGER    1L
+//#define OBJTYPE_LIB               2L
+//#define OBJTYPE_MODULE            3L
 #define OBJTYPE_METHOD          2L
+//#define OBJTYPE_METHODINOBJ       5L
+//#define OBJTYPE_OBJECT            6L
+//#define OBJTYPE_SUBOBJ            7L
+//#define OBJTYPE_PROPERTY      8L
 #define OBJTYPE_SCRIPTCONTAINER     3L
 #define OBJTYPE_SFROOT      4L
 
@@ -72,9 +78,13 @@ class SFTreeListBox : public SvTreeListBox
 private:
     USHORT          nMode;
     Image m_hdImage;
+    Image m_hdImage_hc;
     Image m_libImage;
+    Image m_libImage_hc;
     Image m_macImage;
+    Image m_macImage_hc;
     Image m_docImage;
+    Image m_docImage_hc;
     ::rtl::OUString m_sMyMacros;
     ::rtl::OUString m_sProdMacros;
 
@@ -205,6 +215,7 @@ protected:
     String      getListOfChildren( ::com::sun::star::uno::Reference< com::sun::star::script::browse::XBrowseNode > node, int depth );
     void        StoreCurrentSelection();
     void        RestorePreviousSelection();
+    //String                GetInfo( SbxVariable* pVar );
 
 public:
                     // prob need another arg in the ctor
@@ -214,6 +225,7 @@ public:
 
     virtual short   Execute();
 
+    //DECL_LINK( ActivatePageHdl, TabControl * );
 };
 
 class SvxScriptErrorDialog : public VclAbstractDialog

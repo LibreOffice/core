@@ -11,6 +11,4 @@
   <xsl:template match="@office:mimetype[string(.)='application/vnd.oasis.opendocument.drawing']">
       <xsl:attribute name="office:mimetype">application/vnd.oasis.opendocument.graphics</xsl:attribute>
   </xsl:template>
-
-  <xsl:include href="split-long-lines.xsl"/>
 </xsl:stylesheet>

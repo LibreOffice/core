@@ -50,21 +50,22 @@ SRC1FILES =\
         mailmrge.src
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES) \
-        $(SLO)$/labimg.obj
-
-EXCEPTIONSFILES= \
-        $(SLO)$/envfmt.obj \
-        $(SLO)$/envimg.obj \
+        $(SLO)$/envfmt.obj  \
+        $(SLO)$/envimg.obj  \
         $(SLO)$/envlop1.obj \
-        $(SLO)$/envprt.obj \
-        $(SLO)$/label1.obj \
-        $(SLO)$/labelcfg.obj \
+        $(SLO)$/envprt.obj  \
+        $(SLO)$/labelcfg.obj  \
+        $(SLO)$/label1.obj  \
         $(SLO)$/labelexp.obj \
-        $(SLO)$/labfmt.obj \
-        $(SLO)$/labprt.obj \
+        $(SLO)$/labfmt.obj  \
+        $(SLO)$/labprt.obj  \
+        $(SLO)$/labimg.obj  \
         $(SLO)$/mailmrge.obj \
         $(SLO)$/syncbtn.obj
+
+EXCEPTIONSFILES= \
+        $(SLO)$/labelexp.obj      \
+        $(SLO)$/mailmrge.obj
 
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

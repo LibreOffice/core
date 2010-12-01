@@ -35,6 +35,7 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.EndianConverter;
 import org.openoffice.xmerge.converter.xml.sxc.pexcel.PocketExcelConstants;
 
+
 /**
  * Represents a BIFF REcord that describes workbook window attributes
  */
@@ -90,7 +91,7 @@ public class Window1 implements BIFFRecord {
        /**
       * Reads a Window1 Record from an <code>InputStream</code>
       *
-      * @param  input InputStream containing a Window1 Record
+      * @param  is InputStream containing a Window1 Record
       */
     public int read(InputStream input) throws IOException {
 

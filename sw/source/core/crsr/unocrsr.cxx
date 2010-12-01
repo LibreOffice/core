@@ -227,6 +227,14 @@ SwUnoTableCrsr::~SwUnoTableCrsr()
         delete aTblSel.GetNext();           // und loeschen
 }
 
+
+/*
+SwCursor* SwUnoTableCrsr::Create( SwPaM* pRing ) const
+{
+    return SwUnoCrsr::Create( pRing );
+}
+*/
+
 BOOL SwUnoTableCrsr::IsSelOvr( int eFlags )
 {
     BOOL bRet = SwUnoCrsr::IsSelOvr( eFlags );

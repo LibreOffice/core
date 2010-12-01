@@ -248,7 +248,7 @@ namespace comphelper
         :OPropertyStateContainer( GetBroadcastHelper() )
     {
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StringProperty" )),
+            ::rtl::OUString::createFromAscii( "StringProperty" ),
             1,
             PropertyAttribute::BOUND,
             &m_sStringProperty,
@@ -256,7 +256,7 @@ namespace comphelper
         );
 
         registerProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InterfaceProperty" )),
+            ::rtl::OUString::createFromAscii( "InterfaceProperty" ),
             2,
             PropertyAttribute::BOUND,
             &m_xInterfaceProperty,
@@ -264,7 +264,7 @@ namespace comphelper
         );
 
         registerMayBeVoidProperty(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IntProperty" )),
+            ::rtl::OUString::createFromAscii( "IntProperty" ),
             3,
             PropertyAttribute::BOUND,
             &m_aMayBeVoidProperty,
@@ -272,7 +272,7 @@ namespace comphelper
         );
 
         registerPropertyNoMember(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "OtherInterfaceProperty" )),
+            ::rtl::OUString::createFromAscii( "OtherInterfaceProperty" ),
             4,
             PropertyAttribute::BOUND | PropertyAttribute::MAYBEVOID,
             ::getCppuType( static_cast< Reference< XInterface >* >( NULL ) ),

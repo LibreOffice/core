@@ -49,6 +49,10 @@ class SwDoc;
 /******************************************************************************
  *
  ******************************************************************************/
+/*-----------------15.03.98 13:21-------------------
+
+--------------------------------------------------*/
+
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  SAL_CALL SwXModule_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & );
 
 class SwXModule : public cppu::WeakImplHelper4
@@ -129,7 +133,9 @@ public:
     virtual ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames(void)
         throw( ::com::sun::star::uno::RuntimeException );
 };
+/*-----------------15.03.98 13:21-------------------
 
+--------------------------------------------------*/
 class SwXViewSettings : public comphelper::ChainableHelperNoState
 {
 
@@ -173,7 +179,35 @@ public:
     sal_Bool    IsValid() const {return bObjectValid;}
     void    Invalidate() {bObjectValid = sal_False;}
 };
+/* -----------------24.09.98 10:47-------------------
+ *
+ * --------------------------------------------------*/
+/*class SwXTerminateListener : public ::com::sun::star::frame::XTerminateListener,
+                                public UsrObject
+{
+public:
+    SwXTerminateListener();
+    virtual ~SwXTerminateListener();
 
+    SMART_UNO_DECLARATION( SwXTerminateListener, UsrObject );
+
+    virtual UString                 getClassName();
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//  virtual ::com::sun::star::uno::XInterface *         queryInterface( ::com::sun::star::uno::Uik aUik);
+
+// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
+//  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass > >  getIdlClasses(void);
+
+
+    //XTerminateListener
+    virtual void queryTermination(const ::com::sun::star::lang::EventObject& aEvent);
+    virtual void notifyTermination(const ::com::sun::star::lang::EventObject& aEvent);
+
+    //XEventListener
+    virtual void disposing(const ::com::sun::star::lang::EventObject& Source);
+};
+
+*/
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

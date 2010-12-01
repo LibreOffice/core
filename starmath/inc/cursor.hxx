@@ -180,7 +180,7 @@ public:
      *
      * @returns True, if the caret was in a context where this operation was possible.
      */
-    bool InsertLimit(SmSubSup eSubSup, bool bMoveCaret = true);
+    BOOL InsertLimit(SmSubSup eSubSup, BOOL bMoveCaret = TRUE);
 
     /** Insert a new row or newline
      *
@@ -192,7 +192,7 @@ public:
      * @remarks If the caret is placed in a subline of a command that doesn't support
      *          this operator the method returns FALSE, and doesn't do anything.
      */
-    bool InsertRow();
+    BOOL InsertRow();
 
     /** Insert a fraction, use selection as numerator */
     void InsertFraction();
@@ -226,7 +226,7 @@ public:
     static SmNode* FindTopMostNodeInLine(SmNode* pSNode, bool MoveUpIfSelected = false);
 
     /** Draw the caret */
-    void Draw(OutputDevice& pDev, Point Offset, bool isCaretVisible);
+    void Draw(OutputDevice& pDev, Point Offset);
 
 private:
     friend class SmDocShell;
@@ -341,14 +341,14 @@ private:
                                                          SmNodeList *pSelectedNodes = NULL);
 
     /** Create an instance of SmMathSymbolNode usable for brackets */
-    static SmNode *CreateBracket(SmBracketType eBracketType, bool bIsLeft);
+    static SmNode *CreateBracket(SmBracketType eBracketType, BOOL bIsLeft);
 
     /** The number of times BeginEdit have been called
      * Used to allow nesting of BeginEdit() and EndEdit() sections
      */
     int nEditSections;
     /** Holds data for BeginEdit() and EndEdit() */
-    bool bIsEnabledSetModifiedSmDocShell;
+    BOOL bIsEnabledSetModifiedSmDocShell;
     /** Begin edit section where the tree will be modified */
     void BeginEdit();
     /** End edit section where the tree will be modified */
@@ -407,17 +407,17 @@ public:
      */
     SmNode* Parse(SmNodeList* list, bool bDeleteErrorNodes = true);
     /** True, if the token is an operator */
-    static bool IsOperator(const SmToken &token);
+    static BOOL IsOperator(const SmToken &token);
     /** True, if the token is a relation operator */
-    static bool IsRelationOperator(const SmToken &token);
+    static BOOL IsRelationOperator(const SmToken &token);
     /** True, if the token is a sum operator */
-    static bool IsSumOperator(const SmToken &token);
+    static BOOL IsSumOperator(const SmToken &token);
     /** True, if the token is a product operator */
-    static bool IsProductOperator(const SmToken &token);
+    static BOOL IsProductOperator(const SmToken &token);
     /** True, if the token is a unary operator */
-    static bool IsUnaryOperator(const SmToken &token);
+    static BOOL IsUnaryOperator(const SmToken &token);
     /** True, if the token is a postfix operator */
-    static bool IsPostfixOperator(const SmToken &token);
+    static BOOL IsPostfixOperator(const SmToken &token);
 private:
     SmNodeList* pList;
     /** Get the current terminal */

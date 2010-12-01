@@ -32,7 +32,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define INCL_DOSPROCESS
 #include <osl/pipe.h>
+#include <os2.h>
 
 // eindeutiger Name fÅr die Pipe
 const char pszPipeName[] = "TestPipe";
@@ -56,13 +58,13 @@ void fail( const char * pszText, int retval )
 int main (void)
 {
     char    szBuffer[ 256 ];
-    rtl_uString* ustrPipeName=0;
-    sal_Int32 nChars;
+    sSize_t nChars;
 
-    rtl_uString_newFromAscii(&ustrPipeName,pszPipeName);
+    // gib dem Server die Chance, die Pipe zu îffnen
+    DosSleep( 1000 );
 
     // erzeuge die Pipe
-    Pipe = osl_createPipe( ustrPipeName, osl_Pipe_OPEN, 0 );
+    Pipe = osl_createPipe( pszPipeName, osl_Pipe_OPEN, 0 );
 
     if( !Pipe )
         fail( "unable to open pipe.\n",
@@ -86,7 +88,7 @@ int main (void)
               osl_getLastPipeError( Pipe ) );
 
     // schliesse die Pipe
-    osl_releasePipe( Pipe );
+    osl_destroyPipe( Pipe );
 
     printf( "TestPipe Client: test passed.\n" );
     return 0;

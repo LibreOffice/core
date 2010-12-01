@@ -46,14 +46,15 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES =  \
         $(SLO)$/cnttab.obj \
-        $(SLO)$/cntex.obj \
-        $(SLO)$/idxmrk.obj \
-        $(SLO)$/multmrk.obj \
-        $(SLO)$/swuiidxmrk.obj \
-        $(SLO)$/toxmgr.obj
+        $(SLO)$/cntex.obj
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/cnttab.obj \
+        $(SLO)$/cntex.obj \
+        $(SLO)$/idxmrk.obj \
+        $(SLO)$/swuiidxmrk.obj \
+        $(SLO)$/multmrk.obj \
+        $(SLO)$/toxmgr.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 

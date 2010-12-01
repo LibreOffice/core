@@ -35,7 +35,6 @@
 
 #include "dpglobal.hxx"
 #include "document.hxx"
-#include "dpobject.hxx"
 
 #include <stdio.h>
 
@@ -61,28 +60,28 @@ namespace ScDPGlobal
         return strRet;
     }
 
-    bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip /*= FALSE*/ )
+   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, BOOL bExcludeClip /*= FALSE*/ )
     {
-        if (ScDPCollection* pDPCollection = pDestDoc->GetDPCollection())
+        if ( ScDPCollection* pDPCollection = pDestDoc->GetDPCollection() )
         {
             USHORT nCount = pDPCollection->GetCount();
             SCsCOL nOffsetX = nStartCol - nClipStartCol;
             SCsROW nOffsetY = nStartRow - nClipStartRow;
 
-            for (std::list<ScDPObject>::iterator iter = rClipboard.begin(); iter!=rClipboard.end(); iter++)
+            for( std::list<ScDPObject>::iterator iter = rClipboard.begin(); iter!=rClipboard.end(); iter++ )
             {
                 ScRange aRange = iter->GetOutRange();
 
-                for (USHORT nCurrTab = nStartTab; nCurrTab<=nEndTab; nCurrTab++)
+                for( USHORT nCurrTab = nStartTab; nCurrTab<=nEndTab; nCurrTab++ )
                 {
                     SCsTAB nOffsetZ = nCurrTab - aRange.aStart.Tab();
                     aRange.Move( nOffsetX, nOffsetY, nOffsetZ );
 
-                    for (USHORT i = 0; i<nCount; i++)
+                    for ( USHORT i = 0; i<nCount; i++)
                     {
-                        if ((*pDPCollection)[i] && aRange.Intersects( (*pDPCollection)[i]->GetOutRange()))
+                        if ( (*pDPCollection)[i] && aRange.Intersects( (*pDPCollection)[i]->GetOutRange()))
                         {
-                            if (bExcludeClip && iter->GetOutRange() == (*pDPCollection)[i]->GetOutRange())
+                            if ( bExcludeClip && iter->GetOutRange() == (*pDPCollection)[i]->GetOutRange() )
                             {
                                 continue;
                             }
@@ -92,22 +91,25 @@ namespace ScDPGlobal
                 }
             }
         }
-        return true;
-    }
+    return true;
+}
+//end
 
 }
-
-ScDPItemDataPool::ScDPItemDataPool()
+// --------------------------------------------------------------------
+// ScDPItemDataPool
+// Construct
+ScDPItemDataPool::ScDPItemDataPool(void)
 {
 }
-
+//
 ScDPItemDataPool::ScDPItemDataPool(const ScDPItemDataPool& r):
     maItems(r.maItems),
     maItemIds(r.maItemIds)
 {
 }
 
-ScDPItemDataPool::~ScDPItemDataPool()
+ScDPItemDataPool::~ScDPItemDataPool(void)
 {
 }
 

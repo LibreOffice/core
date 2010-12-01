@@ -123,6 +123,8 @@ private:
                             ImplFontListNameInfo( const XubString& rSearchName ) :
                                 maSearchName( rSearchName )
                             {}
+
+    const XubString&        GetSearchName() const { return maSearchName; }
 };
 
 // =======================================================================

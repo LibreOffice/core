@@ -88,6 +88,7 @@ void ScDrawView::Construct()
     EnableExtendedCommandEventDispatcher(FALSE);
 
     SetFrameDragSingles(TRUE);
+//  SetSolidMarkHdl(TRUE);              // einstellbar -> UpdateUserViewOptions
 
     SetMinMoveDistancePixel( 2 );
     SetHitTolerancePixel( 2 );
@@ -113,7 +114,7 @@ void ScDrawView::Construct()
         if (pLayer)
         {
             SetLayerLocked( pLayer->GetName(), bProt );
-            SetActiveLayer( pLayer->GetName() );        // set active layer to FRONT
+            SetActiveLayer( pLayer->GetName() );        // FRONT als aktiven Layer setzen
         }
         pLayer = rAdmin.GetLayerPerID(SC_LAYER_CONTROLS);
         if (pLayer)
@@ -204,7 +205,7 @@ void ScDrawView::InvalidateAttribs()
     if (!pViewData) return;
     SfxBindings& rBindings = pViewData->GetBindings();
 
-        // true status values:
+        // echte Statuswerte:
     rBindings.InvalidateAll( TRUE );
 }
 
@@ -246,6 +247,20 @@ void ScDrawView::InvalidateDrawTextAttrs()
     rBindings.Invalidate( SID_ALIGN_ANY_RIGHT );
     rBindings.Invalidate( SID_ALIGN_ANY_JUSTIFIED );
 }
+
+//void ScDrawView::DrawMarks( OutputDevice* pOut ) const
+//{
+//  DBG_ASSERT(pOut, "ScDrawView::DrawMarks: No OutputDevice (!)");
+//  SdrPaintWindow* pPaintWindow = FindPaintWindow(*pOut);
+//
+//  if(pPaintWindow)
+//  {
+//      if(pPaintWindow->isXorVisible())
+//      {
+//          ToggleShownXor(pOut, 0L);
+//      }
+//  }
+//}
 
 void ScDrawView::SetMarkedToLayer( BYTE nLayerNo )
 {
@@ -401,7 +416,9 @@ void ScDrawView::MarkListHasChanged()
     if ( pClient && pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
     {
         //  #41730# beim ViewShell::Activate aus dem Reset2Open nicht die Handles anzeigen
+        //HMHbDisableHdl = TRUE;
         pClient->DeactivateObject();
+        //HMHbDisableHdl = FALSE;
         //  Image-Ole wieder durch Grafik ersetzen passiert jetzt in ScClient::UIActivate
     }
 
@@ -600,6 +617,9 @@ void __EXPORT ScDrawView::UpdateUserViewOptions()
         SetGridVisible( rGrid.GetGridVisible() );
         SetSnapEnabled( rGrid.GetUseGridSnap() );
         SetGridSnap( rGrid.GetUseGridSnap() );
+
+        //  Snap from grid options is no longer used
+//      SetSnapGrid( Size( rGrid.GetFldSnapX(), rGrid.GetFldSnapY() ) );
 
         Fraction aFractX( rGrid.GetFldDrawX(), rGrid.GetFldDivisionX() + 1 );
         Fraction aFractY( rGrid.GetFldDrawY(), rGrid.GetFldDivisionY() + 1 );

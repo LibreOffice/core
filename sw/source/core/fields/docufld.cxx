@@ -250,6 +250,9 @@ sal_uInt16 SwPageNumberField::GetSubType() const
     return nSubType;
 }
 
+/*-----------------05.03.98 10:25-------------------
+
+--------------------------------------------------*/
 bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -280,7 +283,9 @@ bool SwPageNumberField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 10:25-------------------
 
+--------------------------------------------------*/
 bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = true;
@@ -294,6 +299,8 @@ bool SwPageNumberField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         if(nSet <= SVX_NUM_PAGEDESC )
             SetFormat(nSet);
         else {
+            //exception(wrong_value)
+            ;
         }
         break;
     case FIELD_PROP_USHORT1:
@@ -377,6 +384,9 @@ SwField* SwAuthorField::Copy() const
     return pTmp;
 }
 
+/*-----------------05.03.98 11:15-------------------
+
+--------------------------------------------------*/
 bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     bool bVal;
@@ -401,7 +411,9 @@ bool SwAuthorField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 11:15-------------------
 
+--------------------------------------------------*/
 bool SwAuthorField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -518,6 +530,9 @@ SwField* SwFileNameField::Copy() const
     return pTmp;
 }
 
+/*-----------------05.03.98 08:59-------------------
+
+--------------------------------------------------*/
 bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -557,7 +572,9 @@ bool SwFileNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 09:01-------------------
 
+--------------------------------------------------*/
 bool SwFileNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -689,6 +706,9 @@ SwField* SwTemplNameField::Copy() const
     return pTmp;
 }
 
+/*-----------------05.03.98 08:59-------------------
+
+--------------------------------------------------*/
 bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -714,7 +734,9 @@ bool SwTemplNameField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 09:01-------------------
 
+--------------------------------------------------*/
 bool SwTemplNameField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
@@ -839,6 +861,9 @@ void SwDocStatField::ChangeExpansion( const SwFrm* pFrm )
                 pFrm->FindPageFrm()->GetPageDesc()->GetNumType().GetNumberingType() );
 }
 
+/*-----------------05.03.98 11:38-------------------
+
+--------------------------------------------------*/
 bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -851,7 +876,9 @@ bool SwDocStatField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 11:38-------------------
 
+--------------------------------------------------*/
 bool SwDocStatField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     bool bRet = false;
@@ -1722,7 +1749,9 @@ SwField* SwHiddenParaField::Copy() const
 
     return pFld;
 }
+/*-----------------05.03.98 13:25-------------------
 
+--------------------------------------------------*/
 bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch ( nWhichId )
@@ -1742,7 +1771,9 @@ bool SwHiddenParaField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 13:25-------------------
 
+--------------------------------------------------*/
 bool SwHiddenParaField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch ( nWhichId )
@@ -1883,6 +1914,9 @@ sal_uInt32 SwPostItField::GetNumberOfParagraphs() const
     return (mpText) ? mpText->Count() : 1;
 }
 
+/*-----------------05.03.98 13:42-------------------
+
+--------------------------------------------------*/
 bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1943,6 +1977,10 @@ bool SwPostItField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     return true;
 }
 
+
+/*-----------------05.03.98 13:42-------------------
+
+--------------------------------------------------*/
 bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1961,6 +1999,7 @@ bool SwPostItField::PutValue( const uno::Any& rAny, USHORT nWhichId )
         break;
     case FIELD_PROP_TEXT:
         DBG_ERROR("Not implemented!");
+        // ::GetString( rAny, sTxt );
         break;
     case FIELD_PROP_DATE:
         if( rAny.getValueType() == ::getCppuType((util::Date*)0) )
@@ -2083,6 +2122,9 @@ void SwExtUserField::SetSubType(sal_uInt16 nSub)
     nType = nSub;
 }
 
+/*-----------------05.03.98 14:14-------------------
+
+--------------------------------------------------*/
 bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2108,7 +2150,9 @@ bool SwExtUserField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 14:14-------------------
 
+--------------------------------------------------*/
 bool SwExtUserField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2198,6 +2242,9 @@ void SwRefPageSetField::SetPar2(const String& rStr)
     SetOffset( (short) rStr.ToInt32() );
 }
 
+/*-----------------05.03.98 14:52-------------------
+
+--------------------------------------------------*/
 bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2213,7 +2260,9 @@ bool SwRefPageSetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 14:52-------------------
 
+--------------------------------------------------*/
 bool SwRefPageSetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2464,7 +2513,9 @@ void SwRefPageGetField::ChangeExpansion( const SwFrm* pFrm,
         pGetFld->SetText( FormatNumber( nPageNum, nTmpFmt ) );
     }
 }
+/*-----------------05.03.98 14:52-------------------
 
+--------------------------------------------------*/
 bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2480,7 +2531,9 @@ bool SwRefPageGetField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 14:52-------------------
 
+--------------------------------------------------*/
 bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -2492,6 +2545,8 @@ bool SwRefPageGetField::PutValue( const uno::Any& rAny, USHORT nWhichId )
             if(nSet <= SVX_NUM_PAGEDESC )
                 SetFormat(nSet);
             else {
+                //exception(wrong_value)
+                ;
             }
         }
         break;
@@ -2594,6 +2649,9 @@ void SwJumpEditField::SetPar2(const String& rStr)
     sHelp = rStr;
 }
 
+/*-----------------05.03.98 15:00-------------------
+
+--------------------------------------------------*/
 bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -2607,6 +2665,7 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
             case JE_FMT_FRAME:  nRet = text::PlaceholderType::TEXTFRAME; break;
             case JE_FMT_GRAPHIC:nRet = text::PlaceholderType::GRAPHIC; break;
             case JE_FMT_OLE:    nRet = text::PlaceholderType::OBJECT; break;
+//          case JE_FMT_TEXT:
             default:
                 nRet = text::PlaceholderType::TEXT; break;
             }
@@ -2624,7 +2683,9 @@ bool SwJumpEditField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return true;
 }
+/*-----------------05.03.98 15:00-------------------
 
+--------------------------------------------------*/
 bool SwJumpEditField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )

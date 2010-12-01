@@ -54,9 +54,10 @@ public:
     virtual SdrLayerID GetControlExportLayerId( const SdrObject & ) const;
 
 protected:
-    //  #b6382898#
+    // --> OD 2006-03-01 #b6382898#
     // overload of <SdrModel::createUnoModel()> is needed to provide corresponding uno model.
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoModel();
+    // <--
 };
 
 

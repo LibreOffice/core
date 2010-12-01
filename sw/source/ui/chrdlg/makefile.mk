@@ -48,18 +48,15 @@ SRC1FILES =	\
         paradlg.src \
         numpara.src
 
-EXCEPTIONSFILES = \
+SLOFILES =	\
         $(SLO)$/break.obj \
-        $(SLO)$/ccoll.obj \
         $(SLO)$/chardlg.obj \
         $(SLO)$/drpcps.obj \
-        $(SLO)$/numpara.obj \
-        $(SLO)$/pardlg.obj \
+        $(SLO)$/ccoll.obj \
         $(SLO)$/swuiccoll.obj \
-        $(SLO)$/tblnumfm.obj
-
-SLOFILES =	\
-        $(EXCEPTIONSFILES)
+        $(SLO)$/pardlg.obj \
+        $(SLO)$/tblnumfm.obj \
+        $(SLO)$/numpara.obj
         
 LIB1TARGET = $(SLB)$/$(TARGET).lib
 

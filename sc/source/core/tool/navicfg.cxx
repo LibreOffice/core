@@ -42,7 +42,7 @@
 //------------------------------------------------------------------
 
 ScNavipiCfg::ScNavipiCfg() :
-//! ConfigItem( OUString(RTL_CONSTASCII_USTRINGPARAM( CFGPATH_NAVIPI )) ),
+//! ConfigItem( OUString::createFromAscii( CFGPATH_NAVIPI ) ),
     nListMode(0),
     nDragMode(0),
     nRootType(0)

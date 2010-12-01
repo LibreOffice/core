@@ -83,6 +83,7 @@ namespace svx
 
         validate();
 
+        //  m_aURL.SetHelpId( HID_DOCLINKEDIT_URL );
         m_aURL.SetDropDownLineCount( 5 );
     }
 

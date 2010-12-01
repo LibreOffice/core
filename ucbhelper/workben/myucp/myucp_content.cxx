@@ -179,7 +179,7 @@ rtl::OUString SAL_CALL Content::getImplementationName()
 {
     // @@@ Adjust implementation name.
     // Prefix with reversed company domain name.
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.myucp.Content"));
+    return rtl::OUString::createFromAscii( "com.sun.star.comp.myucp.Content" );
 }
 
 //=========================================================================
@@ -190,7 +190,7 @@ uno::Sequence< rtl::OUString > SAL_CALL Content::getSupportedServiceNames()
     // @@@ Adjust macro name.
     uno::Sequence< rtl::OUString > aSNS( 1 );
     aSNS.getArray()[ 0 ]
-            = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MYUCP_CONTENT_SERVICE_NAME ));
+            = rtl::OUString::createFromAscii( MYUCP_CONTENT_SERVICE_NAME );
     return aSNS;
 }
 
@@ -205,7 +205,7 @@ rtl::OUString SAL_CALL Content::getContentType()
     throw( uno::RuntimeException )
 {
     // @@@ Adjust macro name ( def in myucp_provider.hxx ).
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MYUCP_CONTENT_TYPE ));
+    return rtl::OUString::createFromAscii( MYUCP_CONTENT_TYPE );
 }
 
 //=========================================================================
@@ -571,27 +571,27 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+            beans::Property( rtl::OUString::createFromAscii( "ContentType" ),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.aContentType );
         xRow->appendString (
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            beans::Property( rtl::OUString::createFromAscii( "Title" ),
                       -1,
                       getCppuType( static_cast< const rtl::OUString * >( 0 ) ),
                       beans::PropertyAttribute::BOUND ),
             rData.aTitle );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+            beans::Property( rtl::OUString::createFromAscii( "IsDocument" ),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.bIsDocument );
         xRow->appendBoolean(
-            beans::Property( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+            beans::Property( rtl::OUString::createFromAscii( "IsFolder" ),
                       -1,
                       getCppuBooleanType(),
                       beans::PropertyAttribute::BOUND
@@ -667,8 +667,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -676,8 +676,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -685,8 +685,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                "Property is read-only!" )),
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
@@ -714,8 +714,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= beans::IllegalTypeException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "Property value has wrong type!" )),
+                                rtl::OUString::createFromAscii(
+                                    "Property value has wrong type!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -780,8 +780,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                    "No property set for storing the value!" )),
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -820,7 +820,7 @@ void Content::queryChildren( ContentRefList& rChildren )
     if ( nPos != ( aURL.getLength() - 1 ) )
     {
         // No trailing slash found. Append.
-        aURL += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aURL += ::rtl::OUString::createFromAscii( "/" );
     }
 
     sal_Int32 nLen = aURL.getLength();
@@ -895,7 +895,7 @@ void Content::insert(
             ucb::IOErrorCode_ALREADY_EXISTING,
             uno::Sequence< uno::Any >(&aProps, 1),
             Environment,
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("content already existing!!")),
+            rtl::OUString::createFromAscii( "content already existing!!" ),
             this );
         // Unreachable
     }

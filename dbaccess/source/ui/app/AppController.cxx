@@ -194,7 +194,7 @@ namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::Database
 Sequence< ::rtl::OUString> OApplicationController::getSupportedServiceNames_Static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString> aSupported(1);
-    aSupported.getArray()[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.application.DefaultViewController"));
+    aSupported.getArray()[0] = ::rtl::OUString::createFromAscii("com.sun.star.sdb.application.DefaultViewController");
     return aSupported;
 }
 //-------------------------------------------------------------------------
@@ -2500,6 +2500,9 @@ sal_Int8 OApplicationController::queryDrop( const AcceptDropEvent& _rEvt, const 
                                 nAction = DND_ACTION_NONE;
                         }
                     }
+                    /*else
+                        nAction = nActionAskedFor & DND_ACTION_COPYMOVE;
+                    */
                 }
                 return nAction;
             }

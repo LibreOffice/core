@@ -243,7 +243,8 @@ SdrLayerAdmin::SdrLayerAdmin(SdrLayerAdmin* pNewParent):
     aLSets(1024,16,16),
     pModel(NULL)
 {
-    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
+    sal_Char aTextControls[] = "Controls";
+    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
     pParent=pNewParent;
 }
 
@@ -253,7 +254,8 @@ SdrLayerAdmin::SdrLayerAdmin(const SdrLayerAdmin& rSrcLayerAdmin):
     pParent(NULL),
     pModel(NULL)
 {
-    aControlLayerName = String(RTL_CONSTASCII_USTRINGPARAM("Controls"));
+    sal_Char aTextControls[] = "Controls";
+    aControlLayerName = String(aTextControls, sizeof(aTextControls-1));
     *this = rSrcLayerAdmin;
 }
 

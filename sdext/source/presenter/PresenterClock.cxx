@@ -350,6 +350,7 @@ void PresenterClock::LateInit (void)
 
 void SAL_CALL PresenterClock::disposing (void)
 {
+    //    osl::MutexGuard aGuard (m_aMutex);
     if (mpTimer != NULL)
     {
         mpTimer->Stop();
@@ -397,6 +398,9 @@ void PresenterClock::UpdateTime (void)
 void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
     throw (RuntimeException)
 {
+    //    ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
+    //    osl::MutexGuard aGuard (m_aMutex);
+
     if (rEventObject.Source == mxWindow)
     {
         mxWindow = NULL;
@@ -413,7 +417,9 @@ void SAL_CALL PresenterClock::disposing (const lang::EventObject& rEventObject)
 void SAL_CALL PresenterClock::windowPaint (const awt::PaintEvent& rEvent)
     throw (RuntimeException)
 {
+    (void)rEvent;
     ThrowIfDisposed();
+    ::osl::MutexGuard aSolarGuard (::osl::Mutex::getGlobalMutex());
     Paint(rEvent.UpdateRect);
 }
 
@@ -466,6 +472,7 @@ void SAL_CALL PresenterClock::windowHidden (const lang::EventObject& rEvent)
 void SAL_CALL PresenterClock::mousePressed (const css::awt::MouseEvent& rEvent)
     throw (css::uno::RuntimeException)
 {
+    (void)rEvent;
     if (rEvent.Buttons == awt::MouseButton::LEFT)
     {
         SetMode(mnMode+1);

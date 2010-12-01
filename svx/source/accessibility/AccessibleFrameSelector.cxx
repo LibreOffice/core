@@ -563,7 +563,7 @@ void AccFrameSelector::removeEventListener( const Reference< XAccessibleEventLis
 
 OUString AccFrameSelector::getImplementationName(  ) throw (RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM("AccFrameSelector"));
+    return OUString::createFromAscii("AccFrameSelector");
 }
 
 // ----------------------------------------------------------------------------

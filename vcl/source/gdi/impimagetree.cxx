@@ -151,32 +151,6 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
 
 bool ImplImageTree::loadImage(
     rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
-    bool localized, bool loadMissing )
-{
-    bool found = false;
-    try {
-        found = doLoadImage(name, style, bitmap, localized);
-    } catch (css::uno::RuntimeException &) {
-        if (!loadMissing)
-            throw;
-    }
-    if (found || !loadMissing)
-        return found;
-
-    try {
-        OSL_TRACE(
-            "ImplImageTree::loadImage exception couldn't load \"%s\", fetching missing_icon.png",
-            rtl::OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr());
-        found = doLoadImage( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("res/missing_icon.png")),
-            style, bitmap, false);
-    } catch (css::uno::RuntimeException &) {
-        throw;
-    }
-    return found;
-}
-
-bool ImplImageTree::doLoadImage(
-    rtl::OUString const & name, rtl::OUString const & style, BitmapEx & bitmap,
     bool localized)
 {
     setStyle(style);
@@ -299,7 +273,7 @@ void ImplImageTree::resetZips() {
                 u.GetMainURL(INetURLObject::NO_DECODE),
                 css::uno::Reference< css::container::XNameAccess >()));
     }
-    if ( m_style.equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("default"))) )
+    if ( m_style.equals(::rtl::OUString::createFromAscii("default")) )
     {
         rtl::OUString url(
             RTL_CONSTASCII_USTRINGPARAM(

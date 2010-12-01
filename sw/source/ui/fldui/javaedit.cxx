@@ -121,12 +121,24 @@ SwJavaEditDialog::SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh) :
     RadioButtonHdl(NULL);
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 SwJavaEditDialog::~SwJavaEditDialog()
 {
     delete pMgr;
     delete pFileDlg;
     Application::SetDefDialogParent( pOldDefDlgParent );
 }
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
 
 IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 {
@@ -140,6 +152,12 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, PrevHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -152,6 +170,12 @@ IMPL_LINK_INLINE_START( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 }
 IMPL_LINK_INLINE_END( SwJavaEditDialog, NextHdl, Button *, EMPTYARG )
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
 {
     SetFld();
@@ -159,9 +183,21 @@ IMPL_LINK( SwJavaEditDialog, OKHdl, Button *, EMPTYARG )
     return 0;
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 void SwJavaEditDialog::Apply()
 {
 }
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
 
 void SwJavaEditDialog::CheckTravel()
 {
@@ -219,6 +255,12 @@ void SwJavaEditDialog::CheckTravel()
     }
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
+
+
 void SwJavaEditDialog::SetFld()
 {
     if( !aOKBtn.IsEnabled() )
@@ -253,6 +295,10 @@ BOOL SwJavaEditDialog::IsUpdate()
     return pFld && ( bIsUrl != pFld->GetFormat() || pFld->GetPar2() != aType || pFld->GetPar1() != aText );
 }
 
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
 IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
 {
     BOOL bEnable = aUrlRB.IsChecked();
@@ -272,6 +318,10 @@ IMPL_LINK( SwJavaEditDialog, RadioButtonHdl, RadioButton *, EMPTYARG )
     }
     return 0;
 }
+
+/***************************************************************************
+    Beschreibung:
+***************************************************************************/
 
 IMPL_LINK( SwJavaEditDialog, InsertFileHdl, PushButton *, pBtn )
 {

@@ -242,7 +242,9 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
 
     return bWeiter;
 }
+/* -----------------------------27.11.00 07:35--------------------------------
 
+ ---------------------------------------------------------------------------*/
 Reference< XInterface > SwDPage::createUnoPage()
 {
     Reference < XInterface > xRet;

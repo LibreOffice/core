@@ -187,9 +187,11 @@ void getDefaultUpdateInfos(
 bool containsBundledOnly(Sequence<Reference<deployment::XPackage> > const & sameIdExtensions)
 {
     OSL_ASSERT(sameIdExtensions.getLength() == 3);
-    return !sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is();
+    if (!sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is())
+        return true;
+    else
+        return false;
 }
-
 /** Returns true if the list of extensions are bundled extensions and there are no
     other extensions with the same identifier in the shared or user repository.
     If extensionList is NULL, then it is checked if there are only bundled extensions.
@@ -203,12 +205,17 @@ bool onlyBundledExtensions(
     if (extensionList)
     {
         typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
-        for (CIT i(extensionList->begin()), aEnd(extensionList->end()); onlyBundled && i != aEnd; ++i)
+        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
         {
             Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
                 dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
 
-            onlyBundled = containsBundledOnly(seqExt);
+            if (!containsBundledOnly(seqExt))
+            {
+                onlyBundled = false;
+                break;
+            }
+
         }
     }
     else
@@ -216,9 +223,13 @@ bool onlyBundledExtensions(
         const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =
             xExtMgr->getAllExtensions(Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
 
-        for (int pos(0), nLen(seqAllExt.getLength()); onlyBundled && pos != nLen; ++pos)
+        for (int pos = seqAllExt.getLength(); pos --; )
         {
-            onlyBundled = containsBundledOnly(seqAllExt[pos]);
+            if (!containsBundledOnly(seqAllExt[pos]))
+            {
+                onlyBundled = false;
+                break;
+            }
         }
     }
     return onlyBundled;

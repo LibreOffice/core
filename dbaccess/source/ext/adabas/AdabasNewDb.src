@@ -51,8 +51,7 @@ ModalDialog DLG_ADABAS_NEWDB
         Pos     = MAP_APPFONT ( 12 , 6) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "Database ~name";
-    };
-
+};
     Edit ET_DATABASENAME
     {
         Border  = TRUE ;
@@ -67,28 +66,26 @@ ModalDialog DLG_ADABAS_NEWDB
         Pos     = MAP_APPFONT ( 6 , 3 + MOVE_Y) ;
         Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
         Text[ en-US ] = "User settings";
-    };
+};
 
     FixedText FT_CONUSR
     {
         Pos     = MAP_APPFONT ( 12 , 31 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Control user";
-    };
-
+};
     FixedText FT_SYSUSR
     {
         Pos     = MAP_APPFONT ( 12 , 14 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Administrator";
-    };
-
+};
     FixedText FT_DOMAIN_USR
     {
         Pos     = MAP_APPFONT ( 12 , 48 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Domain user";
-    };
+};
 
     Edit ET_SYSUSR
     {
@@ -106,7 +103,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_SYSPWD ;
         Text[ en-US ] = "P~assword...";
-    };
+};
 
     Edit ET_CONUSR
     {
@@ -124,8 +121,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_CONPWD ;
         Text[ en-US ] = "~Password...";
-    };
-
+};
     Edit ET_DOMAIN_USR
     {
         Pos     = MAP_APPFONT ( 77 + ADJUST_X, 47 + MOVE_Y) ;
@@ -144,7 +140,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_DOMAINPWD ;
         Text[ en-US ] = "Passwo~rd...";
-    };
+};
 
     FixedImage BMP_CON
     {
@@ -152,14 +148,12 @@ ModalDialog DLG_ADABAS_NEWDB
         Size    = MAP_APPFONT ( 20 , 20 ) ;
         HelpID  = HID_DLG_ADABAS_CON_PWD ;
     };
-
     FixedImage BMP_SYS
     {
         Pos     = MAP_APPFONT ( 240 , 11 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 20 , 20 ) ;
         HelpID  = HID_DLG_ADABAS_SYS_PWD ;
     };
-
     FixedImage BMP_DOMAIN
     {
         Pos     = MAP_APPFONT ( 240 , 44 + MOVE_Y) ;
@@ -172,7 +166,7 @@ ModalDialog DLG_ADABAS_NEWDB
         Pos     = MAP_APPFONT ( 12 , 13 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 10 ) ;
         Text[ en-US ] = "~Backup file";
-    };
+};
 
     Edit ET_RESTORE
     {
@@ -190,7 +184,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_PBRESTORE ;
         Text[ en-US ]   = "...";
-    };
+};
 
     /* DEVSPACE positions */
     FixedLine FL_DBSETTINGS
@@ -198,28 +192,28 @@ ModalDialog DLG_ADABAS_NEWDB
         Pos     = MAP_APPFONT ( 6 , 70 + MOVE_Y) ;
         Size    = MAP_APPFONT ( WIN_X - 12 , 8 ) ;
         Text[ en-US ] = "Database settings";
-    };
+};
 
     FixedText FT_SYSDEVSPACE
     {
         Pos     = MAP_APPFONT ( 12 , 83 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "S~YSDEVSPACE";
-    };
+};
 
     FixedText FT_TRANSACTIONLOG
     {
         Pos     = MAP_APPFONT ( 12 , 99 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "TRANSACTI~ONLOG";
-    };
+};
 
     FixedText FT_DATADEVSPACE
     {
         Pos     = MAP_APPFONT ( 12 , 116 + MOVE_Y) ;
         Size    = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "DATAD~EVSPACE";
-    };
+};
 
     Edit ET_SYSDEVSPACE
     {
@@ -237,7 +231,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_PBSYSDEVSPACE ;
         Text[ en-US ]   = "...";
-    };
+};
 
     Edit ET_TRANSACTIONLOG
     {
@@ -255,7 +249,7 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_PBTRANSACTIONLOG ;
         Text[ en-US ] = "...";
-    };
+};
 
     Edit ET_DATADEVSPACE
     {
@@ -266,6 +260,7 @@ ModalDialog DLG_ADABAS_NEWDB
         HelpID  = HID_DLG_ADABAS_DATADEVSPACE ;
     };
 
+
     PushButton PB_DATADEVSPACE
     {
         Pos     = MAP_APPFONT ( WIN_X - 24, 114 + MOVE_Y) ;
@@ -273,16 +268,14 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop = TRUE ;
         HelpID  = HID_DLG_ADABAS_PBDATADEVSPACE ;
         Text[ en-US ] = "...";
-    };
-
+};
     /* DEVSPACE sizes */
     FixedText FT_TRANSACTIONLOG_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 133 + MOVE_Y) ;
         Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "Transaction ~file (MB)";
-    };
-
+};
     NumericField NF_TRANSACTIONLOG_SIZE
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 131 + MOVE_Y) ;
@@ -290,17 +283,15 @@ ModalDialog DLG_ADABAS_NEWDB
         Border          = TRUE ;
         TabStop         = TRUE ;
         Spin            = TRUE ;
-        StrictFormat    = TRUE;
+StrictFormat    = TRUE;
         HelpID  = HID_DLG_ADABAS_TRANSACTIONLOG_SIZE ;
     };
-
     FixedText FT_DATADEVSPACE_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 150 + MOVE_Y) ;
         Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "Data~base size (MB)";
-    };
-
+};
     NumericField NF_DATADEVSPACE_SIZE
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 148 + MOVE_Y) ;
@@ -308,17 +299,15 @@ ModalDialog DLG_ADABAS_NEWDB
         Border          = TRUE ;
         TabStop         = TRUE ;
         Spin            = TRUE ;
-        StrictFormat    = TRUE;
+StrictFormat    = TRUE;
         HelpID  = HID_DLG_ADABAS_DATADEVSPACE_SIZE ;
     };
-
     FixedText FT_CACHE_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 167 + MOVE_Y) ;
         Size = MAP_APPFONT ( 64 + ADJUST_X, 8 ) ;
         Text[ en-US ] = "Data ~buffer size (MB)";
-    };
-
+};
     NumericField NF_CACHE_SIZE
     {
         Pos             = MAP_APPFONT ( 77 + ADJUST_X, 165 + MOVE_Y) ;
@@ -326,16 +315,14 @@ ModalDialog DLG_ADABAS_NEWDB
         Border          = TRUE ;
         TabStop         = TRUE ;
         Spin            = TRUE ;
-        StrictFormat    = TRUE;
+StrictFormat    = TRUE;
         HelpID          = HID_DLG_ADABAS_CACHE_SIZE ;
     };
-
     FixedLine FL_END
     {
         Pos     = MAP_APPFONT ( 0 , WIN_Y - 24 + MOVE_Y) ;
         Size    = MAP_APPFONT ( WIN_X , 1 ) ;
     };
-
     OKButton PB_OK
     {
         Pos         = MAP_APPFONT ( WIN_X - 112, WIN_Y - 20 + MOVE_Y) ;
@@ -343,7 +330,6 @@ ModalDialog DLG_ADABAS_NEWDB
         TabStop     = TRUE ;
         DefButton   = TRUE ;
     };
-
     CancelButton PB_CANCEL
     {
         Pos         = MAP_APPFONT ( WIN_X - 56 , WIN_Y - 20+ MOVE_Y) ;
@@ -354,29 +340,26 @@ ModalDialog DLG_ADABAS_NEWDB
     String STR_BACKUPFILE_LOAD
     {
         Text[ en-US ]   = "Backup file information";
-    };
+};
 
     Text[ en-US ] = "Create New Adabas D Database";
 };
 
 Image CHECK_GREEN
 {
-    ImageBitmap = Bitmap { File = "nu07.png"; };
+    ImageBitmap = Bitmap { File = "nu07.bmp"; };
     MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-
 Image UNCHECK_RED
 {
-    ImageBitmap = Bitmap { File = "nu08.png"; };
+    ImageBitmap = Bitmap { File = "nu08.bmp"; };
     MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-
 Image DEFAULT_BLUE
 {
-    ImageBitmap = Bitmap { File = "nu09.png"; };
+    ImageBitmap = Bitmap { File = "nu09.bmp"; };
     MaskColor   = Color { Red = 0xFFFF; Green = 0x0; Blue = 0xFFFF; };
 };
-
 /* Fehlermeldungen beim Erstellen einer Adabas DB */
 
 String STR_ADABAS_NO_PARAM_SET
@@ -393,7 +376,6 @@ String STR_ADABAS_NO_SYSTEM_TABLES
 {
     Text[ en-US ]   = "An error occurred as the system tables were being created.";
 };
-
 String STR_ADABAS_NO_BACKUP_FILE
 {
     Text[ en-US ]   = "The backup file entered does not exist.";
@@ -408,12 +390,10 @@ String STR_NO_SAME_USER
 {
     Text[ en-US ] = "The administrator and the control user cannot have the same name!";
 };
-
 String STR_DEVSPACE_NO_FILE
 {
     Text[ en-US ] = "No name has been entered for the $name$ file!";
 };
-
 String STR_NO_PERMISSION
 {
     Text[ en-US ] = "You have to have administrator rights to create a new database!";
@@ -443,12 +423,11 @@ String STR_ADABAS_CREATEPARAM_FILE
 {
     Text [ en-US ] = "Creating database configuration file." ;
 };
-
 String STR_ADABAS_START_DATABASE
 {
     Text [ en-US ] = "Starting database for the first time." ;
-};
 
+};
 String STR_ADABAS_DB_EXISTS
 {
     Text[ en-US ] = "The name entered already exists.";
@@ -473,3 +452,4 @@ String STR_ADABAS_PASSWORD_ILLEGAL
 {
     Text[ en-US ] = "Spaces are not permitted in the password. Please enter a new password.";
 };
+

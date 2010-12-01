@@ -43,3 +43,4 @@
 #define STR_INVALIDVAR          2
 #define STR_INVALIDFORM         3
 #define STR_NOFORMULA           4
+

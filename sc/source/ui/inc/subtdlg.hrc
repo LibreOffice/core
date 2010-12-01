@@ -27,6 +27,12 @@
 
 #include "sc.hrc"
 
+/*
+#define RID_SCDLG_SUBTOTALS 256
+#define RID_SCPAGE_SUBT_GROUP 256
+#define RID_SCPAGE_SUBT_OPTIONS 257
+*/
+
 // TabDialog
 #define BTN_REMOVE          1
 #define PAGE_GROUP1         2
@@ -54,3 +60,5 @@
 #define BTN_FORMATS         33
 #define BTN_USERDEF         34
 #define LB_USERDEF          35
+
+

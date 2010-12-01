@@ -142,6 +142,7 @@ public class Beamer extends complexlib.ComplexTestCase
         final XFrame frame = controller.getFrame();
         final XDispatchProvider dispatchP = (XDispatchProvider) UnoRuntime.queryInterface(XDispatchProvider.class, frame);
         URL command = new URL();
+        // command.Complete = ".component:DB/DataSourceBrowser";
         command.Complete = ".uno:ViewDataSourceBrowser";
 
         Object instance = getORB().createInstance("com.sun.star.util.URLTransformer");

@@ -257,7 +257,7 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
     {
-        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" )) ),
+        uno::Reference< frame::XDesktop > xDesktop( xFactory->createInstance( OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
                     uno::UNO_QUERY );
         if( xDesktop.is() )
         {
@@ -272,9 +272,9 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
                     try
                     {
                         uno::Sequence< beans::PropertyValue > aArg(1);
-                        aArg.getArray()[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ));
+                        aArg.getArray()[0].Name = OUString::createFromAscii( "Hidden" );
                         aArg.getArray()[0].Value <<= (sal_Bool) TRUE;
-                        xComp = xLoader->loadComponentFromURL( aURL, OUString(RTL_CONSTASCII_USTRINGPARAM( "_blank" )), 0, aArg );
+                        xComp = xLoader->loadComponentFromURL( aURL, OUString::createFromAscii( "_blank" ), 0, aArg );
                     }
                     catch( const io::IOException& )
                     {
@@ -316,6 +316,27 @@ BOOL SvxHlinkDlgMarkWnd::RefreshFromDoc( OUString aURL )
     }
     return (mnError==0);
 }
+/*
+void SvxHlinkDlgMarkWnd::Error(int nNr)
+{
+    switch(nNr)
+    {
+        case 0:
+        {
+            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
+            //maLbTree.SetTextColor( Color(COL_BLACK) );
+            //maLbTree.DrawText( aDrawRect, "Keine Ziele im Dokument vorhanden.", TEXT_DRAW_LEFT);// | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            maLbTree.DrawText( Point(0,0), "Keine Ziele im Dokument vorhanden.");
+            maLbTree.DrawLine(aDrawRect.TopLeft(), aDrawRect.BottomRight() );
+        }
+        break;
+        case 1:
+            Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
+            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht ge�ffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            break;
+    }
+}
+*/
 /*************************************************************************
 |*
 |* Fill Tree-Control
@@ -386,6 +407,8 @@ int SvxHlinkDlgMarkWnd::FillTree( uno::Reference< container::XNameAccess > xLink
                                                         pParentEntry,
                                                         FALSE, LIST_APPEND,
                                                         (void*)pData );
+                        maLbTree.SetExpandedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
+                        maLbTree.SetCollapsedEntryBmp( pEntry, aBmp, BMP_COLOR_HIGHCONTRAST );
                         nEntries++;
                     }
                     else

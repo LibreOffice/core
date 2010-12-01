@@ -94,6 +94,12 @@ ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     Init();
     SetCtrls();
     FreeResource();
+
+    // set Hi contrast bitmaps
+    aIB_Add.SetModeImage(       ModuleRes(IMG_ONE_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_AddAll.SetModeImage(    ModuleRes(IMG_ALL_LEFT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_Remove.SetModeImage(    ModuleRes(IMG_ONE_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
+    aIB_RemoveAll.SetModeImage( ModuleRes(IMG_ALL_RIGHT_H),BMP_COLOR_HIGHCONTRAST);
 }
 
 //-------------------------------------------------------------------------
@@ -348,8 +354,8 @@ void ODbaseIndexDialog::Init()
 
     Sequence< ::rtl::OUString> aFolderContent( ::utl::LocalFileHelper::GetFolderContents(m_aDSN,bFolder));
 
-    ::rtl::OUString aIndexExt(RTL_CONSTASCII_USTRINGPARAM("ndx"));
-    ::rtl::OUString aTableExt(RTL_CONSTASCII_USTRINGPARAM("dbf"));
+    ::rtl::OUString aIndexExt = ::rtl::OUString::createFromAscii("ndx");
+    ::rtl::OUString aTableExt = ::rtl::OUString::createFromAscii("dbf");
 
     ::std::vector< String > aUsedIndexes;
 
@@ -535,7 +541,7 @@ void OTableInfo::WriteInfFile( const String& rDSN ) const
         try
         {
             ::ucbhelper::Content aContent(aURL.GetURLNoPass(),Reference<XCommandEnvironment>());
-            aContent.executeCommand( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("delete")),makeAny( sal_Bool( sal_True ) ) );
+            aContent.executeCommand( rtl::OUString::createFromAscii( "delete" ),makeAny( sal_Bool( sal_True ) ) );
         }
         catch (const Exception& e )
         {

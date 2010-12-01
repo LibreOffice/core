@@ -45,8 +45,6 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES= \
         $(SLO)$/formatclipboard.obj \
-        $(SLO)$/pview.obj \
-        $(SLO)$/scroll.obj \
         $(SLO)$/srcview.obj \
         $(SLO)$/swcli.obj  \
         $(SLO)$/uivwimp.obj \
@@ -54,22 +52,37 @@ EXCEPTIONSFILES= \
         $(SLO)$/view0.obj \
         $(SLO)$/view1.obj \
         $(SLO)$/view2.obj \
-        $(SLO)$/viewcoll.obj \
-        $(SLO)$/viewdlg.obj \
-        $(SLO)$/viewdlg2.obj \
         $(SLO)$/viewdraw.obj \
-        $(SLO)$/viewling.obj \
-        $(SLO)$/viewmdi.obj \
         $(SLO)$/viewport.obj \
         $(SLO)$/viewprt.obj \
         $(SLO)$/viewsrch.obj \
-        $(SLO)$/viewstat.obj \
-        $(SLO)$/viewtab.obj
+        $(SLO)$/viewling.obj \
+        $(SLO)$/viewmdi.obj \
 
 SLOFILES =  \
-        $(EXCEPTIONSFILES)
+        $(SLO)$/view0.obj \
+        $(SLO)$/view.obj \
+        $(SLO)$/view1.obj \
+        $(SLO)$/view2.obj \
+        $(SLO)$/viewcoll.obj \
+        $(SLO)$/viewdlg2.obj \
+        $(SLO)$/viewdlg.obj \
+        $(SLO)$/viewdraw.obj \
+        $(SLO)$/viewling.obj \
+        $(SLO)$/viewmdi.obj \
+        $(SLO)$/pview.obj \
+        $(SLO)$/viewport.obj \
+        $(SLO)$/viewstat.obj \
+        $(SLO)$/viewtab.obj \
+        $(SLO)$/viewprt.obj \
+        $(SLO)$/viewsrch.obj \
+        $(SLO)$/scroll.obj \
+        $(SLO)$/swcli.obj  \
+        $(SLO)$/srcview.obj \
+        $(SLO)$/uivwimp.obj \
+        $(SLO)$/formatclipboard.obj
 
-# --- Targets -------------------------------------------------------
+# --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 

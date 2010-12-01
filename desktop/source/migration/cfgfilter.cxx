@@ -53,7 +53,7 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
         throw (Exception)
 {
     NamedValue nv;
-    for (sal_Int32 i=0; i < seqArgs.getLength(); ++i)
+    for (sal_Int32 i=0; i < seqArgs.getLength(); i++)
     {
         if (seqArgs[i] >>= nv)
         {
@@ -64,7 +64,7 @@ void SAL_CALL CConfigFilter::initialize(const Sequence< Any >& seqArgs)
         }
     }
     if (m_aCurrentComponent.getLength() == 0)
-        m_aCurrentComponent = OUString(RTL_CONSTASCII_USTRINGPARAM("unknown.component"));
+        m_aCurrentComponent = OUString::createFromAscii("unknown.component");
 
     if (!m_xSourceLayer.is()) {
         throw Exception();
@@ -78,7 +78,7 @@ void CConfigFilter::pushElement(rtl::OUString aName, sal_Bool bUse)
     OUString aPath;
     if (!m_elementStack.empty()) {
         aPath = m_elementStack.top().path; // or use base path
-        aPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aPath += OUString::createFromAscii("/");
     }
     aPath += aName;
 
@@ -103,13 +103,13 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
     // get full pathname for element
     OUString aFullPath;
     if (!m_elementStack.empty())
-        aFullPath = m_elementStack.top().path + OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+        aFullPath = m_elementStack.top().path + OUString::createFromAscii("/");
 
     aFullPath += aName;
 
     // check whether any include patterns patch this path
     for (strings_v::const_iterator i_in = m_pvInclude->begin();
-        i_in != m_pvInclude->end(); ++i_in)
+        i_in != m_pvInclude->end(); i_in++)
     {
         // pattern is beginning of path
         // or path is a begiing for pattern
@@ -124,7 +124,7 @@ sal_Bool CConfigFilter::checkElement(rtl::OUString aName)
     if (bResult)
     {
         for (strings_v::const_iterator i_ex = m_pvExclude->begin();
-            i_ex != m_pvExclude->end(); ++i_ex)
+            i_ex != m_pvExclude->end(); i_ex++)
         {
             if (aFullPath.match(*i_ex, 0)) // pattern is beginning of path
             {

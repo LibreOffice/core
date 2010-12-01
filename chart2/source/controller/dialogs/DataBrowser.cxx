@@ -52,6 +52,7 @@
 #include "servicenames_charttypes.hxx"
 #include "ResId.hxx"
 #include "Bitmaps.hrc"
+#include "Bitmaps_HC.hrc"
 #include "HelpIds.hrc"
 
 #include <vcl/fixed.hxx>
@@ -67,6 +68,8 @@
 
 #include <algorithm>
 #include <functional>
+
+#define SELECT_IMAGE(name,hc) Image( SchResId( hc ? name ## _HC : name ))
 
 /*  BROWSER_COLUMNSELECTION :  single cells may be selected rather than only
                                entire rows
@@ -87,6 +90,7 @@
 // BROWSER_HIDECURSOR would prevent flickering in edit fields, but navigating
 // with shift up/down, and entering non-editable cells would be problematic,
 // e.g.  the first cell, or when being in read-only mode
+
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
@@ -139,7 +143,6 @@ SeriesHeaderEdit::SeriesHeaderEdit( Window * pParent ) :
         m_nStartColumn( 0 ),
         m_bShowWarningBox( false )
 {}
-
 SeriesHeaderEdit::~SeriesHeaderEdit()
 {}
 
@@ -176,7 +179,8 @@ public:
     void SetPos( const Point & rPos );
     void SetWidth( sal_Int32 nWidth );
     void SetChartType( const Reference< chart2::XChartType > & xChartType,
-                       bool bSwapXAndYAxis );
+                       bool bSwapXAndYAxis,
+                       bool bIsHighContrast );
     void SetSeriesName( const String & rName );
     void SetRange( sal_Int32 nStartCol, sal_Int32 nEndCol );
 
@@ -212,10 +216,11 @@ private:
     DECL_LINK( SeriesNameChanged, void * );
     DECL_LINK( SeriesNameEdited, void * );
 
+    /// @param bHC </TRUE> for hight-contrast image
     static Image GetChartTypeImage(
         const Reference< chart2::XChartType > & xChartType,
-        bool bSwapXAndYAxis
-        );
+        bool bSwapXAndYAxis,
+        bool bHC );
 
     sal_Int32 m_nStartCol, m_nEndCol;
     sal_Int32 m_nWidth;
@@ -306,6 +311,7 @@ void SeriesHeader::SetWidth( sal_Int32 nWidth )
     SetPos( m_aPos );
 }
 
+
 void SeriesHeader::SetPixelPosX( sal_Int32 nPos )
 {
     Point aPos( m_pDevice->LogicToPixel( m_aPos, MAP_APPFONT ));
@@ -320,10 +326,10 @@ void SeriesHeader::SetPixelWidth( sal_Int32 nWidth )
 
 void SeriesHeader::SetChartType(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis
-)
+    bool bSwapXAndYAxis,
+    bool bIsHighContrast )
 {
-    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis ) );
+    m_spSymbol->SetImage( GetChartTypeImage( xChartType, bSwapXAndYAxis, bIsHighContrast ));
 }
 
 void SeriesHeader::SetSeriesName( const String & rName )
@@ -382,10 +388,11 @@ bool SeriesHeader::HasFocus() const
     return m_spSeriesName->HasFocus();
 }
 
+// static
 Image SeriesHeader::GetChartTypeImage(
     const Reference< chart2::XChartType > & xChartType,
-    bool bSwapXAndYAxis
-)
+    bool bSwapXAndYAxis,
+    bool bHC )
 {
     Image aResult;
     if( !xChartType.is())
@@ -394,40 +401,40 @@ Image SeriesHeader::GetChartTypeImage(
 
     if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_AREA ))
     {
-        aResult = Image( SchResId( IMG_TYPE_AREA ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_AREA, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ))
     {
         if( bSwapXAndYAxis )
-            aResult = Image( SchResId( IMG_TYPE_BAR ) );
+            aResult = SELECT_IMAGE( IMG_TYPE_BAR, bHC );
         else
-            aResult = Image( SchResId( IMG_TYPE_COLUMN ) );
+            aResult = SELECT_IMAGE( IMG_TYPE_COLUMN, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_LINE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_LINE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_LINE, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_SCATTER ))
     {
-        aResult = Image( SchResId( IMG_TYPE_XY ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_XY, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_PIE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_PIE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_PIE, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_NET )
           || aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET ) )
     {
-        aResult = Image( SchResId( IMG_TYPE_NET ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_NET, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ))
     {
         // @todo: correct image for candle-stick type
-        aResult = Image( SchResId( IMG_TYPE_STOCK ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_STOCK, bHC );
     }
     else if( aChartTypeName.equals( CHART2_SERVICE_NAME_CHARTTYPE_BUBBLE ))
     {
-        aResult = Image( SchResId( IMG_TYPE_BUBBLE ) );
+        aResult = SELECT_IMAGE( IMG_TYPE_BUBBLE, bHC );
     }
 
     return aResult;
@@ -620,6 +627,7 @@ void DataBrowser::RenewTable()
     const DataBrowserModel::tDataHeaderVector& aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -631,7 +639,7 @@ void DataBrowser::RenewTable()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,
@@ -1012,6 +1020,19 @@ void DataBrowser::PaintCell(
     if( ! bEnabled )
         rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
+    // TEST
+//     if( nColumnId == 1 )
+//         // categories
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xff ));
+//     else if( nColumnId == 2 )
+//         // x-values
+//         rDev.SetFillColor( Color( 0xf0, 0xf0, 0xff ));
+//     else
+//         // y-values
+//         rDev.SetFillColor( Color( 0xff, 0xff, 0xf0 ));
+
+//     rDev.DrawRect( rRect );
+
     // draw the text
     rDev.DrawText( aPos, aText );
 
@@ -1224,6 +1245,7 @@ void DataBrowser::RenewSeriesHeaders()
     DataBrowserModel::tDataHeaderVector aHeaders( m_apDataBrowserModel->getDataHeaders());
     Link aFocusLink( LINK( this, DataBrowser, SeriesHeaderGotFocus ));
     Link aSeriesHeaderChangedLink( LINK( this, DataBrowser, SeriesHeaderChanged ));
+    bool bIsHighContrast = pWin ? (pWin->GetSettings().GetStyleSettings().GetHighContrastMode()) : false;
 
     for( DataBrowserModel::tDataHeaderVector::const_iterator aIt( aHeaders.begin());
          aIt != aHeaders.end(); ++aIt )
@@ -1234,7 +1256,7 @@ void DataBrowser::RenewSeriesHeaders()
         if( xSeriesProp.is() &&
             ( xSeriesProp->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Color"))) >>= nColor ))
             spHeader->SetColor( Color( nColor ));
-        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis );
+        spHeader->SetChartType( aIt->m_xChartType, aIt->m_bSwapXAndYAxis, bIsHighContrast );
         spHeader->SetSeriesName(
             String( DataSeriesHelper::getDataSeriesLabel(
                         aIt->m_xDataSeries,

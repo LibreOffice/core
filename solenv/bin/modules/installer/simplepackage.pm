@@ -27,6 +27,7 @@
 
 package installer::simplepackage;
 
+# use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Cwd;
 use File::Copy;
 use installer::download;
@@ -191,6 +192,9 @@ sub register_extensions
 sub get_mac_translation_file
 {
     my $translationfilename = $installer::globals::maclangpackfilename;
+    # my $translationfilename = $installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::maclangpackfilename;
+    # if ( $installer::globals::unicodensis ) { $translationfilename = $translationfilename . ".uulf"; }
+    # else { $translationfilename = $translationfilename . ".mlf"; }
     if ( ! -f $translationfilename ) { installer::exiter::exit_program("ERROR: Could not find language file $translationfilename!", "get_mac_translation_file"); }
     my $translationfile = installer::files::read_file($translationfilename);
 
@@ -301,6 +305,8 @@ sub get_language_string_from_language_block
 sub localize_scriptfile
 {
     my ($scriptfile, $translationfile, $languagestringref) = @_;
+
+    # my $translationfile = get_mac_translation_file();
 
     my $onelanguage = $$languagestringref;
     if ( $onelanguage =~ /^\s*(.*?)_/ ) { $onelanguage = $1; }
@@ -494,8 +500,10 @@ sub create_package
             replace_variables_in_scriptfile($scriptfilecontent, $volume_name, $allvariables);
             installer::files::save_file($scriptfilename, $scriptfilecontent);
 
-            chmod 0775, $scriptfilename;
-            chmod 0775, $scripthelperrealfilename;
+            $systemcall = "chmod 775 " . "\"" . $scriptfilename . "\"";
+            system($systemcall);
+            $systemcall = "chmod 775 " . "\"" . $scripthelperrealfilename . "\"";
+            system($systemcall);
 
             # Copy also Info.plist and icon file
             # Finding both files in solver
@@ -709,9 +717,13 @@ sub create_simple_package
             if ( ! $installer::globals::iswindowsbuild )
             {
                 # see issue 102274
+                my $unixrights = "";
                 if ( $onefile->{'UnixRights'} )
                 {
-                    chmod oct($onefile->{'UnixRights'}), $destination;
+                    $unixrights = $onefile->{'UnixRights'};
+
+                    my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
+                    system($localcall);
                 }
             }
         }

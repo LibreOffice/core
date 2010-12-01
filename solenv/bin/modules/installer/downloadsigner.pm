@@ -91,6 +91,8 @@ Ende
 
 sub getparameter
 {
+    # installer::logger::print_message("Checking parameter");
+
     while ( $#ARGV >= 0 )
     {
         my $param = shift(@ARGV);
@@ -345,6 +347,7 @@ sub check_cws_build
     my $iscws = 1;
 
     if ( $filename =~ /follow_me_\d+_/ ) { $iscws = 0; }
+    # if ( $filename =~ /log_\d+_/ ) { $iscws = 0; }
 
     return $iscws;
 }

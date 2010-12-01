@@ -216,8 +216,7 @@ BOOL Bitmap::ImplReadDIB( SvStream& rIStm, Bitmap& rBmp, ULONG nOffset, BOOL bIs
 
                 // set decoded bytes to memory stream,
                 // from which we will read the bitmap data
-                pMemStm = new SvMemoryStream;
-                pIStm = pMemStm;
+                pIStm = pMemStm = new SvMemoryStream;
                 pMemStm->SetBuffer( (char*) pData, nUncodedSize, FALSE, nUncodedSize );
                 nOffset = 0;
             }

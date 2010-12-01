@@ -64,6 +64,7 @@ private:
     BOOL            bHelpInitialized : 1;
     BOOL            bIsActive : 1;
     BOOL            bControllersUnBound : 1;
+    BOOL            bWasHighContrast : 1;
     BOOL            bIsAddonPopupMenu : 1;
 
 private:
@@ -124,6 +125,7 @@ public:
     void            SetResMgr(ResMgr* pMgr)  {pResMgr = pMgr; }
     ResMgr*         GetResMgr() { return pResMgr; }
     void            SetHelpIds( ResMgr* );
+    BOOL            IsHiContrastMode() const;
     void            UpdateImages();
 
     DECL_LINK( Select, Menu * );

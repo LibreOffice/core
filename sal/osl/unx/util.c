@@ -40,7 +40,7 @@
 #endif
 
 #include "osl/util.h"
-#include "osl/diagnose.h"
+
 
 
 /*****************************************************************************/
@@ -57,16 +57,17 @@ static int   osl_checkAddr(const char* addr);
 
 sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
 {
-#ifdef SOLARIS
-    /** algorithm doesn't work on solaris */
-    return sal_False;
-#else
     char buff[1024];
     char hard_addr[64];
     struct ifconf ifc;
     struct ifreq *ifr;
     int i;
     int so;
+
+#ifdef SOLARIS
+    /** algorithm doesn't work on solaris */
+    return sal_False;
+#else
 
     if ( pAddr == 0 )
     {
@@ -91,7 +92,7 @@ sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 * pAddr )
     ifc.ifc_buf = buff;
     if ( ioctl(so, SIOCGIFCONF, &ifc) < 0 )
     {
-        OSL_TRACE( "SIOCGIFCONF: %s\n", strerror(errno) );
+/*      fprintf(stderr, "SIOCGIFCONF: %s\n", strerror(errno));*/
         close(so);
         return sal_False;
     }
@@ -140,7 +141,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     if ( ret < 0 )
     {
-        OSL_TRACE( "SIOCGIFFLAGS: %s\n", strerror(errno) );
+/*      fprintf(stderr, "SIOCGIFFLAGS: %s\n", strerror(errno)); */
         close(so);
         return ret;
     }
@@ -152,7 +153,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 
     if (ifr.ifr_flags & IFF_LOOPBACK)
     {
-        OSL_TRACE( "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno) );
+/*      fprintf(stderr, "SIOCGIFFLAGS : is LOOPBACK : %s\n", strerror(errno));*/
         close(so);
         return 0;
     }
@@ -169,7 +170,7 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
 #endif
 
     if (ret < 0) {
-        OSL_TRACE( "SIOCGIFADDR: %s\n", strerror(errno) );
+/*      fprintf(stderr, "SIOCGIFADDR: %s\n", strerror(errno));*/
         memset(hard_addr, 0, 32);
         close(so);
         return ret;
@@ -192,9 +193,12 @@ static int osl_getHWAddr(const char *ifname, char* hard_addr)
     ret=osl_checkAddr(hard_addr);
 
     if (ret < 0) {
-        OSL_TRACE( "SIOCGIFADDR got '00:00:00:00:00:00'\n" );
+/*      fprintf(stderr, "SIOCGIFADDR got '00:00:00:00:00:00'\n"); */
         return ret;
     }
+
+/*  fprintf(stderr,"interface : %s -- ",ifname);*/
+/*  fprintf(stderr,"HWaddr : %s\n", print_ether(hard_addr));*/
 
     return 1;
 }

@@ -83,6 +83,7 @@ OTableConnectionData::~OTableConnectionData()
     DBG_DTOR(OTableConnectionData,NULL);
     // LineDataList loeschen
     OConnectionLineDataVec().swap(m_vConnLineData);
+    //ResetConnLines(FALSE);
 }
 
 //------------------------------------------------------------------------

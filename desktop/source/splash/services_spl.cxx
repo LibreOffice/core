@@ -37,6 +37,7 @@
 
 #include "splash.hxx"
 
+
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -63,6 +64,7 @@ static const fProvider pInstanceProviders[] =
     SplashScreen::getInstance,
     NULL
 };
+
 
 static const char** pSupportedServices[] =
 {
@@ -108,9 +110,9 @@ component_writeInfo(
     for (int i = 0; (pServices[i]!=NULL)&&(pImplementations[i]!=NULL); i++) {
         pServiceName= pServices[i];
         pImplName = pImplementations[i];
-        aImpl = OUString(RTL_CONSTASCII_USTRINGPARAM("/"))
+        aImpl = OUString::createFromAscii("/")
               + OUString::createFromAscii(pImplName)
-              + OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+              + OUString::createFromAscii("/UNO/SERVICES");
         Reference<XRegistryKey> xNewKey = xKey->createKey(aImpl);
         xNewKey->createKey(OUString::createFromAscii(pServiceName));
     }

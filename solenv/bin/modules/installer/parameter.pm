@@ -454,7 +454,8 @@ sub setglobalvariables
 
         if ( $installer::globals::compiler =~ /^unxmac/ )
         {
-            chmod 0777, $installer::globals::temppath;
+            my $localcall = "chmod 777 $installer::globals::temppath \>\/dev\/null 2\>\&1";
+            system($localcall);
         }
 
         $installer::globals::temppath = $installer::globals::temppath . $installer::globals::separator . "i";

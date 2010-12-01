@@ -40,7 +40,7 @@ public abstract class CellValue implements BIFFRecord {
     protected byte   col;
     protected byte[] ixfe = new byte[2];
 
-     /**
+       /**
      * Get the row number of this cell
      *
      * @return the row number of this cell
@@ -85,9 +85,9 @@ public abstract class CellValue implements BIFFRecord {
     }
 
     /**
-     * Set the column number of this cell
+     * Set the row number of this cell
      *
-     * @param col sets the column number for this cell
+     * @param col sets the row number for this cell
      */
     public void setCol(int col) {
         this.col = (byte) (col - 1);        // The cols start at 1
@@ -96,7 +96,7 @@ public abstract class CellValue implements BIFFRecord {
     /**
      * Writes basic cell value attributes to the specified <code>Outputstream</code>
      *
-     * @param output the <code>OutputStream</code> to write to
+     * @param os the <code>OutputStream</code> to write to
      */
     public void write(OutputStream output) throws IOException {
 
@@ -106,9 +106,9 @@ public abstract class CellValue implements BIFFRecord {
     }
 
     /**
-     * Reads a <code>LabelCell</code> from the specified <code>Inputstream</code>
+     * Writes a<code>LabelCell</code> to the specified <code>Outputstream</code>
      *
-     * @param input the <code>InputStream</code> to read from
+     * @param os the <code>OutputStream</code> to write to
      */
     public int read(InputStream input) throws IOException {
 
@@ -124,6 +124,7 @@ public abstract class CellValue implements BIFFRecord {
         return numOfBytesRead;
     }
 
+
     /**
      * Returns the contents of the cell as a String
      *
@@ -132,3 +133,4 @@ public abstract class CellValue implements BIFFRecord {
     abstract public String getString() throws IOException;
 
 }
+

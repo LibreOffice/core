@@ -152,6 +152,7 @@ MenuManager::MenuManager(
     SAL_STATIC_CAST( ::com::sun::star::uno::XInterface*, (OWeakObject*)this )->acquire();
 
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
+    m_bWasHiContrast    = rSettings.GetHighContrastMode();
     m_bShowMenuImages   = rSettings.GetUseImagesInMenus();
 
     sal_Int32 nAddonsURLPrefixLength = ADDONSPOPUPMENU_URL_PREFIX.getLength();
@@ -211,7 +212,7 @@ MenuManager::MenuManager(
                         // Set image for the addon popup menu item
                         if ( bShowMenuImages && !pPopupMenu->GetItemImage( ITEMID_ADDONLIST ))
                         {
-                            Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                            Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                             if ( !!aImage )
                                    pPopupMenu->SetItemImage( ITEMID_ADDONLIST, aImage );
                         }
@@ -238,7 +239,7 @@ MenuManager::MenuManager(
                 AddMenu(pSubMenu,::rtl::OUString(),nItemId,sal_True,sal_False);
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -260,7 +261,7 @@ MenuManager::MenuManager(
 
                 if ( bShowMenuImages && !pMenu->GetItemImage( nItemId ))
                 {
-                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                    Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                     if ( !!aImage )
                            pMenu->SetItemImage( nItemId, aImage );
                 }
@@ -281,14 +282,14 @@ MenuManager::MenuManager(
                         if ( pMenuAttributes && pMenuAttributes->aImageId.getLength() > 0 )
                         {
                             // Retrieve image id from menu attributes
-                            aImage = GetImageFromURL( rFrame, aImageId, FALSE );
+                            aImage = GetImageFromURL( rFrame, aImageId, FALSE, m_bWasHiContrast );
                         }
 
                         if ( !aImage )
                         {
-                            aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                            aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                             if ( !aImage )
-                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE );
+                                aImage = AddonsOptions().GetImageFromURL( aItemCommand, FALSE, m_bWasHiContrast );
                         }
 
                         if ( !!aImage )
@@ -296,7 +297,7 @@ MenuManager::MenuManager(
                     }
                     else if ( !pMenu->GetItemImage( nItemId ))
                     {
-                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE );
+                        Image aImage = GetImageFromURL( rFrame, aItemCommand, FALSE, m_bWasHiContrast );
                         if ( !!aImage )
                                pMenu->SetItemImage( nItemId, aImage );
                     }
@@ -308,6 +309,7 @@ MenuManager::MenuManager(
             }
         }
     }
+
 
     // retrieve label information for all menu items without item text
 
@@ -823,11 +825,14 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
                   UpdateSpecialWindowMenu( pMenu,getServiceFactory(),m_aLock );
 
         // Check if some modes have changed so we have to update our menu images
-        if ( bShowMenuImages != m_bShowMenuImages )
+        sal_Bool bIsHiContrast = rSettings.GetHighContrastMode();
+
+        if ( m_bWasHiContrast != bIsHiContrast || bShowMenuImages != m_bShowMenuImages )
         {
             // The mode changed so we have to replace all images
+            m_bWasHiContrast    = bIsHiContrast;
             m_bShowMenuImages   = bShowMenuImages;
-            FillMenuImages( m_xFrame, pMenu, bShowMenuImages );
+            FillMenuImages(m_xFrame,pMenu,bIsHiContrast,bShowMenuImages);
         }
 
         if ( m_bInitialized )
@@ -1023,7 +1028,7 @@ USHORT MenuManager::FillItemCommand(::rtl::OUString& _rItemCommand,Menu* _pMenu,
     }
     return nItemId;
 }
-void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_Bool bShowMenuImages)
+void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_Bool bIsHiContrast,sal_Bool bShowMenuImages)
 {
     AddonsOptions       aAddonOptions;
 
@@ -1053,7 +1058,7 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
 
                 if ( aImageId.getLength() > 0 )
                 {
-                    Image aImage = GetImageFromURL( _xFrame, aImageId, FALSE );
+                    Image aImage = GetImageFromURL( _xFrame, aImageId, FALSE, bIsHiContrast );
                     if ( !!aImage )
                     {
                         bImageSet = sal_True;
@@ -1064,9 +1069,9 @@ void MenuManager::FillMenuImages(Reference< XFrame >& _xFrame,Menu* _pMenu,sal_B
                 if ( !bImageSet )
                 {
                     rtl::OUString aMenuItemCommand = _pMenu->GetItemCommand( nId );
-                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, FALSE );
+                    Image aImage = GetImageFromURL( _xFrame, aMenuItemCommand, FALSE, bIsHiContrast );
                     if ( !aImage )
-                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE );
+                        aImage = aAddonOptions.GetImageFromURL( aMenuItemCommand, FALSE, bIsHiContrast );
 
                     _pMenu->SetItemImage( nId, aImage );
                 }

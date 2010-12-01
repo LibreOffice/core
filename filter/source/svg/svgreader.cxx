@@ -1124,7 +1124,8 @@ struct AnnotatingVisitor
             if( aPaintUri.first != aPaintUri.second )
             {
                 // assuming gradient. assumption does not hold generally
-                if( strstr(sValue,")") && rValue.getLength() > 5 )
+                const char* pClosingBracket;
+                if( (pClosingBracket=strstr(sValue,")")) && rValue.getLength() > 5 )
                 {
                     ElementRefMapType::iterator aRes;
                     if( (aRes=maGradientIdMap.find(
@@ -1812,7 +1813,7 @@ sal_Bool SVGReader::parseAndConvert()
 {
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         m_xServiceFactory->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" ))), uno::UNO_QUERY_THROW );
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")), uno::UNO_QUERY_THROW );
 
     uno::Reference<xml::dom::XDocument> xDom(
         xDomBuilder->parse(m_xInputStream),
@@ -2718,7 +2719,7 @@ bool importSvg(SvStream & rStream, Graphic & rGraphic )
 
     uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
         xServiceFactory->createInstance(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xml.dom.DocumentBuilder" ))),
+            rtl::OUString::createFromAscii("com.sun.star.xml.dom.DocumentBuilder")),
         uno::UNO_QUERY_THROW );
 
     uno::Reference<io::XInputStream> xStream(

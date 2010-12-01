@@ -66,10 +66,15 @@ typedef ::std::deque< ::boost::shared_ptr<SwDepend> >
     FrameDependList_t;
 
 
-// #i28701# - adjust 4th parameter
+// OD 2004-05-07 #i28701# - adjust 4th parameter
 void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
                          FrameDependSortList_t & rFrames,
                          const bool _bAtCharAnchoredObjs );
+
+
+/* -----------------23.03.99 12:57-------------------
+ *
+ * --------------------------------------------------*/
 
 enum ParaFrameMode
 {

@@ -97,7 +97,7 @@ namespace pcr
     //---------------------------------------------------------------------
     ::rtl::OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.form.ui.OTabOrderDialog"));
+        return ::rtl::OUString::createFromAscii( "org.openoffice.comp.form.ui.OTabOrderDialog" );
     }
 
     //---------------------------------------------------------------------

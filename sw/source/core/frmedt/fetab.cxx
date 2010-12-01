@@ -582,6 +582,10 @@ void SwFEShell::_GetTabCols( SwTabCols &rToFill, const SwFrm *pBox ) const
                 {
                     pLastCols->SetLeftMin( nLeftMin );
 
+                    // OSL_ENSURE( bVert ||
+                    //        pLastCols->GetLeftMin() == (pTab->Frm().*fnRect->fnGetLeft)(),
+                    //        "GetTabCols: wrong result" )
+
                     pColumnCacheLastTabFrm = pTab;
                 }
                 else
@@ -717,6 +721,9 @@ void SwFEShell::GetTabCols( SwTabCols &rToFill ) const
     _GetTabCols( rToFill, pFrm );
 }
 
+/*-- 19.01.2004 08:56:42---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
 void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 {
     const SwFrm *pFrm = GetCurrFrm();
@@ -728,7 +735,9 @@ void SwFEShell::GetTabRows( SwTabCols &rToFill ) const
 
     _GetTabRows( rToFill, pFrm );
 }
+/*-- 19.01.2004 08:56:44---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SwFEShell::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly )
 {
     SwFrm *pBox = GetCurrFrm();
@@ -745,14 +754,18 @@ void SwFEShell::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly )
     GetDoc()->SetTabRows( rNew, bCurColOnly, 0, (SwCellFrm*)pBox );
     EndAllActionAndCall();
 }
+/*-- 19.01.2004 08:59:45---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SwFEShell::GetMouseTabRows( SwTabCols &rToFill, const Point &rPt ) const
 {
     const SwFrm *pBox = GetBox( rPt );
     if ( pBox )
         _GetTabRows( rToFill, pBox );
 }
+/*-- 19.01.2004 08:59:45---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
 void SwFEShell::SetMouseTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const Point &rPt )
 {
     const SwFrm *pBox = GetBox( rPt );
@@ -986,7 +999,9 @@ BOOL SwFEShell::HasBoxSelection() const
     if( IsTableMode() )
         return TRUE;
     SwPaM* pPam = GetCrsr();
-        // empty boxes are also selected as the absence of selection
+        // leere Boxen gelten auch ohne Selektion als selektiert
+//  if( !pPam->HasMark() )
+//      return FALSE;
     BOOL bChg = FALSE;
     if( pPam->GetPoint() == pPam->End())
     {
@@ -1873,7 +1888,7 @@ Point lcl_ProjectOntoClosestTableFrm( const SwTabFrm& rTab, const Point& rPoint,
         else if ( aRet.Y() < aMin1.Y() )
             aRet.Y() = aMin1.Y();
     }
-    else
+    else //if ( bTop )
     {
         aRet.Y() = aMin1.Y();
         if ( aRet.X() > aMin2.X() )
@@ -2523,12 +2538,24 @@ BOOL SwFEShell::GetAutoSum( String& rFml ) const
         if( nW )
         {
             rFml += ')';
+
+/*
+            // TabellenSelektion erzeugen??
+            SwTblBoxFormula aTmp( rFml );
+            SwSelBoxes aBoxes;
+            for( USHORT nSelBoxes = aTmp.GetBoxesOfFormula( rTbl,aBoxes );
+                    nSelBoxes; )
+            {
+            }
+*/
         }
     }
 
     return TRUE;
 }
+/* -----------------------------22.08.2002 12:50------------------------------
 
+ ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsTableRightToLeft() const
 {
     SwFrm *pFrm = GetCurrFrm();
@@ -2538,6 +2565,9 @@ BOOL SwFEShell::IsTableRightToLeft() const
     return pFrm->ImplFindTabFrm()->IsRightToLeft();
 }
 
+/* -----------------------------22.08.2002 12:50------------------------------
+
+ ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
 {
     SwFrm *pFrm = (SwFrm *)GetBox( rPt );
@@ -2546,6 +2576,9 @@ BOOL SwFEShell::IsMouseTableRightToLeft(const Point &rPt) const
     return pTabFrm ? pTabFrm->IsRightToLeft() : FALSE;
 }
 
+/* -----------------------------11.02.2004 12:50------------------------------
+
+ ---------------------------------------------------------------------------*/
 BOOL SwFEShell::IsTableVertical() const
 {
     SwFrm *pFrm = GetCurrFrm();

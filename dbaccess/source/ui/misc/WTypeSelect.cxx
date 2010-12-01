@@ -49,6 +49,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
+//  using namespace ::com::sun::star::sdbcx;
 
 //========================================================================
 // OWizTypeSelectControl
@@ -245,7 +246,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
     DBG_CTOR(OWizTypeSelect,NULL);
     m_lbColumnNames.SetSelectHdl(LINK(this,OWizTypeSelect,ColumnSelectHdl));
 
-    ModuleRes aModuleRes(IMG_JOINS);
+    ModuleRes aModuleRes(isHiContrast(&m_lbColumnNames) ? IMG_JOINS_H : IMG_JOINS);
     ImageList aImageList(aModuleRes);
     m_imgPKey = aImageList.GetImage(IMG_PRIMARY_KEY);
 

@@ -817,14 +817,18 @@ BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 #endif
     if ( !m_bInsideExecutionLoop )
     {
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
         m_pDbgWin->AddText( "Posting Event for CommandHdl.\n" );
 #endif
 
         GetpApp()->PostUserEvent( LINK( this, ImplRemoteControl, CommandHdl ) );
     }
+#ifdef DEBUG
+    else
+        m_bInsideExecutionLoop = TRUE;
+#endif
     return TRUE;
-}
+} // BOOL ImplRemoteControl::QueCommands( ULONG nServiceId, SvStream *pIn )
 
 
 SvStream* ImplRemoteControl::GetReturnStream()

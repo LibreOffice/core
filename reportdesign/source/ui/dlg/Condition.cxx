@@ -106,7 +106,7 @@ IMPL_LINK( ConditionField, OnFormula, Button*, /*_pClickedButton*/ )
     {
         ReportFormula aFormula( sFormula );
         sFormula = aFormula.getCompleteFormula();
-    }
+    } // if ( nLen )
     uno::Reference< awt::XWindow> xInspectorWindow = VCLUnoHelper::GetInterface(this);
     uno::Reference< beans::XPropertySet> xProp(m_pParent->getController().getRowSet(),uno::UNO_QUERY);
     if ( rptui::openDialogFormula_nothrow( sFormula, m_pParent->getController().getContext(),xInspectorWindow,xProp ) )
@@ -212,7 +212,7 @@ void OColorPopup::SetSlotId(USHORT _nSlotId)
     {
         m_aColorSet.SetStyle( m_aColorSet.GetStyle() | WB_NONEFIELD );
         m_aColorSet.SetText( String(ModuleRes( STR_TRANSPARENT )) );
-    }
+    } // if ( SID_ATTR_CHAR_COLOR_BACKGROUND == theSlotId || SID_BACKGROUND_COLOR == theSlotId )
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
@@ -259,6 +259,9 @@ Condition::Condition( Window* _pParent, IConditionalFormatAction& _rAction, ::rp
     ,m_nLastKnownWindowWidth( -1 )
     ,m_bInDestruction( false )
 {
+    m_aMoveUp.SetModeImage( ModuleRes( IMG_MOVE_UP_HC ), BMP_COLOR_HIGHCONTRAST );
+    m_aMoveDown.SetModeImage( ModuleRes( IMG_MOVE_DOWN_HC ), BMP_COLOR_HIGHCONTRAST );
+
     FreeResource();
     m_aActions.SetStyle(m_aActions.GetStyle()|WB_LINESPACING);
     m_aCondLHS.GrabFocus();
@@ -343,7 +346,7 @@ IMPL_LINK( Condition, DropdownClick, ToolBox*, /*pToolBar*/ )
             break;
         default:
             break;
-    }
+    } // switch(nId)
     if ( nTextId )
         m_pColorFloat->SetText(String(ModuleRes(nTextId)));
     m_pColorFloat->SetSlotId(nId);
@@ -386,12 +389,16 @@ void Condition::ApplyCommand( USHORT _nCommandId, const ::Color& _rColor)
     m_rAction.applyCommand( m_nCondIndex, _nCommandId, _rColor );
 }
 //------------------------------------------------------------------------------
-ImageList Condition::getImageList(sal_Int16 _eBitmapSet) const
+ImageList Condition::getImageList(sal_Int16 _eBitmapSet,sal_Bool _bHiContast) const
 {
     sal_Int16 nN = IMG_CONDFORMAT_DLG_SC;
+    sal_Int16 nH = IMG_CONDFORMAT_DLG_SCH;
     if ( _eBitmapSet == SFX_SYMBOLS_SIZE_LARGE )
+    {
         nN = IMG_CONDFORMAT_DLG_LC;
-    return ImageList(ModuleRes(nN));
+        nH = IMG_CONDFORMAT_DLG_LCH;
+    }
+    return ImageList(ModuleRes( _bHiContast ? nH : nN ));
 }
 //------------------------------------------------------------------
 void Condition::resizeControls(const Size& _rDiff)
@@ -427,6 +434,7 @@ void Condition::StateChanged( StateChangedType nType )
     {
         // The physical toolbar changed its outlook and shows another logical toolbar!
         // We have to set the correct high contrast mode on the new tbx manager.
+        //  pMgr->SetHiContrast( IsHiContrastMode() );
         checkImageList();
     }
 }

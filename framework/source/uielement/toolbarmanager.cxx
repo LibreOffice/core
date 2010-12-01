@@ -176,11 +176,13 @@ throw ( RuntimeException )
 
 //*****************************************************************************************************************
 
-static sal_Int16 getImageTypeFromBools( sal_Bool bBig )
+static sal_Int16 getImageTypeFromBools( sal_Bool bBig, sal_Bool bHighContrast )
 {
     sal_Int16 n( 0 );
     if ( bBig )
         n |= ::com::sun::star::ui::ImageType::SIZE_LARGE;
+    if ( bHighContrast )
+        n |= ::com::sun::star::ui::ImageType::COLOR_HIGHCONTRAST;
     return n;
 }
 
@@ -237,6 +239,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     ThreadHelpBase( &Application::GetSolarMutex() ),
     OWeakObject(),
     m_bDisposed( sal_False ),
+    m_bIsHiContrast( pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() ),
     m_bSmallSymbols( !SvtMiscOptions().AreCurrentSymbolsLarge() ),
     m_bModuleIdentified( sal_False ),
     m_bAddedToTaskPaneList( sal_True ),
@@ -285,7 +288,7 @@ ToolBarManager::ToolBarManager( const Reference< XMultiServiceFactory >& rServic
     // enables a menu for clipped items and customization
     SvtCommandOptions aCmdOptions;
     USHORT nMenuType = TOOLBOX_MENUTYPE_CLIPPEDITEMS;
-    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateDialog"))))
+    if ( !aCmdOptions.Lookup( SvtCommandOptions::CMDOPTION_DISABLED, ::rtl::OUString::createFromAscii( "CreateDialog" )))
          nMenuType |= TOOLBOX_MENUTYPE_CUSTOMIZE;
     //added for issue33668 by shizhoubo
     m_pToolBar->SetCommandHdl( LINK( this, ToolBarManager, Command ) );
@@ -366,6 +369,21 @@ void ToolBarManager::CheckAndUpdateImages()
     ResetableGuard aGuard( m_aLock );
     sal_Bool bRefreshImages = sal_False;
 
+    // Check if high contrast/normal mode have changed
+    if ( m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode() )
+    {
+        if ( !m_bIsHiContrast )
+        {
+            bRefreshImages = TRUE;
+            m_bIsHiContrast = sal_True;
+        }
+    }
+    else if ( m_bIsHiContrast )
+    {
+        bRefreshImages = sal_True;
+        m_bIsHiContrast = sal_False;
+    }
+
     SvtMiscOptions aMiscOptions;
     bool bCurrentSymbolsSmall = !aMiscOptions.AreCurrentSymbolsLarge();
     if ( m_bSmallSymbols != bCurrentSymbolsSmall )
@@ -398,11 +416,11 @@ void ToolBarManager::RefreshImages()
         if ( nId > 0 )
         {
             ::rtl::OUString aCommandURL = m_pToolBar->GetItemCommand( nId );
-            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages );
+            Image aImage = GetImageFromURL( m_xFrame, aCommandURL, bBigImages, m_bIsHiContrast );
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCommandURL, bBigImages );
+                aImage = QueryAddonsImage( aCommandURL, bBigImages, m_bIsHiContrast );
             m_pToolBar->SetItemImage( nId, aImage );
         }
     }
@@ -746,8 +764,8 @@ void ToolBarManager::impl_elementChanged(bool _bRemove,const ::com::sun::star::u
     Reference< XNameAccess > xNameAccess;
     sal_Int16                nImageType = sal_Int16();
     sal_Int16                nCurrentImageType = getImageTypeFromBools(
-                                                    SvtMiscOptions().AreCurrentSymbolsLarge()
-                                                    );
+                                                    SvtMiscOptions().AreCurrentSymbolsLarge(),
+                                                    m_bIsHiContrast );
 
     if (( Event.aInfo >>= nImageType ) &&
         ( nImageType == nCurrentImageType ) &&
@@ -1541,7 +1559,8 @@ void ToolBarManager::RequestImages()
     }
 
     sal_Bool  bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge() );
+    m_bIsHiContrast = m_pToolBar->GetSettings().GetStyleSettings().GetHighContrastMode();
+    sal_Int16 p = getImageTypeFromBools( SvtMiscOptions().AreCurrentSymbolsLarge(), m_bIsHiContrast );
 
     if ( m_xDocImageManager.is() )
         aDocGraphicSeq = m_xDocImageManager->getImages( p, aCmdURLSeq );
@@ -1562,7 +1581,7 @@ void ToolBarManager::RequestImages()
             // Try also to query for add-on images before giving up and use an
             // empty image.
             if ( !aImage )
-                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages );
+                aImage = QueryAddonsImage( aCmdURLSeq[i], bBigImages, m_bIsHiContrast );
 
             pIter->second.nImageInfo = 1; // mark image as module based
         }
@@ -1817,8 +1836,10 @@ PopupMenu * ToolBarManager::GetToolBarCustomMeun(ToolBox* pToolBar)
                 pItemMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pItemMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
                 pItemMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos,
-                                         GetImageFromURL( m_xFrame, aCommandURL, sal_False )
-                                       );
+                                         GetImageFromURL( m_xFrame,
+                                                          aCommandURL,
+                                                          sal_False,
+                                                          m_bIsHiContrast ));
             }
             else
             {
@@ -2114,6 +2135,7 @@ IMPL_LINK( ToolBarManager, StateChanged, StateChangedType*, pStateChangedType )
 
     if ( *pStateChangedType == STATE_CHANGE_CONTROLBACKGROUND )
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
     else if ( *pStateChangedType == STATE_CHANGE_VISIBLE )
@@ -2134,6 +2156,7 @@ IMPL_LINK( ToolBarManager, DataChanged, DataChangedEvent*, pDataChangedEvent  )
         (  pDataChangedEvent->GetType() == DATACHANGED_DISPLAY  ))  &&
         ( pDataChangedEvent->GetFlags() & SETTINGS_STYLE        ))
     {
+        // Check if we need to get new images for normal/high contrast mode
         CheckAndUpdateImages();
     }
 
@@ -2218,9 +2241,9 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
     return 0;
 }
 
-Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages )
+Image ToolBarManager::QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast )
 {
-    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages );
+    Image aImage = framework::AddonsOptions().GetImageFromURL( aCommandURL, bBigImages, bHiContrast );
     return aImage;
 }
 

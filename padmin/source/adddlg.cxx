@@ -90,11 +90,11 @@ void APChooseDevicePage::fill( PrinterInfo& rInfo )
 {
     if( m_aPDFBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("pdf="));
+        rInfo.m_aFeatures = OUString::createFromAscii( "pdf=" );
     }
     else if( m_aFaxBtn.IsChecked() )
     {
-        rInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax"));
+        rInfo.m_aFeatures = OUString::createFromAscii( "fax" );
     }
     else
         rInfo.m_aFeatures = OUString();
@@ -694,7 +694,7 @@ void APFaxDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
     {
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
     }
 }
 
@@ -727,9 +727,9 @@ bool APPdfDriverPage::check()
 void APPdfDriverPage::fill( PrinterInfo& rInfo )
 {
     if( isDefault() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("SGENPRT"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "SGENPRT" );
     else if( isDist() )
-        rInfo.m_aDriverName = OUString(RTL_CONSTASCII_USTRINGPARAM("ADISTILL"));
+        rInfo.m_aDriverName = OUString::createFromAscii( "ADISTILL" );
 }
 
 //--------------------------------------------------------------------
@@ -805,7 +805,10 @@ AddPrinterDialog::~AddPrinterDialog()
 
 void AddPrinterDialog::updateSettings()
 {
-    m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
+    if( ! GetSettings().GetStyleSettings().GetHighContrastMode() )
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER ) ) ) );
+    else
+        m_aTitleImage.SetImage( Image( BitmapEx( PaResId( RID_BMP_PRINTER_HC ) ) ) );
 }
 
 void AddPrinterDialog::DataChanged( const DataChangedEvent& rEv )
@@ -1015,13 +1018,13 @@ void AddPrinterDialog::addPrinter()
             }
             else if( m_pChooseDevicePage->isFax() )
             {
-                aInfo.m_aFeatures = OUString(RTL_CONSTASCII_USTRINGPARAM("fax="));
+                aInfo.m_aFeatures = OUString::createFromAscii( "fax=" );
                 if( m_pFaxNamePage->isFaxSwallow() )
-                    aInfo.m_aFeatures += OUString(RTL_CONSTASCII_USTRINGPARAM("swallow"));
+                    aInfo.m_aFeatures += OUString::createFromAscii( "swallow" );
             }
             else if( m_pChooseDevicePage->isPDF() )
             {
-                OUString aPdf( RTL_CONSTASCII_USTRINGPARAM("pdf=") );
+                OUString aPdf( OUString::createFromAscii( "pdf=" ) );
                 aPdf += m_pPdfCommandPage->getPdfDir();
                 aInfo.m_aFeatures = aPdf;
             }

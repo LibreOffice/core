@@ -78,6 +78,8 @@ using ::rtl::OUString;
 
 // Kontextmenue fuer GlobalTree
 #define CTX_INSERT_ANY_INDEX 10
+//#define CTX_INSERT_CNTIDX   11
+//#define CTX_INSERT_USRIDX   12
 #define CTX_INSERT_FILE     11
 #define CTX_INSERT_NEW_FILE 12
 #define CTX_INSERT_TEXT     13
@@ -411,6 +413,8 @@ void SwGlobalTree::TbxMenuHdl(USHORT nTbxId, ToolBox* pBox)
             pMenu->SetHelpId(i, aHelpForMenu[i] );
         }
         pMenu->EnableItem(CTX_INSERT_ANY_INDEX, 0 != (nEnableFlags & ENABLE_INSERT_IDX ));
+//      pMenu->EnableItem(CTX_INSERT_CNTIDX,    0 != (nEnableFlags & ENABLE_INSERT_IDX ));
+//      pMenu->EnableItem(CTX_INSERT_USRIDX,    0 != (nEnableFlags & ENABLE_INSERT_IDX ));
         pMenu->EnableItem(CTX_INSERT_TEXT,      0 != (nEnableFlags & ENABLE_INSERT_TEXT));
         pMenu->EnableItem(CTX_INSERT_FILE,      0 != (nEnableFlags & ENABLE_INSERT_FILE));
         pMenu->EnableItem(CTX_INSERT_NEW_FILE,  0 != (nEnableFlags & ENABLE_INSERT_FILE));
@@ -643,7 +647,8 @@ void    SwGlobalTree::Display(BOOL bOnlyUpdateUserData)
 {
     if(!bIsImageListInitialized)
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
         bIsImageListInitialized = TRUE;
     }
     USHORT nCount = pSwGlblDocContents->Count();
@@ -787,7 +792,9 @@ IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 }
 
 void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
+//IMPL_LINK( SwGlobalTree, PopupHdl, Menu* , pMenu)
 {
+//  USHORT nId = pMenu->GetCurItemId();
     SvLBoxEntry* pEntry = FirstSelected();
     SwGlblDocContent* pCont = pEntry ? (SwGlblDocContent*)pEntry->GetUserData() : 0;
     // wird waehrend des Dialogs ein RequestHelp gerufen,
@@ -882,6 +889,8 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         }
         break;
         case CTX_INSERT_ANY_INDEX:
+//      case CTX_INSERT_CNTIDX:
+//      case CTX_INSERT_USRIDX:
         {
             if(pContCopy)
             {
@@ -1015,6 +1024,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
         delete pContCopy;
     else
         bDeleteContentCopy = true;
+//  return TRUE;
 }
 
 IMPL_LINK( SwGlobalTree, Timeout, Timer*, EMPTYARG )
@@ -1273,7 +1283,8 @@ void    SwGlobalTree::DataChanged( const DataChangedEvent& rDCEvt )
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
-        aEntryImages = ImageList(SW_RES(IMG_NAVI_ENTRYBMP));
+        USHORT nResId = GetSettings().GetStyleSettings().GetHighContrastMode() ? IMG_NAVI_ENTRYBMPH : IMG_NAVI_ENTRYBMP;
+        aEntryImages = ImageList(SW_RES(nResId));
         Update(sal_True);
     }
     SvTreeListBox::DataChanged( rDCEvt );

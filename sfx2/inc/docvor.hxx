@@ -57,6 +57,11 @@ friend class SfxOrganizeDlg_Impl;
     Image                   aOpenedDocBmp;
     Image                   aClosedDocBmp;
 
+    Image                   aOpenedFolderBmpHC;
+    Image                   aClosedFolderBmpHC;
+    Image                   aOpenedDocBmpHC;
+    Image                   aClosedDocBmpHC;
+
     SfxOrganizeMgr*         pMgr;
     SfxOrganizeDlg_Impl*    pDlg;
 
@@ -97,8 +102,8 @@ public:
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
     inline void SetBitmaps(
-                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp
-                    );
+                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp,
+                    const Image &rOFolderBmpHC, const Image &rCFolderBmpHC, const Image &rODocBmpHC, const Image &rCDocBmpHC );
     const Image &GetClosedBmp(USHORT nLevel) const;
     const Image &GetOpenedBmp(USHORT nLevel) const;
 
@@ -139,6 +144,7 @@ friend class SfxOrganizeListBox_Impl;
 
     class SfxOrganizeDlg_Impl *pImp;
 
+//  virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     SfxTemplateOrganizeDlg(Window * pParent, SfxDocumentTemplates* = 0);
     ~SfxTemplateOrganizeDlg();

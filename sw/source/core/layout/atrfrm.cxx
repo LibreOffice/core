@@ -293,6 +293,10 @@ SfxPoolItem*  SwFmtFrmSize::Clone( SfxItemPool* ) const
     return new SwFmtFrmSize( *this );
 }
 
+
+/* -----------------24.04.98 11:36-------------------
+ *
+ * --------------------------------------------------*/
 bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
@@ -351,6 +355,9 @@ bool SwFmtFrmSize::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return true;
 }
 
+/* -----------------24.04.98 11:36-------------------
+ *
+ * --------------------------------------------------*/
 bool SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     sal_Bool bConvert = 0 != (nMemberId&CONVERT_TWIPS);
@@ -1513,6 +1520,9 @@ sal_uInt32 SwFmtAnchor::GetOrder() const
     return mnOrder;
 }
 
+/*-----------------16.02.98 15:21-------------------
+
+--------------------------------------------------*/
 bool SwFmtAnchor::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!

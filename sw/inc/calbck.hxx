@@ -27,19 +27,23 @@
  ************************************************************************/
 
 /*************************************************************
-#* service classes
+#* Service-Klassen
  *************************************************************/
 
 /*
- * When an attribute in a format is changed, this change has to be propagated
- * to all dependent formats and over them to all concerned nodes.
- * In doing so it has to be decided whether the change can have an effect or
- * whether the dependent format redefines the changed attribute (such that the
- * attribute value of the dependent format occludes the changed value).
- * Furthermore, the concerned node can decide whether it makes use of the
- * changed attribute (for example: line distance for underlining was changed,
- * but the underlining attribute was not used). This way, the minimal effort
- * for reformatting is identified.
+#* Aendert sich ein Attribut in einem Format, so muss diese
+#* Aenderung an alle abhaengigen Formate und ueber sie an
+#* alle betroffenen Nodes propagiert werden. Dabei muss
+#* festgestellt werden, ob die Aenderung einen Effekt haben
+#* kann, oder ob das geaenderte Attribut von dem abhaengigen
+#* Format ueberdefiniert wird (so dass ohnehin der
+#* Attributwert des abhaengigen Formates den geaenderten
+#* Wert verdeckt). Weiterhin kann der betroffene Node
+#* feststellen, ob er von dem geaenderten Attribut Gebrauch
+#* macht (Beispiel: Linienabstand fuer Unterstreichung wurde
+#* geaendert, das Attribut Unterstreichung wurde aber nicht
+#* verwendet). So wird bei Aenderungen der minimale Aufwand
+#* zum Reformatieren erkannt.
  */
 #ifndef _CALBCK_HXX
 #define _CALBCK_HXX
@@ -61,17 +65,15 @@ class SW_DLLPUBLIC SwClient
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;           // for AVL sorting
-    BOOL bModifyLocked : 1;             // used in SwModify::Modify,
-                                        // is really a member of SwModify
-                                        // but here for lack of space
-
-    BOOL bInModify  : 1;                // is in a modify. (Debug!!!)
-    BOOL bInDocDTOR : 1;                // Doc gets destroyed,
-                                        // do not "unsubscribe"
-    BOOL bInCache   : 1;                // is in BorderAttrCache of the layout,
-                                        // unsubscribes itself then in Modify!
-    BOOL bInSwFntCache : 1;             // is in SwFont cache of the formatting
+    SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
+    BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
+                                        // eigentlich ein Member des SwModify
+                                        // aber aus Platzgruenden hier.
+    BOOL bInModify  : 1;                // ist in einem Modify. (Debug!!!)
+    BOOL bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
+    BOOL bInCache   : 1;                // Ist im BorderAttrCache des Layout,
+                                        // Traegt sich dann im Modify aus!
+    BOOL bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
 
 protected:
     SwModify *pRegisteredIn;
@@ -86,8 +88,9 @@ public:
     virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
 
-    //rtti, derived classes may do likewise or not. When they do, it can be
-    //casted typesafely via the dependency list of a Modify
+    //rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
+    //kann ueber die Abhaengigkeitsliste eines Modify typsicher gecastet
+    //werden.
     TYPEINFO();
 
     void LockModify()                   { bModifyLocked = TRUE;  }
@@ -99,7 +102,7 @@ public:
     BOOL IsInCache()      const         { return bInCache;       }
     BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
 
-    // get client Information
+        // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
 private:
@@ -116,7 +119,7 @@ inline SwClient::SwClient() :
 // SwModify
 // ----------
 
-// class has a doubly linked list for dependencies
+// Klasse hat eine doppelt Verkette Liste fuer die Abhaengigen.
 
 class SW_DLLPUBLIC SwModify: public SwClient
 {
@@ -141,7 +144,7 @@ public:
 
     const SwClient* GetDepends() const  { return pRoot; }
 
-    // get client information
+        // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
     void SetInDocDTOR() { bInDocDTOR = TRUE; }
@@ -167,9 +170,9 @@ protected:
 // ----------
 
 /*
- * Very useful class when an object depends on multiple objects.
- * This should have an object of the class SwDepend as member for each
- * dependency.
+ * Sehr sinnvolle Klasse, wenn ein Objekt von mehreren Objekten
+ * abhaengig ist. Diese sollte fuer jede Abhaengigkeit ein Objekt
+ * der Klasse SwDepend als Member haben.
  */
 class SW_DLLPUBLIC SwDepend: public SwClient
 {
@@ -182,7 +185,7 @@ public:
     SwClient* GetToTell() { return pToTell; }
     virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
 
-    // get Client information
+        // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem & ) const;
 
 private:
@@ -194,18 +197,18 @@ private:
 
 class SwClientIter
 {
-    friend SwClient* SwModify::_Remove(SwClient *); // for ptr correction
-    friend void SwModify::Add(SwClient *);          // only for OSL_ENSURE !
+    friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
+    friend void SwModify::Add(SwClient *);          // nur fuer OSL_ENSURE(!
 
     SwModify const& rRoot;
     SwClient *pAkt, *pDelNext;
-    // for updating of all iterators when inserting/deleting clients, while the
-    // iterator points on it
+    // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
+    // Clients, wenn der Iterator gerade draufsteht.
     SwClientIter *pNxtIter;
 
     SwClient* mpWatchClient;    // if set, SwModify::_Remove checks if this client is removed
 
-    TypeId aSrchId;             // for First/Next - look for this type
+    TypeId aSrchId;             // fuer First/Next - suche diesen Type
 
 public:
     SW_DLLPUBLIC SwClientIter( SwModify const& );
@@ -214,16 +217,16 @@ public:
     const SwModify& GetModify() const       { return rRoot; }
 
 #ifndef CFRONT
-    SwClient* operator++(int);
-    SwClient* operator--(int);
+    SwClient* operator++(int);  // zum Naechsten
+    SwClient* operator--(int);  // zum Vorherigen
 #endif
-    SwClient* operator++();
-    SwClient* operator--();
+    SwClient* operator++();     // zum Naechsten
+    SwClient* operator--();     // zum Vorherigen
 
-    SwClient* GoStart();
-    SwClient* GoEnd();
+    SwClient* GoStart();        // zum Anfang
+    SwClient* GoEnd();          // zum Ende
 
-    inline SwClient* GoRoot();      // restart from root
+    inline SwClient* GoRoot();      // wieder ab Root (==Start) anfangen
 
     SwClient* operator()() const
         { return pDelNext == pAkt ? pAkt : pDelNext; }
@@ -237,7 +240,7 @@ public:
     void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }
 };
 
-inline SwClient* SwClientIter::GoRoot()
+inline SwClient* SwClientIter::GoRoot()     // wieder ab Root anfangen
 {
     pAkt = rRoot.pRoot;
     return (pDelNext = pAkt);

@@ -494,19 +494,19 @@ void OCalcTable::fillColumns()
                 }
                 break;
             case DataType::DECIMAL:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+                aTypeName = ::rtl::OUString::createFromAscii("DECIMAL");
                 break;
             case DataType::BIT:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOL"));
+                aTypeName = ::rtl::OUString::createFromAscii("BOOL");
                 break;
             case DataType::DATE:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+                aTypeName = ::rtl::OUString::createFromAscii("DATE");
                 break;
             case DataType::TIME:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
+                aTypeName = ::rtl::OUString::createFromAscii("TIME");
                 break;
             case DataType::TIMESTAMP:
-                aTypeName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+                aTypeName = ::rtl::OUString::createFromAscii("TIMESTAMP");
                 break;
             default:
                 OSL_ASSERT("missing type name");

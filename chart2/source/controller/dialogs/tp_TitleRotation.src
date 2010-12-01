@@ -24,7 +24,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 #include "HelpIds.hrc"
 #include "TabPages.hrc"
 
@@ -91,3 +90,4 @@ TabPage TP_ALIGNMENT
         DropDown = TRUE;
     };
 };
+

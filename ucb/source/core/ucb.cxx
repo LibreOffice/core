@@ -351,10 +351,10 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UniversalContentBroker,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.UniversalContentBroker" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         UCB_SERVICE_NAME )) );
+                     OUString::createFromAscii(
+                         "com.sun.star.comp.ucb.UniversalContentBroker" ),
+                     OUString::createFromAscii(
+                         UCB_SERVICE_NAME ) );
 
 //=========================================================================
 //
@@ -659,8 +659,8 @@ Any SAL_CALL UniversalContentBroker::execute(
         {
             ucbhelper::cancelCommandExecution(
                 makeAny( IllegalArgumentException(
-                                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                        "Wrong argument type!" )),
+                                rtl::OUString::createFromAscii(
+                                        "Wrong argument type!" ),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 -1 ) ),
                 Environment );
@@ -844,8 +844,8 @@ bool UniversalContentBroker::getContentProviderData(
     {
         uno::Reference< lang::XMultiServiceFactory > xConfigProv(
                 m_xSMgr->createInstance(
-                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.configuration.ConfigurationProvider" )) ),
+                    rtl::OUString::createFromAscii(
+                        "com.sun.star.configuration.ConfigurationProvider" ) ),
                 uno::UNO_QUERY_THROW );
 
         rtl::OUStringBuffer aFullPath;

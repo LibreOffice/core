@@ -155,6 +155,8 @@ class FlashExportFilter : public cppu::WeakImplHelper4
     Reference< XMultiServiceFactory > mxMSF;
     Reference< XStatusIndicator> mxStatusIndicator;
 
+    osl::File* mpFile;
+
 public:
     FlashExportFilter( const Reference< XMultiServiceFactory > &rxMSF);
 
@@ -274,7 +276,7 @@ sal_Bool FlashExportFilter::ExportAsMultipleFiles(const Sequence< PropertyValue 
     if(!xDrawPages.is())
         return sal_False;
 
-    Reference< XDesktop > rDesktop( mxMSF->createInstance(OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ))), UNO_QUERY);
+    Reference< XDesktop > rDesktop( mxMSF->createInstance(OUString::createFromAscii("com.sun.star.frame.Desktop")), UNO_QUERY);
     if (!rDesktop.is())
         return sal_False;
 

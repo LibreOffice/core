@@ -64,8 +64,10 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemS
     maBtBrowse      ( this, CUI_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( FALSE )
 {
-    // Disable display of bitmap names.
+    // Set HC bitmaps and disable display of bitmap names.
+    maBtBrowse.SetModeImage( Image( CUI_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtBrowse.EnableTextDisplay (FALSE);
+    maBtFileopen.SetModeImage( Image( CUI_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtFileopen.EnableTextDisplay (FALSE);
 
     InitStdControls();

@@ -44,6 +44,5 @@ all: $(MISC)$/LICENSE.odt $(MISC)$/CREDITS.odt
 
 $(MISC)$/LICENSE.odt: LICENSE.odt
     $(COPY) LICENSE.odt $@
-
 $(MISC)$/CREDITS.odt: CREDITS.odt
     $(COPY) CREDITS.odt $@

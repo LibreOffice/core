@@ -76,7 +76,7 @@ XMLStyleExport::XMLStyleExport(
     sIsAutoUpdate( RTL_CONSTASCII_USTRINGPARAM( "IsAutoUpdate" ) ),
     sFollowStyle( RTL_CONSTASCII_USTRINGPARAM( "FollowStyle" ) ),
     sNumberingStyleName( RTL_CONSTASCII_USTRINGPARAM( "NumberingStyleName" ) ),
-    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),
+    sOutlineLevel( RTL_CONSTASCII_USTRINGPARAM( "OutlineLevel" ) ),//#outline level,add by zhaojianwei
     sPoolStyleName( rPoolStyleName ),
     pAutoStylePool( pAutoStyleP  )
 {
@@ -98,7 +98,7 @@ sal_Bool XMLStyleExport::exportStyle(
         const Reference< XStyle >& rStyle,
           const OUString& rXMLFamily,
         const UniReference < SvXMLExportPropertyMapper >& rPropMapper,
-        const Reference< XNameAccess >& xStyles,
+        const Reference< XNameAccess >& xStyles,        //#outline level,add by zhaojianwei
         const OUString* pPrefix )
 {
     Reference< XPropertySet > xPropSet( rStyle, UNO_QUERY );
@@ -176,7 +176,7 @@ sal_Bool XMLStyleExport::exportStyle(
                                       XML_TRUE );
     }
 
-    // style:default-outline-level"..."
+    // style:default-outline-level"..." //#outline level, add by zhaojianwei.0802
     sal_Int32 nOutlineLevel = 0;
     if( xPropSetInfo->hasPropertyByName( sOutlineLevel ) )
     {
@@ -195,11 +195,12 @@ sal_Bool XMLStyleExport::exportStyle(
             }
             else
             {
-                /* Empty value for style:default-outline-level does exist
-                   since ODF 1.2. Thus, suppress its export for former versions. (#i104889#)
-                */
+                // --> OD 2009-12-29 #i104889#
+                // empty value for style:default-outline-level does exist
+                // since ODF 1.2. Thus, suppress its export for former versions.
                 if ( ( GetExport().getExportFlags() & EXPORT_OASIS ) != 0 &&
                      GetExport().getDefaultVersion() >= SvtSaveOptions::ODFVER_012 )
+                // <--
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                               XML_DEFAULT_OUTLINE_LEVEL,
@@ -207,7 +208,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 }
             }
         }
-    }
+    }//<-end,zhaojianwei
 
     // style:list-style-name="..." (SW paragarph styles only)
     if( xPropSetInfo->hasPropertyByName( sNumberingStyleName ) )
@@ -222,10 +223,10 @@ sal_Bool XMLStyleExport::exportStyle(
                 OUString sListName;
                 aAny >>= sListName;
 
-                /* An direct set empty list style has to be written. Otherwise,
-                   this information is lost and causes an error, if the parent
-                   style has a list style set. (#i69523#)
-                */
+                // --> OD 2006-09-21 #i69523#
+                // An direct set empty list style has to be written. Otherwise,
+                // this information is lost and causes an error, if the parent
+                // style has a list style set.
                 if ( !sListName.getLength() )
                 {
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE,
@@ -234,7 +235,7 @@ sal_Bool XMLStyleExport::exportStyle(
                 }
                 else
                 {
-                    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+                    // --> OD 2006-09-27 #i69627#
                     bool bSuppressListStyle( false );
                     {
                         if ( !GetExport().writeOutlineStyleAsNormalListStyle() )
@@ -263,14 +264,17 @@ sal_Bool XMLStyleExport::exportStyle(
                     }
 
                     if ( sListName.getLength() && !bSuppressListStyle )
+                    // <--
                     {
                         GetExport().AddAttribute( XML_NAMESPACE_STYLE,
                                                   XML_LIST_STYLE_NAME,
                                   GetExport().EncodeStyleName( sListName ) );
                     }
                 }
+                // <--
             }
         }
+        //#outline level, add by zhaojianwei.0802
         else if( nOutlineLevel > 0 )
         {
 
@@ -310,7 +314,9 @@ sal_Bool XMLStyleExport::exportStyle(
                                           XML_LIST_STYLE_NAME,
                                           OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
         }
+        //<-end,zhaojianwei
     }
+
 
     // style:pool-id="..." is not required any longer since we use
     // english style names only

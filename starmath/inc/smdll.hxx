@@ -38,7 +38,7 @@ class SfxFilter;
 
 class SmDLL
 {
-    static bool bInitialized;
+    static BOOL bInitialized;
 public:
     static void Init();
     static void Exit();

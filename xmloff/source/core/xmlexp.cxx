@@ -268,9 +268,12 @@ public:
     uno::Reference< uri::XUriReferenceFactory >         mxUriReferenceFactory;
     rtl::OUString                                       msPackageURI;
     rtl::OUString                                       msPackageURIScheme;
-    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    // --> OD 2006-09-27 #i69627#
     sal_Bool                                            mbOutlineStyleAsNormalListStyle;
+    // <--
+    // --> PB 2007-07-06 #i146851#
     sal_Bool                                            mbSaveBackwardCompatibleODF;
+    // <--
 
     uno::Reference< embed::XStorage >                   mxTargetStorage;
 
@@ -292,7 +295,9 @@ public:
 
     ::std::auto_ptr< ::xmloff::RDFaExportHelper> mpRDFaHelper;
 
+    // --> OD 2008-11-26 #158694#
     sal_Bool                                            mbExportTextNumberElement;
+    // <--
     sal_Bool                                            mbNullDateInitialized;
 
     void SetSchemeOf( const ::rtl::OUString& rOrigFileName )
@@ -304,15 +309,20 @@ public:
 };
 
 SvXMLExport_Impl::SvXMLExport_Impl()
-    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    // --> OD 2006-09-27 #i69627#
     : mbOutlineStyleAsNormalListStyle( false )
+    // <--
+    // --> PB 2007-07-06 #i146851#
         ,mbSaveBackwardCompatibleODF( sal_True )
+    // <--
         ,mxComponentContext( ::comphelper::getProcessComponentContext() )
         ,mStreamName()
         ,mNamespaceMaps()
         ,mDepth(0)
         ,mpRDFaHelper() // lazy
+    // --> OD 2008-11-26 #158694#
         ,mbExportTextNumberElement( sal_False )
+    // <--
         ,mbNullDateInitialized( sal_False )
 {
     OSL_ENSURE(mxComponentContext.is(), "SvXMLExport: no ComponentContext");
@@ -432,10 +442,13 @@ void SvXMLExport::_InitCtor()
         mxModel->addEventListener(mxEventListener);
     }
 
-    // Determine model type (#i51726#)
+    // --> OD 2006-03-10 #i51726# - determine model type
     _DetermineModelType();
+    // <--
 
     mbEnableExperimentalOdfExport = getenv("ENABLE_EXPERIMENTAL_ODF_EXPORT") != NULL;
+
+    // --> PB 2007-07-06 #146851# - load mbSaveBackwardCompatibleODF from configuration
 
     // cl: but only if we do export to current oasis format, old openoffice format *must* always be compatible
     if( (getExportFlags() & EXPORT_OASIS) != 0 )
@@ -452,7 +465,7 @@ void SvXMLExport::_InitCtor()
     // <--
 }
 
-// Shapes in Writer cannot be named via context menu (#i51726#)
+// --> OD 2006-03-14 #i51726#
 void SvXMLExport::_DetermineModelType()
 {
     meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;
@@ -462,14 +475,18 @@ void SvXMLExport::_DetermineModelType()
         meModelType = SvtModuleOptions::ClassifyFactoryByModel( mxModel );
     }
 }
+// <--
 
+// #110680#
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     MapUnit eDfltUnit, const enum XMLTokenEnum eClass, sal_uInt16 nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
+    // #110680#
     mxServiceFactory(xServiceFactory),
     mpAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
+    // #110680#
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -487,18 +504,21 @@ SvXMLExport::SvXMLExport(
     _InitCtor();
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString &rFileName,
     const uno::Reference< xml::sax::XDocumentHandler > & rHandler,
     MapUnit eDfltUnit   )
 :   mpImpl( new SvXMLExport_Impl ),
+    // #110680#
     mxServiceFactory(xServiceFactory),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
+    // #110680#
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, eDfltUnit, getServiceFactory() ) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -520,6 +540,7 @@ SvXMLExport::SvXMLExport(
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString &rFileName,
@@ -527,6 +548,7 @@ SvXMLExport::SvXMLExport(
     const Reference< XModel >& rModel,
     sal_Int16 eDfltUnit )
 :   mpImpl( new SvXMLExport_Impl ),
+    // #110680#
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
     mxHandler( rHandler ),
@@ -535,6 +557,8 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
+    // #110680#
+    // pUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit) ) ),
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -556,6 +580,7 @@ SvXMLExport::SvXMLExport(
         mpNumExport = new SvXMLNumFmtExport(*this, mxNumberFormatsSupplier);
 }
 
+// #110680#
 SvXMLExport::SvXMLExport(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
     const OUString &rFileName,
@@ -564,6 +589,7 @@ SvXMLExport::SvXMLExport(
     const Reference< document::XGraphicObjectResolver >& rEmbeddedGraphicObjects,
     sal_Int16 eDfltUnit )
 :   mpImpl( new SvXMLExport_Impl ),
+    // #110680#
     mxServiceFactory(xServiceFactory),
     mxModel( rModel ),
     mxHandler( rHandler ),
@@ -573,6 +599,7 @@ SvXMLExport::SvXMLExport(
     mpAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
+    // #110680#
     mpUnitConv( new SvXMLUnitConverter( MAP_100TH_MM, SvXMLUnitConverter::GetMapUnit(eDfltUnit), getServiceFactory() ) ),
     mpNumExport(0L),
     mpProgressBarHelper( NULL ),
@@ -703,10 +730,12 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         }
     }
 
+    // --> PB 2007-07-06 #i146851#
     if ( mpImpl->mbSaveBackwardCompatibleODF )
         mnExportFlags |= EXPORT_SAVEBACKWARDCOMPATIBLE;
     else
         mnExportFlags &= ~EXPORT_SAVEBACKWARDCOMPATIBLE;
+    // <--
 
     // namespaces for user defined attributes
     Reference< XMultiServiceFactory > xFactory( mxModel,    UNO_QUERY );
@@ -742,8 +771,9 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         }
     }
 
-    // Determine model type (#i51726#)
+    // --> OD 2006-03-10 #i51726# - determine model type
     _DetermineModelType();
+    // <--
 }
 
 // XInitialize
@@ -833,7 +863,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
         }
         mpImpl->mStreamName = sName; // Note: may be empty (XSLT)
 
-        // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+        // --> OD 2006-09-26 #i69627#
         const ::rtl::OUString sOutlineStyleAsNormalListStyle(
                 RTL_CONSTASCII_USTRINGPARAM("OutlineStyleAsNormalListStyle") );
         if( xPropertySetInfo->hasPropertyByName( sOutlineStyleAsNormalListStyle ) )
@@ -841,11 +871,13 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Any aAny = mxExportInfo->getPropertyValue( sOutlineStyleAsNormalListStyle );
             aAny >>= (mpImpl->mbOutlineStyleAsNormalListStyle);
         }
+        // <--
 
         OUString sTargetStorage( RTL_CONSTASCII_USTRINGPARAM("TargetStorage") );
         if( xPropertySetInfo->hasPropertyByName( sTargetStorage ) )
             mxExportInfo->getPropertyValue( sTargetStorage ) >>= mpImpl->mxTargetStorage;
 
+        // --> OD 2008-11-26 #158694#
         const ::rtl::OUString sExportTextNumberElement(
                 RTL_CONSTASCII_USTRINGPARAM("ExportTextNumberElement") );
         if( xPropertySetInfo->hasPropertyByName( sExportTextNumberElement ) )
@@ -853,6 +885,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
             uno::Any aAny = mxExportInfo->getPropertyValue( sExportTextNumberElement );
             aAny >>= (mpImpl->mbExportTextNumberElement);
         }
+        // <--
     }
 
 }
@@ -1274,7 +1307,7 @@ lcl_AddGrddl(SvXMLExport & rExport, const sal_Int32 nExportMode)
     if (EXPORT_SETTINGS != nExportMode) // meta, content, styles
     {
         rExport.AddAttribute( XML_NAMESPACE_GRDDL, XML_TRANSFORMATION,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(s_grddl_xsl)) );
+            OUString::createFromAscii(s_grddl_xsl) );
     }
 }
 
@@ -1350,7 +1383,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
                 // get filter component
                 Reference< xml::sax::XDocumentHandler > xTmpDocHandler(
                     xFactory->createInstanceWithArguments(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Oasis2OOoTransformer")),
+                    OUString::createFromAscii("com.sun.star.comp.Oasis2OOoTransformer"),
                                 aArgs), UNO_QUERY);
                 OSL_ENSURE( xTmpDocHandler.is(),
                     "can't instantiate OASIS transformer component" );
@@ -2430,13 +2463,16 @@ XMLErrors* SvXMLExport::GetErrors()
 void SvXMLExport::DisposingModel()
 {
     mxModel.clear();
-    // Shapes in Writer cannot be named via context menu (#i51726#)
+    // --> OD 2006-03-13 #i51726#
     meModelType = SvtModuleOptions::E_UNKNOWN_FACTORY;;
+    // <--
     mxEventListener.clear();
 }
 
+// #110680#
 ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > SvXMLExport::getServiceFactory()
 {
+    // #110680#
     return mxServiceFactory;
 }
 
@@ -2451,11 +2487,12 @@ SvXMLExport::GetComponentContext() const
     return mpImpl->maInterfaceToIdentifierMapper;
 }
 
-// Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+// --> OD 2006-09-27 #i69627#
 sal_Bool SvXMLExport::writeOutlineStyleAsNormalListStyle() const
 {
     return mpImpl->mbOutlineStyleAsNormalListStyle;
 }
+// <--
 
 uno::Reference< embed::XStorage > SvXMLExport::GetTargetStorage()
 {
@@ -2571,10 +2608,12 @@ SvXMLExport::AddAttributesRDFa(
     mpImpl->mpRDFaHelper->AddRDFa(xMeta);
 }
 
+// --> OD 2008-11-26 #158694#
 sal_Bool SvXMLExport::exportTextNumberElement() const
 {
     return mpImpl->mbExportTextNumberElement;
 }
+// <--
 
 sal_Bool SvXMLExport::SetNullDateOnUnitConverter()
 {

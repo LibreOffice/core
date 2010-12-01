@@ -66,6 +66,10 @@ SvxBoxEntry::SvxBoxEntry(const SvxBoxEntry& rOld) :
 {
 }
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
+
 SvxListBox::SvxListBox(Window* pParent, WinBits nBits) :
     ListBox(pParent, nBits)
 {

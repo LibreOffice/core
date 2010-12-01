@@ -157,10 +157,11 @@ void ScXMLCalculationSettingsContext::EndElement()
             xPropertySet->setPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE)), uno::makeAny(aNullDate) );
             if (GetScImport().GetDocument())
             {
-                ScXMLImport::MutexGuard aGuard(GetScImport());
+                GetScImport().LockSolarMutex();
                 ScDocOptions aDocOptions (GetScImport().GetDocument()->GetDocOptions());
                 aDocOptions.SetYear2000(nYear2000);
                 GetScImport().GetDocument()->SetDocOptions(aDocOptions);
+                GetScImport().UnlockSolarMutex();
             }
         }
     }

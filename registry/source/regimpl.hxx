@@ -123,7 +123,7 @@ public:
 
     ORegKey*    getRootKey();
 
-    const store::OStoreFile& getStoreFile() const
+    const store::OStoreFile& getStoreFile()
         { return m_file; }
 
     const rtl::OUString&    getName() const

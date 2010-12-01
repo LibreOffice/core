@@ -49,6 +49,11 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
 
+//REMOVE    #ifndef SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    #define SO2_DECL_SVINPLACEOBJECT_DEFINED
+//REMOVE    SO2_DECL_REF(SvInPlaceObject)
+//REMOVE    #endif
+
 #include "document.hxx"
 #include "drwlayer.hxx"
 #include "chartarr.hxx"
@@ -108,16 +113,16 @@ void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataReceiver >
     {
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CellRangeRepresentation")), -1,
+            ::rtl::OUString::createFromAscii("CellRangeRepresentation"), -1,
             uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HasCategories")), -1,
+            ::rtl::OUString::createFromAscii("HasCategories"), -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FirstCellAsLabel")), -1,
+            ::rtl::OUString::createFromAscii("FirstCellAsLabel"), -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DataRowSource")), -1,
+            ::rtl::OUString::createFromAscii("DataRowSource"), -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xReceiver->setArguments( aArgs );
     }
@@ -233,7 +238,7 @@ BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 
     if (pName)
         pName->Erase();
-    return FALSE;                   // nothing found
+    return FALSE;                   // nix gefunden
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
@@ -434,7 +439,10 @@ void ScDocument::UpdateChartArea( const String& rChartName,
 
                     pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
 
-                    return;         // do not search anymore
+                    // ((SdrOle2Obj*)pObject)->GetNewReplacement();
+                    // pObject->ActionChanged();
+
+                    return;         // nicht weitersuchen
                 }
             }
             pObject = aIter.Next();
@@ -552,6 +560,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         if ( bChanged )
         {
             {
+//              SetChartRangeList( pChartListener->GetString(), aNewRLR );
+//              pChartListener->ChangeListening( aNewRLR, bDataChanged );
+
                 // Force the chart to be loaded now, so it registers itself for UNO events.
                 // UNO broadcasts are done after UpdateChartRef, so the chart will get this
                 // reference change.
@@ -677,7 +688,7 @@ void ScDocument::UpdateChartListenerCollection()
     else
     {
         ScRange aRange;
-        // Range for searching is not important
+        // Range fuer Suche unwichtig
         ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
         for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         {
@@ -726,13 +737,20 @@ void ScDocument::UpdateChartListenerCollection()
                                 // unable to set the data. So a chart from the
                                 // same document is treated like a chart with
                                 // own data for the time being.
-
+#if 0
                                 // data provider
+                                uno::Reference< chart2::data::XDataProvider > xDataProvider = new
+                                    ScChart2DataProvider( this );
+                                xReceiver->attachDataProvider( xDataProvider );
                                 // number formats supplier
-
+                                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pShell->GetModel(), uno::UNO_QUERY );
+                                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
                                 // data ?
                                 // how to set?? Defined in XML-file, which is already loaded!!!
                                 // => we have to do this stuff here, BEFORE the chart is actually loaded
+
+                                bIsChart = true;
+#endif
                             }
 
                             if (!bIsChart)
@@ -763,6 +781,7 @@ void ScDocument::AddOLEObjectToCollection(const String& rName)
         pOtherObjects = new ScStrCollection;
     pOtherObjects->Insert( new StrData( rName ) );
 }
+
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

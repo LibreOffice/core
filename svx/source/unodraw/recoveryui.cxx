@@ -45,8 +45,8 @@
 //===============================================
 // const
 
-#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.svx.RecoveryUI"))
-#define SERVICENAME_RECOVERYUI              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.dialog.RecoveryUI"))
+#define IMPLEMENTATIONNAME_RECOVERYUI       ::rtl::OUString::createFromAscii("com.sun.star.comp.svx.RecoveryUI")
+#define SERVICENAME_RECOVERYUI              ::rtl::OUString::createFromAscii("com.sun.star.dialog.RecoveryUI")
 
 //===============================================
 // namespace
@@ -191,16 +191,16 @@ static OUString GetCrashConfigDir()
 {
 
 #if defined(WNT) || defined(OS2)
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}"));
+    OUString    ustrValue = OUString::createFromAscii("${$BRAND_BASE_DIR/program/bootstrap.ini:UserInstallation}");
 #elif defined(MACOSX)
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("~"));
+    OUString    ustrValue = OUString::createFromAscii("~");
 #else
-    OUString    ustrValue = OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
+    OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
     Bootstrap::expandMacros( ustrValue );
 
 #if defined(WNT) || defined(OS2)
-    ustrValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/user/crashdata"));
+    ustrValue += OUString::createFromAscii("/user/crashdata");
 #endif
     return ustrValue;
 }

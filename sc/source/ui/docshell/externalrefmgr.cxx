@@ -1323,17 +1323,20 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             static_cast<ScEditCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
+        //break;
         case CELLTYPE_STRING:
         {
             String aStr;
             static_cast<ScStringCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
+        //break;
         case CELLTYPE_VALUE:
         {
             double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
             return new formula::FormulaDoubleToken(fVal);
         }
+        //break;
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
@@ -1352,6 +1355,7 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
                 return new formula::FormulaStringToken(aStr);
             }
         }
+        //break;
         default:
             DBG_ERROR("attempted to convert an unknown cell type.");
     }
@@ -2127,7 +2131,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, Stri
     {
         // Generate a relative file path.
         INetURLObject aBaseURL(getOwnDocumentName());
-        aBaseURL.insertName(OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")));
+        aBaseURL.insertName(OUString::createFromAscii("content.xml"));
 
         String aStr = URIHelper::simpleNormalizedMakeRelative(
             aBaseURL.GetMainURL(INetURLObject::NO_DECODE), aFile);
@@ -2231,7 +2235,7 @@ void ScExternalRefManager::SrcFileData::maybeCreateRealFileName(const String& rO
     // Formulate the absolute file path from the relative path.
     const String& rRelPath = maRelativeName;
     INetURLObject aBaseURL(rOwnDocName);
-    aBaseURL.insertName(OUString(RTL_CONSTASCII_USTRINGPARAM("content.xml")));
+    aBaseURL.insertName(OUString::createFromAscii("content.xml"));
     bool bWasAbs = false;
     maRealFileName = aBaseURL.smartRel2Abs(rRelPath, bWasAbs).GetMainURL(INetURLObject::NO_DECODE);
 }

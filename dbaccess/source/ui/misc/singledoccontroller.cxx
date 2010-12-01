@@ -309,7 +309,7 @@ namespace dbaui
             if(xSupplier.is())
             {
                 m_pImpl->m_xFormatter = Reference< XNumberFormatter >(getORB()
-                    ->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
+                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.NumberFormatter")), UNO_QUERY);
                 m_pImpl->m_xFormatter->attachNumberFormatsSupplier(xSupplier);
             }
             OSL_ENSURE(m_pImpl->m_xFormatter.is(),"No NumberFormatter!");
@@ -667,6 +667,13 @@ namespace dbaui
             sTitle.appendAscii(" : ");
         }
         sTitle.append( getPrivateTitle() );
+        // There can be only one view with the same object
+        //const sal_Int32 nCurrentView = getCurrentStartNumber();
+        //if ( nCurrentView > 1 )
+        //{
+        //    sTitle.appendAscii(" : ");
+        //    sTitle.append(nCurrentView);
+        //}
 
         return sTitle.makeStringAndClear();
     }

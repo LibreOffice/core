@@ -30,7 +30,9 @@
 #include "precompiled_hwpfilter.hxx"
 
 #include <assert.h>
+#ifndef __SGI_STL_VECTOR
 #include <vector>
+#endif
 #include "attributes.hxx"
 
 //using namespace ::std;

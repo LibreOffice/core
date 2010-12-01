@@ -605,7 +605,7 @@ sal_Bool SvXMLGraphicHelper::ImplWriteGraphic( const ::rtl::OUString& rPictureSt
                 xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ), aAny );
             }
 
-            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("image/tiff")) ) );
+            const sal_Bool bCompressed = ( ( 0 == aMimeType.getLength() ) || ( aMimeType == ::rtl::OUString::createFromAscii( "image/tiff" ) ) );
             aAny <<= bCompressed;
             xProps->setPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "Compressed" ) ), aAny );
 
@@ -946,7 +946,7 @@ Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
 
                 if( aId.getLength() )
                 {
-                    aRet = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_GRAPHICOBJECT_URL_BASE ));
+                    aRet = ::rtl::OUString::createFromAscii( XML_GRAPHICOBJECT_URL_BASE );
                     aRet += aId;
                 }
             }

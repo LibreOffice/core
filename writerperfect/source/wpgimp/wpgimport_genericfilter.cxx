@@ -58,7 +58,7 @@ sal_Bool SAL_CALL component_writeInfo(
             sal_Int32 nPos = 0;
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( WPGImportFilter_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES")) );
+            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
 
             const Sequence< OUString > & rSNL = WPGImportFilter_getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

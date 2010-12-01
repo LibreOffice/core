@@ -649,6 +649,7 @@ void RtfExport::ExportDocument_Impl()
         {
             case FTNNUM_PAGE:       pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTPG; break;
             case FTNNUM_DOC:        pOut = OOO_STRING_SVTOOLS_RTF_FTNRSTCONT;   break;
+            // case FTNNUM_CHAPTER:
             default:                pOut = OOO_STRING_SVTOOLS_RTF_FTNRESTART;   break;
         }
         Strm() << pOut;
@@ -662,6 +663,7 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRLC;  break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_FTNNRUC;  break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_FTNNCHI;  break;
+            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_FTNNAR;       break;
         }
         Strm() << pOut;
@@ -682,6 +684,7 @@ void RtfExport::ExportDocument_Impl()
             case SVX_NUM_ROMAN_LOWER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRLC; break;
             case SVX_NUM_ROMAN_UPPER:           pOut = OOO_STRING_SVTOOLS_RTF_AFTNNRUC; break;
             case SVX_NUM_CHAR_SPECIAL:          pOut = OOO_STRING_SVTOOLS_RTF_AFTNNCHI; break;
+            // case SVX_NUM_ARABIC:
             default:                    pOut = OOO_STRING_SVTOOLS_RTF_AFTNNAR;  break;
         }
         Strm() << pOut;
@@ -1204,6 +1207,7 @@ void RtfExport::OutPageDescription( const SwPageDesc& rPgDsc, BOOL bWriteReset, 
     AttrOutput().SectionPageNumbering(pAktPageDesc->GetNumType().GetNumberingType(), 0);
 
     pAktPageDesc = pSave;
+    //bOutPageDesc = bOldOut;
     OSL_TRACE("%s end", OSL_THIS_FUNC);
 }
 

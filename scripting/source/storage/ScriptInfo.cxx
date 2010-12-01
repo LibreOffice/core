@@ -247,7 +247,7 @@ OUString SAL_CALL ScriptInfo::getDescription(  ) throw ( RuntimeException )
     // TDB need to determine locale here, hardcoded at the moment
     // to english
 
-    OUString localeLang(RTL_CONSTASCII_USTRINGPARAM("en"));
+    OUString localeLang = OUString::createFromAscii( "en" );
     strpair_map::const_iterator str_it =
         m_scriptData.locales.find( localeLang );
 

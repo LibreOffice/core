@@ -435,22 +435,22 @@ namespace ucb { namespace ucp { namespace ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContentType")),
+            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "ContentType" ),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Title")),
+            xRow->appendString ( Property( ::rtl::OUString::createFromAscii( "Title" ),
                           -1,
                           getCppuType( static_cast< const ::rtl::OUString * >( 0 ) ),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsDocument")),
+            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsDocument" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 sal_False );
-            xRow->appendBoolean( Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsFolder")),
+            xRow->appendBoolean( Property( ::rtl::OUString::createFromAscii( "IsFolder" ),
                           -1,
                           getCppuBooleanType(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -541,7 +541,7 @@ namespace ucb { namespace ucp { namespace ext
         for ( sal_Int32 n = 0; n < nCount; ++n, ++pValues )
         {
             // all our properties are read-only ...
-            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("property is read-only.")), *this );
+            aRet[ n ] <<= IllegalAccessException( ::rtl::OUString::createFromAscii( "property is read-only." ), *this );
         }
 
         return aRet;

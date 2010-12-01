@@ -49,8 +49,9 @@ class ValueSet;
 class SvxNumberingPreview;
 class SvxBrushItem;
 
+/*-----------------13.02.97 14.02-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 
 struct SvxNumSettings_Impl
 {
@@ -69,8 +70,9 @@ struct SvxNumSettings_Impl
 typedef SvxNumSettings_Impl* SvxNumSettings_ImplPtr;
 SV_DECL_PTRARR_DEL(SvxNumSettingsArr_Impl,SvxNumSettings_ImplPtr,8,4)
 
+/*-----------------07.02.97 11.36-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 class SvxSingleNumPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -108,8 +110,9 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
+/*-----------------07.02.97 11.36-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 
 class SvxBulletPickTabPage : public SfxTabPage
 {
@@ -143,10 +146,10 @@ class SvxBulletPickTabPage : public SfxTabPage
     virtual void        Reset( const SfxItemSet& rSet );
 
     void                SetCharFmtName(const String& rName){sBulletCharFmtName = rName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
-/*--------------------------------------------------
+/*-----------------07.02.97 11.36-------------------
     TabPage fuer vollstaendig Numerierung
 --------------------------------------------------*/
 #define NUMTYPE_MEMBER 4   // Anzahl der Elemente des FormatStrings je Ebene
@@ -191,11 +194,12 @@ class SvxNumPickTabPage : public SfxTabPage
     void                SetCharFmtNames(const String& rCharName, const String& rBulName)
                             {   sNumCharFmtName = rCharName;
                                 sBulletCharFmtName = rBulName;}
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
+/*-----------------12.02.97 07.42-------------------
 
-//------------------------------------------------
+--------------------------------------------------*/
 class SvxBitmapPickTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -238,7 +242,9 @@ class SvxBitmapPickTabPage : public SfxTabPage
     void                SetNumCharFmtName(const String& rName){sNumCharFmtName = rName;}
 };
 
-//------------------------------------------------
+/*-----------------01.12.97 16:13-------------------
+
+--------------------------------------------------*/
 class SvxNumOptionsTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -344,6 +350,7 @@ class SvxNumOptionsTabPage : public SfxTabPage
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 
+//???   void                SetWrtShell(SwWrtShell* pSh);
     void                SetCharFmts(const String& rNumName, const String& rBulletName )
                                 {
                                     sNumCharFmtName = rNumName;
@@ -353,10 +360,12 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
     ListBox&            GetCharFmtListBox() {return aCharFmtLB;}
     void                SetModified(BOOL bRepaint = TRUE);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
-//------------------------------------------------
+/*-----------------03.12.97 10:18-------------------
+
+--------------------------------------------------*/
 class SvxNumPositionTabPage : public SfxTabPage
 {
     using TabPage::ActivatePage;
@@ -377,6 +386,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     MetricField         aDistNumMF;
     FixedText           aAlignFT;
     ListBox             aAlignLB;
+    // <--
 
     // new set of controls shown for numbering rules containing list level
     // attributes in SvxNumberFormat::SvxNumPositionAndSpaceMode == LABEL_ALIGNMENT
@@ -390,6 +400,7 @@ class SvxNumPositionTabPage : public SfxTabPage
     MetricField         aAlignedAtMF;
     FixedText           aIndentAtFT;
     MetricField         aIndentAtMF;
+    // <--
 
     PushButton          aStandardPB;
 
@@ -441,7 +452,7 @@ public:
 
     void                SetMetric(FieldUnit eSet);
     void                SetModified(BOOL bRepaint = TRUE);
-    virtual void        PageCreated(SfxAllItemSet aSet);
+    virtual void        PageCreated(SfxAllItemSet aSet); // add CHINA001
 };
 
 #endif

@@ -79,6 +79,7 @@ public:
 
 // ------ Ab hier Klassen / Methoden fuer die Selectionen -------
 
+// #i75172# predefines
 namespace sdr { namespace overlay { class OverlayObject; }}
 
 class SwSelPaintRects : public SwRects
@@ -89,14 +90,16 @@ class SwSelPaintRects : public SwRects
     static long nPixPtX, nPixPtY;
     static MapMode *pMapMode;
 
+    // die Shell
     const SwCrsrShell* pCShell;
 
     virtual void Paint( const Rectangle& rRect );
     virtual void FillRects() = 0;
 
+    // #i75172#
     sdr::overlay::OverlayObject*    mpCursorOverlay;
 
-    // access to mpCursorOverlay for swapContent
+    // #i75172# access to mpCursorOverlay for swapContent
     sdr::overlay::OverlayObject* getCursorOverlay() const { return mpCursorOverlay; }
     void setCursorOverlay(sdr::overlay::OverlayObject* pNew) { mpCursorOverlay = pNew; }
 
@@ -104,7 +107,7 @@ public:
     SwSelPaintRects( const SwCrsrShell& rCSh );
     virtual ~SwSelPaintRects();
 
-    // in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
+    // #i75172# in SwCrsrShell::CreateCrsr() the content of SwSelPaintRects is exchanged. To
     // make a complete swap access to mpCursorOverlay is needed there
     void swapContent(SwSelPaintRects& rSwap);
 
@@ -163,8 +166,8 @@ public:
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    // zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-    // am sichtbaren Cursor
+// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
+//              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |
@@ -207,8 +210,8 @@ public:
     virtual BOOL IsAtValidPos( BOOL bPoint = TRUE ) const;
 
 #if OSL_DEBUG_LEVEL > 1
-    // zum Testen des UNO-Crsr Verhaltens hier die Implementierung
-    // am sichtbaren Cursor
+// JP 05.03.98: zum Testen des UNO-Crsr Verhaltens hier die Implementierung
+//              am sichtbaren Cursor
     virtual BOOL IsSelOvr( int eFlags =
                                 ( nsSwCursorSelOverFlags::SELOVER_CHECKNODESSECTION |
                                   nsSwCursorSelOverFlags::SELOVER_TOGGLE |

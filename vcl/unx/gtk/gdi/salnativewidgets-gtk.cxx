@@ -268,7 +268,7 @@ public:
 
     void SetSize( int n)
         { delete [] pData; m_idx = 0; m_size = n; pData = new NWPixmapCacheData[m_size]; }
-    int GetSize() const { return m_size; }
+    int GetSize() { return m_size; }
 
     BOOL Find( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkPixmap** pPixmap );
     void Fill( ControlType aType, ControlState aState, const Rectangle& r_pixmapRect, GdkPixmap* pPixmap );
@@ -918,13 +918,7 @@ BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
     // draw upper half in off state
     const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_OFF );
     XLIB_Region aRegion = XCreateRegion();
-    XRectangle aXRect =
-    {
-        static_cast<short>(aCtrlRect.Left()),
-        static_cast<short>(aCtrlRect.Top()),
-        static_cast<unsigned short>(aCtrlRect.GetWidth()),
-        static_cast<unsigned short>(aCtrlRect.GetHeight())
-    };
+    XRectangle aXRect = { aCtrlRect.Left(), aCtrlRect.Top(), aCtrlRect.GetWidth(), aCtrlRect.GetHeight() };
     const unsigned short nH = aXRect.height/2;
     aXRect.height -= nH;
     XUnionRectWithRegion( &aXRect, aRegion, aRegion );

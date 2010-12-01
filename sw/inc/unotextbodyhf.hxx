@@ -120,6 +120,9 @@ public:
 };
 
 
+/* -----------------25.08.98 11:02-------------------
+ *
+ * --------------------------------------------------*/
 typedef ::cppu::WeakImplHelper2
 <   ::com::sun::star::lang::XServiceInfo
 ,   ::com::sun::star::container::XEnumerationAccess

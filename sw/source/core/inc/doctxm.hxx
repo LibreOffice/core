@@ -110,7 +110,9 @@ public:
 
     BOOL SetPosAtStartEnd( SwPosition& rPos, BOOL bAtStart = TRUE ) const;
 };
+/* -----------------02.09.99 07:52-------------------
 
+ --------------------------------------------------*/
 struct SwDefTOXBase_Impl
 {
     SwTOXBase* pContBase;

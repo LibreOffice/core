@@ -29,8 +29,6 @@
 #ifndef SC_XEHELPER_HXX
 #define SC_XEHELPER_HXX
 
-#include <boost/noncopyable.hpp>
-#include <boost/shared_ptr.hpp>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -184,7 +182,7 @@ class XclExpHyperlink;
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef ScfRef< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         ~XclExpHyperlinkHelper();
@@ -221,7 +219,7 @@ class ScPatternAttr;
 /** This class provides methods to create an XclExpString.
     @descr  The string can be created from an edit engine text object or
     directly from a Calc edit cell. */
-class XclExpStringHelper : boost::noncopyable
+class XclExpStringHelper : ScfNoInstance
 {
 public:
     /** Creates a new unformatted string from the passed string.
@@ -331,12 +329,6 @@ public:
     /** Returns the script type first text portion different to WEAK, or the system
         default script type, if there is only weak script in the passed string. */
     static sal_Int16    GetLeadingScriptType( const XclExpRoot& rRoot, const String& rString );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclExpStringHelper();
 };
 
 // Header/footer conversion ===================================================
@@ -372,7 +364,7 @@ class EditEngine;
     Known but unsupported control sequences:
     &G                      picture
  */
-class XclExpHFConverter : protected XclExpRoot, private boost::noncopyable
+class XclExpHFConverter : protected XclExpRoot, ScfNoCopy
 {
 public:
     explicit            XclExpHFConverter( const XclExpRoot& rRoot );
@@ -405,7 +397,7 @@ private:
 /** This class contains static methods to encode a file URL.
     @descr  Excel stores URLs in a format that contains special control characters,
     i.e. for directory separators or volume names. */
-class XclExpUrlHelper : boost::noncopyable
+class XclExpUrlHelper : ScfNoInstance
 {
 public:
     /** Encodes and returns the URL passed in rAbsUrl to an Excel like URL.
@@ -413,12 +405,6 @@ public:
     static String       EncodeUrl( const XclExpRoot& rRoot, const String& rAbsUrl, const String* pTableName = 0 );
     /** Encodes and returns the passed DDE link to an Excel like DDE link. */
     static String       EncodeDde( const String& rApplic, const String rTopic );
-
-private:
-    /** We don't want anybody to instantiate this class, since it is just a
-        collection of static methods. To enforce this, the default constructor
-        is made private */
-    XclExpUrlHelper();
 };
 
 // ----------------------------------------------------------------------------

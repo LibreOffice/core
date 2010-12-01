@@ -35,6 +35,7 @@
 #include "dbu_dlg.hrc"
 #endif
 
+
 TabDialog DLG_DATABASE_USERADMIN
 {
     OutputSize = TRUE ;

@@ -459,7 +459,6 @@ static UBlock2Script scriptList[] = {
     {UBLOCK_CHEROKEE, UBLOCK_RUNIC, ScriptType::LATIN},
     {UBLOCK_KHMER, UBLOCK_MONGOLIAN, ScriptType::COMPLEX},
     {UBLOCK_LATIN_EXTENDED_ADDITIONAL, UBLOCK_GREEK_EXTENDED, ScriptType::LATIN},
-    {UBLOCK_GENERAL_PUNCTUATION, UBLOCK_GENERAL_PUNCTUATION, ScriptType::LATIN},
     {UBLOCK_CJK_RADICALS_SUPPLEMENT, UBLOCK_HANGUL_SYLLABLES, ScriptType::ASIAN},
     {UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, UBLOCK_CJK_COMPATIBILITY_IDEOGRAPHS, ScriptType::ASIAN},
     {UBLOCK_ARABIC_PRESENTATION_FORMS_A, UBLOCK_ARABIC_PRESENTATION_FORMS_A, ScriptType::COMPLEX},
@@ -518,7 +517,7 @@ sal_Bool SAL_CALL BreakIteratorImpl::createLocaleSpecificBreakIterator(const OUS
         }
 
         Reference < uno::XInterface > xI = xMSF->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator_")) + aLocaleName);
+            OUString::createFromAscii("com.sun.star.i18n.BreakIterator_") + aLocaleName);
 
         if ( xI.is() ) {
             xI->queryInterface( getCppuType((const Reference< XBreakIterator>*)0) ) >>= xBI;
@@ -569,7 +568,7 @@ BreakIteratorImpl::getLocaleSpecificBreakIterator(const Locale& rLocale) throw (
                     // load service with name <base>_<lang>
                     createLocaleSpecificBreakIterator(rLocale.Language)) ||
                     // load default service with name <base>_Unicode
-                    createLocaleSpecificBreakIterator(OUString(RTL_CONSTASCII_USTRINGPARAM("Unicode")))) {
+                    createLocaleSpecificBreakIterator(OUString::createFromAscii("Unicode"))) {
                 lookupTable.push_back( new lookupTableItem(aLocale, xBI) );
                 return xBI;
             }

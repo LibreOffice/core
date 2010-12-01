@@ -57,6 +57,13 @@ namespace svt
     namespace
     {
         //..............................................................
+        sal_Bool isHiContrast(Window* _pWindow)
+        {
+            OSL_ENSURE(_pWindow,"Window must be not null!");
+            return _pWindow && _pWindow->GetSettings().GetStyleSettings().GetHighContrastMode();
+        }
+
+        //..............................................................
         sal_uInt16 getRealGetFocusFlags( Window* _pWindow )
         {
             sal_uInt16 nFlags = 0;
@@ -130,6 +137,7 @@ namespace svt
     void EditBrowseBox::impl_construct()
     {
         m_aImpl = ::std::auto_ptr<EditBrowseBoxImpl>(new EditBrowseBoxImpl());
+        m_aImpl->m_bHiContrast = isHiContrast(&GetDataWindow());
 
         SetCompoundControl(sal_True);
         SetGridLineColor( Color( COL_LIGHTGRAY ) );
@@ -294,9 +302,11 @@ namespace svt
     //------------------------------------------------------------------------------
     Image EditBrowseBox::GetImage(RowStatus eStatus) const
     {
-        if ( !m_aStatusImages.GetImageCount() )
+        sal_Bool bHiContrast = isHiContrast(&GetDataWindow());
+        if ( !m_aStatusImages.GetImageCount() || (bHiContrast != m_aImpl->m_bHiContrast) )
         {
-            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList( SvtResId( RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX ) );
+            m_aImpl->m_bHiContrast = bHiContrast;
+            const_cast<EditBrowseBox*>(this)->m_aStatusImages = ImageList(SvtResId(bHiContrast ? RID_SVTOOLS_IMAGELIST_EDITBWSEBOX_H : RID_SVTOOLS_IMAGELIST_EDITBROWSEBOX));
         }
 
         Image aImage;

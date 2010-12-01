@@ -190,7 +190,7 @@ void TableListFacade::updateTableObjectList( bool _bAllowViews )
                     m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
             }
             sTables = xTables->getElementNames();
-        }
+        } // if ( xTables.is() )
 
         xViewSupp.set( xTableSupp, UNO_QUERY );
         if ( xViewSupp.is() )
@@ -298,10 +298,13 @@ void QueryListFacade::updateTableObjectList( bool /*_bAllowViews*/ )
     try
     {
         ImageProvider aImageProvider( m_xConnection );
-        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY ) );
+        Image aQueryImage( aImageProvider.getDefaultImage( DatabaseObject::QUERY, false ) );
+        Image aQueryImageHC( aImageProvider.getDefaultImage( DatabaseObject::QUERY, true ) );
 
-        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage );
-        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImage, BMP_COLOR_NORMAL );
+        m_rQueryList.SetDefaultExpandedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
+        m_rQueryList.SetDefaultCollapsedEntryBmp( aQueryImageHC, BMP_COLOR_HIGHCONTRAST );
 
         Reference< XQueriesSupplier > xSuppQueries( m_xConnection, UNO_QUERY_THROW );
         Reference< XNameAccess > xQueries( xSuppQueries->getQueries(), UNO_QUERY_THROW );

@@ -409,7 +409,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                     ++nUndoPos;
                 }
 
-            OSL_ENSURE( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
+            DBG_ASSERT( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
 
             pUndoData = ( pData ? pData->Clone() : NULL );
         }

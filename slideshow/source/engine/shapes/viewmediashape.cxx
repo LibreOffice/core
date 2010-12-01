@@ -232,7 +232,7 @@ namespace slideshow
             if( xPropSet.is() &&
                 getPropertyValue( xParentWindow,
                                   xPropSet,
-                                  ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Window" ))) )
+                                  ::rtl::OUString::createFromAscii( "Window" )) )
             {
                 const awt::Rectangle aRect( xParentWindow->getPosSize() );
 

@@ -209,7 +209,7 @@ OGenericUnoController::OGenericUnoController(const Reference< XMultiServiceFacto
 
     try
     {
-        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.URLTransformer"))), UNO_QUERY);
+        m_xUrlTransformer = Reference< XURLTransformer > (_rM->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")), UNO_QUERY);
     }
     catch(Exception&)
     {
@@ -308,6 +308,12 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         {
             xFrame.set(aValue.Value,UNO_QUERY_THROW);
         }
+        /* #i42316#
+        else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "ReadOnly" ) ) )
+        {
+            aValue.Value >>= m_bReadOnly;
+        }
+        */
         else if ( ( *pIter >>= aValue ) && ( 0 == aValue.Name.compareToAscii( "Preview" ) ) )
         {
             aValue.Value >>= m_bPreview;
@@ -324,7 +330,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
         Window* pParentWin = pParentComponent ? pParentComponent->GetWindow() : NULL;
         if (!pParentWin)
         {
-            throw IllegalArgumentException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Parent window is null")), *this, 1 );
+            throw IllegalArgumentException( ::rtl::OUString::createFromAscii( "Parent window is null" ), *this, 1 );
         }
 
         m_aInitParameters.assign( aArguments );
@@ -332,7 +338,7 @@ void SAL_CALL OGenericUnoController::initialize( const Sequence< Any >& aArgumen
 
         ODataView* pView = getView();
         if ( !pView )
-            throw RuntimeException( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("unable to create a view")), *this );
+            throw RuntimeException( ::rtl::OUString::createFromAscii( "unable to create a view" ), *this );
 
         if ( m_bReadOnly || m_bPreview )
             pView->EnableInput( FALSE );
@@ -668,7 +674,7 @@ void OGenericUnoController::InvalidateAll()
 void OGenericUnoController::InvalidateAll_Impl()
 {
     // ---------------------------------
-    // invalidate all supported features
+    // invalidate all aupported features
 
     for (   SupportedFeatures::const_iterator aIter = m_aSupportedFeatures.begin();
             aIter != m_aSupportedFeatures.end();
@@ -787,12 +793,12 @@ void OGenericUnoController::addStatusListener(const Reference< XStatusListener >
     if ( m_xUrlTransformer.is() )
         m_xUrlTransformer->parseStrict( aParsedURL );
 
-    // remember the listener together with the URL
+    // remeber the listener together with the URL
     m_arrStatusListener.insert( m_arrStatusListener.end(), DispatchTarget( aParsedURL, aListener ) );
 
     // initially broadcast the state
     ImplBroadcastFeatureState( aParsedURL.Complete, aListener, sal_True );
-        // force the new state to be broadcast to the new listener
+        // force the new state to be broadcasted to the new listener
 }
 
 // -----------------------------------------------------------------------
@@ -1308,7 +1314,7 @@ namespace
 void OGenericUnoController::openHelpAgent(rtl::OUString const& _suHelpStringURL )
 {
     rtl::OUString suURL(_suHelpStringURL);
-    rtl::OUString sLanguage(RTL_CONSTASCII_USTRINGPARAM("Language="));
+    rtl::OUString sLanguage = rtl::OUString::createFromAscii("Language=");
     if (suURL.indexOf(sLanguage) == -1)
     {
         AppendConfigToken(suURL, sal_False /* sal_False := add '&' */ );
@@ -1565,16 +1571,6 @@ Sequence< ::sal_Int16 > SAL_CALL OGenericUnoController::getSupportedCommandGroup
     return aCommandGroups;
 }
 
-namespace
-{
-    //Current c++0x draft (apparently) has std::identity, but not operator()
-    template<typename T> struct SGI_identity : public std::unary_function<T,T>
-    {
-        T& operator()(T& x) const { return x; }
-        const T& operator()(const T& x) const { return x; }
-    };
-}
-
 // -----------------------------------------------------------------------------
 Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableDispatchInformation( ::sal_Int16 CommandGroup ) throw (RuntimeException)
 {
@@ -1596,7 +1592,7 @@ Sequence< DispatchInformation > SAL_CALL OGenericUnoController::getConfigurableD
     ::std::transform( aInformationList.begin(),
         aInformationList.end(),
         aInformation.getArray(),
-        SGI_identity< DispatchInformation >()
+        ::std::identity< DispatchInformation >()
     );
 
     return aInformation;

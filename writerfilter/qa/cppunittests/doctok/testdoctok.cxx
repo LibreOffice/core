@@ -80,8 +80,8 @@ namespace testdoctok
                 {
                     uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >
                         xNameContainer(xFactory->createInstanceWithContext
-                                       (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
-                                        ("com.sun.star.ucb.SimpleFileAccess" )),
+                                       (::rtl::OUString::createFromAscii
+                                        ("com.sun.star.ucb.SimpleFileAccess" ),
                                         xComponentContext), uno::UNO_QUERY );
 
                     if (xNameContainer.is())

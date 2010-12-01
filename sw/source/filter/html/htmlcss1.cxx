@@ -175,6 +175,9 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
     case SVX_CSS1_PBREAK_AUTO:
         bSetBreak = bSetPageDesc = TRUE;
         break;
+//  case SVX_CSS1_PBREAK_AVOID:
+        // Hier koennte man SvxKeepItem am Absatz davor einfuegen
+//      break;
     default:
         ;
     }
@@ -760,12 +763,13 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             (pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_left) ||
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_right) ||
              pNext->GetString().EqualsIgnoreCaseAscii(sCSS1_first)) ) )
+            // || CSS1_SELTYPE_ELEMENT == pNext->GetType() )
         {
             String aName;
             if( pNext )
                 aName = pNext->GetString();
             InsertPage( aName,
-                        pNext != 0,
+                        pNext != 0 /*CSS1_SELTYPE_PSEUDO == pNext->GetType()*/,
                         rItemSet, rPropInfo );
         }
     }
@@ -1514,6 +1518,10 @@ void SwCSS1Parser::AddClassName( String& rFmtName, const String& rClass )
 {
     OSL_ENSURE( rClass.Len(), "Style-Klasse ohne Laenge?" );
 
+// ??????????
+//  String aTmp( rClass );
+//  GetpApp()->GetAppInternational().ToLower( aTmp );
+
     (rFmtName += '.') += rClass;
 }
 
@@ -1911,6 +1919,13 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
                           pPageEntry->GetPropertyInfo() );
         SetPageDescAttrs( GetRightPageDesc(), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
+//      if( pNamedPageDescs )
+//      {
+//          for( USHORT i=0; i<pNamedPageDescs->Count(); i++ )
+//              SetPageDescAttrs( (*pNamedPageDescs)[i],
+//                                pPageEntry->GetItemSet(),
+//                                pPageEntry->GetPropertyInfo() );
+//      }
 
     }
 
@@ -1934,6 +1949,29 @@ BOOL SwCSS1Parser::ParseStyleSheet( const String& rIn )
     if( pPageEntry )
         SetPageDescAttrs( GetLeftPageDesc(TRUE), pPageEntry->GetItemSet(),
                           pPageEntry->GetPropertyInfo() );
+
+    // und jetzt noch die benannten Vorlagen
+//  for( USHORT i=0; i < GetPageCount(); i++ )
+//  {
+//      pPageEntry = GetPage( i );
+//      const String& rKey = pPageEntry->GetKey();
+//      if( !rKey.Len() || rKey.GetChar(0) == ':' )
+//          continue;
+//
+//      String aName( rKey );
+//      GetpApp()->GetAppInternational().ToLower( aName );
+//      USHORT nPage = pDoc->MakePageDesc( aName );
+//      SwPageDesc *pPageDesc = &pDoc->_GetPageDesc( nPage );
+//
+//      // Die neue Seitenvorlage entsteht aus dem Master durch kopieren.
+//      pDoc->CopyPageDesc( *pMasterPageDesc, *pPageDesc );
+//      SetPageDescAttrs( pPageDesc, pPageEntry->GetItemSet(),
+//                        pPageEntry->GetPropertyInfo() );
+//
+//      if( !pNamedPageDescs )
+//          pNamedPageDescs = new SwHTMLPageDescs;
+//      pNamedPageDescs->Insert( pPageDesc, pNamedPageDescs->Count() );
+//  }
 
     return TRUE;
 }

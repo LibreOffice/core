@@ -300,7 +300,9 @@ public:
 
     BOOL                    UnLinkGraphics();
 };
-
+/* -----------------27.10.98 13:04-------------------
+ *
+ * --------------------------------------------------*/
 class EDITENG_DLLPUBLIC SvxNumBulletItem : public SfxPoolItem
 {
     SvxNumRule*             pNumRule;
@@ -321,7 +323,9 @@ public:
     virtual bool            QueryValue( com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 ) const;
     virtual bool            PutValue( const com::sun::star::uno::Any& rVal, BYTE nMemberId = 0 );
 };
-
+/* -----------------28.10.98 15:21-------------------
+ *
+ * --------------------------------------------------*/
 class SvxNodeNum
 {
     USHORT nLevelVal[ SVX_MAX_NUM ];    // Nummern aller Levels

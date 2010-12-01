@@ -28,8 +28,6 @@
 #ifndef BERKELEYDBPROXY_DB_HXX_
 #define BERKELEYDBPROXY_DB_HXX_
 
-#include <boost/noncopyable.hpp>
-
 #ifdef SYSTEM_DB
 #include <db.h>
 #else
@@ -45,11 +43,25 @@ extern "C" {
   typedef void (*db_free_fcn_type)(void *);
 }
 
+
 namespace berkeleydbproxy {
 
     class DbEnv;
     class Dbc;
     class Dbt;
+
+    namespace db_internal
+    {
+        class Noncopyable
+        {
+            // not implemented
+            Noncopyable(const Noncopyable&);
+            void operator=(const Noncopyable&);
+        protected:
+            Noncopyable() {}
+            ~Noncopyable() {}
+        };
+    }
 
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbException
     {
@@ -66,7 +78,7 @@ namespace berkeleydbproxy {
     };
 
 
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbEnv : boost::noncopyable
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbEnv : db_internal::Noncopyable
     {
         friend class Db;
 
@@ -77,7 +89,7 @@ namespace berkeleydbproxy {
         static char *strerror(int);
     };
 
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Db : boost::noncopyable
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Db : db_internal::Noncopyable
     {
     private:
         DB* m_pDBP;
@@ -104,7 +116,7 @@ namespace berkeleydbproxy {
         int cursor(DB_TXN *txnid, Dbc **cursorp, u_int32_t flags);
     };
 
-    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbc : boost::noncopyable
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Dbc : db_internal::Noncopyable
     {
         friend class Db;
         friend class Dbt;
@@ -144,4 +156,20 @@ namespace berkeleydbproxy {
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

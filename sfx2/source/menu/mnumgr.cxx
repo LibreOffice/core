@@ -228,10 +228,11 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         if (nNumSynonyms > 0)
         {
             SvtLinguConfig aCfg;
+            const bool bHC = Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
             Image aImage;
             String sThesImplName( aHelper.GetThesImplName( aLocale ) );
-            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName ) );
+            ::rtl::OUString aSynonymsImageUrl( aCfg.GetSynonymsContextImage( sThesImplName, bHC ) );
             if (sThesImplName.Len() > 0 && aSynonymsImageUrl.getLength() > 0)
                 aImage = Image( lcl_GetImageFromPngUrl( aSynonymsImageUrl ) );
 
@@ -242,7 +243,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
 
                 String aItemText( GetThesaurusReplaceText_Impl( aSynonyms[i] ) );
                 pThesSubMenu->InsertItem( nId, aItemText );
-                ::rtl::OUString aCmd(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusFromContext?WordReplace:string=") );
+                ::rtl::OUString aCmd( ::rtl::OUString::createFromAscii( ".uno:ThesaurusFromContext?WordReplace:string=" ) );
                 aCmd += aItemText;
                 pThesSubMenu->SetItemCommand( nId, aCmd );
 
@@ -258,7 +259,7 @@ PopupMenu* InsertThesaurusSubmenu_Impl( SfxBindings* pBindings, Menu* pSVMenu )
         pThesSubMenu->InsertSeparator();
         const String sThesaurus( SfxResId( STR_MENU_THESAURUS ) );
         pThesSubMenu->InsertItem( 100, sThesaurus );
-        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:ThesaurusDialog")) );
+        pThesSubMenu->SetItemCommand( 100, ::rtl::OUString::createFromAscii( ".uno:ThesaurusDialog" ) );
 
         pSVMenu->InsertSeparator();
         const String sSynonyms( SfxResId( STR_MENU_SYNONYMS ) );

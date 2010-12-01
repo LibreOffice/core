@@ -318,7 +318,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
         // there was/is already a HLINK record
-        mbMultipleUrls = mxLinkRec;
+        mbMultipleUrls = mxLinkRec.is();
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
 
@@ -335,7 +335,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 
 bool XclExpHyperlinkHelper::HasLinkRecord() const
 {
-    return !mbMultipleUrls && mxLinkRec;
+    return !mbMultipleUrls && mxLinkRec.is();
 }
 
 XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()

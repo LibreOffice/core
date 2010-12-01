@@ -80,8 +80,9 @@ class XMLSettingsExportHelper;
 class XMLImageMapExport;
 class XMLErrors;
 
-// Shapes in Writer cannot be named via context menu (#i51726#)
+// --> OD 2006-03-14 #i51726#
 #include <unotools/moduleoptions.hxx>
+// <--
 
 namespace rtl { class OUString; }
 namespace com { namespace sun { namespace star {
@@ -169,9 +170,10 @@ public:
 
 private:
 
-    // Shapes in Writer cannot be named via context menu (#i51726#)
+    // --> OD 2006-03-10 #i51726#
     SvtModuleOptions::EFactory meModelType;
     SAL_DLLPRIVATE void _DetermineModelType();
+    // <--
 
     SAL_DLLPRIVATE void ImplExportMeta(); // <office:meta>
     SAL_DLLPRIVATE void ImplExportSettings(); // <office:settings>
@@ -565,14 +567,16 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
     GetComponentContext() const;
 
-    // Shapes in Writer cannot be named via context menu (#i51726#)
+    // --> OD 2006-03-10 #i51726#
     SvtModuleOptions::EFactory GetModelType() const
     {
         return meModelType;
     }
+    // <--
 
-    // Written OpenDocument file format doesn't fit to the created text document (#i69627#)
+    // --> OD 2006-09-27 #i69627#
     sal_Bool writeOutlineStyleAsNormalListStyle() const;
+    // <--
        bool isExperimentalOdfExportEnabled() const { return mbEnableExperimentalOdfExport; }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetTargetStorage();
@@ -597,7 +601,9 @@ public:
     void AddAttributesRDFa( ::com::sun::star::uno::Reference<
         ::com::sun::star::text::XTextContent> const & i_xTextContent);
 
+    // --> OD 2008-11-26 #158694#
     sal_Bool exportTextNumberElement() const;
+    // <--
 
     /// set null date from model to unit converter, if not already done
     sal_Bool SetNullDateOnUnitConverter();

@@ -54,6 +54,8 @@ SwSmartTagPopup::SwSmartTagPopup( SwView* pSwView,
     mpSwView ( pSwView ),
     mxTextRange( xTextRange )
 {
+    //CreateAutoMnemonics();
+
     Reference <frame::XController> xController = mpSwView->GetController();
     const lang::Locale aLocale( SW_BREAKITER()->GetLocale( (LanguageType)GetAppLanguage() ) );
 

@@ -45,12 +45,23 @@
 #include <basebmp/color.hxx>
 #include <basebmp/scanlineformats.hxx>
 #include <basebmp/bitmapdevice.hxx>
+#include <basebmp/debug.hxx>
 #include "tools.hxx"
+
+#include <iostream>
+#include <fstream>
 
 using namespace ::basebmp;
 
 namespace
 {
+/*
+        std::ofstream output("32bpp_test.dump");
+        debugDump( rDevice, output );
+        std::ofstream output2("32bpp_bmp.dump");
+        debugDump( rBmp, output2 );
+*/
+
 class BmpMaskTest : public CppUnit::TestFixture
 {
 private:
@@ -120,7 +131,8 @@ public:
                                          true,
                                          Format::THIRTYTWO_BIT_TC_MASK );
 
-        ::rtl::OUString aSvg( RTL_CONSTASCII_USTRINGPARAM( "m 0 0h5v10h5v-5h-10z" ));
+        ::rtl::OUString aSvg = ::rtl::OUString::createFromAscii(
+            "m 0 0h5v10h5v-5h-10z" );
 
         basegfx::B2DPolyPolygon aPoly;
         basegfx::tools::importFromSvgD( aPoly, aSvg );
@@ -135,8 +147,8 @@ public:
             aColWhite,
             DrawMode_PAINT );
 
-        aSvg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "m 0 0 h6 v10 h-6z" ));
+        aSvg = ::rtl::OUString::createFromAscii(
+            "m 0 0 h6 v10 h-6z" );
 
         aPoly.clear();
         basegfx::tools::importFromSvgD( aPoly, aSvg );
@@ -169,7 +181,15 @@ public:
     CPPUNIT_TEST_SUITE_END();
 };
 
+// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_REGISTRATION(BmpMaskTest);
 }
+
+
+// -----------------------------------------------------------------------------
+
+// this macro creates an empty function, which will called by the RegisterAllFunctions()
+// to let the user the possibility to also register some functions by hand.
+//NOADDITIONAL;
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

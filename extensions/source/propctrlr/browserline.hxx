@@ -79,7 +79,7 @@ namespace pcr
                             ~OBrowserLine();
 
         void setControl( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _rxControl );
-        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl() const
+        const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& getControl()
         {
             return m_xControl;
         }
@@ -131,7 +131,7 @@ namespace pcr
         void    impl_layoutComponents();
 
         PushButton& impl_ensureButton( bool _bPrimary );
-        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage );
+        void        impl_getImagesFromURL_nothrow( const ::rtl::OUString& _rImageURL, Image& _out_rImage, Image& _out_rHCImage );
     };
 
 //............................................................................

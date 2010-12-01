@@ -33,7 +33,6 @@
 #include <tools/color.hxx>
 #include "ftools.hxx"
 #include "xladdress.hxx"
-#include <boost/shared_ptr.hpp>
 
 // Constants and enumerations =================================================
 
@@ -123,7 +122,7 @@ struct XclSelectionData
     inline explicit     XclSelectionData() : mnCursorIdx( 0 ) {}
 };
 
-typedef boost::shared_ptr< XclSelectionData > XclSelectionDataRef;
+typedef ScfRef< XclSelectionData > XclSelectionDataRef;
 
 // ----------------------------------------------------------------------------
 

@@ -324,7 +324,6 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_SPLIT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaSplit")); break;
             case PROP_HELP:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Help")); break;
             case PROP_HEADING_STYLE_NAME:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HeadingStyleName")); break;
-            case PROP_FRM_DIRECTION:        sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FRMDirection")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

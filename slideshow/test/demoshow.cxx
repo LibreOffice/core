@@ -54,7 +54,6 @@
 #include <ucbhelper/configurationkeys.hxx>
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
-#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/tools/canvastools.hxx>
 #include <basegfx/range/b2drectangle.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -198,11 +197,6 @@ private:
 
     virtual void SAL_CALL setMouseCursor( ::sal_Int16 /*nPointerShape*/ ) throw (uno::RuntimeException)
     {
-    }
-
-    virtual awt::Rectangle SAL_CALL getCanvasArea(  ) throw (uno::RuntimeException)
-    {
-        return awt::Rectangle(0,0,maSize.Width(),maSize.Height());
     }
 
     uno::Reference< rendering::XSpriteCanvas > mxCanvas;
@@ -462,9 +456,7 @@ void DemoWindow::init()
         if( mxShow.is() && !mbSlideDisplayed )
         {
             uno::Reference< drawing::XDrawPage > xSlide( new DummySlide );
-            uno::Reference< drawing::XDrawPages > xDrawPages;
             mxShow->displaySlide( xSlide,
-                                  uno::Reference< drawing::XDrawPagesSupplier >(),
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
@@ -564,8 +556,8 @@ void DemoApp::Main()
 
     // Create UCB.
     uno::Sequence< uno::Any > aArgs( 2 );
-    aArgs[ 0 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY1_LOCAL ));
-    aArgs[ 1 ] <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( UCB_CONFIGURATION_KEY2_OFFICE ));
+    aArgs[ 0 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY1_LOCAL );
+    aArgs[ 1 ] <<= rtl::OUString::createFromAscii( UCB_CONFIGURATION_KEY2_OFFICE );
     ::ucbhelper::ContentBroker::initialize( xFactory, aArgs );
 
     DemoWindow pWindow;

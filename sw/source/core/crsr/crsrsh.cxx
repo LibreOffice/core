@@ -142,7 +142,9 @@ SwPaM * SwCrsrShell::CreateCrsr()
     // hier den akt. Pam nur logisch Hiden, weil sonst die Invertierung
     // vom kopierten Pam aufgehoben wird !!
 
-    // #i75172#
+    // #i75172# to be able to make a complete content swap, i moved this to a method
+    // pNew->Insert( pCurCrsr, 0 );
+    // pCurCrsr->Remove( 0, pCurCrsr->Count() );
     pNew->swapContent(*pCurCrsr);
 
     pCurCrsr->DeleteMark();
@@ -224,6 +226,16 @@ void SwCrsrShell::StartAction()
 
 void SwCrsrShell::EndAction( const BOOL bIdleEnd )
 {
+/*
+//OS: Wird z.B. eine Basic-Action im Hintergrund ausgefuehrt, geht es so nicht
+    if( !bHasFocus )
+    {
+        // hat die Shell nicht den Focus, dann nur das EndAction an
+        // die ViewShell weitergeben.
+        ViewShell::EndAction( bIdleEnd );
+        return;
+    }
+*/
 
     BOOL bVis = bSVCrsrVis;
 
@@ -1208,6 +1220,12 @@ void SwCrsrShell::VisPortChgd( const SwRect & rRect )
     //angezeigt werden, deshalb wird der Aufruf hier geklammert.
     ViewShell::VisPortChgd( rRect );        // Bereich verschieben
 
+/*
+    SwRect aRect( rRect );
+    if( VisArea().IsOver( aRect ) )
+        pCurCrsr->Invalidate( aRect );
+*/
+
     if( bSVCrsrVis && bVis )    // auch SV-Cursor wieder anzeigen
         pVisCrsr->Show();
 
@@ -1312,6 +1330,9 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 
     ClearUpCrsrs();
 
+    // erfrage den Count fuer die Start-/End-Actions und ob die Shell
+    // ueberhaupt den Focus hat
+//  if( ActionPend() /*|| !bHasFocus*/ )
     //JP 12.01.98: Bug #46496# - es muss innerhalb einer BasicAction der
     //              Cursor geupdatet werden; um z.B. den TabellenCursor zu
     //              erzeugen. Im EndAction wird jetzt das UpdateCrsr gerufen!
@@ -1451,6 +1472,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 pTblFrm->GetCharRect( aCharRect, *pTblCrsr->GetPoint() );
 #endif
             }
+//          ALIGNRECT( aCharRect );
 
             pVisCrsr->Hide();       // sichtbaren Cursor immer verstecken
             // Curosr in den sichtbaren Bereich scrollen
@@ -1677,6 +1699,7 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
                 rPt = aCharRect.Center();
                 pFrm->GetCrsrOfst( pShellCrsr->GetPoint(), rPt, &aTmpState );
             }
+//          ALIGNRECT( aCharRect );
 
             if( !pShellCrsr->HasMark() )
                 aCrsrHeight = aTmpState.aRealHeight;
@@ -2299,6 +2322,7 @@ BOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
     SwRect aTmp( aCharRect );
 
     pFrm->GetCharRect( aCharRect, aPos, &aTmpState );
+//  ALIGNRECT( aCharRect );
 
     if( aTmp == aCharRect &&        // BUG 10137: bleibt der Cursor auf der
         pVisCrsr->IsVisible() )     // Position nicht hidden & showen
@@ -2311,6 +2335,9 @@ BOOL SwCrsrShell::SetVisCrsr( const Point &rPt )
         pCurCrsr->Show();
     }
 
+    // Bug 29584: bei Rahmenselektion ist der Cursor versteckt, aber den
+    //          D&D-Cursor will man trotzdem haben
+//  if( bSVCrsrVis )
     {
         if( aTmpState.bRealHeight )
             aCrsrHeight = aTmpState.aRealHeight;
@@ -2562,6 +2589,7 @@ SwCrsrShell::SwCrsrShell( SwCrsrShell& rShell, Window *pInitWin )
     bCallChgLnk = bHasFocus = bSVCrsrVis = bAutoUpdateCells = TRUE;
     bSetCrsrInReadOnly = TRUE;
     pVisCrsr = new SwVisCrsr( this );
+//  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = rShell.IsMacroExecAllowed();
 }
@@ -2605,6 +2633,7 @@ SwCrsrShell::SwCrsrShell( SwDoc& rDoc, Window *pInitWin,
     bSetCrsrInReadOnly = TRUE;
 
     pVisCrsr = new SwVisCrsr( this );
+//  UpdateCrsr( 0 );
     // OD 11.02.2003 #100556#
     mbMacroExecAllowed = true;
 }
@@ -2878,6 +2907,7 @@ BOOL SwCrsrShell::FindValidCntntNode( BOOL bOnlyText )
     if( bOk )
     {
         pCNd = rNdIdx.GetNode().GetCntntNode();
+//      USHORT nCntnt = Min( pCNd->Len(), pCurCrsr->GetPoint()->nContent.GetIndex() );
         xub_StrLen nCntnt = rNdIdx.GetIndex() < nNdIdx ? pCNd->Len() : 0;
         pCurCrsr->GetPoint()->nContent.Assign( pCNd, nCntnt );
     }
@@ -3060,6 +3090,8 @@ bool SwCrsrShell::SelectHiddenRange()
 
     return bRet;
 }
+
+/*  */
 
     // die Suchfunktionen
 ULONG SwCrsrShell::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,

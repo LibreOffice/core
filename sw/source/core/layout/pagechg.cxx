@@ -346,7 +346,11 @@ void SwPageFrm::CheckDirection( BOOL bVert )
             bVertical = 0;
         else
             bVertical = 1;
-
+/*
+        if( pDesc && pDesc->GetName().GetChar(0)=='x')
+            bReverse = 1;
+        else
+ */
             bReverse = 0;
         bInvalidVert = 0;
     }
@@ -2277,9 +2281,11 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
             // first page in book mode is always special:
             if ( bFirstRow && mbBookMode )
             {
-                // #i88036#
+                // --> OD 2008-04-08 #i88036#
+//                nCurrentRowWidth += pStartOfRow->Frm().Width() + nSidebarWidth;
                 nCurrentRowWidth +=
                     pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
+                // <--
             }
 
             // center page if possible
@@ -2295,8 +2301,10 @@ void SwRootFrm::CheckViewLayout( const SwViewOption* pViewOpt, const SwRect* pVi
 
             if ( bFirstRow && mbBookMode )
             {
-                // #i88036#
+                // --> OD 2008-04-08 #i88036#
+//                nX += pStartOfRow->Frm().Width() + nSidebarWidth;
                 nX += pStartOfRow->GetFormatPage().Frm().Width() + nSidebarWidth;
+                // <--
             }
 
             SwPageFrm* pEndOfRow = pPageFrm;
@@ -2446,6 +2454,16 @@ bool SwRootFrm::IsLeftToRightViewLayout() const
     return !rPage.IsRightToLeft() && !rPage.IsVertical();
     // <--
 }
+
+/*const SwRect SwRootFrm::GetExtendedPageArea( USHORT nPageNumber ) const
+{
+    SwRect aRet;
+    OSL_ENSURE( nPageNumber < maPageRects.size(), "No extended page area available" );
+    if ( nPageNumber < maPageRects.size() )
+        aRet = maPageRects[ nPageNumber ];
+    return aRet;
+}*/
+
 
 const SwPageFrm& SwPageFrm::GetFormatPage() const
 {

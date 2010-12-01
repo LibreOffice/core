@@ -54,41 +54,41 @@ typedef BigPtrEntry* ElementPtr;
 
 typedef BOOL (*FnForEach)( const ElementPtr&, void* pArgs );
 
-// 1000 entries per Block = a bit less then 4K
+// 1000 Eintr„ge pro Block = etwas weniger als 4K
 #define MAXENTRY 1000
 
 
-// number of entries that may remain free during compression
-// this value is for the worst case; because we defined MAXBLOCK with ca 25%
-// overhead, 80% = 800 entries are enough
-// if complete compression is desired, 100 has to be specified
+// Anzahl Eintraege, die bei der Kompression frei bleiben duerfen
+// dieser Wert ist fuer den Worst Case, da wir MAXBLOCK mit ca 25%
+// Overhead definiert haben, reichen 80% = 800 Eintraege vollkommen aus
+// Will mann voellige Kompression haben, muss eben 100 angegeben werden.
+
 #define COMPRESSLVL 80
 
-struct BlockInfo {                  // block info:
-    BigPtrArray* pBigArr;           // in this array the block is located
-    ElementPtr* pData;              // data block
-    ULONG nStart, nEnd;             // start- and end index
-    USHORT nElem;                   // number of elements
+struct BlockInfo {                  // Block-Info:
+    BigPtrArray* pBigArr;           // in diesem Array steht der Block
+    ElementPtr* pData;              // Datenblock
+    ULONG nStart, nEnd;             // Start- und EndIndex
+    USHORT nElem;                   // Anzahl Elemente
 };
 
 class SW_DLLPUBLIC BigPtrArray
 {
-    BlockInfo** ppInf;              // block info
-    ULONG       nSize;              // number of elements
-    USHORT      nMaxBlock;          // current max. number of blocks
-    USHORT      nBlock;             // number of blocks
-    USHORT      nCur;               // last block
+    BlockInfo** ppInf;              // Block-Infos
+    ULONG       nSize;              // Anzahl Elemente
+    USHORT      nMaxBlock;          // akt. max Anzahl Bloecke
+    USHORT      nBlock;             // Anzahl Bloecke
+    USHORT      nCur;               // letzter Block
 
-    USHORT      Index2Block( ULONG ) const; // block search
-    BlockInfo*  InsBlock( USHORT );         // insert block
-    void        BlockDel( USHORT );         // some blocks were deleted
-    void        UpdIndex( USHORT );         // recalculate indices
+    USHORT      Index2Block( ULONG ) const; // Blocksuche
+    BlockInfo*  InsBlock( USHORT );         // Block einfuegen
+    void        BlockDel( USHORT );         // es wurden Bloecke geloescht
+    void        UpdIndex( USHORT );         // Indexe neu berechnen
 
 protected:
-    // fill all blocks
-    // the short parameter specifies in percent, how full the blocks should be
-    // made
-    // the return value specifies that something was done
+    // fuelle alle Bloecke auf.
+    // Der short gibt in Prozent an, wie voll die Bloecke werden sollen.
+    // Der ReturnWert besagt, das irgendetwas "getan" wurde
     USHORT Compress( short = COMPRESSLVL );
 
 public:
@@ -114,7 +114,7 @@ public:
 
 inline ULONG BigPtrEntry::GetPos() const
 {
-    DBG_ASSERT( this == pBlock->pData[ nOffset ], "element not in the block" );
+    DBG_ASSERT( this == pBlock->pData[ nOffset ], "Element nicht im Block" );
     return pBlock->nStart + nOffset;
 }
 

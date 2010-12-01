@@ -1211,6 +1211,10 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
     rPlaceableBound.Right()  = (sal_Int32)0x80000000;
     rPlaceableBound.Bottom() = (sal_Int32)0x80000000;
 
+    sal_Int16 nMapMode = MM_ANISOTROPIC;
+
+    sal_uInt16 nFunction;
+    sal_uInt32 nRSize;
     sal_uInt32 nPos = pStm->Tell();
     sal_uInt32 nEnd = pStm->Seek( STREAM_SEEK_TO_END );
 
@@ -1218,10 +1222,6 @@ sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pSt
 
     if( nEnd - nPos )
     {
-        sal_Int16 nMapMode = MM_ANISOTROPIC;
-        sal_uInt16 nFunction;
-        sal_uInt32 nRSize;
-
         while( bRet )
         {
             *pStm >> nRSize >> nFunction;

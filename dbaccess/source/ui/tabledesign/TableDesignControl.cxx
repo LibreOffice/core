@@ -75,6 +75,9 @@ void OTableRowView::Init()
 {
     EditBrowseBox::Init();
 
+//  SetMapMode( MapMode(MAP_TWIP) );
+//  GetDataWindow().SetMapMode( GetMapMode() );
+
     Font aFont( GetDataWindow().GetFont() );
     aFont.SetWeight( WEIGHT_NORMAL );
     GetDataWindow().SetFont( aFont );
@@ -110,7 +113,7 @@ void OTableRowView::KeyInput( const KeyEvent& rEvt )
         if( rEvt.GetKeyCode().GetCode() == KEY_F2 )
         {
             ::com::sun::star::util::URL aUrl;
-            aUrl.Complete =::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DSBEditDoc"));
+            aUrl.Complete =::rtl::OUString::createFromAscii(".uno:DSBEditDoc");
             GetView()->getController().dispatch( aUrl,Sequence< PropertyValue >() );
         }
     }

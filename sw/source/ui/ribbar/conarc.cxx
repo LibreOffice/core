@@ -107,6 +107,11 @@ BOOL ConstArc::MouseButtonUp( const MouseEvent& rMEvt )
                 m_pSh->EndCreate(SDRCREATE_NEXTPOINT);
         }
     }
+/*  else if ( pView->IsCreateObj() && rMEvt.IsRight() )
+    {
+        pView->EndCreateObj( SDRCREATE_FORCEEND );
+        bReturn = TRUE;
+    }*/
 
     return (bReturn);
 }

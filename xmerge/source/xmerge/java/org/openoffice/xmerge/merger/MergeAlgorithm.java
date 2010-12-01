@@ -44,11 +44,14 @@ public interface MergeAlgorithm {
      *  This method is to merge the difference to an <code>Iterator</code>.
      *  The original <code>Iterator</code> will be modified after the call.
      *
-     *  @param  orgSeq       The original sequence which the difference
+     *  @param  objSeq       The original sequence which the difference
      *                       will be applied.  It will be modified.
      *  @param  modSeq       The modified sequence where the difference
      *                       content will be extracted.
      *  @param  differences  The <code>Difference</code> array.
+     *
+     *  @return  An <code>Iterator</code> which is the modified original
+     *           <code>Iterator</code> Sequence.  Same as the first parameter.
      *
      *  @throws  MergeException  If an error occurs during the merge.
      */

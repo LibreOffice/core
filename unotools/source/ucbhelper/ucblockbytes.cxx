@@ -201,7 +201,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
     for (i = 0; i < n; i++)
     {
         PropertyChangeEvent evt (rEvent[i]);
-        if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("DocumentHeader")))
+        if (evt.PropertyName == ::rtl::OUString::createFromAscii ("DocumentHeader"))
         {
             Sequence<DocumentHeaderField> aHead;
             if (evt.NewValue >>= aHead)
@@ -226,12 +226,12 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
 
             m_xLockBytes->SetStreamValid_Impl();
         }
-        else if (evt.PropertyName == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("PresentationURL")))
+        else if (evt.PropertyName == rtl::OUString::createFromAscii ("PresentationURL"))
         {
             ::rtl::OUString aUrl;
             if (evt.NewValue >>= aUrl)
             {
-                ::rtl::OUString aBad (RTL_CONSTASCII_USTRINGPARAM ("private:"));
+                ::rtl::OUString aBad (::rtl::OUString::createFromAscii ("private:"));
                 if (!(aUrl.compareTo (aBad, aBad.getLength()) == 0))
                 {
                     // URL changed (Redirection).
@@ -239,7 +239,7 @@ void SAL_CALL UcbPropertiesChangeListener_Impl::propertiesChange ( const Sequenc
                 }
             }
         }
-        else if (evt.PropertyName == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("MediaType")))
+        else if (evt.PropertyName == ::rtl::OUString::createFromAscii ("MediaType"))
         {
             ::rtl::OUString aContentType;
             if (evt.NewValue >>= aContentType)
@@ -1372,7 +1372,7 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
             {
                 Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
                 Reference< XOutputStream > rxTempOut = Reference < XOutputStream > (
-                                    xFactory->createInstance ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")) ),
+                                    xFactory->createInstance ( ::rtl::OUString::createFromAscii( "com.sun.star.io.TempFile" ) ),
                                     UNO_QUERY );
 
                 if( rxTempOut.is() )
@@ -1667,7 +1667,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     aArgument.Referer = rReferer;
 
     Command aCommand;
-    aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("post"));
+    aCommand.Name = ::rtl::OUString::createFromAscii ("post");
     aCommand.Argument <<= aArgument;
 
     Reference< XProgressHandler > xProgressHdl = new ProgressHandler_Impl( LINK( &xLockBytes, UcbLockBytes, DataAvailHdl ) );
@@ -1707,7 +1707,7 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     {
         Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
         Command aCommand;
-        aCommand.Name     = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setPropertyValues"));
+        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
         aCommand.Handle   = -1; /* unknown */
         aCommand.Argument <<= rProps;
         xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );

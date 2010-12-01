@@ -189,7 +189,7 @@ void SwEndNoteOptionPage::Reset( const SfxItemSet& )
             aPageTemplLbl.Enable(FALSE);
             aPageTemplBox.Enable(FALSE);
         }
-        else
+        else // if ( rInf.ePos == FTNPOS_CHAPTER )
         {
             aPosChapterBox.Check();
             aNumCountBox.RemoveEntry(aNumPage);
@@ -315,6 +315,9 @@ int SwEndNoteOptionPage::GetNumbering() const
     return (int) bPosDoc? nPos + 1: nPos;
 }
 
+/*-----------------09.02.98 11:17-------------------
+
+--------------------------------------------------*/
 void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 {
     pSh = &rShell;
@@ -351,6 +354,11 @@ IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
 
     return 0;
 }
+
+/*------------------------------------------------------------------------
+ Beschreibung:
+------------------------------------------------------------------------*/
+
 
 IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 {

@@ -70,10 +70,6 @@ public:
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
-#if OSL_DEBUG_LEVEL > 0
-    static XmlFilterBase* mpDebugFilterBase;
-#endif
-
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const;
     virtual ::rtl::OUString implGetImplementationName() const;

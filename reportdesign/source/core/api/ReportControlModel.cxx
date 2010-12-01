@@ -85,6 +85,7 @@ void OReportControlModel::insertByIndex( ::sal_Int32 Index, const uno::Any& Elem
         if ( Index > static_cast<sal_Int32>(m_aFormatConditions.size()) )
             throw lang::IndexOutOfBoundsException();
 
+        //m_aFormatConditions.resize(m_aFormatConditions.size() + 1);
         m_aFormatConditions.insert(m_aFormatConditions.begin() + Index,xElement);
     }
 

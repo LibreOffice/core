@@ -121,6 +121,8 @@ using namespace ::ucbhelper;
 
 #define SERVICENAME_TYPEDETECTION       "com.sun.star.document.TypeDetection"
 #define TYPEDETECTION_PARAMETER         "FileName"
+//#define SERVICENAME_OLD_TYPEDETECTION   "com.sun.star.frame.FrameLoaderFactory"
+//#define PARAMETER_OLD_TYPEDETECTION     "DeepDetection"
 #define SERVICENAME_DOCINFO             "com.sun.star.document.DocumentProperties"
 #define SERVICENAME_DOCTEMPLATES        "com.sun.star.frame.DocumentTemplates"
 #define SERVICENAME_DESKTOP             "com.sun.star.frame.Desktop"
@@ -1198,7 +1200,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                                                 UNO_QUERY );
 
         Sequence< PropertyValue > aArgs( 1 );
-        aArgs[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hidden"));
+        aArgs[0].Name = ::rtl::OUString::createFromAscii("Hidden");
         aArgs[0].Value <<= sal_True;
 
         INetURLObject   aTemplURL( rName );
@@ -1208,7 +1210,7 @@ sal_Bool SfxDocumentTemplates::CopyFrom
         {
             xStorable = uno::Reference< XStorable >(
                 xDesktop->loadComponentFromURL( aTemplURL.GetMainURL(INetURLObject::NO_DECODE),
-                                                OUString(RTL_CONSTASCII_USTRINGPARAM("_blank")),
+                                                OUString::createFromAscii( "_blank" ),
                                                 0,
                                                 aArgs ),
                 UNO_QUERY );
@@ -2175,8 +2177,9 @@ const OUString& RegionData_Impl::GetTargetURL()
             OUString aPropName( RTL_CONSTASCII_USTRINGPARAM( TARGET_DIR_URL ) );
 
             getTextProperty_Impl( aRegion, aPropName, maTargetURL );
-            // The targeturl must be substituted: $(baseinsturl) (#i32656#)
+            // --> PB 2004-10-27 #i32656# - the targeturl must be substituted: $(baseinsturl)
             maTargetURL = SvtPathOptions().SubstituteVariable( maTargetURL );
+            // <--
         }
         else
         {
@@ -2329,8 +2332,8 @@ void SfxDocTemplate_Impl::AddRegion( const OUString& rTitle,
     // now get the content of the region
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(2);
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
-    aProps[1] = OUString(RTL_CONSTASCII_USTRINGPARAM( TARGET_URL ));
+    aProps[0] = OUString::createFromAscii( TITLE );
+    aProps[1] = OUString::createFromAscii( TARGET_URL );
 
     try
     {
@@ -2366,7 +2369,7 @@ void SfxDocTemplate_Impl::CreateFromHierarchy( Content &rTemplRoot )
 {
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(1);
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {
@@ -2428,7 +2431,7 @@ sal_Bool SfxDocTemplate_Impl::Construct( )
     Sequence< Any > aCompareArg(1);
     *(aCompareArg.getArray()) <<= xLocalizable->getLocale();;
     m_rCompareFactory = uno::Reference< XAnyCompareFactory >(
-                    xFactory->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.AnyCompareFactory")),
+                    xFactory->createInstanceWithArguments( OUString::createFromAscii( "com.sun.star.ucb.AnyCompareFactory" ),
                                                            aCompareArg ),
                     UNO_QUERY );
 
@@ -2474,7 +2477,7 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
     uno::Reference< XResultSet > xResultSet;
     Sequence< OUString >    aProps(1);
 
-    aProps[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( TITLE ));
+    aProps[0] = OUString::createFromAscii( TITLE );
 
     try
     {

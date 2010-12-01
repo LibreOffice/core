@@ -68,12 +68,13 @@ SwViewLayoutControl::SwViewLayoutControl( USHORT _nSlotId, USHORT _nId, StatusBa
 {
     mpImpl->mnState = 0;
 
-    mpImpl->maImageSingleColumn         = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN) );
-    mpImpl->maImageSingleColumn_Active  = Image( SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE) );
-    mpImpl->maImageAutomatic            = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC) );
-    mpImpl->maImageAutomatic_Active     = Image( SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
-    mpImpl->maImageBookMode             = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
-    mpImpl->maImageBookMode_Active      = Image( SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
+    const sal_Bool bHC = GetStatusBar().GetSettings().GetStyleSettings().GetHighContrastMode();
+    mpImpl->maImageSingleColumn         = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_HC)          : SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN) );
+    mpImpl->maImageSingleColumn_Active  = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE_HC) : SW_RES(IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE) );
+    mpImpl->maImageAutomatic            = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_HC)             : SW_RES(IMG_VIEWLAYOUT_AUTOMATIC) );
+    mpImpl->maImageAutomatic_Active     = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE_HC)    : SW_RES(IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE) );
+    mpImpl->maImageBookMode             = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_HC)              : SW_RES(IMG_VIEWLAYOUT_BOOKMODE) );
+    mpImpl->maImageBookMode_Active      = Image( bHC ? SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE_HC)     : SW_RES(IMG_VIEWLAYOUT_BOOKMODE_ACTIVE) );
 }
 
 SwViewLayoutControl::~SwViewLayoutControl()
@@ -115,6 +116,9 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     Color               aOldLineColor = pDev->GetLineColor();
     Color               aOldFillColor = pDev->GetFillColor();
 
+    //pDev->SetLineColor();
+    //pDev->SetFillColor( pDev->GetBackground().GetColor() );
+
     const bool bSingleColumn    = 0 == mpImpl->mnState;
     const bool bAutomatic       = 1 == mpImpl->mnState;
     const bool bBookMode        = 2 == mpImpl->mnState;
@@ -135,6 +139,17 @@ void SwViewLayoutControl::Paint( const UserDrawEvent& rUsrEvt )
     // draw bookmode image:
     aRect.Left() += nImageWidthAuto;
     pDev->DrawImage( aRect.TopLeft(), bBookMode ? mpImpl->maImageBookMode_Active         : mpImpl->maImageBookMode );
+
+    // draw separators
+    //aRect = rUsrEvt.GetRect();
+    //aRect.Left() += nImageWidth;
+    //aRect.setWidth( 1 );
+    //pDev->DrawRect( aRect );
+    //aRect.Left() += nImageWidth;
+    //pDev->DrawRect( aRect );
+
+    //pDev->SetLineColor( aOldLineColor );
+    //pDev->SetFillColor( aOldFillColor );
 }
 
 BOOL SwViewLayoutControl::MouseButtonDown( const MouseEvent & rEvt )

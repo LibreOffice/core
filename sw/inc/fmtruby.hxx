@@ -52,7 +52,7 @@ public:
 
     SwFmtRuby& operator=( const SwFmtRuby& rAttr );
 
-    // "pure virtual methods" of SfxPoolItem
+    // "pure virtual Methoden" vom SfxPoolItem
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 

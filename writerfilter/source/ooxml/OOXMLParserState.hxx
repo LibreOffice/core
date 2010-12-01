@@ -32,7 +32,7 @@
 #include <ooxml/OOXMLDocument.hxx>
 #include "OOXMLPropertySetImpl.hxx"
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 #include <resourcemodel/TagLogger.hxx>
 #endif
 
@@ -105,7 +105,7 @@ public:
 
     void incContextCount();
 
-#if OSL_DEBUG_LEVEL > 1
+#ifdef DEBUG
 public:
     unsigned int getContextCount() const;
     string toString() const;

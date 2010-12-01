@@ -879,7 +879,7 @@ USHORT SwHTMLWriter::GetCSS1Selector( const SwFmt *pFmt, ByteString& rToken,
 
             // Wenn eine PoolId gesetzt ist, entspricht der Name der
             // Vorlage dem szugehoerigen Token
-            OSL_ENSURE( (rRefPoolId != 0) == (rToken.Len() > 0),
+            OSL_ENSURE( rRefPoolId != 0 == rToken.Len() > 0,
                     "Token missing" );
         }
         else
@@ -3628,6 +3628,11 @@ static void OutCSS1_SvxBorderLine( SwHTMLWriter& rHTMLWrt,
 Writer& OutCSS1_SvxBox( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    // Das Zeichen-Attribut wird nicht ausgegeben, wenn gerade
+    // Optionen ausgegeben werden
+//    if( !rHTMLWrt.IsHTMLMode(HTMLMODE_PARA_BORDER))
+//        return rWrt;
 
     const SvxBoxItem& rBoxItem = (const SvxBoxItem&)rHt;
     const SvxBorderLine *pTop = rBoxItem.GetTop();

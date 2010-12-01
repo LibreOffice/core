@@ -32,6 +32,9 @@
 #include "tools/solar.h"
 #include "unotools/options.hxx"
 
+/*--------------------------------------------------------------------
+     Beschreibung:
+ --------------------------------------------------------------------*/
 namespace utl
 {
     class SfxMiscCfg;

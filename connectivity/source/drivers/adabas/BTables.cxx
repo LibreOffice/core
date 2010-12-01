@@ -65,7 +65,9 @@ sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
     aName   = _rName.copy(nLen+1);
 
     Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+    aTypes[0] = ::rtl::OUString::createFromAscii("%");
+    //  aTypes[0] = ::rtl::OUString::createFromAscii("TABLE");
+    //  aTypes[1] = ::rtl::OUString::createFromAscii("SYSTEMTABLE");
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
@@ -110,22 +112,22 @@ sdbcx::ObjectType OTables::appendObject( const ::rtl::OUString& _rForName, const
 // -------------------------------------------------------------------------
 void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQLException, RuntimeException)
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE TABLE " ));
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
-    aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENT ON TABLE "));
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON TABLE ");
     ::rtl::OUString sSchema;
     descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sSchema;
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + sDot;
 
     aSql += aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" '"))
+            + ::rtl::OUString::createFromAscii(" '")
             + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DESCRIPTION)))
-            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+            + ::rtl::OUString::createFromAscii("'");
     xStmt->execute(aSql);
 
     // columns
@@ -133,7 +135,7 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
     Reference<XIndexAccess> xColumns(xColumnSup->getColumns(),UNO_QUERY);
     Reference< XPropertySet > xColProp;
 
-    aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("COMMENT ON COLUMN "));
+    aSql = ::rtl::OUString::createFromAscii("COMMENT ON COLUMN ");
     if(sSchema.getLength())
         aSql += ::dbtools::quoteName(aQuote, sSchema) + sDot;
     aSql += aQuote + getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote  + sDot
@@ -148,9 +150,9 @@ void OTables::setComments(const Reference< XPropertySet >& descriptor ) throw(SQ
             if(aDescription.getLength())
             {
                 ::rtl::OUString aCom = aSql + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                                            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" '"))
+                                            + ::rtl::OUString::createFromAscii(" '")
                                             + aDescription
-                                            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+                                            + ::rtl::OUString::createFromAscii("'");
                 xStmt->execute(aSql);
                 ::comphelper::disposeComponent(xStmt);
             }
@@ -173,15 +175,15 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         sal_Int32 nLen = _sElementName.indexOf('.');
         aSchema = _sElementName.copy(0,nLen);
         aName   = _sElementName.copy(nLen+1);
-        ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "DROP " ));
+        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
 
         Reference<XPropertySet> xProp(xObject,UNO_QUERY);
         sal_Bool bIsView;
-        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"))))) // here we have a view
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW "));
+        if((bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW")))) // here we have a view
+            aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TABLE "));
+            aSql += ::rtl::OUString::createFromAscii("TABLE ");
 
         aSql += m_xMetaData->getIdentifierQuoteString(  ) + aSchema + m_xMetaData->getIdentifierQuoteString(  );
         aSql += sDot;
@@ -200,7 +202,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 // -------------------------------------------------------------------------
 void OTables::createTable( const Reference< XPropertySet >& descriptor )
 {
-    ::rtl::OUString aSql( RTL_CONSTASCII_USTRINGPARAM( "CREATE TABLE " ));
+    ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE TABLE ");
     ::rtl::OUString aQuote  = static_cast<OAdabasCatalog&>(m_rParent).getConnection()->getMetaData()->getIdentifierQuoteString(  );
     const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
     ::rtl::OUString sSchema;
@@ -214,7 +216,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     ));
 
     aSql += ::dbtools::quoteName(aQuote, getString(descriptor->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))))
-                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
+                + ::rtl::OUString::createFromAscii(" (");
 
     // columns
     Reference<XColumnsSupplier> xColumnSup(descriptor,UNO_QUERY);
@@ -233,10 +235,10 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 
             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote;
 
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+            aSql += ::rtl::OUString::createFromAscii(" ");
             aSql += OTables::getColumnSqlType(xColProp);
             aSql += OTables::getColumnSqlNotNullDefault(xColProp);
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+            aSql += ::rtl::OUString::createFromAscii(",");
         }
     }
 
@@ -266,15 +268,15 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PRIMARY KEY ("));
+                    aSql += ::rtl::OUString::createFromAscii(" PRIMARY KEY (");
                     for( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                                        +   ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                        +   ::rtl::OUString::createFromAscii(",");
                     }
 
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
                 }
                 else if(nKeyType == KeyType::UNIQUE)
                 {
@@ -283,15 +285,15 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" UNIQUE ("));
+                    aSql += ::rtl::OUString::createFromAscii(" UNIQUE (");
                     for( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                        + ::rtl::OUString::createFromAscii(",");
                     }
 
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
                 }
                 else if(nKeyType == KeyType::FOREIGN)
                 {
@@ -302,7 +304,7 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
                     if(!xColumns->getCount())
                         throw SQLException();
 
-                    aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FOREIGN KEY "));
+                    aSql += ::rtl::OUString::createFromAscii(" FOREIGN KEY ");
                     ::rtl::OUString aName,aSchema,aRefTable = getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_REFERENCEDTABLE)));
                     sal_Int32 nLen = aRefTable.indexOf('.');
                     aSchema = aRefTable.copy(0,nLen);
@@ -310,30 +312,30 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
 
                     aSql += aQuote + aSchema + aQuote + sDot
                                 + aQuote + aName + aQuote
-                                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ("));
+                                + ::rtl::OUString::createFromAscii(" (");
 
                     for ( sal_Int32 column=0; column<xColumns->getCount(); ++column )
                     {
                         if(::cppu::extractInterface(xColProp,xColumns->getByIndex(column)) && xColProp.is())
                             aSql += aQuote + getString(xColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))) + aQuote
-                                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","));
+                                        + ::rtl::OUString::createFromAscii(",");
                     }
 
-                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+                    aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
                     switch(nDeleteRule)
                     {
                         case KeyRule::CASCADE:
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE CASCADE "));
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE CASCADE ");
                             break;
                         case KeyRule::RESTRICT:
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE RESTRICT "));
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE RESTRICT ");
                             break;
                         case KeyRule::SET_NULL:
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET NULL "));
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET NULL ");
                             break;
                         case KeyRule::SET_DEFAULT:
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" ON DELETE SET DEFAULT "));
+                            aSql += ::rtl::OUString::createFromAscii(" ON DELETE SET DEFAULT ");
                             break;
                         default:
                             ;
@@ -344,9 +346,9 @@ void OTables::createTable( const Reference< XPropertySet >& descriptor )
     }
 
     if(aSql.lastIndexOf(',') == (aSql.getLength()-1))
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
     else
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+        aSql += ::rtl::OUString::createFromAscii(")");
 
     OAdabasConnection* pConnection = static_cast<OAdabasCatalog&>(m_rParent).getConnection();
         Reference< XStatement > xStmt = pConnection->createStatement(  );
@@ -376,10 +378,10 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     switch(nDataType)
     {
         case DataType::VARBINARY:
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VAR"));
+            sSql += ::rtl::OUString::createFromAscii("VAR");
             /* run through*/
         case DataType::BINARY:
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR"));
+            sSql += ::rtl::OUString::createFromAscii("CHAR");
             break;
         default:
             {
@@ -387,7 +389,7 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
                 if(aTypeName.hasValue() && getString(aTypeName).getLength())
                     sSql += getString(aTypeName);
                 else
-                    sSql += OTables::getTypeString(_rxColProp) + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" "));
+                    sSql += OTables::getTypeString(_rxColProp) + ::rtl::OUString::createFromAscii(" ");
             }
     }
 
@@ -397,24 +399,24 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
         case DataType::VARCHAR:
         case DataType::FLOAT:
         case DataType::REAL:
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
+            sSql += ::rtl::OUString::createFromAscii("(")
                         + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                        + ::rtl::OUString::createFromAscii(")");
             break;
 
         case DataType::DECIMAL:
         case DataType::NUMERIC:
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
+            sSql += ::rtl::OUString::createFromAscii("(")
                         + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(","))
+                        + ::rtl::OUString::createFromAscii(",")
                         + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE))))
-                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
+                        + ::rtl::OUString::createFromAscii(")");
             break;
         case DataType::BINARY:
         case DataType::VARBINARY:
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("("))
+            sSql += ::rtl::OUString::createFromAscii("(")
                         + ::rtl::OUString::valueOf(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION))))
-                        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(") BYTE"));
+                        + ::rtl::OUString::createFromAscii(") BYTE");
             break;
     }
     return sSql;
@@ -427,14 +429,14 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     ::rtl::OUString aDefault = getString(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE))) == ColumnValue::NO_NULLS)
     {
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT NULL"));
+        sSql += ::rtl::OUString::createFromAscii(" NOT NULL");
         if(aDefault.getLength())
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" WITH DEFAULT"));
+            sSql += ::rtl::OUString::createFromAscii(" WITH DEFAULT");
     }
     else if(aDefault.getLength())
     {
-        sSql +=::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DEFAULT '")) + aDefault;
-        sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'"));
+        sSql +=::rtl::OUString::createFromAscii(" DEFAULT '") + aDefault;
+        sSql += ::rtl::OUString::createFromAscii("'");
     }
     return sSql;
 }
@@ -445,58 +447,58 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     switch(getINT32(_rxColProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))))
     {
         case DataType::BIT:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BOOLEAN"));
+            aValue = ::rtl::OUString::createFromAscii("BOOLEAN");
             break;
         case DataType::TINYINT:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SMALLINT"));
+            aValue = ::rtl::OUString::createFromAscii("SMALLINT");
             break;
         case DataType::SMALLINT:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SMALLINT"));
+            aValue = ::rtl::OUString::createFromAscii("SMALLINT");
             break;
         case DataType::INTEGER:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INT"));
+            aValue = ::rtl::OUString::createFromAscii("INT");
             break;
         case DataType::FLOAT:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FLOAT"));
+            aValue = ::rtl::OUString::createFromAscii("FLOAT");
             break;
         case DataType::REAL:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("REAL"));
+            aValue = ::rtl::OUString::createFromAscii("REAL");
             break;
         case DataType::DOUBLE:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DOUBLE"));
+            aValue = ::rtl::OUString::createFromAscii("DOUBLE");
             break;
         case DataType::NUMERIC:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+            aValue = ::rtl::OUString::createFromAscii("DECIMAL");
             break;
         case DataType::DECIMAL:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DECIMAL"));
+            aValue = ::rtl::OUString::createFromAscii("DECIMAL");
             break;
         case DataType::CHAR:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR"));
+            aValue = ::rtl::OUString::createFromAscii("CHAR");
             break;
         case DataType::VARCHAR:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR"));
+            aValue = ::rtl::OUString::createFromAscii("VARCHAR");
             break;
         case DataType::LONGVARCHAR:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONG VARCHAR"));
+            aValue = ::rtl::OUString::createFromAscii("LONG VARCHAR");
             break;
         case DataType::DATE:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATE"));
+            aValue = ::rtl::OUString::createFromAscii("DATE");
             break;
         case DataType::TIME:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIME"));
+            aValue = ::rtl::OUString::createFromAscii("TIME");
             break;
         case DataType::TIMESTAMP:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TIMESTAMP"));
+            aValue = ::rtl::OUString::createFromAscii("TIMESTAMP");
             break;
         case DataType::BINARY:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CHAR () BYTE"));
+            aValue = ::rtl::OUString::createFromAscii("CHAR () BYTE");
             break;
         case DataType::VARBINARY:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VARCHAR () BYTE"));
+            aValue = ::rtl::OUString::createFromAscii("VARCHAR () BYTE");
             break;
         case DataType::LONGVARBINARY:
-            aValue = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LONG BYTE"));
+            aValue = ::rtl::OUString::createFromAscii("LONG BYTE");
             break;
     }
     return aValue;

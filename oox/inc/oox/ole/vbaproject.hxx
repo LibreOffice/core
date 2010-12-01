@@ -29,9 +29,9 @@
 #ifndef OOX_OLE_VBAPROJECT_HXX
 #define OOX_OLE_VBAPROJECT_HXX
 
-#include <map>
-#include <com/sun/star/uno/XInterface.hpp>
 #include "oox/helper/storagebase.hxx"
+#include <com/sun/star/uno/XInterface.hpp>
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -48,7 +48,7 @@ namespace ole {
 
 // ============================================================================
 
-class VbaFilterConfig
+class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
@@ -70,7 +70,7 @@ private:
 
 // ============================================================================
 
-class VbaProject : public VbaFilterConfig
+class OOX_DLLPUBLIC VbaProject : public VbaFilterConfig
 {
 public:
     explicit            VbaProject(
@@ -98,8 +98,6 @@ public:
     /** Returns true, if the document contains the specified dialog. */
     bool                hasDialog( const ::rtl::OUString& rDialogName ) const;
 
-    void                setOleOverridesSink( ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  rxOleOverridesSink ){ mxOleOverridesSink = rxOleOverridesSink; }
-
 private:
                         VbaProject( const VbaProject& );
     VbaProject&         operator=( const VbaProject& );
@@ -117,26 +115,11 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         createDialogLibrary();
     /** Imports the VBA code modules and forms. */
-    void                importVba(
-                            StorageBase& rVbaPrjStrg,
-                            const GraphicHelper& rGraphicHelper,
-                            bool bDefaultColorBgr );
-
+    void                importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr );
     /** Copies the entire VBA project storage to the passed document model. */
     void                copyStorage( StorageBase& rVbaPrjStrg );
 
-
-protected:
-    /** Registers a dummy module that will be created when the VBA project is
-        imported. */
-    void                addDummyModule( const ::rtl::OUString& rName, sal_Int32 nType );
-
-    /** Called when the import process of the VBA code modules starts. */
-    virtual void        prepareModuleImport();
-
 private:
-    typedef ::std::map< ::rtl::OUString, sal_Int32 > DummyModuleMap;
-
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         mxGlobalFactory;    /// Global service factory.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
@@ -145,10 +128,7 @@ private:
                         mxBasicLib;         /// The Basic library of the document used for import.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxDialogLib;        /// The dialog library of the document used for import.
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
-                        mxOleOverridesSink;
-    DummyModuleMap      maDummyModules;     /// Additional empty modules created on import.
-    ::rtl::OUString     maPrjName;          /// Name of the VBA project.
+    const ::rtl::OUString maLibName;        /// Name for Basic and dialog library used for import.
 };
 
 // ============================================================================

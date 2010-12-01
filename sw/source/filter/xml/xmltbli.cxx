@@ -351,10 +351,12 @@ inline SwXMLTableCell_Impl *SwXMLTableRow_Impl::GetCell( sal_uInt32 nCol ) const
 {
     OSL_ENSURE( nCol < USHRT_MAX,
             "SwXMLTableRow_Impl::GetCell: column number is to big" );
-    // #i95726# - some fault tolerance
+    // --> OD 2009-03-19 #i95726# - some fault tolerance
+//    return aCells[(sal_uInt16)nCol];
     OSL_ENSURE( nCol < aCells.Count(),
             "SwXMLTableRow_Impl::GetCell: column number is out of bound" );
     return nCol < aCells.Count() ? aCells[(sal_uInt16)nCol] : 0;
+    // <--
 }
 
 void SwXMLTableRow_Impl::Expand( sal_uInt32 nCells, sal_Bool bOneCell )
@@ -1153,6 +1155,11 @@ String lcl_GenerateFldTypeName(OUString sPrefix, SwTableNode* pTableNode)
     {
         sPrefixStr = String('_');
     }
+//  else if (sPrefixStr.Copy(0, 1).IsAlphaAscii())
+//  {
+//      sPrefixStr.Insert('_', 0);
+//  }
+    // else: name is OK.
 
     // increase count until we find a name that is not yet taken
     String sName;

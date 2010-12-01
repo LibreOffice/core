@@ -42,7 +42,7 @@
 #include <editeng/opaqitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
-// #i18732#
+// OD 18.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
 #include <svx/swframevalidation.hxx>
 
@@ -116,6 +116,7 @@ SwWrapTabPage::SwWrapTabPage(Window *pParent, const SfxItemSet &rSet) :
     aWrapOutsideCB      (this, SW_RES(CB_ONLYOUTSIDE)),
 
     aWrapIL             (SW_RES(IL_WRAP)),
+    aWrapILH            (SW_RES(ILH_WRAP)),
 
     nAnchorId(FLY_AT_PARA),
     nHtmlMode(0),
@@ -446,7 +447,7 @@ void SwWrapTabPage::ActivatePage(const SfxItemSet& rSet)
         aVal.bAutoHeight = rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE;
         aVal.bAutoWidth = rFrmSize.GetWidthSizeType() == ATT_MIN_SIZE;
         aVal.bMirror = rHori.IsPosToggle();
-        // #i18732#
+        // OD 18.09.2003 #i18732#
         aVal.bFollowTextFlow =
             static_cast<const SwFmtFollowTextFlow&>(rSet.Get(RES_FOLLOW_TEXT_FLOW)).GetValue();
 
@@ -646,15 +647,10 @@ IMPL_LINK( SwWrapTabPage, RangeModifyHdl, MetricField *, pEdit )
         else if (pEdit == &aBottomMarginED)
             pOpposite = &aTopMarginED;
 
-        OSL_ASSERT(pOpposite);
+        sal_Int64 nOpposite = pOpposite->GetValue();
 
-        if (pOpposite)
-        {
-            sal_Int64 nOpposite = pOpposite->GetValue();
-
-            if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
-                pOpposite->SetValue(pOpposite->GetMax() - nValue);
-        }
+        if (nValue + nOpposite > Max(pEdit->GetMax(), pOpposite->GetMax()))
+            pOpposite->SetValue(pOpposite->GetMax() - nValue);
     }
 
     return 0;
@@ -707,25 +703,26 @@ void SwWrapTabPage::DataChanged( const DataChangedEvent& rDCEvt )
 
 void SwWrapTabPage::ApplyImageList()
 {
-    ImageList& rImgLst = aWrapIL;
+    ImageList& rImgLst = GetSettings().GetStyleSettings().GetHighContrastMode() ?
+        aWrapILH : aWrapIL;
 
     aWrapThroughRB.SetModeRadioImage(rImgLst.GetImage(IMG_THROUGH));
     BOOL bWrapOutline =  !aWrapOutlineCB.IsChecked();
     if(bWrapOutline)
     {
-        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_NONE     ));
-        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_LEFT     ));
-        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_RIGHT    ));
-        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_PARALLEL ));
-        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_IDEAL    ));
+        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_NONE));
+        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage(IMG_LEFT));
+        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage(IMG_RIGHT));
+        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_PARALLEL));
+        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage(IMG_IDEAL));
     }
     else
     {
-        aNoWrapRB.SetModeRadioImage(       rImgLst.GetImage( IMG_KON_NONE     ));
-        aWrapLeftRB.SetModeRadioImage(     rImgLst.GetImage( IMG_KON_LEFT     ));
-        aWrapRightRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_RIGHT    ));
-        aWrapParallelRB.SetModeRadioImage( rImgLst.GetImage( IMG_KON_PARALLEL ));
-        aIdealWrapRB.SetModeRadioImage(    rImgLst.GetImage( IMG_KON_IDEAL    ));
+        aNoWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_NONE ));
+        aWrapLeftRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_LEFT ));
+        aWrapRightRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_RIGHT ));
+        aWrapParallelRB.SetModeRadioImage(rImgLst.GetImage(IMG_KON_PARALLEL ));
+        aIdealWrapRB.SetModeRadioImage(rImgLst.GetImage( IMG_KON_IDEAL ));
     }
 }
 

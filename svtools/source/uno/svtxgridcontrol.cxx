@@ -51,8 +51,6 @@
 #include <com/sun/star/util/Color.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
 
-#include <vcl/svapp.hxx>
-
 using ::rtl::OUString;
 using namespace ::svt::table;
 using namespace ::com::sun::star::uno;
@@ -126,7 +124,7 @@ void SAL_CALL SVTXGridControl::removeSelectionListener(const ::com::sun::star::u
 
 void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const Any& aValue) throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     switch( GetPropertyId( PropertyName ) )
@@ -287,7 +285,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                             }
                             else
                                 if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
-                                    throw GridInvalidDataException(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The column count doesn't match with the length of row data" )), m_xDataModel);
+                                    throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
 
                             for ( int k = 0; k < rawRowData.getLength(); k++)
                             {
@@ -304,7 +302,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                     }
                 }
                 else
-                    throw GridInvalidDataException(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The data model isn't set!" )), m_xDataModel);
+                    throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
                 sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
                 if(m_xDataModel->getRowHeight() == 0)
                 {
@@ -353,7 +351,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                 }
             }
             else
-                throw GridInvalidModelException(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The column model isn't set!" )), m_xColumnModel);
+                throw GridInvalidModelException(rtl::OUString::createFromAscii("The column model isn't set!"), m_xColumnModel);
 
             break;
         }
@@ -365,7 +363,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
 
 Any SVTXGridControl::getProperty( const ::rtl::OUString& PropertyName ) throw(RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     const sal_uInt16 nPropId = GetPropertyId( PropertyName );
     TableControl* pTable = (TableControl*)GetWindow();
@@ -424,7 +422,7 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
 }
 void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
     TableControl* pTable = (TableControl*)GetWindow();
     if ( pTable )
     {
@@ -434,13 +432,13 @@ void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun:
 }
 void SAL_CALL SVTXGridControl::setFocus() throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
     if ( GetWindow())
         GetWindow()->GrabFocus();
 }
 void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     std::vector< Any > newRow;
     Sequence< Any > rawRowData = Event.rowData;
@@ -458,7 +456,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 
     }
     else if((unsigned int)rawRowData.getLength()!=(unsigned)colCount)
-        throw GridInvalidDataException(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The column count doesn't match with the length of row data" )), m_xDataModel);
+        throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
 
     for ( int k = 0; k < rawRowData.getLength(); k++)
         newRow.push_back(rawRowData[k]);
@@ -488,7 +486,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
 
 void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
     if(Event.index == -1)
@@ -531,73 +529,73 @@ void SAL_CALL SVTXGridControl::rowRemoved(const ::com::sun::star::awt::grid::Gri
 
 void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid::GridColumnEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
-    if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColumnResize" )))
+    if(Event.valueName == rtl::OUString::createFromAscii("ColumnResize"))
     {
         bool resizable = m_pTableModel->getColumnModel()[Event.index]->isResizable();
         Event.newValue>>=resizable;
         m_pTableModel->getColumnModel()[Event.index]->setResizable(resizable);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("ColWidth"))
     {
         sal_Int32 colWidth = m_pTableModel->getColumnModel()[Event.index]->getWidth();
         Event.newValue>>=colWidth;
         m_pTableModel->getColumnModel()[Event.index]->setWidth(colWidth);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("MaxWidth"))
     {
         sal_Int32 maxWidth = m_pTableModel->getColumnModel()[Event.index]->getMaxWidth();
         Event.newValue>>=maxWidth;
         m_pTableModel->getColumnModel()[Event.index]->setMaxWidth(maxWidth);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MinWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("MinWidth"))
     {
         sal_Int32 minWidth = m_pTableModel->getColumnModel()[Event.index]->getMinWidth();
         Event.newValue>>=minWidth;
         m_pTableModel->getColumnModel()[Event.index]->setMinWidth(minWidth);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrefWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("PrefWidth"))
     {
         sal_Int32 prefWidth = m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth();
         Event.newValue>>=prefWidth;
         m_pTableModel->getColumnModel()[Event.index]->setPreferredWidth(prefWidth);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HAlign" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("HAlign"))
     {
         ::com::sun::star::style::HorizontalAlignment hAlign = m_pTableModel->getColumnModel()[Event.index]->getHorizontalAlign();
         Event.newValue>>=hAlign;
         m_pTableModel->getColumnModel()[Event.index]->setHorizontalAlign(hAlign);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "UpdateWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("UpdateWidth"))
     {
         if(m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth() != 0)
-            m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "PrefWidth" )), m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth());
-        m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ColWidth" )), m_pTableModel->getColumnModel()[Event.index]->getWidth());
+            m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString::createFromAscii("PrefWidth"), m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth());
+        m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString::createFromAscii("ColWidth"), m_pTableModel->getColumnModel()[Event.index]->getWidth());
     }
     pTable->Invalidate();
 }
 void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     TableControl* pTable = (TableControl*)GetWindow();
-    if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeight" )))
+    if(Event.valueName == rtl::OUString::createFromAscii("RowHeight"))
     {
         sal_Int32 rowHeight = m_pTableModel->getRowHeight();
         Event.newValue>>=rowHeight;
         m_pTableModel->setRowHeight(rowHeight);
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaderWidth" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaderWidth"))
     {
         sal_Int32 rowHeaderWidth = m_pTableModel->getRowHeaderWidth();
         Event.newValue>>=rowHeaderWidth;
         m_pTableModel->setRowHeaderWidth(rowHeaderWidth);
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowHeaders" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowHeaders"))
     {
         Sequence< rtl::OUString > headers(0);
         Event.newValue>>=headers;
@@ -605,7 +603,7 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
         m_pTableModel->setRowHeaderName(headerNames);
         pTable->Invalidate();
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CellUpdated" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("CellUpdated"))
     {
         std::vector< std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
         sal_Int32 col(0);
@@ -613,7 +611,7 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
         rowContent[Event.index][col] = Event.newValue;
         pTable->InvalidateDataWindow(Event.index, Event.index, false);
     }
-    else if(Event.valueName == rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RowUpdated" )))
+    else if(Event.valueName == rtl::OUString::createFromAscii("RowUpdated"))
     {
         std::vector<std::vector< Any > >& rowContent = m_pTableModel->getCellContent();
         Sequence< sal_Int32 > cols(0);
@@ -821,7 +819,7 @@ void SAL_CALL SVTXGridControl::selectColumn(::sal_Int32 x) throw (::com::sun::st
 }
 void SVTXGridControl::dispose() throw(::com::sun::star::uno::RuntimeException)
 {
-    SolarMutexGuard aGuard;
+    ::osl::SolarGuard aGuard( GetMutex() );
 
     ::com::sun::star::lang::EventObject aObj;
     aObj.Source = (::cppu::OWeakObject*)this;

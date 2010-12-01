@@ -664,6 +664,7 @@ class ImpIcnCursor
     SvLBoxEntry*    SearchRow(USHORT nRow,USHORT nRight,USHORT nLeft,USHORT nPref,
                         BOOL bRight, BOOL bSimple );
 
+    void            ExpandGrid();
     void            CreateGridMap();
     // Rueckgabe FALSE: Eintrag liegt nicht in der GridMap. rGridx,y werden
     // dann an nGridCols, nGridRows geclippt
@@ -671,6 +672,10 @@ class ImpIcnCursor
     void            SetGridUsed( USHORT nDX, USHORT nDY, BOOL bUsed )
                     {
                         pGridMap[ (nDY * nGridCols) + nDX ] = bUsed;
+                    }
+    BOOL            IsGridUsed( USHORT nDX, USHORT nDY )
+                    {
+                        return pGridMap[ (nDY * nGridCols) + nDX ];
                     }
 public:
                     ImpIcnCursor( SvImpIconView* pOwner );
@@ -3548,6 +3553,20 @@ void ImpIcnCursor::SetDeltas()
     }
 }
 
+
+void ImpIcnCursor::ExpandGrid()
+{
+    if( pGridMap )
+    {
+        long nNewGridRows = nGridRows + 20;
+        BOOL* pTempMap = new BOOL[ nNewGridRows * nGridCols ];
+        memcpy( pTempMap, pGridMap, nGridRows * nGridCols );
+        delete pGridMap;
+        pGridMap = pTempMap;
+        nGridRows = nNewGridRows;
+    }
+}
+
 BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
 {
     CreateGridMap();
@@ -3566,6 +3585,9 @@ BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
             rRect.Right() = rRect.Left() + nGridDX;
             SetGridUsed( nCol, nRow, TRUE );
 
+            //XXX
+            //if( nRow + 5 > nGridRows )
+            //  ExpandGrid();
             DBG_ASSERT(pGridMap[nCur],"SetGridUsed failed");
             return TRUE;
         }
@@ -3576,6 +3598,9 @@ BOOL ImpIcnCursor::FindEmptyGridRect( Rectangle& rRect )
     rRect.Left() = LROFFS_WINBORDER;
     rRect.Right() = rRect.Left() + nGridDX;
     return FALSE;
+    //XXX
+    //ExpandGrid();
+    //return TRUE;
 }
 
 void ImpIcnCursor::CreateGridAjustData( SvPtrarr& rLists, SvLBoxEntry* pRefEntry)

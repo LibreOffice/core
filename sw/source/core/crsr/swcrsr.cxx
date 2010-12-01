@@ -2096,6 +2096,12 @@ BOOL SwCursor::MoveSection( SwWhichSection fnWhichSect,
                        nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
 }
 
+/*
+    BOOL MoveTable( SwWhichTable, SwPosTable );
+    BOOL MoveColumn( SwWhichColumn, SwPosColumn );
+    BOOL MoveRegion( SwWhichRegion, SwPosRegion );
+*/
+
 void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
 {
     if( pSavePos )
@@ -2211,6 +2217,19 @@ SwCursor* SwTableCursor::MakeBoxSels( SwCursor* pAktCrsr )
             if( bDel )
             {
                 SwPaM* pDel = (SwPaM*)pCur->GetPrev();
+/*
+JP 20.07.98: der alte Code geht mit dem UNO-TableCrsr nicht
+                if( pDel == pAktCrsr )
+                {
+                    if( pAktCrsr->GetNext() == pAktCrsr )
+                    {
+                        pAktCrsr->DeleteMark();
+                        break;      // es gibt nichts mehr zu loeschen!
+                    }
+                    pAktCrsr = (SwCursor*)pDel->GetPrev();
+                }
+                delete pDel;
+*/
 
                 if( pDel == pAktCrsr )
                     pAktCrsr->DeleteMark();

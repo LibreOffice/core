@@ -44,7 +44,7 @@ public:
 
     DXFGroupReader( SvStream & rIStream, USHORT nMinPercent, USHORT nMaxPercent );
 
-    BOOL GetStatus() const;
+    BOOL GetStatus();
 
     void SetError();
 
@@ -53,20 +53,20 @@ public:
         // Im Falle eines Fehlers liefert GetStatus() FALSE, Gruppencode wird 0
         // gesetzt, und es wird SetS(0,"EOF") ausgefuehrt.
 
-    USHORT GetG() const;
+    USHORT GetG();
         // Liefert den letzten Gruppencode (also was Read() zuletzt lieferte)
 
-    long   GetI() const;
+    long   GetI();
         // Liefert den Integer-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Integer
         // gehandelt haben, wenn nicht, wird 0 gelieferet.
 
-    double GetF() const;
+    double GetF();
         // Liefert den Floatingpoint-Wert zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp Floatingpoint
         // gehandelt haben, wenn nicht, wird 0 geliefert.
 
-    const char * GetS() const;
+    const char * GetS();
         // Liefert den String zur Gruppe, die vorher mit Read() gelesen wurde.
         // Dabei muss es sich um einen Gruppencode fuer den Datentyp String
         // gehandelt haben, wenn nicht, wird NULL geliefert.
@@ -75,9 +75,9 @@ public:
     // aktuelle Gruppencode angegeben werden. (DXFGroupReader speichert die Parameter
     // zu allen Gruppencodes. Dadurch ist es moeglich, dass zunaechst mit Read() einige
     // verschiedene Gruppen eingelesen werden, bevor sie ausgewertet werden.)
-    long         GetI(USHORT nG) const;
-    double       GetF(USHORT nG) const;
-    const char * GetS(USHORT nG) const;
+    long         GetI(USHORT nG);
+    double       GetF(USHORT nG);
+    const char * GetS(USHORT nG);
 
     // Mit folgenden Methoden koennen die aktuell gespeicherten Werte zu den
     // Gruppencodes veraendert werden. (z.B. um Defaultwerte zu setzen, bevor
@@ -93,6 +93,7 @@ private:
     void   ReadS(char * ptgt);
 
     SvStream & rIS;
+    char sIBuff[1024];
     USHORT nIBuffSize,nIBuffPos;
     BOOL bStatus;
     USHORT nLastG;
@@ -119,7 +120,7 @@ private:
 };
 
 
-inline BOOL DXFGroupReader::GetStatus() const
+inline BOOL DXFGroupReader::GetStatus()
 {
     return bStatus;
 }
@@ -130,22 +131,22 @@ inline void DXFGroupReader::SetError()
     bStatus=FALSE;
 }
 
-inline USHORT DXFGroupReader::GetG() const
+inline USHORT DXFGroupReader::GetG()
 {
     return nLastG;
 }
 
-inline long DXFGroupReader::GetI() const
+inline long DXFGroupReader::GetI()
 {
     return GetI(nLastG);
 }
 
-inline double DXFGroupReader::GetF() const
+inline double DXFGroupReader::GetF()
 {
     return GetF(nLastG);
 }
 
-inline const char * DXFGroupReader::GetS() const
+inline const char * DXFGroupReader::GetS()
 {
     return GetS(nLastG);
 }

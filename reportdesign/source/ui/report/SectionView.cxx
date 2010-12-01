@@ -76,6 +76,7 @@ void OSectionView::MarkListHasChanged()
 
     if ( m_pReportWindow && m_pSectionWindow && !m_pSectionWindow->getPage()->getSpecialMode() )
     {
+        //m_pReportWindow->unmarkAllObjects(this); // WHY
         DlgEdHint aHint( RPTUI_HINT_SELECTIONCHANGED );
         m_pReportWindow->getReportView()->Broadcast( aHint );
         m_pReportWindow->getReportView()->UpdatePropertyBrowserDelayed(*this);
@@ -229,7 +230,7 @@ bool OSectionView::OnlyShapesMarked() const
         {
             break;
         }
-    }
+    } // for (ULONG i=0; i<nCount; i++)
     return i == nCount;
 }
 

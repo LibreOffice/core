@@ -45,6 +45,7 @@ protected:
 public:
     SvStrings & rSectionList;
 
+    // #110680#
     SwXMLSectionList(
         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
         SvStrings & rNewSectionList );

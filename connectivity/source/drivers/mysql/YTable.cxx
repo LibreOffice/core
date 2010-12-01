@@ -352,7 +352,7 @@ void OMySQLTable::dropDefaultValue(const ::rtl::OUString& _rColName)
 // -----------------------------------------------------------------------------
 ::rtl::OUString OMySQLTable::getAlterTableColumnPart()
 {
-    ::rtl::OUString sSql( RTL_CONSTASCII_USTRINGPARAM( "ALTER TABLE " ));
+    ::rtl::OUString sSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
     const ::rtl::OUString sQuote = getMetaData()->getIdentifierQuoteString(  );
 
     ::rtl::OUString sComposedName(
@@ -366,7 +366,7 @@ void OMySQLTable::executeStatement(const ::rtl::OUString& _rStatement )
 {
     ::rtl::OUString sSQL = _rStatement;
     if(sSQL.lastIndexOf(',') == (sSQL.getLength()-1))
-        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")")));
+        sSQL = sSQL.replaceAt(sSQL.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
 
     Reference< XStatement > xStmt = getConnection()->createStatement(  );
     if ( xStmt.is() )

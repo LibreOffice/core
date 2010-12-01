@@ -101,7 +101,6 @@
 #include <unochart.hxx>
 #include <sortopt.hxx>
 #include <rtl/math.hxx>
-#include <editeng/frmdiritem.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -1045,53 +1044,26 @@ void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aV
     SolarMutexGuard aGuard;
     if(IsValid())
     {
-        // Hack to support hidden property to transfer textDirection
-        if  ( rPropertyName.equals( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FRMDirection") ) ) )
+        const SfxItemPropertySimpleEntry* pEntry =
+            m_pPropSet->getPropertyMap()->getByName(rPropertyName);
+        if( !pEntry )
         {
-            SvxFrameDirection eDir = FRMDIR_ENVIRONMENT;
-            sal_Int16 nNum = 0;
-            aValue >>= nNum;
-            OSL_TRACE("FRMDirection val %d", nNum );
-            switch (nNum)
-            {
-                case 0:
-                    eDir = FRMDIR_HORI_LEFT_TOP;
-                    break;
-                case 1:
-                    eDir = FRMDIR_HORI_RIGHT_TOP;
-                    break;
-                case 2:
-                    eDir = FRMDIR_VERT_TOP_RIGHT;
-                    break;
-                default:
-                    OSL_ENSURE( false, "unknown direction code, maybe its a bitfield");
-            }
-            SvxFrameDirectionItem aItem( eDir, RES_FRAMEDIR);
-            pBox->GetFrmFmt()->SetFmtAttr(aItem);
+            beans::UnknownPropertyException aEx;
+            aEx.Message = rPropertyName;
+            throw( aEx );
+        }
+        if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
+        {
+            sal_Int32 nRowSpan = 0;
+            if( aValue >>= nRowSpan )
+                pBox->setRowSpan( nRowSpan );
         }
         else
         {
-            const SfxItemPropertySimpleEntry* pEntry =
-                m_pPropSet->getPropertyMap()->getByName(rPropertyName);
-            if( !pEntry )
-            {
-                beans::UnknownPropertyException aEx;
-                aEx.Message = rPropertyName;
-                throw( aEx );
-            }
-            if( pEntry->nWID == FN_UNO_CELL_ROW_SPAN )
-            {
-                sal_Int32 nRowSpan = 0;
-                if( aValue >>= nRowSpan )
-                    pBox->setRowSpan( nRowSpan );
-            }
-            else
-            {
-                SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-                SwAttrSet aSet(pBoxFmt->GetAttrSet());
-                m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
-                pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
-            }
+            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            SwAttrSet aSet(pBoxFmt->GetAttrSet());
+            m_pPropSet->setPropertyValue(rPropertyName, aValue, aSet);
+            pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
         }
     }
 }

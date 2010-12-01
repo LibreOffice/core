@@ -369,7 +369,7 @@ void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
 
 bool XclExpStream::HasValidEncrypter() const
 {
-    return mxEncrypter && mxEncrypter->IsValid();
+    return mxEncrypter.is() && mxEncrypter->IsValid();
 }
 
 void XclExpStream::EnableEncryption( bool bEnable )
@@ -1110,6 +1110,18 @@ bool XclExpXmlStream::exportDocument() throw()
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
+#if 0 // FIXME: Re-write this block without using SotStorage.
+    if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
+        if ( pShell && pOptions->IsLoadExcelBasicStorage() )
+            if ( sal_uInt32 nError
+                 = SvxImportMSVBasic( *pShell, *rStorage,
+                                      pOptions->IsLoadExcelBasicCode(),
+                                      pOptions->IsLoadExcelBasicStorage() )
+                .SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT) )
+            {
+                pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+            }
+#endif
     // Get the viewsettings before processing
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );
@@ -1188,7 +1200,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceMan
         {
             Reference< XRegistryKey > xNewKey1(
                     static_cast< XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString(RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME "/UNO/SERVICES/" )) ) );
+                        OUString::createFromAscii( IMPL_NAME "/UNO/SERVICES/" ) ) );
             xNewKey1->createKey( XlsxExport_getSupportedServiceNames().getConstArray()[0] );
 
             bRet = sal_True;
@@ -1213,7 +1225,7 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
 
     if ( rtl_str_compare( pImplName, IMPL_NAME ) == 0 )
     {
-        const OUString aServiceName(RTL_CONSTASCII_USTRINGPARAM(IMPL_NAME));
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME ) );
 
         xFactory = Reference< XSingleServiceFactory >( ::cppu::createSingleFactory(
                     reinterpret_cast< XMultiServiceFactory* >( pServiceManager ),

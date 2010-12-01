@@ -289,6 +289,9 @@ BOOL SvxAutocorrWordList::Seek_Entry( const SvxAutocorrWordPtr aE, USHORT* pP ) 
     return FALSE;
 }
 
+/* -----------------18.11.98 15:28-------------------
+ *
+ * --------------------------------------------------*/
 void lcl_ClearTable(SvxAutoCorrLanguageTable_Impl& rLangTable)
 {
     SvxAutoCorrectLanguageListsPtr pLists = rLangTable.Last();
@@ -299,6 +302,10 @@ void lcl_ClearTable(SvxAutoCorrLanguageTable_Impl& rLangTable)
     }
     rLangTable.Clear();
 }
+
+/* -----------------03.11.06 10:15-------------------
+ *
+ * --------------------------------------------------*/
 
 sal_Bool SvxAutoCorrect::IsAutoCorrectChar( sal_Unicode cChar )
 {
@@ -315,6 +322,9 @@ sal_Bool SvxAutoCorrect::NeedsHardspaceAutocorr( sal_Unicode cChar )
         cChar == '/' /*case for the urls exception*/;
 }
 
+/* -----------------19.11.98 10:15-------------------
+ *
+ * --------------------------------------------------*/
 long SvxAutoCorrect::GetDefaultFlags()
 {
     long nRet = Autocorrect
@@ -641,13 +651,13 @@ BOOL SvxAutoCorrect::FnAddNonBrkSpace(
     CharClass& rCC = GetCharClass( eLang );
     const lang::Locale rLocale = rCC.getLocale( );
 
-    if ( rLocale.Language == OUString(RTL_CONSTASCII_USTRINGPARAM( "fr" )) )
+    if ( rLocale.Language == OUString::createFromAscii( "fr" ) )
     {
-        bool bFrCA = rLocale.Country == OUString(RTL_CONSTASCII_USTRINGPARAM( "CA" ));
-        OUString allChars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":;!?" ));
+        bool bFrCA = rLocale.Country == OUString::createFromAscii( "CA" );
+        OUString allChars = OUString::createFromAscii( ":;!?" );
         OUString chars( allChars );
         if ( bFrCA )
-            chars = OUString(RTL_CONSTASCII_USTRINGPARAM( ":" ));
+            chars = OUString::createFromAscii( ":" );
 
         sal_Unicode cChar = rTxt.GetChar( nEndPos );
         bool bHasSpace = chars.indexOf( cChar ) != -1;
@@ -821,8 +831,10 @@ BOOL SvxAutoCorrect::FnCptlSttSntnc( SvxAutoCorrDoc& rDoc,
         {
             if( lcl_IsInAsciiArr( sImplWordChars, *pStr ) &&
                 pWordStt - 1 == pStr &&
-                // l'intallazione at beginning of paragraph. Replaced < by <= (#i38971#)
+                // --> FME 2005-02-14 #i38971#
+                // l'intallazione at beginning of paragraph. Replaced < by <=
                 (long)(pStart + 1) <= (long)pStr &&
+                // <--
                 rCC.isLetter(
                     aText,
                     sal::static_int_cast< xub_StrLen >( pStr-1 - pStart ) ) )
@@ -1742,6 +1754,10 @@ void DecryptBlockName_Imp( String& rName )
     }
 }
 
+
+/* -----------------18.11.98 16:00-------------------
+ *
+ * --------------------------------------------------*/
 const SvxAutocorrWord* lcl_SearchWordsInList(
                 SvxAutoCorrectLanguageListsPtr pList, const String& rTxt,
                 xub_StrLen& rStt, xub_StrLen nEndPos, SvxAutoCorrDoc& )
@@ -1833,7 +1849,9 @@ const SvxAutocorrWord* SvxAutoCorrect::SearchWordsInList(
     }
     return 0;
 }
-
+/* -----------------18.11.98 13:46-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
                                              const String& sWord )
 {
@@ -1875,7 +1893,9 @@ BOOL SvxAutoCorrect::FindInWrdSttExceptList( LanguageType eLang,
     }
     return FALSE;
 }
-
+/* -----------------18.11.98 14:28-------------------
+ *
+ * --------------------------------------------------*/
 BOOL lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
 {
     String sAbk( '~' );
@@ -1909,7 +1929,9 @@ BOOL lcl_FindAbbreviation( const SvStringsISortDtor* pList, const String& sWord)
             "falsch sortierte ExeptionListe?" );
     return FALSE;
 }
-
+/* -----------------18.11.98 14:49-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
                                 const String& sWord, BOOL bAbbreviation)
 {
@@ -1958,6 +1980,9 @@ BOOL SvxAutoCorrect::FindInCplSttExceptList(LanguageType eLang,
 
 }
 
+/* -----------------20.11.98 11:53-------------------
+ *
+ * --------------------------------------------------*/
 String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
                                             BOOL bNewFile, BOOL bTst ) const
 {
@@ -1978,6 +2003,9 @@ String SvxAutoCorrect::GetAutoCorrFileName( LanguageType eLang,
     return sRet;
 }
 
+/* -----------------18.11.98 11:16-------------------
+ *
+ * --------------------------------------------------*/
 SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
                 SvxAutoCorrect& rParent,
                 const String& rShareAutoCorrectFile,
@@ -1994,6 +2022,9 @@ SvxAutoCorrectLanguageLists::SvxAutoCorrectLanguageLists(
 {
 }
 
+/* -----------------18.11.98 11:16-------------------
+ *
+ * --------------------------------------------------*/
 SvxAutoCorrectLanguageLists::~SvxAutoCorrectLanguageLists()
 {
     delete pCplStt_ExcptLst;
@@ -2001,6 +2032,9 @@ SvxAutoCorrectLanguageLists::~SvxAutoCorrectLanguageLists()
     delete pAutocorr_List;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::IsFileChanged_Imp()
 {
     // nur alle 2 Minuten aufs FileSystem zugreifen um den
@@ -2076,7 +2110,7 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
 
                 // get parser
                 uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+                    OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
                 DBG_ASSERT( xXMLParser.is(),
                     "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
                 if( !xXMLParser.is() )
@@ -2120,7 +2154,9 @@ void SvxAutoCorrectLanguageLists::LoadXMLExceptList_Imp(
     }
 
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
                             const SvStringsISortDtor& rLst,
                             const sal_Char* pStrmName,
@@ -2192,7 +2228,9 @@ void SvxAutoCorrectLanguageLists::SaveExceptList_Imp(
         }
     }
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
 {
     if( pAutocorr_List )
@@ -2213,7 +2251,7 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
         aParserInput.aInputStream = xStrm->getInputStream();
 
         // get parser
-        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) );
+        uno::Reference< XInterface > xXMLParser = xServiceFactory->createInstance( OUString::createFromAscii("com.sun.star.xml.sax.Parser") );
         DBG_ASSERT( xXMLParser.is(), "XMLReader::Read: com.sun.star.xml.sax.Parser service missing" );
         if( xXMLParser.is() )
         {
@@ -2239,6 +2277,10 @@ SvxAutocorrWordList* SvxAutoCorrectLanguageLists::LoadAutocorrWordList()
     return pAutocorr_List;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
+
 void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pList )
 {
     if( pAutocorr_List && pList != pAutocorr_List )
@@ -2252,20 +2294,27 @@ void SvxAutoCorrectLanguageLists::SetAutocorrWordList( SvxAutocorrWordList* pLis
     nFlags |= ChgWordLstLoad;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 const SvxAutocorrWordList* SvxAutoCorrectLanguageLists::GetAutocorrWordList()
 {
     if( !( ChgWordLstLoad & nFlags ) || IsFileChanged_Imp() )
         SetAutocorrWordList( LoadAutocorrWordList() );
     return pAutocorr_List;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 {
     if( !( CplSttLstLoad & nFlags ) || IsFileChanged_Imp() )
         SetCplSttExceptList( LoadCplSttExceptList() );
     return pCplStt_ExcptLst;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
@@ -2286,7 +2335,9 @@ BOOL SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const String& rNew)
         delete pNew, pNew = 0;
     return 0 != pNew;
 }
-
+/* -----------------18.11.98 15:20-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
 {
     String* pNew = new String( rNew );
@@ -2309,6 +2360,9 @@ BOOL SvxAutoCorrectLanguageLists::AddToWrdSttExceptList(const String& rNew)
     return 0 != pNew;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
 {
     SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
@@ -2319,6 +2373,9 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadCplSttExceptList()
     return pCplStt_ExcptLst;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
 {
     MakeUserStorage_Impl();
@@ -2334,6 +2391,9 @@ void SvxAutoCorrectLanguageLists::SaveCplSttExceptList()
     aLastCheckTime = Time();
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList )
 {
     if( pCplStt_ExcptLst && pList != pCplStt_ExcptLst )
@@ -2347,7 +2407,9 @@ void SvxAutoCorrectLanguageLists::SetCplSttExceptList( SvStringsISortDtor* pList
     }
     nFlags |= CplSttLstLoad;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
 {
     SotStorageRef xStg = new SotStorage( sShareAutoCorrFile, STREAM_READ | STREAM_SHARE_DENYNONE, TRUE );
@@ -2356,7 +2418,9 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::LoadWrdSttExceptList()
         LoadXMLExceptList_Imp( pWrdStt_ExcptLst, pXMLImplWrdStt_ExcptLstStr, xStg );
     return pWrdStt_ExcptLst;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
 {
     MakeUserStorage_Impl();
@@ -2370,7 +2434,9 @@ void SvxAutoCorrectLanguageLists::SaveWrdSttExceptList()
                                             &aModifiedDate, &aModifiedTime );
     aLastCheckTime = Time();
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList )
 {
     if( pWrdStt_ExcptLst && pList != pWrdStt_ExcptLst )
@@ -2383,14 +2449,18 @@ void SvxAutoCorrectLanguageLists::SetWrdSttExceptList( SvStringsISortDtor* pList
     }
     nFlags |= WrdSttLstLoad;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetWrdSttExceptList()
 {
     if( !( WrdSttLstLoad & nFlags ) || IsFileChanged_Imp() )
         SetWrdSttExceptList( LoadWrdSttExceptList() );
     return pWrdStt_ExcptLst;
 }
-
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 void SvxAutoCorrectLanguageLists::RemoveStream_Imp( const String& rName )
 {
     if( sShareAutoCorrFile != sUserAutoCorrFile )
@@ -2515,6 +2585,9 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
         sShareAutoCorrFile = sUserAutoCorrFile;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
 {
     String sStrmName( pXMLImplAutocorr_ListStr, RTL_TEXTENCODING_MS_1252 );
@@ -2624,6 +2697,9 @@ BOOL SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SvStorage& rStg )
     return bRet;
 }
 
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
 BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
                                            const String& rLong )
 {
@@ -2675,8 +2751,10 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     }
     return bRet;
 }
-
-// Text mit Attributierung (kann nur der SWG - SWG-Format!)
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
+    //  - Text mit Attributierung (kann nur der SWG - SWG-Format!)
 BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
                                         SfxObjectShell& rShell )
 {
@@ -2716,7 +2794,10 @@ BOOL SvxAutoCorrectLanguageLists::PutText( const String& rShort,
     return bRet;
 }
 
-// loesche einen Eintrag
+/* -----------------18.11.98 11:26-------------------
+ *
+ * --------------------------------------------------*/
+    //  - loesche einen Eintrag
 BOOL SvxAutoCorrectLanguageLists::DeleteText( const String& rShort )
 {
     // erstmal akt. Liste besorgen!

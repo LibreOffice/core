@@ -162,9 +162,7 @@ USHORT SwTitlePageDlg::GetInsertPosition() const
 
 SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     SfxModalDialog( pParent, SW_RES(DLG_TITLEPAGE) ),
-#ifdef MSC
 #pragma warning (disable : 4355)
-#endif
     aMakeInsertFL       ( this, SW_RES( FL_MAKEINSERT )),
     aUseExistingPagesRB ( this, SW_RES( RB_USE_EXISTING_PAGES )),
     aInsertNewPagesRB   ( this, SW_RES( RB_INSERT_NEW_PAGES )),
@@ -190,9 +188,7 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     aCancelPB           ( this, SW_RES( PB_CANCEL )),
     aHelpPB             ( this, SW_RES( PB_HELP )),
     mpPageFmtDesc       (0)
-#ifdef MSC
 #pragma warning (default : 4355)
-#endif
 {
     FreeResource();
 

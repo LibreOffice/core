@@ -89,7 +89,9 @@ enum ColorConfigEntry
     SQLCOMMENT,
     ColorConfigEntryCount
 };
+/* -----------------------------22.03.2002 15:36------------------------------
 
+ ---------------------------------------------------------------------------*/
 class ColorConfig_Impl;
 struct ColorConfigValue
 {
@@ -100,7 +102,9 @@ struct ColorConfigValue
     sal_Bool operator !=(const ColorConfigValue& rCmp) const
         { return nColor != rCmp.nColor || bIsVisible != rCmp.bIsVisible;}
 };
+/* -----------------------------22.03.2002 15:36------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC ColorConfig:
     public utl::detail::Options
 {
@@ -116,7 +120,9 @@ public:
     ColorConfigValue        GetColorValue(ColorConfigEntry eEntry, sal_Bool bSmart = sal_True)const;
     static Color            GetDefaultColor(ColorConfigEntry eEntry);
 };
+/* -----------------------------22.03.2002 15:31------------------------------
 
+ ---------------------------------------------------------------------------*/
 class SVT_DLLPUBLIC EditableColorConfig
 {
     ColorConfig_Impl*   m_pImpl;

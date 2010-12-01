@@ -275,7 +275,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 
-        const char tmp[] = ".tmp";
+        char tmp[] = ".tmp";
 
         while (xResultSet->next())
         {
@@ -284,7 +284,7 @@ void PackageRegistryBackend::deleteUnusedFolders(
                     xResultSet, UNO_QUERY_THROW )->getString(
                         1 /* Title */ ) );
 
-            if (title.endsWithAsciiL(RTL_CONSTASCII_STRINGPARAM(tmp)))
+            if (title.endsWithAsciiL(tmp, sizeof(tmp) - 1))
                 tempEntries.push_back(
                     makeURLAppendSysPathSegment(sDataFolder, title));
         }
@@ -797,19 +797,12 @@ OUString Package::TypeInfo::getFileFilter() throw (RuntimeException)
 }
 
 //______________________________________________________________________________
-/**************************
- * Get Icon
- *
- * @param highContrast NOTE: disabled the returning of high contrast icons.
- *                     This bool is a noop now.
- * @param smallIcon    Return the small version of the icon
- */
-Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
+Any Package::TypeInfo::getIcon( sal_Bool highContrast, sal_Bool smallIcon )
     throw (RuntimeException)
 {
     if (! smallIcon)
         return Any();
-    const sal_uInt16 nIconId = m_smallIcon;
+    const sal_uInt16 nIconId = (highContrast ? m_smallIcon_HC : m_smallIcon);
     return Any( &nIconId, getCppuType( static_cast<sal_uInt16 const *>(0) ) );
 }
 

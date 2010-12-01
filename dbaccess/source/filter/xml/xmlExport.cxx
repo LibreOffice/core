@@ -118,13 +118,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLSettingsExporter"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLSettingsExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -137,13 +137,13 @@ namespace dbaxml
     //---------------------------------------------------------------------
     ::rtl::OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
     {
-        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sdb.XMLFullExporter"));
+        return ::rtl::OUString::createFromAscii("com.sun.star.comp.sdb.XMLFullExporter");
     }
     //---------------------------------------------------------------------
     Sequence< ::rtl::OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
     {
         Sequence< ::rtl::OUString > aSupported(1);
-        aSupported[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.ExportFilter"));
+        aSupported[0] = ::rtl::OUString::createFromAscii("com.sun.star.document.ExportFilter");
         return aSupported;
     }
 
@@ -241,32 +241,36 @@ ODBExport::ODBExport(const Reference< XMultiServiceFactory >& _rxMSF,sal_uInt16 
     m_xExportHelper = new SvXMLExportPropertyMapper(GetTableStylesPropertySetMapper());
     m_xColumnExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetColumnStylesPropertySetMapper());
 
+    //UniReference < XMLPropertySetMapper > xCellStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetCellStylesPropertySetMapper(),m_xPropHdlFactory);
+    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(xCellStylesPropertySetMapper);
+    //m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
+    //m_xCellExportHelper->ChainExportMapper(XMLTextParagraphExport::CreateParaExtPropMapper(*this));
     m_xCellExportHelper = new OSpecialHanldeXMLExportPropertyMapper(GetCellStylesPropertySetMapper());
     m_xRowExportHelper = new OSpecialHanldeXMLExportPropertyMapper(OXMLHelper::GetRowStylesPropertySetMapper());
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_TABLE,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME )),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_NAME ),
         m_xExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX )));
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_TABLE_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_COLUMN,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME )),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_NAME ),
         m_xColumnExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX )));
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_COLUMN_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_CELL,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME )),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_NAME ),
         m_xCellExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX )));
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_CELL_STYLES_PREFIX ));
 
     GetAutoStylePool()->AddFamily(
         XML_STYLE_FAMILY_TABLE_ROW,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME )),
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_NAME ),
         m_xRowExportHelper.get(),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX )));
+        rtl::OUString::createFromAscii( XML_STYLE_FAMILY_TABLE_ROW_STYLES_PREFIX ));
 }
 // -----------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO1_STATIC( ODBExport, "com.sun.star.comp.sdb.DBExportFilter", "com.sun.star.document.ExportFilter")
@@ -570,7 +574,7 @@ void ODBExport::exportConnectionData()
                         sURL.append(sal_Unicode('/'));
 
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,GetRelativeReference(sURL.makeStringAndClear()));
-                }
+                } // if ( sOrigUrl == sFileName )
                 else
                     AddAttribute(XML_NAMESPACE_XLINK,XML_HREF,sOrigUrl);
                 AddAttribute(XML_NAMESPACE_DB,XML_MEDIA_TYPE,m_aTypeCollection.getMediaType(sValue));
@@ -591,6 +595,7 @@ void ODBExport::exportConnectionData()
                 }
                 catch(const Exception&)
                 {
+                    // nii
                 }
                 SvXMLElementExport aFileBasedDB(*this,XML_NAMESPACE_DB, XML_FILE_BASED_DATABASE, sal_True, sal_True);
             }
@@ -1229,9 +1234,9 @@ void ODBExport::exportAutoStyle(XPropertySet* _xProp)
                         }
                     }
                     ++aItr;
-                }
+                } // while ( aItr != aEnd )
 
-            }
+            } // if ( !aPropStates.empty() )
             if ( XML_STYLE_FAMILY_TABLE_CELL == pExportHelper[i].second.second )
                 ::std::copy( m_aCurrentPropertyStates.begin(), m_aCurrentPropertyStates.end(), ::std::back_inserter( aPropStates ));
             if ( !aPropStates.empty() )

@@ -74,7 +74,9 @@ namespace preload
         }
         void WriteUserData();
     };
+/* -----------------------------14.11.2001 11:33------------------------------
 
+ ---------------------------------------------------------------------------*/
     OEMPreloadDialog_Impl::OEMPreloadDialog_Impl(OEMPreloadDialog* pDialog)
         {
             SfxItemPool& rPool = SFX_APP()->GetPool();
@@ -91,13 +93,18 @@ namespace preload
             pWelcomePage = new OEMWelcomeTabPage(pDialog);
             pLicensePage = new OEMLicenseTabPage(pDialog);
         }
+/* -----------------------------14.11.2001 11:33------------------------------
 
+ ---------------------------------------------------------------------------*/
         void OEMPreloadDialog_Impl::WriteUserData()
         {
             if ( pUserDataPage )
                 ((SfxTabPage*)pUserDataPage)->FillItemSet(*pSet);
         }
 
+/* -----------------------------14.11.2001 11:33------------------------------
+
+ ---------------------------------------------------------------------------*/
     //=====================================================================
     //= OEMPreloadDialog
     //=====================================================================
@@ -137,12 +144,16 @@ namespace preload
               SetPage( OEM_USERDATA, pImpl->pUserDataPage );
           ShowPage( OEM_WELCOME );
     }
+/* -----------------------------14.11.2001 11:33------------------------------
 
+ ---------------------------------------------------------------------------*/
     OEMPreloadDialog::~OEMPreloadDialog( )
     {
         delete pImpl;
     }
+/* -----------------------------14.11.2001 11:33------------------------------
 
+ ---------------------------------------------------------------------------*/
     IMPL_LINK(OEMPreloadDialog, NextPrevPageHdl, PushButton*, pButton)
     {
         if(pButton == &aPrevPB)
@@ -180,7 +191,9 @@ namespace preload
         aPrevPB.Enable(GetCurLevel() != OEM_WELCOME);
         return 0;
     }
+/* -----------------------------14.11.2001 11:33------------------------------
 
+ ---------------------------------------------------------------------------*/
     sal_Bool OEMPreloadDialog::LoadFromLocalFile(const String& rFileName, String& rContent)
     {
         SvtPathOptions aPathOpt;
@@ -211,17 +224,24 @@ namespace preload
         aCancelPB.SetText(rText);
     }
 
+/* -----------------------------13.11.2001 12:29------------------------------
+
+ ---------------------------------------------------------------------------*/
     OEMWelcomeTabPage::OEMWelcomeTabPage(Window* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_WELCOME)),
         aInfoFT(this, ModuleRes(FT_INFO))
     {
         FreeResource();
     }
+/* -----------------------------13.11.2001 12:30------------------------------
 
+ ---------------------------------------------------------------------------*/
     OEMWelcomeTabPage::~OEMWelcomeTabPage()
     {
     }
+/* -----------------------------13.11.2001 12:29------------------------------
 
+ ---------------------------------------------------------------------------*/
     OEMLicenseTabPage::OEMLicenseTabPage(OEMPreloadDialog* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_LICENSE)),
         aLicenseML(this, ModuleRes(ML_LICENSE)),
@@ -258,11 +278,15 @@ namespace preload
         aText.SearchAndReplaceAll( UniString::CreateFromAscii("%PAGEDOWN"), aPBPageDown.GetText() );
         aInfo2FT.SetText( aText );
     }
+/* -----------------------------13.11.2001 12:30------------------------------
 
+ ---------------------------------------------------------------------------*/
     OEMLicenseTabPage::~OEMLicenseTabPage()
     {
     }
+/* ---------------------------14.11.2001 11:24----------------------------
 
+    -----------------------------------------------------------------------*/
     void OEMLicenseTabPage::ActivatePage()
     {
         if(!aLicenseML.GetText().Len())

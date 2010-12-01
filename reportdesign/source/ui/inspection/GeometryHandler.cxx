@@ -127,17 +127,18 @@ namespace rptui
 {
 //........................................................................
 using namespace ::com::sun::star;
+//using namespace formula;
 
 // comparing two property instances
 struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::OUString , bool >
 {
     bool operator() (const beans::Property& x, const ::rtl::OUString& y) const
     {
-        return x.Name.equals(y);
+        return x.Name.equals(y);// ? true : false;
     }
     bool operator() (const ::rtl::OUString& x,const beans::Property& y) const
     {
-        return x.equals(y.Name);
+        return x.equals(y.Name);// ? true : false;
     }
 };
 
@@ -1328,7 +1329,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
             }
             aNewProps.push_back(*pFind);
         }
-    }
+    } // for (size_t i = 0; i < SAL_N_ELEMENTS(pIncludeProperties) ;++i )
 
     // special property for shapes
 //    if ( uno::Reference< report::XShape>(m_xReportComponent,uno::UNO_QUERY).is() )
@@ -1449,6 +1450,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
             eResult = inspection::InteractiveSelectionResult_ObtainedValue;
             beans::PropertyChangeEvent aScopeEvent;
             aScopeEvent.PropertyName = PROPERTY_FILLCOLOR;
+            // aScopeEvent.OldValue <<= _nOldDataFieldType;
             aScopeEvent.NewValue <<= xShape->getPropertyValue(PROPERTY_FILLCOLOR);
             m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
         }
@@ -1517,7 +1519,7 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                 {
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
                     _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
-                }
+                } // if ( bEnable )
                 m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
             }
             break;
@@ -1667,7 +1669,7 @@ void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUStrin
             const uno::Sequence< ::rtl::OUString > aMimeTypes( xReportDefinition->getAvailableMimeTypes() );
             sRet = aMimeTypes[nPos];
         }
-    }
+    } // if ( aFind != aList.end() )
     return sRet;
 }
 // -----------------------------------------------------------------------------
@@ -1913,6 +1915,13 @@ void GeometryHandler::loadDefaultFunctions()
 
         DefaultFunction aDefault;
         aDefault.m_bDeepTraversing = sal_False;
+
+        //aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Counter"));
+        //aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%FunctionName] + 1"));
+        //aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+[:alnum:]*\\][:space:]*\\+[:space:]*1"));
+        //aDefault.m_sInitialFormula.IsPresent = sal_True;
+        //aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"));
+        //m_aDefaultFunctions.push_back(aDefault);
 
         aDefault.m_bPreEvaluated = sal_True;
 

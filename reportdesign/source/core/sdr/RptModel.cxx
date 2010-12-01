@@ -71,6 +71,13 @@ OReportModel::OReportModel(::reportdesign::OReportDefinition* _pReportDefinition
     m_pUndoEnv = new OXUndoEnvironment(*this);
     m_pUndoEnv->acquire();
     SetSdrUndoFactory(new OReportUndoFactory);
+
+ //   SvxFontNameToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONT);
+    //SvxFontHeightToolBoxControl::RegisterControl(SID_ATTR_CHAR_FONTHEIGHT);
+    //SvxFontColorToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR);
+    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR2);
+    //SvxFontColorExtToolBoxControl::RegisterControl(SID_ATTR_CHAR_COLOR_BACKGROUND);
+    //SvxColorToolBoxControl::RegisterControl(SID_BACKGROUND_COLOR);
 }
 
 //----------------------------------------------------------------------------
@@ -127,6 +134,10 @@ void OReportModel::SetModified(sal_Bool _bModified)
 SdrPage* OReportModel::RemovePage(USHORT nPgNum)
 {
     OReportPage* pPage = dynamic_cast<OReportPage*>(SdrModel::RemovePage(nPgNum));
+    //if ( pPage )
+    //{
+    //    m_pUndoEnv->RemoveSection(pPage);
+    //}
     return pPage;
 }
 // -----------------------------------------------------------------------------

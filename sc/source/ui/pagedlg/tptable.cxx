@@ -126,8 +126,10 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
         aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
         aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
         aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
-        aImgLeftRight       (       ScResId( IMG_LEFTRIGHT ) ),
-        aImgTopDown         (       ScResId( IMG_TOPDOWN ) ),
+        aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
+        aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
+        aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
+        aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
         aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
         aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
         aFlPrint            ( this, ScResId( FL_PRINT ) ),
@@ -167,8 +169,11 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 void ScTablePage::ShowImage()
 {
+    bool bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
     bool bLeftRight = aBtnLeftRight.IsChecked();
-    aBmpPageDir.SetImage( (bLeftRight ? aImgLeftRight : aImgTopDown) );
+    aBmpPageDir.SetImage( bHC ?
+        (bLeftRight ? aImgLeftRightHC : aImgTopDownHC) :
+        (bLeftRight ? aImgLeftRight : aImgTopDown) );
 }
 
 // -----------------------------------------------------------------------

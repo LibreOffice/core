@@ -57,6 +57,10 @@ typedef std::auto_ptr<RegistryKeyImpl>      RegistryKey;
 typedef std::vector<std::wstring>               StringList;
 typedef std::auto_ptr<StringList>               StringListPtr;
 
+//---------------------------------------
+//
+//---------------------------------------
+
 class RegistryKeyImpl
 {
 public:

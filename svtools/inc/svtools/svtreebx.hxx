@@ -25,7 +25,6 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-
 #ifndef _SVTREEBOX_HXX
 #define _SVTREEBOX_HXX
 
@@ -87,12 +86,12 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
 #ifdef _SVTREEBX_CXX
     DECL_DLLPRIVATE_LINK( CheckButtonClick, SvLBoxButtonData * );
 
-    SVT_DLLPRIVATE short        GetHeightOffset( const Image& rBmp, Size& rLogicSize);
-    SVT_DLLPRIVATE short        GetHeightOffset( const Font& rFont, Size& rLogicSize);
+    SVT_DLLPRIVATE short            GetHeightOffset( const Image& rBmp, Size& rLogicSize);
+    SVT_DLLPRIVATE short            GetHeightOffset( const Font& rFont, Size& rLogicSize);
 
     SVT_DLLPRIVATE void         SetEntryHeight( SvLBoxEntry* pEntry );
     SVT_DLLPRIVATE void         AdjustEntryHeight( const Image& rBmp );
-    SVT_DLLPRIVATE void         AdjustEntryHeight( const Font& rFont );
+    SVT_DLLPRIVATE void             AdjustEntryHeight( const Font& rFont );
 
     SVT_DLLPRIVATE void         ImpEntryInserted( SvLBoxEntry* pEntry );
     SVT_DLLPRIVATE long         PaintEntry1( SvLBoxEntry*, long nLine,
@@ -100,7 +99,7 @@ class SVT_DLLPUBLIC SvTreeListBox : public SvLBox
                                 BOOL bHasClipRegion=FALSE );
 
     SVT_DLLPRIVATE void         InitTreeView( WinBits nWinStyle );
-    SVT_DLLPRIVATE SvLBoxItem*  GetItem_Impl( SvLBoxEntry*, long nX, SvLBoxTab** ppTab,
+    SVT_DLLPRIVATE SvLBoxItem*      GetItem_Impl( SvLBoxEntry*, long nX, SvLBoxTab** ppTab,
                         USHORT nEmptyWidth );
 #endif
 
@@ -183,26 +182,25 @@ public:
 
     void            EnableCheckButton( SvLBoxButtonData* );
     void            SetCheckButtonData( SvLBoxButtonData* );
-    void            SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp );
+    void            SetNodeBitmaps( const Image& rCollapsedNodeBmp, const Image& rExpandedNodeBmp, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    void            SetDontKnowNodeBitmap( const Image& rDontKnowBmp, BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     /** returns the default image which clients should use for expanded nodes, to have a consistent user
         interface experience in the whole product.
     */
-    static const Image& GetDefaultExpandedNodeImage( );
+    static const Image& GetDefaultExpandedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     /** returns the default image which clients should use for expanded nodes, to have a consistent user
         interface experience in the whole product.
     */
-    static const Image& GetDefaultCollapsedNodeImage( );
+    static const Image& GetDefaultCollapsedNodeImage( BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     /** sets default bitmaps for collapsed and expanded nodes.
     */
     inline  void    SetNodeDefaultImages( )
     {
-        SetNodeBitmaps(
-            GetDefaultCollapsedNodeImage( ),
-            GetDefaultExpandedNodeImage( )
-        );
+        SetNodeBitmaps( GetDefaultCollapsedNodeImage( BMP_COLOR_NORMAL ), GetDefaultExpandedNodeImage( BMP_COLOR_NORMAL ), BMP_COLOR_NORMAL );
+        SetNodeBitmaps( GetDefaultCollapsedNodeImage( BMP_COLOR_HIGHCONTRAST ), GetDefaultExpandedNodeImage( BMP_COLOR_HIGHCONTRAST ), BMP_COLOR_HIGHCONTRAST );
     }
 
     virtual SvLBoxEntry*    InsertEntry( const XubString& rText, SvLBoxEntry* pParent = 0,
@@ -218,11 +216,11 @@ public:
                                          ULONG nPos = LIST_APPEND, void* pUserData = 0,
                                          SvLBoxButtonKind eButtonKind = SvLBoxButtonKind_enabledCheckbox );
 
-    const Image&    GetDefaultExpandedEntryBmp( ) const;
-    const Image&    GetDefaultCollapsedEntryBmp( ) const;
+    const Image&    GetDefaultExpandedEntryBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    const Image&    GetDefaultCollapsedEntryBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 
-    void            SetDefaultExpandedEntryBmp( const Image& rBmp );
-    void            SetDefaultCollapsedEntryBmp( const Image& rBmp );
+    void            SetDefaultExpandedEntryBmp( const Image& rBmp, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    void            SetDefaultCollapsedEntryBmp( const Image& rBmp, BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     void            SetCheckButtonState( SvLBoxEntry*, SvButtonState );
     SvButtonState   GetCheckButtonState( SvLBoxEntry* ) const;
@@ -231,13 +229,13 @@ public:
     BOOL            IsExpandBitmapOnCursor() const  { return (BOOL)(aContextBmpMode & SVLISTENTRYFLAG_FOCUSED)!=0; }
 
     void            SetEntryText(SvLBoxEntry*, const XubString& );
-    void            SetExpandedEntryBmp( SvLBoxEntry* _pEntry, const Image& _rImage );
-    void            SetCollapsedEntryBmp( SvLBoxEntry* _pEntry, const Image& _rImage );
+    void            SetExpandedEntryBmp( SvLBoxEntry* _pEntry, const Image& _rImage, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    void            SetCollapsedEntryBmp( SvLBoxEntry* _pEntry, const Image& _rImage, BmpColorMode _eMode = BMP_COLOR_NORMAL );
 
     virtual String  GetEntryText( SvLBoxEntry* pEntry ) const;
     String          SearchEntryText( SvLBoxEntry* pEntry ) const;
-    const Image&    GetExpandedEntryBmp(SvLBoxEntry* _pEntry ) const;
-    const Image&    GetCollapsedEntryBmp(SvLBoxEntry* _pEntry ) const;
+    const Image&    GetExpandedEntryBmp(SvLBoxEntry* _pEntry, BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    const Image&    GetCollapsedEntryBmp(SvLBoxEntry* _pEntry, BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 
     void            SetCheckButtonHdl( const Link& rLink )  { aCheckButtonHdl=rLink; }
     Link            GetCheckButtonHdl() const { return aCheckButtonHdl; }
@@ -307,10 +305,10 @@ public:
     virtual void    MakeVisible( SvLBoxEntry* );
     void            MakeVisible( SvLBoxEntry*, BOOL bMoveToTop );
 
-    void            SetCollapsedNodeBmp( const Image& );
-    void            SetExpandedNodeBmp( const Image& );
-    Image           GetCollapsedNodeBmp( ) const;
-    Image           GetExpandedNodeBmp( ) const;
+    void            SetCollapsedNodeBmp( const Image&, BmpColorMode _eMode = BMP_COLOR_NORMAL );
+    void            SetExpandedNodeBmp( const Image&, BmpColorMode _eMode = BMP_COLOR_NORMAL  );
+    Image           GetCollapsedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
+    Image           GetExpandedNodeBmp( BmpColorMode _eMode = BMP_COLOR_NORMAL ) const;
 
     void            SetFont( const Font& rFont );
 

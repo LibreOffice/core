@@ -33,6 +33,8 @@
 #include "tokens.hxx"
 #include "oox/helper/containerhelper.hxx"
 
+#include <string.h>
+
 using ::rtl::OString;
 using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;

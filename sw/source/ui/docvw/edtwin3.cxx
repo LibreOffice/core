@@ -138,7 +138,7 @@ BOOL SwEditWin::RulerColumnDrag( const MouseEvent& rMEvt, BOOL bVerticalMode)
 }
 
 // #i23726#
-// #i42921# - add 3rd parameter <bVerticalMode> in order
+// --> OD 2005-02-18 #i42921# - add 3rd parameter <bVerticalMode> in order
 // to consider vertical layout
 BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
                                  const bool bVerticalMode )
@@ -146,6 +146,7 @@ BOOL SwEditWin::RulerMarginDrag( const MouseEvent& rMEvt,
     SvxRuler& rRuler = bVerticalMode ?  rView.GetVLineal() : rView.GetHLineal();
     return !rRuler.StartDocDrag( rMEvt, RULER_TYPE_INDENT);
 }
+// <--
 
 LAYOUT_NS Dialog* GetSearchDialog()
 {
@@ -178,8 +179,8 @@ void SwEditWin::DataChanged( const DataChangedEvent& rDCEvt )
     Window::DataChanged( rDCEvt );
 
     SwWrtShell* pSh = GetView().GetWrtShellPtr();
-    // DataChanged() is sometimes called prior to creating
-    // the SwWrtShell
+    //#99906#   DataChanged() is sometimes called prior to creating
+    //          the SwWrtShell
     if(!pSh)
         return;
     BOOL bViewWasLocked = pSh->IsViewLocked(), bUnlockPaint = FALSE;

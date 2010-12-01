@@ -26,7 +26,6 @@
  ************************************************************************/
 
 #include "condfrmt.hrc"
-
 ModelessDialog RID_SCDLG_CONDFORMAT
 {
     OutputSize = TRUE ;
@@ -358,3 +357,42 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     Text [ en-US ] = "Conditional Formatting" ;
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

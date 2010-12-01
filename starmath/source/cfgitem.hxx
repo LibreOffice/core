@@ -71,7 +71,7 @@ struct SmFontFormat
     SmFontFormat( const Font &rFont );
 
     const Font      GetFont() const;
-    bool            operator == ( const SmFontFormat &rFntFmt ) const;
+    BOOL            operator == ( const SmFontFormat &rFntFmt ) const;
 };
 
 
@@ -90,7 +90,7 @@ SV_DECL_OBJARR( SmFntFmtListEntryArr, SmFntFmtListEntry, 8, 8 )
 class SmFontFormatList
 {
     SmFntFmtListEntryArr    aEntries;
-    bool                    bModified;
+    BOOL                    bModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmFontFormatList( const SmFontFormatList & );
@@ -106,13 +106,13 @@ public:
     const SmFontFormat *    GetFontFormat( const String &rFntFmtId ) const;
     const SmFontFormat *    GetFontFormat( USHORT nPos ) const;
     const String            GetFontFormatId( const SmFontFormat &rFntFmt ) const;
-    const String            GetFontFormatId( const SmFontFormat &rFntFmt, bool bAdd );
+    const String            GetFontFormatId( const SmFontFormat &rFntFmt, BOOL bAdd );
     const String            GetFontFormatId( USHORT nPos ) const;
     const String            GetNewFontFormatId() const;
     USHORT                  GetCount() const    { return aEntries.Count(); }
 
-    bool    IsModified() const          { return bModified; }
-    void    SetModified( bool bVal )    { bModified = bVal; }
+    BOOL    IsModified() const          { return bModified; }
+    void    SetModified( BOOL bVal )    { bModified = bVal; }
 };
 
 
@@ -124,8 +124,8 @@ class SmMathConfig : public utl::ConfigItem
     SmCfgOther *        pOther;
     SmFontFormatList *  pFontFormatList;
     SmSymbolManager *   pSymbolMgr;
-    bool                bIsOtherModified;
-    bool                bIsFormatModified;
+    BOOL                bIsOtherModified;
+    BOOL                bIsFormatModified;
 
     // disallow copy-constructor and assignment-operator for now
     SmMathConfig( const SmMathConfig & );
@@ -144,7 +144,7 @@ class SmMathConfig : public utl::ConfigItem
                         const rtl::OUString &rSymbolName,
                         const rtl::OUString &rBaseNode ) const;
 
-    void            SetOtherIfNotEqual( bool &rbItem, bool bNewVal );
+    void            SetOtherIfNotEqual( BOOL &rbItem, BOOL bNewVal );
 
 protected:
     void    LoadOther();
@@ -154,12 +154,12 @@ protected:
     void    LoadFontFormatList();
     void    SaveFontFormatList();
 
-    void        SetOtherModified( bool bVal );
-    inline bool IsOtherModified() const     { return bIsOtherModified; }
-    void        SetFormatModified( bool bVal );
-    inline bool IsFormatModified() const    { return bIsFormatModified; }
-    void        SetFontFormatListModified( bool bVal );
-    inline bool IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): false; }
+    void        SetOtherModified( BOOL bVal );
+    inline BOOL IsOtherModified() const     { return bIsOtherModified; }
+    void        SetFormatModified( BOOL bVal );
+    inline BOOL IsFormatModified() const    { return bIsFormatModified; }
+    void        SetFontFormatListModified( BOOL bVal );
+    inline BOOL IsFontFormatListModified() const    { return pFontFormatList ? pFontFormatList->IsModified(): FALSE; }
 
     SmFontFormatList &          GetFontFormatList();
     const SmFontFormatList &    GetFontFormatList() const
@@ -180,25 +180,25 @@ public:
     void                SetSymbols( const std::vector< SmSym > &rNewSymbols );
 
     const SmFormat &    GetStandardFormat() const;
-    void                SetStandardFormat( const SmFormat &rFormat, bool bSaveFontFormatList = false );
+    void                SetStandardFormat( const SmFormat &rFormat, BOOL bSaveFontFormatList = FALSE );
 
-    bool            IsPrintTitle() const;
-    void            SetPrintTitle( bool bVal );
-    bool            IsPrintFormulaText() const;
-    void            SetPrintFormulaText( bool bVal );
-    bool            IsPrintFrame() const;
-    void            SetPrintFrame( bool bVal );
+    BOOL            IsPrintTitle() const;
+    void            SetPrintTitle( BOOL bVal );
+    BOOL            IsPrintFormulaText() const;
+    void            SetPrintFormulaText( BOOL bVal );
+    BOOL            IsPrintFrame() const;
+    void            SetPrintFrame( BOOL bVal );
     SmPrintSize     GetPrintSize() const;
     void            SetPrintSize( SmPrintSize eSize );
     USHORT          GetPrintZoomFactor() const;
     void            SetPrintZoomFactor( USHORT nVal );
 
-    bool            IsIgnoreSpacesRight() const;
-    void            SetIgnoreSpacesRight( bool bVal );
-    bool            IsAutoRedraw() const;
-    void            SetAutoRedraw( bool bVal );
-    bool            IsShowFormulaCursor() const;
-    void            SetShowFormulaCursor( bool bVal );
+    BOOL            IsIgnoreSpacesRight() const;
+    void            SetIgnoreSpacesRight( BOOL bVal );
+    BOOL            IsAutoRedraw() const;
+    void            SetAutoRedraw( BOOL bVal );
+    BOOL            IsShowFormulaCursor() const;
+    void            SetShowFormulaCursor( BOOL bVal );
 };
 
 /////////////////////////////////////////////////////////////////

@@ -145,9 +145,7 @@ void XMLIndexChapterInfoEntryContext::StartElement(
     if (bChapterInfoOK)
     {
         nValues++;
-        /* Some of the index chapter information attributes written to ODF 1.1
-           and 1.2 don't reflect the displaying (#i89791#)
-        */
+        // --> OD 2008-06-26 #i89791#
         if ( !bTOC )
         {
             bool bConvert( false );

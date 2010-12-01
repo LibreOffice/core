@@ -46,7 +46,7 @@
 #endif
 #include <svl/itemset.hxx>
 
-#include <svx/svdundo.hxx>
+#include <svx/svdundo.hxx> // #111827#
 
 #include <numrule.hxx>
 #include <itabenum.hxx>
@@ -55,6 +55,7 @@
 #include <swundo.hxx>
 #include <IMark.hxx>
 #include <IDocumentContentOperations.hxx>
+
 
 class SwUndoIter;
 class SwHistory;
@@ -114,6 +115,7 @@ namespace utl {
     class TransliterationWrapper;
 }
 
+
 const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
 const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
 const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
@@ -140,6 +142,7 @@ protected:
                                 const SwRedlineSaveDatas& rCheck,
                                 BOOL bCurrIsEnd );
 
+    // #111827#
     /**
        Returns the rewriter for this object.
 
@@ -156,6 +159,7 @@ public:
     virtual void Redo( SwUndoIter& ) = 0;
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns textual comment for this undo object.
 
@@ -236,6 +240,7 @@ public:
     ~SwUndoSaveCntnt();
 };
 
+
 // sicher eine vollstaendige Section im Nodes-Array
 class SwUndoSaveSection : private SwUndoSaveCntnt
 {
@@ -261,6 +266,7 @@ public:
           SwHistory* GetHistory()       { return pHistory; }
 };
 
+
 // Diese Klasse speichert den Pam als USHORT's und kann diese wieder zu
 // einem PaM zusammensetzen
 class SwUndRng
@@ -276,6 +282,7 @@ public:
     void SetPaM( SwPaM&, BOOL bCorrToCntnt = FALSE ) const;
     void SetPaM( SwUndoIter&, BOOL bCorrToCntnt = FALSE ) const;
 };
+
 
 class SwUndoStart: public SwUndo
 {
@@ -294,9 +301,11 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // -> #111827#
     virtual String GetComment() const;
     void SetRewriter(const SwRewriter & rRewriter);
     virtual SwRewriter GetRewriter() const;
+    // <- #111827#
 
     virtual SwUndoId GetEffectiveId() const;
     SwUndoId GetUserId() const { return nUserId; }
@@ -322,9 +331,11 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // -> #111827#
     virtual String GetComment() const;
     void SetRewriter(const SwRewriter & rRewriter);
     virtual SwRewriter GetRewriter() const;
+    // <- #111827#
 
     virtual SwUndoId GetEffectiveId() const;
     SwUndoId GetUserId() const { return nUserId; }
@@ -366,6 +377,7 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns rewriter for this undo object.
 
@@ -379,8 +391,10 @@ public:
      */
     virtual SwRewriter GetRewriter() const;
 
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoInsert)
 };
+
 
 class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 {
@@ -417,6 +431,7 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns rewriter for this undo object.
 
@@ -434,7 +449,7 @@ public:
 
     void SetTblDelLastNd()      { bTblDelLastNd = TRUE; }
 
-    // for PageDesc/PageBreak Attribute of a table
+    // fuer die PageDesc/PageBreak Attribute einer Tabelle
     void SetPgBrkFlags( BOOL bPageBreak, BOOL bPageDesc )
         { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
 
@@ -448,13 +463,14 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
 };
 
+
 class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
 {
     String aDelStr, aInsStr;
     SwRedlineSaveDatas* pRedlSaveData;
     ULONG nSttNode;
     xub_StrLen nSttCntnt;
-    BOOL bInsChar : 1;      // no more OverWrite; use Insert
+    BOOL bInsChar : 1;      // kein Overwrite mehr; sondern Insert
     BOOL bGroup : 1;        // TRUE: ist schon eine Gruppe; wird in
                             //       CanGrouping() ausgwertet !!
 public:
@@ -464,6 +480,7 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns the rewriter of this undo object.
 
@@ -479,6 +496,7 @@ public:
 
     BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
+
 
 class SwUndoSplitNode: public SwUndo
 {
@@ -496,6 +514,7 @@ public:
     virtual void Repeat( SwUndoIter& );
     void SetTblFlag()       { bTblFlag = TRUE; }
 };
+
 
 class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 {
@@ -532,6 +551,7 @@ public:
     void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
 
 };
+
 
 class SwUndoAttr : public SwUndo, private SwUndRng
 {
@@ -587,6 +607,7 @@ class SwUndoFmtAttr : public SwUndo
 
     bool IsFmtInDoc( SwDoc* );   //is the attribute format still in the Doc?
     void SaveFlyAnchor( bool bSaveDrawPt = false );
+    // --> OD 2004-10-26 #i35443# - Add return value, type <bool>.
     // Return value indicates, if anchor attribute is restored.
     // Notes: - If anchor attribute is restored, all other existing attributes
     //          are also restored.
@@ -595,22 +616,26 @@ class SwUndoFmtAttr : public SwUndo
     //          aren't restored.
     //          This situation occurs for undo of styles.
     bool RestoreFlyAnchor( SwUndoIter& rIter );
-
+    // <--
+    // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
     void Init();
+    // <--
 
 public:
     // register at the Format and save old attributes
+    // --> OD 2008-02-27 #refactorlists# - removed <rNewSet>
     SwUndoFmtAttr( const SfxItemSet& rOldSet,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
+    // <--
     SwUndoFmtAttr( const SfxPoolItem& rItem,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
     virtual ~SwUndoFmtAttr();
     virtual void Undo( SwUndoIter& );
-
+    // --> OD 2004-10-26 #i35443# - <Redo(..)> calls <Undo(..)> - nothing else
     virtual void Redo( SwUndoIter& );
-
+    // <--
     virtual void Repeat( SwUndoIter& );
     virtual SwRewriter GetRewriter() const;
 
@@ -618,6 +643,7 @@ public:
     SwFmt* GetFmt( SwDoc& rDoc );   // checks if it is still in the Doc!
 };
 
+// --> OD 2008-02-12 #newlistlevelattrs#
 class SwUndoFmtResetAttr : public SwUndo
 {
     public:
@@ -636,6 +662,7 @@ class SwUndoFmtResetAttr : public SwUndo
         // old attribute which has been reset - needed for undo.
         ::std::auto_ptr<SfxPoolItem> m_pOldItem;
 };
+// <--
 
 class SwUndoDontExpandFmt : public SwUndo
 {
@@ -665,27 +692,33 @@ public:
     SwUndoFmtAttr* ReleaseUndo()    { return m_pUndo.release(); }
 };
 
+
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
     String aFmtName;
     SwHistory* pHistory;
     SwFmtColl* pFmtColl;
+    // --> OD 2008-04-15 #refactorlists# - for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reseted at the nodes
     // before the format has been applied.
     const bool mbReset;
     // boolean, which indicates that the list attributes had been reseted at
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
+    // <--
 public:
-
+    // --> OD 2008-04-15 #refactorlists#
+//    SwUndoFmtColl( const SwPaM&, SwFmtColl* );
     SwUndoFmtColl( const SwPaM&, SwFmtColl*,
                    const bool bReset,
                    const bool bResetListAttrs );
+    // <--
     virtual ~SwUndoFmtColl();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns the rewriter for this undo object.
 
@@ -704,6 +737,7 @@ public:
     SwHistory* GetHistory() { return pHistory; }
 
 };
+
 
 class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 {
@@ -898,6 +932,7 @@ public:
     void SaveSection( SwStartNode* pSttNd );
     void ReNewBoxes( const SwSelBoxes& rBoxes );
 
+
     void SetColWidthParam( ULONG nBoxIdx, USHORT nMode, USHORT nType,
                             SwTwips nAbsDif, SwTwips nRelDif )
     {
@@ -934,6 +969,7 @@ public:
     void SaveCollection( const SwTableBox& rBox );
 
 };
+
 
 class SwUndoTblNumFmt : public SwUndo
 {
@@ -1037,6 +1073,7 @@ public:
     void SaveFormula( SwHistory& rHistory );
 };
 
+
 class SwUndoBookmark : public SwUndo
 {
     const ::std::auto_ptr<SwHistoryBookmark> m_pHistoryBookmark;
@@ -1050,6 +1087,7 @@ protected:
 public:
     virtual ~SwUndoBookmark();
 
+    // #111827#
     /**
        Returns the rewriter for this undo object.
 
@@ -1065,6 +1103,7 @@ public:
     virtual SwRewriter GetRewriter() const;
 };
 
+
 class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:
@@ -1072,6 +1111,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 };
+
 
 /*--------------------------------------------------------------------
     Beschreibung: Undo auf Sorting
@@ -1129,6 +1169,8 @@ public:
     void Insert( ULONG nOrgPos, ULONG nNewPos );
 
 };
+
+
 
 //--------------------------------------------------------------------
 
@@ -1189,6 +1231,7 @@ public:
 
 };
 
+
 class SwUndoSetFlyFmt : public SwUndo, public SwClient
 {
     SwFrmFmt* pFrmFmt;                  // das gespeicherte FlyFormat
@@ -1234,6 +1277,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
+    // #111827#
     /**
        Returns the rewriter of this undo object.
 
@@ -1263,7 +1307,9 @@ public:
 
 };
 
+
 //--------------------------------------------------------------------
+
 
 class SwUndoTblHeadline : public SwUndo
 {
@@ -1277,7 +1323,8 @@ public:
     virtual void Repeat( SwUndoIter& );
 };
 
-//------------ Undo of Insert-/Delete-Sections ----------------------
+
+//------------ Undo von Insert-/Delete-Sections ----------------------
 
 class SwUndoInsSection : public SwUndo, private SwUndRng
 {
@@ -1311,6 +1358,7 @@ SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
 
 SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
 
+
 //------------ Undo von verschieben/stufen von Gliederung ----------------
 
 class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
@@ -1339,7 +1387,7 @@ public:
 };
 
 //--------------------------------------------------------------------
-// ---------- Undo for Numbering ----------------------------------
+// ---------- Undo fuer Numerierung ----------------------------------
 
 class SwUndoInsNum : public SwUndo, private SwUndRng
 {
@@ -1437,7 +1485,7 @@ public:
 };
 
 //--------------------------------------------------------------------
-// ---------- Undo for DrawObjecte ----------------------------------
+// ---------- Undo fuer DrawObjecte ----------------------------------
 
 class SwSdrUndo : public SwUndo
 {
@@ -1468,6 +1516,7 @@ public:
     void SetGroupFmt( SwDrawFrmFmt* );
 };
 
+// --> OD 2006-11-01 #130889#
 // Action "ungroup drawing object" is now splitted into three parts - see
 // method <SwDoc::UnGroupSelection(..)>:
 // - creation for <SwDrawFrmFmt> instances for the group members of the
@@ -1494,6 +1543,7 @@ public:
     void AddObj( USHORT nPos, SwDrawFrmFmt* );
 };
 
+// --> OD 2006-11-01 #130889#
 class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 {
     private:
@@ -1508,6 +1558,8 @@ class SwUndoDrawUnGroupConnectToLayout : public SwUndo
         void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
                            SdrObject* pDrawObject );
 };
+// <--
+
 
 class SwUndoDrawDelete : public SwUndo
 {
@@ -1551,21 +1603,24 @@ class SwUndoInsertLabel : public SwUndo
 {
     union {
         struct {
-            // for NoTxtFrms
+            // fuer NoTxtFrms
             SwUndoInsLayFmt* pUndoFly;
             SwUndoFmtAttr* pUndoAttr;
         } OBJECT;
         struct {
-            // for Tables/TextBoxes
+            // fuer Tabelle/TextRahmen
             SwUndoDelete* pUndoInsNd;
             ULONG nNode;
         } NODE;
     };
 
     String sText;
+    // --> PB 2005-01-06 #i39983# - the separator will be drawed with a character style
     String sSeparator;
+    // <--
     String sNumberSeparator;
     String sCharacterStyle;
+    // OD 2004-04-15 #i26791# - re-store of drawing object position no longer needed
     USHORT nFldId;
     SwLabelType eType;
     BYTE nLayerId;              // fuer Zeichen-Objekte
@@ -1575,8 +1630,10 @@ class SwUndoInsertLabel : public SwUndo
 
 public:
     SwUndoInsertLabel( const SwLabelType eTyp, const String &rText,
+    // --> PB 2005-01-06 #i39983# - the separator will be drawed with a character style
                         const String& rSeparator,
-                        const String& rNumberSeparator,
+    // <--
+                        const String& rNumberSeparator, //#i61007# order of captions
                         const BOOL bBefore, const USHORT nId,
                         const String& rCharacterStyle,
                         const BOOL bCpyBrd );
@@ -1586,6 +1643,7 @@ public:
     virtual void Redo( SwUndoIter& );
     virtual void Repeat( SwUndoIter& );
 
+    // #111827#
     /**
        Returns the rewriter of this undo object.
 
@@ -1652,6 +1710,7 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 };
+
 
 //--------------------------------------------------------------------
 
@@ -1765,6 +1824,7 @@ public:
     virtual void Redo( SwUndoIter& );
 };
 
+
 //--------------------------------------------------------------------
 
 // Object der als Iterator durch die Undo-Liste laeuft, bis die
@@ -1806,6 +1866,8 @@ public:
     void ClearSelections()  { pSelFmt = 0; pMarkList = 0; }
 };
 
+
+// -> #111827#
 const int nUndoStringLength = 20;
 
 /**
@@ -1832,7 +1894,9 @@ const int nUndoStringLength = 20;
    @return the shortened string
  */
 String ShortenString(const String & rStr, xub_StrLen nLength, const String & rFillStr);
+// <- #111827#
 
+// #16487#
 /**
    Denotes special characters in a string.
 
