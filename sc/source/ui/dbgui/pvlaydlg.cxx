@@ -803,7 +803,6 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         ScDPFieldWindow*    theWnd  = NULL;
         ScDPFuncDataVec*    theArr   = NULL;
         size_t              nAt      = 0;
-        size_t              nToIndex = 0;
         Point               aToPos;
         BOOL                bDataArr = FALSE;
 
@@ -840,6 +839,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
         if ( Contains( theArr, fData.mnCol, nAt ) )
         {
+            size_t nToIndex = 0;
             aToPos = DlgPos2WndPos( rAtPos, *theWnd );
             theWnd->GetExistingIndex( aToPos, nToIndex );
 
