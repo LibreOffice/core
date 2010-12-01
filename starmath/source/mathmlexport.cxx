@@ -795,7 +795,8 @@ void SmXMLExport::ExportExpression(const SmNode *pNode, int nLevel)
     SvXMLElementExport *pRow=0;
     ULONG  nSize = pNode->GetNumSubNodes();
 
-    if (nSize > 1)
+    // #i115443: nodes of type expression always need to be grouped with mrow statement
+    if (nSize > 1 || (pNode && pNode->GetType() == NEXPRESSION))
         pRow = new SvXMLElementExport(*this, XML_NAMESPACE_MATH, XML_MROW, sal_True, sal_True);
 
     //if (nSize)
