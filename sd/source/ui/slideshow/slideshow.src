@@ -71,7 +71,6 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         {
             Separator = TRUE;
         };
-#ifdef ENABLE_PRESENTER_EXTRA_UI
         MenuItem
         {
             Identifier = CM_PEN_MODE;
@@ -153,8 +152,8 @@ Menu RID_SLIDESHOW_CONTEXTMENU
             Identifier = CM_ERASE_INK_PEN;
             Text [ en-US ] = "~Eraser Width" ;
 
-        SubMenu = Menu
-                    {
+            SubMenu = Menu
+            {
                 ItemList =
                 {
                     MenuItem
@@ -185,11 +184,10 @@ Menu RID_SLIDESHOW_CONTEXTMENU
                 };
             };
         };
-#endif
-    MenuItem
-    {
-        Separator = TRUE;
-    };
+        MenuItem
+        {
+            Separator = TRUE;
+        };
         MenuItem
         {
             Identifier = CM_SCREEN;
@@ -216,6 +214,6 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         {
             Identifier = CM_ENDSHOW ;
             Text [ en-US ] = "~End Show" ;
-    };
+        };
     };
 };
