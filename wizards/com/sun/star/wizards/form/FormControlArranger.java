@@ -47,14 +47,13 @@ import com.sun.star.wizards.document.TimeStampControl;
 public class FormControlArranger
 {
 
+    public static final String LABELCONTROL = "LabelControl";
     protected DatabaseControl[] DBControlList = null;
-
     private XNameContainer xFormName;
     private XMultiServiceFactory xMSF;
     private Control[] LabelControlList = null;
     private XStatusIndicator xProgressBar;
     private FieldColumn[] FieldColumns;
-    private DatabaseControl curDBControl;
     // Control curLabelControl;
     private int icurArrangement;
     private boolean bIsFirstRun;
@@ -68,23 +67,23 @@ public class FormControlArranger
     private static final double CMAXREDUCTION = 0.7;
     private FormHandler oFormHandler;
     private int iReduceWidth;
-    private int nXTCPos;
-    private int nYTCPos;
-    private int nXDBPos;
-    private int nYDBPos;
-    private int nTCHeight;
-    private int nTCWidth;
-    private int nDBHeight;
-    private int nDBWidth;
-    private int nMaxTCWidth;
+    private int m_currentLabelPosX;
+    private int m_currentLabelPosY;
+    private int m_currentControlPosX;
+    private int m_currentControlPosY;
+    private int m_LabelHeight;
+    private int m_LabelWidth;
+    private int m_dbControlHeight;
+    private int m_dbControlWidth;
+    private int m_MaxLabelWidth;
     private int nFormWidth;
     private int nFormHeight;
-    private int nMaxRowY;
+    private int m_currentMaxRowHeight;
     private int nSecMaxRowY;
-    private int nMaxColRightX;
+    private int m_maxPostionX;
     private int a;
     private int StartA;
-    private int nMaxDBYPos = 0;     //the maximum YPosition of a DBControl in the form
+    private int m_controlMaxPosY = 0;     //the maximum YPosition of a DBControl in the form
     private Short NBorderType = new Short((short) 1); //3-D Border
 
     public FormControlArranger(FormHandler _oFormHandler, XNameContainer _xFormName, CommandMetaData oDBMetaData, XStatusIndicator _xProgressBar, Point _StartPoint, Size _FormSize)
@@ -102,14 +101,13 @@ public class FormControlArranger
     }
     // Note: on all Controls except for the checkbox the Label has to be set
     // a bit under the DBControl because its Height is also smaller
+
     private int getLabelDiffHeight(int _index)
     {
-        if (curDBControl != null)
+        final DatabaseControl curDBControl = DBControlList[_index];
+        if (curDBControl != null && curDBControl.getControlType() == FormHandler.SOCHECKBOX)
         {
-            if (curDBControl.getControlType() == FormHandler.SOCHECKBOX)
-            {
-                return getCheckBoxDiffHeight(_index);
-            }
+            return getCheckBoxDiffHeight(_index);
         }
         return oFormHandler.getBasicLabelDiffHeight();
     }
@@ -126,20 +124,17 @@ public class FormControlArranger
 
     private int getCheckBoxDiffHeight(int LastIndex)
     {
-        if ((LastIndex < DBControlList.length))
+        if (LastIndex < DBControlList.length && DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX)
         {
-            if (DBControlList[LastIndex].getControlType() == FormHandler.SOCHECKBOX)
-            {
-                return (int) ((oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2);
-            }
+            return (int) ((oFormHandler.getControlReferenceHeight() - DBControlList[LastIndex].getControlHeight()) / 2);
         }
         return 0;
     }
 
-    private boolean isReducable(int _index)
+    private boolean isReducable(int _index, int i_labelWidth, int i_dbControlWidth)
     {
         boolean bisreducable = false;
-        int ntype = this.FieldColumns[_index].getFieldType();
+        int ntype = FieldColumns[_index].getFieldType();
         switch (ntype)
         {
             case DataType.TINYINT:
@@ -178,7 +173,7 @@ public class FormControlArranger
             default:
                 bisreducable = true;
         }
-        if (nTCWidth > 0.9 * CMAXREDUCTION * nDBWidth)
+        if (bisreducable && i_labelWidth > 0.9 * CMAXREDUCTION * i_dbControlWidth)
         {
             bisreducable = false;
         }
@@ -187,62 +182,54 @@ public class FormControlArranger
 
     private int getControlGroupWidth()
     {
-        if (nDBWidth > nTCWidth)
+        if (m_dbControlWidth > m_LabelWidth)
         {
-            return nDBWidth;
+            return m_dbControlWidth;
         }
         else
         {
-            return nTCWidth;
+            return m_LabelWidth;
         }
     }
 
     private void checkJustifiedPosition(int a)
     {
         int nBaseWidth = nFormWidth + cXOffset;
-        int nLeftDist = nMaxColRightX - nBaseWidth;
-        int nRightDist = nBaseWidth - (DBControlList[a].getPosition().X - this.cHoriDistance);
+        int nLeftDist = m_maxPostionX - nBaseWidth;
+        int nRightDist = nBaseWidth - (DBControlList[a].getPosition().X - cHoriDistance);
         if (nLeftDist < 0.5 * nRightDist)
         {
             // Fieldwidths in the line can be made smaller..
             adjustLineWidth(StartA, a, nLeftDist, -1);
-            nYTCPos = nMaxRowY + cVertDistance;
-            nYDBPos = nYTCPos + nTCHeight;
-//          if ((nYDBPos + nDBHeight) > nMaxDBYPos)
-//              nMaxDBYPos = nYDBPos + nDBHeight;
-            nXTCPos = cXOffset;
-            nXDBPos = cXOffset;
+            m_currentLabelPosY = m_currentMaxRowHeight + cVertDistance;
+            m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
+            m_currentLabelPosX = cXOffset;
+            m_currentControlPosX = cXOffset;
             bIsFirstRun = true;
             StartA = a + 1;
         }
         else
         {
             // FieldWidths in the line can be made wider...
-            if (nYDBPos + nDBHeight == nMaxRowY)
+            if (m_currentControlPosY + m_dbControlHeight == m_currentMaxRowHeight)
             {
                 // The last Control was the highest in the row
-                nYTCPos = nSecMaxRowY + cVertDistance;
+                m_currentLabelPosY = nSecMaxRowY;
             }
             else
             {
-                nYTCPos = nMaxRowY + cVertDistance;
+                m_currentLabelPosY = m_currentMaxRowHeight;
             }
-            nYDBPos = nYTCPos + nTCHeight;
-            nXDBPos = cXOffset;
-            nXTCPos = cXOffset;
-            this.LabelControlList[a].setPosition(new Point(cXOffset, nYTCPos));
-            this.DBControlList[a].setPosition(new Point(cXOffset, nYDBPos));
+            m_currentLabelPosY += cVertDistance;
+            m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
+            m_currentControlPosX = cXOffset;
+            m_currentLabelPosX = cXOffset;
+            LabelControlList[a].setPosition(new Point(cXOffset, m_currentLabelPosY));
+            DBControlList[a].setPosition(new Point(cXOffset, m_currentControlPosY));
             bIsFirstRun = true;
-            if (nDBWidth > nTCWidth)
-            {
-                checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
-            }
-            else
-            {
-                checkOuterPoints(nXDBPos, nTCWidth, nYDBPos, nDBHeight, true);
-            }
-            nXTCPos = nMaxColRightX + cHoriDistance;
-            nXDBPos = nXTCPos;
+            checkOuterPoints(m_currentControlPosX, m_dbControlWidth > m_LabelWidth ? m_dbControlWidth : m_LabelWidth, m_currentControlPosY, m_dbControlHeight, true);
+            m_currentLabelPosX = m_maxPostionX + cHoriDistance;
+            m_currentControlPosX = m_currentLabelPosX;
             adjustLineWidth(StartA, a - 1, nRightDist, 1);
             StartA = a;
         }
@@ -278,42 +265,44 @@ public class FormControlArranger
         for (int i = StartIndex; i <= EndIndex; i++)
         {
             int nControlBaseWidth = 0;
-            curDBControl = this.DBControlList[i];
-            Control curLabelControl = this.LabelControlList[i];
+            DatabaseControl dbControl = DBControlList[i];
+            Control curLabelControl = LabelControlList[i];
             if (i != StartIndex)
             {
                 curLabelControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y));
-                curDBControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y + nTCHeight));
+                dbControl.setPosition(new Point(iLocTCPosX, curLabelControl.getPosition().Y + m_LabelHeight));
             }
-            if (((curLabelControl.getSize().Width > curDBControl.getSize().Width)) && (WidthFactor > 0))
+            final Size labelSize = curLabelControl.getSize();
+            Size controlSize = dbControl.getSize();
+            if (((labelSize.Width > controlSize.Width)) && (WidthFactor > 0))
             {
-                nControlBaseWidth = curLabelControl.getSize().Width;
+                nControlBaseWidth = labelSize.Width;
             }
             else
             {
-                nControlBaseWidth = curDBControl.getSize().Width;
+                nControlBaseWidth = controlSize.Width;
             }
             if (FieldColumns[i].getFieldType() == DataType.TIMESTAMP)
             {
-                TimeStampControl oDBTimeStampControl = (TimeStampControl) curDBControl;
+                TimeStampControl oDBTimeStampControl = (TimeStampControl) dbControl;
                 nControlBaseWidth = oDBTimeStampControl.getSize().Width;
-                if (this.isReducable(i) || WidthFactor > 0)
-                {
-                    oDBTimeStampControl.setSize(new Size(nControlBaseWidth + WidthFactor * CorrWidth, oDBTimeStampControl.getSize().Height));
-                }
+            }
+            if (WidthFactor > 0 || isReducable(i, labelSize.Width, controlSize.Width))
+            {
+                controlSize.Width = nControlBaseWidth + WidthFactor * CorrWidth;
+                dbControl.setSize(controlSize);
+                controlSize = dbControl.getSize();
+            }
+
+            if (labelSize.Width > controlSize.Width)
+            {
+                iLocTCPosX += labelSize.Width;
             }
             else
             {
-                if (this.isReducable(i) || WidthFactor > 0)
-                {
-                    curDBControl.setSize(new Size(nControlBaseWidth + WidthFactor * CorrWidth, curDBControl.getSize().Height));
-                }
+                iLocTCPosX += controlSize.Width;
             }
-            iLocTCPosX = curDBControl.getPosition().X + curDBControl.getSize().Width + cHoriDistance;
-            if (curLabelControl.getSize().Width > curDBControl.getSize().Width)
-            {
-                iLocTCPosX = curLabelControl.getPosition().X + curLabelControl.getSize().Width + cHoriDistance;
-            }
+            iLocTCPosX += cHoriDistance;
         }
         if (WidthFactor > 0)
         {
@@ -325,43 +314,38 @@ public class FormControlArranger
         }
     }
 
-    private void checkOuterPoints(int nXPos, int nWidth, int nYPos, int nHeight, boolean bIsDBField)
+    private void checkOuterPoints(int i_nXPos, int i_nWidth, int i_nYPos, int i_nHeight, boolean i_bIsDBField)
     {
-        int nColRightX;
-        if (icurArrangement == FormWizard.SOTOPJUSTIFIED)
+        if (icurArrangement == FormWizard.IN_BLOCK_TOP && i_bIsDBField)
         {
-            if (bIsDBField)
+            // Only at DBControls you can measure the Value of nMaxRowY
+            if (bIsFirstRun)
             {
-                // Only at DBControls you can measure the Value of nMaxRowY
-                if (bIsFirstRun)
+                m_currentMaxRowHeight = i_nYPos + i_nHeight;
+                nSecMaxRowY = m_currentMaxRowHeight;
+            }
+            else
+            {
+                int nRowY = i_nYPos + i_nHeight;
+                if (nRowY >= m_currentMaxRowHeight)
                 {
-                    nMaxRowY = nYPos + nHeight;
-                    nSecMaxRowY = nMaxRowY;
-                }
-                else
-                {
-                    int nRowY = nYPos + nHeight;
-                    if (nRowY >= nMaxRowY)
-                    {
-                        int nOldMaxRowY = nMaxRowY;
-                        nSecMaxRowY = nOldMaxRowY;
-                        nMaxRowY = nRowY;
-                    }
+                    nSecMaxRowY = m_currentMaxRowHeight;
+                    m_currentMaxRowHeight = nRowY;
                 }
             }
         }
         // Find the outer right point
         if (bIsFirstRun)
         {
-            nMaxColRightX = nXPos + nWidth;
+            m_maxPostionX = i_nXPos + i_nWidth;
             bIsFirstRun = false;
         }
         else
         {
-            nColRightX = nXPos + nWidth;
-            if (nColRightX > nMaxColRightX)
+            int nColRightX = i_nXPos + i_nWidth;
+            if (nColRightX > m_maxPostionX)
             {
-                nMaxColRightX = nColRightX;
+                m_maxPostionX = nColRightX;
             }
         }
     }
@@ -370,15 +354,15 @@ public class FormControlArranger
     {
         try
         {
-            this.NBorderType = _NBorderType;
-            this.setStartPoint(_aStartPoint);
+            NBorderType = _NBorderType;
+            setStartPoint(_aStartPoint);
             icurArrangement = _icurArrangement;
             initializePosSizes();
             initializeControlColumn(-1);
             bIsVeryFirstRun = true;
-            nMaxRowY = 0;
+            m_currentMaxRowHeight = 0;
             nSecMaxRowY = 0;
-            this.nMaxColRightX = 0;
+            m_maxPostionX = 0;
             xProgressBar.start("", FieldColumns.length);
             for (int i = 0; i < FieldColumns.length; i++)
             {
@@ -387,13 +371,12 @@ public class FormControlArranger
                     insertLabel(i, _iAlign);
                     insertDBControl(i);
                     bIsVeryFirstRun = false;
-                    DBControlList[i].setPropertyValue("LabelControl", LabelControlList[i].xPropertySet);
+                    DBControlList[i].setPropertyValue(LABELCONTROL, LabelControlList[i].xPropertySet);
                     resetPosSizes(i);
                     xProgressBar.setValue(i + 1);
                 }
                 catch (RuntimeException e)
                 {
-                    int dummy = 0;
                 }
             }
             xProgressBar.end();
@@ -426,19 +409,19 @@ public class FormControlArranger
 
     private void resetPosSizes(int LastIndex)
     {
-        int nYRefPos = nYDBPos;
+        int nYRefPos = m_currentControlPosY;
         switch (icurArrangement)
         {
-            case FormWizard.SOCOLUMNARLEFT:
-                nYDBPos = nYDBPos + nDBHeight + cVertDistance + getCheckBoxDiffHeight(LastIndex);
-                nYRefPos = nYDBPos;
-                if ((nYDBPos > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
+            case FormWizard.COLUMNAR_LEFT:
+                m_currentControlPosY = m_currentControlPosY + m_dbControlHeight + cVertDistance + getCheckBoxDiffHeight(LastIndex);
+                nYRefPos = m_currentControlPosY;
+                if ((m_currentControlPosY > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
                 {
                     repositionColumnarLeftControls(LastIndex);
-                    nXTCPos = nMaxColRightX + 2 * cHoriDistance;
-                    nXDBPos = nXTCPos + this.cLabelGap + nMaxTCWidth;
-                    nYDBPos = cYOffset;
-                    nYRefPos = nYDBPos;
+                    m_currentLabelPosX = m_maxPostionX + 2 * cHoriDistance;
+                    m_currentControlPosX = m_currentLabelPosX + cLabelGap + m_MaxLabelWidth;
+                    m_currentControlPosY = cYOffset;
+                    nYRefPos = m_currentControlPosY;
                     initializeControlColumn(LastIndex);
                 }
                 else
@@ -447,59 +430,63 @@ public class FormControlArranger
                     /* a += 1;*/
                     ++a;
                 }
-                nYTCPos = nYDBPos + this.getLabelDiffHeight(LastIndex);
-                if ((nYRefPos + nDBHeight) > nMaxDBYPos)
+                m_currentLabelPosY = m_currentControlPosY + getLabelDiffHeight(LastIndex);
+                if ((nYRefPos + m_dbControlHeight) > m_controlMaxPosY)
                 {
-                    nMaxDBYPos = nYRefPos + nDBHeight;
+                    m_controlMaxPosY = nYRefPos + m_dbControlHeight;
                 }
 
                 break;
-            case FormWizard.SOCOLUMNARTOP:
-                nYTCPos = nYDBPos + nDBHeight + cVertDistance + getCheckBoxDiffHeight(LastIndex);
-                ;
-                if ((nYTCPos > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
+            case FormWizard.COLUMNAR_TOP:
+                m_currentLabelPosY = m_currentControlPosY + m_dbControlHeight + cVertDistance + getCheckBoxDiffHeight(LastIndex);
+
+                if ((m_currentLabelPosY > cYOffset + nFormHeight) || (LastIndex == (FieldColumns.length - 1)))
                 {
-                    nXDBPos = nMaxColRightX + cHoriDistance;
-                    nXTCPos = nXDBPos;
-                    nYRefPos = nYDBPos;
-                    nYDBPos = cYOffset + nTCHeight + cVertDistance;
-                    nYTCPos = cYOffset;
+                    m_currentControlPosX = m_maxPostionX + cHoriDistance;
+                    m_currentLabelPosX = m_currentControlPosX;
+                    nYRefPos = m_currentControlPosY;
+                    m_currentControlPosY = cYOffset + m_LabelHeight + cVertDistance;
+                    m_currentLabelPosY = cYOffset;
                     initializeControlColumn(LastIndex);
                 }
                 else
                 {
-                    a = a + 1;
+                    ++a;
                 }
-                if ((nYRefPos + nDBHeight + cVertDistance) > nMaxDBYPos)
+                if ((nYRefPos + m_dbControlHeight + cVertDistance) > m_controlMaxPosY)
                 {
-                    nMaxDBYPos = nYRefPos + nDBHeight + cVertDistance;
+                    m_controlMaxPosY = nYRefPos + m_dbControlHeight + cVertDistance;
                 }
                 break;
 
-            case FormWizard.SOTOPJUSTIFIED:
-                if (this.isReducable(a))
+            case FormWizard.IN_BLOCK_TOP:
+                if (isReducable(a, m_LabelWidth, m_dbControlWidth))
                 {
-                    iReduceWidth = iReduceWidth + 1;
+                    ++iReduceWidth;
                 }
-                if (nMaxColRightX > cXOffset + nFormWidth)
+                //if (m_maxPostionX > (nFormWidth-cXOffset-cXOffset)) // cXOffset + nFormWidth
+                if (m_maxPostionX > cXOffset + nFormWidth)
                 {
-                    int nOldYTCPos = nYTCPos;
                     checkJustifiedPosition(a);
-                    nYRefPos = nYDBPos;
+                    nYRefPos = m_currentControlPosY;
                 }
                 else
                 {
-                    nXTCPos = nMaxColRightX + cHoriDistance;
+                    m_currentLabelPosX = m_maxPostionX + cHoriDistance;
                 }
-                a = a + 1;
-                if ((nYRefPos + nDBHeight) > nMaxDBYPos)
+                if (a == FieldColumns.length - 1)
                 {
-                    nMaxDBYPos = nYRefPos + nDBHeight;
+                    checkJustifiedPosition(a);
+                    nYRefPos = m_currentControlPosY;
+                }
+                m_currentControlPosX = m_currentLabelPosX;
+                ++a;
+                if ((nYRefPos + m_dbControlHeight) > m_controlMaxPosY)
+                {
+                    m_controlMaxPosY = nYRefPos + m_dbControlHeight;
                 }
                 break;
         }
-//      if ((nYRefPos + nDBHeight) > nMaxDBYPos)
-//          nMaxDBYPos = nYRefPos + nDBHeight;
     }
 
     private void repositionColumnarLeftControls(int LastIndex)
@@ -509,42 +496,41 @@ public class FormControlArranger
         {
             if (i == StartA)
             {
-                nXTCPos = LabelControlList[i].getPosition().X;
-                nXDBPos = nXTCPos + nMaxTCWidth + cHoriDistance;
+                m_currentLabelPosX = LabelControlList[i].getPosition().X;
+                m_currentControlPosX = m_currentLabelPosX + m_MaxLabelWidth + cHoriDistance;
             }
-            LabelControlList[i].setSize(new Size(nMaxTCWidth, nTCHeight));
-            resetDBShape(DBControlList[i], nXDBPos);
-            checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
+            LabelControlList[i].setSize(new Size(m_MaxLabelWidth, m_LabelHeight));
+            resetDBShape(DBControlList[i], m_currentControlPosX);
+            checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
         }
     }
 
     private void resetDBShape(Shape _curDBControl, int iXPos)
     {
-        int nYDBPos = _curDBControl.getPosition().Y;
-        nDBWidth = _curDBControl.getSize().Width;
-        nDBHeight = _curDBControl.getSize().Height;
-        _curDBControl.setPosition(new Point(iXPos, nYDBPos));
+        m_dbControlWidth = _curDBControl.getSize().Width;
+        m_dbControlHeight = _curDBControl.getSize().Height;
+        _curDBControl.setPosition(new Point(iXPos, _curDBControl.getPosition().Y));
     }
 
     private void initializePosSizes()
     {
-        this.nMaxDBYPos = 0;
-        nXTCPos = cXOffset;
-        nTCWidth = 2000;
-        nDBWidth = 2000;
-        nDBHeight = oFormHandler.getControlReferenceHeight();
-        nTCHeight = oFormHandler.getLabelHeight();
+        m_controlMaxPosY = 0;
+        m_currentLabelPosX = cXOffset;
+        m_LabelWidth = 2000;
+        m_dbControlWidth = 2000;
+        m_dbControlHeight = oFormHandler.getControlReferenceHeight();
+        m_LabelHeight = oFormHandler.getLabelHeight();
         iReduceWidth = 0;
-        if (icurArrangement == FormWizard.SOCOLUMNARLEFT)
+        if (icurArrangement == FormWizard.COLUMNAR_LEFT)
         {
-            nYTCPos = cYOffset + this.getLabelDiffHeight(0);
-            nXDBPos = cXOffset + 3050;
-            nYDBPos = cYOffset;
+            m_currentLabelPosY = cYOffset + getLabelDiffHeight(0);
+            m_currentControlPosX = cXOffset + 3050;
+            m_currentControlPosY = cYOffset;
         }
         else
         {
-            nXDBPos = cXOffset;
-            nYTCPos = cYOffset;
+            m_currentControlPosX = cXOffset;
+            m_currentLabelPosY = cYOffset;
         }
     }
 
@@ -552,63 +538,63 @@ public class FormControlArranger
     {
         try
         {
+            Point aPoint = new Point(m_currentLabelPosX, m_currentLabelPosY);
+            Size aSize = new Size(m_LabelWidth, m_LabelHeight);
             if (bControlsareCreated)
             {
-                LabelControlList[i].setPosition(new Point(nXTCPos, nYTCPos));
-                if (icurArrangement != FormWizard.SOCOLUMNARLEFT)
+                LabelControlList[i].setPosition(aPoint);
+                if (icurArrangement != FormWizard.COLUMNAR_LEFT)
                 {
-                    nTCWidth = LabelControlList[i].getPreferredWidth(FieldColumns[i].getFieldTitle());
-                    LabelControlList[i].setSize(new Size(nTCWidth, nTCHeight));
+                    m_LabelWidth = LabelControlList[i].getPreferredWidth(FieldColumns[i].getFieldTitle());
+                    aSize.Width = m_LabelWidth;
+                    LabelControlList[i].setSize(aSize);
                 }
                 else
                 {
-                    nTCWidth = LabelControlList[i].getSize().Width;
+                    m_LabelWidth = LabelControlList[i].getSize().Width;
                 }
             }
             else
             {
-                Point aPoint = new Point(nXTCPos, nYTCPos);
-                Size aSize = new Size(nTCWidth, nTCHeight);
                 final String sFieldName = FieldColumns[i].getFieldName();
-                this.LabelControlList[i] = new Control(oFormHandler, xFormName, FormHandler.SOLABEL, sFieldName, aPoint, aSize);
-                if (bIsVeryFirstRun)
+                LabelControlList[i] = new Control(oFormHandler, xFormName, FormHandler.SOLABEL, sFieldName, aPoint, aSize);
+                if (bIsVeryFirstRun && icurArrangement == FormWizard.COLUMNAR_TOP)
                 {
-                    if (icurArrangement == FormWizard.SOCOLUMNARTOP)
-                    {
-                        nYDBPos = nYTCPos + nTCHeight;
-                    }
+                    m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
                 }
-                String sTitle = FieldColumns[i].getFieldTitle();
-                nTCWidth = LabelControlList[i].getPreferredWidth(sTitle);
-                }
+                final String sTitle = FieldColumns[i].getFieldTitle();
+                m_LabelWidth = LabelControlList[i].getPreferredWidth(sTitle);
+                aSize.Width = m_LabelWidth;
+                LabelControlList[i].setSize(aSize);
+            }
             Control curLabelControl = LabelControlList[i];
-            if (icurArrangement == FormWizard.SOCOLUMNARLEFT)
+            if (icurArrangement == FormWizard.COLUMNAR_LEFT)
             {
                 // Note This If Sequence must be called before retrieving the outer Points
                 if (bIsFirstRun)
                 {
-                    nMaxTCWidth = nTCWidth;
+                    m_MaxLabelWidth = m_LabelWidth;
                     bIsFirstRun = false;
                 }
-                else if (nTCWidth > nMaxTCWidth)
+                else if (m_LabelWidth > m_MaxLabelWidth)
                 {
-                    nMaxTCWidth = nTCWidth;
+                    m_MaxLabelWidth = m_LabelWidth;
                 }
             }
-            checkOuterPoints(nXTCPos, nTCWidth, nYTCPos, nTCHeight, false);
-            if ((icurArrangement == FormWizard.SOCOLUMNARTOP) || (icurArrangement == FormWizard.SOTOPJUSTIFIED))
+            checkOuterPoints(m_currentLabelPosX, m_LabelWidth, m_currentLabelPosY, m_LabelHeight, false);
+            if ((icurArrangement == FormWizard.COLUMNAR_TOP) || (icurArrangement == FormWizard.IN_BLOCK_TOP))
             {
-                nXDBPos = nXTCPos;
-                nYDBPos = nYTCPos + nTCHeight;
-                curLabelControl.xPropertySet.setPropertyValue("Align", new Short((short) com.sun.star.awt.TextAlign.LEFT));
+                m_currentControlPosX = m_currentLabelPosX;
+                m_currentControlPosY = m_currentLabelPosY + m_LabelHeight;
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) com.sun.star.awt.TextAlign.LEFT));
             }
             else
             {
-                curLabelControl.xPropertySet.setPropertyValue("Align", new Short((short) _iAlign));
+                curLabelControl.xPropertySet.setPropertyValue(PropertyNames.PROPERTY_ALIGN, new Short((short) _iAlign));
             }
             if (!bControlsareCreated)
             {
-                curLabelControl.setSize(new Size(nTCWidth, nTCHeight));
+                curLabelControl.setSize(new Size(m_LabelWidth, m_LabelHeight));
             }
 //      if (CurHelpText != ""){
 //          oModel.HelpText = CurHelptext;
@@ -627,7 +613,7 @@ public class FormControlArranger
             String sFieldName = FieldColumns[i].getFieldName();
             int nFieldType = FieldColumns[i].getFieldType();
 
-            Point aPoint = new Point(nXDBPos, nYDBPos);
+            Point aPoint = new Point(m_currentControlPosX, m_currentControlPosY);
             if (bControlsareCreated)
             {
                 DBControlList[i].setPosition(aPoint);
@@ -649,24 +635,25 @@ public class FormControlArranger
                 }
             }
             DatabaseControl aDBControl = DBControlList[i];
-            nDBHeight = aDBControl.getControlHeight();
-            nDBWidth = aDBControl.getControlWidth();
+            m_dbControlHeight = aDBControl.getControlHeight();
+            m_dbControlWidth = aDBControl.getControlWidth();
             if (nFieldType != DataType.TIMESTAMP)
             {
-                aDBControl.setSize(new Size(nDBWidth, nDBHeight));
+                aDBControl.setSize(new Size(m_dbControlWidth, m_dbControlHeight));
             }
             if (aDBControl.getControlType() == FormHandler.SOCHECKBOX)
             {
-                nYDBPos = nYDBPos + /*(int)*/ ((oFormHandler.getControlReferenceHeight() - nDBHeight) / 2);
-                aPoint = new Point(nXDBPos, nYDBPos);
+                m_currentControlPosY = m_currentControlPosY + /*(int)*/ ((oFormHandler.getControlReferenceHeight() - m_dbControlHeight) / 2);
+                aPoint = new Point(m_currentControlPosX, m_currentControlPosY);
                 aDBControl.setPosition(aPoint);
             }
             if (nFieldType == DataType.LONGVARCHAR) /* memo */
+
             {
                 Helper.setUnoPropertyValue(LabelControlList[i], PropertyNames.PROPERTY_MULTILINE, Boolean.TRUE);
             }
-            checkOuterPoints(nXDBPos, nDBWidth, nYDBPos, nDBHeight, true);
-            aDBControl.setPropertyValue("Border", NBorderType);
+            checkOuterPoints(m_currentControlPosX, m_dbControlWidth, m_currentControlPosY, m_dbControlHeight, true);
+            aDBControl.setPropertyValue(PropertyNames.PROPERTY_BORDER, NBorderType);
         }
         catch (Exception e)
         {
@@ -688,12 +675,12 @@ public class FormControlArranger
 
     public int getFormHeight()
     {
-        return nMaxDBYPos - this.cYOffset;
+        return m_controlMaxPosY - cYOffset;
     }
 
     public int getEntryPointY()
     {
-        if (this.icurArrangement == FormWizard.SOCOLUMNARTOP)
+        if (icurArrangement == FormWizard.COLUMNAR_TOP)
         {
             Control curLabelControl2 = LabelControlList[0];
             return curLabelControl2.getPosition().Y;
@@ -707,8 +694,8 @@ public class FormControlArranger
 
     public void setStartPoint(Point _aPoint)
     {
-        this.cXOffset = _aPoint.X;
-        this.cYOffset = _aPoint.Y;
+        cXOffset = _aPoint.X;
+        cYOffset = _aPoint.Y;
     }
 
     public void adjustYPositions(int _diffY)
@@ -717,10 +704,10 @@ public class FormControlArranger
         {
             Point aPoint = DBControlList[i].getPosition();
             DBControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
-            aPoint = this.LabelControlList[i].getPosition();
+            aPoint = LabelControlList[i].getPosition();
             LabelControlList[i].setPosition(new Point(aPoint.X, aPoint.Y - _diffY));
         }
-        nMaxDBYPos = -_diffY;
+        m_controlMaxPosY = -_diffY;
         cYOffset = -_diffY;
     }
 
