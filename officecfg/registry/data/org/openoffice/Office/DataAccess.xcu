@@ -153,7 +153,7 @@
     </node>
   </node>
   <node oor:name="RegisteredNames">
-    <node oor:name="EvolutionLocal" oor:op="replace">
+    <node oor:name="EvolutionLocal" oor:op="replace" install:module="evoab2">
         <prop oor:name="Location" oor:type="xs:string">
             <value>$(userurl)/database/evolocal.odb</value>
         </prop>
