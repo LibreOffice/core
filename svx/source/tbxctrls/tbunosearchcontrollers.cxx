@@ -29,6 +29,8 @@
 #include "precompiled_svx.hxx"
 
 #include "tbunosearchcontrollers.hxx"
+#include <svx/dialogs.hrc>
+#include <svx/dialmgr.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
@@ -91,7 +93,7 @@ FindTextFieldControl::~FindTextFieldControl()
 
 void FindTextFieldControl::InitControls_Impl()
 {
-    SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
+    SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
     SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
 
     EnableAutocomplete(TRUE, TRUE);
@@ -174,7 +176,7 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
         case EVENT_LOSEFOCUS:
             if ( GetText().Len() == 0 )
             {
-                SetText( String( ::rtl::OUString::createFromAscii("Find") ) );
+                SetText( SVX_RESSTR( RID_SVXSTR_FINDBAR_FIND ) );
                 SetControlForeground(GetSettings().GetStyleSettings().GetDisableColor());
                 m_bToClearTextField = sal_True;
             }

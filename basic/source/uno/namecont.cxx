@@ -2793,7 +2793,6 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
     }
 }
 
-
 //XLibraryContainer3
 OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
     throw (IllegalArgumentException, NoSuchElementException, RuntimeException)
@@ -2808,12 +2807,13 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 }
 
 
-::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatModeOn() throw (RuntimeException)
+// XVBACompatibility
+::sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode() throw (RuntimeException)
 {
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatModeOn( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
+void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
 {
     BasicManager* pBasMgr = getBasicManager();
     if( pBasMgr )

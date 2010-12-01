@@ -53,11 +53,11 @@ class OutputDevice;
 
 #include <vos/ref.hxx>
 
-#if defined(UNX) || defined(WIN) || defined(WNT)
+#if defined(UNX) || defined(WNT)
 #define DEGREE_CHAR ((sal_Unicode)176)   /* 0xB0 = Ansi */
 #endif
 
-#if defined(DOS) || defined(OS2)
+#if defined(OS2)
 #define DEGREE_CHAR ((sal_Unicode)248)   /* 0xF8 = IBM PC (Erw. ASCII) */
 #endif
 

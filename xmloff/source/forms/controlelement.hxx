@@ -63,6 +63,8 @@ namespace xmloff
             GRID,
             VALUERANGE,
             GENERIC_CONTROL,
+            TIME,
+            DATE,
 
             UNKNOWN // must be the last element
         };

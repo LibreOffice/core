@@ -733,6 +733,14 @@ void SdrPaintView::PrePaint()
     }
 }
 
+void SdrPaintView::PostPaint()
+{
+    if(mpPageView)
+    {
+        mpPageView->PostPaint();
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // #define SVX_REPAINT_TIMER_TEST
 

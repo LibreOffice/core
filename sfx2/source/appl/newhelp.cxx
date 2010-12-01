@@ -300,7 +300,7 @@ ContentListBox_Impl::ContentListBox_Impl( Window* pParent, const ResId& rResId )
         aDocumentImage = Image( SfxResId( IMG_HELP_CONTENT_DOC_HC ) );
     }
 
-    SetWindowBits( WB_HIDESELECTION | WB_HSCROLL );
+    SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
 
     SetEntryHeight( 16 );
     SetSelectionMode( SINGLE_SELECTION );
@@ -2138,7 +2138,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
 
     SvtMiscOptions().AddListenerLink( LINK( this, SfxHelpTextWindow_Impl, NotifyHdl ) );
 
-    if ( aOnStartupCB.GetHelpId() == 0 )
+    if ( !aOnStartupCB.GetHelpId().getLength() )
         aOnStartupCB.SetHelpId( HID_HELP_ONSTARTUP_BOX );
 }
 
@@ -2640,7 +2640,7 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_COPY, String( SfxResId( STR_HELP_MENU_TEXT_COPY ) ),
                 Image( SfxResId( bHiContrast ? IMG_HELP_TOOLBOX_HC_COPY : IMG_HELP_TOOLBOX_COPY ) ) );
-            aMenu.SetHelpId( TBI_COPY, SID_COPY );
+            aMenu.SetHelpId( TBI_COPY, ".uno:Copy" );
             aMenu.EnableItem( TBI_COPY, HasSelection() );
 
             if ( bIsDebug )
@@ -3180,7 +3180,7 @@ void SfxHelpWindow_Impl::openDone(const ::rtl::OUString& sURL    ,
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("PreventHelpTips"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowGraphics"), aBoolAny );
                 xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("ShowTables"), aBoolAny );
-                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:68245") ) );
+                xViewProps->setPropertyValue( DEFINE_CONST_OUSTRING("HelpURL"), makeAny( DEFINE_CONST_OUSTRING("HID:SFX2_HID_HELP_ONHELP") ) );
                 ::rtl::OUString sProperty( DEFINE_CONST_OUSTRING("IsExecuteHyperlinks") );
                 if ( xInfo->hasPropertyByName( sProperty ) )
                     xViewProps->setPropertyValue( sProperty, aBoolAny );

@@ -96,11 +96,12 @@ void RootAccess::initBroadcaster(
         for (ChangesListeners::iterator i(changesListeners_.begin());
              i != changesListeners_.end(); ++i)
         {
+            cppu::OWeakObject* pSource = static_cast< cppu::OWeakObject * >(this);
+            css::uno::Reference< css::uno::XInterface > xBase( pSource, css::uno::UNO_QUERY );
             broadcaster->addChangesNotification(
                 *i,
                 css::util::ChangesEvent(
-                    static_cast< cppu::OWeakObject * >(this),
-                    css::uno::makeAny(pathRepresentation_), set));
+                    pSource, makeAny( xBase ), set));
         }
     }
 }

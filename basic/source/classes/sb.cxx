@@ -57,6 +57,7 @@
 #include <vos/mutex.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "errobject.hxx"
+#include <hash_map>
 
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/ModuleInfo.hpp>
@@ -339,27 +340,18 @@ SbxBase* SbFormFactory::Create( UINT16, UINT32 )
 
 SbxObject* SbFormFactory::CreateObject( const String& rClassName )
 {
-    static String aLoadMethodName( RTL_CONSTASCII_USTRINGPARAM("load") );
-
-    SbxObject* pRet = NULL;
-    SbModule* pMod = pMOD;
-    if( pMod )
+    if( SbModule* pMod = pMOD )
     {
-        SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT );
-        if( pVar )
+        if( SbxVariable* pVar = pMod->Find( rClassName, SbxCLASS_OBJECT ) )
         {
-            SbxBase* pObj = pVar->GetObject();
-            SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pObj );
-
-            if( pFormModule != NULL )
+            if( SbUserFormModule* pFormModule = PTR_CAST( SbUserFormModule, pVar->GetObject() ) )
             {
-                pFormModule->load();
-                SbUserFormModuleInstance* pFormInstance = pFormModule->CreateInstance();
-                pRet = pFormInstance;
+                pFormModule->Load();
+                return pFormModule->CreateInstance();
             }
         }
     }
-    return pRet;
+    return 0;
 }
 
 
@@ -561,6 +553,39 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
                 USHORT nFlags_ = pProp->GetFlags();
                 pProp->SetFlag( SBX_NO_BROADCAST );
                 SbxProperty* pNewProp = new SbxProperty( *pProp );
+
+                // Special handling for modules instances and collections, they need
+                // to be instantiated, otherwise all refer to the same base object
+                SbxDataType eVarType = pProp->GetType();
+                if( eVarType == SbxOBJECT )
+                {
+                    SbxBase* pObjBase = pProp->GetObject();
+                    SbxObject* pObj = PTR_CAST(SbxObject,pObjBase);
+                    if( pObj != NULL )
+                    {
+                        String aObjClass = pObj->GetClassName();
+                        (void)aObjClass;
+
+                        SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pObjBase);
+                        if( pClassModuleObj != NULL )
+                        {
+                            SbModule* pLclClassModule = pClassModuleObj->getClassModule();
+                            SbClassModuleObject* pNewObj = new SbClassModuleObject( pLclClassModule );
+                            pNewObj->SetName( pProp->GetName() );
+                            pNewObj->SetParent( pLclClassModule->pParent );
+                            pNewProp->PutObject( pNewObj );
+                        }
+                        else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                        {
+                            String aCollectionName( RTL_CONSTASCII_USTRINGPARAM("Collection") );
+                            BasicCollection* pNewCollection = new BasicCollection( aCollectionName );
+                            pNewCollection->SetName( pProp->GetName() );
+                            pNewCollection->SetParent( pClassModule->pParent );
+                            pNewProp->PutObject( pNewCollection );
+                        }
+                    }
+                }
+
                 pNewProp->ResetFlag( SBX_NO_BROADCAST );
                 pNewProp->SetParent( this );
                 pProps->PutDirect( pNewProp, i );
@@ -569,11 +594,13 @@ SbClassModuleObject::SbClassModuleObject( SbModule* pClassModule )
         }
     }
     SetModuleType( ModuleType::CLASS );
+    mbVBACompat = pClassModule->mbVBACompat;
 }
 
 SbClassModuleObject::~SbClassModuleObject()
 {
-    triggerTerminateEvent();
+    if( StarBASIC::IsRunning() )
+        triggerTerminateEvent();
 
     // Must be deleted by base class dtor because this data
     // is not owned by the SbClassModuleObject object
@@ -606,7 +633,28 @@ void SbClassModuleObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType
                 {
                     SbxValues aVals;
                     aVals.eType = SbxVARIANT;
-                    pMeth->Get( aVals );
+
+                    SbxArray* pArg = pVar->GetParameters();
+                    USHORT nVarParCount = (pArg != NULL) ? pArg->Count() : 0;
+                    if( nVarParCount > 1 )
+                    {
+                        SbxArrayRef xMethParameters = new SbxArray;
+                        xMethParameters->Put( pMeth, 0 );   // Method as parameter 0
+                        for( USHORT i = 1 ; i < nVarParCount ; ++i )
+                        {
+                            SbxVariable* pPar = pArg->Get( i );
+                            xMethParameters->Put( pPar, i );
+                        }
+
+                        pMeth->SetParameters( xMethParameters );
+                        pMeth->Get( aVals );
+                        pMeth->SetParameters( NULL );
+                    }
+                    else
+                    {
+                        pMeth->Get( aVals );
+                    }
+
                     pVar->Put( aVals );
                 }
             }
@@ -712,6 +760,7 @@ SbClassData::SbClassData( void )
 void SbClassData::clear( void )
 {
     mxIfaces->Clear();
+    maRequiredTypes.clear();
 }
 
 SbClassFactory::SbClassFactory( void )
@@ -967,6 +1016,72 @@ SbModule* StarBASIC::FindModule( const String& rName )
     return NULL;
 }
 
+
+struct ClassModuleRunInitItem
+{
+    SbModule*       m_pModule;
+    bool            m_bProcessing;
+    bool            m_bRunInitDone;
+    //ModuleVector  m_vModulesDependingOnThisModule;
+
+    ClassModuleRunInitItem( void )
+        : m_pModule( NULL )
+        , m_bProcessing( false )
+        , m_bRunInitDone( false )
+    {}
+    ClassModuleRunInitItem( SbModule* pModule )
+        : m_pModule( pModule )
+        , m_bProcessing( false )
+        , m_bRunInitDone( false )
+    {}
+};
+
+typedef std::hash_map< ::rtl::OUString, ClassModuleRunInitItem,
+    ::rtl::OUStringHash, ::std::equal_to< ::rtl::OUString > > ModuleInitDependencyMap;
+
+static ModuleInitDependencyMap* GpMIDMap = NULL;
+
+void SbModule::implProcessModuleRunInit( ClassModuleRunInitItem& rItem )
+{
+    ModuleInitDependencyMap& rMIDMap = *GpMIDMap;
+
+    rItem.m_bProcessing = true;
+
+    //bool bAnyDependencies = true;
+    SbModule* pModule = rItem.m_pModule;
+    if( pModule->pClassData != NULL )
+    {
+        StringVector& rReqTypes = pModule->pClassData->maRequiredTypes;
+        if( rReqTypes.size() > 0 )
+        {
+            for( StringVector::iterator it = rReqTypes.begin() ; it != rReqTypes.end() ; ++it )
+            {
+                String& rStr = *it;
+
+                // Is required type a class module?
+                ModuleInitDependencyMap::iterator itFind = rMIDMap.find( rStr );
+                if( itFind != rMIDMap.end() )
+                {
+                    ClassModuleRunInitItem& rParentItem = itFind->second;
+                    if( rParentItem.m_bProcessing )
+                    {
+                        // TODO: raise error?
+                        DBG_ERROR( "Cyclic module dependency detected" );
+                        continue;
+                    }
+
+                    if( !rParentItem.m_bRunInitDone )
+                        implProcessModuleRunInit( rParentItem );
+                }
+            }
+        }
+    }
+
+    pModule->RunInit();
+    rItem.m_bRunInitDone = true;
+    rItem.m_bProcessing = false;
+}
+
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
@@ -980,10 +1095,33 @@ void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
     // compile modules first then RunInit ( otherwise there is
     // can be order dependency, e.g. classmodule A has a member
     // of of type classmodule B and classmodule B hasn't been compiled yet )
+
+    // Consider required types to init in right order. Class modules
+    // that are required by other modules have to be initialized first.
+    ModuleInitDependencyMap aMIDMap;
+    GpMIDMap = &aMIDMap;
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
     {
         SbModule* pModule = (SbModule*)pModules->Get( nMod );
-        pModule->RunInit();
+        String aModuleName = pModule->GetName();
+        if( pModule->isProxyModule() )
+            aMIDMap[aModuleName] = ClassModuleRunInitItem( pModule );
+    }
+
+    ModuleInitDependencyMap::iterator it;
+    for( it = aMIDMap.begin() ; it != aMIDMap.end(); ++it )
+    {
+        ClassModuleRunInitItem& rItem = it->second;
+        SbModule::implProcessModuleRunInit( rItem );
+    }
+    GpMIDMap = NULL;
+
+    // Call RunInit on standard modules
+    for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
+    {
+        SbModule* pModule = (SbModule*)pModules->Get( nMod );
+        if( !pModule->isProxyModule() )
+            pModule->RunInit();
     }
 
     // Check all objects if they are BASIC,
@@ -1948,7 +2086,7 @@ void BasicCollection::CollItem( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         pRes = xItemArray->Get32( nIndex );
     if( !pRes )
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
     else
         *(pPar_->Get(0)) = *pRes;
 }
@@ -1966,6 +2104,6 @@ void BasicCollection::CollRemove( SbxArray* pPar_ )
     if( nIndex >= 0 && nIndex < (INT32)xItemArray->Count32() )
         xItemArray->Remove32( nIndex );
     else
-        SetError( SbxERR_BAD_INDEX );
+        SetError( SbERR_BAD_ARGUMENT );
 }
 

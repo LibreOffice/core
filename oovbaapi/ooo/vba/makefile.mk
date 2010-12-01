@@ -61,9 +61,8 @@ IDLFILES=\
     XFontBase.idl\
     XDialogsBase.idl\
     XDialogBase.idl\
-    XPageSetupBase.idl  \
-    XVBAAppService.idl\
-    XVBADocService.idl\
+    XPageSetupBase.idl
+
 # ------------------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk

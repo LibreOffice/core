@@ -95,6 +95,7 @@
 #include <framework/titlehelper.hxx>
 #include <comphelper/numberedcollection.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <unotools/ucbhelper.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -2598,11 +2599,6 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 //  public impl.
 //________________________________________________________________________________________________________
 
-sal_Bool SfxBaseModel::IsDisposed() const
-{
-    return ( m_pData == NULL ) ;
-}
-
 sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
@@ -2612,6 +2608,14 @@ sal_Bool SfxBaseModel::IsInitialized() const
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
+}
+
+void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
+{
+    if ( impl_isDisposed() )
+        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
+    if ( i_mustBeInitialized && !IsInitialized() )
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
 sal_Bool SfxBaseModel::impl_isDisposed() const
@@ -2648,7 +2652,7 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
     sal_Bool bSaved = sal_False;
     if ( !bSaveTo && m_pData->m_pObjectShell && sURL.getLength()
       && sURL.compareToAscii( "private:stream", 14 ) != COMPARE_EQUAL
-      && SfxMedium::EqualURLs( getLocation(), sURL ) )
+      && ::utl::UCBContentHelper::EqualURLs( getLocation(), sURL ) )
     {
         // this is the same file URL as the current document location, try to use storeOwn if possible
 
@@ -3811,7 +3815,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewCon
 
     Sequence< ::rtl::OUString > aViewNames( nViewFactoryCount );
     for ( sal_Int32 nViewNo = 0; nViewNo < nViewFactoryCount; ++nViewNo )
-        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetViewName();
+        aViewNames[nViewNo] = rDocumentFactory.GetViewFactory( nViewNo ).GetAPIViewName();
     return aViewNames;
 }
 
@@ -3825,7 +3829,7 @@ css::uno::Reference< css::frame::XController2 > SAL_CALL SfxBaseModel::createDef
     SfxModelGuard aGuard( *this );
 
     const SfxObjectFactory& rDocumentFactory = GetObjectShell()->GetFactory();
-    const ::rtl::OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetViewName();
+    const ::rtl::OUString sDefaultViewName = rDocumentFactory.GetViewFactory( 0 ).GetAPIViewName();
 
     aGuard.clear();
 

@@ -51,6 +51,7 @@
 #include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/XExtendedInputSequenceChecker.hpp>
+#include <com/sun/star/uno/Sequence.hxx>
 
 #include <i18npool/lang.h>
 #include <vos/ref.hxx>
@@ -1002,6 +1003,8 @@ public:
     void                SetAutoCompleteText( const String& rStr, sal_Bool bUpdateTipWindow );
 
     EditSelection       TransliterateText( const EditSelection& rSelection, sal_Int32 nTransliterationMode );
+    short               ReplaceTextOnly( ContentNode* pNode, USHORT nCurrentStart, xub_StrLen nLen, const String& rText, const ::com::sun::star::uno::Sequence< sal_Int32 >& rOffsets );
+
 
     void                SetAsianCompressionMode( USHORT n );
     USHORT              GetAsianCompressionMode() const { return nAsianCompressionMode; }

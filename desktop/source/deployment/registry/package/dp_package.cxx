@@ -866,14 +866,10 @@ void BackendImpl::PackageImpl::processPackage_(
             try {
                 xPackage->registerPackage( startup, xSubAbortChannel, xCmdEnv );
             }
-            catch (RuntimeException &) {
-                throw;
-            }
-            catch (ucb::CommandAbortedException &) {
-                throw;
-            }
-            catch (Exception &) {
-                // CommandFailedException, DeploymentException:
+            catch (Exception &)
+            {
+               //We even try a rollback if the user cancelled the action (CommandAbortedException)
+                //in order to prevent invalid database entries.
                 Any exc( ::cppu::getCaughtException() );
                 // try to handle exception, notify:
                 bool approve = false, abort = false;
@@ -904,14 +900,8 @@ void BackendImpl::PackageImpl::processPackage_(
                             bundle[ pos ]->revokePackage(
                                 xSubAbortChannel, xCmdEnv );
                         }
-                        catch (RuntimeException &) {
-                            throw;
-                        }
-                        catch (ucb::CommandAbortedException &) {
-                            throw;
-                        }
-                        catch (Exception &) {
-                            // bundle rollback error:
+                        catch (Exception &)
+                        {
                             OSL_ENSURE( 0, ::rtl::OUStringToOString(
                                             ::comphelper::anyToString(
                                                 ::cppu::getCaughtException() ),
@@ -996,16 +986,20 @@ OUString BackendImpl::PackageImpl::getDescription()
     if (sRelativeURL.getLength())
     {
         OUString sURL = m_url_expanded + OUSTR("/") + sRelativeURL;
-        sDescription = getTextFromURL(
-            css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL);
 
+        try
+        {
+            sDescription = getTextFromURL( css::uno::Reference< css::ucb::XCommandEnvironment >(), sURL );
+        }
+        catch ( css::deployment::DeploymentException& )
+        {
+            OSL_ENSURE( 0, ::rtl::OUStringToOString( ::comphelper::anyToString( ::cppu::getCaughtException() ), RTL_TEXTENCODING_UTF8 ).getStr() );
+        }
     }
+
     if (sDescription.getLength())
         return sDescription;
-    else if(m_oldDescription.getLength())
-        return m_oldDescription;
-    else
-        return OUString();
+    return m_oldDescription;
 }
 
 //______________________________________________________________________________

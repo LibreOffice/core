@@ -90,8 +90,6 @@ getUpdateInformation( Reference<deployment::XUpdateInformationProvider > const &
         Sequence<Reference< xml::dom::XElement > >();
 }
 
-//Put in anonymous namespace
-
 void getOwnUpdateInfos(
         Reference<uno::XComponentContext> const & xContext,
         Reference<deployment::XUpdateInformationProvider > const &  updateInformation,
@@ -185,6 +183,56 @@ void getDefaultUpdateInfos(
     }
 }
 
+bool containsBundledOnly(Sequence<Reference<deployment::XPackage> > const & sameIdExtensions)
+{
+    OSL_ASSERT(sameIdExtensions.getLength() == 3);
+    if (!sameIdExtensions[0].is() && !sameIdExtensions[1].is() && sameIdExtensions[2].is())
+        return true;
+    else
+        return false;
+}
+/** Returns true if the list of extensions are bundled extensions and there are no
+    other extensions with the same identifier in the shared or user repository.
+    If extensionList is NULL, then it is checked if there are only bundled extensions.
+*/
+bool onlyBundledExtensions(
+    Reference<deployment::XExtensionManager> const & xExtMgr,
+    std::vector< Reference<deployment::XPackage > > const * extensionList)
+{
+    OSL_ASSERT(xExtMgr.is());
+    bool onlyBundled = true;
+    if (extensionList)
+    {
+        typedef std::vector<Reference<deployment::XPackage > >::const_iterator CIT;
+        for (CIT i = extensionList->begin(); i != extensionList->end(); i++)
+        {
+            Sequence<Reference<deployment::XPackage> > seqExt = xExtMgr->getExtensionsWithSameIdentifier(
+                dp_misc::getIdentifier(*i), (*i)->getName(), Reference<ucb::XCommandEnvironment>());
+
+            if (!containsBundledOnly(seqExt))
+            {
+                onlyBundled = false;
+                break;
+            }
+
+        }
+    }
+    else
+    {
+        const uno::Sequence< uno::Sequence< Reference<deployment::XPackage > > > seqAllExt =
+            xExtMgr->getAllExtensions(Reference<task::XAbortChannel>(), Reference<ucb::XCommandEnvironment>());
+
+        for (int pos = seqAllExt.getLength(); pos --; )
+        {
+            if (!containsBundledOnly(seqAllExt[pos]))
+            {
+                onlyBundled = false;
+                break;
+            }
+        }
+    }
+    return onlyBundled;
+}
 
 } // anon namespace
 
@@ -233,13 +281,14 @@ UPDATE_SOURCE isUpdateUserExtension(
                 retVal = UPDATE_SOURCE_ONLINE;
 
         }
-        else if (bundledVersion.getLength())
-        {
-            int index = determineHighestVersion(
-                OUString(), OUString(), bundledVersion, onlineVersion);
-            if (index == 3)
-                retVal = UPDATE_SOURCE_ONLINE;
-        }
+        //No update for bundled extensions, they are updated only by the setup
+        //else if (bundledVersion.getLength())
+        //{
+        //    int index = determineHighestVersion(
+        //        OUString(), OUString(), bundledVersion, onlineVersion);
+        //    if (index == 3)
+        //        retVal = UPDATE_SOURCE_ONLINE;
+        //}
     }
     else
     {
@@ -278,13 +327,14 @@ UPDATE_SOURCE isUpdateSharedExtension(
         else if (index == 3)
             retVal = UPDATE_SOURCE_ONLINE;
     }
-    else if (bundledVersion.getLength())
-    {
-        int index = determineHighestVersion(
-            OUString(), OUString(), bundledVersion, onlineVersion);
-        if (index == 3)
-            retVal = UPDATE_SOURCE_ONLINE;
-    }
+    //No update for bundled extensions, they are updated only by the setup
+    //else if (bundledVersion.getLength())
+    //{
+    //    int index = determineHighestVersion(
+    //        OUString(), OUString(), bundledVersion, onlineVersion);
+    //    if (index == 3)
+    //        retVal = UPDATE_SOURCE_ONLINE;
+    //}
     return retVal;
 }
 
@@ -332,7 +382,7 @@ UpdateInfoMap getOnlineUpdateInfos(
 {
     OSL_ASSERT(xExtMgr.is());
     UpdateInfoMap infoMap;
-    if (!xExtMgr.is())
+    if (!xExtMgr.is() || onlyBundledExtensions(xExtMgr, extensionList))
         return infoMap;
 
     if (!extensionList)

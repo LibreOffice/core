@@ -134,7 +134,7 @@ public:
     void                EndInsert();
     void                CheckItem( USHORT, BOOL );
     void                RemoveItem( USHORT );
-    void                InsertItem( USHORT, const String&, MenuItemBits,
+    void                InsertItem( USHORT, const String&, MenuItemBits, const rtl::OString& rHelpId,
                                 USHORT nPos = MENU_APPEND );
     void                InsertSeparator( USHORT nPos = MENU_APPEND );
     // @deprecated (end)

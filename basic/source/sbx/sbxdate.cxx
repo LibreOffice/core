@@ -86,11 +86,10 @@ double ImpGetDate( const SbxValues* p )
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-            if( !p->pString )
+            if( !p->pOUString )
                 nRes = 0;
             else
             {
-#ifndef DOS
                 LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
 
                 SvNumberFormatter* pFormatter;
@@ -126,7 +125,7 @@ double ImpGetDate( const SbxValues* p )
 
                 pFormatter->PutandConvertEntry( aStr, nCheckPos,    nType,
                     nIndex, LANGUAGE_GERMAN, eLangType );
-                BOOL bSuccess = pFormatter->IsNumberFormat( *p->pString, nIndex, nRes );
+                BOOL bSuccess = pFormatter->IsNumberFormat( *p->pOUString, nIndex, nRes );
                 if ( bSuccess )
                 {
                     short nType_ = pFormatter->GetType( nIndex );
@@ -141,9 +140,6 @@ double ImpGetDate( const SbxValues* p )
                 }
 
                 delete pFormatter;
-#else
-                SbxBase::SetError( SbxERR_CONVERSION ); nRes = 0;
-#endif
             }
             break;
         case SbxOBJECT:
@@ -246,10 +242,9 @@ start:
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
-#ifndef DOS
         {
-            if( !p->pString )
-                p->pString = new XubString;
+            if( !p->pOUString )
+                p->pOUString = new ::rtl::OUString;
             Color* pColor;
 
             LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
@@ -299,13 +294,12 @@ start:
                 nIndex,
                 LANGUAGE_GERMAN,
                 eLangType );
-            pFormatter->GetOutputString( n, nIndex, *p->pString, &pColor );
+            String aTmpString;
+            pFormatter->GetOutputString( n, nIndex, aTmpString, &pColor );
+            *p->pOUString = aTmpString;
             delete pFormatter;
-#endif
             break;
-#ifndef DOS
         }
-#endif
         case SbxOBJECT:
         {
             SbxValue* pVal = PTR_CAST(SbxValue,p->pObj);

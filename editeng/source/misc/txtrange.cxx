@@ -45,10 +45,6 @@
 |*
 *************************************************************************/
 
-#ifdef WIN
-#pragma optimize ( "", off )
-#endif
-
 TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const basegfx::B2DPolyPolygon* pLinePolyPolygon,
     USHORT nCacheSz, USHORT nLft, USHORT nRght, BOOL bSimpl, BOOL bInnr,
     BOOL bVert ) :
@@ -96,10 +92,6 @@ TextRanger::TextRanger( const basegfx::B2DPolyPolygon& rPolyPolygon, const baseg
     else
         mpLinePolyPolygon = NULL;
 }
-
-#ifdef WIN
-#pragma optimize ( "", on )
-#endif
 
 /*************************************************************************
 |*
@@ -204,7 +196,7 @@ public:
 
 SvxBoundArgs::SvxBoundArgs( TextRanger* pRanger, SvLongs *pLong,
     const Range& rRange )
-    : aBoolArr( 4, 4 ), pLongArr( pLong ), pTextRanger( pRanger ),
+    : pLongArr( pLong ), pTextRanger( pRanger ),
     nTop( rRange.Min() ), nBottom( rRange.Max() ),
     bInner( pRanger->IsInner() ), bMultiple( bInner || !pRanger->IsSimple() ),
     bConcat( FALSE ), bRotate( pRanger->IsVertical() )
@@ -299,7 +291,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
         bToggle = FALSE;
     USHORT nIdx = 0;
     USHORT nCount = pLongArr->Count();
-    DBG_ASSERT( nCount == 2 * aBoolArr.Count(), "NoteRange: Incompatible Sizes" );
+    DBG_ASSERT( nCount == 2 * aBoolArr.size(), "NoteRange: Incompatible Sizes" );
     while( nIdx < nCount && (*pLongArr)[ nIdx ] < nMin )
         ++nIdx;
     BOOL bOdd = nIdx % 2 ? TRUE : FALSE;
@@ -308,7 +300,7 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
     {   // Dann wird ein neues eingefuegt ...
         pLongArr->Insert( nMin, nIdx );
         pLongArr->Insert( nMax, nIdx + 1 );
-        aBoolArr.Insert( bToggle, nIdx / 2 );
+        aBoolArr.insert( aBoolArr.begin() + nIdx / 2, bToggle );
     }
     else
     {   // ein vorhandes Intervall erweitern ...
@@ -340,9 +332,9 @@ void SvxBoundArgs::NoteRange( BOOL bToggle )
             USHORT nStop = nMaxIdx + nDiff;
             for( USHORT i = nMaxIdx; i < nStop; ++i )
                 bToggle ^= aBoolArr[ i ];
-            aBoolArr.Remove( nMaxIdx, nDiff );
+            aBoolArr.erase( aBoolArr.begin() + nMaxIdx, aBoolArr.begin() + (nMaxIdx + nDiff) );
         }
-        DBG_ASSERT( nMaxIdx < aBoolArr.Count(), "NoteRange: Too much deleted" );
+        DBG_ASSERT( nMaxIdx < aBoolArr.size(), "NoteRange: Too much deleted" );
         aBoolArr[ nMaxIdx ] ^= bToggle;
     }
 }
@@ -487,13 +479,13 @@ void SvxBoundArgs::Calc( const PolyPolygon& rPoly )
 void SvxBoundArgs::Add()
 {
     USHORT nLongIdx = 1;
-    USHORT nCount = aBoolArr.Count();
+    size_t nCount = aBoolArr.size();
     if( nCount && ( !bInner || !pTextRanger->IsSimple() ) )
     {
-        BOOL bDelete = aBoolArr[ 0 ];
+        BOOL bDelete = aBoolArr.front();
         if( bInner )
             bDelete = !bDelete;
-        for( USHORT nBoolIdx = 1; nBoolIdx < nCount; ++nBoolIdx )
+        for( size_t nBoolIdx = 1; nBoolIdx < nCount; ++nBoolIdx )
         {
             if( bDelete )
             {
@@ -505,7 +497,7 @@ void SvxBoundArgs::Add()
                 next /= 2;
                 nBoolIdx = nBoolIdx - next;
                 nCount = nCount - next;
-                aBoolArr.Remove( nBoolIdx, next );
+                aBoolArr.erase( aBoolArr.begin() + nBoolIdx, aBoolArr.begin() + (nBoolIdx + next) );
                 if( nBoolIdx )
                     aBoolArr[ nBoolIdx - 1 ] = FALSE;
 #if OSL_DEBUG_LEVEL > 1
@@ -516,7 +508,7 @@ void SvxBoundArgs::Add()
             bDelete = nBoolIdx < nCount && aBoolArr[ nBoolIdx ];
             nLongIdx += 2;
             DBG_ASSERT( nLongIdx == 2*nBoolIdx+1, "BoundArgs: Array-Idx Confusion" );
-            DBG_ASSERT( aBoolArr.Count()*2 == pLongArr->Count(),
+            DBG_ASSERT( aBoolArr.size()*2 == pLongArr->Count(),
                         "BoundArgs: Array-Count: Confusion" );
         }
     }
@@ -546,7 +538,7 @@ void SvxBoundArgs::Concat( const PolyPolygon* pPoly )
     DBG_ASSERT( pPoly, "Nothing to do?" );
     SvLongs *pOld = pLongArr;
     pLongArr = new SvLongs( 2, 8 );
-    aBoolArr.Remove( 0, aBoolArr.Count() );
+    aBoolArr.clear();
     bInner = FALSE;
     Calc( *pPoly );
     USHORT nCount = pLongArr->Count();

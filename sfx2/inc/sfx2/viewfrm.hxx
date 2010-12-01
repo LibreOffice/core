@@ -253,6 +253,7 @@ public:
 private:
     SAL_DLLPRIVATE BOOL SwitchToViewShell_Impl( USHORT nNo, BOOL bIsIndex = FALSE );
     SAL_DLLPRIVATE void PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell );
+    SAL_DLLPRIVATE void SaveCurrentViewData_Impl( const USHORT i_nNewViewId );
 
     /** loads the given existing document into the given frame
 

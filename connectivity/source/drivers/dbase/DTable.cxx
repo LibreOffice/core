@@ -1432,16 +1432,8 @@ BOOL ODbaseTable::CreateMemoFile(const INetURLObject& aFile)
     char aBuffer[512];              // write buffer
     memset(aBuffer,0,sizeof(aBuffer));
 
-#ifdef WIN
-    m_pMemoStream->Seek(0L);
-    for (UINT16 i = 0; i < 512; i++)
-    {
-        (*m_pMemoStream) << BYTE(0);
-    }
-#else
     m_pMemoStream->SetFiller('\0');
     m_pMemoStream->SetStreamSize(512);
-#endif
 
     m_pMemoStream->Seek(0L);
     (*m_pMemoStream) << long(1);                  // Zeiger auf ersten freien Block
