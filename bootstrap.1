@@ -14,9 +14,7 @@ export EXEEXT
 # Build dmake
 
 if test "$BUILD_DMAKE" != "NO"; then
-
-    if test ! -x "$SOLARENV/$OUTPATH/bin/dmake$EXEEXT"; then
-
+    if test ! -x "$SRC_ROOT/dmake/dmake"; then
         cd "$SRC_ROOT/dmake" || exit
 
         # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
@@ -42,14 +40,9 @@ if test "$BUILD_DMAKE" != "NO"; then
         echo "dmake has been successfully built"
 
         cd ..
-
     else
-
-        echo ""
-        echo "dmake present in $SOLARENV/$OUTPATH/bin/dmake$EXEEXT"
-
+	echo "dmake/dmake already built"
     fi
-
 fi
 
 mkdir -p "$SOLARENV/$OUTPATH/bin"
