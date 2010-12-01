@@ -58,6 +58,8 @@ public:
 
 protected:
     void    ImplDraw( OutputDevice& rDev, ULONG nDrawFlags, const Point& rPos, const Size& rSize ) const;
+private:
+    using FixedImage::ImplDraw;
 };
 
 #endif  // _SV_IMGCTRL_HXX
