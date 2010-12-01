@@ -382,7 +382,7 @@ sub write_idt_header
     {
         $oneline = "File\tComponent_\tFileName\tFileSize\tVersion\tLanguage\tAttributes\tSequence\n";
         push(@{$idtref}, $oneline);
-        $oneline = "s72\ts72\tl255\ti4\tS72\tS20\tI2\ti2\n";
+        $oneline = "s72\ts72\tl255\ti4\tS72\tS20\tI2\ti4\n";
         push(@{$idtref}, $oneline);
         $oneline = "File\tFile\n";
         push(@{$idtref}, $oneline);
@@ -442,7 +442,7 @@ sub write_idt_header
     {
         $oneline = "DiskId\tLastSequence\tDiskPrompt\tCabinet\tVolumeLabel\tSource\n";
         push(@{$idtref}, $oneline);
-        $oneline = "i2\ti2\tL64\tS255\tS32\tS72\n";
+        $oneline = "i2\ti4\tL64\tS255\tS32\tS72\n";
         push(@{$idtref}, $oneline);
         $oneline = "Media\tDiskId\n";
         push(@{$idtref}, $oneline);
