@@ -163,6 +163,7 @@ gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS := $(gb_LinkTarget_NOEXCEPTIONFLAGS)
 gb_LinkTarget_LDFLAGS := \
     -MACHINE:IX86 \
     -NODEFAULTLIB \
+    -OPT:NOREF \
     -SUBSYSTEM:CONSOLE \
     $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
 
