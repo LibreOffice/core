@@ -39,7 +39,8 @@ class Xtxex(AbstractL10nTool):
     def merge_file(self, inputfilename, outputfilename, parsed_file_ref, lang, is_forced_lang, sdfdata): 
         # Special handling for en-US files
         if lang == "en-US":             
-            mod_outputfilename = outputfilename.replace("_en-US",'')
+            mod_outputfilename = outputfilename
+            # mod here if needed
             self.copy_file(inputfilename, mod_outputfilename)
             return      
         # merge usual lang

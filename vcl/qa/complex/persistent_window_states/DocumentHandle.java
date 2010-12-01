@@ -34,13 +34,9 @@ import com.sun.star.lang.XComponent;
 import com.sun.star.awt.XWindow;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.PropertyState;
-import com.sun.star.frame.XController;
-import com.sun.star.frame.FrameSearchFlag;
-import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.FrameSearchFlag;
-import com.sun.star.frame.XFramesSupplier;
 import helper.WindowListener;
 
 /**
@@ -59,7 +55,7 @@ public class DocumentHandle {
 
     /**
      * Constructor
-     * @param xComponentLoader A loader to load a document
+     * @param xCompLoader  A loader to load a document
      */
     public DocumentHandle(XComponentLoader xCompLoader) {
         this.xCompLoader = xCompLoader;
@@ -71,6 +67,7 @@ public class DocumentHandle {
      * @param docName The name of a document as file URL
      * @param hidden If true, the document is loaded hidden.
      * @return The size of the opened/created document.
+     * @throws Exception
      */
     public Rectangle loadDocument(String docName, boolean hidden)
                                                             throws Exception{
@@ -91,13 +88,13 @@ public class DocumentHandle {
             }
 
             // get the current active window
-            XFrame xCurFrame = (XFrame)UnoRuntime.queryInterface(XFrame.class, xCompLoader);
+            XFrame xCurFrame = UnoRuntime.queryInterface(XFrame.class, xCompLoader);
 
             // create a new frame
             XFrame xFrame = xCurFrame.findFrame("_blank", FrameSearchFlag.CREATE);
 
             // load document in this frame
-            XComponentLoader xFrameLoader = (XComponentLoader)UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
+            XComponentLoader xFrameLoader = UnoRuntime.queryInterface(XComponentLoader.class, xFrame);
             xComp = xFrameLoader.loadComponentFromURL(
                                                 docName, "_self", 0, szArgs);
             // wait for the document to load.

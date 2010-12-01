@@ -1693,7 +1693,7 @@ void PDFWriterImpl::PDFPage::appendWaveLine( sal_Int32 nWidth, sal_Int32 nY, sal
  *  class PDFWriterImpl
  */
 
-PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
+PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext, PDFWriter& i_rOuterFace )
         :
         m_pReferenceDevice( NULL ),
         m_aMapMode( MAP_POINT, Point(), Fraction( 1L, pointToPixel(1) ), Fraction( 1L, pointToPixel(1) ) ),
@@ -1719,7 +1719,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_aCreationMetaDateString( 64 ),
         m_pEncryptionBuffer( NULL ),
         m_nEncryptionBufferSize( 0 ),
-        m_bIsPDF_A1( false )
+        m_bIsPDF_A1( false ),
+        m_rOuterFace( i_rOuterFace )
 {
 #ifdef DO_TEST_PDF
     static bool bOnce = true;
@@ -2138,7 +2139,10 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 
         m_pReferenceDevice = pVDev;
 
-        pVDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_PDF1 );
+        if( m_aContext.DPIx == 0 || m_aContext.DPIy == 0 )
+            pVDev->SetReferenceDevice( VirtualDevice::REFDEV_MODE_PDF1 );
+        else
+            pVDev->SetReferenceDevice( m_aContext.DPIx, m_aContext.DPIy );
 
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
         pVDev->SetMapMode( MAP_MM );
@@ -8500,6 +8504,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
+    // force reemitting clip region
     clearClipRegion();
     updateGraphicsState();
 
@@ -8543,7 +8548,10 @@ SvStream* PDFWriterImpl::endRedirect()
     }
 
     pop();
-    // force reemitting colors
+    // force reemitting colors and clip region
+    clearClipRegion();
+    m_aCurrentPDFState.m_bClipRegion = m_aGraphicsStack.front().m_bClipRegion;
+    m_aCurrentPDFState.m_aClipRegion = m_aGraphicsStack.front().m_aClipRegion;
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 

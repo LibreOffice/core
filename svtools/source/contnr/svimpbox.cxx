@@ -45,6 +45,7 @@
 #include <svimpbox.hxx>
 #include <rtl/instance.hxx>
 #include <svtools/svtdata.hxx>
+#include <tools/wintypes.hxx>
 
 #ifndef _SVTOOLS_HRC
 #include <svtools/svtools.hrc>
@@ -83,7 +84,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvLBoxTreeList* pLBTree, WinBits n
     pTree = pLBTree;
     aSelEng.SetFunctionSet( (FunctionSet*)&aFctSet );
     aSelEng.ExpandSelectionOnMouseMove( FALSE );
-    SetWindowBits( nWinStyle );
+    SetStyle( nWinStyle );
     SetSelectionMode( SINGLE_SELECTION );
     SetDragDropMode( 0 );
 
@@ -253,10 +254,10 @@ void SvImpLBox::CalcCellFocusRect( SvLBoxEntry* pEntry, Rectangle& rRect )
     }
 }
 
-void SvImpLBox::SetWindowBits( WinBits nWinStyle )
+void SvImpLBox::SetStyle( WinBits i_nWinStyle )
 {
-    nWinBits = nWinStyle;
-    if((nWinStyle & WB_SIMPLEMODE) && aSelEng.GetSelectionMode()==MULTIPLE_SELECTION)
+    m_nStyle = i_nWinStyle;
+    if ( ( m_nStyle & WB_SIMPLEMODE) && ( aSelEng.GetSelectionMode() == MULTIPLE_SELECTION ) )
         aSelEng.AddAlways( TRUE );
 }
 
@@ -683,6 +684,8 @@ void SvImpLBox::SetCursor( SvLBoxEntry* pEntry, BOOL bForceNoSelect )
         }
     }
     nFlags &= (~F_DESEL_ALL);
+
+    pView->OnCurrentEntryChanged();
 }
 
 void SvImpLBox::ShowCursor( BOOL bShow )
@@ -952,7 +955,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
 
     // erst die Linien Zeichnen, dann clippen!
     pView->SetClipRegion();
-    if( nWinBits & ( WB_HASLINES | WB_HASLINESATROOT ) )
+    if( m_nStyle & ( WB_HASLINES | WB_HASLINESATROOT ) )
         DrawNet();
 
     pView->SetClipRegion( aClipRegion );
@@ -969,7 +972,7 @@ void SvImpLBox::Paint( const Rectangle& rRect )
     {
         // do not select if multiselection or explicit set
         BOOL bNotSelect = ( aSelEng.GetSelectionMode() == MULTIPLE_SELECTION )
-                || ( ( nWinBits & WB_NOINITIALSELECTION ) == WB_NOINITIALSELECTION );
+                || ( ( m_nStyle & WB_NOINITIALSELECTION ) == WB_NOINITIALSELECTION );
         SetCursor( pStartEntry, bNotSelect );
     }
 
@@ -994,7 +997,7 @@ void SvImpLBox::MakeVisible( SvLBoxEntry* pEntry, BOOL bMoveToTop )
     if( bInView && (!bMoveToTop || pStartEntry == pEntry) )
         return;  // ist schon sichtbar
 
-    if( pStartEntry || (nWinBits & WB_FORCE_MAKEVISIBLE) )
+    if( pStartEntry || (m_nStyle & WB_FORCE_MAKEVISIBLE) )
         nFlags &= (~F_FILLING);
     if( !bInView )
     {
@@ -1132,7 +1135,7 @@ void SvImpLBox::DrawNet()
             pView->DrawLine( aPos1, aPos2 );
         }
         // Sichtbar im Control ?
-        if( n>= nOffs && ((nWinBits & WB_HASLINESATROOT) || !pTree->IsAtRootDepth(pEntry)))
+        if( n>= nOffs && ((m_nStyle & WB_HASLINESATROOT) || !pTree->IsAtRootDepth(pEntry)))
         {
             // kann aPos1 recyclet werden ?
             if( !pView->IsExpanded(pEntry) )
@@ -1154,7 +1157,7 @@ void SvImpLBox::DrawNet()
         nY += nEntryHeight;
         pEntry = (SvLBoxEntry*)(pView->NextVisible( pEntry ));
     }
-    if( nWinBits & WB_HASLINESATROOT )
+    if( m_nStyle & WB_HASLINESATROOT )
     {
         pEntry = pView->First();
         aPos1.X() = pView->GetTabPos( pEntry, pFirstDynamicTab);
@@ -1248,7 +1251,8 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
 
     Size aOSize( pView->Control::GetOutputSizePixel() );
 
-    BOOL bVerSBar = ( pView->nWindowStyle & WB_VSCROLL ) != 0;
+    const WinBits nWindowStyle = pView->GetStyle();
+    BOOL bVerSBar = ( nWindowStyle & WB_VSCROLL ) != 0;
     BOOL bHorBar = FALSE;
     long nMaxRight = aOSize.Width(); //GetOutputSize().Width();
     Point aOrigin( pView->GetMapMode().GetOrigin() );
@@ -1256,7 +1260,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
     nMaxRight += aOrigin.X() - 1;
     long nVis = nMostRight - aOrigin.X();
     if( pTabBar || (
-        (pView->nWindowStyle & WB_HSCROLL) &&
+        (nWindowStyle & WB_HSCROLL) &&
         (nVis < nMostRight || nMaxRight < nMostRight) ))
         bHorBar = TRUE;
 
@@ -1274,7 +1278,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
         nMaxRight -= nVerSBarWidth;
         if( !bHorBar )
         {
-            if( (pView->nWindowStyle & WB_HSCROLL) &&
+            if( (nWindowStyle & WB_HSCROLL) &&
                 (nVis < nMostRight || nMaxRight < nMostRight) )
                 bHorBar = TRUE;
         }
@@ -1439,7 +1443,7 @@ void SvImpLBox::FillView()
 
 void SvImpLBox::ShowVerSBar()
 {
-    BOOL bVerBar = ( pView->nWindowStyle & WB_VSCROLL ) != 0;
+    BOOL bVerBar = ( pView->GetStyle() & WB_VSCROLL ) != 0;
     ULONG nVis = 0;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
@@ -1681,7 +1685,7 @@ void SvImpLBox::EntrySelected( SvLBoxEntry* pEntry, BOOL bSelect )
         return;
 
     /*
-    if( (nWinBits & WB_HIDESELECTION) && pEntry && !pView->HasFocus() )
+    if( (m_nStyle & WB_HIDESELECTION) && pEntry && !pView->HasFocus() )
     {
         SvViewData* pViewData = pView->GetViewData( pEntry );
         pViewData->SetCursored( bSelect );
@@ -1943,7 +1947,7 @@ void SvImpLBox::EntryInserted( SvLBoxEntry* pEntry )
         // die Linien invalidieren
         /*
         if( (bEntryVisible || bPrevEntryVisible) &&
-            (nWinBits & ( WB_HASLINES | WB_HASLINESATROOT )) )
+            (m_nStyle & ( WB_HASLINES | WB_HASLINESATROOT )) )
         {
             SvLBoxTab* pTab = pView->GetFirstDynamicTab();
             if( pTab )
@@ -2172,14 +2176,6 @@ void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
                     SelAllDestrAnch( FALSE, TRUE ); // DeselectAll();
                 SetCursor( pEntry );
 
-                DBG_ERROR( "Please report what you did to get this assertion to FS!" );
-                    // The entry which has been double-clicked changed - and we select it, again.
-                    // I have situations where this behaviour does not make any sense at all - even more, it
-                    // leads to hacks to revert it's results.
-                    // So I'm not sure if this behaviour here is nonsense (which I believe at the moment),
-                    // or if there are really scenarious where it dones make sense ....
-                    // 07.12.2001 - 95727 - fs@openoffice.org
-
                 return;
             }
             if( pEntry->HasChilds() || pEntry->HasChildsOnDemand() )
@@ -2273,6 +2269,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
     SvLBoxEntry* pNewCursor;
 
+    const WinBits nWindowStyle = pView->GetStyle();
     switch( aCode )
     {
         case KEY_UP:
@@ -2356,7 +2353,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
                 }
             }
-            else if( pView->nWindowStyle & WB_HSCROLL )
+            else if( nWindowStyle & WB_HSCROLL )
             {
                 long    nThumb = aHorSBar.GetThumbPos();
                 nThumb += aHorSBar.GetLineSize();
@@ -2387,7 +2384,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                     CallEventListeners( VCLEVENT_LISTBOX_SELECT, pCursor );
                 }
             }
-            else if ( pView->nWindowStyle & WB_HSCROLL )
+            else if ( nWindowStyle & WB_HSCROLL )
             {
                 long    nThumb = aHorSBar.GetThumbPos();
                 nThumb -= aHorSBar.GetLineSize();
@@ -2489,13 +2486,17 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
                 else if ( !bShift /*&& !bMod1*/ )
                 {
                     if ( aSelEng.IsAddMode() )
+                    {
                         // toggle selection
                         pView->Select( pCursor, !pView->IsSelected( pCursor ) );
-                    else
+                    }
+                    else if ( !pView->IsSelected( pCursor ) )
                     {
                         SelAllDestrAnch( FALSE );
                         pView->Select( pCursor, TRUE );
                     }
+                    else
+                        bKeyUsed = FALSE;
                 }
                 else
                     bKeyUsed = FALSE;
@@ -2528,7 +2529,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
 
         case KEY_F8:
             if( bShift && pView->GetSelectionMode()==MULTIPLE_SELECTION &&
-                !(nWinBits & WB_SIMPLEMODE))
+                !(m_nStyle & WB_SIMPLEMODE))
             {
                 if( aSelEng.IsAlwaysAdding() )
                     aSelEng.AddAlways( FALSE );
@@ -2576,8 +2577,8 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
         case KEY_A:
             if( bMod1 )
                 SelAllDestrAnch( TRUE );
-//          else
-//              bKeyUsed = FALSE;   #105907# assume user wants to use quicksearch with key "a", so key is handled!
+            else
+                bKeyUsed = FALSE;
             break;
 
         case KEY_SUBTRACT:
@@ -2688,10 +2689,15 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
             break;
 
         default:
-            if( bMod1 || rKeyCode.GetGroup() == KEYGROUP_FKEYS )
-                // #105907# CTRL or Function key is pressed, assume user don't want to use quicksearch...
-                // if there are groups of keys which should not be handled, they can be added here
-                bKeyUsed = FALSE;
+            // is there any reason why we should eat the events here? The only place where this is called
+            // is from SvTreeListBox::KeyInput. If we set bKeyUsed to TRUE here, then the key input
+            // is just silenced. However, we want SvLBox::KeyInput to get a chance, to do the QuickSelection
+            // handling.
+            // (The old code here which intentionally set bKeyUsed to TRUE said this was because of "quick search"
+            // handling, but actually there was no quick search handling anymore. We just re-implemented it.)
+            // #i31275# / 2009-06-16 / frank.schoenheit@sun.com
+            bKeyUsed = FALSE;
+            break;
     }
     return bKeyUsed;
 }
@@ -2706,7 +2712,7 @@ void __EXPORT SvImpLBox::GetFocus()
 //      if( bSimpleTravel && !pView->IsSelected(pCursor) )
 //          pView->Select( pCursor, TRUE );
     }
-    if( nWinBits & WB_HIDESELECTION )
+    if( m_nStyle & WB_HIDESELECTION )
     {
         SvLBoxEntry* pEntry = pView->FirstSelected();
         while( pEntry )
@@ -2739,7 +2745,7 @@ void __EXPORT SvImpLBox::LoseFocus()
         pView->SetEntryFocus( pCursor,FALSE );
     ShowCursor( FALSE );
 
-    if( nWinBits & WB_HIDESELECTION )
+    if( m_nStyle & WB_HIDESELECTION )
     {
         SvLBoxEntry* pEntry = pView->FirstSelected();
         while( pEntry )
@@ -3037,7 +3043,7 @@ void SvImpLBox::SetSelectionMode( SelectionMode eSelMode  )
         bSimpleTravel = TRUE;
     else
         bSimpleTravel = FALSE;
-    if( (nWinBits & WB_SIMPLEMODE) && (eSelMode == MULTIPLE_SELECTION) )
+    if( (m_nStyle & WB_SIMPLEMODE) && (eSelMode == MULTIPLE_SELECTION) )
         aSelEng.AddAlways( TRUE );
 }
 

@@ -39,6 +39,8 @@
 #include "vcl/cmdevt.hxx"
 #include "rtl/ustrbuf.hxx"
 
+#include "vcl/impimagetree.hxx"
+
 #include "premac.h"
 #import "Carbon/Carbon.h"
 #import "apple_remote/RemoteControl.h"
@@ -358,6 +360,8 @@
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
+    YIELD_GUARD;
+    
     SalData* pSalData = GetSalData();
     #if 1 // currently do some really bad hack
     if( ! pSalData->maFrames.empty() )
@@ -416,11 +420,14 @@
     #else // the clean version follows
     return pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL ) ? NSTerminateCancel : NSTerminateNow;
     #endif
+    ImplImageTreeSingletonRef()->shutDown();
     return NSTerminateNow;
 }
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
 {
+    YIELD_GUARD;
+    
     const SalData* pSalData = GetSalData();
 	if( !pSalData->maFrames.empty() )
 		pSalData->maFrames.front()->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
@@ -428,6 +435,8 @@
 
 -(void)screenParametersChanged: (NSNotification*) pNotification
 {
+    YIELD_GUARD;
+    
     SalData* pSalData = GetSalData();
     std::list< AquaSalFrame* >::iterator it;
     for( it = pSalData->maFrames.begin(); it != pSalData->maFrames.end(); ++it )

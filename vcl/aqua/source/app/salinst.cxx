@@ -450,7 +450,6 @@ SalInstance* CreateSalInstance()
     ImplGetSVData()->maNWFData.mbProgressNeedsErase = true;
     ImplGetSVData()->maNWFData.mbCheckBoxNeedsErase = true;
     ImplGetSVData()->maNWFData.mnStatusBarLowerRightOffset = 10;
-    ImplGetSVData()->maGDIData.mbPrinterPullModel = true;
     ImplGetSVData()->maGDIData.mbNoXORClipping = true;
     ImplGetSVData()->maWinData.mbNoSaveBackground = true;
 
@@ -563,6 +562,22 @@ void AquaSalInstance::AcquireYieldMutex( ULONG nCount )
         pYieldMutex->acquire();
         nCount--;
     }
+}
+
+// -----------------------------------------------------------------------
+
+bool AquaSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    SalYieldMutex* pYieldMutex = mpSalYieldMutex;
+    if ( pYieldMutex->GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
