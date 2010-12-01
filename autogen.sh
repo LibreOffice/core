@@ -9,7 +9,7 @@ if test "z$1" = "z--clean"; then
     exit 1;
 fi
 
-function requote
+requote()
 {
         local q=\'
         set -- "${@//\'/$q\'$q}"        # quote inner instances of '
