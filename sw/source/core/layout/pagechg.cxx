@@ -201,8 +201,8 @@ void SwBodyFrm::Paint( const SwRect& rRect, const SwPrtOptions* ) const
     SwRect aRect = Frm();
     pOut->DrawRect(aRect.SVRect());
     pOut->Pop();
-    SwLayoutFrm::Paint(rRect);
 #endif
+    SwLayoutFrm::Paint(rRect);
 }
 
 /*************************************************************************
