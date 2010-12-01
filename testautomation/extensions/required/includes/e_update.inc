@@ -44,7 +44,7 @@ testcase tExtensionManagerResources()
     dim iFilterItems as integer 
     
     const MAX_ITERATIONS = 50
-    const FILTER_ITEMS = 9    ' This is the number of filters/extension types we know
+    const FILTER_ITEMS = 10    ' This is the number of filters/extension types we know
 
     printlog( "Ressource test for the Extension Manager UI" )
     ToolsPackageManager
@@ -76,6 +76,16 @@ testcase tExtensionManagerResources()
                 warnlog( "The file type filter list is incorrect" )
                 printlog( "Expected: " & FILTER_ITEMS )
                 printlog( "Found...: " & iFilterItems )
+                '0: All files (*.*)
+				'1: Configuration Data
+				'2: Configuration Schema
+				'3: Extension
+				'4: UNO Components
+				'5: UNO Dynamic Library Component
+				'6: UNO Java Component
+				'7: UNO Java Type Library
+				'8: UNO Python Component
+				'9: UNO RDB Type Library
             else
                 printlog( "The number of filters in Add Extensions Dialog is ok" )
             endif
