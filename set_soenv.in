@@ -1956,6 +1956,8 @@ ToFile( "WITH_EXTRA_SAMPLE",       "@WITH_EXTRA_SAMPLE@",      "e" );
 ToFile( "WITH_EXTRA_FONT",       "@WITH_EXTRA_FONT@",      "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
+ToFile( "DB_LIB",            "@DB_LIB@",           "e" );
+ToFile( "DB_CPPLIB",         "@DB_CPPLIB@",        "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
 ToFile( "ENABLE_MYSQLC",     "@ENABLE_MYSQLC@",    "e" );
 ToFile( "SYSTEM_MYSQL",      "@SYSTEM_MYSQL@",     "e" );
