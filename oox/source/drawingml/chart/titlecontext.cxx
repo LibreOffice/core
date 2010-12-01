@@ -68,7 +68,7 @@ ContextHandlerRef TextContext::onCreateContext( sal_Int32 nElement, const Attrib
             }
         break;
     }
-    return false;
+    return 0;
 }
 
 void TextContext::onEndElement( const OUString& rChars )

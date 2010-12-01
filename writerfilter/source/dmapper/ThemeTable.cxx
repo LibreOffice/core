@@ -61,6 +61,11 @@ ThemeTable::~ThemeTable()
 
 void ThemeTable::lcl_attribute(Id Name, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("ThemeTable.attribute");
+    dmapper_logger->attribute("name", (*QNameToString::Instance())(Name));
+    dmapper_logger->attribute("value", val.toString());
+#endif
     // int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
     // printf ( "ThemeTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
@@ -79,10 +84,18 @@ void ThemeTable::lcl_attribute(Id Name, Value & val)
 #endif
         }
     }
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("ThemeTable.attribute");
+#endif
 }
 
 void ThemeTable::lcl_sprm(Sprm& rSprm)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("ThemeTable.sprm");
+    dmapper_logger->chars(rSprm.toString());
+#endif
+
     sal_uInt32 nSprmId = rSprm.getId();
     (void)nSprmId;
 
@@ -136,11 +149,22 @@ void ThemeTable::lcl_sprm(Sprm& rSprm)
 #endif
         }
     }
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("ThemeTable.sprm");
+#endif
 }
 
 void ThemeTable::lcl_entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->startElement("ThemeTable.entry");
+#endif
+
     ref->resolve(*this);
+
+#ifdef DEBUG_DOMAINMAPPER
+    dmapper_logger->endElement("ThemeTable.entry");
+#endif
 }
 
 const ::rtl::OUString ThemeTable::getFontNameForTheme(const Id id) const

@@ -156,7 +156,7 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
     // First get the parent properties
     StyleSheetEntryPtr pEntry = m_pStyleSheet->FindParentStyleSheet( sBaseStyleIdentifier );
 
-    if ( pEntry.get( ))
+    if ( pEntry.get( ) )
     {
         if (pStack.get() == NULL)
             pStack.reset(new StyleSheetEntryDeque());
@@ -167,11 +167,11 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask, StyleSheetE
         {
             pStack->push_back(pEntry);
 
-            TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
+        TableStyleSheetEntry* pParent = static_cast<TableStyleSheetEntry *>( pEntry.get( ) );
             pProps->insert( pParent->GetProperties( nMask ), pStack );
 
             pStack->pop_back();
-        }
+    }
     }
 
     // And finally get the mask ones
@@ -198,7 +198,7 @@ void lcl_mergeProps( PropertyMapPtr pToFill,  PropertyMapPtr pToAdd, TblStyleTyp
         ( nStyleId == TBL_STYLE_FIRSTCOL )
     };
 
-    for ( int i = 0 ; i < 7; i++ )
+    for ( unsigned i = 0 ; i != sizeof(pPropsToCheck) / sizeof(PropertyIds); i++ )
     {
         PropertyIds nId = pPropsToCheck[i];
         PropertyDefinition aProp( nId, false );
@@ -658,7 +658,7 @@ void StyleSheetTable::lcl_sprm(Sprm & rSprm)
                 }
             }
             break;
-    }
+}
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 

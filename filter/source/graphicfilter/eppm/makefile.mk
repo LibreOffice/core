@@ -42,17 +42,11 @@ DEPTARGET=veppm
 CDEFS+= -DEDITDEBUG
 .ENDIF
 
-SRS1NAME=$(TARGET)
-SRC1FILES=	dlgeppm.src \
-            eppmstr.src
 .IF "$(L10N_framework)"==""
-SLOFILES =	$(SLO)$/eppm.obj \
-            $(SLO)$/dlgeppm.obj
+SLOFILES =	$(SLO)$/eppm.obj
 .ENDIF
 # ==========================================================================
 
-RESLIB1NAME=$(TARGET2)
-RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 .IF "$(L10N_framework)"==""
 SHL1TARGET= 	epp$(DLLPOSTFIX)
 SHL1IMPLIB= 	eppm

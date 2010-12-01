@@ -180,7 +180,27 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                 pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter->second));
                 break;
             default:
-                lcl_AnyToTag(pTag, aMapIter->second);
+            {
+                try {
+                    sal_Int32 aInt = 0;
+                    aMapIter->second >>= aInt;
+                    pTag->addAttr("value", aInt);
+
+                    sal_uInt32 auInt = 0;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("unsignedValue", auInt);
+
+                    float aFloat = 0.0;
+                    aMapIter->second >>= aFloat;
+                    pTag->addAttr("floatValue", aFloat);
+
+                    ::rtl::OUString aStr;
+                    aMapIter->second >>= auInt;
+                    pTag->addAttr("stringValue", aStr);
+                }
+                catch (...) {
+                }
+            }
                 break;
         }
 

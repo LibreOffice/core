@@ -397,7 +397,7 @@ void TagLogger::dump(const char * name)
 }
 
 PropertySetToTagHandler::PropertySetToTagHandler(IdToString::Pointer_t pIdToString)
-: mpTag(new XMLTag("propertyset")), mpIdToString(pIdToString)
+  : mpTag(new XMLTag("propertyset")), mpIdToString(pIdToString)
 {
 }
 

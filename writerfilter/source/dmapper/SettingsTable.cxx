@@ -30,6 +30,7 @@
 
 #include <stdio.h>
 #include <rtl/ustring.hxx>
+#include <resourcemodel/ResourceModelHelper.hxx>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <SettingsTable.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>

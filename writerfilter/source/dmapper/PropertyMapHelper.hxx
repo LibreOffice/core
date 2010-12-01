@@ -46,4 +46,3 @@ typedef uno::Sequence<PropertyValueSeq_t> PropertyValueSeqSeq_t;
 XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t & rPropValSeqSeq);
 }
 }
-

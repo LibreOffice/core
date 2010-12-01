@@ -30,6 +30,7 @@
 #endif
 #include <WriterFilter.hxx>
 #include <WriterFilterDetection.hxx>
+#include <RtfFilter.hxx>
 
 using namespace ::rtl;
 using namespace ::cppu;
@@ -56,17 +57,13 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     { WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
     { WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0} ,
+    { RtfFilter_createInstance, RtfFilter_getImplementationName, RtfFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0 },
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 
 void SAL_CALL component_getImplementationEnvironment(const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-
-sal_Bool SAL_CALL component_writeInfo( ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
-{
-    return ::cppu::component_writeInfoHelper( xMgr, xRegistry, s_component_entries );
 }
 
 void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )

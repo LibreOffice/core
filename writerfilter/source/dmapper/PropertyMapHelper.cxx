@@ -127,4 +127,3 @@ XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t rPropValSeq
 
 }
 }
-

@@ -85,7 +85,12 @@ OOXMLFastHelper<T>::createAndSetParent
     pTmp->setToken(nToken);
     pTmp->setId(nId);
 
-#ifdef DEBUG_HELPER
+#ifdef DEBUG_CREATE
+    debug_logger->startElement("createAndSetParent");
+    debug_logger->attribute("context", pHandler->getType());
+    debug_logger->attribute("token", fastTokenToId(pTmp->getToken()));
+    debug_logger->attribute("id", (*QNameToString::Instance())(nId));
+
     debug_logger->startElement("created");
     debug_logger->addTag(pTmp->toTag());
     debug_logger->endElement("created");

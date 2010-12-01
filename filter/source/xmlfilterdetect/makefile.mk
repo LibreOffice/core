@@ -58,3 +58,11 @@ SHL1STDLIBS=	$(UCBHELPERLIB)	 \
                 $(SALLIB)
 
 .INCLUDE :			target.mk
+
+ALLTAR : $(MISC)/xmlfd.component
+
+$(MISC)/xmlfd.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xmlfd.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xmlfd.component

@@ -8,7 +8,7 @@
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/WrapTextMode.hpp>
 
-#include "dmapperloggers.hxx"
+#include "dmapperLoggers.hxx"
 
 #include <iostream>
 using namespace std;
