@@ -43,15 +43,14 @@ gb_Deliver_DELIVERABLES :=
 
 endef
 
-# FIXME: this does not really work for real multi repository builds, but the
-# deliver.log format is broken in that case anyway
 define gb_Deliver_add_deliverable
 gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODIR)/%,%,$(1))
+.LOW_RESOLUTION_TIME : $(1)
 
 endef
 
 define gb_Deliver_deliver
-$(call gb_Deliver__deliverprefix,$(2)) $(gb_Deliver_GNUCOPY) -f $(1) $(2)
+$(call gb_Deliver__deliverprefix,$(2)) $(gb_Deliver_GNUCOPY) -f $(1) $(2) && touch -r $(1) $(2)
 endef
 
 # We are currently only creating a deliver.log, if only one module gets build.
@@ -70,6 +69,8 @@ deliverlog : COMMAND := true
 endif
 endef
 
+# FIXME: this does not really work for real multi repository builds, but the
+# deliver.log format is broken in that case anyway
 .PHONY : deliverlog
 deliverlog:
     $(eval $(call gb_Deliver_setdeliverlogcommand))
