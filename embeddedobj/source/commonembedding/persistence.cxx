@@ -978,7 +978,21 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
     if ( m_bWaitSaveCompleted )
     {
         if ( nEntryConnectionMode == embed::EntryInitModes::NO_INIT )
-            saveCompleted( ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) ) );
+        {
+            // saveCompleted is expected, handle it accordingly
+            if ( m_xNewParentStorage == xStorage && m_aNewEntryName.equals( sEntName ) )
+            {
+                saveCompleted( sal_True );
+                return;
+            }
+
+            // if a completely different entry is provided, switch first back to the old persistence in saveCompleted
+            // and then switch to the target persistence
+            sal_Bool bSwitchFurther = ( m_xParentStorage != xStorage || !m_aEntryName.equals( sEntName ) );
+            saveCompleted( sal_False );
+            if ( !bSwitchFurther )
+                return;
+        }
         else
             throw embed::WrongStateException(
                         ::rtl::OUString::createFromAscii( "The object waits for saveCompleted() call!\n" ),
