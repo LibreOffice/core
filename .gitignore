@@ -19,6 +19,7 @@
 # autoconf generated stuff
 /aclocal.m4
 /autom4te.cache
+/autogen.lastrun
 /bootstrap
 /ChangeLog
 /config.log
@@ -30,6 +31,7 @@
 /set_soenv
 /visibility.cxx
 /post_download
+/bin/repo-list
 
 # misc
 /set_soenv.last

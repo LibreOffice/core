@@ -26,14 +26,24 @@
 #
 #*************************************************************************
 
+# environment setup yet?
+if [ -z "$TARFILE_LOCATION" ]; then
+    . ./*[Ee]nv.[Ss]et.sh
+fi
+
 # we want to clone if we are in the bootstrap git repo and clone does not exist yet
 # we need to test for a .git in order not to clone after rsync if we are called in
 # the inner autogen of the buid-repo based build
 if [ ! -d clone -a -d .git ] ; then
-    ./g clone
-fi
-if [ -z "$TARFILE_LOCATION" ]; then
-    . ./*[Ee]nv.[Ss]et.sh
+    if [ -z "$GIT_LINK_SRC" ]; then
+        ./g clone
+    else
+        # space-saving clone from another local workdir
+        mkdir clone
+        for i in $GIT_REPO_NAMES ; do
+            bin/git-new-workdir $GIT_LINK_SRC/$i clone/$i
+        done
+    fi
 fi
 
 if [ ! -d "$TARFILE_LOCATION" ]; then

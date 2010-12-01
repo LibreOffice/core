@@ -126,9 +126,7 @@ done
 # do it!
 DIRS="bootstrap `(cd $CLONEDIR ; ls)`"
 if [ "$COMMAND" = "clone" ] ; then
-    DIRS="artwork base calc components extensions extras filters
-          help impress libs-core libs-extern libs-extern-sys libs-gui
-          postprocess sdk testing ure writer"
+    DIRS=`cat bin/repo-list`
     # update hooks in the main repo too
     ( cd "$RAWBUILDDIR" ; update_hooks "../../git-hooks" )
 fi

@@ -582,6 +582,14 @@ AC_ARG_WITH(external-tar,
     TARFILE_LOCATION=$withval ,
 )
 
+AC_ARG_WITH(linked-git,
+    AS_HELP_STRING([--with-linked-git=<OTHER_CLONE_DIR>],
+        [Specify another checkout's clonedir to re-use. This makes use of 
+		 git-new-workdir, and saves a lot of diskspace when having multiple
+		 trees side-by-side.]),
+    GIT_LINK_SRC=$withval ,
+)
+
 AC_ARG_WITH(openldap,
     AS_HELP_STRING([--with-openldap],
         [Enables the use of the OpenLDAP LDAP SDK instead of the Netscape/Mozilla one.]),
@@ -1887,6 +1895,11 @@ if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
    DO_FETCH_TARBALLS="yes"
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
+
+dnl ===================================================================
+dnl git-new-workdir
+dnl ===================================================================
+AC_SUBST(GIT_LINK_SRC)
 
 dnl ===================================================================
 dnl Disable legacy binary file formats filters
@@ -7857,14 +7870,22 @@ location (/usr/share/java), specify its pathname via
 fi
 AC_SUBST(OOO_JUNIT_JAR)
 
+dnl ===================================================================
+dnl Dealing with l10n options
+dnl ===================================================================
+GIT_REPO_NAMES="artwork base calc components extensions extras filters
+                help impress libs-core libs-extern libs-extern-sys libs-gui
+                postprocess sdk testing ure writer"
 AC_MSG_CHECKING([which languages to be built])
 WITH_LANG="$with_lang"
 if test -z "$WITH_LANG"; then
    AC_MSG_RESULT([en-US])
 else
    AC_MSG_RESULT([$WITH_LANG])
+   GIT_REPO_NAMES="$GIT_REPO_NAMES l10n"
 fi
 AC_SUBST(WITH_LANG)
+AC_SUBST(GIT_REPO_NAMES)
 
 AC_MSG_CHECKING([which languages have poor help localizations])
 WITH_POOR_HELP_LOCALIZATIONS="$with_poor_help_localizations"
@@ -8085,7 +8106,7 @@ else
    echo > set_soenv.last
 fi
 
-AC_OUTPUT([set_soenv Makefile])
+AC_OUTPUT([set_soenv Makefile bin/repo-list])
 
 # touch the config timestamp file set_soenv.stamp
 if test ! -f set_soenv.stamp; then
