@@ -275,8 +275,8 @@ public:
 
 class ScRowStyles : public ScColumnRowStylesBase
 {
-    typedef std::vector<sal_Int32>       ScMysalInt32Vec;
-    ::boost::ptr_vector<ScMysalInt32Vec> aTables;
+    typedef ::mdds::flat_segment_tree<sal_Int32, sal_Int32> StylesType;
+    ::boost::ptr_vector<StylesType> aTables;
 
 public:
     ScRowStyles();
