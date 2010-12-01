@@ -11,23 +11,27 @@ fi
 
 requote()
 {
-        local q=\'
-        set -- "${@//\'/$q\'$q}"        # quote inner instances of '
-        set -- "${@/#/$q}"              # add ' to start of each param
-        set -- "${@/%/$q}"              # add ' to end of each param
-        echo "$*"                       # ' in a comment to stop confusing vim
+    out=""
+    for param in "$@" ; do
+    p=`echo "$param" | sed "s/'/'\\\\\\''/g"`
+    if test -z "$out" ; then
+        out="'$p'"
+    else
+        out="$out '$p'"
+    fi
+    done
+    echo "$out"
 }
 
 distro()
 {
     name=''
-    while test "$#" -gt 0 ; do
-    case "$1" in
-        --with-distro=*) name=${1#--with-distro=} ;;
+    for param in "$@" ; do
+    case "$param" in
+        --with-distro=*) name=${param#--with-distro=} ;;
     esac
-    shift
     done
-    echo $name
+    echo "$name"
 }
 
 old_args=""
