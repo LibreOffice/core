@@ -61,7 +61,7 @@ for i in wget /usr/bin/wget /usr/local/bin/wget /usr/sfw/bin/wget /opt/sfw/bin/w
     if [ $ret -eq 0 ]; then
         wget=$i
         echo found wget: $wget
-        break 2
+        break
     fi
 done
 
@@ -74,7 +74,7 @@ if [ -z "$wget" ]; then
         if [ -x $i ]; then
             curl=$i
             echo found curl: $curl
-            break 2
+            break
         fi
     done
 fi
@@ -94,7 +94,7 @@ for i in md5 md5sum /usr/local/bin/md5sum gmd5sum /usr/sfw/bin/md5sum /opt/sfw/b
     if [ $ret -eq 0 ]; then
         md5sum=$i
         echo found md5sum: $md5sum
-        break 2
+        break
     fi
 done
 
