@@ -2106,12 +2106,18 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
 
                 if ( -1 != nDestPageNum )
                 {
-                    // Destination Export
-                    const sal_Int32 nDestId =
-                        pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
+                    if ( aIBeg->nLinkId != -1 )
+                    {
+                        // Destination Export
+                        const sal_Int32 nDestId = pPDFExtOutDevData->CreateDest( rDestRect.SVRect(), nDestPageNum );
 
-                    // Connect Link and Destination:
-                    pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
+                        // Connect Link and Destination:
+                        pPDFExtOutDevData->SetLinkDest( aIBeg->nLinkId, nDestId );
+                    }
+                    else
+                    {
+                        pPDFExtOutDevData->DescribeRegisteredDest( aIBeg->nDestId, rDestRect.SVRect(), nDestPageNum );
+                    }
                 }
             }
             else
