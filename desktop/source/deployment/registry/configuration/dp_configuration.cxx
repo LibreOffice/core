@@ -139,7 +139,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
 
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
     ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
-    void deleteDataFromDb(OUString const & url);
+    OUString deleteDataFromDb(OUString const & url);
     ::std::list<OUString> getAllIniEntries();
 
 public:
@@ -240,10 +240,18 @@ void BackendImpl::addDataToDb(
     return data;
 }
 
-void BackendImpl::deleteDataFromDb(OUString const & url)
+OUString BackendImpl::deleteDataFromDb(OUString const & url)
 {
-    if (m_backendDb.get())
+    OUString url2(url);
+    if (m_backendDb.get()) {
+        boost::optional< ConfigurationBackendDb::Data > data(
+            m_backendDb->getEntry(url));
+        if (data) {
+            url2 = expandUnoRcTerm(data->iniEntry);
+        }
         m_backendDb->removeEntry(url);
+    }
+    return url2;
 }
 
 ::std::list<OUString> BackendImpl::getAllIniEntries()
@@ -717,11 +725,11 @@ void BackendImpl::PackageImpl::processPackage_(
                 //rebuilding the directory structure.
                 rtl::OUString url2(
                     rtl::OStringToOUString(i->first, RTL_TEXTENCODING_UTF8));
-                ConfigurationBackendDb::Data data;
                 if (url2 != url) {
                    bool schema = i->second.equalsIgnoreAsciiCase(
                        "vnd.sun.star.configuration-schema");
                    OUString url_replaced(url2);
+                   ConfigurationBackendDb::Data data;
                    if (!schema)
                    {
                        const OUString sModFolder = that->createFolder(OUString(), xCmdEnv);
@@ -734,6 +742,7 @@ void BackendImpl::PackageImpl::processPackage_(
                            deleteTempFolder(sModFolder);
                    }
                    that->addToConfigmgrIni(schema, url_replaced, xCmdEnv);
+                   data.iniEntry = dp_misc::makeRcTerm(url_replaced);
                    that->addDataToDb(url2, data);
                 }
                 that->m_registeredPackages->erase(i->first);
@@ -750,9 +759,12 @@ void BackendImpl::PackageImpl::processPackage_(
                 OSL_ASSERT(0);
             }
         }
-        that->deleteDataFromDb(getURL());
-
-        //TODO: revoking at runtime, possible, sensible?
+        url = that->deleteDataFromDb(url);
+        if (!m_isSchema) {
+            com::sun::star::configuration::Update::get(
+                that->m_xComponentContext)->removeExtensionXcuFile(
+                    expandUnoRcUrl(url));
+        }
     }
 }
 

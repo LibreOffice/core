@@ -239,9 +239,9 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
         if( i )
             aTmp += ',';
         if( q->nFlags & SBX_OPTIONAL )
-            aTmp += SbxRes( STRING_OPTIONAL );
+            aTmp += String( SbxRes( STRING_OPTIONAL ) );
         if( q->eType & SbxBYREF )
-            aTmp += SbxRes( STRING_BYREF );
+            aTmp += String( SbxRes( STRING_BYREF ) );
         aTmp += q->aName;
         cType = ' ';
         // Kurzer Typ? Dann holen, evtl. ist dieser 0.
@@ -263,12 +263,12 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
             // langer Typ?
             if( t != SbxNAME_SHORT )
             {
-                aTmp += SbxRes( STRING_AS );
+                aTmp += String( SbxRes( STRING_AS ) );
                 if( nt < 32 )
-                    aTmp += SbxRes(
-                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) );
+                    aTmp += String( SbxRes(
+                        sal::static_int_cast< USHORT >( STRING_TYPES + nt ) ) );
                 else
-                    aTmp += SbxRes( STRING_ANY );
+                    aTmp += String( SbxRes( STRING_ANY ) );
             }
         }
     }
@@ -276,15 +276,15 @@ const XubString& SbxVariable::GetName( SbxNameType t ) const
     // Langer Typ? Dann holen
     if( t == SbxNAME_LONG_TYPES && et != SbxEMPTY )
     {
-        aTmp += SbxRes( STRING_AS );
+        aTmp += String( SbxRes( STRING_AS ) );
         if( et < 32 )
-            aTmp += SbxRes(
-                sal::static_int_cast< USHORT >( STRING_TYPES + et ) );
+            aTmp += String( SbxRes(
+                sal::static_int_cast< USHORT >( STRING_TYPES + et ) ) );
         else
-            aTmp += SbxRes( STRING_ANY );
+            aTmp += String( SbxRes( STRING_ANY ) );
     }
-    ((SbxVariable*) this)->aPic = aTmp;
-    return aPic;
+    ((SbxVariable*) this)->aToolString = aTmp;
+    return aToolString;
 }
 
 // Einen simplen Hashcode erzeugen: Es werden die ersten 6 Zeichen gewertet.
@@ -431,9 +431,10 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
         if( nType == SbxNULL && GetClass() == SbxCLASS_METHOD )
             nType = SbxEMPTY;
         SbxValues aTmp;
-        XubString aVal;
+        String aTmpString;
+        ::rtl::OUString aVal;
         aTmp.eType = aData.eType = (SbxDataType) nType;
-        aTmp.pString = &aVal;
+        aTmp.pOUString = &aVal;
         switch( nType )
         {
             case SbxBOOL:
@@ -445,10 +446,10 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             case SbxSINGLE:
             {
                 // Floats als ASCII
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 double d;
                 SbxDataType t;
-                if( ImpScan( aVal, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
+                if( ImpScan( aTmpString, d, t, NULL ) != SbxERR_OK || t == SbxDOUBLE )
                 {
                     aTmp.nSingle = 0;
                     return FALSE;
@@ -460,9 +461,9 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
             case SbxDOUBLE:
             {
                 // Floats als ASCII
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
                 SbxDataType t;
-                if( ImpScan( aVal, aTmp.nDouble, t, NULL ) != SbxERR_OK )
+                if( ImpScan( aTmpString, aTmp.nDouble, t, NULL ) != SbxERR_OK )
                 {
                     aTmp.nDouble = 0;
                     return FALSE;
@@ -470,7 +471,8 @@ BOOL SbxVariable::LoadData( SvStream& rStrm, USHORT nVer )
                 break;
             }
             case SbxSTRING:
-                rStrm.ReadByteString( aVal, RTL_TEXTENCODING_ASCII_US );
+                rStrm.ReadByteString( aTmpString, RTL_TEXTENCODING_ASCII_US );
+                aVal = aTmpString;
                 break;
             case SbxEMPTY:
             case SbxNULL:

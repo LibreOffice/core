@@ -1206,7 +1206,12 @@ namespace drawinglayer
                             mpOutputDevice->SetLineColor(Color(aHairlineColor));
                             mpOutputDevice->SetFillColor();
                             aHairLinePolyPolygon.transform(maCurrentTransformation);
-                            LineInfo aLineInfo(LINE_SOLID, basegfx::fround(rLine.getWidth()));
+
+                            // #i113922# LineWidth needs to be transformed, too
+                            const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(rLine.getWidth(), 0.0));
+                            const double fDiscreteLineWidth(aDiscreteUnit.getLength());
+
+                            LineInfo aLineInfo(LINE_SOLID, basegfx::fround(fDiscreteLineWidth));
                             aLineInfo.SetLineJoin(rLine.getLineJoin());
 
                             for(sal_uInt32 a(0); a < aHairLinePolyPolygon.count(); a++)

@@ -37,13 +37,14 @@
 #include "rtl/string.h"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
+#include "xmlreader/span.hxx"
+#include "xmlreader/xmlreader.hxx"
 
-#include "span.hxx"
+#include "parsemanager.hxx"
 #include "xcdparser.hxx"
 #include "xcsparser.hxx"
 #include "xcuparser.hxx"
 #include "xmldata.hxx"
-#include "xmlreader.hxx"
 
 namespace configmgr {
 
@@ -59,22 +60,22 @@ XcdParser::XcdParser(int layer, Dependencies const & dependencies, Data & data):
 
 XcdParser::~XcdParser() {}
 
-XmlReader::Text XcdParser::getTextMode() {
+xmlreader::XmlReader::Text XcdParser::getTextMode() {
     return nestedParser_.is()
-        ? nestedParser_->getTextMode() : XmlReader::TEXT_NONE;
+        ? nestedParser_->getTextMode() : xmlreader::XmlReader::TEXT_NONE;
 }
 
 bool XcdParser::startElement(
-    XmlReader & reader, XmlReader::Namespace ns, Span const & name)
+    xmlreader::XmlReader & reader, int nsId, xmlreader::Span const & name)
 {
     if (nestedParser_.is()) {
         OSL_ASSERT(nesting_ != LONG_MAX);
         ++nesting_;
-        return nestedParser_->startElement(reader, ns, name);
+        return nestedParser_->startElement(reader, nsId, name);
     }
     switch (state_) {
     case STATE_START:
-        if (ns == XmlReader::NAMESPACE_OOR &&
+        if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("data")))
         {
             state_ = STATE_DEPENDENCIES;
@@ -82,18 +83,19 @@ bool XcdParser::startElement(
         }
         break;
     case STATE_DEPENDENCIES:
-        if (ns == XmlReader::NAMESPACE_NONE &&
+        if (nsId == xmlreader::XmlReader::NAMESPACE_NONE &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("dependency")))
         {
             if (dependency_.getLength() == 0) {
-                Span attrFile;
+                xmlreader::Span attrFile;
                 for (;;) {
-                    XmlReader::Namespace attrNs;
-                    Span attrLn;
-                    if (!reader.nextAttribute(&attrNs, &attrLn)) {
+                    int attrNsId;
+                    xmlreader::Span attrLn;
+                    if (!reader.nextAttribute(&attrNsId, &attrLn)) {
                         break;
                     }
-                    if (attrNs == XmlReader::NAMESPACE_NONE && //TODO: _OOR
+                    if (attrNsId == xmlreader::XmlReader::NAMESPACE_NONE &&
+                            //TODO: _OOR
                         attrLn.equals(RTL_CONSTASCII_STRINGPARAM("file")))
                     {
                         attrFile = reader.getAttributeValue(false);
@@ -107,7 +109,7 @@ bool XcdParser::startElement(
                          reader.getUrl()),
                         css::uno::Reference< css::uno::XInterface >());
                 }
-                dependency_ = xmldata::convertFromUtf8(attrFile);
+                dependency_ = attrFile.convertFromUtf8();
                 if (dependency_.getLength() == 0) {
                     throw css::uno::RuntimeException(
                         (rtl::OUString(
@@ -127,19 +129,19 @@ bool XcdParser::startElement(
         state_ = STATE_COMPONENTS;
         // fall through
     case STATE_COMPONENTS:
-        if (ns == XmlReader::NAMESPACE_OOR &&
+        if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("component-schema")))
         {
             nestedParser_ = new XcsParser(layer_, data_);
             nesting_ = 1;
-            return nestedParser_->startElement(reader, ns, name);
+            return nestedParser_->startElement(reader, nsId, name);
         }
-        if (ns == XmlReader::NAMESPACE_OOR &&
+        if (nsId == ParseManager::NAMESPACE_OOR &&
             name.equals(RTL_CONSTASCII_STRINGPARAM("component-data")))
         {
-            nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0);
+            nestedParser_ = new XcuParser(layer_ + 1, data_, 0, 0, 0);
             nesting_ = 1;
-            return nestedParser_->startElement(reader, ns, name);
+            return nestedParser_->startElement(reader, nsId, name);
         }
         break;
     default: // STATE_DEPENDENCY
@@ -148,12 +150,12 @@ bool XcdParser::startElement(
     }
     throw css::uno::RuntimeException(
         (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bad member <")) +
-         xmldata::convertFromUtf8(name) +
+         name.convertFromUtf8() +
          rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("> in ")) + reader.getUrl()),
         css::uno::Reference< css::uno::XInterface >());
 }
 
-void XcdParser::endElement(XmlReader const & reader) {
+void XcdParser::endElement(xmlreader::XmlReader const & reader) {
     if (nestedParser_.is()) {
         nestedParser_->endElement(reader);
         if (--nesting_ == 0) {
@@ -174,7 +176,7 @@ void XcdParser::endElement(XmlReader const & reader) {
     }
 }
 
-void XcdParser::characters(Span const & text) {
+void XcdParser::characters(xmlreader::Span const & text) {
     if (nestedParser_.is()) {
         nestedParser_->characters(text);
     }

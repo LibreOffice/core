@@ -48,6 +48,7 @@ LIB1FILES=	\
     $(SLB)$/draw.lib \
     $(SLB)$/chart.lib \
     $(SLB)$/forms.lib \
+    $(SLB)$/form_handlers.lib \
     $(SLB)$/xforms.lib \
     $(SLB)$/table.lib
 
@@ -86,3 +87,11 @@ DEF1DES     =XML Office Lib
 # --- Targets ----------------------------------------------------------
 .ENDIF
 .INCLUDE :  target.mk
+
+ALLTAR : $(MISC)/xo.component
+
+$(MISC)/xo.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        xo.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt xo.component

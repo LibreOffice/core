@@ -55,7 +55,7 @@
 #include "cppu/unotype.hxx"
 #include "cppuhelper/compbase5.hxx"
 #include "cppuhelper/factory.hxx"
-#include "cppuhelper/implbase1.hxx"
+#include "cppuhelper/implbase2.hxx"
 #include "cppuhelper/interfacecontainer.hxx"
 #include "cppuhelper/weak.hxx"
 #include "osl/diagnose.h"
@@ -114,6 +114,8 @@ public:
 private:
     virtual ~Service() {}
 
+    virtual void SAL_CALL disposing() { flushModifications(); }
+
     virtual rtl::OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException)
     { return configuration_provider::getImplementationName(); }
@@ -125,7 +127,6 @@ private:
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
     getSupportedServiceNames() throw (css::uno::RuntimeException)
     { return configuration_provider::getSupportedServiceNames(); }
-        //TODO: DefaultProvider?
 
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(
         rtl::OUString const & aServiceSpecifier)
@@ -165,6 +166,8 @@ private:
 
     virtual css::lang::Locale SAL_CALL getLocale()
         throw (css::uno::RuntimeException);
+
+    void flushModifications() const;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     rtl::OUString locale_;
@@ -241,7 +244,7 @@ Service::createInstanceWithArguments(
     if (nodepath.getLength() == 0) {
         badNodePath();
     }
-    // For backwards compatibility, allow a notepath that misses the leading
+    // For backwards compatibility, allow a nodepath that misses the leading
     // slash:
     if (nodepath[0] != '/') {
         nodepath = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + nodepath;
@@ -272,8 +275,7 @@ Service::createInstanceWithArguments(
             static_cast< cppu::OWeakObject * >(this));
     }
     osl::MutexGuard guard(lock);
-    Components::initSingleton(context_);
-    Components & components = Components::getSingleton();
+    Components & components = Components::getSingleton(context_);
     rtl::Reference< RootAccess > root(
         new RootAccess(components, nodepath, locale, update));
     if (root->isValue()) {
@@ -326,7 +328,7 @@ void Service::removeRefreshListener(
 }
 
 void Service::flush() throw (css::uno::RuntimeException) {
-    //TODO
+    flushModifications();
     cppu::OInterfaceContainerHelper * cont = rBHelper.getContainer(
         cppu::UnoType< css::util::XFlushListener >::get());
     if (cont != 0) {
@@ -380,8 +382,18 @@ css::lang::Locale Service::getLocale() throw (css::uno::RuntimeException) {
     return loc;
 }
 
+void Service::flushModifications() const {
+    Components * components;
+    {
+        osl::MutexGuard guard(lock);
+        components = &Components::getSingleton(context_);
+    }
+    components->flushModifications();
+}
+
 class Factory:
-    public cppu::WeakImplHelper1< css::lang::XSingleComponentFactory >,
+    public cppu::WeakImplHelper2<
+        css::lang::XSingleComponentFactory, css::lang::XServiceInfo >,
     private boost::noncopyable
 {
 public:
@@ -400,6 +412,18 @@ private:
         css::uno::Sequence< css::uno::Any > const & Arguments,
         css::uno::Reference< css::uno::XComponentContext > const & Context)
         throw (css::uno::Exception, css::uno::RuntimeException);
+
+    virtual rtl::OUString SAL_CALL getImplementationName()
+        throw (css::uno::RuntimeException)
+    { return configuration_provider::getImplementationName(); }
+
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
+        throw (css::uno::RuntimeException)
+    { return ServiceName == getSupportedServiceNames()[0]; } //TODO
+
+    virtual css::uno::Sequence< rtl::OUString > SAL_CALL
+    getSupportedServiceNames() throw (css::uno::RuntimeException)
+    { return configuration_provider::getSupportedServiceNames(); }
 };
 
 css::uno::Reference< css::uno::XInterface > Factory::createInstanceWithContext(
@@ -456,7 +480,8 @@ Factory::createInstanceWithArgumentsAndContext(
                             " arguments")),
                     0);
             }
-            // For backwards compatibility, allow "Locale" in any case:
+            // For backwards compatibility, allow "Locale" and (ignored)
+            // "EnableAsync" in any case:
             if (name.equalsIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM("locale")))
             {
@@ -471,8 +496,9 @@ Factory::createInstanceWithArgumentsAndContext(
                                 " one, non-empty, string Locale argument")),
                         0);
                 }
-            } else {
-                //TODO
+            } else if (!name.equalsIgnoreAsciiCaseAsciiL(
+                           RTL_CONSTASCII_STRINGPARAM("enableasync")))
+            {
                 throw css::uno::Exception(
                     rtl::OUString(
                         RTL_CONSTASCII_USTRINGPARAM(
