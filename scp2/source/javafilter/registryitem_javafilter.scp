@@ -46,7 +46,7 @@ RegistryItem gid_Regitem_Clsid__43887c67_4d5d_4127_Baac_87a288494c7c__Inprocserv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{43887C67-4D5D-4127-BAAC-87A288494C7C}\InProcServer32";
     ModuleID = gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel;
-    Value = "[INSTALLLOCATION]Basis\program\xmergesync.dll";
+    Value = "[INSTALLLOCATION]program\xmergesync.dll";
 End
 
 RegistryItem gid_Regitem_Clsid__43887c67_4d5d_4127_Baac_87a288494c7c__Inprocserver32_Threadingmodel
@@ -106,7 +106,7 @@ RegistryItem gid_Regitem_Clsid__Bdd611c3_7bab_460f_8711_5b9ac9ef6020__Inprocserv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{BDD611C3-7BAB-460F-8711-5B9AC9EF6020}\InProcServer32";
     ModuleID = gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word;
-    Value = "[INSTALLLOCATION]Basis\program\xmergesync.dll";
+    Value = "[INSTALLLOCATION]program\xmergesync.dll";
 End
 
 RegistryItem gid_Regitem_Clsid__Bdd611c3_7bab_460f_8711_5b9ac9ef6020__Inprocserver32_Threadingmodel
@@ -166,7 +166,7 @@ RegistryItem gid_Regitem_Clsid__C6ab3e74_9f4f_4370_8120_A8a6fabb7a7c__Inprocserv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{C6AB3E74-9F4F-4370-8120-A8A6FABB7A7C}\InProcServer32";
     ModuleID = gid_Module_Optional_Javafilter_Pocketpc_Pocket_Excel;
-    Value = "[INSTALLLOCATION]Basis\program\xmergesync.dll";
+    Value = "[INSTALLLOCATION]program\xmergesync.dll";
 End
 
 RegistryItem gid_Regitem_Clsid__C6ab3e74_9f4f_4370_8120_A8a6fabb7a7c__Inprocserver32_Threadingmodel
@@ -226,7 +226,7 @@ RegistryItem gid_Regitem_Clsid__Cb43f086_838d_4fa4_B5f6_3406b9a57439__Inprocserv
     ParentID = PREDEFINED_HKEY_CLASSES_ROOT;
     Subkey = "CLSID\{CB43F086-838D-4FA4-B5F6-3406B9A57439}\InProcServer32";
     ModuleID = gid_Module_Optional_Javafilter_Pocketpc_Pocket_Word;
-    Value = "[INSTALLLOCATION]Basis\program\xmergesync.dll";
+    Value = "[INSTALLLOCATION]program\xmergesync.dll";
 End
 
 RegistryItem gid_Regitem_Clsid__Cb43f086_838d_4fa4_B5f6_3406b9a57439__Inprocserver32_Threadingmodel

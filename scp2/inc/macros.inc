@@ -290,24 +290,6 @@
         Styles   = (PACKED,DONT_OVERWRITE,PATCH); \
     End
 
-#define UNO_JAR_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name     = STRING(CONCAT2(name,.jar)); \
-        RegistryID = gid_Starregistry_Services_Rdb; \
-        Dir      = gid_Dir_Classes; \
-        Styles   = (PACKED,DONT_OVERWRITE, UNO_COMPONENT); \
-    End
-
-#define UNO_JAR_FILE_PATCH(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name     = STRING(CONCAT2(name,.jar)); \
-        RegistryID = gid_Starregistry_Services_Rdb; \
-        Dir      = gid_Dir_Classes; \
-        Styles   = (PACKED,DONT_OVERWRITE,UNO_COMPONENT,PATCH); \
-    End
-
 #define JARFILENAME(name) STRING(CONCAT2(name,.jar))
 
 #define PACKED_SHELLNEW_FILE_BODY \
@@ -322,52 +304,16 @@
         Name      = STRING(name) ; \
     End
 
-#define PACKED_UNO_LIB_FILE_BODY \
-        TXT_FILE_BODY; \
-        Styles = (PACKED,UNO_COMPONENT); \
-        Dir    = SCP2_OOO_BIN_DIR; \
-        RegistryID = gid_Starregistry_Services_Rdb
-
-#define PACKED_UNO_LIB_FILE_BODY_PATCH \
-        TXT_FILE_BODY; \
-        Styles = (PACKED,UNO_COMPONENT,PATCH); \
-        Dir    = SCP2_OOO_BIN_DIR; \
-        RegistryID = gid_Starregistry_Services_Rdb
-
-#define STD_UNO_LIB_FILE(id,name) \
-    File id \
-        Name    = LIBNAME(name); \
-        PACKED_UNO_LIB_FILE_BODY; \
-    End
-
-#define STD_UNO_LIB_FILE_PATCH(id,name) \
-    File id \
-        Name    = LIBNAME(name); \
-        PACKED_UNO_LIB_FILE_BODY_PATCH; \
-    End
-
-#define SPECIAL_UNO_LIB_FILE(id,name) \
-    File id \
-        Name    = SPECIAL_NAME(name); \
-        PACKED_UNO_LIB_FILE_BODY; \
-    End
-
-#define SPECIAL_UNO_LIB_FILE_PATCH(id,name) \
-    File id \
-        Name    = SPECIAL_NAME(name); \
-        PACKED_UNO_LIB_FILE_BODY_PATCH; \
-    End
-
-#define SPECIAL_UNO_COMPONENT_LIB_FILE(id,name) \
+#define SPECIAL_COMPONENT_LIB_FILE(id,name) \
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
-        PACKED_UNO_LIB_FILE_BODY; \
+        PACKED_LIB_FILE_BODY; \
     End
 
-#define SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(id,name) \
+#define SPECIAL_COMPONENT_LIB_FILE_PATCH(id,name) \
     File id \
         Name     = SPECIAL_COMPONENT_LIB_NAME(name); \
-        PACKED_UNO_LIB_FILE_BODY_PATCH; \
+        PACKED_LIB_FILE_BODY_PATCH; \
     End
 
 #define WINW4WFILTERFILENAME(name) STRING(CONCAT2(name,f32w.dll))
@@ -394,15 +340,6 @@
         Name = LIBNAME(name); \
         Dir = SCP2_OOO_BIN_DIR; \
         Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS); \
-    End
-
-#define SPECIAL_UNO_NO_WARNING_IF_NOT_EXISTS_FILE(id,name) \
-    File id \
-        TXT_FILE_BODY; \
-        Name = LIBNAME(name); \
-        Dir = SCP2_OOO_BIN_DIR; \
-        Styles = (PACKED, NO_WARNING_IF_NOT_EXISTS, UNO_COMPONENT); \
-        RegistryID = gid_Starregistry_Services_Rdb; \
     End
 
 // ---------------------------------------

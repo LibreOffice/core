@@ -762,29 +762,9 @@ sub replace_many_variables_in_shellscripts
     foreach $key (keys %{$variableshashref})
     {
         my $value = $variableshashref->{$key};
-        if ( ! $value =~ /.oxt/ ) { $value = lc($value); }  # lowercase !
-        if ( $installer::globals::issolarisbuild) { $value =~ s/\.org/org/g; }  # openofficeorg instead of openoffice.org
+        # $value = lc($value);  # lowercase !
+        # if ( $installer::globals::issolarisbuild) { $value =~ s/\.org/org/g; }    # openofficeorg instead of openoffice.org
         replace_variable_in_shellscripts($scriptref, $value, $key);
-    }
-}
-
-#######################################
-# Setting oxt file name variable
-#######################################
-
-sub set_oxt_filename
-{
-    my ($filesinpackage, $allvariables) = @_;
-
-    for ( my $i = 0; $i <= $#{$filesinpackage}; $i++ )
-    {
-        my $onefile = ${$filesinpackage}[$i];
-        if ( $onefile->{'Name'} =~ /.oxt\s*$/ )
-        {
-            $allvariables->{'OXTFILENAME'} = $onefile->{'Name'};
-            # $allvariables->{'FULLOXTFILENAME'} = $onefile->{'destination'};
-            last;  # only one oxt file for each rpm!
-        }
     }
 }
 
@@ -795,9 +775,6 @@ sub set_oxt_filename
 sub adding_shellscripts_to_epm_file
 {
     my ($epmfileref, $shellscriptsfilename, $localrootpath, $allvariableshashref, $filesinpackage) = @_;
-
-    # Setting variable for ${OXTFILENAME} into $allvariableshashref, if this is a RPM with an extension
-    set_oxt_filename($filesinpackage, $allvariableshashref);
 
     # $installer::globals::shellscriptsfilename
 
@@ -1803,25 +1780,26 @@ sub is_extension_package
 # share/extension/install
 ######################################################################
 
-sub get_extension_name
+sub contains_extension_dir
 {
     my ($prototypefile) = @_;
 
-    my $extensionName = "";
+    my $contains_extension_dir = 0;
+
+    # d none opt/openoffice.org3/share/extensions/
 
     for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
     {
         my $line = ${$prototypefile}[$i];
-        if ( $line =~ /^\s*f\s+none\s+share\/extension\/install\/(\w+?\.oxt)\s*\=/ )
+        if ( $line =~ /^\s*d\s+none\s.*\/share\/extensions\// )
         {
-            $extensionName = $1;
+            $contains_extension_dir = 1;
             last;
         }
     }
 
-    return $extensionName;
+    return $contains_extension_dir;
 }
-
 
 ############################################################
 # A Solaris patch contains 7 specific scripts
@@ -1839,9 +1817,9 @@ sub add_scripts_into_prototypefile
     $path = $path . $installer::globals::separator;
 
     my @newlines = ();
-    my $extensionname = get_extension_name($prototypefile);
+    my $is_extension_package = contains_extension_dir($prototypefile);
 
-    if ( $extensionname ne "" )
+    if ( $is_extension_package )
     {
         for ( my $i = 0; $i <= $#installer::globals::solarispatchscriptsforextensions; $i++ )
         {
@@ -1865,9 +1843,7 @@ sub add_scripts_into_prototypefile
             my $scriptfile = installer::files::read_file($sourcefilename);
 
             # Replacing variables
-            my $oldstring = "\$\{OXTFILENAME\}";
-            replace_variables_in_shellscripts_for_patch($scriptfile, $destpath, $oldstring, $extensionname);
-            $oldstring = "PRODUCTDIRECTORYNAME";
+            my $oldstring = "PRODUCTDIRECTORYNAME";
             replace_variables_in_shellscripts_for_patch($scriptfile, $destpath, $oldstring, $staticpath);
 
             # Saving file
