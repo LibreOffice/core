@@ -4528,25 +4528,37 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     test "$with_system_db" != "no"; then
     SYSTEM_DB=YES
     AC_MSG_RESULT([external])
-    AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include ],
-        [
-             CFLAGS=-I/usr/include/db4
-             AC_CHECK_HEADER(db4/db.h,
-             [ DB_INCLUDES=/usr/include/db4 ],
-             [ AC_MSG_ERROR(no. install the db4 libraries) ], []+             )
-        ], []
-    )
+    for dbver in -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4 ''; do
+        AC_MSG_CHECKING([for db$dbver/db.h])
+        for inc_dir in /usr/include /usr/local/include; do
+            if test -r "$inc_dir/db$dbver/db.h"; then
+                DB_INCLUDES="$inc_dir/db$dbver"
+                db_header="db$dbver/db.h"
+                AC_MSG_RESULT([yes])
+                break 2
+            fi
+        done
+        AC_MSG_RESULT([no])
+    done
+
+    if test "$DB_INCLUDES" = ""; then
+       AC_MSG_ERROR(no. install the db4-dev package)
+    fi
     AC_MSG_CHECKING([whether db is at least 4.1])
     AC_TRY_RUN([
-#include <db.h>
+#include <$db_header>
 
 int main(int argc, char **argv) {
        if(DB_VERSION_MAJOR > 4 || (DB_VERSION_MAJOR == 4 && DB_VERSION_MINOR >= 1)) return 0;
        else return 1;
 }
     ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
-    AC_HAVE_LIBRARY(db, [],
-      [AC_MSG_ERROR([db not installed or functional])], [])
+    save_LIBS="$LIBS"
+    for dbver in -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4 ''; do
+        AC_CHECK_LIB(db$dbver, db_create, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; LIBS="-ldb$dbver $LIBS"; break ])
+    done
+    AC_CHECK_FUNC(db_create, [], [ AC_MSG_ERROR([db not installed or functional]) ])
+    LIBS="$save_LIBS"
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
 else
     AC_MSG_RESULT([internal])
@@ -4555,6 +4567,8 @@ else
 fi
 AC_SUBST(SYSTEM_DB)
 AC_SUBST(DB_VERSION)
+AC_SUBST(DB_LIB)
+AC_SUBST(DB_CPPLIB)
 AC_SUBST(DB_INCLUDES)
 AC_SUBST(DB_JAR)
 
