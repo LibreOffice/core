@@ -48,6 +48,7 @@ import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.sheet.XCellRangeData;
 import com.sun.star.sheet.XSpreadsheetDocument;
 import com.sun.star.table.XCellRange;
+import com.sun.star.task.XInteractionHandler;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
