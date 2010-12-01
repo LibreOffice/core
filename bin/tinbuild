@@ -27,8 +27,7 @@ getCommitters ()
 {
 	from_date="$1"
 
-	( git log '--pretty=tformat:%ce' --after="$from_date" ;
-	  bin/g -s log '--pretty=tformat:%ce' --after="$from_date" ) | sort | uniq
+	./g -s log '--pretty=tformat:%ce' --after="$from_date" | sort | uniq
 }
 
 reportError ()
@@ -36,7 +35,8 @@ reportError ()
 	error_kind="$1"
 	shift
 
-	commit=`git log '--pretty=format:%h %cn - %s' -n1`
+	rough_time="$2"
+	shift
 
 	to_mail=
 	if test "$SEND_MAIL" -eq 1; then
@@ -50,12 +50,12 @@ reportError ()
 			       else
 			          to_mail=`getCommitters "$last_success"`
 			       fi
-			       message="last commit: $commit" ;;
+			       message="last succes: $rough_time" ;;
 		esac
 	fi
 
 	echo "$*" 1>&2
-	echo "Last commit: $commit" 1>&2
+	echo "Last success: $rough_time" 1>&2
 	if test -n "$to_mail" ; then
 		subject="Tinderbox failure, $message"
 		(
@@ -72,10 +72,7 @@ Tinderbox info:
 
 Commits since the last success:
 
-  ===== build =====
-`git log '--pretty=tformat:%h  %s' --after="$last_success" | sed 's/^/  /'`
-
-`bin/g log '--pretty=tformat:%h  %s' --after="$last_success" | sed 's/^/  /'`
+`./g log '--pretty=tformat:%h  %s' --after="$last_success" | sed 's/^/  /'`
 
 The error is:
 
@@ -92,8 +89,7 @@ EOF
 
 gitHeads ()
 {
-	git rev-parse --verify HEAD
-	bin/g rev-parse --verify HEAD
+	./g rev-parse --verify HEAD
 }
 
 ## code
@@ -146,54 +142,34 @@ while true; do
 	fi
 	# try to build
 	if ! err_msg=$(./autogen.sh 2>&1); then
-		reportError committer `printf "autogen.sh / configure failed - error is:\n\n$err_msg"`
-	elif ! err_msg=$(./download 2>&1); then
-		reportError committer `printf "download failed - error is:\n\n$err_msg"`
+		reportError committer "$rough_checkout_date" `printf "autogen.sh / configure failed - error is:\n\n$err_msg"`
+	elif ! $NICE make clean >clean.log 2>&1 ; then
+		reportError committer "$rough_checkout_date" `printf "cleaning up failed - error is:\n\n"` "$(tail -n100 clean.log)"
 	elif ! $NICE make >build.log 2>&1 ; then
-		reportError committer `printf "building failed - error is:\n\n"` "$(tail -n100 build.log)"
-	elif ! $NICE make smoketest > smoketest.log 2>&1 ; then
-		reportError committer `printf "smoketest failed - error is:\n\n"` "$(tail -n100 smoketest.log)"
+		reportError committer "$rough_checkout_date" `printf "building failed - error is:\n\n"` "$(tail -n100 build.log)"
+#	elif ! $NICE make smoketest > smoketest.log 2>&1 ; then
+#		reportError committer "$rough_checkout_date" `printf "smoketest failed - error is:\n\n"` "$(tail -n100 smoketest.log)"
 	elif ! $NICE make dev-install >install.log 2>&1 ; then
-		reportError committer `printf "dev installation failed - error is:\n\n"` "$(tail -n100 install.log)"
+		reportError committer "$rough_checkout_date" `printf "dev installation failed - error is:\n\n"` "$(tail -n100 install.log)"
 	else
-		echo build done
-		cp build.log build/
-		cp smoketest.log build/
-		cp install.log build/
+		echo "Build done - checkout from $rough_checkout_date successful."
 		gitHeads > build/git-heads.txt
 
 		prev_success=$last_success
 		last_success=$rough_checkout_date
-		mv build "build-$last_success" ||
-		{
-			msg=
-			test -z "$prev_success" || msg="Leaving 'build-$prev_success' around, exiting now"
-			reportError owner `printf "Cannot move 'build' to 'build-$last_success'\n\n$msg"`
-		}
-
-		if test -n "$prev_success"; then
-			rm -rf "build-$prev_success"
-		fi
 	fi
 
-	if [ -d build ] ; then
-		mv build.log build/
-		mv smoketest.log build/
-		mv install.log build/
-		rm -rf build.failed
-		mv build build.failed
-	fi
+	for I in clean.log build.log smoketest.log install.log ; do
+		mv $I prev-$I 2>/dev/null
+	done
 
 	echo updating repo
 
 	# new commits?
 	while true; do
-		old_head=$(gitHeads) && err_msg=$(git pull -r 2>&1) && err_msg2=$(bin/g pull -r 2>&1) ||
+		old_head=$(gitHeads) && err_msg="$(./g pull -r 2>&1)" ||
 		{
-			msg=
-			test -z "$prev_success" || msg="Leaving 'build-$prev_success' around, exiting now"
-
-			reportError owner `printf "git repo broken - error is:\n\n$err_msg\n$err_msg2\n$msg"`
+			reportError owner "$rough_checkout_date" `printf "git repo broken - error is:\n\n$err_msg"`
 		}
 		new_head=$(gitHeads)
 		
