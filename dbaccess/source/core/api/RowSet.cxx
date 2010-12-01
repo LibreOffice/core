@@ -1078,7 +1078,7 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     positionCache( MOVE_NONE_REFRESH_ONLY );
 
     ORowSetRow aOldValues;
-    if ( !m_aCurrentRow.isNull() )
+    if ( !m_bModified && _bNotifyModified && !m_aCurrentRow.isNull() )
         aOldValues = new ORowSetValueVector( m_aCurrentRow->getBody() );
 
     m_pCache->cancelRowUpdates();
@@ -1088,11 +1088,13 @@ void ORowSet::implCancelRowUpdates( sal_Bool _bNotifyModified ) SAL_THROW( ( SQL
     m_aCurrentRow.setBookmark(m_aBookmark);
 
     // notification order
-    // - column values
-    ORowSetBase::firePropertyChange(aOldValues);
     // IsModified
     if( !m_bModified && _bNotifyModified )
+    {
+        // - column values
+        ORowSetBase::firePropertyChange(aOldValues);
         fireProperty(PROPERTY_ID_ISMODIFIED,sal_False,sal_True);
+    }
 }
 
 // -------------------------------------------------------------------------
@@ -2771,9 +2773,9 @@ void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
 
     // notification order:
     if ( m_bModified && m_pCache )
-        // - column values
         implCancelRowUpdates( sal_False ); // do _not_ notify the IsModify - will do this ourself below
 
+    // - column values
     ORowSetBase::refreshRow();
 
     // - IsModified
