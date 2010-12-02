@@ -2214,7 +2214,6 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                             {
                                 Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
                                 xNode->setBegin( makeAny( (double)0.0 ) );
-//                              xNode->setFill( AnimationFill::HOLD );
                                 xNextClickContainer->appendChild( xNode );
                             }
                         }
@@ -2245,7 +2244,6 @@ void stl_process_after_effect_node_func(AfterEffectNode& rNode)
                     {
                         Reference< XAnimationNode > xNode( xNextContainer, UNO_QUERY_THROW );
                         xNode->setBegin( makeAny( (double)0.0 ) );
-//                      xNode->setFill( AnimationFill::HOLD );
                         xNewClickContainer->appendChild( xNode );
                     }
                 }
@@ -3190,44 +3188,6 @@ void EffectSequenceHelper::processAfterEffect( const Reference< XAnimationNode >
     }
 }
 
-/*
-double EffectSequenceHelper::calculateIterateNodeDuration(
-{
-    Reference< i18n::XBreakIterator > xBI( ImplGetBreakIterator() );
-
-    sal_Int32 nDone;
-    sal_Int32 nNextCellBreak( xBI->nextCharacters(rTxt, nIdx, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 0, nDone) );
-    i18n::Boundary nNextWordBoundary( xBI->getWordBoundary(rTxt, nIdx, rLocale, i18n::WordType::ANY_WORD, sal_True) );
-    sal_Int32 nNextSentenceBreak( xBI->endOfSentence(rTxt, nIdx, rLocale) );
-
-    const sal_Int32 nEndPos( nIdx + nLen );
-    sal_Int32 i, currOffset(0);
-    for( i=nIdx; i<nEndPos; ++i )
-    {
-        // TODO: Check whether position update is valid for CTL/BiDi
-        rOutDev.DrawText( rPos + Point(currOffset,0), rTxt, i, 1 );
-        currOffset = *pDXArray++;
-
-        // issue the comments at the respective break positions
-        if( i == nNextCellBreak )
-        {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOC" ) );
-            nNextCellBreak = xBI->nextCharacters(rTxt, i, rLocale, i18n::CharacterIteratorMode::SKIPCELL, 1, nDone);
-        }
-        if( i == nNextWordBoundary.endPos )
-        {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOW" ) );
-            nNextWordBoundary = xBI->getWordBoundary(rTxt, i+1, rLocale, i18n::WordType::ANY_WORD, sal_True);
-        }
-        if( i == nNextSentenceBreak )
-        {
-            rMtf.AddAction( new MetaCommentAction( "XTEXT_EOS" ) );
-            nNextSentenceBreak = xBI->endOfSentence(rTxt, i+1, rLocale);
-        }
-    }
-}
-
-*/
 // ====================================================================
 
 class AnimationChangeListener : public cppu::WeakImplHelper1< XChangesListener >

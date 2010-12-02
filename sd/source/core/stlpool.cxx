@@ -107,7 +107,6 @@ SdStyleSheetPool::SdStyleSheetPool(SfxItemPool const& _rPool, SdDrawDocument* pD
         for( sal_uInt16 nPage = 0; nPage < nCount; ++nPage )
             AddStyleFamily( mpDoc->GetMasterSdPage(nPage,PK_STANDARD) );
 
-//      StartListening( *mpDoc );
     }
 }
 
@@ -267,7 +266,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
 
             ULONG nFontSize = 20;
             short nFirstIndent = -600;
-//          USHORT nIndent = nLevel * 1200;
             USHORT nLower = 100;
 
             switch (nLevel)
@@ -309,25 +307,9 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
             rOutlineSet.Put( SvxFontHeightItem( nFontSize, 100, EE_CHAR_FONTHEIGHT_CJK ) );
             rOutlineSet.Put( SvxFontHeightItem( SdDrawDocument::convertFontHeightToCTL( nFontSize ), 100, EE_CHAR_FONTHEIGHT_CTL ) );
 
-            // Einzuege
-/* i35937
-            aSvxLRSpaceItem.SetTxtFirstLineOfst(nFirstIndent);
-            aSvxLRSpaceItem.SetTxtLeft(nIndent);
-            aSvxLRSpaceItem.SetRight(0);
-            aSvxLRSpaceItem.SetBulletFI(TRUE);
-            pSheet->GetItemSet().Put(aSvxLRSpaceItem);
-*/
-            // Zeilendurchschuss (Abstand nach unten)
+            // Line distance (downwards). Stuff around here cleaned up in i35937
             aSvxULSpaceItem.SetLower(nLower);
             pSheet->GetItemSet().Put(aSvxULSpaceItem);
-
-/* i35937
-            if (nLevel == 1)
-            {
-                SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 1); // Bullets sichtbar
-                pSheet->GetItemSet().Put(aBulletStateItem);
-            }
-*/
         }
     }
 
@@ -394,7 +376,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rTitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rTitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rTitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-//      rTitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
         rTitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
@@ -440,7 +421,6 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rSubtitleSet.Put(SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ));
         rSubtitleSet.Put(SvxAdjustItem(SVX_ADJUST_CENTER, EE_PARA_JUST ));
         rSubtitleSet.Put( SdrTextVertAdjustItem( SDRTEXTVERTADJUST_CENTER ) );
-//      rSubtitleSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         // #i16874# enable kerning by default but only for new documents
         rSubtitleSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
         aSvxLRSpaceItem.SetTxtLeft(0);
@@ -487,19 +467,11 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(const String& rLayoutName, sal_Bo
         rNotesSet.Put( SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK ) );
         rNotesSet.Put( SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF) );
         rNotesSet.Put( SvxColorItem( Color(COL_AUTO), EE_CHAR_COLOR ) );
-//      rNotesSet.Put( SfxUInt16Item(EE_PARA_BULLETSTATE, 0) );
         rNotesSet.Put( SvxLRSpaceItem( 0, 0, 600, -600, EE_PARA_LRSPACE  ) );
         // #i16874# enable kerning by default but only for new documents
         rNotesSet.Put( SvxAutoKernItem( TRUE, EE_CHAR_PAIRKERNING ) );
 
-/* #i35937#
-        SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) rNotesSet.Get(EE_PARA_NUMBULLET) );
-
-        EditEngine::ImportBulletItem( aNumBullet, 0, NULL,
-                                &(const SvxLRSpaceItem&) rNotesSet.Get( EE_PARA_LRSPACE ) );
-
-        ( (SfxItemSet&) rNotesSet).Put( aNumBullet );
-*/
+/* #i35937# */
 
     }
 
@@ -812,7 +784,6 @@ void SdStyleSheetPool::CreatePseudosIfNecessary()
     SfxStyleSheetBase* pSheet = NULL;
     SfxStyleSheetBase* pParent = NULL;
 
-    //USHORT nUsedMask = SFXSTYLEBIT_ALL & ~SFXSTYLEBIT_USERDEF;
     USHORT nUsedMask = SFXSTYLEBIT_USED;
 
     aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
@@ -1386,7 +1357,6 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException)
         {
         }
 
-//      EndListening( *mpDoc );
         mpDoc = 0;
 
         Clear();

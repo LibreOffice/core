@@ -128,9 +128,7 @@ SdPage* ImpPageListWatcher::GetSdPage(PageKind ePgKind, sal_uInt32 nPgNum)
         }
         case PK_HANDOUT:
         {
-//          #11420# for models used to transfer drawing shapes via clipboard its
-//          ok to not have a handout page
-//          DBG_ASSERT(mpHandoutPage, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
+//          #11420# for models used to transfer drawing shapes via clipboard its ok to not have a handout page
             DBG_ASSERT(nPgNum == 0L, "ImpPageListWatcher::GetSdPage: access to non existing handout page (!)");
             if (nPgNum == 0)
                 pRetval = mpHandoutPage;

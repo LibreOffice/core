@@ -169,7 +169,6 @@ void SAL_CALL TextApiObject::dispose() throw(RuntimeException)
         mpSource = 0;
     }
 
-    // SvxUnoText::dispose();
 }
 
 OutlinerParaObject* TextApiObject::CreateText()

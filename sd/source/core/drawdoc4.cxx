@@ -267,9 +267,6 @@ void SdDrawDocument::CreateLayoutTemplates()
     aBulletItem.SetSymbol( 0x25CF );                    // Punkt
     rISet.Put(aBulletItem);
 
-//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0); // Bullets nicht sichtbar
-//  rISet.Put(aBulletStateItem);
-
     // Neues BulletItem
     pSSPool->PutNumBulletItem( pSheet, aBulletFont );
 
@@ -373,12 +370,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     aLRSpaceItem.SetTxtFirstLineOfst(600);      // Erstzeileneinzug 6mm, rechts 0
     pISet->Put(aLRSpaceItem);
 
-/* #i35937#
-    // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
-    SvxNumBulletItem aNumBullet( (const SvxNumBulletItem&) pISet->Get(EE_PARA_NUMBULLET) );
-    EditEngine::ImportBulletItem( aNumBullet, 0, NULL, &aLRSpaceItem );
-    pISet->Put( aNumBullet );
-*/
+/* #i35937# */
     // ---- Titel ---------------------------------------------------------
 
     aName = String(SdResId(STR_POOLSHEET_TITLE));
@@ -438,12 +430,7 @@ void SdDrawDocument::CreateLayoutTemplates()
     SvxLRSpaceItem aLRSpItem( 200, 200, 0, 0, EE_PARA_LRSPACE);
     pISet->Put( aLRSpItem );    // Erstzeileneinzug 0 mm, links und rechts 2 mm
 
-/* #i35937#
-    // SvxLRSpaceItem hart gesetzt: NumBulletItem anpassen
-    SvxNumBulletItem aNmBullet( (const SvxNumBulletItem&) pISet->Get(EE_PARA_NUMBULLET) );
-    EditEngine::ImportBulletItem( aNmBullet, 0, NULL, &aLRSpItem );
-    pISet->Put( aNmBullet );
-*/
+/* #i35937# */
 
     pISet->Put(SvxULSpaceItem(100, 100, EE_PARA_ULSPACE ));      // Absatzrand oben/unten 1 mm
 
@@ -580,7 +567,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
     pSheet = &(pSSPool->Make(aDefaultCellStyleName, SD_STYLE_FAMILY_CELL, nMask));
     pSheet->SetHelpId( aHelpFile, HID_SD_CELL_STYLE_DEFAULT );
     SfxItemSet& rISet = pSheet->GetItemSet();
-//  SfxItemPool* pPool = rISet.GetPool();
 
     String   aNullStr;
 
@@ -616,21 +602,6 @@ void SdDrawDocument::CreateDefaultCellStyles()
     rISet.Put( SvxFontHeightItem( 635, 100, EE_CHAR_FONTHEIGHT_CJK ) ); // 18 pt
     rISet.Put( SvxFontHeightItem( convertFontHeightToCTL( 635 ), 100, EE_CHAR_FONTHEIGHT_CTL ) ); // 18 pt
 
-//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT ) );
-//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK ) );
-//  rISet.Put( SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL ) );
-
-//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC ) );
-//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK ) );
-//  rISet.Put( SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL ) );
-
-//    rISet.Put(SvxContourItem(FALSE, EE_CHAR_OUTLINE ));
-//    rISet.Put(SvxShadowedItem(FALSE, EE_CHAR_SHADOW ));
-//    rISet.Put(SvxUnderlineItem(UNDERLINE_NONE, EE_CHAR_UNDERLINE));
-//    rISet.Put(SvxOverlineItem(UNDERLINE_NONE, EE_CHAR_OVERLINE));
-//    rISet.Put(SvxCrossedOutItem(STRIKEOUT_NONE, EE_CHAR_STRIKEOUT ));
-//    rISet.Put(SvxEmphasisMarkItem(EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK));
-//    rISet.Put(SvxCharReliefItem(RELIEF_NONE, EE_CHAR_RELIEF));
     rISet.Put(SvxColorItem(Color(COL_AUTO), EE_CHAR_COLOR ));
 
     // Absatzattribute (Edit Engine)
@@ -1340,10 +1311,6 @@ void SdDrawDocument::SetTextDefaults() const
     aBulletItem.SetScale(45);               // in Prozent
     aBulletItem.SetSymbol( 0x25CF );                // Punkt
     pItemPool->SetPoolDefaultItem( aBulletItem );
-
-    // Bullets nicht sichtbar
-//  SfxUInt16Item aBulletStateItem(EE_PARA_BULLETSTATE, 0);
-//  pItemPool->SetPoolDefaultItem( aBulletStateItem );
 
     // Neues BulletItem
     SvxNumberFormat aNumberFormat(SVX_NUM_CHAR_SPECIAL);

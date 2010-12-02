@@ -364,7 +364,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
             // #i105146# We want no content to be displayed for PK_HANDOUT,
             // so just never set a page as content
             pSdrObj = new SdrPageObj(0);
-//          pSdrObj->SetResizeProtect(TRUE);
         }
         break;
 
@@ -515,7 +514,6 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
         // Objekt am StyleSheet anmelden
         // #95114# Set style only when one was found (as in 5.2)
-        // pSdrObj->NbcSetStyleSheet( GetStyleSheetForPresObj(eObjKind), FALSE );
         if( mePageKind != PK_HANDOUT )
         {
             SfxStyleSheet* pSheetForPresObj = GetStyleSheetForPresObj(eObjKind);
@@ -717,10 +715,7 @@ void SdPage::Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectang
                         {
                             sd::UndoManager* pUndoManager = pModel ? static_cast<SdDrawDocument*>(pModel)->GetUndoManager() : 0;
                             const bool bUndo = pUndoManager && pUndoManager->isInListAction() && IsInserted();
-/*
-                            DBG_ASSERT( bUndo || (pUndoManager && pUndoManager->isInUndo()),
-                                            "SdPage::Changed(), model change without undo!?" );
-*/
+
                             if( bUndo )
                                 pUndoManager->AddUndoAction( new UndoObjectUserCall(*pObj) );
 
@@ -1609,19 +1604,7 @@ void SdPage::SetAutoLayout(AutoLayout eLayout, BOOL bInit, BOOL bCreate )
                     if( !bUndo )
                         SdrObject::Free( pObj );
                 }
-/* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout
-                else
-                {
-                    if( bUndo )
-                    {
-                        pUndoManager->AddUndoAction( new UndoObjectPresentationKind( *pObj ) );
-                        if( pObj->GetUserCall() )
-                            pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
-                    }
-                    maPresentationShapeList.removeShape( *pObj );
-                    pObj->SetUserCall(0);
-                }
-*/
+/* #i108541# keep non empty pres obj as pres obj even if they are not part of the current layout */
             }
             pObj = pNext;
         }
@@ -2230,10 +2213,7 @@ SdrObject* SdPage::InsertAutoLayoutShape( SdrObject* pObj, PresObjKind eObjKind,
             pUndoManager->AddUndoAction( new UndoObjectUserCall( *pObj ) );
         }
 
-//      if ( pObj->ISA(SdrGrafObj) && !pObj->IsEmptyPresObj() )
             ( /*(SdrGrafObj*)*/ pObj)->AdjustToMaxRect( aRect );
-//      else
-//          SetLogicRect( pObj, aRect );
 
         pObj->SetUserCall(this);
 
@@ -2866,8 +2846,6 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
 
                 if( pOldPara )
                 {
-                    //pTextObj->SetVerticalWriting( bVertical );
-                    //
                     // #94826# Here, only the vertical flag for the
                     // OutlinerParaObjects needs to be changed. The
                     // AutoGrowWidth/Height items still exist in the

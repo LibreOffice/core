@@ -386,29 +386,9 @@ deprecated_AnimationEffect_conversion_table[] =
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-zoom", 0 },
     { AnimationEffect_DISSOLVE, "ooo-entrance-fade-in-and-swivel", 0 },
 
-// open
-/*
-    { AnimationEffect_ZOOM_IN_FROM_LEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_UPPERLEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_TOP, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_UPPERRIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_RIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_LOWERRIGHT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_BOTTOM, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_LOWERLEFT, "ooo-entrance-zoom","in" },
-    { AnimationEffect_ZOOM_IN_FROM_CENTER, "ooo-entrance-zoom","in" },
+    // still open (no matching effect: AnimationEffect_ZOOM_IN_FROM_*,
+    // AnimationEffect_ZOOM_OUT_FROM_*, AnimationEffect_PATH
 
-    { AnimationEffect_ZOOM_OUT_FROM_LEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_UPPERLEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_TOP, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_UPPERRIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_RIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_LOWERRIGHT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_BOTTOM, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_LOWERLEFT, "ooo-entrance-appear",0 },
-    { AnimationEffect_ZOOM_OUT_FROM_CENTER, "ooo-entrance-appear",0 },
-    { AnimationEffect_PATH, "ooo-entrance-spiral-in",0 },
-*/
     { AnimationEffect_NONE, 0, 0 }
 };
 
@@ -828,7 +808,6 @@ double EffectMigration::ConvertAnimationSpeed( AnimationSpeed eSpeed )
     {
     case AnimationSpeed_SLOW: fDuration = 2.0; break;
     case AnimationSpeed_FAST: fDuration = 0.5; break;
-    //case AnimationSpeed_MEDIUM:
     default:
         fDuration = 1.0; break;
     }

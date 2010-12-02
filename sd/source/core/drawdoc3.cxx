@@ -89,22 +89,6 @@ using namespace ::com::sun::star;
 |* Oeffnet ein Bookmark-Dokument
 |*
 \************************************************************************/
-/*
-SdStorageListener : public BaseImplHelper1 < lang::XEventListener >
-{
-    uno::Reference < embed::XStorage >& xStor;
-public:
-            SdStorageListener ( uno::Reference < embed::XStorage >& rStor )
-                : xStor( rStor )
-            {}
-
-    void disposing ( const lang::EventObject& aEvent ) throw ( uno::RuntimeException );
-};
-
-void SdStorageListener::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
-{
-    xStor = NULL;
-}*/
 
 SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium& rMedium)
 {

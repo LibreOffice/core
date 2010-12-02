@@ -301,7 +301,6 @@ SfxItemSet& SdStyleSheet::GetItemSet()
     // aktuellen Praesentationslayouts: dessen ItemSet returnieren
     else
     {
-//        return (GetRealStyleSheet()->GetItemSet());
 
         SdStyleSheet* pSdSheet = GetRealStyleSheet();
 
@@ -766,21 +765,6 @@ SdStyleSheet* SdStyleSheet::CreateEmptyUserStyle( SfxStyleSheetBasePool& rPool, 
 // XInterface
 // --------------------------------------------------------------------
 
-/*
-Any SAL_CALL SdStyleSheet::queryInterface( const ::com::sun::star::uno::Type& aType ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::queryInterface( aType );
-}
-
-// --------------------------------------------------------------------
-
-void SAL_CALL SdStyleSheet::acquire(  ) throw ()
-{
-    SdStyleSheetBase::acquire();
-}
-
-// --------------------------------------------------------------------
-*/
 void SAL_CALL SdStyleSheet::release(  ) throw ()
 {
     if (osl_decrementInterlockedCount( &m_refCount ) == 0)
@@ -803,31 +787,6 @@ void SAL_CALL SdStyleSheet::release(  ) throw ()
     }
 }
 
-// --------------------------------------------------------------------
-// XWeak
-// --------------------------------------------------------------------
-/*
-Reference< XAdapter > SAL_CALL SdStyleSheet::queryAdapter(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::queryAdapter();
-}
-
-// --------------------------------------------------------------------
-// XTypeProvider
-// --------------------------------------------------------------------
-
-Sequence< Type > SAL_CALL SdStyleSheet::getTypes(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::getTypes();
-}
-
-// --------------------------------------------------------------------
-
-Sequence< ::sal_Int8 > SAL_CALL SdStyleSheet::getImplementationId(  ) throw (RuntimeException)
-{
-    return SdStyleSheetBase::getImplementationId();
-}
-*/
 // --------------------------------------------------------------------
 // XComponent
 // --------------------------------------------------------------------
@@ -1327,8 +1286,6 @@ PropertyState SAL_CALL SdStyleSheet::getPropertyState( const OUString& PropertyN
         case SFX_ITEM_DEFAULT:
             eState = PropertyState_DEFAULT_VALUE;
             break;
-//      case SFX_ITEM_DONTCARE:
-//      case SFX_ITEM_DISABLED:
         default:
             eState = PropertyState_AMBIGUOUS_VALUE;
             break;

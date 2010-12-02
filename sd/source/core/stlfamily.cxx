@@ -279,7 +279,6 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
             }
         }
 
-//              *pNames++ = (*iter++).second->GetApiName();
         return aNames;
     }
     else
@@ -562,7 +561,6 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
         {
             case SD_STYLE_FAMILY_MASTERPAGE:    sDisplayName = getName(); break;
             case SD_STYLE_FAMILY_CELL:          sDisplayName = String( SdResId(STR_CELL_STYLE_FAMILY) ); break;
-//          case SD_STYLE_FAMILY_GRAPHICS:
             default:                            sDisplayName = String( SdResId(STR_GRAPHICS_STYLE_FAMILY) ); break;
         }
         return Any( sDisplayName );

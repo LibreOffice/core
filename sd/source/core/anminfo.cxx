@@ -94,7 +94,6 @@ SdAnimationInfo::SdAnimationInfo(const SdAnimationInfo& rAnmInfo, SdrObject& rOb
                  maSecondSoundFile          (rAnmInfo.maSecondSoundFile),
                  mbSecondSoundOn            (rAnmInfo.mbSecondSoundOn),
                  mbSecondPlayFull           (rAnmInfo.mbSecondPlayFull),
-//               maBookmark                 (rAnmInfo.maBookmark),
                  mnVerb                     (rAnmInfo.mnVerb),
                  mnPresOrder                (LIST_APPEND),
                  mrObject                   (rObject)

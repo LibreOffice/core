@@ -255,7 +255,7 @@ public:
     virtual void SAL_CALL setVolume( double _volume ) throw (RuntimeException);
 
 
-    // XCommand
+    // XCommand - the following two shadowed by animate, unfortunately
 //    virtual Any SAL_CALL getTarget() throw (RuntimeException);
 //    virtual void SAL_CALL setTarget( const Any& _target ) throw (RuntimeException);
     virtual sal_Int16 SAL_CALL getCommand() throw (RuntimeException);

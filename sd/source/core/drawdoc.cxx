@@ -748,21 +748,6 @@ void SdDrawDocument::UpdateAllLinks()
 */
 void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool )
 {
-/* cl removed because not needed anymore since binfilter
-    SdrObjListIter aShapeIter( *pPage );
-    while( aShapeIter.IsMore() )
-    {
-        OutlinerParaObject* pOPO = aShapeIter.Next()->GetOutlinerParaObject();
-        if( pOPO )
-        {
-            if( pOPO->GetOutlinerMode() == OUTLINERMODE_DONTKNOW )
-                pOPO->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
-
-            pOPO->FinishLoad( pSPool );
-        }
-    }
-*/
-
     const sd::ShapeList& rPresentationShapes( pPage->GetPresentationShapeList() );
     if(!rPresentationShapes.isEmpty())
     {
@@ -988,7 +973,6 @@ SvxNumType SdDrawDocument::GetPageNumType() const
 void SdDrawDocument::SetPrinterIndependentLayout (sal_Int32 nMode)
 {
     // #108104#
-    // DBG_ASSERT (mpDocSh!=NULL, "No available document shell to set ref device at.");
 
     switch (nMode)
     {
