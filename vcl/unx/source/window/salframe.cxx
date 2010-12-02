@@ -3996,10 +3996,10 @@ long X11SalFrame::HandleClientMessage( XClientMessageEvent *pEvent )
                 {
                     if( this == s_pSaveYourselfFrame )
                     {
-                        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+                        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
                         const char* argv[2];
                         argv[0] = "/bin/sh";
-                        argv[1] = const_cast<char*>(aExec.GetBuffer());
+                        argv[1] = const_cast<char*>(aExec.getStr());
     #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
     #endif
@@ -4044,10 +4044,10 @@ void X11SalFrame::SaveYourselfDone( SalFrame* pSaveFrame )
     // session save was done, inform dtwm
     if( s_pSaveYourselfFrame && pSaveFrame )
     {
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
         const char* argv[2];
         argv[0] = "/bin/sh";
-        argv[1] = const_cast<char*>(aExec.GetBuffer());
+        argv[1] = const_cast<char*>(aExec.getStr());
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "SaveYourself request, setting command: %s %s\n", argv[0], argv[1] );
 #endif

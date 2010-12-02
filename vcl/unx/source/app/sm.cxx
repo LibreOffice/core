@@ -211,7 +211,7 @@ static void BuildSmPropertyList()
 {
     if( ! pSmProps )
     {
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
 
         nSmProps = 5;
         pSmProps = new SmProp[ nSmProps ];
@@ -220,22 +220,22 @@ static void BuildSmPropertyList()
         pSmProps[ 0 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 0 ].num_vals  = 1;
         pSmProps[ 0 ].vals      = new SmPropValue;
-        pSmProps[ 0 ].vals->length  = aExec.Len()+1;
-        pSmProps[ 0 ].vals->value   = strdup( aExec.GetBuffer() );
+        pSmProps[ 0 ].vals->length  = aExec.getLength()+1;
+        pSmProps[ 0 ].vals->value   = strdup( aExec.getStr() );
 
         pSmProps[ 1 ].name      = const_cast<char*>(SmProgram);
         pSmProps[ 1 ].type      = const_cast<char*>(SmARRAY8);
         pSmProps[ 1 ].num_vals  = 1;
         pSmProps[ 1 ].vals      = new SmPropValue;
-        pSmProps[ 1 ].vals->length  = aExec.Len()+1;
-        pSmProps[ 1 ].vals->value   = strdup( aExec.GetBuffer() );
+        pSmProps[ 1 ].vals->length  = aExec.getLength()+1;
+        pSmProps[ 1 ].vals->value   = strdup( aExec.getStr() );
 
         pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
         pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
         pSmProps[ 2 ].num_vals  = 3;
         pSmProps[ 2 ].vals      = new SmPropValue[3];
-        pSmProps[ 2 ].vals[0].length    = aExec.Len()+1;
-        pSmProps[ 2 ].vals[0].value = strdup( aExec.GetBuffer() );
+        pSmProps[ 2 ].vals[0].length    = aExec.getLength()+1;
+        pSmProps[ 2 ].vals[0].value = strdup( aExec.getStr() );
             ByteString aRestartOption( "-session=" );
         aRestartOption.Append( SessionManagerClient::getSessionID() );
         pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
@@ -559,7 +559,7 @@ void SessionManagerClient::interactionDone( bool bCancelShutdown )
 }
 
 
-String SessionManagerClient::getExecName()
+rtl::OUString SessionManagerClient::getExecName()
 {
     rtl::OUString aExec, aSysExec;
     osl_getExecutableFile( &aExec.pData );

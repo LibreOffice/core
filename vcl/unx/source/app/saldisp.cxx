@@ -735,10 +735,10 @@ void SalDisplay::initScreen( int nScreen ) const
                          1
                          );
 
-        ByteString aExec( SessionManagerClient::getExecName(), osl_getThreadTextEncoding() );
+        rtl::OString aExec(rtl::OUStringToOString(SessionManagerClient::getExecName(), osl_getThreadTextEncoding()));
         const char* argv[2];
         argv[0] = "/bin/sh";
-        argv[1] = aExec.GetBuffer();
+        argv[1] = aExec.getStr();
         XSetCommand( pDisp_, rSD.m_aRefWindow, const_cast<char**>(argv), 2 );
         XSelectInput( pDisp_, rSD.m_aRefWindow, PropertyChangeMask );
 
