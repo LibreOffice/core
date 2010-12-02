@@ -14,7 +14,7 @@ export EXEEXT
 # Build dmake
 
 if test "$BUILD_DMAKE" != "NO"; then
-    if test ! -x "$SRC_ROOT/dmake/dmake"; then
+    if test ! -x "$SRC_ROOT/dmake/dmake$EXEEXT"; then
         cd "$SRC_ROOT/dmake" || exit
 
         # Special case! The w32/tcsh build needs CC pointing to the MSVC++ compiler
