@@ -537,6 +537,29 @@
         </info>
         <value>0</value>
       </prop>
+      <prop oor:name="PenColor" oor:type="xs:int">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: slide show context menu -->
+        <info>
+          <author>CL</author>
+          <desc>Color of the pen during slideshow.</desc>
+          <label>Pen Color</label>
+        </info>
+        <value>16711680</value>
+      </prop>
+      <prop oor:name="PenWidth" oor:type="xs:double">
+        <!-- OldPath: -->
+        <!-- OldLocation: -->
+        <!-- UIHints: slide show context menu -->
+        <info>
+          <author>CL</author>
+          <desc>Width of the pen during slideshow.</desc>
+          <label>Pen Width</label>
+        </info>
+        <value>150</value>
+      </prop>
+
       <group oor:name="TextObject">
         <info>
           <desc>Contains text editing related configuration items.</desc>
