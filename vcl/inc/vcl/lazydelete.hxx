@@ -284,10 +284,15 @@ namespace vcl
 
         void set (const ::com::sun::star::uno::Reference<I>& r_xNew )
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent (m_xI, UNO_QUERY);
-            m_xI.clear();
-            if (xComponent.is())
+            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent> xComponent (m_xI, ::com::sun::star::uno::UNO_QUERY);
+            m_xI = r_xNew;
+            if (xComponent.is()) try
+            {
                 xComponent->dispose();
+            }
+            catch( Exception& )
+            {
+            }
         }
     };
 }
