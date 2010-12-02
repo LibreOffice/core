@@ -290,7 +290,7 @@ namespace vcl
             {
                 xComponent->dispose();
             }
-            catch( Exception& )
+            catch( ::com::sun::star::uno::Exception& )
             {
             }
         }
