@@ -121,9 +121,9 @@ AC_ARG_ENABLE(fetch-external,
 ,)
 
 AC_ARG_ENABLE(lockdown,
-    AS_HELP_STRING([--enable-lockdown],
-        [Enables the gconf integration work in LibO.]),
-,)
+    AS_HELP_STRING([--disable-lockdown],
+        [Disables the gconf integration work in LibO.]),
+,enable_lockdown=yes)
 
 AC_ARG_ENABLE(vba,
     AS_HELP_STRING([--disable-vba],
@@ -136,9 +136,9 @@ AC_ARG_ENABLE(pch,
 ,)
 
 AC_ARG_ENABLE(hids,
-    AS_HELP_STRING([--enable-hids],
-        [Enables generation of HelpId lists.]),
-,)
+    AS_HELP_STRING([--disable-hids],
+        [Disables generation of HelpId lists.]),
+,enable_hids=yes)
 
 AC_ARG_ENABLE(mozilla,
     AS_HELP_STRING([--disable-mozilla],
@@ -274,15 +274,15 @@ AC_ARG_ENABLE(unix-qstart,
 
 AC_ARG_ENABLE(broffice,
     AS_HELP_STRING([--disable-broffice],
-        [When enabled, this will include broffice branded artwork into packages,
-         that will only be seen in the pt_BR locale.]),
+        [When disabled, broffice specific branding artwork for use in the pt_BR
+	 locale is removed, giving uniform branding.]),
 ,enable_broffice=yes)
 
 AC_ARG_ENABLE(cairo,
-    AS_HELP_STRING([--enable-cairo],
+    AS_HELP_STRING([--disable-cairo],
         [Determines whether to use Cairo library on platforms where Cairo is
          available.]),
-,enable_cairo=no)
+,enable_cairo=yes)
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--enable-opengl],
