@@ -410,7 +410,7 @@
 						<desc>Indicates whether a simple click on a text object changes it to edit mode.</desc>
 						<label>Allow quick editing</label>
 					</info>
-					<value>false</value>
+					<value>true</value>
 				</prop>
 				<prop oor:name="Selectable" oor:type="xs:boolean">
 					<!-- OldPath: Draw/Other/Text_Objects -->
