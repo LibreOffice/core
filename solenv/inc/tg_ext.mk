@@ -110,9 +110,9 @@ clean:
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := bzip2 -cd $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.bz2 $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
@@ -120,28 +120,28 @@ $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.bz2
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.Z
     @-$(RM) $@
 .IF "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - ")
+    @noop $(assign UNPACKCMD := sh -c "uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - ")
 .ELSE			# "$(GUI)"=="UNX"
-    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := uncompress -c $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.Z | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
 .ENDIF			# "$(GUI)"=="UNX"
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar.gz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar.gz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tgz
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) -x$(tar_verbose_switch)f - )
+    @noop $(assign UNPACKCMD := gzip -d -c $(subst,\,/ $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tgz) $(TARFILE_FILTER) | $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f - )
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
 $(MISC)/%.unpack : $(TARFILE_LOCATION2)/%.tar
     @-$(RM) $@
-    @noop $(assign UNPACKCMD := $(GNUTAR) -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
+    @noop $(assign UNPACKCMD := $(GNUTAR) --no-same-owner -x$(tar_verbose_switch)f $(TARFILE_LOCATION)/$(TARFILE_MD5)-$(TARFILE_NAME).tar)
     @$(TYPE) $(mktmp $(UNPACKCMD)) > $@.$(INPATH)
     @$(RENAME) $@.$(INPATH) $@
 
