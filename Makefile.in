@@ -39,4 +39,4 @@ src/downloaded: ooo.lst download
 	@. ./*[Ee]nv.[Ss]et.sh && \
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 
-download: src/downloaded
+fetch: src/downloaded
