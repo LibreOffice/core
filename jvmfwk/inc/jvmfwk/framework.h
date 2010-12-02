@@ -830,6 +830,7 @@ javaFrameworkError SAL_CALL jfw_getJRELocations(
     JFW_E_NONE the function ran successfully.</br>
     JFW_E_ERROR an error occurred during execution.</br>
     JFW_E_INVALID_ARG pInfo contains invalid data</br>
+    JFW_E_NO_PLUGIN a plug-in library could not be found.<br/>
  */
 javaFrameworkError SAL_CALL jfw_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
 

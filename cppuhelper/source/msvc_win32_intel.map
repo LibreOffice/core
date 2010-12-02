@@ -278,3 +278,9 @@ UDK_3.6 { # OOo 3.3
         ?clear@WeakReferenceHelper@uno@star@sun@com@@QAAXXZ;
         ?createOneInstanceComponentFactory@cppu@@YA?AV?$Reference@VXSingleComponentFactory@lang@star@sun@com@@@uno@star@sun@com@@P6A?AV?$Reference@VXInterface@uno@star@sun@com@@@3456@ABV?$Reference@VXComponentContext@uno@star@sun@com@@@3456@@ZABVOUString@rtl@@ABV?$Sequence@VOUString@rtl@@@3456@PAU_rtl_ModuleCount@@@Z;
 } UDK_3.5;
+
+UDK_3.7 { # OOo 3.4
+    global:
+        ?setDependentFastPropertyValue@OPropertySetHelper@cppu@@IAEXJABVAny@uno@star@sun@com@@@Z;
+} UDK_3.6;
+

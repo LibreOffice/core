@@ -1022,66 +1022,31 @@ static int oslDoCopyFile(const sal_Char* pszSourceFileName, const sal_Char* pszD
         return nRet;
     }
 
-    /* HACK: because memory mapping fails on various
-       platforms if the size of the source file is  0 byte */
-    if (0 == nSourceSize)
-    {
-        close(SourceFileFD);
-        close(DestFileFD);
-        return 0;
-    }
-
-    // read and lseek are used to check the possibility to access the data
-    // not a nice solution, but it allows to avoid a crash in case it is an opened samba file
-    // generally, reading of one byte should not affect the performance
-    char nCh;
-    if ( 1 != read( SourceFileFD, &nCh, 1 )
-      || -1 == lseek( SourceFileFD, 0, SEEK_SET ) )
-    {
-        nRet = errno;
-        close( SourceFileFD );
-        close( DestFileFD );
-        return nRet;
-    }
-
     size_t nWritten = 0;
     size_t nRemains = nSourceSize;
-
-    /* mmap file -- open dest file -- write -- fsync it at the end */
-    void* pSourceFile = mmap( 0, nSourceSize, PROT_READ, MAP_SHARED, SourceFileFD, 0 );
-    if ( pSourceFile != MAP_FAILED )
-    {
-        nWritten = write( DestFileFD, pSourceFile, nSourceSize );
-        nRemains -= nWritten;
-        munmap( (char*)pSourceFile, nSourceSize );
-    }
 
     if ( nRemains )
     {
         /* mmap has problems, try the direct streaming */
-        char pBuffer[32000];
+        char pBuffer[0x8000];
         size_t nRead = 0;
 
         nRemains = nSourceSize;
 
-        if ( -1 != lseek( SourceFileFD, 0, SEEK_SET )
-          && -1 != lseek( DestFileFD, 0, SEEK_SET ) )
+        do
         {
-            do
-            {
-                nRead = 0;
-                nWritten = 0;
+            nRead = 0;
+            nWritten = 0;
 
-                size_t nToRead = std::min( (size_t)32000, nRemains );
-                nRead = read( SourceFileFD, pBuffer, nToRead );
-                if ( (size_t)-1 != nRead )
-                    nWritten = write( DestFileFD, pBuffer, nRead );
+            size_t nToRead = std::min( (size_t)0x8000, nRemains );
+            nRead = read( SourceFileFD, pBuffer, nToRead );
+            if ( (size_t)-1 != nRead )
+                nWritten = write( DestFileFD, pBuffer, nRead );
 
-                if ( (size_t)-1 != nWritten )
-                    nRemains -= nWritten;
-            }
-            while( nRemains && (size_t)-1 != nRead && nRead == nWritten );
+            if ( (size_t)-1 != nWritten )
+                nRemains -= nWritten;
         }
+        while( nRemains && (size_t)-1 != nRead && nRead == nWritten );
     }
 
     if ( nRemains )

@@ -238,6 +238,25 @@ javaPluginError jfw_plugin_startJavaVirtualMachine(
 
 
 
+/** checks if the installation of the jre still exists.
+
+    This function checks if the JRE described by pInfo still
+    exists. The check must be very quick because it is called by javaldx
+    (Linux, Solaris) at start up.
+
+    @param pInfo
+        [in]  the JavaInfo object with information about the JRE.
+    @param pp_exist
+        [out] the parameter is set to either sal_True or sal_False. The value is
+        only valid if the function returns JFW_E_NONE.
+
+   @return
+    JFW_PLUGIN_E_NONE the function ran successfully.</br>
+    JFW_PLUGIN_E_ERROR an error occurred during execution.</br>
+    JFW_PLUGIN_E_INVALID_ARG pInfo contains invalid data</br>
+ */
+javaPluginError jfw_plugin_existJRE(const JavaInfo *pInfo, sal_Bool *exist);
+
 #ifdef __cplusplus
 }
 #endif
