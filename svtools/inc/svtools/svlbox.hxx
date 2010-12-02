@@ -47,6 +47,7 @@
 #include <vcl/accel.hxx>
 #endif
 #include <vcl/mnemonicengine.hxx>
+#include <vcl/quickselectionengine.hxx>
 #include <tools/gen.hxx>
 #include <svtools/treelist.hxx>
 #include <svl/svarray.hxx>
@@ -253,10 +254,12 @@ DECLARE_SVTREELIST(SvLBoxTreeList, SvLBoxEntry*)
 class SvLBox;
 struct SvLBox_Impl
 {
-    bool                    m_bIsEmptyTextAllowed;
-    bool                    m_bEntryMnemonicsEnabled;
-    Link*                   m_pLink;
-    ::vcl::MnemonicEngine   m_aMnemonicEngine;
+    bool                        m_bIsEmptyTextAllowed;
+    bool                        m_bEntryMnemonicsEnabled;
+    bool                        m_bDoingQuickSelection;
+    Link*                       m_pLink;
+    ::vcl::MnemonicEngine       m_aMnemonicEngine;
+    ::vcl::QuickSelectionEngine m_aQuickSelectionEngine;
 
     SvLBox_Impl( SvLBox& _rBox );
 };
@@ -267,6 +270,7 @@ class SVT_DLLPUBLIC SvLBox
                 ,public DropTargetHelper
                 ,public DragSourceHelper
                 ,public ::vcl::IMnemonicEntryList
+                ,public ::vcl::ISearchableStringList
 {
     friend class SvLBoxEntry;
 
@@ -290,7 +294,6 @@ class SVT_DLLPUBLIC SvLBox
 
 protected:
 
-    WinBits         nWindowStyle;
     Link            aExpandedHdl;
     Link            aExpandingHdl;
     Link            aSelectHdl;
@@ -376,11 +379,18 @@ protected:
     // for asynchronous D&D
     sal_Int8        ExecuteDrop( const ExecuteDropEvent& rEvt, SvLBox* pSourceView );
 
-     // IMnemonicEntryList
-     virtual const void* FirstSearchEntry( String& _rEntryText );
-     virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText );
-     virtual void        SelectSearchEntry( const void* _pEntry );
-     virtual void        ExecuteSearchEntry( const void* _pEntry );
+    void            OnCurrentEntryChanged();
+
+    // IMnemonicEntryList
+    virtual const void* FirstSearchEntry( String& _rEntryText ) const;
+    virtual const void* NextSearchEntry( const void* _pCurrentSearchEntry, String& _rEntryText ) const;
+    virtual void        SelectSearchEntry( const void* _pEntry );
+    virtual void        ExecuteSearchEntry( const void* _pEntry ) const;
+
+    // ISearchableStringList
+    virtual ::vcl::StringEntryIdentifier    CurrentEntry( String& _out_entryText ) const;
+    virtual ::vcl::StringEntryIdentifier    NextEntry( ::vcl::StringEntryIdentifier _currentEntry, String& _out_entryText ) const;
+    virtual void                            SelectEntry( ::vcl::StringEntryIdentifier _entry );
 
 public:
 
