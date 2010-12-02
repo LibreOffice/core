@@ -33,6 +33,7 @@
 #include <hintids.hxx>
 #include <svl/whiter.hxx>
 #include <svtools/imapobj.hxx>
+#include <svtools/miscopt.hxx>
 #include <svl/srchitem.hxx>
 #include <svtools/imap.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -854,6 +855,16 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                          || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
+
+                case FN_EXPORT_OLE:
+                case FN_EXPORT_OLE_AS_PDF:
+                case FN_EXPORT_OLE_AS_GRAPHIC:
+                {
+                    SvtMiscOptions aMiscOptions;
+                    if ( !aMiscOptions.IsExperimentalMode() )
+                        rSet.DisableItem( nWhich );
+                    break;
+                }
 
                 case SID_OBJECT_ALIGN_UP     :
                 case SID_OBJECT_ALIGN_MIDDLE :
