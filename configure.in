@@ -5440,51 +5440,51 @@ if test "$_os" = "SunOS" -o "$_os" = "FreeBSD" -o "$_os" = "Darwin"; then
       GNUPATCH=$PATCH
    else
       if test -x "$with_gnu_patch"; then
-	GNUPATCH=$with_gnu_patch
+	      GNUPATCH=$with_gnu_patch
       else
-        AC_MSG_ERROR([--with-gnu-patch did not point to an executable])
+         AC_MSG_ERROR([--with-gnu-patch did not point to an executable])
       fi
    fi
 
    AC_MSG_CHECKING([whether $GNUPATCH is GNU patch])
    if $GNUPATCH --version | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
-	AC_MSG_RESULT([yes])
+	   AC_MSG_RESULT([yes])
    else
-  	AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
+      AC_MSG_ERROR([no, GNU patch needed. install or specify with --with-gnu-patch=/path/to/it])
    fi
+fi
 
 dnl We also need to check for --with-gnu-cp
 
-  if test -z "$with_gnu_cp"; then
-    AC_PATH_PROGS(GNUCP, gnucp cp)
-    if test -z $GNUCP; then
+if test -z "$with_gnu_cp"; then
+   AC_PATH_PROGS(GNUCP, gnucp cp)
+   if test -z $GNUCP; then
       AC_MSG_ERROR([Neither gnucp nor cp found. Install GNU cp and/or specify --with-gnu-cp=/path/to/it])
-    fi
-  else
-    if test -x "$with_gnu_cp"; then
+   fi
+else
+   if test -x "$with_gnu_cp"; then
       GNUCP=$with_gnu_cp
-    else
-      AC_MSG_ERROR([--with-gnu-cp did not point to an executable])
-    fi
-  fi
-
-  AC_MSG_CHECKING([whether $GNUCP is GNU cp])
-  if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
-	AC_MSG_RESULT([yes])
-  else
-   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
-	AC_MSG_RESULT([yes])
    else
-      if test "$_os" = "Darwin"; then
+      AC_MSG_ERROR([--with-gnu-cp did not point to an executable])
+   fi
+fi
+
+AC_MSG_CHECKING([whether $GNUCP is GNU cp])
+if $GNUCP --version 2>/dev/null | grep "Free Software Foundation" >/dev/null 2>/dev/null; then
+   AC_MSG_RESULT([yes])
+else
+   if $GNUCP --version 2>/dev/null | grep "GNU fileutils" >/dev/null 2>/dev/null; then
+      AC_MSG_RESULT([yes])
+   else
+      if test "$_os" = "SunOS" -o "$_os" = "FreeBSD"; then
+         AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
+      else
          GNUCP=''
          AC_MSG_RESULT([no gnucp found - using the system's cp command])
-      else      
-         AC_MSG_ERROR([no, GNU cp needed. install or specify with --with-gnu-cp=/path/to/it])
       fi
    fi
-  fi	
-
 fi
+
 AC_SUBST(GNUPATCH)
 AC_SUBST(GNUCP)
 
