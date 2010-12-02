@@ -39,6 +39,8 @@
 #include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
+#include <com/sun/star/chart/TimeInterval.hpp>
+#include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -167,6 +169,56 @@ bool lclIsAutoAnyOrGetScaledValue( double& rfValue, const Any& rAny, bool bLogSc
     if( !bIsAuto && bLogScale )
         rfValue = log( rfValue ) / log( 10.0 );
     return bIsAuto;
+}
+
+sal_uInt16 lclGetTimeValue( const XclExpRoot& rRoot, double fSerialDate, sal_uInt16 nTimeUnit )
+{
+    DateTime aDateTime = rRoot.GetDateTimeFromDouble( fSerialDate );
+    switch( nTimeUnit )
+    {
+        case EXC_CHDATERANGE_DAYS:
+            return ::limit_cast< sal_uInt16, double >( fSerialDate, 0, SAL_MAX_UINT16 );
+        case EXC_CHDATERANGE_MONTHS:
+            return ::limit_cast< sal_uInt16, sal_uInt16 >( 12 * (aDateTime.GetYear() - rRoot.GetBaseYear()) + aDateTime.GetMonth() - 1, 0, SAL_MAX_INT16 );
+        case EXC_CHDATERANGE_YEARS:
+            return ::limit_cast< sal_uInt16, sal_uInt16 >( aDateTime.GetYear() - rRoot.GetBaseYear(), 0, SAL_MAX_INT16 );
+        default:
+            OSL_ENSURE( false, "lclGetTimeValue - unexpected time unit" );
+    }
+    return ::limit_cast< sal_uInt16, double >( fSerialDate, 0, SAL_MAX_UINT16 );
+}
+
+bool lclConvertTimeValue( const XclExpRoot& rRoot, sal_uInt16& rnValue, const Any& rAny, sal_uInt16 nTimeUnit )
+{
+    double fSerialDate;
+    bool bAuto = lclIsAutoAnyOrGetValue( fSerialDate, rAny );
+    if( !bAuto )
+        rnValue = lclGetTimeValue( rRoot, fSerialDate, nTimeUnit );
+    return bAuto;
+}
+
+sal_uInt16 lclGetTimeUnit( sal_Int32 nApiTimeUnit )
+{
+    switch( nApiTimeUnit )
+    {
+        case cssc::TimeUnit::DAY:   return EXC_CHDATERANGE_DAYS;
+        case cssc::TimeUnit::MONTH: return EXC_CHDATERANGE_MONTHS;
+        case cssc::TimeUnit::YEAR:  return EXC_CHDATERANGE_YEARS;
+        default:                    OSL_ENSURE( false, "lclGetTimeUnit - unexpected time unit" );
+    }
+    return EXC_CHDATERANGE_DAYS;
+}
+
+bool lclConvertTimeInterval( sal_uInt16 rnValue, sal_uInt16& rnTimeUnit, const Any& rAny )
+{
+    cssc::TimeInterval aInterval;
+    bool bAuto = lclIsAutoAnyOrGetValue( aInterval, rAny );
+    if( !bAuto )
+    {
+        rnValue = ::limit_cast< sal_uInt16, sal_Int32 >( aInterval.Number, 1, SAL_MAX_UINT16 );
+        rnTimeUnit = lclGetTimeUnit( aInterval.TimeUnit );
+    }
+    return bAuto;
 }
 
 } // namespace
@@ -2548,14 +2600,42 @@ XclExpChLabelRange::XclExpChLabelRange( const XclExpChRoot& rRoot ) :
 
 void XclExpChLabelRange::Convert( const ScaleData& rScaleData, bool bMirrorOrient )
 {
+    // TODO: detect automatic category/date axis (has axis type CATEGORY)
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS, rScaleData.AxisType == cssc2::AxisType::DATE );
+    // automatic axis type detection
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTODATE, rScaleData.AutoDateAxis );
+
+    // base unit
+    const cssc::TimeIncrement& rTimeIncrement = rScaleData.TimeIncrement;
+    sal_Int32 nApiTimeUnit = 0;
+    bool bAutoBase = lclIsAutoAnyOrGetValue( nApiTimeUnit, rTimeIncrement.TimeResolution );
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOBASE, bAutoBase );
+    if( !bAutoBase )
+    {
+         maDateData.mnBaseUnit = lclGetTimeUnit( nApiTimeUnit );
+
+        /*  Min/max values depend on base time unit, they specify the
+            number of days, months, or years starting from null date. */
+        bool bAutoMin = lclConvertTimeValue( GetRoot(), maDateData.mnMinDate, rScaleData.Minimum, maDateData.mnBaseUnit );
+        ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMIN, bAutoMin );
+        bool bAutoMax = lclConvertTimeValue( GetRoot(), maDateData.mnMaxDate, rScaleData.Maximum, maDateData.mnBaseUnit );
+        ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAX, bAutoMax );
+    }
+
+    // increment
+    bool bAutoMajor = lclConvertTimeInterval( maDateData.mnMajorStep, maDateData.mnMajorUnit, rTimeIncrement.MajorTimeInterval );
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAJOR, bAutoMajor );
+    bool bAutoMinor = lclConvertTimeInterval( maDateData.mnMinorStep, maDateData.mnMinorUnit, rTimeIncrement.MinorTimeInterval );
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMINOR, bAutoMinor );
+
     // origin
     double fOrigin = 0.0;
     if( !lclIsAutoAnyOrGetValue( fOrigin, rScaleData.Origin ) )
-        maData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 31999 );
+        maLabelData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 31999 );
 
     // reverse order
     if( (rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE) != bMirrorOrient )
-        ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_REVERSE );
+        ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_REVERSE );
 }
 
 void XclExpChLabelRange::ConvertAxisPosition( const ScfPropertySet& rPropSet )
@@ -2564,19 +2644,55 @@ void XclExpChLabelRange::ConvertAxisPosition( const ScfPropertySet& rPropSet )
     rPropSet.GetProperty( eAxisPos, EXC_CHPROP_CROSSOVERPOSITION );
     double fCrossingPos = 1.0;
     rPropSet.GetProperty( fCrossingPos, EXC_CHPROP_CROSSOVERVALUE );
+
+    bool bDateAxis = ::get_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS );
     switch( eAxisPos )
     {
-        case cssc::ChartAxisPosition_ZERO:  maData.mnCross = 1;                                                     break;
-        case cssc::ChartAxisPosition_START: maData.mnCross = 1;                                                     break;
-        case cssc::ChartAxisPosition_END:   ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );                break;
-        case cssc::ChartAxisPosition_VALUE: maData.mnCross = limit_cast< sal_uInt16 >( fCrossingPos, 1, 31999 );    break;
-        default:                            maData.mnCross = 1;
+        case cssc::ChartAxisPosition_ZERO:
+        case cssc::ChartAxisPosition_START:
+            maLabelData.mnCross = 1;
+            ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOCROSS );
+        break;
+        case cssc::ChartAxisPosition_END:
+            ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_MAXCROSS );
+        break;
+        case cssc::ChartAxisPosition_VALUE:
+            maLabelData.mnCross = limit_cast< sal_uInt16 >( fCrossingPos, 1, 31999 );
+            ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOCROSS, false );
+            if( bDateAxis )
+                maDateData.mnCross = lclGetTimeValue( GetRoot(), fCrossingPos, maDateData.mnBaseUnit );
+        break;
+        default:
+            maLabelData.mnCross = 1;
+            ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOCROSS );
+    }
+}
+
+void XclExpChLabelRange::Save( XclExpStream& rStrm )
+{
+    // the CHLABELRANGE record
+    XclExpRecord::Save( rStrm );
+
+    // the CHDATERANGE record with date axis settings (BIFF8 only)
+    if( GetBiff() == EXC_BIFF8 )
+    {
+        rStrm.StartRecord( EXC_ID_CHDATERANGE, 18 );
+        rStrm   << maDateData.mnMinDate
+                << maDateData.mnMaxDate
+                << maDateData.mnMajorStep
+                << maDateData.mnMajorUnit
+                << maDateData.mnMinorStep
+                << maDateData.mnMinorUnit
+                << maDateData.mnBaseUnit
+                << maDateData.mnCross
+                << maDateData.mnFlags;
+        rStrm.EndRecord();
     }
 }
 
 void XclExpChLabelRange::WriteBody( XclExpStream& rStrm )
 {
-    rStrm << maData.mnCross << maData.mnLabelFreq << maData.mnTickFreq << maData.mnFlags;
+    rStrm << maLabelData.mnCross << maLabelData.mnLabelFreq << maLabelData.mnTickFreq << maLabelData.mnFlags;
 }
 
 // ----------------------------------------------------------------------------

@@ -1016,13 +1016,15 @@ public:
     void                ConvertAxisPosition( const ScfPropertySet& rPropSet );
     /** Sets flag for tickmark position between categories or on categories. */
     inline void         SetTicksBetweenCateg( bool bTicksBetween )
-                            { ::set_flag( maData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
+                            { ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_BETWEEN, bTicksBetween ); }
 
 private:
+    virtual void        Save( XclExpStream& rStrm );
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
-    XclChLabelRange     maData;             /// Contents of the CHLABELRANGE record.
+    XclChLabelRange     maLabelData;        /// Contents of the CHLABELRANGE record.
+    XclChDateRange      maDateData;         /// Contents of the CHDATERANGE record.
 };
 
 typedef ScfRef< XclExpChLabelRange > XclExpChLabelRangeRef;
