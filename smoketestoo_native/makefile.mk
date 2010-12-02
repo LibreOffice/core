@@ -59,14 +59,9 @@ cpptest : $(SHL1TARGETN)
 OOO_CPPTEST_ARGS = $(SHL1TARGETN) -env:arg-doc=$(BIN)/smoketestdoc.sxw
 
 .IF "$(OS)" != "WNT"
-$(installationtest_instpath).flag : $(shell ls \
-        $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).tar.gz)
+localinstall :
     $(RM) -r $(installationtest_instpath)
     $(MKDIRHIER) $(installationtest_instpath)
-    cd $(installationtest_instpath) && $(GNUTAR) xfz \
-        $(installationtest_instset)/LibO_*_install-arc_$(defaultlangiso).tar.gz
-    $(MV) $(installationtest_instpath)/LibO_*_install-arc_$(defaultlangiso) \
-        $(installationtest_instpath)/opt
-    $(TOUCH) $@
-cpptest : $(installationtest_instpath).flag
+    ooinstall $(installationtest_instpath)/opt
+cpptest : localinstall
 .END
