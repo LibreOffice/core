@@ -315,7 +315,7 @@ private:
                         mxVbaEvents;
 
 public:
-    ScTabOpList         aTableOpList;                   // list of ScInterpreterTableOpParams currently in use
+    ScInterpreterTableOpParams* aTableOpList;           // ScInterpreterTableOpParams currently in use
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
 private:
 

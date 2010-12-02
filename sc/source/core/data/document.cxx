@@ -3081,10 +3081,9 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     }
 }
 
-
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
-    ScInterpreterTableOpParams* p = aTableOpList.Last();
+    ScInterpreterTableOpParams* p = aTableOpList;
     if ( p && p->bCollectNotifications )
     {
         if ( p->bRefresh )
@@ -3098,7 +3097,6 @@ void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
         }
     }
 }
-
 
 void ScDocument::CalcAll()
 {
