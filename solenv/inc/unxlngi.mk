@@ -27,7 +27,7 @@
 
 # mk file for Unix Linux Intel (X86) using GCC, please make generic modifications to unxlng.mk
 CDEFAULTOPT=-Os
-ARCH_FLAGS*=-mtune=pentiumpro
+ARCH_FLAGS*=-mtune=atom
 .INCLUDE : unxlng.mk
 CDEFS+=-DX86
 DLLPOST=.so
