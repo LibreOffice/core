@@ -143,8 +143,7 @@ String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                         //              hinterher alle am Stringende (koenten ja 'normale' 0x7f drinstehen
                            BOOL bEmpty = RES_TXTATR_FIELD != pHt->Which() ||
                             !(static_cast<SwTxtFld const*>(pHt)
-                                ->GetFld().GetFld()->ExpandField(
-                                    rNd.GetDoc()->IsClipBoard()).Len());
+                                ->GetFld().GetFld()->ExpandField(true).Len());
                         if ( bEmpty && nStart == nAkt )
                            {
                             rArr.Insert( nAkt, rArr.Count() );

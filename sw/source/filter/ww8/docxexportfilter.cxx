@@ -26,6 +26,8 @@
  ************************************************************************/
 
 #include "docxexportfilter.hxx"
+#include "rtfexportfilter.hxx"
+#include "rtfimportfilter.hxx"
 #include "docxexport.hxx"
 
 #include <docsh.hxx>
@@ -133,6 +135,7 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
 
 SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /* pRegistryKey */ )
 {
+    OSL_TRACE("%s, pImplName is '%s'", OSL_THIS_FUNC, pImplName);
     uno::Reference< lang::XSingleServiceFactory > xFactory;
     void* pRet = 0;
 
@@ -145,6 +148,22 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplN
                     DocxExport_getImplementationName(),
                     DocxExport_createInstance,
                     DocxExport_getSupportedServiceNames() ) );
+    } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFEXPORT ) == 0 ) {
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFEXPORT ) );
+
+        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                    RtfExport_getImplementationName(),
+                    RtfExport_createInstance,
+                    RtfExport_getSupportedServiceNames() ) );
+    } else if ( rtl_str_compare( pImplName, IMPL_NAME_RTFIMPORT ) == 0 ) {
+        const OUString aServiceName( OUString::createFromAscii( IMPL_NAME_RTFIMPORT ) );
+
+        xFactory = uno::Reference< lang::XSingleServiceFactory >( ::cppu::createSingleFactory(
+                    reinterpret_cast< lang::XMultiServiceFactory* >( pServiceManager ),
+                    RtfImport_getImplementationName(),
+                    RtfImport_createInstance,
+                    RtfImport_getSupportedServiceNames() ) );
     }
 
     if ( xFactory.is() )

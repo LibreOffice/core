@@ -343,7 +343,8 @@ void WW8Export::DoFormText(const SwInputField * pFld)
 
     OutputField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CMD_END);
 
-    SwWW8Writer::WriteString16(Strm(), pFld->Expand(), false);
+    String const fieldStr( pFld->ExpandField(true) );
+    SwWW8Writer::WriteString16(Strm(), fieldStr, false);
 
     static BYTE aArr2[] = {
         0x03, 0x6a, 0x00, 0x00, 0x00, 0x00, // sprmCPicLocation
@@ -811,49 +812,7 @@ void WW8Export::AppendFlyInFlys(const sw::Frame& rFrmFmt,
         OutputField(0, ww::eSHAPE, aEmptyStr, WRITEFIELD_CLOSE);
 }
 
-class WW8_SdrAttrIter : public MSWordAttrIter
-{
-private:
-    const EditTextObject* pEditObj;
-    const SfxItemPool* pEditPool;
-    EECharAttribArray aTxtAtrArr;
-    SvPtrarr aChrTxtAtrArr;
-    SvUShorts aChrSetArr;
-    USHORT nPara;
-    xub_StrLen nAktSwPos;
-    xub_StrLen nTmpSwPos;                   // fuer HasItem()
-    rtl_TextEncoding eNdChrSet;
-    USHORT nScript;
-    BYTE mnTyp;
-
-    xub_StrLen SearchNext( xub_StrLen nStartPos );
-    void SetCharSet(const EECharAttrib& rTxtAttr, bool bStart);
-
-    //No copying
-    WW8_SdrAttrIter(const WW8_SdrAttrIter&);
-    WW8_SdrAttrIter& operator=(const WW8_SdrAttrIter&);
-public:
-    WW8_SdrAttrIter( WW8Export& rWr, const EditTextObject& rEditObj,
-        BYTE nType );
-    void NextPara( USHORT nPar );
-    void OutParaAttr(bool bCharAttr);
-    void OutEEField(const SfxPoolItem& rHt);
-
-    bool IsTxtAttr(xub_StrLen nSwPos);
-
-    void NextPos() { nAktSwPos = SearchNext( nAktSwPos + 1 ); }
-
-    void OutAttr( xub_StrLen nSwPos );
-    virtual const SfxPoolItem* HasTextItem( USHORT nWhich ) const;
-    virtual const SfxPoolItem& GetItem( USHORT nWhich ) const;
-    bool OutAttrWithRange(xub_StrLen nPos);
-    xub_StrLen WhereNext() const                { return nAktSwPos; }
-    rtl_TextEncoding GetNextCharSet() const;
-    rtl_TextEncoding GetNodeCharSet() const     { return eNdChrSet; }
-};
-
-
-WW8_SdrAttrIter::WW8_SdrAttrIter( WW8Export& rWr,
+MSWord_SdrAttrIter::MSWord_SdrAttrIter( MSWordExportBase& rWr,
     const EditTextObject& rEditObj, BYTE nTyp )
     : MSWordAttrIter( rWr ), pEditObj(&rEditObj), pEditPool(0),
     aTxtAtrArr( 0, 4 ), aChrTxtAtrArr( 0, 4 ), aChrSetArr( 0, 4 ),
@@ -862,7 +821,7 @@ WW8_SdrAttrIter::WW8_SdrAttrIter( WW8Export& rWr,
     NextPara( 0 );
 }
 
-void WW8_SdrAttrIter::NextPara( USHORT nPar )
+void MSWord_SdrAttrIter::NextPara( USHORT nPar )
 {
     nPara = nPar;
     // Attributwechsel an Pos 0 wird ignoriert, da davon ausgegangen
@@ -885,7 +844,7 @@ void WW8_SdrAttrIter::NextPara( USHORT nPar )
     nAktSwPos = SearchNext( 1 );
 }
 
-rtl_TextEncoding WW8_SdrAttrIter::GetNextCharSet() const
+rtl_TextEncoding MSWord_SdrAttrIter::GetNextCharSet() const
 {
     if( aChrSetArr.Count() )
         return (rtl_TextEncoding)aChrSetArr[ aChrSetArr.Count() - 1 ];
@@ -893,7 +852,7 @@ rtl_TextEncoding WW8_SdrAttrIter::GetNextCharSet() const
 }
 
 // der erste Parameter in SearchNext() liefert zurueck, ob es ein TxtAtr ist.
-xub_StrLen WW8_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
+xub_StrLen MSWord_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
 {
     xub_StrLen nPos;
     xub_StrLen nMinPos = STRING_MAXLEN;
@@ -932,7 +891,7 @@ xub_StrLen WW8_SdrAttrIter::SearchNext( xub_StrLen nStartPos )
     return nMinPos;
 }
 
-void WW8_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
+void MSWord_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
 {
     void* p = 0;
     rtl_TextEncoding eChrSet;
@@ -962,7 +921,7 @@ void WW8_SdrAttrIter::SetCharSet(const EECharAttrib& rAttr, bool bStart)
     }
 }
 
-void WW8_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
+void MSWord_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
 {
     const SvxFieldItem &rField = (const SvxFieldItem &)rHt;
     const SvxFieldData *pFld = rField.GetField();
@@ -981,7 +940,7 @@ void WW8_SdrAttrIter::OutEEField(const SfxPoolItem& rHt)
     }
 }
 
-void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
+void MSWord_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
 {
     OutParaAttr(true);
 
@@ -1038,7 +997,7 @@ void WW8_SdrAttrIter::OutAttr( xub_StrLen nSwPos )
     }
 }
 
-bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
+bool MSWord_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 {
     for (USHORT i = 0; i < aTxtAtrArr.Count(); ++i)
     {
@@ -1063,7 +1022,7 @@ bool WW8_SdrAttrIter::IsTxtAttr(xub_StrLen nSwPos)
 // Attribut-Anfangposition fragen kann.
 // Es koennen nur Attribute mit Ende abgefragt werden.
 // Es wird mit bDeep gesucht
-const SfxPoolItem* WW8_SdrAttrIter::HasTextItem(USHORT nWhich) const
+const SfxPoolItem* MSWord_SdrAttrIter::HasTextItem(USHORT nWhich) const
 {
     const SfxPoolItem* pRet = 0;
     nWhich = sw::hack::TransformWhichBetweenPools(*pEditPool,
@@ -1088,7 +1047,7 @@ const SfxPoolItem* WW8_SdrAttrIter::HasTextItem(USHORT nWhich) const
     return pRet;
 }
 
-const SfxPoolItem& WW8_SdrAttrIter::GetItem( USHORT nWhich ) const
+const SfxPoolItem& MSWord_SdrAttrIter::GetItem( USHORT nWhich ) const
 {
     using sw::hack::GetSetWhichFromSwDocWhich;
     const SfxPoolItem* pRet = HasTextItem(nWhich);
@@ -1102,7 +1061,7 @@ const SfxPoolItem& WW8_SdrAttrIter::GetItem( USHORT nWhich ) const
     return *pRet;
 }
 
-void WW8_SdrAttrIter::OutParaAttr(bool bCharAttr)
+void MSWord_SdrAttrIter::OutParaAttr(bool bCharAttr)
 {
     SfxItemSet aSet( pEditObj->GetParaAttribs( nPara ));
     if( aSet.Count() )
@@ -1175,7 +1134,7 @@ void WW8Export::WriteOutliner(const OutlinerParaObject& rParaObj, BYTE nTyp)
 {
     bool bAnyWrite = false;
     const EditTextObject& rEditObj = rParaObj.GetTextObject();
-    WW8_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
+    MSWord_SdrAttrIter aAttrIter( *this, rEditObj, nTyp );
 
     USHORT nPara = rEditObj.GetParagraphCount();
     BYTE bNul = 0;
