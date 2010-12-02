@@ -941,6 +941,14 @@ Menu MN_GRF_POPUPMENU
             Text [ en-US ] = "Save Graphics..." ;
         };
         MN_FRM_CAPTION_ITEM
+        SEPARATOR;
+        MenuItem
+        {
+            Identifier = FN_EXTERNAL_EDIT ;
+            HelpID = FN_EXTERNAL_EDIT ;
+            Text [ en-US ] = "Edit with External Tool...";
+        };
+        SEPARATOR;
         MenuItem
         {
             ITEM_EDIT_IMAP

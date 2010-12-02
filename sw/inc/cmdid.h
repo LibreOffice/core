@@ -858,6 +858,8 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_UNO_TABLE_NAME                   (FN_EXTRA2 + 111)
 #define FN_UNO_META                         (FN_EXTRA2 + 112)
 #define FN_UNO_NESTED_TEXT_CONTENT          (FN_EXTRA2 + 113)
+/* Edit Graphic with External Tool */
+#define FN_EXTERNAL_EDIT                    (FN_EXTRA2 + 114)
 
 /*------------------------------------------------ --------------------
     Area: Help

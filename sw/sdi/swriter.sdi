@@ -3510,6 +3510,33 @@ SfxVoidItem SaveGraphic FN_SAVE_GRAPHIC
     GroupId = GID_GRAPHIC;
 ]
 
+//------------------------------------------------------------------------
+SfxVoidItem ExternalEdit FN_EXTERNAL_EDIT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_GRAPHIC;
+]
+//------------------------------------------------------------------------
+
+
 //--------------------------------------------------------------------------
 SfxVoidItem Grow FN_GROW_FONT_SIZE
 ()
