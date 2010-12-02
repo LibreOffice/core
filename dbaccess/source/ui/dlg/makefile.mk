@@ -137,8 +137,6 @@ SLOFILES+=		$(SLO)$/adodatalinks.obj
 .ENDIF
 
 # --- Targets ----------------------------------
-#LOCALIZE_ME=AutoControls_tmpl.hrc
-
 .INCLUDE : target.mk
 
 $(SLO)$/ConnectionHelper.obj : $(LOCALIZE_ME_DEST)
