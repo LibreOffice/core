@@ -275,7 +275,7 @@ namespace
         _map->put( makeAny( xControlModel ), makeAny( xControlShape ) );
     }
 
-    static void lcl_removeFormObject( const FmFormObj& _object, const Reference< XMap >& _map )
+    static void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map, bool i_ignoreNonExistence = false )
     {
         // the control model
         Reference< XControlModel > xControlModel( _object.GetUnoControlModel(), UNO_QUERY );
@@ -287,8 +287,11 @@ namespace
         Any aOldAssignment =
     #endif
             _map->remove( makeAny( xControlModel ) );
-        OSL_ENSURE( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
-            "lcl_removeFormObject: map was inconsistent!" );
+        (void)aOldAssignment;
+        OSL_ENSURE( !i_ignoreNonExistence ||
+            ( aOldAssignment == makeAny( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ) ),
+                "lcl_removeFormObject: map was inconsistent!" );
+        (void)i_ignoreNonExistence;
     }
 }
 
@@ -703,7 +706,26 @@ Reference< XForm >  FmFormPageImpl::findFormForDataSource(
     return sName;
 }
 
-//------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
+{
+    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    if ( !xControlShapeMap.is() )
+        // our map does not exist -> not interested in this event
+        return;
+
+    try
+    {
+        lcl_removeFormObject_throw( _object,  xControlShapeMap, false );
+        lcl_insertFormObject_throw( _object,  xControlShapeMap );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -721,6 +743,7 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
     }
 }
 
+//----------------------------------------------------------------------------------------------------------------------
 void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 {
     Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
@@ -730,7 +753,7 @@ void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 
     try
     {
-        lcl_removeFormObject( _object, xControlShapeMap );
+        lcl_removeFormObject_throw( _object, xControlShapeMap );
     }
     catch( const Exception& )
     {

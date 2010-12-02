@@ -135,6 +135,7 @@ public:
 
     void formObjectInserted( const FmFormObj& _object );
     void formObjectRemoved( const FmFormObj& _object );
+    void formModelAssigned( const FmFormObj& _object );
 
     /** returns an object mapping from control models to drawing shapes.
     */

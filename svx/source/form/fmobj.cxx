@@ -650,7 +650,9 @@ void FmFormObj::SetUnoControlModel( const Reference< com::sun::star::awt::XContr
 {
     SdrUnoObj::SetUnoControlModel( _rxModel );
 
-    // TODO: call something like formObjectInserted at the form page, to tell it the new model
+    FmFormPage* pFormPage = PTR_CAST( FmFormPage, GetPage() );
+    if ( pFormPage )
+        pFormPage->GetImpl().formModelAssigned( *this );
 
     impl_checkRefDevice_nothrow( true );
 }
