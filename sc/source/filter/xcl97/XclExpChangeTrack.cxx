@@ -949,24 +949,26 @@ static const char* lcl_GetType( XclExpChTrData* pData )
 {
     switch( pData->nType )
     {
-        case EXC_CHTR_TYPE_RK:
-        case EXC_CHTR_TYPE_DOUBLE:
-            return "n";
-            break;
-        case EXC_CHTR_TYPE_FORMULA:
-            {
-                ScFormulaCell* pFormulaCell = const_cast< ScFormulaCell* >( pData->mpFormulaCell );
-                const char* sType;
-                OUString sValue;
-                XclXmlUtils::GetFormulaTypeAndValue( *pFormulaCell, sType, sValue );
-                return sType;
-            }
-            break;
-        case EXC_CHTR_TYPE_STRING:
-            return "inlineStr";
-        default:
-            return "*unknown*";
+    case EXC_CHTR_TYPE_RK:
+    case EXC_CHTR_TYPE_DOUBLE:
+        return "n";
+        break;
+    case EXC_CHTR_TYPE_FORMULA:
+        {
+            ScFormulaCell* pFormulaCell = const_cast< ScFormulaCell* >( pData->mpFormulaCell );
+            const char* sType;
+            OUString sValue;
+            XclXmlUtils::GetFormulaTypeAndValue( *pFormulaCell, sType, sValue );
+            return sType;
+        }
+        break;
+    case EXC_CHTR_TYPE_STRING:
+        return "inlineStr";
+        break;
+    default:
+        break;
     }
+    return "*unknown*";
 }
 
 static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScAddress& rPosition, XclExpChTrData* pData )
