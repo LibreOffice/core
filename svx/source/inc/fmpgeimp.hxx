@@ -81,8 +81,9 @@ protected:
 
 public:
     FmFormPageImpl( FmFormPage& _rPage );
-    FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl );
     ~FmFormPageImpl();
+
+    void initFrom( FmFormPageImpl& i_foreignImpl );
 
     //  nur wichtig fuer den DesignMode
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);

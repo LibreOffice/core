@@ -167,19 +167,16 @@ namespace
 }
 
 //------------------------------------------------------------------------------
-FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl )
-    :m_rPage( _rPage )
-    ,m_bFirstActivation( sal_True )
-    ,m_bAttemptedFormCreation( false )
+void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 {
     DBG_CTOR(FmFormPageImpl,NULL);
 
     // clone the Forms collection
-    Reference< XCloneable > xCloneable( const_cast< FmFormPageImpl& >( rImpl ).getForms( false ), UNO_QUERY );
+    Reference< XCloneable > xCloneable( const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ), UNO_QUERY );
     if ( !xCloneable.is() )
     {
         // great, nothing to do
-        OSL_ENSURE( !const_cast< FmFormPageImpl& >( rImpl ).getForms( false ).is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
+        OSL_ENSURE( !const_cast< FmFormPageImpl& >( i_foreignImpl ).getForms( false ).is(), "FmFormPageImpl::FmFormPageImpl: a non-cloneable forms container!?" );
         return;
     }
     try
@@ -196,7 +193,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
         aVisitor.process( FormComponentPair( xCloneable, m_xForms ), aAssignmentProcessor );
 
         // assign the cloned models to their SdrObjects
-        SdrObjListIter aForeignIter( rImpl.m_rPage );
+        SdrObjListIter aForeignIter( i_foreignImpl.m_rPage );
         SdrObjListIter aOwnIter( m_rPage );
 
         OSL_ENSURE( aForeignIter.IsMore() == aOwnIter.IsMore(), "FmFormPageImpl::FmFormPageImpl: inconsistent number of objects (1)!" );
@@ -230,7 +227,7 @@ FmFormPageImpl::FmFormPageImpl( FmFormPage& _rPage, const FmFormPageImpl& rImpl 
             MapControlModels::const_iterator assignment = aModelAssignment.find( xForeignModel );
             OSL_ENSURE( assignment != aModelAssignment.end(), "FmFormPageImpl::FmFormPageImpl: no clone found for this model!" );
             if ( assignment == aModelAssignment.end() )
-                // the source SdrObject has a model, but it is not part of the model hierarchy in rImpl.getForms().
+                // the source SdrObject has a model, but it is not part of the model hierarchy in i_foreignImpl.getForms().
                 // Pathological, too ...
                 continue;
 

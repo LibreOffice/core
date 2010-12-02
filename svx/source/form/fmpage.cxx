@@ -105,12 +105,15 @@ FmFormPage::FmFormPage(FmFormModel& rModel, StarBASIC* _pBasic, FASTBOOL bMaster
 FmFormPage::FmFormPage(const FmFormPage& rPage)
            :SdrPage(rPage)
 #ifndef SVX_LIGHT
-           ,m_pImpl(new FmFormPageImpl( *this, rPage.GetImpl() ) )
+           ,m_pImpl(new FmFormPageImpl( *this ) )
 #else
            ,m_pImpl(NULL)
 #endif
            ,m_pBasic(0)
 {
+#ifndef SVX_LIGHT
+    m_pImpl->initFrom( rPage.GetImpl() );
+#endif
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "FmFormPage::FmFormPage" );
     m_sPageName = rPage.m_sPageName;
 }
