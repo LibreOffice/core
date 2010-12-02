@@ -103,13 +103,6 @@ sub rewrite_set($$$)
     $state{'win32_new_root'} = $tmp;
 
     sed_file ("$new_root/$set", \&rewrite_value, \%state);
-
-    my $tcsh_set = $set;
-    $tcsh_set =~ s/\.sh$//;
-
-    print "   $tcsh_set\n";
-
-    sed_file ("$new_root/$tcsh_set", \&rewrite_value, \%state);
 }
 
 sub find_old_root($$)
