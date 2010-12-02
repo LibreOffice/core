@@ -170,6 +170,43 @@ using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 
+ScXMLRowAttrAccess::Cache::Cache() :
+    mnTab(-1), mnRow1(-1), mnRow2(-1), mbValue(false) {}
+
+bool ScXMLRowAttrAccess::Cache::hasCache(sal_Int32 nTab, sal_Int32 nRow) const
+{
+    return mnTab == nTab && mnRow1 <= nRow && nRow <= mnRow2;
+}
+
+ScXMLRowAttrAccess::ScXMLRowAttrAccess(ScDocument* pDoc) :
+    mpDoc(pDoc) {}
+
+bool ScXMLRowAttrAccess::rowHidden(sal_Int32 nTab, sal_Int32 nRow)
+{
+    if (!maHidden.hasCache(nTab, nRow))
+    {
+        SCROW nRow1, nRow2;
+        maHidden.mbValue = mpDoc->RowHidden(
+            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
+        maHidden.mnRow1 = static_cast<sal_Int32>(nRow1);
+        maHidden.mnRow2 = static_cast<sal_Int32>(nRow2);
+    }
+    return maHidden.mbValue;
+}
+
+bool ScXMLRowAttrAccess::rowFiltered(sal_Int32 nTab, sal_Int32 nRow)
+{
+    if (!maFiltered.hasCache(nTab, nRow))
+    {
+        SCROW nRow1, nRow2;
+        maFiltered.mbValue = mpDoc->RowFiltered(
+            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
+        maFiltered.mnRow1 = static_cast<sal_Int32>(nRow1);
+        maFiltered.mnRow2 = static_cast<sal_Int32>(nRow2);
+    }
+    return maFiltered.mbValue;
+}
+
 //----------------------------------------------------------------------------
 
 namespace
@@ -1213,18 +1250,18 @@ void ScXMLExport::WriteRowContent()
     }
 }
 
-void ScXMLExport::WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex,
-    const sal_Int8 nFlag, const sal_Int32 nEqualRows)
+void ScXMLExport::WriteRowStartTag(
+    sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int32 nEqualRows,
+    bool bHidden, bool bFiltered)
 {
     AddAttribute(sAttrStyleName, *pRowStyles->GetStyleNameByIndex(nIndex));
-    if (nFlag)
-        if (nFlag & CR_HIDDEN)
-        {
-            if (nFlag & CR_FILTERED)
-                AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_FILTER);
-            else
-                AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
-        }
+    if (bHidden)
+    {
+        if (bFiltered)
+            AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_FILTER);
+        else
+            AddAttribute(XML_NAMESPACE_TABLE, XML_VISIBILITY, XML_COLLAPSE);
+    }
     if (nEqualRows > 1)
     {
         rtl::OUStringBuffer aBuf;
@@ -1258,7 +1295,9 @@ void ScXMLExport::CloseHeaderRows()
     EndElement(XML_NAMESPACE_TABLE, XML_TABLE_HEADER_ROWS, sal_True);
 }
 
-void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
+void ScXMLExport::OpenNewRow(
+    const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEqualRows,
+    bool bHidden, bool bFiltered)
 {
     nOpenRow = nStartRow;
     if (pGroupRows->IsGroupStart(nStartRow))
@@ -1278,35 +1317,38 @@ void ScXMLExport::OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const
             nEquals = aRowHeaderRange.EndRow - nStartRow + 1;
         else
             nEquals = nEqualRows;
-        WriteRowStartTag(nStartRow, nIndex, nFlag, nEquals);
+        WriteRowStartTag(nStartRow, nIndex, nEquals, bHidden, bFiltered);
         nOpenRow = nStartRow + nEquals - 1;
         if (nEquals < nEqualRows)
         {
             CloseRow(nStartRow + nEquals - 1);
-            WriteRowStartTag(nStartRow, nIndex, nFlag, nEqualRows - nEquals);
+            WriteRowStartTag(nStartRow, nIndex, nEqualRows - nEquals, bHidden, bFiltered);
             nOpenRow = nStartRow + nEqualRows - 1;
         }
     }
     else
-        WriteRowStartTag(nStartRow, nIndex, nFlag, nEqualRows);
+        WriteRowStartTag(nStartRow, nIndex, nEqualRows, bHidden, bFiltered);
 }
 
-void ScXMLExport::OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
-    const sal_Int32 nStartRow, const sal_Int32 nEqualRows)
+void ScXMLExport::OpenAndCloseRow(
+    const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEqualRows,
+    bool bHidden, bool bFiltered)
 {
-    OpenNewRow(nIndex, nFlag, nStartRow, nEqualRows);
+    OpenNewRow(nIndex, nStartRow, nEqualRows, bHidden, bFiltered);
     WriteRowContent();
     CloseRow(nStartRow + nEqualRows - 1);
     pRowFormatRanges->Clear();
 }
 
-void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow)
+void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLRowAttrAccess& rRowAttr)
 {
     if (nRepeatRow > 1)
     {
         sal_Int32 nPrevIndex(0), nIndex;
-        sal_Int8 nPrevFlag(0);
-        sal_Int8 nFlag(0);
+        bool bPrevHidden = false;
+        bool bPrevFiltered = false;
+        bool bHidden = false;
+        bool bFiltered = false;
         sal_Int32 nEqualRows(1);
         sal_Int32 nEndRow(nStartRow + nRepeatRow);
         sal_Int32 nRow;
@@ -1316,14 +1358,20 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
             {
                 nPrevIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 if (pDoc)
-                    nPrevFlag = (pDoc->GetRowFlags(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTable))) & (CR_HIDDEN | CR_FILTERED);
+                {
+                    bPrevHidden = rRowAttr.rowHidden(nTable, nRow);
+                    bPrevFiltered = rRowAttr.rowFiltered(nTable, nRow);
+                }
             }
             else
             {
                 nIndex = pRowStyles->GetStyleNameIndex(nTable, nRow);
                 if (pDoc)
-                    nFlag = (pDoc->GetRowFlags(static_cast<SCROW>(nRow), static_cast<SCTAB>(nTable))) & (CR_HIDDEN | CR_FILTERED);
-                if (nIndex == nPrevIndex && nFlag == nPrevFlag &&
+                {
+                    bHidden = rRowAttr.rowHidden(nTable, nRow);
+                    bFiltered = rRowAttr.rowFiltered(nTable, nRow);
+                }
+                if (nIndex == nPrevIndex && bHidden == bPrevHidden && bFiltered == bPrevFiltered &&
                     !(bHasRowHeader && ((nRow == aRowHeaderRange.StartRow) || (nRow - 1 == aRowHeaderRange.EndRow))) &&
                     !(pGroupRows->IsGroupStart(nRow)) &&
                     !(pGroupRows->IsGroupEnd(nRow - 1)))
@@ -1333,27 +1381,32 @@ void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, con
                     if (nRow < nEndRow)
                     {
                         ScRowFormatRanges* pTempRowFormatRanges = new ScRowFormatRanges(pRowFormatRanges);
-                        OpenAndCloseRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
+                        OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
                         delete pRowFormatRanges;
                         pRowFormatRanges = pTempRowFormatRanges;
                     }
                     else
-                        OpenAndCloseRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
+                        OpenAndCloseRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
                     nEqualRows = 1;
                     nPrevIndex = nIndex;
-                    nPrevFlag = nFlag;
+                    bPrevHidden = bHidden;
+                    bPrevFiltered = bFiltered;
                 }
             }
         }
-        OpenNewRow(nPrevIndex, nPrevFlag, nRow - nEqualRows, nEqualRows);
+        OpenNewRow(nPrevIndex, nRow - nEqualRows, nEqualRows, bPrevHidden, bPrevFiltered);
     }
     else
     {
         sal_Int32 nIndex = pRowStyles->GetStyleNameIndex(nTable, nStartRow);
-        sal_Int8 nFlag(0);
+        bool bHidden = false;
+        bool bFiltered = false;
         if (pDoc)
-            nFlag = (pDoc->GetRowFlags(static_cast<SCROW>(nStartRow), static_cast<SCTAB>(nTable))) & (CR_HIDDEN | CR_FILTERED);
-        OpenNewRow(nIndex, nFlag, nStartRow, 1);
+        {
+            bHidden = rRowAttr.rowHidden(nTable, nStartRow);
+            bFiltered = rRowAttr.rowFiltered(nTable, nStartRow);
+        }
+        OpenNewRow(nIndex, nStartRow, 1, bHidden, bFiltered);
     }
     nOpenRow = nStartRow + nRepeatRow - 1;
 }
@@ -1384,11 +1437,12 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
     const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet)
 {
     pRowFormatRanges->Clear();
+    ScXMLRowAttrAccess aRowAttr(pDoc);
     if (nStartRow == nEndRow)
     {
         pCellStyles->GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, pRowFormatRanges);
         if (nOpenRow == - 1)
-            OpenRow(nSheet, nStartRow, 1);
+            OpenRow(nSheet, nStartRow, 1, aRowAttr);
         WriteRowContent();
         pRowFormatRanges->Clear();
     }
@@ -1409,12 +1463,12 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 DBG_ASSERT(nMaxRows, "something wents wrong");
                 if (nMaxRows >= nTotalRows - nRows)
                 {
-                    OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows);
+                    OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
                     nRows += nTotalRows - nRows;
                 }
                 else
                 {
-                    OpenRow(nSheet, nStartRow + nRows, nMaxRows);
+                    OpenRow(nSheet, nStartRow + nRows, nMaxRows, aRowAttr);
                     nRows += nMaxRows;
                 }
                 if (!pRowFormatRanges->GetSize())
@@ -1424,7 +1478,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
             }
             if (nTotalRows == 1)
                 CloseRow(nStartRow);
-            OpenRow(nSheet, nEndRow, 1);
+            OpenRow(nSheet, nEndRow, 1, aRowAttr);
             pRowFormatRanges->Clear();
             pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
             WriteRowContent();
@@ -1439,12 +1493,12 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 sal_Int32 nMaxRows = pRowFormatRanges->GetMaxRows();
                 if (nMaxRows >= nTotalRows - nRows)
                 {
-                    OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows);
+                    OpenRow(nSheet, nStartRow + nRows, nTotalRows - nRows, aRowAttr);
                     nRows += nTotalRows - nRows;
                 }
                 else
                 {
-                    OpenRow(nSheet, nStartRow + nRows, nMaxRows);
+                    OpenRow(nSheet, nStartRow + nRows, nMaxRows, aRowAttr);
                     nRows += nMaxRows;
                 }
                 if (!pRowFormatRanges->GetSize())
@@ -1452,7 +1506,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
                 WriteRowContent();
                 CloseRow(nStartRow + nRows - 1);
             }
-            OpenRow(nSheet, nEndRow, 1);
+            OpenRow(nSheet, nEndRow, 1, aRowAttr);
             pRowFormatRanges->Clear();
             pCellStyles->GetFormatRanges(0, nEndCol, nEndRow, nSheet, pRowFormatRanges);
             WriteRowContent();

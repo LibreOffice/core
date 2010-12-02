@@ -68,6 +68,29 @@ class ScBaseCell;
 
 typedef std::vector< com::sun::star::uno::Reference < com::sun::star::drawing::XShapes > > ScMyXShapesVec;
 
+class ScXMLRowAttrAccess
+{
+    struct Cache
+    {
+        sal_Int32   mnTab;
+        sal_Int32   mnRow1;
+        sal_Int32   mnRow2;
+        bool    mbValue;
+        Cache();
+        bool hasCache(sal_Int32 nTab, sal_Int32 nRow) const;
+    };
+
+public:
+    ScXMLRowAttrAccess(ScDocument* pDoc);
+
+    bool rowHidden(sal_Int32 nTab, sal_Int32 nRow);
+    bool rowFiltered(sal_Int32 nTab, sal_Int32 nRow);
+private:
+    Cache maHidden;
+    Cache maFiltered;
+    ScDocument* mpDoc;
+};
+
 class ScXMLExport : public SvXMLExport
 {
     ScDocument*                 pDoc;
@@ -160,13 +183,14 @@ class ScXMLExport : public SvXMLExport
     void ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 nStartRow,
         const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet);
     void WriteRowContent();
-    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nEmptyRows);
+    void WriteRowStartTag(sal_Int32 nRow, const sal_Int32 nIndex, const sal_Int32 nEmptyRows, bool bHidden, bool bFiltered);
     void OpenHeaderRows();
     void CloseHeaderRows();
-    void OpenNewRow(const sal_Int32 nIndex, const sal_Int8 nFlag, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int8 nFlag,
-        const sal_Int32 nStartRow, const sal_Int32 nEmptyRows);
-    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow);
+    void OpenNewRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                    bool bHidden, bool bFiltered);
+    void OpenAndCloseRow(const sal_Int32 nIndex, const sal_Int32 nStartRow, const sal_Int32 nEmptyRows,
+                         bool bHidden, bool bFiltered);
+    void OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLRowAttrAccess& rRowAttr);
     void CloseRow(const sal_Int32 nRow);
     void GetColumnRowHeader(sal_Bool& bHasColumnHeader, com::sun::star::table::CellRangeAddress& aColumnHeaderRange,
         sal_Bool& bHasRowHeader, com::sun::star::table::CellRangeAddress& aRowHeaderRange,
