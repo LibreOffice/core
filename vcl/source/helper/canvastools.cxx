@@ -820,13 +820,13 @@ namespace vcl
             const uno::Sequence< double >                   rColor,
             const uno::Reference< rendering::XColorSpace >& xColorSpace )
         {
-            const rendering::ARGBColor& rARGBColor(
+            const rendering::ARGBColor aARGBColor(
                 xColorSpace->convertToARGB(rColor)[0]);
 
-            return Color( 255-toByteColor(rARGBColor.Alpha),
-                          toByteColor(rARGBColor.Red),
-                          toByteColor(rARGBColor.Green),
-                          toByteColor(rARGBColor.Blue) );
+            return Color( 255-toByteColor(aARGBColor.Alpha),
+                          toByteColor(aARGBColor.Red),
+                          toByteColor(aARGBColor.Green),
+                          toByteColor(aARGBColor.Blue) );
         }
 
         //---------------------------------------------------------------------------------------
