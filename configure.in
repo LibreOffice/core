@@ -147,10 +147,10 @@ AC_ARG_ENABLE(mozilla,
 ,enable_mozilla=yes)
 
 AC_ARG_ENABLE(epm,
-    AS_HELP_STRING([--disable-epm],
+    AS_HELP_STRING([--enable-epm],
         [LibO includes self-packaging code, that requires epm, however epm is
          useless for large scale package building.]),
-,enable_epm=yes)
+,enable_epm=no)
 
 AC_ARG_ENABLE(activex_component,
     AS_HELP_STRING([--disable-activex-component],
@@ -273,10 +273,10 @@ AC_ARG_ENABLE(unix-qstart,
 ,enable_unix_quickstarter=yes)
 
 AC_ARG_ENABLE(broffice,
-    AS_HELP_STRING([--enable-broffice],
+    AS_HELP_STRING([--disable-broffice],
         [When enabled, this will include broffice branded artwork into packages,
          that will only be seen in the pt_BR locale.]),
-,)
+,enable_broffice=yes)
 
 AC_ARG_ENABLE(cairo,
     AS_HELP_STRING([--enable-cairo],
@@ -3916,6 +3916,7 @@ fi
 AC_SUBST(BUILD_DMAKE)
 
 AC_MSG_CHECKING([whether to enable EPM for packing])
+BUILD_EPM=NO
 if test "$enable_epm" = "yes"; then
    AC_MSG_RESULT([yes])
    dnl ===================================================================
@@ -4111,7 +4112,6 @@ msi - Windows .msi
          AC_MSG_ERROR([pkgmk needed for Solaris pkg creation. Install it.])
       fi
    fi
-   AC_SUBST(BUILD_EPM)
    AC_SUBST(RPM)
    AC_SUBST(DPKG)
    AC_SUBST(PKGMK)
@@ -4121,6 +4121,7 @@ else
    PKGFORMAT=native
 fi
 AC_SUBST(EPM)
+AC_SUBST(BUILD_EPM)
 AC_SUBST(PKGFORMAT)
 
 dnl ===================================================================
