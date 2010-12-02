@@ -659,7 +659,6 @@
 #include "unotools/pathoptions.hxx"
 #include "svl/poolitem.hxx"
 #include "svtools/prgsbar.hxx"
-#include "svtools/printdlg.hxx"
 #include "svtools/prnsetup.hxx"
 #include "svl/ptitem.hxx"
 #include "svl/rectitem.hxx"
