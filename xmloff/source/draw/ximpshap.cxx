@@ -1926,7 +1926,35 @@ void SdXMLConnectorShapeContext::StartElement(const uno::Reference< xml::sax::XA
             SetLayer();
 
             if ( maPath.hasValue() )
-                xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
+            {
+                // --> OD #i115492#
+                // Ignore svg:d attribute for text documents created by OpenOffice.org
+                // versions before OOo 3.3, because these OOo versions are storing
+                // svg:d values not using the correct unit.
+                bool bApplySVGD( true );
+                if ( uno::Reference< text::XTextDocument >(GetImport().GetModel(), uno::UNO_QUERY).is() )
+                {
+                    sal_Int32 nUPD( 0 );
+                    sal_Int32 nBuild( 0 );
+                    const bool bBuildIdFound = GetImport().getBuildIds( nUPD, nBuild );
+                    if ( GetImport().IsTextDocInOOoFileFormat() ||
+                         ( bBuildIdFound &&
+                           ( ( nUPD == 641 ) || ( nUPD == 645 ) ||  // prior OOo 2.0
+                             ( nUPD == 680 ) ||                     // OOo 2.x
+                             ( nUPD == 300 ) ||                     // OOo 3.0 - OOo 3.0.1
+                             ( nUPD == 310 ) ||                     // OOo 3.1 - OOo 3.1.1
+                             ( nUPD == 320 ) ) ) )                  // OOo 3.2 - OOo 3.2.1
+                    {
+                        bApplySVGD = false;
+                    }
+                }
+
+                if ( bApplySVGD )
+                {
+                    xProps->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("PolyPolygonBezier") ), maPath );
+                }
+                // <--
+            }
 
             SdXMLShapeContext::StartElement(xAttrList);
         }

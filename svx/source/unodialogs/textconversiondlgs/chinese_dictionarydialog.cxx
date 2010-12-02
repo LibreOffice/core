@@ -116,7 +116,7 @@ String DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
 void DictionaryList::initDictionaryControl( const Reference< linguistic2::XConversionDictionary>& xDictionary
                                            , ListBox* pPropertyTypeNameListBox )
 {
-    SetWindowBits( WB_VSCROLL );
+    SetStyle( WB_VSCROLL | WB_TABSTOP );
     SetSelectionMode( SINGLE_SELECTION );
     SetBorderStyle( WINDOW_BORDER_MONO );
     SetHighlightRange();

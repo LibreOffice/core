@@ -49,6 +49,14 @@ TabPage TP_MANAGE_STYLES
         Pos = MAP_APPFONT ( 70 , 6  ) ;
         Size = MAP_APPFONT ( 184 , 12 ) ;
     };
+    MultiLineEdit MLE_NAME
+    {
+        Pos = MAP_APPFONT ( 70 , 8  ) ;
+        Size = MAP_APPFONT ( 80 , 12 ) ;
+        Border = FALSE;
+        ReadOnly = TRUE;
+        Hide = TRUE;
+    };
     CheckBox CB_AUTO
     {
         HelpID = "sfx2:CheckBox:TP_MANAGE_STYLES:CB_AUTO";

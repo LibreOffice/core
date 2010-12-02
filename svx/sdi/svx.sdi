@@ -15108,3 +15108,31 @@ SfxVoidItem InsertRowDialog SID_TABLE_INSERT_ROW_DLG
     ToolBoxConfig = FALSE,
     GroupId = GID_TABLE;
 ]
+//--------------------------------------------------------------------------
+SfxVoidItem PrepareMailExport SID_MAIL_PREPAREEXPORT
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* status: */
+    SlotType = SfxBoolItem
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_EXPLORER;
+]
+
