@@ -54,7 +54,8 @@ distro_name=$(distro "$@")
 if test "z${distro_name}" != "z" ; then
     cumul=""
     if test -f "./distro-configs/${distro_name}.conf" ; then
-        IFS="$(printf '\n')"
+        IFS=$'
+'
         for opt in $(cat distro-configs/${distro_name}.conf) ; do cumul="$cumul $opt" ; done ;
         unset IFS
         conf_args=$(requote "$@" | sed -e "s/'--with-distro=[^']*'/$cumul/")
