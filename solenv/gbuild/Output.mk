@@ -53,8 +53,8 @@ define gb_Output_warn
 $(warning $(NEWLINE)[ WARN  $(2) ] !!!$(NEWLINE)[ WARN  $(2) ] !!! $(1)$(NEWLINE)[ WARN  $(2) ] !!!)
 endef
 
-gb_Output_ESCAPE := $(shell echo -e '\033')
-gb_Output_BELL := $(shell echo -e '\07')
+gb_Output_ESCAPE := $(shell awk 'BEGIN { printf "%c", 27 }')
+gb_Output_BELL := $(shell awk 'BEGIN { printf "%c", 7 }')
 
 # only enable colorized output if
 # - gb_COLOR is set
