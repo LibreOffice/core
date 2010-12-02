@@ -755,7 +755,7 @@ AC_ARG_WITH(system-libxml,
 AC_ARG_WITH(system-python,
     AS_HELP_STRING([--with-system-python],
         [Use python already on system.]),
-,)
+,with_system_python=yes)
 
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
