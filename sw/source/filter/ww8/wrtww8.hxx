@@ -749,7 +749,7 @@ protected:
     virtual void UpdatePosition( SwWW8AttrIter* pAttrIter, xub_StrLen nAktPos, xub_StrLen nEnd );
 
     /// Output SwTxtNode
-    void OutputTextNode( const SwTxtNode& );
+    virtual void OutputTextNode( const SwTxtNode& );
 
     /// Output SwTableNode
     void OutputTableNode( const SwTableNode& );
