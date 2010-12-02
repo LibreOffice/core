@@ -9702,11 +9702,14 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     // =========================================
     if ( xFactory.is() )
     {
-        static Reference<lang::XMultiServiceFactory> xCanvasFactory(
-            xFactory->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM(
-                              "com.sun.star."
-                              "rendering.CanvasFactory") ) ), UNO_QUERY );
+        static ::vcl::DeleteUnoReferenceOnDeinit<XMultiServiceFactory> xStaticCanvasFactory(
+            Reference<XMultiServiceFactory>(
+                xFactory->createInstance(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.rendering.CanvasFactory") ) ),
+                UNO_QUERY ));
+        uno::Reference<XMultiServiceFactory> xCanvasFactory(xStaticCanvasFactory.get());
+
         if(xCanvasFactory.is())
         {
 #ifdef WNT
