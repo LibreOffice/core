@@ -4614,6 +4614,7 @@ we check in the following sequence:
                     nSetRelative++;
 
                 rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+                bool bIsURI=false; //URI: 12.6.4.7, URI Actions, URI must be encoded in 7-bit-ASCII
                 if( nSetGoToRMode == 0 )
                     switch( m_aContext.DefaultLinkAction )
                     {
@@ -4621,6 +4622,7 @@ we check in the following sequence:
                     case PDFWriter::URIAction :
                     case PDFWriter::URIActionDestination :
                         aLine.append( "/URI/URI" );
+                        bIsURI=true;
                         break;
                     case PDFWriter::LaunchAction:
 // now:
@@ -4632,7 +4634,10 @@ we check in the following sequence:
 // and will force the use of URI when the protocol is not file://
                         if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
+                        {
                             aLine.append( "/URI/URI" );
+                            bIsURI=true;
+                        }
                         else
                             aLine.append( "/Launch/F" );
                         break;
@@ -4640,7 +4645,8 @@ we check in the following sequence:
 //fragment are encoded in the same way as in the named destination processing
                 rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                 if( nSetGoToRMode )
-                {//add the fragment
+                {
+                    //add the fragment
                     aLine.append("/GoToR");
                     aLine.append("/F");
                     appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
@@ -4665,13 +4671,23 @@ we check in the following sequence:
 //substitute the fragment
                         aTargetURL.SetMark( aLineLoc.getStr() );
                     }
-                    rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
-// check if we have a URL available, if the string is empty, set it as the original one
-//                 if( aURL.getLength() == 0 )
-//                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
-//                 else
+                    if (bIsURI)
+                    {
+                        //If we're writing to URI/URI we must e in 7-bit ASCII, so encode anything else as %XX
+                        rtl::OUString aURL = aTargetURL.GetMainURL(INetURLObject::NO_DECODE);
+                        appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL(m_aContext.BaseURL, aURL) :
+                            aURL , rLink.m_nObject, aLine );
+                    }
+                    else
+                    {
+                        //TO-DO: Depending on the interpretation of 12.6.4.5 we
+                        //may be able to use appendUnicodeTextStringEncrypt
+                        //here for the INetURLObject::DECODE_WITH_CHARSET case
+                        //to ensure that the string doesn't get mangled
+                        rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
                         appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
                                                                    aURL , rLink.m_nObject, aLine );
+                    }
                 }
 //<--- i56629
             }
