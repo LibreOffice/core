@@ -3537,12 +3537,9 @@ sub check_partial_gnumake_build {
     if(!$build_all_parents && is_gnumake_module(shift)) {
         print "This module has been migrated to GNU make.\n";
         print "You can only use build --all/--since here with build.pl.\n";
-        print "To do a build of only this module call:\n";
-        print "\tmake -sr\n";
-        print "in the module root.";
         print "To do the equivalent of 'build && deliver' call:\n";
-        print "\tmake -sr install\n";
-        print "in the module root (THIS will modify the solver).";
+        print "\tmake -sr\n";
+        print "in the module root (This will modify the solver).\n";
         exit 1;
     }
 }
