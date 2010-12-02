@@ -271,7 +271,7 @@ using namespace connectivity;
 %type <pParseNode> form_conversion char_translation trim_fct trim_operands trim_spec bit_value_fct bit_substring_fct op_column_commalist
 %type <pParseNode> /*bit_concatenation*/ bit_value_exp bit_factor bit_primary collate_clause char_value_fct unique_spec value_exp_commalist in_predicate_value unique_test update_source 
 %type <pParseNode> function_arg_commalist3 string_function_3Argument function_arg_commalist4 string_function_4Argument function_arg_commalist2 string_function_1Argument string_function_2Argument
-%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument date_function_3Argument
+%type <pParseNode> date_function_0Argument date_function_1Argument function_name12 function_name23 function_name1 function_name2 function_name3 function_name0 numeric_function_0Argument numeric_function_1Argument numeric_function_2Argument 
 %type <pParseNode> all query_primary sql_not for_length upper_lower comparison column_val  cross_union /*opt_schema_element_list*/
 %type <pParseNode> /*op_authorization op_schema*/ nil_fkt schema_element base_table_def base_table_element base_table_element_commalist
 %type <pParseNode> column_def odbc_fct_spec	odbc_call_spec odbc_fct_type op_parameter union_statement
@@ -1851,10 +1851,10 @@ function_name12:
 	;
 function_name23:
 		SQL_TOKEN_LOCATE
+	|	SQL_TOKEN_DATEDIFF
 	;
 function_name3:
 		string_function_3Argument
-	|	date_function_3Argument
 	;
 function_name:
 		string_function
@@ -1912,8 +1912,6 @@ date_function_1Argument:
 	|	SQL_TOKEN_TIMEVALUE
 	|	SQL_TOKEN_DATEVALUE
 	;
-date_function_3Argument:
-	SQL_TOKEN_DATEDIFF
 	
 date_function:
 		SQL_TOKEN_TIMESTAMPADD        
