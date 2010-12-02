@@ -6,7 +6,7 @@ SHELL=/bin/sh
 all: dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
-        ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
 
 install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
@@ -40,3 +40,9 @@ src/downloaded: ooo.lst download
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 
 fetch: src/downloaded
+
+check:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	cd smoketestoo_native && \
+	export SAL_USE_VCLPLUGIN="svp" && \
+        build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
