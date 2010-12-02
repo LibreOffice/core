@@ -639,6 +639,9 @@ included in c-context files, so c++ style stuff will cause problems.
 #define FN_NUMBER_CURRENCY                  (FN_FORMAT2 + 127)
 #define FN_NUMBER_PERCENT                   (FN_FORMAT2 + 128)
 
+#define FN_EXPORT_OLE_AS_PDF                (FN_FORMAT2 + 129)    /* Test PDF */
+#define FN_EXPORT_OLE_AS_GRAPHIC            (FN_FORMAT2 + 130)    /* Test JPG */
+
 #define FN_FRAME_CHAIN                      (FN_FORMAT2 + 136)
 #define FN_FRAME_UNCHAIN                    (FN_FORMAT2 + 137)
 

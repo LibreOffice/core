@@ -173,6 +173,20 @@ interface BaseTextFrame
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
 
+    FN_EXPORT_OLE_AS_PDF // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
+    FN_EXPORT_OLE_AS_GRAPHIC // status(final|play)
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+
     SID_FRAME_LINESTYLE // status()
     [
         ExecMethod = ExecFrameStyle ;

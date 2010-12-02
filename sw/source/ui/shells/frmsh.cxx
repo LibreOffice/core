@@ -88,6 +88,13 @@
 #include <svx/dialogs.hrc>
 // <--
 
+#include <sfx2/filedlghelper.hxx>
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#include <com/sun/star/beans/PropertyValues.hpp>
+#include <com/sun/star/uno/Reference.h>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/uno/Any.h>
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -115,6 +122,10 @@ SFX_IMPL_INTERFACE(SwFrameShell, SwBaseShell, SW_RES(STR_SHELLNAME_FRAME))
     SFX_OBJECTBAR_REGISTRATION(SFX_OBJECTBAR_OBJECT, SW_RES(RID_FRAME_TOOLBOX));
 }
 
+#include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XDesktop.hpp>
+#include <com/sun/star/frame/XDispatchHelper.hpp>
+
 void SwFrameShell::Execute(SfxRequest &rReq)
 {
     //Erstmal die, die keinen FrmMgr benoetigen.
@@ -126,6 +137,135 @@ void SwFrameShell::Execute(SfxRequest &rReq)
 
     switch ( nSlot )
     {
+        case FN_EXPORT_OLE_AS_GRAPHIC:
+        {
+            const int nSel = rSh.GetSelectionType();
+            if (nSel & nsSelectionType::SEL_OLE)
+            {
+                sfx2::FileDialogHelper aDlgHelper( ::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+                aDlgHelper.SetTitle(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Export as JPG" )));
+                String aExt(RTL_CONSTASCII_USTRINGPARAM("*.jpg"));
+                aDlgHelper.AddFilter( aExt, aExt );
+                aDlgHelper.SetCurrentFilter( aExt );
+                if( aDlgHelper.Execute() == ERRCODE_NONE )
+                {
+                    String aFile(aDlgHelper.GetPath());
+                    // copy the object
+                    uno::Reference< frame::XController > xController = rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
+                    uno::Reference< frame::XFrame > xFrame = xController->getFrame();
+                    uno::Reference< frame::XDispatchHelper > xDispatchHelper(::comphelper::getProcessServiceFactory()->createInstance(
+                                                                                                                                      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.DispatchHelper" )) ),
+                                uno::UNO_QUERY );
+                    uno::Reference< frame::XDispatchProvider > xDispatchProvider(xFrame,UNO_QUERY);
+                    xDispatchHelper->executeDispatch(xDispatchProvider, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Copy")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    // create new draw document
+                    ::beans::PropertyValues aPropertyValue(1);
+                    aPropertyValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Hidden" ) );
+                    aPropertyValue[0].Value <<= sal_Bool(sal_False);
+
+                    uno::Reference< ::frame::XComponentLoader > xLoader(xFrame, UNO_QUERY);
+                    uno::Reference< ::lang::XComponent > xDrawComponent( xLoader->loadComponentFromURL(
+                                                                                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:factory/sdraw" ) ),
+                                                                                                       ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_blank" ) ), 0,
+                                                                                                       aPropertyValue));
+
+                    // paste it into draw
+                    uno::Reference< frame::XModel > xDrawModel(xDrawComponent, UNO_QUERY);
+                    xController = xDrawModel->getCurrentController();
+                    xFrame = xController->getFrame();
+                    uno::Reference< frame::XDispatchProvider > xDrawDispatchProvider(xFrame,UNO_QUERY);
+
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:Paste")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AlignUp")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    xDispatchHelper->executeDispatch(xDrawDispatchProvider,
+                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:AlignCenter")),
+                                                     ::rtl::OUString(), 0,
+                                                     Sequence < ::com::sun::star::beans::PropertyValue >());
+                    // export as jpeg
+                    xController = xFrame->getController();
+                    aPropertyValue[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                    aPropertyValue[0].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "draw_jpg_Export" ) );
+                    uno::Reference< frame::XStorable > xStorable(xController->getModel(), uno::UNO_QUERY );
+                    xStorable->storeToURL(aFile, aPropertyValue);
+
+                    // destroy draw document
+                    xDrawComponent->dispose();
+                }
+            }
+            rReq.Ignore();
+        }
+        break;
+        case FN_EXPORT_OLE_AS_PDF:
+        {
+            const int nSel = rSh.GetSelectionType();
+            if (nSel & nsSelectionType::SEL_OLE)
+            {
+                sfx2::FileDialogHelper aDlgHelper( ::ui::dialogs::TemplateDescription::FILESAVE_AUTOEXTENSION, 0 );
+                aDlgHelper.SetTitle(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Export as PDF" )));
+                String aExt(RTL_CONSTASCII_USTRINGPARAM("*.pdf"));
+                aDlgHelper.AddFilter( aExt, aExt );
+                aDlgHelper.SetCurrentFilter( aExt );
+                if( aDlgHelper.Execute() == ERRCODE_NONE )
+                {
+                    String aFile(aDlgHelper.GetPath());
+                    Reference< frame::XController > xController = rSh.GetView().GetViewFrame()->GetFrame().GetFrameInterface()->getController();
+                    ::beans::PropertyValues aPropertyValue(3);
+                    aPropertyValue[0].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+                    aPropertyValue[0].Value <<= rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "writer_pdf_Export" ) );
+                    Sequence< ::beans::PropertyValue > aSequence(10);
+                    ::beans::PropertyValue aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseLosslessCompression" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[0] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Quality" ));
+                    aValue.Value <<= sal_Int32(90);
+                    aSequence[1] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ReduceImageResolution" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[2] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ));
+                    aValue.Value <<= sal_Int32(300);
+                    aSequence[3] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[4] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ));
+                    aValue.Value <<= sal_Bool(sal_False);
+                    aSequence[5] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ));
+                    aValue.Value <<= sal_Bool(sal_True);
+                    aSequence[6] = aValue;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FormsType" ));
+                    aValue.Value <<= sal_Int32(0);
+                    aSequence[7] = aValue;
+                    uno::Any aAny;
+                    Reference< view::XSelectionSupplier > xView( xController, UNO_QUERY );
+                    xView->getSelection() >>= aAny;
+                    aValue.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Selection" ));
+                    aValue.Value <<= aAny;
+                    aSequence[8] = aValue;
+                    aValue.Name = rtl::OUString();
+                    aValue.Value <<= sal_Int32(0);
+                    aSequence[9] = aValue;
+                    aPropertyValue[1].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "FilterData" ) );
+                    aPropertyValue[1].Value <<= aSequence;
+                    aPropertyValue[2].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Selection" ) );
+                    aPropertyValue[2].Value <<= sal_Bool(sal_True);
+                    Reference< frame::XStorable > xStorable(xController->getModel(), uno::UNO_QUERY );
+                    xStorable->storeToURL(aFile, aPropertyValue);
+                }
+            }
+            rReq.Ignore();
+        }
+        break;
         case FN_FRAME_TO_ANCHOR:
             if ( rSh.IsFrmSelected() )
             {
