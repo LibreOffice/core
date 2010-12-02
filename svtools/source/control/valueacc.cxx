@@ -45,12 +45,13 @@ using namespace ::com::sun::star;
 // - ValueSetItem -
 // ----------------
 
-ValueSetItem::ValueSetItem( ValueSet& rParent ) :
-    mrParent( rParent ),
-    mnId( 0 ),
-    mnBits( 0 ),
-    mpData( NULL ),
-    mpxAcc( NULL )
+ValueSetItem::ValueSetItem( ValueSet& rParent )
+    : mrParent(rParent)
+    , mnId(0)
+    , mnBits(0)
+    , meType(VALUESETITEM_NONE)
+    , mpData(NULL)
+    , mpxAcc(NULL)
 {
 }
 
