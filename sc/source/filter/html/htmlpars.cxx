@@ -1316,11 +1316,8 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
 {
-    if ( !pActEntry->pImageList )
-        pActEntry->pImageList = new ScHTMLImageList;
-    ScHTMLImageList* pIL = pActEntry->pImageList;
     ScHTMLImage* pImage = new ScHTMLImage;
-    pIL->Insert( pImage, LIST_APPEND );
+    pActEntry->maImageList.push_back( pImage );
     const HTMLOptions* pOptions = ((HTMLParser*)pInfo->pParser)->GetOptions();
     USHORT nArrLen = pOptions->Count();
     for ( USHORT i = 0; i < nArrLen; i++ )
@@ -1393,11 +1390,12 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         pImage->aSize = pDefaultDev->LogicToPixel( pGraphic->GetPrefSize(),
             pGraphic->GetPrefMapMode() );
     }
-    if ( pIL->Count() > 0 )
+    if ( pActEntry->maImageList.size() > 0 )
     {
         long nWidth = 0;
-        for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+        for ( sal_uInt32 i=0; i < pActEntry->maImageList.size(); ++i )
         {
+            ScHTMLImage* pI = &pActEntry->maImageList[ i ];
             if ( pI->nDir & nHorizontal )
                 nWidth += pI->aSize.Width() + 2 * pI->aSpace.X();
             else
@@ -1406,7 +1404,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         if ( pActEntry->nWidth
           && (nWidth + pImage->aSize.Width() + 2 * pImage->aSpace.X()
                 >= pActEntry->nWidth) )
-            pIL->Last()->nDir = nVertical;
+            pActEntry->maImageList.back().nDir = nVertical;
     }
 }
 
@@ -1444,7 +1442,7 @@ USHORT ScHTMLLayoutParser::GetWidthPixel( const HTMLOption* pOption )
     {
         if ( rOptVal.Search('*') != STRING_NOTFOUND )
         {   // relativ zu was?!?
-//2do: ColArray aller relativen Werte sammeln und dann MakeCol
+            //todo: ColArray aller relativen Werte sammeln und dann MakeCol
             return 0;
         }
         else
@@ -1622,8 +1620,8 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_PARABREAK_OFF:
         {   // nach einem Image geht es vertikal weiter
-            if ( pActEntry->pImageList && pActEntry->pImageList->Count() > 0 )
-                pActEntry->pImageList->Last()->nDir = nVertical;
+            if ( pActEntry->maImageList.size() > 0 )
+                pActEntry->maImageList.back().nDir = nVertical;
         }
         break;
         case HTML_ANCHOR_ON:
@@ -1638,7 +1636,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_BIGPRINT_ON :
         {
-//2do: aktuelle Fontgroesse merken und einen groesser
+            //tpdo: aktuelle Fontgroesse merken und einen groesser
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[3], 100, ATTR_FONT_HEIGHT ) );
@@ -1646,7 +1644,7 @@ void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
         break;
         case HTML_SMALLPRINT_ON :
         {
-//2do: aktuelle Fontgroesse merken und einen kleiner
+            //todo: aktuelle Fontgroesse merken und einen kleiner
             if ( IsAtBeginningOfText( pInfo ) )
                 pActEntry->aItemSet.Put( SvxFontHeightItem(
                     maFontHeights[0], 100, ATTR_FONT_HEIGHT ) );

@@ -399,7 +399,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     mpDoc, mpEngine->GetEditTextObjectPool() ) );
                 delete pObject;
             }
-            if ( pE->pImageList )
+            if ( pE->maImageList.size() )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
@@ -454,7 +454,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     {   // Grafiken einfuegen
         for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
         {
-            if ( pE->pImageList )
+            if ( pE->maImageList.size() )
             {
                 SCCOL nCol = pE->nCol;
                 SCROW nRow = pE->nRow;
@@ -468,19 +468,18 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
 }
 
 
-BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
-        ScEEParseEntry* pE )
+BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
 {
-    ScHTMLImageList* pIL = pE->pImageList;
-    if ( !pIL || !pIL->Count() )
+    if ( !pE->maImageList.size() )
         return FALSE;
     BOOL bHasGraphics = FALSE;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     long nWidth, nHeight;
     nWidth = nHeight = 0;
     sal_Char nDir = nHorizontal;
-    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+    for ( sal_uInt32 i = 0; i < pE->maImageList.size() ; ++i )
     {
+        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( pI->pGraphic )
             bHasGraphics = TRUE;
         Size aSizePix = pI->aSize;
@@ -536,8 +535,7 @@ BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
 void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
-    ScHTMLImageList* pIL = pE->pImageList;
-    if ( !pIL || !pIL->Count() )
+    if ( !pE->maImageList.size() )
         return ;
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)
@@ -556,8 +554,9 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     Point aSpace;
     Size aLogicSize;
     sal_Char nDir = nHorizontal;
-    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+    for ( sal_uInt32 i = 0; i < pE->maImageList.size(); ++i )
     {
+        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( nDir & nHorizontal )
         {   // horizontal
             aInsertPos.X() += aLogicSize.Width();
