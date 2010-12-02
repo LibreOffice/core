@@ -2272,7 +2272,17 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
 
         SwDBData aData;
         SwWrtShell &rSh = GetWrtShell();
-        aData = rSh.GetDBData();
+
+        SvStringsDtor aDBNameList(5, 1);
+        SvStringsDtor aAllDBNames(5, 5);
+        rSh.GetAllUsedDB( aDBNameList, &aAllDBNames );
+        if ( aDBNameList.Count( ) )
+        {
+            String sDBName = *aDBNameList[0];
+            aData.sDataSource = sDBName.GetToken(0, DB_DELIM);
+            aData.sCommand = sDBName.GetToken(1, DB_DELIM);
+            aData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();
+        }
         rSh.EnterStdMode(); // Wechsel in Textshell erzwingen; ist fuer
                             // das Mischen von DB-Feldern notwendig.
         AttrChangedNotify( &rSh );
