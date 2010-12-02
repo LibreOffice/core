@@ -32,6 +32,7 @@
 #include <vcl/graph.hxx>
 #include <tools/list.hxx>
 #include <vcl/menu.hxx>
+#include <svl/stritem.hxx>
 
 class SwView;
 class SfxDispatcher;
@@ -67,6 +68,23 @@ public:
     void Execute( Window* pWin, USHORT nId );
 };
 
+static void lcl_GetPreferedExtension( String &rExt, const Graphic &rGrf )
+{
+    // dann ggfs. ueber die native-Info der Grafik den "besten"
+    // Filter vorschlagen
+    const sal_Char* pExt = "png";
+    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
+        case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
+        case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
+        case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
+        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
+        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
+        default:; //prevent warning
+    }
+    rExt.AssignAscii( pExt );
+}
 
 #endif
 
