@@ -95,7 +95,7 @@ namespace toolkit
         ::vos::OGuard aGuard( GetMutex() );
 
         Throbber* pThrobber( dynamic_cast< Throbber* >( GetWindow() ) );
-        if ( pThrobber != NULL)
+        if ( pThrobber == NULL)
             return;
 
         uno::Sequence< uno::Reference< graphic::XGraphic > > aImageList(12);
