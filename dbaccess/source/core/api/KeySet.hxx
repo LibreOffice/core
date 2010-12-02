@@ -228,6 +228,11 @@ namespace dbaccess
         virtual void SAL_CALL cancelRowUpdates(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL moveToInsertRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL moveToCurrentRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+
+        virtual sal_Bool previous_checked( sal_Bool i_bFetchRow );
+        virtual sal_Bool absolute_checked( sal_Int32 row,sal_Bool i_bFetchRow );
+        virtual sal_Bool last_checked( sal_Bool i_bFetchRow);
     };
 }
 #endif // DBACCESS_CORE_API_KEYSET_HXX
