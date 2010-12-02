@@ -458,7 +458,7 @@ private:
 
     boost::optional<RGBColor>               maUserPaintColor;
 
-    boost::optional<double>                 maUserPaintStrokeWidth;
+    double                                  maUserPaintStrokeWidth;
 
     //changed for the eraser project
     boost::optional<bool>           maEraseAllInk;
@@ -950,7 +950,7 @@ SlideSharedPtr SlideShowImpl::makeSlide(
                                              maShapeCursors,
                                              (aIter != maPolygons.end()) ? aIter->second :  PolyPolygonVector(),
                                              maUserPaintColor ? *maUserPaintColor : RGBColor(),
-                                             *maUserPaintStrokeWidth,
+                                             maUserPaintStrokeWidth,
                                              !!maUserPaintColor,
                                              mbImageAnimationsAllowed,
                                              mbDisableAnimationZOrder) );
@@ -1616,6 +1616,9 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
 
             // enable user paint
             maUserPaintColor.reset( unoColor2RGBColor( nColor ) );
+            if( mpCurrentSlide && !mpCurrentSlide->isPaintOverlayActive() )
+                mpCurrentSlide->enablePaintOverlay();
+
             maEventMultiplexer.notifyUserPaintColor( *maUserPaintColor );
         }
         else
@@ -1623,10 +1626,11 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             // disable user paint
             maUserPaintColor.reset();
             maEventMultiplexer.notifyUserPaintDisabled();
+            if( mpCurrentSlide )
+                mpCurrentSlide->disablePaintOverlay();
         }
 
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
+        resetCursor();
 
         return true;
     }
@@ -1645,15 +1649,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             maEraseAllInk.reset( nEraseAllInk );
             maEventMultiplexer.notifyEraseAllInk( *maEraseAllInk );
         }
-        else
-        {
-        // disable user paint
-        maEraseAllInk.reset();
-        maEventMultiplexer.notifyUserPaintDisabled();
-        }
-
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-        resetCursor();
 
         return true;
     }
@@ -1673,9 +1668,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             maEventMultiplexer.notifySwitchPenMode();
             }
         }
-
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
         return true;
     }
 
@@ -1695,8 +1687,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             }
         }
 
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
         return true;
     }
 
@@ -1715,15 +1705,6 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
             maEraseInk.reset( nEraseInk );
             maEventMultiplexer.notifyEraseInkWidth( *maEraseInk );
         }
-        else
-        {
-            // disable user paint
-            maEraseInk.reset();
-            maEventMultiplexer.notifyUserPaintDisabled();
-        }
-
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
 
         return true;
     }
@@ -1737,17 +1718,10 @@ sal_Bool SlideShowImpl::setProperty( beans::PropertyValue const& rProperty )
         {
             OSL_ENSURE( mbMouseVisible,"setProperty(): User paint overrides invisible mouse" );
             // enable user paint stroke width
-            maUserPaintStrokeWidth.reset( nWidth );
-            maEventMultiplexer.notifyUserPaintStrokeWidth( *maUserPaintStrokeWidth );
+            maUserPaintStrokeWidth = nWidth;
+            maEventMultiplexer.notifyUserPaintStrokeWidth( maUserPaintStrokeWidth );
         }
-        else
-        {
-            // disable user paint stroke width
-            maUserPaintStrokeWidth.reset();
-            maEventMultiplexer.notifyUserPaintDisabled();
-        }
-        if( mnCurrentCursor == awt::SystemPointer::ARROW )
-            resetCursor();
+
         return true;
     }
 
@@ -2210,6 +2184,8 @@ void SlideShowImpl::notifySlideTransitionEnded( bool bPaintSlide )
                 "notifySlideTransitionEnded(): Invalid current slide" );
     if (mpCurrentSlide)
     {
+        mpCurrentSlide->update_settings( !!maUserPaintColor, maUserPaintColor ? *maUserPaintColor : RGBColor(), maUserPaintStrokeWidth );
+
         // first init show, to give the animations
         // the chance to register SlideStartEvents
         const bool bBackgroundLayerRendered( !bPaintSlide );
