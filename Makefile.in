@@ -3,7 +3,7 @@
 
 SHELL=/bin/sh
 
-all: dmake/dmake@EXEEXT@
+all: dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
         ../solenv/bin/build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
@@ -34,3 +34,9 @@ clean: dmake/dmake@EXEEXT@
 dmake/dmake@EXEEXT@:
 	@. ./*[Ee]nv.[Ss]et.sh && \
         ./bootstrap
+
+src/downloaded: ooo.lst download
+	@. ./*[Ee]nv.[Ss]et.sh && \
+	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
+
+download: src/downloaded
