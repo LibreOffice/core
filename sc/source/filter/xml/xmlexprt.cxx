@@ -69,6 +69,7 @@
 #include "externalrefmgr.hxx"
 #include "editutil.hxx"
 #include "tabprotection.hxx"
+#include "cachedattraccess.hxx"
 
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -169,43 +170,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
-
-ScXMLRowAttrAccess::Cache::Cache() :
-    mnTab(-1), mnRow1(-1), mnRow2(-1), mbValue(false) {}
-
-bool ScXMLRowAttrAccess::Cache::hasCache(sal_Int32 nTab, sal_Int32 nRow) const
-{
-    return mnTab == nTab && mnRow1 <= nRow && nRow <= mnRow2;
-}
-
-ScXMLRowAttrAccess::ScXMLRowAttrAccess(ScDocument* pDoc) :
-    mpDoc(pDoc) {}
-
-bool ScXMLRowAttrAccess::rowHidden(sal_Int32 nTab, sal_Int32 nRow)
-{
-    if (!maHidden.hasCache(nTab, nRow))
-    {
-        SCROW nRow1, nRow2;
-        maHidden.mbValue = mpDoc->RowHidden(
-            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
-        maHidden.mnRow1 = static_cast<sal_Int32>(nRow1);
-        maHidden.mnRow2 = static_cast<sal_Int32>(nRow2);
-    }
-    return maHidden.mbValue;
-}
-
-bool ScXMLRowAttrAccess::rowFiltered(sal_Int32 nTab, sal_Int32 nRow)
-{
-    if (!maFiltered.hasCache(nTab, nRow))
-    {
-        SCROW nRow1, nRow2;
-        maFiltered.mbValue = mpDoc->RowFiltered(
-            static_cast<SCTAB>(nTab), static_cast<SCROW>(nRow), &nRow1, &nRow2);
-        maFiltered.mnRow1 = static_cast<sal_Int32>(nRow1);
-        maFiltered.mnRow2 = static_cast<sal_Int32>(nRow2);
-    }
-    return maFiltered.mbValue;
-}
 
 //----------------------------------------------------------------------------
 
@@ -1340,7 +1304,7 @@ void ScXMLExport::OpenAndCloseRow(
     pRowFormatRanges->Clear();
 }
 
-void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLRowAttrAccess& rRowAttr)
+void ScXMLExport::OpenRow(const sal_Int32 nTable, const sal_Int32 nStartRow, const sal_Int32 nRepeatRow, ScXMLCachedRowAttrAccess& rRowAttr)
 {
     if (nRepeatRow > 1)
     {
@@ -1437,7 +1401,7 @@ void ScXMLExport::ExportFormatRanges(const sal_Int32 nStartCol, const sal_Int32 
     const sal_Int32 nEndCol, const sal_Int32 nEndRow, const sal_Int32 nSheet)
 {
     pRowFormatRanges->Clear();
-    ScXMLRowAttrAccess aRowAttr(pDoc);
+    ScXMLCachedRowAttrAccess aRowAttr(pDoc);
     if (nStartRow == nEndRow)
     {
         pCellStyles->GetFormatRanges(nStartCol, nEndCol, nStartRow, nSheet, pRowFormatRanges);

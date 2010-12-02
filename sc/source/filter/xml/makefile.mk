@@ -47,6 +47,7 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 SLOFILES =  \
         $(SLO)$/sheetdata.obj \
+        $(SLO)$/cachedattraccess.obj \
         $(SLO)$/xmlwrap.obj \
         $(SLO)$/xmlimprt.obj \
         $(SLO)$/xmlexprt.obj \
