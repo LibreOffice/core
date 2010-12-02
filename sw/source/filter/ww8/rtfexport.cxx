@@ -761,6 +761,12 @@ void RtfExport::OutputLinkedOLE( const rtl::OUString& )
     OSL_TRACE("%s", OSL_THIS_FUNC);
 }
 
+void RtfExport::OutputTextNode( const SwTxtNode& rNode )
+{
+    if ( !m_bOutOutlineOnly || rNode.IsOutline( ) )
+        MSWordExportBase::OutputTextNode( rNode );
+}
+
 void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* pFmt, ULONG nLnNum )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
@@ -769,13 +775,14 @@ void RtfExport::AppendSection( const SwPageDesc* pPageDesc, const SwSectionFmt* 
     AttrOutput().SectionBreak( msword::PageBreak, m_pSections->CurrentSectionInfo() );
 }
 
-RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter )
+RtfExport::RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter, bool bOutOutlineOnly )
     : MSWordExportBase( pDocument, pCurrentPam, pOriginalPam ),
       m_pFilter( pFilter ),
       m_pWriter( pWriter ),
       m_pAttrOutput( NULL ),
       m_pSections( NULL ),
       m_pSdrExport( NULL ),
+      m_bOutOutlineOnly( bOutOutlineOnly ),
       eDefaultEncoding(
               rtl_getTextEncodingFromWindowsCharset(
                   sw::ms::rtl_TextEncodingToWinCharset(DEF_ENCODING))),
@@ -1250,16 +1257,20 @@ void RtfExport::WriteHeaderFooter(const SwFrmFmt& rFmt, bool bHeader, const sal_
 /// Glue class to call RtfExport as an internal filter, needed by copy&paste support.
 class SwRTFWriter : public Writer
 {
-       public:
-               SwRTFWriter( const String& rFilterName, const String& rBaseURL );
-               virtual ~SwRTFWriter();
-               virtual ULONG WriteStream();
+    private:
+        bool bOutOutlineOnly;
+
+    public:
+        SwRTFWriter( const String& rFilterName, const String& rBaseURL );
+        virtual ~SwRTFWriter();
+        virtual ULONG WriteStream();
 };
 
-SwRTFWriter::SwRTFWriter( const String& /*rFltName*/, const String & rBaseURL )
+SwRTFWriter::SwRTFWriter( const String& rFltName, const String & rBaseURL )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
     SetBaseURL( rBaseURL );
+    bOutOutlineOnly = 'O' == rFltName.GetChar( 0 );
 }
 
 SwRTFWriter::~SwRTFWriter()
@@ -1268,7 +1279,7 @@ SwRTFWriter::~SwRTFWriter()
 ULONG SwRTFWriter::WriteStream()
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
-    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this );
+    RtfExport aExport( NULL, pDoc, new SwPaM( *pCurPam->End(), *pCurPam->Start() ), pCurPam, this, bOutOutlineOnly );
     aExport.ExportDocument( true );
     return 0;
 }

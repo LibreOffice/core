@@ -70,6 +70,7 @@ class RtfExport : public MSWordExportBase
     MSWordSections *m_pSections;
 
     RtfSdrExport *m_pSdrExport;
+    bool m_bOutOutlineOnly;
 
 public:
     /// Access to the attribute output class.
@@ -137,6 +138,9 @@ protected:
     /// Return value indicates if an inherited outline numbering is suppressed.
     virtual bool DisallowInheritingOutlineNumbering(const SwFmt &rFmt);
 
+    /// Output SwTxtNode is depending on outline export mode
+    virtual void OutputTextNode( const SwTxtNode& );
+
     /// Output SwGrfNode
     virtual void OutputGrfNode( const SwGrfNode& );
 
@@ -150,7 +154,8 @@ protected:
 public:
     /// Pass the pDocument, pCurrentPam and pOriginalPam to the base class.
     RtfExport( RtfExportFilter *pFilter, SwDoc *pDocument,
-            SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter );
+            SwPaM *pCurrentPam, SwPaM *pOriginalPam, Writer* pWriter,
+            bool bOutOutlineOnly = false );
 
     /// Destructor.
     virtual ~RtfExport();
