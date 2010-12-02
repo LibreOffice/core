@@ -119,6 +119,7 @@ class ScViewOptions;
 class ScStrCollection;
 class TypedScStrCollection;
 class ScChangeTrack;
+class ScEditEngineDefaulter;
 class ScFieldEditEngine;
 class ScNoteEditEngine;
 struct ScConsolidateParam;
@@ -1576,6 +1577,8 @@ public:
     BOOL            IsValidAsianKerning() const;
     void            SetAsianKerning(BOOL bNew);
 
+    void            ApplyAsianEditSettings(ScEditEngineDefaulter& rEngine);
+
     BYTE            GetEditTextDirection(SCTAB nTab) const; // EEHorizontalTextDirection values
 
     SC_DLLPUBLIC ScLkUpdMode        GetLinkMode() const             { return eLinkMode ;}
@@ -1770,7 +1773,6 @@ public:
     SC_DLLPUBLIC SfxItemPool*       GetEnginePool() const;
     SC_DLLPUBLIC ScFieldEditEngine& GetEditEngine();
     SC_DLLPUBLIC ScNoteEditEngine&  GetNoteEngine();
-//UNUSED2009-05 SfxItemPool&            GetNoteItemPool();
 
     ScRefreshTimerControl*  GetRefreshTimerControl() const
         { return pRefreshTimerControl; }

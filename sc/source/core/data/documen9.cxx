@@ -818,3 +818,10 @@ void ScDocument::SetAsianKerning(BOOL bNew)
         pDrawLayer->SetKernAsianPunctuation( (BOOL)nAsianKerning );
 }
 
+void ScDocument::ApplyAsianEditSettings( ScEditEngineDefaulter& rEngine )
+{
+    rEngine.SetForbiddenCharsTable( xForbiddenCharacters );
+    rEngine.SetAsianCompressionMode( GetAsianCompression() );
+    rEngine.SetKernAsianPunctuation( GetAsianKerning() );
+}
+

@@ -50,6 +50,7 @@ struct ScTableInfo;
 class ScTabViewShell;
 class ScPageBreakData;
 class FmFormView;
+class ScFieldEditEngine;
 
 // #i74769# SdrPaintWindow predefine
 class SdrPaintWindow;
@@ -181,6 +182,8 @@ private:
     double          GetStretch();
 
     void            DrawRotatedFrame( const Color* pForceColor );       // pixel
+
+    ScFieldEditEngine* CreateOutputEditEngine();
 
 public:
                     ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
