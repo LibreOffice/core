@@ -356,12 +356,9 @@ AC_ARG_ENABLE(kde4,
 ,)
 
 AC_ARG_ENABLE(binfilter,
-    AS_HELP_STRING([--disable-binfilter],
-        [Disable legacy binary file formats filters.]),
-,
-    if ! test -d ./binfilter; then
-        enable_binfilter=no;
-    fi
+    AS_HELP_STRING([--enable-binfilter],
+        [Enable legacy binary file formats filters build.]),
+,enable_binfilter=no
 )
 
 AC_ARG_ENABLE(rpath,
