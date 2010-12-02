@@ -76,7 +76,7 @@
 #include <swwait.hxx>
 #include <shells.hrc>
 #include <popup.hrc>
-
+#include <extedit.hxx>
 #define SwGrfShell
 #include <sfx2/msg.hxx>
 #include "swslots.hxx"
@@ -114,6 +114,19 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             }
         }
         break;
+        case FN_EXTERNAL_EDIT:
+        {
+            /* When the graphic is selected to be opened via some external tool
+             * for advanced editing
+             */
+            GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
+            if(0 != pGraphicObject)
+            {
+              EditWithExternalTool(pGraphicObject);
+            }
+        }
+        break;
+
         case SID_INSERT_GRAPHIC:
         case FN_FORMAT_GRAFIC_DLG:
         {
@@ -530,6 +543,13 @@ void SwGrfShell::GetAttrState(SfxItemSet &rSet)
                 bDisable = TRUE;
             break;
         case FN_SAVE_GRAPHIC:
+            if( rSh.GetGraphicType() == GRAPHIC_NONE )
+                bDisable = sal_True;
+        break;
+        /*
+         * If the Graphic is None type it should be externally editable
+         */
+        case FN_EXTERNAL_EDIT:
             if( rSh.GetGraphicType() == GRAPHIC_NONE )
                 bDisable = sal_True;
         break;
