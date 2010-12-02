@@ -394,12 +394,8 @@ private:
     PresentationSettings maPresSettings;
     sal_Int32       mnUserPaintColor;
 
-    bool            mbSwitchPenMode;
-    bool            mbSwitchEraserMode;
+    bool            mbUsePen;
     double          mdUserPaintStrokeWidth;
-    bool            mbEraseAllInk;
-//    bool          mbEraseInk;
-    sal_Int32       mnEraseInkSize;
 
     /// used in updateHdl to prevent recursive calls
     sal_Int32       mnEntryCounter;

@@ -279,6 +279,9 @@ private:
 
     sal_Int32   mnDisplay;
 
+    sal_Int32 mnPenColor;
+    double mnPenWidth;
+
     /** This value controls the device to use for formatting documents.
         The currently supported values are 0 for the current printer or 1
         for the printer independent virtual device the can be retrieved from
@@ -335,6 +338,12 @@ public:
 
     sal_Int32   GetDisplay() const { Init(); return mnDisplay; }
     void        SetDisplay( sal_Int32 nDisplay = 0 ) { if( mnDisplay != nDisplay ) { OptionsChanged(); mnDisplay = nDisplay; } }
+
+    sal_Int32 GetPresentationPenColor() const { Init(); return mnPenColor; }
+    void      SetPresentationPenColor( sal_Int32 nPenColor ) { if( mnPenColor != nPenColor ) { OptionsChanged(); mnPenColor = nPenColor; } }
+
+    double    GetPresentationPenWidth() const { Init(); return mnPenWidth; }
+    void      SetPresentationPenWidth( double nPenWidth ) { if( mnPenWidth != nPenWidth ) { OptionsChanged(); mnPenWidth = nPenWidth; } }
 
     void    SetStartWithTemplate( BOOL bOn = TRUE ) { if( bStartWithTemplate != bOn ) { OptionsChanged(); bStartWithTemplate = bOn; } }
     void    SetMarkedHitMovesAlways( BOOL bOn = TRUE ) { if( bMarkedHitMovesAlways != bOn ) { OptionsChanged(); bMarkedHitMovesAlways = bOn; } }

@@ -74,16 +74,7 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_PEN_MODE;
-            Text [ en-US ] = "~Pen Mode";
-        };
-        MenuItem
-        {
-            Identifier = CM_ERASE_MODE;
-            Text [ en-US ] = "~Eraser Mode";
-        };
-        MenuItem
-        {
-            Separator = TRUE;
+            Text [ en-US ] = "Mouse pointer as ~pen";
         };
         MenuItem
         {
@@ -123,66 +114,13 @@ Menu RID_SLIDESHOW_CONTEXTMENU
         };
         MenuItem
         {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
             Identifier = CM_COLOR_PEN ;
-            Text [ en-US ] = "~Change Pen Color" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Separator = TRUE;
+            Text [ en-US ] = "~Change Pen Color..." ;
         };
         MenuItem
         {
             Identifier = CM_ERASE_ALLINK ;
             Text [ en-US ] = "~Erase All Ink On Slide" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = CM_ERASE_INK_PEN;
-            Text [ en-US ] = "~Eraser Width" ;
-
-            SubMenu = Menu
-            {
-                ItemList =
-                {
-                    MenuItem
-                    {
-                        Identifier =  CM_ERASE_INK_PEN_VERY_THIN;
-                        Text [ en-US ] = "~Very thin";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_ERASE_INK_PEN_THIN;
-                        Text [ en-US ] = "~Thin";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_ERASE_INK_PEN_NORMAL;
-                        Text [ en-US ] = "~Normal";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_ERASE_INK_PEN_THICK;
-                        Text [ en-US ] = "~Thick";
-                    };
-                    MenuItem
-                    {
-                        Identifier =  CM_ERASE_INK_PEN_VERY_THICK;
-                        Text [ en-US ] = "~Very Thick";
-                    };
-                };
-            };
         };
         MenuItem
         {
