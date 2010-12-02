@@ -91,7 +91,7 @@ testcase tExtensionManagerResources()
         kontext "ExtensionUpdate"
         if ( ExtensionUpdate.exists( 2 ) ) then
             call dialogtest( ExtensionUpdate )
-            ExtensionUpdate.cancel()
+            ExtensionUpdate.close()
             ExtensionUpdate.notExists( 3 )
         else
             warnlog( "Extenson Update dialog did not open" )      
