@@ -167,9 +167,10 @@ gb_LinkTarget_LDFLAGS := \
     -NODEFAULTLIB \
     -OPT:NOREF \
     -SUBSYSTEM:CONSOLE \
-    -safeseh \
-    -nxcompat \
-    -dynamicbase \
+    -OPT:NOREF \
+        -safeseh \
+        -nxcompat \
+        -dynamicbase \
     $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
 
 ifneq ($(ENABLE_CRASHDUMP),)
