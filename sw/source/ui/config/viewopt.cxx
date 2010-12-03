@@ -184,6 +184,7 @@ SwViewOption::SwViewOption() :
     mbViewLayoutBookMode(FALSE),
     bShowPlaceHolderFields( sal_True ),
 
+    sSymbolFont( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ),
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
