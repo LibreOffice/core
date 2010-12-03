@@ -250,7 +250,7 @@ Sequence< OUString > HwpImportFilter::getSupportedServiceNames_Static( void ) th
 }
 HwpImportFilter::HwpImportFilter( const Reference< XMultiServiceFactory > xFact )
 {
-    OUString sService = OUString::createFromAscii( WRITER_IMPORTER_NAME );
+    OUString sService(RTL_CONSTASCII_USTRINGPARAM( WRITER_IMPORTER_NAME ));
     try {
         Reference< XDocumentHandler >
             xHandler( xFact->createInstance( sService ), UNO_QUERY );
@@ -307,12 +307,12 @@ void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
 
 OUString HwpImportFilter::getImplementationName_Static() throw()
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
 }
 
 OUString HwpImportFilter::getImplementationName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return OUString::createFromAscii( IMPLEMENTATION_NAME );
+    return OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME ));
 }
 sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
 {
@@ -329,7 +329,7 @@ sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(:
 Sequence< OUString> HwpImportFilter::getSupportedServiceNames( void ) throw(::com::sun::star::uno::RuntimeException)
 {
     Sequence< OUString > seq(1);
-    seq.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+    seq.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
     return seq;
 }
 
@@ -357,8 +357,8 @@ extern "C"
                 Reference< XRegistryKey > xKey( reinterpret_cast< XRegistryKey * >( pRegistryKey ) );
 
                 Reference< XRegistryKey > xNewKey = xKey->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) );
-                xNewKey->createKey( OUString::createFromAscii( SERVICE_NAME ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) );
+                xNewKey->createKey( OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME )) );
 
                 return sal_True;
             }
@@ -381,7 +381,7 @@ extern "C"
 
             OUString aImplementationName = OUString::createFromAscii( pImplName );
 
-            if (aImplementationName == OUString::createFromAscii( IMPLEMENTATION_NAME ) )
+            if (aImplementationName == OUString(RTL_CONSTASCII_USTRINGPARAM( IMPLEMENTATION_NAME )) )
             {
                 xRet = createSingleFactory( xSMgr, aImplementationName,
                                             HwpImportFilter_CreateInstance,
