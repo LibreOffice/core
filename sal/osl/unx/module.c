@@ -244,7 +244,7 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         if (workDir)
         {
 #if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", filaname);
+            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s\n", filename);
 #endif
             rtl_string2UString(ppLibraryUrl,
                                filename,
