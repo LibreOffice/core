@@ -36,7 +36,7 @@
 #include <svtools/localresaccess.hxx>
 #include <tools/debug.hxx>
 #include <cppuhelper/extract.hxx>
-
+#include <sal/macros.h>
 #include <algorithm>
 #include <functional>
 
@@ -360,7 +360,7 @@ namespace pcr
         };
 
         s_pPropertyInfos = aPropertyInfos;
-        s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
+        s_nCount = SAL_N_ELEMENTS(aPropertyInfos);
 
         // sort
         ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );

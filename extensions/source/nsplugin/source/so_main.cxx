@@ -66,6 +66,7 @@
 #include "nsp_func.hxx"
 
 #include "sal/main.h"
+#include <sal/macros.h>
 
 #include "rtl/process.h"
 #include "rtl/bootstrap.hxx"
@@ -85,7 +86,6 @@
 #include "com/sun/star/bridge/XUnoUrlResolver.hpp"
 
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
-#define ARLEN(x) sizeof (x) / sizeof *(x)
 
 using namespace ::rtl;
 using namespace ::osl;
@@ -389,7 +389,7 @@ Reference< lang::XMultiServiceFactory > SAL_CALL start_office(NSP_PIPE_FD read_f
         oslProcessError rc = osl_executeProcess(
             aOfficePath.pData,
             ar_args,
-            ARLEN( ar_args ),
+            SAL_N_ELEMENTS( ar_args ),
             osl_Process_DETACHED,
             sec.getHandle(),
             0, // => current working dir

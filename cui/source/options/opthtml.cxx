@@ -38,6 +38,7 @@
 #include <cuires.hrc>
 #include "helpid.hrc"
 #include <dialmgr.hxx>
+#include <sal/macros.h>
 
 // Umwandlung der Modi zu den Positionen in der Listbox
 const USHORT aPosToExportArr[] =
@@ -186,7 +187,7 @@ void OfaHtmlTabPage::Reset( const SfxItemSet& )
     aUnknownTagCB.Check(pHtmlOpt->IsImportUnknown());
     aIgnoreFontNamesCB.Check(pHtmlOpt->IsIgnoreFontFamily());
     USHORT nExport = pHtmlOpt->GetExportMode();
-    if( nExport >= ( sizeof( aExportToPosArr ) / sizeof( USHORT ) ) )
+    if( nExport >= SAL_N_ELEMENTS( aExportToPosArr ) )
         nExport = 4;    // default for bad config entry is NS 4.0
     USHORT nPosArr = aExportToPosArr[ nExport ];
 //  if( nPosArr == DEPRECATED_ENTRY )

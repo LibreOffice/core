@@ -34,6 +34,7 @@
 #include "sslerr.h"
 #include "nspr.h"
 #include "certt.h"
+#include <sal/macros.h>
 
 #include "../diagnose.hxx"
 
@@ -61,7 +62,7 @@ const char *
 getCertError(PRErrorCode errNum)
 {
     static char sEmpty[] = "";
-    const int numDesc = sizeof(allDesc) / sizeof(ErrDesc);
+    const int numDesc = SAL_N_ELEMENTS(allDesc);
     for (int i = 0; i < numDesc; i++)
     {
         if (allDesc[i].errNum == errNum)

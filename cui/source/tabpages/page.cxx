@@ -40,6 +40,7 @@
 #include <vcl/msgbox.hxx>
 #include <unotools/configitem.hxx>
 #include "svx/htmlmode.hxx"
+#include <sal/macros.h>
 
 #define _SVX_PAGE_CXX
 
@@ -155,9 +156,7 @@ USHORT aArr[] =
 
 USHORT PageUsageToPos_Impl( USHORT nUsage )
 {
-    const USHORT nCount = sizeof(aArr) / sizeof(USHORT);
-
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( USHORT i = 0; i < SAL_N_ELEMENTS(aArr); ++i )
         if ( aArr[i] == ( nUsage & 0x000f ) )
             return i;
     return SVX_PAGE_ALL;
@@ -167,9 +166,7 @@ USHORT PageUsageToPos_Impl( USHORT nUsage )
 
 USHORT PosToPageUsage_Impl( USHORT nPos )
 {
-    const USHORT nCount = sizeof(aArr) / sizeof(USHORT);
-
-    if ( nPos >= nCount )
+    if ( nPos >= SAL_N_ELEMENTS(aArr) )
         return 0;
     return aArr[nPos];
 }

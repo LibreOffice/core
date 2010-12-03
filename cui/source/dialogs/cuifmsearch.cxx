@@ -492,7 +492,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     {
         // die beiden jeweils anderen Boxes disablen oder enablen
         CheckBox* pBoxes[] = { &m_cbWildCard, &m_cbRegular, &m_cbApprox };
-        for (sal_uInt32 i=0; i<sizeof(pBoxes)/sizeof(CheckBox*); ++i)
+        for (sal_uInt32 i=0; i< SAL_N_ELEMENTS(pBoxes); ++i)
         {
             if (pBoxes[i] != pBox)
             {

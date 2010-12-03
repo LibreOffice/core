@@ -56,6 +56,7 @@
 #include <sfx2/request.hxx>
 #include <svl/intitem.hxx>
 #include <sfx2/itemconnect.hxx>
+#include <sal/macros.h>
 #include "borderconn.hxx"
 
 // -----------------------------------------------------------------------
@@ -691,7 +692,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_RIGHT,BOX_LINE_RIGHT),
                             };
 
-    for (sal_uInt32 i=0; i < sizeof(eTypes1)/sizeof(TBorderPair); ++i)
+    for (sal_uInt32 i=0; i < SAL_N_ELEMENTS(eTypes1); ++i)
         aBoxItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes1[i].first ), eTypes1[i].second );
 
     //--------------------------------
@@ -701,7 +702,7 @@ BOOL SvxBorderTabPage::FillItemSet( SfxItemSet& rCoreAttrs )
                                 TBorderPair(svx::FRAMEBORDER_HOR,BOXINFO_LINE_HORI),
                                 TBorderPair(svx::FRAMEBORDER_VER,BOXINFO_LINE_VERT)
                             };
-    for (sal_uInt32 j=0; j < sizeof(eTypes2)/sizeof(TBorderPair); ++j)
+    for (sal_uInt32 j=0; j < SAL_N_ELEMENTS(eTypes2); ++j)
         aBoxInfoItem.SetLine( aFrameSel.GetFrameBorderStyle( eTypes2[j].first ), eTypes2[j].second );
 
     aBoxInfoItem.EnableHor( mbHorEnabled );

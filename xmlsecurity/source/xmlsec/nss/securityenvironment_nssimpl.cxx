@@ -37,6 +37,7 @@
 #include "ocsp.h"
 
 #include <sal/config.h>
+#include <sal/macros.h>
 #include "securityenvironment_nssimpl.hxx"
 #include "x509certificate_nssimpl.hxx"
 #include <rtl/uuid.h>
@@ -882,7 +883,7 @@ verifyCertificate( const Reference< csss::XCertificate >& aCert,
            {certificateUsageEmailRecipient, "certificateUsageEmailRecipient"}
         };
 
-        int numUsages = sizeof(arUsages) / sizeof(UsageDescription);
+        int numUsages = SAL_N_ELEMENTS(arUsages);
         for (int i = 0; i < numUsages; i++)
         {
             xmlsec_trace("Testing usage %d of %d: %s (0x%x)", i + 1,

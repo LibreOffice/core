@@ -39,6 +39,7 @@
 #include <osl/security.hxx>
 #include <osl/time.h>
 #include <osl/file.hxx>
+#include <sal/macros.h>
 
 #ifdef WNT
 #ifdef _MSC_VER
@@ -91,7 +92,7 @@ static const sal_Char * const aUpdateEntryProperties[] = {
     OLD_VERSION
 };
 
-static const sal_uInt32 nUpdateEntryProperties = sizeof(aUpdateEntryProperties) / sizeof(sal_Char *);
+static const sal_uInt32 nUpdateEntryProperties = SAL_N_ELEMENTS(aUpdateEntryProperties);
 
 //------------------------------------------------------------------------------
 

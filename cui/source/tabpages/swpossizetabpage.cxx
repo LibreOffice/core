@@ -43,6 +43,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/rectenum.hxx>
+#include <sal/macros.h>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/VertOrientation.hpp>
@@ -368,55 +369,53 @@ static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
 
 std::size_t lcl_GetFrmMapCount(const FrmMap* pMap)
 {
-    if ( pMap )
+    if( pMap )
     {
-        std::size_t aSizeOf = sizeof(FrmMap);
-        if( pMap == aVParaHtmlMap)
-            return sizeof(aVParaHtmlMap) / aSizeOf;
-        if( pMap == aVAsCharHtmlMap)
-            return sizeof(aVAsCharHtmlMap) / aSizeOf;
-        if( pMap == aHParaHtmlMap)
-            return sizeof(aHParaHtmlMap) / aSizeOf;
-        if( pMap == aHParaHtmlAbsMap)
-            return sizeof(aHParaHtmlAbsMap) / aSizeOf;
-        if ( pMap == aVPageMap )
-            return sizeof(aVPageMap) / aSizeOf;
-        if ( pMap == aVPageHtmlMap )
-            return sizeof(aVPageHtmlMap) / aSizeOf;
-        if ( pMap == aVAsCharMap )
-            return sizeof(aVAsCharMap) / aSizeOf;
-        if ( pMap == aVParaMap )
-            return sizeof(aVParaMap) / aSizeOf;
-        if ( pMap == aHParaMap )
-            return sizeof(aHParaMap) / aSizeOf;
-        if ( pMap == aHFrameMap )
-            return sizeof(aHFrameMap) / aSizeOf;
-        // OD 19.09.2003 #i18732# - own vertical alignment map for to frame anchored objects
-        if ( pMap == aVFrameMap )
-            return sizeof(aVFrameMap) / aSizeOf;
-        if ( pMap == aHCharMap )
-            return sizeof(aHCharMap) / aSizeOf;
-        if ( pMap == aHCharHtmlMap )
-            return sizeof(aHCharHtmlMap) / aSizeOf;
-        if ( pMap == aHCharHtmlAbsMap )
-            return sizeof(aHCharHtmlAbsMap) / aSizeOf;
-        if ( pMap == aVCharMap )
-            return sizeof(aVCharMap) / aSizeOf;
-        if ( pMap == aVCharHtmlMap )
-            return sizeof(aVCharHtmlMap) / aSizeOf;
-        if ( pMap == aVCharHtmlAbsMap )
-            return sizeof(aVCharHtmlAbsMap) / aSizeOf;
-        if ( pMap == aHPageHtmlMap )
-            return sizeof(aHPageHtmlMap) / aSizeOf;
-        if ( pMap == aHFlyHtmlMap )
-            return sizeof(aHFlyHtmlMap) / aSizeOf;
-        if ( pMap == aVFlyHtmlMap )
-            return sizeof(aVFlyHtmlMap) / aSizeOf;
-        if( pMap == aVMultiSelectionMap)
-            return sizeof(aVMultiSelectionMap) / aSizeOf;
-        if( pMap == aHMultiSelectionMap)
-            return sizeof(aHMultiSelectionMap) / aSizeOf;
-        return sizeof(aHPageMap) / aSizeOf;
+        if( pMap == aVParaHtmlMap )
+            return SAL_N_ELEMENTS(aVParaHtmlMap);
+        if( pMap == aVAsCharHtmlMap )
+            return SAL_N_ELEMENTS( aVAsCharHtmlMap );
+        if( pMap == aHParaHtmlMap )
+            return SAL_N_ELEMENTS( aHParaHtmlMap );
+        if( pMap == aHParaHtmlAbsMap )
+            return SAL_N_ELEMENTS( aHParaHtmlAbsMap );
+        if( pMap == aVPageMap )
+            return SAL_N_ELEMENTS( aVPageMap );
+        if( pMap == aVPageHtmlMap )
+            return SAL_N_ELEMENTS( aVPageHtmlMap );
+        if( pMap == aVAsCharMap )
+            return SAL_N_ELEMENTS( aVAsCharMap );
+        if( pMap == aVParaMap )
+            return SAL_N_ELEMENTS( aVParaMap );
+        if( pMap == aHParaMap )
+            return SAL_N_ELEMENTS( aHParaMap );
+        if( pMap == aHFrameMap )
+            return SAL_N_ELEMENTS( aHFrameMap );
+        if( pMap == aVFrameMap )
+            return SAL_N_ELEMENTS( aVFrameMap );
+        if( pMap == aHCharMap )
+            return SAL_N_ELEMENTS( aHCharMap );
+        if( pMap == aHCharHtmlMap )
+            return SAL_N_ELEMENTS( aHCharHtmlMap );
+        if( pMap == aHCharHtmlAbsMap )
+            return SAL_N_ELEMENTS( aHCharHtmlAbsMap );
+        if( pMap == aVCharMap )
+            return SAL_N_ELEMENTS( aVCharMap );
+        if( pMap == aVCharHtmlMap )
+            return SAL_N_ELEMENTS( aVCharHtmlMap );
+        if( pMap == aVCharHtmlAbsMap )
+            return SAL_N_ELEMENTS( aVCharHtmlAbsMap );
+        if( pMap == aHPageHtmlMap )
+            return SAL_N_ELEMENTS( aHPageHtmlMap );
+        if( pMap == aHFlyHtmlMap )
+            return SAL_N_ELEMENTS( aHFlyHtmlMap );
+        if( pMap == aVFlyHtmlMap )
+            return SAL_N_ELEMENTS( aVFlyHtmlMap );
+        if( pMap == aVMultiSelectionMap )
+            return SAL_N_ELEMENTS( aVMultiSelectionMap );
+        if( pMap == aHMultiSelectionMap )
+            return SAL_N_ELEMENTS( aHMultiSelectionMap );
+        return SAL_N_ELEMENTS(aHPageMap);
     }
     return 0;
 }
@@ -458,7 +457,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             {SwFPos::REL_FRM_BOTTOM, SwFPos::REL_FRM_RIGHT }
         };
         USHORT nIndex;
-        for(nIndex = 0; nIndex < sizeof(aHoriIds) / sizeof(StringIdPair_Impl); ++nIndex)
+        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aHoriIds); ++nIndex)
         {
             if(aHoriIds[nIndex].eHori == eStringId)
             {
@@ -467,7 +466,7 @@ SvxSwFramePosString::StringId lcl_ChangeResIdToVerticalOrRTL(
             }
         }
         nIndex = 0;
-        for(nIndex = 0; nIndex < sizeof(aVertIds) / sizeof(StringIdPair_Impl); ++nIndex)
+        for(nIndex = 0; nIndex < SAL_N_ELEMENTS(aVertIds); ++nIndex)
         {
             if(aVertIds[nIndex].eHori == eStringId)
             {
@@ -484,8 +483,7 @@ ULONG lcl_GetLBRelationsForRelations( const USHORT _nRel )
 {
     ULONG nLBRelations = 0L;
 
-    sal_uInt16 nRelMapSize = sizeof(aRelationMap) / sizeof(RelationMap);
-    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < nRelMapSize; ++nRelMapPos )
+    for ( sal_uInt16 nRelMapPos = 0; nRelMapPos < SAL_N_ELEMENTS(aRelationMap); ++nRelMapPos )
     {
         if ( aRelationMap[nRelMapPos].nRelation == _nRel )
         {
@@ -1628,7 +1626,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
         if (pMap == aVAsCharHtmlMap || pMap == aVAsCharMap)
         {
             String sOldEntry(rLB.GetSelectEntry());
-            USHORT nRelCount = sizeof(aAsCharRelationMap) / sizeof(RelationMap);
+            USHORT nRelCount = SAL_N_ELEMENTS(aAsCharRelationMap);
             SvxSwFramePosString::StringId eStrId = pMap[nMapPos].eStrId;
 
             for (std::size_t _nMapPos = 0; _nMapPos < nMapCount; _nMapPos++)
@@ -1675,7 +1673,7 @@ ULONG SvxSwPosSizeTabPage::FillRelLB(FrmMap *pMap, USHORT nMapPos, USHORT nAlign
         }
         else
         {
-            USHORT nRelCount = sizeof(aRelationMap) / sizeof(RelationMap);
+            USHORT nRelCount = SAL_N_ELEMENTS(aRelationMap);
 
             // OD 14.11.2003 #i22341# - special handling for map <aVCharMap>,
             // because its ambigous in its <eStrId>/<eMirrorStrId>.

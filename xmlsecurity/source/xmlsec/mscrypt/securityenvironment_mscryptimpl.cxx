@@ -38,6 +38,7 @@
 #pragma warning(pop)
 #endif
 #include <sal/config.h>
+#include <sal/macros.h>
 #include <osl/thread.h>
 #include "securityenvironment_mscryptimpl.hxx"
 
@@ -114,11 +115,10 @@ CertErrorToString arErrStrings[] =
 
 void traceTrustStatus(DWORD err)
 {
-    int numErrors = sizeof(arErrStrings) / sizeof(CertErrorToString);
     xmlsec_trace("The certificate error status is: ");
     if (err == 0)
         xmlsec_trace("%s", arErrStrings[0].name);
-    for (int i = 1; i < numErrors; i++)
+    for (int i = 1; i < SAL_N_ELEMENTS(arErrStrings); i++)
     {
         if (arErrStrings[i].error & err)
             xmlsec_trace("%s", arErrStrings[i].name);
