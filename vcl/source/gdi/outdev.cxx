@@ -202,10 +202,6 @@ bool OutputDevice::ImplSelectClipRegion( const Region& rRegion, SalGraphics* pGr
 {
     DBG_TESTSOLARMUTEX();
 
-    // TODO(Q3): Change from static to plain method - everybody's
-    // calling it with pOutDev=this!
-    // => done, but only with minimal changes for now => TODO
-    OutputDevice* const pOutDev = this;
     if( !pGraphics )
     {
         if( !mpGraphics )
