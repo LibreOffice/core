@@ -3465,6 +3465,10 @@ StackVar ScInterpreter::Interpret()
                 case ocArcCosHyp        : ScArcCosHyp();                break;
                 case ocArcTanHyp        : ScArcTanHyp();                break;
                 case ocArcCotHyp        : ScArcCotHyp();                break;
+                case ocCosecant         : ScCosecant();                 break;
+                case ocSecant           : ScSecant();                   break;
+                case ocCosecantHyp      : ScCosecantHyp();              break;
+                case ocSecantHyp        : ScSecantHyp();                break;
                 case ocExp              : ScExp();                      break;
                 case ocLn               : ScLn();                       break;
                 case ocLog10            : ScLog10();                    break;
