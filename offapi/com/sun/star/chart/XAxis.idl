@@ -27,56 +27,34 @@
 #ifndef com_sun_star_chart_XAxis_idl
 #define com_sun_star_chart_XAxis_idl
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
-#include <com/sun/star/beans/XPropertySet.idl>
+module com {  module sun {  module star {  module chart {
 
-#include <com/sun/star/chart2/ScaleData.idl>
-
-module com
-{
-module sun
-{
-module star
-{
-module chart2
-{
+/** Allows easier access to the different subelements of an axis.
+@since OOo 3.4
+*/
 
 interface XAxis : ::com::sun::star::uno::XInterface
 {
-    /**
+    /** @returns
+            the title of the axis. The returned object supports the properties described in service <type>ChartTitle</type>.
      */
-    void setScaleData( [in] ScaleData aScale );
+    com::sun::star::beans::XPropertySet getAxisTitle();
 
-    /**
-     */
-    ScaleData getScaleData();
-
-    /** the returned property set must support the service
-        <type>GridProperties</type>
+    /** @returns
+            the properties of the major grid of the axis. The returned object supports service <type>ChartGrid</type>.
     */
-    com::sun::star::beans::XPropertySet getGridProperties();
+    com::sun::star::beans::XPropertySet getMajorGrid();
 
-    /** the returned property sets must support the service
-        <type>GridProperties</type>
-
-        <p>If you do not want to render certain a sub-grid, in the
-        corresponding <type>XPropertySet</type> the property
-        <member>GridProperties::Show</member> must be <FALSE/>.</p>
-     */
-    sequence< com::sun::star::beans::XPropertySet > getSubGridProperties();
-
-    /** the returned property sets must support the service
-        <type>TickProperties</type>
-     */
-    sequence< com::sun::star::beans::XPropertySet > getSubTickProperties();
+    /** @returns
+            the properties of the minor grid of the axis. The returned object supports service <type>ChartGrid</type>.
+    */
+    com::sun::star::beans::XPropertySet getMinorGrid();
 };
 
-} ; // chart2
-} ; // com
-} ; // sun
-} ; // star
+}; }; }; };
 
 #endif

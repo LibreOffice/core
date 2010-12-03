@@ -63,6 +63,10 @@
 #include <com/sun/star/chart/TimeIncrement.idl>
 #endif
 
+#ifndef __com_sun_star_chart_XAxis_idl__
+#include <com/sun/star/chart/XAxis.idl>
+#endif
+
 #ifndef _com_sun_star_xml_UserDefinedAttributeSupplier_idl_
 #include <com/sun/star/xml/UserDefinedAttributeSupplier.idl>
 #endif
@@ -80,8 +84,6 @@
  */
 published service ChartAxis
 {
-
-
     /** set the properties for the entire axis line as well as for the
         tick marks.
      */
@@ -91,13 +93,18 @@ published service ChartAxis
      */
     service com::sun::star::style::CharacterProperties;
 
-        /** If a <type>ChartAxis</type> may be stored as XML element, this
-            service should be supported in order to preserve unparsed XML
-            attributes.
+    /** If a <type>ChartAxis</type> may be stored as XML element, this
+        service should be supported in order to preserve unparsed XML
+        attributes.
 
         @since OOo 1.1.2
      */
     [optional] service com::sun::star::xml::UserDefinedAttributeSupplier;
+
+    /** Access to the sub elements of an axis like title and grids.
+        @since OOo 3.4
+     */
+    [optional] interface com::sun::star::chart::XAxis;
 
     interface com::sun::star::beans::XPropertySet;
 

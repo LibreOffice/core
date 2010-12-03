@@ -100,6 +100,8 @@ IDLFILES=\
     TimeInterval.idl\
     X3DDefaultSetter.idl\
     X3DDisplay.idl\
+    XAxis.idl\
+    XAxisSupplier.idl\
     XAxisXSupplier.idl\
     XAxisYSupplier.idl\
     XAxisZSupplier.idl\
