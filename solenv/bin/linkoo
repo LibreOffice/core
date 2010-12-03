@@ -60,7 +60,7 @@ $program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FI
 my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
 %replaceable = (
-	$program_dir => '\.so',
+    $program_dir => '\.so',
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
@@ -78,12 +78,12 @@ sub sniff_target($)
 {
     my $build_dir = shift;
     my ($dirhandle, $fname);
-    my ($target, $libver, $lang) = ( 'unxlngi4.pro', '680', 'en-US' ); # defaults
-    
+    my ($target, $libver, $lang) = ( 'unxlngi6.pro', '680', 'en-US' ); # defaults
+
     opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
     while ($fname = readdir ($dirhandle)) {
 	$fname =~ /Set.sh$/ || next;
-	
+
 	my $file;
 	open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
 	while (<$file>) {
@@ -184,7 +184,7 @@ sub scan_and_link_files($$$)
     my $build_path = shift;
     my $installed_files = shift;
     my $target = shift;
-    
+
     my @modules = ();
     my $dirh_toplevel;
     opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
@@ -231,7 +231,7 @@ sub scan_and_link_files($$$)
     for my $file (keys %build_files) {
 	my $src = $build_files{$file};
 	my $dest = $installed_files->{$file};
-	
+
 	do_link ($src, $dest, $file, $file);
     }
     print "\n";
@@ -284,12 +284,24 @@ sub link_oovbaapi_rdb()
     do_link ($src, $dest, 'oovbaapi.db', 'oovbaapi.rdb');
     print "\n";
 }
+
 sub link_types_rdb()
 {
     print "Types.rdb case:";
     my $src  = "$OOO_BUILD/offapi/$TARGET/ucr";
     my $dest = "$OOO_INSTALL/" . $ure_misc_dir;
     do_link ($src, $dest, 'types.db', 'types.rdb');
+    print "\n";
+}
+
+sub link_pagein_files()
+{
+    print "pagein case:";
+    my $src  = "$OOO_BUILD/desktop/$TARGET/misc";
+    my $dest = "$OOO_INSTALL/" . $program_dir;
+    for my $c ('calc', 'draw', 'impress', 'writer', 'common') {
+	do_link ($src, $dest, "pagein-$c", "pagein-$c");
+    }
     print "\n";
 }
 
@@ -359,6 +371,7 @@ scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
 link_iso_res();
 link_types_rdb();
 link_oovbaapi_rdb();
+link_pagein_files();
 link_soffice_bin_files();
 
 if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
