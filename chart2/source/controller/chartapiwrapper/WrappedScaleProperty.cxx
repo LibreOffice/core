@@ -97,6 +97,9 @@ WrappedScaleProperty::WrappedScaleProperty( tScaleProperty eScaleProperty
         case SCALE_PROP_DATE_INCREMENT:
             m_aOuterName = C2U("TimeIncrement");
             break;
+        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
+            m_aOuterName = C2U("ExplicitTimeIncrement");
+            break;
         case SCALE_PROP_LOGARITHMIC:
             m_aOuterName = C2U("Logarithmic");
             break;
@@ -130,6 +133,7 @@ void WrappedScaleProperty::addWrappedProperties( std::vector< WrappedProperty* >
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AUTO_STEPHELP, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_AXIS_TYPE, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_DATE_INCREMENT, spChart2ModelContact ) );
+    rList.push_back( new WrappedScaleProperty( SCALE_PROP_EXPLICIT_DATE_INCREMENT, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_LOGARITHMIC, spChart2ModelContact ) );
     rList.push_back( new WrappedScaleProperty( SCALE_PROP_REVERSEDIRECTION, spChart2ModelContact ) );
 }
@@ -308,6 +312,9 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
             bSetScaleData = true;
             break;
         }
+        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
+            //read only property
+            break;
         case SCALE_PROP_LOGARITHMIC:
         {
             if( rOuterValue >>= bBool )
@@ -550,6 +557,25 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 aRet = uno::makeAny( aScaleData.TimeIncrement );
             break;
         }
+        case SCALE_PROP_EXPLICIT_DATE_INCREMENT:
+        {
+            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
+            {
+                m_spChart2ModelContact->getExplicitValuesForAxis( xAxis, aExplicitScale, aExplicitIncrement );
+                if( aExplicitScale.AxisType == AxisType::DATE )
+                {
+                    TimeIncrement aTimeIncrement;
+                    aTimeIncrement.MajorTimeInterval = uno::makeAny( aExplicitIncrement.MajorTimeInterval );
+                    aTimeIncrement.MinorTimeInterval = uno::makeAny( aExplicitIncrement.MinorTimeInterval );
+                    aTimeIncrement.TimeResolution = uno::makeAny( aExplicitScale.TimeResolution );
+                    aRet = uno::makeAny(aTimeIncrement);
+                }
+            }
+
+            if( aScaleData.AxisType == AxisType::DATE || aScaleData.AutoDateAxis )
+                aRet = uno::makeAny( aScaleData.TimeIncrement );
+            break;
+        }
         case SCALE_PROP_LOGARITHMIC:
         {
             aRet <<= static_cast< sal_Bool >( AxisHelper::isLogarithmic(aScaleData.Scaling) );
@@ -571,5 +597,5 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
 }
 
 } //  namespace wrapper
-} //namespace chart
+} //  namespace chart
 //.............................................................................

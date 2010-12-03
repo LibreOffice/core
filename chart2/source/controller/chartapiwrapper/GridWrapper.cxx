@@ -112,17 +112,17 @@ void GridWrapper::getDimensionAndSubGridBool( tGridType eType, sal_Int32& rnDime
 
     switch( eType )
     {
-        case X_MAIN_GRID:
+        case X_MAJOR_GRID:
             rnDimensionIndex = 0; rbSubGrid = false; break;
-        case Y_MAIN_GRID:
+        case Y_MAJOR_GRID:
             rnDimensionIndex = 1; rbSubGrid = false; break;
-        case Z_MAIN_GRID:
+        case Z_MAJOR_GRID:
             rnDimensionIndex = 2; rbSubGrid = false; break;
-        case X_SUB_GRID:
+        case X_MINOR_GRID:
             rnDimensionIndex = 0; rbSubGrid = true;  break;
-        case Y_SUB_GRID:
+        case Y_MINOR_GRID:
             rnDimensionIndex = 1; rbSubGrid = true;  break;
-        case Z_SUB_GRID:
+        case Z_MINOR_GRID:
             rnDimensionIndex = 2; rbSubGrid = true;  break;
     }
 }
@@ -209,3 +209,4 @@ APPHELPER_XSERVICEINFO_IMPL( GridWrapper, lcl_aServiceName );
 
 } //  namespace wrapper
 } //  namespace chart
+
