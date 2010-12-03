@@ -2499,7 +2499,6 @@ void SchXMLExportHelper_Impl::exportAxes(
 
     // write an axis element also if the axis itself is not visible, but a grid or a title
 
-    Reference< beans::XPropertySet > xAxisProps;
     OUString aCategoriesRange;
     Reference< chart::XAxisSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
 
