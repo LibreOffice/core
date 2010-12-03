@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Library_Library,msword))
 
+$(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
+
 $(eval $(call gb_Library_set_include,msword,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/ui/inc \

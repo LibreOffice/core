@@ -520,7 +520,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||
-                 bVert == rL2.Height() > rL2.Width() )
+                 (bVert == (rL2.Height() > rL2.Width())) )
                 continue;
 
             long nL2a, nL2b, nL2c, nL2d;
@@ -694,7 +694,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             if ( rLine.IsLocked () )
                 continue;
 
-            if ( !bVerticalSubs == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
+            if ( (!bVerticalSubs == (rLine.Height() > rLine.Width())) ) //gleiche Ausrichtung?
                 continue;
 
             if ( aSubsRect.IsOver( rLine ) )
@@ -899,7 +899,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 SwLineRect &rLk = operator[](k);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
-                    if ( bVerticalSubs == rLk.Height() > rLk.Width() )
+                    if ( (bVerticalSubs == (rLk.Height() > rLk.Width())) )
                     {
                         if ( bVerticalSubs )
                         {
@@ -6251,7 +6251,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
-    BOOL bLineInFly = rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys()
+    BOOL bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );
