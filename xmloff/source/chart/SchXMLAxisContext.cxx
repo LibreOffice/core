@@ -47,11 +47,8 @@
 #include <com/sun/star/chart/TimeIncrement.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
-#include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
-#include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
-#include <com/sun/star/chart/XAxisZSupplier.hpp>
-#include <com/sun/star/chart/XSecondAxisTitleSupplier.hpp>
-
+#include <com/sun/star/chart/XAxis.hpp>
+#include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart2/AxisType.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -152,157 +149,96 @@ SchXMLAxisContext::SchXMLAxisContext( SchXMLImportHelper& rImpHelper,
 SchXMLAxisContext::~SchXMLAxisContext()
 {}
 
+Reference< chart::XAxis > lcl_getChartAxis( SchXMLAxis aCurrentAxis, const Reference< chart::XDiagram > xDiagram )
+{
+    Reference< chart::XAxis > xAxis;
+    Reference< chart::XAxisSupplier > xAxisSuppl( xDiagram, uno::UNO_QUERY );
+    if( !xAxisSuppl.is() )
+        return xAxis;
+    if( aCurrentAxis.nAxisIndex == 0 )
+        xAxis = xAxisSuppl->getAxis(aCurrentAxis.eDimension);
+    else
+        xAxis = xAxisSuppl->getSecondaryAxis(aCurrentAxis.eDimension);
+    return xAxis;
+}
+
 /* returns a shape for the current axis's title. The property
    "Has...AxisTitle" is set to "True" to get the shape
  */
 Reference< drawing::XShape > SchXMLAxisContext::getTitleShape()
 {
     Reference< drawing::XShape > xResult;
-    uno::Any aTrueBool;
-    aTrueBool <<= (sal_Bool)(sal_True);
-    Reference< beans::XPropertySet > xDiaProp( m_xDiagram, uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
+    if( !xDiaProp.is() || !xAxis.is() )
+        return xResult;
 
+    rtl::OUString aPropName;
     switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                {
-                    if( xDiaProp.is())
-                        xDiaProp->setPropertyValue( OUString::createFromAscii( "HasXAxisTitle" ), aTrueBool );
-                    xResult = Reference< drawing::XShape >( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
-                }
-            }
+                aPropName = OUString::createFromAscii( "HasXAxisTitle" );
             else
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() )
-                {
-                    if( xDiaProp.is() )
-                        xDiaProp->setPropertyValue( OUString::createFromAscii( "HasSecondaryXAxisTitle" ), aTrueBool );
-                    xResult = Reference< drawing::XShape >( xSuppl->getSecondXAxisTitle(), uno::UNO_QUERY );
-                }
-            }
+                aPropName = OUString::createFromAscii( "HasSecondaryXAxisTitle" );
             break;
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                {
-                    if( xDiaProp.is())
-                        xDiaProp->setPropertyValue( OUString::createFromAscii( "HasYAxisTitle" ), aTrueBool );
-                    xResult = Reference< drawing::XShape >( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
-                }
-            }
+                aPropName = OUString::createFromAscii( "HasYAxisTitle" );
             else
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() )
-                {
-                    if( xDiaProp.is() )
-                        xDiaProp->setPropertyValue( OUString::createFromAscii( "HasSecondaryYAxisTitle" ), aTrueBool );
-                    xResult = Reference< drawing::XShape >( xSuppl->getSecondYAxisTitle(), uno::UNO_QUERY );
-                }
-            }
+                aPropName = OUString::createFromAscii( "HasSecondaryYAxisTitle" );
             break;
         case SCH_XML_AXIS_Z:
-        {
-            Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-            if( xSuppl.is())
-            {
-                if( xDiaProp.is())
-                    xDiaProp->setPropertyValue( OUString::createFromAscii( "HasZAxisTitle" ), aTrueBool );
-                xResult = Reference< drawing::XShape >( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
-            }
+            aPropName = OUString::createFromAscii( "HasZAxisTitle" );
             break;
-        }
         case SCH_XML_AXIS_UNDEF:
             DBG_ERROR( "Invalid axis" );
             break;
     }
-
+    xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+    xResult = Reference< drawing::XShape >( xAxis->getAxisTitle(), uno::UNO_QUERY );
     return xResult;
 }
 
 void SchXMLAxisContext::CreateGrid( OUString sAutoStyleName, bool bIsMajor )
 {
-    Reference< chart::XDiagram > xDia = m_rImportHelper.GetChartDocument()->getDiagram();
-    Reference< beans::XPropertySet > xGridProp;
-    OUString sPropertyName;
-    DBG_ASSERT( xDia.is(), "diagram object is invalid!" );
+    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
+    if( !xDiaProp.is() || !xAxis.is() )
+        return;
 
-    Reference< beans::XPropertySet > xDiaProp( xDia, uno::UNO_QUERY );
-    uno::Any aTrueBool( uno::makeAny( true ));
-
+    rtl::OUString aPropName;
     switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
-            {
-                Reference< chart::XAxisXSupplier > xSuppl( xDia, uno::UNO_QUERY );
-                if( xSuppl.is())
-                {
-                    if( bIsMajor )
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasXAxisGrid"), aTrueBool );
-                        xGridProp = xSuppl->getXMainGrid();
-                    }
-                    else
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasXAxisHelpGrid"), aTrueBool );
-                        xGridProp = xSuppl->getXHelpGrid();
-                    }
-                }
-            }
+            if( bIsMajor )
+                aPropName = OUString::createFromAscii("HasXAxisGrid");
+            else
+                aPropName = OUString::createFromAscii("HasXAxisHelpGrid");
             break;
         case SCH_XML_AXIS_Y:
-            {
-                Reference< chart::XAxisYSupplier > xSuppl( xDia, uno::UNO_QUERY );
-                if( xSuppl.is())
-                {
-                    if( bIsMajor )
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasYAxisGrid"), aTrueBool );
-                        xGridProp = xSuppl->getYMainGrid();
-                    }
-                    else
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasYAxisHelpGrid"), aTrueBool );
-                        xGridProp = xSuppl->getYHelpGrid();
-                    }
-                }
-            }
+            if( bIsMajor )
+                aPropName = OUString::createFromAscii("HasYAxisGrid");
+            else
+                aPropName = OUString::createFromAscii("HasYAxisHelpGrid");
             break;
         case SCH_XML_AXIS_Z:
-            {
-                Reference< chart::XAxisZSupplier > xSuppl( xDia, uno::UNO_QUERY );
-                if( xSuppl.is())
-                {
-                    if( bIsMajor )
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasZAxisGrid"), aTrueBool );
-                        xGridProp = xSuppl->getZMainGrid();
-                    }
-                    else
-                    {
-                        if( xDiaProp.is())
-                            xDiaProp->setPropertyValue( OUString::createFromAscii("HasZAxisHelpGrid"), aTrueBool );
-                        xGridProp = xSuppl->getZHelpGrid();
-                    }
-                }
-            }
+            if( bIsMajor )
+                aPropName = OUString::createFromAscii("HasZAxisGrid");
+            else
+                aPropName = OUString::createFromAscii("HasZAxisHelpGrid");
             break;
         case SCH_XML_AXIS_UNDEF:
             DBG_ERROR( "Invalid axis" );
             break;
     }
+    xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+
+    Reference< beans::XPropertySet > xGridProp;
+    if( bIsMajor )
+        xGridProp = xAxis->getMajorGrid();
+    else
+        xGridProp = xAxis->getMinorGrid();
 
     // set properties
     if( xGridProp.is())
@@ -472,131 +408,80 @@ bool lcl_AdaptWrongPercentScaleValues(chart2::ScaleData& rScaleData)
 
 void SchXMLAxisContext::CreateAxis()
 {
-    // add new Axis to list
     m_rAxes.push_back( m_aCurrentAxis );
 
-    // set axis at chart
-    Reference< beans::XPropertySet > xDiaProp( m_xDiagram, uno::UNO_QUERY );
-    uno::Any aTrueBool;
-    aTrueBool <<= (sal_Bool)(sal_True);
-    uno::Any aFalseBool;
-    aFalseBool <<= (sal_Bool)(sal_False);
-    Reference< frame::XModel > xDoc( m_rImportHelper.GetChartDocument(), uno::UNO_QUERY );
-
+    Reference< beans::XPropertySet > xDiaProp( m_rImportHelper.GetChartDocument()->getDiagram(), uno::UNO_QUERY );
+    if( !xDiaProp.is() )
+        return;
+    rtl::OUString aPropName;
     switch( m_aCurrentAxis.eDimension )
     {
         case SCH_XML_AXIS_X:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                try
-                {
-                    xDiaProp->setPropertyValue(
-                        OUString::createFromAscii( "HasXAxis" ), aTrueBool );
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_ERROR( "Couldn't turn on x axis" );
-                }
-                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    m_xAxisProps = xSuppl->getXAxis();
-            }
+                aPropName = OUString::createFromAscii("HasXAxis");
             else
-            {
-                try
-                {
-                    xDiaProp->setPropertyValue(
-                        OUString::createFromAscii( "HasSecondaryXAxis" ), aTrueBool );
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_ERROR( "Couldn't turn on second x axis" );
-                }
-                Reference< chart::XTwoAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    m_xAxisProps = xSuppl->getSecondaryXAxis();
-            }
+                aPropName = OUString::createFromAscii("HasSecondaryXAxis");
             break;
-
         case SCH_XML_AXIS_Y:
             if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                try
-                {
-                    xDiaProp->setPropertyValue(
-                        OUString::createFromAscii( "HasYAxis" ), aTrueBool );
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_ERROR( "Couldn't turn on y axis" );
-                }
-                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    m_xAxisProps = xSuppl->getYAxis();
-
-
-                if( m_bAddMissingXAxisForNetCharts )
-                {
-                    if( xDiaProp.is() )
-                    {
-                        try
-                        {
-                            xDiaProp->setPropertyValue(
-                                OUString::createFromAscii( "HasXAxis" ), uno::makeAny(sal_True) );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            DBG_ERROR( "Couldn't turn on x axis" );
-                        }
-                    }
-                }
-            }
+                aPropName = OUString::createFromAscii("HasYAxis");
             else
-            {
-                try
-                {
-                    xDiaProp->setPropertyValue(
-                        OUString::createFromAscii( "HasSecondaryYAxis" ), aTrueBool );
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_ERROR( "Couldn't turn on second y axis" );
-                }
-                Reference< chart::XTwoAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is())
-                    m_xAxisProps = xSuppl->getSecondaryYAxis();
-            }
+                aPropName = OUString::createFromAscii("HasSecondaryYAxis");
             break;
-
         case SCH_XML_AXIS_Z:
-            {
-                bool bSettingZAxisSuccedded = false;
-                try
-                {
-                    OUString sHasZAxis( OUString::createFromAscii( "HasZAxis" ) );
-                    xDiaProp->setPropertyValue( sHasZAxis, aTrueBool );
-                    xDiaProp->getPropertyValue( sHasZAxis ) >>= bSettingZAxisSuccedded;
-                }
-                catch( beans::UnknownPropertyException & )
-                {
-                    DBG_ERROR( "Couldn't turn on z axis" );
-                }
-                if( bSettingZAxisSuccedded )
-                {
-                    Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                    if( xSuppl.is())
-                        m_xAxisProps = xSuppl->getZAxis();
-                }
-            }
+            if( m_aCurrentAxis.nAxisIndex == 0 )
+                aPropName = OUString::createFromAscii("HasXAxis");
+            else
+                aPropName = OUString::createFromAscii("HasSecondaryXAxis");
             break;
         case SCH_XML_AXIS_UNDEF:
-            // nothing
+            DBG_ERROR( "Invalid axis" );
             break;
+    }
+    try
+    {
+        xDiaProp->setPropertyValue( aPropName, uno::makeAny(sal_True) );
+    }
+    catch( beans::UnknownPropertyException & )
+    {
+        DBG_ERROR( "Couldn't turn on axis" );
+    }
+    if( m_aCurrentAxis.eDimension==SCH_XML_AXIS_Z )
+    {
+        bool bSettingZAxisSuccedded = false;
+        try
+        {
+            xDiaProp->getPropertyValue( aPropName ) >>= bSettingZAxisSuccedded;
+        }
+        catch( beans::UnknownPropertyException & )
+        {
+            DBG_ERROR( "Couldn't turn on z axis" );
+        }
+        if( !bSettingZAxisSuccedded )
+            return;
+    }
+
+
+    m_xAxisProps = Reference<beans::XPropertySet>( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ), uno::UNO_QUERY );
+
+    if( m_bAddMissingXAxisForNetCharts && m_aCurrentAxis.eDimension==SCH_XML_AXIS_Y && m_aCurrentAxis.nAxisIndex==0 )
+    {
+        try
+        {
+            xDiaProp->setPropertyValue( OUString::createFromAscii( "HasXAxis" ), uno::makeAny(sal_True) );
+        }
+        catch( beans::UnknownPropertyException & )
+        {
+            DBG_ERROR( "Couldn't turn on x axis" );
+        }
     }
 
     // set properties
     if( m_xAxisProps.is())
     {
+        uno::Any aTrueBool( uno::makeAny( sal_True ));
+        uno::Any aFalseBool( uno::makeAny( sal_False ));
+
         // #i109879# the line color is black as default, in the model it is a light gray
         m_xAxisProps->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "LineColor" )),
                                      uno::makeAny( COL_BLACK ));
@@ -641,10 +526,10 @@ void SchXMLAxisContext::CreateAxis()
                     {
                         //copy style from y axis to added x axis:
 
-                        Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                        if( xSuppl.is() )
+                        Reference< chart::XAxisSupplier > xAxisSuppl( xDiaProp, uno::UNO_QUERY );
+                        if( xAxisSuppl.is() )
                         {
-                            Reference< beans::XPropertySet > xXAxisProp( xSuppl->getXAxis() );
+                            Reference< beans::XPropertySet > xXAxisProp( xAxisSuppl->getAxis(0), uno::UNO_QUERY );
                             (( XMLPropStyleContext* )pStyle )->FillPropertySet( xXAxisProp );
                         }
 
@@ -713,130 +598,24 @@ void SchXMLAxisContext::CreateAxis()
 
 void SchXMLAxisContext::SetAxisTitle()
 {
-    // add new Axis to list
-    m_rAxes.push_back( m_aCurrentAxis );
+    if( !m_aCurrentAxis.aTitle.getLength() )
+        return;
 
-    // set axis at chart
-    sal_Bool bHasTitle = ( m_aCurrentAxis.aTitle.getLength() > 0 );
-    Reference< frame::XModel > xDoc( m_rImportHelper.GetChartDocument(), uno::UNO_QUERY );
+    Reference< chart::XAxis > xAxis( lcl_getChartAxis( m_aCurrentAxis, m_xDiagram ) );
+    if( !xAxis.is() )
+        return;
 
-    switch( m_aCurrentAxis.eDimension )
+    Reference< beans::XPropertySet > xTitleProp( xAxis->getAxisTitle() );
+    if( xTitleProp.is() )
     {
-        case SCH_XML_AXIS_X:
-            if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                Reference< chart::XAxisXSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() && bHasTitle )
-                {
-                    Reference< beans::XPropertySet > xTitleProp( xSuppl->getXAxisTitle(), uno::UNO_QUERY );
-                    if( xTitleProp.is())
-                    {
-                        try
-                        {
-                            uno::Any aAny;
-                            aAny <<= m_aCurrentAxis.aTitle;
-                            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            DBG_ERROR( "Property String for Title not available" );
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() && bHasTitle )
-                {
-                    Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondXAxisTitle(), uno::UNO_QUERY );
-                    if( xTitleProp.is())
-                    {
-                        try
-                        {
-                            uno::Any aAny;
-                            aAny <<= m_aCurrentAxis.aTitle;
-                            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            DBG_ERROR( "Property String for Title not available" );
-                        }
-                    }
-                }
-            }
-            break;
-
-        case SCH_XML_AXIS_Y:
-            if( m_aCurrentAxis.nAxisIndex == 0 )
-            {
-                Reference< chart::XAxisYSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() && bHasTitle )
-                {
-                    Reference< beans::XPropertySet > xTitleProp( xSuppl->getYAxisTitle(), uno::UNO_QUERY );
-                    if( xTitleProp.is())
-                    {
-                        try
-                        {
-                            uno::Any aAny;
-                            aAny <<= m_aCurrentAxis.aTitle;
-                            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                                DBG_ERROR( "Property String for Title not available" );
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Reference< chart::XSecondAxisTitleSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() && bHasTitle )
-                {
-                    Reference< beans::XPropertySet > xTitleProp( xSuppl->getSecondYAxisTitle(), uno::UNO_QUERY );
-                    if( xTitleProp.is())
-                    {
-                        try
-                        {
-                            uno::Any aAny;
-                            aAny <<= m_aCurrentAxis.aTitle;
-                            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            DBG_ERROR( "Property String for Title not available" );
-                        }
-                    }
-                }
-            }
-            break;
-
-        case SCH_XML_AXIS_Z:
-            {
-                Reference< chart::XAxisZSupplier > xSuppl( m_xDiagram, uno::UNO_QUERY );
-                if( xSuppl.is() && bHasTitle )
-                {
-                    Reference< beans::XPropertySet > xTitleProp( xSuppl->getZAxisTitle(), uno::UNO_QUERY );
-                    if( xTitleProp.is())
-                    {
-                        try
-                        {
-                            uno::Any aAny;
-                            aAny <<= m_aCurrentAxis.aTitle;
-                            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), aAny );
-                        }
-                        catch( beans::UnknownPropertyException & )
-                        {
-                            DBG_ERROR( "Property String for Title not available" );
-                        }
-                    }
-                }
-            }
-            break;
-        case SCH_XML_AXIS_UNDEF:
-            // nothing
-            break;
+        try
+        {
+            xTitleProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "String" )), uno::makeAny(m_aCurrentAxis.aTitle) );
+        }
+        catch( beans::UnknownPropertyException & )
+        {
+            DBG_ERROR( "Property String for Title not available" );
+        }
     }
 }
 

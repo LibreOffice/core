@@ -207,47 +207,33 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     {
         try
         {
-            if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisXSupplier" )))
-            {
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasXAxis" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasXAxisGrid" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasXAxisDescription" ), aFalseBool );
-            }
-            if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTwoAxisXSupplier" )))
-            {
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasSecondaryXAxis" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasSecondaryXAxisDescription" ), aFalseBool );
-            }
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasXAxis" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasXAxisGrid" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasXAxisDescription" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasSecondaryXAxis" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasSecondaryXAxisDescription" ), aFalseBool );
 
-            if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisYSupplier" )))
-            {
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasYAxis" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasYAxisGrid" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasYAxisDescription" ), aFalseBool );
-            }
-            if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartTwoAxisYSupplier" )))
-            {
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasSecondaryYAxis" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasSecondaryYAxisDescription" ), aFalseBool );
-            }
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasYAxis" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasYAxisGrid" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasYAxisDescription" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasSecondaryYAxis" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasSecondaryYAxisDescription" ), aFalseBool );
 
-            if( xInfo->supportsService( rtl::OUString::createFromAscii( "com.sun.star.chart.ChartAxisZSupplier" )))
-            {
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasZAxis" ), aFalseBool );
-                xProp->setPropertyValue(
-                    rtl::OUString::createFromAscii( "HasZAxisDescription" ), aFalseBool );
-            }
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasZAxis" ), aFalseBool );
+            xProp->setPropertyValue(
+                rtl::OUString::createFromAscii( "HasZAxisDescription" ), aFalseBool );
+
             uno::Any aAny;
             chart::ChartDataRowSource eSource = chart::ChartDataRowSource_COLUMNS;
             aAny <<= eSource;

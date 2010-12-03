@@ -64,11 +64,10 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 
+#include <com/sun/star/chart/XAxis.hpp>
+#include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
-#include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
-#include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
-#include <com/sun/star/chart/XAxisZSupplier.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
 #include <com/sun/star/chart/ChartAxisType.hpp>
@@ -207,8 +206,9 @@ public:
                                     const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
                                     sal_Bool bExportContent );
     void exportAxis( enum XMLTokenEnum eDimension, enum XMLTokenEnum eAxisName,
-                    const Reference< beans::XPropertySet > xAxisProps, const Reference< chart2::XAxis >& xChart2Axis, const Reference< beans::XPropertySet > xTitleProps, const OUString& rCategoriesRanges,
-                    const Reference< beans::XPropertySet > xMajorGridProps, const Reference< beans::XPropertySet > xMinorGridProps, bool bExportContent );
+                    const Reference< beans::XPropertySet > xAxisProps, const Reference< chart2::XAxis >& xChart2Axis,
+                    const OUString& rCategoriesRanges,
+                    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid, bool bExportContent );
     void exportGrid( const Reference< beans::XPropertySet > xGridProperties, bool bMajor, bool bExportContent );
     void exportDateScale( const Reference< beans::XPropertySet > xAxisProps );
     void exportAxisTitle( const Reference< beans::XPropertySet > xTitleProps, bool bExportContent );
@@ -2354,10 +2354,8 @@ void SchXMLExportHelper_Impl::exportAxis(
     enum XMLTokenEnum eAxisName,
     const Reference< beans::XPropertySet > xAxisProps,
     const Reference< chart2::XAxis >& xChart2Axis,
-    const Reference< beans::XPropertySet > xTitleProps,
     const OUString& rCategoriesRange,
-    const Reference< beans::XPropertySet > xMajorGridProps,
-    const Reference< beans::XPropertySet > xMinorGridProps,
+    bool bHasTitle, bool bHasMajorGrid, bool bHasMinorGrid,
     bool bExportContent )
 {
     static const OUString sNumFormat( OUString::createFromAscii( "NumberFormat" ));
@@ -2392,6 +2390,17 @@ void SchXMLExportHelper_Impl::exportAxis(
     //date scale
     if( bExportDateScale )
         exportDateScale( xAxisProps );
+
+    Reference< beans::XPropertySet > xTitleProps;
+    Reference< beans::XPropertySet > xMajorGridProps;
+    Reference< beans::XPropertySet > xMinorGridProps;
+    Reference< chart::XAxis > xAxis( xAxisProps, uno::UNO_QUERY );
+    if( xAxis.is() )
+    {
+        xTitleProps = bHasTitle ? xAxis->getAxisTitle() : 0;
+        xMajorGridProps = bHasMajorGrid ? xAxis->getMajorGrid() : 0;
+        xMinorGridProps = bHasMinorGrid ? xAxis->getMinorGrid() : 0;
+    }
 
     // axis-title
     exportAxisTitle( xTitleProps , bExportContent );
@@ -2445,41 +2454,16 @@ void SchXMLExportHelper_Impl::exportAxes(
     // get multiple properties using XMultiPropertySet
     MultiPropertySetHandler aDiagramProperties (xDiagram);
 
-    //  Check for supported services and then the properties provided by this service.
-    Reference<lang::XServiceInfo> xServiceInfo (xDiagram, uno::UNO_QUERY);
-    if (xServiceInfo.is())
-    {
-        if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisXSupplier")))
-        {
-            aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis")), bHasXAxis);
-        }
-        if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisYSupplier")))
-        {
-            aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis")), bHasYAxis);
-        }
-        if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartAxisZSupplier")))
-        {
-            aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis")), bHasZAxis);
-        }
-        if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisXSupplier")))
-        {
-            aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis")), bHasSecondaryXAxis);
-        }
-        if (xServiceInfo->supportsService(
-            OUString::createFromAscii ("com.sun.star.chart.ChartTwoAxisYSupplier")))
-        {
-            aDiagramProperties.Add (
-                OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis")), bHasSecondaryYAxis);
-        }
-    }
+    aDiagramProperties.Add (
+        OUString(RTL_CONSTASCII_USTRINGPARAM("HasXAxis")), bHasXAxis);
+    aDiagramProperties.Add (
+        OUString(RTL_CONSTASCII_USTRINGPARAM("HasYAxis")), bHasYAxis);
+    aDiagramProperties.Add (
+        OUString(RTL_CONSTASCII_USTRINGPARAM("HasZAxis")), bHasZAxis);
+    aDiagramProperties.Add (
+        OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryXAxis")), bHasSecondaryXAxis);
+    aDiagramProperties.Add (
+        OUString(RTL_CONSTASCII_USTRINGPARAM("HasSecondaryYAxis")), bHasSecondaryYAxis);
 
     aDiagramProperties.Add (
         OUString (RTL_CONSTASCII_USTRINGPARAM ("HasXAxisTitle")), bHasXAxisTitle);
@@ -2516,21 +2500,15 @@ void SchXMLExportHelper_Impl::exportAxes(
     // write an axis element also if the axis itself is not visible, but a grid or a title
 
     Reference< beans::XPropertySet > xAxisProps;
-    Reference< beans::XPropertySet > xTitleProps;
     OUString aCategoriesRange;
-    Reference< beans::XPropertySet > xMajorGridProps;
-    Reference< beans::XPropertySet > xMinorGridProps;
+    Reference< chart::XAxisSupplier > xAxisSupp( xDiagram, uno::UNO_QUERY );
 
     // x axis
     // -------
     Reference< ::com::sun::star::chart2::XAxis > xNewAxis = lcl_getAxis( xCooSys, XML_X );
     if( xNewAxis.is() )
     {
-        Reference< chart::XAxisXSupplier > xAxisXSupp( xDiagram, uno::UNO_QUERY );
-        xAxisProps = xAxisXSupp.is() ? xAxisXSupp->getXAxis() : 0;
-        xTitleProps = (bHasXAxisTitle && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXAxisTitle(), uno::UNO_QUERY ) : 0;
-        xMajorGridProps = (bHasXAxisMajorGrid && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXMainGrid(), uno::UNO_QUERY ) : 0;
-        xMinorGridProps = (bHasXAxisMinorGrid && xAxisXSupp.is()) ? Reference< beans::XPropertySet >( xAxisXSupp->getXHelpGrid(), uno::UNO_QUERY ) : 0;
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(0) : 0, uno::UNO_QUERY );
         if( mbHasCategoryLabels && bExportContent )
         {
             Reference< chart2::data::XLabeledDataSequence > xCategories( lcl_getCategories( xNewDiagram ) );
@@ -2545,7 +2523,7 @@ void SchXMLExportHelper_Impl::exportAxes(
                 }
             }
         }
-        exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        exportAxis( XML_X, XML_PRIMARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasXAxisTitle, bHasXAxisMajorGrid, bHasXAxisMinorGrid, bExportContent );
         aCategoriesRange = OUString();
     }
 
@@ -2555,11 +2533,8 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_X, false );
     if( xNewAxis.is() )
     {
-        Reference< chart::XTwoAxisXSupplier > xAxisTwoXSupp( xDiagram, uno::UNO_QUERY );
-        xAxisProps = xAxisTwoXSupp.is() ? xAxisTwoXSupp->getSecondaryXAxis() : 0;
-        xTitleProps = ( bHasSecondaryXAxisTitle && xSecondTitleSupp.is() ) ? Reference< beans::XPropertySet >( xSecondTitleSupp->getSecondXAxisTitle(), uno::UNO_QUERY ) : 0;
-        xMajorGridProps = xMinorGridProps = 0;
-        exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(0) : 0, uno::UNO_QUERY );
+        exportAxis( XML_X, XML_SECONDARY_X, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryXAxisTitle, false, false, bExportContent );
     }
 
     // y axis
@@ -2567,12 +2542,8 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y );
     if( xNewAxis.is() )
     {
-        Reference< chart::XAxisYSupplier > xAxisYSupp( xDiagram, uno::UNO_QUERY );
-        xAxisProps = xAxisYSupp.is() ? xAxisYSupp->getYAxis() : 0;
-        xTitleProps = (bHasYAxisTitle && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYAxisTitle(), uno::UNO_QUERY ) : 0;
-        xMajorGridProps = (bHasYAxisMajorGrid && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY ) : 0;
-        xMinorGridProps = (bHasYAxisMinorGrid && xAxisYSupp.is()) ? Reference< beans::XPropertySet >( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY ) : 0;
-        exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(1) : 0, uno::UNO_QUERY );
+        exportAxis( XML_Y, XML_PRIMARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasYAxisTitle, bHasYAxisMajorGrid, bHasYAxisMinorGrid, bExportContent );
     }
 
     // secondary y axis
@@ -2580,11 +2551,8 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Y, false );
     if( xNewAxis.is() )
     {
-        Reference< chart::XTwoAxisYSupplier > xAxisTwoYSupp( xDiagram, uno::UNO_QUERY );
-        xAxisProps = xAxisTwoYSupp.is() ? xAxisTwoYSupp->getSecondaryYAxis() : 0;
-        xTitleProps = ( bHasSecondaryYAxisTitle && xSecondTitleSupp.is() ) ? Reference< beans::XPropertySet >( xSecondTitleSupp->getSecondYAxisTitle(), uno::UNO_QUERY ) : 0;
-        xMajorGridProps = xMinorGridProps = 0;
-        exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getSecondaryAxis(1) : 0, uno::UNO_QUERY );
+        exportAxis( XML_Y, XML_SECONDARY_Y, xAxisProps, xNewAxis, aCategoriesRange, bHasSecondaryYAxisTitle, false, false, bExportContent );
     }
 
     // z axis
@@ -2592,12 +2560,8 @@ void SchXMLExportHelper_Impl::exportAxes(
     xNewAxis = lcl_getAxis( xCooSys, XML_Z );
     if( xNewAxis.is() )
     {
-        Reference< chart::XAxisZSupplier > xAxisZSupp( xDiagram, uno::UNO_QUERY );
-        xAxisProps = xAxisZSupp.is() ? xAxisZSupp->getZAxis() : 0;
-        xTitleProps = (bHasZAxisTitle && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZAxisTitle(), uno::UNO_QUERY ) : 0;
-        xMajorGridProps = (bHasZAxisMajorGrid && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZMainGrid(), uno::UNO_QUERY ) : 0;
-        xMinorGridProps = (bHasZAxisMinorGrid && xAxisZSupp.is()) ? Reference< beans::XPropertySet >( xAxisZSupp->getZHelpGrid(), uno::UNO_QUERY ) : 0;
-        exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, xTitleProps, aCategoriesRange, xMajorGridProps, xMinorGridProps, bExportContent );
+        Reference< beans::XPropertySet > xAxisProps( xAxisSupp.is() ? xAxisSupp->getAxis(2) : 0, uno::UNO_QUERY );
+        exportAxis( XML_Z, XML_PRIMARY_Z, xAxisProps, xNewAxis, aCategoriesRange, bHasZAxisTitle, bHasZAxisMajorGrid, bHasZAxisMinorGrid, bExportContent );
     }
 }
 
