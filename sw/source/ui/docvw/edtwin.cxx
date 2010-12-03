@@ -5467,8 +5467,28 @@ void QuickHelpData::FillStrArr( SwWrtShell& rSh, const String& rWord )
             // actual word
             if( rS.Len() > rWord.Len() )
             {
-                String* pNew = new String( rS );
-                if( !aArr.Insert( pNew ) )
+                CharClass &rCC = GetAppCharClass();
+                String aMatch;
+                int upper = 0, lower = 0, letters = 0;
+                for( xub_StrLen i = 0; i < rWord.Len(); i++ ) {
+                    sal_Int32 nCharType = rCC.getCharacterType( rWord, i );
+                    if( !CharClass::isLetterType( nCharType ) )
+                        continue;
+                    letters++;
+                    if( i18n::KCharacterType::LOWER & nCharType )
+                        lower++;
+                    if( i18n::KCharacterType::UPPER & nCharType )
+                        upper++;
+                }
+                if (lower == letters)
+                    aMatch = rCC.lower( rS );
+                else if (upper == letters)
+                    aMatch = rCC.upper( rS );
+                else // mixed case - use what we have
+                    aMatch = rS;
+
+                String *pNew = new String( aMatch );
+                if (!aArr.Insert( pNew ))
                     delete pNew;
             }
             ++nStt;
