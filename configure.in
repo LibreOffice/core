@@ -1628,6 +1628,7 @@ case "$build_os" in
         test_gtk=yes
         test_randr=no
         test_freetype=no
+	test_cairo=no
         _os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
