@@ -72,6 +72,7 @@ UNODLLPOST=.uno$(DLLPOST)
 DFTDLLPOST=$(DLLPOSTFIX)$(DLLPOST) # Default 
 
 URELIBPATH=..$/ure-link$/lib
+UREMISCPATH=..$/ure-link$/share$/misc
 
 $(MISC)$/$(TARGET)-calc : makefile.mk
     @echo Making: $@
@@ -160,7 +161,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)svl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)vcl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)tk$(DFTDLLPOST)    >> $@
-    @-echo types.rdb                   >> $@
+    @-echo $(UREMISCPATH)$/types.rdb   >> $@
     @-echo services.rdb                >> $@
     @-echo oovbaapi.rdb                          >> $@
     @-echo deployment$(DLLPOSTFIX)$(UNODLLPOST)  >> $@
