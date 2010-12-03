@@ -719,27 +719,6 @@ namespace slideshow
                 ::cppcanvas::getBlue(aColor));
         }
 
-        /*sal_Int32 RGBAColor2UnoColor( ::cppcanvas::Color::IntSRGBA aColor )
-        {
-            return ::cppcanvas::unMakeColor(
-                                                    // convert from IntSRGBA color to API color
-                                                    // (0xRRGGBBAA -> 0xAARRGGBB)
-                                                    static_cast< sal_uInt8 >(0),
-                                                    ::cppcanvas::getRed(aColor),
-                                                    ::cppcanvas::getGreen(aColor),
-                                                    ::cppcanvas::getBlue(aColor));
-        }*/
-
-        sal_Int8 unSignedToSigned(sal_Int8 nInt)
-        {
-            if(nInt < 0 ){
-                sal_Int8 nInt2 = nInt >> 1U;
-                return nInt2;
-            }else{
-                return nInt;
-            }
-        }
-
         void fillRect( const ::cppcanvas::CanvasSharedPtr& rCanvas,
                        const ::basegfx::B2DRectangle&      rRect,
                        ::cppcanvas::Color::IntSRGBA        aFillColor )

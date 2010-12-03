@@ -169,12 +169,6 @@ private:
     */
     bool isAnimated();
 
-    /** Query whether this slide is currently showing.
-
-        @return true, if this slide is currently showing.
-    */
-    bool isShowing() const;
-
     void enablePaintOverlay();
     void disablePaintOverlay();
 
@@ -730,11 +724,6 @@ void SlideImpl::resetCursor()
 {
     mnCurrentCursor = awt::SystemPointer::ARROW;
     mrCursorManager.resetCursor();
-}
-
-bool SlideImpl::isShowing() const
-{
-    return meAnimationState == SHOWING_STATE;
 }
 
 bool SlideImpl::isAnimated()
