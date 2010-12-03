@@ -53,6 +53,7 @@ SLOFILES = \
     $(SLO)$/OGLTrans_Shaders_$(OS).obj \
     $(SLO)$/OGLTrans_TransitionerImpl_$(OS).obj
 
+DLLPRE=
 SHL1TARGET=$(TARGET).uno
 
 SHL1STDLIBS= $(SALLIB) $(VCLLIB) $(CPPULIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(CANVASTOOLSLIB)
