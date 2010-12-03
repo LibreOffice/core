@@ -86,12 +86,14 @@ else
 gb_CxxObject__command_dep =
 endif
 
-# CXXFLAGS and DEFS we want to use for this object. This should usually be the case.
-# Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget) are the same as the
-# PCH_CXXFLAGS/PCH_DEFS should never be overridden on an object -- they should be the same as for the whole
-# The DEFS/CXXFLAGS would have too be manually overridden for one object file for them to differ.
-# linktarget. In general it should be cleaner to use a static library compiled with different flags and link
-# that in rather than mixing different flags in one linktarget.
+# Only enable PCH if the PCH_CXXFLAGS and the PCH_DEFS (from the linktarget)
+# are the same as the CXXFLAGS and DEFS we want to use for this object. This
+# should usually be the case.  The DEFS/CXXFLAGS would have too be manually
+# overridden for one object file for them to differ.  PCH_CXXFLAGS/PCH_DEFS
+# should never be overridden on an object -- they should be the same as for the
+# whole linktarget. In general it should be cleaner to use a static library
+# compiled with different flags and link that in rather than mixing different
+# flags in one linktarget.
 define gb_CxxObject__set_pchflags
 ifeq ($(gb_ENABLE_PCH),$(true))
 ifneq ($(strip $$(PCH_NAME)),)
