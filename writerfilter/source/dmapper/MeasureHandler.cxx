@@ -59,18 +59,14 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)rName;
-    /* WRITERFILTERSTATUS: table: MeasureHandler_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_unit:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
             //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
             //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
             m_nUnit = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Height_hRule: // 90666;
         {
             ::rtl::OUString sHeightType = rVal.getString();
@@ -78,14 +74,11 @@ void MeasureHandler::attribute(Id rName, Value & rVal)
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_trleft:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_preferredWidth:
         case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
         {
             m_nUnit = NS_ooxml::LN_Value_ST_TblWidth_dxa;

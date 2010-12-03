@@ -71,10 +71,8 @@ void OLEHandler::attribute(Id rName, Value & rVal)
 {
     rtl::OUString sStringValue = rVal.getString();
     (void)rName;
-    /* WRITERFILTERSTATUS: table: OLEHandler_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_OLEObject_Type:
             m_sObjectType = sStringValue;
         break;
@@ -103,7 +101,6 @@ void OLEHandler::attribute(Id rName, Value & rVal)
             m_nDyaOrig = rVal.getInt();
         break;
         case NS_ooxml::LN_shape:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         {
             uno::Reference< drawing::XShape > xTempShape;
             rVal.getAny() >>= xTempShape;

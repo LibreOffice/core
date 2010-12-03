@@ -65,21 +65,15 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
     (void)rName;
-    /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
         case NS_rtf::LN_cellTopColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellLeftColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellBottomColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellRightColor:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             // nIntValue contains the color, directly
         break;
         case NS_ooxml::LN_CT_Shd_val:
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         {
             //might be clear, pct5...90, some hatch types
             //TODO: The values need symbolic names!
@@ -87,13 +81,11 @@ void CellColorHandler::attribute(Id rName, Value & rVal)
         }
         break;
         case NS_ooxml::LN_CT_Shd_fill:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0xffffff; //fill color auto means white
             m_nFillColor = nIntValue;
         break;
         case NS_ooxml::LN_CT_Shd_color:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             if( nIntValue == OOXML_COLOR_AUTO )
                 nIntValue = 0; //shading color auto means black
             //color of the shading

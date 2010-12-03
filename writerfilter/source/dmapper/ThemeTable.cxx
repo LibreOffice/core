@@ -72,10 +72,8 @@ void ThemeTable::attribute(Id Name, Value & val)
     // int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
     // printf ( "ThemeTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
-    /* WRITERFILTERSTATUS: table: ThemeTable_attributedata */
     switch(Name)
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TextFont_typeface:
          if (sValue.getLength())
              m_pImpl->m_currentFontThemeEntry[m_pImpl->m_currentThemeFontId] = sValue;
@@ -109,10 +107,8 @@ void ThemeTable::sprm(Sprm& rSprm)
 
     // printf ( "ThemeTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
-    /* WRITERFILTERSTATUS: table: ThemeTable_sprm */
     switch(nSprmId)
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_BaseStyles_fontScheme:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -120,9 +116,7 @@ void ThemeTable::sprm(Sprm& rSprm)
                 pProperties->resolve(*this);
     }
     break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_majorFont:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontScheme_minorFont:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -132,11 +126,8 @@ void ThemeTable::sprm(Sprm& rSprm)
             m_pImpl->m_themeFontMap[nSprmId] = m_pImpl->m_currentFontThemeEntry;
     }
     break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_latin:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_ea:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_FontCollection_cs:
         {
         m_pImpl->m_currentThemeFontId = nSprmId;

@@ -125,12 +125,10 @@ void SettingsTable::attribute(Id nName, Value & val)
     ::rtl::OUString sValue = val.getString();
     (void)sValue;
     //printf ( "SettingsTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
-    /* WRITERFILTERSTATUS: table: SettingsTable_attributedata */
 #if 0 //no values known, yet
 
     switch(Name)
     {
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml:::
     break;
     default:
@@ -159,26 +157,16 @@ void SettingsTable::sprm(Sprm& rSprm)
 
     //printf ( "SettingsTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
-    /* WRITERFILTERSTATUS: table: SettingsTable_sprm */
     switch(nSprmId)
     {
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_zoom: //  92469;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_proofState: //  92489;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_attachedTemplate: //  92491;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_hdrShapeDefaults: //  92544;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_footnotePr: //  92545;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_endnotePr: //  92546;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_compat: //  92547;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_themeFontLang: //  92552;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_shapeDefaults: //  92560;
 
     //PropertySetValues - need to be resolved
@@ -188,41 +176,31 @@ void SettingsTable::sprm(Sprm& rSprm)
         pProperties->resolve(*this);
     }
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_stylePaneFormatFilter: // 92493;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_defaultTabStop: //  92505;
     m_pImpl->m_nDefaultTabStop = nIntValue;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_noPunctuationKerning: //  92526;
     m_pImpl->m_bNoPunctuationKerning = nIntValue ? true : false;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_characterSpacingControl: //  92527;
     m_pImpl->m_sCharacterSpacing = sStringValue; // doNotCompress, compressPunctuation, compressPunctuationAndJapaneseKana
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_doNotIncludeSubdocsInStats: //  92554; // Do Not Include Content in Text Boxes, Footnotes, and Endnotes in Document Statistics)
     m_pImpl->m_doNotIncludeSubdocsInStats = nIntValue? true : false;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_decimalSymbol: //  92562;
     m_pImpl->m_sDecimalSymbol = sStringValue;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_listSeparator: //  92563;
     m_pImpl->m_sListSeparatorForFields = sStringValue;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_rsids: //  92549; revision save Ids - probably not necessary
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Settings_hyphenationZone: // 92508;
     m_pImpl->m_nHyphenationZone = nIntValue;
     break;
-    /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
     case NS_ooxml::LN_CT_Compat_useFELayout: // 92422;
     // useFELayout (Do Not Bypass East Asian/Complex Script Layout Code - support of old versions of Word - ignored)
     break;

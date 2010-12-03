@@ -74,10 +74,8 @@ void BorderHandler::attribute(Id rName, Value & rVal)
 #endif
 
     sal_Int32 nIntValue = rVal.getInt();
-    /* WRITERFILTERSTATUS: table: BorderHandler_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_rgbrc:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
@@ -91,21 +89,17 @@ void BorderHandler::attribute(Id rName, Value & rVal)
             }
         }
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = ConversionHelper::convertTwipToMM100( nIntValue * 5 / 2 );
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTSPACE:   // border distance in points
             m_nLineDistance = ConversionHelper::convertTwipToMM100( nIntValue * 20 );
         break;
@@ -131,20 +125,13 @@ void BorderHandler::sprm(Sprm & rSprm)
     dmapper_logger->attribute("sprm", rSprm.toString());
 #endif
 
-    /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
     switch( rSprm.getId())
     {
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_top:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_left:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_bottom:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_right:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_insideH:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblBorders_insideV:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();

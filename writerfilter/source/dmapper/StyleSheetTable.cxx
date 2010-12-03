@@ -428,15 +428,12 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     (void)nIntValue;
     ::rtl::OUString sValue = val.getString();
 //    printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
-    /* WRITERFILTERSTATUS: table: StyleSheetTable_attributedata */
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_STI:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             ::rtl::OUString tempStyleIdentifier = GetStyleIdFromIndex(static_cast<sal_uInt32>(nIntValue));
             if (tempStyleIdentifier.getLength())
@@ -446,57 +443,41 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         }
         break;
         case NS_rtf::LN_SGC:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->nStyleTypeCode = (StyleType)nIntValue;
         break;
         case NS_rtf::LN_ISTDBASE:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
                 m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_ISTDNEXT:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             if (static_cast<sal_uInt32>(nIntValue) != 0xfff)
                 m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = ::rtl::OUString::valueOf(static_cast<sal_Int32>(nIntValue), 16);
         break;
         case NS_rtf::LN_FSCRATCH:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FINVALHEIGHT:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FHASUPE:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FMASSCOPY:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_CUPX:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_BCHUPE:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FAUTOREDEF:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FHIDDEN:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED8_3:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             //noone seems to care about it
         break;
         case NS_rtf::LN_XSTZNAME:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleName1 = sValue;
             if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_XSTZNAME1:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleName = sValue;
             if (m_pImpl->m_pCurrentEntry->sStyleIdentifierI.getLength())
                 m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
         break;
         case NS_rtf::LN_UPX:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             resolveAttributeProperties(val);
         break;
         case NS_ooxml::LN_CT_Style_type:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
 /*          defaults should be set at the service "com.sun.star.text.Defaults"
              if (nIntValue == 1)
@@ -515,23 +496,18 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_Style_default:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->bIsDefaultStyle = (nIntValue != 0);
         break;
         case NS_ooxml::LN_CT_Style_customStyle:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
         case NS_ooxml::LN_CT_Style_styleId:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sStyleIdentifierI = sValue;
             m_pImpl->m_pCurrentEntry->sStyleIdentifierD = sValue;
         break;
         case NS_ooxml::LN_CT_TblWidth_w:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_w( nIntValue );
         break;
         case NS_ooxml::LN_CT_TblWidth_type:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TblWidth_type( nIntValue );
         break;
         default:
@@ -564,21 +540,17 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     rtl::OUString sStringValue = pValue.get() ? pValue->getString() : rtl::OUString();
     //printf ( "StyleSheetTable::sprm(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)nSprmId, (unsigned int)nIntValue, ::rtl::OUStringToOString(sStringValue, RTL_TEXTENCODING_DONTKNOW).getStr());
 
-    /* WRITERFILTERSTATUS: table: StyleSheetTable_sprm */
     switch(nSprmId)
     {
         case NS_ooxml::LN_CT_Style_name:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             //this is only a UI name!
             m_pImpl->m_pCurrentEntry->sStyleName = sStringValue;
             m_pImpl->m_pCurrentEntry->sStyleName1 = sStringValue;
             break;
         case NS_ooxml::LN_CT_Style_basedOn:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sBaseStyleIdentifier = sStringValue;
             break;
         case NS_ooxml::LN_CT_Style_next:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_pCurrentEntry->sNextStyleIdentifier = sStringValue;
             break;
         case NS_ooxml::LN_CT_Style_aliases:
@@ -596,14 +568,12 @@ void StyleSheetTable::sprm(Sprm & rSprm)
         case NS_ooxml::LN_CT_Style_rsid:
         case NS_ooxml::LN_CT_Style_trPr:
         case NS_ooxml::LN_CT_Style_tcPr:
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
         case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
         case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -630,30 +600,25 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             break;
         }
         case NS_ooxml::LN_CT_PPrDefault_pPr:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
             m_pImpl->m_rDMapper.sprm( rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
         break;
         case NS_ooxml::LN_CT_RPrDefault_rPr:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
             m_pImpl->m_rDMapper.sprm( rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( false );
         break;
         case NS_ooxml::LN_CT_TblPrBase_jc:     //table alignment - row properties!
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
              m_pImpl->m_pCurrentEntry->pProperties->Insert( PROP_HORI_ORIENT, false,
                 uno::makeAny( ConversionHelper::convertTableJustification( nIntValue )));
         break;
         case NS_ooxml::LN_CT_TrPrBase_jc:     //table alignment - row properties!
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
                 dynamic_cast< StyleSheetPropertyMap* >( m_pImpl->m_pCurrentEntry->pProperties.get() )->SetCT_TrPrBase_jc(nIntValue);
         break;
         case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
@@ -681,10 +646,8 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             //no cell margins in styles
         break;
         case NS_ooxml::LN_CT_Style_pPr:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             // no break
         case NS_ooxml::LN_CT_Style_rPr:
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             // no break
         default:
             {

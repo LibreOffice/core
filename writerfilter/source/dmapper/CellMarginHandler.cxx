@@ -67,7 +67,6 @@ void CellMarginHandler::attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
     (void)rName;
-    /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
         case NS_ooxml::LN_CT_TblWidth_w:
@@ -91,22 +90,18 @@ void CellMarginHandler::sprm(Sprm & rSprm)
         pProperties.get()->resolve( *this );
         switch( rSprm.getId() )
         {
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TblCellMar_top:
                 m_nTopMargin = m_nValue;
                 m_bTopMarginValid = true;
             break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TblCellMar_left:
                 m_nLeftMargin = m_nValue;
                 m_bLeftMarginValid = true;
             break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TblCellMar_bottom:
                 m_nBottomMargin = m_nValue;
                 m_bBottomMarginValid = true;
             break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TblCellMar_right:
                 m_nRightMargin = m_nValue;
                 m_bRightMarginValid = true;

@@ -42,14 +42,10 @@ namespace dmapper {
         sal_uInt32 nSprmId = rSprm.getId();
         Value::Pointer_t pValue = rSprm.getValue();
         sal_Int32 nIntValue = ((pValue.get() != NULL) ? pValue->getInt() : 0);
-        /* WRITERFILTERSTATUS: table: table_sprmdata */
         switch( nSprmId )
        {
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_jc: //90706
-            /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0.5 */
             case NS_ooxml::LN_CT_TblPrBase_jc:
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case 0x5400: // sprmTJc
             {
                 //table justification 0: left, 1: center, 2: right
@@ -59,10 +55,8 @@ namespace dmapper {
                 insertTableProps( pTableMap );
             }
             break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             case 0x9601: // sprmTDxaLeft
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x9602: // sprmTDxaGapHalf
             {
                 //m_nGapHalf = ConversionHelper::convertTwipToMM100( nIntValue );
@@ -71,7 +65,6 @@ namespace dmapper {
                 insertTableProps(pPropMap);
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 2 */
             case NS_ooxml::LN_CT_TrPrBase_trHeight: //90703
             {
                 //contains unit and value
@@ -87,7 +80,6 @@ namespace dmapper {
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x3403: // sprmTFCantSplit
             case NS_sprm::LN_TCantSplit: // 0x3644
             {
@@ -97,7 +89,6 @@ namespace dmapper {
                 insertRowProps(pPropMap);
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0x9407: // sprmTDyaRowHeight
             {
                 // table row height - negative values indicate 'exact height' - positive 'at least'
@@ -114,7 +105,6 @@ namespace dmapper {
                 insertRowProps(pPropMap);
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_vAlign://90694
             {
                 sal_Int16 nVertOrient = text::VertOrientation::NONE;
@@ -130,7 +120,6 @@ namespace dmapper {
                 cellProps( pCellPropMap );
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblBorders: //table borders, might be defined in table style
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -148,7 +137,6 @@ namespace dmapper {
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_tcBorders ://cell borders
             //contains CT_TcBorders_left, right, top, bottom
             {
@@ -176,15 +164,10 @@ namespace dmapper {
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61a : // sprmTCellTopColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61b : // sprmTCellLeftColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61c : // sprmTCellBottomColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case 0xd61d : // sprmTCellRightColor
-            /* WRITERFILTERSTATUS: done: 1, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TcPrBase_shd:
             {
                 // each color sprm contains as much colors as cells are in a row
@@ -199,7 +182,6 @@ namespace dmapper {
             }
             break;
 //OOXML table properties
-            /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
             case NS_ooxml::LN_CT_TblPrBase_tblCellMar: //cell margins
             {
                 //contains LN_CT_TblCellMar_top, LN_CT_TblCellMar_left, LN_CT_TblCellMar_bottom, LN_CT_TblCellMar_right

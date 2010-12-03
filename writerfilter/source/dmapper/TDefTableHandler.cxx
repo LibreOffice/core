@@ -64,10 +64,8 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
     (void)rName;
-    /* WRITERFILTERSTATUS: table: TDefTable_attributedata */
     switch( rName )
     {
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_cellx:
             // nIntValue contains the vert. line position
             //TODO: nIntValue is wrong for negative values!
@@ -75,7 +73,6 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
                 nIntValue -= 0xffff;
             m_aCellBorderPositions.push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_tc:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
@@ -86,38 +83,24 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
         }
         break;
         //from LN_tc
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FFIRSTMERGED:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FMERGED:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTICAL:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FBACKWARD:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FROTATEFONT:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTMERGE:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTRESTART:
         break;
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_VERTALIGN:
             //TODO: m_aCellVertAlign is just a temporary solution! 0 - top 1 - center 2 - bottom
             m_aCellVertAlign.push_back( nIntValue );
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FUNUSED:
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_CellPrefferedSize:
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTOP:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCLEFT:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCBOTTOM:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCRIGHT:
         {
             writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
@@ -125,31 +108,23 @@ void TDefTableHandler::attribute(Id rName, Value & rVal)
         }
         break;
         //from LN_BRCXXXX - handled within the BorderHandler
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
             m_nLineWidth = ConversionHelper::convertTwipToMM100( nIntValue * 5 / 2 );
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Border_color:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTSPACE:   // 0x2874
             m_nLineDistance = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FSHADOW:    // 0x2875
             //if 1 then line has shadow - unsupported
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FFRAME:     // 0x2876
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
@@ -175,30 +150,21 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
         ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
                                                                         aBorderLine, m_bOOXML );
 
-        /* WRITERFILTERSTATUS: table: TDefTable_localresolve */
         switch( rName )
         {
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TcBorders_top:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_rtf::LN_BRCTOP:
                 m_aTopBorderLines.push_back(aBorderLine);
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TcBorders_left:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_rtf::LN_BRCLEFT:
                 m_aLeftBorderLines.push_back(aBorderLine);
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TcBorders_bottom:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_rtf::LN_BRCBOTTOM:
                 m_aBottomBorderLines.push_back(aBorderLine);
             break;
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_TcBorders_right:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             case NS_rtf::LN_BRCRIGHT:
                 m_aRightBorderLines.push_back(aBorderLine);
             break;
@@ -217,16 +183,11 @@ void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties
   -----------------------------------------------------------------------*/
 void TDefTableHandler::sprm(Sprm & rSprm)
 {
-    /* WRITERFILTERSTATUS: table: TDefTable_sprm */
     switch( rSprm.getId() )
     {
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_top:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_left:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_bottom:
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TcBorders_right:
         case NS_ooxml::LN_CT_TcBorders_insideH:
         case NS_ooxml::LN_CT_TcBorders_insideV:

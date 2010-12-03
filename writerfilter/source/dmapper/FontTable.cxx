@@ -69,7 +69,6 @@ void FontTable::attribute(Id Name, Value & val)
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
     //printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
-    /* WRITERFILTERSTATUS: table: FontTable_attributedata */
     switch(Name)
     {
 //        case NS_rtf::LN_ISTD: break;
@@ -101,41 +100,30 @@ void FontTable::attribute(Id Name, Value & val)
 //        case NS_rtf::LN_UNUSED4: break;
 //        case NS_rtf::LN_UNUSED8: break;
 //        case NS_rtf::LN_CLFOLVL: break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_CBFFNM1:
             m_pImpl->pCurrentEntry->sFontName1 = sValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_PRQ:
             m_pImpl->pCurrentEntry->nPitchRequest = static_cast<sal_Int16>( nIntValue );
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_FTRUETYPE:
             m_pImpl->pCurrentEntry->bTrueType = nIntValue == 1 ? true : false;
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED1_3: //unused
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FF: //unused
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED1_7: //unused
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_WWEIGHT:
             m_pImpl->pCurrentEntry->nBaseWeight = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_CHS:
             m_pImpl->pCurrentEntry->nTextEncoding = nIntValue;
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_IXCHSZALT:
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_PANOSE:
             m_pImpl->pCurrentEntry->sPanose += sValue;
         break;
-        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_FS:
             m_pImpl->pCurrentEntry->sFontSignature += sValue;
         break;
@@ -495,13 +483,10 @@ void FontTable::attribute(Id Name, Value & val)
         case NS_rtf::LN_F:
         break;
         case NS_rtf::LN_ALTFONTNAME:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
         case NS_rtf::LN_XSZFFN:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Font_name:
-            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
 //        case NS_rtf::LN_XSTZNAME: break;

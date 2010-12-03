@@ -636,15 +636,12 @@ void ListsManager::attribute( Id nName, Value& rVal )
     ListLevel::Pointer pCurrentLvl = m_pCurrentDefinition->GetCurrentLevel( );
 
 
-    /* WRITERFILTERSTATUS: table: ListTable_attributedata */
     switch(nName)
     {
-        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_RGBXCHNUMS:
             if(pCurrentLvl.get())
                 pCurrentLvl->AddRGBXchNums( rVal.getString( ) );
         break;
-        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_LevelText_val:
         {
             //this strings contains the definition of the level
@@ -657,30 +654,20 @@ void ListsManager::attribute( Id nName, Value& rVal )
         }
         break;
 //        case NS_rtf::LN_ISTD: break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTARTAT:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_NFC:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_JC:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FLEGAL:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FNORESTART:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FIDENTSAV:
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FCONVERTED:
 #if 0
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FWORD6:
 #endif
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_IXCHFOLLOW:
             if ( pCurrentLvl.get( ) )
                 pCurrentLvl->SetValue( nName, sal_Int32( nIntValue ) );
         break;
-        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_RGISTD:
             m_pCurrentDefinition->AddRGISTD( rVal.getString() );
         break;
@@ -707,7 +694,6 @@ void ListsManager::attribute( Id nName, Value& rVal )
                 pProperties->resolve(*this);
         }
         break;
-        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_AbstractNum_abstractNumId:
         {
             // This one corresponds to the AbstractNum Id definition
@@ -717,17 +703,14 @@ void ListsManager::attribute( Id nName, Value& rVal )
         }
         break;
         case NS_ooxml::LN_CT_Ind_left:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_INDENT_AT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
             break;
         case NS_ooxml::LN_CT_Ind_hanging:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_FIRST_LINE_INDENT, true, uno::makeAny( - ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
         case NS_ooxml::LN_CT_Ind_firstLine:
-            /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             pCurrentLvl->Insert(
                 PROP_FIRST_LINE_INDENT, true, uno::makeAny( ConversionHelper::convertTwipToMM100( nIntValue ) ));
         break;
@@ -774,10 +757,8 @@ void ListsManager::sprm( Sprm& rSprm )
         nSprmId == NS_ooxml::LN_CT_Numbering_num )
     {
         sal_Int32 nIntValue = rSprm.getValue()->getInt();
-        /* WRITERFILTERSTATUS: table: ListTable_sprm */
         switch( nSprmId )
         {
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_Numbering_abstractNum:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -793,7 +774,6 @@ void ListsManager::sprm( Sprm& rSprm )
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_Numbering_num:
             {
                 writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
@@ -823,14 +803,11 @@ void ListsManager::sprm( Sprm& rSprm )
                 }
             }
             break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_AbstractNum_multiLevelType:
             break;
-            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
             case NS_rtf::LN_TPLC:
                 m_pCurrentDefinition->SetValue( nSprmId, nIntValue );
             break;
-            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
             case NS_ooxml::LN_CT_AbstractNum_lvl:
             {
                 m_pCurrentDefinition->AddLevel();
@@ -839,27 +816,17 @@ void ListsManager::sprm( Sprm& rSprm )
                     pProperties->resolve(*this);
                 }
             break;
-            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
             case NS_rtf::LN_RGBXCHNUMS: break;
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_ISTARTAT:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_NFC:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_JC:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FLEGAL:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FNORESTART:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FIDENTSAV:
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FCONVERTED:
 #if 0
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_FWORD6:
 #endif
-            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
             case NS_rtf::LN_IXCHFOLLOW:
                 m_pCurrentDefinition->GetCurrentLevel( )->SetValue( nSprmId, nIntValue );
             break;
