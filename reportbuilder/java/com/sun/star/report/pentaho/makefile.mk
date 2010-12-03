@@ -33,13 +33,25 @@ PACKAGE = com$/sun$/star$/report$/pentaho
 nodep=true
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
+.INCLUDE :  $(SOLARBINDIR)/jfreereport_version.mk
 
 #----- compile .java files -----------------------------------------
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 EXTRAJARFILES += $(FLUTE_JAR) $(LIBBASE_JAR) $(LIBXML_JAR) $(JFREEREPORT_JAR) $(LIBLOADER_JAR) $(SAC_JAR) $(LIBLAYOUT_JAR) $(LIBSERIALIZER_JAR) $(LIBFONTS_JAR) $(LIBFORMULA_JAR) $(LIBREPOSITORY_JAR)
 .ELSE
-JARFILES += flute-1.3.0.jar libbase-1.0.0.jar libfonts-1.0.0.jar libformula-0.2.0.jar liblayout-0.2.9.jar libloader-1.0.0.jar librepository-1.0.0.jar libxml-1.0.0.jar flow-engine-0.9.2.jar sac.jar
+JARFILES += \
+    flute-$(FLUTE_VERSION).jar				            \
+    libserializer-$(LIBSERIALIZER_VERSION).jar			\
+    libbase-$(LIBBASE_VERSION).jar                      \
+    libfonts-$(LIBFONTS_VERSION).jar					\
+    libformula-$(LIBFORMULA_VERSION).jar				\
+    liblayout-$(LIBLAYOUT_VERSION).jar					\
+    libloader-$(LIBLOADER_VERSION).jar					\
+    librepository-$(LIBREPOSITORY_VERSION).jar			\
+    libxml-$(LIBXML_VERSION).jar						\
+    flow-engine-$(FLOW_ENGINE_VERSION).jar 	            \
+    sac.jar
 .ENDIF
 
 .IF "$(SYSTEM_APACHE_COMMONS)" == "YES"

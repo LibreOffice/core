@@ -1,5 +1,5 @@
---- misc/core/build.xml	(Revision 6728)
-+++ misc/build/core/build.xml	(Arbeitskopie)
+--- misc/flow-engine-0.9.4/build.xml	(Revision 6728)
++++ misc/build/flow-engine-0.9.4/build.xml	(Arbeitskopie)
 @@ -24,6 +24,6 @@
    <!-- Setup the compile classpath -->
    <path id="classpath">

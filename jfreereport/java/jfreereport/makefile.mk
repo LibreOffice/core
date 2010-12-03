@@ -29,21 +29,20 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=flow-engine
-VERSION=-0.9.2
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 .INCLUDE : antsettings.mk
+.INCLUDE : $(PRJ)$/version.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 .IF "$(L10N_framework)"==""
-TARFILE_NAME=core
-TARFILE_MD5=d4c4d91ab3a8e52a2e69d48d34ef4df4
-TARFILE_ROOTDIR=core
+TARFILE_NAME=$(TARGET)-$(FLOW_ENGINE_VERSION)
+TARFILE_IS_FLAT=true
+TARFILE_MD5=ba2930200c9f019c2d93a8c88c651a0f
 PATCH_FILES=$(PRJ)$/patches$/$(TARGET).patch
-# ADDITIONAL_FILES=MANIFEST.MF
 CONVERTFILES=build.xml
 
 .IF "$(JAVACISGCJ)"=="yes"
@@ -64,8 +63,8 @@ BUILD_ACTION=$(ANT) -Dlib="../../../class" -Dbuild.label="build-$(RSCREVISION)" 
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .IF "$(L10N_framework)"==""
-ALLTAR : $(CLASSDIR)$/$(TARGET)$(VERSION).jar 
-$(CLASSDIR)$/$(TARGET)$(VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
-    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)$(VERSION).jar
+ALLTAR : $(CLASSDIR)$/$(TARGET)-$(FLOW_ENGINE_VERSION).jar 
+$(CLASSDIR)$/$(TARGET)-$(FLOW_ENGINE_VERSION).jar : $(PACKAGE_DIR)$/$(INSTALL_FLAG_FILE)
+    $(COPY) $(PACKAGE_DIR)$/$(TARFILE_ROOTDIR)$/build$/lib$/$(TARGET).jar $(CLASSDIR)$/$(TARGET)-$(FLOW_ENGINE_VERSION).jar
 .ENDIF
 .ENDIF
