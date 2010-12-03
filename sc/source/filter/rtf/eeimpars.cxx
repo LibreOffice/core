@@ -160,8 +160,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     }
     ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
-    size_t ListSize = mpParser->ListSize();
-    for ( size_t i = 0; i < ListSize; ++i )
+    for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
     {
         pE = mpParser->ListEntry( i );
         SCROW nRow = nStartRow + pE->nRow;
@@ -281,22 +280,22 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     BYTE nScriptType = mpDoc->GetStringScriptType( aStr );
                     const BYTE nScripts[3] = { SCRIPTTYPE_LATIN,
                         SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
-                    for ( BYTE i=0; i<3; ++i )
+                    for ( BYTE j=0; j<3; ++j )
                     {
-                        if ( nScriptType & nScripts[i] )
+                        if ( nScriptType & nScripts[j] )
                         {
                             if ( pFont )
                                 rSet.Put( *pFont, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT ));
+                                            nScripts[j], ATTR_FONT ));
                             if ( pHeight )
                                 rSet.Put( *pHeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_HEIGHT ));
+                                            nScripts[j], ATTR_FONT_HEIGHT ));
                             if ( pWeight )
                                 rSet.Put( *pWeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_WEIGHT ));
+                                            nScripts[j], ATTR_FONT_WEIGHT ));
                             if ( pPosture )
                                 rSet.Put( *pPosture, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_POSTURE ));
+                                            nScripts[j], ATTR_FONT_POSTURE ));
                         }
                     }
                 }
@@ -453,9 +452,9 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
         }
     }
     if ( bHasGraphics )
-    {   // Grafiken einfuegen
-        size_t ListSize = mpParser->ListSize();
-        for ( size_t i = 0; i < ListSize; ++i )
+    {
+        // Grafiken einfuegen
+        for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
         {
             pE = mpParser->ListEntry( i );
             if ( !pE->maImageList.empty() )

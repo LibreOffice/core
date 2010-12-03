@@ -163,8 +163,7 @@ void ScRTFParser::ColAdjust()
     {
         SCCOL nCol = 0;
         ScEEParseEntry* pE;
-        size_t ListSize = maList.size();
-        for ( size_t i = nStartAdjust; i < ListSize; ++ i )
+        for ( size_t i = nStartAdjust, nListSize = maList.size(); i < nListSize; ++ i )
         {
             pE = maList[ i ];
             if ( pE->nCol == 0 )
