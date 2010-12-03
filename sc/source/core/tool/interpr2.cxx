@@ -654,8 +654,15 @@ void ScInterpreter::ScNPV()
                     break;
                     case svSingleRef :
                     {
-                        nVal += (GetDouble() / pow(1.0 + nZins, (double)nCount));
-                        nCount++;
+                        ScAddress aAdr;
+                        PopSingleRef( aAdr );
+                        ScBaseCell* pCell = GetCell( aAdr );
+                        if (!HasCellEmptyData(pCell) && HasCellValueData(pCell))
+                        {
+                            double nCellVal = GetCellValue( aAdr, pCell );
+                            nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
+                            nCount++;
+                        }
                     }
                     break;
                     case svDoubleRef :
@@ -664,18 +671,14 @@ void ScInterpreter::ScNPV()
                         USHORT nErr = 0;
                         double nCellVal;
                         PopDoubleRef( aRange, nParamCount, nRefInList);
-                        ScValueIterator aValIter(pDok, aRange, glSubTotal);
-                        if (aValIter.GetFirst(nCellVal, nErr))
+                        ScHorizontalValueIterator aValIter( pDok, aRange, glSubTotal);
+                        while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
                         {
                             nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
                             nCount++;
-                            while ((nErr == 0) && aValIter.GetNext(nCellVal, nErr))
-                            {
-                                nVal += (nCellVal / pow(1.0 + nZins, (double)nCount));
-                                nCount++;
-                            }
-                            SetError(nErr);
                         }
+                        if ( nErr != 0 )
+                            SetError(nErr);
                     }
                     break;
                     default : SetError(errIllegalParameter); break;
