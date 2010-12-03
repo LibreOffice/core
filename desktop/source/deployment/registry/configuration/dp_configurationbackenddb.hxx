@@ -82,7 +82,6 @@ public:
 
     ::boost::optional<Data> getEntry(::rtl::OUString const & url);
     ::std::list< ::rtl::OUString> getAllDataUrls();
-    ::std::list< ::rtl::OUString> getAllIniEntries();
 };
 
 

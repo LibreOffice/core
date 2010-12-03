@@ -127,10 +127,7 @@ class Desktop : public Application
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
 
-        // first-start (ever) & license relate methods
-        static rtl::OUString    GetLicensePath();
-        static sal_Bool         LicenseNeedsAcceptance();
-        static sal_Bool         IsFirstStartWizardNeeded();
+        // first-start (ever) related methods
         static sal_Bool         CheckExtensionDependencies();
 
         static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );

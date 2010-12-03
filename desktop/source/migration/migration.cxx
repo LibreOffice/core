@@ -35,7 +35,6 @@
 
 #include "migration.hxx"
 #include "migration_impl.hxx"
-#include "cfgfilter.hxx"
 
 #include <unotools/textsearch.hxx>
 #include <comphelper/processfactory.hxx>
@@ -134,19 +133,6 @@ static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/
     }
 
     return sLabel;
-}
-
-::rtl::OUString stripHotKey( const ::rtl::OUString& str )
-{
-    sal_Int32 index = str.indexOf( '~' );
-    if ( index == -1 )
-    {
-        return str;
-    }
-    else
-    {
-        return str.replaceAt( index, 1, ::rtl::OUString() );
-    }
 }
 
 ::rtl::OUString mapModuleShortNameToIdentifier(const ::rtl::OUString& sShortName)

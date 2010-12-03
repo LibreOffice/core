@@ -44,8 +44,7 @@ SLOFILES =	$(SLO)$/splash.obj \
 
 SHL1DEPN=   makefile.mk
 SHL1OBJS=   $(SLOFILES) \
-            $(SLO)$/migration.obj \
-            $(SLO)$/cfgfilter.obj
+            $(SLO)$/migration.obj
 
 
 SHL1TARGET=$(TARGET)$(DLLPOSTFIX)

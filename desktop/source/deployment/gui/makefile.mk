@@ -55,7 +55,6 @@ SLOFILES = \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
-        $(SLO)$/dp_gui_system.obj \
         $(SLO)$/dp_gui_extensioncmdqueue.obj \
         $(SLO)$/descedit.obj
 

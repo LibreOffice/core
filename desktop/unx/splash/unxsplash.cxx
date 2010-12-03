@@ -159,22 +159,6 @@ const sal_Char *UnxSplashScreen::serviceName = "com.sun.star.office.PipeSplashSc
 const sal_Char *UnxSplashScreen::implementationName = "com.sun.star.office.comp.PipeSplashScreen";
 const sal_Char *UnxSplashScreen::supportedServiceNames[] = { "com.sun.star.office.PipeSplashScreen", NULL };
 
-OUString UnxSplashScreen::impl_getImplementationName()
-{
-    return OUString::createFromAscii( implementationName );
-}
-
-Sequence<OUString> UnxSplashScreen::impl_getSupportedServiceNames()
-{
-    Sequence<OUString> aSequence;
-    for ( int i = 0; supportedServiceNames[i] != NULL; i++ )
-    {
-        aSequence.realloc( i+1 );
-        aSequence[i] = OUString::createFromAscii( supportedServiceNames[i] );
-    }
-    return aSequence;
-}
-
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -171,13 +171,6 @@ ConfigurationBackendDb::getEntry(::rtl::OUString const & url)
     }
 }
 
-::std::list<OUString> ConfigurationBackendDb::getAllIniEntries()
-{
-    return getOneChildFromAllEntries(OUSTR("ini-entry"));
-}
-
-
-
 } // namespace configuration
 } // namespace backend
 } // namespace dp_registry

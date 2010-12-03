@@ -754,12 +754,6 @@ sal_Bool CommandLineArgs::IsTerminateAfterInit() const
     return m_aBoolParams[ CMD_BOOLPARAM_TERMINATEAFTERINIT ];
 }
 
-sal_Bool CommandLineArgs::IsNoFirstStartWizard() const
-{
-    osl::MutexGuard  aMutexGuard( m_aMutex );
-    return m_aBoolParams[ CMD_BOOLPARAM_NOFIRSTSTARTWIZARD ];
-}
-
 sal_Bool CommandLineArgs::IsNoLogo() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );

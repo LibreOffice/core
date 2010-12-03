@@ -141,7 +141,6 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
     void addDataToDb(OUString const & url, ConfigurationBackendDb::Data const & data);
     ::boost::optional<ConfigurationBackendDb::Data> readDataFromDb(OUString const & url);
     OUString deleteDataFromDb(OUString const & url);
-    ::std::list<OUString> getAllIniEntries();
 
 public:
     BackendImpl( Sequence<Any> const & args,
@@ -254,16 +253,6 @@ OUString BackendImpl::deleteDataFromDb(OUString const & url)
     }
     return url2;
 }
-
-::std::list<OUString> BackendImpl::getAllIniEntries()
-{
-    if (m_backendDb.get())
-        return m_backendDb->getAllIniEntries();
-    else
-        return ::std::list<OUString>();
-}
-
-
 
 // XPackageRegistry
 //______________________________________________________________________________

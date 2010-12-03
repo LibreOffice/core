@@ -45,8 +45,7 @@ CDEFS+=-I..$/app
 CDEFS+=-I$(PRJ)/inc
 
 SLOFILES = \
-        $(SLO)$/migration.obj \
-        $(SLO)$/cfgfilter.obj
+        $(SLO)$/migration.obj
 
 # --- Targets ------------------------------------------------------
 

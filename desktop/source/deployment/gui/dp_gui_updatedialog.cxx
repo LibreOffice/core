@@ -121,7 +121,6 @@
 #include "dp_gui_updatedata.hxx"
 #include "dp_gui_updatedialog.hxx"
 #include "dp_gui_shared.hxx"
-#include "dp_gui_system.hxx"
 
 class KeyEvent;
 class MouseEvent;
@@ -239,25 +238,6 @@ private:
     Thread(UpdateDialog::Thread &); // not defined
     void operator =(UpdateDialog::Thread &); // not defined
 
-    struct Entry {
-        explicit Entry(
-            css::uno::Reference< css::deployment::XPackage > const & thePackage,
-            rtl::OUString const & theVersion);
-
-        css::uno::Reference< css::deployment::XPackage > package;
-        rtl::OUString version;
-        //Indicates that the extension provides its own update URLs.
-        //If this is true, then we must not use the default update
-        //URL to find the update information.
-        bool bProvidesOwnUpdate;
-        css::uno::Reference< css::xml::dom::XNode > info;
-        UpdateDialog::DisabledUpdate disableUpdate;
-        dp_gui::UpdateData updateData;
-    };
-
-    // A multimap in case an extension is installed in "user", "shared" or "bundled"
-    typedef std::map< rtl::OUString, Entry > Map;
-
     virtual ~Thread();
 
     virtual void execute();
@@ -271,10 +251,6 @@ private:
         css::uno::Reference< css::deployment::XPackage > const & package,
         css::uno::Sequence< rtl::OUString > const & urls,
         rtl::OUString const & identifier) const;
-
-    void getOwnUpdateInformation(
-        css::uno::Reference< css::deployment::XPackage > const & package,
-        Map * map);
 
     ::rtl::OUString getUpdateDisplayString(
         dp_gui::UpdateData const & data, ::rtl::OUString const & version = ::rtl::OUString()) const;
@@ -336,17 +312,6 @@ void UpdateDialog::Thread::stop() {
         abort->sendAbort();
     }
     m_updateInformation->cancel();
-}
-
-UpdateDialog::Thread::Entry::Entry(
-    css::uno::Reference< css::deployment::XPackage > const & thePackage,
-    rtl::OUString const & theVersion):
-
-    package(thePackage),
-    version(theVersion),
-    bProvidesOwnUpdate(false),
-    updateData(thePackage)
-{
 }
 
 UpdateDialog::Thread::~Thread()
@@ -1030,16 +995,6 @@ bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublis
     return true;
 }
 
-bool UpdateDialog::isReadOnly( const css::uno::Reference< css::deployment::XPackage > &xPackage ) const
-{
-    if ( m_xExtensionManager.is() && xPackage.is() )
-    {
-        return m_xExtensionManager->isReadOnlyRepository( xPackage->getRepositoryName() );
-    }
-    else
-        return true;
-}
-
 IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
 {
     rtl::OUStringBuffer b;
@@ -1216,7 +1171,6 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
         OSL_ASSERT(i->aInstalledPackage.is());
         //If the user has no write access to the shared folder then the update
         //for a shared extension is disable, that is it cannot be in m_enabledUpdates
-//        OSL_ASSERT(isReadOnly(i->aInstalledPackage) == sal_False);
     }
 
 

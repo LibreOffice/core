@@ -45,20 +45,6 @@ namespace dp_misc
 
 //==============================================================================
 void xml_parse(
-    Reference<xml::input::XRoot> const & xRoot,
-    ::ucbhelper::Content & ucb_content,
-    Reference<XComponentContext> const & xContext )
-{
-    const Any arg(xRoot);
-    const Reference<xml::sax::XDocumentHandler> xDocHandler(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
-            OUSTR("com.sun.star.xml.input.SaxDocumentHandler"),
-            Sequence<Any>( &arg, 1 ), xContext ), UNO_QUERY_THROW );
-    xml_parse( xDocHandler, ucb_content, xContext );
- }
-
-//==============================================================================
-void xml_parse(
     Reference<xml::sax::XDocumentHandler> const & xDocHandler,
     ::ucbhelper::Content & ucb_content,
     Reference<XComponentContext> const & xContext )

@@ -143,7 +143,6 @@ class CommandLineArgs
         sal_Bool                IsQuickstart() const;
         sal_Bool                IsNoQuickstart() const;
         sal_Bool                IsTerminateAfterInit() const;
-        sal_Bool                IsNoFirstStartWizard() const;
         sal_Bool                IsNoLogo() const;
         sal_Bool                IsNoLockcheck() const;
         sal_Bool                IsHelp() const;

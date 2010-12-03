@@ -434,28 +434,6 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
     }
 }
 
-// -----------------------------------------------------------------------------
-
-TStringVectorPtr getContent( const ::rtl::OUString& rBaseURL )
-{
-    TStringVectorPtr aResult( new TStringVector );
-    ::osl::Directory aDir( rBaseURL);
-    if ( aDir.open() == ::osl::FileBase::E_None )
-    {
-        // iterate over directory content
-        TStringVector aSubDirs;
-        ::osl::DirectoryItem aItem;
-        while ( aDir.getNextItem( aItem ) == ::osl::FileBase::E_None )
-        {
-            ::osl::FileStatus aFileStatus( FileStatusMask_Type | FileStatusMask_FileURL );
-            if ( aItem.getFileStatus( aFileStatus ) == ::osl::FileBase::E_None )
-                aResult->push_back( aFileStatus.getFileURL() );
-        }
-    }
-
-    return aResult;
-}
-
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
     throw (lang::IllegalArgumentException, Exception, RuntimeException)
 {

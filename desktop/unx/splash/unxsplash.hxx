@@ -73,10 +73,6 @@ public:
 
     static Reference< XInterface > getInstance( const Reference < XMultiServiceFactory >& xFactory );
 
-    // static service info
-    static OUString  impl_getImplementationName();
-    static Sequence<OUString> impl_getSupportedServiceNames();
-
     // XStatusIndicator
     virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( RuntimeException );
     virtual void SAL_CALL end() throw ( RuntimeException );
