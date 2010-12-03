@@ -297,7 +297,11 @@ void ScInterpreter::ScGetTime()
         double nSec = GetDouble();
         double nMin = GetDouble();
         double nHour = GetDouble();
-        PushDouble( ( (nHour * 3600) + (nMin * 60) + nSec ) / D_TIMEFACTOR );
+        double fTime = fmod( (nHour * 3600) + (nMin * 60) + nSec, D_TIMEFACTOR) / D_TIMEFACTOR;
+        if (fTime < 0)
+            PushIllegalArgument();
+        else
+            PushDouble( fTime);
     }
 }
 
