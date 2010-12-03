@@ -141,7 +141,7 @@ bool PropertyMap::IsRTL( bool& bSet )
     PropertyMap::iterator aIt = find( PropertyDefinition( PROP_WRITING_MODE, true ) );
     if( aIt != end( ) )
     {
-        sal_Int16 nValue;
+        sal_Int16 nValue(0);
         aIt->second >>= nValue;
         bRtl = ( nValue == text::WritingMode2::RL_TB );
         bSet = true;
