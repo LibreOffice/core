@@ -31,6 +31,7 @@
 
 #include "pppoptimizertoken.hxx"
 #include <osl/mutex.hxx>
+#include <sal/macros.h>
 #include <hash_map>
 #include <string.h>
 
@@ -311,7 +312,7 @@ PPPOptimizerTokenEnum TKGet( const rtl::OUString& rToken )
         {
             TypeNameHashMap* pH = new TypeNameHashMap;
             const TokenTable* pPtr = pTokenTableArray;
-            const TokenTable* pEnd = pPtr + ( sizeof( pTokenTableArray ) / sizeof( TokenTable ) );
+            const TokenTable* pEnd = pPtr + SAL_N_ELEMENTS( pTokenTableArray );
             for ( ; pPtr < pEnd; pPtr++ )
                 (*pH)[ pPtr->pS ] = pPtr->pE;
             pHashMap = pH;

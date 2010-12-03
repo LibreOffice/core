@@ -43,6 +43,7 @@
 #include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 
 using namespace ::rtl;
 using namespace ::com::sun::star::awt;
@@ -89,7 +90,7 @@ rtl::OUString InsertSeparator( OptimizerDialog& rOptimizerDialog, const OUString
         Any( sal_Int16( 0 ) ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -127,7 +128,7 @@ rtl::OUString InsertButton( OptimizerDialog& rOptimizerDialog, const OUString& r
         Any( nWidth ) };
 
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -161,7 +162,7 @@ rtl::OUString InsertFixedText( OptimizerDialog& rOptimizerDialog, const rtl::OUS
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -198,7 +199,7 @@ rtl::OUString InsertCheckBox( OptimizerDialog& rOptimizerDialog, const OUString&
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -241,7 +242,7 @@ rtl::OUString InsertFormattedField( OptimizerDialog& rOptimizerDialog, const OUS
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -287,7 +288,7 @@ rtl::OUString InsertComboBox( OptimizerDialog& rOptimizerDialog, const OUString&
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -323,7 +324,7 @@ rtl::OUString InsertRadioButton( OptimizerDialog& rOptimizerDialog, const rtl::O
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -366,7 +367,7 @@ rtl::OUString InsertListBox( OptimizerDialog& rOptimizerDialog, const OUString& 
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -867,7 +868,7 @@ void OptimizerDialog::InitPage4()
             Any( (sal_Int32)( 0 ) ),
             Any( (sal_Int32)( PAGE_WIDTH - 12 ) ) };
 
-        sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+        sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
         Sequence< rtl::OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );

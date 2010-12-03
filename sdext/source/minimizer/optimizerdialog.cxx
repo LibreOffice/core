@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
+#include <sal/macros.h>
 #include <osl/time.h>
 
 // -------------------
@@ -80,7 +81,7 @@ void OptimizerDialog::InitDialog()
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( OD_DIALOG_WIDTH ) ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -110,7 +111,7 @@ void OptimizerDialog::InitRoadmap()
             Any( mnTabIndex++ ),
             Any( sal_Int32( 85 ) ) };
 
-        sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+        sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
         Sequence< rtl::OUString >   aNames( pNames, nCount );
         Sequence< Any >             aValues( pValues, nCount );

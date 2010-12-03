@@ -35,6 +35,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <sal/macros.h>
 #include "com/sun/star/util/URL.hpp"
 #include "com/sun/star/util/XURLTransformer.hpp"
 
@@ -88,7 +89,7 @@ rtl::OUString InsertFixedText( InformationDialog& rInformationDialog, const rtl:
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -117,7 +118,7 @@ rtl::OUString InsertImage( InformationDialog& rInformationDialog, const OUString
         Any( nPosY ),
         Any( sal_True ),
         Any( nWidth ) };
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -150,7 +151,7 @@ rtl::OUString InsertCheckBox( InformationDialog& rInformationDialog, const OUStr
         Any( nTabIndex ),
         Any( nWidth ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -187,7 +188,7 @@ rtl::OUString InsertButton( InformationDialog& rInformationDialog, const OUStrin
         Any( nWidth ) };
 
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
@@ -269,7 +270,7 @@ void InformationDialog::InitDialog()
         Any( getString( STR_SUN_OPTIMIZATION_WIZARD2 ) ),
         Any( sal_Int32( DIALOG_WIDTH ) ) };
 
-    sal_Int32 nCount = sizeof( pNames ) / sizeof( OUString );
+    sal_Int32 nCount = SAL_N_ELEMENTS( pNames );
 
     Sequence< rtl::OUString >   aNames( pNames, nCount );
     Sequence< Any >             aValues( pValues, nCount );
