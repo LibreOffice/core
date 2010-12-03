@@ -38,6 +38,7 @@
 #include "funcdesc.hxx"
 #include <unotools/charclass.hxx>
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL > 1
@@ -214,7 +215,7 @@ void ScParameterClassification::Init()
     memset( pData, 0, sizeof(RunData) * (SC_OPCODE_LAST_OPCODE_ID + 1));
 
     // init from specified static data above
-    for ( size_t i=0; i < sizeof(pRawData) / sizeof(RawData); ++i )
+    for ( size_t i=0; i < SAL_N_ELEMENTS(pRawData); ++i )
     {
         const RawData* pRaw = &pRawData[i];
         if ( pRaw->eOp > SC_OPCODE_LAST_OPCODE_ID )

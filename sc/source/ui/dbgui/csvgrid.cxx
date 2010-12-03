@@ -38,6 +38,7 @@
 
 #include <svtools/colorcfg.hxx>
 #include <svl/smplhint.hxx>
+#include <sal/macros.h>
 #include <tools/poly.hxx>
 #include "scmod.hxx"
 #include "asciiopt.hxx"
@@ -523,7 +524,7 @@ sal_uInt8 lcl_GetExtColumnType( sal_Int32 nIntType )
 {
     static sal_uInt8 pExtTypes[] =
         { SC_COL_STANDARD, SC_COL_TEXT, SC_COL_DMY, SC_COL_MDY, SC_COL_YMD, SC_COL_ENGLISH, SC_COL_SKIP };
-    static sal_Int32 nExtTypeCount = sizeof( pExtTypes ) / sizeof( *pExtTypes );
+    static sal_Int32 nExtTypeCount = SAL_N_ELEMENTS(pExtTypes);
     return pExtTypes[ ((0 <= nIntType) && (nIntType < nExtTypeCount)) ? nIntType : 0 ];
 }
 

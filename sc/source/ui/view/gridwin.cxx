@@ -55,6 +55,7 @@
 #include <vcl/hatch.hxx>
 #include <sot/formats.hxx>
 #include <sot/clsids.hxx>
+#include <sal/macros.h>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
@@ -953,7 +954,7 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
 
         //  default entries
         static const USHORT nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_EMPTY, SCSTR_NOTEMPTY };
-        const USHORT nDefCount = sizeof(nDefIDs) / sizeof(USHORT);
+        const USHORT nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
             String aEntry( (ScResId) nDefIDs[i] );

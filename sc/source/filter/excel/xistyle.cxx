@@ -53,6 +53,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <sal/macros.h>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
@@ -904,7 +905,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 
     if( nXclLine == EXC_LINE_NONE )
         return false;
-    if( nXclLine >= STATIC_TABLE_SIZE( ppnLineParam ) )
+    if( nXclLine >= SAL_N_ELEMENTS( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );

@@ -2235,7 +2235,7 @@ void ScInterpreter::ScBase()
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
             0
         };
-        static const int nDigits = (sizeof(pDigits)/sizeof(sal_Unicode))-1;
+        static const int nDigits = SAL_N_ELEMENTS(pDigits)-1;
         xub_StrLen nMinLen;
         if ( nParamCount == 3 )
         {

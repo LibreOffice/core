@@ -50,6 +50,7 @@
 #include <svl/zformat.hxx>
 #include <vcl/image.hxx>
 #include <vcl/virdev.hxx>
+#include <sal/macros.h>
 #include <tools/rcid.h>
 #include <unotools/charclass.hxx>
 #include <stdlib.h>
@@ -1219,11 +1220,10 @@ ScFunctionList::ScFunctionList() :
         RID_SC_FUNCTION_DESCRIPTIONS1,
         RID_SC_FUNCTION_DESCRIPTIONS2
     };
-    const USHORT nBlocks = sizeof(nDescBlock) / sizeof(USHORT);
 
     aFunctionList.Clear();
 
-    for ( USHORT k = 0; k < nBlocks; k++ )
+    for ( USHORT k = 0; k < SAL_N_ELEMENTS(nDescBlock); k++ )
     {
         ::std::auto_ptr<ScResourcePublisher> pBlock( new ScResourcePublisher( ScResId( nDescBlock[k] ) ) );
         // Browse for all possible OpCodes. This is not the fastest method, but

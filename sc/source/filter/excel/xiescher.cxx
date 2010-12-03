@@ -84,6 +84,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/colritem.hxx>
 #include <svx/xflclit.hxx>
+#include <sal/macros.h>
 #include <editeng/adjitem.hxx>
 #include <svx/xlineit.hxx>
 #include <svx/xlinjoit.hxx>
@@ -657,7 +658,7 @@ void XclImpDrawObjBase::ConvertFillStyle( SdrObject& rSdrObj, const XclObjFillDa
                 { 0x88, 0x00, 0x22, 0x00, 0x88, 0x00, 0x22, 0x00 },
                 { 0x80, 0x00, 0x08, 0x00, 0x80, 0x00, 0x08, 0x00 }
             };
-            const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, STATIC_TABLE_SIZE( sppnPatterns ) ) ];
+            const sal_uInt8* const pnPattern = sppnPatterns[ ::std::min< size_t >( rFillData.mnPattern - 2, SAL_N_ELEMENTS( sppnPatterns ) ) ];
             // create 2-colored 8x8 DIB
             SvMemoryStream aMemStrm;
             aMemStrm << sal_uInt32( 12 ) << sal_Int16( 8 ) << sal_Int16( 8 ) << sal_uInt16( 1 ) << sal_uInt16( 1 );

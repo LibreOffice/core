@@ -32,6 +32,7 @@
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/math.hxx>
+#include <sal/macros.h>
 #include <string.h>
 
 #include <tools/resmgr.hxx>
@@ -510,7 +511,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
 
 static const sal_Char*      pLang[] = { "de", "en" };
 static const sal_Char*      pCoun[] = { "DE", "US" };
-static const sal_uInt32     nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
+static const sal_uInt32     nNumOfLoc = SAL_N_ELEMENTS(pLang);
 
 
 void AnalysisAddIn::InitDefLocales( void )

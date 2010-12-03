@@ -36,6 +36,7 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <oox/helper/helper.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
@@ -44,10 +45,8 @@
 
 // Common macros ==============================================================
 
-/** Expands to the size of a STATIC data array. */
-#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 /** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
-#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
+#define STATIC_TABLE_END( array )   ((array)+SAL_N_ELEMENTS(array))
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )

@@ -32,6 +32,7 @@
 #include <stdio.h>
 #include <tools/resary.hxx>
 #include <rtl/math.hxx>
+#include <sal/macros.h>
 #include "analysishelper.hxx"
 #include "analysis.hrc"
 
@@ -1413,9 +1414,7 @@ sal_uInt16 FuncData::GetStrIndex( sal_uInt16 nParamNum ) const
 
 FuncDataList::FuncDataList( ResMgr& rResMgr )
 {
-    const sal_uInt32    nNum = sizeof( pFuncDatas ) / sizeof( FuncDataBase );
-
-    for( sal_uInt16 n = 0 ; n < nNum ; n++ )
+    for( sal_uInt16 n = 0 ; n < SAL_N_ELEMENTS(pFuncDatas) ; n++ )
         Append( new FuncData( pFuncDatas[ n ], rResMgr ) );
 }
 
