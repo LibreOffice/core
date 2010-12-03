@@ -3081,22 +3081,27 @@ void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
     }
 }
 
+
 void ScDocument::AddTableOpFormulaCell( ScFormulaCell* pCell )
 {
-    ScInterpreterTableOpParams* p = aTableOpList;
-    if ( p && p->bCollectNotifications )
+    if ( !aTableOpList.empty() )
     {
-        if ( p->bRefresh )
-        {   // refresh pointers only
-            p->aNotifiedFormulaCells.push_back( pCell );
-        }
-        else
-        {   // init both, address and pointer
-            p->aNotifiedFormulaCells.push_back( pCell );
-            p->aNotifiedFormulaPos.push_back( pCell->aPos );
+        ScInterpreterTableOpParams* p = &aTableOpList.back();
+        if ( p->bCollectNotifications )
+        {
+            if ( p->bRefresh )
+            {   // refresh pointers only
+                p->aNotifiedFormulaCells.push_back( pCell );
+            }
+            else
+            {   // init both, address and pointer
+                p->aNotifiedFormulaCells.push_back( pCell );
+                p->aNotifiedFormulaPos.push_back( pCell->aPos );
+            }
         }
     }
 }
+
 
 void ScDocument::CalcAll()
 {

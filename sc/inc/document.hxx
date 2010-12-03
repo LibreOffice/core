@@ -47,6 +47,7 @@
 #include <map>
 #include <set>
 #include <list>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class KeyEvent;
 class OutputDevice;
@@ -315,7 +316,7 @@ private:
                         mxVbaEvents;
 
 public:
-    ScInterpreterTableOpParams* aTableOpList;           // ScInterpreterTableOpParams currently in use
+    boost::ptr_vector< ScInterpreterTableOpParams > aTableOpList; // list of ScInterpreterTableOpParams currently in use
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
 private:
 
