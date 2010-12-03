@@ -37,6 +37,7 @@
 #include <editeng/editdata.hxx>
 #include <address.hxx>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <vector>
 
 const sal_Char nHorizontal = 1;
 const sal_Char nVertical = 2;
@@ -105,7 +106,6 @@ struct ScEEParseEntry
                                     maImageList.clear();
                             }
 };
-DECLARE_LIST( ScEEParseList, ScEEParseEntry* )
 
 
 class EditEngine;
@@ -116,7 +116,7 @@ protected:
     EditEngine*         pEdit;
     SfxItemPool*        pPool;
     SfxItemPool*        pDocPool;
-    ScEEParseList*      pList;
+    ::std::vector< ScEEParseEntry* > maList;
     ScEEParseEntry*     pActEntry;
     Table*              pColWidths;
     int                 nLastToken;
@@ -131,14 +131,15 @@ public:
                         ScEEParser( EditEngine* );
     virtual             ~ScEEParser();
 
-    virtual ULONG       Read( SvStream&, const String& rBaseURL ) = 0;
+    virtual ULONG           Read( SvStream&, const String& rBaseURL ) = 0;
 
-    void                GetDimensions( SCCOL& nCols, SCROW& nRows ) const
-                            { nCols = nColMax; nRows = nRowMax; }
-    ULONG               Count() const   { return pList->Count(); }
-    ScEEParseEntry*     First() const   { return pList->First(); }
-    ScEEParseEntry*     Next() const    { return pList->Next(); }
-    Table*              GetColWidths() const { return pColWidths; }
+    Table*                  GetColWidths() const { return pColWidths; }
+    void                    GetDimensions( SCCOL& nCols, SCROW& nRows ) const
+                                { nCols = nColMax; nRows = nRowMax; }
+
+    inline size_t           ListSize() const{ return maList.size(); }
+    ScEEParseEntry*         ListEntry( size_t index ) { return maList[ index ]; }
+    const ScEEParseEntry*   ListEntry( size_t index ) const { return maList[ index ]; }
 };
 
 

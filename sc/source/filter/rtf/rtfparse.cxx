@@ -92,18 +92,23 @@ ULONG ScRTFParser::Read( SvStream& rStream, const String& rBaseURL )
     ULONG nErr = pEdit->Read( rStream, rBaseURL, EE_FORMAT_RTF );
     if ( nLastToken == RTF_PAR )
     {
-        ScEEParseEntry* pE = pList->Last();
-        if ( pE
-                // komplett leer
-            && (( pE->aSel.nStartPara == pE->aSel.nEndPara
-                    && pE->aSel.nStartPos == pE->aSel.nEndPos)
-                // leerer Paragraph
-                || ( pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
-                    && pE->aSel.nStartPos == pEdit->GetTextLen( pE->aSel.nStartPara )
-                    && pE->aSel.nEndPos == 0 )) )
-        {   // den letzten leeren Absatz nicht uebernehmen
-            pList->Remove();
-            delete pE;
+        if ( !maList.empty() )
+        {
+            ScEEParseEntry* pE = maList.back();
+            if (    // komplett leer
+                (  (  pE->aSel.nStartPara == pE->aSel.nEndPara
+                   && pE->aSel.nStartPos  == pE->aSel.nEndPos
+                   )
+                ||  // leerer Paragraph
+                   (  pE->aSel.nStartPara + 1 == pE->aSel.nEndPara
+                   && pE->aSel.nStartPos      == pEdit->GetTextLen( pE->aSel.nStartPara )
+                   && pE->aSel.nEndPos        == 0
+                   )
+                )
+               )
+            {   // den letzten leeren Absatz nicht uebernehmen
+                maList.pop_back();
+            }
         }
     }
     ColAdjust();
@@ -158,9 +163,10 @@ void ScRTFParser::ColAdjust()
     {
         SCCOL nCol = 0;
         ScEEParseEntry* pE;
-        pE = pList->Seek( nStartAdjust );
-        while ( pE )
+        size_t ListSize = maList.size();
+        for ( size_t i = nStartAdjust; i < ListSize; ++ i )
         {
+            pE = maList[ i ];
             if ( pE->nCol == 0 )
                 nCol = 0;
             pE->nCol = nCol;
@@ -175,7 +181,6 @@ void ScRTFParser::ColAdjust()
             }
             if ( nCol > nColMax )
                 nColMax = nCol;
-            pE = pList->Next();
         }
         nStartAdjust = (ULONG)~0;
         pColTwips->Remove( (USHORT)0, pColTwips->Count() );
@@ -362,14 +367,17 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 EntryEnd( pActEntry, pInfo->aSelection );
 
                 if ( nStartAdjust == (ULONG)~0 )
-                    nStartAdjust = pList->Count();
-                pList->Insert( pActEntry, LIST_APPEND );
+                    nStartAdjust = maList.size();
+                maList.push_back( pActEntry );
                 NewActEntry( pActEntry );   // neuer freifliegender pActEntry
             }
             else
             {   // aktuelle Twips der MergeCell zuweisen
-                if ( (pE = pList->Last()) != 0 )
+                if ( !maList.empty() )
+                {
+                    pE = maList.back();
                     pE->nTwips = pActDefault->nTwips;
+                }
                 // Selection des freifliegenden pActEntry anpassen
                 // Paragraph -1 wg. Textaufbruch in EditEngine waehrend Parse
                 pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
@@ -392,7 +400,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 pActEntry->nCol = 0;
                 pActEntry->nRow = nRowCnt;
                 EntryEnd( pActEntry, pInfo->aSelection );
-                pList->Insert( pActEntry, LIST_APPEND );
+                maList.push_back( pActEntry );
                 NewActEntry( pActEntry );   // new pActEntry
                 NextRow();
             }

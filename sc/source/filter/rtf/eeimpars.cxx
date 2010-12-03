@@ -131,7 +131,7 @@ ULONG ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->Count() );
+        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize() );
     ULONG nProgress = 0;
 
     SCCOL nStartCol, nEndCol;
@@ -160,8 +160,10 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     }
     ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
-    for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
+    size_t ListSize = mpParser->ListSize();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
+        pE = mpParser->ListEntry( i );
         SCROW nRow = nStartRow + pE->nRow;
         if ( nRow != nLastMergedRow )
             nMergeColAdd = 0;
@@ -452,9 +454,11 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     }
     if ( bHasGraphics )
     {   // Grafiken einfuegen
-        for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
+        size_t ListSize = mpParser->ListSize();
+        for ( size_t i = 0; i < ListSize; ++i )
         {
-            if ( pE->maImageList.size() )
+            pE = mpParser->ListEntry( i );
+            if ( !pE->maImageList.empty() )
             {
                 SCCOL nCol = pE->nCol;
                 SCROW nRow = pE->nRow;
@@ -603,7 +607,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
         pDocPool( new ScDocumentPool ),
-        pList( new ScEEParseList ),
         pColWidths( new Table ),
         nLastToken(0),
         nColCnt(0),
@@ -622,9 +625,7 @@ ScEEParser::~ScEEParser()
 {
     delete pActEntry;
     delete pColWidths;
-    for ( ScEEParseEntry* pE = pList->First(); pE; pE = pList->Next() )
-        delete pE;
-    delete pList;
+    if ( !maList.empty() ) maList.clear();
 
     // Pool erst loeschen nachdem die Listen geloescht wurden
     pPool->SetSecondaryPool( NULL );
