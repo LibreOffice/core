@@ -119,9 +119,8 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)package2$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucpfile1$(DLLPOST) >> $@
     @-echo $(DLLPRE)ucb1$(DLLPOST)     >> $@
-    @-echo $(DLLPRE)configmgr$(DLLPOST) >> $@
+    @-echo configmgr$(UNODLLPOST)      >> $@
 #
-    @-echo $(DLLPRE)dtrans$(DLLPOST)   >> $@
     @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST) >> $@
 .IF "$(ENABLE_GTK)" != ""
     @-echo $(DLLPRE)vclplug_gtk$(DFTDLLPOST) >> $@
@@ -141,6 +140,7 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(URELIBPATH)$/bootstrap$(UNODLLPOST)            >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)reg$(UDKDLLPOST)         >> $@
     @-echo $(URELIBPATH)$/$(DLLPRE)store$(UDKDLLPOST)       >> $@
+    @-echo $(URELIBPATH)$/reflection$(UNODLLPOST)           >> $@
 .IF "$(USE_SYSTEM_STL)"!="YES"
 .IF "$(COMNAME)" == "gcc2" || "$(COMNAME)" == "gcc3"
     @-echo $(URELIBPATH)$/$(DLLPRE)stlport_gcc$(DLLPOST)    >> $@
@@ -160,6 +160,31 @@ $(MISC)$/$(TARGET)-common : makefile.mk
     @-echo $(DLLPRE)svl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)vcl$(DFTDLLPOST)   >> $@
     @-echo $(DLLPRE)tk$(DFTDLLPOST)    >> $@
-    @-echo $(DLLPRE)svt$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)sfx$(DFTDLLPOST)   >> $@
-    @-echo $(DLLPRE)sofficeapp$(DLLPOST) >> $@
+    @-echo types.rdb                   >> $@
+    @-echo services.rdb                >> $@
+    @-echo oovbaapi.rdb                          >> $@
+    @-echo deployment$(DLLPOSTFIX)$(UNODLLPOST)  >> $@
+    @-echo $(DLLPRE)deploymentmisc$(DFTDLLPOST)  >> $@
+    @-echo $(DLLPRE)ucb1$(DLLPOST)               >> $@
+    @-echo $(DLLPRE)xstor$(DLLPOST)              >> $@
+    @-echo $(DLLPRE)package2$(DLLPOST)           >> $@
+    @-echo $(DLLPRE)filterconfig1$(DLLPOST)      >> $@
+    @-echo $(DLLPRE)uui$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)lng$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)svt$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)spl$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)basegfx$(DFTDLLPOST)         >> $@
+    @-echo $(DLLPRE)avmedia$(DFTDLLPOST)         >> $@
+    @-echo $(DLLPRE)helplinker$(DFTDLLPOST)      >> $@
+    @-echo $(DLLPRE)vclplug_gen$(DFTDLLPOST)     >> $@
+    @-echo $(DLLPRE)icule$(ICUDLLPOST)           >> $@
+    @-echo $(DLLPRE)icudata$(ICUDLLPOST)         >> $@
+    @-echo sax$(UNODLLPOST)                      >> $@
+    @-echo gconfbe1$(UNODLLPOST)                 >> $@
+    @-echo fsstorage$(UNODLLPOST)                >> $@
+    @-echo desktopbe1$(UNODLLPOST)               >> $@
+    @-echo localebe1$(UNODLLPOST)                >> $@
+    @-echo ucpexpand1$(UNODLLPOST)               >> $@
+# stoc bits
+    @-echo $(DLLPRE)sfx$(DFTDLLPOST)             >> $@
+    @-echo $(DLLPRE)sofficeapp$(DLLPOST)         >> $@
