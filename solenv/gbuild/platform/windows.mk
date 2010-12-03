@@ -59,6 +59,7 @@ gb_CFLAGS := \
     -Gd \
     -GR \
     -Gs \
+    -GS \
     -Gy \
     -nologo \
     -Wall \
@@ -106,6 +107,7 @@ gb_CXXFLAGS := \
     -Gd \
     -GR \
     -Gs \
+    -GS \
     -Gy \
     -nologo \
     -Wall \
@@ -165,13 +167,20 @@ gb_LinkTarget_LDFLAGS := \
     -NODEFAULTLIB \
     -OPT:NOREF \
     -SUBSYSTEM:CONSOLE \
+    -safeseh \
+    -nxcompat \
+    -dynamicbase \
     $(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
 
 ifneq ($(ENABLE_CRASHDUMP),)
 gb_LinkTarget_LDFLAGS += -DEBUG
+gb_CFLAGS+=-Zi
+gb_CXXFLAGS+=-Zi
 endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
+gb_CXXFLAGS +=-Zi
+gb_CFLAGS +=-Zi
 gb_COMPILEROPTFLAGS :=
 gb_LinkTarget_LDFLAGS += -DEBUG
 else
@@ -281,7 +290,9 @@ endef
 
 # PrecompiledHeader class
 
-gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx -Fp$(call gb_PrecompiledHeader_get_target,$(1))
+gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+                                       -Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
+                                       -Fd$(call gb_PrecompiledHeader_get_target,$(1)).pdb
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_PrecompiledHeader__command_deponcompile
@@ -313,7 +324,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj" && \
     E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 rm $(1).obj
 $(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
@@ -322,7 +333,9 @@ endef
 
 # NoexPrecompiledHeader class
 
-gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1))
+gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
+                                           -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
+                                           -Fd$(call gb_NoexPrecompiledHeader_get_target,$(1)).pdb
 
 ifeq ($(gb_FULLDEPS),$(true))
 define gb_NoexPrecompiledHeader__command_deponcompile
@@ -354,7 +367,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj" && \
     E=$$($$C) || (RC=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$RC)))
 rm $(1).obj
 $(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
@@ -364,15 +377,8 @@ endef
 
 # LinkTarget class
 
-
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_COMPILEROPTFLAGS)
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_COMPILEROPTFLAGS)
-
-ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CXXFLAGS +=
-gb_LinkTarget_CFLAGS +=
-
-endif
 
 gb_LinkTarget_INCLUDE :=\
     $(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \
