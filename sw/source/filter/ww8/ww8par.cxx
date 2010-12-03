@@ -3580,7 +3580,7 @@ void wwSectionManager::InsertSegments()
             bool bThisAndNextAreCompatible = (aNext != aEnd) ? ((aIter->GetPageWidth() == aNext->GetPageWidth()) &&
                 (aIter->GetPageHeight() == aNext->GetPageHeight()) && (aIter->IsLandScape() == aNext->IsLandScape())) : true;
 
-            if ((aNext != aEnd && aNext->IsContinous() && bThisAndNextAreCompatible) || bProtected)
+            if (((aNext != aEnd && aNext->IsContinous() && bThisAndNextAreCompatible) || bProtected))
             {
                 bIgnoreCols = true;
                 if ((aIter->NoCols() > 1) || bProtected)
