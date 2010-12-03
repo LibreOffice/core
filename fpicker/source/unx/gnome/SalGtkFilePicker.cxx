@@ -406,52 +406,6 @@ void SAL_CALL SalGtkFilePicker::controlStateChanged( FilePickerEvent aEvent )
     if (m_xListener.is()) m_xListener->controlStateChanged( aEvent );
 }
 
-//-----------------------------------------------------------------------------------------
-// If there are more then one listener the return value of the last one wins
-//-----------------------------------------------------------------------------------------
-
-rtl::OUString SAL_CALL SalGtkFilePicker::helpRequested( FilePickerEvent aEvent ) const
-{
-    rtl::OUString aHelpText;
-
-    ::cppu::OInterfaceContainerHelper* pICHelper =
-        rBHelper.getContainer( getCppuType( ( uno::Reference<XFilePickerListener> * )0 ) );
-
-    if( pICHelper )
-    {
-        ::cppu::OInterfaceIteratorHelper iter( *pICHelper );
-
-        while( iter.hasMoreElements() )
-        {
-            try
-            {
-                /*
-                      if there are multiple listeners responding
-                          to this notification the next response
-                  overwrittes  the one before if it is not empty
-                        */
-
-                rtl::OUString aTempString;
-
-                uno::Reference<XFilePickerListener> xFPListener( iter.next(), uno::UNO_QUERY );
-                if( xFPListener.is() )
-                        {
-                    aTempString = xFPListener->helpRequested( aEvent );
-                    if( aTempString.getLength() )
-                        aHelpText = aTempString;
-                        }
-
-            }
-            catch( uno::RuntimeException& )
-            {
-                OSL_ENSURE( false, "RuntimeException during event dispatching" );
-            }
-        }
-    }
-
-    return aHelpText;
-}
-
 //=====================================================================
 
 struct FilterEntry
