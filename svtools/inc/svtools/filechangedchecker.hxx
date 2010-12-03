@@ -24,6 +24,7 @@
 #ifndef SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
 #define SVTOOLS_INCLUDED_FILECHANGEDCHECKER_HXX
 
+#include "svtools/svtdllapi.h"
 #include <boost/function.hpp>
 #include <osl/file.hxx>
 #include <vcl/timer.hxx>
@@ -33,7 +34,7 @@
     Instances of this class setup a vcl timer to occasionally wake up
     check whether file modification time has changed.
  */
-class FileChangedChecker
+class SVT_DLLPUBLIC FileChangedChecker
 {
 private :
     Timer                    mTimer;
@@ -41,10 +42,10 @@ private :
     TimeValue                mLastModTime;
     ::boost::function0<void> mpCallback;
 
-    bool getCurrentModTime(TimeValue& o_rValue) const;
+    bool SVT_DLLPRIVATE getCurrentModTime(TimeValue& o_rValue) const;
+    DECL_LINK(TimerHandler, Timer *);
 
 public :
-    DECL_LINK(TimerHandler, Timer *);
     void resetTimer();
     bool hasFileChanged();
     FileChangedChecker(const rtl::OUString& rFilename, const ::boost::function0<void>& rCallback);
