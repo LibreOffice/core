@@ -3009,7 +3009,6 @@ void XclImpChValueRange::Convert( ScaleData& rScaleData, bool bMirrorOrient ) co
     }
     else
     {
-        sal_Int32 nCount = 0;
         if( !bAutoMajor && !bAutoMinor && (0.0 < maData.mfMinorStep) && (maData.mfMinorStep <= maData.mfMajorStep) )
         {
             double fCount = maData.mfMajorStep / maData.mfMinorStep + 0.5;
