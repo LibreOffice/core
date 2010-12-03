@@ -5558,8 +5558,8 @@ elif test "$_os" != "WINNT" ; then
    if test -z "$x_includes"; then
       AC_MSG_ERROR([No X includes found]) # Exit
    fi
-   CFLAGS=$X_CFLAGS
-   LDFLAGS="$X_LDFLAGS $X_LIBS"
+   CFLAGS="$CFLAGS $X_CFLAGS"
+   LDFLAGS="$LDFLAGS $X_LDFLAGS $X_LIBS"
    AC_CHECK_LIB(X11, XOpenDisplay, x_libs="-lX11 $X_EXTRA_LIBS", [AC_MSG_ERROR([X Development libraries not found])])
    dnl Check if the XauDisposeAuth symbol is provided by libXau.
    AC_CHECK_LIB(Xau, XauDisposeAuth, XAU_LIBS="-lXau", [])
