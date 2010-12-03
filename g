@@ -15,16 +15,16 @@ if [ "$#" -eq "0" ] ; then
     exit $?
 fi
 
-CLONEDIR=`perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$/\/clone/'`
+CLONEDIR=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$/\/clone/')
 if [ ! -e ${CLONEDIR} ]; then mkdir -p $CLONEDIR; fi
-RAWBUILDDIR=`perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$//'`
+RAWBUILDDIR=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' $0 | sed -e ' s/\/g$//')
 if [ ! -e ${RAWBUILDDIR} ]; then mkdir -p $RAWBUILDDIR; fi
 
 # should we need to update the hooks
 function update_hooks()
 {
     HOOKDIR="$1"
-    for H in `cd "$RAWBUILDDIR/git-hooks" ; echo *` ; do
+    for H in $(cd "$RAWBUILDDIR/git-hooks" ; echo *) ; do
         HOOK=".git/hooks/$H"
         if [ ! -x "$HOOK" -a ! -L "$HOOK" ] ; then
             rm -f "$HOOK"
@@ -114,7 +114,7 @@ while shift ; do
         fi
 
         # make the paths absolute
-        FILES[$FILESNUM]=`perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM"`
+        FILES[$FILESNUM]=$(perl -e 'use Cwd "abs_path"; print abs_path(shift);' "$PARAM")
         if [ -z "${FILES[$FILESNUM]}" -o ! -e "${FILES[$FILESNUM]}" ] ; then
             # it is probably not a file, but a tag name, or something
             FILES[$FILESNUM]="$PARAM"
@@ -124,9 +124,9 @@ while shift ; do
 done
 
 # do it!
-DIRS="bootstrap `(cd $CLONEDIR ; ls)`"
+DIRS="bootstrap $(cd $CLONEDIR ; ls)"
 if [ "$COMMAND" = "clone" ] ; then
-    DIRS=`cat bin/repo-list`
+    DIRS=$(cat bin/repo-list)
     # update hooks in the main repo too
     ( cd "$RAWBUILDDIR" ; update_hooks "../../git-hooks" )
 fi
@@ -155,8 +155,8 @@ for REPO in $DIRS ; do
             if [ "$RELATIVIZE" = "1" -a -n "$FILES" ] ; then
                 FILESNUM=0
                 INSERTNUM=0
-                PWD=`pwd`
-                PWDLEN=`pwd | wc -c`
+                PWD=$(pwd)
+                PWDLEN=$(pwd | wc -c)
                 for I in "${FILES[@]}" ; do
                     I="${I//@REPO@/${REPO}}"
                     unset FILES[$FILESNUM]
@@ -188,18 +188,18 @@ for REPO in $DIRS ; do
                     ;;
                 commit)
                     if [ "$ALLOW_EMPTY" != "1" ] ; then
-                        [ -z "`git diff-index --name-only HEAD --`" ] && exit 0
+                        [ -z "$(git diff-index --name-only HEAD --)" ] && exit 0
                     fi
                     ;;
                 push)
                     if [ "$PUSH_ALL" != "1" ] ; then
-                        [ -n "`git rev-list origin..HEAD`" ] || exit 0
+                        [ -n "$(git rev-list origin..HEAD)" ] || exit 0
                     fi
                     ;;
                 status)
-                    LOCALCOMMITS="`git rev-list origin..HEAD`"
+                    LOCALCOMMITS="$(git rev-list origin..HEAD)"
                     if [ -z "$LOCALCOMMITS" ] ; then
-                        [ -z "`git diff-index --name-only HEAD --`" ] && exit 0
+                        [ -z "$(git diff-index --name-only HEAD --)" ] && exit 0
                     fi
                     ;;
                 clone)
@@ -211,7 +211,7 @@ for REPO in $DIRS ; do
             [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
 
             # check for changes
-            HEADREF=`git show-ref --head HEAD`
+            HEADREF=$(git show-ref --head HEAD)
 
             # do it!
             git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
@@ -224,13 +224,13 @@ for REPO in $DIRS ; do
             fi
 
             # update stamp if the repo changed
-            NEWHEADREF=`git show-ref --head HEAD`
+            NEWHEADREF=$(git show-ref --head HEAD)
             [ "$HEADREF" != "$NEWHEADREF" ] && touch $CLONEDIR/repos_changed
 
             case "$COMMAND" in
                 pull|clone)
                     # update links
-                    for link in `ls` ; do
+                    for link in $(ls) ; do
                         if [ ! -e "$RAWBUILDDIR/$link" ] ; then
                             echo "Creating missing link $link"
                             ln -s "$DIR/$link" "$RAWBUILDDIR/$link"
@@ -258,7 +258,7 @@ done
 
 # Cleanup the broken links
 if [ "$COMMAND" = "pull" ] ; then
-    for link in `ls $RAWBUILDDIR` ; do
+    for link in $(ls $RAWBUILDDIR) ; do
         if [ -h "$RAWBUILDDIR/$link" -a ! -e "$RAWBUILDDIR/$link" ]; then
             echo "Removing broken link $link"
             rm $RAWBUILDDIR/$link
