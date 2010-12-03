@@ -228,7 +228,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
     RTF_CharTypeDef eCharType = NOTDEF_CHARTYPE;
     USHORT nFontAlign;
 
-    int bChkStkPos = !bNewGroup && aAttrStack.back();
+    int bChkStkPos = !bNewGroup && !aAttrStack.empty();
 
     while( bWeiter && IsParserWorking() )           // solange bekannte Attribute erkannt werden
     {
@@ -250,7 +250,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                 if( !bChkStkPos )
                     break;
 
-                SvxRTFItemStackType* pAkt = aAttrStack.back();
+                SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
                 if( !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
                     pAkt->nSttCnt == pInsPos->GetCntIdx() ))
                     break;
@@ -269,7 +269,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
 
                     // alle bis hierher gueltigen Attribute "setzen"
                     AttrGroupEnd();
-                    pAkt = aAttrStack.back();  // can be changed after AttrGroupEnd!
+                    pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
                     pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
 
                     aAttrStack.push_back( pNew );
@@ -305,7 +305,7 @@ void SvxRTFParser::ReadAttr( int nToken, SfxItemSet* pSet )
                     nStyleNo = -1 == nTokenValue ? 0 : USHORT(nTokenValue);
                     // setze am akt. auf dem AttrStack stehenden Style die
                     // StyleNummer
-                    SvxRTFItemStackType* pAkt = aAttrStack.back();
+                    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
                     if( !pAkt )
                         break;
 
@@ -1869,7 +1869,7 @@ void SvxRTFParser::ReadBackgroundAttr( int nToken, SfxItemSet& rSet,
 // pard / plain abarbeiten
 void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 {
-    if( !bNewGroup && aAttrStack.back() )   // not at the beginning of a new group
+    if( !bNewGroup && !aAttrStack.empty() ) // not at the beginning of a new group
     {
         SvxRTFItemStackType* pAkt = aAttrStack.back();
 
@@ -1887,7 +1887,7 @@ void SvxRTFParser::RTFPardPlain( int bPard, SfxItemSet** ppSet )
 
                 // alle bis hierher gueltigen Attribute "setzen"
                 AttrGroupEnd();
-                pAkt = aAttrStack.back();  // can be changed after AttrGroupEnd!
+                pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
                 pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
                 aAttrStack.push_back( pNew );
                 pAkt = pNew;

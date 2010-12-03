@@ -875,7 +875,7 @@ const Font& SvxRTFParser::GetFont( USHORT nId )
 
 SvxRTFItemStackType* SvxRTFParser::_GetAttrSet( int bCopyAttr )
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.back();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     SvxRTFItemStackType* pNew;
     if( pAkt )
         pNew = new SvxRTFItemStackType( *pAkt, *pInsPos, bCopyAttr );
@@ -941,9 +941,9 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 {
     if( !aAttrStack.empty() )
     {
-        SvxRTFItemStackType *pOld = aAttrStack.back();
+        SvxRTFItemStackType *pOld = aAttrStack.empty() ? 0 : aAttrStack.back();
         aAttrStack.pop_back();
-        SvxRTFItemStackType *pAkt = aAttrStack.back();
+        SvxRTFItemStackType *pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
 
         do {        // middle check loop
             ULONG nOldSttNdIdx = pOld->pSttNd->GetIdx();
@@ -1118,7 +1118,7 @@ void SvxRTFParser::AttrGroupEnd()   // den akt. Bearbeiten, vom Stack loeschen
 
                         // alle bis hierher gueltigen Attribute "setzen"
                         AttrGroupEnd();
-                        pAkt = aAttrStack.back();  // can be changed after AttrGroupEnd!
+                        pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();  // can be changed after AttrGroupEnd!
                         pNew->aAttrSet.SetParent( pAkt ? &pAkt->aAttrSet : 0 );
                         aAttrStack.push_back( pNew );
                         pAkt = pNew;
@@ -1181,7 +1181,7 @@ void SvxRTFParser::SetAttrSet( SvxRTFItemStackType &rSet )
     // Is text wasn't inserted? (Get SttPos from the top of stack!)
 int SvxRTFParser::IsAttrSttPos()
 {
-    SvxRTFItemStackType* pAkt = aAttrStack.back();
+    SvxRTFItemStackType* pAkt = aAttrStack.empty() ? 0 : aAttrStack.back();
     return !pAkt || (pAkt->pSttNd->GetIdx() == pInsPos->GetNodeIdx() &&
         pAkt->nSttCnt == pInsPos->GetCntIdx());
 }

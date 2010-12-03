@@ -53,6 +53,9 @@
   </node>
   <node oor:name="Insert">
     <node oor:name="Caption">
+      <prop oor:name="CaptionOrderNumberingFirst">
+         <value xml:lang="hu">true</value>
+      </prop>
       <node oor:name="WriterObject">
         <node oor:name="Table">
           <node oor:name="Settings">
