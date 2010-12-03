@@ -45,6 +45,9 @@ Module gid_Module_Prg_Impress_Bin
     Files = (gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Share_Registry_Impress_Xcd,
 	gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
+ #if defined ENABLE_OPENGL
+     gid_File_Share_Config_Sofficecfg_Impress_Transitions_OGL_Xml,
+ #endif
     gid_File_Tmp_Userinstall_Impress_Inf);
 End
 

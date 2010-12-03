@@ -592,7 +592,6 @@ End
 #endif
 #endif
 
-#ifdef MACOSX
 #ifdef QUARTZ
 File gid_File_Lib_Fps_Aqua
     TXT_FILE_BODY;
@@ -618,7 +617,6 @@ File gid_File_Lib_avmediaQuickTime
 	Name = LIBNAME(avmediaQuickTime);
 	Dir = SCP2_OOO_BIN_DIR;
 End
-#endif
 #endif
 
 #ifdef WNT
