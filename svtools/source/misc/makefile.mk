@@ -60,6 +60,7 @@ SLOFILES=\
     $(SLO)$/ehdl.obj                \
     $(SLO)$/embedhlp.obj            \
     $(SLO)$/embedtransfer.obj       \
+    $(SLO)$/filechangedchecker.obj  \
     $(SLO)$/helpagentwindow.obj     \
     $(SLO)$/imagemgr.obj            \
     $(SLO)$/imageresourceaccess.obj \
