@@ -1538,7 +1538,16 @@ ErrCode UcbLockBytes::Flush() const
     Reference <XOutputStream > xOutputStream = getOutputStream_Impl();
     if ( !xOutputStream.is() )
         return ERRCODE_IO_CANTWRITE;
-    xOutputStream->flush();
+
+    try
+    {
+        xOutputStream->flush();
+    }
+    catch( Exception )
+    {
+        return ERRCODE_IO_CANTWRITE;
+    }
+
     return ERRCODE_NONE;
 }
 
