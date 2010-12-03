@@ -169,6 +169,7 @@ void SwViewOption::PaintPostIts( OutputDevice *pOut, const SwRect &rRect, sal_Bo
 }
 
 SwViewOption::SwViewOption() :
+    sSymbolFont( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ),
     aRetoucheColor( COL_TRANSPARENT ),
     mnViewLayoutColumns( 0 ),
     nPagePrevRow( 1 ),
@@ -183,8 +184,6 @@ SwViewOption::SwViewOption() :
     bBookview(FALSE),
     mbViewLayoutBookMode(FALSE),
     bShowPlaceHolderFields( sal_True ),
-
-    sSymbolFont( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ),
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
     nTblDest(TBL_DEST_CELL)
