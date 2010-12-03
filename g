@@ -31,6 +31,9 @@ function update_hooks()
             ln -s "$HOOKDIR/$H" "$HOOK"
         fi
     done
+    if [ -z "$(git config push.default)" ] ; then
+        git config push.default tracking
+    fi
 }
 
 # extra params for some commands, like log
