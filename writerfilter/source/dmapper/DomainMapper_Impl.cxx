@@ -891,6 +891,32 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     dmapper_logger->endElement("finishParagraph");
 #endif
 }
+
+bool DomainMapper_Impl::IsRTL( )
+{
+    bool bRtl = false;
+    bool bSet = false;
+    if ( GetTopContext() )
+        bRtl = GetTopContext()->IsRTL( bSet );
+
+    PropertyMapPtr pParaContext = GetTopContextOfType( CONTEXT_PARAGRAPH );
+    if ( !bSet && pParaContext )
+    {
+        ParagraphPropertyMap* pParaProps = static_cast< ParagraphPropertyMap* >( pParaContext.get() );
+        rtl::OUString sStyleName = pParaProps->GetParaStyleName( );
+        bRtl = m_pStyleSheetTable->IsRTL( sStyleName, bSet );
+    }
+
+    PropertyMapPtr pSectionContext = GetTopContextOfType( CONTEXT_SECTION );
+    if ( !bSet && pSectionContext )
+    {
+        SectionPropertyMap* pSectionProps = static_cast< SectionPropertyMap* >( pSectionContext.get() );
+        bRtl = pSectionProps->GetSFBiDi();
+    }
+
+    return bRtl;
+}
+
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/

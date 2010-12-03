@@ -13841,6 +13841,30 @@
       </define>
       <define name="CT_Ind">
         <optional>
+          <attribute name="end">
+            <ref name="ST_SignedTwipsMeasure"/>
+            <xs:documentation>Left Indentation</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="endChars">
+            <ref name="ST_DecimalNumber"/>
+            <xs:documentation>Left Indentation in Character Units</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="start">
+            <ref name="ST_SignedTwipsMeasure"/>
+            <xs:documentation>Left Indentation</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
+          <attribute name="startChars">
+            <ref name="ST_DecimalNumber"/>
+            <xs:documentation>Left Indentation in Character Units</xs:documentation>
+          </attribute>
+        </optional>
+        <optional>
           <attribute name="left">
             <ref name="ST_SignedTwipsMeasure"/>
             <xs:documentation>Left Indentation</xs:documentation>
@@ -21596,14 +21620,19 @@
       <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
     </resource>
     <resource name="CT_Ind" resource="Properties">
-      <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
-      <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
-      <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
-      <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
+      <attribute name="end" tokenid="ooxml:CT_Ind_end"/>
+      <attribute name="endChars" tokenid="ooxml:CT_Ind_endChars"/>
+      <attribute name="start" tokenid="ooxml:CT_Ind_start"/>
+      <attribute name="startChars" tokenid="ooxml:CT_Ind_startChars"/>
       <attribute name="hanging" tokenid="ooxml:CT_Ind_hanging"/>
       <attribute name="hangingChars" tokenid="ooxml:CT_Ind_hangingChars"/>
       <attribute name="firstLine" tokenid="ooxml:CT_Ind_firstLine"/>
       <attribute name="firstLineChars" tokenid="ooxml:CT_Ind_firstLineChars"/>
+      <!-- ECMA 1st version -->
+      <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
+      <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
+      <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
+      <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
     </resource>
     <resource name="ST_Jc" resource="List">
       <value tokenid="0">left</value>

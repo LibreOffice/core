@@ -1408,6 +1408,20 @@ void StyleSheetTable::applyDefaults(bool bParaProperties)
     return sListLabel;
 }
 
+bool StyleSheetTable::IsRTL( rtl::OUString sStyleName, bool& bSet )
+{
+    bool bRtl = false;
+    bSet = false;
+    StyleSheetEntryPtr pStyle = FindStyleSheetByStyleName( sStyleName );
+    bRtl = pStyle->pProperties->IsRTL( bSet );
+
+    StyleSheetEntryPtr pBaseStyle = FindStyleSheetByISTD( pStyle->sBaseStyleIdentifier );
+    if ( !bSet && pBaseStyle )
+        bRtl = IsRTL( pBaseStyle->sStyleName, bSet );
+
+    return bRtl;
+}
+
 }//namespace dmapper
 }//namespace writerfilter
 

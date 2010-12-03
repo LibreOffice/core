@@ -1999,6 +1999,7 @@ encoding
 end
 endA
 endAngle
+endChars
 endChr
 endCnv
 endCondLst
@@ -4800,6 +4801,7 @@ starsTop
 start
 startAngle
 startAt
+startChars
 startDate
 startNum
 startOverride
