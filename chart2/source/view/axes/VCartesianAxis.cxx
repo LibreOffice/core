@@ -330,28 +330,29 @@ public:
 
 private:
     ::std::vector< TickInfo >& m_rTickInfoVector;
-    sal_Int32 m_nLongestLabelIndex;
+    ::std::vector< sal_Int32 > m_aValidIndices;
     sal_Int32 m_nCurrentIndex;
 };
 
 MaxLabelTickIter::MaxLabelTickIter( ::std::vector< TickInfo >& rTickInfoVector
             , sal_Int32 nLongestLabelIndex )
             : m_rTickInfoVector(rTickInfoVector)
-            , m_nLongestLabelIndex( nLongestLabelIndex )
             , m_nCurrentIndex(0)
 {
     sal_Int32 nMaxIndex = m_rTickInfoVector.size()-1;
+    if( nLongestLabelIndex<0 || nLongestLabelIndex>=nMaxIndex-1 )
+        nLongestLabelIndex = 0;
 
-    //ensure correct value:
-    if( m_nLongestLabelIndex<0 || m_nLongestLabelIndex>nMaxIndex)
-        m_nLongestLabelIndex = 0;
-
-    //last label is checked anyhow
-    if( m_nLongestLabelIndex==nMaxIndex )
-        m_nLongestLabelIndex = 0;
-    //label before last is checked anyhow
-    if( m_nLongestLabelIndex+1==nMaxIndex )
-        m_nLongestLabelIndex = 0;
+    if( nMaxIndex>=0 )
+        m_aValidIndices.push_back(0);
+    if( nMaxIndex>=1 )
+        m_aValidIndices.push_back(1);
+    if( nLongestLabelIndex>1 )
+        m_aValidIndices.push_back(nLongestLabelIndex);
+    if( nMaxIndex > 2 )
+        m_aValidIndices.push_back(nMaxIndex-1);
+    if( nMaxIndex > 1 )
+        m_aValidIndices.push_back(nMaxIndex);
 }
 MaxLabelTickIter::~MaxLabelTickIter()
 {
@@ -360,35 +361,16 @@ MaxLabelTickIter::~MaxLabelTickIter()
 TickInfo* MaxLabelTickIter::firstInfo()
 {
     m_nCurrentIndex = 0;
-    if( m_nCurrentIndex < static_cast<sal_Int32>(m_rTickInfoVector.size()) )
-        return &m_rTickInfoVector[m_nCurrentIndex];
+    if( m_nCurrentIndex < static_cast<sal_Int32>(m_aValidIndices.size()) )
+        return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
 }
 
 TickInfo* MaxLabelTickIter::nextInfo()
 {
-    sal_Int32 nMaxIndex = m_rTickInfoVector.size()-1;
-    if( m_nLongestLabelIndex >= nMaxIndex-1 )
-        m_nLongestLabelIndex = 0;
-
-    if( m_nCurrentIndex==0 )
-        m_nCurrentIndex++;
-    else if( m_nCurrentIndex==1 && m_nCurrentIndex<m_nLongestLabelIndex )
-        m_nCurrentIndex=m_nLongestLabelIndex;
-    else if( m_nCurrentIndex==m_nLongestLabelIndex )
-    {
-        if( nMaxIndex>=3 )
-            m_nCurrentIndex=nMaxIndex-1;
-        else if( nMaxIndex>=2 )
-            m_nCurrentIndex=nMaxIndex;
-    }
-    else if( m_nCurrentIndex==nMaxIndex-1 )
-        m_nCurrentIndex=nMaxIndex;
-    else
-        m_nCurrentIndex=nMaxIndex+1;
-
-    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_rTickInfoVector.size()) )
-        return &m_rTickInfoVector[m_nCurrentIndex];
+    m_nCurrentIndex++;
+    if( m_nCurrentIndex>=0 && m_nCurrentIndex<static_cast<sal_Int32>(m_aValidIndices.size()) )
+        return &m_rTickInfoVector[m_aValidIndices[m_nCurrentIndex]];
     return 0;
 }
 
