@@ -30,7 +30,7 @@ Dim TemplatePath as String
 				If PhotosDir &lt;&gt; &quot;&quot; Then
 					TemplatePath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/web/&quot;)
 					If TemplatePath &lt;&gt; &quot;&quot; Then
-						SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;wizard/bitmap&quot;)
+						SOBitmapPath = GetOfficeSubPath(&quot;Template&quot;, &quot;../wizard/bitmap&quot;)
 						If SOBitmapPath &lt;&gt; &quot;&quot; Then
 							GetWebwizardPaths() = True
 							Exit Function
