@@ -400,7 +400,6 @@ public:
     SAL_DLLPRIVATE void         ImplInitClipRegion();
     SAL_DLLPRIVATE bool         ImplSelectClipRegion( const Region&, SalGraphics* pGraphics = NULL );
     SAL_DLLPRIVATE void         ImplSetClipRegion( const Region* pRegion );
-    SAL_DLLPRIVATE void         ImplSetTriangleClipRegion( const PolyPolygon &rPolyPolygon );
 
     SAL_DLLPRIVATE SalLayout*   ImplLayout( const String&, xub_StrLen nIndex,
                                             xub_StrLen nLen, const Point& rLogicPos = Point(0,0),
@@ -838,7 +837,6 @@ public:
 
     void                SetClipRegion();
     void                SetClipRegion( const Region& rRegion );
-    void                SetTriangleClipRegion( const PolyPolygon &rRegion );
     Region              GetClipRegion() const;
     BOOL                IsClipRegion() const { return mbClipRegion; }
     Region              GetActiveClipRegion() const;

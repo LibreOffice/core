@@ -341,21 +341,8 @@ namespace vclcanvas
                         else
 #endif
                         {
-                            // redraw is direcly on the front buffer,
-                            // or using alpha blending - cannot use
-                            // XOR, thus, employing the still somewhat
-                            // speedier triangle clip method
-                            ::basegfx::B2DPolygon aTriangulatedClip(::basegfx::triangulator::triangulate(aClipPoly));
-
-                            // restrict the clipping area to the visible portion of the output device.
-                            Size aSize(rTargetSurface.GetOutputSizePixel());
-                            ::basegfx::B2DRange aOutputRect(::basegfx::B2DPoint(0,0),::basegfx::B2DPoint(aSize.Width(),aSize.Height()));
-                            ::basegfx::B2DPolygon aClippedClip(::basegfx::tools::clipTriangleListOnRange(aTriangulatedClip,aOutputRect));
-
-                            // #i76339#
-                            const Polygon aPoly(aClippedClip);
-                            const PolyPolygon aPolyPoly(aPoly);
-                            rTargetSurface.SetTriangleClipRegion(aPolyPoly);
+                            Region aClipRegion( aClipPoly );
+                            rTargetSurface.SetClipRegion( aClipRegion );
                         }
                     }
                 }
