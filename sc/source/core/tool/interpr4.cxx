@@ -1234,7 +1234,7 @@ void ScInterpreter::DoubleRefToVars( const ScToken* p,
     const ScComplexRefData& rCRef = p->GetDoubleRef();
     SingleRefToVars( rCRef.Ref1, rCol1, rRow1, rTab1);
     SingleRefToVars( rCRef.Ref2, rCol2, rRow2, rTab2);
-    if ( !pDok->aTableOpList.empty() > 0 && !bDontCheckForTableOp )
+    if ( !pDok->aTableOpList.empty() && !bDontCheckForTableOp )
     {
         ScRange aRange( rCol1, rRow1, rTab1, rCol2, rRow2, rTab2 );
         if ( IsTableOpInRange( aRange ) )
@@ -1319,7 +1319,7 @@ void ScInterpreter::DoubleRefToRange( const ScComplexRefData & rCRef,
     rRange.aStart.Set( nCol, nRow, nTab );
     SingleRefToVars( rCRef.Ref2, nCol, nRow, nTab);
     rRange.aEnd.Set( nCol, nRow, nTab );
-    if (! pDok->aTableOpList.empty() > 0 && !bDontCheckForTableOp )
+    if (! pDok->aTableOpList.empty() && !bDontCheckForTableOp )
     {
         if ( IsTableOpInRange( rRange ) )
             SetError( errIllegalParameter );
