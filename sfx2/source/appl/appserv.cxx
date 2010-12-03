@@ -28,9 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <com/sun/star/uno/Reference.hxx>
-#ifndef _COM_SUN_STAR_LANG_XMultiServiceFactory_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
@@ -40,9 +38,7 @@
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
-#ifndef _COM_SUN_STAR_UTIL_CloseVetoException_HPP_
 #include <com/sun/star/util/CloseVetoException.hpp>
-#endif
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -133,6 +129,7 @@
 #include <sfx2/dialogs.hrc>
 #include "sorgitm.hxx"
 #include "sfx2/sfxhelp.hxx"
+#include <tools/svlibrary.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -749,9 +746,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 ::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -771,9 +766,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 void MacroOrganizer( INT16 nTabId )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(

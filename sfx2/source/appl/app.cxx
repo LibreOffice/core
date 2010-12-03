@@ -112,6 +112,7 @@
 #include "sfx2/stbitem.hxx"
 #include "eventsupplier.hxx"
 #include <sfx2/dockwin.hxx>
+#include <tools/svlibrary.hxx>
 
 #ifdef DBG_UTIL
 #include <sfx2/tbxctrl.hxx>
@@ -725,9 +726,7 @@ extern "C" { static void SAL_CALL thisModule() {} }
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
@@ -816,9 +815,7 @@ SfxApplication::ChooseScript()
 void SfxApplication::MacroOrganizer( INT16 nTabId )
 {
     // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
     // load module
     oslModule handleMod = osl_loadModuleRelative(
