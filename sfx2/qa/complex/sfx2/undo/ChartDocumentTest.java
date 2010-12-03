@@ -93,36 +93,11 @@ public class ChartDocumentTest implements DocumentTest
         XChartDocument chartDoc = UnoRuntime.queryInterface( XChartDocument.class, shapeProps.getPropertyValue( "Model" ) );
         m_chartDocument = new OfficeDocument( i_orb, chartDoc );
 
+        // actually activate the object
         final XEmbeddedObject embeddedChart = UnoRuntime.queryInterface( XEmbeddedObject.class,
             shapeProps.getPropertyValue( "EmbeddedObject" ) );
-        final XStateChangeBroadcaster stateBroadcaster = UnoRuntime.queryInterface( XStateChangeBroadcaster.class, embeddedChart );
-        stateBroadcaster.addStateChangeListener( new ChartStateListener() );
+        embeddedChart.doVerb( EmbedVerbs.MS_OLEVERB_SHOW );
 
-        // activate the chart
-        selSupplier.select( shape );
-
-        // some Writer-internal processes, which are a pre-condition for being able to successfully dispatch
-        // the ObjectMenu command, run asynchronously, without a chance of being notified when they're finished :(
-        // So, wait a little, again ...
-        synchronized ( embeddedChart ) { embeddedChart.wait( 500 ); }
-        // ... and check if those processes are finished
-        final VerbDescriptor[] verbs = embeddedChart.getSupportedVerbs();
-        boolean canActivate = true;
-        for ( int i=0; i<verbs.length && !canActivate; ++i )
-            if ( verbs[i].VerbID == EmbedVerbs.MS_OLEVERB_SHOW )
-                canActivate = true;
-        assertTrue( "cannot activate OLE object", canActivate );
-
-        // actually activate the object
-        //embeddedChart.doVerb( EmbedVerbs.MS_OLEVERB_SHOW );
-            // if we could use XEmbeddedObject.setVerb, then we would not need the "select" thingie above, and also
-            // the asynchronous dispatch below would not be necessary.
-            // Sadly, doVerb at the moment reliably deadlocks ... :(
-
-        m_textDocument.getCurrentView().dispatch( ".uno:ObjectMenue", new NamedValue[] { new NamedValue( "VerbID", EmbedVerbs.MS_OLEVERB_SHOW ) } );
-
-        // the dispatch happens asynchronously, so wait a little (at most 1 seconds) until the chart really has been activated
-        synchronized ( m_chartActivatedCondition ) { m_chartActivatedCondition.wait( 1000 ); }
         final int state = embeddedChart.getCurrentState();
         if ( state != EmbedStates.UI_ACTIVE )
             fail( "unable to activate the embedded chart" );
@@ -297,26 +272,6 @@ public class ChartDocumentTest implements DocumentTest
         private final Object        m_newValue;
     }
 
-    private class ChartStateListener implements XStateChangeListener
-    {
-        public void changingState( EventObject i_event, int i_oldState, int i_newState ) throws WrongStateException
-        {
-        }
-
-        public void stateChanged( EventObject i_event, int i_oldState, int i_newState )
-        {
-            if ( i_newState != EmbedStates.UI_ACTIVE )
-                return;
-            synchronized ( m_chartActivatedCondition )
-            {
-                m_chartActivatedCondition.notifyAll();
-            }
-        }
-
-        public void disposing( EventObject i_event ) { }
-    };
-
     private final OfficeDocument    m_textDocument;
     private final OfficeDocument    m_chartDocument;
-    private final Object            m_chartActivatedCondition = new Object();
 }
