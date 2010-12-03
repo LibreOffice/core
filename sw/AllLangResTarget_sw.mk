@@ -134,6 +134,7 @@ $(eval $(call gb_SrsTarget_add_files,sw/res,\
     sw/source/ui/frmdlg/cption.src \
     sw/source/ui/frmdlg/frmpage.src \
     sw/source/ui/frmdlg/frmui.src \
+    sw/source/ui/frmdlg/wrap.src \
     sw/source/ui/globdoc/globdoc.src \
     sw/source/ui/index/cnttab.src \
     sw/source/ui/index/idxmrk.src \
