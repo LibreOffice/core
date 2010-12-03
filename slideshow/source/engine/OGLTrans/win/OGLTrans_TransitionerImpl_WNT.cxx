@@ -1,11 +1,13 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: OGLTrans_TransitionerImpl.cxx,v $
+ * $Revision: 1.6 $
  *
  * This file is part of OpenOffice.org.
  *
@@ -53,34 +55,15 @@
 #include <tools/gen.hxx>
 #include <vcl/window.hxx>
 #include <vcl/syschild.hxx>
+#include <vcl/sysdata.hxx>
 
 #include <boost/noncopyable.hpp>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-
-#if defined( WNT )
-    #include <tools/prewin.h>
-    #include <windows.h>
-    #include <tools/postwin.h>
-    #define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
-    #define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
-#elif defined( OS2 )
-#elif defined( QUARTZ )
-    #include "premac.h"
-    #include <Cocoa/Cocoa.h>
-    #include "postmac.h"
-#elif defined( UNX )
-namespace unx
-{
-#include <X11/keysym.h>
-#include <X11/X.h>
-#include <GL/glx.h>
-#include <GL/glxext.h>
-}
-#endif
-#include <vcl/sysdata.hxx>
+#define GL_TEXTURE_MAX_ANISOTROPY_EXT 0x84FE
+#define GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT 0x84FF
 
 #ifdef DEBUG
 #include <boost/date_time/posix_time/posix_time.hpp>
@@ -211,22 +194,9 @@ private:
     /// Holds the information of our new child window
     struct GLWindow
     {
-#if defined( WNT )
     HWND                    hWnd;
     HDC                     hDC;
     HGLRC                   hRC;
-#elif defined( OS2 )
-#elif defined( QUARTZ )
-#elif defined( UNX )
-    unx::Display*           dpy;
-    int                     screen;
-    unx::Window             win;
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    unx::GLXFBConfig        fbc;
-#endif
-    unx::XVisualInfo*       vi;
-    unx::GLXContext         ctx;
-#endif
         unsigned int            bpp;
         unsigned int            Width;
         unsigned int            Height;
@@ -1211,9 +1181,6 @@ void OGLTransitionerImpl::disposeContextAndWindow()
 
 void OGLTransitionerImpl::disposeTextures()
 {
-    if( !GLWin.ctx )
-        return;
-
 #ifdef WNT
     wglMakeCurrent(GLWin.hDC,GLWin.hRC);
 #endif
@@ -1311,21 +1278,11 @@ OGLTransitionerImpl::OGLTransitionerImpl(OGLTransitionImpl* pOGLTransition) :
     GLenteringSlide( 0 ),
     pWindow( NULL ),
     mxView(),
-    mxLeavingBitmap(),
-    mxEnteringBitmap(),
     EnteringBytes(),
     LeavingBytes(),
-#if defined( GLX_VERSION_1_3 ) && defined( GLX_EXT_texture_from_pixmap )
-    LeavingPixmap(0),
-    EnteringPixmap(0),
-#endif
     mbRestoreSync( false ),
     mbUseLeavingPixmap( false ),
     mbUseEnteringPixmap( false ),
-    mbFreeLeavingPixmap( false ),
-    mbFreeEnteringPixmap( false ),
-    maLeavingPixmap(0),
-    maEnteringPixmap(0),
     SlideBitmapLayout(),
     SlideSize(),
     pTransition(pOGLTransition)
@@ -1496,5 +1453,3 @@ namespace sdecl = comphelper::service_decl;
 
 // The C shared lib entry points
 COMPHELPER_SERVICEDECL_EXPORTS1(OGLTransitionFactoryDecl)
-
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

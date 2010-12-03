@@ -1,11 +1,13 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
- * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2008 by Sun Microsystems, Inc.
  *
  * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * $RCSfile: $
+ * $Revision: $
  *
  * This file is part of OpenOffice.org.
  *
@@ -36,9 +38,9 @@ namespace unx
 #include <GL/glxext.h>
 }
 
-#ifdef GL_VERSION_2_0
-
 bool OGLShaders::cbInitialized = false;
+
+#ifdef GL_VERSION_2_0
 
 PFNGLCREATESHADERPROC OGLShaders::glCreateShader = NULL;
 PFNGLSHADERSOURCEPROC OGLShaders::glShaderSource = NULL;
@@ -139,4 +141,3 @@ GLuint OGLShaders::LinkProgram( const char *vertexShader, const char *fragmentSh
 #endif
 }
 
-/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
