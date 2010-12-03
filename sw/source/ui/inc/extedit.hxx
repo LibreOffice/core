@@ -28,11 +28,23 @@
 #include <osl/process.h>
 #include <vcl/graph.hxx>
 #include <svtools/grfmgr.hxx>
+#include <wrtsh.hxx>
+#include <vcl/timer.hxx>
 
-class ExternalProcessClass_Impl;
-struct ThreadData;
-struct ExternalEvent;
+struct Data
+{
+    GraphicObject *pGraphicObject;
+    rtl::OUString fileName;
+    SwWrtShell *rSh ;
+};
 
-void EditWithExternalTool(GraphicObject *pGraphic);
+class ExternalProcessClass_Impl
+{
+    public:
+        DECL_LINK( CloseEvent, void *pEvent );
+        DECL_LINK( StartListeningEvent, void *pEvent );
+};
+
+void EditWithExternalTool(GraphicObject *pGraphic, SwWrtShell *rSh);
 
 #endif

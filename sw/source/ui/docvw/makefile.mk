@@ -51,6 +51,7 @@ SLOFILES =  \
         $(SLO)$/edtwin2.obj \
         $(SLO)$/edtwin3.obj \
         $(SLO)$/romenu.obj \
+        $(SLO)$/extedit.obj \
         $(SLO)$/srcedtw.obj \
                 $(SLO)$/PostItMgr.obj \
                 $(SLO)$/frmsidebarwincontainer.obj \

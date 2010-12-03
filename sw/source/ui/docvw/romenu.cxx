@@ -77,6 +77,24 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::sfx2;
 
+void GetPreferedExtension( String &rExt, const Graphic &rGrf )
+{
+    // dann ggfs. ueber die native-Info der Grafik den "besten"
+    // Filter vorschlagen
+    const sal_Char* pExt = "png";
+    switch( const_cast<Graphic&>(rGrf).GetLink().GetType() )
+    {
+        case GFX_LINK_TYPE_NATIVE_GIF:      pExt = "gif"; break;
+        case GFX_LINK_TYPE_NATIVE_TIF:      pExt = "tif"; break;
+        case GFX_LINK_TYPE_NATIVE_WMF:      pExt = "wmf"; break;
+        case GFX_LINK_TYPE_NATIVE_MET:      pExt = "met"; break;
+        case GFX_LINK_TYPE_NATIVE_PCT:      pExt = "pct"; break;
+        case GFX_LINK_TYPE_NATIVE_JPG:      pExt = "jpg"; break;
+        default:; //prevent warning
+    }
+    rExt.AssignAscii( pExt );
+}
+
 SwReadOnlyPopup::~SwReadOnlyPopup()
 {
     String *pDel = (String*)aThemeList.First();
@@ -427,7 +445,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
 
     String aExt( aURL.GetExtension() );
     if( !aExt.Len() )
-        lcl_GetPreferedExtension( aExt, rGraphic );
+        GetPreferedExtension( aExt, rGraphic );
 
     aExt.ToLowerAscii();
     USHORT nDfltFilter = USHRT_MAX;
@@ -443,7 +461,7 @@ String ExportGraphic( const Graphic &rGraphic, const String &rGrfName )
     if ( USHRT_MAX == nDfltFilter )
     {
         //"falsche" Extension?
-        lcl_GetPreferedExtension( aExt, rGraphic );
+        GetPreferedExtension( aExt, rGraphic );
         for ( USHORT i = 0; i < nCount; ++i )
             if ( aExt == rGF.GetExportFormatShortName( i ).ToLowerAscii() )
             {

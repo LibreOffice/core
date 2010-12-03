@@ -122,7 +122,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             GraphicObject *pGraphicObject = (GraphicObject *) rSh.GetGraphicObj();
             if(0 != pGraphicObject)
             {
-              EditWithExternalTool(pGraphicObject);
+                EditWithExternalTool(pGraphicObject, &rSh);
             }
         }
         break;
