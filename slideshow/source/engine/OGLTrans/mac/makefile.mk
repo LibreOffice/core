@@ -31,10 +31,14 @@
 
 PRJ=..$/..$/..$/..
 
-.IF "$(ENABLE_OPENGL)" != "TRUE" || "$(OS)" != "MACOSX"
+.IF "$(OS)" != "MACOSX"
+all:
+    @echo "Nothing to build for this platform"
+.ELIF "$(ENABLE_OPENGL)" != "TRUE"
 all:
     @echo "Building without OpenGL transitions"
 .ENDIF
+
 
 PRJNAME=slideshow
 TARGET=OGLTrans
