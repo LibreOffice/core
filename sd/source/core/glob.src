@@ -122,23 +122,23 @@ String STR_PRESOBJ_MPNOTESTITLE
 };
 String STR_PRESOBJ_MPNOTESTEXT
 {
-    Text [ en-US ] = "Double-click to edit the notes format" ;
+    Text [ en-US ] = "Click to edit the notes format" ;
 };
 String STR_PRESOBJ_TITLE
 {
-    Text [ en-US ] = "Double-click to add title" ;
+    Text [ en-US ] = "Click to add title" ;
 };
 String STR_PRESOBJ_OUTLINE
 {
-    Text [ en-US ] = "Double-click to add text" ;
+    Text [ en-US ] = "Click to add text" ;
 };
 String STR_PRESOBJ_TEXT
 {
-    Text [ en-US ] = "Double-click to add text" ;
+    Text [ en-US ] = "Click to add text" ;
 };
 String STR_PRESOBJ_NOTESTEXT
 {
-    Text [ en-US ] = "Double-click to add notes" ;
+    Text [ en-US ] = "Click to add notes" ;
 };
 String STR_PRESOBJ_GRAPHIC
 {
