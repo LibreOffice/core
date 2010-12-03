@@ -126,11 +126,10 @@ ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseU
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
     ScHTMLTableStackEntry* pS;
-    size_t ListSize = maList.size();
     while ( (pS = aTableStack.Pop()) != 0 )
     {
         bool found = false;
-        for ( size_t i = 0; i < ListSize; ++i )
+        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
         {
             if ( pS->pCellEntry == maList[ i ] )
             {
@@ -408,8 +407,7 @@ void ScHTMLLayoutParser::Adjust()
     SCROW nCurRow = 0;
     USHORT nPageWidth = (USHORT) aPageSize.Width();
     Table* pTab = NULL;
-    size_t ListSize = maList.size();
-    for ( size_t i = 0; i < ListSize; ++i )
+    for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
     {
         ScEEParseEntry* pE = maList[ i ];
         if ( pE->nTab < nTab )
@@ -551,8 +549,7 @@ void ScHTMLLayoutParser::SetWidths()
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
         nTableWidth = (USHORT)((*pLocalColOffset)[pLocalColOffset->Count() -1 ] - (*pLocalColOffset)[0]);
-        size_t ListSize = maList.size();
-        for ( size_t i = nFirstTableCell; i < ListSize; ++i )
+        for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
         {
             pE = maList[ i ];
             if ( pE->nTab == nTable )
@@ -572,8 +569,7 @@ void ScHTMLLayoutParser::SetWidths()
             USHORT* pWidths = new USHORT[ nColsPerRow ];
             memset( pWidths, 0, nColsPerRow * sizeof(USHORT) );
             pOffsets[0] = nColOffsetStart;
-            size_t ListSize = maList.size();
-            for ( size_t i = nFirstTableCell; i < ListSize; ++i )
+            for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
                 pE = maList[ i ];
                 if ( pE->nTab == nTable && pE->nWidth )
@@ -644,8 +640,7 @@ void ScHTMLLayoutParser::SetWidths()
             }
             nTableWidth = pOffsets[nColsPerRow] - pOffsets[0];
 
-            ListSize = maList.size();
-            for ( size_t i = nFirstTableCell; i < ListSize; ++i )
+            for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
             {
                 pE = maList[ i ];
                 if ( pE->nTab == nTable )
@@ -673,8 +668,7 @@ void ScHTMLLayoutParser::SetWidths()
         if ( aPageSize.Width() < nMax )
             aPageSize.Width() = nMax;
     }
-    size_t ListSize = maList.size();
-    for ( size_t i = nFirstTableCell; i < ListSize; ++i )
+    for ( size_t i = nFirstTableCell, nListSize = maList.size(); i < nListSize; ++i )
     {
         pE = maList[ i ];
         if ( pE->nTab == nTable )
@@ -725,9 +719,8 @@ void ScHTMLLayoutParser::CloseEntry( ImportInfo* pInfo )
     if ( bTabInTabCell )
     {   // in TableOff vom Stack geholt
         bTabInTabCell = FALSE;
-        size_t ListSize = maList.size();
         bool found = false;
-        for ( size_t i = 0; i < ListSize; ++i )
+        for ( size_t i = 0, nListSize = maList.size(); i < nListSize; ++i )
         {
             if ( pActEntry == maList[ i ] )
             {
