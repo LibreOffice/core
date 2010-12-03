@@ -49,7 +49,7 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Common ----------------------------------------------------------
 
 SLOFILES = \
-    $(SLO)$/OGLTrans_TransitionImpl_$(OS).obj \
+    $(SLO)$/OGLTrans_TransitionImpl.obj \
     $(SLO)$/OGLTrans_Shaders_$(OS).obj \
     $(SLO)$/OGLTrans_TransitionerImpl_$(OS).obj
 
