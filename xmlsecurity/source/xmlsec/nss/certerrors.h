@@ -370,7 +370,7 @@ an existing cert, but that is not the same cert."},
 
 {SEC_ERROR_BAD_INFO_ACCESS_LOCATION, "Bad information access location in cert extension"},
 
-{SEC_ERROR_LIBPKIX_INTERNAL, "Libpkix internal error occured during cert validation."},
+{SEC_ERROR_LIBPKIX_INTERNAL, "Libpkix internal error occurred during cert validation."},
 
 #if ( NSS_VMAJOR > 3 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR > 12 ) || ( NSS_VMAJOR == 3 && NSS_VMINOR == 12 && NSS_VPATCH > 2 )
 // following 3 errors got first used in NSS 3.12.3

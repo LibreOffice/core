@@ -149,7 +149,7 @@ static string xml_encode( const string &rString )
     string temp = rString;
     string::size_type pos = 0;
 
-    // First replace all occurences of '&' because it may occur in further
+    // First replace all occurrences of '&' because it may occur in further
     // encoded chardters too
 
     for( pos = 0; (pos = temp.find( '&', pos )) != string::npos; pos += 4 )

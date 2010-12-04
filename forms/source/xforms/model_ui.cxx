@@ -139,7 +139,7 @@ void lcl_OutPosition( OUStringBuffer& rBuffer,
 {
     OSL_ENSURE( xNode->getParentNode().is(), "need parent" );
 
-    // count # of occurences of this node
+    // count # of occurrences of this node
     sal_Int32 nFound = 0;
     sal_Int32 nPosition = -1;
     if( xNode->getParentNode().is() )

@@ -982,7 +982,7 @@ PluginInputStream::~PluginInputStream()
     {
         ByteString aFileName( aFile, m_pPlugin->getTextEncoding() );
         if( m_pPlugin->getPluginComm() && m_nMode != -1 )
-            // mode -1 means either an error occured,
+            // mode -1 means either an error occurred,
             // or the plugin is already disposing
         {
             m_pPlugin->getPluginComm()->addFileToDelete( aFile );

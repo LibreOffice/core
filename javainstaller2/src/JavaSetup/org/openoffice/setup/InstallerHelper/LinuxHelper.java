@@ -111,7 +111,7 @@ import java.util.Vector;public class LinuxHelper {
 
     private HashMap analyzeVersionString(String versionString) {
 
-        boolean errorOccured = false;
+        boolean errorOccurred = false;
 
         Integer micro = null;
         Integer minor = null;
@@ -131,14 +131,14 @@ import java.util.Vector;public class LinuxHelper {
                 versionString = versionString.substring(0, pos);
             } catch (IndexOutOfBoundsException ex) {
                 System.err.println("Error: Could not get substring from " + versionString);
-                errorOccured = true;
+                errorOccurred = true;
             }
             try {
                 int releaseInt = Integer.parseInt(releaseString);
                 release = new Integer(releaseInt);
             } catch (NumberFormatException ex) {
                 System.err.println("Error: Could not convert " + releaseString + " to integer");
-                errorOccured = true;
+                errorOccurred = true;
             }
         }
 
@@ -166,7 +166,7 @@ import java.util.Vector;public class LinuxHelper {
                 versionString = versionString.substring(0, pos);
             } catch (IndexOutOfBoundsException ex) {
                 System.err.println("Error: Could not get substring from " + versionString);
-                errorOccured = true;
+                errorOccurred = true;
             }
 
             pos = versionString.lastIndexOf(".");
@@ -176,7 +176,7 @@ import java.util.Vector;public class LinuxHelper {
                     majorString = versionString.substring(0, pos);
                 } catch (IndexOutOfBoundsException ex) {
                     System.err.println("Error: Could not get substring from " + versionString);
-                    errorOccured = true;
+                    errorOccurred = true;
                 }
                 try {
                     int microInt = Integer.parseInt(microString);
@@ -188,7 +188,7 @@ import java.util.Vector;public class LinuxHelper {
                 } catch (NumberFormatException ex) {
                     System.err.println("Error: Could not convert " + microString + "," +
                                        minorString + " or " + majorString + " to integer");
-                    errorOccured = true;
+                    errorOccurred = true;
                 }
             }
         }
@@ -199,7 +199,7 @@ import java.util.Vector;public class LinuxHelper {
         // if ( minorString == null ) { minorString = ""; }
         // System.err.println("Major " + majorString + " Minor: " + minorString + " Micro: " + microString + " Release: " + releaseString);
 
-        if ( errorOccured ) {
+        if ( errorOccurred ) {
             micro = null;
             minor = null;
             major = null;

@@ -86,7 +86,7 @@ IMPL_LINK( FmShowColsDialog, OnClickedOk, Button*, EMPTYARG )
                 }
                 catch(...)
                 {
-                    DBG_ERROR("FmShowColsDialog::OnClickedOk Exception occured!");
+                    DBG_ERROR("FmShowColsDialog::OnClickedOk Exception occurred!");
                 }
             }
         }
@@ -124,7 +124,7 @@ void FmShowColsDialog::SetColumns(const ::com::sun::star::uno::Reference< ::com:
         }
         catch(...)
         {
-            DBG_ERROR("FmShowColsDialog::SetColumns Exception occured!");
+            DBG_ERROR("FmShowColsDialog::SetColumns Exception occurred!");
         }
 
         // if the col is hidden, put it into the list

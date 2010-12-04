@@ -99,7 +99,7 @@ public:
             sal_Int16   _nWhitespaceTreatment
     );
 
-    /** replace all occurences 0x08, 0x0A, 0x0D with 0x20
+    /** replace all occurrences 0x08, 0x0A, 0x0D with 0x20
     */
     static ::rtl::OUString replaceWhitespace( const ::rtl::OUString& _rString );
 

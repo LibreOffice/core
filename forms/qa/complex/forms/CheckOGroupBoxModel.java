@@ -88,13 +88,13 @@ public class CheckOGroupBoxModel extends ComplexTestCase {
             xPropSet.setPropertyValues(boundPropsToTest, newValue);
         } catch (com.sun.star.beans.PropertyVetoException e) {
             e.printStackTrace((PrintWriter)log);
-            failed("Exception occured while trying to change the properties.");
+            failed("Exception occurred while trying to change the properties.");
         } catch (com.sun.star.lang.IllegalArgumentException e) {
             e.printStackTrace((PrintWriter)log);
-            failed("Exception occured while trying to change the properties.");
+            failed("Exception occurred while trying to change the properties.");
         } catch (com.sun.star.lang.WrappedTargetException e) {
             e.printStackTrace((PrintWriter)log);
-            failed("Exception occured while trying to change the properties.");
+            failed("Exception occurred while trying to change the properties.");
         } // end of try-catch
 
         assure("Listener was not called.", ml.wasListenerCalled());

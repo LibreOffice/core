@@ -1576,7 +1576,7 @@ BOOL SFTreeListBox::dialogSort2( Reference< browse::XBrowseNode > node1,
     }
     else if ( aException.getValueType() == ::getCppuType( ( const provider::ScriptFrameworkErrorException* ) NULL ) )
     {
-        // A Script Framework error has occured
+        // A Script Framework error has occurred
         provider::ScriptFrameworkErrorException sfe;
         aException >>= sfe;
         return GetErrorMessage( sfe );

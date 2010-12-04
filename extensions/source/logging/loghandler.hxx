@@ -123,13 +123,13 @@ namespace logging
 
         /** retrieves our formatter's heading, encoded with our encoding
 
-            @return <TRUE/> in case of success, <FALSE/> if any error occured
+            @return <TRUE/> in case of success, <FALSE/> if any error occurred
         */
         bool    getEncodedHead( ::rtl::OString& _out_rHead ) const;
 
         /** retrieves our formatter's tail, encoded with our encoding
 
-            @return <TRUE/> in case of success, <FALSE/> if any error occured
+            @return <TRUE/> in case of success, <FALSE/> if any error occurred
         */
         bool    getEncodedTail( ::rtl::OString& _out_rTail ) const;
 

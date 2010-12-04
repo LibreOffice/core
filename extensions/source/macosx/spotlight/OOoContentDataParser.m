@@ -110,7 +110,7 @@
 - (void)parser:(NSXMLParser *)parser parseErrorOccurred:(NSError *)parseError
 {
     //NSLog(@"parsing finished with error");
-    NSLog([NSString stringWithFormat:@"An error occured parsing the document. (Error %i, Description: %@, Line: %i, Column: %i)", [parseError code], 
+    NSLog([NSString stringWithFormat:@"An error occurred parsing the document. (Error %i, Description: %@, Line: %i, Column: %i)", [parseError code], 
         [[parser parserError] localizedDescription], [parser lineNumber],
         [parser columnNumber]]);
     

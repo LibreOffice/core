@@ -267,7 +267,7 @@ String RID_SVXSTR_EVENT_CONFIRMDELETE
 {
     Text [ en-US ] = "Confirm deletion" ;
 };
-String RID_SVXSTR_EVENT_ERROROCCURED
+String RID_SVXSTR_EVENT_ERROROCCURRED
 {
     Text [ en-US ] = "Error occurred" ;
 };

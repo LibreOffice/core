@@ -124,8 +124,8 @@ public class Controller {
             // }
 
             installData.setSystemLanguages(realVector);
-        } else {    // an error occured
-            log = pkgCommand + "<br><b>Returns: " + returnValue + " An error occured</b><br>";
+        } else {    // an error occurred
+            log = pkgCommand + "<br><b>Returns: " + returnValue + " An error occurred</b><br>";
             LogManager.addCommandsLogfileComment(log);
             System.err.println("Error in command: " + pkgCommand);
             for (int i = 0; i < returnErrorVector.size(); i++) {

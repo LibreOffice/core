@@ -94,17 +94,17 @@ Java_org_openoffice_accessibility_WindowsAccessBridgeAdapter_getProcessID(JNIEnv
     g_jcWindowsAccessBridgeAdapter =
         static_cast< jclass > (pJNIEnv->NewGlobalRef(clazz));
     if (NULL == g_jcWindowsAccessBridgeAdapter) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
     g_jmRegisterTopWindow =
         pJNIEnv->GetStaticMethodID(clazz, "registerTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRegisterTopWindow) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
     g_jmRevokeTopWindow =
         pJNIEnv->GetStaticMethodID(clazz, "revokeTopWindow", "(ILcom/sun/star/accessibility/XAccessible;)V");
     if (0 == g_jmRevokeTopWindow) {
-        return 0; /* jni error occured */
+        return 0; /* jni error occurred */
     }
 
     // Use the special protocol of XJavaVM.getJavaVM:  If the passed in
@@ -284,7 +284,7 @@ void handleWindowEvent(Window * pWindow, bool bShow)
                         (bShow) ? g_jmRegisterTopWindow : g_jmRevokeTopWindow,
                         (jint) GetHWND(pWindow), joXAccessible );
 
-                    // Clear any exception that might have been occured.
+                    // Clear any exception that might have been occurred.
                     if (pJNIEnv->ExceptionCheck()) {
                         pJNIEnv->ExceptionClear();
                     }

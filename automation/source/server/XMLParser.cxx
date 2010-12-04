@@ -622,11 +622,11 @@ void StatementCommand::HandleSAXParser()
                     }
                     else if ( pElementNode )
                     {
-                        USHORT nNthOccurance;
+                        USHORT nNthOccurrence;
                         if( (nParams & PARAM_USHORT_1) )
-                            nNthOccurance = nNr1;
+                            nNthOccurrence = nNr1;
                         else
-                            nNthOccurance = 1;
+                            nNthOccurrence = 1;
 
                         USHORT i;
                         NodeRef xNew;
@@ -638,10 +638,10 @@ void StatementCommand::HandleSAXParser()
                                 ElementNode* pNewElement = (ElementNode*)(&xNew);
                                 if ( aString1.Equals( pNewElement->GetNodeName() ) )
                                 {
-                                    if ( nNthOccurance > 1 )
+                                    if ( nNthOccurrence > 1 )
                                     {
                                         xNew.Clear();
-                                        nNthOccurance--;
+                                        nNthOccurrence--;
                                     }
                                 }
                                 else

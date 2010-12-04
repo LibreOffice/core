@@ -775,7 +775,7 @@ String RID_STR_EVT_CONFIRMDELETE
 {
     Text [ en-US ] = "Confirm deletion" ;
 };
-String RID_STR_EVT_ERROROCCURED
+String RID_STR_EVT_ERROROCCURRED
 {
     Text [ en-US ] = "Error occurred" ;
 };
