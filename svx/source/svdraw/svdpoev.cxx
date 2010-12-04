@@ -571,7 +571,7 @@ void SdrPolyEditView::CloseMarkedObjects(BOOL bToggle, BOOL bOpen) // , long nOp
             SdrMark* pM=GetSdrMarkByIndex(nm);
             SdrObject* pO=pM->GetMarkedSdrObj();
             BOOL bClosed=pO->IsClosedObj();
-            if (pO->IsPolyObj() && (bClosed==bOpen) || bToggle)
+            if ((pO->IsPolyObj() && (bClosed==bOpen)) || bToggle)
             {
                 if( bUndo )
                     AddUndo(GetModel()->GetSdrUndoFactory().CreateUndoGeoObject(*pO));
