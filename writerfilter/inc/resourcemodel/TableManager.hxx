@@ -542,7 +542,7 @@ public:
     virtual void props(PropertiesPointer pProps);
 
     /**
-       Handle occurance of character 0x7.
+       Handle occurrence of character 0x7.
      */
     virtual void handle0x7();
 

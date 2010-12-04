@@ -288,7 +288,7 @@ $path_h = 1;
     201 => 'hostControl', # should not be used
     202 => 'textBox'
 );
-# An error occured, we have to ignore this shape
+# An error occurred, we have to ignore this shape
 sub error( $ )
 {
     my ( $msg ) = @_;

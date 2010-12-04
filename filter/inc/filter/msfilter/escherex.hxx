@@ -312,7 +312,7 @@
 
 enum ESCHER_BlibType
 {                           // GEL provided types...
-   ERROR = 0,               // An error occured during loading
+   ERROR = 0,               // An error occurred during loading
    UNKNOWN,                 // An unknown blip type
    EMF,                     // Windows Enhanced Metafile
    WMF,                     // Windows Metafile

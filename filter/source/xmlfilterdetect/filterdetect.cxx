@@ -187,7 +187,7 @@ Reference< com::sun::star::frame::XModel > xModel;
         }
         catch(Exception &)
         {
-                 OSL_ENSURE( sal_False, "An Exception occured while opening File stream" );
+                 OSL_ENSURE( sal_False, "An Exception occurred while opening File stream" );
         }
         if(sTypeName.equalsAscii(""))
         {

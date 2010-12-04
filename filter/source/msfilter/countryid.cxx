@@ -331,7 +331,7 @@ CountryId ConvertLanguageToCountry( LanguageType eLanguage )
 
 LanguageType ConvertCountryToLanguage( CountryId eCountry )
 {
-    // just find the first occurance of eCountry and return the language type
+    // just find the first occurrence of eCountry and return the language type
     const CountryEntry* pEntry = std::find_if( pTable, pEnd, CountryEntryPred_Country( eCountry ) );
     return (pEntry != pEnd) ? pEntry->meLanguage : LANGUAGE_DONTKNOW;
 }

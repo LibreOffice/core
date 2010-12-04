@@ -724,7 +724,7 @@ void SectionPropertyMap::CopyLastHeaderFooter( bool bFirstPage, DomainMapper_Imp
         catch ( const uno::Exception& e )
         {
 #if DEBUG
-            clog << "An exception occured in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
+            clog << "An exception occurred in SectionPropertyMap::CopyLastHeaderFooter( ) - ";
             clog << rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr( ) << endl;
 #endif
         }

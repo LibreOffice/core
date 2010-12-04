@@ -182,7 +182,7 @@ TypeDetection::~TypeDetection()
 
         //*******************************************
         // if no flat detected (nor preselected!) type could be
-        // verified and no error occured during creation of
+        // verified and no error occurred during creation of
         // the might needed input stream, start detection
         // which uses all registered deep detection services.
         if (
@@ -741,7 +741,7 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
     // a) no types                                => no detection
     // b) deep detection not allowed              => return first valid type of list (because its the preferred or the first valid one)
     //    or(!) match by URLPattern               => in such case a deep detection will be supressed!
-    // c) type has no detect service              => safe the first occured type without a detect service
+    // c) type has no detect service              => safe the first occurred type without a detect service
     //                                               as "last chance"(!). It will be used outside of this method
     //                                               if no further type could be detected.
     //                                               It must be the first one, because it can be a preferred type.

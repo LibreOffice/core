@@ -550,7 +550,7 @@ sal_Bool Writer::streamSound( const char * filename )
 // not the sum of the number of samples in the L and R channels.
 //
 // The return code = number of bytes output in mp3buffer.  This can be 0.
-// If it is <0, an error occured.
+// If it is <0, an error occurred.
 
 
         for (int samples_written = 0; samples_written < info.frames; samples_written += samples_per_frame)

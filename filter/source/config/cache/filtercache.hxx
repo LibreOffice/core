@@ -587,7 +587,7 @@ class FilterCache : public BaseLock
                         attributes there.
 
             @throw      [css::uno::Exception]
-                        if an internal error occured.
+                        if an internal error occurred.
                         Note: If the item is missing inside the underlying configuration
                         no exception will be thrown. In such case the item is marked as
                         finalized/mandatory automaticly
@@ -740,7 +740,7 @@ class FilterCache : public BaseLock
 
             @return     [css::uno::Any]
                         the value of the requested key.
-                        Can be empty if an internal error occured or if the requested
+                        Can be empty if an internal error occurred or if the requested
                         key does not exists!
          */
         css::uno::Any impl_getDirectCFGValue(const ::rtl::OUString& sDirectKey);
@@ -898,7 +898,7 @@ class FilterCache : public BaseLock
                     the set node name of the requested item.
 
             @return An iterator, which points directly to the new cached item.
-                    Is a valid iterator if no exception occured here!
+                    Is a valid iterator if no exception occurred here!
                     But to improve robustness - it should be checked :-)
 
             @throw  [css::container::NoSuchElementException]
