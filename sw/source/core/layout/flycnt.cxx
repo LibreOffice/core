@@ -352,7 +352,7 @@ bool SwOszControl::ChkOsz()
         {
             if ( *(pNewObjPos) == *(*aObjPosIter) )
             {
-                // position already occured -> oscillation
+                // position already occurred -> oscillation
                 bOscillationDetected = true;
                 delete pNewObjPos;
                 break;

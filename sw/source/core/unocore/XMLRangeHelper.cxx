@@ -352,7 +352,7 @@ CellRange getCellRangeFromXMLString( const OUString & rXMLString )
                 nStartPos, nEndPos - 1,
                 aResult ))
         {
-            // if an error occured, bail out
+            // if an error occurred, bail out
             return CellRange();
         }
     }

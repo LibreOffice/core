@@ -1113,7 +1113,7 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                               : pClipFrm->Frm();
                 // --> OD 2004-10-14 #i26945# - consider that a table, during
                 // its format, can exceed its upper printing area bottom.
-                // Thus, enlarge the clip rectangle, if such a case occured
+                // Thus, enlarge the clip rectangle, if such a case occurred
                 if ( pFly->GetAnchorFrm()->IsInTab() )
                 {
                     const SwTabFrm* pTabFrm = const_cast<SwFlyFrm*>(pFly)

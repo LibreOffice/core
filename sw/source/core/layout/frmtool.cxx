@@ -976,7 +976,7 @@ SwCntntNotify::~SwCntntNotify()
                         // The layout is calculated _before_ calling PrtOLENotify,
                         // and the OLE objects are not invalidated during import.
                         // Therefore I added the condition !IsUpdateExpFld,
-                        // have a look at the occurence of CalcLayout in
+                        // have a look at the occurrence of CalcLayout in
                         // uiview/view.cxx.
                         if ( !pNd->IsOLESizeInvalid() &&
                              !pSh->GetDoc()->IsUpdateExpFld() )

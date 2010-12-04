@@ -2510,7 +2510,7 @@ void SwTabFrm::MakeAll()
                         --nUnSplitted;
 
                     // --> FME 2004-06-09 #i29771# Two tries to split the table:
-                    // If an error occured during splitting. We start a second
+                    // If an error occurred during splitting. We start a second
                     // try, this time without splitting of table rows.
                     if ( bSplitError )
                     {
