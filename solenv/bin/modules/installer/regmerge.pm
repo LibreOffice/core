@@ -219,20 +219,20 @@ sub merge_files
     my $prefix = $databasefile->{'NativeServicesURLPrefix'};
     # TODO: "NativeServicesURLPrefix" or "JavaServicesURLPrefix"
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
 
     for ( my $i = 0; $i <= $#{$registerfiles}; $i++ )
     {
         my $registerfile = $databasedir . $installer::globals::separator . $i . ".tmp";
-        open (IN, '<', $registerfiles->[$i]) or $error_occured = 1;
-        open (OUT, '>', $registerfile) or $error_occured = 1;
+        open (IN, '<', $registerfiles->[$i]) or $error_occurred = 1;
+        open (OUT, '>', $registerfile) or $error_occurred = 1;
         while (<IN>)
         {
             s/^ComponentName=/ComponentName=$prefix/;
-            print OUT $_ or $error_occured = 1;
+            print OUT $_ or $error_occurred = 1;
         }
-        close IN or $error_occured = 1;
-        close OUT or $error_occured = 1;
+        close IN or $error_occurred = 1;
+        close OUT or $error_occurred = 1;
 
         my $systemcall = $regmergefile . " -v " . $databasedest . " " . $registerfile . " 2\>\&1 |";
 
@@ -271,7 +271,7 @@ sub merge_files
         {
             $infoline = "ERROR: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
-            $error_occured = 1;
+            $error_occurred = 1;
         }
         else
         {
@@ -280,7 +280,7 @@ sub merge_files
         }
     }
 
-    return $error_occured;
+    return $error_occurred;
 }
 
 ################################################################

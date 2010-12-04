@@ -1194,7 +1194,7 @@ CELLPTR prereq;
     * definitions for the %-target members are stored in the prerequisites
     * list of the master target. */
    /* This relies on target->ce_prq being NULL if this is the first
-    * occurence of this %-target and therefore not yet having a %-target
+    * occurrence of this %-target and therefore not yet having a %-target
     * master. */
    match = FALSE;
    for(edl=target->ce_prq; !match && edl != NIL(LINK); edl=edl->cl_next) {

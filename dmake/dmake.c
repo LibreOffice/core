@@ -292,7 +292,7 @@ char **argv;
                  HASHPTR hp;
                  /* This cleans the .SILENT setting */
                  hp = Def_macro(".SILENT", "", M_EXPANDED);
-                 /* This overrides the bitmask for further occurences of
+                 /* This overrides the bitmask for further occurrences of
                   * .SILENT to "no bits allowed", see bit variables in the
                   * set_macro_value() definition in dag.c.
                   * The bitmask is already set by Create_macro_vars() in

@@ -293,7 +293,7 @@ sub do_broadcast
     print "cmd_bcst -s 18 \@$tmpfile_name\n";
     unlink "$tmpfile_name";
 
-    if ( $returnvalue ) # an error occured
+    if ( $returnvalue ) # an error occurred
     {
         if (!($packager::globals::ignoreerrors)) { packager::exiter::exit_program("ERROR: Packing not successful!", "do_broadcast"); }
     }

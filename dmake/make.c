@@ -1254,7 +1254,7 @@ Exec_commands( cp )/*
 
   The function returns 0, if the command is executed and has successfully
   returned, and it returns 1 if the command is executing but has not yet
-  returned or -1 if an error occured (Return value from Do_cmnd()).
+  returned or -1 if an error occurred (Return value from Do_cmnd()).
 
   Macros that are found in recipe lines are expanded in this function, in
   parallel builds this can mean they are expanded before the previous recipe

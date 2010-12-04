@@ -443,8 +443,8 @@ sub get_forceintoupdate_value
 }
 
 ###################################################
-# Substituting all occurences of "<" by "&lt;"
-# and all occurences of ">" by "&gt;"
+# Substituting all occurrences of "<" by "&lt;"
+# and all occurrences of ">" by "&gt;"
 ###################################################
 
 sub replace_brackets_in_string
@@ -458,7 +458,7 @@ sub replace_brackets_in_string
 }
 
 ###################################################
-# Substituting all occurences of "\uUXYZ" by
+# Substituting all occurrences of "\uUXYZ" by
 # "&#xUXYZ;", because the use xml saxparser does
 # not know anything about this encoding. Therfore
 # the xml file can keep standard encoding "UTF-8"
@@ -884,7 +884,7 @@ sub make_systemcall
     {
         $infoline = "ERROR: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
-        $error_occured = 1;
+        $error_occurred = 1;
     }
     else
     {
@@ -927,13 +927,13 @@ sub make_systemcall_allowing_error
         {
             $infoline = "WARNING: Failed system call:  $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
-            $error_occured = 1;
+            $error_occurred = 1;
         }
         else
         {
             $infoline = "ERROR: $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
-            $error_occured = 1;
+            $error_occurred = 1;
         }
     }
     else

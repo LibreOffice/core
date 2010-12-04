@@ -1335,7 +1335,7 @@ sub remove_Files_Without_Sourcedirectory
 
     my $infoline;
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
     my @missingfiles = ();
     push(@missingfiles, "ERROR: The following files could not be found: \n");
 
@@ -1360,7 +1360,7 @@ sub remove_Files_Without_Sourcedirectory
                     push( @installer::globals::logfileinfo, $infoline);
 
                     push(@missingfiles, "ERROR: File not found: $filename\n");
-                    $error_occured = 1;
+                    $error_occurred = 1;
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
@@ -1372,7 +1372,7 @@ sub remove_Files_Without_Sourcedirectory
                         push( @installer::globals::logfileinfo, $infoline);
 
                         push(@missingfiles, "ERROR: File not found: $filename\n");
-                        $error_occured = 1;
+                        $error_occurred = 1;
 
                         next;   # removing this file from list, if sourcepath is empty
                     }
@@ -1395,7 +1395,7 @@ sub remove_Files_Without_Sourcedirectory
     $infoline = "\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    if ( $error_occured )
+    if ( $error_occurred )
     {
         for ( my $i = 0; $i <= $#missingfiles; $i++ ) { print "$missingfiles[$i]"; }
         installer::exiter::exit_program("ERROR: Missing files", "remove_Files_Without_Sourcedirectory");
@@ -2025,7 +2025,7 @@ sub quoting_illegal_filenames
 }
 
 ############################################################################
-# Removing multiple occurences of same module.
+# Removing multiple occurrences of same module.
 ############################################################################
 
 sub optimize_list

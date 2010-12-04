@@ -129,18 +129,18 @@ sub register_unocomponents
 
     installer::logger::include_header_into_logfile("Registering UNO components:");
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
     my $filestring = "";
     for ( my $i = 0; $i <= $#{$unocomponents}; ++$i )
     {
-        my $local_error1_occured = 0;
-        my $local_error2_occured = 0;
+        my $local_error1_occurred = 0;
+        my $local_error2_occurred = 0;
 
         my $sourcepath = make_file_url(${$unocomponents}[$i]->{'sourcepath'});
         my $urlprefix = ${$unocomponents}[$i]->{'NativeServicesURLPrefix'};
         if (defined($urlprefix))
         {
-            $local_error1_occured = call_regcomp($regcompfileref, $servicesfile, $sourcepath, $urlprefix);
+            $local_error1_occurred = call_regcomp($regcompfileref, $servicesfile, $sourcepath, $urlprefix);
         }
         else
         {
@@ -150,14 +150,14 @@ sub register_unocomponents
         if (length($filestring) > $installer::globals::unomaxservices ||
             ($i == $#{$unocomponents} && $filestring ne ""))
         {
-            $local_error2_occured = call_regcomp($regcompfileref, $servicesfile, $filestring, $nativeservicesurlprefix);
+            $local_error2_occurred = call_regcomp($regcompfileref, $servicesfile, $filestring, $nativeservicesurlprefix);
             $filestring = "";
         }
 
-        if (( $local_error1_occured ) || ( $local_error2_occured )) { $error_occured = 1; }
+        if (( $local_error1_occurred ) || ( $local_error2_occured )) { $error_occured = 1; }
     }
 
-    return $error_occured;
+    return $error_occurred;
 }
 
 sub call_regcomp
@@ -165,7 +165,7 @@ sub call_regcomp
     my ($regcompfileref, $servicesfile, $filestring, $urlprefix) = @_;
     my @regcompoutput = ();
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
 
     my $systemcall = "$$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $urlprefix . $installer::globals::quote . " 2\>\&1 |";
 
@@ -184,7 +184,7 @@ sub call_regcomp
     {
         $infoline = "ERROR: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
-        $error_occured = 1;
+        $error_occurred = 1;
     }
     else
     {
@@ -192,7 +192,7 @@ sub call_regcomp
         push( @installer::globals::logfileinfo, $infoline);
     }
 
-    return $error_occured;
+    return $error_occurred;
 }
 
 ################################################################
@@ -210,7 +210,7 @@ sub register_javacomponents
     installer::pathanalyzer::get_path_from_fullqualifiedname($ure_internal_java_dir_ref);
     if ( $$ure_internal_java_dir_ref eq "" ) { installer::exiter::exit_program("Could not determine URE_INTERNAL_JAVA_DIR when registering Java components!", "register_javacomponents"); }
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
 
     my $do_register = 1;
     if (!( $installer::globals::solarjava )) { $do_register = 0; }
@@ -245,7 +245,7 @@ sub register_javacomponents
                 if ($returnvalue)
                 {
                     $infoline = "ERROR: $systemcall\n";
-                    $error_occured = 1;
+                    $error_occurred = 1;
                 }
                 else
                 {
@@ -263,7 +263,7 @@ sub register_javacomponents
         }
     }
 
-    return $error_occured;
+    return $error_occurred;
 }
 
 
@@ -311,7 +311,7 @@ sub register_pythoncomponents
 
     installer::logger::include_header_into_logfile("Registering python UNO components:");
 
-    my $error_occured = 0;
+    my $error_occurred = 0;
     my $counter = 0;
 
     my $systemcall = "";
@@ -386,7 +386,7 @@ sub register_pythoncomponents
                 {
                     $infoline = "ERROR: $systemcall\n";
                     push( @installer::globals::logfileinfo, $infoline);
-                    $error_occured = 1;
+                    $error_occurred = 1;
                 }
                 else
                 {
@@ -402,7 +402,7 @@ sub register_pythoncomponents
         }
     }
 
-    return $error_occured;
+    return $error_occurred;
 }
 
 ################################################################
@@ -454,15 +454,15 @@ sub register_all_components
         }
     }
 
-    $uno_error_occured = 0;
-    $java_error_occured = 0;
-    $python_error_occured = 0;
+    $uno_error_occurred = 0;
+    $java_error_occurred = 0;
+    $python_error_occurred = 0;
 
-    if ( $#unocomponents > -1 ) { $uno_error_occured = register_unocomponents($allvariableshashref, \@unocomponents, $regcompfileref, $servicesfile, $nativeservicesurlprefix); }
-    if ( $#javacomponents > -1 ) { $java_error_occured = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb, $javaservicesurlprefix); }
-    if ( $#pythoncomponents > -1 ) { $python_error_occured = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
+    if ( $#unocomponents > -1 ) { $uno_error_occurred = register_unocomponents($allvariableshashref, \@unocomponents, $regcompfileref, $servicesfile, $nativeservicesurlprefix); }
+    if ( $#javacomponents > -1 ) { $java_error_occurred = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb, $javaservicesurlprefix); }
+    if ( $#pythoncomponents > -1 ) { $python_error_occurred = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
 
-    if ( $uno_error_occured || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
+    if ( $uno_error_occurred || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
 
     return $registererrorflag;
 }
@@ -741,7 +741,7 @@ sub collect_all_services_gids
     my ($filesarrayref) = @_;
 
     my @databasegids = ();
-    my $error_occured = 0;
+    my $error_occurred = 0;
     my @error_files = ();
 
     for ( my $i = 0; $i <= $#{$filesarrayref}; $i++ )
@@ -756,11 +756,11 @@ sub collect_all_services_gids
         else
         {
             push(@error_files, $onefile->{'gid'});
-            $error_occured = 1;
+            $error_occurred = 1;
         }
     }
 
-    if ( $error_occured )
+    if ( $error_occurred )
     {
         my $infoline = "ERROR: Style UNO_COMPONENT is set, but no RegistryID is assigned!\n";
         push( @installer::globals::logfileinfo, $infoline);

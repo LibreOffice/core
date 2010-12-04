@@ -1005,9 +1005,9 @@ sub create_transforms
         my $infoline = "Systemcall: $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
 
-        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occured.
+        # Problem: msitran.exe in version 4.0 always returns "1", even if no failure occurred.
         # Therefore it has to be checked, if this is version 4.0. If yes, if the mst file
-        # exists and if it is larger than 0 bytes. If this is true, then no error occured.
+        # exists and if it is larger than 0 bytes. If this is true, then no error occurred.
         # File Version of msitran.exe: 4.0.6000.16384 has checksum: "b66190a70145a57773ec769e16777b29".
         # Same for msitran.exe from wntmsci12: "aa25d3445b94ffde8ef0c1efb77a56b8"
 
@@ -1052,13 +1052,13 @@ sub create_transforms
                     }
                     else
                     {
-                        $infoline = "Filesize indicates that an error occured.\n";
+                        $infoline = "Filesize indicates that an error occurred.\n";
                         push( @installer::globals::logfileinfo, $infoline);
                     }
                 }
                 else
                 {
-                    $infoline = "File $transformfile does not exist -> An error occured.\n";
+                    $infoline = "File $transformfile does not exist -> An error occurred.\n";
                     push( @installer::globals::logfileinfo, $infoline);
                 }
             }
@@ -2076,8 +2076,8 @@ sub read_saved_mappings
     {
         my @errorlines = ();
         my $errorstring = "";
-        my $error_occured = 0;
-        my $file_error_occured = 0;
+        my $error_occurred = 0;
+        my $file_error_occurred = 0;
         my $dir_error = 0;
 
         my $idtdir = $installer::globals::previous_idt_dir;
@@ -2101,28 +2101,28 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::savedmapping{"$2/$5"}))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedmapping{" . "$2/$5}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             if ( exists($installer::globals::savedrevmapping{$lc1}))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrevmapping{" . "$lc1}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             my $shortname = $4 || '';
@@ -2136,15 +2136,15 @@ sub read_saved_mappings
 
             if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
             {
-                if ( ! $file_error_occured )
+                if ( ! $file_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate savedrev83mapping{" . "$shortname}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $file_error_occured = 1;
+                $error_occurred = 1;
+                $file_error_occurred = 1;
             }
 
             $installer::globals::savedmapping{"$2/$5"} = "$1;$shortname";
@@ -2176,15 +2176,15 @@ sub read_saved_mappings
 
             if ( exists($installer::globals::saved83dirmapping{$1}) )
             {
-                if ( ! $dir_error_occured )
+                if ( ! $dir_error_occurred )
                 {
                     $errorstring = "\nErrors in $idtfile: \n";
                     push(@errorlines, $errorstring);
                 }
                 $errorstring = "Duplicate saved83dirmapping{" . "$1}\n";
                 push(@errorlines, $errorstring);
-                $error_occured = 1;
-                $dir_error_occured = 1;
+                $error_occurred = 1;
+                $dir_error_occurred = 1;
             }
 
             $installer::globals::saved83dirmapping{$1} = $4;
@@ -2196,7 +2196,7 @@ sub read_saved_mappings
 
         # Analyzing errors
 
-        if ( $error_occured )
+        if ( $error_occurred )
         {
             for ( my $i = 0; $i <= $#errorlines; $i++ )
             {

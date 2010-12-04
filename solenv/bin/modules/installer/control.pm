@@ -341,11 +341,11 @@ sub check_logfile
         # Errors are all errors, but not the Windows installer table "Error.idt"
 
         my $compareline = $line;
-        $compareline =~ s/Error\.idt//g;    # removing all occurences of "Error.idt"
-        $compareline =~ s/Error\.mlf//g;    # removing all occurences of "Error.mlf"
-        $compareline =~ s/Error\.ulf//g;    # removing all occurences of "Error.ulf"
-        $compareline =~ s/Error\.idl//g;    # removing all occurences of "Error.idl"
-        $compareline =~ s/Error\.html//g;   # removing all occurences of "Error.html"
+        $compareline =~ s/Error\.idt//g;    # removing all occurrences of "Error.idt"
+        $compareline =~ s/Error\.mlf//g;    # removing all occurrences of "Error.mlf"
+        $compareline =~ s/Error\.ulf//g;    # removing all occurrences of "Error.ulf"
+        $compareline =~ s/Error\.idl//g;    # removing all occurrences of "Error.idl"
+        $compareline =~ s/Error\.html//g;   # removing all occurrences of "Error.html"
 
         if ( $compareline =~ /\bError\b/i )
         {
@@ -358,7 +358,7 @@ sub check_logfile
     {
         my $line = "\n*********************************************************************\n";
         push(@output, $line);
-        $line = "ERROR: The following errors occured in packaging process:\n\n";
+        $line = "ERROR: The following errors occurred in packaging process:\n\n";
         push(@output, $line);
 
         for ( my $i = 0; $i <= $#errors; $i++ )

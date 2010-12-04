@@ -629,9 +629,9 @@ sub cabinet_cosistency_check
                 }
                 else
                 {
-                    $infoline = "ERROR: Problem occured calling diff.exe (File: $lastfile)\n";
+                    $infoline = "ERROR: Problem occurred calling diff.exe (File: $lastfile)\n";
                     push( @installer::globals::logfileinfo, $infoline);
-                    installer::exiter::exit_program("ERROR: Problem occured calling diff.exe (File: $lastfile) !", "cabinet_cosistency_check");
+                    installer::exiter::exit_program("ERROR: Problem occurred calling diff.exe (File: $lastfile) !", "cabinet_cosistency_check");
                 }
             }
         }

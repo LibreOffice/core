@@ -641,7 +641,7 @@ void rep_subn_cyg(string &argument)
   regfree(&re);
 }
 
-// Replace all occurences of subexpression number "subexp" with "repl"
+// Replace all occurrences of subexpression number "subexp" with "repl"
 void rep_subn( string &argument, const char *pattern, int subexp, const char repl)
 {
   int status, pos=0;
