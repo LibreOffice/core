@@ -1003,7 +1003,7 @@ public: // XServiceInfo
 private:
 
     void writeSequence( const Sequence<sal_Int8> & seq );
-    sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw();
+    sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw();
 
     Reference< XOutputStream >  m_out;
     Sequence < sal_Int8 >       m_seqStartElement;
@@ -1047,14 +1047,14 @@ Sequence< OUString >    SaxWriter_getSupportedServiceNames(void) throw()
 }
 
 
-sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurence ) throw()
+sal_Int32 SAXWriter::getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw()
 {
     sal_Int32 nLength =-1;
     if (mp_SaxWriterHelper)
     {
         if ( m_bForceLineBreak ||
             (m_bAllowLineBreak &&
-            ((nFirstLineBreakOccurence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT)) )
+            ((nFirstLineBreakOccurrence + mp_SaxWriterHelper->GetLastColumnCount()) > MAXCOLUMNCOUNT)) )
             nLength = m_nLevel;
     }
     m_bForceLineBreak = sal_False;
@@ -1258,19 +1258,19 @@ void SAXWriter::characters(const OUString& aChars)  throw(SAXException, RuntimeE
             bThrowException = !mp_SaxWriterHelper->writeString( aChars, sal_False, sal_False );
         else
         {
-            // Note : nFirstLineBreakOccurence is not exact, because we don't know, how
+            // Note : nFirstLineBreakOccurrence is not exact, because we don't know, how
             //        many 2 and 3 byte chars are inbetween. However this whole stuff
             //        is eitherway for pretty printing only, so it does not need to be exact.
             sal_Int32 nLength(0);
             sal_Int32 nIndentPrefix(-1);
             if (m_bAllowLineBreak)
             {
-                sal_Int32 nFirstLineBreakOccurence = getFirstLineBreak( aChars );
+                sal_Int32 nFirstLineBreakOccurrence = getFirstLineBreak( aChars );
 
                 nLength = calcXMLByteLength( aChars.getStr(), aChars.getLength(),
                                                ! m_bIsCDATA , sal_False );
                 nIndentPrefix = getIndentPrefixLength(
-                    nFirstLineBreakOccurence >= 0 ? nFirstLineBreakOccurence : nLength );
+                    nFirstLineBreakOccurrence >= 0 ? nFirstLineBreakOccurrence : nLength );
             }
             else
                 nIndentPrefix = getIndentPrefixLength(nLength);

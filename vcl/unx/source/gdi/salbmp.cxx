@@ -211,7 +211,7 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( Drawable aDrawable,
         // so better catch the XError
         pXLib->PushXErrorLevel( true );
         XImage* pImage = XGetImage( pXDisp, aDrawable, nX, nY, nWidth, nHeight, AllPlanes, ZPixmap );
-        bool bWasError = pXLib->HasXErrorOccured() && pXLib->GetLastXErrorRequestCode() == X_GetImage;
+        bool bWasError = pXLib->HasXErrorOccurred() && pXLib->GetLastXErrorRequestCode() == X_GetImage;
         pXLib->PopXErrorLevel();
 
         if( ! bWasError && pImage && pImage->data )

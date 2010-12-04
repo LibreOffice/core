@@ -191,7 +191,7 @@ WMSupportsFWS (Display *display, int screen)
  *
  * newHandler() -
  *
- * Handle X errors (temporarily) to record the occurance of BadWindow
+ * Handle X errors (temporarily) to record the occurrence of BadWindow
  * errors without crashing.  Used to detect the FWS_COMM_WINDOW root window
  * property containing an old or obsolete window id.
  *

@@ -233,8 +233,8 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
         }
         catch (uno::RuntimeException& )
         {
-            // XXX this is arguable, if the exception occured because pNewEntry is
-            // garbage you wouldn't insert it. If the exception occured because the
+            // XXX this is arguable, if the exception occurred because pNewEntry is
+            // garbage you wouldn't insert it. If the exception occurred because the
             // Collator implementation is garbage then give the user a chance to see
             // his stuff
             Insert( pNewEntry, (ULONG)0 );

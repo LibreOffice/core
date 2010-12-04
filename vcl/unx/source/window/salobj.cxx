@@ -149,7 +149,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
                            pVisual,
                            CWEventMask|CWColormap, &aAttribs );
         XSync( pDisp, False );
-        BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+        BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
         pSalDisp->GetXLib()->PopXErrorLevel();
         if( bWasXError )
         {
@@ -176,7 +176,7 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     pObjData->pAppContext   = NULL;
 
     XSync(pDisp, False);
-    BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccured();
+    BOOL bWasXError = pSalDisp->GetXLib()->HasXErrorOccurred();
     pSalDisp->GetXLib()->PopXErrorLevel();
     if( bWasXError )
     {

@@ -552,7 +552,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
     {}
 
     /* process a new set of properties
-     * merges changed properties and returns "true" if any occured
+     * merges changed properties and returns "true" if any occurred
      * if the optional output set is not NULL then the names of the changed properties are returned
     **/
     bool processProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& i_rNewProp,

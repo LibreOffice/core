@@ -820,7 +820,7 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
         {
             delete pCur;
             rIo.SetError( SVSTREAM_GENERALERROR );
-            // an error occured
+            // an error occurred
             return;
         }
 

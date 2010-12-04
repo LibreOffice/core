@@ -48,7 +48,7 @@ namespace comphelper
 
     //-------------------------------------------------------------------------
     /** search the given string within the given sequence, return the positions where it was found.
-        if _bOnlyFirst is sal_True, only the first occurence will be returned.
+        if _bOnlyFirst is sal_True, only the first occurrence will be returned.
     */
     COMPHELPER_DLLPUBLIC staruno::Sequence<sal_Int16> findValue(const staruno::Sequence< ::rtl::OUString >& _rList, const ::rtl::OUString& _rValue, sal_Bool _bOnlyFirst = sal_False);
 

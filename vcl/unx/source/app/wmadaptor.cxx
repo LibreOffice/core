@@ -669,7 +669,7 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
                 && aRealType == XA_CARDINAL
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;
@@ -872,7 +872,7 @@ bool WMAdaptor::getNetWmName()
                 && aRealType == XA_WINDOW
                 && nFormat == 32
                 && nItems != 0
-                && ! m_pSalDisplay->GetXLib()->HasXErrorOccured()
+                && ! m_pSalDisplay->GetXLib()->HasXErrorOccurred()
                 )
             {
                 aCheckWindow =  *(XLIB_Window*)pProperty;

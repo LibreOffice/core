@@ -613,7 +613,7 @@ SvNumberformat::SvNumberformat(String& rString,
         bStarFlag( FALSE )
 {
     // If the group (AKA thousand) separator is a Non-Breaking Space (French)
-    // replace all occurences by a simple space.
+    // replace all occurrences by a simple space.
     // The tokens will be changed to the LocaleData separator again later on.
     const sal_Unicode cNBSp = 0xA0;
     const String& rThSep = GetFormatter().GetNumThousandSep();

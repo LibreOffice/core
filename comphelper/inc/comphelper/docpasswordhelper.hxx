@@ -70,7 +70,7 @@ public:
             - DocPasswordVerifierResult_WRONG_PASSWORD, if the password is
               wrong. The user may be asked again for a new password.
             - DocPasswordVerifierResult_ABORT, if an unrecoverable error
-              occured while password verification. The password request loop
+              occurred while password verification. The password request loop
               will be aborted.
      */
     virtual DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword ) = 0;

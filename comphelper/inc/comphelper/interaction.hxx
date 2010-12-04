@@ -52,7 +52,7 @@ namespace comphelper
     */
     class OInteractionSelect
     {
-        sal_Bool    m_bSelected : 1;    /// indicates if the select event occured
+        sal_Bool    m_bSelected : 1;    /// indicates if the select event occurred
 
     protected:
         OInteractionSelect() : m_bSelected(sal_False) { }

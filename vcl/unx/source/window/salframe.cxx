@@ -3753,7 +3753,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                     &hDummy,
                     &Children,
                     &nChildren );
-        if( GetDisplay()->GetXLib()->HasXErrorOccured() )
+        if( GetDisplay()->GetXLib()->HasXErrorOccurred() )
         {
             hWM_Parent = GetShellWindow();
             break;
@@ -3843,7 +3843,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
      *  so need real geometries here
      *  (this will fail with virtual roots ?)
      */
-    GetDisplay()->GetXLib()->ResetXErrorOccured();
+    GetDisplay()->GetXLib()->ResetXErrorOccurred();
     int xp, yp, x, y;
     unsigned int wp, w, hp, h, bw, d;
     XGetGeometry( GetXDisplay(),
@@ -3855,7 +3855,7 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
                   &hRoot,
                   &xp, &yp, &wp, &hp, &bw, &d );
     bool bResized = false;
-    if( ! GetDisplay()->GetXLib()->HasXErrorOccured() )
+    if( ! GetDisplay()->GetXLib()->HasXErrorOccurred() )
     {
         maGeometry.nRightDecoration     = wp - w - maGeometry.nLeftDecoration;
         maGeometry.nBottomDecoration    = hp - h - maGeometry.nTopDecoration;

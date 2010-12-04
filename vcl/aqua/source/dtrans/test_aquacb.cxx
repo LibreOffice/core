@@ -144,7 +144,7 @@ int SAL_CALL main( int argc, char** argv )
     OUString rdbName = OUString::createFromAscii( argv[1] );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( !g_xFactory.is() )
     {
         OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");

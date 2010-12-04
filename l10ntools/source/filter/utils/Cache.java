@@ -1795,7 +1795,7 @@ public class Cache
                 {
                     // last token was not a delimiter - new one is such delim
                     // => ignore this delimiter - but save the information, that
-                    //    it occured
+                    //    it occurred
                     bLastWasDelim = true;
                 }
             }

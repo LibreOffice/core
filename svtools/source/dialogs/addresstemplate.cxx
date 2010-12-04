@@ -1263,7 +1263,7 @@ void AssignmentPersistentData::Commit()
         }
         catch(Exception&)
         {
-            DBG_ERROR("AddressBookSourceDialog::OnAdministrateDatasources: an error occured while executing the administration dialog!");
+            DBG_ERROR("AddressBookSourceDialog::OnAdministrateDatasources: an error occurred while executing the administration dialog!");
         }
 
         // re-fill the data source list

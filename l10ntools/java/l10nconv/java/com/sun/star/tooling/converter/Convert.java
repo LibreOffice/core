@@ -177,10 +177,10 @@ public class Convert {
                     OutputHandler.closeAll();
 
                 } catch(Exception e){
-                    System.out.print("An EXCEPTION occured, please check your commad line settings \n"+e.getMessage());
+                    System.out.print("An EXCEPTION occurred, please check your commad line settings \n"+e.getMessage());
                     System.exit(-1);
                 }catch(Throwable t){
-                    System.out.print("A FATAL ERROR occured, please check your commad line settings \n"+t.getMessage());
+                    System.out.print("A FATAL ERROR occurred, please check your commad line settings \n"+t.getMessage());
                     System.exit(-1);
                 }
 
@@ -455,7 +455,7 @@ public class Convert {
                 OutputHandler.out("ERROR: "+e.getMessage());
                 System.exit(-1);
             } catch (Throwable t){
-                System.out.print("An Error occured while parsing the command line,\n please check your commad line settings.\n "+t.getMessage());
+                System.out.print("An Error occurred while parsing the command line,\n please check your commad line settings.\n "+t.getMessage());
                 System.exit(-1);
             }
 

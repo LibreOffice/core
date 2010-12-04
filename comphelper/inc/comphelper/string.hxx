@@ -75,14 +75,14 @@ COMPHELPER_DLLPUBLIC rtl::OUString searchAndReplaceAsciiL(
     rtl::OUString const & to, sal_Int32 beginAt = 0,
     sal_Int32 * replacedAt = NULL);
 
-/** replaces, in the given source string, all occurences of a given ASCII pattern
+/** replaces, in the given source string, all occurrences of a given ASCII pattern
     with another ASCII pattern
 */
 COMPHELPER_DLLPUBLIC ::rtl::OUString searchAndReplaceAllAsciiWithAscii(
     const ::rtl::OUString& source, const sal_Char* from, const sal_Char* to,
     const sal_Int32 beginAt = 0 );
 
-/** does an in-place replacement of the first occurance of a sub string with
+/** does an in-place replacement of the first occurrence of a sub string with
     another string
 
     @param source

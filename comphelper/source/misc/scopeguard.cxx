@@ -49,11 +49,11 @@ ScopeGuard::~ScopeGuard()
                 OSL_ENSURE(
                     false, rtl::OUStringToOString(
                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                           "UNO exception occured: ") ) +
+                                           "UNO exception occurred: ") ) +
                         exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
             }
             catch (...) {
-                OSL_ENSURE( false, "unknown exception occured!" );
+                OSL_ENSURE( false, "unknown exception occurred!" );
             }
         }
         else

@@ -2365,13 +2365,13 @@ void SalX11Display::Yield()
     Dispatch( &aEvent );
 
 #ifdef DBG_UTIL
-    if( pXLib_->HasXErrorOccured() )
+    if( pXLib_->HasXErrorOccurred() )
     {
         XFlush( pDisp_ );
         PrintEvent( "SalDisplay::Yield (WasXError)", &aEvent );
     }
 #endif
-    pXLib_->ResetXErrorOccured();
+    pXLib_->ResetXErrorOccurred();
 }
 
 long SalX11Display::Dispatch( XEvent *pEvent )

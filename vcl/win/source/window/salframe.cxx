@@ -4935,7 +4935,7 @@ static int ImplMenuChar( HWND, WPARAM wParam, LPARAM lParam )
     if( nFound == 1 )
         nRet = MAKELRESULT( idxFound, MNC_EXECUTE );
     else
-        // duplicate mnemonics, just select the next occurence
+        // duplicate mnemonics, just select the next occurrence
         nRet = MAKELRESULT( idxFound, MNC_SELECT );
 
     return nRet;
@@ -5205,7 +5205,7 @@ static int ImplHandleMenuSelect( HWND hWnd, WPARAM wParam, LPARAM lParam )
     long nRet = 0;
     if ( hMenu && !pFrame->mLastActivatedhMenu )
     {
-        // we never activated a menu (ie, no WM_INITMENUPOPUP has occured yet)
+        // we never activated a menu (ie, no WM_INITMENUPOPUP has occurred yet)
         // which means this must be the menubar -> send activation/deactivation
         SalMenuEvent aMenuEvt;
         WinSalMenuItem *pSalMenuItem = ImplGetSalMenuItem( hMenu, nId, bByPosition );

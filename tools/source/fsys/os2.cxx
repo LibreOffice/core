@@ -112,7 +112,7 @@ int ApiRet2ToSolarError_Impl( int nApiRet )
         case ERROR_FILENAME_EXCED_RANGE:    return ERRCODE_IO_NAMETOOLONG;
     }
 
-    DBG_TRACE1( "FSys: unknown apiret error %d occured", nApiRet );
+    DBG_TRACE1( "FSys: unknown apiret error %d occurred", nApiRet );
     return FSYS_ERR_UNKNOWN;
 }
 

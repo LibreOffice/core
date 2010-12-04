@@ -245,9 +245,9 @@ public:
     virtual void    Remove( int fd );
 
     void            XError( Display *pDisp, XErrorEvent *pEvent );
-    bool            HasXErrorOccured() const { return m_aXErrorHandlerStack.back().m_bWas; }
+    bool            HasXErrorOccurred() const { return m_aXErrorHandlerStack.back().m_bWas; }
     unsigned int    GetLastXErrorRequestCode() const { return m_aXErrorHandlerStack.back().m_nLastErrorRequest; }
-    void            ResetXErrorOccured() { m_aXErrorHandlerStack.back().m_bWas = false; }
+    void            ResetXErrorOccurred() { m_aXErrorHandlerStack.back().m_bWas = false; }
     void PushXErrorLevel( bool bIgnore );
     void PopXErrorLevel();
 

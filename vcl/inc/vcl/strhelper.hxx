@@ -49,7 +49,7 @@ int VCL_DLLPUBLIC GetCommandLineTokenCount( const ByteString& );
 
 String VCL_DLLPUBLIC WhitespaceToSpace( const String&, BOOL bProtect = TRUE );
 ByteString VCL_DLLPUBLIC WhitespaceToSpace( const ByteString&, BOOL bProtect = TRUE );
-// returns a string with multiple adjacent occurences of whitespace
+// returns a string with multiple adjacent occurrences of whitespace
 // converted to a single space. if bProtect is TRUE (nonzero), then
 // doublequote, singlequote and singleleftquote protect their respective
 // contents

@@ -119,7 +119,7 @@ namespace canvas
 
         /** Query error status
 
-            @returns true, if an error occured during primitive
+            @returns true, if an error occurred during primitive
             construction.
          */
         virtual bool      isError() = 0;

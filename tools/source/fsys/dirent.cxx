@@ -120,7 +120,7 @@ int Sys2SolarError_Impl( int nSysErr )
 #endif
     }
 
-    DBG_TRACE1( "FSys: unknown system error %d occured", nSysErr );
+    DBG_TRACE1( "FSys: unknown system error %d occurred", nSysErr );
     return FSYS_ERR_UNKNOWN;
 }
 

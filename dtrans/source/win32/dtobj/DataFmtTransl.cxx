@@ -175,7 +175,7 @@ DataFlavor CDataFormatTranslator::getDataFlavorFromFormatEtc( const FORMATETC& a
                     OUString clipFormatName = getClipboardFormatName( aClipformat );
 
                     // if we could not get a clipboard format name an
-                    // error must have occured or it is a standard
+                    // error must have occurred or it is a standard
                     // clipboard format that we don't translate, e.g.
                     // CF_BITMAP (the office only uses CF_DIB)
                     if ( clipFormatName.getLength( ) )
