@@ -239,7 +239,7 @@ private:
     */
     bool mbFoundObject;
 
-    /** When set to <TRUE/> this flag indicates that an error has occured
+    /** When set to <TRUE/> this flag indicates that an error has occurred
         that should terminate the iteration over the objects to search/spell
         check.
     */

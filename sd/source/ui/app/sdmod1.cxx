@@ -978,7 +978,7 @@ OutlineToImpressFinalizer::OutlineToImpressFinalizer (
                     &nReadByteCount));
 
             // Check the error code and stop copying the stream data when an
-            // error has occured.
+            // error has occurred.
             switch (nErrorCode)
             {
                 case ERRCODE_NONE:

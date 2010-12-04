@@ -581,7 +581,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     const ::boost::weak_ptr<ViewShell>& rpViewShellWeak,
     bool bDirectionIsForward)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward),
-      mbPageChangeOccured(false),
+      mbPageChangeOccurred(false),
       mpPage(NULL),
       mpObjectIterator(NULL)
 {
@@ -599,7 +599,7 @@ ViewIteratorImpl::ViewIteratorImpl (
     PageKind ePageKind,
     EditMode eEditMode)
     : IteratorImplBase (pDocument, rpViewShellWeak, bDirectionIsForward, ePageKind, eEditMode),
-      mbPageChangeOccured(false),
+      mbPageChangeOccurred(false),
       mpPage(NULL),
       mpObjectIterator(NULL)
 {
@@ -696,8 +696,8 @@ void ViewIteratorImpl::GotoNextText(void)
 
 void ViewIteratorImpl::SetPage (sal_Int32 nPageIndex)
 {
-    mbPageChangeOccured = (maPosition.mnPageIndex!=nPageIndex);
-    if (mbPageChangeOccured)
+    mbPageChangeOccurred = (maPosition.mnPageIndex!=nPageIndex);
+    if (mbPageChangeOccurred)
     {
         maPosition.mnPageIndex = nPageIndex;
 

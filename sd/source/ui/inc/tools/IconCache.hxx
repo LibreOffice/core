@@ -55,7 +55,7 @@ public:
     /** Return the icon with the given resource id.
         @return
             The returned Image may be empty when there is no icon for the
-            given id or an error occured.  Should not happen under normal
+            given id or an error occurred.  Should not happen under normal
             circumstances.
     */
     Image GetIcon (USHORT nResourceId);

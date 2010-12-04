@@ -225,8 +225,8 @@ protected:
     void SetPage (sal_Int32 nPageIndex);
 
 private:
-    /// Indicates whether a page changed occured on switching to current page.
-    bool mbPageChangeOccured;
+    /// Indicates whether a page changed occurred on switching to current page.
+    bool mbPageChangeOccurred;
     /// Pointer to the page associated with the current page index. May be NULL.
     SdPage* mpPage;
     /// Iterator of all objects on the current page.
