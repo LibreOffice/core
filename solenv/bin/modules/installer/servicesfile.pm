@@ -154,7 +154,7 @@ sub register_unocomponents
             $filestring = "";
         }
 
-        if (( $local_error1_occurred ) || ( $local_error2_occured )) { $error_occured = 1; }
+        if (( $local_error1_occurred ) || ( $local_error2_occurred )) { $error_occurred = 1; }
     }
 
     return $error_occurred;
@@ -462,7 +462,7 @@ sub register_all_components
     if ( $#javacomponents > -1 ) { $java_error_occurred = register_javacomponents($allvariableshashref, \@javacomponents, $regcompfileref, $servicesfile, $regcomprdb, $javaservicesurlprefix); }
     if ( $#pythoncomponents > -1 ) { $python_error_occurred = register_pythoncomponents(\@pythoncomponents, $regcompfileref, $servicesfile, $includepatharrayref); }
 
-    if ( $uno_error_occurred || $java_error_occured || $python_error_occured ) { $registererrorflag = 1; }
+    if ( $uno_error_occurred || $java_error_occurred || $python_error_occurred ) { $registererrorflag = 1; }
 
     return $registererrorflag;
 }
