@@ -4,10 +4,10 @@ pe	slideshow\inc							nmake	-	all	pe_inc NULL
 pe	slideshow\source\engine					nmake	-	all	pe_engine pe_inc NULL
 pe	slideshow\source\engine\slide			nmake	-	all	pe_slide pe_inc NULL
 pe	slideshow\source\engine\shapes			nmake	-	all	pe_shapes pe_inc NULL
-pe	slideshow\source\engine\OGLTrans\unx        nmake   -   u pe_ogltrans_unx pe_inc NULL
+pe	slideshow\source\engine\OGLTrans\unx        nmake   -   u pe_ogltrans_unx pe_ogltrans_mac.u pe_inc NULL
 pe	slideshow\source\engine\OGLTrans\win        nmake   -   w pe_ogltrans_win pe_inc NULL
-pe	slideshow\source\engine\OGLTrans\mac        nmake   -   u pe_ogltrans_mac pe_inc NULL
+pe	slideshow\source\engine\OGLTrans\mac        nmake   -   u pe_ogltrans_mac pe_transitions pe_inc NULL
 pe	slideshow\source\engine\transitions		nmake	-	all	pe_transitions pe_inc NULL
 pe	slideshow\source\engine\animationnodes	nmake	-	all	pe_animationnodes pe_inc NULL
 pe	slideshow\source\engine\activities		nmake	-	all	pe_activities pe_inc NULL
-pe	slideshow\util							nmake	-	all	pe_util pe_shapes pe_slide pe_activities pe_animationnodes pe_transitions pe_engine NULL
+pe	slideshow\util							nmake	-	all	pe_util pe_shapes pe_slide pe_activities pe_animationnodes pe_transitions pe_ogltrans_mac.u pe_ogltrans_unx.u pe_ogltrans_win.w pe_engine NULL
