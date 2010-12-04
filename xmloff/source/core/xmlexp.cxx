@@ -923,8 +923,8 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
                   aSeq, e.Message, NULL );
     }
 
-    // return true only if no error occured
-    return (GetErrorFlags() & (ERROR_DO_NOTHING|ERROR_ERROR_OCCURED)) == 0;
+    // return true only if no error occurred
+    return (GetErrorFlags() & (ERROR_DO_NOTHING|ERROR_ERROR_OCCURRED)) == 0;
 }
 
 void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException)
@@ -2399,9 +2399,9 @@ void SvXMLExport::SetError(
 
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURED;
+        mnErrorFlags |= ERROR_ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURED;
+        mnErrorFlags |= ERROR_WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 

@@ -170,7 +170,7 @@ public class ScriptEditorForBeanShell
 
 
     /**
-     *  Indicates the line where error occured
+     *  Indicates the line where error occurred
      *
      */
     public void indicateErrorLine( int lineNum )

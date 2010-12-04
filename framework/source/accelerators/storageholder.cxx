@@ -361,7 +361,7 @@ void StorageHolder::notifyPath(const ::rtl::OUString& sPath)
     {
         IStorageListener* pListener = *pIt2;
         if (pListener)
-            pListener->changesOccured(sNormedPath);
+            pListener->changesOccurred(sNormedPath);
     }
 
     aReadLock.unlock();

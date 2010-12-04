@@ -123,7 +123,7 @@ protected:
         const css::uno::Sequence< css::uno::Any >& rArgs ) throw (css::lang::IllegalArgumentException) = 0;
 
     /** Derived classes may do additional postprocessing. Called even if the
-        event handler does not exist, or if an error occured during execution. */
+        event handler does not exist, or if an error occurred during execution. */
     virtual void implPostProcessEvent(
         EventQueue& rEventQueue,
         const EventHandlerInfo& rInfo,

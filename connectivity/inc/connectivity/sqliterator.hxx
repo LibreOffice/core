@@ -171,7 +171,7 @@ namespace connectivity
         const OSQLParseNode* getSimpleGroupByTree() const;
         const OSQLParseNode* getSimpleHavingTree() const;
 
-        /** returns the errors which occured during parsing.
+        /** returns the errors which occurred during parsing.
 
             The returned object contains a chain (via SQLException::NextException) of SQLExceptions.
         */
@@ -338,12 +338,12 @@ namespace connectivity
         /** appends an SQLException corresponding to the given error code to our error collection
 
             @param  _eError
-                the code of the error which occured
+                the code of the error which occurred
             @param  _pReplaceToken1
-                if not <NULL/>, the first occurance of '#' in the error message will be replaced
+                if not <NULL/>, the first occurrence of '#' in the error message will be replaced
                 with the given token
             @param  _pReplaceToken2
-                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurance of '#'
+                if not <NULL/>, and if _rReplaceToken1 is not <NULL/>, the second occurrence of '#'
                 in the error message will be replaced with _rReplaceToken2
         */
         void impl_appendError( IParseContext::ErrorCode _eError,

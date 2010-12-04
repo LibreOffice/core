@@ -191,7 +191,7 @@ jobject connectivity::convertTypeMapToJavaMap(JNIEnv* /*pEnv*/,const Reference< 
     return 0;
 }
 // -----------------------------------------------------------------------------
-sal_Bool connectivity::isExceptionOccured(JNIEnv *pEnv,sal_Bool _bClear)
+sal_Bool connectivity::isExceptionOccurred(JNIEnv *pEnv,sal_Bool _bClear)
 {
     if ( !pEnv )
         return sal_False;

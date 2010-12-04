@@ -362,7 +362,7 @@ public:
     ::rtl::OUString GetODFVersion() const;
 
     /**
-     * Record an error condition that occured during import. The
+     * Record an error condition that occurred during import. The
      * behavior of SetError can be modified using the error flag
      * constants.
      */

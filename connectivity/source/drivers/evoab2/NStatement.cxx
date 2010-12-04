@@ -428,7 +428,7 @@ EBookQuery *OCommonStatement::whereAnalysis( const OSQLParseNode* parseTree )
             m_pConnection->throwGenericSQLException(STR_QUERY_NOT_LIKE_TOO_COMPLEX,*this);
         }
         else if( (aMatchString.indexOf ( WILDCARD ) == aMatchString.lastIndexOf ( WILDCARD ) ) )
-        {   // One occurance of '%'  matches...
+        {   // One occurrence of '%'  matches...
             if ( aMatchString.indexOf ( WILDCARD ) == 0 )
                 pResult = createTest( aColumnName, E_BOOK_QUERY_ENDS_WITH, aMatchString.copy( 1 ) );
             else if ( aMatchString.indexOf ( WILDCARD ) == aMatchString.getLength() - 1 )

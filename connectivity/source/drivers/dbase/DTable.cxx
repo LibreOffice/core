@@ -2281,7 +2281,7 @@ void ODbaseTable::alterColumn(sal_Int32 index,
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"ODbaseTable::alterColumn: Exception occured!");
+        OSL_ENSURE(0,"ODbaseTable::alterColumn: Exception occurred!");
         throw;
     }
 }

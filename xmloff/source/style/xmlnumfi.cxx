@@ -847,7 +847,7 @@ void lcl_EnquoteIfNecessary( rtl::OUStringBuffer& rContent, const SvXMLNumFormat
     else if ( rParent.GetType() == XML_TOK_STYLES_PERCENTAGE_STYLE && nLength > 1 )
     {
         //  the percent character in percentage styles must be left out of quoting
-        //  (one occurence is enough even if there are several percent characters in the string)
+        //  (one occurrence is enough even if there are several percent characters in the string)
 
         rtl::OUString aString( rContent.getStr() );
         sal_Int32 nPos = aString.indexOf( (sal_Unicode) '%' );

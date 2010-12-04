@@ -627,7 +627,7 @@ beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
         throw deployment::DeploymentException(
-            OUSTR("unexpected exception occured!"),
+            OUSTR("unexpected exception occurred!"),
             static_cast<OWeakObject *>(this), exc );
     }
 }

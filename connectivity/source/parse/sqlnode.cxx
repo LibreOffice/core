@@ -702,7 +702,7 @@ void OSQLParseNode::impl_parseLikeNodeToString_throw( ::rtl::OUStringBuffer& rSt
         }
         catch ( Exception& )
         {
-            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occured!" );
+            OSL_ENSURE( false, "OSQLParseNode::impl_parseLikeNodeToString_throw Exception occurred!" );
         }
         if ( !m_aChildren[0]->isLeaf() )
         {

@@ -210,7 +210,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // get access to the element
     // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
     // it cache it as a member of this module manager instance. If we change some props there ... but dont
-    // flush changes (because an error occured) we will read them later. If we use a different config access
+    // flush changes (because an error occurred) we will read them later. If we use a different config access
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         xSMGR,

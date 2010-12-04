@@ -228,7 +228,7 @@ GstBusSyncReply Player::processSyncMessage( GstMessage *message )
         }
     } else if( GST_MESSAGE_TYPE( message ) == GST_MESSAGE_ERROR ) {
         if( mnWidth == 0 ) {
-            // an error occured, set condition so that OOo thread doesn't wait for us
+            // an error occurred, set condition so that OOo thread doesn't wait for us
 #if DEBUG
             sal_Bool aSuccess =
 #endif

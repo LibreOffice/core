@@ -114,7 +114,7 @@ DGColorNameLookUp::DGColorNameLookUp (void)
     }
     catch (uno::RuntimeException e)
     {
-        // When an excpetion occured then whe have an empty name sequence
+        // When an excpetion occurred then whe have an empty name sequence
         // and the loop below is not entered.
     }
 

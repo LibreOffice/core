@@ -1754,9 +1754,9 @@ void SvXMLImport::SetError(
 {
     // maintain error flags
     if ( ( nId & XMLERROR_FLAG_ERROR ) != 0 )
-        mnErrorFlags |= ERROR_ERROR_OCCURED;
+        mnErrorFlags |= ERROR_ERROR_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_WARNING ) != 0 )
-        mnErrorFlags |= ERROR_WARNING_OCCURED;
+        mnErrorFlags |= ERROR_WARNING_OCCURRED;
     if ( ( nId & XMLERROR_FLAG_SEVERE ) != 0 )
         mnErrorFlags |= ERROR_DO_NOTHING;
 

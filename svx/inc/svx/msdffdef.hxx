@@ -1097,7 +1097,7 @@ typedef enum {
 } MSO_BLIPUSAGE;
 
 typedef enum {                          // GEL provided types...
-   mso_blipERROR = 0,          // An error occured during loading
+   mso_blipERROR = 0,          // An error occurred during loading
    mso_blipUNKNOWN,            // An unknown blip type
    mso_blipEMF,                // Windows Enhanced Metafile
    mso_blipWMF,                // Windows Metafile

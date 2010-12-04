@@ -74,8 +74,8 @@ public:
     OUString sExceptionMessage;/// message of original exception (if available)
 
     // XLocator information:
-    sal_Int32 nRow;     /// row number where error occured (or -1 for unknown)
-    sal_Int32 nColumn;  /// column number where error occured (or -1)
+    sal_Int32 nRow;     /// row number where error occurred (or -1 for unknown)
+    sal_Int32 nColumn;  /// column number where error occurred (or -1)
     OUString sPublicId; /// public identifier
     OUString sSystemId; /// public identifier
 
@@ -130,7 +130,7 @@ void XMLErrors::AddRecord(
 
     OUStringBuffer sMessage;
 
-    sMessage.appendAscii( "An error or a warning has occured during XML import/export!\n" );
+    sMessage.appendAscii( "An error or a warning has occurred during XML import/export!\n" );
 
     // ID & flags
     sMessage.appendAscii( "Error-Id: 0x");

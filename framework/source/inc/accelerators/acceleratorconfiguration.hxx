@@ -220,7 +220,7 @@ class XMLBasedAcceleratorConfiguration : protected ThreadHelpBase               
             throw(css::uno::RuntimeException);
 
         // IStorageListener
-        virtual void changesOccured(const ::rtl::OUString& sPath);
+        virtual void changesOccurred(const ::rtl::OUString& sPath);
 
         //______________________________________
         // helper for derived classes

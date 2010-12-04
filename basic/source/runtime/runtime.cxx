@@ -785,7 +785,7 @@ BOOL SbiRuntime::Step()
             pInst->nErl = nLine;
             pErrCode    = pCode;
             pErrStmnt   = pStmnt;
-            // An error occured in an error handler
+            // An error occurred in an error handler
             // force parent handler ( if there is one )
             // to handle the error
             bool bLetParentHandleThis = false;

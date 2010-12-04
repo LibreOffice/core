@@ -3137,7 +3137,7 @@ void XMLDdeFieldDeclImportContext::StartElement(
                                                  UNO_QUERY);
         if( xFactory.is() )
         {
-            /* #i6432# There might be multiple occurances of one DDE
+            /* #i6432# There might be multiple occurrences of one DDE
                declaration if it is used in more than one of
                header/footer/body. createInstance will throw an exception if we
                try to create the second, third, etc. instance of such a

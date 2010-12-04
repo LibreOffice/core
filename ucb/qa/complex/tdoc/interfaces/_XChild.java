@@ -90,7 +90,7 @@ public class _XChild {
             oObj.setParent(gotten);
         }
         catch (com.sun.star.lang.NoSupportException ex) {
-            log.println("Exception occured during setParent() - " + (supported?"FAILED":"OK"));
+            log.println("Exception occurred during setParent() - " + (supported?"FAILED":"OK"));
             if (supported) {
                 ex.printStackTrace((java.io.PrintWriter)log);
                 return false;

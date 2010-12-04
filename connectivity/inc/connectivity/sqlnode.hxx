@@ -303,7 +303,7 @@ namespace connectivity
                 too, to check whether they contain nested sub queries.
 
             @param _pErrorHolder
-                takes the error which occured while generating the statement, if any. Might be <NULL/>,
+                takes the error which occurred while generating the statement, if any. Might be <NULL/>,
                 in this case the error is not reported back, and can only be recognized by examing the
                 return value.
 
@@ -414,7 +414,7 @@ namespace connectivity
                                             ::rtl::OUString &_rTable
                                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _xMetaData);
 
-        // susbtitute all occurences of :var or [name] into the dynamic parameter ?
+        // susbtitute all occurrences of :var or [name] into the dynamic parameter ?
         // _pNode will be modified if parameters exists
         static void substituteParameterNames(OSQLParseNode* _pNode);
 

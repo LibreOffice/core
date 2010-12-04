@@ -57,7 +57,7 @@ class IStorageListener
 
         //--------------------------------------
         /** @short  TODO */
-        virtual void changesOccured(const ::rtl::OUString& sPath) = 0;
+        virtual void changesOccurred(const ::rtl::OUString& sPath) = 0;
 };
 
 } // namespace framework

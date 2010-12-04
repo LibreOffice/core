@@ -1806,7 +1806,7 @@ void DbGridControl::ColumnMoved(sal_uInt16 nId)
     //              +---+---+---+---+---+---+
     //
     // Now, all is consistent again.
-    // (except of the hidden column : The cycling of the cols occured on the model, not on the view. maybe
+    // (except of the hidden column : The cycling of the cols occurred on the model, not on the view. maybe
     // the user expected the latter but there really is no good argument against our method ;) ...)
     //
     // And no, this large explanation isn't just because I wanted to play a board game or something like

@@ -98,7 +98,7 @@ int SAL_CALL main(int, char*, char* )
     OUString rdbName = OUString( RTL_CONSTASCII_USTRINGPARAM( RDB_SYSPATH ) );
     Reference< XMultiServiceFactory > g_xFactory( createRegistryServiceFactory( rdbName ) );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( g_xFactory.is() == sal_False )
     {
         OSL_ENSURE(sal_False, "Can't create RegistryServiceFactory");
@@ -184,7 +184,7 @@ int SAL_CALL main(int, char*, char* )
     // Cast factory to XComponent
     Reference< XComponent > xComponent( g_xFactory, UNO_QUERY );
 
-    // Print a message if an error occured.
+    // Print a message if an error occurred.
     if ( xComponent.is() == sal_False )
     {
         OSL_ENSURE(sal_False, "Error shuting down");

@@ -500,7 +500,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeResetListener(const css::u
 
 //-----------------------------------------------
 // IStorageListener
-void XMLBasedAcceleratorConfiguration::changesOccured(const ::rtl::OUString& /*sPath*/)
+void XMLBasedAcceleratorConfiguration::changesOccurred(const ::rtl::OUString& /*sPath*/)
 {
     reload();
 }

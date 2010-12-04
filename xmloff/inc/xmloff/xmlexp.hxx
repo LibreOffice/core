@@ -530,7 +530,7 @@ public:
     void IgnorableWhitespace();
 
     /**
-     * Record an error condition that occured during export. The
+     * Record an error condition that occurred during export. The
      * behavior of SetError can be modified using the error flag
      * constants.
      */

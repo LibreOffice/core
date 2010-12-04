@@ -595,7 +595,7 @@ void SbiParser::DefType( BOOL bPrivate )
                 pDim = NULL;
                 pElem = VarDecl(&pDim,FALSE,FALSE);
                 if( !pElem )
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;   // Error occurred
         }
         if( pElem )
         {
@@ -727,14 +727,14 @@ void SbiParser::DefEnum( BOOL bPrivate )
                 pElem = VarDecl( &pDim, FALSE, TRUE );
                 if( !pElem )
                 {
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;   // Error occurred
                     break;
                 }
                 else if( pDim )
                 {
                     delete pDim;
                     Error( SbERR_SYNTAX );
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;   // Error occurred
                     break;
                 }
 
@@ -764,7 +764,7 @@ void SbiParser::DefEnum( BOOL bPrivate )
                 if( pOld )
                 {
                     Error( SbERR_VAR_DEFINED, pElem->GetName() );
-                    bDone = TRUE;   // Error occured
+                    bDone = TRUE;   // Error occurred
                     break;
                 }
 

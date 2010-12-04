@@ -804,7 +804,7 @@ class LoginDialog   :   public XTYPEPROVIDER                ,
             @short      helper methods to read/write  properties from/to ini file
             @descr      Using of Config-Class isn't easy everytime :-(
                         Thats the reason for these helper. State of operation isn't realy important ..
-                        but we assert impossible cases or occured errors!
+                        but we assert impossible cases or occurred errors!
 
             @seealso    -
 

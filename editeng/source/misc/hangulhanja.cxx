@@ -968,7 +968,7 @@ namespace editeng
 
             if( sChangeInto.getLength() )
             {
-                // change the current occurence
+                // change the current occurrence
                 implChange( sChangeInto );
 
                 // put into the "change all" list

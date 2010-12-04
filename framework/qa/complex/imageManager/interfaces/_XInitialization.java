@@ -75,7 +75,7 @@ public class _XInitialization {
             }
 
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured while method calling.") ;
+            log.println("Exception occurred while method calling.") ;
             e.printStackTrace((java.io.PrintWriter)log) ;
             result = false ;
         }

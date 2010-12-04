@@ -939,7 +939,7 @@ void MacabRecords::insertPropertyIntoMacabRecord(const ABPropertyType _propertyT
              * scalar type, an error, or an unknown type are found.
              * Because of that, the following checks only occur for this type.
              * We store whether we have successfully placed this property
-             * into the MacabRecord (or whether an unrecoverable error occured).
+             * into the MacabRecord (or whether an unrecoverable error occurred).
              * Then, we try over and over again to place the property into the
              * record. There are three possible results:
              * 1) Success!

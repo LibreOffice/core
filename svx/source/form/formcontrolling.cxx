@@ -463,7 +463,7 @@ namespace svx
         if ( bSuccess )
             return true;
 
-        // display the error. Prefer the one reported in errorOccured over the one caught.
+        // display the error. Prefer the one reported in errorOccurred over the one caught.
         if ( m_aOperationError.hasValue() )
             displayException( m_aOperationError );
         else if ( aError.hasValue() )
@@ -545,7 +545,7 @@ namespace svx
     //--------------------------------------------------------------------
     void SAL_CALL FormControllerHelper::errorOccured( const SQLErrorEvent& _Event ) throw (RuntimeException)
     {
-        OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccured: two errors during one operation?" );
+        OSL_ENSURE( !m_aOperationError.hasValue(), "FormControllerHelper::errorOccurred: two errors during one operation?" );
         m_aOperationError = _Event.Reason;
     }
 

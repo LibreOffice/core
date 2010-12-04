@@ -1773,7 +1773,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -1814,7 +1814,7 @@ void FmXFormShell::SetY2KState(sal_uInt16 n)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occured!");
+                    DBG_ERROR("FmXFormShell::SetY2KState: Exception occurred!");
                 }
 
             }
@@ -3238,7 +3238,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                 }
                 catch(Exception&)
                 {
-                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
+                    DBG_ERROR("FmXFormShell::stopFiltering: Exception occurred!");
                 }
 
                 if (!isRowSetAlive(xFormSet))

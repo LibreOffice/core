@@ -289,7 +289,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
         if ( pResMgr )
             aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, *pResMgr ))) );
         else
-            aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
+            aDiagnosticMessage.appendAscii( "The following internal error has occurred:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
     }
 

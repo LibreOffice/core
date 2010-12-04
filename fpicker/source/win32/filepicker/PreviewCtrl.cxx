@@ -419,7 +419,7 @@ sal_Bool SAL_CALL CFilePreview::show( sal_Bool bShow )
 // if the preview is shown and enabled
 // preview of the given file will be shown
 // returns true on success or false if an error
-// occured (the file in not there or not accessible etc.)
+// occurred (the file in not there or not accessible etc.)
 //---------------------------------------------------
 
 sal_Bool SAL_CALL CFilePreview::update( const rtl::OUString& aFileName )

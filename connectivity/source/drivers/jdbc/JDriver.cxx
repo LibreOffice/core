@@ -116,7 +116,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
         java_sql_Connection* pConnection = new java_sql_Connection( *this );
         xOut = pConnection;
         if ( !pConnection->construct(url,info) )
-            xOut.clear(); // an error occured and the java driver didn't throw an exception
+            xOut.clear(); // an error occurred and the java driver didn't throw an exception
         else
             m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_SUCCESS );
     }

@@ -88,7 +88,7 @@ ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     if( aAny >>= bValue )
         m_aCB_Use_Variants.Check( bValue );
 
-    // #117820# (search for other occurences!)
+    // #117820# (search for other occurrences!)
     // disable and hide that checkbox until it is decided if it is needed or not.
     // If it is to be removed later the respective code needs to be removed as
     // well, otherwise we just have to remove the next lines again.
@@ -130,7 +130,7 @@ void ChineseTranslationDialog::getSettings( sal_Bool& rbDirectionToSimplified
 
 void ChineseTranslationDialog::impl_UpdateVariantsCheckBox()
 {
-// #117820# (search for other occurences!)
+// #117820# (search for other occurrences!)
 //    m_aCB_Use_Variants.Enable( m_aRB_To_Traditional.IsChecked() );
 }
 
@@ -142,7 +142,7 @@ IMPL_LINK( ChineseTranslationDialog, DirectionHdl, void*, EMPTYARG )
 
 IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
 {
-// #117820# (search for other occurences!)
+// #117820# (search for other occurrences!)
 //    if( m_aCB_Translate_Commonterms.IsChecked() && m_aRB_To_Traditional.IsChecked() )
 //        m_aCB_Use_Variants.Check( true );
     return 0;

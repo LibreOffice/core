@@ -507,7 +507,7 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         }
         catch(Exception&)
         {
-            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occured!");
+            DBG_ERROR("FmGridHeader::ExecuteDrop: Exception occurred!");
         }
 
         sal_Int32 nPreferedType = -1;
@@ -2128,7 +2128,7 @@ void FmGridControl::KeyInput( const KeyEvent& rKEvt )
                         }
                         catch(const Exception&)
                         {
-                            OSL_ENSURE(0,"exception occured while deleting a column");
+                            OSL_ENSURE(0,"exception occurred while deleting a column");
                         }
                     }
                 }

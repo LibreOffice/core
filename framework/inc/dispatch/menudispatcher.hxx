@@ -176,7 +176,7 @@ class MenuDispatcher   :   // interfaces
             @seealso    method loadCancelled()
 
             @param      "xControl"  , css::uno::Reference to a valid listener for state events.
-            @param      "aURL"      , URL about listener will be informed, if something occured.
+            @param      "aURL"      , URL about listener will be informed, if something occurred.
             @return     -
 
             @onerror    -

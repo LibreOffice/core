@@ -46,7 +46,7 @@ en-US = "There is already a setup process running."
 
 
 [%UNKNOWN_ERROR%]
-en-US = "An Unknown Error occured!"
+en-US = "An Unknown Error occurred!"
 
 
 [%INVALID_PROFILE%]

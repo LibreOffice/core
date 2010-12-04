@@ -896,7 +896,7 @@ void XMLSectionExport::ExportBaseIndexSource(
         aAny = xLevelTemplates->getByIndex(i);
         aAny >>= aTemplateSequence;
 
-        // export the sequence (abort export if an error occured; #91214#)
+        // export the sequence (abort export if an error occurred; #91214#)
         sal_Bool bResult =
             ExportIndexTemplate(eType, i, rPropertySet, aTemplateSequence);
         if ( !bResult )

@@ -49,7 +49,7 @@ public class DatabaseMetaData {
         } catch( java.lang.IllegalAccessException ex ) {
             assure("IllegalAccessException!",false);
         } catch( SQLException ex ) {
-            assure("SQLException occured: " + ex.getMessage() ,false);
+            assure("SQLException occurred: " + ex.getMessage() ,false);
         } catch( java.lang.reflect.InvocationTargetException ex ) {
             assure("IllegalAccessException!",false);
         } finally {

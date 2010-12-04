@@ -913,7 +913,7 @@ void FmSearchEngine::Init(const ::rtl::OUString& sVisibleFields)
     }
     catch(Exception&)
     {
-        DBG_ERROR("Exception occured!");
+        DBG_ERROR("Exception occurred!");
     }
 
 }

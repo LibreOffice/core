@@ -86,15 +86,15 @@ while (<>) {
         # remove possible Windows line-ends
         chomp;
 
-        # patch all occurances of openoffice in ICON line with
+        # patch all occurrences of openoffice in ICON line with
         # $prefix
         s/Icon=/Icon=$iconprefix/;
 
-        # patch all occurances of openoffice in icon_filename
+        # patch all occurrences of openoffice in icon_filename
         # line with $prefix
         s/icon_filename=/icon_filename=$iconprefix/;
 
-        # patch all occurances of openoffice in EXEC line with
+        # patch all occurrences of openoffice in EXEC line with
         # $productfilename
         if ( /Exec/ ) {
             s/openoffice/$productfilename/;

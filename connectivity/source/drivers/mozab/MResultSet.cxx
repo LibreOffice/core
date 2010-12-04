@@ -981,7 +981,7 @@ void OResultSet::analyseWhereClause( const OSQLParseNode*                 parseT
                   && matchString.indexOf( MATCHCHAR ) == -1
                 )
             {
-                // One occurance of '%' - no '_' matches...
+                // One occurrence of '%' - no '_' matches...
                 if ( matchString.indexOf ( WILDCARD ) == 0 )
                 {
                     op = MQueryOp::EndsWith;

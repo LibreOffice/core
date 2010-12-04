@@ -281,7 +281,7 @@ sal_Int32 java_lang_Object::callIntMethod( const char* _pMethodName, jmethodID& 
     // call method
     jint out( t.pEnv->CallIntMethod( object, _inout_MethodID ) );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 
@@ -320,7 +320,7 @@ void java_lang_Object::callVoidMethodWithIntArg( const char* _pMethodName, jmeth
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }
@@ -333,7 +333,7 @@ void java_lang_Object::callVoidMethodWithBoolArg( const char* _pMethodName, jmet
     // call method
     t.pEnv->CallVoidMethod( object, _inout_MethodID,_nArgument );
     if ( _bIgnoreException )
-        isExceptionOccured(t.pEnv,sal_True);
+        isExceptionOccurred(t.pEnv,sal_True);
     else
         ThrowSQLException( t.pEnv, NULL );
 }

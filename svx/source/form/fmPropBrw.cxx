@@ -719,7 +719,7 @@ void FmPropBrw::StateChanged(sal_uInt16 nSID, SfxItemState eState, const SfxPool
     }
     catch (Exception&)
     {
-        DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
+        DBG_ERROR("FmPropBrw::StateChanged: Exception occurred!");
     }
     m_bInStateChange = false;
 }

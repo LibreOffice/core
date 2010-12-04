@@ -345,7 +345,7 @@ void JavaMigration::migrateJavarc()
             {
                 OSL_ENSURE(0, "[Service implementation " IMPL_NAME
                            "] XJob::execute: jfw_setSelectedJRE failed.");
-                fprintf(stderr, "\nCannot migrate Java. An error occured.\n");
+                fprintf(stderr, "\nCannot migrate Java. An error occurred.\n");
             }
         }
         else if (err == JFW_E_FAILED_VERSION)
