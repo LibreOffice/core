@@ -8052,7 +8052,7 @@ AC_MSG_RESULT([$BUILD_NCPUS])
 AC_SUBST(BUILD_NCPUS)
 
 dnl ===================================================================
-dnl Number of CPUs to use during the build
+dnl Number of parallel jobs to be executed by dmake
 dnl ===================================================================
 AC_MSG_CHECKING([for maximum of jobs per processor])
 BUILD_MAX_JOBS="1"
