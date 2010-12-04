@@ -8006,13 +8006,12 @@ dnl Use zenity during build
 dnl ===================================================================
 AC_MSG_CHECKING([whether to use zenity during build])
 if test "$enable_zenity" = "yes"; then
+   AC_MSG_RESULT([yes])
    AC_PATH_PROGS( ZNTY, zenity )
-   if test -z "ZNTY"; then
+   if test -z "$ZNTY"; then
       ENABLE_ZENITY=FALSE
-      AC_MSG_RESULT([no])
    else
       ENABLE_ZENITY=TRUE
-      AC_MSG_RESULT([yes])
    fi
 else
     ENABLE_ZENITY=FALSE
