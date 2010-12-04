@@ -216,7 +216,7 @@ private:
 
 // FORMAT record - number formats =============================================
 
-/** Stores all user defined number formats occured in the file. */
+/** Stores all user defined number formats occurred in the file. */
 class XclImpNumFmtBuffer : public XclNumFmtBuffer, protected XclImpRoot
 {
 public:
@@ -480,7 +480,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Contains all XF records occured in the file.
+/** Contains all XF records occurred in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
 class XclImpXFBuffer : protected XclImpRoot, private boost::noncopyable
 {

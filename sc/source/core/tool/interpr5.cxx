@@ -697,7 +697,7 @@ void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
  * permutations (row exchanges).
  *
  * Returns 0 if a singular matrix is encountered, else +1 if an even number of
- * permutations occured, or -1 if odd, which is the sign of the determinant.
+ * permutations occurred, or -1 if odd, which is the sign of the determinant.
  * This may be used to calculate the determinant by multiplying the sign with
  * the product of the diagonal elements of the LU matrix.
  */

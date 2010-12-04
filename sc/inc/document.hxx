@@ -680,7 +680,7 @@ public:
 
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
-        @return  true = DDE link found; false = Unpredictable error occured, no DDE link created. */
+        @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
     SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults = NULL );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).

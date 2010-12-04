@@ -77,7 +77,7 @@ using ::rtl::OUStringBuffer;
 
 namespace {
 
-// constants to track occurence of specific data types
+// constants to track occurrence of specific data types
 const sal_uInt16 EXC_PCITEM_DATA_STRING     = 0x0001;   /// String, empty, boolean, error.
 const sal_uInt16 EXC_PCITEM_DATA_DOUBLE     = 0x0002;   /// Double with fraction.
 const sal_uInt16 EXC_PCITEM_DATA_INTEGER    = 0x0004;   /// Integer, double without fraction.

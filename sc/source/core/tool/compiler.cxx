@@ -3140,10 +3140,10 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
         {
-            //  #b6355215# use GetNameOccurences to collect all positions of aName on the sheet
+            //  #b6355215# use GetNameOccurrences to collect all positions of aName on the sheet
             //  (only once), similar to the outer part of the loop in the "else" branch.
 
-            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurences( aName, aPos.Tab() );
+            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurrences( aName, aPos.Tab() );
 
             //  Loop through the found positions, similar to the inner part of the loop in the "else" branch.
             //  The order of addresses in the vector is the same as from ScCellIterator.

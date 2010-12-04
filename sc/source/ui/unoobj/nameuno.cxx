@@ -218,7 +218,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
     // GRAM_PODF_A1 for API compatibility.
     Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL,formula::FormulaGrammar::GRAM_PODF_A1 );
 
-    if ( aName != aNewStr )                 // some error occured...
+    if ( aName != aNewStr )                 // some error occurred...
         throw uno::RuntimeException();      // no other exceptions specified
 }
 

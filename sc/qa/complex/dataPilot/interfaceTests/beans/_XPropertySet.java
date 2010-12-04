@@ -205,19 +205,19 @@ public class _XPropertySet {
                 oObj.setPropertyValue(PTT.bound,
                     ValueChanger.changePValue(gValue));
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } // end of try-catch
@@ -260,19 +260,19 @@ public class _XPropertySet {
                 oObj.setPropertyValue(PTT.constrained,
                     ValueChanger.changePValue(gValue));
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } // end of try-catch
@@ -318,19 +318,19 @@ public class _XPropertySet {
                 oObj.setPropertyValue(PTT.normal, sValue);
                 sValue = oObj.getPropertyValue(PTT.normal);
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.normal+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.normal+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.normal+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.normal+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } // end of try-catch
@@ -368,12 +368,12 @@ public class _XPropertySet {
         try {
             Object gValue = oObj.getPropertyValue(toCheck);
         } catch (com.sun.star.beans.UnknownPropertyException e) {
-            log.println("Exception occured while trying to get property '"+
+            log.println("Exception occurred while trying to get property '"+
                  PTT.normal+"'");
             e.printStackTrace((java.io.PrintWriter)log);
             result = false;
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while trying to get property '"+
+            log.println("Exception occurred while trying to get property '"+
                 PTT.normal+"'");
             e.printStackTrace((java.io.PrintWriter)log);
             result = false;
@@ -411,19 +411,19 @@ public class _XPropertySet {
                 oObj.setPropertyValue(PTT.bound,
                     ValueChanger.changePValue(gValue));
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.bound+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } // end of try-catch
@@ -468,19 +468,19 @@ public class _XPropertySet {
                 oObj.setPropertyValue(PTT.constrained,
                     ValueChanger.changePValue(gValue));
             } catch (com.sun.star.beans.PropertyVetoException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.beans.UnknownPropertyException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while trying to change "+
+                log.println("Exception occurred while trying to change "+
                     "property '"+ PTT.constrained+"'");
                 e.printStackTrace((java.io.PrintWriter)log);
             } // end of try-catch

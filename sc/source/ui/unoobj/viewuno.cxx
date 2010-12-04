@@ -469,7 +469,7 @@ private:
     ScTabViewObj* pViewObj;
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper;
     sal_Bool bDelaySelectionEvent;
-    sal_Bool bSelectionChangeOccured;
+    sal_Bool bSelectionChangeOccurred;
 
     void fireSelectionChangeEvent();
 
@@ -487,7 +487,7 @@ public:
 };
 
 ScTabViewEventListener::ScTabViewEventListener(ScTabViewObj* pObj, uno::Reference< script::vba::XVBAEventProcessor >& rVbaEventsHelper):
-    pViewObj( pObj ),xVbaEventsHelper( rVbaEventsHelper ), bDelaySelectionEvent( sal_False ), bSelectionChangeOccured( sal_False )
+    pViewObj( pObj ),xVbaEventsHelper( rVbaEventsHelper ), bDelaySelectionEvent( sal_False ), bSelectionChangeOccurred( sal_False )
 {
 }
 
@@ -514,14 +514,14 @@ void ScTabViewEventListener::fireSelectionChangeEvent()
                 }
     }
     bDelaySelectionEvent = sal_False;
-    bSelectionChangeOccured = sal_False;
+    bSelectionChangeOccurred = sal_False;
 }
 
 sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouseEvent& e ) throw (uno::RuntimeException)
 {
     // Delay to fire the selection change event if clicking the left mouse button to do selection.
     bDelaySelectionEvent = ( e.Buttons == ::com::sun::star::awt::MouseButton::RIGHT ) ? sal_False : sal_True;
-    bSelectionChangeOccured = sal_False;
+    bSelectionChangeOccurred = sal_False;
 
     // ScTabViewObj::MousePressed should handle process BeforeDoubleClick and BeforeRightClick events
     return sal_True;
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouse
 
 sal_Bool SAL_CALL ScTabViewEventListener::mouseReleased( const awt::EnhancedMouseEvent&/*e*/) throw (uno::RuntimeException)
 {
-    if ( bSelectionChangeOccured )
+    if ( bSelectionChangeOccurred )
         fireSelectionChangeEvent();
     return sal_True;
 }
@@ -542,7 +542,7 @@ void SAL_CALL ScTabViewEventListener::selectionChanged( const lang::EventObject&
     }
     else
     {
-        bSelectionChangeOccured = sal_True;
+        bSelectionChangeOccurred = sal_True;
     }
 }
 

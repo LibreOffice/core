@@ -52,7 +52,7 @@ public:
             ScAutoNameCache( ScDocument* pD );
             ~ScAutoNameCache();
 
-    const ScAutoNameAddresses& GetNameOccurences( const String& rName, SCTAB nTab );
+    const ScAutoNameAddresses& GetNameOccurrences( const String& rName, SCTAB nTab );
 };
 
 #endif

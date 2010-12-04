@@ -1722,7 +1722,7 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
 
     SCSIZE nCount = (nOrient == sheet::DataPilotFieldOrientation_PAGE) ? PIVOT_MAXPAGEFIELD : PIVOT_MAXFIELD;
 
-    //! merge multiple occurences (data field with different functions)
+    //! merge multiple occurrences (data field with different functions)
     //! force data field in one dimension
 
     std::vector< long > aPos( nCount, 0 );

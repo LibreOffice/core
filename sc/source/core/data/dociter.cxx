@@ -1169,7 +1169,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                     if ( nTestEqualCondition && bTestEqualCondition )
                     {
                         nTestEqualCondition |= nTestEqualConditionMatched;
-                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        nStopOnMismatch |= nStopOnMismatchOccurred;
                         return NULL;
                     }
                     bool bStop;
@@ -1187,7 +1187,7 @@ ScBaseCell* ScQueryCellIterator::GetThis()
                         bStop = true;
                     if (bStop)
                     {
-                        nStopOnMismatch |= nStopOnMismatchOccured;
+                        nStopOnMismatch |= nStopOnMismatchOccurred;
                         return NULL;
                     }
                 }

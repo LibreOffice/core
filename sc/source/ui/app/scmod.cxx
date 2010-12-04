@@ -1918,7 +1918,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
 
         bMore = bLinks || bWidth || bSpell;         // ueberhaupt noch was?
 
-        //  While calculating a Basic formula, a paint event may have occured,
+        //  While calculating a Basic formula, a paint event may have occurred,
         //  so check the bNeedsRepaint flags for this document's views
         if (bWidth)
             lcl_CheckNeedsRepaint( pDocSh );
