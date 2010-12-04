@@ -249,7 +249,7 @@ class KeyGeneratorForReset extends UniqueColumnValue implements XResetListener
     /* ------------------------------------------------------------------ */
     public void resetted( com.sun.star.lang.EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
-        // check if this reset occured becase we're on a new record
+        // check if this reset occurred becase we're on a new record
         XPropertySet xFormProps = UNO.queryPropertySet( aEvent.Source );
         try
         {

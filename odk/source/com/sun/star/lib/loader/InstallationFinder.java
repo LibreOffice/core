@@ -79,7 +79,7 @@ final class InstallationFinder {
      * Gets the path of a UNO installation.
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified or found, or if an error occured
+     *         was specified or found, or if an error occurred
      */
     public static String getPath() {
 
@@ -140,7 +140,7 @@ final class InstallationFinder {
      * java -D<property name>=<installation path> -jar application.jar.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified in the Java system property or if an error occured
+     *         was specified in the Java system property or if an error occurred
      */
     private static String getPathFromProperty( String prop ) {
 
@@ -164,7 +164,7 @@ final class InstallationFinder {
      * Java versions.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was specified in the environment variable or if an error occured
+     *         was specified in the environment variable or if an error occurred
      */
     private static String getPathFromEnvVar( String var ) {
 
@@ -188,7 +188,7 @@ final class InstallationFinder {
      * <p>This method is called on the Windows platform only.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromWindowsRegistry() {
 
@@ -227,7 +227,7 @@ final class InstallationFinder {
      * Java versions.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromPathEnvVar() {
 
@@ -286,7 +286,7 @@ final class InstallationFinder {
      * is in one of the directories listed in the PATH environment variable.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromWhich() {
 
@@ -382,7 +382,7 @@ final class InstallationFinder {
      * OOo 2.0.</p>
      *
      * @return the installation path or <code>null</code>, if no installation
-     *         was found or if an error occured
+     *         was found or if an error occurred
      */
     private static String getPathFromSVersionFile() {
 

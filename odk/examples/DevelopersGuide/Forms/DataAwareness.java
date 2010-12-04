@@ -219,7 +219,7 @@ public class DataAwareness extends DocumentBasedExample implements XPropertyChan
     /* ------------------------------------------------------------------ */
     public void resetted( EventObject aEvent ) throws com.sun.star.uno.RuntimeException
     {
-        // check if this reset occured becase we're on a new record
+        // check if this reset occurred becase we're on a new record
         XPropertySet xFormProps = UNO.queryPropertySet(  aEvent.Source );
         try
         {

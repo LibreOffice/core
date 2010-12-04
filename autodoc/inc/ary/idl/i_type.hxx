@@ -58,7 +58,7 @@ class Type_2s
 
 /** Base of all IDL types.
 
-    Type represents the occurence of a type as base,
+    Type represents the occurrence of a type as base,
     parameter, return type or element type in UNO IDL code.
     Some of them relate to a ->CodeEntity, but
     the ->Type "MyInterface" is something different than
