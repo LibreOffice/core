@@ -640,7 +640,7 @@ sal_Bool OSelectionBrowseBox::fillColumnRef(const ::rtl::OUString& _sColumnName,
         if ( pTabWinList )
         {
             sal_uInt16 nTabCount = 0;
-            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occured: column not in table window
+            if ( !static_cast<OQueryTableView*>(getDesignView()->getTableView())->FindTableFromField(_sColumnName,_pEntry,nTabCount) ) // error occurred: column not in table window
             {
                 String sErrorMsg(ModuleRes(RID_STR_FIELD_DOESNT_EXIST));
                 sErrorMsg.SearchAndReplaceAscii("$name$",_sColumnName);

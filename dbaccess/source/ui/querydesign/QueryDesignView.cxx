@@ -247,7 +247,7 @@ namespace
                     bError = sal_True;
             }
         }
-        // check if error occured
+        // check if error occurred
         if ( bError )
             eErrorCode = eIllegalJoin;
 
@@ -2823,7 +2823,7 @@ sal_Bool OQueryDesignView::checkStatement()
 {
     sal_Bool bRet = sal_True;
     if ( m_pSelectionBox )
-        bRet = m_pSelectionBox->Save(); // an error occured so we return no
+        bRet = m_pSelectionBox->Save(); // an error occurred so we return no
     return bRet;
 }
 //-------------------------------------------------------------------------------

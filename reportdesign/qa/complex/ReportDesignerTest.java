@@ -537,7 +537,7 @@ public class ReportDesignerTest extends ComplexTestCase {
             catch (com.sun.star.util.CloseVetoException e)
             {
                 log.println("ERROR: CloseVetoException caught");
-                log.println("CloseVetoException occured Can't close document.");
+                log.println("CloseVetoException occurred Can't close document.");
                 log.println("Message: " + e.getMessage());
             }
         }

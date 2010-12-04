@@ -1410,7 +1410,7 @@ IMPL_LINK( SbaXDataBrowserController, OnAsyncDisplayError, void*, /* _pNotIntere
 //------------------------------------------------------------------------------
 void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErrorEvent& aEvent) throw( RuntimeException )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::errorOccured" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaui", "Ocke.Janssen@sun.com", "SbaXDataBrowserController::errorOccurred" );
     ::osl::MutexGuard aGuard( getMutex() );
 
     SQLExceptionInfo aInfo( aEvent.Reason );
@@ -1419,7 +1419,7 @@ void SbaXDataBrowserController::errorOccured(const ::com::sun::star::sdb::SQLErr
 
     if ( m_nFormActionNestingLevel )
     {
-        OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccured: can handle one error per transaction only!" );
+        OSL_ENSURE( !m_aCurrentError.isValid(), "SbaXDataBrowserController::errorOccurred: can handle one error per transaction only!" );
         m_aCurrentError = aInfo;
     }
     else

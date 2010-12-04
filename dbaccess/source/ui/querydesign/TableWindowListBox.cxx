@@ -77,7 +77,7 @@ OTableWindowListBox::OTableWindowListBox( OTableWindow* pParent )
 void OTableWindowListBox::dragFinished( )
 {
     // first show the error msg when existing
-    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccuredError());
+    m_pTabWin->getDesignView()->getController().showError(m_pTabWin->getDesignView()->getController().clearOccurredError());
     // second look for ui activities which should happen after d&d
     if (m_nUiEvent)
         Application::RemoveUserEvent(m_nUiEvent);
@@ -322,7 +322,7 @@ IMPL_LINK( OTableWindowListBox, DropHdl, void *, /*EMPTY_ARG*/)
     catch(const SQLException& e)
     {
         // remember the exception so that we can show them later when d&d is finished
-        m_pTabWin->getDesignView()->getController().setErrorOccured(::dbtools::SQLExceptionInfo(e));
+        m_pTabWin->getDesignView()->getController().setErrorOccurred(::dbtools::SQLExceptionInfo(e));
     }
     return 0L;
 }

@@ -1147,7 +1147,7 @@ void OTableController::alterColumns()
                         xAppend->appendByDescriptor(xNewColumn);
                     }
                     catch(const SQLException&)
-                    { // an error occured so we try to reactivate the old one
+                    { // an error occurred so we try to reactivate the old one
                         xAppend->appendByDescriptor(xColumn);
                         throw;
                     }

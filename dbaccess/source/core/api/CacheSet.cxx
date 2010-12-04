@@ -137,11 +137,11 @@ OCacheSet::~OCacheSet()
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"Exception occured");
+        OSL_ENSURE(0,"Exception occurred");
     }
     catch(...)
     {
-        OSL_ENSURE(0,"Unknown Exception occured");
+        OSL_ENSURE(0,"Unknown Exception occurred");
     }
 
     DBG_DTOR(OCacheSet,NULL);

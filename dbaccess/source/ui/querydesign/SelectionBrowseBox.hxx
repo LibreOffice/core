@@ -259,7 +259,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
-                <TRUE/> if an error occured otherwise <FALSE/>
+                <TRUE/> if an error occurred otherwise <FALSE/>
         */
         sal_Bool        saveField(const String& _sFieldName,OTableFieldDescRef& _pEntry,sal_Bool& _bListAction);
 
@@ -283,7 +283,7 @@ namespace dbaui
             @param  _bListAction
                 Will be set to <TRUE/> when we are in a list action otherwise <FALSE/>
             @return
-                <TRUE/> if an error occured otherwise <FALSE/>
+                <TRUE/> if an error occurred otherwise <FALSE/>
         */
         sal_Bool        fillColumnRef(  const ::connectivity::OSQLParseNode* _pColumnRef,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,

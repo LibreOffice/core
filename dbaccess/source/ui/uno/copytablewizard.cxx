@@ -328,7 +328,7 @@ namespace dbaui
                     const Reference< XPropertySet >& _rxDestTable
                 );
 
-        /** processes an error which occured during copying
+        /** processes an error which occurred during copying
 
             First, all listeners are ask. If a listener tells to cancel or continue copying, this is reported to the
             method's caller. If a listener tells to ask the user, this is done, and the user's decision is
@@ -1112,7 +1112,7 @@ bool CopyTableWizard::impl_processCopyError_nothrow( const CopyTableRowEvent& _r
     {
         SQLContext aError;
         aError.Context = *this;
-        aError.Message = String( ModuleRes( STR_ERROR_OCCURED_WHILE_COPYING ) );
+        aError.Message = String( ModuleRes( STR_ERROR_OCCURRED_WHILE_COPYING ) );
 
         ::dbtools::SQLExceptionInfo aInfo( _rEvent.Error );
         if ( aInfo.isValid() )

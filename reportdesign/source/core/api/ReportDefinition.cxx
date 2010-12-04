@@ -1854,7 +1854,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         {
             if ( i == nLastOpenMode )
                 throw lang::WrappedTargetException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An error occured while creating the document storage." ) ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An error occurred while creating the document storage." ) ),
                         // TODO: resource
                     *this,
                     ::cppu::getCaughtException()

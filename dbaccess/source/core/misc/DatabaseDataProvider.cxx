@@ -240,7 +240,7 @@ uno::Reference< chart2::data::XDataSource > SAL_CALL DatabaseDataProvider::creat
             {
             }
         }
-        if ( !bRet ) // no command set or an error occured, use Internal data handler
+        if ( !bRet ) // no command set or an error occurred, use Internal data handler
         {
             uno::Reference< lang::XInitialization> xIni(m_xInternal,uno::UNO_QUERY);
             if ( xIni.is() )

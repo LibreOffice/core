@@ -179,7 +179,7 @@ namespace dbaccess
                 m_xActiveConnection points to a valid SDB-level connection
 
             @throws com::sun::star::sdb::SQLException
-                if an database-related error occured
+                if an database-related error occurred
 
             @throws com::sun::star::uno::RuntimeException
                 if any of the components involved throws a com::sun::star::uno::RuntimeException

@@ -1084,7 +1084,7 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
     // Create drag lines over all viewable Views
     // Therefore we need to identify the marked objects
     // and create temporary objects on all other views at the same position
-    // relative to its occurance.
+    // relative to its occurrence.
 
     OSL_TRACE("BegDragObj createInvisible Objects\n" );
     int nViewCount = 0;

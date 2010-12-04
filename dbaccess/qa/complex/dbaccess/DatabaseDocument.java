@@ -653,7 +653,7 @@ public class DatabaseDocument extends TestCase implements com.sun.star.document.
                 "  oEvent.EventName = \"OnLoad\"\n" +
                 "  oEvent.Source = ThisComponent\n" +
                 "\n" +
-                "  oCallback.documentEventOccured( oEvent )\n" +
+                "  oCallback.documentEventOccurred( oEvent )\n" +
                 "End Sub\n";
         XModel databaseDoc = impl_createDocWithMacro( libName, moduleName, eventHandlerCode );
         final String documentURL = databaseDoc.getURL();

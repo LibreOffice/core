@@ -889,7 +889,7 @@ SdrObject* isOver(const Rectangle& _rRect, SdrPage& _rPage, SdrView& _rView, boo
     return pOverlappedObj;
 }
 // -----------------------------------------------------------------------------
-bool checkArrayForOccurance(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
+bool checkArrayForOccurrence(SdrObject* _pObjToCheck, SdrUnoObj* _pIgnore[], int _nListLength)
 {
     for(int i=0;i<_nListLength;i++)
     {
@@ -910,7 +910,7 @@ SdrObject* isOver(const Rectangle& _rRect,SdrPage& _rPage,SdrView& _rView,bool _
 
     while( !pOverlappedObj && (pObjIter = aIter.Next()) != NULL )
     {
-        if (checkArrayForOccurance(pObjIter, _pIgnoreList, _nIgnoreListLength))
+        if (checkArrayForOccurrence(pObjIter, _pIgnoreList, _nIgnoreListLength))
         {
             continue;
         }

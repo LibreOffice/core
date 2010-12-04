@@ -151,7 +151,7 @@ namespace dbaui
             @param  _sReturn
                 <OUT/> contains the selected name.
             @return
-                <FALSE/> if an error occured, otherwise <TRUE/>
+                <FALSE/> if an error occurred, otherwise <TRUE/>
         */
         sal_Bool getSelectedDataSource(::rtl::OUString& _sReturn,::rtl::OUString& _sCurr);
 

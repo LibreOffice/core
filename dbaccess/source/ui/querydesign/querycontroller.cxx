@@ -1614,7 +1614,7 @@ bool OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         {
             ::dbtools::SQLExceptionInfo aInfo(e);
             showError(aInfo);
-            // an error occured so we clear the statement
+            // an error occurred so we clear the statement
             sTranslatedStmt = ::rtl::OUString();
         }
     }

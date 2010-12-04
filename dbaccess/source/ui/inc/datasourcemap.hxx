@@ -113,7 +113,7 @@ namespace dbaui
         void        clearModifiedFlag(const ::rtl::OUString& _rName);
 
         /** tell the map that a data source is scheduled to be deleted.
-            @return     id for accessing the deleted data source later. -1 if no free id existed or an error occured
+            @return     id for accessing the deleted data source later. -1 if no free id existed or an error occurred
         */
         sal_Int32   markDeleted(const ::rtl::OUString& _rName);
 

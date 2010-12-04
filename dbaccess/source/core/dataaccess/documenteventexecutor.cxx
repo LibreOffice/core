@@ -163,7 +163,7 @@ namespace dbaccess
         Reference< XEventsSupplier > xEventsSupplier( m_pData->xDocument.get(), UNO_QUERY );
         if ( !xEventsSupplier.is() )
         {
-            OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccured: no document anymore, but still being notified?" );
+            OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccurred: no document anymore, but still being notified?" );
             return;
         }
 
@@ -176,7 +176,7 @@ namespace dbaccess
             {
                 // this is worth an assertion: We are listener at the very same document which we just asked
                 // for its events. So when EventName is fired, why isn't it supported by xDocEvents?
-                OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccured: an unsupported event is notified!" );
+                OSL_ENSURE( false, "DocumentEventExecutor::documentEventOccurred: an unsupported event is notified!" );
                 return;
             }
 
@@ -199,7 +199,7 @@ namespace dbaccess
             bool bNonEmptyScript = sScript.getLength() != 0;
 
             OSL_ENSURE( bDispatchScriptURL && bNonEmptyScript,
-                "DocumentEventExecutor::documentEventOccured: invalid/unsupported script descriptor" );
+                "DocumentEventExecutor::documentEventOccurred: invalid/unsupported script descriptor" );
 
             if ( bDispatchScriptURL && bNonEmptyScript )
             {

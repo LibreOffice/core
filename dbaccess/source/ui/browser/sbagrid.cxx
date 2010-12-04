@@ -1113,7 +1113,7 @@ Reference< XPropertySet >  SbaGridControl::getField(sal_uInt16 nModelPos)
     }
     catch(Exception&)
     {
-        OSL_ENSURE(0,"SbaGridControl::getField Exception occured!");
+        OSL_ENSURE(0,"SbaGridControl::getField Exception occurred!");
     }
 
     return xEmptyReturn;

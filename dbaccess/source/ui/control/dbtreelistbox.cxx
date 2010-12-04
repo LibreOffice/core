@@ -155,7 +155,7 @@ void DBTreeListBox::RequestingChilds( SvLBoxEntry* pParent )
     {
         if (!m_aPreExpandHandler.Call(pParent))
         {
-            // an error occured. The method calling us will reset the entry flags, so it can't be expanded again.
+            // an error occurred. The method calling us will reset the entry flags, so it can't be expanded again.
             // But we want that the user may do a second try (i.e. because he misstypes a password in this try), so
             // we have to reset these flags controlling the expand ability
             PostUserEvent(LINK(this, DBTreeListBox, OnResetEntry), pParent);

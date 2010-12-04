@@ -199,7 +199,7 @@ void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConn
     }
     catch(Exception&)
     {
-        // a non-SQLException exception occured ... simply throw an SQLException
+        // a non-SQLException exception occurred ... simply throw an SQLException
         SQLException aInfo;
         aInfo.Message = sCurrentActionError;
         throw aInfo;

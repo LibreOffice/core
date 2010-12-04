@@ -2174,7 +2174,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnExpandEntry, SvLBoxEntry*, _pParent)
         }
         else
             return 0L;
-                // 0 indicates that an error occured
+                // 0 indicates that an error occurred
     }
     else
     {   // we have to expand the queries or bookmarks
