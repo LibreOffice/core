@@ -86,7 +86,6 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, ::
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
-//  SetBackground( Wallpaper( Color( COL_BLACK ) ) );
     SetBackground(); // avoids that VCL paints any background!
     GetParent()->Show();
     AddEventListener( LINK( this, ShowWindow, EventHdl ) );
@@ -289,17 +288,6 @@ void ShowWindow::Paint(const Rectangle& rRect)
 {
     if( (meShowWindowMode == SHOWWINDOWMODE_NORMAL) || (meShowWindowMode == SHOWWINDOWMODE_PREVIEW) )
     {
-/*
-        Region aOldClipRegion( GetClipRegion() );
-
-        Region aClipRegion( rRect );
-        aClipRegion.Exclude( maPresArea );
-        SetClipRegion( aClipRegion );
-
-        DrawWallpaper( rRect, maShowBackground );
-
-        SetClipRegion( aOldClipRegion );
-*/
         if( mxController.is() )
         {
             mxController->paint(rRect);
@@ -337,13 +325,6 @@ void ShowWindow::Paint(const Rectangle& rRect)
 long ShowWindow::Notify(NotifyEvent& rNEvt)
 {
     long nOK = FALSE;
-/*
-    if( mpViewShell && rNEvt.GetType() == EVENT_GETFOCUS )
-    {
-        NotifyEvent aNEvt(EVENT_GETFOCUS, this);
-        nOK = mpViewShell->GetViewFrame()->GetWindow().Notify(aNEvt);
-    }
-*/
     if (!nOK)
         nOK = Window::Notify(rNEvt);
 
@@ -357,13 +338,6 @@ void ShowWindow::GetFocus()
 {
     // Basisklasse
     Window::GetFocus();
-/*
-    if( mpViewShell )
-    {
-        NotifyEvent aNEvt(EVENT_GETFOCUS, this);
-        mpViewShell->GetViewFrame()->GetWindow().Notify(aNEvt);
-    }
-*/
 }
 
 // -----------------------------------------------------------------------------
@@ -398,8 +372,6 @@ BOOL ShowWindow::SetEndMode()
     {
         DeleteWindowFromPaintView();
         meShowWindowMode = SHOWWINDOWMODE_END;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
@@ -434,8 +406,6 @@ BOOL ShowWindow::SetPauseMode( sal_Int32 nPageIndexToRestart, sal_Int32 nTimeout
         mnPauseTimeout = nTimeout;
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_PAUSE;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( Color( COL_BLACK ) ) );
         maShowBackground = Wallpaper( Color( COL_BLACK ) );
 
         // hide navigator if it is visible
@@ -466,8 +436,6 @@ BOOL ShowWindow::SetBlankMode( sal_Int32 nPageIndexToRestart, const Color& rBlan
         DeleteWindowFromPaintView();
         mnRestartPageIndex = nPageIndexToRestart;
         meShowWindowMode = SHOWWINDOWMODE_BLANK;
-//      maShowBackground = GetBackground();
-//      SetBackground( Wallpaper( rBlankColor ) );
         maShowBackground = Wallpaper( rBlankColor );
 
         // hide navigator if it is visible
@@ -498,7 +466,6 @@ void ShowWindow::TerminateShow()
     maPauseTimer.Stop();
     maMouseTimer.Stop();
     Erase();
-//  SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;
@@ -536,7 +503,6 @@ void ShowWindow::RestartShow( sal_Int32 nPageIndexToRestart )
     maLogo.Clear();
     maPauseTimer.Stop();
     Erase();
-//  SetBackground( maShowBackground );
     maShowBackground = Wallpaper( Color( COL_BLACK ) );
     meShowWindowMode = SHOWWINDOWMODE_NORMAL;
     mnPauseTimeout = SLIDE_NO_TIMEOUT;

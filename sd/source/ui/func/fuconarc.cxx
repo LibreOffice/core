@@ -144,7 +144,6 @@ BOOL FuConstructArc::MouseButtonDown( const MouseEvent& rMEvt )
             SfxItemSet aAttr(mpDoc->GetPool());
             SetStyleSheet(aAttr, pObj);
 
-//-/            pObj->NbcSetAttributes(aAttr, FALSE);
             pObj->SetMergedItemSet(aAttr);
         }
 
@@ -262,7 +261,6 @@ void FuConstructArc::Activate()
     mpView->SetCurrentObj((UINT16)aObjKind);
 
     FuConstruct::Activate();
-//  FuDraw::Activate();
 }
 
 /*************************************************************************
@@ -274,22 +272,10 @@ void FuConstructArc::Activate()
 void FuConstructArc::Deactivate()
 {
     FuConstruct::Deactivate();
-//  FuDraw::Deactivate();
 }
 
-// #97016#
 SdrObject* FuConstructArc::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_DRAW_ARC:
-    // case SID_DRAW_CIRCLEARC:
-    // case SID_DRAW_PIE:
-    // case SID_DRAW_PIE_NOFILL:
-    // case SID_DRAW_CIRCLEPIE:
-    // case SID_DRAW_CIRCLEPIE_NOFILL:
-    // case SID_DRAW_ELLIPSECUT:
-    // case SID_DRAW_ELLIPSECUT_NOFILL:
-    // case SID_DRAW_CIRCLECUT:
-    // case SID_DRAW_CIRCLECUT_NOFILL:
 
     SdrObject* pObj = SdrObjFactory::MakeNewObject(
         mpView->GetCurrentObjInventor(), mpView->GetCurrentObjIdentifier(),

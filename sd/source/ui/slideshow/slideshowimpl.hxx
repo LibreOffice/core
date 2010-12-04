@@ -398,7 +398,6 @@ private:
     bool            mbSwitchEraserMode;
     double          mdUserPaintStrokeWidth;
     bool            mbEraseAllInk;
-//    bool          mbEraseInk;
     sal_Int32       mnEraseInkSize;
 #endif
     /// used in updateHdl to prevent recursive calls

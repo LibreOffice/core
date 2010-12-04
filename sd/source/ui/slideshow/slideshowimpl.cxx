@@ -120,12 +120,8 @@ static USHORT __READONLY_DATA pAllowed[] =
 {
     SID_OPENDOC                             , //     5501   // damit interne Spruenge klappen
     SID_JUMPTOMARK                          , //     5598
-//  SID_SHOWPOPUPS                          , //     5929
-//    SID_GALLERY                             , //     5960
     SID_OPENHYPERLINK                       , //     6676
-//    SID_GALLERY_FORMATS                     , //    10280
     SID_NAVIGATOR                           , //    10366
-//  SID_FM_DESIGN_MODE                      , //    10629
     SID_PRESENTATION_END                    , //    27218
     SID_NAVIGATOR_PAGENAME                  , //    27287
     SID_NAVIGATOR_STATE                     , //    27288
@@ -560,7 +556,6 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 , mbSwitchEraserMode(false)
 , mdUserPaintStrokeWidth ( 4.0 )
 , mbEraseAllInk(false)
-//, mbEraseInk(false)
 , mnEraseInkSize(100)
 #endif
 , mnEntryCounter(0)
@@ -1033,10 +1028,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             Help::DisableContextHelp();
             Help::DisableExtHelp();
 
-        //  mpTimeButton = new PushButton( mpShowWindow, SdResId( RID_TIME_BUTTON ) );
-        //  maPencil = Pointer( POINTER_PEN );
-        //  mpTimeButton->Hide();
-
             if( maPresSettings.mbFullScreen )
             {
                 // disable basic ide error handling
@@ -1060,18 +1051,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
             // WorkWindow propagates the resize to the DrawViewShell which calls
             // resize() at the SlideShow (this).  Calling resize here results in a
             // temporary display of a black window in the window's default size
-
-/*
-            if ( mbRehearseTimings )
-            {
-                Size  aButtonSizePixel( pTimeButton->GetSizePixel() );
-                Point aButtonPosPixel( aButtonSizePixel.Width() >> 1, pShowWindow->GetSizePixel().Height() - aButtonSizePixel.Height() * 5 / 2);
-
-                pTimeButton->SetPosPixel( aButtonPosPixel );
-                aTimer.SetTimeoutHdl( LINK( this,FuSlideShow, TimeButtonTimeOutHdl ) );
-                pTimeButton->SetClickHdl( LINK( this, FuSlideShow, TimeButtonHdl ) );
-            }
-*/
 
             if( mpView )
             {
@@ -1111,13 +1090,6 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
                     -1, Any( bZOrderEnabled == sal_False ),
                     beans::PropertyState_DIRECT_VALUE ) );
 
-/*
-            aProperties.push_back(
-                beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") ),
-                    -1, Any( maPresSettings.mbMouseVisible != sal_False ),
-                    beans::PropertyState_DIRECT_VALUE ) );
-*/
             aProperties.push_back(
                 beans::PropertyValue(
                     OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
@@ -1708,7 +1680,7 @@ sal_Int32 SlideshowImpl::getSlideNumberForBookmark( const OUString& rStrBookmark
 
     if( nPgNum == SDRPAGE_NOTFOUND )
     {
-        // Ist das Bookmark ein Objekt?
+        // Is the bookmark an object?
         SdrObject* pObj = mpDoc->GetObj( aBookmark );
 
         if( pObj )
@@ -1912,9 +1884,7 @@ sal_Int32 SlideshowImpl::updateSlideShow (void)
         // G550, the frame rates were much more steadier with this
         // tweak, although.
 
-// currently no solution, because this kills sound (at least on Windows)
-//         // Boost our prio, as long as we're in the render loop
-//         ::canvas::tools::PriorityBooster aBooster(2);
+        // currently no solution, because this kills sound (at least on Windows)
 
         double fUpdate = 0.0;
         if( !xShow->update(fUpdate) )
@@ -2800,17 +2770,6 @@ void SlideshowImpl::resize( const Size& rSize )
     {
         mpShowWindow->SetSizePixel( maPresSize );
         mpShowWindow->Show();
-
-        // Call ToTop() to bring the window to top if
-        // a) the old size is not degenerate (then the window will be closed
-        // soon) and
-        // b) the animation mode is not that of a preview (on the one hand
-        // this leaves the old behaviour for the slide show mode unmodified
-        // and on the other hand does not move the focus from the document
-        // to the (preview) window; the ToTop() seems not to be necessary at
-        // least for the preview).
-//        if( !aOldSize.Width() && !aOldSize.Height() )
-//          mpShowWindow->ToTop();
     }
 
     if( mxView.is() ) try

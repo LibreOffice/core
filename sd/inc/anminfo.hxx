@@ -71,7 +71,6 @@ public:
     String                  maSecondSoundFile; // fuer Objekt ausblenden
     BOOL                    mbSecondSoundOn;    // fuer Objekt ausblenden
     BOOL                    mbSecondPlayFull;// fuer Objekt ausblenden
-//  String                  maBookmark;     // Sprung zu Objekt/Seite
     USHORT                  mnVerb;         // fuer OLE-Objekt
     ULONG                   mnPresOrder;
     SdrObject&              mrObject;

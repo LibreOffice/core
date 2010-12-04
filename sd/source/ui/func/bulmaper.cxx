@@ -131,7 +131,6 @@ void SdBulletMapper::MapFontsInNumRule( SvxNumRule& aNumRule, const SfxItemSet& 
             aMyFont.SetShadow(rSItem.GetValue());
 
             aNewLevel.SetBulletFont(&aMyFont);
-//          aNewLevel.SetBulletRelSize( 75 );
             aNumRule.SetLevel(nLevel, aNewLevel );
         }
         else if( rSrcLevel.GetNumberingType() == com::sun::star::style::NumberingType::CHAR_SPECIAL )

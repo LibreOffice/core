@@ -129,7 +129,6 @@ public:
     virtual BOOL    GetAttributes( SfxItemSet& rTargetSet, BOOL bOnlyHardAttr=FALSE ) const;
     virtual BOOL    SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll = FALSE);
 
-//  virtual BOOL       HasMarkedObjUnused() const;
     void               FillOutliner();
     void               SetLinks();
     void               ResetLinks() const;
@@ -152,7 +151,7 @@ public:
         USHORT nLayer = SDRPAGE_NOTFOUND);
 
 
-    // #97766# Re-implement GetScriptType for this view to get correct results
+    // Re-implement GetScriptType for this view to get correct results
     virtual sal_uInt16 GetScriptType() const;
 
     /** After this method has been called with <TRUE/> following changes of

@@ -2547,7 +2547,6 @@ void SdDrawPage::setBackground( const Any& rValue )
         pBackground->fillItemSet( (SdDrawDocument*)GetPage()->GetModel(), aSet );
     }
 
-//-/    pObj->NbcSetAttributes( aSet, sal_False );
     if( aSet.Count() == 0 )
     {
         // no background fill, represent by setting XFILL_NONE
@@ -2562,7 +2561,6 @@ void SdDrawPage::setBackground( const Any& rValue )
 
     // repaint only
     SvxFmDrawPage::mpPage->ActionChanged();
-    // pPage->SendRepaintBroadcast();
 }
 
 // XAnnotationAccess:

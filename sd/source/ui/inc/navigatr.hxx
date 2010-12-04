@@ -125,7 +125,6 @@ private:
     ::sd::NavigatorChildWindow*     mpChildWinContext;
     Size                        maSize;
     Size                        maMinSize;
-//  Size                        maFltWinSize;
     BOOL                        mbDocImported;
     String                      maDropFileName;
     NavigatorDragType           meDragType;

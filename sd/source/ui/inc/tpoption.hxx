@@ -54,8 +54,6 @@ public:
     virtual BOOL FillItemSet( SfxItemSet& );
     virtual void Reset( const SfxItemSet & );
 
-//    virtual void ActivatePage( const SfxItemSet& rSet );
-//    virtual int  DeactivatePage( SfxItemSet* pSet );
 };
 /*************************************************************************
 |*

@@ -57,7 +57,6 @@
 #include "ToolBarManager.hxx"
 #include <svx/svx3ditems.hxx>
 
-// #97016#
 #include <svx/polysc3d.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 
@@ -104,7 +103,6 @@ void FuConstruct3dObject::DoExecute( SfxRequest& rReq )
 |*
 \************************************************************************/
 
-// #97016#
 E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
 {
     E3dCompoundObject* p3DObj = NULL;
@@ -261,7 +259,6 @@ E3dCompoundObject* FuConstruct3dObject::ImpCreateBasic3DShape()
     return p3DObj;
 }
 
-// #97016#
 void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dScene *pScene)
 {
     Camera3D &aCamera  = (Camera3D&) pScene->GetCamera ();
@@ -289,7 +286,6 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
 
         case SID_3D_SPHERE:
         {
-//              pScene->RotateX(DEG2RAD(60));
         }
         break;
 
@@ -304,13 +300,11 @@ void FuConstruct3dObject::ImpPrepareBasic3DShape(E3dCompoundObject* p3DObj, E3dS
         case SID_3D_CONE:
         case SID_3D_PYRAMID:
         {
-//              pScene->RotateX(DEG2RAD(25));
         }
         break;
 
         case SID_3D_TORUS:
         {
-//              pScene->RotateX(DEG2RAD(15));
             aTransformation.rotate(DEG2RAD(90), 0.0, 0.0);
         }
         break;
@@ -342,11 +336,9 @@ BOOL FuConstruct3dObject::MouseButtonDown(const MouseEvent& rMEvt)
 
         WaitObject aWait( (Window*)mpViewShell->GetActiveWindow() );
 
-        // #97016#
         p3DObj = ImpCreateBasic3DShape();
         E3dScene* pScene = mpView->SetCurrent3DObj(p3DObj);
 
-        // #97016#
         ImpPrepareBasic3DShape(p3DObj, pScene);
         bReturn = mpView->BegCreatePreparedObject(aPnt, nDrgLog, pScene);
 
@@ -441,17 +433,8 @@ void FuConstruct3dObject::Deactivate()
     FuConstruct::Deactivate();
 }
 
-// #97016#
 SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
-    // case SID_3D_CUBE:
-    // case SID_3D_SHELL:
-    // case SID_3D_SPHERE:
-    // case SID_3D_TORUS:
-    // case SID_3D_HALF_SPHERE:
-    // case SID_3D_CYLINDER:
-    // case SID_3D_CONE:
-    // case SID_3D_PYRAMID:
 
     E3dCompoundObject* p3DObj = ImpCreateBasic3DShape();
 
@@ -465,7 +448,6 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
     Rectangle a3DRect(0, 0, (long)fW, (long)fH);
     E3dScene* pScene = new E3dPolyScene(mpView->Get3DDefaultAttributes());
 
-    // mpView->InitScene(pScene, fW, fH, aVolume.MaxVec().Z() + ((fW + fH) / 4.0));
     // copied code from E3dView::InitScene
     double fCamZ(aVolume.getMaxZ() + ((fW + fH) / 4.0));
     Camera3D aCam(pScene->GetCamera());
@@ -523,7 +505,7 @@ SdrObject* FuConstruct3dObject::CreateDefaultObject(const sal_uInt16 nID, const 
         }
     }
 
-    // #97016#, #98245# use changed rectangle, not original one
+    // use changed rectangle, not original one
     pScene->SetLogicRect(aRect);
 
     return pScene;

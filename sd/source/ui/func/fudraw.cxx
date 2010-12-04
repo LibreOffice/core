@@ -117,7 +117,7 @@ FuDraw::~FuDraw()
 
 BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    // #95491# remember button state for creation of own MouseEvents
+    // remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
 
     BOOL bReturn = FALSE;
@@ -130,8 +130,6 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
     {
         FrameView* pFrameView = mpViewShell->GetFrameView();
 
-//        BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//        bOrtho = bOrtho != rMEvt.IsShift();
         BOOL bOrtho = FALSE;
 
         BOOL bRestricted = TRUE;
@@ -220,7 +218,7 @@ BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
         SdrPageView* pPV = 0;
         USHORT nHitLog = USHORT ( mpWindow->PixelToLogic(Size(HITPIX,0)).Width() );
 
-        // #76572# look only for HelpLines when they are visible (!)
+        // look only for HelpLines when they are visible (!)
         BOOL bHelpLine(FALSE);
         if(mpView->IsHlplVisible())
             bHelpLine = mpView->PickHelpLine(aMDPos, nHitLog, *mpWindow, nHelpLine, pPV);
@@ -252,8 +250,6 @@ BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
     FrameView* pFrameView = mpViewShell->GetFrameView();
     Point aPos = mpWindow->PixelToLogic( rMEvt.GetPosPixel() );
 
-//    BOOL bOrtho = mpView->IsOrthoDesired() || pFrameView->IsOrtho();
-//    bOrtho = bOrtho != rMEvt.IsShift();
     BOOL bOrtho = FALSE;
 
     BOOL bRestricted = TRUE;
@@ -461,7 +457,7 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( !aCode.IsMod1() && !aCode.IsMod2() )
             {
-                // #105336# Moved next line which was a bugfix itself into
+                // Moved next line which was a bugfix itself into
                 // the scope which really does the object selection travel
                 // and thus is allowed to call SelectionHasChanged().
 
@@ -473,13 +469,12 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
                 // changeover to the next object
                 if(!mpView->MarkNextObj( !aCode.IsShift() ))
                 {
-                    // #97016# No next object: go over open end and
+                    // No next object: go over open end and
                     // get first from the other side
                     mpView->UnmarkAllObj();
                     mpView->MarkNextObj(!aCode.IsShift());
                 }
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -494,11 +489,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // #97016# mark last object
+                // mark last object
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(FALSE);
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -513,11 +507,10 @@ BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 
             if ( aCode.IsMod1() )
             {
-                // #97016# mark first object
+                // mark first object
                 mpView->UnmarkAllObj();
                 mpView->MarkNextObj(TRUE);
 
-                // #97016# II
                 if(mpView->AreObjectsMarked())
                     mpView->MakeVisible(mpView->GetAllMarkedRect(), *mpWindow);
 
@@ -843,9 +836,8 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
                 if ( !pDocSh->IsUIActive() )
                 {
                     /**********************************************************
-                    * aktivate OLE-object
+                    * activate OLE-object
                     **********************************************************/
-                    //HMHmpView->HideMarkHdl();
                     mpViewShell->ActivateObject( (SdrOle2Obj*) pObj, 0);
                 }
             }
@@ -1114,7 +1106,6 @@ bool FuDraw::cancel()
     }
     else if ( mpView->AreObjectsMarked() )
     {
-        // #97016# II
         const SdrHdlList& rHdlList = mpView->GetHdlList();
         SdrHdl* pHdl = rHdlList.GetFocusHdl();
 

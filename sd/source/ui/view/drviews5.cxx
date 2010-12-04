@@ -92,7 +92,6 @@ void DrawViewShell::ModelHasChanged()
     // Damit der Navigator auch einen aktuellen Status bekommt
     GetViewFrame()->GetBindings().Invalidate( SID_NAVIGATOR_STATE, TRUE, FALSE );
 
-    //Update3DWindow();
     SfxBoolItem aItem( SID_3D_STATE, TRUE );
     GetViewFrame()->GetDispatcher()->Execute(
         SID_3D_STATE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aItem, 0L );
@@ -234,8 +233,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
 
     if (mpDrawView->IsMoveOnlyDragging() != pView->IsMoveOnlyDragging() )
         mpDrawView->SetMoveOnlyDragging( pView->IsMoveOnlyDragging() );
-
-//    mpDrawView->SetSlantButShear( pView->IsSlantButShear() );
 
     if (mpDrawView->IsNoDragXorPolys() != pView->IsNoDragXorPolys() )
         mpDrawView->SetNoDragXorPolys( pView->IsNoDragXorPolys() );
@@ -454,7 +451,7 @@ void DrawViewShell::PrePaint()
 
 void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 {
-    // #103834# Fill var FillColor here to have it available on later call
+    // Fill var FillColor here to have it available on later call
     svtools::ColorConfig aColorConfig;
     Color aFillColor;
 
@@ -467,15 +464,15 @@ void DrawViewShell::Paint(const Rectangle& rRect, ::sd::Window* pWin)
         aFillColor = Color( aColorConfig.GetColorValue( svtools::DOCCOLOR ).nColor );
     }
 
-    /* #97517#  This is done before each text edit, so why not do it before every paint.
+    /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( GetDoc()->GetLanguage( EE_CHAR_LANGUAGE ) );
 
-    // #103834# Set Application Background color for usage in SdrPaintView(s)
+    // Set Application Background color for usage in SdrPaintView(s)
     mpDrawView->SetApplicationBackgroundColor(aFillColor);
 
-    /* #97517#  This is done before each text edit, so why not do it before every paint.
+    /* This is done before each text edit, so why not do it before every paint.
                 The default language is only used if the outliner only contains one
                 character in a symbol font */
     GetDoc()->GetDrawOutliner( NULL ).SetDefaultLanguage( Application::GetSettings().GetLanguage() );

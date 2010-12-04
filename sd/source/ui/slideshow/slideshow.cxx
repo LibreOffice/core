@@ -142,8 +142,6 @@ const SfxItemPropertyMapEntry* ImplGetPresentationPropertyMap()
     return aPresentationPropertyMap_Impl;
 }
 
-//SfxItemPropertyMap map_impl[] = { { 0,0,0,0,0,0 } };
-
 // --------------------------------------------------------------------
 // class SlideShow
 // --------------------------------------------------------------------
@@ -1215,8 +1213,6 @@ void SlideShow::StartFullscreenPresentation( )
         if( mpFullScreenFrameView )
             delete mpFullScreenFrameView;
         mpFullScreenFrameView = new FrameView(mpDoc, pOriginalFrameView);
-
-//      Reference<XController> xController;
 
         // The new frame is created hidden.  To make it visible and activate the
         // new view shell--a prerequisite to process slot calls and initialize

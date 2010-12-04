@@ -68,12 +68,10 @@ enum ShowWindowMode
     SHOWWINDOWMODE_PREVIEW = 4
 };
 
-//class ShowWindowImpl;
-
 class ShowWindow
     : public ::sd::Window
 {
-//  friend class ShowWindowImpl;
+
 public:
     ShowWindow ( const ::rtl::Reference< ::sd::SlideshowImpl >& xController, ::Window* pParent );
     virtual ~ShowWindow (void);
@@ -97,7 +95,6 @@ public:
     virtual void    Resize();
     virtual void    GetFocus();
     virtual void    LoseFocus();
-//  virtual void    GrabFocus();
 
     virtual void    KeyInput(const KeyEvent& rKEvt);
     virtual void    MouseMove(const MouseEvent& rMEvt);

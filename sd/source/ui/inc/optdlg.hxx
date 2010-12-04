@@ -48,7 +48,6 @@ public:
 protected:
 
     virtual void        PageCreated( USHORT nId, SfxTabPage &rPage );
-//  virtual SfxItemSet* CreateInputItemSet( USHORT nPageId );
 };
 
 

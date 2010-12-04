@@ -254,7 +254,7 @@ OutlineViewShell::~OutlineViewShell()
     if ( pClipEvtLstnr )
     {
         pClipEvtLstnr->AddRemoveListener( GetActiveWindow(), FALSE );
-        pClipEvtLstnr->ClearCallbackLink();     // #103849# prevent callback if another thread is waiting
+        pClipEvtLstnr->ClearCallbackLink();     // prevent callback if another thread is waiting
         pClipEvtLstnr->release();
     }
 }
@@ -308,13 +308,11 @@ void OutlineViewShell::ArrangeGUIElements ()
     {
         pWindow->SetMinZoomAutoCalc(FALSE);
 
-        // pWindow->SetPosSizePixel(rNewPos, Size(nSizeX, nSizeY));
 
         // OutputArea der OutlinerView aendern
         OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
 
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
-//      aWin.nLeft = pOlView->GetPageNumberWidthPixel();
 
         aWin = pWindow->PixelToLogic(aWin);
         pOutlinerView->SetOutputArea(aWin);
@@ -418,10 +416,8 @@ void OutlineViewShell::Deactivate( BOOL bIsMDIActivate )
 {
     pOlView->DisconnectFromApplication();
 
-    // #96416# Links must be kept also on deactivated viewshell, to allow drag'n'drop
+    // Links must be kept also on deactivated viewshell, to allow drag'n'drop
     // to function properly
-    // pOlView->ResetLinks();
-
     ViewShell::Deactivate( bIsMDIActivate );
 }
 
@@ -515,7 +511,6 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         (nSlot == SID_TRANSLITERATE_HIRAGANA) ||
         (nSlot == SID_TRANSLITERATE_KATAGANA) ||
         (nSlot == SID_CUT) ||
-//      (nSlot == SID_COPY) ||
         (nSlot == SID_PASTE) ||
         (nSlot == SID_DELETE)))
     {
@@ -696,7 +691,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         }
         break;
 
-        // #96090# added Undo/Redo handling
+        // added Undo/Redo handling
         case SID_UNDO :
         {
             OutlineViewPageChangesGuard aGuard2(pOlView);
@@ -980,7 +975,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         GetDoc()->SetChanged(TRUE);
     }
 
-    // Da �berladen, muss hier der Status gesetzt werden
+    // Da ueberladen, muss hier der Status gesetzt werden
     if( !GetDocSh()->IsModified() )
     {
         rSet.DisableItem( SID_SAVEDOC );
@@ -1116,9 +1111,6 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     FuBullet::GetSlotState( rSet, this, GetViewFrame() );
 
-    //rSet.DisableItem( SID_PRINTDOC );
-    //rSet.DisableItem( SID_PRINTDOCDIRECT );
-    //rSet.DisableItem( SID_SETUPPRINTER );
 }
 
 /*************************************************************************
@@ -1218,7 +1210,6 @@ void OutlineViewShell::SetZoom(long nZoom)
         pOutlinerView->SetOutputArea(aWin);
     }
 
-    // #106268#
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
     GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOMSLIDER );
 }
@@ -1406,10 +1397,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
 
 
     // Seitenanzeige und Layout
-    /*
-    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_PAGE ) ||
-        SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_STATUS_LAYOUT ) )
-    */
+
     USHORT  nPageCount = GetDoc()->GetSdPageCount( PK_STANDARD );
     String  aPageStr, aLayoutStr;
 
@@ -1475,8 +1463,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
 
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
         {
-            // #91457# Popup for Online-Spelling now handled by DrawDocShell
-            // Link aLink = LINK(GetDoc(), SdDrawDocument, OnlineSpellCallback);
+            // Popup for Online-Spelling now handled by DrawDocShell
             Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
             pOLV->ExecuteSpellPopup(aPos, &aLink);
@@ -1567,7 +1554,6 @@ Size OutlineViewShell::GetOptimalSizePixel() const
     // und jetzt jetzt das Standardgelumpe draufaddieren
     aResult.Width()  += mpVerticalScrollBar->GetSizePixel().Width();
     aResult.Height() += mpHorizontalScrollBar->GetSizePixel().Height();
-        //!!! + System::GetMenuBarHeightPixel();  // statt Titlebar
     return aResult;
 }
 

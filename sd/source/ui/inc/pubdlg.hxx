@@ -138,7 +138,6 @@ private:
     FixedText*      pPage4_Titel2;
     MultiLineEdit*  pPage4_Misc;
     CheckBox*       pPage4_Download;
-//-/    CheckBox*       pPage4_Created;
 
     // page 5 controls
 
@@ -162,8 +161,6 @@ private:
     SdHtmlAttrPreview*  pPage6_Preview;
 
     boost::scoped_ptr< ButtonSet > mpButtonSet;
-
-//  CheckBox*       pPage6_Sound;
 
     // standard controls
     FixedLine       aBottomLine;

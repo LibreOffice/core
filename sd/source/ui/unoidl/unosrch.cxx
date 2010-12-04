@@ -627,7 +627,6 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                 xFound = (text::XText*)pRange;
                 pRange->SetSelection(aSelection);
 
-//              pDescr->SetStartPos( nEndPos );
             }
         }
         else

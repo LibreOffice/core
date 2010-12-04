@@ -821,7 +821,6 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt, DropTargetHelper& rTar
                                 pAction->SetPathObj(pInfo->mpPathObj, pInfo->mpPathObj);
                                 pAction->SetClickAction(pInfo->meClickAction, eClickAction);
                                 pAction->SetBookmark(pInfo->GetBookmark(), aBookmark);
-//                              pAction->SetInvisibleInPres(pInfo->mbInvisibleInPresentation, TRUE);
                                 pAction->SetVerb(pInfo->mnVerb, pInfo->mnVerb);
                                 pAction->SetSecondEffect(pInfo->meSecondEffect, pInfo->meSecondEffect);
                                 pAction->SetSecondSpeed(pInfo->meSecondSpeed, pInfo->meSecondSpeed);
@@ -905,7 +904,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
                                   TRUE, &aPos );
         }
 
-        // Loeschen der ExchangeList
+        // Delete the ExchangeList
         if( pExchangeList )
         {
             for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )

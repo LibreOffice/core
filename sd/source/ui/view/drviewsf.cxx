@@ -367,7 +367,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
                 else
                 {   SfxTemplateItem aItem( nWhich, String() );
                     aAllSet.Put( aItem, aItem.Which() );
-                    // rSet.DisableItem( nWhich );
                 }
             }
             break;
@@ -488,22 +487,6 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
         delete pSet;
     }
 
-//    const SdrMarkList& rMarkList = mpDrawView->GetMarkedObjectList();
-//    ULONG nMarkCount = rMarkList.GetMarkCount();
-//    BOOL bDisabled = FALSE;
-//
-//    for (ULONG i = 0;
-//         i < nMarkCount && !bDisabled && i < 50; i++)
-//    {
-//        SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-//
-//        if (pObj->GetObjInventor() == E3dInventor)
-//        {
-//            bDisabled = TRUE;
-//            rSet.ClearItem(SDRATTR_SHADOW);
-//            rSet.DisableItem(SDRATTR_SHADOW);
-//        }
-//    }
 }
 
 

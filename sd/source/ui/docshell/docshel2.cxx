@@ -140,25 +140,6 @@ void DrawDocShell::Draw(OutputDevice* pOut, const JobSetup&, USHORT nAspect)
 
     delete pView;
 
-//  Fuer Testzwecke: Bitte nicht entfernen!
-//
-//  GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
-//
-//  if( pMtf )
-//  {
-//      String aURLStr;
-//
-//      if( ::utl::LocalFileHelper::ConvertPhysicalNameToURL( String( RTL_CONSTASCII_USTRINGPARAM( "d:\\gdi.mtf" ) ), aURLStr ) )
-//      {
-//          SvStream* pOStm = ::utl::UcbStreamHelper::CreateStream( aURLStr, STREAM_WRITE | STREAM_TRUNC );
-//
-//          if( pOStm )
-//          {
-//              *pOStm << *pMtf;
-//              delete pOStm;
-//          }
-//      }
-//  }
 }
 
 Rectangle DrawDocShell::GetVisArea(USHORT nAspect) const
@@ -316,7 +297,6 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
             if ( pPageView->GetLockedLayers() != pFrameView->GetLockedLayers() )
                 pPageView->SetLockedLayers( pFrameView->GetLockedLayers() );
 
-    //                if ( pPageView->GetHelpLines() != pFrameView->GetHelpLines() )
                 pPageView->SetHelpLines( pFrameView->GetStandardHelpLines() );
         }
 
@@ -326,7 +306,7 @@ Bitmap DrawDocShell::GetPagePreviewBitmap(SdPage* pPage, USHORT nMaxEdgePixel)
 
     pView->CompleteRedraw( &aVDev, Rectangle( aNullPt, aSize ) );
 
-    // #111097# IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
+    // IsRedrawReady() always gives sal_True while ( !pView->IsRedrawReady() ) {}
     delete pView;
 
     aVDev.SetMapMode( MapMode() );

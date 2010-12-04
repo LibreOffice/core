@@ -411,7 +411,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                                     bLink, bReplace, nPos,
                                     FALSE, NULL, TRUE, TRUE, FALSE );
 
-            // Loeschen der BookmarkList
+            // delete the BookmarkList
             if( pBookmarkList )
             {
                 String* pString = (String*) pBookmarkList->First();
@@ -423,7 +423,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
                 delete pBookmarkList;
                 pBookmarkList = NULL;
             }
-            // Loeschen der ExchangeList
+            // delete the ExchangeList
             if( pExchangeList )
             {
                 String* pString = (String*) pExchangeList->First();
@@ -437,7 +437,6 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             }
         }
         // Dann Objekte einfuegen
-        //pBookmarkList = pDlg->GetList( 2 ); // Objekte
         pBookmarkList = pObjectBookmarkList;
 
         // Um zu gewaehrleisten... (s.o.)
@@ -447,7 +446,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             bOK = mpDoc->InsertBookmarkAsObject( pBookmarkList, pExchangeList,
                                 bLink, NULL, NULL);
 
-        // Loeschen der BookmarkList
+        // delete the BookmarkList
         if( pBookmarkList )
         {
             String* pString = (String*) pBookmarkList->First();
@@ -459,7 +458,7 @@ BOOL FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
             delete pBookmarkList;
             pBookmarkList = NULL;
         }
-        // Loeschen der ExchangeList
+        // delete the ExchangeList
         if( pExchangeList )
         {
             String* pString = (String*) pExchangeList->First();
@@ -512,11 +511,7 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
         // was zeichnen muessen;
         // der globale Outliner koennte in SdPage::CreatePresObj
         // benutzt werden
-//      SfxItemPool* pPool = mpDoc->GetDrawOutliner().GetEmptyItemSet().GetPool();
         SdrOutliner* pOutliner = new ::sd::Outliner( mpDoc, OUTLINERMODE_TEXTOBJECT );
-//      pOutliner->SetStyleSheetPool((SfxStyleSheetPool*)mpDoc->GetStyleSheetPool());
-//      pOutliner->SetEditTextObjectPool(pPool);
-//      pOutliner->SetForbiddenCharsTable( mpDoc->GetForbiddenCharsTable() );
 
         // Referenz-Device setzen
         pOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );

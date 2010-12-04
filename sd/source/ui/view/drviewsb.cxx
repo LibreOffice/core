@@ -156,8 +156,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     }
                     else
                     {
-                        //pDlg->GetAttr( aNewAttr );
-                        //aLayerName     = ((SdAttrLayerName &) aNewAttr.Get (ATTR_LAYER_NAME)).GetValue ();
                         aLayerTitle  = ((SdAttrLayerTitle &) aNewAttr.Get (ATTR_LAYER_TITLE)).GetValue ();
                         aLayerDesc   = ((SdAttrLayerDesc &) aNewAttr.Get (ATTR_LAYER_DESC)).GetValue ();
                         bIsVisible   = ((SdAttrLayerVisible &) aNewAttr.Get (ATTR_LAYER_VISIBLE)).GetValue ();
@@ -201,7 +199,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                 if ( aPrevLayer == aName )
                 {
-//                    nPrevLayer = nLayer;
                     nPrevLayer = Max(nLayer, (USHORT) 4);
                 }
             }
@@ -550,8 +547,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     String aName;
                     if( GetDocSh()->HasName() )
                         aName = GetDocSh()->GetMedium()->GetName();
-                    //else
-                    //  aName = GetDocSh()->GetName();
                     pFieldItem = new SvxFieldItem( SvxExtFileField( aName ), EE_FEATURE_FIELD );
                 }
                 break;
@@ -638,7 +633,6 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
                     AbstractSdModifyFieldDlg* pDlg = pFact ? pFact->CreateSdModifyFieldDlg(GetActiveWindow(), pFldItem->GetField(), pOLV->GetAttribs() ) : 0;
                     if( pDlg && pDlg->Execute() == RET_OK )
                     {
-                        // #108538#
                         // To make a correct SetAttribs() call at the utlinerView
                         // it is necessary to split the actions here
                         SvxFieldData* pField = pDlg->GetField();
@@ -658,7 +652,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                             pOLV->InsertField( aFieldItem );
 
-                            // #108538# select again for eventual SetAttribs call
+                            // select again for eventual SetAttribs call
                             pOLV->SetSelection( aSel );
                         }
 
@@ -675,7 +669,7 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
 
                         if(pField)
                         {
-                            // #108538# restore selection to original
+                            // restore selection to original
                             if(bSelectionWasModified)
                             {
                                 aSel.nEndPos--;
@@ -744,7 +738,6 @@ bool DrawViewShell::RenameSlide( USHORT nPageId, const String & rName  )
         BYTE nBgObj = rLayerAdmin.GetLayerID( String( SdResId( STR_LAYER_BCKGRNDOBJ )), FALSE );
         SetOfByte aVisibleLayers = mpActualPage->TRG_GetMasterPageVisibleLayers();
 
-        // (#67720#)
         SfxUndoManager* pManager = GetDoc()->GetDocSh()->GetUndoManager();
         ModifyPageUndoAction* pAction = new ModifyPageUndoAction(
             pManager, GetDoc(), pUndoPage, rName, pUndoPage->GetAutoLayout(),

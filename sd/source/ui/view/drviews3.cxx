@@ -371,7 +371,6 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
         case SID_RELOAD:
         {
-            // #83951#
             USHORT nId = Svx3DChildWindow::GetChildWindowId();
             SfxViewFrame* pFrame = GetViewFrame();
 
@@ -673,7 +672,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 aEditAttr.Put( rItem );
                 mpDrawView->SetAttributes( aEditAttr );
 
-                // #91081# Invalidate is missing here
                 Invalidate(SID_ATTR_TABSTOP);
             }
             break;
@@ -745,7 +743,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                         aEditAttr.Put( aLRSpaceItem );
                         mpDrawView->SetAttributes( aEditAttr );
 
-                        // #92557# Invalidate is missing here
                         Invalidate(SID_ATTR_PARA_LRSPACE);
                         break;
                     }
@@ -757,7 +754,6 @@ void  DrawViewShell::ExecRuler(SfxRequest& rReq)
                 aEditAttrReduced.Put( aLRSpaceItem );
                 mpDrawView->SetAttributes( aEditAttrReduced );
 
-                // #92557# Invalidate is missing here
                 Invalidate(SID_ATTR_PARA_LRSPACE);
             }
             break;
@@ -833,8 +829,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
                 {
                     const SvxTabStopItem& rItem = (const SvxTabStopItem&) aEditAttr.Get( EE_PARA_TABS );
                     rSet.Put( rItem );
-
-                    //Rectangle aRect = maMarkRect;
 
                     const SvxLRSpaceItem& rLRSpaceItem = (const SvxLRSpaceItem&) aEditAttr.Get( EE_PARA_LRSPACE );
                     USHORT nId = SID_ATTR_PARA_LRSPACE;
@@ -922,7 +916,6 @@ void  DrawViewShell::GetRulerState(SfxItemSet& rSet)
     {
         rSet.DisableItem( SID_RULER_OBJECT );
         rSet.DisableItem( EE_PARA_TABS );
-//      rSet.DisableItem( SID_RULER_TEXT_RIGHT_TO_LEFT );
     }
 
     rSet.Put( aLRSpace );

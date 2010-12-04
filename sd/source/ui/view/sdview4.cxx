@@ -207,7 +207,6 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
         aPageSize.Width()  -= pPage->GetLftBorder() + pPage->GetRgtBorder();
         aPageSize.Height() -= pPage->GetUppBorder() + pPage->GetLwrBorder();
         pNewGrafObj->AdjustToMaxRect( Rectangle( Point(), aPageSize ), TRUE );
-//      pNewGrafObj->AdjustToMaxRect( Rectangle( pPV->GetOffset(), aPageSize ), TRUE );
 
         ULONG   nOptions = SDRINSERT_SETDEFLAYER;
         BOOL    bIsPresTarget = FALSE;

@@ -255,8 +255,6 @@ public:
         pResult = new BitmapEx(aReader.Read());
     }
 
-//    sal_Int32 nRatio ((100L * (ULONG)pResult->GetSizeBytes()) / (ULONG)pData->mnDataSize);
-
     return ::boost::shared_ptr<BitmapEx>(pResult);
 }
 

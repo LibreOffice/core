@@ -73,7 +73,6 @@
 #include <svx/bmpmask.hxx>
 #include "LayerTabBar.hxx"
 
-// #97016# IV
 #include <svx/svditer.hxx>
 
 namespace sd {
@@ -157,7 +156,6 @@ BOOL DrawViewShell::KeyInput (const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if ( !IsInputLocked() || ( rKEvt.GetKeyCode().GetCode() == KEY_ESCAPE ) )
     {
-        // #97016# IV
         if(KEY_RETURN == rKEvt.GetKeyCode().GetCode()
             && rKEvt.GetKeyCode().IsMod1()
             && GetView()->IsTextEdit())
@@ -284,7 +282,6 @@ void DrawViewShell::MouseButtonDown(const MouseEvent& rMEvt,
     // opened by inplace client and we would deactivate the inplace client,
     // the contex menu is closed by VCL asynchronously which in the end
     // would work on deleted objects or the context menu has no parent anymore)
-    // See #126086# and #128122#
     SfxInPlaceClient* pIPClient = GetViewShell()->GetIPClient();
     BOOL bIsOleActive = ( pIPClient && pIPClient->IsObjectInPlaceActive() );
 
@@ -345,7 +342,6 @@ void DrawViewShell::MouseMove(const MouseEvent& rMEvt, ::sd::Window* pWin)
                  pWin->CaptureMouse();
         }
 
-        // #109585#
         // Since the next MouseMove may execute a IsSolidDraggingNow() in
         // SdrCreateView::MovCreateObj and there the ApplicationBackgroundColor
         // is needed it is necessary to set it here.
@@ -545,7 +541,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             const SvxFieldItem* pFldItem = NULL;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
-                //pFldItem = pOLV->GetFieldUnderMousePointer();
 
             // Hilfslinie
             if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow(), nHelpLine, pPV) )
@@ -568,7 +563,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             {
                 LanguageType eLanguage( LANGUAGE_SYSTEM );
 
-                // #101743# Format popup with outliner language, if possible
+                // Format popup with outliner language, if possible
                 if( pOLV->GetOutliner() )
                 {
                     ESelection aSelection( pOLV->GetSelection() );
@@ -587,7 +582,6 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                 if( pField )
                 {
                     SvxFieldItem aFieldItem( *pField, EE_FEATURE_FIELD );
-                    //pOLV->DeleteSelected(); <-- fehlt leider !
                     // Feld selektieren, so dass es beim Insert geloescht wird
                     ESelection aSel = pOLV->GetSelection();
                     BOOL bSel = TRUE;
@@ -631,8 +625,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                 if( (  rCEvt.IsMouseEvent() && pOutlinerView->IsWrongSpelledWordAtPos(aPos) ) ||
                                     ( !rCEvt.IsMouseEvent() && pOutlinerView->IsCursorAtWrongSpelledWord() ) )
                                 {
-                                    // #91457# Popup for Online-Spelling now handled by DrawDocShell
-                                    // Link aLink = LINK(GetDoc(), SdDrawDocument, OnlineSpellCallback);
+                                    // Popup for Online-Spelling now handled by DrawDocShell
                                     Link aLink = LINK(GetDocSh(), DrawDocShell, OnlineSpellCallback);
 
                                     if( !rCEvt.IsMouseEvent() )
@@ -747,7 +740,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                         break;
                                 }
                             }
-                            else if( nInv == E3dInventor /*&& nId == E3D_POLYSCENE_ID*/)
+                            else if( nInv == E3dInventor )
                             {
                                 if( nId == E3D_POLYSCENE_ID || nId == E3D_SCENE_ID )
                                 {
@@ -785,7 +778,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                                                 RID_DRAW_NOSEL_POPUP;
                 }
             }
-            // Popup-Menue anzeigen
+            // show Popup-Menu
             if (nSdResId)
             {
                 GetActiveWindow()->ReleaseMouse();
@@ -794,7 +787,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     GetViewFrame()->GetDispatcher()->ExecutePopup(SdResId(nSdResId));
                 else
                 {
-                    //#106326# don't open contextmenu at mouse position if not opened via mouse
+                    //don't open contextmenu at mouse position if not opened via mouse
 
                     //middle of the window if nothing is marked
                     Point aMenuPos(GetActiveWindow()->GetSizePixel().Width()/2

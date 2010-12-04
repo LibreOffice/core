@@ -79,7 +79,6 @@
 #include <svx/fontworkbar.hxx>
 #include <svx/svdoutl.hxx>
 
-// #96090#
 #include <svl/slstitm.hxx>
 #include <sfx2/request.hxx>
 #include "SpellDialogChildWindow.hxx"
@@ -317,8 +316,7 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
     // Laut MI darf keiner GrabFocus rufen, der nicht genau weiss von
     // welchem Window der Focus gegrabt wird. Da Activate() vom SFX teilweise
     // asynchron verschickt wird, kann es sein, dass ein falsches Window
-    // den Focus hat (#29682#):
-    //GetViewFrame()->GetWindow().GrabFocus();
+    // den Focus hat
 
     if (mpHorizontalRuler.get() != NULL)
         mpHorizontalRuler->SetActive(TRUE);
@@ -354,12 +352,6 @@ void ViewShell::Activate(BOOL bIsMDIActivate)
         if(!GetDocSh()->IsUIActive())
             UpdatePreview( GetActualPage(), TRUE );
 
-        //HMH::sd::View* pView = GetView();
-
-        //HMHif (pView)
-        //HMH{
-        //HMH   pView->ShowMarkHdl();
-        //HMH}
     }
 
     ReadFrameViewData( mpFrameView );
@@ -455,7 +447,6 @@ BOOL ViewShell::KeyInput(const KeyEvent& rKEvt, ::sd::Window* pWin)
 
     if(!bReturn)
     {
-        // #76008#
         // give key input first to SfxViewShell to give CTRL+Key
         // (e.g. CTRL+SHIFT+'+', to front) priority.
         OSL_ASSERT (GetViewShell()!=NULL);
@@ -529,7 +520,6 @@ void ViewShell::MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin)
     {
         pWin->GrabFocus();
         SetActiveWindow(pWin);
-//        GetViewFrame()->GetWindow().GrabFocus();
     }
 
     // MouseEvent in E3dView eintragen
@@ -814,7 +804,7 @@ void ViewShell::Resize (void)
         return;
 
     // Remember the new position and size.
-    maViewPos = Point(0,0); //mpParentWindow->GetPosPixel();
+    maViewPos = Point(0,0);
     maViewSize = aSize;
 
     // Rearrange the UI elements to take care of the new position and size.
@@ -830,10 +820,8 @@ void ViewShell::Resize (void)
     if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED
         && IsMainViewShell())
     {
-        //        GetDocSh()->SetVisArea(aVisArea);
-    }
 
-    //  VisAreaChanged(aVisArea);
+    }
 
     ::sd::View* pView = GetView();
 
@@ -1159,7 +1147,7 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageUndoAction
+            // when UndoStack is cleared by ModifyPageUndoAction
             // the nCount may have changed, so test GetUndoActionCount()
             while(nNumber-- && pUndoManager->GetUndoActionCount())
             {
@@ -1167,7 +1155,7 @@ void ViewShell::ImpSidUndo(BOOL, SfxRequest& rReq)
             }
         }
 
-        // #91081# refresh rulers, maybe UNDO was move of TAB marker in ruler
+        // refresh rulers, maybe UNDO was move of TAB marker in ruler
         if (mbHasRulers)
         {
             Invalidate(SID_ATTR_TABSTOP);
@@ -1200,7 +1188,7 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
         if(nCount >= nNumber)
         {
-            // #94637# when UndoStack is cleared by ModifyPageRedoAction
+            // when UndoStack is cleared by ModifyPageRedoAction
             // the nCount may have changed, so test GetRedoActionCount()
             while(nNumber-- && pUndoManager->GetRedoActionCount())
             {
@@ -1208,7 +1196,7 @@ void ViewShell::ImpSidRedo(BOOL, SfxRequest& rReq)
             }
         }
 
-        // #91081# refresh rulers, maybe REDO was move of TAB marker in ruler
+        // refresh rulers, maybe REDO was move of TAB marker in ruler
         if (mbHasRulers)
         {
             Invalidate(SID_ATTR_TABSTOP);
@@ -1260,8 +1248,7 @@ void ViewShell::ExecReq( SfxRequest& rReq )
 
             GetActiveWindow()->SetDrawMode( nMode );
             mpFrameView->SetDrawMode( nMode );
-// #110094#-7
-//            GetView()->ReleaseMasterPagePaintCache();
+
             GetActiveWindow()->Invalidate();
 
             Invalidate();
@@ -1403,7 +1390,6 @@ void ViewShell::DisposeFunctions()
 bool ViewShell::IsMainViewShell (void) const
 {
     return mpImpl->mbIsMainViewShell;
-    //    return GetViewShellBase().GetMainViewShell() == this;
 }
 
 void ViewShell::SetIsMainViewShell (bool bIsMainViewShell)

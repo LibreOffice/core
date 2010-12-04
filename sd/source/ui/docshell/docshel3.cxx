@@ -123,7 +123,7 @@ void DrawDocShell::Execute( SfxRequest& rReq )
         {
             if( dynamic_cast< FuSearch* >(mxDocShellFunction.get()) )
             {
-                // Suchen&Ersetzen in allen DocShells beenden
+                // End Search&Replace in all docshells
                 SfxObjectShell* pFirstShell = SfxObjectShell::GetFirst();
                 SfxObjectShell* pShell = pFirstShell;
 
@@ -184,7 +184,6 @@ void DrawDocShell::Execute( SfxRequest& rReq )
 
         case SID_CLOSEDOC:
         {
-//            SfxObjectShell::DoClose();
             ExecuteSlot(rReq, SfxObjectShell::GetStaticInterface());
         }
         break;

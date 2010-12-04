@@ -149,8 +149,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
         !((SdrTextObj*) pObj)->HasText() )
     {
 // automatisches Auf/Zuklappen des FontWork-Dialog; erstmal deaktiviert
-//      if ( pDlg )
-//          pDlg->SetActive(FALSE);
 
         rSet.DisableItem(XATTR_FORMTXTSTYLE);
         rSet.DisableItem(XATTR_FORMTXTADJUST);
@@ -169,7 +167,6 @@ void DrawViewShell::GetFormTextState(SfxItemSet& rSet)
     {
         if ( pDlg )
         {
-//          pDlg->SetActive();
             pDlg->SetColorTable(GetDoc()->GetColorTable());
         }
 
@@ -203,7 +200,6 @@ void DrawViewShell::ExecAnimationWin( SfxRequest& rReq )
         {
             AnimationWindow* pAnimWin;
             USHORT nId = AnimationChildWindow::GetChildWindowId();
-            //((const SfxUInt16Item&)(rReq.GetArgs()->Get(nSId))).GetValue();
 
             pAnimWin = static_cast<AnimationWindow*>(
                 GetViewFrame()->GetChildWindow(nId)->GetWindow());

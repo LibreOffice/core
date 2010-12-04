@@ -809,8 +809,6 @@ void Window::SetVisibleXY(double fX, double fY)
     if ( fY >= 0 )
         maWinPos.Y() = (long) (fY * maViewSize.Height());
     UpdateMapOrigin(FALSE);
-    //  Size sz(nOldX - aWinPos.X(), nOldY - aWinPos.Y());
-    //  sz = LogicToPixel(sz);
     Scroll(nOldX - maWinPos.X(), nOldY - maWinPos.Y(), SCROLL_CHILDREN);
     Update();
 }
@@ -983,12 +981,10 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 {
                     SetDrawMode( nOutputMode );
                     mpViewShell->GetFrameView()->SetDrawMode( nOutputMode );
-// #110094#-7
-//                  mpViewShell->GetView()->ReleaseMasterPagePaintCache();
                     Invalidate();
                 }
 
-                // #103100# Overwrite window color for OutlineView
+                // Overwrite window color for OutlineView
                 if( mpViewShell->ISA(OutlineViewShell ) )
                 {
                     svtools::ColorConfig aColorConfig;
@@ -1001,7 +997,7 @@ void Window::DataChanged( const DataChangedEvent& rDCEvt )
                 mpViewShell->Invalidate();
                 mpViewShell->ArrangeGUIElements();
 
-                // #101928# re-create handles to show new outfit
+                // re-create handles to show new outfit
                 if(mpViewShell->ISA(DrawViewShell))
                 {
                     mpViewShell->GetView()->AdjustMarkHdl();

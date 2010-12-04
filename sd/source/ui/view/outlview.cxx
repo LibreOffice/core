@@ -58,7 +58,6 @@
 #include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 
-// #97766#
 #include <editeng/editobj.hxx>
 #include <editeng/editund2.hxx>
 
@@ -277,22 +276,6 @@ void OutlineView::Paint(const Rectangle& rRect, ::sd::Window* pWin)
 
 void OutlineView::InvalidateSlideNumberArea()
 {
-/*
-    for( sal_Int16 nView = 0; nView < MAX_OUTLINERVIEWS; ++nView )
-    {
-        if (mpOutlinerView[nView] != NULL)
-        {
-            ::Window* pWindow = mpOutlinerView[nView]->GetWindow();
-            if( pWindow )
-            {
-                Rectangle aRect( Point(0,0), pWindow->GetOutputSize() );
-                aRect.nRight = aRect.nLeft + pWindow->PixelToLogic( Point( mnPageNumberWidthPixel, 0 ) ).X() * 2;
-
-                pWindow->Invalidate(aRect);
-            }
-        }
-    }
-*/
 }
 
 /*************************************************************************
@@ -1587,7 +1570,7 @@ sal_Int8 OutlineView::ExecuteDrop( const ExecuteDropEvent&, DropTargetHelper&, :
     return DND_ACTION_NONE;
 }
 
-// #97766# Re-implement GetScriptType for this view to get correct results
+// Re-implement GetScriptType for this view to get correct results
 sal_uInt16 OutlineView::GetScriptType() const
 {
     sal_uInt16 nScriptType = ::sd::View::GetScriptType();

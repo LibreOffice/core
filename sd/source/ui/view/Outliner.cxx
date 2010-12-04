@@ -370,7 +370,7 @@ void Outliner::EndSpelling (void)
             SetUpdateMode(TRUE);
         }
 
-        // #95811# Before clearing the modify flag use it as a hint that
+        // Before clearing the modify flag use it as a hint that
         // changes were done at SpellCheck
         if(IsModified())
         {
@@ -380,7 +380,7 @@ void Outliner::EndSpelling (void)
                 mpDrawDocument->SetChanged(TRUE);
         }
 
-        // #95811# now clear the modify flag to have a specified state of
+        // now clear the modify flag to have a specified state of
         // Outliner
         ClearModifyFlag();
 
@@ -533,7 +533,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
             {
                 RememberStartPosition ();
                 bEndOfSearch = SearchAndReplaceOnce ();
-                //#107233# restore start position if nothing was found
+                // restore start position if nothing was found
                 if(!mbStringFound)
                     RestoreStartPosition ();
                 else
@@ -1477,8 +1477,6 @@ void Outliner::SetViewShell (const ::boost::shared_ptr<ViewShell>& rpViewShell)
         // When the outline view is not owned by us then we have to clear
         // that pointer so that the current one for the new view shell will
         // be used (in ProvideOutlinerView).
-        //        if ( ! mbOwnOutlineView)
-        //            mpOutlineView = NULL;
         if (mpViewShell.get() != NULL)
         {
             mpView = mpViewShell->GetView();
@@ -1574,7 +1572,6 @@ void Outliner::PrepareConversion (void)
         mpDrawDocument->GetDocSh()->SetWaitCursor( FALSE );
         // Start seach at the right end of the current object's text
         // depending on the search direction.
-//      mpOutlineView->SetSelection (GetSearchStartPosition ());
     }
     else
     {
