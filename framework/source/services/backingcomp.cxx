@@ -499,7 +499,7 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     Window*     pWindow = VCLUnoHelper::GetWindow(m_xWindow);
 
     // disable full screen mode of the frame!
-    if (pParent->IsFullScreenMode())
+    if (pParent && pParent->IsFullScreenMode())
     {
         pParent->ShowFullScreenMode(FALSE);
         pParent->SetMenuBarMode(MENUBAR_MODE_NORMAL);
