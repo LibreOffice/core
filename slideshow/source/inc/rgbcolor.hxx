@@ -50,24 +50,6 @@ namespace slideshow
             RGBColor( double nRed, double nGreen, double nBlue );
             explicit RGBColor( const HSLColor& rColor );
 
-            /** Hue of the color.
-
-                @return hue, is in the range [0,360]
-             */
-            double getHue() const;
-
-            /** Saturation of the color.
-
-                @return saturation, is in the range [0,1]
-             */
-            double getSaturation() const;
-
-            /** Luminance of the color.
-
-                @return luminance, is in the range [0,1]
-             */
-            double getLuminance() const;
-
             /** Get the RGB red value.
              */
             double getRed() const;
@@ -79,10 +61,6 @@ namespace slideshow
             /** Get the RGB blue value.
              */
             double getBlue() const;
-
-            /** Create an HSL color object.
-             */
-            HSLColor getHSLColor() const;
 
             /** Create an integer sRGBA color.
              */

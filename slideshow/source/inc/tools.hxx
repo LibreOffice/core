@@ -393,9 +393,13 @@ namespace slideshow
         basegfx::B2DRange getAPIShapeBounds( const ::com::sun::star::uno::Reference<
                                                 ::com::sun::star::drawing::XShape >& xShape );
 
+/*
+        TODO(F1): When ZOrder someday becomes usable enable this
+
         /// Get the content of the ZOrder shape property
         double getAPIShapePrio( const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::drawing::XShape >& xShape );
+*/
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector&         rSize,
                                               const boost::shared_ptr<UnoView>& pView );

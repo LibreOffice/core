@@ -68,22 +68,6 @@ namespace slideshow
              */
             double getLuminance() const;
 
-            /** Get the RGB red value.
-             */
-            double getRed() const;
-
-            /** Get the RGB green value.
-             */
-            double getGreen() const;
-
-            /** Get the RGB blue value.
-             */
-            double getBlue() const;
-
-            /** Create an RGB color object.
-             */
-            RGBColor getRGBColor() const;
-
             struct HSLTriple
             {
                 HSLTriple();

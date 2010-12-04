@@ -790,6 +790,9 @@ namespace slideshow
                                             aTmpRect.Y+aTmpRect.Height );
         }
 
+/*
+        TODO(F1): When ZOrder someday becomes usable enable this
+
         double getAPIShapePrio( const uno::Reference< drawing::XShape >& xShape )
         {
             uno::Reference< beans::XPropertySet > xPropSet( xShape,
@@ -807,6 +810,7 @@ namespace slideshow
             // Maybe we can also take the total number of shapes here
             return nPrio / 65535.0;
         }
+*/
 
         basegfx::B2IVector getSlideSizePixel( const basegfx::B2DVector& rSlideSize,
                                               const UnoViewSharedPtr&   pView )
