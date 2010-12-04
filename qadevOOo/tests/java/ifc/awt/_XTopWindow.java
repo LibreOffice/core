@@ -165,7 +165,7 @@ public class _XTopWindow extends MultiMethodTest {
 
     /**
     * Creates a simple menu bar and adds to the window. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _setMenuBar() {
         XMenuBar menu = null ;

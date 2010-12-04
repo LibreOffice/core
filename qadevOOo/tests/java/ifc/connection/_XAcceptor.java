@@ -57,12 +57,12 @@ public class _XAcceptor extends MultiMethodTest {
 
     /**
     * Calls <code>accept()</code> method in a separate thread.
-    * Then stores exception thrown by call if it occured, or
+    * Then stores exception thrown by call if it occurred, or
     * return value.
     */
     protected class AcceptorThread extends Thread {
         /**
-        * If exception occured during method call it is
+        * If exception occurred during method call it is
         * stored in this field.
         */
         public Exception ex = null ;
@@ -183,7 +183,7 @@ public class _XAcceptor extends MultiMethodTest {
                         acception.acceptedCall.getDescription()) ;
             } else {
                 if (acception.ex != null) {
-                    log.println("Exception occured in accept() thread :") ;
+                    log.println("Exception occurred in accept() thread :") ;
                     acception.ex.printStackTrace(log) ;
                 }
 
@@ -303,7 +303,7 @@ public class _XAcceptor extends MultiMethodTest {
 
         } else {
             if (acception.ex != null) {
-                log.println("Exception occured in accept() thread :") ;
+                log.println("Exception occurred in accept() thread :") ;
                 acception.ex.printStackTrace(log) ;
                 result = false ;
             } else {

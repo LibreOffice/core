@@ -60,7 +60,7 @@ public class _XEnumeration extends MultiMethodTest {
     * Retrieves relation and sets oObj to a separate enumeration
     * created. Retrieves all elements from enumeration.<p>
     * Has <b> OK </b> status if all elements successfully retrieved
-    * and exceptions occured.
+    * and exceptions occurred.
     */
     public void _hasMoreElements() {
         boolean result = true;

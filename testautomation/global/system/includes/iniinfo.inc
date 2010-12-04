@@ -983,7 +983,7 @@ function getSofficeNative() as string
         end if
         getSofficeNative = gOfficePath  ' set return value
     else
-        '/// If error occured, set returnvalue to "" - empty srting ///'
+        '/// If error occurred, set returnvalue to "" - empty srting ///'
         getSofficeNative = ""           ' set return value
     end if
 end function

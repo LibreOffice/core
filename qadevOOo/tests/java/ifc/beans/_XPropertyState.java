@@ -135,11 +135,11 @@ public class _XPropertyState extends MultiMethodTest {
                 log.println("Default property value is : '" + propDef + "'");
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occured while getting Property default");
+                    "occurred while getting Property default");
                 result=false;
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("Exception " + e +
-                    "occured while getting Property default");
+                    "occurred while getting Property default");
                 result=false;
             }
             tRes.tested("getPropertyDefault()", result);
@@ -167,7 +167,7 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occured while getting Property state");
+                    "occurred while getting Property state");
                 result = false;
             }
             tRes.tested("getPropertyState()", result);
@@ -202,7 +202,7 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occured while getting Property state");
+                    "occurred while getting Property state");
                 result = false;
             }
 
@@ -255,11 +255,11 @@ public class _XPropertyState extends MultiMethodTest {
                 }
             } catch (com.sun.star.beans.UnknownPropertyException e) {
                 log.println("Exception " + e +
-                    "occured while setting Property to default");
+                    "occurred while setting Property to default");
                 result=false;
             } catch (com.sun.star.lang.WrappedTargetException e) {
                 log.println("Exception " + e +
-                    "occured while testing property value");
+                    "occurred while testing property value");
                 result=false;
             }
 

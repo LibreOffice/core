@@ -106,7 +106,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.beforeFirst() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("beforeFirst()", false) ;
             return ;
@@ -132,7 +132,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             result = oObj.isBeforeFirst() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -147,7 +147,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.afterLast() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("afterLast()", false) ;
             return ;
@@ -173,7 +173,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             result = oObj.isAfterLast() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -188,7 +188,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.first() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("first()", false) ;
             return ;
@@ -214,7 +214,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             result = oObj.isFirst() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -229,7 +229,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.last() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("last()", false) ;
             return ;
@@ -254,7 +254,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             result = oObj.isLast() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -271,7 +271,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.absolute(1) ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -295,7 +295,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             result &= oObj.getRow() == 1;
         } catch (SQLException e) {
-            log.println("Exception occured:");
+            log.println("Exception occurred:");
             e.printStackTrace(log);
             result = false;
         }
@@ -319,7 +319,7 @@ public class _XResultSet extends MultiMethodTest {
             log.println("Row was : " + prevRow + ", row is : " + oObj.getRow());
             result &= prevRow + 1 == oObj.getRow() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -342,7 +342,7 @@ public class _XResultSet extends MultiMethodTest {
             log.println("Row was : " + prevRow + ", row is : " + oObj.getRow());
             result &= prevRow - 1 == oObj.getRow() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -367,7 +367,7 @@ public class _XResultSet extends MultiMethodTest {
 
             result &= prevRow + 2 == oObj.getRow() ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             result = false ;
         }
@@ -395,7 +395,7 @@ public class _XResultSet extends MultiMethodTest {
                 oObj.refreshRow() ;
                 tRes.tested("refreshRow()", true) ;
             } catch (SQLException e) {
-                log.println("Exception occured :") ;
+                log.println("Exception occurred :") ;
                 e.printStackTrace(log) ;
                 tRes.tested("refreshRow()", false) ;
             }
@@ -414,7 +414,7 @@ public class _XResultSet extends MultiMethodTest {
                 log.println("Value after refresh: " + valAfterRefresh);
                 tRes.tested("refreshRow()", valAfterRefresh.equals(oldValue));
             } catch(SQLException e) {
-                log.println("Exception occured :");
+                log.println("Exception occurred :");
                 e.printStackTrace(log);
                 tRes.tested("refreshRow()", false);
             }
@@ -431,7 +431,7 @@ public class _XResultSet extends MultiMethodTest {
             boolean res = oObj.rowUpdated() ;
             tRes.tested("rowUpdated()", true) ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("rowUpdated()", false) ;
         }
@@ -446,7 +446,7 @@ public class _XResultSet extends MultiMethodTest {
             boolean res = oObj.rowInserted() ;
             tRes.tested("rowInserted()", true) ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("rowInserted()", false) ;
         }
@@ -461,7 +461,7 @@ public class _XResultSet extends MultiMethodTest {
             boolean res = oObj.rowDeleted() ;
             tRes.tested("rowDeleted()", true) ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("rowDeleted()", false) ;
         }
@@ -481,7 +481,7 @@ public class _XResultSet extends MultiMethodTest {
             tRes.tested("getStatement()",
                 (hasStatement && res != null) || !hasStatement) ;
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
             tRes.tested("getStatement()", false) ;
         }
@@ -496,7 +496,7 @@ public class _XResultSet extends MultiMethodTest {
         try {
             oObj.first();
         } catch (SQLException e) {
-            log.println("Exception occured :") ;
+            log.println("Exception occurred :") ;
             e.printStackTrace(log) ;
         }
     }

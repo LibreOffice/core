@@ -113,7 +113,7 @@ public class _XRowSet extends MultiMethodTest {
         try {
             oObj.execute() ;
         } catch (SQLException e) {
-            log.println("Exception occured :" + e) ;
+            log.println("Exception occurred :" + e) ;
             result = false ;
         }
 

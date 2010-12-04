@@ -68,7 +68,7 @@ public class _XFlushable extends MultiMethodTest {
     /**
     * Test call method <code>flush</code> and checks if added listener
     * was called and removed one wasn't. <p>
-    * Has OK status if no exception has occured. <p>
+    * Has OK status if no exception has occurred. <p>
     *     Methods to be executed before :
     * {@link #_addFlushListener},
     * {@link #_removeFlushListener}

@@ -56,7 +56,7 @@ public class _XComponentContext extends MultiMethodTest {
                 log.println("worked .... ok");
                 res &= true;
             } catch (com.sun.star.uno.Exception e) {
-                log.println("Exception occured " + e.getMessage());
+                log.println("Exception occurred " + e.getMessage());
                 res &= false;
             }
         }

@@ -88,7 +88,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getDate() {
 
@@ -118,7 +118,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getMin() {
 
@@ -148,7 +148,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getMax() {
 
@@ -182,7 +182,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getFirst() {
 
@@ -218,7 +218,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets the current value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _getLast() {
 
@@ -232,7 +232,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Sets the value to empty. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * The following method tests are to be completed successfully before :
     * <ul>
     *  <li> <code> setTime </code> : value must be not empty </li>
@@ -290,7 +290,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets strict state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
     */
     public void _isStrictFormat() {
 
@@ -326,7 +326,7 @@ public class _XDateField extends MultiMethodTest {
 
     /**
     * Gets long format state and stores it. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
     */
     public void _isLongFormat() {
 

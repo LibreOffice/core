@@ -241,19 +241,19 @@ public class _XContainer extends MultiMethodTest {
             }
             NC.removeByName("XContainer_dummy");
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured ");
+            log.println("Exception occurred ");
             ex.printStackTrace(log);
             bResult = false;
         } catch (com.sun.star.lang.WrappedTargetException ex) {
-            log.println("Exception occured ");
+            log.println("Exception occurred ");
             ex.printStackTrace(log);
             bResult = false;
         } catch (com.sun.star.container.NoSuchElementException ex) {
-            log.println("Exception occured ");
+            log.println("Exception occurred ");
             ex.printStackTrace(log);
             bResult = false;
         } catch (com.sun.star.container.ElementExistException ex) {
-            log.println("Exception occured ");
+            log.println("Exception occurred ");
             ex.printStackTrace(log);
             bResult = false;
         }

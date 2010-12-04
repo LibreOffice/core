@@ -134,13 +134,13 @@ public class _BaseIndex extends MultiPropertyTest {
 
                     indProp.replaceByIndex(0, newVal);
                 } catch (com.sun.star.lang.WrappedTargetException e) {
-                    log.println("Exception occured while testing LevelFormat");
+                    log.println("Exception occurred while testing LevelFormat");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                    log.println("Exception occured while testing LevelFormat");
+                    log.println("Exception occurred while testing LevelFormat");
                     e.printStackTrace(log);
                 } catch (com.sun.star.lang.IllegalArgumentException e) {
-                    log.println("Exception occured while testing LevelFormat");
+                    log.println("Exception occurred while testing LevelFormat");
                     e.printStackTrace(log);
                 }
 
@@ -194,10 +194,10 @@ public class _BaseIndex extends MultiPropertyTest {
                 }
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while printing LevelFormat");
+            log.println("Exception occurred while printing LevelFormat");
             e.printStackTrace(log);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured while printing LevelFormat");
+            log.println("Exception occurred while printing LevelFormat");
             e.printStackTrace(log);
         }
     }

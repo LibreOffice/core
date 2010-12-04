@@ -552,7 +552,7 @@ public class OpenOfficeDatabaseReportExtractor extends Assurance
             catch (com.sun.star.util.CloseVetoException e)
             {
                 GlobalLogWriter.println("ERROR: CloseVetoException caught");
-                GlobalLogWriter.println("CloseVetoException occured Can't close document.");
+                GlobalLogWriter.println("CloseVetoException occurred Can't close document.");
                 GlobalLogWriter.println("Message: " + e.getMessage());
             }
         }

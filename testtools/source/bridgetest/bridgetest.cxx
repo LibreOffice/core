@@ -1260,7 +1260,7 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
     catch (Exception & exc)
     {
         OString cstr( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        fprintf( stderr, "exception occured: %s\n", cstr.getStr() );
+        fprintf( stderr, "exception occurred: %s\n", cstr.getStr() );
         throw;
     }
 

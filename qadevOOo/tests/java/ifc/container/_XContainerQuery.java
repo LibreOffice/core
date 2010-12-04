@@ -113,11 +113,11 @@ public class _XContainerQuery extends MultiMethodTest {
                     Object element = subSet.nextElement();
 
                     } catch (com.sun.star.container.NoSuchElementException e){
-                        log.println("Exception occured ");
+                        log.println("Exception occurred ");
                         e.printStackTrace(log);
                         bResult = false;
                     } catch (com.sun.star.lang.WrappedTargetException e){
-                        log.println("Exception occured ");
+                        log.println("Exception occurred ");
                         e.printStackTrace(log);
                         bResult = false;
                     }
@@ -147,11 +147,11 @@ public class _XContainerQuery extends MultiMethodTest {
             Object element = subSet.nextElement();
 
             } catch (com.sun.star.container.NoSuchElementException e){
-                log.println("Exception occured ");
+                log.println("Exception occurred ");
                 e.printStackTrace(log);
                 bResult = false;
             } catch (com.sun.star.lang.WrappedTargetException e){
-                log.println("Exception occured ");
+                log.println("Exception occurred ");
                 e.printStackTrace(log);
                 bResult = false;
             }

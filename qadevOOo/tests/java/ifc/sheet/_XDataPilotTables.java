@@ -99,7 +99,7 @@ public class _XDataPilotTables extends MultiMethodTest {
             bResult &= oSheet.getCellByPosition
                 (CA.Column, CA.Row).getFormula().equals("Filter");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured! " + e);
+            log.println("Exception occurred! " + e);
             bResult = false;
         }
 
@@ -136,7 +136,7 @@ public class _XDataPilotTables extends MultiMethodTest {
             bResult &= oSheet.getCellByPosition
                 (CA.Column, CA.Row).getFormula().equals("");
         } catch (com.sun.star.uno.Exception e) {
-            log.println("Exception occured ! " + e);
+            log.println("Exception occurred ! " + e);
             bResult = false;
         }
         log.println(bResult ? "OK" : "FAILED");

@@ -186,19 +186,19 @@ public class ScCellCursorObj extends TestCase {
             oSheet.getCellByPosition(3, 2).setFormula("xTextDoc");
             oSheet.getCellByPosition(3, 3).setFormula("xTextDoc");
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while creating test object:");
+            log.println("Exception occurred while creating test object:");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occured while creating test object:");
+            log.println("Exception occurred while creating test object:");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-            log.println("Exception occured while creating test object:");
+            log.println("Exception occurred while creating test object:");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while creating test object:");
+            log.println("Exception occurred while creating test object:");
             e.printStackTrace(log);
             throw new StatusException("Couldn't create test object", e);
         }

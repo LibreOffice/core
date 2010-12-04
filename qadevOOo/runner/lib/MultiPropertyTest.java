@@ -253,7 +253,7 @@ public class MultiPropertyTest extends MultiMethodTest
             }
             catch (Exception e)
             {
-                log.println("Exception occured while testing property '" + propName + "'");
+                log.println("Exception occurred while testing property '" + propName + "'");
                 e.printStackTrace(log);
                 tRes.tested(propName, false);
             }

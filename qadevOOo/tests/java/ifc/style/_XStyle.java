@@ -107,7 +107,7 @@ public class _XStyle extends MultiMethodTest {
         try {
             oObj.setParentStyle(oMyStyle.getName());
         } catch (com.sun.star.container.NoSuchElementException e) {
-            log.println("Exception occured while method call: " + e);
+            log.println("Exception occurred while method call: " + e);
             result = false ;
         }
 

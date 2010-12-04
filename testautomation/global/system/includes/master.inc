@@ -577,7 +577,7 @@ end sub
 '-------------------------------------------------------------------------
 
 sub TestExit
-    '/// Automatically called at the end of a testcase or directly called when an error occured
+    '/// Automatically called at the end of a testcase or directly called when an error occurred
     '///+<li>Write the data for status page in a list in status.inc</li></ul>
     Call PleaseRecover  ("TestExit")    
     if ((gTestName <> "") AND isStatusEnabled()) then  
@@ -616,7 +616,7 @@ sub PleaseRecover (sWhat as String)
         gStartTheOffice = FALSE
         'This is the trigger for a restart after application crashed:
         sError = ResetApplication                       
-        'If sError = empty then no error occured.
+        'If sError = empty then no error occurred.
         if sError <> "" then                            
             printlog "   **    Error in " + sWhat + " -Routine      **"
             warnlog sError

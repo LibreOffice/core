@@ -71,7 +71,7 @@ public class _XFixedText extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getText() {
 
@@ -105,7 +105,7 @@ public class _XFixedText extends MultiMethodTest {
 
     /**
     * Just calls the method and stores value returned. <p>
-    * Has <b>OK</b> status if no runtime exceptions occured.
+    * Has <b>OK</b> status if no runtime exceptions occurred.
     */
     public void _getAlignment() {
 

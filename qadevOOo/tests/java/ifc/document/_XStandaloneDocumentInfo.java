@@ -64,7 +64,7 @@ public class _XStandaloneDocumentInfo extends MultiMethodTest {
     String newProp = null;
     /**
     * Sets new value of the property 'Author' and calls the method. <p>
-    * Has <b> OK </b> status if no exception occured.
+    * Has <b> OK </b> status if no exception occurred.
     */
     public void _storeIntoURL() {
         try {
@@ -99,7 +99,7 @@ public class _XStandaloneDocumentInfo extends MultiMethodTest {
 
     /**
     * Calls the method and checks value of the property 'Author'. <p>
-    * Has <b> OK </b> status if no exception occured and value of the property
+    * Has <b> OK </b> status if no exception occurred and value of the property
     * 'Author' is equal to value that was set in the method
     * <code>storeIntoURL</code>.
     */

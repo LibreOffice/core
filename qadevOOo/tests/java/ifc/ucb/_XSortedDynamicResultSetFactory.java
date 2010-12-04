@@ -144,7 +144,7 @@ public class _XSortedDynamicResultSetFactory extends MultiMethodTest {
                 rowCount = set.getRow();
                 log.println("Number of rows in result set: " + rowCount);
             } catch (com.sun.star.sdbc.SQLException e) {
-                log.println("Exception occured while accessing "+
+                log.println("Exception occurred while accessing "+
                     "sorted result set :");
                 e.printStackTrace(log);
             }

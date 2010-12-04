@@ -105,7 +105,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
             oObj.select(selections[1]);
             res = selectionChanged;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured during addSelectionChangeListener()");
+            log.println("Exception occurred during addSelectionChangeListener()");
             ex.printStackTrace(log);
             res = false;
         }
@@ -151,7 +151,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
                 }
             }
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured during select()");
+            log.println("Exception occurred during select()");
             ex.printStackTrace(log);
             res = false;
         }
@@ -179,7 +179,7 @@ public class _XSelectionSupplier extends MultiMethodTest {
             oObj.select(selections[1]);
             res = !selectionChanged;
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured during removeSelectionChangeListener()");
+            log.println("Exception occurred during removeSelectionChangeListener()");
             ex.printStackTrace(log);
             res = false;
         }

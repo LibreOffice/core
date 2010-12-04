@@ -91,7 +91,7 @@ public class _XButton extends MultiMethodTest {
 
     /**
     * Just sets some text for label. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _setLabel() {
 
@@ -103,7 +103,7 @@ public class _XButton extends MultiMethodTest {
 
     /**
     * Just sets some command for button. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _setActionCommand() {
 

@@ -412,23 +412,23 @@ public class _CharacterProperties extends MultiPropertyTest {
                 tRes.tested(name,true);
             }
             else {
-                log.println("Exception occured while testing property '" +
+                log.println("Exception occurred while testing property '" +
                      name + "'");
                 ex.printStackTrace(log);
                 tRes.tested(name, false);
             }
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            log.println("Exception occured while testing property '" +
+            log.println("Exception occurred while testing property '" +
                 name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Exception occured while testing property '" +
+            log.println("Exception occurred while testing property '" +
                  name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);
         } catch (com.sun.star.beans.PropertyVetoException e) {
-            log.println("Exception occured while testing property '" +
+            log.println("Exception occurred while testing property '" +
                  name + "'");
             e.printStackTrace(log);
             tRes.tested(name, false);

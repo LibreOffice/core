@@ -50,7 +50,7 @@ public class _XActionLockable extends MultiMethodTest {
     /**
      * Method addActionLock called first and then
      * checked value returned by isActionLocked().<p>
-     * Has <b> OK </b> status if no runtime exceptions occured
+     * Has <b> OK </b> status if no runtime exceptions occurred
      * and returned value is true.
      */
     public void _isActionLocked() {
@@ -62,7 +62,7 @@ public class _XActionLockable extends MultiMethodTest {
 
     /**
     * Just calls the method. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _addActionLock() {
         requiredMethod("resetActionLocks()");
@@ -72,7 +72,7 @@ public class _XActionLockable extends MultiMethodTest {
 
     /**
     * Calls the method and check value returned by isActionLocked(). <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     * and returned value is false.
     */
     public void _removeActionLock() {
@@ -84,7 +84,7 @@ public class _XActionLockable extends MultiMethodTest {
 
     /**
     * Calls the method with specific value. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured
+    * Has <b> OK </b> status if no runtime exceptions occurred
     */
     public void _setActionLocks() {
         oObj.setActionLocks( nLock );

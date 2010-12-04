@@ -93,7 +93,7 @@ class Pump extends Thread
         }
         catch (java.io.IOException e)
         {
-            log.println(pref + "Exception occured: " + e);
+            log.println(pref + "Exception occurred: " + e);
         }
     }
 

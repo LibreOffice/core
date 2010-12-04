@@ -159,12 +159,12 @@ public class _XDocumentInsertable extends MultiMethodTest {
             }
 
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("Exception occured while testing "+
+            log.println("Exception occurred while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;
         } catch (com.sun.star.io.IOException ex) {
-            log.println("Exception occured while testing "+
+            log.println("Exception occurred while testing "+
                 "insertDocumentFromURL()");
             ex.printStackTrace(log);
             result = false ;

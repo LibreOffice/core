@@ -850,7 +850,7 @@ Public Class BridgeTest
 	     Throw 
         Catch e as System.Exception 
 	      Throw New unoidl.com.sun.star.uno.RuntimeException( _
-		    "cli_vb_bridgetest.vb: unexpected exception occured in XMain::run. " _
+		    "cli_vb_bridgetest.vb: unexpected exception occurred in XMain::run. " _
 		    & "Original exception: " + e.GetType().Name + "\n Message: " _
 		    & e.Message , Nothing)
 

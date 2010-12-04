@@ -123,19 +123,19 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
                     the_Cursor, oContent, true);
 
             } catch (com.sun.star.lang.WrappedTargetException e) {
-                log.println("Exception occured while creating test Object.");
+                log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);
             } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
-                log.println("Exception occured while creating test Object.");
+                log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);
             } catch (com.sun.star.lang.IllegalArgumentException e) {
-                log.println("Exception occured while creating test Object.");
+                log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);
             } catch (com.sun.star.uno.Exception e) {
-                log.println("Exception occured while creating test Object.");
+                log.println("Exception occurred while creating test Object.");
                 e.printStackTrace(log);
                 throw new StatusException("Couldn't insert textField.URL", e);
             }
@@ -175,7 +175,7 @@ public class _XTextFieldsSupplier extends MultiMethodTest {
     /**
      * Just for convenience: log the exception and set the method false.
      * @param method The name of the method to set to false.
-     * @param e The Exception that occured.
+     * @param e The Exception that occurred.
      */
     private void setMethodFalse(String method, Exception e) {
         log.println("Exception while executing '" + method + "'");

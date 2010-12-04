@@ -67,7 +67,7 @@ public class _XGrid extends MultiMethodTest {
     /**
     * The method called. Then CurrentColumnPosition is obtained, changed
     * and saved.
-    * Has <b> OK </b> status if no exceptions was occured.
+    * Has <b> OK </b> status if no exceptions was occurred.
     */
     public void _setCurrentColumnPosition() {
         log.println("Testing setCurrentColumnPosition()...");

@@ -95,7 +95,7 @@ public class _DatabaseImportDescriptor extends MultiMethodTest {
                 tRes.tested(name, true);
             }
         } catch (Exception e) {
-             log.println("Exception occured while testing property '" +
+             log.println("Exception occurred while testing property '" +
                  name + "'");
              e.printStackTrace(log);
              tRes.tested(name, false);

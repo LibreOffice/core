@@ -773,7 +773,7 @@ public class ValueChanger {
                 }
             }
         } catch (Exception e) {
-            System.err.println("Exception occured while changing Enumeration value:") ;
+            System.err.println("Exception occurred while changing Enumeration value:") ;
             e.printStackTrace(System.err) ;
         }
         if (newValue == null) newValue = oldValue ;

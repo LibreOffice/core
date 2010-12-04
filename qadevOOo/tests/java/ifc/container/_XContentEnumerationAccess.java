@@ -56,7 +56,7 @@ public class _XContentEnumerationAccess extends MultiMethodTest{
             serviceNames = oObj.getAvailableServiceNames();
             bResult = serviceNames != null ;
         } catch (Exception e) {
-            log.println("Exception occured. " + e);
+            log.println("Exception occurred. " + e);
             bResult = false;
         }
         tRes.tested("getAvailableServiceNames()", bResult);

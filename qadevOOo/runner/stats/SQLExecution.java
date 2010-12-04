@@ -81,7 +81,7 @@ public class SQLExecution {
 
     /**
      * Open a connection to the DataBase
-     * @return True, if no error occured.
+     * @return True, if no error occurred.
      */
     public boolean openConnection() {
         if(m_bConnectionOpen) return true;
@@ -108,7 +108,7 @@ public class SQLExecution {
 
     /**
      * Close the connection to the DataBase
-     * @return True, if no error occured.
+     * @return True, if no error occurred.
      */
     public boolean closeConnection() {
         if (!m_bConnectionOpen) return true;
@@ -130,7 +130,7 @@ public class SQLExecution {
      * @param command The command to execute.
      * @param sqlInput Input values for the command.
      * @param sqlOutput The results of the command are put in this Hashtable.
-     * @return True, if no error occured.
+     * @return True, if no error occurred.
      */
     public boolean executeSQLCommand(String command, Hashtable sqlInput, Hashtable sqlOutput)
                                         throws IllegalArgumentException {
@@ -144,7 +144,7 @@ public class SQLExecution {
      * @param sqlOutput The results of the command are put in this Hashtable.
      * @param mergeOutputIntoInput The output of the result is put into the
      * sqlInput Hashtable.
-     * @return True, if no error occured.
+     * @return True, if no error occurred.
      */
     public boolean executeSQLCommand(String command, Hashtable sqlInput, Hashtable sqlOutput, boolean mergeOutputIntoInput)
                                         throws IllegalArgumentException {
@@ -160,7 +160,7 @@ public class SQLExecution {
         Vector sqlCommand = new Vector();
         sqlCommand.add("");
         boolean update = false;
-        // synchronize all "$varname" occurences in the command string with
+        // synchronize all "$varname" occurrences in the command string with
         // values from input
         StringTokenizer token = new StringTokenizer(command, " ");
         while (token.hasMoreTokens()) {

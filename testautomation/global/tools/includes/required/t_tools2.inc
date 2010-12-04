@@ -617,7 +617,7 @@ function fRelativeToAbsolutePath (sRelativePath as string) as string
     sIntern = sRelativePath
     ' get count of 'relative path ups'
     aSplitOnDoublePoints = split(sIntern, gPathSigne+"..")
-    ' for every occurence cut part from path
+    ' for every occurrence cut part from path
     iHowOften = uBound(aSplitOnDoublePoints)-1
     for i = 0 to iHowOften
         ' Split on every "/.."

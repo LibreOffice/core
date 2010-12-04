@@ -63,13 +63,13 @@ public class _XSimpleFileAccess2 extends MultiMethodTest {
             tRes.tested("writeFile()",result);
         }
         catch (com.sun.star.ucb.CommandAbortedException ex) {
-            log.println("CommandAbortedException occured while testing "+
+            log.println("CommandAbortedException occurred while testing "+
                 "'writeFile()'");
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);
         }
         catch (com.sun.star.uno.Exception ex) {
-            log.println("Exception occured while testing 'writeFile()'");
+            log.println("Exception occurred while testing 'writeFile()'");
             ex.printStackTrace(log);
             tRes.tested("writeFile()",false);
         }

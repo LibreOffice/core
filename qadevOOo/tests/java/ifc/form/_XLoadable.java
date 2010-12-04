@@ -208,7 +208,7 @@ public class _XLoadable extends MultiMethodTest {
     /**
     * Adds a listener. If its methods are called or not is checked
     * in other object methods. <p>
-    * Has <b> OK </b> status if no runtime exceptions occured.
+    * Has <b> OK </b> status if no runtime exceptions occurred.
     */
     public void _addLoadListener() {
 

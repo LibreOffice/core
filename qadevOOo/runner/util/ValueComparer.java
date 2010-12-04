@@ -72,7 +72,7 @@ public class ValueComparer {
             }
         }
         catch (Exception e) {
-            System.out.println("Exception occured while comparing Objects");
+            System.out.println("Exception occurred while comparing Objects");
             e.printStackTrace();
         }
         return eq;

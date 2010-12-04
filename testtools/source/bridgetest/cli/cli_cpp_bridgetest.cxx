@@ -970,7 +970,7 @@ static bool raiseException(XBridgeTest* xLBT )
         catch (System::Exception* exc)
         {
             System::Text::StringBuilder* s = new System::Text::StringBuilder();
-            s->Append(S"cli_cpp_bridgetest: unexpected exception occured in XMain::run. Original exception: ");
+            s->Append(S"cli_cpp_bridgetest: unexpected exception occurred in XMain::run. Original exception: ");
             s->Append(exc->GetType()->Name);
             s->Append(S"\n Message: ");
             s->Append(exc->Message);

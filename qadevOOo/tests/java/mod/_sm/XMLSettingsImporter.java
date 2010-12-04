@@ -167,7 +167,7 @@ public class XMLSettingsImporter extends TestCase {
                         logF.println("Margin returned: " + gMargin);
                         return impMargin == gMargin.shortValue() ;
                     } catch (com.sun.star.uno.Exception e) {
-                        logF.println("Exception occured while checking filter :") ;
+                        logF.println("Exception occurred while checking filter :") ;
                         e.printStackTrace(logF) ;
                         return false ;
                     }

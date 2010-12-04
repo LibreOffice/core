@@ -190,7 +190,7 @@ public class _XStorable extends MultiMethodTest {
     * Has <b> OK </b> status if:
     * <ol>
     *  <li>component was stored, object is not readonly and has location</li>
-    *  <li>exception occured because of component is readonly
+    *  <li>exception occurred because of component is readonly
     *  and wasn't stored</li>
     * </ol>
     */
