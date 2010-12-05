@@ -779,7 +779,6 @@ void SvxAreaTabPage::Construct()
 
 void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 {
-    USHORT _nPos = 0;
     USHORT nCount;
     SFX_ITEMSET_ARG (&rSet,pPageTypeItem,SfxUInt16Item,SID_PAGE_TYPE,sal_False);
     SFX_ITEMSET_ARG (&rSet,pPosItem,SfxUInt16Item,SID_TABPAGE_POS,sal_False);
@@ -793,6 +792,7 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
 
         if( pColorTab )
         {
+            USHORT _nPos = 0;
             // Bitmapliste
             if( *pnBitmapListState )
             {
