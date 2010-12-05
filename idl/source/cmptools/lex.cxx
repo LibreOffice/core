@@ -338,7 +338,6 @@ ULONG SvTokenStream::GetNumber()
 *************************************************************************/
 BOOL SvTokenStream::MakeToken( SvToken & rToken )
 {
-    int             c1;
     USHORT          i;
 
     do
@@ -361,7 +360,7 @@ BOOL SvTokenStream::MakeToken( SvToken & rToken )
     {
         // Zeit Optimierung, keine Kommentare
         //ByteString aComment( (char)c );
-        c1 = c;
+        int c1 = c;
         c = GetFastNextChar();
         if( '/' == c )
         {
