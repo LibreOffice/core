@@ -30,7 +30,7 @@
 
 //#include <osl/diagnose.hxx>
 
-#import "OGLTrans_Shaders_MACOSX.h"
+#import "OGLTrans_Shaders.h"
 
 
 @implementation OGLShaders

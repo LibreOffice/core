@@ -50,8 +50,8 @@ ENABLE_EXCEPTIONS=TRUE
 
 SLOFILES = \
     $(SLO)$/OGLTrans_TransitionImpl.obj \
-    $(SLO)$/OGLTrans_Shaders_$(OS).obj \
-    $(SLO)$/OGLTrans_TransitionerImpl_$(OS).obj
+    $(SLO)$/OGLTrans_Shaders.obj \
+    $(SLO)$/OGLTrans_TransitionerImpl.obj
 
 DLLPRE=
 SHL1TARGET=$(TARGET).uno

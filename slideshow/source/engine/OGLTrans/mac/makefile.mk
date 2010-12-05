@@ -60,10 +60,10 @@ IMPL_SUBDIR=unx
 .ENDIF
 
 SLOFILES = \
-    $(SLO)$/OGLTrans_Shaders_$(OS).obj \
-    $(SLO)$/OGLTrans_TransitionImpl_$(OS).obj \
+    $(SLO)$/OGLTrans_Shaders.obj \
+    $(SLO)$/OGLTrans_TransitionImpl.obj \
     $(SLO)$/aquaOpenGLView.obj \
-    $(SLO)$/OGLTrans_TransitionerImpl_$(OS).obj
+    $(SLO)$/OGLTrans_TransitionerImpl.obj
 
 SHL1TARGET=$(TARGET).uno
 

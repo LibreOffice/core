@@ -29,7 +29,7 @@
  ************************************************************************/
 
 #include "OGLTrans_TransitionImpl.hxx"
-#include "OGLTrans_Shaders_MACOSX.h"
+#include "OGLTrans_Shaders.h"
 #ifdef QUARTZ
 #include <OpenGL/gl.h>
 #else
