@@ -852,7 +852,6 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
 {
     sal_uInt16 nContentRow;
     sal_uInt8 nCol = static_cast<sal_uInt8>(GetTable()->GetColumn());
-    sal_uInt8 nFirstColSpann = 1;
     XFTable* pTmpTable = new XFTable;
     XFRow* pXFRow;
 
@@ -871,6 +870,7 @@ sal_uInt16 LwpTableLayout::ConvertHeadingRow(
     }
     else
     {
+        sal_uInt8 nFirstColSpann = 1;
         bFindFlag = FindSplitColMark(pTmpTable,CellMark,nFirstColSpann);
 
         if (bFindFlag)//split to 2 cells
