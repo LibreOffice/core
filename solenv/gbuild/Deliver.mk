@@ -49,7 +49,7 @@ mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -f $
 endef
 else
 define gb_Deliver_deliver
-mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) -pf $(1) $(2)
+mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) --force --preserve=mode,timestamps $(1) $(2)
 endef
 endif
 
