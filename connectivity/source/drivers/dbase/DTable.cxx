@@ -1515,14 +1515,14 @@ BOOL ODbaseTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const Reference<X
 
     // Gesamte neue Row uebernehmen:
     // ... und am Ende als neuen Record hinzufuegen:
-    UINT32 nTempPos = m_nFilePos,
-           nFileSize = 0,
-           nMemoFileSize = 0;
+    UINT32 nTempPos = m_nFilePos;
 
     m_nFilePos = (ULONG)m_aHeader.db_anz + 1;
     BOOL bInsertRow = UpdateBuffer( rRow, NULL, _xCols );
     if ( bInsertRow )
     {
+        UINT32 nFileSize = 0, nMemoFileSize = 0;
+
         nFileSize = lcl_getFileSize(*m_pFileStream);
 
         if (HasMemoFields() && m_pMemoStream)
