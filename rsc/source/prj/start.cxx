@@ -210,7 +210,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
                       ByteString aSrsName,
                       RscPtrPtr * pCmdLine )
 {
-    int             i, nExit;
+    int nExit;
     ByteString*     pString;
     ByteString      aRspFileName;   // Response-Datei
     FILE *          fRspFile;       // Response-Datei
@@ -221,7 +221,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
     RscVerbosity eVerbosity = RscVerbosityNormal;
     if( fRspFile )
     {
-        for( i = 1; i < (int)(pCmdLine->GetCount() -1); i++ )
+        for (int i = 1; i < (int)(pCmdLine->GetCount() -1); ++i)
         {
             if ( !rsc_stricmp( (char *)pCmdLine->GetEntry( i ), "-verbose" ) )
             {
