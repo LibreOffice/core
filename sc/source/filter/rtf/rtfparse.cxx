@@ -250,8 +250,7 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
                 ColAdjust();
         }
         // TwipCols aufbauen, erst nach nLastWidth Vergleich!
-        size_t ListSize = pDefaultList->size();
-        for ( size_t i = 0; i < ListSize; ++i )
+        for ( size_t i = 0, nListSize = pDefaultList->size(); i < nListSize; ++i )
         {
             pD = &( pDefaultList->at( i ) );
             SCCOL n;
