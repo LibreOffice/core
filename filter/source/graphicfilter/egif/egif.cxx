@@ -48,8 +48,8 @@
 class GIFWriter
 {
     Bitmap              aAccBmp;
-    BitmapReadAccess*   pAcc;
-    SvStream*           pGIF;
+    SvStream& m_rGIF;
+    BitmapReadAccess*   m_pAcc;
     ULONG               nMinPercent;
     ULONG               nMaxPercent;
     ULONG               nLastPercent;
@@ -81,17 +81,23 @@ class GIFWriter
 
 public:
 
-                        GIFWriter() {}
-                        ~GIFWriter() {}
+    GIFWriter(SvStream &rStream);
+    ~GIFWriter() {}
 
-    BOOL                WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                                        FilterConfigItem* pConfigItem );
+    BOOL WriteGIF( const Graphic& rGraphic, FilterConfigItem* pConfigItem );
 };
+
+GIFWriter::GIFWriter(SvStream &rStream)
+    : m_rGIF(rStream)
+    , m_pAcc(NULL)
+    , nActX(0)
+    , nActY(0)
+{
+}
 
 // ------------------------------------------------------------------------
 
-BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
-                                FilterConfigItem* pFilterConfigItem )
+BOOL GIFWriter::WriteGIF(const Graphic& rGraphic, FilterConfigItem* pFilterConfigItem)
 {
     if ( pFilterConfigItem )
     {
@@ -110,16 +116,15 @@ BOOL GIFWriter::WriteGIF( const Graphic& rGraphic, SvStream& rGIF,
     if( bLogSize )
         aSize100 = Application::GetDefaultDevice()->LogicToLogic( rGraphic.GetPrefSize(), aMap, MAP_100TH_MM );
 
-    pGIF = &rGIF;
     bStatus = TRUE;
     nLastPercent = 0;
     nInterlaced = 0;
-    pAcc = NULL;
+    m_pAcc = NULL;
 
     if ( pFilterConfigItem )
         nInterlaced = pFilterConfigItem->ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Interlaced" ) ), 0 );
 
-    pGIF->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    m_rGIF.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     if( rGraphic.IsAnimated() )
     {
@@ -274,9 +279,9 @@ BOOL GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
         else
             aAccBmp.Convert( BMP_CONVERSION_8BIT_COLORS );
 
-        pAcc = aAccBmp.AcquireReadAccess();
+        m_pAcc = aAccBmp.AcquireReadAccess();
 
-        if( !pAcc )
+        if( !m_pAcc )
             bStatus = FALSE;
     }
 
@@ -287,8 +292,8 @@ BOOL GIFWriter::CreateAccess( const BitmapEx& rBmpEx )
 
 void GIFWriter::DestroyAccess()
 {
-    aAccBmp.ReleaseAccess( pAcc );
-    pAcc = NULL;
+    aAccBmp.ReleaseAccess( m_pAcc );
+    m_pAcc = NULL;
 }
 
 // ------------------------------------------------------------------------
@@ -297,9 +302,9 @@ void GIFWriter::WriteSignature( BOOL bGIF89a )
 {
     if( bStatus )
     {
-        pGIF->Write( bGIF89a ? "GIF89a" : "GIF87a" , 6 );
+        m_rGIF.Write( bGIF89a ? "GIF89a" : "GIF87a" , 6 );
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -316,20 +321,20 @@ void GIFWriter::WriteGlobalHeader( const Size& rSize )
         const BYTE      cFlags = 128 | ( 7 << 4 );
 
         // Werte rausschreiben
-        *pGIF << nWidth;
-        *pGIF << nHeight;
-        *pGIF << cFlags;
-        *pGIF << (BYTE) 0x00;
-        *pGIF << (BYTE) 0x00;
+        m_rGIF << nWidth;
+        m_rGIF << nHeight;
+        m_rGIF << cFlags;
+        m_rGIF << (BYTE) 0x00;
+        m_rGIF << (BYTE) 0x00;
 
         // Dummy-Palette mit zwei Eintraegen (Schwarz/Weiss) schreiben;
         // dieses nur wegen Photoshop-Bug, da die keine Bilder ohne
         // globale Farbpalette lesen koennen
-        *pGIF << (UINT16) 0;
-        *pGIF << (UINT16) 255;
-        *pGIF << (UINT16) 65535;
+        m_rGIF << (UINT16) 0;
+        m_rGIF << (UINT16) 255;
+        m_rGIF << (UINT16) 65535;
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -355,15 +360,15 @@ void GIFWriter::WriteLoopExtension( const Animation& rAnimation )
         const BYTE cLoByte = (const BYTE) nLoopCount;
         const BYTE cHiByte = (const BYTE) ( nLoopCount >> 8 );
 
-        *pGIF << (BYTE) 0x21;
-        *pGIF << (BYTE) 0xff;
-        *pGIF << (BYTE) 0x0b;
-        pGIF->Write( "NETSCAPE2.0", 11 );
-        *pGIF << (BYTE) 0x03;
-        *pGIF << (BYTE) 0x01;
-        *pGIF << cLoByte;
-        *pGIF << cHiByte;
-        *pGIF << (BYTE) 0x00;
+        m_rGIF << (BYTE) 0x21;
+        m_rGIF << (BYTE) 0xff;
+        m_rGIF << (BYTE) 0x0b;
+        m_rGIF.Write( "NETSCAPE2.0", 11 );
+        m_rGIF << (BYTE) 0x03;
+        m_rGIF << (BYTE) 0x01;
+        m_rGIF << cLoByte;
+        m_rGIF << cHiByte;
+        m_rGIF << (BYTE) 0x00;
     }
 }
 
@@ -374,15 +379,15 @@ void GIFWriter::WriteLogSizeExtension( const Size& rSize100 )
     // PrefSize in 100th-mm als ApplicationExtension schreiben
     if( rSize100.Width() && rSize100.Height() )
     {
-        *pGIF << (BYTE) 0x21;
-        *pGIF << (BYTE) 0xff;
-        *pGIF << (BYTE) 0x0b;
-        pGIF->Write( "STARDIV 5.0", 11 );
-        *pGIF << (BYTE) 0x09;
-        *pGIF << (BYTE) 0x01;
-        *pGIF << (UINT32) rSize100.Width();
-        *pGIF << (UINT32) rSize100.Height();
-        *pGIF << (BYTE) 0x00;
+        m_rGIF << (BYTE) 0x21;
+        m_rGIF << (BYTE) 0xff;
+        m_rGIF << (BYTE) 0x0b;
+        m_rGIF.Write( "STARDIV 5.0", 11 );
+        m_rGIF << (BYTE) 0x09;
+        m_rGIF << (BYTE) 0x01;
+        m_rGIF << (UINT32) rSize100.Width();
+        m_rGIF << (UINT32) rSize100.Height();
+        m_rGIF << (BYTE) 0x00;
     }
 }
 
@@ -405,15 +410,15 @@ void GIFWriter::WriteImageExtension( long nTimer, Disposal eDisposal )
         else if( eDisposal == DISPOSE_PREVIOUS )
             cFlags |= ( 3 << 2 );
 
-        *pGIF << (BYTE) 0x21;
-        *pGIF << (BYTE) 0xf9;
-        *pGIF << (BYTE) 0x04;
-        *pGIF << cFlags;
-        *pGIF << nDelay;
-        *pGIF << (BYTE) pAcc->GetBestPaletteIndex( BMP_COL_TRANS );
-        *pGIF << (BYTE) 0x00;
+        m_rGIF << (BYTE) 0x21;
+        m_rGIF << (BYTE) 0xf9;
+        m_rGIF << (BYTE) 0x04;
+        m_rGIF << cFlags;
+        m_rGIF << nDelay;
+        m_rGIF << (BYTE) m_pAcc->GetBestPaletteIndex( BMP_COL_TRANS );
+        m_rGIF << (BYTE) 0x00;
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -426,9 +431,9 @@ void GIFWriter::WriteLocalHeader()
     {
         const UINT16    nPosX = (UINT16) nActX;
         const UINT16    nPosY = (UINT16) nActY;
-        const UINT16    nWidth = (UINT16) pAcc->Width();
-        const UINT16    nHeight = (UINT16) pAcc->Height();
-        BYTE            cFlags = (BYTE) ( pAcc->GetBitCount() - 1 );
+        const UINT16    nWidth = (UINT16) m_pAcc->Width();
+        const UINT16    nHeight = (UINT16) m_pAcc->Height();
+        BYTE            cFlags = (BYTE) ( m_pAcc->GetBitCount() - 1 );
 
         // Interlaced-Flag setzen
         if( nInterlaced )
@@ -438,14 +443,14 @@ void GIFWriter::WriteLocalHeader()
         cFlags |= 0x80;
 
         // alles rausschreiben
-        *pGIF << (BYTE) 0x2c;
-        *pGIF << nPosX;
-        *pGIF << nPosY;
-        *pGIF << nWidth;
-        *pGIF << nHeight;
-        *pGIF << cFlags;
+        m_rGIF << (BYTE) 0x2c;
+        m_rGIF << nPosX;
+        m_rGIF << nPosY;
+        m_rGIF << nWidth;
+        m_rGIF << nHeight;
+        m_rGIF << cFlags;
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -454,25 +459,25 @@ void GIFWriter::WriteLocalHeader()
 
 void GIFWriter::WritePalette()
 {
-    if( bStatus && pAcc->HasPalette() )
+    if( bStatus && m_pAcc->HasPalette() )
     {
-        const USHORT nCount = pAcc->GetPaletteEntryCount();
-        const USHORT nMaxCount = ( 1 << pAcc->GetBitCount() );
+        const USHORT nCount = m_pAcc->GetPaletteEntryCount();
+        const USHORT nMaxCount = ( 1 << m_pAcc->GetBitCount() );
 
         for ( USHORT i = 0; i < nCount; i++ )
         {
-            const BitmapColor& rColor = pAcc->GetPaletteColor( i );
+            const BitmapColor& rColor = m_pAcc->GetPaletteColor( i );
 
-            *pGIF << rColor.GetRed();
-            *pGIF << rColor.GetGreen();
-            *pGIF << rColor.GetBlue();
+            m_rGIF << rColor.GetRed();
+            m_rGIF << rColor.GetGreen();
+            m_rGIF << rColor.GetBlue();
         }
 
         // Rest mit 0 auffuellen
         if( nCount < nMaxCount )
-            pGIF->SeekRel( ( nMaxCount - nCount ) * 3 );
+            m_rGIF.SeekRel( ( nMaxCount - nCount ) * 3 );
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -482,23 +487,22 @@ void GIFWriter::WritePalette()
 void GIFWriter::WriteAccess()
 {
     GIFLZWCompressor    aCompressor;
-    const long          nWidth = pAcc->Width();
-    const long          nHeight = pAcc->Height();
+    const long          nWidth = m_pAcc->Width();
+    const long          nHeight = m_pAcc->Height();
     BYTE*               pBuffer = NULL;
-    const ULONG         nFormat = pAcc->GetScanlineFormat();
-    long                nY;
-    long                nT;
-    long                i;
+    const ULONG         nFormat = m_pAcc->GetScanlineFormat();
     BOOL                bNative = ( BMP_FORMAT_8BIT_PAL == nFormat );
 
     if( !bNative )
         pBuffer = new BYTE[ nWidth ];
 
-    if( bStatus && ( 8 == pAcc->GetBitCount() ) && pAcc->HasPalette() )
+    if( bStatus && ( 8 == m_pAcc->GetBitCount() ) && m_pAcc->HasPalette() )
     {
-        aCompressor.StartCompression( *pGIF, pAcc->GetBitCount() );
+        aCompressor.StartCompression( m_rGIF, m_pAcc->GetBitCount() );
 
-        for( i = 0; i < nHeight; i++ )
+        long nY, nT;
+
+        for( long i = 0; i < nHeight; ++i )
         {
             if( nInterlaced )
             {
@@ -526,16 +530,16 @@ void GIFWriter::WriteAccess()
                 nY = i;
 
             if( bNative )
-                aCompressor.Compress( pAcc->GetScanline( nY ), nWidth );
+                aCompressor.Compress( m_pAcc->GetScanline( nY ), nWidth );
             else
             {
                 for( long nX = 0L; nX < nWidth; nX++ )
-                    pBuffer[ nX ] = (BYTE) pAcc->GetPixel( nY, nX );
+                    pBuffer[ nX ] = (BYTE) m_pAcc->GetPixel( nY, nX );
 
                 aCompressor.Compress( pBuffer, nWidth );
             }
 
-            if ( pGIF->GetError() )
+            if ( m_rGIF.GetError() )
                 bStatus = FALSE;
 
             MayCallback( nMinPercent + ( nMaxPercent - nMinPercent ) * i / nHeight );
@@ -546,7 +550,7 @@ void GIFWriter::WriteAccess()
 
         aCompressor.EndCompression();
 
-        if ( pGIF->GetError() )
+        if ( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 
@@ -559,9 +563,9 @@ void GIFWriter::WriteTerminator()
 {
     if( bStatus )
     {
-        *pGIF << (BYTE) 0x3b;
+        m_rGIF << (BYTE) 0x3b;
 
-        if( pGIF->GetError() )
+        if( m_rGIF.GetError() )
             bStatus = FALSE;
     }
 }
@@ -571,7 +575,8 @@ void GIFWriter::WriteTerminator()
 extern "C" BOOL __LOADONCALLAPI GraphicExport( SvStream& rStream, Graphic& rGraphic,
                                                FilterConfigItem* pConfigItem, BOOL )
 {
-    return GIFWriter().WriteGIF( rGraphic, rStream, pConfigItem );
+    GIFWriter aWriter(rStream);
+    return aWriter.WriteGIF(rGraphic, pConfigItem);
 }
 
 // ------------------------------------------------------------------------
