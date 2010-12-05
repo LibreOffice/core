@@ -972,7 +972,7 @@ void ExtensionCmdQueue::Thread::_checkForUpdates(
 
     if ( ( pUpdateDialog->Execute() == RET_OK ) && !vData.empty() )
     {
-        // If there is at least one directly downloadable dialog then we
+        // If there is at least one directly downloadable extension then we
         // open the install dialog.
         ::std::vector< UpdateData > dataDownload;
         int countWebsiteDownload = 0;
