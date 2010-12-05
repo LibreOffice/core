@@ -32,6 +32,7 @@
 #include "lzwdecom.hxx"
 
 LZWDecompressor::LZWDecompressor()
+    : pOutBufData(NULL)
 {
     USHORT i;
 
