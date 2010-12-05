@@ -686,12 +686,12 @@ sal_Bool SwView::ExecSpellPopup(const Point& rPt)
             bool bUseGrammarContext = false;
             Reference< XSpellAlternatives >  xAlt( pWrtShell->GetCorrection(&rPt, aToFill) );
             /*linguistic2::*/ProofreadingResult aGrammarCheckRes;
-            sal_Int32 nErrorPosInText = -1;
             sal_Int32 nErrorInResult = -1;
             uno::Sequence< rtl::OUString > aSuggestions;
             bool bCorrectionRes = false;
             if (!xAlt.is() || xAlt->getAlternatives().getLength() == 0)
             {
+                sal_Int32 nErrorPosInText = -1;
                 bCorrectionRes = pWrtShell->GetGrammarCorrection( aGrammarCheckRes, nErrorPosInText, nErrorInResult, aSuggestions, &rPt, aToFill );
                 ::rtl::OUString aMessageText;
                 if (nErrorInResult >= 0)
