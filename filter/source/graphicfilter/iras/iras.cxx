@@ -50,7 +50,7 @@ class RASReader {
 
 private:
 
-    SvStream*           mpRAS;                  // Die einzulesende RAS-Datei
+    SvStream&           m_rRAS;                 // Die einzulesende RAS-Datei
 
     BOOL                mbStatus;
     Bitmap              maBmp;
@@ -68,18 +68,19 @@ private:
     BYTE                ImplGetByte();
 
 public:
-                        RASReader();
+                        RASReader(SvStream &rRAS);
                         ~RASReader();
-    BOOL                ReadRAS( SvStream & rRAS, Graphic & rGraphic );
+    BOOL                ReadRAS(Graphic & rGraphic);
 };
 
 //=================== Methoden von RASReader ==============================
 
-RASReader::RASReader() :
-    mbStatus    ( TRUE ),
-    mpAcc       ( NULL ),
-    mnRepCount  ( 0 ),
-    mbPalette   ( FALSE )
+RASReader::RASReader(SvStream &rRAS)
+    : m_rRAS(rRAS)
+    , mbStatus(TRUE)
+    , mpAcc(NULL)
+    , mnRepCount(0)
+    , mbPalette(FALSE)
 {
 }
 
@@ -89,16 +90,15 @@ RASReader::~RASReader()
 
 //----------------------------------------------------------------------------
 
-BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
+BOOL RASReader::ReadRAS(Graphic & rGraphic)
 {
     UINT32 nMagicNumber;
 
-    if ( rRAS.GetError() )
+    if ( m_rRAS.GetError() )
         return FALSE;
 
-    mpRAS = &rRAS;
-    mpRAS->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
-    *mpRAS >> nMagicNumber;
+    m_rRAS.SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
+    m_rRAS >> nMagicNumber;
     if ( nMagicNumber != SUNRASTER_MAGICNUMBER )
         return FALSE;
 
@@ -115,8 +115,8 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
     {
         if ( mnColorMapType == RAS_COLOR_RAW_MAP )      // RAW Colormap wird geskipped
         {
-            ULONG nCurPos = mpRAS->Tell();
-            mpRAS->Seek( nCurPos + mnColorMapSize );
+            ULONG nCurPos = m_rRAS.Tell();
+            m_rRAS.Seek( nCurPos + mnColorMapSize );
         }
         else if ( mnColorMapType == RAS_COLOR_RGB_MAP ) // RGB koennen wir auslesen
         {
@@ -130,9 +130,9 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
                 mpAcc->SetPaletteEntryCount( mnDstColors );
                 USHORT  i;
                 BYTE    nRed[256], nGreen[256], nBlue[256];
-                for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nRed[ i ];
-                for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nGreen[ i ];
-                for ( i = 0; i < mnDstColors; i++ ) *mpRAS >> nBlue[ i ];
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nRed[ i ];
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nGreen[ i ];
+                for ( i = 0; i < mnDstColors; i++ ) m_rRAS >> nBlue[ i ];
                 for ( i = 0; i < mnDstColors; i++ )
                 {
                     mpAcc->SetPaletteColor( i, BitmapColor( nRed[ i ], nGreen[ i ], nBlue[ i ] ) );
@@ -161,8 +161,8 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
     {
         if ( mnColorMapType != RAS_COLOR_NO_MAP )   // when graphic has more then 256 colors and a color map we skip
         {                                           // the colormap
-            ULONG nCurPos = mpRAS->Tell();
-            mpRAS->Seek( nCurPos + mnColorMapSize );
+            ULONG nCurPos = m_rRAS.Tell();
+            m_rRAS.Seek( nCurPos + mnColorMapSize );
         }
     }
 
@@ -183,7 +183,7 @@ BOOL RASReader::ReadRAS( SvStream & rRAS, Graphic & rGraphic )
 
 BOOL RASReader::ImplReadHeader()
 {
-    *mpRAS >> mnWidth >> mnHeight >> mnDepth >> mnImageDatSize >>
+    m_rRAS >> mnWidth >> mnHeight >> mnDepth >> mnImageDatSize >>
         mnType >> mnColorMapType >> mnColorMapSize;
 
     if ( mnWidth == 0 || mnHeight == 0 )
@@ -321,7 +321,7 @@ BYTE RASReader::ImplGetByte()
     BYTE nRetVal;
     if ( mnType != RAS_TYPE_BYTE_ENCODED )
     {
-        *mpRAS >> nRetVal;
+        m_rRAS >> nRetVal;
         return nRetVal;
     }
     else
@@ -333,14 +333,14 @@ BYTE RASReader::ImplGetByte()
         }
         else
         {
-            *mpRAS >> nRetVal;
+            m_rRAS >> nRetVal;
             if ( nRetVal != 0x80 )
                 return nRetVal;
-            *mpRAS >> nRetVal;
+            m_rRAS >> nRetVal;
             if ( nRetVal == 0 )
                 return 0x80;
             mnRepCount = nRetVal    ;
-            *mpRAS >> mnRepVal;
+            m_rRAS >> mnRepVal;
             return mnRepVal;
         }
     }
@@ -350,9 +350,9 @@ BYTE RASReader::ImplGetByte()
 
 extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
-    RASReader aRASReader;
+    RASReader aRASReader(rStream);
 
-    return aRASReader.ReadRAS( rStream, rGraphic );
+    return aRASReader.ReadRAS(rGraphic );
 }
 
 //================== ein bischen Muell fuer Windows ==========================
