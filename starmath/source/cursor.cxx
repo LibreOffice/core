@@ -1058,6 +1058,15 @@ void SmCursor::InsertElement(SmFormulaElement element){
             token.aText.AssignAscii(">");
             pNewNode = new SmMathSymbolNode(token);
         }break;
+        case PercentElement:
+        {
+            SmToken token;
+            token.eType = TTEXT;
+            token.cMathChar = MS_PERCENT;
+            token.nGroup = 0;
+            token.aText.AssignAscii("\"%\"");
+            pNewNode = new SmMathSymbolNode(token);
+        }break;
         default:
             j_assert(false, "Element unknown!");
     }

@@ -52,7 +52,8 @@ enum SmFormulaElement{
     CDotElement,
     EqualElement,
     LessThanElement,
-    GreaterThanElement
+    GreaterThanElement,
+    PercentElement
 };
 
 /** Bracket types that can be inserted */

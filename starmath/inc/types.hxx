@@ -198,7 +198,9 @@ enum MathSymbol
     MS_SETZ         = (sal_Unicode) 0x2124,
     MS_SETQ         = (sal_Unicode) 0x211A,
     MS_SETR         = (sal_Unicode) 0x211D,
-    MS_SETC         = (sal_Unicode) 0x2102
+    MS_SETC         = (sal_Unicode) 0x2102,
+
+    MS_PERCENT      = (sal_Unicode) 0x0025
 };
 
 #endif

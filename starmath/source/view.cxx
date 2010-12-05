@@ -513,6 +513,8 @@ void SmGraphicWindow::KeyInput(const KeyEvent& rKEvt)
                 rCursor.InsertBrackets(CurlyBrackets);
             }else if(code == '!') {
                 rCursor.InsertElement(FactorialElement);
+            }else if(code == '%') {
+                rCursor.InsertElement(PercentElement);
             }else{
                 if(code != 0){
                     rCursor.InsertText(code);
