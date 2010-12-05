@@ -752,14 +752,11 @@ void AssistentDlgImpl::CloseDocShell()
 {
     if(xDocShell.Is())
     {
-        //uno::Reference< lang::XComponent > xModel( xDocShell->GetModel(), uno::UNO_QUERY );
         uno::Reference< util::XCloseable > xCloseable( xDocShell->GetModel(), uno::UNO_QUERY );
-        //if( xModel.is() )
         if( xCloseable.is() )
         {
             xCloseable->close( sal_True );
             xDocShell = NULL;
-            //xModel->dispose();
         }
         else
         {
@@ -1039,7 +1036,6 @@ String AssistentDlgImpl::GetLayoutFileName()
 
 SfxObjectShellLock AssistentDlgImpl::GetDocument()
 {
-//  mbPreview = FALSE;      // Document nicht anzeigen
     UpdatePreview(FALSE);   // aber komplett laden
     UpdatePageList();
 

@@ -161,14 +161,6 @@ void WindowUpdater::UpdateWindow (OutputDevice* pDevice) const
 
 void WindowUpdater::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
-    // #110094#-7
-    // Clear the master page cache so that master pages will be redrawn.
-    //if (mpViewShell != NULL)
-    //{
-    //    SdView* pView = mpViewShell->GetView();
-    //    if (pView != NULL)
-    //        pView->ReleaseMasterPagePaintCache ();
-    //}
     // Set the current state at all registered output devices.
     tWindowList::iterator aWindowIterator (maWindowList.begin());
     while (aWindowIterator != maWindowList.end())

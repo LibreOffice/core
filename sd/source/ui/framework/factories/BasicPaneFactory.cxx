@@ -414,11 +414,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             // problems after reload (missing resizes for the side panes).
             if (mbFirstUpdateSeen)
             {
-                if (mpUpdateLockManager.get()!=NULL)
-                {
-                    //                    ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-                    //                    mpUpdateLockManager->Lock();
-                }
             }
             else
                 mbFirstUpdateSeen = true;
@@ -432,8 +427,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
             if (mpUpdateLockManager.get() != NULL)
             {
                 ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
-                //                if (mpUpdateLockManager->IsLocked())
-                //                    mpUpdateLockManager->Unlock();
             }
             break;
     }

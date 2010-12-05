@@ -492,10 +492,6 @@ void ViewShellBase::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
                             SID_PRESENTATION, SFX_CALLMODE_ASYNCHRON );
                     }
                 }
-                else
-                {
-                    //                    mpPaneManager->InitPanes();
-                }
                 break;
 
             default:
@@ -658,7 +654,6 @@ PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
 {
     (void)pParent;
     return NULL;
-    //    return mpImpl->mpPrintManager->CreatePrintDialog (pParent);
 }
 
 
@@ -671,7 +666,6 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     (void)pParent;
     (void)rOptions;
     return NULL;
-    //    return mpImpl->mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
@@ -682,7 +676,6 @@ USHORT  ViewShellBase::Print(SfxProgress&, BOOL bIsAPI, PrintDialog* pDlg)
     (void)bIsAPI;
     (void)pDlg;
     return 0;
-    //    return mpImpl->mpPrintManager->Print (rProgress, bIsAPI, pDlg);
 }
 
 
@@ -698,7 +691,6 @@ ErrCode ViewShellBase::DoPrint (
     (void)bSilent;
     (void)bIsAPI;
     return 0;
-    //return mpImpl->mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent, bIsAPI );
 }
 
 
@@ -707,7 +699,6 @@ ErrCode ViewShellBase::DoPrint (
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
     SfxViewShell::PreparePrint (pPrintDialog);
-    //mpImpl->mpPrintManager->PreparePrint (pPrintDialog);
 }
 
 
@@ -826,12 +817,6 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
 
 void ViewShellBase::GetState (SfxItemSet& rSet)
 {
-    // The full screen mode is not supported.  Disable the the slot so that
-    // it appears grayed out when somebody uses configures the menu to show
-    // an menu item for it.
-    //    if (rSet.GetItemState(SID_WIN_FULLSCREEN) == SFX_ITEM_AVAILABLE)
-    //        rSet.DisableItem(SID_WIN_FULLSCREEN);
-
     mpImpl->GetSlotState(rSet);
 
     FuBullet::GetSlotState( rSet, 0, GetViewFrame() );

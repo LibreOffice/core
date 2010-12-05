@@ -93,10 +93,6 @@ BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 
     if ( mpView->IsAction() )
     {
-        // #90235# this extra triggering is an error and leads to
-        // erasing the last two points when creating a polygon.
-        // if ( rMEvt.IsRight() )
-        //  mpView->BckAction();
         return TRUE;
     }
 

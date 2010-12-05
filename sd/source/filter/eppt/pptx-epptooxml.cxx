@@ -288,10 +288,6 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
     if ( ImplGetPropertyValue( rXPropSet, S( "FillStyle" ) ) )
         mAny >>= aFillStyle;
 
-    if( aFillStyle == FillStyle_BITMAP ) {
-
-    }
-
     if( aFillStyle == FillStyle_NONE ||
         aFillStyle == FillStyle_GRADIENT ||
         aFillStyle == FillStyle_HATCH )

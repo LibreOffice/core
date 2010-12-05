@@ -394,7 +394,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                     pOleObj->SetProgName( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "StarMath" ) ) );
                 }
 
-                //HMHmpView->HideMarkHdl();
                 pOleObj->SetLogicRect(aRect);
                 Size aTmp( OutputDevice::LogicToLogic( aRect.GetSize(), MAP_100TH_MM, aUnit ) );
                 awt::Size aVisualSize;
@@ -599,8 +598,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
                                 ( (SdrOle2Obj*) pObj)->SetAspect(nAspect);
                                 Rectangle aRect = ( (SdrOle2Obj*) pObj)->GetLogicRect();
 
-                                //HMHmpView->HideMarkHdl();
-
                                 if ( nAspect == embed::Aspects::MSOLE_ICON )
                                 {
                                     if( xIconMetaFile.is() )
@@ -666,7 +663,6 @@ void FuInsertOLE::DoExecute( SfxRequest& rReq )
 
                         if (bCreateNew)
                         {
-                            //HMHmpView->HideMarkHdl();
                             pObj->SetLogicRect(aRect);
 
                             if ( nAspect != embed::Aspects::MSOLE_ICON )

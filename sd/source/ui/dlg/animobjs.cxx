@@ -116,7 +116,6 @@ void SdDisplay::Paint( const Rectangle& )
         aPt.Y() = ( aSize.Height() - aBmpSize.Height() ) / 2;
 
     aBitmapEx.Draw( this, aPt, aBmpSize );
-    //DrawBitmap( aPt, aBmpSize, *pBitmap );
 }
 
 // -----------------------------------------------------------------------
@@ -629,8 +628,6 @@ void AnimationWindow::UpdateControl( ULONG nListPos, BOOL bDisableCtrls )
     }
     else
     {
-        //aFiCount.SetText( String( SdResId( STR_NULL ) ) );
-
         // Wenn kein Objekt in der Liste ist
         aBtnFirst.Enable( FALSE );
         aBtnReverse.Enable( FALSE );
@@ -738,7 +735,6 @@ Fraction AnimationWindow::GetScale()
 
 void AnimationWindow::Resize()
 {
-    //if( !IsZoomedIn() )
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )
     {
@@ -754,7 +750,6 @@ void AnimationWindow::Resize()
         aCtlDisplay.SetOutputSizePixel( aDisplaySize );
 
         Point aPt;
-        // aPt.X() = aDiffSize.Width() / 2;
         aPt.Y() = aDiffSize.Height();
 
         // Verschieben der anderen Controls
@@ -832,8 +827,6 @@ void AnimationWindow::Resize()
         aGrpAnimation.Show();
 
         aSize = aWinSize;
-
-        //aFltWinSize = GetSizePixel();
     }
     SfxDockingWindow::Resize();
 }
@@ -1218,8 +1211,6 @@ void AnimationWindow::CreateAnimObj (::sd::View& rView )
                 break;
 
             }
-            //aRect.SetPos(aWindowCenter + Point(aOffset.Width(), aOffset.Height()));
-            //pClone->SetSnapRect( aRect );
             // SetSnapRect ist fuer Ellipsen leider nicht implementiert !!!
             Point aMovePt( aWindowCenter + Point( aOffset.Width(), aOffset.Height() ) - aRect.TopLeft() );
             Size aMoveSize( aMovePt.X(), aMovePt.Y() );

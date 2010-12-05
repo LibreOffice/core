@@ -272,9 +272,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
     }
     delete pDlg;
 
-//    if (!bCancel)
-//        EndDialog(RET_OK);
-
     if( !bCancel )
     {
         // Pruefen, ob Vorlage schon vorhanden
@@ -309,12 +306,6 @@ IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
                 {
                     ::sd::DrawDocShell*  pTemplDocSh= pTemplDoc->GetDocSh();
 
-/*                  SdPage* pMaster = pTemplDoc->GetMasterSdPage( 0, PK_STANDARD );
-                    mpLayoutNames->Insert( new String( maName ), LIST_APPEND );
-
-                    Bitmap aBitmap( pTemplDocSh->GetPagePreviewBitmap( pMaster, 90 ) );
-                    maVS.InsertItem( (USHORT) mpLayoutNames->Count(), aBitmap, maName);
-*/
                     USHORT nCount = pTemplDoc->GetMasterPageCount();
 
                     for (USHORT nLayout = 0; nLayout < nCount; nLayout++)

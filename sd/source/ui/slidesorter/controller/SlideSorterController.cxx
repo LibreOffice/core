@@ -298,8 +298,6 @@ void SlideSorterController::Paint (
     const Rectangle& rBBox,
     ::Window* pWindow)
 {
-    //    if (mnPaintEntranceCount == 0)
-    {
         ++mnPaintEntranceCount;
 
         try
@@ -316,7 +314,6 @@ void SlideSorterController::Paint (
         }
 
         --mnPaintEntranceCount;
-    }
 }
 
 

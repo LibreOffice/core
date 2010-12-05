@@ -101,9 +101,6 @@ BOOL SdTpOptionsSnap::FillItemSet( SfxItemSet& rAttrs )
 {
     SvxGridTabPage::FillItemSet(rAttrs);
     SdOptionsSnapItem* pOptsItem = NULL;
-//    if(SFX_ITEM_SET != rAttrs.GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem ))
-//        pExampleSet->GetItemState( ATTR_OPTIONS_SNAP, FALSE, (const SfxPoolItem**)&pOptsItem );
-
     SdOptionsSnapItem aOptsItem( ATTR_OPTIONS_SNAP );
 
     aOptsItem.GetOptionsSnap().SetSnapHelplines( aCbxSnapHelplines.IsChecked() );
@@ -188,7 +185,6 @@ BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
         aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
         aCbxDragStripes.GetSavedValue()     != aCbxDragStripes.IsChecked() ||
-        //aCbxHelplines.GetSavedValue()     != aCbxHelplines.IsChecked() ||
         aCbxHandlesBezier.GetSavedValue()   != aCbxHandlesBezier.IsChecked() )
     {
         SdOptionsLayoutItem aOptsItem( ATTR_OPTIONS_LAYOUT );
@@ -197,7 +193,6 @@ BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
         aOptsItem.GetOptionsLayout().SetMoveOutline( aCbxMoveOutline.IsChecked() );
         aOptsItem.GetOptionsLayout().SetDragStripes( aCbxDragStripes.IsChecked() );
         aOptsItem.GetOptionsLayout().SetHandlesBezier( aCbxHandlesBezier.IsChecked() );
-        //aOptsItem.GetOptionsLayout().SetHelplines( aCbxHelplines.IsChecked() );
 
         rAttrs.Put( aOptsItem );
         bModified = TRUE;
@@ -219,13 +214,11 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
     aCbxMoveOutline.Check( aLayoutItem.GetOptionsLayout().IsMoveOutline() );
     aCbxDragStripes.Check( aLayoutItem.GetOptionsLayout().IsDragStripes() );
     aCbxHandlesBezier.Check( aLayoutItem.GetOptionsLayout().IsHandlesBezier() );
-    //aCbxHelplines.Check( aLayoutItem.GetOptionsLayout().IsHelplines() );
 
     aCbxRuler.SaveValue();
     aCbxMoveOutline.SaveValue();
     aCbxDragStripes.SaveValue();
     aCbxHandlesBezier.SaveValue();
-    //aCbxHelplines.SaveValue();
 }
 
 // -----------------------------------------------------------------------
