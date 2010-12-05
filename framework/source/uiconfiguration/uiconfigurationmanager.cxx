@@ -697,7 +697,6 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
     if ( isReadOnly() )
         return;
 
-    bool bResetStorage( false );
     if ( m_xDocConfigStorage.is() )
     {
         try
@@ -737,7 +736,6 @@ void SAL_CALL UIConfigurationManager::reset() throw (::com::sun::star::uno::Runt
                 if ( xTransactedObject.is() )
                     xTransactedObject->commit();
             }
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             // Try to access our module sub folder
