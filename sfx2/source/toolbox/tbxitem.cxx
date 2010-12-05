@@ -779,11 +779,8 @@ throw (::com::sun::star::uno::RuntimeException)
                 try
                 {
                     Window*  pTbxWindow = VCLUnoHelper::GetWindow( xSubToolBar );
-                    ToolBox* pToolBar( 0 );
                     if ( pTbxWindow && pTbxWindow->GetType() == WINDOW_TOOLBOX )
                     {
-                        pToolBar = (ToolBox *)pTbxWindow;
-
                         Any a;
                         a = xProp->getPropertyValue( aPersistentString );
                         xProp->setPropertyValue( aPersistentString, makeAny( sal_False ));
