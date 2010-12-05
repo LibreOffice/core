@@ -365,31 +365,32 @@ struct WinMtfFillStyle
     WinMtfFillStyleType aType;
     Bitmap              aBmp;
 
-    WinMtfFillStyle() :
-        aFillColor  ( Color( COL_BLACK ) ),
-        bTransparent( FALSE )
+    WinMtfFillStyle()
+        : aFillColor(Color(COL_BLACK))
+        , bTransparent(FALSE)
+        , aType(FillStyleSolid)
     {
-    };
+    }
 
-    WinMtfFillStyle( const Color& rColor, BOOL bTrans = FALSE ) :
-        aFillColor  ( rColor ),
-        bTransparent( bTrans ),
-        aType       ( FillStyleSolid )
+    WinMtfFillStyle( const Color& rColor, BOOL bTrans = FALSE )
+        : aFillColor(rColor)
+        , bTransparent(bTrans)
+        , aType(FillStyleSolid)
     {
-    };
+    }
 
-    WinMtfFillStyle( Bitmap& rBmp ) :
-        aType( FillStylePattern ),
-        aBmp ( rBmp )
+    WinMtfFillStyle(Bitmap& rBmp)
+        : aType(FillStylePattern)
+        , aBmp(rBmp)
     {
-    };
+    }
 
     BOOL operator==( const WinMtfFillStyle& rStyle )
-        { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) && ( aType == rStyle.aType ) ); };
+        { return ( ( aFillColor == rStyle.aFillColor ) && ( bTransparent == rStyle.bTransparent ) && ( aType == rStyle.aType ) ); }
     BOOL operator==( WinMtfFillStyle* pStyle )
-        { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) && ( aType == pStyle->aType ) ); };
-    void operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; };
-    void operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; };
+        { return ( ( aFillColor == pStyle->aFillColor ) && ( bTransparent == pStyle->bTransparent ) && ( aType == pStyle->aType ) ); }
+    void operator=( const WinMtfFillStyle& rStyle ) { aFillColor = rStyle.aFillColor; bTransparent = rStyle.bTransparent; aBmp = rStyle.aBmp; aType = rStyle.aType; }
+    void operator=( WinMtfFillStyle* pStyle ) { aFillColor = pStyle->aFillColor; bTransparent = pStyle->bTransparent; aBmp = pStyle->aBmp; aType = pStyle->aType; }
 };
 
 // -----------------------------------------------------------------------------
@@ -402,32 +403,32 @@ struct WinMtfLineStyle
 
     WinMtfLineStyle() :
         aLineColor  ( COL_BLACK ),
-        bTransparent( FALSE ) {};
+        bTransparent( FALSE ) {}
 
     WinMtfLineStyle( const Color& rColor, BOOL bTrans = FALSE ) :
         aLineColor  ( rColor ),
-        bTransparent( bTrans ) {};
+        bTransparent( bTrans ) {}
 
     WinMtfLineStyle( const Color& rColor, const LineInfo rStyle, BOOL bTrans = FALSE ) :
         aLineColor  ( rColor ),
         aLineInfo   ( rStyle ),
-        bTransparent( bTrans ) {};
+        bTransparent( bTrans ) {}
 
-    BOOL operator==( const WinMtfLineStyle& rStyle ) { return ( ( aLineColor == rStyle.aLineColor ) && ( bTransparent == rStyle.bTransparent ) && ( aLineInfo == rStyle.aLineInfo ) ); };
-    BOOL operator==( WinMtfLineStyle* pStyle ) { return ( ( aLineColor == pStyle->aLineColor ) && ( bTransparent == pStyle->bTransparent ) && ( aLineInfo == pStyle->aLineInfo ) ); };
+    BOOL operator==( const WinMtfLineStyle& rStyle ) { return ( ( aLineColor == rStyle.aLineColor ) && ( bTransparent == rStyle.bTransparent ) && ( aLineInfo == rStyle.aLineInfo ) ); }
+    BOOL operator==( WinMtfLineStyle* pStyle ) { return ( ( aLineColor == pStyle->aLineColor ) && ( bTransparent == pStyle->bTransparent ) && ( aLineInfo == pStyle->aLineInfo ) ); }
     void operator=( const WinMtfLineStyle& rStyle )
     {
         aLineColor = rStyle.aLineColor;
         bTransparent = rStyle.bTransparent;
         aLineInfo = rStyle.aLineInfo;
-    };
+    }
 
     void operator=( WinMtfLineStyle* pStyle )
     {
         aLineColor = pStyle->aLineColor;
         bTransparent = pStyle->bTransparent;
         aLineInfo = pStyle->aLineInfo;
-    };
+    }
 };
 
 // -----------------------------------------------------------------------------
@@ -444,7 +445,7 @@ struct XForm
     {
         eM11 =  eM22 = 1.0f;
         eDx = eDy = eM12 = eM21 = 0.0f;
-    };
+    }
 
     friend SvStream& operator>>( SvStream& rIn, XForm& rXForm );
 };
@@ -487,7 +488,7 @@ struct BSaveStruct
     WinMtfFillStyle aStyle;
 
                 BSaveStruct( const Bitmap& rBmp, const Rectangle& rOutRect, UINT32 nRop, WinMtfFillStyle& rStyle ) :
-                    aBmp( rBmp ), aOutRect( rOutRect ), nWinRop( nRop ), aStyle ( rStyle ){};
+                    aBmp( rBmp ), aOutRect( rOutRect ), nWinRop( nRop ), aStyle ( rStyle ){}
 };
 
 // -----------------------------------------------------------------------------
@@ -503,10 +504,10 @@ struct GDIObj
         pStyle  ( NULL ),
         eType   ( GDI_DUMMY )
     {
-    };
+    }
 
-    GDIObj( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; };
-    void Set( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; };
+    GDIObj( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; }
+    void Set( GDIObjectType eT, void* pS ) { pStyle = pS; eType = eT; }
     void Delete()
     {
         if ( pStyle )
@@ -529,7 +530,7 @@ struct GDIObj
             }
             pStyle = NULL;
         }
-    };
+    }
 
     ~GDIObj()
     {
@@ -778,7 +779,9 @@ private:
 public:
 
                     WMFReader( SvStream& rStreamWMF, GDIMetaFile& rGDIMetaFile, FilterConfigItem* pConfigItem = NULL )
-                        : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem ) {};
+                        : WinMtf( new WinMtfOutput( rGDIMetaFile ), rStreamWMF, pConfigItem )
+                        , pEMFStream(NULL)
+                        {}
 
                     ~WMFReader();
 
