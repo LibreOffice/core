@@ -265,7 +265,6 @@ void SAL_CALL MinMaxLineWrapper::removeVetoableChangeListener( const ::rtl::OUSt
 void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::OUString >& rNameSeq, const uno::Sequence< uno::Any >& rValueSeq )
                     throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
-    bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
     for(sal_Int32 nN=0; nN<nMinCount; nN++)
     {
@@ -277,7 +276,6 @@ void SAL_CALL MinMaxLineWrapper::setPropertyValues( const uno::Sequence< ::rtl::
         catch( beans::UnknownPropertyException& ex )
         {
             ASSERT_EXCEPTION( ex );
-            bUnknownProperty = true;
         }
     }
     //todo: store unknown properties elsewhere
