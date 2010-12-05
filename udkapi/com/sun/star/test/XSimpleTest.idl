@@ -95,7 +95,7 @@ published interface XSimpleTest: com::sun::star::uno::XInterface
 
     //-------------------------------------------------------------------------
     /**States if one of the last test has failed. This is cumulative.
-        @return true if all test have been passed succesfully. false if an error has occured.
+        @return true if all test have been passed succesfully. false if an error has occurred.
 
     */
     boolean testPassed();

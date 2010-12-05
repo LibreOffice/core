@@ -342,7 +342,7 @@ static void cpp_call(
             pStackStart, (pStack - pStackStart),
             pGPR, nRegs,
             pFPR, nRegs );
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params

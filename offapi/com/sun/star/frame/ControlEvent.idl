@@ -54,7 +54,7 @@ struct ControlEvent
     */
     ::com::sun::star::util::URL aURL;
 
-    /** specifies the event which has occured.
+    /** specifies the event which has occurred.
      */
     string Event;
 

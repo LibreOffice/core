@@ -620,7 +620,7 @@ int msci_filterCppException(
     RuntimeException exc(
         OUString( RTL_CONSTASCII_USTRINGPARAM(
                       "[msci_uno bridge error] unexpected "
-                      "C++ exception occured!") ),
+                      "C++ exception occurred!") ),
         Reference< XInterface >() );
     uno_type_any_constructAndConvert(
         pUnoExc, &exc, ::getCppuType( &exc ).getTypeLibType(), pCpp2Uno );

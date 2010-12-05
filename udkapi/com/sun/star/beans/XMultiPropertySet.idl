@@ -81,7 +81,7 @@ published interface XMultiPropertySet: com::sun::star::uno::XInterface
         <p>The values of the properties must change before the bound
         events are fired. The values of the constrained properties
         should change after the vetoable events are fired and only if no
-        exception occured. Unknown properties are ignored.  </p>
+        exception occurred. Unknown properties are ignored.  </p>
 
         @param aPropertyNames
             specifies the names of the properties. All names must be unique.

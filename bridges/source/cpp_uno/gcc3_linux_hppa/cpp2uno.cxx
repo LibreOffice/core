@@ -306,7 +306,7 @@ namespace
     fprintf(stderr, "after dispatch\n");
 #endif
 
-        // in case an exception occured...
+        // in case an exception occurred...
         if (pUnoExc)
         {
             // destruct temporary in/inout params
@@ -327,7 +327,7 @@ namespace
             // is here for dummy
             return typelib_TypeClass_VOID;
         }
-        else // else no exception occured...
+        else // else no exception occurred...
         {
             // temporary params
             for ( ; nTempIndizes--; )

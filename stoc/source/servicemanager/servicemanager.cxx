@@ -929,7 +929,7 @@ void OServiceManager::onUnloadingNotify()
     IT_MM it_end1= m_ServiceMap.end();
     list<IT_MM> listDeleteServiceMap;
     typedef list<IT_MM>::const_iterator CIT_DMM;
-    // find occurences in m_ServiceMap
+    // find occurrences in m_ServiceMap
     for(IT_MM it_i1= m_ServiceMap.begin(); it_i1 != it_end1; it_i1++)
     {
         if( m_SetLoadedFactories.find( it_i1->second) != it_SetEnd)
@@ -1042,7 +1042,7 @@ void OServiceManager::disposing()
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### RuntimeException occured upon disposing factory: %s", str.getStr() );
+            OSL_TRACE( "### RuntimeException occurred upon disposing factory: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1264,7 +1264,7 @@ Reference< XInterface > OServiceManager::createInstanceWithContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif
@@ -1328,7 +1328,7 @@ Reference< XInterface > OServiceManager::createInstanceWithArgumentsAndContext(
         {
 #if OSL_DEBUG_LEVEL > 1
             OString str( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-            OSL_TRACE( "### DisposedException occured: %s", str.getStr() );
+            OSL_TRACE( "### DisposedException occurred: %s", str.getStr() );
 #else
             (void) exc; // unused
 #endif

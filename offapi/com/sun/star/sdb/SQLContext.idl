@@ -48,7 +48,7 @@ published exception SQLContext: com::sun::star::sdbc::SQLWarning
 {
     /** provides special info about the details where a
         <type scope="com::sun::star::sdbc">SQLException</type>
-        occured.
+        occurred.
         As usual for SQLExceptions, several SQLContext-objects may be chained, then the
         most recent context is appended to the list's tail
      */

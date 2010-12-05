@@ -592,7 +592,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
         }
     }
 
-    /* if an error occured we have to close the server side pipe ends too */
+    /* if an error occurred we have to close the server side pipe ends too */
 
     if (hInputWrite)
         CloseHandle(hInputWrite);

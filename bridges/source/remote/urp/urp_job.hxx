@@ -127,7 +127,7 @@ public:
 public:
     typelib_InterfaceMethodTypeDescription    *m_pMethodType;
     typelib_InterfaceAttributeTypeDescription *m_pAttributeType;
-    sal_Bool m_bExceptionOccured;
+    sal_Bool m_bExceptionOccurred;
 
 private:
     void     **m_ppArgs;

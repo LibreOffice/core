@@ -32,7 +32,7 @@
 module com { module sun { module star { module ucb {
 
 //=============================================================================
-/** These values are used to specify whether and which error has occured
+/** These values are used to specify whether and which error has occurred
     while fetching data of some <type>ContentResultSet</type> rows.
 
     @see FetchResult

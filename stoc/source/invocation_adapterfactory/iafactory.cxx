@@ -304,7 +304,7 @@ bool AdapterImpl::coerce_assign(
             m_pFactory->m_pConverter,
             m_pFactory->m_pConvertToTD, &ret, args, &p_exc );
 
-        if (p_exc) // exception occured
+        if (p_exc) // exception occurred
         {
             OSL_ASSERT(
                 p_exc->pType->eTypeClass == typelib_TypeClass_EXCEPTION );

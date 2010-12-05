@@ -48,7 +48,7 @@ import java.util.Set;
  *
  * <p>Unlike other map implementations, <code>WeakMap</code> is asymmetric in
  * that <code>put</code> expects the given value to be a plain object that is
- * then wrapped in a <code>WeakReference</code>, while the occurences of values
+ * then wrapped in a <code>WeakReference</code>, while the occurrences of values
  * in all other methods (<code>containsValue</code>, <code>entrySet</code>,
  * <code>equals</code>, <code>get</code>, <code>hashCode</code>,
  * <code>remove</code>, <code>values</code>, and also the return value of

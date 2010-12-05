@@ -776,7 +776,7 @@ void OReaderThread::run()
                     break;
                 }
 
-                pClientJob->m_bExceptionOccured = flags.bException;
+                pClientJob->m_bExceptionOccurred = flags.bException;
 
                 pClientJob->setUnmarshal( &m_unmarshal );
 #ifdef BRIDGES_URP_PROT

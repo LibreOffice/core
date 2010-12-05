@@ -58,7 +58,7 @@ interface XLayoutManagerListener : com::sun::star::lang::XEventListener
             reference to the layout manager which invoked the event.
 
         @param eLayoutEvent
-            identifies the layout event that has occured.
+            identifies the layout event that has occurred.
 
         @param aInfo
             provides additional information about the event. The type

@@ -852,7 +852,7 @@ PermissionCollection AccessController::getEffectivePermissions(
         clearPostPoned(); // safety: exception could have happened before checking postponed?
         OUStringBuffer buf( 64 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occured): ") );
+            RTL_CONSTASCII_STRINGPARAM("deployment error (AccessControlException occurred): ") );
         buf.append( exc.Message );
         throw DeploymentException( buf.makeStringAndClear(), exc.Context );
     }

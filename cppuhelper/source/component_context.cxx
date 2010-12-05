@@ -616,7 +616,7 @@ Any ComponentContext::lookupMap( OUString const & rName )
         Any caught( getCaughtException() );
         OUStringBuffer buf;
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(
-                             "exception occured raising singleton \"") );
+                             "exception occurred raising singleton \"") );
         buf.append( rName );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("\": ") );
         buf.append( exc.Message );

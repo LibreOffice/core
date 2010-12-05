@@ -42,7 +42,7 @@ module com { module sun { module star { module script { module provider {
         thrown by a LanguageScriptProvider whilst executing a script
 */
 exception ScriptExceptionRaisedException : ::com::sun::star::script::provider::ScriptErrorRaisedException {
-    /** Name of script where error occured
+    /** Name of script where error occurred
      */
     string exceptionType;
 };

@@ -639,7 +639,7 @@ void Invocation_Impl::setValue( const OUString& PropertyName, const Any& Value )
         catch (Exception & exc)
         {
             throw InvocationTargetException(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occured in setValue(): ") ) +
+                OUString( RTL_CONSTASCII_USTRINGPARAM("exception occurred in setValue(): ") ) +
                 exc.Message, Reference< XInterface >(), makeAny( exc /* though sliced */ ) );
         }
     }

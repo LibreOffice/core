@@ -1059,7 +1059,7 @@ SAL_IMPLEMENT_MAIN()
     }
     catch (Exception & rExc)
     {
-        fprintf( stderr, "> exception occured: " );
+        fprintf( stderr, "> exception occurred: " );
         OString aMsg( OUStringToOString( rExc.Message, RTL_TEXTENCODING_ASCII_US ) );
         fprintf( stderr, "%s\n", aMsg.getStr() );
     }

@@ -124,7 +124,7 @@ published interface XCommandProcessor : com::sun::star::uno::XInterface
         to indicate that two threads tried to use the same command identifier
 
         @throws Exception
-        if an error occured during the execution of the command.
+        if an error occurred during the execution of the command.
     */
     any execute( [in] Command aCommand,
                  [in] long CommandId,

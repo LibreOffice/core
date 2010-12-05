@@ -466,7 +466,7 @@ inline void SAL_CALL cppu_cppenv_computeObjectIdentifier(
         }
         catch (::com::sun::star::uno::RuntimeException &)
         {
-            OSL_ENSURE( 0, "### RuntimeException occured udring queryInterface()!" );
+            OSL_ENSURE( 0, "### RuntimeException occurred udring queryInterface()!" );
         }
     }
 }

@@ -106,7 +106,7 @@ void * binuno_queryInterface( void * pUnoI, typelib_TypeDescriptionReference * p
 #if OSL_DEBUG_LEVEL > 1
         OUStringBuffer buf( 128 );
         buf.appendAscii(
-            RTL_CONSTASCII_STRINGPARAM("### exception occured querying for interface ") );
+            RTL_CONSTASCII_STRINGPARAM("### exception occurred querying for interface ") );
         buf.append( * reinterpret_cast< OUString const * >( &pDestType->pTypeName ) );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM(": [") );
         buf.append( * reinterpret_cast< OUString const * >( &pExc->pType->pTypeName ) );

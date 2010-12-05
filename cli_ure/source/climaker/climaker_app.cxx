@@ -723,7 +723,7 @@ SAL_IMPLEMENT_MAIN()
                          osl_getThreadTextEncoding() ) );
         fprintf(
             stderr,
-            "\n> error: .NET exception occured: %s\n> dying abnormally...",
+            "\n> error: .NET exception occurred: %s\n> dying abnormally...",
             msg.getStr() );
         ret = 1;
     }

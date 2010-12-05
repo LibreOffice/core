@@ -59,7 +59,7 @@
 
     <p>
     If an event <method scope="com::sun::star::lang">XEventListener::disposing</method>
-    occured, nobody called <method>XCloseable::close</method> on listened object before.
+    occurred, nobody called <method>XCloseable::close</method> on listened object before.
     Then it's not allowed to break this request - it must be accepted!
     </p>
 
@@ -122,7 +122,7 @@ published interface XCloseListener: com::sun::star::lang::XEventListener
         </p>
 
         <p>
-        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occured before
+        If the event <member scope="com::sun::star::lang">XEventListener::disposing()</member> occurred before
         it must be accepted too. There exist no chance for a disagreement any more.
         </p>
 

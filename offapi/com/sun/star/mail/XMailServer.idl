@@ -191,13 +191,13 @@ interface XMailServer: ::com::sun::star::uno::XInterface {
         a wrong server name, an unreachable DNS server, etc.
 
         @throws com::sun::star::io::NoRouteToHostException
-        if an error occured to connect to the remote mail server.
+        if an error occurred to connect to the remote mail server.
         Typically the remote mail server cannot be reach because of an
         intervening firewall, or if an intermediate router is down,
         the network connection is broken, etc.
 
         @throws com::sun::star::io::ConnectException
-        if an error occured while attempting to connect to the remote
+        if an error occurred while attempting to connect to the remote
         mail server. Typically the connection was refused remotely,
         because the mail server is not listening on the remote address/port.
 

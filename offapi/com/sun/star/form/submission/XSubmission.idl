@@ -63,7 +63,7 @@ interface XSubmission : com::sun::star::uno::XInterface
             requirements for the submission, e.g. data consistency, are fulfilled.
 
         @throws com::sun::star::lang::WrappedTargetException
-            if an error occured during invoking the submission target
+            if an error occurred during invoking the submission target
     */
     void submit( )
                 raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );
@@ -79,7 +79,7 @@ interface XSubmission : com::sun::star::uno::XInterface
             requirements for the submission, e.g. data consistency, are fulfilled.
 
         @throws com::sun::star::lang::WrappedTargetException
-            if an error occured during invoking the submission target
+            if an error occurred during invoking the submission target
     */
     void submitWithInteraction( [in] com::sun::star::task::XInteractionHandler aHandler )
                 raises ( com::sun::star::util::VetoException, com::sun::star::lang::WrappedTargetException );

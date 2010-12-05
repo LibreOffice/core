@@ -42,13 +42,13 @@ module com { module sun { module star { module script { module provider {
         by a LanguageScriptProvider whilst executing a script
 */
 exception ScriptErrorRaisedException : com::sun::star::uno::Exception {
-    /** Name of script where error occured
+    /** Name of script where error occurred
      */
     string scriptName;
     /** Scripting language of script that generated exception
      */
     string language;
-    /** line number where error occured.
+    /** line number where error occurred.
      */
     long lineNum;
 };

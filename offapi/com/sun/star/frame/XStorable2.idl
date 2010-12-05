@@ -73,7 +73,7 @@ published interface XStorable2: XStorable
             the optional parameters contain unacceptable for save entry
 
         @throws com::sun::star::io::IOException
-            if an IO error occured during save operation
+            if an IO error occurred during save operation
 
         @see XStorable::store
      */

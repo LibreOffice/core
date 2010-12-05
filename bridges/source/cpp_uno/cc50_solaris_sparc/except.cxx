@@ -335,7 +335,7 @@ void cc50_solaris_sparc_raiseException( uno_Any * pUnoExc, uno_Mapping * pUno2Cp
         OUStringToOString(
             *reinterpret_cast< OUString const * >( &pUnoExc->pType->pTypeName ),
             RTL_TEXTENCODING_ASCII_US ) );
-    fprintf( stderr, "> uno exception occured: %s\n", cstr.getStr() );
+    fprintf( stderr, "> uno exception occurred: %s\n", cstr.getStr() );
 #endif
     bridges::cpp_uno::shared::ArrayPointer< unsigned int > thunkPtr(
         new unsigned int[6]);
@@ -428,7 +428,7 @@ void cc50_solaris_sparc_fillUnoException(
     }
 
 #if OSL_DEBUG_LEVEL > 1
-    fprintf( stderr, "> c++ exception occured: %s\n",
+    fprintf( stderr, "> c++ exception occurred: %s\n",
              ::rtl::OUStringToOString(
                  pExcTypeDescr->pTypeName,
                  RTL_TEXTENCODING_ASCII_US ).getStr() );

@@ -38,7 +38,7 @@
 
 //=============================================================================
 
-/** Indicates that an error occured in an NPN or NPP function call.
+/** Indicates that an error occurred in an NPN or NPP function call.
 
     @see XPlugin
     @see XPluginContext

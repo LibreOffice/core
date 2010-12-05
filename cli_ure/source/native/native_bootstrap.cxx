@@ -74,7 +74,7 @@ namespace
  * @param subKeyName  name of the subkey to open
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 WCHAR* getPathFromRegistryKey( HKEY hroot, LPCWSTR subKeyName )
 {

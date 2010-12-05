@@ -476,7 +476,7 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
                     catch (container::NoSuchElementException & exc)
                     {
                         throw lang::IllegalArgumentException(
-                            OUSTR("NoSuchElementException occured: ") +
+                            OUSTR("NoSuchElementException occurred: ") +
                             exc.Message, static_cast<OWeakObject *>(this),
                             -1 /* unknown */ );
                     }
@@ -512,13 +512,13 @@ void SAL_CALL ManagerImpl::insert( const Any & rElement )
             catch (reflection::NoSuchTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("NoSuchTypeNameException occured: ") + exc.Message,
+                    OUSTR("NoSuchTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
             catch (reflection::InvalidTypeNameException & exc)
             {
                 throw lang::IllegalArgumentException(
-                    OUSTR("InvalidTypeNameException occured: ") + exc.Message,
+                    OUSTR("InvalidTypeNameException occurred: ") + exc.Message,
                     static_cast<OWeakObject *>(this), -1 /* unknown */ );
             }
         }

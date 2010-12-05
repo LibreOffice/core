@@ -251,7 +251,7 @@ void SAL_CALL dispatchRemote2UnoProxy(
     else
     {
         // -----------------------
-        // an exception occured
+        // an exception occurred
         // -----------------------
         typelib_TypeDescription *pAnyType = 0;
         getCppuType( (::com::sun::star::uno::Any*) 0 ).getDescription( &pAnyType );

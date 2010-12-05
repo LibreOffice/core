@@ -493,7 +493,7 @@ void Proxy::dispatch(typelib_TypeDescriptionReference * pReturnTypeRef,
 
         *ppException = 0;
     }
-    else // exception occured
+    else // exception occurred
     {
         for (sal_Int32 nPos = 0; nPos < nParams; ++ nPos)
         {

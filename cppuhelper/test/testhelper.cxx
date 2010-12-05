@@ -97,7 +97,7 @@ SAL_IMPLEMENT_MAIN()
     catch (Exception & exc)
     {
         OString cstr_msg( OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( ! "exception occured: ", cstr_msg.getStr() );
+        OSL_ENSURE( ! "exception occurred: ", cstr_msg.getStr() );
     }
 
     printf( "Test finished\n" );

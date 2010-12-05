@@ -71,7 +71,7 @@ published struct FetchResult
     boolean Orientation;
 
     //-------------------------------------------------------------------------
-    /** indicates whether and which error has occured, while fetching.
+    /** indicates whether and which error has occurred, while fetching.
 
         <p>The value may contain zero or more constants of the
         <type>FetchError</type> constants group.

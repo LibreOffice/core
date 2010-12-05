@@ -1505,7 +1505,7 @@ namespace osl_Socket
             /// Socket constructor.
             // ::osl::Socket sSocket;
 
-            CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the socket was created successfully, if no exception occured",
+            CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the socket was created successfully, if no exception occurred",
                                     1 == 1 );
         }
 

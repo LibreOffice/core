@@ -603,7 +603,7 @@ Reference< XComponentContext > SAL_CALL bootstrap()
             case osl_Process_E_NotFound:
                 throw BootstrapException( OUSTR( "image not found!" ) );
             case osl_Process_E_TimedOut:
-                throw BootstrapException( OUSTR( "timout occured!" ) );
+                throw BootstrapException( OUSTR( "timout occurred!" ) );
             case osl_Process_E_NoPermission:
                 throw BootstrapException( OUSTR( "permission denied!" ) );
             case osl_Process_E_Unknown:

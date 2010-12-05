@@ -45,7 +45,7 @@
  * @param subKeyName  name of the subkey to open
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
 {
@@ -87,7 +87,7 @@ static char* getPathFromRegistryKey( HKEY hroot, const char* subKeyName )
  * Gets the installation path from the Windows Registry.
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* platformSpecific()
 {
@@ -119,7 +119,7 @@ static char* platformSpecific()
  * is in one of the directories listed in the PATH environment variable.</p>
  *
  * @return the installation path or NULL, if no installation was found or
- *         if an error occured
+ *         if an error occurred
  */
 static char* platformSpecific()
 {

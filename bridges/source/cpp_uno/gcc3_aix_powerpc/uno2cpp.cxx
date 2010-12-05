@@ -315,7 +315,7 @@ static void cpp_call(
                         pAdjustedThisPtr, aVtableSlot.index,
                         pCppReturn, pReturnTypeDescr->eTypeClass,
                         pStackStart, (pStack - pStackStart), pFPR, nFPR );
-                // NO exception occured...
+                // NO exception occurred...
                 *ppUnoExc = 0;
 
                 // reconvert temporary params

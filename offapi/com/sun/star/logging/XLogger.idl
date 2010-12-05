@@ -121,17 +121,17 @@ interface XLogger
     void    log( [in] long Level, [in] string Message );
 
     /** logs a given message, detailing the source class and method at which the logged
-        event occured.
+        event occurred.
 
         @param Level
             the log level of this message. If this level is smaller than the logger's <member>Level</member>
             attribute, then the call will be ignored.
 
         @param SourceClass
-            the source class at which the logged event occured.
+            the source class at which the logged event occurred.
 
         @param SourceMethod
-            the source class at which the logged event occured.
+            the source class at which the logged event occurred.
 
         @param Message
             the message to log

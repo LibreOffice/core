@@ -132,7 +132,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createSimpleRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif
@@ -163,7 +163,7 @@ Reference< registry::XSimpleRegistry > SAL_CALL createNestedRegistry(
 #if OSL_DEBUG_LEVEL > 0
         OString cstr_msg(
             OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
-        OSL_ENSURE( !"### exception occured:", cstr_msg.getStr() );
+        OSL_ENSURE( !"### exception occurred:", cstr_msg.getStr() );
 #else
         (void) exc; // avoid warning about unused variable
 #endif

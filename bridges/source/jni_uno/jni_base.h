@@ -79,7 +79,7 @@ class JNI_context
     JNI_context( JNI_context & ); // not impl
     void operator = ( JNI_context ); // not impl
 
-    void java_exc_occured() const;
+    void java_exc_occurred() const;
 public:
     inline explicit JNI_context(
         JNI_info const * jni_info, JNIEnv * env, jobject class_loader )
@@ -117,7 +117,7 @@ inline void JNI_context::ensure_no_exception() const
 {
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
-        java_exc_occured();
+        java_exc_occurred();
     }
 }
 
@@ -127,7 +127,7 @@ inline bool JNI_context::assert_no_exception() const
     if (JNI_FALSE != m_env->ExceptionCheck())
     {
         m_env->ExceptionClear();
-        OSL_ENSURE( 0, "unexpected java exception occured!" );
+        OSL_ENSURE( 0, "unexpected java exception occurred!" );
         return false;
     }
     return true;

@@ -247,7 +247,7 @@ void LogProbe(
         rtl_logfile_longTrace( "} LogBridge () %s",sTemp.getStr());
         if ( ppException && *ppException )
         {
-            rtl_logfile_trace( " excption occured : ");
+            rtl_logfile_trace( " excption occurred : ");
             typelib_TypeDescription * pElementTypeDescr = 0;
             TYPELIB_DANGER_GET( &pElementTypeDescr, (*ppException)->pType );
             const ::rtl::OString sValue( ::rtl::OUStringToOString(pElementTypeDescr->pTypeName,osl_getThreadTextEncoding()));

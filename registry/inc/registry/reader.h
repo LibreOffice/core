@@ -65,7 +65,7 @@ extern "C" {
    not be null; if the given binary blob is malformed, or of a version larger
    than <code>maxVersion</code>, null is returned
 
-   @return false iff an out-of-memory condition occured, in which case
+   @return false iff an out-of-memory condition occurred, in which case
    <code>result</code> is left unchanged, and no type reader is created
 
    @since UDK 3.2.0
@@ -323,7 +323,7 @@ void SAL_CALL typereg_reader_getFieldTypeName(
    @param result an out-parameter obtaining the field value's value; must not be
    null
 
-   @return false iff an out-of-memory condition occured, in which case
+   @return false iff an out-of-memory condition occurred, in which case
    <code>type</code> and <code>value</code> are left unchanged
 
    @since UDK 3.2.0

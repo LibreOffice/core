@@ -413,7 +413,7 @@ static void cpp_call(
             pReturnTypeDescr->eTypeClass,
             (sal_Int32 *)pCppStackStart,
              nStackLongs);
-        // NO exception occured...
+        // NO exception occurred...
         *ppUnoExc = 0;
 
         // reconvert temporary params

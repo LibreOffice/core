@@ -578,7 +578,7 @@ namespace osl_Thread
                 myThread* newthread = new myThread();
                 sal_Bool res1 = newthread->create();
                 sal_Bool res2 = newthread->create();
-                t_print("In non pro, an assertion should occured. This behaviour is right.\n");
+                t_print("In non pro, an assertion should occurred. This behaviour is right.\n");
                 termAndJoinThread(newthread);
                 delete newthread;
 

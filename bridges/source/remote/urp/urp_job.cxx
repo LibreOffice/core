@@ -154,7 +154,7 @@ namespace bridges_urp
         //-------------------------------
         // Handle the reply, unpack data
         //-------------------------------
-        if( m_bExceptionOccured )
+        if( m_bExceptionOccurred )
         {
             bReturn = m_pUnmarshal->unpackAny( *m_ppException );
         }
@@ -513,13 +513,13 @@ namespace bridges_urp
             sMessage.appendAscii( RTL_CONSTASCII_STRINGPARAM( "URP_Bridge : disposed\n" ) );
             sMessage.append( m_pBridgeImpl->getErrorsAsString() );
             prepareRuntimeExceptionClientSide( m_ppException, sMessage.makeStringAndClear() );
-            m_bExceptionOccured = sal_True;
+            m_bExceptionOccurred = sal_True;
         }
         else
         {
             OSL_ASSERT( pDisposeReason == (void*)this );
         }
-        if( !m_bExceptionOccured )
+        if( !m_bExceptionOccurred )
         {
             *m_ppException = 0;
         }

@@ -39,7 +39,7 @@ module drafts { module com {  module sun {  module star {  module form {
 //=============================================================================
 
 /** specifies the event which is notified when a change in a string entry
-    list occured
+    list occurred
 
     @see XListEntrySource
     @see XListEntryListener
@@ -49,7 +49,7 @@ module drafts { module com {  module sun {  module star {  module form {
 */
 struct ListEntryEvent : com::sun::star::lang::EventObject
 {
-    /** denotes the position where a change occured.
+    /** denotes the position where a change occurred.
 
         <p>The concrete semantics of the value depends on the concrete
         event being notified.</p>

@@ -111,7 +111,7 @@ published interface XContentIdentifierMapping: com::sun::star::uno::XInterface
         be returned unmodified).
 
         @returns  <TRUE/> if any of the columns contain data that (potentially)
-        needs mapping (though maybe no mapping occured for the concrete input
+        needs mapping (though maybe no mapping occurred for the concrete input
         data of this call).  This information can be useful to decide whether,
         for another row, a call to this function is at all necessary.
     */

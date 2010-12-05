@@ -150,7 +150,7 @@ namespace rtl
             an arbitrary value
 
             @return
-            the given value, with all occurences of special characters ("$" and
+            the given value, with all occurrences of special characters ("$" and
             "\") escaped
 
             @since UDK 3.2.9

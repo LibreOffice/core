@@ -228,7 +228,7 @@ void SAL_CALL thisDispatch(
     else
     {
         // -----------------------
-        // an exception occured
+        // an exception occurred
         // -----------------------
         typelib_TypeDescription *pAnyType = 0;
         getCppuType( (Any*) 0 ).getDescription( &pAnyType );

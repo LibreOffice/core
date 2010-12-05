@@ -188,7 +188,7 @@ System::Object* Bridge::call_uno(uno_Interface * pUnoI,
         }
         return 0; // void return
     }
-    else // exception occured
+    else // exception occurred
     {
         // destruct uno in args
         for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
@@ -281,7 +281,7 @@ void Bridge::call_cli(
         map_to_uno(
             uno_ret, retInvoke, return_type, false /* no assign */);
     }
-    // no exception occured
+    // no exception occurred
     *uno_exc = 0;
 }
 

@@ -373,7 +373,7 @@ oslFileError SAL_CALL osl_getFileURLFromSystemPath( rtl_uString *ustrSystemPath,
         /* adapt index to pTmp */
         nIndex += pTmp->length - ustrSystemPath->length;
 
-        /* remove all occurances of '//' */
+        /* remove all occurrences of '//' */
         for( nSrcIndex = nIndex + 1; nSrcIndex < pTmp->length; nSrcIndex++ )
         {
             if( ((sal_Unicode) '/' == pTmp->buffer[nSrcIndex]) && ((sal_Unicode) '/' == pTmp->buffer[nIndex]) )

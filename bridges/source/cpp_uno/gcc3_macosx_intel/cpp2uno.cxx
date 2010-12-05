@@ -167,7 +167,7 @@ void cpp2uno_call(
     (*pThis->getUnoI()->pDispatcher)(
         pThis->getUnoI(), pMemberTypeDescr, pUnoReturn, pUnoArgs, &pUnoExc );
 
-    // in case an exception occured...
+    // in case an exception occurred...
     if (pUnoExc)
     {
         // destruct temporary in/inout params
@@ -186,7 +186,7 @@ void cpp2uno_call(
             &aUnoExc, pThis->getBridge()->getUno2Cpp() );
             // has to destruct the any
     }
-    else // else no exception occured...
+    else // else no exception occurred...
     {
         // temporary params
         for ( ; nTempIndizes--; )

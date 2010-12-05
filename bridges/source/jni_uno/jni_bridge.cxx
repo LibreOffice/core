@@ -292,7 +292,7 @@ Bridge::~Bridge() SAL_THROW( () )
 
 
 //______________________________________________________________________________
-void JNI_context::java_exc_occured() const
+void JNI_context::java_exc_occurred() const
 {
     // !don't rely on JNI_info!
 
@@ -302,7 +302,7 @@ void JNI_context::java_exc_occured() const
     if (! jo_exc.is())
     {
         throw BridgeRuntimeError(
-            OUSTR("java exception occured, but not available!?") +
+            OUSTR("java exception occurred, but not available!?") +
             get_stack_trace() );
     }
 

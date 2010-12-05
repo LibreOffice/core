@@ -43,7 +43,7 @@
 
     @param return_code return code of call
 */
-#define CUNO_EXCEPTION_OCCURED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
+#define CUNO_EXCEPTION_OCCURRED( return_code ) (0 != ((return_code) & CUNO_ERROR_EXCEPTION))
 
 typedef sal_Int32 cuno_ErrorCode;
 
