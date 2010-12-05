@@ -514,9 +514,6 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                     reinterpret_cast<
                         typelib_InterfaceMethodTypeDescription * >(member);
 
-                bool issimple = bridges::cpp_uno::shared::isSimpleType(
-                    pMethodTD->pReturnTypeRef);
-
                 code = codeSnippet(code, functionOffset++, vtableOffset);
                 break;
             }
