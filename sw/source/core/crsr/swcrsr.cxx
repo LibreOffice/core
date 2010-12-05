@@ -2120,13 +2120,14 @@ BOOL lcl_SeekEntry( const SwSelBoxes& rTmp, const SwStartNode* pSrch, USHORT& rF
 {
     ULONG nIdx = pSrch->GetIndex();
 
-    USHORT nO = rTmp.Count(), nM, nU = 0;
+    USHORT nO = rTmp.Count();
     if( nO > 0 )
     {
         nO--;
+        USHORT nU = 0;
         while( nU <= nO )
         {
-            nM = nU + ( nO - nU ) / 2;
+            USHORT nM = nU + ( nO - nU ) / 2;
             if( rTmp[ nM ]->GetSttNd() == pSrch )
             {
                 rFndPos = nM;
