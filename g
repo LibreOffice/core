@@ -211,14 +211,15 @@ for REPO in $DIRS ; do
                     ;;
             esac
 
-            [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
-
             # check for changes
             HEADREF=$(git show-ref --head HEAD)
 
             # do it!
-            git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
-            RETURN=$?
+	    if [ "$COMMAND" != "clone" -o ! -d $DIR ] ; then
+                [ "$REPORT_REPOS" = "1" ] && echo "===== $NAME ====="
+                git $PAGER "$COMMAND" $EXTRA "${FILES[@]}"
+                RETURN=$?
+	    fi
 
             # now we can change the dir in case of clone as well
             if [ "$COMMAND" = "clone" ] ; then
