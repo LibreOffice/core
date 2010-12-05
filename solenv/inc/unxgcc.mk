@@ -110,13 +110,13 @@ CFLAGSPROF=
 # Compiler flags for debugging
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-# Compiler flags for enabling optimizations
-.IF "$(PRODUCT)"!=""
-CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
 
 GCCNUMVERSION_CMD=-dumpversion $(PIPEERROR) $(AWK) -v num=true -f $(SOLARENV)/bin/getcompver.awk
 GCCNUMVER:=$(shell @-$(CXX) $(GCCNUMVERSION_CMD))
 
+# Compiler flags for enabling optimizations
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=$(CDEFAULTOPT) # optimizing for products
 .IF "$(USE_SYSTEM_STL)"!="YES" || "$(GCCNUMVER)" <= "000400050000"
 #STLPort headers are full of aliasing warnings and
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes
@@ -127,6 +127,7 @@ CFLAGSOPT+=-fno-strict-aliasing
 .ELSE 	# "$(PRODUCT)"!=""
 CFLAGSOPT=   							# no optimizing for non products
 .ENDIF	# "$(PRODUCT)"!=""
+
 # Compiler flags for disabling optimizations
 CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
