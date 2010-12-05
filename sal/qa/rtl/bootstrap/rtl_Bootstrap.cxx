@@ -62,7 +62,7 @@ using namespace rtl;
 inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
 {
 
-    if (strlen(msg) > 0)
+    if (msg && msg[0] != 0)
     {
         t_print("%s: ", msg );
     }
