@@ -79,8 +79,7 @@ ScRTFParser::~ScRTFParser()
 {
     delete pInsDefault;
     delete pColTwips;
-    for ( ScRTFCellDefault* pD = pDefaultList->First(); pD; pD = pDefaultList->Next() )
-        delete pD;
+    pDefaultList->clear();
     delete pDefaultList;
 }
 
@@ -240,8 +239,10 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
         ScRTFCellDefault* pD;
         bNewDef = FALSE;
         // rechts nicht buendig? => neue Tabelle
-        if ( nLastWidth
-          && ((pD = pDefaultList->Last()) != 0) && pD->nTwips != nLastWidth )
+        if (  nLastWidth
+           && ( (pD = &(pDefaultList->back())) != 0 )
+           && pD->nTwips != nLastWidth
+           )
         {
             SCCOL n1, n2;
             if ( !( SeekTwips( nLastWidth, &n1 )
@@ -249,15 +250,17 @@ void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
                 ColAdjust();
         }
         // TwipCols aufbauen, erst nach nLastWidth Vergleich!
-        for ( pD = pDefaultList->First(); pD; pD = pDefaultList->Next() )
+        size_t ListSize = pDefaultList->size();
+        for ( size_t i = 0; i < ListSize; ++i )
         {
+            pD = &( pDefaultList->at( i ) );
             SCCOL n;
             if ( !SeekTwips( pD->nTwips, &n ) )
                 pColTwips->Insert( pD->nTwips );
         }
     }
     pDefMerge = NULL;
-    pActDefault = pDefaultList->First();
+    pActDefault = &(pDefaultList->front());
     DBG_ASSERT( pActDefault, "NewCellRow: pActDefault==0" );
 }
 
@@ -297,12 +300,10 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
-            if ( (pD = pDefaultList->Last()) != 0 )
+            if ( (pD = &(pDefaultList->back())) != 0 )
                 nLastWidth = pD->nTwips;
             nColCnt = 0;
-            for ( pD = pDefaultList->First(); pD; pD = pDefaultList->Next() )
-                delete pD;
-            pDefaultList->Clear();
+            pDefaultList->clear();
             pDefMerge = NULL;
             nLastToken = pInfo->nToken;
         }
@@ -315,8 +316,10 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
         break;
         case RTF_CLMRG:         // A cell to be merged with the preceding cell
         {
-            if ( !pDefMerge )
-                pDefMerge = pDefaultList->Last();
+            if ( !pDefMerge
+               && !(pDefaultList->empty())
+               )
+                pDefMerge = &( pDefaultList->back() );
             DBG_ASSERT( pDefMerge, "RTF_CLMRG: pDefMerge==0" );
             if ( pDefMerge )        // sonst rottes RTF
                 pDefMerge->nColOverlap++;   // mehrere nacheinander moeglich
@@ -329,7 +332,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             bNewDef = TRUE;
             pInsDefault->nCol = nColCnt;
             pInsDefault->nTwips = pInfo->nTokenValue;   // rechter Zellenrand
-            pDefaultList->Insert( pInsDefault, LIST_APPEND );
+            pDefaultList->push_back( pInsDefault );
             // neuer freifliegender pInsDefault
             pInsDefault = new ScRTFCellDefault( pPool );
             if ( ++nColCnt > nColMax )
@@ -381,7 +384,10 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
                 // Paragraph -1 wg. Textaufbruch in EditEngine waehrend Parse
                 pActEntry->aSel.nStartPara = pInfo->aSelection.nEndPara - 1;
             }
-            pActDefault = pDefaultList->Next();
+            if ( pDefaultList->empty() )
+                pActDefault = NULL;
+            else
+                pActDefault = &( pDefaultList->back() );
             nLastToken = pInfo->nToken;
         }
         break;

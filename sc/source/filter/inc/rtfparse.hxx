@@ -32,6 +32,7 @@
 #include "eeparser.hxx"
 
 #ifdef SC_RTFPARSE_CXX
+#include <boost/ptr_container/ptr_vector.hpp>
 
 struct ScRTFCellDefault
 {
@@ -43,9 +44,8 @@ struct ScRTFCellDefault
                         ScRTFCellDefault( SfxItemPool* pPool ) :
                             aItemSet( *pPool ), nColOverlap(1) {}
 };
+typedef boost::ptr_vector< ScRTFCellDefault > ScRTFDefaultList;
 
-DECLARE_LIST( ScRTFDefaultList, ScRTFCellDefault* )
-// Remove: (const unsigned short &) not sufficiently different from (unsigned short)
 // deswegen ULONG, typedef bringt's auch nicht :-(
 SV_DECL_VARARR_SORT( ScRTFColTwips, ULONG, 16, 4)
 
