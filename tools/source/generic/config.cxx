@@ -130,7 +130,7 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
 
     if( aFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None )
     {
-        sal_uInt64 nPos = 0, nRead = 0;
+        sal_uInt64 nPos = 0;
         if( aFile.getSize( nPos ) == ::osl::FileBase::E_None )
         {
             if (nPos > std::numeric_limits< std::size_t >::max()) {
@@ -138,6 +138,7 @@ static BYTE* ImplSysReadConfig( const XubString& rFileName,
                 return 0;
             }
             pBuf = new BYTE[static_cast< std::size_t >(nPos)];
+            sal_uInt64 nRead = 0;
             if( aFile.read( pBuf, nPos, nRead ) == ::osl::FileBase::E_None && nRead == nPos )
             {
                 //skip the byte-order-mark 0xEF 0xBB 0xBF, if it was UTF8 files
