@@ -432,10 +432,10 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
     bool bSwap = false;
     CharSet eCharSet = RTL_TEXTENCODING_DONTKNOW;
     bool bLE = true;
-    ULONG nHead=0;
     /*See if its a known unicode type*/
     if (rLen >= 2)
     {
+        ULONG nHead=0;
         if (rLen > 2 && BYTE(pBuf[0]) == 0xEF && BYTE(pBuf[1]) == 0xBB &&
             BYTE(pBuf[2]) == 0xBF)
         {
