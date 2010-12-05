@@ -387,13 +387,12 @@ SW_DLLPUBLIC void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
 
     if( pOldFmt && nOldFmt )
     {
-        USHORT i = 0;
-
         SvNumberFormatter *pFormatter = ((SwValueField*)pFld)->GetDoc()->GetNumberFormatter();
         const SvNumberformat* pEntry = pFormatter->GetEntry( nOldFmt );
 
         if( pEntry )
         {
+            USHORT i = 0;
             while( pOldFmt[i].eFormatIdx != NF_NUMERIC_START ||
                    pOldFmt[i].nOldFormat )
             {
