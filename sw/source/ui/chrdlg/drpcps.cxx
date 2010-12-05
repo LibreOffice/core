@@ -119,8 +119,14 @@ class SwDropCapsPict : public Control
     void            GetFontSettings( const SwDropCapsPage& _rPage, Font& _rFont, USHORT _nWhich );
 public:
 
-     SwDropCapsPict(Window *pParent, const ResId &rResId) :
-            Control(pParent, rResId), mpPrinter( NULL ), mbDelPrinter( FALSE ) {}
+    SwDropCapsPict(Window *pParent, const ResId &rResId)
+        : Control(pParent, rResId)
+        , mnTotLineH(0)
+        , mnLineH(0)
+        , mnTextH(0)
+        , mpPrinter( NULL )
+        , mbDelPrinter( FALSE )
+    {}
     ~SwDropCapsPict();
 
     void UpdatePaintSettings( void );       // also invalidates control!
