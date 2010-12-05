@@ -29,14 +29,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #include <math.h>
 #include <stdlib.h>
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 #ifndef _SAL_TYPES_H_
     #include <sal/types.h>
@@ -50,15 +44,9 @@
     #include <rtl/string.hxx>
 #endif
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-
 #ifndef _RTL_STRING_UTILS_CONST_H_
     #include <rtl_String_Utils_Const.h>
 #endif
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 using namespace rtl;
 
@@ -276,11 +264,6 @@ sal_Bool AStringToDoubleCompare ( const sal_Char  *pStr,
 
     return cmp;
 } // AStringToDoubleCompare
-
-//------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------
 
 sal_uInt32 UStringLen( const sal_Unicode *pUStr )
 {
@@ -610,8 +593,5 @@ sal_Bool AStringToUStringNCopy( sal_Unicode       *pDest,
 
     return  bCopied;
 } // AStringToUStringNCopy
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -37,8 +37,6 @@
 #include <rtl/ustring.h>
 #include <rtl/ustring.hxx>
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #include <osl/thread.h>
 #include <rtl_String_Const.h>
 #include <rtl_String_Utils.hxx>

@@ -65,9 +65,6 @@ using namespace com::sun::star::registry;
 namespace cppu
 {
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class OSingleFactoryHelper
     : public XServiceInfo
     , public XSingleServiceFactory
@@ -267,10 +264,6 @@ Sequence< OUString > OSingleFactoryHelper::getSupportedServiceNames(void)
     return aServiceNames;
 }
 
-
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
-//----------------------------------------------------------------------
 struct OFactoryComponentHelper_Mutex
 {
     Mutex   aMutex;
@@ -543,10 +536,6 @@ sal_Bool SAL_CALL OFactoryComponentHelper::releaseOnNotification() throw(::com::
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 class ORegistryFactoryHelper : public OFactoryComponentHelper,
                                public OPropertySetHelper
 
@@ -954,10 +943,6 @@ sal_Bool SAL_CALL ORegistryFactoryHelper::releaseOnNotification() throw(::com::s
     return retVal;
 }
 
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-
 class OFactoryProxyHelper : public WeakImplHelper3< XServiceInfo, XSingleServiceFactory,
                                                     XUnloadingPreference >
 {
@@ -1047,10 +1032,6 @@ sal_Bool SAL_CALL OFactoryProxyHelper::releaseOnNotification() throw(::com::sun:
     return sal_True;
 }
 
-
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
-//-----------------------------------------------------------------------------
 // global function
 Reference<XSingleServiceFactory > SAL_CALL createSingleFactory(
     const Reference<XMultiServiceFactory > & rServiceManager,

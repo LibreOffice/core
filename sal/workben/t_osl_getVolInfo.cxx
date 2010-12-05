@@ -49,10 +49,6 @@
 #   define  TEST_PATH_6 "/blah"
 #endif
 
-//------------------------------
-//
-//------------------------------
-
 void test_getVolumeInformation(const rtl::OUString& path_url)
     {
         oslVolumeInfo vi;
@@ -78,10 +74,6 @@ void test_getVolumeInformation(const rtl::OUString& path_url)
             err == osl_File_E_None
         );
     }
-
-//------------------------------
-//
-//------------------------------
 
 class TestClass_osl_getVolumeInformation : public CppUnit::TestFixture
 {

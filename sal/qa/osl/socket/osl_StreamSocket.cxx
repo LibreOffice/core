@@ -976,8 +976,7 @@ namespace osl_StreamSocket
 // LLA:         asAcceptorSocket.close();
 // LLA:     }
 // LLA: }
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
+
 /** Client Socket Thread, served as a temp little client to communicate with server.
  */
 

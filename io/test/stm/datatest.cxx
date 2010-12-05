@@ -386,14 +386,6 @@ OUString    ODataStreamTest_getImplementationName( int i) throw ()
     }
 }
 
-
-/**------------------------------------------------------
-*
-*
-*
-*
-*
-*------------------------------------------------------*/
 class MyPersistObject : public WeakImplHelper2< XPersistObject , XPropertySet >
 {
 public:
@@ -657,9 +649,6 @@ OUString    OMyPersistObject_getImplementationName( ) throw ()
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "test.com.sun.star.io.PersistTest" ) );
 }
 
-
-// ---------------------------------------------
-// -----------------------------------------------
 class OObjectStreamTest :
         public ODataStreamTest
 {

@@ -43,10 +43,6 @@
 
 const rtl::OUString CWD        = rtl::OUString::createFromAscii(".");
 
-//------------------------------
-//
-//------------------------------
-
 class Test_osl_Process : public CppUnit::TestFixture
 {
 public:

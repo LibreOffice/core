@@ -53,9 +53,6 @@ using namespace rtl;
 using namespace std;
 using namespace osl;
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 #ifdef SAL_W32
 #pragma pack(push, 8)
 #elif defined(SAL_OS2)
@@ -364,10 +361,6 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
 
 namespace { struct Init : public rtl::Static< TypeDescriptor_Init_Impl, Init > {}; }
 
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" void SAL_CALL typelib_typedescription_registerCallback(
     void * pContext, typelib_typedescription_Callback pCallback )
     SAL_THROW_EXTERN_C()
@@ -407,10 +400,6 @@ extern "C" void SAL_CALL typelib_typedescription_revokeCallback(
     }
 }
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" sal_Int32 SAL_CALL typelib_typedescription_getAlignedUnoSize(
     const typelib_TypeDescription * pTypeDescription,
     sal_Int32 nOffset, sal_Int32 & rMaxIntegralTypeSize )
@@ -2282,10 +2271,6 @@ extern "C" void SAL_CALL typelib_typedescription_getByName(
     }
 }
 
-
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
 extern "C" void SAL_CALL typelib_typedescriptionreference_newByAsciiName(
     typelib_TypeDescriptionReference ** ppTDR,
     typelib_TypeClass eTypeClass,

@@ -312,9 +312,6 @@ inline void EnsureNoFinalSlash (rtl::OUString & url)
     }
 }
 
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
-
 struct Bootstrap_Impl
 {
     sal_Int32 _nRefCount;
@@ -603,9 +600,6 @@ void Bootstrap_Impl::expandValue(
               LOOKUP_MODE_URE_BOOTSTRAP_EXPANSION : mode),
              requestFile, requestKey, requestStack)).pData);
 }
-
-//----------------------------------------------------------------------------
-//----------------------------------------------------------------------------
 
 namespace {
 

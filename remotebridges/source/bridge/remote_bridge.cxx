@@ -388,9 +388,6 @@ namespace remotebridges_bridge
         m->dispose();
     }
 
-    //---------------------------------
-    //
-    //---------------------------------
     Reference< XInterface > SAL_CALL CreateInstance( const Reference< XComponentContext > &)
     {
         return Reference< XInterface > ( ( OWeakObject * ) new ORemoteBridge );
