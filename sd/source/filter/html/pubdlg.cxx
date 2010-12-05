@@ -174,7 +174,6 @@ SdPublishingDesign::SdPublishingDesign()
     m_aAuthor      += (String)aUserOptions.GetLastName();
     m_aEMail        = aUserOptions.GetEmail();
     m_bDownload     = FALSE;
-//-/    m_bCreated      = TRUE;
     m_nButtonThema  = -1;
 
     m_bUserAttr     = FALSE;
@@ -219,7 +218,6 @@ int SdPublishingDesign::operator ==(const SdPublishingDesign & rDesign) const
                 m_aWWW         == rDesign.m_aWWW &&
                 m_aMisc        == rDesign.m_aMisc &&
                 m_bDownload    == rDesign.m_bDownload &&
-//-/                m_bCreated     == rDesign.m_bCreated &&
                 m_nButtonThema == rDesign.m_nButtonThema &&
                 m_bUserAttr    == rDesign.m_bUserAttr &&
                 m_aBackColor   == rDesign.m_aBackColor &&
@@ -639,8 +637,6 @@ void SdPublishingDlg::CreatePages()
     if(m_bImpress)
         aAssistentFunc.InsertControl(4,
             pPage4_Download = new CheckBox(this,SdResId(PAGE4_DOWNLOAD)));
-//-/    aAssistentFunc.InsertControl(4,
-//-/        pPage4_Created = new CheckBox(this,SdResId(PAGE4_CREATED)));
 
     // Seite 5
     aAssistentFunc.InsertControl(5,
@@ -766,7 +762,6 @@ void SdPublishingDlg::RemovePages()
     delete pPage4_Misc;
     if(m_bImpress)
         delete pPage4_Download;
-//-/    delete pPage4_Created;
 
     delete pPage5_Bmp;
     delete pPage5_Titel;
@@ -964,7 +959,6 @@ void SdPublishingDlg::GetParameterSequence( Sequence< PropertyValue >& rParams )
     }
 
     // Seite 6
-//  aSet.Put(SfxBoolItem(ATTR_PUBLISH_SLIDESOUND,pPage6_Sound->IsChecked()));
 
 
     rParams.realloc( aProps.size() );
@@ -1088,12 +1082,6 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 // =====================================================================
 IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
 {
-/*
-    if(pButton == pPage3_Standard)
-    pPage3_Frames->Check( pButton == pPage3 );
-    else
-        pPage3_Standard->Check(FALSE);
-*/
     UpdatePage();
 
     return 0;
@@ -1516,7 +1504,6 @@ void SdPublishingDlg::SetDesign( SdPublishingDesign* pDesign )
     pPage4_Misc->SetText(pDesign->m_aMisc);
     if(m_bImpress)
         pPage4_Download->Check(pDesign->m_bDownload);
-//-/    pPage4_Created->Check(pDesign->m_bCreated);
 
     pPage5_TextOnly->Check(pDesign->m_nButtonThema == -1);
     if(pDesign->m_nButtonThema != -1)
@@ -1581,7 +1568,6 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
     pDesign->m_aWWW = pPage4_WWW->GetText();
     pDesign->m_aMisc = pPage4_Misc->GetText();
     pDesign->m_bDownload = m_bImpress?pPage4_Download->IsChecked():FALSE;
-//-/    pDesign->m_bCreated = pPage4_Created->IsChecked();
 
     if(pPage5_TextOnly->IsChecked())
         pDesign->m_nButtonThema = -1;

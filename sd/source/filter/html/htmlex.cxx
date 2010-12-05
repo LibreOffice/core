@@ -654,21 +654,6 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     Size aTmpSize( pPage->GetSize() );
     double dRatio=((double)aTmpSize.Width())/aTmpSize.Height();
 
-/*
-    switch( mnWidthPixel )
-    {
-        case 800:
-            mnWidthPixel = 640;
-            break;
-        case 1024:
-            mnWidthPixel = 800;
-            break;
-        case 640:
-        default:
-            mnWidthPixel = 512;
-            break;
-    }
-*/
     mnHeightPixel = (USHORT)(mnWidthPixel/dRatio);
 
     //------------------------------------------------------------------
@@ -681,7 +666,6 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
     maIndex = aINetURLObj.GetLastName();
 
     mnSdPageCount = mpDoc->GetSdPageCount( PK_STANDARD );
-//    USHORT nHiddenSlides = 0;
     for( USHORT nPage = 0; nPage < mnSdPageCount; nPage++ )
     {
         pPage = mpDoc->GetSdPage( nPage, PK_STANDARD );
@@ -1107,7 +1091,6 @@ bool HtmlExport::CreateHtmlTextForPresPages()
         if( mbDocColors )
         {
             SetDocColors( pPage );
-//          maBackColor = pPage->GetPageBackgroundColor();
         }
 
 // HTML Kopf
@@ -2202,50 +2185,6 @@ String HtmlExport::getDocumentTitle()
     return mDocTitle;
 }
 
-/*
-var nCurrentPage = 0;
-var nPageCount = JSCRIPT2;
-
-function NavigateAbs( nPage )
-{
-    frames[\"show\"].location.href = \"img\" + nPage + \".htm\";
-    frames[\"notes\"].location.href = \"note\" + nPage + \".htm\";
-    nCurrentPage = nPage;
-    if(nCurrentPage==0)
-    {
-        frames[\"navbar1\"].location.href = \"navbar0.htm\";
-    }
-    else if(nCurrentPage==nPageCount-1)
-    {
-        frames[\"navbar1\"].location.href = \"navbar2.htm\";
-    }
-    else
-        frames[\"navbar1\"].location.href = \"navbar1.htm\";
-    }
-}
-
-function NavigateRel( nDelta )
-{
-    var nPage = parseInt(nCurrentPage) + parseInt(nDelta);
-    if( (nPage >= 0) && (nPage < nPageCount) )
-    {
-        NavigateAbs( nPage );
-    }
-}
-
-function ExpandOutline()
-{
-    frames[\"navbar2\"].location.href = \"navbar4.htm\";
-    frames[\"outline\"].location.href = \"outline1.htm\";
-}
-
-function CollapseOutline()
-{
-    frames[\"navbar2\"].location.href = \"navbar3.htm\";
-    frames[\"outline\"].location.href = \"outline0.htm\";
-}
-*/
-
 static const char* JS_NavigateAbs =
     "function NavigateAbs( nPage )\r\n"
     "{\r\n"
@@ -3221,13 +3160,6 @@ bool HtmlExport::checkForExistingFiles()
 String HtmlExport::StringToURL( const String& rURL )
 {
     return rURL;
-/*
-    return StringToHTMLString(rURL);
-    OUString aURL( StringToHTMLString(rURL) );
-
-    aURL = Uri::encode( aURL, rtl_UriCharClassUric, rtl_UriEncodeCheckEscapes, RTL_TEXTENCODING_UTF8);
-    return String( aURL );
-*/
 }
 
 String HtmlExport::GetButtonName( int nButton ) const

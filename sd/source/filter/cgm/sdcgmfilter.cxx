@@ -145,10 +145,6 @@ sal_Bool SdCGMFilter::Export()
         {
             ::rtl::OUString aPhysicalName( mrMedium.GetPhysicalName() );
 
-            /* !!!
-            if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->SdrEndTextEdit();
-            */
             CreateStatusIndicator();
             bRet = FncCGMExport( aPhysicalName, mxModel, mxStatusIndicator, NULL );
         }

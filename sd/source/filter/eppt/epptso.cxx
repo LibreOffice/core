@@ -1121,33 +1121,6 @@ void PPTWriter::ImplAdjustFirstLineLineSpacing( TextObj& rTextObj, EscherPropert
 
                 if ( ( nLineSpacing > 0 ) && ( nLineSpacing < 100 ) )
                 {
-    /*
-                    if ( rxText.is() )
-                    {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xShape( rxText, ::com::sun::star::uno::UNO_QUERY );
-                        if ( xShape.is() )
-                        {
-                            SdrObject* pObj = GetSdrObjectFromXShape( mXShape );
-                            if ( pObj )
-                            {
-                                const OutlinerParaObject* pParaObj = pObj->GetOutlinerParaObject();
-                                if ( pParaObj )
-                                {
-                                    SdrModel* pModel = pObj->GetModel();
-                                    if ( pModel )
-                                    {
-                                        Outliner aOutliner( &pModel->GetItemPool(), pParaObj->GetOutlinerMode() );
-                                        aOutliner.SetText( *pParaObj );
-                                        ULONG nTextHeight = aOutliner.GetLineHeight( 0, 0 );
-                                        if ( nTextHeight )
-                                        {
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-    */
                     double fCharHeight = pPortion->mnCharHeight;
                     fCharHeight *= 2540 / 72;
                     fCharHeight *= 100 - nLineSpacing;
@@ -1445,7 +1418,6 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
                                 nNumberingType = pBulletPara->nMappedNumType;
                             break;
 
-    //                      case SVX_NUM_PAGEDESC :
                             case SVX_NUM_BITMAP :
                                 nNumberingType = 0;
                             break;
@@ -2210,14 +2182,7 @@ sal_Bool PPTWriter::ImplCreatePresentationPlaceholder( const sal_Bool bMasterPag
                 << (sal_uInt8)0                 // Size of PlaceHolder ( 0 = FULL, 1 = HALF, 2 = QUARTER )
                 << (sal_uInt16)0;               // padword
         mpPptEscherEx->CloseContainer();        // ESCHER_ClientData
-/*
-        if ( aExtBu.Tell() )
-        {
-            if ( !pClientData )
-                pClientData = new SvMemoryStream( 0x200, 0x200 );
-            ImplProgTagContainer( pClientData, &aExtBu );
-        }
-*/
+
         if ( aClientTextBox.Tell() )
         {
             *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
@@ -2887,8 +2852,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 aPropertyOptions.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_AnchorText, ESCHER_AnchorMiddle );
-//                              aPropertyOptions.AddOpt( ESCHER_Prop_fillColor, nFillColor );
-//                              aPropertyOptions.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
                                 aPropertyOptions.AddOpt( ESCHER_Prop_shadowColor, 0x8000002 );
@@ -2980,8 +2943,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 EscherPropertyContainer aPropOpt2;
                                 aPropOpt2.AddOpt( ESCHER_Prop_LockAgainstGrouping, 0x50001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_lTxid, mnTxId += 0x60 );
-//                              aPropOpt2.AddOpt( ESCHER_Prop_fillColor, nFillColor );
-//                              aPropOpt2.AddOpt( ESCHER_Prop_fillBackColor, nFillBackColor );
                                 aPropOpt2.AddOpt( ESCHER_Prop_fNoFillHitTest, 0x110001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_lineColor, 0x8000001 );
                                 aPropOpt2.AddOpt( ESCHER_Prop_fNoLineDrawDash, 0x90001 );
@@ -3127,10 +3088,6 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                                 << (sal_uInt32)0            // subtype
                                 << (sal_uInt32)0
                                 << (sal_uInt32)0x0012b600;
-
-//                  PPTWriter::WriteCString( *mpExEmbed, "Photo Editor Photo", 1 );
-//                  PPTWriter::WriteCString( *mpExEmbed, "MSPhotoEd.3", 2 );
-//                  PPTWriter::WriteCString( *mpExEmbed, "Microsoft Photo Editor 3.0 Photo", 3 );
 
                     nSize = mpExEmbed->Tell() - nOldPos;
                     mpExEmbed->Seek( nOldPos - 4 );

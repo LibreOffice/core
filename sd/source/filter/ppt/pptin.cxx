@@ -653,12 +653,7 @@ sal_Bool ImplSdPPTImport::Import()
                     {
                         UINT32 nTitleInstance = TSS_TYPE_PAGETITLE;
                         UINT32 nOutlinerInstance = TSS_TYPE_BODY;
-//                      BOOL bSwapStyleSheet = pSlideLayout->eLayout == PPT_LAYOUT_TITLEMASTERSLIDE;
-//                      if ( bSwapStyleSheet )
-//                      {
-//                          nTitleInstance = TSS_TYPE_TITLE;
-//                          nOutlinerInstance = TSS_TYPE_SUBTITLE;
-//                      }
+
                         /////////////////////
                         // titelstylesheet //
                         /////////////////////
@@ -958,13 +953,6 @@ sal_Bool ImplSdPPTImport::Import()
                                         rStCtrl >> aProgTagContentHd;
                                         switch( aProgTagContentHd.nRecType )
                                         {
-/*
-                                            case PPT_PST_CommentContainer :
-                                            {
-
-                                            }
-                                            break;
-*/
                                             case DFF_msofbtAnimGroup :
                                             {
                                                 ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xPage( pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY );
@@ -1400,8 +1388,7 @@ sal_Bool ImplSdPPTImport::Import()
         rPresSettings.mbCustomShow = ( nFlags & 8 ) != 0;
         rPresSettings.mbEndless = ( nFlags & 0x80 ) != 0;
         rPresSettings.mbFullScreen = ( nFlags & 0x10 ) == 0;
-//      rPresSettings.mnPauseTimeout;
-//      rPresSettings.mbShowLogo;
+
         if ( nStartSlide && ( nStartSlide <= GetPageCount() ) )
         {
             SdPage* pPage = mpDoc->GetSdPage( nStartSlide - 1, PK_STANDARD );
@@ -1812,9 +1799,6 @@ void ImplSdPPTImport::ImportPageEffect( SdPage* pPage, const sal_Bool bNewAnimat
                                 else
                                     pPage->SetPresChange( mePresChange );
 
-//                              if ( nBuildFlags & 1 )                          // slidechange by mouseclick
-//                                  pPage->SetPresChange( mePresChange );
-
                                 if ( nBuildFlags & 4 )
                                     pPage->SetExcluded( TRUE );                 // Dia nicht anzeigen
                                 if ( nBuildFlags & 16 )
@@ -2094,18 +2078,10 @@ void ImplSdPPTImport::FillSdAnimationInfo( SdAnimationInfo* pInfo, PptInteractiv
         pInfo->SetBookmark( ReadSound( pIAtom->nSoundRef ) );   // Pfad zum Soundfile in MSDOS-Notation
         pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_SOUND;           // RunProgramAction
     }
-//  if ( nFlags & 0x01 )    // koennen wir nicht ( beim Anklicken markieren )
+
     switch ( pIAtom->nAction )
     {
-//      case 0x01 :                                         // MacroAction
-//      {
-//          pInfo->meClickAction = ::com::sun::star::presentation::::com::sun::star::presentation::ClickAction_MACRO;
-//          // aMacro liegt in folgender Form vor:
-//          // "Macroname.Modulname.Libname.Dokumentname" oder
-//          // "Macroname.Modulname.Libname.Applikationsname"
-//          pInfo->maBookmark = aMacroName;
-//      }
-//      break;
+
         case 0x02 :                                         // RunProgramAction
         {
             pInfo->meClickAction = ::com::sun::star::presentation::ClickAction_PROGRAM;

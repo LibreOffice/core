@@ -146,10 +146,6 @@ sal_Bool SdPPTFilter::Export()
             SotStorageRef    xStorRef = new SotStorage( mrMedium.GetOutStream(), FALSE );
             ExportPPT       PPTExport = reinterpret_cast<ExportPPT>(pLibrary->getFunctionSymbol( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ExportPPT")) ));
 
-            /* !!!
-            if ( pViewShell && pViewShell->GetView() )
-                pViewShell->GetView()->SdrEndTextEdit();
-            */
             if( PPTExport && xStorRef.Is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;

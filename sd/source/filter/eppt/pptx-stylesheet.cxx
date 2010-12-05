@@ -171,10 +171,6 @@ PPTExParaSheet::PPTExParaSheet( int nInstance, sal_uInt16 nDefaultTab, PPTExBull
                 nUpperDist = 0x1e;
             break;
 
-//          default :
-//          case EPP_TEXTTYPE_notUsed :
-//          case EPP_TEXTTYPE_Other :
-//          break;
         }
         switch ( nDepth )
         {
@@ -309,7 +305,6 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
                 PPTExParaLevel& rLevel = maParaLevel[ i ];
                 if ( i )
                     aParagraphObj.ImplGetNumberingLevel( rBuProv, i, FALSE );
-//              rLevel.mbIsBullet = ( ( aParagraphObj.nBulletFlags & 1 ) != 0 );
                 rLevel.mnTextOfs = aParagraphObj.nTextOfs;
                 rLevel.mnBulletOfs = (sal_uInt16)aParagraphObj.nBulletOfs;
                 rLevel.mnBulletChar = aParagraphObj.cBulletId;

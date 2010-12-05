@@ -190,7 +190,6 @@ PortionObj::PortionObj( ::com::sun::star::uno::Reference< ::com::sun::star::text
                         case 156:   nChar = 0x0153; break;// LATIN SMALL LIGATURE OE
                         case 158:   nChar = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
                         case 159:   nChar = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
-//                      case 222:   nChar = 0x00B6; break;// PILCROW SIGN / PARAGRAPH SIGN
                     }
                 }
                 mpText[ i ] = nChar;
@@ -945,49 +944,6 @@ void ParagraphObj::ImplGetNumberingLevel( PPTExBulletProvider& rBuProv, sal_Int1
 
                         if ( aFontDesc.Name.getLength() )
                         {
-/*
-                            if ( aFontDesc.CharSet != ::com::sun::star::awt::CharSet::SYMBOL )
-                            {
-                                switch ( cBulletId )
-                                {
-                                    // Currency
-                                    case 128:   cBulletId = 0x20AC; break;
-                                    // Punctuation and other
-                                    case 130:   cBulletId = 0x201A; break;// SINGLE LOW-9 QUOTATION MARK
-                                    case 131:   cBulletId = 0x0192; break;// LATIN SMALL LETTER F WITH HOOK
-                                    case 132:   cBulletId = 0x201E; break;// DOUBLE LOW-9 QUOTATION MARK
-                                                                          // LOW DOUBLE PRIME QUOTATION MARK
-                                    case 133:   cBulletId = 0x2026; break;// HORIZONTAL ELLIPSES
-                                    case 134:   cBulletId = 0x2020; break;// DAGGER
-                                    case 135:   cBulletId = 0x2021; break;// DOUBLE DAGGER
-                                    case 136:   cBulletId = 0x02C6; break;// MODIFIER LETTER CIRCUMFLEX ACCENT
-                                    case 137:   cBulletId = 0x2030; break;// PER MILLE SIGN
-                                    case 138:   cBulletId = 0x0160; break;// LATIN CAPITAL LETTER S WITH CARON
-                                    case 139:   cBulletId = 0x2039; break;// SINGLE LEFT-POINTING ANGLE QUOTATION MARK
-                                    case 140:   cBulletId = 0x0152; break;// LATIN CAPITAL LIGATURE OE
-                                    case 142:   cBulletId = 0x017D; break;// LATIN CAPITAL LETTER Z WITH CARON
-                                    case 145:   cBulletId = 0x2018; break;// LEFT SINGLE QUOTATION MARK
-                                                                          // MODIFIER LETTER TURNED COMMA
-                                    case 146:   cBulletId = 0x2019; break;// RIGHT SINGLE QUOTATION MARK
-                                                                          // MODIFIER LETTER APOSTROPHE
-                                    case 147:   cBulletId = 0x201C; break;// LEFT DOUBLE QUOTATION MARK
-                                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
-                                    case 148:   cBulletId = 0x201D; break;// RIGHT DOUBLE QUOTATION MARK
-                                                                          // REVERSED DOUBLE PRIME QUOTATION MARK
-                                    case 149:   cBulletId = 0x2022; break;// BULLET
-                                    case 150:   cBulletId = 0x2013; break;// EN DASH
-                                    case 151:   cBulletId = 0x2014; break;// EM DASH
-                                    case 152:   cBulletId = 0x02DC; break;// SMALL TILDE
-                                    case 153:   cBulletId = 0x2122; break;// TRADE MARK SIGN
-                                    case 154:   cBulletId = 0x0161; break;// LATIN SMALL LETTER S WITH CARON
-                                    case 155:   cBulletId = 0x203A; break;// SINGLE RIGHT-POINTING ANGLE QUOTATION MARK
-                                    case 156:   cBulletId = 0x0153; break;// LATIN SMALL LIGATURE OE
-                                    case 158:   cBulletId = 0x017E; break;// LATIN SMALL LETTER Z WITH CARON
-                                    case 159:   cBulletId = 0x0178; break;// LATIN CAPITAL LETTER Y WITH DIAERESIS
-//                                  case 222:   cBulletId = 0x00B6; break;// PILCROW SIGN / PARAGRAPH SIGN
-                                }
-                            }
-*/
                             nParaFlags |= 0x90; // wir geben den Font und den Charset vor
                         }
                     }
@@ -1446,8 +1402,6 @@ sal_uInt32 FontCollection::GetId( FontCollectionEntry& rEntry )
         Font aFont;
         aFont.SetCharSet( rEntry.CharSet );
         aFont.SetName( rEntry.Original );
-//      aFont.SetFamily( rEntry.Family );
-//      aFont.SetPitch( rEntry.Pitch );
         aFont.SetHeight( 100 );
 
         if ( !pVDev )

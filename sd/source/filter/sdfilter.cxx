@@ -108,28 +108,6 @@ void SdFilter::CreateStatusIndicator()
     if ( pStatusBarItem )
         pStatusBarItem->GetValue() >>= mxStatusIndicator;
 
-//  try
-//  {
-//      if (mxModel.is())
-//      {
-//          Reference< XController > xController( mxModel->getCurrentController());
-//          if( xController.is())
-//          {
-//              Reference< XFrame > xFrame( xController->getFrame());
-//              if( xFrame.is())
-//              {
-//                  Reference< XStatusIndicatorFactory > xFactory( xFrame, UNO_QUERY );
-//                  if( xFactory.is())
-//                  {
-//                      mxStatusIndicator = xFactory->createStatusIndicator();
-//                  }
-//              }
-//          }
-//      }
-//  }
-//  catch( Exception& )
-//  {
-//  }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

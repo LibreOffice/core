@@ -347,46 +347,6 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
             mpStrm->Write( aBinaryTagData10Atom.GetData(), aBinaryTagData10Atom.Tell() );
         }
     }
-/*
-    if ( mbUseNewAnimations )
-    {
-        SvMemoryStream amsofbtAnimGroup;
-        ppt::AnimationExporter aExporter( aSolverContainer, maSoundCollection );
-        aExporter.doexport( mXDrawPage, amsofbtAnimGroup );
-        sal_uInt32 nmsofbtAnimGroupSize = amsofbtAnimGroup.Tell();
-        if ( nmsofbtAnimGroupSize )
-        {
-            EscherExContainer aProgTags     ( *mpStrm, EPP_ProgTags );
-            EscherExContainer aProgBinaryTag( *mpStrm, EPP_ProgBinaryTag );
-            {
-                EscherExAtom aCString( *mpStrm, EPP_CString );
-                *mpStrm << (sal_uInt32)0x5f005f
-                        << (sal_uInt32)0x50005f
-                        << (sal_uInt32)0x540050
-                        << (sal_uInt16)0x31
-                        << (sal_uInt16)0x30;
-            }
-            {
-                EscherExAtom aBinaryTagData( *mpStrm, EPP_BinaryTagData );
-                {
-                    {
-                        EscherExAtom aMagic2( *mpStrm, 0x2eeb );
-                        *mpStrm << (sal_uInt32)0x01c45df9
-                                << (sal_uInt32)0xe1471b30;
-                    }
-                    {
-                        EscherExAtom aMagic( *mpStrm, 0x2b00 );
-                        *mpStrm << (sal_uInt32)0;
-                    }
-                }
-                mpStrm->Write( amsofbtAnimGroup.GetData(), amsofbtAnimGroup.Tell() );
-                {
-                    EscherExContainer aMagic2( *mpStrm, 0x2b02 );
-                }
-            }
-        }
-    }
-*/
     mpPptEscherEx->CloseContainer();    // EPP_Slide
 }
 
@@ -897,12 +857,6 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     }
                 }
 
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "DiaName" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsAlwaysOnTop" ) ) ) )
-//              {
-//              }
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsAutomatic" ) ) ) )
                 {
                     sal_Bool bBool = sal_False;
@@ -925,18 +879,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                     if ( !bBool )
                         nFlags |= 0x11;
                 }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsMouseVisible" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "PageRange" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "StartWithNavigator" ) ) ) )
-//              {
-//              }
-//              if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "UsePen" ) ) ) )
-//              {
-//              }
+
                 mpPptEscherEx->AddAtom( 80, EPP_SSDocInfoAtom, 1 );
                 *mpStrm << nPenColor << nRestartTime << nStartSlide << nEndSlide;
 
@@ -1044,8 +987,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
 sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
 {
     sal_uInt32 nCurrentOfs, nParaOfs, nParaCount = 0;
-// SfxOlePropertySection does this...
-//    rStrm << (sal_uInt32)0x41;      // property type VT_BLOB
+
     nParaOfs = rStrm.Tell();
     rStrm << (sal_uInt32)0;         // property size
     rStrm << (sal_uInt32)0;         // property count

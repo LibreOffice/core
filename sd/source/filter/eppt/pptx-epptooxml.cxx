@@ -289,8 +289,7 @@ void PowerPointExport::ImplWriteBackground( FSHelperPtr pFS, Reference< XPropert
         mAny >>= aFillStyle;
 
     if( aFillStyle == FillStyle_BITMAP ) {
-        //DBG(printf ("FillStyle_BITMAP properties\n"));
-        //DBG(dump_pset(rXPropSet));
+
     }
 
     if( aFillStyle == FillStyle_NONE ||
@@ -478,10 +477,6 @@ void PowerPointExport::WriteTransition( FSHelperPtr pFS )
         nTransition = XML_cover;
         pDirection = Get8Direction( nDirection );
         break;
-// we don't have cut transition AFAIK
-//      case PPT_TRANSITION_TYPE_CUT:
-//      nTransition = XML_cut;
-//      break;
         case PPT_TRANSITION_TYPE_DIAMOND:
         nTransition = XML_diamond;
         break;
@@ -1243,11 +1238,6 @@ void PowerPointExport::ImplWriteNotes( sal_uInt32 nPageNum )
 
     pFS->startElementNS( XML_p, XML_cSld, FSEND );
 
-    // background
-//     if( bHasBackground ) {
-//         ImplWriteBackground( pFS, aXBackgroundPropSet );
-//     }
-
     WriteShapeTree( pFS, NOTICE, FALSE );
 
     pFS->endElementNS( XML_p, XML_cSld );
@@ -1437,8 +1427,6 @@ void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPr
 
     pFS->endElementNS( XML_p, XML_sldLayoutIdLst );
 
-    // WriteTextStyles( pFS );
-
     pFS->endElementNS( XML_p, XML_sldMaster );
 
     DBG(printf("----------------\n"));
@@ -1468,8 +1456,6 @@ void PowerPointExport::ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum
                                             .appendAscii( ".xml" )
                                             .makeStringAndClear(),
                                             US( "application/vnd.openxmlformats-officedocument.presentationml.slideLayout+xml" ) );
-
-//     LayoutInfo& rLayoutInfo = GetLayoutInfo( mXPagePropSet );
 
     // add implicit relation of slide layout to slide master
     addRelation( pFS->getOutputStream(),

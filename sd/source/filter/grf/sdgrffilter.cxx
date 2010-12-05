@@ -454,8 +454,6 @@ void SdGRFFilter::SaveGraphic( const ::com::sun::star::uno::Reference< ::com::su
                         break;
                     }
                 }
-                // Fallthrough!
-//          case ::com::sun::star::graphic::GraphicType::EMPTY:
             default:
                 aMimeType = OUString(RTL_CONSTASCII_USTRINGPARAM( "image/png" ) );
                 break;

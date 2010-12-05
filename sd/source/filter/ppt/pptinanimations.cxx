@@ -245,7 +245,6 @@ void AnimationImporter::import( const Reference< XDrawPage >& xPage, const DffRe
 {
 #ifdef DBG_ANIM_LOG
     mpFile = fopen( "c:\\output.xml", "w+" );
-    //mpFile = stdout;
 #endif
     dump("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 
@@ -301,10 +300,6 @@ Reference< XAnimationNode > AnimationImporter::createNode( const Atom* pAtom, co
         switch( rNode.mnNodeType )
         {
         case mso_Anim_Behaviour_FILTER:
-/*
-            pServiceName = "com.sun.star.animations.TransitionFilter";
-            break;
-*/
         case mso_Anim_Behaviour_ANIMATION:
             if( pAtom->hasChildAtom( DFF_msofbtAnimateSet ) )
                 pServiceName = "com.sun.star.animations.AnimateSet";
@@ -3133,14 +3128,9 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
                 }
 
 
-//              dump( " ref=\"%s\"", nRefMode == 3 ? "source" : ( nRefMode == 0 ? "target" : "unknown" ) );
-//              dump( " type=\"%s\"", nRefType == 1 ? "shape" : ( nRefType == 2 ? "sound": "unknown" ) );
-//              dump( " id=\"%lu\"", (sal_Int32)nRefId );
 #ifdef DBG_ANIM_LOG
                 if((begin != -1) || (end != -1) )
                 {
-//                  dump( " text_begin=\"%ld\"", begin );
-//                  dump( " text_end=\"%ld\"", end );
                 }
 #endif
             }
@@ -3149,9 +3139,6 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
             {
                 sal_Int32 nU1;
                 mrStCtrl >> nU1;
-
-                // HINT: nU1 == 1 : target document. ?
-//              dump( " unknown_0x2b01=\"%#lx\"", nU1 );
             }
             break;
             default:
@@ -3543,7 +3530,6 @@ void AnimationImporter::dump( const PropertySet& rSet )
         break;
 
         case DFF_ANIM_DIRECTION:
-//      case DFF_ANIM_MASTERREL:
         {
             sal_Bool bDirection;
             if( aAny >>= bDirection )

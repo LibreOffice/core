@@ -196,17 +196,6 @@ void SdTransformOOo2xDocument::transformShape( SdrObject& rObj )
 
 void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 {
-/*
-    const SfxItemSet& rSet = rTextShape.GetMergedItemSet();
-
-    if( (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) )
-    {
-        SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
-        aItem.SetLeftValue( 0 );
-        aItem.SetTxtFirstLineOfst( 0 );
-        rTextShape.SetMergedItem( aItem );
-    }
-*/
 
     if(!rTextShape.IsEmptyPresObj())
     {
@@ -321,7 +310,7 @@ bool SdTransformOOo2xDocument::getBulletState( const SfxItemSet& rSet, sal_uInt1
 bool SdTransformOOo2xDocument::transformItemSet( SfxItemSet& rSet, bool bNumbering )
 {
     bool bRet = false;
-    if( bNumbering /* && (rSet.GetItemState( EE_PARA_LRSPACE ) == SFX_ITEM_SET) && (rSet.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_SET) */ )
+    if( bNumbering )
     {
         SvxLRSpaceItem aItem( *static_cast<const SvxLRSpaceItem*>(rSet.GetItem( EE_PARA_LRSPACE )) );
         if( (aItem.GetLeft() != 0) || (aItem.GetTxtFirstLineOfst() != 0) )

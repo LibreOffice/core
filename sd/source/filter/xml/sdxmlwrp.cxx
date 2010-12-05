@@ -709,7 +709,6 @@ sal_Bool SdXMLFilter::Import( ErrCode& nError )
     switch( nRet )
     {
     case 0: break;
-    // case ERRCODE_SFX_WRONGPASSWORD: break;
     case SD_XML_READERROR: break;
     case ERRCODE_IO_BROKENPACKAGE:
         if( xStorage.is() )
