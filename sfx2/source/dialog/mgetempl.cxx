@@ -204,10 +204,9 @@ SfxManageStyleSheetPage::SfxManageStyleSheetPage( Window* pParent, const SfxItem
             break;
     }
 
-    USHORT nStyleFilterIdx = 0xffff;
-
     if ( i < nCount )
     {
+        USHORT nStyleFilterIdx = 0xffff;
         // Filterflags
         const SfxStyleFilter& rList = pItem->GetFilterList();
         nCount = (USHORT)rList.Count();
