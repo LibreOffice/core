@@ -90,7 +90,7 @@ class TGAReader {
 
 private:
 
-    SvStream*           mpTGA;
+    SvStream&           m_rTGA;
 
     BitmapWriteAccess*  mpAcc;
     TGAFileHeader*      mpFileHeader;
@@ -110,23 +110,24 @@ private:
     BOOL                ImplReadBody();
 
 public:
-                        TGAReader();
+                        TGAReader(SvStream &rTGA);
                         ~TGAReader();
-    BOOL                ReadTGA( SvStream & rTGA, Graphic & rGraphic );
+    BOOL                ReadTGA(Graphic &rGraphic);
 };
 
 //=================== Methoden von TGAReader ==============================
 
-TGAReader::TGAReader() :
-    mpAcc           ( NULL ),
-    mpFileHeader    ( NULL ),
-    mpFileFooter    ( NULL ),
-    mpExtension     ( NULL ),
-    mpColorMap      ( NULL ),
-    mbStatus        ( TRUE ),
-    mnTGAVersion    ( 1 ),
-    mbIndexing      ( FALSE ),
-    mbEncoding      ( FALSE )
+TGAReader::TGAReader(SvStream &rTGA)
+    : m_rTGA(rTGA)
+    , mpAcc(NULL)
+    , mpFileHeader(NULL)
+    , mpFileFooter(NULL)
+    , mpExtension(NULL)
+    , mpColorMap(NULL)
+    , mbStatus(TRUE)
+    , mnTGAVersion(1)
+    , mbIndexing(FALSE)
+    , mbEncoding(FALSE)
 {
 }
 
@@ -140,17 +141,16 @@ TGAReader::~TGAReader()
 
 // -------------------------------------------------------------------------------------------
 
-BOOL TGAReader::ReadTGA( SvStream & rTGA, Graphic & rGraphic )
+BOOL TGAReader::ReadTGA(Graphic & rGraphic)
 {
-    if ( rTGA.GetError() )
+    if ( m_rTGA.GetError() )
         return FALSE;
 
-    mpTGA = &rTGA;
-    mpTGA->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
+    m_rTGA.SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
     // Kopf einlesen:
 
-    if ( !mpTGA->GetError() )
+    if ( !m_rTGA.GetError() )
     {
         mbStatus = ImplReadHeader();
         if ( mbStatus )
@@ -187,7 +187,7 @@ BOOL TGAReader::ImplReadHeader()
     if ( mpFileHeader == NULL )
         return FALSE;
 
-    *mpTGA >> mpFileHeader->nImageIDLength >> mpFileHeader->nColorMapType >> mpFileHeader->nImageType >>
+    m_rTGA >> mpFileHeader->nImageIDLength >> mpFileHeader->nColorMapType >> mpFileHeader->nImageType >>
         mpFileHeader->nColorMapFirstEntryIndex >> mpFileHeader->nColorMapLength >> mpFileHeader->nColorMapEntrySize >>
             mpFileHeader->nColorMapXOrigin >> mpFileHeader->nColorMapYOrigin >> mpFileHeader->nImageWidth >>
                 mpFileHeader->nImageHeight >> mpFileHeader->nPixelDepth >> mpFileHeader->nImageDescriptor;
@@ -201,12 +201,12 @@ BOOL TGAReader::ImplReadHeader()
     mpFileFooter = new TGAFileFooter;       // read the TGA-File-Footer to determine whether
     if ( mpFileFooter )                     // we got an old TGA format or the new one
     {
-        ULONG nCurStreamPos = mpTGA->Tell();
-        mpTGA->Seek( STREAM_SEEK_TO_END );
-        ULONG nTemp = mpTGA->Tell();
-        mpTGA->Seek( nTemp - SizeOfTGAFileFooter );
+        ULONG nCurStreamPos = m_rTGA.Tell();
+        m_rTGA.Seek( STREAM_SEEK_TO_END );
+        ULONG nTemp = m_rTGA.Tell();
+        m_rTGA.Seek( nTemp - SizeOfTGAFileFooter );
 
-        *mpTGA >> mpFileFooter->nExtensionFileOffset >> mpFileFooter->nDeveloperDirectoryOffset >>
+        m_rTGA >> mpFileFooter->nExtensionFileOffset >> mpFileFooter->nDeveloperDirectoryOffset >>
             mpFileFooter->nSignature[0] >> mpFileFooter->nSignature[1] >> mpFileFooter->nSignature[2] >>
                 mpFileFooter->nSignature[3] >> mpFileFooter->nPadByte >> mpFileFooter->nStringTerminator;
 
@@ -219,19 +219,19 @@ BOOL TGAReader::ImplReadHeader()
             mpExtension = new TGAExtension;
             if ( mpExtension )
             {
-                mpTGA->Seek( mpFileFooter->nExtensionFileOffset );
-                *mpTGA >> mpExtension->nExtensionSize;
+                m_rTGA.Seek( mpFileFooter->nExtensionFileOffset );
+                m_rTGA >> mpExtension->nExtensionSize;
                 if ( mpExtension->nExtensionSize >= SizeOfTGAExtension )
                 {
                     mnTGAVersion = 2;
 
-                    mpTGA->Read( mpExtension->sAuthorName, 41 );
-                    mpTGA->Read( mpExtension->sAuthorComment, 324 );
-                    mpTGA->Read( mpExtension->sDateTimeStamp, 12 );
-                    mpTGA->Read( mpExtension->sJobNameID, 12 );
-                    *mpTGA >> mpExtension->sJobNameID[ 0 ] >> mpExtension->sJobNameID[ 1 ] >> mpExtension->sJobNameID[ 2 ];
-                    mpTGA->Read( mpExtension->sSoftwareID, 41 );
-                    *mpTGA >> mpExtension->nSoftwareVersionNumber >> mpExtension->nSoftwareVersionLetter
+                    m_rTGA.Read( mpExtension->sAuthorName, 41 );
+                    m_rTGA.Read( mpExtension->sAuthorComment, 324 );
+                    m_rTGA.Read( mpExtension->sDateTimeStamp, 12 );
+                    m_rTGA.Read( mpExtension->sJobNameID, 12 );
+                    m_rTGA >> mpExtension->sJobNameID[ 0 ] >> mpExtension->sJobNameID[ 1 ] >> mpExtension->sJobNameID[ 2 ];
+                    m_rTGA.Read( mpExtension->sSoftwareID, 41 );
+                    m_rTGA >> mpExtension->nSoftwareVersionNumber >> mpExtension->nSoftwareVersionLetter
                         >> mpExtension->nKeyColor >> mpExtension->nPixelAspectRatioNumerator
                             >> mpExtension->nPixelAspectRatioDeNumerator >> mpExtension->nGammaValueNumerator
                                 >> mpExtension->nGammaValueDeNumerator >> mpExtension->nColorCorrectionOffset
@@ -241,7 +241,7 @@ BOOL TGAReader::ImplReadHeader()
                 }
             }
         }
-        mpTGA->Seek( nCurStreamPos );
+        m_rTGA.Seek( nCurStreamPos );
     }
 
     //  using the TGA file specification this was the correct form but adobe photoshop sets nImageDescriptor
@@ -274,7 +274,7 @@ BOOL TGAReader::ImplReadHeader()
     };
 
     if ( mpFileHeader->nImageIDLength )         // skip the Image ID
-        mpTGA->SeekRel( mpFileHeader->nImageIDLength );
+        m_rTGA.SeekRel( mpFileHeader->nImageIDLength );
 
     return mbStatus;
 }
@@ -319,10 +319,10 @@ BOOL TGAReader::ImplReadBody()
                 case 16 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
-                        *mpTGA >> nRunCount;
+                        m_rTGA >> nRunCount;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
-                            *mpTGA >> nRGB16;
+                            m_rTGA >> nRGB16;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return FALSE;
                             nRed = (BYTE)( mpColorMap[ nRGB16 ] >> 16 );
@@ -346,7 +346,7 @@ BOOL TGAReader::ImplReadBody()
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
-                                *mpTGA >> nRGB16;
+                                m_rTGA >> nRGB16;
                                 if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                     return FALSE;
                                 nRed = (BYTE)( mpColorMap[ nRGB16 ] >> 16 );
@@ -371,10 +371,10 @@ BOOL TGAReader::ImplReadBody()
                 case 8 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
-                        *mpTGA >> nRunCount;
+                        m_rTGA >> nRunCount;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
-                            *mpTGA >> nDummy;
+                            m_rTGA >> nDummy;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return FALSE;
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
@@ -396,7 +396,7 @@ BOOL TGAReader::ImplReadBody()
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
 
-                                *mpTGA >> nDummy;
+                                m_rTGA >> nDummy;
                                 if ( nDummy >= mpFileHeader->nColorMapLength )
                                     return FALSE;
                                 mpAcc->SetPixel( nY, nX, (BYTE)nDummy );
@@ -426,10 +426,10 @@ BOOL TGAReader::ImplReadBody()
                     {
                         while ( nYCount < mpFileHeader->nImageHeight )
                         {
-                            *mpTGA >> nRunCount;
+                            m_rTGA >> nRunCount;
                             if ( nRunCount & 0x80 )     // a run length packet
                             {
-                                *mpTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
                                 for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
                                     mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -448,7 +448,7 @@ BOOL TGAReader::ImplReadBody()
                             {
                                 for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                                 {
-                                    *mpTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                    m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
                                     mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                     nX += nXAdd;
                                     nXCount++;
@@ -469,10 +469,10 @@ BOOL TGAReader::ImplReadBody()
                 case 24 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
-                        *mpTGA >> nRunCount;
+                        m_rTGA >> nRunCount;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
-                            *mpTGA >> nBlue >> nGreen >> nRed;
+                            m_rTGA >> nBlue >> nGreen >> nRed;
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
@@ -491,7 +491,7 @@ BOOL TGAReader::ImplReadBody()
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
-                                *mpTGA >> nBlue >> nGreen >> nRed;
+                                m_rTGA >> nBlue >> nGreen >> nRed;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                                 nX += nXAdd;
                                 nXCount++;
@@ -511,10 +511,10 @@ BOOL TGAReader::ImplReadBody()
                 case 16 :
                     while ( nYCount < mpFileHeader->nImageHeight )
                     {
-                        *mpTGA >> nRunCount;
+                        m_rTGA >> nRunCount;
                         if ( nRunCount & 0x80 )     // a run length packet
                         {
-                            *mpTGA >> nRGB16;
+                            m_rTGA >> nRGB16;
                             nRed = (BYTE)( nRGB16 >> 7 ) & 0xf8;
                             nGreen = (BYTE)( nRGB16 >> 2 ) & 0xf8;
                             nBlue = (BYTE)( nRGB16 << 3 ) & 0xf8;
@@ -536,7 +536,7 @@ BOOL TGAReader::ImplReadBody()
                         {
                             for ( USHORT i = 0; i < ( ( nRunCount & 0x7f ) + 1 ); i++ )
                             {
-                                *mpTGA >> nRGB16;
+                                m_rTGA >> nRGB16;
                                 nRed = (BYTE)( nRGB16 >> 7 ) & 0xf8;
                                 nGreen = (BYTE)( nRGB16 >> 2 ) & 0xf8;
                                 nBlue = (BYTE)( nRGB16 << 3 ) & 0xf8;
@@ -575,7 +575,7 @@ BOOL TGAReader::ImplReadBody()
                     case 16 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
-                            *mpTGA >> nRGB16;
+                            m_rTGA >> nRGB16;
                             if ( nRGB16 >= mpFileHeader->nColorMapLength )
                                 return FALSE;
                             nRed = (BYTE)( mpColorMap[ nRGB16 ] >> 16 );
@@ -589,7 +589,7 @@ BOOL TGAReader::ImplReadBody()
                     case 8 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
-                            *mpTGA >> nDummy;
+                            m_rTGA >> nDummy;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return FALSE;
                             mpAcc->SetPixel( nY, nX, (BYTE)nDummy );
@@ -608,7 +608,7 @@ BOOL TGAReader::ImplReadBody()
                         {
                             for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                             {
-                                *mpTGA >> nBlue >> nGreen >> nRed >> nDummy;
+                                m_rTGA >> nBlue >> nGreen >> nRed >> nDummy;
                                 mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                             }
                         }
@@ -618,7 +618,7 @@ BOOL TGAReader::ImplReadBody()
                     case 24 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
-                            *mpTGA >> nBlue >> nGreen >> nRed;
+                            m_rTGA >> nBlue >> nGreen >> nRed;
                             mpAcc->SetPixel( nY, nX, BitmapColor( nRed, nGreen, nBlue ) );
                         }
                         break;
@@ -627,7 +627,7 @@ BOOL TGAReader::ImplReadBody()
                     case 16 :
                         for (;nXCount < mpFileHeader->nImageWidth; nXCount++, nX += nXAdd )
                         {
-                            *mpTGA >> nRGB16;
+                            m_rTGA >> nRGB16;
                             nRed = (BYTE)( nRGB16 >> 7 ) & 0xf8;
                             nGreen = (BYTE)( nRGB16 >> 2 ) & 0xf8;
                             nBlue = (BYTE)( nRGB16 << 3 ) & 0xf8;
@@ -675,14 +675,14 @@ BOOL TGAReader::ImplReadPalette()
                 break;
 
             case 32 :
-                mpTGA->Read( mpColorMap, 4 * nColors );
+                m_rTGA.Read( mpColorMap, 4 * nColors );
                 break;
 
             case 24 :
                 {
                     for ( ULONG i = 0; i < nColors; i++ )
                     {
-                        mpTGA->Read( &mpColorMap[ i ], 3 );
+                        m_rTGA.Read( &mpColorMap[ i ], 3 );
                     }
                 }
                 break;
@@ -693,7 +693,7 @@ BOOL TGAReader::ImplReadPalette()
                     for ( ULONG i = 0; i < nColors; i++ )
                     {
                         UINT16 nTemp;
-                        *mpTGA >> nTemp;
+                        m_rTGA >> nTemp;
                         mpColorMap[ i ] = ( ( nTemp & 0x7c00 ) << 9 ) + ( ( nTemp & 0x01e0 ) << 6 ) +
                             ( ( nTemp & 0x1f ) << 3 );
                     }
@@ -725,9 +725,9 @@ BOOL TGAReader::ImplReadPalette()
 
 extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGraphic, FilterConfigItem*, BOOL )
 {
-    TGAReader aTGAReader;
+    TGAReader aTGAReader(rStream);
 
-    return aTGAReader.ReadTGA( rStream, rGraphic );
+    return aTGAReader.ReadTGA(rGraphic);
 }
 
 //================== ein bischen Muell fuer Windows ==========================
