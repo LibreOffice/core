@@ -261,6 +261,8 @@ private:
     virtual void execute();
     virtual void SAL_CALL onTerminated();
 
+    void _insert(const TExtensionCmd& rExtCmd);
+
     void _addExtension( ::rtl::Reference< ProgressCmdEnv > &rCmdEnv,
                         const OUString &rPackageURL,
                         const OUString &rRepository,
@@ -648,57 +650,30 @@ void ExtensionCmdQueue::Thread::addExtension( const ::rtl::OUString &rExtensionU
                                               const ::rtl::OUString &rRepository,
                                               const bool bWarnUser )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not add the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rExtensionURL.getLength() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ADD, rExtensionURL, rRepository, bWarnUser ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::removeExtension( const uno::Reference< deployment::XPackage > &rPackage )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::REMOVE, rPackage ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
 //------------------------------------------------------------------------------
 void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment::XPackage > &rPackage )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::ACCEPT_LICENSE, rPackage ) );
-
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
@@ -706,20 +681,12 @@ void ExtensionCmdQueue::Thread::acceptLicense( const uno::Reference< deployment:
 void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deployment::XPackage > &rPackage,
                                                  const bool bEnable )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not remove the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     if ( rPackage.is() )
     {
         TExtensionCmd pEntry( new ExtensionCmd( bEnable ? ExtensionCmd::ENABLE :
                                                           ExtensionCmd::DISABLE,
                                                 rPackage ) );
-        m_queue.push( pEntry );
-        m_eInput = START;
-        m_wakeup.set();
+        _insert( pEntry );
     }
 }
 
@@ -727,16 +694,8 @@ void ExtensionCmdQueue::Thread::enableExtension( const uno::Reference< deploymen
 void ExtensionCmdQueue::Thread::checkForUpdates(
     const std::vector<uno::Reference<deployment::XPackage > > &vExtensionList )
 {
-    ::osl::MutexGuard aGuard( m_mutex );
-
-    //If someone called stop then we do not update the extension -> game over!
-    if ( m_bStopped )
-        return;
-
     TExtensionCmd pEntry( new ExtensionCmd( ExtensionCmd::CHECK_FOR_UPDATES, vExtensionList ) );
-    m_queue.push( pEntry );
-    m_eInput = START;
-    m_wakeup.set();
+    _insert( pEntry );
 }
 
 //------------------------------------------------------------------------------
@@ -1123,6 +1082,19 @@ void ExtensionCmdQueue::Thread::onTerminated()
 {
     ::osl::MutexGuard g(m_mutex);
     m_bTerminated = true;
+}
+
+void ExtensionCmdQueue::Thread::_insert(const TExtensionCmd& rExtCmd)
+{
+    ::osl::MutexGuard aGuard( m_mutex );
+
+    // If someone called stop then we do not process the command -> game over!
+    if ( m_bStopped )
+        return;
+
+    m_queue.push( rExtCmd );
+    m_eInput = START;
+    m_wakeup.set();
 }
 
 //------------------------------------------------------------------------------
