@@ -907,8 +907,6 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
     if ( m_bDisposed )
         throw DisposedException();
 
-    bool bResetStorage( false );
-
     if ( !isReadOnly() )
     {
         // Remove all elements from our user-defined storage!
@@ -939,8 +937,6 @@ void SAL_CALL ModuleUIConfigurationManager::reset() throw (::com::sun::star::uno
                     }
                 }
             }
-
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
