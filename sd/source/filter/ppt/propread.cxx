@@ -100,7 +100,7 @@ static xub_StrLen lcl_getMaxSafeStrLen(sal_uInt32 nSize)
     if (nSize > STRING_MAXLEN)
         nSize = STRING_MAXLEN;
 
-    return nSize;
+    return static_cast< xub_StrLen >( nSize );
 }
 
 BOOL PropItem::Read( String& rString, sal_uInt32 nStringType, sal_Bool bAlign )

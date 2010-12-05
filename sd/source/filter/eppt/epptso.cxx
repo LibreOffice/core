@@ -3063,7 +3063,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 continue;
             }
             else if ( ( mType == "drawing.OLE2" ) || ( mType == "presentation.OLE2" )
-                        || ( mType == "presentation.Chart" ) || ( mType == "presentation.Table" )
+                        || ( mType == "presentation.Chart" ) || ( mType == "presentation.Calc" )
                             || ( mType == "presentation.OrgChart" ) )
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -3253,7 +3253,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                 }
             }
-            else if ( mType == "drawing.Table" )
+            else if ( (mType == "drawing.Table") || (mType == "presentation.Table") )
             {
                 SvMemoryStream* pTmp = NULL;
                 if ( bEffect && !mbUseNewAnimations )
