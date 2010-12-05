@@ -1457,7 +1457,6 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         const SvNumberformat* pFormat )
 {
     xub_StrLen nPos = 0;
-    int nDayOfWeek;
 
     // First of all, eat leading blanks
     SkipBlanks(rString, nPos);
@@ -1507,7 +1506,7 @@ BOOL ImpSvNumberInputScan::ScanStartString( const String& rString,
         }
         else
         {
-            nDayOfWeek = GetDayOfWeek( rString, nPos );
+            int nDayOfWeek = GetDayOfWeek( rString, nPos );
             if ( nDayOfWeek )
             {   // day of week is just parsed away
                 eScannedType = NUMBERFORMAT_DATE;       // !!! it IS a date !!!
