@@ -297,7 +297,7 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
     USHORT         nColBits;           // Anzahl der Bits/Pixel (2, 4,  8)
     USHORT         i,j,k;              // Spaltenzaehler, Zeilenzaehler, Planezaehler
     USHORT         a,b;                // Hilfsvariable
-    BYTE           pl1 = 0,pl2= 0;     // Masken fuer die Planes
+    BYTE           pl1 = 0;            // Masken fuer die Planes
     BYTE*          pBuf=NULL;          // Buffer fuer eine Pixelzeile
     PcxExpand      aPcx;
     ULONG          nOfs;
@@ -344,6 +344,8 @@ BOOL SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
             rOut.Write((char*)pBuf,nWdtOut);
         }
     } else if (nColors==16) {
+        BYTE pl2= 0;     // Masken fuer die Planes
+
         rOut<<RGBQuad(0x00,0x00,0x00); // Schwarz
         rOut<<RGBQuad(0x24,0x24,0x24); // Grau 80%
         rOut<<RGBQuad(0x49,0x49,0x49); // Grau 60%
