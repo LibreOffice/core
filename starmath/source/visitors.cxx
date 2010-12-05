@@ -2242,39 +2242,33 @@ void SmNodeToTextVisitor::Visit( SmOperNode* pNode )
         SmNode* pChild;
         if( ( pChild = pSubSup->GetSubSup( LSUP ) ) ) {
             Separate( );
-            Append( "lsup { " );
+            Append( "lsup " );
             LineToText( pChild );
-            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( LSUB ) ) ) {
             Separate( );
-            Append( "lsub { " );
+            Append( "lsub " );
             LineToText( pChild );
-            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( RSUP ) ) ) {
             Separate( );
-            Append( "rsup { " );
+            Append( "rsup " );
             LineToText( pChild );
-            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( RSUB ) ) ) {
             Separate( );
-            Append( "rsub { " );
+            Append( "rsub " );
             LineToText( pChild );
-            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( CSUP ) ) ) {
             Separate( );
-            Append( "csup { " );
+            Append( "csup " );
             LineToText( pChild );
-            Append( "} ");
         }
         if( ( pChild = pSubSup->GetSubSup( CSUB ) ) ) {
             Separate( );
-            Append( "csub { " );
+            Append( "csub " );
             LineToText( pChild );
-            Append( "} ");
         }
     }
     LineToText( pNode->GetSubNode( 1 ) );
@@ -2380,18 +2374,15 @@ void SmNodeToTextVisitor::Visit( SmFontNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmUnHorNode* pNode )
 {
-    Append( "{" );
     SmNodeIterator it( pNode, pNode->GetSubNode( 1 )->GetToken( ).eType == TFACT );
     while( it.Next( ) ) {
         Separate( );
         it->Accept( this );
     }
-    Append( " }" );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
 {
-    Append( "{" );
     SmNode *pLeft  = pNode->GetSubNode( 0 ),
            *pOper  = pNode->GetSubNode( 1 ),
            *pRight = pNode->GetSubNode( 2 );
@@ -2402,7 +2393,6 @@ void SmNodeToTextVisitor::Visit( SmBinHorNode* pNode )
     Separate( );
     pRight->Accept( this );
     Separate( );
-    Append( "}" );
 }
 
 void SmNodeToTextVisitor::Visit( SmBinVerNode* pNode )
@@ -2466,11 +2456,9 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
     for ( USHORT i = 0; i < pNode->GetNumRows( ); i++ ) {
         for ( USHORT j = 0; j < pNode->GetNumCols( ); j++ ) {
             SmNode* pSubNode = pNode->GetSubNode( i * pNode->GetNumCols( ) + j );
-            Append( "{" );
             Separate( );
             pSubNode->Accept( this );
             Separate( );
-            Append( "}" );
             if( j != pNode->GetNumCols( ) - 1 )
                 Append( "#" );
         }
@@ -2478,7 +2466,7 @@ void SmNodeToTextVisitor::Visit( SmMatrixNode* pNode )
         if( i != pNode->GetNumRows( ) - 1 )
             Append( "##" );
     }
-    Append( "}" );
+    Append( "} " );
 }
 
 void SmNodeToTextVisitor::Visit( SmPlaceNode* )
@@ -2535,8 +2523,8 @@ void SmNodeToTextVisitor::Visit( SmLineNode* pNode )
 
 void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
 {
-    USHORT nSize = pNode->GetNumSubNodes();
-    if (nSize > 1) {
+    bool bracketsNeeded = pNode->GetNumSubNodes() != 1 || pNode->GetSubNode(0)->GetType() != NEXPRESSION;
+    if (bracketsNeeded) {
         Append( "{ " );
     }
     SmNodeIterator it( pNode );
@@ -2544,7 +2532,7 @@ void SmNodeToTextVisitor::Visit( SmExpressionNode* pNode )
         it->Accept( this );
         Separate( );
     }
-    if (nSize > 1) {
+    if (bracketsNeeded) {
         Append( "} " );
     }
 }
