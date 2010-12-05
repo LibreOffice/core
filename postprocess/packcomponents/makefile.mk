@@ -65,6 +65,7 @@ my_components = \
     component/svtools/source/hatchwindow/hatchwindowfactory \
     component/svtools/source/productregistration/productregistration.uno \
     component/svtools/util/svt \
+    component/sw/util/msword \
     component/sw/util/sw \
     component/sw/util/swd \
     component/sw/util/vbaswobj \
@@ -109,7 +110,6 @@ my_components = \
     mcnttype \
     migrationoo2 \
     msforms \
-    msword \
     mysql \
     odbc \
     offacc \
