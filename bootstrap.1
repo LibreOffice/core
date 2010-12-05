@@ -72,6 +72,9 @@ chmod +x "$SRC_ROOT/solenv/bin/zipdep.pl"
 chmod +x "$SRC_ROOT/solenv/bin/gccinstlib.pl"
 
 # fetch or update external tarballs
+if [ ! -d $SRC_ROOT/src ] ; then
+    mkdir $SRC_ROOT/src
+fi
 if [ "$DO_FETCH_TARBALLS" = "yes" ]; then
 	$SRC_ROOT/download $SRC_ROOT/ooo.lst
 fi
