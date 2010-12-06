@@ -84,7 +84,7 @@
 using namespace ::com::sun::star;
 
 
-HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
+HTMLOptionEnum aHTMLImgHAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,    text::HoriOrientation::LEFT       },
     { OOO_STRING_SVTOOLS_HTML_AL_right,   text::HoriOrientation::RIGHT      },
@@ -92,7 +92,7 @@ HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[] =
 };
 
 
-HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[] =
+HTMLOptionEnum aHTMLImgVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::LINE_TOP       },
     { OOO_STRING_SVTOOLS_HTML_VA_texttop,     text::VertOrientation::CHAR_TOP       },

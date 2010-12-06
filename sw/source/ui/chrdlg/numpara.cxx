@@ -53,7 +53,7 @@
 
 // Globals ******************************************************************
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART_AT,
     0
 };

@@ -83,7 +83,7 @@ using namespace ::com::sun::star::lang;
 
 // Globals ******************************************************************
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     RES_PARATR_DROP, RES_PARATR_DROP,
     0
 };

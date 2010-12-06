@@ -93,7 +93,7 @@ using ::rtl::OUString;
 // is in appenv.cxx
 extern String InsertLabEnvText( SwWrtShell& , SwFldMgr& , const String& );
 
-const char __FAR_DATA MASTER_LABEL[] = "MasterLabel";
+const char MASTER_LABEL[] = "MasterLabel";
 
 const SwFrmFmt *lcl_InsertBCText( SwWrtShell& rSh, const SwLabItem& rItem,
                         SwFrmFmt &rFmt,

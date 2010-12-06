@@ -96,14 +96,14 @@ using ::rtl::OUString;
 const sal_uInt16 TABINDEX_MIN = 0;
 const sal_uInt16 TABINDEX_MAX = 32767;
 
-static HTMLOptionEnum __FAR_DATA aHTMLFormMethodTable[] =
+static HTMLOptionEnum aHTMLFormMethodTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_METHOD_get,       FormSubmitMethod_GET    },
     { OOO_STRING_SVTOOLS_HTML_METHOD_post,  FormSubmitMethod_POST   },
     { 0,                    0                       }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLFormEncTypeTable[] =
+static HTMLOptionEnum aHTMLFormEncTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_ET_url,           FormSubmitEncoding_URL          },
     { OOO_STRING_SVTOOLS_HTML_ET_multipart, FormSubmitEncoding_MULTIPART    },
@@ -113,7 +113,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLFormEncTypeTable[] =
 
 enum HTMLWordWrapMode { HTML_WM_OFF, HTML_WM_HARD, HTML_WM_SOFT };
 
-static HTMLOptionEnum __FAR_DATA aHTMLTextAreaWrapTable[] =
+static HTMLOptionEnum aHTMLTextAreaWrapTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_WW_off,       HTML_WM_OFF },
     { OOO_STRING_SVTOOLS_HTML_WW_hard,  HTML_WM_HARD    },
@@ -123,7 +123,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLTextAreaWrapTable[] =
     { 0,                0               }
 };
 
-HTMLEventType __FAR_DATA aEventTypeTable[] =
+HTMLEventType aEventTypeTable[] =
 {
     HTML_ET_ONSUBMITFORM,
     HTML_ET_ONRESETFORM,
@@ -136,7 +136,7 @@ HTMLEventType __FAR_DATA aEventTypeTable[] =
     HTML_ET_END
 };
 
-const sal_Char * __FAR_DATA aEventListenerTable[] =
+const sal_Char * aEventListenerTable[] =
 {
     "XSubmitListener",
     "XResetListener",
@@ -148,7 +148,7 @@ const sal_Char * __FAR_DATA aEventListenerTable[] =
     ""
 };
 
-const sal_Char * __FAR_DATA aEventMethodTable[] =
+const sal_Char * aEventMethodTable[] =
 {
     "approveSubmit",
     "approveReset",
@@ -160,7 +160,7 @@ const sal_Char * __FAR_DATA aEventMethodTable[] =
     ""
 };
 
-const sal_Char * __FAR_DATA aEventSDOptionTable[] =
+const sal_Char * aEventSDOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_SDonsubmit,
     OOO_STRING_SVTOOLS_HTML_O_SDonreset,
@@ -172,7 +172,7 @@ const sal_Char * __FAR_DATA aEventSDOptionTable[] =
     0
 };
 
-const sal_Char * __FAR_DATA aEventOptionTable[] =
+const sal_Char * aEventOptionTable[] =
 {
     OOO_STRING_SVTOOLS_HTML_O_onsubmit,
     OOO_STRING_SVTOOLS_HTML_O_onreset,

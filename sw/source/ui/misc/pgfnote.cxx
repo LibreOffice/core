@@ -62,7 +62,7 @@
 /*-----------------------------------------------------#---------------
     Beschreibung:   vordefinierte Linien in Point
  --------------------------------------------------------------------*/
-static const USHORT __FAR_DATA nLines[] = {
+static const USHORT nLines[] = {
     0,
     50,
     100,
@@ -73,7 +73,7 @@ static const USHORT __FAR_DATA nLines[] = {
 
 static const USHORT nLineCount = SAL_N_ELEMENTS(nLines);
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     FN_PARAM_FTN_INFO, FN_PARAM_FTN_INFO,
     0
 };

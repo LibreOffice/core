@@ -63,7 +63,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 
 
-static HTMLOutEvent __FAR_DATA aBodyEventTable[] =
+static HTMLOutEvent aBodyEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,       OOO_STRING_SVTOOLS_HTML_O_onload,       SFX_EVENT_OPENDOC   },
     { OOO_STRING_SVTOOLS_HTML_O_SDonunload, OOO_STRING_SVTOOLS_HTML_O_onunload, SFX_EVENT_PREPARECLOSEDOC   },

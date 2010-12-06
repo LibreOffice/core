@@ -39,11 +39,11 @@ enum HTMLEventType
     HTML_ET_END
 };
 
-extern HTMLEventType __FAR_DATA aEventTypeTable[];
-extern const sal_Char * __FAR_DATA aEventListenerTable[];
-extern const sal_Char * __FAR_DATA aEventMethodTable[];
-extern const sal_Char * __FAR_DATA aEventSDOptionTable[];
-extern const sal_Char * __FAR_DATA aEventOptionTable[];
+extern HTMLEventType aEventTypeTable[];
+extern const sal_Char * aEventListenerTable[];
+extern const sal_Char * aEventMethodTable[];
+extern const sal_Char * aEventSDOptionTable[];
+extern const sal_Char * aEventOptionTable[];
 
 
 

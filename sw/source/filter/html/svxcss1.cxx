@@ -3183,7 +3183,7 @@ struct CSS1PropEntry
 
 
 // die Tabelle mit den Zuordnungen
-static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
+static CSS1PropEntry aCSS1PropFnTab[] =
 {
     CSS1_PROP_ENTRY(background),
     CSS1_PROP_ENTRY(background_color),
@@ -3241,7 +3241,7 @@ static CSS1PropEntry __FAR_DATA aCSS1PropFnTab[] =
 
 /*  */
 
-static int __FAR_DATA bSortedPropFns = FALSE;
+static int bSortedPropFns = FALSE;
 
 extern "C"
 {

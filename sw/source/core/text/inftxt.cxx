@@ -104,7 +104,7 @@ using namespace ::com::sun::star::beans;
 
 // --> OD 2006-06-27 #b6440955#
 // variable moved to class <numfunc:GetDefBulletConfig>
-//extern const sal_Char __FAR_DATA sBulletFntName[];
+//extern const sal_Char sBulletFntName[];
 namespace numfunc
 {
     extern const String& GetDefBulletFontname();

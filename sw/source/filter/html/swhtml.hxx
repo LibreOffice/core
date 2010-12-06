@@ -80,9 +80,9 @@ class SvxCSS1PropertyInfo;
 #define HTML_DFLT_IMG_HEIGHT (MM50*2)
 
 // ein par Sachen, die man oefter mal braucht
-extern HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[];
-extern HTMLOptionEnum __FAR_DATA aHTMLImgHAlignTable[];
-extern HTMLOptionEnum __FAR_DATA aHTMLImgVAlignTable[];
+extern HTMLOptionEnum aHTMLPAlignTable[];
+extern HTMLOptionEnum aHTMLImgHAlignTable[];
+extern HTMLOptionEnum aHTMLImgVAlignTable[];
 
 
 // der Attribut Stack:

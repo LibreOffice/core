@@ -144,7 +144,7 @@ enum
 /*--------------------------------------------------------------------
     Beschreibung: Formate in der richtigen Reihenfolge
  --------------------------------------------------------------------*/
-static const USHORT __FAR_DATA aSetFmt[] =
+static const USHORT aSetFmt[] =
 {
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_SETVAR_???
 // uebereinstimmen
@@ -152,14 +152,14 @@ static const USHORT __FAR_DATA aSetFmt[] =
     0
 };
 
-static const USHORT __FAR_DATA aGetFmt[] =
+static const USHORT aGetFmt[] =
 {
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_GETVAR_???
 // uebereinstimmen
     0
 };
 
-static const USHORT __FAR_DATA aUsrFmt[] =
+static const USHORT aUsrFmt[] =
 {
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_SETVAR_???
 // uebereinstimmen
@@ -167,7 +167,7 @@ static const USHORT __FAR_DATA aUsrFmt[] =
     nsSwExtendedSubType::SUB_CMD
 };
 
-static const USHORT __FAR_DATA aDBFmt[] =
+static const USHORT aDBFmt[] =
 {
 // die Reihenfolge muss zu Beginn mit den ResourceIds fuer FMT_DBFLD_???
 // uebereinstimmen
@@ -195,7 +195,7 @@ struct SwFldPack
 /*--------------------------------------------------------------------
     Beschreibung: Strings und Formate
  --------------------------------------------------------------------*/
-static const SwFldPack __FAR_DATA aSwFlds[] =
+static const SwFldPack aSwFlds[] =
 {
     // Document
     { TYP_EXTUSERFLD,       FLD_EU_BEGIN,       FLD_EU_END,     0,                  0 },

@@ -222,7 +222,7 @@ SV_IMPL_PTRARR( SwUndoMoves, SwUndoMovePtr )
 SV_IMPL_PTRARR( SwTblToTxtSaves, SwTblToTxtSavePtr )
 SV_IMPL_PTRARR( _UndoTblCpyTbl_Entries, _UndoTblCpyTbl_EntryPtr )
 
-USHORT __FAR_DATA aSave_BoxCntntSet[] = {
+USHORT aSave_BoxCntntSet[] = {
     RES_CHRATR_COLOR, RES_CHRATR_CROSSEDOUT,
     RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
     RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,

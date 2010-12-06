@@ -126,12 +126,12 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::document;
 
-const sal_Char __FAR_DATA sFrmFmtStr[] = "Frameformat";
-const sal_Char __FAR_DATA sEmptyPageStr[] = "Empty Page";
-const sal_Char __FAR_DATA sColumnCntStr[] = "Columncontainer";
-const sal_Char __FAR_DATA sCharFmtStr[] = "Zeichenformat";
-const sal_Char __FAR_DATA sTxtCollStr[] = "Textformatvorlage";
-const sal_Char __FAR_DATA sGrfCollStr[] = "Graphikformatvorlage";
+const sal_Char sFrmFmtStr[] = "Frameformat";
+const sal_Char sEmptyPageStr[] = "Empty Page";
+const sal_Char sColumnCntStr[] = "Columncontainer";
+const sal_Char sCharFmtStr[] = "Zeichenformat";
+const sal_Char sTxtCollStr[] = "Textformatvorlage";
+const sal_Char sGrfCollStr[] = "Graphikformatvorlage";
 
 SV_IMPL_PTRARR( SwNumRuleTbl, SwNumRulePtr)
 SV_IMPL_PTRARR( SwTxtFmtColls, SwTxtFmtCollPtr)
@@ -1065,7 +1065,7 @@ SfxObjectShell* SwDoc::CreateCopy(bool bCallInitNew ) const
 {
     SwDoc* pRet = new SwDoc;
     //copy settings
-    USHORT __FAR_DATA aRangeOfDefaults[] = {
+    USHORT aRangeOfDefaults[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,

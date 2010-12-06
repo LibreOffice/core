@@ -133,7 +133,7 @@ using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------
 
-HTMLOutEvent __FAR_DATA aAnchorEventTable[] =
+HTMLOutEvent aAnchorEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonclick,      OOO_STRING_SVTOOLS_HTML_O_onclick,      SFX_EVENT_MOUSECLICK_OBJECT },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },

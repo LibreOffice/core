@@ -120,7 +120,7 @@ SFX_IMPL_INTERFACE(SwTableShell, SwBaseShell, SW_RES(STR_SHELLNAME_TABLE))
 
 TYPEINIT1(SwTableShell,SwBaseShell)
 
-const USHORT __FAR_DATA aUITableAttrRange[] =
+const USHORT aUITableAttrRange[] =
 {
     FN_PARAM_TABLE_NAME,            FN_PARAM_TABLE_NAME,
     FN_PARAM_TABLE_HEADLINE,        FN_PARAM_TABLE_HEADLINE,

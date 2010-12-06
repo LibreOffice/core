@@ -95,10 +95,10 @@
 #if defined(UNX)
 const sal_Char SwHTMLWriter::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA SwHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char SwHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
-static sal_Char __FAR_DATA sIndentTabs[MAX_INDENT_LEVEL+2] =
+static sal_Char sIndentTabs[MAX_INDENT_LEVEL+2] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )

@@ -109,7 +109,7 @@ using ::rtl::OUString;
 #define  GLBL_TABPOS_SUB 5
 
 const SfxObjectShell* SwGlobalTree::pShowShell = 0;
-static const USHORT __FAR_DATA aHelpForMenu[] =
+static const USHORT aHelpForMenu[] =
 {
     0,                          //
     HID_GLBLTREE_UPDATE,        //CTX_UPDATE

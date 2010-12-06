@@ -93,7 +93,7 @@ const USHORT PT_24  = 24 * 20;      // 22 pt
 //const USHORT HTML_PARSPACE = ((CM_05 * 7) / 10);
 #define HTML_PARSPACE   GetMetricVal( CM_05 )
 
-static const sal_Char __FAR_DATA sKomma[] = ", ";
+static const sal_Char sKomma[] = ", ";
 
 static const USHORT aHeadlineSizes[ 2 * MAXLEVEL ] = {
 //  PT_16, PT_14, PT_14, PT_12, PT_12,          // normal

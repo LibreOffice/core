@@ -140,11 +140,11 @@ using namespace ::com::sun::star;
 
 //-----------------------------------------------------------------------
 
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_rule_end, " }" );
+sal_Char CSS1_CONSTASCII_DEF( sCSS1_span_tag_end, "\">" );
 const sal_Char cCSS1_style_opt_end = '\"';
 
-sal_Char __FAR_DATA CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
+sal_Char CSS1_CONSTASCII_DEF( sHTML_FTN_fontheight, "57%" );
 
 extern SwAttrFnTab aCSS1AttrFnTab;
 

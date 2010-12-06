@@ -1528,7 +1528,7 @@ struct CharAttr
 };
 
 // Editieren entspricht Einfuegen-Attributen
-static CharAttr __FAR_DATA aRedlineAttr[] =
+static CharAttr aRedlineAttr[] =
 {
     { SID_ATTR_CHAR_CASEMAP,        SVX_CASEMAP_NOT_MAPPED },
     { SID_ATTR_CHAR_WEIGHT,         WEIGHT_BOLD },

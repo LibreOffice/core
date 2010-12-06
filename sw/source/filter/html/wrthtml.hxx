@@ -222,7 +222,7 @@ public:
 #if defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char sNewLine[];   // \015\012
 #endif
 
     SvStringsDtor aImgMapNames;     // geschriebene Image Maps

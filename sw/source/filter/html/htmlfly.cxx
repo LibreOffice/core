@@ -156,9 +156,9 @@ static Writer& OutHTML_FrmFmtAsMarquee( Writer& rWrt, const SwFrmFmt& rFrmFmt,
                                         const SdrObject& rSdrObj    );
 //-----------------------------------------------------------------------
 
-extern HTMLOutEvent __FAR_DATA aAnchorEventTable[];
+extern HTMLOutEvent aAnchorEventTable[];
 
-static HTMLOutEvent __FAR_DATA aImageEventTable[] =
+static HTMLOutEvent aImageEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonload,           OOO_STRING_SVTOOLS_HTML_O_onload,       SVX_EVENT_IMAGE_LOAD        },
     { OOO_STRING_SVTOOLS_HTML_O_SDonabort,      OOO_STRING_SVTOOLS_HTML_O_onabort,  SVX_EVENT_IMAGE_ABORT       },
@@ -166,7 +166,7 @@ static HTMLOutEvent __FAR_DATA aImageEventTable[] =
     { 0,                        0,                  0                       }
 };
 
-static HTMLOutEvent __FAR_DATA aIMapEventTable[] =
+static HTMLOutEvent aIMapEventTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseover,  OOO_STRING_SVTOOLS_HTML_O_onmouseover,  SFX_EVENT_MOUSEOVER_OBJECT  },
     { OOO_STRING_SVTOOLS_HTML_O_SDonmouseout,       OOO_STRING_SVTOOLS_HTML_O_onmouseout,       SFX_EVENT_MOUSEOUT_OBJECT   },

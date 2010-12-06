@@ -194,13 +194,13 @@ SW_DLLPUBLIC Size GetGraphicSizeTwip( const Graphic&, OutputDevice* pOutDev );
 
 // Seperator fuer Sprunge im Dokument auf verschiedene Inhalttype
 const sal_Unicode cMarkSeperator = '|';
-extern const sal_Char* __FAR_DATA pMarkToTable;             // Strings stehen
-extern const sal_Char* __FAR_DATA pMarkToFrame;             // im Init.cxx
-extern const sal_Char* __FAR_DATA pMarkToRegion;
-SW_DLLPUBLIC extern const sal_Char* __FAR_DATA pMarkToOutline;
-extern const sal_Char* __FAR_DATA pMarkToText;
-extern const sal_Char* __FAR_DATA pMarkToGraphic;
-extern const sal_Char* __FAR_DATA pMarkToOLE;
+extern const sal_Char* pMarkToTable;                // Strings stehen
+extern const sal_Char* pMarkToFrame;             // im Init.cxx
+extern const sal_Char* pMarkToRegion;
+SW_DLLPUBLIC extern const sal_Char* pMarkToOutline;
+extern const sal_Char* pMarkToText;
+extern const sal_Char* pMarkToGraphic;
+extern const sal_Char* pMarkToOLE;
 
 #ifndef DB_DELIM                            // Ist in OFA definiert!!!
 #define DB_DELIM ((sal_Unicode)0xff)        // Datenbank <-> Tabellen-Trenner

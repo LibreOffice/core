@@ -57,7 +57,7 @@
 using namespace ::com::sun::star;
 //using namespace text;
 
-static USHORT __FAR_DATA aFrmMgrRange[] = {
+static USHORT aFrmMgrRange[] = {
                             RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                             SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER,
                             FN_SET_FRM_NAME, FN_SET_FRM_NAME,

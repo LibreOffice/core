@@ -89,7 +89,7 @@ SvStringsDtor* SwFieldType::pFldNames = 0;
 
 DBG_NAME(SwFieldType)
 
-    USHORT __FAR_DATA aTypeTab[] = {
+    USHORT aTypeTab[] = {
     /* RES_DBFLD            */      TYP_DBFLD,
     /* RES_USERFLD          */      TYP_USERFLD,
     /* RES_FILENAMEFLD      */      TYP_FILENAMEFLD,

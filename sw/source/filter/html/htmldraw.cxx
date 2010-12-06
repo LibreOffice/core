@@ -79,7 +79,7 @@ const sal_uInt32 HTML_FRMOPTS_MARQUEE_CSS1  =
     HTML_FRMOPT_S_ALIGN |
     HTML_FRMOPT_S_SPACE;
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
+static HTMLOptionEnum aHTMLMarqBehaviorTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_BEHAV_scroll,     SDRTEXTANI_SCROLL       },
     { OOO_STRING_SVTOOLS_HTML_BEHAV_alternate,  SDRTEXTANI_ALTERNATE    },
@@ -87,7 +87,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLMarqBehaviorTable[] =
     { 0,                        0                       }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLMarqDirectionTable[] =
+static HTMLOptionEnum aHTMLMarqDirectionTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,          SDRTEXTANI_LEFT         },
     { OOO_STRING_SVTOOLS_HTML_AL_right,         SDRTEXTANI_RIGHT        },

@@ -96,7 +96,7 @@ using sw::mark::IMark;
 #if defined(UNX)
 const sal_Char RtfExport::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA RtfExport::sNewLine[] = "\015\012";
+const sal_Char RtfExport::sNewLine[] = "\015\012";
 #endif
 
 // the default text encoding for the export, if it doesn't fit unicode will

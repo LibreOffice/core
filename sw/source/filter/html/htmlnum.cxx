@@ -63,7 +63,7 @@ using namespace ::com::sun::star;
 
 
 // <UL TYPE=...>
-static HTMLOptionEnum __FAR_DATA aHTMLULTypeTable[] =
+static HTMLOptionEnum aHTMLULTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_disc,  HTML_BULLETCHAR_DISC        },
     { OOO_STRING_SVTOOLS_HTML_ULTYPE_circle,    HTML_BULLETCHAR_CIRCLE      },

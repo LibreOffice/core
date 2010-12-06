@@ -133,7 +133,7 @@
 using namespace ::com::sun::star;
 
 // <P ALIGN=xxx>, <Hn ALIGN=xxx>, <TD ALIGN=xxx> usw.
-HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[] =
+HTMLOptionEnum aHTMLPAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_AL_left,  SVX_ADJUST_LEFT     },
     { OOO_STRING_SVTOOLS_HTML_AL_center,    SVX_ADJUST_CENTER   },
@@ -145,7 +145,7 @@ HTMLOptionEnum __FAR_DATA aHTMLPAlignTable[] =
 };
 
 // <SPACER TYPE=...>
-static HTMLOptionEnum __FAR_DATA aHTMLSpacerTypeTable[] =
+static HTMLOptionEnum aHTMLSpacerTypeTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_block,     HTML_SPTYPE_BLOCK       },
     { OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal,    HTML_SPTYPE_HORI        },

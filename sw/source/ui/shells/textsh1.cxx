@@ -494,7 +494,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             // remove the languages from that)
             SvUShortsSort aAttribs;
 
-            USHORT __FAR_DATA aResetableSetRange[] = {
+            USHORT aResetableSetRange[] = {
                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
                 RES_CHRATR_BEGIN, RES_CHRATR_LANGUAGE - 1,
                 RES_CHRATR_LANGUAGE + 1, RES_CHRATR_CJK_LANGUAGE - 1,
@@ -506,7 +506,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
                 0
             };
-            USHORT __FAR_DATA *pUShorts = aResetableSetRange;
+            USHORT *pUShorts = aResetableSetRange;
             while (*pUShorts)
             {
                 USHORT nL = pUShorts[1] - pUShorts[0] + 1;

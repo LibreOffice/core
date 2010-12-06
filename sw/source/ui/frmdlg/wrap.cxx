@@ -61,7 +61,7 @@
 
 using namespace ::com::sun::star;
 
-static USHORT __FAR_DATA aWrapPageRg[] = {
+static USHORT aWrapPageRg[] = {
     RES_LR_SPACE, RES_UL_SPACE,
     RES_PROTECT, RES_SURROUND,
     RES_PRINT, RES_PRINT,

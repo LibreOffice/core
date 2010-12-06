@@ -130,8 +130,8 @@ using ::com::sun::star::frame::XModel;
 using ::com::sun::star::container::XNameAccess;
 using ::com::sun::star::style::XStyleFamiliesSupplier;
 
-const sal_Char __FAR_DATA sPackageProtocol[] = "vnd.sun.star.Package:";
-const sal_Char __FAR_DATA sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
+const sal_Char sPackageProtocol[] = "vnd.sun.star.Package:";
+const sal_Char sGraphicObjectProtocol[] = "vnd.sun.star.GraphicObject:";
 
 /****************************************************************************
     Rahmenbeschreibung

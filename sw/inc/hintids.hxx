@@ -28,7 +28,7 @@
 #ifndef _HINTIDS_HXX
 #define _HINTIDS_HXX
 
-#include <tools/solar.h>        // for __FAR_DATA
+#include <tools/solar.h>
 #include <sal/types.h>          // for sal_Unicode
 #include "swdllapi.h"
 
@@ -431,8 +431,8 @@ class SfxPoolItem;
 struct SfxItemInfo;
 typedef SfxPoolItem* SwDfltAttrTab[ POOLATTR_END - POOLATTR_BEGIN  ];
 
-extern SwDfltAttrTab __FAR_DATA aAttrTab;
-extern SfxItemInfo   __FAR_DATA aSlotTab[];
+extern SwDfltAttrTab aAttrTab;
+extern SfxItemInfo   aSlotTab[];
 
 SW_DLLPUBLIC const SfxPoolItem* GetDfltAttr( USHORT nWhich );
 
@@ -448,29 +448,29 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr );
 // all Sets defined in init.cxx
 
 // AttrSet-Range for the 3 Break-Attribute
-extern USHORT __FAR_DATA aBreakSetRange[];
+extern USHORT aBreakSetRange[];
 // AttrSet-Range for TxtFmtColl
-extern USHORT __FAR_DATA aTxtFmtCollSetRange[];
+extern USHORT aTxtFmtCollSetRange[];
 // AttrSet-Range for GrfFmtColl
-extern USHORT __FAR_DATA aGrfFmtCollSetRange[];
+extern USHORT aGrfFmtCollSetRange[];
 // AttrSet-Range for TextNode
-SW_DLLPUBLIC extern USHORT __FAR_DATA aTxtNodeSetRange[];
+SW_DLLPUBLIC extern USHORT aTxtNodeSetRange[];
 // AttrSet-Range for NoTxtNode
-extern USHORT __FAR_DATA aNoTxtNodeSetRange[];
+extern USHORT aNoTxtNodeSetRange[];
 // AttrSet-Range for SwTable
-extern USHORT __FAR_DATA aTableSetRange[];
+extern USHORT aTableSetRange[];
 // AttrSet-Range for SwTableLine
-extern USHORT __FAR_DATA aTableLineSetRange[];
+extern USHORT aTableLineSetRange[];
 // AttrSet-Range for SwTableBox
-extern USHORT __FAR_DATA aTableBoxSetRange[];
+extern USHORT aTableBoxSetRange[];
 // AttrSet-Range for SwFrmFmt
-SW_DLLPUBLIC extern USHORT __FAR_DATA aFrmFmtSetRange[];
+SW_DLLPUBLIC extern USHORT aFrmFmtSetRange[];
 // AttrSet-Range for SwCharFmt
-extern USHORT __FAR_DATA aCharFmtSetRange[];
+extern USHORT aCharFmtSetRange[];
 // AttrSet-Range for the autostyles
-extern USHORT __FAR_DATA aCharAutoFmtSetRange[];
+extern USHORT aCharAutoFmtSetRange[];
 // AttrSet-Range for SwPageDescFmt
-extern USHORT __FAR_DATA aPgFrmFmtSetRange[];
+extern USHORT aPgFrmFmtSetRange[];
 
 // check if ID is InRange of AttrSet-Ids
 BOOL IsInRange( const USHORT* pRange, const USHORT nId );

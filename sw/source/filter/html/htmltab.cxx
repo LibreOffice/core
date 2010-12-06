@@ -82,7 +82,7 @@
 using namespace ::com::sun::star;
 
 
-static HTMLOptionEnum __FAR_DATA aHTMLTblVAlignTable[] =
+static HTMLOptionEnum aHTMLTblVAlignTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_VA_top,         text::VertOrientation::NONE       },
     { OOO_STRING_SVTOOLS_HTML_VA_middle,      text::VertOrientation::CENTER     },

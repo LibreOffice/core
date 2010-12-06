@@ -284,7 +284,7 @@ struct  ProvNamesId_Type
 };
 
 // note: this thing is indexed as an array, so do not insert/remove entries!
-const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.text.TextTable",                          SW_SERVICE_TYPE_TEXTTABLE },
     { "com.sun.star.text.TextFrame",                          SW_SERVICE_TYPE_TEXTFRAME },

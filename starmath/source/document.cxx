@@ -110,7 +110,7 @@ using namespace ::com::sun::star::uno;
 
 #define DOCUMENT_BUFFER_SIZE    (USHORT)32768
 
-static const char __FAR_DATA pStarMathDoc[] = "StarMathDocument";
+static const char pStarMathDoc[] = "StarMathDocument";
 
 #define SmDocShell
 #include "smslots.hxx"

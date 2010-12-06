@@ -395,7 +395,7 @@ void SwTextGridPage::SetLinesOrCharsRanges(FixedText & rField, const sal_Int32 n
 
 USHORT* SwTextGridPage::GetRanges()
 {
-    static USHORT __FAR_DATA aPageRg[] = {
+    static USHORT aPageRg[] = {
         RES_TEXTGRID, RES_TEXTGRID,
         0};
     return aPageRg;

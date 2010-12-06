@@ -190,7 +190,7 @@ void SwMultiTOXTabDialog::CreateOrUpdateExample(
     if(!pExampleFrame || !pExampleFrame->IsInitialized())
         return;
 
-    const char* __FAR_DATA IndexServiceNames[] =
+    const char* IndexServiceNames[] =
     {
         "com.sun.star.text.DocumentIndex",
         "com.sun.star.text.UserIndex",

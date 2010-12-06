@@ -3110,7 +3110,7 @@ BOOL lcl_BoxSetSplitBoxFmts( const SwTableBox*& rpBox, void* pPara )
         }
         else
         {
-USHORT __FAR_DATA aTableSplitBoxSetRange[] = {
+USHORT aTableSplitBoxSetRange[] = {
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
     RES_PROTECT,        RES_PROTECT,

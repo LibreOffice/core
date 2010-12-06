@@ -36,7 +36,7 @@ class SwWrtShell;
 
 SW_DLLPUBLIC void ItemSetToTableParam( const SfxItemSet& rSet, SwWrtShell &rSh );
 
-extern const USHORT __FAR_DATA aUITableAttrRange[];
+extern const USHORT aUITableAttrRange[];
 SW_DLLPUBLIC const USHORT* SwuiGetUITableAttrRange();
 
 class SwTableShell: public SwBaseShell

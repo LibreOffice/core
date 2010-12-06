@@ -70,36 +70,36 @@ enum SwCalcOper
 
 //-- Calculate Operations Strings -----------------------------------------
 
-extern const sal_Char __FAR_DATA sCalc_Add[];
-extern const sal_Char __FAR_DATA sCalc_Sub[];
-extern const sal_Char __FAR_DATA sCalc_Mul[];
-extern const sal_Char __FAR_DATA sCalc_Div[];
-extern const sal_Char __FAR_DATA sCalc_Phd[];
-extern const sal_Char __FAR_DATA sCalc_Sqrt[];
-extern const sal_Char __FAR_DATA sCalc_Pow[];
-extern const sal_Char __FAR_DATA sCalc_Or[];
-extern const sal_Char __FAR_DATA sCalc_Xor[];
-extern const sal_Char __FAR_DATA sCalc_And[];
-extern const sal_Char __FAR_DATA sCalc_Not[];
-extern const sal_Char __FAR_DATA sCalc_Eq[];
-extern const sal_Char __FAR_DATA sCalc_Neq[];
-extern const sal_Char __FAR_DATA sCalc_Leq[];
-extern const sal_Char __FAR_DATA sCalc_Geq[];
-extern const sal_Char __FAR_DATA sCalc_L[];
-extern const sal_Char __FAR_DATA sCalc_G[];
-extern const sal_Char __FAR_DATA sCalc_Sum[];
-extern const sal_Char __FAR_DATA sCalc_Mean[];
-extern const sal_Char __FAR_DATA sCalc_Min[];
-extern const sal_Char __FAR_DATA sCalc_Max[];
-extern const sal_Char __FAR_DATA sCalc_Sin[];
-extern const sal_Char __FAR_DATA sCalc_Cos[];
-extern const sal_Char __FAR_DATA sCalc_Tan[];
-extern const sal_Char __FAR_DATA sCalc_Asin[];
-extern const sal_Char __FAR_DATA sCalc_Acos[];
-extern const sal_Char __FAR_DATA sCalc_Atan[];
-extern const sal_Char __FAR_DATA sCalc_Tdif[];
-extern const sal_Char __FAR_DATA sCalc_Round[];
-extern const sal_Char __FAR_DATA sCalc_Date[];
+extern const sal_Char sCalc_Add[];
+extern const sal_Char sCalc_Sub[];
+extern const sal_Char sCalc_Mul[];
+extern const sal_Char sCalc_Div[];
+extern const sal_Char sCalc_Phd[];
+extern const sal_Char sCalc_Sqrt[];
+extern const sal_Char sCalc_Pow[];
+extern const sal_Char sCalc_Or[];
+extern const sal_Char sCalc_Xor[];
+extern const sal_Char sCalc_And[];
+extern const sal_Char sCalc_Not[];
+extern const sal_Char sCalc_Eq[];
+extern const sal_Char sCalc_Neq[];
+extern const sal_Char sCalc_Leq[];
+extern const sal_Char sCalc_Geq[];
+extern const sal_Char sCalc_L[];
+extern const sal_Char sCalc_G[];
+extern const sal_Char sCalc_Sum[];
+extern const sal_Char sCalc_Mean[];
+extern const sal_Char sCalc_Min[];
+extern const sal_Char sCalc_Max[];
+extern const sal_Char sCalc_Sin[];
+extern const sal_Char sCalc_Cos[];
+extern const sal_Char sCalc_Tan[];
+extern const sal_Char sCalc_Asin[];
+extern const sal_Char sCalc_Acos[];
+extern const sal_Char sCalc_Atan[];
+extern const sal_Char sCalc_Tdif[];
+extern const sal_Char sCalc_Round[];
+extern const sal_Char sCalc_Date[];
 
 /******************************************************************************
  *                          Calculate ErrorCodes

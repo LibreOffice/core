@@ -58,7 +58,7 @@
 
 #include "swuiccoll.hxx"
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     FN_COND_COLL, FN_COND_COLL,
     0
 };

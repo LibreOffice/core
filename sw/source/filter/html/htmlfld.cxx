@@ -56,7 +56,7 @@ struct HTMLNumFmtTblEntry
     NfIndexTableOffset eFmt;
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLFldTypeTable[] =
+static HTMLOptionEnum aHTMLFldTypeTable[] =
 {
     { OOO_STRING_SW_HTML_FT_author, RES_AUTHORFLD       },
     { OOO_STRING_SW_HTML_FT_sender, RES_EXTUSERFLD      },
@@ -70,7 +70,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLFldTypeTable[] =
     { 0,                0                   }
 };
 
-static HTMLNumFmtTblEntry __FAR_DATA aHTMLDateFldFmtTable[] =
+static HTMLNumFmtTblEntry aHTMLDateFldFmtTable[] =
 {
     { "SSYS",       NF_DATE_SYSTEM_SHORT    },
     { "LSYS",       NF_DATE_SYSTEM_LONG     },
@@ -92,7 +92,7 @@ static HTMLNumFmtTblEntry __FAR_DATA aHTMLDateFldFmtTable[] =
     { 0,                    NF_NUMERIC_START }
 };
 
-static HTMLNumFmtTblEntry __FAR_DATA aHTMLTimeFldFmtTable[] =
+static HTMLNumFmtTblEntry aHTMLTimeFldFmtTable[] =
 {
     { "SYS",     NF_TIME_HHMMSS },
     { "SSMM24",      NF_TIME_HHMM },
@@ -100,7 +100,7 @@ static HTMLNumFmtTblEntry __FAR_DATA aHTMLTimeFldFmtTable[] =
     { 0,                 NF_NUMERIC_START }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldFmtTable[] =
+static HTMLOptionEnum aHTMLPageNumFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_uletter,     SVX_NUM_CHARS_UPPER_LETTER },
     { OOO_STRING_SW_HTML_FF_lletter,     SVX_NUM_CHARS_LOWER_LETTER },
@@ -116,7 +116,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldFmtTable[] =
 };
 
 
-static HTMLOptionEnum __FAR_DATA aHTMLExtUsrFldSubTable[] =
+static HTMLOptionEnum aHTMLExtUsrFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_company,         EU_COMPANY },
     { OOO_STRING_SW_HTML_FS_firstname,   EU_FIRSTNAME },
@@ -136,14 +136,14 @@ static HTMLOptionEnum __FAR_DATA aHTMLExtUsrFldSubTable[] =
     { 0,                     0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLAuthorFldFmtTable[] =
+static HTMLOptionEnum aHTMLAuthorFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,        AF_NAME },
     { OOO_STRING_SW_HTML_FF_shortcut,    AF_SHORTCUT },
     { 0,                     0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
+static HTMLOptionEnum aHTMLPageNumFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_random,      PG_RANDOM },
     { OOO_STRING_SW_HTML_FS_next,        PG_NEXT },
@@ -159,7 +159,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLPageNumFldSubTable[] =
     const SwDocInfoSubType DI_INFO3         =  DI_SUBTYPE_END + 3;
     const SwDocInfoSubType DI_INFO4         =  DI_SUBTYPE_END + 4;
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
+static HTMLOptionEnum aHTMLDocInfoFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_title,   DI_TITEL },
     { OOO_STRING_SW_HTML_FS_theme,   DI_THEMA },
@@ -175,7 +175,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldFmtTable[] =
+static HTMLOptionEnum aHTMLDocInfoFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_author,      DI_SUB_AUTHOR },
     { OOO_STRING_SW_HTML_FF_time,    DI_SUB_TIME },
@@ -183,7 +183,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocInfoFldFmtTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLDocStatFldSubTable[] =
+static HTMLOptionEnum aHTMLDocStatFldSubTable[] =
 {
     { OOO_STRING_SW_HTML_FS_page,    DS_PAGE },
     { OOO_STRING_SW_HTML_FS_para,    DS_PARA },
@@ -195,7 +195,7 @@ static HTMLOptionEnum __FAR_DATA aHTMLDocStatFldSubTable[] =
     { 0,                 0 }
 };
 
-static HTMLOptionEnum __FAR_DATA aHTMLFileNameFldFmtTable[] =
+static HTMLOptionEnum aHTMLFileNameFldFmtTable[] =
 {
     { OOO_STRING_SW_HTML_FF_name,       FF_NAME },
     { OOO_STRING_SW_HTML_FF_pathname,   FF_PATHNAME },

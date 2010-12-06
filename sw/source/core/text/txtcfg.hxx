@@ -43,7 +43,7 @@
 // Toleranzwert in der Formatierung und Textausgabe.
 #define SLOPPY_TWIPS    5
 
-#define CONSTCHAR( name, string ) static const sal_Char __FAR_DATA name[] = string
+#define CONSTCHAR( name, string ) static const sal_Char name[] = string
 
 // Allgemeines ...
 

@@ -46,7 +46,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
 // Breitenangaben der Fussnotenlinien, mit TabPage abstimmen
-static const USHORT __FAR_DATA nFtnLines[] = {
+static const USHORT nFtnLines[] = {
     0,
     10,
     50,

@@ -147,7 +147,7 @@ extern void ClearFEShellTabCols();
 |*  einige Bereiche fuer die Set in Collections / Nodes
 |*************************************************************************/
     // AttrSet-Range fuer die 2 Break-Attribute
-USHORT __FAR_DATA aBreakSetRange[] = {
+USHORT aBreakSetRange[] = {
     RES_PAGEDESC, RES_BREAK,
     0 };
 
@@ -155,7 +155,7 @@ USHORT __FAR_DATA aBreakSetRange[] = {
     // OD 2008-02-27 #refactorlists# :
     // list attributes ( RES_PARATR_LIST_BEGIN - RES_PARATR_LIST_END ) are not
     // included in the paragraph style's itemset.
-USHORT __FAR_DATA aTxtFmtCollSetRange[] = {
+USHORT aTxtFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -164,7 +164,7 @@ USHORT __FAR_DATA aTxtFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die GrfFmtColl
-USHORT __FAR_DATA aGrfFmtCollSetRange[] = {
+USHORT aGrfFmtCollSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -172,7 +172,7 @@ USHORT __FAR_DATA aGrfFmtCollSetRange[] = {
 };
 
     // AttrSet-Range fuer die TextNode
-USHORT __FAR_DATA aTxtNodeSetRange[] = {
+USHORT aTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_PARATR_BEGIN, RES_PARATR_END-1,
@@ -184,14 +184,14 @@ USHORT __FAR_DATA aTxtNodeSetRange[] = {
 };
 
     // AttrSet-Range fuer die NoTxtNode
-USHORT __FAR_DATA aNoTxtNodeSetRange[] = {
+USHORT aNoTxtNodeSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_GRFATR_BEGIN, RES_GRFATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
-USHORT __FAR_DATA aTableSetRange[] = {
+USHORT aTableSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_BREAK,
     RES_BACKGROUND,     RES_SHADOW,
@@ -206,7 +206,7 @@ USHORT __FAR_DATA aTableSetRange[] = {
     0
 };
 
-USHORT __FAR_DATA aTableLineSetRange[] = {
+USHORT aTableLineSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -217,7 +217,7 @@ USHORT __FAR_DATA aTableLineSetRange[] = {
     0
 };
 
-USHORT __FAR_DATA aTableBoxSetRange[] = {
+USHORT aTableBoxSetRange[] = {
     RES_FILL_ORDER,     RES_FRM_SIZE,
     RES_LR_SPACE,       RES_UL_SPACE,
     RES_BACKGROUND,     RES_SHADOW,
@@ -230,21 +230,21 @@ USHORT __FAR_DATA aTableBoxSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwFrmFmt
-USHORT __FAR_DATA aFrmFmtSetRange[] = {
+USHORT aFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die SwCharFmt
-USHORT __FAR_DATA aCharFmtSetRange[] = {
+USHORT aCharFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
 };
 
 // AttrSet-Range fuer die character autostyles
-USHORT __FAR_DATA aCharAutoFmtSetRange[] = {
+USHORT aCharAutoFmtSetRange[] = {
     RES_CHRATR_BEGIN, RES_CHRATR_END-1,
     RES_TXTATR_UNKNOWN_CONTAINER, RES_TXTATR_UNKNOWN_CONTAINER,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
@@ -252,7 +252,7 @@ USHORT __FAR_DATA aCharAutoFmtSetRange[] = {
 };
 
 // AttrSet-Range fuer die SwPageDescFmt
-USHORT __FAR_DATA aPgFrmFmtSetRange[] = {
+USHORT aPgFrmFmtSetRange[] = {
     RES_FRMATR_BEGIN, RES_FRMATR_END-1,
     RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
     0
@@ -262,9 +262,9 @@ USHORT __FAR_DATA aPgFrmFmtSetRange[] = {
  * lege eine Tabelle fuer einen Zugriff auf die
  * Default-Format-Attribute an
  ******************************************************************************/
-SwDfltAttrTab __FAR_DATA aAttrTab;
+SwDfltAttrTab aAttrTab;
 
-SfxItemInfo __FAR_DATA aSlotTab[] =
+SfxItemInfo aSlotTab[] =
 {
     { SID_ATTR_CHAR_CASEMAP, SFX_ITEM_POOLABLE },       // RES_CHRATR_CASEMAP
     { SID_ATTR_CHAR_CHARSETCOLOR, SFX_ITEM_POOLABLE },  // RES_CHRATR_CHARSETCOLOR
@@ -441,13 +441,13 @@ USHORT* SwAttrPool::pVersionMap5 = 0;
 USHORT* SwAttrPool::pVersionMap6 = 0;
 SwIndexReg* SwIndexReg::pEmptyIndexArray = 0;
 
-const sal_Char* __FAR_DATA pMarkToTable     = "table";
-const sal_Char* __FAR_DATA pMarkToFrame     = "frame";
-const sal_Char* __FAR_DATA pMarkToRegion    = "region";
-const sal_Char* __FAR_DATA pMarkToText      = "text";
-const sal_Char* __FAR_DATA pMarkToOutline   = "outline";
-const sal_Char* __FAR_DATA pMarkToGraphic   = "graphic";
-const sal_Char* __FAR_DATA pMarkToOLE       = "ole";
+const sal_Char* pMarkToTable        = "table";
+const sal_Char* pMarkToFrame        = "frame";
+const sal_Char* pMarkToRegion   = "region";
+const sal_Char* pMarkToText     = "text";
+const sal_Char* pMarkToOutline  = "outline";
+const sal_Char* pMarkToGraphic  = "graphic";
+const sal_Char* pMarkToOLE      = "ole";
 
 SvPtrarr *pGlobalOLEExcludeList = 0;
 

@@ -85,7 +85,7 @@ USHORT SwViewOption::nPixelTwips = 0;   //ein Pixel auf dem Bildschirm
 #define MIN_TABWIDTH        120
 #define MIN_TABHEIGHT       200
 
-static const char __FAR_DATA aPostItStr[] = "  ";
+static const char aPostItStr[] = "  ";
 
 BOOL SwViewOption::IsEqualFlags( const SwViewOption &rOpt ) const
 {

@@ -143,8 +143,8 @@
 #include <svx/ofaitem.hxx>
 #include <unomid.h>
 
-const char __FAR_DATA sStatusDelim[] = " : ";
-const char __FAR_DATA sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
+const char sStatusDelim[] = " : ";
+const char sStatusComma[] = " , ";//#outlinelevel, define a Variable for "," add by zhaojianwei
 
 using ::rtl::OUString;
 using namespace sfx2;

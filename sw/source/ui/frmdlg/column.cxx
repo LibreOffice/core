@@ -78,7 +78,7 @@ SV_IMPL_PTRARR( SwColumns, SwColumnPtr )
 /*--------------------------------------------------------------------
     Beschreibung:  Statische Daten
  --------------------------------------------------------------------*/
-static const USHORT __FAR_DATA nLines[] = {
+static const USHORT nLines[] = {
     DEF_LINE_WIDTH_0,
     DEF_LINE_WIDTH_1,
     DEF_LINE_WIDTH_2,
@@ -390,7 +390,7 @@ USHORT GetMaxWidth( SwColMgr* pColMgr, USHORT nCols )
     return nMax;
 }
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     RES_COL, RES_COL,
     0
 };

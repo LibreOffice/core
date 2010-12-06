@@ -457,7 +457,7 @@ void SwDoc::ResetAttrs( const SwPaM &rRg,
     ParaRstFmt aPara( pStt, pEnd, pHst );
 
     // mst: not including META here; it seems attrs with CH_TXTATR are omitted
-    USHORT __FAR_DATA aResetableSetRange[] = {
+    USHORT aResetableSetRange[] = {
         RES_FRMATR_BEGIN, RES_FRMATR_END-1,
         RES_CHRATR_BEGIN, RES_CHRATR_END-1,
         RES_PARATR_BEGIN, RES_PARATR_END-1,

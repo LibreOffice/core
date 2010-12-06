@@ -69,35 +69,35 @@ using namespace ::com::sun::star;
 // tippt sich schneller
 #define RESOURCE ViewShell::GetShellRes()
 
-const sal_Char __FAR_DATA sCalc_Add[]   =   "add";
-const sal_Char __FAR_DATA sCalc_Sub[]   =   "sub";
-const sal_Char __FAR_DATA sCalc_Mul[]   =   "mul";
-const sal_Char __FAR_DATA sCalc_Div[]   =   "div";
-const sal_Char __FAR_DATA sCalc_Phd[]   =   "phd";
-const sal_Char __FAR_DATA sCalc_Sqrt[]  =   "sqrt";
-const sal_Char __FAR_DATA sCalc_Pow[]   =   "pow";
-const sal_Char __FAR_DATA sCalc_Or[]    =   "or";
-const sal_Char __FAR_DATA sCalc_Xor[]   =   "xor";
-const sal_Char __FAR_DATA sCalc_And[]   =   "and";
-const sal_Char __FAR_DATA sCalc_Not[]   =   "not";
-const sal_Char __FAR_DATA sCalc_Eq[]    =   "eq";
-const sal_Char __FAR_DATA sCalc_Neq[]   =   "neq";
-const sal_Char __FAR_DATA sCalc_Leq[]   =   "leq";
-const sal_Char __FAR_DATA sCalc_Geq[]   =   "geq";
-const sal_Char __FAR_DATA sCalc_L[]     =   "l";
-const sal_Char __FAR_DATA sCalc_G[]     =   "g";
-const sal_Char __FAR_DATA sCalc_Sum[]   =   "sum";
-const sal_Char __FAR_DATA sCalc_Mean[]  =   "mean";
-const sal_Char __FAR_DATA sCalc_Min[]   =   "min";
-const sal_Char __FAR_DATA sCalc_Max[]   =   "max";
-const sal_Char __FAR_DATA sCalc_Sin[]   =   "sin";
-const sal_Char __FAR_DATA sCalc_Cos[]   =   "cos";
-const sal_Char __FAR_DATA sCalc_Tan[]   =   "tan";
-const sal_Char __FAR_DATA sCalc_Asin[]  =   "asin";
-const sal_Char __FAR_DATA sCalc_Acos[]  =   "acos";
-const sal_Char __FAR_DATA sCalc_Atan[]  =   "atan";
-const sal_Char __FAR_DATA sCalc_Round[] =   "round";
-const sal_Char __FAR_DATA sCalc_Date[]  =   "date";
+const sal_Char sCalc_Add[]  =   "add";
+const sal_Char sCalc_Sub[]  =   "sub";
+const sal_Char sCalc_Mul[]  =   "mul";
+const sal_Char sCalc_Div[]  =   "div";
+const sal_Char sCalc_Phd[]  =   "phd";
+const sal_Char sCalc_Sqrt[] =   "sqrt";
+const sal_Char sCalc_Pow[]  =   "pow";
+const sal_Char sCalc_Or[]   =   "or";
+const sal_Char sCalc_Xor[]  =   "xor";
+const sal_Char sCalc_And[]  =   "and";
+const sal_Char sCalc_Not[]  =   "not";
+const sal_Char sCalc_Eq[]   =   "eq";
+const sal_Char sCalc_Neq[]  =   "neq";
+const sal_Char sCalc_Leq[]  =   "leq";
+const sal_Char sCalc_Geq[]  =   "geq";
+const sal_Char sCalc_L[]        =   "l";
+const sal_Char sCalc_G[]        =   "g";
+const sal_Char sCalc_Sum[]  =   "sum";
+const sal_Char sCalc_Mean[] =   "mean";
+const sal_Char sCalc_Min[]  =   "min";
+const sal_Char sCalc_Max[]  =   "max";
+const sal_Char sCalc_Sin[]  =   "sin";
+const sal_Char sCalc_Cos[]  =   "cos";
+const sal_Char sCalc_Tan[]  =   "tan";
+const sal_Char sCalc_Asin[] =   "asin";
+const sal_Char sCalc_Acos[] =   "acos";
+const sal_Char sCalc_Atan[] =   "atan";
+const sal_Char sCalc_Round[]    =   "round";
+const sal_Char sCalc_Date[] =   "date";
 
 
 
