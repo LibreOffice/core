@@ -137,6 +137,7 @@ protected:
     bool            bXORMode_ : 1;      // is ROP XOR Mode set
     BOOL            bDitherBrush_ : 1;  // is solid or tile
 
+    using SalGraphics::SetClipRegion;
     void            SetClipRegion( GC          pGC,
                                    XLIB_Region pXReg = NULL ) const;
 
