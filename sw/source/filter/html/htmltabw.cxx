@@ -70,6 +70,7 @@
 #endif
 #include <viewopt.hxx>
 #endif
+#include <sal/types.h>
 
 //#define MAX_DEPTH (USHRT_MAX)
 #define MAX_DEPTH (3)
@@ -337,7 +338,7 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
 
 #ifndef PURE_HTML
     long nWidth = 0;
-    sal_uInt32 nPrcWidth = ULONG_MAX;
+    sal_uInt32 nPrcWidth = SAL_MAX_UINT32;
     if( bOutWidth )
     {
         if( bLayoutExport )
