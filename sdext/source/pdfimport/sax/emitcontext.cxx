@@ -70,9 +70,9 @@ SaxEmitter::SaxEmitter( const uno::Reference< xml::sax::XDocumentHandler >& xDoc
         aBuf.append( aFileURL );
         aBuf.appendAscii( "/pdfimport.xml" );
         pStream = new osl::File( aBuf.makeStringAndClear() );
-        if( pStream->open( OpenFlag_Write | OpenFlag_Create ) )
+        if( pStream->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create ) )
         {
-            pStream->open( OpenFlag_Write );
+            pStream->open( osl_File_OpenFlag_Write );
             pStream->setSize( 0 );
         }
     }
