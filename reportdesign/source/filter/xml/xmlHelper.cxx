@@ -350,7 +350,7 @@ uno::Reference<beans::XPropertySet> OXMLHelper::createBorderPropertySet()
 // -----------------------------------------------------------------------------
 SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 {
-    static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+    static SvXMLTokenMapEntry aElemTokenMap[]=
     {
         { XML_NAMESPACE_REPORT, XML_REPORT_HEADER,              XML_TOK_REPORT_HEADER           },
         { XML_NAMESPACE_REPORT, XML_PAGE_HEADER ,               XML_TOK_PAGE_HEADER             },
@@ -377,7 +377,7 @@ SvXMLTokenMap* OXMLHelper::GetReportElemTokenMap()
 // -----------------------------------------------------------------------------
 SvXMLTokenMap* OXMLHelper::GetSubDocumentElemTokenMap()
 {
-    static __FAR_DATA SvXMLTokenMapEntry aElemTokenMap[]=
+    static SvXMLTokenMapEntry aElemTokenMap[]=
     {
         { XML_NAMESPACE_REPORT, XML_MASTER_DETAIL_FIELD,    XML_TOK_MASTER_DETAIL_FIELD},
         { XML_NAMESPACE_REPORT, XML_MASTER,                 XML_TOK_MASTER},

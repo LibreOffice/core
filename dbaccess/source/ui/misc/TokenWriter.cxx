@@ -82,15 +82,15 @@ using namespace ::com::sun::star::util;
 using ::com::sun::star::frame::XModel;
 
 #if defined(UNX)
-const char __FAR_DATA ODatabaseImportExport::sNewLine = '\012';
+const char ODatabaseImportExport::sNewLine = '\012';
 #else
-const char __FAR_DATA ODatabaseImportExport::sNewLine[] = "\015\012";
+const char ODatabaseImportExport::sNewLine[] = "\015\012";
 #endif
 
-const static char __FAR_DATA sMyBegComment[]    = "<!-- ";
-const static char __FAR_DATA sMyEndComment[]    = " -->";
-const static char __FAR_DATA sFontFamily[]      = "font-family: ";
-const static char __FAR_DATA sFontSize[]        = "font-size: ";
+const static char sMyBegComment[]   = "<!-- ";
+const static char sMyEndComment[]   = " -->";
+const static char sFontFamily[]     = "font-family: ";
+const static char sFontSize[]       = "font-size: ";
 
 #define SBA_FORMAT_SELECTION_COUNT  4
 #define CELL_X                      1437
@@ -660,7 +660,7 @@ BOOL ORTFImportExport::Read()
 }
 //-------------------------------------------------------------------
 //===================================================================
-const sal_Int16 __FAR_DATA OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
+const sal_Int16 OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZES] =
 {
     HTMLFONTSZ1_DFLT, HTMLFONTSZ2_DFLT, HTMLFONTSZ3_DFLT, HTMLFONTSZ4_DFLT,
     HTMLFONTSZ5_DFLT, HTMLFONTSZ6_DFLT, HTMLFONTSZ7_DFLT
@@ -669,7 +669,7 @@ const sal_Int16 __FAR_DATA OHTMLImportExport::nDefaultFontSize[SBA_HTML_FONTSIZE
 sal_Int16 OHTMLImportExport::nFontSize[SBA_HTML_FONTSIZES] = { 0 };
 
 const sal_Int16 OHTMLImportExport::nCellSpacing = 0;
-const char __FAR_DATA OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
+const char OHTMLImportExport::sIndentSource[nIndentMax+1] = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 //========================================================================
 // Macros for HTML-Export
