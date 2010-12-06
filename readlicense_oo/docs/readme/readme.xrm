@@ -91,7 +91,7 @@
 				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
 			</div>
 			<div class="LINUX" id="Linuxi2">
-			    <p id="s2we10"> xml:lang="en-US">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
+			    <p id="s2we10">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
 				<p id="s2we11">This “stand-alone” ${PRODUCTNAME} installer is provided for users in need of previews, having special needs, and for out-of-the-ordinary cases.</p>
 				<ul>
 					<li>
