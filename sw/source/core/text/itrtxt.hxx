@@ -66,8 +66,13 @@ protected:
     // Zuruecksetzen in die erste Zeile.
     void Init();
     void CtorInitTxtIter( SwTxtFrm *pFrm, SwTxtInfo *pInf );
-    inline SwTxtIter(SwTxtNode* pTxtNode) : SwAttrIter(pTxtNode) { }
-
+    inline SwTxtIter(SwTxtNode* pTxtNode)
+        : SwAttrIter(pTxtNode)
+        , pFrm(NULL)
+        , pInf(NULL)
+        , pCurr(NULL)
+        , pPrev(NULL)
+    {}
 public:
     inline SwTxtIter( SwTxtFrm *pTxtFrm, SwTxtInfo *pTxtInf ) : SwAttrIter(pTxtFrm!=NULL?pTxtFrm->GetTxtNode():NULL)
            { CtorInitTxtIter( pTxtFrm, pTxtInf ); }
