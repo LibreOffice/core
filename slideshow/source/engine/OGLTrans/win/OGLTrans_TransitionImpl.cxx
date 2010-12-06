@@ -407,7 +407,7 @@ void OGLTransitionImpl::makeIris()
 
     Primitive irisPart, part;
     int i, nSteps = 24, nParts = 7;
-    double lt = 0, t = 1.0/nSteps, cx, cy, lcx, lcy, lx = 1, ly = 0, x, y, cxo, cyo, lcxo, lcyo, of=2.2, f=1.42;
+    double t = 1.0/nSteps, cx, cy, lcx, lcy, lx = 1, ly = 0, x, y, cxo, cyo, lcxo, lcyo, of=2.2, f=1.42;
 
     for (i=1; i<=nSteps; i++) {
         x = cos ((3*2*M_PI*t)/nParts);
@@ -428,7 +428,6 @@ void OGLTransitionImpl::makeIris()
                                basegfx::B2DVector (cxo, cyo));
         lx = x;
         ly = y;
-        lt = t;
         t += 1.0/nSteps;
     }
 
