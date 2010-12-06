@@ -113,9 +113,9 @@ static const char ITEM_TOOLBAR_URL[] = "private:resource/toolbar/";
 static const char CUSTOM_TOOLBAR_STR[] = "custom_toolbar_";
 static const char CUSTOM_MENU_STR[] = "vnd.openoffice.org:CustomMenu";
 
-static const char __FAR_DATA pSeparatorStr[] =
+static const char pSeparatorStr[] =
     "----------------------------------";
-static const char __FAR_DATA pMenuSeparatorStr[]    = " | ";
+static const char pMenuSeparatorStr[]   = " | ";
 
 #ifdef _MSC_VER
 #pragma warning (disable:4355)

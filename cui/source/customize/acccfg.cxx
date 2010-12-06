@@ -113,7 +113,7 @@ static ::rtl::OUString MEDIATYPE_PROPNAME               (RTL_CONSTASCII_USTRINGP
 static ::rtl::OUString MEDIATYPE_UICONFIG               (RTL_CONSTASCII_USTRINGPARAM("application/vnd.sun.xml.ui.configuration"                 ));
 
 //-----------------------------------------------
-static USHORT __FAR_DATA KEYCODE_ARRAY[] =
+static USHORT KEYCODE_ARRAY[] =
 {
     KEY_F1       ,
     KEY_F2       ,

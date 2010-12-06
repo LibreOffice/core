@@ -102,7 +102,7 @@ struct StringIdPair_Impl
 // OD 11.11.2003 #i22341#
 #define LB_VERT_LINE            0x00400000L // vertical text line
 
-static RelationMap __FAR_DATA aRelationMap[] =
+static RelationMap aRelationMap[] =
 {
     {SwFPos::FRAME,         SwFPos::FRAME,             LB_FRAME,           RelOrientation::FRAME},
     {SwFPos::PRTAREA,       SwFPos::PRTAREA,           LB_PRTAREA,         RelOrientation::PRINT_AREA},
@@ -130,7 +130,7 @@ static RelationMap __FAR_DATA aRelationMap[] =
     {SwFPos::REL_LINE,  SwFPos::REL_LINE,   LB_VERT_LINE,   RelOrientation::TEXT_LINE}
 };
 
-static RelationMap __FAR_DATA aAsCharRelationMap[] =
+static RelationMap aAsCharRelationMap[] =
 {
     {SwFPos::REL_BASE,  SwFPos::REL_BASE,   LB_REL_BASE,   RelOrientation::FRAME},
     {SwFPos::REL_CHAR,  SwFPos::REL_CHAR,   LB_REL_CHAR,   RelOrientation::FRAME},
@@ -144,7 +144,7 @@ static RelationMap __FAR_DATA aAsCharRelationMap[] =
 #define HORI_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_PG_LEFT| \
                         LB_REL_PG_RIGHT)
 
-static FrmMap __FAR_DATA aHPageMap[] =
+static FrmMap aHPageMap[] =
 {
     {SwFPos::LEFT,       SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PAGE_REL},
     {SwFPos::RIGHT,      SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PAGE_REL},
@@ -152,14 +152,14 @@ static FrmMap __FAR_DATA aHPageMap[] =
     {SwFPos::FROMLEFT,   SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_PAGE_REL}
 };
 
-static FrmMap __FAR_DATA aHPageHtmlMap[] =
+static FrmMap aHPageHtmlMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_REL_PG_FRAME}
 };
 
 #define VERT_PAGE_REL   (LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVPageMap[] =
+static FrmMap aVPageMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PAGE_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PAGE_REL},
@@ -167,7 +167,7 @@ static FrmMap __FAR_DATA aVPageMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PAGE_REL}
 };
 
-static FrmMap __FAR_DATA aVPageHtmlMap[] =
+static FrmMap aVPageHtmlMap[] =
 {
     {SwFPos::FROMTOP, SwFPos::FROMTOP,        VertOrientation::NONE,      LB_REL_PG_FRAME}
 };
@@ -179,7 +179,7 @@ static FrmMap __FAR_DATA aVPageHtmlMap[] =
 #define HORI_FRAME_REL  (LB_FLY_REL_PG_FRAME|LB_FLY_REL_PG_PRTAREA| \
                         LB_FLY_REL_PG_LEFT|LB_FLY_REL_PG_RIGHT)
 
-static FrmMap __FAR_DATA aHFrameMap[] =
+static FrmMap aHFrameMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,  HORI_FRAME_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_FRAME_REL},
@@ -187,7 +187,7 @@ static FrmMap __FAR_DATA aHFrameMap[] =
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      HORI_FRAME_REL}
 };
 
-static FrmMap __FAR_DATA aHFlyHtmlMap[] =
+static FrmMap aHFlyHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      LB_FLY_REL_PG_FRAME},
     {SwFPos::FROMLEFT,      SwFPos::MIR_FROMLEFT,   HoriOrientation::NONE,      LB_FLY_REL_PG_FRAME}
@@ -197,7 +197,7 @@ static FrmMap __FAR_DATA aHFlyHtmlMap[] =
 // OD 10.11.2003 #i22305#
 #define VERT_FRAME_REL   (LB_VERT_FRAME|LB_FLY_VERT_PRTAREA)
 
-static FrmMap __FAR_DATA aVFrameMap[] =
+static FrmMap aVFrameMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_FRAME_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_FRAME_REL},
@@ -205,17 +205,17 @@ static FrmMap __FAR_DATA aVFrameMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_FRAME_REL}
 };
 
-static FrmMap __FAR_DATA aVFlyHtmlMap[] =
+static FrmMap aVFlyHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB_FLY_VERT_FRAME},
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      LB_FLY_VERT_FRAME}
 };
 
-static FrmMap __FAR_DATA aVMultiSelectionMap[] =
+static FrmMap aVMultiSelectionMap[] =
 {
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      0}
 };
-static FrmMap __FAR_DATA aHMultiSelectionMap[] =
+static FrmMap aHMultiSelectionMap[] =
 {
     {SwFPos::FROMLEFT,      SwFPos::FROMLEFT,       HoriOrientation::NONE,      0}
 };
@@ -228,7 +228,7 @@ static FrmMap __FAR_DATA aHMultiSelectionMap[] =
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT)
 
-static FrmMap __FAR_DATA aHParaMap[] =
+static FrmMap aHParaMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_PARA_REL},
@@ -238,13 +238,13 @@ static FrmMap __FAR_DATA aHParaMap[] =
 
 #define HTML_HORI_PARA_REL  (LB_FRAME|LB_PRTAREA)
 
-static FrmMap __FAR_DATA aHParaHtmlMap[] =
+static FrmMap aHParaHtmlMap[] =
 {
     {SwFPos::LEFT,  SwFPos::LEFT,   HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT, SwFPos::RIGHT,  HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
 };
 
-static FrmMap __FAR_DATA aHParaHtmlAbsMap[] =
+static FrmMap aHParaHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HTML_HORI_PARA_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HTML_HORI_PARA_REL}
@@ -254,7 +254,7 @@ static FrmMap __FAR_DATA aHParaHtmlAbsMap[] =
 #define VERT_PARA_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVParaMap[] =
+static FrmMap aVParaMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       VERT_PARA_REL},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,    VERT_PARA_REL},
@@ -262,7 +262,7 @@ static FrmMap __FAR_DATA aVParaMap[] =
     {SwFPos::FROMTOP,       SwFPos::FROMTOP,        VertOrientation::NONE,      VERT_PARA_REL}
 };
 
-static FrmMap __FAR_DATA aVParaHtmlMap[] =
+static FrmMap aVParaHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,       LB_VERT_PRTAREA}
 };
@@ -275,7 +275,7 @@ static FrmMap __FAR_DATA aVParaHtmlMap[] =
                         LB_REL_PG_FRAME|LB_REL_PG_PRTAREA|LB_REL_FRM_LEFT| \
                         LB_REL_FRM_RIGHT|LB_REL_CHAR)
 
-static FrmMap __FAR_DATA aHCharMap[] =
+static FrmMap aHCharMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,      HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     HORI_CHAR_REL},
@@ -285,13 +285,13 @@ static FrmMap __FAR_DATA aHCharMap[] =
 
 #define HTML_HORI_CHAR_REL  (LB_FRAME|LB_PRTAREA|LB_REL_CHAR)
 
-static FrmMap __FAR_DATA aHCharHtmlMap[] =
+static FrmMap aHCharHtmlMap[] =
 {
     {SwFPos::LEFT,          SwFPos::LEFT,           HoriOrientation::LEFT,      HTML_HORI_CHAR_REL},
     {SwFPos::RIGHT,         SwFPos::RIGHT,          HoriOrientation::RIGHT,     HTML_HORI_CHAR_REL}
 };
 
-static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
+static FrmMap aHCharHtmlAbsMap[] =
 {
     {SwFPos::LEFT,          SwFPos::MIR_LEFT,       HoriOrientation::LEFT,          LB_PRTAREA|LB_REL_CHAR},
     {SwFPos::RIGHT,         SwFPos::MIR_RIGHT,      HoriOrientation::RIGHT,     LB_PRTAREA},
@@ -303,7 +303,7 @@ static FrmMap __FAR_DATA aHCharHtmlAbsMap[] =
 #define VERT_CHAR_REL   (LB_VERT_FRAME|LB_VERT_PRTAREA| \
                          LB_REL_PG_FRAME|LB_REL_PG_PRTAREA)
 
-static FrmMap __FAR_DATA aVCharMap[] =
+static FrmMap aVCharMap[] =
 {
     // OD 11.11.2003 #i22341#
     // introduce mappings for new vertical alignment at top of line <LB_VERT_LINE>
@@ -324,12 +324,12 @@ static FrmMap __FAR_DATA aVCharMap[] =
 };
 
 
-static FrmMap __FAR_DATA aVCharHtmlMap[] =
+static FrmMap aVCharHtmlMap[] =
 {
     {SwFPos::BELOW,         SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
 };
 
-static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
+static FrmMap aVCharHtmlAbsMap[] =
 {
     {SwFPos::TOP,    SwFPos::TOP,            VertOrientation::TOP,           LB_REL_CHAR},
     {SwFPos::BELOW,  SwFPos::BELOW,          VertOrientation::CHAR_BOTTOM,   LB_REL_CHAR}
@@ -338,7 +338,7 @@ static FrmMap __FAR_DATA aVCharHtmlAbsMap[] =
     anchored as character
  --------------------------------------------------------------------*/
 
-static FrmMap __FAR_DATA aVAsCharMap[] =
+static FrmMap aVAsCharMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB_REL_BASE},
     {SwFPos::BOTTOM,        SwFPos::BOTTOM,         VertOrientation::BOTTOM,        LB_REL_BASE},
@@ -355,7 +355,7 @@ static FrmMap __FAR_DATA aVAsCharMap[] =
     {SwFPos::FROMBOTTOM,    SwFPos::FROMBOTTOM,     VertOrientation::NONE,          LB_REL_BASE}
 };
 
-static FrmMap __FAR_DATA aVAsCharHtmlMap[] =
+static FrmMap aVAsCharHtmlMap[] =
 {
     {SwFPos::TOP,           SwFPos::TOP,            VertOrientation::TOP,           LB_REL_BASE},
     {SwFPos::CENTER_VERT,   SwFPos::CENTER_VERT,    VertOrientation::CENTER,        LB_REL_BASE},

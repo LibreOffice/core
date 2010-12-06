@@ -118,7 +118,7 @@ _SfxMacroTabPage_Impl::~_SfxMacroTabPage_Impl()
 SvStringsDtor* _ImpGetRangeHdl( _SfxMacroTabPage*, const String& rLanguage );
 SvStringsDtor* _ImpGetMacrosOfRangeHdl( _SfxMacroTabPage*, const String& rLanguage, const String& rRange );
 
-static USHORT __FAR_DATA aPageRg[] = {
+static USHORT aPageRg[] = {
     SID_ATTR_MACROITEM, SID_ATTR_MACROITEM,
     0
 };
