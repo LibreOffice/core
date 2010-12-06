@@ -6366,7 +6366,9 @@ if test  "$test_gtk" = "yes"; then
       BUILD_TYPE="$BUILD_TYPE GTK"
 
       if test "x$enable_systray" = "xyes"; then
-         ENABLE_SYSTRAY_GTK="TRUE"
+         PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
+			    [ ENABLE_SYSTRAY_GTK="TRUE" ],
+			    [ ENABLE_SYSTRAY_GTK="" ])
          BUILD_TYPE="$BUILD_TYPE SYSTRAY_GTK"
       fi
 
