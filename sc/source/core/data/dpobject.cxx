@@ -65,6 +65,7 @@
 #include <com/sun/star/sheet/DataPilotTableHeaderData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionData.hpp>
 #include <com/sun/star/sheet/DataPilotTablePositionType.hpp>
+#include <com/sun/star/sheet/DimensionFlags.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleComponentFactory.hpp>
@@ -845,7 +846,7 @@ bool ScDPObject::IsDimNameInUse(const OUString& rName) const
     return false;
 }
 
-String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
+String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout, sal_Int32* pFlags )
 {
     rIsDataLayout = FALSE;
     String aRet;
@@ -879,6 +880,10 @@ String ScDPObject::GetDimName( long nDim, BOOL& rIsDataLayout )
                     rIsDataLayout = TRUE;
                 else
                     aRet = String( aName );
+
+                if (pFlags)
+                    *pFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                rtl::OUString::createFromAscii(SC_UNO_FLAGS), 0 );
             }
         }
     }
@@ -2003,6 +2008,8 @@ BOOL ScDPObject::FillLabelData(ScPivotParam& rParam)
                 GetHierarchies(nDim, pNewLabel->maHiers);
                 GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
                 lcl_FillLabelData(*pNewLabel, xDimProp);
+                pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
+                                        rtl::OUString::createFromAscii(SC_UNO_FLAGS), 0 );
                 rParam.maLabelArray.push_back(pNewLabel);
             }
         }
@@ -2229,6 +2236,32 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
             }
         }
     }
+}
+
+// static
+bool ScDPObject::IsOrientationAllowed( USHORT nOrient, sal_Int32 nDimFlags )
+{
+    bool bAllowed = true;
+    switch (nOrient)
+    {
+        case sheet::DataPilotFieldOrientation_PAGE:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_PAGE_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_COLUMN:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_COLUMN_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_ROW:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_ROW_ORIENTATION ) == 0;
+            break;
+        case sheet::DataPilotFieldOrientation_DATA:
+            bAllowed = ( nDimFlags & sheet::DimensionFlags::NO_DATA_ORIENTATION ) == 0;
+            break;
+        default:
+            {
+                // allowed to remove from previous orientation
+            }
+    }
+    return bAllowed;
 }
 
 // -----------------------------------------------------------------------
