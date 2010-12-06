@@ -280,7 +280,18 @@ void Test::tViewZoom()
 {
     sal_uInt16 nOrigZoom, nNextZoom, nFinalZoom;
 
+    EditEngine &rEditEngine = m_xDocShRef->GetEditEngine();
+
+    rtl::OUString sStringOne(RTL_CONSTASCII_USTRINGPARAM("a under b"));
+    {
+        rEditEngine.SetText(0, sStringOne);
+        m_xDocShRef->UpdateText();
+        rtl::OUString sFinalText = m_xDocShRef->GetText();
+        CPPUNIT_ASSERT_MESSAGE("Strings must match", sStringOne == sFinalText);
+    }
+
     SmGraphicWindow &rGraphicWindow = m_pViewShell->GetGraphicWindow();
+    rGraphicWindow.SetSizePixel(Size(1024, 800));
     nOrigZoom = rGraphicWindow.GetZoom();
 
     {
@@ -296,6 +307,14 @@ void Test::tViewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be equal", nFinalZoom == nOrigZoom);
     }
+
+    {
+        SfxRequest aZoomOut(SID_FITINWINDOW, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoomOut);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be about 800%", nFinalZoom > nOrigZoom);
+    }
+
 }
 
 void Test::testDocument()
