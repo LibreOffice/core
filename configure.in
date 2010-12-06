@@ -4287,7 +4287,8 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     done
 
     if test "$DB_INCLUDES" = ""; then
-       AC_MSG_ERROR(no. install the db4-dev package)
+       AC_CHECK_HEADER(db.h, [ DB_INCLUDES=/usr/include; db_header="db.h" ],
+           [ AC_MSG_ERROR(no. install the db4-dev package) ])
     fi
     AC_MSG_CHECKING([whether db is at least 4.1])
     AC_TRY_RUN([
@@ -4299,7 +4300,7 @@ int main(int argc, char **argv) {
 }
     ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no. you need at least db 4.1])])
     save_LIBS="$LIBS"
-    for dbver in -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4 ''; do
+    for dbver in '' -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4; do
         AC_CHECK_LIB(db$dbver, db_create, [ DB_LIB="db$dbver"; DB_CPPLIB="db_cxx$dbver"; LIBS="-ldb$dbver $LIBS"; break ])
     done
     AC_CHECK_FUNC(db_create, [], [ AC_MSG_ERROR([db not installed or functional]) ])
