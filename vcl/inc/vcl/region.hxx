@@ -78,9 +78,9 @@ private:
     SAL_DLLPRIVATE void             ImplXOrPolyPolygon( const Region& );
 
 public: // public within vcl
-    SAL_DLLPRIVATE BOOL             ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
+    VCL_PLUGIN_PUBLIC BOOL              ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
                                           long& nX, long& nY, long& nWidth, long& nHeight ) const;
-    SAL_DLLPRIVATE BOOL             ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
+    VCL_PLUGIN_PUBLIC BOOL              ImplGetNextRect( ImplRegionInfo& rImplRegionInfo,
                                          long& nX, long& nY, long& nWidth, long& nHeight ) const;
 #ifdef DBG_UTIL
     friend const char*  ImplDbgTestRegion( const void* pObj );

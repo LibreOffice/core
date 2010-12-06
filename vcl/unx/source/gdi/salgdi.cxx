@@ -40,6 +40,7 @@
 
 #include "vcl/printergfx.hxx"
 #include "vcl/jobdata.hxx"
+#include "vcl/region.h"
 
 #include "tools/debug.hxx"
 
@@ -104,7 +105,7 @@ X11SalGraphics::X11SalGraphics()
     m_aRenderPicture    = 0;
     m_pRenderFormat     = NULL;
 
-    pClipRegion_            = NULL;
+    mpClipRegion            = NULL;
     pPaintRegion_       = NULL;
 
     pPenGC_         = NULL;
@@ -170,7 +171,7 @@ void X11SalGraphics::freeResources()
     Display *pDisplay = GetXDisplay();
 
     DBG_ASSERT( !pPaintRegion_, "pPaintRegion_" );
-    if( pClipRegion_ ) XDestroyRegion( pClipRegion_ ), pClipRegion_ = None;
+    if( mpClipRegion ) XDestroyRegion( mpClipRegion ), mpClipRegion = None;
 
     if( hBrush_ )       XFreePixmap( pDisplay, hBrush_ ), hBrush_ = None;
     if( pPenGC_ )       XFreeGC( pDisplay, pPenGC_ ), pPenGC_ = None;
@@ -260,8 +261,8 @@ void X11SalGraphics::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
     int n = 0;
     XLIB_Region Regions[3];
 
-    if( pClipRegion_ /* && !XEmptyRegion( pClipRegion_ ) */ )
-        Regions[n++] = pClipRegion_;
+    if( mpClipRegion /* && !XEmptyRegion( mpClipRegion ) */ )
+        Regions[n++] = mpClipRegion;
 //  if( pPaintRegion_ /* && !XEmptyRegion( pPaintRegion_ ) */ )
 //      Regions[n++] = pPaintRegion_;
 
@@ -579,7 +580,7 @@ long X11SalGraphics::GetGraphicsHeight() const
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 void X11SalGraphics::ResetClipRegion()
 {
-    if( pClipRegion_ )
+    if( mpClipRegion )
     {
         bPenGC_         = FALSE;
         bFontGC_        = FALSE;
@@ -591,46 +592,36 @@ void X11SalGraphics::ResetClipRegion()
         bStippleGC_     = FALSE;
         bTrackingGC_    = FALSE;
 
-        XDestroyRegion( pClipRegion_ );
-        pClipRegion_    = NULL;
+        XDestroyRegion( mpClipRegion );
+        mpClipRegion    = NULL;
     }
 }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::BeginSetClipRegion( ULONG )
+bool X11SalGraphics::setClipRegion( const Region& i_rClip )
 {
-    if( pClipRegion_ )
-        XDestroyRegion( pClipRegion_ );
-    pClipRegion_ = XCreateRegion();
-}
+    if( mpClipRegion )
+        XDestroyRegion( mpClipRegion );
+    mpClipRegion = XCreateRegion();
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-BOOL X11SalGraphics::unionClipRegion( long nX, long nY, long nDX, long nDY )
-{
-    if (!nDX || !nDY)
-        return TRUE;
+    ImplRegionInfo aInfo;
+    long nX, nY, nW, nH;
+    bool bRegionRect = i_rClip.ImplGetFirstRect(aInfo, nX, nY, nW, nH );
+    while( bRegionRect )
+    {
+        if ( nW && nH )
+        {
+            XRectangle aRect;
+            aRect.x         = (short)nX;
+            aRect.y         = (short)nY;
+            aRect.width     = (unsigned short)nW;
+            aRect.height    = (unsigned short)nH;
 
-    XRectangle aRect;
-    aRect.x         = (short)nX;
-    aRect.y         = (short)nY;
-    aRect.width     = (unsigned short)nDX;
-    aRect.height    = (unsigned short)nDY;
+            XUnionRectWithRegion( &aRect, mpClipRegion, mpClipRegion );
+        }
+        bRegionRect = i_rClip.ImplGetNextRect( aInfo, nX, nY, nW, nH );
+    }
 
-    XUnionRectWithRegion( &aRect, pClipRegion_, pClipRegion_ );
-
-    return TRUE;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-bool X11SalGraphics::unionClipRegion( const ::basegfx::B2DPolyPolygon& )
-{
-        // TODO: implement and advertise OutDevSupport_B2DClip support
-        return false;
-}
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void X11SalGraphics::EndSetClipRegion()
-{
+    // done, invalidate GCs
     bPenGC_         = FALSE;
     bFontGC_        = FALSE;
     bBrushGC_       = FALSE;
@@ -641,11 +632,12 @@ void X11SalGraphics::EndSetClipRegion()
     bStippleGC_     = FALSE;
     bTrackingGC_    = FALSE;
 
-    if( XEmptyRegion( pClipRegion_ ) )
+    if( XEmptyRegion( mpClipRegion ) )
     {
-        XDestroyRegion( pClipRegion_ );
-        pClipRegion_= NULL;
+        XDestroyRegion( mpClipRegion );
+        mpClipRegion= NULL;
     }
+    return true;
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -1054,8 +1046,8 @@ XID X11SalGraphics::GetXRenderPicture()
 #if 0
     // setup clipping so the callers don't have to do it themselves
     // TODO: avoid clipping if already set correctly
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
     else
 #endif
     {
@@ -1192,8 +1184,8 @@ bool X11SalGraphics::drawFilledTrapezoids( const ::basegfx::B2DTrapezoid* pB2DTr
 
     // set clipping
     // TODO: move into GetXRenderPicture?
-    if( pClipRegion_ && !XEmptyRegion( pClipRegion_ ) )
-        rRenderPeer.SetPictureClipRegion( aDstPic, pClipRegion_ );
+    if( mpClipRegion && !XEmptyRegion( mpClipRegion ) )
+        rRenderPeer.SetPictureClipRegion( aDstPic, mpClipRegion );
 
     // render the trapezoids
     const XRenderPictFormat* pMaskFormat = rRenderPeer.GetStandardFormatA8();
