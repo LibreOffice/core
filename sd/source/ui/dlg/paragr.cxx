@@ -95,7 +95,7 @@ SfxTabPage* SdParagraphNumTabPage::Create(Window *pParent, const SfxItemSet & rA
 
 USHORT* SdParagraphNumTabPage::GetRanges()
 {
-    static USHORT __FAR_DATA aRange[] =
+    static USHORT aRange[] =
     {
         ATTR_PARANUMBERING_START, ATTR_PARANUMBERING_END,
         0

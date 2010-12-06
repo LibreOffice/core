@@ -126,7 +126,7 @@ enum WID_PAGE
  #endif
 #endif
 
-static sal_Char __FAR_DATA sEmptyPageName[sizeof("page")] = "page";
+static sal_Char sEmptyPageName[sizeof("page")] = "page";
 
 /** this function stores the property maps for draw pages in impress and draw */
 const SvxItemPropertySet* ImplGetDrawPagePropertySet( sal_Bool bImpress, PageKind ePageKind )
