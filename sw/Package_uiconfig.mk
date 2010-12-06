@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -38,6 +38,7 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/drawingobjectbar.xml,sglobal/toolbar/drawingobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/drawtextobjectbar.xml,sglobal/toolbar/drawtextobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/extrusionobjectbar.xml,sglobal/toolbar/extrusionobjectbar.xml))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/findbar.xml,sglobal/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/flowchartshapes.xml,sglobal/toolbar/flowchartshapes.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/fontworkobjectbar.xml,sglobal/toolbar/fontworkobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sglobal/toolbar/fontworkshapetype.xml,sglobal/toolbar/fontworkshapetype.xml))
@@ -75,6 +76,7 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/drawingobjectbar.xml,sweb/toolbar/drawingobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/drawtextobjectbar.xml,sweb/toolbar/drawtextobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/extrusionobjectbar.xml,sweb/toolbar/extrusionobjectbar.xml))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/findbar.xml,sweb/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/flowchartshapes.xml,sweb/toolbar/flowchartshapes.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/fontworkobjectbar.xml,sweb/toolbar/fontworkobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/sweb/toolbar/fontworkshapetype.xml,sweb/toolbar/fontworkshapetype.xml))
@@ -190,6 +192,7 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/drawingobjectbar.xml,swriter/toolbar/drawingobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/drawtextobjectbar.xml,swriter/toolbar/drawtextobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/extrusionobjectbar.xml,swriter/toolbar/extrusionobjectbar.xml))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/findbar.xml,swriter/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/flowchartshapes.xml,swriter/toolbar/flowchartshapes.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/fontworkobjectbar.xml,swriter/toolbar/fontworkobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swriter/toolbar/fontworkshapetype.xml,swriter/toolbar/fontworkshapetype.xml))
@@ -228,6 +231,7 @@ $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolb
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/drawingobjectbar.xml,swxform/toolbar/drawingobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/drawtextobjectbar.xml,swxform/toolbar/drawtextobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/extrusionobjectbar.xml,swxform/toolbar/extrusionobjectbar.xml))
+$(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/findbar.xml,swxform/toolbar/findbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/flowchartshapes.xml,swxform/toolbar/flowchartshapes.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/fontworkobjectbar.xml,swxform/toolbar/fontworkobjectbar.xml))
 $(eval $(call gb_Package_add_file,sw_uiconfig,xml/uiconfig/modules/swxform/toolbar/fontworkshapetype.xml,swxform/toolbar/fontworkshapetype.xml))
