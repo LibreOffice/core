@@ -2588,8 +2588,10 @@ void DocxAttributeOutput::NumberingLevel( BYTE nLevel,
                 FSEND );
         m_pSerializer->endElementNS( XML_w, XML_tabs );
     }
+
+    sal_Int32 nToken = ecmaDialect ? XML_left : XML_start;
     m_pSerializer->singleElementNS( XML_w, XML_ind,
-            FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nIndentAt ) ).getStr(),
+            FSNS( XML_w, nToken ), OString::valueOf( sal_Int32( nIndentAt ) ).getStr(),
             FSNS( XML_w, XML_hanging ), OString::valueOf( sal_Int32( -nFirstLineIndex ) ).getStr(),
             FSEND );
     m_pSerializer->endElementNS( XML_w, XML_pPr );
@@ -3482,6 +3484,8 @@ void DocxAttributeOutput::FormatPaperBin( const SvxPaperBinItem& )
 
 void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 {
+    bool bEcma = m_rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
+
     if ( m_rExport.bOutFlyFrmAttrs )
     {
         if ( !m_pFlyAttrList )
@@ -3515,8 +3519,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     {
         FastAttributeList *pLRSpaceAttrList = m_pSerializer->createAttrList();
 
-        pLRSpaceAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( (sal_Int32) rLRSpace.GetTxtLeft() ) );
-        pLRSpaceAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( (sal_Int32) rLRSpace.GetRight() ) );
+        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_left : XML_start ) ), OString::valueOf( (sal_Int32) rLRSpace.GetTxtLeft() ) );
+        pLRSpaceAttrList->add( FSNS( XML_w, ( bEcma ? XML_right : XML_end ) ), OString::valueOf( (sal_Int32) rLRSpace.GetRight() ) );
 
         sal_Int32 nFirstLineAdjustment = rLRSpace.GetTxtFirstLineOfst();
         if (nFirstLineAdjustment > 0)
