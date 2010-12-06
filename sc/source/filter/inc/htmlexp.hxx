@@ -100,7 +100,7 @@ class ScHTMLExport : public ScExportBase
     static USHORT       nFontSize[SC_HTML_FONTSIZES];
     static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
     static const USHORT nCellSpacing;
-    static const sal_Char __FAR_DATA sIndentSource[];
+    static const sal_Char sIndentSource[];
 
     boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
     ScHTMLStyle         aHTMLStyle;

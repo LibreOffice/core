@@ -40,9 +40,9 @@
 //------------------------------------------------------------------
 
 #if defined(UNX)
-const sal_Char __FAR_DATA ScExportBase::sNewLine = '\012';
+const sal_Char ScExportBase::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA ScExportBase::sNewLine[] = "\015\012";
+const sal_Char ScExportBase::sNewLine[] = "\015\012";
 #endif
 
 

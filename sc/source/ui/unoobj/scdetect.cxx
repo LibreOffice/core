@@ -97,32 +97,32 @@ ScFilterDetect::~ScFilterDetect()
 {
 }
 
-static const sal_Char __FAR_DATA pFilterSc50[]      = "StarCalc 5.0";
-static const sal_Char __FAR_DATA pFilterSc50Temp[]  = "StarCalc 5.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc40[]      = "StarCalc 4.0";
-static const sal_Char __FAR_DATA pFilterSc40Temp[]  = "StarCalc 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc30[]      = "StarCalc 3.0";
-static const sal_Char __FAR_DATA pFilterSc30Temp[]  = "StarCalc 3.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
-static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
-static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
-static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
-static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
-static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
-static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
-static const sal_Char __FAR_DATA pFilterEx5Temp[]   = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
-static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
-static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilter2003XML[]   = "MS Excel 2003 XML";
-static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
-static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
-static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
-static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
-static const sal_Char __FAR_DATA pFilterHtmlWeb[]   = "calc_HTML_WebQuery";
-static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
+static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
+static const sal_Char pFilterSc50Temp[] = "StarCalc 5.0 Vorlage/Template";
+static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
+static const sal_Char pFilterSc40Temp[] = "StarCalc 4.0 Vorlage/Template";
+static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
+static const sal_Char pFilterSc30Temp[] = "StarCalc 3.0 Vorlage/Template";
+static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
+static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
+static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
+static const sal_Char pFilterLotus[]        = "Lotus";
+static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
+static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
+static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
+static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
+static const sal_Char pFilterExcel95[]  = "MS Excel 95";
+static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
+static const sal_Char pFilterExcel97[]  = "MS Excel 97";
+static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+static const sal_Char pFilter2003XML[]   = "MS Excel 2003 XML";
+static const sal_Char pFilterDBase[]        = "dBase";
+static const sal_Char pFilterDif[]      = "DIF";
+static const sal_Char pFilterSylk[]     = "SYLK";
+static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
+static const sal_Char pFilterHtmlWeb[]  = "calc_HTML_WebQuery";
+static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 
 static BOOL lcl_MayBeAscii( SvStream& rStream )

@@ -105,12 +105,12 @@
 
 //========================================================================
 
-const static sal_Char __FAR_DATA sMyBegComment[]    = "<!-- ";
-const static sal_Char __FAR_DATA sMyEndComment[]    = " -->";
-const static sal_Char __FAR_DATA sFontFamily[]      = "font-family:";
-const static sal_Char __FAR_DATA sFontSize[]        = "font-size:";
+const static sal_Char sMyBegComment[]   = "<!-- ";
+const static sal_Char sMyEndComment[]   = " -->";
+const static sal_Char sFontFamily[]     = "font-family:";
+const static sal_Char sFontSize[]       = "font-size:";
 
-const USHORT __FAR_DATA ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
+const USHORT ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 {
     HTMLFONTSZ1_DFLT, HTMLFONTSZ2_DFLT, HTMLFONTSZ3_DFLT, HTMLFONTSZ4_DFLT,
     HTMLFONTSZ5_DFLT, HTMLFONTSZ6_DFLT, HTMLFONTSZ7_DFLT
@@ -118,13 +118,13 @@ const USHORT __FAR_DATA ScHTMLExport::nDefaultFontSize[SC_HTML_FONTSIZES] =
 
 USHORT ScHTMLExport::nFontSize[SC_HTML_FONTSIZES] = { 0 };
 
-const char* __FAR_DATA ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
+const char* ScHTMLExport::pFontSizeCss[SC_HTML_FONTSIZES] =
 {
     "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"
 };
 
 const USHORT ScHTMLExport::nCellSpacing = 0;
-const sal_Char __FAR_DATA ScHTMLExport::sIndentSource[nIndentMax+1] =
+const sal_Char ScHTMLExport::sIndentSource[nIndentMax+1] =
     "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t";
 
 //========================================================================

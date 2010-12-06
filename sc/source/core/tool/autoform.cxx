@@ -57,9 +57,9 @@
 const sal_Char *linker_dummy = "";
 
 //  Standard-Name ist jetzt STR_STYLENAME_STANDARD (wie Vorlagen)
-//static const sal_Char __FAR_DATA cStandardName[] = "Standard";
+//static const sal_Char cStandardName[] = "Standard";
 
-static const sal_Char __FAR_DATA sAutoTblFmtName[] = "autotbl.fmt";
+static const sal_Char sAutoTblFmtName[] = "autotbl.fmt";
 
 // bis SO5PF
 const USHORT AUTOFORMAT_ID_X        = 9501;

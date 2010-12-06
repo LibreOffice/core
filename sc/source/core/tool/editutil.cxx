@@ -69,7 +69,7 @@
 
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
+const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
 //------------------------------------------------------------------------

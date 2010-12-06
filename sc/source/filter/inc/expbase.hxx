@@ -41,9 +41,9 @@ class ScExportBase
 {
 public:
 #if defined UNX
-    static const sal_Char __FAR_DATA sNewLine;
+    static const sal_Char sNewLine;
 #else
-    static const sal_Char __FAR_DATA sNewLine[];
+    static const sal_Char sNewLine[];
 #endif
 
 protected:

@@ -106,7 +106,7 @@ BOOL ScInputHandler::bAutoComplete = FALSE;         // wird in KeyInput gesetzt
 //  only characters that are allowed in formulas next to references
 //  and the quotation mark (so string constants can be skipped)
 
-static const sal_Char __FAR_DATA pMinDelimiters[] = " !\"";
+static const sal_Char pMinDelimiters[] = " !\"";
 
 extern USHORT nEditAdjust;      //! Member an ViewData
 

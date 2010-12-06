@@ -44,8 +44,8 @@
 
 // ============================================================================
 
-static const sal_Char __FAR_DATA pStrFix[] = "FIX";
-static const sal_Char __FAR_DATA pStrMrg[] = "MRG";
+static const sal_Char pStrFix[] = "FIX";
+static const sal_Char pStrMrg[] = "MRG";
 
 
 // ============================================================================

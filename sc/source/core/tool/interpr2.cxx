@@ -2229,7 +2229,7 @@ void ScInterpreter::ScBase()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        static const sal_Unicode __FAR_DATA pDigits[] = {
+        static const sal_Unicode pDigits[] = {
             '0','1','2','3','4','5','6','7','8','9',
             'A','B','C','D','E','F','G','H','I','J','K','L','M',
             'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
