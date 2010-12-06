@@ -41,6 +41,7 @@
 #include <com/sun/star/chart/MissingValueTreatment.hpp>
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
+#include <com/sun/star/chart/XAxisSupplier.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
@@ -1321,7 +1322,7 @@ bool XclExpChText::ConvertDataLabel( const ScfPropertySet& rPropSet,
         sal_uInt16 nLabelPos = EXC_CHTEXT_POS_AUTO;
         if( rPropSet.GetProperty( nPlacement, EXC_CHPROP_LABELPLACEMENT ) )
         {
-            using namespace ::com::sun::star::chart::DataLabelPlacement;
+            using namespace cssc::DataLabelPlacement;
             if( nPlacement == rTypeInfo.mnDefaultLabelPos )
             {
                 nLabelPos = EXC_CHTEXT_POS_DEFAULT;
@@ -1541,7 +1542,7 @@ void XclExpCh3dDataFormat::Convert( const ScfPropertySet& rPropSet )
     sal_Int32 nApiType(0);
     if( rPropSet.GetProperty( nApiType, EXC_CHPROP_GEOMETRY3D ) )
     {
-        using namespace ::com::sun::star::chart2::DataPointGeometry3D;
+        using namespace cssc2::DataPointGeometry3D;
         switch( nApiType )
         {
             case CUBOID:
@@ -2298,7 +2299,7 @@ void XclExpChLegend::Convert( const ScfPropertySet& rPropSet )
                 used by this property (in the RelativePosition.Anchor member)
                 it cannot be used to calculate the position easily. For this,
                 the Chart1 API will be used instead. */
-            Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
+            Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
             Reference< XShape > xChart1Legend( xChart1Doc->getLegend(), UNO_SET_THROW );
             // coordinates in CHLEGEND record written but not used by Excel
             mxFramePos.reset( new XclExpChFramePos( EXC_CHFRAMEPOS_CHARTSIZE, EXC_CHFRAMEPOS_PARENT ) );
@@ -2400,9 +2401,9 @@ void XclExpChTypeGroup::ConvertType(
 
     // spline - TODO: get from single series (#i66858#)
     ScfPropertySet aTypeProp( xChartType );
-    ::com::sun::star::chart2::CurveStyle eCurveStyle;
+    cssc2::CurveStyle eCurveStyle;
     bool bSpline = aTypeProp.GetProperty( eCurveStyle, EXC_CHPROP_CURVESTYLE ) &&
-        (eCurveStyle != ::com::sun::star::chart2::CurveStyle_LINES);
+        (eCurveStyle != cssc2::CurveStyle_LINES);
 
     // extended type info
     maTypeInfo.Set( maType.GetTypeInfo(), b3dChart, bSpline );
@@ -2598,34 +2599,43 @@ XclExpChLabelRange::XclExpChLabelRange( const XclExpChRoot& rRoot ) :
 {
 }
 
-void XclExpChLabelRange::Convert( const ScaleData& rScaleData, bool bMirrorOrient )
+void XclExpChLabelRange::Convert( const ScaleData& rScaleData, const ScfPropertySet& rChart1Axis, bool bMirrorOrient )
 {
-    // TODO: detect automatic category/date axis (has axis type CATEGORY)
-    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS, rScaleData.AxisType == cssc2::AxisType::DATE );
-    // automatic axis type detection
-    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTODATE, rScaleData.AutoDateAxis );
-
-    // base unit
-    const cssc::TimeIncrement& rTimeIncrement = rScaleData.TimeIncrement;
-    sal_Int32 nApiTimeUnit = 0;
-    bool bAutoBase = lclIsAutoAnyOrGetValue( nApiTimeUnit, rTimeIncrement.TimeResolution );
-    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOBASE, bAutoBase );
-    if( !bAutoBase )
+    /*  Base time unit (using the property 'ExplicitTimeIncrement' from the old
+        chart API allows to detect axis type (date axis, if property exists),
+        and to receive the base time unit currently used in case the base time
+        unit is set to 'automatic'. */
+    cssc::TimeIncrement aTimeIncrement;
+    if( rChart1Axis.GetProperty( aTimeIncrement, EXC_CHPROP_EXPTIMEINCREMENT ) )
     {
-         maDateData.mnBaseUnit = lclGetTimeUnit( nApiTimeUnit );
+        // property exists -> this is a date axis currently
+        ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_DATEAXIS );
 
-        /*  Min/max values depend on base time unit, they specify the
-            number of days, months, or years starting from null date. */
+        // automatic base time unit, if the UNO Any 'rScaleData.TimeIncrement.TimeResolution' does not contain a valid value...
+        bool bAutoBase = !rScaleData.TimeIncrement.TimeResolution.has< cssc::TimeIncrement >();
+        ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOBASE, bAutoBase );
+
+        // ...but get the current base time unit from the property of the old chart API
+        sal_Int32 nApiTimeUnit = 0;
+        bool bValidBaseUnit = aTimeIncrement.TimeResolution >>= nApiTimeUnit;
+        DBG_ASSERT( bValidBaseUnit, "XclExpChLabelRange::Convert - cannot ghet base time unit" );
+        maDateData.mnBaseUnit = bValidBaseUnit ? lclGetTimeUnit( nApiTimeUnit ) : EXC_CHDATERANGE_DAYS;
+
+        /*  Min/max values depend on base time unit, they specify the number of
+            days, months, or years starting from null date. */
         bool bAutoMin = lclConvertTimeValue( GetRoot(), maDateData.mnMinDate, rScaleData.Minimum, maDateData.mnBaseUnit );
         ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMIN, bAutoMin );
         bool bAutoMax = lclConvertTimeValue( GetRoot(), maDateData.mnMaxDate, rScaleData.Maximum, maDateData.mnBaseUnit );
         ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAX, bAutoMax );
     }
 
+    // automatic axis type detection
+    ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTODATE, rScaleData.AutoDateAxis );
+
     // increment
-    bool bAutoMajor = lclConvertTimeInterval( maDateData.mnMajorStep, maDateData.mnMajorUnit, rTimeIncrement.MajorTimeInterval );
+    bool bAutoMajor = lclConvertTimeInterval( maDateData.mnMajorStep, maDateData.mnMajorUnit, rScaleData.TimeIncrement.MajorTimeInterval );
     ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMAJOR, bAutoMajor );
-    bool bAutoMinor = lclConvertTimeInterval( maDateData.mnMinorStep, maDateData.mnMinorUnit, rTimeIncrement.MinorTimeInterval );
+    bool bAutoMinor = lclConvertTimeInterval( maDateData.mnMinorStep, maDateData.mnMinorUnit, rScaleData.TimeIncrement.MinorTimeInterval );
     ::set_flag( maDateData.mnFlags, EXC_CHDATERANGE_AUTOMINOR, bAutoMinor );
 
     // origin
@@ -2634,7 +2644,7 @@ void XclExpChLabelRange::Convert( const ScaleData& rScaleData, bool bMirrorOrien
         maLabelData.mnCross = limit_cast< sal_uInt16 >( fOrigin, 1, 31999 );
 
     // reverse order
-    if( (rScaleData.Orientation == ::com::sun::star::chart2::AxisOrientation_REVERSE) != bMirrorOrient )
+    if( (rScaleData.Orientation == cssc2::AxisOrientation_REVERSE) != bMirrorOrient )
         ::set_flag( maLabelData.mnFlags, EXC_CHLABELRANGE_REVERSE );
 }
 
@@ -2777,7 +2787,7 @@ namespace {
 
 sal_uInt8 lclGetXclTickPos( sal_Int32 nApiTickmarks )
 {
-    using namespace ::com::sun::star::chart2::TickmarkStyle;
+    using namespace cssc2::TickmarkStyle;
     sal_uInt8 nXclTickPos = 0;
     ::set_flag( nXclTickPos, EXC_CHTICK_INSIDE,  ::get_flag( nApiTickmarks, INNER ) );
     ::set_flag( nXclTickPos, EXC_CHTICK_OUTSIDE, ::get_flag( nApiTickmarks, OUTER ) );
@@ -2880,6 +2890,30 @@ Reference< XAxis > lclGetApiAxis( Reference< XCoordinateSystem > xCoordSystem,
     return xAxis;
 }
 
+Reference< cssc::XAxis > lclGetApiChart1Axis( Reference< XChartDocument > xChartDoc,
+        sal_Int32 nApiAxisDim, sal_Int32 nApiAxesSetIdx )
+{
+    Reference< cssc::XAxis > xChart1Axis;
+    try
+    {
+        Reference< cssc::XChartDocument > xChart1Doc( xChartDoc, UNO_QUERY_THROW );
+        Reference< cssc::XAxisSupplier > xChart1AxisSupp( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
+        switch( nApiAxesSetIdx )
+        {
+            case EXC_CHART_AXESSET_PRIMARY:
+                xChart1Axis = xChart1AxisSupp->getAxis( nApiAxisDim );
+            break;
+            case EXC_CHART_AXESSET_SECONDARY:
+                xChart1Axis = xChart1AxisSupp->getSecondaryAxis( nApiAxisDim );
+            break;
+        }
+    }
+    catch( Exception& )
+    {
+    }
+    return xChart1Axis;
+}
+
 } // namespace
 
 XclExpChAxis::XclExpChAxis( const XclExpChRoot& rRoot, sal_uInt16 nAxisType ) :
@@ -2902,7 +2936,8 @@ void XclExpChAxis::SetRotation( sal_uInt16 nRotation )
         mxTick->SetRotation( nRotation );
 }
 
-void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossingAxis, const XclChExtTypeInfo& rTypeInfo )
+void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossingAxis,
+        Reference< cssc::XAxis > xChart1Axis, const XclChExtTypeInfo& rTypeInfo )
 {
     ScfPropertySet aAxisProp( xAxis );
     bool bCategoryAxis = ((GetAxisType() == EXC_CHAXIS_X) && rTypeInfo.mbCategoryAxis) || (GetAxisType() == EXC_CHAXIS_Z);
@@ -2922,8 +2957,11 @@ void XclExpChAxis::Convert( Reference< XAxis > xAxis, Reference< XAxis > xCrossi
         mxLabelRange.reset( new XclExpChLabelRange( GetChRoot() ) );
         mxLabelRange->SetTicksBetweenCateg( rTypeInfo.mbTicksBetweenCateg );
         if( xAxis.is() )
+        {
+            ScfPropertySet aChart1AxisProp( xChart1Axis );
             // #i71684# radar charts have reversed rotation direction
-            mxLabelRange->Convert( xAxis->getScaleData(), (GetAxisType() == EXC_CHAXIS_X) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR) );
+            mxLabelRange->Convert( xAxis->getScaleData(), aChart1AxisProp, (GetAxisType() == EXC_CHAXIS_X) && (rTypeInfo.meTypeCateg == EXC_CHTYPECATEG_RADAR) );
+        }
         // get position of crossing axis on this axis from passed axis object
         if( aCrossingProp.Is() )
             mxLabelRange->ConvertAxisPosition( aCrossingProp );
@@ -3051,7 +3089,7 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
             bool b3dChart = xCoordSystem.is() && (xCoordSystem->getDimension() == 3);
 
             // percent charts
-            namespace ApiAxisType = ::com::sun::star::chart2::AxisType;
+            namespace ApiAxisType = cssc2::AxisType;
             Reference< XAxis > xApiYAxis = lclGetApiAxis( xCoordSystem, EXC_CHART_AXIS_Y, nApiAxesSetIdx );
             bool bPercent = xApiYAxis.is() && (xApiYAxis->getScaleData().AxisType == ApiAxisType::PERCENT);
 
@@ -3158,8 +3196,8 @@ sal_uInt16 XclExpChAxesSet::Convert( Reference< XDiagram > xDiagram, sal_uInt16 
     // inner and outer plot area position and size
     try
     {
-        Reference< ::com::sun::star::chart::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
-        Reference< ::com::sun::star::chart::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
+        Reference< cssc::XChartDocument > xChart1Doc( GetChartDocument(), UNO_QUERY_THROW );
+        Reference< cssc::XDiagramPositioning > xPositioning( xChart1Doc->getDiagram(), UNO_QUERY_THROW );
         // set manual flag in chart data
         if( !xPositioning->isAutomaticDiagramPositioning() )
             GetChartData().SetManualPlotArea();
@@ -3226,7 +3264,8 @@ void XclExpChAxesSet::ConvertAxis(
     sal_Int32 nApiAxesSetIdx = GetApiAxesSetIndex();
     Reference< XAxis > xAxis = lclGetApiAxis( xCoordSystem, nApiAxisDim, nApiAxesSetIdx );
     Reference< XAxis > xCrossingAxis = lclGetApiAxis( xCoordSystem, nCrossingAxisDim, nApiAxesSetIdx );
-    rxChAxis->Convert( xAxis, xCrossingAxis, rTypeInfo );
+    Reference< cssc::XAxis > xChart1Axis = lclGetApiChart1Axis( GetChartDocument(), nApiAxisDim, nApiAxesSetIdx );
+    rxChAxis->Convert( xAxis, xCrossingAxis, xChart1Axis, rTypeInfo );
 
     // create and convert axis title
     Reference< XTitled > xTitled( xAxis, UNO_QUERY );
@@ -3289,7 +3328,7 @@ XclExpChChart::XclExpChChart( const XclExpRoot& rRoot,
         sal_Int32 nMissingValues = 0;
         if( aDiaProp.GetProperty( nMissingValues, EXC_CHPROP_MISSINGVALUETREATMENT ) )
         {
-            using namespace ::com::sun::star::chart::MissingValueTreatment;
+            using namespace cssc::MissingValueTreatment;
             switch( nMissingValues )
             {
                 case LEAVE_GAP: maProps.mnEmptyMode = EXC_CHPROPS_EMPTY_SKIP;           break;

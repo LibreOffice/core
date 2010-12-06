@@ -101,6 +101,7 @@ class XclRoot;
 #define EXC_CHPROP_ERRORBARX                CREATE_OUSTRING( "ErrorBarX" )
 #define EXC_CHPROP_ERRORBARY                CREATE_OUSTRING( "ErrorBarY" )
 #define EXC_CHPROP_EXPANSION                CREATE_OUSTRING( "Expansion" )
+#define EXC_CHPROP_EXPTIMEINCREMENT         CREATE_OUSTRING( "ExplicitTimeIncrement" )
 #define EXC_CHPROP_FILLBITMAPMODE           CREATE_OUSTRING( "FillBitmapMode" )
 #define EXC_CHPROP_FILLSTYLE                CREATE_OUSTRING( "FillStyle" )
 #define EXC_CHPROP_GAPWIDTHSEQ              CREATE_OUSTRING( "GapwidthSequence" )
