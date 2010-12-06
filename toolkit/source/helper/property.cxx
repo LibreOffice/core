@@ -121,7 +121,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
         ::osl::Guard< ::osl::Mutex > aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pPropertyInfos )
         {
-            static ImplPropertyInfo __FAR_DATA aImplPropertyInfos [] =
+            static ImplPropertyInfo aImplPropertyInfos [] =
             {
             DECL_PROP_2     ( "AccessibleName",         ACCESSIBLENAME,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "Align",                  ALIGN,              sal_Int16,          BOUND, MAYBEDEFAULT, MAYBEVOID ),

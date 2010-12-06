@@ -41,7 +41,7 @@ using namespace rtl;
 #if defined(UNX)
 const sal_Char RTFOutFuncs::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA RTFOutFuncs::sNewLine[] = "\015\012";
+const sal_Char RTFOutFuncs::sNewLine[] = "\015\012";
 #endif
 
 

@@ -261,7 +261,7 @@ struct ComponentInfo
     WindowType      nWinType;
 };
 
-static ComponentInfo __FAR_DATA aComponentInfos [] =
+static ComponentInfo aComponentInfos [] =
 {
     { "buttondialog",       WINDOW_BUTTONDIALOG },
     { "cancelbutton",       WINDOW_CANCELBUTTON },

@@ -51,7 +51,7 @@
 #if defined(UNX)
 const sal_Char HTMLOutFuncs::sNewLine = '\012';
 #else
-const sal_Char __FAR_DATA HTMLOutFuncs::sNewLine[] = "\015\012";
+const sal_Char HTMLOutFuncs::sNewLine[] = "\015\012";
 #endif
 
 #define TXTCONV_BUFFER_SIZE 20

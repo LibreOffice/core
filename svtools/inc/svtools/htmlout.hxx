@@ -64,7 +64,7 @@ struct HTMLOutFuncs
 #if defined(MAC) || defined(UNX)
     static const sal_Char sNewLine;     // nur \012 oder \015
 #else
-    static const sal_Char __FAR_DATA sNewLine[];    // \015\012
+    static const sal_Char sNewLine[];   // \015\012
 #endif
 
     SVT_DLLPUBLIC static void ConvertStringToHTML( const String& sSrc, ByteString& rDest,

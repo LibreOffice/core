@@ -63,7 +63,7 @@ using namespace ::com::sun::star::util;
 // regular expression to validate complete numbers, plus every fragment which can occur during the input
 // of a complete number
 // [+/-][{digit}*.]*{digit}*[,{digit}*][e[+/-]{digit}*]
-const char __FAR_DATA szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
+const char szNumericInput[] = "_[-+]?([0-9]*\\,)*[0-9]*(\\.[0-9]*)?(e[-+]?[0-9]*)?_";
     // (the two _ are for normalizing it: With this, we can ensure that a to-be-checked text is always
     // matched as a _whole_)
 #else

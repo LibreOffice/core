@@ -61,7 +61,7 @@
         ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
         if( !pProperties )
         {
-            static ::com::sun::star::beans::Property __FAR_DATA aPropTable[] =
+            static ::com::sun::star::beans::Property aPropTable[] =
             {
                 ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Orientation")), PROPERTY_Orientation, ::getCppuType((const sal_Int16*)0), 0 ),
                 ::com::sun::star::beans::Property( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Horizontal")), PROPERTY_Horizontal, ::getBooleanCppuType(), 0 )

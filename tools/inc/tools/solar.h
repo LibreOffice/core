@@ -87,7 +87,6 @@ typedef sal_uInt32          UINT32; /* typedef unsigned int    UINT32; previousl
 
 #define DELETEZ( p )    ( delete p,p = 0 )
 
-#define __FAR_DATA
 #define __READONLY_DATA         const
 #define __EXPORT
 

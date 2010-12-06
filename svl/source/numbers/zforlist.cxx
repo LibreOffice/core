@@ -87,7 +87,7 @@ using namespace ::com::sun::star::lang;
 #define UNKNOWN_SUBSTITUTE      LANGUAGE_ENGLISH_US
 
 static BOOL bIndexTableInitialized = FALSE;
-static sal_uInt32 __FAR_DATA theIndexTable[NF_INDEX_TABLE_ENTRIES];
+static sal_uInt32 theIndexTable[NF_INDEX_TABLE_ENTRIES];
 
 
 // ====================================================================

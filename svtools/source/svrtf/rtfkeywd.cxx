@@ -48,9 +48,9 @@ struct RTF_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = FALSE;
+static int bSortKeyWords = FALSE;
 
-static RTF_TokenEntry __FAR_DATA aRTFTokenTab[] = {
+static RTF_TokenEntry aRTFTokenTab[] = {
 {{OOO_STRING_SVTOOLS_RTF_IGNORE},        RTF_IGNOREFLAG},
 {{OOO_STRING_SVTOOLS_RTF_RTF},           RTF_RTF},
 {{OOO_STRING_SVTOOLS_RTF_ANSI},          RTF_ANSITYPE},

@@ -50,9 +50,9 @@ struct HTML_TokenEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortKeyWords = FALSE;
+static int bSortKeyWords = FALSE;
 
-static HTML_TokenEntry __FAR_DATA aHTMLTokenTab[] = {
+static HTML_TokenEntry aHTMLTokenTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_area},            HTML_AREA}, // Netscape 2.0
     {{OOO_STRING_SVTOOLS_HTML_base},            HTML_BASE}, // HTML 3.0
     {{OOO_STRING_SVTOOLS_HTML_comment},     HTML_COMMENT},
@@ -280,9 +280,9 @@ struct HTML_CharEntry
 };
 
 // Flag: RTF-Token Tabelle wurde schon sortiert
-static int __FAR_DATA bSortCharKeyWords = FALSE;
+static int bSortCharKeyWords = FALSE;
 
-static HTML_CharEntry __FAR_DATA aHTMLCharNameTab[] = {
+static HTML_CharEntry aHTMLCharNameTab[] = {
     {{OOO_STRING_SVTOOLS_HTML_C_lt},             60},
     {{OOO_STRING_SVTOOLS_HTML_C_gt},             62},
     {{OOO_STRING_SVTOOLS_HTML_C_amp},        38},
@@ -621,9 +621,9 @@ sal_Unicode GetHTMLCharName( const String& rName )
 /**/
 
 // Flag: Optionen-Tabelle wurde schon sortiert
-static int __FAR_DATA bSortOptionKeyWords = FALSE;
+static int bSortOptionKeyWords = FALSE;
 
-static HTML_TokenEntry __FAR_DATA aHTMLOptionTab[] = {
+static HTML_TokenEntry aHTMLOptionTab[] = {
 
 // Attribute ohne Wert
     {{OOO_STRING_SVTOOLS_HTML_O_box},       HTML_O_BOX},
@@ -864,7 +864,7 @@ struct HTML_ColorEntry
     ULONG nColor;
 };
 
-static int __FAR_DATA bSortColorKeyWords = FALSE;
+static int bSortColorKeyWords = FALSE;
 
 #define HTML_NO_COLOR 0xffffffffUL
 
@@ -873,7 +873,7 @@ static int __FAR_DATA bSortColorKeyWords = FALSE;
 // und scheinen im Gegensatz zu denen aus
 // "http://www.infi.net/wwwimages/colorindex.html"
 // zu stimmen
-static HTML_ColorEntry __FAR_DATA aHTMLColorNameTab[] = {
+static HTML_ColorEntry aHTMLColorNameTab[] = {
     { { "ALICEBLUE" }, 0x00f0f8ffUL },
     { { "ANTIQUEWHITE" }, 0x00faebd7UL },
     { { "AQUA" }, 0x0000ffffUL },
