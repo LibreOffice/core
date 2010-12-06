@@ -415,7 +415,7 @@ protected:
     void exportTextMark(
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertySet> & xPropSet,
-        const ::rtl::OUString sProperty,
+        const ::rtl::OUString& rProperty,
         const enum ::xmloff::token::XMLTokenEnum pElements[],
         sal_Bool bAutoStyles);
 

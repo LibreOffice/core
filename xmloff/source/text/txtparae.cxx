@@ -2416,7 +2416,7 @@ void XMLTextParagraphExport::exportSoftPageBreak(
 
 void XMLTextParagraphExport::exportTextMark(
     const Reference<XPropertySet> & rPropSet,
-    const OUString sProperty,
+    const OUString& rProperty,
     const enum XMLTokenEnum pElements[],
     sal_Bool bAutoStyles)
 {
@@ -2431,7 +2431,7 @@ void XMLTextParagraphExport::exportTextMark(
      if (!bAutoStyles)
     {
         // name element
-        Reference<XNamed> xName(rPropSet->getPropertyValue(sProperty), UNO_QUERY);
+        Reference<XNamed> xName(rPropSet->getPropertyValue(rProperty), UNO_QUERY);
         GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_NAME,
                                  xName->getName());
 
