@@ -1441,19 +1441,35 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
 
+    if ( mnIndex > mnLen )
+    {
+        mnIndex = 0;
+        mpDXAry = 0;
+        return;
+    }
+
     if( nAryLen )
     {
         // #i9762#, #106172# Ensure that DX array is at least mnLen entries long
-        const ULONG nIntAryLen( Max(nAryLen, static_cast<sal_uInt32>(mnLen)) );
-        mpDXAry = new sal_Int32[ nIntAryLen ];
+        if ( mnLen >= nAryLen )
+        {
+            mpDXAry = new (std::nothrow)sal_Int32[ mnLen ];
+            if ( mpDXAry )
+            {
+                   ULONG i;
+                for( i = 0UL; i < nAryLen; i++ )
+                    rIStm >> mpDXAry[ i ];
 
-        ULONG i;
-        for( i = 0UL; i < nAryLen; i++ )
-            rIStm >> mpDXAry[ i ];
-
-        // #106172# setup remainder
-        for( ; i < nIntAryLen; i++ )
-            mpDXAry[ i ] = 0;
+                // #106172# setup remainder
+                for( ; i < mnLen; i++ )
+                    mpDXAry[ i ] = 0;
+            }
+        }
+        else
+        {
+            mpDXAry = NULL;
+            return;
+        }
     }
     else
         mpDXAry = NULL;
@@ -3793,7 +3809,6 @@ MetaAction* MetaFloatTransparentAction::Clone()
 void MetaFloatTransparentAction::Move( long nHorzMove, long nVertMove )
 {
     maPoint.Move( nHorzMove, nVertMove );
-    maMtf.Move(nHorzMove, nVertMove);
 }
 
 // ------------------------------------------------------------------------
@@ -3804,7 +3819,6 @@ void MetaFloatTransparentAction::Scale( double fScaleX, double fScaleY )
     ImplScaleRect( aRectangle, fScaleX, fScaleY );
     maPoint = aRectangle.TopLeft();
     maSize = aRectangle.GetSize();
-    maMtf.Scale(fScaleX, fScaleY);
 }
 
 // ------------------------------------------------------------------------

@@ -77,6 +77,10 @@
     id              mpMouseEventListener;
     id              mDraggingDestinationHandler;
     NSEvent*        mpLastSuperEvent;
+
+    // #i102807# used by magnify event handler
+    NSTimeInterval  mfLastMagnifyTime;
+    float           mfMagnifyDeltaSum;
 }
 +(void)unsetMouseFrame: (AquaSalFrame*)pFrame;
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;

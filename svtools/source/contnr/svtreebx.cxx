@@ -2516,6 +2516,11 @@ void SvTreeListBox::DataChanged( const DataChangedEvent& rDCEvt )
         Control::DataChanged( rDCEvt );
 }
 
+void SvTreeListBox::StateChanged( StateChangedType i_nStateChange )
+{
+    SvLBox::StateChanged( i_nStateChange );
+}
+
 void SvTreeListBox::InitSettings(BOOL bFont,BOOL bForeground,BOOL bBackground)
 {
     const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();

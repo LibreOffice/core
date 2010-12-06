@@ -7398,7 +7398,14 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
                 // try to handle ligatures and such
                 if( i < nGlyphs-1 )
                 {
-                    pUnicodesPerGlyph[i] = nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    nChars = pCharPosAry[i+1] - pCharPosAry[i];
+                    // #i115618# fix for simple RTL+CTL cases
+                    // TODO: sanitize for RTL ligatures, more complex CTL, etc.
+                    if( nChars < 0 )
+                        nChars = -nChars;
+            else if( nChars == 0 )
+                        nChars = 1;
+                    pUnicodesPerGlyph[i] = nChars;
                     for( int n = 1; n < nChars; n++ )
                         aUnicodes.push_back( rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]+n) ) );
                 }
@@ -8499,6 +8506,7 @@ void PDFWriterImpl::beginRedirect( SvStream* pStream, const Rectangle& rTargetRe
 {
     push( PUSH_ALL );
 
+    // force reemitting clip region
     clearClipRegion();
     updateGraphicsState();
 
@@ -8542,7 +8550,10 @@ SvStream* PDFWriterImpl::endRedirect()
     }
 
     pop();
-    // force reemitting colors
+    // force reemitting colors and clip region
+    clearClipRegion();
+    m_aCurrentPDFState.m_bClipRegion = m_aGraphicsStack.front().m_bClipRegion;
+    m_aCurrentPDFState.m_aClipRegion = m_aGraphicsStack.front().m_aClipRegion;
     m_aCurrentPDFState.m_aLineColor = Color( COL_TRANSPARENT );
     m_aCurrentPDFState.m_aFillColor = Color( COL_TRANSPARENT );
 

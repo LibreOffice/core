@@ -378,6 +378,7 @@ static AquaSalFrame* getMouseContainerFrame()
         mpLastSuperEvent = nil;
     }
 
+    mfLastMagnifyTime = 0.0;
     return self;
 }
 
@@ -637,21 +638,40 @@ private:
     
     // TODO: ??  -(float)magnification;
     if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
+	{
+		const NSTimeInterval fMagnifyTime = [pEvent timestamp];
+        mpFrame->mnLastEventTime = static_cast<ULONG>( fMagnifyTime * 1000.0 );
         mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-        
-        float dZ = 0.0;
-        for(;;)
+
+        // check if this is a new series of magnify events
+        static const NSTimeInterval fMaxDiffTime = 0.3;
+        const bool bNewSeries = (fMagnifyTime - mfLastMagnifyTime > fMaxDiffTime);
+
+        if( bNewSeries )
+            mfMagnifyDeltaSum = 0.0;
+        mfMagnifyDeltaSum += [pEvent deltaZ];
+
+		mfLastMagnifyTime = [pEvent timestamp];
+		// TODO: change to 0.1 when COMMAND_WHEEL_ZOOM handlers allow finer zooming control
+		static const float fMagnifyFactor = 0.25;
+        static const float fMinMagnifyStep = 15.0 / fMagnifyFactor;
+        if( fabs(mfMagnifyDeltaSum) <= fMinMagnifyStep )
+            return;
+
+        // adapt NSEvent-sensitivity to application expectations
+        // TODO: rather make COMMAND_WHEEL_ZOOM handlers smarter
+        const float fDeltaZ = mfMagnifyDeltaSum * fMagnifyFactor;
+        int nDeltaZ = FRound( fDeltaZ );
+        if( !nDeltaZ )
         {
-            dZ += [pEvent deltaZ];
-            NSEvent* pNextEvent = [NSApp nextEventMatchingMask: NSScrollWheelMask
-            untilDate: nil inMode: NSDefaultRunLoopMode dequeue: YES ];
-            if( !pNextEvent )
-                break;
-            pEvent = pNextEvent;
+            // handle new series immediately
+            if( !bNewSeries )
+                return;
+            nDeltaZ = (fDeltaZ >= 0.0) ? +1 : -1;
         }
-        
+        // eventually give credit for delta sum
+        mfMagnifyDeltaSum -= nDeltaZ / fMagnifyFactor;
+
         NSPoint aPt = [NSEvent mouseLocation];
         mpFrame->CocoaToVCL( aPt );
         
@@ -667,18 +687,15 @@ private:
         if( Application::GetSettings().GetLayoutRTL() )
             aEvent.mnX = mpFrame->maGeometry.nWidth-1-aEvent.mnX;
         
-        if( dZ != 0.0 )
-        {
-            aEvent.mnDelta = static_cast<long>(floor(dZ));
-            aEvent.mnNotchDelta = dZ < 0 ? -1 : 1;
-            if( aEvent.mnDelta == 0 )
-                aEvent.mnDelta = aEvent.mnNotchDelta;
-            aEvent.mbHorz = FALSE;
-            aEvent.mnScrollLines = dZ > 0 ? dZ/WHEEL_EVENT_FACTOR : -dZ/WHEEL_EVENT_FACTOR;
-            if( aEvent.mnScrollLines == 0 )
-                aEvent.mnScrollLines = 1;
-            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
-        }
+        aEvent.mnDelta = nDeltaZ;
+        aEvent.mnNotchDelta = (nDeltaZ >= 0) ? +1 : -1;
+        if( aEvent.mnDelta == 0 )
+            aEvent.mnDelta = aEvent.mnNotchDelta;
+        aEvent.mbHorz = FALSE;
+        aEvent.mnScrollLines = nDeltaZ;
+        if( aEvent.mnScrollLines == 0 )
+            aEvent.mnScrollLines = 1;
+        mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
     }
 }
 

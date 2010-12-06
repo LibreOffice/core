@@ -1,4 +1,3 @@
-#!/bin/sh
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -26,14 +25,35 @@
 #
 #*************************************************************************
 
-if [ x${SOLARENV}x = xx ]; then
-    echo No environment found, please use 'setsolar'
-exit 1
-fi
+# Copy *.py files into output tree and call a script once to
+# force python to create the *.pyc files.
 
-if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
-    exec python $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
-else
-    exec python $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
-fi
+PRJ=..
+TARGET = l10ntools_dummy_pyc
+
+.INCLUDE: settings.mk
+
+.IF "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) $(SOLARBINDIR)/python
+.ELSE                   # "$(SYSTEM_PYTHON)"!="YES"
+PYTHON=$(AUGMENT_LIBRARY_PATH) $(WRAPCMD) python
+.ENDIF                  # "$(SYSTEM_PYTHON)"!="YES"
+
+PYFILES = $(BIN)$/const.py \
+          $(BIN)$/l10ntool.py \
+          $(BIN)$/pseudo.py \
+          $(BIN)$/sdf.py \
+          $(BIN)$/xhtex.py \
+          $(BIN)$/xtxex.py   
+
+.INCLUDE: target.mk
+
+.IGNORE : create_pyc 
+ALLTAR : create_pyc 
+create_pyc : $(PYFILES)
+    @$(PYTHON) $(BIN)/xtxex.py >& /dev/null
+
+$(BIN)$/%.py : tool/%.py
+    @$(COPY) $< $@
+
 

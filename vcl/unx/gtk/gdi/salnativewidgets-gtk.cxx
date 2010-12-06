@@ -411,6 +411,9 @@ void GtkData::initNWF( void )
     // open first menu on F10
     pSVData->maNWFData.mbOpenMenuOnF10 = true;
 
+    // omit GetNativeControl while painting (see brdwin.cxx)
+    pSVData->maNWFData.mbCanDrawWidgetAnySize = true;
+
     int nScreens = GetX11SalData()->GetDisplay()->GetScreenCount();
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
@@ -1102,8 +1105,9 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         GtkRequisition aReq;
         gtk_widget_size_request( widget, &aReq );
         Rectangle aEditRect = rControlRegion;
+        long nHeight = (aEditRect.GetHeight() > aReq.height+1) ? aEditRect.GetHeight() : aReq.height+1;
         aEditRect = Rectangle( aEditRect.TopLeft(),
-                               Size( aEditRect.GetWidth(), aReq.height+1 ) );
+                               Size( aEditRect.GetWidth(), nHeight ) );
         rNativeBoundingRegion = aEditRect;
         rNativeContentRegion = rNativeBoundingRegion;
         returnVal = TRUE;
@@ -2291,11 +2295,10 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
                                         const ImplControlValue& aValue,
                                         const OUString& )
 {
-    OSL_ASSERT( aValue.getType() == CTRL_TAB_ITEM );
+    OSL_ASSERT( nType != CTRL_TAB_ITEM || aValue.getType() == CTRL_TAB_ITEM );
     GdkPixmap * pixmap;
     Rectangle       pixmapRect;
     Rectangle       tabRect;
-    const TabitemValue *    pTabitemValue = static_cast<const TabitemValue *>(&aValue);
     GtkStateType    stateType;
     GtkShadowType   shadowType;
     if( ! gWidgetData[ m_nScreen ].gCacheTabItems )
@@ -2311,9 +2314,8 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     if( !aCachePage.GetSize() )
         aCachePage.SetSize( 1 );
 
-    if ( !pTabitemValue && (nType==CTRL_TAB_ITEM) )
+    if ( (nType == CTRL_TAB_ITEM) && (aValue.getType() != CTRL_TAB_ITEM) )
     {
-        std::fprintf( stderr, "NWPaintGTKTabItem() received a NULL TabitemValue.  Cannot draw native tab\n" );
         return( false );
     }
 
@@ -2326,6 +2328,7 @@ BOOL GtkSalGraphics::NWPaintGTKTabItem( ControlType nType, ControlPart,
     pixmapRect = rControlRectangle;
     if ( nType == CTRL_TAB_ITEM )
     {
+        const TabitemValue *    pTabitemValue = static_cast<const TabitemValue *>(&aValue);
         if ( !pTabitemValue->isFirst() )
         {
             // GTK+ tabs overlap on the right edge (the top tab obscures the

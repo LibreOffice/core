@@ -2203,7 +2203,9 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
             const int k = mpGlyphs2Chars[ i ];
             mpGlyphs2Chars[ j ]   = k;
             const int nRelGlyphPos = (j++) - rVI.mnMinGlyphPos;
-            mpLogClusters[ k ]    = static_cast<WORD>(nRelGlyphPos);
+            if( k < 0) // extra glyphs are already mapped
+                continue;
+            mpLogClusters[ k ] = static_cast<WORD>(nRelGlyphPos);
         }
 
         rVI.mnEndGlyphPos = j;
