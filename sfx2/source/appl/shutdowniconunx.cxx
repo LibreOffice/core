@@ -366,8 +366,8 @@ void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
     pTrayIcon = gtk_status_icon_new_from_pixbuf(pPixbuf);
     g_object_unref( pPixbuf );
 
-    gtk_status_icon_set_title(pTrayIcon, aLabel);
-    gtk_status_icon_set_tooltip_text(pTrayIcon, aLabel);
+    g_object_set (pTrayIcon, "title", aLabel.getStr(),
+                  "tooltip_text", aLabel.getStr(), NULL);
 
     GtkWidget *pMenu = gtk_menu_new();
     g_signal_connect (pMenu, "deactivate",
