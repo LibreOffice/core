@@ -55,7 +55,8 @@ namespace toolkit
 //  ----------------------------------------------------
 //  class UnoGridModel
 //  ----------------------------------------------------
-UnoGridModel::UnoGridModel()
+UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory )
+        :UnoControlModel( i_factory )
 {
     ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_BORDER );
@@ -278,7 +279,7 @@ Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XM
     return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl );
 }
 
-Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridModel( i_factory ) );
 }

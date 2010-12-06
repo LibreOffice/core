@@ -185,7 +185,7 @@ FORWARD_DECLARE_INTERFACE( script, XNameContainer )
         ,public ::comphelper::OAggregationArrayUsageHelper< OTemplateInstanceDisambiguation< CONTROLMODEL > >
     {
     public:
-        OGeometryControlModel();
+        OGeometryControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
 
     private:
         OGeometryControlModel(::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable >& _rxAggregateInstance);

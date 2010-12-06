@@ -32,12 +32,21 @@
 
 #include <toolkit/controls/unocontrolbase.hxx>
 #include <toolkit/helper/property.hxx>
+#include <comphelper/processfactory.hxx>
 
 #include <tools/debug.hxx>
 
 //  ----------------------------------------------------
 //  class UnoControlBase
 //  ----------------------------------------------------
+
+UnoControlBase::UnoControlBase()
+    :UnoControl( ::comphelper::getProcessServiceFactory() )
+{
+    OSL_ENSURE( false, "UnoControlBase::UnoControlBase: not implemented. Well, not really." );
+    // just implemented to let the various FooImplInheritanceHelper compile, you should use the
+    // version taking a service factory
+}
 
 sal_Bool UnoControlBase::ImplHasProperty( sal_uInt16 nPropId )
 {

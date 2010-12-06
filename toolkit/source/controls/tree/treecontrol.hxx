@@ -54,7 +54,7 @@ protected:
     ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
 
 public:
-    UnoTreeModel();
+    UnoTreeModel( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& i_factory );
     UnoTreeModel( const UnoTreeModel& rModel );
 
     UnoControlModel* Clone() const;
