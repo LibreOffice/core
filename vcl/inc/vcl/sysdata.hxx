@@ -150,6 +150,7 @@ struct SystemGlyphData
     unsigned long        index;
     double               x;
     double               y;
+    int                  fallbacklevel;
 };
 
 
@@ -178,12 +179,14 @@ struct SystemFontData
 // - SystemTextLayoutData -
 // --------------------
 
+typedef std::vector<SystemGlyphData> SystemGlyphDataVector;
+
 struct SystemTextLayoutData
 {
     unsigned long   nSize;                      // size in bytes of this structure
     std::vector<SystemGlyphData> rGlyphData;    // glyph data
     int             orientation;                // Text orientation
-    SystemFontData aSysFontData;                // Font data for the text layout
 };
 
 #endif // _SV_SYSDATA_HXX
+
