@@ -35,7 +35,7 @@
 #define GLOBALOVERFLOW
 
 // Vergleichsstrings
-sal_Unicode __FAR_DATA pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
+sal_Unicode pszStandard[] = { 's', 't', 'a', 'n', 'd', 'a', 'r', 'd', 0 };
 
 // Konvertiert in echte RGB-Farben, damit in den Listboxen
 // endlich mal richtig selektiert werden kann.

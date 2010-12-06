@@ -110,7 +110,7 @@ enum SfxSlotKind
 struct SfxTypeAttrib
 {
     USHORT                  nAID;
-    const char __FAR_DATA*  pName;
+    const char* pName;
 };
 
 struct SfxType
@@ -223,8 +223,8 @@ SFX_DECL_TYPE(18); // for SvxSearchItem
                }
 
 #define SFX_SLOTMAP_NONE(ShellClass) \
-            static SfxFormalArgument __FAR_DATA a##ShellClass##Args_Impl[1]; \
-            static SfxSlot __FAR_DATA a##ShellClass##Slots_Impl[] = \
+            static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
+            static SfxSlot a##ShellClass##Slots_Impl[] = \
             { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } }
 
 #define SFX_ARGUMENT( ArgSlotId, ArgName, ArgTypeId ) \
@@ -237,7 +237,7 @@ class SfxPoolItem;
 struct SfxFormalArgument
 {
     const SfxType*          pType;  // Typ des Parameters (SfxPoolItem Subklasse)
-    const char __FAR_DATA*  pName;  // Name des Parameters
+    const char* pName;  // Name des Parameters
     USHORT                  nSlotId;// Slot-Id zur Identifikation des Parameters
 
     const TypeId&           Type() const
@@ -263,8 +263,8 @@ public:
     SfxStateFunc                fnState;        // Funktion f"ur Status
 
     const SfxType*              pType;          // SfxPoolItem-Typ (Status)
-    const char __FAR_DATA*      pName;          // Name des Slots
-    const char __FAR_DATA*      pMethodName;    // Name der Method falls anders
+    const char*     pName;          // Name des Slots
+    const char*     pMethodName;    // Name der Method falls anders
 
     const SfxSlot*              pLinkedSlot;    // Master-Slot f"ur Enum-Werte
     const SfxSlot*              pNextSlot;      // mit derselben Status-Methode
@@ -273,7 +273,7 @@ public:
     USHORT                      nArgDefCount;   // Anzahl der formalen Argumente
     long                        nDisableFlags;      // DisableFlags, die vorhanden sein
                                                 // m"ussen, damit der Slot enabled ist
-    const char __FAR_DATA*      pUnoName;       // UnoName des Slots
+    const char*     pUnoName;       // UnoName des Slots
 
 public:
 

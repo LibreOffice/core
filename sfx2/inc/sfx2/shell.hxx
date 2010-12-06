@@ -301,12 +301,12 @@ inline void SfxShell::SetPool
 
 //=====================================================================
 
-#define SFX_ARGUMENTMAP(ShellClass) static SfxFormalArgument __FAR_DATA a##ShellClass##Args_Impl[] =
+#define SFX_ARGUMENTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[] =
 
-#define SFX_SLOTMAP(ShellClass) static SfxFormalArgument __FAR_DATA a##ShellClass##Args_Impl[1]; \
-                                static SfxSlot __FAR_DATA a##ShellClass##Slots_Impl[] =
+#define SFX_SLOTMAP(ShellClass) static SfxFormalArgument a##ShellClass##Args_Impl[1]; \
+                                static SfxSlot a##ShellClass##Slots_Impl[] =
 
-#define SFX_SLOTMAP_ARG(ShellClass) static SfxSlot __FAR_DATA a##ShellClass##Slots_Impl[] =
+#define SFX_SLOTMAP_ARG(ShellClass) static SfxSlot a##ShellClass##Slots_Impl[] =
 
 #define SFX_DECL_INTERFACE(nId)                                             \
             static SfxInterface*                pInterface;                 \

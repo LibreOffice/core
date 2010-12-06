@@ -71,7 +71,7 @@ enum SvXMLSepTokenMapAttrs
     XML_TOK_COLUMN_SEP_END=XML_TOK_UNKNOWN
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aColAttrTokenMap[] =
+static SvXMLTokenMapEntry aColAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_REL_WIDTH,      XML_TOK_COLUMN_WIDTH },
     { XML_NAMESPACE_FO,     XML_START_INDENT,   XML_TOK_COLUMN_MARGIN_LEFT },
@@ -79,7 +79,7 @@ static __FAR_DATA SvXMLTokenMapEntry aColAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aColSepAttrTokenMap[] =
+static SvXMLTokenMapEntry aColSepAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_WIDTH,          XML_TOK_COLUMN_SEP_WIDTH },
     { XML_NAMESPACE_STYLE,  XML_COLOR,          XML_TOK_COLUMN_SEP_COLOR },

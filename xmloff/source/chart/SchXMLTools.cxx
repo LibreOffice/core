@@ -40,7 +40,6 @@
 #include <xmloff/xmluconv.hxx>
 // header for struct SvXMLEnumMapEntry
 #include <xmloff/xmlement.hxx>
-// header for define __FAR_DATA
 #include <tools/solar.h>
 
 // header for class SvXMLImportPropertyMapper
@@ -164,7 +163,7 @@ Reference< chart2::data::XDataSequence > lcl_createNewSequenceFromCachedXMLRange
 namespace SchXMLTools
 {
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLChartClassMap[] =
+static SvXMLEnumMapEntry aXMLChartClassMap[] =
 {
     { XML_LINE,         XML_CHART_CLASS_LINE    },
     { XML_AREA,         XML_CHART_CLASS_AREA    },

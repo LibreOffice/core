@@ -3009,7 +3009,7 @@ enum DdeFieldDeclAttrs
     XML_TOK_DDEFIELD_UPDATE
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
+static SvXMLTokenMapEntry aDdeDeclAttrTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_NAME, XML_TOK_DDEFIELD_NAME },
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION, XML_TOK_DDEFIELD_APPLICATION },

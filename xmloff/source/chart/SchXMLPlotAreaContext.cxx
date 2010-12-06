@@ -85,7 +85,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using com::sun::star::uno::Reference;
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLAxisClassMap[] =
+static SvXMLEnumMapEntry aXMLAxisClassMap[] =
 {
     { XML_X,  SCH_XML_AXIS_X  },
     { XML_Y,  SCH_XML_AXIS_Y  },

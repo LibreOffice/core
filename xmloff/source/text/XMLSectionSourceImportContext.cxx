@@ -74,7 +74,7 @@ enum XMLSectionSourceToken
     XML_TOK_SECTION_TEXT_SECTION_NAME
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionSourceTokenMap[] =
+static SvXMLTokenMapEntry aSectionSourceTokenMap[] =
 {
     { XML_NAMESPACE_XLINK, XML_HREF, XML_TOK_SECTION_XLINK_HREF },
     { XML_NAMESPACE_TEXT, XML_FILTER_NAME, XML_TOK_SECTION_TEXT_FILTER_NAME },

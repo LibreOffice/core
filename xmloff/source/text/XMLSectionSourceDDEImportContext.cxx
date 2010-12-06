@@ -87,7 +87,7 @@ enum XMLSectionSourceDDEToken
     XML_TOK_SECTION_IS_AUTOMATIC_UPDATE
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
+static SvXMLTokenMapEntry aSectionSourceDDETokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_DDE_APPLICATION,
           XML_TOK_SECTION_DDE_APPLICATION },

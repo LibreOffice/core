@@ -166,7 +166,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeTokenMap()
 {
     if( mpAnimationNodeTokenMap == NULL )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
+        static SvXMLTokenMapEntry aAnimationNodeTokenMap[] =
         {
             { XML_NAMESPACE_ANIMATION,  XML_PAR,                (sal_uInt16)AnimationNodeType::PAR },
             { XML_NAMESPACE_ANIMATION,  XML_SEQ,                (sal_uInt16)AnimationNodeType::SEQ },
@@ -245,7 +245,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
 {
     if( mpAnimationNodeAttributeTokenMap == NULL )
     {
-        static __FAR_DATA SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
+        static SvXMLTokenMapEntry aAnimationNodeAttributeTokenMap[] =
         {
             { XML_NAMESPACE_SMIL, XML_BEGIN,                    (sal_uInt16)ANA_Begin },
             { XML_NAMESPACE_SMIL, XML_DUR,                      (sal_uInt16)ANA_Dur },

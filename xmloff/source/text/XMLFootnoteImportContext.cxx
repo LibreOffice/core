@@ -71,7 +71,7 @@ enum XMLFootnoteChildToken {
     XML_TOK_FTN_NOTE_BODY
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
+static SvXMLTokenMapEntry aFootnoteChildTokenMap[] =
 {
     { XML_NAMESPACE_TEXT, XML_NOTE_CITATION,
       XML_TOK_FTN_NOTE_CITATION },

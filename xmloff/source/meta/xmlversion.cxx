@@ -52,7 +52,7 @@ using ::rtl::OUString;
 
 // ------------------------------------------------------------------------
 
-sal_Char __FAR_DATA XMLN_VERSIONSLIST[] = "VersionList.xml";
+sal_Char XMLN_VERSIONSLIST[] = "VersionList.xml";
 
 // ------------------------------------------------------------------------
 

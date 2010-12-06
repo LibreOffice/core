@@ -58,9 +58,9 @@
 using namespace ::com::sun::star;
 
 
-sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
-sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
-sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
+sal_Char sHTML_MIME_text[] = "text/";
+sal_Char sHTML_MIME_application[] = "application/";
+sal_Char sHTML_MIME_experimental[] = "x-";
 
 // <INPUT TYPE=xxx>
 static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =

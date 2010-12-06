@@ -118,7 +118,7 @@ struct SFX_VB_ErrorItem
     SbError nErrorSFX;
 };
 
-const SFX_VB_ErrorItem __FAR_DATA SFX_VB_ErrorTab[] =
+const SFX_VB_ErrorItem SFX_VB_ErrorTab[] =
 {
     { 1, SbERR_BASIC_EXCEPTION },  // #87844 Map exception to error code 1
     { 2, SbERR_SYNTAX },

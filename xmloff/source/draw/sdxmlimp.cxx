@@ -502,7 +502,7 @@ const SvXMLTokenMap& SdXMLImport::GetDocElemTokenMap()
 {
     if(!mpDocElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDocElemTokenMap[] =
+        static SvXMLTokenMapEntry aDocElemTokenMap[] =
 {
     { XML_NAMESPACE_OFFICE, XML_FONT_FACE_DECLS,    XML_TOK_DOC_FONTDECLS       },
     { XML_NAMESPACE_OFFICE, XML_STYLES,             XML_TOK_DOC_STYLES          },
@@ -527,7 +527,7 @@ const SvXMLTokenMap& SdXMLImport::GetBodyElemTokenMap()
 {
     if(!mpBodyElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aBodyElemTokenMap[] =
+        static SvXMLTokenMapEntry aBodyElemTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,   XML_PAGE,               XML_TOK_BODY_PAGE   },
     { XML_NAMESPACE_PRESENTATION, XML_SETTINGS,     XML_TOK_BODY_SETTINGS   },
@@ -550,7 +550,7 @@ const SvXMLTokenMap& SdXMLImport::GetStylesElemTokenMap()
 {
     if(!mpStylesElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aStylesElemTokenMap[] =
+        static SvXMLTokenMapEntry aStylesElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_PAGE_LAYOUT,                XML_TOK_STYLES_PAGE_MASTER              },
     { XML_NAMESPACE_STYLE,  XML_PRESENTATION_PAGE_LAYOUT,   XML_TOK_STYLES_PRESENTATION_PAGE_LAYOUT },
@@ -570,7 +570,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageElemTokenMap()
 {
     if(!mpMasterPageElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
+        static SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,          XML_STYLE,      XML_TOK_MASTERPAGE_STYLE    },
     { XML_NAMESPACE_PRESENTATION,   XML_NOTES,      XML_TOK_MASTERPAGE_NOTES    },
@@ -589,7 +589,7 @@ const SvXMLTokenMap& SdXMLImport::GetMasterPageAttrTokenMap()
 {
     if(!mpMasterPageAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
+        static SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,  XML_NAME,                       XML_TOK_MASTERPAGE_NAME },
     { XML_NAMESPACE_STYLE,  XML_DISPLAY_NAME,               XML_TOK_MASTERPAGE_DISPLAY_NAME },
@@ -614,7 +614,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterAttrTokenMap()
 {
     if(!mpPageMasterAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPageMasterAttrTokenMap[] =
 {
     { XML_NAMESPACE_STYLE,          XML_NAME,               XML_TOK_PAGEMASTER_NAME                 },
     XML_TOKEN_MAP_END
@@ -632,7 +632,7 @@ const SvXMLTokenMap& SdXMLImport::GetPageMasterStyleAttrTokenMap()
 {
     if(!mpPageMasterStyleAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPageMasterStyleAttrTokenMap[] =
 {
     { XML_NAMESPACE_FO,             XML_MARGIN_TOP,         XML_TOK_PAGEMASTERSTYLE_MARGIN_TOP          },
     { XML_NAMESPACE_FO,             XML_MARGIN_BOTTOM,      XML_TOK_PAGEMASTERSTYLE_MARGIN_BOTTOM       },
@@ -656,7 +656,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageAttrTokenMap()
 {
     if(!mpDrawPageAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
+        static SvXMLTokenMapEntry aDrawPageAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW,           XML_NAME,                           XML_TOK_DRAWPAGE_NAME               },
     { XML_NAMESPACE_DRAW,           XML_STYLE_NAME,                     XML_TOK_DRAWPAGE_STYLE_NAME         },
@@ -684,7 +684,7 @@ const SvXMLTokenMap& SdXMLImport::GetDrawPageElemTokenMap()
 {
     if(!mpDrawPageElemTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
+        static SvXMLTokenMapEntry aDrawPageElemTokenMap[] =
 {
     { XML_NAMESPACE_PRESENTATION,   XML_NOTES,              XML_TOK_DRAWPAGE_NOTES      },
     { XML_NAMESPACE_ANIMATION,      XML_PAR,                XML_TOK_DRAWPAGE_PAR        },
@@ -704,7 +704,7 @@ const SvXMLTokenMap& SdXMLImport::GetPresentationPlaceholderAttrTokenMap()
 {
     if(!mpPresentationPlaceholderAttrTokenMap)
     {
-        static __FAR_DATA SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
+        static SvXMLTokenMapEntry aPresentationPlaceholderAttrTokenMap[] =
 {
     { XML_NAMESPACE_PRESENTATION,   XML_OBJECT,     XML_TOK_PRESENTATIONPLACEHOLDER_OBJECTNAME  },
     { XML_NAMESPACE_SVG,            XML_X,          XML_TOK_PRESENTATIONPLACEHOLDER_X           },

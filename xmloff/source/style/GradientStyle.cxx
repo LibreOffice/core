@@ -112,7 +112,7 @@ sal_Bool XMLGradientStyleImport::importXML(
     aGradient.Border = 0;
 
     {
-        static __FAR_DATA SvXMLTokenMapEntry aGradientAttrTokenMap[] =
+        static SvXMLTokenMapEntry aGradientAttrTokenMap[] =
 {
     { XML_NAMESPACE_DRAW, XML_NAME, XML_TOK_GRADIENT_NAME },
     { XML_NAMESPACE_DRAW, XML_DISPLAY_NAME, XML_TOK_GRADIENT_DISPLAY_NAME },

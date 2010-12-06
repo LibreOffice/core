@@ -278,7 +278,7 @@ uno::Sequence< sal_Int32 > lcl_getNumberSequenceFromString( const ::rtl::OUStrin
 
 } // anonymous namespace
 
-static __FAR_DATA SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
+static SvXMLEnumMapEntry aXMLLegendAlignmentMap[] =
 {
 //  { XML_LEFT,         chart::ChartLegendPosition_LEFT     },
     // #i35421#

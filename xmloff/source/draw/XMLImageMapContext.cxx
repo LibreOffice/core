@@ -88,7 +88,7 @@ enum XMLImageMapToken
     XML_TOK_IMAP_TARGET
 };
 
-static __FAR_DATA SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
+static SvXMLTokenMapEntry aImageMapObjectTokenMap[] =
 {
     { XML_NAMESPACE_XLINK,  XML_HREF,           XML_TOK_IMAP_URL            },
     { XML_NAMESPACE_OFFICE, XML_NAME,           XML_TOK_IMAP_NAME           },

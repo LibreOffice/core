@@ -67,7 +67,7 @@ static sal_Char __READONLY_DATA sHTML_SC_auto[] =   "AUTO";
 static sal_Char __READONLY_DATA sHTML_MIME_text_html[] =    "text/html; charset=";
 
 /* not used anymore?
-static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
+static HTMLOutEvent aFrameSetEventTable[] =
 {
     { sHTML_O_SDonload,     sHTML_O_onload,     SFX_EVENT_OPENDOC   },
     { sHTML_O_SDonunload,   sHTML_O_onunload,   SFX_EVENT_PREPARECLOSEDOC   },
@@ -80,7 +80,7 @@ static HTMLOutEvent __FAR_DATA aFrameSetEventTable[] =
 #if defined(UNX)
 const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\012";
 #else
-const sal_Char __FAR_DATA SfxFrameHTMLWriter::sNewLine[] = "\015\012";
+const sal_Char SfxFrameHTMLWriter::sNewLine[] = "\015\012";
 #endif
 
 void SfxFrameHTMLWriter::OutMeta( SvStream& rStrm,
