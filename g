@@ -129,7 +129,7 @@ done
 # do it!
 DIRS="bootstrap $(cd $CLONEDIR ; ls)"
 if [ "$COMMAND" = "clone" ] ; then
-    DIRS=$(cat bin/repo-list)
+    DIRS=$(cat "$RAWBUILDDIR/bin/repo-list")
     # update hooks in the main repo too
     ( cd "$RAWBUILDDIR" ; update_hooks "../../git-hooks" )
 fi
