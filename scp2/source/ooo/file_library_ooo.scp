@@ -218,13 +218,6 @@ End
 #ifdef UNX
 #ifdef ENABLE_GTK
 #ifdef ENABLE_SYSTRAY_GTK
-File gid_File_Lib_Egg_Tray
- TXT_FILE_BODY;
- Styles = (PACKED);
- Dir = SCP2_OOO_BIN_DIR;
- Name = STRING(CONCAT3(libeggtray,DLLPOSTFIX,UNXSUFFIX));
-End
-
 File gid_File_Lib_QStart_Gtk
     Name = LIBNAME(qstart_gtk);
     TXT_FILE_BODY;
