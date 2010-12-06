@@ -669,15 +669,15 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
         aStreamCreationArgs, m_xContext ), uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( ::rtl::OUString::createFromAscii("URL"),
+    aSequence[0] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")),
                                          0,
                                          uno::makeAny(aFileName),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( ::rtl::OUString::createFromAscii("InputStream"),
+    aSequence[1] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")),
                                          0,
                                          uno::makeAny( xDataStream ),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( ::rtl::OUString::createFromAscii("InputSequence"),
+    aSequence[2] = beans::PropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")),
                                          0,
                                          uno::makeAny(aDataSequence),
                                          beans::PropertyState_DIRECT_VALUE );
@@ -961,19 +961,19 @@ bool xpdf_ImportFromFile( const ::rtl::OUString&                             rUR
     if( checkEncryption( aSysUPath, xIHdl, aPwd, bIsEncrypted, aDocName ) == false )
         return false;
 
-    rtl::OUStringBuffer converterURL = rtl::OUString::createFromAscii("xpdfimport");
+    rtl::OUStringBuffer converterURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xpdfimport"));
 
     // retrieve package location url (xpdfimport executable is located there)
     // ---------------------------------------------------
     uno::Reference<deployment::XPackageInformationProvider> xProvider(
         xContext->getValueByName(
-            rtl::OUString::createFromAscii("/singletons/com.sun.star.deployment.PackageInformationProvider" )),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.deployment.PackageInformationProvider"))),
         uno::UNO_QUERY);
     if( xProvider.is() )
     {
         converterURL.insert(
             0,
-            rtl::OUString::createFromAscii("/"));
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")));
         converterURL.insert(
             0,
             xProvider->getPackageLocation(

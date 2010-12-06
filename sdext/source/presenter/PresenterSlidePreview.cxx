@@ -79,8 +79,8 @@ PresenterSlidePreview::PresenterSlidePreview (
         || ! rpPresenterController.is())
     {
         throw RuntimeException(
-            OUString::createFromAscii(
-                "PresenterSlidePreview can not be constructed due to empty argument"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                "PresenterSlidePreview can not be constructed due to empty argument")),
             static_cast<XWeak*>(this));
     }
 
@@ -106,7 +106,7 @@ PresenterSlidePreview::PresenterSlidePreview (
     if (xFactory.is())
         mxPreviewRenderer = Reference<drawing::XSlideRenderer>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.drawing.SlideRenderer"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.SlideRenderer")),
                 rxContext),
             UNO_QUERY);
 
@@ -278,9 +278,9 @@ void PresenterSlidePreview::SetSlide (const Reference<drawing::XDrawPage>& rxPag
         try
         {
             xPropertySet->getPropertyValue(
-                OUString::createFromAscii("Width")) >>= aSlideSize.Width;
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Width"))) >>= aSlideSize.Width;
             xPropertySet->getPropertyValue(
-                OUString::createFromAscii("Height")) >>= aSlideSize.Height;
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Height"))) >>= aSlideSize.Height;
         }
         catch (beans::UnknownPropertyException&)
         {

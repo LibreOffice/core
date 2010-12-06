@@ -351,9 +351,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
                             }
                             if ( bNeedsOptimizing && aDestSizePixel.Width && aDestSizePixel.Height )
                             {
-                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
                                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
+                                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
 
                                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, bRemoveCropArea, aGraphicCropLogic );
                                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
@@ -371,9 +371,9 @@ Reference< XGraphic > ImpCompressGraphic( const Reference< XComponentContext >& 
             else // this is a metafile
             {
                 rtl::OUString aDestMimeType( aSourceMimeType );
-                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.io.TempFile" ), rxMSF ), UNO_QUERY_THROW );
+                Reference< XStream > xTempFile( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.io.TempFile")), rxMSF ), UNO_QUERY_THROW );
                 Reference< XOutputStream > xOutputStream( xTempFile->getOutputStream() );
-                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ), rxMSF ), UNO_QUERY_THROW );
+                Reference< XGraphicProvider > xGraphicProvider( rxMSF->getServiceManager()->createInstanceWithContext( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.graphic.GraphicProvider")), rxMSF ), UNO_QUERY_THROW );
                 ImpCompressGraphic( xGraphicProvider, xGraphic, xOutputStream, aDestMimeType, aLogicalSize, rGraphicSettings.mnJPEGQuality, rGraphicSettings.mnImageResolution, sal_False, aGraphicCropLogic );
                 Reference< XInputStream > xInputStream( xTempFile->getInputStream() );
                 Reference< XSeekable > xSeekable( xInputStream, UNO_QUERY_THROW );

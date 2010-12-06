@@ -102,7 +102,7 @@ Sequence< OUString > MysqlCDriver::getSupportedServiceNames_Static()
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
     Sequence< OUString > aSNS(1);
-    aSNS[0] = OUString::createFromAscii("com.sun.star.sdbc.Driver");
+    aSNS[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbc.Driver"));
     return aSNS;
 }
 /* }}} */
@@ -152,7 +152,7 @@ void MysqlCDriver::impl_initCppConn_lck_throw()
 #else
     if ( !m_bAttemptedLoadCppConn )
     {
-        const ::rtl::OUString sModuleName = ::rtl::OUString::createFromAscii( CPPCONN_LIB );
+        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM( CPPCONN_LIB ));
         m_hCppConnModule = osl_loadModuleRelative( &thisModule, sModuleName.pData, 0 );
         m_bAttemptedLoadCppConn = true;
     }
@@ -243,7 +243,7 @@ sal_Bool SAL_CALL MysqlCDriver::acceptsURL(const OUString& url)
         throw(SQLException, RuntimeException)
 {
     OSL_TRACE("MysqlCDriver::acceptsURL");
-    return (!url.compareTo(OUString::createFromAscii("sdbc:mysqlc:"), sizeof("sdbc:mysqlc:")-1));
+    return (!url.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("sdbc:mysqlc:")), sizeof("sdbc:mysqlc:")-1));
 }
 /* }}} */
 
@@ -260,14 +260,14 @@ Sequence< DriverPropertyInfo > SAL_CALL MysqlCDriver::getPropertyInfo(const OUSt
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Hostname"))
                 ,OUString(RTL_CONSTASCII_USTRINGPARAM("Name of host"))
                 ,sal_True
-                ,OUString::createFromAscii("localhost")
+                ,OUString(RTL_CONSTASCII_USTRINGPARAM("localhost"))
                 ,Sequence< OUString >())
             );
         aDriverInfo.push_back(DriverPropertyInfo(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("Port"))
                 ,OUString(RTL_CONSTASCII_USTRINGPARAM("Port"))
                 ,sal_True
-                ,OUString::createFromAscii("3306")
+                ,OUString(RTL_CONSTASCII_USTRINGPARAM("3306"))
                 ,Sequence< OUString >())
             );
         return Sequence< DriverPropertyInfo >(&(aDriverInfo[0]),aDriverInfo.size());

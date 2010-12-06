@@ -129,7 +129,7 @@ PresenterScrollBar::PresenterScrollBar (
 
         mxPresenterHelper = Reference<drawing::XPresenterHelper>(
             xFactory->createInstanceWithContext(
-                OUString::createFromAscii("com.sun.star.comp.Draw.PresenterHelper"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.Draw.PresenterHelper")),
                 rxComponentContext),
             UNO_QUERY_THROW);
 
@@ -331,7 +331,7 @@ void PresenterScrollBar::SetCanvas (const Reference<css::rendering::XCanvas>& rx
                     try
                     {
                         mpBitmaps.reset(new PresenterBitmapContainer(
-                            OUString::createFromAscii("PresenterScreenSettings/ScrollBar/Bitmaps"),
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("PresenterScreenSettings/ScrollBar/Bitmaps")),
                             ::boost::shared_ptr<PresenterBitmapContainer>(),
                             mxComponentContext,
                             mxCanvas,

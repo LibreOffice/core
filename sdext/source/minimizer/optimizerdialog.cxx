@@ -129,8 +129,8 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
         rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
-        rtl::OUString sBitmap( isHighContrast() ? rtl::OUString::createFromAscii( "/minimizepresi_80_h.png" )
-                                                : rtl::OUString::createFromAscii( "/minimizepresi_80.png" ) );
+        rtl::OUString sBitmap( isHighContrast() ? RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80_h.png")
+                                                : RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80.png") );
         rtl::OUString sURL( sBitmapPath += sBitmap );
 
         xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
@@ -523,12 +523,12 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 {
                     rtl::OUString sHelpFile( mrOptimizerDialog.getPath( TK_HelpFile ) );
                     Reference< XDesktop > desktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
                     Reference< XSimpleFileAccess > xSimpleFileAccess( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
                     Reference< XInputStream > xInputStream( xSimpleFileAccess->openFileRead( sHelpFile ) );
                     Reference< XDesktop > xDesktop( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithContext(
-                            OUString::createFromAscii( "com.sun.star.frame.Desktop" ), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
+                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop")), mrOptimizerDialog.GetComponentContext() ), UNO_QUERY_THROW );
                     Reference< XFrame > xDesktopFrame( xDesktop, UNO_QUERY_THROW );
                     xHelpFrame = Reference< XFrame >( xDesktopFrame->findFrame( TKGet( TK__blank ), 0 ) );
                     Reference< XCloseBroadcaster > xCloseBroadcaster( xHelpFrame, UNO_QUERY_THROW );
@@ -541,16 +541,16 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     aLoadProps[ 1 ].Name = TKGet( TK_InputStream );
                     aLoadProps[ 1 ].Value <<= xInputStream;
 
-                    Reference< XComponent >( xLoader->loadComponentFromURL( OUString::createFromAscii( "private:stream" ),
+                    Reference< XComponent >( xLoader->loadComponentFromURL( OUString(RTL_CONSTASCII_USTRINGPARAM("private:stream")),
                         TKGet( TK__self ), 0, aLoadProps ) );
 
                     Reference< XPropertySet > xPropSet( xHelpFrame, UNO_QUERY_THROW );
                     Reference< XLayoutManager > xLayoutManager;
-                    if ( xPropSet->getPropertyValue( OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager )
+                    if ( xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("LayoutManager")) ) >>= xLayoutManager )
                     {
                         xLayoutManager->setVisible( sal_False );
-                        xLayoutManager->hideElement( OUString::createFromAscii( "private:resource/menubar/menubar" ) );
-                        xLayoutManager->destroyElement( OUString::createFromAscii( "private:resource/statusbar/statusbar" ) );
+                        xLayoutManager->hideElement( OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/menubar/menubar")) );
+                        xLayoutManager->destroyElement( OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar")) );
                     }
                 }
             }
@@ -603,7 +603,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                                 aLocation = aLocation.copy( 0, nIndex );
 
                             // adding .mini
-                            aLocation = aLocation.concat( OUString::createFromAscii( ".mini" ) );
+                            aLocation = aLocation.concat( OUString(RTL_CONSTASCII_USTRINGPARAM(".mini")) );
                             aFileOpenDialog.setDefaultName( aLocation );
                         }
                     }
@@ -653,7 +653,7 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                 aArgs[ 0 ] <<= mrOptimizerDialog.GetFrame();
 
                 Reference < XDispatch > xDispatch( mrOptimizerDialog.GetComponentContext()->getServiceManager()->createInstanceWithArgumentsAndContext(
-                    OUString::createFromAscii( "com.sun.star.comp.PPPOptimizer" ), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.PPPOptimizer")), aArgs, mrOptimizerDialog.GetComponentContext() ), UNO_QUERY );
 
                 URL aURL;
                 aURL.Protocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.com.sun.star.comp.PPPOptimizer:" ) );

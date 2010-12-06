@@ -53,20 +53,20 @@ using ::rtl::OUString;
 namespace sdext { namespace presenter {
 
 const ::rtl::OUString PresenterPaneFactory::msCurrentSlidePreviewPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane1"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane1"));
 const ::rtl::OUString PresenterPaneFactory::msNextSlidePreviewPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane2"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane2"));
 const ::rtl::OUString PresenterPaneFactory::msNotesPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane3"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane3"));
 const ::rtl::OUString PresenterPaneFactory::msToolBarPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane4"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane4"));
 const ::rtl::OUString PresenterPaneFactory::msSlideSorterPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane5"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane5"));
 const ::rtl::OUString PresenterPaneFactory::msHelpPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Pane6"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Pane6"));
 
 const ::rtl::OUString PresenterPaneFactory::msOverlayPaneURL(
-    OUString::createFromAscii("private:resource/pane/Presenter/Overlay"));
+    RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/Overlay"));
 
 
 
@@ -117,7 +117,7 @@ void PresenterPaneFactory::Register (const Reference<frame::XController>& rxCont
         else
         {
             xCC->addResourceFactory(
-                OUString::createFromAscii("private:resource/pane/Presenter/*"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/pane/Presenter/*")),
                 this);
         }
     }

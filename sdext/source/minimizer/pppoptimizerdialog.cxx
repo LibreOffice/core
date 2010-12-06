@@ -155,11 +155,11 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 
                 if ( nFileSizeSource && nFileSizeDest )
                 {
-                    rtl::OUStringBuffer sBuf( rtl::OUString::createFromAscii( "Your Presentation has been minimized from:" ) );
+                    rtl::OUStringBuffer sBuf( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Your Presentation has been minimized from:")) );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeSource >> 10 ) );
-                    sBuf.append( rtl::OUString::createFromAscii( "KB to " ) );
+                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB to ")) );
                     sBuf.append( rtl::OUString::valueOf( nFileSizeDest >> 10 ) );
-                    sBuf.append( rtl::OUString::createFromAscii( "KB." ) );
+                    sBuf.append( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("KB.")) );
                     OUString sResult( sBuf.makeStringAndClear() );
 //                  mpOptimizerDialog->showMessageBox( sResult, sResult, sal_False );
                 }

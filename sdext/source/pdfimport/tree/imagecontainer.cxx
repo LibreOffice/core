@@ -140,7 +140,7 @@ void ImageContainer::writeBase64EncodedStream( ImageId nId, EmitContext& rContex
         std::find_if(pAry,pAry+nLen,
                      boost::bind(comphelper::TPropertyValueEqualFunctor(),
                                  _1,
-                                 rtl::OUString::createFromAscii("InputSequence"))));
+                                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputSequence")))));
     OSL_ENSURE( pValue != pAry+nLen,
                 "InputSequence not found" );
 

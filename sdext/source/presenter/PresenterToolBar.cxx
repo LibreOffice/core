@@ -778,7 +778,7 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+        OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
         PresenterConfigurationAccess::READ_ONLY);
 
     const OUString sBasePath (PresenterComponent::GetBasePath(mxComponentContext));
@@ -2092,7 +2092,7 @@ void ProgressLabel::CurrentSlideHasChanged (void)
         if (nCurrentSlideIndex >= 0 && nSlideCount > 0)
             SetText(
                 OUString::valueOf(nCurrentSlideIndex)
-                    + OUString::createFromAscii(" / ")
+                    + OUString(RTL_CONSTASCII_USTRINGPARAM(" / "))
                         + OUString::valueOf(nSlideCount));
         else
             SetText(A2S(""));

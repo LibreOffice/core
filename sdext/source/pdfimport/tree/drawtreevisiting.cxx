@@ -61,7 +61,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( this->m_rProcessor.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
 
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
@@ -74,7 +74,7 @@ const ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
     {
         Reference< XComponentContext > xContext( m_rEmitContext.m_xContext, uno::UNO_SET_THROW );
         Reference< XMultiComponentFactory > xMSF(  xContext->getServiceManager(), uno::UNO_SET_THROW );
-    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.i18n.BreakIterator"), xContext);
+    Reference < XInterface > xInterface = xMSF->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator")), xContext);
         mxBreakIter = uno::Reference< i18n::XBreakIterator >( xInterface, uno::UNO_QUERY );
     }
     return mxBreakIter;

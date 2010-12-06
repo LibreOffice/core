@@ -138,7 +138,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, voi
     {
         ::rtl::OUString sMainKeyName( sRootKey );
         sMainKeyName += ::rtl::OUString::createFromAscii( pComponents->pAsciiImplementationName );
-        sMainKeyName += ::rtl::OUString::createFromAscii( "/UNO/SERVICES" );
+        sMainKeyName += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
         try
         {

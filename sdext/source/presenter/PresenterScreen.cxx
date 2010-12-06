@@ -539,11 +539,11 @@ sal_Int32 PresenterScreen::GetScreenNumber (
             // is set.
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                OUString::createFromAscii("/org.openoffice.Office.extension.PresenterScreen/"),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.extension.PresenterScreen/")),
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
-                OUString::createFromAscii("Presenter/StartAlways")) >>= bStartAlways)
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/StartAlways"))) >>= bStartAlways)
             {
                 if (bStartAlways)
                     return nScreenNumber;
@@ -702,13 +702,13 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString::createFromAscii("org.openoffice.Office.extension.PresenterScreen"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.extension.PresenterScreen")),
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);
-        OUString sLayoutName (OUString::createFromAscii("DefaultLayout"));
+        OUString sLayoutName (RTL_CONSTASCII_USTRINGPARAM("DefaultLayout"));
         aConfiguration.GetConfigurationNode(
-            OUString::createFromAscii("Presenter/CurrentLayout")) >>= sLayoutName;
+            OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/CurrentLayout"))) >>= sLayoutName;
         ProcessLayout(aConfiguration, sLayoutName, rxContext, rxAnchorId);
     }
     catch (RuntimeException&)
@@ -729,14 +729,14 @@ void PresenterScreen::ProcessLayout (
     {
         Reference<container::XHierarchicalNameAccess> xLayoutNode (
             rConfiguration.GetConfigurationNode(
-                OUString::createFromAscii("Presenter/Layouts/")+rsLayoutName),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Presenter/Layouts/"))+rsLayoutName),
             UNO_QUERY_THROW);
 
         // Read the parent layout first, if one is referenced.
         OUString sParentLayout;
         rConfiguration.GetConfigurationNode(
             xLayoutNode,
-            OUString::createFromAscii("ParentLayout")) >>= sParentLayout;
+            OUString(RTL_CONSTASCII_USTRINGPARAM("ParentLayout"))) >>= sParentLayout;
         if (sParentLayout.getLength() > 0)
         {
             // Prevent infinite recursion.
@@ -748,16 +748,16 @@ void PresenterScreen::ProcessLayout (
         Reference<container::XNameAccess> xList (
             rConfiguration.GetConfigurationNode(
                 xLayoutNode,
-                OUString::createFromAscii("Layout")),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("Layout"))),
             UNO_QUERY_THROW);
 
         ::std::vector<rtl::OUString> aProperties (6);
-        aProperties[0] = OUString::createFromAscii("PaneURL");
-        aProperties[1] = OUString::createFromAscii("ViewURL");
-        aProperties[2] = OUString::createFromAscii("RelativeX");
-        aProperties[3] = OUString::createFromAscii("RelativeY");
-        aProperties[4] = OUString::createFromAscii("RelativeWidth");
-        aProperties[5] = OUString::createFromAscii("RelativeHeight");
+        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("PaneURL"));
+        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewURL"));
+        aProperties[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeX"));
+        aProperties[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeY"));
+        aProperties[4] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeWidth"));
+        aProperties[5] = OUString(RTL_CONSTASCII_USTRINGPARAM("RelativeHeight"));
         mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xList,
@@ -786,10 +786,10 @@ void PresenterScreen::ProcessViewDescriptions (
             UNO_QUERY_THROW);
 
         ::std::vector<rtl::OUString> aProperties (4);
-        aProperties[0] = OUString::createFromAscii("ViewURL");
-        aProperties[1] = OUString::createFromAscii("Title");
-        aProperties[2] = OUString::createFromAscii("AccessibleTitle");
-        aProperties[3] = OUString::createFromAscii("IsOpaque");
+        aProperties[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("ViewURL"));
+        aProperties[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("Title"));
+        aProperties[2] = OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleTitle"));
+        aProperties[3] = OUString(RTL_CONSTASCII_USTRINGPARAM("IsOpaque"));
         mnComponentIndex = 1;
         PresenterConfigurationAccess::ForAll(
             xViewDescriptionsNode,

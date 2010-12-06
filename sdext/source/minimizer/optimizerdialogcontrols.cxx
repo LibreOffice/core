@@ -609,7 +609,7 @@ static OUString ImpValueOfInMB( const sal_Int64& rVal, sal_Unicode nSeparator = 
         aVal.setLength( nX + 2 );
         aVal.setCharAt( nX, nSeparator );
     }
-    aVal.append( OUString::createFromAscii( " MB" ) );
+    aVal.append( OUString(RTL_CONSTASCII_USTRINGPARAM(" MB")) );
     return aVal.makeStringAndClear();
 }
 
