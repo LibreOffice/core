@@ -64,6 +64,11 @@ ScPrintFuncCache::ScPrintFuncCache( ScDocShell* pD, const ScMarkData& rMark,
 
     ScDocument* pDoc = pDocSh->GetDocument();
     SCTAB nTabCount = pDoc->GetTableCount();
+
+    // avoid repeated progress bars if row heights for all sheets are needed
+    if ( nTabCount > 1 && rMark.GetSelectCount() == nTabCount )
+        pDocSh->UpdatePendingRowHeights( nTabCount-1, true );
+
     SCTAB nTab;
     for ( nTab=0; nTab<nTabCount; nTab++ )
     {
