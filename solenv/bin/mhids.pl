@@ -59,7 +59,10 @@ sub cleandie
     print STDERR "$errstring\n";
     if ( not $debug ) {
         foreach my $i (@cleanuplist) {
-            unlink "$workfile$i" if -f "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
+#           unlink "$workfile$i" if -f "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
+            if ( -f "$workfile$i" ) {
+                unlink "$workfile$i" or print STDERR "ERROR - couldn't remove $workfile$i\n";
+            }
         }
     }
     die "$erroreval\n";
@@ -387,6 +390,7 @@ rename("$srs/$filebase.hid.$ENV{INPATH}", "$srs/$filebase.hid") or cleandie("ERR
 
 if ( not $debug ) {
     foreach my $i (@cleanuplist) {
+        sleep 1;
         if ( -f "$workfile$i" ) {
             unlink "$workfile$i"  or cleandie("");
         }

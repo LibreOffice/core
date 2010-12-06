@@ -38,7 +38,7 @@
 #define VER_FINAL       0
 
 #define VER_DAY         1
-#define VER_MONTH       1
+#define VER_MONTH       8
 #define VER_YEAR        2010
 
 #ifndef VER_FIRSTYEAR

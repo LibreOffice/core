@@ -7,18 +7,14 @@
 
 # Product       List_of_platforms                                                   List_of_languages   Target
 
-OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro    en-US   openoffice
-OpenOffice      unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12                                     en-US   openoffice
-#BrOffice                                                                                          pt-BR   broffice
-#OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,wntmsci12                    en-US   openofficewithjre
-#BrOffice_wJRE                                                                                     pt-BR   brofficewithjre
-OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxmacxi.pro,unxlngx6.pro    en-US   openofficedev
-#BrOffice_Dev                                                                                      pt-BR   brofficedev
-#OpenOffice_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12  en-US   sdkoo
-OpenOffice_Dev_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12  en-US   sdkoodev
+OpenOffice             unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|bg|bn|ca|ca-XV|cs|da|de|el|en-GB|es|et|eu|fi|fr|ga|gl|he|hu|it|ja|km|ko|lt|mk|nb|nl|om|pl|pt|pt-BR|ru|sh|sl|sr|sv|tr|vi|zh-CN|zh-TW openoffice 
+#OpenOffice      unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci12                                  en-US   openoffice
+OpenOffice_wJRE        unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|bg|bn|ca|ca-XV|cs|da|de|el|en-GB|es|et|eu|fi|fr|ga|gl|he|hu|it|ja|km|ko|lt|mk|nb|nl|om|pl|pt|pt-BR|ru|sh|sl|sr|sv|tr|vi|zh-CN|zh-TW openofficewithjre
+#OpenOffice_Dev  unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxmacxi.pro,unxlngx6.pro    en-US   openofficedev
+OpenOffice_SDK         unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro  en-US   sdkoo
+#OpenOffice_Dev_SDK  unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro  en-US   sdkoodev
 #URE             unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngi6,unxsoli4,unxsols4,wntmsci12  en-US   ure
-OpenOfficeLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro    de      ooolanguagepack
-OpenOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12,unxmacxi                                     de      ooolanguagepack
-OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro     de|fr|ja|ar|ru   ooodevlanguagepack
-#BrOfficeLanguagepack     unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro        pt-BR   broolanguagepack
+OpenOfficeLanguagepack unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro en-US|ar|as|ast|be-BY|bg|bn|ca|ca-XV|cs|da|de|dz|el|en-GB|eo|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|ka|km|kn|ko|ku|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ro|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|uz|vi|zh-CN|zh-TW ooolanguagepack
+#OpenOfficeLanguagepack   unxlngi6,unxsoli4,unxsols4,wntmsci12,unxmacxi                                     de      ooolanguagepack
+#OpenOfficeDevLanguagepack   unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci12.pro,unxlngx6.pro,unxmacxi.pro     ar|as|ast|bg|bn|ca|ca-XV|cs|da|de|dz|el|en-GB|es|et|eu|fi|fr|ga|gl|gu|he|hi|hu|id|is|it|ja|km|kn|ko|lt|lv|mk|ml|mr|my|nb|nl|nn|oc|om|or|pa-IN|pl|pt|pt-BR|ru|sh|si|sk|sl|sr|sv|ta|te|th|tr|ug|uk|vi|zh-CN|zh-TW   ooodevlanguagepack
 
