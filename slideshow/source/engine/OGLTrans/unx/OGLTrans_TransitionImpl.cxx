@@ -498,9 +498,6 @@ void OGLTransitionImpl::makeRochade()
     Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), 45, false, -1, 0));
     maEnteringSlidePrimitives.push_back(Slide);
 
-    //     OverallOperations.push_back(new SEllipseTranslate(0.5, 2, 0, 1, true, 0, 1));
-//      push_back(new STranslate(basegfx::B3DVector(0, 0, -2), true, 0, 0.5));
-//      OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, 2), true, 0.5, 1));
 }
 
 // TODO(Q3): extract to basegfx
@@ -559,7 +556,6 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
     }
 
     {
-        //double angle(0.0);
         Primitive EnteringSlide;
         Primitive LeavingSlide;
         for(int Point(0); Point + 1 < nPointsOnCircles; ++Point)

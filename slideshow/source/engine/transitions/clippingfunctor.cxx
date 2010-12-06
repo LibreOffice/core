@@ -50,8 +50,6 @@ namespace slideshow
                                          bool                                    bModeIn ) :
             mpParametricPoly( rPolygon ),
             maStaticTransformation(),
-            // AW: Not needed
-            // maBackgroundRect( createUnitRect() ),
             mbForwardParameterSweep( true ),
             mbSubtractPolygon( false ),
             mbScaleIsotrophically( rTransitionInfo.mbScaleIsotrophically ),
