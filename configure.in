@@ -6369,7 +6369,6 @@ if test  "$test_gtk" = "yes"; then
          PKG_CHECK_MODULES( GTK210, gtk+-2.0 >= 2.10.0,
 			    [ ENABLE_SYSTRAY_GTK="TRUE" ],
 			    [ ENABLE_SYSTRAY_GTK="" ])
-         BUILD_TYPE="$BUILD_TYPE SYSTRAY_GTK"
       fi
 
       AC_MSG_CHECKING([whether to enable DBUS support])
