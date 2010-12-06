@@ -1,0 +1,49 @@
+--- misc/libxml2-2.7.6/xpath.c
++++ misc/build/libxml2-2.7.6/xpath.c
+@@ -8104,9 +8104,17 @@
+ xmlNodePtr
+ xmlXPathNextFollowing(xmlXPathParserContextPtr ctxt, xmlNodePtr cur) {
+     if ((ctxt == NULL) || (ctxt->context == NULL)) return(NULL);
+-    if (cur != NULL && cur->children != NULL)
+-        return cur->children ;
+-    if (cur == NULL) cur = ctxt->context->node;
++    if ((cur != NULL) && (cur->type  != XML_ATTRIBUTE_NODE) &&
++        (cur->type != XML_NAMESPACE_DECL) && (cur->children != NULL))
++        return(cur->children);
++
++    if (cur == NULL) {
++        cur = ctxt->context->node;
++        if (cur->type == XML_NAMESPACE_DECL)
++            return(NULL);
++        if (cur->type == XML_ATTRIBUTE_NODE)
++            cur = cur->parent;
++    }
+     if (cur == NULL) return(NULL) ; /* ERROR */
+     if (cur->next != NULL) return(cur->next) ;
+     do {
+@@ -8160,8 +8168,13 @@
+ xmlXPathNextPreceding(xmlXPathParserContextPtr ctxt, xmlNodePtr cur)
+ {
+     if ((ctxt == NULL) || (ctxt->context == NULL)) return(NULL);
+-    if (cur == NULL)
++    if (cur == NULL) {
+         cur = ctxt->context->node;
++        if (cur->type == XML_NAMESPACE_DECL)
++            return(NULL);
++        if (cur->type == XML_ATTRIBUTE_NODE)
++            return(cur->parent);
++    }
+     if (cur == NULL)
+ 	return (NULL);
+     if ((cur->prev != NULL) && (cur->prev->type == XML_DTD_NODE))
+@@ -8205,8 +8218,8 @@
+         cur = ctxt->context->node;
+         if (cur == NULL)
+             return (NULL);
+-	if (cur->type == XML_NAMESPACE_DECL)
+-	    cur = (xmlNodePtr)((xmlNsPtr)cur)->next;
++        if (cur->type == XML_NAMESPACE_DECL)
++            return (NULL);
+         ctxt->ancestor = cur->parent;
+     }
+     if ((cur->prev != NULL) && (cur->prev->type == XML_DTD_NODE))
