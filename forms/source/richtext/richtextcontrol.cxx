@@ -109,7 +109,7 @@ namespace frm
     DBG_NAME( ORichTextControl )
     //------------------------------------------------------------------
     ORichTextControl::ORichTextControl( const Reference< XMultiServiceFactory >& _rxORB )
-        :m_xORB( _rxORB )
+        :UnoEditControl( _rxORB )
     {
         DBG_CTOR( ORichTextControl, NULL );
     }
