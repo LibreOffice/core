@@ -3673,9 +3673,46 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-    dnl first check if we have been asked to autodetect JAVA_HOME with a recent gij
-    if test "$JDK" = "gcj" -a -z "$JAVA_HOME"; then
-      if test "x$with_jdk_home" = "x" -a "$_gij_longver" -ge "40200"; then
+   # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
+   if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
+
+   if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
+       # try to recover first by looking whether we have a alternatives
+       # system as in Debian or newer SuSEs where following /usr/bin/javac
+       # over /etc/alternatives/javac leads to the right bindir where we
+       # just need to strip a bit away to get a valid JAVA_HOME
+       JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
+   elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
+       # maybe only one level of symlink (e.g. on Mac)
+       JAVA_HOME=$(readlink $JAVACOMPILER)
+       if test "$(dirname $JAVA_HOME)" = "."; then
+           # we've got no path to trim back
+           JAVA_HOME=""
+       fi
+   else
+       # else warn
+       AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
+       AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
+       echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
+       echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
+   fi
+   dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
+   if test "$JAVA_HOME" != "/usr"; then
+       if test "$_os" = "Darwin"; then
+           dnl Leopard returns a non-suitable path with readlink - points to "Current" only
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/Current/Commands/javac$,/CurrentJDK/Home,)
+           dnl Tiger already returns a JDK path..
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/CurrentJDK/Commands/javac$,/CurrentJDK/Home,)
+       else
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/bin/javac$,,)
+       fi
+   fi
+fi
+# as we drop out of this, JAVA_HOME may have been set to the empty string by readlink
+
+dnl now if JAVA_HOME has been set to empty, then call findhome to find it
+    if test -z "$JAVA_HOME"; then
+      if test "x$with_jdk_home" = "x"; then
         cat > findhome.java <<_ACEOF
 [import java.io.File;
 
@@ -3716,37 +3753,6 @@ _ACEOF
 
     dnl second sanity check JAVA_HOME if possible
     if test "$JDK" != "gcj" -o "$_gij_longver" -ge "40200"; then
-      # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
-      if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-
-         if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
-          # try to recover first by looking whether we have a alternatives
-          # system as in Debian or newer SuSEs where following /usr/bin/javac
-          # over /etc/alternatives/javac leads to the right bindir where we
-          # just need to strip a bit away to get a valid JAVA_HOME
-            JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
-         elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
-            # maybe only one level of symlink (e.g. on Mac)
-            JAVA_HOME=$(readlink $JAVACOMPILER)
-         else
-          # else warn
-          AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
-          AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
-          echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
-          echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
-          fi
-         dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
-         if test "$JAVA_HOME" != "/usr"; then
-            if test "$_os" = "Darwin"; then
-               dnl Leopard returns a non-suitable path with readlink - points to "Current" only
-               JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/Current/Commands/javac$,/CurrentJDK/Home,)
-               dnl Tiger already returns a JDK path..
-               JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/CurrentJDK/Commands/javac$,/CurrentJDK/Home,)
-            else
-               JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/bin/javac$,,)
-            fi
-         fi
-      fi
       # now check if $JAVA_HOME is really valid
       if test "$_os" = "Darwin"; then
          if test ! -f "$JAVA_HOME/lib/jvm.cfg" -a "x$with_jdk_home" = "x"; then
@@ -3762,13 +3768,10 @@ _ACEOF
          echo "JAVA_HOME was not explicitly informed with --with-jdk-home. the configure script" >> warn
          echo "attempted to find JAVA_HOME automatically, but apparently it failed" >> warn
          echo "in case JAVA_HOME is incorrectly set, some projects with not be built correctly" >> warn
-#         if test "$JDK" = "gcj"; then
-#             echo "e.g. install java-1.4.2-gcj-compat-devel and use --with-jdk-home=/usr/lib/jvm/java-1.4.2-gcj" >> warn
-#         fi
       fi
     fi
+    AC_MSG_NOTICE([JAVA_HOME=$JAVA_HOME])
 fi
-
 AWTLIB=
 if test "$SOLAR_JAVA" != ""; then
    AC_MSG_CHECKING([for jawt lib name])
