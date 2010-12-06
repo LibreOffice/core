@@ -35,4 +35,8 @@
   <implementation name="com.sun.star.comp.Writer.WriterFilterDetector">
     <service name="com.sun.star.document.ExtendedTypeDetection"/>
   </implementation>
+  <implementation name="com.sun.star.comp.Writer.RtfFilter">
+    <service name="com.sun.star.document.ImportFilter"/>
+    <service name="com.sun.star.document.ExportFilter"/>
+  </implementation>
 </component>

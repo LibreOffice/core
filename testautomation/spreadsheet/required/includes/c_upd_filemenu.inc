@@ -358,10 +358,10 @@ endcase
 
 testcase tFileRecentDocuments
 
-'if gPlatform = "lin" then
-'    warnlog "#110649# Due to bug this testcase is not available"
-'    goto endsub
-'end if
+if gPlatform = "lin" then
+    warnlog "#110649# Due to bug this testcase is not available"
+    goto endsub
+end if
     
     dim sTestFile as string
       

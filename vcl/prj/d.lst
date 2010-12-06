@@ -154,4 +154,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 ..\inc\vcl\helper.hxx %_DEST%\inc%_EXT%\vcl\helper.hxx
 ..\inc\vcl\strhelper.hxx %_DEST%\inc%_EXT%\vcl\strhelper.hxx
 ..\inc\vcl\lazydelete.hxx %_DEST%\inc%_EXT%\vcl\lazydelete.hxx
+..\inc\vcl\arrange.hxx %_DEST%\inc%_EXT%\vcl\arrange.hxx
+..\inc\vcl\wpropset.hxx %_DEST%\inc%_EXT%\vcl\wpropset.hxx
 ..\%__SRC%\misc\vcl.component %_DEST%\xml%_EXT%\vcl.component
+

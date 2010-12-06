@@ -202,16 +202,30 @@ sal_Bool SfxObjectShell::QuerySlotExecutable( USHORT /*nSlotId*/ )
 
 //-------------------------------------------------------------------------
 
-sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
+bool GetEncryptionData_Impl( const SfxItemSet* pSet, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
 {
-    const SfxPoolItem* pItem = NULL;
-    if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, sal_True, &pItem ) )
+    bool bResult = false;
+    if ( pSet )
     {
-        DBG_ASSERT( pItem->IsA( TYPE(SfxStringItem) ), "wrong item type" );
-        rPasswd = ( (const SfxStringItem*)pItem )->GetValue();
-        return sal_True;
+        SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+        if ( pEncryptionDataItem )
+        {
+            pEncryptionDataItem->GetValue() >>= o_rEncryptionData;
+            bResult = true;
+        }
+        else
+        {
+            SFX_ITEMSET_ARG( pSet, pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+            if ( pPasswordItem )
+            {
+                ::rtl::OUString aPassword = pPasswordItem->GetValue();
+                o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aPassword );
+                bResult = true;
+            }
+        }
     }
-    return sal_False;
+
+    return bResult;
 }
 
 //-------------------------------------------------------------------------
@@ -996,15 +1010,15 @@ sal_Bool SfxObjectShell::DoSave()
 
         pImp->bIsSaving = sal_True;
 
-        ::rtl::OUString aPasswd;
+        uno::Sequence< beans::NamedValue > aEncryptionData;
         if ( IsPackageStorageFormat_Impl( *GetMedium() ) )
         {
-            if ( GetPasswd_Impl( GetMedium()->GetItemSet(), aPasswd ) )
+            if ( GetEncryptionData_Impl( GetMedium()->GetItemSet(), aEncryptionData ) )
             {
                 try
                 {
                     //TODO/MBA: GetOutputStorage?! Special mode, because it's "Save"?!
-                    ::comphelper::OStorageHelper::SetCommonStoragePassword( GetMedium()->GetStorage(), aPasswd );
+                    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( GetMedium()->GetStorage(), aEncryptionData );
                     bOk = sal_True;
                 }
                 catch( uno::Exception& )
@@ -1386,13 +1400,13 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
 
         // transfer password from the parameters to the storage
-        ::rtl::OUString aPasswd;
+        uno::Sequence< beans::NamedValue > aEncryptionData;
         sal_Bool bPasswdProvided = sal_False;
-        if ( GetPasswd_Impl( rMedium.GetItemSet(), aPasswd ) )
+        if ( GetEncryptionData_Impl( rMedium.GetItemSet(), aEncryptionData ) )
         {
             bPasswdProvided = sal_True;
             try {
-                ::comphelper::OStorageHelper::SetCommonStoragePassword( xMedStorage, aPasswd );
+                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xMedStorage, aEncryptionData );
                 bOk = sal_True;
             }
             catch( uno::Exception& )
@@ -3154,13 +3168,13 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
         {
-            ::rtl::OUString aPasswd;
-            if ( GetPasswd_Impl(pMedium->GetItemSet(), aPasswd) )
+            uno::Sequence< beans::NamedValue > aEncryptionData;
+            if ( GetEncryptionData_Impl(pMedium->GetItemSet(), aEncryptionData) )
             {
                 try
                 {
                     // the following code must throw an exception in case of failure
-                    ::comphelper::OStorageHelper::SetCommonStoragePassword( xStorage, aPasswd );
+                    ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( xStorage, aEncryptionData );
                 }
                 catch( uno::Exception& )
                 {

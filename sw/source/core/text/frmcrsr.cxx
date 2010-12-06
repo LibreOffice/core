@@ -780,7 +780,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
         if( aLine.GetCurr()->GetLen() &&
             CH_BREAK == aInf.GetTxt().GetChar( nRightMargin - 1 ) )
             --nRightMargin;
-        if( !bAPI && (aLine.GetNext() || pFrm->GetFollow()) )
+        else if( !bAPI && (aLine.GetNext() || pFrm->GetFollow()) )
         {
             while( nRightMargin > aLine.GetStart() &&
                 ' ' == aInf.GetTxt().GetChar( nRightMargin - 1 ) )

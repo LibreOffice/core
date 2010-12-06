@@ -1106,8 +1106,6 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         if(nRet != RET_OK && nRet != RET_YES)
             return 0;
     }
-    //create the send dialog
-    SwSendMailDialog* pDlg = new SwSendMailDialog( pButton, rConfigItem );
     //add the documents
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = 0;
@@ -1133,7 +1131,26 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     switch( nDocType )
     {
         case MM_DOCTYPE_OOO : break;
-        case MM_DOCTYPE_PDF : bIsPDF = true; break;
+        case MM_DOCTYPE_PDF : bIsPDF = true;
+        {
+            //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
+            //because it uses the same user data :-(
+            SfxFilterMatcher aMatcher( pFilterContainer->GetName() );
+            SfxFilterMatcherIter aIter( &aMatcher );
+            const SfxFilter* pFilter = aIter.First();
+            String sFilterMime( String::CreateFromAscii( "application/pdf" ));
+            while ( pFilter )
+            {
+                if( pFilter->GetMimeType() == sFilterMime  && pFilter->CanExport() )
+                {
+                    pSfxFlt = pFilter;
+                    break;
+                }
+                pFilter = aIter.Next();
+            }
+
+        }
+        break;
         case MM_DOCTYPE_WORD:
         {
             //the method SwIOSystemGetFilterOfFormat( ) returns the template filter
@@ -1239,6 +1256,8 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
     uno::Reference< frame::XStorable > xStore( pTargetView->GetDocShell()->GetModel(), uno::UNO_QUERY);
     xStore->storeToURL( sTargetTempURL, aValues   );
 
+    //create the send dialog
+    SwSendMailDialog* pDlg = new SwSendMailDialog( pButton, rConfigItem );
     pDlg->SetDocumentCount( nEnd );
     pDlg->ShowDialog();
     //help to force painting the dialog

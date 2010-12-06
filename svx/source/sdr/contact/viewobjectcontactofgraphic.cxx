@@ -177,7 +177,7 @@ namespace sdr
                 if(rGrafObj.IsLinkedGraphic())
                 {
                     // update graphic link
-                    rGrafObj.ImpUpdateGraphicLink();
+                    rGrafObj.ImpUpdateGraphicLink( sal_False );
                 }
                 else
                 {
@@ -196,7 +196,7 @@ namespace sdr
                         rGrafObj.mbInsidePaint = sal_True;
                         rGrafObj.ForceSwapIn();
                         rGrafObj.mbInsidePaint = sal_False;
-                    }
+                        }
 
                     bRetval = true;
                 }
@@ -252,19 +252,27 @@ namespace sdr
             // prepare primitive generation with evtl. loading the graphic when it's swapped out
             SdrGrafObj& rGrafObj = const_cast< ViewObjectContactOfGraphic* >(this)->getSdrGrafObj();
             bool bDoAsynchronGraphicLoading(rGrafObj.GetModel() && rGrafObj.GetModel()->IsSwapGraphics());
-            static bool bSuppressAsynchLoading(false);
             bool bSwapInDone(false);
+            bool bSwapInExclusive(false);
 
-            if(bDoAsynchronGraphicLoading
-                && rGrafObj.IsSwappedOut()
-                && rGrafObj.GetPage()
-                && rGrafObj.GetPage()->IsMasterPage())
+            if( bDoAsynchronGraphicLoading && rGrafObj.IsSwappedOut() )
             {
-                // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
-                bDoAsynchronGraphicLoading = false;
+                // sometimes it is needed that each graphic is completely available and swapped in
+                // for these cases a ForceSwapIn is called later at the graphic object
+                if ( rGrafObj.GetPage() && rGrafObj.GetPage()->IsMasterPage() )
+                {
+                    // #i102380# force Swap-In for GraphicObjects on MasterPage to have a nicer visualisation
+                    bDoAsynchronGraphicLoading = false;
+                }
+                else if ( GetObjectContact().isOutputToPrinter()
+                    || GetObjectContact().isOutputToRecordingMetaFile()
+                    || GetObjectContact().isOutputToPDFFile() )
+                {
+                    bDoAsynchronGraphicLoading = false;
+                    bSwapInExclusive = true;
+                }
             }
-
-            if(bDoAsynchronGraphicLoading && !bSuppressAsynchLoading)
+            if( bDoAsynchronGraphicLoading )
             {
                 bSwapInDone = const_cast< ViewObjectContactOfGraphic* >(this)->impPrepareGraphicWithAsynchroniousLoading();
             }
@@ -293,10 +301,8 @@ namespace sdr
                 }
             }
 
-            // if swap in was forced only for printing, swap out again
-            const bool bSwapInExclusiveForPrinting(bSwapInDone && GetObjectContact().isOutputToPrinter());
-
-            if(bSwapInExclusiveForPrinting)
+            // if swap in was forced only for printing metafile and pdf, swap out again
+            if( bSwapInDone && bSwapInExclusive )
             {
                 rGrafObj.ForceSwapOut();
             }

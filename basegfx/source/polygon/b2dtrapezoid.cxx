@@ -798,6 +798,7 @@ namespace basegfx
                                         if(splitEdgeAtGivenPoint(aLeft, *pNewLeft, aCurrent))
                                         {
                                             maNewPoints.push_back(pNewLeft);
+                                            bDone = true;
                                         }
                                         else
                                         {
@@ -809,13 +810,12 @@ namespace basegfx
                                         if(splitEdgeAtGivenPoint(aRight, *pNewRight, aCurrent))
                                         {
                                             maNewPoints.push_back(pNewRight);
+                                            bDone = true;
                                         }
                                         else
                                         {
                                             delete pNewRight;
                                         }
-
-                                        bDone = true;
                                     }
                                 }
 

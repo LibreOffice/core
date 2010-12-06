@@ -1474,7 +1474,10 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
                 aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
-        aTxt += rSeparator;
+        if( rTxt.Len() > 0 )
+        {
+            aTxt += rSeparator;
+        }
         xub_StrLen nSepIdx = aTxt.Len();
         aTxt += rTxt;
 

@@ -92,7 +92,7 @@ SwWriteTableCell *SwWriteTableRow::AddCell( const SwTableBox *pBox,
 
 //-----------------------------------------------------------------------
 
-SwWriteTableCol::SwWriteTableCol(USHORT nPosition)
+SwWriteTableCol::SwWriteTableCol(sal_uInt32 nPosition)
     : nPos(nPosition), nWidthOpt(0), bRelWidthOpt(false), bOutWidth(true),
     bLeftBorder(true), bRightBorder(true)
 {
@@ -100,13 +100,13 @@ SwWriteTableCol::SwWriteTableCol(USHORT nPosition)
 
 //-----------------------------------------------------------------------
 
-long SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
+sal_uInt32 SwWriteTable::GetBoxWidth( const SwTableBox *pBox )
 {
     const SwFrmFmt *pFmt = pBox->GetFrmFmt();
     const SwFmtFrmSize& aFrmSize=
         (const SwFmtFrmSize&)pFmt->GetFmtAttr( RES_FRM_SIZE );
 
-    return aFrmSize.GetSize().Width();
+    return sal::static_int_cast<sal_uInt32>(aFrmSize.GetSize().Width());
 }
 
 long SwWriteTable::GetLineHeight( const SwTableLine *pLine )
@@ -306,9 +306,9 @@ USHORT SwWriteTable::MergeBoxBorders( const SwTableBox *pBox,
 }
 
 
-USHORT SwWriteTable::GetRawWidth( USHORT nCol, USHORT nColSpan ) const
+sal_uInt32  SwWriteTable::GetRawWidth( USHORT nCol, USHORT nColSpan ) const
 {
-    USHORT nWidth = aCols[nCol+nColSpan-1]->GetPos();
+    sal_uInt32 nWidth = aCols[nCol+nColSpan-1]->GetPos();
     if( nCol > 0 )
         nWidth = nWidth - aCols[nCol-1]->GetPos();
 
@@ -352,7 +352,7 @@ USHORT SwWriteTable::GetRightSpace( USHORT nCol, USHORT nColSpan ) const
 
 USHORT SwWriteTable::GetAbsWidth( USHORT nCol, USHORT nColSpan ) const
 {
-    long nWidth = GetRawWidth( nCol, nColSpan );
+    sal_uInt32 nWidth = GetRawWidth( nCol, nColSpan );
     if( nBaseWidth != nTabWidth )
     {
         nWidth *= nTabWidth;
@@ -419,9 +419,9 @@ BOOL SwWriteTable::ShouldExpandSub(const SwTableBox *pBox, BOOL /*bExpandedBefor
 }
 
 void SwWriteTable::CollectTableRowsCols( long nStartRPos,
-                                           USHORT nStartCPos,
+                                           sal_uInt32 nStartCPos,
                                            long nParentLineHeight,
-                                           USHORT nParentLineWidth,
+                                           sal_uInt32 nParentLineWidth,
                                            const SwTableLines& rLines,
                                            USHORT nDepth )
 {
@@ -429,7 +429,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
     USHORT nLines = rLines.Count();
 
 #ifdef DBG_UTIL
-    USHORT nEndCPos = 0;
+    sal_uInt32 nEndCPos = 0;
 #endif
 
     long nRPos = nStartRPos;
@@ -484,16 +484,16 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
         const SwTableBoxes& rBoxes = pLine->GetTabBoxes();
         USHORT nBoxes = rBoxes.Count();
 
-        USHORT nCPos = nStartCPos;
+        sal_uInt32 nCPos = nStartCPos;
         for( USHORT nBox=0; nBox<nBoxes; nBox++ )
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
-            USHORT nOldCPos = nCPos;
+            sal_uInt32 nOldCPos = nCPos;
 
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0)  )
             {
-                nCPos = nCPos + (USHORT)GetBoxWidth( pBox );
+                nCPos = nCPos + GetBoxWidth( pBox );
                 SwWriteTableCol *pCol = new SwWriteTableCol( nCPos );
 
                 USHORT nCol;
@@ -512,7 +512,7 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
             else
             {
 #ifdef DBG_UTIL
-                USHORT nCheckPos = nCPos + (USHORT)GetBoxWidth( pBox );
+                sal_uInt32 nCheckPos = nCPos + GetBoxWidth( pBox );
                 if( !nEndCPos )
                 {
                     nEndCPos = nCheckPos;
@@ -550,9 +550,9 @@ void SwWriteTable::CollectTableRowsCols( long nStartRPos,
 
 
 void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
-                                        USHORT nStartCPos, USHORT nStartCol,
+                                        sal_uInt32 nStartCPos, USHORT nStartCol,
                                         long nParentLineHeight,
-                                        USHORT nParentLineWidth,
+                                        sal_uInt32 nParentLineWidth,
                                         const SwTableLines& rLines,
                                         const SvxBrushItem* pParentBrush,
                                         USHORT nDepth,
@@ -655,7 +655,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
         }
 
         USHORT nBoxes = rBoxes.Count();
-        USHORT nCPos = nStartCPos;
+        sal_uInt32 nCPos = nStartCPos;
         USHORT nCol = nStartCol;
 
         for( USHORT nBox=0; nBox<nBoxes; nBox++ )
@@ -663,10 +663,10 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             const SwTableBox *pBox = rBoxes[nBox];
 
             // Position der letzten ueberdeckten Spalte ermitteln
-            USHORT nOldCPos = nCPos;
+            sal_uInt32 nOldCPos = nCPos;
             if( nBox < nBoxes-1 || (nParentLineWidth==0 && nLine==0) )
             {
-                nCPos = nCPos + (USHORT)GetBoxWidth( pBox );
+                nCPos = nCPos + GetBoxWidth( pBox );
                 if( nBox==nBoxes-1 )
                     nParentLineWidth = nCPos - nStartCPos;
             }
@@ -768,7 +768,7 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
 }
 
 SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
-    USHORT nBWidth, BOOL bRel, USHORT nMaxDepth, USHORT nLSub, USHORT nRSub, sal_uInt32 nNumOfRowsToRepeat)
+    sal_uInt32 nBWidth, BOOL bRel, USHORT nMaxDepth, USHORT nLSub, USHORT nRSub, sal_uInt32 nNumOfRowsToRepeat)
     : nBorderColor((UINT32)-1), nCellSpacing(0), nCellPadding(0), nBorder(0),
     nInnerBorder(0), nBaseWidth(nBWidth), nHeadEndRow(USHRT_MAX),
      nLeftSub(nLSub), nRightSub(nRSub), nTabWidth(nWidth), bRelWidths(bRel),
@@ -779,7 +779,7 @@ SwWriteTable::SwWriteTable(const SwTableLines& rLines, long nWidth,
     bColsOption(false), bColTags(true), bLayoutExport(false),
     bCollectBorderWidth(true)
 {
-    USHORT nParentWidth = nBaseWidth + nLeftSub + nRightSub;
+    sal_uInt32 nParentWidth = nBaseWidth + nLeftSub + nRightSub;
 
     // Erstmal die Tabellen-Struktur festlegen. Hinter der Tabelle ist in
     // jedem Fall eine Spalte zu Ende

@@ -1251,27 +1251,18 @@ void XclDelta::SaveXml( XclExpXmlStream& rStrm )
 
 // ============================================================================
 
-XclExpFilePass::XclExpFilePass( const XclExpRoot& rRoot ) :
+XclExpFileEncryption::XclExpFileEncryption( const XclExpRoot& rRoot ) :
     XclExpRecord(0x002F, 54),
     mrRoot(rRoot)
 {
 }
 
-XclExpFilePass::~XclExpFilePass()
+XclExpFileEncryption::~XclExpFileEncryption()
 {
 }
 
-void XclExpFilePass::WriteBody( XclExpStream& rStrm )
+void XclExpFileEncryption::WriteBody( XclExpStream& rStrm )
 {
-    static const sal_uInt8 nDocId[] = {
-        0x17, 0xf7, 0x01, 0x08, 0xea, 0xad, 0x30, 0x5c,
-        0x1a, 0x95, 0xa5, 0x75, 0xd6, 0x79, 0xcd, 0x8d };
-
-
-    static const sal_uInt8 nSalt[] = {
-        0xa4, 0x5b, 0xf7, 0xe9, 0x9f, 0x55, 0x21, 0xc5,
-        0xc5, 0x56, 0xa8, 0x0d, 0x39, 0x05, 0x3a, 0xb4 };
-
     // 0x0000 - neither standard nor strong encryption
     // 0x0001 - standard or strong encryption
     rStrm << static_cast<sal_uInt16>(0x0001);
@@ -1281,13 +1272,17 @@ void XclExpFilePass::WriteBody( XclExpStream& rStrm )
     sal_uInt16 nStdEnc = 0x0001;
     rStrm << nStdEnc << nStdEnc;
 
-    sal_uInt8 nSaltHash[16];
-    XclExpEncrypterRef xEnc( new XclExpBiff8Encrypter(mrRoot, nDocId, nSalt) );
-    xEnc->GetSaltDigest(nSaltHash);
+    sal_uInt8 pnDocId[16];
+    sal_uInt8 pnSalt[16];
+    sal_uInt8 pnSaltHash[16];
+    XclExpEncrypterRef xEnc( new XclExpBiff8Encrypter(mrRoot) );
+    xEnc->GetDocId(pnDocId);
+    xEnc->GetSalt(pnSalt);
+    xEnc->GetSaltDigest(pnSaltHash);
 
-    rStrm.Write(nDocId, 16);
-    rStrm.Write(nSalt, 16);
-    rStrm.Write(nSaltHash, 16);
+    rStrm.Write(pnDocId, 16);
+    rStrm.Write(pnSalt, 16);
+    rStrm.Write(pnSaltHash, 16);
 
     rStrm.SetEncrypter(xEnc);
 }

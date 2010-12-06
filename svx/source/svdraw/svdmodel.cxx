@@ -207,6 +207,8 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     else
         nDefTextHgt = SdrEngineDefaults::GetFontHeight();
 
+    pItemPool->SetPoolDefaultItem( SdrTextWordWrapItem( sal_False ) );
+
     SetTextDefaults();
     pLayerAdmin=new SdrLayerAdmin;
     pLayerAdmin->SetModel(this);

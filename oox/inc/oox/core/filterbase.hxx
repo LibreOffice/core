@@ -31,6 +31,7 @@
 #include <memory>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
@@ -194,9 +195,9 @@ public:
     /** Returns a helper for the handling of OLE obejcts. */
     ::oox::ole::OleObjectHelper& getOleObjectHelper() const;
 
-    /** Requests a password from the media descriptor or from the user. On
-        success, the password will be inserted into the media descriptor. */
-    ::rtl::OUString     requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
+    /** Requests the encryption data from the media descriptor or from the user. On
+        success, the encryption data will be inserted into the media descriptor. */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const;
 
     /** Imports the raw binary data from the specified stream.
         @return  True, if the data could be imported from the stream. */

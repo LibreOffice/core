@@ -151,6 +151,25 @@ namespace sdr
             }
         }
 
+        // VirtualDevice?
+        bool ObjectContactOfObjListPainter::isOutputToVirtualDevice() const
+        {
+            return (OUTDEV_VIRDEV == mrTargetOutputDevice.GetOutDevType());
+        }
+
+        // recording MetaFile?
+        bool ObjectContactOfObjListPainter::isOutputToRecordingMetaFile() const
+        {
+            GDIMetaFile* pMetaFile = mrTargetOutputDevice.GetConnectMetaFile();
+            return (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
+        }
+
+        // pdf export?
+        bool ObjectContactOfObjListPainter::isOutputToPDFFile() const
+        {
+            return (0 != mrTargetOutputDevice.GetPDFWriter());
+        }
+
         OutputDevice* ObjectContactOfObjListPainter::TryToGetOutputDevice() const
         {
             return &mrTargetOutputDevice;

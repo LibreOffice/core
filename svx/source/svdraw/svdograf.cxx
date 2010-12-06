@@ -45,6 +45,7 @@
 #include <vcl/svapp.hxx>
 
 #include <sfx2/linkmgr.hxx>
+#include <sfx2/docfile.hxx>
 #include <svx/svdetc.hxx>
 #include "svdglob.hxx"
 #include "svdstr.hrc"
@@ -69,6 +70,8 @@
 #include <svx/sdr/contact/viewcontactofgraphic.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <osl/thread.hxx>
+#include <vos/mutex.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -80,13 +83,48 @@ using namespace ::com::sun::star::io;
 #define GRAFSTREAMPOS_INVALID   0xffffffff
 #define SWAPGRAPHIC_TIMEOUT     5000
 
+
 // ------------------
 // - SdrGraphicLink -
 // ------------------
 
+
+const Graphic ImpLoadLinkedGraphic( const String& rFileName, const String& rFilterName )
+{
+    Graphic aGraphic;
+
+    SfxMedium xMed( rFileName, STREAM_STD_READ, TRUE );
+    xMed.DownLoad();
+
+    SvStream* pInStrm = xMed.GetInStream();
+    if ( pInStrm )
+    {
+        pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
+        GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
+
+        const USHORT nFilter = rFilterName.Len() && pGF->GetImportFormatCount()
+                            ? pGF->GetImportFormatNumber( rFilterName )
+                            : GRFILTER_FORMAT_DONTKNOW;
+
+        String aEmptyStr;
+        com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > aFilterData( 1 );
+
+        // Room for improvment:
+        // As this is a linked graphic the GfxLink is not needed if saving/loading our own format.
+        // But this link is required by some filters to access the native graphic (pdf export/ms export),
+        // there we should create a new service to provide this data if needed
+        aFilterData[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CreateNativeLink" ) );
+        aFilterData[ 0 ].Value = Any( sal_True );
+        pGF->ImportGraphic( aGraphic, aEmptyStr, *pInStrm, nFilter, NULL, 0, &aFilterData );
+    }
+    return aGraphic;
+}
+
+class SdrGraphicUpdater;
 class SdrGraphicLink : public sfx2::SvBaseLink
 {
     SdrGrafObj*         pGrafObj;
+    SdrGraphicUpdater*  pGraphicUpdater;
 
 public:
                         SdrGraphicLink(SdrGrafObj* pObj);
@@ -95,16 +133,87 @@ public:
     virtual void        Closed();
     virtual void        DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue );
+    void                DataChanged( const Graphic& rGraphic );
 
     BOOL                Connect() { return 0 != GetRealObject(); }
-    void                UpdateSynchron();
+    void                UpdateAsynchron();
+    void                RemoveGraphicUpdater();
 };
+
+class SdrGraphicUpdater : public ::osl::Thread
+{
+public:
+    SdrGraphicUpdater( const String& rFileName, const String& rFilterName, SdrGraphicLink& );
+    virtual ~SdrGraphicUpdater( void );
+
+    void SAL_CALL Terminate( void );
+
+    sal_Bool GraphicLinkChanged( const String& rFileName ){ return mrFileName != rFileName; };
+
+protected:
+
+    /** is called from the inherited create method and acts as the
+        main function of this thread.
+    */
+    virtual void SAL_CALL run(void);
+
+    /** Called after the thread is terminated via the terminate
+        method.  Used to kill the thread by calling delete on this.
+    */
+    virtual void SAL_CALL onTerminated(void);
+
+private:
+
+    ::osl::Mutex    maMutex;
+    const String&   mrFileName;
+    const String&   mrFilterName;
+    SdrGraphicLink& mrGraphicLink;
+
+    volatile bool mbIsTerminated;
+};
+
+SdrGraphicUpdater::SdrGraphicUpdater( const String& rFileName, const String& rFilterName, SdrGraphicLink& rGraphicLink )
+: mrFileName( rFileName )
+, mrFilterName( rFilterName )
+, mrGraphicLink( rGraphicLink )
+, mbIsTerminated( sal_False )
+{
+    create();
+}
+
+SdrGraphicUpdater::~SdrGraphicUpdater( void )
+{
+}
+
+void SdrGraphicUpdater::Terminate()
+{
+    ::osl::MutexGuard aGuard( maMutex );
+    mbIsTerminated = sal_True;
+}
+
+void SAL_CALL SdrGraphicUpdater::onTerminated(void)
+{
+    delete this;
+}
+
+void SAL_CALL SdrGraphicUpdater::run(void)
+{
+    Graphic aGraphic( ImpLoadLinkedGraphic( mrFileName, mrFilterName ) );
+    ::osl::MutexGuard aGuard(maMutex);
+    vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+    if ( !mbIsTerminated )
+    {
+        mrGraphicLink.DataChanged( aGraphic );
+        mrGraphicLink.RemoveGraphicUpdater();
+    }
+}
 
 // -----------------------------------------------------------------------------
 
-SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj):
-    ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB ),
-    pGrafObj(pObj)
+SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj)
+: ::sfx2::SvBaseLink( ::sfx2::LINKUPDATE_ONCALL, SOT_FORMATSTR_ID_SVXB )
+, pGrafObj( pObj )
+, pGraphicUpdater( NULL )
 {
     SetSynchron( FALSE );
 }
@@ -113,6 +222,22 @@ SdrGraphicLink::SdrGraphicLink(SdrGrafObj* pObj):
 
 SdrGraphicLink::~SdrGraphicLink()
 {
+    if ( pGraphicUpdater )
+        pGraphicUpdater->Terminate();
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrGraphicLink::DataChanged( const Graphic& rGraphic )
+{
+    pGrafObj->ImpSetLinkedGraphic( rGraphic );
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrGraphicLink::RemoveGraphicUpdater()
+{
+    pGraphicUpdater = NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -135,9 +260,8 @@ void SdrGraphicLink::DataChanged( const String& rMimeType,
         }
         else if( SotExchange::GetFormatIdFromMimeType( rMimeType ) != sfx2::LinkManager::RegisterStatusInfoId() )
         {
-            // only repaint, no objectchange
-            pGrafObj->ActionChanged();
-            // pGrafObj->BroadcastObjectChange();
+            // broadcasting, to update slidesorter
+            pGrafObj->BroadcastObjectChange();
         }
     }
 }
@@ -155,14 +279,20 @@ void SdrGraphicLink::Closed()
 
 // -----------------------------------------------------------------------------
 
-void SdrGraphicLink::UpdateSynchron()
+void SdrGraphicLink::UpdateAsynchron()
 {
     if( GetObj() )
     {
-        String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
-        ::com::sun::star::uno::Any aValue;
-        GetObj()->GetData( aValue, aMimeType, TRUE );
-        DataChanged( aMimeType, aValue );
+        if ( pGraphicUpdater )
+        {
+            if ( pGraphicUpdater->GraphicLinkChanged( pGrafObj->GetFileName() ) )
+            {
+                pGraphicUpdater->Terminate();
+                pGraphicUpdater = new SdrGraphicUpdater( pGrafObj->GetFileName(), pGrafObj->GetFilterName(), *this );
+            }
+        }
+        else
+            pGraphicUpdater = new SdrGraphicUpdater( pGrafObj->GetFileName(), pGrafObj->GetFilterName(), *this );
     }
 }
 
@@ -447,8 +577,10 @@ void SdrGrafObj::ForceSwapIn() const
 
         const_cast< SdrGrafObj* >( this )->mbIsPreview = sal_False;
     }
-
-    pGraphic->FireSwapInRequest();
+    if ( pGraphicLink && pGraphic->IsSwappedOut() )
+        ImpUpdateGraphicLink( sal_False );
+    else
+        pGraphic->FireSwapInRequest();
 
     if( pGraphic->IsSwappedOut() ||
         ( pGraphic->GetType() == GRAPHIC_NONE ) ||
@@ -558,20 +690,32 @@ UINT16 SdrGrafObj::GetObjIdentifier() const
 
 // -----------------------------------------------------------------------------
 
-sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
+/* The graphic of the GraphicLink will be loaded. If it is called with
+   bAsynchron = true then the graphic will be set later via DataChanged
+*/
+sal_Bool SdrGrafObj::ImpUpdateGraphicLink( sal_Bool bAsynchron ) const
 {
-    sal_Bool    bRet = sal_False;
-
+    sal_Bool bRet = sal_False;
     if( pGraphicLink )
     {
-        const sal_Bool bIsChanged = pModel->IsChanged();
-        pGraphicLink->UpdateSynchron();
-        pModel->SetChanged( bIsChanged );
-
+        if ( bAsynchron )
+            pGraphicLink->UpdateAsynchron();
+        else
+            pGraphicLink->DataChanged( ImpLoadLinkedGraphic( aFileName, aFilterName ) );
         bRet = sal_True;
     }
-
     return bRet;
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrGrafObj::ImpSetLinkedGraphic( const Graphic& rGraphic )
+{
+    const sal_Bool bIsChanged = GetModel()->IsChanged();
+    NbcSetGraphic( rGraphic );
+    ActionChanged();
+    BroadcastObjectChange();
+    GetModel()->SetChanged( bIsChanged );
 }
 
 // -----------------------------------------------------------------------------
@@ -1095,7 +1239,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                 if( ( pGraphic->HasUserData() || pGraphicLink ) &&
                     ( nSwapMode & SDR_SWAPGRAPHICSMODE_PURGE ) )
                 {
-                    pRet = NULL;
+                    pRet = GRFMGR_AUTOSWAPSTREAM_LINK;
                 }
                 else if( nSwapMode & SDR_SWAPGRAPHICSMODE_TEMP )
                 {
@@ -1180,7 +1324,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     }
                 }
             }
-            else if( !ImpUpdateGraphicLink() )
+            else if( !ImpUpdateGraphicLink( sal_False ) )
             {
                 pRet = GRFMGR_AUTOSWAPSTREAM_TEMP;
             }

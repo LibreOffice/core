@@ -65,6 +65,8 @@ using ::com::sun::star::xml::sax::XLocator;
 using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace core {
 
@@ -366,7 +368,49 @@ void lclDeriveKey( const sal_uInt8* pnHash, sal_uInt32 nHashLen, sal_uInt8* pnKe
 
 // ----------------------------------------------------------------------------
 
-bool lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUString& rPassword, sal_uInt8* pnKey, sal_uInt32 nRequiredKeyLen )
+bool lclCheckEncryptionData( const sal_uInt8* pnKey, sal_uInt32 nKeySize, const sal_uInt8* pnVerifier, sal_uInt32 nVerifierSize, const sal_uInt8* pnVerifierHash, sal_uInt32 nVerifierHashSize )
+{
+    bool bResult = false;
+
+    // the only currently supported algorithm needs key size 128
+    if ( nKeySize == 16 && nVerifierSize == 16 && nVerifierHashSize == 32 )
+    {
+        // check password
+        EVP_CIPHER_CTX aes_ctx;
+        EVP_CIPHER_CTX_init( &aes_ctx );
+        EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
+        EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+        int nOutLen = 0;
+        sal_uInt8 pnTmpVerifier[ 16 ];
+        (void) memset( pnTmpVerifier, 0, sizeof(pnTmpVerifier) );
+
+        /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifier, &nOutLen, pnVerifier, nVerifierSize );
+        EVP_CIPHER_CTX_cleanup( &aes_ctx );
+
+        EVP_CIPHER_CTX_init( &aes_ctx );
+        EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
+        EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
+        sal_uInt8 pnTmpVerifierHash[ 32 ];
+        (void) memset( pnTmpVerifierHash, 0, sizeof(pnTmpVerifierHash) );
+
+        /*int*/ EVP_DecryptUpdate( &aes_ctx, pnTmpVerifierHash, &nOutLen, pnVerifierHash, nVerifierHashSize );
+        EVP_CIPHER_CTX_cleanup( &aes_ctx );
+
+        rtlDigest aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
+        rtlDigestError aError = rtl_digest_update( aDigest, pnTmpVerifier, sizeof( pnTmpVerifier ) );
+        sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
+        aError = rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
+        rtl_digest_destroy( aDigest );
+
+        bResult = ( memcmp( pnSha1Hash, pnTmpVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0 );
+    }
+
+    return bResult;
+}
+
+// ----------------------------------------------------------------------------
+
+uno::Sequence< beans::NamedValue > lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUString& rPassword, sal_uInt8* pnKey, sal_uInt32 nRequiredKeyLen )
 {
     size_t nBufferSize = rEncrInfo.mnSaltSize + 2 * rPassword.getLength();
     sal_uInt8* pnBuffer = new sal_uInt8[ nBufferSize ];
@@ -405,30 +449,19 @@ bool lclGenerateEncryptionKey( const PackageEncryptionInfo& rEncrInfo, const OUS
     lclDeriveKey( pnHash, RTL_DIGEST_LENGTH_SHA1, pnKey, nRequiredKeyLen );
     delete[] pnHash;
 
-    // check password
-    EVP_CIPHER_CTX aes_ctx;
-    EVP_CIPHER_CTX_init( &aes_ctx );
-    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
-    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
-    int nOutLen = 0;
-    sal_uInt8 pnVerifier[ 16 ] = { 0 };
-    /*int*/ EVP_DecryptUpdate( &aes_ctx, pnVerifier, &nOutLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ) );
-    EVP_CIPHER_CTX_cleanup( &aes_ctx );
+    uno::Sequence< beans::NamedValue > aResult;
+    if ( lclCheckEncryptionData( pnKey, nRequiredKeyLen, rEncrInfo.mpnEncrVerifier, sizeof( rEncrInfo.mpnEncrVerifier ), rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) ) )
+    {
+        ::comphelper::SequenceAsHashMap aEncryptionData;
+        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionKey" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( pnKey ), nRequiredKeyLen );
+        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionSalt" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnSalt ), rEncrInfo.mnSaltSize );
+        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifier" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifier ), sizeof( rEncrInfo.mpnEncrVerifier ) );
+        aEncryptionData[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifierHash" ) ) ] <<= uno::Sequence< sal_Int8 >( reinterpret_cast< const sal_Int8* >( rEncrInfo.mpnEncrVerifierHash ), sizeof( rEncrInfo.mpnEncrVerifierHash ) );
 
-    EVP_CIPHER_CTX_init( &aes_ctx );
-    EVP_DecryptInit_ex( &aes_ctx, EVP_aes_128_ecb(), 0, pnKey, 0 );
-    EVP_CIPHER_CTX_set_padding( &aes_ctx, 0 );
-    sal_uInt8 pnVerifierHash[ 32 ] = { 0 };
-    /*int*/ EVP_DecryptUpdate( &aes_ctx, pnVerifierHash, &nOutLen, rEncrInfo.mpnEncrVerifierHash, sizeof( rEncrInfo.mpnEncrVerifierHash ) );
-    EVP_CIPHER_CTX_cleanup( &aes_ctx );
+        aResult = aEncryptionData.getAsConstNamedValueList();
+    }
 
-    aDigest = rtl_digest_create( rtl_Digest_AlgorithmSHA1 );
-    aError = rtl_digest_update( aDigest, pnVerifier, sizeof( pnVerifier ) );
-    sal_uInt8 pnSha1Hash[ RTL_DIGEST_LENGTH_SHA1 ];
-    aError = rtl_digest_get( aDigest, pnSha1Hash, RTL_DIGEST_LENGTH_SHA1 );
-    rtl_digest_destroy( aDigest );
-
-    return memcmp( pnSha1Hash, pnVerifierHash, RTL_DIGEST_LENGTH_SHA1 ) == 0;
+    return aResult;
 }
 
 // the password verifier ------------------------------------------------------
@@ -438,8 +471,8 @@ class PasswordVerifier : public ::comphelper::IDocPasswordVerifier
 public:
     explicit            PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo );
 
-    virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const OUString& rPassword );
+    virtual ::comphelper::DocPasswordVerifierResult verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData );
 
     inline const sal_uInt8* getKey() const { return &maKey.front(); }
 
@@ -454,11 +487,29 @@ PasswordVerifier::PasswordVerifier( const PackageEncryptionInfo& rEncryptInfo ) 
 {
 }
 
-::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const OUString& rPassword )
+::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyPassword( const ::rtl::OUString& rPassword, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& o_rEncryptionData )
 {
     // verifies the password and writes the related decryption key into maKey
-    return lclGenerateEncryptionKey( mrEncryptInfo, rPassword, &maKey.front(), maKey.size() ) ?
+    o_rEncryptionData = lclGenerateEncryptionKey( mrEncryptInfo, rPassword, &maKey.front(), maKey.size() );
+    return ( o_rEncryptionData.getLength() > 0 ) ?
         ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
+}
+
+::comphelper::DocPasswordVerifierResult PasswordVerifier::verifyEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& rEncryptionData )
+{
+    ::comphelper::SequenceAsHashMap aHashData( rEncryptionData );
+    uno::Sequence< sal_Int8 > aKey = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionKey" ) ), uno::Sequence< sal_Int8 >() );
+    uno::Sequence< sal_Int8 > aVerifier = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifier" ) ), uno::Sequence< sal_Int8 >() );
+    uno::Sequence< sal_Int8 > aVerifierHash = aHashData.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "AES128EncryptionVerifierHash" ) ), uno::Sequence< sal_Int8 >() );
+
+    return lclCheckEncryptionData(
+                reinterpret_cast< const sal_uInt8* >( aKey.getConstArray() ),
+                aKey.getLength(),
+                reinterpret_cast< const sal_uInt8* >( aVerifier.getConstArray() ),
+                aVerifier.getLength(),
+                reinterpret_cast< const sal_uInt8* >( aVerifierHash.getConstArray() ),
+                aVerifierHash.getLength() )
+            ?  ::comphelper::DocPasswordVerifierResult_OK : ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
 }
 
 } // namespace
@@ -520,10 +571,10 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
                     (according to the verifier), or with an empty string if
                     user has cancelled the password input dialog. */
                 PasswordVerifier aVerifier( aEncryptInfo );
-                OUString aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                uno::Sequence< beans::NamedValue > aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
                     aVerifier, rMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
 
-                if( aPassword.getLength() == 0 )
+                if( aEncryptionData.getLength() == 0 )
                 {
                     rMediaDesc[ MediaDescriptor::PROP_ABORTED() ] <<= true;
                 }

@@ -85,6 +85,8 @@ SLOFILES= \
             $(SLO)$/winproc.obj 	\
             $(SLO)$/window2.obj 	\
             $(SLO)$/window3.obj		\
+            $(SLO)$/window4.obj		\
+            $(SLO)$/wpropset.obj	\
             $(SLO)$/wrkwin.obj
 
 # --- Targets ------------------------------------------------------
