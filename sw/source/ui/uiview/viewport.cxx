@@ -199,24 +199,13 @@ aDocSz = rSz;
     BOOL bModified = false;
     SwTwips lGreenOffset = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER * 2;
     SwTwips lTmp = aDocSz.Width() + lGreenOffset;
-    Size aEditSz( GetEditWin().PixelToLogic( GetEditWin().GetOutputSizePixel() ) );
 
-    if( !pWrtShell->GetViewOptions()->getBrowseMode() &&
-        lTmp < aEditSz.Width())
-    {
-        aNewVisArea.Left() = - (aEditSz.Width() - lTmp) / 2;
-        aNewVisArea.Right() = aEditSz.Width() + aNewVisArea.Left();
-        bModified = true;
-    }
-    else
-    {
     if ( aNewVisArea.Right() >= lTmp  )
     {
         lTmp = aNewVisArea.Right() - lTmp;
         aNewVisArea.Right() -= lTmp;
         aNewVisArea.Left() -= lTmp;
-            bModified = true;
-        }
+        bModified = true;
     }
 
     lTmp = aDocSz.Height() + lGreenOffset;
@@ -260,8 +249,7 @@ void SwView::SetVisArea( const Rectangle &rRect, BOOL bUpdateScrollbar )
         aLR.Bottom() += lMin - aLR.Top();
         aLR.Top() = lMin;
     }
-    if( pWrtShell->GetViewOptions()->getBrowseMode() &&
-        aLR.Left() < lMin )
+    if( aLR.Left() < lMin )
     {
         aLR.Right() += lMin - aLR.Left();
         aLR.Left() = lMin;
@@ -836,31 +824,14 @@ void SwView::CalcVisArea( const Size &rOutPixel )
     //Die Verschiebungen nach rechts und/oder unten koennen jetzt falsch
     //sein (z.B. Zoom aendern, Viewgroesse aendern.
     const long lBorder = IsDocumentBorder() ? DOCUMENTBORDER : DOCUMENTBORDER*2;
-
-    if( !pWrtShell->GetViewOptions()->getBrowseMode() &&
-        aDocSz.Width() < aRect.GetWidth())
-    {
-        //#i1761# if the document is smaller than the Window then put it to the center of the window
-        long lDelta = (aDocSz.Width() + lBorder - aRect.GetWidth())/2;
-        aRect.Right() = aRect.GetWidth() + lDelta;
-        aRect.Left() = lDelta;
-    }
-    else
+    if ( aRect.Left() )
     {
         const long lWidth = GetWrtShell().GetDocSize().Width() + lBorder;
-        if ( aRect.Left() >  0 )
-        {
         if ( aRect.Right() > lWidth )
         {
             long lDelta    = aRect.Right() - lWidth;
             aRect.Left()  -= lDelta;
             aRect.Right() -= lDelta;
-        }
-    }
-        else if( aRect.Left() < 0 )
-        {
-            aRect.Right() = aRect.GetWidth();
-            aRect.Left() = 0;
         }
     }
     if ( aRect.Top() )
