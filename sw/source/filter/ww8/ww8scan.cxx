@@ -892,11 +892,18 @@ void WW8SprmIter::SetSprms(const BYTE* pSprms_, long nLen_)
 
 const BYTE* WW8SprmIter::operator ++( int )
 {
-    if (nRemLen > 0)
+    if (nRemLen > 0 )
     {
-        pSprms += nAktSize;
-        nRemLen -= nAktSize;
-        UpdateMyMembers();
+        if( nRemLen >= nAktSize )
+        {
+            pSprms += nAktSize;
+            nRemLen -= nAktSize;
+            UpdateMyMembers();
+        }
+        else
+        {
+            throw( ::std::exception() );
+        }
     }
     return pSprms;
 }
@@ -3247,6 +3254,8 @@ void WW8PLCFx_Cp_FKP::GetSprms(WW8PLCFxDesc* p)
         Otherwise our cool fastsave algorithm can be brought to bear on the
         problem.
         */
+        if( !pPieceIter )
+            return;
         ULONG nOldPos = pPieceIter->GetIdx();
         bool bOk = pPieceIter->SeekPos(nOrigCp);
         pPieceIter->SetIdx( nOldPos );
@@ -7179,8 +7188,16 @@ void WW8DopTypography::ReadFromMem(BYTE *&pData)
     for (i=0; i < nMaxLeading; ++i)
         rgxchLPunct[i] = Get_Short(pData);
 
-    rgxchFPunct[cchFollowingPunct]=0;
-    rgxchLPunct[cchLeadingPunct]=0;
+    if (cchFollowingPunct >= 0 && cchFollowingPunct < nMaxFollowing)
+        rgxchFPunct[cchFollowingPunct]=0;
+    else
+        rgxchFPunct[nMaxFollowing - 1]=0;
+
+    if (cchLeadingPunct >= 0 && cchLeadingPunct < nMaxLeading)
+        rgxchLPunct[cchLeadingPunct]=0;
+    else
+        rgxchLPunct[nMaxLeading - 1]=0;
+
 }
 
 void WW8DopTypography::WriteToMem(BYTE *&pData) const

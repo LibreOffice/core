@@ -631,6 +631,8 @@ void SwDoc::setJobsetup(/*[in]*/ const JobSetup &rJobSetup )
 
 SwPrintData* SwDoc::getPrintData() const
 {
+    if(!pPrtData)
+        ((SwDoc*)this)->pPrtData = new SwPrintData;
     return pPrtData;
 }
 
@@ -1714,16 +1716,22 @@ sal_uInt16 SwDoc::GetPageCount() const
 const Size SwDoc::GetPageSize( sal_uInt16 nPageNum, bool bSkipEmptyPages ) const
 {
     Size aSize;
-    if( GetRootFrm() && nPageNum )
+    if ( GetRootFrm() && nPageNum )
     {
         const SwPageFrm* pPage = static_cast<const SwPageFrm*>
                                  (GetRootFrm()->Lower());
 
-        while( --nPageNum && pPage->GetNext() )
+        while ( --nPageNum && pPage->GetNext() )
+        {
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
 
-        if( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        // switch to next page for an empty page, if empty pages are not skipped
+        // in order to get a sensible page size for an empty page - e.g. for printing.
+        if ( !bSkipEmptyPages && pPage->IsEmptyPage() && pPage->GetNext() )
+        {
             pPage = static_cast<const SwPageFrm*>( pPage->GetNext() );
+        }
 
         aSize = pPage->Frm().SSize();
     }

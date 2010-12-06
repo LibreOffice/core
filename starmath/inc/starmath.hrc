@@ -107,7 +107,7 @@
 #define RID_READSYMBOLERROR         (RID_APP_START + 203)
 #define RID_NOMATHTYPEFACEWARNING   (RID_APP_START + 204)
 #define RID_OBJECTNAME              (RID_APP_START + 501)
-#define RID_VIEWNAME                (RID_APP_START + 502)
+    // free
 #define RID_UNDOEDITNAME            (RID_APP_START + 503)
 #define RID_UNDOFORMATNAME          (RID_APP_START + 504)
 #define RID_APPICO                  (RID_APP_START + 601)

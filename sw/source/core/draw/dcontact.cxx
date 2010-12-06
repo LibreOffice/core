@@ -1396,6 +1396,37 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
                 DisconnectFromLayout( false );
                 break;
             }
+        case SDRUSERCALL_CHILD_INSERTED :
+        case SDRUSERCALL_CHILD_REMOVED :
+        {
+            // --> AW, OD 2010-09-13 #i113730#
+            // force layer of controls for group objects containing control objects
+            if(dynamic_cast< SdrObjGroup* >(maAnchoredDrawObj.DrawObj()))
+            {
+                if(::CheckControlLayer(maAnchoredDrawObj.DrawObj()))
+                {
+                    const IDocumentDrawModelAccess* pIDDMA = static_cast<SwFrmFmt*>(pRegisteredIn)->getIDocumentDrawModelAccess();
+                    const SdrLayerID aCurrentLayer(maAnchoredDrawObj.DrawObj()->GetLayer());
+                    const SdrLayerID aControlLayerID(pIDDMA->GetControlsId());
+                    const SdrLayerID aInvisibleControlLayerID(pIDDMA->GetInvisibleControlsId());
+
+                    if(aCurrentLayer != aControlLayerID && aCurrentLayer != aInvisibleControlLayerID)
+                    {
+                        if ( aCurrentLayer == pIDDMA->GetInvisibleHellId() ||
+                             aCurrentLayer == pIDDMA->GetInvisibleHeavenId() )
+                        {
+                            maAnchoredDrawObj.DrawObj()->SetLayer(aInvisibleControlLayerID);
+                        }
+                        else
+                        {
+                            maAnchoredDrawObj.DrawObj()->SetLayer(aControlLayerID);
+                        }
+                    }
+                }
+            }
+            // fallthrough intended here
+            // <--
+        }
         case SDRUSERCALL_MOVEONLY:
         case SDRUSERCALL_RESIZE:
         case SDRUSERCALL_CHILD_MOVEONLY :
@@ -1403,8 +1434,6 @@ void SwDrawContact::_Changed( const SdrObject& rObj,
         case SDRUSERCALL_CHILD_CHGATTR :
         case SDRUSERCALL_CHILD_DELETE :
         case SDRUSERCALL_CHILD_COPY :
-        case SDRUSERCALL_CHILD_INSERTED :
-        case SDRUSERCALL_CHILD_REMOVED :
         {
             // --> OD 2004-08-04 #i31698# - improvement:
             // get instance <SwAnchoredDrawObject> only once

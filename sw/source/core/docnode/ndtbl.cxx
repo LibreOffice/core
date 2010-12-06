@@ -334,7 +334,13 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         new SwEndNode( aEndIdx, *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
-        pLine->GetTabBoxes().C40_INSERT( SwTableBox, pPrvBox, nInsPos + n );
+
+        SwTableBoxes & rTabBoxes = pLine->GetTabBoxes();
+        USHORT nRealInsPos = nInsPos + n;
+        if (nRealInsPos > rTabBoxes.Count())
+            nRealInsPos = rTabBoxes.Count();
+
+        rTabBoxes.C40_INSERT( SwTableBox, pPrvBox, nRealInsPos );
 
         //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
         if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
