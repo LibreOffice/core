@@ -777,26 +777,29 @@ void SAL_CALL ModuleUIConfigurationManager::dispose() throw (::com::sun::star::u
     css::lang::EventObject aEvent( xThis );
     m_aListenerContainer.disposeAndClear( aEvent );
 
-    {
-        ResetableGuard aGuard( m_aLock );
-        try
-        {
-            if ( m_xModuleImageManager.is() )
-                m_xModuleImageManager->dispose();
-        }
-        catch ( Exception& )
-        {
-        }
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ResetableGuard aGuard( m_aLock );
+    Reference< XComponent > xModuleImageManager( m_xModuleImageManager );
+    m_xModuleImageManager.clear();
+    m_xModuleAcceleratorManager.clear();
+    m_aUIElements[LAYER_USERDEFINED].clear();
+    m_aUIElements[LAYER_DEFAULT].clear();
+    m_xDefaultConfigStorage.clear();
+    m_xUserConfigStorage.clear();
+    m_xUserRootCommit.clear();
+    m_bConfigRead = false;
+    m_bModified = false;
+    m_bDisposed = true;
+    aGuard.unlock();
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-        m_xModuleImageManager.clear();
-        m_aUIElements[LAYER_USERDEFINED].clear();
-        m_aUIElements[LAYER_DEFAULT].clear();
-        m_xDefaultConfigStorage.clear();
-        m_xUserConfigStorage.clear();
-        m_xUserRootCommit.clear();
-        m_bConfigRead = false;
-        m_bModified = false;
-        m_bDisposed = true;
+    try
+    {
+        if ( xModuleImageManager.is() )
+            xModuleImageManager->dispose();
+    }
+    catch ( Exception& )
+    {
     }
 }
 
@@ -1371,30 +1374,35 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getImageManager()
     }
 
     return Reference< XInterface >( m_xModuleImageManager, UNO_QUERY );
-
-//    return Reference< XInterface >();
 }
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManager() throw (::com::sun::star::uno::RuntimeException)
 {
     ResetableGuard aGuard( m_aLock );
+
+    if ( m_bDisposed )
+        throw DisposedException();
+
     Reference< XMultiServiceFactory > xSMGR   = m_xServiceManager;
-    ::rtl::OUString                   aModule = /*m_aModuleShortName*/m_aModuleIdentifier;
-    aGuard.unlock();
+    ::rtl::OUString                   aModule = m_aModuleIdentifier;
 
-    Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
-    Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
+    if ( !m_xModuleAcceleratorManager.is() )
+    {
+        Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
+        Reference< XInitialization > xInit    (xManager, UNO_QUERY_THROW);
 
-    PropertyValue aProp;
-    aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
-    aProp.Value <<= aModule;
+        PropertyValue aProp;
+        aProp.Name    = ::rtl::OUString::createFromAscii("ModuleIdentifier");
+        aProp.Value <<= aModule;
 
-    Sequence< Any > lArgs(1);
-    lArgs[0] <<= aProp;
+        Sequence< Any > lArgs(1);
+        lArgs[0] <<= aProp;
 
-    xInit->initialize(lArgs);
+        xInit->initialize(lArgs);
+        m_xModuleAcceleratorManager = Reference< XInterface >( xManager, UNO_QUERY );
+    }
 
-    return xManager;
+    return m_xModuleAcceleratorManager;
 }
 
 Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getEventsManager() throw (::com::sun::star::uno::RuntimeException)

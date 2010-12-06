@@ -25,42 +25,18 @@
 *
 ************************************************************************/
 
-#ifndef INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
-#define INCLUDED_CONFIGMGR_SOURCE_MODIFICATIONS_HXX
+#ifndef INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
+#define INCLUDED_CONFIGMGR_SOURCE_ADDITIONS_HXX
 
 #include "sal/config.h"
 
-#include <map>
-
-#include "boost/noncopyable.hpp"
+#include <list>
 
 #include "path.hxx"
 
-namespace rtl { class OUString; }
-
 namespace configmgr {
 
-class Modifications: private boost::noncopyable {
-public:
-    struct Node {
-        typedef std::map< rtl::OUString, Node > Children;
-
-        Children children;
-    };
-
-    Modifications();
-
-    ~Modifications();
-
-    void add(Path const & path);
-
-    void remove(Path const & path);
-
-    Node const & getRoot() const;
-
-private:
-    Node root_;
-};
+typedef std::list< Path > Additions;
 
 }
 

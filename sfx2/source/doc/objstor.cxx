@@ -1917,7 +1917,25 @@ sal_Bool SfxObjectShell::ConnectTmpStorage_Impl(
             bResult = SaveCompleted( xTmpStorage );
 
             if ( bResult )
+            {
                 pImp->pBasicManager->setStorage( xTmpStorage );
+
+                // Get rid of this workaround after issue i113914 is fixed
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+                    xBasicLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+                try
+                {
+                    uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+                    xDialogLibraries->setRootStorage( xTmpStorage );
+                }
+                catch( uno::Exception& )
+                {}
+            }
         }
         catch( uno::Exception& )
         {}
@@ -2063,6 +2081,22 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
         // TODO/LATER: may be this code will be replaced, but not sure
         // Set storage in document library containers
         pImp->pBasicManager->setStorage( xStorage );
+
+        // Get rid of this workaround after issue i113914 is fixed
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xBasicLibraries( pImp->xBasicLibraries, uno::UNO_QUERY_THROW );
+            xBasicLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
+        try
+        {
+            uno::Reference< script::XStorageBasedLibraryContainer > xDialogLibraries( pImp->xDialogLibraries, uno::UNO_QUERY_THROW );
+            xDialogLibraries->setRootStorage( xStorage );
+        }
+        catch( uno::Exception& )
+        {}
     }
     else
     {

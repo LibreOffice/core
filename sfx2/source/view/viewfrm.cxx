@@ -75,6 +75,8 @@
 #include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/document/XViewDataSupplier.hpp>
+#include <com/sun/star/container/XIndexContainer.hpp>
 #include <rtl/ustrbuf.hxx>
 
 #include <unotools/localfilehelper.hxx>
@@ -96,6 +98,7 @@
 #include <comphelper/storagehelper.hxx>
 #include <svtools/asynclink.hxx>
 #include <svl/sharecontrolfile.hxx>
+#include <framework/framelistanalyzer.hxx>
 
 #include <boost/optional.hpp>
 
@@ -106,6 +109,8 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::lang;
 using ::com::sun::star::awt::XWindow;
 using ::com::sun::star::beans::PropertyValue;
+using ::com::sun::star::document::XViewDataSupplier;
+using ::com::sun::star::container::XIndexContainer;
 namespace css = ::com::sun::star;
 
 #ifndef GCC
@@ -2092,7 +2097,25 @@ SfxViewFrame* SfxViewFrame::LoadViewIntoFrame_Impl_NoThrow( const SfxObjectShell
         {
             ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
             Reference < XFrame > xDesktop( aContext.createComponent( "com.sun.star.frame.Desktop" ), UNO_QUERY_THROW );
-            xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+
+            if ( !i_bHidden )
+            {
+                try
+                {
+                    // if there is a backing component, use it
+                    Reference< XFramesSupplier > xTaskSupplier( xDesktop , css::uno::UNO_QUERY_THROW );
+                    ::framework::FrameListAnalyzer aAnalyzer( xTaskSupplier, Reference< XFrame >(), ::framework::FrameListAnalyzer::E_BACKINGCOMPONENT );
+
+                    if ( aAnalyzer.m_xBackingComponent.is() )
+                        xFrame = aAnalyzer.m_xBackingComponent;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !xFrame.is() )
+                xFrame.set( xDesktop->findFrame( DEFINE_CONST_UNICODE("_blank"), 0 ), UNO_SET_THROW );
+
             bOwnFrame = true;
         }
 
@@ -2242,6 +2265,72 @@ SfxViewFrame* SfxViewFrame::Get( const Reference< XController>& i_rController, c
 
 //--------------------------------------------------------------------
 
+void SfxViewFrame::SaveCurrentViewData_Impl( const USHORT i_nNewViewId )
+{
+    SfxViewShell* pCurrentShell = GetViewShell();
+    ENSURE_OR_RETURN_VOID( pCurrentShell != NULL, "SfxViewFrame::SaveCurrentViewData_Impl: no current view shell -> no current view data!" );
+
+    // determine the logical (API) view name
+    const SfxObjectFactory& rDocFactory( pCurrentShell->GetObjectShell()->GetFactory() );
+    const sal_uInt16 nCurViewNo = rDocFactory.GetViewNo_Impl( GetCurViewId(), 0 );
+    const String sCurrentViewName = rDocFactory.GetViewFactory( nCurViewNo ).GetAPIViewName();
+    const sal_uInt16 nNewViewNo = rDocFactory.GetViewNo_Impl( i_nNewViewId, 0 );
+    const String sNewViewName = rDocFactory.GetViewFactory( nNewViewNo ).GetAPIViewName();
+    if ( ( sCurrentViewName.Len() == 0 ) || ( sNewViewName.Len() == 0 ) )
+    {
+        // can't say anything about the view, the respective application did not yet migrate its code to
+        // named view factories => bail out
+        OSL_ENSURE( false, "SfxViewFrame::SaveCurrentViewData_Impl: views without API names? Shouldn't happen anymore?" );
+        return;
+    }
+    OSL_ENSURE( !sNewViewName.Equals( sCurrentViewName ), "SfxViewFrame::SaveCurrentViewData_Impl: suspicious: new and old view name are identical!" );
+
+    // save the view data only when we're moving from a non-print-preview to the print-preview view
+    if ( !sNewViewName.EqualsAscii( "PrintPreview" ) )
+        return;
+
+    // retrieve the view data from the view
+    Sequence< PropertyValue > aViewData;
+    pCurrentShell->WriteUserDataSequence( aViewData );
+
+    try
+    {
+        // retrieve view data (for *all* views) from the model
+        const Reference< XController > xController( pCurrentShell->GetController(), UNO_SET_THROW );
+        const Reference< XViewDataSupplier > xViewDataSupplier( xController->getModel(), UNO_QUERY_THROW );
+        const Reference< XIndexContainer > xViewData( xViewDataSupplier->getViewData(), UNO_QUERY_THROW );
+
+        // look up the one view data item which corresponds to our current view, and remove it
+        const sal_Int32 nCount = xViewData->getCount();
+        for ( sal_Int32 i=0; i<nCount; ++i )
+        {
+            const ::comphelper::NamedValueCollection aCurViewData( xViewData->getByIndex(i) );
+            ::rtl::OUString sViewId( aCurViewData.getOrDefault( "ViewId", ::rtl::OUString() ) );
+            if ( sViewId.getLength() == 0 )
+                continue;
+
+            const SfxViewFactory* pViewFactory = rDocFactory.GetViewFactoryByViewName( sViewId );
+            if ( pViewFactory == NULL )
+                continue;
+
+            if ( pViewFactory->GetOrdinal() == GetCurViewId() )
+            {
+                xViewData->removeByIndex(i);
+                break;
+            }
+        }
+
+        // then replace it with the most recent view data we just obtained
+        xViewData->insertByIndex( 0, makeAny( aViewData ) );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+//--------------------------------------------------------------------
+
 sal_Bool SfxViewFrame::SwitchToViewShell_Impl
 (
     sal_uInt16  nViewIdOrNo,    /*  > 0
@@ -2303,6 +2392,9 @@ sal_Bool SfxViewFrame::SwitchToViewShell_Impl
         // ID of the new view
         SfxObjectFactory& rDocFact = GetObjectShell()->GetFactory();
         const USHORT nViewId = ( bIsIndex || !nViewIdOrNo ) ? rDocFact.GetViewFactory( nViewIdOrNo ).GetOrdinal() : nViewIdOrNo;
+
+        // save the view data of the old view, so it can be restored later on (when needed)
+        SaveCurrentViewData_Impl( nViewId );
 
         // create and load new ViewShell
         SfxViewShell* pNewSh = LoadViewIntoFrame_Impl(
