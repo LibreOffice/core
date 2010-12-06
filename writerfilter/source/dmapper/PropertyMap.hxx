@@ -135,8 +135,6 @@ public:
 
     virtual void insertTableProperties( const PropertyMap* );
 
-    virtual bool IsRTL( bool& bSet );
-
 #ifdef DEBUG_DOMAINMAPPER
     virtual XMLTag::Pointer_t toTag() const;
 #endif
@@ -267,7 +265,6 @@ public:
     void SetGutterRTL( bool bSet ) { m_bGutterRTL = bSet;}
     void SetDzaGutter( sal_Int32 nSet ) {m_nDzaGutter = nSet; }
     void SetSFBiDi( bool bSet ) { m_bSFBiDi = bSet;}
-    bool GetSFBiDi( ) { return m_bSFBiDi;}
 
     void SetGridType(sal_Int32 nSet) { m_nGridType = nSet; }
     void SetGridLinePitch( sal_Int32 nSet ) { m_nGridLinePitch = nSet; }

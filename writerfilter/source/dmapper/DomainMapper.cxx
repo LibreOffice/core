@@ -1319,30 +1319,12 @@ void DomainMapper::attribute(Id nName, Value & val)
         }
         break;
         case NS_ooxml::LN_CT_Ind_start:
-            if (m_pImpl->GetTopContext())
-            {
-                PropertyIds eId = PROP_PARA_LEFT_MARGIN;
-                if ( m_pImpl->IsRTL() )
-                    eId = PROP_PARA_RIGHT_MARGIN;
-                m_pImpl->GetTopContext()->Insert(
-                    eId, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
-            }
-            break;
-        case NS_ooxml::LN_CT_Ind_end:
-            if (m_pImpl->GetTopContext())
-            {
-                PropertyIds eId = PROP_PARA_RIGHT_MARGIN;
-                if ( m_pImpl->IsRTL() )
-                    eId = PROP_PARA_LEFT_MARGIN;
-                m_pImpl->GetTopContext()->Insert(
-                    eId, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
-            }
-            break;
         case NS_ooxml::LN_CT_Ind_left:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(
                     PROP_PARA_LEFT_MARGIN, true, uno::makeAny( ConversionHelper::convertTwipToMM100(nIntValue ) ));
             break;
+        case NS_ooxml::LN_CT_Ind_end:
         case NS_ooxml::LN_CT_Ind_right:
             if (m_pImpl->GetTopContext())
                 m_pImpl->GetTopContext()->Insert(

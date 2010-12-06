@@ -598,8 +598,6 @@ public:
 
     void ApplySettingsTable();
     SectionPropertyMap * GetSectionContext();
-
-    bool IsRTL();
 };
 } //namespace dmapper
 } //namespace writerfilter

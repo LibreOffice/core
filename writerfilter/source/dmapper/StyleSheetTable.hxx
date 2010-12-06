@@ -118,8 +118,6 @@ public:
 
     ::rtl::OUString getOrCreateCharStyle( PropertyValueVector_t& rCharProperties );
 
-    bool IsRTL( rtl::OUString sStyleName, bool& bSet );
-
 private:
     void resolveAttributeProperties(Value & val);
     void resolveSprmProps(Sprm & sprm_);

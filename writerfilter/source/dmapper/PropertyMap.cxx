@@ -38,7 +38,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
-#include <com/sun/star/text/WritingMode2.hpp>
+#include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/TextGridMode.hpp>
@@ -131,23 +131,6 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
                           (PropertyDefinition( eId, bIsTextProperty),
                            rAny ));
     Invalidate();
-}
-
-bool PropertyMap::IsRTL( bool& bSet )
-{
-    bool bRtl = false;
-    bSet = false;
-
-    PropertyMap::iterator aIt = find( PropertyDefinition( PROP_WRITING_MODE, true ) );
-    if( aIt != end( ) )
-    {
-        sal_Int16 nValue(0);
-        aIt->second >>= nValue;
-        bRtl = ( nValue == text::WritingMode2::RL_TB );
-        bSet = true;
-    }
-
-    return bRtl;
 }
 
 #ifdef DEBUG_DOMAINMAPPER
@@ -893,14 +876,14 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         if( aElement != end())
             aElement->second >>= nWidth;
 
-        sal_Int32 eWritingMode = text::WritingMode2::LR_TB;
+        text::WritingMode eWritingMode = text::WritingMode_LR_TB;
         aElement = find(PropertyDefinition( PROP_WRITING_MODE, false ));
         if( aElement != end())
             aElement->second >>= eWritingMode;
 
 
 
-        sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode2::LR_TB ?
+        sal_Int32 nTextAreaHeight = eWritingMode == text::WritingMode_LR_TB ?
             nHeight - m_nTopMargin - m_nBottomMargin :
             nWidth - m_nLeftMargin - m_nRightMargin;
 
