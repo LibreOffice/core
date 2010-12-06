@@ -1068,6 +1068,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 }
                 if( bMoveRulerAction )
                 {
+                    ScDocShellModificator aModificator( *pDocShell );
                     if( bLeftRulerChange && bLeftRulerMove )
                     {
                        aLRItem.SetLeft( (long)( aButtonUpPt.X() / HMM_PER_TWIPS + aOffset.X() / HMM_PER_TWIPS ));
@@ -1096,6 +1097,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     Rectangle aRect(0,0,10000,10000);
                     Paint( aRect );
+                    aModificator.SetDocumentModified();
                     bLeftRulerChange = FALSE;
                     bRightRulerChange = FALSE;
                 }
@@ -1128,6 +1130,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
                 DBG_ASSERT( pStyleSheet, "PageStyle not found" );
                 if ( pStyleSheet )
                 {
+                    ScDocShellModificator aModificator( *pDocShell );
                     ScStyleSaveData aOldData;
                     if( bUndo )
                         aOldData.InitFromStyle( pStyleSheet );
@@ -1192,6 +1195,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 
                     Rectangle  aRect(0,0,10000,10000);
                     Paint( aRect );
+                    aModificator.SetDocumentModified();
                     bTopRulerChange = FALSE;
                     bBottomRulerChange = FALSE;
                     bHeaderRulerChange = FALSE;
