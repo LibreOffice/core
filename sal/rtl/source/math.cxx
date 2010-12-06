@@ -318,44 +318,37 @@ inline void doubleToString(StringT ** pResult,
 
     if ( rtl::math::isNan( fValue ) )
     {
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-1.#NAN");
+        // #i112652# XMLSchema-2
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("NaN");
         if (pResultCapacity == 0)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
+        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
+                       RTL_CONSTASCII_STRINGPARAM("NaN"));
 
-        if ( bSign )
-            T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                           RTL_CONSTASCII_STRINGPARAM("-"));
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("1"));
-        T::appendChar(pResult, pResultCapacity, &nResultOffset, cDecSeparator);
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("#NAN"));
         return;
     }
 
     bool bHuge = fValue == HUGE_VAL; // g++ 3.0.1 requires it this way...
     if ( bHuge || rtl::math::isInf( fValue ) )
     {
-        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-1.#INF");
+        // #i112652# XMLSchema-2
+        sal_Int32 nCapacity = RTL_CONSTASCII_LENGTH("-INF");
         if (pResultCapacity == 0)
         {
             pResultCapacity = &nCapacity;
             T::createBuffer(pResult, pResultCapacity);
             nResultOffset = 0;
         }
-
         if ( bSign )
             T::appendAscii(pResult, pResultCapacity, &nResultOffset,
                            RTL_CONSTASCII_STRINGPARAM("-"));
         T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("1"));
-        T::appendChar(pResult, pResultCapacity, &nResultOffset, cDecSeparator);
-        T::appendAscii(pResult, pResultCapacity, &nResultOffset,
-                       RTL_CONSTASCII_STRINGPARAM("#INF"));
+                       RTL_CONSTASCII_STRINGPARAM("INF"));
+
         return;
     }
 
@@ -736,158 +729,185 @@ inline double stringToDouble(CharT const * pBegin, CharT const * pEnd,
             ++p0;
     }
     CharT const * p = p0;
+    bool bDone = false;
 
-    // leading zeros and group separators may be safely ignored
-    while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
-        ++p;
-
-    long nValExp = 0;       // carry along exponent of mantissa
-
-    // integer part of mantissa
-    for (; p != pEnd; ++p)
+    // #i112652# XMLSchema-2
+    if (3 >= (pEnd - p))
     {
-        CharT c = *p;
-        if (isDigit(c))
+        if ((CharT('N') == p[0]) && (CharT('a') == p[1])
+            && (CharT('N') == p[2]))
         {
-            fVal = fVal * 10.0 + static_cast< double >( c - CharT('0') );
-            ++nValExp;
+            p += 3;
+            rtl::math::setNan( &fVal );
+            bDone = true;
         }
-        else if (c != cGroupSeparator)
-            break;
+        else if ((CharT('I') == p[0]) && (CharT('N') == p[1])
+                 && (CharT('F') == p[2]))
+        {
+            p += 3;
+            fVal = HUGE_VAL;
+            eStatus = rtl_math_ConversionStatus_OutOfRange;
+            bDone = true;
+        }
     }
 
-    // fraction part of mantissa
-    if (p != pEnd && *p == cDecSeparator)
+    if (!bDone) // do not recognize e.g. NaN1.23
     {
-        ++p;
-        double fFrac = 0.0;
-        long nFracExp = 0;
-        while (p != pEnd && *p == CharT('0'))
-        {
-            --nFracExp;
+        // leading zeros and group separators may be safely ignored
+        while (p != pEnd && (*p == CharT('0') || *p == cGroupSeparator))
             ++p;
-        }
-        if ( nValExp == 0 )
-            nValExp = nFracExp - 1;    // no integer part => fraction exponent
-        // one decimal digit needs ld(10) ~= 3.32 bits
-        static const int nSigs = (DBL_MANT_DIG / 3) + 1;
-        int nDigs = 0;
+
+        long nValExp = 0;       // carry along exponent of mantissa
+
+        // integer part of mantissa
         for (; p != pEnd; ++p)
         {
             CharT c = *p;
-            if (!isDigit(c))
-                break;
-            if ( nDigs < nSigs )
-            {   // further digits (more than nSigs) don't have any significance
-                fFrac = fFrac * 10.0 + static_cast< double >( c - CharT('0') );
-                --nFracExp;
-                ++nDigs;
+            if (isDigit(c))
+            {
+                fVal = fVal * 10.0 + static_cast< double >( c - CharT('0') );
+                ++nValExp;
             }
+            else if (c != cGroupSeparator)
+                break;
         }
-        if ( fFrac != 0.0 )
-            fVal += rtl::math::pow10Exp( fFrac, nFracExp );
-        else if ( nValExp < 0 )
-            nValExp = 0;        // no digit other than 0 after decimal point
-    }
 
-    if ( nValExp > 0 )
-        --nValExp;      // started with offset +1 at the first mantissa digit
-
-    // Exponent
-    if (p != p0 && p != pEnd && (*p == CharT('E') || *p == CharT('e')))
-    {
-        ++p;
-        bool bExpSign;
-        if (p != pEnd && *p == CharT('-'))
+        // fraction part of mantissa
+        if (p != pEnd && *p == cDecSeparator)
         {
-            bExpSign = true;
             ++p;
-        }
-        else
-        {
-            bExpSign = false;
-            if (p != pEnd && *p == CharT('+'))
+            double fFrac = 0.0;
+            long nFracExp = 0;
+            while (p != pEnd && *p == CharT('0'))
+            {
+                --nFracExp;
                 ++p;
-        }
-        if ( fVal == 0.0 )
-        {   // no matter what follows, zero stays zero, but carry on the offset
-            while (p != pEnd && isDigit(*p))
-                ++p;
-        }
-        else
-        {
-            bool bOverFlow = false;
-            long nExp = 0;
+            }
+            if ( nValExp == 0 )
+                nValExp = nFracExp - 1; // no integer part => fraction exponent
+            // one decimal digit needs ld(10) ~= 3.32 bits
+            static const int nSigs = (DBL_MANT_DIG / 3) + 1;
+            int nDigs = 0;
             for (; p != pEnd; ++p)
             {
                 CharT c = *p;
                 if (!isDigit(c))
                     break;
-                int i = c - CharT('0');
-                if ( long10Overflow( nExp, i ) )
-                    bOverFlow = true;
-                else
-                    nExp = nExp * 10 + i;
+                if ( nDigs < nSigs )
+                {   // further digits (more than nSigs) don't have any
+                    // significance
+                    fFrac = fFrac * 10.0 + static_cast<double>(c - CharT('0'));
+                    --nFracExp;
+                    ++nDigs;
+                }
             }
-            if ( nExp )
+            if ( fFrac != 0.0 )
+                fVal += rtl::math::pow10Exp( fFrac, nFracExp );
+            else if ( nValExp < 0 )
+                nValExp = 0;    // no digit other than 0 after decimal point
+        }
+
+        if ( nValExp > 0 )
+            --nValExp;  // started with offset +1 at the first mantissa digit
+
+        // Exponent
+        if (p != p0 && p != pEnd && (*p == CharT('E') || *p == CharT('e')))
+        {
+            ++p;
+            bool bExpSign;
+            if (p != pEnd && *p == CharT('-'))
             {
-                if ( bExpSign )
-                    nExp = -nExp;
-                long nAllExp = ( bOverFlow ? 0 : nExp + nValExp );
-                if ( nAllExp > DBL_MAX_10_EXP || (bOverFlow && !bExpSign) )
-                {   // overflow
-                    fVal = HUGE_VAL;
-                    eStatus = rtl_math_ConversionStatus_OutOfRange;
+                bExpSign = true;
+                ++p;
+            }
+            else
+            {
+                bExpSign = false;
+                if (p != pEnd && *p == CharT('+'))
+                    ++p;
+            }
+            if ( fVal == 0.0 )
+            {   // no matter what follows, zero stays zero, but carry on the
+                // offset
+                while (p != pEnd && isDigit(*p))
+                    ++p;
+            }
+            else
+            {
+                bool bOverFlow = false;
+                long nExp = 0;
+                for (; p != pEnd; ++p)
+                {
+                    CharT c = *p;
+                    if (!isDigit(c))
+                        break;
+                    int i = c - CharT('0');
+                    if ( long10Overflow( nExp, i ) )
+                        bOverFlow = true;
+                    else
+                        nExp = nExp * 10 + i;
                 }
-                else if ( nAllExp < DBL_MIN_10_EXP || (bOverFlow && bExpSign) )
-                {   // underflow
-                    fVal = 0.0;
-                    eStatus = rtl_math_ConversionStatus_OutOfRange;
+                if ( nExp )
+                {
+                    if ( bExpSign )
+                        nExp = -nExp;
+                    long nAllExp = ( bOverFlow ? 0 : nExp + nValExp );
+                    if ( nAllExp > DBL_MAX_10_EXP || (bOverFlow && !bExpSign) )
+                    {   // overflow
+                        fVal = HUGE_VAL;
+                        eStatus = rtl_math_ConversionStatus_OutOfRange;
+                    }
+                    else if ((nAllExp < DBL_MIN_10_EXP) ||
+                             (bOverFlow && bExpSign) )
+                    {   // underflow
+                        fVal = 0.0;
+                        eStatus = rtl_math_ConversionStatus_OutOfRange;
+                    }
+                    else if ( nExp > DBL_MAX_10_EXP || nExp < DBL_MIN_10_EXP )
+                    {   // compensate exponents
+                        fVal = rtl::math::pow10Exp( fVal, -nValExp );
+                        fVal = rtl::math::pow10Exp( fVal, nAllExp );
+                    }
+                    else
+                        fVal = rtl::math::pow10Exp( fVal, nExp );  // normal
                 }
-                else if ( nExp > DBL_MAX_10_EXP || nExp < DBL_MIN_10_EXP )
-                {   // compensate exponents
-                    fVal = rtl::math::pow10Exp( fVal, -nValExp );
-                    fVal = rtl::math::pow10Exp( fVal, nAllExp );
-                }
-                else
-                    fVal = rtl::math::pow10Exp( fVal, nExp );      // normal
             }
         }
-    }
-    else if (p - p0 == 2 && p != pEnd && p[0] == CharT('#')
-             && p[-1] == cDecSeparator && p[-2] == CharT('1'))
-    {
-        if (pEnd - p >= 4 && p[1] == CharT('I') && p[2] == CharT('N')
-            && p[3] == CharT('F'))
+        else if (p - p0 == 2 && p != pEnd && p[0] == CharT('#')
+                 && p[-1] == cDecSeparator && p[-2] == CharT('1'))
         {
-            // "1.#INF", "+1.#INF", "-1.#INF"
-            p += 4;
-            fVal = HUGE_VAL;
-            eStatus = rtl_math_ConversionStatus_OutOfRange;
-            // Eat any further digits:
-            while (p != pEnd && isDigit(*p))
-                ++p;
-        }
-        else if (pEnd - p >= 4 && p[1] == CharT('N') && p[2] == CharT('A')
-            && p[3] == CharT('N'))
-        {
-            // "1.#NAN", "+1.#NAN", "-1.#NAN"
-            p += 4;
-            rtl::math::setNan( &fVal );
-            if (bSign)
+            if (pEnd - p >= 4 && p[1] == CharT('I') && p[2] == CharT('N')
+                && p[3] == CharT('F'))
             {
-                union {
-                    double sd;
-                    sal_math_Double md;
-                } m;
-                m.sd = fVal;
-                m.md.w32_parts.msw |= 0x80000000; // create negative NaN
-                fVal = m.sd;
-                bSign = false; // don't negate again
+                // "1.#INF", "+1.#INF", "-1.#INF"
+                p += 4;
+                fVal = HUGE_VAL;
+                eStatus = rtl_math_ConversionStatus_OutOfRange;
+                // Eat any further digits:
+                while (p != pEnd && isDigit(*p))
+                    ++p;
             }
-            // Eat any further digits:
-            while (p != pEnd && isDigit(*p))
-                ++p;
+            else if (pEnd - p >= 4 && p[1] == CharT('N') && p[2] == CharT('A')
+                && p[3] == CharT('N'))
+            {
+                // "1.#NAN", "+1.#NAN", "-1.#NAN"
+                p += 4;
+                rtl::math::setNan( &fVal );
+                if (bSign)
+                {
+                    union {
+                        double sd;
+                        sal_math_Double md;
+                    } m;
+                    m.sd = fVal;
+                    m.md.w32_parts.msw |= 0x80000000; // create negative NaN
+                    fVal = m.sd;
+                    bSign = false; // don't negate again
+                }
+                // Eat any further digits:
+                while (p != pEnd && isDigit(*p))
+                    ++p;
+            }
         }
     }
 

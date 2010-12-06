@@ -122,6 +122,7 @@ IDLFILES=\
     DatabaseRange.idl\
     DatabaseRanges.idl\
     DatabaseRangesEnumeration.idl\
+    DimensionFlags.idl\
     DocumentSettings.idl\
      ExternalDocLink.idl\
      ExternalDocLinks.idl\
