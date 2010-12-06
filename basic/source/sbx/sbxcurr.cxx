@@ -29,101 +29,289 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#include <basic/sbx.hxx>
 #include <tools/errcode.hxx>
+#include <vcl/svapp.hxx>        // for SvtSysLocale
 
-#define _TLBIGINT_INT64
-#include <tools/bigint.hxx>
-
+#include <basic/sbx.hxx>
 #include <basic/sbxvar.hxx>
 #include "sbxconv.hxx"
 
-static ::rtl::OUString   ImpCurrencyToString( const SbxINT64& );
-static SbxINT64 ImpStringToCurrency( const ::rtl::OUString& );
 
-SbxINT64 ImpGetCurrency( const SbxValues* p )
+static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
 {
-    SbxValues aTmp;
-    SbxINT64 nRes;
+    bool isNeg = ( rVal < 0 );
+    sal_Int64 absVal = isNeg ? -rVal : rVal;
+
+    SvtSysLocale aSysLocale;
+    sal_Unicode cDecimalSep = '.', cThousandSep = ',';
+#if MAYBEFUTURE
+    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
+    cDecimalSep = rData.getNumDecimalSep().GetBuffer()[0];
+    cThousandSep = rData.getNumThousandSep().GetBuffer()[0];
+#endif
+
+    rtl::OUString aAbsStr = rtl::OUString::valueOf( absVal );
+    rtl::OUStringBuffer aBuf;
+
+    sal_Int32 initialLen = aAbsStr.getLength();
+
+    bool bLessThanOne = false;
+    if ( initialLen  <= 4 )  // if less the 1
+        bLessThanOne = true;
+
+    sal_Int32 nCapacity = 6; // minimum e.g. 0.0000
+
+    if ( !bLessThanOne )
+    {
+        nCapacity = initialLen + 1;
+        if ( initialLen > 5 )
+        {
+            sal_Int32 nThouSeperators = ( initialLen - 5 ) / 3;
+            nCapacity += nThouSeperators;
+        }
+    }
+
+    if ( isNeg )
+        ++nCapacity;
+
+    aBuf.setLength( nCapacity );
+
+
+    sal_Int32 nDigitCount = 0;
+    sal_Int32 nInsertIndex = nCapacity - 1;
+    sal_Int32 nEndIndex = isNeg ? 1 : 0;
+
+    for ( sal_Int32 charCpyIndex = aAbsStr.getLength() - 1; nInsertIndex >= nEndIndex;  ++nDigitCount )
+    {
+        if ( nDigitCount == 4 )
+            aBuf.setCharAt( nInsertIndex--, cDecimalSep );
+        if ( nDigitCount > 4 && ! ( ( nDigitCount - 4  ) % 3) )
+            aBuf.setCharAt( nInsertIndex--, cThousandSep );
+        if ( nDigitCount < initialLen )
+            aBuf.setCharAt( nInsertIndex--, aAbsStr[ charCpyIndex-- ] );
+        else
+        // Handle leading 0's to right of decimal point
+        // Note: in VBA the stringification is a little more complex
+        // but more natural as only the necessary digits
+        // to the right of the decimal places are displayed
+        // It would be great to conditionally be able to display like that too
+        //
+        // Val   OOo (Cur)  VBA (Cur)
+        // ---   ---------  ---------
+        // 0     0.0000     0
+        // 0.1   0.1000     0.1
+
+            aBuf.setCharAt( nInsertIndex--, (sal_Unicode)'0' );
+    }
+    if ( isNeg )
+            aBuf.setCharAt( nInsertIndex, (sal_Unicode)'-' );
+
+    aAbsStr = aBuf.makeStringAndClear();
+    return aAbsStr;
+}
+
+
+static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
+{
+// TODO consider various possible errors: overflow, end-of-string check for leftovers from malformed string
+    sal_Int32   nFractDigit = 4;
+    sal_Int64   nResult = 0;
+    sal_Bool    bNeg = sal_False;
+
+    const sal_Unicode* p = rStr.getStr();
+
+    SvtSysLocale aSysLocale;
+#if MAYBEFUTURE
+    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
+    sal_Unicode cLocaleDeciPnt = rData.getNumDecimalSep().GetBuffer()[0];
+    sal_Unicode cLocale1000Sep = rData.getNumThousandSep().GetBuffer()[0];
+#endif
+    sal_Unicode cSpaceSep = sal_Unicode(' ');
+    sal_Unicode cDeciPnt = sal_Unicode('.');
+    sal_Unicode c1000Sep = sal_Unicode(',');
+
+#if MAYBEFUTURE
+        // score each set of separators (Locale and Basic) on total number of matches
+        // if one set has more matches use that set
+        // if tied use the set with the only or rightmost decimal separator match
+        // currency is fixed pt system: usually expect the decimal pt, 1000sep may occur
+    sal_Int32 LocaleScore = 0;
+    sal_Int32 LocaleLastDeci = -1;
+    sal_Int32 LOBasicScore = 0;
+    sal_Int32 LOBasicLastDeci = -1;
+
+    for( int idx=0; idx<rStr.getLength(); idx++ )
+    {
+        if ( *(p+idx) == cLocaleDeciPnt )
+        {
+            LocaleScore++;
+            LocaleLastDeci = idx;
+        }
+        if ( *(p+idx) == cLocale1000Sep )
+            LocaleScore++;
+
+        if ( *(p+idx) == cDeciPnt )
+        {
+            LOBasicScore++;
+            LOBasicLastDeci = idx;
+        }
+        if ( *(p+idx) == c1000Sep )
+            LOBasicScore++;
+    }
+    if ( ( LocaleScore > LOBasicScore )
+       ||( LocaleScore = LOBasicScore && LocaleLastDeci > LOBasicLastDeci ) )
+    {
+        cDeciPnt = cLocaleDeciPnt;
+        c1000Sep = cLocale1000Sep;
+    }
+#endif
+
+    //  p == original param value: re-starting at top of string
+    while( *p == cSpaceSep ) p++;                   // skip leading spaces
+    if( *p == sal_Unicode('-') )
+    {
+        p++;
+        bNeg = sal_True;
+    }
+    else if ( *p == sal_Unicode('+') )
+        p++;
+
+    while( *p == cSpaceSep ) p++;                   // skip space between sign and number
+
+    // always accept space as thousand separator (is never decimal pt; maybe stray)
+    // exits on non-numeric (incl. null terminator)
+    while( ( *p >= '0' && *p <= '9' ) || *p == c1000Sep || *p == cSpaceSep )
+    {
+        if ( *p >= '0' && *p <= '9' )
+            nResult = 10*nResult + (sal_Int64)*p - (sal_Int64)'0';
+        p++;
+        // could be overflow here ... new result < last result (results always > 0)
+    }
+
+    if( *p == cDeciPnt ) {
+        p++;
+        while( (nFractDigit && *p >= '0' && *p <= '9') || *p == cSpaceSep )
+        {
+            nResult = 10*nResult + (sal_Int64)*p - (sal_Int64)'0';
+            nFractDigit--;
+            p++;
+            // could be overflow here ...
+        }
+        while( *p == cSpaceSep ) p++;               // skip mid-number/trailing spaces
+        if( *p >= '5' && *p <= '9' ) nResult ++;    // round 5-9 up = round to nearest
+    }
+    while( *p == cSpaceSep ) p++;                   // skip mid-number/trailing spaces
+    // error cases of junky string skip thru to end up here
+    // warning cases of extra num ignored end up here too
+
+    // make sure all of CURRENCY_FACTOR is applied
+    while( nFractDigit ) {
+        nResult *= 10;
+        nFractDigit--;
+    }
+    if( bNeg )  return -nResult;
+    return nResult;
+}
+
+
+sal_Int64 ImpGetCurrency( const SbxValues* p )
+{
+    SbxValues   aTmp;
+    sal_Int64  nRes;
 start:
     switch( +p->eType )
     {
+        case SbxERROR:
         case SbxNULL:
             SbxBase::SetError( SbxERR_CONVERSION );
+            nRes = 0; break;
         case SbxEMPTY:
-            nRes.SetNull(); break;
-        case SbxCHAR:
-            nRes = ImpDoubleToCurrency( (double)p->nChar ); break;
-        case SbxBYTE:
-            nRes = ImpDoubleToCurrency( (double)p->nByte ); break;
-        case SbxINTEGER:
-        case SbxBOOL:
-            nRes = ImpDoubleToCurrency( (double)p->nInteger ); break;
-        case SbxERROR:
-        case SbxUSHORT:
-            nRes = ImpDoubleToCurrency( (double)p->nUShort ); break;
+            nRes = 0; break;
         case SbxCURRENCY:
-            nRes = p->nLong64; break;
+            nRes = p->nInt64; break;
+        case SbxBYTE:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nByte);
+            break;
+        case SbxCHAR:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->pChar);
+            break;
+        case SbxBOOL:
+        case SbxINTEGER:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nInteger);
+            break;
+        case SbxUSHORT:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nUShort);
+            break;
         case SbxLONG:
-            nRes = ImpDoubleToCurrency( (double)p->nLong );
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nLong);
             break;
         case SbxULONG:
-            nRes = ImpDoubleToCurrency( (double)p->nULong );
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(p->nULong);
             break;
+
         case SbxSALINT64:
-            nRes = ImpDoubleToCurrency( (double)p->nInt64 );
-            break;
+        {
+            nRes = p->nInt64 * CURRENCY_FACTOR; break;
+            if ( nRes > SbxMAXSALINT64 )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
+            }
+        }
         case SbxSALUINT64:
-            nRes = ImpDoubleToCurrency( ImpSalUInt64ToDouble( p->uInt64 ) );
+            nRes = p->nInt64 * CURRENCY_FACTOR; break;
+            if ( nRes > SbxMAXSALINT64 )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXSALINT64;
+            }
+            else if ( nRes < SbxMINSALINT64 )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMINSALINT64;
+            }
             break;
+//TODO: bring back SbxINT64 types here for limits -1 with flag value at SAL_MAX/MIN
         case SbxSINGLE:
-            if( p->nSingle > SbxMAXCURR )
+            if( p->nSingle * CURRENCY_FACTOR + 0.5 > (float)SAL_MAX_INT64
+             || p->nSingle * CURRENCY_FACTOR - 0.5 < (float)SAL_MIN_INT64 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMax();
+                nRes = SAL_MAX_INT64;
+                if( p->nSingle * CURRENCY_FACTOR - 0.5 < (float)SAL_MIN_INT64 )
+                    nRes = SAL_MIN_INT64;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                break;
             }
-            else if( p->nSingle < SbxMINCURR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMin();
-            }
-            else
-                nRes = ImpDoubleToCurrency( (double)p->nSingle );
+            nRes = ImpDoubleToCurrency( (double)p->nSingle );
             break;
+
         case SbxDATE:
         case SbxDOUBLE:
-            if( p->nDouble > SbxMAXCURR )
+            if( p->nDouble * CURRENCY_FACTOR + 0.5 > (double)SAL_MAX_INT64
+             || p->nDouble * CURRENCY_FACTOR - 0.5 < (double)SAL_MIN_INT64 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMax();
+                nRes = SAL_MAX_INT64;
+                if( p->nDouble * CURRENCY_FACTOR - 0.5 < (double)SAL_MIN_INT64 )
+                    nRes = SAL_MIN_INT64;
+                SbxBase::SetError( SbxERR_OVERFLOW );
+                break;
             }
-            else if( p->nDouble < SbxMINCURR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMin();
-            }
-            else
-                nRes = ImpDoubleToCurrency( p->nDouble );
+            nRes = ImpDoubleToCurrency( p->nDouble );
             break;
+
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             {
             double d = 0.0;
             if( p->pDecimal )
                 p->pDecimal->getDouble( d );
-            if( d > SbxMAXCURR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMax();
-            }
-            else if( d < SbxMINCURR )
-            {
-                SbxBase::SetError( SbxERR_OVERFLOW ); nRes.SetMin();
-            }
-            else
-                nRes = ImpDoubleToCurrency( d );
+            nRes = ImpDoubleToCurrency( d );
             break;
             }
+
+
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-                nRes.SetNull();
+                nRes=0;
             else
                 nRes = ImpStringToCurrency( *p->pOUString );
             break;
@@ -134,23 +322,26 @@ start:
                 nRes = pVal->GetCurrency();
             else
             {
-                SbxBase::SetError( SbxERR_NO_OBJECT ); nRes.SetNull();
+                SbxBase::SetError( SbxERR_NO_OBJECT );
+                nRes=0;
             }
             break;
         }
 
         case SbxBYREF | SbxCHAR:
-            nRes = ImpDoubleToCurrency( (double)*p->pChar ); break;
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pChar);
+            break;
         case SbxBYREF | SbxBYTE:
-            nRes = ImpDoubleToCurrency( (double)*p->pByte ); break;
-        case SbxBYREF | SbxINTEGER:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pByte);
+            break;
         case SbxBYREF | SbxBOOL:
-            nRes = ImpDoubleToCurrency( (double)*p->pInteger ); break;
+        case SbxBYREF | SbxINTEGER:
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pInteger);
+            break;
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            nRes = ImpDoubleToCurrency( (double)*p->pUShort ); break;
-        case SbxBYREF | SbxCURRENCY:
-            nRes = *p->pLong64; break;
+            nRes = (sal_Int64)CURRENCY_FACTOR * (sal_Int64)(*p->pUShort);
+            break;
 
         // from here on had to be tested
         case SbxBYREF | SbxLONG:
@@ -162,23 +353,25 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
             aTmp.uInt64 = *p->puInt64; goto ref;
         ref:
-            aTmp.eType = SbxDataType( p->eType & 0x0FFF );
+            aTmp.eType = SbxDataType( p->eType & ~SbxBYREF );
             p = &aTmp; goto start;
 
         default:
-            SbxBase::SetError( SbxERR_CONVERSION ); nRes.SetNull();
+            SbxBase::SetError( SbxERR_CONVERSION );
+            nRes=0;
     }
     return nRes;
 }
 
-void ImpPutCurrency( SbxValues* p, const SbxINT64 &r )
+
+void ImpPutCurrency( SbxValues* p, const sal_Int64 r )
 {
-    double dVal = ImpCurrencyToDouble( r );
     SbxValues aTmp;
 start:
     switch( +p->eType )
@@ -204,21 +397,23 @@ start:
 
         // from here no longer
         case SbxSINGLE:
-            p->nSingle = (float)dVal; break;
+            p->nSingle = (float)( r / CURRENCY_FACTOR ); break;
         case SbxDATE:
         case SbxDOUBLE:
-            p->nDouble = dVal; break;
-        case SbxSALINT64:
-            p->nInt64 = ImpDoubleToSalInt64( dVal ); break;
+            p->nDouble =  ImpCurrencyToDouble( r ); break;
         case SbxSALUINT64:
-            p->uInt64 = ImpDoubleToSalUInt64( dVal ); break;
+            p->uInt64 = r / CURRENCY_FACTOR; break;
+        case SbxSALINT64:
+            p->nInt64 = r / CURRENCY_FACTOR; break;
+
         case SbxCURRENCY:
-            p->nLong64 = r; break;
+            p->nInt64 = r; break;
+
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             {
             SbxDecimal* pDec = ImpCreateDecimal( p );
-            if( !pDec->setDouble( dVal ) )
+            if( !pDec->setDouble( ImpCurrencyToDouble( r ) / CURRENCY_FACTOR ) )
                 SbxBase::SetError( SbxERR_OVERFLOW );
             break;
             }
@@ -226,7 +421,7 @@ start:
         case SbxSTRING:
         case SbxLPSTR:
             if( !p->pOUString )
-                p->pOUString = new ::rtl::OUString;
+                p->pOUString = new rtl::OUString;
 
             *p->pOUString = ImpCurrencyToString( r );
             break;
@@ -240,158 +435,100 @@ start:
             break;
         }
         case SbxBYREF | SbxCHAR:
-            if( dVal > SbxMAXCHAR )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( val > SbxMAXCHAR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXCHAR;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXCHAR;
             }
-            else if( dVal < SbxMINCHAR )
+            else if( val < SbxMINCHAR )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMINCHAR;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMINCHAR;
             }
-            *p->pChar = (xub_Unicode) dVal; break;
+            *p->pChar = (sal_Unicode) val; break;
+        }
         case SbxBYREF | SbxBYTE:
-            if( dVal > SbxMAXBYTE )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( val > SbxMAXBYTE )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXBYTE;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXBYTE;
             }
-            else if( dVal < 0 )
+            else if( val < 0 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pByte = (BYTE) dVal; break;
+            *p->pByte = (BYTE) val; break;
+        }
         case SbxBYREF | SbxINTEGER:
         case SbxBYREF | SbxBOOL:
-            if( dVal > SbxMAXINT )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( r > SbxMAXINT )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXINT;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXINT;
             }
-            else if( dVal < SbxMININT )
+            else if( r < SbxMININT )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMININT;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMININT;
             }
-            *p->pInteger = (INT16) dVal; break;
+            *p->pInteger = (INT16) r; break;
+        }
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
-            if( dVal > SbxMAXUINT )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( val > SbxMAXUINT )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXUINT;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXUINT;
             }
-            else if( dVal < 0 )
+            else if( val < 0 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pUShort = (UINT16) dVal; break;
+            *p->pUShort = (UINT16) val; break;
+        }
         case SbxBYREF | SbxLONG:
-            if( dVal > SbxMAXLNG )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( val > SbxMAXLNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXLNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXLNG;
             }
-            else if( dVal < SbxMINLNG )
+            else if( val < SbxMINLNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMINLNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMINLNG;
             }
-            *p->pLong = (INT32) dVal; break;
+            *p->pLong = (INT32) val; break;
+        }
         case SbxBYREF | SbxULONG:
-            if( dVal > SbxMAXULNG )
+        {
+            sal_Int64 val = r / CURRENCY_FACTOR;
+            if( val > SbxMAXULNG )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = SbxMAXULNG;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = SbxMAXULNG;
             }
-            else if( dVal < 0 )
+            else if( val < 0 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW ); dVal = 0;
+                SbxBase::SetError( SbxERR_OVERFLOW ); val = 0;
             }
-            *p->pULong = (UINT32) dVal; break;
+            *p->pULong = (UINT32) val;
+            break;
+        }
+        case SbxBYREF | SbxCURRENCY:
+            *p->pnInt64 = r; break;
         case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = ImpDoubleToSalInt64( dVal ); break;
+            *p->pnInt64 = r / CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = ImpDoubleToSalUInt64( dVal ); break;
+            *p->puInt64 = (sal_uInt64)r / CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSINGLE:
-            *p->pSingle = (float) dVal; break;
+            p->nSingle = (float)( r / CURRENCY_FACTOR ); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-            *p->pDouble = (double) dVal; break;
-        case SbxBYREF | SbxCURRENCY:
-            *p->pLong64 = r; break;
-
+            *p->pDouble = ImpCurrencyToDouble( r ); break;
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
-}
-
-// help functions for the conversion
-
-static ::rtl::OUString ImpCurrencyToString( const SbxINT64 &r )
-{
-    BigInt a10000 = 10000;
-
-    //return GetpApp()->GetAppInternational().GetCurr( BigInt( r ), 4 );
-    BigInt aInt( r );
-    aInt.Abs();
-    BigInt aFrac = aInt;
-    aInt  /= a10000;
-    aFrac %= a10000;
-    aFrac += a10000;
-
-    ::rtl::OUString aString;
-    if( r.nHigh < 0 )
-        aString = ::rtl::OUString( (sal_Unicode)'-' );
-    aString += aInt.GetString();
-    aString += ::rtl::OUString( (sal_Unicode)'.' );
-    aString += aFrac.GetString().GetBuffer()+1;
-    return aString;
-}
-
-static SbxINT64 ImpStringToCurrency( const ::rtl::OUString &r )
-{
-    int nDec = 4;
-    String aStr;
-    const sal_Unicode* p = r.getStr();
-
-    if( *p == '-' )
-        aStr += *p++;
-
-    while( *p >= '0' && *p <= '9' ) {
-        aStr += *p++;
-        if( *p == ',' )
-            p++;
-    }
-
-    if( *p == '.' ) {
-        p++;
-        while( nDec && *p >= '0' && *p <= '9' ) {
-            aStr += *p++;
-            nDec--;
-        }
-    }
-    while( nDec ) {
-        aStr += '0';
-        nDec--;
-    }
-
-    BigInt aBig( aStr );
-    SbxINT64 nRes;
-    aBig.INT64( &nRes );
-    return nRes;
-}
-
-double ImpINT64ToDouble( const SbxINT64 &r )
-{ return (double)r.nHigh*(double)4294967296.0 + (double)r.nLow; }
-
-SbxINT64 ImpDoubleToINT64( double d )
-{
-    SbxINT64 nRes;
-    nRes.Set( d );
-    return nRes;
-}
-
-double ImpUINT64ToDouble( const SbxUINT64 &r )
-{ return (double)r.nHigh*(double)4294967296.0 + (double)r.nLow; }
-
-SbxUINT64 ImpDoubleToUINT64( double d )
-{
-    SbxUINT64 nRes;
-    nRes.Set( d );
-    return nRes;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

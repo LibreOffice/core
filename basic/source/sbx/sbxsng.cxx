@@ -59,10 +59,6 @@ start:
             nRes = (float) p->nULong; break;
         case SbxSINGLE:
             nRes = p->nSingle; break;
-        case SbxSALINT64:
-            nRes = (float) p->nInt64; break;
-        case SbxSALUINT64:
-            nRes = (float) ImpSalUInt64ToDouble( p->uInt64 ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             if( p->pDecimal )
@@ -72,17 +68,17 @@ start:
             break;
         case SbxDATE:
         case SbxDOUBLE:
-        case SbxLONG64:
-        case SbxULONG64:
         case SbxCURRENCY:
+        case SbxSALINT64:
+        case SbxSALUINT64:
             {
             double dVal;
             if( p->eType == SbxCURRENCY )
-                dVal = ImpCurrencyToDouble( p->nLong64 );
-            else if( p->eType == SbxLONG64 )
-                dVal = ImpINT64ToDouble( p->nLong64 );
-            else if( p->eType == SbxULONG64 )
-                dVal = ImpUINT64ToDouble( p->nULong64 );
+                dVal = ImpCurrencyToDouble( p->nInt64 );
+            else if( p->eType == SbxSALINT64 )
+                dVal = (float) p->nInt64;
+            else if( p->eType == SbxSALUINT64 )
+                dVal = (float) p->uInt64;
             else
                 dVal = p->nDouble;
 
@@ -96,6 +92,7 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW );
                 nRes = static_cast< float >(SbxMINSNG);
             }
+            // tests for underflow - storing value too small for precision of single
             else if( dVal > 0 && dVal < SbxMAXSNG2 )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW );
@@ -167,15 +164,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
-        case SbxBYREF | SbxULONG64:
-            aTmp.nULong64 = *p->pULong64; goto ref;
-        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxSALINT64:
-            nRes = (float) *p->pnInt64; break;
-        case SbxBYREF | SbxSALUINT64:
-            nRes = (float) ImpSalUInt64ToDouble( *p->puInt64 ); break;
         case SbxBYREF | SbxCURRENCY:
-            aTmp.nLong64 = *p->pLong64; goto ref;
+            aTmp.nInt64 = *p->pnInt64; goto ref;
+        case SbxBYREF | SbxSALUINT64:
+            aTmp.uInt64 = *p->puInt64; goto ref;
         ref:
             aTmp.eType = SbxDataType( p->eType & 0x0FFF );
             p = &aTmp; goto start;
@@ -206,11 +199,7 @@ start:
         case SbxERROR:
         case SbxUSHORT:
             aTmp.pUShort = &p->nUShort; goto direct;
-        case SbxULONG64:
-            aTmp.pULong64 = &p->nULong64; goto direct;
-        case SbxLONG64:
         case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
@@ -334,9 +323,9 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = (double) n; break;
         case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = ImpDoubleToSalInt64( (double) n ); break;
+            *p->pnInt64 = (sal_Int64)n; break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = ImpDoubleToSalUInt64( (double) n ); break;
+            *p->puInt64 = (sal_uInt64)n; break;
         case SbxBYREF | SbxCURRENCY:
             double d;
             if( n > SbxMAXCURR )
@@ -351,7 +340,7 @@ start:
             {
                 d = n;
             }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
+            *p->pnInt64 = ImpDoubleToCurrency( d ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );

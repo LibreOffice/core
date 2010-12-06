@@ -47,13 +47,15 @@ extern BOOL ImpConvStringExt( ::rtl::OUString& rSrc, SbxDataType eTargetType );
 double      ImpRound( double );
 INT16       ImpGetInteger( const SbxValues* );
 void        ImpPutInteger( SbxValues*, INT16 );
+
 sal_Int64   ImpGetInt64( const SbxValues* );
 void        ImpPutInt64( SbxValues*, sal_Int64 );
 sal_uInt64  ImpGetUInt64( const SbxValues* );
 void        ImpPutUInt64( SbxValues*, sal_uInt64 );
 
-sal_Int64   ImpDoubleToSalInt64( double d );
+sal_Int64   ImpDoubleToSalInt64 ( double d );
 sal_uInt64  ImpDoubleToSalUInt64( double d );
+double      ImpSalInt64ToDouble ( sal_Int64 n );
 double      ImpSalUInt64ToDouble( sal_uInt64 n );
 
 // SBXLNG.CXX
@@ -71,37 +73,18 @@ void    ImpPutSingle( SbxValues*, float );
 double  ImpGetDouble( const SbxValues* );
 void    ImpPutDouble( SbxValues*, double, BOOL bCoreString=FALSE );
 
-#if FALSE
-// SBX64.CXX
-
-SbxINT64  ImpGetINT64( const SbxValues* );
-void      ImpPutINT64( SbxValues*, const SbxINT64& );
-SbxUINT64 ImpGetUINT64( const SbxValues* );
-void      ImpPutUINT64( SbxValues*, const SbxUINT64& );
-#endif
-
 // SBXCURR.CXX
 
-SbxUINT64 ImpDoubleToUINT64( double );
-double    ImpUINT64ToDouble( const SbxUINT64& );
-SbxINT64  ImpDoubleToINT64( double );
-double    ImpINT64ToDouble( const SbxINT64& );
+sal_Int64   ImpGetCurrency( const SbxValues* );
+void        ImpPutCurrency( SbxValues*, const sal_Int64 );
 
-#if TRUE
-INT32     ImpGetCurrLong( const SbxValues* );
-void      ImpPutCurrLong( SbxValues*, INT32 );
-INT32     ImpDoubleToCurrLong( double );
-double    ImpCurrLongToDouble( INT32 );
-#endif
+inline  sal_Int64   ImpDoubleToCurrency( double d )
+                    {   if (d > 0) return (sal_Int64)( d * CURRENCY_FACTOR + 0.5);
+                              else return (sal_Int64)( d * CURRENCY_FACTOR - 0.5);
+                    }
 
-SbxINT64  ImpGetCurrency( const SbxValues* );
-void      ImpPutCurrency( SbxValues*, const SbxINT64& );
-inline
-SbxINT64  ImpDoubleToCurrency( double d )
-          { return ImpDoubleToINT64( d * CURRENCY_FACTOR ); }
-inline
-double    ImpCurrencyToDouble( const SbxINT64 &r )
-          { return ImpINT64ToDouble( r ) / CURRENCY_FACTOR; }
+inline  double      ImpCurrencyToDouble( const sal_Int64 r )
+                    { return (double)r / (double)CURRENCY_FACTOR; }
 
 
 // SBXDEC.CXX
@@ -124,7 +107,7 @@ void    ImpPutString( SbxValues*, const ::rtl::OUString* );
 // SBXCHAR.CXX
 
 sal_Unicode ImpGetChar( const SbxValues* );
-void    ImpPutChar( SbxValues*, sal_Unicode );
+void        ImpPutChar( SbxValues*, sal_Unicode );
 
 // SBXBYTE.CXX
 BYTE    ImpGetByte( const SbxValues* );
@@ -143,9 +126,9 @@ void    ImpPutULong( SbxValues*, UINT32 );
 // SBXBOOL.CXX
 
 enum SbxBOOL ImpGetBool( const SbxValues* );
-void    ImpPutBool( SbxValues*, INT16 );
+void         ImpPutBool( SbxValues*, INT16 );
 
-// ByteArry <--> String
+// ByteArray <--> String
 SbxArray* StringToByteArray(const ::rtl::OUString& rStr);
 ::rtl::OUString ByteArrayToString(SbxArray* pArr);
 

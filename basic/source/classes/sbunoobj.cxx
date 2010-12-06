@@ -781,13 +781,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
                                 oleautomation::Currency aCurrency;
                                 if( (aValue >>= aCurrency) )
                                 {
-                                    sal_Int64 nValue64 = aCurrency.Value;
-                                    SbxINT64 aInt64;
-                                    aInt64.nHigh =
-                                        sal::static_int_cast< INT32 >(
-                                            nValue64 >> 32);
-                                    aInt64.nLow = (UINT32)( nValue64 & 0xffffffff );
-                                    pVar->PutCurrency( aInt64 );
+                                    pVar->PutCurrency( aCurrency.Value );
                                     break;
                                 }
                             }
@@ -960,8 +954,6 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
-        //case SbxLONG64:   break;
-        //case SbxULONG64:  break;
         // map machine-dependent ones on hyper for secureness
         case SbxINT:        aRetType = ::getCppuType( (sal_Int32*)0 ); break;
         case SbxUINT:       aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
@@ -1103,7 +1095,7 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
         }
         // Otherwise it is a No-Uno-Basic-Object -> default==deliver void
     }
-    // No objekt, convert basic type
+    // No object, convert basic type
     else
     {
         aRetType = getUnoTypeForSbxBaseType( eBaseType );
@@ -1157,6 +1149,10 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                         aType = ::getCppuType( (sal_Int16*)0 );
                     else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
                         aType = ::getCppuType( (sal_Int32*)0 );
+#if MAYBEFUTURE
+                    else
+                        aType = ::getCppuType( (sal_Int64*)0 );
+#endif
                 }
                 break;
             }
@@ -1192,6 +1188,7 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                     aType = ::getCppuType( (sal_uInt16*)0 );
                 break;
             }
+            // TODO: need to add hyper types ?
             default: break;
         }
     }
@@ -1324,13 +1321,8 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                         }
                         else if( rType == ::getCppuType( (oleautomation::Currency*)0 ) )
                         {
-                            SbxINT64 aInt64 = pVar->GetCurrency();
-                            oleautomation::Currency aCurrency;
-                            sal_Int64& rnValue64 = aCurrency.Value;
-                            rnValue64 = aInt64.nHigh;
-                            rnValue64 <<= 32;
-                            rnValue64 |= aInt64.nLow;
-                            aRetVal <<= aCurrency;
+                            // assumes per previous code that ole Currency is Int64
+                            aRetVal <<= (sal_Int64)( pVar->GetInt64() );
                             break;
                         }
                         else if( rType == ::getCppuType( (oleautomation::Date*)0 ) )
@@ -1363,11 +1355,9 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
         case TypeClass_CLASS:           break;
         case TypeClass_TYPEDEF:         break;
         case TypeClass_UNION:           break;
-        case TypeClass_ENUM:            break;
         case TypeClass_ARRAY:           break;
         */
 
-        // Array -> Sequence
         case TypeClass_ENUM:
         {
             aRetVal = int2enum( pVar->GetLong(), rType );
@@ -1888,8 +1878,6 @@ String Dbg_SbxDataType2String( SbxDataType eType )
         case SbxBYTE:       aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxBYTE") ); break;
         case SbxUSHORT:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUSHORT") ); break;
         case SbxULONG:      aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG") ); break;
-        case SbxLONG64:     aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxLONG64") ); break;
-        case SbxULONG64:    aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxULONG64") ); break;
         case SbxSALINT64:   aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT64") ); break;
         case SbxSALUINT64:  aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxUINT64") ); break;
         case SbxINT:        aRet = String( RTL_CONSTASCII_USTRINGPARAM("SbxINT") ); break;
