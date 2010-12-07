@@ -139,6 +139,14 @@
 .INCLUDE : unxbsdi2.mk
 .ENDIF
 
+.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDI"
+.INCLUDE : unxbsdi3.mk
+.ENDIF
+
+.IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341NETBSDX"
+.INCLUDE : unxbsdx3.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)" == "GCCNETBSDS"
 .INCLUDE : unxbsds.mk
 .ENDIF

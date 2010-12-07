@@ -259,6 +259,16 @@ elsif ( $platform =~ m/netbsd/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
    }
+   elsif ($platform =~ m/^x86_64/)
+   {  print "Setting NetBSD x86-64 specific values... ";
+      $outfile        = "NetBSDX86-64Env.Set.sh";
+      $CPU            = "X";
+      $CPUNAME        = "X86_64";
+      $OUTPATH        = "unxbsdx";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+   }
    elsif ($platform =~ m/^sparc/)
    {  print "Setting NetBSD Sparc specific values... ";
       $outfile        = "NetBSDSparcEnv.Set.sh";
@@ -284,8 +294,14 @@ elsif ( $platform =~ m/netbsd/ )
      exit 1;
    }
    #Conditional setting depending on gcc3:
-      $CVER           = "C300";
-      $OUTPATH        = $OUTPATH."2";
+      if (@GCCVER@ >= 30401) {
+         $CVER           = "C341";
+         $OUTPATH        = $OUTPATH."3";
+      }
+      else {
+         $CVER           = "C300";
+         $OUTPATH        = $OUTPATH."2";
+      }
    # General NetBSD settings:
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
