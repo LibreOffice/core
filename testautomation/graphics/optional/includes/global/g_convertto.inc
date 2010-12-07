@@ -30,15 +30,6 @@
 '* short description :
 '*
 '**************************************************************************************
-' #1 tiAendernUmwandelnInPolygon
-' #1 tiModifyConvertToPolygon
-' #1 tdContextConvertIntoBitmap
-' #1 tiAendernUmwandelnInKurve
-' #1 tiAendernUmwandelnInPolygonGrafik
-' #1 tiAendernUmwandelnIn3D
-' #1 tiAendernUmwandelnIn3DRotationskoerper
-' #1 tiAendernUmwandelnInMetaFile
-'\*************************************************************************************
 
 '  Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\columbia.dxf")
 '   Call hGrafikEinfuegen ConvertPath  ( gTesttoolPath + "global\input\graf_inp\enter.bmp" )
@@ -52,29 +43,29 @@
 '   Call tdContextConvertIntoMetaFile
 
 testcase tiModifyConvertToPolygon
-   Dim PosX as string
-   Dim PosY as string
-   Dim Maxanzahl as string
-   Dim Minanzahl as string
+    Dim PosX as string
+    Dim PosY as string
+    Dim Maxanzahl as string
+    Dim Minanzahl as string
 
-   Call hNewDocument
-   Call sSelectEmptyLayout
-   sleep 3
-   hTextrahmenErstellen ("This is a text that will be transformed into a Polygon-object", 10,10,60,30)
-   sleep 1
-   hTypeKeys "<Escape>"
-   sleep 1
-   EditSelectAll
-   sleep 1
-   ContextConvertIntoPolygon
-   sleep 1
-   ContextPositionAndSize
-      Kontext
-      Active.SetPage TabPositionAndSize
-      Kontext "TabPositionAndSize"
-      PosX = Width.GetText
-      PosY = Height.GetText
-      TabPositionAndSize.OK
+    Call hNewDocument
+    Call sSelectEmptyLayout
+    sleep 3
+    hTextrahmenErstellen ("This is a text that will be transformed into a Polygon-object", 10,10,60,30)
+    sleep 1
+    hTypeKeys "<Escape>"
+    sleep 1
+    EditSelectAll
+    sleep 1
+    ContextConvertIntoPolygon
+    sleep 1
+    ContextPositionAndSize
+    Kontext
+    Active.SetPage TabPositionAndSize
+    Kontext "TabPositionAndSize"
+    PosX = Width.GetText
+    PosY = Height.GetText
+    TabPositionAndSize.OK
    sleep 1
    FormatCharacter
        Kontext
@@ -120,7 +111,7 @@ testcase tiModifyConvertToPolygon
       Kontext
       Active.SetPage TabPositionAndSize
       Kontext "TabPositionAndSize"
-      '/// compare width and heigth to control is it is still text ///'
+      printlog "compare width and heigth to control is it is still text"
       if ( Width.GetText = PosX or Height.GetText = PosY ) Then
            Printlog "- Text converted into polygon"
       else
@@ -133,7 +124,7 @@ testcase tiModifyConvertToPolygon
 
    Call hNewDocument
    sleep 3
-   '/// insert graphic (input\\impress\\grafik\\sample.bmp)///'
+   printlog "insert graphic (input\\impress\\grafik\\sample.bmp)"
    Call hGrafikEinfuegen ConvertPath  ( gTesttoolPath + "global\input\graf_inp\enter.bmp" )
    sleep 3
    ContextConvertIntoPolygon
@@ -142,9 +133,11 @@ testcase tiModifyConvertToPolygon
        MaxAnzahl = Farbanzahl.GetText
       Farbanzahl.More 1
       If Maxanzahl < Farbanzahl.GetText Then Warnlog "- Maximum value could be raised."
-      Farbanzahl.ToMin									'/// set color to min ///'
+      printlog "set color to min"
+      Farbanzahl.ToMin								
       MinAnzahl = Farbanzahl.GetText
-      Farbanzahl.Less 1									'/// try to set a value lower than minimum ///'
+      printlog "try to set a value lower than minimum"
+      Farbanzahl.Less 1									
       If Farbanzahl.GetText < Minanzahl then Warnlog "- Minimum value could be lowered."
       Farbanzahl.SetText "2"
       Vorschau.Click
@@ -166,18 +159,20 @@ endcase 'tiModifyConvertToPolygon
 '--------------------------------------------------------
 testcase tdContextConvertIntoBitmap
 
-  Call hNewDocument									'/// new document  ///'
-  sleep 3
-  InsertGraphicsFromFile								'/// insert graphic  ///'
-  sleep 3
-  kontext "Active"
+    printlog "new document"
+    Call hNewDocument
+    sleep 3
+    printlog "insert graphic"
+    InsertGraphicsFromFile
+    sleep 3
+    kontext "Active"
     if Active.Exists Then
-       Active.OK
+        Active.OK
     end if
-  sleep 5
-  Kontext "GrafikEinfuegenDlg"
-  sleep 2
-'///  uses input\\impress\\grafik\\columbia.dxf ///
+    sleep 5
+    Kontext "GrafikEinfuegenDlg"
+    sleep 2
+printlog " uses input\impress\grafik\columbia.dxf"
   Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\columbia.dxf")
   sleep 2
   Oeffnen.Click
@@ -192,44 +187,53 @@ testcase tdContextConvertIntoBitmap
    end if
   Kontext "DocumentImpress"
    try
-        ContextConvertIntoBitmap							'/// convert dxf file to bitmap  ///'
+        printlog "convert dxf file to bitmap"
+        ContextConvertIntoBitmap							
         sleep 1
         Printlog "- Convert into bitmap works"
    catch
         Warnlog "- Convert into bitmap does not work"
    endcatch
- sleep 2
-  Call hCloseDocument									 '/// close document  ///'
-  
+    sleep 2
+    printlog "close document"
+    Call hCloseDocument
+
 endcase 'tdContextConvertIntoBitmap
 '--------------------------------------------------------
 testcase tiAendernUmwandelnInKurve
 
     Printlog "  ----- ContextConvertIntoCurve testen"
-
- Call hNewDocument							'/// New impress document///'
+    printlog "New impress document"
+    Call hNewDocument
     Call sSelectEmptyLayout
 
-  Call hTextrahmenErstellen ("I test,test,test,test only, if it works for you",20,20,60,30)	'/// create textbox///'
-   sleep 2
-   Kontext "DocumentImpress"
-   gMouseDoubleClick  70,70					'/// deselect textbox ///'
-   sleep 2
-   EditSelectAll                                                '/// select textbox ///'
-   sleep 2
-   ContextConvertIntoCurve							'/// convert into curve ///'
-   sleep 3
-   gMouseClick 30,15
+    printlog "create textbox"
+    Call hTextrahmenErstellen ("I test,test,test,test only, if it works for you",20,20,60,30)
+    sleep 2
+    Kontext "DocumentImpress"
+    printlog "deselect textbox "
+    gMouseDoubleClick  70,70
+    sleep 2
+    printlog "select textbox "
+    EditSelectAll
+    sleep 2
+    printlog "convert into curve "
+    ContextConvertIntoCurve
+    sleep 3
+    gMouseClick 30,15
 
-    hTypeKeys "<SHIFT RIGHT>",3					'/// try to select 3 letters ///'
+    printlog "try to select 3 letters "
+    hTypeKeys "<SHIFT RIGHT>",3					
      try
-    EditCopy							'/// try edit copy to check if its still text ///'
+     printlog "try edit copy to check if its still text "
+    EditCopy							
         Warnlog "  - Convert into curve, seperate letters should not be selectable anymore"
      catch
         Printlog "  - Text converted into a curve"
      endcatch
 
- Call hCloseDocument								'/// close document ///'
+     printlog "close document "
+    Call hCloseDocument
  
 endcase 'tiAendernUmwandelnInKurve
 '--------------------------------------------------------
@@ -237,13 +241,15 @@ testcase tiAendernUmwandelnInPolygonGrafik
 
     Printlog "- Context/ConvertIntoPolygon"
 
- Call hNewDocument									'/// new document ///'
+    printlog "new document "
+    Call hNewDocument
     Call sSelectEmptyLayout
 
-  InsertGraphicsFromFile								'/// insert graphic (desp.bmp) ///'
+    printlog "insert graphic (desp.bmp) "
+  InsertGraphicsFromFile								
 
   Kontext "GrafikEinfuegenDlg"
-   '///use graphic : input\\impress\\grafik\\desp.bmp ///
+  printlog "use graphic : input\impress\grafik\desp.bmp"
    Dateiname.SetText ConvertPath ( gTesttoolPath + "global\input\graf_inp\desp.bmp" )
    Oeffnen.Click
    sleep 3
@@ -251,53 +257,66 @@ testcase tiAendernUmwandelnInPolygonGrafik
   EditSelectAll
   sleep 1
 
-  ContextConvertIntoPolygon								'///  convert into polygon ///'
+  printlog " convert into polygon "
+  ContextConvertIntoPolygon								
   Kontext "UmwandelnInPolygon"
    Printlog "- Testing vectorize dialog"
-   Farbanzahl.ToMax									'/// set number of colors to max  ///'
+   printlog "set number of colors to max"
+   Farbanzahl.ToMax									
      if Farbanzahl.GetText <> "32" Then Warnlog "- Maximum value for color depth should be 32, but it is: " + Farbanzahl.GetText
-   Farbanzahl.ToMin									'/// set number of colors to min  ///'
+     printlog "set number of colors to min"
+    Farbanzahl.ToMin
    sleep 1
      if Farbanzahl.GetText <> "8" Then Warnlog "- Minimum value for color depth should be 8 but it is: " + Farbanzahl.GetText
    sleep 2
-   Punktreduktion.SetText "50"								'/// set point reduction to 50 ///'
+   printlog "set point reduction to 50 "
+   Punktreduktion.SetText "50"								
    sleep 2
      if Punktreduktion.GetText <> "32 Pixel" Then Warnlog "- Maximum value should be 32, but it is: " + Punktreduktion.GetText
    sleep 1
-   Punktreduktion.SetText "-50"								'/// set an out of range value  ///'
+   printlog "set an out of range value"
+   Punktreduktion.SetText "-50"								
    sleep 1
      if Punktreduktion.GetText <> "0 Pixel" Then Warnlog "- Minimum value should be 0, but it is: " + Punktreduktion.GetText
-   Loecherfuellen.Uncheck								'/// uncheck fill holes  ///'
+     printlog "uncheck fill holes"
+    Loecherfuellen.Uncheck
     if Not Kachelgroesse.IsEnabled Then
        Printlog "- Control disabled."
     else
        Warnlog "- Control should be disabled if Fill is not checked."
     end if
-   Vorschau.Click									'/// open preview  ///'
+    printlog "open preview"
+   Vorschau.Click									
    sleep 2
-   UmwandelnInPolygon.OK								'/// close dialog ///'
+   printlog "close dialog "
+   UmwandelnInPolygon.OK								
    sleep 5
-  Call hCloseDocument									'/// close document  ///'
+   printlog "close document"
+  Call hCloseDocument									
   
 endcase 'tiAendernUmwandelnInPolygonGrafik
 '--------------------------------------------------------
 testcase tiAendernUmwandelnIn3D
 
     Printlog "- Convert into 3D"
- Call hNewDocument
- sleep 1								'/// new impress document ///'
-  hRechteckErstellen (10,10,40,40)							'/// create rectangle  ///'
-                    '/// convert into 3D ///'
+    printlog "new impress document "
+    Call hNewDocument
+    sleep 1
+    printlog "create rectangle"
+    hRechteckErstellen (10,10,40,40)
+                    printlog "convert into 3D "
    sleep 2
    gMouseclick 35,35
    sleep 1
    try
-     ContextConvertInto3D								'/// try to access convert ito 3d a 2nd time, should be impossible using a 3d object as source ///'
+   printlog "try to access convert ito 3d a 2nd time, should be impossible using a 3d object as source "
+     ContextConvertInto3D								
      Printlog "- Convert into 3D works"
    catch
      Warnlog "- Convert into 3D does not work"
    endcatch
- Call hCloseDocument									'/// close document '///
+   printlog "close document"
+ Call hCloseDocument									
  
 endcase 'tiAendernUmwandelnIn3D
 '--------------------------------------------------------
@@ -307,11 +326,14 @@ testcase tiAendernUmwandelnIn3DRotationskoerper
   Dim PosX
   Dim PosY
 
- Call hNewDocument									'/// new document '///
+  printlog "new document"
+ Call hNewDocument									
   Kontext "DocumentImpress"
-  hRechteckErstellen (20,20,50,50)							'/// create rectangle  ///'
+  printlog "create rectangle"
+  hRechteckErstellen (20,20,50,50)							
   sleep 1
-  ContextPositionAndSize								'/// get position values for the rectangle ///'
+  printlog "get position values for the rectangle "
+  ContextPositionAndSize								
   Kontext
   Active.SetPage TabPositionAndSize
   Kontext "TabPositionAndSize"
@@ -320,26 +342,31 @@ testcase tiAendernUmwandelnIn3DRotationskoerper
   TabPositionAndSize.OK
   sleep 1
   Kontext "DocumentImpress"
-  ContextConvertInto3DRotationObject							'/// convert into 3d lathe object  ///'
+  printlog "convert into 3d lathe object"
+  ContextConvertInto3DRotationObject							
   sleep 2
   ContextPositionAndSize
   Kontext
-  Active.SetPage TabPositionAndSize								'/// control changes in position values to confirm convert action  ///'
+  printlog "control changes in position values to confirm convert action"
+  Active.SetPage TabPositionAndSize								
   Kontext "TabPositionAndSize"
    if PositionX.GetText = PosX and PositionY.GetText = PosY Then Warnlog "- No change in position or dimension, converting seemd not to work"
   TabPositionAndSize.OK
   sleep 1
- Call hCloseDocument									'/// close document ///'
+  printlog "close document "
+ Call hCloseDocument									
  
 endcase 'tiAendernUmwandelnIn3DRotationskoerper
 '--------------------------------------------------------
 testcase tiAendernUmwandelnInMetaFile
 
     Printlog "- ConvertIntoMetaFile"
-    
-    Call hNewDocument									'/// new document ///'
+
+    printlog "new document "
+    Call hNewDocument									
     sleep 3
-    InsertGraphicsFromFile								'/// insert graphic  ///'
+    printlog "insert graphic"
+    InsertGraphicsFromFile								
     sleep 1
     kontext "Active"
     sleep 1
@@ -349,21 +376,21 @@ testcase tiAendernUmwandelnInMetaFile
     sleep 1
     Kontext "GrafikEinfuegenDlg"
     sleep 2
-    '///  uses input\\impress\\grafik\\desp.gif") ///
+    printlog " uses input\impress\grafik\desp.gif"
     Dateiname.SetText ConvertPath (gTesttoolPath + "global\input\graf_inp\purzel.gif")
     sleep 2
     Oeffnen.Click
     sleep 5
     Kontext "DocumentImpress"
     try
-        ContextConvertIntoMetafile							'/// convert bitmap into metafile  ///'
+        printlog "convert bitmap into metafile"
+        ContextConvertIntoMetafile
         sleep 2
         Printlog "- Convert into Metafile does work"
     catch
         Warnlog "- Convert into Metafile does not work"
     endcatch
     sleep 2
-    Call hCloseDocument									'/// close document  ///'
-    
+    printlog "close document"
+    Call hCloseDocument									
 endcase 'tiAendernUmwandelnInMetaFile
-

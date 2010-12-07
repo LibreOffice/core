@@ -30,20 +30,9 @@
 '* short description : Tests the Engine for Presentation
 '*
 '*******************************************************************
-'*
-' #1 tiPengineTabEntrance
-' #1 tiPengineTabEmphasis
-' #1 tiPengineTabExit
-' #1 tiPengineTabMotionPaths
-' #1 tiPengineSlideTransition
-' #1 tiPengineTabpageEntrance2
-' #1 tiPengineTabPageEmphasis2
-' #1 tiPengineTabPageExit2
-' #1 tiPengineTabPageMotionPaths2
-'*
-'\*******************************************************************
 
 testcase tiPengineTabEntrance
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -62,19 +51,19 @@ testcase tiPengineTabEntrance
     dim UsedEffect as string
     dim NewEffect as string
 
-'/// open application ///'
-Call hNewDocument
-'/// create textbox with text ///'
-Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-'/// Slide Show->Custom Animation... ///'
-SlideShowCustomAnimation
-   Kontext "Tasks"
-   '/// click button 'Add...' ///'
-   EffectAdd.click
-   '/// Dialog 'Custom Animation' comes up ///'
-   kontext
+    printlog "open application"
+    Call hNewDocument
+    printlog "create textbox with text"
+    Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
+    printlog "Slide Show->Custom Animation..."
+    SlideShowCustomAnimation
+    Kontext "Tasks"
+    printlog "click button 'Add...'"
+    EffectAdd.click
+    printlog "Dialog 'Custom Animation' comes up"
+    kontext
 
-   '/// Switch to TabPage: Entrance ///'
+   printlog "Switch to TabPage: Entrance"
    active.setPage(TabEntrance)
    kontext "TabEntrance"
    if TabEntrance.exists(5) then
@@ -183,7 +172,8 @@ SlideShowCustomAnimation
                  Printlog "Presentation didn't end. Error?"
               endif
               kontext "TabEntrance"
-              Effects.TypeKeys "<DOWN>", e '/// Select the next entry ///'
+              printlog "Select the next entry"
+              Effects.TypeKeys "<DOWN>", e 
               p = Effects.GetSelIndex
               If p = d Then e = i
           Next e
@@ -206,12 +196,12 @@ SlideShowCustomAnimation
       Next o
       kontext
 
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -223,15 +213,16 @@ SlideShowCustomAnimation
    endif
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabEntrance
 
-'------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
 
 testcase tiPengineTabEmphasis
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -250,19 +241,19 @@ testcase tiPengineTabEmphasis
     dim UsedEffect as string
     dim NewEffect as string
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
       Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-      '/// Slide Show->Custom Animation... ///'
+      printlog "Slide Show->Custom Animation..."
       SlideShowCustomAnimation
       Kontext "Tasks"
-      '/// click button 'Add...' ///'
+      printlog "click button 'Add...'"
       EffectAdd.click
-      '/// Dialog 'Custom Animation' comes up ///'
+      printlog "Dialog 'Custom Animation' comes up"
       kontext
 
-      '/// Switch to TabPage: Emphasis ///'
+      printlog "Switch to TabPage: Emphasis"
       kontext
       active.setPage(TabEmphasis)
       kontext "TabEmphasis"
@@ -347,11 +338,12 @@ testcase tiPengineTabEmphasis
                  else
                     Printlog "Presentation didn't end. Error?"
                  endif
-                 '/// Switch to TabPage: Emphasis ///'
+                 printlog "Switch to TabPage: Emphasis"
                  kontext
                  active.setPage(TabEmphasis)
                  kontext "TabEmphasis"
-                 Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+                 printlog "Select the next entry"
+                 Effects.TypeKeys "<DOWN>", e + 1 
                   p = Effects.GetSelIndex
                   If p = d Then e = i
              Next e
@@ -375,12 +367,12 @@ testcase tiPengineTabEmphasis
       endif
       kontext
 
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -388,15 +380,16 @@ testcase tiPengineTabEmphasis
       bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabEmphasis
 
-'------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
 
 testcase tiPengineTabExit
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -415,19 +408,19 @@ testcase tiPengineTabExit
     dim UsedEffect as string
     dim NewEffect as string
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
       Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-      '/// Slide Show->Custom Animation... ///'
+      printlog "Slide Show->Custom Animation..."
       SlideShowCustomAnimation
       Kontext "Tasks"
-      '/// click button 'Add...' ///'
+      printlog "click button 'Add...'"
       EffectAdd.click
-      '/// Dialog 'Custom Animation' comes up ///'
+      printlog "Dialog 'Custom Animation' comes up"
       kontext
 
-      '/// Switch to TabPage: Exit ///'
+      printlog "Switch to TabPage: Exit"
       active.setPage(TabExit)
       kontext "TabExit"
       if TabExit.exists(5) then
@@ -509,10 +502,11 @@ testcase tiPengineTabExit
                     Printlog "Presentation didn't end. Error?"
                  endif
                  kontext
-                 '/// Switch to TabPage: Exit ///'
+                 printlog "Switch to TabPage: Exit"
                  active.setPage(TabExit)
                  kontext "TabExit"
-                 Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+                 printlog "Select the next entry"
+                 Effects.TypeKeys "<DOWN>", e + 1 
                  p = Effects.GetSelIndex
                  If p = d Then e = i 'p > 2 AND
              Next e
@@ -529,12 +523,12 @@ testcase tiPengineTabExit
       endif
       kontext
       
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -542,15 +536,17 @@ testcase tiPengineTabExit
       bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
 
-'------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+endcase 'tiPengineTabExit
+
+'-------------------------------------------------------------------------------
 
 testcase tiPengineTabMotionPaths
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -569,19 +565,19 @@ testcase tiPengineTabMotionPaths
     dim UsedEffect as string
     dim NewEffect as string
     
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
       Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-      '/// Slide Show->Custom Animation... ///'
+      printlog "Slide Show->Custom Animation..."
       SlideShowCustomAnimation
       Kontext "Tasks"
-      '/// click button 'Add...' ///'
+      printlog "click button 'Add...'"
       EffectAdd.click
-      '/// Dialog 'Custom Animation' comes up ///'
+      printlog "Dialog 'Custom Animation' comes up"
       kontext
       
-      '/// Switch to TabPage: Motion Paths ///'
+      printlog "Switch to TabPage: Motion Paths"
       active.setPage(TabMotionPaths)
       kontext "TabMotionPaths"
       if TabMotionPaths.exists(5) then
@@ -671,10 +667,11 @@ testcase tiPengineTabMotionPaths
                     Printlog "Presentation didn't end. Error?"
                  endif
                  kontext
-                 '/// Switch to TabPage: Motion Paths ///'
+                 printlog "Switch to TabPage: Motion Paths"
                  active.setPage(TabMotionPaths)
                  kontext "TabMotionPaths"
-                 Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+                 Effects.TypeKeys "<DOWN>", e + 1
+                 printlog "Select the next entry"
 '                 if p = 2 then Effects.TypeKeys "<DOWN>"
                   p = Effects.GetSelIndex
                   If p = d Then e = i 'p > 2 AND
@@ -691,12 +688,12 @@ testcase tiPengineTabMotionPaths
       endif
       kontext
 
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -704,15 +701,16 @@ testcase tiPengineTabMotionPaths
       bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabMotionPaths
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tiPengineSlideTransition
+
     dim a as integer
     dim b as integer
     dim i as integer
@@ -720,31 +718,31 @@ testcase tiPengineSlideTransition
     dim iCount as integer
     dim Soundposition as integer
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create rectangle ///'
+    printlog "create rectangle"
     Call hRechteckErstellen ( 10, 10, 20, 40 )
     sleep 1
-    '/// Insert a second slide ///'
+    printlog "Insert a second slide"
     InsertSlide
     sleep 2
-    hTypekeys "<Pagedown>"
+    hTypeKeys "<Pagedown>"
     sleep 2
-    '/// create textframe with quotes; Simple: 39; Double: 34; ///'
+    printlog "create textframe with quotes; Simple: 39; Double: 34;"
     hTextrahmenErstellen ( "Hallo",20,20,60,30)
-    '/// Insert a third slide ///'
+    printlog "Insert a third slide"
     InsertSlide
     sleep 2
     hTypekeys "<Pagedown>"
     sleep 2
-    '/// Slide Show->Slide Transition ///'
+    printlog "Slide Show->Slide Transition"
     SlideShowSlideTransition
     sleep 2
-    '/// The 'Slide Transition' in the right 'Tasks' Pane has to come up ///'
+    printlog "The 'Slide Transition' in the right 'Tasks' Pane has to come up"
     Kontext "Tasks"
-        '/// Select every entry in the Listbox 'Apply to Selected Slides' ///'
-        '/// Then select the next Speed for Transition and retest all the effects ///'
-        '/// Redo until all effects has been tested with all speeds ///'
+        printlog "Select every entry in the Listbox 'Apply to Selected Slides'"
+        printlog "Then select the next Speed for Transition and retest all the effects"
+        printlog "Redo until all effects has been tested with all speeds"
         lala = TransitionApplyToSelectedSlide.GetItemCount
         Printlog "Count of effects : " + TransitionApplyToSelectedSlide.GetItemCount
         Printlog "Count of Speeds  : " + TransitionSpeed.GetItemCount
@@ -759,7 +757,7 @@ testcase tiPengineSlideTransition
             Next iCount
         Next b
         Printlog "Count of Sounds  : " + TransitionSound.GetItemCount
-        '/// One Entry of the Listbox 'Sound' is 'Other sound...', select it ///'
+        printlog "One Entry of the Listbox 'Sound' is 'Other sound...', select it"
 '        iCount = TransitionSound.GetItemCount
         TransitionSound.TypeKeys "<HOME>"
         i = 0
@@ -770,11 +768,11 @@ testcase tiPengineSlideTransition
             Soundposition = TransitionSound.GetSelIndex
             kontext "OeffnenDlg"
             if (OeffnenDlg.Exists (5)) then
-               '/// Read all entries in Listbox 'File type' ///'
+               printlog "Read all entries in Listbox 'File type'"
                for i = 1 to Dateityp.getItemCount
                    printlog "" + i + ":" + Dateityp.getItemText(i)
                next i
-               '/// cancel dialog 'Open' ///'
+               printlog "cancel dialog 'Open'"
                sleep 1
                OeffnenDlg.cancel
                kontext "Tasks"
@@ -792,21 +790,21 @@ testcase tiPengineSlideTransition
         sleep 5
         kontext "Tasks"
 
-        '/// check checkbox 'Automatically after' ///'
+        printlog "check checkbox 'Automatically after'"
         TransitionAutomaticallyAfter.Check
         sleep 5
-        '/// press key 'Page Up' in box ///'
+        printlog "press key 'Page Up' in box"
         TransitionAutomaticallyAfterTime.TypeKeys "<PageUp>"
         sleep 5
-        '/// check the standard checkbox 'On mouse click' ///'
+        printlog "check the standard checkbox 'On mouse click'"
         TransitionOnMouseClick.Check
         sleep 5
-        '/// press button 'Apply to All Slides' ///'
+        printlog "press button 'Apply to All Slides'"
         TransitionApplyToAllSlides.Click
         sleep 5
-        '/// press button 'Play' ///'
+        printlog "press button 'Play'"
         TransitionPlay.Click
-        '/// press button 'Slide Show' ///'
+        printlog "press button 'Slide Show'"
         sleep (10)
         TransitionSlideShow.Click
         sleep (3)
@@ -827,17 +825,17 @@ testcase tiPengineSlideTransition
         endif
         kontext "Tasks"
 
-        '/// uncheck and check Checkbox 'Automatic Preview' ///'
-        '/// default is checked ///'
+        printlog "uncheck and check Checkbox 'Automatic Preview'"
+        printlog "default is checked"
         if (NOT TransitionAutomaticPreview.IsChecked) then
             warnlog "Impress:Tasks Pane:Slide Transition: Automatic preview has to be checked by default, wasn't!"
         endif
         TransitionAutomaticPreview.UnCheck
         sleep 1
         TransitionAutomaticPreview.Check
-    '/// close application ///'
+    printlog "close application"
     Call hCloseDocument
-endcase
+endcase 'tiPengineSlideTransition
 
 'testcase
 ' Two different objects for two different effects. Does it work?
@@ -849,9 +847,10 @@ endcase
 ' Save file, close, open again and see if everything is as it were. (Random effects)
 'Endcase
 
-'########################################################################
+'-------------------------------------------------------------------------------
 
 testcase tiPengineTabpageEntrance2
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -868,21 +867,21 @@ testcase tiPengineTabpageEntrance2
     dim StartName1 as string
     dim PropertyName1 as string
 
-'/// open application ///'
-Call hNewDocument
-'/// create textbox with text ///'
-Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-'/// Slide Show->Custom Animation... ///'
-SlideShowCustomAnimation
-   Kontext "Tasks"
-   '/// Uncheck AutomaticPreview ///'
-   EffectAutomaticPreview.UnCheck
-   '/// click button 'Add...' ///'
-   EffectAdd.click
-   '/// Dialog 'Custom Animation' comes up ///'
-   kontext
+    printlog "open application"
+    Call hNewDocument
+    printlog "create textbox with text"
+    Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
+    printlog "Slide Show->Custom Animation..."
+    SlideShowCustomAnimation
+    Kontext "Tasks"
+    printlog "Uncheck AutomaticPreview"
+    EffectAutomaticPreview.UnCheck
+    printlog "click button 'Add...'"
+    EffectAdd.click
+    printlog "Dialog 'Custom Animation' comes up"
+    kontext
    
-   '/// Switch to TabPage: Entrance ///'
+   printlog "Switch to TabPage: Entrance"
    active.setPage(TabEntrance)
    kontext "TabEntrance"
    if TabEntrance.exists(5) then
@@ -927,7 +926,8 @@ SlideShowCustomAnimation
                  Printlog "Presentation didn't end. Error?"
               endif
               kontext "TabEntrance"
-              Effects.TypeKeys "<DOWN>", e '/// Select the next entry ///'
+              printlog "Select the next entry"
+              Effects.TypeKeys "<DOWN>", e 
               p = Effects.GetSelIndex
               If p = d Then e = i
           Next e
@@ -945,12 +945,12 @@ SlideShowCustomAnimation
       Next o
 
       kontext
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -962,15 +962,16 @@ SlideShowCustomAnimation
    endif
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabpageEntrance2
 
 '------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tiPengineTabPageEmphasis2
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -987,21 +988,21 @@ testcase tiPengineTabPageEmphasis2
     dim StartName1 as string
     dim PropertyName1 as string
 
-'/// open application ///'
-Call hNewDocument
-'/// create textbox with text ///'
-Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-'/// Slide Show->Custom Animation... ///'
-SlideShowCustomAnimation
+    printlog "open application"
+    Call hNewDocument
+    printlog "create textbox with text"
+    Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
+    printlog "Slide Show->Custom Animation..."
+    SlideShowCustomAnimation
    Kontext "Tasks"
-   '/// Uncheck AutomaticPreview ///'
+   printlog "Uncheck AutomaticPreview"
    EffectAutomaticPreview.UnCheck
-   '/// click button 'Add...' ///'
+   printlog "click button 'Add...'"
    EffectAdd.click
-   '/// Dialog 'Custom Animation' comes up ///'
+   printlog "Dialog 'Custom Animation' comes up"
    kontext
 
-      '/// Switch to TabPage: Emphasis ///'
+      printlog "Switch to TabPage: Emphasis"
       kontext
       active.setPage(TabEmphasis)
       kontext "TabEmphasis"
@@ -1049,7 +1050,8 @@ SlideShowCustomAnimation
                  active.setPage(TabEmphasis)
                  Printlog "Testing effects in - TabEmphasis"
                  kontext "TabEmphasis"
-                 Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+                 printlog "Select the next entry"
+                 Effects.TypeKeys "<DOWN>", e + 1 
                  p = Effects.GetSelIndex
                  If p = d Then e = i 'p > 2 AND
              Next e
@@ -1074,12 +1076,12 @@ SlideShowCustomAnimation
       endif
 
       kontext
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -1087,15 +1089,16 @@ SlideShowCustomAnimation
       bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabPageEmphasis2
 
 '------------------------------------------------------------------------------------
 
 testcase tiPengineTabPageExit2
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -1112,21 +1115,21 @@ testcase tiPengineTabPageExit2
     dim StartName1 as string
     dim PropertyName1 as string
 
-'/// open application ///'
+printlog "open application"
 Call hNewDocument
-'/// create textbox with text ///'
+printlog "create textbox with text"
 Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-'/// Slide Show->Custom Animation... ///'
+printlog "Slide Show->Custom Animation..."
 SlideShowCustomAnimation
    Kontext "Tasks"
-   '/// Uncheck AutomaticPreview ///'
+   printlog "Uncheck AutomaticPreview"
    EffectAutomaticPreview.UnCheck
-   '/// click button 'Add...' ///'
+   printlog "click button 'Add...'"
    EffectAdd.click
-   '/// Dialog 'Custom Animation' comes up ///'
+   printlog "Dialog 'Custom Animation' comes up"
    kontext
  
-   '/// Switch to TabPage: Exit ///'
+   printlog "Switch to TabPage: Exit"
    active.setPage(TabExit)
    kontext "TabExit"
    if TabExit.exists(5) then
@@ -1178,15 +1181,16 @@ SlideShowCustomAnimation
                   Printlog "Presentation didn't end. Error?"
                endif
                kontext
-               '/// Switch to TabPage: Exit ///'
+               printlog "Switch to TabPage: Exit"
                active.setPage(TabExit)
                kontext "TabExit"
-               Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+               printlog "Select the next entry"
+               Effects.TypeKeys "<DOWN>", e + 1 
                p = Effects.GetSelIndex
                If p = d Then e = i 'p > 2 AND
            Next e
            kontext
-           '/// Switch to TabPage: Exit ///'
+           printlog "Switch to TabPage: Exit"
            active.setPage(TabExit)
            kontext "TabExit"
            e = 0
@@ -1208,12 +1212,12 @@ SlideShowCustomAnimation
    endif
 
    kontext
-   '/// Switch to TabPage: Entrance ///'
+   printlog "Switch to TabPage: Entrance"
    active.setPage(TabEntrance)
    kontext "TabEntrance"
    if TabEntrance.exists(5) then
       Effects.Select 4
-      '/// Close dialog 'Custom Animation' with 'OK' ///'
+      printlog "Close dialog 'Custom Animation' with 'OK'"
       TabEntrance.OK
    else
       warnlog "Error when switching Tab"
@@ -1221,15 +1225,16 @@ SlideShowCustomAnimation
    bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabPageExit2
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 testcase tiPengineTabPageMotionPaths2
+
     dim bError as boolean
     dim e as integer
     dim d as integer
@@ -1246,21 +1251,21 @@ testcase tiPengineTabPageMotionPaths2
     dim StartName1 as string
     dim PropertyName1 as string
 
-    '/// open application ///'
+    printlog "open application"
     Call hNewDocument
-    '/// create textbox with text ///'
+    printlog "create textbox with text"
     Call hTextrahmenErstellen ("Test text to test text effects", 35, 35, 70, 70 )
-    '/// Slide Show->Custom Animation... ///'
+    printlog "Slide Show->Custom Animation..."
     SlideShowCustomAnimation
       Kontext "Tasks"
-      '/// Uncheck AutomaticPreview ///'
+      printlog "Uncheck AutomaticPreview"
       EffectAutomaticPreview.UnCheck
-      '/// click button 'Add...' ///'
+      printlog "click button 'Add...'"
       EffectAdd.click
-      '/// Dialog 'Custom Animation' comes up ///'
+      printlog "Dialog 'Custom Animation' comes up"
       kontext
 
-      '/// Switch to TabPage: Motion Paths ///'
+      printlog "Switch to TabPage: Motion Paths"
       active.setPage(TabMotionPaths)
       kontext "TabMotionPaths"
       if TabMotionPaths.exists(5) then
@@ -1302,15 +1307,16 @@ testcase tiPengineTabPageMotionPaths2
                     Printlog "Presentation didn't end. Error?"
                  endif
                  kontext
-                 '/// Switch to TabPage: Motion Paths ///'
+                 printlog "Switch to TabPage: Motion Paths"
                  active.setPage(TabMotionPaths)
                  kontext "TabMotionPaths"
-                 Effects.TypeKeys "<DOWN>", e + 1 '/// Select the next entry ///'
+                 printlog "Select the next entry"
+                 Effects.TypeKeys "<DOWN>", e + 1 
                   p = Effects.GetSelIndex
                   If p = d Then e = i 'p > 2 AND
              Next e
              kontext
-             '/// Switch to TabPage: Motion Paths ///'
+             printlog "Switch to TabPage: Motion Paths"
              active.setPage(TabMotionPaths)
              kontext "TabMotionPaths"
 
@@ -1332,12 +1338,12 @@ testcase tiPengineTabPageMotionPaths2
          warnlog "Impress:Tasks Pane:Custom Animation:TabMotionPaths tabPage doesn't work."
       endif
       kontext
-      '/// Switch to TabPage: Entrance ///'
+      printlog "Switch to TabPage: Entrance"
       active.setPage(TabEntrance)
       kontext "TabEntrance"
       if TabEntrance.exists(5) then
          Effects.Select 4
-         '/// Close dialog 'Custom Animation' with 'OK' ///'
+         printlog "Close dialog 'Custom Animation' with 'OK'"
          TabEntrance.OK
       else
          warnlog "Error when switching Tab"
@@ -1345,12 +1351,10 @@ testcase tiPengineTabPageMotionPaths2
       bError = false
    kontext "Tasks"
    EffectAutomaticPreview.Check
-   '/// click button 'Remove' ///'
+   printlog "click button 'Remove'"
    EffectRemove.Click
-   '/// close application ///'
+   printlog "close application"
    Call hCloseDocument
-endcase
+endcase 'tiPengineTabPageMotionPaths2
 
 '--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
