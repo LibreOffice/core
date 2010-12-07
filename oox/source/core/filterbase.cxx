@@ -67,6 +67,8 @@ using ::comphelper::MediaDescriptor;
 using ::comphelper::SequenceAsHashMap;
 using ::oox::ole::OleObjectHelper;
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace core {
 
@@ -399,7 +401,7 @@ OleObjectHelper& FilterBase::getOleObjectHelper() const
     return *mxImpl->mxOleObjHelper;
 }
 
-OUString FilterBase::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier ) const
+uno::Sequence< beans::NamedValue >  FilterBase::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier ) const
 {
     ::std::vector< OUString > aDefaultPasswords;
     aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
