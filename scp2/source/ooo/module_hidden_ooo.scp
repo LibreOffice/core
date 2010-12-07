@@ -27,6 +27,52 @@
 
 #include "macros.inc"
 
+#ifdef AIX
+#ifndef SYSTEM_CURL
+Unixlink gid_Unixlink_File_Lib_Curl
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libcurl,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libcurl,UNXSUFFIX,.3));
+End
+#endif
+#ifndef SYSTEM_REDLAND
+Unixlink gid_Unixlink_File_Lib_Raptor
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libraptor,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libraptor,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rasqal
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librasqal,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librasqal,UNXSUFFIX,.1));
+End
+
+Unixlink gid_Unixlink_File_Lib_Rdf
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(librdf,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(librdf,UNXSUFFIX,.0));
+End
+#endif
+#ifndef SYSTEM_LIBXSLT
+Unixlink gid_Unixlink_File_Lib_Xslt
+    BIN_FILE_BODY;
+    Dir = SCP2_OOO_BIN_DIR;
+    Name = STRING(CONCAT2(libxslt,UNXSUFFIX));
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
+    Target = STRING(CONCAT3(libxslt,UNXSUFFIX,.1));
+End
+#endif
+#endif
+
 Module gid_Module_Root_Files_2
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
@@ -275,6 +321,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Adabas,
 	gid_File_Lib_Cached1,
 	gid_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Curl,
 	gid_File_Lib_Db,
 	gid_File_Lib_Dbpool,
 	gid_File_Lib_Embobj,
@@ -334,8 +381,11 @@ Module gid_Module_Root_Files_5
 	gid_File_Ucptdoc1,
 	gid_File_Ucpexpand1,
 	gid_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Raptor,
 	gid_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rasqal,
 	gid_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Rdf,
 	gid_File_Lib_Unordf,
 	gid_File_Lib_Sndfile,
 	gid_File_Lib_Tvhlp1,
@@ -349,6 +399,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Ucphier1,
 	gid_File_Lib_Ucppkg1,
 	gid_File_Lib_Xslt,
+	gid_Unixlink_File_Lib_Xslt,
 	gid_File_Lib_LibXMLSec_xmlsecnss,
 	gid_File_Lib_LibXMLSec_xmlseccore,
 	gid_File_Lib_LibXMLSec_xmlsecmscrypto,
@@ -417,6 +468,11 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Assembly,
 	gid_File_Lib_Policy_Cli_Oootypes_Config);
+    Unixlinks = (gid_Unixlink_File_Lib_Curl,
+	gid_Unixlink_File_Lib_Raptor,
+	gid_Unixlink_File_Lib_Rasqal,
+	gid_Unixlink_File_Lib_Rdf,
+	gid_Unixlink_File_Lib_Xslt);
 End
 
 Module gid_Module_Root_Files_6
