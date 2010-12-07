@@ -43,7 +43,6 @@ IDLFILES=\
     GridDataEvent.idl\
     SelectionEventType.idl\
     GridSelectionEvent.idl\
-    XGridControlListener.idl\
     XGridSelectionListener.idl\
     XGridSelection.idl\
     XGridColumn.idl\
