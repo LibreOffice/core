@@ -759,7 +759,7 @@ static const FunctionData saFuncTableOdf[] =
     { "PERMUTATIONA",           0,                      NOID,   NOID,   2,  2,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "PHI",                    0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
     { "RRI",                    0,                      NOID,   NOID,   3,  3,  V, { VR }, FUNCFLAG_MACROCALLODF },
-    { "SHEET",                  0,                      NOID,   NOID,   1,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
+    { "SHEET",                  0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "SHEETS",                 0,                      NOID,   NOID,   0,  1,  V, { RO }, FUNCFLAG_MACROCALLODF },
     { "SKEWP",                  0,                      NOID,   NOID,   1,  MX, V, { RX }, FUNCFLAG_MACROCALLODF },
     { "UNICHAR",                0,                      NOID,   NOID,   1,  1,  V, { VR }, FUNCFLAG_MACROCALLODF },
