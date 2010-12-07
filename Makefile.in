@@ -10,7 +10,7 @@ all: dmake/dmake@EXEEXT@ fetch
 
 install:
 	@. ./*[Ee]nv.[Ss]et.sh && \
-	echo "Installing in $${prefix:-@prefix@}..."
+	echo "Installing in $${prefix:-@prefix@}..." && \
 	ooinstall "$${prefix:-@prefix@}" && \
 	echo "" && \
 	echo "Installation finished, you can now execute:" && \
