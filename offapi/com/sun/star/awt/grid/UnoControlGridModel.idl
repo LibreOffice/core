@@ -28,19 +28,12 @@
 #define __com_sun_star_awt_grid_UnoControlGridModel_idl__
 
 #include <com/sun/star/awt/grid/XGridColumnModel.idl>
-
 #include <com/sun/star/awt/grid/XGridDataModel.idl>
-
 #include <com/sun/star/awt/grid/ScrollBarMode.idl>
-
 #include <com/sun/star/awt/UnoControlModel.idl>
-
 #include <com/sun/star/view/SelectionType.idl>
-
 #include <com/sun/star/awt/FontDescriptor.idl>
-
 #include <com/sun/star/style/VerticalAlignment.idl>
-
 #include <com/sun/star/util/Color.idl>
 
 //=============================================================================
@@ -49,7 +42,7 @@ module com {  module sun {  module star {  module awt { module grid {
 
 //=============================================================================
 
-/** specifies the standard model of a <type>UnoControlGridModel</type>.
+/** specifies the standard model of a <type>UnoControlGrid</type> control.
 
     @since OOo 3.3.0
  */

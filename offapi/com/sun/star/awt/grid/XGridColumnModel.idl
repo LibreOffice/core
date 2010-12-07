@@ -28,10 +28,10 @@
 #define __com_sun_star_awt_grid_XGridColumnModel_idl__
 
 #include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/XComponent.idl>
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
-
-#include <com/sun/star/awt/grid/XGridColumnListener.idl>
+#include <com/sun/star/container/XContainer.idl>
 
 //=============================================================================
 
@@ -48,9 +48,13 @@ module com {  module sun {  module star {  module awt { module grid {
 */
 interface XGridColumnModel
 {
-    ///** Specifies whether column selection is allowed
-    //*/
-    //[attribute] boolean ColumnSelectionAllowed;
+    /** implements life time control for the component
+    */
+    interface ::com::sun::star::lang::XComponent;
+
+    /** allows to register listeners to be notified when columns are inserted or removed
+    */
+    interface ::com::sun::star::container::XContainer;
 
     /**Specifies the height of column header.
     */
@@ -94,7 +98,13 @@ interface XGridColumnModel
     */
     XGridColumn getColumn( [in] long index);
 
-    /** Sets default columns to the column model.
+    /** Fills the model with the given number of default columns
+
+        <p>Existing columns will be removed before adding new columns. Listeners at the column model will
+        be notified one <member scope="com::sun::star::container">XContainerListener::elementRemoved</member> event
+        for each removed column, and one <member scope="com::sun::star::container">XContainerListener::elementInserted</member>
+        event for each insertion.</p>
+
         @param elements
             the number of default columns that should be set.
     */
@@ -106,10 +116,6 @@ interface XGridColumnModel
             the column, which is already created
     */
     XGridColumn copyColumn( [in] XGridColumn column );
-
-    /*
-    long getTotalColumnWidth();
-    */
 };
 
 //=============================================================================
