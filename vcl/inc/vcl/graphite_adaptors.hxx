@@ -84,7 +84,7 @@ namespace grutils
 // the Graphite engine.
 // @author tse
 //
-class VCL_DLLPUBLIC GraphiteFontAdaptor : public gr::Font
+class VCL_PLUGIN_PUBLIC GraphiteFontAdaptor : public gr::Font
 {
     typedef std::map<const gr::gid16, std::pair<gr::Rect, gr::Point> > GlyphMetricMap;
     friend class GrFontHasher;
