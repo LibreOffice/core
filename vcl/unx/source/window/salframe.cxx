@@ -1152,8 +1152,6 @@ void X11SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
     setXEmbedInfo();
     if( bVisible )
     {
-        SessionManagerClient::open(); // will simply return after the first time
-
         mbInShow = TRUE;
         if( ! (nStyle_ & SAL_FRAME_STYLE_INTRO) )
         {

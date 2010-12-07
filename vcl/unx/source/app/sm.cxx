@@ -82,6 +82,7 @@ SalSession* X11SalInstance::CreateSalSession()
 {
     if( ! pOneInstance )
         pOneInstance = new IceSalSession();
+    SessionManagerClient::open();
     return pOneInstance;
 }
 

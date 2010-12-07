@@ -1282,7 +1282,6 @@ void GtkSalFrame::Show( BOOL bVisible, BOOL bNoActivate )
             gtk_window_set_keep_above( GTK_WINDOW(m_pWindow), bVisible );
         if( bVisible )
         {
-            SessionManagerClient::open(); // will simply return after the first time
             initClientId();
             getDisplay()->startupNotificationCompleted();
 
