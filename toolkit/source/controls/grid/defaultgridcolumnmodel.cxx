@@ -27,174 +27,273 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
+
 #include "defaultgridcolumnmodel.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+/** === end UNO includes === **/
+
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#include <rtl/ref.hxx>
+#include <tools/diagnose_ex.h>
 
-using ::rtl::OUString;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::awt::grid;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::style;
-
+//......................................................................................................................
 namespace toolkit
+//......................................................................................................................
 {
+    /** === begin UNO using === **/
+    using ::com::sun::star::uno::Reference;
+    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Sequence;
+    using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::awt::grid::XGridColumn;
+    using ::com::sun::star::uno::XInterface;
+    using ::com::sun::star::lang::XMultiServiceFactory;
+    using ::com::sun::star::lang::XComponent;
+    using ::com::sun::star::lang::EventObject;
+    using ::com::sun::star::container::XContainerListener;
+    using ::com::sun::star::container::ContainerEvent;
+    using ::com::sun::star::uno::Exception;
+    /** === end UNO using === **/
 
-///////////////////////////////////////////////////////////////////////
-// class DefaultGridColumnModel
-///////////////////////////////////////////////////////////////////////
-
-DefaultGridColumnModel::DefaultGridColumnModel(const Reference< XMultiServiceFactory >& xFactory)
-: columns(std::vector< Reference< XGridColumn > >())
- ,m_nColumnHeaderHeight(0)
- ,m_xFactory(xFactory)
-{
-}
-
-//---------------------------------------------------------------------
-
-DefaultGridColumnModel::~DefaultGridColumnModel()
-{
-}
-
-//---------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (::com::sun::star::uno::RuntimeException)
-{
-    return columns.size();
-}
-
-//---------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    Reference<XGridColumn> xColumn(column);
-    columns.push_back(xColumn);
-    sal_Int32 index = columns.size() - 1;
-    xColumn->setIndex(index);
-    return index;
-}
-
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (::com::sun::star::uno::RuntimeException)
-{
-    return comphelper::containerToSequence(columns);
-}
-
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException)
-{
-    if ( index >=0 && index < ((sal_Int32)columns.size()))
+    //==================================================================================================================
+    //= DefaultGridColumnModel
+    //==================================================================================================================
+    //------------------------------------------------------------------------------------------------------------------
+    DefaultGridColumnModel::DefaultGridColumnModel( const Reference< XMultiServiceFactory >& i_factory )
+        :DefaultGridColumnModel_Base( m_aMutex )
+        ,m_aContext( i_factory )
+        ,m_aContainerListeners( m_aMutex )
+        ,m_aColumns()
+        ,m_nColumnHeaderHeight(0)
     {
-        return columns[index];
     }
-    else
-        return Reference< XGridColumn >();
-}
-//---------------------------------------------------------------------
-void SAL_CALL DefaultGridColumnModel::setColumnHeaderHeight(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException)
-{
-    m_nColumnHeaderHeight = _value;
-}
-//---------------------------------------------------------------------
-sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnHeaderHeight() throw (::com::sun::star::uno::RuntimeException)
-{
-    return m_nColumnHeaderHeight;
-}
 
-//---------------------------------------------------------------------
-void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (::com::sun::star::uno::RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    for(sal_Int32 i=0;i<rowElements;i++)
+    //------------------------------------------------------------------------------------------------------------------
+    DefaultGridColumnModel::~DefaultGridColumnModel()
     {
-        Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"  ) ), UNO_QUERY );
-        columns.push_back(xColumn);
-        xColumn->setIndex(i);
     }
-}
-::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn > & column)  throw (::com::sun::star::uno::RuntimeException)
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnCount() throw (RuntimeException)
+    {
+        return m_aColumns.size();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL DefaultGridColumnModel::addColumn( const Reference< XGridColumn > & i_column ) throw (RuntimeException)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
+        m_aColumns.push_back( i_column );
+        sal_Int32 index = m_aColumns.size() - 1;
+        i_column->setIndex( index );
+
+        return index;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< Reference< XGridColumn > > SAL_CALL DefaultGridColumnModel::getColumns() throw (RuntimeException)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        return ::comphelper::containerToSequence( m_aColumns );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (RuntimeException)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
+        {
+            return m_aColumns[index];
+        }
+        else
+            // TODO: exception
+            return Reference< XGridColumn >();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridColumnModel::setColumnHeaderHeight(sal_Int32 _value) throw (RuntimeException)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        m_nColumnHeaderHeight = _value;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Int32 SAL_CALL DefaultGridColumnModel::getColumnHeaderHeight() throw (RuntimeException)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+        return m_nColumnHeaderHeight;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridColumnModel::setDefaultColumns(sal_Int32 rowElements) throw (RuntimeException)
+    {
+        ::std::vector< ContainerEvent > aRemovedColumns;
+        ::std::vector< ContainerEvent > aInsertedColumns;
+
+        {
+            ::osl::MutexGuard aGuard( m_aMutex );
+
+            // remove existing columns
+            while ( !m_aColumns.empty() )
+            {
+                const size_t lastColIndex = m_aColumns.size() - 1;
+
+                ContainerEvent aEvent;
+                aEvent.Source = *this;
+                aEvent.Accessor <<= sal_Int32( lastColIndex );
+                aEvent.Element <<= m_aColumns[ lastColIndex ];
+                aRemovedColumns.push_back( aEvent );
+
+                m_aColumns.erase( m_aColumns.begin() + lastColIndex );
+            }
+
+            // add new columns
+            for ( sal_Int32 i=0; i<rowElements; ++i )
+            {
+                const Reference< XGridColumn > xColumn( m_aContext.createComponent( "com.sun.star.awt.grid.GridColumn" ), UNO_QUERY_THROW );
+
+                ContainerEvent aEvent;
+                aEvent.Source = *this;
+                aEvent.Accessor <<= i;
+                aEvent.Element <<= xColumn;
+                aInsertedColumns.push_back( aEvent );
+
+                m_aColumns.push_back( xColumn );
+                xColumn->setIndex( i );
+            }
+        }
+
+        // fire removal notifications
+        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
+                event != aRemovedColumns.end();
+                ++event
+            )
+        {
+            m_aContainerListeners.notifyEach( &XContainerListener::elementRemoved, *event );
+        }
+
+        // fire insertion notifications
+        for (   ::std::vector< ContainerEvent >::const_iterator event = aInsertedColumns.begin();
+                event != aInsertedColumns.end();
+                ++event
+            )
+        {
+            m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, *event );
+        }
+
+        // dispose removed columns
+        for (   ::std::vector< ContainerEvent >::const_iterator event = aRemovedColumns.begin();
+                event != aRemovedColumns.end();
+                ++event
+            )
+        {
+            try
+            {
+                const Reference< XComponent > xColComp( event->Element, UNO_QUERY_THROW );
+                xColComp->dispose();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::copyColumn(const Reference< XGridColumn > & column)  throw (RuntimeException)
+    {
+        Reference< XGridColumn > xColumn( m_aContext.createComponent( "com.sun.star.awt.grid.GridColumn" ), UNO_QUERY_THROW );
+        xColumn->setColumnWidth(column->getColumnWidth());
+        xColumn->setPreferredWidth(column->getPreferredWidth());
+        xColumn->setMaxWidth(column->getMaxWidth());
+        xColumn->setMinWidth(column->getMinWidth());
+        xColumn->setPreferredWidth(column->getPreferredWidth());
+        xColumn->setResizeable(column->getResizeable());
+        xColumn->setTitle(column->getTitle());
+        xColumn->setHorizontalAlign(column->getHorizontalAlign());
+        return xColumn;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.DefaultGridColumnModel" ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const ::rtl::OUString& i_serviceName ) throw (RuntimeException)
+    {
+        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+        for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
+            if ( aServiceNames[i] == i_serviceName )
+                return sal_True;
+        return sal_False;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    Sequence< ::rtl::OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
+    {
+        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_DefaultGridColumnModel ) );
+        const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridColumnModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
+    {
+        if ( i_listener.is() )
+            m_aContainerListeners.addInterface( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridColumnModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException)
+    {
+        if ( i_listener.is() )
+            m_aContainerListeners.removeInterface( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL DefaultGridColumnModel::disposing()
+    {
+        DefaultGridColumnModel_Base::disposing();
+
+        EventObject aEvent( *this );
+        m_aContainerListeners.disposeAndClear( aEvent );
+
+        ::osl::MutexGuard aGuard( m_aMutex );
+        // remove, dispose and clear columns
+        {
+            while ( !m_aColumns.empty() )
+            {
+                try
+                {
+                    const Reference< XComponent > xColComponent( m_aColumns[ 0 ], UNO_QUERY_THROW );
+                    xColComponent->dispose();
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
+                }
+
+                m_aColumns.erase( m_aColumns.begin() );
+            }
+
+            Columns aEmpty;
+            m_aColumns.swap( aEmpty );
+        }
+    }
+
+//......................................................................................................................
+}   // namespace toolkit
+//......................................................................................................................
+
+//----------------------------------------------------------------------------------------------------------------------
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rFactory)
 {
-    Reference<XGridColumn> xColumn( m_xFactory->createInstance ( OUString::createFromAscii( "com.sun.star.awt.grid.GridColumn"  ) ), UNO_QUERY );
-    xColumn->setColumnWidth(column->getColumnWidth());
-    xColumn->setPreferredWidth(column->getPreferredWidth());
-    xColumn->setMaxWidth(column->getMaxWidth());
-    xColumn->setMinWidth(column->getMinWidth());
-    xColumn->setPreferredWidth(column->getPreferredWidth());
-    xColumn->setResizeable(column->getResizeable());
-    xColumn->setTitle(column->getTitle());
-    xColumn->setHorizontalAlign(column->getHorizontalAlign());
-    return xColumn;
+    return ::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel( _rFactory ) );
 }
-//---------------------------------------------------------------------
-// XComponent
-//---------------------------------------------------------------------
-
-void SAL_CALL DefaultGridColumnModel::dispose() throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::com::sun::star::lang::EventObject aEvent;
-    aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-    BrdcstHelper.aLC.disposeAndClear( aEvent );
-
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL DefaultGridColumnModel::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.addListener( XEventListener::static_type(), xListener );
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL DefaultGridColumnModel::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.removeListener( XEventListener::static_type(), xListener );
-}
-
-//---------------------------------------------------------------------
-// XServiceInfo
-//---------------------------------------------------------------------
-
-::rtl::OUString SAL_CALL DefaultGridColumnModel::getImplementationName(  ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.DefaultGridColumnModel" ) );
-    return aImplName;
-}
-
-//---------------------------------------------------------------------
-
-sal_Bool SAL_CALL DefaultGridColumnModel::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return ServiceName.equalsAscii( szServiceName_DefaultGridColumnModel );
-}
-
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL DefaultGridColumnModel::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aServiceName( OUString::createFromAscii( szServiceName_DefaultGridColumnModel ) );
-    static const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-}
-
-Reference< XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const Reference< XMultiServiceFactory >& _rFactory)
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::DefaultGridColumnModel( _rFactory ) );
-}
-

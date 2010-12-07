@@ -25,20 +25,11 @@
  *
  ************************************************************************/
 
-// MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
 #include "gridcolumn.hxx"
+
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
-#include <rtl/ref.hxx>
-
-using ::rtl::OUString;
-using namespace ::com::sun::star;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt;
-using namespace ::com::sun::star::awt::grid;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::style;
 
 #define COLWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ColWidth" ))
 #define MAXWIDTH ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "MaxWidth" ))
@@ -51,255 +42,240 @@ using namespace ::com::sun::star::style;
 
 namespace toolkit
 {
+    using namespace ::com::sun::star;
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::awt;
+    using namespace ::com::sun::star::awt::grid;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::style;
 
-///////////////////////////////////////////////////////////////////////
-// class GridColumn
-///////////////////////////////////////////////////////////////////////
-
-GridColumn::GridColumn()
-: identifier(Any())
-,index(0)
-,columnWidth(4)
-,preferredWidth(0)
-,maxWidth(0)
-,minWidth(0)
-,bResizeable(true)
-,horizontalAlign(HorizontalAlignment(0))
-{
-}
-
-//---------------------------------------------------------------------
-
-GridColumn::~GridColumn()
-{
-}
-
-//---------------------------------------------------------------------
-
-void GridColumn::broadcast( broadcast_column_type eType, const GridColumnEvent& aEvent )
-{
-    ::cppu::OInterfaceContainerHelper* pIter = BrdcstHelper.getContainer( XGridColumnListener::static_type() );
-    if( pIter )
+    //==================================================================================================================
+    //= DefaultGridColumnModel
+    //==================================================================================================================
+    GridColumn::GridColumn()
+        :GridColumn_Base( m_aMutex )
+        ,m_aIdentifier()
+        ,m_nIndex(0)
+        ,m_nColumnWidth(4)
+        ,m_nPreferredWidth(0)
+        ,m_nMaxWidth(0)
+        ,m_nMinWidth(0)
+        ,m_bResizeable(true)
+        ,m_eHorizontalAlign(HorizontalAlignment(0))
     {
-        ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
-        while(aListIter.hasMoreElements())
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    GridColumn::~GridColumn()
+    {
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void GridColumn::broadcast( broadcast_column_type eType, const GridColumnEvent& aEvent )
+    {
+        ::cppu::OInterfaceContainerHelper* pIter = rBHelper.getContainer( XGridColumnListener::static_type() );
+        if( pIter )
         {
-            XGridColumnListener* pListener = static_cast<XGridColumnListener*>(aListIter.next());
-            switch( eType )
+            ::cppu::OInterfaceIteratorHelper aListIter(*pIter);
+            while(aListIter.hasMoreElements())
             {
-                case column_attribute_changed:  pListener->columnChanged(aEvent); break;
+                XGridColumnListener* pListener = static_cast<XGridColumnListener*>(aListIter.next());
+                switch( eType )
+                {
+                    case column_attribute_changed:  pListener->columnChanged(aEvent); break;
+                }
             }
         }
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void GridColumn::broadcast_changed(::rtl::OUString name, Any oldValue, Any newValue)
+    {
+        Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
+        GridColumnEvent aEvent( xSource, name, oldValue, newValue, m_nIndex);
+        broadcast( column_attribute_changed, aEvent);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::updateColumn(const ::rtl::OUString& name, sal_Int32 width) throw (::com::sun::star::uno::RuntimeException)
+    {
+        if(PREFWIDTH == name)
+            m_nPreferredWidth = width;
+        else if (COLWIDTH == name)
+            m_nColumnWidth = width;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::com::sun::star::uno::Any SAL_CALL GridColumn::getIdentifier() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_aIdentifier;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        value >>= m_aIdentifier;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getColumnWidth() throw (::com::sun::star::uno::RuntimeException)
+    {
+        broadcast_changed(UPDATE, Any(m_nColumnWidth), Any());
+        return m_nColumnWidth;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_nColumnWidth = value;
+        broadcast_changed(COLWIDTH, Any(m_nColumnWidth),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
+    {
+        broadcast_changed(UPDATE, Any(m_nPreferredWidth), Any());
+        return m_nPreferredWidth;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_nPreferredWidth = value;
+        broadcast_changed(PREFWIDTH, Any(m_nPreferredWidth),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getMaxWidth() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_nMaxWidth;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_nMaxWidth = value;
+        broadcast_changed(MAXWIDTH, Any(m_nMaxWidth),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::sal_Int32 SAL_CALL GridColumn::getMinWidth() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_nMinWidth;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_nMinWidth = value;
+        broadcast_changed(MINWIDTH, Any(m_nMinWidth),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL GridColumn::getTitle() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_sTitle;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_sTitle = value;
+        broadcast_changed(TITLE, Any(m_sTitle),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Bool SAL_CALL GridColumn::getResizeable() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_bResizeable;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_bResizeable = value;
+        broadcast_changed(COLRESIZE, Any(m_bResizeable),Any(value));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException)
+    {
+        return m_eHorizontalAlign;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_eHorizontalAlign = align;
+        broadcast_changed(HALIGN, Any(m_eHorizontalAlign),Any(align));
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+    {
+        rBHelper.addListener( XGridColumnListener::static_type(), xListener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+    {
+        rBHelper.removeListener( XGridColumnListener::static_type(), xListener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::dispose() throw (RuntimeException)
+    {
+        // simply disambiguate, the base class handles this
+        GridColumn_Base::dispose();
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::addEventListener( const Reference< XEventListener >& i_listener ) throw (RuntimeException)
+    {
+        // simply disambiguate, the base class handles this
+        GridColumn_Base::addEventListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::removeEventListener( const Reference< XEventListener >& i_listener ) throw (RuntimeException)
+    {
+        // simply disambiguate, the base class handles this
+        GridColumn_Base::removeEventListener( i_listener );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    void SAL_CALL GridColumn::setIndex(sal_Int32 _nIndex) throw (::com::sun::star::uno::RuntimeException)
+    {
+        m_nIndex = _nIndex;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::rtl::OUString SAL_CALL GridColumn::getImplementationName(  ) throw (RuntimeException)
+    {
+        return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.comp.toolkit.GridColumn" ) );
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    sal_Bool SAL_CALL GridColumn::supportsService( const ::rtl::OUString& i_serviceName ) throw (RuntimeException)
+    {
+        const Sequence< ::rtl::OUString > aServiceNames( getSupportedServiceNames() );
+        for ( sal_Int32 i=0; i<aServiceNames.getLength(); ++i )
+            if ( aServiceNames[i] == i_serviceName )
+                return sal_True;
+        return sal_False;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
+    {
+        const ::rtl::OUString aServiceName( ::rtl::OUString::createFromAscii( szServiceName_GridColumn ) );
+        const Sequence< ::rtl::OUString > aSeq( &aServiceName, 1 );
+        return aSeq;
+    }
 }
 
-//---------------------------------------------------------------------
-
-void GridColumn::broadcast_changed(::rtl::OUString name, Any oldValue, Any newValue)
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& )
 {
-    Reference< XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
-    GridColumnEvent aEvent( xSource, name, oldValue, newValue, index);
-    broadcast( column_attribute_changed, aEvent);
-}
-
-void SAL_CALL GridColumn::updateColumn(const ::rtl::OUString& name, sal_Int32 width) throw (::com::sun::star::uno::RuntimeException)
-{
-    if(PREFWIDTH == name)
-        preferredWidth = width;
-    else if (COLWIDTH == name)
-        columnWidth = width;
-}
-//---------------------------------------------------------------------
-// XGridColumn
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Any SAL_CALL GridColumn::getIdentifier() throw (::com::sun::star::uno::RuntimeException)
-{
-    return identifier;
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setIdentifier(const ::com::sun::star::uno::Any & value) throw (::com::sun::star::uno::RuntimeException)
-{
-    value >>= identifier;
-}
-
-//--------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL GridColumn::getColumnWidth() throw (::com::sun::star::uno::RuntimeException)
-{
-    broadcast_changed(UPDATE, Any(columnWidth), Any());
-    return columnWidth;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setColumnWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-{
-    columnWidth = value;
-    broadcast_changed(COLWIDTH, Any(columnWidth),Any(value));
-}
-//--------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL GridColumn::getPreferredWidth() throw (::com::sun::star::uno::RuntimeException)
-{
-    broadcast_changed(UPDATE, Any(preferredWidth), Any());
-    return preferredWidth;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setPreferredWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-{
-    preferredWidth = value;
-    broadcast_changed(PREFWIDTH, Any(preferredWidth),Any(value));
-}
-//--------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL GridColumn::getMaxWidth() throw (::com::sun::star::uno::RuntimeException)
-{
-    return maxWidth;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setMaxWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-{
-    maxWidth = value;
-    broadcast_changed(MAXWIDTH, Any(maxWidth),Any(value));
-}
-//--------------------------------------------------------------------
-
-::sal_Int32 SAL_CALL GridColumn::getMinWidth() throw (::com::sun::star::uno::RuntimeException)
-{
-    return minWidth;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setMinWidth(::sal_Int32 value) throw (::com::sun::star::uno::RuntimeException)
-{
-    minWidth = value;
-    broadcast_changed(MINWIDTH, Any(minWidth),Any(value));
-}
-
-//--------------------------------------------------------------------
-
-::rtl::OUString SAL_CALL GridColumn::getTitle() throw (::com::sun::star::uno::RuntimeException)
-{
-    return title;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setTitle(const ::rtl::OUString & value) throw (::com::sun::star::uno::RuntimeException)
-{
-    title = value;
-    broadcast_changed(TITLE, Any(title),Any(value));
-}
-//--------------------------------------------------------------------
-
-sal_Bool SAL_CALL GridColumn::getResizeable() throw (::com::sun::star::uno::RuntimeException)
-{
-    return bResizeable;
-}
-
-//--------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setResizeable(sal_Bool value) throw (::com::sun::star::uno::RuntimeException)
-{
-    bResizeable = value;
-    broadcast_changed(COLRESIZE, Any(bResizeable),Any(value));
-}
-//---------------------------------------------------------------------
-HorizontalAlignment SAL_CALL GridColumn::getHorizontalAlign() throw (::com::sun::star::uno::RuntimeException)
-{
-    return horizontalAlign;
-}
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::setHorizontalAlign(HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException)
-{
-    horizontalAlign = align;
-    broadcast_changed(HALIGN, Any(horizontalAlign),Any(align));
-}
-//---------------------------------------------------------------------
-void SAL_CALL GridColumn::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.addListener( XGridColumnListener::static_type(), xListener );
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.removeListener( XGridColumnListener::static_type(), xListener );
-}
-
-//---------------------------------------------------------------------
-// XComponent
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::dispose() throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-
-    ::com::sun::star::lang::EventObject aEvent;
-    aEvent.Source.set( static_cast< ::cppu::OWeakObject* >( this ) );
-    BrdcstHelper.aLC.disposeAndClear( aEvent );
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.addListener( XEventListener::static_type(), xListener );
-}
-
-//---------------------------------------------------------------------
-
-void SAL_CALL GridColumn::removeEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException)
-{
-    BrdcstHelper.removeListener( XEventListener::static_type(), xListener );
-}
-void SAL_CALL GridColumn::setIndex(sal_Int32 _nIndex) throw (::com::sun::star::uno::RuntimeException)
-{
-    index = _nIndex;
-}
-//---------------------------------------------------------------------
-// XServiceInfo
-//---------------------------------------------------------------------
-
-::rtl::OUString SAL_CALL GridColumn::getImplementationName(  ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "toolkit.GridColumn" ) );
-    return aImplName;
-}
-
-//---------------------------------------------------------------------
-
-sal_Bool SAL_CALL GridColumn::supportsService( const ::rtl::OUString& ServiceName ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    return ServiceName.equalsAscii( szServiceName_GridColumn );
-}
-
-//---------------------------------------------------------------------
-
-::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL GridColumn::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
-    static const OUString aServiceName( OUString::createFromAscii( szServiceName_GridColumn ) );
-    static const Sequence< OUString > aSeq( &aServiceName, 1 );
-    return aSeq;
-}
-
-}
-
-Reference< XInterface > SAL_CALL GridColumn_CreateInstance( const Reference< XMultiServiceFactory >& )
-{
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::GridColumn );
+    return *( new ::toolkit::GridColumn );
 }
 

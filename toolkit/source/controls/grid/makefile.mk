@@ -43,7 +43,8 @@ SLOFILES=   \
             $(SLO)$/gridcontrol.obj\
             $(SLO)$/defaultgriddatamodel.obj\
             $(SLO)$/defaultgridcolumnmodel.obj\
-            $(SLO)$/gridcolumn.obj
+            $(SLO)$/gridcolumn.obj\
+            $(SLO)$/grideventforwarder.obj
             
 # --- Targets ------------------------------------------------------
 
