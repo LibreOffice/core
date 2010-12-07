@@ -72,13 +72,10 @@ static void systray_disable_cb()
 
 static void exit_quickstarter_cb( GtkWidget * )
 {
-    if (pTrayIcon)
-    {
-        plugin_shutdown_sys_tray();
-        //terminate may cause this .so to be unloaded. So we must be hands off
-        //all calls into this .so after this call
-        ShutdownIcon::terminateDesktop();
-    }
+    plugin_shutdown_sys_tray();
+    //terminate may cause this .so to be unloaded. So we must be hands off
+    //all calls into this .so after this call
+    ShutdownIcon::terminateDesktop();
 }
 
 static void menu_deactivate_cb( GtkWidget *pMenu )
