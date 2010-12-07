@@ -54,6 +54,8 @@ export SAL_ALLOW_LINKOO_SYMLINKS=1
 $program_dir = 'basis-link/program';
 $brand_program_dir = 'program';
 $ure_misc_dir = 'basis-link/ure-link/share/misc';
+$ure_java_dir = 'basis-link/ure-link/share/java';
+$ure_lib_dir = 'basis-link/ure-link/lib';
 
 $program_dir = 'openoffice.org/basis-link/MacOS' if ($ENV{OS} eq 'MACOSX'); # FIXME probably wrong
 
@@ -61,6 +63,8 @@ my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
 %replaceable = (
     $program_dir => '\.so',
+    $ure_lib_dir => '\.so',
+    $ure_java_dir => '\.jar$',
     $program_dir . '/resource' => '\.res$',
     $program_dir . '/classes' => '\.jar$',
     'basis-link/share/config' => '\.zip$',
@@ -69,6 +73,7 @@ my @exceptions = ( 'cppuhelper', 'sunjavaplugin', 'libjvmfwk' );
 
 # strangely enough, OSX has those small differences...
 $replaceable{$program_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
+$replaceable{$ure_lib_dir_dir} = '\.dylib$' if ($ENV{OS} eq 'MACOSX');
 
 @search_dirs = ( 'lib', 'bin', 'class' );
 
