@@ -2107,7 +2107,7 @@ sub zenity_open {
 sub zenity_close {
     if (zenity_enabled()) {
         sleep(1); # Give Zenity a chance to show the message.
-        kill 1, $zenity_pid;
+        close($zenity_in);
     };
 };
 
