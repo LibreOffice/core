@@ -30,6 +30,8 @@
 
 // defines for positions and sizes ---------------------------------------
 
+#define ENABLE_HELP_FORMATTING 0
+
 #define WHOLE_WIDTH             248
 #define EDIT_WIDTH              30
 #define UNIT_WIDTH              40
@@ -46,19 +48,24 @@
 #define ROWSPACE                RSC_SP_CTRL_DESC_Y
 #define ROW0                    3
 #define ROW1                    (ROW0 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#if ENABLE_HELP_FORMATTING
 #define ROW2                    (ROW1 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#else
+#define ROW2                    (ROW1)
+#endif
 #define ROW3                    (ROW2 +RSC_CD_DROPDOWN_HEIGHT+ROWSPACE)
 #define ROW4                    (ROW3 +RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
 #define ROW5                    (ROW4 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW6                    (ROW5 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#define ROW7                    (ROW6 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW8                    (ROW7 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#define ROW9                    (ROW8 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW10                   (ROW9 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW7                    (ROW6 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW8                    (ROW7 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
+#define ROW9                    (ROW8 +RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW10                   (ROW9 +RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW11                   (ROW10+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
-#define ROW12                   (ROW11+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
-#define ROW13                   (ROW12+RSC_CD_PUSHBUTTON_HEIGHT+ROWSPACE)
+#define ROW12                   (ROW11+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW13                   (ROW12+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 #define ROW14                   (ROW13+RSC_CD_CHECKBOX_HEIGHT+ROWSPACE)
+#define ROW15                   (ROW14+RSC_CD_FIXEDLINE_HEIGHT+ROWSPACE)
 
 #define DIFF(v1,v2)                     (v2-v1)
 #define OFFS_TEXTBOX_FIXEDTEXT(base)    (base+(RSC_CD_TEXTBOX_HEIGHT-RSC_CD_FIXEDTEXT_HEIGHT)/2)

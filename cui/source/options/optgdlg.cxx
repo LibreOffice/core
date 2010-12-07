@@ -221,6 +221,11 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 {
     FreeResource();
 
+#if not ENABLE_HELP_FORMATTING
+    aHelpFormatFT.Hide();
+    aHelpFormatLB.Hide();
+#endif
+
     if (!lcl_HasSystemFilePicker())
     {
         aFileDlgFL.Hide();
@@ -237,6 +242,27 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #else
     aODMADlgCB.Hide();
 #endif
+
+    if (!aODMADlgCB.IsVisible())
+    {
+        // rearrange the following controls
+        Point aNewPos = aPrintDlgFL.GetPosPixel();
+        long nDelta = aNewPos.Y() - aODMADlgCB.GetPosPixel().Y();
+
+        Window* pWins[] =
+        {
+            &aPrintDlgFL, &aPrintDlgCB, &aDocStatusFL, &aDocStatusCB, &aSaveAlwaysCB,
+            &aTwoFigureFL, &aInterpretFT, &aYearValueField, &aToYearFT, &aExperimentalCB
+        };
+        Window** pCurrent = pWins;
+        const sal_Int32 nCount = SAL_N_ELEMENTS( pWins );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCurrent )
+        {
+            aNewPos = (*pCurrent)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCurrent)->SetPosPixel( aNewPos );
+        }
+    }
 
     if ( !aFileDlgCB.IsVisible() )
     {
