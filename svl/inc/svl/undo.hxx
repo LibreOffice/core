@@ -398,10 +398,12 @@ protected:
     BOOL    UndoWithContext( SfxUndoContext& i_context );
     BOOL    RedoWithContext( SfxUndoContext& i_context );
 
+    void    ImplClearRedo_NoLock( bool const i_currentLevel );
+
 private:
     USHORT  ImplLeaveListAction( const bool i_merge, ::svl::undo::impl::UndoManagerGuard& i_guard );
     bool    ImplAddUndoAction_NoNotify( SfxUndoAction* pAction, bool bTryMerge, bool bClearRedo, ::svl::undo::impl::UndoManagerGuard& i_guard );
-    void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard );
+    void    ImplClearRedo( ::svl::undo::impl::UndoManagerGuard& i_guard, bool const i_currentLevel );
     void    ImplClearUndo( ::svl::undo::impl::UndoManagerGuard& i_guard );
     void    ImplClear( ::svl::undo::impl::UndoManagerGuard& i_guard );
     USHORT  ImplGetRedoActionCount_Lock( bool const i_currentLevel = CurrentLevel ) const;

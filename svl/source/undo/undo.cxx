@@ -522,17 +522,24 @@ void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
 void SfxUndoManager::Clear()
 {
     UndoManagerGuard aGuard( *m_pData );
-    ENSURE_OR_RETURN_VOID( !IsInListAction(), "SfxUndoManager::Clear: not allowed when within a list action!" );
+    OSL_ENSURE( !ImplIsInListAction_Lock(), "SfxUndoManager::Clear: suspicious call - do you really wish to clear the current level?" );
     ImplClear( aGuard );
+}
+
+//------------------------------------------------------------------------
+
+void SfxUndoManager::ImplClearRedo_NoLock( bool const i_currentLevel )
+{
+    UndoManagerGuard aGuard( *m_pData );
+    ImplClearRedo( aGuard, i_currentLevel );
 }
 
 //------------------------------------------------------------------------
 
 void SfxUndoManager::ClearRedo()
 {
-    UndoManagerGuard aGuard( *m_pData );
-    ENSURE_OR_RETURN_VOID( !IsInListAction(), "SfxUndoManager::ClearRedo: not allowed when within a list action!" );
-    ImplClearRedo( aGuard );
+    OSL_ENSURE( !IsInListAction(), "SfxUndoManager::ClearRedo: suspicious call - do you really wish to clear the current level?" );
+    ImplClearRedo_NoLock( CurrentLevel );
 }
 
 //------------------------------------------------------------------------
@@ -576,19 +583,22 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
 
 //------------------------------------------------------------------------
 
-void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard )
+void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_currentLevel )
 {
+    SfxUndoArray* pUndoArray = ( i_currentLevel == IUndoManager::CurrentLevel ) ? m_pData->pActUndoArray : m_pData->pUndoArray;
+
     // clearance
-    while ( m_pData->pActUndoArray->aUndoActions.size() > m_pData->pActUndoArray->nCurUndoAction )
+    while ( pUndoArray->aUndoActions.size() > pUndoArray->nCurUndoAction )
     {
-        size_t deletePos = m_pData->pActUndoArray->aUndoActions.size() - 1;
-        SfxUndoAction* pAction = m_pData->pActUndoArray->aUndoActions[ deletePos ].pAction;
-        m_pData->pActUndoArray->aUndoActions.Remove( deletePos );
+        size_t deletePos = pUndoArray->aUndoActions.size() - 1;
+        SfxUndoAction* pAction = pUndoArray->aUndoActions[ deletePos ].pAction;
+        pUndoArray->aUndoActions.Remove( deletePos );
         i_guard.markForDeletion( pAction );
     }
 
-    // notification
-    i_guard.scheduleNotification( &SfxUndoListener::clearedRedo );
+    // notification - only if the top level's stack was cleared
+    if ( i_currentLevel == IUndoManager::TopLevel )
+        i_guard.scheduleNotification( &SfxUndoListener::clearedRedo );
 }
 
 //------------------------------------------------------------------------
@@ -612,7 +622,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
 
     // clear redo stack, if requested
     if ( bClearRedo && ( ImplGetRedoActionCount_Lock( CurrentLevel ) > 0 ) )
-        ImplClearRedo( i_guard );
+        ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
     // respect max number
     if( m_pData->pActUndoArray == m_pData->pUndoArray )
@@ -887,7 +897,7 @@ BOOL SfxUndoManager::ImplRedo( SfxUndoContext* i_contextOrNull )
             {
                 // the Undo action is still there ...
                 // assume the error is a permanent failure, and clear the Undo stack
-                ImplClearRedo( aGuard );
+                ImplClearRedo( aGuard, IUndoManager::CurrentLevel );
                 throw;
             }
             ++nCurAction;
@@ -1086,9 +1096,9 @@ USHORT SfxUndoManager::ImplLeaveListAction( const bool i_merge, UndoManagerGuard
         return 0;
     }
 
-    // now that it is finally clear the list action is non-trivial, and to participate in the Undo stack, clear
+    // now that it is finally clear the list action is non-trivial, and does participate in the Undo stack, clear
     // the redo stack
-    ImplClearRedo( i_guard );
+    ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
     SfxUndoAction* pCurrentAction= m_pData->pActUndoArray->aUndoActions[ m_pData->pActUndoArray->nCurUndoAction-1 ].pAction;
     SfxListUndoAction* pListAction = dynamic_cast< SfxListUndoAction * >( pCurrentAction );
