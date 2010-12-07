@@ -772,6 +772,17 @@ void lcl_AddErrorBottomLine( const drawing::Position3D& rPosition, ::basegfx::B2
     return aMainDirection;
 }
 
+drawing::Position3D lcl_transformMixedToScene( PlottingPositionHelper* pPosHelper
+    , double fX /*scaled*/, double fY /*unscaled*/, double fZ /*unscaled*/, bool bClip )
+{
+    if(!pPosHelper)
+        return drawing::Position3D(0,0,0);
+    pPosHelper->doLogicScaling( 0,&fY,&fZ );
+    if(bClip)
+        pPosHelper->clipScaledLogicValues( &fX,&fY,&fZ );
+    return pPosHelper->transformScaledLogicToScene( fX, fY, fZ, false );
+}
+
 } // anonymous namespace
 
 // virtual
@@ -782,6 +793,7 @@ void VSeriesPlotter::createErrorBar(
     , const VDataSeries& rVDataSeries
     , sal_Int32 nIndex
     , bool bYError /* = true */
+    , double* pfScaledLogicX
     )
 {
     if( !ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ) )
@@ -816,7 +828,13 @@ void VSeriesPlotter::createErrorBar(
         const double fX = aUnscaledLogicPosition.PositionX;
         const double fY = aUnscaledLogicPosition.PositionY;
         const double fZ = aUnscaledLogicPosition.PositionZ;
-        aMiddle = m_pPosHelper->transformLogicToScene( fX, fY, fZ, true );
+        double fScaledX = fX;
+        if( pfScaledLogicX )
+            fScaledX = *pfScaledLogicX;
+        else
+            m_pPosHelper->doLogicScaling( &fScaledX, 0, 0 );
+
+        aMiddle = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fY, fZ, true );
 
         drawing::Position3D aNegative(aMiddle);
         drawing::Position3D aPositive(aMiddle);
@@ -831,11 +849,16 @@ void VSeriesPlotter::createErrorBar(
                 double fLocalX = fX;
                 double fLocalY = fY;
                 if( bYError )
+                {
                     fLocalY+=fLength;
+                    aPositive = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                }
                 else
+                {
                     fLocalX+=fLength;
+                    aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                }
                 bCreatePositiveBorder = m_pPosHelper->isLogicVisible(fLocalX, fLocalY, fZ);
-                aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
             }
             else
                 bShowPositive = false;
@@ -849,12 +872,16 @@ void VSeriesPlotter::createErrorBar(
                 double fLocalX = fX;
                 double fLocalY = fY;
                 if( bYError )
+                {
                     fLocalY-=fLength;
+                    aNegative = lcl_transformMixedToScene( m_pPosHelper, fScaledX, fLocalY, fZ, true );
+                }
                 else
+                {
                     fLocalX-=fLength;
-
+                    aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                }
                 bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
-                aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
             }
             else
                 bShowNegative = false;
@@ -898,7 +925,8 @@ void VSeriesPlotter::createErrorBar(
 // virtual
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
-                            , const uno::Reference< drawing::XShapes >& xTarget )
+                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , double* pfScaledLogicX )
 {
     if(m_nDimension!=2)
         return;
@@ -912,7 +940,8 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
             , rVDataSeries, nPointIndex
-            , true /* bYError */ );
+            , true /* bYError */
+            , pfScaledLogicX );
     }
 }
 

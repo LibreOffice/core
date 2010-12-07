@@ -381,12 +381,14 @@ protected: //methods
         , const VDataSeries& rVDataSeries
         , sal_Int32 nIndex
         , bool bVertical
+        , double* pfScaledLogicX
         );
 
     virtual void createErrorBar_Y( const ::com::sun::star::drawing::Position3D& rUnscaledLogicPosition
         , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
         , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+                ::com::sun::star::drawing::XShapes >& xTarget
+        , double* pfScaledLogicX=0 );
 
     virtual void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<

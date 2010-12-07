@@ -846,7 +846,7 @@ void BarChart::createShapes()
                         }
 
                         //create error bar
-                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget );
+                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nPointIndex, m_xLogicTarget, &fLogicX );
 
                         //------------
                         //create data point label
