@@ -696,7 +696,7 @@ sub create_simple_package
             }
             else
             {
-                $infoline = "ERROR: Could not copy $source to $destination\n";
+                $infoline = "ERROR: Could not copy $source to $destination $!\n";
                 $returnvalue = 0;
             }
 
