@@ -192,7 +192,7 @@ void SwHTMLParser::SplitAttrTab( const SwPosition& rNewPos )
                 nOldEndCnt = pPam->GetPoint()->nContent.GetIndex();
             }
 
-            if( RES_PARATR_BEGIN <= nWhich && bMoveBack ||
+            if( (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
                 pAttr->GetSttParaIdx() < pOldEndPara->GetIndex() ||
                 (pAttr->GetSttPara() == *pOldEndPara &&
                  pAttr->GetSttCnt() != nOldEndCnt) )

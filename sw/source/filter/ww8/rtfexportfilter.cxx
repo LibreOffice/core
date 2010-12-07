@@ -143,44 +143,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment( const
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void* /* pServiceManager */, void* pRegistryKey )
-{
-    sal_Bool bRet = sal_False;
-
-    if( pRegistryKey )
-    {
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xNewKey1(
-                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( IMPL_NAME_RTFEXPORT "/UNO/SERVICES/" ) ) );
-            xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
-
-            bRet = sal_True;
-        }
-        catch( registry::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException (rtfexport)!" );
-        }
-
-        try
-        {
-            uno::Reference< registry::XRegistryKey > xNewKey1(
-                    static_cast< registry::XRegistryKey* >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( IMPL_NAME_RTFIMPORT "/UNO/SERVICES/" ) ) );
-            xNewKey1->createKey( RtfExport_getSupportedServiceNames().getConstArray()[0] );
-
-            bRet = sal_True;
-        }
-        catch( registry::InvalidRegistryException& )
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException (rtfimport)!" );
-        }
-    }
-
-    return bRet;
-}
-
 // ------------------------
 // - component_getFactory -
 // ------------------------
