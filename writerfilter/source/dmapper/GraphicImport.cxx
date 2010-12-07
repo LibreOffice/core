@@ -1032,7 +1032,7 @@ void GraphicImport::attribute(Id nName, Value & val)
             ;
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("attribute");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -1341,7 +1341,7 @@ void GraphicImport::sprm(Sprm & rSprm)
 
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("sprm");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------

@@ -86,7 +86,7 @@ void ThemeTable::attribute(Id Name, Value & val)
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("ThemeTable.attribute");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -144,7 +144,7 @@ void ThemeTable::sprm(Sprm& rSprm)
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("ThemeTable.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -157,7 +157,7 @@ void ThemeTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer
     ref->resolve(*this);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("ThemeTable.entry");
+    dmapper_logger->endElement();
 #endif
 }
 

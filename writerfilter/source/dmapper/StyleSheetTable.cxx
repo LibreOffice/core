@@ -84,24 +84,24 @@ StyleSheetEntry::~StyleSheetEntry()
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t StyleSheetEntry::toTag()
+void StyleSheetEntry::dumpXml( const TagLogger::Pointer_t pLogger )
 {
-    XMLTag::Pointer_t pResult(new XMLTag("StyleSheetEntry"));
+    pLogger->startElement("StyleSheetEntry");
 
-    pResult->addAttr("identifierI", sStyleIdentifierI);
-    pResult->addAttr("identifierD", sStyleIdentifierD);
-    pResult->addAttr("default", bIsDefaultStyle ? "true" : "false");
-    pResult->addAttr("invalidHeight", bInvalidHeight ? "true" : "false");
-    pResult->addAttr("hasUPE", bHasUPE ? "true" : "false");
-    pResult->addAttr("styleType", nStyleTypeCode);
-    pResult->addAttr("baseStyle", sBaseStyleIdentifier);
-    pResult->addAttr("nextStyle", sNextStyleIdentifier);
-    pResult->addAttr("styleName", sStyleName);
-    pResult->addAttr("styleName1", sStyleName1);
-    pResult->addAttr("convertedName", sConvertedStyleName);
-    pResult->addTag(pProperties->toTag());
+    pLogger->attribute("identifierI", sStyleIdentifierI);
+    pLogger->attribute("identifierD", sStyleIdentifierD);
+    pLogger->attribute("default", bIsDefaultStyle ? "true" : "false");
+    pLogger->attribute("invalidHeight", bInvalidHeight ? "true" : "false");
+    pLogger->attribute("hasUPE", bHasUPE ? "true" : "false");
+    pLogger->attribute("styleType", nStyleTypeCode);
+    pLogger->attribute("baseStyle", sBaseStyleIdentifier);
+    pLogger->attribute("nextStyle", sNextStyleIdentifier);
+    pLogger->attribute("styleName", sStyleName);
+    pLogger->attribute("styleName1", sStyleName1);
+    pLogger->attribute("convertedName", sConvertedStyleName);
+    pProperties->dumpXml( pLogger );
 
-    return pResult;
+    pLogger->endElement();
 }
 #endif
 
@@ -132,8 +132,8 @@ void TableStyleSheetEntry::AddTblStylePr( TblStyleType nType, PropertyMapPtr pPr
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("AddTblStylePr");
     dmapper_logger->attribute("type", nType);
-    dmapper_logger->addTag(pProps->toTag());
-    dmapper_logger->endElement("AddTblStylePr");
+    pProps->dumpXml(dmapper_logger);
+    dmapper_logger->endElement();
 #endif
 
     static TblStyleType pTypesToFix[] =
@@ -201,20 +201,37 @@ PropertyMapPtr TableStyleSheetEntry::GetProperties( sal_Int32 nMask )
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t TableStyleSheetEntry::toTag()
+void TableStyleSheetEntry::dumpXml( const TagLogger::Pointer_t pLogger )
 {
-    XMLTag::Pointer_t pResult(StyleSheetEntry::toTag());
+
+    pLogger->startElement("StyleSheetEntry");
+
+    pLogger->attribute("identifierI", sStyleIdentifierI);
+    pLogger->attribute("identifierD", sStyleIdentifierD);
+    pLogger->attribute("default", bIsDefaultStyle ? "true" : "false");
+    pLogger->attribute("invalidHeight", bInvalidHeight ? "true" : "false");
+    pLogger->attribute("hasUPE", bHasUPE ? "true" : "false");
+    pLogger->attribute("styleType", nStyleTypeCode);
+    pLogger->attribute("baseStyle", sBaseStyleIdentifier);
+    pLogger->attribute("nextStyle", sNextStyleIdentifier);
+    pLogger->attribute("styleName", sStyleName);
+    pLogger->attribute("styleName1", sStyleName1);
+    pLogger->attribute("convertedName", sConvertedStyleName);
+    pProperties->dumpXml( pLogger );
 
     for (sal_Int32 nBit = 0; nBit < 13; ++nBit)
     {
+        pLogger->startElement("properties");
+
         PropertyMapPtr pMap = GetProperties(1 << nBit);
 
-        XMLTag::Pointer_t pTag = pMap->toTag();
-        pTag->addAttr("kind", nBit);
-        pResult->addTag(pTag);
+        pMap->dumpXml( pLogger );
+        pLogger->attribute("kind", nBit);
+
+        pLogger->endElement();
     }
 
-    return pResult;
+    pLogger->endElement();
 }
 #endif
 
@@ -520,7 +537,7 @@ void StyleSheetTable::attribute(Id Name, Value & val)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.attribute");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -672,7 +689,7 @@ void StyleSheetTable::sprm(Sprm & rSprm)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 19.06.2006 12:04:33---------------------------------------------------
@@ -704,14 +721,14 @@ void StyleSheetTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Po
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->addTag(m_pImpl->m_pCurrentEntry->toTag());
+    m_pImpl->m_pCurrentEntry->dumpXml( dmapper_logger );
 #endif
 
     StyleSheetEntryPtr pEmptyEntry;
     m_pImpl->m_pCurrentEntry = pEmptyEntry;
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("StyleSheetTable.entry");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 21.06.2006 15:34:49---------------------------------------------------
@@ -950,7 +967,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
                                 aSortedPropVals.Insert( aPropValues[nProp] );
                             }
 #ifdef DEBUG_DOMAINMAPPER
-                            dmapper_logger->endElement("propvalue");
+                            dmapper_logger->endElement();
 #endif
                         }
                         if(bAddFollowStyle)
@@ -1005,8 +1022,8 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
 #ifdef DEBUG_DOMAINMAPPER
                         uno::Reference<beans::XPropertySet> xProps(xStyle, uno::UNO_QUERY);
                         dmapper_logger->startElement("insertStyle");
-                        dmapper_logger->addTag(unoPropertySetToTag(xProps));
-                        dmapper_logger->endElement("insertStyle");
+                        dmapper_logger->unoPropertySet(xProps);
+                        dmapper_logger->endElement();
 #endif
                     }
                 }
@@ -1021,7 +1038,7 @@ void StyleSheetTable::ApplyStyleSheets( FontTablePtr rFontTable )
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("applyStyleSheets");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 22.06.2006 15:56:56---------------------------------------------------

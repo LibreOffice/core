@@ -226,12 +226,11 @@ public:
     void sendPropertyToParent();
 
 #if OSL_DEBUG_LEVEL > 1
-    static XMLTag::Pointer_t toPropertiesTag(OOXMLPropertySet::Pointer_t);
-    virtual XMLTag::Pointer_t toTag() const;
-    virtual string toString() const;
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
 #ifdef DEBUG_MEMORY
+    sal_uInt32 getInstanceNumber() { return mnInstanceNumber; }
     virtual void SAL_CALL acquire() throw();
     virtual void SAL_CALL release() throw();
 #endif
@@ -345,7 +344,7 @@ public:
     virtual OOXMLPropertySet::Pointer_t getPropertySet() const;
 
 #if OSL_DEBUG_LEVEL > 1
-    virtual XMLTag::Pointer_t toTag() const;
+    virtual void dumpXml( const TagLogger::Pointer_t pLogger ) const;
 #endif
 
 protected:

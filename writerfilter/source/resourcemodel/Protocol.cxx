@@ -94,7 +94,7 @@ void StreamProtocol::text(const sal_uInt8 * data, size_t len)
                           RTL_TEXTENCODING_MS_1252);
     m_pTagLogger->startElement("protocol-text");
     m_pTagLogger->chars(sText);
-    m_pTagLogger->endElement("protocol-text");
+    m_pTagLogger->endElement();
 
     m_pStream->text(data, len);
 }
@@ -108,7 +108,7 @@ void StreamProtocol::utext(const sal_uInt8 * data, size_t len)
 
     m_pTagLogger->startElement("protocol-utext");
     m_pTagLogger->chars(sText);
-    m_pTagLogger->endElement("protocol-utext");
+    m_pTagLogger->endElement();
 
     m_pStream->utext(data, len);
 }
@@ -117,7 +117,7 @@ void StreamProtocol::props(writerfilter::Reference<Properties>::Pointer_t ref)
 {
     m_pTagLogger->startElement("protocol-props");
     m_pStream->props(ref);
-    m_pTagLogger->endElement("protocol-props");
+    m_pTagLogger->endElement();
 }
 
 void StreamProtocol::table(Id name,
@@ -126,7 +126,7 @@ void StreamProtocol::table(Id name,
     m_pTagLogger->startElement("protocol-table");
     m_pTagLogger->attribute("name", (*QNameToString::Instance())(name));
     m_pStream->table(name, ref);
-    m_pTagLogger->endElement("protocol-table");
+    m_pTagLogger->endElement();
 }
 
 void StreamProtocol::substream(Id name,
@@ -136,7 +136,7 @@ void StreamProtocol::substream(Id name,
     m_pTagLogger->attribute("name", (*QNameToString::Instance())(name));
 
     m_pStream->substream(name, ref);
-    m_pTagLogger->endElement("protocol-substream");
+    m_pTagLogger->endElement();
 }
 
 void StreamProtocol::info(const string & rInfo)
@@ -178,7 +178,7 @@ void PropertiesProtocol::attribute(Id name, Value & val)
     m_pTagLogger->attribute("name", (*QNameToString::Instance())(name));
     m_pTagLogger->attribute("value", val.toString());
     m_pProperties->attribute(name, val);
-    m_pTagLogger->endElement("protocol-attribute");
+    m_pTagLogger->endElement();
 }
 
 void PropertiesProtocol::sprm(Sprm & _sprm)
@@ -190,7 +190,7 @@ void PropertiesProtocol::sprm(Sprm & _sprm)
     m_pTagLogger->attribute("name", _sprm.getName());
     m_pTagLogger->chars(_sprm.toString());
     m_pProperties->sprm(_sprm);
-    m_pTagLogger->endElement("protocol-sprm");
+    m_pTagLogger->endElement();
 }
 
 /*
@@ -212,7 +212,7 @@ void TableProtocol::entry(int pos,
     m_pTagLogger->startElement("protocol-entry");
     m_pTagLogger->attribute("pos", pos);
     m_pTable->entry(pos, ref);
-    m_pTagLogger->endElement("protocol-entry");
+    m_pTagLogger->endElement();
 }
 
 }

@@ -236,7 +236,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                             pFactory->attributeAction(pHandler, aIt->first, pValue);
                         }
 #ifdef DEBUG_ATTRIBUTES
-                        debug_logger->endElement("list");
+                        debug_logger->endElement();
 #endif
                     }
                     break;
@@ -248,12 +248,12 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
                 }
             }
 #ifdef DEBUG_ATTRIBUTES
-            debug_logger->endElement("attribute");
+            debug_logger->endElement();
 #endif
         }
 
 #ifdef DEBUG_ATTRIBUTES
-        debug_logger->endElement("attributes");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -299,7 +299,7 @@ void OOXMLFactory::startAction(OOXMLFastContextHandler * pHandler, Token_t /*nTo
 #endif
         pFactory->startAction(pHandler);
 #ifdef DEBUG_ELEMENT
-        debug_logger->endElement("factory-startAction");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -316,7 +316,7 @@ void OOXMLFactory::endAction(OOXMLFastContextHandler * pHandler, Token_t /*nToke
 #endif
         pFactory->endAction(pHandler);
 #ifdef DEBUG_ELEMENT
-        debug_logger->endElement("factory-endAction");
+        debug_logger->endElement();
 #endif
     }
 }

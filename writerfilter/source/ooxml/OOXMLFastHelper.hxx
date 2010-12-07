@@ -182,9 +182,9 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
          (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element( "unknown-qname" );
 
-    debug_logger->endElement("newProperty-from-string");
+    debug_logger->endElement();
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -205,9 +205,9 @@ void OOXMLFastHelper<T>::newProperty(OOXMLFastContextHandler * pHandler,
     debug_logger->attribute("value", pVal->toString());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element("unknown-qname");
 
-    debug_logger->endElement("newProperty-from-int");
+    debug_logger->endElement();
 #endif
 
     pHandler->newProperty(nId, pVal);
@@ -231,9 +231,9 @@ void OOXMLFastHelper<T>::mark(OOXMLFastContextHandler * pHandler,
      (rValue, RTL_TEXTENCODING_ASCII_US).getStr());
 
     if (aStr.size() == 0)
-        debug_logger->addTag(XMLTag::Pointer_t(new XMLTag("unknown-qname")));
+        debug_logger->element("unknown-qname");
 
-    debug_logger->endElement("mark");
+    debug_logger->endElement();
 #endif
 
     pHandler->mark(nId, pVal);

@@ -888,7 +888,7 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("finishParagraph");
+    dmapper_logger->endElement();
 #endif
 }
 /*-------------------------------------------------------------------------
@@ -2394,7 +2394,7 @@ void DomainMapper_Impl::AppendFieldCommand(::rtl::OUString& rPartOfCommand)
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("appendFieldCommand");
     dmapper_logger->chars(rPartOfCommand);
-    dmapper_logger->endElement("appendFieldCommand");
+    dmapper_logger->endElement();
 #endif
 
     FieldContextPtr pContext = m_aFieldStack.top();
@@ -2936,7 +2936,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 #ifdef DEBUG_DOMAINMAPPER
                     dmapper_logger->startElement("fieldService");
                     dmapper_logger->chars(sServiceName);
-                    dmapper_logger->endElement("fieldService");
+                    dmapper_logger->endElement();
 #endif
 
                     xFieldInterface = m_xTextFactory->createInstance(sServiceName);
@@ -3370,7 +3370,7 @@ void DomainMapper_Impl::SetFieldFFData(FFDataHandler::Pointer_t pFFDataHandler)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("setFieldFFData");
+    dmapper_logger->endElement();
 #endif
 }
 

@@ -1481,7 +1481,7 @@ void WW8DocumentImpl::text(Stream & rStream, const sal_uInt8 * data, size_t len)
     ::rtl::OUString sText( (const sal_Char*) data, len, RTL_TEXTENCODING_MS_1252 );
     debug_logger->startElement("text");
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
-    debug_logger->endElement("text");
+    debug_logger->endElement();
 #endif
     rStream.text(data, len);
 }
@@ -1497,7 +1497,7 @@ void WW8DocumentImpl::utext(Stream & rStream, const sal_uInt8 * data, size_t len
     sText = aBuffer.makeStringAndClear();
 
     debug_logger->chars(OUStringToOString(sText, RTL_TEXTENCODING_ASCII_US).getStr());
-    debug_logger->endElement("utext");
+    debug_logger->endElement();
 #endif
     rStream.utext(data, len);
 }
@@ -1599,7 +1599,7 @@ void WW8DocumentImpl::startCharacterGroup(Stream & rStream)
 void WW8DocumentImpl::endCharacterGroup(Stream & rStream)
 {
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("charactergroup");
+    debug_logger->endElement();
 #endif
 
     rStream.endCharacterGroup();
@@ -1625,7 +1625,7 @@ void WW8DocumentImpl::endParagraphGroup(Stream & rStream)
         endCharacterGroup(rStream);
 
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("paragraphgroup");
+    debug_logger->endElement();
 #endif
     rStream.endParagraphGroup();
     mbInParagraphGroup = false;
@@ -1650,7 +1650,7 @@ void WW8DocumentImpl::endSectionGroup(Stream & rStream)
         endParagraphGroup(rStream);
 
 #ifdef DEBUG_ELEMENT
-    debug_logger->endElement("sectiongroup");
+    debug_logger->endElement();
 #endif
     rStream.endSectionGroup();
     mbInSection = false;
@@ -1833,7 +1833,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_footnote, pFootnote);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1851,7 +1851,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_endnote, pEndnote);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1869,7 +1869,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
                     rStream.substream(NS_rtf::LN_annotation, pAnnotation);
 #ifdef DEBUG_ELEMENT
-                    debug_logger->endElement("substream");
+                    debug_logger->endElement();
 #endif
                 }
             }
@@ -1926,9 +1926,8 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         if (pProperties.get() != NULL)
         {
 #ifdef DEBUG_PROPERTIES
-            PropertySetToTagHandler aHandler(IdToString::Pointer_t(new WW8IdToString()));
-            pProperties->resolve(aHandler);
-            debug_logger->addTag(aHandler.getTag());
+            debug_logger->propertySet(pProperties,
+                    IdToString::Pointer_t(new WW8IdToString()));
 #endif
 
             rStream.props(pProperties);

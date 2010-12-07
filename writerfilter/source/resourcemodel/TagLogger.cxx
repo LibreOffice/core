@@ -27,7 +27,7 @@
  ************************************************************************/
 
 #if OSL_DEBUG_LEVEL > 1
-#include <fstream>
+#include <libxml/xmlstring.h>
 #include <string.h>
 #include <resourcemodel/TagLogger.hxx>
 #include <resourcemodel/util.hxx>
@@ -35,182 +35,6 @@
 
 namespace writerfilter
 {
-    XMLTag::Pointer_t XMLTag::NIL(new XMLTag("NIL"));
-
-    void XMLTag::addAttr(string sName, string sValue)
-    {
-        XMLAttribute aAttr(sName, sValue);
-
-        mAttrs.push_back(aAttr);
-    }
-
-    void XMLTag::addAttr(string sName, const ::rtl::OUString & sValue)
-    {
-        addAttr(sName,
-                OUStringToOString
-                (sValue, RTL_TEXTENCODING_ASCII_US).getStr());
-    }
-
-    void XMLTag::addAttr(string sName, sal_uInt32 nValue)
-    {
-        static char buffer[256];
-        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
-        addAttr(sName, buffer);
-    }
-
-void XMLTag::addAttr(string sName, uno::Any aAny)
-{
-    string aTmpStrInt;
-    string aTmpStrFloat;
-    string aTmpStrString;
-
-    static char buffer[256];
-
-    try
-    {
-        sal_Int32 nInt = 0;
-        aAny >>= nInt;
-
-        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32,
-                 nInt);
-
-        aTmpStrInt = buffer;
-    }
-    catch (uno::Exception aExcept)
-    {
-        aTmpStrInt = "exception";
-    }
-
-    try
-    {
-        float nFloat = 0.0;
-        aAny >>= nFloat;
-
-        snprintf(buffer, sizeof(buffer), "%f",
-                 nFloat);
-
-        aTmpStrFloat = buffer;
-    }
-    catch (uno::Exception aExcept)
-    {
-        aTmpStrFloat = "exception";
-    }
-
-    try
-    {
-        ::rtl::OUString aStr;
-        aAny >>= aStr;
-
-        aTmpStrString = OUStringToOString(aStr, RTL_TEXTENCODING_ASCII_US).getStr();
-    }
-    catch (uno::Exception aExcept)
-    {
-        aTmpStrString = "exception";
-    }
-
-    addAttr(sName, "i:" + aTmpStrInt + " f:" + aTmpStrFloat + " s:" +
-            aTmpStrString);
-}
-
-    void XMLTag::addTag(XMLTag::Pointer_t pTag)
-    {
-        if (pTag != XMLTag::Pointer_t())
-            mTags.push_back(pTag);
-    }
-
-    void XMLTag::chars(const string & rChars)
-    {
-        mChars += rChars;
-    }
-
-void XMLTag::chars(const ::rtl::OUString & rChars)
-{
-    chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
-}
-
-    const string & XMLTag::getTag() const
-    {
-        return mTag;
-    }
-
-    string XMLTag::toString() const
-    {
-        if (mChars.length() > 0)
-            return mChars;
-
-        string sResult;
-
-        if (mMode == START || mMode == COMPLETE)
-        {
-            sResult += "<" + mTag;
-
-            XMLAttributes_t::const_iterator aIt = mAttrs.begin();
-            while (aIt != mAttrs.end())
-            {
-                sResult += " ";
-                sResult += aIt->mName;
-                sResult += "=\"";
-                sResult += xmlify(aIt->mValue);
-                sResult += "\"";
-
-                aIt++;
-            }
-
-            sResult +=">";
-
-            if (mTags.size() > 0)
-            {
-                XMLTags_t::const_iterator aItTags = mTags.begin();
-                while (aItTags != mTags.end())
-                {
-                    if ((*aItTags).get() != NULL)
-                        sResult += (*aItTags)->toString();
-
-                    aItTags++;
-                }
-            }
-        }
-
-        if (mMode == END || mMode == COMPLETE)
-            sResult += "</" + mTag + ">";
-
-        return sResult;
-    }
-
-    ostream & XMLTag::output(ostream & o) const
-    {
-        if (mMode == START || mMode == COMPLETE)
-        {
-            o << "<" << mTag;
-
-            XMLAttributes_t::const_iterator aItAttrs(mAttrs.begin());
-            while (aItAttrs != mAttrs.end())
-            {
-                o << " " << aItAttrs->mName << "=\""
-                << xmlify(aItAttrs->mValue)
-                << "\"";
-
-                aItAttrs++;
-            }
-
-            o << ">";
-
-            XMLTags_t::const_iterator aItTags(mTags.begin());
-            while (aItTags != mTags.end())
-            {
-                (*aItTags)->output(o);
-                aItTags++;
-            }
-
-            o << mChars;
-        }
-
-        if (mMode == END || mMode == COMPLETE)
-            o << "</" << mTag << ">";
-
-        return o;
-    }
-
     struct eqstr
     {
         bool operator()(const char* s1, const char* s2) const
@@ -222,18 +46,47 @@ void XMLTag::chars(const ::rtl::OUString & rChars)
     typedef hash_map<const char *, TagLogger::Pointer_t, hash<const char *>, eqstr> TagLoggerHashMap_t;
     static TagLoggerHashMap_t * tagLoggers = NULL;
 
-    TagLogger::TagLogger()
-    : mFileName("writerfilter")
+    TagLogger::TagLogger(const char* name)
+    : pWriter( NULL ), pName( name )
     {
     }
 
     TagLogger::~TagLogger()
     {
+        pWriter = NULL;
+        pName = NULL;
     }
 
-    void TagLogger::setFileName(const string & rName)
+    void TagLogger::setFileName( const string & filename )
     {
-        mFileName = rName;
+        if ( pWriter )
+            endDocument();
+
+        string fileName;
+        char * temp = getenv("TAGLOGGERTMP");
+
+        if (temp != NULL)
+            fileName += temp;
+        else
+            fileName += "/tmp";
+
+        string sPrefix = filename;
+        size_t nLastSlash = sPrefix.find_last_of('/');
+        size_t nLastBackslash = sPrefix.find_last_of('\\');
+        size_t nCutPos = nLastSlash;
+        if (nLastBackslash < nCutPos)
+            nCutPos = nLastBackslash;
+        if (nCutPos < sPrefix.size())
+            sPrefix = sPrefix.substr(nCutPos + 1);
+
+        fileName += "/";
+        fileName += sPrefix;
+        fileName += ".";
+        fileName += pName;
+        fileName += ".xml";
+
+        pWriter = xmlNewTextWriterFilename( fileName.c_str(), 0 );
+        xmlTextWriterSetIndent( pWriter, 4 );
     }
 
     TagLogger::Pointer_t TagLogger::getInstance(const char * name)
@@ -248,7 +101,7 @@ void XMLTag::chars(const ::rtl::OUString & rChars)
 
         if (aIt == tagLoggers->end())
         {
-            TagLogger::Pointer_t pTagLogger(new TagLogger());
+            TagLogger::Pointer_t pTagLogger(new TagLogger(name));
             pair<const char *, TagLogger::Pointer_t> entry(name, pTagLogger);
             aIt = tagLoggers->insert(entry).first;
         }
@@ -256,63 +109,81 @@ void XMLTag::chars(const ::rtl::OUString & rChars)
         return aIt->second;
     }
 
-    XMLTag::Pointer_t TagLogger::currentTag() const
-    {
-        bool bEmpty=mTags.empty();
-        if (!bEmpty)
-            return mTags.top();
-
-        return XMLTag::NIL;
-    }
-
     void TagLogger::startDocument()
     {
-        XMLTag::Pointer_t pTag(new XMLTag("root"));
-        mTags.push(pTag);
-        mpRoot = pTag;
+        xmlTextWriterStartDocument( pWriter, NULL, NULL, NULL );
+        xmlTextWriterStartElement( pWriter, BAD_CAST( "root" ) );
     }
 
     void TagLogger::element(const string & name)
     {
         startElement(name);
-        endElement(name);
+        endElement();
     }
 
     void TagLogger::startElement(const string & name)
     {
-        XMLTag::Pointer_t pTag(new XMLTag(name));
-        currentTag()->addTag(pTag);
-        mTags.push(pTag);
+        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
+        xmlTextWriterStartElement( pWriter, xmlName );
+        xmlFree( xmlName );
     }
 
     void TagLogger::attribute(const string & name, const string & value)
     {
-        currentTag()->addAttr(name, value);
+        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
+        xmlChar* xmlValue = xmlCharStrdup( value.c_str() );
+        xmlTextWriterWriteAttribute( pWriter, xmlName, xmlValue );
+
+        xmlFree( xmlValue );
+        xmlFree( xmlName );
     }
 
     void TagLogger::attribute(const string & name, const ::rtl::OUString & value)
     {
-        currentTag()->addAttr(name, value);
+        attribute( name, OUStringToOString( value, RTL_TEXTENCODING_ASCII_US ).getStr() );
     }
 
     void TagLogger::attribute(const string & name, sal_uInt32 value)
     {
-        currentTag()->addAttr(name, value);
+        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
+        xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+               "%" SAL_PRIuUINT32, value );
+        xmlFree( xmlName );
     }
 
-void TagLogger::attribute(const string & name, const uno::Any aAny)
-{
-    currentTag()->addAttr(name, aAny);
-}
-
-    void TagLogger::addTag(XMLTag::Pointer_t pTag)
+    void TagLogger::attribute(const string & name, const uno::Any aAny)
     {
-        currentTag()->addTag(pTag);
+        string aTmpStrInt;
+        string aTmpStrFloat;
+        string aTmpStrString;
+
+        sal_Int32 nInt = 0;
+        float nFloat = 0.0;
+        ::rtl::OUString aStr;
+
+        xmlChar* xmlName = xmlCharStrdup( name.c_str() );
+        if ( aAny >>= nInt )
+        {
+            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+                   "%" SAL_PRIdINT32, nInt );
+        }
+        else if ( aAny >>= nFloat )
+        {
+            xmlTextWriterWriteFormatAttribute( pWriter, xmlName,
+                   "%f", nFloat );
+        }
+        else if ( aAny >>= aStr )
+        {
+            attribute( name, aStr );
+        }
+        xmlFree( xmlName );
     }
 
     void TagLogger::chars(const string & rChars)
     {
-        currentTag()->chars(xmlify(rChars));
+        xmlChar* xmlChars = xmlCharStrdup( rChars.c_str() );
+        xmlTextWriterWriteString( pWriter, xmlChars );
+        xmlFree( xmlChars );
     }
 
     void TagLogger::chars(const ::rtl::OUString & rChars)
@@ -320,149 +191,128 @@ void TagLogger::attribute(const string & name, const uno::Any aAny)
         chars(OUStringToOString(rChars, RTL_TEXTENCODING_ASCII_US).getStr());
     }
 
-    void TagLogger::endElement(const string & name)
+    void TagLogger::endElement()
     {
-        string nameRemoved = currentTag()->getTag();
-
-        if (name == nameRemoved)
-            mTags.pop();
-        else {
-            XMLTag::Pointer_t pTag(new XMLTag("end.mismatch"));
-            pTag->addAttr("name", name);
-            pTag->addAttr("top", nameRemoved);
-
-            currentTag()->addTag(pTag);
-        }
-
+        xmlTextWriterEndElement( pWriter );
     }
 
     void TagLogger::endDocument()
     {
-        mTags.pop();
+        xmlTextWriterEndDocument( pWriter );
+        xmlFreeTextWriter( pWriter );
     }
 
-    ostream & TagLogger::output(ostream & o) const
+
+    class PropertySetDumpHandler : public Properties
     {
-        return mpRoot->output(o);
-    }
+        IdToString::Pointer_t mpIdToString;
+        TagLogger::Pointer_t m_pLogger;
 
-    void TagLogger::dump(const char * name)
+    public:
+        PropertySetDumpHandler(TagLogger::Pointer_t pLogger,
+                IdToString::Pointer_t pIdToString);
+        virtual ~PropertySetDumpHandler();
+
+        void resolve(writerfilter::Reference<Properties>::Pointer_t props);
+
+        virtual void attribute(Id name, Value & val);
+        virtual void sprm(Sprm & sprm);
+    };
+
+    PropertySetDumpHandler::PropertySetDumpHandler(TagLogger::Pointer_t pLogger,
+            IdToString::Pointer_t pIdToString) :
+        mpIdToString(pIdToString)
     {
-        TagLoggerHashMap_t::iterator aIt(tagLoggers->find(name));
-        if (aIt != tagLoggers->end())
-        {
-            string fileName;
-            char * temp = getenv("TAGLOGGERTMP");
-
-            if (temp != NULL)
-                fileName += temp;
-            else
-                fileName += "/tmp";
-
-            string sPrefix = aIt->second->mFileName;
-            size_t nLastSlash = sPrefix.find_last_of('/');
-            size_t nLastBackslash = sPrefix.find_last_of('\\');
-            size_t nCutPos = nLastSlash;
-            if (nLastBackslash < nCutPos)
-                nCutPos = nLastBackslash;
-            if (nCutPos < sPrefix.size())
-                sPrefix = sPrefix.substr(nCutPos + 1);
-
-            fileName += "/";
-            fileName += sPrefix;
-            fileName +=".";
-            fileName += name;
-            fileName += ".xml";
-
-            ofstream dumpStream(fileName.c_str());
-            aIt->second->output(dumpStream);
-        }
+        m_pLogger = pLogger;
     }
 
-    PropertySetToTagHandler::~PropertySetToTagHandler()
+    PropertySetDumpHandler::~PropertySetDumpHandler()
     {
     }
 
-    void PropertySetToTagHandler::resolve
-    (XMLTag & rTag, writerfilter::Reference<Properties>::Pointer_t pProps)
+    void PropertySetDumpHandler::resolve(
+            writerfilter::Reference<Properties>::Pointer_t pProps)
     {
         if (pProps.get() != NULL)
-        {
-            PropertySetToTagHandler aHandler(mpIdToString);
-            pProps->resolve(aHandler);
-            rTag.addTag(aHandler.getTag());
-        }
+            pProps->resolve( *this );
     }
 
-    void PropertySetToTagHandler::attribute(Id name, Value & val)
+    void PropertySetDumpHandler::attribute(Id name, Value & val)
     {
-        XMLTag::Pointer_t pTag(new XMLTag("attribute"));
+        m_pLogger->startElement( "attribute" );
 
-        pTag->addAttr("name", (*QNameToString::Instance())(name));
-        pTag->addAttr("value", val.toString());
+        m_pLogger->attribute("name", (*QNameToString::Instance())(name));
+        m_pLogger->attribute("value", val.toString());
 
-        resolve(*pTag, val.getProperties());
+        resolve(val.getProperties());
 
-        mpTag->addTag(pTag);
+        m_pLogger->endElement();
     }
 
-    void PropertySetToTagHandler::sprm(Sprm & rSprm)
+    void PropertySetDumpHandler::sprm(Sprm & rSprm)
     {
-        XMLTag::Pointer_t pTag(new XMLTag("sprm"));
+        m_pLogger->startElement( "sprm" );
 
         string sName;
 
         if (mpIdToString != IdToString::Pointer_t())
             sName = mpIdToString->toString(rSprm.getId());
 
-        pTag->addAttr("name", sName);
+        m_pLogger->attribute( "name", sName );
 
-        static char sBuffer[256];
-        snprintf(sBuffer, sizeof(sBuffer),
-                 "0x%" SAL_PRIxUINT32 ", %" SAL_PRIuUINT32, rSprm.getId(),
-                 rSprm.getId());
-        pTag->addAttr("id", sBuffer);
-        pTag->addAttr("value", rSprm.getValue()->toString());
+        m_pLogger->attribute( "id", rSprm.getId() );
+        m_pLogger->attribute( "value", rSprm.getValue()->toString() );
 
-        resolve(*pTag, rSprm.getProps());
+        resolve( rSprm.getProps() );
 
-        mpTag->addTag(pTag);
+        m_pLogger->endElement();
     }
 
-
-XMLTag::Pointer_t unoPropertySetToTag(uno::Reference<beans::XPropertySet> rPropSet)
-{
-    uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
-    uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
-
-    XMLTag::Pointer_t pResult(new XMLTag("unoPropertySet"));
-
-    for (int i = 0; i < aProps.getLength(); ++i)
+    void TagLogger::propertySet(writerfilter::Reference<Properties>::Pointer_t props,
+            IdToString::Pointer_t pIdToString)
     {
-        XMLTag::Pointer_t pPropTag(new XMLTag("property"));
+        startElement( "propertySet" );
 
-        ::rtl::OUString sName(aProps[i].Name);
+        TagLogger::Pointer_t pLogger( this );
+        PropertySetDumpHandler handler( pLogger, pIdToString );
+        handler.resolve( props );
 
-        pPropTag->addAttr("name", sName);
-        try
-        {
-            pPropTag->addAttr("value", rPropSet->getPropertyValue(sName));
-        }
-        catch (uno::Exception aException)
-        {
-            XMLTag::Pointer_t pException(new XMLTag("exception"));
-
-            pException->chars("getPropertyValue(\"");
-            pException->chars(sName);
-            pException->chars("\")");
-            pPropTag->addTag(pException);
-        }
-
-        pResult->addTag(pPropTag);
+        endElement( );
     }
 
-    return pResult;
-}
+    void TagLogger::unoPropertySet(uno::Reference<beans::XPropertySet> rPropSet)
+    {
+        uno::Reference<beans::XPropertySetInfo> xPropSetInfo(rPropSet->getPropertySetInfo());
+        uno::Sequence<beans::Property> aProps(xPropSetInfo->getProperties());
+
+        startElement( "unoPropertySet" );
+
+        for (int i = 0; i < aProps.getLength(); ++i)
+        {
+            startElement( "property" );
+            ::rtl::OUString sName(aProps[i].Name);
+
+            attribute( "name", sName );
+            try
+            {
+                attribute( "value", rPropSet->getPropertyValue( sName ) );
+            }
+            catch (uno::Exception aException)
+            {
+                startElement( "exception" );
+
+                chars("getPropertyValue(\"");
+                chars(sName);
+                chars("\")");
+
+                endElement( );
+            }
+
+            endElement( );
+        }
+
+        endElement( );
+    }
 
 }
 #endif // DEBUG

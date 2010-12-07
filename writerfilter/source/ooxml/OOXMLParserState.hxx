@@ -108,8 +108,7 @@ public:
 #if OSL_DEBUG_LEVEL > 1
 public:
     unsigned int getContextCount() const;
-    string toString() const;
-    XMLTag::Pointer_t toTag() const;
+    void dumpXml( const TagLogger::Pointer_t& pLogger );
 #endif
 
 };

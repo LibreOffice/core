@@ -41,44 +41,44 @@ namespace dmapper
 
 using namespace ::com::sun::star;
 
-XMLTag::Pointer_t lcl_TableColumnSeparatorsToTag(const uno::Any & rTableColumnSeparators)
+void lcl_DumpTableColumnSeparators(const TagLogger::Pointer_t pLogger, const uno::Any & rTableColumnSeparators)
 {
     uno::Sequence<text::TableColumnSeparator> aSeq;
     rTableColumnSeparators >>= aSeq;
 
-    XMLTag::Pointer_t pResult(new XMLTag("property.TableColumnSeparators"));
+    pLogger->startElement("property.TableColumnSeparators");
 
     sal_uInt32 nLength = aSeq.getLength();
     for (sal_uInt32 n = 0; n < nLength; ++n)
     {
-        XMLTag::Pointer_t pTagSeparator(new XMLTag("separator"));
+        pLogger->startElement("separator");
 
-        pTagSeparator->addAttr("position", aSeq[n].Position);
-        pTagSeparator->addAttr("visible", aSeq[n].IsVisible);
+        pLogger->attribute("position", aSeq[n].Position);
+        pLogger->attribute("visible", aSeq[n].IsVisible);
 
-        pResult->addTag(pTagSeparator);
+        pLogger->endElement();
     }
 
-    return pResult;
+    pLogger->endElement();
 }
 
-XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
+void lcl_DumpPropertyValues(const TagLogger::Pointer_t pLogger, beans::PropertyValues & rValues)
 {
-    XMLTag::Pointer_t pResult(new XMLTag("propertyValues"));
+    pLogger->startElement("propertyValues");
 
     beans::PropertyValue * pValues = rValues.getArray();
 
     for (sal_Int32 n = 0; n < rValues.getLength(); ++n)
     {
-        XMLTag::Pointer_t pTag(new XMLTag("propertyValue"));
+        pLogger->startElement("propertyValue");
 
-        pTag->addAttr("name", pValues[n].Name);
+        pLogger->attribute("name", pValues[n].Name);
 
         try
         {
             sal_Int32 aInt = 0;
             pValues[n].Value >>= aInt;
-            pTag->addAttr("value", aInt);
+            pLogger->attribute("value", aInt);
         }
         catch (...)
         {
@@ -86,45 +86,40 @@ XMLTag::Pointer_t lcl_PropertyValuesToTag(beans::PropertyValues & rValues)
 
         if (pValues[n].Name.equalsAscii("TableColumnSeparators"))
         {
-            pTag->addTag(lcl_TableColumnSeparatorsToTag(pValues[n].Value));
+            lcl_DumpTableColumnSeparators(pLogger, pValues[n].Value);
         }
 
-        pResult->addTag(pTag);
+        pLogger->endElement();
     }
-
-    return pResult;
+    pLogger->endElement();
 }
 
-XMLTag::Pointer_t lcl_PropertyValueSeqToTag(PropertyValueSeq_t & rPropValSeq)
+void lcl_DumpPropertyValueSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeq_t & rPropValSeq)
 {
-    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+    pLogger->startElement("PropertyValueSeq");
 
     beans::PropertyValues * pValues = rPropValSeq.getArray();
 
     for (sal_Int32 n = 0; n < rPropValSeq.getLength(); ++n)
     {
-        XMLTag::Pointer_t pTag(lcl_PropertyValuesToTag(pValues[n]));
-
-        pResult->addTag(pTag);
+        lcl_DumpPropertyValues(pLogger, pValues[n]);
     }
 
-    return pResult;
+    pLogger->endElement();
 }
 
-XMLTag::Pointer_t lcl_PropertyValueSeqSeqToTag(PropertyValueSeqSeq_t rPropValSeqSeq)
+void lcl_DumpPropertyValueSeqSeq(const TagLogger::Pointer_t pLogger, PropertyValueSeqSeq_t rPropValSeqSeq)
 {
-    XMLTag::Pointer_t pResult(new XMLTag("PropertyValueSeq"));
+    pLogger->startElement("PropertyValueSeq");
 
     PropertyValueSeq_t * pValues = rPropValSeqSeq.getArray();
 
     for (sal_Int32 n = 0; n < rPropValSeqSeq.getLength(); ++n)
     {
-        XMLTag::Pointer_t pTag(lcl_PropertyValueSeqToTag(pValues[n]));
-
-        pResult->addTag(pTag);
+        lcl_DumpPropertyValueSeq(pLogger, pValues[n]);
     }
 
-    return pResult;
+    pLogger->endElement();
 }
 
 }

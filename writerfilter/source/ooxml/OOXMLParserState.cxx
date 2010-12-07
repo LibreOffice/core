@@ -155,7 +155,7 @@ void OOXMLParserState::resolveCharacterProperties(Stream & rStream)
         mpCharacterProps.reset(new OOXMLPropertySetImpl());
 
 #ifdef DEBUG_PROPERTIES
-        debug_logger->endElement("resolveCharacterProperties");
+        debug_logger->endElement();
 #endif
     }
 }
@@ -281,14 +281,9 @@ unsigned int OOXMLParserState::getContextCount() const
     return mnContexts;
 }
 
-string OOXMLParserState::toString() const
+void OOXMLParserState::dumpXml( const TagLogger::Pointer_t& pLogger )
 {
-    return toTag()->toString();
-}
-
-XMLTag::Pointer_t OOXMLParserState::toTag() const
-{
-    XMLTag::Pointer_t pTag(new XMLTag("parserstate"));
+    pLogger->startElement("parserstate");
 
     string sTmp;
 
@@ -312,14 +307,14 @@ XMLTag::Pointer_t OOXMLParserState::toTag() const
     else
         sTmp += "-";
 
-    pTag->addAttr("state", sTmp);
-    pTag->addAttr("XNoteId",
+    pLogger->attribute("state", sTmp);
+    pLogger->attribute("XNoteId",
                   OUStringToOString(getXNoteId(),
                                     RTL_TEXTENCODING_ASCII_US).getStr());
     if (mpCharacterProps != OOXMLPropertySet::Pointer_t())
-        pTag->chars(mpCharacterProps->toString());
+        pLogger->chars(mpCharacterProps->toString());
 
-    return pTag;
+    pLogger->endElement();
  }
 #endif
 

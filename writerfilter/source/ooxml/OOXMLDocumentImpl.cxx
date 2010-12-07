@@ -153,7 +153,7 @@ OOXMLDocumentImpl::getXNoteStream(OOXMLStream::StreamType_t nType, const Id & rT
 #ifdef DEBUG_ELEMENT
     debug_logger->startElement("getXNoteStream");
     debug_logger->attribute("id", rId);
-    debug_logger->endElement("getXNoteStream");
+    debug_logger->endElement();
 #endif
 
     OOXMLStream::Pointer_t pStream =
@@ -355,7 +355,7 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
     }
 
 #ifdef DEBUG_RESOLVE
-    debug_logger->endElement("OOXMLDocumentImpl.resolve");
+    debug_logger->endElement();
 #endif
 }
 

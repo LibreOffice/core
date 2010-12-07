@@ -200,7 +200,7 @@ void DomainMapper::attribute(Id nName, Value & val)
     dmapper_logger->startElement("attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(nName));
     dmapper_logger->attribute("value", val.toString());
-    dmapper_logger->endElement("attribute");
+    dmapper_logger->endElement();
 #endif
     static ::rtl::OUString sLocalBookmarkName;
     sal_Int32 nIntValue = val.getInt();
@@ -2244,7 +2244,7 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
 #ifdef DEBUG_DOMAINMAPPER
                         dmapper_logger->startElement("charWeight");
                         dmapper_logger->attribute("weight", nIntValue ? awt::FontWeight::BOLD : awt::FontWeight::NORMAL);
-                        dmapper_logger->endElement("charWeight");
+                        dmapper_logger->endElement();
 #endif
 
                         rContext->Insert(ePropertyId, true, aBold );
@@ -3397,14 +3397,14 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
             dmapper_logger->startElement("unhandled");
             dmapper_logger->attribute("id", nSprmId);
             dmapper_logger->attribute("name", rSprm.getName());
-            dmapper_logger->endElement("unhandled");
+            dmapper_logger->endElement();
 #endif
         }
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->addTag(rContext->toTag());
-    dmapper_logger->endElement("DomainMapper.sprm");
+    rContext->dumpXml(dmapper_logger);
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -3420,7 +3420,7 @@ void DomainMapper::entry(int /*pos*/,
     ref->resolve(*this);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("DomainMapper.entry");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -3453,7 +3453,7 @@ void DomainMapper::endSectionGroup()
     m_pImpl->PopProperties(CONTEXT_SECTION);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("section");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:13---------------------------------------------------
@@ -3488,7 +3488,7 @@ void DomainMapper::endParagraphGroup()
     //frame conversion has to be executed after table conversion
     m_pImpl->ExecuteFrameConversion();
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("paragraph");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -3513,7 +3513,7 @@ void DomainMapper::endShape( )
     m_pImpl->PopShapeContext( );
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("shape");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -3578,7 +3578,7 @@ void DomainMapper::endCharacterGroup()
     m_pImpl->PopProperties(CONTEXT_CHARACTER);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("charactergroup");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:14---------------------------------------------------
@@ -3591,7 +3591,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("text");
     dmapper_logger->chars(sText);
-    dmapper_logger->endElement("text");
+    dmapper_logger->endElement();
 #endif
 
     try
@@ -3680,7 +3680,7 @@ void DomainMapper::utext(const sal_uInt8 * data_, size_t len)
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("utext");
     dmapper_logger->chars(sText);
-    dmapper_logger->endElement("utext");
+    dmapper_logger->endElement();
 #endif
 
     try
@@ -3759,7 +3759,7 @@ void DomainMapper::props(writerfilter::Reference<Properties>::Pointer_t ref)
         ref->resolve(*this);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("props");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:15---------------------------------------------------
@@ -3819,7 +3819,7 @@ void DomainMapper::table(Id name, writerfilter::Reference<Table>::Pointer_t ref)
     m_pImpl->SetAnyTableImport(false);
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("table");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------
@@ -3897,7 +3897,7 @@ void DomainMapper::substream(Id rName, ::writerfilter::Reference<Stream>::Pointe
     m_pImpl->popTableManager( );
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("substream");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 09.06.2006 09:52:16---------------------------------------------------

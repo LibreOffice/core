@@ -84,7 +84,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
     dmapper_logger->startElement("tablemanager.sprm");
     string sSprm = rSprm.toString();
     dmapper_logger->chars(sSprm);
-    dmapper_logger->endElement("tablemanager.sprm");
+    dmapper_logger->endElement();
 #endif
     bool bRet = DomainMapperTableManager_Base_t::sprm(rSprm);
     if( !bRet )
@@ -123,7 +123,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
                             pPropMap->setValue( TablePropertyMap::TABLE_WIDTH, m_nTableWidth );
                     }
 #ifdef DEBUG_DOMAINMAPPER
-                    dmapper_logger->addTag(pPropMap->toTag());
+                    pPropMap->dumpXml( dmapper_logger );
 #endif
                     insertTableProps(pPropMap);
                 }
@@ -245,7 +245,7 @@ bool DomainMapperTableManager::sprm(Sprm & rSprm)
 #if DEBUG_DOMAINMAPPER
                 dmapper_logger->startElement("tablemanager.GridSpan");
                 dmapper_logger->attribute("gridSpan", nIntValue);
-                dmapper_logger->endElement("tablemanager.GridSpan");
+                dmapper_logger->endElement();
 #endif
                 m_nGridSpan = nIntValue;
             }
@@ -352,9 +352,9 @@ void DomainMapperTableManager::endLevel( )
     dmapper_logger->startElement("dmappertablemanager.endLevel");
     PropertyMapPtr pProps = getTableProps();
     if (pProps.get() != NULL)
-        dmapper_logger->addTag(getTableProps()->toTag());
+        getTableProps()->dumpXml( dmapper_logger );
 
-    dmapper_logger->endElement("dmappertablemanager.endLevel");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -394,7 +394,7 @@ void DomainMapperTableManager::endOfRowAction()
 #ifdef DEBUG_DOMAINMAPPER
             dmapper_logger->startElement("col");
             dmapper_logger->attribute("width", *aCellIter);
-            dmapper_logger->endElement("col");
+            dmapper_logger->endElement();
 #endif
 
              m_nTableWidth += *aCellIter++;
@@ -409,7 +409,7 @@ void DomainMapperTableManager::endOfRowAction()
         }
 
 #ifdef DEBUG_DOMAINMAPPER
-        dmapper_logger->endElement("tableWidth");
+        dmapper_logger->endElement();
 #endif
     }
 
@@ -430,12 +430,12 @@ void DomainMapperTableManager::endOfRowAction()
         {
             dmapper_logger->startElement("gridSpan");
             dmapper_logger->attribute("span", *aGridSpanIter);
-            dmapper_logger->endElement("gridSpan");
+            dmapper_logger->endElement();
 
             aGridSpanIter++;
         }
     }
-    dmapper_logger->endElement("gridSpans");
+    dmapper_logger->endElement();
 #endif
 
     //calculate number of used grids - it has to match the size of m_aTableGrid
@@ -478,8 +478,8 @@ void DomainMapperTableManager::endOfRowAction()
 
 #ifdef DEBUG_DOMAINMAPPER
         dmapper_logger->startElement("rowProperties");
-        dmapper_logger->addTag(pPropMap->toTag());
-        dmapper_logger->endElement("rowProperties");
+        pPropMap->dumpXml( dmapper_logger );
+        dmapper_logger->endElement();
 #endif
         insertRowProps(pPropMap);
     }
@@ -490,7 +490,7 @@ void DomainMapperTableManager::endOfRowAction()
     pCurrentSpans->clear();
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("endOfRowAction");
+    dmapper_logger->endElement();
 #endif
 }
 /*-- 18.06.2007 10:34:37---------------------------------------------------

@@ -27,7 +27,7 @@ void TblStylePrHandler::attribute(Id rName, Value & rVal)
     dmapper_logger->startElement("TblStylePrHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(rName));
     dmapper_logger->chars(rVal.toString());
-    dmapper_logger->endElement("TblStylePrHandler.attribute");
+    dmapper_logger->endElement();
 #endif
 
     switch ( rName )
@@ -74,7 +74,7 @@ void TblStylePrHandler::sprm(Sprm & rSprm)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("TblStylePrHandler.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 

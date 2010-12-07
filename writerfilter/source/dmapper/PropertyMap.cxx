@@ -134,41 +134,41 @@ void PropertyMap::Insert( PropertyIds eId, bool bIsTextProperty, const uno::Any&
 }
 
 #ifdef DEBUG_DOMAINMAPPER
-XMLTag::Pointer_t PropertyMap::toTag() const
+void PropertyMap::dumpXml( const TagLogger::Pointer_t pLogger ) const
 {
-    XMLTag::Pointer_t pResult(new XMLTag("PropertyMap"));
+    pLogger->startElement("PropertyMap");
 
     PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
     PropertyMap::const_iterator aMapIter = begin();
     while (aMapIter != end())
     {
-        XMLTag::Pointer_t pTag(new XMLTag("property"));
+        pLogger->startElement("property");
 
-        pTag->addAttr("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
+        pLogger->attribute("name", rPropNameSupplier.GetName( aMapIter->first.eId ));
 
         switch (aMapIter->first.eId)
         {
             case PROP_TABLE_COLUMN_SEPARATORS:
-                pTag->addTag(lcl_TableColumnSeparatorsToTag(aMapIter->second));
+               lcl_DumpTableColumnSeparators(pLogger, aMapIter->second);
                 break;
             default:
             {
                 try {
                     sal_Int32 aInt;
                     aMapIter->second >>= aInt;
-                    pTag->addAttr("value", aInt);
+                    pLogger->attribute("value", aInt);
 
                     sal_uInt32 auInt;
                     aMapIter->second >>= auInt;
-                    pTag->addAttr("unsignedValue", auInt);
+                    pLogger->attribute("unsignedValue", auInt);
 
                     float aFloat;
                     aMapIter->second >>= aFloat;
-                    pTag->addAttr("floatValue", aFloat);
+                    pLogger->attribute("floatValue", aFloat);
 
                     ::rtl::OUString aStr;
                     aMapIter->second >>= auInt;
-                    pTag->addAttr("stringValue", aStr);
+                    pLogger->attribute("stringValue", aStr);
                 }
                 catch (...) {
                 }
@@ -176,12 +176,12 @@ XMLTag::Pointer_t PropertyMap::toTag() const
                 break;
         }
 
-        pResult->addTag(pTag);
+        pLogger->endElement();
 
         ++aMapIter;
     }
 
-    return pResult;
+    pLogger->endElement();
 }
 #endif
 
@@ -1215,7 +1215,7 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
 {
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("TablePropertyMap.insertTableProperties");
-    dmapper_logger->addTag(pMap->toTag());
+    pMap->dumpXml(dmapper_logger);
 #endif
 
     const TablePropertyMap* pSource = dynamic_cast< const TablePropertyMap* >(pMap);
@@ -1232,8 +1232,8 @@ void TablePropertyMap::insertTableProperties( const PropertyMap* pMap )
         }
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->addTag(toTag());
-    dmapper_logger->endElement("TablePropertyMap.insertTableProperties");
+    dumpXml( dmapper_logger );
+    dmapper_logger->endElement();
 #endif
 }
 

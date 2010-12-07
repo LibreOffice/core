@@ -137,7 +137,7 @@ void SettingsTable::attribute(Id nName, Value & val)
     }
 #endif
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("SettingsTable.attribute");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -221,7 +221,7 @@ void SettingsTable::sprm(Sprm& rSprm)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("SettingsTable.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 

@@ -70,7 +70,7 @@ void BorderHandler::attribute(Id rName, Value & rVal)
 #ifdef DEBUG_DOMAINMAPPER
     dmapper_logger->startElement("BorderHandler.attribute");
     dmapper_logger->attribute("id", (*QNameToString::Instance())(rName));
-    dmapper_logger->endElement("BorderHandler.attribute");
+    dmapper_logger->endElement();
 #endif
 
     sal_Int32 nIntValue = rVal.getInt();
@@ -147,7 +147,7 @@ void BorderHandler::sprm(Sprm & rSprm)
     }
 
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("BorderHandler.sprm");
+    dmapper_logger->endElement();
 #endif
 
 }

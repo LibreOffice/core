@@ -407,7 +407,7 @@ void FFDataHandler::sprm(Sprm & r_Sprm)
         break;
     }
 #ifdef DEBUG_DOMAINMAPPER
-    dmapper_logger->endElement("FFDataHandler.sprm");
+    dmapper_logger->endElement();
 #endif
 }
 
@@ -424,7 +424,7 @@ void FFDataHandler::attribute(Id name, Value & val)
     dmapper_logger->startElement("FFDataHandler.attribute");
     dmapper_logger->attribute("name", (*QNameToString::Instance())(name));
     dmapper_logger->attribute("value", val.toString());
-    dmapper_logger->endElement("FFDataHandler.attribute");
+    dmapper_logger->endElement();
 #endif
     switch (name)
     {
