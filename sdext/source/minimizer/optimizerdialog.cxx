@@ -129,8 +129,7 @@ void OptimizerDialog::InitRoadmap()
         InsertRoadmapItem( 4, sal_True, getString( STR_SUMMARY ), ITEM_ID_SUMMARY );
 
         rtl::OUString sBitmapPath( getPath( TK_BitmapPath ) );
-        rtl::OUString sBitmap( isHighContrast() ? RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80_h.png")
-                                                : RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80.png") );
+        rtl::OUString sBitmap( RTL_CONSTASCII_USTRINGPARAM("/minimizepresi_80.png") );
         rtl::OUString sURL( sBitmapPath += sBitmap );
 
         xPropertySet->setPropertyValue( TKGet( TK_ImageURL ), Any( sURL ) );
