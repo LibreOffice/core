@@ -85,6 +85,15 @@ UnoGridModel::UnoGridModel( const ::com::sun::star::uno::Reference< ::com::sun::
     ImplRegisterProperty( BASEPROPERTY_GRID_HEADER_BACKGROUND );
     ImplRegisterProperty( BASEPROPERTY_GRID_LINE_COLOR );
     ImplRegisterProperty( BASEPROPERTY_GRID_ROW_BACKGROUND );
+
+    osl_incrementInterlockedCount( &m_refCount );
+    {
+        setFastPropertyValue( BASEPROPERTY_GRID_COLUMNMODEL,
+            makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridColumnModel" ) ) );
+        setFastPropertyValue( BASEPROPERTY_GRID_DATAMODEL,
+            makeAny( maContext.createComponent( "com.sun.star.awt.grid.DefaultGridDataModel" ) ) );
+    }
+    osl_decrementInterlockedCount( &m_refCount );
 }
 
 UnoGridModel::UnoGridModel( const UnoGridModel& rModel )

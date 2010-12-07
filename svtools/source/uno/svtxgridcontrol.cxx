@@ -263,45 +263,44 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         {
             {
                 m_xDataModel = Reference< XGridDataModel >( aValue, UNO_QUERY );
-                if(m_xDataModel != NULL)
-                {
-                    Sequence<Sequence< Any > > cellData = m_xDataModel->getData();
-                    if(cellData.getLength()!= 0)
-                    {
-                        for (int i = 0; i < cellData.getLength(); i++)
-                        {
-                            std::vector< Any > newRow;
-                            Sequence< Any > rawRowData = cellData[i];
-                            //check whether the data row vector length matches with the column count
-                            if(m_xColumnModel->getColumnCount() == 0)
-                            {
-                                for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
-                                {
-                                    UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
-                                    m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
-                                }
-                                m_xColumnModel->setDefaultColumns(rawRowData.getLength());
-                            }
-                            else
-                                if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
-                                    throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
-
-                            for ( int k = 0; k < rawRowData.getLength(); k++)
-                            {
-                                newRow.push_back(rawRowData[k]);
-                            }
-                            m_pTableModel->getCellContent().push_back(newRow);
-                        }
-
-                        Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
-                        std::vector< rtl::OUString > newRow(
-                            comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
-                        m_pTableModel->setRowCount(m_xDataModel->getRowCount());
-                        m_pTableModel->setRowHeaderName(newRow);
-                    }
-                }
-                else
+                if ( !m_xDataModel.is() )
                     throw GridInvalidDataException(rtl::OUString::createFromAscii("The data model isn't set!"), m_xDataModel);
+
+                Sequence<Sequence< Any > > cellData = m_xDataModel->getData();
+                if(cellData.getLength()!= 0)
+                {
+                    for (int i = 0; i < cellData.getLength(); i++)
+                    {
+                        std::vector< Any > newRow;
+                        Sequence< Any > rawRowData = cellData[i];
+                        //check whether the data row vector length matches with the column count
+                        if(m_xColumnModel->getColumnCount() == 0)
+                        {
+                            for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
+                            {
+                                UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
+                                m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                            }
+                            m_xColumnModel->setDefaultColumns(rawRowData.getLength());
+                        }
+                        else
+                            if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
+                                throw GridInvalidDataException(rtl::OUString::createFromAscii("The column count doesn't match with the length of row data"), m_xDataModel);
+
+                        for ( int k = 0; k < rawRowData.getLength(); k++)
+                        {
+                            newRow.push_back(rawRowData[k]);
+                        }
+                        m_pTableModel->getCellContent().push_back(newRow);
+                    }
+
+                    Sequence< ::rtl::OUString > rowHeaders = m_xDataModel->getRowHeaders();
+                    std::vector< rtl::OUString > newRow(
+                        comphelper::sequenceToContainer< std::vector<rtl::OUString > >(rowHeaders));
+                    m_pTableModel->setRowCount(m_xDataModel->getRowCount());
+                    m_pTableModel->setRowHeaderName(newRow);
+                }
+
                 sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
                 if(m_xDataModel->getRowHeight() == 0)
                 {
@@ -316,41 +315,36 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_COLUMNMODEL:
         {
-            m_xColumnModel = Reference< XGridColumnModel >( aValue, UNO_QUERY );
-            if(m_xColumnModel != NULL)
+            m_xColumnModel = Reference< XGridColumnModel >( aValue, UNO_QUERY_THROW );
+            if(m_xColumnModel->getColumnCount() != 0)
             {
-                if(m_xColumnModel->getColumnCount() != 0)
+                Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
+                std::vector<Reference< XGridColumn > > aNewColumns(
+                    comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
+                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
+                if(m_xColumnModel->getColumnHeaderHeight() == 0)
                 {
-                    Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
-                    std::vector<Reference< XGridColumn > > aNewColumns(
-                        comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
-                    sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
-                    if(m_xColumnModel->getColumnHeaderHeight() == 0)
-                    {
-                        m_pTableModel->setColumnHeaderHeight(fontHeight);
-                        m_xColumnModel->setColumnHeaderHeight(fontHeight);
-                    }
-                    else
-                        m_pTableModel->setColumnHeaderHeight(m_xColumnModel->getColumnHeaderHeight());
-                    for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
-                    {
-                        UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
-                        Reference< XGridColumn > xGridColumn = m_xColumnModel->getColumn(col);
-                        m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
-                        tableColumn->setHorizontalAlign(xGridColumn->getHorizontalAlign());
-                        tableColumn->setWidth(xGridColumn->getColumnWidth());
-                        if(xGridColumn->getPreferredWidth() != 0)
-                            tableColumn->setPreferredWidth(xGridColumn->getPreferredWidth());
-                        if(xGridColumn->getMaxWidth() != 0)
-                            tableColumn->setMaxWidth(xGridColumn->getMaxWidth());
-                        if(xGridColumn->getMinWidth() != 0)
-                            tableColumn->setMinWidth(xGridColumn->getMinWidth());
-                        tableColumn->setResizable(xGridColumn->getResizeable());
-                    }
+                    m_pTableModel->setColumnHeaderHeight(fontHeight);
+                    m_xColumnModel->setColumnHeaderHeight(fontHeight);
+                }
+                else
+                    m_pTableModel->setColumnHeaderHeight(m_xColumnModel->getColumnHeaderHeight());
+                for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
+                {
+                    UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
+                    Reference< XGridColumn > xGridColumn = m_xColumnModel->getColumn(col);
+                    m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                    tableColumn->setHorizontalAlign(xGridColumn->getHorizontalAlign());
+                    tableColumn->setWidth(xGridColumn->getColumnWidth());
+                    if(xGridColumn->getPreferredWidth() != 0)
+                        tableColumn->setPreferredWidth(xGridColumn->getPreferredWidth());
+                    if(xGridColumn->getMaxWidth() != 0)
+                        tableColumn->setMaxWidth(xGridColumn->getMaxWidth());
+                    if(xGridColumn->getMinWidth() != 0)
+                        tableColumn->setMinWidth(xGridColumn->getMinWidth());
+                    tableColumn->setResizable(xGridColumn->getResizeable());
                 }
             }
-            else
-                throw GridInvalidModelException(rtl::OUString::createFromAscii("The column model isn't set!"), m_xColumnModel);
 
             break;
         }
