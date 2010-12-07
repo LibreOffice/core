@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 # A hook script to verify what is about to be committed.
 # Called by "git commit" with no arguments.  The hook should
