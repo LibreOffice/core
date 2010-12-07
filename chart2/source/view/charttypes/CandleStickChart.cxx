@@ -178,6 +178,7 @@ void CandleStickChart::createShapes()
     //(@todo maybe different iteration for breaks in axis ?)
     sal_Int32 nStartIndex = 0;
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();
+    double fLogicZ = 1.5;//as defined
 //=============================================================================
     //iterate through all x values per indices
     for( sal_Int32 nIndex = nStartIndex; nIndex < nEndIndex; nIndex++ )
@@ -320,13 +321,13 @@ void CandleStickChart::createShapes()
                         drawing::PolyPolygonShape3D aPoly;
 
                         sal_Int32 nLineIndex = 0;
-                        if( bShowFirst &&  pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_First ,0 )
+                        if( bShowFirst &&  pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_First ,fLogicZ )
                             && isValidPosition(aPosLeftFirst) && isValidPosition(aPosMiddleFirst) )
                         {
                             AddPointToPoly( aPoly, aPosLeftFirst, nLineIndex );
                             AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex++ );
                         }
-                        if( pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_Last ,0 )
+                        if( pPosHelper->isLogicVisible( fUnscaledX, fUnscaledY_Last ,fLogicZ )
                             && isValidPosition(aPosMiddleLast) && isValidPosition(aPosRightLast) )
                         {
                             AddPointToPoly( aPoly, aPosMiddleLast, nLineIndex );
