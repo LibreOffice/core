@@ -15,6 +15,7 @@
 #include <document.hxx>
 #include <view.hxx>
 
+#include <sfx2/sfxmodelfactory.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
@@ -23,6 +24,8 @@
 
 #include <editeng/editeng.hxx>
 #include <editeng/editview.hxx>
+
+#include <svx/zoomitem.hxx>
 
 #include "preextstl.h"
 #include <cppunit/TestSuite.h>
@@ -86,7 +89,10 @@ void Test::setUp()
 
     SmDLL::Init();
 
-    m_xDocShRef = new SmDocShell(SFXOBJECTSHELL_STD_NORMAL);
+    m_xDocShRef = new SmDocShell(
+        SFXMODEL_EMBEDDED_OBJECT |
+        SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
+        SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
     m_xDocShRef->DoInitNew(0);
 
     SfxViewFrame *pViewFrame = SfxViewFrame::LoadHiddenDocument(*m_xDocShRef, 0);
@@ -308,13 +314,68 @@ void Test::tViewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should be equal", nFinalZoom == nOrigZoom);
     }
 
+    sal_uInt16 nOptimalZoom=0;
+
     {
-        SfxRequest aZoomOut(SID_FITINWINDOW, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
-        m_pViewShell->Execute(aZoomOut);
-        nFinalZoom = rGraphicWindow.GetZoom();
-        CPPUNIT_ASSERT_MESSAGE("Should be about 800%", nFinalZoom > nOrigZoom);
+        SfxRequest aZoom(SID_FITINWINDOW, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoom);
+        nOptimalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be about 800%", nOptimalZoom > nOrigZoom);
     }
 
+    {
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_OPTIMAL, 0));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be optimal zoom", nFinalZoom == nOptimalZoom);
+    }
+
+#if 0
+    //TO-DO: switch from embedded to normal to get these meaningfull
+    {
+        SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoomOut);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
+
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_PAGEWIDTH, 0));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be same as optimal zoom", nFinalZoom == nOptimalZoom);
+    }
+
+    {
+        SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoomOut);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
+
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_WHOLEPAGE, 0));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be same as optimal zoom", nFinalZoom == nOptimalZoom);
+    }
+#endif
+
+    {
+        SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoomOut);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should not be optimal zoom", nFinalZoom != nOptimalZoom);
+
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 50));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be 50%", nFinalZoom == 50);
+    }
 }
 
 void Test::testDocument()
