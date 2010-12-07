@@ -571,18 +571,7 @@ CreateElementMapPointer </xsl:text>
 <!-- factoryaction -->
 <xsl:template name="factoryaction">
   <xsl:param name="action"/>
-  <xsl:text>&#xa;&#xa;</xsl:text>
-  <xsl:text>void </xsl:text>
-  <xsl:call-template name="factoryclassname"/>
-  <xsl:text>::</xsl:text>
-  <xsl:value-of select="$action"/>
-  <xsl:text>Action(OOXMLFastContextHandler * pHandler</xsl:text>
-  <xsl:if test="$action='characters'">
-    <xsl:text>, const ::rtl::OUString &amp; sText</xsl:text>
-  </xsl:if>
-  <xsl:text>)&#xa;</xsl:text>
-  <xsl:text>{&#xa;</xsl:text>
-  <xsl:variable name="switch1block">
+  <xsl:variable name="switchblock1">
     <xsl:for-each select="resource[action/@name=$action]">
       <xsl:text>
       </xsl:text>
@@ -611,13 +600,30 @@ CreateElementMapPointer </xsl:text>
       </xsl:for-each>
     </xsl:if>
   </xsl:variable>
-  <xsl:if test="string-length($switch1block) > 0 or string-length($switchblock2) > 0">
+  <xsl:text>&#xa;&#xa;</xsl:text>
+  <xsl:text>void </xsl:text>
+  <xsl:call-template name="factoryclassname"/>
+  <xsl:text>::</xsl:text>
+  <xsl:value-of select="$action"/>
+  <xsl:text>Action(OOXMLFastContextHandler*</xsl:text>
+  <xsl:if test="string-length($switchblock1) &gt; 0 or string-length($switchblock2) &gt; 0">
+    <xsl:text> pHandler</xsl:text>
+  </xsl:if>
+  <xsl:if test="$action='characters'">
+    <xsl:text>, const ::rtl::OUString &amp;</xsl:text>
+    <xsl:if test="contains($switchblock1, 'sText') or contains($switchblock2, 'sText')">
+      <xsl:text> sText</xsl:text>
+    </xsl:if>
+  </xsl:if>
+  <xsl:text>)&#xa;</xsl:text>
+  <xsl:text>{&#xa;</xsl:text>
+  <xsl:if test="string-length($switchblock1) > 0 or string-length($switchblock2) > 0">
     <xsl:text>    sal_uInt32 nDefine = pHandler->getDefine();&#xa;</xsl:text>
   </xsl:if>
-  <xsl:if test="string-length($switch1block) > 0">
+  <xsl:if test="string-length($switchblock1) > 0">
     <xsl:text>    switch (nDefine)&#xa;</xsl:text>
     <xsl:text>    {&#xa;</xsl:text>
-    <xsl:value-of select="$switch1block"/>
+    <xsl:value-of select="$switchblock1"/>
     <xsl:text>    default:&#xa;</xsl:text>
     <xsl:text>        break;&#xa;</xsl:text>
     <xsl:text>    }&#xa;</xsl:text>

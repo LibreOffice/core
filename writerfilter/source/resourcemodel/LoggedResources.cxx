@@ -245,14 +245,14 @@ void LoggedStream::substream(Id name, writerfilter::Reference<Stream>::Pointer_t
 #endif
 }
 
-void LoggedStream::info(const string & info)
+void LoggedStream::info(const string & _info)
 {
 #ifdef DEBUG_LOGGING
     mHelper.startElement("info");
-    mHelper.attribute("text", info);
+    mHelper.attribute("text", _info);
 #endif
 
-    lcl_info(info);
+    lcl_info(_info);
 
 #ifdef DEBUG_LOGGING
     mHelper.endElement("info");
@@ -281,15 +281,15 @@ void LoggedProperties::attribute(Id name, Value & val)
     lcl_attribute(name, val);
 }
 
-void LoggedProperties::sprm(Sprm & sprm)
+void LoggedProperties::sprm(Sprm & _sprm)
 {
 #ifdef DEBUG_LOGGING
     mHelper.startElement("sprm");
-    mHelper.attribute("name", (*QNameToString::Instance())(sprm.getId()));
+    mHelper.attribute("name", (*QNameToString::Instance())(_sprm.getId()));
     mHelper.chars(sprm.toString());
 #endif
 
-    lcl_sprm(sprm);
+    lcl_sprm(_sprm);
 
 #ifdef DEBUG_LOGGING
     mHelper.endElement("sprm");

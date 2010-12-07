@@ -30,7 +30,7 @@
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/ResourceModelHelper.hxx>
 
-#include "ConversionHelper.hxx"ConversionHelper::convertTwipToMM100(
+#include "ConversionHelper.hxx"
 #include "WrapPolygonHandler.hxx"
 #include "dmapperLoggers.hxx"
 
@@ -186,15 +186,15 @@ void WrapPolygonHandler::lcl_attribute(Id Name, Value & val)
     }
 }
 
-void WrapPolygonHandler::lcl_sprm(Sprm & sprm)
+void WrapPolygonHandler::lcl_sprm(Sprm & _sprm)
 {
-    switch (sprm.getId())
+    switch (_sprm.getId())
     {
     case NS_ooxml::LN_CT_WrapPath_lineTo:
     case NS_ooxml::LN_CT_WrapPath_start:
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
-            resolveSprmProps(*this, sprm);
+            resolveSprmProps(*this, _sprm);
 
             awt::Point aPoint(mnX, mnY);
             mpPolygon->addPoint(aPoint);
