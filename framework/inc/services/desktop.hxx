@@ -429,8 +429,6 @@ class Desktop   :   // interfaces
          */
         ::sal_Bool impl_closeFrames(::sal_Bool bAllowUI);
 
-        sal_Bool impl_terminate();
-
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
     //  (should be private everytime!)
@@ -508,8 +506,6 @@ class Desktop   :   // interfaces
         css::uno::Reference< css::frame::XTerminateListener > m_xSfxTerminator;
 
         css::uno::Reference< css::frame::XUntitledNumbers > m_xTitleNumberGenerator;
-
-        bool m_bTerminating;    // we are in the process of terminating already
 
 };      //  class Desktop
 
