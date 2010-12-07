@@ -42,7 +42,7 @@ PACKAGE = complex/sfx2
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = OOoRunner.jar ridl.jar test.jar test-tools.jar unoil.jar
+JARFILES        = OOoRunnerLight.jar ridl.jar test.jar test-tools.jar unoil.jar
 EXTRAJARFILES   = $(OOO_JUNIT_JAR)
 JAVAFILES       = $(shell @$(FIND) . -name "*.java") \
 
