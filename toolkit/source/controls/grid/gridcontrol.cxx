@@ -154,9 +154,10 @@ Reference< XPropertySetInfo > UnoGridModel::getPropertySetInfo(  ) throw(Runtime
 //  ----------------------------------------------------
 //  class UnoGridControl
 //  ----------------------------------------------------
-UnoGridControl::UnoGridControl()
-: mSelectionMode(SelectionType(1)),
-    m_aSelectionListeners( *this )
+UnoGridControl::UnoGridControl( const Reference< XMultiServiceFactory >& i_factory )
+    :UnoGridControl_Base( i_factory )
+    ,mSelectionMode(SelectionType(1))
+    ,m_aSelectionListeners( *this )
 {
 }
 
@@ -274,9 +275,9 @@ void SAL_CALL UnoGridControl::removeSelectionListener(const ::com::sun::star::un
 }
 }//namespace toolkit
 
-Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL GridControl_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoGridControl( i_factory ) );
 }
 
 Reference< XInterface > SAL_CALL GridControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )

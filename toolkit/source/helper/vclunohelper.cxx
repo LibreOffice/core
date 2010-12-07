@@ -212,7 +212,7 @@ Polygon VCLUnoHelper::CreatePolygon( const ::com::sun::star::uno::Sequence< sal_
 
 ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer> VCLUnoHelper::CreateControlContainer( Window* pWindow )
 {
-    const uno::Reference< lang::FDXMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    const uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     UnoControlContainer* pContainer = new UnoControlContainer( xFactory, pWindow->GetComponentInterface( sal_True ) );
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > x = pContainer;
 

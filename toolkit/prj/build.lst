@@ -14,9 +14,7 @@ ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_layout_core ti_h
 
 ti      toolkit\qa\unoapi nmake - all ti_qa_unoapi NULL
 
+ti toolkit\qa\complex\toolkit               nmake - all ti_complex_toolkit NULL
 
 # fail on unxsoli4
 #ti      toolkit\qa\complex\xunitconversion nmake - all ti_complex_conv ti_util NULL
-
-# fails
-# ti      toolkit\qa\complex\toolkit                   nmake - all ti_complex_ti ti_qa_complex_toolkit_interface_tests ti_util NULL
