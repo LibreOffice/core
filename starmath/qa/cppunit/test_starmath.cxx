@@ -376,6 +376,24 @@ void Test::tViewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be 50%", nFinalZoom == 50);
     }
+
+    {
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 5));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be Clipped to 25%", nFinalZoom == 25);
+    }
+
+    {
+        SfxItemSet aSet(m_xDocShRef->GetPool(), SID_ATTR_ZOOM, SID_ATTR_ZOOM);
+        aSet.Put(SvxZoomItem(SVX_ZOOM_PERCENT, 1000));
+        SfxRequest aZoom(SID_ATTR_ZOOM, SFX_CALLMODE_SYNCHRON, aSet);
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be Clipped to 800%", nFinalZoom == 800);
+    }
 }
 
 void Test::testDocument()
