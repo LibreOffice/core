@@ -62,9 +62,8 @@ fi
 
 sd_binary=`basename "$0" | sed 's/libreoffice/soffice/g'`.bin
 
-# this is a temporary hack until we can live with the default search paths
 case "`uname -s`" in
-OpenBSD)
+OpenBSD) # this is a temporary hack until we can live with the default search paths
     sd_prog1="$sd_prog/../basis-link/program"
     sd_prog2="$sd_prog/../basis-link/ure-link/lib"
     LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
@@ -74,19 +73,9 @@ OpenBSD)
         export JAVA_HOME
     fi
     ;;
-esac
-
-# this is a temporary hack until we can live with the default search paths
-case "`uname -s`" in
-OpenBSD)
-    sd_prog1="$sd_prog/../basis-link/program"
-    sd_prog2="$sd_prog/../basis-link/ure-link/lib"
-    LD_LIBRARY_PATH=$sd_prog1:$sd_prog2${LD_LIBRARY_PATH+:${LD_LIBRARY_PATH}}
-    JAVA_HOME=$(javaPathHelper -h libreoffice-java 2> /dev/null)
-    export LD_LIBRARY_PATH
-    if [ -n "${JAVA_HOME}" ]; then
-        export JAVA_HOME
-    fi
+AIX)
+    LIBPATH=$sd_prog:$sd_prog/../basis-link/program:$sd_prog/../basis-link/ure-link/lib${LIBPATH:+:$LIBPATH}
+    export LIBPATH
     ;;
 esac
 
