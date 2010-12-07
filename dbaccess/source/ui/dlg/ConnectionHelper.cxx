@@ -184,7 +184,7 @@ DBG_NAME(OConnectionHelper)
             {
                 try
                 {
-                    ::rtl::OUString sFolderPickerService = ::rtl::OUString::createFromAscii(SERVICE_UI_FOLDERPICKER);
+                    ::rtl::OUString sFolderPickerService(SERVICE_UI_FOLDERPICKER);
                     Reference< XFolderPicker > xFolderPicker(m_xORB->createInstance(sFolderPickerService), UNO_QUERY);
                     if (!xFolderPicker.is())
                     {
