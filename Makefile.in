@@ -1,7 +1,7 @@
 # @configure_input@
 # FIXME: create 'install' and 'check' target
 
-SHELL=/bin/sh
+SHELL=/usr/bin/env bash
 
 all: dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
