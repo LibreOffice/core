@@ -127,7 +127,7 @@ bool ButtonsImpl::copyGraphic( const OUString& rName, const OUString& rPath )
     {
         osl::File::remove( rPath );
         osl::File aOutputFile( rPath );
-        if( aOutputFile.open( OpenFlag_Write|OpenFlag_Create ) == osl::FileBase::E_None )
+        if( aOutputFile.open( osl_File_OpenFlag_Write|osl_File_OpenFlag_Create ) == osl::FileBase::E_None )
         {
             Reference< XOutputStream > xOutput( new comphelper::OSLOutputStreamWrapper( aOutputFile ) );
             comphelper::OStorageHelper::CopyInputToOutput( xInput, xOutput );
