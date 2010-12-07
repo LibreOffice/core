@@ -6413,6 +6413,9 @@ ENABLE_BROFFICE=""
 AC_MSG_CHECKING([whether to enable BrOffice branding])
 if test "$enable_broffice" = "yes"; then
     ENABLE_BROFFICE="TRUE"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(ENABLE_BROFFICE)
 
