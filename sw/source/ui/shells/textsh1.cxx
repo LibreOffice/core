@@ -1743,8 +1743,8 @@ void SwTextShell::ChangeHeaderOrFooter(
         if( !rStyleName.Len() || rStyleName == sTmp )
         {
             if( bShowWarning && !bOn && GetActiveView() && GetActiveView() == &GetView() &&
-                    (bHeader && aDesc.GetMaster().GetHeader().IsActive() ||
-                        !bHeader && aDesc.GetMaster().GetFooter().IsActive()))
+                    ((bHeader && aDesc.GetMaster().GetHeader().IsActive()) ||
+                        (!bHeader && aDesc.GetMaster().GetFooter().IsActive())))
             {
                 bShowWarning = FALSE;
                 //Actions have to be closed while the dialog is showing

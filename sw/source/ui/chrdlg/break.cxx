@@ -200,7 +200,7 @@ SwBreakDlg::SwBreakDlg( Window *pParent, SwWrtShell &rS ) :
     }
 
     String aFmtName;
-    for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
+    for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
         if(LISTBOX_ENTRY_NOTFOUND == aPageCollBox.GetEntryPos( aFmtName =
                                     SwStyleNameMapper::GetUIName( i, aFmtName )))
             ::InsertStringSorted(aFmtName, aPageCollBox, 1 );

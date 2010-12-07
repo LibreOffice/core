@@ -2380,8 +2380,7 @@ Range SwTOXBaseSection::GetKeyRange(const String& rStr, const String& rStrReadin
 
         if( rIntl.IsEqual( sMyString, sMyStringReading, pBase->GetLocale(),
                            sToCompare, sToCompareReading, rNew.GetLocale() )  &&
-                    pBase->GetLevel() == nLevel &&
-                    pBase->GetType() == TOX_SORT_CUSTOM )
+                    pBase->GetLevel() == nLevel )
             break;
     }
     if(i == nMax)
