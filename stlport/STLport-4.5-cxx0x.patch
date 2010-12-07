@@ -1,0 +1,17 @@
+--- misc/STLport-4.5/stlport/config/stl_gcc.h
++++ misc/build/STLport-4.5/stlport/config/stl_gcc.h
+@@ -239,10 +239,10 @@
+ 
+ 
+ /* strict ANSI prohibits "long long" ( gcc) */
+-#  if defined ( __STRICT_ANSI__ )
+-#    undef _STLP_LONG_LONG
+-// #    define _STLP_STRICT_ANSI 1
+-#  endif
++//#  if defined ( __STRICT_ANSI__ )
++//#    undef _STLP_LONG_LONG
++//// #    define _STLP_STRICT_ANSI 1
++//#  endif
+ 
+ //# if !defined (__STRICT_ANSI__) || defined (__BUILDING_STLPORT)
+ //#    define _STLP_USE_TEMPLATE_EXPORT

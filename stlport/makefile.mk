@@ -63,7 +63,10 @@ $(INCCOM)$/stlport$/vector: systemstl$/$$(@:f)
 .IF "$(COMID)"=="gcc3"
     TARFILE_NAME=STLport-4.5
     TARFILE_MD5=18f577b374d60b3c760a3a3350407632
-    PATCH_FILES=STLport-4.5.patch STLport-4.5-gcc43_warnings.patch
+    PATCH_FILES=\
+                STLport-4.5.patch \
+                STLport-4.5-gcc43_warnings.patch \
+                STLport-4.5-cxx0x.patch
 .ELIF "$(GUI)"=="WNT"
     .IF "$(CCNUMVER)"<="001300000000"
         TARFILE_NAME=STLport-4.0
