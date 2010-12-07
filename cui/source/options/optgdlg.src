@@ -85,7 +85,7 @@ TabPage OFA_TP_MISC
     CheckBox CB_HELPAGENT
     {
         Pos = MAP_APPFONT( COL1, ROW3 );
-        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT( COL3 - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Help Agent";
     };
     PushButton PB_HELPAGENT_RESET
