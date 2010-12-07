@@ -44,12 +44,14 @@ namespace {
 
 class Test : public CppUnit::TestFixture {
 public:
+    Test();
+    ~Test();
+
     // init
     virtual void setUp();
     virtual void tearDown();
 
     // tests
-    void testDocument();
     void tmEditUndoRedo();
     void tmEditAllClipboard();
     void tmEditMarker();
@@ -58,7 +60,11 @@ public:
     void tViewZoom();
 
     CPPUNIT_TEST_SUITE(Test);
-    CPPUNIT_TEST(testDocument);
+    CPPUNIT_TEST(tmEditUndoRedo);
+    CPPUNIT_TEST(tmEditAllClipboard);
+    CPPUNIT_TEST(tmEditMarker);
+    CPPUNIT_TEST(tmEditFailure);
+    CPPUNIT_TEST(tViewZoom);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -73,7 +79,7 @@ private:
     SmViewShell *m_pViewShell;
 };
 
-void Test::setUp()
+Test::Test()
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
@@ -88,7 +94,10 @@ void Test::setUp()
     InitVCL(xSM);
 
     SmDLL::Init();
+}
 
+void Test::setUp()
+{
     m_xDocShRef = new SmDocShell(
         SFXMODEL_EMBEDDED_OBJECT |
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
@@ -113,6 +122,10 @@ void Test::tearDown()
     delete m_pSmCmdBoxWindow;
     delete m_pDispatcher;
     m_xDocShRef.Clear();
+}
+
+Test::~Test()
+{
     uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
@@ -394,16 +407,6 @@ void Test::tViewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be Clipped to 800%", nFinalZoom == 800);
     }
-}
-
-void Test::testDocument()
-{
-    tmEditUndoRedo();
-    tmEditAllClipboard();
-    tmEditMarker();
-    tmEditFailure();
-
-    tViewZoom();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
