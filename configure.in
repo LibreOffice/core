@@ -4539,7 +4539,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
     AC_MSG_RESULT([external])
     for dbver in -5.1 5.1 -5.0 5.0 -5 5 -4.8 4.8 -4.7 4.7 -4 4 ''; do
         AC_MSG_CHECKING([for db$dbver/db.h])
-        for inc_dir in /usr/include /usr/local/include; do
+        for inc_dir in /usr/include /usr/local/include /usr/pkg/include; do
             if test -r "$inc_dir/db$dbver/db.h"; then
                 DB_INCLUDES="$inc_dir/db$dbver"
                 db_header="db$dbver/db.h"
