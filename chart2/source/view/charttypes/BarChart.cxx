@@ -450,7 +450,7 @@ void BarChart::createShapes()
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
-    double fLogicZ        = 0.0;//as defined
+    double fLogicZ        = 1.0;//as defined
 
     bool bDrawConnectionLines = false;
     bool bDrawConnectionLinesInited = false;
@@ -614,7 +614,7 @@ void BarChart::createShapes()
                         continue;//point not visible
                     if(fUnscaledLogicX>pPosHelper->getLogicMaxX())
                         continue;//point not visible
-                    if(pPosHelper->isStrongLowerXRequested() && fUnscaledLogicX==pPosHelper->getLogicMaxX())
+                    if(pPosHelper->isStrongLowerRequested(0) && fUnscaledLogicX==pPosHelper->getLogicMaxX())
                         continue;//point not visible
                     double fLogicX = pPosHelper->getScaledSlotPos( fUnscaledLogicX, fSlotX );
 
@@ -643,7 +643,7 @@ void BarChart::createShapes()
                         fNegativeLogicYForNextSeries += fLogicBarHeight;
 
                     if(m_nDimension==3)
-                        fLogicZ = nZ;
+                        fLogicZ = nZ+0.5;
 
                     drawing::Position3D aUnscaledLogicPosition( fUnscaledLogicX, fUpperYValue, fLogicZ );
 

@@ -178,7 +178,7 @@ void VPolarAngleAxis::createLabels()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = -0.5;//as defined
+    double fLogicZ      = 1.0;//as defined
 
     if( m_aAxisProperties.m_bDisplayLabels )
     {
@@ -213,7 +213,7 @@ void VPolarAngleAxis::createShapes()
         return;
 
     double fLogicRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = -0.5;//as defined
+    double fLogicZ      = 1.0;//as defined
 
     //-----------------------------------------
     //create axis main lines

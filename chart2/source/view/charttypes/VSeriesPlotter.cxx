@@ -1186,53 +1186,12 @@ long VSeriesPlotter::calculateTimeResolutionOnXAxis()
 }
 double VSeriesPlotter::getMinimumX()
 {
-    /*
-    if( m_bCategoryXAxis )
-    {
-        double fRet = 1.0;//first text category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
-            fRet -= 0.5;
-        else if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
-        {
-            const std::vector< DatePlusIndex >& rDateCategories( m_pExplicitCategoriesProvider->getDateCategories() );
-            DBG_ASSERT(!rDateCategories.empty(),"need date values");
-            if(!rDateCategories.empty())
-            {
-                DatePlusIndex aFirst = rDateCategories.front();
-                fRet = aFirst.fValue;
-            }
-        }
-        return fRet;
-    }
-    */
-
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMinimum;
 }
 double VSeriesPlotter::getMaximumX()
 {
-    /*
-    if( m_bCategoryXAxis )
-    {
-        //return category count for pure text axis
-        double fRet = getPointCount();//first category (index 0) matches with real number 1.0
-        if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->hasComplexCategories() )
-            fRet += 0.5;
-        else if( m_pExplicitCategoriesProvider && m_pExplicitCategoriesProvider->isDateAxis() )
-        {
-            const std::vector< DatePlusIndex >& rDateCategories( m_pExplicitCategoriesProvider->getDateCategories() );
-            DBG_ASSERT(!rDateCategories.empty(),"need date values");
-            if(!rDateCategories.empty())
-            {
-                DatePlusIndex aLast = rDateCategories.back();
-                fRet = aLast.fValue;
-            }
-        }
-        return fRet;
-    }
-    */
-
     double fMinimum, fMaximum;
     this->getMinimumAndMaximiumX( fMinimum, fMaximum );
     return fMaximum;
@@ -1309,13 +1268,13 @@ double VSeriesPlotter::getMaximumYInRange( double fMinimumX, double fMaximumX, s
 double VSeriesPlotter::getMinimumZ()
 {
     //this is the default for all charts without a meaningfull z axis
-    return 0.5;
+    return 1.0;
 }
 double VSeriesPlotter::getMaximumZ()
 {
-    if( 3!=m_nDimension )
-        return 0.5;
-    return m_aZSlots.size()+0.5;
+    if( 3!=m_nDimension || !m_aZSlots.size() )
+        return getMinimumZ()+1;
+    return m_aZSlots.size();
 }
 
 namespace

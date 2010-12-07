@@ -75,7 +75,7 @@ public:
     inline bool   isSameForGivenResolution( double fX, double fY, double fZ
                                 , double fX2, double fY2, double fZ2 );
 
-    inline bool   isStrongLowerXRequested() const;
+    inline bool   isStrongLowerRequested( sal_Int32 nDimensionIndex ) const;
     inline bool   isLogicVisible( double fX, double fY, double fZ ) const;
     inline void   doLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
     inline void   doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip=false ) const;
@@ -125,8 +125,8 @@ public:
 
     void setTimeResolution( long nTimeResolution, const Date& rNullDate );
     virtual void setScaledCategoryWidth( double fScaledCategoryWidth );
-    void MaybeShiftCategoryX( double& fScaledXValue ) const;
-    void DoShiftCategoryXIfShiftIsIndicated( bool bAllowShift );
+    void AllowShiftXAxisPos( bool bAllowShift );
+    void AllowShiftZAxisPos( bool bAllowShift );
 
 protected: //member
     ::std::vector< ExplicitScaleData >  m_aScales;
@@ -149,7 +149,8 @@ protected: //member
     Date m_aNullDate;
 
     double m_fScaledCategoryWidth;
-    bool   m_DoShiftCategoryXIfShiftIsIndicated;
+    bool   m_bAllowShiftXAxisPos;
+    bool   m_bAllowShiftZAxisPos;
 };
 
 //describes wich axis of the drawinglayer scene or sreen axis are the normal axis
@@ -292,19 +293,23 @@ bool PlottingPositionHelper::isSameForGivenResolution( double fX, double fY, dou
     return (bSameX && bSameY && bSameZ);
 }
 
-bool PlottingPositionHelper::isStrongLowerXRequested() const
+bool PlottingPositionHelper::isStrongLowerRequested( sal_Int32 nDimensionIndex ) const
 {
-    if( !m_aScales.empty() )
-        return m_DoShiftCategoryXIfShiftIsIndicated && m_aScales[0].ShiftedCategoryPosition;
+    if( m_aScales.empty() )
+        return false;
+    if( 0==nDimensionIndex )
+        return m_bAllowShiftXAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
+    else if( 2==nDimensionIndex )
+        return m_bAllowShiftZAxisPos && m_aScales[nDimensionIndex].ShiftedCategoryPosition;
     return false;
 }
 
 bool PlottingPositionHelper::isLogicVisible(
     double fX, double fY, double fZ ) const
 {
-    return fX >= m_aScales[0].Minimum && ( isStrongLowerXRequested() ? fX < m_aScales[0].Maximum : fX <= m_aScales[0].Maximum )
+    return fX >= m_aScales[0].Minimum && ( isStrongLowerRequested(0) ? fX < m_aScales[0].Maximum : fX <= m_aScales[0].Maximum )
         && fY >= m_aScales[1].Minimum && fY <= m_aScales[1].Maximum
-        && fZ >= m_aScales[2].Minimum && fZ <= m_aScales[2].Maximum;
+        && fZ >= m_aScales[2].Minimum && ( isStrongLowerRequested(2) ? fZ < m_aScales[2].Maximum : fZ <= m_aScales[2].Maximum );
 }
 
 void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const
@@ -316,12 +321,18 @@ void PlottingPositionHelper::doLogicScaling( double* pX, double* pY, double* pZ,
     {
         if( m_aScales[0].Scaling.is())
             *pX = m_aScales[0].Scaling->doScaling(*pX);
-        MaybeShiftCategoryX(*pX);
+        if( m_bAllowShiftXAxisPos && m_aScales[0].ShiftedCategoryPosition )
+            (*pX) += m_fScaledCategoryWidth/2.0;
     }
     if(pY && m_aScales[1].Scaling.is())
         *pY = m_aScales[1].Scaling->doScaling(*pY);
-    if(pZ && m_aScales[2].Scaling.is())
-        *pZ = m_aScales[2].Scaling->doScaling(*pZ);
+    if(pZ)
+    {
+        if( m_aScales[2].Scaling.is())
+            *pZ = m_aScales[2].Scaling->doScaling(*pZ);
+        if( m_bAllowShiftZAxisPos && m_aScales[2].ShiftedCategoryPosition)
+            (*pZ) += 0.5;
+    }
 }
 
 void PlottingPositionHelper::doUnshiftedLogicScaling( double* pX, double* pY, double* pZ, bool bClip ) const

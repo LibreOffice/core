@@ -260,6 +260,9 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
     // no scaling for categories
     rExplicitScale.Scaling.clear();
 
+    if( rExplicitScale.ShiftedCategoryPosition )
+        rExplicitScale.Maximum += 1.0;
+
     // ensure that at least one category is visible
     if( rExplicitScale.Maximum <= rExplicitScale.Minimum )
         rExplicitScale.Maximum = rExplicitScale.Minimum + 1.0;
@@ -274,9 +277,6 @@ void ScaleAutomatism::calculateExplicitIncrementAndScaleForCategory(
         rExplicitScale.Minimum = EquidistantTickFactory::getMinimumAtIncrement( rExplicitScale.Minimum, rExplicitIncrement );
     if( bAutoMaximum && m_bExpandBorderToIncrementRhythm )
         rExplicitScale.Maximum = EquidistantTickFactory::getMaximumAtIncrement( rExplicitScale.Maximum, rExplicitIncrement );
-
-    if( rExplicitScale.ShiftedCategoryPosition )
-        rExplicitScale.Maximum += 1.0;
 
     //prevent performace killover
     double fDistanceCount = ::rtl::math::approxFloor( (rExplicitScale.Maximum-rExplicitScale.Minimum) / rExplicitIncrement.Distance );

@@ -131,7 +131,7 @@ void VPolarGrid::create2DAngleGrid( const Reference< drawing::XShapes >& xLogicT
 
     double fLogicInnerRadius = m_pPosHelper->getInnerLogicRadius();
     double fLogicOuterRadius = m_pPosHelper->getOuterLogicRadius();
-    double fLogicZ      = -0.5;//as defined
+    double fLogicZ      = 1.0;//as defined
 
     sal_Int32 nLinePropertiesCount = rLinePropertiesList.size();
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = rAngleTickInfos.begin();
@@ -223,7 +223,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
 
             //xxxxx rTickInfo.updateUnscaledValue( xInverseRadiusScaling );
             double fLogicRadius = rTickInfo.getUnscaledTickValue();
-            double fLogicZ      = -0.5;//as defined
+            double fLogicZ      = 1.0;//as defined
 
             drawing::PointSequenceSequence aPoints(1);
             VPolarGrid::createLinePointSequence_ForAngleAxis( aPoints, rAngleTickInfos

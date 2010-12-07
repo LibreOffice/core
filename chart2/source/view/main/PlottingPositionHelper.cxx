@@ -63,7 +63,8 @@ PlottingPositionHelper::PlottingPositionHelper()
         , m_nTimeResolution( ::com::sun::star::chart::TimeUnit::DAY )
         , m_aNullDate(30,12,1899)
         , m_fScaledCategoryWidth(1.0)
-        , m_DoShiftCategoryXIfShiftIsIndicated(false)
+        , m_bAllowShiftXAxisPos(false)
+        , m_bAllowShiftZAxisPos(false)
 {
 }
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
@@ -79,7 +80,8 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
         , m_nTimeResolution( rSource.m_nTimeResolution )
         , m_aNullDate( rSource.m_aNullDate )
         , m_fScaledCategoryWidth( rSource.m_fScaledCategoryWidth )
-        , m_DoShiftCategoryXIfShiftIsIndicated( rSource.m_DoShiftCategoryXIfShiftIsIndicated )
+        , m_bAllowShiftXAxisPos( rSource.m_bAllowShiftXAxisPos )
+        , m_bAllowShiftZAxisPos( rSource.m_bAllowShiftZAxisPos )
 {
 }
 
@@ -679,18 +681,13 @@ void PlottingPositionHelper::setScaledCategoryWidth( double fScaledCategoryWidth
 {
     m_fScaledCategoryWidth = fScaledCategoryWidth;
 }
-void PlottingPositionHelper::MaybeShiftCategoryX( double& fScaledXValue ) const
+void PlottingPositionHelper::AllowShiftXAxisPos( bool bAllowShift )
 {
-    if( m_DoShiftCategoryXIfShiftIsIndicated && !m_aScales.empty() )
-    {
-        if(m_aScales[0].ShiftedCategoryPosition)
-            fScaledXValue += m_fScaledCategoryWidth/2.0;
-    }
+    m_bAllowShiftXAxisPos = bAllowShift;
 }
-
-void PlottingPositionHelper::DoShiftCategoryXIfShiftIsIndicated( bool bAllowShift )
+void PlottingPositionHelper::AllowShiftZAxisPos( bool bAllowShift )
 {
-    m_DoShiftCategoryXIfShiftIsIndicated = bAllowShift;
+    m_bAllowShiftZAxisPos = bAllowShift;
 }
 
 /*

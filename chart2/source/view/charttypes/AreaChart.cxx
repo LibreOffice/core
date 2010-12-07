@@ -98,7 +98,10 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
     if( m_pMainPosHelper )
-        m_pMainPosHelper->DoShiftCategoryXIfShiftIsIndicated(true);
+    {
+        m_pMainPosHelper->AllowShiftXAxisPos(true);
+        m_pMainPosHelper->AllowShiftZAxisPos(true);
+    }
     PlotterBase::m_pPosHelper = m_pMainPosHelper;
     VSeriesPlotter::m_pMainPosHelper = m_pMainPosHelper;
 
@@ -613,7 +616,7 @@ void AreaChart::createShapes()
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     //update/create information for current group
-    double fLogicZ        = 0.5;//as defined
+    double fLogicZ        = 1.0;//as defined
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();

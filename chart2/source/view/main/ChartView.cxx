@@ -1697,6 +1697,8 @@ sal_Bool ChartView::getExplicitValuesForAxis(
             }
             else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::CATEGORY )
                 rExplicitScale.Maximum -= 1.0;
+            else if( rExplicitScale.AxisType == ::com::sun::star::chart2::AxisType::SERIES )
+                rExplicitScale.Maximum -= 1.0;
         }
         return sal_True;
     }

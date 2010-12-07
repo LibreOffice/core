@@ -121,7 +121,7 @@ void BubbleChart::calculateMaximumLogicBubbleSize()
 
 void BubbleChart::calculateBubbleSizeScalingFactor()
 {
-    double fLogicZ=0.5;
+    double fLogicZ=1.0;
     drawing::Position3D aSceneMinPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMinX(),m_pMainPosHelper->getLogicMinY(),fLogicZ, false ) );
     drawing::Position3D aSceneMaxPos( m_pMainPosHelper->transformLogicToScene( m_pMainPosHelper->getLogicMaxX(),m_pMainPosHelper->getLogicMaxY(),fLogicZ, false ) );
 
@@ -223,7 +223,7 @@ void BubbleChart::createShapes()
         m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
 
     //update/create information for current group
-    double fLogicZ        = 0.5;//as defined
+    double fLogicZ        = 1.0;//as defined
 
     sal_Int32 nStartIndex = 0; // inclusive       ;..todo get somehow from x scale
     sal_Int32 nEndIndex = VSeriesPlotter::getPointCount();

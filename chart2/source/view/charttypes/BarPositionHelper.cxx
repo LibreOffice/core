@@ -45,7 +45,8 @@ using namespace ::com::sun::star::chart2;
 BarPositionHelper::BarPositionHelper( bool /* bSwapXAndY */ )
         : CategoryPositionHelper( 1 )
 {
-    DoShiftCategoryXIfShiftIsIndicated(true);
+    AllowShiftXAxisPos(true);
+    AllowShiftZAxisPos(true);
 }
 
 BarPositionHelper::BarPositionHelper( const BarPositionHelper& rSource )
@@ -76,7 +77,6 @@ double BarPositionHelper::getScaledSlotPos( double fUnscaledLogicX, double fSeri
     double fScaledLogicX(fUnscaledLogicX);
     doLogicScaling(&fScaledLogicX,NULL,NULL);
     fScaledLogicX = CategoryPositionHelper::getScaledSlotPos( fScaledLogicX, fSeriesNumber );
-    //MaybeShiftCategoryX( fScaledLogicX );
     return fScaledLogicX;
 
 }

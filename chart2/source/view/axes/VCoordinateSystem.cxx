@@ -98,8 +98,8 @@ VCoordinateSystem::VCoordinateSystem( const Reference< XCoordinateSystem >& xCoo
 {
     if( !m_xCooSysModel.is() || m_xCooSysModel->getDimension()<3 )
     {
-        m_aExplicitScales[2].Minimum = -0.5;
-        m_aExplicitScales[2].Maximum = 0.5;
+        m_aExplicitScales[2].Minimum = 1.0;
+        m_aExplicitScales[2].Maximum = 2.0;
         m_aExplicitScales[2].Orientation = AxisOrientation_MATHEMATICAL;
     }
 }
