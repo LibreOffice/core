@@ -106,6 +106,9 @@ CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-shared
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
+.IF "$(debug)"!=""
+CONFIGURE_FLAGS+=--with-mem-debug --with-run-debug
+.ENDIF
 .ENDIF
 
 
