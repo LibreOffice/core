@@ -109,7 +109,7 @@ TabPage OFA_TP_MISC
     CheckBox CB_FILEDLG
     {
         Pos = MAP_APPFONT( COL1, ROW5 );
-        Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
+        Size = MAP_APPFONT( COL3 - COL1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "~Use %PRODUCTNAME dialogs";
     };
     CheckBox CB_ODMADLG
