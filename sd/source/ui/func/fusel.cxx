@@ -160,6 +160,8 @@ FuSelection::~FuSelection()
 
 BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
+    OSL_TRACE("FuSelection::MouseButtonDown(), clicks=%d", rMEvt.GetClicks() );
+
     // Hack fuer #?????#
     bHideAndAnimate = FALSE;
 
@@ -437,8 +439,11 @@ BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
                         }
                     }
 
-                    if( bMarked && (nSlotId == SID_OBJECT_ROTATE) && !rMEvt.IsShift() )
-                        mpViewShell->GetViewFrame()->GetDispatcher()->Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SYNCHRON);
+                    if( bMarked && bTempRotation && (nSlotId == SID_OBJECT_ROTATE) && !rMEvt.IsShift() && (rMEvt.GetClicks() != 2) )
+                    {
+                        nSlotId = SID_OBJECT_SELECT;
+                        Activate();
+                    }
                 }
             }
         }
@@ -645,6 +650,8 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
+    OSL_TRACE("FuSelection::MouseButtonUp(), clicks=%d", rMEvt.GetClicks() );
+
     BOOL bReturn = FALSE;
     // When the right mouse button is pressed then only select objects
     // (and deselect others) as a preparation for showing the context
@@ -714,6 +721,8 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 
                 if (nSlotId == SID_OBJECT_SELECT
                     && mpView->IsRotateAllowed()
+
+                    && (rMEvt.GetClicks() != 2)
                     && (mpViewShell->GetFrameView()->IsClickChangeRotation()
                         || (pSingleObj
                             && pSingleObj->GetObjInventor()==E3dInventor))
