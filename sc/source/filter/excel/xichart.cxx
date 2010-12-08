@@ -3682,7 +3682,12 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     {
         XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
         xText->ReadRecordGroup( rStrm );
-        maDefTexts[ nTextId ] = xText;
+        XclImpChTextMap::iterator itr = maDefTexts.find(nTextId);
+        if (itr != maDefTexts.end())
+            // Remove existing element before inserting a new one.
+            maDefTexts.erase(itr);
+
+        maDefTexts.insert(XclImpChTextMap::value_type(nTextId, xText));
     }
 }
 
@@ -3729,7 +3734,9 @@ XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
         case EXC_CHTEXTTYPE_AXISLABEL:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
         case EXC_CHTEXTTYPE_DATALABEL:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
     }
-    return maDefTexts.get( nDefTextId );
+
+    XclImpChTextMap::const_iterator itr = maDefTexts.find(nDefTextId);
+    return itr == maDefTexts.end() ? XclImpChTextRef() : itr->second;
 }
 
 bool XclImpChChart::IsManualPlotArea() const
