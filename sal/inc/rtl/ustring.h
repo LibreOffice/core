@@ -1449,7 +1449,7 @@ sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * s
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(sizeof(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
+#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 
