@@ -304,7 +304,7 @@ End Function
 
 
 Function GetFormWizardPaths() as Boolean
-	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/bitmap&quot;)
+	FormPath = GetOfficeSubPath(&quot;Template&quot;,&quot;../wizard/bitmap&quot;)
 	If FormPath &lt;&gt; &quot;&quot; Then
 		WebWizardPath = GetOfficeSubPath(&quot;Template&quot;,&quot;wizard/web&quot;)
 		If WebWizardPath &lt;&gt; &quot;&quot; Then
