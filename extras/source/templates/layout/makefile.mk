@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -24,7 +24,7 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..$/..$/..
+PRJ=..$/..$/..
 
 
 
@@ -35,13 +35,8 @@ TARGET=templateslayout
 
 .INCLUDE : $(PRJ)$/util$/target.pmk
 
-
-
 ZIP1TARGET      = $(TEMPLATE_LAYOUT_IMPRESS_TARGET)
-
-ZIP1LIST	= $(LANGDIR)$/*
-
-
+ZIP1LIST        = * -x makefile -x delzip
 
 .INCLUDE : target.mk
 
