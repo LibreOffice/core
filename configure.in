@@ -4523,6 +4523,9 @@ dnl ===================================================================
 dnl Check for system python
 dnl ===================================================================
 AC_MSG_CHECKING([which python to use])
+if test "$_os" = "WINNT"; then
+   with_system_python=no
+fi
 if test "$_os" = "Darwin" && test "$with_system_python" != "no"; then
    with_system_python=yes
    AC_MSG_RESULT([compiling against MacOSX10.4u.sdk (python version 2.3)])
