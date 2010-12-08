@@ -3356,7 +3356,8 @@ void XclImpChAxesSet::Finalize()
             XclImpChTypeGroupRef xTypeGroup = aIt->second;
             xTypeGroup->Finalize();
             if( xTypeGroup->IsValidGroup() )
-                aValidGroups[ aIt->first ] = xTypeGroup;
+                aValidGroups.insert(
+                    XclImpChTypeGroupMap::value_type(aIt->first, xTypeGroup));
         }
         maTypeGroups.swap( aValidGroups );
     }
@@ -3493,7 +3494,14 @@ void XclImpChAxesSet::ReadChTypeGroup( XclImpStream& rStrm )
 {
     XclImpChTypeGroupRef xTypeGroup( new XclImpChTypeGroup( GetChRoot() ) );
     xTypeGroup->ReadRecordGroup( rStrm );
-    maTypeGroups[ xTypeGroup->GetGroupIdx() ] = xTypeGroup;
+    sal_uInt16 nGroupIdx = xTypeGroup->GetGroupIdx();
+    XclImpChTypeGroupMap::iterator itr = maTypeGroups.find(nGroupIdx);
+    if (itr != maTypeGroups.end())
+        // Remove existing element before inserting a new one.
+        maTypeGroups.erase(itr);
+
+    maTypeGroups.insert(
+        XclImpChTypeGroupMap::value_type(nGroupIdx, xTypeGroup));
 }
 
 Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XDiagram > xDiagram ) const
