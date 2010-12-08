@@ -560,7 +560,7 @@ testcase tExtrasPraesentationseinstellungen
     printlog " Check state of navigator ! Expected: closed"
     Kontext "Navigator"
     if Navigator.exists then
-        '///+ Close Navigator !"
+        printlog " Close Navigator !"
         Navigator.Close
         Warnlog "Navigator: Should have been closed. Closing now."
     else

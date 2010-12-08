@@ -325,7 +325,7 @@ ZentriertLinks.Check
     TabLinienenden.Cancel
     sleep 2
     
-    '///New part for line
+    'New part for line
     'EditSelectAll     printlog "Select all objects in document"
     'sleep 2
     'hTypeKeys "<DELETE>"     printlog "Delete objects"

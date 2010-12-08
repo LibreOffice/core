@@ -49,7 +49,7 @@ testcase tiDatei_Fuer_Anordnen_Erstellen
     
     hMenuSelectNr(4)
     hMenuSelectNr(13)
-    call sSelectEmptyLayout								'/// new document  ///'
+    call sSelectEmptyLayout								
     if Dir(Datei)<>"" then app.Kill(Datei) ' kill old file
     printlog "create 3 overlapping objects "
     for Zaehler = 1 to 3

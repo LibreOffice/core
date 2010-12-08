@@ -259,14 +259,14 @@ testcase tiEditClipboard
     printlog "Get values for position variables"
     Ueber_Text_4 = fGetPositionX()				
     Sleep 1
-    printlog "<b> Edit->Copy </b>"
+    printlog " Edit->Copy"
     EditCopy
-    '///+ Type Key [Deletee]"
+    printlog " Type Key [Delete]"
     hTypeKeys "<DELETE>"
-    '///+ <i> Edit->Paste </i>"
+    printlog "Edit->Paste"
     EditPaste
     sleep 1
-    '///+   Edit->Select All"
+    printlog "Edit->Select All"
     EditSelectAll
     sTemp = fGetPositionX()
     printlog "TabPositionAndSize: comparing position with original position"
