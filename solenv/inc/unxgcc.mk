@@ -90,8 +90,11 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 # -fpermissive should be removed as soon as possible
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE" && "$(HAVE_GCC_VISIBILITY_BROKEN)" != "TRUE"
-CFLAGSCXX += -fvisibility-inlines-hidden
+CFLAGSCXX+=-fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+.IF "$(HAVE_CXX0X)" == "TRUE"
+CFLAGSCXX+=-std=c++0x
+.ENDIF # "$(HAVE_CXX0X)" == "TRUE"
 
 CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
 CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
