@@ -99,6 +99,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     SdrGrafObj*     pNewGrafObj = NULL;
     SdrPageView*    pPV = GetSdrPageView();
     SdrObject*      pPickObj = pObj;
+    const bool bOnMaster = pPV && pPV->GetPage() && pPV->GetPage()->IsMasterPage();
 
     if(pPV && this->ISA(::sd::slidesorter::view::SlideSorterView))
     {
@@ -115,7 +116,7 @@ SdrGrafObj* View::InsertGraphic( const Graphic& rGraphic, sal_Int8& rAction,
     if( mnAction == DND_ACTION_LINK && pPickObj && pPV )
     {
         const bool bIsGraphic = pPickObj->ISA( SdrGrafObj );
-        if( bIsGraphic || pObj->IsEmptyPresObj() )
+        if( bIsGraphic || (pObj->IsEmptyPresObj() && !bOnMaster) )
         {
             if( IsUndoEnabled() )
                 BegUndo(String(SdResId(STR_INSERTGRAPHIC)));
