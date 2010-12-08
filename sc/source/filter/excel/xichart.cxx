@@ -2702,17 +2702,17 @@ Reference< XLabeledDataSequence > XclImpChTypeGroup::CreateCategSequence() const
 
 void XclImpChTypeGroup::ReadChDropBar( XclImpStream& rStrm )
 {
-    sal_uInt16 nDropBar = EXC_CHDROPBAR_NONE;
-    if( !maDropBars.has( EXC_CHDROPBAR_UP ) )
-        nDropBar = EXC_CHDROPBAR_UP;
-    else if( !maDropBars.has( EXC_CHDROPBAR_DOWN ) )
-        nDropBar = EXC_CHDROPBAR_DOWN;
-
-    if( nDropBar != EXC_CHDROPBAR_NONE )
+    if (maDropBars.find(EXC_CHDROPBAR_UP) == maDropBars.end())
     {
-        XclImpChDropBarRef xDropBar( new XclImpChDropBar( nDropBar ) );
-        xDropBar->ReadRecordGroup( rStrm );
-        maDropBars[ nDropBar ] = xDropBar;
+        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_UP));
+        p->ReadRecordGroup(rStrm);
+        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_UP, p));
+    }
+    else if(maDropBars.find(EXC_CHDROPBAR_DOWN) == maDropBars.end())
+    {
+        XclImpChDropBarRef p(new XclImpChDropBar(EXC_CHDROPBAR_DOWN));
+        p->ReadRecordGroup(rStrm);
+        maDropBars.insert(XclImpChDropBarMap::value_type(EXC_CHDROPBAR_DOWN, p));
     }
 }
 
