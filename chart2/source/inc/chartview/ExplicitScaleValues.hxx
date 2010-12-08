@@ -57,10 +57,10 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitScaleData
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling > Scaling;
 
-    long AxisType;//see ::com::sun::star::chart2::AxisType
-    bool ShiftedCategoryPosition;
-    long TimeResolution; //constant of type <type>::com::sun::star::chart::TimeUnit</type>
-    Date NullDate;
+    sal_Int32   AxisType;//see ::com::sun::star::chart2::AxisType
+    bool        ShiftedCategoryPosition;
+    sal_Int32   TimeResolution; //constant of type <type>::com::sun::star::chart::TimeUnit</type>
+    Date        NullDate;
 };
 
 struct OOO_DLLPUBLIC_CHARTVIEW ExplicitSubIncrement
@@ -72,13 +72,13 @@ struct OOO_DLLPUBLIC_CHARTVIEW ExplicitSubIncrement
         sub-tick-marks are displayed between two superior ticks.
 
      */
-    long    IntervalCount;
+    sal_Int32 IntervalCount;
 
     /** If <TRUE/>, the distance between two sub-tick-marks on the
         screen is always the same.  If <FALSE/>, the distances may
         differ depending on the <type>XScaling</type>.
      */
-    bool    PostEquidistant;
+    bool PostEquidistant;
 };
 
 /** describes how tickmarks are positioned on the scale of an axis.
