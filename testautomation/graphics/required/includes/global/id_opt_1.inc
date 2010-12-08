@@ -84,13 +84,17 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
         Tabulatorabstand.SetText (sTabAbstand)
 
         if (gApplication = "DRAW") then
+            printlog "Index Zeichnungsmasstab= " & iZeichnungsmasstab
+            printlog "Zeichnungsmasstab Item Count= " & (Zeichnungsmasstab.GetItemCount)
             If ( Zeichnungsmasstab.GetItemCount <> iZeichnungsmasstab ) Then
-                Zeichnungsmasstab.Select (Zeichnungsmasstab.GetItemCount) _
-            Else Zeichnungsmasstab.Select (1)
-                iTemp2 = Zeichnungsmasstab.GetSelIndex
-                if irgendwas(6) Then SetzenAufKreis.UnCheck Else           SetzenAufKreis.Check
+                Zeichnungsmasstab.Select (Zeichnungsmasstab.GetItemCount)
+            Else 
+                Zeichnungsmasstab.Select (1)
             endif
-            else ' IMPRESS
+            iTemp2 = Zeichnungsmasstab.GetSelIndex
+            printlog "iTemp2= " & iTemp2
+            if irgendwas(6) Then SetzenAufKreis.UnCheck Else           SetzenAufKreis.Check
+        else ' IMPRESS
             if irgendwas(7) Then MitAutopilotStarten.UnCheck         Else  MitAutopilotStarten.Check
             if irgendwas(8) Then MitAktuellerSeite.UnCheck           Else  MitAktuellerSeite.Check
             if irgendwas(9) Then AlleAbsatzabstaendeAddieren.UnCheck Else  AlleAbsatzabstaendeAddieren.Check
@@ -110,7 +114,7 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
         Kontext "ExtrasOptionenDlg"
         ExtrasOptionenDlg.OK
 
-        printlog "Office quit - start"
+        printlog "-------> Office quit - start"
 
         ExitRestartTheOffice
         printlog "opening new doc to get the Options"
@@ -127,6 +131,8 @@ testcase tToolsOptionsDrawGeneral (sApplication as string)
         If ( irgendwas(5) = ObjekteImmerVerschiebbar.IsChecked   ) Then WarnLog "Objects Always Movable state changed"
 
         if (gApplication = "DRAW") then
+        printlog "Index Zeichnungsmasstab= " & (Zeichnungsmasstab.GetSelIndex)
+        printlog "iTemp2= " & iTemp2
          If ( Zeichnungsmasstab.GetSelIndex <> iTemp2 ) Then WarnLog "Drawing Scale state changed BUG #97391 is:"+Zeichnungsmasstab.GetSelIndex+"; should: "+iTemp2
          If ( irgendwas(6) = SetzenAufKreis.IsChecked             ) Then WarnLog "'Do not disort objects in curve' state changed"
         else ' IMPRESS
