@@ -110,6 +110,7 @@ my_components = \
     mcnttype \
     migrationoo2 \
     msforms \
+    msword \
     mysql \
     odbc \
     offacc \
