@@ -975,6 +975,11 @@ Directory gid_Dir_Share_Template_Wizard
     DosName = "wizard";
 End
 
+Directory gid_Dir_Share_Template_Layout
+    ParentID = gid_Dir_Template;
+    DosName = "layout";
+End
+
 Directory gid_Dir_Share_Template_Wizard_Bitmap
     ParentID = gid_Dir_Share_Template_Wizard;
     DosName = "bitmap";
