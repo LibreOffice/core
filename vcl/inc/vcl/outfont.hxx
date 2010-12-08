@@ -116,7 +116,7 @@ public: // TODO: hide members behind accessor methods
 // TODO: make cloning cheaper
 
 // abstract base class for physical font faces
-class VCL_DLLPUBLIC ImplFontData : public ImplDevFontAttributes
+class VCL_PLUGIN_PUBLIC ImplFontData : public ImplDevFontAttributes
 {
 public:
     // by using an ImplFontData object as a factory for its corresponding
@@ -140,7 +140,7 @@ public:
     virtual ImplFontData*   Clone() const = 0;
 
 protected:
-                            ImplFontData( const ImplDevFontAttributes&, int nMagic );
+    explicit                ImplFontData( const ImplDevFontAttributes&, int nMagic );
     void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
 
     long                    mnWidth;    // Width (in pixels)
@@ -185,7 +185,7 @@ public: // TODO: change to private
 // TODO: merge with ImplFontCache
 // TODO: rename to LogicalFontManager
 
-class VCL_DLLPUBLIC ImplDevFontList
+class VCL_PLUGIN_PUBLIC ImplDevFontList
 {
 private:
     friend class WinGlyphFallbackSubstititution;
@@ -267,7 +267,7 @@ struct ImplKernPairData
 class ImplFontMetricData : public ImplFontAttributes
 {
 public:
-            ImplFontMetricData( const ImplFontSelectData& );
+    explicit ImplFontMetricData( const ImplFontSelectData& );
     void    ImplInitTextLineSize( const OutputDevice* pDev );
     void    ImplInitAboveTextLineSize();
 
@@ -324,10 +324,10 @@ public: // TODO: hide members behind accessor methods
 // TODO: rename ImplFontEntry to LogicalFontInstance
 // TODO: allow sharing of metrics for related fonts
 
-class VCL_DLLPUBLIC ImplFontEntry
+class VCL_PLUGIN_PUBLIC ImplFontEntry
 {
 public:
-                        ImplFontEntry( const ImplFontSelectData& );
+    explicit            ImplFontEntry( const ImplFontSelectData& );
     virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private

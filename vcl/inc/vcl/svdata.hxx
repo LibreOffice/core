@@ -391,8 +391,8 @@ void        ImplFreeEventHookData();
 long        ImplCallPreNotify( NotifyEvent& rEvt );
 long        ImplCallEvent( NotifyEvent& rEvt );
 
-extern VCL_DLLPUBLIC ImplSVData* pImplSVData;
-inline VCL_DLLPUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
+extern VCL_PLUGIN_PUBLIC ImplSVData* pImplSVData;
+inline VCL_PLUGIN_PUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 inline ImplSVData* ImplGetAppSVData() { return ImplGetSVData(); }
 
 bool ImplInitAccessBridge( BOOL bAllowCancel, BOOL &rCancelled );

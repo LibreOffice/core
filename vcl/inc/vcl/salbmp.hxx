@@ -38,7 +38,7 @@ class SalGraphics;
 class BitmapPalette;
 struct BitmapSystemData;
 
-class VCL_DLLPUBLIC SalBitmap
+class VCL_PLUGIN_PUBLIC SalBitmap
 {
 public:
     SalBitmap() {}

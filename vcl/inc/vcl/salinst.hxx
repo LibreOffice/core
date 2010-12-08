@@ -68,7 +68,7 @@ namespace vos { class IMutex; }
 // - SalInstance -
 // ---------------
 
-class VCL_DLLPUBLIC SalInstance
+class VCL_PLUGIN_PUBLIC SalInstance
 {
 public:
     typedef bool(*Callback)(void*,void*,int);
@@ -197,7 +197,7 @@ void DestroySalInstance( SalInstance* pInst );
 
 void SalAbort( const XubString& rErrorText );
 
-VCL_DLLPUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
+VCL_PLUGIN_PUBLIC const ::rtl::OUString& SalGetDesktopEnvironment();
 
 // -----------
 // - SalData -
