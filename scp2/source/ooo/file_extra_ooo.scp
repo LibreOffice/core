@@ -350,18 +350,17 @@ File gid_File_Extra_Symbols
     Name = "symbols.zip";
 End
 
-File gid_File_Extra_Tpllayoutimpr_Lang
-    Dir = gid_Dir_Template_Layout;
-    TXT_FILE_BODY;
-    Styles = (ARCHIVE, DONT_OVERWRITE);
-    EXTRA_ALL_LANG(tpllayoutimpr,zip);
-End
-
 File gid_File_Extra_Tplpresntimpr_Lang
     Dir = gid_Dir_Template_Presnt;
     TXT_FILE_BODY;
     Styles = (ARCHIVE, DONT_OVERWRITE);
     EXTRA_ALL_LANG(tplpresntimpr,zip);
+End
+
+File gid_File_Extra_Tpllayoutimpr
+    Dir = gid_Dir_Share_Template_Layout;
+    ARCHIVE_TXT_FILE_BODY;
+    Name = "tpllayoutimpr.zip";
 End
 
 File gid_File_Extra_Tplwizbitmap
