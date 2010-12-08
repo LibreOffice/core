@@ -22592,6 +22592,12 @@
       <attribute name="uri" tokenid="ooxml:CT_SmartTagRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
+    <resource name="CT_SdtBlock" resource="Properties">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtContentBlock"/>
+    </resource>
+    <resource name="CT_SdtContentBlock" resource="Properties"/>
     <resource name="EG_PContent" resource="Properties">
       <element name="fldSimple" tokenid="ooxml:EG_PContent_fldSimple"/>
       <element name="hyperlink" tokenid="ooxml:EG_PContent_hyperlink"/>
@@ -23324,7 +23330,7 @@
       <action name="start" action="footnoteCont"/>
       <action name="start" action="endnoteSeparator"/>
       <action name="start" action="endnoteCont"/>
--->
+      -->
       <action name="end" action="endCharacterGroup"/>
       <action name="end" action="endParagraphGroup"/>
       <action name="end" action="endSectionGroup"/>
