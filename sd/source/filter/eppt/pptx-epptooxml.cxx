@@ -1542,7 +1542,7 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
 
     Reference< beans::XPropertySet > xPropSet( xSlide, uno::UNO_QUERY );
     xPropSet->setPropertyValue( US( "Layout" ), makeAny( short( aLayoutInfo[ nOffset ].nType ) ) );
-    dump_pset( xPropSet );
+    DBG(dump_pset( xPropSet ));
 
     mXPagePropSet = Reference< XPropertySet >( xSlide, UNO_QUERY );
     mXShapes = Reference< XShapes >( xSlide, UNO_QUERY );
