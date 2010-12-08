@@ -144,6 +144,7 @@ static SdTypesCache gImplTypesCache;
 
 #define WID_THAT_NEED_ANIMINFO 19
 
+#define WID_PLACEHOLDERTEXT 24
 
 
         #define IMPRESS_MAP_ENTRIES \
@@ -168,6 +169,7 @@ static SdTypesCache gImplTypesCache;
         { MAP_CHAR_LEN(UNO_NAME_OBJ_VERB),          WID_VERB,            &::getCppuType((const sal_Int32*)0),                       0, 0},\
         { MAP_CHAR_LEN("IsAnimation"),              WID_ISANIMATION,     &::getBooleanCppuType(),                                   0, 0},\
         { MAP_CHAR_LEN("NavigationOrder"),          WID_NAVORDER,        &::getCppuType((const sal_Int32*)0),                       0, 0},\
+        { MAP_CHAR_LEN("PlaceholderText"),          WID_PLACEHOLDERTEXT, &::getCppuType((const OUString*)0),                        0, 0},\
         { 0,0,0,0,0,0}
 
 
@@ -777,6 +779,9 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         case WID_ISANIMATION:
             aRet <<= (sal_Bool)( pInfo && pInfo->mbIsMovie);
             break;
+        case WID_PLACEHOLDERTEXT:
+            aRet <<= GetPlaceholderText();
+            break;
         case WID_BOOKMARK:
         {
             OUString aString;
@@ -964,6 +969,24 @@ sal_Bool SdXShape::IsEmptyPresObj() const throw()
 
     return sal_False;
 }
+
+OUString SdXShape::GetPlaceholderText() const
+{
+    // only possible if this actually *is* a presentation object
+    if( !IsPresObj() )
+        return OUString();
+
+    SdrObject* pObj = mpShape->GetSdrObject();
+    if( pObj == NULL )
+        return OUString();
+
+    SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
+    DBG_ASSERT( pPage, "no page?" );
+    if( pPage == NULL )
+        return OUString();
+
+    return pPage->GetPresObjText( pPage->GetPresObjKind(pObj) );
+ }
 
 /** sets/reset the empty status of a presentation object
 */
