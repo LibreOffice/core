@@ -940,8 +940,18 @@ void DrawingML::WriteRun( Reference< XTextRange > rRun )
     sal_Bool bIsField = sal_False;
     OUString sText = rRun->getString();
 
-    if( sText.getLength() < 1)
-        return;
+    if( sText.getLength() < 1) {
+        Reference< XPropertySet > xPropSet( rRun, UNO_QUERY );
+
+        try {
+        if( !xPropSet.is() || !( xPropSet->getPropertyValue( S( "PlaceholderText" ) ) >>= sText ) )
+            return;
+        if( sText.getLength() < 1 )
+            return;
+        } catch (Exception e) {
+            return;
+        }
+    }
 
     if( ( sFieldType = GetFieldType( rRun, bIsField ) ) ) {
         OStringBuffer sUUID(39);
@@ -1220,7 +1230,7 @@ void DrawingML::WriteParagraph( Reference< XTextContent > rParagraph )
         Any any ( enumeration->nextElement() );
 
         if (any >>= run) {
-            if( !bPropertiesWritten && run->getString().getLength() ) {
+            if( !bPropertiesWritten ) {
                 WriteParagraphProperties( rParagraph );
                 bPropertiesWritten = TRUE;
             }
@@ -1305,6 +1315,7 @@ void DrawingML::WriteText( Reference< XShape > rXShape  )
                            XML_anchorCtr, bHorizontalCenter ? "1" : NULL,
                            XML_vert, sWritingMode,
                            FSEND );
+    //mpFS->singleElement( FSNS( XML_a, XML_lstStyle ), FSEND );
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
     if( !access.is() )

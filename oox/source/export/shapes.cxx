@@ -103,8 +103,6 @@ using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using ::sax_fastparser::FSHelperPtr;
 
-DBG(extern void dump_pset(Reference< XPropertySet > rXPropSet));
-
 #define IDS(x) (OString(#x " ") + OString::valueOf( mnShapeIdMax++ )).getStr()
 
 struct CustomShapeTypeTranslationTable
@@ -401,9 +399,26 @@ awt::Size ShapeExport::MapSize( const awt::Size& rSize ) const
 
 sal_Bool ShapeExport::NonEmptyText( Reference< XShape > xShape )
 {
+    Reference< XPropertySet > xPropSet( xShape, UNO_QUERY );
+    sal_Bool bIsEmptyPresObj = sal_False;
+    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsEmptyPresentationObject" ) ) >>= bIsEmptyPresObj ) ) {
+        DBG(printf("empty presentation object %d, props:\n", bIsEmptyPresObj));
+        if( bIsEmptyPresObj )
+            return sal_True;
+    }
+    sal_Bool bIsPresObj = sal_False;
+    if( xPropSet.is() && ( xPropSet->getPropertyValue( S( "IsPresentationObject" ) ) >>= bIsPresObj ) ) {
+        DBG(printf("presentation object %d, props:\n", bIsPresObj));
+        if( bIsPresObj )
+            return sal_True;
+    }
+
     Reference< XSimpleText > xText( xShape, UNO_QUERY );
 
-    return ( xText.is() && xText->getString().getLength() );
+    if( xText.is() )
+        return xText->getString().getLength();
+
+    return sal_False;
 }
 
 ShapeExport& ShapeExport::WriteBezierShape( Reference< XShape > xShape, sal_Bool bClosed )
