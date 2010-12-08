@@ -65,7 +65,7 @@ typedef PNODE*      PPNODE;
 class ImpNodeCache;
 class BitmapReadAccess;
 
-class VCL_DLLPUBLIC Octree
+class VCL_PLUGIN_PUBLIC Octree
 {
 private:
 
@@ -127,7 +127,7 @@ inline USHORT Octree::GetBestPaletteIndex( const BitmapColor& rColor )
 // - InverseColorMap -
 // -------------------
 
-class VCL_DLLPUBLIC InverseColorMap
+class VCL_PLUGIN_PUBLIC InverseColorMap
 {
 private:
 
@@ -143,7 +143,7 @@ private:
 
 public:
 
-                        InverseColorMap( const BitmapPalette& rPal );
+    explicit            InverseColorMap( const BitmapPalette& rPal );
                         ~InverseColorMap();
 
     inline USHORT       GetBestPaletteIndex( const BitmapColor& rColor );
