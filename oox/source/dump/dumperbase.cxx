@@ -65,6 +65,8 @@ using ::com::sun::star::io::XTextOutputStream;
 using ::comphelper::MediaDescriptor;
 using ::oox::core::FilterBase;
 
+using namespace ::com::sun::star;
+
 namespace oox {
 namespace dump {
 
@@ -1581,18 +1583,18 @@ NameListRef SharedConfigData::getNameList( const OUString& rListName ) const
     return xList;
 }
 
-OUString SharedConfigData::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+uno::Sequence< beans::NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    OUString aPassword;
+    uno::Sequence< beans::NamedValue > aEncryptionData;
     if( !mbPwCancelled )
     {
         ::std::vector< OUString > aDefaultPasswords;
         aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
-        aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+        aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
             rVerifier, mrMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
-        mbPwCancelled = aPassword.getLength() == 0;
+        mbPwCancelled = aEncryptionData.getLength() == 0;
     }
-    return aPassword;
+    return aEncryptionData;
 }
 
 bool SharedConfigData::implIsValid() const
@@ -1764,9 +1766,9 @@ NameListRef Config::getNameList( const String& rListName ) const
     return implGetNameList( rListName );
 }
 
-OUString Config::requestPassword( ::comphelper::IDocPasswordVerifier& rVerifier )
+uno::Sequence< beans::NamedValue > Config::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
 {
-    return mxCfgData->requestPassword( rVerifier );
+    return mxCfgData->requestEncryptionData( rVerifier );
 }
 
 bool Config::isPasswordCancelled() const
