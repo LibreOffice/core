@@ -29,7 +29,7 @@
 
 ModalDialog SV_DLG_PRINT
 {
-    HelpID = ".HelpId:vcl:PrintDialog:Dialog";
+    HelpID = ".HelpID:vcl:PrintDialog:Dialog";
     Text [en-US] = "Print";
     Closeable = TRUE;
     Sizeable = TRUE;
