@@ -171,7 +171,6 @@ ScDPObject::ScDPObject( ScDocument* pD ) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
-    mnAutoFormatIndex( 65535 ),
     bAllowMove( FALSE ),
     nHeaderRows( 0 ),
     mbHeaderLayout(false),
@@ -194,7 +193,6 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pOutput( NULL ),
     bSettingsChanged( FALSE ),
     bAlive( FALSE ),
-    mnAutoFormatIndex( r.mnAutoFormatIndex ),
     bAllowMove( FALSE ),
     nHeaderRows( r.nHeaderRows ),
     mbHeaderLayout( r.mbHeaderLayout ),
@@ -254,16 +252,6 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     }
 
     InvalidateData();       // re-init source from SaveData
-}
-
-void ScDPObject::SetAutoFormatIndex(const sal_uInt16 nIndex)
-{
-    mnAutoFormatIndex = nIndex;
-}
-
-sal_uInt16 ScDPObject::GetAutoFormatIndex() const
-{
-    return mnAutoFormatIndex;
 }
 
 void ScDPObject::SetHeaderLayout (bool bUseGrid)

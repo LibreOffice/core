@@ -106,7 +106,6 @@ private:
     ScDPOutput*             pOutput;
     BOOL                    bSettingsChanged;
     BOOL                    bAlive;         // FALSE if only used to hold settings
-    sal_uInt16              mnAutoFormatIndex;
     BOOL                    bAllowMove;
     long                    nHeaderRows;    // page fields plus filter button
     bool                    mbHeaderLayout;  // TRUE : grid, FALSE : standard
@@ -149,9 +148,6 @@ public:
 
     void                SetOutRange(const ScRange& rRange);
     const ScRange&      GetOutRange() const     { return aOutRange; }
-
-    void                SetAutoFormatIndex (const sal_uInt16 nIndex);
-    sal_uInt16          GetAutoFormatIndex() const;
 
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const;
