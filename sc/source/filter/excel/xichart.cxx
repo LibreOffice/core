@@ -3682,12 +3682,14 @@ void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
     {
         XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
         xText->ReadRecordGroup( rStrm );
-        XclImpChTextMap::iterator itr = maDefTexts.find(nTextId);
-        if (itr != maDefTexts.end())
-            // Remove existing element before inserting a new one.
-            maDefTexts.erase(itr);
-
-        maDefTexts.insert(XclImpChTextMap::value_type(nTextId, xText));
+        XclImpChTextMap::iterator itr = maDefTexts.lower_bound(nTextId);
+        if (itr != maDefTexts.end() && !(maDefTexts.key_comp()(nTextId, itr->first)))
+        {
+            // Key exists. Update the existing element.
+            itr->second = xText;
+        }
+        else
+            maDefTexts.insert(itr, XclImpChTextMap::value_type(nTextId, xText));
     }
 }
 
