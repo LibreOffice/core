@@ -80,6 +80,9 @@ private:
 };
 
 Test::Test()
+    : m_pDispatcher(NULL)
+    , m_pSmCmdBoxWindow(NULL)
+    , m_pEditWindow(NULL)
 {
     m_xContext = cppu::defaultBootstrap_InitialComponentContext();
     m_xFactory = m_xContext->getServiceManager();
@@ -99,7 +102,7 @@ Test::Test()
 void Test::setUp()
 {
     m_xDocShRef = new SmDocShell(
-        SFXMODEL_EMBEDDED_OBJECT |
+        SFXMODEL_STANDARD |
         SFXMODEL_DISABLE_EMBEDDED_SCRIPTS |
         SFXMODEL_DISABLE_DOCUMENT_RECOVERY);
     m_xDocShRef->DoInitNew(0);
@@ -345,8 +348,6 @@ void Test::tViewZoom()
         CPPUNIT_ASSERT_MESSAGE("Should be optimal zoom", nFinalZoom == nOptimalZoom);
     }
 
-#if 0
-    //TO-DO: switch from embedded to normal to get these meaningfull
     {
         SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
         m_pViewShell->Execute(aZoomOut);
@@ -374,7 +375,6 @@ void Test::tViewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be same as optimal zoom", nFinalZoom == nOptimalZoom);
     }
-#endif
 
     {
         SfxRequest aZoomOut(SID_ZOOMOUT, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
