@@ -46,10 +46,10 @@ TARGET=so_neon
     @echo "neon disabled...."
 .ENDIF
 
-NEON_NAME=neon-0.29.3
+NEON_NAME=neon-0.29.5
 
 TARFILE_NAME=$(NEON_NAME)
-TARFILE_MD5=ba1015b59c112d44d7797b62fe7bee51
+TARFILE_MD5=ff369e69ef0f0143beb5626164e87ae2
 PATCH_FILES=neon.patch
 
 .IF "$(GUI)"=="WNT"

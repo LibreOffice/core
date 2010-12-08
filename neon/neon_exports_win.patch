@@ -1,5 +1,5 @@
---- misc/neon-0.29.3/src/exports.map	2009-09-29 10:28:13.531250000 +0200
-+++ misc/build/neon-0.29.3/src/exports.map	2009-09-21 12:16:53.453125000 +0200
+--- misc/neon-0.29.5/src/exports.map	2009-09-29 10:28:13.531250000 +0200
++++ misc/build/neon-0.29.5/src/exports.map	2009-09-21 12:16:53.453125000 +0200
 @@ -0,0 +1,294 @@
 +UDK_3_0_0 {
 +	global:
