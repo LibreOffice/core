@@ -95,6 +95,15 @@ namespace sdr
             // Process the whole displaying
             virtual void ProcessDisplay(DisplayInfo& rDisplayInfo);
 
+            // VirtualDevice? Default is false
+            virtual bool isOutputToVirtualDevice() const;
+
+            // recording MetaFile? Default is false
+            virtual bool isOutputToRecordingMetaFile() const;
+
+            // pdf export? Default is false
+            virtual bool isOutputToPDFFile() const;
+
             // access to OutputDevice. May return 0L like the default implementations do. Needs to be overloaded as needed.
             virtual OutputDevice* TryToGetOutputDevice() const;
         };
