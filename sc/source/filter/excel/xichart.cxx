@@ -2011,7 +2011,13 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 {
     XclImpChSerErrorBarRef xErrorBar( new XclImpChSerErrorBar( GetChRoot() ) );
     xErrorBar->ReadChSerErrorBar( rStrm );
-    maErrorBars[ xErrorBar->GetBarType() ] = xErrorBar;
+    sal_uInt8 nBarType = xErrorBar->GetBarType();
+    XclImpChSerErrorBarMap::iterator itr = maErrorBars.find(nBarType);
+    if (itr != maErrorBars.end())
+        // Remove existing element.
+        maErrorBars.erase(itr);
+
+    maErrorBars.insert(XclImpChSerErrorBarMap::value_type(nBarType, xErrorBar));
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
