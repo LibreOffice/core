@@ -22592,6 +22592,11 @@
       <attribute name="uri" tokenid="ooxml:CT_SmartTagRun_uri"/>
       <attribute name="element" tokenid="ooxml:CT_SmartTagRun_element"/>
     </resource>
+    <resource name="CT_SdtRun" resource="Properties">
+      <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
+      <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
+      <element name="sdtContent" tokenid="ooxml:CT_SdtContentRun"/>
+    </resource>
     <resource name="CT_SdtBlock" resource="Properties">
       <element name="sdtPr" tokenid="ooxml:CT_SdtPr"/>
       <element name="sdtEndPr" tokenid="ooxml:CT_SdtEndPr"/>
