@@ -3692,11 +3692,13 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
     xDataFmt->ReadRecordGroup( rStrm );
     if( xDataFmt->GetPointPos().mnSeriesIdx <= EXC_CHSERIES_MAXSERIES )
     {
-        XclImpChDataFormatRef& rxMapFmt = maDataFmts[ xDataFmt->GetPointPos() ];
+        const XclChDataPointPos& rPos = xDataFmt->GetPointPos();
+        if (maDataFmts.find(rPos) == maDataFmts.end())
+            // No element exists for this data point.  Insert it.
+            maDataFmts.insert(XclImpChDataFormatMap::value_type(rPos, xDataFmt));
+
         /*  Do not overwrite existing data format group, Excel always uses the
             first data format group occuring in any CHSERIES group. */
-        if( !rxMapFmt )
-            rxMapFmt = xDataFmt;
     }
 }
 
