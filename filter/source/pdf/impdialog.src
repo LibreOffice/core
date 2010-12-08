@@ -265,6 +265,12 @@ TabPage  RID_PDF_TAB_GENER
     };
 };
 
+WarningBox RID_PDF_WARNPDFAPASSWORD
+{
+    Title[en-US] = "PDF/A Export";
+    Message[ en-US ] = "PDF/A does not allow encryption. The exported PDF file will not be password protected.";
+};
+
 //----------------------------------------------------------
 //tab page for PDF Export, opening features
 TabPage  RID_PDF_TAB_OPNFTR
@@ -607,6 +613,11 @@ TabPage  RID_PDF_TAB_SECURITY
         Text [ en-US ] = "PDF document will not be encrypted";
     };
 
+    String STR_USER_PWD_PDFA
+    {
+        Text [en-US] = "PDF doument will not be encrypted due to PDF/A export.";
+    };
+
     FixedText FT_OWNER_PWD
     {
         Pos = MAP_APPFONT( 12 , 65 );
@@ -631,6 +642,11 @@ TabPage  RID_PDF_TAB_SECURITY
     String  STR_OWNER_PWD_UNREST
     {
         Text [ en-US ] = "PDF document will be unrestricted";
+    };
+
+    String STR_OWNER_PWD_PDFA
+    {
+        Text [en-US] = "PDF doument will not be restricted due to PDF/A export.";
     };
 
 //////////////////////////////
