@@ -1518,7 +1518,7 @@ sal_Int32 PowerPointExport::GetLayoutFileId( sal_Int32 nOffset, sal_uInt32 nMast
     return mLayoutInfo[ nOffset ].mnFileIdArray[ nMasterNum ];
 }
 
-void PowerPointExport::ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum )
+void PowerPointExport::ImplWriteLayout( sal_Int32 /*nOffset*/, sal_uInt32 /*nMasterNum*/ )
 {
     // we write all the layouts together with master(s)
     // ImplWritePPTXLayout( GetPPTXLayoutId( nOffset ), nMasterNum );
@@ -1534,8 +1534,11 @@ void PowerPointExport::ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMaste
     Reference< container::XIndexAccess > xIndexAccess( xDrawPages, uno::UNO_QUERY );
 
     xSlide = xDrawPages->insertNewByIndex( xIndexAccess->getCount() );
+
+#ifdef DEBUG
     if( xSlide.is() )
-        DBG(printf("new page created\n"));
+        printf("new page created\n");
+#endif
 
     Reference< beans::XPropertySet > xPropSet( xSlide, uno::UNO_QUERY );
     xPropSet->setPropertyValue( US( "Layout" ), makeAny( short( aLayoutInfo[ nOffset ].nType ) ) );
