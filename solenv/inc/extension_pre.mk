@@ -39,11 +39,11 @@ COMPONENT_MANIFEST*:=$(EXTENSIONDIR)/META-INF/manifest.xml
 MANIFEST_SRC*:=manifest.xml
 
 .IF "$(GUI)" == "WIN" || "$(GUI)" == "WNT"
-PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)/registration/license_$i.txt)
-COMPONENT_LIC_TEMPL*:=registration/license_xxx.txt
+PACKLICS*:=$(EXTENSIONDIR)/registration/license.txt
+COMPONENT_LIC_TEMPL*:=registration/license.txt
 .ELSE
-PACKLICS*:=$(foreach,i,$(alllangiso) $(EXTENSIONDIR)/registration/LICENSE_$i)
-COMPONENT_LIC_TEMPL*:=registration/LICENSE_xxx
+PACKLICS*:=$(EXTENSIONDIR)/registration/LICENSE
+COMPONENT_LIC_TEMPL*:=registration/LICENSE
 .ENDIF
 
 #TODO:  check ZIP9TARGET for previous use!
