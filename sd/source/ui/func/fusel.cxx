@@ -160,8 +160,6 @@ FuSelection::~FuSelection()
 
 BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
-    OSL_TRACE("FuSelection::MouseButtonDown(), clicks=%d", rMEvt.GetClicks() );
-
     // Hack fuer #?????#
     bHideAndAnimate = FALSE;
 
@@ -650,8 +648,6 @@ BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
 
 BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
-    OSL_TRACE("FuSelection::MouseButtonUp(), clicks=%d", rMEvt.GetClicks() );
-
     BOOL bReturn = FALSE;
     // When the right mouse button is pressed then only select objects
     // (and deselect others) as a preparation for showing the context
