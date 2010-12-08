@@ -1544,7 +1544,7 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
         return true;
 
     osl::File aFile( aFilePath );
-    rc = aFile.open( OpenFlag_Write | OpenFlag_Create );
+    rc = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     if ( rc != osl::FileBase::E_None ) return false;
 
