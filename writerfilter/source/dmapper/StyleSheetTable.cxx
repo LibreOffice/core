@@ -25,6 +25,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#include <resourcemodel/ResourceModelHelper.hxx>
 #include <StyleSheetTable.hxx>
 #include <dmapper/DomainMapper.hxx>
 #include <NumberingManager.hxx>
@@ -346,7 +347,6 @@ struct StyleSheetTable_Impl
     StringPairMap_t                         m_aStyleNameMap;
     ListCharStylePropertyVector_t           m_aListCharStylePropertyVector;
 
-
     StyleSheetTable_Impl(DomainMapper& rDMapper, uno::Reference< text::XTextDocument> xTextDocument);
 
     ::rtl::OUString HasListCharStyle( const PropertyValueVector_t& rCharProperties );
@@ -496,11 +496,6 @@ void StyleSheetTable::attribute(Id Name, Value & val)
         break;
         case NS_ooxml::LN_CT_Style_type:
         {
-/*          defaults should be set at the service "com.sun.star.text.Defaults"
-             if (nIntValue == 1)
-                *(m_pImpl->m_pCurrentEntry->pProperties) = *(m_pImpl->m_pDefaultParaProps);
-            else if (nIntValue == 2)
-                *(m_pImpl->m_pCurrentEntry->pProperties) = *(m_pImpl->m_pDefaultCharProps);*/
             StyleType nType = ( StyleType ) nIntValue;
             if ( nType == STYLE_TYPE_TABLE )
             {
@@ -588,7 +583,6 @@ void StyleSheetTable::sprm(Sprm & rSprm)
         break;
         case NS_ooxml::LN_CT_Style_tblPr: //contains table properties
         case NS_ooxml::LN_CT_Style_tblStylePr: //contains  to table properties
-        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         case NS_ooxml::LN_CT_TblPrBase_tblInd: //table properties - at least width value and type
         case NS_ooxml::LN_EG_RPrBase_rFonts: //table fonts
         {
@@ -616,15 +610,17 @@ void StyleSheetTable::sprm(Sprm & rSprm)
             }
             break;
         }
+        case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
         case NS_ooxml::LN_CT_PPrDefault_pPr:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultParaProps );
-            m_pImpl->m_rDMapper.sprm( rSprm );
+            resourcemodel::resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( true );
         break;
+        case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
         case NS_ooxml::LN_CT_RPrDefault_rPr:
             m_pImpl->m_rDMapper.PushStyleSheetProperties( m_pImpl->m_pDefaultCharProps );
-            m_pImpl->m_rDMapper.sprm( rSprm );
+            resourcemodel::resolveSprmProps( m_pImpl->m_rDMapper, rSprm );
             m_pImpl->m_rDMapper.PopStyleSheetProperties();
             applyDefaults( false );
         break;

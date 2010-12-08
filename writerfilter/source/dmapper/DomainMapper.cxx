@@ -3013,6 +3013,10 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     }
     break;
 
+    case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
+    case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
+        GetStyleSheetTable()->sprm( rSprm );
+    break;
     case NS_ooxml::LN_CT_PPr_sectPr:
     case NS_ooxml::LN_EG_RPrBase_color:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
@@ -3024,8 +3028,6 @@ void DomainMapper::sprm( Sprm& rSprm, PropertyMapPtr rContext, SprmType eSprmTyp
     case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_CT_RPrDefault_rPr:
     case NS_ooxml::LN_CT_PPrDefault_pPr:
-    case NS_ooxml::LN_CT_DocDefaults_pPrDefault:
-    case NS_ooxml::LN_CT_DocDefaults_rPrDefault:
     case NS_ooxml::LN_CT_Style_pPr:
     case NS_ooxml::LN_CT_Style_rPr:
     case NS_ooxml::LN_CT_PPr_rPr:
