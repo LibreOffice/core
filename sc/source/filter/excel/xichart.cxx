@@ -2044,8 +2044,19 @@ XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
 
 XclImpChTextRef* XclImpChSeries::GetDataLabelRef( sal_uInt16 nPointIdx )
 {
-    if( (nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT) )
-        return &maLabels[ nPointIdx ];
+    if ((nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT))
+    {
+        XclImpChTextMap::iterator itr = maLabels.find(nPointIdx);
+        if (itr == maLabels.end())
+        {
+            // No object exists at this point index position.  Insert a new one.
+            XclImpChTextRef p(new XclImpChText(GetChRoot()));
+            pair<XclImpChTextMap::iterator, bool> r =
+                maLabels.insert(XclImpChTextMap::value_type(nPointIdx, p));
+            itr = r.first;
+        }
+        return &itr->second;
+    }
     return 0;
 }
 
