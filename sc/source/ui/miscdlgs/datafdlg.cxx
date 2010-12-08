@@ -286,7 +286,7 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
         aFixedText.SetText(aBuf.makeStringAndClear());
     }
     else
-        aFixedText.SetText(String::CreateFromAscii("New Record"));
+        aFixedText.SetText(String(ScResId(STR_NEW_RECORD)));
 
     aSlider.SetThumbPos(aCurrentRow-nStartRow-1);
 }
