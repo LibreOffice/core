@@ -4179,7 +4179,7 @@ dnl # Note that if there is a possibility the first call to
 dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
 dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
 dnl ===================================================================
-if test "$_os" != "WNT"; then
+if test "$_os" != "WINNT"; then
     PKG_PROG_PKG_CONFIG
 fi
 
@@ -6001,7 +6001,7 @@ if test "$_os" = "Linux"; then
    fi
 fi
 
-if test "$_os" != "WNT"; then
+if test "$_os" != "WINNT"; then
   AC_CHECK_FUNCS(getopt, HAVE_GETOPT=YES, [HAVE_GETOPT=NO])
   AC_CHECK_FUNCS(readdir_r, HAVE_READDIR_R=YES, [HAVE_READDIR_R=NO])
   if test "$HAVE_GETOPT" = "YES" -a "$HAVE_READDIR_R" = "YES"; then
@@ -6550,7 +6550,7 @@ if test "$_os" = "Darwin" ; then
    AC_MSG_RESULT([yes])
 else
    if test "x$enable_opengl" != "xno" ; then
-      if test "$_os" != "WNT"; then
+      if test "$_os" != "WINNT"; then
          save_LDFLAGS=$LDFLAGS
         LDFLAGS="$LDFLAGS -lm"
         AC_MSG_RESULT([yes])
