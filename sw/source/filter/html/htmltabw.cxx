@@ -70,6 +70,7 @@
 #endif
 #include <viewopt.hxx>
 #endif
+#include <sal/types.h>
 
 //#define MAX_DEPTH (USHRT_MAX)
 #define MAX_DEPTH (3)

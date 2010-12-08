@@ -29,16 +29,20 @@
 #include "precompiled_sw.hxx"
 /* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil -*- */
 
-#include <hash_set>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
+
+#include <hash_set>
 #include <unotools/ucbstreamhelper.hxx>
 #include <tools/solar.h>
 #include <rtl/tencinfo.h>
+#include <rtl/random.h>
 
 #include <sot/storage.hxx>
 #include <sfx2/docinf.hxx>
 #include <sfx2/docfile.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/frame.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 #include <svtools/sfxecode.hxx>
@@ -107,6 +111,7 @@
 
 #include <com/sun/star/i18n/ForbiddenCharacters.hpp>
 #include <comphelper/extract.hxx>
+#include <comphelper/sequenceashashmap.hxx>
 #include <fltini.hxx>
 
 #include <algorithm>
@@ -4344,6 +4349,90 @@ namespace
         return aPassw;
     }
 
+    uno::Sequence< beans::NamedValue > InitXorWord95Codec( ::msfilter::MSCodec_XorWord95& rCodec, SfxMedium& rMedium, WW8Fib* pWwFib )
+    {
+        uno::Sequence< beans::NamedValue > aEncryptionData;
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+        if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
+            aEncryptionData.realloc( 0 );
+
+        if ( !aEncryptionData.getLength() )
+        {
+            String sUniPassword = QueryPasswordForMedium( rMedium );
+
+            ByteString sPassword(sUniPassword, WW8Fib::GetFIBCharset( pWwFib->chseTables ) );
+
+            xub_StrLen nLen = sPassword.Len();
+            if( nLen <= 15 )
+            {
+                sal_uInt8 pPassword[16];
+                memset( pPassword, 0, sizeof( pPassword ) );
+
+                for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
+                    pPassword[nChar] = sPassword.GetChar(nChar);
+
+                rCodec.InitKey( pPassword );
+                aEncryptionData = rCodec.GetEncryptionData();
+
+                // the export supports RC4 algorithm only, so we have to generate the related EncryptionData as well,
+                // so that Save can export the document without asking for a password;
+                // as result there will be EncryptionData for both algorithms in the MediaDescriptor
+                ::msfilter::MSCodec_Std97 aCodec97;
+
+                // Generate random number with a seed of time as salt.
+                TimeValue aTime;
+                osl_getSystemTime( &aTime );
+                rtlRandomPool aRandomPool = rtl_random_createPool();
+                rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+                sal_uInt8 pDocId[ 16 ];
+                rtl_random_getBytes( aRandomPool, pDocId, 16 );
+
+                rtl_random_destroyPool( aRandomPool );
+
+                sal_uInt16 pStd97Pass[16];
+                memset( pStd97Pass, 0, sizeof( pStd97Pass ) );
+                for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+                    pStd97Pass[nChar] = sUniPassword.GetChar(nChar);
+
+                aCodec97.InitKey( pStd97Pass, pDocId );
+
+                // merge the EncryptionData, there should be no conflicts
+                ::comphelper::SequenceAsHashMap aEncryptionHash( aEncryptionData );
+                aEncryptionHash.update( ::comphelper::SequenceAsHashMap( aCodec97.GetEncryptionData() ) );
+                aEncryptionHash >> aEncryptionData;
+            }
+        }
+
+        return aEncryptionData;
+    }
+
+    uno::Sequence< beans::NamedValue > InitStd97Codec( ::msfilter::MSCodec_Std97& rCodec, sal_uInt8 pDocId[16], SfxMedium& rMedium )
+    {
+        uno::Sequence< beans::NamedValue > aEncryptionData;
+        SFX_ITEMSET_ARG( rMedium.GetItemSet(), pEncryptionData, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+        if ( pEncryptionData && ( pEncryptionData->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
+            aEncryptionData.realloc( 0 );
+
+        if ( !aEncryptionData.getLength() )
+        {
+            String sUniPassword = QueryPasswordForMedium( rMedium );
+
+            xub_StrLen nLen = sUniPassword.Len();
+            if ( nLen <= 15 )
+            {
+                sal_Unicode pPassword[16];
+                memset( pPassword, 0, sizeof( pPassword ) );
+                for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
+                    pPassword[nChar] = sUniPassword.GetChar(nChar);
+
+                rCodec.InitKey( pPassword, pDocId );
+                aEncryptionData = rCodec.GetEncryptionData();
+            }
+        }
+
+        return aEncryptionData;
+    }
 }
 
 ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
@@ -4397,31 +4486,22 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
     if (bDecrypt)
     {
         nErrRet = ERRCODE_SVX_WRONGPASS;
-        switch (eAlgo)
+        SfxMedium* pMedium = mpDocShell->GetMedium();
+
+        if ( pMedium )
         {
-            default:
-                nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
-                break;
-            case XOR:
+            switch (eAlgo)
             {
-                String sUniPassword =
-                    QueryPasswordForMedium(*(mpDocShell->GetMedium()));
-
-                ByteString sPassword(sUniPassword,
-                    WW8Fib::GetFIBCharset(pWwFib->chseTables));
-
-                xub_StrLen nLen = sPassword.Len();
-                // DR: do not cut a wrong (too long) password
-                if( nLen <= 15 )
+                default:
+                    nErrRet = ERRCODE_SVX_READ_FILTER_CRYPT;
+                    break;
+                case XOR:
                 {
-                    sal_uInt8 aPassword[16] = {0};
-
-                    for (xub_StrLen nChar = 0; nChar < sPassword.Len(); ++nChar )
-                        aPassword[nChar] = sPassword.GetChar(nChar);
-
                     msfilter::MSCodec_XorWord95 aCtx;
-                    aCtx.InitKey(aPassword);
-                    if (aCtx.VerifyKey(pWwFib->nKey, pWwFib->nHash))
+                    uno::Sequence< beans::NamedValue > aEncryptionData = InitXorWord95Codec( aCtx, *pMedium, pWwFib );
+
+                    // if initialization has failed the EncryptionData should be empty
+                    if ( aEncryptionData.getLength() && aCtx.VerifyKey( pWwFib->nKey, pWwFib->nHash ) )
                     {
                         nErrRet = 0;
                         pTempMain = MakeTemp(aDecryptMain);
@@ -4453,22 +4533,15 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                             DecryptXOR(aCtx, *pDataStream, aDecryptData);
                             pDataStream = &aDecryptData;
                         }
+
+                        pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
+                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
                     }
                 }
-            }
-            break;
-            case RC4:
-            {
-                String sUniPassword =
-                    QueryPasswordForMedium(*(mpDocShell->GetMedium()));
-
-                xub_StrLen nLen = sUniPassword.Len();
-                // DR: do not cut a wrong (too long) password
-                if (nLen <= 15)
+                break;
+                case RC4:
                 {
-                    sal_Unicode aPassword[16] = {0};
-                    for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-                        aPassword[nChar] = sUniPassword.GetChar(nChar);
+                    msfilter::MSCodec_Std97 aCtx;
 
                     sal_uInt8 aDocId[ 16 ];
                     pTableStream->Read(aDocId, 16);
@@ -4477,9 +4550,9 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                     sal_uInt8 aSaltHash[ 16 ];
                     pTableStream->Read(aSaltHash, 16);
 
-                    msfilter::MSCodec_Std97 aCtx;
-                    aCtx.InitKey(aPassword, aDocId);
-                    if (aCtx.VerifyKey(aSaltData, aSaltHash))
+                    // if initialization has failed the EncryptionData should be empty
+                    uno::Sequence< beans::NamedValue > aEncryptionData = InitStd97Codec( aCtx, aDocId, *pMedium );
+                    if ( aEncryptionData.getLength() && aCtx.VerifyKey( aSaltData, aSaltHash ) )
                     {
                         nErrRet = 0;
 
@@ -4498,17 +4571,13 @@ ULONG SwWW8ImplReader::LoadThroughDecryption(SwPaM& rPaM ,WW8Glossary *pGloss)
                             DecryptRC4(aCtx, *pDataStream, aDecryptData);
                             pDataStream = &aDecryptData;
                         }
-                        SfxMedium* pMedium = mpDocShell->GetMedium();
-                        if ( pMedium )
-                        {
-                            SfxItemSet* pSet = pMedium->GetItemSet();
-                            if ( pSet )
-                                pSet->Put( SfxStringItem(SID_PASSWORD, sUniPassword) );
-                        }
+
+                        pMedium->GetItemSet()->ClearItem( SID_PASSWORD );
+                        pMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
                     }
                 }
+                break;
             }
-            break;
         }
 
         if (nErrRet == 0)
@@ -4919,7 +4988,14 @@ ULONG WW8Reader::Read(SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const St
         }
         SwWW8ImplReader* pRdr = new SwWW8ImplReader(nVersion, pStg, pIn, rDoc,
             rBaseURL, bNew);
-        nRet = pRdr->LoadDoc( rPam );
+        try
+        {
+            nRet = pRdr->LoadDoc( rPam );
+        }
+        catch( const std::exception& )
+        {
+            nRet = ERR_WW8_NO_WW8_FILE_ERR;
+        }
         delete pRdr;
 
         if( refStrm.Is() )
