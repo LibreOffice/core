@@ -1139,7 +1139,7 @@ void OOXMLFastContextHandler::resolvePropertySetAttrs()
 void OOXMLFastContextHandler::sendPropertyToParent()
 {
 #ifdef DEBUG_ELEMENT
-    debug_logger->startElement("sendPropertyToParent");
+    debug_logger->element("sendPropertyToParent");
 #endif
 
     if (mpParent != NULL)
@@ -1152,17 +1152,8 @@ void OOXMLFastContextHandler::sendPropertyToParent()
                 pProp(new OOXMLPropertyImpl(mId, getValue(),
                                             OOXMLPropertyImpl::SPRM));
             pProps->add(pProp);
-
-#ifdef DEBUG_ELEMENT
-            debug_logger->propertySet(pProps,
-                    IdToString::Pointer_t(new OOXMLIdToString()));
-#endif
         }
     }
-
-#ifdef DEBUG_ELEMENT
-    debug_logger->endElement();
-#endif
 }
 
 void OOXMLFastContextHandler::sendPropertiesToParent()
@@ -1177,13 +1168,6 @@ void OOXMLFastContextHandler::sendPropertiesToParent()
         if (pParentProps.get() != NULL)
         {
             OOXMLPropertySet::Pointer_t pProps(getPropertySet());
-
-#ifdef DEBUG_ELEMENT
-            debug_logger->startElement("me");
-            debug_logger->propertySet(pProps,
-                    IdToString::Pointer_t(new OOXMLIdToString()));
-            debug_logger->endElement();
-#endif
 
             if (pProps.get() != NULL)
             {
