@@ -3161,7 +3161,7 @@ AC_SUBST(STLPORT_VER)
 AC_SUBST(USE_SYSTEM_STL)
 
 dnl ===================================================================
-dnl visibility feature
+dnl visibility and c++0x features
 dnl ===================================================================
 if test "$GCC" = "yes"; then
    AC_MSG_CHECKING([whether $CC supports -fvisibility=hidden])
@@ -3174,7 +3174,48 @@ if test "$GCC" = "yes"; then
    else
       AC_MSG_RESULT([no])
    fi
+
+   AC_MSG_CHECKING([whether $CC supports -std=c++0x without Language Defect 757])
+   save_CXXFLAGS=$CFLAGS
+   CXXFLAGS="$CXXFLAGS -std=c++0x"
+   AC_LANG_PUSH([C++])
+
+   AC_TRY_COMPILE([
+#include <stddef.h>
+
+template <typename T, size_t S> char (&sal_n_array_size( T(&)[S] ))[S];
+
+namespace
+{
+	struct b
+	{
+		int i;
+		int j;
+	};
+}
+],[
+struct a
+{
+	int i;
+	int j;
+};
+a thinga[]={{0,0}, {1,1}};
+b thingb[]={{0,0}, {1,1}};
+size_t i = sizeof(sal_n_array_size(thinga));
+size_t j = sizeof(sal_n_array_size(thingb));
+return !(i != 0 && j != 0);
+], HAVE_CXX0X=TRUE,)
+
+   AC_LANG_POP([C++])
+   CXXFLAGS=$save_CXXFLAGS
+   if test "$HAVE_CXX0X" = "TRUE"; then
+      AC_MSG_RESULT([yes])
+   else
+      AC_MSG_RESULT([no])
+   fi
 fi
+
+AC_SUBST(HAVE_CXX0X)
 
 # ===================================================================
 # use --ccache-skip?
