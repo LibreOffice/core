@@ -22,7 +22,9 @@ fallbacklicenses=$(foreach,i,{$(subst,$(defaultlangiso), $(alllangiso))} $(forea
 .INCLUDE: target.mk
 # ------------------------------------------------------------------
 
-ALLTAR: $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics
+ALLTAR: $(SOURCELICENCES) $(fallbacklicenses) just_for_nice_optics \
+        $(MISC)$/LICENSE.odt $(MISC)$/CREDITS.odt \
+        $(MISC)$/THIRDPARTYLICENSEREADME.html
 
 .IF "$(fallbacklicenses)"!=""
 $(fallbacklicenses) : $(SOURCELICENCES)
@@ -47,9 +49,9 @@ $(SYSLICDEST)$/LICENSE.odt : odt$/LICENSE.odt
     $(COPY) $< $@
 
 # just copy into misc
-$(MISC)$/LICENSE.odt: LICENSE.odt
-    $(COPY) LICENSE.odt $@
-$(MISC)$/CREDITS.odt: CREDITS.odt
-    $(COPY) CREDITS.odt $@
-$(MISC)$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
-    $(COPY) THIRDPARTYLICENSEREADME.html $@
+$(MISC)$/LICENSE.odt: odt/LICENSE.odt
+    $(COPY) odt/LICENSE.odt $@
+$(MISC)$/CREDITS.odt: odt/CREDITS.odt
+    $(COPY) odt/CREDITS.odt $@
+$(MISC)$/THIRDPARTYLICENSEREADME.html: html/THIRDPARTYLICENSEREADME.html
+    $(COPY) html/THIRDPARTYLICENSEREADME.html $@

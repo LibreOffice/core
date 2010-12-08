@@ -4,30 +4,20 @@ mkdir: %_DEST%\pck%_EXT%
 dos: echo =====================================================================
 dos: echo Delivering LICENSE files
 dos: echo =====================================================================
-
-# Can we finally unify Windows and unx file names to upper case
-# LICENSE/LICENSE.html?
-# FIXME: is - can you solve this?
 ..\%__SRC%\misc\license\unx\LICENSE* %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\unx\LICENSE*.html %_DEST%\bin%_EXT%\osl
 ..\%__SRC%\misc\license\unx\LICENSE*.odt %_DEST%\bin%_EXT%\osl
 ..\%__SRC%\misc\license\wnt\LICENSE*.odt %_DEST%\bin%_EXT%\osl
 ..\%__SRC%\misc\license\wnt\license*.txt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.html %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.rtf %_DEST%\bin%_EXT%\osl
+..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\LICENSE.odt
+..\%__SRC%\misc\CREDITS.odt %_DEST%\bin%_EXT%\CREDITS.odt
 
 # URE:
 mkdir: %_DEST%\bin%_EXT%\ure
-..\%__SRC%\misc\license\unx\LICENSE_en-US %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\wnt\license_en-US.txt %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\wnt\license_en-US.rtf %_DEST%\bin%_EXT%\ure\license_en-US.rtf
+..\%__SRC%\misc\license\unx\LICENSE %_DEST%\bin%_EXT%\ure\LICENSE
+..\%__SRC%\misc\license\wnt\license.txt %_DEST%\bin%_EXT%\ure\license.txt
 
-# RTF only for Windows?
-# Why? It comes from cws_src680_langsupporter.
 ..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
 
-..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\LICENSE.odt
-..\%__SRC%\misc\CREDITS.odt %_DEST%\bin%_EXT%\CREDITS.odt
 
 dos: echo =====================================================================
 dos: echo Delivering README files
