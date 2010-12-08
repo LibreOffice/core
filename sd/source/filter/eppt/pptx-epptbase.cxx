@@ -453,6 +453,15 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
     if ( GetPropertyValue( aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "Layout" ) ) ), sal_True )
         aAny >>= nLayout;
 
+    DBG(printf("GetLayoutOffset %d\n", nLayout));
+
+    return nLayout;
+}
+
+sal_Int32 PPTWriterBase::GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
+{
+    sal_Int32 nLayout = GetLayoutOffset( rXPropSet );
+
     if ( ( nLayout >= 21 ) && ( nLayout <= 26 ) )   // NOTES _> HANDOUT6
         nLayout = 20;
     if ( ( nLayout >= 27 ) && ( nLayout <= 30 ) )   // VERTICAL LAYOUT
@@ -465,7 +474,7 @@ sal_Int32 PPTWriterBase::GetLayoutOffset( const ::com::sun::star::uno::Reference
 
 PHLayout& PPTWriterBase::GetLayout(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const
 {
-    return pPHLayout[ GetLayoutOffset( rXPropSet ) ];
+    return pPHLayout[ GetLayoutOffsetFixed( rXPropSet ) ];
 }
 
 // ---------------------------------------------------------------------------------------------

@@ -90,6 +90,7 @@ public:
     static const char* GetSideDirection( sal_uInt8 nDirection );
     static const char* GetCornerDirection( sal_uInt8 nDirection );
     static const char* Get8Direction( sal_uInt8 nDirection );
+    static       int   GetPPTXLayoutId( int nOffset );
 
 protected:
 
@@ -98,6 +99,7 @@ protected:
     virtual void ImplWriteNotes( sal_uInt32 nPageNum );
     virtual void ImplWriteSlideMaster( sal_uInt32 nPageNum, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );
     virtual void ImplWriteLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
+    void ImplWritePPTXLayout( sal_Int32 nOffset, sal_uInt32 nMasterNum );
     void WriteTheme( sal_Int32 nThemeNum );
 
     virtual sal_Bool ImplCreateDocument();

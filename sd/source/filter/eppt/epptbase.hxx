@@ -86,7 +86,7 @@ struct PHLayout
     BOOL    bSecOutlinerPossible;
 };
 
-enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3 };
+enum PageType { NORMAL = 0, MASTER = 1, NOTICE = 2, UNDEFINED = 3, LAYOUT = 4 };
 
 class PropValue
 {
@@ -404,6 +404,7 @@ public:
     PHLayout& GetLayout( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
     PHLayout& GetLayout( sal_Int32 nOffset ) const;
     sal_Int32 GetLayoutOffset( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
+    sal_Int32 GetLayoutOffsetFixed( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& rXPropSet ) const;
 
     sal_Bool CreateSlide( sal_uInt32 nPageNum );
     sal_Bool CreateSlideMaster( sal_uInt32 nPageNum );
