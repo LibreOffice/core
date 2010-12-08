@@ -97,7 +97,7 @@ typedef std::vector< sal_Int32 > Int32Vector;
 // note: all positions are in pixel and relative to
 // the top/left-position of the virtual output area
 
-class VCL_DLLPUBLIC SalGraphics
+class VCL_PLUGIN_PUBLIC SalGraphics
 {
     int                     m_nLayout; // 0: mirroring off, 1: mirror x-axis
 

@@ -37,7 +37,7 @@ class SalGraphics;
 // - SalVirtualDevice -
 // --------------------
 
-class VCL_DLLPUBLIC SalVirtualDevice
+class VCL_PLUGIN_PUBLIC SalVirtualDevice
 {
 public:                     // public for Sal Implementation
     SalVirtualDevice() {}

@@ -174,7 +174,7 @@ public:
 
 class CmapResult;
 
-class VCL_DLLPUBLIC ImplFontCharMap
+class VCL_PLUGIN_PUBLIC ImplFontCharMap
 {
 public:
     explicit             ImplFontCharMap( const CmapResult& );
@@ -218,11 +218,7 @@ private:
 };
 
 // CmapResult is a normalized version of the many CMAP formats
-class
-#ifdef UNX
-    VCL_DLLPUBLIC // vcl-plugins need it
-#endif // UNX
-CmapResult
+class VCL_PLUGIN_PUBLIC CmapResult
 {
 public:
     explicit    CmapResult( bool bSymbolic = false,
