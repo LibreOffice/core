@@ -93,16 +93,6 @@ Directory gid_Dir_Basis_Sdk
 #endif
 End
 
-
-#if defined MACOSX
-ScpAction scp_Copy_License_Txt_Sdk
-    README_ALL_LANG(Copy, LICENSE);
-    README_ALL_LANG(Name, LICENSE);
-    Styles = (SCPZIP_REPLACE);
-    Subdir = "LICENSEs";
-End
-#endif
-
 Directory gid_Dir_Share_Sdk
     ParentID = gid_Dir_Basis_Sdk;
     DosName = "share";
@@ -125,10 +115,10 @@ File gid_File_Txt_License
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme_Sdk;
   #ifdef UNX
-    Name = "LICENSE_en-US";
+    Name = "LICENSE";
   #endif
   #ifdef WNT
-    Name = "license_en-US.txt";
+    Name = "license.txt";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End

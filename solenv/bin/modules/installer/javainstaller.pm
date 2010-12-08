@@ -273,7 +273,7 @@ sub get_licensefilesource
 {
     my ($language, $includepatharrayref) = @_;
 
-    my $licensefilename = "LICENSE_" . $language;
+    my $licensefilename = "LICENSE"; # . '_' . $language;
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $includepatharrayref, 0);
     if ($$licenseref eq "") { installer::exiter::exit_program("ERROR: Could not find License file $licensefilename!", "get_licensefilesource"); }
