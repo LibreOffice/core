@@ -135,6 +135,8 @@ using ::com::sun::star::chart2::data::XLabeledDataSequence;
 
 using ::formula::FormulaToken;
 using ::formula::StackVar;
+using ::boost::shared_ptr;
+using ::std::pair;
 
 namespace cssc = ::com::sun::star::chart;
 namespace cssc2 = ::com::sun::star::chart2;
@@ -2023,8 +2025,20 @@ XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
 {
     if( nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS )
         return &mxSeriesFmt;
-    if( nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT )
-        return &maPointFmts[ nPointIdx ];
+
+    if (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT)
+    {
+        XclImpChDataFormatMap::iterator itr = maPointFmts.find(nPointIdx);
+        if (itr == maPointFmts.end())
+        {
+            // No object exists at this point index position.  Insert a new one.
+            XclImpChDataFormatRef p(new XclImpChDataFormat(GetChRoot()));
+            pair<XclImpChDataFormatMap::iterator, bool> r =
+                maPointFmts.insert(XclImpChDataFormatMap::value_type(nPointIdx, p));
+            itr = r.first;
+        }
+        return &itr->second;
+    }
     return 0;
 }
 
