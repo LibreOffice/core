@@ -2420,8 +2420,17 @@ void XclExpChTypeGroup::ConvertSeries(
                 maType.SetStacked( bPercent );
 
                 // connected data points (only in stacked bar charts)
-                if( bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR) )
-                    maChartLines[ EXC_CHCHARTLINE_CONNECT ].reset( new XclExpChLineFormat( GetChRoot() ) );
+                if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
+                {
+                    XclExpChLineFormatMap::iterator itr = maChartLines.find(EXC_CHCHARTLINE_CONNECT);
+                    if (itr != maChartLines.end())
+                        // Remove existing element before inserting a new one.
+                        maChartLines.erase(itr);
+
+                    XclExpChLineFormatRef p(new XclExpChLineFormat(GetChRoot()));
+                    maChartLines.insert(
+                        XclExpChLineFormatMap::value_type(EXC_CHCHARTLINE_CONNECT, p));
+                }
             }
             else
             {
