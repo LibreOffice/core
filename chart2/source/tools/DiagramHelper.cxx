@@ -1125,7 +1125,7 @@ void lcl_switchToDateCategories( const Reference< XChartDocument >& xChartDoc, c
                 sal_Int32 nType = util::NumberFormat::UNDEFINED;
                 if( xKeyProps.is() )
                     xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
-                if( nType!=util::NumberFormat::DATE && nType!=util::NumberFormat::DATETIME )
+                if( !(nType&util::NumberFormat::DATE) && !(nType&util::NumberFormat::DATETIME) )
                 {
                     //set a date format to the axis
                     sal_Bool bCreate = sal_True;

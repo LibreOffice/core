@@ -404,7 +404,7 @@ bool lcl_isDateFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFo
     {
         sal_Int32 nType = util::NumberFormat::DATETIME;
         xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
-        bIsDate = (nType==util::NumberFormat::DATE || nType==util::NumberFormat::DATETIME);
+        bIsDate = (nType&util::NumberFormat::DATE || nType&util::NumberFormat::DATETIME);
     }
     return bIsDate;
 }

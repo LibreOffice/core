@@ -46,7 +46,7 @@ namespace
             //treat dates like text #i25706#
             sal_uInt32 nNumberFormat = pDocument->GetNumberFormat( ScAddress( nCol, nRow, nTab ) );
             short nType = pDocument->GetFormatTable()->GetType(nNumberFormat);
-            bool bIsDate = (nType == NUMBERFORMAT_DATE) || (nType == NUMBERFORMAT_DATETIME);
+            bool bIsDate = (nType & NUMBERFORMAT_DATE) || (nType & NUMBERFORMAT_DATETIME);
             bReturn = !bIsDate;
         }
         return bReturn;

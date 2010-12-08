@@ -109,6 +109,7 @@ using namespace ::com::sun::star;
 #include "chgviset.hxx"
 #include "reffact.hxx"
 #include "chartlis.hxx"
+#include "chartpos.hxx"
 #include "waitoff.hxx"
 #include "tablink.hxx"      // ScDocumentLoader statics
 #include "drwlayer.hxx"
@@ -378,19 +379,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     BOOL bOk = TRUE;
                     if ( !bAddRange && ( !bColInit || !bRowInit ) )
                     {
-                                                // Spalten/Zeilenkoepfe testen wie in chartarr
+                        ScChartPositioner aChartPositioner( &aDocument, nTab, nCol1,nRow1, nCol2,nRow2 );
                         if (!bColInit)
-                        {
-                            for (SCCOL i=nCol1; i<=nCol2 && bColHeaders; i++)
-                                if (aDocument.HasValueData( i, nRow1, nTab ))
-                                    bColHeaders = FALSE;
-                        }
+                            bColHeaders = aChartPositioner.HasColHeaders();
                         if (!bRowInit)
-                        {
-                            for (SCROW i=nRow1; i<=nRow2 && bRowHeaders; i++)
-                                if (aDocument.HasValueData( nCol1, i, nTab ))
-                                    bRowHeaders = FALSE;
-                        }
+                            bRowHeaders = aChartPositioner.HasRowHeaders();
 
                         //CHINA001 ScColRowLabelDlg aDlg( pParent, bRowHeaders, bColHeaders );
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
