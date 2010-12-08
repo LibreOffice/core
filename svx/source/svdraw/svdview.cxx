@@ -988,8 +988,6 @@ Pointer SdrView::GetPreferedPointer(const Point& rMousePos, const OutputDevice* 
         if ((IsDraggingPoints() || IsDraggingGluePoints()) && IsMouseHideWhileDraggingPoints())
             return Pointer(POINTER_NULL);
 
-        OSL_TRACE("SdrView::GetPreferedPointer(%lx) %lx\n", this, mpCurrentSdrDragMethod);
-
         return mpCurrentSdrDragMethod->GetSdrDragPointer();
     }
     if (IsMarkObj() || IsMarkPoints() || IsMarkGluePoints() || IsEncirclement() || IsSetPageOrg()) return Pointer(POINTER_ARROW);
