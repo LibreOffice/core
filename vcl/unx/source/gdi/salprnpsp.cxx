@@ -1187,14 +1187,12 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
     aContext.Version            = vcl::PDFWriter::PDF_1_4;
     aContext.Tagged             = false;
     aContext.EmbedStandardFonts = true;
-    aContext.Encrypt            = false;
     aContext.DocumentLocale     = Application::GetSettings().GetLocale();
 
     // prepare doc info
-    vcl::PDFDocInfo aDocInfo;
-    aDocInfo.Title              = i_rJobName;
-    aDocInfo.Creator            = i_rAppName;
-    aDocInfo.Producer           = i_rAppName;
+    aContext.DocumentInfo.Title              = i_rJobName;
+    aContext.DocumentInfo.Creator            = i_rAppName;
+    aContext.DocumentInfo.Producer           = i_rAppName;
 
     // define how we handle metafiles in PDFWriter
     vcl::PDFWriter::PlayMetafileContext aMtfContext;
@@ -1271,11 +1269,10 @@ BOOL PspSalPrinter::StartJob( const String* i_pFileName, const String& i_rJobNam
                 #if defined __SUNPRO_CC
                 #pragma disable_warn
                 #endif
-                pWriter.reset( new vcl::PDFWriter( aContext ) );
+                pWriter.reset( new vcl::PDFWriter( aContext, uno::Reference< beans::XMaterialHolder >() ) );
                 #if defined __SUNPRO_CC
                 #pragma enable_warn
                 #endif
-                pWriter->SetDocInfo( aDocInfo );
             }
 
             pWriter->NewPage( TenMuToPt( aNewParm.maPageSize.Width() ),
