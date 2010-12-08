@@ -2422,14 +2422,15 @@ void XclExpChTypeGroup::ConvertSeries(
                 // connected data points (only in stacked bar charts)
                 if (bConnectBars && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR))
                 {
-                    XclExpChLineFormatMap::iterator itr = maChartLines.find(EXC_CHCHARTLINE_CONNECT);
-                    if (itr != maChartLines.end())
-                        // Remove existing element before inserting a new one.
-                        maChartLines.erase(itr);
-
+                    sal_uInt16 nKey = EXC_CHCHARTLINE_CONNECT;
                     XclExpChLineFormatRef p(new XclExpChLineFormat(GetChRoot()));
-                    maChartLines.insert(
-                        XclExpChLineFormatMap::value_type(EXC_CHCHARTLINE_CONNECT, p));
+                    XclExpChLineFormatMap::iterator itr = maChartLines.lower_bound(nKey);
+                    if (itr != maChartLines.end() && !(maChartLines.key_comp()(nKey, itr->first)))
+                        // Overwrite the existing element.
+                        itr->second = p;
+                    else
+                        // Insert new element.
+                        maChartLines.insert(XclExpChLineFormatMap::value_type(nKey, p));
                 }
             }
             else

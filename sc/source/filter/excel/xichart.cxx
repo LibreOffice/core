@@ -2012,12 +2012,13 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
     XclImpChSerErrorBarRef xErrorBar( new XclImpChSerErrorBar( GetChRoot() ) );
     xErrorBar->ReadChSerErrorBar( rStrm );
     sal_uInt8 nBarType = xErrorBar->GetBarType();
-    XclImpChSerErrorBarMap::iterator itr = maErrorBars.find(nBarType);
-    if (itr != maErrorBars.end())
-        // Remove existing element.
-        maErrorBars.erase(itr);
-
-    maErrorBars.insert(XclImpChSerErrorBarMap::value_type(nBarType, xErrorBar));
+    XclImpChSerErrorBarMap::iterator itr = maErrorBars.lower_bound(nBarType);
+    if (itr != maErrorBars.end() && !maErrorBars.key_comp()(nBarType, itr->first))
+        // Overwrite the existing element.
+        itr->second = xErrorBar;
+    else
+        maErrorBars.insert(
+            itr, XclImpChSerErrorBarMap::value_type(nBarType, xErrorBar));
 }
 
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
@@ -2034,14 +2035,12 @@ XclImpChDataFormatRef* XclImpChSeries::GetDataFormatRef( sal_uInt16 nPointIdx )
 
     if (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT)
     {
-        XclImpChDataFormatMap::iterator itr = maPointFmts.find(nPointIdx);
-        if (itr == maPointFmts.end())
+        XclImpChDataFormatMap::iterator itr = maPointFmts.lower_bound(nPointIdx);
+        if (itr == maPointFmts.end() || maPointFmts.key_comp()(nPointIdx, itr->first))
         {
             // No object exists at this point index position.  Insert a new one.
             XclImpChDataFormatRef p(new XclImpChDataFormat(GetChRoot()));
-            pair<XclImpChDataFormatMap::iterator, bool> r =
-                maPointFmts.insert(XclImpChDataFormatMap::value_type(nPointIdx, p));
-            itr = r.first;
+            itr = maPointFmts.insert(itr, XclImpChDataFormatMap::value_type(nPointIdx, p));
         }
         return &itr->second;
     }
@@ -2052,14 +2051,12 @@ XclImpChTextRef* XclImpChSeries::GetDataLabelRef( sal_uInt16 nPointIdx )
 {
     if ((nPointIdx == EXC_CHDATAFORMAT_ALLPOINTS) || (nPointIdx < EXC_CHDATAFORMAT_MAXPOINTCOUNT))
     {
-        XclImpChTextMap::iterator itr = maLabels.find(nPointIdx);
-        if (itr == maLabels.end())
+        XclImpChTextMap::iterator itr = maLabels.lower_bound(nPointIdx);
+        if (itr == maLabels.end() || maLabels.key_comp()(nPointIdx, itr->first))
         {
             // No object exists at this point index position.  Insert a new one.
             XclImpChTextRef p(new XclImpChText(GetChRoot()));
-            pair<XclImpChTextMap::iterator, bool> r =
-                maLabels.insert(XclImpChTextMap::value_type(nPointIdx, p));
-            itr = r.first;
+            itr = maLabels.insert(itr, XclImpChTextMap::value_type(nPointIdx, p));
         }
         return &itr->second;
     }
@@ -3495,13 +3492,13 @@ void XclImpChAxesSet::ReadChTypeGroup( XclImpStream& rStrm )
     XclImpChTypeGroupRef xTypeGroup( new XclImpChTypeGroup( GetChRoot() ) );
     xTypeGroup->ReadRecordGroup( rStrm );
     sal_uInt16 nGroupIdx = xTypeGroup->GetGroupIdx();
-    XclImpChTypeGroupMap::iterator itr = maTypeGroups.find(nGroupIdx);
-    if (itr != maTypeGroups.end())
-        // Remove existing element before inserting a new one.
-        maTypeGroups.erase(itr);
-
-    maTypeGroups.insert(
-        XclImpChTypeGroupMap::value_type(nGroupIdx, xTypeGroup));
+    XclImpChTypeGroupMap::iterator itr = maTypeGroups.lower_bound(nGroupIdx);
+    if (itr != maTypeGroups.end() && !maTypeGroups.key_comp()(nGroupIdx, itr->first))
+        // Overwrite the existing element.
+        itr->second = xTypeGroup;
+    else
+        maTypeGroups.insert(
+            itr, XclImpChTypeGroupMap::value_type(nGroupIdx, xTypeGroup));
 }
 
 Reference< XCoordinateSystem > XclImpChAxesSet::CreateCoordSystem( Reference< XDiagram > xDiagram ) const
@@ -3700,9 +3697,11 @@ void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
     if( xDataFmt->GetPointPos().mnSeriesIdx <= EXC_CHSERIES_MAXSERIES )
     {
         const XclChDataPointPos& rPos = xDataFmt->GetPointPos();
-        if (maDataFmts.find(rPos) == maDataFmts.end())
+        XclImpChDataFormatMap::iterator itr = maDataFmts.lower_bound(rPos);
+        if (itr == maDataFmts.end() || maDataFmts.key_comp()(rPos, itr->first))
             // No element exists for this data point.  Insert it.
-            maDataFmts.insert(XclImpChDataFormatMap::value_type(rPos, xDataFmt));
+            maDataFmts.insert(
+                itr, XclImpChDataFormatMap::value_type(rPos, xDataFmt));
 
         /*  Do not overwrite existing data format group, Excel always uses the
             first data format group occuring in any CHSERIES group. */
