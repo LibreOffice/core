@@ -27,22 +27,6 @@
 
 #include "macros.inc"
 
-ScpAction scp_Copy_License_Txt
-  #ifdef UNX
-    README_ALL_LANG(Copy, LICENSE);
-    README_ALL_LANG(Name, LICENSE);
-  #else
-    README_TXT_ALL_LANG(Copy, license, txt);
-    README_TXT_ALL_LANG(Name, license, txt);
-  #endif
-    Styles = (SCPZIP_REPLACE);
-  #ifndef MACOSX
-    Subdir = "licenses";
-  #else
-    Subdir = "LICENSEs";
-  #endif
-End
-
 #ifdef MACOSX
 ScpAction scp_Copy_Thirdpartylicense_Readme_Html
     Copy = "THIRDPARTYLICENSEREADME.html";
@@ -114,21 +98,6 @@ ScpAction scp_Copy_Xpd_Gif_Setup
     Name = "Setup.gif";
     Styles = (XPD_ONLY);
     Subdir = "installdata/images";
-End
-
-// Setup license file
-ScpAction scp_Copy_Xpd_Html_License
-    README_TXT_ALL_LANG(Copy, LICENSE, html);
-    README_TXT_ALL_LANG(Name, LICENSE, html);
-    Styles = (XPD_ONLY);
-    Subdir = "installdata/html";
-End
-
-ScpAction scp_Copy_Xpd_Html_License_En_Us
-  	Copy = "LICENSE_en-US.html";
-    Name = "LICENSE.html";
-    Styles = (XPD_ONLY);
-    Subdir = "installdata/html";
 End
 
 // Setup help files
