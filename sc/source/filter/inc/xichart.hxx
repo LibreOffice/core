@@ -43,6 +43,7 @@
 #include "xiescher.hxx"
 #include "xistring.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace awt
@@ -1092,7 +1093,7 @@ private:
     void                ReadChDataFormat( XclImpStream& rStrm );
 
     /** Returns true, if the chart type group contains a hi-lo line format. */
-    inline bool         HasHiLoLine() const { return maChartLines.has( EXC_CHCHARTLINE_HILO ); }
+    inline bool         HasHiLoLine() const { return maChartLines.find( EXC_CHCHARTLINE_HILO ) != maChartLines.end(); }
     /** Returns true, if the chart type group contains drop bar formats. */
     inline bool         HasDropBars() const { return !maDropBars.empty(); }
 
@@ -1105,10 +1106,10 @@ private:
     void                CreateStockSeries( XChartTypeRef xChartType, sal_Int32 nApiAxesSetIdx ) const;
 
 private:
-    typedef ::std::vector< XclImpChSeriesRef >          XclImpChSeriesVec;
-    typedef ScfRefMap< sal_uInt16, XclImpChDropBar >    XclImpChDropBarMap;
-    typedef ScfRefMap< sal_uInt16, XclImpChLineFormat > XclImpChLineFormatMap;
-    typedef ::std::set< sal_uInt16 >                    UInt16Set;
+    typedef ::std::vector< XclImpChSeriesRef >               XclImpChSeriesVec;
+    typedef ScfRefMap< sal_uInt16, XclImpChDropBar >         XclImpChDropBarMap;
+    typedef boost::ptr_map< sal_uInt16, XclImpChLineFormat > XclImpChLineFormatMap;
+    typedef ::std::set< sal_uInt16 >                         UInt16Set;
 
     XclChTypeGroup      maData;             /// Contents of the CHTYPEGROUP record.
     XclImpChType        maType;             /// Chart type (e.g. CHBAR, CHLINE, ...).

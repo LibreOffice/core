@@ -2636,9 +2636,10 @@ bool XclImpChTypeGroup::HasVarPointFormat() const
 bool XclImpChTypeGroup::HasConnectorLines() const
 {
     // existence of connector lines (only in stacked bar charts)
-    bool bAnyStacked = maType.IsStacked() || maType.IsPercent();
-    XclImpChLineFormatRef xConnLine = maChartLines.get( EXC_CHCHARTLINE_CONNECT );
-    return bAnyStacked && (maTypeInfo.meTypeCateg == EXC_CHTYPECATEG_BAR) && xConnLine && xConnLine->HasLine();
+    if ( !(maType.IsStacked() || maType.IsPercent()) || (maTypeInfo.meTypeCateg != EXC_CHTYPECATEG_BAR) )
+        return false;
+    XclImpChLineFormatMap::const_iterator xConLine = maChartLines.find( EXC_CHCHARTLINE_CONNECT );
+    return ( xConLine != maChartLines.end() && xConLine->second->HasLine() );
 }
 
 const String& XclImpChTypeGroup::GetSingleSeriesTitle() const
@@ -2714,8 +2715,8 @@ void XclImpChTypeGroup::ReadChChartLine( XclImpStream& rStrm )
     sal_uInt16 nLineId = rStrm.ReaduInt16();
     if( (rStrm.GetNextRecId() == EXC_ID_CHLINEFORMAT) && rStrm.StartNextRecord() )
     {
-        XclImpChLineFormatRef xLineFmt( new XclImpChLineFormat );
-        xLineFmt->ReadChLineFormat( rStrm );
+        XclImpChLineFormat xLineFmt;
+        xLineFmt.ReadChLineFormat( rStrm );
         maChartLines[ nLineId ] = xLineFmt;
     }
 }
@@ -2817,11 +2818,11 @@ void XclImpChTypeGroup::CreateStockSeries( Reference< XChartType > xChartType, s
         aTypeProp.SetBoolProperty( EXC_CHPROP_SHOWFIRST, HasDropBars() );
         aTypeProp.SetBoolProperty( EXC_CHPROP_SHOWHIGHLOW, true );
         // hi-lo line format
-        XclImpChLineFormatRef xHiLoLine = maChartLines.get( EXC_CHCHARTLINE_HILO );
-        if( xHiLoLine )
+        XclImpChLineFormatMap::const_iterator xHiLoLine = maChartLines.find( EXC_CHCHARTLINE_HILO );
+        if ( xHiLoLine != maChartLines.end() )
         {
             ScfPropertySet aSeriesProp( xDataSeries );
-            xHiLoLine->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
+            xHiLoLine->second->Convert( GetChRoot(), aSeriesProp, EXC_CHOBJTYPE_HILOLINE );
         }
         // white dropbar format
         XclImpChDropBarRef xUpBar = maDropBars.get( EXC_CHDROPBAR_UP );
