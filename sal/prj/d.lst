@@ -23,7 +23,6 @@ symlink: %_DEST%\lib%_EXT%\libuno_sal.dylib.3 %_DEST%\lib%_EXT%\libuno_sal.dylib
 
 ..\%__SRC%\slb\sal.lib %_DEST%\lib%_EXT%\xsal.lib
 
-..\%__SRC%\bin\kill.exe %_DEST%\bin%_EXT%\kill.exe
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\bin\*.bin %_DEST%\bin%_EXT%\*.bin
