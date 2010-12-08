@@ -2430,7 +2430,7 @@ void XclExpChTypeGroup::ConvertSeries(
                         itr->second = p;
                     else
                         // Insert new element.
-                        maChartLines.insert(XclExpChLineFormatMap::value_type(nKey, p));
+                        maChartLines.insert(itr, XclExpChLineFormatMap::value_type(nKey, p));
                 }
             }
             else
