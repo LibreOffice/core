@@ -322,8 +322,8 @@ void InformationDialog::InitDialog()
     OUString aInfoString( getString( eInfoString ) );
     const OUString aOldSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%OLDFILESIZE" ) );
     const OUString aNewSizePlaceholder( RTL_CONSTASCII_USTRINGPARAM( "%NEWFILESIZE" ) );
-    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString::createFromAscii("%TITLE"  )
-                                                         : OUString::createFromAscii("'%TITLE'") );
+    const OUString aTitlePlaceholder( aTitle.getLength() ? OUString(RTL_CONSTASCII_USTRINGPARAM("%TITLE"  ))
+                                                         : OUString(RTL_CONSTASCII_USTRINGPARAM("'%TITLE'")) );
 
     sal_Int32 i = aInfoString.indexOf( aOldSizePlaceholder, 0 );
     if ( i >= 0 )
