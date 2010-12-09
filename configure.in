@@ -487,12 +487,6 @@ AC_ARG_ENABLE(extra-font,
 	[Add extra font content.]),
 ,)
 
-AC_ARG_ENABLE(theme,
-    AS_HELP_STRING([--enable-theme="theme1 theme2..."],
-	[Choose which themes to include. By default all available themes are included.
-         Possible choices: crystal, hicontrast, oxygen, tango.]),
-,)
-
 dnl ---------- Deprecated since 2010-11-05 ----------
 
 AC_ARG_ENABLE(mysql-connector,
@@ -603,6 +597,12 @@ AC_ARG_WITH(vba-package-format,
                           Usage:     --with-vba-package-format="builtin" or
                                      --with-vba-package-format="extn"
     ],
+,)
+
+AC_ARG_WITH(theme,
+    AS_HELP_STRING([--with-theme="theme1 theme2..."],
+	[Choose which themes to include. By default those themes with an '*' are included.
+         Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
 ,)
 
 AC_ARG_WITH(extension-integration,
@@ -7320,6 +7320,24 @@ else
 fi
 
 dnl ===================================================================
+dnl Test which themes to include
+dnl ===================================================================
+AC_MSG_CHECKING([which themes to include])
+# if none given, use all available themes
+if test "z$enable_theme" = "z" -o "z$enable_theme" = "zyes"; then
+  enable_theme="default crystal hicontrast oxygen tango"
+fi
+
+  WITH_THEMES=""
+  for theme in $enable_theme
+  do
+    WITH_THEMES="$WITH_THEMES $theme"
+    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[a-z]' '[A-Z]'`"
+  done
+  AC_MSG_RESULT([$WITH_THEMES])
+AC_SUBST(WITH_THEMES)
+
+dnl ===================================================================
 dnl Test whether to integrate extensions into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for extensions integration])
@@ -7640,26 +7658,6 @@ else
   SCPDEFS="$SCPDEFS -DWITH_EXTRA_FONT"
 fi
 AC_SUBST(WITH_EXTRA_FONT)
-
-dnl ===================================================================
-dnl Test which themes to include
-dnl ===================================================================
-AC_MSG_CHECKING([which themes to include])
-# if none given, use all available themes
-if test "z$enable_theme" = "z" -o "z$enable_theme" = "zyes"; then
-  enable_theme="crystal hicontrast oxygen tango"
-fi
-
-  ENABLE_THEMES=""
-  for theme in $enable_theme
-  do
-    ENABLE_THEMES="$ENABLE_THEMES $theme"
-    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[a-z]' '[A-Z]'`"
-  done
-  AC_MSG_RESULT([$ENABLE_THEMES])
-
-AC_SUBST(ENABLE_THEMES)
-AC_SUBST(SCPDEFS)
 
 dnl ===================================================================
 dnl Test whether to enable ActiveX embedding

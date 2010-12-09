@@ -1836,12 +1836,14 @@ File gid_File_Jar_Productregistration
 End
 #endif
 
+#ifdef THEME_DEFAULT
 File gid_File_Images_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images.zip";
     Styles = (PACKED);
 End
+#endif
 
 #ifdef THEME_CRYSTAL
 File gid_File_ImagesCrystal_Zip
