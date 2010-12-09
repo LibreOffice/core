@@ -52,8 +52,6 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 
-#define USE_64BIT_INTS
-
 // =======================================================================
 
 DBG_NAMEEX( OutputDevice )
@@ -174,12 +172,10 @@ static void ImplCalcBigIntThreshold( long nDPIX, long nDPIY,
             rThresRes.mnThresPixToLogY = (long)(((ULONG)LONG_MAX + (ULONG)(-nProductY/2)) / nDenomY);
     }
 
-#ifdef USE_64BIT_INTS
     rThresRes.mnThresLogToPixX /= 2;
     rThresRes.mnThresLogToPixY /= 2;
     rThresRes.mnThresPixToLogX /= 2;
     rThresRes.mnThresPixToLogY /= 2;
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -383,7 +379,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
     (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
     {
@@ -411,34 +406,6 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
        }
     }
     return n;
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        n *= nDPI * nMapNum;
-        n += n >= 0 ? nMapDenom/2 : -((nMapDenom-1)/2);
-                return (n / nMapDenom);
-    }
-    else
-    {
-        BigInt aTemp( n );
-        aTemp *= BigInt( nDPI );
-        aTemp *= BigInt( nMapNum );
-
-        if ( aTemp.IsNeg() )
-        {
-            BigInt aMapScDenom2( (nMapDenom-1)/2 );
-            aTemp -= aMapScDenom2;
-        }
-        else
-        {
-            BigInt aMapScDenom2( nMapDenom/2 );
-            aTemp += aMapScDenom2;
-        }
-
-        aTemp /= BigInt( nMapDenom );
-        return (long)aTemp;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -448,7 +415,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
 {
     // To "use" it...
    (void) nThres;
-#ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
         n = (2 * n * nMapDenom) / (nDPI * nMapNum);
@@ -462,59 +428,6 @@ static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
     }
     if( n < 0 ) --n; else ++n;
     return (n / 2);
-#else // USE_64BIT_INTS
-    if ( Abs( n ) < nThres )
-    {
-        long nDenom  = nDPI * nMapNum;
-        long nNum    = n * nMapDenom;
-        if( (nNum ^ nDenom) >= 0 )
-            nNum += nDenom/2;
-        else
-            nNum -= nDenom/2;
-        return (nNum / nDenom);
-    }
-    else
-    {
-        BigInt aDenom( nDPI );
-        aDenom *= BigInt( nMapNum );
-
-        BigInt aNum( n );
-        aNum *= BigInt( nMapDenom );
-
-        BigInt aDenom2( aDenom );
-        if ( aNum.IsNeg() )
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-            else
-            {
-                aDenom2 -= 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-        }
-        else
-        {
-            if ( aDenom.IsNeg() )
-            {
-                aDenom2 += 1;
-                aDenom2 /= BigInt(2);
-                aNum -= aDenom2;
-            }
-            else
-            {
-                aDenom2 /= BigInt(2);
-                aNum += aDenom2;
-            }
-        }
-
-        aNum  /= aDenom;
-        return (long)aNum;
-    }
-#endif
 }
 
 // -----------------------------------------------------------------------
