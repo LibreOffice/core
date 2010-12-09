@@ -68,7 +68,7 @@ void cpp2uno_call(
 
     if (pReturnTypeDescr)
     {
-        if (bridges::cpp_uno::shared::isSimpleType( pReturnTypeDescr ))
+        if (x86::isSimpleReturnType( pReturnTypeDescr ))
         {
             pUnoReturn = pReturnValue; // direct way for simple types
         }
@@ -359,15 +359,39 @@ extern "C" typedef void (*PrivateSnippetExecutor)();
 
 int const codeSnippetSize = 16;
 
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+namespace
+{
+    PrivateSnippetExecutor returnsInRegister(typelib_TypeDescriptionReference * pReturnTypeRef)
+    {
+        //These archs apparently are returning small structs in registers, while Linux
+        //doesn't
+        PrivateSnippetExecutor exec=NULL;
+
+        typelib_TypeDescription * pReturnTypeDescr = 0;
+        TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
+        const bool bSimpleReturnStruct = x86::isSimpleReturnType(pReturnTypeDescr);
+        const sal_Int32 nRetSize = pReturnTypeDescr->nSize;
+        TYPELIB_DANGER_RELEASE( pReturnTypeDescr );
+        if (bSimpleReturnStruct)
+        {
+            exec = privateSnippetExecutorGeneral; // fills eax
+            if (nRetSize > 4)
+                exec = privateSnippetExecutorHyper; // fills eax/edx
+        }
+        return exec;
+    }
+}
+#endif
+
 unsigned char * codeSnippet(
     unsigned char * code, sal_PtrDiff writetoexecdiff, sal_Int32 functionIndex, sal_Int32 vtableOffset,
-    typelib_TypeClass returnTypeClass)
+    typelib_TypeDescriptionReference * pReturnTypeRef)
 {
-    if (!bridges::cpp_uno::shared::isSimpleType(returnTypeClass)) {
-        functionIndex |= 0x80000000;
-    }
     PrivateSnippetExecutor exec;
-    switch (returnTypeClass) {
+    typelib_TypeClass eReturnClass = pReturnTypeRef ? pReturnTypeRef->eTypeClass : typelib_TypeClass_VOID;
+    switch (eReturnClass)
+    {
     case typelib_TypeClass_VOID:
         exec = privateSnippetExecutorVoid;
         break;
@@ -381,13 +405,24 @@ unsigned char * codeSnippet(
     case typelib_TypeClass_DOUBLE:
         exec = privateSnippetExecutorDouble;
         break;
+    case typelib_TypeClass_STRUCT:
+    case typelib_TypeClass_EXCEPTION:
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(MACOSX)
+        exec = returnsInRegister(pReturnTypeRef);
+        if (!exec)
+        {
+            exec = privateSnippetExecutorClass;
+            functionIndex |= 0x80000000;
+        }
+        break;
+#endif
     case typelib_TypeClass_STRING:
     case typelib_TypeClass_TYPE:
     case typelib_TypeClass_ANY:
     case typelib_TypeClass_SEQUENCE:
-    case typelib_TypeClass_STRUCT:
     case typelib_TypeClass_INTERFACE:
         exec = privateSnippetExecutorClass;
+        functionIndex |= 0x80000000;
         break;
     default:
         exec = privateSnippetExecutorGeneral;
@@ -455,7 +490,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             code = codeSnippet(
                 code, writetoexecdiff, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceAttributeTypeDescription * >(
-                    member)->pAttributeTypeRef->eTypeClass);
+                    member)->pAttributeTypeRef);
             // Setter:
             if (!reinterpret_cast<
                 typelib_InterfaceAttributeTypeDescription * >(
@@ -464,7 +499,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
                 (s++)->fn = code + writetoexecdiff;
                 code = codeSnippet(
                     code, writetoexecdiff, functionOffset++, vtableOffset,
-                    typelib_TypeClass_VOID);
+                    NULL);
             }
             break;
 
@@ -473,7 +508,7 @@ unsigned char * bridges::cpp_uno::shared::VtableFactory::addLocalFunctions(
             code = codeSnippet(
                 code, writetoexecdiff, functionOffset++, vtableOffset,
                 reinterpret_cast< typelib_InterfaceMethodTypeDescription * >(
-                    member)->pReturnTypeRef->eTypeClass);
+                    member)->pReturnTypeRef);
             break;
 
         default:
