@@ -260,6 +260,8 @@ extern "C" void NPFR_propnames_results( void* userdata,
     theResources->push_back( theResource );
 }
 
+extern osl::Mutex aGlobalNeonMutex;
+
 // -------------------------------------------------------------------
 // Constructor
 // -------------------------------------------------------------------
@@ -287,12 +289,15 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
         thePropNames[ theIndex ].nspace = NULL;
         thePropNames[ theIndex ].name   = NULL;
 
-        nError = ne_simple_propfind( inSession,
-                                     inPath,
-                                     inDepth,
-                                     thePropNames,
-                                     NPFR_propfind_results,
-                                     &ioResources );
+        {
+            osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+            nError = ne_simple_propfind( inSession,
+                                         inPath,
+                                         inDepth,
+                                         thePropNames,
+                                         NPFR_propfind_results,
+                                         &ioResources );
+        }
 
         for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
             free( (void *)thePropNames[ theIndex ].name );
@@ -302,6 +307,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     else
     {
         // ALLPROP
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
         nError = ne_simple_propfind( inSession,
                                      inPath,
                                      inDepth,
