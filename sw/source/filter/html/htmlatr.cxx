@@ -1250,8 +1250,9 @@ class HTMLEndPosLst
     SvXub_StrLens aScriptChgLst;    // positions where script changes
                                     // 0 is not contained in this list,
                                     // but the text length
-    SvUShorts aScriptLst;   // the script that is valif up to the position
-                            // contained in aScriptChgList at the same index
+    // the script that is valif up to the position
+    // contained in aScriptChgList at the same index
+    ::std::vector<USHORT> aScriptLst;
 
     SwDoc *pDoc;            // das aktuelle Dokument
     SwDoc* pTemplate;       // die HTML-Vorlage (oder 0)
@@ -1797,8 +1798,8 @@ HTMLEndPosLst::HTMLEndPosLst( SwDoc *pD, SwDoc* pTempl,
     {
         sal_uInt16 nScript = pBreakIt->GetBreakIter()->getScriptType( rText, nPos );
         nPos = (xub_StrLen)pBreakIt->GetBreakIter()->endOfScript( rText, nPos, nScript );
-        aScriptChgLst.Insert( nPos, aScriptChgLst.Count() );
-        aScriptLst.Insert( nScript, aScriptLst.Count() );
+        aScriptChgLst.push_back( nPos );
+        aScriptLst.push_back( nScript );
     }
 }
 
@@ -1995,9 +1996,8 @@ void HTMLEndPosLst::Insert( const SfxPoolItem& rItem,
 
     if( bDependsOnScript )
     {
-        sal_uInt16 nScriptChgs = aScriptChgLst.Count();
         xub_StrLen nPos = nStart;
-        for( sal_uInt16 i=0; i < nScriptChgs; i++ )
+        for( size_t i=0; i < aScriptChgLst.size(); i++ )
         {
             xub_StrLen nChgPos = aScriptChgLst[i];
             if( nPos >= nChgPos )
@@ -2080,8 +2080,8 @@ sal_uInt16 HTMLEndPosLst::GetScriptAtPos( xub_StrLen nPos ,
 {
     sal_uInt16 nRet = CSS1_OUTMODE_ANY_SCRIPT;
 
-    sal_uInt16 nScriptChgs = aScriptChgLst.Count();
-    sal_uInt16 i=0;
+    size_t nScriptChgs = aScriptChgLst.size();
+    size_t i=0;
     while( i < nScriptChgs && nPos >= aScriptChgLst[i] )
         i++;
     ASSERT( i < nScriptChgs, "script list is to short" );

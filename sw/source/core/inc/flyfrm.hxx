@@ -24,13 +24,13 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLYFRM_HXX
-#define _FLYFRM_HXX
+#ifndef SW_FLYFRM_HXX
+#define SW_FLYFRM_HXX
 
 #include "layfrm.hxx"
+#include "frmfmt.hxx"
 
 class SwPageFrm;
-class SwFlyFrmFmt;
 class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
@@ -158,7 +158,8 @@ public:
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
@@ -283,5 +284,11 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
+
+    // overwriting "SwFrmFmt *SwLayoutFrm::GetFmt" to provide the correct derived return type.
+    // (This is in order to skip on the otherwise necessary casting of the result to
+    // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
+    virtual const SwFlyFrmFmt *GetFmt() const;
+    virtual       SwFlyFrmFmt *GetFmt();
 };
 #endif

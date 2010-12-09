@@ -1073,23 +1073,33 @@ BOOL SwLayAction::TurboAction()
 |*  Letzte Aenderung    MA 18. Jul. 96
 |*
 |*************************************************************************/
-const SwFrm *lcl_FindFirstInvaLay( const SwFrm *pFrm, long nBottom )
+static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
+{
+    if (
+         !pFrm->IsValid() ||
+         (pFrm->IsCompletePaint() && ( pFrm->Frm().Top() < nBottom ) )
+       )
+    {
+        return true;
+    }
+    return false;
+}
+
+static const SwFrm *lcl_FindFirstInvaLay( const SwFrm *pFrm, long nBottom )
 {
     ASSERT( pFrm->IsLayoutFrm(), "FindFirstInvaLay, no LayFrm" );
 
-    if ( !pFrm->IsValid() || pFrm->IsCompletePaint() &&
-         pFrm->Frm().Top() < nBottom )
+    if (lcl_IsInvaLay(pFrm, nBottom))
         return pFrm;
     pFrm = ((SwLayoutFrm*)pFrm)->Lower();
     while ( pFrm )
     {
         if ( pFrm->IsLayoutFrm() )
         {
-            if ( !pFrm->IsValid() || pFrm->IsCompletePaint() &&
-                 pFrm->Frm().Top() < nBottom )
+            if (lcl_IsInvaLay(pFrm, nBottom))
                 return pFrm;
             const SwFrm *pTmp;
-            if ( 0 != (pTmp = ::lcl_FindFirstInvaLay( pFrm, nBottom )) )
+            if ( 0 != (pTmp = lcl_FindFirstInvaLay( pFrm, nBottom )) )
                 return pTmp;
         }
         pFrm = pFrm->GetNext();
@@ -1097,7 +1107,7 @@ const SwFrm *lcl_FindFirstInvaLay( const SwFrm *pFrm, long nBottom )
     return 0;
 }
 
-const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
+static const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
                                      const SwCntntFrm *pFirst )
 {
     const SwCntntFrm *pCnt = pFirst ? pFirst->GetNextCntntFrm() :
@@ -1144,7 +1154,7 @@ const SwFrm *lcl_FindFirstInvaCntnt( const SwLayoutFrm *pLay, long nBottom,
 }
 
 // --> OD 2005-02-21 #i37877# - consider drawing objects
-const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
+static const SwAnchoredObject* lcl_FindFirstInvaObj( const SwPageFrm* _pPage,
                                               long _nBottom )
 {
     ASSERT( _pPage->GetSortedObjs(), "FindFirstInvaObj, no Objs" )
@@ -2420,7 +2430,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #endif
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
-            aBools.Insert( bVis, aBools.Count() );
+            aBools.push_back( bVis );
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 

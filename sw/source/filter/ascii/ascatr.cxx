@@ -125,7 +125,7 @@ BOOL SwASC_AttrIter::OutAttr( xub_StrLen nSwPos )
                 {
                 case RES_TXTATR_FIELD:
                     sOut = static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                            ->ExpandField(rWrt.pDoc->IsClipBoard());
+                            ->ExpandField(true);
                     break;
 
                 case RES_TXTATR_FTN:
@@ -205,8 +205,8 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     } while( nStrPos < nEnde );
 
     if( !bLastNd ||
-        ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
-            && !nStrPos && nEnde == nNodeEnde )
+        ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
+            && !nStrPos && nEnde == nNodeEnde ) )
         rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;

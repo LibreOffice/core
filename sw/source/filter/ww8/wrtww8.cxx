@@ -112,6 +112,8 @@
 #include "dbgoutsw.hxx"
 
 #include <sfx2/docfile.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/frame.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/tempfile.hxx>
 #include <filter/msfilter/mscodec.hxx>
@@ -1284,7 +1286,7 @@ void WW8_WrtBookmarks::Append( WW8_CP nStartCp, const String& rNm,  const ::sw::
 
         aSttCps.Insert(nStartCp, nPos);
         aEndCps.Insert(nStartCp, nPos);
-        aFieldMarks.Insert(BOOL(false), nPos);
+        aFieldMarks.insert(aFieldMarks.begin() + nPos, BOOL(false));
         maSwBkmkNms.insert(aIter, rNm);
     }
     else
@@ -2859,10 +2861,10 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
 
-    USHORT n, nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem(
+        if( 0 != (pINetFmt = (SwFmtINetFmt*)rDoc.GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             0 != ( pTxtAttr = pINetFmt->GetTxtINetFmt()) &&
             0 != ( pTxtNd = pTxtAttr->GetpTxtNode() ) &&
@@ -2873,10 +2875,10 @@ void MSWordExportBase::CollectOutlineBookmarks(const SwDoc &rDoc)
     }
 
     const SwFmtURL *pURL;
-    nMaxItems = rDoc.GetAttrPool().GetItemCount( RES_URL );
+    nMaxItems = rDoc.GetAttrPool().GetItemCount2( RES_URL );
     for( n = 0; n < nMaxItems; ++n )
     {
-        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem(
+        if( 0 != (pURL = (SwFmtURL*)rDoc.GetAttrPool().GetItem2(
             RES_URL, n ) ) )
         {
             AddLinkTarget( pURL->GetURL() );
@@ -2995,20 +2997,54 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
         pDoc->SetRedlineMode( (RedlineMode_t)(mnRedlineMode) );
 }
 
-String SwWW8Writer::GetPassword()
+bool SwWW8Writer::InitStd97CodecUpdateMedium( ::msfilter::MSCodec_Std97& rCodec )
 {
-    String sUniPassword;
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+
     if ( mpMedium )
     {
-        SfxItemSet* pSet = mpMedium->GetItemSet();
+        SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False );
+        if ( pEncryptionDataItem && ( pEncryptionDataItem->GetValue() >>= aEncryptionData ) && !rCodec.InitCodec( aEncryptionData ) )
+        {
+            OSL_ENSURE( false, "Unexpected EncryptionData!" );
+            aEncryptionData.realloc( 0 );
+        }
 
-        const SfxPoolItem* pPasswordItem = NULL;
-        if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, sal_True, &pPasswordItem ) )
-            if( pPasswordItem != NULL )
-                sUniPassword = ( (const SfxStringItem*)pPasswordItem )->GetValue();
+        if ( !aEncryptionData.getLength() )
+        {
+            // try to generate the encryption data based on password
+            SFX_ITEMSET_ARG( mpMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
+            if ( pPasswordItem && pPasswordItem->GetValue().Len() && pPasswordItem->GetValue().Len() <= 15 )
+            {
+                // Generate random number with a seed of time as salt.
+                TimeValue aTime;
+                osl_getSystemTime( &aTime );
+                rtlRandomPool aRandomPool = rtl_random_createPool ();
+                rtl_random_addBytes ( aRandomPool, &aTime, 8 );
+
+                sal_uInt8 pDocId[ 16 ];
+                rtl_random_getBytes( aRandomPool, pDocId, 16 );
+
+                rtl_random_destroyPool( aRandomPool );
+
+                sal_Unicode aPassword[16];
+                memset( aPassword, 0, sizeof( aPassword ) );
+                for ( xub_StrLen nChar = 0; nChar < pPasswordItem->GetValue().Len(); ++nChar )
+                    aPassword[nChar] = pPasswordItem->GetValue().GetChar(nChar);
+
+                rCodec.InitKey( aPassword, pDocId );
+                aEncryptionData = rCodec.GetEncryptionData();
+
+                mpMedium->GetItemSet()->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+            }
+        }
+
+        if ( aEncryptionData.getLength() )
+            mpMedium->GetItemSet()->ClearItem( SID_PASSWORD );
     }
 
-    return sUniPassword;
+    // nonempty encryption data means hier that the codec was successfuly initialized
+    return ( aEncryptionData.getLength() != 0 );
 }
 
 void WW8Export::ExportDocument_Impl()
@@ -3042,8 +3078,6 @@ void WW8Export::ExportDocument_Impl()
 
     Strm().SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
 
-    String sUniPassword( GetWriter().GetPassword() );
-
     utl::TempFile aTempMain;
     aTempMain.EnableKillingFile();
     utl::TempFile aTempTable;
@@ -3051,13 +3085,10 @@ void WW8Export::ExportDocument_Impl()
     utl::TempFile aTempData;
     aTempData.EnableKillingFile();
 
-    bool bEncrypt = false;
-
-    xub_StrLen nLen = sUniPassword.Len();
-    if ( nLen > 0 && nLen <= 15) // Password has been set
+    msfilter::MSCodec_Std97 aCtx;
+    bool bEncrypt = m_pWriter ? m_pWriter->InitStd97CodecUpdateMedium( aCtx ) : false;
+    if ( bEncrypt )
     {
-        bEncrypt =true;
-
         GetWriter().SetStream(
             aTempMain.GetStream( STREAM_READWRITE | STREAM_SHARE_DENYWRITE ) );
 
@@ -3121,24 +3152,6 @@ void WW8Export::ExportDocument_Impl()
 
     if ( bEncrypt )
     {
-        // Generate random number with a seed of time as salt.
-        TimeValue aTime;
-        osl_getSystemTime( &aTime );
-        rtlRandomPool aRandomPool = rtl_random_createPool ();
-        rtl_random_addBytes ( aRandomPool, &aTime, 8 );
-
-        sal_uInt8 aDocId[ 16 ] = {0};
-        rtl_random_getBytes( aRandomPool, aDocId, 16 );
-
-        rtl_random_destroyPool( aRandomPool );
-
-        sal_Unicode aPassword[16] = {0};
-        for (xub_StrLen nChar = 0; nChar < nLen; ++nChar )
-            aPassword[nChar] = sUniPassword.GetChar(nChar);
-
-        msfilter::MSCodec_Std97 aCtx;
-        aCtx.InitKey(aPassword, aDocId);
-
         SvStream *pStrmTemp, *pTableStrmTemp, *pDataStrmTemp;
         pStrmTemp = &xWwStrm;
         pTableStrmTemp = &xTableStrm;
@@ -3155,11 +3168,14 @@ void WW8Export::ExportDocument_Impl()
         sal_uInt32 nEncType = 0x10001;
         *pTableStrmTemp << nEncType;
 
-        sal_uInt8 pSaltData[16] = {0};
-        sal_uInt8 pSaltDigest[16] = {0};
-        aCtx.GetEncryptKey( aDocId, pSaltData, pSaltDigest );
+        sal_uInt8 pDocId[16];
+        aCtx.GetDocId( pDocId );
 
-        pTableStrmTemp->Write( aDocId, 16 );
+        sal_uInt8 pSaltData[16];
+        sal_uInt8 pSaltDigest[16];
+        aCtx.GetEncryptKey( pDocId, pSaltData, pSaltDigest );
+
+        pTableStrmTemp->Write( pDocId, 16 );
         pTableStrmTemp->Write( pSaltData, 16 );
         pTableStrmTemp->Write( pSaltDigest, 16 );
 
@@ -3371,7 +3387,8 @@ MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM 
     mpTableInfo(new ww8::WW8TableInfo()), nUniqueList(0),
     mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0),
     pStyles( NULL ),
-    bHasHdr(false), bHasFtr(false),
+    bHasHdr(false), bHasFtr(false), bSubstituteBullets(true),
+    mbExportModeRTF( false ),
     pDoc( pDocument ),
     pCurPam( pCurrentPam ),
     pOrigPam( pOriginalPam )

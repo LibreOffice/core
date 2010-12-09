@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -238,7 +238,8 @@ enum SmModelPropertyHandles
     // --> PB 2004-08-25 #i33095# Security Options
     HANDLE_LOAD_READONLY,
     // <--
-    HANDLE_DIALOG_LIBRARIES     // #i73329#
+    HANDLE_DIALOG_LIBRARIES,     // #i73329#
+    HANDLE_BASELINE // 3.7.2010 #i972#
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -309,6 +310,9 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
         // --> PB 2004-08-25 #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+        // <--
+        // --> 3.7.2010 #i972#
+        { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
@@ -954,6 +958,21 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
+            // <--
+            // --> 3.7.2010 #i972#
+            case HANDLE_BASELINE:
+            {
+                if ( !pDocSh->pTree )
+                    pDocSh->Parse();
+                if ( pDocSh->pTree )
+                {
+                    if ( !pDocSh->IsFormulaArranged() )
+                        pDocSh->ArrangeFormula();
+
+                    *pValue <<= static_cast<sal_Int32>( pDocSh->pTree->GetFormulaBaseline() );
+                }
+            }
+            break;
             // <--
         }
     }

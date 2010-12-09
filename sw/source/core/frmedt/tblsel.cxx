@@ -55,6 +55,7 @@
 // OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>
 #include <frmtool.hxx>
+#include <deque>
 
 //siehe auch swtable.cxx
 #define COLFUZZY 20L
@@ -152,8 +153,7 @@ struct _Sort_CellFrm
         : pFrm( &rCFrm ) {}
 };
 
-SV_DECL_VARARR( _Sort_CellFrms, _Sort_CellFrm, 16, 16 )
-SV_IMPL_VARARR( _Sort_CellFrms, _Sort_CellFrm )
+typedef std::deque< _Sort_CellFrm > _Sort_CellFrms;
 
 SV_IMPL_PTRARR( SwChartBoxes, SwTableBoxPtr );
 SV_IMPL_PTRARR( SwChartLines, SwChartBoxes* );
@@ -616,9 +616,8 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
                                 rUnion.Top()    <= nFrmBottom &&
                                 nFrmBottom      <= nUnionBottom+ nYFuzzy )
 
-                                aCellFrms.Insert(
-                                        _Sort_CellFrm( *(SwCellFrm*)pCell ),
-                                        aCellFrms.Count() );
+                                aCellFrms.push_back(
+                                        _Sort_CellFrm( *(SwCellFrm*)pCell) );
                             else
                             {
                                 bValidChartSel = FALSE;
@@ -643,12 +642,12 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
 
             // alle Zellen der (Teil-)Tabelle zusammen. Dann teste mal ob
             // all huebsch nebeneinander liegen.
-            USHORT n, nEnd, nCellCnt = 0;
+            size_t n, nCellCnt = 0;
             long nYPos = LONG_MAX;
             long nXPos = 0;
             long nHeight = 0;
 
-            for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
+            for( n = 0 ; n < aCellFrms.size(); ++n )
             {
                 const _Sort_CellFrm& rCF = aCellFrms[ n ];
                 if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
@@ -699,7 +698,7 @@ BOOL ChkChartSel( const SwNode& rSttNd, const SwNode& rEndNd,
             {
                 nYPos = LONG_MAX;
                 SwChartBoxes* pBoxes = 0;
-                for( n = 0, nEnd = aCellFrms.Count(); n < nEnd; ++n )
+                for( n = 0; n < aCellFrms.size(); ++n )
                 {
                     const _Sort_CellFrm& rCF = aCellFrms[ n ];
                     if( (rCF.pFrm->Frm().*fnRect->fnGetTop)() != nYPos )
@@ -1747,8 +1746,8 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
             (!pTmp->IsCellFrm() ||
              ( ( ! bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() < nSX &&
                            (pTmp->Frm().*fnRect->fnGetRight)()< nSX2 ) ||
-                   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
-                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) )
+               (   bRTL && (pTmp->Frm().*fnRect->fnGetLeft)() > nSX &&
+                           (pTmp->Frm().*fnRect->fnGetRight)()> nSX2 ) ) ) )
         pTmp = pTmp->GetNextLayoutLeaf();
 
     if ( pTmp )

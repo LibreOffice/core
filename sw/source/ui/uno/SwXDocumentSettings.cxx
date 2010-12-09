@@ -31,7 +31,6 @@
 #include <vos/mutex.hxx>
 #include <sfx2/sfxbasecontroller.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <comphelper/MasterPropertySetInfo.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
@@ -124,7 +123,8 @@ enum SwDocumentSettingsPropertyHandles
     // --> OD 2008-06-05 #i89181#
     HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST,
     // <--
-    HANDLE_MODIFYPASSWORDINFO
+    HANDLE_MODIFYPASSWORDINFO,
+    HANDLE_MATH_BASELINE_ALIGNMENT
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -179,6 +179,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         // --> OD 2008-06-05 #i89181#
         { RTL_CONSTASCII_STRINGPARAM("TabAtLeftIndentForParagraphsInList"), HANDLE_TAB_AT_LEFT_INDENT_FOR_PARA_IN_LIST, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("ModifyPasswordInfo"), HANDLE_MODIFYPASSWORDINFO, CPPUTYPE_PROPERTYVALUE, 0,   0},
+        { RTL_CONSTASCII_STRINGPARAM("MathBaselineAlignment"), HANDLE_MATH_BASELINE_ALIGNMENT, CPPUTYPE_BOOLEAN, 0, 0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -221,7 +222,6 @@ SwXDocumentSettings::SwXDocumentSettings ( SwXTextDocument * pModel )
 , mpPrinter( NULL )
 {
     registerSlave ( new SwXPrintSettings ( PRINT_SETTINGS_DOCUMENT, mpModel->GetDocShell()->GetDoc() ) );
-    registerSlave ( new SwXPrintPreviewSettings ( mpModel->GetDocShell()->GetDoc() ) );
 }
 
 SwXDocumentSettings::~SwXDocumentSettings()
@@ -688,6 +688,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
                     uno::Reference< uno::XInterface >() );
         }
         break;
+        case HANDLE_MATH_BASELINE_ALIGNMENT:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT, bTmp );
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -1018,6 +1024,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_MODIFYPASSWORDINFO:
         {
             rValue <<= mpDocSh->GetModifyPasswordInfo();
+        }
+        break;
+        case HANDLE_MATH_BASELINE_ALIGNMENT:
+        {
+            sal_Bool bTmp = mpDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
 

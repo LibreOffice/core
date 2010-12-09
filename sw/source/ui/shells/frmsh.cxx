@@ -52,7 +52,7 @@
 #include <vcl/msgbox.hxx>
 // <--
 
-
+#include <doc.hxx>
 #include <fmturl.hxx>
 #include <fmtclds.hxx>
 #include <fmtcnct.hxx>
@@ -78,6 +78,7 @@
 
 #include <helpid.h>
 #include <cmdid.h>
+#include <cfgitems.hxx>
 #include <globals.hrc>
 #include <popup.hrc>
 #include <shells.hrc>
@@ -408,14 +409,13 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                                             SID_HTML_MODE,          SID_HTML_MODE,
                                             FN_SET_FRM_ALT_NAME,    FN_SET_FRM_ALT_NAME,
                                             FN_PARAM_CHAIN_PREVIOUS, FN_PARAM_CHAIN_NEXT,
+                                            FN_OLE_IS_MATH,         FN_OLE_IS_MATH,
+                                            FN_MATH_BASELINE_ALIGNMENT, FN_MATH_BASELINE_ALIGNMENT,
                                             0);
 
                 const SwViewOption* pVOpt = rSh.GetViewOptions();
                 if(nSel & nsSelectionType::SEL_OLE)
-                {
-                    aSet.Put(SfxBoolItem(FN_KEEP_ASPECT_RATIO,
-                        pVOpt->IsKeepRatio()));
-                }
+                    aSet.Put( SfxBoolItem(FN_KEEP_ASPECT_RATIO, pVOpt->IsKeepRatio()) );
                 aSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
                 aSet.Put(SfxStringItem(FN_SET_FRM_NAME, rSh.GetFlyName()));
                 if( nSel & nsSelectionType::SEL_OLE )
@@ -445,6 +445,12 @@ void SwFrameShell::Execute(SfxRequest &rReq)
                     rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
                 if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
                     rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
+
+                // disable vertical positioning for Math Objects anchored 'as char' if baseline alignment is activated
+                aSet.Put( SfxBoolItem( FN_MATH_BASELINE_ALIGNMENT,
+                        rSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT ) ) );
+                const uno::Reference < embed::XEmbeddedObject > xObj( rSh.GetOleRef() );
+                aSet.Put( SfxBoolItem( FN_OLE_IS_MATH, xObj.is() && SotExchange::IsMath( xObj->getClassID() ) ) );
 
                 UINT16 nDefPage = 0;
                 if(pArgs && pArgs->GetItemState(FN_FORMAT_FRAME_DLG, FALSE, &pItem) == SFX_ITEM_SET)
@@ -711,7 +717,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_HORZ_LEFT:
                     if ( (eFrmType & FRMTYPE_FLY_INCNT) ||
                             bProtect ||
-                            (nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER)&& bHtmlMode )
+                            ((nWhich == FN_FRAME_ALIGN_HORZ_CENTER  || nWhich == SID_OBJECT_ALIGN_CENTER)&& bHtmlMode) )
                         rSet.DisableItem( nWhich );
                 break;
                 case FN_FRAME_ALIGN_VERT_ROW_TOP:
@@ -721,7 +727,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_CHAR_CENTER:
                 case FN_FRAME_ALIGN_VERT_CHAR_BOTTOM:
                     if ( !(eFrmType & FRMTYPE_FLY_INCNT) || bProtect
-                            || bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich )
+                            || (bHtmlMode && FN_FRAME_ALIGN_VERT_CHAR_BOTTOM == nWhich) )
                         rSet.DisableItem( nWhich );
                 break;
 
@@ -732,7 +738,7 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                 case FN_FRAME_ALIGN_VERT_TOP:
                 case FN_FRAME_ALIGN_VERT_CENTER:
                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                    if ( bProtect || bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT)
+                    if ( bProtect || (bHtmlMode && eFrmType & FRMTYPE_FLY_ATCNT) )
                         rSet.DisableItem( nWhich );
                     else
                     {
@@ -1146,3 +1152,4 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & nsSelectionType::SEL_GRF) || (nSel & nsSelectionType::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
+

@@ -62,9 +62,9 @@ SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/feflyole.obj \
         $(SLO)$/feshview.obj \
         $(SLO)$/fetab.obj \
-        $(SLO)$/tblsel.obj
         
 EXCEPTIONSFILES=\
+        $(SLO)$/tblsel.obj \
         $(SLO)$/fecopy.obj \
         $(SLO)$/fefly1.obj \
         $(SLO)$/fews.obj

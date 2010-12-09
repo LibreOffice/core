@@ -6,6 +6,8 @@ UDK_3_0_0 {
                 ExportDOC;
                                 SaveOrDelMSVBAStorage_ww8;
                                 GetSaveWarningOfMSVBAStorage_ww8;
+                component_getImplementationEnvironment;
+                component_getFactory;
         local:
                 *;
 };

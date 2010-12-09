@@ -100,7 +100,6 @@
 #include <fldupde.hxx>
 #include <swbaslnk.hxx>
 #include <printdata.hxx>
-#include <swprtopt.hxx>
 #include <cmdid.h>              // fuer den dflt - Printer in SetJob
 #include <statstr.hrc>          // StatLine-String
 #include <comcore.hrc>
@@ -207,6 +206,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case PURGE_OLE: return mbPurgeOLE;
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
+        case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         default:
             ASSERT(false, "Invalid setting id");
     }
@@ -305,7 +305,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
-    case PROTECT_FORM:
+        case PROTECT_FORM:
         mbProtectForm = value;
         break;
 
@@ -345,6 +345,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
+            break;
+        case MATH_BASELINE_ALIGNMENT:
+            mbMathBaselineAlignment  = value;
             break;
         default:
             ASSERT(false, "Invalid setting id");
@@ -1187,7 +1190,7 @@ static void lcl_FormatPostIt(
 
     pIDCO->SplitNode( *aPam.GetPoint(), false );
     aStr = pField->GetPar2();
-#if defined( WIN ) || defined( WNT ) || defined( PM2 )
+#if defined( WNT ) || defined( PM2 )
     // Bei Windows und Co alle CR rausschmeissen
     aStr.EraseAllChars( '\r' );
 #endif
@@ -1845,10 +1848,10 @@ void SwDoc::DocInfoChgd( )
 const SwFmtRefMark* SwDoc::GetRefMark( const String& rName ) const
 {
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n ) ))
+        if( 0 == (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n ) ))
             continue;
 
         const SwFmtRefMark* pFmtRef = (SwFmtRefMark*)pItem;
@@ -1867,10 +1870,10 @@ const SwFmtRefMark* SwDoc::GetRefMark( USHORT nIndex ) const
     const SwTxtRefMark* pTxtRef;
     const SwFmtRefMark* pRet = 0;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -1893,10 +1896,10 @@ USHORT SwDoc::GetRefMarks( SvStringsDtor* pNames ) const
     const SfxPoolItem* pItem;
     const SwTxtRefMark* pTxtRef;
 
-    USHORT nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_REFMARK );
-    USHORT nCount = 0;
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = GetAttrPool().GetItem( RES_TXTATR_REFMARK, n )) &&
+    sal_uInt32 nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_REFMARK );
+    sal_uInt32 nCount = 0;
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = GetAttrPool().GetItem2( RES_TXTATR_REFMARK, n )) &&
             0 != (pTxtRef = ((SwFmtRefMark*)pItem)->GetTxtRefMark()) &&
             &pTxtRef->GetTxtNode().GetNodes() == &GetNodes() )
         {
@@ -2137,9 +2140,9 @@ const SwFmtINetFmt* SwDoc::FindINetAttr( const String& rName ) const
     const SwFmtINetFmt* pItem;
     const SwTxtINetFmt* pTxtAttr;
     const SwTxtNode* pTxtNd;
-    USHORT n, nMaxItems = GetAttrPool().GetItemCount( RES_TXTATR_INETFMT );
+    sal_uInt32 n, nMaxItems = GetAttrPool().GetItemCount2( RES_TXTATR_INETFMT );
     for( n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem(
+        if( 0 != (pItem = (SwFmtINetFmt*)GetAttrPool().GetItem2(
             RES_TXTATR_INETFMT, n ) ) &&
             pItem->GetName().Equals( rName ) &&
             0 != ( pTxtAttr = pItem->GetTxtINetFmt()) &&
@@ -2398,6 +2401,54 @@ BOOL SwDoc::RemoveInvisibleContent()
     EndUndo( UNDO_UI_DELETE_INVISIBLECNTNT, NULL );
     return bRet;
 }
+/*-- 25.08.2010 14:18:12---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+BOOL SwDoc::HasInvisibleContent() const
+{
+    BOOL bRet = sal_False;
+
+    SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
+    if( aIter.First( TYPE( SwFmtFld ) ) )
+        bRet = sal_True;
+
+    //
+    // Search for any hidden paragraph (hidden text attribute)
+    //
+    if( ! bRet )
+    {
+        for( ULONG n = GetNodes().Count(); !bRet && (n > 0); )
+        {
+            SwTxtNode* pTxtNd = GetNodes()[ --n ]->GetTxtNode();
+            if ( pTxtNd )
+            {
+                SwPaM aPam( *pTxtNd, 0, *pTxtNd, pTxtNd->GetTxt().Len() );
+                if( pTxtNd->HasHiddenCharAttribute( true ) ||  ( pTxtNd->HasHiddenCharAttribute( false ) ) )
+                {
+                    bRet = sal_True;
+                }
+            }
+        }
+    }
+
+    if( ! bRet )
+    {
+        const SwSectionFmts& rSectFmts = GetSections();
+        USHORT n;
+
+        for( n = rSectFmts.Count(); !bRet && (n > 0); )
+        {
+            SwSectionFmt* pSectFmt = rSectFmts[ --n ];
+            // don't add sections in Undo/Redo
+            if( !pSectFmt->IsInNodesArr())
+                continue;
+            SwSection* pSect = pSectFmt->GetSection();
+            if( pSect->IsHidden() )
+                bRet = sal_True;
+        }
+    }
+    return bRet;
+}
 /*-- 11.06.2004 08:34:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -2453,7 +2504,7 @@ BOOL SwDoc::ConvertFieldsToText()
                         nWhich != RES_REFPAGEGETFLD&&
                         nWhich != RES_REFPAGESETFLD))
                 {
-                    String sText = pField->GetCntnt();
+                    String sText = pField->ExpandField(true);
                     //database fields should not convert their command into text
                     if( RES_DBFLD == pCurType->Which() && !static_cast<const SwDBField*>(pField)->IsInitialized())
                         sText.Erase();
@@ -2512,26 +2563,17 @@ bool SwDoc::LinksUpdated() const
 }
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
-bool SwDoc::EmbedAllLinks()
+::sfx2::SvBaseLink* lcl_FindNextRemovableLink( const ::sfx2::SvBaseLinks& rLinks, sfx2::LinkManager& rLnkMgr )
 {
-    BOOL bRet = FALSE;
-    sfx2::LinkManager& rLnkMgr = GetLinkManager();
-    const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
-    if( rLnks.Count() )
+    for( USHORT n = 0; n < rLinks.Count(); ++n )
     {
-        BOOL bDoesUndo = DoesUndo();
-        DoUndo( FALSE );
-
-        for( USHORT n = 0; n < rLnks.Count(); ++n )
+        ::sfx2::SvBaseLink* pLnk = &(*rLinks[ n ]);
+        if( pLnk &&
+            ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
+              OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
+            pLnk->ISA( SwBaseLink ) )
         {
-            ::sfx2::SvBaseLink* pLnk = &(*rLnks[ n ]);
-            if( pLnk &&
-                ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
-                  OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
-                pLnk->ISA( SwBaseLink ) )
-            {
                 ::sfx2::SvBaseLinkRef xLink = pLnk;
-                USHORT nCount = rLnks.Count();
 
                 String sFName;
                 rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
@@ -2539,20 +2581,33 @@ bool SwDoc::EmbedAllLinks()
                 INetURLObject aURL( sFName );
                 if( INET_PROT_FILE == aURL.GetProtocol() ||
                     INET_PROT_CID == aURL.GetProtocol() )
-                {
-                    // dem Link sagen, das er aufgeloest wird!
-                    xLink->Closed();
+                    return pLnk;
+        }
+    }
+    return 0;
+}
+bool SwDoc::EmbedAllLinks()
+{
+    BOOL bRet = FALSE;
+    sfx2::LinkManager& rLnkMgr = GetLinkManager();
+    const ::sfx2::SvBaseLinks& rLinks = rLnkMgr.GetLinks();
+    if( rLinks.Count() )
+    {
+        BOOL bDoesUndo = DoesUndo();
+        DoUndo( FALSE );
 
-                    // falls einer vergessen hat sich auszutragen
-                    if( xLink.Is() )
-                        rLnkMgr.Remove( xLink );
+        ::sfx2::SvBaseLink* pLnk = 0;
+        while( 0 != (pLnk = lcl_FindNextRemovableLink( rLinks, rLnkMgr ) ) )
+        {
+            ::sfx2::SvBaseLinkRef xLink = pLnk;
+            // dem Link sagen, das er aufgeloest wird!
+            xLink->Closed();
 
-                    if( nCount != rLnks.Count() + 1 )
-                        n = 0;      // wieder von vorne anfangen, es wurden
-                                    // mehrere Links entfernt
-                    bRet = TRUE;
-                }
-            }
+            // falls einer vergessen hat sich auszutragen
+            if( xLink.Is() )
+                rLnkMgr.Remove( xLink );
+
+            bRet = TRUE;
         }
 
         DelAllUndoObj();

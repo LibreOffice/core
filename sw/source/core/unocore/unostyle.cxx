@@ -1894,8 +1894,8 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                             if(
                                 pCharStyleNames[i] != SwXNumberingRules::GetInvalidStyle() &&
                                 ((pCharStyleNames[i].Len() && !pFmt->GetCharFmt()) ||
-                                pCharStyleNames[i].Len() &&
-                                            pFmt->GetCharFmt()->GetName() != pCharStyleNames[i] ))
+                                (pCharStyleNames[i].Len() &&
+                                            pFmt->GetCharFmt()->GetName() != pCharStyleNames[i]) ))
                             {
 
                                 SwCharFmt* pCharFmt = 0;
@@ -1927,8 +1927,8 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                             //jetzt nochmal fuer Fonts
                             if(pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
                                 ((pBulletFontNames[i].Len() && !pFmt->GetBulletFont()) ||
-                                pBulletFontNames[i].Len() &&
-                                        pFmt->GetBulletFont()->GetName() != pBulletFontNames[i] ))
+                                (pBulletFontNames[i].Len() &&
+                                        pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) ))
                             {
                                 const SvxFontListItem* pFontListItem =
                                         (const SvxFontListItem* )pDoc->GetDocShell()
@@ -3609,8 +3609,8 @@ MakeObject:
                 {
                     const SwPageDesc& rDesc = aBase.GetOldPageDesc();
                     const SwFrmFmt* pFrmFmt = 0;
-                    sal_Bool bShare = bHeader && rDesc.IsHeaderShared()||
-                                    !bHeader && rDesc.IsFooterShared();
+                    sal_Bool bShare = (bHeader && rDesc.IsHeaderShared())||
+                                    (!bHeader && rDesc.IsFooterShared());
                     // TextLeft returns the left content if there is one,
                     // Text and TextRight return the master content.
                     // TextRight does the same as Text and is for
@@ -3993,11 +3993,11 @@ SwAutoStylesEnumImpl::SwAutoStylesEnumImpl( SwDoc* pInitDoc, IStyleAccess::SwAut
     {
         std::set< std::pair< USHORT, USHORT > > aRubyMap;
         SwAttrPool& rAttrPool = pDoc->GetAttrPool();
-        USHORT nCount = rAttrPool.GetItemCount( RES_TXTATR_CJK_RUBY );
+        sal_uInt32 nCount = rAttrPool.GetItemCount2( RES_TXTATR_CJK_RUBY );
 
-        for ( USHORT nI = 0; nI < nCount; ++nI )
+        for ( sal_uInt32 nI = 0; nI < nCount; ++nI )
         {
-            const SwFmtRuby* pItem = static_cast<const SwFmtRuby*>(rAttrPool.GetItem( RES_TXTATR_CJK_RUBY, nI ));
+            const SwFmtRuby* pItem = static_cast<const SwFmtRuby*>(rAttrPool.GetItem2( RES_TXTATR_CJK_RUBY, nI ));
             if ( pItem && pItem->GetTxtRuby() )
             {
                 std::pair< USHORT, USHORT > aPair( pItem->GetPosition(), pItem->GetAdjustment() );

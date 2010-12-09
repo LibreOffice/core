@@ -220,7 +220,7 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
         // Tabellenvariante, wenn mehrere Tabellenzellen selektiert
     rSh.GetCrsr();                  //Damit GetCrsrCnt() auch das Richtige liefert
-    aBoxInfo.SetTable          (rSh.IsTableMode() && rSh.GetCrsrCnt() > 1 ||
+    aBoxInfo.SetTable          ((rSh.IsTableMode() && rSh.GetCrsrCnt() > 1) ||
                                     !bTableSel);
         // Abstandsfeld immer anzeigen
     aBoxInfo.SetDist           ((BOOL) TRUE);
@@ -663,7 +663,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             else
                 aCoreSet.InvalidateItem( RES_BACKGROUND );
 
-            if ( !pDlg && rReq.GetArgs() || pDlg->Execute() == RET_OK )
+            if ( (!pDlg && rReq.GetArgs()) || pDlg->Execute() == RET_OK )
             {
                 const SfxItemSet* pOutSet = pDlg ? pDlg->GetOutputItemSet() : rReq.GetArgs();
                 if ( pDlg )
@@ -961,10 +961,11 @@ void SwTableShell::Execute(SfxRequest &rReq)
         case FN_TABLE_INSERT_COL_DLG:
         case FN_TABLE_INSERT_ROW_DLG:
         {
+            const SfxSlot* pSlot = GetStaticInterface()->GetSlot(nSlot);
             if ( FN_TABLE_INSERT_ROW_DLG != nSlot || !rSh.IsInRepeatedHeadline())
             {
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, nSlot) : 0);
+                ::std::auto_ptr<SvxAbstractInsRowColDlg> pDlg( pFact ? pFact->CreateSvxInsRowColDlg( GetView().GetWindow(), nSlot == FN_TABLE_INSERT_COL_DLG, pSlot->GetCommand() ) : 0);
 
                 if( pDlg.get() && (pDlg->Execute() == 1) )
                 {
@@ -1329,9 +1330,9 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_VERT_BOTTOM:
             {
                 USHORT nAlign = rSh.GetBoxAlign();
-                BOOL bSet = nSlot == FN_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE||
-                            nSlot == FN_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER ||
-                            nSlot == FN_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM;
+                BOOL bSet = (nSlot == FN_TABLE_VERT_NONE && nAlign == text::VertOrientation::NONE) ||
+                            (nSlot == FN_TABLE_VERT_CENTER && nAlign == text::VertOrientation::CENTER) ||
+                            (nSlot == FN_TABLE_VERT_BOTTOM && nAlign == text::VertOrientation::BOTTOM);
                 rSet.Put(SfxBoolItem(nSlot, bSet));
             }
             break;
@@ -1341,9 +1342,9 @@ void SwTableShell::GetState(SfxItemSet &rSet)
             case FN_TABLE_MODE_VARIABLE  :
                 {
                     TblChgMode nMode = rSh.GetTblChgMode();
-                    BOOL bSet = nSlot == FN_TABLE_MODE_FIX && nMode == TBLFIX_CHGABS ||
-                            nSlot == FN_TABLE_MODE_FIX_PROP && nMode == TBLFIX_CHGPROP ||
-                            nSlot == FN_TABLE_MODE_VARIABLE && nMode == TBLVAR_CHGABS;
+                    BOOL bSet = (nSlot == FN_TABLE_MODE_FIX && nMode == TBLFIX_CHGABS) ||
+                            (nSlot == FN_TABLE_MODE_FIX_PROP && nMode == TBLFIX_CHGPROP) ||
+                            (nSlot == FN_TABLE_MODE_VARIABLE && nMode == TBLVAR_CHGABS);
                     rSet.Put(SfxBoolItem(nSlot, bSet));
                 }
             break;

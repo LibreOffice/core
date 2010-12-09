@@ -51,10 +51,6 @@ class SvxErrorHandler;
 **
 **/
 
-#ifdef WIN
-#define RELEASE     "WIN304"
-#endif
-
 #ifdef PM2
 #define RELEASE     "PM304"
 #endif
