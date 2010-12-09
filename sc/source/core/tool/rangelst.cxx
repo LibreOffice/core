@@ -48,6 +48,9 @@
 
 ScRangeList::~ScRangeList()
 {
+    std::vector<ScRangePtr>::iterator itr = begin(), itrEnd = end();
+    for (; itr != itrEnd; ++itr)
+        delete *itr;
     clear();
 }
 
@@ -148,7 +151,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
+    for ( size_t i = 0, nRanges = size(); i < nRanges && pOver; ++i )
     {
         ScRangePtr p = at( i );
         if ( p == pOver )
@@ -203,6 +206,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
             if ( bIsInList )
             {   // innerhalb der Liste Range loeschen
                 erase( begin() + nOldPos );
+                delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
