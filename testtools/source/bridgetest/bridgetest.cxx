@@ -558,6 +558,11 @@ static sal_Bool performTest(
             bRet = check( memcmp(&aIn, &aOut, sizeof(FourFloats)) == 0, "four floats struct test" ) && bRet;
         }
         {
+            MixedFloatAndInteger aIn(7.7f, 8);
+            MixedFloatAndInteger aOut = xLBT->echoMixedFloatAndInteger(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(MixedFloatAndInteger)) == 0, "mixed float and integer struct test" ) && bRet;
+        }
+        {
             sal_Int32 i2 = xLBT->testPPCAlignment( 0, 0, 0, 0, 0xbeaf );
             bRet = check( i2 == 0xbeaf, "ppc-style alignment test" ) && bRet;
         }

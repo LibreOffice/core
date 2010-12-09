@@ -120,6 +120,15 @@ struct FourFloats
     float                      d;
 };
 /**
+ * Small struct with mixed float and integers.
+ * Should return in registers on BSDs/MACOSx
+ */
+struct MixedFloatAndInteger
+{
+    float                      a;
+    long                       b;
+};
+/**
  * complex types adding string, inteface, any
  */
 struct TestElement : TestSimple
@@ -279,6 +288,11 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
      * register return test 5
      */
     FourFloats echoFourFloats( [in] FourFloats aStruct );
+
+    /**
+     * register return test 6
+     */
+    MixedFloatAndInteger echoMixedFloatAndInteger( [in] MixedFloatAndInteger aStruct );
 
     /**
      * PPC Alignment test (#i107182#)

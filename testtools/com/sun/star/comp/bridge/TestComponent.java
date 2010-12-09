@@ -49,6 +49,7 @@ import test.testtools.bridgetest.MediumStruct;
 import test.testtools.bridgetest.BigStruct;
 import test.testtools.bridgetest.TwoFloats;
 import test.testtools.bridgetest.FourFloats;
+import test.testtools.bridgetest.MixedFloatAndInteger;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
 import test.testtools.bridgetest.XCurrentContextChecker;
@@ -494,6 +495,10 @@ public class TestComponent {
         }
 
         public FourFloats echoFourFloats( FourFloats i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public MixedFloatAndInteger echoMixedFloatAndInteger( MixedFloatAndInteger i_Struct) throws com.sun.star.uno.RuntimeException {
             return i_Struct;
         }
 
