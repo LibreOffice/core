@@ -1726,7 +1726,7 @@ double SwSbxValue::GetDouble() const
 
 SwSbxValue& SwSbxValue::MakeDouble()
 {
-    if( SbxSTRING == GetType() )
+    if( GetType() == SbxSTRING  || GetType() == SbxBOOL )
         PutDouble( GetDouble() );
     return *this;
 }
