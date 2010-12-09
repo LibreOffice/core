@@ -88,6 +88,12 @@ void raiseException(
 //==================================================================================================
 void fillUnoException(
     __cxa_exception * header, uno_Any *, uno_Mapping * pCpp2Uno );
+
+}
+
+namespace x86
+{
+    bool isSimpleReturnType(typelib_TypeDescription * pTD, bool recursive = false);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
