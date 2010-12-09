@@ -2317,18 +2317,23 @@ void SmParser::Special()
         // conversion of symbol names for 6.0 (XML) file format
         // (name change on import / export.
         // UI uses localized names XML file format does not.)
-        if (IsImportSymbolNames())
+        if( rName.Len() && rName.GetChar( 0 ) == sal_Unicode( '%' ) )
         {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetUiSymbolName( rName );
-            bReplace = TRUE;
+            if (IsImportSymbolNames())
+            {
+                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+                aNewName = rLSD.GetUiSymbolName( rName.Copy( 1 ) );
+                bReplace = TRUE;
+            }
+            else if (IsExportSymbolNames())
+            {
+                const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
+                aNewName = rLSD.GetExportSymbolName( rName.Copy( 1 ) );
+                bReplace = TRUE;
+            }
         }
-        else if (IsExportSymbolNames())
-        {
-            const SmLocalizedSymbolData &rLSD = SM_MOD()->GetLocSymbolData();
-            aNewName = rLSD.GetExportSymbolName( rName );
-            bReplace = TRUE;
-        }
+        if( aNewName.Len() )
+            aNewName.Insert( '%', 0 );
     }
     else    // 5.0 <-> 6.0 formula text (symbol name) conversion
     {
@@ -2367,7 +2372,7 @@ void SmParser::Special()
 
     if (bReplace  &&  aNewName.Len()  &&  rName != aNewName)
     {
-        Replace( GetTokenIndex() + 1, rName.Len(), aNewName );
+        Replace( GetTokenIndex(), rName.Len(), aNewName );
         rName = aNewName;
     }
 
