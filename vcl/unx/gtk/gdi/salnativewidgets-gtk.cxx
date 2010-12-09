@@ -735,12 +735,6 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
                             const ImplControlValue& aValue,
                             const OUString& rCaption )
 {
-    if( (nType==CTRL_CHECKBOX) && (nPart==PART_ENTIRE_CONTROL) &&
-        aValue.getTristateVal() == BUTTONVALUE_MIXED )
-    {
-        return drawNativeMixedStateCheck( nType, nPart, rControlRegion, nState, aValue, rCaption );
-    }
-
     BOOL            returnVal = FALSE;
     // get a GC with current clipping region set
     SelectFont();
@@ -897,55 +891,6 @@ BOOL GtkSalGraphics::drawNativeControl( ControlType nType,
 
     return( returnVal );
 }
-
-BOOL GtkSalGraphics::drawNativeMixedStateCheck( ControlType nType,
-                                                ControlPart nPart,
-                                                const Rectangle& rControlRegion,
-                                                ControlState nState,
-                                                const ImplControlValue& aValue,
-                                                const OUString& rCaption )
-{
-    // need to emulate something for mixed state
-
-    // do this via pixmap since some themes don't care for regions
-    bool bOldNeedPixmapPaint = bNeedPixmapPaint;
-    bNeedPixmapPaint = true;
-
-    Rectangle aCtrlRect = rControlRegion;
-    BOOL      returnVal = FALSE;
-    SelectFont();
-
-    // draw upper half in off state
-    const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_OFF );
-    XLIB_Region aRegion = XCreateRegion();
-    XRectangle aXRect = { aCtrlRect.Left(), aCtrlRect.Top(), aCtrlRect.GetWidth(), aCtrlRect.GetHeight() };
-    const unsigned short nH = aXRect.height/2;
-    aXRect.height -= nH;
-    XUnionRectWithRegion( &aXRect, aRegion, aRegion );
-    SetClipRegion( pFontGC_, aRegion );
-    XDestroyRegion( aRegion );
-
-    returnVal = drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rCaption );
-
-    if( returnVal )
-    {
-        // draw lower half in on state
-        const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_ON );
-        aXRect.y += nH;
-        aRegion = XCreateRegion();
-        XUnionRectWithRegion( &aXRect, aRegion, aRegion );
-        SetClipRegion( pFontGC_, aRegion );
-        XDestroyRegion( aRegion );
-        returnVal = drawNativeControl( nType, nPart, rControlRegion, nState, aValue, rCaption );
-    }
-
-    // clean up
-    bNeedPixmapPaint = bOldNeedPixmapPaint;
-    const_cast<ImplControlValue&>(aValue).setTristateVal( BUTTONVALUE_MIXED );
-    SetClipRegion( pFontGC_ );
-    return returnVal;
-}
-
 
 /*
  * DrawNativeControlText()
@@ -1382,7 +1327,8 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
 {
     GtkStateType    stateType;
     GtkShadowType   shadowType;
-    BOOL            isChecked = (aValue.getTristateVal()==BUTTONVALUE_ON) ? TRUE : FALSE;
+    bool            isChecked = (aValue.getTristateVal() == BUTTONVALUE_ON);
+    bool            isInconsistent = (aValue.getTristateVal() == BUTTONVALUE_MIXED);
     GdkRectangle    clipRect;
     gint            x,y;
 
@@ -1397,7 +1343,7 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( GdkDrawable* gdkDrawable,
     y = rControlRectangle.Top() + (rControlRectangle.GetHeight()-indicator_size)/2;
 
     // Set the shadow based on if checked or not so we get a checkmark.
-    shadowType = isChecked ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    shadowType = isChecked ? GTK_SHADOW_IN : isInconsistent ? GTK_SHADOW_ETCHED_IN : GTK_SHADOW_OUT;
     NWSetWidgetState( gWidgetData[m_nScreen].gCheckWidget, nState, stateType );
     GTK_TOGGLE_BUTTON(gWidgetData[m_nScreen].gCheckWidget)->active = isChecked;
 
@@ -2537,7 +2483,6 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
     gint            g_x=0, g_y=0, g_w=10, g_h=10;
     bool            bPaintButton = true;
     GtkWidget*      pButtonWidget = gWidgetData[m_nScreen].gToolbarButtonWidget;
-    const gchar*    pButtonDetail = "button";
     GdkRectangle    clipRect;
 
     NWEnsureGTKToolbar( m_nScreen );
@@ -2596,13 +2541,18 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         {
             pButtonWidget = gWidgetData[m_nScreen].gToolbarToggleWidget;
             shadowType = GTK_SHADOW_IN;
+            stateType = GTK_STATE_ACTIVE;
             // special case stateType value for depressed toggle buttons
             // cf. gtk+/gtk/gtktogglebutton.c (gtk_toggle_button_update_state)
-            if( ! (nState & (CTRL_STATE_PRESSED|CTRL_STATE_ROLLOVER)) )
-                stateType = GTK_STATE_ACTIVE;
-            pButtonDetail = "togglebutton";
+            if( (nState & (CTRL_STATE_ROLLOVER|CTRL_STATE_PRESSED)) )
+            {
+                stateType = GTK_STATE_PRELIGHT;
+                shadowType = GTK_SHADOW_OUT;
+            }
             bPaintButton = true;
         }
+        else
+            stateType = GTK_STATE_PRELIGHT; // only for bPaintButton = true, in which case always rollver is meant
 
         NWSetWidgetState( pButtonWidget, nState, stateType );
         gtk_widget_ensure_style( pButtonWidget );
@@ -2660,7 +2610,7 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
                                stateType,
                                shadowType,
                                &clipRect,
-                               pButtonWidget, pButtonDetail, x, y, w, h );
+                               pButtonWidget, "button", x, y, w, h );
             }
         }
     }

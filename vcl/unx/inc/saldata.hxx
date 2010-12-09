@@ -63,6 +63,7 @@ protected:
             SalDisplay         *m_pSalDisplay;
             pthread_t           hMainThread_;
             rtl::OUString       maLocalHostName;
+            rtl::OUString       maUnicodeAccumulator;
 
 public:
     X11SalData();
@@ -90,6 +91,7 @@ public:
 
     const rtl::OUString&    GetLocalHostName() const
     { return maLocalHostName; }
+    rtl::OUString&          GetUnicodeAccumulator() { return maUnicodeAccumulator; }
 
     static int XErrorHdl( Display*, XErrorEvent* );
     static int XIOErrorHdl( Display* );

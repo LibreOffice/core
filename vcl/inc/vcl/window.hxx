@@ -50,7 +50,7 @@
 #include <rtl/ustring.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
-#include <vcl/smartid.hxx>
+#include <boost/shared_ptr.hpp>
 
 class VirtualDevice;
 struct ImplDelData;
@@ -95,6 +95,13 @@ namespace accessibility {
 namespace com {
 namespace sun {
 namespace star {
+namespace beans {
+    struct PropertyValue;
+}}}}
+
+namespace com {
+namespace sun {
+namespace star {
 namespace rendering {
     class XCanvas;
     class XSpriteCanvas;
@@ -122,7 +129,11 @@ namespace dnd {
     class XDropTarget;
 } } } } }
 
-namespace vcl { struct ControlLayoutData; }
+namespace vcl {
+    struct ControlLayoutData;
+    class WindowArranger;
+    struct ExtWindowImpl;
+}
 
 namespace svt { class PopupWindowControllerImpl; }
 
@@ -476,6 +487,10 @@ public:
     SAL_DLLPRIVATE BOOL                ImplUpdatePos();
     SAL_DLLPRIVATE void                ImplUpdateSysObjPos();
     SAL_DLLPRIVATE WindowImpl*         ImplGetWindowImpl() const { return mpWindowImpl; }
+    SAL_DLLPRIVATE void                ImplFreeExtWindowImpl();
+    // creates ExtWindowImpl on demand, but may return NULL (e.g. if mbInDtor)
+    SAL_DLLPRIVATE vcl::ExtWindowImpl* ImplGetExtWindowImpl() const;
+    SAL_DLLPRIVATE void                ImplDeleteOwnedChildren();
     /** check whether a font is suitable for UI
 
     The font to be tested will be checked whether it could display a
@@ -541,6 +556,7 @@ public:
     SAL_DLLPRIVATE BOOL        ImplRegisterAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplRevokeAccessibleNativeFrame();
     SAL_DLLPRIVATE void        ImplCallResize();
+    SAL_DLLPRIVATE void        ImplExtResize();
     SAL_DLLPRIVATE void        ImplCallMove();
     SAL_DLLPRIVATE Rectangle   ImplOutputToUnmirroredAbsoluteScreenPixel( const Rectangle& rRect ) const;
     SAL_DLLPRIVATE void        ImplMirrorFramePos( Point &pt ) const;
@@ -599,6 +615,7 @@ public:
     virtual void        KeyUp( const KeyEvent& rKEvt );
     virtual void        PrePaint();
     virtual void        Paint( const Rectangle& rRect );
+    virtual void        PostPaint();
     virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
     virtual void        Move();
     virtual void        Resize();
@@ -953,16 +970,12 @@ public:
     void                SetQuickHelpText( const XubString& rHelpText );
     const XubString&    GetQuickHelpText() const;
 
-    void                SetHelpId( ULONG nHelpId );     /// deprecated
-    ULONG               GetHelpId() const;              /// deprecated
-    void                SetSmartHelpId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
-    SmartId             GetSmartHelpId() const;
+    void                SetHelpId( const rtl::OString& );
+    const rtl::OString& GetHelpId() const;
 
-    void                SetUniqueId( ULONG nUniqueId ); /// deprecated
-    ULONG               GetUniqueId() const;            /// deprecated
-    void                SetSmartUniqueId( const SmartId& aId, SmartIdUpdateMode aMode = SMART_SET_SMART );
-    SmartId             GetSmartUniqueId() const;
-    SmartId             GetSmartUniqueOrHelpId() const;
+    void                SetUniqueId( const rtl::OString& );
+    const rtl::OString& GetUniqueId() const;
+    const rtl::OString& GetUniqueOrHelpId() const;
 
     Window*             FindWindow( const Point& rPos ) const;
 
@@ -1106,6 +1119,56 @@ public:
 
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
+
+    // ExtImpl
+
+    // layouting
+    boost::shared_ptr< vcl::WindowArranger > getLayout();
+
+    /* add a child Window
+       addWindow will do the following things
+       - insert the passed window into the child list (equivalent to i_pWin->SetParent( this ))
+       - mark the window as "owned", meaning that the added Window will be destroyed by
+         the parent's desctructor.
+         This means: do not pass in member windows or stack objects here. Do not cause
+         the destructor of the added window to be called in any way.
+
+         to avoid ownership pass i_bTakeOwnership as "false"
+    */
+    void addWindow( Window* i_pWin, bool i_bTakeOwnership = true );
+
+    /* remove a child Window
+       the remove window functions will
+       - reparent the searched window (equivalent to i_pWin->SetParent( i_pNewParent ))
+       - return a pointer to the removed window or NULL if i_pWin was not found
+       caution: ownership passes to the new parent or the caller, if the new parent was NULL
+    */
+    Window* removeWindow( Window* i_pWin, Window* i_pNewParent = NULL );
+
+    /* return the identifier of this window
+    */
+    const rtl::OUString& getIdentifier() const;
+    /* set an identifier
+       identifiers have only loosely defined rules per se
+       in context of Window they must be unique over the window
+       hierarchy you'd like to find them again using the findWindow method
+    */
+    void setIdentifier( const rtl::OUString& );
+
+    /* returns the first found descendant that matches
+       the passed identifier or NULL
+    */
+    Window* findWindow( const rtl::OUString& ) const;
+
+    /* get/set properties
+       this will contain window properties (like visible, enabled)
+       as well as properties of derived classes (e.g. text of Edit fields)
+    */
+    virtual com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > getProperties() const;
+    /*
+    */
+    virtual void setProperties( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& );
+
 };
 
 

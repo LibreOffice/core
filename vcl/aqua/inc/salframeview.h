@@ -37,6 +37,7 @@
 }
 -(id)initWithSalFrame: (AquaSalFrame*)pFrame;
 -(MacOSBOOL)canBecomeKeyWindow;
+-(void)displayIfNeeded;
 -(void)windowDidBecomeKey: (NSNotification*)pNotification;
 -(void)windowDidResignKey: (NSNotification*)pNotification;
 -(void)windowDidChangeScreen: (NSNotification*)pNotification;

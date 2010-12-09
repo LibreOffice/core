@@ -28,20 +28,19 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
-#ifndef _VOS_THREAD_HXX
-#include <vos/thread.hxx>
-#endif
-#include <tools/string.hxx>
-#include <tools/gen.hxx>
-#include <tools/shl.hxx>
-#include <tools/link.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/sv.h>
-#include <tools/color.hxx>
-#include <tools/debug.hxx>
-#include <vcl/dllapi.h>
-#include <com/sun/star/uno/Reference.hxx>
-#include <unotools/options.hxx>
+#include "vos/thread.hxx"
+#include "tools/string.hxx"
+#include "tools/gen.hxx"
+#include "tools/shl.hxx"
+#include "tools/link.hxx"
+#include "tools/fldunit.hxx"
+#include "vcl/vclevent.hxx"
+#include "vcl/sv.h"
+#include "tools/color.hxx"
+#include "tools/debug.hxx"
+#include "vcl/dllapi.h"
+#include "com/sun/star/uno/Reference.hxx"
+#include "unotools/options.hxx"
 
 namespace com {
 namespace sun {
@@ -168,6 +167,8 @@ struct ImplSVAppData
     BOOL                    mbDialogCancel;                 // TRUE: Alle Dialog::Execute()-Aufrufe werden mit return FALSE sofort beendet
     BOOL                    mbNoYield;                      // Application::Yield will not wait for events if the queue is empty
                                                             // essentially that makes it the same as Application::Reschedule
+    long                    mnDefaultLayoutBorder;          // default value in pixel for layout distances used
+                                                            // in window arrangers
 
     /** Controls whether showing any IME status window is toggled on or off.
 
@@ -208,7 +209,6 @@ struct ImplSVGDIData
     BOOL                    mbFontSubChanged;   // TRUE: FontSubstitution wurde zwischen Begin/End geaendert
     utl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     utl::FontSubstConfiguration* mpFontSubstConfiguration;
-    bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
     bool                    mbNativeFontConfig; // true: do not override UI font
     bool                    mbNoXORClipping;    // true: do not use XOR to achieve clipping effects
 };
@@ -248,6 +248,8 @@ struct ImplSVWinData
 // - ImplSVCtrlData -
 // ------------------
 
+typedef std::vector< std::pair< String, FieldUnit > > FieldUnitStringList;
+
 struct ImplSVCtrlData
 {
     ImageList*              mpCheckImgList;     // ImageList for CheckBoxes
@@ -271,6 +273,8 @@ struct ImplSVCtrlData
     ULONG                   mnLastRadioFColor;  // Letzte FaceColor fuer RadioImage
     ULONG                   mnLastRadioWColor;  // Letzte WindowColor fuer RadioImage
     ULONG                   mnLastRadioLColor;  // Letzte LightColor fuer RadioImage
+    FieldUnitStringList*    mpFieldUnitStrings; // list with field units
+    FieldUnitStringList*    mpCleanUnitStrings; // same list but with some "fluff" like spaces removed
 };
 
 
@@ -318,10 +322,8 @@ struct ImplSVNWFData
                                                           // window background before drawing the native
                                                           // checkbox
     bool                    mbScrollbarJumpPage;          // true for "jump to here" behavior
+    int                     mnStatusBarLowerRightOffset;  // amount in pixel to avoid in the lower righthand corner
     bool                    mbCanDrawWidgetAnySize;       // set to true currently on gtk
-                                                          // signals that widgets can be drawn in any size and
-                                                          // brdwin.cxx ImplSmallBorderWindowView::DrawWindow
-                                                          // should not do GetNativeControlRegion
 };
 
 
@@ -394,6 +396,10 @@ inline VCL_DLLPUBLIC ImplSVData* ImplGetSVData() { return pImplSVData; }
 inline ImplSVData* ImplGetAppSVData() { return ImplGetSVData(); }
 
 bool ImplInitAccessBridge( BOOL bAllowCancel, BOOL &rCancelled );
+
+FieldUnitStringList* ImplGetFieldUnits();
+FieldUnitStringList* ImplGetCleanedFieldUnits();
+
 
 // -----------------------------------------------------------------------
 

@@ -38,9 +38,9 @@ PDFWriter::AnyWidget::~AnyWidget()
 {
 }
 
-PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext )
+PDFWriter::PDFWriter( const PDFWriter::PDFWriterContext& rContext, const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& xEnc )
         :
-        pImplementation( new PDFWriterImpl( rContext ) )
+        pImplementation( new PDFWriterImpl( rContext, xEnc, *this ) )
 {
 }
 
@@ -67,16 +67,6 @@ bool PDFWriter::Emit()
 PDFWriter::PDFVersion PDFWriter::GetVersion() const
 {
     return ((PDFWriterImpl*)pImplementation)->getVersion();
-}
-
-void PDFWriter::SetDocInfo( const PDFDocInfo& rInfo )
-{
-    ((PDFWriterImpl*)pImplementation)->setDocInfo( rInfo );
-}
-
-const PDFDocInfo& PDFWriter::GetDocInfo() const
-{
-    return ((PDFWriterImpl*)pImplementation)->getDocInfo();
 }
 
 void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
@@ -569,3 +559,18 @@ std::set< PDFWriter::ErrorCode > PDFWriter::GetErrors()
 {
     return ((PDFWriterImpl*)pImplementation)->getErrors();
 }
+
+com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >
+PDFWriter::InitEncryption( const rtl::OUString& i_rOwnerPassword,
+                           const rtl::OUString& i_rUserPassword,
+                           bool b128Bit
+                          )
+{
+    return PDFWriterImpl::initEncryption( i_rOwnerPassword, i_rUserPassword, b128Bit );
+}
+
+void PDFWriter::PlayMetafile( const GDIMetaFile& i_rMTF, const vcl::PDFWriter::PlayMetafileContext& i_rPlayContext, PDFExtOutDevData* i_pData )
+{
+    ((PDFWriterImpl*)pImplementation)->playMetafile( i_rMTF, i_pData, i_rPlayContext, NULL);
+}
+

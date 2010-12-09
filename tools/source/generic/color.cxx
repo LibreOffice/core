@@ -244,8 +244,8 @@ ColorData Color::HSBtoRGB( USHORT nHue, USHORT nSat, USHORT nBri )
         f = dH - n;
 
         UINT8 a = (UINT8) ( nB * ( 100 - nSat ) / 100 );
-        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)nSat * f + 0.5 ) ) / 100 );
-        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) + 0.5 ) ) / 100 );
+        UINT8 b = (UINT8) ( nB * ( 100 - ( (double)nSat * f ) ) / 100 );
+        UINT8 c = (UINT8) ( nB * ( 100 - ( (double)nSat * ( 1.0 - f ) ) ) / 100 );
 
         switch( n )
         {

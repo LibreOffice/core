@@ -2255,7 +2255,7 @@ void SalX11Display::Yield()
 
     XEvent aEvent;
     DBG_ASSERT( static_cast<SalYieldMutex*>(GetSalData()->m_pInstance->GetYieldMutex())->GetThreadId() ==
-                NAMESPACE_VOS(OThread)::getCurrentIdentifier(),
+                vos::OThread::getCurrentIdentifier(),
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
@@ -2592,7 +2592,7 @@ void SalDisplay::PrintInfo() const
              sal::static_int_cast< unsigned int >(GetVisual(m_nDefaultScreen).GetVisualId()) );
 }
 
-void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
+int SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, long i_nHeight )
 {
     // see if any frame buffers are at the same coordinates
     // this can happen with weird configuration e.g. on
@@ -2608,10 +2608,11 @@ void SalDisplay::addXineramaScreenUnique( long i_nX, long i_nY, long i_nWidth, l
             {
                 m_aXineramaScreens[n].SetSize( Size( i_nWidth, i_nHeight ) );
             }
-            return;
+            return (int)n;
         }
     }
     m_aXineramaScreens.push_back( Rectangle( Point( i_nX, i_nY ), Size( i_nWidth, i_nHeight ) ) );
+    return (int)m_aXineramaScreens.size()-1;
 }
 
 void SalDisplay::InitXinerama()

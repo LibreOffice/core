@@ -360,6 +360,8 @@
 
 -(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
 {
+    YIELD_GUARD;
+    
     SalData* pSalData = GetSalData();
     #if 1 // currently do some really bad hack
     if( ! pSalData->maFrames.empty() )
@@ -424,6 +426,8 @@
 
 -(void)systemColorsChanged: (NSNotification*) pNotification
 {
+    YIELD_GUARD;
+    
     const SalData* pSalData = GetSalData();
 	if( !pSalData->maFrames.empty() )
 		pSalData->maFrames.front()->CallCallback( SALEVENT_SETTINGSCHANGED, NULL );
@@ -431,6 +435,8 @@
 
 -(void)screenParametersChanged: (NSNotification*) pNotification
 {
+    YIELD_GUARD;
+    
     SalData* pSalData = GetSalData();
     std::list< AquaSalFrame* >::iterator it;
     for( it = pSalData->maFrames.begin(); it != pSalData->maFrames.end(); ++it )

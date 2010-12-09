@@ -31,9 +31,17 @@ if [ x${SOLARENV}x = xx ]; then
 exit 1
 fi
 
+if [ ${GUI} = "WNT" ]; then
 if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
     exec python $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
 else
     exec python $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
+fi
+else
+if [ x${SOLARVER}x = xx -o x${UPDMINOREXT}x = xx  ]; then
+    exec python $SOLARVERSION/$INPATH/bin/xtxex.py "$@"
+else
+    exec python $SOLARVERSION/$INPATH/bin$UPDMINOREXT/xtxex.py "$@"
+fi
 fi
 
