@@ -123,8 +123,7 @@ static void setPythonHome ( const OUString & pythonHome )
 
 static void prependPythonPath( const OUString & pythonPathBootstrap )
 {
-    rtl::OStringBuffer bufPYTHONPATH( 256 );
-    bufPYTHONPATH.append( "PYTHONPATH=");
+    rtl::OUStringBuffer bufPYTHONPATH( 256 );
     sal_Int32 nIndex = 0;
     while( 1 )
     {
@@ -140,21 +139,19 @@ static void prependPythonPath( const OUString & pythonPathBootstrap )
         }
         OUString systemPath;
         osl_getSystemPathFromFileURL( fileUrl.pData, &(systemPath.pData) );
-        bufPYTHONPATH.append( rtl::OUStringToOString( systemPath.pData, osl_getThreadTextEncoding() ));
-        bufPYTHONPATH.append( SAL_PATHSEPARATOR );
+        bufPYTHONPATH.append( systemPath );
+        bufPYTHONPATH.append( static_cast<sal_Unicode>(SAL_PATHSEPARATOR) );
         if( nNew == -1 )
             break;
         nIndex = nNew + 1;
     }
     const char * oldEnv = getenv( "PYTHONPATH");
     if( oldEnv )
-        bufPYTHONPATH.append( oldEnv );
-    OString result = bufPYTHONPATH.makeStringAndClear();
-    rtl_string_acquire( result.pData );
+        bufPYTHONPATH.append( rtl::OUString(oldEnv, strlen(oldEnv), osl_getThreadTextEncoding()) );
 
-//     printf( "Setting %s\n" , result.pData->buffer );
-    putenv( result.pData->buffer );
-
+    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("PYTHONPATH"));
+    rtl::OUString envValue(bufPYTHONPATH.makeStringAndClear());
+    osl_setEnvironment(envVar.pData, envValue.pData);
 }
 
 Reference< XInterface > CreateInstance( const Reference< XComponentContext > & ctx )
@@ -230,12 +227,6 @@ void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
-}
-//==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
-{
-    return cppu::component_writeInfoHelper( pServiceManager, pRegistryKey, g_entries );
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
