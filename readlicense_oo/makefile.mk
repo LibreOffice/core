@@ -7,14 +7,14 @@ TARGET=source
 # ------------------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
-SYSLICBASE=license.txt license.html license.rtf
+SYSLICBASE=license.txt LICENSE.odt
 SYSLICDEST=$(MISC)$/license$/wnt
 .ELSE          # "$(GUI)"=="WNT"
-SYSLICBASE=LICENSE LICENSE.html
+SYSLICBASE=LICENSE LICENSE.odt
 SYSLICDEST=$(MISC)$/license$/unx
 .ENDIF          # "$(GUI)"=="WNT"
 
-SOURCELICENCES=$(foreach,i,$(SYSLICBASE) $(SYSLICDEST)$/$(i:b)_en-US$(i:e))
+SOURCELICENCES=$(foreach,i,$(SYSLICBASE) $(SYSLICDEST)$/$(i:b)$(i:e))
 
 fallbacklicenses=$(foreach,i,{$(subst,$(defaultlangiso), $(alllangiso))} $(foreach,j,$(SYSLICBASE) $(SYSLICDEST)$/$(j:b)_$i$(j:e)))
 
@@ -34,19 +34,22 @@ just_for_nice_optics: $(fallbacklicenses)
     @$(ECHONL)
 
 # for windows, convert linends to DOS
-$(SYSLICDEST)$/license_en-US.% : source$/license$/license_en-US.%
+$(SYSLICDEST)$/license.% : txt$/license.%
     @-$(MKDIRHIER) $(SYSLICDEST)
     $(PERL) -p -e 's/\r?\n$$/\r\n/' < $< > $@
 
 # for others just copy
-$(SYSLICDEST)$/LICENSE_en-US : source$/license$/license_en-US.txt
+$(SYSLICDEST)$/LICENSE : txt$/license.txt
+    @-$(MKDIRHIER) $(SYSLICDEST)
+    $(COPY) $< $@
+$(SYSLICDEST)$/LICENSE.odt : odt$/LICENSE.odt
     @-$(MKDIRHIER) $(SYSLICDEST)
     $(COPY) $< $@
 
-$(SYSLICDEST)$/LICENSE_en-US.html : source$/license$/license_en-US.html
-    @-$(MKDIRHIER) $(SYSLICDEST)
-    $(COPY) $< $@
-
-$(SYSLICDEST)$/LICENSE.odt : source$/license$/license.odt
-    @-$(MKDIRHIER) $(SYSLICDEST)
-    $(COPY) $< $@
+# just copy into misc
+$(MISC)$/LICENSE.odt: LICENSE.odt
+    $(COPY) LICENSE.odt $@
+$(MISC)$/CREDITS.odt: CREDITS.odt
+    $(COPY) CREDITS.odt $@
+$(MISC)$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
+    $(COPY) THIRDPARTYLICENSEREADME.html $@
