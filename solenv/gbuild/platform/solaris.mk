@@ -195,7 +195,6 @@ endef
 
 # Library class
 
-#gb_Library_DEFS := -DSHAREDLIB -D_DLL_
 gb_Library_DEFS :=
 gb_Library_TARGETTYPEFLAGS := -Bdynamic -z text -G
 gb_Library_SYSPRE := lib

@@ -131,13 +131,10 @@ include $(foreach repo,$(gb_REPOS),$(repo)/RepositoryFixes.mk)
 $(eval $(call gb_Helper_collect_knownlibs))
 
 gb_GLOBALDEFS := \
-    -D__DMAKE \
     -D_REENTRANT \
-    -D_USE_NAMESPACE=1 \
     -DCUI \
     -DENABLE_LAYOUT_EXPERIMENTAL=0 \
     -DENABLE_LAYOUT=0 \
-    -DNEW_SOLAR \
     -DOSL_DEBUG_LEVEL=$(gb_DEBUGLEVEL) \
     -DSOLAR_JAVA \
     -DSTLPORT_VERSION=$(STLPORT_VER) \
