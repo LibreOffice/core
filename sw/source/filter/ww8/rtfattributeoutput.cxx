@@ -3007,6 +3007,7 @@ bool RtfAttributeOutput::DropdownField( const SwField* /*pFld*/ )
 
 RtfAttributeOutput::RtfAttributeOutput( RtfExport &rExport )
     : m_rExport( rExport ),
+    m_bStrikeDouble( false ),
     m_pTableWrt( NULL ),
     m_bTableCellOpen( false ),
     m_nTableDepth( 0 ),
