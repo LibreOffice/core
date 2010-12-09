@@ -2037,9 +2037,25 @@ inline void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OString& rInSt
     appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
-inline void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer )
+void PDFWriterImpl::appendLiteralStringEncrypt( const rtl::OUString& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer, rtl_TextEncoding nEnc )
 {
-    rtl::OString aBufferString( rtl::OUStringToOString( rInString, RTL_TEXTENCODING_ASCII_US ) );
+    rtl::OString aBufferString( rtl::OUStringToOString( rInString, nEnc ) );
+    sal_Int32 nLen = aBufferString.getLength();
+    rtl::OStringBuffer aBuf( nLen );
+    const sal_Char* pT = aBufferString.getStr();
+
+    for( sal_Int32 i = 0; i < nLen; i++, pT++ )
+    {
+        if( (*pT & 0x80) == 0 )
+            aBuf.append( *pT );
+        else
+        {
+            aBuf.append( '<' );
+            appendHex( *pT, aBuf );
+            aBuf.append( '>' );
+        }
+    }
+    aBufferString = aBuf.makeStringAndClear();
     appendLiteralStringEncrypt( aBufferString, nInObjectNumber, rOutBuffer);
 }
 
@@ -4634,18 +4650,20 @@ we check in the following sequence:
             {
                 aLine.append( "/Launch/Win<</F" );
                 // INetURLObject is not good with UNC paths, use original path
-                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine );
+                appendLiteralStringEncrypt(  rLink.m_aURL, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 aLine.append( ">>" );
             }
             else
             {
-                sal_Int32 nSetRelative = 0;
+                bool bSetRelative = false;
+                bool bFileSpec = false;
 //check if relative file link is requested and if the protocol is 'file://'
                 if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
-                    nSetRelative++;
+                    bSetRelative = true;
 
                 rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
                 if( nSetGoToRMode == 0 )
+                {
                     switch( m_aContext.DefaultLinkAction )
                     {
                     default:
@@ -4665,19 +4683,24 @@ we check in the following sequence:
                                         eTargetProtocol != INET_PROT_FILE )
                             aLine.append( "/URI/URI" );
                         else
+                        {
                             aLine.append( "/Launch/F" );
+                            bFileSpec = true;
+                        }
                         break;
                     }
+                }
 //fragment are encoded in the same way as in the named destination processing
-                rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                 if( nSetGoToRMode )
                 {//add the fragment
+                    rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");
-                    appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
+                    bFileSpec = true;
+                    appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark,
                                                                                          INetURLObject::WAS_ENCODED,
                                                                                          INetURLObject::DECODE_WITH_CHARSET ) :
-                                                                   aURLNoMark, rLink.m_nObject, aLine );
+                                                                   aURLNoMark, rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                     if( aFragment.getLength() > 0 )
                     {
                         aLine.append("/D/");
@@ -4696,13 +4719,16 @@ we check in the following sequence:
 //substitute the fragment
                         aTargetURL.SetMark( aLineLoc.getStr() );
                     }
-                    rtl::OUString aURL = aTargetURL.GetMainURL( (nSetRelative || eTargetProtocol == INET_PROT_FILE) ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
+                    rtl::OUString aURL = aTargetURL.GetMainURL( bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE );
 // check if we have a URL available, if the string is empty, set it as the original one
 //                 if( aURL.getLength() == 0 )
 //                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
 //                 else
-                        appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
-                                                                   aURL , rLink.m_nObject, aLine );
+                        appendLiteralStringEncrypt( bSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL,
+                                                                                            INetURLObject::WAS_ENCODED,
+                                                                                            bFileSpec ? INetURLObject::DECODE_WITH_CHARSET : INetURLObject::NO_DECODE
+                                                                                            ) :
+                                                                   aURL , rLink.m_nObject, aLine, osl_getThreadTextEncoding() );
                 }
 //<--- i56629
             }
@@ -5606,7 +5632,7 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                 {
                     // create a submit form action
                     aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F" );
-                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine );
+                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine, osl_getThreadTextEncoding() );
                     aLine.append( "/Flags " );
 
                     sal_Int32 nFlags = 0;
