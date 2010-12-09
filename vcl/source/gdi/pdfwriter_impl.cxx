@@ -2962,12 +2962,9 @@ bool PDFWriterImpl::emitTilings()
 
         aTilingObj.setLength( 0 );
 
-#if OSL_DEBUG_LEVEL > 1
-        {
-            OStringBuffer aLine( "PDFWriterImpl::emitTilings" );
-            emitComment( aLine.getStr() );
-        }
-#endif
+        #if OSL_DEBUG_LEVEL > 1
+        emitComment( "PDFWriterImpl::emitTilings" );
+        #endif
 
         sal_Int32 nX = (sal_Int32)it->m_aRectangle.Left();
         sal_Int32 nY = (sal_Int32)it->m_aRectangle.Top();
@@ -3455,10 +3452,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( const ImplFont
 
                     // now we can actually write the font stream !
                     #if OSL_DEBUG_LEVEL > 1
-                    {
-                        OStringBuffer aLine( " PDFWriterImpl::emitEmbeddedFont" );
-                        emitComment( aLine.getStr() );
-                    }
+                    emitComment( " PDFWriterImpl::emitEmbeddedFont" );
                     #endif
                     OStringBuffer aLine( 512 );
                     nStreamObject = createObject();
@@ -3884,12 +3878,9 @@ sal_Int32 PDFWriterImpl::createToUnicodeCMap( sal_uInt8* pEncoding,
     delete pCodec;
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::createToUnicodeCMap" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::createToUnicodeCMap" );
+    #endif
     OStringBuffer aLine( 40 );
 
     aLine.append( nStream );
@@ -4076,10 +4067,7 @@ bool PDFWriterImpl::emitFonts()
                 CHECK_RETURN( (osl_File_E_None == osl_setFilePos( aFontFile, osl_Pos_Absolut, 0 ) ) );
 
                 #if OSL_DEBUG_LEVEL > 1
-                {
-                    OStringBuffer aLine1( " PDFWriterImpl::emitFonts" );
-                    emitComment( aLine1.getStr() );
-                }
+                emitComment( "PDFWriterImpl::emitFonts" );
                 #endif
                 sal_Int32 nFontStream = createObject();
                 sal_Int32 nStreamLengthObject = createObject();
@@ -5384,12 +5372,9 @@ bool PDFWriterImpl::emitAppearances( PDFWidget& rWidget, OStringBuffer& rAnnotDi
                 pApppearanceStream->Seek( STREAM_SEEK_TO_BEGIN );
                 sal_Int32 nObject = createObject();
                 CHECK_RETURN( updateObject( nObject ) );
-#if OSL_DEBUG_LEVEL > 1
-                {
-                    OStringBuffer aLine( " PDFWriterImpl::emitAppearances" );
-                    emitComment( aLine.getStr() );
-                }
-#endif
+                #if OSL_DEBUG_LEVEL > 1
+                emitComment( "PDFWriterImpl::emitAppearances" );
+                #endif
                 OStringBuffer aLine;
                 aLine.append( nObject );
 
@@ -9277,12 +9262,9 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_END );
     ULONG nSize = rObject.m_pContentStream->Tell();
     rObject.m_pContentStream->Seek( STREAM_SEEK_TO_BEGIN );
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeTransparentObject" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeTransparentObject" );
+    #endif
     OStringBuffer aLine( 512 );
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
     aLine.append( rObject.m_nObject );
@@ -9426,28 +9408,21 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     sal_Int32 nFunctionObject = createObject();
     CHECK_RETURN( updateObject( nFunctionObject ) );
 
-    OutputDevice* pRefDevice = getReferenceDevice();
-    pRefDevice->Push( PUSH_ALL );
-    if( rObject.m_aSize.Width() > pRefDevice->GetOutputSizePixel().Width() )
-        rObject.m_aSize.Width() = pRefDevice->GetOutputSizePixel().Width();
-    if( rObject.m_aSize.Height() > pRefDevice->GetOutputSizePixel().Height() )
-        rObject.m_aSize.Height() = pRefDevice->GetOutputSizePixel().Height();
-    pRefDevice->SetMapMode( MapMode( MAP_PIXEL ) );
-    pRefDevice->DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
+    VirtualDevice aDev;
+    aDev.SetOutputSizePixel( rObject.m_aSize );
+    aDev.SetMapMode( MapMode( MAP_PIXEL ) );
+    aDev.DrawGradient( Rectangle( Point( 0, 0 ), rObject.m_aSize ), rObject.m_aGradient );
 
-    Bitmap aSample = pRefDevice->GetBitmap( Point( 0, 0 ), rObject.m_aSize );
+    Bitmap aSample = aDev.GetBitmap( Point( 0, 0 ), rObject.m_aSize );
     BitmapReadAccess* pAccess = aSample.AcquireReadAccess();
     AccessReleaser aReleaser( pAccess );
 
     Size aSize = aSample.GetSizePixel();
 
     sal_Int32 nStreamLengthObject = createObject();
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeGradientFunction" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeGradientFunction" );
+    #endif
     OStringBuffer aLine( 120 );
     aLine.append( nFunctionObject );
     aLine.append( " 0 obj\n"
@@ -9475,7 +9450,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
 
     checkAndEnableStreamEncryption( nFunctionObject );
     beginCompression();
-    for( int y = 0; y < aSize.Height(); y++ )
+    for( int y = aSize.Height()-1; y >= 0; y-- )
     {
         for( int x = 0; x < aSize.Width(); x++ )
         {
@@ -9526,8 +9501,6 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
 
-    pRefDevice->Pop();
-
     return true;
 }
 
@@ -9556,12 +9529,9 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
             m_aErrors.insert( PDFWriter::Warning_Transparency_Omitted_PDF13 );
 
     }
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeJPG" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeJPG" );
+    #endif
 
     OStringBuffer aLine(200);
     aLine.append( rObject.m_nObject );
@@ -9681,12 +9651,9 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     sal_Int32 nStreamLengthObject   = createObject();
     sal_Int32 nMaskObject           = 0;
 
-#if OSL_DEBUG_LEVEL > 1
-    {
-        OStringBuffer aLine( " PDFWriterImpl::writeBitmapObject" );
-        emitComment( aLine.getStr() );
-    }
-#endif
+    #if OSL_DEBUG_LEVEL > 1
+    emitComment( "PDFWriterImpl::writeBitmapObject" );
+    #endif
     OStringBuffer aLine(1024);
     aLine.append( rObject.m_nObject );
     aLine.append( " 0 obj\n"
@@ -10076,15 +10043,16 @@ sal_Int32 PDFWriterImpl::createGradient( const Gradient& rGradient, const Size& 
                                rSize ) );
     // check if we already have this gradient
     std::list<GradientEmit>::iterator it;
+    // rounding to point will generally lose some pixels
+    // round up to point boundary
+    aPtSize.Width()++;
+    aPtSize.Height()++;
     for( it = m_aGradients.begin(); it != m_aGradients.end(); ++it )
     {
         if( it->m_aGradient == rGradient )
         {
-            if( it->m_aSize.Width() < aPtSize.Width() )
-                it->m_aSize.Width() = aPtSize.Width();
-            if( it->m_aSize.Height() <= aPtSize.Height() )
-                it->m_aSize.Height() = aPtSize.Height();
-           break;
+            if( it->m_aSize == aPtSize )
+                break;
         }
     }
     if( it == m_aGradients.end() )
@@ -10159,12 +10127,12 @@ void PDFWriterImpl::drawGradient( const PolyPolygon& rPolyPoly, const Gradient& 
         return;
     }
 
-    sal_Int32 nGradient = createGradient( rGradient, rPolyPoly.GetBoundRect().GetSize() );
+    Rectangle aBoundRect = rPolyPoly.GetBoundRect();
+    sal_Int32 nGradient = createGradient( rGradient, aBoundRect.GetSize() );
 
     updateGraphicsState();
 
-    Rectangle aBoundRect = rPolyPoly.GetBoundRect();
-    Point aTranslate = aBoundRect.BottomLeft() + Point( 0, 1 );
+    Point aTranslate = aBoundRect.BottomLeft();
     int nPolygons = rPolyPoly.Count();
 
     OStringBuffer aLine( 80*nPolygons );

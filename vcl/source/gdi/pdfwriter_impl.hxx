@@ -1052,8 +1052,6 @@ i12626
     bool prepareEncryption( const com::sun::star::uno::Reference< com::sun::star::beans::XMaterialHolder >& );
 
     // helper for playMetafile
-    void implWriteGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient,
-                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
     void implWriteBitmapEx( const Point& rPoint, const Size& rSize, const BitmapEx& rBitmapEx,
                            VirtualDevice* pDummyVDev, const vcl::PDFWriter::PlayMetafileContext& );
 
