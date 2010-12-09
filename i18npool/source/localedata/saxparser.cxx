@@ -144,11 +144,10 @@ class TestDocumentHandler :
     public WeakImplHelper3< XExtendedDocumentHandler , XEntityResolver , XErrorHandler >
 {
 public:
-    TestDocumentHandler(const char* locale, const char* outFile ) :
-      rootNode(0), nError(0), nbOfCurrencies(0), nbOfCalendars(0), nbOfFormatElements(0),
-      nbOfTransliterations(0), nbOfCollations(0), nbOfDays(50), nbOfMonths(50), nbOfEras(10),
-      flag(-1), of(outFile, locale), isStartDayOfWeek(false), foundDefaultName(false),
-      foundVariant(false), openElement(false)
+    TestDocumentHandler(const char* locale, const char* outFile )
+        : rootNode(0)
+        , nError(0)
+        , of(outFile, locale)
     {
         strncpy( theLocale, locale, sizeof(theLocale) );
         theLocale[sizeof(theLocale)-1] = 0;
@@ -247,10 +246,6 @@ public: // ExtendedDocumentHandler
 
         LocaleNode * l = currentNode.top();
         l->setValue (aChars);
-        ::rtl::OUString str(aChars);
-        sal_Unicode nonBreakSPace[2]= {0xa, 0x0};
-        if(!openElement || str.equals(nonBreakSPace))
-          return;
     }
 
     virtual void SAL_CALL ignorableWhitespace(const OUString& /*aWhitespaces*/) throw (SAXException,RuntimeException)
@@ -303,23 +298,8 @@ public: // ExtendedDocumentHandler
 
 public:
     int nError;
-    ::rtl::OUString currentElement;
-    sal_Int16 nbOfCurrencies;
-    sal_Int16 nbOfCalendars;
-    sal_Int16 nbOfFormatElements;
-    sal_Int16 nbOfTransliterations;
-    sal_Int16 nbOfCollations;
-    Sequence<sal_Int16> nbOfDays;
-    Sequence<sal_Int16> nbOfMonths;
-    Sequence<sal_Int16> nbOfEras;
-    sal_Char *elementTag;
     sal_Char theLocale[50];
-    sal_Int16 flag;
     OFileWriter of;
-    sal_Bool isStartDayOfWeek;
-    sal_Bool foundDefaultName;
-    sal_Bool foundVariant;
-        sal_Bool openElement;
 };
 
 
