@@ -60,6 +60,10 @@ public:
         rtl::OUString const & name, rtl::OUString const & style,
         BitmapEx & bitmap, bool localized = false, bool loadMissing = false );
 
+    bool loadDefaultImage(
+        rtl::OUString const & style,
+        BitmapEx& bitmap);
+
     void shutDown();
         // a crude form of life cycle control (called from DeInitVCL; otherwise,
         // if the ImplImageTree singleton were destroyed during exit that would

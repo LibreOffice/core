@@ -595,7 +595,7 @@ uno::Reference< graphic::XGraphic > loadGraphic( const char *pName )
     if ( aStr.compareToAscii( ".uno:" ) == 0 )
         aStr = aStr.copy( 5 ).toAsciiLowerCase();
 
-    if ( !vcl::ImageRepository::loadImage( OUString::createFromAscii( pName ), aBmp, true ) )
+    if ( !vcl::ImageRepository::loadImage( OUString::createFromAscii( pName ), aBmp, true, true ) )
         return uno::Reference< graphic::XGraphic >();
 
     return Graphic( aBmp ).GetXGraphic();

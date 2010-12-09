@@ -104,7 +104,7 @@ BitmapEx::BitmapEx( const ResId& rResId ) :
     const String aFileName( pResMgr->ReadString() );
     ::rtl::OUString aCurrentSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
-    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this ) )
+    if( !aImageTree->loadImage( aFileName, aCurrentSymbolsStyle, *this, true ) )
     {
 #ifdef DBG_UTIL
         ByteString aErrorStr( "BitmapEx::BitmapEx( const ResId& rResId ): could not load image <" );

@@ -44,6 +44,7 @@
 #include <vcl/impimagetree.hxx>
 #include <vcl/image.h>
 #include <vcl/image.hxx>
+#include <vcl/imagerepository.hxx>
 
 #if OSL_DEBUG_LEVEL > 0
 #include <rtl/strbuf.hxx>
@@ -490,8 +491,6 @@ ImageList::ImageList( const ::std::vector< ::rtl::OUString >& rNameVector,
     mpImplData->maPrefix = rPrefix;
     for( sal_uInt32 i = 0; i < rNameVector.size(); ++i )
     {
-//      fprintf (stderr, "List %p [%d]: '%s'\n",
-//               this, i, rtl::OUStringToOString( rNameVector[i], RTL_TEXTENCODING_UTF8 ).getStr() );
         mpImplData->AddImage( rNameVector[ i ], static_cast< USHORT >( i ) + 1, BitmapEx() );
     }
 }
@@ -536,9 +535,6 @@ void ImageAryData::Load(const rtl::OUString &rPrefix)
     ::rtl::OUString aSymbolsStyle = Application::GetSettings().GetStyleSettings().GetCurrentSymbolsStyleName();
 
     BitmapEx aBmpEx;
-
-//  fprintf (stderr, "Attempt load of '%s'\n",
-//           rtl::OUStringToOString( maName, RTL_TEXTENCODING_UTF8 ).getStr() );
 
     rtl::OUString aFileName = rPrefix;
     aFileName += maName;
@@ -615,8 +611,6 @@ void ImageList::InsertFromHorizontalStrip( const BitmapEx &rBitmapEx,
                                            const std::vector< rtl::OUString > &rNameVector )
 {
     USHORT nItems = sal::static_int_cast< USHORT >( rNameVector.size() );
-
-//  fprintf (stderr, "InsertFromHorizontalStrip (1) [%d items]\n", nItems);
 
     if (!nItems)
             return;
@@ -789,8 +783,6 @@ Image ImageList::GetImage( USHORT nId ) const
 {
     DBG_CHKTHIS( ImageList, NULL );
 
-//  fprintf (stderr, "GetImage %d\n", nId);
-
     Image aRet;
 
     if( mpImplData )
@@ -809,6 +801,14 @@ Image ImageList::GetImage( USHORT nId ) const
         }
     }
 
+    if (!aRet)
+    {
+        BitmapEx rBitmap;
+        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
+        if (res)
+            aRet =  Image(rBitmap);
+    }
+
     return aRet;
 }
 
@@ -816,9 +816,6 @@ Image ImageList::GetImage( USHORT nId ) const
 
 Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
 {
-//  fprintf (stderr, "GetImage '%s'\n",
-//           rtl::OUStringToOString( rImageName, RTL_TEXTENCODING_UTF8 ).getStr() );
-
     if( mpImplData )
     {
         ImageAryData *pImg = mpImplData->maNameHash[ rImageName ];
@@ -830,7 +827,6 @@ Image ImageList::GetImage( const ::rtl::OUString& rImageName ) const
             return Image( pImg->maBitmapEx );
         }
     }
-//  fprintf (stderr, "no such image\n");
 
     return Image();
 }
@@ -979,9 +975,6 @@ Size ImageList::GetImageSize() const
             aRet = mpImplData->maImageSize = aTmp.GetSizePixel();
         }
     }
-//  fprintf (stderr, "GetImageSize returns %d, %d\n",
-//           aRet.Width(), aRet.Height());
-
     return aRet;
 }
 
