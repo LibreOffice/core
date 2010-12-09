@@ -63,6 +63,8 @@
 #include <rtl/logfile.hxx>
 #include "svtools/miscopt.hxx"
 
+#include "vcl/imagerepository.hxx"
+
 //_________________________________________________________________________________________________________________
 //  namespaces
 //_________________________________________________________________________________________________________________
@@ -361,7 +363,15 @@ GlobalImageList::~GlobalImageList()
 Image GlobalImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
 {
     osl::MutexGuard guard( getGlobalImageListMutex() );
-    return CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
+    Image aImage = CmdImageList::getImageFromCommandURL( nImageType, rCommandURL );
+    if (!aImage)
+    {
+        BitmapEx rBitmap;
+        bool res = ::vcl::ImageRepository::loadDefaultImage(rBitmap);
+        if (res)
+            aImage = Image(rBitmap);
+    }
+    return aImage;
 }
 
 bool GlobalImageList::hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
