@@ -186,7 +186,6 @@ void ImpSvNumberformatInfo::Load(SvStream& rStream, USHORT nAnz)
             >> nCntPre >> nCntPost >> nCntExp;
 }
 
-
 //============================================================================
 
 // static
@@ -241,7 +240,6 @@ BYTE SvNumberNatNum::MapDBNumToNatNum( BYTE nDBNum, LanguageType eLang, BOOL bDa
     }
     return nNatNum;
 }
-
 
 // static
 BYTE SvNumberNatNum::MapNatNumToDBNum( BYTE nNatNum, LanguageType eLang, BOOL bDate )
@@ -399,7 +397,6 @@ void ImpSvNumFor::Load(SvStream& rStream, ImpSvNumberformatScan& rSc,
     pColor = rSc.GetColor(sColorName);
 }
 
-
 BOOL ImpSvNumFor::HasNewCurrency() const
 {
     for ( USHORT j=0; j<nAnzStrings; j++ )
@@ -409,7 +406,6 @@ BOOL ImpSvNumFor::HasNewCurrency() const
     }
     return FALSE;
 }
-
 
 BOOL ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
             String& rExtension ) const
@@ -429,7 +425,6 @@ BOOL ImpSvNumFor::GetNewCurrencySymbol( String& rSymbol,
     //! kein Erase an rSymbol, rExtension
     return FALSE;
 }
-
 
 void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
 {
@@ -460,7 +455,6 @@ void ImpSvNumFor::SaveNewCurrencyMap( SvStream& rStream ) const
     }
 }
 
-
 void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
 {
     USHORT nCnt;
@@ -474,7 +468,6 @@ void ImpSvNumFor::LoadNewCurrencyMap( SvStream& rStream )
             aI.nTypeArray[nPos] = nType;
     }
 }
-
 
 /***********************Funktionen SvNumberformat************************/
 
@@ -557,7 +550,6 @@ SvNumberformat::SvNumberformat( SvNumberformat& rFormat, ImpSvNumberformatScan& 
     ImpCopyNumberformat( rFormat );
 }
 
-
 BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
 {
     if ( nSymbolType > 0  )
@@ -599,7 +591,6 @@ BOOL lcl_SvNumberformat_IsBracketedPrefix( short nSymbolType )
     }
     return FALSE;
 }
-
 
 SvNumberformat::SvNumberformat(String& rString,
                                ImpSvNumberformatScan* pSc,
@@ -1078,7 +1069,6 @@ enum ScanState
     SsGetBracketed      // any [...] not decided yet
 };
 
-
 // read a string until ']' and delete spaces in input
 // static
 xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
@@ -1104,7 +1094,6 @@ xub_StrLen SvNumberformat::ImpGetNumber(String& rString,
     }
     return nPos - nStartPos;
 }
-
 
 // static
 LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
@@ -1137,7 +1126,6 @@ LanguageType SvNumberformat::ImpGetLanguageType( const String& rString,
     return (nNum && (cToken == ']' || nPos == nLen)) ? (LanguageType)nNum :
         LANGUAGE_DONTKNOW;
 }
-
 
 short SvNumberformat::ImpNextSymbol(String& rString,
                                  xub_StrLen& nPos,
@@ -1595,7 +1583,6 @@ void SvNumberformat::ConvertLanguage( SvNumberFormatter& rConverter,
     }
 }
 
-
 // static
 void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
 {
@@ -1625,7 +1612,6 @@ void SvNumberformat::LoadString( SvStream& rStream, String& rStr )
         *pUni = 0;
     }
 }
-
 
 void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr ) const
 {
@@ -1697,7 +1683,6 @@ void SvNumberformat::Save( SvStream& rStream, ImpSvNumMultipleWriteHeader& rHdr 
     rHdr.EndEntry();
 }
 
-
 BOOL SvNumberformat::HasNewCurrency() const
 {
     for ( USHORT j=0; j<4; j++ )
@@ -1707,7 +1692,6 @@ BOOL SvNumberformat::HasNewCurrency() const
     }
     return FALSE;
 }
-
 
 BOOL SvNumberformat::GetNewCurrencySymbol( String& rSymbol,
             String& rExtension ) const
@@ -1721,7 +1705,6 @@ BOOL SvNumberformat::GetNewCurrencySymbol( String& rSymbol,
     rExtension.Erase();
     return FALSE;
 }
-
 
 // static
 String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
@@ -1772,12 +1755,10 @@ String SvNumberformat::StripNewCurrencyDelimiters( const String& rStr,
     return aTmp;
 }
 
-
 void SvNumberformat::Build50Formatstring( String& rStr ) const
 {
     rStr = StripNewCurrencyDelimiters( sFormatstring, TRUE );
 }
-
 
 void SvNumberformat::ImpGetOutputStandard(double& fNumber, String& OutString)
 {
@@ -1994,6 +1975,33 @@ void lcl_GetOutputStringScientific(
 
     rOutString = ::rtl::math::doubleToUString(
         fNumber, rtl_math_StringFormat_E, nPrec, rFormatter.GetNumDecimalSep().GetChar(0));
+}
+
+sal_Int32 lcl_GetForcedDenominator(ImpSvNumberformatInfo &rInfo, USHORT nAnz)
+{
+    USHORT i;
+    rtl::OUString aDiv;
+    for( i = 0; i < nAnz; i++ )
+    {
+        if( rInfo.nTypeArray[i] == NF_SYMBOLTYPE_FRAC_FDIV )
+            aDiv += rInfo.sStrArray[i];
+    }
+    return aDiv.toInt32();
+}
+
+// TODO: More optimizations?
+void lcl_ForcedDenominator(ULONG &nFrac, ULONG &nDiv, ULONG nForcedDiv)
+{
+    double fFrac = (double)nFrac / (double)nDiv;
+    double fMultiplier = (double)nForcedDiv / (double)nDiv;
+    nFrac = (ULONG)( (double)nFrac * fMultiplier );
+
+    double fFracNew = (double)nFrac / (double)nForcedDiv;
+    double fFracNew1 = (double)(nFrac + 1) / (double)nForcedDiv;
+    double fDiff = fFrac - fFracNew;
+    if( fDiff > ( fFracNew1 - fFrac ) )
+        nFrac++;
+    nDiv = nForcedDiv;
 }
 
 }
@@ -2382,6 +2390,16 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     }
                 }
 
+                if( sal_Int32 nForcedDiv = lcl_GetForcedDenominator(NumFor[nIx].Info(), nAnz) )
+                {
+                    lcl_ForcedDenominator(nFrac, nDiv, nForcedDiv);
+                    if( nFrac >= nDiv )
+                    {
+                        nFrac = nDiv = 0;
+                        fNum = fNum + 1.0;
+                    }
+                }
+
                 if (rInfo.nCntPre == 0)    // unechter Bruch
                 {
                     double fNum1 = fNum * (double)nDiv + (double)nFrac;
@@ -2758,7 +2776,6 @@ BOOL SvNumberformat::ImpGetTimeOutput(double fNumber,
     return bRes;
 }
 
-
 BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
 {
     if ( GetCal().getUniqueID() != Gregorian::get() )
@@ -2783,7 +2800,6 @@ BOOL SvNumberformat::ImpIsOtherCalendar( const ImpSvNumFor& rNumFor ) const
     }
     return FALSE;
 }
-
 
 void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
         double& fOrgDateTime ) const
@@ -2816,7 +2832,6 @@ void SvNumberformat::SwitchToOtherCalendar( String& rOrgCalendar,
     }
 }
 
-
 void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar,
         double fOrgDateTime ) const
 {
@@ -2828,7 +2843,6 @@ void SvNumberformat::SwitchToGregorianCalendar( const String& rOrgCalendar,
         rCal.setDateTime( fOrgDateTime );
     }
 }
-
 
 BOOL SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, double& fOrgDateTime )
 {
@@ -2856,7 +2870,6 @@ BOOL SvNumberformat::ImpFallBackToGregorianCalendar( String& rOrgCalendar, doubl
     return FALSE;
 }
 
-
 BOOL SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
         double& fOrgDateTime, const ImpSvNumFor& rNumFor ) const
 {
@@ -2879,7 +2892,6 @@ BOOL SvNumberformat::ImpSwitchToSpecifiedCalendar( String& rOrgCalendar,
     }
     return FALSE;
 }
-
 
 // static
 void SvNumberformat::ImpAppendEraG( String& OutString,
@@ -2904,7 +2916,6 @@ void SvNumberformat::ImpAppendEraG( String& OutString,
     else
         OutString += rCal.getDisplayString( CalendarDisplayCode::SHORT_ERA, nNatNum );
 }
-
 
 BOOL SvNumberformat::ImpGetDateOutput(double fNumber,
                                    USHORT nIx,
@@ -3863,6 +3874,8 @@ BOOL SvNumberformat::ImpNumberFill( String& sStr,       // number string
                 sStr.Insert(sNum, k);
             }
             break;
+            case NF_SYMBOLTYPE_FRAC_FDIV:       // Do Nothing
+                break;
 
             default:
                 sStr.Insert(rInfo.sStrArray[j],k);
@@ -3974,7 +3987,6 @@ const String* SvNumberformat::GetNumForString( USHORT nNumFor, USHORT nPos,
     return &NumFor[nNumFor].Info().sStrArray[nPos];
 }
 
-
 short SvNumberformat::GetNumForType( USHORT nNumFor, USHORT nPos,
             BOOL bString /* = FALSE */ ) const
 {
@@ -4016,7 +4028,6 @@ short SvNumberformat::GetNumForType( USHORT nNumFor, USHORT nPos,
     return NumFor[nNumFor].Info().nTypeArray[nPos];
 }
 
-
 BOOL SvNumberformat::IsNegativeWithoutSign() const
 {
     if ( IsNegativeRealNegative() )
@@ -4027,7 +4038,6 @@ BOOL SvNumberformat::IsNegativeWithoutSign() const
     }
     return FALSE;
 }
-
 
 DateFormat SvNumberformat::GetDateOrder() const
 {
@@ -4064,7 +4074,6 @@ DateFormat SvNumberformat::GetDateOrder() const
     }
     return rLoc().getDateFormat();
 }
-
 
 sal_uInt32 SvNumberformat::GetExactDateOrder() const
 {
@@ -4108,7 +4117,6 @@ sal_uInt32 SvNumberformat::GetExactDateOrder() const
     return nRet;
 }
 
-
 void SvNumberformat::GetConditions( SvNumberformatLimitOps& rOper1, double& rVal1,
                           SvNumberformatLimitOps& rOper2, double& rVal2 ) const
 {
@@ -4118,7 +4126,6 @@ void SvNumberformat::GetConditions( SvNumberformatLimitOps& rOper1, double& rVal
     rVal2  = fLimit2;
 }
 
-
 Color* SvNumberformat::GetColor( USHORT nNumFor ) const
 {
     if ( nNumFor > 3 )
@@ -4126,7 +4133,6 @@ Color* SvNumberformat::GetColor( USHORT nNumFor ) const
 
     return NumFor[nNumFor].GetColor();
 }
-
 
 void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
             SvNumberformatLimitOps eOp, double fLimit, const String& rDecSep )
@@ -4163,7 +4169,6 @@ void lcl_SvNumberformat_AddLimitStringImpl( String& rStr,
         rStr += ']';
     }
 }
-
 
 String SvNumberformat::GetMappedFormatstring(
         const NfKeywordTable& rKeywords, const LocaleDataWrapper& rLocWrp,
@@ -4326,7 +4331,6 @@ String SvNumberformat::GetMappedFormatstring(
     return aStr;
 }
 
-
 String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
         sal_Int32 nVal, USHORT nMinDigits ) const
 {
@@ -4362,7 +4366,6 @@ String SvNumberformat::ImpGetNatNumString( const SvNumberNatNum& rNum,
     return aStr;
 }
 
-
 void SvNumberformat::ImpTransliterateImpl( String& rStr,
         const SvNumberNatNum& rNum ) const
 {
@@ -4371,7 +4374,6 @@ void SvNumberformat::ImpTransliterateImpl( String& rStr,
     rStr = GetFormatter().GetNatNum()->getNativeNumberString( rStr,
             aLocale, rNum.GetNatNum() );
 }
-
 
 void SvNumberformat::GetNatNumXml(
         com::sun::star::i18n::NativeNumberXmlAttributes& rAttr,
@@ -4418,7 +4420,6 @@ BOOL SvNumberformat::HasStringNegativeSign( const String& rStr )
     return FALSE;
 }
 
-
 // static
 void SvNumberformat::SetComment( const String& rStr, String& rFormat,
         String& rComment )
@@ -4450,7 +4451,6 @@ void SvNumberformat::SetComment( const String& rStr, String& rFormat,
     }
 }
 
-
 // static
 void SvNumberformat::EraseCommentBraces( String& rStr )
 {
@@ -4470,7 +4470,6 @@ void SvNumberformat::EraseCommentBraces( String& rStr )
     if ( nLen && rStr.GetChar( nLen-1 ) == ' ' )
         rStr.Erase( --nLen, 1 );
 }
-
 
 // static
 void SvNumberformat::EraseComment( String& rStr )
@@ -4508,7 +4507,6 @@ void SvNumberformat::EraseComment( String& rStr )
         rStr.Erase( nPos );
 }
 
-
 // static
 BOOL SvNumberformat::IsInQuote( const String& rStr, xub_StrLen nPos,
             sal_Unicode cQuote, sal_Unicode cEscIn, sal_Unicode cEscOut )
@@ -4542,7 +4540,6 @@ BOOL SvNumberformat::IsInQuote( const String& rStr, xub_StrLen nPos,
     return bQuoted;
 }
 
-
 // static
 xub_StrLen SvNumberformat::GetQuoteEnd( const String& rStr, xub_StrLen nPos,
             sal_Unicode cQuote, sal_Unicode cEscIn, sal_Unicode cEscOut )
@@ -4567,7 +4564,6 @@ xub_StrLen SvNumberformat::GetQuoteEnd( const String& rStr, xub_StrLen nPos,
     }
     return nLen;        // String Ende
 }
-
 
 USHORT SvNumberformat::ImpGetNumForStringElementCount( USHORT nNumFor ) const
 {

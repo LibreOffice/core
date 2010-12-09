@@ -126,7 +126,9 @@ enum NfIndexTableOffset
     NF_FRACTION_START,
     NF_FRACTION_1 = NF_FRACTION_START,      // # ?/?
     NF_FRACTION_2,                          // # ??/??
-    NF_FRACTION_END = NF_FRACTION_2,
+    NF_FRACTION_3,                          // # ?/4
+    NF_FRACTION_4,                          // # ??/100
+    NF_FRACTION_END = NF_FRACTION_4,
 
     NF_NUMERIC_END = NF_FRACTION_END,
 

@@ -123,7 +123,6 @@ ImpSvNumberformatScan::~ImpSvNumberformatScan()
     Reset();
 }
 
-
 void ImpSvNumberformatScan::ChangeIntl()
 {
     bKeywordsNeedInit = TRUE;
@@ -132,7 +131,6 @@ void ImpSvNumberformatScan::ChangeIntl()
     sKeyword[NF_KEY_TRUE].Erase();
     sKeyword[NF_KEY_FALSE].Erase();
 }
-
 
 void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
 {
@@ -163,7 +161,6 @@ void ImpSvNumberformatScan::InitSpecialKeyword( NfKeywordIndex eIdx ) const
     }
 }
 
-
 void ImpSvNumberformatScan::InitCompatCur() const
 {
     ImpSvNumberformatScan* pThis = (ImpSvNumberformatScan*)this;
@@ -174,7 +171,6 @@ void ImpSvNumberformatScan::InitCompatCur() const
     bCompatCurNeedInit = FALSE;
 }
 
-
 void ImpSvNumberformatScan::InitKeywords() const
 {
     if ( !bKeywordsNeedInit )
@@ -182,7 +178,6 @@ void ImpSvNumberformatScan::InitKeywords() const
     ((ImpSvNumberformatScan*)this)->SetDependentKeywords();
     bKeywordsNeedInit = FALSE;
 }
-
 
 /** Extract the name of General, Standard, Whatever, ignoring leading modifiers
     such as [NatNum1]. */
@@ -226,7 +221,6 @@ static String lcl_extractStandardGeneralName( const ::rtl::OUString & rCode )
         aStr = rCode.copy( pBeg - rCode.getStr(), p - pBeg);
     return aStr;
 }
-
 
 void ImpSvNumberformatScan::SetDependentKeywords()
 {
@@ -455,7 +449,6 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     InitCompatCur();
 }
 
-
 void ImpSvNumberformatScan::ChangeNullDate(USHORT nDay, USHORT nMonth, USHORT nYear)
 {
     if ( pNullDate )
@@ -534,7 +527,6 @@ Color* ImpSvNumberformatScan::GetColor(String& sStr)
     }
     return pResult;
 }
-
 
 short ImpSvNumberformatScan::GetKeyWord( const String& sSymbol, xub_StrLen nPos )
 {
@@ -956,7 +948,6 @@ void ImpSvNumberformatScan::SkipStrings(USHORT& i, xub_StrLen& nPos)
     }
 }
 
-
 USHORT ImpSvNumberformatScan::PreviousKeyword(USHORT i)
 {
     short res = 0;
@@ -1088,7 +1079,6 @@ void ImpSvNumberformatScan::Reset()
     nNatNumModifier = 0;
 }
 
-
 BOOL ImpSvNumberformatScan::Is100SecZero( USHORT i, BOOL bHadDecSep )
 {
     USHORT nIndexPre = PreviousKeyword( i );
@@ -1097,7 +1087,6 @@ BOOL ImpSvNumberformatScan::Is100SecZero( USHORT i, BOOL bHadDecSep )
             || (i>0 && nTypeArray[i-1] == NF_SYMBOLTYPE_STRING));
                 // SS"any"00  take "any" as a valid decimal separator
 }
-
 
 xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
 {
@@ -1407,7 +1396,6 @@ xub_StrLen ImpSvNumberformatScan::ScanType(const String&)
     return 0;                               // Alles ok
 }
 
-
 bool ImpSvNumberformatScan::InsertSymbol( USHORT & nPos, svt::NfSymbolType eType, const String& rStr )
 {
     if (nAnzStrings >= NF_MAX_FORMAT_SYMBOLS || nPos > nAnzStrings)
@@ -1428,7 +1416,6 @@ bool ImpSvNumberformatScan::InsertSymbol( USHORT & nPos, svt::NfSymbolType eType
     sStrArray[nPos] = rStr;
     return true;
 }
-
 
 int ImpSvNumberformatScan::FinalScanGetCalendar( xub_StrLen& nPos, USHORT& i,
             USHORT& rAnzResStrings )
@@ -1561,6 +1548,8 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
             sal_Unicode cThousandFill = ' ';
             while (i < nAnzStrings)
             {
+                // TODO: rechecking eScannedType is unnecessary.
+                // This switch-case is for eScannedType == NUMBERFORMAT_FRACTION anyway
                 if (eScannedType == NUMBERFORMAT_FRACTION &&    // special case
                     nTypeArray[i] == NF_SYMBOLTYPE_DEL &&           // # ### #/#
                     StringEqualsChar( sOldThousandSep, ' ' ) && // e.g. France or Sweden
@@ -1570,7 +1559,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                 {
                     nTypeArray[i] = NF_SYMBOLTYPE_STRING;           // del->string
                 }                                               // kein Taus.p.
-
 
                 if (nTypeArray[i] == NF_SYMBOLTYPE_BLANK    ||
                     nTypeArray[i] == NF_SYMBOLTYPE_STAR ||
@@ -1621,6 +1609,26 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                     {
                         bThaiT = true;
                         sStrArray[i] = sKeyword[nTypeArray[i]];
+                    }
+                    else if (sStrArray[i].GetChar(0) >= '0' &&
+                             sStrArray[i].GetChar(0) <= '9')
+                    {
+                        rtl::OUString sDiv;
+                        USHORT j = i;
+                        while(j < nAnzStrings)
+                            sDiv += sStrArray[j++];
+                        if (rtl::OUString::valueOf(sDiv.toInt32()) == sDiv)
+                        {
+                            /* Found a Divisor */
+                            sal_Int32 nDiv = sDiv.toInt32();
+                            while (i < j)
+                                nTypeArray[i++] = NF_SYMBOLTYPE_FRAC_FDIV;
+                            i = j - 1;                            // Stop the loop
+                            if (nCntPost)
+                                nCounter = nCntPost;
+                            else if (nCntPre)
+                                nCounter = nCntPre;
+                        }
                     }
                     else
                         nTypeArray[i] = NF_SYMBOLTYPE_STRING;
@@ -2748,7 +2756,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
     return 0;
 }
 
-
 xub_StrLen ImpSvNumberformatScan::RemoveQuotes( String& rStr )
 {
     if ( rStr.Len() > 1 )
@@ -2769,7 +2776,6 @@ xub_StrLen ImpSvNumberformatScan::RemoveQuotes( String& rStr )
     }
     return 0;
 }
-
 
 xub_StrLen ImpSvNumberformatScan::ScanFormat( String& rString, String& rComment )
 {
@@ -2804,6 +2810,5 @@ void ImpSvNumberformatScan::CopyInfo(ImpSvNumberformatInfo* pInfo, USHORT nAnz)
     pInfo->nCntPost     = nCntPost;
     pInfo->nCntExp      = nCntExp;
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
