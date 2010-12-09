@@ -1734,9 +1734,8 @@ else
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
-if test "$WITH_MYSPELL_DICTS" = "NO"; then
-  AC_MSG_CHECKING([whether to use dicts from external paths])
-  if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
+AC_MSG_CHECKING([whether to use dicts from external paths])
+if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     SYSTEM_DICTS=YES
     AC_MSG_CHECKING([for spelling dictionary directory])
@@ -1760,10 +1759,9 @@ if test "$WITH_MYSPELL_DICTS" = "NO"; then
         THES_SYSTEM_DIR=file:///usr/share/mythes
     fi
     AC_MSG_RESULT([$THES_SYSTEM_DIR])
-  else
-      AC_MSG_RESULT([no])
-      SYSTEM_DICTS=NO
-  fi
+else
+        AC_MSG_RESULT([no])
+        SYSTEM_DICTS=NO
 fi
 AC_SUBST(SYSTEM_DICTS)
 AC_SUBST(DICT_SYSTEM_DIR)
