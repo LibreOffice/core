@@ -268,10 +268,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
             Dl_info     dli;
-            ptrdiff_t   offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
+                ptrdiff_t offset;
+
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
@@ -334,10 +335,11 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
         for ( pFramePtr = buffer; size > 0 && pFramePtr && *pFramePtr; pFramePtr++, size-- )
         {
             Dl_info     dli;
-            ptrdiff_t   offset;
 
             if ( 0 != dladdr( *pFramePtr, &dli ) )
             {
+                ptrdiff_t offset;
+
                 if ( dli.dli_fname && dli.dli_fbase )
                 {
                     offset = (ptrdiff_t)*pFramePtr - (ptrdiff_t)dli.dli_fbase;
