@@ -8013,9 +8013,13 @@
         <list>
           <xs:documentation>Justification</xs:documentation>
           <choice>
-            <!-- Left Justification -->
+            <!-- Align To Leading Edge -->
+            <value>start</value>
+            <!-- Align To Trailing Edge -->
+            <value>end</value>
+            <!-- Left Justification (ecma) -->
             <value>left</value>
-            <!-- Right -->
+            <!-- Right (ecma) -->
             <value>right</value>
             <!-- Center (Equation) -->
             <value>center</value>
@@ -8306,6 +8310,8 @@
       <attribute name="val" tokenid="ooxml:CT_Style_val" action="setValue"/>
     </resource>
     <resource name="ST_Jc" resource="List" generated="yes">
+      <value name="start" tokenid="ooxml:Value_math_ST_Jc_start">left</value>
+      <value name="end" tokenid="ooxml:Value_math_ST_Jc_end">right</value>
       <value name="left" tokenid="ooxml:Value_math_ST_Jc_left">left</value>
       <value name="right" tokenid="ooxml:Value_math_ST_Jc_right">right</value>
       <value name="center" tokenid="ooxml:Value_math_ST_Jc_center">center</value>
@@ -13917,11 +13923,15 @@
         <list>
           <xs:documentation>Horizontal Alignment Type</xs:documentation>
           <choice>
-            <!-- Align Left -->
+            <!-- Align To Leading Edge -->
+            <value>start</value>
+            <!-- Align To Trailing Edge -->
+            <value>end</value>
+            <!-- Align Left (ecma) -->
             <value>left</value>
             <!-- Align Center -->
             <value>center</value>
-            <!-- Align Right -->
+            <!-- Align Right (ecma) -->
             <value>right</value>
             <!-- Justified -->
             <value>both</value>
@@ -21636,8 +21646,10 @@
     </resource>
     <resource name="ST_Jc" resource="List">
       <value tokenid="0">left</value>
-      <value tokenid="1">center</value>
       <value tokenid="2">right</value>
+      <value tokenid="0">start</value>
+      <value tokenid="1">center</value>
+      <value tokenid="2">end</value>
       <value tokenid="3">both</value>
       <value tokenid="ooxml:Value_ST_Jc_mediumKashida">mediumKashida</value>
       <value tokenid="ooxml:Value_ST_Jc_distribute">distribute</value>
