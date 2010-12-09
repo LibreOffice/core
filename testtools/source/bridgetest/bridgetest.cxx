@@ -563,6 +563,11 @@ static sal_Bool performTest(
             bRet = check( memcmp(&aIn, &aOut, sizeof(MixedFloatAndInteger)) == 0, "mixed float and integer struct test" ) && bRet;
         }
         {
+            ThreeByteStruct aIn(9, 10, 11);
+            ThreeByteStruct aOut = xLBT->echoThreeByteStruct(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(ThreeByteStruct)) == 0, "three byte struct test" ) && bRet;
+        }
+        {
             sal_Int32 i2 = xLBT->testPPCAlignment( 0, 0, 0, 0, 0xbeaf );
             bRet = check( i2 == 0xbeaf, "ppc-style alignment test" ) && bRet;
         }

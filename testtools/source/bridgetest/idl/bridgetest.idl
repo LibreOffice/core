@@ -129,6 +129,16 @@ struct MixedFloatAndInteger
     long                       b;
 };
 /**
+ * Small struct with three bytes.  Should *not* return in registers on
+ * BSDs/MACOSx
+ */
+struct ThreeByteStruct
+{
+    byte                       a;
+    byte                       b;
+    byte                       c;
+};
+/**
  * complex types adding string, inteface, any
  */
 struct TestElement : TestSimple
@@ -293,6 +303,11 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
      * register return test 6
      */
     MixedFloatAndInteger echoMixedFloatAndInteger( [in] MixedFloatAndInteger aStruct );
+
+    /**
+     * register return test 7
+     */
+    ThreeByteStruct echoThreeByteStruct( [in] ThreeByteStruct aStruct );
 
     /**
      * PPC Alignment test (#i107182#)

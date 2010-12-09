@@ -227,6 +227,8 @@ public:
         { return rStruct; }
     virtual MixedFloatAndInteger SAL_CALL echoMixedFloatAndInteger(const MixedFloatAndInteger& rStruct) throw(com::sun::star::uno::RuntimeException)
         { return rStruct; }
+    virtual ThreeByteStruct SAL_CALL echoThreeByteStruct(const ThreeByteStruct& rStruct) throw(com::sun::star::uno::RuntimeException)
+        { return rStruct; }
     virtual sal_Int32 SAL_CALL testPPCAlignment( sal_Int64, sal_Int64, sal_Int32, sal_Int64, sal_Int32 i2 ) throw(com::sun::star::uno::RuntimeException)
         { return i2; }
 
