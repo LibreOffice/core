@@ -3714,50 +3714,47 @@ if test "$SOLAR_JAVA" != ""; then
 fi
 
 if test "$SOLAR_JAVA" != ""; then
-    if test $_os != "Darwin"; then
-        # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
-        if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
-            if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
-                # try to recover first by looking whether we have a alternatives
-                # system as in Debian or newer SuSEs where following /usr/bin/javac
-                # over /etc/alternatives/javac leads to the right bindir where we
-                # just need to strip a bit away to get a valid JAVA_HOME
-                JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
-            elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
-                # maybe only one level of symlink (e.g. on Mac)
-                JAVA_HOME=$(readlink $JAVACOMPILER)
-            fi
-            if test "$(dirname $JAVA_HOME)" = "."; then
-                # we've got no path to trim back
-                JAVA_HOME=""
-            fi
-        else
-            # else warn
-            AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
-            AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
-            echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
-            echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
-        fi
-        dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
-        if test "$JAVA_HOME" != "/usr"; then
-            JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/bin/javac$,,)
-        fi
-    else
-        if test "x$with_jdk_home" = "x"; then
-            if test -x /usr/libexec/java_home ; then
-                JAVA_HOME=$(/usr/libexec/java_home)
-            else
-                JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home"
-            fi
-        fi
-    fi
+   # check if JAVA_HOME was (maybe incorrectly?) set automatically to /usr
+   if test "$JAVA_HOME" = "/usr" -a "x$with_jdk_home" = "x"; then
 
-    # as we drop out of this, JAVA_HOME may have been set to the empty string by readlink
+   if basename $(readlink $(readlink $JAVACOMPILER)) >/dev/null 2>/dev/null; then
+       # try to recover first by looking whether we have a alternatives
+       # system as in Debian or newer SuSEs where following /usr/bin/javac
+       # over /etc/alternatives/javac leads to the right bindir where we
+       # just need to strip a bit away to get a valid JAVA_HOME
+       JAVA_HOME=$(readlink $(readlink $JAVACOMPILER))
+   elif readlink $JAVACOMPILER >/dev/null 2>/dev/null; then
+       # maybe only one level of symlink (e.g. on Mac)
+       JAVA_HOME=$(readlink $JAVACOMPILER)
+       if test "$(dirname $JAVA_HOME)" = "."; then
+           # we've got no path to trim back
+           JAVA_HOME=""
+       fi
+   else
+       # else warn
+       AC_MSG_WARN([JAVA_HOME is set to /usr - this is very likely to be incorrect])
+       AC_MSG_WARN([if this is the case, please inform the correct JAVA_HOME with --with-jdk-home])
+       echo "JAVA_HOME is set to /usr - this is very likely to be incorrect" >> warn
+       echo "if this is the case, please inform the correct JAVA_HOME with --with-jdk-home" >> warn
+   fi
+   dnl now that we have the path to the real javac, make a JAVA_HOME out of it..
+   if test "$JAVA_HOME" != "/usr"; then
+       if test "$_os" = "Darwin"; then
+           dnl Leopard returns a non-suitable path with readlink - points to "Current" only
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/Current/Commands/javac$,/CurrentJDK/Home,)
+           dnl Tiger already returns a JDK path..
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/CurrentJDK/Commands/javac$,/CurrentJDK/Home,)
+       else
+           JAVA_HOME=$(echo $JAVA_HOME | $SED -e s,/bin/javac$,,)
+       fi
+   fi
+fi
+# as we drop out of this, JAVA_HOME may have been set to the empty string by readlink
 
-    dnl now if JAVA_HOME has been set to empty, then call findhome to find it
+dnl now if JAVA_HOME has been set to empty, then call findhome to find it
     if test -z "$JAVA_HOME"; then
-        if test "x$with_jdk_home" = "x"; then
-            cat > findhome.java <<_ACEOF
+      if test "x$with_jdk_home" = "x"; then
+        cat > findhome.java <<_ACEOF
 [import java.io.File;
 
 class findhome
@@ -3770,29 +3767,29 @@ class findhome
     }
 }]
 _ACEOF
-            AC_MSG_CHECKING([if javac works])
-            javac_cmd="$JAVACOMPILER findhome.java 1>&2"
-            AC_TRY_EVAL(javac_cmd)
-            if test $? = 0 && test -f ./findhome.class ; then
-                AC_MSG_RESULT([javac works])
-            else
-                echo "configure: javac test failed" >&5
-                cat findhome.java >&5
-                AC_MSG_ERROR([javac does not work - java projects will not build!])
-            fi
-
-            AC_MSG_CHECKING([if gij knows its java.home])
-            JAVA_HOME=`$JAVAINTERPRETER findhome`
-            if test $? = 0 && test "$JAVA_HOME" != "" ; then
-                AC_MSG_RESULT([$JAVA_HOME])
-            else
-                echo "configure: java test failed" >&5
-                cat findhome.java >&5
-                AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
-            fi
+        AC_MSG_CHECKING([if javac works])
+        javac_cmd="$JAVACOMPILER findhome.java 1>&2"
+        AC_TRY_EVAL(javac_cmd)
+        if test $? = 0 && test -f ./findhome.class ; then
+          AC_MSG_RESULT([javac works])
         else
-            JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+          echo "configure: javac test failed" >&5
+          cat findhome.java >&5
+          AC_MSG_ERROR([javac does not work - java projects will not build!])
         fi
+
+        AC_MSG_CHECKING([if gij knows its java.home])
+        JAVA_HOME=`$JAVAINTERPRETER findhome`
+        if test $? = 0 && test "$JAVA_HOME" != "" ; then
+          AC_MSG_RESULT([$JAVA_HOME])
+        else
+          echo "configure: java test failed" >&5
+          cat findhome.java >&5
+          AC_MSG_ERROR([gij does not know its java.home - use --with-jdk-home])
+        fi
+      else
+        JAVA_HOME=`echo $JAVAINTERPRETER | $SED -n "s,//*bin//*$WITH_JAVA,,p"`
+      fi
     fi
 
     dnl second sanity check JAVA_HOME if possible
