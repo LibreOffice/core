@@ -398,6 +398,12 @@ AC_ARG_ENABLE(extra-font,
 	[Add extra font content.]),
 ,)
 
+AC_ARG_ENABLE(theme,
+    AS_HELP_STRING([--enable-theme="theme1 theme2..."],
+	[Choose which themes to include. By default all available themes are included.
+         Possible choices: crystal, hicontrast, oxygen, tango.]),
+,)
+
 dnl ---------- Deprecated since 2010-11-05 ----------
 
 AC_ARG_ENABLE(mysql-connector,
@@ -7393,8 +7399,29 @@ else
 fi
 AC_SUBST(WITH_EXTRA_FONT)
 
+dnl ===================================================================
+dnl Test which themes to include
+dnl ===================================================================
+AC_MSG_CHECKING([which themes to include])
+# if none given, use all available themes
+if test "z$enable_theme" = "z" -o "z$enable_theme" = "zyes"; then
+  enable_theme="crystal hicontrast oxygen tango"
+fi
+
+  ENABLE_THEMES=""
+  for theme in $enable_theme
+  do
+    ENABLE_THEMES="$ENABLE_THEMES $theme"
+    SCPDEFS="$SCPDEFS -DTHEME_`echo $theme|tr '[a-z]' '[A-Z]'`"
+  done
+  AC_MSG_RESULT([$ENABLE_THEMES])
+
+AC_SUBST(ENABLE_THEMES)
 AC_SUBST(SCPDEFS)
 
+dnl ===================================================================
+dnl Test whether to enable ActiveX embedding
+dnl ===================================================================
 if test "$_os" = "WINNT"; then
   AC_MSG_CHECKING([whether to enable ActiveX embedding of OOo components])
   if test "$enable_activex_component" = "yes" -o "$enable_activex_component" = "TRUE" -o "$enable_activex_component" = ""; then

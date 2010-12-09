@@ -1849,33 +1849,41 @@ File gid_File_Images_Zip
     Styles = (PACKED);
 End
 
+#ifdef THEME_CRYSTAL
 File gid_File_ImagesCrystal_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_crystal.zip";
     Styles = (PACKED);
 End
+#endif
 
+#ifdef THEME_OXYGEN
 File gid_File_ImagesOxygen_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_oxygen.zip";
     Styles = (PACKED);
 End
+#endif
 
+#ifdef THEME_HICONTRAST
 File gid_File_ImagesHicontrast_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_hicontrast.zip";
     Styles = (PACKED);
 End
+#endif
 
+#ifdef THEME_TANGO
 File gid_File_ImagesTango_Zip
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Config;
     Name = "images_tango.zip";
     Styles = (PACKED);
 End
+#endif
 
 File gid_File_ImagesClassic8_Zip
     TXT_FILE_BODY;
