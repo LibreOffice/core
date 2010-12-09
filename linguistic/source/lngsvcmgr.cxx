@@ -579,10 +579,6 @@ LngSvcMgr::LngSvcMgr() :
     utl::ConfigItem( String::CreateFromAscii( "Office.Linguistic" ) ),
     aEvtListeners   ( GetLinguMutex() )
 {
-    bHasAvailSpellLocales   =
-    bHasAvailGrammarLocales =
-    bHasAvailHyphLocales    =
-    bHasAvailThesLocales    =
     bDisposing = FALSE;
 
     pSpellDsp   = 0;
@@ -1470,39 +1466,21 @@ uno::Sequence< lang::Locale > SAL_CALL
     uno::Sequence< lang::Locale > aRes;
 
     uno::Sequence< lang::Locale >  *pAvailLocales     = NULL;
-    BOOL                *pHasAvailLocales   = NULL;
     if (0 == rServiceName.compareToAscii( SN_SPELLCHECKER ))
-    {
         pAvailLocales       = &aAvailSpellLocales;
-        pHasAvailLocales    = &bHasAvailSpellLocales;
-    }
     else if (0 == rServiceName.compareToAscii( SN_GRAMMARCHECKER ))
-    {
         pAvailLocales       = &aAvailGrammarLocales;
-        pHasAvailLocales    = &bHasAvailGrammarLocales;
-    }
     else if (0 == rServiceName.compareToAscii( SN_HYPHENATOR ))
-    {
         pAvailLocales       = &aAvailHyphLocales;
-        pHasAvailLocales    = &bHasAvailHyphLocales;
-    }
     else if (0 == rServiceName.compareToAscii( SN_THESAURUS ))
-    {
         pAvailLocales       = &aAvailThesLocales;
-        pHasAvailLocales    = &bHasAvailThesLocales;
-    }
 
-    // about pHasAvailLocales: nowadays (with OOo lingu in SO) we want to know immediately about
+    // Nowadays (with OOo lingu in SO) we want to know immediately about
     // new downloaded dictionaries and have them ready right away if the Tools/Options...
     // is used to activate them. Thus we can not rely anymore on buffered data.
-    if (pAvailLocales  /*&&  pHasAvailLocales */)
+    if (pAvailLocales)
     {
-//      if (!*pHasAvailLocales)
-//      {
-            *pAvailLocales = GetAvailLocales(
-                    getAvailableServices( rServiceName, lang::Locale() ) );
-//          *pHasAvailLocales = TRUE;
-//      }
+        *pAvailLocales = GetAvailLocales(getAvailableServices(rServiceName, lang::Locale()));
         aRes = *pAvailLocales;
     }
 

@@ -112,10 +112,6 @@ class LngSvcMgr :
     SvcInfoArray *                                      pAvailThesSvcs;
 
     BOOL bDisposing;
-    BOOL bHasAvailSpellLocales;
-    BOOL bHasAvailGrammarLocales;
-    BOOL bHasAvailHyphLocales;
-    BOOL bHasAvailThesLocales;
 
     // disallow copy-constructor and assignment-operator for now
     LngSvcMgr(const LngSvcMgr &);
