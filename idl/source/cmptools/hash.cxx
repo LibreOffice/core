@@ -168,11 +168,11 @@ SvStringHashTable::SvStringHashTable( UINT32 nMaxEntries )
 *************************************************************************/
 SvStringHashTable::~SvStringHashTable()
 {
+#ifdef DBG_UTIL
     // RefCount auf eins setzen
     SvStringHashEntry * pPos, *pEnd;
     pPos    = pEntries;
     pEnd    = pEntries + GetMax();
-#ifdef DBG_UTIL
     while( pPos != pEnd )
     {
         DBG_ASSERT( pPos->GetRefCount() == 1, "Reference count != 1" );
