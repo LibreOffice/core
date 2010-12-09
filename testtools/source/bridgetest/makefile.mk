@@ -140,9 +140,9 @@ runtest : $(DLLDEST)$/uno_types.rdb $(DLLDEST)$/uno_services.rdb makefile.mk
         com.sun.star.test.bridge.CppTestObject
 .ENDIF
     
-$(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb
+$(DLLDEST)$/uno_types.rdb : $(SOLARBINDIR)$/udkapi.rdb $(BIN)$/bridgetest.rdb
     echo $(DLLDEST)
-    $(GNUCOPY) $? $@
+    $(GNUCOPY) $(SOLARBINDIR)$/udkapi.rdb $@
     $(REGMERGE) $@ / $(BIN)$/bridgetest.rdb
 
 $(DLLDEST)$/bridgetest_client$(BATCH_SUFFIX) .ERRREMOVE: makefile.mk
