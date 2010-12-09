@@ -130,7 +130,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_NUP
     {
-        HelpID = ".HelpID:vcl:PrintDialog:TabNUp";
+        HelpID = ".HelpID:vcl:PrintDialog:NUpPage";
         Text [en-US] = "Page Layout";
         Hide = TRUE;
 
@@ -307,7 +307,7 @@ ModalDialog SV_DLG_PRINT
 
     TabPage SV_PRINT_TAB_JOB
     {
-        HelpID = ".HelpID:vcl:PrintDialog:TabJob";
+        HelpID = ".HelpID:vcl:PrintDialog:JobPage";
         Text [en-US] = "General";
         Hide = TRUE;
 
@@ -418,7 +418,7 @@ ModalDialog SV_DLG_PRINT
     {
         Text [en-US] = "Options";
         Hide = TRUE;
-        HelpID = ".HelpID:vcl:PrintDialog:TabOpt";
+        HelpID = ".HelpID:vcl:PrintDialog:OptPage";
 
         FixedLine SV_PRINT_OPT_PRINT_FL
         {
