@@ -78,7 +78,6 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
     JAWT_DrawingSurfaceInfo*    dsi     ;
     JAWT_X11DrawingSurfaceInfo* dsi_x11 ;
     Drawable                    drawable;
-    Display*                    display ;
 
     /* Get the AWT */
     awt.version = JAWT_VERSION_1_3;
@@ -99,7 +98,6 @@ JNIEXPORT jlong JNICALL Java_NativeView_getNativeWindow
     /* Get the platform-specific drawing info */
     dsi_x11  = (JAWT_X11DrawingSurfaceInfo*)dsi->platformInfo;
     drawable = dsi_x11->drawable;
-    display  = dsi_x11->display;
 
     /* Free the drawing surface info */
     ds->FreeDrawingSurfaceInfo(dsi);
