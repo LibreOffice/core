@@ -330,7 +330,6 @@ MSILIB=msi.lib
 DDRAWLIB=ddraw.lib
 SHLWAPILIB=shlwapi.lib
 URLMONLIB=urlmon.lib
-UNICOWSLIB=unicows.lib
 WININETLIB=wininet.lib
 OLDNAMESLIB=oldnames.lib
 MSIMG32LIB=msimg32.lib

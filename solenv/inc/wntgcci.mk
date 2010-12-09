@@ -210,7 +210,6 @@ MSILIB=$(PSDK_HOME)$/lib$/msi.lib
 DDRAWLIB=$(DIRECTXSDK_LIB)/ddraw.lib
 SHLWAPILIB=$(PSDK_HOME)$/lib$/shlwapi.lib
 URLMONLIB=$(PSDK_HOME)$/lib$/urlmon.lib
-UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
 WININETLIB=-lwininet
 OLDNAMESLIB=-lmoldname
 MSIMG32LIB=$(PSDK_HOME)$/lib$/msimg32.lib
