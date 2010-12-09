@@ -465,7 +465,6 @@ void Ruler::ImplInvertLines( BOOL bErase )
 void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
 {
     long    n = 0;
-    long    nTick = 0;
     long    nTick3 = aImplRulerUnitTab[mnUnitIndex].nTick3;
     long    nTickCount = aImplRulerUnitTab[mnUnitIndex].nTick1;
     Size    aPixSize = maVirDev.LogicToPixel( Size( nTick3, nTick3 ), maMapMode );
@@ -568,6 +567,7 @@ void Ruler::ImplDrawTicks( long nMin, long nMax, long nStart, long nCenter )
     {
         long nTxtWidth2;
         long nTxtHeight2 = GetTextHeight()/2;
+        long nTick = 0;
         while ( ((nStart-n) >= nMin) || ((nStart+n) <= nMax) )
         {
             // Null-Punkt
