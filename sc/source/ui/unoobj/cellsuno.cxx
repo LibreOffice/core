@@ -4460,7 +4460,7 @@ void SAL_CALL ScCellRangesObj::insertByName( const rtl::OUString& aName, const u
 }
 
 BOOL lcl_FindRangeByName( const ScRangeList& rRanges, ScDocShell* pDocSh,
-                            const String& rName, ULONG& rIndex )
+                            const String& rName, size_t& rIndex )
 {
     if (pDocSh)
     {
@@ -4541,7 +4541,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
     String aNameStr(aName);
     ScDocShell* pDocSh = GetDocShell();
     const ScRangeList& rRanges = GetRangeList();
-    ULONG nIndex = 0;
+    size_t nIndex = 0;
     if ( lcl_FindRangeByName( rRanges, pDocSh, aNameStr, nIndex ) )
     {
         //  einzelnen Range weglassen
