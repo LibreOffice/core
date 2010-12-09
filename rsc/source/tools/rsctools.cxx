@@ -152,18 +152,20 @@ ByteString GetTmpFileName()
 BOOL Append( FILE * fDest, ByteString aTmpFile )
 {
 #define MAX_BUF 4096
-    char    szBuf[ MAX_BUF ];
-    int     nItems;
-    FILE    *fSource;
-
-    fSource = fopen( aTmpFile.GetBuffer(), "rb" );
-    if( !fDest || !fSource ){
+    FILE *fSource = fopen( aTmpFile.GetBuffer(), "rb" );
+    if( !fDest || !fSource )
+    {
         if( fSource )
             fclose( fSource );
         return FALSE;
     }
-    else{
-        do{ // append
+    else
+    {
+        char szBuf[ MAX_BUF ];
+        int nItems;
+
+        do //appemd
+        {
             nItems = fread( szBuf, sizeof( char ), MAX_BUF, fSource );
             fwrite( szBuf, sizeof( char ), nItems, fDest );
         } while( MAX_BUF == nItems );
