@@ -124,7 +124,6 @@ SHL1STDLIBS=    \
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
         $(UWINAPILIB) \
-        $(UNICOWSLIB) \
         $(ADVAPI32LIB) \
         $(KERNEL32LIB)
 .ENDIF
