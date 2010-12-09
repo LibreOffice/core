@@ -881,8 +881,6 @@ void UIConfigurationManagerImpl::reset() throw (::com::sun::star::uno::RuntimeEx
     if ( m_bDisposed )
         throw DisposedException();
 
-    bool bResetStorage( false );
-
     if ( !isReadOnly() )
     {
         // Remove all elements from our user-defined storage!
@@ -913,8 +911,6 @@ void UIConfigurationManagerImpl::reset() throw (::com::sun::star::uno::RuntimeEx
                     }
                 }
             }
-
-            bResetStorage = true;
 
             // remove settings from user defined layer and notify listener about removed settings data!
             ConfigEventNotifyContainer aRemoveEventNotifyContainer;
