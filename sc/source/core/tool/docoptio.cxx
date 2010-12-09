@@ -372,7 +372,6 @@ ScDocCfg::ScDocCfg() :
     aCompatItem(OUString(RTL_CONSTASCII_USTRINGPARAM(CFGPATH_COMPAT)))
 {
     sal_Int32 nIntVal = 0;
-    double fDoubleVal = 0;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
@@ -388,6 +387,7 @@ ScDocCfg::ScDocCfg() :
     OSL_ENSURE(aValues.getLength() == aNames.getLength(), "GetProperties failed");
     if(aValues.getLength() == aNames.getLength())
     {
+        double fDoubleVal = 0;
         for(int nProp = 0; nProp < aNames.getLength(); nProp++)
         {
             DBG_ASSERT(pValues[nProp].hasValue(), "property value missing");
