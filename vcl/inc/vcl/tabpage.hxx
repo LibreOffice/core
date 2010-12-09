@@ -56,8 +56,6 @@ public:
 
     virtual void    ActivatePage();
     virtual void    DeactivatePage();
-
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > CreateAccessible();
 };
 
 #endif  // _SV_TABPAGE_HXX
