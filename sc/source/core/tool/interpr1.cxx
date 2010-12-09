@@ -3357,7 +3357,6 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
             case svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
                 {
@@ -3386,6 +3385,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 else
                 {
                     ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                    USHORT nErr = 0;
                     if (aValIter.GetFirst(fVal, nErr))
                     {
                         // placed the loop on the inside for performance reasons:
@@ -7212,10 +7212,10 @@ void ScInterpreter::ScRight()
 void ScInterpreter::ScSearch()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSearch" );
-    double fAnz;
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
+        double fAnz;
         if (nParamCount == 3)
         {
             fAnz = ::rtl::math::approxFloor(GetDouble());
