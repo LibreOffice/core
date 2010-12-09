@@ -4,9 +4,9 @@ mkdir: %_DEST%\pck%_EXT%
 dos: echo =====================================================================
 dos: echo Delivering LICENSE files
 dos: echo =====================================================================
-..\%__SRC%\misc\LICENSE     %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license.txt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\osl
+..\%__SRC%\misc\LICENSE     %_DEST%\bin%_EXT%\osl\LICENSE
+..\%__SRC%\misc\license.txt %_DEST%\bin%_EXT%\osl\license.txt
+..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\osl\LICENSE.odt
 
 ..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\LICENSE.odt
 ..\%__SRC%\misc\CREDITS.odt %_DEST%\bin%_EXT%\CREDITS.odt
