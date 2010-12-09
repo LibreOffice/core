@@ -70,7 +70,6 @@ SHL1OBJS=$(SLOFILES)
 #STDSHL=
 
 SHL1STDLIBS=\
-        $(UNICOWSLIB)\
         $(KERNEL32LIB)\
         $(LIBCMT)\
         $(WININETLIB)
