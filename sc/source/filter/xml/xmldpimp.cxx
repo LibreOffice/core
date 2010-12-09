@@ -128,7 +128,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
     pDPDimSaveData(NULL),
     sDataPilotTableName(),
     sApplicationData(),
-    sGrandTotal(GetXMLToken(XML_BOTH)),
     mnRowFieldCount(0),
     mnColFieldCount(0),
     mnPageFieldCount(0),
@@ -165,7 +164,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
             break;
             case XML_TOK_DATA_PILOT_TABLE_ATTR_GRAND_TOTAL :
             {
-                sGrandTotal = sValue;
                 if (IsXMLToken(sValue, XML_BOTH))
                 {
                     maRowGrandTotal.mbVisible = true;
