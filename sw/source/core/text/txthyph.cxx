@@ -260,22 +260,6 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         if( bRet )
         {
             XubString aSelTxt( rInf.GetTxt().Copy(nWrdStart, nLen) );
-            xub_StrLen nCnt = 0;
-
-// these things should be handled by the dialog
-//            for( xub_StrLen i = 0; i < nLen; ++i )
-//            {
-//                sal_Unicode cCh = aSelTxt.GetChar(i);
-//                if( (CH_TXTATR_BREAKWORD == cCh || CH_TXTATR_INWORD == cCh )
-//                     && rInf.HasHint( nWrdStart + i ) )
-//                {
-//                    aSelTxt.Erase( i , 1 );
-//                    nCnt++;
-//                    --nLen;
-//                    if( i )
-//                        --i;
-//                }
-//            }
 
             {
                 MSHORT nMinTrail = 0;
@@ -293,7 +277,7 @@ sal_Bool SwTxtFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
             {
                 rHyphInf.SetHyphWord( xHyphWord );
                 rHyphInf.nWordStart = nWrdStart;
-                rHyphInf.nWordLen   = nLen+nCnt;
+                rHyphInf.nWordLen = nLen;
                 rHyphInf.SetNoLang( sal_False );
                 rHyphInf.SetCheck( sal_True );
             }
