@@ -3113,6 +3113,9 @@ namespace xmloff { namespace token {
         TOKEN( "outside-minimum",       XML_OUTSIDE_MINIMUM ),
         TOKEN( "outside-maximum",       XML_OUTSIDE_MAXIMUM ),
 
+        TOKEN( "min-value", XML_MIN_VALUE ),
+        TOKEN( "max-value", XML_MAX_VALUE ),
+
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else

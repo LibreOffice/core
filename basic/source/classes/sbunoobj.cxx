@@ -3910,7 +3910,7 @@ BasicAllListener_Impl::~BasicAllListener_Impl()
 
 void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     if( xSbxObj.Is() )
     {
@@ -3975,7 +3975,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 // Methoden von XEventListener
 void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     xSbxObj.Clear();
 }
@@ -4367,7 +4367,7 @@ void SAL_CALL ModuleInvocationProxy::setValue( const ::rtl::OUString& rProperty,
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Set ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4408,7 +4408,7 @@ Any SAL_CALL ModuleInvocationProxy::getValue( const ::rtl::OUString& rProperty )
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
 
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     ::rtl::OUString aPropertyFunctionName( RTL_CONSTASCII_USTRINGPARAM( "Property Get ") );
     aPropertyFunctionName += m_aPrefix;
@@ -4446,7 +4446,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const ::rtl::OUString& rFunction,
                                             Sequence< Any >& )
     throw( CannotConvertException, InvocationTargetException )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    vos::OGuard guard( Application::GetSolarMutex() );
 
     Any aRet;
     SbxObjectRef xScopeObj = m_xScopeObj;

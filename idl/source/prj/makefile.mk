@@ -41,7 +41,6 @@ CDEFS+=-DIDL_COMPILER
 OBJFILES=   $(OBJ)$/command.obj      \
             $(OBJ)$/svidl.obj		\
             $(OBJ)$/globals.obj      \
-            $(OBJ)$/idldll.obj       \
             $(OBJ)$/database.obj
 
 # --- Targets ------------------------------------------------------------

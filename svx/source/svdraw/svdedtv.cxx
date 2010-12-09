@@ -1039,46 +1039,6 @@ void SdrEditView::ReplaceObjectAtView(SdrObject* pOldObj, SdrPageView& rPV, SdrO
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef WIN
-void SdrEditView::BegUndo()             // Undo-Klammerung auf
-{
-    pMod->BegUndo();
-}
-
-void SdrEditView::BegUndo(const String& rComment) // Undo-Klammerung auf
-{
-    pMod->BegUndo(rComment);
-}
-
-void SdrEditView::BegUndo(const String& rComment, const String& rObjDescr,
-        SdrRepeatFunc eFunc) // Undo-Klammerung auf
-{
-    pMod->BegUndo(rComment,rObjDescr,eFunc);
-}
-
-void SdrEditView::BegUndo(SdrUndoGroup* pUndoGrp) // Undo-Klammerung auf
-{
-    pMod->BegUndo(pUndoGrp);
-}
-
-void SdrEditView::AddUndo(SdrUndoAction* pUndo)   // Action hinzufuegen
-{
-    pMod->AddUndo(pUndo);
-}
-    // nur nach dem 1. BegUndo oder vor dem letzten EndUndo:
-void SdrEditView::SetUndoComment(const String& rComment)
-{
-    pMod->SetUndoComment(rComment);
-}
-
-
-void SdrEditView::SetUndoComment(const String& rComment,
-                                const String& rObjDescr)
-{
-    pMod->SetUndoComment(rComment,rObjDescr);
-}
-#endif
-
 bool SdrEditView::IsUndoEnabled() const
 {
     return pMod->IsUndoEnabled();

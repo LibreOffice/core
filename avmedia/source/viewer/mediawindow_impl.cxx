@@ -1,4 +1,4 @@
-/*************************************************************************
+/************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
@@ -94,7 +94,7 @@ void  MediaWindowControl::execute( const MediaItem& rItem )
 // --------------------
 
 MediaChildWindow::MediaChildWindow( Window* pParent ) :
-    JavaChildWindow( pParent, WB_CLIPCHILDREN )
+    SystemChildWindow( pParent, WB_CLIPCHILDREN )
 {
 }
 
@@ -111,7 +111,7 @@ void MediaChildWindow::MouseMove( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
-    JavaChildWindow::MouseMove( rMEvt );
+    SystemChildWindow::MouseMove( rMEvt );
     GetParent()->MouseMove( aTransformedEvent );
 }
 
@@ -122,7 +122,7 @@ void MediaChildWindow::MouseButtonDown( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
-    JavaChildWindow::MouseButtonDown( rMEvt );
+    SystemChildWindow::MouseButtonDown( rMEvt );
     GetParent()->MouseButtonDown( aTransformedEvent );
 }
 
@@ -133,7 +133,7 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
     const MouseEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rMEvt.GetPosPixel() ) ),
                                           rMEvt.GetClicks(), rMEvt.GetMode(), rMEvt.GetButtons(), rMEvt.GetModifier() );
 
-    JavaChildWindow::MouseButtonUp( rMEvt );
+    SystemChildWindow::MouseButtonUp( rMEvt );
     GetParent()->MouseButtonUp( aTransformedEvent );
 }
 
@@ -141,7 +141,7 @@ void MediaChildWindow::MouseButtonUp( const MouseEvent& rMEvt )
 
 void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 {
-    JavaChildWindow::KeyInput( rKEvt );
+    SystemChildWindow::KeyInput( rKEvt );
     GetParent()->KeyInput( rKEvt );
 }
 
@@ -149,7 +149,7 @@ void MediaChildWindow::KeyInput( const KeyEvent& rKEvt )
 
 void MediaChildWindow::KeyUp( const KeyEvent& rKEvt )
 {
-    JavaChildWindow::KeyUp( rKEvt );
+    SystemChildWindow::KeyUp( rKEvt );
     GetParent()->KeyUp( rKEvt );
 }
 
@@ -160,7 +160,7 @@ void MediaChildWindow::Command( const CommandEvent& rCEvt )
     const CommandEvent aTransformedEvent( GetParent()->ScreenToOutputPixel( OutputToScreenPixel( rCEvt.GetMousePosPixel() ) ),
                                             rCEvt.GetCommand(), rCEvt.IsMouseEvent(), rCEvt.GetData() );
 
-    JavaChildWindow::Command( rCEvt );
+    SystemChildWindow::Command( rCEvt );
     GetParent()->Command( aTransformedEvent );
 }
 
@@ -179,6 +179,7 @@ MediaWindowImpl::MediaWindowImpl( Window* pParent, MediaWindow* pMediaWindow, bo
     mpEmptyBmpEx( NULL ),
     mpAudioBmpEx( NULL )
 {
+    maChildWindow.SetBackground( Color( COL_BLACK ) );
     maChildWindow.SetHelpId( HID_AVMEDIA_PLAYERWINDOW );
     maChildWindow.Hide();
 
@@ -229,19 +230,24 @@ void MediaWindowImpl::onURLChanged()
 {
     if( getPlayer().is() )
     {
-        uno::Sequence< uno::Any >              aArgs( 2 );
         uno::Reference< media::XPlayerWindow > xPlayerWindow;
-        const Point                            aPoint;
-        const Size                             aSize( maChildWindow.GetSizePixel() );
-        const sal_IntPtr                       nWndHandle = static_cast< sal_IntPtr >( maChildWindow.getParentWindowHandleForJava() );
 
-        aArgs[ 0 ] = uno::makeAny( nWndHandle );
-        aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
+        const Point         aPoint;
+        const Size          aSize( maChildWindow.GetSizePixel() );
+        const sal_IntPtr    nWndHandle = (sal_IntPtr) maChildWindow.GetParentWindowHandle( isMediaWindowJavaBased() );
 
         try
         {
             if( nWndHandle != 0 )
+            {
+                uno::Sequence< uno::Any > aArgs( 3 );
+
+                aArgs[ 0 ] = uno::makeAny( nWndHandle );
+                aArgs[ 1 ] = uno::makeAny( awt::Rectangle( aPoint.X(), aPoint.Y(), aSize.Width(), aSize.Height() ) );
+                aArgs[ 2 ] = uno::makeAny( reinterpret_cast< sal_IntPtr >( &maChildWindow ) );
+
                 xPlayerWindow = getPlayer()->createPlayerWindow( aArgs );
+            }
         }
         catch( uno::RuntimeException )
         {
@@ -273,8 +279,6 @@ void MediaWindowImpl::onURLChanged()
         updateMediaItem( aItem );
         mpMediaWindowControl->setState( aItem );
     }
-
-    Invalidate();
 }
 
 // ---------------------------------------------------------------------
@@ -291,7 +295,7 @@ void MediaWindowImpl::update()
 
 void MediaWindowImpl::setPosSize( const Rectangle& rRect )
 {
-    SetPosSizePixel( rRect.Left(), rRect.Top(), rRect.GetWidth(), rRect.GetHeight() );
+    SetPosSizePixel( rRect.TopLeft(), rRect.GetSize() );
 }
 
 // ---------------------------------------------------------------------
@@ -305,7 +309,6 @@ void MediaWindowImpl::setPointer( const Pointer& rPointer )
 
     if( xPlayerWindow.is() )
     {
-
         long nPointer;
 
         switch( rPointer.GetStyle() )
@@ -355,10 +358,10 @@ void MediaWindowImpl::Resize()
         mpMediaWindowControl->SetPosSizePixel( Point( nOffset, nControlY ), Size( aCurSize.Width() - ( nOffset << 1 ), nControlHeight ) );
     }
 
-    maChildWindow.SetPosSizePixel( Point( nOffset, nOffset ), aPlayerWindowSize );
-
     if( xPlayerWindow.is() )
         xPlayerWindow->setPosSize( 0, 0, aPlayerWindowSize.Width(), aPlayerWindowSize.Height(), 0 );
+
+    maChildWindow.SetPosSizePixel( Point( nOffset, nOffset ), aPlayerWindowSize );
 }
 
 // ---------------------------------------------------------------------
@@ -405,7 +408,7 @@ void MediaWindowImpl::Paint( const Rectangle& )
 
         pLogo = mpEmptyBmpEx;
     }
-    else if ( !getPlayerWindow().is() )
+    else if( !getPlayerWindow().is() )
     {
         if( !mpAudioBmpEx )
             mpAudioBmpEx = new BitmapEx( AVMEDIA_RESID( AVMEDIA_BMP_AUDIOLOGO ) );
@@ -446,8 +449,6 @@ void MediaWindowImpl::Paint( const Rectangle& )
                              aBasePos.Y() + ( ( aVideoRect.GetHeight() - aLogoSize.Height() ) >> 1 ) ),
                       aLogoSize, *pLogo );
     }
-
-    update();
 }
 
 // ---------------------------------------------------------------------

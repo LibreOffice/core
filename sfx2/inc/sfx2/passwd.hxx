@@ -39,29 +39,35 @@
 
 // defines ---------------------------------------------------------------
 
-#define SHOWEXTRAS_NONE     ((USHORT)0x0000)
-#define SHOWEXTRAS_USER     ((USHORT)0x0001)
-#define SHOWEXTRAS_CONFIRM  ((USHORT)0x0002)
-#define SHOWEXTRAS_ALL      ((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
+#define SHOWEXTRAS_NONE      ((USHORT)0x0000)
+#define SHOWEXTRAS_USER      ((USHORT)0x0001)
+#define SHOWEXTRAS_CONFIRM   ((USHORT)0x0002)
+#define SHOWEXTRAS_PASSWORD2 ((USHORT)0x0004)
+#define SHOWEXTRAS_CONFIRM2  ((USHORT)0x0008)
+#define SHOWEXTRAS_ALL       ((USHORT)(SHOWEXTRAS_USER | SHOWEXTRAS_CONFIRM))
 
 // class SfxPasswordDialog -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxPasswordDialog : public ModalDialog
 {
 private:
+    FixedLine       maPasswordBox;
     FixedText       maUserFT;
     Edit            maUserED;
     FixedText       maPasswordFT;
     Edit            maPasswordED;
     FixedText       maConfirmFT;
     Edit            maConfirmED;
-    FixedLine       maPasswordBox;
+    FixedLine       maPassword2Box;
+    FixedText       maPassword2FT;
+    Edit            maPassword2ED;
+    FixedText       maConfirm2FT;
+    Edit            maConfirm2ED;
 
     OKButton        maOKBtn;
     CancelButton    maCancelBtn;
     HelpButton      maHelpBtn;
 
-    String          maConfirmStr;
     USHORT          mnMinLen;
     USHORT          mnExtras;
 
@@ -76,9 +82,13 @@ public:
     String          GetPassword() const { return maPasswordED.GetText(); }
     String          GetConfirm() const { return maConfirmED.GetText(); }
 
+    String          GetPassword2() const { return maPassword2ED.GetText(); }
+    String          GetConfirm2() const { return maConfirm2ED.GetText(); }
+    void            SetGroup2Text( const String& i_rText ) { maPassword2Box.SetText( i_rText ); }
+
     void            SetMinLen( USHORT Len );
     void            SetMaxLen( USHORT Len );
-    void            SetEditHelpId( ULONG nId ) { maPasswordED.SetHelpId( nId ); }
+    void            SetEditHelpId( const rtl::OString& rId ) { maPasswordED.SetHelpId( rId ); }
     void            ShowExtras( USHORT nExtras ) { mnExtras = nExtras; }
     void            AllowAsciiOnly( bool i_bAsciiOnly = true ) { mbAsciiOnly = i_bAsciiOnly; }
 

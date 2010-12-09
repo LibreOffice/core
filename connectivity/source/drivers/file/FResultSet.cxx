@@ -75,12 +75,7 @@ using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::container;
 
 // Maximale Anzahl von Rows, die mit ORDER BY sortiert durchlaufen werden koennen:
-#if defined (WIN)
-#define MAX_KEYSET_SIZE 0x3ff0  // Etwas weniger als ein Segment, damit
-                                    // noch Platz fuer Memory Debug-Informationen
-#else
 #define MAX_KEYSET_SIZE 0x40000 // 256K
-#endif
 
 namespace
 {
@@ -942,9 +937,13 @@ again:
     {
         m_pTable->fetchRow(m_aEvaluateRow, rTableCols, sal_True,bRetrieveData || bHasRestriction);
 
-        if (    (!m_bShowDeleted && m_aEvaluateRow->isDeleted())
-            ||  (bHasRestriction && //!bShowDeleted && m_aEvaluateRow->isDeleted() ||// keine Anzeige von geloeschten Saetzen
-                   !m_pSQLAnalyzer->evaluateRestriction()))      // Auswerten der Bedingungen
+        if  (   (   !m_bShowDeleted
+                &&  m_aEvaluateRow->isDeleted()
+                )
+            ||  (   bHasRestriction
+                &&  !m_pSQLAnalyzer->evaluateRestriction()
+                )
+            )
         {                                                // naechsten Satz auswerten
             // aktuelle Zeile loeschen im Keyset
             if (m_pEvaluationKeySet)
@@ -993,12 +992,14 @@ again:
 
     // Evaluate darf nur gesetzt sein,
     // wenn der Keyset weiter aufgebaut werden soll
-    if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT && !isCount() &&
-        (m_pFileSet.isValid() || m_pSortIndex) && bEvaluate)
+    if  (   ( m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT )
+        &&  !isCount()
+        &&  bEvaluate
+        )
     {
         if (m_pSortIndex)
         {
-            OKeyValue* pKeyValue = GetOrderbyKeyValue(m_aEvaluateRow);
+            OKeyValue* pKeyValue = GetOrderbyKeyValue( m_aSelectRow );
             m_pSortIndex->AddKeyValue(pKeyValue);
         }
         else if (m_pFileSet.isValid())
@@ -1049,7 +1050,7 @@ BOOL OResultSet::Move(IResultSetHelper::Movement eCursorPosition, INT32 nOffset,
 //
     INT32 nTempPos = m_nRowPos;
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = m_pTable->Lock();
+    //  vos::OGuard* pGuard = m_pTable->Lock();
 
     if (m_aSQLIterator.getStatementType() == SQL_STATEMENT_SELECT &&
         !isCount())
@@ -1299,8 +1300,8 @@ void OResultSet::sortRows()
     ::std::vector<sal_Int32>::iterator aOrderByIter = m_aOrderbyColumnNumber.begin();
     for (::std::vector<sal_Int16>::size_type i=0;aOrderByIter != m_aOrderbyColumnNumber.end(); ++aOrderByIter,++i)
     {
-        OSL_ENSURE((sal_Int32)m_aRow->get().size() > *aOrderByIter,"Invalid Index");
-        switch ((*(m_aRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
+        OSL_ENSURE((sal_Int32)m_aSelectRow->get().size() > *aOrderByIter,"Invalid Index");
+        switch ((*(m_aSelectRow->get().begin()+*aOrderByIter))->getValue().getTypeKind())
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
@@ -1329,7 +1330,7 @@ void OResultSet::sortRows()
                 OSL_ASSERT("OFILECursor::Execute: Datentyp nicht implementiert");
                 break;
         }
-        (m_aEvaluateRow->get())[*aOrderByIter]->setBound(sal_True);
+        (m_aSelectRow->get())[*aOrderByIter]->setBound(sal_True);
     }
 
     m_pSortIndex = new OSortIndex(eKeyType,m_aOrderbyAscending);
@@ -1346,8 +1347,13 @@ void OResultSet::sortRows()
     }
     else
     {
-        while (ExecuteRow(IResultSetHelper::NEXT,1,TRUE))
+        while ( ExecuteRow( IResultSetHelper::NEXT, 1, FALSE, TRUE ) )
         {
+            m_aSelectRow->get()[0]->setValue( m_aRow->get()[0]->getValue() );
+            if ( m_pSQLAnalyzer->hasFunctions() )
+                m_pSQLAnalyzer->setSelectionEvaluationResult( m_aSelectRow, m_aColMapping );
+            const sal_Int32 nBookmark = (*m_aRow->get().begin())->getValue();
+            ExecuteRow( IResultSetHelper::BOOKMARK, nBookmark, TRUE, FALSE );
         }
     }
 
@@ -1409,7 +1415,7 @@ BOOL OResultSet::OpenImpl()
     m_nRowCountResult = -1;
 
     // exclusiver zugriff auf die Tabelle
-    //  NAMESPACE_VOS(OGuard)* pGuard = pTable->Lock();
+    //  vos::OGuard* pGuard = pTable->Lock();
     m_nLastVisitedPos = m_pTable->getCurrentLastPos();
 
     switch(m_aSQLIterator.getStatementType())

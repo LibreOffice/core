@@ -980,6 +980,8 @@ sal_Bool SAL_CALL SfxBaseModel::attachResource( const   ::rtl::OUString&        
         aArgs.remove( "InputStream" );
         aArgs.remove( "URL" );
         aArgs.remove( "Frame" );
+        aArgs.remove( "Password" );
+        aArgs.remove( "EncryptionData" );
 
         // TODO/LATER: all the parameters that are accepted by ItemSet of the DocShell must be removed here
 
@@ -1633,6 +1635,11 @@ void SAL_CALL SfxBaseModel::storeAsURL( const   ::rtl::OUString&                
         uno::Sequence< beans::PropertyValue > aSequence ;
         TransformItems( SID_OPENDOC, *m_pData->m_pObjectShell->GetMedium()->GetItemSet(), aSequence );
         attachResource( rURL, aSequence );
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( m_pData->m_pObjectShell->GetMedium()->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
     }
 }
 
@@ -1891,6 +1898,11 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pHidItem, SfxBoolItem, SID_HIDDEN, sal_False);
         if ( pHidItem )
             bHidden = pHidItem->GetValue();
+
+#if OSL_DEBUG_LEVEL > 0
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False);
+        OSL_ENSURE( !pPasswdItem, "There should be no Password property in the document MediaDescriptor!" );
+#endif
         // !TODO: will be done by Framework!
         pMedium->SetUpdatePickList( !bHidden );
     }
@@ -2599,11 +2611,6 @@ SfxObjectShell* SfxBaseModel::impl_getObjectShell() const
 //  public impl.
 //________________________________________________________________________________________________________
 
-sal_Bool SfxBaseModel::IsDisposed() const
-{
-    return ( m_pData == NULL ) ;
-}
-
 sal_Bool SfxBaseModel::IsInitialized() const
 {
     if ( !m_pData || !m_pData->m_pObjectShell )
@@ -2613,6 +2620,14 @@ sal_Bool SfxBaseModel::IsInitialized() const
     }
 
     return m_pData->m_pObjectShell->GetMedium() != NULL;
+}
+
+void SfxBaseModel::MethodEntryCheck( const bool i_mustBeInitialized ) const
+{
+    if ( impl_isDisposed() )
+        throw ::com::sun::star::lang::DisposedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
+    if ( i_mustBeInitialized && !IsInitialized() )
+        throw ::com::sun::star::lang::NotInitializedException( ::rtl::OUString(), *const_cast< SfxBaseModel* >( this ) );
 }
 
 sal_Bool SfxBaseModel::impl_isDisposed() const
@@ -2667,48 +2682,40 @@ void SfxBaseModel::impl_store(  const   ::rtl::OUString&                   sURL 
                     aArgHash.erase( aFilterString );
                     aArgHash.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
 
-                    // if the password is changed SaveAs should be done
-                    // no password for encrypted document is also a change here
-                    sal_Bool bPassChanged = sal_False;
-
-                    ::comphelper::SequenceAsHashMap::iterator aNewPassIter
-                        = aArgHash.find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) );
-                    SFX_ITEMSET_ARG( pMedium->GetItemSet(), pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False );
-                    if ( pPasswordItem && aNewPassIter != aArgHash.end() )
+                    try
                     {
-                        ::rtl::OUString aNewPass;
-                        aNewPassIter->second >>= aNewPass;
-                        bPassChanged = !aNewPass.equals( pPasswordItem->GetValue() );
+                        storeSelf( aArgHash.getAsConstPropertyValueList() );
+                        bSaved = sal_True;
                     }
-                    else if ( pPasswordItem || aNewPassIter != aArgHash.end() )
-                        bPassChanged = sal_True;
-
-                    if ( !bPassChanged )
+                    catch( const lang::IllegalArgumentException& )
                     {
-                        try
+                        // some additional arguments do not allow to use saving, SaveAs should be done
+                        // but only for normal documents, the shared documents would be overwritten in this case
+                        // that would mean an information loss
+                        // TODO/LATER: need a new interaction for this case
+                        if ( m_pData->m_pObjectShell->IsDocShared() )
                         {
-                            storeSelf( aArgHash.getAsConstPropertyValueList() );
-                            bSaved = sal_True;
-                        }
-                        catch( const lang::IllegalArgumentException& )
-                        {
-                            // some additional arguments do not allow to use saving, SaveAs should be done
-                            // but only for normal documents, the shared documents would be overwritten in this case
-                            // that would mean an information loss
-                            // TODO/LATER: need a new interaction for this case
-                            if ( m_pData->m_pObjectShell->IsDocShared() )
-                            {
-                                m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
-                                m_pData->m_pObjectShell->StoreLog();
+                            m_pData->m_pObjectShell->AddLog( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX "Can't store shared document!" ) ) );
+                            m_pData->m_pObjectShell->StoreLog();
 
+                            uno::Sequence< beans::NamedValue > aNewEncryptionData = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "EncryptionData" ) ), uno::Sequence< beans::NamedValue >() );
+                            if ( !aNewEncryptionData.getLength() )
+                            {
+                                ::rtl::OUString aNewPassword = aArgHash.getUnpackedValueOrDefault( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ), ::rtl::OUString() );
+                                aNewEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( aNewPassword );
+                            }
+
+                            uno::Sequence< beans::NamedValue > aOldEncryptionData;
+                            GetEncryptionData_Impl( pMedium->GetItemSet(), aOldEncryptionData );
+
+                            if ( !aOldEncryptionData.getLength() && !aNewEncryptionData.getLength() )
                                 throw;
+                            else
+                            {
+                                // if the password is changed a special error should be used in case of shared document
+                                throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                             }
                         }
-                    }
-                    else if ( m_pData->m_pObjectShell->IsDocShared() )
-                    {
-                        // if the password is changed a special error should be used in case of shared document
-                        throw task::ErrorCodeIOException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Cant change password for shared document." ) ), uno::Reference< uno::XInterface >(), ERRCODE_SFX_SHARED_NOPASSWORDCHANGE );
                     }
                 }
             }

@@ -707,8 +707,8 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
         else
         {
             const String        aGraphicObjectId( aPictureStreamName );
-            const GraphicObject aGrfObject( ByteString( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US ) );
-
+            const ByteString    aAsciiObjectID( aGraphicObjectId, RTL_TEXTENCODING_ASCII_US );
+            const GraphicObject aGrfObject( aAsciiObjectID );
             if( aGrfObject.GetType() != GRAPHIC_NONE )
             {
                 String          aStreamName( aGraphicObjectId );
@@ -782,6 +782,15 @@ void SvXMLGraphicHelper::ImplInsertGraphicURL( const ::rtl::OUString& rURLStr, s
                 rURLPair.second = sPictures;
                 rURLPair.second += aStreamName;
             }
+#if OSL_DEBUG_LEVEL > 0
+            else
+            {
+                ByteString sMessage = "graphic object with ID '";
+                sMessage += aAsciiObjectID;
+                sMessage += "' has an unknown type";
+                OSL_ENSURE( false, sMessage.GetBuffer() );
+            }
+#endif
         }
 
         maURLSet.insert( aURLString );

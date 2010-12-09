@@ -35,15 +35,6 @@
 #include <database.hxx>
 
 /****************** G L O B A L S ****************************************/
-#ifdef DOS
-static IdlDll * pApp = NULL;
-IdlDll * GetIdlApp()
-{
-    if( !pApp )
-        pApp = new IdlDll();
-    return pApp;
-}
-#else
 IdlDll * GetIdlApp()
 {
     if( !(*(IdlDll**)GetAppData(SHL_IDL)) )
@@ -55,7 +46,6 @@ IdlDll * GetIdlApp()
     }
     return (*(IdlDll**)GetAppData(SHL_IDL));
 }
-#endif
 
 IdlDll::IdlDll()
     : pHashTable( NULL )

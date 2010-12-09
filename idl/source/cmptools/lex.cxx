@@ -146,11 +146,7 @@ SvToken & SvToken::operator = ( const SvToken & rObj )
 *************************************************************************/
 void SvTokenStream::InitCtor()
 {
-#ifdef DOS
-    SetCharSet( CHARSET_ANSI );
-#else
     SetCharSet( gsl_getSystemTextEncoding() );
-#endif
     aStrTrue    = "TRUE";
     aStrFalse   = "FALSE";
     nLine       = nColumn = 0;
@@ -251,11 +247,7 @@ void SvTokenStream::SetCharSet( CharSet nSet )
 {
     nCharSet = nSet;
 
-#ifdef DOS
-    pCharTab = SvChar::GetTable( nSet, CHARSET_ANSI );
-#else
     pCharTab = SvChar::GetTable( nSet, gsl_getSystemTextEncoding() );
-#endif
 }
 
 /*************************************************************************

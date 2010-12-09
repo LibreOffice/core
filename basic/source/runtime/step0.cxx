@@ -139,7 +139,6 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         }
 
     }
-#ifndef WIN
     static SbxVariable* pTRUE = NULL;
     static SbxVariable* pFALSE = NULL;
 
@@ -163,12 +162,6 @@ void SbiRuntime::StepCompare( SbxOperator eOp )
         }
         PushVar( pFALSE );
     }
-#else
-    BOOL bRes = p2->Compare( eOp, *p1 );
-    SbxVariable* pRes = new SbxVariable;
-    pRes->PutBool( bRes );
-    PushVar( pRes );
-#endif
 }
 
 void SbiRuntime::StepEXP()      { StepArith( SbxEXP );      }

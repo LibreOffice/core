@@ -28,11 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#if defined(WIN)
-#include <string.h>
-#else
 #include <stdlib.h> // getenv
-#endif
 #include <vcl/svapp.hxx>
 #include <vcl/mapmod.hxx>
 #include <vcl/wrkwin.hxx>
@@ -50,10 +46,6 @@
 #define INCL_DOS
 #define INCL_DOSPROCESS
 #include <svpm.h>
-#endif
-
-#if defined(WIN)
-#include <tools/svwin.h>
 #endif
 
 #ifndef CLK_TCK
@@ -1286,31 +1278,10 @@ RTLFUNC(Environ)
     }
     String aResult;
     // sollte ANSI sein, aber unter Win16 in DLL nicht moeglich
-#if defined(WIN)
-    LPSTR lpszEnv = GetDOSEnvironment();
-    String aCompareStr( rPar.Get(1)->GetString() );
-    aCompareStr += '=';
-    const char* pCompare = aCompareStr.GetStr();
-    int nCompareLen = aCompareStr.Len();
-    while ( *lpszEnv )
-    {
-        // Es werden alle EnvString in der Form ENV=VAL 0-terminiert
-        // aneinander gehaengt.
-
-        if ( strnicmp( pCompare, lpszEnv, nCompareLen ) == 0 )
-        {
-            aResult = (const char*)(lpszEnv+nCompareLen);
-            rPar.Get(0)->PutString( aResult );
-            return;
-        }
-        lpszEnv += lstrlen( lpszEnv ) + 1;  // Next Enviroment-String
-    }
-#else
     ByteString aByteStr( rPar.Get(1)->GetString(), gsl_getSystemTextEncoding() );
     const char* pEnvStr = getenv( aByteStr.GetBuffer() );
     if ( pEnvStr )
         aResult = String::CreateFromAscii( pEnvStr );
-#endif
     rPar.Get(0)->PutString( aResult );
 }
 
@@ -1321,11 +1292,7 @@ static double GetDialogZoomFactor( BOOL bX, long nValue )
     if( pDevice )
     {
         Size aRefSize( nValue, nValue );
-#ifndef WIN
         Fraction aFracX( 1, 26 );
-#else
-        Fraction aFracX( 1, 23 );
-#endif
         Fraction aFracY( 1, 24 );
         MapMode aMap( MAP_APPFONT, Point(), aFracX, aFracY );
         Size aScaledSize = pDevice->LogicToPixel( aRefSize, aMap );

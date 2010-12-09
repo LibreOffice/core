@@ -62,7 +62,6 @@ class Timer;
 class SfxItemSet;
 class DateTime;
 class SvStringsDtor;
-class SvEaMgr;
 
 #define S2BS(s) ByteString( s, RTL_TEXTENCODING_MS_1252 )
 
@@ -113,7 +112,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
+    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 #endif
 
 public:
@@ -207,8 +206,6 @@ public:
 
     SvStream*           GetInStream();
     SvStream*           GetOutStream();
-
-    SvEaMgr*            GetEaMgr();
 
     sal_Bool            Commit();
     sal_Bool            IsStorage();

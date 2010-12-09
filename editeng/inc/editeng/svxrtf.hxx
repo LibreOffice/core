@@ -37,6 +37,9 @@
 #include <svl/svstdarr.hxx>
 #include <editeng/editengdllapi.h>
 
+#include <deque>
+#include <utility>
+#include <vector>
 class Font;
 class Color;
 class Graphic;
@@ -82,12 +85,15 @@ public:
 
 
 typedef Color* ColorPtr;
-SV_DECL_PTRARR( SvxRTFColorTbl, ColorPtr, 16, 4 )
+typedef std::deque< ColorPtr > SvxRTFColorTbl;
 DECLARE_TABLE( SvxRTFFontTbl, Font* )
 DECLARE_TABLE( SvxRTFStyleTbl, SvxRTFStyleType* )
 typedef SvxRTFItemStackType* SvxRTFItemStackTypePtr;
 SV_DECL_PTRARR_DEL( SvxRTFItemStackList, SvxRTFItemStackTypePtr, 1, 1 )
-SV_DECL_PTRARR_STACK( SvxRTFItemStack, SvxRTFItemStackTypePtr, 0, 1 )
+
+// SvxRTFItemStack can't be "std::stack< SvxRTFItemStackTypePtr >" type, because
+// the methods are using operator[] in sw/source/filter/rtf/rtftbl.cxx file
+typedef std::deque< SvxRTFItemStackTypePtr > SvxRTFItemStack;
 
 // einige Hilfsklassen fuer den RTF-Parser
 struct SvxRTFStyleType
@@ -104,7 +110,7 @@ struct SvxRTFStyleType
 
 
 // Bitmap - Mode
-
+typedef ::std::vector< ::std::pair< ::rtl::OUString, ::rtl::OUString > > PictPropertyNameValuePairs;
 struct EDITENG_DLLPUBLIC SvxRTFPictureType
 {
     // Format der Bitmap
@@ -135,7 +141,7 @@ struct EDITENG_DLLPUBLIC SvxRTFPictureType
     USHORT  nWidthBytes;
     USHORT  nScalX, nScalY;
     short   nCropT, nCropB, nCropL, nCropR;
-
+    PictPropertyNameValuePairs aPropertyPairs;
     SvxRTFPictureType() { ResetValues(); }
     // alle Werte auf default; wird nach einlesen der Bitmap aufgerufen !
     void ResetValues();
@@ -376,7 +382,7 @@ public:
 
     virtual SvParserState CallParser(); // Aufruf des Parsers
 
-    inline const Color& GetColor( USHORT nId ) const;
+    inline const Color& GetColor( size_t nId ) const;
     const Font& GetFont( USHORT nId );      // aendert den dflt Font
 
     virtual int IsEndPara( SvxNodeIdx* pNd, xub_StrLen nCnt ) const = 0;
@@ -451,12 +457,12 @@ public:
 };
 
 
-// ----------- Inline Implementierungen --------------
+// ----------- Inline Implementations --------------
 
-inline const Color& SvxRTFParser::GetColor( USHORT nId ) const
+inline const Color& SvxRTFParser::GetColor( size_t nId ) const
 {
     ColorPtr pColor = (ColorPtr)pDfltColor;
-    if( nId < aColorTbl.Count() )
+    if( nId < aColorTbl.size() )
         pColor = aColorTbl[ nId ];
     return *pColor;
 }
@@ -464,7 +470,7 @@ inline const Color& SvxRTFParser::GetColor( USHORT nId ) const
 inline SfxItemSet& SvxRTFParser::GetAttrSet()
 {
     SvxRTFItemStackTypePtr pTmp;
-    if( bNewGroup || 0 == ( pTmp = aAttrStack.Top()) )
+    if( bNewGroup || 0 == ( pTmp = aAttrStack.empty() ? 0 : aAttrStack.back()) )
         pTmp = _GetAttrSet();
     return pTmp->aAttrSet;
 }

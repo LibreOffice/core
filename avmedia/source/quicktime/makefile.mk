@@ -83,3 +83,11 @@ SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 dummy:
     @echo " Nothing to build for GUIBASE=$(GUIBASE)"
 .ENDIF
+
+ALLTAR : $(MISC)/avmediaQuickTime.component
+
+$(MISC)/avmediaQuickTime.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt avmediaQuickTime.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt avmediaQuickTime.component

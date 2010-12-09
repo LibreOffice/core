@@ -444,11 +444,7 @@ TYPEINIT1(SbJScriptMethod,SbMethod)
 TYPEINIT1(SbObjModule,SbModule)
 TYPEINIT1(SbUserFormModule,SbObjModule)
 
-SV_DECL_VARARR(SbiBreakpoints,USHORT,4,4)
-SV_IMPL_VARARR(SbiBreakpoints,USHORT)
-
-
-SV_IMPL_VARARR(HighlightPortions, HighlightPortion)
+typedef std::vector<HighlightPortion> HighlightPortions;
 
 bool getDefaultVBAMode( StarBASIC* pb )
 {
@@ -1531,15 +1527,15 @@ BOOL SbModule::IsBreakable( USHORT nLine ) const
     return FALSE;
 }
 
-USHORT SbModule::GetBPCount() const
+size_t SbModule::GetBPCount() const
 {
-    return pBreaks ? pBreaks->Count() : 0;
+    return pBreaks ? pBreaks->size() : 0;
 }
 
-USHORT SbModule::GetBP( USHORT n ) const
+USHORT SbModule::GetBP( size_t n ) const
 {
-    if( pBreaks && n < pBreaks->Count() )
-        return pBreaks->GetObject( n );
+    if( pBreaks && n < pBreaks->size() )
+        return pBreaks->operator[]( n );
     else
         return 0;
 }
@@ -1548,11 +1544,9 @@ BOOL SbModule::IsBP( USHORT nLine ) const
 {
     if( pBreaks )
     {
-        const USHORT* p = pBreaks->GetData();
-        USHORT n = pBreaks->Count();
-        for( USHORT i = 0; i < n; i++, p++ )
+        for( size_t i = 0; i < pBreaks->size(); i++ )
         {
-            USHORT b = *p;
+            USHORT b = pBreaks->operator[]( i );
             if( b == nLine )
                 return TRUE;
             if( b < nLine )
@@ -1568,18 +1562,16 @@ BOOL SbModule::SetBP( USHORT nLine )
         return FALSE;
     if( !pBreaks )
         pBreaks = new SbiBreakpoints;
-    const USHORT* p = pBreaks->GetData();
-    USHORT n = pBreaks->Count();
-    USHORT i;
-    for( i = 0; i < n; i++, p++ )
+    size_t i;
+    for( i = 0; i < pBreaks->size(); i++ )
     {
-        USHORT b = *p;
+        USHORT b = pBreaks->operator[]( i );
         if( b == nLine )
             return TRUE;
         if( b < nLine )
             break;
     }
-    pBreaks->Insert( &nLine, 1, i );
+    pBreaks->insert( pBreaks->begin() + i, nLine );
 
     // #38568: Zur Laufzeit auch hier SbDEBUG_BREAK setzen
     if( pINST && pINST->pRun )
@@ -1593,19 +1585,19 @@ BOOL SbModule::ClearBP( USHORT nLine )
     BOOL bRes = FALSE;
     if( pBreaks )
     {
-        const USHORT* p = pBreaks->GetData();
-        USHORT n = pBreaks->Count();
-        for( USHORT i = 0; i < n; i++, p++ )
+        for( size_t i = 0; i < pBreaks->size(); i++ )
         {
-            USHORT b = *p;
+            USHORT b = pBreaks->operator[]( i );
             if( b == nLine )
             {
-                pBreaks->Remove( i, 1 ); bRes = TRUE; break;
+                pBreaks->erase( pBreaks->begin() + i );
+                bRes = TRUE;
+                break;
             }
             if( b < nLine )
                 break;
         }
-        if( !pBreaks->Count() )
+        if( pBreaks->empty() )
             delete pBreaks, pBreaks = NULL;
     }
     return bRes;
@@ -1613,7 +1605,8 @@ BOOL SbModule::ClearBP( USHORT nLine )
 
 void SbModule::ClearAllBP()
 {
-    delete pBreaks; pBreaks = NULL;
+    delete pBreaks;
+    pBreaks = NULL;
 }
 
 void
@@ -1641,7 +1634,7 @@ BOOL SbModule::LoadData( SvStream& rStrm, USHORT nVer )
     Clear();
     if( !SbxObject::LoadData( rStrm, 1 ) )
         return FALSE;
-    // Sicherheitshalber...
+    // Precaution...
     SetFlag( SBX_EXTSEARCH | SBX_GBLSEARCH );
     BYTE bImage;
     rStrm >> bImage;

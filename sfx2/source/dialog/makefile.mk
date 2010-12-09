@@ -46,6 +46,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/templdlg.obj        \
         $(SLO)$/dinfdlg.obj         \
         $(SLO)$/dockwin.obj         \
+        $(SLO)$/passwd.obj			\
         $(SLO)$/taskpane.obj
 
 SLOFILES =\
@@ -58,7 +59,6 @@ SLOFILES =\
         $(SLO)$/mgetempl.obj		\
         $(SLO)$/navigat.obj			\
         $(SLO)$/newstyle.obj		\
-        $(SLO)$/passwd.obj			\
         $(SLO)$/printopt.obj		\
         $(SLO)$/sfxdlg.obj          \
         $(SLO)$/splitwin.obj		\

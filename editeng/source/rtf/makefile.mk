@@ -29,20 +29,19 @@ PRJ=..$/..
 
 PRJNAME=editeng
 TARGET=rtf
-
+ENABLE_EXCEPTIONS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES= \
+        $(SLO)$/rtfitem.obj \
         $(SLO)$/svxrtf.obj
 
 SLOFILES= \
         $(EXCEPTIONSFILES) \
-        $(SLO)$/rtfitem.obj \
         $(SLO)$/rtfgrf.obj
 
 # ==========================================================================
