@@ -46,15 +46,15 @@ using namespace ::com::sun::star::xml::sax;
 
 class Formula{
 public:
-     Formula(char *_eq, int _ishwpeq = 1) {
-          eq = _eq;
-          isHwpEQ = _ishwpeq;
-          trim();
-     }
-     virtual ~Formula(){ }
+    Formula(char *_eq, int _ishwpeq = 1)
+        : pList(NULL)
+    {
+        eq = _eq;
+        isHwpEQ = _ishwpeq;
+        trim();
+    }
+    virtual ~Formula(){ }
 
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
      void setDocumentHandler(Reference < XDocumentHandler > xHandler ){
           rDocumentHandler = xHandler;
      }
@@ -62,8 +62,6 @@ public:
           pList = p;
           rList = (XAttributeList *) pList;
      }
-// DVO: remove DEBUG dependency
-// #endif
      int parse();
 private:
      void trim();
@@ -89,13 +87,9 @@ private:
      void makeEnd(Node *res);
 
 private:
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
      Reference< XDocumentHandler >   rDocumentHandler;
      Reference< XAttributeList > rList;
      AttributeListImpl *pList;
-// DVO: remove DEBUG dependency
-// #endif
      char *eq;
      int isHwpEQ;
 };
