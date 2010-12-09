@@ -267,12 +267,10 @@ void SwVbaTableHelper::SetColWidth( sal_Int32 _width, sal_Int32 nCol, sal_Int32 
     SwTabCols aOldCols;
     InitTabCols( aOldCols, pStart, bCurRowOnly );
 
-    SwTwips nWidth = 0;
-
     SwTabCols aCols( aOldCols );
     if ( aCols.Count() > 0 )
     {
-        nWidth = GetColWidth( aCols, nCol);
+        SwTwips nWidth = GetColWidth( aCols, nCol);
 
         int nDiff = (int)(nNewWidth - nWidth);
         if( !nCol )
