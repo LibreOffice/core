@@ -131,9 +131,9 @@ IMPL_LINK( LookUpComboBox_Impl, ModifyTimer_Hdl, Timer *, EMPTYARG /*pTimer*/ )
 
 // class ReplaceEdit_Impl --------------------------------------------------
 
-ReplaceEdit_Impl::ReplaceEdit_Impl(
-    Window *pParent, const ResId &rResId ) :
-    Edit        (pParent, rResId)
+ReplaceEdit_Impl::ReplaceEdit_Impl( Window *pParent, const ResId &rResId )
+    : Edit(pParent, rResId)
+    , m_pBtn(NULL)
 {
 }
 
