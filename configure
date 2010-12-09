@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH NO_HIDS GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM RPM PKGFORMAT GPERF BUILD_STAX MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_MDDS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB MYTHES_CFLAGS MYTHES_LIBS SYSTEM_MYTHES SYSTEM_LPSOLVE HAVE_GETOPT HAVE_READDIR_R SYSTEM_LIBC PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE nodep LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS EGREP AWK SED LOCAL_SOLENV _solenv UPD SOURCEVERSION build build_cpu build_vendor build_os host host_cpu host_vendor host_os target target_cpu target_vendor target_os GNUTAR OSVERSION PTHREAD_CFLAGS PTHREAD_LIBS ENABLE_CRASHDUMP VC_STANDARD ENABLE_WERROR ENABLE_DEBUG PRODUCT PROFULLSWITCH PROEXT ENABLE_SYMBOLS DISABLE_STRIP ENABLE_CUPS ENABLE_FONTCONFIG TARFILE_LOCATION DO_FETCH_TARBALLS WITH_BINFILTER ENABLE_DIRECTX DISABLE_ACTIVEX DISABLE_ATL ENABLE_RPATH WITH_MYSPELL_DICTS SYSTEM_DICTS DICT_SYSTEM_DIR HYPH_SYSTEM_DIR THES_SYSTEM_DIR WITH_MINGWIN SHELLPATH GCC_HOME CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT COMPATH GCCVER HAVE_LD_BSYMBOLIC_FUNCTIONS ENABLE_PCH GNUMAKE _cc HAVE_LD_HASH_STYLE PERL MSPDB_PATH COMEX USE_MINGW MIDL_PATH CSC_PATH FRAME_HOME CPP CXX CXXFLAGS ac_ct_CXX CXXCPP SIZEOF_LONG WORDS_BIGENDIAN LFS_CFLAGS ENABLE_VBA VBA_EXTENSION PAM NEW_SHADOW_API PAM_LINK CRYPT_LINK GXX_INCLUDE_PATH MINGW_LIB_INCLUDE_PATH MINGW_BACKWARD_INCLUDE_PATH MINGW_CLIB_DIR MINGW_SHARED_GCCLIB MINGW_GCCLIB_EH MINGW_SHARED_GXXLIB MINGW_GCCDLL MINGW_GXXDLL EXCEPTIONS STLPORT4 STLPORT_VER USE_SYSTEM_STL USE_CCACHE CCACHE HAVE_GCC_VISIBILITY_FEATURE ALLOC BUILD_VER_STRING SOLAR_JAVA JAVAINTERPRETER JAVACOMPILER JAVACISGCJ JAVADOC AWTLIB JAVAAOTCOMPILER JAVA_HOME JDK JAVAFLAGS JAVAIFLAGS DMAKE BUILD_DMAKE EPM DPKG PKGMK BUILD_EPM RPM PKGFORMAT GPERF BUILD_STAX MINGWCXX ac_ct_MINGWCXX MINGWSTRIP ac_ct_MINGWSTRIP BUILD_UNOWINREG SYSTEM_STDLIBS SYSTEM_ZLIB SYSTEM_JPEG SYSTEM_EXPAT PKG_CONFIG LIBWPD_CFLAGS LIBWPD_LIBS SYSTEM_LIBWPD CPPUNIT_CFLAGS CPPUNIT_LIBS SYSTEM_CPPUNIT FREETYPE_CFLAGS FREETYPE_LIBS USE_FT_EMBOLDEN LIBXSLT_CFLAGS LIBXSLT_LIBS XSLTPROC SYSTEM_LIBXSLT LIBXML_CFLAGS LIBXML_LIBS SYSTEM_LIBXML PYTHON PYTHON_VERSION PYTHON_PREFIX PYTHON_EXEC_PREFIX PYTHON_PLATFORM pythondir pkgpythondir pyexecdir pkgpyexecdir BZIP2 SYSTEM_PYTHON PYTHON_CFLAGS PYTHON_LIBS HOME SYSTEM_DB DB_VERSION DB_INCLUDES DB_JAR SYSTEM_LUCENE LUCENE_CORE_JAR LUCENE_ANALYZERS_JAR ENABLE_MYSQLC MYSQLCONFIG SYSTEM_MYSQL MYSQL_INC MYSQL_LIB MYSQL_DEFINES LIBMYSQL_PATH SYSTEM_MYSQL_CPPCONN SYSTEM_HSQLDB HSQLDB_JAR SYSTEM_BSH BSH_JAR SERIALIZER_JAR SYSTEM_SAXON SAXON_JAR CURLCONFIG SYSTEM_CURL CURL_CFLAGS CURL_LIBS SYSTEM_MDDS SYSTEM_BOOST SYSTEM_VIGRA SYSTEM_ODBC_HEADERS WITH_MOZILLA WITH_LDAP WITH_OPENLDAP MOZ_NSS_CFLAGS MOZ_NSS_LIBS NSS_LIB MOZ_NSPR_CFLAGS MOZ_NSPR_LIBS NSPR_LIB MOZILLAXPCOM_CFLAGS MOZILLAXPCOM_LIBS MOZILLA_VERSION MOZILLA_TOOLKIT MOZGTK2_CFLAGS MOZGTK2_LIBS MOZLIBREQ_CFLAGS MOZLIBREQ_LIBS BUILD_MOZAB ENABLE_NSS_MODULE MOZILLABUILD SYSTEM_MOZILLA MOZ_FLAVOUR MOZ_INC MOZ_LIB MOZ_LIB_XPCOM MOZ_LDAP_CFLAGS SYSTEM_SANE_HEADER SYSTEM_GENBRK SYSTEM_GENCCODE SYSTEM_GENCMN SYSTEM_ICU GRAPHITE_CFLAGS GRAPHITE_LIBS ENABLE_GRAPHITE SYSTEM_GRAPHITE X_CFLAGS X_PRE_LIBS X_LIBS X_EXTRA_LIBS XINC XLIB XAU_LIBS DISABLE_XAW SYSTEM_XRENDER_HEADERS XRENDER_LINK XRANDR_CFLAGS XRANDR_LIBS XRANDR_DLOPEN ENABLE_RANDR DISABLE_NEON NEON_CFLAGS NEON_LIBS SYSTEM_NEON NEON_VERSION OPENSSL_CFLAGS OPENSSL_LIBS SYSTEM_OPENSSL ENABLE_AGG AGG_CFLAGS AGG_LIBS SYSTEM_AGG AGG_VERSION REDLAND_CFLAGS REDLAND_LIBS SYSTEM_REDLAND HUNSPELL_CFLAGS HUNSPELL_LIBS SYSTEM_HUNSPELL SYSTEM_HYPH HYPHEN_LIB MYTHES_CFLAGS MYTHES_LIBS SYSTEM_MYTHES SYSTEM_LPSOLVE SYSTEM_LIBTEXTCAT SYSTEM_LIBTEXTCAT_DATA HAVE_GETOPT HAVE_READDIR_R SYSTEM_LIBC PSDK_HOME WINDOWS_VISTA_PSDK DIRECTXSDK_HOME DIRECTXSDK_LIB NSIS_PATH BISON FLEX PATCH GNUCP GNUPATCH CYGWIN_PATH ML_EXE ASM_HOME ZIP UNZIP ZIP_HOME ENABLE_GTK ENABLE_KDE ENABLE_KDE4 GCONF_CFLAGS GCONF_LIBS ENABLE_GCONF GNOMEVFS_CFLAGS GNOMEVFS_LIBS ENABLE_GNOMEVFS GTK_CFLAGS GTK_LIBS DBUS_CFLAGS DBUS_LIBS GIO_CFLAGS GIO_LIBS ENABLE_GIO ENABLE_DBUS ENABLE_SYSTRAY_GTK GSTREAMER_CFLAGS GSTREAMER_LIBS ENABLE_GSTREAMER CAIRO_CFLAGS CAIRO_LIBS ENABLE_CAIRO BUILD_PIXMAN SYSTEM_CAIRO ENABLE_OPENGL ENABLE_PRESENTER_EXTRA_UI ENABLE_MINIMIZER ENABLE_PRESENTER_SCREEN POPPLER_CFLAGS POPPLER_LIBS ENABLE_PDFIMPORT SYSTEM_POPPLER ENABLE_MEDIAWIKI SYSTEM_SERVLETAPI SERVLETAPI_JAR ENABLE_REPORTBUILDER SYSTEM_JFREEREPORT SAC_JAR LIBXML_JAR FLUTE_JAR JFREEREPORT_JAR LIBBASE_JAR LIBLAYOUT_JAR LIBLOADER_JAR LIBFORMULA_JAR LIBREPOSITORY_JAR LIBFONTS_JAR LIBSERIALIZER_JAR SYSTEM_APACHE_COMMONS COMMONS_CODEC_JAR COMMONS_LANG_JAR COMMONS_HTTPCLIENT_JAR COMMONS_LOGGING_JAR MOC KDE_CFLAGS KDE_LIBS MOC4 KDE4_CFLAGS KDE4_LIBS ENABLE_LOCKDOWN GOBJECT_CFLAGS GOBJECT_LIBS ENABLE_EVOAB2 ENABLE_KAB WITH_FONTS WITHOUT_PPDS WITHOUT_AFMS SCPDEFS USE_XINERAMA XINERAMA_LINK ANT ANT_HOME ANT_LIB OOO_JUNIT_JAR WITH_LANG WITH_POOR_HELP_LOCALIZATIONS WITH_DICT INTRO_BITMAPS ABOUT_BITMAPS OOO_VENDOR UNIXWRAPPERNAME ENABLE_STATIC_GTK ENABLE_LAYOUT VERBOSE nodep LOCAL_SOLVER BUILD_TYPE LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -874,8 +874,6 @@ Optional Features:
 
   --enable-pch            EXPERIMENTAL: Enables precompiled header support for C++.
 
-  --enable-hids            Enables generation of HelpId lists.
-
   --disable-mozilla       OO.o usually includes a strangely hacked up mozilla
                           binary for your platform, to build without this
                           version, use this option.
@@ -946,6 +944,9 @@ Optional Features:
 
   --disable-gtk           Determines whether to use Gtk+ vclplug on platforms
                           where Gtk+ is available.
+
+  --disable-gstreamer     Determines whether to use the GStreamer media
+                          backend on platforms where GStreamer is available.
 
   --disable-systray       Determines whether to build the systray quickstarter.
 
@@ -1237,6 +1238,10 @@ Optional Packages:
   --with-system-altlinuxhyph    Use ALTLinuxhyph already on system
 
   --with-system-lpsolve         Use lpsolve already on system
+
+  --with-system-libtextcat      Use libtextcat already on system
+
+  --with-system-libtextcat-data Use libtextcat data already on system
 
   --with-system-cppunit         Use cppunit already on system
 
@@ -1976,11 +1981,6 @@ if test "${enable_pch+set}" = set; then
   enableval="$enable_pch"
 
 fi;
-# Check whether --enable-hids or --disable-hids was given.
-if test "${enable_hids+set}" = set; then
-  enableval="$enable_hids"
-
-fi;
 # Check whether --enable-mozilla or --disable-mozilla was given.
 if test "${enable_mozilla+set}" = set; then
   enableval="$enable_mozilla"
@@ -2124,6 +2124,13 @@ if test "${enable_gtk+set}" = set; then
 
 else
   enable_gtk=yes
+fi;
+# Check whether --enable-gstreamer or --disable-gstreamer was given.
+if test "${enable_gstreamer+set}" = set; then
+  enableval="$enable_gstreamer"
+
+else
+  enable_gstreamer=yes
 fi;
 # Check whether --enable-systray or --disable-systray was given.
 if test "${enable_systray+set}" = set; then
@@ -2721,6 +2728,18 @@ if test "${with_system_lpsolve+set}" = set; then
 
 fi;
 
+# Check whether --with-system-libtextcat or --without-system-libtextcat was given.
+if test "${with_system_libtextcat+set}" = set; then
+  withval="$with_system_libtextcat"
+
+fi;
+
+# Check whether --with-external-libtextcat-data or --without-external-libtextcat-data was given.
+if test "${with_external_libtextcat_data+set}" = set; then
+  withval="$with_external_libtextcat_data"
+
+fi;
+
 # Check whether --with-system-cppunit or --without-system-cppunit was given.
 if test "${with_system_cppunit+set}" = set; then
   withval="$with_system_cppunit"
@@ -3312,6 +3331,7 @@ case "$build_os" in
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		_os=SunOS
 		# Extract the first word of "gtar", so it can be a program name with args.
 set dummy gtar; ac_word=$2
@@ -3391,7 +3411,8 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
-		_os=Linux
+        test_gstreamer=yes
+        _os=Linux
 		;;
 	gnu)
 		test_cups=no
@@ -3401,6 +3422,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cups=no
 		test_cairo=yes
 		test_freetype=no
+        test_gstreamer=no
 		_os=WINNT
 		;;
 	darwin*) # Mac OS X
@@ -3409,6 +3431,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
 		test_cairo=yes
         test_randr=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
          { echo "$as_me:$LINENO: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >&5
@@ -3423,6 +3446,7 @@ echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --
         test_randr=no
 		test_gtk=no
 		test_freetype=no
+        test_gstreamer=no
 		_os=OS2
 		;;
 	freebsd*)
@@ -3433,6 +3457,7 @@ echo "$as_me: WARNING: Disabling gtk-quickstarter - not supported on Mac. Use --
 		test_cups=yes
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		echo "$as_me:$LINENO: checking the FreeBSD operating system release" >&5
 echo $ECHO_N "checking the FreeBSD operating system release... $ECHO_C" >&6
 		if test -n "$with_os_version"; then
@@ -3471,6 +3496,7 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6
 		test_cups=no
         test_randr=yes
 		test_freetype=yes
+        test_gstreamer=yes
 		PTHREAD_CFLAGS="-pthread"
 		PTHREAD_LIBS="-pthread -lpthread"
 		_os=NetBSD
@@ -3479,6 +3505,7 @@ echo "${ECHO_T}$PTHREAD_LIBS" >&6
 		test_cups=no
         test_randr=no
 		test_freetype=yes
+        test_gstreamer=yes
 	   PTHREAD_LIBS=-pthread
 		echo "AIX is an alpha port --- Use at own risk" >> warn
 		_os=AIX
@@ -4912,8 +4939,8 @@ echo "$as_me: error: version \"$_gcc_version\" gives internal error with small."
    fi
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
-         CC=$GCC_HOME/bin/gcc-4.0
-         GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
+         export CC=$GCC_HOME/bin/gcc-4.0
+                   GCCVER2=`"$CC" -dumpversion | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
          if test "$GCCVER2" -ge "040000" -a "$GCCVER2" -lt "040100" ; then
             GCCVER=$GCCVER2
          fi
@@ -5029,19 +5056,6 @@ echo "$as_me: WARNING: Precompiled header not yet supported for your platform/co
    fi
 else
    ENABLE_PCH=""
-   echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6
-fi
-
-
-echo "$as_me:$LINENO: checking whether to enable hid list feature" >&5
-echo $ECHO_N "checking whether to enable hid list feature... $ECHO_C" >&6
-if test -n "$enable_hids" && test "$enable_hids" != "no"; then
-   NO_HIDS=""
-   echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6
-else
-   NO_HIDS="TRUE"
    echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 fi
@@ -13801,9 +13815,7 @@ if test -n "$with_system_cppunit" -o -n "$with_system_libs" && \
     echo "$as_me:$LINENO: result: external" >&5
 echo "${ECHO_T}external" >&6
     SYSTEM_CPPUNIT=YES
-    # might work for earlier, too but go sure. We didn't have
-    # a system-cppunit before the first version using a proper cppunit
-    # (and that being 1.12.1) anyway
+    # might work for earlier, too but go sure:
 
   succeeded=no
 
@@ -13858,23 +13870,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for cppunit >= 1.12.1 " >&5
-echo $ECHO_N "checking for cppunit >= 1.12.1 ... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for cppunit >= 1.12.0 " >&5
+echo $ECHO_N "checking for cppunit >= 1.12.0 ... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "cppunit >= 1.12.1 " ; then
+        if $PKG_CONFIG --exists "cppunit >= 1.12.0 " ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking CPPUNIT_CFLAGS" >&5
 echo $ECHO_N "checking CPPUNIT_CFLAGS... $ECHO_C" >&6
-            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.1 "`
+            CPPUNIT_CFLAGS=`$PKG_CONFIG --cflags "cppunit >= 1.12.0 "`
             echo "$as_me:$LINENO: result: $CPPUNIT_CFLAGS" >&5
 echo "${ECHO_T}$CPPUNIT_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking CPPUNIT_LIBS" >&5
 echo $ECHO_N "checking CPPUNIT_LIBS... $ECHO_C" >&6
-            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.1 "`
+            CPPUNIT_LIBS=`$PKG_CONFIG --libs "cppunit >= 1.12.0 "`
             echo "$as_me:$LINENO: result: $CPPUNIT_LIBS" >&5
 echo "${ECHO_T}$CPPUNIT_LIBS" >&6
         else
@@ -13882,7 +13894,7 @@ echo "${ECHO_T}$CPPUNIT_LIBS" >&6
             CPPUNIT_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.1 "`
+            CPPUNIT_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "cppunit >= 1.12.0 "`
             echo $CPPUNIT_PKG_ERRORS
         fi
 
@@ -13897,21 +13909,11 @@ echo "${ECHO_T}$CPPUNIT_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
-echo "$as_me: error: Library requirements (cppunit >= 1.12.1 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
+     { { echo "$as_me:$LINENO: error: Library requirements (cppunit >= 1.12.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&5
+echo "$as_me: error: Library requirements (cppunit >= 1.12.0 ) not met; consider adjusting the PKG_CONFIG_PATH environment variable if your libraries are in a nonstandard prefix so pkg-config can find them." >&2;}
    { (exit 1); exit 1; }; }
   fi
 
-    echo "$as_me:$LINENO: checking STL compatibility" >&5
-echo $ECHO_N "checking STL compatibility... $ECHO_C" >&6
-    if test "$WITH_STLPORT" != "no"; then
-	{ { echo "$as_me:$LINENO: error: to use system cppunit you need to use --without-stlport" >&5
-echo "$as_me: error: to use system cppunit you need to use --without-stlport" >&2;}
-   { (exit 1); exit 1; }; }
-    else
-	echo "$as_me:$LINENO: result: OK" >&5
-echo "${ECHO_T}OK" >&6
-    fi
 else
     echo "$as_me:$LINENO: result: internal" >&5
 echo "${ECHO_T}internal" >&6
@@ -15166,9 +15168,33 @@ echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_core_jar" >&6
 if test $ac_cv_file__usr_share_java_lucene_core_jar = yes; then
    LUCENE_CORE_JAR=/usr/share/java/lucene-core.jar
 else
+   echo "$as_me:$LINENO: checking for /usr/share/java/lucene.jar" >&5
+echo $ECHO_N "checking for /usr/share/java/lucene.jar... $ECHO_C" >&6
+if test "${ac_cv_file__usr_share_java_lucene_jar+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  test "$cross_compiling" = yes &&
+  { { echo "$as_me:$LINENO: error: cannot check for file existence when cross compiling" >&5
+echo "$as_me: error: cannot check for file existence when cross compiling" >&2;}
+   { (exit 1); exit 1; }; }
+if test -r "/usr/share/java/lucene.jar"; then
+  ac_cv_file__usr_share_java_lucene_jar=yes
+else
+  ac_cv_file__usr_share_java_lucene_jar=no
+fi
+fi
+echo "$as_me:$LINENO: result: $ac_cv_file__usr_share_java_lucene_jar" >&5
+echo "${ECHO_T}$ac_cv_file__usr_share_java_lucene_jar" >&6
+if test $ac_cv_file__usr_share_java_lucene_jar = yes; then
+   LUCENE_CORE_JAR=/usr/share/java/lucene.jar
+else
    { { echo "$as_me:$LINENO: error: lucene-core.jar replacement not found" >&5
 echo "$as_me: error: lucene-core.jar replacement not found" >&2;}
    { (exit 1); exit 1; }; }
+
+fi
+
+
 
 fi
 
@@ -22424,23 +22450,23 @@ fi
   else
      PKG_CONFIG_MIN_VERSION=0.9.0
      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
-        echo "$as_me:$LINENO: checking for neon >= 0.24.0" >&5
-echo $ECHO_N "checking for neon >= 0.24.0... $ECHO_C" >&6
+        echo "$as_me:$LINENO: checking for neon >= 0.26.0" >&5
+echo $ECHO_N "checking for neon >= 0.26.0... $ECHO_C" >&6
 
-        if $PKG_CONFIG --exists "neon >= 0.24.0" ; then
+        if $PKG_CONFIG --exists "neon >= 0.26.0" ; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
             succeeded=yes
 
             echo "$as_me:$LINENO: checking NEON_CFLAGS" >&5
 echo $ECHO_N "checking NEON_CFLAGS... $ECHO_C" >&6
-            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.24.0"`
+            NEON_CFLAGS=`$PKG_CONFIG --cflags "neon >= 0.26.0"`
             echo "$as_me:$LINENO: result: $NEON_CFLAGS" >&5
 echo "${ECHO_T}$NEON_CFLAGS" >&6
 
             echo "$as_me:$LINENO: checking NEON_LIBS" >&5
 echo $ECHO_N "checking NEON_LIBS... $ECHO_C" >&6
-            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.24.0"`
+            NEON_LIBS=`$PKG_CONFIG --libs "neon >= 0.26.0"`
             echo "$as_me:$LINENO: result: $NEON_LIBS" >&5
 echo "${ECHO_T}$NEON_LIBS" >&6
         else
@@ -22448,7 +22474,7 @@ echo "${ECHO_T}$NEON_LIBS" >&6
             NEON_LIBS=""
             ## If we have a custom action on failure, don't print errors, but
             ## do set a variable so people can do so.
-            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.24.0"`
+            NEON_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "neon >= 0.26.0"`
 
         fi
 
@@ -22463,8 +22489,8 @@ echo "${ECHO_T}$NEON_LIBS" >&6
   if test $succeeded = yes; then
      :
   else
-     { { echo "$as_me:$LINENO: error: you need neon >= 0.24.x for system-neon" >&5
-echo "$as_me: error: you need neon >= 0.24.x for system-neon" >&2;}
+     { { echo "$as_me:$LINENO: error: you need neon >= 0.26.x for system-neon" >&5
+echo "$as_me: error: you need neon >= 0.26.x for system-neon" >&2;}
    { (exit 1); exit 1; }; }
   fi
 
@@ -22874,6 +22900,7 @@ echo "${ECHO_T}internal" >&6
 	BUILD_TYPE="$BUILD_TYPE REDLAND"
 	SYSTEM_REDLAND=NO
 fi
+
 
 
 
@@ -24659,6 +24686,261 @@ else
 echo "${ECHO_T}internal" >&6
     SYSTEM_LPSOLVE=NO
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
+fi
+
+
+echo "$as_me:$LINENO: checking which libtextcat to use" >&5
+echo $ECHO_N "checking which libtextcat to use... $ECHO_C" >&6
+if test -n "$with_system_libtextcat" && test "$with_system_libtextcat" != "no"; then
+    echo "$as_me:$LINENO: result: external" >&5
+echo "${ECHO_T}external" >&6
+    SYSTEM_LIBTEXTCAT=YES
+    if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for libtextcat/textcat.h" >&5
+echo $ECHO_N "checking for libtextcat/textcat.h... $ECHO_C" >&6
+if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_libtextcat_textcat_h" >&5
+echo "${ECHO_T}$ac_cv_header_libtextcat_textcat_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking libtextcat/textcat.h usability" >&5
+echo $ECHO_N "checking libtextcat/textcat.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <libtextcat/textcat.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking libtextcat/textcat.h presence" >&5
+echo $ECHO_N "checking libtextcat/textcat.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <libtextcat/textcat.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: libtextcat/textcat.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: libtextcat/textcat.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## ------------------------------------------ ##
+## Report this to the AC_PACKAGE_NAME lists.  ##
+## ------------------------------------------ ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for libtextcat/textcat.h" >&5
+echo $ECHO_N "checking for libtextcat/textcat.h... $ECHO_C" >&6
+if test "${ac_cv_header_libtextcat_textcat_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_libtextcat_textcat_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_libtextcat_textcat_h" >&5
+echo "${ECHO_T}$ac_cv_header_libtextcat_textcat_h" >&6
+
+fi
+if test $ac_cv_header_libtextcat_textcat_h = yes; then
+  :
+else
+   { { echo "$as_me:$LINENO: error: libtextcat headers not found." >&5
+echo "$as_me: error: libtextcat headers not found." >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+
+
+echo "$as_me:$LINENO: checking for special_textcat_Init in -ltextcat" >&5
+echo $ECHO_N "checking for special_textcat_Init in -ltextcat... $ECHO_C" >&6
+if test "${ac_cv_lib_textcat_special_textcat_Init+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-ltextcat  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char special_textcat_Init ();
+int
+main ()
+{
+special_textcat_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_textcat_special_textcat_Init=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_textcat_special_textcat_Init=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_textcat_special_textcat_Init" >&5
+echo "${ECHO_T}$ac_cv_lib_textcat_special_textcat_Init" >&6
+if test $ac_cv_lib_textcat_special_textcat_Init = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_LIBTEXTCAT 1
+_ACEOF
+
+  LIBS="-ltextcat $LIBS"
+
+else
+   { { echo "$as_me:$LINENO: error: libtextcat library not found or not suitable. libtextcat typically needs to be patched" >&5
+echo "$as_me: error: libtextcat library not found or not suitable. libtextcat typically needs to be patched" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    SYSTEM_LIBTEXTCAT=NO
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCAT"
+fi
+
+
+echo "$as_me:$LINENO: checking which libtextcat data directory to use" >&5
+echo $ECHO_N "checking which libtextcat data directory to use... $ECHO_C" >&6
+if test -n "$with_system_libtextcat_data" && test "$with_system_libtextcat_data" != "no"; then
+    if test "$with_system_libtextcat_data" = "yes"; then
+        SYSTEM_LIBTEXTCAT_DATA=file:///usr/share/libtextcat
+    else
+        SYSTEM_LIBTEXTCAT_DATA=file://$with_system_libtextcat_data
+    fi
+    echo "$as_me:$LINENO: result: $SYSTEM_LIBTEXTCAT_DATA" >&5
+echo "${ECHO_T}$SYSTEM_LIBTEXTCAT_DATA" >&6
+else
+    echo "$as_me:$LINENO: result: internal" >&5
+echo "${ECHO_T}internal" >&6
+    BUILD_TYPE="$BUILD_TYPE LIBTEXTCATDATA"
 fi
 
 
@@ -26458,6 +26740,126 @@ echo "${ECHO_T}no" >&6
 
 fi
 
+
+
+
+
+
+
+GSTREAMER_CFLAGS=""
+GSTREAMER_LIBS=""
+ENABLE_GSTREAMER=""
+
+if test "$test_gstreamer" = "yes"; then
+    echo "$as_me:$LINENO: checking whether to build the GStreamer media backend" >&5
+echo $ECHO_N "checking whether to build the GStreamer media backend... $ECHO_C" >&6
+    if test "x$enable_gstreamer" != "xno" ; then
+
+  succeeded=no
+
+  if test -z "$PKG_CONFIG"; then
+    # Extract the first word of "pkg-config", so it can be a program name with args.
+set dummy pkg-config; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $PKG_CONFIG in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
+  ;;
+esac
+fi
+PKG_CONFIG=$ac_cv_path_PKG_CONFIG
+
+if test -n "$PKG_CONFIG"; then
+  echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
+echo "${ECHO_T}$PKG_CONFIG" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+  fi
+
+  if test "$PKG_CONFIG" = "no" ; then
+     echo "*** The pkg-config script could not be found. Make sure it is"
+     echo "*** in your path, or set the PKG_CONFIG environment variable"
+     echo "*** to the full path to pkg-config."
+     echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
+  else
+     PKG_CONFIG_MIN_VERSION=0.9.0
+     if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
+        echo "$as_me:$LINENO: checking for gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 " >&5
+echo $ECHO_N "checking for gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 ... $ECHO_C" >&6
+
+        if $PKG_CONFIG --exists "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 " ; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+            succeeded=yes
+
+            echo "$as_me:$LINENO: checking GSTREAMER_CFLAGS" >&5
+echo $ECHO_N "checking GSTREAMER_CFLAGS... $ECHO_C" >&6
+            GSTREAMER_CFLAGS=`$PKG_CONFIG --cflags "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+            echo "$as_me:$LINENO: result: $GSTREAMER_CFLAGS" >&5
+echo "${ECHO_T}$GSTREAMER_CFLAGS" >&6
+
+            echo "$as_me:$LINENO: checking GSTREAMER_LIBS" >&5
+echo $ECHO_N "checking GSTREAMER_LIBS... $ECHO_C" >&6
+            GSTREAMER_LIBS=`$PKG_CONFIG --libs "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+            echo "$as_me:$LINENO: result: $GSTREAMER_LIBS" >&5
+echo "${ECHO_T}$GSTREAMER_LIBS" >&6
+        else
+            GSTREAMER_CFLAGS=""
+            GSTREAMER_LIBS=""
+            ## If we have a custom action on failure, don't print errors, but
+            ## do set a variable so people can do so.
+            GSTREAMER_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "gtk+-2.0 >= 2.4 gthread-2.0 gstreamer-0.10 gstreamer-interfaces-0.10 "`
+
+        fi
+
+
+
+     else
+        echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
+        echo "*** See http://www.freedesktop.org/software/pkgconfig"
+     fi
+  fi
+
+  if test $succeeded = yes; then
+     :
+  else
+     { { echo "$as_me:$LINENO: error: requirements to build the GStreamer media backend not met. Use --disable-gstreamer or install the missing packages" >&5
+echo "$as_me: error: requirements to build the GStreamer media backend not met. Use --disable-gstreamer or install the missing packages" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+
+        ENABLE_GSTREAMER="TRUE"
+        echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+    else
+        echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+    fi
+fi
 
 
 
@@ -29061,6 +29463,7 @@ echo $ECHO_N "checking whether to include AFMs... $ECHO_C" >&6
 if test "$with_afms" != "no"; then
   echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
+  BUILD_TYPE="$BUILD_TYPE AFMS"
 else
   echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
@@ -30577,7 +30980,6 @@ s,@COMPATH@,$COMPATH,;t t
 s,@GCCVER@,$GCCVER,;t t
 s,@HAVE_LD_BSYMBOLIC_FUNCTIONS@,$HAVE_LD_BSYMBOLIC_FUNCTIONS,;t t
 s,@ENABLE_PCH@,$ENABLE_PCH,;t t
-s,@NO_HIDS@,$NO_HIDS,;t t
 s,@GNUMAKE@,$GNUMAKE,;t t
 s,@_cc@,$_cc,;t t
 s,@HAVE_LD_HASH_STYLE@,$HAVE_LD_HASH_STYLE,;t t
@@ -30785,6 +31187,8 @@ s,@MYTHES_CFLAGS@,$MYTHES_CFLAGS,;t t
 s,@MYTHES_LIBS@,$MYTHES_LIBS,;t t
 s,@SYSTEM_MYTHES@,$SYSTEM_MYTHES,;t t
 s,@SYSTEM_LPSOLVE@,$SYSTEM_LPSOLVE,;t t
+s,@SYSTEM_LIBTEXTCAT@,$SYSTEM_LIBTEXTCAT,;t t
+s,@SYSTEM_LIBTEXTCAT_DATA@,$SYSTEM_LIBTEXTCAT_DATA,;t t
 s,@HAVE_GETOPT@,$HAVE_GETOPT,;t t
 s,@HAVE_READDIR_R@,$HAVE_READDIR_R,;t t
 s,@SYSTEM_LIBC@,$SYSTEM_LIBC,;t t
@@ -30822,6 +31226,9 @@ s,@GIO_LIBS@,$GIO_LIBS,;t t
 s,@ENABLE_GIO@,$ENABLE_GIO,;t t
 s,@ENABLE_DBUS@,$ENABLE_DBUS,;t t
 s,@ENABLE_SYSTRAY_GTK@,$ENABLE_SYSTRAY_GTK,;t t
+s,@GSTREAMER_CFLAGS@,$GSTREAMER_CFLAGS,;t t
+s,@GSTREAMER_LIBS@,$GSTREAMER_LIBS,;t t
+s,@ENABLE_GSTREAMER@,$ENABLE_GSTREAMER,;t t
 s,@CAIRO_CFLAGS@,$CAIRO_CFLAGS,;t t
 s,@CAIRO_LIBS@,$CAIRO_LIBS,;t t
 s,@ENABLE_CAIRO@,$ENABLE_CAIRO,;t t

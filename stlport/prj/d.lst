@@ -17,6 +17,7 @@ mkdir: %_DEST%\inc%_EXT%\stl\wrap_std\h
 ..\%__SRC%\inc\stlport\using\h\* %_DEST%\inc%_EXT%\stl\using\h\*
 ..\%__SRC%\inc\stlport\wrap_std\* %_DEST%\inc%_EXT%\stl\wrap_std\*
 ..\%__SRC%\inc\stlport\wrap_std\h\* %_DEST%\inc%_EXT%\stl\wrap_std\h\*
+..\systemstlguards\*.h %_DEST%\inc%_EXT%\stl\*.h
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\lib*.a %_DEST%\lib%_EXT%\lib*.a
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
