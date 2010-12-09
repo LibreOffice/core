@@ -764,245 +764,259 @@ BOOL TIFFReader::ConvertScanline( ULONG nY )
         }
         else if ( nPhotometricInterpretation == 2 && nSamplesPerPixel >= 3 )
         {
-            ULONG nMinMax = nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
-            for ( nx = 0; nx < nImageWidth; nx++ )
+            if ( nMaxSampleValue > nMinSampleValue )
             {
-                if ( nPlanes < 3 )
+                ULONG nMinMax = nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
+                for ( nx = 0; nx < nImageWidth; nx++ )
                 {
-                    nRed = GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                    nGreen = GetBits( pMap[ 1 ], ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                    nBlue = GetBits( pMap[ 2 ], ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                    if ( nPlanes < 3 )
+                    {
+                        nRed = GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( pMap[ 1 ], ( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( pMap[ 2 ], ( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                    }
+                    else
+                    {
+                        nRed = GetBits( pMap[ 0 ], nx * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( pMap[ 1 ], nx * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( pMap[ 2 ], nx * nBitsPerSample, nBitsPerSample );
+                    }
+                    pAcc->SetPixel( nY, nx, Color( (BYTE)( nRed - nMinMax ), (BYTE)( nGreen - nMinMax ), (BYTE)(nBlue - nMinMax) ) );
                 }
-                else
-                {
-                    nRed = GetBits( pMap[ 0 ], nx * nBitsPerSample, nBitsPerSample );
-                    nGreen = GetBits( pMap[ 1 ], nx * nBitsPerSample, nBitsPerSample );
-                    nBlue = GetBits( pMap[ 2 ], nx * nBitsPerSample, nBitsPerSample );
-                }
-                pAcc->SetPixel( nY, nx, Color( (BYTE)( nRed - nMinMax ), (BYTE)( nGreen - nMinMax ), (BYTE)(nBlue - nMinMax) ) );
             }
         }
         else if ( nPhotometricInterpretation == 5 && nSamplesPerPixel == 3 )
         {
-            ULONG nMinMax =  nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
-            for ( nx = 0; nx < nImageWidth; nx++ )
+            if ( nMaxSampleValue > nMinSampleValue )
             {
-                if ( nPlanes < 3 )
+                ULONG nMinMax =  nMinSampleValue * 255 / ( nMaxSampleValue - nMinSampleValue );
+                for ( nx = 0; nx < nImageWidth; nx++ )
                 {
-                    nRed = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
-                    nGreen = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
-                    nBlue = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                    if ( nPlanes < 3 )
+                    {
+                        nRed = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 0 ) * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 1 ) * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( pMap[ 0 ],( nx * nSamplesPerPixel + 2 ) * nBitsPerSample, nBitsPerSample );
+                    }
+                    else
+                    {
+                        nRed = GetBits( pMap[ 0 ], nx * nBitsPerSample, nBitsPerSample );
+                        nGreen = GetBits( pMap[ 1 ], nx * nBitsPerSample, nBitsPerSample );
+                        nBlue = GetBits( pMap[ 2 ], nx * nBitsPerSample, nBitsPerSample );
+                    }
+                    nRed = 255 - (BYTE)( nRed - nMinMax );
+                    nGreen = 255 - (BYTE)( nGreen - nMinMax );
+                    nBlue = 255 - (BYTE)( nBlue - nMinMax );
+                    pAcc->SetPixel( nY, nx, Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue ) );
                 }
-                else
-                {
-                    nRed = GetBits( pMap[ 0 ], nx * nBitsPerSample, nBitsPerSample );
-                    nGreen = GetBits( pMap[ 1 ], nx * nBitsPerSample, nBitsPerSample );
-                    nBlue = GetBits( pMap[ 2 ], nx * nBitsPerSample, nBitsPerSample );
-                }
-                nRed = 255 - (BYTE)( nRed - nMinMax );
-                nGreen = 255 - (BYTE)( nGreen - nMinMax );
-                nBlue = 255 - (BYTE)( nBlue - nMinMax );
-                pAcc->SetPixel( nY, nx, Color( (BYTE) nRed, (BYTE) nGreen, (BYTE) nBlue ) );
             }
         }
         else if( nPhotometricInterpretation == 5 && nSamplesPerPixel == 4 )
         {
-            BYTE    nSamp[ 4 ];
-            BYTE    nSampLast[ 4 ] = { 0, 0, 0, 0 };
-            long    nBlack;
-
-            for( nx = 0; nx < nImageWidth; nx++ )
+            if ( nMaxSampleValue > nMinSampleValue )
             {
-                // sind die Werte als Differenz abgelegt?
-                if( 2 == nPredictor )
-                {
-                    for( ns = 0; ns < 4; ns++ )
-                    {
-                        if( nPlanes < 3 )
-                            nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
-                        else
-                            nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
-                        nSamp[ ns ] = nSampLast[ ns ];
-                    }
-                }
-                else
-                {
-                    for( ns = 0; ns < 4; ns++ )
-                    {
-                        if( nPlanes < 3 )
-                            nSamp[ ns ] = (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
-                        else
-                            nSamp[ ns ]= (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
-                    }
-                }
-                nBlack = nSamp[ 3 ];
-                nRed = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 0 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
-                            255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
-                nGreen = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 1 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
-                            255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
-                nBlue = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 2 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
-                            255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
-                pAcc->SetPixel( nY, nx, Color ( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                BYTE    nSamp[ 4 ];
+                BYTE    nSampLast[ 4 ] = { 0, 0, 0, 0 };
+                long    nBlack;
 
+                for( nx = 0; nx < nImageWidth; nx++ )
+                {
+                    // sind die Werte als Differenz abgelegt?
+                    if( 2 == nPredictor )
+                    {
+                        for( ns = 0; ns < 4; ns++ )
+                        {
+                            if( nPlanes < 3 )
+                                nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
+                            else
+                                nSampLast[ ns ] = nSampLast[ ns ] + (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
+                            nSamp[ ns ] = nSampLast[ ns ];
+                        }
+                    }
+                    else
+                    {
+                        for( ns = 0; ns < 4; ns++ )
+                        {
+                            if( nPlanes < 3 )
+                                nSamp[ ns ] = (BYTE) GetBits( pMap[ 0 ], ( nx * nSamplesPerPixel + ns ) * nBitsPerSample, nBitsPerSample );
+                            else
+                                nSamp[ ns ]= (BYTE) GetBits( pMap[ ns ], nx * nBitsPerSample, nBitsPerSample );
+                        }
+                    }
+                    nBlack = nSamp[ 3 ];
+                    nRed = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 0 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                                255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
+                    nGreen = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 1 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                                255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
+                    nBlue = (BYTE) Max( 0L, 255L - ( ( (long) nSamp[ 2 ] + nBlack - ( ( (long) nMinSampleValue ) << 1 ) ) *
+                                255L/(long)(nMaxSampleValue-nMinSampleValue) ) );
+                    pAcc->SetPixel( nY, nx, Color ( (BYTE)nRed, (BYTE)nGreen, (BYTE)nBlue ) );
+                }
             }
         }
     }
     else if ( nSamplesPerPixel == 1 && ( nPhotometricInterpretation <= 1 || nPhotometricInterpretation == 3 ) )
     {
-        ULONG nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-        BYTE* pt = pMap[ 0 ];
-        BYTE nShift;
-
-        switch ( nDstBitsPerPixel )
+        if ( nMaxSampleValue > nMinSampleValue )
         {
-            case 8 :
+            ULONG nMinMax = ( ( 1 << nDstBitsPerPixel ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
+            BYTE* pt = pMap[ 0 ];
+            BYTE nShift;
+
+            switch ( nDstBitsPerPixel )
             {
-                BYTE nLast;
-                if ( bByteSwap )
+                case 8 :
                 {
-                    if ( nPredictor == 2 )
+                    BYTE nLast;
+                    if ( bByteSwap )
                     {
-                        nLast = BYTESWAP( (BYTE)*pt++ );
-                        for ( nx = 0; nx < nImageWidth; nx++ )
+                        if ( nPredictor == 2 )
                         {
-                            pAcc->SetPixel( nY, nx, nLast );
-                            nLast = nLast + *pt++;
+                            nLast = BYTESWAP( (BYTE)*pt++ );
+                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            {
+                                pAcc->SetPixel( nY, nx, nLast );
+                                nLast = nLast + *pt++;
+                            }
+                        }
+                        else
+                        {
+                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            {
+                                nLast = *pt++;
+                                pAcc->SetPixel( nY, nx, (BYTE)( ( (BYTESWAP((ULONG)nLast ) - nMinSampleValue ) * nMinMax ) ) );
+                            }
                         }
                     }
                     else
                     {
-                        for ( nx = 0; nx < nImageWidth; nx++ )
+                        if ( nPredictor == 2 )
                         {
                             nLast = *pt++;
-                            pAcc->SetPixel( nY, nx, (BYTE)( ( (BYTESWAP((ULONG)nLast ) - nMinSampleValue ) * nMinMax ) ) );
+                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            {
+                                pAcc->SetPixel( nY, nx, nLast );
+                                nLast = nLast + *pt++;
+                            }
+                        }
+                        else
+                        {
+                            for ( nx = 0; nx < nImageWidth; nx++ )
+                            {
+                                pAcc->SetPixel( nY, nx, (BYTE)( ( (ULONG)*pt++ - nMinSampleValue ) * nMinMax ) );
+
+                            }
                         }
                     }
                 }
-                else
+                break;
+
+                case 7 :
+                case 6 :
+                case 5 :
+                case 4 :
+                case 3 :
+                case 2 :
                 {
-                    if ( nPredictor == 2 )
+                    for ( nx = 0; nx < nImageWidth; nx++ )
                     {
-                        nLast = *pt++;
-                        for ( nx = 0; nx < nImageWidth; nx++ )
+                        nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
+                        pAcc->SetPixel( nY, nx, (BYTE)nVal );
+                    }
+                }
+                break;
+
+                case 1 :
+                {
+                    if ( bByteSwap )
+                    {
+                        nx = 0;
+                        nByteCount = ( nImageWidth >> 3 ) + 1;
+                        while ( --nByteCount )
                         {
-                            pAcc->SetPixel( nY, nx, nLast );
-                            nLast = nLast + *pt++;
+                            nByteVal = *pt++;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, nx++, nByteVal );
+                        }
+                        if ( nImageWidth & 7 )
+                        {
+                            nByteVal = *pt++;
+                            while ( nx < nImageWidth )
+                            {
+                                pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                                nByteVal >>= 1;
+                            }
                         }
                     }
                     else
                     {
-                        for ( nx = 0; nx < nImageWidth; nx++ )
+                        nx = 7;
+                        nByteCount = ( nImageWidth >> 3 ) + 1;
+                        while ( --nByteCount )
                         {
-                            pAcc->SetPixel( nY, nx, (BYTE)( ( (ULONG)*pt++ - nMinSampleValue ) * nMinMax ) );
-
-                        }
-                    }
-                }
-            }
-            break;
-
-            case 7 :
-            case 6 :
-            case 5 :
-            case 4 :
-            case 3 :
-            case 2 :
-            {
-                for ( nx = 0; nx < nImageWidth; nx++ )
-                {
-                    nVal = ( GetBits( pt, nx * nBitsPerSample, nBitsPerSample ) - nMinSampleValue ) * nMinMax;
-                    pAcc->SetPixel( nY, nx, (BYTE)nVal );
-                }
-            }
-            break;
-
-            case 1 :
-            {
-                if ( bByteSwap )
-                {
-                    nx = 0;
-                    nByteCount = ( nImageWidth >> 3 ) + 1;
-                    while ( --nByteCount )
-                    {
-                        nByteVal = *pt++;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, nx++, nByteVal );
-                    }
-                    if ( nImageWidth & 7 )
-                    {
-                        nByteVal = *pt++;
-                        while ( nx < nImageWidth )
-                        {
-                            pAcc->SetPixel( nY, nx++, nByteVal & 1 );
+                            nByteVal = *pt++;
+                            pAcc->SetPixel( nY, nx, nByteVal & 1 );
                             nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal & 1 );
+                            nByteVal >>= 1;
+                            pAcc->SetPixel( nY, --nx, nByteVal );
+                            nx += 15;
                         }
-                    }
-                }
-                else
-                {
-                    nx = 7;
-                    nByteCount = ( nImageWidth >> 3 ) + 1;
-                    while ( --nByteCount )
-                    {
-                        nByteVal = *pt++;
-                        pAcc->SetPixel( nY, nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal & 1 );
-                        nByteVal >>= 1;
-                        pAcc->SetPixel( nY, --nx, nByteVal );
-                        nx += 15;
-                    }
-                    if ( nImageWidth & 7 )
-                    {
-                        nx -= 7;
-                        nByteVal = *pt++;
-                        nShift = 7;
-                        while ( nx < nImageWidth )
+                        if ( nImageWidth & 7 )
                         {
-                            pAcc->SetPixel( nY, nx++, ( nByteVal >> nShift ) & 1);
+                            nx -= 7;
+                            nByteVal = *pt++;
+                            nShift = 7;
+                            while ( nx < nImageWidth )
+                            {
+                                pAcc->SetPixel( nY, nx++, ( nByteVal >> nShift ) & 1);
+                            }
                         }
                     }
                 }
-            }
-            break;
+                break;
 
-            default :
-                return FALSE;
+                default :
+                    return FALSE;
+            }
         }
     }
     else if ( ( nSamplesPerPixel == 2 ) && ( nBitsPerSample == 8 ) &&
         ( nPlanarConfiguration == 1 ) && ( pColorMap == 0 ) )               // grayscale
     {
-        ULONG nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
-        BYTE*   pt = pMap[ 0 ];
-        if ( nByte1 == 'I' )
-            pt++;
-        for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
+        if ( nMaxSampleValue > nMinSampleValue )
         {
-            pAcc->SetPixel( nY, nx, (BYTE)( ( (ULONG)*pt - nMinSampleValue ) * nMinMax ) );
+            ULONG nMinMax = ( ( 1 << 8 /*nDstBitsPerPixel*/ ) - 1 ) / ( nMaxSampleValue - nMinSampleValue );
+            BYTE*   pt = pMap[ 0 ];
+            if ( nByte1 == 'I' )
+                pt++;
+            for ( nx = 0; nx < nImageWidth; nx++, pt += 2 )
+            {
+                pAcc->SetPixel( nY, nx, (BYTE)( ( (ULONG)*pt - nMinSampleValue ) * nMinMax ) );
+            }
         }
     }
     else
@@ -1207,11 +1221,17 @@ BOOL TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
                 if ( pTIFF->IsEof() )
                     nNextIfd = 0;
             }
+            if ( !nBitsPerSample || ( nBitsPerSample > 32 ) )
+                bStatus = FALSE;
             if ( bStatus )
             {
                 if ( nMaxSampleValue == 0 )
-                    nMaxSampleValue = ( 1 << nBitsPerSample ) - 1;
-
+                {
+                    if ( nBitsPerSample == 32 )         // sj: i93300, compiler bug, 1 << 32 gives 1 one 32bit windows platforms,
+                        nMaxSampleValue = 0xffffffff;   // (up from 80286 only the lower 5 bits are used when shifting a 32bit register)
+                    else
+                        nMaxSampleValue = ( 1 << nBitsPerSample ) - 1;
+                }
                 if ( nPhotometricInterpretation == 2 || nPhotometricInterpretation == 5 || nPhotometricInterpretation == 6 )
                     nDstBitsPerPixel = 24;
                 else if ( nBitsPerSample*nSamplesPerPixel <= 1 )
@@ -1311,32 +1331,4 @@ extern "C" BOOL __LOADONCALLAPI GraphicImport(SvStream & rStream, Graphic & rGra
 
     return TRUE;
 }
-
-//============================= fuer Windows ==================================
-#ifndef GCC
-#endif
-
-#ifdef WIN
-
-static HINSTANCE hDLLInst = 0;      // HANDLE der DLL
-
-extern "C" int CALLBACK LibMain( HINSTANCE hDLL, WORD, WORD nHeap, LPSTR )
-{
-#ifndef WNT
-    if ( nHeap )
-        UnlockData( 0 );
-#endif
-
-    hDLLInst = hDLL;
-
-    return TRUE;
-}
-
-extern "C" int CALLBACK WEP( int )
-{
-    return 1;
-}
-
-#endif
-
 

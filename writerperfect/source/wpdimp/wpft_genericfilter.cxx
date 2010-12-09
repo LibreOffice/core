@@ -46,33 +46,6 @@ void SAL_CALL component_getImplementationEnvironment(
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
-sal_Bool SAL_CALL component_writeInfo(
-    void * /* pServiceManager */, void * pRegistryKey )
-{
-    if (pRegistryKey)
-    {
-        try
-        {
-            sal_Int32 nPos = 0;
-            Reference< XRegistryKey > xNewKey(
-                reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey( WordPerfectImportFilter_getImplementationName() ) );
-            xNewKey = xNewKey->createKey( OUString::createFromAscii( "/UNO/SERVICES" ) );
-
-            const Sequence< OUString > & rSNL = WordPerfectImportFilter_getSupportedServiceNames();
-            const OUString * pArray = rSNL.getConstArray();
-            for ( nPos = rSNL.getLength(); nPos--; )
-                xNewKey->createKey( pArray[nPos] );
-
-            return sal_True;
-        }
-        catch (InvalidRegistryException &)
-        {
-            OSL_ENSURE( sal_False, "### InvalidRegistryException!" );
-        }
-    }
-    return sal_False;
-}
-//==================================================================================================
 void * SAL_CALL component_getFactory(
     const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
