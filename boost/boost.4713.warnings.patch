@@ -140,3 +140,14 @@
      {}
    };
  
+--- misc/build/boost_1_39_0/boost/ptr_container/detail/map_iterator.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/detail/map_iterator.hpp
+@@ -49,7 +49,7 @@
+             : first(rp->first), second(rp->second)
+             { }
+             
+-            const ref_pair* const operator->() const
++            const ref_pair* operator->() const
+             {
+                 return this;
+             }
