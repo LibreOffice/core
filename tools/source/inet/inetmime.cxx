@@ -1145,8 +1145,6 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
 
         bool bPresent;
         Parameter ** pPos = aList.find(aAttribute, nSection, bPresent);
-        if (bPresent)
-            break;
 
         bool bExtended = false;
         if (p != pEnd && *p == '*')
@@ -1303,7 +1301,8 @@ sal_Char const * INetMIME::scanParameters(sal_Char const * pBegin,
                     pTokenBegin, static_cast< xub_StrLen >(p - pTokenBegin));
         }
 
-        *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
+        if (!bPresent)
+            *pPos = new Parameter(*pPos, aAttribute, aCharset, aLanguage, aValue,
                               nSection, bExtended);
     }
     return parseParameters(aList, pParameters) ? pParameterBegin : pBegin;
