@@ -833,7 +833,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 
     if( nXclLine == EXC_LINE_NONE )
         return false;
-    if( nXclLine >= STATIC_TABLE_SIZE( ppnLineParam ) )
+    if( nXclLine >= STATIC_ARRAY_SIZE( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );

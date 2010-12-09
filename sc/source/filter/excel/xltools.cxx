@@ -53,7 +53,7 @@ using ::rtl::OUString;
 
 XclGuid::XclGuid()
 {
-    ::std::fill( mpnData, STATIC_TABLE_END( mpnData ), 0 );
+    ::std::fill( mpnData, STATIC_ARRAY_END( mpnData ), 0 );
 }
 
 XclGuid::XclGuid(
@@ -77,14 +77,14 @@ XclGuid::XclGuid(
 
 bool operator==( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
-    return ::std::equal( rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ), rCmp2.mpnData );
+    return ::std::equal( rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ), rCmp2.mpnData );
 }
 
 bool operator<( const XclGuid& rCmp1, const XclGuid& rCmp2 )
 {
     return ::std::lexicographical_compare(
-        rCmp1.mpnData, STATIC_TABLE_END( rCmp1.mpnData ),
-        rCmp2.mpnData, STATIC_TABLE_END( rCmp2.mpnData ) );
+        rCmp1.mpnData, STATIC_ARRAY_END( rCmp1.mpnData ),
+        rCmp2.mpnData, STATIC_ARRAY_END( rCmp2.mpnData ) );
 }
 
 XclImpStream& operator>>( XclImpStream& rStrm, XclGuid& rGuid )
@@ -357,7 +357,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return (nXclPattern < STATIC_TABLE_SIZE( pnRatioTable )) ?
+    return (nXclPattern < STATIC_ARRAY_SIZE( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
@@ -409,7 +409,7 @@ pCodePageTable[] =
     {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
     {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
 };
-const XclCodePageEntry* const pCodePageTableEnd = STATIC_TABLE_END( pCodePageTable );
+const XclCodePageEntry* const pCodePageTableEnd = STATIC_ARRAY_END( pCodePageTable );
 
 struct XclCodePageEntry_CPPred
 {
@@ -487,10 +487,10 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    DBG_ASSERT( STATIC_ARRAY_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
-    if( cBuiltIn < STATIC_TABLE_SIZE( ppcDefNames ) )
+    if( cBuiltIn < STATIC_ARRAY_SIZE( ppcDefNames ) )
         aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
     else
         aDefName = String::CreateFromInt32( cBuiltIn );
@@ -554,7 +554,7 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, s
     else
     {
         aStyleName = maStyleNamePrefix1;
-        if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
+        if( nStyleId < STATIC_ARRAY_SIZE( ppcStyleNames ) )
             aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
         else if( rName.Len() > 0 )
             aStyleName.Append( rName );
@@ -594,7 +594,7 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     if( nPrefixLen > 0 )
     {
         String aShortName;
-        for( sal_uInt8 nId = 0; nId < STATIC_TABLE_SIZE( ppcStyleNames ); ++nId )
+        for( sal_uInt8 nId = 0; nId < STATIC_ARRAY_SIZE( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {
