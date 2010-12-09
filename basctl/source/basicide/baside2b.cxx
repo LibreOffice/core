@@ -28,8 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basctl.hxx"
 
-
-#include <svl/svarray.hxx>
+#include <vector>
 #define _BASIC_TEXTPORTIONS
 #include <basic/sbdef.hxx>
 #include <ide_pch.hxx>
@@ -258,7 +257,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
         if ( rHEvt.GetMode() & HELPMODE_CONTEXT )
         {
             String aKeyword = GetWordAtCursor();
-            Application::GetHelp()->Start( aKeyword, this );
+            Application::GetHelp()->SearchKeyword( aKeyword );
             bDone = TRUE;
         }
         else if ( rHEvt.GetMode() & HELPMODE_QUICK )
@@ -773,8 +772,8 @@ void EditorWindow::ImpDoHighlight( ULONG nLine )
         pEditEngine->RemoveAttribs( nLine, TRUE );
         HighlightPortions aPortions;
         aHighlighter.getHighlightPortions( nLine, aLine, aPortions );
-        USHORT nCount = aPortions.Count();
-        for ( USHORT i = 0; i < nCount; i++ )
+
+        for ( size_t i = 0; i < aPortions.size(); i++ )
         {
             HighlightPortion& r = aPortions[i];
             const Color& rColor = ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->getSyntaxColor(r.tokenType);

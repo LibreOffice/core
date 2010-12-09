@@ -115,13 +115,8 @@ public:
                                     SvxConfigFunctionListBox_Impl( Window*, const ResId& );
                                     ~SvxConfigFunctionListBox_Impl();
     void                            ClearAll();
-    SvLBoxEntry*                    GetEntry_Impl( USHORT nId );
-    SvLBoxEntry*                    GetEntry_Impl( const String& );
-    USHORT                          GetId( SvLBoxEntry *pEntry );
     String                          GetHelpText( SvLBoxEntry *pEntry );
     using Window::GetHelpText;
-    USHORT                          GetCurId()
-                                    { return GetId( FirstSelected() ); }
     SvLBoxEntry*                    GetLastSelectedEntry();
     void                            FunctionSelected();
 
@@ -235,7 +230,6 @@ public:
     void        SetImageProvider( ImageProvider* provider )
         { aCategories.SetImageProvider( provider ); }
 
-    USHORT      GetSelectedId();
     String      GetScriptURL() const;
     String      GetSelectedDisplayName();
     String      GetSelectedHelpText();

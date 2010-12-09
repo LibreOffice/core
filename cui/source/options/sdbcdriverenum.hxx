@@ -64,7 +64,6 @@ namespace offapp
 
         const_iterator  begin() const throw();
         const_iterator  end() const throw();
-        sal_Int32 size() const throw();
     };
 
 //........................................................................

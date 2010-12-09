@@ -166,7 +166,7 @@ public:
 class PluginConnector : public Mediator
 {
 protected:
-    NAMESPACE_VOS(OMutex)               m_aUserEventMutex;
+    vos::OMutex               m_aUserEventMutex;
 
     static std::vector<PluginConnector*>  allConnectors;
 

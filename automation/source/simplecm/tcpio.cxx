@@ -63,7 +63,7 @@ comm_USHORT TCPIO::ReceiveBytes( void* pBuffer, comm_UINT32 nLen )
 
 
 // helper
-void TCPIO::SetStreamSocket( NAMESPACE_VOS(OStreamSocket) *pSocket )
+void TCPIO::SetStreamSocket( vos::OStreamSocket *pSocket )
 {
     vos::OGuard aRGuard( aMSocketReadAccess );
     vos::OGuard aWGuard( aMSocketWriteAccess );

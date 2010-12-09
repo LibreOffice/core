@@ -52,7 +52,7 @@ namespace svx
 PasswordTable::PasswordTable( Window* pParent, const ResId& rResId ) :
     SvxSimpleTable( pParent, rResId )
 {
-    SetWindowBits( GetStyle() | WB_NOINITIALSELECTION );
+    SetStyle( GetStyle() | WB_NOINITIALSELECTION );
 }
 
 void PasswordTable::InsertHeaderItem( USHORT nColumn, const String& rText, HeaderBarItemBits nBits )
@@ -311,10 +311,8 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
             ::rtl::OUString aURL = m_aPasswordsLB.GetEntryText( pEntry, 0 );
             ::rtl::OUString aUserName = m_aPasswordsLB.GetEntryText( pEntry, 1 );
 
-            ::comphelper::DocPasswordRequest* pPasswordRequest
-                  = new ::comphelper::DocPasswordRequest(
-                      ::comphelper::DocPasswordRequestType_STANDARD,
-                      task::PasswordRequestMode_PASSWORD_CREATE, aURL );
+            ::comphelper::SimplePasswordRequest* pPasswordRequest
+                  = new ::comphelper::SimplePasswordRequest( task::PasswordRequestMode_PASSWORD_CREATE );
             uno::Reference< task::XInteractionRequest > rRequest( pPasswordRequest );
 
             uno::Reference< task::XInteractionHandler > xInteractionHandler(

@@ -1159,51 +1159,6 @@ void OfaViewTabPage::Reset( const SfxItemSet& )
     LINK( this, OfaViewTabPage, OnAntialiasingToggled ).Call( NULL );
 #endif
 }
-/* -----------------------------23.11.00 14:55--------------------------------
-
- ---------------------------------------------------------------------------*/
-class LangConfigItem_Impl : public ConfigItem
-{
-    Any         aValue;
-    OUString    aPropertyName;
-public:
-    LangConfigItem_Impl(const OUString& rTree, const OUString& rProperty);
-    ~LangConfigItem_Impl();
-
-    virtual void            Commit();
-
-    const Any&  GetValue() const {return aValue;}
-    void        SetValue(Any& rValue)  {aValue = rValue; SetModified();}
-};
-/* -----------------------------23.11.00 15:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-LangConfigItem_Impl::LangConfigItem_Impl(
-    const OUString& rTree, const OUString& rProperty) :
-    ConfigItem(rTree),
-    aPropertyName(rProperty)
-{
-    Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = aPropertyName;
-    Sequence<Any> aValues = GetProperties(aNames);
-    aValue = aValues.getConstArray()[0];
-}
-/* -----------------------------23.11.00 15:06--------------------------------
-
- ---------------------------------------------------------------------------*/
-LangConfigItem_Impl::~LangConfigItem_Impl()
-{}
-/* -----------------------------23.11.00 15:10--------------------------------
-
- ---------------------------------------------------------------------------*/
-void LangConfigItem_Impl::Commit()
-{
-    Sequence<OUString> aNames(1);
-    aNames.getArray()[0] = aPropertyName;
-    Sequence<Any> aValues(1);
-    aValues.getArray()[0] = aValue;
-    PutProperties(aNames, aValues);
-}
 /* -----------------22.07.2003 10:33-----------------
 
  --------------------------------------------------*/

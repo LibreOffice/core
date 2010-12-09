@@ -59,6 +59,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
     {
+        HelpID = "cui:ListBox:RID_SVXDLG_EDIT_MODULES:LB_EDIT_MODULES_LANGUAGE";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 83 , 14 ) ;
         Size = MAP_APPFONT ( 95 , 80 ) ;
@@ -74,6 +75,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_UP
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_UP";
         Pos = MAP_APPFONT ( 184 , 32 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -81,6 +83,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_DOWN";
         Pos = MAP_APPFONT ( 184 , 49 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -88,6 +91,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
     {
+        HelpID = "cui:PushButton:RID_SVXDLG_EDIT_MODULES:PB_EDIT_MODULES_PRIO_BACK";
         Pos = MAP_APPFONT ( 184 , 66 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
@@ -164,6 +168,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     };
     NumericField ED_PREBREAK
     {
+        HelpID = "cui:NumericField:RID_SVXDLG_LNG_ED_NUM_PREBREAK:ED_PREBREAK";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 56 , 14 ) ;
         Size = MAP_APPFONT ( 31 , 12 ) ;
@@ -220,6 +225,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     PushButton PB_LINGU_MODULES_EDIT
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_LINGU:PB_LINGU_MODULES_EDIT";
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -241,6 +247,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     PushButton PB_LINGU_DICS_NEW_DIC
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_LINGU:PB_LINGU_DICS_NEW_DIC";
         Pos = MAP_APPFONT ( 198 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -248,6 +255,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     PushButton PB_LINGU_DICS_EDIT_DIC
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_LINGU:PB_LINGU_DICS_EDIT_DIC";
         Pos = MAP_APPFONT ( 198 , 87 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -255,6 +263,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     PushButton PB_LINGU_DICS_DEL_DIC
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_LINGU:PB_LINGU_DICS_DEL_DIC";
         Pos = MAP_APPFONT ( 198 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -276,6 +285,7 @@ TabPage RID_SFXPAGE_LINGU
     };
     PushButton PB_LINGU_OPTIONS_EDIT
     {
+        HelpID = "cui:PushButton:RID_SFXPAGE_LINGU:PB_LINGU_OPTIONS_EDIT";
         Pos = MAP_APPFONT ( 198 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

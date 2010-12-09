@@ -891,9 +891,9 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
     delete pIsoRes;
 
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
-    aTreeLB.SetWindowBits( WB_HASBUTTONS | WB_HASBUTTONSATROOT |
+    aTreeLB.SetStyle( aTreeLB.GetStyle()|WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
-                           WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE );
+                           WB_CLIPCHILDREN | WB_HSCROLL | WB_FORCE_MAKEVISIBLE | WB_QUICK_SEARCH );
     aTreeLB.SetSpaceBetweenEntries( 0 );
     aTreeLB.SetSelectionMode( SINGLE_SELECTION );
     aTreeLB.SetSublistOpenWithLeftRight( TRUE );
@@ -2710,22 +2710,6 @@ short OfaTreeOptionsDialog::Execute()
 // class ExtensionsTabPage -----------------------------------------------
 
 ExtensionsTabPage::ExtensionsTabPage(
-    Window* pParent, const ResId& rResId, const rtl::OUString& rPageURL,
-    const rtl::OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
-
-    TabPage( pParent, rResId ),
-
-    m_sPageURL          ( rPageURL ),
-    m_sEventHdl         ( rEvtHdl ),
-    m_xWinProvider      ( rProvider ),
-    m_bIsWindowHidden   ( false )
-
-{
-}
-
-// -----------------------------------------------------------------------
-
-ExtensionsTabPage::ExtensionsTabPage(
     Window* pParent, WinBits nStyle, const rtl::OUString& rPageURL,
     const rtl::OUString& rEvtHdl, const Reference< awt::XContainerWindowProvider >& rProvider ) :
 
@@ -2863,15 +2847,3 @@ void ExtensionsTabPage::SavePage()
 {
     DispatchAction( C2U("ok") );
 }
-
-// -----------------------------------------------------------------------
-
-void ExtensionsTabPage::HideWindow()
-{
-    if ( !m_bIsWindowHidden && m_xPage.is() )
-    {
-        m_xPage->setVisible( sal_False );
-        m_bIsWindowHidden = true;
-    }
-}
-

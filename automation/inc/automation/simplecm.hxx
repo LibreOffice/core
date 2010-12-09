@@ -337,14 +337,14 @@ private:
     ByteString aMyName;
 
     TCPIO* pTCPIO;
-    NAMESPACE_VOS(OStreamSocket) *pStreamSocket;
+    vos::OStreamSocket *pStreamSocket;
 
 protected:
-    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    SimpleCommunicationLinkViaSocket( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
     virtual ~SimpleCommunicationLinkViaSocket();
 
-    NAMESPACE_VOS(OStreamSocket)* GetStreamSocket() { return pStreamSocket; }
-    void SetStreamSocket( NAMESPACE_VOS(OStreamSocket)* pSocket );
+    vos::OStreamSocket* GetStreamSocket() { return pStreamSocket; }
+    void SetStreamSocket( vos::OStreamSocket* pSocket );
 
     SvStream *pReceiveStream;
     BOOL DoReceiveDataStream();             /// Recieve DataPacket from Socket
@@ -358,7 +358,7 @@ protected:
 class SimpleCommunicationLinkViaSocketWithReceiveCallbacks : public SimpleCommunicationLinkViaSocket
 {
 public:
-    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, NAMESPACE_VOS(OStreamSocket) *pSocket );
+    SimpleCommunicationLinkViaSocketWithReceiveCallbacks( CommunicationManager *pMan, vos::OStreamSocket *pSocket );
     ~SimpleCommunicationLinkViaSocketWithReceiveCallbacks();
     virtual BOOL ReceiveDataStream();
 protected:
@@ -371,7 +371,7 @@ class CommonSocketFunctions
 public:
     BOOL DoStartCommunication( CommunicationManager *pCM, ICommunicationManagerClient *pCMC, ByteString aHost, ULONG nPort );
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS )=0;
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS )=0;
 };
 
 class SingleCommunicationManagerClientViaSocket : public SingleCommunicationManager, public ICommunicationManagerClient, CommonSocketFunctions
@@ -387,7 +387,7 @@ private:
     ByteString aHostToTalk;
     ULONG nPortToTalk;
 protected:
-    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, NAMESPACE_VOS(OConnectorSocket) *pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
+    virtual CommunicationLink *CreateCommunicationLink( CommunicationManager *pCM, vos::OConnectorSocket *pCS ){ return new SimpleCommunicationLinkViaSocketWithReceiveCallbacks( pCM, pCS ); }
 };
 
 #endif

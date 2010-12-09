@@ -30,7 +30,6 @@ import java.util.Vector;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
 import com.sun.star.lang.EventObject;
-//import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
@@ -89,7 +88,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        new Integer(8), "HID:" + curHelpID, soptDetailQuery, new Integer(_iPosX), new Integer(iCompPosY - 42), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(iCompWidth)
+                        new Integer(8), HelpIds.getHelpIdString(curHelpID), soptDetailQuery, new Integer(_iPosX), new Integer(iCompPosY - 42), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(iCompWidth)
                     });
 
             optSummaryQuery = CurUnoDialog.insertRadioButton("optSummaryQuery", 0, new ActionListenerImpl(),
@@ -99,7 +98,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        new Integer(16), "HID:" + (curHelpID + 1), soptSummaryQuery, Boolean.TRUE, new Integer(_iPosX), new Integer(iCompPosY - 32), IStep, new Short(curtabindex++), new Integer(iCompWidth)
+                        new Integer(16), HelpIds.getHelpIdString(curHelpID + 1), soptSummaryQuery, Boolean.TRUE, new Integer(_iPosX), new Integer(iCompPosY - 32), IStep, new Short(curtabindex++), new Integer(iCompWidth)
                     });
             CurUnoDialog.insertLabel("lblAggregate",
                     new String[]
@@ -132,7 +131,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        oFontDescriptor, new Integer(14), "HID:" + (lastHelpIndex + 1), "+", new Integer(_iPosX + iCompWidth - 36), new Integer(iButtonPosY), IStep, new Short((curtabindex++)), new Integer(16)
+                        oFontDescriptor, new Integer(14), HelpIds.getHelpIdString(lastHelpIndex + 1), "+", new Integer(_iPosX + iCompWidth - 36), new Integer(iButtonPosY), IStep, new Short((curtabindex++)), new Integer(16)
                     });
             CurUnoDialog.insertButton("btnminus", SOREMOVEROW, new ActionListenerImpl(),
                     new String[]
@@ -141,7 +140,7 @@ public class AggregateComponent extends ControlScroller
                     },
                     new Object[]
                     {
-                        oFontDescriptor, new Integer(14), "HID:" + (lastHelpIndex + 2), "-", new Integer(_iPosX + iCompWidth - 16), new Integer(iButtonPosY), IStep, new Short(curtabindex++), new Integer(16)
+                        oFontDescriptor, new Integer(14), HelpIds.getHelpIdString(lastHelpIndex + 2), "-", new Integer(_iPosX + iCompWidth - 16), new Integer(iButtonPosY), IStep, new Short(curtabindex++), new Integer(16)
                     });
             CurDBMetaData.Type = getQueryType();
         }
@@ -533,7 +532,7 @@ public class AggregateComponent extends ControlScroller
                         },
                         new Object[]
                         {
-                            Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX + 4), new Integer(ypos), UIConsts.INVISIBLESTEP, sFunctions, new Short(curtabindex++), new Integer(88)
+                            Boolean.TRUE, new Integer(12), HelpIds.getHelpIdString(_curHelpID++), new Integer(iCompPosX + 4), new Integer(ypos), UIConsts.INVISIBLESTEP, sFunctions, new Short(curtabindex++), new Integer(88)
                         });
 
                 xFieldListBox = CurUnoDialog.insertListBox(getFieldsControlName(index), 1, null, new ItemListenerImpl(),
@@ -543,7 +542,7 @@ public class AggregateComponent extends ControlScroller
                         },
                         new Object[]
                         {
-                            Boolean.TRUE, new Integer(12), "HID:" + _curHelpID++, new Integer(iCompPosX + 98), new Integer(ypos), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(86)
+                            Boolean.TRUE, new Integer(12), HelpIds.getHelpIdString(_curHelpID++), new Integer(iCompPosX + 98), new Integer(ypos), UIConsts.INVISIBLESTEP, new Short(curtabindex++), new Integer(86)
                         });
                 lastHelpIndex = _curHelpID - 1;
             }

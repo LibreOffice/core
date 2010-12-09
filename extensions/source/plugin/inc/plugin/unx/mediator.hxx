@@ -90,10 +90,10 @@ protected:
     int                                 m_nSocket;
 
     std::vector<MediatorMessage*>       m_aMessageQueue;
-    NAMESPACE_VOS(OMutex)               m_aQueueMutex;
-    NAMESPACE_VOS(OMutex)               m_aSendMutex;
+    vos::OMutex             m_aQueueMutex;
+    vos::OMutex             m_aSendMutex;
     // only one thread can send a message at any given time
-    NAMESPACE_VOS(OCondition)           m_aNewMessageCdtn;
+    vos::OCondition         m_aNewMessageCdtn;
     MediatorListener*                   m_pListener;
     // thread to fill the queue
 
@@ -150,7 +150,7 @@ public:
         }
 };
 
-class MediatorListener : public NAMESPACE_VOS( OThread )
+class MediatorListener : public vos:: OThread
 {
     friend class Mediator;
   private:

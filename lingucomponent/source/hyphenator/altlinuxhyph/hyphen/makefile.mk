@@ -91,3 +91,11 @@ DEF1EXPORTFILE=	exports.dxp
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/hyphen.component
+
+$(MISC)/hyphen.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        hyphen.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt hyphen.component
