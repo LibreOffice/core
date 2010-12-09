@@ -896,9 +896,9 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                 BOOL bSelected = FALSE;
                 ScRangeList aRanges;
                 pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, FALSE );
-                ULONG nRangeCount = aRanges.Count();
-                for (ULONG i=0; i<nRangeCount && !bSelected; i++)
-                    if ( aRanges.GetObject(i)->Intersects( aNewRange ) )
+                size_t nRangeCount = aRanges.size();
+                for (size_t i=0; i < nRangeCount && !bSelected; ++i)
+                    if ( aRanges.at( i )->Intersects( aNewRange ) )
                         bSelected = TRUE;
 
                 // select the range if no part of it was selected

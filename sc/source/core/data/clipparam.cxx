@@ -57,12 +57,12 @@ ScClipParam::ScClipParam(const ScClipParam& r) :
 
 bool ScClipParam::isMultiRange() const
 {
-    return maRanges.Count() > 1;
+    return maRanges.size() > 1;
 }
 
 SCCOL ScClipParam::getPasteColSize()
 {
-    if (!maRanges.Count())
+    if (maRanges.empty())
         return 0;
 
     switch (meDirection)
@@ -70,14 +70,17 @@ SCCOL ScClipParam::getPasteColSize()
         case ScClipParam::Column:
         {
             SCCOL nColSize = 0;
-            for (ScRangePtr p = maRanges.First(); p; p = maRanges.Next())
+            for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
+            {
+                ScRangePtr p = maRanges[ i ];
                 nColSize += p->aEnd.Col() - p->aStart.Col() + 1;
+            }
             return nColSize;
         }
         case ScClipParam::Row:
         {
             // We assume that all ranges have identical column size.
-            const ScRange& rRange = *maRanges.First();
+            const ScRange& rRange = *maRanges.front();
             return rRange.aEnd.Col() - rRange.aStart.Col() + 1;
         }
         case ScClipParam::Unspecified:
@@ -89,7 +92,7 @@ SCCOL ScClipParam::getPasteColSize()
 
 SCROW ScClipParam::getPasteRowSize()
 {
-    if (!maRanges.Count())
+    if (maRanges.empty())
         return 0;
 
     switch (meDirection)
@@ -97,14 +100,17 @@ SCROW ScClipParam::getPasteRowSize()
         case ScClipParam::Column:
         {
             // We assume that all ranges have identical row size.
-            const ScRange& rRange = *maRanges.First();
+            const ScRange& rRange = *maRanges.front();
             return rRange.aEnd.Row() - rRange.aStart.Row() + 1;
         }
         case ScClipParam::Row:
         {
             SCROW nRowSize = 0;
-            for (ScRangePtr p = maRanges.First(); p; p = maRanges.Next())
+            for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
+            {
+                ScRangePtr p = maRanges[ i ];
                 nRowSize += p->aEnd.Row() - p->aStart.Row() + 1;
+            }
             return nRowSize;
         }
         case ScClipParam::Unspecified:
@@ -118,9 +124,9 @@ ScRange ScClipParam::getWholeRange() const
 {
     ScRange aWhole;
     bool bFirst = true;
-    ScRangeList aRanges = maRanges;
-    for (ScRange* p = aRanges.First(); p; p = aRanges.Next())
+    for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
     {
+        ScRange* p = maRanges[ i ];
         if (bFirst)
         {
             aWhole = *p;
@@ -159,13 +165,15 @@ void ScClipParam::transpose()
     }
 
     ScRangeList aNewRanges;
-    if (maRanges.Count())
+    if (!maRanges.empty())
     {
-        ScRange* p = maRanges.First();
+        ScRange* p = maRanges.front();
         SCCOL nColOrigin = p->aStart.Col();
         SCROW nRowOrigin = p->aStart.Row();
-        for (; p; p = maRanges.Next())
+
+        for ( size_t i = 1, n = maRanges.size(); i < n; ++i )
         {
+            p = maRanges[ i ];
             SCCOL nColDelta = p->aStart.Col() - nColOrigin;
             SCROW nRowDelta = p->aStart.Row() - nRowOrigin;
             SCCOL nCol1 = 0;
@@ -176,8 +184,7 @@ void ScClipParam::transpose()
             nCol2 += static_cast<SCCOL>(nRowDelta);
             nRow1 += static_cast<SCROW>(nColDelta);
             nRow2 += static_cast<SCROW>(nColDelta);
-            ScRange aNew(nCol1, nRow1, p->aStart.Tab(), nCol2, nRow2, p->aStart.Tab());
-            aNewRanges.Append(aNew);
+            aNewRanges.push_back( new ScRange(nCol1, nRow1, p->aStart.Tab(), nCol2, nRow2, p->aStart.Tab() ) );
         }
     }
     maRanges = aNewRanges;

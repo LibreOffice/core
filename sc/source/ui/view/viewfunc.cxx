@@ -943,10 +943,10 @@ BYTE ScViewFunc::GetSelectionScriptType()
     {
         ScRangeList aRanges;
         rMark.FillRangeListWithMarks( &aRanges, FALSE );
-        ULONG nCount = aRanges.Count();
-        for (ULONG i=0; i<nCount; i++)
+        size_t nCount = aRanges.size();
+        for ( size_t i=0; i < nCount; i++ )
         {
-            ScRange aRange = *aRanges.GetObject(i);
+            ScRange aRange = *aRanges.at( i );
             ScCellIterator aIter( pDoc, aRange );
             ScBaseCell* pCell = aIter.GetFirst();
             while ( pCell )

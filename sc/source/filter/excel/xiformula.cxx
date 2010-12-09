@@ -67,7 +67,7 @@ void XclImpFmlaCompImpl::CreateRangeList(
         ScRangeList& rScRanges, XclFormulaType /*eType*/,
         const XclTokenArray& rXclTokArr, XclImpStream& /*rStrm*/ )
 {
-    rScRanges.RemoveAll();
+    rScRanges.clear();
 
     //! evil hack, using old formula import :-)
     if( !rXclTokArr.Empty() )

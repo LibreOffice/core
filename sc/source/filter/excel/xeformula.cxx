@@ -2603,18 +2603,18 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, con
 
 XclTokenArrayRef XclExpFormulaCompiler::CreateFormula( XclFormulaType eType, const ScRangeList& rScRanges )
 {
-    ULONG nCount = rScRanges.Count();
+    size_t nCount = rScRanges.size();
     if( nCount == 0 )
         return XclTokenArrayRef();
 
     ScTokenArray aScTokArr;
     SCTAB nCurrScTab = GetCurrScTab();
     bool b3DRefOnly = mxImpl->Is3DRefOnly( eType );
-    for( ULONG nIdx = 0; nIdx < nCount; ++nIdx )
+    for( size_t nIdx = 0; nIdx < nCount; ++nIdx )
     {
         if( nIdx > 0 )
             aScTokArr.AddOpCode( ocUnion );
-        lclPutRangeToTokenArray( aScTokArr, *rScRanges.GetObject( nIdx ), nCurrScTab, b3DRefOnly );
+        lclPutRangeToTokenArray( aScTokArr, *rScRanges[ nIdx ], nCurrScTab, b3DRefOnly );
     }
     return mxImpl->CreateFormula( eType, aScTokArr );
 }

@@ -741,9 +741,11 @@ String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTo
     }
 
     ScRangeList aRangeList = rRangeList;
-    const ScRange* pFirst = aRangeList.First();
-    for (const ScRange* p = pFirst; p; p = aRangeList.Next())
+    const ScRange* pFirst = aRangeList.front();
+    size_t ListSize = aRangeList.size();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
+        const ScRangePtr p = aRangeList.at( i );
         if (p != pFirst)
             pArray->AddOpCode(ocSep);
         ScComplexRefData aRef;
@@ -991,14 +993,12 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                     rMark.MarkToMulti();
                     ScRangeListRef aList( new ScRangeList );
                     rMark.FillRangeListWithMarks( aList, FALSE );
-                    USHORT nCnt = (USHORT) aList->Count();
-                    if ( nCnt )
+                    if ( !aList->empty() )
                     {
-                        ScRangePtr pR;
-                        USHORT i;
-                        for ( pR = aList->First(), i=0; i < nCnt;
-                              pR = aList->Next(), i++ )
+                        size_t nListSize = aList->size();
+                        for ( size_t i = 0; i < nListSize; ++i )
                         {
+                            ScRangePtr pR = aList->at( i );
                             pDoc->AddPrintRange( nTab, *pR );
                         }
                     }

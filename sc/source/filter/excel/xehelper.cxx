@@ -260,13 +260,11 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
 
 void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
 {
-    ULONG nIdx = rScRanges.Count();
-    while( nIdx )
+    for ( size_t nRange = rScRanges.size(); nRange > 0; )
     {
-        --nIdx; // backwards to keep nIdx valid
-        ScRange* pScRange = rScRanges.GetObject( nIdx );
-        if( pScRange && !CheckRange( *pScRange, bWarn ) )
-            delete rScRanges.Remove( nIdx );
+        ScRangePtr pScRange = rScRanges[ --nRange ];
+        if( !CheckRange( *pScRange, bWarn ) )
+            rScRanges.erase( rScRanges.begin() + nRange );
     }
 }
 
@@ -274,9 +272,9 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
         const ScRangeList& rScRanges, bool bWarn )
 {
     rXclRanges.clear();
-    for( ULONG nPos = 0, nCount = rScRanges.Count(); nPos < nCount; ++nPos )
+    for( size_t nPos = 0, nCount = rScRanges.size(); nPos < nCount; ++nPos )
     {
-        if( const ScRange* pScRange = rScRanges.GetObject( nPos ) )
+        if( const ScRange* pScRange = rScRanges[ nPos ] )
         {
             XclRange aXclRange( ScAddress::UNINITIALIZED );
             if( ConvertRange( aXclRange, *pScRange, bWarn ) )

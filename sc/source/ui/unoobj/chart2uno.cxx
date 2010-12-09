@@ -1996,12 +1996,6 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
     return xResult;
 }
 
-/*uno::Reference< util::XNumberFormatsSupplier > SAL_CALL ScChart2DataProvider::getNumberFormatsSupplier()
-    throw (uno::RuntimeException)
-{
-    return uno::Reference< util::XNumberFormatsSupplier >( lcl_GetXModel( m_pDocument ), uno::UNO_QUERY );
-}*/
-
 // XRangeXMLConversion ---------------------------------------------------
 
 rtl::OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const rtl::OUString& sRangeRepresentation )
@@ -2200,74 +2194,6 @@ ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException)
     }
 
     return aRet;
-
-/*    typedef ::std::vector< uno::Reference< chart2::data::XLabeledDataSequence > > tVec;
-    tVec aVec;
-    bool bSeries = false;
-    // split into columns - FIXME: different if GlueState() is used
-    for ( ScRangePtr p = m_xRanges->First(); p; p = m_xRanges->Next())
-    {
-        for ( SCCOL nCol = p->aStart.Col(); nCol <= p->aEnd.Col(); ++nCol)
-        {
-            uno::Reference< chart2::data::XLabeledDataSequence > xLabeledSeq(
-                new ScChart2LabeledDataSequence( m_pDocument));
-            if( xLabeledSeq.is())
-            {
-                aVec.push_back( xLabeledSeq );
-                if( bSeries )
-                {
-                    ScRangeListRef aColRanges = new ScRangeList;
-                    // one single sheet selected assumed for now
-                    aColRanges->Append( ScRange( nCol, p->aStart.Row(),
-                                                 p->aStart.Tab(), nCol, p->aStart.Row(),
-                                                 p->aStart.Tab()));
-                    // TEST: add range two times, once as label, once as data
-                    // TODO: create pure Numerical and Text sequences if possible
-                    uno::Reference< chart2::data::XDataSequence > xLabel(
-                        new ScChart2DataSequence( m_pDocument, aColRanges));
-
-                    // set role
-                    uno::Reference< beans::XPropertySet > xProp( xLabel, uno::UNO_QUERY );
-                    if( xProp.is())
-                        xProp->setPropertyValue(
-                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )),
-                            ::uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "label" ))));
-
-                    xLabeledSeq->setLabel( xLabel );
-                }
-
-                ScRangeListRef aColRanges = new ScRangeList;
-
-                // one single sheet selected assumed for now
-                aColRanges->Append( ScRange( nCol, p->aStart.Row() + 1,
-                                             p->aStart.Tab(), nCol, p->aEnd.Row(),
-                                             p->aStart.Tab()));
-                uno::Reference< chart2::data::XDataSequence > xData(
-                    new ScChart2DataSequence( m_pDocument, aColRanges));
-
-                // set role
-                uno::Reference< beans::XPropertySet > xProp( xData, uno::UNO_QUERY );
-                if( xProp.is())
-                    xProp->setPropertyValue(
-                        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Role" )),
-                        ::uno::makeAny( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "values" ))));
-
-                xLabeledSeq->setValues( xData );
-
-                bSeries = true;
-            }
-        }
-    }
-    uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > aSequences(
-            aVec.size());
-    uno::Reference< chart2::data::XLabeledDataSequence> * pArr = aSequences.getArray();
-    sal_Int32 j = 0;
-    for ( tVec::const_iterator iSeq = aVec.begin(); iSeq != aVec.end();
-            ++iSeq, ++j)
-    {
-        pArr[j] = *iSeq;
-    }
-    return aSequences;*/
 }
 
 void ScChart2DataSource::AddLabeledSequence(const uno::Reference < chart2::data::XLabeledDataSequence >& xNew)
@@ -2709,11 +2635,10 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     if (!m_pRangeIndices.get())
         return;
 
-    sal_uInt32 nCount = rRanges.Count();
-    for (sal_uInt32 i = 0; i < nCount; ++i)
+    for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
     {
         ScSharedTokenRef pToken;
-        ScRange* pRange = static_cast<ScRange*>(rRanges.GetObject(i));
+        ScRangePtr pRange = rRanges[ i ];
         DBG_ASSERT(pRange, "range object is NULL.");
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);
@@ -2841,7 +2766,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
             }
         }
 
-        DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
+        DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.size()),
                    "range list and range index list have different sizes.");
 
         auto_ptr<ScRangeList> pUndoRanges;
@@ -2854,7 +2779,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
         if (bChanged)
         {
-            DBG_ASSERT(m_pRangeIndices->size() == static_cast<size_t>(aRanges.Count()),
+            DBG_ASSERT(m_pRangeIndices->size() == aRanges.size(),
                        "range list and range index list have different sizes after the reference update.");
 
             // Bring the change back from the range list to the token list.
@@ -2884,7 +2809,7 @@ void ScChart2DataSequence::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 
             const ScRangeList& rRanges = rUndoHint.GetRanges();
 
-            sal_uInt32 nCount = rRanges.Count();
+            size_t nCount = rRanges.size();
             if (nCount != m_pRangeIndices->size())
             {
                 DBG_ERROR("range count and range index count differ.");
@@ -3232,8 +3157,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
     ScRangeList aRanges;
     ScRefTokenHelper::getRangeListFromTokens(aRanges, *m_pTokens);
     uno::Reference< table::XCellRange > xSheet;
-    for ( p = aRanges.First(); p && !bFound; p = aRanges.Next())
+    for ( size_t rIndex = 0, nRanges = aRanges.size(); (rIndex < nRanges) && !bFound; ++rIndex )
     {
+        p = aRanges[ rIndex ];
         // TODO: use DocIter?
         table::CellAddress aStart, aEnd;
         ScUnoConversion::FillApiAddress( aStart, p->aStart );
@@ -3507,46 +3433,6 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
     m_bGotDataChangedHint = b;
 }
 
-// XUnoTunnel
-
-// sal_Int64 SAL_CALL ScChart2DataSequence::getSomething(
-//              const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
-// {
-//  if ( rId.getLength() == 16 &&
-//           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-//                                  rId.getConstArray(), 16 ) )
-//  {
-//      return (sal_Int64)this;
-//  }
-//  return 0;
-// }
-
-// // static
-// const uno::Sequence<sal_Int8>& ScChart2DataSequence::getUnoTunnelId()
-// {
-//  static uno::Sequence<sal_Int8> * pSeq = 0;
-//  if( !pSeq )
-//  {
-//      osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-//      if( !pSeq )
-//      {
-//          static uno::Sequence< sal_Int8 > aSeq( 16 );
-//          rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-//          pSeq = &aSeq;
-//      }
-//  }
-//  return *pSeq;
-// }
-
-// // static
-// ScChart2DataSequence* ScChart2DataSequence::getImplementation( const uno::Reference<uno::XInterface> xObj )
-// {
-//  ScChart2DataSequence* pRet = NULL;
-//  uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-//  if (xUT.is())
-//      pRet = (ScChart2DataSequence*) xUT->getSomething( getUnoTunnelId() );
-//  return pRet;
-// }
 
 #if USE_CHART2_EMPTYDATASEQUENCE
 // DataSequence ==============================================================
@@ -3820,46 +3706,6 @@ void SAL_CALL ScChart2EmptyDataSequence::removeVetoableChangeListener(
     OSL_ENSURE( false, "Not yet implemented" );
 }
 
-// XUnoTunnel
-
-// sal_Int64 SAL_CALL ScChart2EmptyDataSequence::getSomething(
-//              const uno::Sequence<sal_Int8 >& rId ) throw(uno::RuntimeException)
-// {
-//  if ( rId.getLength() == 16 &&
-//           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
-//                                  rId.getConstArray(), 16 ) )
-//  {
-//      return (sal_Int64)this;
-//  }
-//  return 0;
-// }
-
-// // static
-// const uno::Sequence<sal_Int8>& ScChart2EmptyDataSequence::getUnoTunnelId()
-// {
-//  static uno::Sequence<sal_Int8> * pSeq = 0;
-//  if( !pSeq )
-//  {
-//      osl::Guard< osl::Mutex > aGuard( osl::Mutex::getGlobalMutex() );
-//      if( !pSeq )
-//      {
-//          static uno::Sequence< sal_Int8 > aSeq( 16 );
-//          rtl_createUuid( (sal_uInt8*)aSeq.getArray(), 0, sal_True );
-//          pSeq = &aSeq;
-//      }
-//  }
-//  return *pSeq;
-// }
-
-// // static
-// ScChart2DataSequence* ScChart2EmptyDataSequence::getImplementation( const uno::Reference<uno::XInterface> xObj )
-// {
-//  ScChart2DataSequence* pRet = NULL;
-//  uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
-//  if (xUT.is())
-//      pRet = (ScChart2EmptyDataSequence*) xUT->getSomething( getUnoTunnelId() );
-//  return pRet;
-// }
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -373,15 +373,16 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
 
             // Check for geometrical feasibility of the ranges.
             bool bValidRanges = true;
-            ScRangePtr p = aClipParam.maRanges.First();
+            ScRangePtr p = aClipParam.maRanges.front();
             SCCOL nPrevColDelta = 0;
             SCROW nPrevRowDelta = 0;
             SCCOL nPrevCol = p->aStart.Col();
             SCROW nPrevRow = p->aStart.Row();
             SCCOL nPrevColSize = p->aEnd.Col() - p->aStart.Col() + 1;
             SCROW nPrevRowSize = p->aEnd.Row() - p->aStart.Row() + 1;
-            for (p = aClipParam.maRanges.Next(); p; p = aClipParam.maRanges.Next())
+            for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
             {
+                p = aClipParam.maRanges.at( i );
                 if (pDoc->HasSelectedBlockMatrixFragment(
                     p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark))
                 {
@@ -1075,8 +1076,10 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         ScViewUtil::UnmarkFiltered( aFilteredMark, pDoc);
         aFilteredMark.FillRangeListWithMarks( &aRangeList, FALSE);
         nUnfilteredRows = 0;
-        for (ScRange* p = aRangeList.First(); p; p = aRangeList.Next())
+        size_t ListSize = aRangeList.size();
+        for ( size_t i = 0; i < ListSize; ++i )
         {
+            ScRangePtr p = aRangeList.at( i );
             nUnfilteredRows += p->aEnd.Row() - p->aStart.Row() + 1;
         }
 #if 0

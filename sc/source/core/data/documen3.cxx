@@ -652,7 +652,6 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, BOOL bNewScenario 
         //  und aktuelle Werte in bisher aktive Szenarios zurueckschreiben
 
         ScRangeList aRanges = *pTab[nSrcTab]->GetScenarioRanges();
-        const ULONG nRangeCount = aRanges.Count();
 
         //  nDestTab ist die Zieltabelle
         for ( SCTAB nTab = nDestTab+1;
@@ -662,9 +661,9 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, BOOL bNewScenario 
             if ( pTab[nTab]->IsActiveScenario() )       // auch wenn's dasselbe Szenario ist
             {
                 BOOL bTouched = FALSE;
-                for ( ULONG nR=0; nR<nRangeCount && !bTouched; nR++)
+                for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
                 {
-                    const ScRange* pRange = aRanges.GetObject(nR);
+                    const ScRange* pRange = aRanges[ nR ];
                     if ( pTab[nTab]->HasScenarioRange( *pRange ) )
                         bTouched = TRUE;
                 }
@@ -704,10 +703,6 @@ void ScDocument::MarkScenario( SCTAB nSrcTab, SCTAB nDestTab, ScMarkData& rDestM
 BOOL ScDocument::HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const
 {
     return ValidTab(nTab) && pTab[nTab] && pTab[nTab]->HasScenarioRange( rRange );
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->HasScenarioRange( rRange );
-
-    //return FALSE;
 }
 
 const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
@@ -721,10 +716,6 @@ const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
 BOOL ScDocument::IsActiveScenario( SCTAB nTab ) const
 {
     return ValidTab(nTab) && pTab[nTab] && pTab[nTab]->IsActiveScenario(  );
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->IsActiveScenario();
-
-    //return FALSE;
 }
 
 void ScDocument::SetActiveScenario( SCTAB nTab, BOOL bActive )
@@ -948,8 +939,8 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 
     ScRange aSource;
     ScClipParam& rClipParam = GetClipParam();
-    if (rClipParam.maRanges.Count())
-        aSource = *rClipParam.maRanges.First();
+    if (!rClipParam.maRanges.empty())
+        aSource = *rClipParam.maRanges.front();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;

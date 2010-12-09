@@ -48,15 +48,7 @@
 
 ScRangeList::~ScRangeList()
 {
-    for ( ScRangePtr pR = First(); pR; pR = Next() )
-        delete pR;
-}
-
-void ScRangeList::RemoveAll()
-{
-    for ( ScRangePtr pR = First(); pR; pR = Next() )
-        delete pR;
-    Clear();
+    clear();
 }
 
 USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
@@ -116,11 +108,10 @@ void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
-    ULONG nCnt = Count();
-    for ( ULONG nIdx = 0; nIdx < nCnt; nIdx++ )
+    for ( size_t nIdx = 0, nCnt = size(); nIdx < nCnt; ++nIdx )
     {
         String aStr;
-        GetObject( nIdx )->Format( aStr, nFlags, pDoc, eConv );
+        at( nIdx )->Format( aStr, nFlags, pDoc, eConv );
         if ( nIdx )
             rStr += cDelimiter;
         rStr += aStr;
@@ -128,9 +119,9 @@ void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
 }
 
 
-void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
+void ScRangeList::Join( const ScRange& r, bool bIsInList )
 {
-    if ( !Count() )
+    if ( empty() )
     {
         Append( r );
         return ;
@@ -141,32 +132,42 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
     SCCOL nCol2 = r.aEnd.Col();
     SCROW nRow2 = r.aEnd.Row();
     SCTAB nTab2 = r.aEnd.Tab();
+
     ScRangePtr pOver = (ScRangePtr) &r;     // fies aber wahr wenn bInList
-    ULONG nOldPos = 0;
+    size_t nOldPos = 0;
     if ( bIsInList )
     {   // merken um ggbf. zu loeschen bzw. wiederherzustellen
-        nOldPos = GetPos( pOver );
+        for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
+        {
+            if ( at( i ) == pOver )
+            {
+                nOldPos = i;
+                break;
+            }
+        }
     }
-    BOOL bJoinedInput = FALSE;
-    for ( ScRangePtr p = First(); p && pOver; p = Next() )
+    bool bJoinedInput = false;
+
+    for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
     {
+        ScRangePtr p = at( i );
         if ( p == pOver )
             continue;           // derselbe, weiter mit dem naechsten
-        BOOL bJoined = FALSE;
+        bool bJoined = false;
         if ( p->In( r ) )
         {   // Range r in Range p enthalten oder identisch
             if ( bIsInList )
-                bJoined = TRUE;     // weg mit Range r
+                bJoined = true;     // weg mit Range r
             else
             {   // das war's dann
-                bJoinedInput = TRUE;    // nicht anhaengen
+                bJoinedInput = true;    // nicht anhaengen
                 break;  // for
             }
         }
         else if ( r.In( *p ) )
         {   // Range p in Range r enthalten, r zum neuen Range machen
             *p = r;
-            bJoined = TRUE;
+            bJoined = true;
         }
         if ( !bJoined && p->aStart.Tab() == nTab1 && p->aEnd.Tab() == nTab2 )
         {   // 2D
@@ -175,12 +176,12 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
                 if ( p->aStart.Row() == nRow2+1 )
                 {   // oben
                     p->aStart.SetRow( nRow1 );
-                    bJoined = TRUE;
+                    bJoined = true;
                 }
                 else if ( p->aEnd.Row() == nRow1-1 )
                 {   // unten
                     p->aEnd.SetRow( nRow2 );
-                    bJoined = TRUE;
+                    bJoined = true;
                 }
             }
             else if ( p->aStart.Row() == nRow1 && p->aEnd.Row() == nRow2 )
@@ -188,12 +189,12 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
                 if ( p->aStart.Col() == nCol2+1 )
                 {   // links
                     p->aStart.SetCol( nCol1 );
-                    bJoined = TRUE;
+                    bJoined = true;
                 }
                 else if ( p->aEnd.Col() == nCol1-1 )
                 {   // rechts
                     p->aEnd.SetCol( nCol2 );
-                    bJoined = TRUE;
+                    bJoined = true;
                 }
             }
         }
@@ -201,49 +202,51 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
         {
             if ( bIsInList )
             {   // innerhalb der Liste Range loeschen
-                Remove( nOldPos );
-                delete pOver;
+                erase( begin() + nOldPos );
                 pOver = NULL;
                 if ( nOldPos )
                     nOldPos--;          // Seek richtig aufsetzen
             }
-            bJoinedInput = TRUE;
-            Join( *p, TRUE );           // rekursiv!
+            bJoinedInput = true;
+            Join( *p, true );           // rekursiv!
         }
     }
-    if ( bIsInList )
-        Seek( nOldPos );
-    else if ( !bJoinedInput )
+    if (  !bIsInList && !bJoinedInput )
         Append( r );
 }
 
 
-BOOL ScRangeList::operator==( const ScRangeList& r ) const
+bool ScRangeList::operator==( const ScRangeList& r ) const
 {
     if ( this == &r )
-        return TRUE;                // identische Referenz
-    if ( Count() != r.Count() )
-        return FALSE;
-    ULONG nCnt = Count();
-    for ( ULONG nIdx = 0; nIdx < nCnt; nIdx++ )
+        return true;                // identische Referenz
+    size_t nCnt = size();
+    if ( nCnt != r.size() )
+        return false;
+    for ( size_t nIdx = 0; nIdx < nCnt; nIdx++ )
     {
-        if ( *GetObject( nIdx ) != *r.GetObject( nIdx ) )
-            return FALSE;           // auch andere Reihenfolge ist ungleich
+        if ( *at( nIdx ) != *r.at( nIdx ) )
+            return false;           // auch andere Reihenfolge ist ungleich
     }
-    return TRUE;
+    return true;
 }
 
-BOOL ScRangeList::operator!=( const ScRangeList& r ) const
+bool ScRangeList::operator!=( const ScRangeList& r ) const
 {
     return !operator==( r );
 }
 
-BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
-                                    ScDocument* pDoc, const ScRange& rWhere,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz )
+bool ScRangeList::UpdateReference(
+    UpdateRefMode eUpdateRefMode,
+    ScDocument* pDoc,
+    const ScRange& rWhere,
+    SCsCOL nDx,
+    SCsROW nDy,
+    SCsTAB nDz
+)
 {
-    BOOL bChanged = FALSE;
-    if ( Count() )
+    bool bChanged = FALSE;
+    if ( !empty() )
     {
         SCCOL nCol1;
         SCROW nRow1;
@@ -252,8 +255,9 @@ BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
         SCROW nRow2;
         SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for ( ScRange* pR = First(); pR; pR = Next() )
+        for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
         {
+            ScRangePtr pR = at( i );
             SCCOL theCol1;
             SCROW theRow1;
             SCTAB theTab1;
@@ -276,13 +280,11 @@ BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
     return bChanged;
 }
 
-
 ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    ULONG nListCount = Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
     {
-        ScRange* pR = GetObject( j );
+        ScRangePtr pR = at( j );
         if ( pR->In( rAdr ) )
             return pR;
     }
@@ -294,56 +296,49 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
     ScRangeListBase(),
     SvRefBase()
 {
-    ULONG nListCount = rList.Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
-        Append( *rList.GetObject( j ) );
+    for ( size_t j = 0, nListCount = rList.size(); j < nListCount; j++ )
+        Append( *rList[ j ] );
 }
 
 
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
-    RemoveAll();
-
-    ULONG nListCount = rList.Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
-        Append( *rList.GetObject( j ) );
-
+    clear();
+    for ( size_t j = 0, nListCount = rList.size(); j < nListCount; j++ )
+        Append( *rList[ j ] );
     return *this;
 }
 
 
-BOOL ScRangeList::Intersects( const ScRange& rRange ) const
+bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    ULONG nListCount = Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
-        if ( GetObject(j)->Intersects( rRange ) )
-            return TRUE;
+    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+        if ( at( j )->Intersects( rRange ) )
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 
-BOOL ScRangeList::In( const ScRange& rRange ) const
+bool ScRangeList::In( const ScRange& rRange ) const
 {
-    ULONG nListCount = Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
-        if ( GetObject(j)->In( rRange ) )
-            return TRUE;
+    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+        if ( at( j )->In( rRange ) )
+            return true;
 
-    return FALSE;
+    return false;
 }
 
 
-ULONG ScRangeList::GetCellCount() const
+size_t ScRangeList::GetCellCount() const
 {
-    ULONG nCellCount = 0;
-    ULONG nListCount = Count();
-    for ( ULONG j = 0; j < nListCount; j++ )
+    size_t nCellCount = 0;
+    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
     {
-        ScRange* pR = GetObject( j );
-        nCellCount += ULONG(pR->aEnd.Col() - pR->aStart.Col() + 1)
-            * ULONG(pR->aEnd.Row() - pR->aStart.Row() + 1)
-            * ULONG(pR->aEnd.Tab() - pR->aStart.Tab() + 1);
+        ScRangePtr pR = at( j );
+        nCellCount += size_t(pR->aEnd.Col() - pR->aStart.Col() + 1)
+                    * size_t(pR->aEnd.Row() - pR->aStart.Row() + 1)
+                    * size_t(pR->aEnd.Tab() - pR->aStart.Tab() + 1);
     }
     return nCellCount;
 }

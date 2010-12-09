@@ -345,10 +345,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     aRangeListRef = new ScRangeList;
                     aRangeListRef->Parse( aRangeName, pDoc );
-                    if ( aRangeListRef->Count() )
+                    if ( !aRangeListRef->empty() )
                     {
                         bMultiRange = TRUE;
-                        aSingleRange = *aRangeListRef->GetObject(0);    // fuer Header
+                        aSingleRange = *aRangeListRef->front(); // fuer Header
                         bValid = TRUE;
                     }
                     else

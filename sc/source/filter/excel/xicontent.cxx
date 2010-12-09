@@ -438,8 +438,9 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     ScRangeList aRowScRanges;
     rAddrConv.ConvertRangeList( aRowScRanges, aRowXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetRowNameRangesRef();
-    for( pScRange = aRowScRanges.First(); pScRange; pScRange = aRowScRanges.Next() )
+    for ( size_t i = 0, nRanges = aRowScRanges.size(); i < nRanges; ++i )
     {
+        pScRange = aRowScRanges[ i ];
         ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Col() < MAXCOL )
         {
@@ -458,8 +459,10 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     ScRangeList aColScRanges;
     rAddrConv.ConvertRangeList( aColScRanges, aColXclRanges, nScTab, false );
     xLabelRangesRef = rDoc.GetColNameRangesRef();
-    for( pScRange = aColScRanges.First(); pScRange; pScRange = aColScRanges.Next() )
+
+    for ( size_t i = 0, nRanges = aColScRanges.size(); i < nRanges; ++i )
     {
+        pScRange = aColScRanges[ i ];
         ScRange aDataRange( *pScRange );
         if( aDataRange.aEnd.Row() < MAXROW )
         {
@@ -508,7 +511,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
     }
 
     // entire conditional format outside of valid range?
-    if( !maRanges.Count() )
+    if( maRanges.empty() )
         return;
 
     sal_uInt8 nType, nOperator;
@@ -594,7 +597,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** formulas ***
 
-    const ScAddress& rPos = maRanges.GetObject( 0 )->aStart;    // assured above that maRanges is not empty
+    const ScAddress& rPos = maRanges.front()->aStart;    // assured above that maRanges is not empty
     ExcelToSc& rFmlaConv = GetOldFmlaConverter();
 
     ::std::auto_ptr< ScTokenArray > xTokArr1;
@@ -643,8 +646,9 @@ void XclImpCondFormat::Apply()
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_CONDITIONAL, nKey ) );
 
         // maRanges contains only valid cell ranges
-        for( const ScRange* pScRange = maRanges.First(); pScRange; pScRange = maRanges.Next() )
+        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
         {
+            const ScRangePtr pScRange = maRanges[ i ];
             rDoc.ApplyPatternAreaTab(
                 pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(),
@@ -776,7 +780,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
     rRoot.GetAddressConverter().ConvertRangeList( aScRanges, aXclRanges, nScTab, true );
 
     // only continue if there are valid ranges
-    if ( !aScRanges.Count() )
+    if ( aScRanges.empty() )
         return;
 
     bool bIsValid = true;   // valid settings in flags field
@@ -816,7 +820,7 @@ void XclImpValidationManager::ReadDV( XclImpStream& rStrm )
 
 
     // first range for base address for relative references
-    const ScRange& rScRange = *aScRanges.GetObject( 0 );    // aScRanges is not empty
+    const ScRange& rScRange = *aScRanges.front();    // aScRanges is not empty
 
     // process string list of a list validity (convert to list of string tokens)
     if( xTokArr1.get() && (eValMode == SC_VALID_LIST) && ::get_flag( nFlags, EXC_DV_STRINGLIST ) )
@@ -864,9 +868,12 @@ void XclImpValidationManager::Apply()
         aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
         // apply all ranges
-        for( const ScRange* pScRange = rItem.maRanges.First(); pScRange; pScRange = rItem.maRanges.Next() )
+        for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
+        {
+            const ScRangePtr pScRange = rItem.maRanges[ i ];
             rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(), pScRange->aStart.Tab(), aPattern );
+        }
     }
     maDVItems.clear();
 }

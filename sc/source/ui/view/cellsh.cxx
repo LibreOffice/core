@@ -517,11 +517,7 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
 
 void ScCellShell::GetState(SfxItemSet &rSet)
 {
-    // removed: SID_BORDER_OBJECT (old Basic)
-
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-//     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame().IsInPlace();
-//  BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScViewData* pData       = GetViewData();
     ScDocument* pDoc        = pData->GetDocument();
@@ -742,8 +738,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SELECT_SCENARIO:
                 {
-                    // ScDocument* pDoc = GetViewData()->GetDocument();
-                    // SCTAB       nTab = GetViewData()->GetTabNo();
                     List        aList;
 
                     Color   aDummyCol;
@@ -796,19 +790,6 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 break;
 
-/*  Zellschutz bei selektierten Zellen wird bei anderen Funktionen auch nicht abgefragt...
-            case SID_DELETE:
-                {
-                    if ( pDoc->IsTabProtected(nTab) )
-                    {
-                        const SfxItemSet&       rAttrSet  = GetSelectionPattern()->GetItemSet();
-                        const ScProtectionAttr& rProtAttr = (const ScProtectionAttr&)rAttrSet.Get( ATTR_PROTECTION, TRUE );
-                        if ( rProtAttr.GetProtection() )
-                            rSet.DisableItem( nWhich );
-                    }
-                }
-                break;
-*/
             case SID_OUTLINE_MAKE:
                 {
                     if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
@@ -915,10 +896,10 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             // look for at least one note in selection
                             ScRangeList aRanges;
                             rMark.FillRangeListWithMarks( &aRanges, FALSE );
-                            ULONG nCount = aRanges.Count();
-                            for (ULONG nPos=0; nPos<nCount && !bEnable; nPos++)
+                            size_t nCount = aRanges.size();
+                            for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
                             {
-                                ScCellIterator aCellIter( pDoc, *aRanges.GetObject(nPos) );
+                                ScCellIterator aCellIter( pDoc, *aRanges.at(nPos) );
                                 for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
                                     if ( pCell->HasNote() )
                                         bEnable = TRUE;             // note found

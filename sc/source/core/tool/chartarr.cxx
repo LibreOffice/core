@@ -129,12 +129,12 @@ BOOL ScChartArray::operator==(const ScChartArray& rCmp) const
 ScMemChart* ScChartArray::CreateMemChart()
 {
     ScRangeListRef aRangeListRef(GetRangeList());
-    ULONG nCount = aRangeListRef->Count();
+    size_t nCount = aRangeListRef->size();
     if ( nCount > 1 )
         return CreateMemChartMulti();
     else if ( nCount == 1 )
     {
-        ScRange* pR = aRangeListRef->First();
+        ScRangePtr pR = aRangeListRef->front();
         if ( pR->aStart.Tab() != pR->aEnd.Tab() )
             return CreateMemChartMulti();
         else
@@ -163,7 +163,7 @@ ScMemChart* ScChartArray::CreateMemChartSingle()
     SCROW nRow2;
     SCTAB nTab2;
     ScRangeListRef aRangeListRef(GetRangeList());
-    aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+    aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
 
     SCCOL nStrCol = nCol1;      // fuer Beschriftung merken
     SCROW nStrRow = nRow1;

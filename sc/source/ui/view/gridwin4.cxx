@@ -84,9 +84,7 @@
 void lcl_LimitRect( Rectangle& rRect, const Rectangle& rVisible )
 {
     if ( rRect.Top()    < rVisible.Top()-1 )    rRect.Top()    = rVisible.Top()-1;
-//  if ( rRect.Left()   < rVisible.Left()-1 )   rRect.Left()   = rVisible.Left()-1;
     if ( rRect.Bottom() > rVisible.Bottom()+1 ) rRect.Bottom() = rVisible.Bottom()+1;
-//  if ( rRect.Right()  > rVisible.Right()+1 )  rRect.Right()  = rVisible.Right()+1;
 
     // #51122# auch wenn das inner-Rectangle nicht sichtbar ist, muss evtl.
     // die Titelzeile gezeichnet werden, darum kein Rueckgabewert mehr.
@@ -220,10 +218,10 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
         BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        USHORT nRangeCount = (USHORT)xRanges->Count();
-        for (USHORT j=0; j<nRangeCount; j++)
+        size_t nRangeCount = xRanges->size();
+        for (size_t j=0; j < nRangeCount; j++)
         {
-            ScRange aRange = *xRanges->GetObject(j);
+            ScRange aRange = *xRanges->at( j );
             //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
             //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
             pDoc->ExtendTotalMerge( aRange );
@@ -602,12 +600,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
             aOutputData.SetEditCell( nEditCol, nEditRow );
         else
             bEditMode = FALSE;
-
-        //  nur Edit-Area zu zeichnen?
-        //! dann muss trotzdem noch der Rand / das Gitter gemalt werden!
-
-//      if ( nEditCol <= nX1 && nEditEndCol >= nX2 && nEditRow <= nY1 && nEditEndRow >= nY2 )
-//          bOnlyEdit = TRUE;
     }
 
     // define drawing layer map mode and paint rectangle
@@ -818,11 +810,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
     }
 
     pContentDev->SetMapMode(MAP_PIXEL);
-
-#ifdef OLD_SELECTION_PAINT
-    if (pViewData->IsActive())
-        aOutputData.DrawMark( this );
-#endif
 
     if ( pViewData->IsRefMode() && nTab >= pViewData->GetRefStartZ() && nTab <= pViewData->GetRefEndZ() )
     {

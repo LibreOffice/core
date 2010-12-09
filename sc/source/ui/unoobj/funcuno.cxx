@@ -554,8 +554,6 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     ScAddress aAdr;
     ScCompiler aCompiler(pDoc,aAdr);
     aCompiler.SetGrammar(pDoc->GetGrammar());
-    //if (!ScCompiler::IsInitialized())
- //       ScCompiler::InitSymbolsEnglish();
 
     //
     //  find function
@@ -647,9 +645,9 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
             {
                 ScDocument* pSrcDoc = pImpl->GetDocument();
                 const ScRangeList& rRanges = pImpl->GetRangeList();
-                if ( pSrcDoc && rRanges.Count() == 1 )
+                if ( pSrcDoc && rRanges.size() == 1 )
                 {
-                    ScRange aSrcRange = *rRanges.GetObject(0);
+                    ScRange aSrcRange = *rRanges[ 0 ];
 
                     long nStartRow = nDocRow;
                     long nColCount = aSrcRange.aEnd.Col() - aSrcRange.aStart.Col() + 1;

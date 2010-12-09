@@ -341,7 +341,7 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                         pCell = aCellIter.GetNext();
                     }
 
-                    ULONG nRanges = aErrorCells.Count();
+                    size_t nRanges = aErrorCells.size();
                     if ( nRanges )                          // found any?
                     {
                         ScTokenArray aTokenArr;
@@ -350,9 +350,9 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
                         aTokenArr.AddOpCode( ocClose );
                         aTokenArr.AddOpCode( ocStop );
 
-                        for (ULONG nPos=0; nPos<nRanges; nPos++)
+                        for (size_t nPos=0; nPos < nRanges; nPos++)
                         {
-                            const ScRange* pRange = aErrorCells.GetObject(nPos);
+                            const ScRange* pRange = aErrorCells[ nPos ];
                             SCCOL nStartCol = pRange->aStart.Col();
                             SCROW nStartRow = pRange->aStart.Row();
                             SCCOL nEndCol = pRange->aEnd.Col();

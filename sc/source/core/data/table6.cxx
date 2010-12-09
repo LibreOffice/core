@@ -768,8 +768,9 @@ bool ScTable::SearchAndReplaceEmptyCells(
 
         ScRangeList aMarkedRanges, aNewRanges;
         rMark.FillRangeListWithMarks(&aMarkedRanges, true);
-        for (ScRangePtr p = aMarkedRanges.First(); p; p = aMarkedRanges.Next())
+        for ( size_t i = 0, n = aMarkedRanges.size(); i < n; ++i )
         {
+            ScRangePtr p = aMarkedRanges[ i ];
             if (p->aStart.Col() > nColEnd || p->aStart.Row() > nRowEnd)
                 // This range is outside the data area.  Skip it.
                 continue;
@@ -795,17 +796,19 @@ bool ScTable::SearchAndReplaceEmptyCells(
     {
         if (rSearchItem.GetBackward())
         {
-            for (ScRangePtr p = aRanges.Last(); p; p = aRanges.Prev())
+            for ( size_t i = aRanges.size(); i > 0; --i )
             {
-                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
+                ScRangePtr p = aRanges[ i - 1 ];
+                if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
                     return true;
             }
         }
         else
         {
-            for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+            for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
             {
-                if (SearchRangeForEmptyCell(*p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
+                ScRangePtr p = aRanges[ i ];
+                if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc ))
                     return true;
             }
         }
@@ -815,8 +818,11 @@ bool ScTable::SearchAndReplaceEmptyCells(
         bool bFound = false;
         ScMarkData aNewMark(rMark);
         aNewMark.ResetMark();
-        for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+        for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
+        {
+            ScRangePtr p = aRanges[ i ];
             bFound |= SearchRangeForAllEmptyCells(*p, rSearchItem, aNewMark, rUndoStr, pUndoDoc);
+        }
         rMark = aNewMark;
         return bFound;
     }

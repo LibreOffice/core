@@ -32,45 +32,49 @@
 #include "global.hxx"
 #include "address.hxx"
 #include <tools/solar.h>
+#include <vector>
 
 class ScDocument;
 
 typedef ScRange* ScRangePtr;
-DECLARE_LIST( ScRangeListBase, ScRangePtr )
+typedef ::std::vector< ScRangePtr > ScRangeListBase;
 class SC_DLLPUBLIC ScRangeList : public ScRangeListBase, public SvRefBase
 {
-private:
-    using ScRangeListBase::operator==;
-    using ScRangeListBase::operator!=;
-
 public:
                     ScRangeList() {}
                     ScRangeList( const ScRangeList& rList );
     virtual         ~ScRangeList();
     ScRangeList&    operator=(const ScRangeList& rList);
-    void            RemoveAll();
     void            Append( const ScRange& rRange )
                     {
                         ScRangePtr pR = new ScRange( rRange );
-                        Insert( pR, LIST_APPEND );
+                        push_back( pR );
                     }
+
     USHORT          Parse( const String&, ScDocument* = NULL,
                            USHORT nMask = SCA_VALID,
                            formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                            sal_Unicode cDelimiter = 0 );
+
     void            Format( String&, USHORT nFlags = 0, ScDocument* = NULL,
                             formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_OOO,
                             sal_Unicode cDelimiter = 0 ) const;
-    void            Join( const ScRange&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
-                                    const ScRange& rWhere,
-                                    SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
+
+    void            Join( const ScRange&, bool bIsInList = false );
+
+    bool            UpdateReference( UpdateRefMode, ScDocument*,
+                                     const ScRange& rWhere,
+                                     SCsCOL nDx,
+                                     SCsROW nDy,
+                                     SCsTAB nDz
+                                   );
+
     ScRange*        Find( const ScAddress& ) const;
-    BOOL            operator==( const ScRangeList& ) const;
-    BOOL            operator!=( const ScRangeList& r ) const;
-    BOOL            Intersects( const ScRange& ) const;
-    BOOL            In( const ScRange& ) const;
-    ULONG           GetCellCount() const;
+    bool            operator==( const ScRangeList& ) const;
+    bool            operator!=( const ScRangeList& r ) const;
+    bool            Intersects( const ScRange& ) const;
+    bool            In( const ScRange& ) const;
+    size_t          GetCellCount() const;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 

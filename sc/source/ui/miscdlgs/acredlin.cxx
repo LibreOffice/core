@@ -296,11 +296,11 @@ void __EXPORT ScAcceptChgDlg::Init()
 
     pTPFilter->CheckRange(aChangeViewSet.HasRange());
 
-    ScRange* pRangeEntry=aChangeViewSet.GetTheRangeList().GetObject(0);
     aRangeList=aChangeViewSet.GetTheRangeList();
 
-    if(pRangeEntry!=NULL)
+    if( !aChangeViewSet.GetTheRangeList().empty() )
     {
+        ScRangePtr pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         String aRefStr;
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         pTPFilter->SetRange(aRefStr);
@@ -394,17 +394,13 @@ BOOL ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
     {
         if(pTPFilter->IsRange())
         {
-            ScRange* pRangeEntry=aRangeList.First();
-
-            while(pRangeEntry!=NULL)
+            for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                if(pRangeEntry->Intersects(aRef)) break;
-                pRangeEntry=aRangeList.Next();
-            }
-
-            if(pRangeEntry!=NULL)
-            {
-                bFlag=TRUE;
+                ScRangePtr pRangeEntry = aRangeList[ i ];
+                if (pRangeEntry->Intersects(aRef)) {
+                    bFlag = TRUE;
+                    break;
+                }
             }
         }
         else
@@ -520,18 +516,15 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
         {
             if(pTPFilter->IsRange())
             {
-                ScRange* pRangeEntry=aRangeList.First();
-
-                while(pRangeEntry!=NULL)
+                for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    if(pRangeEntry->Intersects(aRef)) break;
-                    pRangeEntry=aRangeList.Next();
-                }
-                //SC_CAS_VIRGIN,SC_CAS_ACCEPTED,SC_CAS_REJECTED
-                if(pRangeEntry!=NULL)
-                {
-                    bHasFilterEntry=TRUE;
-                    bFlag=TRUE;
+                    ScRangePtr pRangeEntry = aRangeList[ i ];
+                    if( pRangeEntry->Intersects(aRef) )
+                    {
+                        bHasFilterEntry=TRUE;
+                        bFlag=TRUE;
+                        break;
+                    }
                 }
             }
             else if(!bIsGenerated)
@@ -590,18 +583,15 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
     {
         if(pTPFilter->IsRange())
         {
-            ScRange* pRangeEntry=aRangeList.First();
-
-            while(pRangeEntry!=NULL)
+            for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                if(pRangeEntry->Intersects(aRef)) break;
-                pRangeEntry=aRangeList.Next();
-            }
-            //SC_CAS_VIRGIN,SC_CAS_ACCEPTED,SC_CAS_REJECTED
-            if(pRangeEntry!=NULL &&
-                pScChangeAction->GetState()==eState)
-            {
-                bFlag=TRUE;
+                ScRangePtr pRangeEntry=aRangeList[ i ];
+                if( pRangeEntry->Intersects(aRef) )
+                {
+                    if( pScChangeAction->GetState()==eState )
+                        bFlag=TRUE;
+                    break;
+                }
             }
         }
         else if(pScChangeAction->GetState()==eState && !bIsGenerated)
@@ -719,17 +709,14 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeActionContent(const ScChangeActionConte
     {
         if(pTPFilter->IsRange())
         {
-            ScRange* pRangeEntry=aRangeList.First();
-
-            while(pRangeEntry!=NULL)
+            for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                if(pRangeEntry->Intersects(aRef)) break;
-                pRangeEntry=aRangeList.Next();
-            }
-            //SC_CAS_VIRGIN,SC_CAS_ACCEPTED,SC_CAS_REJECTED
-            if(pRangeEntry!=NULL)
-            {
-                bFlag=TRUE;
+                ScRange* pRangeEntry = aRangeList[ i ];
+                if( pRangeEntry->Intersects(aRef) )
+                {
+                    bFlag=TRUE;
+                    break;
+                }
             }
         }
         else if(!bIsGenerated)
@@ -1036,7 +1023,7 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
     if(pRef!=NULL)
     {
         ClearView();
-        aRangeList.Clear();
+        aRangeList.clear();
         aRangeList.Parse(pTPFilter->GetRange(),pDoc);
         UpdateView();
     }

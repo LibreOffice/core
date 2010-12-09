@@ -841,10 +841,10 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
-       ULONG nRangeCount = aVarRanges.Count();
-    for (ULONG nRangePos=0; nRangePos<nRangeCount; ++nRangePos)
+
+    for ( size_t nRangePos=0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos )
     {
-        ScRange aRange(*aVarRanges.GetObject(nRangePos));
+        ScRange aRange(*aVarRanges[ nRangePos ] );
         aRange.Justify();
         SCTAB nTab = aRange.aStart.Tab();
 

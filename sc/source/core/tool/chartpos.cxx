@@ -106,10 +106,11 @@ void ScChartPositioner::GlueState()
         return;
     bDummyUpperLeft = FALSE;
     ScRangePtr pR;
-    if ( aRangeListRef->Count() <= 1 )
+    if ( aRangeListRef->size() <= 1 )
     {
-        if ( (pR = aRangeListRef->First())!=NULL )
+        if (  !aRangeListRef->empty() )
         {
+            pR = aRangeListRef->front();
             if ( pR->aStart.Tab() == pR->aEnd.Tab() )
                 eGlue = SC_CHARTGLUE_NONE;
             else
@@ -126,29 +127,25 @@ void ScChartPositioner::GlueState()
         return;
     }
 
-    pR = aRangeListRef->First();
+    pR = aRangeListRef->front();
     nStartCol = pR->aStart.Col();
     nStartRow = pR->aStart.Row();
     SCCOL nMaxCols, nEndCol;
     SCROW nMaxRows, nEndRow;
     nMaxCols = nEndCol = 0;
     nMaxRows = nEndRow = 0;
-    do
+    for ( size_t i = 1, nRanges = aRangeListRef->size(); i <= nRanges; ++i )     // <= so 1 extra pass after last item
     {   // umspannenden Bereich etc. feststellen
         SCCOLROW nTmp, n1, n2;
-        if ( (n1 = pR->aStart.Col()) < nStartCol )
-            nStartCol = static_cast<SCCOL>(n1);
-        if ( (n2 = pR->aEnd.Col()) > nEndCol )
-            nEndCol = static_cast<SCCOL>(n2);
-        if ( (nTmp = n2 - n1 + 1) > nMaxCols )
-            nMaxCols = static_cast<SCCOL>(nTmp);
-        if ( (n1 = pR->aStart.Row()) < nStartRow )
-            nStartRow = static_cast<SCROW>(n1);
-        if ( (n2 = pR->aEnd.Row()) > nEndRow )
-            nEndRow = static_cast<SCROW>(n2);
-        if ( (nTmp = n2 - n1 + 1) > nMaxRows )
-            nMaxRows = static_cast<SCROW>(nTmp);
-    } while ( (pR = aRangeListRef->Next())!=NULL );
+        if ( (n1 = pR->aStart.Col()) < nStartCol ) nStartCol = static_cast<SCCOL>(n1  );
+        if ( (n2 = pR->aEnd.Col()  ) > nEndCol   ) nEndCol   = static_cast<SCCOL>(n2  );
+        if ( (nTmp = n2 - n1 + 1   ) > nMaxCols  ) nMaxCols  = static_cast<SCCOL>(nTmp);
+        if ( (n1 = pR->aStart.Row()) < nStartRow ) nStartRow = static_cast<SCROW>(n1  );
+        if ( (n2 = pR->aEnd.Row()  ) > nEndRow   ) nEndRow   = static_cast<SCROW>(n2  );
+        if ( (nTmp = n2 - n1 + 1   ) > nMaxRows  ) nMaxRows  = static_cast<SCROW>(nTmp);
+        if ( i < nRanges )                      // in last pass; i = nRanges so don't use at()
+            pR = aRangeListRef->at( i );
+    }
     SCCOL nC = nEndCol - nStartCol + 1;
     if ( nC == 1 )
     {
@@ -197,8 +194,9 @@ void ScChartPositioner::GlueState()
 
     SCCOL nCol, nCol1, nCol2;
     SCROW nRow, nRow1, nRow2;
-    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
+    for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {   // Selektionen 2D als belegt markieren
+        pR = aRangeListRef->at( i );
         nCol1 = pR->aStart.Col() - nStartCol;
         nCol2 = pR->aEnd.Col() - nStartCol;
         nRow1 = pR->aStart.Row() - nStartRow;
@@ -301,9 +299,9 @@ void ScChartPositioner::CheckColRowHeaders()
     BOOL bColStrings = TRUE;
     BOOL bRowStrings = TRUE;
     GlueState();
-    if ( aRangeListRef->Count() == 1 )
+    if ( aRangeListRef->size() == 1 )
     {
-        aRangeListRef->First()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+        aRangeListRef->front()->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         if ( nCol1 > nCol2 || nRow1 > nRow2 )
             bColStrings = bRowStrings = FALSE;
         else
@@ -323,10 +321,12 @@ void ScChartPositioner::CheckColRowHeaders()
     else
     {
         BOOL bVert = (eGlue == SC_CHARTGLUE_NONE || eGlue == SC_CHARTGLUE_ROWS);
-        for ( ScRangePtr pR = aRangeListRef->First();
-                pR && (bColStrings || bRowStrings);
-                pR = aRangeListRef->Next() )
+        for ( size_t i = 0, nRanges = aRangeListRef->size();
+              (i < nRanges) && (bColStrings || bRowStrings);
+              ++i
+            )
         {
+            ScRangePtr pR = aRangeListRef->at( i );
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             BOOL bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
@@ -392,12 +392,12 @@ void ScChartPositioner::CreatePositionMap()
     Table* pCols = new Table;
     Table* pNewRowTable = new Table;
     ScAddress* pNewAddress = new ScAddress;
-    ScRangePtr pR;
     Table* pCol;
     ScAddress* pPos;
     SCROW nNoGlueRow = 0;
-    for ( pR = aRangeListRef->First(); pR; pR = aRangeListRef->Next() )
+    for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
+        ScRangePtr pR = aRangeListRef->at( i );
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {
@@ -461,7 +461,6 @@ void ScChartPositioner::CreatePositionMap()
 
     if ( nColCount==0 || nRowCount==0 )
     {   // einen Eintrag ohne Daten erzeugen
-        pR = aRangeListRef->First();
         if ( pCols->Count() > 0 )
             pCol = (Table*) pCols->First();
         else

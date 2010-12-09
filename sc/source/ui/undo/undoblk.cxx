@@ -2175,26 +2175,18 @@ void ScUndoRemoveMerge::SetCurTab()
 ScRange lcl_TotalRange( const ScRangeList& rRanges )
 {
     ScRange aTotal;
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    if ( !rRanges.empty() )
     {
-        ScRange aRange = *rRanges.GetObject(i);
-        if (i==0)
-            aTotal = aRange;
-        else
+        aTotal = *rRanges[ 0 ];
+        for ( size_t i = 1, nCount = rRanges.size(); i < nCount; ++i )
         {
-            if (aRange.aStart.Col() < aTotal.aStart.Col())
-                aTotal.aStart.SetCol(aRange.aStart.Col());
-            if (aRange.aStart.Row() < aTotal.aStart.Row())
-                aTotal.aStart.SetRow(aRange.aStart.Row());
-            if (aRange.aStart.Tab() < aTotal.aStart.Tab())
-                aTotal.aStart.SetTab(aRange.aStart.Tab());
-            if (aRange.aEnd.Col() > aTotal.aEnd.Col())
-                aTotal.aEnd.SetCol(aRange.aEnd.Col());
-            if (aRange.aEnd.Row() > aTotal.aEnd.Row())
-                aTotal.aEnd.SetRow(aRange.aEnd.Row());
-            if (aRange.aEnd.Tab() > aTotal.aEnd.Tab())
-                aTotal.aEnd.SetTab(aRange.aEnd.Tab());
+            ScRange aRange = *rRanges[ i ];
+            if (aRange.aStart.Col() < aTotal.aStart.Col()) aTotal.aStart.SetCol(aRange.aStart.Col());
+            if (aRange.aStart.Row() < aTotal.aStart.Row()) aTotal.aStart.SetRow(aRange.aStart.Row());
+            if (aRange.aStart.Tab() < aTotal.aStart.Tab()) aTotal.aStart.SetTab(aRange.aStart.Tab());
+            if (aRange.aEnd.Col()   > aTotal.aEnd.Col()  ) aTotal.aEnd.SetCol(  aRange.aEnd.Col()  );
+            if (aRange.aEnd.Row()   > aTotal.aEnd.Row()  ) aTotal.aEnd.SetRow(  aRange.aEnd.Row()  );
+            if (aRange.aEnd.Tab()   > aTotal.aEnd.Tab()  ) aTotal.aEnd.SetTab(aRange.aEnd.Tab()    );
         }
     }
     return aTotal;
@@ -2242,11 +2234,10 @@ void __EXPORT ScUndoBorder::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();        //! Funktion an docfunc aufrufen
-    ULONG nCount = pRanges->Count();
-    ULONG i;
-    for (i=0; i<nCount; i++)
+    size_t nCount = pRanges->size();
+    for (size_t i = 0; i < nCount; ++i )
     {
-        ScRange aRange = *pRanges->GetObject(i);
+        ScRange aRange = *pRanges->at( i );
         SCTAB nTab = aRange.aStart.Tab();
 
         ScMarkData aMark;
@@ -2255,8 +2246,8 @@ void __EXPORT ScUndoBorder::Redo()
 
         pDoc->ApplySelectionFrame( aMark, pOuter, pInner );
     }
-    for (i=0; i<nCount; i++)
-        pDocShell->PostPaint( *pRanges->GetObject(i), PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+    for (size_t i = 0; i < nCount; ++i)
+        pDocShell->PostPaint( *pRanges->at( i ), PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }

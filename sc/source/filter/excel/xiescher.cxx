@@ -1860,8 +1860,11 @@ void XclImpControlHelper::ReadCellLinkFormula( XclImpStream& rStrm, bool bWithBo
     ScRangeList aScRanges;
     ReadRangeList( aScRanges, rStrm, bWithBoundSize );
     // Use first cell of first range
-    if( const ScRange* pScRange = aScRanges.GetObject( 0 ) )
+    if ( !aScRanges.empty() )
+    {
+        const ScRangePtr pScRange = aScRanges.front();
         mxCellLink.reset( new ScAddress( pScRange->aStart ) );
+    }
 }
 
 void XclImpControlHelper::ReadSourceRangeFormula( XclImpStream& rStrm, bool bWithBoundSize )
@@ -1869,8 +1872,11 @@ void XclImpControlHelper::ReadSourceRangeFormula( XclImpStream& rStrm, bool bWit
     ScRangeList aScRanges;
     ReadRangeList( aScRanges, rStrm, bWithBoundSize );
     // Use first range
-    if( const ScRange* pScRange = aScRanges.GetObject( 0 ) )
+    if ( !aScRanges.empty() )
+    {
+        const ScRangePtr pScRange = aScRanges.front();
         mxSrcRange.reset( new ScRange( *pScRange ) );
+    }
 }
 
 void XclImpControlHelper::DoProcessControl( ScfPropertySet& ) const

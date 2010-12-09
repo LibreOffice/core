@@ -270,14 +270,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
             else
                 mbDelIns = sal_False;
         }
-        // no longer needed, because the document calls the VisAreaChanged method
-/*      else if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::VISIBLE_DATA_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-            CommitChange(aEvent);*/
         // commented out, because to use a ModelChangeEvent is not the right way
         // at the moment there is no way, but the Java/Gnome Api should be extended sometime
 /*          if (mpViewShell)
@@ -295,15 +287,6 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 
                 CommitTableModelChange(aNewPos.Top(), aNewPos.Left(), aNewPos.Bottom(), aNewPos.Right(), AccessibleTableModelChangeType::UPDATE);
             }
-        }*/
-        // no longer needed, because the document calls the BoundingBoxChanged method
-/*        else if (rRef.GetId() == SC_HINT_ACC_WINDOWRESIZED)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.EventId = AccessibleEventId::BOUNDRECT_CHANGED;
-            aEvent.Source = uno::Reference< XAccessibleContext >(this);
-
-            CommitChange(aEvent);
         }*/
     }
     else if (rHint.ISA( ScUpdateRefHint ))
@@ -781,9 +764,9 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
 {
     mpSortedMarkedCells = new std::vector<ScMyAddress>();
     mpSortedMarkedCells->reserve(mpMarkedRanges->GetCellCount());
-    ScRange* pRange = mpMarkedRanges->First();
-    while (pRange)
+    for ( size_t i = 0, ListSize = mpMarkedRanges->size(); i < ListSize; ++i )
     {
+        ScRangePtr pRange = mpMarkedRanges->at( i );
         if (pRange->aStart.Tab() != pRange->aEnd.Tab())
         {
             if ((maActiveCell.Tab() >= pRange->aStart.Tab()) ||
@@ -805,7 +788,6 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
         {
             DBG_ERROR("Range of wrong table");
         }
-        pRange = mpMarkedRanges->Next();
     }
     std::sort(mpSortedMarkedCells->begin(), mpSortedMarkedCells->end());
 }

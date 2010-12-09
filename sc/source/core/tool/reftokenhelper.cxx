@@ -198,11 +198,11 @@ void ScRefTokenHelper::getTokenFromRange(ScSharedTokenRef& pToken, const ScRange
 void ScRefTokenHelper::getTokensFromRangeList(vector<ScSharedTokenRef>& pTokens, const ScRangeList& rRanges)
 {
     vector<ScSharedTokenRef> aTokens;
-    sal_uInt32 nCount = rRanges.Count();
+    size_t nCount = rRanges.size();
     aTokens.reserve(nCount);
-    for (sal_uInt32 i = 0; i < nCount; ++i)
+    for (size_t i = 0; i < nCount; ++i)
     {
-        ScRange* pRange = static_cast<ScRange*>(rRanges.GetObject(i));
+        ScRange* pRange = rRanges[ i ];
         if (!pRange)
             // failed.
             return;

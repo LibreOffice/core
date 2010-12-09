@@ -1356,7 +1356,6 @@ BOOL lcl_CutRange( ScRange& rRange, const ScRange& rOther )
 
 void ScConditionalFormat::DoRepaint( const ScRange* pModified )
 {
-    USHORT i;
     SfxObjectShell* pSh = pDoc->GetDocumentShell();
     if (pSh)
     {
@@ -1371,10 +1370,9 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
             pAreas = new ScRangeList;
             pDoc->FindConditionalFormat( nKey, *pAreas );
         }
-        USHORT nCount = (USHORT) pAreas->Count();
-        for (i=0; i<nCount; i++)
+        for (size_t i = 0, nCount = pAreas->size(); i < nCount; i++ )
         {
-            ScRange aRange = *pAreas->GetObject(i);
+            ScRange aRange = *pAreas->at( i );
             BOOL bDo = TRUE;
             if ( pModified )
             {

@@ -1384,10 +1384,9 @@ BOOL lcl_IsAllInRange( const ::std::vector< ScRangeList >& rRangesVector, const 
     for( ;aIt!=rRangesVector.end(); ++aIt )
     {
         const ScRangeList& rRanges = *aIt;
-        ULONG nCount = rRanges.Count();
-        for (ULONG i=0; i<nCount; i++)
+        for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            ScRange aRange = *rRanges.GetObject(i);
+            ScRange aRange = *rRanges[ i ];
             if ( !rClipRange.In( aRange ) )
             {
                 return FALSE;   // at least one range is not valid
@@ -1406,10 +1405,9 @@ BOOL lcl_MoveRanges( ::std::vector< ScRangeList >& rRangesVector, const ScRange&
     for( ;aIt!=rRangesVector.end(); ++aIt )
     {
         ScRangeList& rRanges = *aIt;
-        ULONG nCount = rRanges.Count();
-        for (ULONG i=0; i<nCount; i++)
+        for ( size_t i = 0, nCount = rRanges.size(); i < nCount; i++ )
         {
-            ScRange* pRange = rRanges.GetObject(i);
+            ScRange* pRange = rRanges[ i ];
             if ( rSourceRange.In( *pRange ) )
             {
                 SCsCOL nDiffX = rDestPos.Col() - (SCsCOL)rSourceRange.aStart.Col();

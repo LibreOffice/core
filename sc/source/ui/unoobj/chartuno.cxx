@@ -627,12 +627,12 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
                             if ( rRangeList.Is() )
                             {
-                                ULONG nCount = rRangeList->Count();
+                                size_t nCount = rRangeList->size();
                                 uno::Sequence< table::CellRangeAddress > aCellRanges( nCount );
                                 table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
-                                for ( USHORT i = 0; i < nCount; ++i )
+                                for ( size_t i = 0; i < nCount; ++i )
                                 {
-                                    ScRange aRange( *rRangeList->GetObject( i ) );
+                                    ScRange aRange( *rRangeList->at( i ) );
                                     table::CellRangeAddress aCellRange;
                                     ScUnoConversion::FillApiRange( aCellRange, aRange );
                                     pCellRanges[ i ] = aCellRange;
@@ -725,14 +725,14 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
     if ( xRanges.Is() )
     {
-        ULONG nCount = xRanges->Count();
+        size_t nCount = xRanges->size();
 
         table::CellRangeAddress aRangeAddress;
         uno::Sequence<table::CellRangeAddress> aSeq(nCount);
         table::CellRangeAddress* pAry = aSeq.getArray();
-        for (USHORT i=0; i<nCount; i++)
+        for (size_t i = 0; i < nCount; i++)
         {
-            ScRange aRange(*xRanges->GetObject(i));
+            ScRange aRange( *xRanges->at( i ) );
 
             aRangeAddress.Sheet       = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();

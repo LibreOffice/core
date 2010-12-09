@@ -50,7 +50,7 @@ class ScRangeFindList
 {
     List        aEntries;
     String      aDocName;
-    BOOL        bHidden;
+    bool        bHidden;
 
 public:
             ScRangeFindList(const String& rName);
@@ -64,9 +64,9 @@ public:
     void    SetHidden( BOOL bSet )              { bHidden = bSet; }
 
     const String&   GetDocName() const          { return aDocName; }
-    BOOL            IsHidden() const            { return bHidden; }
+    bool            IsHidden() const            { return bHidden; }
 
-    static ColorData GetColorName( USHORT nIndex );
+    static ColorData GetColorName( size_t nIndex );
 };
 
 

@@ -273,11 +273,11 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-        sal_Int32 nRangeCount (pRangeList->Count());
-        sal_Int32 nRangeIndex (0);
+        size_t nRangeCount (pRangeList->size());
+        size_t nRangeIndex (0);
         while (!bSubTotal && nRangeIndex < nRangeCount)
         {
-            const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+            const ScRange* pRange = pRangeList->at( nRangeIndex );
             if( pRange )
             {
                 SCTAB nTabEnd(pRange->aEnd.Tab());
@@ -310,7 +310,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
                 nRangeIndex = 0;
                 while (!bSubTotal && nRangeIndex < nRangeCount)
                 {
-                    const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+                    const ScRange* pRange = pRangeList->at( nRangeIndex );
                     if( pRange )
                     {
                         ScRange aDBArea;
@@ -375,10 +375,10 @@ void __EXPORT ScInputWindow::Select()
 
                         // check if one of the marked ranges is empty
                         bool bEmpty = false;
-                        const ULONG nCount = aMarkRangeList.Count();
-                        for ( ULONG i = 0; i < nCount; ++i )
+                        const size_t nCount = aMarkRangeList.size();
+                        for ( size_t i = 0; i < nCount; ++i )
                         {
-                            const ScRange aRange( *aMarkRangeList.GetObject( i ) );
+                            const ScRange aRange( *aMarkRangeList.at( i ) );
                             if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
                                     aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aEnd.Row() ) )
@@ -394,7 +394,7 @@ void __EXPORT ScInputWindow::Select()
                             const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                             if ( bDataFound )
                             {
-                                ScAddress aAddr = aRangeList.Last()->aEnd;
+                                ScAddress aAddr = aRangeList.back()->aEnd;
                                 aAddr.IncRow();
                                 const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
                                 pViewSh->EnterAutoSum( aRangeList, bSubTotal, aAddr );
@@ -403,9 +403,9 @@ void __EXPORT ScInputWindow::Select()
                         else
                         {
                             const sal_Bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
-                            for ( ULONG i = 0; i < nCount; ++i )
+                            for ( size_t i = 0; i < nCount; ++i )
                             {
-                                const ScRange aRange( *aMarkRangeList.GetObject( i ) );
+                                const ScRange aRange( *aMarkRangeList.at( i ) );
                                 const bool bSetCursor = ( i == nCount - 1 ? true : false );
                                 const bool bContinue = ( i != 0  ? true : false );
                                 if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )

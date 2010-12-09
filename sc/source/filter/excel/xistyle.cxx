@@ -1763,7 +1763,7 @@ void XclImpXFRangeBuffer::Initialize()
 {
     maColumns.clear();
     maHyperlinks.clear();
-    maMergeList.RemoveAll();
+    maMergeList.clear();
 }
 
 void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )
@@ -1788,10 +1788,15 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
         if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
         {
             // expand last merged range if this attribute is set repeatedly
-            ScRange* pRange = maMergeList.Last();
-            if( pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol)
-                    && (eMode == xlXFModeBlank) )
-                pRange->aEnd.IncCol();
+            if ( !maMergeList.empty() )
+            {
+                ScRange* pRange = maMergeList.back();
+                if(  (pRange->aEnd.Row()     == nScRow)
+                  && (pRange->aEnd.Col() + 1 == nScCol)
+                  && (eMode                  == xlXFModeBlank)
+                  )
+                    pRange->aEnd.IncCol();
+            }
             else if( eMode != xlXFModeBlank )   // #108781# do not merge empty cells
                 SetMerge( nScCol, nScRow );
         }
@@ -1913,8 +1918,9 @@ void XclImpXFRangeBuffer::Finalize()
         XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
 
     // apply cell merging
-    for( const ScRange* pRange = maMergeList.First(); pRange; pRange = maMergeList.Next() )
+    for ( size_t i = 0, nRange = maMergeList.size(); i < nRange; ++i )
     {
+        const ScRangePtr pRange = maMergeList[ i ];
         const ScAddress& rStart = pRange->aStart;
         const ScAddress& rEnd = pRange->aEnd;
         bool bMultiCol = rStart.Col() != rEnd.Col();

@@ -2121,13 +2121,13 @@ void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRange
         aEvent.Source.set( static_cast< cppu::OWeakObject* >( this ) );
         aEvent.Base <<= aEvent.Source;
 
-        ULONG nRangeCount = rRanges.Count();
+        size_t nRangeCount = rRanges.size();
         aEvent.Changes.realloc( static_cast< sal_Int32 >( nRangeCount ) );
-        for ( ULONG nIndex = 0; nIndex < nRangeCount; ++nIndex )
+        for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
         {
             uno::Reference< table::XCellRange > xRangeObj;
 
-            ScRange aRange( *rRanges.GetObject( nIndex ) );
+            ScRange aRange( *rRanges[ nIndex ] );
             if ( aRange.aStart == aRange.aEnd )
             {
                 xRangeObj.set( new ScCellObj( pDocShell, aRange.aStart ) );
@@ -2174,20 +2174,20 @@ void ScModelObj::NotifyChanges( const ::rtl::OUString& rOperation, const ScRange
                     if (pScript)
                     {
                         ScRangeList aTabRanges;     // collect ranges on this sheet
-                        ULONG nRangeCount = rRanges.Count();
-                        for ( ULONG nIndex = 0; nIndex < nRangeCount; ++nIndex )
+                        size_t nRangeCount = rRanges.size();
+                        for ( size_t nIndex = 0; nIndex < nRangeCount; ++nIndex )
                         {
-                            ScRange aRange( *rRanges.GetObject( nIndex ) );
+                            ScRange aRange( *rRanges[ nIndex ] );
                             if ( aRange.aStart.Tab() == nTab )
                                 aTabRanges.Append( aRange );
                         }
-                        ULONG nTabRangeCount = aTabRanges.Count();
+                        size_t nTabRangeCount = aTabRanges.size();
                         if ( nTabRangeCount > 0 )
                         {
                             uno::Reference<uno::XInterface> xTarget;
                             if ( nTabRangeCount == 1 )
                             {
-                                ScRange aRange( *aTabRanges.GetObject( 0 ) );
+                                ScRange aRange( *aTabRanges[ 0 ] );
                                 if ( aRange.aStart == aRange.aEnd )
                                     xTarget.set( static_cast<cppu::OWeakObject*>( new ScCellObj( pDocShell, aRange.aStart ) ) );
                                 else
@@ -2642,13 +2642,13 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
     ScDocument* pDoc = pDocShell->GetDocument();
     if (ScRangeStringConverter::GetRangeListFromString( aRangeList, aRange, pDoc, ::formula::FormulaGrammar::CONV_OOO, ';' ))
     {
-        sal_Int32 nCount = aRangeList.Count();
+        size_t nCount = aRangeList.size();
         if (nCount)
         {
             xRet.realloc(nCount);
-            for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+            for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                const ScRange* pRange = aRangeList.GetObject( nIndex );
+                const ScRange* pRange = aRangeList[ nIndex ];
                 if( pRange )
                     xRet[nIndex] = new ScCellRangeObj(pDocShell, *pRange);
             }

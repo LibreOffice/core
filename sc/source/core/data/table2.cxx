@@ -470,8 +470,9 @@ void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
                          bool bKeepScenarioFlags, bool bCloneNoteCaptions)
 {
     ScRangeList aRanges(rRanges);
-    for (ScRangePtr p = aRanges.First(); p; p = aRanges.Next())
+    for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
     {
+        ScRangePtr p = aRanges[ i ];
         CopyToClip(p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
                    pTable, bKeepScenarioFlags, bCloneNoteCaptions);
     }
@@ -915,23 +916,17 @@ BOOL ScTable::HasScenarioRange( const ScRange& rRange ) const
 {
     DBG_ASSERT( bScenario, "bScenario == FALSE" );
 
-//  ScMarkData aMark;
-//  MarkScenarioIn( aMark, 0 );             //! Bits als Parameter von HasScenarioRange?
-//  return aMark.IsAllMarked( rRange );
-
     ScRange aTabRange = rRange;
     aTabRange.aStart.SetTab( nTab );
     aTabRange.aEnd.SetTab( nTab );
 
     const ScRangeList* pList = GetScenarioRanges();
-//  return ( pList && pList->Find( aTabRange ) );
 
     if (pList)
     {
-        ULONG nCount = pList->Count();
-        for ( ULONG j = 0; j < nCount; j++ )
+        for ( size_t j = 0, n = pList->size(); j < n; j++ )
         {
-            ScRange* pR = pList->GetObject( j );
+            ScRange* pR = pList->at( j );
             if ( pR->Intersects( aTabRange ) )
                 return TRUE;
         }
@@ -1711,15 +1706,14 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
             // in the active scenario range.
             ScRangeList aRanges;
             rMark.FillRangeListWithMarks( &aRanges, FALSE );
-            ULONG nRangeCount = aRanges.Count();
             SCTAB nScenTab = nTab+1;
             while(pDocument->IsScenario(nScenTab) && bIsEditable)
             {
                 if(pDocument->IsActiveScenario(nScenTab))
                 {
-                    for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+                    for (size_t i=0, nRange = aRanges.size(); (i < nRange) && bIsEditable; i++ )
                     {
-                        ScRange aRange = *aRanges.GetObject(i);
+                        ScRange aRange = *aRanges[ i ];
                         if(pDocument->HasScenarioRange(nScenTab, aRange))
                         {
                             USHORT nFlags;
@@ -1746,10 +1740,9 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
         {
             ScRangeList aRanges;
             rMark.FillRangeListWithMarks( &aRanges, FALSE );
-            ULONG nRangeCount = aRanges.Count();
-            for (ULONG i=0; i<nRangeCount && bIsEditable; i++)
+            for (size_t i = 0, nRange = aRanges.size(); (i < nRange) && bIsEditable; i++)
             {
-                ScRange aRange = *aRanges.GetObject(i);
+                ScRange aRange = *aRanges[ i ];
                 if(pDocument->HasScenarioRange(nTab, aRange))
                 {
                     USHORT nFlags;

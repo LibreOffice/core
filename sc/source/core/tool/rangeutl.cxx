@@ -566,8 +566,10 @@ sal_Bool ScRangeStringConverter::GetRangeListFromString(
     while( nOffset >= 0 )
     {
         ScRange* pRange = new ScRange;
-        if( GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote ) && (nOffset >= 0) )
-            rRangeList.Insert( pRange, LIST_APPEND );
+        if (  GetRangeFromString( *pRange, rRangeListStr, pDocument, eConv, nOffset, cSeperator, cQuote )
+           && (nOffset >= 0)
+           )
+            rRangeList.push_back( pRange );
         else if (nOffset > -1)
             bRet = sal_False;
     }
@@ -721,10 +723,9 @@ void ScRangeStringConverter::GetStringFromRangeList(
     OUString sRangeListStr;
     if( pRangeList )
     {
-        sal_Int32 nCount = pRangeList->Count();
-        for( sal_Int32 nIndex = 0; nIndex < nCount; nIndex++ )
+        for( size_t nIndex = 0, nCount = pRangeList->size(); nIndex < nCount; nIndex++ )
         {
-            const ScRange* pRange = pRangeList->GetObject( nIndex );
+            const ScRangePtr pRange = pRangeList->at( nIndex );
             if( pRange )
                 GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeperator, sal_True, nFormatFlags );
         }

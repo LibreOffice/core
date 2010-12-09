@@ -97,27 +97,26 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 {
     //! if multiple sheets are copied, update references into the other copied sheets?
 
-    BOOL bChanged = FALSE;
+    bool bChanged = false;
 
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    for ( size_t i=0, nCount = rRanges.size(); i < nCount; i++ )
     {
-        ScRange* pRange = rRanges.GetObject(i);
+        ScRangePtr pRange = rRanges[ i ];
         if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
         {
             pRange->aStart.SetTab( nDestTab );
             pRange->aEnd.SetTab( nDestTab );
-            bChanged = TRUE;
+            bChanged = true;
         }
         if ( pRange->aStart.Tab() >= nTabCount )
         {
             pRange->aStart.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
+            bChanged = true;
         }
         if ( pRange->aEnd.Tab() >= nTabCount )
         {
             pRange->aEnd.SetTab( nTabCount > 0 ? ( nTabCount - 1 ) : 0 );
-            bChanged = TRUE;
+            bChanged = true;
         }
     }
 

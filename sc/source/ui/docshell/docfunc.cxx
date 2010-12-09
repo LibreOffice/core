@@ -547,13 +547,14 @@ static void lcl_collectAllPredOrSuccRanges(
     ScDocument* pDoc = rDocShell.GetDocument();
     vector<ScSharedTokenRef> aRefTokens;
     ScRangeList aSrcRanges(rSrcRanges);
-    ScRange* p = aSrcRanges.First();
-    if (!p)
+    if ( aSrcRanges.empty() )
         return;
+    ScRangePtr p = aSrcRanges.front();
     ScDetectiveFunc aDetFunc(pDoc, p->aStart.Tab());
     ScRangeList aDestRanges;
-    for (; p; p = aSrcRanges.Next())
+    for ( size_t i = 1, ListSize = aSrcRanges.size(); i < ListSize; ++i )
     {
+        p = aSrcRanges[ i ];
         if (bPred)
         {
             aDetFunc.GetAllPreds(

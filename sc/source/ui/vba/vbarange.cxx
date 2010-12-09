@@ -243,9 +243,9 @@ uno::Reference< excel::XRange > lcl_makeXRangeFromSheetCellRanges( const uno::Re
         aCellRanges.Append( refRange );
     }
     // Single range
-    if ( aCellRanges.First() == aCellRanges.Last() )
+    if ( aCellRanges.size() == 1 )
     {
-        uno::Reference< table::XCellRange > xTmpRange( new ScCellRangeObj( pDoc, *aCellRanges.First() ) );
+        uno::Reference< table::XCellRange > xTmpRange( new ScCellRangeObj( pDoc, *aCellRanges.front() ) );
         xRange = new ScVbaRange( xParent, xContext, xTmpRange );
     }
     else
@@ -828,7 +828,7 @@ protected:
                 if ( pUnoRangesBase )
                 {
                     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-                    ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
+                    ScCompiler aCompiler( m_pDoc, aCellRanges.front()->aStart );
                     aCompiler.SetGrammar(m_eGrammar);
                     // compile the string in the format passed in
                     aCompiler.CompileString( sFormula );
@@ -872,7 +872,7 @@ public:
             pUnoRangesBase )
         {
             ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
-            ScCompiler aCompiler( m_pDoc, aCellRanges.First()->aStart );
+            ScCompiler aCompiler( m_pDoc, aCellRanges.front()->aStart );
             aCompiler.SetGrammar(formula::FormulaGrammar::GRAM_DEFAULT);
             aCompiler.CompileString( sVal );
             // set desired convention
@@ -1160,8 +1160,9 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 
         bool bTabFromReferrer = !( nFlags & SCA_TAB_3D );
 
-        for ( ScRange* pRange = aCellRanges.First() ; pRange; pRange = aCellRanges.Next() )
+        for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
         {
+            ScRangePtr pRange = aCellRanges[ i ];
             pRange->aStart.SetCol( refRange.aStart.Col() + pRange->aStart.Col() );
             pRange->aStart.SetRow( refRange.aStart.Row() + pRange->aStart.Row() );
             pRange->aStart.SetTab( bTabFromReferrer ? refRange.aStart.Tab()  : pRange->aStart.Tab() );
@@ -1183,9 +1184,9 @@ getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const
     if ( !getScRangeListForAddress ( sName, pDocSh, refRange, aCellRanges, eConv ) )
         throw uno::RuntimeException();
     // Single range
-    if ( aCellRanges.First() == aCellRanges.Last() )
+    if ( aCellRanges.size() == 1 )
     {
-        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocSh, *aCellRanges.First() ) );
+        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocSh, *aCellRanges.front() ) );
         uno::Reference< XHelperInterface > xFixThisParent = excel::getUnoSheetModuleObj( xRange );
         return new ScVbaRange( xFixThisParent, xContext, xRange );
     }
@@ -1348,10 +1349,10 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
             ScRange refRange;
             if ( getScRangeListForAddress ( rString, pDocSh, refRange, aCellRanges, aConv ) )
             {
-                if ( aCellRanges.First() == aCellRanges.Last() )
+                if ( aCellRanges.size() == 1 )
                 {
                     table::CellRangeAddress aRangeAddress;
-                    ScUnoConversion::FillApiRange( aRangeAddress, *aCellRanges.First() );
+                    ScUnoConversion::FillApiRange( aRangeAddress, *aCellRanges.front() );
                     return aRangeAddress;
                 }
             }
@@ -1824,14 +1825,15 @@ ScVbaRange::HasFormula() throw (uno::RuntimeException)
         uno::Reference<uno::XInterface>  xRanges( pThisRanges->queryFormulaCells( ( sheet::FormulaResult::ERROR | sheet::FormulaResult::VALUE |  sheet::FormulaResult::STRING ) ), uno::UNO_QUERY_THROW );
         ScCellRangesBase* pFormulaRanges = dynamic_cast< ScCellRangesBase * > ( xRanges.get() );
         // check if there are no formula cell, return false
-        if ( pFormulaRanges->GetRangeList().Count() == 0 )
+        if ( pFormulaRanges->GetRangeList().empty() )
             return uno::makeAny(sal_False);
 
         // chech if there are holes (where some cells are not formulas)
         // or returned range is not equal to this range
-        if ( ( pFormulaRanges->GetRangeList().Count() > 1 )
-        || ( pFormulaRanges->GetRangeList().GetObject(0)->aStart != pThisRanges->GetRangeList().GetObject(0)->aStart )
-        || ( pFormulaRanges->GetRangeList().GetObject(0)->aEnd != pThisRanges->GetRangeList().GetObject(0)->aEnd ) )
+        if (  ( pFormulaRanges->GetRangeList().size() > 1 )
+           || ( pFormulaRanges->GetRangeList().front()->aStart != pThisRanges->GetRangeList().front()->aStart )
+           || ( pFormulaRanges->GetRangeList().front()->aEnd   != pThisRanges->GetRangeList().front()->aEnd   )
+           )
             return aNULL(); // should return aNULL;
     }
     return uno::makeAny( sal_True );
@@ -1916,8 +1918,9 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
 
-    for ( ScRange* pRange = aCellRanges.First() ; pRange; pRange = aCellRanges.Next() )
+    for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
     {
+        ScRange* pRange = aCellRanges[ i ];
         if ( bIsColumnOffset )
         {
             pRange->aStart.SetCol( pRange->aStart.Col() + nColOffset );
@@ -1930,13 +1933,13 @@ ScVbaRange::Offset( const ::uno::Any &nRowOff, const uno::Any &nColOff ) throw (
         }
     }
 
-    if ( aCellRanges.Count() > 1 ) // Multi-Area
+    if ( aCellRanges.size() > 1 ) // Multi-Area
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pUnoRangesBase->GetDocShell(), aCellRanges ) );
         return new ScVbaRange( mxParent, mxContext, xRanges );
     }
     // normal range
-    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), *aCellRanges.First() ) );
+    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), *aCellRanges.front() ) );
     return new ScVbaRange( mxParent, mxContext, xRange  );
 }
 
@@ -2386,13 +2389,12 @@ ScVbaRange::Rows(const uno::Any& aIndex ) throw (uno::RuntimeException)
         ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
         ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
-        ScRange aRange = *aCellRanges.First();
+        ScRange aRange = *aCellRanges.front();
         if( aIndex >>= nValue )
         {
             aRange.aStart.SetRow( aRange.aStart.Row() + --nValue );
             aRange.aEnd.SetRow( aRange.aStart.Row() );
         }
-
         else if ( aIndex >>= sAddress )
         {
             ScAddress::Details dDetails( formula::FormulaGrammar::CONV_XL_A1, 0, 0 );
@@ -2431,7 +2433,7 @@ ScVbaRange::Columns(const uno::Any& aIndex ) throw (uno::RuntimeException)
     ScCellRangesBase* pUnoRangesBase = getCellRangesBase();
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
-    ScRange aRange = *aCellRanges.First();
+    ScRange aRange = *aCellRanges.front();
     if ( aIndex.hasValue() )
     {
         if ( aIndex >>= nValue )
@@ -2924,8 +2926,9 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn ) throw (uno::RuntimeException)
     // copy the range list
     ScRangeList aCellRanges = pUnoRangesBase->GetRangeList();
 
-    for ( ScRange* pRange = aCellRanges.First() ; pRange; pRange = aCellRanges.Next() )
+    for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
     {
+        ScRange* pRange = aCellRanges[ i ];
         if ( bColumn )
         {
             pRange->aStart.SetRow( 0 );
@@ -2937,13 +2940,13 @@ ScVbaRange::getEntireColumnOrRow( bool bColumn ) throw (uno::RuntimeException)
             pRange->aEnd.SetCol( MAXCOL );
         }
     }
-    if ( aCellRanges.Count() > 1 ) // Multi-Area
+    if ( aCellRanges.size() > 1 ) // Multi-Area
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pUnoRangesBase->GetDocShell(), aCellRanges ) );
 
         return new ScVbaRange( mxParent, mxContext, xRanges, !bColumn, bColumn );
     }
-    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), *aCellRanges.First() ) );
+    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pUnoRangesBase->GetDocShell(), *aCellRanges.front() ) );
     return new ScVbaRange( mxParent, mxContext, xRange, !bColumn, bColumn  );
 }
 
@@ -4939,11 +4942,11 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
 
     // Get field delimiters.
     String rFieldDelimiters;
-    if ( bTab )              rFieldDelimiters += '\t';
-    if ( bSemicolon )    rFieldDelimiters += ';';
-    if ( bComma )        rFieldDelimiters += ',';
-    if ( bSpace )          rFieldDelimiters += ' ';
-    if ( bOther )          rFieldDelimiters += *sOtherChar.getStr();
+    if ( bTab       ) rFieldDelimiters += '\t';
+    if ( bSemicolon ) rFieldDelimiters += ';';
+    if ( bComma     ) rFieldDelimiters += ',';
+    if ( bSpace     ) rFieldDelimiters += ' ';
+    if ( bOther     ) rFieldDelimiters += *sOtherChar.getStr();
 
     // Get the text in current range to SvMemoryStream.
     ScRange aSrcScRange;
@@ -4951,9 +4954,9 @@ ScVbaRange::TextToColumns( const css::uno::Any& Destination, const css::uno::Any
     if ( pSrcCellRangesBase )
     {
         ScRangeList aRangeList = pSrcCellRangesBase->GetRangeList();
-        if ( aRangeList.First() )
+        if ( !aRangeList.empty() )
         {
-            aSrcScRange = *aRangeList.First();
+            aSrcScRange = *aRangeList.front();
         }
     }
     ScImportExport aExport( getScDocument(), aSrcScRange );
@@ -5805,9 +5808,9 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue) throw
                     aCellRanges.Append( refRange );
                 }
                 // Single range
-                if ( aCellRanges.First() == aCellRanges.Last() )
+                if ( aCellRanges.size() == 1 )
                 {
-                    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( getScDocShell(), *aCellRanges.First() ) );
+                    uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( getScDocShell(), *aCellRanges.front() ) );
                     return new ScVbaRange( mxParent, mxContext, xRange );
                 }
                 uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( getScDocShell(), aCellRanges ) );

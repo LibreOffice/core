@@ -774,12 +774,12 @@ void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimensio
 
     ScRangeListRef xRanges;
     GetViewData()->GetMultiArea( xRanges );         // incl. cursor if nothing is selected
-    ULONG nRangeCount = xRanges->Count();
+    size_t nRangeCount = xRanges->size();
     BOOL bContinue = TRUE;
 
-    for (ULONG nRangePos=0; nRangePos<nRangeCount && bContinue; nRangePos++)
+    for (size_t nRangePos=0; nRangePos < nRangeCount && bContinue; nRangePos++)
     {
-        ScRange aRange = *xRanges->GetObject(nRangePos);
+        ScRange aRange = *xRanges->at(nRangePos);
         SCCOL nStartCol = aRange.aStart.Col();
         SCROW nStartRow = aRange.aStart.Row();
         SCCOL nEndCol = aRange.aEnd.Col();

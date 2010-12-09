@@ -65,54 +65,6 @@ ScMyStyleRanges::~ScMyStyleRanges()
     delete pCurrencyList;
 }
 
-void ScMyStyleRanges::AddRange(const ScRange& rRange, ScRangeList* pList,
-    const rtl::OUString* pStyleName, const sal_Int16 nType,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
-{
-    pList->Join(rRange);
-    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
-    if (pList->Count() > nMaxRanges)
-    {
-        sal_Int32 nCount(pList->Count());
-        ScRange* pRange(NULL);
-        for (sal_Int32 i = 0; i < nCount; ++i)
-        {
-            pRange = pList->GetObject(i);
-            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
-            {
-                rImport.SetStyleToRange(*pRange, pStyleName, nType, NULL);
-                delete pRange;
-                pRange = NULL;
-                pList->Remove(i);
-            }
-        }
-    }
-}
-
-void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
-    const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-    ScXMLImport& rImport, const sal_uInt32 nMaxRanges)
-{
-    xList->Join(rRange);
-    DBG_ASSERT(nMaxRanges > 0, "MaxRanges to less");
-    if (xList->Count() > nMaxRanges)
-    {
-        sal_Int32 nCount(xList->Count());
-        ScRange* pRange(NULL);
-        for (sal_Int32 i = 0; i < nCount; ++i)
-        {
-            pRange = xList->GetObject(i);
-            if (pRange && (pRange->aEnd.Row() + 1 < rRange.aStart.Row()))
-            {
-                rImport.SetStyleToRange(*pRange, pStyleName, util::NumberFormat::CURRENCY, pCurrency);
-                delete pRange;
-                pRange = NULL;
-                xList->Remove(i);
-            }
-        }
-    }
-}
-
 void ScMyStyleRanges::AddRange(const ScRange& rRange,
     const rtl::OUString* /*pStyleName*/, const sal_Int16 nType,
     ScXMLImport& /*rImport*/, const sal_uInt32 /*nMaxRanges*/)
@@ -270,18 +222,16 @@ void ScMyStyleRanges::SetStylesToRanges(ScRangeList* pList,
     const rtl::OUString* pStyleName, const sal_Int16 nCellType,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
-    sal_Int32 nCount(pList->Count());
-    for (sal_Int32 i = 0; i < nCount; ++i)
-        rImport.SetStyleToRange(*pList->GetObject(i), pStyleName, nCellType, pCurrency);
+    for ( size_t i = 0, nCount = pList->size(); i < nCount; ++i)
+        rImport.SetStyleToRange( *pList->at(i), pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(ScRangeListRef xList,
     const rtl::OUString* pStyleName, const sal_Int16 nCellType,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
-    sal_Int32 nCount(xList->Count());
-    for (sal_Int32 i = 0; i < nCount; ++i)
-        rImport.SetStyleToRange(*xList->GetObject(i), pStyleName, nCellType, pCurrency);
+    for (size_t i = 0, nCount = xList->size(); i < nCount; ++i)
+        rImport.SetStyleToRange( *xList->at(i), pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport)

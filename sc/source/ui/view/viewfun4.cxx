@@ -239,15 +239,15 @@ void ScViewFunc::DoRefConversion( BOOL bRecord )
 
     ScRangeListRef xRanges;
     GetViewData()->GetMultiArea( xRanges );
-    ULONG nCount = xRanges->Count();
+    size_t nCount = xRanges->size();
 
     for (SCTAB i=0; i<nTabCount; i++)
     {
         if (rMark.GetTableSelect(i))
         {
-            for (ULONG j=0; j<nCount; j++)
+            for (size_t j=0; j<nCount; j++)
             {
-                ScRange aRange = *xRanges->GetObject(j);
+                ScRange aRange = *xRanges->at(j);
                 aRange.aStart.SetTab(i);
                 aRange.aEnd.SetTab(i);
                 ScCellIterator aIter( pDoc, aRange );

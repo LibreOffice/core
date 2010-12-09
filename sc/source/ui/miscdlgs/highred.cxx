@@ -162,12 +162,11 @@ void __EXPORT ScHighlightChgDlg::Init()
     }
 
     aFilterCtr.CheckRange(aChangeViewSet.HasRange());
-    ScRange* pRangeEntry=aChangeViewSet.GetTheRangeList().GetObject(0);
 
-
-    if(pRangeEntry!=NULL)
+    if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         String aRefStr;
+        ScRangePtr pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }

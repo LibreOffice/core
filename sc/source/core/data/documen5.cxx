@@ -396,9 +396,8 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         aNewRanges = new ScRangeList;
                         aNewRanges->Parse( aRangesStr, this );
 
-                        ULONG nAddCount = rNewList->Count();
-                        for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
-                            aNewRanges->Append( *rNewList->GetObject(nAdd) );
+                        for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
+                            aNewRanges->Append( *rNewList->at( nAdd ) );
                     }
                     else
                     {
@@ -513,8 +512,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         ScRangeListRef aNewRLR( new ScRangeList );
         BOOL bChanged = FALSE;
         BOOL bDataChanged = FALSE;
-        for ( ScRangePtr pR = aRLR->First(); pR; pR = aRLR->Next() )
+        for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
         {
+            ScRangePtr pR = aRLR->at( i );
             SCCOL theCol1 = pR->aStart.Col();
             SCROW theRow1 = pR->aStart.Row();
             SCTAB theTab1 = pR->aStart.Tab();

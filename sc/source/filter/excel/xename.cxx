@@ -639,7 +639,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                 }
                 // create the NAME record (do not warn if ranges are shrunken)
                 GetAddressConverter().ValidateRangeList( aRangeList, false );
-                if( aRangeList.Count() > 0 )
+                if( !aRangeList.empty() )
                     GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTAREA, aRangeList );
             }
 
@@ -658,7 +658,7 @@ void XclExpNameManagerImpl::CreateBuiltInNames()
                     GetXclMaxPos().Col(), pRowRange->aEnd.Row(), nScTab ) );
             // create the NAME record
             GetAddressConverter().ValidateRangeList( aTitleList, false );
-            if( aTitleList.Count() > 0 )
+            if( !aTitleList.empty() )
                 GetNameManager().InsertBuiltInName( EXC_BUILTIN_PRINTTITLES, aTitleList );
 
             // *** 3) filter ranges *** ---------------------------------------
@@ -731,10 +731,10 @@ sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScR
 sal_uInt16 XclExpNameManager::InsertBuiltInName( sal_Unicode cBuiltIn, const ScRangeList& rRangeList )
 {
     sal_uInt16 nNameIdx = 0;
-    if( rRangeList.Count() )
+    if( !rRangeList.empty() )
     {
         XclTokenArrayRef xTokArr = GetFormulaCompiler().CreateFormula( EXC_FMLATYPE_NAME, rRangeList );
-        nNameIdx = mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRangeList.GetObject( 0 )->aStart.Tab() );
+        nNameIdx = mxImpl->InsertBuiltInName( cBuiltIn, xTokArr, rRangeList.front()->aStart.Tab() );
     }
     return nNameIdx;
 }

@@ -269,9 +269,6 @@ void ScTabView::InvalidateAttribs()
     rBindings.Invalidate( SID_NUMBER_CURRENCY );
     rBindings.Invalidate( SID_NUMBER_PERCENT );
     rBindings.Invalidate( SID_NUMBER_TIME );
-
-//  rBindings.Invalidate( SID_RANGE_VALUE );
-//  rBindings.Invalidate( SID_RANGE_FORMULA );
 }
 
 //      SetCursor - Cursor setzen, zeichnen, InputWin updaten
@@ -402,7 +399,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( FID_MERGE_TOGGLE );
     rBindings.Invalidate( SID_AUTOFILTER_HIDE );
     rBindings.Invalidate( SID_UNFILTER );
-//  rBindings.Invalidate( SID_IMPORT_DATA );        // jetzt wieder immer moeglich
     rBindings.Invalidate( SID_REIMPORT_DATA );
     rBindings.Invalidate( SID_REFRESH_DBAREA );
     rBindings.Invalidate( SID_OUTLINE_SHOW );
@@ -442,7 +438,6 @@ void ScTabView::SelectionChanged()
     rBindings.Invalidate( SID_INSERT_POSTIT );
     rBindings.Invalidate( SID_CHARMAP );
     rBindings.Invalidate( SID_OPENDLG_FUNCTION );
-//  rBindings.Invalidate( FID_CONDITIONAL_FORMAT );
     rBindings.Invalidate( SID_OPENDLG_CONDFRMT );
     rBindings.Invalidate( FID_VALIDATION );
     rBindings.Invalidate( SID_EXTERNAL_SOURCE );
@@ -1893,7 +1888,6 @@ void ScTabView::KillEditView( BOOL bNoPaint )
             {
                 pGridWin[i]->UpdateCursorOverlay();
                 pGridWin[i]->UpdateAutoFillOverlay();
-                // pGridWin[i]->UpdateAllOverlays();
             }
         }
 }
@@ -2155,8 +2149,10 @@ void ScTabView::DoChartSelection(
         if( ScRangeStringConverter::GetRangeListFromString(
                 aRangeList, rHilightRanges[i].RangeRepresentation, pDoc, pDoc->GetAddressConvention(), sep ))
         {
-            for ( ScRangePtr p = aRangeList.First(); p; p = aRangeList.Next())
+            size_t nListSize = aRangeList.size();
+            for ( size_t j = 0; j < nListSize; ++j )
             {
+                ScRange* p = aRangeList.at( j );
                 if( rHilightRanges[i].Index == - 1 )
                     AddHighlightRange( *p, aSelColor );
                 else
@@ -2594,7 +2590,6 @@ void ScTabView::ActivatePart( ScSplitPos eWhich )
         {
             //  GrabFocus nur, wenn vorher das andere GridWindow den Focus hatte
             //  (z.B. wegen Suchen & Ersetzen)
-//!         aViewData.GetViewShell()->GetViewFrame()->GetWindow().GrabFocus();
             pGridWin[eWhich]->GrabFocus();
         }
 
@@ -2672,14 +2667,6 @@ void ScTabView::ZoomChanged()
     }
 
     SetNewVisArea();
-
-    /* the old code
-    ScGridWindow* pWin = pGridWin[aViewData.GetActivePart()];
-    if (pWin)
-    {
-        pWin->SetMapMode( pWin->GetDrawMapMode() ); // mit neuem Zoom
-        SetNewVisArea();                            // benutzt den gesetzten MapMode
-    } */
 
     InterpretVisible();     // #69343# have everything calculated before painting
 

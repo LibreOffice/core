@@ -140,7 +140,7 @@ bool XclImpAddressConverter::ConvertRange( ScRange& rScRange,
 void XclImpAddressConverter::ConvertRangeList( ScRangeList& rScRanges,
         const XclRangeList& rXclRanges, SCTAB nScTab, bool bWarn )
 {
-    rScRanges.RemoveAll();
+    rScRanges.clear();
     for( XclRangeList::const_iterator aIt = rXclRanges.begin(), aEnd = rXclRanges.end(); aIt != aEnd; ++aIt )
     {
         ScRange aScRange( ScAddress::UNINITIALIZED );

@@ -314,7 +314,7 @@ void SAL_CALL ScVbaEventsListener::changesOccurred( const util::ChangesEvent& aE
         }
     }
 
-    if( (aRangeList.Count() > 0) && mpDocShell )
+    if( ( !aRangeList.empty() ) && mpDocShell )
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( mpDocShell, aRangeList ) );
         uno::Sequence< uno::Any > aArgs(1);
@@ -680,7 +680,7 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
         maOldSelection = pNewCellRanges->GetRangeList();
         return bChanged;
     }
-    maOldSelection.Clear();
+    maOldSelection.clear();
     return true;
 }
 

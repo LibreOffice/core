@@ -752,10 +752,9 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     ScRangeListRef aNew = new ScRangeList;
     if (rRangeList.Is())
     {
-        ULONG nCount = rRangeList->Count();
-        for (ULONG i=0; i<nCount; i++)
+        for ( size_t i = 0, nCount = rRangeList->size(); i < nCount; i++ )
         {
-            ScRange aRange(*rRangeList->GetObject( i ));
+            ScRange aRange( *rRangeList->at( i ) );
             if ( ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL ) ||
                  ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW ) )
             {
@@ -1680,7 +1679,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 
         ScClipParam& rClipParam = pClipDoc->GetClipParam();
         pClipDoc->aDocName = aDocName;
-        rClipParam.maRanges.RemoveAll();
+        rClipParam.maRanges.clear();
         rClipParam.maRanges.Append(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
         pClipDoc->ResetClip( this, nTab );
 
@@ -1908,9 +1907,9 @@ void ScDocument::UpdateRangeNamesInFormulas(
             rRangeNames.mpRangeNames[i]->ReplaceRangeNamesInUse(rRangeNames.maRangeMap);
     }
     // then update the formulas, they might need just the updated range names
-    for (ULONG nRange = 0; nRange < rDestRanges.Count(); ++nRange)
+    for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
     {
-        const ScRange* pRange = rDestRanges.GetObject( nRange);
+        const ScRange* pRange = rDestRanges.at( nRange);
         SCCOL nCol1 = pRange->aStart.Col();
         SCROW nRow1 = pRange->aStart.Row();
         SCCOL nCol2 = pRange->aEnd.Col();
@@ -2097,8 +2096,8 @@ void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
 
     SCROW nSourceRow = rClipStartRow;
     SCROW nSourceEnd = 0;
-    if (pCBFCP->pClipDoc->GetClipParam().maRanges.Count())
-        nSourceEnd = pCBFCP->pClipDoc->GetClipParam().maRanges.First()->aEnd.Row();
+    if ( !pCBFCP->pClipDoc->GetClipParam().maRanges.empty() )
+        nSourceEnd = pCBFCP->pClipDoc->GetClipParam().maRanges.front()->aEnd.Row();
     SCROW nDestRow = nRow1;
 
     while ( nSourceRow <= nSourceEnd && nDestRow <= nRow2 )
@@ -2241,9 +2240,9 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             SCROW nClipStartRow = aClipRange.aStart.Row();
             // WaE: commented because unused:   SCCOL nClipEndCol = pClipDoc->aClipRange.aEnd.Col();
             SCROW nClipEndRow = aClipRange.aEnd.Row();
-            for (ULONG nRange = 0; nRange < pDestRanges->Count(); ++nRange)
+            for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
             {
-                const ScRange* pRange = pDestRanges->GetObject( nRange);
+                const ScRange* pRange = pDestRanges->at( nRange);
                 SCCOL nCol1 = pRange->aStart.Col();
                 SCROW nRow1 = pRange->aStart.Row();
                 SCCOL nCol2 = pRange->aEnd.Col();
@@ -2390,8 +2389,9 @@ void ScDocument::CopyMultiRangeFromClip(
     sal_uInt16 nDelFlag = IDF_CONTENTS;
     const ScBitMaskCompressedArray<SCROW, BYTE>& rFlags = GetRowFlagsArray(aCBFCP.nTabStart);
 
-    for (ScRange* p = rClipParam.maRanges.First(); p; p = rClipParam.maRanges.Next())
+    for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
     {
+        ScRangePtr p = rClipParam.maRanges[ i ];
         // The begin row must not be filtered.
 
         SCROW nRowCount = p->aEnd.Row() - p->aStart.Row() + 1;
@@ -2467,7 +2467,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
     if (bIsClip)
     {
         ScClipParam& rClipParam = GetClipParam();
-        rClipParam.maRanges.RemoveAll();
+        rClipParam.maRanges.clear();
         rClipParam.maRanges.Append(rArea);
         rClipParam.mbCutMode = bCut;
     }
@@ -2487,17 +2487,18 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
     }
 
     ScRangeList& rClipRanges = GetClipParam().maRanges;
-    if (!rClipRanges.Count())
+    if (rClipRanges.empty())
         // No clip range.  Bail out.
         return;
 
-    ScRangePtr p = rClipRanges.First();
+    ScRangePtr p = rClipRanges.front();
     SCCOL nStartCol = p->aStart.Col();
     SCCOL nEndCol   = p->aEnd.Col();
     SCROW nStartRow = p->aStart.Row();
     SCROW nEndRow   = p->aEnd.Row();
-    for (p = rClipRanges.Next(); p; p = rClipRanges.Next())
+    for ( size_t i = 1, n = rClipRanges.size(); i < n; ++i )
     {
+        p = rClipRanges[ i ];
         if (p->aStart.Col() < nStartCol)
             nStartCol = p->aStart.Col();
         if (p->aStart.Row() < nStartRow)
@@ -2535,10 +2536,10 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
     if (bIsClip)
     {
         ScRangeList& rClipRanges = GetClipParam().maRanges;
-        if (rClipRanges.Count())
+        if ( !rClipRanges.empty() )
         {
-            nClipX = rClipRanges.First()->aStart.Col();
-            nClipY = rClipRanges.First()->aStart.Row();
+            nClipX = rClipRanges.front()->aStart.Col();
+            nClipY = rClipRanges.front()->aStart.Row();
         }
     }
     else
@@ -2556,11 +2557,12 @@ BOOL ScDocument::HasClipFilteredRows()
         ++nCountTab;
 
     ScRangeList& rClipRanges = GetClipParam().maRanges;
-    if (!rClipRanges.Count())
+    if ( rClipRanges.empty() )
         return false;
 
-    for (ScRange* p = rClipRanges.First(); p; p = rClipRanges.Next())
+    for ( size_t i = 0, n = rClipRanges.size(); i < n; ++i )
     {
+        ScRangePtr p = rClipRanges[ i ];
         bool bAnswer = pTab[nCountTab]->HasFilteredRows(p->aStart.Row(), p->aEnd.Row());
         if (bAnswer)
             return true;
@@ -3064,10 +3066,9 @@ void ScDocument::SetTableOpDirty( const ScRange& rRange )
 
 void ScDocument::InterpretDirtyCells( const ScRangeList& rRanges )
 {
-    ULONG nRangeCount = rRanges.Count();
-    for (ULONG nPos=0; nPos<nRangeCount; nPos++)
+    for (size_t nPos=0, nRangeCount = rRanges.size(); nPos < nRangeCount; nPos++)
     {
-        ScCellIterator aIter( this, *rRanges.GetObject(nPos) );
+        ScCellIterator aIter( this, *rRanges[ nPos ] );
         ScBaseCell* pCell = aIter.GetFirst();
         while (pCell)
         {
@@ -4914,14 +4915,14 @@ void ScDocument::ApplySelectionFrame( const ScMarkData& rMark,
 {
     ScRangeList aRangeList;
     rMark.FillRangeListWithMarks( &aRangeList, FALSE );
-    ULONG nRangeCount = aRangeList.Count();
+    size_t nRangeCount = aRangeList.size();
     for (SCTAB i=0; i<=MAXTAB; i++)
     {
         if (pTab[i] && rMark.GetTableSelect(i))
         {
-            for (ULONG j=0; j<nRangeCount; j++)
+            for ( size_t j=0; j < nRangeCount; j++ )
             {
-                ScRange aRange = *aRangeList.GetObject(j);
+                ScRange aRange = *aRangeList[ j ];
                 pTab[i]->ApplyBlockFrame( pLineOuter, pLineInner,
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(),   aRange.aEnd.Row() );

@@ -131,7 +131,7 @@ void ScFormulaReferenceHelper::enableInput( BOOL bEnable )
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 {
-    if( /*!pRefEdit &&*/ bEnableColorRef )
+    if( bEnableColorRef )
     {
         bHighLightRef=TRUE;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -147,16 +147,12 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 
             if( ParseWithNames( aRangeList, rStr, pDoc ) )
             {
-                ScRange* pRangeEntry = aRangeList.First();
-
-                USHORT nIndex=0;
-                while(pRangeEntry != NULL)
+                for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ColorData aColName = ScRangeFindList::GetColorName(nIndex++);
-                    pTabViewShell->AddHighlightRange(*pRangeEntry, aColName);
-
-                    pRangeEntry = aRangeList.Next();
-                }
+                    ScRangePtr pRangeEntry = aRangeList[ i ];
+                    ColorData aColName = ScRangeFindList::GetColorName( i );
+                    pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
+               }
             }
         }
     }
@@ -165,7 +161,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
 {
     bool bError = false;
-    rRanges.RemoveAll();
+    rRanges.clear();
 
     ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
     ScRangeUtil aRangeUtil;
@@ -317,9 +313,9 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
             ScRangeList aRangeList;
             if( ParseWithNames( aRangeList, pRefEdit->GetText(), pDoc ) )
             {
-                const ScRange* pRange = aRangeList.GetObject( 0 );
-                if( pRange )
+                if ( !aRangeList.empty() )
                 {
+                    const ScRangePtr pRange = aRangeList.front();
                     pViewShell->SetTabNo( pRange->aStart.Tab() );
                     pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
                         pRange->aStart.Row(), SC_FOLLOW_JUMP, FALSE, FALSE );

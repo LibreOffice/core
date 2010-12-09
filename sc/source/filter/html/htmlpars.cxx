@@ -370,8 +370,9 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
         do
         {
             bAgain = FALSE;
-            for ( ScRange* pR = xLockedList->First(); pR; pR = xLockedList->Next() )
+            for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
             {
+                ScRangePtr pR = xLockedList->at( i );
                 if ( pR->Intersects( aRange ) )
                 {
                     pE->nCol = pR->aEnd.Col() + 1;
@@ -396,9 +397,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
 
 void ScHTMLLayoutParser::Adjust()
 {
-    for ( ScRange* pR = xLockedList->First(); pR; pR = xLockedList->Next() )
-        delete pR;
-    xLockedList->Clear();
+    xLockedList->clear();
     ScHTMLAdjustStack aStack;
     ScHTMLAdjustStackEntry* pS;
     USHORT nTab = 0;
@@ -2039,7 +2038,9 @@ ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
     ScRange* pRange = 0;
-    if( ((pRange = maVMergedCells.Find( rCellPos.MakeAddr() )) != 0) || ((pRange = maHMergedCells.Find( rCellPos.MakeAddr() )) != 0) )
+    if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
+      || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
+      )
         aSpan.Set( pRange->aEnd.Col() - pRange->aStart.Col() + 1, pRange->aEnd.Row() - pRange->aStart.Row() + 1 );
     return aSpan;
 }
@@ -2621,8 +2622,11 @@ void ScHTMLTable::FillEmptyCells()
         aIter->FillEmptyCells();
 
     // insert the final vertically merged ranges into maUsedCells
-    for( const ScRange* pRange = maVMergedCells.First(); pRange; pRange = maVMergedCells.Next() )
+    for ( size_t i = 0, nRanges = maVMergedCells.size(); i < nRanges; ++i )
+    {
+        ScRangePtr pRange = maVMergedCells[ i ];
         maUsedCells.Join( *pRange );
+    }
 
     for( ScAddress aAddr; aAddr.Row() < maSize.mnRows; aAddr.IncRow() )
     {
