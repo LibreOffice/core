@@ -436,7 +436,7 @@ namespace {
                                            aOpt.GetModuleName( mbImpress ? SvtModuleOptions::E_SIMPRESS : SvtModuleOptions::E_SDRAW ) );
             AddDialogControl( vcl::PrinterOptionsHelper::getGroupControlOpt(
                                 aAppGroupname,
-                                rtl::OUString()
+                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) )
                                 ) );
 
             uno::Sequence< rtl::OUString > aHelpIds;
