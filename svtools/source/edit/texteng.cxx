@@ -2091,7 +2091,6 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             return;
 
         ULONG nParaHeight = CalcParaHeight( nPara );
-        USHORT nIndex = 0;
         if ( ( !pPaintArea || ( ( nY + (long)nParaHeight ) > pPaintArea->Top() ) )
                 && ( !pPaintRange || ( ( nPara >= pPaintRange->GetStart().GetPara() ) && ( nPara <= pPaintRange->GetEnd().GetPara() ) ) ) )
         {
@@ -2099,6 +2098,7 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
             // Ueber die Zeilen des Absatzes...
             // --------------------------------------------------
             USHORT nLines = pPortion->GetLines().Count();
+            USHORT nIndex = 0;
             for ( USHORT nLine = 0; nLine < nLines; nLine++ )
             {
                 TextLine* pLine = pPortion->GetLines().GetObject(nLine);
