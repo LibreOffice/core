@@ -101,6 +101,15 @@ struct BigStruct
     hyper                      h;
 };
 /**
+ * two floats, BSDs/MacOSX on intel handle returning small
+ * structs differently than Linux
+ */
+struct TwoFloats
+{
+    float                      a;
+    float                      b;
+};
+/**
  * all floats, ia64 handles them specially
  */
 struct FourFloats
@@ -264,10 +273,15 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /**
      * register return test 4
      */
+    TwoFloats echoTwoFloats( [in] TwoFloats aStruct );
+
+    /**
+     * register return test 5
+     */
     FourFloats echoFourFloats( [in] FourFloats aStruct );
 
     /**
-     * register return test 4 (i107182)
+     * PPC Alignment test (#i107182#)
      */
     long testPPCAlignment( [in] hyper l1, [in] hyper l2, [in] long i1, [in] hyper l3, [in] long i2 );
 

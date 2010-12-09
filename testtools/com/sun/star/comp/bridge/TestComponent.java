@@ -47,6 +47,7 @@ import test.testtools.bridgetest.TestStruct;
 import test.testtools.bridgetest.SmallStruct;
 import test.testtools.bridgetest.MediumStruct;
 import test.testtools.bridgetest.BigStruct;
+import test.testtools.bridgetest.TwoFloats;
 import test.testtools.bridgetest.FourFloats;
 import test.testtools.bridgetest.XBridgeTest;
 import test.testtools.bridgetest.XBridgeTest2;
@@ -485,6 +486,10 @@ public class TestComponent {
         }
 
         public BigStruct echoBigStruct( BigStruct i_Struct) throws com.sun.star.uno.RuntimeException {
+            return i_Struct;
+        }
+
+        public TwoFloats echoTwoFloats( TwoFloats i_Struct) throws com.sun.star.uno.RuntimeException {
             return i_Struct;
         }
 

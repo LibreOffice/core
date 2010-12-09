@@ -548,6 +548,11 @@ static sal_Bool performTest(
             bRet = check( memcmp(&aIn, &aOut, sizeof(BigStruct)) == 0, "big struct test" ) && bRet;
         }
         {
+            TwoFloats aIn(1.1f, 2.2f);
+            TwoFloats aOut = xLBT->echoTwoFloats(aIn);
+            bRet = check( memcmp(&aIn, &aOut, sizeof(TwoFloats)) == 0, "two floats struct test" ) && bRet;
+        }
+        {
             FourFloats aIn(3.3f, 4.4f, 5.5f, 6.6f);
             FourFloats aOut = xLBT->echoFourFloats(aIn);
             bRet = check( memcmp(&aIn, &aOut, sizeof(FourFloats)) == 0, "four floats struct test" ) && bRet;
