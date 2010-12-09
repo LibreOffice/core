@@ -137,7 +137,10 @@ chart2::ScaleData AxisHelper::getDateCheckedScale( const Reference< chart2::XAxi
 void AxisHelper::checkDateAxis( chart2::ScaleData& rScale, ExplicitCategoriesProvider* pExplicitCategoriesProvider, bool bChartTypeAllowsDateAxis )
 {
     if( rScale.AutoDateAxis && rScale.AxisType == AxisType::CATEGORY && bChartTypeAllowsDateAxis )
+    {
         rScale.AxisType = AxisType::DATE;
+        removeExplicitScaling( rScale );
+    }
     if( rScale.AxisType == AxisType::DATE && (!pExplicitCategoriesProvider || !pExplicitCategoriesProvider->isDateAxis()) )
     {
         rScale.AxisType = AxisType::CATEGORY;

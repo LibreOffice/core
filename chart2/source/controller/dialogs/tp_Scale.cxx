@@ -421,7 +421,7 @@ BOOL ScaleTabPage::FillItemSet(SfxItemSet& rOutAttrs)
     rOutAttrs.Put(SfxInt32Item(SCHATTR_AXIS_STEP_HELP, nStepHelp));
     rOutAttrs.Put(SvxDoubleItem(fOrigin  , SCHATTR_AXIS_ORIGIN));
 
-    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,aCbxAutoStepMain.IsChecked()));
+    rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_STEP_MAIN,bAutoScale || aCbxAutoStepMain.IsChecked()));
     rOutAttrs.Put(SvxDoubleItem(fStepMain,SCHATTR_AXIS_STEP_MAIN));
 
     rOutAttrs.Put(SfxBoolItem(SCHATTR_AXIS_AUTO_TIME_RESOLUTION,bAutoScale || m_aCbx_AutoTimeResolution.IsChecked()));
