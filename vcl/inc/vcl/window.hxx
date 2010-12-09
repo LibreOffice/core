@@ -700,7 +700,6 @@ public:
     void                SetZoomedPointFont( const Font& rFont );
     long                GetDrawPixel( OutputDevice* pDev, long nPixels ) const;
     Font                GetDrawPixelFont( OutputDevice* pDev ) const;
-    void                GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const;
 
     void                SetControlFont();
     void                SetControlFont( const Font& rFont );

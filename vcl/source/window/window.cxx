@@ -5977,17 +5977,6 @@ Font Window::GetPointFont() const
 
 // -----------------------------------------------------------------------
 
-// TODO: remove in next incompatible build
-void Window::GetFontResolution( sal_Int32& nDPIX, sal_Int32& nDPIY ) const
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    nDPIX = mpWindowImpl->mpFrameData->mnDPIX;
-    nDPIY = mpWindowImpl->mpFrameData->mnDPIY;
-}
-
-// -----------------------------------------------------------------------
-
 void Window::SetParentClipMode( USHORT nMode )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
