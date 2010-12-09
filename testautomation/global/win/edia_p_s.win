@@ -132,7 +132,7 @@ TabOptions .HelpID:vcl:PrintDialog:OptPage
 PrinterList .HelpID:vcl:PrintDialog:JobPage:PrinterList
 NumberOfCopies .HelpID:vcl:PrintDialog:JobPage:Copies
 Collate .HelpID:vcl:PrintDialog:JobPage:Collate
-PrintNotes .HelpID:vcl:PrintDialog:PrintAnnotationMode:ListBox
+PrintNotes .HelpID:vcl:PrintDialog:PrintAnnotationMode:FixedText
 AllPages .HelpID:vcl:PrintDialog:PrintContent:RadioButton:0
 AllSlides .HelpID:vcl:PrintDialog:PrintContent:RadioButton:0
 AllSheets .HelpID:vcl:PrintDialog:PrintContent:RadioButton:0
@@ -151,7 +151,7 @@ PartsToPrint .HelpID:vcl:PrintDialog:PageContentType:ListBox
 SlidesPerPage .HelpID:vcl:PrintDialog:SlidesPerPage:ListBox
 ArrangeSlides .HelpID:vcl:PrintDialog:SlidesPerPageOrder:ListBox            
 
-*TabApplication .HelpID:vcl:PrintDialog:TabPage:10
+*TabApplication .HelpID:vcl:PrintDialog:TabPage:AppPage
 PrintPageBackground .HelpID:vcl:PrintDialog:PrintPageBackground:CheckBox
 PrintGraphicsAndDiagrams .HelpID:vcl:PrintDialog:PrintTablesGraphicsAndDiagrams:CheckBox
 PrintPicturesAndObjects .HelpID:vcl:PrintDialog:PrintPicturesAndObjects:CheckBox
@@ -197,7 +197,7 @@ BrochurePageSides .HelpID:vcl:PrintDialog:PrintProspectInclude:ListBox
 *TabOptions .HelpID:vcl:PrintDialog:OptPage
 PrintToFile .HelpID:vcl:PrintDialog:OptPage:ToFile
 PrintAsSingleJobs .HelpID:vcl:PrintDialog:OptPage:SingleJobs
-PrintReverse .HelpID:vcl:PrintDialog:OptPage:Reverse
+PrintReverse .HelpID:vcl:PrintDialog:OptPage:ToReverse
 PaperTrayFromPrefs .HelpID:vcl:PrintDialog:PrintPaperFromSetup:CheckBox        
 
 *PurchaseStarOffice sym:TAB_HID_LICENSING_DIALOG
