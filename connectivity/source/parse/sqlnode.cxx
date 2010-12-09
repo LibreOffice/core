@@ -2511,6 +2511,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             rString.append(m_aNodeValue);
             rString.appendAscii("#");
             break;
+
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
             {
@@ -2523,6 +2524,13 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 rString.append(aTmp);
 
             }   break;
+            // fall through
+        case SQL_NODE_PUNCTUATION:
+            if ( m_aNodeValue.toChar() == '(' || m_aNodeValue.toChar() == ')') // no spaces in front of '(' or after ')'
+            {
+                rString.append(m_aNodeValue);
+                break;
+            }
             // fall through
         default:
             if (rString.getLength() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )
