@@ -45,7 +45,6 @@
 #include <tools/rcid.h>
 
 #include <vcl/help.hxx>
-#include <vcl/imagerepository.hxx>
 #include <vcl/lazydelete.hxx>
 
 #include <svx/sdrpagewindow.hxx>
