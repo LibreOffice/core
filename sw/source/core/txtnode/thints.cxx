@@ -3047,12 +3047,18 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
         case RES_TXTATR_META:
         case RES_TXTATR_METAFIELD:
             cRet = CH_TXTATR_INWORD;
-            break;
+        break;
 
         case RES_TXTATR_FIELD:
         case RES_TXTATR_FLYCNT:
+        {
             cRet = CH_TXTATR_BREAKWORD;
-            break;
+
+            // #i78149: PostIt fields should not break words for spell and grammar checking
+            if (RES_POSTITFLD == rAttr.GetFld().GetFld()->GetTyp()->Which())
+                cRet = CH_TXTATR_INWORD;
+        }
+        break;
 
         default:
             ASSERT(false, "GetCharOfTxtAttr: unknown attr");
