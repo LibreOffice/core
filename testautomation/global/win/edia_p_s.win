@@ -124,7 +124,7 @@ Cancel .HelpID:vcl:PrintDialog:Cancel
    
 PrintingTabControl .HelpID:vcl:PrintDialog:TabPages
 TabPrintGeneral .HelpID:vcl:PrintDialog:JobPage
-TabApplication .HelpID:vcl:PrintDialog:TabPage:10
+TabApplication .HelpID:vcl:PrintDialog:TabPage:AppPage
 TabLayout .HelpID:vcl:PrintDialog:NUpPage
 TabOptions .HelpID:vcl:PrintDialog:OptPage
 
