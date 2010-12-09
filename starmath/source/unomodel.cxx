@@ -100,7 +100,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aOpt.GetModuleName( SvtModuleOptions::E_SMATH ) );
-    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+    m_aUIProperties[0].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
 
     // create subgroup for print options
     m_aUIProperties[1].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );

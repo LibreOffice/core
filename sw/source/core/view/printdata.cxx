@@ -226,7 +226,7 @@ SwPrintUIOptions::SwPrintUIOptions(
     String aAppGroupname( aLocalizedStrings.GetString( 0 ) );
     aAppGroupname.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "%s" ) ),
                                     aModOpt.GetModuleName( SvtModuleOptions::E_SWRITER ) );
-    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString() );
+    m_aUIProperties[ nIdx++ ].Value = getGroupControlOpt( aAppGroupname, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:TabPage:AppPage" ) ) );
 
     // create sub section for Contents
     m_aUIProperties[ nIdx++ ].Value = getSubgroupControlOpt( aLocalizedStrings.GetString( 1 ), rtl::OUString() );
