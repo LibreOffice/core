@@ -2091,7 +2091,7 @@ void UniscribeLayout::DropGlyph( int nStartx8 )
             if( GetItemSubrange( *pVI, nStart, nDummy ) )
                 break;
         DBG_ASSERT( nStart <= mnGlyphCount, "USPLayout::DropG overflow" );
-        int nOffset = 0;
+
         int j = pVI->mnMinGlyphPos;
         while (mpOutGlyphs[j] == DROPPED_OUTGLYPH) j++;
         if (j == nStart)
@@ -2138,7 +2138,6 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
     }
 
     // remove the dropped glyphs
-    const int* pGlyphWidths = mpJustifications ? mpJustifications : mpGlyphAdvances;
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVI = mpVisualItems[ nItem ];
@@ -2159,7 +2158,6 @@ void UniscribeLayout::Simplify( bool /*bIsBase*/ )
         i = nMinGlyphPos;
         while( (mpOutGlyphs[i] == cDroppedGlyph) && (i < nEndGlyphPos) )
         {
-            //rVI.mnXOffset += pGlyphWidths[ i ];
             rVI.mnMinGlyphPos = ++i;
         }
 
@@ -2723,7 +2721,6 @@ void UniscribeLayout::Justify( long nNewWidth )
 
     // justify stretched script items
     long nXOffset = 0;
-    SCRIPT_CACHE& rScriptCache = GetScriptCache();
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         VisualItem& rVisualItem = mpVisualItems[ nItem ];
