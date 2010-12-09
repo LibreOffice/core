@@ -46,7 +46,6 @@ $(eval $(call gb_Library_set_include,tl,\
 
 $(eval $(call gb_Library_set_defs,tl,\
     $$(DEFS) \
-    -DSHARED_LIB \
     -DTOOLS_DLLIMPLEMENTATION \
     -DVCL \
 ))
