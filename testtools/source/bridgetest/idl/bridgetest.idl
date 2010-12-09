@@ -103,7 +103,7 @@ struct BigStruct
 /**
  * all floats, ia64 handles them specially
  */
-struct AllFloats
+struct FourFloats
 {
     float                      a;
     float                      b;
@@ -264,7 +264,7 @@ interface XBridgeTestBase : com::sun::star::uno::XInterface
     /**
      * register return test 4
      */
-    AllFloats echoAllFloats( [in] AllFloats aStruct );
+    FourFloats echoFourFloats( [in] FourFloats aStruct );
 
     /**
      * register return test 4 (i107182)
