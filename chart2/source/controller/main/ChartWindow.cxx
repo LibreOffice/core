@@ -59,7 +59,7 @@ ChartWindow::ChartWindow( WindowController* pWindowController, Window* pParent, 
         , m_pWindowController( pWindowController )
         , m_bInPaint(false)
 {
-    this->SetSmartHelpId( SmartId( HID_SCH_WIN_DOCUMENT ) );
+    this->SetHelpId( HID_SCH_WIN_DOCUMENT );
     this->SetMapMode( MapMode(MAP_100TH_MM) );
     adjustHighContrastMode();
     // chart does not depend on exact pixel painting => enable antialiased drawing

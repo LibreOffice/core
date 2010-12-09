@@ -1288,6 +1288,8 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
         rBookmarks.clear();
     }
 
+    if ( pDrawView )
+        pDrawView->HideSdrPage();
     delete pDrawView;
 }
 

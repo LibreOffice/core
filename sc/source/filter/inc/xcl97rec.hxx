@@ -478,11 +478,11 @@ public:
 
 // ============================================================================
 
-class XclExpFilePass : public XclExpRecord
+class XclExpFileEncryption : public XclExpRecord
 {
 public:
-    explicit XclExpFilePass( const XclExpRoot& rRoot );
-    virtual ~XclExpFilePass();
+    explicit XclExpFileEncryption( const XclExpRoot& rRoot );
+    virtual ~XclExpFileEncryption();
 
 private:
     virtual void WriteBody( XclExpStream& rStrm );

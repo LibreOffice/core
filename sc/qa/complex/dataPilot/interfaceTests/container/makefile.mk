@@ -25,10 +25,10 @@
 #
 #*************************************************************************
 
-PRJ = ..$/..$/..$/..$/..
+PRJ = ../../../../..
 TARGET  = DataPilotInterfaceContainer
 PRJNAME = sc
-PACKAGE = complex$/dataPilot$/interfaceTests$/container
+PACKAGE = complex/dataPilot/interfaceTests/container
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -38,7 +38,7 @@ PACKAGE = complex$/dataPilot$/interfaceTests$/container
 
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar java_uno.jar OOoRunner.jar
 JAVAFILES       = _XNamed.java
-JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
+JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)/$(PACKAGE)/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
 

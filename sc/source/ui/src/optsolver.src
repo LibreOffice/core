@@ -30,7 +30,7 @@
 ModelessDialog RID_SCDLG_OPTSOLVER
 {
     OutputSize = TRUE ;
-    HelpId = SID_OPENDLG_OPTSOLVER ;
+    HelpId = CMD_SID_OPENDLG_OPTSOLVER ;
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 230 , 210 ) ;
@@ -46,6 +46,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_OBJECTIVECELL
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_OBJECTIVECELL";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 67 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
@@ -53,6 +54,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_OBJECTIVECELL
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_OBJECTIVECELL";
         Pos = MAP_APPFONT ( 199 , 5 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -67,6 +69,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     RadioButton RB_MAX
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_OPTSOLVER:RB_MAX";
         Pos = MAP_APPFONT ( 67 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Maximum" ;
@@ -74,6 +77,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     RadioButton RB_MIN
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_OPTSOLVER:RB_MIN";
         Pos = MAP_APPFONT ( 67 , 38 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Minimum" ;
@@ -81,6 +85,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     RadioButton RB_VALUE
     {
+        HelpID = "sc:RadioButton:RID_SCDLG_OPTSOLVER:RB_VALUE";
         Pos = MAP_APPFONT ( 67 , 52 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "Value of" ;
@@ -88,6 +93,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_TARGET
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_TARGET";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 128 , 50 ) ;
         Size = MAP_APPFONT ( 69 , 12 ) ;
@@ -95,6 +101,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_TARGET
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_TARGET";
         Pos = MAP_APPFONT ( 199 , 49 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -109,6 +116,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_VARIABLECELLS
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_VARIABLECELLS";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 67 , 66 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
@@ -116,6 +124,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_VARIABLECELLS
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_VARIABLECELLS";
         Pos = MAP_APPFONT ( 199 , 65 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -150,6 +159,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
 
     Edit ED_LEFT1
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_LEFT1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -157,6 +167,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_LEFT1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_LEFT1";
         Pos = MAP_APPFONT ( 67 , 113 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -164,6 +175,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ListBox LB_OP1
     {
+        HelpID = "sc:ListBox:RID_SCDLG_OPTSOLVER:LB_OP1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 114 ) ;
         Size = MAP_APPFONT ( 38 , 56 ) ;
@@ -180,6 +192,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_RIGHT1
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_RIGHT1";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 128 , 114 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -187,6 +200,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_RIGHT1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_RIGHT1";
         Pos = MAP_APPFONT ( 183 , 113 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -194,6 +208,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_DELETE1
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_DELETE1";
         Pos = MAP_APPFONT ( 199 , 113 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -203,6 +218,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
 
     Edit ED_LEFT2
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_LEFT2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -210,6 +226,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_LEFT2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_LEFT2";
         Pos = MAP_APPFONT ( 67 , 128 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -217,6 +234,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ListBox LB_OP2
     {
+        HelpID = "sc:ListBox:RID_SCDLG_OPTSOLVER:LB_OP2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 129 ) ;
         Size = MAP_APPFONT ( 38 , 56 ) ;
@@ -233,6 +251,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_RIGHT2
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_RIGHT2";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 128 , 129 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -240,6 +259,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_RIGHT2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_RIGHT2";
         Pos = MAP_APPFONT ( 183 , 128 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -247,6 +267,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_DELETE2
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_DELETE2";
         Pos = MAP_APPFONT ( 199 , 128 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -256,6 +277,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
 
     Edit ED_LEFT3
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_LEFT3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 144 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -263,6 +285,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_LEFT3
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_LEFT3";
         Pos = MAP_APPFONT ( 67 , 143 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -270,6 +293,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ListBox LB_OP3
     {
+        HelpID = "sc:ListBox:RID_SCDLG_OPTSOLVER:LB_OP3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 144 ) ;
         Size = MAP_APPFONT ( 38 , 56 ) ;
@@ -286,6 +310,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_RIGHT3
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_RIGHT3";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 128 , 144 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -293,6 +318,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_RIGHT3
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_RIGHT3";
         Pos = MAP_APPFONT ( 183 , 143 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -300,6 +326,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_DELETE3
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_DELETE3";
         Pos = MAP_APPFONT ( 199 , 143 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -309,6 +336,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
 
     Edit ED_LEFT4
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_LEFT4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 159 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -316,6 +344,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_LEFT4
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_LEFT4";
         Pos = MAP_APPFONT ( 67 , 158 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -323,6 +352,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ListBox LB_OP4
     {
+        HelpID = "sc:ListBox:RID_SCDLG_OPTSOLVER:LB_OP4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 84 , 159 ) ;
         Size = MAP_APPFONT ( 38 , 56 ) ;
@@ -339,6 +369,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     Edit ED_RIGHT4
     {
+        HelpID = "sc:Edit:RID_SCDLG_OPTSOLVER:ED_RIGHT4";
         Border = TRUE ;
         Pos = MAP_APPFONT ( 128 , 159 ) ;
         Size = MAP_APPFONT ( 53 , 12 ) ;
@@ -346,6 +377,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_RIGHT4
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_RIGHT4";
         Pos = MAP_APPFONT ( 183 , 158 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -353,6 +385,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     ImageButton IB_DELETE4
     {
+        HelpID = "sc:ImageButton:RID_SCDLG_OPTSOLVER:IB_DELETE4";
         Pos = MAP_APPFONT ( 199 , 158 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
@@ -375,6 +408,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
 
     PushButton BTN_OPTIONS
     {
+        HelpID = "sc:PushButton:RID_SCDLG_OPTSOLVER:BTN_OPTIONS";
         Pos = MAP_APPFONT ( 6 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
@@ -395,6 +429,7 @@ ModelessDialog RID_SCDLG_OPTSOLVER
     };
     PushButton BTN_SOLVE
     {
+        HelpID = "sc:PushButton:RID_SCDLG_OPTSOLVER:BTN_SOLVE";
         Pos = MAP_APPFONT ( 174 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;

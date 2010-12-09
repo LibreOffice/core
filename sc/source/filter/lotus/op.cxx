@@ -73,7 +73,7 @@
 #include <string.h>
 #include <math.h>
 #include <ctype.h>
-#if defined( MAC ) || defined( ICC )
+#if defined( ICC )
 #include <stdlib.h>
 #endif
 
