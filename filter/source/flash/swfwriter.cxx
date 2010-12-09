@@ -596,7 +596,7 @@ sal_Bool Writer::streamSound( const char * filename )
         delete[] mp3buffer;
 
         delete[] sample_buff;
-        int err = sf_close(sf);
+        sf_close(sf);
 
         // 8. free the internal data structures.
         lame_close(m_lame_flags);
