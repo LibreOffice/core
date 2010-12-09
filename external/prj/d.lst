@@ -46,8 +46,6 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msvcp90\Microsoft.VC90.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC90.DebugCRT.manifest
 ..\msm90\*.msm %_DEST%\bin%_EXT%
 
-..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
-
 ..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
 
 ..\msi\instmsiw.exe %_DEST%\bin%_EXT%\instmsiw.exe
