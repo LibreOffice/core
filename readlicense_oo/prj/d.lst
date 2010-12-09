@@ -4,17 +4,17 @@ mkdir: %_DEST%\pck%_EXT%
 dos: echo =====================================================================
 dos: echo Delivering LICENSE files
 dos: echo =====================================================================
-..\%__SRC%\misc\license\unx\LICENSE* %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\unx\LICENSE*.odt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\LICENSE*.odt %_DEST%\bin%_EXT%\osl
-..\%__SRC%\misc\license\wnt\license*.txt %_DEST%\bin%_EXT%\osl
+..\%__SRC%\misc\LICENSE     %_DEST%\bin%_EXT%\osl
+..\%__SRC%\misc\license.txt %_DEST%\bin%_EXT%\osl
+..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\osl
+
 ..\%__SRC%\misc\LICENSE.odt %_DEST%\bin%_EXT%\LICENSE.odt
 ..\%__SRC%\misc\CREDITS.odt %_DEST%\bin%_EXT%\CREDITS.odt
 
 # URE:
 mkdir: %_DEST%\bin%_EXT%\ure
-..\%__SRC%\misc\license\unx\LICENSE %_DEST%\bin%_EXT%\ure\LICENSE
-..\%__SRC%\misc\license\wnt\license.txt %_DEST%\bin%_EXT%\ure\license.txt
+..\%__SRC%\misc\LICENSE %_DEST%\bin%_EXT%\ure\LICENSE
+..\%__SRC%\misc\license.txt %_DEST%\bin%_EXT%\ure\license.txt
 
 ..\%__SRC%\misc\THIRDPARTYLICENSEREADME.html %_DEST%\bin%_EXT%\THIRDPARTYLICENSEREADME.html
 
