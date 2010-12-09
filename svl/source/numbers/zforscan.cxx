@@ -1620,7 +1620,6 @@ xub_StrLen ImpSvNumberformatScan::FinalScan( String& rString, String& rComment )
                         if (rtl::OUString::valueOf(sDiv.toInt32()) == sDiv)
                         {
                             /* Found a Divisor */
-                            sal_Int32 nDiv = sDiv.toInt32();
                             while (i < j)
                                 nTypeArray[i++] = NF_SYMBOLTYPE_FRAC_FDIV;
                             i = j - 1;                            // Stop the loop
