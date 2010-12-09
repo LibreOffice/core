@@ -355,7 +355,6 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
     Impl_writeActions( rMtf );
 
     sal_uInt16 nId = 0;
-    sal_uInt16 iDepth = 1;
     {
         CharacterIdVector::iterator aIter( maShapeIds.begin() );
         const CharacterIdVector::iterator aEnd( maShapeIds.end() );
@@ -366,6 +365,7 @@ sal_uInt16 Writer::defineShape( const GDIMetaFile& rMtf, sal_Int16 x, sal_Int16 
         {
             nId = startSprite();
 
+            sal_uInt16 iDepth = 1;
             while( aIter != aEnd )
             {
                 placeShape( *aIter, iDepth++, x, y );
