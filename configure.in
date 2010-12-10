@@ -1289,6 +1289,7 @@ echo "*   Running ${PACKAGE_NAME} build configuration."
 echo "*"
 echo "********************************************************************"
 echo ""
+
 dnl ===================================================================
 dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
@@ -1381,8 +1382,6 @@ if echo "$build_os" | grep cygwin; then
    if test "`echo $CygwinVer | $AWK -F . '{ print $1$2 }'`" -lt "15"; then
       AC_MSG_ERROR([You need at least Cygwin V1.5.x])
    fi
-else
-   CygwinVer="false"
 fi
 
 dnl ===================================================================
@@ -1565,7 +1564,7 @@ if test "$_os" = "WINNT"; then
 
    dnl Set the CL_X64 variable.
    AC_MSG_CHECKING([whether to use the Microsoft C/C++ x64 compiler])
-   if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
+   if test "z$enable_cl_x64" = "z" -o "$enable_cl_x64" = "no"; then
       CL_X64=""
       AC_MSG_RESULT([no])
    else
@@ -1753,7 +1752,7 @@ if test -z "$TARFILE_LOCATION"; then
 fi
 AC_SUBST(TARFILE_LOCATION)
 
-if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
+if test "z$enable_fetch_external" != "zno" \
    && test -z "$with_system_libs" -a "$with_system_jars" != "no"; then
    DO_FETCH_TARBALLS="yes"
 fi
