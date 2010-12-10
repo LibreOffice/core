@@ -1394,6 +1394,7 @@ dnl ===================================================================
 test_cairo=yes
 test_randr=yes
 test_cups=yes
+test_fontconfig=yes
 
 case "$build_os" in
     solaris*)
@@ -1447,12 +1448,14 @@ case "$build_os" in
         test_randr=no
         test_freetype=no
         test_cairo=no
+        test_fontconfig=no
         _os=WINNT
         ;;
     darwin*) # Mac OS X
         test_gtk=yes
         test_randr=no
         test_freetype=no
+        test_fontconfig=no
 	test_cairo=no
         _os=Darwin
       if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
@@ -1686,9 +1689,25 @@ AC_SUBST(ENABLE_CUPS)
 dnl check for fontconfig support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable fontconfig support])
-if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a \( "$enable_fontconfig" = "yes" -o "$enable_fontconfig" = "TRUE" \); then
+if test "z$test_fontconfig" = "zyes" -a "z$enable_fontconfig" != "no"; then
    ENABLE_FONTCONFIG="TRUE"
    AC_MSG_RESULT([yes])
+
+   AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
+                    [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
+    AC_MSG_CHECKING([whether fontconfig is >= 2.2.0])
+    AC_TRY_RUN([
+#include <fontconfig/fontconfig.h>
+
+int main(int argc, char **argv) {
+    if(FC_MAJOR > 2 || (FC_MAJOR == 2 && FC_MINOR >= 2)) return 0;
+    else return 1;
+}   ],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_RESULT([no])
+         AC_MSG_ERROR([fontconfig >= 2.2.0 needed])
+    ])
+
 else
    ENABLE_FONTCONFIG=""
    AC_MSG_RESULT([no])
@@ -5446,24 +5465,6 @@ if test "$_os" != "WINNT" -a "$_os" != "OS2" -a "$_os" != "Darwin"; then
 fi
 AC_SUBST(DISABLE_XAW)
 
-
-
-dnl ===================================================================
-dnl Check if fontconfig/fontconfig.h is available
-dnl ===================================================================
-if test "$ENABLE_FONTCONFIG" = "TRUE" ; then
-    AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
-                    [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
-    AC_MSG_CHECKING([whether fontconfig is >= 2.2.0])
-    AC_TRY_RUN([
-#include <fontconfig/fontconfig.h>
-
-int main(int argc, char **argv) {
-    if(FC_MAJOR > 2 || (FC_MAJOR == 2 && FC_MINOR >= 2)) return 0;
-    else return 1;
-}
-], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([no, fontconfig >= 2.2.0 needed])])
-fi
 
 dnl ===================================================================
 dnl Check for system Xrender
