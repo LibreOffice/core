@@ -37,6 +37,8 @@
 
 /* *** Additional Extensions *** */
 
+#ifdef WITH_EXTENSION_INTEGRATION
+
 /* ** Presentation Minimizer ** */
 
 #ifndef WITHOUT_EXTENSION_MINIMIZER
@@ -93,11 +95,6 @@ End
 #endif
 
 /* ** Lightproof ** */
-
-#ifdef WITH_EXTENSION_LIGHTPROOF
-
-
-#endif
 
 /* ** Numbertext ** */
 
@@ -242,11 +239,7 @@ End
 
 #endif
 
-
 /* ** Sun Template Pack ** */
-
-#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
-
 
 #endif
 

@@ -44,10 +44,13 @@ Module gid_Module_Optional_Extensions
     Styles = ( );
 End
 
+/* *** Additional Extensions *** */
+
+#ifdef WITH_EXTENSION_INTEGRATION
+
 /* ** Presentation Minimizer ** */
 
 #ifndef WITHOUT_EXTENSION_MINIMIZER
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_MINIMIZER
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MINIMIZER);
@@ -59,12 +62,10 @@ Module gid_Module_Optional_Extensions_MINIMIZER
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Report Builder ** */
 
 #ifndef WITHOUT_EXTENSION_REPORTDESIGN
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_REPORTDESIGN
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_REPORTDESIGN);
@@ -76,12 +77,10 @@ Module gid_Module_Optional_Extensions_REPORTDESIGN
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** MediaWiki Publisher** */
 
 #ifndef WITHOUT_EXTENSION_MEDIAWIKI
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_MEDIAWIKI
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MEDIAWIKI);
@@ -93,12 +92,10 @@ Module gid_Module_Optional_Extensions_MEDIAWIKI
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Presenter Screen ** */
 
 #ifndef WITHOUT_EXTENSION_PRESENTER_SCREEN
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_PRESENTER_SCREEN
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PRESENTER_SCREEN);
@@ -110,12 +107,10 @@ Module gid_Module_Optional_Extensions_PRESENTER_SCREEN
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** PDF Import ** */
 
 #ifndef WITHOUT_EXTENSION_PDFIMPORT
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_PDFIMPORT
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_PDFIMPORT);
@@ -127,12 +122,10 @@ Module gid_Module_Optional_Extensions_PDFIMPORT
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Lightproof ** */
 
 #ifdef WITH_EXTENSION_LIGHTPROOF
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_LightProof
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_LIGHTPROOF);
     ParentID = gid_Module_Optional_Extensions;
@@ -141,12 +134,10 @@ Module gid_Module_Optional_Extensions_LightProof
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Numbertext ** */
 
 #ifdef WITH_EXTENSION_NUMBERTEXT
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_NumberText
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NUMBERTEXT);
@@ -158,12 +149,10 @@ Module gid_Module_Optional_Extensions_NumberText
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Hungarian Cross-reference Toolbar ** */
 
 #ifdef WITH_EXTENSION_HUNART
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_HunArt
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_HUNART);
@@ -175,12 +164,10 @@ Module gid_Module_Optional_Extensions_HunArt
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Typography Toolbar ** */
 
 #ifdef WITH_EXTENSION_TYPO
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Typo
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_TYPO);
@@ -192,12 +179,10 @@ Module gid_Module_Optional_Extensions_Typo
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** ConvertTextToNumber ** */
 
 #ifdef WITH_EXTENSION_CT2N
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_CT2N
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_CT2N);
@@ -209,12 +194,10 @@ Module gid_Module_Optional_Extensions_CT2N
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Watch Window ** */
 
 #ifdef WITH_EXTENSION_WATCH_WINDOW
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Watch_Window
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_WATCH_WINDOW);
@@ -226,12 +209,10 @@ Module gid_Module_Optional_Extensions_Watch_Window
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Diagram ** */
 
 #ifdef WITH_EXTENSION_DIAGRAM
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Diagram
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_DIAGRAM);
@@ -243,12 +224,10 @@ Module gid_Module_Optional_Extensions_Diagram
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Validator ** */
 
 #ifdef WITH_EXTENSION_VALIDATOR
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Validator
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_VALIDATOR);
@@ -260,12 +239,10 @@ Module gid_Module_Optional_Extensions_Validator
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Barcode ** */
 
 #ifdef WITH_EXTENSION_BARCODE
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Barcode
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_BARCODE);
@@ -277,12 +254,10 @@ Module gid_Module_Optional_Extensions_Barcode
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Google Docs ** */
 
 #ifdef WITH_EXTENSION_GOOGLE_DOCS
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Google_Docs
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_GOOGLE_DOCS);
@@ -294,12 +269,10 @@ Module gid_Module_Optional_Extensions_Google_Docs
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** NLPSolver ** */
 
 #ifdef WITH_EXTENSION_NLPSOLVER
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_NLPSolver
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_NLPSOLVER);
@@ -311,12 +284,10 @@ Module gid_Module_Optional_Extensions_NLPSolver
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** LanguageTool ** */
 
 #ifdef WITH_EXTENSION_LANGUAGETOOL
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_LanguageTool
  PackageInfo = "packinfo_extensions.txt";
  MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_LANGUAGETOOL);
@@ -328,12 +299,10 @@ Module gid_Module_Optional_Extensions_LanguageTool
  Styles = ( );
 End
 #endif
-#endif
 
 /* ** MySQL Connector ** */
 
 #ifdef WITH_EXTENSION_MYSQLC
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_MySQLConnector
  PackageInfo = "packinfo_extensions.txt";
  MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_MYSQLC);
@@ -345,12 +314,10 @@ Module gid_Module_Optional_Extensions_MySQLConnector
  Styles = ( );
 End
 #endif
-#endif
 
 /* ** oooblogger ** */
 
 #ifdef WITH_EXTENSION_OOOBLOGGER
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_OOoBlogger
     PackageInfo = "packinfo_extensions.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_OOOBLOGGER);
@@ -362,12 +329,10 @@ Module gid_Module_Optional_Extensions_OOoBlogger
     Styles = ( );
 End
 #endif
-#endif
 
 /* ** Sun Template Pack ** */
 
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
-#ifdef WITH_EXTENSION_INTEGRATION
 Module gid_Module_Optional_Extensions_Sun_Template_Pack
     ParentID = gid_Module_Optional_Extensions;
     MOD_NAME_DESC(MODULE_OPTIONAL_EXTENSIONS_SUN_TEMPLATE_PACK);
@@ -376,6 +341,7 @@ Module gid_Module_Optional_Extensions_Sun_Template_Pack
     Styles = ( );
 End
 #endif
+
 #endif
 
 #ifdef WITH_EXTENSION_INTEGRATION

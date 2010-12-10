@@ -37,6 +37,8 @@
 
 /* ** LightProof ** */
 
+#ifdef WITH_EXTENSION_INTEGRATION
+
 #ifdef WITH_EXTENSION_LIGHTPROOF
 
 Module gid_Module_Optional_Extensions_LightProof_Template
@@ -51,5 +53,7 @@ Module gid_Module_Optional_Extensions_LightProof_Template
 End
 
 #include "alllangmodules_extensions_lightproof.inc"
+
+#endif
 
 #endif

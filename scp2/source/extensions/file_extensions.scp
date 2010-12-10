@@ -37,6 +37,8 @@
 
 /* *** Additional Extensions *** */
 
+#ifdef WITH_EXTENSION_INTEGRATION
+
 /* ** Presentation Minimizer ** */
 
 #ifndef WITHOUT_EXTENSION_MINIMIZER
@@ -251,10 +253,10 @@ End
 #ifdef WITH_EXTENSION_LANGUAGETOOL
 
 File gid_File_Oxt_LanguageTool
-	TXT_FILE_BODY;
-	Styles = (PACKED, ARCHIVE);
-	Dir = gid_Brand_Dir_Share_Extensions_LanguageTool;
-	Name = "LanguageTool.oxt";
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_LanguageTool;
+    Name = "LanguageTool.oxt";
 End
 
 #endif
@@ -264,10 +266,10 @@ End
 #ifdef WITH_EXTENSION_MYSQLC
 
 File gid_File_Oxt_MySQLConnector
-	TXT_FILE_BODY;
-	Styles = (PACKED, ARCHIVE);
-	Dir = gid_Brand_Dir_Share_Extensions_MySQLConnector;
-	Name = "mysql-connector-ooo.oxt";
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_MySQLConnector;
+    Name = "mysql-connector-ooo.oxt";
 End
 
 #endif
@@ -324,5 +326,7 @@ File gid_File_Oxt_Script_Provider_For_Python
     Dir = gid_Brand_Dir_Share_Extensions_Script_Provider_For_Python;
     Name = "script-provider-for-python.oxt";
 End
+
+#endif
 
 #endif
