@@ -1494,7 +1494,7 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
         if (pList)
             for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
             {
-                ScRangePair* pPair = pList->at( i );
+                ScRangePair* pPair = (*pList)[i];
                 ScRange aRange = pPair->GetRange(0);
                 ScCellIterator aIter( this, aRange );
                 for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )

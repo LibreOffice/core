@@ -557,7 +557,6 @@ ScRangePair* ScRangePairList::Remove( ScRangePair* Adr)
     return p;
 }
 
-//-----------------------------------------------------------------------------
 bool ScRangePairList::operator==( const ScRangePairList& r ) const
 {
     if ( this == &r )
@@ -572,25 +571,21 @@ bool ScRangePairList::operator==( const ScRangePairList& r ) const
     return true;
 }
 
-//-----------------------------------------------------------------------------
+ScRangePair* ScRangePairList::operator [](size_t idx)
+{
+    return maPairs[idx];
+}
+
 const ScRangePair* ScRangePairList::operator [](size_t idx) const
 {
     return maPairs[idx];
 }
 
-//-----------------------------------------------------------------------------
 size_t ScRangePairList::size() const
 {
     return maPairs.size();
 }
 
-//-----------------------------------------------------------------------------
-ScRangePair* ScRangePairList::at( size_t idx )
-{
-    return maPairs.at( idx );
-}
-
-//-----------------------------------------------------------------------------
 bool ScRangePairList::UpdateReference( UpdateRefMode eUpdateRefMode,
                                     ScDocument* pDoc, const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz )

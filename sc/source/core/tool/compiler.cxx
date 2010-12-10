@@ -3068,7 +3068,7 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                 pRL = pDoc->GetRowNameRanges();
             for ( size_t iPair = 0, nPairs = pRL->size(); iPair < nPairs && !bInList; ++iPair )
             {
-                ScRangePair* pR = pRL->at( iPair );
+                ScRangePair* pR = (*pRL)[iPair];
                 const ScRange& rNameRange = pR->GetRange(0);
                 if ( jThisTab && !(rNameRange.aStart.Tab() <= nThisTab &&
                         nThisTab <= rNameRange.aEnd.Tab()) )
@@ -5265,7 +5265,7 @@ BOOL ScCompiler::HandleSingleRef()
     ScRange aRange;
     for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
     {
-        ScRangePair* pR = pRL->at( i );
+        ScRangePair* pR = (*pRL)[i];
         if ( pR->GetRange(0).In( aLook ) )
         {
             bInList = bValidName = TRUE;
@@ -5312,7 +5312,7 @@ BOOL ScCompiler::HandleSingleRef()
                 }
                 for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined ColNameRange below limits row
-                    ScRangePair* pR = pRL->at( i );
+                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
                     {   // identical column range
@@ -5345,7 +5345,7 @@ BOOL ScCompiler::HandleSingleRef()
                 }
                 for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined RowNameRange to the right limits column
-                    ScRangePair* pR = pRL->at( i );
+                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                     {   // identical row range

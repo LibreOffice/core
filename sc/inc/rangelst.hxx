@@ -120,7 +120,7 @@ public:
     ScRangePair*        Remove(ScRangePair* pAdr);
 
     size_t              size() const;
-    ScRangePair*        at( size_t idx );
+    ScRangePair*        operator[](size_t idx);
     const ScRangePair*  operator[](size_t idx) const;
 
 private:

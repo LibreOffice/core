@@ -1050,7 +1050,7 @@ ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
         ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
         if ( pList && nIndex < pList->size() )
         {
-            ScRangePair* pData = pList->at( nIndex );
+            ScRangePair* pData = (*pList)[nIndex];
             if (pData)
                 return new ScLabelRangeObj( pDocShell, bColumn, pData->GetRange(0) );
         }
@@ -1105,7 +1105,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 
-            ScRangePair* pEntry = xNewList->at( nIndex );
+            ScRangePair* pEntry = (*xNewList)[nIndex];
             if (pEntry)
             {
                 xNewList->Remove( pEntry );
