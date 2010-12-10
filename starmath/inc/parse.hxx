@@ -270,7 +270,7 @@ public:
     const SmErrorDesc * PrevError();
     const SmErrorDesc * GetError(USHORT i = 0xFFFF);
 
-    bool    IsUsedSymbol( const String &rSymbolName ) const { m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
+    bool    IsUsedSymbol( const String &rSymbolName ) const { return m_aUsedSymbols.find( rSymbolName ) != m_aUsedSymbols.end(); }
     std::set< rtl::OUString >   GetUsedSymbols() const      { return m_aUsedSymbols; }
 };
 
