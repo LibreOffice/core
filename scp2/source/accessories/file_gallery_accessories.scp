@@ -37,103 +37,103 @@
 File gid_File_Extra_Gallery_Accessories
     Dir = gid_Dir_Gallery;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigallery.zip";
+    Name = "accessoriesgallery.zip";
 End
 
 File gid_File_Extra_Gallery_Draws_People_Accessories
     Dir = gid_Dir_Gallery_Draws_People;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigallerydrawspeople.zip";
+    Name = "accessoriesgallerydrawspeople.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Plants_Accessories
     Dir = gid_Dir_Gallery_Photos_Plants;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosplants.zip";
+    Name = "accessoriesgalleryphotosplants.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Celebration_Accessories
     Dir = gid_Dir_Gallery_Photos_Celebration;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotoscelebration.zip";
+    Name = "accessoriesgalleryphotoscelebration.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Fauna_Accessories
     Dir = gid_Dir_Gallery_Photos_Fauna;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosfauna.zip";
+    Name = "accessoriesgalleryphotosfauna.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Flowers_Accessories
     Dir = gid_Dir_Gallery_Photos_Flowers;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosflowers.zip";
+    Name = "accessoriesgalleryphotosflowers.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_FoodsandDrinks_Accessories
     Dir = gid_Dir_Gallery_Photos_FoodsandDrinks;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosfoodsanddrinks.zip";
+    Name = "accessoriesgalleryphotosfoodsanddrinks.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Humans_Accessories
     Dir = gid_Dir_Gallery_Photos_Humans;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotoshumans.zip";
+    Name = "accessoriesgalleryphotoshumans.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Landscapes_Accessories
     Dir = gid_Dir_Gallery_Photos_Landscapes;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotoslandscapes.zip";
+    Name = "accessoriesgalleryphotoslandscapes.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Buildings_Accessories
     Dir = gid_Dir_Gallery_Photos_Buildings;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosbuildings.zip";
+    Name = "accessoriesgalleryphotosbuildings.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Objects_Accessories
     Dir = gid_Dir_Gallery_Photos_Objects;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosobjects.zip";
+    Name = "accessoriesgalleryphotosobjects.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Cities_Accessories
     Dir = gid_Dir_Gallery_Photos_Cities;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotoscities.zip";
+    Name = "accessoriesgalleryphotoscities.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Space_Accessories
     Dir = gid_Dir_Gallery_Photos_Space;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosspace.zip";
+    Name = "accessoriesgalleryphotosspace.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Statues_Accessories
     Dir = gid_Dir_Gallery_Photos_Statues;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotosstatues.zip";
+    Name = "accessoriesgalleryphotosstatues.zip";
 End
 
 File gid_File_Extra_Gallery_Photos_Travel_Accessories
     Dir = gid_Dir_Gallery_Photos_Travel;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryphotostravel.zip";
+    Name = "accessoriesgalleryphotostravel.zip";
 End
 
 File gid_File_Extra_Gallery_Elements_Bullets2_Accessories
     Dir = gid_Dir_Gallery_Elements_Bullets2;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigalleryelementsbullets2.zip";
+    Name = "accessoriesgalleryelementsbullets2.zip";
 End
 
 File gid_File_Extra_Gallery_NONFREE_Accessories
     Dir = gid_Dir_Gallery;
     ARCHIVE_TXT_FILE_BODY;
-    Name = "kamigallerynonfree.zip";
+    Name = "accessoriesgallerynonfree.zip";
 End
 
 #endif
