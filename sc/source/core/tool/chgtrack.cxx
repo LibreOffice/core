@@ -2743,24 +2743,6 @@ BOOL ScChangeTrack::IsMatrixFormulaRangeDifferent( const ScBaseCell* pOldCell,
     return nC1 != nC2 || nR1 != nR2;
 }
 
-
-void ScChangeTrack::AppendContent( const ScAddress& rPos,
-        const String& rNewValue, ScBaseCell* pOldCell )
-{
-    String aOldValue;
-    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pDoc, rPos );
-    if ( aOldValue != rNewValue ||
-            IsMatrixFormulaRangeDifferent( pOldCell, NULL ) )
-    {   // nur wirkliche Aenderung tracken
-        ScRange aRange( rPos );
-        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
-        pAct->SetOldValue( pOldCell, pDoc, pDoc );
-        pAct->SetNewValue( rNewValue, pDoc );
-        Append( pAct );
-    }
-}
-
-
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
         const ScBaseCell* pOldCell, ULONG nOldFormat, ScDocument* pRefDoc )
 {

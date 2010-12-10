@@ -1248,11 +1248,6 @@ public:
                                 // nicht anders geht (setzen nur String fuer
                                 // NewValue bzw. Formelerzeugung)
 
-                                // bevor neuer Wert im Dokument gesetzt wird
-            void                AppendContent( const ScAddress& rPos,
-                                    const String& rNewValue,
-                                    ScBaseCell* pOldCell );
-
     SC_DLLPUBLIC        void                AppendInsert( const ScRange& );
 
                                 // pRefDoc may be NULL => no lookup of contents
