@@ -305,28 +305,28 @@ sal_Int32 SchXMLWrapper::Import()
 
     // import meta information
     ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_metaStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_meta_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_metaStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_meta_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import styles
     ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_styleStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_styles_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_styleStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_styles_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import content
     nWarning = ImportStream(
-        ::rtl::OUString::createFromAscii( sXML_contentStreamName ),
-        ::rtl::OUString::createFromAscii( sXML_import_chart_content_service ),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName )),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_content_service )),
         xXMLParser, xServiceFactory, xGraphObjResolver );
 
     // import of "content.xml" didn't work - try old "Content.xml" stream
     if( nWarning != 0 )
     {
         nWarning = ImportStream(
-            ::rtl::OUString::createFromAscii( sXML_oldContentStreamName ),
-            ::rtl::OUString::createFromAscii( sXML_import_chart_old_content_service ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_oldContentStreamName )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_import_chart_old_content_service )),
             xXMLParser, xServiceFactory, xGraphObjResolver );
     }
 
@@ -474,8 +474,8 @@ sal_Bool SchXMLWrapper::Export()
 
         //export to one stream
         bRet = ExportStream(
-            ::rtl::OUString::createFromAscii( sXML_contentStreamName ),
-            ::rtl::OUString::createFromAscii( sXML_export_chart_allinone_service ),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_contentStreamName )),
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( sXML_export_chart_allinone_service )),
             xDataSource, xServiceFactory, aArgs );
 
         // graphics resolver has to be destroyed this way!
