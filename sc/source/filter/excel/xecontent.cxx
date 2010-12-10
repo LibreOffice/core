@@ -592,8 +592,9 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
 void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
         ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
-    for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
+    for ( size_t i = 0, nPairs = xLabelRangesRef->size(); i < nPairs; ++i )
     {
+        ScRangePair* pRangePair = xLabelRangesRef->at( i );
         const ScRange& rScRange = pRangePair->GetRange( 0 );
         if( rScRange.aStart.Tab() == nScTab )
             rScRanges.Append( rScRange );

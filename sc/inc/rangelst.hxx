@@ -47,7 +47,7 @@ public:
     void            Append( const ScRange& rRange )
                     {
                         ScRangePtr pR = new ScRange( rRange );
-                        push_back( pR );
+                        maRanges.push_back( pR );
                     }
 
     USHORT          Parse( const String&, ScDocument* = NULL,
@@ -99,29 +99,35 @@ SV_DECL_IMPL_REF( ScRangeList );
 
 // RangePairList: erster Range (aRange[0]) eigentlicher Range, zweiter
 // Range (aRange[1]) Daten zu diesem Range, z.B. Rows eines ColName
-DECLARE_LIST( ScRangePairListBase, ScRangePair* )
-class ScRangePairList : public ScRangePairListBase, public SvRefBase
+class ScRangePairList : public SvRefBase
 {
-private:
-    using ScRangePairListBase::operator==;
-
 public:
-    virtual         ~ScRangePairList();
+    virtual             ~ScRangePairList();
     ScRangePairList*    Clone() const;
-    void            Append( const ScRangePair& rRangePair )
-                    {
-                        ScRangePair* pR = new ScRangePair( rRangePair );
-                        Insert( pR, LIST_APPEND );
-                    }
-    void            Join( const ScRangePair&, BOOL bIsInList = FALSE );
-    BOOL            UpdateReference( UpdateRefMode, ScDocument*,
+    void                Append( const ScRangePair& rRangePair )
+                        {
+                            ScRangePair* pR = new ScRangePair( rRangePair );
+                            maPairs.push_back( pR );
+                        }
+    void                Join( const ScRangePair&, bool bIsInList = false );
+    bool                UpdateReference( UpdateRefMode, ScDocument*,
                                     const ScRange& rWhere,
                                     SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
-    void            DeleteOnTab( SCTAB nTab );
-    ScRangePair*    Find( const ScAddress& ) const;
-    ScRangePair*    Find( const ScRange& ) const;
-    ScRangePair**   CreateNameSortedArray( ULONG& nCount, ScDocument* ) const;
-    BOOL            operator==( const ScRangePairList& ) const;
+    void                DeleteOnTab( SCTAB nTab );
+    ScRangePair*        Find( const ScAddress& ) const;
+    ScRangePair*        Find( const ScRange& ) const;
+    ScRangePair**       CreateNameSortedArray( size_t& nCount, ScDocument* ) const;
+    bool                operator==( const ScRangePairList& ) const;
+
+    ScRangePair*        Remove(size_t nPos);
+    ScRangePair*        Remove(ScRangePair* pAdr);
+
+    size_t              size() const;
+    ScRangePair*        at( size_t idx );
+    const ScRangePair*  operator[](size_t idx) const;
+
+private:
+    ::std::vector< ScRangePair* > maPairs;
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 

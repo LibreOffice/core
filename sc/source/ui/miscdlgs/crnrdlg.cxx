@@ -506,7 +506,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aRangeMap.clear();
     aEdAssign.SetText( EMPTY_STRING );
 
-    ULONG nCount, j;
+    size_t nCount, j;
     USHORT nPos; //@008 Hilfsvariable q eingefuegt
 
     SCCOL nCol1;    //@008 04.09.97
@@ -526,7 +526,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString += strDelim;
     nPos = aLbRange.InsertEntry( aString );
     aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
-    if ( (nCount = xColNameRanges->Count()) > 0 )
+    if ( (nCount = xColNameRanges->size()) > 0 )
     {
         ScRangePair** ppSortArray = xColNameRanges->CreateNameSortedArray(
             nCount, pDoc );
@@ -573,7 +573,7 @@ void ScColRowNameRangesDlg::UpdateNames()
     aString += strDelim;
     nPos = aLbRange.InsertEntry( aString );
     aLbRange.SetEntryData( nPos, (void*)nEntryDataDelim );
-    if ( (nCount = xRowNameRanges->Count()) > 0 )
+    if ( (nCount = xRowNameRanges->size()) > 0 )
     {
         ScRangePair** ppSortArray = xRowNameRanges->CreateNameSortedArray(
             nCount, pDoc );

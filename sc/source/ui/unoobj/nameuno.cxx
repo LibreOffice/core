@@ -1042,15 +1042,15 @@ void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 // sheet::XLabelRanges
 
-ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
+ScLabelRangeObj* ScLabelRangesObj::GetObjectByIndex_Impl(size_t nIndex)
 {
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
-        if ( pList && nIndex < pList->Count() )
+        if ( pList && nIndex < pList->size() )
         {
-            ScRangePair* pData = pList->GetObject(nIndex);
+            ScRangePair* pData = pList->at( nIndex );
             if (pData)
                 return new ScLabelRangeObj( pDocShell, bColumn, pData->GetRange(0) );
         }
@@ -1101,11 +1101,11 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangePairList* pOldList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
 
-        if ( pOldList && nIndex >= 0 && nIndex < (sal_Int32)pOldList->Count() )
+        if ( pOldList && nIndex >= 0 && nIndex < (sal_Int32)pOldList->size() )
         {
             ScRangePairListRef xNewList(pOldList->Clone());
 
-            ScRangePair* pEntry = xNewList->GetObject( nIndex );
+            ScRangePair* pEntry = xNewList->at( nIndex );
             if (pEntry)
             {
                 xNewList->Remove( pEntry );
@@ -1148,7 +1148,7 @@ sal_Int32 SAL_CALL ScLabelRangesObj::getCount() throw(uno::RuntimeException)
         ScDocument* pDoc = pDocShell->GetDocument();
         ScRangePairList* pList = bColumn ? pDoc->GetColNameRanges() : pDoc->GetRowNameRanges();
         if (pList)
-            return pList->Count();
+            return pList->size();
     }
     return 0;
 }

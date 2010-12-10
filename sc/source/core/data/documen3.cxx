@@ -1443,16 +1443,14 @@ BOOL ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 {
-    USHORT i;
-
     //
     //  Bereichsnamen
     //
 
     if ( pRangeName )
     {
-        USHORT nRangeCount = pRangeName->GetCount();
-        for ( i=0; i<nRangeCount; i++ )
+        sal_uInt16 nRangeCount = pRangeName->GetCount();
+        for ( sal_uInt16 i = 0; i < nRangeCount; i++ )
         {
             ScRangeData* pData = (*pRangeName)[i];
             if (pData)
@@ -1470,8 +1468,8 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pDBCollection )
     {
-        USHORT nDBCount = pDBCollection->GetCount();
-        for ( i=0; i<nDBCount; i++ )
+        sal_uInt16 nDBCount = pDBCollection->GetCount();
+        for ( sal_uInt16 i=0; i<nDBCount; i++ )
         {
             ScDBData* pData = (*pDBCollection)[i];
             if (pData)
@@ -1492,10 +1490,11 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
     pLists[1] = GetRowNameRanges();
     for (USHORT nListNo=0; nListNo<2; nListNo++)
     {
-        ScRangePairList* pList = pLists[nListNo];
+        ScRangePairList* pList = pLists[ nListNo ];
         if (pList)
-            for ( ScRangePair* pPair = pList->First(); pPair; pPair = pList->Next() )
+            for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
             {
+                ScRangePair* pPair = pList->at( i );
                 ScRange aRange = pPair->GetRange(0);
                 ScCellIterator aIter( this, aRange );
                 for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
