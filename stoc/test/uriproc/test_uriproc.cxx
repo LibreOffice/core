@@ -276,7 +276,7 @@ void Test::testParse() {
                 uriRef->getPathSegment(4));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(5));
+                rtl::OUString(), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].query != 0, uriRef->hasQuery());

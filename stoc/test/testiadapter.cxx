@@ -1029,23 +1029,23 @@ SAL_IMPLEMENT_MAIN()
 
         xImplReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString::createFromAscii("invocadapt.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invocadapt.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString::createFromAscii("stocservices.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("stocservices.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString::createFromAscii("invocation.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("invocation.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString::createFromAscii("reflection.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("reflection.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
         xImplReg->registerImplementation(
             OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
-            OUString::createFromAscii("introspection.uno" SAL_DLLEXTENSION),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("introspection.uno" SAL_DLLEXTENSION)),
             Reference< XSimpleRegistry >() );
 
         if (test_adapter( xMgr ))

@@ -91,7 +91,7 @@ SAL_IMPLEMENT_MAIN()
     {
         // try to get provider from module
         component_getFactoryFunc pCompFactoryFunc = (component_getFactoryFunc)
-            module.getFunctionSymbol( OUString::createFromAscii(COMPONENT_GETFACTORY) );
+            module.getFunctionSymbol( OUString(RTL_CONSTASCII_USTRINGPARAM(COMPONENT_GETFACTORY)) );
 
         if (pCompFactoryFunc)
         {

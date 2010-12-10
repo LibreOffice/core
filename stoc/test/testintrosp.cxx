@@ -1565,8 +1565,8 @@ SAL_IMPLEMENT_MAIN()
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
-        libName = OUString::createFromAscii(
-            "introspection.uno" SAL_DLLEXTENSION);
+        libName = OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "introspection.uno" SAL_DLLEXTENSION));
 //          ORealDynamicLoader::computeLibraryName( OUString(RTL_CONSTASCII_USTRINGPARAM("insp")), libName);
         fprintf(stderr, "3\n" );
         xImplReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),

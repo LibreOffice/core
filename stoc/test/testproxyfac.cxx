@@ -284,8 +284,8 @@ SAL_IMPLEMENT_MAIN()
 
             Reference< reflection::XProxyFactory > xProxyFac(
                 xMgr->createInstance(
-                    OUString::createFromAscii(
-                        "com.sun.star.reflection.ProxyFactory") ),
+                    OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.reflection.ProxyFactory")) ),
                 UNO_QUERY_THROW );
 
             Reference< XAggregation > x(

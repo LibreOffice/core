@@ -150,7 +150,7 @@ Reference < XInterface > SAL_CALL Test_Manager_Impl_CreateInstance(
 //
 OUString Test_Manager_Impl::getImplementationName() throw()
 {
-    return OUString::createFromAscii(IMPLEMENTATION_NAME);
+    return OUString(RTL_CONSTASCII_USTRINGPARAM(IMPLEMENTATION_NAME));
 }
 
 //*************************************************************************
@@ -180,7 +180,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames(void) throw ()
 Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) throw ()
 {
     Sequence< OUString > aSNS( 2 );
-    aSNS.getArray()[0] = OUString::createFromAscii(SERVICE_NAME);
+    aSNS.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM(SERVICE_NAME));
     aSNS.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge"));
     return aSNS;
 }
@@ -330,7 +330,7 @@ extern "C" void SAL_CALL test_ServiceManager()
     {
         Reference< XServiceProvider > xSiSP1(createSingleFactory(
             xSMgr,
-            OUString::createFromAscii("com::sun::star.usr.Test_Manager_Impl1),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.usr.Test_Manager_Impl1)),
             Test_Manager_Impl_CreateInstance,
             Test_Manager_Impl::getSupportedServiceNames_Static() ), UNO_QUERY);
         Reference< XServiceProvider > xSiSP11(createSingleFactory(
