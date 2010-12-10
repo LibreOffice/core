@@ -568,7 +568,7 @@ namespace rtl_Bootstrap
                 // ??  INHERITED_VALUE = ok now, which is set in set_001
                 printUString( suGetOrientValue );
 
-                rtl::OUString suValue = rtl::OUString::createFromAscii( TESTSHL2_INI );
+                rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM( TESTSHL2_INI ));
                 // set to another value
                 Bootstrap::set( suName, suValue );
                 rtl::OUString suGetValue;

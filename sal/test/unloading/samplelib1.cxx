@@ -148,24 +148,24 @@ extern "C" {
             {
                 Reference< XRegistryKey > xNewKey(
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME1 "/UNO/SERVICES" ) ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME1 "/UNO/SERVICES" )) ) );
 
                 xNewKey->createKey( OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME1)));
 
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME2 "/UNO/SERVICES" ) );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME2 "/UNO/SERVICES" )) );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME2)));
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME3 "/UNO/SERVICES" )   );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME3 "/UNO/SERVICES" ))   );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME3)));
 
                 xNewKey=
                     reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                        OUString::createFromAscii( "/" IMPLNAME4 "/UNO/SERVICES" )   );
+                        OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLNAME4 "/UNO/SERVICES" ))   );
 
                 xNewKey->createKey(OUString( RTL_CONSTASCII_USTRINGPARAM( SERVICENAME4)));
                 return sal_True;
