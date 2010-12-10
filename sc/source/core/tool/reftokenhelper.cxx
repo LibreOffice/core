@@ -202,7 +202,7 @@ void ScRefTokenHelper::getTokensFromRangeList(vector<ScSharedTokenRef>& pTokens,
     aTokens.reserve(nCount);
     for (size_t i = 0; i < nCount; ++i)
     {
-        ScRange* pRange = rRanges[ i ];
+        const ScRange* pRange = rRanges[i];
         if (!pRange)
             // failed.
             return;

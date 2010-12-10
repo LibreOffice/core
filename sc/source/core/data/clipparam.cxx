@@ -126,7 +126,7 @@ ScRange ScClipParam::getWholeRange() const
     bool bFirst = true;
     for ( size_t i = 0, n = maRanges.size(); i < n; ++i )
     {
-        ScRange* p = maRanges[ i ];
+        const ScRange* p = maRanges[i];
         if (bFirst)
         {
             aWhole = *p;

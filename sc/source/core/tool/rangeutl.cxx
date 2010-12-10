@@ -725,7 +725,7 @@ void ScRangeStringConverter::GetStringFromRangeList(
     {
         for( size_t nIndex = 0, nCount = pRangeList->size(); nIndex < nCount; nIndex++ )
         {
-            const ScRangePtr pRange = pRangeList->at( nIndex );
+            const ScRange* pRange = pRangeList->at( nIndex );
             if( pRange )
                 GetStringFromRange( sRangeListStr, *pRange, pDocument, eConv, cSeperator, sal_True, nFormatFlags );
         }

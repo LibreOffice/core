@@ -44,11 +44,14 @@
 #include "rechead.hxx"
 #include "compiler.hxx"
 
+using ::std::vector;
+using ::std::advance;
+
 // === ScRangeList ====================================================
 
 ScRangeList::~ScRangeList()
 {
-    std::vector<ScRangePtr>::iterator itr = begin(), itrEnd = end();
+    std::vector<ScRangePtr>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
     for (; itr != itrEnd; ++itr)
         delete *itr;
     clear();
@@ -124,7 +127,7 @@ void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
 
 void ScRangeList::Join( const ScRange& r, bool bIsInList )
 {
-    if ( empty() )
+    if ( maRanges.empty() )
     {
         Append( r );
         return ;
@@ -136,13 +139,14 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     SCROW nRow2 = r.aEnd.Row();
     SCTAB nTab2 = r.aEnd.Tab();
 
-    ScRangePtr pOver = (ScRangePtr) &r;     // fies aber wahr wenn bInList
+    ScRange* pOver = (ScRange*) &r;     // fies aber wahr wenn bInList
     size_t nOldPos = 0;
     if ( bIsInList )
-    {   // merken um ggbf. zu loeschen bzw. wiederherzustellen
-        for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
+    {
+        // Find the current position of this range.
+        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
         {
-            if ( at( i ) == pOver )
+            if ( maRanges[i] == pOver )
             {
                 nOldPos = i;
                 break;
@@ -151,9 +155,9 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
     }
     bool bJoinedInput = false;
 
-    for ( size_t i = 0, nRanges = size(); i < nRanges && pOver; ++i )
+    for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges && pOver; ++i )
     {
-        ScRangePtr p = at( i );
+        ScRange* p = maRanges[i];
         if ( p == pOver )
             continue;           // derselbe, weiter mit dem naechsten
         bool bJoined = false;
@@ -205,7 +209,7 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
         {
             if ( bIsInList )
             {   // innerhalb der Liste Range loeschen
-                erase( begin() + nOldPos );
+                Remove(nOldPos);
                 delete pOver;
                 pOver = NULL;
                 if ( nOldPos )
@@ -284,11 +288,22 @@ bool ScRangeList::UpdateReference(
     return bChanged;
 }
 
-ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
+const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
     for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
     {
-        ScRangePtr pR = at( j );
+        const ScRange* pR = maRanges[j];
+        if ( pR->In( rAdr ) )
+            return pR;
+    }
+    return NULL;
+}
+
+ScRange* ScRangeList::Find( const ScAddress& rAdr )
+{
+    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    {
+        ScRange* pR = maRanges[j];
         if ( pR->In( rAdr ) )
             return pR;
     }
@@ -297,7 +312,6 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 
 
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
-    ScRangeListBase(),
     SvRefBase()
 {
     for ( size_t j = 0, nListCount = rList.size(); j < nListCount; j++ )
@@ -339,7 +353,7 @@ size_t ScRangeList::GetCellCount() const
     size_t nCellCount = 0;
     for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
     {
-        ScRangePtr pR = at( j );
+        const ScRange* pR = maRanges[j];
         nCellCount += size_t(pR->aEnd.Col() - pR->aStart.Col() + 1)
                     * size_t(pR->aEnd.Row() - pR->aStart.Row() + 1)
                     * size_t(pR->aEnd.Tab() - pR->aStart.Tab() + 1);
@@ -347,6 +361,78 @@ size_t ScRangeList::GetCellCount() const
     return nCellCount;
 }
 
+ScRange* ScRangeList::Remove(size_t nPos)
+{
+    if (maRanges.size() <= nPos)
+        // Out-of-bound condition.  Bail out.
+        return NULL;
+
+    vector<ScRange*>::iterator itr = maRanges.begin();
+    advance(itr, nPos);
+    ScRange* p = *itr;
+    maRanges.erase(itr);
+    return p;
+}
+
+bool ScRangeList::empty() const
+{
+    return maRanges.empty();
+}
+
+size_t ScRangeList::size() const
+{
+    return maRanges.size();
+}
+
+ScRange* ScRangeList::at(size_t idx)
+{
+    return maRanges.at(idx);
+}
+
+const ScRange* ScRangeList::at(size_t idx) const
+{
+    return maRanges.at(idx);
+}
+
+ScRange* ScRangeList::operator [](size_t idx)
+{
+    return maRanges[idx];
+}
+
+const ScRange* ScRangeList::operator [](size_t idx) const
+{
+    return maRanges[idx];
+}
+
+ScRange* ScRangeList::front()
+{
+    return maRanges.front();
+}
+
+const ScRange* ScRangeList::front() const
+{
+    return maRanges.front();
+}
+
+ScRange* ScRangeList::back()
+{
+    return maRanges.back();
+}
+
+const ScRange* ScRangeList::back() const
+{
+    return maRanges.back();
+}
+
+void ScRangeList::push_back(ScRange* p)
+{
+    maRanges.push_back(p);
+}
+
+void ScRangeList::clear()
+{
+    maRanges.clear();
+}
 
 // === ScRangePairList ====================================================
 

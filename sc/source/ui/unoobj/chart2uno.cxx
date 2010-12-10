@@ -2638,7 +2638,7 @@ void ScChart2DataSequence::UpdateTokensFromRanges(const ScRangeList& rRanges)
     for ( size_t i = 0, nCount = rRanges.size(); i < nCount; ++i )
     {
         ScSharedTokenRef pToken;
-        ScRangePtr pRange = rRanges[ i ];
+        const ScRange* pRange = rRanges[i];
         DBG_ASSERT(pRange, "range object is NULL.");
 
         ScRefTokenHelper::getTokenFromRange(pToken, *pRange);

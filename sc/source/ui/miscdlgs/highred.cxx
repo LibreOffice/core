@@ -166,7 +166,7 @@ void __EXPORT ScHighlightChgDlg::Init()
     if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         String aRefStr;
-        ScRangePtr pRangeEntry = aChangeViewSet.GetTheRangeList().front();
+        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }

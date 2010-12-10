@@ -890,7 +890,7 @@ BOOL lcl_WholeSheet( const ScRangeList& rRanges )
 {
     if ( rRanges.size() == 1 )
     {
-        ScRange* pRange = rRanges[ 0 ];
+        const ScRange* pRange = rRanges[0];
         if ( pRange && pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
                        pRange->aStart.Row() == 0 && pRange->aEnd.Row() == MAXROW )
             return TRUE;
@@ -2968,7 +2968,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
             //  (nur hier, Listener werden auf den ganzen Bereich angemeldet)
             //! direkt testen, ob es ein ScTableSheetObj ist?
 
-            ScRange* pRange = aRanges[ 0 ];
+            const ScRange* pRange = aRanges[0];
             if ( pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
                  pRange->aStart.Row() == 0 && pRange->aEnd.Row() == MAXROW )
             {
@@ -3039,7 +3039,7 @@ ScRangeListRef ScCellRangesBase::GetLimitedChartRanges_Impl( long nDataColumns, 
 {
     if ( aRanges.size() == 1 )
     {
-        ScRange* pRange = aRanges[ 0 ];
+        const ScRange* pRange = aRanges[0];
         if ( pRange->aStart.Col() == 0 && pRange->aEnd.Col() == MAXCOL &&
              pRange->aStart.Row() == 0 && pRange->aEnd.Row() == MAXROW )
         {
@@ -4791,8 +4791,8 @@ void ScCellRangeObj::RefChanged()
     DBG_ASSERT(rRanges.size() == 1, "was fuer Ranges ?!?!");
     if ( !rRanges.empty() )
     {
-        const ScRangePtr pFirst = rRanges[ 0 ];
-        aRange = *pFirst;
+        const ScRange* pFirst = rRanges[0];
+        aRange = ScRange(*pFirst);
         aRange.Justify();
     }
 }

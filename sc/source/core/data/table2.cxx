@@ -926,7 +926,7 @@ BOOL ScTable::HasScenarioRange( const ScRange& rRange ) const
     {
         for ( size_t j = 0, n = pList->size(); j < n; j++ )
         {
-            ScRange* pR = pList->at( j );
+            const ScRange* pR = pList->at( j );
             if ( pR->Intersects( aTabRange ) )
                 return TRUE;
         }

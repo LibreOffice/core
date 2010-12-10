@@ -397,7 +397,10 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
 
 void ScHTMLLayoutParser::Adjust()
 {
+    for (size_t i = 0, n = xLockedList->size(); i < n; ++i)
+        delete xLockedList->at(i);
     xLockedList->clear();
+
     ScHTMLAdjustStack aStack;
     ScHTMLAdjustStackEntry* pS;
     USHORT nTab = 0;
@@ -2037,7 +2040,7 @@ const SfxItemSet& ScHTMLTable::GetCurrItemSet() const
 ScHTMLSize ScHTMLTable::GetSpan( const ScHTMLPos& rCellPos ) const
 {
     ScHTMLSize aSpan( 1, 1 );
-    ScRange* pRange = 0;
+    const ScRange* pRange = NULL;
     if(  ( (pRange = maVMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
       || ( (pRange = maHMergedCells.Find( rCellPos.MakeAddr() ) ) != 0)
       )

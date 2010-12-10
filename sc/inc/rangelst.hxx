@@ -37,8 +37,7 @@
 class ScDocument;
 
 typedef ScRange* ScRangePtr;
-typedef ::std::vector< ScRangePtr > ScRangeListBase;
-class SC_DLLPUBLIC ScRangeList : public ScRangeListBase, public SvRefBase
+class SC_DLLPUBLIC ScRangeList : public SvRefBase
 {
 public:
                     ScRangeList() {}
@@ -69,12 +68,31 @@ public:
                                      SCsTAB nDz
                                    );
 
-    ScRange*        Find( const ScAddress& ) const;
+    const ScRange*  Find( const ScAddress& ) const;
+    ScRange*        Find( const ScAddress& );
     bool            operator==( const ScRangeList& ) const;
     bool            operator!=( const ScRangeList& r ) const;
     bool            Intersects( const ScRange& ) const;
     bool            In( const ScRange& ) const;
     size_t          GetCellCount() const;
+
+    ScRange*        Remove(size_t nPos);
+
+    bool            empty() const;
+    size_t          size() const;
+    ScRange*        at(size_t idx);
+    const ScRange*  at(size_t idx) const;
+    ScRange*        operator[](size_t idx);
+    const ScRange*  operator[](size_t idx) const;
+    ScRange*        front();
+    const ScRange*  front() const;
+    ScRange*        back();
+    const ScRange*  back() const;
+    void            push_back(ScRange* p);
+    void            clear();
+
+private:
+    ::std::vector<ScRange*> maRanges;
 };
 SV_DECL_IMPL_REF( ScRangeList );
 

@@ -300,7 +300,7 @@ void __EXPORT ScAcceptChgDlg::Init()
 
     if( !aChangeViewSet.GetTheRangeList().empty() )
     {
-        ScRangePtr pRangeEntry = aChangeViewSet.GetTheRangeList().front();
+        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         String aRefStr;
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         pTPFilter->SetRange(aRefStr);
