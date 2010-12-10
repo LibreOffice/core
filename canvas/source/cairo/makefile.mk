@@ -98,8 +98,8 @@ CFLAGSCXX+=$(OBJCXXFLAGS)
 
 # Xlib
 SLOFILES+= $(SLO)$/cairo_xlib_cairo.obj
-SHL1STDLIBS+= -lfontconfig -lX11 -lXrender $(FREETYPE_LIBS)
-CFLAGS+=$(FREETYPE_CFLAGS)
+SHL1STDLIBS+= $(FONTCONFIG_LIBS) -lX11 -lXrender $(FREETYPE_LIBS)
+CFLAGS+= $(FREETYPE_CFLAGS)
 
 .ENDIF   # "$(GUIBASE)"=="aqua"
 

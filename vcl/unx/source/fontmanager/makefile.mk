@@ -42,8 +42,8 @@ INCDEPN+= -I..$/fontsubset
 CDEFS += -DENABLE_FONTCONFIG
 .ENDIF
 
-CFLAGS+=$(FREETYPE_CFLAGS)
-CFLAGS+=$(FONTCONFIG_CFLAGS)
+CFLAGS+= $(FREETYPE_CFLAGS)
+CFLAGS+= $(FONTCONFIG_CFLAGS)
 # --- Files --------------------------------------------------------
 
 .IF "$(GUIBASE)"=="aqua"
