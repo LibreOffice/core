@@ -77,6 +77,7 @@ public:
     size_t          GetCellCount() const;
 
     ScRange*        Remove(size_t nPos);
+    void            RemoveAll();
 
     bool            empty() const;
     size_t          size() const;
@@ -89,7 +90,6 @@ public:
     ScRange*        back();
     const ScRange*  back() const;
     void            push_back(ScRange* p);
-    void            clear();
 
 private:
     ::std::vector<ScRange*> maRanges;

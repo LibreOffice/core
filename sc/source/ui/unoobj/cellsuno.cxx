@@ -1643,7 +1643,7 @@ void ScCellRangesBase::InitInsertRange(ScDocShell* pDocSh, const ScRange& rR)
 
         ScRange aCellRange(rR);
         aCellRange.Justify();
-        aRanges.clear();
+        aRanges.RemoveAll();
         aRanges.Append( aCellRange );
 
         pDocShell->GetDocument()->AddUnoObject(*this);
@@ -1666,7 +1666,7 @@ void ScCellRangesBase::SetNewRange(const ScRange& rNew)
     ScRange aCellRange(rNew);
     aCellRange.Justify();
 
-    aRanges.clear();
+    aRanges.RemoveAll();
     aRanges.Append( aCellRange );
     RefChanged();
 }
@@ -4563,7 +4563,7 @@ void SAL_CALL ScCellRangesObj::removeByName( const rtl::OUString& aName )
             for (USHORT n=0; n<nCount && !bValid; n++)
                 if (aNamedEntries[n]->GetName() == aNameStr)
                 {
-                    aDiff.clear();
+                    aDiff.RemoveAll();
                     aDiff.Append( aNamedEntries[n]->GetRange() );
                     bValid = TRUE;
                 }

@@ -680,7 +680,7 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
         maOldSelection = pNewCellRanges->GetRangeList();
         return bChanged;
     }
-    maOldSelection.clear();
+    maOldSelection.RemoveAll();
     return true;
 }
 

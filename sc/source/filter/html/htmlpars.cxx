@@ -397,9 +397,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
 
 void ScHTMLLayoutParser::Adjust()
 {
-    for (size_t i = 0, n = xLockedList->size(); i < n; ++i)
-        delete xLockedList->at(i);
-    xLockedList->clear();
+    xLockedList->RemoveAll();
 
     ScHTMLAdjustStack aStack;
     ScHTMLAdjustStackEntry* pS;

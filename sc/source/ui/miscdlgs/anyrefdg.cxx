@@ -161,7 +161,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 bool ScFormulaReferenceHelper::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
 {
     bool bError = false;
-    rRanges.clear();
+    rRanges.RemoveAll();
 
     ScAddress::Details aDetails(pDoc->GetAddressConvention(), 0, 0);
     ScRangeUtil aRangeUtil;

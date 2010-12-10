@@ -1763,7 +1763,7 @@ void XclImpXFRangeBuffer::Initialize()
 {
     maColumns.clear();
     maHyperlinks.clear();
-    maMergeList.clear();
+    maMergeList.RemoveAll();
 }
 
 void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, XclImpXFInsertMode eMode )

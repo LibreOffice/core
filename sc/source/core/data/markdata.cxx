@@ -369,7 +369,7 @@ void ScMarkData::FillRangeListWithMarks( ScRangeList* pList, BOOL bClear ) const
         return;
 
     if (bClear)
-        pList->clear();
+        pList->RemoveAll();
 
     //!     bei mehreren selektierten Tabellen mehrere Ranges eintragen !!!
 
@@ -406,7 +406,7 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
         return;
 
     ScRangeList aOldList(*pList);
-    pList->clear();                 //! oder die vorhandenen unten weglassen
+    pList->RemoveAll();                 //! oder die vorhandenen unten weglassen
 
     for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         if (bTabMarked[nTab])

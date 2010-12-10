@@ -1679,7 +1679,7 @@ void ScDocument::CopyTabToClip(SCCOL nCol1, SCROW nRow1,
 
         ScClipParam& rClipParam = pClipDoc->GetClipParam();
         pClipDoc->aDocName = aDocName;
-        rClipParam.maRanges.clear();
+        rClipParam.maRanges.RemoveAll();
         rClipParam.maRanges.Append(ScRange(nCol1, nRow1, 0, nCol2, nRow2, 0));
         pClipDoc->ResetClip( this, nTab );
 
@@ -2467,7 +2467,7 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
     if (bIsClip)
     {
         ScClipParam& rClipParam = GetClipParam();
-        rClipParam.maRanges.clear();
+        rClipParam.maRanges.RemoveAll();
         rClipParam.maRanges.Append(rArea);
         rClipParam.mbCutMode = bCut;
     }

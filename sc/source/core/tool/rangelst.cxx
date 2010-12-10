@@ -47,15 +47,13 @@
 using ::std::vector;
 using ::std::advance;
 using ::std::find_if;
+using ::std::for_each;
 
 // === ScRangeList ====================================================
 
 ScRangeList::~ScRangeList()
 {
-    std::vector<ScRangePtr>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
-    for (; itr != itrEnd; ++itr)
-        delete *itr;
-    clear();
+    RemoveAll();
 }
 
 USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
@@ -331,7 +329,7 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
 
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
-    clear();
+    RemoveAll();
     for ( size_t j = 0, nListCount = rList.maRanges.size(); j < nListCount; j++ )
         Append( *rList[ j ] );
     return *this;
@@ -382,6 +380,24 @@ ScRange* ScRangeList::Remove(size_t nPos)
     ScRange* p = *itr;
     maRanges.erase(itr);
     return p;
+}
+
+namespace {
+
+struct DeleteObject : public ::std::unary_function<void, ScRange*>
+{
+    void operator() (ScRange* p)
+    {
+        delete p;
+    }
+};
+
+}
+
+void ScRangeList::RemoveAll()
+{
+    for_each(maRanges.begin(), maRanges.end(), DeleteObject());
+    maRanges.clear();
 }
 
 bool ScRangeList::empty() const
@@ -437,11 +453,6 @@ const ScRange* ScRangeList::back() const
 void ScRangeList::push_back(ScRange* p)
 {
     maRanges.push_back(p);
-}
-
-void ScRangeList::clear()
-{
-    maRanges.clear();
 }
 
 // === ScRangePairList ====================================================

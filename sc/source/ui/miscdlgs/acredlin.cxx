@@ -1023,7 +1023,7 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
     if(pRef!=NULL)
     {
         ClearView();
-        aRangeList.clear();
+        aRangeList.RemoveAll();
         aRangeList.Parse(pTPFilter->GetRange(),pDoc);
         UpdateView();
     }
