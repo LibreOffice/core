@@ -48,6 +48,7 @@ using ::std::vector;
 using ::std::advance;
 using ::std::find_if;
 using ::std::for_each;
+using ::formula::FormulaGrammar;
 
 namespace {
 
@@ -121,6 +122,44 @@ private:
     size_t mnCellCount;
 };
 
+class FormatString : public ::std::unary_function<void, const ScRange*>
+{
+public:
+    FormatString(String& rStr, USHORT nFlags, ScDocument* pDoc, FormulaGrammar::AddressConvention eConv, sal_Unicode cDelim) :
+        mrStr(rStr),
+        mnFlags(nFlags),
+        mpDoc(pDoc),
+        meConv(eConv),
+        mcDelim(cDelim),
+        mbFirst(true) {}
+
+    FormatString(const FormatString& r) :
+        mrStr(r.mrStr),
+        mnFlags(r.mnFlags),
+        mpDoc(r.mpDoc),
+        meConv(r.meConv),
+        mcDelim(r.mcDelim),
+        mbFirst(r.mbFirst) {}
+
+    void operator() (const ScRange* p)
+    {
+        String aStr;
+        p->Format(aStr, mnFlags, mpDoc, meConv);
+        if (mbFirst)
+            mbFirst = false;
+        else
+            mrStr += mcDelim;
+        mrStr += aStr;
+    }
+private:
+    String& mrStr;
+    USHORT mnFlags;
+    ScDocument* mpDoc;
+    FormulaGrammar::AddressConvention meConv;
+    sal_Unicode mcDelim;
+    bool mbFirst;
+};
+
 }
 
 // === ScRangeList ====================================================
@@ -186,14 +225,8 @@ void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
-    for ( size_t nIdx = 0, nCnt = maRanges.size(); nIdx < nCnt; ++nIdx )
-    {
-        String aStr;
-        at( nIdx )->Format( aStr, nFlags, pDoc, eConv );
-        if ( nIdx )
-            rStr += cDelimiter;
-        rStr += aStr;
-    }
+    FormatString func(rStr, nFlags, pDoc, eConv, cDelimiter);
+    for_each(maRanges.begin(), maRanges.end(), func);
 }
 
 
