@@ -87,14 +87,9 @@ namespace impl
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
 typedef ::comphelper::WeakImplHelper20<
-//       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
-//      ,::com::sun::star::frame::XStorable     //(required interface) base of XStorable2
         ,::com::sun::star::util::XModifiable    //comprehends XModifyBroadcaster (required interface)
-    //  ,::com::sun::star::uno::XWeak           // implemented by WeakImplHelper(optional interface)
-    //  ,::com::sun::star::uno::XInterface      // implemented by WeakImplHelper(optional interface)
-    //  ,::com::sun::star::lang::XTypeProvider  // implemented by WeakImplHelper
         ,::com::sun::star::lang::XServiceInfo
         ,::com::sun::star::chart2::XChartDocument  // derived from XModel
         ,::com::sun::star::chart2::data::XDataReceiver   // public API
@@ -135,8 +130,6 @@ private:
     ::cppu::OInterfaceContainerHelper                                           m_aControllers;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >    m_xCurrentController;
     sal_uInt16                                                                  m_nControllerLockCount;
-
-//  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aPrinterOptions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > m_xContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation >      m_xOldModelAgg;
