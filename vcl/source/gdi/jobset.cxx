@@ -295,10 +295,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
 {
     DBG_ASSERTWARNING( rIStream.GetVersion(), "JobSetup::>> - Solar-Version not set on rOStream" );
 
-    // Zur Zeit haben wir noch kein neues FileFormat
-//    if ( rIStream.GetVersion() < JOBSET_FILEFORMAT2 )
     {
-        USHORT nLen;
+        USHORT nLen(0);
         USHORT nSystem;
         sal_Size nFirstPos = rIStream.Tell();
         rIStream >> nLen;
@@ -377,11 +375,6 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
         }
         delete[] pTempBuf;
     }
-/*
-    else
-    {
-    }
-*/
 
     return rIStream;
 }
