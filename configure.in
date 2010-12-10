@@ -1573,6 +1573,37 @@ if test "$_os" = "WINNT"; then
       AC_MSG_RESULT([yes])
    fi
    AC_SUBST(CL_X64)
+
+   AC_MSG_CHECKING([whether to use DirectX])
+   if test "$enable_directx" = "yes" -o "$enable_directx" = "TRUE" -o "$enable_directx" = ""; then
+      ENABLE_DIRECTX="TRUE"
+      AC_MSG_RESULT([yes])
+   else
+      ENABLE_DIRECTX=""
+      AC_MSG_RESULT([no])
+   fi
+   AC_SUBST(ENABLE_DIRECTX)
+
+   AC_MSG_CHECKING([whether to use ActiveX])
+   if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
+      DISABLE_ACTIVEX=""
+      AC_MSG_RESULT([yes])
+   else
+      DISABLE_ACTIVEX="TRUE"
+      AC_MSG_RESULT([no])
+   fi
+   AC_SUBST(DISABLE_ACTIVEX)
+
+   AC_MSG_CHECKING([whether to use ATL])
+   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
+      DISABLE_ATL=""
+      AC_MSG_RESULT([yes])
+   else
+      DISABLE_ATL="TRUE"
+      AC_MSG_RESULT([no])
+   fi
+   AC_SUBST(DISABLE_ATL)
+
 fi
 
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
@@ -1745,39 +1776,6 @@ else
    AC_MSG_RESULT([yes])
 fi
 AC_SUBST(WITH_BINFILTER)
-
-if test "$_os" = "WINNT"; then
-   AC_MSG_CHECKING([whether to use DirectX])
-   if test "$enable_directx" = "yes" -o "$enable_directx" = "TRUE" -o "$enable_directx" = ""; then
-      ENABLE_DIRECTX="TRUE"
-      AC_MSG_RESULT([yes])
-   else
-      ENABLE_DIRECTX=""
-      AC_MSG_RESULT([no])
-   fi
-   AC_SUBST(ENABLE_DIRECTX)
-
-   AC_MSG_CHECKING([whether to use ActiveX])
-   if test "$enable_activex" = "yes" -o "$enable_activex" = "TRUE" -o "$enable_activex" = ""; then
-      DISABLE_ACTIVEX=""
-      AC_MSG_RESULT([yes])
-   else
-      DISABLE_ACTIVEX="TRUE"
-      AC_MSG_RESULT([no])
-   fi
-   AC_SUBST(DISABLE_ACTIVEX)
-
-   AC_MSG_CHECKING([whether to use ATL])
-   if test "$enable_atl" = "yes" -o "$enable_atl" = "TRUE" -o "$enable_atl" = ""; then
-      DISABLE_ATL=""
-      AC_MSG_RESULT([yes])
-   else
-      DISABLE_ATL="TRUE"
-      AC_MSG_RESULT([no])
-   fi
-   AC_SUBST(DISABLE_ATL)
-
-fi
 
 dnl ===================================================================
 dnl Disable rpath in shared libraries?
