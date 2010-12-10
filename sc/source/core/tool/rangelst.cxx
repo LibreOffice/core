@@ -101,6 +101,26 @@ struct DeleteObject : public ::std::unary_function<void, T*>
     }
 };
 
+class CountCells : public ::std::unary_function<void, const ScRange*>
+{
+public:
+    CountCells() : mnCellCount(0) {}
+    CountCells(const CountCells& r) : mnCellCount(r.mnCellCount) {}
+
+    void operator() (const ScRange* p)
+    {
+        mnCellCount +=
+              size_t(p->aEnd.Col() - p->aStart.Col() + 1)
+            * size_t(p->aEnd.Row() - p->aStart.Row() + 1)
+            * size_t(p->aEnd.Tab() - p->aStart.Tab() + 1);
+    }
+
+    size_t getCellCount() const { return mnCellCount; }
+
+private:
+    size_t mnCellCount;
+};
+
 }
 
 // === ScRangeList ====================================================
@@ -393,18 +413,8 @@ bool ScRangeList::In( const ScRange& rRange ) const
 
 size_t ScRangeList::GetCellCount() const
 {
-    size_t nCellCount = 0;
-
-    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        const ScRange* pR = *itr;
-        nCellCount += size_t(pR->aEnd.Col() - pR->aStart.Col() + 1)
-                    * size_t(pR->aEnd.Row() - pR->aStart.Row() + 1)
-                    * size_t(pR->aEnd.Tab() - pR->aStart.Tab() + 1);
-    }
-
-    return nCellCount;
+    CountCells func;
+    return for_each(maRanges.begin(), maRanges.end(), func).getCellCount();
 }
 
 ScRange* ScRangeList::Remove(size_t nPos)
