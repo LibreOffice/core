@@ -251,7 +251,8 @@ SHL1STDLIBS += $(UWINAPILIB)      \
                $(WINSPOOLLIB)     \
                $(OLE32LIB)        \
                $(SHELL32LIB)      \
-               $(ADVAPI32LIB)
+               $(ADVAPI32LIB)     \
+               $(VERSIONLIB)
 
 SHL1STDLIBS += $(IMM32LIB)
 
