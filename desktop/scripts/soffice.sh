@@ -60,6 +60,13 @@ if [ -e ooenv ] ; then
     . ./ooenv
 fi
 
+if [ "$VALGRIND" != "" ]; then
+    VALGRINDCHECK="valgrind --tool=$VALGRIND --error-exitcode=101"
+    export VALGRINDCHECK
+    G_SLICE=malloc
+    export G_SLICE
+fi
+
 sd_binary=`basename "$0" | sed 's/libreoffice/soffice/g'`.bin
 
 case "`uname -s`" in
@@ -102,7 +109,7 @@ if [ "$sd_binary" = "soffice.bin" -a -x "$sd_prog/oosplash.bin" ] && [ "$no_oosp
     sd_binary="oosplash.bin"
 
     # try to connect to a running instance early
-    if "$sd_prog/$sd_binary" -qsend-and-report "$@" ; then
+    if $VALGRINDCHECK "$sd_prog/$sd_binary" -qsend-and-report "$@" ; then
         exit 0
     fi
 fi
@@ -165,7 +172,7 @@ if [ -f /etc/adabasrc ]; then
 fi
 
 # execute soffice binary
-"$sd_prog/$sd_binary" "$@" &
+$VALGRINDCHECK "$sd_prog/$sd_binary" "$@" &
 trap 'kill -9 $!' TERM
 wait $!
 sd_ret=$?
@@ -173,9 +180,9 @@ sd_ret=$?
 while [ $sd_ret -eq 79 -o $sd_ret -eq 81 ]
 do
     if [ $sd_ret -eq 79 ]; then
-        "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
+        $VALGRINDCHECK "$sd_prog/$sd_binary" ""$BOOTSTRAPVARS"" &
     elif [ $sd_ret -eq 81 ]; then
-        "$sd_prog/$sd_binary" "$@" &
+        $VALGRINDCHECK "$sd_prog/$sd_binary" "$@" &
     fi
 
     wait $!
