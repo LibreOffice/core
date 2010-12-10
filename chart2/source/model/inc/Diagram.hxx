@@ -31,11 +31,13 @@
 #include "MutexContainer.hxx"
 #include <cppuhelper/implbase8.hxx>
 #include <comphelper/uno3.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/chart2/data/XDataSource.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/X3DDefaultSetter.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -117,8 +119,6 @@ protected:
 //      throw (::com::sun::star::lang::IllegalArgumentException);
 
     // ____ XDiagram ____
-//     virtual ::rtl::OUString SAL_CALL getChartTypeTemplateServiceName()
-//         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getWall()
         throw (::com::sun::star::uno::RuntimeException);
@@ -136,7 +136,10 @@ protected:
     virtual void SAL_CALL setDefaultColorScheme(
         const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XColorScheme >& xColorScheme )
         throw (::com::sun::star::uno::RuntimeException);
-
+    virtual void SAL_CALL setDiagramData(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSource >& xDataSource,
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArguments )
+            throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(

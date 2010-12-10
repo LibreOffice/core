@@ -739,30 +739,9 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
         return;
     uno::Reference< chart2::data::XDataSource > xSource( xDataProvider->createDataSource( aArguments ) );
 
-    // determine a template
-    uno::Reference< lang::XMultiServiceFactory > xFact( xChartDoc->getChartTypeManager(), uno::UNO_QUERY );
-    uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram());
-    DiagramHelper::tTemplateWithServiceName aTemplateAndService =
-        DiagramHelper::getTemplateForDiagram( xDia, xFact );
-    ::rtl::OUString aServiceName( aTemplateAndService.second );
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate = aTemplateAndService.first;
-
-    // (fall-back)
-    if( ! xTemplate.is())
-    {
-        if( aServiceName.getLength() == 0 )
-            aServiceName = C2U("com.sun.star.chart2.template.Column");
-        xTemplate.set( xFact->createInstance( aServiceName ), uno::UNO_QUERY );
-    }
-    OSL_ASSERT( xTemplate.is());
-
-    if( xTemplate.is() && xSource.is())
-    {
-        // argument detection works with internal knowledge of the
-        // ArrayDataProvider
-        OSL_ASSERT( xDia.is());
-        xTemplate->changeDiagramData( xDia, xSource, aArguments );
-    }
+    uno::Reference< chart2::XDiagram > xDia( xChartDoc->getFirstDiagram() );
+    if( xDia.is() )
+        xDia->setDiagramData( xSource, aArguments );
 
     //correct stacking mode
     if( bStacked || bPercent || bDeep )
