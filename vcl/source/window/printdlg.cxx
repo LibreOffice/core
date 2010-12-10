@@ -2139,8 +2139,7 @@ IMPL_LINK( PrintDialog, ClickHdl, Button*, pButton )
         Help* pHelp = Application::GetHelp();
         if( pHelp )
         {
-            // FIXME: find out proper help URL and use here
-            pHelp->Start( rtl::OStringToOUString( GetHelpId(), RTL_TEXTENCODING_UTF8 ), GetParent() );
+            pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:OK" ) ), &maOKButton );
         }
     }
     else if( pButton == &maForwardBtn )
