@@ -330,7 +330,7 @@ bool ScRangeList::UpdateReference(
     SCsTAB nDz
 )
 {
-    bool bChanged = FALSE;
+    bool bChanged = false;
     if ( !maRanges.empty() )
     {
         SCCOL nCol1;
@@ -356,7 +356,7 @@ bool ScRangeList::UpdateReference(
                     theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
                     != UR_NOTHING )
             {
-                bChanged = TRUE;
+                bChanged = true;
                 pR->aStart.Set( theCol1, theRow1, theTab1 );
                 pR->aEnd.Set( theCol2, theRow2, theTab2 );
             }
