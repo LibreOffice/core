@@ -330,36 +330,39 @@ bool ScRangeList::UpdateReference(
     SCsTAB nDz
 )
 {
+    if (maRanges.empty())
+        // No ranges to update.  Bail out.
+        return false;
+
     bool bChanged = false;
-    if ( !maRanges.empty() )
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
+    rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
+
+    vector<ScRange*>::iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    for (; itr != itrEnd; ++itr)
     {
-        SCCOL nCol1;
-        SCROW nRow1;
-        SCTAB nTab1;
-        SCCOL nCol2;
-        SCROW nRow2;
-        SCTAB nTab2;
-        rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
+        ScRange* pR = *itr;
+        SCCOL theCol1;
+        SCROW theRow1;
+        SCTAB theTab1;
+        SCCOL theCol2;
+        SCROW theRow2;
+        SCTAB theTab2;
+        pR->GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
+        if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
+                nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
+                nDx, nDy, nDz,
+                theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
+                != UR_NOTHING )
         {
-            ScRangePtr pR = maRanges[i];
-            SCCOL theCol1;
-            SCROW theRow1;
-            SCTAB theTab1;
-            SCCOL theCol2;
-            SCROW theRow2;
-            SCTAB theTab2;
-            pR->GetVars( theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 );
-            if ( ScRefUpdate::Update( pDoc, eUpdateRefMode,
-                    nCol1, nRow1, nTab1, nCol2, nRow2, nTab2,
-                    nDx, nDy, nDz,
-                    theCol1, theRow1, theTab1, theCol2, theRow2, theTab2 )
-                    != UR_NOTHING )
-            {
-                bChanged = true;
-                pR->aStart.Set( theCol1, theRow1, theTab1 );
-                pR->aEnd.Set( theCol2, theRow2, theTab2 );
-            }
+            bChanged = true;
+            pR->aStart.Set( theCol1, theRow1, theTab1 );
+            pR->aEnd.Set( theCol2, theRow2, theTab2 );
         }
     }
     return bChanged;
