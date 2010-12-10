@@ -63,8 +63,6 @@ BaseContainerControl::BaseContainerControl( const Reference< XMultiServiceFactor
     : BaseControl   ( xFactory  )
     , m_aListeners  ( m_aMutex  )
 {
-    // initialize info list for controls
-    m_pControlInfoList = new IMPL_ControlInfoList ;
 }
 
 BaseContainerControl::~BaseContainerControl()
@@ -180,12 +178,6 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
         // activate new tab order
         impl_activateTabControllers();
 
-/*
-        Reference< XVclContainerPeer > xC;
-        mxPeer->queryInterface( ::getCppuType((const Reference< XVclContainerPeer >*)0), xC );
-        xC->enableDialogControl( sal_True );
-*/
-
     }
 }
 
@@ -232,15 +224,14 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
     Sequence< Reference< XControl > >   seqCtrls    =   getControls();
     Reference< XControl > *             pCtrls      =   seqCtrls.getArray();
     sal_uInt32                          nCtrls      =   seqCtrls.getLength();
-    sal_uInt32                          nMaxCount   =   m_pControlInfoList->Count();
-    sal_uInt32                          nCount      =   0;
+    size_t                              nMaxCount   =   maControlInfoList.size();
+    size_t                              nCount      =   0;
 
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
-        delete m_pControlInfoList->GetObject( 0 );
+        delete maControlInfoList[ 0 ];
     }
-    m_pControlInfoList->Clear();
-
+    maControlInfoList.clear();
 
     for ( nCount = 0; nCount < nCtrls; ++nCount )
     {
@@ -286,7 +277,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
         pNewControl->xControl   = rControl  ;
 
         // and insert in list
-        m_pControlInfoList->Insert ( pNewControl, LIST_APPEND ) ;
+        maControlInfoList.push_back( pNewControl ) ;
 
         // initialize new control
         pNewControl->xControl->setContext       ( (OWeakObject*)this    ) ;
@@ -346,12 +337,12 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
         // Ready for multithreading
         MutexGuard aGuard (m_aMutex) ;
 
-        sal_uInt32 nControls = m_pControlInfoList->Count () ;
+        size_t nControls = maControlInfoList.size();
 
-        for ( sal_uInt32 n=0; n<nControls; n++ )
+        for ( size_t n = 0; n < nControls; n++ )
         {
             // Search for right control
-            IMPL_ControlInfo* pControl = m_pControlInfoList->GetObject (n) ;
+            IMPL_ControlInfo* pControl = maControlInfoList[ n ] ;
             if ( rControl == pControl->xControl )
             {
                 //.is it found ... remove listener from control
@@ -360,7 +351,9 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
                 // ... free memory
                 delete pControl ;
-                m_pControlInfoList->Remove (n) ;
+                ::std::vector<IMPL_ControlInfo*>::iterator itr = maControlInfoList.begin();
+                advance(itr, n);
+                maControlInfoList.erase(itr);
 
                 // Send message to all other listener
                 OInterfaceContainerHelper * pInterfaceContainer = m_aListeners.getContainer( ::getCppuType((const Reference< XContainerListener >*)0) ) ;
@@ -422,13 +415,13 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
 
-    Reference< XControl >  xRetControl  =   Reference< XControl >       () ;
-    sal_uInt32              nControls   =   m_pControlInfoList->Count   () ;
+    Reference< XControl >   xRetControl = Reference< XControl > ();
+    size_t                  nControls   = maControlInfoList.size();
 
     // Search for right control
-    for( sal_uInt32 nCount = 0; nCount < nControls; ++nCount )
+    for( size_t nCount = 0; nCount < nControls; ++nCount )
     {
-        IMPL_ControlInfo* pSearchControl = m_pControlInfoList->GetObject ( nCount ) ;
+        IMPL_ControlInfo* pSearchControl = maControlInfoList[ nCount ];
 
         if ( pSearchControl->sName == rName )
         {
@@ -451,15 +444,15 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() ) ;
 
-    sal_uInt32                          nControls       = m_pControlInfoList->Count ()  ;
+    size_t                              nControls       = maControlInfoList.size();
+    size_t                              nCount          = 0;
     Sequence< Reference< XControl > >   aDescriptor     ( nControls )                   ;
     Reference< XControl > *             pDestination    = aDescriptor.getArray ()       ;
-    sal_uInt32                          nCount          = 0                             ;
 
     // Copy controls to sequence
     for( nCount = 0; nCount < nControls; ++nCount )
     {
-        IMPL_ControlInfo* pCopyControl = m_pControlInfoList->GetObject ( nCount ) ;
+        IMPL_ControlInfo* pCopyControl = maControlInfoList[ nCount ];
         pDestination [ nCount ] = pCopyControl->xControl ;
     }
 
@@ -585,10 +578,9 @@ void BaseContainerControl::impl_paint ( sal_Int32 /*nX*/, sal_Int32 /*nY*/, cons
 /*
     if (rGraphics.is())
     {
-        for ( sal_uInt32 n=m_pControlInfoList->Count(); n; )
+        for ( size_t n = maControlInfoList.size(); n; )
         {
-            ControlInfo* pSearchControl = m_pControlInfoList->GetObject (--n) ;
-
+            ControlInfo* pSearchControl = maControlInfoList[ --n ];
             pSearchControl->xControl->paint ( nX, nY, rGraphics ) ;
         }
     }
@@ -621,8 +613,8 @@ void BaseContainerControl::impl_activateTabControllers ()
 void BaseContainerControl::impl_cleanMemory ()
 {
     // Get count of listitems.
-    sal_uInt32  nMaxCount   =   m_pControlInfoList->Count ()    ;
-    sal_uInt32  nCount      =   0                               ;
+    size_t  nMaxCount   = maControlInfoList.size();
+    size_t  nCount      = 0;
 
     // Delete all items.
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
@@ -631,13 +623,12 @@ void BaseContainerControl::impl_cleanMemory ()
         // We count from 0 to MAX, where "MAX=count of items" BEFORE we delete some elements!
         // If we use "GetObject ( nCount )" ... it can be, that we have an index greater then count of current elements!
 
-        IMPL_ControlInfo* pSearchControl = m_pControlInfoList->GetObject ( 0 ) ;
-        delete pSearchControl ;
+        IMPL_ControlInfo* pSearchControl = maControlInfoList[ nCount ];
+        delete pSearchControl;
     }
 
     // Delete list himself.
-    m_pControlInfoList->Clear () ;
-    delete m_pControlInfoList ;
+    maControlInfoList.clear ();
 }
 
 } // namespace unocontrols
