@@ -85,7 +85,7 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_ComponentTarget_get_clean_t
 endef
 
 define gb_Library__forward_to_Linktarget
-gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2))
+gb_Library_$(1) = $$(call gb_LinkTarget_$(1),$(call gb_Library_get_linktargetname,$$(call gb_Library_get_filename,$$(1))),$$(2),$$(3))
 
 endef
 
