@@ -52,7 +52,11 @@
 #include <toolkit/controls/tksimpleanimation.hxx>
 #include <toolkit/controls/tkthrobber.hxx>
 #include <toolkit/controls/dialogcontrol.hxx>
+#include <toolkit/controls/tabpagemodel.hxx>
+#include <toolkit/controls/tabpagecontainer.hxx>
 #include "toolkit/dllapi.h"
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 namespace toolkit
 {
@@ -195,6 +199,10 @@ IMPL_CREATEINSTANCE( UnoSimpleAnimationControl )
 IMPL_CREATEINSTANCE( UnoSimpleAnimationControlModel )
 IMPL_CREATEINSTANCE( UnoThrobberControl )
 IMPL_CREATEINSTANCE( UnoThrobberControlModel )
+IMPL_CREATEINSTANCE( UnoControlTabPage )
+//IMPL_CREATEINSTANCE( UnoControlTabPageModel )
+//IMPL_CREATEINSTANCE( UnoControlTabPageContainer )
+//IMPL_CREATEINSTANCE( UnoControlTabPageContainerModel )
 
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControl_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL TreeControlModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
@@ -204,6 +212,11 @@ extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridDataModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL DefaultGridColumnModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL GridColumn_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlTabPageContainer_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlTabPageContainerModel_CreateInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
+
+//extern sal_Bool SAL_CALL UnoControlTabPageModel_component_writeInfo(void * serviceManager, void * registryKey);
+extern ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL UnoControlTabPageModel_CreateInstance (const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& );
 
 extern void * SAL_CALL comp_AsyncCallback_component_getFactory( const char * implName, void * serviceManager, void * registryKey );
 
@@ -290,17 +303,19 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, szServiceName2_UnoThrobberControl )
         CHECKANDCREATEFACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
         CHECKANDCREATEFACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
-        CHECKANDCREATEFACTORY( GridControl, szServiceName_GridControl, NULL );
-         CHECKANDCREATEFACTORY( GridControlModel, szServiceName_GridControlModel, NULL );
-        CHECKANDCREATEFACTORY( DefaultGridDataModel, szServiceName_DefaultGridDataModel, NULL );
-        CHECKANDCREATEFACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL );
-        CHECKANDCREATEFACTORY( GridColumn, szServiceName_GridColumn, NULL );
+        CHECKANDCREATEFACTORY( GridControl, szServiceName_GridControl, NULL )
+         CHECKANDCREATEFACTORY( GridControlModel, szServiceName_GridControlModel, NULL )
+        CHECKANDCREATEFACTORY( DefaultGridDataModel, szServiceName_DefaultGridDataModel, NULL )
+        CHECKANDCREATEFACTORY( DefaultGridColumnModel, szServiceName_DefaultGridColumnModel, NULL )
+        CHECKANDCREATEFACTORY( GridColumn, szServiceName_GridColumn, NULL )
+        CHECKANDCREATEFACTORY( UnoControlTabPageModel, szServiceName_UnoControlTabPageModel, NULL )
+        CHECKANDCREATEFACTORY( UnoControlTabPage, szServiceName_UnoControlTabPage, NULL )
+        CHECKANDCREATEFACTORY( UnoControlTabPageContainerModel, szServiceName_UnoControlTabPageContainerModel, NULL )
+        CHECKANDCREATEFACTORY( UnoControlTabPageContainer, szServiceName_UnoControlTabPageContainer, NULL )
 
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
-
-
         if( pRet == 0 )
             pRet = comp_Layout_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
     }
