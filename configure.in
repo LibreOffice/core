@@ -1714,7 +1714,8 @@ else
    AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_FONTCONFIG)
-
+AC_SUBST(FONTCONFIG_CFLAGS)
+AC_SUBST(FONTCONFIG_LIBS)
 
 dnl whether to find & fetch external tarballs?
 dnl ===================================================================
