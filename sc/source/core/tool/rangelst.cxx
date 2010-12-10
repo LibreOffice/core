@@ -55,13 +55,26 @@ class FindRangeByAddress : public ::std::unary_function<bool, ScRange*>
 {
 public:
     FindRangeByAddress(const ScAddress& rAddr) : mrAddr(rAddr) {}
-
+    FindRangeByAddress(const FindRangeByAddress& r) : mrAddr(r.mrAddr) {}
     bool operator() (const ScRange* pRange) const
     {
         return pRange->In(mrAddr);
     }
 private:
     const ScAddress& mrAddr;
+};
+
+class AppendToList : public ::std::unary_function<void, const ScRange*>
+{
+public:
+    AppendToList(vector<ScRange*>& rRanges) : mrRanges(rRanges) {}
+    AppendToList(const AppendToList& r) : mrRanges(r.mrRanges) {}
+    void operator() (const ScRange* p)
+    {
+        mrRanges.push_back(new ScRange(*p));
+    }
+private:
+    vector<ScRange*>& mrRanges;
 };
 
 template<typename T>
@@ -331,40 +344,42 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
     return itr == maRanges.end() ? NULL : *itr;
 }
 
-
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     SvRefBase()
 {
-    for ( size_t j = 0, nListCount = rList.maRanges.size(); j < nListCount; j++ )
-        Append( *rList[ j ] );
+    maRanges.reserve(rList.maRanges.size());
+    for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
 }
-
 
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
     RemoveAll();
-    for ( size_t j = 0, nListCount = rList.maRanges.size(); j < nListCount; j++ )
-        Append( *rList[ j ] );
+    maRanges.reserve(rList.maRanges.size());
+    for_each(rList.maRanges.begin(), rList.maRanges.end(), AppendToList(maRanges));
     return *this;
 }
 
-
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
-        if ( at( j )->Intersects( rRange ) )
+    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const ScRange* p = *itr;
+        if (p->Intersects(rRange))
             return true;
-
+    }
     return false;
 }
 
-
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
-        if ( at( j )->In( rRange ) )
+    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    for (; itr != itrEnd; ++itr)
+    {
+        const ScRange* p = *itr;
+        if (p->In(rRange))
             return true;
-
+    }
     return false;
 }
 
@@ -372,13 +387,16 @@ bool ScRangeList::In( const ScRange& rRange ) const
 size_t ScRangeList::GetCellCount() const
 {
     size_t nCellCount = 0;
-    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
+
+    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
+    for (; itr != itrEnd; ++itr)
     {
-        const ScRange* pR = maRanges[j];
+        const ScRange* pR = *itr;
         nCellCount += size_t(pR->aEnd.Col() - pR->aStart.Col() + 1)
                     * size_t(pR->aEnd.Row() - pR->aStart.Row() + 1)
                     * size_t(pR->aEnd.Tab() - pR->aStart.Tab() + 1);
     }
+
     return nCellCount;
 }
 
