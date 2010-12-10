@@ -209,8 +209,10 @@ namespace DOM
         {
             OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
             xmlChar *xValue = xmlGetProp(m_aNodePtr, (xmlChar*)o1.getStr());
-            if (xValue != NULL) {
+            if (xValue != NULL)
+            {
                 aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
+                xmlFree(xValue);
             }
         }
         return aValue;
@@ -269,7 +271,8 @@ namespace DOM
             OString o2 = OUStringToOString(namespaceURI, RTL_TEXTENCODING_UTF8);
             xmlChar *xNS = (xmlChar*)o2.getStr();
             xmlChar *xValue = (xmlChar*)xmlGetNsProp(m_aNodePtr, xName, xNS);
-            if (xValue != NULL) {
+            if (xValue != NULL)
+            {
                 aValue = OUString((sal_Char*)xValue, strlen((char*)xValue), RTL_TEXTENCODING_UTF8);
                 xmlFree(xValue);
             }
@@ -511,6 +514,7 @@ namespace DOM
             else
             {
                 oldValue = OUString((char*)xOld, strlen((char*)xOld), RTL_TEXTENCODING_UTF8);
+                xmlFree(xOld);
                 xmlSetProp(m_aNodePtr, xName, xValue);
             }
 
@@ -583,6 +587,7 @@ namespace DOM
                 else
                 {
                     oldValue = OUString((char *)xOld, strlen((char *)xOld), RTL_TEXTENCODING_UTF8);
+                    xmlFree(xOld);
                     xmlSetNsProp(m_aNodePtr, pNs, xLName, xValue);
                 }
                 // dispatch DOMAttrModified event
