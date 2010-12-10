@@ -1625,9 +1625,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
 if test -n "$enable_debug" && test "$enable_debug" != "no"; then
    ENABLE_DEBUG="TRUE"
-   if test -z "$enable_symbols"; then
-      enable_symbols="yes"
-   fi
+   enable_symbols="yes"
    AC_MSG_RESULT([yes])
 else
    ENABLE_DEBUG="FALSE"
@@ -1655,22 +1653,14 @@ AC_SUBST(PROEXT)
 
 dnl whether to include symbols into final build.
 dnl ===================================================================
-AC_MSG_CHECKING([whether to include symbols into final build])
-if test -n "$enable_symbols" && test "$enable_symbols" != "no"; then
-    if test "$enable_symbols" = "yes" -o "$enable_symbols" = "TRUE"; then
-        ENABLE_SYMBOLS="TRUE"
-        AC_MSG_RESULT([yes])
+AC_MSG_CHECKING([whether to include symbols])
+if test -n "$enable_symbols" -a "$enable_symbols" != "no"; then
+    if test "$enable_symbols" = "small" -o "$enable_symbols" = "SMALL"; then
+       ENABLE_SYMBOLS="SMALL"
+       AC_MSG_RESULT([yes, small])
     else
-        if test "$enable_symbols" = "SMALL" -o "$enable_symbols" = "small"; then
-            ENABLE_SYMBOLS="SMALL"
-            AC_MSG_RESULT([yes, small ones])
-        else if test "$enable_symbols" != "no" ; then
-                 echo enable symbols is: $enable_symbols
-                 AC_MSG_ERROR([--enable-symbols only accepts yes, TRUE or SMALL as parameter.])
-                    else
-                           ENABLE_SYMBOLS=
-             fi
-        fi
+       ENABLE_SYMBOLS="TRUE"
+       AC_MSG_RESULT([yes])
     fi
 else
    ENABLE_SYMBOLS=
