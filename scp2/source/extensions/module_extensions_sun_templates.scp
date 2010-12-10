@@ -37,6 +37,8 @@
 
 /* ** Sun Template Pack ** */
 
+#ifdef WITH_EXTENSION_INTEGRATION
+
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
 
 Module gid_Module_Optional_Extensions_Sun_T_Pack_Template
@@ -51,5 +53,7 @@ Module gid_Module_Optional_Extensions_Sun_T_Pack_Template
 End
 
 #include "alllangmodules_extensions_templates.inc"
+
+#endif
 
 #endif
