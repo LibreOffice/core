@@ -63,7 +63,6 @@
 #include <com/sun/star/drawing/FillStyle.hpp>
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/chart2/XChartTypeTemplate.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
@@ -78,48 +77,6 @@ using namespace ::SchXMLTools;
 
 namespace
 {
-uno::Reference< chart2::XChartTypeTemplate > lcl_getTemplate( const uno::Reference< chart2::XChartDocument > & xDoc )
-{
-    uno::Reference< chart2::XChartTypeTemplate > xResult;
-    try
-    {
-        if( !xDoc.is())
-            return xResult;
-        uno::Reference< lang::XMultiServiceFactory > xChartTypeManager( xDoc->getChartTypeManager(), uno::UNO_QUERY );
-        if( !xChartTypeManager.is())
-            return xResult;
-        uno::Reference< chart2::XDiagram > xDiagram( xDoc->getFirstDiagram());
-        if( !xDiagram.is())
-            return xResult;
-
-        uno::Sequence< ::rtl::OUString > aServiceNames( xChartTypeManager->getAvailableServiceNames());
-        const sal_Int32 nLength = aServiceNames.getLength();
-
-        for( sal_Int32 i = 0; i < nLength; ++i )
-        {
-            try
-            {
-                uno::Reference< chart2::XChartTypeTemplate > xTempl(
-                    xChartTypeManager->createInstance( aServiceNames[ i ] ), uno::UNO_QUERY_THROW );
-
-                if( xTempl->matchesTemplate( xDiagram, sal_True ))
-                {
-                    xResult.set( xTempl );
-                    break;
-                }
-            }
-            catch( uno::Exception & )
-            {
-                DBG_ERROR( "Exception during determination of chart type template" );
-            }
-        }
-    }
-    catch( uno::Exception & )
-    {
-        DBG_ERROR( "Exception during import lcl_getTemplate" );
-    }
-    return xResult;
-}
 
 void lcl_setRoleAtLabeledSequence(
     const uno::Reference< chart2::data::XLabeledDataSequence > & xLSeq,
@@ -685,10 +642,6 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     if( !xNewDia.is() || !xDataProvider.is() )
         return;
 
-    uno::Reference< chart2::XChartTypeTemplate > xTemplate( lcl_getTemplate( xNewDoc ));
-    if(!xTemplate.is())
-        return;
-
     sal_Bool bFirstCellAsLabel =
         (eDataRowSource==chart::ChartDataRowSource_COLUMNS)? bRowHasLabels : bColHasLabels;
     sal_Bool bHasCateories =
@@ -760,7 +713,7 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
         -1, uno::makeAny( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
 
-    xTemplate->changeDiagramData( xNewDia, xDataSource, aArgs );
+    xNewDia->setDiagramData( xDataSource, aArgs );
 }
 
 void SchXMLChartContext::EndElement()
@@ -810,8 +763,7 @@ void SchXMLChartContext::EndElement()
     // cleanup: remove empty chart type groups
     lcl_removeEmptyChartTypeGroups( xNewDoc );
 
-    // set stack mode before a potential template detection (in case we have a
-    // rectangular range)
+    // set stack mode before a potential chart type detection (in case we have a rectangular range)
     uno::Reference< chart::XDiagram > xDiagram( xDoc->getDiagram() );
     uno::Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
     if( xDiaProp.is())
@@ -890,8 +842,7 @@ void SchXMLChartContext::EndElement()
         {
             //apply data from rectangular range
 
-            // create datasource from data provider with rectangular range
-            // parameters and change the diagram via template mechanism
+            // create datasource from data provider with rectangular range parameters and change the diagram setDiagramData
             try
             {
                 if( bOlderThan2_3 && xDiaProp.is() )//for older charts the hidden cells were removed by calc on the fly
