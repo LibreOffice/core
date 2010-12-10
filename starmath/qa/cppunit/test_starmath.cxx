@@ -407,6 +407,14 @@ void Test::tViewZoom()
         nFinalZoom = rGraphicWindow.GetZoom();
         CPPUNIT_ASSERT_MESSAGE("Should be Clipped to 800%", nFinalZoom == 800);
     }
+
+    {
+        SfxRequest aZoom(SID_ADJUST, SFX_CALLMODE_SYNCHRON, m_pViewShell->GetPool());
+        m_pViewShell->Execute(aZoom);
+        nFinalZoom = rGraphicWindow.GetZoom();
+        CPPUNIT_ASSERT_MESSAGE("Should be the same as optimal", nOptimalZoom == nFinalZoom);
+    }
+
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
