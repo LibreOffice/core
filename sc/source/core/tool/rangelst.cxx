@@ -46,6 +46,7 @@
 
 using ::std::vector;
 using ::std::advance;
+using ::std::find_if;
 
 // === ScRangeList ====================================================
 
@@ -288,26 +289,35 @@ bool ScRangeList::UpdateReference(
     return bChanged;
 }
 
+namespace {
+
+class FindRangeByAddress : public ::std::unary_function<bool, ScRange*>
+{
+public:
+    FindRangeByAddress(const ScAddress& rAddr) : mrAddr(rAddr) {}
+
+    bool operator() (const ScRange* pRange) const
+    {
+        return pRange->In(mrAddr);
+    }
+private:
+    const ScAddress& mrAddr;
+};
+
+}
+
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
-    {
-        const ScRange* pR = maRanges[j];
-        if ( pR->In( rAdr ) )
-            return pR;
-    }
-    return NULL;
+    vector<ScRange*>::const_iterator itr = find_if(
+        maRanges.begin(), maRanges.end(), FindRangeByAddress(rAdr));
+    return itr == maRanges.end() ? NULL : *itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
-    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
-    {
-        ScRange* pR = maRanges[j];
-        if ( pR->In( rAdr ) )
-            return pR;
-    }
-    return NULL;
+    vector<ScRange*>::iterator itr = find_if(
+        maRanges.begin(), maRanges.end(), FindRangeByAddress(rAdr));
+    return itr == maRanges.end() ? NULL : *itr;
 }
 
 
