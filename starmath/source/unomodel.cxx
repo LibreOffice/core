@@ -143,7 +143,7 @@ SmPrintUIOptions::SmPrintUIOptions()
     // create a numeric box for scale dependent on PrintFormat = "Scaling" (matches to SID_PRINTZOOM)
     vcl::PrinterOptionsHelper::UIControlOptions aRangeOpt( aPrintFormatProp, 2, sal_True );
     m_aUIProperties[ 7 ].Value = getRangeControlOpt( rtl::OUString(),
-                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField," ) ),
+                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".HelpID:vcl:PrintDialog:PrintScale:NumericField" ) ),
                                                      rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( PRTUIOPT_PRINT_SCALE ) ),
                                                      pConfig->GetPrintZoomFactor(),    // initial value
                                                      10,     // min value
