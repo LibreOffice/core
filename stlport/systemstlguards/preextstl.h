@@ -50,11 +50,20 @@
 #       endif
 #       include _STLP_NATIVE_HEADER(exception_defines.h)
 #       include _STLP_NATIVE_HEADER(limits)
-#       include _STLP_NATIVE_HEADER(memory)
+#       if !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#           include _STLP_NATIVE_HEADER(memory)
+#       endif
 #       include _STLP_NATIVE_HEADER(exception)
 #       include _STLP_NATIVE_HEADER(iosfwd)
-#       include _STLP_NATIVE_HEADER(algorithm)
-#       include _STLP_NATIVE_HEADER(string)
+#       if !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#           include _STLP_NATIVE_HEADER(algorithm)
+#           include _STLP_NATIVE_HEADER(string)
+#       else
+#           include _STLP_NATIVE_HEADER(vector)
+#           include _STLP_NATIVE_HEADER(string)
+#           include _STLP_NATIVE_HEADER(numeric)
+#           include _STLP_NATIVE_HEADER(algorithm)
+#       endif
 #       include _STLP_NATIVE_HEADER(streambuf)
 #       include _STLP_NATIVE_HEADER(ios)
 #       include _STLP_NATIVE_HEADER(locale)
