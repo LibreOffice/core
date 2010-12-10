@@ -260,7 +260,7 @@
 					<p id="subscribelist4" xml:lang="en-US">General developer list: libreoffice@lists.freedesktop.org (heavy traffic)</p>
 				</li>
 			</ul>
-			<h3 xml:lang="en-US">Joining one or more Projects</h3>
+			<h3 id="joining0" xml:lang="en-US">Joining one or more Projects</h3>
 			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
 		</div>
 
