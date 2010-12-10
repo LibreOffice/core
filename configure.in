@@ -172,8 +172,7 @@ AC_ARG_ENABLE(mathmldtd,
 AC_ARG_ENABLE(evolution2,
     AS_HELP_STRING([--enable-evolution2],
         [Allows the built-in evolution 2 addressbook connectivity build to be
-         enabled.]),
-,)
+         enabled.]))
 
 AC_ARG_ENABLE(cups,
     AS_HELP_STRING([--disable-cups],
@@ -241,19 +240,16 @@ AC_ARG_ENABLE(debug,
         [Include debugging symbols from --enable-symbols plus extra debugging
          code. Extra large build! (enables -g compiler flag and dmake debug=true)
          If you need even more verbose output, build a module with 
-         "build -- debug=true dbglevel=2".]),
-,)
+         "build -- debug=true dbglevel=2".]))
 
 AC_ARG_ENABLE(dbgutil,
     AS_HELP_STRING([--enable-dbgutil],
         [Include additional debugging utilities, such as assertions, object
-         counting, etc. Larger build. Independent from --enable-debug]),
-,)
+         counting, etc. Larger build. Independent from --enable-debug]))
 
 AC_ARG_ENABLE(crashdump,
     AS_HELP_STRING([--enable-crashdump],
-        [Enable the crashdump feature code.]),
-,)
+        [Enable the crashdump feature.]))
 
 AC_ARG_ENABLE(gtk,
     AS_HELP_STRING([--disable-gtk],
@@ -487,64 +483,6 @@ AC_ARG_ENABLE(extra-font,
 	[Add extra font content.]),
 ,)
 
-dnl ---------- Deprecated since 2010-11-05 ----------
-
-AC_ARG_ENABLE(mysql-connector,
-    AS_HELP_STRING([--enable-mysql-connector],
-        [Deprecated: use --enable-ext-mysql-connector instead.]),
-    if test -z "$enable_ext_mysql_connector"; then
-        enable_ext_mysql_connector=$enable_mysql_connector;
-    fi ,
-)
-
-AC_ARG_ENABLE(presenter-extra-ui,
-    AS_HELP_STRING([--enable-presenter-extra-ui],
-        [Deprecated: use --enable-ext-presenter-ui instead.]),
-    if test -z "$enable_ext_presenter_ui"; then
-        enable_ext_presenter_ui=$enable_presenter_extra_ui;
-    fi ,
-)
-
-AC_ARG_ENABLE(minimizer,
-    AS_HELP_STRING([--enable-minimizer],
-        [Deprecated: use --enable-ext-presenter-minimizer instead.]),
-    if test -z "$enable_ext_presenter_minimizer"; then
-        enable_ext_presenter_minimizer=$enable_minimizer;
-    fi ,
-)
-
-AC_ARG_ENABLE(presenter-console,
-    AS_HELP_STRING([--enable-presenter-console],
-        [Deprecated: use --enable-ext-presenter-console instead.]),
-    if test -z "$enable_ext_presenter_console"; then
-        enable_ext_presenter_console=$enable_presenter_console;
-    fi ,
-)
-
-AC_ARG_ENABLE(pdfimport,
-    AS_HELP_STRING([--enable-pdfimport],
-        [Deprecated: use --enable-ext-pdfimport instead.]),
-    if test -z "$enable_ext_pdfimport"; then
-        enable_ext_pdfimport=$enable_pdfimport;
-    fi ,
-)
-
-AC_ARG_ENABLE(wiki-publisher,
-    AS_HELP_STRING([--enable-wiki-publisher],
-        [Deprecated: use --enable-ext-wiki-publisher instead.]),
-    if test -z "$enable_ext_wiki_publisher"; then
-        enable_ext_wiki_publisher=$enable_wiki_publisher;
-    fi ,
-)
-
-AC_ARG_ENABLE(report-builder,
-    AS_HELP_STRING([--enable-report-builder],
-        [Deprecated: use --enable-ext-report-builder instead.]),
-    if test -z "$enable_ext_report_builder"; then
-        enable_ext_report_builder=$enable_report_builder;
-    fi ,
-)
-
 dnl ===================================================================
 dnl Optional Packages (--with/without-)
 dnl ===================================================================
@@ -762,46 +700,38 @@ AC_ARG_WITH(system-python,
 
 AC_ARG_WITH(system-icu,
     AS_HELP_STRING([--with-system-icu],
-        [Use icu already on system.]),
-,)
+        [Use icu already on system.]))
 
 AC_ARG_WITH(system-poppler,
     AS_HELP_STRING([--with-system-poppler],
-        [Use system poppler. (only needed for pdfimport extension)]),
-,)
+        [Use system poppler. (only needed for pdfimport extension)]))
 
 AC_ARG_WITH(system-db,
     AS_HELP_STRING([--with-system-db],
-        [Use berkeley db already on system.]),
-,)
+        [Use berkeley db already on system.]))
 
 AC_ARG_WITH(system-lucene,
     AS_HELP_STRING([--with-system-lucene],
-        [Use lucene already on system.]),
-,)
+        [Use lucene already on system.]))
 
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
-        [Use apache commons libraries already on system.]),
-,)
+        [Use apache commons libraries already on system.]))
 
 AC_ARG_WITH(lucene-core-jar,
     AS_HELP_STRING([--with-lucene-core-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LUCENE_CORE_JAR=$withval ,
-)
+    LUCENE_CORE_JAR=$withval)
 
 AC_ARG_WITH(lucene-analyzers-jar,
     AS_HELP_STRING([--with-lucene-analyzers-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LUCENE_ANALYZERS_JAR=$withval ,
-)
+    LUCENE_ANALYZERS_JAR=$withval ,)
 
 AC_ARG_WITH(system-mysql,
     AS_HELP_STRING([--with-system-mysql],
         [Use MySQL libraries already on system, for building the MySQL Connector/LibO
-         extension. Requires MYSQLCONFIG to point to the mysql_config executable.]),
-,)
+         extension. Requires MYSQLCONFIG to point to the mysql_config executable.]))
 
 AC_ARG_WITH(libmysql-path,
     AS_HELP_STRING([--with-libmysql-path],
@@ -815,238 +745,195 @@ AC_ARG_WITH(libmysql-path,
 
 AC_ARG_WITH(system-mysql-cppconn,
     AS_HELP_STRING([--with-system-mysql-cppconn],
-        [Use MySQL C++ Connector libraries already on system.]),
-,)
+        [Use MySQL C++ Connector libraries already on system.]))
 
 AC_ARG_WITH(system-hsqldb,
     AS_HELP_STRING([--with-system-hsqldb],
-        [Use hsqldb already on system.]),
-,)
+        [Use hsqldb already on system.]))
 
 AC_ARG_WITH(hsqldb-jar,
     AS_HELP_STRING([--with-hsqldb-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    HSQLDB_JAR=$withval ,
-)
+    HSQLDB_JAR=$withval)
 
 AC_ARG_WITH(system-beanshell,
     AS_HELP_STRING([--with-system-beanshell],
-        [Use beanshell already on system.]),
-,)
+        [Use beanshell already on system.]))
 
 AC_ARG_WITH(beanshell-jar,
     AS_HELP_STRING([--with-beanshell-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    BSH_JAR=$withval ,
-)
+    BSH_JAR=$withval)
 
 AC_ARG_WITH(commons-codec-jar,
     AS_HELP_STRING([--with-commons-codec-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    COMMONS_CODEC_JAR=$withval ,
-)
+    COMMONS_CODEC_JAR=$withval)
 
 AC_ARG_WITH(commons-lang-jar,
     AS_HELP_STRING([--with-commons-lang-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    COMMONS_LANG_JAR=$withval ,
-)
+    COMMONS_LANG_JAR=$withval)
 
 AC_ARG_WITH(commons-httpclient-jar,
     AS_HELP_STRING([--with-commons-httpclient-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    COMMONS_HTTPCLIENT_JAR=$withval ,
-)
+    COMMONS_HTTPCLIENT_JAR=$withval)
 
 AC_ARG_WITH(commons-logging-jar,
     AS_HELP_STRING([--with-commons-logging-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    COMMONS_LOGGING_JAR=$withval ,
-)
+    COMMONS_LOGGING_JAR=$withval)
 
 AC_ARG_WITH(servlet-api-jar,
     AS_HELP_STRING([--with-servlet-api-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    SERVLETAPI_JAR=$withval ,
-)
+    SERVLETAPI_JAR=$withval)
 
 AC_ARG_WITH(system-jfreereport,
     AS_HELP_STRING([--with-system-jfreereport],
-        [Use JFreeReport already on system.]),
-,)
+        [Use JFreeReport already on system.]))
 
 AC_ARG_WITH(sac-jar,
     AS_HELP_STRING([--with-sac-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    SAC_JAR=$withval ,
-)
+    SAC_JAR=$withval)
 
 AC_ARG_WITH(libxml-jar,
     AS_HELP_STRING([--with-libxml-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBXML_JAR=$withval ,
-)
+    LIBXML_JAR=$withval)
 
 AC_ARG_WITH(flute-jar,
     AS_HELP_STRING([--with-flute-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    FLUTE_JAR=$withval ,
-)
+    FLUTE_JAR=$withval)
 
 AC_ARG_WITH(jfreereport-jar,
     AS_HELP_STRING([--with-jfreereport-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    JFREEREPORT_JAR=$withval ,
-)
+    JFREEREPORT_JAR=$withval)
 
 AC_ARG_WITH(liblayout-jar,
     AS_HELP_STRING([--with-liblayout-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBLAYOUT_JAR=$withval ,
-)
+    LIBLAYOUT_JAR=$withval)
 
 AC_ARG_WITH(libloader-jar,
     AS_HELP_STRING([--with-libloader-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval ,
-)
+    LIBLOADER_JAR=$withval)
 
 AC_ARG_WITH(libloader-jar,
     AS_HELP_STRING([--with-libloader-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBLOADER_JAR=$withval ,
-)
+    LIBLOADER_JAR=$withval)
 
 AC_ARG_WITH(libformula-jar,
     AS_HELP_STRING([--with-libformula-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBFORMULA_JAR=$withval ,
-)
+    LIBFORMULA_JAR=$withval)
 
 AC_ARG_WITH(librepository-jar,
     AS_HELP_STRING([--with-librepository-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBREPOSITORY_JAR=$withval ,
-)
+    LIBREPOSITORY_JAR=$withval)
 
 AC_ARG_WITH(libfonts-jar,
     AS_HELP_STRING([--with-libfonts-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBFONTS_JAR=$withval ,
-)
+    LIBFONTS_JAR=$withval)
 
 AC_ARG_WITH(libserializer-jar,
     AS_HELP_STRING([--with-libserializer-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBSERIALIZER_JAR=$withval ,
-)
+    LIBSERIALIZER_JAR=$withval)
 
 AC_ARG_WITH(libbase-jar,
     AS_HELP_STRING([--with-libbase-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    LIBBASE_JAR=$withval ,
-)
+    LIBBASE_JAR=$withval)
 
 AC_ARG_WITH(system-saxon,
     AS_HELP_STRING([--with-system-saxon],
-        [Use saxon already on system.]),
-,)
+        [Use saxon already on system.]))
 
 AC_ARG_WITH(saxon-jar,
     AS_HELP_STRING([--with-saxon-jar=JARFILE],
         [Specify path to jarfile manually.]),
-    SAXON_JAR=$withval ,
-)
+    SAXON_JAR=$withval)
 
 AC_ARG_WITH(system-libxslt,
     AS_HELP_STRING([--with-system-libxslt],
-        [Use libxslt already on system.]),
-,)
+        [Use libxslt already on system.]))
 
 AC_ARG_WITH(system-odbc,
     AS_HELP_STRING([--with-system-odbc-headers],
-        [Use the odbc headers already on system.]),
-,)
+        [Use the odbc headers already on system.]))
 
 AC_ARG_WITH(system-sane,
     AS_HELP_STRING([--with-system-sane-header],
-        [Use sane.h already on system.]),
-,)
+        [Use sane.h already on system.]))
 
 AC_ARG_WITH(system-xrender,
     AS_HELP_STRING([--with-system-xrender-headers],
-        [Use XRender headers already on system.]),
-,)
+        [Use XRender headers already on system.]))
 
 AC_ARG_WITH(system-mesa-headers,
     AS_HELP_STRING([--with-system-mesa-headers],
-        [Use Mesa headers already on system.]),
-,)
+        [Use Mesa headers already on system.]))
 
 AC_ARG_WITH(system-curl,
     AS_HELP_STRING([--with-system-curl],
-        [Use curl already on system.]),
-,)
+        [Use curl already on system.]))
 
 AC_ARG_WITH(system-boost,
     AS_HELP_STRING([--with-system-boost],
-        [Use boost already on system.]),
-,)
+        [Use boost already on system.]))
 
 AC_ARG_WITH(system-mdds,
     AS_HELP_STRING([--with-system-mdds],
-        [Use mdds already on system.]),
-,)
+        [Use mdds already on system.]))
 
 AC_ARG_WITH(system-vigra,
     AS_HELP_STRING([--with-system-vigra],
-        [Use vigra already on system.]),
-,)
+        [Use vigra already on system.]))
 
 AC_ARG_WITH(system-neon,
     AS_HELP_STRING([--with-system-neon],
-        [Use neon already on system.]),
-,)
+        [Use neon already on system.]))
 
 AC_ARG_WITH(system-hunspell,
     AS_HELP_STRING([--with-system-hunspell],
-        [Use libhunspell already on system.]),
-,)
+        [Use libhunspell already on system.]))
 
 AC_ARG_WITH(system-mythes,
     AS_HELP_STRING([--with-system-mythes],
-        [Use mythes already on system.]),
-,)
+        [Use mythes already on system.]))
 
 AC_ARG_WITH(system-altlinuxhyph,
     AS_HELP_STRING([--with-system-altlinuxhyph],
-        [Use ALTLinuxhyph already on system.]),
-,)
+        [Use ALTLinuxhyph already on system.]))
 
 AC_ARG_WITH(system-lpsolve,
     AS_HELP_STRING([--with-system-lpsolve],
-        [Use lpsolve already on system.]),
-,)
+        [Use lpsolve already on system.]))
 
 AC_ARG_WITH(system-libtextcat,
     AS_HELP_STRING([--with-system-libtextcat],
-        [Use libtextcat already on system.]),
-,)
+        [Use libtextcat already on system.]))
 
 AC_ARG_WITH(external-libtextcat-data,
     AS_HELP_STRING([--with-external-libtextcat-data],
-        [Use libtextcat data already on system.]),
-,)
+        [Use libtextcat data already on system.]))
 
 AC_ARG_WITH(system-cppunit,
     AS_HELP_STRING([--with-system-cppunit],
-        [Use cppunit already on system.]),
-,)
+        [Use cppunit already on system.]))
 
 AC_ARG_WITH(system-redland,
     AS_HELP_STRING([--with-system-redland],
-        [Use redland library already on system.]),
-,)
+        [Use redland library already on system.]))
 
 AC_ARG_WITH(system-mozilla,
     AS_HELP_STRING([--with-system-mozilla],
@@ -1394,96 +1281,6 @@ AC_ARG_WITH(max-jobs,
          The real number of the jobs is affected by the --with-num-cpus too, it can get up to CPUS*max_jobs.
          Defaults to 1, unless you configure --enable-icecream - then to 10.]),
 ,)
-
-dnl ---------- Deprecated since 2010-11-05 ----------
-
-AC_ARG_WITH(barcode,
-    AS_HELP_STRING([--with-barcode],
-        [Deprecated: use --enable-ext-barcode instead.]),
-    if test -z "$enable_ext_barcode"; then
-        enable_ext_barcode=$with_barcode;
-    fi ,
-)
-
-AC_ARG_WITH(diagram,
-    AS_HELP_STRING([--with-diagram],
-        [Deprecated: use --enable-ext-diagram instead.]),
-    if test -z "$enable_ext_diagram"; then
-        enable_ext_diagram=$with_diagram;
-    fi ,
-)
-
-AC_ARG_WITH(google-docs,
-    AS_HELP_STRING([--with-google-docs],
-        [Deprecated: use --enable-ext-google-docs instead.]),
-    if test -z "$enable_ext_google_docs"; then
-        enable_ext_google_docs=$with_google_docs;
-    fi ,
-)
-
-AC_ARG_WITH(hunart,
-    AS_HELP_STRING([--with-hunart],
-        [Deprecated: use --enable-ext-hunart instead.]),
-    if test -z "$enable_ext_hunart"; then
-        enable_ext_hunart=$with_hunart;
-    fi ,
-)
-
-AC_ARG_WITH(lightproof,
-    AS_HELP_STRING([--with-lightproof],
-        [Deprecated: use --enable-ext-lightproof instead.]),
-    if test -z "$enable_ext_lightproof"; then
-        enable_ext_lightproof=$with_lightproof;
-    fi ,
-)
-
-AC_ARG_WITH(nlpsolver,
-    AS_HELP_STRING([--with-nlpsolver],
-        [Deprecated: use --enable-ext-nlpsolver instead.]),
-    if test -z "$enable_ext_nlpsolver"; then
-        enable_ext_nlpsolver=$with_nlpsolver;
-    fi ,
-)
-
-AC_ARG_WITH(numbertext,
-    AS_HELP_STRING([--with-numbertext],
-        [Deprecated: use --enable-ext-numbertext instead.]),
-    if test -z "$enable_ext_numbertext"; then
-        enable_ext_numbertext=$with_numbertext;
-    fi ,
-)
-
-AC_ARG_WITH(oooblogger,
-    AS_HELP_STRING([--with-oooblogger],
-        [Deprecated: use --enable-ext-oooblogger instead.]),
-    if test -z "$enable_ext_oooblogger"; then
-        enable_ext_oooblogger=$with_oooblogger;
-    fi ,
-)
-
-AC_ARG_WITH(typo,
-    AS_HELP_STRING([--with-typo],
-        [Deprecated: use --enable-ext-typo instead.]),
-    if test -z "$enable_ext_typo"; then
-        enable_ext_typo=$with_typo;
-    fi ,
-)
-
-AC_ARG_WITH(validator,
-    AS_HELP_STRING([--with-validator],
-        [Deprecated: use --enable-ext-validator instead.]),
-    if test -z "$enable_ext_validator"; then
-        enable_ext_validator=$with_validator;
-    fi ,
-)
-
-AC_ARG_WITH(watch-window,
-    AS_HELP_STRING([--with-watch-window],
-        [Deprecated: use --enable-ext-watch-window instead.]),
-    if test -z "$enable_ext_watch_window"; then
-        enable_ext_watch_window=$with_watch_window;
-    fi ,
-)
 
 BUILD_TYPE="LibO"
 
