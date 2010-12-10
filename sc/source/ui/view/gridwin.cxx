@@ -5130,7 +5130,7 @@ BOOL ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
         size_t nRangeCount = aRanges.size();
         for (size_t j=0;  j< nRangeCount; ++j)
         {
-            ScRange aRange = *aRanges.at( j );
+            ScRange aRange = *aRanges[j];
             //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
             //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
             pDoc->ExtendTotalMerge( aRange );
@@ -5253,7 +5253,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
     mpOOSelectionBorder = new ::sdr::overlay::OverlayObjectList;
     for ( size_t i = 0; i < rClipParam.maRanges.size(); ++i )
     {
-        ScRange* p = rClipParam.maRanges.at( i );
+        ScRange* p = rClipParam.maRanges[i];
         if (p->aStart.Tab() != nCurTab)
             continue;
 

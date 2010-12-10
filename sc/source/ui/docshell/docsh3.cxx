@@ -264,7 +264,7 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
                 for ( size_t i = 0, nCount = xRangeList->size(); i < nCount; i++ )
                 {
                     //! nExtFlags ???
-                    ScRange aRange = *xRangeList->at( i );
+                    ScRange aRange = *(*xRangeList)[i];
                     PostPaint( aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
                                 aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab(),
                                 nParts );

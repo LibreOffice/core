@@ -8140,7 +8140,7 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
             table::CellRangeAddress* pAry = aRetRanges.getArray();
             for( size_t nIndex = 0; nIndex < nCount; nIndex++ )
             {
-                const ScRange* pRange = pRangeList->at( nIndex );
+                const ScRange* pRange = (*pRangeList)[nIndex];
                 pAry->StartColumn = pRange->aStart.Col();
                 pAry->StartRow = pRange->aStart.Row();
                 pAry->EndColumn = pRange->aEnd.Col();

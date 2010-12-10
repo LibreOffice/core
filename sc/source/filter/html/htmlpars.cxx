@@ -372,7 +372,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
             bAgain = FALSE;
             for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
             {
-                ScRange* pR = xLockedList->at( i );
+                ScRange* pR = (*xLockedList)[i];
                 if ( pR->Intersects( aRange ) )
                 {
                     pE->nCol = pR->aEnd.Col() + 1;

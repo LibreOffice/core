@@ -899,7 +899,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             size_t nCount = aRanges.size();
                             for (size_t nPos = 0; nPos < nCount && !bEnable; ++nPos)
                             {
-                                ScCellIterator aCellIter( pDoc, *aRanges.at(nPos) );
+                                ScCellIterator aCellIter(pDoc, *aRanges[nPos]);
                                 for( ScBaseCell* pCell = aCellIter.GetFirst(); pCell && !bEnable; pCell = aCellIter.GetNext() )
                                     if ( pCell->HasNote() )
                                         bEnable = TRUE;             // note found

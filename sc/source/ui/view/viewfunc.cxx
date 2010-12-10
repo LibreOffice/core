@@ -946,7 +946,7 @@ BYTE ScViewFunc::GetSelectionScriptType()
         size_t nCount = aRanges.size();
         for ( size_t i=0; i < nCount; i++ )
         {
-            ScRange aRange = *aRanges.at( i );
+            ScRange aRange = *aRanges[i];
             ScCellIterator aIter( pDoc, aRange );
             ScBaseCell* pCell = aIter.GetFirst();
             while ( pCell )

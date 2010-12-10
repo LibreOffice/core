@@ -766,7 +766,7 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
     mpSortedMarkedCells->reserve(mpMarkedRanges->GetCellCount());
     for ( size_t i = 0, ListSize = mpMarkedRanges->size(); i < ListSize; ++i )
     {
-        ScRange* pRange = mpMarkedRanges->at( i );
+        ScRange* pRange = (*mpMarkedRanges)[i];
         if (pRange->aStart.Tab() != pRange->aEnd.Tab())
         {
             if ((maActiveCell.Tab() >= pRange->aStart.Tab()) ||

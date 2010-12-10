@@ -632,7 +632,7 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                                 table::CellRangeAddress* pCellRanges = aCellRanges.getArray();
                                 for ( size_t i = 0; i < nCount; ++i )
                                 {
-                                    ScRange aRange( *rRangeList->at( i ) );
+                                    ScRange aRange( *(*rRangeList)[i] );
                                     table::CellRangeAddress aCellRange;
                                     ScUnoConversion::FillApiRange( aCellRange, aRange );
                                     pCellRanges[ i ] = aCellRange;
@@ -732,7 +732,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges() throw(un
         table::CellRangeAddress* pAry = aSeq.getArray();
         for (size_t i = 0; i < nCount; i++)
         {
-            ScRange aRange( *xRanges->at( i ) );
+            ScRange aRange( *(*xRanges)[i] );
 
             aRangeAddress.Sheet       = aRange.aStart.Tab();
             aRangeAddress.StartColumn = aRange.aStart.Col();

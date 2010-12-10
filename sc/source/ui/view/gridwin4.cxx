@@ -218,10 +218,9 @@ void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData* pViewData, ScSplitP
         BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
         long nLayoutSign = bLayoutRTL ? -1 : 1;
 
-        size_t nRangeCount = xRanges->size();
-        for (size_t j=0; j < nRangeCount; j++)
+        for (size_t j = 0, n = xRanges->size(); j < n; ++j)
         {
-            ScRange aRange = *xRanges->at( j );
+            ScRange aRange = *(*xRanges)[j];
             //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
             //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
             pDoc->ExtendTotalMerge( aRange );

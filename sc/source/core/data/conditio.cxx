@@ -1372,7 +1372,7 @@ void ScConditionalFormat::DoRepaint( const ScRange* pModified )
         }
         for (size_t i = 0, nCount = pAreas->size(); i < nCount; i++ )
         {
-            ScRange aRange = *pAreas->at( i );
+            ScRange aRange = *(*pAreas)[i];
             BOOL bDo = TRUE;
             if ( pModified )
             {

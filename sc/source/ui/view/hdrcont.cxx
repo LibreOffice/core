@@ -893,13 +893,9 @@ void ScHeaderControl::Command( const CommandEvent& rCEvt )
                                          sal::static_int_cast<SCCOL>(nPos), MAXROW, nTab );
 
                 // see if any part of the range is already selected
-                BOOL bSelected = FALSE;
                 ScRangeList aRanges;
                 pViewData->GetMarkData().FillRangeListWithMarks( &aRanges, FALSE );
-                size_t nRangeCount = aRanges.size();
-                for (size_t i=0; i < nRangeCount && !bSelected; ++i)
-                    if ( aRanges.at( i )->Intersects( aNewRange ) )
-                        bSelected = TRUE;
+                bool bSelected = aRanges.Intersects(aNewRange);
 
                 // select the range if no part of it was selected
                 if ( !bSelected )

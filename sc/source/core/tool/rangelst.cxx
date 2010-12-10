@@ -482,16 +482,6 @@ size_t ScRangeList::size() const
     return maRanges.size();
 }
 
-ScRange* ScRangeList::at(size_t idx)
-{
-    return maRanges.at(idx);
-}
-
-const ScRange* ScRangeList::at(size_t idx) const
-{
-    return maRanges.at(idx);
-}
-
 ScRange* ScRangeList::operator [](size_t idx)
 {
     return maRanges[idx];

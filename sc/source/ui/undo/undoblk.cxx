@@ -2229,7 +2229,7 @@ void __EXPORT ScUndoBorder::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoBorder::Redo()
+void ScUndoBorder::Redo()
 {
     BeginRedo();
 
@@ -2237,7 +2237,7 @@ void __EXPORT ScUndoBorder::Redo()
     size_t nCount = pRanges->size();
     for (size_t i = 0; i < nCount; ++i )
     {
-        ScRange aRange = *pRanges->at( i );
+        ScRange aRange = *(*pRanges)[i];
         SCTAB nTab = aRange.aStart.Tab();
 
         ScMarkData aMark;
@@ -2247,7 +2247,7 @@ void __EXPORT ScUndoBorder::Redo()
         pDoc->ApplySelectionFrame( aMark, pOuter, pInner );
     }
     for (size_t i = 0; i < nCount; ++i)
-        pDocShell->PostPaint( *pRanges->at( i ), PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
+        pDocShell->PostPaint( *(*pRanges)[i], PAINT_GRID, SC_PF_LINES | SC_PF_TESTMERGE );
 
     EndRedo();
 }

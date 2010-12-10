@@ -754,7 +754,7 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
     {
         for ( size_t i = 0, nCount = rRangeList->size(); i < nCount; i++ )
         {
-            ScRange aRange( *rRangeList->at( i ) );
+            ScRange aRange( *(*rRangeList)[i] );
             if ( ( aRange.aStart.Col() == 0 && aRange.aEnd.Col() == MAXCOL ) ||
                  ( aRange.aStart.Row() == 0 && aRange.aEnd.Row() == MAXROW ) )
             {
@@ -1909,7 +1909,7 @@ void ScDocument::UpdateRangeNamesInFormulas(
     // then update the formulas, they might need just the updated range names
     for ( size_t nRange = 0, n = rDestRanges.size(); nRange < n; ++nRange )
     {
-        const ScRange* pRange = rDestRanges.at( nRange);
+        const ScRange* pRange = rDestRanges[nRange];
         SCCOL nCol1 = pRange->aStart.Col();
         SCROW nRow1 = pRange->aStart.Row();
         SCCOL nCol2 = pRange->aEnd.Col();
@@ -2242,7 +2242,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             SCROW nClipEndRow = aClipRange.aEnd.Row();
             for ( size_t nRange = 0; nRange < pDestRanges->size(); ++nRange )
             {
-                const ScRange* pRange = pDestRanges->at( nRange);
+                const ScRange* pRange = (*pDestRanges)[nRange];
                 SCCOL nCol1 = pRange->aStart.Col();
                 SCROW nRow1 = pRange->aStart.Row();
                 SCCOL nCol2 = pRange->aEnd.Col();

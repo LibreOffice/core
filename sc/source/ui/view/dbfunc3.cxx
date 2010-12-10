@@ -779,7 +779,7 @@ void ScDBFunc::GetSelectedMemberList( ScStrCollection& rEntries, long& rDimensio
 
     for (size_t nRangePos=0; nRangePos < nRangeCount && bContinue; nRangePos++)
     {
-        ScRange aRange = *xRanges->at(nRangePos);
+        ScRange aRange = *(*xRanges)[nRangePos];
         SCCOL nStartCol = aRange.aStart.Col();
         SCROW nStartRow = aRange.aStart.Row();
         SCCOL nEndCol = aRange.aEnd.Col();

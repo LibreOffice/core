@@ -1218,7 +1218,7 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
 
     for( size_t nRange = 0; (nRange < pRList->size()) && bContLoop; nRange++ )
     {
-        const ScRange* pRange = pRList->at( nRange );
+        const ScRange* pRange = (*pRList)[nRange];
         for( nRow = pRange->aStart.Row(); (nRow <= pRange->aEnd.Row()) && bContLoop; nRow++ )
             for( nCol = pRange->aStart.Col(); (nCol <= pRange->aEnd.Col()) && bContLoop; nCol++ )
             {

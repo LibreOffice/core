@@ -173,7 +173,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     size_t ListSize = aRanges.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        p = aRanges.at( i );
+        p = aRanges[i];
         // Collect only those ranges that are on the same sheet as the current
         // cursor.
         if (p->aStart.Tab() == aCurPos.Tab())
@@ -190,7 +190,7 @@ void ScViewFunc::MarkAndJumpToRanges(const ScRangeList& rRanges)
     ListSize = aRangesToMark.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        p = aRangesToMark.at( i );
+        p = aRangesToMark[i];
         MarkRange(*p, false, true);
     }
 }

@@ -223,7 +223,7 @@ void ScMyStyleRanges::SetStylesToRanges(ScRangeList* pList,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
     for ( size_t i = 0, nCount = pList->size(); i < nCount; ++i)
-        rImport.SetStyleToRange( *pList->at(i), pStyleName, nCellType, pCurrency );
+        rImport.SetStyleToRange( *(*pList)[i], pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(ScRangeListRef xList,
@@ -231,7 +231,7 @@ void ScMyStyleRanges::SetStylesToRanges(ScRangeListRef xList,
     const rtl::OUString* pCurrency, ScXMLImport& rImport)
 {
     for (size_t i = 0, nCount = xList->size(); i < nCount; ++i)
-        rImport.SetStyleToRange( *xList->at(i), pStyleName, nCellType, pCurrency );
+        rImport.SetStyleToRange( *(*xList)[i], pStyleName, nCellType, pCurrency );
 }
 
 void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLImport& rImport)

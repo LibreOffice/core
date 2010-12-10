@@ -382,7 +382,7 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
             SCROW nPrevRowSize = p->aEnd.Row() - p->aStart.Row() + 1;
             for ( size_t i = 1; i < aClipParam.maRanges.size(); ++i )
             {
-                p = aClipParam.maRanges.at( i );
+                p = aClipParam.maRanges[i];
                 if (pDoc->HasSelectedBlockMatrixFragment(
                     p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(), rMark))
                 {
@@ -1079,7 +1079,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         size_t ListSize = aRangeList.size();
         for ( size_t i = 0; i < ListSize; ++i )
         {
-            ScRange* p = aRangeList.at( i );
+            ScRange* p = aRangeList[i];
             nUnfilteredRows += p->aEnd.Row() - p->aStart.Row() + 1;
         }
 #if 0

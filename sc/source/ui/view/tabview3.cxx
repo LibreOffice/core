@@ -2152,7 +2152,7 @@ void ScTabView::DoChartSelection(
             size_t nListSize = aRangeList.size();
             for ( size_t j = 0; j < nListSize; ++j )
             {
-                ScRange* p = aRangeList.at( j );
+                ScRange* p = aRangeList[j];
                 if( rHilightRanges[i].Index == - 1 )
                     AddHighlightRange( *p, aSelColor );
                 else

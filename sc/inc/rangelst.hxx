@@ -80,8 +80,6 @@ public:
 
     bool            empty() const;
     size_t          size() const;
-    ScRange*        at(size_t idx);
-    const ScRange*  at(size_t idx) const;
     ScRange*        operator[](size_t idx);
     const ScRange*  operator[](size_t idx) const;
     ScRange*        front();
