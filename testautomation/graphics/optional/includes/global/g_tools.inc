@@ -459,11 +459,16 @@ endcase 'tiToolsHyphenation2
 '-------------------------------------------------------------------------------
 testcase tToolsMacro
 
+qaerrorlog( "#i116017# - [Automation]: TypeKeys executes wrong commands" )
+    goto endsub
+
+
     Dim i as integer
     Dim j as integer
     Dim Zaehler as integer
     Dim ZaehlerListe as integer
 
+    printlog "New document"
     Call hNewDocument
 
     ToolsMacro
@@ -474,7 +479,9 @@ testcase tToolsMacro
         Zaehler=MakroAus.GetItemCount
         MakroAus.typeKeys "<end>"
         for i = 1 to Zaehler
-            MakroAus.typeKeys "<+><up>"
+            MakroAus.typeKeys "<+>"
+            sleep 1
+            MakroAus.typeKeys "<up>"
         next i
     next j
     Zaehler=MakroAus.GetItemCount

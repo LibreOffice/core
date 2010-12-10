@@ -41,15 +41,15 @@ testcase tiDatei_Fuer_Anordnen_Erstellen
     call hNewDocument
     if gApplication = "DRAW" then
         kontext "DocumentDraw"
-        DocumentDraw.UseMenu
     else
         kontext "DocumentImpress"
         DocumentImpress.UseMenu
+        hMenuSelectNr(4)
+        hMenuSelectNr(13)
+        call sSelectEmptyLayout
     end if
     
-    hMenuSelectNr(4)
-    hMenuSelectNr(13)
-    call sSelectEmptyLayout								
+    								
     if Dir(Datei)<>"" then app.Kill(Datei) ' kill old file
     printlog "create 3 overlapping objects "
     for Zaehler = 1 to 3

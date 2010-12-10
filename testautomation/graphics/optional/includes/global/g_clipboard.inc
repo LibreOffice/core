@@ -136,7 +136,6 @@ testcase tiEditUndo
     else
         warnlog "File is missing."
     endif
-    Call hCloseDocument	
 
     printlog "Close document"
     Call hCloseDocument						
