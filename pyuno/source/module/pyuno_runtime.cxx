@@ -177,7 +177,7 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
         reinterpret_cast< oslGenericFunction >(readLoggingConfig),
         (rtl_uString **) &fileName );
     fileName = OUString( fileName.getStr(), fileName.lastIndexOf( '/' )+1 );
-    fileName += OUString::createFromAscii(  SAL_CONFIGFILE("pyuno") );
+    fileName += OUString(RTL_CONSTASCII_USTRINGPARAM(  SAL_CONFIGFILE("pyuno") ));
     rtl::Bootstrap bootstrapHandle( fileName );
 
     OUString str;

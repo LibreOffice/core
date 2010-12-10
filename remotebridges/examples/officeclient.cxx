@@ -116,13 +116,13 @@ void OfficeClientMain::registerServices( )
 
     OUString aSharedLibrary[4];
     aSharedLibrary[0] =
-        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "connector.uno" SAL_DLLEXTENSION ));
     aSharedLibrary[1] =
-        OUString::createFromAscii( "remotebridge.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "remotebridge.uno" SAL_DLLEXTENSION ));
     aSharedLibrary[2] =
-        OUString::createFromAscii( "bridgefac.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "bridgefac.uno" SAL_DLLEXTENSION ));
     aSharedLibrary[3] =
-        OUString::createFromAscii( "uuresolver.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "uuresolver.uno" SAL_DLLEXTENSION ));
 
     sal_Int32 i;
     for( i = 0 ; i < 4 ; i ++ )
@@ -293,7 +293,7 @@ sal_Bool SAL_CALL component_writeInfo(
         {
             Reference< XRegistryKey > xNewKey(
                 reinterpret_cast< XRegistryKey * >( pRegistryKey )->createKey(
-                    OUString::createFromAscii( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" ) ) );
+                    OUString(RTL_CONSTASCII_USTRINGPARAM( "/" IMPLEMENTATION_NAME "/UNO/SERVICES" )) ) );
 
             const Sequence< OUString > & rSNL = getSupportedServiceNames();
             const OUString * pArray = rSNL.getConstArray();

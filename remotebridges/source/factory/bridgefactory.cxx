@@ -419,7 +419,7 @@ namespace remotebridges_factory
             if( !pNames )
             {
                 static Sequence< OUString > seqNames(1);
-                seqNames.getArray()[0] = OUString::createFromAscii( SERVICE_NAME );
+                seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SERVICE_NAME ));
                 pNames = &seqNames;
             }
         }

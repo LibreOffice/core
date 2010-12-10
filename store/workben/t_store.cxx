@@ -370,7 +370,7 @@ int SAL_CALL main (int argc, char **argv)
         {
             OUString aName (RTL_CONSTASCII_USTRINGPARAM("demostor-"));
             aName += OUString::valueOf ((sal_Int32)(i + 1), 10);
-            aName += OUString::createFromAscii (".dat");
+            aName += OUString(RTL_CONSTASCII_USTRINGPARAM (".dat"));
 
 #if (_DEMOSTOR_REMOVE == 1)
             eErrCode = aFile.remove (aPath, aName);

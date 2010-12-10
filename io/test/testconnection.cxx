@@ -193,11 +193,11 @@ int __cdecl main( int argc, char * argv[] )
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
     OUString aLibName =
-        OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
+        OUString(RTL_CONSTASCII_USTRINGPARAM( "connector.uno" SAL_DLLEXTENSION ));
     xImplReg->registerImplementation(
         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
-    aLibName = OUString::createFromAscii( "acceptor.uno" SAL_DLLEXTENSION );
+    aLibName = OUString(RTL_CONSTASCII_USTRINGPARAM( "acceptor.uno" SAL_DLLEXTENSION ));
     xImplReg->registerImplementation(
         OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
