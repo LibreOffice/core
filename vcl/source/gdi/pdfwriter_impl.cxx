@@ -9435,6 +9435,7 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     aLine.append( " ]\n"
                   "/BitsPerSample 8\n"
                   "/Range[ 0 1 0 1 0 1 ]\n"
+                  "/Order 3\n"
                   "/Length " );
     aLine.append( nStreamLengthObject );
     aLine.append( " 0 R\n"
