@@ -209,7 +209,7 @@ End
 
 #endif
 
-/* ** Validator ** */
+/* ** Barcode ** */
 
 #ifdef WITH_EXTENSION_BARCODE
 
