@@ -1331,6 +1331,9 @@ if test -z "$GNUTAR"; then
 fi
 AC_SUBST(GNUTAR)
 
+# Do we have pkg-config?
+PKG_PROG_PKG_CONFIG
+
 dnl ===================================================================
 dnl Checks for --with-local-solenv invocation
 dnl TODO: Is this still required?
@@ -3915,16 +3918,6 @@ if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. 
     AC_MSG_RESULT([OK])
 else
     AC_MSG_ERROR([too old, you need at least 3.0.0])
-fi
-
-dnl ===================================================================
-dnl Check for pkg-config
-dnl # Note that if there is a possibility the first call to
-dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
-dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
-dnl ===================================================================
-if test "$_os" != "WINNT"; then
-    PKG_PROG_PKG_CONFIG
 fi
 
 dnl ===================================================================
