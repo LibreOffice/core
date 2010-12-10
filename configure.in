@@ -1365,7 +1365,7 @@ fi
 dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
-AC_CANONICAL_SYSTEM
+AC_CANONICAL_HOST
 if test "$build" != "$host" -o "$build" != "$target" \
   -o "$host" != "$target"; then
     AC_MSG_WARN([cross-compiling by any means is not supported (yet)!])
@@ -1383,7 +1383,7 @@ test_randr=yes
 test_cups=yes
 test_fontconfig=yes
 
-case "$build_os" in
+case "$host_os" in
     solaris*)
         test_gtk=yes
         build_gstreamer=yes
@@ -1400,7 +1400,7 @@ case "$build_os" in
         dnl check whether we're using solaris 6,7,8 - sparc or intel.
         dnl ===========================================================
            AC_MSG_CHECKING([the Solaris operating system release])
-           _os_release=`echo $build_os | $SED -e s/solaris2\.//`
+           _os_release=`echo $host_os | $SED -e s/solaris2\.//`
         if test "$_os_release" -lt "6"; then
                   AC_MSG_ERROR([use solaris >= 6 to build LibreOffice])
            else
@@ -1409,8 +1409,8 @@ case "$build_os" in
 
            dnl check whether we're using a sparc or i386 processor
            AC_MSG_CHECKING([the processor type])
-           if test "$build_cpu" = "sparc" -o "$build_cpu" = "i386"; then
-                  AC_MSG_RESULT([ok ($build_cpu)])
+           if test "$host_cpu" = "sparc" -o "$host_cpu" = "i386"; then
+                  AC_MSG_RESULT([ok ($host_cpu)])
            else
                   AC_MSG_ERROR([only sparc and i386 processors are supported])
            fi
@@ -2802,9 +2802,9 @@ dnl ===================================================================
    AC_MSG_CHECKING([what the default STL should be])
    DEFAULT_TO_STLPORT="no"
    if test "$_os" = "Linux"; then
-     case "$build_cpu" in
+     case "$host_cpu" in
        i?86)
-     case "$build_os" in k*bsd*-gnu*)
+     case "$host_os" in k*bsd*-gnu*)
          DEFAULT_TO_STLPORT="no"
         ;;
      *)
@@ -3083,7 +3083,7 @@ _ACEOF
       if ! $CXX $CXXFLAGS $CPPFLAGS -fpic -S visibility.cxx 2>/dev/null > /dev/null; then
          gccvisbroken=yes
       else
-         case "$build_cpu" in
+         case "$host_cpu" in
             i?86|x86_64|arm*)
                if $EGREP -q '@PLT' visibility.s; then
                   gccvisbroken=no
@@ -3123,7 +3123,7 @@ if test "$with_alloc" = "system"; then
 fi
 if test "$with_alloc" = "tcmalloc"; then
     AC_MSG_RESULT(tcmalloc)
-    if ! echo $build_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
+    if ! echo $host_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
         AC_MSG_ERROR([tcmalloc only available/usable on ix86])
     fi
     AC_CHECK_LIB(tcmalloc, malloc, [],
@@ -3180,7 +3180,7 @@ else
 fi
 AC_SUBST(SOLAR_JAVA)
 
-if test "$_os" = "Linux" && test "$build_cpu" = "powerpc"; then
+if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
    # IBMs JDK needs this...
    JITC_PROCESSOR_TYPE=6
    export JITC_PROCESSOR_TYPE
@@ -6720,7 +6720,7 @@ if test "$_os" != "OpenBSD"; then
 fi
 if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     dnl Search paths for Qt3 and KDE3
-    if test "$build_cpu" != "x86_64" ; then
+    if test "$host_cpu" != "x86_64" ; then
         qt_incdirs="$QTINC /usr/local/qt/include /usr/include/qt /usr/include /usr/X11R6/include/X11/qt /usr/X11R6/include/qt /usr/lib/qt3/include /usr/lib/qt/include /usr/share/qt3/include /usr/local/include/X11/qt3 $x_includes"
         qt_libdirs="$QTLIB /usr/local/qt/lib /usr/lib/qt /usr/lib /usr/X11R6/lib/X11/qt /usr/X11R6/lib/qt /usr/lib/qt3/lib /usr/lib/qt/lib /usr/share/qt3/lib /usr/local/lib/qt3 $x_libraries"
     else
@@ -6729,13 +6729,13 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     fi
     if test -n "$QTDIR" ; then
         qt_incdirs="$QTDIR/include $qt_incdirs"
-        if test "$build_cpu" != "x86_64" ; then
+        if test "$host_cpu" != "x86_64" ; then
             qt_libdirs="$QTDIR/lib $qt_libdirs"
         else
             qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
         fi
     fi
-    if test "$build_cpu" != "x86_64" ; then
+    if test "$host_cpu" != "x86_64" ; then
         kde_incdirs="/usr/lib/kde/include /usr/local/kde/include /usr/local/include /usr/kde/include /usr/include/kde /opt/kde3/include /opt/kde/include $x_includes"
         kde_libdirs="/usr/lib/kde/lib /usr/local/kde/lib /usr/kde/lib /usr/lib/kde /usr/lib/kde3 /usr/X11R6/lib /usr/local/lib /opt/kde3/lib /opt/kde/lib /usr/X11R6/kde/lib /usr/lib $x_libraries"
     else
@@ -6744,7 +6744,7 @@ if test "$test_kde" = "yes" -a "$ENABLE_KDE" = "TRUE" ; then
     fi
     if test -n "$KDEDIR" ; then
         kde_incdirs="$KDEDIR/include $kde_incdirs"
-        if test "$build_cpu" != "x86_64" ; then
+        if test "$host_cpu" != "x86_64" ; then
             kde_libdirs="$KDEDIR/lib $kde_libdirs"
         else
             kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
@@ -6849,14 +6849,14 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    kde_incdirs="/usr/include $x_includes"
    kde_libdirs="/usr/lib $x_libraries"
 
-   if test "$build_cpu" = "x86_64" ; then
+   if test "$host_cpu" = "x86_64" ; then
       qt_libdirs="$qt_libdirs /usr/lib64/qt4 /usr/lib64/qt /usr/lib64"
       kde_libdirs="$kde_libdirs /usr/lib64 /usr/lib64/kde4"
    fi
 
    if test -n "$QTDIR" ; then
       qt_incdirs="$QTDIR/include $qt_incdirs"
-      if test "$build_cpu" != "x86_64" ; then
+      if test "$host_cpu" != "x86_64" ; then
          qt_libdirs="$QTDIR/lib $qt_libdirs"
       else
          qt_libdirs="$QTDIR/lib64 $QTDIR/lib $qt_libdirs"
@@ -6864,7 +6864,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
    if test -n "$QT4DIR" ; then
       qt_incdirs="$QT4DIR/include $qt_incdirs"
-      if test "$build_cpu" != "x86_64" ; then
+      if test "$host_cpu" != "x86_64" ; then
          qt_libdirs="$QT4DIR/lib $qt_libdirs"
       else
          qt_libdirs="$QT4DIR/lib64 $QT4DIR/lib $qt_libdirs"
@@ -6873,7 +6873,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
 
    if test -n "$KDEDIR" ; then
       kde_incdirs="$KDEDIR/include $kde_incdirs"
-      if test "$build_cpu" != "x86_64" ; then
+      if test "$host_cpu" != "x86_64" ; then
          kde_libdirs="$KDEDIR/lib $kde_libdirs"
       else
          kde_libdirs="$KDEDIR/lib64 $KDEDIR/lib $kde_libdirs"
@@ -6881,7 +6881,7 @@ if test "$test_kde4" = "yes" -a "$ENABLE_KDE4" = "TRUE" ; then
    fi
    if test -n "$KDE4DIR" ; then
       kde_incdirs="$KDE4DIR/include $kde_incdirs"
-      if test "$build_cpu" != "x86_64" ; then
+      if test "$host_cpu" != "x86_64" ; then
          kde_libdirs="$KDE4DIR/lib $kde_libdirs"
       else
          kde_libdirs="$KDE4DIR/lib64 $KDE4DIR/lib $kde_libdirs"
@@ -7425,7 +7425,7 @@ elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
       XINERAMA_LINK=dynamic
    elif test -e "$XLIB/libXinerama.a"; then
       # static version
-      if echo $build_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
+      if echo $host_cpu | grep -E 'i[[3456]]86' 2>/dev/null >/dev/null; then
          USE_XINERAMA=YES
          XINERAMA_LINK=static
       else
