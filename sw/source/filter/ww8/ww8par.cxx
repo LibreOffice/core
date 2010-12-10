@@ -213,7 +213,7 @@ bool Sttb::Read( SvStream* pS )
 
 void Sttb::Print( FILE* fp )
 {
-    fprintf( fp, "[ 0x%x ] Sttb - dump\n", nOffSet);
+    fprintf( fp, "[ 0x%" SAL_PRIxUINT32 " ] Sttb - dump\n", nOffSet);
     fprintf( fp, " fExtend 0x%x [expected 0xFFFF ]\n", fExtend );
     fprintf( fp, " cData no. or string data items %d (0x%x)\n", cData, cData );
 
