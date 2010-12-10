@@ -342,7 +342,7 @@ bool ScRangeList::UpdateReference(
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
         {
-            ScRangePtr pR = at( i );
+            ScRangePtr pR = maRanges[i];
             SCCOL theCol1;
             SCROW theRow1;
             SCTAB theTab1;
