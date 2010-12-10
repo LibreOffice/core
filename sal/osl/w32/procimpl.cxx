@@ -63,7 +63,7 @@ extern "C" oslFileHandle SAL_CALL osl_createFileHandleFromOSHandle( HANDLE hFile
 const sal_Unicode NAME_VALUE_SEPARATOR = TEXT('=');
 const sal_Char* SPACE = " ";
 const rtl::OUString ENV_COMSPEC (RTL_CONSTASCII_USTRINGPARAM("COMSPEC"));
-const rtl::OUString QUOTE = rtl::OUString::createFromAscii("\"");
+const rtl::OUString QUOTE(RTL_CONSTASCII_USTRINGPARAM("\""));
 
 namespace /* private */
 {

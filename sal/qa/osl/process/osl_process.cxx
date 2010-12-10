@@ -551,10 +551,10 @@ public:
     void osl_execProc_merged_child_environment()
     {
         rtl_uString* child_env[4];
-        OUString env1 = OUString::createFromAscii(ENV1);
-        OUString env2 = OUString::createFromAscii(ENV2);
-        OUString env3 = OUString::createFromAscii(ENV3);
-        OUString env4 = OUString::createFromAscii(ENV4);
+        OUString env1(RTL_CONSTASCII_USTRINGPARAM(ENV1));
+        OUString env2(RTL_CONSTASCII_USTRINGPARAM(ENV2));
+        OUString env3(RTL_CONSTASCII_USTRINGPARAM(ENV3));
+        OUString env4(RTL_CONSTASCII_USTRINGPARAM(ENV4));
 
         child_env[0] = env1.pData;
         child_env[1] = env2.pData;

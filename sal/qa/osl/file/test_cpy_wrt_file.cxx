@@ -52,10 +52,10 @@ public:
     void cp_file()
     {
         rtl::OUString src_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_SOURCE_PATH), src_url);
+        FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(COPY_SOURCE_PATH)), src_url);
 
         rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(COPY_DEST_PATH), dest_url);
+        FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(COPY_DEST_PATH)), dest_url);
 
         FileBase::RC err = File::copy(src_url, dest_url);
         CPPUNIT_ASSERT_MESSAGE("Copy didn't recognized disk full", err != FileBase::E_None);
@@ -79,7 +79,7 @@ public:
     void wrt_file()
     {
         rtl::OUString dest_url;
-        FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
+        FileBase::getFileURLFromSystemPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(WRITE_DEST_PATH)), dest_url);
 
         File tmp_file(dest_url);
         rtl::OUString suErrorMsg = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("File creation failed: "))+ dest_url;
