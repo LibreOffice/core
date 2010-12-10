@@ -272,7 +272,7 @@ public:
     BOOL            DeleteTables(const SvShorts &TheTabs, BOOL bRecord = TRUE );
 
     BOOL            RenameTable( const String& rName, SCTAB nTabNr );
-    void            MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy );
+    void            MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const String& rName );
     void            ImportTables( ScDocShell* pSrcShell,
                                     SCTAB nCount, const SCTAB* pSrcTabs,
                                     BOOL bLink,SCTAB nTab);

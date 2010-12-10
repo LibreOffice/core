@@ -552,7 +552,7 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
             if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
             {
                 //! use table selection from the tab control where dragging was started?
-                pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
+                pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE, String() );
 
                 rData.pCellTransfer->SetDragWasInternal();          // don't delete
                 return TRUE;

@@ -478,7 +478,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 USHORT nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
                 BOOL   bCpy = FALSE;
+                BOOL   bRna = FALSE;
                 String aDocName;
+                String aTabName;
 
                 if( pReqArgs != NULL )
                 {
@@ -496,6 +498,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     }
                     if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
                         bCpy = ((const SfxBoolItem*)pItem)->GetValue();
+
+#if 0
+// This must be checked:
+                    if( IS_AVAILABLE( FN_PARAM_3, &pItem ) )
+                        aTabName = ((const SfxStringItem*)pItem)->GetValue();
+#endif
 
                     if( aDocName.Len() )
                     {
@@ -557,6 +565,12 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         nDoc = pDlg->GetSelectedDocument();
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
+                        bRna = pDlg->GetRenameTable();
+                        // Leave aTabName string empty, when Rename is FALSE.
+                        if( bRna )
+                        {
+                           pDlg->GetTabNameString( aTabName );
+                        }
                         bDoIt = TRUE;
 
                         String aFoundDocName;
@@ -586,7 +600,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
 
-                    MoveTable( nDoc, nTab, bCpy );
+                    MoveTable( nDoc, nTab, bCpy, aTabName );
                 }
             }
             break;

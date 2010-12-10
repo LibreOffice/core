@@ -263,6 +263,8 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScM
     virtual USHORT  GetSelectedDocument     () const;
     virtual USHORT  GetSelectedTable        () const;
     virtual BOOL    GetCopyTable            () const;
+    virtual BOOL    GetRenameTable          () const;
+    virtual void    GetTabNameString( String& rString ) const;
     virtual void    SetCopyTable            (BOOL bFlag=TRUE);
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE);
 };

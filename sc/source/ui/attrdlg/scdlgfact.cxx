@@ -502,6 +502,14 @@ BOOL    AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
     return pDlg->GetCopyTable();
 }
+BOOL    AbstractScMoveTableDlg_Impl::GetRenameTable() const
+{
+    return pDlg->GetRenameTable();
+}
+void    AbstractScMoveTableDlg_Impl::GetTabNameString( String& rString ) const
+{
+    pDlg->GetTabNameString( rString );
+}
 void    AbstractScMoveTableDlg_Impl::SetCopyTable(BOOL bFla)
 {
     return pDlg->SetCopyTable( bFla );
