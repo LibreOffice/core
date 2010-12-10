@@ -1294,7 +1294,7 @@ echo "*"
 echo "********************************************************************"
 echo ""
 dnl ===================================================================
-dnl Configure pre-requisites.
+dnl Configure pre-requisites. (grep, awk, sed, bash)
 dnl ===================================================================
 cat /dev/null > warn
 
@@ -1313,6 +1313,12 @@ AC_PATH_PROGS(SED, sed )
 if test -z "$SED"; then
    AC_MSG_ERROR([install sed to run this script])
 fi
+AC_PATH_PROG(BASH, bash)
+if test -z "$BASH"; then
+   AC_MSG_ERROR([bash not found in \$PATH])
+fi
+AC_SUBST(BASH)
+
 
 AC_MSG_CHECKING([for solenv environment])
 if test -z "$with_local_solenv"; then
@@ -1854,17 +1860,6 @@ if test "$_os" = "WINNT" ; then
    fi
 fi
 
-
-dnl ===================================================================
-dnl Check whether the bash shell can be used.
-dnl ===================================================================
-AC_PATH_PROG(SHELLPATH, bash)
-if test -z "$SHELLPATH"; then
-   AC_MSG_ERROR([bash not found in \$PATH])
-else
-   SHELLPATH=`echo $SHELLPATH | $SED -n "s/\/bash$//p"`
-fi
-AC_SUBST(SHELLPATH)
 
 dnl ===================================================================
 dnl  Checks for c compiler,

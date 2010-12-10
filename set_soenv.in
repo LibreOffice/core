@@ -886,8 +886,8 @@ $JAVA_HOME = PathFormat('@JAVA_HOME@') ;
 if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
 }
-# 3. shell path.
-$OOO_SHELL = '@SHELLPATH@'."\/bash";
+# 3. bash path.
+$OOO_SHELL = '@BASH@';
 
 if ( '@STLPORT4@' eq $no_stl )
 {
