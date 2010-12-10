@@ -66,7 +66,7 @@ using ::com::sun::star::accessibility::XAccessible;
 class PanelDemo : public Application
 {
 public:
-    virtual void Main();
+    virtual int Main();
 
 private:
     static Reference< XMultiServiceFactory > createApplicationServiceManager();
@@ -860,7 +860,7 @@ Reference< XMultiServiceFactory > PanelDemo::createApplicationServiceManager()
 }
 
 //-----------------------------------------------------------------------------
-void __EXPORT PanelDemo::Main()
+int __EXPORT PanelDemo::Main()
 {
     // create service factory
     Reference< XMultiServiceFactory >  xSMgr = createApplicationServiceManager();
@@ -875,6 +875,7 @@ void __EXPORT PanelDemo::Main()
     // run the application
     PanelDemoMainWindow aWindow;
     Execute();
+    return EXIT_SUCCESS;
 }
 
 PanelDemo aTheApplication;

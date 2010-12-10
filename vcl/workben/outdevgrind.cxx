@@ -74,7 +74,7 @@ namespace
 class GrindApp : public Application
 {
 public:
-    virtual void   Main();
+    virtual int Main();
     virtual USHORT Exception( USHORT nError );
 };
 
@@ -915,7 +915,7 @@ USHORT GrindApp::Exception( USHORT nError )
     return 0;
 }
 
-void GrindApp::Main()
+int GrindApp::Main()
 {
     bool bHelp = false;
 
@@ -931,7 +931,7 @@ void GrindApp::Main()
     if( bHelp )
     {
         printf( "outdevgrind - Profile OutputDevice\n" );
-        return;
+        return EXIT_SUCCESS;
     }
 
     //-------------------------------------------------
@@ -968,6 +968,7 @@ void GrindApp::Main()
 
     // clean up UCB
     ::ucbhelper::ContentBroker::deinitialize();
+    return EXIT_SUCCESS;
 }
 
 } // namespace

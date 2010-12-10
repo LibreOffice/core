@@ -59,7 +59,7 @@ using namespace comphelper;
 class MyApp : public Application
 {
 public:
-    void            Main();
+    int Main();
     virtual USHORT  Exception( USHORT nError );
 
     static void ReadStringHook( String& );
@@ -94,7 +94,7 @@ USHORT MyApp::Exception( USHORT nError )
     return 0;
 }
 
-void MyApp::Main()
+int MyApp::Main()
 {
     PADialog* pPADialog;
 
@@ -153,7 +153,7 @@ void MyApp::Main()
         BOOL bQuitApp;
         if( !InitAccessBridge( true, bQuitApp ) )
             if( bQuitApp )
-                return;
+                return EXIT_FAILURE;
     }
 
     // initialize test-tool library (if available)
@@ -174,6 +174,7 @@ void MyApp::Main()
      */
     ::ucbhelper::ContentBroker::deinitialize();
 
+    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

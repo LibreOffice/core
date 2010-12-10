@@ -156,7 +156,7 @@ oslSignalAction SAL_CALL VCLExceptionSignal_impl( void* /*pData*/, oslSignalInfo
 }
 
 // =======================================================================
-BOOL ImplSVMain()
+int ImplSVMain()
 {
     // The 'real' SVMain()
     RTL_LOGFILE_CONTEXT( aLog, "vcl (ss112471) ::SVMain" );
@@ -167,6 +167,7 @@ BOOL ImplSVMain()
 
     Reference<XMultiServiceFactory> xMS;
 
+    int nReturn = EXIT_FAILURE;
 
     BOOL bInit = InitVCL( xMS );
 
@@ -174,7 +175,7 @@ BOOL ImplSVMain()
     {
         // Application-Main rufen
         pSVData->maAppData.mbInAppMain = TRUE;
-        pSVData->mpApp->Main();
+        nReturn = pSVData->mpApp->Main();
         pSVData->maAppData.mbInAppMain = FALSE;
     }
 
@@ -203,17 +204,17 @@ BOOL ImplSVMain()
     }
 
     DeInitVCL();
-    return bInit;
+    return nReturn;
 }
 
-BOOL SVMain()
+int SVMain()
 {
     // #i47888# allow for alternative initialization as required for e.g. MacOSX
-    extern BOOL ImplSVMainHook( BOOL* );
+    extern BOOL ImplSVMainHook( int* );
 
-    BOOL bInit;
-    if( ImplSVMainHook( &bInit ) )
-        return bInit;
+    int nRet;
+    if( ImplSVMainHook( &nRet ) )
+        return nRet;
     else
         return ImplSVMain();
 }
@@ -226,7 +227,7 @@ oslSignalHandler   pExceptionHandler = NULL;
 class Application_Impl : public Application
 {
 public:
-    void                Main(){};
+    int                Main() { return EXIT_SUCCESS; };
 };
 
 class DesktopEnvironmentContext: public cppu::WeakImplHelper1< com::sun::star::uno::XCurrentContext >

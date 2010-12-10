@@ -243,7 +243,7 @@ public:
                                 Application();
     virtual                     ~Application();
 
-    virtual void                Main() = 0;
+    virtual int                 Main() = 0;
 
     virtual BOOL                QueryExit();
 

@@ -75,7 +75,7 @@ using namespace ::com::sun::star;
 
 extern BOOL ImplSVMain();
 
-static BOOL* gpbInit = 0;
+static int* gpnInit = 0;
 static NSMenu* pDockMenu = nil;
 static bool bNoSVMain = true;
 static bool bLeftMain = false;
@@ -209,9 +209,9 @@ static void initNSApp()
         [NSApp activateIgnoringOtherApps: YES];
 }
 
-BOOL ImplSVMainHook( BOOL * pbInit )
+BOOL ImplSVMainHook( int * pnInit )
 {
-    gpbInit = pbInit;
+    gpnInit = pnInit;
 
     bNoSVMain = false;
     initNSApp();
@@ -587,9 +587,9 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
         break;
     case AppExecuteSVMain:
     {
-        BOOL bResult = ImplSVMain();
-        if( gpbInit )
-            *gpbInit = bResult;
+        int nResult = ImplSVMain();
+        if( gpnInit )
+            *gpnInit = nResult;
         [NSApp stop: NSApp];
         bLeftMain = true;
         if( pDockMenu )

@@ -210,7 +210,7 @@ void DeInitSalMain();
 // ----------
 
 // Callbacks (indepen in \sv\source\app\svmain.cxx)
-VCL_DLLPUBLIC BOOL SVMain();
+VCL_DLLPUBLIC int SVMain();
 
 #endif // _SV_SALINST_HXX
 

@@ -32,7 +32,7 @@
 
 #ifndef MACOSX
 
-BOOL ImplSVMainHook( BOOL * )
+BOOL ImplSVMainHook( int * )
 {
     return FALSE;   // indicate that ImplSVMainHook is not implemented
 }
@@ -57,7 +57,7 @@ static void SourceContextCallBack( void *pInfo )
 
 struct ThreadContext
 {
-    BOOL* pRet;
+    int* pRet;
     CFRunLoopRef* pRunLoopRef;
 };
 
@@ -76,7 +76,7 @@ static void RunSVMain(void *pData)
     _exit( 0 );
 }
 
-BOOL ImplSVMainHook( BOOL *pbInit )
+BOOL ImplSVMainHook( int *pnInit )
 {
     // Mac OS X requires that any Cocoa code have a CFRunLoop started in the
     // primordial thread. Since all of the AWT classes in Java 1.4 and higher
@@ -87,7 +87,7 @@ BOOL ImplSVMainHook( BOOL *pbInit )
 
     CFRunLoopRef runLoopRef = CFRunLoopGetCurrent();
     ThreadContext tcx;
-    tcx.pRet = pbInit;  // the return value
+    tcx.pRet = pnInit;  // the return value
     tcx.pRunLoopRef = &runLoopRef;
     oslThread hThreadID = osl_createThread(RunSVMain, &tcx);
 
