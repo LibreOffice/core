@@ -1331,9 +1331,6 @@ if test -z "$GNUTAR"; then
 fi
 AC_SUBST(GNUTAR)
 
-# Do we have pkg-config?
-PKG_PROG_PKG_CONFIG
-
 dnl ===================================================================
 dnl Checks for --with-local-solenv invocation
 dnl TODO: Is this still required?
