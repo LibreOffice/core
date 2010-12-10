@@ -321,7 +321,11 @@ Reference< XOutputStream > XmlFilterBase::openFragmentStream( const OUString& rS
 
 FSHelperPtr XmlFilterBase::openFragmentStreamWithSerializer( const OUString& rStreamName, const OUString& rMediaType )
 {
-    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ) ) );
+    bool bWriteHeader = true;
+    if( rMediaType.indexOfAsciiL( "vml", 3 ) >= 0 &&
+        rMediaType.indexOfAsciiL( "+xml", 4 ) < 0 )
+        bWriteHeader = false;
+    return FSHelperPtr( new FastSerializerHelper( openFragmentStream( rStreamName, rMediaType ), bWriteHeader ) );
 }
 
 TextFieldStack& XmlFilterBase::getTextFieldStack() const

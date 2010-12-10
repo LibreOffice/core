@@ -363,8 +363,8 @@ void VMLExport::Commit( EscherPropertyContainer& rProps, const Rectangle& rRect 
                         case ESCHER_WrapThrough:   pWrapType = "through"; break;
                     }
                     if ( pWrapType )
-                        m_pSerializer->singleElementNS( XML_w10, XML_wrap,
-                                FSNS( XML_w10, XML_type ), pWrapType,
+                        m_pSerializer->singleElementNS( XML_v, XML_wrap,
+                                FSNS( XML_v, XML_type ), pWrapType,
                                 FSEND );
                 }
                 bAlreadyWritten[ ESCHER_Prop_WrapText ] = true;
