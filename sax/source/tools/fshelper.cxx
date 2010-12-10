@@ -10,7 +10,7 @@ using namespace ::com::sun::star::uno;
 
 namespace sax_fastparser {
 
-FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream ) :
+FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >& xOutputStream, bool bWriteHeader ) :
     mpSerializer(new FastSaxSerializer())
 {
     Reference< lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
@@ -18,7 +18,8 @@ FastSerializerHelper::FastSerializerHelper(const Reference< io::XOutputStream >&
 
     mpSerializer->setFastTokenHandler( mxTokenHandler );
     mpSerializer->setOutputStream( xOutputStream );
-    mpSerializer->startDocument();
+    if( bWriteHeader )
+        mpSerializer->startDocument();
 }
 
 FastSerializerHelper::~FastSerializerHelper()
