@@ -506,7 +506,8 @@ AC_ARG_WITH(theme,
 AC_ARG_WITH(extension-integration,
 [
   --with-extension-integration      It will integrate the builded extensions
-              to the installer of the product.],
+                          to the installer of the product.
+                          Please use this switch to include any extension.],
 ,)
 
 AC_ARG_WITH(fonts,
