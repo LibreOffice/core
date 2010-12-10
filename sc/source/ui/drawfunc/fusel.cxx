@@ -56,6 +56,7 @@
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 #include "scmod.hxx"
+#include "client.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -462,15 +463,16 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
     /**************************************************************************
     * Ggf. OLE-Objekt beruecksichtigen
     **************************************************************************/
-    SfxInPlaceClient* pIPClient = pViewShell->GetIPClient();
 
-    if (pIPClient)
+    ScClient* pClient = static_cast< ScClient* >( pViewShell->GetIPClient() );
+    if ( pClient )
     {
         ScModule* pScMod = SC_MOD();
         bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
-
-        if ( pIPClient->IsObjectInPlaceActive() && !bUnoRefDialog )
-            pIPClient->DeactivateObject();
+        if ( pClient->IsObjectInPlaceActive() && !bUnoRefDialog )
+        {
+            pClient->DeactivateObj();
+        }
     }
 
     USHORT nClicks = rMEvt.GetClicks();
