@@ -99,7 +99,7 @@ SV_DECL_IMPL_REF( ScRangeList );
 
 // RangePairList: erster Range (aRange[0]) eigentlicher Range, zweiter
 // Range (aRange[1]) Daten zu diesem Range, z.B. Rows eines ColName
-class ScRangePairList : public SvRefBase
+class SC_DLLPUBLIC ScRangePairList : public SvRefBase
 {
 public:
     virtual             ~ScRangePairList();

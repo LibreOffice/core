@@ -49,6 +49,32 @@ using ::std::advance;
 using ::std::find_if;
 using ::std::for_each;
 
+namespace {
+
+class FindRangeByAddress : public ::std::unary_function<bool, ScRange*>
+{
+public:
+    FindRangeByAddress(const ScAddress& rAddr) : mrAddr(rAddr) {}
+
+    bool operator() (const ScRange* pRange) const
+    {
+        return pRange->In(mrAddr);
+    }
+private:
+    const ScAddress& mrAddr;
+};
+
+template<typename T>
+struct DeleteObject : public ::std::unary_function<void, T*>
+{
+    void operator() (T* p)
+    {
+        delete p;
+    }
+};
+
+}
+
 // === ScRangeList ====================================================
 
 ScRangeList::~ScRangeList()
@@ -83,8 +109,7 @@ USHORT ScRangeList::Parse( const String& rStr, ScDocument* pDoc, USHORT nMask,
             aOne = rStr.GetToken( i, cDelimiter );
             aRange.aStart.SetTab( nTab );   // Default Tab wenn nicht angegeben
             USHORT nRes = aRange.ParseAny( aOne, pDoc, eConv );
-            USHORT nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 |
-SCA_VALID_TAB2;
+            USHORT nEndRangeBits = SCA_VALID_COL2 | SCA_VALID_ROW2 | SCA_VALID_TAB2;
             USHORT nTmp1 = ( nRes & SCA_BITS );
             USHORT nTmp2 = ( nRes & nEndRangeBits );
             // If we have a valid single range with
@@ -226,14 +251,19 @@ void ScRangeList::Join( const ScRange& r, bool bIsInList )
 bool ScRangeList::operator==( const ScRangeList& r ) const
 {
     if ( this == &r )
-        return true;                // identische Referenz
-    size_t nCnt = maRanges.size();
-    if ( nCnt != r.maRanges.size() )
+        return true;
+
+    if (maRanges.size() != r.maRanges.size())
         return false;
-    for ( size_t nIdx = 0; nIdx < nCnt; nIdx++ )
+
+    vector<ScRange*>::const_iterator itr1 = maRanges.begin(), itrEnd = maRanges.end();
+    vector<ScRange*>::const_iterator itr2 = r.maRanges.begin();
+    for (; itr1 != itrEnd; ++itr1, ++itr2)
     {
-        if ( *maRanges.at( nIdx ) != *r.maRanges.at( nIdx ) )
-            return false;           // auch andere Reihenfolge ist ungleich
+        const ScRange* p1 = *itr1;
+        const ScRange* p2 = *itr2;
+        if (*p1 != *p2)
+            return false;
     }
     return true;
 }
@@ -285,23 +315,6 @@ bool ScRangeList::UpdateReference(
         }
     }
     return bChanged;
-}
-
-namespace {
-
-class FindRangeByAddress : public ::std::unary_function<bool, ScRange*>
-{
-public:
-    FindRangeByAddress(const ScAddress& rAddr) : mrAddr(rAddr) {}
-
-    bool operator() (const ScRange* pRange) const
-    {
-        return pRange->In(mrAddr);
-    }
-private:
-    const ScAddress& mrAddr;
-};
-
 }
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
@@ -382,21 +395,9 @@ ScRange* ScRangeList::Remove(size_t nPos)
     return p;
 }
 
-namespace {
-
-struct DeleteObject : public ::std::unary_function<void, ScRange*>
-{
-    void operator() (ScRange* p)
-    {
-        delete p;
-    }
-};
-
-}
-
 void ScRangeList::RemoveAll()
 {
-    for_each(maRanges.begin(), maRanges.end(), DeleteObject());
+    for_each(maRanges.begin(), maRanges.end(), DeleteObject<ScRange>());
     maRanges.clear();
 }
 
@@ -457,22 +458,9 @@ void ScRangeList::push_back(ScRange* p)
 
 // === ScRangePairList ========================================================
 
-namespace {
-
-struct DeletePair : public ::std::unary_function<void, ScRangePair*>
-{
-    void operator() (ScRangePair* p)
-    {
-        delete p;
-    }
-};
-
-}
-
-//-----------------------------------------------------------------------------
 ScRangePairList::~ScRangePairList()
 {
-    for_each( maPairs.begin(), maPairs.end(), DeletePair() );
+    for_each( maPairs.begin(), maPairs.end(), DeleteObject<ScRangePair>() );
     maPairs.clear();
 }
 
