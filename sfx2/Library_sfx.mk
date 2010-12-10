@@ -276,7 +276,6 @@ $(eval $(call gb_Library_add_linked_libs,sfx,\
 ))
 endif
 ifeq ($(OS),WNT)
-
 # workaround: disable PCH for these objects to avoid redeclaration
 # errors - needs to be fixed in module tools
 $(eval $(call gb_Library_add_cxxobjects,sfx,\
