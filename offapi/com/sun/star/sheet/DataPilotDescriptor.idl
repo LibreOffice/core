@@ -143,6 +143,14 @@ published service DataPilotDescriptor
     [optional, property] boolean DrillDownOnDoubleClick;
 
     //-------------------------------------------------------------------------
+
+    /** specifies a label for grand total results.
+
+    @since OOo 3.4
+     */
+    [optional, property] string GrandTotalName;
+
+    //-------------------------------------------------------------------------
 };
 
 //=============================================================================
