@@ -75,7 +75,7 @@ sal_uInt32 getEntriesFromFile( sal_Char* fName,
                                             vector< sal_Char* >& entries ) {
 
     ::osl::File inFile( cnvrtPth( fName ) );
-    if ( inFile.open( OpenFlag_Read ) == ::osl::FileBase::E_None) {
+    if ( inFile.open( osl_File_OpenFlag_Read ) == ::osl::FileBase::E_None) {
         ::rtl::ByteSequence byteSeq;
         inFile.readLine( byteSeq );
         while ( byteSeq.getLength() ) {

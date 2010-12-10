@@ -52,8 +52,8 @@ void tLog::initialize( const ::rtl::OString& name ) {
             ret = ::osl::File::remove( m_logname );
         }
 
-    if( m_logfile->open( OpenFlag_Write ) == ::osl::FileBase::E_NOENT ) {
-            ret = m_logfile->open( OpenFlag_Write | OpenFlag_Create );
+    if( m_logfile->open( osl_File_OpenFlag_Write ) == ::osl::FileBase::E_NOENT ) {
+            ret = m_logfile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
         }
         else  {
             ret = m_logfile->setPos( Pos_End, 0 );
