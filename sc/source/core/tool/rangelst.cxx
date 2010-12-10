@@ -114,7 +114,7 @@ void ScRangeList::Format( String& rStr, USHORT nFlags, ScDocument* pDoc,
     if (!cDelimiter)
         cDelimiter = ScCompiler::GetNativeSymbol(ocSep).GetChar(0);
 
-    for ( size_t nIdx = 0, nCnt = size(); nIdx < nCnt; ++nIdx )
+    for ( size_t nIdx = 0, nCnt = maRanges.size(); nIdx < nCnt; ++nIdx )
     {
         String aStr;
         at( nIdx )->Format( aStr, nFlags, pDoc, eConv );
@@ -228,12 +228,12 @@ bool ScRangeList::operator==( const ScRangeList& r ) const
 {
     if ( this == &r )
         return true;                // identische Referenz
-    size_t nCnt = size();
-    if ( nCnt != r.size() )
+    size_t nCnt = maRanges.size();
+    if ( nCnt != r.maRanges.size() )
         return false;
     for ( size_t nIdx = 0; nIdx < nCnt; nIdx++ )
     {
-        if ( *at( nIdx ) != *r.at( nIdx ) )
+        if ( *maRanges.at( nIdx ) != *r.maRanges.at( nIdx ) )
             return false;           // auch andere Reihenfolge ist ungleich
     }
     return true;
@@ -254,7 +254,7 @@ bool ScRangeList::UpdateReference(
 )
 {
     bool bChanged = FALSE;
-    if ( !empty() )
+    if ( !maRanges.empty() )
     {
         SCCOL nCol1;
         SCROW nRow1;
@@ -263,7 +263,7 @@ bool ScRangeList::UpdateReference(
         SCROW nRow2;
         SCTAB nTab2;
         rWhere.GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
-        for ( size_t i = 0, nRanges = size(); i < nRanges; ++i )
+        for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
         {
             ScRangePtr pR = at( i );
             SCCOL theCol1;
@@ -290,7 +290,7 @@ bool ScRangeList::UpdateReference(
 
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
     {
         const ScRange* pR = maRanges[j];
         if ( pR->In( rAdr ) )
@@ -301,7 +301,7 @@ const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
-    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
     {
         ScRange* pR = maRanges[j];
         if ( pR->In( rAdr ) )
@@ -314,7 +314,7 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr )
 ScRangeList::ScRangeList( const ScRangeList& rList ) :
     SvRefBase()
 {
-    for ( size_t j = 0, nListCount = rList.size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = rList.maRanges.size(); j < nListCount; j++ )
         Append( *rList[ j ] );
 }
 
@@ -322,7 +322,7 @@ ScRangeList::ScRangeList( const ScRangeList& rList ) :
 ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
     clear();
-    for ( size_t j = 0, nListCount = rList.size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = rList.maRanges.size(); j < nListCount; j++ )
         Append( *rList[ j ] );
     return *this;
 }
@@ -330,7 +330,7 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
         if ( at( j )->Intersects( rRange ) )
             return true;
 
@@ -340,7 +340,7 @@ bool ScRangeList::Intersects( const ScRange& rRange ) const
 
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
         if ( at( j )->In( rRange ) )
             return true;
 
@@ -351,7 +351,7 @@ bool ScRangeList::In( const ScRange& rRange ) const
 size_t ScRangeList::GetCellCount() const
 {
     size_t nCellCount = 0;
-    for ( size_t j = 0, nListCount = size(); j < nListCount; j++ )
+    for ( size_t j = 0, nListCount = maRanges.size(); j < nListCount; j++ )
     {
         const ScRange* pR = maRanges[j];
         nCellCount += size_t(pR->aEnd.Col() - pR->aStart.Col() + 1)
