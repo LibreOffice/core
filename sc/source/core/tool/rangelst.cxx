@@ -51,17 +51,32 @@ using ::std::for_each;
 
 namespace {
 
-class FindRangeByAddress : public ::std::unary_function<bool, ScRange*>
+template<typename T>
+class FindEnclosingRange : public ::std::unary_function<bool, ScRange*>
 {
 public:
-    FindRangeByAddress(const ScAddress& rAddr) : mrAddr(rAddr) {}
-    FindRangeByAddress(const FindRangeByAddress& r) : mrAddr(r.mrAddr) {}
+    FindEnclosingRange(const T& rTest) : mrTest(rTest) {}
+    FindEnclosingRange(const FindEnclosingRange& r) : mrTest(r.mrTest) {}
     bool operator() (const ScRange* pRange) const
     {
-        return pRange->In(mrAddr);
+        return pRange->In(mrTest);
     }
 private:
-    const ScAddress& mrAddr;
+    const T& mrTest;
+};
+
+template<typename T>
+class FindIntersectingRange : public ::std::unary_function<bool, ScRange*>
+{
+public:
+    FindIntersectingRange(const T& rTest) : mrTest(rTest) {}
+    FindIntersectingRange(const FindIntersectingRange& r) : mrTest(r.mrTest) {}
+    bool operator() (const ScRange* pRange) const
+    {
+        return pRange->Intersects(mrTest);
+    }
+private:
+    const T& mrTest;
 };
 
 class AppendToList : public ::std::unary_function<void, const ScRange*>
@@ -333,14 +348,14 @@ bool ScRangeList::UpdateReference(
 const ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
     vector<ScRange*>::const_iterator itr = find_if(
-        maRanges.begin(), maRanges.end(), FindRangeByAddress(rAdr));
+        maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr )
 {
     vector<ScRange*>::iterator itr = find_if(
-        maRanges.begin(), maRanges.end(), FindRangeByAddress(rAdr));
+        maRanges.begin(), maRanges.end(), FindEnclosingRange<ScAddress>(rAdr));
     return itr == maRanges.end() ? NULL : *itr;
 }
 
@@ -361,26 +376,18 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 
 bool ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        const ScRange* p = *itr;
-        if (p->Intersects(rRange))
-            return true;
-    }
-    return false;
+    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
+    vector<ScRange*>::const_iterator itr =
+        find_if(maRanges.begin(), itrEnd, FindIntersectingRange<ScRange>(rRange));
+    return itr != itrEnd;
 }
 
 bool ScRangeList::In( const ScRange& rRange ) const
 {
-    vector<ScRange*>::const_iterator itr = maRanges.begin(), itrEnd = maRanges.end();
-    for (; itr != itrEnd; ++itr)
-    {
-        const ScRange* p = *itr;
-        if (p->In(rRange))
-            return true;
-    }
-    return false;
+    vector<ScRange*>::const_iterator itrEnd = maRanges.end();
+    vector<ScRange*>::const_iterator itr =
+        find_if(maRanges.begin(), itrEnd, FindEnclosingRange<ScRange>(rRange));
+    return itr != itrEnd;
 }
 
 
