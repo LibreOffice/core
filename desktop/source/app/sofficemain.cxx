@@ -34,7 +34,7 @@
 #include <rtl/logfile.hxx>
 #include <tools/extendapplicationenvironment.hxx>
 
-BOOL SVMain();
+int SVMain();
 
 // -=-= main() -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
@@ -47,9 +47,7 @@ extern "C" int soffice_main()
     desktop::Desktop aDesktop;
     // This string is used during initialization of the Gtk+ VCL module
     aDesktop.SetAppName( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")) );
-    SVMain();
-
-    return 0;
+    return SVMain();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -84,7 +84,7 @@ class Desktop : public Application
 
                                 Desktop();
                                 ~Desktop();
-        virtual void            Main( );
+        virtual int         Main( );
         virtual void            Init();
         virtual void            InitFinished();
         virtual void            DeInit();

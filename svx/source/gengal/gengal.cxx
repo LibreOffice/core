@@ -80,7 +80,7 @@ typedef ::std::list<rtl::OUString> FileNameList;
 class GalApp : public Application
 {
 public:
-    virtual void Main();
+    virtual int Main();
 
 protected:
     Reference<XMultiServiceFactory> xMSF;
@@ -275,7 +275,7 @@ void GalApp::InitUCB()
         fprintf( stderr, "Failed to init content broker\n" );
 }
 
-void GalApp::Main()
+int GalApp::Main()
 {
     bool bHelp = false;
     rtl::OUString aPath, aDestDir;
@@ -310,10 +310,11 @@ void GalApp::Main()
     if( bHelp )
     {
         PrintHelp();
-        return;
+        return EXIT_SUCCESS;
     }
 
     createTheme( aName, aPath, aDestDir, nNumFrom, aFiles );
+    return EXIT_SUCCESS;
 }
 
 GalApp aGalApp;

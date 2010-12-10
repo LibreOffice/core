@@ -58,7 +58,7 @@ public:
 //  MenuBar*    pMainMenu;          // Hauptmenue
     Accelerator*    pMainAccel;     // Acceleratoren
 
-    void  Main( );
+    int Main( );
 
     void  LoadIniFile();
     void  SetFocus();

@@ -1511,7 +1511,7 @@ namespace {
     }
 }
 
-void Desktop::Main()
+int Desktop::Main()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Main" );
 
@@ -1523,12 +1523,12 @@ void Desktop::Main()
     if ( eError != BE_OK )
     {
         HandleBootstrapErrors( eError );
-        return;
+        return EXIT_FAILURE;
     }
 
     BootstrapStatus eStatus = GetBootstrapStatus();
     if (eStatus == BS_TERMINATE) {
-        return;
+        return EXIT_FAILURE;
     }
 
     // Detect desktop environment - need to do this as early as possible
@@ -1561,7 +1561,7 @@ void Desktop::Main()
                 HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
             else
                 HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-            return;
+            return EXIT_FAILURE;
         }
         // refresh path information
         utl::Bootstrap::reloadData();
@@ -1588,7 +1588,7 @@ void Desktop::Main()
 #ifndef UNX
         if ( pCmdLineArgs->IsHelp() ) {
             displayCmdlineHelp();
-            return;
+            return EXIT_SUCCESS;
         }
 #endif
 
@@ -1598,7 +1598,7 @@ void Desktop::Main()
         m_pLockfile = new Lockfile;
         if ( !pCmdLineArgs->IsInvisible() && !pCmdLineArgs->IsNoLockcheck() && !m_pLockfile->check( Lockfile_execWarning )) {
             // Lockfile exists, and user clicked 'no'
-            return;
+            return EXIT_FAILURE;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "desktop (lo119109) Desktop::Main <- Lockfile" );
 
@@ -1610,16 +1610,18 @@ void Desktop::Main()
 
             if( !InitAccessBridge( true, bQuitApp ) )
                 if( bQuitApp )
-                    return;
+                    return EXIT_FAILURE;
         }
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} GetEnableATToolSupport" );
 
         // terminate if requested...
-        if( pCmdLineArgs->IsTerminateAfterInit() ) return;
+        if( pCmdLineArgs->IsTerminateAfterInit() )
+            return EXIT_SUCCESS;
 
 
         //  Read the common configuration items for optimization purpose
-        if ( !InitializeConfiguration() ) return;
+        if ( !InitializeConfiguration() )
+            return EXIT_FAILURE;
 
         SetSplashScreenProgress(30);
 
@@ -1668,7 +1670,7 @@ void Desktop::Main()
         OUString aTitleString( aTitle );
         bCheckOk = CheckInstallation( aTitleString );
         if ( !bCheckOk )
-            return;
+            return EXIT_FAILURE;
         else
             aTitle = aTitleString;
 
@@ -1725,7 +1727,7 @@ void Desktop::Main()
         SynchronizeExtensionRepositories();
         bool bAbort = CheckExtensionDependencies();
         if ( bAbort )
-            return;
+            return EXIT_FAILURE;
 
         Migration::migrateSettingsIfNecessary();
 
@@ -1823,22 +1825,13 @@ void Desktop::Main()
         com::sun::star::uno::Exception te;
         wte.TargetException >>= te;
         FatalError( MakeStartupConfigAccessErrorMessage(wte.Message + te.Message) );
-        return;
+        return EXIT_FAILURE;
     }
     catch ( com::sun::star::uno::Exception& e )
     {
         FatalError( MakeStartupErrorMessage(e.Message) );
-        return;
+        return EXIT_FAILURE;
     }
-    /*
-    catch ( ... )
-    {
-        FatalError( MakeStartupErrorMessage(
-            OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "Unknown error during startup (Office wrapper service).\nInstallation could be damaged."))));
-        return;
-    }
-    */
     SetSplashScreenProgress(55);
 
     SvtFontSubstConfig().Apply();
@@ -1880,17 +1873,8 @@ void Desktop::Main()
         catch ( com::sun::star::uno::Exception& e )
         {
             FatalError( MakeStartupErrorMessage(e.Message) );
-            return;
+            return EXIT_FAILURE;
         }
-        /*
-        catch ( ... )
-        {
-            FatalError( MakeStartupErrorMessage(
-                OUString(RTL_CONSTASCII_USTRINGPARAM(
-                "Unknown error during startup (TD/Desktop service).\nInstallation could be damaged."))));
-            return;
-        }
-        */
 
         // Post user event to startup first application component window
         // We have to send this OpenClients message short before execute() to
@@ -1982,9 +1966,9 @@ void Desktop::Main()
         if ( m_rSplashScreen.is() )
             m_rSplashScreen->reset();
 
-        // wouldn't the solution be more clean if SalMain returns the exit code to the system?
-        _exit( ExitHelper::E_NORMAL_RESTART );
+        return ExitHelper::E_NORMAL_RESTART;
     }
+    return EXIT_SUCCESS;
 }
 
 IMPL_LINK( Desktop, ImplInitFilterHdl, ConvertData*, pData )

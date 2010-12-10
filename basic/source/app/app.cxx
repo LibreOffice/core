@@ -228,7 +228,7 @@ static void ReplaceStringHookProc( UniString& rStr )
     }
 }
 
-void BasicApp::Main( )
+int BasicApp::Main( )
 {
 #ifdef DBG_UTIL
 //  Install filter for OSLAsserts
@@ -336,6 +336,7 @@ void BasicApp::Main( )
         InfoBox( NULL, String::CreateFromAscii( "unknown Exception not caught" ) ).Execute();
         throw;
     }
+    return EXIT_SUCCESS;
 }
 
 void BasicApp::LoadIniFile()
