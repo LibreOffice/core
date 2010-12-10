@@ -271,18 +271,18 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
 ::rtl::OUString AnalyzeService_getImplementationName ()
 {
-    return rtl::OUString::createFromAscii ( AnalyzeService::IMPLEMENTATION_NAME );
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::IMPLEMENTATION_NAME ));
 }
 
 sal_Bool SAL_CALL AnalyzeService_supportsService( const ::rtl::OUString& ServiceName )
 {
-    return ServiceName.equals( rtl::OUString::createFromAscii( AnalyzeService::SERVICE_NAME ) );
+    return ServiceName.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( AnalyzeService::SERVICE_NAME )) );
 }
 uno::Sequence< rtl::OUString > SAL_CALL AnalyzeService_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
     uno::Sequence < rtl::OUString > aRet(1);
     rtl::OUString* pArray = aRet.getArray();
-    pArray[0] =  rtl::OUString::createFromAscii ( AnalyzeService::SERVICE_NAME );
+    pArray[0] =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ( AnalyzeService::SERVICE_NAME ));
     return aRet;
 }
 
