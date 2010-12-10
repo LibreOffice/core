@@ -1671,20 +1671,16 @@ AC_SUBST(ENABLE_SYMBOLS)
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to strip the solver or not.])
-if test -n "$enable_strip_solver"; then
-   if test "$enable_strip_solver" = "yes"; then
-      DISABLE_STRIP=
-   else if test "$enable_strip_solver" = "no"; then
-           DISABLE_STRIP="TRUE"
-        else
-           AC_MSG_ERROR([--disable-strip-solver only accepts yes or no as parameter.])
-        fi
-   fi
+if test "z$enable_strip_solver" = "zno"; then
+   DISABLE_STRIP="TRUE"
+   AC_MSG_RESULT([no])
 else
    if test -n "$ENABLE_SYMBOLS"; then
       DISABLE_STRIP="TRUE"
+      AC_MSG_RESULT([no])
    else
       DISABLE_STRIP=
+      AC_MSG_RESULT([yes])
    fi
 fi
 AC_SUBST(DISABLE_STRIP)
