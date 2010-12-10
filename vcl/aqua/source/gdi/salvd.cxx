@@ -33,6 +33,7 @@
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "salframe.h"
+#include <vcl/svapp.hxx>
 
 #include "vcl/sysdata.hxx"
 
@@ -197,13 +198,19 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
             pSalFrame = *GetSalData()->maFrames.begin();
         if( pSalFrame )
         {
-            NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pSalFrame->getWindow()];
-            if( pNSContext )
-                xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            // #i91990#
+            NSWindow* pWindow = pSalFrame->getWindow();
+            if ( pWindow )
+            {
+                NSGraphicsContext* pNSContext = [NSGraphicsContext graphicsContextWithWindow: pWindow];
+                if( pNSContext )
+                    xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
+            }
         }
     }
 
-    DBG_ASSERT( xCGContext, "no context" );
+    if ( !Application::IsHeadlessModeEnabled() )
+        DBG_ASSERT( xCGContext, "no context" );
 
     const CGSize aNewSize = { nDX, nDY };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
