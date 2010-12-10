@@ -1373,18 +1373,6 @@ if test "$build" != "$host" -o "$build" != "$target" \
 fi
 
 dnl ===================================================================
-dnl Checks for cygwin >= 1.5
-dnl ===================================================================
-if echo "$build_os" | grep cygwin; then
-   AC_MSG_CHECKING([Cygwin version])
-   CygwinVer=`uname -r`
-   AC_MSG_RESULT([$CygwinVer])
-   if test "`echo $CygwinVer | $AWK -F . '{ print $1$2 }'`" -lt "15"; then
-      AC_MSG_ERROR([You need at least Cygwin V1.5.x])
-   fi
-fi
-
-dnl ===================================================================
 dnl The following is a list of supported systems.
 dnl Sequential to keep the logic very simple
 dnl These values may be checked and reset later.
