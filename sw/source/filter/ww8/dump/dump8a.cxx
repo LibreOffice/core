@@ -2328,7 +2328,6 @@ void DumpEscherRecs( ULONG nPos, UINT32 nLength )
 {
     begin( *pOut, *xTableStream ) << endl1;
 
-    UINT16 nOldFbt = 0;
     ULONG nReadLen = 0;
     while( nReadLen < nLength )
     {
@@ -2373,7 +2372,6 @@ void DumpEscherRecs( ULONG nPos, UINT32 nLength )
 
         nReadLen += nRecLen;
         xTableStream->Seek( nPos + nReadLen );
-        nOldFbt = nFbt;
     }
     end( *pOut, *xTableStream ) << endl1;
 }

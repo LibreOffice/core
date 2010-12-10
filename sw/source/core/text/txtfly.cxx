@@ -755,12 +755,9 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
 SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
 {
     pPage = rTxtFly.pPage;
-    // --> OD 2006-08-15 #i68520#
     mpCurrAnchoredObj = rTxtFly.mpCurrAnchoredObj;
-    // <--
     pCurrFrm = rTxtFly.pCurrFrm;
     pMaster = rTxtFly.pMaster;
-    // --> OD 2006-08-15 #i68520#
     if( rTxtFly.mpAnchoredObjList )
     {
         mpAnchoredObjList = new SwAnchoredObjList( *(rTxtFly.mpAnchoredObjList) );
@@ -769,11 +766,16 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     {
         mpAnchoredObjList = NULL;
     }
-    // <--
 
     bOn = rTxtFly.bOn;
     bLeftSide = rTxtFly.bLeftSide;
     bTopRule = rTxtFly.bTopRule;
+    nMinBottom = rTxtFly.nMinBottom;
+    nNextTop = rTxtFly.nNextTop;
+    nIndex = rTxtFly.nIndex;
+    mbIgnoreCurrentFrame = rTxtFly.mbIgnoreCurrentFrame;
+    mbIgnoreContour = rTxtFly.mbIgnoreContour;
+    mbIgnoreObjsInHeaderFooter = rTxtFly.mbIgnoreObjsInHeaderFooter;
 }
 
 void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )

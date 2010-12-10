@@ -66,7 +66,7 @@ public:
     SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) throw( css::uno::RuntimeException );
 
     sal_Int32 getGalleryType() const { return mnGalleryType; }
-    css::uno::Reference< css::container::XIndexReplace > getNumberingRules() { return mxNumberingRules; }
+    css::uno::Reference< css::container::XIndexReplace > getNumberingRules() const { return mxNumberingRules; }
     css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const rtl::OUString& sName ) throw( css::uno::RuntimeException );
     void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const rtl::OUString& sName, const css::uno::Any& aValue ) throw( css::uno::RuntimeException );
 

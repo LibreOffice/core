@@ -1252,9 +1252,8 @@ void SwLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT nFlags,
     SvLBoxEntry* pEntry )
 {
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();
-    const SwSection* pSect;
     if(pCont->GetType() == GLBLDOC_SECTION &&
-        !(pSect = pCont->GetSection())->IsConnectFlag() )
+        !(pCont->GetSection())->IsConnectFlag() )
     {
         Font aOldFont( rDev.GetFont());
         Font aFont(aOldFont);

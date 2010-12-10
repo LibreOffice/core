@@ -437,9 +437,8 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException)
     SwSectionFmt *const pSectFmt = m_pImpl->GetSectionFmt();
     if(pSectFmt)
     {
-        const SwSection* pSect;
         const SwNodeIndex* pIdx;
-        if( 0 != ( pSect = pSectFmt->GetSection() ) &&
+        if( 0 != ( pSectFmt->GetSection() ) &&
             0 != ( pIdx = pSectFmt->GetCntnt().GetCntntIdx() ) &&
             pIdx->GetNode().GetNodes().IsDocNodes() )
         {

@@ -73,7 +73,7 @@ public:
     ~SwEndnoter() { delete pEndArr; }
     void CollectEndnotes( SwSectionFrm* pSct );
     void CollectEndnote( SwFtnFrm* pFtn );
-    const SwSectionFrm* GetSect() { return pSect; }
+    const SwSectionFrm* GetSect() const { return pSect; }
     void InsertEndnotes();
     BOOL HasEndnotes() const { return pEndArr && pEndArr->Count(); }
 };

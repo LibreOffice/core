@@ -2183,7 +2183,6 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 long nPrtHeight = (Prt().*fnRect->fnGetHeight)() - nDist;
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight );
 
-                SwTwips nReal = 0;
                 // We do not allow a section frame to shrink the its upper
                 // footer frame. This is because in the calculation of a
                 // footer frame, the content of the section frame is _not_
@@ -2199,7 +2198,7 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
                 // would cause the top of the section frame to overlap with the
                 // fly frame again, this would result in a perfect loop.
                 if( GetUpper() && !GetUpper()->IsFooterFrm() )
-                    nReal = GetUpper()->Shrink( nDist, bTst );
+                    GetUpper()->Shrink( nDist, bTst );
 
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {

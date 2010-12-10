@@ -578,7 +578,7 @@ private:
     long mnEndPos;   //0x15
 public:
     explicit Chunk(long nStart, const String &rURL)
-        : msURL(rURL), mnStartPos(nStart) {}
+        : msURL(rURL), mnStartPos(nStart), mnEndPos(0)  {}
     Chunk(const Chunk &rChunk)
         : msURL(rChunk.msURL), mnStartPos(rChunk.mnStartPos),
         mnEndPos(rChunk.mnEndPos) {}

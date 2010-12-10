@@ -75,9 +75,7 @@ void SwTxtIter::CtorInitTxtIter( SwTxtFrm *pNewFrm, SwTxtInfo *pNewInf )
 
     pFrm = pNewFrm;
     pInf = pNewInf;
-    // --> OD 2008-01-17 #newlistlevelattrs#
     aLineInf.CtorInitLineInfo( pNode->GetSwAttrSet(), *pNode );
-    // <--
     nFrameStart = pFrm->Frm().Pos().Y() + pFrm->Prt().Pos().Y();
     SwTxtIter::Init();
     if( pNode->GetSwAttrSet().GetRegister().GetValue() )
