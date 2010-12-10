@@ -745,7 +745,7 @@ String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTo
     size_t ListSize = aRangeList.size();
     for ( size_t i = 0; i < ListSize; ++i )
     {
-        const ScRangePtr p = aRangeList.at( i );
+        const ScRange* p = aRangeList.at( i );
         if (p != pFirst)
             pArray->AddOpCode(ocSep);
         ScComplexRefData aRef;
@@ -998,7 +998,7 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                         size_t nListSize = aList->size();
                         for ( size_t i = 0; i < nListSize; ++i )
                         {
-                            ScRangePtr pR = aList->at( i );
+                            ScRange* pR = aList->at( i );
                             pDoc->AddPrintRange( nTab, *pR );
                         }
                     }

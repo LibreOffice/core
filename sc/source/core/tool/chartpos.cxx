@@ -105,7 +105,7 @@ void ScChartPositioner::GlueState()
     if ( eGlue != SC_CHARTGLUE_NA )
         return;
     bDummyUpperLeft = FALSE;
-    ScRangePtr pR;
+    ScRange* pR;
     if ( aRangeListRef->size() <= 1 )
     {
         if (  !aRangeListRef->empty() )
@@ -326,7 +326,7 @@ void ScChartPositioner::CheckColRowHeaders()
               ++i
             )
         {
-            ScRangePtr pR = aRangeListRef->at( i );
+            ScRange* pR = aRangeListRef->at( i );
             pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
             BOOL bTopRow = (nRow1 == nStartRow);
             if ( bRowStrings && (bVert || nCol1 == nStartCol) )
@@ -397,7 +397,7 @@ void ScChartPositioner::CreatePositionMap()
     SCROW nNoGlueRow = 0;
     for ( size_t i = 0, nRanges = aRangeListRef->size(); i < nRanges; ++i )
     {
-        ScRangePtr pR = aRangeListRef->at( i );
+        ScRange* pR = aRangeListRef->at( i );
         pR->GetVars( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
         for ( nTab = nTab1; nTab <= nTab2; nTab++ )
         {

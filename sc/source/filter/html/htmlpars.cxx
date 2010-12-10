@@ -372,7 +372,7 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, BOOL bJoin )
             bAgain = FALSE;
             for ( size_t i =  0, nRanges = xLockedList->size(); i < nRanges; ++i )
             {
-                ScRangePtr pR = xLockedList->at( i );
+                ScRange* pR = xLockedList->at( i );
                 if ( pR->Intersects( aRange ) )
                 {
                     pE->nCol = pR->aEnd.Col() + 1;
@@ -2625,7 +2625,7 @@ void ScHTMLTable::FillEmptyCells()
     // insert the final vertically merged ranges into maUsedCells
     for ( size_t i = 0, nRanges = maVMergedCells.size(); i < nRanges; ++i )
     {
-        ScRangePtr pRange = maVMergedCells[ i ];
+        ScRange* pRange = maVMergedCells[ i ];
         maUsedCells.Join( *pRange );
     }
 

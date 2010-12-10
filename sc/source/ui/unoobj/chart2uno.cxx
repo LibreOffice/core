@@ -3144,7 +3144,7 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ScChart2DataSequence::generateLabel(ch
 
     sal_Int32 nCount = 0;
     bool bFound = false;
-    ScRangePtr p;
+    ScRange* p;
 
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( lcl_GetSpreadSheetDocument( m_pDocument ));
     if (!xSpreadDoc.is())
@@ -3499,7 +3499,7 @@ uno::Sequence< rtl::OUString > SAL_CALL ScChart2EmptyDataSequence::getTextualDat
         throw uno::RuntimeException();
 
     sal_Int32 nCount = 0;
-    ScRangePtr p;
+    ScRange* p;
 
     DBG_ASSERT(m_xRanges->Count() == 1, "not handled count of ranges");
 

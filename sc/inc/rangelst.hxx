@@ -36,7 +36,6 @@
 
 class ScDocument;
 
-typedef ScRange* ScRangePtr;
 class SC_DLLPUBLIC ScRangeList : public SvRefBase
 {
 public:
@@ -46,7 +45,7 @@ public:
     ScRangeList&    operator=(const ScRangeList& rList);
     void            Append( const ScRange& rRange )
                     {
-                        ScRangePtr pR = new ScRange( rRange );
+                        ScRange* pR = new ScRange( rRange );
                         maRanges.push_back( pR );
                     }
 

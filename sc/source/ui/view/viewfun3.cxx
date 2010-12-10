@@ -373,7 +373,7 @@ BOOL ScViewFunc::CopyToClip( ScDocument* pClipDoc, BOOL bCut, BOOL bApi, BOOL bI
 
             // Check for geometrical feasibility of the ranges.
             bool bValidRanges = true;
-            ScRangePtr p = aClipParam.maRanges.front();
+            ScRange* p = aClipParam.maRanges.front();
             SCCOL nPrevColDelta = 0;
             SCROW nPrevRowDelta = 0;
             SCCOL nPrevCol = p->aStart.Col();
@@ -1079,7 +1079,7 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         size_t ListSize = aRangeList.size();
         for ( size_t i = 0; i < ListSize; ++i )
         {
-            ScRangePtr p = aRangeList.at( i );
+            ScRange* p = aRangeList.at( i );
             nUnfilteredRows += p->aEnd.Row() - p->aStart.Row() + 1;
         }
 #if 0

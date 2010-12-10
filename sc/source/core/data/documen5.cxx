@@ -514,7 +514,7 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         BOOL bDataChanged = FALSE;
         for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
         {
-            ScRangePtr pR = aRLR->at( i );
+            ScRange* pR = aRLR->at( i );
             SCCOL theCol1 = pR->aStart.Col();
             SCROW theRow1 = pR->aStart.Row();
             SCTAB theTab1 = pR->aStart.Tab();

@@ -1920,7 +1920,7 @@ void XclImpXFRangeBuffer::Finalize()
     // apply cell merging
     for ( size_t i = 0, nRange = maMergeList.size(); i < nRange; ++i )
     {
-        const ScRangePtr pRange = maMergeList[ i ];
+        const ScRange* pRange = maMergeList[ i ];
         const ScAddress& rStart = pRange->aStart;
         const ScAddress& rEnd = pRange->aEnd;
         bool bMultiCol = rStart.Col() != rEnd.Col();

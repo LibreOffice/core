@@ -2391,7 +2391,7 @@ void ScDocument::CopyMultiRangeFromClip(
 
     for ( size_t i = 0, n = rClipParam.maRanges.size(); i < n; ++i )
     {
-        ScRangePtr p = rClipParam.maRanges[ i ];
+        ScRange* p = rClipParam.maRanges[ i ];
         // The begin row must not be filtered.
 
         SCROW nRowCount = p->aEnd.Row() - p->aStart.Row() + 1;
@@ -2491,7 +2491,7 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
         // No clip range.  Bail out.
         return;
 
-    ScRangePtr p = rClipRanges.front();
+    ScRange* p = rClipRanges.front();
     SCCOL nStartCol = p->aStart.Col();
     SCCOL nEndCol   = p->aEnd.Col();
     SCROW nStartRow = p->aStart.Row();
@@ -2562,7 +2562,7 @@ BOOL ScDocument::HasClipFilteredRows()
 
     for ( size_t i = 0, n = rClipRanges.size(); i < n; ++i )
     {
-        ScRangePtr p = rClipRanges[ i ];
+        ScRange* p = rClipRanges[ i ];
         bool bAnswer = pTab[nCountTab]->HasFilteredRows(p->aStart.Row(), p->aEnd.Row());
         if (bAnswer)
             return true;

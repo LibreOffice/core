@@ -134,7 +134,7 @@ ScMemChart* ScChartArray::CreateMemChart()
         return CreateMemChartMulti();
     else if ( nCount == 1 )
     {
-        ScRangePtr pR = aRangeListRef->front();
+        ScRange* pR = aRangeListRef->front();
         if ( pR->aStart.Tab() != pR->aEnd.Tab() )
             return CreateMemChartMulti();
         else

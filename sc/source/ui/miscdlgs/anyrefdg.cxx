@@ -149,7 +149,7 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
             {
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ScRangePtr pRangeEntry = aRangeList[ i ];
+                    ScRange* pRangeEntry = aRangeList[ i ];
                     ColorData aColName = ScRangeFindList::GetColorName( i );
                     pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
                }
@@ -315,7 +315,7 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
             {
                 if ( !aRangeList.empty() )
                 {
-                    const ScRangePtr pRange = aRangeList.front();
+                    const ScRange* pRange = aRangeList.front();
                     pViewShell->SetTabNo( pRange->aStart.Tab() );
                     pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
                         pRange->aStart.Row(), SC_FOLLOW_JUMP, FALSE, FALSE );

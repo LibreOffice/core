@@ -101,7 +101,7 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 
     for ( size_t i=0, nCount = rRanges.size(); i < nCount; i++ )
     {
-        ScRangePtr pRange = rRanges[ i ];
+        ScRange* pRange = rRanges[ i ];
         if ( pRange->aStart.Tab() == nSourceTab && pRange->aEnd.Tab() == nSourceTab )
         {
             pRange->aStart.SetTab( nDestTab );

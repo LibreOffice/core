@@ -472,7 +472,7 @@ void ScTable::CopyToClip(const ScRangeList& rRanges, ScTable* pTable,
     ScRangeList aRanges(rRanges);
     for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
     {
-        ScRangePtr p = aRanges[ i ];
+        ScRange* p = aRanges[ i ];
         CopyToClip(p->aStart.Col(), p->aStart.Row(), p->aEnd.Col(), p->aEnd.Row(),
                    pTable, bKeepScenarioFlags, bCloneNoteCaptions);
     }

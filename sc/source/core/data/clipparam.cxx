@@ -72,7 +72,7 @@ SCCOL ScClipParam::getPasteColSize()
             SCCOL nColSize = 0;
             for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
             {
-                ScRangePtr p = maRanges[ i ];
+                ScRange* p = maRanges[ i ];
                 nColSize += p->aEnd.Col() - p->aStart.Col() + 1;
             }
             return nColSize;
@@ -108,7 +108,7 @@ SCROW ScClipParam::getPasteRowSize()
             SCROW nRowSize = 0;
             for ( size_t i = 0, nListSize = maRanges.size(); i < nListSize; ++i )
             {
-                ScRangePtr p = maRanges[ i ];
+                ScRange* p = maRanges[ i ];
                 nRowSize += p->aEnd.Row() - p->aStart.Row() + 1;
             }
             return nRowSize;

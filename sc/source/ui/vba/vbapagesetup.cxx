@@ -116,7 +116,7 @@ void SAL_CALL ScVbaPageSetup::setPrintArea( const rtl::OUString& rAreas ) throw 
             uno::Sequence< table::CellRangeAddress > aSeq( aCellRanges.size() );
             for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
             {
-                ScRangePtr pRange = aCellRanges[ i ];
+                ScRange* pRange = aCellRanges[ i ];
                 table::CellRangeAddress aRangeAddress;
                 ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
                 aSeq[ i++ ] = aRangeAddress;

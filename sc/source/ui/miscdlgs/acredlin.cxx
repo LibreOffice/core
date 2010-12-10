@@ -396,7 +396,7 @@ BOOL ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
         {
             for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                ScRangePtr pRangeEntry = aRangeList[ i ];
+                ScRange* pRangeEntry = aRangeList[ i ];
                 if (pRangeEntry->Intersects(aRef)) {
                     bFlag = TRUE;
                     break;
@@ -518,7 +518,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeA
             {
                 for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ScRangePtr pRangeEntry = aRangeList[ i ];
+                    ScRange* pRangeEntry = aRangeList[ i ];
                     if( pRangeEntry->Intersects(aRef) )
                     {
                         bHasFilterEntry=TRUE;
@@ -585,7 +585,7 @@ SvLBoxEntry* ScAcceptChgDlg::InsertFilteredAction(const ScChangeAction* pScChang
         {
             for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
             {
-                ScRangePtr pRangeEntry=aRangeList[ i ];
+                ScRange* pRangeEntry=aRangeList[ i ];
                 if( pRangeEntry->Intersects(aRef) )
                 {
                     if( pScChangeAction->GetState()==eState )

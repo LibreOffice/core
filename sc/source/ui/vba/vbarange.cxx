@@ -1162,7 +1162,7 @@ bool getScRangeListForAddress( const rtl::OUString& sName, ScDocShell* pDocSh, S
 
         for ( size_t i = 0, nRanges = aCellRanges.size(); i < nRanges; ++i )
         {
-            ScRangePtr pRange = aCellRanges[ i ];
+            ScRange* pRange = aCellRanges[ i ];
             pRange->aStart.SetCol( refRange.aStart.Col() + pRange->aStart.Col() );
             pRange->aStart.SetRow( refRange.aStart.Row() + pRange->aStart.Row() );
             pRange->aStart.SetTab( bTabFromReferrer ? refRange.aStart.Tab()  : pRange->aStart.Tab() );

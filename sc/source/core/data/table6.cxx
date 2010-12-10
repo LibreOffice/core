@@ -770,7 +770,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
         rMark.FillRangeListWithMarks(&aMarkedRanges, true);
         for ( size_t i = 0, n = aMarkedRanges.size(); i < n; ++i )
         {
-            ScRangePtr p = aMarkedRanges[ i ];
+            ScRange* p = aMarkedRanges[ i ];
             if (p->aStart.Col() > nColEnd || p->aStart.Row() > nRowEnd)
                 // This range is outside the data area.  Skip it.
                 continue;
@@ -798,7 +798,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
         {
             for ( size_t i = aRanges.size(); i > 0; --i )
             {
-                ScRangePtr p = aRanges[ i - 1 ];
+                ScRange* p = aRanges[ i - 1 ];
                 if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc))
                     return true;
             }
@@ -807,7 +807,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
         {
             for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
             {
-                ScRangePtr p = aRanges[ i ];
+                ScRange* p = aRanges[ i ];
                 if (SearchRangeForEmptyCell( *p, rSearchItem, rCol, rRow, rUndoStr, pUndoDoc ))
                     return true;
             }
@@ -820,7 +820,7 @@ bool ScTable::SearchAndReplaceEmptyCells(
         aNewMark.ResetMark();
         for ( size_t i = 0, nListSize = aRanges.size(); i < nListSize; ++i )
         {
-            ScRangePtr p = aRanges[ i ];
+            ScRange* p = aRanges[ i ];
             bFound |= SearchRangeForAllEmptyCells(*p, rSearchItem, aNewMark, rUndoStr, pUndoDoc);
         }
         rMark = aNewMark;

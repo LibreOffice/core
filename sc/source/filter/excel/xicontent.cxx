@@ -648,7 +648,7 @@ void XclImpCondFormat::Apply()
         // maRanges contains only valid cell ranges
         for ( size_t i = 0, nRanges = maRanges.size(); i < nRanges; ++i )
         {
-            const ScRangePtr pScRange = maRanges[ i ];
+            const ScRange* pScRange = maRanges[ i ];
             rDoc.ApplyPatternAreaTab(
                 pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(),
@@ -870,7 +870,7 @@ void XclImpValidationManager::Apply()
         // apply all ranges
         for ( size_t i = 0, nRanges = rItem.maRanges.size(); i < nRanges; ++i )
         {
-            const ScRangePtr pScRange = rItem.maRanges[ i ];
+            const ScRange* pScRange = rItem.maRanges[ i ];
             rDoc.ApplyPatternAreaTab( pScRange->aStart.Col(), pScRange->aStart.Row(),
                 pScRange->aEnd.Col(), pScRange->aEnd.Row(), pScRange->aStart.Tab(), aPattern );
         }

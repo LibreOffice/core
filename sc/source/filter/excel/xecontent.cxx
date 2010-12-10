@@ -337,7 +337,7 @@ sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
     for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
     {
-        const ScRangePtr pScRange = rNCRanges[ i ];
+        const ScRange* pScRange = rNCRanges[ i ];
         if( pScRange->In( rPos ) )
             return *aIt;
     }
@@ -581,7 +581,7 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     // row labels only over 1 column (restriction of Excel97/2000/XP)
     for ( size_t i = 0, nRanges = maRowRanges.size(); i < nRanges; ++i )
     {
-        ScRangePtr pScRange = maRowRanges[ i ];
+        ScRange* pScRange = maRowRanges[ i ];
         if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
             pScRange->aEnd.SetCol( pScRange->aStart.Col() );
     }
