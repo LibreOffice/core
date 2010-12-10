@@ -732,7 +732,10 @@ rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sS
     sBuf.appendAscii( sStream );
     if( nId )
         sBuf.append( nId );
-    sBuf.appendAscii( ".xml" );
+    if( strstr(sStream, "vml") )
+        sBuf.appendAscii( ".vml" );
+    else
+        sBuf.appendAscii( ".xml" );
     return sBuf.makeStringAndClear();
 }
 
