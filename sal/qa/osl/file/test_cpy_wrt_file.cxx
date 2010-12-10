@@ -82,7 +82,7 @@ public:
         FileBase::getFileURLFromSystemPath(rtl::OUString::createFromAscii(WRITE_DEST_PATH), dest_url);
 
         File tmp_file(dest_url);
-        rtl::OUString suErrorMsg = rtl::OUString::createFromAscii("File creation failed: ")+ dest_url;
+        rtl::OUString suErrorMsg = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("File creation failed: "))+ dest_url;
         FileBase::RC err = tmp_file.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
 
         CPPUNIT_ASSERT_MESSAGE( suErrorMsg, err == FileBase::E_None || err == FileBase::E_EXIST );

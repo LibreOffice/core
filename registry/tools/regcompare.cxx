@@ -1634,8 +1634,8 @@ static sal_uInt32 checkBlob(const OUString& keyName, typereg::Reader& reader1, s
     }
 /*
     if ( nError &&
-         (!keyName.compareTo(OUString::createFromAscii("/UCR/drafts"), 11) ||
-          !keyName.compareTo(OUString::createFromAscii("/drafts"), 7)) )
+         (!keyName.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("/UCR/drafts")), 11) ||
+          !keyName.compareTo(OUString(RTL_CONSTASCII_USTRINGPARAM("/drafts")), 7)) )
     {
         if ( options.forceOutput() )
         {

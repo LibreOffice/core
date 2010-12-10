@@ -1324,7 +1324,7 @@ void SAL_CALL NestedRegistryImpl::close(  )
     }
 /*
     throw InvalidRegistryException(
-            OUString::createFromAscii("the 'close' method is not specified for a nested registry"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("the 'close' method is not specified for a nested registry")),
             Reference< XInterface >() );
 */
 }

@@ -103,7 +103,7 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType, const Reference< XMultiS
         if( !xRefl.is() )
         {
             xRefl = Reference< XIdlReflection >( xMgr->createInstance(
-                OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
             OSL_ENSURE( xRefl.is(), "### no corereflection!" );
         }
         xRetClass = xRefl->forName( sOWName );
@@ -127,19 +127,19 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     OUString aRetStr;
     switch( eType )
     {
-        case TypeClass_TYPE:            aRetStr = OUString::createFromAscii("TYPE TYPE");               break;
-        case TypeClass_INTERFACE:       aRetStr = OUString::createFromAscii("TYPE INTERFACE");      break;
-        case TypeClass_SERVICE:         aRetStr = OUString::createFromAscii("TYPE SERVICE");            break;
-        case TypeClass_STRUCT:          aRetStr = OUString::createFromAscii("TYPE STRUCT");         break;
-        case TypeClass_TYPEDEF:         aRetStr = OUString::createFromAscii("TYPE TYPEDEF");            break;
-        case TypeClass_UNION:           aRetStr = OUString::createFromAscii("TYPE UNION");          break;
-        case TypeClass_ENUM:            aRetStr = OUString::createFromAscii("TYPE ENUM");               break;
-        case TypeClass_EXCEPTION:       aRetStr = OUString::createFromAscii("TYPE EXCEPTION");      break;
-        case TypeClass_ARRAY:           aRetStr = OUString::createFromAscii("TYPE ARRAY");          break;
-        case TypeClass_SEQUENCE:        aRetStr = OUString::createFromAscii("TYPE SEQUENCE");           break;
-        case TypeClass_VOID:            aRetStr = OUString::createFromAscii("TYPE void");               break;
-        case TypeClass_ANY:             aRetStr = OUString::createFromAscii("TYPE any");                break;
-        case TypeClass_UNKNOWN:         aRetStr = OUString::createFromAscii("TYPE unknown");            break;
+        case TypeClass_TYPE:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE TYPE"));               break;
+        case TypeClass_INTERFACE:       aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE INTERFACE"));      break;
+        case TypeClass_SERVICE:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE SERVICE"));            break;
+        case TypeClass_STRUCT:          aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE STRUCT"));         break;
+        case TypeClass_TYPEDEF:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE TYPEDEF"));            break;
+        case TypeClass_UNION:           aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE UNION"));          break;
+        case TypeClass_ENUM:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE ENUM"));               break;
+        case TypeClass_EXCEPTION:       aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE EXCEPTION"));      break;
+        case TypeClass_ARRAY:           aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE ARRAY"));          break;
+        case TypeClass_SEQUENCE:        aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE SEQUENCE"));           break;
+        case TypeClass_VOID:            aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE void"));               break;
+        case TypeClass_ANY:             aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE any"));                break;
+        case TypeClass_UNKNOWN:         aRetStr = OUString(RTL_CONSTASCII_USTRINGPARAM("TYPE unknown"));            break;
         case TypeClass_BOOLEAN:
         {
             sal_Bool b = *(sal_Bool*)aValue.getValue();
@@ -226,7 +226,7 @@ OUString AnyToString( const Any& aValue, sal_Bool bIncludeType, const Reference<
     if( bIncludeType )
     {
         Reference< XIdlClass > xIdlClass = TypeToIdlClass( aValType, xMgr );
-        aRetStr = aRetStr + OUString( OUString::createFromAscii(" (Typ: ") ) + xIdlClass->getName() + OUString::createFromAscii(")");
+        aRetStr = aRetStr + OUString( OUString(RTL_CONSTASCII_USTRINGPARAM(" (Typ: ")) ) + xIdlClass->getName() + OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
     }
     return aRetStr;
 }
@@ -338,21 +338,21 @@ Sequence< Property > ImplPropertySetInfo::getProperties(void)
         pSeq = new Sequence<Property>( 3 );
         Property * pAry = pSeq->getArray();
 
-        pAry[0].Name = OUString::createFromAscii("Factor");
+        pAry[0].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Factor"));
         pAry[0].Handle = -1;
         pAry[0].Type = getCppuType( (double*) NULL );
         //pAry[0].Type = TypeToIdlClass( getCppuType( (double*) NULL ), mxMgr );
         //pAry[0].Type = Double_getReflection()->getIdlClass();
         pAry[0].Attributes = BOUND | TRANSIENT;
 
-        pAry[1].Name = OUString::createFromAscii("MyCount");
+        pAry[1].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("MyCount"));
         pAry[1].Handle = -1;
         pAry[1].Type = getCppuType( (sal_Int32*) NULL );
         //pAry[1].Type = TypeToIdlClass( getCppuType( (sal_Int32*) NULL ), mxMgr );
         //pAry[1].Type = INT32_getReflection()->getIdlClass();
         pAry[1].Attributes = BOUND | TRANSIENT;
 
-        pAry[2].Name = OUString::createFromAscii("Info");
+        pAry[2].Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Info"));
         pAry[2].Handle = -1;
         pAry[2].Type = getCppuType( (OUString*) NULL );
         //pAry[2].Type = TypeToIdlClass( getCppuType( (OUString*) NULL ), mxMgr );
@@ -512,7 +512,7 @@ public:
     virtual OUString SAL_CALL getFirstName()
         throw(RuntimeException);
     virtual OUString SAL_CALL getLastName() throw(RuntimeException)
-        { return OUString( OUString::createFromAscii("Meyer") ); }
+        { return OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Meyer")) ); }
     virtual sal_Int16 SAL_CALL getAge() throw(RuntimeException)
         { return m_nMarkusAge; }
     virtual sal_Int16 SAL_CALL getChildrenCount() throw(RuntimeException)
@@ -608,14 +608,14 @@ void ImplIntroTest::Init( void )
 {
     // Eindeutigen Namen verpassen
     static sal_Int32 nObjCount = 0;
-    OUString aName( OUString::createFromAscii("IntroTest-Obj Nr. ") );
+    OUString aName( RTL_CONSTASCII_USTRINGPARAM("IntroTest-Obj Nr. ") );
     aName += OUString::valueOf( nObjCount );
     setObjectName( aName );
 
     // Properties initialisieren
     aAnyArray[0] <<= 3.14;
     aAnyArray[1] <<= (sal_Int32)42;
-    aAnyArray[2] <<= OUString( OUString::createFromAscii("Hallo") );
+    aAnyArray[2] <<= OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Hallo")) );
 
     // Output-Interface
     //m_pOutput = NULL;
@@ -637,12 +637,12 @@ void ImplIntroTest::Init( void )
     // String-Sequence intitialisieren
     aStringSeq.realloc( 3 );
     OUString* pStr = aStringSeq.getArray();
-    pStr[ 0 ] = OUString( OUString::createFromAscii("String 0") );
-    pStr[ 1 ] = OUString( OUString::createFromAscii("String 1") );
-    pStr[ 2 ] = OUString( OUString::createFromAscii("String 2") );
+    pStr[ 0 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 0")) );
+    pStr[ 1 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 1")) );
+    pStr[ 2 ] = OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("String 2")) );
 
     // structs initialisieren
-    m_aFirstStruct.Name = OUString::createFromAscii("FirstStruct-Name");
+    m_aFirstStruct.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("FirstStruct-Name"));
     m_aFirstStruct.Handle = 77777;
     //XIdlClassRef Type;
     m_aFirstStruct.Attributes = -222;
@@ -760,7 +760,7 @@ Any ImplIntroTest::getPropertyValue( const OUString& PropertyName )
 OUString ImplIntroTest::getFirstName(void)
     throw(RuntimeException)
 {
-    return OUString( OUString::createFromAscii("Markus") );
+    return OUString( OUString(RTL_CONSTASCII_USTRINGPARAM("Markus")) );
 }
 
 void ImplIntroTest::writeln( const OUString& Text )
@@ -812,7 +812,7 @@ sal_Bool ImplIntroTest::hasElements(  )
 sal_Int32 getIndexForName( const OUString& ItemName )
 {
     OUString aLeftStr = ItemName.copy( 0, 4 );
-    if( aLeftStr == OUString::createFromAscii("Item") )
+    if( aLeftStr == OUString(RTL_CONSTASCII_USTRINGPARAM("Item")) )
     {
         // TODO
         OUString aNumStr = ItemName.copy( 4 );
@@ -840,7 +840,7 @@ Any ImplIntroTest::getByName( const OUString& aName )
         if( !pNameAccessTab[iIndex].is() )
         {
             ImplIntroTest* p = new ImplIntroTest( mxMgr );
-            OUString aName2( OUString::createFromAscii("IntroTest by Name-Access, Index = ") );
+            OUString aName2( RTL_CONSTASCII_USTRINGPARAM("IntroTest by Name-Access, Index = ") );
             aName2 += OUString::valueOf( iIndex );
             //aName2 = aName2 + StringToUString( String( iIndex ), CHARSET_SYSTEM );
             p->setObjectName( aName2 );
@@ -864,7 +864,7 @@ Sequence< OUString > ImplIntroTest::getElementNames(  )
     OUString* pStr = aStrSeq.getArray();
     for( sal_Int32 i = 0 ; i < DEFAULT_NAME_ACCESS_COUNT ; i++ )
     {
-        OUString aName( OUString::createFromAscii("Item") );
+        OUString aName( RTL_CONSTASCII_USTRINGPARAM("Item") );
         aName += OUString::valueOf( i );
         //aName = aName + StringToUString( i, CHARSET_SYSTEM );
         pStr[i] = aName;
@@ -902,7 +902,7 @@ Any ImplIntroTest::getByIndex( sal_Int32 Index )
         if( !pNameAccessTab[Index].is() )
         {
             ImplIntroTest* p = new ImplIntroTest( mxMgr );
-            OUString aName( OUString::createFromAscii("IntroTest by Index-Access, Index = ") );
+            OUString aName( RTL_CONSTASCII_USTRINGPARAM("IntroTest by Index-Access, Index = ") );
             aName += OUString::valueOf( Index );
             //aName = aName + StringToUString( String( iIndex ), CHARSET_SYSTEM );
             p->setObjectName( aName );
@@ -1296,7 +1296,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
                         OUString aStr;
                         aPropVal >>= aStr;
                         //OString aStr = aPropVal.getString();
-                        aStr = aStr + OUString::createFromAscii(" (Modified!)");
+                        aStr = aStr + OUString(RTL_CONSTASCII_USTRINGPARAM(" (Modified!)"));
                         aNewVal <<= aStr;
                         break;
                     }
@@ -1544,35 +1544,35 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
 SAL_IMPLEMENT_MAIN()
 {
-    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
+    Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb")) ) );
 
     sal_Bool bSucc = sal_False;
     try
     {
         Reference< XImplementationRegistration > xImplReg(
-            xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+            xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) ), UNO_QUERY );
         OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
         // Register services
         OUString libName( RTL_CONSTASCII_USTRINGPARAM(
                               "reflection.uno" SAL_DLLEXTENSION) );
-//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
+//          ORealDynamicLoader::computeLibraryName( OUString(RTL_CONSTASCII_USTRINGPARAM("corefl")), libName);
         fprintf(stderr, "1\n" );
-        xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "2\n" );
-        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.CoreReflection") ), UNO_QUERY );
+        Reference< XIdlReflection > xRefl( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.reflection.CoreReflection")) ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         // Introspection
         libName = OUString::createFromAscii(
             "introspection.uno" SAL_DLLEXTENSION);
-//          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("insp"), libName);
+//          ORealDynamicLoader::computeLibraryName( OUString(RTL_CONSTASCII_USTRINGPARAM("insp")), libName);
         fprintf(stderr, "3\n" );
-        xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImplReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                          libName, Reference< XSimpleRegistry >() );
         fprintf(stderr, "4\n" );
-        Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString::createFromAscii("com.sun.star.beans.Introspection") ), UNO_QUERY );
+        Reference< XIntrospection > xIntrosp( xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection")) ), UNO_QUERY );
         OSL_ENSURE( xRefl.is(), "### no corereflection!" );
 
         fprintf(stderr, "before test_introsp\n" );

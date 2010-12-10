@@ -138,7 +138,7 @@ protected:
     void SAL_CALL run( )
         {
             ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 );
             ::osl::StreamSocket ssStreamConnection;
 
             //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
@@ -248,7 +248,7 @@ protected:
 public:
     ClientSocketThread( osl::Condition &_aCond  ):
             m_aCondition(_aCond),
-            m_saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 ),
+            m_saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 ),
             m_csConnectorSocket( )
         {
             m_id = getIdentifier( );
@@ -331,7 +331,7 @@ protected:
 
     void SAL_CALL run( )
         {
-            ::osl::SocketAddr      m_aTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr      m_aTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
             ::osl::ConnectorSocket m_aConnectorSocket;
 
             if (! m_aTargetSocketAddr.is())
@@ -412,7 +412,7 @@ protected:
         {
             t_print("start WriteSocketThread\n");
             ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
             if (! saLocalSocketAddr.is())
             {
                 t_print("LocalSocketAddr was NOT created successfully!\n");
@@ -636,7 +636,7 @@ namespace osl_StreamSocket
         void send_recv2()
             {
                 ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
+                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 );
                 ::osl::StreamSocket ssStreamConnection;
                 sal_Char pReadBuffer[30] = "";
 
@@ -756,7 +756,7 @@ namespace osl_StreamSocket
             }
     public:
         SendClientThread(  ):
-                m_saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 ),
+                m_saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 ),
                 m_csConnectorSocket( )
             {
                 //t_print("# successfully creat this SendClientThread %d!\n",  m_id );
@@ -788,7 +788,7 @@ namespace osl_StreamSocket
             {
 #if defined(LINUX)
                 ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-                AcceptorThread myAcceptorThread( asSocket, rtl::OUString::createFromAscii("127.0.0.1") );
+                AcceptorThread myAcceptorThread( asSocket, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")) );
                 myAcceptorThread.create();
 
                 thread_sleep( 1 );
@@ -805,7 +805,7 @@ namespace osl_StreamSocket
         void shutdown_002()
             {
                 ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9);
+                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9);
                 asSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: bind fail", asSocket.bind( saLocalSocketAddr ) == sal_True);
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: listen fail", asSocket.listen( 1 ) == sal_True );
@@ -858,7 +858,7 @@ namespace osl_StreamSocket
         void shutdown_003()
             {
                 ::osl::AcceptorSocket asSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9);
+                ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9);
                 asSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: bind fail", asSocket.bind( saLocalSocketAddr ) == sal_True);
                 CPPUNIT_ASSERT_MESSAGE("shutdown_002: listen fail", asSocket.listen( 1 ) == sal_True );
@@ -937,7 +937,7 @@ namespace osl_StreamSocket
 // LLA:     void SAL_CALL run( )
 // LLA:     {
 // LLA:         ::osl::AcceptorSocket asAcceptorSocket( osl_Socket_FamilyInet, osl_Socket_ProtocolIp, osl_Socket_TypeStream );
-// LLA:         ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("10.16.66.252"), 8888 );
+// LLA:         ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10.16.66.252")), 8888 );
 // LLA:         ::osl::StreamSocket ssStreamConnection;
 // LLA:
 // LLA:         //if has not set this option, socket addr can not be binded in some time(maybe 2 minutes) by another socket
@@ -1216,9 +1216,9 @@ namespace osl_StreamSocket
     public:
 // LLA: orig        void send_recv()
 // LLA: orig             {
-// LLA: orig                if ( ifAvailable(rtl::OUString::createFromAscii("margritte.germany")) == sal_True )
+// LLA: orig                if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("margritte.germany"))) == sal_True )
 // LLA: orig                    t_print("margritte is alive ! \n");
-// LLA: orig                if ( ifAvailable(rtl::OUString::createFromAscii("10.16.66.252")) == sal_False )
+// LLA: orig                if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10.16.66.252"))) == sal_False )
 // LLA: orig                {
 // LLA: orig            t_print("ip 10.16.66.252 is not alive! \n");
 // LLA: orig            return;
@@ -1297,7 +1297,7 @@ namespace osl_StreamSocket
         void send_recv()
             {
                 rtl::OString sAddr;
-                // if ( ifAvailable(rtl::OUString::createFromAscii("margritte.germany")) == sal_True )
+                // if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("margritte.germany"))) == sal_True )
                 // {
                 //     t_print("margritte is alive ! \n");
                 //     sAddr = "margritte.germany";
@@ -1310,21 +1310,21 @@ namespace osl_StreamSocket
                 }
 //                 else
 //                 {
-//                     if ( ifAvailable(rtl::OUString::createFromAscii("192.168.7.2")) == sal_True )
+//                     if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("192.168.7.2"))) == sal_True )
 //                     {
 //                         sAddr = "192.168.7.2";
 //                         t_print("moon found ! \n");
 //                     }
 //                     else
 //                     {
-//                         if ( ifAvailable(rtl::OUString::createFromAscii("moon.linux.bogus")) == sal_True )
+//                         if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("moon.linux.bogus"))) == sal_True )
 //                         {
 //                             sAddr = "moon.linux.bogus";
 //                             t_print("moon found ! \n");
 //                         }
 //                         else
 //                         {
-//                             if ( ifAvailable(rtl::OUString::createFromAscii("moon")) == sal_True )
+//                             if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("moon"))) == sal_True )
 //                             {
 //                                 sAddr = "moon";
 //                                 t_print("moon found ! \n");
@@ -1333,7 +1333,7 @@ namespace osl_StreamSocket
 //                     }
 //                 }
 
-                // if ( ifAvailable(rtl::OUString::createFromAscii("10.16.64.196")) == sal_False )
+                // if ( ifAvailable(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("10.16.64.196"))) == sal_False )
                 // {
                 //     t_print("ip 10.16.64.196 is not alive! \n");
                 //     return;

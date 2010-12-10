@@ -42,8 +42,8 @@
  Constants
  ******************************************************************/
 
-const rtl::OUString BACKSLASH = rtl::OUString::createFromAscii("\\");
-const rtl::OUString SLASH     = rtl::OUString::createFromAscii("/");
+const rtl::OUString BACKSLASH (RTL_CONSTASCII_USTRINGPARAM("\\"));
+const rtl::OUString SLASH     (RTL_CONSTASCII_USTRINGPARAM("/"));
 
 /*******************************************************************
  osl_systemPathEnsureSeparator

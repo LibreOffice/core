@@ -95,7 +95,7 @@ inline ::rtl::OUString getModulePath( void )
 
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') );
     suDirPath = suDirPath.copy( 0, suDirPath.lastIndexOf('/') + 1);
-    suDirPath += rtl::OUString::createFromAscii("bin");
+    suDirPath += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bin"));
     return suDirPath;
 }
 
@@ -122,12 +122,12 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
 {
 
      rtl::OUString aDirURL(getExecutableDirectory());
-     aDirURL += OUString::createFromAscii( "/");
+     aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
      aDirURL += OUString::createFromAscii( _sFilename.getStr() );
 #if defined(WNT) || defined(OS2)
-    aDirURL += rtl::OUString::createFromAscii(".ini");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ini"));
 #else
-    aDirURL += rtl::OUString::createFromAscii("rc");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rc"));
 #endif
     return aDirURL;
 
@@ -137,12 +137,12 @@ inline rtl::OUString t_getSourcePath(rtl::OString const& _sFilename)
   rtl::OUString suPath;
   if (filename != "")
   {
-  suPath = rtl::OUString::createFromAscii(pStr) + rtl::OUString::createFromAscii( "/sal/qa/rtl/bootstrap/" )
+  suPath = rtl::OUString::createFromAscii(pStr) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sal/qa/rtl/bootstrap/"))
   + rtl::OUString::createFromAscii( filename );
   }
   else
   {
-  suPath = rtl::OUString::createFromAscii(pStr) + rtl::OUString::createFromAscii( "/sal/qa/rtl/bootstrap" );
+  suPath = rtl::OUString::createFromAscii(pStr) + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/sal/qa/rtl/bootstrap"));
   }
   rtl::OUString suURL;
   ::osl::FileBase::getFileURLFromSystemPath( suPath, suURL );
@@ -185,7 +185,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 printUString( suIniname );
                 Bootstrap aBootstrap( suIniname );
-                rtl::OUString suGetname; // = rtl::OUString::createFromAscii("");
+                rtl::OUString suGetname; // = rtl::OUString();
                 aBootstrap.getIniName( suGetname );
                 printUString( suGetname );
 
@@ -230,7 +230,7 @@ namespace rtl_Bootstrap
             {
                 Bootstrap aBootstrap;
                 rtl::OUString suValue;
-                rtl::OUString suValuename = rtl::OUString::createFromAscii( "SOLAR_JAVA" );
+                rtl::OUString suValuename (RTL_CONSTASCII_USTRINGPARAM("SOLAR_JAVA"));
                 //aBootstrap.getFrom( suValuename, suValue );
                 aBootstrap.getFrom( suValuename, suValue );
                 sal_Char *  pStr = getenv("SOLAR_JAVA");
@@ -242,7 +242,7 @@ namespace rtl_Bootstrap
            {
            Bootstrap aBootstrap;
            rtl::OUString suValue;
-           rtl::OUString suValuename = rtl::OUString::createFromAscii( "SRC_ROOT" );
+           rtl::OUString suValuename (RTL_CONSTASCII_USTRINGPARAM("SRC_ROOT"));
            //aBootstrap.getFrom( suValuename, suValue );
            aBootstrap.getFrom( suValuename, suValue );
            sal_Char *  pStr = getenv("SRC_ROOT");
@@ -263,7 +263,7 @@ namespace rtl_Bootstrap
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname );
                 rtl::OUString suGetname;
-                rtl::OUString suValuename = rtl::OUString::createFromAscii( "INHERITED_VALUE" );
+                rtl::OUString suValuename (RTL_CONSTASCII_USTRINGPARAM("INHERITED_VALUE"));
                 aBootstrap.getFrom( suValuename, suGetname );
                 printUString( suGetname );
                 CPPUNIT_ASSERT_MESSAGE("get the value of a variable in ini file.", suGetname.getLength() != 0 );
@@ -275,8 +275,8 @@ namespace rtl_Bootstrap
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname );
                 rtl::OUString suGetname;
-                rtl::OUString suValuename = rtl::OUString::createFromAscii( "MY_VALUE" );
-                rtl::OUString myDefault = rtl::OUString::createFromAscii( "2" );
+                rtl::OUString suValuename(RTL_CONSTASCII_USTRINGPARAM("MY_VALUE"));
+                rtl::OUString myDefault(RTL_CONSTASCII_USTRINGPARAM("2"));
                 aBootstrap.getFrom( suValuename, suGetname, myDefault );
                 //printUString( suGetname );
                 CPPUNIT_ASSERT_MESSAGE("getFrom use default.", suGetname.compareTo( myDefault ) == 0 );
@@ -294,29 +294,29 @@ namespace rtl_Bootstrap
                 aBootstrap.getIniName( suGetIniName );
 
                 printUString(suGetIniName, "Current bootstrap file");
-                sal_Int32 nIndex = suGetIniName.indexOf(rtl::OUString::createFromAscii( "pseudo" ));
+                sal_Int32 nIndex = suGetIniName.indexOf(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pseudo")));
                 CPPUNIT_ASSERT_MESSAGE("ini name must have 'pseudo' in name.", nIndex > 0);
 
                 // rtlBootstrapHandle bsHandle = aBootstrap.getHandle();
                 // CPPUNIT_ASSERT_MESSAGE("getHandle return NULL!", bsHandle != 0);
 
                 rtl::OUString suValue;
-                rtl::OUString suKeyName = rtl::OUString::createFromAscii( "FILE" );
+                rtl::OUString suKeyName(RTL_CONSTASCII_USTRINGPARAM("FILE"));
                 aBootstrap.getFrom( suKeyName, suValue );
                 printUString( suValue );
-                sal_Int32 nCompare = suValue.compareTo( rtl::OUString::createFromAscii("pseudo file") );
+                sal_Int32 nCompare = suValue.compareTo( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pseudo file")) );
 
                 CPPUNIT_ASSERT_MESSAGE("<Bootstrap('pseudo')>.getFrom('FILE', ...) result is unexpected.",  nCompare == 0);
             }
         void getFrom_004_1()
             {
                 // get the same key out of the default context
-                rtl::OUString suKeyName = rtl::OUString::createFromAscii( "FILE" );
+                rtl::OUString suKeyName(RTL_CONSTASCII_USTRINGPARAM("FILE"));
                 rtl::OUString suGetValue;
                 Bootstrap::get( suKeyName, suGetValue );
                 printUString( suGetValue );
 
-                CPPUNIT_ASSERT_MESSAGE("Bootstrap::get('FILE', ...)", suGetValue.compareTo( rtl::OUString::createFromAscii("testshl2 file") ) == 0 );
+                CPPUNIT_ASSERT_MESSAGE("Bootstrap::get('FILE', ...)", suGetValue.compareTo( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testshl2 file")) ) == 0 );
             }
 
     /** helper function: return the child process's ret value( typedef sal_uInt32 oslProcessExitCode;)
@@ -327,17 +327,17 @@ namespace rtl_Bootstrap
          rtl::OUString suCWD = getModulePath();
             oslProcess hProcess = NULL;
            rtl::OUString suFileURL = suCWD;
-            suFileURL += rtl::OUString::createFromAscii("/") +  rtl::OUString::createFromAscii(process_name) ;
+            suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) +  rtl::OUString::createFromAscii(process_name) ;
 #if defined(WNT) || defined(OS2)
-        suFileURL += rtl::OUString::createFromAscii(".exe");
+        suFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe"));
 #endif
             const int nParameterCount = 3;
             rtl_uString* pParameters[ nParameterCount ];
             OUString suFlag( OUString::createFromAscii(flag) );
-        OUString suEnv1( OUString::createFromAscii("-env:UNO_SERVICES=service.rdb"));
+        OUString suEnv1( RTL_CONSTASCII_USTRINGPARAM("-env:UNO_SERVICES=service.rdb") );
         OUString suIniname = t_getSourcePath("rtl");
         printUString( suIniname, "rtl path:");
-        //OUString suEnv2( OUString::createFromAscii("-env:MYENV=bootstrap_process"));
+        //OUString suEnv2( RTL_CONSTASCII_USTRINGPARAM("-env:MYENV=bootstrap_process") );
 
             pParameters[0] = suFlag.pData;
             pParameters[1] = suEnv1.pData;
@@ -473,7 +473,7 @@ namespace rtl_Bootstrap
                 Bootstrap::setIniFilename( suIniname );
                 //rtl_bootstrap_args_open( suIniname.pData );
                 rtl::OUString suGetname;
-                rtl::OUString suValuename = rtl::OUString::createFromAscii( "INHERITED_VALUE" );
+                rtl::OUString suValuename(RTL_CONSTASCII_USTRINGPARAM("INHERITED_VALUE"));
                 //aBootstrap.getFrom( suValuename, suGetname  );
                 Bootstrap::get( suValuename, suGetname  );
                 printUString( suGetname );
@@ -517,11 +517,11 @@ namespace rtl_Bootstrap
                 //rtl_bootstrap_get_iniName_from_handle( bsHandle, &iniName.pData );
 
                 rtl::OUString suValue;
-                rtl::OUString suKeyName = rtl::OUString::createFromAscii( "PSEUDOFILE" );
+                rtl::OUString suKeyName(RTL_CONSTASCII_USTRINGPARAM("PSEUDOFILE"));
                 rtl_bootstrap_get_from_handle(bsHandle, suKeyName.pData, &suValue.pData, NULL);
                 printUString( suValue);
 
-                CPPUNIT_ASSERT_MESSAGE("Can not use the handle which is returned by getHandle!", suValue.equals( rtl::OUString::createFromAscii("be pseudo") ) == sal_True );
+                CPPUNIT_ASSERT_MESSAGE("Can not use the handle which is returned by getHandle!", suValue.equals( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("be pseudo")) ) == sal_True );
 
                 // CPPUNIT_ASSERT_MESSAGE("Can not use the handle which is returned by getHandle!",
                 //      suGetname.equalsIgnoreAsciiCase( iniName ) == sal_True );
@@ -550,8 +550,8 @@ namespace rtl_Bootstrap
                 //in ini fle, INHERITED_VALUE=inherited_value
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname);
-                rtl::OUString suName = rtl::OUString::createFromAscii( "INHERITED_VALUE" );
-                rtl::OUString suValue = rtl::OUString::createFromAscii( "ok" );
+                rtl::OUString suName(RTL_CONSTASCII_USTRINGPARAM("INHERITED_VALUE"));
+                rtl::OUString suValue(RTL_CONSTASCII_USTRINGPARAM("ok"));
                 // set to another value
                 Bootstrap::set( suName, suValue );
                 rtl::OUString suGetValue;
@@ -562,7 +562,7 @@ namespace rtl_Bootstrap
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap myBootstrap( suIniname);
-                rtl::OUString suName = rtl::OUString::createFromAscii( "INHERITED_VALUE" );
+                rtl::OUString suName(RTL_CONSTASCII_USTRINGPARAM("INHERITED_VALUE"));
                 rtl::OUString suGetOrientValue;
                 Bootstrap::get( suName, suGetOrientValue);
                 // ??  INHERITED_VALUE = ok now, which is set in set_001
@@ -596,11 +596,11 @@ namespace rtl_Bootstrap
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname);
-                rtl::OUString suMacro = rtl::OUString::createFromAscii( "$MYVAR/expand1" );
+                rtl::OUString suMacro(RTL_CONSTASCII_USTRINGPARAM("$MYVAR/expand1"));
                 //printUString( suMacro );
                 //expandMacro now
                 aBootstrap.expandMacrosFrom( suMacro );
-                rtl::OUString suExpectedMacro = rtl::OUString::createFromAscii( "src680_test/expand1" );
+                rtl::OUString suExpectedMacro(RTL_CONSTASCII_USTRINGPARAM("src680_test/expand1"));
                 //printUString( suMacro );
                 CPPUNIT_ASSERT_MESSAGE("expandMacrosFrom failed.", suMacro.compareTo(suExpectedMacro) == 0 );
             }
@@ -619,19 +619,19 @@ namespace rtl_Bootstrap
                 t_print("inifile is:");
                 printUString( suIniname );
                 Bootstrap aBootstrap( suIniname) ;
-                  rtl::OUString suMacro = rtl::OUString::createFromAscii( "${" );         //rtlrc:Bootstrap:RTLVALUE}");
+                  rtl::OUString suMacro(RTL_CONSTASCII_USTRINGPARAM("${"));         //rtlrc:Bootstrap:RTLVALUE}");
 
-     rtl::OUString aDirURL = OUString::createFromAscii( "$ORIGIN");
-     aDirURL += OUString::createFromAscii( "/");
-     aDirURL += OUString::createFromAscii( "rtl" );
+     rtl::OUString aDirURL(RTL_CONSTASCII_USTRINGPARAM("$ORIGIN"));
+     aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+     aDirURL += OUString(RTL_CONSTASCII_USTRINGPARAM("rtl"));
 #if defined(WNT) || defined(OS2)
-    aDirURL += rtl::OUString::createFromAscii(".ini");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".ini"));
 #else
-    aDirURL += rtl::OUString::createFromAscii("rc");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rc"));
 #endif
 
                 suMacro += aDirURL;//t_getSourcePath("rtl");
-                suMacro += rtl::OUString::createFromAscii( "::RTLVALUE}");
+                suMacro += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("::RTLVALUE}"));
 
                 t_print("created macro is: ");
                 printUString( suMacro );
@@ -639,7 +639,7 @@ namespace rtl_Bootstrap
                 aBootstrap.expandMacrosFrom( suMacro );
                 t_print("expanded macro is:");
                 printUString( suMacro );
-                rtl::OUString suExpectedMacro = rtl::OUString::createFromAscii( "qadev17" );
+                rtl::OUString suExpectedMacro(RTL_CONSTASCII_USTRINGPARAM("qadev17"));
                 CPPUNIT_ASSERT_MESSAGE("failed, can't expand '${file:///.../" SAL_CONFIGFILE("rtl") "::RTLVALUE}' to 'qadev17'", suMacro.compareTo(suExpectedMacro) == 0 );
             }
         void expandMacrosFrom_002_1()
@@ -651,12 +651,12 @@ namespace rtl_Bootstrap
 
                 rtl::OUString suMacro;
                 // just a simple test, if this really work.
-                aBootstrap.getFrom(rtl::OUString::createFromAscii( "SOFROMVALUE2" ), suMacro );
+                aBootstrap.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOFROMVALUE2")), suMacro );
                 t_print("SOFROMVALUE2:");
                 printUString( suMacro );
                 CPPUNIT_ASSERT_MESSAGE("'SOFROMVALUE2' seems to do not exist.", suMacro.getLength() > 0 );
 
-                aBootstrap.getFrom(rtl::OUString::createFromAscii( "SOFROMVALUE" ), suMacro );
+                aBootstrap.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOFROMVALUE")), suMacro );
 
                 t_print("SOFROMVALUE:");
                 printUString( suMacro );
@@ -666,7 +666,7 @@ namespace rtl_Bootstrap
                 // t_print("expanded macro is:");
                 // aBootstrap.expandMacrosFrom( suMacro );
                 // printUString( suMacro );
-                rtl::OUString suExpectedMacro = rtl::OUString::createFromAscii( "src680_qadev" );
+                rtl::OUString suExpectedMacro(RTL_CONSTASCII_USTRINGPARAM("src680_qadev"));
                 CPPUNIT_ASSERT_MESSAGE("failed, can't expand '${" SAL_CONFIGFILE("rtl") "::SOVALUE}' to 'src680_qadev'", suMacro.compareTo(suExpectedMacro) == 0 );
             }
         void expandMacrosFrom_002_2()
@@ -680,18 +680,18 @@ namespace rtl_Bootstrap
                 Bootstrap aBootstrap( suIniname);
 
                 rtl::OUString suMacro;
-                aBootstrap.getFrom(rtl::OUString::createFromAscii( "SOFROMVALUE3" ), suMacro );
+                aBootstrap.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOFROMVALUE3")), suMacro );
 
                 t_print("SOFROMVALUE3:");
                 printUString( suMacro );
 
-                if (suMacro.equals(rtl::OUString::createFromAscii("testshl2_file") ) == sal_True)
+                if (suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testshl2_file")) ) == sal_True)
                 {
                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE3' is read from the wrong ini file.", 0 );
                 }
                 else
                 {
-                    CPPUNIT_ASSERT_MESSAGE("SOFROMVALUE3 should contain 'rtlfile'.", suMacro.equals(rtl::OUString::createFromAscii("rtlfile") ) == sal_True );
+                    CPPUNIT_ASSERT_MESSAGE("SOFROMVALUE3 should contain 'rtlfile'.", suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rtlfile")) ) == sal_True );
                 }
             }
 //? I don't know if this is a right test.
@@ -706,22 +706,22 @@ namespace rtl_Bootstrap
 //                 Bootstrap aBootstrap( suIniname);
 //
 //                 rtl::OUString suMacro;
-//                 aBootstrap.getFrom(rtl::OUString::createFromAscii( "SOFROMVALUE4" ), suMacro );
+//                 aBootstrap.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SOFROMVALUE4")), suMacro );
 //
 //                 t_print("SOFROMVALUE4:");
 //                 printUString( suMacro );
 //
-//                 if (suMacro.equals(rtl::OUString::createFromAscii("testshl2_file") ) == sal_True)
+//                 if (suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testshl2_file")) ) == sal_True)
 //                 {
 //                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE4' is read from the wrong section out of the wrong ini file.", 0 );
 //                 }
-//                 else if (suMacro.equals(rtl::OUString::createFromAscii("testshl2_file_other") ) == sal_True)
+//                 else if (suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("testshl2_file_other")) ) == sal_True)
 //                 {
 //                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE4' is read from the wrong ini file.", 0 );
 //                 }
 //                 else
 //                 {
-//                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE4' should contain 'rtlfile_other'.", suMacro.equals(rtl::OUString::createFromAscii("rtlfile_other") ) == sal_True );
+//                     CPPUNIT_ASSERT_MESSAGE("Value 'SOFROMVALUE4' should contain 'rtlfile_other'.", suMacro.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rtlfile_other")) ) == sal_True );
 //                 }
 //             }
         void expandMacrosFrom_003()
@@ -729,10 +729,10 @@ namespace rtl_Bootstrap
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname);
                 rtl::OUString suMacro[4];
-                suMacro[0] = rtl::OUString::createFromAscii( "$SYSUSERCONFIG" );
-                suMacro[1] = rtl::OUString::createFromAscii( "$SYSUSERHOME" );
-                suMacro[2] = rtl::OUString::createFromAscii( "$SYSBINDIR" );
-                suMacro[3] = rtl::OUString::createFromAscii( "$ORIGIN" );
+                suMacro[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERCONFIG"));
+                suMacro[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSUSERHOME"));
+                suMacro[2] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$SYSBINDIR"));
+                suMacro[3] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("$ORIGIN"));
 
                 for ( int i = 0; i < 4; i++ )
                 {
@@ -844,13 +844,13 @@ namespace rtl_Bootstrap
             {
                 rtl::OUString suIniname = t_getSourcePath(TESTSHL2_INI);
                 Bootstrap aBootstrap( suIniname) ;
-                rtl::OUString suMacro = rtl::OUString::createFromAscii( "$INHERITED_VALUE/well" );
+                rtl::OUString suMacro(RTL_CONSTASCII_USTRINGPARAM("$INHERITED_VALUE/well"));
                 Bootstrap::expandMacros( suMacro );
 
-        rtl::OUString suName = rtl::OUString::createFromAscii( "INHERITED_VALUE" );
+        rtl::OUString suName(RTL_CONSTASCII_USTRINGPARAM("INHERITED_VALUE"));
                 OUString suGetValue;
                 Bootstrap::get( suName, suGetValue );
-                suGetValue += OUString::createFromAscii( "/well" );
+                suGetValue += OUString(RTL_CONSTASCII_USTRINGPARAM("/well"));
                 CPPUNIT_ASSERT_MESSAGE("expandMacros failed.", suGetValue.compareTo(suMacro) == 0 );
             }
 
@@ -929,9 +929,9 @@ static void create_rtlrc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
 #if defined(WNT) || defined(OS2)
-    aFileURL += rtl::OUString::createFromAscii("/rtl.ini");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/rtl.ini"));
 #else
-    aFileURL += rtl::OUString::createFromAscii("/rtlrc");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/rtlrc"));
 #endif
 
     rtl::OString sLines;
@@ -952,9 +952,9 @@ static void create_testshl2rc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
 #if defined(WNT) || defined(OS2)
-    aFileURL += rtl::OUString::createFromAscii("/testshl2.ini");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testshl2.ini"));
 #else
-    aFileURL += rtl::OUString::createFromAscii("/testshl2rc");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/testshl2rc"));
 #endif
     rtl::OString sLines;
     sLines += "[Bootstrap]\n";
@@ -994,9 +994,9 @@ static void create_pseudorc()
 {
     rtl::OUString aFileURL(getExecutableDirectory());
 #if defined(WNT) || defined(OS2)
-    aFileURL += rtl::OUString::createFromAscii("/pseudo.ini");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/pseudo.ini"));
 #else
-    aFileURL += rtl::OUString::createFromAscii("/pseudorc");
+    aFileURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/pseudorc"));
 #endif
     rtl::OString sLines;
     sLines += "[Bootstrap]\n";
@@ -1011,9 +1011,9 @@ void create_bootstrap_processrc()
 {
     rtl::OUString aDirURL(getModulePath());
 #if defined(WNT) || defined(OS2)
-    aDirURL += rtl::OUString::createFromAscii("/bootstrap_process.ini");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/bootstrap_process.ini"));
 #else
-    aDirURL += rtl::OUString::createFromAscii("/bootstrap_processrc");
+    aDirURL += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/bootstrap_processrc"));
 #endif
     rtl::OString sLines;
     sLines += "[Bootstrap]\n";

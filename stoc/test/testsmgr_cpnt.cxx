@@ -86,7 +86,7 @@ Reference<XMultiServiceFactory> getProcessServiceManager()
     {
         MutexGuard aGuard( Mutex::getGlobalMutex() );
         if (! s_x.is())
-            s_x = createRegistryServiceFactory( OUString::createFromAscii( "stoctest.rdb" ), sal_False );
+            s_x = createRegistryServiceFactory( OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb")), sal_False );
     }
     return s_x;
 }
@@ -181,7 +181,7 @@ Sequence< OUString > Test_Manager_Impl::getSupportedServiceNames_Static(void) th
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = OUString::createFromAscii(SERVICE_NAME);
-    aSNS.getArray()[1] = OUString::createFromAscii("com.sun.star.bridge.Bridge");
+    aSNS.getArray()[1] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge"));
     return aSNS;
 }
 
@@ -218,7 +218,7 @@ extern "C" void SAL_CALL test_ServiceManager()
 
     Reference<XContentEnumerationAccess> xContEnum(xSMgr, UNO_QUERY);
     TEST_ENSHURE( xContEnum.is() , "query on XContentEnumerationAccess failed" );
-    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString::createFromAscii("com.sun.star.registry.SimpleRegistry")));
+    Reference<XEnumeration > xEnum(xContEnum->createContentEnumeration(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.SimpleRegistry"))));
     TEST_ENSHURE( xEnum.is() , "createContentEnumeration failed" );
     sal_Int32 nLen = 0;
     while( xEnum->hasMoreElements() )
@@ -243,33 +243,33 @@ extern "C" void SAL_CALL test_ServiceManager()
     TEST_ENSHURE( nLen == 8, "more than 6 factories" );
 
     // try to get an instance for a unknown service
-    TEST_ENSHURE( !xSMgr->createInstance(OUString::createFromAscii("bla.blup.Q")).is(), "unknown service provider found" );
+    TEST_ENSHURE( !xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("bla.blup.Q"))).is(), "unknown service provider found" );
 
     //
     // First test : register service via the internal function of the component itself
     //
     {
         Reference< XImplementationRegistration >
-            xInst( xSMgr->createInstance(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration")), UNO_QUERY );
+            xInst( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))), UNO_QUERY );
         TEST_ENSHURE( xInst.is(), "no ImplementationRegistration" );
 
         try {
             // register the services via writeComponentRegInfo (see at end of this file)
-            xInst->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), atUModule2, Reference< XSimpleRegistry >() );
+            xInst->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2, Reference< XSimpleRegistry >() );
         }
         catch( CannotRegisterImplementationException e ) {
             TEST_ENSHURE( 0, "register implementation failed" );
         }
 
         // getImplementations() check
-         Sequence<OUString> seqImpl = xInst->getImplementations(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), atUModule2);
+         Sequence<OUString> seqImpl = xInst->getImplementations(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), atUModule2);
         TEST_ENSHURE( seqImpl.getLength() == 1, "count of implementantions is wrong" );
-        TEST_ENSHURE( seqImpl.getConstArray()[0] == OUString::createFromAscii("com.sun.star.DummyService.V10"), "implementation name is not equal" );
+        TEST_ENSHURE( seqImpl.getConstArray()[0] == OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.DummyService.V10")), "implementation name is not equal" );
 
 
         // tests, if a service provider can be instantiated.
 
-        Reference< XInterface > xIFace(xSMgr->createInstance(OUString::createFromAscii("com.sun.star.ts.TestManagerImpl")));
+        Reference< XInterface > xIFace(xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ts.TestManagerImpl"))));
         TEST_ENSHURE( xIFace.is(), "loadable service not found" );
 
         // remove the service
@@ -278,10 +278,10 @@ extern "C" void SAL_CALL test_ServiceManager()
     }
 
 
-//  Reference < XSimpleRegistry > xSReg(  xSMgr->createInstance(OUString::createFromAscii("com::sun::star.uno.repos.SimpleRegistry")), UNO_QUERY );
+//  Reference < XSimpleRegistry > xSReg(  xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.uno.repos.SimpleRegistry"))), UNO_QUERY );
 //  TEST_ENSHURE( xSReg.is() , "Simple registry couldn't be instantiated" );
 
-//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_True);
+//  xSReg->open(OUString(RTL_CONSTASCII_USTRINGPARAM("dummy.reg")), sal_False, sal_True);
 //  xSReg->close();
 
     // laut dbo : C-API muss nicht mehr unterstuezt werden
@@ -305,23 +305,23 @@ extern "C" void SAL_CALL test_ServiceManager()
 //  if (!UNO_isNull((UNO_Ifc*)&xUnoSMgr))
 //      xUnoSMgr.m_pVmt->release(xUnoSMgr.m_pCtx);
 
-//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_True, sal_False);
-//  TEST_ENSHURE(!xSReg->getRootKey()->openKey(OUString::createFromAscii("/SERVICES/com::sun::star/ts/TestManagerImpl/URL")).is(),
+//  xSReg->open(OUString(RTL_CONSTASCII_USTRINGPARAM("dummy.reg")), sal_True, sal_False);
+//  TEST_ENSHURE(!xSReg->getRootKey()->openKey(OUString(RTL_CONSTASCII_USTRINGPARAM("/SERVICES/com::sun::star/ts/TestManagerImpl/URL"))).is(),
 //              "deinstall failed" );
 
 //  xSReg->close();
 
-//  xSReg->open(OUString::createFromAscii("dummy.reg"), sal_False, sal_False);
+//  xSReg->open(OUString(RTL_CONSTASCII_USTRINGPARAM("dummy.reg")), sal_False, sal_False);
 //  xSReg->destroy();
-//  xSReg->open(OUString::createFromAscii("dummy2.reg"), sal_False, sal_False);
+//  xSReg->open(OUString(RTL_CONSTASCII_USTRINGPARAM("dummy2.reg")), sal_False, sal_False);
 //  xSReg->destroy();
 
 
     // Test initialisieren
 /*
-    XServiceProviderRef xSiSP1 = createSimpleServiceProvider( OUString::createFromAscii("com::sun::star.usr.Test_Manager_Impl1"), Test_Manager_Impl_getReflection );
-    XServiceProviderRef xSiSP11 = createSimpleServiceProvider( OUString::createFromAscii("com::sun::star.usr.Test_Manager_Impl1"), Test_Manager_Impl_getReflection );
-    XServiceProviderRef xSiSP2 = createSimpleServiceProvider( OUString::createFromAscii("com::sun::star.usr.Test_Manager_Impl2"), Test_Manager_Impl_getReflection );
+    XServiceProviderRef xSiSP1 = createSimpleServiceProvider( OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.usr.Test_Manager_Impl1")), Test_Manager_Impl_getReflection );
+    XServiceProviderRef xSiSP11 = createSimpleServiceProvider( OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.usr.Test_Manager_Impl1")), Test_Manager_Impl_getReflection );
+    XServiceProviderRef xSiSP2 = createSimpleServiceProvider( OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.usr.Test_Manager_Impl2")), Test_Manager_Impl_getReflection );
 */
 /*
     // second test
@@ -335,7 +335,7 @@ extern "C" void SAL_CALL test_ServiceManager()
             Test_Manager_Impl::getSupportedServiceNames_Static() ), UNO_QUERY);
         Reference< XServiceProvider > xSiSP11(createSingleFactory(
             xSMgr,
-            OUString::createFromAscii("com::sun::star.usr.Test_Manager_Impl1"),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com::sun::star.usr.Test_Manager_Impl1")),
             Test_Manager_Impl_CreateInstance,
             Test_Manager_Impl::getSupportedServiceNames_Static() ),UNO_QUERY);
         Reference< XServiceProvider > xSiSP2(createSingleFactory(

@@ -224,9 +224,9 @@ namespace Stringtest
         void test_UTF8_files()
             {
 #ifdef UNX
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/atestdir")));
 #else /* Windows */
-                rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/atestdir"));
+                rtl::OUString suDirURL(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///c:/temp/atestdir")));
 #endif
                 osl::Directory aDir(suDirURL);
                 aDir.open();

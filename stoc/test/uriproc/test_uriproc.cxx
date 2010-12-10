@@ -253,7 +253,7 @@ void Test::testParse() {
                 data[i].pathSegmentCount, uriRef->getPathSegmentCount());
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(-1));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(-1));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 rtl::OUString::createFromAscii(data[i].pathSegment0),
@@ -276,7 +276,7 @@ void Test::testParse() {
                 uriRef->getPathSegment(4));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
-                rtl::OUString::createFromAscii(""), uriRef->getPathSegment(5));
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), uriRef->getPathSegment(5));
             TEST_ASSERT_EQUAL(
                 "testParse", i, data[i].uriReference,
                 data[i].query != 0, uriRef->hasQuery());
@@ -850,7 +850,7 @@ void Test::testVndSunStarScript() {
                                 "testVndSunStarScript",
                                 static_cast< double >(i)
                                 + static_cast< double >(j) / 10.0,
-                                ::rtl::OUString::createFromAscii("setParameter"),
+                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setParameter")),
                                 originalReference,
                                 uriRef->getUriReference());
                         }
@@ -862,7 +862,7 @@ void Test::testVndSunStarScript() {
                 TEST_ASSERT_EQUAL(
                     "testVndSunStarScript",
                     i,
-                    ::rtl::OUString::createFromAscii("setName"),
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("setName")),
                     originalReference,
                     uriRef->getUriReference());
             }
@@ -904,8 +904,8 @@ void Test::testVndSunStarScript() {
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString::createFromAscii("illegal arguments"),
-        ::rtl::OUString::createFromAscii("name"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")),
         caughtExpected,
         true);
 
@@ -913,15 +913,15 @@ void Test::testVndSunStarScript() {
     try {
         scriptUrl->setParameter(
             ::rtl::OUString(),
-            ::rtl::OUString::createFromAscii("non-empty"));
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("non-empty")));
     }
     catch( const css::lang::IllegalArgumentException& ) {
         caughtExpected = true;
     }
     TEST_ASSERT_EQUAL(
         "testVndSunStarScript",
-        ::rtl::OUString::createFromAscii("illegal arguments"),
-        ::rtl::OUString::createFromAscii("parameter"),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("illegal arguments")),
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("parameter")),
         caughtExpected,
         true);
 }

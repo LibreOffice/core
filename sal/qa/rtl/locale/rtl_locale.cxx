@@ -40,7 +40,7 @@ namespace rtl_locale
     // default locale for test purpose
     void setDefaultLocale()
     {
-        rtl::OLocale::setDefault(rtl::OUString::createFromAscii("de"), rtl::OUString::createFromAscii("DE"), /* rtl::OUString() */ rtl::OUString::createFromAscii("hochdeutsch") );
+        rtl::OLocale::setDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE")), /* rtl::OUString() */ rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch")) );
     }
 
 class getDefault : public CppUnit::TestFixture
@@ -69,7 +69,7 @@ public:
 
     void getDefault_001()
     {
-        // rtl::OLocale::setDefault(rtl::OUString::createFromAscii("de"), rtl::OUString::createFromAscii("DE"), rtl::OUString());
+        // rtl::OLocale::setDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE")), rtl::OUString());
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         CPPUNIT_ASSERT_MESSAGE("locale must not null", aLocale.getData() != NULL);
     }
@@ -101,7 +101,7 @@ public:
     // insert your test code here.
     void setDefault_001()
     {
-        rtl::OLocale::setDefault(rtl::OUString::createFromAscii("en"), rtl::OUString::createFromAscii("US"), rtl::OUString());
+        rtl::OLocale::setDefault(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString());
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         CPPUNIT_ASSERT_MESSAGE("locale must not null", aLocale.getData() != NULL);
 
@@ -136,14 +136,14 @@ public:
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage = aLocale.getLanguage();
         t_print("Language: %s\n", rtl::OUStringToOString(suLanguage, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString::createFromAscii("de")));
+        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
     }
     void getLanguage_002()
     {
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suLanguage = rtl_locale_getLanguage(aLocale.getData());
         t_print("Language: %s\n", rtl::OUStringToOString(suLanguage, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString::createFromAscii("de")));
+        CPPUNIT_ASSERT_MESSAGE("locale language must be 'de'", suLanguage.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("de"))));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -175,14 +175,14 @@ public:
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry = aLocale.getCountry();
         t_print("Country: %s\n", rtl::OUStringToOString(suCountry, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString::createFromAscii("DE")));
+        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
     }
     void getCountry_002()
     {
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suCountry = rtl_locale_getCountry(aLocale.getData());
         t_print("Country: %s\n", rtl::OUStringToOString(suCountry, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString::createFromAscii("DE")));
+        CPPUNIT_ASSERT_MESSAGE("locale country must be 'DE'", suCountry.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DE"))));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -214,14 +214,14 @@ public:
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant = aLocale.getVariant();
         t_print("Variant: %s\n", rtl::OUStringToOString(suVariant, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString::createFromAscii("hochdeutsch")));
+        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
     }
     void getVariant_002()
     {
        rtl::OLocale aLocale = ::rtl::OLocale::getDefault();
         rtl::OUString suVariant = rtl_locale_getVariant(aLocale.getData());
         t_print("Variant: %s\n", rtl::OUStringToOString(suVariant, osl_getThreadTextEncoding()).getStr());
-        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString::createFromAscii("hochdeutsch")));
+        CPPUNIT_ASSERT_MESSAGE("locale variant must be 'hochdeutsch'", suVariant.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("hochdeutsch"))));
     }
 
     // Change the following lines only, if you add, remove or rename
@@ -289,8 +289,8 @@ public:
     // insert your test code here.
     void equals_001()
     {
-        rtl::OLocale aLocale1 = rtl::OLocale::registerLocale(rtl::OUString::createFromAscii("en"), rtl::OUString::createFromAscii("US"), rtl::OUString());
-        rtl::OLocale aLocale2 = rtl::OLocale::registerLocale(rtl::OUString::createFromAscii("en"), rtl::OUString::createFromAscii("US"));
+        rtl::OLocale aLocale1 = rtl::OLocale::registerLocale(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString());
+        rtl::OLocale aLocale2 = rtl::OLocale::registerLocale(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
 
         sal_Bool bLocaleAreEqual = sal_False;
         bLocaleAreEqual = (aLocale1 == aLocale2);
@@ -300,8 +300,8 @@ public:
 
     void equals_002()
     {
-        rtl::OLocale aLocale1 = rtl::OLocale::registerLocale(rtl::OUString::createFromAscii("en"), rtl::OUString::createFromAscii("US"), rtl::OUString());
-        rtl::OLocale aLocale2 = rtl::OLocale::registerLocale(rtl::OUString::createFromAscii("en"), rtl::OUString::createFromAscii("US"));
+        rtl::OLocale aLocale1 = rtl::OLocale::registerLocale(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")), rtl::OUString());
+        rtl::OLocale aLocale2 = rtl::OLocale::registerLocale(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en")), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("US")));
 
         sal_Int32 nEqual = rtl_locale_equals(aLocale1.getData(), aLocale2.getData());
         t_print("rtl_locale_equals() result: %d\n", nEqual);

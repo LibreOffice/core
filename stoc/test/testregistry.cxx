@@ -125,7 +125,7 @@ void setStarUserRegistry()
     RegistryKey rootKey, rKey, rKey2;
 
     OUString userReg = getExePath();
-    userReg += OUString::createFromAscii("user.rdb");
+    userReg += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
     if(myRegistry->open(userReg, REG_READWRITE))
     {
         TEST_ENSHURE(!myRegistry->create(userReg), "setStarUserRegistry error 1");
@@ -145,7 +145,7 @@ void setLinkInDefaultRegistry(const OUString& linkName, const OUString& linkTarg
     RegistryKey rootKey;
 
     OUString appReg = getExePath();
-    appReg += OUString::createFromAscii("stoctest.rdb");
+    appReg += OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb"));
 
     TEST_ENSHURE(!myRegistry->open(appReg, REG_READWRITE), "setLinkInDefaultRegistry error 1");
     TEST_ENSHURE(!myRegistry->openRootKey(rootKey), "setLinkInDefaultRegistry error 2");
@@ -458,11 +458,11 @@ void test_DefaultRegistry(
     OUString userRdb(exePath);
     OUString applicatRdb(exePath);
 
-    userRdb += OUString::createFromAscii("user.rdb");
-    applicatRdb += OUString::createFromAscii("stoctest.rdb");
+    userRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("user.rdb"));
+    applicatRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("stoctest.rdb"));
 
     Reference < XMultiServiceFactory > rSMgr  = ::cppu::createRegistryServiceFactory( userRdb, applicatRdb, sal_False, OUString());
-                                                                                      //OUString::createFromAscii("//./e:/src596/stoc/wntmsci3/bin") );
+                                                                                      //OUString(RTL_CONSTASCII_USTRINGPARAM("//./e:/src596/stoc/wntmsci3/bin")) );
 
     Reference< XPropertySet > xPropSet( rSMgr, UNO_QUERY);
     TEST_ENSHURE( xPropSet.is(), "test_DefaultRegistry error0");
@@ -669,8 +669,8 @@ void test_DefaultRegistry(
 SAL_IMPLEMENT_MAIN()
 {
 //  setStarUserRegistry();
-     setLinkInDefaultRegistry(OUString::createFromAscii("/Test/DefaultLink"),
-                              OUString::createFromAscii("/Test/FifthKey/MyFirstLink"));
+     setLinkInDefaultRegistry(OUString(RTL_CONSTASCII_USTRINGPARAM("/Test/DefaultLink")),
+                              OUString(RTL_CONSTASCII_USTRINGPARAM("/Test/FifthKey/MyFirstLink")));
 
     OUString reg1( RTL_CONSTASCII_USTRINGPARAM("testreg1.rdb") );
     OUString reg2( RTL_CONSTASCII_USTRINGPARAM("testreg2.rdb") );

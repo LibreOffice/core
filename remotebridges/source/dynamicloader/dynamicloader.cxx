@@ -150,8 +150,8 @@ namespace dynamic_loader {
                                                                  const OUString& locationUrl)      throw(CannotRegisterImplementationException, RuntimeException);
     };
 
-    const OUString DynamicLoader::implname = OUString::createFromAscii("com.sun.star.comp.stoc.DynamicLoader");
-    const OUString DynamicLoader::servname = OUString::createFromAscii("com.sun.star.loader.Dynamic");
+    const OUString DynamicLoader::implname (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.stoc.DynamicLoader"));
+    const OUString DynamicLoader::servname (RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.Dynamic"));
 
     Sequence<OUString> SAL_CALL DynamicLoader::getSupportedServiceNames_Static() throw() {
         return Sequence<OUString>(&servname, 1);
@@ -332,11 +332,11 @@ namespace dynamic_loader {
         }
 
         // create the keys
-        OUString keyName = OUString::createFromAscii("/");
+        OUString keyName (RTL_CONSTASCII_USTRINGPARAM("/"));
         keyName += implementationLoaderUrl;
         keyName += OUString(RTL_CONSTASCII_USTRINGPARAM("_"));
         keyName += serviceName;
-        keyName += OUString::createFromAscii("/UNO/SERVICES");
+        keyName += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
         Reference<XRegistryKey> xNewKey(xKey->createKey(keyName));
         xNewKey->createKey(serviceName);
@@ -387,9 +387,9 @@ extern "C" {
 
         if (pRegistryKey) {
             try {
-                OUString x = OUString::createFromAscii("/");
+                OUString x (RTL_CONSTASCII_USTRINGPARAM("/"));
                 x += ::dynamic_loader::DynamicLoader::implname;
-                x += OUString::createFromAscii("/UNO/SERVICES");
+                x += OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
 
 
                 Reference<XRegistryKey> xNewKey(pRegistryKey->createKey(x));

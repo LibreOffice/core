@@ -567,7 +567,7 @@ oslFileError SAL_CALL osl_getDirectoryItem( rtl_uString* ustrFileURL, oslDirecto
 
                 if ( pItemImpl->ustrDrive->buffer[pItemImpl->ustrDrive->length-1] != sal_Unicode('\\') )
                     rtl_uString_newConcat( &pItemImpl->ustrDrive,
-                                            pItemImpl->ustrDrive, rtl::OUString::createFromAscii( "\\" ).pData);
+                                            pItemImpl->ustrDrive, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\")).pData);
 
                 *pItem = pItemImpl;
             }

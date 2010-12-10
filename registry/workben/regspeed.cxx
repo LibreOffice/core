@@ -194,7 +194,7 @@ int _cdecl main( int argc, char * argv[] )
 
             for (sal_Int32 i=0; i < S1; i++)
             {
-                keyName1 = OUString::createFromAscii("/");
+                keyName1 = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                 keyName1 += sName1;
                 keyName1 += OUString().valueOf(i);
                 if (reg_openKey(hRootKey, keyName1.pData, &hKey))
@@ -203,10 +203,10 @@ int _cdecl main( int argc, char * argv[] )
 
                 for (sal_Int32 j=0; j < S2; j++)
                 {
-                    keyName2 = OUString::createFromAscii("/");
+                    keyName2 = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     keyName2 += sName1;
                     keyName2 += OUString().valueOf(i);
-                    keyName2 += OUString::createFromAscii("/");
+                    keyName2 += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                     keyName2 += sName2;
                     keyName2 += OUString().valueOf(j);
                     if (reg_openKey(hRootKey, keyName2.pData, &hSubKey))
@@ -215,13 +215,13 @@ int _cdecl main( int argc, char * argv[] )
 
                         for (sal_Int32 n=0; n < S3; n++)
                         {
-                            keyName3 = OUString::createFromAscii("/");
+                            keyName3 = OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                             keyName3 += sName1;
                             keyName3 += OUString().valueOf(i);
-                            keyName3 += OUString::createFromAscii("/");
+                            keyName3 += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                             keyName3 += sName2;
                             keyName3 += OUString().valueOf(j);
-                            keyName3 += OUString::createFromAscii("/");
+                            keyName3 += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
                             keyName3 += sName3;
                             keyName3 += OUString().valueOf(n);
                             if (reg_openKey(hRootKey, keyName3.pData, &hSubSubKey))

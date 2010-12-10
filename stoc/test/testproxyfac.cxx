@@ -77,7 +77,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString::createFromAscii( "target" ); }
+        { return OUString(RTL_CONSTASCII_USTRINGPARAM("target")); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }
@@ -141,7 +141,7 @@ public:
 
     // XServiceInfo
     virtual OUString SAL_CALL getImplementationName() throw (RuntimeException)
-        { return OUString::createFromAscii( "master" ); }
+        { return OUString(RTL_CONSTASCII_USTRINGPARAM("master")); }
     virtual sal_Bool SAL_CALL supportsService( const OUString & /*rServiceName*/ )
         throw (RuntimeException)
         { return sal_False; }

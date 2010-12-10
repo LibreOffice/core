@@ -66,9 +66,9 @@ inline void printUString( const ::rtl::OUString & str )
 inline ::rtl::OUString getDllURL( void )
 {
 #if ( defined WNT )        // lib in Unix and lib in Windows are not same in file name.
-    ::rtl::OUString libPath( rtl::OUString::createFromAscii( "Module_DLL.dll" ) );
+    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("Module_DLL.dll") );
 #else
-    ::rtl::OUString libPath( rtl::OUString::createFromAscii( "libModule_DLL.so" ) );
+    ::rtl::OUString libPath( RTL_CONSTASCII_USTRINGPARAM("libModule_DLL.so") );
 #endif
 
     ::rtl::OUString dirPath, dllPath;
@@ -92,7 +92,7 @@ inline void printFileName( const ::rtl::OUString & str )
 
 inline sal_Bool isURL( const ::rtl::OUString pathname )
 {
-    ::rtl::OUString aPreURL( rtl::OUString::createFromAscii( "file:///" ) );
+    ::rtl::OUString aPreURL( RTL_CONSTASCII_USTRINGPARAM("file:///") );
     return ( ( pathname.indexOf( aPreURL ) == 0 ) ? sal_True : sal_False );
 }
 
@@ -252,7 +252,7 @@ namespace osl_Module
         void getUrlFromAddress_002( )
         {
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
 
             OUString aFileURL;
             bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
@@ -302,12 +302,12 @@ namespace osl_Module
         {
 #ifdef UNX
             //Can not get a CJK directory already exist, so here create one. Perhaps reason is encoding problem.
-            ::rtl::OUString aPidDirURL = rtl::OUString::createFromAscii( "file:///tmp/" ) + ::rtl::OUString::valueOf( ( long )getpid( ) );
+            ::rtl::OUString aPidDirURL = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file:///tmp/")) + ::rtl::OUString::valueOf( ( long )getpid( ) );
             ::rtl::OUString aMyDirURL = aPidDirURL + aKname;
             createTestDirectory( aPidDirURL );
             createTestDirectory( aMyDirURL );
 
-            ::rtl::OUString aDLLURL = aMyDirURL + rtl::OUString::createFromAscii( "/libModule_DLL.so" );
+            ::rtl::OUString aDLLURL = aMyDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/libModule_DLL.so"));
             //check if the lib exist.
             //FIXME: if assert condition is false, the case will return, so the directory will not be clean-up
             CPPUNIT_ASSERT_MESSAGE( "#Source file is not exist. please manually clean-up directory and file under /tmp", ifFileExist( getDllURL( ) ) == sal_True );
@@ -317,7 +317,7 @@ namespace osl_Module
             CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, copy failed. please manually clean-up directory and file under /tmp", ifFileExist( aDLLURL ) == sal_True );
 
             //test if can create a normal file
-            ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString::createFromAscii( "/test_file" );
+            ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/test_file"));
             ::osl::File testFile( aFileURL );
             nError = testFile.open( OpenFlag_Create );
             CPPUNIT_ASSERT_MESSAGE( "#create failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
@@ -416,7 +416,7 @@ namespace osl_Module
         void getSymbol_001( )
         {
             ::osl::Module aMod( getDllURL( ) );
-            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+            FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
             bRes = sal_False;
             if ( pFunc )
                 bRes = pFunc( bRes );
@@ -457,7 +457,7 @@ namespace osl_Module
         void optr_oslModule_002( )
         {
             ::osl::Module aMod( getDllURL( ) );
-            ::rtl::OUString funcName(::rtl::OUString::createFromAscii( "firstfunc" ) );
+            ::rtl::OUString funcName( RTL_CONSTASCII_USTRINGPARAM("firstfunc") );
 
             FuncPtr pFunc = ( FuncPtr ) osl_getSymbol( (oslModule)aMod, funcName.pData );
             bRes = sal_False;
@@ -487,7 +487,7 @@ namespace osl_Module
         void getFunctionSymbol_001( )
         {
             ::osl::Module aMod( getDllURL( ) );
-            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
+            oslGenericFunction oslFunc = aMod.getFunctionSymbol( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("firstfunc")) );
             ::rtl::OUString aLibraryURL;
             bRes = ::osl::Module::getUrlFromAddress( oslFunc, aLibraryURL);
             aMod.unload();

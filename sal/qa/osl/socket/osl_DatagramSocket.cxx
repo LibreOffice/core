@@ -149,7 +149,7 @@ protected:
 
 public:
     TalkerThread( ):
-        saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 )
+        saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 )
     {
     }
 
@@ -170,7 +170,7 @@ protected:
 
     void SAL_CALL run( )
     {
-        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
+        ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
         dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
         if ( dsSocket.bind( saLocalSocketAddr ) == sal_False )
         {
@@ -189,7 +189,7 @@ protected:
 public:
     sal_Char pRecvBuffer[30];
     ListenerThread( ):
-        saTargetSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 )
+        saTargetSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 )
     {
         pRecvBuffer[0] = '\0';
     }
@@ -215,7 +215,7 @@ public:
 
         void sr_001()
         {
-            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT9 );
+            ::osl::SocketAddr saLocalSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT9 );
             ::osl::DatagramSocket dsSocket;
             dsSocket.setOption( osl_Socket_OptionReuseAddr, 1 );
             dsSocket.bind( saLocalSocketAddr );
@@ -235,7 +235,7 @@ public:
 
         void sr_002()
         {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
 
             //listener thread construct a DatagramSocket, recvFrom waiting for data, then main thread sendto data
@@ -260,7 +260,7 @@ public:
         //sendTo error, return -1; recvFrom error, return -1
         void sr_003()
         {
-            ::osl::SocketAddr saListenSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
             // Transport endpoint is not connected
             sal_Int32 nSend = dsSocket.sendTo( saListenSocketAddr, pTestString2, strlen( pTestString2 ) + 1 );
@@ -270,8 +270,8 @@ public:
 
         void sr_004()
         {
-            ::osl::SocketAddr saListenSocketAddr1( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT10 );
-            ::osl::SocketAddr saListenSocketAddr2( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr1( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT10 );
+            ::osl::SocketAddr saListenSocketAddr2( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_MYPORT10 );
             ::osl::DatagramSocket dsSocket;
 
             dsSocket.enableNonBlockingMode( sal_True );

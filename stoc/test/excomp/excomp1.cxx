@@ -129,7 +129,7 @@ Sequence<OUString> SAL_CALL ExampleComponent1Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent1Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString::createFromAscii("Lalelu nur der Mann im Mond schaut zu ...");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Lalelu nur der Mann im Mond schaut zu ..."));
 }
 
 

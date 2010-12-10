@@ -189,43 +189,43 @@ int __cdecl main( int argc, char * argv[] )
         createRegistryServiceFactory( OUString( RTL_CONSTASCII_USTRINGPARAM("applicat.rdb")) ) );
 
     Reference< XImplementationRegistration > xImplReg(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration") ), UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")) ), UNO_QUERY );
     OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
     OUString aLibName =
         OUString::createFromAscii( "connector.uno" SAL_DLLEXTENSION );
     xImplReg->registerImplementation(
-        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
     aLibName = OUString::createFromAscii( "acceptor.uno" SAL_DLLEXTENSION );
     xImplReg->registerImplementation(
-        OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+        OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")), aLibName, Reference< XSimpleRegistry >() );
 
     Reference < XAcceptor >  rAcceptor(
         xMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ) , UNO_QUERY );
 
     Reference < XAcceptor >  rAcceptorPipe(
         xMgr->createInstance(
-            OUString::createFromAscii("com.sun.star.connection.Acceptor" ) ) , UNO_QUERY );
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ) , UNO_QUERY );
 
     Reference < XConnector >  rConnector(
-        xMgr->createInstance( OUString::createFromAscii("com.sun.star.connection.Connector") ) , UNO_QUERY );
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Connector")) ) , UNO_QUERY );
 
 
     printf( "Testing sockets" );
     fflush( stdout );
-    testConnection( OUString::createFromAscii("socket,host=localhost,port=2001"), rAcceptor , rConnector );
+    testConnection( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")), rAcceptor , rConnector );
     printf( " Done\n" );
 
     printf( "Testing pipe" );
     fflush( stdout );
-    testConnection( OUString::createFromAscii("pipe,name=bla") , rAcceptorPipe , rConnector );
+    testConnection( OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=bla")) , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
     // check, if errornous strings make any problem
     rAcceptor = Reference< XAcceptor > (
-        xMgr->createInstance( OUString::createFromAscii( "com.sun.star.connection.Acceptor" ) ),
+        xMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor")) ),
         UNO_QUERY );
 
     try
@@ -257,14 +257,14 @@ int __cdecl main( int argc, char * argv[] )
     }
 
 
-    MyThread thread( rAcceptor , OUString::createFromAscii("socket,host=localhost,port=2001") );
+    MyThread thread( rAcceptor , OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
     thread.create();
 
     TimeValue value = {0,1};
     osl_waitThread( &value );
     try
     {
-        rAcceptor->accept( OUString::createFromAscii("socket,host=localhost,port=2001") );
+        rAcceptor->accept( OUString(RTL_CONSTASCII_USTRINGPARAM("socket,host=localhost,port=2001")) );
         OSL_ENSURE( 0 , "already existing exception expected" );
     }
     catch( AlreadyAcceptingException & e)

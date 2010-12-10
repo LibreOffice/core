@@ -199,7 +199,7 @@ Sequence<OUString> SAL_CALL ExampleComponent2Impl::getSupportedServiceNames_Stat
 OUString SAL_CALL ExampleComponent2Impl::getMessage() throw(RuntimeException)
 {
     Guard< Mutex > aGuard( m_mutex );
-    return OUString::createFromAscii("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ...");
+    return OUString(RTL_CONSTASCII_USTRINGPARAM("Alle meine Entchen schwimmen auf dem See, schwimmen auf dem See ..."));
 }
 
 

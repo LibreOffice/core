@@ -71,9 +71,9 @@ inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = ""
 inline ::rtl::OUString getTempPath( void )
 {
 #ifdef UNX
-    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///tmp/"));
+    rtl::OUString suDirURL( RTL_CONSTASCII_USTRINGPARAM("file:///tmp/") );
 #else /* Windows */
-    rtl::OUString suDirURL(rtl::OUString::createFromAscii("file:///c:/temp/"));
+    rtl::OUString suDirURL( RTL_CONSTASCII_USTRINGPARAM("file:///c:/temp/") );
 #endif
     return suDirURL;
 }
@@ -137,8 +137,8 @@ namespace rtl_logfile
                 rtl_logfile_trace("trace %d %d %d\n" , 1 , 2 ,3 );
 
                 rtl::OUString suFilePath = getTempPath();
-                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-                suFilePath +=  rtl::OUString::createFromAscii(".log");
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logfile1_")) + getCurrentPID( );
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".log"));
 
                 ::osl::FileBase::RC   nError1;
                 ::osl::File aTestFile( suFilePath );
@@ -226,8 +226,8 @@ public:
             {
                 t_print( "\n#Do some clean-ups ... only delete logfile1_*.log here!\n" );
                 rtl::OUString suFilePath = getTempPath();
-                suFilePath +=  rtl::OUString::createFromAscii("logfile1_") + getCurrentPID( );
-                suFilePath +=  rtl::OUString::createFromAscii(".log");
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("logfile1_")) + getCurrentPID( );
+                suFilePath +=  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".log"));
 
                 //if ( ifFileExist( suFilePath )  == sal_True )
                 ::osl::FileBase::RC nError1;

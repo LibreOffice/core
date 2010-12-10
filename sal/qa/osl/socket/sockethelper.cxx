@@ -175,11 +175,11 @@ void printUString( const ::rtl::OUString & str, const char* msg)
     if ( returnVal.equals( rightVal ) )
         return aUString;
     aUString += ::rtl::OUString::createFromAscii(msg);
-    aUString += ::rtl::OUString::createFromAscii(": the returned value is '");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(":  the returned value is '"));
     aUString += returnVal;
-    aUString += ::rtl::OUString::createFromAscii("', but the value should be '");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("', but the value should be '"));
     aUString += rightVal;
-    aUString += ::rtl::OUString::createFromAscii("'.");
+    aUString += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'."));
     return aUString;
 }
 

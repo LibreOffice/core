@@ -59,7 +59,7 @@ namespace rtl_OUString
         /// test of OUString(rtl_uString*)
         void ctors_001()
             {
-                rtl::OUString *pStr = new rtl::OUString( rtl::OUString::createFromAscii("a String") );
+                rtl::OUString *pStr = new rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("a String") );
 
                 rtl::OUString aStrToTest(pStr->pData);
                 delete pStr;
@@ -69,7 +69,7 @@ namespace rtl_OUString
                 memset(pBuffer, 0, 2 * 8);
                 free(pBuffer);
 
-                sal_Bool bResult = aStrToTest.equals(rtl::OUString::createFromAscii("a String"));
+                sal_Bool bResult = aStrToTest.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a String")));
                 CPPUNIT_ASSERT_MESSAGE("String must not be empty",  bResult == sal_True);
             }
 
@@ -692,88 +692,88 @@ public:
     void lastIndexOf_test_oustring_offset_001()
         {
             // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring_offset(aStr, aSearchStr, 0, aStr.getLength());
         }
 
     void lastIndexOf_test_oustring_offset_002()
         {
             // search for sun, start at pos = 3, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring_offset(aStr, aSearchStr, 0, 3);
         }
 
     void lastIndexOf_test_oustring_offset_003()
         {
             // search for sun, start at pos = 2, found (pos==-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring_offset(aStr, aSearchStr, -1, 2);
         }
 
     void lastIndexOf_test_oustring_offset_004()
         {
             // search for sun, start at the end, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring_offset(aStr, aSearchStr, -1, -1);
         }
 
     void lastIndexOf_test_oustring_001()
         {
             // search for sun, found (pos==0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, 0);
         }
 
     void lastIndexOf_test_oustring_002()
         {
             // search for sun, found (pos==4)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, 4);
         }
 
     void lastIndexOf_test_oustring_003()
         {
             // search for sun, found (pos==8)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, 8);
         }
 
     void lastIndexOf_test_oustring_004()
         {
             // search for sun, found (pos==8)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, 8);
         }
 
     void lastIndexOf_test_oustring_005()
         {
             // search for sun, found (pos==4)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun su"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, 4);
         }
 
     void lastIndexOf_test_oustring_006()
         {
             // search for sun, found (pos==-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("sun");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the su su"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("sun"));
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
     void lastIndexOf_test_oustring_007()
         {
             // search for earth, not found (-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the su su");
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the su su"));
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("earth"));
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
@@ -781,7 +781,7 @@ public:
         {
             // search for earth, not found (-1)
             rtl::OUString aStr = rtl::OUString();
-            rtl::OUString aSearchStr = rtl::OUString::createFromAscii("earth");
+            rtl::OUString aSearchStr(RTL_CONSTASCII_USTRINGPARAM("earth"));
             lastIndexOf_oustring(aStr, aSearchStr, -1);
         }
 
@@ -797,7 +797,7 @@ public:
     void lastIndexOf_test_salunicode_001()
         {
             // search for 's', found (19)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
             sal_Unicode suChar = L's';
             lastIndexOf_salunicode(aStr, suChar, 19);
         }
@@ -805,7 +805,7 @@ public:
     void lastIndexOf_test_salunicode_002()
         {
             // search for 'x', not found (-1)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
             sal_Unicode suChar = L'x';
             lastIndexOf_salunicode(aStr, suChar, -1);
         }
@@ -813,21 +813,21 @@ public:
     void lastIndexOf_test_salunicode_offset_001()
         {
             // search for 's', start from pos last char, found (19)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(aStr, cuChar, 19, aStr.getLength());
         }
     void lastIndexOf_test_salunicode_offset_002()
         {
             // search for 's', start pos is last occur from search behind, found (17)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
             sal_Unicode cuChar = L's';
             lastIndexOf_salunicode_offset(aStr, cuChar, 17, 19);
         }
     void lastIndexOf_test_salunicode_offset_003()
         {
             // search for 't', start pos is 1, found (0)
-            rtl::OUString aStr = rtl::OUString::createFromAscii("the sun sun java system");
+            rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("the sun sun java system"));
             sal_Unicode cuChar = L't';
             lastIndexOf_salunicode_offset(aStr, cuChar, 0, 1);
         }
@@ -886,66 +886,66 @@ public:
 
     void getToken_001()
         {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b");
+            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;b"));
 
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_002()
         {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;b.c");
+            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;b.c"));
 
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", suToken.equals(rtl::OUString::createFromAscii("c")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'c'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("c"))) == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_003()
         {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("a;;b");
+            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("a;;b"));
 
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString::createFromAscii("a")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'a'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("a"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, ';', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString::createFromAscii("b")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be a 'b'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("b"))) == sal_True);
             CPPUNIT_ASSERT_MESSAGE("index should be negative", nIndex == -1);
         }
 
     void getToken_004()
         {
-            rtl::OUString suTokenStr = rtl::OUString::createFromAscii("longer.then.ever.");
+            rtl::OUString suTokenStr(RTL_CONSTASCII_USTRINGPARAM("longer.then.ever."));
 
             sal_Int32 nIndex = 0;
 
             rtl::OUString suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", suToken.equals(rtl::OUString::createFromAscii("longer")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'longer'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("longer"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", suToken.equals(rtl::OUString::createFromAscii("then")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'then'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("then"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
-            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", suToken.equals(rtl::OUString::createFromAscii("ever")) == sal_True);
+            CPPUNIT_ASSERT_MESSAGE("Token should be 'ever'", suToken.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ever"))) == sal_True);
 
             /* rtl::OUString */ suToken = suTokenStr.getToken( 0, '.', nIndex );
             CPPUNIT_ASSERT_MESSAGE("Token should be empty", suToken.getLength() == 0);

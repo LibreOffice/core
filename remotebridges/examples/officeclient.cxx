@@ -92,7 +92,7 @@ void OfficeClientMain::testWriter( const Reference< XComponent > & rComponent )
     Reference< XTextCursor > rCursor = rText->createTextCursor();
     Reference< XTextRange > rRange ( rCursor , UNO_QUERY );
 
-    rText->insertString( rRange, OUString::createFromAscii( "This text has been posted by the officeclient component" ), sal_False );
+    rText->insertString( rRange, OUString(RTL_CONSTASCII_USTRINGPARAM("This text has been posted by the officeclient component")), sal_False );
 }
 
 /********************
@@ -105,7 +105,7 @@ void OfficeClientMain::registerServices( )
     Reference < XImplementationRegistration > rImplementationRegistration(
 
         m_xSMgr->createInstance(
-            OUString::createFromAscii( "com.sun.star.registry.ImplementationRegistration" )),
+            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration"))),
         UNO_QUERY );
 
     if( ! rImplementationRegistration.is() )
@@ -135,7 +135,7 @@ void OfficeClientMain::registerServices( )
         {
             // register the needed services in the servicemanager
             rImplementationRegistration->registerImplementation(
-                OUString::createFromAscii( "com.sun.star.loader.SharedLibrary" ),
+                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                 aDllName,
                 Reference< XSimpleRegistry > () );
         }
@@ -156,7 +156,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
         try {
             registerServices();
             Reference < XInterface > r =
-                m_xSMgr->createInstance( OUString::createFromAscii( "com.sun.star.bridge.UnoUrlResolver" ) );
+                m_xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.UnoUrlResolver")) );
             Reference < XUnoUrlResolver > rResolver( r , UNO_QUERY );
             r = rResolver->resolve( aArguments.getConstArray()[0] );
 
@@ -165,7 +165,7 @@ sal_Int32 OfficeClientMain::run( const Sequence< OUString > & aArguments ) throw
             {
                 printf( "got the remote NamingService\n" );
 
-                r = rNamingService->getRegisteredObject(OUString::createFromAscii("StarOffice.ServiceManager"));
+                r = rNamingService->getRegisteredObject(OUString(RTL_CONSTASCII_USTRINGPARAM("StarOffice.ServiceManager")));
 
                 Reference< XMultiServiceFactory > rRemoteSMgr( r , UNO_QUERY );
 
@@ -262,7 +262,7 @@ Sequence< OUString > getSupportedServiceNames()
         if( !pNames )
         {
             static Sequence< OUString > seqNames(2);
-            seqNames.getArray()[0] = OUString::createFromAscii( "com.sun.star.bridge.example.OfficeClientExample" );
+            seqNames.getArray()[0] = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.example.OfficeClientExample"));
             pNames = &seqNames;
         }
     }

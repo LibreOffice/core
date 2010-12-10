@@ -86,25 +86,25 @@ SAL_IMPLEMENT_MAIN()
     OUString exePath( getExePath() );
     OUString excompRdb(exePath);
 
-    excompRdb += OUString::createFromAscii("excomp.rdb");
+    excompRdb += OUString(RTL_CONSTASCII_USTRINGPARAM("excomp.rdb"));
 
     Reference< XMultiServiceFactory > xSMgr  = ::cppu::createRegistryServiceFactory( excompRdb );
     TEST_ENSHURE( xSMgr.is(), "excomp error 0" );
 
     typelib_TypeDescription* pTypeDesc = NULL;
-    OUString sType = OUString::createFromAscii("com.sun.star.text.XTextDocument");
+    OUString sType(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.XTextDocument"));
     typelib_typedescription_getByName( &pTypeDesc, sType.pData);
 //  typelib_InterfaceTypeDescription* pInterDesc = (typelib_InterfaceTypeDescription*)pTypeDesc;
 
-    Reference< XInterface > xIFace = xSMgr->createInstance(OUString::createFromAscii("com.sun.star.registry.ImplementationRegistration"));
+    Reference< XInterface > xIFace = xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration")));
     Reference< XImplementationRegistration > xImpReg( xIFace, UNO_QUERY);
     TEST_ENSHURE( xImpReg.is(), "excomp error 1" );
     try
     {
-        xImpReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImpReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                         compName1,
                                         Reference< XSimpleRegistry >() );
-        xImpReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
+        xImpReg->registerImplementation(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.loader.SharedLibrary")),
                                         compName2,
                                         Reference< XSimpleRegistry >() );
     }
@@ -113,10 +113,10 @@ SAL_IMPLEMENT_MAIN()
         TEST_ENSHURE( e.Message.getLength(), OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US).getStr() );
     }
 
-    Reference< XTest > xTest1( xSMgr->createInstance(OUString::createFromAscii("example.ExampleComponent1")),
+    Reference< XTest > xTest1( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent1"))),
                                UNO_QUERY);
     TEST_ENSHURE( xTest1.is(), "excomp error 2" );
-    Reference< XTest > xTest2( xSMgr->createInstance(OUString::createFromAscii("example.ExampleComponent2")),
+    Reference< XTest > xTest2( xSMgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("example.ExampleComponent2"))),
                                UNO_QUERY);
     TEST_ENSHURE( xTest2.is(), "excomp error 3" );
 

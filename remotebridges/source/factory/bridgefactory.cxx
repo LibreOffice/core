@@ -240,7 +240,7 @@ namespace remotebridges_factory
         else
         {
             // fallback to the old solution, deprecated, should be removed !
-            sService = OUString::createFromAscii( "com.sun.star.bridge.Bridge." );
+            sService = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.bridge.Bridge."));
             sService += sProtocolName;
         }
         return sService;

@@ -45,7 +45,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     //custom .ini/rc file
     Bootstrap aBs_custom( OUString::createFromAscii(argv[3]) );
     OUString suValue;
-    OUString suDefault( OUString::createFromAscii("mydefault") );
+    OUString suDefault( RTL_CONSTASCII_USTRINGPARAM("mydefault") );
     int flag = atoi( argv[1] );
 
     switch( flag ) {

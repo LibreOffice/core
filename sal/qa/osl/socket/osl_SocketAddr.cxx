@@ -116,11 +116,11 @@ namespace osl_SocketAddr
 
             sal_Bool bOk = compareUString(suHost, suHost2);
 
-            rtl::OUString suError = rtl::OUString::createFromAscii("Host names should be the same. From SocketAddr.getLocalHostname() it is'");
+            rtl::OUString suError (RTL_CONSTASCII_USTRINGPARAM("Host names should be the same. From SocketAddr.getLocalHostname() it is'"));
             suError += suHost;
-            suError += rtl::OUString::createFromAscii("', from getThisHostname() it is '");
+            suError += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("', from getThisHostname() it is '"));
             suError += suHost2;
-            suError += rtl::OUString::createFromAscii("'.");
+            suError += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("'."));
 
             CPPUNIT_ASSERT_MESSAGE(suError, sal_True == bOk);
         }
@@ -128,7 +128,7 @@ namespace osl_SocketAddr
         void ctors_copy()
         {
             /// SocketAddr copy constructor.
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
             ::osl::SocketAddr saCopySocketAddr( saSocketAddr );
 
             sal_Int32 nPort = saCopySocketAddr.getPort( );
@@ -139,7 +139,7 @@ namespace osl_SocketAddr
 
         void ctors_copy_no_001()
         {
-            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
             CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
 
             oslSocketAddr psaOSLSocketAddr = pSocketAddr->getHandle( );
@@ -156,7 +156,7 @@ namespace osl_SocketAddr
 
         void ctors_copy_no_002()
         {
-            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
                    CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
                    oslSocketAddr psaOSLSocketAddr = pSocketAddr->getHandle( );
                    ::osl::SocketAddr* pSocketAddrCopy = new ::osl::SocketAddr( psaOSLSocketAddr, SAL_NO_COPY );
@@ -169,7 +169,7 @@ namespace osl_SocketAddr
 
         void ctors_copy_handle_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
             ::osl::SocketAddr saSocketAddrCopy( saSocketAddr.getHandle( ) );
 
             CPPUNIT_ASSERT_MESSAGE("test for SocketAddr copy handle constructor function: copy another Socket's handle, get its port to check copy effect.",
@@ -178,7 +178,7 @@ namespace osl_SocketAddr
 
         void ctors_copy_handle_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
             ::osl::SocketAddr saSocketAddrCopy( saSocketAddr.getHandle( ) );
             saSocketAddrCopy.setPort( IP_PORT_HTTP2 );
 
@@ -189,7 +189,7 @@ namespace osl_SocketAddr
         void ctors_hostname_port_001()
         {
             /// tcpip-specif constructor.
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
             printUString( saSocketAddr.getHostname( ), "ctors_hostname_port_001:getHostname");
 
             CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specif constructor function: do a constructor using tcpip spec, check the result.",
@@ -202,7 +202,7 @@ namespace osl_SocketAddr
         void ctors_hostname_port_002()
         {
             /// tcpip-specif constructor.
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT2 );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT2 );
 
             CPPUNIT_ASSERT_MESSAGE("test for SocketAddr tcpip specif constructor function: using an invalid IP address, the socketaddr ctors should fail", sal_False == saSocketAddr.is( ));
         }
@@ -238,7 +238,7 @@ namespace osl_SocketAddr
         // refer to setPort_003()
         void is_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_INVAL );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_INVAL );
 
             CPPUNIT_ASSERT_MESSAGE("test for is() function: create a tcp-ip socket using invalid port number",
                                     sal_True == saSocketAddr.is( ) );
@@ -246,7 +246,7 @@ namespace osl_SocketAddr
 
         void is_003()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_MYPORT );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_MYPORT );
 
             CPPUNIT_ASSERT_MESSAGE("test for is() function: create a tcp-ip socket using invalid Ip number",
                                     sal_True != saSocketAddr.is( ) );
@@ -278,7 +278,7 @@ namespace osl_SocketAddr
 
         void getHostname_000()
             {
-                ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.107"), IP_PORT_FTP );
+                ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.107")), IP_PORT_FTP );
                 rtl::OUString suResult = saSocketAddr.getHostname( 0 );
 
             }
@@ -290,16 +290,16 @@ namespace osl_SocketAddr
         */
         void getHostname_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.107"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.107")), IP_PORT_FTP );
             rtl::OUString suResult = saSocketAddr.getHostname( 0 );
-            rtl::OUString suError = outputError(suResult, rtl::OUString::createFromAscii("sceri.PRC.Sun.COM"), "test for getHostname(0)");
-            sal_Bool bOK = compareUString( suResult, rtl::OUString::createFromAscii("sceri.PRC.Sun.COM") );
+            rtl::OUString suError = outputError(suResult, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sceri.PRC.Sun.COM")), "test for getHostname(0)");
+            sal_Bool bOK = compareUString( suResult, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("sceri.PRC.Sun.COM")) );
             // search the returned hostname in /etc/hosts, if find, and the IP in the row is same as IP
             // in the Addr, it's right also.
             if ( bOK == sal_False)
             {
                 rtl::OString aString = ::rtl::OUStringToOString( suResult, RTL_TEXTENCODING_ASCII_US );
-                if ( compareUString( getIPbyName( aString ), rtl::OUString::createFromAscii("129.158.217.107") ) == sal_True )
+                if ( compareUString( getIPbyName( aString ), rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.107")) ) == sal_True )
                     bOK = sal_True;
             }
             CPPUNIT_ASSERT_MESSAGE( suError, sal_True == bOK);
@@ -309,11 +309,11 @@ namespace osl_SocketAddr
 // LLA: this function does not work in company (Linux, Windows) but at home
         void getHostname_002()
         {
-            rtl::OUString suHostname = rtl::OUString::createFromAscii("cn-1.germany.sun.com");
+            rtl::OUString suHostname (RTL_CONSTASCII_USTRINGPARAM("cn-1.germany.sun.com"));
             rtl::OString aString = ::rtl::OUStringToOString( suHostname, RTL_TEXTENCODING_ASCII_US );
             rtl::OUString aHostIP    = getIPbyName( aString );
 
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_FTP );
             sal_Bool bOK = saSocketAddr.setHostname( suHostname );
             CPPUNIT_ASSERT_MESSAGE("#SocketAddr.setHostname failed", sal_True == bOK );
             oslSocketResult aResult;
@@ -353,7 +353,7 @@ namespace osl_SocketAddr
     public:
         void getPort_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getPort() function: get a normal port number.",
                                     IP_PORT_FTP == saSocketAddr.getPort( ) );
@@ -361,7 +361,7 @@ namespace osl_SocketAddr
 
         void getPort_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_INVAL );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_INVAL );
 
             //t_print("#getPort_002: Port number is %d \n", saSocketAddr.getPort( ));
 
@@ -372,7 +372,7 @@ namespace osl_SocketAddr
         //2. SocketAddr family is not osl_Socket_FamilyInet, but case 2 could not be constructed
         void getPort_003()
         {
-            rtl::OUString suInvalidIP = rtl::OUString::createFromAscii("123.345.67.89");
+            rtl::OUString suInvalidIP (RTL_CONSTASCII_USTRINGPARAM("123.345.67.89"));
             ::osl::SocketAddr saSocketAddr( suInvalidIP, IP_PORT_MYPORT );
 
             CPPUNIT_ASSERT_MESSAGE( "test for getPort( ) function: give an invalid IP to a SocketAddr, get the port to see returned value. ",
@@ -399,7 +399,7 @@ namespace osl_SocketAddr
     public:
         void setPort_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_TELNET );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort() function: modify a port number setting, and check it.",
@@ -417,7 +417,7 @@ namespace osl_SocketAddr
         */
         void setPort_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_ZERO );
 
             oslSocket sHandle = osl_createSocket( osl_Socket_FamilyInet, osl_Socket_TypeStream, osl_Socket_ProtocolIp );
@@ -436,7 +436,7 @@ namespace osl_SocketAddr
 
         void setPort_003()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP);
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP);
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_INVAL );
             //on Linux, getPort return 34463
             //t_print("#Port number is %d \n", saSocketAddr.getPort( ));
@@ -449,7 +449,7 @@ namespace osl_SocketAddr
         /* this is not a inet-addr => can't set port */
         void setPort_004()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("123.345.67.89"), IP_PORT_FTP);
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("123.345.67.89")), IP_PORT_FTP);
             sal_Bool bOK = saSocketAddr.setPort( IP_PORT_MYPORT );
 
             CPPUNIT_ASSERT_MESSAGE( "test for setPort( ) function: set an invalid address with valid port. it should return error.",
@@ -486,8 +486,8 @@ namespace osl_SocketAddr
     public:
         void setAddr_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
-            saSocketAddr.setAddr( UStringIPToByteSequence( rtl::OUString::createFromAscii("127.0.0.1") ) );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
+            saSocketAddr.setAddr( UStringIPToByteSequence( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")) ) );
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( 0 );
             sal_Bool bOK = sal_False;
 
@@ -517,7 +517,7 @@ namespace osl_SocketAddr
         void getAddr_001()
         {
             oslSocketResult SocketResult;
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_FTP );
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( &SocketResult );
 
             sal_Bool bOK = sal_False;
@@ -550,8 +550,8 @@ namespace osl_SocketAddr
     public:
         void operator_equal_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET);
-            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET);
+            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
 
             saSocketAddrEqual = saSocketAddr;
             sal_Bool bOK = sal_False;
@@ -568,8 +568,8 @@ namespace osl_SocketAddr
 
         void operator_equal_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.199"), IP_PORT_TELNET);
-            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.199")), IP_PORT_TELNET);
+            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
 
             saSocketAddrEqual = saSocketAddr;
             CPPUNIT_ASSERT_MESSAGE( "after assign, the assigned SocketAddr is not same as the original Addr",
@@ -583,8 +583,8 @@ namespace osl_SocketAddr
 
         void operator_equal_const_001()
         {
-            const ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET);
-            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            const ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET);
+            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
 
             saSocketAddrEqual = saSocketAddr;
             sal_Bool bOK = sal_False;
@@ -600,8 +600,8 @@ namespace osl_SocketAddr
 
         void operator_equal_const_002()
         {
-            const ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET);
-            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+            const ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET);
+            ::osl::SocketAddr saSocketAddrEqual( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
 
             saSocketAddrEqual = saSocketAddr;
             saSocketAddrEqual.setPort( IP_PORT_HTTP1 );
@@ -612,9 +612,9 @@ namespace osl_SocketAddr
 
         void operator_equal_assign_001()
         {
-            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET );
+            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET );
                    CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
-                   ::osl::SocketAddr* pSocketAddrAssign = new ::osl::SocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP );
+                   ::osl::SocketAddr* pSocketAddrAssign = new ::osl::SocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP );
                    oslSocketAddr poslSocketAddr = pSocketAddr->getHandle( );
                    //if( m_handle ) osl_destroySocketAddr( m_handle ); so pSocketAddrAssign had been destroyed and then point to pSocketAddr
                    pSocketAddrAssign->assign(poslSocketAddr, SAL_NO_COPY);
@@ -627,8 +627,8 @@ namespace osl_SocketAddr
 
         void operator_is_equal_001()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET);
-            ::osl::SocketAddr saSocketAddrequal( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET);
+            ::osl::SocketAddr saSocketAddrequal( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET );
 
             CPPUNIT_ASSERT_MESSAGE( "test for operator_equal_equal() function: check two identical Address.",
                                       sal_True == ( saSocketAddrequal == saSocketAddr.getHandle( ) ) );
@@ -636,8 +636,8 @@ namespace osl_SocketAddr
 
         void operator_is_equal_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("129.158.217.202"), IP_PORT_FTP);
-            ::osl::SocketAddr saSocketAddrequal( rtl::OUString::createFromAscii("127.0.0.1"), IP_PORT_TELNET );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("129.158.217.202")), IP_PORT_FTP);
+            ::osl::SocketAddr saSocketAddrequal( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), IP_PORT_TELNET );
 
             CPPUNIT_ASSERT_MESSAGE( "test for operator_equal_equal() function: check two different Address.",
                                       sal_False == ( saSocketAddrequal == saSocketAddr.getHandle( ) ) );
@@ -667,7 +667,7 @@ namespace osl_SocketAddr
 
         void getSocketAddrHandle_001()
         {
-            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+            ::osl::SocketAddr* pSocketAddr = new ::osl::SocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
                    CPPUNIT_ASSERT_MESSAGE("check for new SocketAddr", pSocketAddr != NULL);
                    oslSocketAddr psaOSLSocketAddr = pSocketAddr->getHandle( );
                    ::osl::SocketAddr* pSocketAddrCopy = new ::osl::SocketAddr( psaOSLSocketAddr, SAL_NO_COPY );
@@ -680,7 +680,7 @@ namespace osl_SocketAddr
 
         void getSocketAddrHandle_002()
         {
-            ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("deuce.PRC.Sun.COM"), IP_PORT_MYPORT4 );
+            ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("deuce.PRC.Sun.COM")), IP_PORT_MYPORT4 );
             oslSocketAddr poslSocketAddr = saSocketAddr.getHandle( );
 
             sal_Bool bOK = ( saSocketAddr == poslSocketAddr );
@@ -725,7 +725,7 @@ namespace osl_SocketAddr
             // LLA: IMHO localhost, or hostname by itself should be ok.
             rtl::OUString suThisHost = getThisHostname( );
             bool bOk = false;
-            if (suThisHost.equals(rtl::OUString::createFromAscii("localhost")))
+            if (suThisHost.equals(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost"))))
             {
                 bOk = true;
             }
@@ -761,7 +761,7 @@ namespace osl_SocketAddr
         void resolveHostname_001()
         {
             ::osl::SocketAddr saSocketAddr;
-            ::osl::SocketAddr::resolveHostname( rtl::OUString::createFromAscii("127.0.0.1"), saSocketAddr );
+            ::osl::SocketAddr::resolveHostname( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("127.0.0.1")), saSocketAddr );
             ::rtl::ByteSequence bsSocketAddr = saSocketAddr.getAddr( 0 );
             sal_Bool bOK = sal_False;
 
@@ -782,7 +782,7 @@ namespace osl_SocketAddr
     /** testing the method:
         static inline sal_Int32 SAL_CALL getServicePort(
             const ::rtl::OUString& strServiceName,
-            const ::rtl::OUString & strProtocolName= ::rtl::OUString::createFromAscii( "tcp" ) );
+            const ::rtl::OUString & strProtocolName= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("tcp")) );
     */
 
     class gettheServicePort : public CppUnit::TestFixture
@@ -790,8 +790,8 @@ namespace osl_SocketAddr
     public:
         void gettheServicePort_001()
         {
-            rtl::OUString suServiceFTP  = rtl::OUString::createFromAscii( "ftp" );
-            rtl::OUString suProtocolTCP = rtl::OUString::createFromAscii( "tcp" );
+            rtl::OUString suServiceFTP  (RTL_CONSTASCII_USTRINGPARAM("ftp"));
+            rtl::OUString suProtocolTCP (RTL_CONSTASCII_USTRINGPARAM("tcp"));
 
             CPPUNIT_ASSERT_MESSAGE( "test for getServicePort() function: try to get ftp service port on TCP protocol.",
                                       IP_PORT_FTP== ::osl::SocketAddr::getServicePort( suServiceFTP, suProtocolTCP ) );
@@ -799,8 +799,8 @@ namespace osl_SocketAddr
 
         void gettheServicePort_002()
         {
-            rtl::OUString suServiceTELNET  = rtl::OUString::createFromAscii( "telnet" );
-            rtl::OUString suProtocolTCP    = rtl::OUString::createFromAscii( "tcp" );
+            rtl::OUString suServiceTELNET  (RTL_CONSTASCII_USTRINGPARAM("telnet"));
+            rtl::OUString suProtocolTCP    (RTL_CONSTASCII_USTRINGPARAM("tcp"));
             CPPUNIT_ASSERT_MESSAGE( "test for getServicePort() function: try to get telnet service port on TCP protocol.",
                                       IP_PORT_TELNET== ::osl::SocketAddr::getServicePort( suServiceTELNET, suProtocolTCP ) );
         }
@@ -808,17 +808,17 @@ namespace osl_SocketAddr
         void gettheServicePort_003()
         {
         //Solaris has no service called "https", please see /etc/services
-            rtl::OUString suServiceNETBIOS = rtl::OUString::createFromAscii( "netbios-dgm" );
-            rtl::OUString suProtocolUDP    = rtl::OUString::createFromAscii( "udp" );
+            rtl::OUString suServiceNETBIOS (RTL_CONSTASCII_USTRINGPARAM("netbios-dgm"));
+            rtl::OUString suProtocolUDP    (RTL_CONSTASCII_USTRINGPARAM("udp"));
             CPPUNIT_ASSERT_MESSAGE( "test for getServicePort() function: try to get netbios-ssn service port on UDP protocol.",
                                       IP_PORT_NETBIOS_DGM == ::osl::SocketAddr::getServicePort( suServiceNETBIOS, suProtocolUDP ) );
         }
 
         void gettheServicePort_004()
         {
-            rtl::OUString suProtocolUDP    = rtl::OUString::createFromAscii( "udp" );
+            rtl::OUString suProtocolUDP(RTL_CONSTASCII_USTRINGPARAM( "udp" ));
             CPPUNIT_ASSERT_MESSAGE( "test for getServicePort() function: try to get a service port which is not exist.",
-                                      OSL_INVALID_PORT == ::osl::SocketAddr::getServicePort( ::rtl::OUString::createFromAscii( "notexist" ), suProtocolUDP ) );
+                                      OSL_INVALID_PORT == ::osl::SocketAddr::getServicePort( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("notexist")), suProtocolUDP ) );
         }
 
         CPPUNIT_TEST_SUITE( gettheServicePort );
@@ -839,7 +839,7 @@ namespace osl_SocketAddr
     public:
         void getFamilyOfSocketAddr_001()
         {
-                   ::osl::SocketAddr saSocketAddr( rtl::OUString::createFromAscii("localhost"), IP_PORT_HTTP1 );
+                   ::osl::SocketAddr saSocketAddr( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("localhost")), IP_PORT_HTTP1 );
                    oslSocketAddr psaOSLSocketAddr = saSocketAddr.getHandle( );
                    CPPUNIT_ASSERT_EQUAL(
                     osl_Socket_FamilyInet,

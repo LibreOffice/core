@@ -174,7 +174,7 @@ DirectoryTraveller::DirectoryTraveller (
       m_nCount   (0)
 {
     m_aPath += rName;
-    m_aPath += OUString::createFromAscii("/");
+    m_aPath += OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
 }
 
 /*
@@ -458,7 +458,7 @@ int SAL_CALL main (int argc, char **argv)
     {
         // Create symlink to (root) directory.
         eErrCode = aFile.symlink (
-            aPath,      OUString::createFromAscii("000000/"),
+            aPath,      OUString(RTL_CONSTASCII_USTRINGPARAM("000000/")),
             OUString(), aPath);
         OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
@@ -470,7 +470,7 @@ int SAL_CALL main (int argc, char **argv)
 
         eErrCode = aFile.symlink (
             aPath, aLinkName,
-            aPath, OUString::createFromAscii("demostor-1.dat"));
+            aPath, OUString(RTL_CONSTASCII_USTRINGPARAM("demostor-1.dat")));
         OSL_POSTCOND(
             ((eErrCode == store_E_None         ) ||
              (eErrCode == store_E_AlreadyExists)    ),
@@ -517,7 +517,7 @@ int SAL_CALL main (int argc, char **argv)
         {
             // Open symlink entry.
             eErrCode = aRootDir.create (
-                aFile, aPath, OUString::createFromAscii("000000"),
+                aFile, aPath, OUString(RTL_CONSTASCII_USTRINGPARAM("000000")),
                 store_AccessReadOnly);
         }
         else
