@@ -1283,9 +1283,6 @@ AC_ARG_WITH(max-jobs,
 
 BUILD_TYPE="LibO"
 
-dnl ===================================================================
-dnl Message.
-dnl ===================================================================
 echo "********************************************************************"
 echo "*"
 echo "*   Running ${PACKAGE_NAME} build configuration."
@@ -1293,7 +1290,7 @@ echo "*"
 echo "********************************************************************"
 echo ""
 dnl ===================================================================
-dnl Configure pre-requisites. (grep, awk, sed, bash)
+dnl check for required programs (grep, awk, sed, bash)
 dnl ===================================================================
 cat /dev/null > warn
 
@@ -1312,6 +1309,7 @@ AC_PATH_PROGS(SED, sed )
 if test -z "$SED"; then
    AC_MSG_ERROR([install sed to run this script])
 fi
+
 AC_PATH_PROG(BASH, bash)
 if test -z "$BASH"; then
    AC_MSG_ERROR([bash not found in \$PATH])
@@ -1319,6 +1317,10 @@ fi
 AC_SUBST(BASH)
 
 
+dnl ===================================================================
+dnl Checks for --with-local-solenv invocation
+dnl TODO: Is this still required?
+dnl ===================================================================
 AC_MSG_CHECKING([for solenv environment])
 if test -z "$with_local_solenv"; then
    LOCAL_SOLENV="DEFAULT"
@@ -1356,6 +1358,9 @@ if test "$build" != "$host" -o "$build" != "$target" \
     echo "cross-compiling by any means is not supported (yet)!" >> warn
 fi
 
+dnl ===================================================================
+dnl Checks for cygwin >= 1.5
+dnl ===================================================================
 if echo "$build_os" | grep cygwin; then
    AC_MSG_CHECKING([Cygwin version])
    CygwinVer=`uname -r`
@@ -1533,14 +1538,16 @@ else
 fi
 AC_SUBST(ENABLE_CRASHDUMP)
 
-if test "$_os" = "WINNT"; then
-   BUILD_TYPE="$BUILD_TYPE TWAIN"
-fi
 
+dnl ===================================================================
+dnl Windows specific tests and stuff
+dnl ===================================================================
 if test "$_os" = "WINNT"; then
-   dnl ===================================================================
+
+   dnl Include twain scanners
+   BUILD_TYPE="$BUILD_TYPE TWAIN"
+
    dnl Set the CL_X64 variable.
-   dnl ===================================================================
    AC_MSG_CHECKING([whether to use the Microsoft C/C++ x64 compiler])
    if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
       CL_X64=""
@@ -1552,7 +1559,6 @@ if test "$_os" = "WINNT"; then
    AC_SUBST(CL_X64)
 fi
 
-dnl ===================================================================
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
@@ -1568,7 +1574,6 @@ else
 fi
 AC_SUBST(ENABLE_WERROR)
 
-dnl ===================================================================
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
@@ -1584,7 +1589,6 @@ else
 fi
 AC_SUBST(ENABLE_DEBUG)
 
-dnl ===================================================================
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with additional debug utilities])
@@ -1603,8 +1607,7 @@ AC_SUBST(PRODUCT)
 AC_SUBST(PROFULLSWITCH)
 AC_SUBST(PROEXT)
 
-dnl ===================================================================
-dnl First setting is whether to include symbols into final build.
+dnl whether to include symbols into final build.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include symbols into final build])
 if test -n "$enable_symbols" && test "$enable_symbols" != "no"; then
@@ -1629,7 +1632,6 @@ else
 fi
 AC_SUBST(ENABLE_SYMBOLS)
 
-dnl ===================================================================
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to strip the solver or not.])
@@ -1668,6 +1670,8 @@ else
 fi
 AC_SUBST(ENABLE_CUPS)
 
+dnl check for fontconfig support
+dnl ===================================================================
 AC_MSG_CHECKING([whether to enable fontconfig support])
 if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a \( "$enable_fontconfig" = "yes" -o "$enable_fontconfig" = "TRUE" \); then
    ENABLE_FONTCONFIG="TRUE"
@@ -1678,8 +1682,8 @@ else
 fi
 AC_SUBST(ENABLE_FONTCONFIG)
 
-dnl ===================================================================
-dnl find external tarballs.
+
+dnl whether to find & fetch external tarballs?
 dnl ===================================================================
 if test -z "$TARFILE_LOCATION"; then
    TARFILE_LOCATION="DEFAULT"
@@ -1692,12 +1696,11 @@ if test -z "$enable_fetch_external" || test "$enable_fetch_external" = "yes" \
 fi
 AC_SUBST(DO_FETCH_TARBALLS)
 
-dnl ===================================================================
+
 dnl git-new-workdir
 dnl ===================================================================
 AC_SUBST(GIT_LINK_SRC)
 
-dnl ===================================================================
 dnl Disable legacy binary file formats filters
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable filters for legacy binary file formats (StarOffice 5.2)])
@@ -2054,7 +2057,6 @@ fi
 
 AC_SUBST(GNUTAR)
 
-dnl ===================================================================
 dnl  Test the solaris compiler version
 dnl ===================================================================
 if test "$_os" = "SunOS"; then
