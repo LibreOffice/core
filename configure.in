@@ -1366,11 +1366,6 @@ dnl ===================================================================
 dnl Checks for the operating system and processor.
 dnl ===================================================================
 AC_CANONICAL_HOST
-if test "$build" != "$host" -o "$build" != "$target" \
-  -o "$host" != "$target"; then
-    AC_MSG_WARN([cross-compiling by any means is not supported (yet)!])
-    echo "cross-compiling by any means is not supported (yet)!" >> warn
-fi
 
 dnl ===================================================================
 dnl The following is a list of supported systems.
@@ -1443,13 +1438,13 @@ case "$host_os" in
         test_randr=no
         test_freetype=no
         test_fontconfig=no
-	test_cairo=no
+        test_cairo=no
         _os=Darwin
-      if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
-         AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
-         echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
-         enable_systray=no
-      fi
+        if test "$enable_systray" = "yes" && test "$enable_gtk" != "no"; then
+            AC_MSG_WARN([Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray])
+            echo "Disabling gtk-quickstarter - not supported on Mac. Use --disable-systray" >>warn
+            enable_systray=no
+        fi
         ;;
     os2*)
         test_cups=no
