@@ -1702,28 +1702,13 @@ else
 fi
 AC_SUBST(ENABLE_CUPS)
 
-dnl check for fontconfig support
-dnl ===================================================================
+
+# check for fontconfig support
 AC_MSG_CHECKING([whether to enable fontconfig support])
 if test "z$test_fontconfig" = "zyes" -a "z$enable_fontconfig" != "no"; then
    ENABLE_FONTCONFIG="TRUE"
    AC_MSG_RESULT([yes])
-
-   AC_CHECK_HEADER(fontconfig/fontconfig.h, [],
-                    [AC_MSG_ERROR([fontconfig/fontconfig.h could not be found. libfontconfig1-dev or fontconfig???-devel missing?])], [])
-    AC_MSG_CHECKING([whether fontconfig is >= 2.2.0])
-    AC_TRY_RUN([
-#include <fontconfig/fontconfig.h>
-
-int main(int argc, char **argv) {
-    if(FC_MAJOR > 2 || (FC_MAJOR == 2 && FC_MINOR >= 2)) return 0;
-    else return 1;
-}   ],
-        [AC_MSG_RESULT([yes])],
-        [AC_MSG_RESULT([no])
-         AC_MSG_ERROR([fontconfig >= 2.2.0 needed])
-    ])
-
+   PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
 else
    ENABLE_FONTCONFIG=""
    AC_MSG_RESULT([no])
