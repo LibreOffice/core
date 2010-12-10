@@ -116,15 +116,6 @@ SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
-.IF "$(COM)"=="GCC"
-DEF1EXPORTFILE=\
-    $(SHL1TARGET)_mingw.dxp\
-    unicows_mingw.dxp
-.ELSE
-DEF1EXPORTFILE=\
-    $(SHL1TARGET).dxp\
-    unicows.dxp
-.ENDIF
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
