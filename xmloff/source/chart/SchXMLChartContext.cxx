@@ -707,10 +707,14 @@ void lcl_ApplyDataFromRectangularRangeToDiagram(
     uno::Reference< chart2::data::XDataSource > xDataSource(
         xDataProvider->createDataSource( aArgs ));
 
-    aArgs.realloc( aArgs.getLength() + 1 );
-    aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+    aArgs.realloc( aArgs.getLength() + 2 );
+    aArgs[ aArgs.getLength() - 2 ] = beans::PropertyValue(
         ::rtl::OUString::createFromAscii("HasCategories"),
         -1, uno::makeAny( bHasCateories ),
+        beans::PropertyState_DIRECT_VALUE );
+    aArgs[ aArgs.getLength() - 1 ] = beans::PropertyValue(
+        ::rtl::OUString::createFromAscii("UseCategoriesAsX"),
+        -1, uno::makeAny( sal_False ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
 
     xNewDia->setDiagramData( xDataSource, aArgs );
