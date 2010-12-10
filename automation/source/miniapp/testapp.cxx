@@ -270,7 +270,7 @@ Reference< XContentProviderManager > InitializeUCB( void )
     return xUcb;
 }
 
-void MyApp::Main()
+int MyApp::Main()
 {
     Reference< XContentProviderManager > xUcb = InitializeUCB();
     LanguageType aRequestedLanguage;
@@ -299,6 +299,7 @@ void MyApp::Main()
     RemoteControl aRC;
 
     Execute();
+    return EXIT_SUCCESS;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

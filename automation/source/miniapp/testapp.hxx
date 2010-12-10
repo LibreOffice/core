@@ -92,7 +92,7 @@ class MyApp : public Application
 
 public:
     MyApp();
-    void Main();
+    int Main();
 
     virtual void                Property( ApplicationProperty& );
     virtual PlugInDispatcher*   GetDispatcher();
