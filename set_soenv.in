@@ -293,16 +293,9 @@ elsif ( $platform =~ m/netbsd/ )
    { print "Unsupported NetBSD architecture: $platform \n";
      exit 1;
    }
-   #Conditional setting depending on gcc3:
-      if (@GCCVER@ >= 30401) {
-         $CVER           = "C341";
-         $OUTPATH        = $OUTPATH."3";
-      }
-      else {
-         $CVER           = "C300";
-         $OUTPATH        = $OUTPATH."2";
-      }
    # General NetBSD settings:
+      $CVER           = "C341";
+      $OUTPATH        = $OUTPATH."3";
       $BIG_SVX        = "TRUE";
       $COM            = "GCC";
       $COMPATH        = '@COMPATH@';
@@ -399,9 +392,7 @@ elsif ( $platform =~ m/freebsd/ )
    {  print "Unsupported FreeBSD architecture: $platform \n";
          exit 1;
    }
-   if( @GCCVER@ >= 30401 ) {
       $CVER        = "C341";
-   }
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/openbsd/ )
@@ -438,9 +429,7 @@ elsif ( $platform =~ m/openbsd/ )
    {  print "Unsupported OpenBSD architecture: $platform \n";
          exit 1;
    }
-   if( @GCCVER@ >= 30401 ) {
       $CVER        = "C341";
-   }
       $INPATH         = $OUTPATH.$PROEXT;
 }
 elsif ( $platform =~ m/linux/ )
@@ -818,11 +807,7 @@ elsif ( $platform =~ m/darwin/ )
           $CPUNAME        = "INTEL";
           $OUTPATH        = "unxmacxi";
       }
-      if (@GCCVER@ >= 30401) {
-	  $CVER           = "C341";
-      } else {
-	  $CVER           = "C300";
-      }
+      $CVER           = "C341";
       $GUI            = "UNX";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;

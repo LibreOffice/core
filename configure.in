@@ -1898,22 +1898,12 @@ COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
-GCCVER=20995
 if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
    GCCVER=`echo $_gcc_version | $AWK -F. '{ print \$1*10000+\$2*100+\$3 }'`
 
-   if test "$_gcc_major" -lt "3"; then
-      AC_MSG_ERROR([found version "$_gcc_version", use version 3+ of the gcc compiler])
-   else
-      if test "$GCCVER" -eq "030203"; then
-        if test "$ENABLE_SYMBOLS" = "SMALL"; then
-           AC_MSG_ERROR([version "$_gcc_version" gives internal error with small.])
-        fi
-      fi
-   fi
    if test "$_os" = "Darwin" -a "$GCCVER" -ge "040100" ; then
       if test -z "$save_CC" -a -x "$GCC_HOME/bin/gcc-4.0" ; then
          CC=$GCC_HOME/bin/gcc-4.0
@@ -1938,7 +1928,6 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; th
       AC_MSG_RESULT([ok (GNU ld)])
    fi
 fi
-AC_SUBST(GCCVER)
 
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
@@ -1968,7 +1957,7 @@ if test -n "$enable_pch" && test "$enable_pch" != "no"; then
        ENABLE_PCH="TRUE"
        AC_MSG_RESULT([yes])
 dnl There is no PCH support in GCC versions prior to this
-   elif test "$GCC" = "yes" -a "$GCCVER" -gt "030400"; then
+   elif test "$GCC" = "yes"; then
        ENABLE_PCH="TRUE"
        AC_MSG_RESULT([yes])
    else
