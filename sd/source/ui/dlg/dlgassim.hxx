@@ -57,17 +57,4 @@ public:
 
 };
 
-class TemplateCacheInfo;
-
-DECLARE_LIST( TemplateCacheInfoList, TemplateCacheInfo * )
-
-class TemplateCacheDirEntry
-{
-public:
-    String                      m_aPath;
-    TemplateCacheInfoList       m_aFiles;
-};
-
-DECLARE_LIST( TemplateCacheDirEntryList, TemplateCacheDirEntry * )
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
