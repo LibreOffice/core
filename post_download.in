@@ -132,3 +132,15 @@ if test "$_os" = "WINNT"; then
       AC_MSG_ERROR([instmsiw.exe is missing in external/msi.])
    fi
 fi
+
+dnl ===================================================================
+dnl Windows builds with MSVS 2008/2010 need msvcr71.dll in external/msvcp71
+dnl ===================================================================
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for msvcr71.dll])
+   if test -f ./external/msvcp71/msvcr71.dll; then
+      AC_MSG_RESULT([found])
+   else
+      AC_MSG_ERROR([msvcr71.dll is missing in external/msvcp71.])
+   fi
+fi
