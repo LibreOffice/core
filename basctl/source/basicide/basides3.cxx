@@ -167,7 +167,7 @@ SdrView* BasicIDEShell::GetCurDlgView() const
 }
 
 // Nur wenn Dialogfenster oben:
-void __EXPORT BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
+void BasicIDEShell::ExecuteDialog( SfxRequest& rReq )
 {
     if ( pCurWin && ( pCurWin->IsA( TYPE( DialogWindow) ) ||
         (rReq.GetSlot() == SID_IMPORT_DIALOG &&pCurWin->IsA( TYPE( ModulWindow) ) ) ) )

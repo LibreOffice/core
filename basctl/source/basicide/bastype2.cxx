@@ -605,7 +605,7 @@ void BasicTreeListBox::UpdateEntries()
     SetCurrentEntry( aCurDesc );
 }
 
-SvLBoxEntry* __EXPORT BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
+SvLBoxEntry* BasicTreeListBox::CloneEntry( SvLBoxEntry* pSource )
 {
     SvLBoxEntry* pNew = SvTreeListBox::CloneEntry( pSource );
     BasicEntry* pUser = (BasicEntry*)pSource->GetUserData();

@@ -91,7 +91,7 @@ Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 }
 
 #if 0
-USHORT __EXPORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
+USHORT BasicIDEShell::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *pPrintDialog )
 {
     if ( pCurWin )
     {
@@ -144,7 +144,7 @@ String BasicIDEShell::GetSelectionText( BOOL bWholeWord )
     return aText;
 }
 
-SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( BOOL bCreate )
+SfxPrinter* BasicIDEShell::GetPrinter( BOOL bCreate )
 {
     if ( pCurWin ) // && pCurWin->ISA( ModulWindow ) )
     {
@@ -155,7 +155,7 @@ SfxPrinter* __EXPORT BasicIDEShell::GetPrinter( BOOL bCreate )
     return 0;
 }
 
-USHORT __EXPORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+USHORT BasicIDEShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     (void)nDiffFlags;
     BasicDocShell* pDocShell = (BasicDocShell*)GetViewFrame()->GetObjectShell();
@@ -323,13 +323,13 @@ ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const S
     return pModWin;
 }
 
-void __EXPORT BasicIDEShell::Move()
+void BasicIDEShell::Move()
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
         ((ModulWindow*)pCurWin)->FrameWindowMoved();
 }
 
-void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
+void BasicIDEShell::ShowCursor( bool bOn )
 {
     if ( pCurWin && pCurWin->ISA( ModulWindow ) )
         ((ModulWindow*)pCurWin)->ShowCursor( bOn );
@@ -339,7 +339,7 @@ void __EXPORT BasicIDEShell::ShowCursor( bool bOn )
 sal_Int32 getBasicIDEShellCount( void );
 
 // Nur wenn Basicfenster oben:
-void __EXPORT BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
+void BasicIDEShell::ExecuteBasic( SfxRequest& rReq )
 {
     if ( !pCurWin || !pCurWin->IsA( TYPE( ModulWindow ) ) )
         return;

@@ -180,7 +180,7 @@ EditorWindow::EditorWindow( Window* pParent ) :
 
 
 
-__EXPORT EditorWindow::~EditorWindow()
+EditorWindow::~EditorWindow()
 {
     pSourceViewConfig->RemoveListener(this);
     delete pSourceViewConfig;
@@ -244,7 +244,7 @@ String EditorWindow::GetWordAtCursor()
     return aWord;
 }
 
-void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
+void EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
 
@@ -314,7 +314,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
 }
 
 
-void __EXPORT EditorWindow::Resize()
+void EditorWindow::Resize()
 {
     // ScrollBars, etc. happens in Adjust...
     if ( pEditView )
@@ -341,14 +341,14 @@ void __EXPORT EditorWindow::Resize()
 }
 
 
-void __EXPORT EditorWindow::MouseMove( const MouseEvent &rEvt )
+void EditorWindow::MouseMove( const MouseEvent &rEvt )
 {
     if ( pEditView )
         pEditView->MouseMove( rEvt );
 }
 
 
-void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
+void EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
 {
     if ( pEditView )
     {
@@ -359,7 +359,7 @@ void __EXPORT EditorWindow::MouseButtonUp( const MouseEvent &rEvt )
     }
 }
 
-void __EXPORT EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
+void EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
 {
     GrabFocus();
     if ( pEditView )
@@ -368,7 +368,7 @@ void __EXPORT EditorWindow::MouseButtonDown( const MouseEvent &rEvt )
     }
 }
 
-void __EXPORT EditorWindow::Command( const CommandEvent& rCEvt )
+void EditorWindow::Command( const CommandEvent& rCEvt )
 {
     if ( pEditView )
     {
@@ -400,7 +400,7 @@ BOOL EditorWindow::ImpCanModify()
     return bCanModify;
 }
 
-void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
+void EditorWindow::KeyInput( const KeyEvent& rKEvt )
 {
     if ( !pEditView )   // Happens in Win95
         return;
@@ -465,7 +465,7 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
     }
 }
 
-void __EXPORT EditorWindow::Paint( const Rectangle& rRect )
+void EditorWindow::Paint( const Rectangle& rRect )
 {
     if ( !pEditEngine )     // We need it now at latest
         CreateEditEngine();
@@ -473,7 +473,7 @@ void __EXPORT EditorWindow::Paint( const Rectangle& rRect )
     pEditView->Paint( rRect );
 }
 
-void __EXPORT EditorWindow::LoseFocus()
+void EditorWindow::LoseFocus()
 {
     SetSourceInBasic();
     Window::LoseFocus();
@@ -944,20 +944,20 @@ BreakPointWindow::BreakPointWindow( Window* pParent ) :
 
 
 
-__EXPORT BreakPointWindow::~BreakPointWindow()
+BreakPointWindow::~BreakPointWindow()
 {
 }
 
 
 
-void __EXPORT BreakPointWindow::Resize()
+void BreakPointWindow::Resize()
 {
 /// Invalidate();
 }
 
 
 
-void __EXPORT BreakPointWindow::Paint( const Rectangle& )
+void BreakPointWindow::Paint( const Rectangle& )
 {
     if ( SyncYOffset() )
         return;
@@ -1052,7 +1052,7 @@ BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
     return 0;
 }
 
-void __EXPORT BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.GetClicks() == 2 )
     {
@@ -1068,7 +1068,7 @@ void __EXPORT BreakPointWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 
 
-void __EXPORT BreakPointWindow::Command( const CommandEvent& rCEvt )
+void BreakPointWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
@@ -1229,14 +1229,14 @@ WatchWindow::WatchWindow( Window* pParent ) :
 
 
 
-__EXPORT WatchWindow::~WatchWindow()
+WatchWindow::~WatchWindow()
 {
     GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
 
-void __EXPORT WatchWindow::Paint( const Rectangle& )
+void WatchWindow::Paint( const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aWatchStr );
     lcl_DrawIDEWindowFrame( this );
@@ -1244,7 +1244,7 @@ void __EXPORT WatchWindow::Paint( const Rectangle& )
 
 
 
-void __EXPORT WatchWindow::Resize()
+void WatchWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
@@ -1529,14 +1529,14 @@ StackWindow::StackWindow( Window* pParent ) :
 
 
 
-__EXPORT StackWindow::~StackWindow()
+StackWindow::~StackWindow()
 {
     GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
 
 
-void __EXPORT StackWindow::Paint( const Rectangle& )
+void StackWindow::Paint( const Rectangle& )
 {
     DrawText( Point( DWBORDER, 7 ), aStackStr );
     lcl_DrawIDEWindowFrame( this );
@@ -1544,7 +1544,7 @@ void __EXPORT StackWindow::Paint( const Rectangle& )
 
 
 
-void __EXPORT StackWindow::Resize()
+void StackWindow::Resize()
 {
     Size aSz = GetOutputSizePixel();
     Size aBoxSz( aSz.Width() - 2*DWBORDER, aSz.Height() - nVirtToolBoxHeight - DWBORDER );
@@ -1579,7 +1579,7 @@ IMPL_LINK_INLINE_END( StackWindow, ButtonHdl, ImageButton *, pButton )
 
 
 
-void __EXPORT StackWindow::UpdateCalls()
+void StackWindow::UpdateCalls()
 {
     aTreeListBox.SetUpdateMode( FALSE );
     aTreeListBox.Clear();
@@ -1666,7 +1666,7 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
 
 
 
-void __EXPORT ComplexEditorWindow::Resize()
+void ComplexEditorWindow::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     Size aSz( aOutSz );
@@ -1901,7 +1901,7 @@ SbxBase* WatchTreeListBox::ImplGetSBXForEntry( SvLBoxEntry* pEntry, bool& rbArra
     return pSBX;
 }
 
-BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+BOOL WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
 
@@ -1930,7 +1930,7 @@ BOOL __EXPORT WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bEdit;
 }
 
-BOOL __EXPORT WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+BOOL WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );

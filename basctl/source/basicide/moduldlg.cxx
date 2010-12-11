@@ -74,7 +74,7 @@ ExtBasicTreeListBox::~ExtBasicTreeListBox()
 {
 }
 
-BOOL __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+BOOL ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     BOOL bRet = FALSE;
 
@@ -100,7 +100,7 @@ BOOL __EXPORT ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection&
     return bRet;
 }
 
-BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+BOOL ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     BOOL bValid = BasicIDE::IsValidSbxName( rNewText );
     if ( !bValid )
@@ -152,7 +152,7 @@ BOOL __EXPORT ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const Strin
 }
 
 
-DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
+DragDropMode ExtBasicTreeListBox::NotifyStartDrag( TransferDataContainer&, SvLBoxEntry* pEntry )
 {
     DragDropMode nMode_ = SV_DRAGDROP_NONE;
 
@@ -192,7 +192,7 @@ DragDropMode __EXPORT ExtBasicTreeListBox::NotifyStartDrag( TransferDataContaine
 }
 
 
-BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
+BOOL ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 {
     // don't drop on a BasicManager (nDepth == 0)
     USHORT nDepth = pEntry ? GetModel()->GetDepth( pEntry ) : 0;
@@ -258,7 +258,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyAcceptDrop( SvLBoxEntry* pEntry )
 }
 
 
-BOOL __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+BOOL ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
 {
     return NotifyCopyingMoving( pTarget, pEntry,
@@ -266,7 +266,7 @@ BOOL __EXPORT ExtBasicTreeListBox::NotifyMoving( SvLBoxEntry* pTarget, SvLBoxEnt
 }
 
 
-BOOL __EXPORT ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+BOOL ExtBasicTreeListBox::NotifyCopying( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos )
 {
 //  return FALSE;   // Wie kopiere ich ein SBX ?!
@@ -331,7 +331,7 @@ void BasicIDEShell::CopyDialogResources( Reference< io::XInputStreamProvider >& 
 }
 
 
-BOOL __EXPORT ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
+BOOL ExtBasicTreeListBox::NotifyCopyingMoving( SvLBoxEntry* pTarget, SvLBoxEntry* pEntry,
                         SvLBoxEntry*& rpNewParent, ULONG& rNewChildPos, BOOL bMove )
 {
     (void)pEntry;
@@ -508,7 +508,7 @@ OrganizeDialog::OrganizeDialog( Window* pParent, INT16 tabId, BasicEntryDescript
     }
 }
 
-__EXPORT OrganizeDialog::~OrganizeDialog()
+OrganizeDialog::~OrganizeDialog()
 {
     for ( USHORT i = 0; i < aTabCtrl.GetPageCount(); i++ )
         delete aTabCtrl.GetTabPage( aTabCtrl.GetPageId( i ) );
@@ -607,12 +607,12 @@ void ObjectPage::SetCurrentEntry( BasicEntryDescriptor& rDesc )
     aBasicBox.SetCurrentEntry( rDesc );
 }
 
-void __EXPORT ObjectPage::ActivatePage()
+void ObjectPage::ActivatePage()
 {
     aBasicBox.UpdateEntries();
 }
 
-void __EXPORT ObjectPage::DeactivatePage()
+void ObjectPage::DeactivatePage()
 {
 }
 

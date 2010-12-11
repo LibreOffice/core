@@ -53,7 +53,7 @@ SV_DECL_VARARR( EntryArray, SvLBoxEntry*, 4, 4 )
 SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
 
 
-void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
     ScriptDocument aDocument( aDesc.GetDocument() );
@@ -144,7 +144,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     }
 }
 
-void __EXPORT BasicTreeListBox::ExpandedHdl()
+void BasicTreeListBox::ExpandedHdl()
 {
     SvLBoxEntry* pEntry = GetHdlEntry();
     DBG_ASSERT( pEntry, "Was wurde zugeklappt?" );

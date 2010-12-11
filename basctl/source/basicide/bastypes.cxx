@@ -82,7 +82,7 @@ IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, 
 
 
 
-__EXPORT IDEBaseWindow::~IDEBaseWindow()
+IDEBaseWindow::~IDEBaseWindow()
 {
     DBG_DTOR( IDEBaseWindow, 0 );
     if ( pShellVScrollBar )
@@ -105,7 +105,7 @@ void IDEBaseWindow::Init()
 
 
 
-void __EXPORT IDEBaseWindow::DoInit()
+void IDEBaseWindow::DoInit()
 {
 }
 
@@ -131,14 +131,14 @@ IMPL_LINK_INLINE_END( IDEBaseWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
 
 
 
-void __EXPORT IDEBaseWindow::ExecuteCommand( SfxRequest& )
+void IDEBaseWindow::ExecuteCommand( SfxRequest& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
 
 
 
-void __EXPORT IDEBaseWindow::GetState( SfxItemSet& )
+void IDEBaseWindow::GetState( SfxItemSet& )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
@@ -176,34 +176,34 @@ long IDEBaseWindow::Notify( NotifyEvent& rNEvt )
 }
 
 
-void __EXPORT IDEBaseWindow::DoScroll( ScrollBar* )
+void IDEBaseWindow::DoScroll( ScrollBar* )
 {
     DBG_CHKTHIS( IDEBaseWindow, 0 );
 }
 
 
-void __EXPORT IDEBaseWindow::StoreData()
+void IDEBaseWindow::StoreData()
 {
 }
 
-BOOL __EXPORT IDEBaseWindow::CanClose()
-{
-    return TRUE;
-}
-
-BOOL __EXPORT IDEBaseWindow::AllowUndo()
+BOOL IDEBaseWindow::CanClose()
 {
     return TRUE;
 }
 
+BOOL IDEBaseWindow::AllowUndo()
+{
+    return TRUE;
+}
 
 
-void __EXPORT IDEBaseWindow::UpdateData()
+
+void IDEBaseWindow::UpdateData()
 {
 }
 
 
-String __EXPORT IDEBaseWindow::GetTitle()
+String IDEBaseWindow::GetTitle()
 {
     return String();
 }
@@ -235,30 +235,30 @@ BOOL IDEBaseWindow::IsReadOnly()
     return FALSE;
 }
 
-void __EXPORT IDEBaseWindow::BasicStarted()
+void IDEBaseWindow::BasicStarted()
 {
 }
 
-void __EXPORT IDEBaseWindow::BasicStopped()
+void IDEBaseWindow::BasicStopped()
 {
 }
 
-BOOL __EXPORT IDEBaseWindow::IsModified()
+BOOL IDEBaseWindow::IsModified()
 {
     return TRUE;
 }
 
-BOOL __EXPORT IDEBaseWindow::IsPasteAllowed()
+BOOL IDEBaseWindow::IsPasteAllowed()
 {
     return FALSE;
 }
 
-Window* __EXPORT IDEBaseWindow::GetLayoutWindow()
+Window* IDEBaseWindow::GetLayoutWindow()
 {
     return this;
 }
 
-SfxUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
+SfxUndoManager* IDEBaseWindow::GetUndoManager()
 {
     return NULL;
 }
@@ -417,7 +417,7 @@ void IDEBaseWindow::Deactivating()
 {
 }
 
-USHORT __EXPORT IDEBaseWindow::GetSearchOptions()
+USHORT IDEBaseWindow::GetSearchOptions()
 {
     return 0;
 }
@@ -432,7 +432,7 @@ BasicDockingWindow::BasicDockingWindow( Window* pParent ) :
 
 
 
-BOOL __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
+BOOL BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     Rectangle aTmpRec( rRect );
@@ -451,7 +451,7 @@ BOOL __EXPORT BasicDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
 
 
 
-void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
+void BasicDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
 {
     if ( bFloatMode )
         DockingWindow::EndDocking( rRect, bFloatMode );
@@ -465,7 +465,7 @@ void __EXPORT BasicDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloa
 
 
 
-void __EXPORT BasicDockingWindow::ToggleFloatingMode()
+void BasicDockingWindow::ToggleFloatingMode()
 {
     ModulWindowLayout* pLayout = (ModulWindowLayout*)GetParent();
     if ( IsFloatingMode() )
@@ -479,7 +479,7 @@ void __EXPORT BasicDockingWindow::ToggleFloatingMode()
 
 
 
-BOOL __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
+BOOL BasicDockingWindow::PrepareToggleFloatingMode()
 {
     if ( IsFloatingMode() )
     {
@@ -492,7 +492,7 @@ BOOL __EXPORT BasicDockingWindow::PrepareToggleFloatingMode()
 
 
 
-void __EXPORT BasicDockingWindow::StartDocking()
+void BasicDockingWindow::StartDocking()
 {
     // Position und Groesse auf dem Desktop merken...
     if ( IsFloatingMode() )
@@ -554,7 +554,7 @@ BasicIDETabBar::BasicIDETabBar( Window* pParent ) :
     SetHelpId( HID_BASICIDE_TABBAR );
 }
 
-void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
+void BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) && !IsInEditMode() )
     {
@@ -572,7 +572,7 @@ void __EXPORT BasicIDETabBar::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
+void BasicIDETabBar::Command( const CommandEvent& rCEvt )
 {
     if ( ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU ) && !IsInEditMode() )
     {
@@ -658,7 +658,7 @@ long BasicIDETabBar::AllowRenaming()
 }
 
 
-void __EXPORT BasicIDETabBar::EndRenaming()
+void BasicIDETabBar::EndRenaming()
 {
     if ( !IsEditModeCanceled() )
     {

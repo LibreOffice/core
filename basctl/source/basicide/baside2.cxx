@@ -227,7 +227,7 @@ SbModuleRef ModulWindow::XModule()
     return xModule;
 }
 
-__EXPORT ModulWindow::~ModulWindow()
+ModulWindow::~ModulWindow()
 {
     DBG_DTOR( ModulWindow, 0 );
     nValid = 0;
@@ -236,7 +236,7 @@ __EXPORT ModulWindow::~ModulWindow()
 }
 
 
-void __EXPORT ModulWindow::GetFocus()
+void ModulWindow::GetFocus()
 {
     if ( nValid != VALIDWINDOW  )
         return;
@@ -258,11 +258,11 @@ void ModulWindow::DoInit()
 }
 
 
-void __EXPORT ModulWindow::Paint( const Rectangle& )
+void ModulWindow::Paint( const Rectangle& )
 {
 }
 
-void __EXPORT ModulWindow::Resize()
+void ModulWindow::Resize()
 {
     aXEditorWindow.SetPosSizePixel( Point( 0, 0 ),
                                     Size( GetOutputSizePixel() ) );
@@ -737,7 +737,7 @@ IMPL_LINK( ModulWindow, BasicErrorHdl, StarBASIC *, pBasic )
     return FALSE;
 }
 
-long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
+long ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     // Ein GoOnTop aktiviert da Fenster, das veraendert aber den Context fuer
@@ -882,7 +882,7 @@ void ModulWindow::EditMacro( const String& rMacroName )
 }
 
 
-void __EXPORT ModulWindow::StoreData()
+void ModulWindow::StoreData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     // StoreData wird gerufen, wenn der BasicManager zerstoert oder
@@ -895,20 +895,20 @@ void __EXPORT ModulWindow::StoreData()
 //  xModule->SetModified( FALSE );
 }
 
-BOOL __EXPORT ModulWindow::CanClose()
+BOOL ModulWindow::CanClose()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     return TRUE;
 }
 
 
-BOOL __EXPORT ModulWindow::AllowUndo()
+BOOL ModulWindow::AllowUndo()
 {
     return GetEditorWindow().CanModify();
 }
 
 
-void __EXPORT ModulWindow::UpdateData()
+void ModulWindow::UpdateData()
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     DBG_ASSERT( XModule().Is(), "Kein Modul!" );
@@ -1012,7 +1012,7 @@ sal_Int32 ModulWindow::FormatAndPrint( Printer* pPrinter, sal_Int32 nPrintPage )
 }
 
 
-void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
+void ModulWindow::ExecuteCommand( SfxRequest& rReq )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     AssertValidEditEngine();
@@ -1127,7 +1127,7 @@ void __EXPORT ModulWindow::ExecuteCommand( SfxRequest& rReq )
 
 
 
-void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
+void ModulWindow::GetState( SfxItemSet &rSet )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     SfxWhichIter aIter(rSet);
@@ -1193,7 +1193,7 @@ void __EXPORT ModulWindow::GetState( SfxItemSet &rSet )
 }
 
 
-void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
+void ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     DBG_CHKTHIS( ModulWindow, 0 );
     if ( ( pCurScrollBar == GetHScrollBar() ) && GetEditView() )
@@ -1209,14 +1209,14 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 }
 
 
-BOOL __EXPORT ModulWindow::IsModified()
+BOOL ModulWindow::IsModified()
 {
     return GetEditEngine() ? GetEditEngine()->IsModified() : FALSE;
 }
 
 
 
-void __EXPORT ModulWindow::GoOnTop()
+void ModulWindow::GoOnTop()
 {
     IDE_DLL()->GetShell()->GetViewFrame()->ToTop();
 }
@@ -1231,7 +1231,7 @@ String ModulWindow::GetSbModuleName()
 
 
 
-String __EXPORT ModulWindow::GetTitle()
+String ModulWindow::GetTitle()
 {
     return GetSbModuleName();
 }
@@ -1262,7 +1262,7 @@ void ModulWindow::ShowCursor( BOOL bOn )
 }
 
 
-Window* __EXPORT ModulWindow::GetLayoutWindow()
+Window* ModulWindow::GetLayoutWindow()
 {
     return pLayout;
 }
@@ -1318,14 +1318,14 @@ USHORT ModulWindow::StartSearchAndReplace( const SvxSearchItem& rSearchItem, BOO
     return nFound;
 }
 
-SfxUndoManager* __EXPORT ModulWindow::GetUndoManager()
+SfxUndoManager* ModulWindow::GetUndoManager()
 {
     if ( GetEditEngine() )
         return &GetEditEngine()->GetUndoManager();
     return NULL;
 }
 
-USHORT __EXPORT ModulWindow::GetSearchOptions()
+USHORT ModulWindow::GetSearchOptions()
 {
     USHORT nOptions = SEARCH_OPTIONS_SEARCH |
                       SEARCH_OPTIONS_WHOLE_WORDS |
@@ -1344,7 +1344,7 @@ USHORT __EXPORT ModulWindow::GetSearchOptions()
     return nOptions;
 }
 
-void __EXPORT ModulWindow::BasicStarted()
+void ModulWindow::BasicStarted()
 {
     if ( XModule().Is() )
     {
@@ -1364,7 +1364,7 @@ void __EXPORT ModulWindow::BasicStarted()
     }
 }
 
-void __EXPORT ModulWindow::BasicStopped()
+void ModulWindow::BasicStopped()
 {
     aStatus.bIsRunning = FALSE;
     GetBreakPointWindow().SetMarkerPos( MARKER_NOMARKER );
@@ -1508,14 +1508,14 @@ ModulWindowLayout::~ModulWindowLayout()
     m_aColorConfig.RemoveListener(this);
 }
 
-void __EXPORT ModulWindowLayout::Resize()
+void ModulWindowLayout::Resize()
 {
     // ScrollBars, etc. passiert in BasicIDEShell:Adjust...
     ArrangeWindows();
 //  Invalidate();
 }
 
-void __EXPORT ModulWindowLayout::Paint( const Rectangle& )
+void ModulWindowLayout::Paint( const Rectangle& )
 {
     DrawText( Point(), String( IDEResId( RID_STR_NOMODULE ) ) );
 }

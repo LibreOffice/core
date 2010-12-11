@@ -278,7 +278,7 @@ IMPL_LINK( DialogWindow, NotifyUndoActionHdl, SfxUndoAction *, pUndoAction )
 
 
 
-void __EXPORT DialogWindow::DoInit()
+void DialogWindow::DoInit()
 {
     GetHScrollBar()->Show();
     GetVScrollBar()->Show();
@@ -287,12 +287,12 @@ void __EXPORT DialogWindow::DoInit()
 
 
 
-void __EXPORT DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
+void DialogWindow::DoScroll( ScrollBar* pCurScrollBar )
 {
     pEditor->DoScroll( pCurScrollBar );
 }
 
-void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
+void DialogWindow::GetState( SfxItemSet& rSet )
 {
     SfxWhichIter aIter(rSet);
     for ( USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
@@ -419,7 +419,7 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
 
 
 
-void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
+void DialogWindow::ExecuteCommand( SfxRequest& rReq )
 {
     switch ( rReq.GetSlot() )
     {
@@ -1264,12 +1264,12 @@ DlgEdView* DialogWindow::GetView() const
     return pEditor ? pEditor->GetView() : NULL;
 }
 
-BOOL __EXPORT DialogWindow::IsModified()
+BOOL DialogWindow::IsModified()
 {
     return pEditor->IsModified();
 }
 
-SfxUndoManager* __EXPORT DialogWindow::GetUndoManager()
+SfxUndoManager* DialogWindow::GetUndoManager()
 {
     return pUndoMgr;
 }

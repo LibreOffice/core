@@ -426,7 +426,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
    return p;
 }
 
-void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
+void SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     SFEntry* userData = 0;
     if ( !pEntry )
@@ -446,7 +446,7 @@ void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
     }
 }
 
-void __EXPORT SFTreeListBox::ExpandedHdl()
+void SFTreeListBox::ExpandedHdl()
 {
 }
 
@@ -562,7 +562,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString languag
     FreeResource();
 }
 
-__EXPORT SvxScriptOrgDialog::~SvxScriptOrgDialog()
+SvxScriptOrgDialog::~SvxScriptOrgDialog()
 {
     // clear the SelectHdl so that it isn't called during the dtor
     aScriptsBox.SetSelectHdl( Link() );

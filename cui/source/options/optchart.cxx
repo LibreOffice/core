@@ -119,12 +119,12 @@ void SvxDefaultColorOptPage::Construct()
 }
 
 
-SfxTabPage* __EXPORT SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& rAttrs )
+SfxTabPage* SvxDefaultColorOptPage::Create( Window* pParent, const SfxItemSet& rAttrs )
 {
     return new SvxDefaultColorOptPage( pParent, rAttrs );
 }
 
-BOOL __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
+BOOL SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
 {
     if( pColorConfig )
         rOutAttrs.Put( *SAL_STATIC_CAST( SfxPoolItem*, pColorConfig ));
@@ -132,7 +132,7 @@ BOOL __EXPORT SvxDefaultColorOptPage::FillItemSet( SfxItemSet& rOutAttrs )
     return TRUE;
 }
 
-void __EXPORT SvxDefaultColorOptPage::Reset( const SfxItemSet& )
+void SvxDefaultColorOptPage::Reset( const SfxItemSet& )
 {
     aLbChartColors.SelectEntryPos( 0 );
     ListClickedHdl( &aLbChartColors );

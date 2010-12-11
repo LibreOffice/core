@@ -135,18 +135,18 @@ ObjectCatalog::~ObjectCatalog()
     GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
 }
 
-void __EXPORT ObjectCatalog::Move()
+void ObjectCatalog::Move()
 {
     IDE_DLL()->GetExtraData()->SetObjectCatalogPos( GetPosPixel() );
 }
 
-BOOL __EXPORT ObjectCatalog::Close()
+BOOL ObjectCatalog::Close()
 {
     aCancelHdl.Call( this );
     return TRUE;
 }
 
-void __EXPORT ObjectCatalog::Resize()
+void ObjectCatalog::Resize()
 {
     Size aOutSz = GetOutputSizePixel();
     IDE_DLL()->GetExtraData()->SetObjectCatalogSize( aOutSz );

@@ -284,12 +284,12 @@ SvxChartColorTableItem::SvxChartColorTableItem( const SvxChartColorTableItem& rO
 {
 }
 
-SfxPoolItem* __EXPORT SvxChartColorTableItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxChartColorTableItem::Clone( SfxItemPool * ) const
 {
     return new SvxChartColorTableItem( *this );
 }
 
-int __EXPORT SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
+int SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rAttr ), "SvxChartColorTableItem::operator== : types differ" );
 
@@ -302,7 +302,7 @@ int __EXPORT SvxChartColorTableItem::operator==( const SfxPoolItem& rAttr ) cons
     return 0;
 }
 
-void __EXPORT SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
+void SvxChartColorTableItem::SetOptions( SvxChartOptions* pOpts ) const
 {
     if ( pOpts )
         pOpts->SetDefaultColors( m_aColorTable );

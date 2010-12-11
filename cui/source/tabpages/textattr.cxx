@@ -134,7 +134,7 @@ SvxTextAttrPage::~SvxTextAttrPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAttrPage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );

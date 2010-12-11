@@ -2011,7 +2011,7 @@ SvxExtParagraphTabPage::SvxExtParagraphTabPage( Window* pParent, const SfxItemSe
 
 // -----------------------------------------------------------------------
 
-__EXPORT SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
+SvxExtParagraphTabPage::~SvxExtParagraphTabPage()
 {
 }
 

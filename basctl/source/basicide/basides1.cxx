@@ -84,7 +84,7 @@ using namespace ::com::sun::star::frame;
 class SvxSearchItem;
 
 //  Egal was, einfach ans aktuelle Fenster:
-void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
+void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 {
     if ( !pCurWin )
         return;
@@ -265,7 +265,7 @@ void __EXPORT BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
 }
 
 //  Egal, wer oben, Einfluss auf die Shell:
-void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
+void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
 {
     USHORT nSlot = rReq.GetSlot();
     switch ( nSlot )
@@ -779,7 +779,7 @@ void __EXPORT BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
     }
 }
 
-void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
+void BasicIDEShell::GetState(SfxItemSet &rSet)
 {
     SfxWhichIter aIter(rSet);
     for ( USHORT nWh = aIter.FirstWhich(); 0 != nWh; nWh = aIter.NextWhich() )
@@ -1303,7 +1303,7 @@ ModulWindow* BasicIDEShell::ShowActiveModuleWindow( StarBASIC* pBasic )
     return 0;
 }
 
-void __EXPORT BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
+void BasicIDEShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     // Nicht wenn minimiert, weil dann bei Restore der Text verschoben ist.
     if ( GetViewFrame()->GetWindow().GetOutputSizePixel().Height() == 0 )
@@ -1352,7 +1352,7 @@ Reference< XModel > BasicIDEShell::GetCurrentDocument() const
     return xDocument;
 }
 
-void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
+void BasicIDEShell::Activate( BOOL bMDI )
 {
     SfxViewShell::Activate( bMDI );
 
@@ -1365,7 +1365,7 @@ void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
     }
 }
 
-void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
+void BasicIDEShell::Deactivate( BOOL bMDI )
 {
     // bMDI TRUE heisst, dass ein anderes MDI aktiviert wurde, bei einem
     // Deactivate durch eine MessageBox ist bMDI FALSE

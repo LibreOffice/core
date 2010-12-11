@@ -599,7 +599,7 @@ void _SfxMacroTabPage::SelectEvent( const String & /*rEventName*/, USHORT nEvent
 }
 
 
-SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const String& rLanguage )
+SvStringsDtor* _ImpGetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const String& rLanguage )
 {
     SvStringsDtor* pNew = new SvStringsDtor;
     SfxApplication* pSfxApp = SFX_APP();
@@ -661,7 +661,7 @@ SvStringsDtor* __EXPORT _ImpGetRangeHdl( _SfxMacroTabPage* /*pTbPg*/, const Stri
 }
 
 // besorgen der Funktionen eines Bereiches
-SvStringsDtor* __EXPORT _ImpGetMacrosOfRangeHdl(
+SvStringsDtor* _ImpGetMacrosOfRangeHdl(
     _SfxMacroTabPage* /*pTbPg*/,
     const String& /*rLanguage*/,
     const String& /*rRange*/ )

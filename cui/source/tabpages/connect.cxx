@@ -180,7 +180,7 @@ SvxConnectionPage::~SvxConnectionPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
+void SvxConnectionPage::Reset( const SfxItemSet& rAttrs )
 {
     const SfxPoolItem* pItem = GetItem( rAttrs, SDRATTR_EDGENODE1HORZDIST );
     const SfxItemPool* pPool = rAttrs.GetPool();

@@ -80,7 +80,7 @@ XubString SvxClickInfoCtr::GetText() const
 }
 
 //-----------------------------------------------------------------------------
-__EXPORT SvxClickInfoCtr::~SvxClickInfoCtr()
+SvxClickInfoCtr::~SvxClickInfoCtr()
 {
 }
 

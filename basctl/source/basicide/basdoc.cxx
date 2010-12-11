@@ -67,7 +67,7 @@ BasicDocShell::BasicDocShell()
     SetBaseModel( new SIDEModel(this) );
 }
 
-__EXPORT BasicDocShell::~BasicDocShell()
+BasicDocShell::~BasicDocShell()
 {
     delete pPrinter;
 }

@@ -252,7 +252,7 @@ void BasicIDEShell::Init()
     UpdateWindows();
 }
 
-__EXPORT BasicIDEShell::~BasicIDEShell()
+BasicIDEShell::~BasicIDEShell()
 {
     m_aNotifier.dispose();
 
@@ -407,7 +407,7 @@ void BasicIDEShell::StoreAllWindowData( BOOL bPersistent )
 }
 
 
-USHORT __EXPORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+USHORT BasicIDEShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     (void)bForBrowsing;
 
@@ -469,14 +469,14 @@ void BasicIDEShell::InitTabBar()
 }
 
 
-Size __EXPORT BasicIDEShell::GetOptimalSizePixel() const
+Size BasicIDEShell::GetOptimalSizePixel() const
 {
     return Size( 400, 300 );
 }
 
 
 
-void __EXPORT BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
+void BasicIDEShell::OuterResizePixel( const Point &rPos, const Size &rSize )
 {
     // Adjust fliegt irgendwann raus...
     AdjustPosSizePixel( rPos, rSize );
@@ -602,7 +602,7 @@ void BasicIDEShell::ShowObjectDialog( BOOL bShow, BOOL bCreateOrDestroy )
 
 
 
-void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
+void BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                                         const SfxHint& rHint, const TypeId& )
 {
     if ( IDE_DLL()->GetShell() )

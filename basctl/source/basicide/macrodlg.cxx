@@ -209,7 +209,7 @@ void MacroChooser::RestoreMacroDescription()
     }
 }
 
-short __EXPORT MacroChooser::Execute()
+short MacroChooser::Execute()
 {
     RestoreMacroDescription();
     aRunButton.GrabFocus();

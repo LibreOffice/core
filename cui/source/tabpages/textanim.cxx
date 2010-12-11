@@ -59,7 +59,7 @@ static USHORT pRanges[] =
 |*
 \************************************************************************/
 
-__EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
+SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
                                 const SfxItemSet* pAttr,
                                 const SdrView* pSdrView ) :
         SfxTabDialog        ( pParent, CUI_RES( RID_SVXDLG_TEXT ), pAttr ),
@@ -78,7 +78,7 @@ __EXPORT SvxTextTabDialog::SvxTextTabDialog( Window* pParent,
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
+void SvxTextTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 {
     switch( nId )
     {
@@ -177,7 +177,7 @@ SvxTextAnimationPage::~SvxTextAnimationPage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
+void SvxTextAnimationPage::Reset( const SfxItemSet& rAttrs )
 {
     const SfxItemPool* pPool = rAttrs.GetPool();
 

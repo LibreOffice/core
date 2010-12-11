@@ -180,7 +180,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId )
 
 //----------------------------------------------------------------------------
 
-__EXPORT BasicCheckBox::~BasicCheckBox()
+BasicCheckBox::~BasicCheckBox()
 {
     delete pCheckButton;
 
@@ -287,7 +287,7 @@ void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
+BOOL BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 {
     if ( nMode != LIBMODE_MANAGER )
         return FALSE;
@@ -346,7 +346,7 @@ BOOL __EXPORT BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+BOOL BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
 {
     BOOL bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
     String aCurText( GetEntryText( pEntry, 0 ) );
@@ -603,7 +603,7 @@ void LibPage::CheckButtons()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT LibPage::ActivatePage()
+void LibPage::ActivatePage()
 {
     SetCurLib();
 }
@@ -611,7 +611,7 @@ void __EXPORT LibPage::ActivatePage()
 //----------------------------------------------------------------------------
 
 
-void __EXPORT LibPage::DeactivatePage()
+void LibPage::DeactivatePage()
 {
 }
 

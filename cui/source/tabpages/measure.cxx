@@ -187,7 +187,7 @@ SvxMeasurePage::~SvxMeasurePage()
 |*
 \************************************************************************/
 
-void __EXPORT SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
+void SvxMeasurePage::Reset( const SfxItemSet& rAttrs )
 {
     SfxItemPool* pPool = rAttrs.GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );

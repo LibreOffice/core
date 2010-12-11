@@ -178,12 +178,12 @@ BasicLibBox::BasicLibBox( Window* pParent, const uno::Reference< frame::XFrame >
 
 
 
-__EXPORT BasicLibBox::~BasicLibBox()
+BasicLibBox::~BasicLibBox()
 {
     ClearBox();
 }
 
-void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
+void BasicLibBox::Update( const SfxStringItem* pItem )
 {
     // Immer auf dem laufenden sein...
 //  if ( !pItem  || !pItem->GetValue().Len() )
@@ -200,7 +200,7 @@ void __EXPORT BasicLibBox::Update( const SfxStringItem* pItem )
         SelectEntry( aCurText );
 }
 
-void __EXPORT BasicLibBox::ReleaseFocus()
+void BasicLibBox::ReleaseFocus()
 {
     SfxViewShell* pCurSh = SfxViewShell::Current();
     DBG_ASSERT( pCurSh, "Current ViewShell not found!" );
@@ -316,7 +316,7 @@ long BasicLibBox::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void __EXPORT BasicLibBox::Select()
+void BasicLibBox::Select()
 {
     if ( !IsTravelSelect() )
     {

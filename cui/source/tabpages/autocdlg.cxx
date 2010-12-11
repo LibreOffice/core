@@ -355,7 +355,7 @@ public:
 /*********************************************************************/
 
 
-void __EXPORT OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, USHORT /*nFlags*/,
+void OfaImpBrwString::Paint( const Point& rPos, SvLBox& rDev, USHORT /*nFlags*/,
     SvLBoxEntry* pEntry )
 {
     rDev.DrawText( rPos, GetText() );
@@ -522,7 +522,7 @@ SvLBoxEntry* OfaSwAutoFmtOptionsPage::CreateEntry(String& rTxt, USHORT nCol)
 /*********************************************************************/
 
 
-__EXPORT OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
+OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 {
     delete (ImpUserData*) aCheckLB.GetUserData( REPLACE_BULLETS );
     delete (ImpUserData*) aCheckLB.GetUserData( APPLY_NUMBERING );
@@ -534,7 +534,7 @@ __EXPORT OfaSwAutoFmtOptionsPage::~OfaSwAutoFmtOptionsPage()
 /*                                                                   */
 /*********************************************************************/
 
-SfxTabPage* __EXPORT OfaSwAutoFmtOptionsPage::Create( Window* pParent,
+SfxTabPage* OfaSwAutoFmtOptionsPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet)
 {
     return new OfaSwAutoFmtOptionsPage(pParent, rAttrSet);
