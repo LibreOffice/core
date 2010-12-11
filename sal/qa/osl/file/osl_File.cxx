@@ -382,9 +382,7 @@ inline void createTestFile( const ::rtl::OUString filename )
     if ( !isURL( filename ) )
         ::osl::FileBase::getFileURLFromSystemPath( filename, aPathURL ); //convert if not full qualified URL
 
-    //::std::auto_ptr<File> pFile( new File( aPathURL ) );
     File aFile(aPathURL);
-    //nError = pFile->open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
     nError = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
@@ -543,10 +541,8 @@ inline sal_Bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode 
                     bCheckResult = sal_True;
                 break;
             case osl_Check_Mode_WriteAccess:
-                /// check the file name and whether it can be write.
+                /// check the file name and whether it can be written.
                 /// write chars into the file.
-                //testFile.close( );
-                //testFile.open( OpenFlag_Write );
                 sal_uInt64 nCount_write;
                 nError2 = testFile.write( pBuffer_Char, 10, nCount_write );
                 if ( ::osl::FileBase::E_None == nError2 )
@@ -3978,34 +3974,6 @@ namespace osl_File
             CPPUNIT_ASSERT_MESSAGE( "test for setSize function: truncate the file ",
                                      10 == nFilePointer );
         }
-      /*            void setSize_003( )
-        {
-            ::osl::File   testFile( aTmpName4 );
-            // sal_Bool      bEOF  = sal_False;
-            // sal_Bool      *pEOF = &bEOF;
-            sal_uInt64     nFilePointer;
-
-
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            //enlarge the file to size of 100;
-             nError1 = testFile.setSize( 10 );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            //get the file size;
-             nError1 = testFile.setPos( Pos_End, 0 );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-             nError1 = testFile.getPos( nFilePointer );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            nError1 = testFile.close( );
-            CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
-
-            CPPUNIT_ASSERT_MESSAGE( "test for setSize function: truncate the file ",
-                                     10 == nFilePointer );
-        }
-      */
 
         CPPUNIT_TEST_SUITE( setSize );
         CPPUNIT_TEST( setSize_001 );
