@@ -56,11 +56,11 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
+#include <list>
+using ::std::list;
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
-
-
-DECLARE_LIST( MacroList, SbMethod* )
 
 MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
@@ -552,39 +552,36 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
-        MacroList aMacros;
-        USHORT nMacroCount = pModule->GetMethods()->Count();
-        USHORT nRealMacroCount = 0;
-        USHORT iMeth;
-        for ( iMeth = 0; iMeth  < nMacroCount; iMeth++ )
+
+        list< SbMethod* > aMacros;
+        size_t nMacroCount = pModule->GetMethods()->Count();
+        for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
             SbMethod* pMethod = (SbMethod*)pModule->GetMethods()->Get( iMeth );
             if( pMethod->IsHidden() )
                 continue;
-            ++nRealMacroCount;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
-            ULONG nPos = LIST_APPEND;
             // Eventuell weiter vorne ?
             USHORT nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
-            for ( ULONG n = 0; n < aMacros.Count(); n++ )
+            list< SbMethod* >::iterator itr;
+            for ( itr = aMacros.begin(); itr != aMacros.end(); ++itr )
             {
                 USHORT nS, nE;
-                SbMethod* pM = aMacros.GetObject( n );
+                SbMethod* pM = *itr;
                 DBG_ASSERT( pM, "Macro nicht in Liste ?!" );
                 pM->GetLineRange( nS, nE );
-                if ( nS > nStart )
-                {
-                    nPos = n;
+                if ( nS > nStart ) {
                     break;
                 }
             }
-            aMacros.Insert( pMethod, nPos );
+            if ( itr != aMacros.end() ) ++itr;
+            aMacros.insert( itr, pMethod );
         }
 
         aMacroBox.SetUpdateMode( FALSE );
-        for ( iMeth = 0; iMeth < nRealMacroCount; iMeth++ )
-            aMacroBox.InsertEntry( aMacros.GetObject( iMeth )->GetName() );
+        for ( list< SbMethod* >::iterator itr = aMacros.begin(); itr != aMacros.end(); ++itr )
+            aMacroBox.InsertEntry( (*itr)->GetName() );
         aMacroBox.SetUpdateMode( TRUE );
 
         if ( aMacroBox.GetEntryCount() )

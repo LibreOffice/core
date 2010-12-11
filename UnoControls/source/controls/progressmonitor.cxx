@@ -43,7 +43,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <tools/debug.hxx>
 #include <tools/solar.h>
-
+#include <algorithm>
 //____________________________________________________________________________________________________________
 //  includes of my project
 //____________________________________________________________________________________________________________
@@ -61,7 +61,7 @@ using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star::awt   ;
 
 using ::std::vector;
-
+using ::std::find;
 
 namespace unocontrols{
 
@@ -308,15 +308,17 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
         // ... delete item from right list ...
         if ( bbeforeProgress == sal_True )
         {
-            vector< IMPL_TextlistItem* >::iterator itr = maTextlist_Top.begin();
-            while ( (itr < maTextlist_Top.end()) && (*itr != pSearchItem) ) ++itr;
-            maTextlist_Top.erase(itr);
+            vector< IMPL_TextlistItem* >::iterator
+                itr = find( maTextlist_Top.begin(), maTextlist_Top.end(), pSearchItem );
+            if (itr != maTextlist_Top.end())
+                maTextlist_Top.erase(itr);
         }
         else
         {
-            vector< IMPL_TextlistItem* >::iterator itr = maTextlist_Bottom.begin();
-            while ( (itr < maTextlist_Bottom.end()) && (*itr != pSearchItem) ) ++itr;
-            maTextlist_Bottom.erase(itr);
+            vector< IMPL_TextlistItem* >::iterator
+                itr = find( maTextlist_Bottom.begin(), maTextlist_Bottom.end(), pSearchItem );
+            if (itr != maTextlist_Bottom.end())
+                maTextlist_Bottom.erase(itr);
         }
 
         delete pSearchItem ;
