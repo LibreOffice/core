@@ -153,7 +153,7 @@ SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
     return new SwLoadOptPage(pParent, rAttrSet );
 }
 
-BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
+BOOL SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
 {
     BOOL bRet = FALSE;
     SwModule* pMod = SW_MOD();
@@ -231,7 +231,7 @@ BOOL __EXPORT SwLoadOptPage::FillItemSet( SfxItemSet& rSet )
     return bRet;
 }
 
-void __EXPORT SwLoadOptPage::Reset( const SfxItemSet& rSet)
+void SwLoadOptPage::Reset( const SfxItemSet& rSet)
 {
     const SwMasterUsrPref* pUsrPref = SW_MOD()->GetUsrPref(FALSE);
     const SfxPoolItem* pItem;

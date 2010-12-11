@@ -125,7 +125,7 @@ SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItem
     return new SwLineNumberingPage( pParent, rSet );
 }
 
-void __EXPORT SwLineNumberingPage::Reset( const SfxItemSet&  )
+void SwLineNumberingPage::Reset( const SfxItemSet&  )
 {
     const SwLineNumberInfo &rInf = pSh->GetLineNumberInfo();
     IDocumentStylePoolAccess* pIDSPA = pSh->getIDocumentStylePoolAccess();
@@ -228,7 +228,7 @@ IMPL_LINK( SwLineNumberingPage, LineOnOffHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-BOOL __EXPORT SwLineNumberingPage::FillItemSet( SfxItemSet& )
+BOOL SwLineNumberingPage::FillItemSet( SfxItemSet& )
 {
     SwLineNumberInfo aInf(pSh->GetLineNumberInfo());
 

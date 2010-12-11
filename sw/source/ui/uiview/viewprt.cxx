@@ -95,7 +95,7 @@ using namespace ::com::sun::star;
 /*--------------------------------------------------------------------
     Beschreibung:   Drucker an Sfx uebergeben
  --------------------------------------------------------------------*/
-SfxPrinter* __EXPORT SwView::GetPrinter( BOOL bCreate )
+SfxPrinter* SwView::GetPrinter( BOOL bCreate )
 {
     const IDocumentDeviceAccess* pIDDA = GetWrtShell().getIDocumentDeviceAccess();
     SfxPrinter *pOld = pIDDA->getPrinter( false );
@@ -131,7 +131,7 @@ void SetPrinter( IDocumentDeviceAccess* pIDDA, SfxPrinter* pNew, BOOL bWeb )
     }
 }
 
-USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
+USHORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 {
     SwWrtShell &rSh = GetWrtShell();
     SfxPrinter* pOld = rSh.getIDocumentDeviceAccess()->getPrinter( false );
@@ -170,7 +170,7 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags, bool  )
 /*--------------------------------------------------------------------
     Beschreibung:   TabPage fuer applikationsspezifische Druckoptionen
  --------------------------------------------------------------------*/
-SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
+SfxTabPage* SwView::CreatePrintOptionsPage(Window* pParent,
                                                     const SfxItemSet& rSet)
 {
     return ::CreatePrintOptionsPage( pParent, rSet, FALSE );
@@ -196,7 +196,7 @@ PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
     return pDlg;
 }
 
-PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
+PrintDialog* SwView::CreatePrintDialog( Window* pParent )
 {
     // AMA: Hier sollte vielleicht die virtuelle Seitennummer angezeigt werden,
     //      aber nur, wenn das Drucken virtuelle Seitennummern und nicht wie
@@ -207,7 +207,7 @@ PrintDialog* __EXPORT SwView::CreatePrintDialog( Window* pParent )
 /*--------------------------------------------------------------------
     Beschreibung:   Print-Dispatcher
  --------------------------------------------------------------------*/
-void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
+void SwView::ExecutePrint(SfxRequest& rReq)
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     ::SetAppPrintOptions( &GetWrtShell(), bWeb );

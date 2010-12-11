@@ -163,7 +163,7 @@ void SwInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 //==================================================================
 
-void __EXPORT SwInputWindow::Resize()
+void SwInputWindow::Resize()
 {
     ToolBox::Resize();
 
@@ -340,7 +340,7 @@ IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
 //==================================================================
 
 
-void __EXPORT SwInputWindow::Click( )
+void SwInputWindow::Click( )
 {
     USHORT nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -519,7 +519,7 @@ void SwInputWindow::DelBoxCntnt()
 
 //==================================================================
 
-void __EXPORT InputEdit::KeyInput(const KeyEvent& rEvent)
+void InputEdit::KeyInput(const KeyEvent& rEvent)
 {
     const KeyCode aCode = rEvent.GetKeyCode();
     if(aCode == KEY_RETURN || aCode == KEY_F2 )
@@ -532,7 +532,7 @@ void __EXPORT InputEdit::KeyInput(const KeyEvent& rEvent)
 
 //==================================================================
 
-void __EXPORT InputEdit::UpdateRange(const String& rBoxes,
+void InputEdit::UpdateRange(const String& rBoxes,
                                     const String& rName )
 {
     if( !rBoxes.Len() )
@@ -650,7 +650,7 @@ __EXPORT SwInputChild::~SwInputChild()
 }
 
 
-SfxChildWinInfo __EXPORT SwInputChild::GetInfo() const
+SfxChildWinInfo SwInputChild::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
     return aInfo;

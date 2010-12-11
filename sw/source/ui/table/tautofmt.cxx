@@ -892,7 +892,7 @@ void AutoFmtPreview::PaintCells()
 //------------------------------------------------------------------------
 
 
-void __EXPORT AutoFmtPreview::Init()
+void AutoFmtPreview::Init()
 {
     SetBorderStyle( GetBorderStyle() | WINDOW_BORDER_MONO );
     maArray.Initialize( 5, 5 );
@@ -1021,7 +1021,7 @@ void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 
 //------------------------------------------------------------------------
 
-void __EXPORT AutoFmtPreview::Paint( const Rectangle& rRect )
+void AutoFmtPreview::Paint( const Rectangle& rRect )
 {
     DoPaint( rRect );
 }

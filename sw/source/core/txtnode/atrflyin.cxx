@@ -55,7 +55,7 @@ SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
 {
 }
 
-int __EXPORT SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
+int SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
 {
     OSL_ENSURE( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
     return( pTxtAttr && ((SwFmtFlyCnt&)rAttr).pTxtAttr &&
@@ -63,7 +63,7 @@ int __EXPORT SwFmtFlyCnt::operator==( const SfxPoolItem& rAttr ) const
             pFmt == ((SwFmtFlyCnt&)rAttr).GetFrmFmt() );
 }
 
-SfxPoolItem* __EXPORT SwFmtFlyCnt::Clone( SfxItemPool* ) const
+SfxPoolItem* SwFmtFlyCnt::Clone( SfxItemPool* ) const
 {
     return new SwFmtFlyCnt( pFmt );
 }

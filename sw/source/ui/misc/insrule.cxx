@@ -119,7 +119,7 @@ SwRulerValueSet::~SwRulerValueSet()
 {
 }
 
-void __EXPORT SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
+void SwRulerValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
     Rectangle aRect = rUDEvt.GetRect();
     OutputDevice*  pDev = rUDEvt.GetDevice();

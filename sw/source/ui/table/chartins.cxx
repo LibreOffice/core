@@ -266,7 +266,7 @@ void SwInsertChart(Window* pParent, SfxBindings* pBindings )
 }
 
 
-void __EXPORT AutoEdit::KeyInput( const KeyEvent& rEvt )
+void AutoEdit::KeyInput( const KeyEvent& rEvt )
 {
     USHORT nCode = rEvt.GetKeyCode().GetCode();
     if( nCode != KEY_SPACE )

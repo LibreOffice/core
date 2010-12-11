@@ -159,19 +159,19 @@ SwFlyDrawObj::~SwFlyDrawObj()
 |*
 *************************************************************************/
 
-UINT32 __EXPORT SwFlyDrawObj::GetObjInventor() const
+UINT32 SwFlyDrawObj::GetObjInventor() const
 {
     return SWGInventor;
 }
 
 
-UINT16 __EXPORT SwFlyDrawObj::GetObjIdentifier()    const
+UINT16 SwFlyDrawObj::GetObjIdentifier() const
 {
     return SwFlyDrawObjIdentifier;
 }
 
 
-UINT16 __EXPORT SwFlyDrawObj::GetObjVersion() const
+UINT16 SwFlyDrawObj::GetObjVersion() const
 {
     return SwDrawFirst;
 }
@@ -520,7 +520,7 @@ void SwVirtFlyDrawObj::wrap_DoPaintObject() const
 |*
 *************************************************************************/
 
-void __EXPORT SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
+void SwVirtFlyDrawObj::TakeObjInfo( SdrObjTransformInfoRec& rInfo ) const
 {
     rInfo.bSelectAllowed     = rInfo.bMoveAllowed =
     rInfo.bResizeFreeAllowed = rInfo.bResizePropAllowed = TRUE;
@@ -551,38 +551,38 @@ void SwVirtFlyDrawObj::SetRect() const
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetCurrentBoundRect() const
+const Rectangle& SwVirtFlyDrawObj::GetCurrentBoundRect() const
 {
     SetRect();
     return aOutRect;
 }
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLastBoundRect() const
+const Rectangle& SwVirtFlyDrawObj::GetLastBoundRect() const
 {
     return GetCurrentBoundRect();
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::RecalcBoundRect()
+void SwVirtFlyDrawObj::RecalcBoundRect()
 {
     SetRect();
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::RecalcSnapRect()
+void SwVirtFlyDrawObj::RecalcSnapRect()
 {
     SetRect();
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetSnapRect()  const
+const Rectangle& SwVirtFlyDrawObj::GetSnapRect()  const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -593,20 +593,20 @@ void __EXPORT SwVirtFlyDrawObj::SetSnapRect(const Rectangle& )
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetSnapRect(const Rectangle& )
 {
     SetRect();
 }
 
 
-const Rectangle& __EXPORT SwVirtFlyDrawObj::GetLogicRect() const
+const Rectangle& SwVirtFlyDrawObj::GetLogicRect() const
 {
     SetRect();
     return aOutRect;
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 {
     Rectangle aTmp( GetLastBoundRect() );
     SetRect();
@@ -617,7 +617,7 @@ void __EXPORT SwVirtFlyDrawObj::SetLogicRect(const Rectangle& )
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
+void SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 {
     SetRect();
 }
@@ -643,7 +643,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcSetLogicRect(const Rectangle& )
 |*
 *************************************************************************/
 
-void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
+void SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 {
     MoveRect( aOutRect, rSiz );
     const Point aOldPos( GetFlyFrm()->Frm().Pos() );
@@ -779,7 +779,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcMove(const Size& rSiz)
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
+void SwVirtFlyDrawObj::NbcResize(const Point& rRef,
             const Fraction& xFact, const Fraction& yFact)
 {
     ResizeRect( aOutRect, rRef, xFact, yFact );
@@ -881,7 +881,7 @@ void __EXPORT SwVirtFlyDrawObj::NbcResize(const Point& rRef,
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
+void SwVirtFlyDrawObj::Move(const Size& rSiz)
 {
     NbcMove( rSiz );
     SetChanged();
@@ -889,7 +889,7 @@ void __EXPORT SwVirtFlyDrawObj::Move(const Size& rSiz)
 }
 
 
-void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
+void SwVirtFlyDrawObj::Resize(const Point& rRef,
                     const Fraction& xFact, const Fraction& yFact)
 {
     NbcResize( rRef, xFact, yFact );
@@ -898,14 +898,14 @@ void __EXPORT SwVirtFlyDrawObj::Resize(const Point& rRef,
 }
 
 
-Pointer  __EXPORT SwVirtFlyDrawObj::GetMacroPointer(
+Pointer  SwVirtFlyDrawObj::GetMacroPointer(
     const SdrObjMacroHitRec& ) const
 {
     return Pointer( POINTER_REFHAND );
 }
 
 
-bool __EXPORT SwVirtFlyDrawObj::HasMacro() const
+bool SwVirtFlyDrawObj::HasMacro() const
 {
     const SwFmtURL &rURL = pFlyFrm->GetFmt()->GetURL();
     return rURL.GetMap() || rURL.GetURL().Len();

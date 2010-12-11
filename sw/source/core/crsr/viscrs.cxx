@@ -296,7 +296,7 @@ void SwVisCrsr::Hide()
 
 #ifdef SW_CRSR_TIMER
 
-void __EXPORT SwVisCrsr::Timeout()
+void SwVisCrsr::Timeout()
 {
     OSL_ENSURE( !bIsDragCrsr, "Timer vorher abschalten" );
     if( bIsVisible )

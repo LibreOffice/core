@@ -181,7 +181,7 @@ __EXPORT SwParaDlg::~SwParaDlg()
 }
 
 
-void __EXPORT SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
+void SwParaDlg::PageCreated(USHORT nId, SfxTabPage& rPage)
 {
     SwWrtShell& rSh = rView.GetWrtShell();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

@@ -59,7 +59,7 @@ static BOOL bFootnote = TRUE;
  Beschreibung:  Einfuegen der Fussnote durch OK
 ------------------------------------------------------------------------*/
 
-void __EXPORT SwInsFootNoteDlg::Apply()
+void SwInsFootNoteDlg::Apply()
 {
     String aStr;
 

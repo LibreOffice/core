@@ -88,7 +88,7 @@ __EXPORT SwFldDBPage::~SwFldDBPage()
 /*--------------------------------------------------------------------
     Beschreibung: TabPage initialisieren
  --------------------------------------------------------------------*/
-void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
+void SwFldDBPage::Reset(const SfxItemSet&)
 {
     Init(); // Allgemeine initialisierung
 
@@ -191,7 +191,7 @@ void __EXPORT SwFldDBPage::Reset(const SfxItemSet&)
     }
 }
 
-BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
+BOOL SwFldDBPage::FillItemSet(SfxItemSet& )
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -260,7 +260,7 @@ BOOL __EXPORT SwFldDBPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-SfxTabPage* __EXPORT SwFldDBPage::Create(   Window* pParent,
+SfxTabPage* SwFldDBPage::Create(    Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDBPage( pParent, rAttrSet ) );

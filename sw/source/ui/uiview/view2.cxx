@@ -484,7 +484,7 @@ BOOL SwView::InsertGraphicDlg( SfxRequest& rReq )
     return bReturn;
 }
 
-void __EXPORT SwView::Execute(SfxRequest &rReq)
+void SwView::Execute(SfxRequest &rReq)
 {
     USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pArgs = rReq.GetArgs();

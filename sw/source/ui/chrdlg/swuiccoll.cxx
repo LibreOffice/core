@@ -147,7 +147,7 @@ __EXPORT SwCondCollPage::~SwCondCollPage()
 }
 
 
-int __EXPORT SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
+int SwCondCollPage::DeactivatePage(SfxItemSet * _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
@@ -160,7 +160,7 @@ Page: Factory
 ****************************************************************************/
 
 
-SfxTabPage* __EXPORT SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
+SfxTabPage* SwCondCollPage::Create(Window *pParent, const SfxItemSet &rSet)
 {
     return new SwCondCollPage(pParent, rSet);
 }
@@ -170,7 +170,7 @@ Page: FillItemSet-Overload
 ****************************************************************************/
 
 
-BOOL __EXPORT SwCondCollPage::FillItemSet(SfxItemSet &rSet)
+BOOL SwCondCollPage::FillItemSet(SfxItemSet &rSet)
 {
     BOOL bModified = TRUE;
     SwCondCollItem aCondItem;
@@ -188,7 +188,7 @@ Page: Reset-Overload
 ****************************************************************************/
 
 
-void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
+void SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 {
     if(bNewTemplate)
         aConditionCB.Enable();
@@ -231,7 +231,7 @@ void __EXPORT SwCondCollPage::Reset(const SfxItemSet &/*rSet*/)
 
 }
 
-USHORT* __EXPORT SwCondCollPage::GetRanges()
+USHORT* SwCondCollPage::GetRanges()
 {
     return aPageRg;
 }

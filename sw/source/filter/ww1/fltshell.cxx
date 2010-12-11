@@ -762,7 +762,7 @@ int SwFltAnchor::operator==(const SfxPoolItem& rItem) const
     return pFrmFmt == ((SwFltAnchor&)rItem).pFrmFmt;
 }
 
-SfxPoolItem* __EXPORT SwFltAnchor::Clone(SfxItemPool*) const
+SfxPoolItem* SwFltAnchor::Clone(SfxItemPool*) const
 {
     return new SwFltAnchor(*this);
 }
@@ -879,7 +879,7 @@ int SwFltSection::operator==(const SfxPoolItem& rItem) const
     return m_pSection == ((SwFltSection&)rItem).m_pSection;
 }
 
-SfxPoolItem* __EXPORT SwFltSection::Clone(SfxItemPool*) const
+SfxPoolItem* SwFltSection::Clone(SfxItemPool*) const
 {
     return new SwFltSection(*this);
 }

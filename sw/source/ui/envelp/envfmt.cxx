@@ -503,19 +503,19 @@ void SwEnvFmtPage::SetMinMax()
     aSizeHeightField.Reformat();
 }
 
-SfxTabPage* __EXPORT SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
+SfxTabPage* SwEnvFmtPage::Create(Window* pParent, const SfxItemSet& rSet)
 {
     return new SwEnvFmtPage(pParent, rSet);
 }
 
-void __EXPORT SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
+void SwEnvFmtPage::ActivatePage(const SfxItemSet& rSet)
 {
     SfxItemSet aSet(rSet);
     aSet.Put(GetParent()->aEnvItem);
     Reset(aSet);
 }
 
-int __EXPORT SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
+int SwEnvFmtPage::DeactivatePage(SfxItemSet* _pSet)
 {
     if( _pSet )
         FillItemSet(*_pSet);
@@ -546,14 +546,14 @@ void SwEnvFmtPage::FillItem(SwEnvItem& rItem)
     }
 }
 
-BOOL __EXPORT SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
+BOOL SwEnvFmtPage::FillItemSet(SfxItemSet& rSet)
 {
     FillItem(GetParent()->aEnvItem);
     rSet.Put(GetParent()->aEnvItem);
     return TRUE;
 }
 
-void __EXPORT SwEnvFmtPage::Reset(const SfxItemSet& rSet)
+void SwEnvFmtPage::Reset(const SfxItemSet& rSet)
 {
     const SwEnvItem& rItem = (const SwEnvItem&) rSet.Get(FN_ENVELOP);
 

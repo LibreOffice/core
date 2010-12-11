@@ -99,7 +99,7 @@ __EXPORT SwFldDokInfPage::~SwFldDokInfPage()
 {
 }
 
-void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
+void SwFldDokInfPage::Reset(const SfxItemSet& )
 {
     Init(); // Allgemeine initialisierung
 
@@ -429,7 +429,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
     return nSize;
 }
 
-BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
+BOOL SwFldDokInfPage::FillItemSet(SfxItemSet& )
 {
     if (!pSelEntry || (USHORT)(ULONG)pSelEntry->GetUserData() == USHRT_MAX)
         return FALSE;
@@ -466,7 +466,7 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-SfxTabPage* __EXPORT SwFldDokInfPage::Create(   Window* pParent,
+SfxTabPage* SwFldDokInfPage::Create(    Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokInfPage( pParent, rAttrSet ) );

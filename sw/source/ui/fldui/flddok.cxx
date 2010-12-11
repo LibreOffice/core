@@ -90,7 +90,7 @@ __EXPORT SwFldDokPage::~SwFldDokPage()
 {
 }
 
-void __EXPORT SwFldDokPage::Reset(const SfxItemSet& )
+void SwFldDokPage::Reset(const SfxItemSet& )
 {
     SavePos(&aTypeLB);
     Init(); // Allgemeine initialisierung
@@ -553,7 +553,7 @@ IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
+BOOL SwFldDokPage::FillItemSet(SfxItemSet& )
 {
     BOOL bPage = FALSE;
     USHORT nTypeId = (USHORT)(ULONG)aTypeLB.GetEntryData(GetTypeSel());
@@ -647,7 +647,7 @@ BOOL __EXPORT SwFldDokPage::FillItemSet(SfxItemSet& )
     return FALSE;
 }
 
-SfxTabPage* __EXPORT SwFldDokPage::Create(  Window* pParent,
+SfxTabPage* SwFldDokPage::Create(   Window* pParent,
                         const SfxItemSet& rAttrSet )
 {
     return ( new SwFldDokPage( pParent, rAttrSet ) );

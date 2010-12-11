@@ -523,7 +523,7 @@ IMPL_LINK( SwHTMLParser, AsyncCallback, void*, /*pVoid*/ )
     return 0;
 }
 
-SvParserState __EXPORT SwHTMLParser::CallParser()
+SvParserState SwHTMLParser::CallParser()
 {
     // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
     pSttNdIdx = new SwNodeIndex( pDoc->GetNodes() );
@@ -581,7 +581,7 @@ SvParserState __EXPORT SwHTMLParser::CallParser()
     return eRet;
 }
 
-void __EXPORT SwHTMLParser::Continue( int nToken )
+void SwHTMLParser::Continue( int nToken )
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( !nContinue, "Continue im Continue - Das sollte doch nicht sein, oder?" );
@@ -958,7 +958,7 @@ void SwHTMLParser::DocumentDetected()
 }
 
 // wird fuer jedes Token gerufen, das in CallParser erkannt wird
-void __EXPORT SwHTMLParser::NextToken( int nToken )
+void SwHTMLParser::NextToken( int nToken )
 {
     if( ( pDoc->GetDocShell() && pDoc->GetDocShell()->IsAbortingImport() )
         || 1 == pDoc->getReferenceCount() )

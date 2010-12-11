@@ -165,7 +165,7 @@ SwGlossaryGroupDlg::~SwGlossaryGroupDlg()
 
 }
 
-void __EXPORT SwGlossaryGroupDlg::Apply()
+void SwGlossaryGroupDlg::Apply()
 {
     if(aNewPB.IsEnabled())
         NewHdl(&aNewPB);

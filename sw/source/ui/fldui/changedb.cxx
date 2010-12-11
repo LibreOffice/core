@@ -213,7 +213,7 @@ __EXPORT SwChangeDBDlg::~SwChangeDBDlg()
 /*--------------------------------------------------------------------
      Beschreibung:  Schliessen
  --------------------------------------------------------------------*/
-void __EXPORT SwChangeDBDlg::Apply()
+void SwChangeDBDlg::Apply()
 {
     UpdateFlds();
 }

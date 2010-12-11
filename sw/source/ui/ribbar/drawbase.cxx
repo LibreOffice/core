@@ -511,7 +511,7 @@ void SwDrawBase::Activate(const USHORT nSlot)
 \************************************************************************/
 
 
-void __EXPORT SwDrawBase::Deactivate()
+void SwDrawBase::Deactivate()
 {
     SdrView *pSdrView = m_pSh->GetDrawView();
     pSdrView->SetOrtho(FALSE);
