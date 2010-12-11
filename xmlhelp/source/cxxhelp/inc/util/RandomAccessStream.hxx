@@ -51,9 +51,9 @@ namespace xmlsearch {
 
         protected:
 
-            enum OPENFLAG { Read = OpenFlag_Read,
-                            Write = OpenFlag_Write,
-                            Create = OpenFlag_Create };
+            enum OPENFLAG { Read = osl_File_OpenFlag_Read,
+                            Write = osl_File_OpenFlag_Write,
+                            Create = osl_File_OpenFlag_Create };
 
         };
 

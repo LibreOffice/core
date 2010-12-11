@@ -2080,7 +2080,7 @@ void BrokenRecoveryDialog::impl_askForSavePath()
             ::osl::File aFile( rURL );
 
             printf( "Loading %s:", OString( rURL.getStr(), rURL.getLength(), osl_getThreadTextEncoding() ).getStr() );
-            if ( ::osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
+            if ( ::osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
             {
                 ::rtl::OString  aContent;
                 ::osl::FileBase::RC result;

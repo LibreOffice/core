@@ -519,7 +519,7 @@ TVChildTarget::TVChildTarget( const Reference< XMultiServiceFactory >& xMSF )
         len = configData.vFileLen[--j];
         char* s = new char[ int(len) ];  // the buffer to hold the installed files
         osl::File aFile( configData.vFileURL[j] );
-        aFile.open( OpenFlag_Read );
+        aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s,len,ret );
         aFile.close();
 
@@ -781,7 +781,7 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
                 if(! showBasic && baseName.compareToAscii("sbasic") == 0 )
                   continue;
                 osl::File aFile( aFileUrl );
-                if( osl::FileBase::E_None == aFile.open( OpenFlag_Read ) )
+                if( osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
                 {
                     sal_uInt64 nSize;
                     aFile.getSize( nSize );

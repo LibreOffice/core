@@ -364,21 +364,21 @@ OslStream::OslStream( const String& rName, short nStrmMode )
 
     if( (nStrmMode & (STREAM_READ | STREAM_WRITE)) == (STREAM_READ | STREAM_WRITE) )
     {
-        nFlags = OpenFlag_Read | OpenFlag_Write;
+        nFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write;
     }
     else if( nStrmMode & STREAM_WRITE )
     {
-        nFlags = OpenFlag_Write;
+        nFlags = osl_File_OpenFlag_Write;
     }
     else //if( nStrmMode & STREAM_READ )
     {
-        nFlags = OpenFlag_Read;
+        nFlags = osl_File_OpenFlag_Read;
     }
 
     osl::FileBase::RC nRet = maFile.open( nFlags );
-    if( nRet == osl::FileBase::E_NOENT && nFlags != OpenFlag_Read )
+    if( nRet == osl::FileBase::E_NOENT && nFlags != osl_File_OpenFlag_Read )
     {
-        nFlags |= OpenFlag_Create;
+        nFlags |= osl_File_OpenFlag_Create;
         nRet = maFile.open( nFlags );
     }
 

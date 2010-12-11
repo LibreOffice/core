@@ -859,7 +859,7 @@ bool ShutdownIcon::GetAutostart( )
     OUString aShortcutUrl;
     osl::File::getFileURLFromSystemPath( aShortcut, aShortcutUrl );
     osl::File f( aShortcutUrl );
-    osl::File::RC error = f.open( OpenFlag_Read );
+    osl::File::RC error = f.open( osl_File_OpenFlag_Read );
     if( error == osl::File::E_None )
     {
         f.close();

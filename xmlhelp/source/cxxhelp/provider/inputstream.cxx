@@ -42,7 +42,7 @@ XInputStream_impl::XInputStream_impl( const rtl::OUString& aUncPath )
     : m_bIsOpen( false ),
       m_aFile( aUncPath )
 {
-    m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( OpenFlag_Read ) );
+    m_bIsOpen = ( osl::FileBase::E_None == m_aFile.open( osl_File_OpenFlag_Read ) );
 }
 
 

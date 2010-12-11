@@ -594,7 +594,7 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
 {
     uno::Reference< XContentProvider > xProvider( m_pProvider );
     osl::File aFile( aUnqPath );
-    osl::FileBase::RC err = aFile.open( OpenFlag_Read );
+    osl::FileBase::RC err = aFile.open( osl_File_OpenFlag_Read );
 
     if( err != osl::FileBase::E_None )
     {
@@ -905,7 +905,7 @@ shell::setv( const rtl::OUString& aUnqPath,
                 {   // valid value for the size
                     osl::File aFile(aUnqPath);
                     bool err =
-                        aFile.open(OpenFlag_Write) != osl::FileBase::E_None ||
+                        aFile.open(osl_File_OpenFlag_Write) != osl::FileBase::E_None ||
                         aFile.setSize(sal_uInt64(newSize)) != osl::FileBase::E_None ||
                         aFile.close() != osl::FileBase::E_None;
 
@@ -1800,12 +1800,12 @@ shell::write( sal_Int32 CommandId,
 
     if( OverWrite )
     {
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
         if( err != osl::FileBase::E_None )
         {
             aFile.close();
-            err = aFile.open( OpenFlag_Write );
+            err = aFile.open( osl_File_OpenFlag_Write );
         }
 
         if( err != osl::FileBase::E_None )
@@ -1818,7 +1818,7 @@ shell::write( sal_Int32 CommandId,
     }
     else
     {
-        err = aFile.open( OpenFlag_Read | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_NoLock );
         if( err == osl::FileBase::E_None )  // The file exists and shall not be overwritten
         {
             installError( CommandId,
@@ -1831,7 +1831,7 @@ shell::write( sal_Int32 CommandId,
 
         // as a temporary solution the creation does not lock the file at all
         // in future it should be possible to create the file without lock explicitly
-        err = aFile.open( OpenFlag_Write | OpenFlag_Create | OpenFlag_NoLock );
+        err = aFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create | osl_File_OpenFlag_NoLock );
 
         if( err != osl::FileBase::E_None )
         {

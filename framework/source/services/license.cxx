@@ -451,7 +451,7 @@ LicenseDialog::LicenseDialog(const ::rtl::OUString & aLicensePath, ResMgr *pResM
 
     // load license text
     File aLicenseFile(aLicensePath);
-    if ( aLicenseFile.open(OpenFlag_Read) == FileBase::E_None)
+    if ( aLicenseFile.open(osl_File_OpenFlag_Read) == FileBase::E_None)
     {
         DirectoryItem d;
         DirectoryItem::get(aLicensePath, d);

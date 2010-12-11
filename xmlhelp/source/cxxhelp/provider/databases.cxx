@@ -494,7 +494,7 @@ StaticModuleInformation* Databases::getStaticInformationForModule( const rtl::OU
                            key +
                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ".cfg" )) );
 
-        if( osl::FileBase::E_None != cfgFile.open( OpenFlag_Read ) )
+        if( osl::FileBase::E_None != cfgFile.open( osl_File_OpenFlag_Read ) )
             it->second = 0;
         else
         {
@@ -1329,7 +1329,7 @@ void Databases::cascadingStylesheet( const rtl::OUString& Language,
             osl::FileStatus aStatus( FileStatusMask_FileSize );
 
             if( osl::FileBase::E_None == osl::DirectoryItem::get( fileURL,aDirItem ) &&
-                osl::FileBase::E_None == aFile.open( OpenFlag_Read )                 &&
+                osl::FileBase::E_None == aFile.open( osl_File_OpenFlag_Read )        &&
                 osl::FileBase::E_None == aDirItem.getFileStatus( aStatus ) )
             {
                 sal_uInt64 nSize;

@@ -121,7 +121,7 @@ namespace desktop {
 
         // try to create file
         File aFile(m_aLockname);
-        if (aFile.open( OpenFlag_Create ) == File::E_EXIST) {
+        if (aFile.open( osl_File_OpenFlag_Create ) == File::E_EXIST) {
             m_bIsLocked = sal_True;
         } else {
             // new lock created
@@ -141,7 +141,7 @@ namespace desktop {
                 // remove file and create new
                 File::remove( m_aLockname );
                 File aFile(m_aLockname);
-                aFile.open( OpenFlag_Create );
+                aFile.open( osl_File_OpenFlag_Create );
                 aFile.close( );
                 syncToFile( );
                 m_bRemove = sal_True;

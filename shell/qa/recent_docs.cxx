@@ -137,7 +137,7 @@ public:
     void read_recently_used(void* buffer, size_t size)
     {
         File ruf(get_recently_used_url());
-        FileBase::RC rc = ruf.open(OpenFlag_Read);
+        FileBase::RC rc = ruf.open(osl_File_OpenFlag_Read);
 
         CPPUNIT_ASSERT_MESSAGE("Cannot open ~/.recently-used", FileBase::E_None == rc);
 

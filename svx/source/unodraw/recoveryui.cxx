@@ -231,7 +231,7 @@ static bool new_crash_pending()
     OUString    aUnsentURL = GetUnsentURL();
     File    aFile( aUnsentURL );
 
-    if ( FileBase::E_None == aFile.open( OpenFlag_Read ) )
+    if ( FileBase::E_None == aFile.open( osl_File_OpenFlag_Read ) )
     {
         aFile.close();
         return true;
