@@ -975,13 +975,12 @@ void __EXPORT BreakPointWindow::Paint( const Rectangle& )
     aBmpOff.X() = ( aOutSz.Width() - aBmpSz.Width() ) / 2;
     aBmpOff.Y() = ( nLineHeight - aBmpSz.Height() ) / 2;
 
-    BreakPoint* pBrk = GetBreakPoints().First();
-    while ( pBrk )
+    for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
     {
-        ULONG nLine = pBrk->nLine-1;
-        ULONG nY = nLine*nLineHeight - nCurYOffset;
+        BreakPoint* pBrk = GetBreakPoints().at( i );
+        size_t nLine = pBrk->nLine-1;
+        size_t nY = nLine*nLineHeight - nCurYOffset;
         DrawImage( Point( 0, nY ) + aBmpOff, pBrk->bEnabled ? aBrk1 : aBrk0 );
-        pBrk = GetBreakPoints().Next();
     }
     ShowMarker( TRUE );
 }
@@ -1039,20 +1038,16 @@ void BreakPointWindow::ShowMarker( BOOL bShow )
 
 BreakPoint* BreakPointWindow::FindBreakPoint( const Point& rMousePos )
 {
-    long nLineHeight = GetTextHeight();
-    long nYPos = rMousePos.Y() + nCurYOffset;
-//  Image aBrk( ((ModulWindowLayout*)pModulWindow->GetLayoutWindow())->GetImage( IMGID_BRKENABLED ) );
-//  Size aBmpSz( aBrk.GetSizePixel() );
-//  aBmpSz = PixelToLogic( aBmpSz );
+    size_t nLineHeight = GetTextHeight();
+    size_t nYPos = rMousePos.Y() + nCurYOffset;
 
-    BreakPoint* pBrk = GetBreakPoints().First();
-    while ( pBrk )
+    for ( size_t i = 0, n = GetBreakPoints().size(); i < n ; ++i )
     {
-        ULONG nLine = pBrk->nLine-1;
-        long nY = nLine*nLineHeight;
+        BreakPoint* pBrk = GetBreakPoints().at( i );
+        size_t nLine = pBrk->nLine-1;
+        size_t nY = nLine*nLineHeight;
         if ( ( nYPos > nY ) && ( nYPos < ( nY + nLineHeight ) ) )
             return pBrk;
-        pBrk = GetBreakPoints().Next();
     }
     return 0;
 }

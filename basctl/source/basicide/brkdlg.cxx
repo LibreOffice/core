@@ -46,7 +46,7 @@
 // FIXME  Why does BreakPointDialog allow only USHORT for break-point line
 // numbers, whereas BreakPoint supports ULONG?
 
-bool lcl_ParseText( String aText, USHORT& rLineNr )
+bool lcl_ParseText( String aText, size_t& rLineNr )
 {
     // aText should look like "# n" where
     // n > 0 && n < std::numeric_limits< USHORT >::max().
@@ -61,9 +61,9 @@ bool lcl_ParseText( String aText, USHORT& rLineNr )
         aText.Erase(0, 1);
     // XXX Assumes that USHORT is contained within sal_Int32:
     sal_Int32 n = aText.ToInt32();
-    if (n <= 0 || n > std::numeric_limits< USHORT >::max())
+    if ( n <= 0 )
         return false;
-    rLineNr = static_cast< USHORT >(n);
+    rLineNr = static_cast< size_t >(n);
     return true;
 }
 
@@ -84,14 +84,12 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     FreeResource();
 
     aComboBox.SetUpdateMode( FALSE );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.First();
-    BreakPoint* pFirstBrk = pBrk;
-    while ( pBrk )
+    for ( size_t i = 0, n = m_aModifiedBreakPointList.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = m_aModifiedBreakPointList.at( i );
         String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
         aEntryStr += String::CreateFromInt32( pBrk->nLine );
         aComboBox.InsertEntry( aEntryStr, COMBOBOX_APPEND );
-        pBrk = m_aModifiedBreakPointList.Next();
     }
     aComboBox.SetUpdateMode( TRUE );
 
@@ -112,7 +110,7 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     aNumericField.SetModifyHdl( LINK( this, BreakPointDialog, EditModifyHdl ) );
 
     aComboBox.SetText( aComboBox.GetEntry( 0 ) );
-    UpdateFields( pFirstBrk );
+    UpdateFields( m_aModifiedBreakPointList.at( 0 ) );
 
     CheckButtons();
 }
@@ -130,7 +128,7 @@ void BreakPointDialog::CheckButtons()
     // "New" button is enabled if the combo box edit contains a valid line
     // number that is not already present in the combo box list; otherwise
     // "OK" and "Delete" buttons are enabled:
-    USHORT nLine;
+    size_t nLine;
     if (lcl_ParseText(aComboBox.GetText(), nLine)
         && m_aModifiedBreakPointList.FindBreakPoint(nLine) == 0)
     {
@@ -165,7 +163,7 @@ IMPL_LINK( BreakPointDialog, ComboBoxHighlightHdl, ComboBox *, pBox )
     aDelButton.Enable();
 
     USHORT nEntry = pBox->GetEntryPos( pBox->GetText() );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     DBG_ASSERT( pBrk, "Kein passender Breakpoint zur Liste ?" );
     UpdateFields( pBrk );
 
@@ -200,13 +198,13 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     {
         // Checkbox beruecksichtigen!
         String aText( aComboBox.GetText() );
-        USHORT nLine;
-        BOOL bValid = lcl_ParseText( aText, nLine );
+        size_t nLine;
+        bool bValid = lcl_ParseText( aText, nLine );
         if ( bValid )
         {
             BreakPoint* pBrk = new BreakPoint( nLine );
             pBrk->bEnabled = aCheckBox.IsChecked();
-            pBrk->nStopAfter = (ULONG) aNumericField.GetValue();
+            pBrk->nStopAfter = (size_t) aNumericField.GetValue();
             m_aModifiedBreakPointList.InsertSorted( pBrk );
             String aEntryStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
             aEntryStr += String::CreateFromInt32( pBrk->nLine );
@@ -229,11 +227,11 @@ IMPL_LINK( BreakPointDialog, ButtonHdl, Button *, pButton )
     }
     else if ( pButton == &aDelButton )
     {
-        USHORT nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-        BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+        size_t nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
+        BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
         if ( pBrk )
         {
-            delete m_aModifiedBreakPointList.Remove( pBrk );
+            delete m_aModifiedBreakPointList.remove( pBrk );
             aComboBox.RemoveEntry( nEntry );
             if ( nEntry && !( nEntry < aComboBox.GetEntryCount() ) )
                 nEntry--;
@@ -272,8 +270,8 @@ void BreakPointDialog::UpdateFields( BreakPoint* pBrk )
 
 BreakPoint* BreakPointDialog::GetSelectedBreakPoint()
 {
-    USHORT nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
-    BreakPoint* pBrk = m_aModifiedBreakPointList.GetObject( nEntry );
+    size_t nEntry = aComboBox.GetEntryPos( aComboBox.GetText() );
+    BreakPoint* pBrk = m_aModifiedBreakPointList.at( nEntry );
     return pBrk;
 }
 

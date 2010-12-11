@@ -54,6 +54,7 @@ class SfxItemSet;
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include <hash_map>
+#include <vector>
 
 #define LINE_SEP_CR     0x0D
 #define LINE_SEP        0x0A
@@ -84,14 +85,13 @@ struct BasicStatus
 
 struct BreakPoint
 {
-    BOOL    bEnabled;
-    BOOL    bTemp;
-    ULONG   nLine;
-    ULONG   nStopAfter;
-    ULONG   nHitCount;
+    bool    bEnabled;
+    bool    bTemp;
+    size_t  nLine;
+    size_t  nStopAfter;
+    size_t  nHitCount;
 
-    BreakPoint( ULONG nL )  { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = TRUE; bTemp = FALSE; }
-
+    BreakPoint( size_t nL ) { nLine = nL; nStopAfter = 0; nHitCount = 0; bEnabled = true; bTemp = false; }
 };
 
 class BasicDockingWindow : public DockingWindow
@@ -109,11 +109,11 @@ public:
     BasicDockingWindow( Window* pParent );
 };
 
-DECLARE_LIST( BreakPL, BreakPoint* )
-class BreakPointList : public BreakPL
+class BreakPointList
 {
 private:
     void operator =(BreakPointList); // not implemented
+    ::std::vector< BreakPoint* > maBreakPoints;
 
 public:
     BreakPointList();
@@ -127,10 +127,17 @@ public:
     void transfer(BreakPointList & rList);
 
     void        InsertSorted( BreakPoint* pBrk );
-    BreakPoint* FindBreakPoint( ULONG nLine );
-    void        AdjustBreakPoints( ULONG nLine, BOOL bInserted );
+    BreakPoint* FindBreakPoint( size_t nLine );
+    void        AdjustBreakPoints( size_t nLine, bool bInserted );
     void        SetBreakPointsInBasic( SbModule* pModule );
     void        ResetHitCount();
+
+    size_t              size() const;
+    BreakPoint*         at( size_t i );
+    const BreakPoint*   at( size_t i ) const;
+    BreakPoint*         remove( BreakPoint* ptr );
+    void                push_back( BreakPoint* item );
+    void                clear();
 };
 
 // helper class for sorting TabBar

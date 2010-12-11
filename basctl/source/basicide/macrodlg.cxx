@@ -56,8 +56,9 @@
 #include <com/sun/star/script/XLibraryContainer2.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 
-#include <list>
-using ::std::list;
+#include <map>
+using ::std::map;
+using ::std::pair;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -553,7 +554,7 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
 
-        list< SbMethod* > aMacros;
+        map< sal_uInt16, SbMethod* > aMacros;
         size_t nMacroCount = pModule->GetMethods()->Count();
         for ( size_t iMeth = 0; iMeth  < nMacroCount; iMeth++ )
         {
@@ -562,26 +563,14 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
                 continue;
             DBG_ASSERT( pMethod, "Methode nicht gefunden! (NULL)" );
             // Eventuell weiter vorne ?
-            USHORT nStart, nEnd;
+            sal_uInt16 nStart, nEnd;
             pMethod->GetLineRange( nStart, nEnd );
-            list< SbMethod* >::iterator itr;
-            for ( itr = aMacros.begin(); itr != aMacros.end(); ++itr )
-            {
-                USHORT nS, nE;
-                SbMethod* pM = *itr;
-                DBG_ASSERT( pM, "Macro nicht in Liste ?!" );
-                pM->GetLineRange( nS, nE );
-                if ( nS > nStart ) {
-                    break;
-                }
-            }
-            if ( itr != aMacros.end() ) ++itr;
-            aMacros.insert( itr, pMethod );
+            aMacros.insert( map< sal_uInt16, SbMethod*>::value_type( nStart, pMethod ) );
         }
 
         aMacroBox.SetUpdateMode( FALSE );
-        for ( list< SbMethod* >::iterator itr = aMacros.begin(); itr != aMacros.end(); ++itr )
-            aMacroBox.InsertEntry( (*itr)->GetName() );
+        for ( map< sal_uInt16, SbMethod* >::iterator it = aMacros.begin(); it != aMacros.end(); ++it )
+            aMacroBox.InsertEntry( (*it).second->GetName() );
         aMacroBox.SetUpdateMode( TRUE );
 
         if ( aMacroBox.GetEntryCount() )

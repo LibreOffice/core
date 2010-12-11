@@ -334,7 +334,7 @@ BOOL ModulWindow::BasicExecute()
 
     if ( XModule().Is() && xModule->IsCompiled() && !aStatus.bError )
     {
-        if ( GetBreakPoints().Count() )
+        if ( GetBreakPoints().size() )
             aStatus.nBasicFlags = aStatus.nBasicFlags | SbDEBUG_BREAK;
 
         if ( !aStatus.bIsRunning )
@@ -584,7 +584,7 @@ BOOL ModulWindow::ToggleBreakPoint( ULONG nLine )
         if ( pBrk ) // entfernen
         {
             xModule->ClearBP( (USHORT)nLine );
-            delete GetBreakPoints().Remove( pBrk );
+            delete GetBreakPoints().remove( pBrk );
         }
         else // einen erzeugen
         {
@@ -1350,7 +1350,7 @@ void __EXPORT ModulWindow::BasicStarted()
     {
         aStatus.bIsRunning = TRUE;
         BreakPointList& rList = GetBreakPoints();
-        if ( rList.Count() )
+        if ( rList.size() )
         {
             rList.ResetHitCount();
             rList.SetBreakPointsInBasic( xModule );

@@ -59,6 +59,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
+using ::std::vector;
 
 DBG_NAME( IDEBaseWindow )
 
@@ -265,11 +266,10 @@ SfxUndoManager* __EXPORT IDEBaseWindow::GetUndoManager()
 BreakPointList::BreakPointList()
 {}
 
-BreakPointList::BreakPointList(BreakPointList const & rList):
-    BreakPL( sal::static_int_cast<USHORT>( rList.Count() ))
+BreakPointList::BreakPointList(BreakPointList const & rList)
 {
-    for (ULONG i = 0; i < rList.Count(); ++i)
-        Insert(new BreakPoint(*rList.GetObject(i)), i);
+    for (size_t i = 0; i < rList.size(); ++i)
+        maBreakPoints.push_back( new BreakPoint(*rList.at( i ) ) );
 }
 
 BreakPointList::~BreakPointList()
@@ -279,76 +279,69 @@ BreakPointList::~BreakPointList()
 
 void BreakPointList::reset()
 {
-    while (Count() > 0)
-        delete Remove(Count() - 1);
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
+        delete maBreakPoints[ i ];
+    maBreakPoints.clear();
 }
 
 void BreakPointList::transfer(BreakPointList & rList)
 {
     reset();
-    for (ULONG i = 0; i < rList.Count(); ++i)
-        Insert(rList.GetObject(i), i);
-    rList.Clear();
+    for (size_t i = 0; i < rList.size(); ++i)
+        maBreakPoints.push_back( rList.at( i ) );
+    rList.reset();
 }
 
 void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
     {
-        if ( pNewBrk->nLine <= pBrk->nLine )
+        if ( pNewBrk->nLine <= (*i)->nLine )
         {
             DBG_ASSERT( ( pBrk->nLine != pNewBrk->nLine ) || pNewBrk->bTemp, "BreakPoint existiert schon!" );
-            Insert( pNewBrk );
+            maBreakPoints.insert( i, pNewBrk );
             return;
         }
-        pBrk = Next();
     }
     // Keine Einfuegeposition gefunden => LIST_APPEND
-    Insert( pNewBrk, LIST_APPEND );
+    maBreakPoints.push_back( pNewBrk );
 }
 
 void BreakPointList::SetBreakPointsInBasic( SbModule* pModule )
 {
     pModule->ClearAllBP();
 
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->bEnabled )
             pModule->SetBP( (USHORT)pBrk->nLine );
-        pBrk = Next();
     }
 }
 
-BreakPoint* BreakPointList::FindBreakPoint( ULONG nLine )
+BreakPoint* BreakPointList::FindBreakPoint( size_t nLine )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         if ( pBrk->nLine == nLine )
             return pBrk;
-
-        pBrk = Next();
     }
-
-    return (BreakPoint*)0;
+    return NULL;
 }
 
-
-
-void BreakPointList::AdjustBreakPoints( ULONG nLine, BOOL bInserted )
+void BreakPointList::AdjustBreakPoints( size_t nLine, bool bInserted )
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0; i < maBreakPoints.size(); )
     {
-        BOOL bDelBrk = FALSE;
+        BreakPoint* pBrk = maBreakPoints[ i ];
+        bool bDelBrk = false;
         if ( pBrk->nLine == nLine )
         {
             if ( bInserted )
                 pBrk->nLine++;
             else
-                bDelBrk = TRUE;
+                bDelBrk = true;
         }
         else if ( pBrk->nLine > nLine )
         {
@@ -360,26 +353,65 @@ void BreakPointList::AdjustBreakPoints( ULONG nLine, BOOL bInserted )
 
         if ( bDelBrk )
         {
-            ULONG n = GetCurPos();
-            delete Remove( pBrk );
-            pBrk = Seek( n );
+            delete remove( pBrk );
         }
         else
         {
-            pBrk = Next();
+            ++i;
         }
     }
 }
 
 void BreakPointList::ResetHitCount()
 {
-    BreakPoint* pBrk = First();
-    while ( pBrk )
+    for ( size_t i = 0, n = maBreakPoints.size(); i < n; ++i )
     {
+        BreakPoint* pBrk = maBreakPoints[ i ];
         pBrk->nHitCount = 0;
-        pBrk = Next();
     }
 }
+
+size_t BreakPointList::size() const
+{
+    return maBreakPoints.size();
+}
+
+BreakPoint* BreakPointList::at( size_t i )
+{
+    if ( i < maBreakPoints.size() )
+        return maBreakPoints[ i ];
+    else
+        return NULL;
+}
+
+const BreakPoint* BreakPointList::at( size_t i ) const
+{
+    return maBreakPoints[ i ];
+}
+
+BreakPoint* BreakPointList::remove( BreakPoint* ptr )
+{
+    for ( vector< BreakPoint* >::iterator i = maBreakPoints.begin(); i < maBreakPoints.end(); ++i )
+    {
+        if ( ptr == *i )
+        {
+            maBreakPoints.erase( i );
+            return ptr;
+        }
+    }
+    return NULL;
+}
+
+void BreakPointList::push_back( BreakPoint* item )
+{
+    maBreakPoints.push_back( item );
+}
+
+void BreakPointList::clear()
+{
+    maBreakPoints.clear();
+}
+
 
 void IDEBaseWindow::Deactivating()
 {
