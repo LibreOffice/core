@@ -167,7 +167,7 @@ sal_Bool Initialize( void )
 
         // Open the ini-File
         pFile=new File( iniFileURL );
-        rc=pFile->open( OpenFlag_Read | OpenFlag_Write );
+        rc=pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
         if ( rc!=FileBase::E_None )
         {
             rtl_uString_release(strExeFileURL);
@@ -257,21 +257,21 @@ sal_Bool Initialize( void )
         return sal_False;
 
     pFile=new File( file1 );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
     delete pFile;
 
     pFile=new File( file2 );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
     delete pFile;
 
     pFile=new File( file_on_server );
-    rc=pFile->open( OpenFlag_Write | OpenFlag_Create );
+    rc=pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( rc!=FileBase::E_None )
         return sal_False;
     rc=pFile->close();
@@ -688,7 +688,7 @@ static void FileOpenAndCloseTest( void )
     // open an existing file (Read)
     //--------------------------------------------------
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     print_error( rtl::OString( "Open File (Read)" ), rc );
 
     //--------------------------------------------------
@@ -704,7 +704,7 @@ static void FileOpenAndCloseTest( void )
     // open an existing file (Write)
     //--------------------------------------------------
 
-    rc=pFile->open( OpenFlag_Write );
+    rc=pFile->open( osl_File_OpenFlag_Write );
     print_error( rtl::OString( "Open File (Write)" ), rc );
 
     //--------------------------------------------------
@@ -750,7 +750,7 @@ void FileCreateAndRemoveTest()
     // open (create) a not existing file (Read and write)
     //----------------------------------------------------
 
-    rc = pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
 
@@ -780,7 +780,7 @@ void FileCreateAndRemoveTest()
     // remove an open file
     //----------------------------------------------------
 
-    pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     rc=pFile->remove( file_not_exist );
     print_error( rtl::OString( "Remove an open File" ), rc );
@@ -823,7 +823,7 @@ void FileWriteAndReadTest( void )
     // open (create) a not existing file (Read and write)
     //----------------------------------------------------
 
-    rc = pFile->open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = pFile->open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
 
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
 
@@ -921,7 +921,7 @@ void FileCopyAndMoveTest( void )
 
     pFile=new File( destPath );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc == FileBase::E_None)
     {
         printf( "Verify: OK!\n" );
@@ -987,7 +987,7 @@ void FileCopyAndMoveTest( void )
 
     pFile=new File( destPath );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc==FileBase::E_None )
     {
         pFile->close();
@@ -995,7 +995,7 @@ void FileCopyAndMoveTest( void )
         delete pFile;
         pFile=new File( file1 );
 
-        rc=pFile->open( OpenFlag_Read );
+        rc=pFile->open( osl_File_OpenFlag_Read );
 
         if ( rc!=FileBase::E_None )
         {
@@ -1084,7 +1084,7 @@ void FileSizeTest( void )
     printFileName( file_not_exist );
     printf( "\n\n");
 
-    rc = aFile.open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     print_error( rtl::OString( "Create and Open File (Read & Write)" ), rc );
     printf( "\n" );
 
@@ -1172,7 +1172,7 @@ void FilePointerTest( void )
     printFileName( file_not_exist );
     printf( "\n\n");
 
-    rc = rFile.open( OpenFlag_Read | OpenFlag_Write | osl_File_OpenFlag_Create );
+    rc = rFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     print_error( rtl::OString( "Create and Open File (Read & Write) "), rc );
     printf( "\n" );
 
@@ -1672,7 +1672,7 @@ void DirectoryItemTest( void )
 
     pFile=new File( file1 );
 
-    rc=pFile->open( OpenFlag_Read );
+    rc=pFile->open( osl_File_OpenFlag_Read );
     if ( rc==FileBase::E_None )
     {
         printf( "Get DirectoryItem from a File-Handle: ");

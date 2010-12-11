@@ -138,7 +138,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
         return sal_False;
 
     ::osl::File strFile( aUStr );
-    ::osl::FileBase::RC nError = strFile.open( OpenFlag_Read );
+    ::osl::FileBase::RC nError = strFile.open( osl_File_OpenFlag_Read );
     if ( ::File::E_NOENT == nError )
         return sal_False;
     else{
@@ -319,7 +319,7 @@ namespace osl_Module
             //test if can create a normal file
             ::rtl::OUString aFileURL = aMyDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/test_file"));
             ::osl::File testFile( aFileURL );
-            nError = testFile.open( OpenFlag_Create );
+            nError = testFile.open( osl_File_OpenFlag_Create );
             CPPUNIT_ASSERT_MESSAGE( "#create failed. please manually clean-up directory and file under /tmp", nError == ::osl::FileBase::E_None );
             CPPUNIT_ASSERT_MESSAGE( "#This file is not exist, create failed. please manually clean-up directory and file under /tmp", ifFileExist( aFileURL ) == sal_True );
 

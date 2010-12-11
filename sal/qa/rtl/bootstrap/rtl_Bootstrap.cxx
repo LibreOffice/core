@@ -77,7 +77,7 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 {
     ::osl::FileBase::RC   nError1;
     ::osl::File aTestFile( _sFilename );
-    nError1 = aTestFile.open ( OpenFlag_Read );
+    nError1 = aTestFile.open ( osl_File_OpenFlag_Read );
     if ( ( ::osl::FileBase::E_NOENT != nError1 ) && ( ::osl::FileBase::E_ACCES != nError1 ) )
     {
         aTestFile.close( );
@@ -897,7 +897,7 @@ static void removeAndCreateFile(rtl::OUString const& _suFileURL, rtl::OString co
     osl::File::remove(_suFileURL);
 
     ::std::auto_ptr<osl::File> pFile( new osl::File( _suFileURL ) );
-    ::osl::FileBase::RC nError = pFile->open( OpenFlag_Write | OpenFlag_Create );
+    ::osl::FileBase::RC nError = pFile->open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     if ( ::osl::FileBase::E_None == nError || ::osl::FileBase::E_EXIST == nError )
     {
         t_print(T_VERBOSE, "%s\n" , OString(_suFileURL, _suFileURL.getLength(), RTL_TEXTENCODING_ASCII_US).getStr());

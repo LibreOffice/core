@@ -385,7 +385,7 @@ inline void createTestFile( const ::rtl::OUString filename )
     //::std::auto_ptr<File> pFile( new File( aPathURL ) );
     File aFile(aPathURL);
     //nError = pFile->open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
-    nError = aFile.open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
+    nError = aFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
     //CPPUNIT_ASSERT_MESSAGE( "In createTestFile Function: creation ", ( ::osl::FileBase::E_None == nError ) || ( nError == ::osl::FileBase::E_EXIST ) );
     if ( ( ::osl::FileBase::E_None != nError ) && ( nError != ::osl::FileBase::E_EXIST ))
     {
@@ -528,7 +528,7 @@ inline sal_Bool checkFile( const ::rtl::OUString & str, oslCheckMode nCheckMode 
     sal_Bool        bCheckResult;
 
     bCheckResult = sal_False;
-    nError1 = testFile.open ( OpenFlag_Read );
+    nError1 = testFile.open ( osl_File_OpenFlag_Read );
     if ( ( ::osl::FileBase::E_NOENT != nError1 ) && ( ::osl::FileBase::E_ACCES != nError1 ) ){
 
         switch ( nCheckMode ) {
@@ -583,7 +583,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
     ::rtl::OString aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
     // const char *path = aString.getStr( );
     ::osl::File testFile( str );
-    bCheckResult = ( osl::FileBase::E_None == testFile.open( OpenFlag_Read ) );
+    bCheckResult = ( osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Read ) );
     //if (bCheckResult)
     //t_print("%s exist!\n", path);
     //else
@@ -607,10 +607,10 @@ inline sal_Bool ifFileCanWrite( const ::rtl::OUString & str )
     const char *path = aString.getStr( );
     if (( _access( path, 2 ) ) != -1 )
          bCheckResult = sal_True;
-     //on UNX, just test if open success with OpenFlag_Write
+     //on UNX, just test if open success with osl_File_OpenFlag_Write
 #else
     ::osl::File testFile( str );
-    bCheckResult = (osl::FileBase::E_None == testFile.open( OpenFlag_Write ));
+    bCheckResult = (osl::FileBase::E_None == testFile.open( osl_File_OpenFlag_Write ));
 #endif
     return bCheckResult;
 }
@@ -1480,7 +1480,7 @@ namespace osl_FileBase
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
             //printFileName(*pUStr_FileURL);
-            nError2 = testFile.open( OpenFlag_Create );
+            nError2 = testFile.open( osl_File_OpenFlag_Create );
             if ( osl::FileBase::E_EXIST == nError2 )  {
                 osl_closeFile( *pHandle );
                 deleteTestFile( *pUStr_FileURL );
@@ -1495,7 +1495,7 @@ namespace osl_FileBase
             bOK = sal_False;
             nError1 = FileBase::createTempFile( pUStr_DirURL, pHandle, pUStr_FileURL );
             ::osl::File testFile( *pUStr_FileURL );
-            nError2 = testFile.open( OpenFlag_Create );
+            nError2 = testFile.open( osl_File_OpenFlag_Create );
 
             CPPUNIT_ASSERT_MESSAGE( "createTempFile function: create a temp file, but it does not exist",
                 ( osl::FileBase::E_None == nError1 ) && ( pHandle != NULL ) &&
@@ -1528,7 +1528,7 @@ namespace osl_FileBase
             nError1 = FileBase::createTempFile( pUStr_DirURL, 0, pUStr_FileURL );
             bOK = ( pUStr_FileURL != 0);
             ::osl::File testFile( *pUStr_FileURL );
-            nError2 = testFile.open( OpenFlag_Create );
+            nError2 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( *pUStr_FileURL );
             CPPUNIT_ASSERT_MESSAGE( "createTempFile function: create a temp file, but it does not exist",
                 ( osl::FileBase::E_None == nError1 ) && ( osl::FileBase::E_EXIST == nError2 ) &&( sal_True == bOK ) );
@@ -3191,7 +3191,7 @@ namespace osl_FileStatus
         void getFileSize_002( )
         {
             ::osl::File testfile( aTypeURL );
-            nError = testfile.open( OpenFlag_Write | OpenFlag_Read );
+            nError = testfile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError );
             nError = testfile.setSize( TEST_FILE_SIZE );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError );
@@ -3417,7 +3417,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName4 );
 
-            ::osl::FileBase::RC nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            ::osl::FileBase::RC nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             ::osl::FileBase::RC nError2 = testFile.close( );
             CPPUNIT_ASSERT_MESSAGE( "test for ctors function: initialize a File and test its open and close",
                                      ( ::osl::FileBase::E_None == nError1 ) && ( ::osl::FileBase::E_None == nError2 ) );
@@ -3429,7 +3429,7 @@ namespace osl_File
             sal_Char buffer[30] = "Test for File constructor";
             sal_uInt64 nCount;
 
-                ::osl::FileBase::RC nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+                ::osl::FileBase::RC nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
                 ::osl::FileBase::RC nError2 = testFile.write( buffer, 30, nCount );
             testFile.close( );
 
@@ -3472,7 +3472,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             nError2 = testFile.close( );
             CPPUNIT_ASSERT_MESSAGE("close error", ::osl::FileBase::E_None == nError2 );
 
@@ -3484,7 +3484,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName3 );
 
-            nError1 = testFile.open( OpenFlag_Read );
+            nError1 = testFile.open( osl_File_OpenFlag_Read );
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: open a directory",
                                      ( File::E_INVAL == nError1 ) || ( File::E_ACCES == nError1 ) );
@@ -3494,7 +3494,7 @@ namespace osl_File
         {
             ::osl::File testFile( aCanURL1 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: open a non-exist file",
                                      File::E_NOENT == nError1 );
@@ -3506,7 +3506,7 @@ namespace osl_File
             concatURL( aTestFile, aTmpName2 );
             ::osl::File testFile( aTestFile );
 
-            nError1 = testFile.open( OpenFlag_Create );
+            nError1 = testFile.open( osl_File_OpenFlag_Create );
             sal_Bool bOK = ( File::E_ACCES == nError1 );
 #if defined (WNT )
             bOK = sal_True;  /// in Windows, you can create file in c:/ any way.
@@ -3522,7 +3522,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Create );
+            nError1 = testFile.open( osl_File_OpenFlag_Create );
 
             CPPUNIT_ASSERT_MESSAGE( "test for open function: create an exist file",
                                      File::E_EXIST == nError1 );
@@ -3535,7 +3535,7 @@ namespace osl_File
             sal_Char buffer_read[30];
             sal_uInt64 nCount_write, nCount_read;
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write | OpenFlag_Create );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create );
             nError2 = testFile.write( buffer_write, 30, nCount_write );
              ::osl::FileBase::RC nError4 = testFile.setPos( Pos_Absolut, 0 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError4 );
@@ -3546,7 +3546,7 @@ namespace osl_File
             ::osl::FileBase::RC nError6 = testFile.remove( aCanURL1 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError6 );
 
-            CPPUNIT_ASSERT_MESSAGE( "test for open function: test for OpenFlag_Read,OpenFlag_Write and OpenFlag_Create",
+            CPPUNIT_ASSERT_MESSAGE( "test for open function: test for osl_File_OpenFlag_Read, osl_File_OpenFlag_Write and osl_File_OpenFlag_Create",
                                     ( ::osl::FileBase::E_None == nError1 ) &&
                                     ( ::osl::FileBase::E_None == nError2 ) &&
                                     ( ::osl::FileBase::E_None == nError3 ) &&
@@ -3593,7 +3593,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             nError2 = testFile.close( );
@@ -3606,7 +3606,7 @@ namespace osl_File
         {
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             nError2 = testFile.close( );
@@ -3645,7 +3645,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3666,7 +3666,7 @@ namespace osl_File
             ::osl::File testFile( aTmpName4 );
             sal_Char buffer_read[2];
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.setPos( Pos_Absolut, 26 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3684,7 +3684,7 @@ namespace osl_File
             ::osl::File testFile( aTmpName4 );
             sal_Char buffer_read[2];
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
              nError1 = testFile.setPos( Pos_Absolut, sizeof( pBuffer_Char ) - 2 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3704,7 +3704,7 @@ namespace osl_File
             ::osl::File testFile( aTmpName4 );
             sal_Char buffer_read[2];
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //the file size is smaller than 100
             nError1 = testFile.setPos( Pos_End,  -100 );
@@ -3748,7 +3748,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3772,7 +3772,7 @@ namespace osl_File
             nError1 = testFile.getPos( nFilePointer );
             CPPUNIT_ASSERT( ::osl::FileBase::E_INVAL == nError1 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
              nError1 = testFile.setPos( Pos_Absolut, 26 );
@@ -3813,7 +3813,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3836,7 +3836,7 @@ namespace osl_File
             sal_Bool      *pEOF = &bEOF;
 
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
              nError1 = testFile.setPos( Pos_End, 0 );
@@ -3858,7 +3858,7 @@ namespace osl_File
             sal_Bool      *pEOF = &bEOF;
             sal_uInt64    nFilePointer = 0;
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
              nError1 = testFile.setPos( Pos_Absolut, 0 );
@@ -3907,7 +3907,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -3931,7 +3931,7 @@ namespace osl_File
             sal_uInt64     nFilePointer;
 
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //enlarge the file to size of 100;
@@ -3959,7 +3959,7 @@ namespace osl_File
             sal_uInt64     nFilePointer;
 
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //enlarge the file to size of 100;
@@ -4034,7 +4034,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4057,7 +4057,7 @@ namespace osl_File
             sal_Char       buffer_read[10];
 
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             nError1 = testFile.read( buffer_read, 10, nCount_read );
@@ -4079,7 +4079,7 @@ namespace osl_File
             sal_Char       buffer_read[26];
 
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
              nError1 = testFile.setPos( Pos_Absolut, 26 );
@@ -4132,7 +4132,7 @@ namespace osl_File
             sal_uInt64     nFilePointer;
             sal_Char       buffer_read[10];
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             //write chars into the file.
@@ -4185,7 +4185,7 @@ namespace osl_File
                                         "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                                       };
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
 
             for ( int nCount = 0; nCount < 3; nCount++ )
@@ -4209,7 +4209,7 @@ namespace osl_File
         {
              ::osl::File    testFile( aTmpName6 );
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.readLine( aSequence );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4225,7 +4225,7 @@ namespace osl_File
             sal_Bool bEOF  = sal_False;
             sal_Bool *pEOF = &bEOF;
 
-            nError1 = testFile.open( OpenFlag_Read | OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Read | osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             for ( int nCount = 0; nCount < 3; nCount++ )
             {
@@ -4265,7 +4265,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4289,7 +4289,7 @@ namespace osl_File
             nError1 = ::osl::File::copy( aTmpName4, aTmpName6 );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //check
-            nError1 = testFile.open( OpenFlag_Create );
+            nError1 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( aTmpName6 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for copy function: copy file to upper directory",
@@ -4338,7 +4338,7 @@ namespace osl_File
       {
         createTestFile( aTmpName6 );
         File tmpFile( aTmpName6 );
-        FileBase::RC err = tmpFile.open( OpenFlag_Write | OpenFlag_Read );
+        FileBase::RC err = tmpFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
         (void)err;
         tmpFile.setSize( 200 );
         tmpFile.close();
@@ -4348,7 +4348,7 @@ namespace osl_File
 
         //check if is the new file
         File newFile( aTmpName4 );
-        newFile.open( OpenFlag_Write | OpenFlag_Read );
+        newFile.open( osl_File_OpenFlag_Write | osl_File_OpenFlag_Read );
         newFile.setPos( Pos_End, 0 );
         //      CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
         sal_uInt64     nFilePointer;
@@ -4399,7 +4399,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4422,7 +4422,7 @@ namespace osl_File
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             //check
              ::osl::File    testFile( aCanURL1 );
-            nError2 = testFile.open( OpenFlag_Create );
+            nError2 = testFile.open( osl_File_OpenFlag_Create );
             deleteTestFile( aCanURL1 );
 
             CPPUNIT_ASSERT_MESSAGE( "test for move function: rename file to another directory",
@@ -4561,7 +4561,7 @@ namespace osl_File
             //write chars into the file.
             ::osl::File testFile( aTmpName4 );
 
-            nError1 = testFile.open( OpenFlag_Write );
+            nError1 = testFile.open( osl_File_OpenFlag_Write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
             nError1 = testFile.write( pBuffer_Char, sizeof( pBuffer_Char ), nCount_write );
             CPPUNIT_ASSERT( ::osl::FileBase::E_None == nError1 );
@@ -4583,7 +4583,7 @@ namespace osl_File
             nError1 = ::osl::File::remove( aTmpName4 );
             //check
              ::osl::File    testFile( aTmpName4 );
-            nError2 = testFile.open( OpenFlag_Create );
+            nError2 = testFile.open( osl_File_OpenFlag_Create );
 
             CPPUNIT_ASSERT_MESSAGE( "test for remove function: remove a file",
                                     ( ::osl::FileBase::E_None == nError1 ) &&

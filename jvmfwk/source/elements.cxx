@@ -748,7 +748,7 @@ jfw::FileStatus NodeJava::checkSettingsFileStatus() const
                         //delete file
 //                        File::RC rc_rem = File::remove(sURL);
                         File f(sURL);
-                        if (File::E_None == f.open(OpenFlag_Write | OpenFlag_Read)
+                        if (File::E_None == f.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Read)
                             && File::E_None == f.setPos(0, 0)
                             && File::E_None == f.setSize(0))
                                     ret = FILE_DOES_NOT_EXIST;

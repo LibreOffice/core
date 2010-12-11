@@ -979,7 +979,7 @@ rtl::OUString expandMacros(
                         rtl::OUString line;
                         rtl::OUString url;
                         // Silently ignore any errors (is that good?):
-                        if (f.open(OpenFlag_Read) == osl::FileBase::E_None &&
+                        if (f.open(osl_File_OpenFlag_Read) == osl::FileBase::E_None &&
                             f.readLine(seq) == osl::FileBase::E_None &&
                             rtl_convertStringToUString(
                                 &line.pData,

@@ -84,7 +84,7 @@ bool t_fileExist(rtl::OUString const& _sFilename)
 {
     ::osl::FileBase::RC   nError1;
     ::osl::File aTestFile( _sFilename );
-    nError1 = aTestFile.open ( OpenFlag_Read );
+    nError1 = aTestFile.open ( osl_File_OpenFlag_Read );
     if ( ( ::osl::FileBase::E_NOENT != nError1 ) && ( ::osl::FileBase::E_ACCES != nError1 ) )
     {
         aTestFile.close( );
@@ -143,7 +143,7 @@ namespace rtl_logfile
                 ::osl::FileBase::RC   nError1;
                 ::osl::File aTestFile( suFilePath );
                 printUString( suFilePath );
-                nError1 = aTestFile.open ( OpenFlag_Read );
+                nError1 = aTestFile.open ( osl_File_OpenFlag_Read );
                 CPPUNIT_ASSERT_MESSAGE("create the log file: but the logfile does not exist",
                                        ( ::osl::FileBase::E_NOENT != nError1 ) &&
                                        ( ::osl::FileBase::E_ACCES != nError1 ) );
