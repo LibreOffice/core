@@ -999,7 +999,7 @@ sal_Bool EnhancedCustomShape2d::GetParameter( double& rRetValue, const EnhancedC
         {
             if ( rParameter.Value.getValueTypeClass() == TypeClass_DOUBLE )
             {
-                double fValue;
+                double fValue(0.0);
                 if ( rParameter.Value >>= fValue )
                 {
                     rRetValue = fValue;
