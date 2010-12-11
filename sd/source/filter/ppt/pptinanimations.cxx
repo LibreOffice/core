@@ -3727,7 +3727,7 @@ void AnimationImporter::dump( const PropertySet& rSet )
 
         case DFF_ANIM_VOLUME:
         {
-            double fVolume;
+            double fVolume(0.0);
             if( aAny >>= fVolume )
             {
                 fprintf( mpFile, " volume=\"%g%%\"", (double)(fVolume * 100.0) );
