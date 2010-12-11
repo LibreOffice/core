@@ -883,7 +883,7 @@ void XMLEnhancedCustomShapeContext::StartElement( const uno::Reference< xml::sax
                         double fFactor = SvXMLExportHelper::GetConversionFactor( aUnitStr, MAP_100TH_MM, eSrcUnit );
                         if ( ( fFactor != 1.0 ) && ( fFactor != 0.0 ) )
                         {
-                            double fDepth;
+                            double fDepth(0.0);
                             if ( rDepth.Value >>= fDepth )
                             {
                                 fDepth /= fFactor;
