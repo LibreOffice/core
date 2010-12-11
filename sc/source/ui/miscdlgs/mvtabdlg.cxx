@@ -66,7 +66,6 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
         aLbTable    ( this, ScResId( LB_INSERT ) ),
         aBtnCopy    ( this, ScResId( BTN_COPY ) ),
         aBtnRename  ( this, ScResId( BTN_RENAME ) ),
-        aFtTabName  ( this, ScResId( FT_LABEL ) ),
         aEdTabName  ( this, ScResId( ED_INPUT ) ),
         aBtnOk      ( this, ScResId( BTN_OK ) ),
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
@@ -110,6 +109,7 @@ void ScMoveTableDlg::SetCopyTable(BOOL bFlag)
 {
     aBtnCopy.Check(bFlag);
 }
+
 void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
 {
     if(bFlag)
@@ -121,19 +121,26 @@ void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
 void ScMoveTableDlg::SetRenameTable(BOOL bFlag)
 {
     aBtnRename.Check(bFlag);
-    SetTabNameVisible(bFlag);
+    EnableTabName(bFlag);
 }
 
-void ScMoveTableDlg::SetTabNameVisible(BOOL bFlag)
+void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
+{    if( bFlag )
+        aBtnRename.Enable();
+    else
+        aBtnRename.Disable();
+}
+
+void ScMoveTableDlg::EnableTabName(BOOL bFlag)
 {
     if(bFlag)
     {
-        aFtTabName.Show();
-        aEdTabName.Show();
-    } else
+        aEdTabName.Enable();
+    }
+    else
     {
-        aFtTabName.Hide();
-        aEdTabName.Hide();
+        aEdTabName.Disable();
+        aEdTabName.SetText( String() );
     }
 }
 
@@ -146,7 +153,7 @@ void ScMoveTableDlg::Init()
     aBtnRename.SetToggleHdl( LINK( this, ScMoveTableDlg, RenameHdl ) );
     aBtnCopy.Check( FALSE );
     aBtnRename.Check( FALSE );
-    SetTabNameVisible( FALSE );
+    EnableTabName( FALSE );
     InitDocListBox();
     SelHdl( &aLbDoc );
 }
@@ -185,13 +192,12 @@ void ScMoveTableDlg::InitDocListBox()
     aLbDoc.SelectEntryPos( nSelPos );
 }
 
-
 //------------------------------------------------------------------------
 // Handler:
 
 IMPL_LINK( ScMoveTableDlg, RenameHdl, void *, EMPTYARG )
 {
-    SetTabNameVisible( aBtnRename.IsChecked() );
+    EnableTabName( aBtnRename.IsChecked() );
 
     return 0;
 }

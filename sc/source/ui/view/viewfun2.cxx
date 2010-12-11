@@ -2543,7 +2543,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 //----------------------------------------------------------------------------
 //  Tabelle in anderes Dokument verschieben / kopieren
 
-void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const String& rName )
+void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const String* pName )
 {
     ScDocument* pDoc       = GetViewData()->GetDocument();
     ScDocShell* pDocShell  = GetViewData()->GetDocShell();
@@ -2645,8 +2645,8 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
         for( USHORT j=0; j<TheTabs.Count(); j++, nDestTab1++ )
         {   // #63304# insert sheets first and update all references
             String aName;
-            if( rName.Len() )
-                aName = rName;
+            if( pName->Len() )
+                aName = *pName;
             else
                 pDoc->GetName( TheTabs[j], aName );
 
@@ -2830,12 +2830,12 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
         }
 
         // Rename must be done after that all sheets have been moved.
-        if( rName.Len() )
+        if( pName->Len() )
         {
             for(int j=0;j<TheDestTabs.Count();j++)
             {
                 SCTAB nRenameTab = static_cast<SCTAB>(TheDestTabs[j]);
-                String aTabName( rName);
+                String aTabName( *pName);
                 pDoc->CreateValidTabName( aTabName );
                 pDocShell->GetDocFunc().RenameTable( nRenameTab, aTabName, TRUE, FALSE );
             }

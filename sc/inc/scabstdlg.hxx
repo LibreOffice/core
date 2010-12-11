@@ -217,6 +217,8 @@ public:
     virtual void    GetTabNameString( String& rString ) const = 0;
     virtual void    SetCopyTable            (BOOL bFlag=TRUE) = 0;
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE) = 0;
+    virtual void    SetRenameTable          (BOOL bFlag=TRUE) = 0;
+    virtual void    EnableRenameTable       (BOOL bFlag=TRUE) = 0;
 };
 
 class AbstractScNameCreateDlg : public VclAbstractDialog  //add for ScNameCreateDlg

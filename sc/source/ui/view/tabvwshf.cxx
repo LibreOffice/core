@@ -560,6 +560,10 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         pDlg->SetCopyTable();
                         pDlg->EnableCopyTable(FALSE);
                     }
+                    if(nTabSelCount != 1)
+                    {
+                        pDlg->EnableRenameTable(FALSE);
+                    }
                     if ( pDlg->Execute() == RET_OK )
                     {
                         nDoc = pDlg->GetSelectedDocument();
@@ -600,7 +604,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
 
-                    MoveTable( nDoc, nTab, bCpy, aTabName );
+                    MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
             }
             break;
