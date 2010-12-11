@@ -2252,7 +2252,7 @@ void ScDocShell::GetSbxState( SfxItemSet &rSet )
         pVisibleSh->GetState( rSet );
 }
 
-void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, USHORT nAspect )
+void ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, USHORT nAspect )
 {
 
     SCTAB nVisTab = aDocument.GetVisibleTab();
@@ -2284,7 +2284,7 @@ void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup *
     pDev->SetLayoutMode( nOldLayoutMode );
 }
 
-Rectangle __EXPORT ScDocShell::GetVisArea( USHORT nAspect ) const
+Rectangle ScDocShell::GetVisArea( USHORT nAspect ) const
 {
     SfxObjectCreateMode eShellMode = GetCreateMode();
     if ( eShellMode == SFX_CREATE_MODE_ORGANIZER )
@@ -2369,7 +2369,7 @@ void ScDocShell::GetPageOnFromPageStyleSet( const SfxItemSet* pStyleSet,
     rbFooter = ((const SfxBoolItem&)pSet->Get(ATTR_PAGE_ON)).GetValue();
 }
 
-long __EXPORT ScDocShell::DdeGetData( const String& rItem,
+long ScDocShell::DdeGetData( const String& rItem,
                                       const String& rMimeType,
                                       ::com::sun::star::uno::Any & rValue )
 {
@@ -2418,7 +2418,7 @@ long __EXPORT ScDocShell::DdeGetData( const String& rItem,
     return 0;
 }
 
-long __EXPORT ScDocShell::DdeSetData( const String& rItem,
+long ScDocShell::DdeSetData( const String& rItem,
                                         const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue )
 {
@@ -2457,7 +2457,7 @@ long __EXPORT ScDocShell::DdeSetData( const String& rItem,
     return 0;
 }
 
-::sfx2::SvLinkSource* __EXPORT ScDocShell::DdeCreateLinkSource( const String& rItem )
+::sfx2::SvLinkSource* ScDocShell::DdeCreateLinkSource( const String& rItem )
 {
     //  only check for valid item string - range is parsed again in ScServerObject ctor
 

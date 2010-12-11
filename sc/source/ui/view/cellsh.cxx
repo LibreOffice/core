@@ -448,7 +448,7 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
 }
 
 
-void __EXPORT ScCellShell::GetClipState( SfxItemSet& rSet )
+void ScCellShell::GetClipState( SfxItemSet& rSet )
 {
 // SID_PASTE
 // SID_PASTE_SPECIAL

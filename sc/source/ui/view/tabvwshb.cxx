@@ -220,7 +220,7 @@ BOOL ScTabViewShell::ActivateObject( SdrOle2Obj* pObj, long nVerb )
     return ( !(nErr & ERRCODE_ERROR_MASK) );
 }
 
-ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
+ErrCode ScTabViewShell::DoVerb(long nVerb)
 {
     SdrView* pView = GetSdrView();
     if (!pView)

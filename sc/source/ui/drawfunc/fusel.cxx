@@ -108,7 +108,7 @@ BYTE FuSelection::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -343,7 +343,7 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
+BOOL FuSelection::MouseMove(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuDraw::MouseMove(rMEvt);
 
@@ -390,7 +390,7 @@ BOOL __EXPORT FuSelection::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());

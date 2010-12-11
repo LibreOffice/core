@@ -68,7 +68,7 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
+BOOL ScDocShell::InitNew( const uno::Reference < embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::InitNew" );
 
@@ -201,12 +201,12 @@ void ScDocShell::ResetDrawObjectShell()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScDocShell::Activate()
+void ScDocShell::Activate()
 {
 }
 
 
-void __EXPORT ScDocShell::Deactivate()
+void ScDocShell::Deactivate()
 {
 }
 

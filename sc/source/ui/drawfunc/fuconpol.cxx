@@ -74,7 +74,7 @@ FuConstPolygon::~FuConstPolygon()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -106,7 +106,7 @@ BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     pView->MouseMove(rMEvt, pWindow);
     BOOL bReturn = FuConstruct::MouseMove(rMEvt);
@@ -119,7 +119,7 @@ BOOL __EXPORT FuConstPolygon::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -156,7 +156,7 @@ BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstPolygon::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
 

@@ -115,7 +115,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
+ScPivotFilterDlg::~ScPivotFilterDlg()
 {
     for (USHORT i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
@@ -126,7 +126,7 @@ __EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );

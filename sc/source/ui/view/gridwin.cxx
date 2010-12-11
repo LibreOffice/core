@@ -235,7 +235,7 @@ ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
 {
 }
 
-__EXPORT ScFilterListBox::~ScFilterListBox()
+ScFilterListBox::~ScFilterListBox()
 {
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -252,7 +252,7 @@ void ScFilterListBox::EndInit()
     bInit = FALSE;
 }
 
-void __EXPORT ScFilterListBox::LoseFocus()
+void ScFilterListBox::LoseFocus()
 {
 #ifndef UNX
     Hide();
@@ -287,13 +287,13 @@ long ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void __EXPORT ScFilterListBox::Select()
+void ScFilterListBox::Select()
 {
     ListBox::Select();
     SelectHdl();
 }
 
-void __EXPORT ScFilterListBox::SelectHdl()
+void ScFilterListBox::SelectHdl()
 {
     if ( !IsTravelSelect() && !bInit && !bCancelled )
     {
@@ -487,7 +487,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
     EnableRTL( FALSE );
 }
 
-__EXPORT ScGridWindow::~ScGridWindow()
+ScGridWindow::~ScGridWindow()
 {
     // #114409#
     ImpDestroyOverlayObjects();
@@ -497,7 +497,7 @@ __EXPORT ScGridWindow::~ScGridWindow()
     delete pNoteMarker;
 }
 
-void __EXPORT ScGridWindow::Resize( const Size& )
+void ScGridWindow::Resize( const Size& )
 {
     //  gar nix
 }
@@ -1472,7 +1472,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
     return bNewPointer;
 }
 
-void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nNestedButtonState = SC_NESTEDBUTTON_DOWN;
 
@@ -1793,7 +1793,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -2246,7 +2246,7 @@ void ScGridWindow::FakeButtonUp()
     }
 }
 
-void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
+void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
 
@@ -2636,7 +2636,7 @@ void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWi
     pWin->SetCursorRect( &aEditArea );
 }
 
-void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
+void ScGridWindow::Command( const CommandEvent& rCEvt )
 {
     // The command event is send to the window after a possible context
     // menu from an inplace client is closed. Now we have the chance to
@@ -3076,7 +3076,7 @@ static void ClearSingleSelection( ScViewData* pViewData )
     }
 }
 
-void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
+void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // #96965# Cursor control for ref input dialog
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
@@ -4550,7 +4550,7 @@ void ScGridWindow::ShowCursor()
     --nCursorHideCount;
 }
 
-void __EXPORT ScGridWindow::GetFocus()
+void ScGridWindow::GetFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->GotFocus();
@@ -4573,7 +4573,7 @@ void __EXPORT ScGridWindow::GetFocus()
     Window::GetFocus();
 }
 
-void __EXPORT ScGridWindow::LoseFocus()
+void ScGridWindow::LoseFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->LostFocus();

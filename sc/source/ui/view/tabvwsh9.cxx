@@ -172,7 +172,7 @@ ScInputHandler* ScTabViewShell::GetInputHandler() const
 
 //------------------------------------------------------------------
 
-String __EXPORT ScTabViewShell::GetDescription() const
+String ScTabViewShell::GetDescription() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ** Test ** "));
 }

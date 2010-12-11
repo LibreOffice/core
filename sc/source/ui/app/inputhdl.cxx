@@ -472,7 +472,7 @@ ScInputHandler::ScInputHandler()
     //  Bindings (nur noch fuer Invalidate benutzt) werden bei Bedarf aktuell geholt
 }
 
-__EXPORT ScInputHandler::~ScInputHandler()
+ScInputHandler::~ScInputHandler()
 {
     //  Wenn dies der Applikations-InputHandler ist, wird der dtor erst nach SfxApplication::Main
     //  gerufen, darf sich also auf keine Sfx-Funktionen mehr verlassen

@@ -115,7 +115,7 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
     SetDispatcherLock( FALSE );
 }
 
-void __EXPORT ScHighlightChgDlg::Init()
+void ScHighlightChgDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;
@@ -192,7 +192,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-BOOL __EXPORT ScHighlightChgDlg::Close()
+BOOL ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }

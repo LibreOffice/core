@@ -469,14 +469,14 @@ ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
 
 //------------------------------------------------------------------------
 
-__EXPORT ScConsolidateParam::~ScConsolidateParam()
+ScConsolidateParam::~ScConsolidateParam()
 {
     ClearDataAreas();
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScConsolidateParam::ClearDataAreas()
+void ScConsolidateParam::ClearDataAreas()
 {
     if ( ppDataAreas )
     {
@@ -490,7 +490,7 @@ void __EXPORT ScConsolidateParam::ClearDataAreas()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScConsolidateParam::Clear()
+void ScConsolidateParam::Clear()
 {
     ClearDataAreas();
 
@@ -503,7 +503,7 @@ void __EXPORT ScConsolidateParam::Clear()
 
 //------------------------------------------------------------------------
 
-ScConsolidateParam& __EXPORT ScConsolidateParam::operator=( const ScConsolidateParam& r )
+ScConsolidateParam& ScConsolidateParam::operator=( const ScConsolidateParam& r )
 {
     nCol            = r.nCol;
     nRow            = r.nRow;
@@ -519,7 +519,7 @@ ScConsolidateParam& __EXPORT ScConsolidateParam::operator=( const ScConsolidateP
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
+BOOL ScConsolidateParam::operator==( const ScConsolidateParam& r ) const
 {
     BOOL bEqual =   (nCol           == r.nCol)
                  && (nRow           == r.nRow)
@@ -544,7 +544,7 @@ BOOL __EXPORT ScConsolidateParam::operator==( const ScConsolidateParam& r ) cons
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScConsolidateParam::SetAreas( ScArea* const* ppAreas, USHORT nCount )
+void ScConsolidateParam::SetAreas( ScArea* const* ppAreas, USHORT nCount )
 {
     ClearDataAreas();
     if ( ppAreas && nCount > 0 )
@@ -605,14 +605,14 @@ ScPivotParam::ScPivotParam( const ScPivotParam& r )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPivotParam::~ScPivotParam()
+ScPivotParam::~ScPivotParam()
 {
 }
 
 //------------------------------------------------------------------------
 
 
-void __EXPORT ScPivotParam::ClearPivotArrays()
+void ScPivotParam::ClearPivotArrays()
 {
     memset( aPageArr, 0, PIVOT_MAXPAGEFIELD * sizeof(PivotField) );
     memset( aColArr, 0, PIVOT_MAXFIELD * sizeof(PivotField) );
@@ -639,7 +639,7 @@ void ScPivotParam::SetLabelData(const vector<ScDPLabelDataRef>& r)
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
+void ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
                                               const PivotField* pColArr,
                                               const PivotField* pRowArr,
                                               const PivotField* pDataArr,
@@ -666,7 +666,7 @@ void __EXPORT ScPivotParam::SetPivotArrays  ( const PivotField* pPageArr,
 
 //------------------------------------------------------------------------
 
-ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
+ScPivotParam& ScPivotParam::operator=( const ScPivotParam& r )
 {
     nCol              = r.nCol;
     nRow              = r.nRow;
@@ -684,7 +684,7 @@ ScPivotParam& __EXPORT ScPivotParam::operator=( const ScPivotParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScPivotParam::operator==( const ScPivotParam& r ) const
+BOOL ScPivotParam::operator==( const ScPivotParam& r ) const
 {
     BOOL bEqual =   (nCol       == r.nCol)
                  && (nRow       == r.nRow)
@@ -758,7 +758,7 @@ ScSolveParam::~ScSolveParam()
 
 //------------------------------------------------------------------------
 
-ScSolveParam& __EXPORT ScSolveParam::operator=( const ScSolveParam& r )
+ScSolveParam& ScSolveParam::operator=( const ScSolveParam& r )
 {
     delete pStrTargetVal;
 
@@ -832,7 +832,7 @@ ScTabOpParam& ScTabOpParam::operator=( const ScTabOpParam& r )
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScTabOpParam::operator==( const ScTabOpParam& r ) const
+BOOL ScTabOpParam::operator==( const ScTabOpParam& r ) const
 {
     return (        (aRefFormulaCell == r.aRefFormulaCell)
                  && (aRefFormulaEnd  == r.aRefFormulaEnd)

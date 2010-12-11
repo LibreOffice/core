@@ -2338,7 +2338,7 @@ void ScChangeTrack::Clear()
 }
 
 
-void __EXPORT ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
     {

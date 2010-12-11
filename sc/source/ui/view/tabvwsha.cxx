@@ -162,7 +162,7 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr, sal_uInt16 nErrCode )
 //      FID_VALIDATION
 
 
-void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
+void ScTabViewShell::GetState( SfxItemSet& rSet )
 {
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
@@ -706,7 +706,7 @@ void ScTabViewShell::UpdateInputHandlerCellAdjust( SvxCellHorJustify eJust )
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
+void ScTabViewShell::ExecuteSave( SfxRequest& rReq )
 {
     //  nur SID_SAVEDOC / SID_SAVEASDOC
 
@@ -722,7 +722,7 @@ void __EXPORT ScTabViewShell::ExecuteSave( SfxRequest& rReq )
     GetViewData()->GetDocShell()->ExecuteSlot( rReq );
 }
 
-void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
+void ScTabViewShell::GetSaveState( SfxItemSet& rSet )
 {
     SfxShell* pDocSh = GetViewData()->GetDocShell();
 

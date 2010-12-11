@@ -83,7 +83,7 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScMoveTableDlg::~ScMoveTableDlg()
+ScMoveTableDlg::~ScMoveTableDlg()
 {
 }
 
@@ -110,7 +110,7 @@ void ScMoveTableDlg::EnableCopyTable(BOOL bFlag)
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScMoveTableDlg::Init()
+void ScMoveTableDlg::Init()
 {
     aBtnOk.SetClickHdl   ( LINK( this, ScMoveTableDlg, OkHdl ) );
     aLbDoc.SetSelectHdl  ( LINK( this, ScMoveTableDlg, SelHdl ) );

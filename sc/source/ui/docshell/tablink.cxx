@@ -113,7 +113,7 @@ ScTableLink::ScTableLink(SfxObjectShell* pShell, const String& rFile,
     SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
-__EXPORT ScTableLink::~ScTableLink()
+ScTableLink::~ScTableLink()
 {
     // Verbindung aufheben
 
@@ -127,7 +127,7 @@ __EXPORT ScTableLink::~ScTableLink()
     delete pImpl;
 }
 
-void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
+void ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
 {
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
     //  ein Optionen-Dialog kommt...
@@ -141,7 +141,7 @@ void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
     SvBaseLink::Edit( pParent, LINK( this, ScTableLink, TableEndEditHdl ) );
 }
 
-void __EXPORT ScTableLink::DataChanged( const String&,
+void ScTableLink::DataChanged( const String&,
                                         const ::com::sun::star::uno::Any& )
 {
     sfx2::LinkManager* pLinkManager=pImpl->m_pDocSh->GetDocument()->GetLinkManager();
@@ -160,7 +160,7 @@ void __EXPORT ScTableLink::DataChanged( const String&,
     }
 }
 
-void __EXPORT ScTableLink::Closed()
+void ScTableLink::Closed()
 {
     // Verknuepfung loeschen: Undo
     ScDocument* pDoc = pImpl->m_pDocSh->GetDocument();

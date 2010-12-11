@@ -96,7 +96,7 @@ void ScDPFieldWindow::Init()
     GetStyleSettings();
 }
 
-__EXPORT ScDPFieldWindow::~ScDPFieldWindow()
+ScDPFieldWindow::~ScDPFieldWindow()
 {
     if (pAccessible)
     {
@@ -456,7 +456,7 @@ void ScDPFieldWindow::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScDPFieldWindow::Paint( const Rectangle& /* rRect */ )
+void ScDPFieldWindow::Paint( const Rectangle& /* rRect */ )
 {
     // #124828# hiding the caption is now done from StateChanged
     Redraw();
@@ -476,7 +476,7 @@ void ScDPFieldWindow::UseMnemonic()
     UpdateStyle();
 }
 
-void __EXPORT ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
+void ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
@@ -486,7 +486,7 @@ void __EXPORT ScDPFieldWindow::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 }
 
-void __EXPORT ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
     {
@@ -507,7 +507,7 @@ void __EXPORT ScDPFieldWindow::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScDPFieldWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void ScDPFieldWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
     {
@@ -522,7 +522,7 @@ void __EXPORT ScDPFieldWindow::MouseButtonUp( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
+void ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
 {
     if( IsMouseCaptured() )
     {
@@ -539,7 +539,7 @@ void __EXPORT ScDPFieldWindow::MouseMove( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
+void ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
 {
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
     USHORT nCode = rKeyCode.GetCode();
@@ -580,7 +580,7 @@ void __EXPORT ScDPFieldWindow::KeyInput( const KeyEvent& rKEvt )
         Control::KeyInput( rKEvt );
 }
 
-void __EXPORT ScDPFieldWindow::GetFocus()
+void ScDPFieldWindow::GetFocus()
 {
     Control::GetFocus();
     Redraw();
@@ -599,7 +599,7 @@ void __EXPORT ScDPFieldWindow::GetFocus()
     }
 }
 
-void __EXPORT ScDPFieldWindow::LoseFocus()
+void ScDPFieldWindow::LoseFocus()
 {
     Control::LoseFocus();
     Redraw();

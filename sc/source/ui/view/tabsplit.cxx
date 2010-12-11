@@ -54,7 +54,7 @@ ScTabSplitter::~ScTabSplitter()
 {
 }
 
-void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseMove( rMEvt );
@@ -62,7 +62,7 @@ void __EXPORT ScTabSplitter::MouseMove( const MouseEvent& rMEvt )
         Splitter::MouseMove( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonUp( rMEvt );
@@ -70,7 +70,7 @@ void __EXPORT ScTabSplitter::MouseButtonUp( const MouseEvent& rMEvt )
         Splitter::MouseButtonUp( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (bFixed)
         Window::MouseButtonDown( rMEvt );
@@ -78,7 +78,7 @@ void __EXPORT ScTabSplitter::MouseButtonDown( const MouseEvent& rMEvt )
         Splitter::MouseButtonDown( rMEvt );
 }
 
-void __EXPORT ScTabSplitter::Splitting( Point& rSplitPos )
+void ScTabSplitter::Splitting( Point& rSplitPos )
 {
     Window* pParent = GetParent();
     Point aScreenPos = pParent->OutputToNormalizedScreenPixel( rSplitPos );

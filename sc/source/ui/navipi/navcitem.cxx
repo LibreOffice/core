@@ -56,7 +56,7 @@ ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /* eState */,
+void ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
 {
     switch( GetId() )

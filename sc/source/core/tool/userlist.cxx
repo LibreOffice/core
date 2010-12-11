@@ -78,7 +78,7 @@ ScUserListData::ScUserListData(const ScUserListData& rData) :
     InitTokens();
 }
 
-__EXPORT ScUserListData::~ScUserListData()
+ScUserListData::~ScUserListData()
 {
     delete[] pSubStrings;
     delete[] pUpperSub;

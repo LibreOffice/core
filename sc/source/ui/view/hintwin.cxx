@@ -92,7 +92,7 @@ ScHintWindow::~ScHintWindow()
 }
 
 
-void __EXPORT ScHintWindow::Paint( const Rectangle& /* rRect */ )
+void ScHintWindow::Paint( const Rectangle& /* rRect */ )
 {
     SetFont( aHeadFont );
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );

@@ -141,7 +141,7 @@ ScViewOptions::ScViewOptions( const ScViewOptions& rCpy )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScViewOptions::~ScViewOptions()
+ScViewOptions::~ScViewOptions()
 {
 }
 
@@ -261,20 +261,20 @@ ScTpViewItem::ScTpViewItem( const ScTpViewItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTpViewItem::~ScTpViewItem()
+ScTpViewItem::~ScTpViewItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScTpViewItem::GetValueText() const
+String ScTpViewItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpViewItem") );
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
+int ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -285,7 +285,7 @@ int __EXPORT ScTpViewItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTpViewItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTpViewItem::Clone( SfxItemPool * ) const
 {
     return new ScTpViewItem( *this );
 }

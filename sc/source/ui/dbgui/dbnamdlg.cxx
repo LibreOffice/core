@@ -191,7 +191,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScDbNameDlg::~ScDbNameDlg()
+ScDbNameDlg::~ScDbNameDlg()
 {
     DELETEZ( pSaveObj );
 
@@ -343,7 +343,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScDbNameDlg::Close()
+BOOL ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }

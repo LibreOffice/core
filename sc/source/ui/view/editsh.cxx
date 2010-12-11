@@ -626,7 +626,7 @@ void lcl_DisableAll( SfxItemSet& rSet )    // disable all slots
     }
 }
 
-void __EXPORT ScEditShell::GetState( SfxItemSet& rSet )
+void ScEditShell::GetState( SfxItemSet& rSet )
 {
     // #125326# When deactivating the view, edit mode is stopped, but the EditShell is left active
     // (a shell can't be removed from within Deactivate). In that state, the EditView isn't inserted
@@ -747,7 +747,7 @@ IMPL_LINK( ScEditShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
     return 0;
 }
 
-void __EXPORT ScEditShell::GetClipState( SfxItemSet& rSet )
+void ScEditShell::GetClipState( SfxItemSet& rSet )
 {
     if ( !pClipEvtLstnr )
     {

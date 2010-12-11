@@ -99,13 +99,13 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScAttrDlg::~ScAttrDlg()
+ScAttrDlg::~ScAttrDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void ScAttrDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     SfxAllItemSet aSet(*(GetInputSetImpl()->GetPool()));

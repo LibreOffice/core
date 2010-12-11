@@ -122,7 +122,7 @@ ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAd
 {
 }
 
-__EXPORT ScUndoObjData::~ScUndoObjData()
+ScUndoObjData::~ScUndoObjData()
 {
 }
 
@@ -137,7 +137,7 @@ void ScUndoObjData::Undo()
     }
 }
 
-void __EXPORT ScUndoObjData::Redo()
+void ScUndoObjData::Redo()
 {
     ScDrawObjData* pData = ScDrawLayer::GetObjData( pObj );
     DBG_ASSERT(pData,"ScUndoObjData: Daten nicht da");
@@ -155,7 +155,7 @@ ScTabDeletedHint::ScTabDeletedHint( SCTAB nTabNo ) :
 {
 }
 
-__EXPORT ScTabDeletedHint::~ScTabDeletedHint()
+ScTabDeletedHint::~ScTabDeletedHint()
 {
 }
 
@@ -164,7 +164,7 @@ ScTabSizeChangedHint::ScTabSizeChangedHint( SCTAB nTabNo ) :
 {
 }
 
-__EXPORT ScTabSizeChangedHint::~ScTabSizeChangedHint()
+ScTabSizeChangedHint::~ScTabSizeChangedHint()
 {
 }
 
@@ -304,7 +304,7 @@ ScDrawLayer::ScDrawLayer( ScDocument* pDocument, const String& rName ) :
     }
 }
 
-__EXPORT ScDrawLayer::~ScDrawLayer()
+ScDrawLayer::~ScDrawLayer()
 {
     Broadcast(SdrHint(HINT_MODELCLEARED));
 
@@ -334,7 +334,7 @@ void ScDrawLayer::UseHyphenator()
     }
 }
 
-SdrPage* __EXPORT ScDrawLayer::AllocPage(bool bMasterPage)
+SdrPage* ScDrawLayer::AllocPage(bool bMasterPage)
 {
     //  don't create basic until it is needed
     StarBASIC* pBasic = NULL;
@@ -360,7 +360,7 @@ void ScDrawLayer::UpdateBasic()
     //! remove this method?
 }
 
-SdrModel* __EXPORT ScDrawLayer::AllocModel() const
+SdrModel* ScDrawLayer::AllocModel() const
 {
     //  #103849# Allocated model (for clipboard etc) must not have a pointer
     //  to the original model's document, pass NULL as document:
@@ -368,7 +368,7 @@ SdrModel* __EXPORT ScDrawLayer::AllocModel() const
     return new ScDrawLayer( NULL, aName );
 }
 
-Window* __EXPORT ScDrawLayer::GetCurDocViewWin()
+Window* ScDrawLayer::GetCurDocViewWin()
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::GetCurDocViewWin without document" );
     if ( !pDoc )
@@ -1985,14 +1985,14 @@ void ScDrawLayer::SetGlobalDrawPersist(SfxObjectShell* pPersist)            // s
     pGlobalDrawPersist = pPersist;
 }
 
-void __EXPORT ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
+void ScDrawLayer::SetChanged( sal_Bool bFlg /* = sal_True */ )
 {
     if ( bFlg && pDoc )
         pDoc->SetChartListenerCollectionNeedsUpdate( TRUE );
     FmFormModel::SetChanged( bFlg );
 }
 
-SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
+SvStream* ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
     DBG_ASSERT( pDoc, "ScDrawLayer::GetDocumentStream without document" );
     if ( !pDoc )
@@ -2045,7 +2045,7 @@ SvStream* __EXPORT ScDrawLayer::GetDocumentStream(SdrDocumentStreamInfo& rStream
     return pRet;
 }
 
-SdrLayerID __EXPORT ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
+SdrLayerID ScDrawLayer::GetControlExportLayerId( const SdrObject & ) const
 {
     //  Layer fuer Export von Form-Controls in Versionen vor 5.0 - immer SC_LAYER_FRONT
     return SC_LAYER_FRONT;

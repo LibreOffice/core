@@ -35,14 +35,14 @@
 
 //------------------------------------------------------------------------
 
-String __EXPORT SvxDrawToolItem::GetValueText() const
+String SvxDrawToolItem::GetValueText() const
 {
     return GetValueText(GetValue());
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT SvxDrawToolItem::GetValueText( USHORT nVal ) const
+String SvxDrawToolItem::GetValueText( USHORT nVal ) const
 {
     const sal_Char* p;
 
@@ -65,14 +65,14 @@ String __EXPORT SvxDrawToolItem::GetValueText( USHORT nVal ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxDrawToolItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxDrawToolItem::Clone( SfxItemPool * ) const
 {
     return new SvxDrawToolItem(*this);
 }
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxDrawToolItem::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* SvxDrawToolItem::Create( SvStream& rStream, USHORT nVer ) const
 {
     USHORT nVal;
     rStream >> nVal;

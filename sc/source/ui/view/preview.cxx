@@ -144,7 +144,7 @@ ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pView
 }
 
 
-__EXPORT ScPreview::~ScPreview()
+ScPreview::~ScPreview()
 {
     delete pDrawView;
     delete pLocationData;
@@ -484,7 +484,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 }
 
 //Issue51656 Add resizeable margin on page preview from maoyg
-void __EXPORT ScPreview::Paint( const Rectangle& /* rRect */ )
+void ScPreview::Paint( const Rectangle& /* rRect */ )
 {
     if (!bValid)
     {
@@ -672,7 +672,7 @@ void __EXPORT ScPreview::Paint( const Rectangle& /* rRect */ )
 }
 //Issue51656 Add resizeable margin on page preview from maoyg
 
-void __EXPORT ScPreview::Command( const CommandEvent& rCEvt )
+void ScPreview::Command( const CommandEvent& rCEvt )
 {
     USHORT nCmd = rCEvt.GetCommand();
     if ( nCmd == COMMAND_WHEEL || nCmd == COMMAND_STARTAUTOSCROLL || nCmd == COMMAND_AUTOSCROLL )
@@ -688,7 +688,7 @@ void __EXPORT ScPreview::Command( const CommandEvent& rCEvt )
 }
 
 
-void __EXPORT ScPreview::KeyInput( const KeyEvent& rKEvt )
+void ScPreview::KeyInput( const KeyEvent& rKEvt )
 {
     //  The + and - keys can't be configured as accelerator entries, so they must be handled directly
     //  (in ScPreview, not ScPreviewShell -> only if the preview window has the focus)
@@ -1010,7 +1010,7 @@ void ScPreview::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 //Issue51656 Add resizeable margin on page preview from maoyg
-void __EXPORT ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
+void ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
 {
     Fraction  aPreviewZoom( nZoom, 100 );
     Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
@@ -1093,7 +1093,7 @@ void __EXPORT ScPreview::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
+void ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
 {
         Fraction  aPreviewZoom( nZoom, 100 );
         Fraction  aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );
@@ -1340,7 +1340,7 @@ void __EXPORT ScPreview::MouseButtonUp( const MouseEvent& rMEvt )
         ReleaseMouse();
 }
 
-void __EXPORT ScPreview::MouseMove( const MouseEvent& rMEvt )
+void ScPreview::MouseMove( const MouseEvent& rMEvt )
 {
     Fraction aPreviewZoom( nZoom, 100 );
     Fraction aHorPrevZoom( (long)( 100 * nZoom / pDocShell->GetOutputFactor() ), 10000 );

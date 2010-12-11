@@ -160,7 +160,7 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScNameDlg::~ScNameDlg()
+ScNameDlg::~ScNameDlg()
 {
     DELETEZ( pSaveObj );
 }
@@ -168,7 +168,7 @@ __EXPORT ScNameDlg::~ScNameDlg()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScNameDlg::Init()
+void ScNameDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;
@@ -252,7 +252,7 @@ void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-BOOL __EXPORT ScNameDlg::Close()
+BOOL ScNameDlg::Close()
 {
     return DoClose( ScNameDlgWrapper::GetChildWindowId() );
 }
@@ -269,7 +269,7 @@ void ScNameDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScNameDlg::UpdateChecks()
+void ScNameDlg::UpdateChecks()
 {
     USHORT       nCurPos=0;
 
@@ -314,7 +314,7 @@ void __EXPORT ScNameDlg::UpdateChecks()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScNameDlg::UpdateNames()
+void ScNameDlg::UpdateNames()
 {
     USHORT  nRangeCount = aLocalRangeName.GetCount();
 
@@ -359,7 +359,7 @@ void __EXPORT ScNameDlg::UpdateNames()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScNameDlg::CalcCurTableAssign( String& aAssign, USHORT nCurPos )
+void ScNameDlg::CalcCurTableAssign( String& aAssign, USHORT nCurPos )
 {
     ScRangeData* pRangeData = (ScRangeData*)(aLocalRangeName.At( nCurPos ));
 

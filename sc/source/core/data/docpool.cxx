@@ -380,7 +380,7 @@ ScDocumentPool::ScDocumentPool( SfxItemPool* pSecPool, BOOL bLoadRefCounts )
     SetVersionMap( 11, 100, 187, pVersionMap11 );
 }
 
-__EXPORT ScDocumentPool::~ScDocumentPool()
+ScDocumentPool::~ScDocumentPool()
 {
     Delete();
 
@@ -597,7 +597,7 @@ void ScDocumentPool::DeleteVersionMaps()
 //  wird (Assertions).
 //
 
-const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
+const SfxPoolItem& ScDocumentPool::Put( const SfxPoolItem& rItem, USHORT nWhich )
 {
     if ( rItem.Which() != ATTR_PATTERN )                // nur Pattern ist special
         return SfxItemPool::Put( rItem, nWhich );
@@ -612,7 +612,7 @@ const SfxPoolItem& __EXPORT ScDocumentPool::Put( const SfxPoolItem& rItem, USHOR
     return rNew;
 }
 
-void __EXPORT ScDocumentPool::Remove( const SfxPoolItem& rItem )
+void ScDocumentPool::Remove( const SfxPoolItem& rItem )
 {
     if ( rItem.Which() == ATTR_PATTERN )                // nur Pattern ist special
     {
@@ -676,7 +676,7 @@ void ScDocumentPool::CellStyleCreated( const String& rName )
     }
 }
 
-SfxItemPool* __EXPORT ScDocumentPool::Clone() const
+SfxItemPool* ScDocumentPool::Clone() const
 {
     return new SfxItemPool (*this, TRUE);
 }
@@ -784,7 +784,7 @@ SfxItemPresentation lcl_HFPresentation
     return ePresentation;
 }
 
-SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
+SfxItemPresentation ScDocumentPool::GetPresentation(
     const SfxPoolItem&  rItem,
     SfxItemPresentation ePresentation,
     SfxMapUnit          ePresentationMetric,
@@ -1030,7 +1030,7 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
     return ePresentation;
 }
 
-SfxMapUnit __EXPORT ScDocumentPool::GetMetric( USHORT nWhich ) const
+SfxMapUnit ScDocumentPool::GetMetric( USHORT nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 

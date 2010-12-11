@@ -73,7 +73,7 @@ using namespace com::sun::star;
 // STATIC DATA -----------------------------------------------------------
 
 
-void __EXPORT ScTabView::Init()
+void ScTabView::Init()
 {
     /*  RTL layout of the view windows is done manually, because it depends on
         the sheet orientation, not the UI setting. Note: controls that are
@@ -148,7 +148,7 @@ void __EXPORT ScTabView::Init()
     TestHintWindow();
 }
 
-__EXPORT ScTabView::~ScTabView()
+ScTabView::~ScTabView()
 {
     USHORT i;
 

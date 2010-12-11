@@ -407,12 +407,12 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
         SvTreeListBox::KeyInput(rKEvt);
 }
 
-//BOOL __EXPORT ScContentTree::Drop( const DropEvent& rEvt )
+//BOOL ScContentTree::Drop( const DropEvent& rEvt )
 //{
 //  return pParentWindow->Drop(rEvt);           // Drop auf Navigator
 //}
 
-//BOOL __EXPORT ScContentTree::QueryDrop( DropEvent& rEvt )
+//BOOL ScContentTree::QueryDrop( DropEvent& rEvt )
 //{
 //  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
 //}
@@ -436,7 +436,7 @@ void ScContentTree::DragFinished( sal_Int8 /* nAction */ )
 {
 }
 
-void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
+void ScContentTree::Command( const CommandEvent& rCEvt )
 {
     BOOL bDone = FALSE;
 
@@ -531,7 +531,7 @@ void __EXPORT ScContentTree::Command( const CommandEvent& rCEvt )
         SvTreeListBox::Command(rCEvt);
 }
 
-void __EXPORT ScContentTree::RequestHelp( const HelpEvent& rHEvt )
+void ScContentTree::RequestHelp( const HelpEvent& rHEvt )
 {
     BOOL bDone = FALSE;
     if( rHEvt.GetMode() & HELPMODE_QUICK )

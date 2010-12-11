@@ -83,17 +83,17 @@ ScInputStatusItem::ScInputStatusItem( const ScInputStatusItem& rItem )
 {
 }
 
-__EXPORT ScInputStatusItem::~ScInputStatusItem()
+ScInputStatusItem::~ScInputStatusItem()
 {
     delete pEditData;
 }
 
-String __EXPORT ScInputStatusItem::GetValueText() const
+String ScInputStatusItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("InputStatus"));
 }
 
-int __EXPORT ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
+int ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -104,7 +104,7 @@ int __EXPORT ScInputStatusItem::operator==( const SfxPoolItem& rItem ) const
                                                         //! Edit-Daten vergleichen!
 }
 
-SfxPoolItem* __EXPORT ScInputStatusItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScInputStatusItem::Clone( SfxItemPool * ) const
 {
     return new ScInputStatusItem( *this );
 }
@@ -190,20 +190,20 @@ ScSortItem::ScSortItem( const ScSortItem& rItem ) :
 {
 }
 
-__EXPORT ScSortItem::~ScSortItem()
+ScSortItem::~ScSortItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScSortItem::GetValueText() const
+String ScSortItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SortItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScSortItem::operator==( const SfxPoolItem& rItem ) const
+int ScSortItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -215,7 +215,7 @@ int __EXPORT ScSortItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScSortItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScSortItem::Clone( SfxItemPool * ) const
 {
     return new ScSortItem( *this );
 }
@@ -265,7 +265,7 @@ ScQueryItem::ScQueryItem( const ScQueryItem& rItem ) :
 {
 }
 
-__EXPORT ScQueryItem::~ScQueryItem()
+ScQueryItem::~ScQueryItem()
 {
 }
 
@@ -290,14 +290,14 @@ BOOL ScQueryItem::GetAdvancedQuerySource(ScRange& rSource) const
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScQueryItem::GetValueText() const
+String ScQueryItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("QueryItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScQueryItem::operator==( const SfxPoolItem& rItem ) const
+int ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -311,7 +311,7 @@ int __EXPORT ScQueryItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScQueryItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScQueryItem::Clone( SfxItemPool * ) const
 {
     return new ScQueryItem( *this );
 }
@@ -348,20 +348,20 @@ ScSubTotalItem::ScSubTotalItem( const ScSubTotalItem& rItem ) :
 {
 }
 
-__EXPORT ScSubTotalItem::~ScSubTotalItem()
+ScSubTotalItem::~ScSubTotalItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScSubTotalItem::GetValueText() const
+String ScSubTotalItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("SubTotalItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
+int ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -373,7 +373,7 @@ int __EXPORT ScSubTotalItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScSubTotalItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScSubTotalItem::Clone( SfxItemPool * ) const
 {
     return new ScSubTotalItem( *this );
 }
@@ -408,21 +408,21 @@ ScUserListItem::ScUserListItem( const ScUserListItem& rItem )
         pUserList = NULL;
 }
 
-__EXPORT ScUserListItem::~ScUserListItem()
+ScUserListItem::~ScUserListItem()
 {
     delete pUserList;
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScUserListItem::GetValueText() const
+String ScUserListItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScUserListItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScUserListItem::operator==( const SfxPoolItem& rItem ) const
+int ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -440,7 +440,7 @@ int __EXPORT ScUserListItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScUserListItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScUserListItem::Clone( SfxItemPool * ) const
 {
     return new ScUserListItem( *this );
 }
@@ -475,20 +475,20 @@ ScConsolidateItem::ScConsolidateItem( const ScConsolidateItem& rItem ) :
 
 //------------------------------------------------------------------------
 
-__EXPORT ScConsolidateItem::~ScConsolidateItem()
+ScConsolidateItem::~ScConsolidateItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScConsolidateItem::GetValueText() const
+String ScConsolidateItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScConsolidateItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
+int ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -499,7 +499,7 @@ int __EXPORT ScConsolidateItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScConsolidateItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScConsolidateItem::Clone( SfxItemPool * ) const
 {
     return new ScConsolidateItem( *this );
 }
@@ -535,21 +535,21 @@ ScPivotItem::ScPivotItem( const ScPivotItem& rItem ) :
 
 //------------------------------------------------------------------------
 
-__EXPORT ScPivotItem::~ScPivotItem()
+ScPivotItem::~ScPivotItem()
 {
     delete pSaveData;
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScPivotItem::GetValueText() const
+String ScPivotItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScPivotItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScPivotItem::operator==( const SfxPoolItem& rItem ) const
+int ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -562,7 +562,7 @@ int __EXPORT ScPivotItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScPivotItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScPivotItem::Clone( SfxItemPool * ) const
 {
     return new ScPivotItem( *this );
 }
@@ -589,20 +589,20 @@ ScSolveItem::ScSolveItem( const ScSolveItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScSolveItem::~ScSolveItem()
+ScSolveItem::~ScSolveItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScSolveItem::GetValueText() const
+String ScSolveItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScSolveItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScSolveItem::operator==( const SfxPoolItem& rItem ) const
+int ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -613,7 +613,7 @@ int __EXPORT ScSolveItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScSolveItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScSolveItem::Clone( SfxItemPool * ) const
 {
     return new ScSolveItem( *this );
 }
@@ -639,20 +639,20 @@ ScTabOpItem::ScTabOpItem( const ScTabOpItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTabOpItem::~ScTabOpItem()
+ScTabOpItem::~ScTabOpItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScTabOpItem::GetValueText() const
+String ScTabOpItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScTabOpItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
+int ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -663,7 +663,7 @@ int __EXPORT ScTabOpItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTabOpItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTabOpItem::Clone( SfxItemPool * ) const
 {
     return new ScTabOpItem( *this );
 }
@@ -692,20 +692,20 @@ ScCondFrmtItem::ScCondFrmtItem( const ScCondFrmtItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScCondFrmtItem::~ScCondFrmtItem()
+ScCondFrmtItem::~ScCondFrmtItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScCondFrmtItem::GetValueText() const
+String ScCondFrmtItem::GetValueText() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ScCondFrmtItem"));
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
+int ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -716,7 +716,7 @@ int __EXPORT ScCondFrmtItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScCondFrmtItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScCondFrmtItem::Clone( SfxItemPool * ) const
 {
     return new ScCondFrmtItem( *this );
 }

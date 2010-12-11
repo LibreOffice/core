@@ -75,7 +75,7 @@ SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 #*
 #************************************************************************/
 
-__EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
+ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
                                     USHORT nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo ) :
@@ -183,7 +183,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
 #*
 #************************************************************************/
 
-__EXPORT ScFunctionDockWin::~ScFunctionDockWin()
+ScFunctionDockWin::~ScFunctionDockWin()
 {
     EndListening( GetBindings() );
 }
@@ -643,7 +643,7 @@ void ScFunctionDockWin::SetDescription()
 #*
 #************************************************************************/
 
-void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
+void ScFunctionDockWin::Resizing( Size& rNewSize )
 {
     if((ULONG)rNewSize.Width()<nMinWidth) rNewSize.Width()=nMinWidth;
     if((ULONG)rNewSize.Height()<nMinHeight) rNewSize.Height()=nMinHeight;
@@ -664,7 +664,7 @@ void __EXPORT ScFunctionDockWin::Resizing( Size& rNewSize )
 #*
 #************************************************************************/
 
-BOOL __EXPORT ScFunctionDockWin::Close()
+BOOL ScFunctionDockWin::Close()
 {
     SfxBoolItem aItem( FID_FUNCTION_BOX, FALSE );
 
@@ -692,7 +692,7 @@ BOOL __EXPORT ScFunctionDockWin::Close()
 #*  Output:     Das uebergebene Alignment
 #*
 #************************************************************************/
-SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
+SfxChildAlignment ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
     String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
@@ -787,7 +787,7 @@ void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 #*
 #************************************************************************/
 
-void __EXPORT ScFunctionDockWin::Resize()
+void ScFunctionDockWin::Resize()
 {
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )

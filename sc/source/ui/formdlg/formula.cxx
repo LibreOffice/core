@@ -265,7 +265,7 @@ void ScFormulaDlg::fill()
     }
 }
 
-__EXPORT ScFormulaDlg::~ScFormulaDlg()
+ScFormulaDlg::~ScFormulaDlg()
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
@@ -320,7 +320,7 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
 }
 
 
-BOOL __EXPORT ScFormulaDlg::Close()
+BOOL ScFormulaDlg::Close()
 {
     DoEnter(FALSE);
     return TRUE;

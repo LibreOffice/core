@@ -244,7 +244,7 @@ void ScAcceptChgDlg::ReInit(ScViewData* ptrViewData)
     }
 }
 
-void __EXPORT ScAcceptChgDlg::Init()
+void ScAcceptChgDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;

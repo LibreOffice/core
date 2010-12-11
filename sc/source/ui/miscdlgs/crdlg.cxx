@@ -71,7 +71,7 @@ ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScColOrRowDlg::~ScColOrRowDlg()
+ScColOrRowDlg::~ScColOrRowDlg()
 {
 }
 

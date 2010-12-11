@@ -64,7 +64,7 @@ ScClient::ScClient( ScTabViewShell* pViewShell, Window* pDraw, SdrModel* pSdrMod
     SetObject( pObj->GetObjRef() );
 }
 
-__EXPORT ScClient::~ScClient()
+ScClient::~ScClient()
 {
 }
 
@@ -94,7 +94,7 @@ SdrOle2Obj* ScClient::GetDrawObj()
     return pOle2Obj;
 }
 
-void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
+void ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
@@ -156,7 +156,7 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
     }
 }
 
-void __EXPORT ScClient::ObjectAreaChanged()
+void ScClient::ObjectAreaChanged()
 {
     SfxViewShell* pSfxViewSh = GetViewShell();
     ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
@@ -184,7 +184,7 @@ void __EXPORT ScClient::ObjectAreaChanged()
         pViewSh->ScrollToObject( pDrawObj );
 }
 
-void __EXPORT ScClient::ViewChanged()
+void ScClient::ViewChanged()
 {
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
@@ -243,7 +243,7 @@ void __EXPORT ScClient::ViewChanged()
     }
 }
 
-void __EXPORT ScClient::MakeVisible()
+void ScClient::MakeVisible()
 {
     SdrOle2Obj* pDrawObj = GetDrawObj();
     if (pDrawObj)

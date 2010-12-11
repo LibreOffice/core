@@ -139,7 +139,7 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DrawText")));
 }
 
-__EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
+ScDrawTextObjectBar::~ScDrawTextObjectBar()
 {
     if ( pClipEvtLstnr )
     {
@@ -159,7 +159,7 @@ __EXPORT ScDrawTextObjectBar::~ScDrawTextObjectBar()
 //
 //========================================================================
 
-void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
+void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
     ScDrawView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
@@ -373,7 +373,7 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
+void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
 {
     SfxViewFrame* pViewFrm = pViewData->GetViewShell()->GetViewFrame();
     BOOL bHasFontWork = pViewFrm->HasChildWindow(SID_FONTWORK);
@@ -501,7 +501,7 @@ IMPL_LINK( ScDrawTextObjectBar, ClipboardChanged, TransferableDataHelper*, pData
     return 0;
 }
 
-void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
+void ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 {
     SdrView* pView = pViewData->GetScDrawView();
     if ( !pView->GetTextEditOutlinerView() )
@@ -562,7 +562,7 @@ void __EXPORT ScDrawTextObjectBar::GetClipState( SfxItemSet& rSet )
 //
 //========================================================================
 
-void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 {
     //  Unterstreichung
 
@@ -677,7 +677,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
     rOutView.SetSelection( aOldSel );
 }
 
-void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
 {
     SdrView*            pView = pViewData->GetScDrawView();
     const SfxItemSet*   pArgs = rReq.GetArgs();
@@ -876,7 +876,7 @@ void __EXPORT ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
+void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 {
     if ( IsNoteEdit() )
     {

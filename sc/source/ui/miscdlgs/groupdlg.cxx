@@ -76,7 +76,7 @@ BOOL ScGroupDlg::GetColsChecked() const
 
 //------------------------------------------------------------------------
 
-__EXPORT ScGroupDlg::~ScGroupDlg()
+ScGroupDlg::~ScGroupDlg()
 {
 }
 

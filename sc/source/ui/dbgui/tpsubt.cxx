@@ -93,7 +93,7 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTpSubTotalGroup::~ScTpSubTotalGroup()
+ScTpSubTotalGroup::~ScTpSubTotalGroup()
 {
     USHORT  nCount = (USHORT)aLbColumns.GetEntryCount();
 
@@ -134,7 +134,7 @@ void ScTpSubTotalGroup::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTpSubTotalGroup::GetRanges()
+USHORT* ScTpSubTotalGroup::GetRanges()
 {
     return pSubTotalsRanges;
 }
@@ -439,19 +439,19 @@ IMPL_LINK( ScTpSubTotalGroup, CheckHdl, ListBox *, pLb )
 //========================================================================
 // Abgeleitete Gruppen-TabPages:
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup1::Create( Window*            pParent,
+SfxTabPage* ScTpSubTotalGroup1::Create( Window*         pParent,
                                                  const SfxItemSet&  rArgSet )
     { return ( new ScTpSubTotalGroup1( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup2::Create( Window*             pParent,
+SfxTabPage* ScTpSubTotalGroup2::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup2( pParent, rArgSet ) ); }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalGroup3::Create( Window*             pParent,
+SfxTabPage* ScTpSubTotalGroup3::Create( Window*          pParent,
                                        const SfxItemSet&    rArgSet )
     { return ( new ScTpSubTotalGroup3( pParent, rArgSet ) ); }
 
@@ -474,11 +474,11 @@ ScTpSubTotalGroup3::ScTpSubTotalGroup3( Window* pParent, const SfxItemSet& rArgS
 
 #define RESET(i) (ScTpSubTotalGroup::DoReset( (i), rArgSet ))
 
-void __EXPORT ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
+void ScTpSubTotalGroup1::Reset( const SfxItemSet& rArgSet ) { RESET(1); }
 
-void __EXPORT ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
+void ScTpSubTotalGroup2::Reset( const SfxItemSet& rArgSet ) { RESET(2); }
 
-void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
+void ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3); }
 
 #undef RESET
 
@@ -486,11 +486,11 @@ void __EXPORT ScTpSubTotalGroup3::Reset( const SfxItemSet& rArgSet ) { RESET(3);
 
 #define FILLSET(i) (ScTpSubTotalGroup::DoFillItemSet( (i), rArgSet ))
 
-BOOL __EXPORT ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
+BOOL ScTpSubTotalGroup1::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(1); }
 
-BOOL __EXPORT ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
+BOOL ScTpSubTotalGroup2::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(2); }
 
-BOOL __EXPORT ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
+BOOL ScTpSubTotalGroup3::FillItemSet( SfxItemSet& rArgSet ) { return FILLSET(3); }
 
 #undef FILL
 
@@ -528,7 +528,7 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTpSubTotalOptions::~ScTpSubTotalOptions()
+ScTpSubTotalOptions::~ScTpSubTotalOptions()
 {
 }
 
@@ -552,7 +552,7 @@ void ScTpSubTotalOptions::Init()
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent,
+SfxTabPage* ScTpSubTotalOptions::Create( Window*                 pParent,
                                           const SfxItemSet&     rArgSet )
 {
     return ( new ScTpSubTotalOptions( pParent, rArgSet ) );
@@ -560,7 +560,7 @@ SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     aBtnPagebreak.Check ( rSubTotalData.bPagebreak );
     aBtnCase.Check      ( rSubTotalData.bCaseSens );
@@ -587,7 +587,7 @@ void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTpSubTotalOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSubTotalParam theSubTotalData;            // auslesen, wenn schon teilweise gefuellt
     SfxTabDialog* pDlg = GetTabDialog();
@@ -673,15 +673,15 @@ IMPL_LINK( ScTpSubTotalOptions, CheckHdl, CheckBox *, pBox )
     return 0;
 }
 
-__EXPORT ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
+ScTpSubTotalGroup1::~ScTpSubTotalGroup1()
 {
 }
 
-__EXPORT ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
+ScTpSubTotalGroup2::~ScTpSubTotalGroup2()
 {
 }
 
-__EXPORT ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
+ScTpSubTotalGroup3::~ScTpSubTotalGroup3()
 {
 }
 

@@ -76,7 +76,7 @@ FuConstCustomShape::~FuConstCustomShape()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -114,7 +114,7 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -125,7 +125,7 @@ BOOL __EXPORT FuConstCustomShape::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -150,7 +150,7 @@ BOOL __EXPORT FuConstCustomShape::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstCustomShape::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);

@@ -159,7 +159,7 @@ void FuDraw::ResetModifiers()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -174,7 +174,7 @@ BOOL __EXPORT FuDraw::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuDraw::MouseMove(const MouseEvent& rMEvt)
+BOOL FuDraw::MouseMove(const MouseEvent& rMEvt)
 {
     //  #106438# evaluate modifiers only if in a drawing layer action
     //  (don't interfere with keyboard shortcut handling)
@@ -190,7 +190,7 @@ BOOL __EXPORT FuDraw::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuDraw::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -241,7 +241,7 @@ BOOL lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const KeyEven
     return bReturn;
 }
 
-BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
+BOOL FuDraw::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
     ScViewData& rViewData = *pViewShell->GetViewData();

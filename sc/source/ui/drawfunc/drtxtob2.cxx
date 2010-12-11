@@ -70,7 +70,7 @@ BOOL ScDrawTextObjectBar::IsNoteEdit()
 
 //  wenn kein Text editiert wird, Funktionen wie in drawsh
 
-void __EXPORT ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteGlobal( SfxRequest &rReq )
 {
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
@@ -148,7 +148,7 @@ void ScDrawTextObjectBar::GetGlobalClipState( SfxItemSet& rSet )
     }
 }
 
-void __EXPORT ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecuteExtra( SfxRequest &rReq )
 {
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();

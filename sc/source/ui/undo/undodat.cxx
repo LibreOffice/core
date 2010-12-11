@@ -99,19 +99,19 @@ ScUndoDoOutline::ScUndoDoOutline( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoDoOutline::~ScUndoDoOutline()
+ScUndoDoOutline::~ScUndoDoOutline()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoDoOutline::GetComment() const
+String ScUndoDoOutline::GetComment() const
 {   // Detail einblenden" "Detail ausblenden"
     return bShow ?
         ScGlobal::GetRscString( STR_UNDO_DOOUTLINE ) :
         ScGlobal::GetRscString( STR_UNDO_REDOOUTLINE );
 }
 
-void __EXPORT ScUndoDoOutline::Undo()
+void ScUndoDoOutline::Undo()
 {
     BeginUndo();
 
@@ -146,7 +146,7 @@ void __EXPORT ScUndoDoOutline::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoDoOutline::Redo()
+void ScUndoDoOutline::Redo()
 {
     BeginRedo();
 
@@ -166,11 +166,11 @@ void __EXPORT ScUndoDoOutline::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDoOutline::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoDoOutline::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDoOutline::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoDoOutline::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht
 }
@@ -192,19 +192,19 @@ ScUndoMakeOutline::ScUndoMakeOutline( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoMakeOutline::~ScUndoMakeOutline()
+ScUndoMakeOutline::~ScUndoMakeOutline()
 {
     delete pUndoTable;
 }
 
-String __EXPORT ScUndoMakeOutline::GetComment() const
+String ScUndoMakeOutline::GetComment() const
 {   // "Gruppierung" "Gruppierung aufheben"
     return bMake ?
         ScGlobal::GetRscString( STR_UNDO_MAKEOUTLINE ) :
         ScGlobal::GetRscString( STR_UNDO_REMAKEOUTLINE );
 }
 
-void __EXPORT ScUndoMakeOutline::Undo()
+void ScUndoMakeOutline::Undo()
 {
     BeginUndo();
 
@@ -225,7 +225,7 @@ void __EXPORT ScUndoMakeOutline::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoMakeOutline::Redo()
+void ScUndoMakeOutline::Redo()
 {
     BeginRedo();
 
@@ -243,7 +243,7 @@ void __EXPORT ScUndoMakeOutline::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -256,7 +256,7 @@ void __EXPORT ScUndoMakeOutline::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoMakeOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -280,18 +280,18 @@ ScUndoOutlineLevel::ScUndoOutlineLevel( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoOutlineLevel::~ScUndoOutlineLevel()
+ScUndoOutlineLevel::~ScUndoOutlineLevel()
 {
     delete pUndoDoc;
     delete pUndoTable;
 }
 
-String __EXPORT ScUndoOutlineLevel::GetComment() const
+String ScUndoOutlineLevel::GetComment() const
 {   // "Gliederungsebene auswaehlen";
     return ScGlobal::GetRscString( STR_UNDO_OUTLINELEVEL );
 }
 
-void __EXPORT ScUndoOutlineLevel::Undo()
+void ScUndoOutlineLevel::Undo()
 {
     BeginUndo();
 
@@ -323,7 +323,7 @@ void __EXPORT ScUndoOutlineLevel::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoOutlineLevel::Redo()
+void ScUndoOutlineLevel::Redo()
 {
     BeginRedo();
 
@@ -340,13 +340,13 @@ void __EXPORT ScUndoOutlineLevel::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoOutlineLevel::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->SelectLevel( bColumns, nLevel, TRUE );
 }
 
-BOOL __EXPORT ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoOutlineLevel::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -368,20 +368,20 @@ ScUndoOutlineBlock::ScUndoOutlineBlock( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoOutlineBlock::~ScUndoOutlineBlock()
+ScUndoOutlineBlock::~ScUndoOutlineBlock()
 {
     delete pUndoDoc;
     delete pUndoTable;
 }
 
-String __EXPORT ScUndoOutlineBlock::GetComment() const
+String ScUndoOutlineBlock::GetComment() const
 {   // "Detail einblenden" "Detail ausblenden"
     return bShow ?
         ScGlobal::GetRscString( STR_UNDO_DOOUTLINEBLK ) :
         ScGlobal::GetRscString( STR_UNDO_REDOOUTLINEBLK );
 }
 
-void __EXPORT ScUndoOutlineBlock::Undo()
+void ScUndoOutlineBlock::Undo()
 {
     BeginUndo();
 
@@ -426,7 +426,7 @@ void __EXPORT ScUndoOutlineBlock::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoOutlineBlock::Redo()
+void ScUndoOutlineBlock::Redo()
 {
     BeginRedo();
 
@@ -441,7 +441,7 @@ void __EXPORT ScUndoOutlineBlock::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -454,7 +454,7 @@ void __EXPORT ScUndoOutlineBlock::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoOutlineBlock::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -475,18 +475,18 @@ ScUndoRemoveAllOutlines::ScUndoRemoveAllOutlines( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoRemoveAllOutlines::~ScUndoRemoveAllOutlines()
+ScUndoRemoveAllOutlines::~ScUndoRemoveAllOutlines()
 {
     delete pUndoDoc;
     delete pUndoTable;
 }
 
-String __EXPORT ScUndoRemoveAllOutlines::GetComment() const
+String ScUndoRemoveAllOutlines::GetComment() const
 {   // "Gliederung entfernen"
     return ScGlobal::GetRscString( STR_UNDO_REMOVEALLOTLNS );
 }
 
-void __EXPORT ScUndoRemoveAllOutlines::Undo()
+void ScUndoRemoveAllOutlines::Undo()
 {
     BeginUndo();
 
@@ -521,7 +521,7 @@ void __EXPORT ScUndoRemoveAllOutlines::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoRemoveAllOutlines::Redo()
+void ScUndoRemoveAllOutlines::Redo()
 {
     BeginRedo();
 
@@ -539,13 +539,13 @@ void __EXPORT ScUndoRemoveAllOutlines::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRemoveAllOutlines::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveAllOutlines( TRUE );
 }
 
-BOOL __EXPORT ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoRemoveAllOutlines::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -566,18 +566,18 @@ ScUndoAutoOutline::ScUndoAutoOutline( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoAutoOutline::~ScUndoAutoOutline()
+ScUndoAutoOutline::~ScUndoAutoOutline()
 {
     delete pUndoDoc;
     delete pUndoTable;
 }
 
-String __EXPORT ScUndoAutoOutline::GetComment() const
+String ScUndoAutoOutline::GetComment() const
 {   // "Auto-Gliederung"
     return ScGlobal::GetRscString( STR_UNDO_AUTOOUTLINE );
 }
 
-void __EXPORT ScUndoAutoOutline::Undo()
+void ScUndoAutoOutline::Undo()
 {
     BeginUndo();
 
@@ -617,7 +617,7 @@ void __EXPORT ScUndoAutoOutline::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoAutoOutline::Redo()
+void ScUndoAutoOutline::Redo()
 {
     BeginRedo();
 
@@ -648,13 +648,13 @@ void __EXPORT ScUndoAutoOutline::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoAutoOutline::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->AutoOutline( TRUE );
 }
 
-BOOL __EXPORT ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoAutoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -679,7 +679,7 @@ ScUndoSubTotals::ScUndoSubTotals( ScDocShell* pNewDocShell, SCTAB nNewTab,
 {
 }
 
-__EXPORT ScUndoSubTotals::~ScUndoSubTotals()
+ScUndoSubTotals::~ScUndoSubTotals()
 {
     delete pUndoDoc;
     delete pUndoTable;
@@ -687,12 +687,12 @@ __EXPORT ScUndoSubTotals::~ScUndoSubTotals()
     delete pUndoDB;
 }
 
-String __EXPORT ScUndoSubTotals::GetComment() const
+String ScUndoSubTotals::GetComment() const
 {   // "Teilergebnisse"
     return ScGlobal::GetRscString( STR_UNDO_SUBTOTALS );
 }
 
-void __EXPORT ScUndoSubTotals::Undo()
+void ScUndoSubTotals::Undo()
 {
     BeginUndo();
 
@@ -770,7 +770,7 @@ void __EXPORT ScUndoSubTotals::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoSubTotals::Redo()
+void ScUndoSubTotals::Redo()
 {
     BeginRedo();
 
@@ -787,11 +787,11 @@ void __EXPORT ScUndoSubTotals::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoSubTotals::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoSubTotals::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -820,18 +820,18 @@ ScUndoSort::ScUndoSort( ScDocShell* pNewDocShell,
     }
 }
 
-__EXPORT ScUndoSort::~ScUndoSort()
+ScUndoSort::~ScUndoSort()
 {
     delete pUndoDoc;
     delete pUndoDB;
 }
 
-String __EXPORT ScUndoSort::GetComment() const
+String ScUndoSort::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_SORT );
 }
 
-void __EXPORT ScUndoSort::Undo()
+void ScUndoSort::Undo()
 {
     BeginUndo();
 
@@ -886,7 +886,7 @@ void __EXPORT ScUndoSort::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoSort::Redo()
+void ScUndoSort::Redo()
 {
     BeginRedo();
 
@@ -913,11 +913,11 @@ void __EXPORT ScUndoSort::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoSort::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoSort::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -955,7 +955,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
-__EXPORT ScUndoQuery::~ScUndoQuery()
+ScUndoQuery::~ScUndoQuery()
 {
     delete pUndoDoc;
 //  delete pUndoDBData;
@@ -963,12 +963,12 @@ __EXPORT ScUndoQuery::~ScUndoQuery()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-String __EXPORT ScUndoQuery::GetComment() const
+String ScUndoQuery::GetComment() const
 {   // "Filtern";
     return ScGlobal::GetRscString( STR_UNDO_QUERY );
 }
 
-void __EXPORT ScUndoQuery::Undo()
+void ScUndoQuery::Undo()
 {
     BeginUndo();
 
@@ -1071,7 +1071,7 @@ void __EXPORT ScUndoQuery::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoQuery::Redo()
+void ScUndoQuery::Redo()
 {
     BeginRedo();
 
@@ -1089,11 +1089,11 @@ void __EXPORT ScUndoQuery::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoQuery::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoQuery::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -1182,18 +1182,18 @@ ScUndoDBData::ScUndoDBData( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoDBData::~ScUndoDBData()
+ScUndoDBData::~ScUndoDBData()
 {
     delete pUndoColl;
     delete pRedoColl;
 }
 
-String __EXPORT ScUndoDBData::GetComment() const
+String ScUndoDBData::GetComment() const
 {   // "Datenbankbereiche aendern";
     return ScGlobal::GetRscString( STR_UNDO_DBDATA );
 }
 
-void __EXPORT ScUndoDBData::Undo()
+void ScUndoDBData::Undo()
 {
     BeginUndo();
 
@@ -1211,7 +1211,7 @@ void __EXPORT ScUndoDBData::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoDBData::Redo()
+void ScUndoDBData::Redo()
 {
     BeginRedo();
 
@@ -1229,11 +1229,11 @@ void __EXPORT ScUndoDBData::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDBData::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoDBData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht
 }
@@ -1262,7 +1262,7 @@ ScUndoImportData::ScUndoImportData( ScDocShell* pNewDocShell, SCTAB nNewTab,
     // redo doc doesn't contain imported data (but everything else)
 }
 
-__EXPORT ScUndoImportData::~ScUndoImportData()
+ScUndoImportData::~ScUndoImportData()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -1270,12 +1270,12 @@ __EXPORT ScUndoImportData::~ScUndoImportData()
     delete pRedoDBData;
 }
 
-String __EXPORT ScUndoImportData::GetComment() const
+String ScUndoImportData::GetComment() const
 {   // "Importieren";
     return ScGlobal::GetRscString( STR_UNDO_IMPORTDATA );
 }
 
-void __EXPORT ScUndoImportData::Undo()
+void ScUndoImportData::Undo()
 {
     BeginUndo();
 
@@ -1364,7 +1364,7 @@ void __EXPORT ScUndoImportData::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoImportData::Redo()
+void ScUndoImportData::Redo()
 {
     BeginRedo();
 
@@ -1436,7 +1436,7 @@ void __EXPORT ScUndoImportData::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1451,7 +1451,7 @@ void __EXPORT ScUndoImportData::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoImportData::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     //  Repeat nur fuer Import per DB-Bereich, dann ist pUndoDBData gesetzt
 
@@ -1490,7 +1490,7 @@ ScUndoRepeatDB::ScUndoRepeatDB( ScDocShell* pNewDocShell, SCTAB nNewTab,
     }
 }
 
-__EXPORT ScUndoRepeatDB::~ScUndoRepeatDB()
+ScUndoRepeatDB::~ScUndoRepeatDB()
 {
     delete pUndoDoc;
     delete pUndoTable;
@@ -1498,12 +1498,12 @@ __EXPORT ScUndoRepeatDB::~ScUndoRepeatDB()
     delete pUndoDB;
 }
 
-String __EXPORT ScUndoRepeatDB::GetComment() const
+String ScUndoRepeatDB::GetComment() const
 {   // "Wiederholen";       //! bessere Beschreibung!
     return ScGlobal::GetRscString( STR_UNDO_REPEATDB );
 }
 
-void __EXPORT ScUndoRepeatDB::Undo()
+void ScUndoRepeatDB::Undo()
 {
     BeginUndo();
 
@@ -1603,7 +1603,7 @@ void __EXPORT ScUndoRepeatDB::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoRepeatDB::Redo()
+void ScUndoRepeatDB::Redo()
 {
     BeginRedo();
 
@@ -1623,13 +1623,13 @@ void __EXPORT ScUndoRepeatDB::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRepeatDB::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->RepeatDB( TRUE );
 }
 
-BOOL __EXPORT ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoRepeatDB::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1654,7 +1654,7 @@ ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
         pNewDPObject = new ScDPObject( *pNewObj );
 }
 
-__EXPORT ScUndoDataPilot::~ScUndoDataPilot()
+ScUndoDataPilot::~ScUndoDataPilot()
 {
     delete pOldDPObject;
     delete pNewDPObject;
@@ -1662,7 +1662,7 @@ __EXPORT ScUndoDataPilot::~ScUndoDataPilot()
     delete pNewUndoDoc;
 }
 
-String __EXPORT ScUndoDataPilot::GetComment() const
+String ScUndoDataPilot::GetComment() const
 {
     USHORT nIndex;
     if ( pOldUndoDoc && pNewUndoDoc )
@@ -1675,7 +1675,7 @@ String __EXPORT ScUndoDataPilot::GetComment() const
     return ScGlobal::GetRscString( nIndex );
 }
 
-void __EXPORT ScUndoDataPilot::Undo()
+void ScUndoDataPilot::Undo()
 {
     BeginUndo();
 
@@ -1760,7 +1760,7 @@ void __EXPORT ScUndoDataPilot::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoDataPilot::Redo()
+void ScUndoDataPilot::Redo()
 {
     BeginRedo();
 
@@ -1787,12 +1787,12 @@ void __EXPORT ScUndoDataPilot::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDataPilot::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoDataPilot::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! allow deletion
 }
 
-BOOL __EXPORT ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     //! allow deletion
     return FALSE;
@@ -1818,19 +1818,19 @@ ScUndoConsolidate::ScUndoConsolidate( ScDocShell* pNewDocShell, const ScArea& rA
 {
 }
 
-__EXPORT ScUndoConsolidate::~ScUndoConsolidate()
+ScUndoConsolidate::~ScUndoConsolidate()
 {
     delete pUndoDoc;
     delete pUndoTab;
     delete pUndoData;
 }
 
-String __EXPORT ScUndoConsolidate::GetComment() const
+String ScUndoConsolidate::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CONSOLIDATE );
 }
 
-void __EXPORT ScUndoConsolidate::Undo()
+void ScUndoConsolidate::Undo()
 {
     BeginUndo();
 
@@ -1927,7 +1927,7 @@ void __EXPORT ScUndoConsolidate::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoConsolidate::Redo()
+void ScUndoConsolidate::Redo()
 {
     BeginRedo();
 
@@ -1944,11 +1944,11 @@ void __EXPORT ScUndoConsolidate::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoConsolidate::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoConsolidate::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1993,16 +1993,16 @@ ScUndoChartData::ScUndoChartData( ScDocShell* pNewDocShell, const String& rName,
     Init();
 }
 
-__EXPORT ScUndoChartData::~ScUndoChartData()
+ScUndoChartData::~ScUndoChartData()
 {
 }
 
-String __EXPORT ScUndoChartData::GetComment() const
+String ScUndoChartData::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CHARTDATA );
 }
 
-void __EXPORT ScUndoChartData::Undo()
+void ScUndoChartData::Undo()
 {
     BeginUndo();
 
@@ -2012,7 +2012,7 @@ void __EXPORT ScUndoChartData::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoChartData::Redo()
+void ScUndoChartData::Redo()
 {
     BeginRedo();
 
@@ -2022,11 +2022,11 @@ void __EXPORT ScUndoChartData::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoChartData::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoChartData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }

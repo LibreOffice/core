@@ -138,7 +138,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScFilterDlg::~ScFilterDlg()
+ScFilterDlg::~ScFilterDlg()
 {
     for (USHORT i=0; i<=MAXCOL; i++)
         delete pEntryLists[i];
@@ -154,7 +154,7 @@ __EXPORT ScFilterDlg::~ScFilterDlg()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
@@ -341,7 +341,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScFilterDlg::Close()
+BOOL ScFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();

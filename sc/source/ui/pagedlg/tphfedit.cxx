@@ -130,7 +130,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScEditWindow::~ScEditWindow()
+ScEditWindow::~ScEditWindow()
 {
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
@@ -153,7 +153,7 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 // -----------------------------------------------------------------------
 
-EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
+EditTextObject* ScEditWindow::CreateTextObject()
 {
     //  wegen #38841# die Absatzattribute zuruecksetzen
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
@@ -237,7 +237,7 @@ void ScEditWindow::SetCharAttriutes()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
+void ScEditWindow::Paint( const Rectangle& rRec )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -253,14 +253,14 @@ void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseMove( const MouseEvent& rMEvt )
+void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEdView->MouseMove( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !HasFocus() )
         GrabFocus();
@@ -270,14 +270,14 @@ void __EXPORT ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEdView->MouseButtonUp( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
+void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
     USHORT nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
@@ -301,7 +301,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::GetFocus()
+void ScEditWindow::GetFocus()
 {
     pActiveEdWnd = this;
 
@@ -314,7 +314,7 @@ void __EXPORT ScEditWindow::GetFocus()
         pAcc = NULL;
 }
 
-void __EXPORT ScEditWindow::LoseFocus()
+void ScEditWindow::LoseFocus()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)

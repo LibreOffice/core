@@ -87,7 +87,7 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScMetricInputDlg::~ScMetricInputDlg()
+ScMetricInputDlg::~ScMetricInputDlg()
 {
 }
 

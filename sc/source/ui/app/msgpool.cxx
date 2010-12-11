@@ -94,7 +94,7 @@ ScMessagePool::ScMessagePool()
 }
 
 
-__EXPORT ScMessagePool::~ScMessagePool()
+ScMessagePool::~ScMessagePool()
 {
     Delete();
     SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
@@ -108,7 +108,7 @@ __EXPORT ScMessagePool::~ScMessagePool()
 }
 
 
-SfxMapUnit __EXPORT ScMessagePool::GetMetric( USHORT nWhich ) const
+SfxMapUnit ScMessagePool::GetMetric( USHORT nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 

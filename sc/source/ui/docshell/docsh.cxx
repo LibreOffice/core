@@ -204,7 +204,7 @@ TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-I
 
 //------------------------------------------------------------------
 
-void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
+void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         sal_uInt32* pFormat,
                                         String* /* pAppName */,
                                         String* pFullTypeName,
@@ -484,7 +484,7 @@ BOOL ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
     return bRet;
 }
 
-BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
+BOOL ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
@@ -534,7 +534,7 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
     if ( xVbaEvents.is() ) try
@@ -967,7 +967,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     // Inhalte fuer Organizer laden
 
 
-BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
+BOOL ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
@@ -1022,7 +1022,7 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     rDateConvert = static_cast<bool>(aTokens[1].toInt32());
 }
 
-BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
+BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
 
@@ -1557,7 +1557,7 @@ ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 }
 
 
-BOOL __EXPORT ScDocShell::Save()
+BOOL ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
@@ -1573,7 +1573,7 @@ BOOL __EXPORT ScDocShell::Save()
 }
 
 
-BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
+BOOL ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
@@ -1603,7 +1603,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 }
 
 
-BOOL __EXPORT ScDocShell::IsInformationLost()
+BOOL ScDocShell::IsInformationLost()
 {
 /*
     const SfxFilter *pFilt = GetMedium()->GetFilter();
@@ -2055,7 +2055,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     rStream.SetNumberFormatInt( nOldNumberFormatInt );
 }
 
-BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
+BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
 
@@ -2324,13 +2324,13 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 }
 
 
-BOOL __EXPORT ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
+BOOL ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
 {
     return SfxObjectShell::SaveCompleted( xStor );
 }
 
 
-BOOL __EXPORT ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
+BOOL ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 {
     BOOL bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
 
@@ -2379,7 +2379,7 @@ sal_Bool ScDocShell::QuerySlotExecutable( USHORT nSlotId )
 }
 
 
-USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+USHORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
@@ -2585,7 +2585,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
 
 //------------------------------------------------------------------
 
-__EXPORT ScDocShell::~ScDocShell()
+ScDocShell::~ScDocShell()
 {
     ResetDrawObjectShell(); // #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
 
@@ -2622,7 +2622,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
 //------------------------------------------------------------------
 
-SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
+SfxUndoManager* ScDocShell::GetUndoManager()
 {
     return aDocument.GetUndoManager();
 }
@@ -2749,7 +2749,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 }
 
 
-SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
+SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
                                          Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );

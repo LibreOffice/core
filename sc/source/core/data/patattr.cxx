@@ -121,12 +121,12 @@ ScPatternAttr::ScPatternAttr( const ScPatternAttr& rPatternAttr )
         pName = NULL;
 }
 
-__EXPORT ScPatternAttr::~ScPatternAttr()
+ScPatternAttr::~ScPatternAttr()
 {
     delete pName;
 }
 
-SfxPoolItem* __EXPORT ScPatternAttr::Clone( SfxItemPool *pPool ) const
+SfxPoolItem* ScPatternAttr::Clone( SfxItemPool *pPool ) const
 {
     ScPatternAttr* pPattern = new ScPatternAttr( GetItemSet().Clone(TRUE, pPool) );
 
@@ -156,7 +156,7 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }
 
-int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
+int ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
 {
     // #i62090# Use quick comparison between ScPatternAttr's ItemSets
 
@@ -164,7 +164,7 @@ int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
-SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersion */ ) const
+SfxPoolItem* ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersion */ ) const
 {
     String* pStr;
     BOOL    bHasStyle;
@@ -192,7 +192,7 @@ SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersi
     return pPattern;
 }
 
-SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT /* nItemVersion */) const
+SvStream& ScPatternAttr::Store(SvStream& rStream, USHORT /* nItemVersion */) const
 {
     rStream << (BOOL)TRUE;
 

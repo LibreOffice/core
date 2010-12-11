@@ -168,13 +168,13 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScHFEditDlg::~ScHFEditDlg()
+ScHFEditDlg::~ScHFEditDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScHFEditDlg::PageCreated( USHORT /* nId */, SfxTabPage& rPage )
+void ScHFEditDlg::PageCreated( USHORT /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 

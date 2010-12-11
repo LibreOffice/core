@@ -131,14 +131,14 @@ ScUndoInsertCells::ScUndoInsertCells( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoInsertCells::~ScUndoInsertCells()
+ScUndoInsertCells::~ScUndoInsertCells()
 {
     delete pPasteUndo;
     delete []pTabs;
     delete []pScenarios;
 }
 
-String __EXPORT ScUndoInsertCells::GetComment() const
+String ScUndoInsertCells::GetComment() const
 {
     return ScGlobal::GetRscString( pPasteUndo ? STR_UNDO_PASTE : STR_UNDO_INSERTCELLS );
 }
@@ -294,7 +294,7 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
         pViewShell->CellContentChanged();
 }
 
-void __EXPORT ScUndoInsertCells::Undo()
+void ScUndoInsertCells::Undo()
 {
     if ( pPasteUndo )
         pPasteUndo->Undo();     // undo paste first
@@ -305,7 +305,7 @@ void __EXPORT ScUndoInsertCells::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoInsertCells::Redo()
+void ScUndoInsertCells::Redo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
@@ -316,7 +316,7 @@ void __EXPORT ScUndoInsertCells::Redo()
         pPasteUndo->Redo();     // redo paste last
 }
 
-void __EXPORT ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -332,7 +332,7 @@ void __EXPORT ScUndoInsertCells::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoInsertCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -370,13 +370,13 @@ ScUndoDeleteCells::ScUndoDeleteCells( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoDeleteCells::~ScUndoDeleteCells()
+ScUndoDeleteCells::~ScUndoDeleteCells()
 {
     delete []pTabs;
     delete []pScenarios;
 }
 
-String __EXPORT ScUndoDeleteCells::GetComment() const
+String ScUndoDeleteCells::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS ); // "Loeschen"
 }
@@ -529,7 +529,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
     //  CellContentChanged kommt mit der Markierung
 }
 
-void __EXPORT ScUndoDeleteCells::Undo()
+void ScUndoDeleteCells::Undo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
@@ -548,7 +548,7 @@ void __EXPORT ScUndoDeleteCells::Undo()
     }
 }
 
-void __EXPORT ScUndoDeleteCells::Redo()
+void ScUndoDeleteCells::Redo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
@@ -561,13 +561,13 @@ void __EXPORT ScUndoDeleteCells::Redo()
         pViewShell->DoneBlockMode();            // aktuelle weg
 }
 
-void __EXPORT ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoDeleteCells::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( eCmd, TRUE );
 }
 
-BOOL __EXPORT ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoDeleteCells::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -593,12 +593,12 @@ ScUndoDeleteMulti::ScUndoDeleteMulti( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoDeleteMulti::~ScUndoDeleteMulti()
+ScUndoDeleteMulti::~ScUndoDeleteMulti()
 {
     delete [] pRanges;
 }
 
-String __EXPORT ScUndoDeleteMulti::GetComment() const
+String ScUndoDeleteMulti::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECELLS );  // wie DeleteCells
 }
@@ -675,7 +675,7 @@ void ScUndoDeleteMulti::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoDeleteMulti::Undo()
+void ScUndoDeleteMulti::Undo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
@@ -721,7 +721,7 @@ void __EXPORT ScUndoDeleteMulti::Undo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoDeleteMulti::Redo()
+void ScUndoDeleteMulti::Redo()
 {
     WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
@@ -753,14 +753,14 @@ void __EXPORT ScUndoDeleteMulti::Redo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoDeleteMulti::Repeat(SfxRepeatTarget& rTarget)
 {
     //  DeleteCells, falls einfache Selektion
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->DeleteCells( DEL_DELROWS, TRUE );
 }
 
-BOOL __EXPORT ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoDeleteMulti::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -782,12 +782,12 @@ ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoCut::~ScUndoCut()
+ScUndoCut::~ScUndoCut()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoCut::GetComment() const
+String ScUndoCut::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_CUT ); // "Ausschneiden"
 }
@@ -842,14 +842,14 @@ void ScUndoCut::DoChange( const BOOL bUndo )
         pViewShell->CellContentChanged();
 }
 
-void __EXPORT ScUndoCut::Undo()
+void ScUndoCut::Undo()
 {
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
 }
 
-void __EXPORT ScUndoCut::Redo()
+void ScUndoCut::Redo()
 {
     BeginRedo();
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -859,13 +859,13 @@ void __EXPORT ScUndoCut::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoCut::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->CutToClip( NULL, TRUE );
 }
 
-BOOL __EXPORT ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoCut::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -910,7 +910,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoPaste::~ScUndoPaste()
+ScUndoPaste::~ScUndoPaste()
 {
     delete pUndoDoc;
     delete pRedoDoc;
@@ -918,7 +918,7 @@ __EXPORT ScUndoPaste::~ScUndoPaste()
     delete pRefRedoData;
 }
 
-String __EXPORT ScUndoPaste::GetComment() const
+String ScUndoPaste::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_PASTE ); // "Einfuegen"
 }
@@ -1086,7 +1086,7 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
         pViewShell->CellContentChanged();
 }
 
-void __EXPORT ScUndoPaste::Undo()
+void ScUndoPaste::Undo()
 {
     BeginUndo();
     DoChange( TRUE );
@@ -1095,7 +1095,7 @@ void __EXPORT ScUndoPaste::Undo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoPaste::Redo()
+void ScUndoPaste::Redo()
 {
     BeginRedo();
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -1106,7 +1106,7 @@ void __EXPORT ScUndoPaste::Redo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1124,7 +1124,7 @@ void __EXPORT ScUndoPaste::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoPaste::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1166,11 +1166,11 @@ ScUndoDragDrop::ScUndoDragDrop( ScDocShell* pNewDocShell,
     SetChangeTrack();
 }
 
-__EXPORT ScUndoDragDrop::~ScUndoDragDrop()
+ScUndoDragDrop::~ScUndoDragDrop()
 {
 }
 
-String __EXPORT ScUndoDragDrop::GetComment() const
+String ScUndoDragDrop::GetComment() const
 {   // "Verschieben" : "Kopieren"
     return bCut ?
         ScGlobal::GetRscString( STR_UNDO_MOVE ) :
@@ -1276,7 +1276,7 @@ void ScUndoDragDrop::DoUndo( ScRange aRange ) const
     PaintArea( aPaintRange, nExtFlags );
 }
 
-void __EXPORT ScUndoDragDrop::Undo()
+void ScUndoDragDrop::Undo()
 {
     BeginUndo();
     DoUndo(aDestRange);
@@ -1286,7 +1286,7 @@ void __EXPORT ScUndoDragDrop::Undo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoDragDrop::Redo()
+void ScUndoDragDrop::Redo()
 {
     BeginRedo();
 
@@ -1369,11 +1369,11 @@ void __EXPORT ScUndoDragDrop::Redo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;           // geht nicht
 }
@@ -1393,13 +1393,13 @@ ScUndoListNames::ScUndoListNames( ScDocShell* pNewDocShell, const ScRange& rRang
 {
 }
 
-__EXPORT ScUndoListNames::~ScUndoListNames()
+ScUndoListNames::~ScUndoListNames()
 {
     delete pUndoDoc;
     delete pRedoDoc;
 }
 
-String __EXPORT ScUndoListNames::GetComment() const
+String ScUndoListNames::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_LISTNAMES );
 }
@@ -1417,27 +1417,27 @@ void ScUndoListNames::DoChange( ScDocument* pSrcDoc ) const
         pViewShell->CellContentChanged();
 }
 
-void __EXPORT ScUndoListNames::Undo()
+void ScUndoListNames::Undo()
 {
     BeginUndo();
     DoChange(pUndoDoc);
     EndUndo();
 }
 
-void __EXPORT ScUndoListNames::Redo()
+void ScUndoListNames::Redo()
 {
     BeginRedo();
     DoChange(pRedoDoc);
     EndRedo();
 }
 
-void __EXPORT ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoListNames::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->InsertNameList();
 }
 
-BOOL __EXPORT ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoListNames::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1467,17 +1467,17 @@ ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
     aRange.aEnd.SetTab(rDestArea.nTab);
 }
 
-__EXPORT ScUndoUseScenario::~ScUndoUseScenario()
+ScUndoUseScenario::~ScUndoUseScenario()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoUseScenario::GetComment() const
+String ScUndoUseScenario::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_USESCENARIO );
 }
 
-void __EXPORT ScUndoUseScenario::Undo()
+void ScUndoUseScenario::Undo()
 {
     BeginUndo();
 
@@ -1532,7 +1532,7 @@ void __EXPORT ScUndoUseScenario::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoUseScenario::Redo()
+void ScUndoUseScenario::Redo()
 {
     SCTAB nTab = aRange.aStart.Tab();
     BeginRedo();
@@ -1550,7 +1550,7 @@ void __EXPORT ScUndoUseScenario::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1559,7 +1559,7 @@ void __EXPORT ScUndoUseScenario::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoUseScenario::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1590,12 +1590,12 @@ ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
     aMarkData.MarkToMulti();
 }
 
-__EXPORT ScUndoSelectionStyle::~ScUndoSelectionStyle()
+ScUndoSelectionStyle::~ScUndoSelectionStyle()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoSelectionStyle::GetComment() const
+String ScUndoSelectionStyle::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_APPLYCELLSTYLE );
 }
@@ -1644,21 +1644,21 @@ void ScUndoSelectionStyle::DoChange( const BOOL bUndo )
     ShowTable( aWorkRange.aStart.Tab() );
 }
 
-void __EXPORT ScUndoSelectionStyle::Undo()
+void ScUndoSelectionStyle::Undo()
 {
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
 }
 
-void __EXPORT ScUndoSelectionStyle::Redo()
+void ScUndoSelectionStyle::Redo()
 {
     BeginRedo();
     DoChange( FALSE );
     EndRedo();
 }
 
-void __EXPORT ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1677,12 +1677,12 @@ void __EXPORT ScUndoSelectionStyle::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoSelectionStyle::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
 
-USHORT __EXPORT ScUndoSelectionStyle::GetId() const
+USHORT ScUndoSelectionStyle::GetId() const
 {
     return STR_UNDO_APPLYCELLSTYLE;
 }
@@ -1702,12 +1702,12 @@ ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& r
     SetChangeTrack();
 }
 
-__EXPORT ScUndoEnterMatrix::~ScUndoEnterMatrix()
+ScUndoEnterMatrix::~ScUndoEnterMatrix()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoEnterMatrix::GetComment() const
+String ScUndoEnterMatrix::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_ENTERMATRIX );
 }
@@ -1723,7 +1723,7 @@ void ScUndoEnterMatrix::SetChangeTrack()
         nStartChangeAction = nEndChangeAction = 0;
 }
 
-void __EXPORT ScUndoEnterMatrix::Undo()
+void ScUndoEnterMatrix::Undo()
 {
     BeginUndo();
 
@@ -1744,7 +1744,7 @@ void __EXPORT ScUndoEnterMatrix::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoEnterMatrix::Redo()
+void ScUndoEnterMatrix::Redo()
 {
     BeginRedo();
 
@@ -1764,7 +1764,7 @@ void __EXPORT ScUndoEnterMatrix::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1773,7 +1773,7 @@ void __EXPORT ScUndoEnterMatrix::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoEnterMatrix::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1801,18 +1801,18 @@ ScUndoIndent::ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
 {
 }
 
-__EXPORT ScUndoIndent::~ScUndoIndent()
+ScUndoIndent::~ScUndoIndent()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoIndent::GetComment() const
+String ScUndoIndent::GetComment() const
 {
     USHORT nId = bIsIncrement ? STR_UNDO_INC_INDENT : STR_UNDO_DEC_INDENT;
     return ScGlobal::GetRscString( nId );
 }
 
-void __EXPORT ScUndoIndent::Undo()
+void ScUndoIndent::Undo()
 {
     BeginUndo();
 
@@ -1827,7 +1827,7 @@ void __EXPORT ScUndoIndent::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoIndent::Redo()
+void ScUndoIndent::Redo()
 {
     BeginRedo();
 
@@ -1838,13 +1838,13 @@ void __EXPORT ScUndoIndent::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoIndent::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->ChangeIndent( bIsIncrement );
 }
 
-BOOL __EXPORT ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoIndent::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1863,17 +1863,17 @@ ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMark
 {
 }
 
-__EXPORT ScUndoTransliterate::~ScUndoTransliterate()
+ScUndoTransliterate::~ScUndoTransliterate()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoTransliterate::GetComment() const
+String ScUndoTransliterate::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_TRANSLITERATE );
 }
 
-void __EXPORT ScUndoTransliterate::Undo()
+void ScUndoTransliterate::Undo()
 {
     BeginUndo();
 
@@ -1888,7 +1888,7 @@ void __EXPORT ScUndoTransliterate::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoTransliterate::Redo()
+void ScUndoTransliterate::Redo()
 {
     BeginRedo();
 
@@ -1899,13 +1899,13 @@ void __EXPORT ScUndoTransliterate::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoTransliterate::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->TransliterateText( nTransliterationType );
 }
 
-BOOL __EXPORT ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoTransliterate::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1932,18 +1932,18 @@ ScUndoClearItems::ScUndoClearItems( ScDocShell* pNewDocShell, const ScMarkData& 
         pWhich[i] = pW[i];
 }
 
-__EXPORT ScUndoClearItems::~ScUndoClearItems()
+ScUndoClearItems::~ScUndoClearItems()
 {
     delete pUndoDoc;
     delete pWhich;
 }
 
-String __EXPORT ScUndoClearItems::GetComment() const
+String ScUndoClearItems::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_DELETECONTENTS );
 }
 
-void __EXPORT ScUndoClearItems::Undo()
+void ScUndoClearItems::Undo()
 {
     BeginUndo();
 
@@ -1954,7 +1954,7 @@ void __EXPORT ScUndoClearItems::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoClearItems::Redo()
+void ScUndoClearItems::Redo()
 {
     BeginRedo();
 
@@ -1965,7 +1965,7 @@ void __EXPORT ScUndoClearItems::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -1975,7 +1975,7 @@ void __EXPORT ScUndoClearItems::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoClearItems::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -1993,17 +1993,17 @@ ScUndoRemoveBreaks::ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
+ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoRemoveBreaks::GetComment() const
+String ScUndoRemoveBreaks::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMOVEBREAKS );
 }
 
-void __EXPORT ScUndoRemoveBreaks::Undo()
+void ScUndoRemoveBreaks::Undo()
 {
     BeginUndo();
 
@@ -2018,7 +2018,7 @@ void __EXPORT ScUndoRemoveBreaks::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoRemoveBreaks::Redo()
+void ScUndoRemoveBreaks::Redo()
 {
     BeginRedo();
 
@@ -2034,7 +2034,7 @@ void __EXPORT ScUndoRemoveBreaks::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
     {
@@ -2043,7 +2043,7 @@ void __EXPORT ScUndoRemoveBreaks::Repeat(SfxRepeatTarget& rTarget)
     }
 }
 
-BOOL __EXPORT ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoRemoveBreaks::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -2061,17 +2061,17 @@ ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
 {
 }
 
-__EXPORT ScUndoRemoveMerge::~ScUndoRemoveMerge()
+ScUndoRemoveMerge::~ScUndoRemoveMerge()
 {
     delete pUndoDoc;
 }
 
-String __EXPORT ScUndoRemoveMerge::GetComment() const
+String ScUndoRemoveMerge::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_REMERGE );  // "Zusammenfassung aufheben"
 }
 
-void __EXPORT ScUndoRemoveMerge::Undo()
+void ScUndoRemoveMerge::Undo()
 {
     using ::std::set;
 
@@ -2102,7 +2102,7 @@ void __EXPORT ScUndoRemoveMerge::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoRemoveMerge::Redo()
+void ScUndoRemoveMerge::Redo()
 {
     using ::std::set;
 
@@ -2149,13 +2149,13 @@ void __EXPORT ScUndoRemoveMerge::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRemoveMerge::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->RemoveMerge();
 }
 
-BOOL __EXPORT ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoRemoveMerge::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }
@@ -2203,7 +2203,7 @@ ScUndoBorder::ScUndoBorder( ScDocShell* pNewDocShell,
     pInner = new SvxBoxInfoItem(rNewInner);
 }
 
-__EXPORT ScUndoBorder::~ScUndoBorder()
+ScUndoBorder::~ScUndoBorder()
 {
     delete pUndoDoc;
     delete pRanges;
@@ -2211,12 +2211,12 @@ __EXPORT ScUndoBorder::~ScUndoBorder()
     delete pInner;
 }
 
-String __EXPORT ScUndoBorder::GetComment() const
+String ScUndoBorder::GetComment() const
 {
     return ScGlobal::GetRscString( STR_UNDO_SELATTRLINES );     //! eigener String?
 }
 
-void __EXPORT ScUndoBorder::Undo()
+void ScUndoBorder::Undo()
 {
     BeginUndo();
 
@@ -2252,12 +2252,12 @@ void ScUndoBorder::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoBorder::Repeat(SfxRepeatTarget& /* rTarget */)
+void ScUndoBorder::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! spaeter (wenn die Funktion aus cellsuno nach docfunc gewandert ist)
 }
 
-BOOL __EXPORT ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
+BOOL ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;   // s.o.
 }

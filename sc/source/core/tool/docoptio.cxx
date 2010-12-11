@@ -224,20 +224,20 @@ ScTpCalcItem::ScTpCalcItem( const ScTpCalcItem& rItem )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTpCalcItem::~ScTpCalcItem()
+ScTpCalcItem::~ScTpCalcItem()
 {
 }
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScTpCalcItem::GetValueText() const
+String ScTpCalcItem::GetValueText() const
 {
     return String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("ScTpCalcItem") );
 }
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
+int ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 {
     DBG_ASSERT( SfxPoolItem::operator==( rItem ), "unequal Which or Type" );
 
@@ -248,7 +248,7 @@ int __EXPORT ScTpCalcItem::operator==( const SfxPoolItem& rItem ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT ScTpCalcItem::Clone( SfxItemPool * ) const
+SfxPoolItem* ScTpCalcItem::Clone( SfxItemPool * ) const
 {
     return new ScTpCalcItem( *this );
 }

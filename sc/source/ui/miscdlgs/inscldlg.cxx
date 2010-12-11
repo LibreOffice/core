@@ -113,7 +113,7 @@ InsCellCmd ScInsertCellDlg::GetInsCellCmd() const
     return nReturn;
 }
 
-__EXPORT ScInsertCellDlg::~ScInsertCellDlg()
+ScInsertCellDlg::~ScInsertCellDlg()
 {
 }
 

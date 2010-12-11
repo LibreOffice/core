@@ -119,7 +119,7 @@ ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
 
 //  GetInfo fliegt wieder raus, wenn es ein SFX_IMPL_TOOLBOX gibt !!!!
 
-SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
+SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     return aInfo;
@@ -224,7 +224,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     pImgMgr->RegisterToolBox( this );
 }
 
-__EXPORT ScInputWindow::~ScInputWindow()
+ScInputWindow::~ScInputWindow()
 {
     BOOL bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
 
@@ -327,7 +327,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
     return bSubTotal;
 }
 
-void __EXPORT ScInputWindow::Select()
+void ScInputWindow::Select()
 {
     ScModule* pScMod = SC_MOD();
     ToolBox::Select();
@@ -485,7 +485,7 @@ void __EXPORT ScInputWindow::Select()
     }
 }
 
-void __EXPORT ScInputWindow::Resize()
+void ScInputWindow::Resize()
 {
     ToolBox::Resize();
 
@@ -601,12 +601,12 @@ void ScInputWindow::SetFormulaMode( BOOL bSet )
     aTextWindow.SetFormulaMode(bSet);
 }
 
-void __EXPORT ScInputWindow::SetText( const String& rString )
+void ScInputWindow::SetText( const String& rString )
 {
     ToolBox::SetText(rString);
 }
 
-String __EXPORT ScInputWindow::GetText() const
+String ScInputWindow::GetText() const
 {
     return ToolBox::GetText();
 }
@@ -748,7 +748,7 @@ ScTextWnd::ScTextWnd( Window* pParent )
     SetPointer          ( POINTER_TEXT );
 }
 
-__EXPORT ScTextWnd::~ScTextWnd()
+ScTextWnd::~ScTextWnd()
 {
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
@@ -757,7 +757,7 @@ __EXPORT ScTextWnd::~ScTextWnd()
     delete pEditEngine;
 }
 
-void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
+void ScTextWnd::Paint( const Rectangle& rRec )
 {
     if (pEditView)
         pEditView->Paint( rRec );
@@ -783,7 +783,7 @@ void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
     }
 }
 
-void __EXPORT ScTextWnd::Resize()
+void ScTextWnd::Resize()
 {
     if (pEditView)
     {
@@ -804,13 +804,13 @@ void __EXPORT ScTextWnd::Resize()
     }
 }
 
-void __EXPORT ScTextWnd::MouseMove( const MouseEvent& rMEvt )
+void ScTextWnd::MouseMove( const MouseEvent& rMEvt )
 {
     if (pEditView)
         pEditView->MouseMove( rMEvt );
 }
 
-void __EXPORT ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!HasFocus())
     {
@@ -826,7 +826,7 @@ void __EXPORT ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
+void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (pEditView)
         if (pEditView->MouseButtonUp( rMEvt ))
@@ -842,7 +842,7 @@ void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
         }
 }
 
-void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
+void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
     bInputMode = TRUE;
     USHORT nCommand = rCEvt.GetCommand();
@@ -916,7 +916,7 @@ void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     }
 }
 
-void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
+void ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 {
     bInputMode = TRUE;
     if (!SC_MOD()->InputKeyEvent( rKEvt ))
@@ -931,18 +931,18 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
     bInputMode = FALSE;
 }
 
-void __EXPORT ScTextWnd::GetFocus()
+void ScTextWnd::GetFocus()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
         pViewSh->SetFormShellAtTop( FALSE );     // focus in input line -> FormShell no longer on top
 }
 
-void __EXPORT ScTextWnd::LoseFocus()
+void ScTextWnd::LoseFocus()
 {
 }
 
-String __EXPORT ScTextWnd::GetText() const
+String ScTextWnd::GetText() const
 {
     //  ueberladen, um per Testtool an den Text heranzukommen
 
@@ -1374,7 +1374,7 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
     StartListening( *SFX_APP() );       // fuer Navigator-Bereichsnamen-Updates
 }
 
-__EXPORT ScPosWnd::~ScPosWnd()
+ScPosWnd::~ScPosWnd()
 {
     EndListening( *SFX_APP() );
 
@@ -1630,7 +1630,7 @@ void ScPosWnd::Modify()
     }
 }
 
-void __EXPORT ScPosWnd::Select()
+void ScPosWnd::Select()
 {
     ComboBox::Select();     //  in VCL gibt GetText() erst danach den ausgewaehlten Eintrag
 
@@ -1726,7 +1726,7 @@ void ScPosWnd::DoEnter()
     ReleaseFocus_Impl();
 }
 
-long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
+long ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
 

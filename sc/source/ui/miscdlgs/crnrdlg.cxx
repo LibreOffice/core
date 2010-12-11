@@ -132,7 +132,7 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 #*
 #************************************************************************/
 
-__EXPORT ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
+ScColRowNameRangesDlg::~ScColRowNameRangesDlg()
 {
 }
 
@@ -444,7 +444,7 @@ void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pD
 #*
 #************************************************************************/
 
-BOOL __EXPORT ScColRowNameRangesDlg::Close()
+BOOL ScColRowNameRangesDlg::Close()
 {
     return DoClose( ScColRowNameRangesDlgWrapper::GetChildWindowId() );
 }

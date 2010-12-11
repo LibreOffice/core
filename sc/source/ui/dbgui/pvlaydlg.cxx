@@ -200,7 +200,7 @@ ScDPFieldWindow& ScDPLayoutDlg::GetFieldWindow( ScDPFieldType eType )
     return aWndSelect;
 }
 
-void __EXPORT ScDPLayoutDlg::Init(bool bNewOutput)
+void ScDPLayoutDlg::Init(bool bNewOutput)
 {
     DBG_ASSERT( pViewData && pDoc,
                 "Ctor-Initialisierung fehlgeschlagen!" );
@@ -361,7 +361,7 @@ void __EXPORT ScDPLayoutDlg::Init(bool bNewOutput)
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScDPLayoutDlg::Close()
+BOOL ScDPLayoutDlg::Close()
 {
     return DoClose( ScPivotLayoutWrapper::GetChildWindowId() );
 }

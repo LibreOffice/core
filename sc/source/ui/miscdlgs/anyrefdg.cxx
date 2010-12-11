@@ -817,14 +817,14 @@ BOOL ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::IsRefInputMode() const
+BOOL ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::DoClose( USHORT nId )
+BOOL ScRefHandler::DoClose( USHORT nId )
 {
     m_aHelper.DoClose(nId);
     return TRUE;
@@ -851,7 +851,7 @@ void ScRefHandler::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::IsTableLocked() const
+BOOL ScRefHandler::IsTableLocked() const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
 

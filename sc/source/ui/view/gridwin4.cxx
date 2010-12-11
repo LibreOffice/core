@@ -310,7 +310,7 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScGridWindow::PrePaint()
+void ScGridWindow::PrePaint()
 {
     // forward PrePaint to DrawingLayer
     ScTabViewShell* pTabViewShell = pViewData->GetViewShell();
@@ -328,7 +328,7 @@ void __EXPORT ScGridWindow::PrePaint()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
+void ScGridWindow::Paint( const Rectangle& rRect )
 {
     //TODO/LATER: how to get environment? Do we need that?!
     /*
