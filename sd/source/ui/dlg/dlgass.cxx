@@ -81,11 +81,13 @@
 #include "WindowUpdater.hxx"
 
 #include <comphelper/processfactory.hxx>
+#include <vector>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::sd;
 
+using ::std::vector;
 
 void InterpolateFixedBitmap( FixedBitmap * pBitmap )
 {
@@ -116,8 +118,6 @@ public:
     String maPassword;
     String maPath;
 };
-
-DECLARE_LIST( PasswordEntryList, PasswordEntry * )
 
 // ====================================================================
 
@@ -208,7 +208,7 @@ public:
     String GetPassword( const String rPath );
     void DeletePassords();
 
-    PasswordEntryList maPasswordList;
+    vector< PasswordEntry* > maPasswordList;
 
     String maDocFile;
     String maLayoutFile;
@@ -1674,21 +1674,21 @@ void AssistentDlgImpl::SavePassword( SfxObjectShellLock xDoc, const String& rPat
             if(aPass.Len() == 0)
                 return;
 
-            PasswordEntry* pEntry = maPasswordList.First();
-            while(pEntry)
+            PasswordEntry* pEntry = NULL;
+            for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
             {
-                if(pEntry->maPath == rPath)
+                if ( maPasswordList[ i ]->maPath == rPath )
+                {
+                    pEntry = maPasswordList[ i ];
                     break;
-
-                pEntry = maPasswordList.Next();
-
+                }
             }
 
             if(pEntry == NULL)
             {
                 pEntry = new PasswordEntry();
                 pEntry->maPath = rPath;
-                maPasswordList.Insert( pEntry );
+                maPasswordList.push_back( pEntry );
             }
 
             if(pEntry)
@@ -1708,26 +1708,20 @@ void AssistentDlgImpl::RestorePassword( SfxItemSet* pSet, const String& rPath )
 
 String AssistentDlgImpl::GetPassword( const String rPath )
 {
-    PasswordEntry* pEntry = maPasswordList.First();
-    while(pEntry)
+    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
     {
+        PasswordEntry* pEntry = maPasswordList[ i ];
         if(pEntry->maPath == rPath)
             return pEntry->maPassword;
-
-        pEntry = maPasswordList.Next();
     }
-
     return String();
 }
 
 void AssistentDlgImpl::DeletePassords()
 {
-    PasswordEntry* pEntry = maPasswordList.First();
-    while(pEntry)
-    {
-        delete pEntry;
-        pEntry = maPasswordList.Next();
-    }
+    for ( size_t i = 0, n = maPasswordList.size(); i < n; ++i )
+        delete maPasswordList[ i ];
+    maPasswordList.clear();
 }
 
 BOOL AssistentDlgImpl::IsOwnFormat( const String& rPath )
