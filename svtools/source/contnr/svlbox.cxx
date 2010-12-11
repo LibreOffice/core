@@ -737,7 +737,7 @@ SvLBox::SvLBox( Window* pParent, const ResId& rResId ) :
     SetType(WINDOW_TREELISTBOX);
 }
 
-__EXPORT SvLBox::~SvLBox()
+SvLBox::~SvLBox()
 {
     DBG_DTOR(SvLBox,0);
     delete pEdCtrl;

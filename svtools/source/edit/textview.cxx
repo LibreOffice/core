@@ -2386,11 +2386,11 @@ TextSelFunctionSet::TextSelFunctionSet( TextView* pView )
     mpView = pView;
 }
 
-void __EXPORT TextSelFunctionSet::BeginDrag()
+void TextSelFunctionSet::BeginDrag()
 {
 }
 
-void __EXPORT TextSelFunctionSet::CreateAnchor()
+void TextSelFunctionSet::CreateAnchor()
 {
 //  TextSelection aSel( mpView->GetSelection() );
 //  aSel.GetStart() = aSel.GetEnd();
@@ -2401,27 +2401,27 @@ void __EXPORT TextSelFunctionSet::CreateAnchor()
     mpView->ImpSetSelection( mpView->mpImpl->maSelection.GetEnd() );
 }
 
-BOOL __EXPORT TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
+BOOL TextSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
 {
     return mpView->SetCursorAtPoint( rPointPixel );
 }
 
-BOOL __EXPORT TextSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+BOOL TextSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     return mpView->IsSelectionAtPoint( rPointPixel );
 }
 
-void __EXPORT TextSelFunctionSet::DeselectAll()
+void TextSelFunctionSet::DeselectAll()
 {
     CreateAnchor();
 }
 
-void __EXPORT TextSelFunctionSet::DeselectAtPoint( const Point& )
+void TextSelFunctionSet::DeselectAtPoint( const Point& )
 {
     // Nur bei Mehrfachselektion
 }
 
-void __EXPORT TextSelFunctionSet::DestroyAnchor()
+void TextSelFunctionSet::DestroyAnchor()
 {
     // Nur bei Mehrfachselektion
 }

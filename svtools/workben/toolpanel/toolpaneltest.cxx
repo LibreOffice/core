@@ -860,7 +860,7 @@ Reference< XMultiServiceFactory > PanelDemo::createApplicationServiceManager()
 }
 
 //-----------------------------------------------------------------------------
-int __EXPORT PanelDemo::Main()
+int PanelDemo::Main()
 {
     // create service factory
     Reference< XMultiServiceFactory >  xSMgr = createApplicationServiceManager();

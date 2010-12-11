@@ -415,7 +415,7 @@ ULONG SvTabListBox::GetEntryPos( const SvLBoxEntry* pEntry ) const
     return 0xffffffff;
 }
 
-void __EXPORT SvTabListBox::Resize()
+void SvTabListBox::Resize()
 {
     SvTreeListBox::Resize();
 }

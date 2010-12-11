@@ -83,7 +83,7 @@ SvxListBox::SvxListBox(Window* pParent, const ResId& rId):
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-__EXPORT SvxListBox::~SvxListBox()
+SvxListBox::~SvxListBox()
 {
     aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
@@ -351,7 +351,7 @@ SvxComboBox::SvxComboBox(Window* pParent, const ResId& rId, USHORT nStyleBits ):
      Beschreibung: Basisklasse Dtor
  --------------------------------------------------------------------*/
 
-__EXPORT SvxComboBox::~SvxComboBox()
+SvxComboBox::~SvxComboBox()
 {
     aEntryLst.DeleteAndDestroy(0,   aEntryLst.Count());
     aDelEntryLst.DeleteAndDestroy(0, aDelEntryLst.Count());
@@ -575,7 +575,7 @@ void SvxComboBox::InsertSorted(SvxBoxEntry* pEntry)
     Beschreibung: Je nach Option bestimmte Zeichen ausblenden
  --------------------------------------------------------------------*/
 
-void __EXPORT SvxComboBox::KeyInput( const KeyEvent& rKEvt )
+void SvxComboBox::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Unicode cChar = rKEvt.GetCharCode();
 

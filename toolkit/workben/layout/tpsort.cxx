@@ -148,7 +148,7 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTabPageSortFields::~ScTabPageSortFields()
+ScTabPageSortFields::~ScTabPageSortFields()
 {
 }
 
@@ -192,14 +192,14 @@ void ScTabPageSortFields::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTabPageSortFields::GetRanges()
+USHORT* ScTabPageSortFields::GetRanges()
 {
     return pSortRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*   pParent,
+SfxTabPage* ScTabPageSortFields::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTabPageSortFields( pParent, rArgSet ) );
@@ -207,7 +207,7 @@ SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*   pParent,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
     bSortByRows = rSortData.bByRow;
     bHasHeader  = rSortData.bHasHeader;
@@ -267,7 +267,7 @@ void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam theSortData = rSortData;
     if (pDlg)
@@ -338,7 +338,7 @@ BOOL __EXPORT ScTabPageSortFields::FillItemSet( SfxItemSet& rArgSet )
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
 // void ScTabPageSortFields::ActivatePage( const SfxItemSet& rSet )
 
-void __EXPORT ScTabPageSortFields::ActivatePage()
+void ScTabPageSortFields::ActivatePage()
 {
     if ( pDlg )
     {
@@ -361,7 +361,7 @@ void __EXPORT ScTabPageSortFields::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
+int ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
     {
@@ -615,7 +615,7 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTabPageSortOptions::~ScTabPageSortOptions()
+ScTabPageSortOptions::~ScTabPageSortOptions()
 {
 #if !TEST_LAYOUT
     USHORT nEntries = aLbOutPos.GetEntryCount();
@@ -738,7 +738,7 @@ void ScTabPageSortOptions::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
+USHORT* ScTabPageSortOptions::GetRanges()
 {
     return pSortRanges;
 }
@@ -748,7 +748,7 @@ USHORT* __EXPORT ScTabPageSortOptions::GetRanges()
 #if ENABLE_LAYOUT
 #undef SfxTabPage
 #endif /* ENABLE_LAYOUT */
-SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
+SfxTabPage* ScTabPageSortOptions::Create(
                                             Window*             pParent,
                                             const SfxItemSet&   rArgSet )
 {
@@ -757,7 +757,7 @@ SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
+void ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     if ( rSortData.bUserDef )
     {
@@ -827,7 +827,7 @@ void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 {
     ScSortParam theSortData = rSortData;
     if (pDlg)
@@ -878,7 +878,7 @@ BOOL __EXPORT ScTabPageSortOptions::FillItemSet( SfxItemSet& rArgSet )
 
 // fuer Datenaustausch ohne Dialog-Umweg: (! noch zu tun !)
 // void ScTabPageSortOptions::ActivatePage( const SfxItemSet& rSet )
-void __EXPORT ScTabPageSortOptions::ActivatePage()
+void ScTabPageSortOptions::ActivatePage()
 {
     if ( pDlg )
     {
@@ -901,7 +901,7 @@ void __EXPORT ScTabPageSortOptions::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
+int ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     BOOL bPosInputOk = TRUE;
 
@@ -1037,7 +1037,7 @@ IMPL_LINK( ScTabPageSortOptions, SortDirHdl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
+void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 {
     if ( pEd == &aEdOutPos )
     {

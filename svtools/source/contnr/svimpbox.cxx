@@ -2670,7 +2670,7 @@ BOOL SvImpLBox::KeyInput( const KeyEvent& rKEvt)
     return bKeyUsed;
 }
 
-void __EXPORT SvImpLBox::GetFocus()
+void SvImpLBox::GetFocus()
 {
     if( pCursor )
     {
@@ -2706,7 +2706,7 @@ void __EXPORT SvImpLBox::GetFocus()
     }
 }
 
-void __EXPORT SvImpLBox::LoseFocus()
+void SvImpLBox::LoseFocus()
 {
     aEditTimer.Stop();
     if( pCursor )
@@ -2736,7 +2736,7 @@ inline void SvImpLBox::SelectEntry( SvLBoxEntry* pEntry, BOOL bSelect )
     pView->Select( pEntry, bSelect );
 }
 
-__EXPORT ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
+ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
     SvTreeListBox* pV )
 {
     pImp = pImpl;
@@ -2744,40 +2744,40 @@ __EXPORT ImpLBSelEng::ImpLBSelEng( SvImpLBox* pImpl, SelectionEngine* pSEng,
     pView = pV;
 }
 
-__EXPORT ImpLBSelEng::~ImpLBSelEng()
+ImpLBSelEng::~ImpLBSelEng()
 {
 }
 
-void __EXPORT ImpLBSelEng::BeginDrag()
+void ImpLBSelEng::BeginDrag()
 {
     pImp->BeginDrag();
 }
 
 /*
-void __EXPORT ImpLBSelEng::EndDrag( const Point& )
+void ImpLBSelEng::EndDrag( const Point& )
 {
 }
 */
 
-void __EXPORT ImpLBSelEng::CreateAnchor()
+void ImpLBSelEng::CreateAnchor()
 {
     pImp->pAnchor = pImp->pCursor;
 }
 
-void __EXPORT ImpLBSelEng::DestroyAnchor()
+void ImpLBSelEng::DestroyAnchor()
 {
     pImp->pAnchor = 0;
 }
 
 /*
-void __EXPORT ImpLBSelEng::CreateCursor()
+void ImpLBSelEng::CreateCursor()
 {
     pImp->pAnchor = 0;
 }
 */
 
 
-BOOL __EXPORT ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
+BOOL ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelectAtCursor)
 {
     SvLBoxEntry* pNewCursor = pImp->MakePointVisible( rPoint );
     if( pNewCursor != pImp->pCursor  )
@@ -2795,7 +2795,7 @@ BOOL __EXPORT ImpLBSelEng::SetCursorAtPoint(const Point& rPoint, BOOL bDontSelec
     return FALSE;
 }
 
-BOOL __EXPORT ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
+BOOL ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( pEntry )
@@ -2803,7 +2803,7 @@ BOOL __EXPORT ImpLBSelEng::IsSelectionAtPoint( const Point& rPoint )
     return FALSE;
 }
 
-void __EXPORT ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
+void ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( !pEntry )
@@ -2812,7 +2812,7 @@ void __EXPORT ImpLBSelEng::DeselectAtPoint( const Point& rPoint )
 }
 
 /*
-void __EXPORT ImpLBSelEng::SelectAtPoint( const Point& rPoint )
+void ImpLBSelEng::SelectAtPoint( const Point& rPoint )
 {
     SvLBoxEntry* pEntry = pImp->MakePointVisible( rPoint );
     if( !pEntry )
@@ -2821,7 +2821,7 @@ void __EXPORT ImpLBSelEng::SelectAtPoint( const Point& rPoint )
 }
 */
 
-void __EXPORT ImpLBSelEng::DeselectAll()
+void ImpLBSelEng::DeselectAll()
 {
     pImp->SelAllDestrAnch( FALSE, FALSE ); // SelectionEngine nicht resetten!
     pImp->nFlags &= (~F_DESEL_ALL);

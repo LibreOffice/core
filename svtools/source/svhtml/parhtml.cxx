@@ -336,7 +336,7 @@ HTMLParser::~HTMLParser()
     delete pOptions;
 }
 
-SvParserState __EXPORT HTMLParser::CallParser()
+SvParserState HTMLParser::CallParser()
 {
     eState = SVPAR_WORKING;
     nNextCh = GetNextChar();
@@ -1099,7 +1099,7 @@ int HTMLParser::_GetNextRawToken()
 }
 
 // scanne das naechste Token,
-int __EXPORT HTMLParser::_GetNextToken()
+int HTMLParser::_GetNextToken()
 {
     int nRet = 0;
     sSaveToken.Erase();

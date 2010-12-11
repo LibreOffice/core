@@ -230,27 +230,27 @@ void SvIconView::RequestingChilds( SvLBoxEntry* pParent )
         InsertEntry( String::CreateFromAscii("<dummy>"), pParent, FALSE, LIST_APPEND );
 }
 
-void __EXPORT SvIconView::Paint( const Rectangle& rRect )
+void SvIconView::Paint( const Rectangle& rRect )
 {
     pImp->Paint( rRect );
 }
 
-void __EXPORT SvIconView::MouseButtonDown( const MouseEvent& rMEvt )
+void SvIconView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pImp->MouseButtonDown( rMEvt );
 }
 
-void __EXPORT SvIconView::MouseButtonUp( const MouseEvent& rMEvt )
+void SvIconView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pImp->MouseButtonUp( rMEvt );
 }
 
-void __EXPORT SvIconView::MouseMove( const MouseEvent& rMEvt )
+void SvIconView::MouseMove( const MouseEvent& rMEvt )
 {
     pImp->MouseMove( rMEvt );
 }
 
-void __EXPORT SvIconView::KeyInput( const KeyEvent& rKEvt )
+void SvIconView::KeyInput( const KeyEvent& rKEvt )
 {
     // unter OS/2 bekommen wir auch beim Editieren Key-Up/Down
     if( IsEditingActive() )
@@ -263,19 +263,19 @@ void __EXPORT SvIconView::KeyInput( const KeyEvent& rKEvt )
     nImpFlags &= ~SVLBOX_IS_TRAVELSELECT;
 }
 
-void __EXPORT SvIconView::Resize()
+void SvIconView::Resize()
 {
     pImp->Resize();
     SvLBox::Resize();
 }
 
-void __EXPORT SvIconView::GetFocus()
+void SvIconView::GetFocus()
 {
     pImp->GetFocus();
     SvLBox::GetFocus();
 }
 
-void __EXPORT SvIconView::LoseFocus()
+void SvIconView::LoseFocus()
 {
     pImp->LoseFocus();
     SvLBox::LoseFocus();
@@ -302,46 +302,46 @@ void SvIconView::SetModel( SvLBoxTreeList* pNewModel, SvLBoxEntry* pParent )
     pImp->SetModel( pNewModel, pParent );
 }
 
-void __EXPORT SvIconView::ModelHasCleared()
+void SvIconView::ModelHasCleared()
 {
     SvLBox::ModelHasCleared();
     pImp->Clear();
 }
 
-void __EXPORT SvIconView::ModelHasInserted( SvListEntry* pEntry )
+void SvIconView::ModelHasInserted( SvListEntry* pEntry )
 {
     if( !(nIcnVwFlags & ICNVW_BLOCK_ENTRYINS ) )
         pImp->EntryInserted( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvIconView::ModelHasInsertedTree( SvListEntry* pEntry )
+void SvIconView::ModelHasInsertedTree( SvListEntry* pEntry )
 {
     pImp->TreeInserted( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvIconView::ModelIsMoving(SvListEntry* pSource,
+void SvIconView::ModelIsMoving(SvListEntry* pSource,
         SvListEntry* /* pTargetParent */ , ULONG /* nChildPos */ )
 {
     pImp->MovingEntry( (SvLBoxEntry*)pSource );
 }
 
-void __EXPORT SvIconView::ModelHasMoved(SvListEntry* pSource )
+void SvIconView::ModelHasMoved(SvListEntry* pSource )
 {
     pImp->EntryMoved( (SvLBoxEntry*)pSource );
 }
 
-void __EXPORT SvIconView::ModelIsRemoving( SvListEntry* pEntry )
+void SvIconView::ModelIsRemoving( SvListEntry* pEntry )
 {
     pImp->RemovingEntry( (SvLBoxEntry*)pEntry );
     NotifyRemoving( (SvLBoxEntry*)pEntry );
 }
 
-void __EXPORT SvIconView::ModelHasRemoved( SvListEntry* /* pEntry */ )
+void SvIconView::ModelHasRemoved( SvListEntry* /* pEntry */ )
 {
     pImp->EntryRemoved();
 }
 
-void __EXPORT SvIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
+void SvIconView::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     // die einzelnen Items des Entries reinitialisieren
     SvLBox::ModelHasEntryInvalidated( pEntry );

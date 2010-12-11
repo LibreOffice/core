@@ -66,7 +66,7 @@ HDDEDATA CALLBACK DdeInternal::SvrCallback(
             HDDEDATA hData, DWORD, DWORD )
 #else
 #if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-HDDEDATA CALLBACK __EXPORT DdeInternal::SvrCallback(
+HDDEDATA CALLBACK DdeInternal::SvrCallback(
             WORD nCode, WORD nCbType, HCONV hConv, HSZ hText1, HSZ hText2,
             HDDEDATA hData, DWORD, DWORD )
 #else
@@ -718,21 +718,21 @@ void DdeTopic::NotifyClient( const String& rItem )
 
 // --- DdeTopic::Connect() -----------------------------------------
 
-void __EXPORT DdeTopic::Connect( long nId )
+void DdeTopic::Connect( long nId )
 {
     aConnectLink.Call( (void*)nId );
 }
 
 // --- DdeTopic::Disconnect() --------------------------------------
 
-void __EXPORT DdeTopic::Disconnect( long nId )
+void DdeTopic::Disconnect( long nId )
 {
     aDisconnectLink.Call( (void*)nId );
 }
 
 // --- DdeTopic::_Disconnect() --------------------------------------
 
-void __EXPORT DdeTopic::_Disconnect( long nId )
+void DdeTopic::_Disconnect( long nId )
 {
     for( DdeItem* pItem = aItems.First(); pItem; pItem = aItems.Next() )
         pItem->DecMonitor( nId );
@@ -742,7 +742,7 @@ void __EXPORT DdeTopic::_Disconnect( long nId )
 
 // --- DdeTopic::Get() ---------------------------------------------
 
-DdeData* __EXPORT DdeTopic::Get( ULONG nFmt )
+DdeData* DdeTopic::Get( ULONG nFmt )
 {
     if ( aGetLink.IsSet() )
         return (DdeData*)aGetLink.Call( (void*)nFmt );
@@ -752,7 +752,7 @@ DdeData* __EXPORT DdeTopic::Get( ULONG nFmt )
 
 // --- DdeTopic::Put() ---------------------------------------------
 
-BOOL __EXPORT DdeTopic::Put( const DdeData* r )
+BOOL DdeTopic::Put( const DdeData* r )
 {
     if ( aPutLink.IsSet() )
         return (BOOL)aPutLink.Call( (void*) r );
@@ -762,7 +762,7 @@ BOOL __EXPORT DdeTopic::Put( const DdeData* r )
 
 // --- DdeTopic::Execute() -----------------------------------------
 
-BOOL __EXPORT DdeTopic::Execute( const String* r )
+BOOL DdeTopic::Execute( const String* r )
 {
     if ( aExecLink.IsSet() )
         return (BOOL)aExecLink.Call( (void*)r );
@@ -1071,14 +1071,14 @@ String DdeService::Status()
 
 // --- DdeService::IsBusy() ----------------------------------------
 
-BOOL __EXPORT DdeService::IsBusy()
+BOOL DdeService::IsBusy()
 {
     return FALSE;
 }
 
 // --- DdeService::GetHelp() ----------------------------------------
 
-String __EXPORT DdeService::GetHelp()
+String DdeService::GetHelp()
 {
     return String();
 }

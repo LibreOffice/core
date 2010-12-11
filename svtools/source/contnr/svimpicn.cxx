@@ -1871,7 +1871,7 @@ void SvImpIconView::AdjustScrollBars()
     aOutputSize.Height() = nRealHeight;
 }
 
-void __EXPORT SvImpIconView::Resize()
+void SvImpIconView::Resize()
 {
     StopEditTimer();
     Rectangle aRect;
@@ -1980,7 +1980,7 @@ void SvImpIconView::CheckScrollBars()
 }
 
 
-void __EXPORT SvImpIconView::GetFocus()
+void SvImpIconView::GetFocus()
 {
     if( pCursor )
     {
@@ -1989,7 +1989,7 @@ void __EXPORT SvImpIconView::GetFocus()
     }
 }
 
-void __EXPORT SvImpIconView::LoseFocus()
+void SvImpIconView::LoseFocus()
 {
     StopEditTimer();
     if( pCursor )
