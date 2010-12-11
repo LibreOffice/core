@@ -31,11 +31,6 @@
 #include <svl/svarray.hxx>
 
 #include <osl/thread.hxx>
-
-#ifndef _STRING_LIST
-DECLARE_LIST( StringList, String * )
-#define _STRING_LIST
-#endif
 #include <basic/process.hxx>
 
 class Process;
