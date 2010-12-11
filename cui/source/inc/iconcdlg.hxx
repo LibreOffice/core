@@ -38,6 +38,7 @@
 #include <svl/itemset.hxx>
 #include <tools/list.hxx>
 #include <tools/string.hxx>
+#include <vector>
 
 #define CTRLS_OFFSET        3
 #define BUTTON_DISTANCE     8
@@ -52,9 +53,6 @@ class IconChoicePage;
 // Create-Function
 typedef IconChoicePage* (*CreatePage)(Window *pParent, const SfxItemSet &rAttrSet);
 typedef USHORT*         (*GetPageRanges)(); // liefert internationale Which-Wert
-
-// page-list
-DECLARE_LIST( IconChoicePageList, IconChoicePageData * )
 
 // position of iconchoicectrl
 enum EIconChoicePos { PosLeft, PosRight, PosTop, PosBottom };
@@ -165,7 +163,7 @@ private :
     friend class IconChoicePage;
 
     EIconChoicePos          meChoicePos;    // Position des IconChoiceCtrl's
-    IconChoicePageList      maPageList;     // Liste von PageData-Pointer
+    ::std::vector< IconChoicePageData* > maPageList;    // Liste von PageData-Pointer
 
     SvtIconChoiceCtrl       maIconCtrl;     // DAS IconChoice-Control
 

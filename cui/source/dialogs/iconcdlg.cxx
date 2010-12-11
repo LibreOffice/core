@@ -46,6 +46,8 @@
 #include <vcl/mnemonic.hxx>
 #include <vcl/i18nhelp.hxx>
 
+using ::std::vector;
+
 #ifdef WNT
 int __cdecl IconcDlgCmpUS_Impl( const void* p1, const void* p2 )
 #else
@@ -327,19 +329,15 @@ IconChoiceDialog::IconChoiceDialog ( Window* pParent, const ResId &rResId,
 
 IconChoiceDialog ::~IconChoiceDialog ()
 {
-    ULONG i;
-
     // save configuration at INI-Manager
     // and remove pages
     SvtViewOptions aTabDlgOpt( E_TABDIALOG, String::CreateFromInt32( nResId ) );
     aTabDlgOpt.SetWindowState( ::rtl::OUString::createFromAscii( GetWindowState((WINDOWSTATE_MASK_X | WINDOWSTATE_MASK_Y | WINDOWSTATE_MASK_STATE | WINDOWSTATE_MASK_MINIMIZED)).GetBuffer() ) );
     aTabDlgOpt.SetPageID( mnCurrentPageId );
 
-    const ULONG nCount = maPageList.Count();
-
-    for ( i = 0; i < nCount; ++i )
+    for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
-        IconChoicePageData* pData = maPageList.GetObject(i);
+        IconChoicePageData* pData = maPageList[ i ];
 
         if ( pData->pPage )
         {
@@ -360,7 +358,7 @@ IconChoiceDialog ::~IconChoiceDialog ()
     }
 
     // remove Userdata from Icons
-    for ( i=0; i<maIconCtrl.GetEntryCount(); i++)
+    for ( ULONG i=0; i < maIconCtrl.GetEntryCount(); i++)
     {
         SvxIconChoiceCtrlEntry* pEntry = maIconCtrl.GetEntry ( i );
         USHORT* pUserData = (USHORT*) pEntry->GetUserData();
@@ -393,7 +391,7 @@ SvxIconChoiceCtrlEntry* IconChoiceDialog::AddTabPage(
     IconChoicePageData* pData = new IconChoicePageData ( nId, pCreateFunc,
                                                          pRangesFunc,
                                                          bItemsOnDemand );
-    maPageList.Insert ( pData, LIST_APPEND );
+    maPageList.push_back( pData );
 
     pData->fnGetRanges = pRangesFunc;
     pData->bOnDemand = bItemsOnDemand;
@@ -417,7 +415,14 @@ void IconChoiceDialog::RemoveTabPage( USHORT nId )
     // remove page from list
     if ( pData )
     {
-        maPageList.Remove ( pData );
+        for ( vector< IconChoicePageData* >::iterator i = maPageList.begin(); i < maPageList.end(); ++i )
+        {
+            if ( *i == pData )
+            {
+                maPageList.erase( i );
+                break;
+            }
+        }
 
         // save settings
         if ( pData->pPage )
@@ -457,7 +462,7 @@ void IconChoiceDialog::RemoveTabPage( USHORT nId )
     // was it the current page ?
     if ( nId == mnCurrentPageId )
     {
-        mnCurrentPageId = maPageList.First()->nId;
+        mnCurrentPageId = maPageList.front()->nId;
     }
 
     Invalidate ();
@@ -473,9 +478,9 @@ void IconChoiceDialog::Paint( const Rectangle& rRect )
 {
     Dialog::Paint ( rRect );
 
-    for ( ULONG i=0; i<maPageList.Count(); i++ )
+    for ( size_t i = 0; i < maPageList.size(); i++ )
     {
-        IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
+        IconChoicePageData* pData = maPageList[ i ];
 
         if ( pData->nId == mnCurrentPageId )
         {
@@ -645,9 +650,9 @@ void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
     ////////////////////////////////////////
     // Pages resizen & positionieren
     //
-    for ( ULONG i=0; i<maPageList.Count(); i++ )
+    for ( size_t i = 0; i < maPageList.size(); i++ )
     {
-        IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
+        IconChoicePageData* pData = maPageList[ i ];
 
         Point aNewPagePos;
         Size aNewPageSize;
@@ -973,12 +978,9 @@ BOOL IconChoiceDialog::DeActivatePageImpl ()
             pSet = GetRefreshedSet();
             DBG_ASSERT( pSet, "GetRefreshedSet() liefert NULL" );
             // alle Pages als neu zu initialsieren flaggen
-            const ULONG nCount = maPageList.Count();
-
-            for ( USHORT i = 0; i < nCount; ++i )
+            for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
             {
-                IconChoicePageData* pObj = (IconChoicePageData*)maPageList.GetObject(i);
-
+                IconChoicePageData* pObj = maPageList[ i ];
                 if ( pObj->pPage != pPage ) // eigene Page nicht mehr refreshen
                     pObj->bRefresh = TRUE;
                 else
@@ -1028,13 +1030,11 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
     if ( pRanges )
         return pRanges;
     SvUShorts aUS( 16, 16 );
-    ULONG nCount = maPageList.Count();
 
-    USHORT i;
-    for ( i = 0; i < nCount; ++i )
+    size_t nCount = maPageList.size();
+    for ( size_t i = 0; i < nCount; ++i )
     {
-        IconChoicePageData* pData = maPageList.GetObject (i);
-
+        IconChoicePageData* pData = maPageList[ i ];
         if ( pData->fnGetRanges )
         {
             const USHORT* pTmpRanges = (pData->fnGetRanges)();
@@ -1053,8 +1053,7 @@ const USHORT* IconChoiceDialog::GetInputRanges( const SfxItemPool& rPool )
 #endif
     {
         nCount = aUS.Count();
-
-        for ( i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
             aUS[i] = rPool.GetWhich( aUS[i] );
     }
 
@@ -1150,7 +1149,7 @@ SfxItemSet* IconChoiceDialog::CreateInputItemSet( USHORT )
 
 short IconChoiceDialog::Execute()
 {
-    if ( !maPageList.Count() )
+    if ( maPageList.empty() )
         return RET_CANCEL;
 
     Start_Impl();
@@ -1178,10 +1177,9 @@ void IconChoiceDialog::Start( BOOL bShow )
 sal_Bool IconChoiceDialog::QueryClose()
 {
     sal_Bool bRet = sal_True;
-    const ULONG nCount = maPageList.Count();
-    for ( ULONG i = 0; i < nCount; ++i )
+    for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
-        IconChoicePageData* pData = maPageList.GetObject(i);
+        IconChoicePageData* pData = maPageList[i ];
         if ( pData->pPage && !pData->pPage->QueryClose() )
         {
             bRet = sal_False;
@@ -1199,7 +1197,7 @@ void IconChoiceDialog::Start_Impl()
     USHORT nActPage;
 
     if ( mnCurrentPageId == 0 || mnCurrentPageId == USHRT_MAX )
-        nActPage = maPageList.GetObject(0)->nId;
+        nActPage = maPageList.front()->nId;
     else
         nActPage = mnCurrentPageId;
 
@@ -1218,7 +1216,7 @@ void IconChoiceDialog::Start_Impl()
             nActPage = mnCurrentPageId;
 
         if ( GetPageData ( nActPage ) == NULL )
-            nActPage = ( (IconChoicePageData*)maPageList.GetObject(0) )->nId;
+            nActPage = maPageList.front()->nId;
     }
     else if ( USHRT_MAX != mnCurrentPageId && GetPageData ( mnCurrentPageId ) != NULL )
         nActPage = mnCurrentPageId;
@@ -1247,18 +1245,15 @@ const SfxItemSet* IconChoiceDialog::GetRefreshedSet()
 IconChoicePageData* IconChoiceDialog::GetPageData ( USHORT nId )
 {
     IconChoicePageData *pRet = NULL;
-    BOOL bFound = FALSE;
-
-    for ( ULONG i=0; i<maPageList.Count() && !bFound; i++ )
+    for ( size_t i=0; i < maPageList.size(); i++ )
     {
-        IconChoicePageData* pData = (IconChoicePageData*)maPageList.GetObject ( i );
-
+        IconChoicePageData* pData = maPageList[ i ];
         if ( pData->nId == nId )
         {
             pRet = pData;
+            break;
         }
     }
-
     return pRet;
 }
 
@@ -1316,9 +1311,7 @@ short IconChoiceDialog::Ok()
     }
     BOOL _bModified = FALSE;
 
-    const ULONG nCount = maPageList.Count();
-
-    for ( USHORT i = 0; i < nCount; ++i )
+    for ( size_t i = 0, nCount = maPageList.size(); i < nCount; ++i )
     {
         IconChoicePageData* pData = GetPageData ( i );
 
