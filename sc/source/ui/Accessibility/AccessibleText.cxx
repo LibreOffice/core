@@ -804,47 +804,7 @@ void ScAccessibleCellTextData::GetCellText(const ScAddress& rCellPos, String& rT
 
 SvxTextForwarder* ScAccessibleCellTextData::GetTextForwarder()
 {
-/*  sal_Bool bHasForwarder(sal_False);
-    if (mpViewShell && mpViewShell->GetViewData() &&
-        (mpViewShell->GetViewData()->GetCurPos() == aCellPos) &&
-        (mpViewShell->GetViewData()->HasEditView(meSplitPos)) &&
-        (mpViewShell->GetViewData()->GetEditViewCol() == aCellPos.Col()) &&
-        (mpViewShell->GetViewData()->GetEditViewRow() == aCellPos.Row()))
-    {
-        if (!mbViewEditEngine)
-        {
-            if (pForwarder)
-                DELETEZ( pForwarder );
-            if (pEditEngine)
-                DELETEZ( pEditEngine );
-
-                SCCOL nCol;
-                SCROW nRow;
-                EditView* pEditView;
-            mpViewShell->GetViewData()->GetEditView( meSplitPos, pEditView, nCol, nRow );
-            if (pEditView)
-            {
-                pEditEngine = (ScFieldEditEngine*)pEditView->GetEditEngine();
-                pForwarder = new SvxEditEngineForwarder(*pEditEngine);
-                bHasForwarder = sal_True;
-            }
-        }
-        else
-            bHasForwarder = sal_True;
-    }
-    else if (mbViewEditEngine)
-    {
-        // remove Forwarder created with EditEngine from EditView
-        if (pForwarder)
-            DELETEZ( pForwarder );
-        pEditEngine->SetNotifyHdl(Link());
-        // don't delete, because it is the EditEngine of the EditView
-        pEditEngine = NULL;
-        mbViewEditEngine = sal_False;
-    }
-
-    if (!bHasForwarder)*/
-        ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
+    ScCellTextData::GetTextForwarder(); // creates Forwarder and EditEngine
 
     ScDocument* pDoc = ( pDocShell ? pDocShell->GetDocument() : NULL );
     if ( pDoc && pEditEngine && mpViewShell )
@@ -1254,8 +1214,6 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bo
             {
                 pTxtWnd->StartEditEngine();
                 pTxtWnd->GrabFocus();
-//              pTxtWnd->SetTextString( rText );
-//              pTxtWnd->GetEditView()->SetSelection( rSel );
 
                 mpEditView = pTxtWnd->GetEditView();
             }
