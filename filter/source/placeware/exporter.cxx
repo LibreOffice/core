@@ -276,7 +276,7 @@ static void createSlideFile( Reference< XComponent > xDoc, ZipFile& rZipFile, co
     osl::File::RC nRC;
     sal_uInt64 nTemp;
 
-    nRC = aInfoFile.open( OpenFlag_Write );
+    nRC = aInfoFile.open( osl_File_OpenFlag_Write );
     if( osl::File::E_None == nRC )
     {
         nRC = aInfoFile.write( aInfo.getStr(), aInfo.getLength(), nTemp );

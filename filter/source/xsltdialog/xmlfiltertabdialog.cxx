@@ -230,7 +230,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maDTD != mpOldInfo->maDTD) && isFileURL( mpNewInfo->maDTD ) )
         {
             osl::File aFile( mpNewInfo->maDTD );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_DTD_NOT_FOUND;
@@ -246,7 +246,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maExportXSLT != mpOldInfo->maExportXSLT) && isFileURL( mpNewInfo->maExportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maExportXSLT );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_EXPORT_XSLT_NOT_FOUND;
@@ -262,7 +262,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maImportXSLT != mpOldInfo->maImportXSLT) && isFileURL( mpNewInfo->maImportXSLT ) )
         {
             osl::File aFile( mpNewInfo->maImportXSLT );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_XSLT_NOT_FOUND;
@@ -286,7 +286,7 @@ bool XMLFilterTabDialog::onOk()
         if( (mpNewInfo->maImportTemplate != mpOldInfo->maImportTemplate) && isFileURL( mpNewInfo->maImportTemplate ) )
         {
             osl::File aFile( mpNewInfo->maImportTemplate );
-            osl::File::RC aRC = aFile.open( OpenFlag_Read );
+            osl::File::RC aRC = aFile.open( osl_File_OpenFlag_Read );
             if( aRC != osl::File::E_None )
             {
                 nErrorId = STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND;

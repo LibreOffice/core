@@ -45,7 +45,7 @@ namespace
 
         explicit OutputWrap( const rtl::OUString& rURL ) : maFile(rURL)
         {
-            maFile.open(osl_File_OpenFlag_Create|OpenFlag_Write);
+            maFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
         }
 
         virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< ::sal_Int8 >& aData ) throw (com::sun::star::io::NotConnectedException,com::sun::star::io::BufferSizeExceededException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException)
@@ -111,7 +111,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     }
 
     osl::File aInputFile(aSrcURL);
-    if( osl::FileBase::E_None!=aInputFile.open(OpenFlag_Read) )
+    if( osl::FileBase::E_None!=aInputFile.open(osl_File_OpenFlag_Read) )
     {
         OSL_TRACE( "Cannot open input file" );
         return 1;

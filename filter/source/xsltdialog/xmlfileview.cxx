@@ -622,7 +622,7 @@ void XMLSourceFileDialog::onValidate()
         if( xImporter.is() )
         {
             osl::File aInputFile( maFileURL );
-            /* osl::File::RC rc = */ aInputFile.open( OpenFlag_Read );
+            /* osl::File::RC rc = */ aInputFile.open( osl_File_OpenFlag_Read );
 
             Reference< XInputStream > xIS( new comphelper::OSLInputStreamWrapper( aInputFile ) );
 

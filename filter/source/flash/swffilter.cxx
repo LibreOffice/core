@@ -76,7 +76,7 @@ public:
     OslOutputStreamWrapper(const OUString& sFileName) : mrFile(sFileName)
     {
         osl_removeFile(sFileName.pData);
-        mrFile.open(OpenFlag_Create|OpenFlag_Write);
+        mrFile.open( osl_File_OpenFlag_Create|osl_File_OpenFlag_Write );
     }
 
     // stario::XOutputStream

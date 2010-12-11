@@ -240,7 +240,7 @@ bool XMLFilterJarHelper::savePackage( const OUString& rPackageURL, const XMLFilt
 
             {
                 osl::File aOutputFile( aTempFileURL );
-                /* osl::File::RC rc = */ aOutputFile.open( OpenFlag_Write );
+                /* osl::File::RC rc = */ aOutputFile.open( osl_File_OpenFlag_Write );
                 Reference< XOutputStream > xOS( new OSLOutputStreamWrapper( aOutputFile ) );
 
                 TypeDetectionExporter aExporter( mxMSF );
