@@ -119,7 +119,7 @@ SwHTMLWriter::SwHTMLWriter( const String& rBaseURL )
 }
 
 
-__EXPORT SwHTMLWriter::~SwHTMLWriter()
+SwHTMLWriter::~SwHTMLWriter()
 {
     delete pNumRuleInfo;
 }

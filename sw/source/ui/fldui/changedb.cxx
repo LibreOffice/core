@@ -205,7 +205,7 @@ SvLBoxEntry* SwChangeDBDlg::Insert(const String& rDBName)
 /*--------------------------------------------------------------------
     Beschreibung: Dialog zerstoeren
  --------------------------------------------------------------------*/
-__EXPORT SwChangeDBDlg::~SwChangeDBDlg()
+SwChangeDBDlg::~SwChangeDBDlg()
 {
     delete pMgr;
 }

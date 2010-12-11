@@ -81,7 +81,7 @@ SwDrawBase::SwDrawBase(SwWrtShell* pSwWrtShell, SwEditWin* pWindow, SwView* pSwV
 |*
 \************************************************************************/
 
-__EXPORT SwDrawBase::~SwDrawBase()
+SwDrawBase::~SwDrawBase()
 {
     if (m_pView->GetWrtShellPtr()) // Im view-Dtor koennte die wrtsh bereits geloescht worden sein...
         m_pSh->GetDrawView()->SetEditMode(TRUE);

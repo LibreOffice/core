@@ -165,7 +165,7 @@ SwNumNamesDlg::SwNumNamesDlg(Window *pParent)
     SelectHdl(&aFormBox);
 }
 
-__EXPORT SwNumNamesDlg::~SwNumNamesDlg() {}
+SwNumNamesDlg::~SwNumNamesDlg() {}
 
 USHORT lcl_BitToLevel(USHORT nActLevel)
 {

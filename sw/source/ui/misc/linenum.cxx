@@ -63,7 +63,7 @@ SwLineNumberingDlg::SwLineNumberingDlg(SwView *pVw) :
     GetOKButton()->SetClickHdl(LINK(this, SwLineNumberingDlg, OKHdl));
 }
 
-__EXPORT SwLineNumberingDlg::~SwLineNumberingDlg()
+SwLineNumberingDlg::~SwLineNumberingDlg()
 {
 }
 
@@ -116,11 +116,11 @@ SwLineNumberingPage::SwLineNumberingPage( Window* pParent,
     ::FillCharStyleListBox(aCharStyleLB, pSh->GetView().GetDocShell());
 }
 
-__EXPORT SwLineNumberingPage::~SwLineNumberingPage()
+SwLineNumberingPage::~SwLineNumberingPage()
 {
 }
 
-SfxTabPage* __EXPORT SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* SwLineNumberingPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new SwLineNumberingPage( pParent, rSet );
 }

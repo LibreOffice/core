@@ -76,7 +76,7 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
     }
 }
 
-__EXPORT SwDDETable::~SwDDETable()
+SwDDETable::~SwDDETable()
 {
     SwDDEFieldType* pFldTyp = (SwDDEFieldType*)aDepend.GetRegisteredIn();
     SwDoc* pDoc = GetFrmFmt()->GetDoc();

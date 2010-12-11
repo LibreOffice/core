@@ -176,7 +176,7 @@ SwParaDlg::SwParaDlg(Window *pParent,
 }
 
 
-__EXPORT SwParaDlg::~SwParaDlg()
+SwParaDlg::~SwParaDlg()
 {
 }
 

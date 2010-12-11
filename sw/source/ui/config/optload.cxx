@@ -147,7 +147,7 @@ SwLoadOptPage::~SwLoadOptPage()
 {
 }
 
-SfxTabPage* __EXPORT SwLoadOptPage::Create( Window* pParent,
+SfxTabPage* SwLoadOptPage::Create( Window* pParent,
                                 const SfxItemSet& rAttrSet )
 {
     return new SwLoadOptPage(pParent, rAttrSet );

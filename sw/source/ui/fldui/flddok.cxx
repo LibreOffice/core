@@ -86,7 +86,7 @@ SwFldDokPage::SwFldDokPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aNumFormatLB.SetShowLanguageControl(TRUE);
 }
 
-__EXPORT SwFldDokPage::~SwFldDokPage()
+SwFldDokPage::~SwFldDokPage()
 {
 }
 

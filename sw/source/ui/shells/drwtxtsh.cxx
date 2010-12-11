@@ -147,7 +147,7 @@ SwDrawTextShell::SwDrawTextShell(SwView &rV) :
     SetHelpId(SW_DRWTXTSHELL);
 }
 
-__EXPORT SwDrawTextShell::~SwDrawTextShell()
+SwDrawTextShell::~SwDrawTextShell()
 {
     if ( GetView().GetCurShell() == this )
         rView.ResetSubShell();

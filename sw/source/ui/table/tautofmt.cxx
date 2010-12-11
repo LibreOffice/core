@@ -161,7 +161,7 @@ void SwStringInputDlg::GetInputString( String& rString ) const
 }
 
 
-__EXPORT SwStringInputDlg::~SwStringInputDlg()
+SwStringInputDlg::~SwStringInputDlg()
 {
 }
 
@@ -215,7 +215,7 @@ SwAutoFormatDlg::SwAutoFormatDlg( Window* pParent, SwWrtShell* pWrtShell,
 //------------------------------------------------------------------------
 
 
-__EXPORT SwAutoFormatDlg::~SwAutoFormatDlg()
+SwAutoFormatDlg::~SwAutoFormatDlg()
 {
     delete pWndPreview;
 
@@ -612,7 +612,7 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, SwWrtShell* 
 
 //------------------------------------------------------------------------
 
-__EXPORT AutoFmtPreview::~AutoFmtPreview()
+AutoFmtPreview::~AutoFmtPreview()
 {
     delete pNumFmt;
 }

@@ -139,7 +139,7 @@ Page: Dtor
 ****************************************************************************/
 
 
-__EXPORT SwCondCollPage::~SwCondCollPage()
+SwCondCollPage::~SwCondCollPage()
 {
     for(USHORT i = 0; i < aFilterLB.GetEntryCount(); ++i)
         delete (USHORT*)aFilterLB.GetEntryData(i);

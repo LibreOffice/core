@@ -297,7 +297,7 @@ IMPL_LINK(SwTitlePageDlg, StartPageHdl, RadioButton*, EMPTYARG)
     return 0;
 }
 
-__EXPORT SwTitlePageDlg::~SwTitlePageDlg()
+SwTitlePageDlg::~SwTitlePageDlg()
 {
     delete mpPageFmtDesc;
 }

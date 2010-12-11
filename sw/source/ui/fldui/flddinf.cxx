@@ -95,7 +95,7 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
         pItem->GetValue() >>= xCustomPropertySet;
 }
 
-__EXPORT SwFldDokInfPage::~SwFldDokInfPage()
+SwFldDokInfPage::~SwFldDokInfPage()
 {
 }
 

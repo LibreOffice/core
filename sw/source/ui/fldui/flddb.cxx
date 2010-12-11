@@ -81,7 +81,7 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aAddDBPB.SetClickHdl(LINK(this, SwFldDBPage, AddDBHdl));
 }
 
-__EXPORT SwFldDBPage::~SwFldDBPage()
+SwFldDBPage::~SwFldDBPage()
 {
 }
 

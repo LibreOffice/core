@@ -81,7 +81,7 @@ SwXMLWriter::SwXMLWriter( const String& rBaseURL )
 }
 
 
-__EXPORT SwXMLWriter::~SwXMLWriter()
+SwXMLWriter::~SwXMLWriter()
 {
 }
 

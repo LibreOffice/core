@@ -119,7 +119,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
 //==================================================================
 
-__EXPORT SwInputWindow::~SwInputWindow()
+SwInputWindow::~SwInputWindow()
 {
     SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
 
@@ -643,7 +643,7 @@ SwInputChild::SwInputChild(Window* _pParent,
 }
 
 
-__EXPORT SwInputChild::~SwInputChild()
+SwInputChild::~SwInputChild()
 {
     if(pDispatch)
         pDispatch->Lock(FALSE);

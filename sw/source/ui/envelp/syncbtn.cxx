@@ -84,7 +84,7 @@ SwSyncBtnDlg::SwSyncBtnDlg( SfxBindings* _pBindings,
     aSyncBtn.SetClickHdl(LINK(this, SwSyncBtnDlg, BtnHdl));
 }
 
-__EXPORT SwSyncBtnDlg::~SwSyncBtnDlg()
+SwSyncBtnDlg::~SwSyncBtnDlg()
 {
 }
 

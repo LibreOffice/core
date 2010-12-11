@@ -437,7 +437,7 @@ SwVirtFlyDrawObj::SwVirtFlyDrawObj(SdrObject& rNew, SwFlyFrm* pFly) :
 }
 
 
-__EXPORT SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
+SwVirtFlyDrawObj::~SwVirtFlyDrawObj()
 {
     if ( GetPage() )    //Der SdrPage die Verantwortung entziehen.
         GetPage()->RemoveObject( GetOrdNum() );

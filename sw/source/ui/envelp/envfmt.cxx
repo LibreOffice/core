@@ -181,7 +181,7 @@ SwEnvFmtPage::SwEnvFmtPage(Window* pParent, const SfxItemSet& rSet) :
 
 }
 
-__EXPORT SwEnvFmtPage::~SwEnvFmtPage()
+SwEnvFmtPage::~SwEnvFmtPage()
 {
     aAddrEditButton.SetPopupMenu(0);
     aSendEditButton.SetPopupMenu(0);

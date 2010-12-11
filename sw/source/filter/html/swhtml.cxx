@@ -431,7 +431,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     }
 }
 
-__EXPORT SwHTMLParser::~SwHTMLParser()
+SwHTMLParser::~SwHTMLParser()
 {
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE( !nContinue, "DTOR im Continue - Das geht schief!!!" );

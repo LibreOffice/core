@@ -61,7 +61,7 @@ SwWebListShell::SwWebListShell(SwView &_rView) :
     SetHelpId(SW_LISTSHELL);
 }
 
-__EXPORT SwWebListShell::~SwWebListShell()
+SwWebListShell::~SwWebListShell()
 {
 }
 
