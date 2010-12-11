@@ -60,6 +60,9 @@ using namespace ::com::sun::star::uno   ;
 using namespace ::com::sun::star::lang  ;
 using namespace ::com::sun::star::awt   ;
 
+using ::std::vector;
+
+
 namespace unocontrols{
 
 //____________________________________________________________________________________________________________
@@ -119,10 +122,6 @@ ProgressMonitor::ProgressMonitor( const Reference< XMultiServiceFactory >& xFact
     m_xText_Bottom->setText  ( OUString(RTL_CONSTASCII_USTRINGPARAM( PROGRESSMONITOR_DEFAULT_TEXT  )) ) ;
 
     --m_refCount ;
-
-    // Initialize info lists for fixedtext's
-    m_pTextlist_Top     = new IMPL_Textlist ;
-    m_pTextlist_Bottom  = new IMPL_Textlist ;
 }
 
 ProgressMonitor::~ProgressMonitor()
@@ -275,11 +274,11 @@ void SAL_CALL ProgressMonitor::addText(
         // ... and insert it in right list.
         if ( bbeforeProgress == sal_True )
         {
-            m_pTextlist_Top->Insert    ( pTextItem, LIST_APPEND ) ;
+            maTextlist_Top.push_back( pTextItem );
         }
         else
         {
-            m_pTextlist_Bottom->Insert ( pTextItem, LIST_APPEND ) ;
+            maTextlist_Bottom.push_back( pTextItem );
         }
     }
 
@@ -309,11 +308,15 @@ void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbe
         // ... delete item from right list ...
         if ( bbeforeProgress == sal_True )
         {
-            m_pTextlist_Top->Remove    ( pSearchItem ) ;
+            vector< IMPL_TextlistItem* >::iterator itr = maTextlist_Top.begin();
+            while ( (itr < maTextlist_Top.end()) && (*itr != pSearchItem) ) ++itr;
+            maTextlist_Top.erase(itr);
         }
         else
         {
-            m_pTextlist_Bottom->Remove ( pSearchItem ) ;
+            vector< IMPL_TextlistItem* >::iterator itr = maTextlist_Bottom.begin();
+            while ( (itr < maTextlist_Bottom.end()) && (*itr != pSearchItem) ) ++itr;
+            maTextlist_Bottom.erase(itr);
         }
 
         delete pSearchItem ;
@@ -893,9 +896,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Top->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
             aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
         }
@@ -911,9 +914,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Top->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Top.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Top[ n ];
             aCollectString  +=  pSearchItem->sText ;
             aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
         }
@@ -931,9 +934,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Bottom->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sTopic ;
             aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))             ;
         }
@@ -949,9 +952,9 @@ void ProgressMonitor::impl_rebuildFixedText ()
 
         // Collect all topics from list and format text.
         // "\n" MUST BE at the end of line!!! => Else ... topic and his text are not in the same line!!!
-        for ( sal_uInt32 n=0; n<m_pTextlist_Bottom->Count(); ++n )
+        for ( size_t n = 0; n < maTextlist_Bottom.size(); ++n )
         {
-            IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject (n) ;
+            IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ n ];
             aCollectString  +=  pSearchItem->sText ;
             aCollectString  +=  OUString(RTL_CONSTASCII_USTRINGPARAM("\n"))            ;
         }
@@ -972,23 +975,19 @@ void ProgressMonitor::impl_cleanMemory ()
 
     // Delete all of lists.
 
-    sal_uInt32 nPosition ;
-
-    for ( nPosition = 0; nPosition < m_pTextlist_Top->Count () ; ++nPosition )
+    for ( size_t nPosition = 0; nPosition < maTextlist_Top.size() ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = m_pTextlist_Top->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = maTextlist_Top[ nPosition ];
         delete pSearchItem ;
     }
-    m_pTextlist_Top->Clear () ;
-    delete m_pTextlist_Top ;
+    maTextlist_Top.clear();
 
-    for ( nPosition = 0; nPosition < m_pTextlist_Bottom->Count () ; ++nPosition )
+    for ( size_t nPosition = 0; nPosition < maTextlist_Bottom.size() ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = m_pTextlist_Bottom->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = maTextlist_Bottom[ nPosition ];
         delete pSearchItem ;
     }
-    m_pTextlist_Bottom->Clear () ;
-    delete m_pTextlist_Bottom ;
+    maTextlist_Bottom.clear();
 }
 
 //____________________________________________________________________________________________________________
@@ -998,30 +997,30 @@ void ProgressMonitor::impl_cleanMemory ()
 IMPL_TextlistItem* ProgressMonitor::impl_searchTopic ( const OUString& rTopic, sal_Bool bbeforeProgress )
 {
     // Get right textlist for following operations.
-    IMPL_Textlist* pTextList ;
+    ::std::vector< IMPL_TextlistItem* >* pTextList ;
 
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex ) ;
 
     if ( bbeforeProgress == sal_True )
     {
-        pTextList = m_pTextlist_Top    ;
+        pTextList = &maTextlist_Top    ;
     }
     else
     {
-        pTextList = m_pTextlist_Bottom ;
+        pTextList = &maTextlist_Bottom ;
     }
 
     // Switch off guard.
     aGuard.clear () ;
 
     // Search the topic in textlist.
-    sal_uInt32  nPosition   =   0                   ;
-    sal_uInt32  nCount      =   pTextList->Count () ;
+    size_t nPosition    = 0;
+    size_t nCount       = pTextList->size();
 
     for ( nPosition = 0; nPosition < nCount ; ++nPosition )
     {
-        IMPL_TextlistItem* pSearchItem = pTextList->GetObject ( nPosition ) ;
+        IMPL_TextlistItem* pSearchItem = pTextList->at( nPosition );
 
         if ( pSearchItem->sTopic == rTopic )
         {
