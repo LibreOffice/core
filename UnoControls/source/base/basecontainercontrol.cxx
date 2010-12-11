@@ -229,7 +229,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException )
 
     for ( nCount = 0; nCount < nMaxCount; ++nCount )
     {
-        delete maControlInfoList[ 0 ];
+        delete maControlInfoList[ nCount ];
     }
     maControlInfoList.clear();
 
