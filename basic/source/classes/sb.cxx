@@ -1282,7 +1282,7 @@ USHORT StarBASIC::StepPoint( USHORT l, USHORT c1, USHORT c2 )
         return BreakHdl();
 }
 
-USHORT __EXPORT StarBASIC::BreakHdl()
+USHORT StarBASIC::BreakHdl()
 {
     return (USHORT) ( aBreakHdl.IsSet()
         ? aBreakHdl.Call( this ) : SbDEBUG_CONTINUE );
@@ -1627,7 +1627,7 @@ USHORT StarBASIC::GetErl()
         return 0;
 }
 
-BOOL __EXPORT StarBASIC::ErrorHdl()
+BOOL StarBASIC::ErrorHdl()
 {
     return (BOOL) ( aErrorHdl.IsSet()
         ? aErrorHdl.Call( this ) : FALSE );

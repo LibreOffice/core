@@ -599,7 +599,7 @@ void SvxLineEndWindow::Resize()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SvxLineEndWindow::Resizing( Size& rNewSize )
+void SvxLineEndWindow::Resizing( Size& rNewSize )
 {
     Size aBitmapSize = aBmpSize; // -> Member
     aBitmapSize.Width()  += 6; //

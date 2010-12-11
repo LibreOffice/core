@@ -123,11 +123,11 @@ String SfxShellIdent_Impl( const SfxShell *pSh )
 // SfxShell
 //=========================================================================
 
-void __EXPORT SfxShell::EmptyExecStub(SfxShell *, SfxRequest &)
+void SfxShell::EmptyExecStub(SfxShell *, SfxRequest &)
 {
 }
 
-void __EXPORT SfxShell::EmptyStateStub(SfxShell *, SfxItemSet &)
+void SfxShell::EmptyStateStub(SfxShell *, SfxItemSet &)
 {
 }
 

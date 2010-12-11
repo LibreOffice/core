@@ -101,7 +101,7 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
 // -----------------------------------------------------------------------
 
-__EXPORT SfxNewStyleDlg::~SfxNewStyleDlg()
+SfxNewStyleDlg::~SfxNewStyleDlg()
 {
 }
 

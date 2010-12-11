@@ -64,7 +64,7 @@ EditSpellWrapper::EditSpellWrapper( Window* _pWin,
     pEditView = pView;
 }
 
-void __EXPORT EditSpellWrapper::SpellStart( SvxSpellArea eArea )
+void EditSpellWrapper::SpellStart( SvxSpellArea eArea )
 {
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
@@ -126,18 +126,18 @@ sal_Bool EditSpellWrapper::SpellContinue()
     return GetLast().is();
 }
 
-void __EXPORT EditSpellWrapper::SpellEnd()
+void EditSpellWrapper::SpellEnd()
 {
     // Base class will show language errors...
     SvxSpellWrapper::SpellEnd();
 }
 
-sal_Bool __EXPORT EditSpellWrapper::HasOtherCnt()
+sal_Bool EditSpellWrapper::HasOtherCnt()
 {
     return sal_False;
 }
 
-sal_Bool __EXPORT EditSpellWrapper::SpellMore()
+sal_Bool EditSpellWrapper::SpellMore()
 {
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
     SpellInfo* pSpellInfo = pImpEE->GetSpellInfo();
@@ -157,14 +157,14 @@ sal_Bool __EXPORT EditSpellWrapper::SpellMore()
     return bMore;
 }
 
-void __EXPORT EditSpellWrapper::ScrollArea()
+void EditSpellWrapper::ScrollArea()
 {
     // Keine weitere Aktion noetig...
     // Es sei denn, der Bereich soll in die Mitte gescrollt werden,
     // und nicht irgendwo stehen.
 }
 
-void __EXPORT EditSpellWrapper::ReplaceAll( const String &rNewText,
+void EditSpellWrapper::ReplaceAll( const String &rNewText,
             sal_Int16 )
 {
     // Wird gerufen, wenn Wort in ReplaceList des SpellCheckers
@@ -172,7 +172,7 @@ void __EXPORT EditSpellWrapper::ReplaceAll( const String &rNewText,
     CheckSpellTo();
 }
 
-void __EXPORT EditSpellWrapper::ChangeWord( const String& rNewWord,
+void EditSpellWrapper::ChangeWord( const String& rNewWord,
             const sal_uInt16 )
 {
     // Wird gerufen, wenn Wort Button Change
@@ -185,13 +185,13 @@ void __EXPORT EditSpellWrapper::ChangeWord( const String& rNewWord,
     CheckSpellTo();
 }
 
-void __EXPORT EditSpellWrapper::ChangeThesWord( const String& rNewWord )
+void EditSpellWrapper::ChangeThesWord( const String& rNewWord )
 {
     pEditView->InsertText( rNewWord );
     CheckSpellTo();
 }
 
-void __EXPORT EditSpellWrapper::AutoCorrect( const String&, const String& )
+void EditSpellWrapper::AutoCorrect( const String&, const String& )
 {
 }
 

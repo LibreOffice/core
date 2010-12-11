@@ -120,12 +120,12 @@ SfxTabDialogItem::SfxTabDialogItem( USHORT nId, const SfxItemSet& rItemSet )
 {
 }
 
-SfxPoolItem* __EXPORT SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
+SfxPoolItem* SfxTabDialogItem::Clone(SfxItemPool* pToPool) const
 {
     return new SfxTabDialogItem( *this, pToPool );
 }
 
-SfxPoolItem* __EXPORT SfxTabDialogItem::Create(SvStream& /*rStream*/, USHORT /*nVersion*/) const
+SfxPoolItem* SfxTabDialogItem::Create(SvStream& /*rStream*/, USHORT /*nVersion*/) const
 {
     DBG_ERROR( "Use it only in UI!" );
     return NULL;

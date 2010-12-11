@@ -321,7 +321,7 @@ SdrPaintView::~SdrPaintView()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void __EXPORT SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrPaintView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     //If the stylesheet has been destroyed
     if (&rBC == pDefaultStyleSheet)

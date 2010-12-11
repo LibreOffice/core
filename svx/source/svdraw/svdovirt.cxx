@@ -92,7 +92,7 @@ SdrObject& SdrVirtObj::ReferencedObj()
     return rRefObj;
 }
 
-void __EXPORT SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
+void SdrVirtObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& /*rHint*/)
 {
     bClosedObj=rRefObj.IsClosedObj();
     SetRectsDirty(); // hier noch Optimieren.

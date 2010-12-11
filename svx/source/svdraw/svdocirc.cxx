@@ -1074,7 +1074,7 @@ Point SdrCircObj::GetSnapPoint(sal_uInt32 i) const
     }
 }
 
-void __EXPORT SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrCircObj::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SetXPolyDirty();
     SdrRectObj::Notify(rBC,rHint);

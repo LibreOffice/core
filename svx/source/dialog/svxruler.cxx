@@ -433,7 +433,7 @@ SvxRuler::SvxRuler
 }
 
 
-__EXPORT SvxRuler::~SvxRuler()
+SvxRuler::~SvxRuler()
 /*
    [Beschreibung]
 
@@ -2794,7 +2794,7 @@ void SvxRuler::EvalModifier()
 }
 
 
-void __EXPORT SvxRuler::Click()
+void SvxRuler::Click()
 
 /*
    [Beschreibung]
@@ -3421,7 +3421,7 @@ void SvxRuler::CalcMinMax()
 }
 
 
-long __EXPORT SvxRuler::StartDrag()
+long SvxRuler::StartDrag()
 
 /*
    [Beschreibung]
@@ -3506,7 +3506,7 @@ long __EXPORT SvxRuler::StartDrag()
 }
 
 
-void  __EXPORT SvxRuler::Drag()
+void  SvxRuler::Drag()
 /*
    [Beschreibung]
 
@@ -3546,7 +3546,7 @@ void  __EXPORT SvxRuler::Drag()
 }
 
 
-void __EXPORT SvxRuler::EndDrag()
+void SvxRuler::EndDrag()
 /*
    [Beschreibung]
 
@@ -3618,7 +3618,7 @@ void __EXPORT SvxRuler::EndDrag()
 }
 
 
-void __EXPORT SvxRuler::ExtraDown()
+void SvxRuler::ExtraDown()
 
 /*
    [Beschreibung]
@@ -3639,7 +3639,7 @@ void __EXPORT SvxRuler::ExtraDown()
 }
 
 
-void __EXPORT SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
+void SvxRuler::Notify(SfxBroadcaster&, const SfxHint& rHint)
 /*
 
    [Beschreibung]

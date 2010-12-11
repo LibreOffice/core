@@ -317,7 +317,7 @@ ULONG OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTarget
     return nPara;
 }
 
-BOOL __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
+BOOL OutlinerView::MouseMove( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
 
@@ -334,7 +334,7 @@ BOOL __EXPORT OutlinerView::MouseMove( const MouseEvent& rMEvt )
 }
 
 
-BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )
@@ -385,7 +385,7 @@ BOOL __EXPORT OutlinerView::MouseButtonDown( const MouseEvent& rMEvt )
 }
 
 
-BOOL __EXPORT OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL OutlinerView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     DBG_CHKTHIS(OutlinerView,0);
     if ( ( pOwner->ImplGetOutlinerMode() == OUTLINERMODE_TEXTOBJECT ) || pEditView->GetEditEngine()->IsInSelectionMode() )

@@ -194,7 +194,7 @@ SdrMarkView::~SdrMarkView()
     delete mpSdrViewSelection;
 }
 
-void __EXPORT SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void SdrMarkView::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
 {
     SdrHint* pSdrHint=PTR_CAST(SdrHint,&rHint);
     if (pSdrHint!=NULL)

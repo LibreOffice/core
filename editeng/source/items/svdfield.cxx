@@ -36,28 +36,28 @@
 
 SV_IMPL_PERSIST1(SdrMeasureField,SvxFieldData);
 
-__EXPORT SdrMeasureField::~SdrMeasureField()
+SdrMeasureField::~SdrMeasureField()
 {
 }
 
-SvxFieldData* __EXPORT SdrMeasureField::Clone() const
+SvxFieldData* SdrMeasureField::Clone() const
 {
     return new SdrMeasureField(*this);
 }
 
-int __EXPORT SdrMeasureField::operator==(const SvxFieldData& rSrc) const
+int SdrMeasureField::operator==(const SvxFieldData& rSrc) const
 {
     return eMeasureFieldKind==((SdrMeasureField&)rSrc).GetMeasureFieldKind();
 }
 
-void __EXPORT SdrMeasureField::Load(SvPersistStream& rIn)
+void SdrMeasureField::Load(SvPersistStream& rIn)
 {
     UINT16 nFieldKind;
     rIn>>nFieldKind;
     eMeasureFieldKind=(SdrMeasureFieldKind)nFieldKind;
 }
 
-void __EXPORT SdrMeasureField::Save(SvPersistStream& rOut)
+void SdrMeasureField::Save(SvPersistStream& rOut)
 {
     rOut<<(UINT16)eMeasureFieldKind;
 }

@@ -188,11 +188,11 @@ public:
     virtual void KeyInput(const KeyEvent& rEvt);
 };
 
-__EXPORT ImpItemEdit::~ImpItemEdit()
+ImpItemEdit::~ImpItemEdit()
 {
 }
 
-void __EXPORT ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
+void ImpItemEdit::KeyInput(const KeyEvent& rKEvt)
 {
     _SdrItemBrowserControl* pBrowseMerk = pBrowse;
 
@@ -229,7 +229,7 @@ _SdrItemBrowserControl::_SdrItemBrowserControl(Window* pParent, WinBits nBits):
     ImpCtor();
 }
 
-__EXPORT _SdrItemBrowserControl::~_SdrItemBrowserControl()
+_SdrItemBrowserControl::~_SdrItemBrowserControl()
 {
     if(pEditControl)
         delete pEditControl;
@@ -303,12 +303,12 @@ void _SdrItemBrowserControl::Clear()
     BrowseBox::Clear();
 }
 
-long __EXPORT _SdrItemBrowserControl::GetRowCount() const
+long _SdrItemBrowserControl::GetRowCount() const
 {
     return aList.Count();
 }
 
-BOOL __EXPORT _SdrItemBrowserControl::SeekRow(long nRow)
+BOOL _SdrItemBrowserControl::SeekRow(long nRow)
 {
     nAktPaintRow=nRow;
     return TRUE;
@@ -357,7 +357,7 @@ String _SdrItemBrowserControl::GetCellText(long _nRow, USHORT _nColId) const
     return sRet;
 }
 
-void __EXPORT _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const
+void _SdrItemBrowserControl::PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const
 {
     if (nAktPaintRow<0 || (ULONG)nAktPaintRow>=aList.Count()) {
         return;
@@ -405,7 +405,7 @@ USHORT _SdrItemBrowserControl::GetCurrentWhich() const
     return nRet;
 }
 
-void __EXPORT _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
+void _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
 {
     ULONG nPos=GetCurrentPos();
     if (nPos!=CONTAINER_ENTRY_NOTFOUND) {
@@ -413,7 +413,7 @@ void __EXPORT _SdrItemBrowserControl::DoubleClick(const BrowserMouseEvent&)
     }
 }
 
-void __EXPORT _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
+void _SdrItemBrowserControl::KeyInput(const KeyEvent& rKEvt)
 {
     USHORT nKeyCode=rKEvt.GetKeyCode().GetCode()+rKEvt.GetKeyCode().GetModifier();
     bool bAusgewertet = false;
@@ -458,7 +458,7 @@ sal_Int32 _SdrItemBrowserControl::GetFieldIndexAtPoint(sal_Int32 /*_nRow*/,sal_I
     return -1;
 }
 
-void __EXPORT _SdrItemBrowserControl::Select()
+void _SdrItemBrowserControl::Select()
 {
     EndChangeEntry();
     BrowseBox::Select();
@@ -1084,16 +1084,16 @@ _SdrItemBrowserWindow::_SdrItemBrowserWindow(Window* pParent, WinBits nBits):
     aBrowse.Show();
 }
 
-__EXPORT _SdrItemBrowserWindow::~_SdrItemBrowserWindow()
+_SdrItemBrowserWindow::~_SdrItemBrowserWindow()
 {
 }
 
-void __EXPORT _SdrItemBrowserWindow::Resize()
+void _SdrItemBrowserWindow::Resize()
 {
     aBrowse.SetSizePixel(GetOutputSizePixel());
 }
 
-void __EXPORT _SdrItemBrowserWindow::GetFocus()
+void _SdrItemBrowserWindow::GetFocus()
 {
     aBrowse.GrabFocus();
 }

@@ -137,7 +137,7 @@ void SdrAttrObj::SetModel(SdrModel* pNewModel)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // syntactical sugar for ItemSet accesses
 
-void __EXPORT SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
+void SdrAttrObj::Notify(SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 {
     SfxSimpleHint *pSimple = PTR_CAST(SfxSimpleHint, &rHint);
     BOOL bDataChg(pSimple && SFX_HINT_DATACHANGED == pSimple->GetId());

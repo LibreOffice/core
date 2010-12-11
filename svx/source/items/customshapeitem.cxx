@@ -293,7 +293,7 @@ SdrCustomShapeGeometryItem::SdrCustomShapeGeometryItem( SvStream& /*rIn*/, sal_u
 
     }
 }
-int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
+int SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) const
 {
     int bRet = SfxPoolItem::operator==( rCmp );
     if ( bRet )
@@ -301,7 +301,7 @@ int __EXPORT SdrCustomShapeGeometryItem::operator==( const SfxPoolItem& rCmp ) c
     return bRet;
 }
 
-SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
+SfxItemPresentation SdrCustomShapeGeometryItem::GetPresentation(
     SfxItemPresentation ePresentation, SfxMapUnit /*eCoreMetric*/,
     SfxMapUnit /*ePresentationMetric*/, XubString &rText, const IntlWrapper *) const
 {
@@ -316,12 +316,12 @@ SfxItemPresentation __EXPORT SdrCustomShapeGeometryItem::GetPresentation(
     return ePresentation;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
+SfxPoolItem* SdrCustomShapeGeometryItem::Create( SvStream& rIn, sal_uInt16 nItemVersion ) const
 {
     return new SdrCustomShapeGeometryItem( rIn, nItemVersion );
 }
 
-SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
+SvStream& SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16 nItemVersion ) const
 {
     if ( nItemVersion )
     {
@@ -330,7 +330,7 @@ SvStream& __EXPORT SdrCustomShapeGeometryItem::Store( SvStream& rOut, sal_uInt16
     return rOut;
 }
 
-SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
+SfxPoolItem* SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/ ) const
 {
     SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( GetGeometry() );
 //  SdrCustomShapeGeometryItem* pItem = new SdrCustomShapeGeometryItem( *this );
@@ -346,7 +346,7 @@ SfxPoolItem* __EXPORT SdrCustomShapeGeometryItem::Clone( SfxItemPool * /*pPool*/
 }
 
 #ifdef SDR_ISPOOLABLE
-int __EXPORT SdrCustomShapeGeometryItem::IsPoolable() const
+int SdrCustomShapeGeometryItem::IsPoolable() const
 {
     USHORT nId=Which();
     return nId < SDRATTR_NOTPERSIST_FIRST || nId > SDRATTR_NOTPERSIST_LAST;

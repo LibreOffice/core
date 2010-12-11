@@ -2172,7 +2172,7 @@ LanguageType EditEngine::GetDefaultLanguage() const
     return pImpEditEngine->GetDefaultLanguage();
 }
 
-sal_Bool __EXPORT EditEngine::SpellNextDocument()
+sal_Bool EditEngine::SpellNextDocument()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return sal_False;
@@ -2223,7 +2223,7 @@ sal_Bool EditEngine::HasConvertibleTextPortion( LanguageType nLang )
     return pImpEditEngine->HasConvertibleTextPortion( nLang );
 }
 
-sal_Bool __EXPORT EditEngine::ConvertNextDocument()
+sal_Bool EditEngine::ConvertNextDocument()
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return sal_False;
@@ -2463,7 +2463,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
 // =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
-void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT,
+void EditEngine::DrawingText( const Point&, const XubString&, USHORT, USHORT,
     const sal_Int32*, const SvxFont&, sal_uInt16, sal_uInt16, BYTE,
     const EEngineData::WrongSpellVector*, const SvxFieldData*, bool, bool, bool,
     const ::com::sun::star::lang::Locale*, const Color&, const Color&)
@@ -2472,7 +2472,7 @@ void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, USHORT, U
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
+void EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*/,
                                       const String& /*rChar*/, const SvxFont& /*rFont*/,
                                       USHORT /*nPara*/, xub_StrLen /*nIndex*/,
                                       BYTE /*nRightToLeft*/, bool /*bEndOfLine*/,
@@ -2482,12 +2482,12 @@ void __EXPORT EditEngine::DrawingTab( const Point& /*rStartPos*/, long /*nWidth*
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::PaintingFirstLine( sal_uInt16, const Point&, long, const Point&, short, OutputDevice* )
+void EditEngine::PaintingFirstLine( sal_uInt16, const Point&, long, const Point&, short, OutputDevice* )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::ParagraphInserted( sal_uInt16 nPara )
+void EditEngine::ParagraphInserted( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
@@ -2500,7 +2500,7 @@ void __EXPORT EditEngine::ParagraphInserted( sal_uInt16 nPara )
     }
 }
 
-void __EXPORT EditEngine::ParagraphDeleted( sal_uInt16 nPara )
+void EditEngine::ParagraphDeleted( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
@@ -2517,24 +2517,24 @@ void EditEngine::ParagraphConnected( USHORT /*nLeftParagraph*/, USHORT /*nRightP
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-sal_Bool __EXPORT EditEngine::FormattingParagraph( sal_uInt16 )
+sal_Bool EditEngine::FormattingParagraph( sal_uInt16 )
 {
     // return sal_True, wenn die Attribute geaendert wurden...
     DBG_CHKTHIS( EditEngine, 0 );
     return sal_False;
 }
 
-void __EXPORT EditEngine::ParaAttribsChanged( sal_uInt16 /* nParagraph */ )
+void EditEngine::ParaAttribsChanged( sal_uInt16 /* nParagraph */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::StyleSheetChanged( SfxStyleSheet* /* pStyle */ )
+void EditEngine::StyleSheetChanged( SfxStyleSheet* /* pStyle */ )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
+void EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 
@@ -2547,7 +2547,7 @@ void __EXPORT EditEngine::ParagraphHeightChanged( sal_uInt16 nPara )
     }
 }
 
-XubString __EXPORT EditEngine::GetUndoComment( sal_uInt16 nId ) const
+XubString EditEngine::GetUndoComment( sal_uInt16 nId ) const
 {
     DBG_CHKTHIS( EditEngine, 0 );
     XubString aComment;
@@ -2605,18 +2605,18 @@ Rectangle EditEngine::GetBulletArea( sal_uInt16 )
     return Rectangle( Point(), Point() );
 }
 
-XubString __EXPORT EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
+XubString EditEngine::CalcFieldValue( const SvxFieldItem&, sal_uInt16, sal_uInt16, Color*&, Color*& )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return ' ';
 }
 
-void __EXPORT EditEngine::FieldClicked( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
+void EditEngine::FieldClicked( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }
 
-void __EXPORT EditEngine::FieldSelected( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
+void EditEngine::FieldSelected( const SvxFieldItem&, sal_uInt16, sal_uInt16 )
 {
     DBG_CHKTHIS( EditEngine, 0 );
 }

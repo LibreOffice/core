@@ -201,7 +201,7 @@ public:
     virtual void    FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos );
 };
 
-XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     const SvxFieldData* pField = rField.GetField();
     if ( !pField )
@@ -231,7 +231,7 @@ XubString __EXPORT MyEditEngine::CalcFieldValue( const SvxFieldItem& rField, USH
     return String( RTL_CONSTASCII_USTRINGPARAM( "???" ) );
 }
 
-void __EXPORT MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
+void MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
     EditEngine::FieldClicked( rField, nPara, nPos );    // Falls URL
     const SvxFieldData* pField = rField.GetField();
@@ -247,7 +247,7 @@ void __EXPORT MyEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT nPa
         Sound::Beep();
 }
 
-void __EXPORT MyEditEngine::FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
+void MyEditEngine::FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
     const SvxFieldData* pField = rField.GetField();
     if ( !pField )
@@ -295,12 +295,12 @@ MyView::~MyView()
     delete pEditView;
 }
 
-void __EXPORT MyView::Paint( const Rectangle& rRec )
+void MyView::Paint( const Rectangle& rRec )
 {
     pEditView->Paint( rRec );
 }
 
-void __EXPORT MyView::Resize()
+void MyView::Resize()
 {
     Size aPaperSz( GetOutputSize() );
 //  aPaperSz.Width() /= 2;
@@ -312,12 +312,12 @@ void __EXPORT MyView::Resize()
 }
 
 // --- MyView::KeyInput() --------------------------------------
-void __EXPORT MyView::KeyInput( const KeyEvent& rKEvt )
+void MyView::KeyInput( const KeyEvent& rKEvt )
 {
     pEditView->PostKeyEvent( rKEvt );
 }
 
-void __EXPORT MyView::MouseMove( const MouseEvent& rMEvt )
+void MyView::MouseMove( const MouseEvent& rMEvt )
 {
     Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
     if ( pEditView->GetOutputArea().IsInside( aPos ) )
@@ -329,28 +329,28 @@ void __EXPORT MyView::MouseMove( const MouseEvent& rMEvt )
     pEditView->MouseMove( rMEvt );
 }
 
-void __EXPORT MyView::MouseButtonDown( const MouseEvent& rMEvt )
+void MyView::MouseButtonDown( const MouseEvent& rMEvt )
 {
     pEditView->MouseButtonDown( rMEvt );
 }
 
-void __EXPORT MyView::MouseButtonUp( const MouseEvent& rMEvt )
+void MyView::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEditView->MouseButtonUp( rMEvt );
 }
 
-void __EXPORT MyView::Command( const CommandEvent& rCEvt )
+void MyView::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_STARTDRAG )
         pEditView->Command(rCEvt);
 }
 
-BOOL __EXPORT MyView::Drop( const DropEvent& rEvt )
+BOOL MyView::Drop( const DropEvent& rEvt )
 {
     return pEditView->Drop( rEvt );
 }
 
-BOOL __EXPORT MyView::QueryDrop( DropEvent& rEvt )
+BOOL MyView::QueryDrop( DropEvent& rEvt )
 {
     return pEditView->QueryDrop( rEvt );
 }
@@ -1286,7 +1286,7 @@ void EditMainWindow::CreatePolygon()
     aViewWin.Invalidate();
 }
 
-void __EXPORT EditMainWindow::GetFocus()
+void EditMainWindow::GetFocus()
 {
     aViewWin.GrabFocus();
 }
@@ -1351,7 +1351,7 @@ void EditMainWindow::SetScrollBars()
     aHScrollBar.Show();
 }
 
-void __EXPORT EditMainWindow::Resize()
+void EditMainWindow::Resize()
 {
     long nBorder = aVScrollBar.GetSizePixel().Width();
     long nExtra = 10;
@@ -1469,7 +1469,7 @@ EditViewWindow::EditViewWindow( Window* pParent ) :
 #endif
 }
 
-void __EXPORT EditViewWindow::Paint( const Rectangle& rRec )
+void EditViewWindow::Paint( const Rectangle& rRec )
 {
     if ( pEditView->GetEditEngine()->GetPolygon() )
     {
@@ -1522,7 +1522,7 @@ void EditViewWindow::MarkOutputArea()
     aCurFrame = aOutArea;
 }
 
-void __EXPORT EditViewWindow::Resize()
+void EditViewWindow::Resize()
 {
     Size aPaperSz( GetOutputSize() );
     pEditView->SetOutputArea( Rectangle( Point(0,0), aPaperSz ) );
@@ -1531,7 +1531,7 @@ void __EXPORT EditViewWindow::Resize()
     Invalidate();
 }
 
-void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
+void EditViewWindow::KeyInput( const KeyEvent& rKEvt )
 {
     sal_Unicode nCharCode = rKEvt.GetCharCode();
 
@@ -1708,7 +1708,7 @@ void __EXPORT EditViewWindow::KeyInput( const KeyEvent& rKEvt )
     ((EditMainWindow*)GetParent())->UpdateToolBox();
 }
 
-void __EXPORT EditViewWindow::MouseMove( const MouseEvent& rMEvt )
+void EditViewWindow::MouseMove( const MouseEvent& rMEvt )
 {
     Point aPos = PixelToLogic( rMEvt.GetPosPixel() );
     if ( pEditView->GetOutputArea().IsInside( aPos ) )
@@ -1736,19 +1736,19 @@ void __EXPORT EditViewWindow::MouseMove( const MouseEvent& rMEvt )
     pEditView->MouseMove( rMEvt );
 }
 
-void __EXPORT EditViewWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void EditViewWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     GrabFocus();
     pEditView->MouseButtonDown( rMEvt );
 }
 
-void __EXPORT EditViewWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void EditViewWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEditView->MouseButtonUp( rMEvt );
     ((EditMainWindow*)GetParent())->UpdateToolBox();
 }
 
-void __EXPORT EditViewWindow::Command( const CommandEvent& rCEvt )
+void EditViewWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == COMMAND_CONTEXTMENU )
     {
@@ -1760,19 +1760,19 @@ void __EXPORT EditViewWindow::Command( const CommandEvent& rCEvt )
 
 }
 
-BOOL __EXPORT EditViewWindow::Drop( const DropEvent& rEvt )
+BOOL EditViewWindow::Drop( const DropEvent& rEvt )
 {
     return pEditView->Drop( rEvt );
 }
 
-BOOL __EXPORT EditViewWindow::QueryDrop( DropEvent& rEvt )
+BOOL EditViewWindow::QueryDrop( DropEvent& rEvt )
 {
     return pEditView->QueryDrop( rEvt );
 }
 
 // --- aEditApp ------------------------------------------------------
 
-void __EXPORT EditApp::Main()
+void EditApp::Main()
 {
 #ifdef WNT
     SvFactory::Init();

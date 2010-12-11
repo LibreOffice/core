@@ -302,7 +302,7 @@ EditTextObject::EditTextObject( const EditTextObject& r )
     nWhich = r.nWhich;
 }
 
-__EXPORT EditTextObject::~EditTextObject()
+EditTextObject::~EditTextObject()
 {
     DBG_DTOR( EE_EditTextObject, 0 );
 }
@@ -425,14 +425,14 @@ void EditTextObject::SetStyleSheet( USHORT /*nPara*/, const XubString& /*rName*/
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
 }
 
-BOOL __EXPORT EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
+BOOL EditTextObject::ChangeStyleSheets( const XubString&, SfxStyleFamily,
                                             const XubString&, SfxStyleFamily )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
     return FALSE;
 }
 
-void __EXPORT EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
+void EditTextObject::ChangeStyleSheetName( SfxStyleFamily /*eFamily*/,
                 const XubString& /*rOldName*/, const XubString& /*rNewName*/ )
 {
     DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
@@ -557,12 +557,12 @@ void EditTextObject::Skip( SvStream& rIStream )
     rIStream.Seek( nStartPos + nFullSz );
 }
 
-void __EXPORT EditTextObject::StoreData( SvStream& ) const
+void EditTextObject::StoreData( SvStream& ) const
 {
     DBG_ERROR( "StoreData: Basisklasse!" );
 }
 
-void __EXPORT EditTextObject::CreateData( SvStream& )
+void EditTextObject::CreateData( SvStream& )
 {
     DBG_ERROR( "CreateData: Basisklasse!" );
 }
@@ -719,7 +719,7 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     }
 }
 
-__EXPORT BinTextObject::~BinTextObject()
+BinTextObject::~BinTextObject()
 {
     if(!bOwnerOfPool && pPool)
     {
@@ -793,7 +793,7 @@ void BinTextObject::DeleteContents()
     aContents.Remove( 0, aContents.Count() );
 }
 
-EditTextObject* __EXPORT BinTextObject::Clone() const
+EditTextObject* BinTextObject::Clone() const
 {
     return new BinTextObject( *this );
 }
@@ -1151,7 +1151,7 @@ BOOL BinTextObject::ImpChangeStyleSheets(
     return bChanges;
 }
 
-BOOL __EXPORT BinTextObject::ChangeStyleSheets(
+BOOL BinTextObject::ChangeStyleSheets(
                     const XubString& rOldName, SfxStyleFamily eOldFamily,
                     const XubString& rNewName, SfxStyleFamily eNewFamily )
 {
@@ -1162,13 +1162,13 @@ BOOL __EXPORT BinTextObject::ChangeStyleSheets(
     return bChanges;
 }
 
-void __EXPORT BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
+void BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
                 const XubString& rOldName, const XubString& rNewName )
 {
     ImpChangeStyleSheets( rOldName, eFamily, rNewName, eFamily );
 }
 
-void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
+void BinTextObject::StoreData( SvStream& rOStream ) const
 {
     USHORT nVer = 602;
     rOStream << nVer;
@@ -1343,7 +1343,7 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
     }
 }
 
-void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
+void BinTextObject::CreateData( SvStream& rIStream )
 {
     rIStream >> nVersion;
 
@@ -1661,7 +1661,7 @@ bool BinTextObject::isWrongListEqual(const BinTextObject& rCompare) const
 
 #define CHARSETMARKER   0x9999
 
-void __EXPORT BinTextObject::CreateData300( SvStream& rIStream )
+void BinTextObject::CreateData300( SvStream& rIStream )
 {
     // Fuer Aufwaertskompatibilitaet.
 

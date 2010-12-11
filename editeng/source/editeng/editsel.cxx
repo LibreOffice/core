@@ -43,18 +43,18 @@ EditSelFunctionSet::EditSelFunctionSet()
     pCurView = NULL;
 }
 
-void __EXPORT EditSelFunctionSet::CreateAnchor()
+void EditSelFunctionSet::CreateAnchor()
 {
     if ( pCurView )
         pCurView->pImpEditView->CreateAnchor();
 }
 
-void __EXPORT EditSelFunctionSet::DestroyAnchor()
+void EditSelFunctionSet::DestroyAnchor()
 {
     // Nur bei Mehrfachselektion
 }
 
-BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
+BOOL EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL )
 {
     if ( pCurView )
         return pCurView->pImpEditView->SetCursorAtPoint( rPointPixel );
@@ -62,7 +62,7 @@ BOOL __EXPORT EditSelFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BO
     return FALSE;
 }
 
-BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+BOOL EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     if ( pCurView )
         return pCurView->pImpEditView->IsSelectionAtPoint( rPointPixel );
@@ -70,20 +70,20 @@ BOOL __EXPORT EditSelFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
     return FALSE;
 }
 
-void __EXPORT EditSelFunctionSet::DeselectAtPoint( const Point& )
+void EditSelFunctionSet::DeselectAtPoint( const Point& )
 {
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // !  Implementieren, wenn Mehrfachselektion moeglich  !
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 }
 
-void __EXPORT EditSelFunctionSet::BeginDrag()
+void EditSelFunctionSet::BeginDrag()
 {
     // Nur bei Mehrfachselektion
 }
 
 
-void __EXPORT EditSelFunctionSet::DeselectAll()
+void EditSelFunctionSet::DeselectAll()
 {
     if ( pCurView )
         pCurView->pImpEditView->DeselectAll();

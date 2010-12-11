@@ -93,7 +93,7 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bIsNewDoc,
     SetSwitchToUCS2( TRUE );
 }
 
-__EXPORT SfxHTMLParser::~SfxHTMLParser()
+SfxHTMLParser::~SfxHTMLParser()
 {
     DBG_ASSERT( !pDLMedium, "Da ist ein File-Download stehengeblieben" );
     delete pDLMedium;

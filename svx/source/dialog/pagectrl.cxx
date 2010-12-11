@@ -123,7 +123,7 @@ SvxPageWindow::~SvxPageWindow()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT SvxPageWindow::Paint( const Rectangle& )
+void SvxPageWindow::Paint( const Rectangle& )
 {
     Fraction aXScale( aWinSize.Width(), std::max( (long) (aSize.Width() * 2 + aSize.Width() / 8), 1L ) );
     Fraction aYScale( aWinSize.Height(), std::max( aSize.Height(), 1L ) );

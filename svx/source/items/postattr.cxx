@@ -87,7 +87,7 @@ SfxItemPresentation SvxPostItAuthorItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItAuthorItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItAuthorItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItAuthorItem( *this );
 }
@@ -136,7 +136,7 @@ SfxItemPresentation SvxPostItDateItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItDateItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItDateItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItDateItem( *this );
 }
@@ -185,7 +185,7 @@ SfxItemPresentation SvxPostItTextItem::GetPresentation
 
 // -----------------------------------------------------------------------
 
-SfxPoolItem* __EXPORT SvxPostItTextItem::Clone( SfxItemPool * ) const
+SfxPoolItem* SvxPostItTextItem::Clone( SfxItemPool * ) const
 {
     return new SvxPostItTextItem( *this );
 }

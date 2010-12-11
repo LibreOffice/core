@@ -509,11 +509,11 @@ void TestWindow::CheckError()
      }
 }
 
-void __EXPORT TestWindow::Paint( const Rectangle& rRec )
+void TestWindow::Paint( const Rectangle& rRec )
 {
 }
 
-void __EXPORT TestWindow::Resize()
+void TestWindow::Resize()
 {
     Size aTBSz = aToolBox.CalcWindowSizePixel();
     aToolBox.SetSizePixel( Size( GetOutputSizePixel().Width(), aTBSz.Height()) );
@@ -521,7 +521,7 @@ void __EXPORT TestWindow::Resize()
     ShowInfo();
 }
 
-void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
+void TestWindow::KeyInput( const KeyEvent& rKEvt )
 {
     char nCharCode = rKEvt.GetCharCode();
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
@@ -535,16 +535,16 @@ void __EXPORT TestWindow::KeyInput( const KeyEvent& rKEvt )
     UpdateToolBox();
 }
 
-void __EXPORT TestWindow::MouseMove( const MouseEvent& rMEvt )
+void TestWindow::MouseMove( const MouseEvent& rMEvt )
 {
 }
 
-void __EXPORT TestWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void TestWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     ShowInfo();
 }
 
-void __EXPORT TestWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void TestWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     UpdateToolBox();
 }
@@ -569,12 +569,12 @@ IMPL_LINK( TestWindow, BasicErrorHdl, StarBASIC *, pBasic )
     return 0;
 }
 
-void __EXPORT TestApp::Main( void )
+void TestApp::Main( void )
 {
     Main( 0, NULL );
 }
 
-void __EXPORT TestApp::Main( int, char*[] )
+void TestApp::Main( int, char*[] )
 {
     BasicDLL aBasiDLL;
     SvFactory::Init();

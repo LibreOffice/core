@@ -66,18 +66,18 @@ SvxRotateModeItem::SvxRotateModeItem( const SvxRotateModeItem& rItem )
 {
 }
 
-__EXPORT SvxRotateModeItem::~SvxRotateModeItem()
+SvxRotateModeItem::~SvxRotateModeItem()
 {
 }
 
-SfxPoolItem* __EXPORT SvxRotateModeItem::Create( SvStream& rStream, USHORT ) const
+SfxPoolItem* SvxRotateModeItem::Create( SvStream& rStream, USHORT ) const
 {
     USHORT nVal;
     rStream >> nVal;
     return new SvxRotateModeItem( (SvxRotateMode) nVal,Which() );
 }
 
-SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
+SfxItemPresentation SvxRotateModeItem::GetPresentation(
                                 SfxItemPresentation ePres,
                                 SfxMapUnit /*eCoreUnit*/, SfxMapUnit /*ePresUnit*/,
                                 String& rText, const IntlWrapper * )  const
@@ -100,7 +100,7 @@ SfxItemPresentation __EXPORT SvxRotateModeItem::GetPresentation(
     return ePres;
 }
 
-String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
+String SvxRotateModeItem::GetValueText( USHORT nVal ) const
 {
     String aText;
 
@@ -119,17 +119,17 @@ String __EXPORT SvxRotateModeItem::GetValueText( USHORT nVal ) const
     return aText;
 }
 
-USHORT __EXPORT SvxRotateModeItem::GetValueCount() const
+USHORT SvxRotateModeItem::GetValueCount() const
 {
     return 4;       // STANDARD, TOP, CENTER, BOTTOM
 }
 
-SfxPoolItem* __EXPORT SvxRotateModeItem::Clone( SfxItemPool* ) const
+SfxPoolItem* SvxRotateModeItem::Clone( SfxItemPool* ) const
 {
     return new SvxRotateModeItem( *this );
 }
 
-USHORT __EXPORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
+USHORT SvxRotateModeItem::GetVersion( USHORT /*nFileVersion*/ ) const
 {
     return 0;
 }

@@ -78,7 +78,7 @@ ValWnd::ValWnd( Window* pParent, const ResId& rId ) : Window( pParent, rId )
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ValWnd::Paint( const Rectangle& )
+void ValWnd::Paint( const Rectangle& )
 {
     DrawText( aRectOut.TopLeft(), aStrValue );
 }
@@ -123,7 +123,7 @@ void ArgEdit::Init( ArgEdit* pPrevEdit, ArgEdit* pNextEdit,
 
 // Cursor control for Edit Fields in Argument Dialog
 
-void __EXPORT ArgEdit::KeyInput( const KeyEvent& rKEvt )
+void ArgEdit::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode     aCode   = rKEvt.GetKeyCode();
     BOOL        bUp     = (aCode.GetCode() == KEY_UP);

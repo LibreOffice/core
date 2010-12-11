@@ -661,7 +661,7 @@ void Outliner::AddText( const OutlinerParaObject& rPObj )
     pEditEngine->SetUpdateMode( bUpdate );
 }
 
-void __EXPORT Outliner::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
+void Outliner::FieldClicked( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
     DBG_CHKTHIS(Outliner,0);
 
@@ -674,7 +674,7 @@ void __EXPORT Outliner::FieldClicked( const SvxFieldItem& rField, USHORT nPara, 
 }
 
 
-void __EXPORT Outliner::FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
+void Outliner::FieldSelected( const SvxFieldItem& rField, USHORT nPara, USHORT nPos )
 {
     DBG_CHKTHIS(Outliner,0);
     if ( !aFieldClickedHdl.IsSet() )
@@ -686,7 +686,7 @@ void __EXPORT Outliner::FieldSelected( const SvxFieldItem& rField, USHORT nPara,
 }
 
 
-XubString __EXPORT Outliner::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
+XubString Outliner::CalcFieldValue( const SvxFieldItem& rField, USHORT nPara, USHORT nPos, Color*& rpTxtColor, Color*& rpFldColor )
 {
     DBG_CHKTHIS(Outliner,0);
     if ( !aCalcFieldValueHdl.IsSet() )

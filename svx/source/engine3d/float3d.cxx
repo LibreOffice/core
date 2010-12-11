@@ -100,7 +100,7 @@ namespace {
 /*************************************************************************
 |*  Svx3DWin - FloatingWindow
 \************************************************************************/
-__EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
+Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
                 SfxChildWindow *pCW, Window* pParent ) :
         SfxDockingWindow    ( pInBindings, pCW, pParent,
                                     SVX_RES( RID_SVXFLOAT_3D ) ),
@@ -365,7 +365,7 @@ __EXPORT Svx3DWin::Svx3DWin( SfxBindings* pInBindings,
 }
 
 // -----------------------------------------------------------------------
-__EXPORT Svx3DWin::~Svx3DWin()
+Svx3DWin::~Svx3DWin()
 {
     //delete pMatFavSetList;
     delete p3DView;
@@ -2165,7 +2165,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
 }
 
 // -----------------------------------------------------------------------
-void __EXPORT Svx3DWin::Resize()
+void Svx3DWin::Resize()
 {
     if ( !IsFloatingMode() ||
          !GetFloatingWindow()->IsRollUp() )
@@ -3213,7 +3213,7 @@ ColorLB* Svx3DWin::GetLbByButton( const PushButton* pBtn )
 |* Ableitung vom SfxChildWindow als "Behaelter" fuer Effekte
 |*
 \************************************************************************/
-__EXPORT Svx3DChildWindow::Svx3DChildWindow( Window* _pParent,
+Svx3DChildWindow::Svx3DChildWindow( Window* _pParent,
                                                          USHORT nId,
                                                          SfxBindings* pBindings,
                                                          SfxChildWinInfo* pInfo ) :
@@ -3241,7 +3241,7 @@ Svx3DCtrlItem::Svx3DCtrlItem( USHORT _nId,
 }
 
 // -----------------------------------------------------------------------
-void __EXPORT Svx3DCtrlItem::StateChanged( USHORT /*nSId*/,
+void Svx3DCtrlItem::StateChanged( USHORT /*nSId*/,
                         SfxItemState /*eState*/, const SfxPoolItem* /*pItem*/ )
 {
 }

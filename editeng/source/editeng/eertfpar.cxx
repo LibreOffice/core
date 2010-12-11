@@ -99,7 +99,7 @@ EditRTFParser::~EditRTFParser()
 {
 }
 
-SvParserState __EXPORT EditRTFParser::CallParser()
+SvParserState EditRTFParser::CallParser()
 {
     DBG_ASSERT( !aCurSel.HasRange(), "Selection bei CallParser!" );
     // Den Teil, in den importiert wird, vom Rest abtrennen.
@@ -190,7 +190,7 @@ void EditRTFParser::AddRTFDefaultValues( const EditPaM& rStart, const EditPaM& r
     }
 }
 
-void __EXPORT EditRTFParser::NextToken( int nToken )
+void EditRTFParser::NextToken( int nToken )
 {
     switch( nToken )
     {
@@ -242,7 +242,7 @@ void __EXPORT EditRTFParser::NextToken( int nToken )
     }
 }
 
-void __EXPORT EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
+void EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
 {
     // fuer Tokens, die im ReadAttr nicht ausgewertet werden
     // Eigentlich nur fuer Calc (RTFTokenHdl), damit RTF_INTBL
@@ -255,7 +255,7 @@ void __EXPORT EditRTFParser::UnknownAttrToken( int nToken, SfxItemSet* )
     }
 }
 
-void __EXPORT EditRTFParser::InsertText()
+void EditRTFParser::InsertText()
 {
     String aText( aToken );
     if ( pImpEditEngine->aImportHdl.IsSet() )
@@ -268,7 +268,7 @@ void __EXPORT EditRTFParser::InsertText()
     nLastAction = ACTION_INSERTTEXT;
 }
 
-void __EXPORT EditRTFParser::InsertPara()
+void EditRTFParser::InsertPara()
 {
     if ( pImpEditEngine->aImportHdl.IsSet() )
     {
@@ -279,7 +279,7 @@ void __EXPORT EditRTFParser::InsertPara()
     nLastAction = ACTION_INSERTPARABRK;
 }
 
-void __EXPORT EditRTFParser::MovePos( int bForward )
+void EditRTFParser::MovePos( int bForward )
 {
     if( bForward )
         aCurSel = pImpEditEngine->CursorRight( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
@@ -287,7 +287,7 @@ void __EXPORT EditRTFParser::MovePos( int bForward )
         aCurSel = pImpEditEngine->CursorLeft( aCurSel.Max(), ::com::sun::star::i18n::CharacterIteratorMode::SKIPCHARACTER );
 }
 
-void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
+void EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
                                     USHORT& rCntPos )
 {
     //    Gewollt ist: von der aktuellen Einfuegeposition den vorherigen
@@ -306,12 +306,12 @@ void __EXPORT EditRTFParser::SetEndPrevPara( SvxNodeIdx*& rpNodePos,
     rCntPos = pPrevNode->Len();
 }
 
-int __EXPORT EditRTFParser::IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const
+int EditRTFParser::IsEndPara( SvxNodeIdx* pNd, USHORT nCnt ) const
 {
     return ( nCnt == ( ((EditNodeIdx*)pNd)->GetNode()->Len()) );
 }
 
-void __EXPORT EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
+void EditRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
 {
     ContentNode* pSttNode = ((EditNodeIdx&)rSet.GetSttNode()).GetNode();
     ContentNode* pEndNode = ((EditNodeIdx&)rSet.GetEndNode()).GetNode();
@@ -499,7 +499,7 @@ void EditRTFParser::CreateStyleSheets()
     }
 }
 
-void __EXPORT EditRTFParser::CalcValue()
+void EditRTFParser::CalcValue()
 {
     const MapUnit eDestUnit = static_cast< MapUnit >( aEditMapMode.GetMapUnit() );
     const MapUnit eSrcUnit  = aRTFMapMode.GetMapUnit();
@@ -602,33 +602,33 @@ void EditRTFParser::SkipGroup()
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
 }
 
-ULONG __EXPORT EditNodeIdx::GetIdx() const
+ULONG EditNodeIdx::GetIdx() const
 {
     return pImpEditEngine->GetEditDoc().GetPos( pNode );
 }
 
-SvxNodeIdx* __EXPORT EditNodeIdx::Clone() const
+SvxNodeIdx* EditNodeIdx::Clone() const
 {
     return new EditNodeIdx( pImpEditEngine, pNode );
 }
 
-SvxPosition* __EXPORT EditPosition::Clone() const
+SvxPosition* EditPosition::Clone() const
 {
     return new EditPosition( pImpEditEngine, pCurSel );
 }
 
-SvxNodeIdx* __EXPORT EditPosition::MakeNodeIdx() const
+SvxNodeIdx* EditPosition::MakeNodeIdx() const
 {
     return new EditNodeIdx( pImpEditEngine, pCurSel->Max().GetNode() );
 }
 
-ULONG __EXPORT EditPosition::GetNodeIdx() const
+ULONG EditPosition::GetNodeIdx() const
 {
     ContentNode* pN = pCurSel->Max().GetNode();
     return pImpEditEngine->GetEditDoc().GetPos( pN );
 }
 
-USHORT __EXPORT EditPosition::GetCntIdx() const
+USHORT EditPosition::GetCntIdx() const
 {
     return pCurSel->Max().GetIndex();
 }
