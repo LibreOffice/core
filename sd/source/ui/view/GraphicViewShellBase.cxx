@@ -53,7 +53,7 @@ SFX_IMPL_VIEWFACTORY(GraphicViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* GraphicViewShellBase::pFactory;
-SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
+SfxViewShell* GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);

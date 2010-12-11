@@ -53,7 +53,7 @@ SFX_IMPL_VIEWFACTORY(ImpressViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* ImpressViewShellBase::pFactory;
-SfxViewShell* __EXPORT ImpressViewShellBase::CreateInstance (
+SfxViewShell* ImpressViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ImpressViewShellBase* pBase = new ImpressViewShellBase(pFrame, pOldView);

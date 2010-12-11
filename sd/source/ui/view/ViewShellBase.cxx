@@ -249,7 +249,7 @@ SFX_IMPL_VIEWFACTORY(ViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* ViewShellBase::pFactory;
-SfxViewShell* __EXPORT ViewShellBase::CreateInstance (
+SfxViewShell* ViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     ViewShellBase* pBase = new ViewShellBase(pFrame, pOldView);

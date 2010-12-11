@@ -51,7 +51,7 @@ SFX_IMPL_VIEWFACTORY(SlideSorterViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* SlideSorterViewShellBase::pFactory;
-SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
+SfxViewShell* SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);

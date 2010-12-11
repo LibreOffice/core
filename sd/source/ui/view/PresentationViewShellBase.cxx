@@ -60,7 +60,7 @@ SFX_IMPL_VIEWFACTORY(PresentationViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* PresentationViewShellBase::pFactory;
-SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
+SfxViewShell* PresentationViewShellBase::CreateInstance (
     SfxViewFrame *_pFrame, SfxViewShell *pOldView)
 {
     PresentationViewShellBase* pBase =

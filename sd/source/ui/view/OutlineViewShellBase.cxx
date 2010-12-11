@@ -51,7 +51,7 @@ SFX_IMPL_VIEWFACTORY(OutlineViewShellBase, SdResId(STR_DEFAULTVIEW))
 }
 */
 SfxViewFactory* OutlineViewShellBase::pFactory;
-SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
+SfxViewShell* OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
