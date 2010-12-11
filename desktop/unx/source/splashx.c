@@ -308,11 +308,10 @@ static void create_pixmap()
         int bytes_per_line = image->bytes_per_line;
         int bpp = image->bits_per_pixel;
         int byte_order = image->byte_order;
-        int machine_byte_order;
 #if defined( _LITTLE_ENDIAN )
-        machine_byte_order = LSBFirst;
+        int machine_byte_order = LSBFirst;
 #elif defined( _BIG_ENDIAN )
-        machine_byte_order = MSBFirst;
+        int machine_byte_order = MSBFirst;
 #else
         {
             fprintf( stderr, "Unsupported machine endianity.\n" );
