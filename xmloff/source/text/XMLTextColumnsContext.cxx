@@ -88,7 +88,7 @@ static SvXMLTokenMapEntry aColSepAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_Sep_Align_Enum[] =
+SvXMLEnumMapEntry const pXML_Sep_Align_Enum[] =
 {
     { XML_TOP,          VerticalAlignment_TOP   },
     { XML_MIDDLE,       VerticalAlignment_MIDDLE },

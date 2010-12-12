@@ -822,7 +822,7 @@ void XMLAuthorFieldImportContext::PrepareField(
 
 TYPEINIT1( XMLPageContinuationImportContext, XMLTextFieldImportContext );
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aSelectPageAttrMap[] =
+static SvXMLEnumMapEntry const lcl_aSelectPageAttrMap[] =
 {
     { XML_PREVIOUS,     PageNumberType_PREV },
     { XML_CURRENT,      PageNumberType_CURRENT },
@@ -2878,7 +2878,7 @@ XMLReferenceFieldImportContext::XMLReferenceFieldImportContext(
 {
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA lcl_aReferenceTypeTokenMap[] =
+static SvXMLEnumMapEntry const lcl_aReferenceTypeTokenMap[] =
 {
     { XML_PAGE,         ReferenceFieldPart::PAGE},
     { XML_CHAPTER,      ReferenceFieldPart::CHAPTER },
@@ -3382,7 +3382,7 @@ XMLBibliographyFieldImportContext::XMLBibliographyFieldImportContext(
 }
 
 // TODO: this is the same map as is used in the text field export
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },

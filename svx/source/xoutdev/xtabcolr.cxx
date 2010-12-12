@@ -171,7 +171,7 @@ BOOL XColorTable::Create()
     xub_StrLen nLen;
     ResMgr& rRes = DIALOG_MGR();
 
-    static USHORT __READONLY_DATA aResId[] =
+    static USHORT const aResId[] =
     {
         RID_SVXSTR_BLACK,
         RID_SVXSTR_BLUE,
@@ -200,7 +200,7 @@ BOOL XColorTable::Create()
 
     // BM: ifndef VCL part removed (deprecated)
 
-    static ColorData __READONLY_DATA aColTab[] =
+    static ColorData const aColTab[] =
     {
         COL_BLACK,
         COL_BLUE,

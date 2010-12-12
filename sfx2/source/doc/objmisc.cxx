@@ -170,7 +170,7 @@ public:
 
 //=========================================================================
 
-sal_uInt16 __READONLY_DATA aTitleMap_Impl[3][2] =
+sal_uInt16 const aTitleMap_Impl[3][2] =
 {
                                 //  local               remote
     /*  SFX_TITLE_CAPTION   */  {   SFX_TITLE_FILENAME, SFX_TITLE_TITLE },

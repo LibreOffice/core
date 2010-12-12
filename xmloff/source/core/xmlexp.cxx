@@ -113,8 +113,8 @@ using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::io;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_1_1[] = "1.1";
-sal_Char __READONLY_DATA sXML_1_2[] = "1.2";
+sal_Char const sXML_1_1[] = "1.1";
+sal_Char const sXML_1_2[] = "1.2";
 
 const sal_Char s_grddl_xsl[] =
     "http://docs.oasis-open.org/office/1.2/xslt/odf2rdf.xsl";

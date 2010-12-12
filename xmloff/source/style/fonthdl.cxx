@@ -46,7 +46,7 @@ using namespace ::xmloff::token;
 
 const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
 {
-    static SvXMLEnumMapEntry __READONLY_DATA aFontFamilyGenericMapping[] =
+    static SvXMLEnumMapEntry const aFontFamilyGenericMapping[] =
     {
         { XML_DECORATIVE,       FAMILY_DECORATIVE },
 
@@ -60,7 +60,7 @@ const SvXMLEnumMapEntry* lcl_getFontFamilyGenericMapping()
     return aFontFamilyGenericMapping;
 }
 
-static SvXMLEnumMapEntry __READONLY_DATA aFontPitchMapping[] =
+static SvXMLEnumMapEntry const aFontPitchMapping[] =
 {
     { XML_FIXED,            PITCH_FIXED     },
     { XML_VARIABLE,         PITCH_VARIABLE  },

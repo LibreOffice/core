@@ -393,7 +393,7 @@ void XMLSectionExport::ExportIndexHeaderStart(
 }
 
 
-SvXMLEnumStringMapEntry __READONLY_DATA aIndexTypeMap[] =
+SvXMLEnumStringMapEntry const aIndexTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.ContentIndex", TEXT_SECTION_TYPE_TOC ),
     ENUM_STRING_MAP_ENTRY( "com.sun.star.text.DocumentIndex", TEXT_SECTION_TYPE_ALPHABETICAL ),
@@ -1159,7 +1159,7 @@ enum TemplateParamEnum
     TOK_TPARAM_BIBLIOGRAPHY_DATA
 };
 
-SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
+SvXMLEnumStringMapEntry const aTemplateTypeMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenEntryNumber",  TOK_TTYPE_ENTRY_NUMBER ),
     ENUM_STRING_MAP_ENTRY( "TokenEntryText",    TOK_TTYPE_ENTRY_TEXT ),
@@ -1173,7 +1173,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateTypeMap[] =
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
+SvXMLEnumStringMapEntry const aTemplateParamMap[] =
 {
     ENUM_STRING_MAP_ENTRY( "TokenType",             TOK_TPARAM_TOKEN_TYPE ),
     ENUM_STRING_MAP_ENTRY( "CharacterStyleName",    TOK_TPARAM_CHAR_STYLE ),
@@ -1189,7 +1189,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aTemplateParamMap[] =
     ENUM_STRING_MAP_END()
 };
 
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataFieldMap[] =
+SvXMLEnumMapEntry const aBibliographyDataFieldMap[] =
 {
     { XML_ADDRESS,              BibliographyDataField::ADDRESS },
     { XML_ANNOTE,               BibliographyDataField::ANNOTE },

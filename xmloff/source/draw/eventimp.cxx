@@ -65,7 +65,7 @@ using namespace ::xmloff::token;
 
 ///////////////////////////////////////////////////////////////////////
 
-SvXMLEnumMapEntry __READONLY_DATA aXML_EventActions_EnumMap[] =
+SvXMLEnumMapEntry const aXML_EventActions_EnumMap[] =
 {
     { XML_NONE,             ClickAction_NONE    },
     { XML_PREVIOUS_PAGE,    ClickAction_PREVPAGE },

@@ -51,7 +51,7 @@
 
 #ifndef REDUCEDSVXFONT
     const sal_Unicode CH_BLANK = sal_Unicode(' ');      // ' ' Leerzeichen
-    static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+    static sal_Char const sDoubleSpace[] = "  ";
 #endif
 
 /*************************************************************************

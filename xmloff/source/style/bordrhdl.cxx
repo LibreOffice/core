@@ -157,13 +157,13 @@ SvXMLEnumMapEntry pXML_NamedBorderWidths[] =
     DEF_DOUBLE_LINE##n##_DIST
 
 
-static sal_uInt16 __READONLY_DATA aSBorderWidths[] =
+static sal_uInt16 const aSBorderWidths[] =
 {
     SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 1 ), SBORDER_ENTRY( 2 ),
     SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
 };
 
-static sal_uInt16 __READONLY_DATA aDBorderWidths[] =
+static sal_uInt16 const aDBorderWidths[] =
 {
     DBORDER_ENTRY( 0 ),
     DBORDER_ENTRY( 7 ),

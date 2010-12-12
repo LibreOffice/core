@@ -75,12 +75,12 @@ using namespace ::rtl;
 using namespace ::xmloff::token;
 using namespace cppu;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "__office";
-sal_Char __READONLY_DATA sXML_np__office_ooo[] = "___office";
-sal_Char __READONLY_DATA sXML_np__draw[] = "__draw";
-sal_Char __READONLY_DATA sXML_np__draw_ooo[] = "___draw";
-sal_Char __READONLY_DATA sXML_np__ooo[] = "__ooo";
-sal_Char __READONLY_DATA sXML_np__xlink[] = "__xlink";
+sal_Char const sXML_np__office[] = "__office";
+sal_Char const sXML_np__office_ooo[] = "___office";
+sal_Char const sXML_np__draw[] = "__draw";
+sal_Char const sXML_np__draw_ooo[] = "___draw";
+sal_Char const sXML_np__ooo[] = "__ooo";
+sal_Char const sXML_np__xlink[] = "__xlink";
 
 ///////////////////////////////////////////////////////////////////////
 

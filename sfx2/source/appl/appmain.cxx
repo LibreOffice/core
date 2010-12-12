@@ -85,7 +85,7 @@ DBG_NAME(SfxAppMainCHAOSReg)
 //===================================================================
 
 #ifdef TF_POOLABLE
-static SfxItemInfo __READONLY_DATA aItemInfos[] =
+static SfxItemInfo const aItemInfos[] =
 {
     { 0, 0 }
 };

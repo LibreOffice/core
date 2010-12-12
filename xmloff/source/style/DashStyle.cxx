@@ -75,7 +75,7 @@ static SvXMLTokenMapEntry aDashStyleAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
-SvXMLEnumMapEntry __READONLY_DATA pXML_DashStyle_Enum[] =
+SvXMLEnumMapEntry const pXML_DashStyle_Enum[] =
 {
     { XML_RECT,         drawing::DashStyle_RECT },
     { XML_ROUND,        drawing::DashStyle_ROUND },

@@ -2125,12 +2125,12 @@ void SfxDispatcher::SetSlotFilter
 
     gezieltes disablen der Slots 1, 2 und 3:
 
-        static sal_uInt16 __READONLY_DATA pSIDs[] = { 1, 2, 3 };
+        static sal_uInt16 const pSIDs[] = { 1, 2, 3 };
         pDisp->SetSlotFilter( sal_False, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
 
     nur die Slots 5, 6 und 7 zulassen:
 
-        static sal_uInt16 __READONLY_DATA pSIDs[] = { 5, 6, 7 };
+        static sal_uInt16 const pSIDs[] = { 5, 6, 7 };
         pDisp->SetSlotFilter( sal_True, sizeof(pSIDs)/sizeof(sal_uInt16), pSIDs );
 
     Filter ausschalten:

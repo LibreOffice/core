@@ -481,12 +481,12 @@ BOOL SvxAutoCorrect::FnChgOrdinalNumber(
     if( 2 < nEndPos - nSttPos &&
         rCC.isDigit( rTxt, nEndPos - 3 ) )
     {
-        static sal_Char __READONLY_DATA
+        static sal_Char const
             sAll[]      = "th",         /* rest */
             sFirst[]    = "st",         /* 1 */
             sSecond[]   = "nd",         /* 2 */
             sThird[]    = "rd";         /* 3 */
-        static const sal_Char* __READONLY_DATA aNumberTab[ 4 ] =
+        static const sal_Char* const aNumberTab[ 4 ] =
         {
             sAll, sFirst, sSecond, sThird
         };

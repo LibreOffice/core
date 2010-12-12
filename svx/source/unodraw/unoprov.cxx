@@ -1249,7 +1249,7 @@ bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount
     return FALSE;
 }
 
-static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
+static USHORT const SvxUnoColorNameDefResId[] =
 {
     RID_SVXSTR_BLUEGREY_DEF,
     RID_SVXSTR_BLACK_DEF,
@@ -1280,7 +1280,7 @@ static USHORT __READONLY_DATA SvxUnoColorNameDefResId[] =
     RID_SVXSTR_COLOR_CHART_DEF
 };
 
-static USHORT __READONLY_DATA SvxUnoColorNameResId[] =
+static USHORT const SvxUnoColorNameResId[] =
 {
     RID_SVXSTR_BLUEGREY,
     RID_SVXSTR_BLACK,

@@ -85,34 +85,34 @@ using namespace ::com::sun::star::io;
 using rtl::OUString;
 using rtl::OUStringBuffer;
 
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
+static sal_Char const XML_UNO_NAME_NRULE_SYMBOL_TEXT_DISTANCE[] =
         "SymbolTextDistance";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PARENT_NUMBERING[] =
+static sal_Char const XML_UNO_NAME_NRULE_PARENT_NUMBERING[] =
         "ParentNumbering";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] =
+static sal_Char const XML_UNO_NAME_NRULE_CHAR_STYLE_NAME[] =
         "CharStyleName";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_CHAR[] ="BulletChar";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] =
+static sal_Char const XML_UNO_NAME_NRULE_BULLET_CHAR[] ="BulletChar";
+static sal_Char const XML_UNO_NAME_NRULE_BULLET_RELSIZE[] = "BulletRelSize";
+static sal_Char const XML_UNO_NAME_NRULE_GRAPHIC_SIZE[] =
         "GraphicSize";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_VERT_ORIENT[] ="VertOrient";
+static sal_Char const XML_UNO_NAME_NRULE_VERT_ORIENT[] ="VertOrient";
 
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LEFT_MARGIN[] = "LeftMargin";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] =
+static sal_Char const XML_UNO_NAME_NRULE_NUMBERINGTYPE[] = "NumberingType";
+static sal_Char const XML_UNO_NAME_NRULE_PREFIX[] = "Prefix";
+static sal_Char const XML_UNO_NAME_NRULE_SUFFIX[] = "Suffix";
+static sal_Char const XML_UNO_NAME_NRULE_ADJUST[] = "Adjust";
+static sal_Char const XML_UNO_NAME_NRULE_LEFT_MARGIN[] = "LeftMargin";
+static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_OFFSET[] =
     "FirstLineOffset";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
-static sal_Char __READONLY_DATA XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
+static sal_Char const XML_UNO_NAME_NRULE_BULLET_FONT[] = "BulletFont";
+static sal_Char const XML_UNO_NAME_NRULE_GRAPHICURL[] = "GraphicURL";
+static sal_Char const XML_UNO_NAME_NRULE_START_WITH[] = "StartWith";
+static sal_Char const XML_UNO_NAME_NRULE_BULLET_COLOR[] = "BulletColor";
+static sal_Char const XML_UNO_NAME_NRULE_POSITION_AND_SPACE_MODE[] = "PositionAndSpaceMode";
+static sal_Char const XML_UNO_NAME_NRULE_LABEL_FOLLOWED_BY[] = "LabelFollowedBy";
+static sal_Char const XML_UNO_NAME_NRULE_LISTTAB_STOP_POSITION[] = "ListtabStopPosition";
+static sal_Char const XML_UNO_NAME_NRULE_FIRST_LINE_INDENT[] = "FirstLineIndent";
+static sal_Char const XML_UNO_NAME_NRULE_INDENT_AT[] = "IndentAt";
 
 // ---------------------------------------------------------------------
 

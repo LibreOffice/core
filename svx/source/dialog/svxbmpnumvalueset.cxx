@@ -152,7 +152,7 @@ static void lcl_PaintLevel(OutputDevice* pVDev, sal_Int16 nNumberingType,
 }
 void  SvxNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
 {
-    static USHORT __READONLY_DATA aLinesArr[] =
+    static USHORT const aLinesArr[] =
     {
         15, 10,
         20, 30,

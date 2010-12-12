@@ -63,7 +63,7 @@ sal_Char sHTML_MIME_application[] = "application/";
 sal_Char sHTML_MIME_experimental[] = "x-";
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
+static HTMLOptionEnum const aAreaShapeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_SH_rect,      IMAP_OBJ_RECTANGLE  },
     { OOO_STRING_SVTOOLS_HTML_SH_rectangle, IMAP_OBJ_RECTANGLE  },

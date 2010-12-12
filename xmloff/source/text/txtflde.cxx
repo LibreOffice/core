@@ -94,77 +94,77 @@ using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 
 
-static sal_Char __READONLY_DATA FIELD_SERVICE_SENDER[] = "ExtendedUser";
-static sal_Char __READONLY_DATA FIELD_SERVICE_AUTHOR[] = "Author";
-static sal_Char __READONLY_DATA FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GETEXP[] = "GetExpression";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SETEXP[] = "SetExpression";
-static sal_Char __READONLY_DATA FIELD_SERVICE_USER[] = "User";
-static sal_Char __READONLY_DATA FIELD_SERVICE_INPUT[] = "Input";
-static sal_Char __READONLY_DATA FIELD_SERVICE_USERINPUT[] = "InputUser";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DATETIME[] = "DateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_DISPLAY[] = "Database";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DB_NAME[] = "DatabaseName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
-static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
-static sal_Char __READONLY_DATA FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
-static sal_Char __READONLY_DATA FIELD_SERVICE_FILE_NAME[] = "FileName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CHAPTER[] = "Chapter";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_WORD_COUNT[] = "WordCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
-static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SHEET_NAME[] = "SheetName";
-static sal_Char __READONLY_DATA FIELD_SERVICE_MACRO[] = "Macro";
-static sal_Char __READONLY_DATA FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DDE[] = "DDE";
-static sal_Char __READONLY_DATA FIELD_SERVICE_URL[] = "URL";
-static sal_Char __READONLY_DATA FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
-static sal_Char __READONLY_DATA FIELD_SERVICE_SCRIPT[] = "Script";
-static sal_Char __READONLY_DATA FIELD_SERVICE_ANNOTATION[] = "Annotation";
-static sal_Char __READONLY_DATA FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
-static sal_Char __READONLY_DATA FIELD_SERVICE_META[] = "MetadataField";
-static sal_Char __READONLY_DATA FIELD_SERVICE_MEASURE[] = "Measure";
-static sal_Char __READONLY_DATA FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
-static sal_Char __READONLY_DATA FIELD_SERVICE_DROP_DOWN[] = "DropDown";
+static sal_Char const FIELD_SERVICE_SENDER[] = "ExtendedUser";
+static sal_Char const FIELD_SERVICE_AUTHOR[] = "Author";
+static sal_Char const FIELD_SERVICE_JUMPEDIT[] = "JumpEdit";
+static sal_Char const FIELD_SERVICE_GETEXP[] = "GetExpression";
+static sal_Char const FIELD_SERVICE_SETEXP[] = "SetExpression";
+static sal_Char const FIELD_SERVICE_USER[] = "User";
+static sal_Char const FIELD_SERVICE_INPUT[] = "Input";
+static sal_Char const FIELD_SERVICE_USERINPUT[] = "InputUser";
+static sal_Char const FIELD_SERVICE_DATETIME[] = "DateTime";
+static sal_Char const FIELD_SERVICE_PAGENUMBER[] = "PageNumber";
+static sal_Char const FIELD_SERVICE_DB_NEXT[] = "DatabaseNextSet";
+static sal_Char const FIELD_SERVICE_DB_SELECT[] = "DatabaseNumberOfSet";
+static sal_Char const FIELD_SERVICE_DB_NUMBER[] = "DatabaseSetNumber";
+static sal_Char const FIELD_SERVICE_DB_DISPLAY[] = "Database";
+static sal_Char const FIELD_SERVICE_DB_NAME[] = "DatabaseName";
+static sal_Char const FIELD_SERVICE_CONDITIONAL_TEXT[] = "ConditionalText";
+static sal_Char const FIELD_SERVICE_HIDDEN_TEXT[] = "HiddenText";
+static sal_Char const FIELD_SERVICE_HIDDEN_PARAGRAPH[] = "HiddenParagraph";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR[] = "DocInfo.ChangeAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_AUTHOR2[] = "docinfo.ChangeAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME[] = "DocInfo.ChangeDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CHANGE_DATE_TIME2[] = "docinfo.ChangeDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME[] = "DocInfo.EditTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_EDIT_TIME2[] = "docinfo.EditTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION[] = "DocInfo.Description";
+static sal_Char const FIELD_SERVICE_DOC_INFO_DESCRIPTION2[] = "docinfo.Description";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR[] = "DocInfo.CreateAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_AUTHOR2[] = "docinfo.CreateAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME[] = "DocInfo.CreateDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CREATE_DATE_TIME2[] = "docinfo.CreateDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
+static sal_Char const FIELD_SERVICE_DOC_INFO_CUSTOM2[] = "docinfo.Custom";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR2[] = "docinfo.PrintAuthor";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME2[] = "docinfo.PrintDateTime";
+static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
+static sal_Char const FIELD_SERVICE_DOC_INFO_KEY_WORDS2[] = "docinfo.KeyWords";
+static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT[] = "DocInfo.Subject";
+static sal_Char const FIELD_SERVICE_DOC_INFO_SUBJECT2[] = "docinfo.Subject";
+static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE[] = "DocInfo.Title";
+static sal_Char const FIELD_SERVICE_DOC_INFO_TITLE2[] = "docinfo.Title";
+static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION[] = "DocInfo.Revision";
+static sal_Char const FIELD_SERVICE_DOC_INFO_REVISION2[] = "docinfo.Revision";
+static sal_Char const FIELD_SERVICE_FILE_NAME[] = "FileName";
+static sal_Char const FIELD_SERVICE_CHAPTER[] = "Chapter";
+static sal_Char const FIELD_SERVICE_TEMPLATE_NAME[] = "TemplateName";
+static sal_Char const FIELD_SERVICE_PAGE_COUNT[] = "PageCount";
+static sal_Char const FIELD_SERVICE_PARAGRAPH_COUNT[] = "ParagraphCount";
+static sal_Char const FIELD_SERVICE_WORD_COUNT[] = "WordCount";
+static sal_Char const FIELD_SERVICE_CHARACTER_COUNT[] = "CharacterCount";
+static sal_Char const FIELD_SERVICE_TABLE_COUNT[] = "TableCount";
+static sal_Char const FIELD_SERVICE_GRAPHIC_COUNT[] = "GraphicObjectCount";
+static sal_Char const FIELD_SERVICE_OBJECT_COUNT[] = "EmbeddedObjectCount";
+static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_SET[] = "ReferencePageSet";
+static sal_Char const FIELD_SERVICE_REFERENCE_PAGE_GET[] = "ReferencePageGet";
+static sal_Char const FIELD_SERVICE_SHEET_NAME[] = "SheetName";
+static sal_Char const FIELD_SERVICE_MACRO[] = "Macro";
+static sal_Char const FIELD_SERVICE_GET_REFERENCE[] = "GetReference";
+static sal_Char const FIELD_SERVICE_DDE[] = "DDE";
+static sal_Char const FIELD_SERVICE_URL[] = "URL";
+static sal_Char const FIELD_SERVICE_BIBLIOGRAPHY[] = "Bibliography";
+static sal_Char const FIELD_SERVICE_SCRIPT[] = "Script";
+static sal_Char const FIELD_SERVICE_ANNOTATION[] = "Annotation";
+static sal_Char const FIELD_SERVICE_COMBINED_CHARACTERS[] = "CombinedCharacters";
+static sal_Char const FIELD_SERVICE_META[] = "MetadataField";
+static sal_Char const FIELD_SERVICE_MEASURE[] = "Measure";
+static sal_Char const FIELD_SERVICE_TABLE_FORMULA[] = "TableFormula";
+static sal_Char const FIELD_SERVICE_DROP_DOWN[] = "DropDown";
 
-SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
+SvXMLEnumStringMapEntry const aFieldServiceNameMapping[] =
 {
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_SENDER, FIELD_ID_SENDER ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_AUTHOR, FIELD_ID_AUTHOR ),
@@ -2690,7 +2690,7 @@ void XMLTextFieldExport::ProcessDateTime(enum XMLTokenEnum eName,
 }
 
 
-SvXMLEnumMapEntry __READONLY_DATA aBibliographyDataTypeMap[] =
+SvXMLEnumMapEntry const aBibliographyDataTypeMap[] =
 {
     { XML_ARTICLE,          BibliographyDataType::ARTICLE },
     { XML_BOOK,             BibliographyDataType::BOOK },

@@ -45,8 +45,8 @@
 using namespace ::rtl;
 using namespace ::com::sun::star;
 
-sal_Char __READONLY_DATA sAudio[] = "audio";
-sal_Char __READONLY_DATA sVideo[] = "video";
+sal_Char const sAudio[] = "audio";
+sal_Char const sVideo[] = "video";
 
 /*************************************************************************
 |*
