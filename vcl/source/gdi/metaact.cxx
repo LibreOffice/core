@@ -1442,7 +1442,7 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
     rIStm   >> mnLen;
     rIStm   >> nAryLen;
 
-    if ( mnIndex > mnLen )
+    if ( mnIndex + mnLen > maStr.Len() )
     {
         mnIndex = 0;
         mpDXAry = 0;
