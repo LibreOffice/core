@@ -45,7 +45,7 @@
 
 // Tabellen zum Umwandeln von Options-Werten in Strings
 
-static HTMLOptionEnum __READONLY_DATA aScriptLangOptEnums[] =
+static HTMLOptionEnum const aScriptLangOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_LG_starbasic, HTML_SL_STARBASIC   },
     { OOO_STRING_SVTOOLS_HTML_LG_javascript,    HTML_SL_JAVASCRIPT  },

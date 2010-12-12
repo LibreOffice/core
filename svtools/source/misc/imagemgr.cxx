@@ -70,7 +70,7 @@ struct SvtExtensionResIdMapping_Impl
     USHORT  _nImgId;
 };
 
-static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
+static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
 {
     { "awk",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
     { "bas",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            0 },
@@ -224,7 +224,7 @@ struct SvtFactory2ExtensionMapping_Impl
 
 // mapping from "private:factory" url to extension
 
-static SvtFactory2ExtensionMapping_Impl __READONLY_DATA Fac2ExtMap_Impl[] =
+static SvtFactory2ExtensionMapping_Impl const Fac2ExtMap_Impl[] =
 {
     { "swriter",                "odt" },
     { "swriter/web",            "html" },

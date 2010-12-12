@@ -67,7 +67,7 @@ const sal_Int32 MAX_ENTITY_LEN( 8L );
 // Tabellen zum Umwandeln von Options-Werten in Strings
 
 // <INPUT TYPE=xxx>
-static HTMLOptionEnum __READONLY_DATA aInputTypeOptEnums[] =
+static HTMLOptionEnum const aInputTypeOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_IT_text,      HTML_IT_TEXT        },
     { OOO_STRING_SVTOOLS_HTML_IT_password,  HTML_IT_PASSWORD    },
@@ -85,7 +85,7 @@ static HTMLOptionEnum __READONLY_DATA aInputTypeOptEnums[] =
 };
 
 // <TABLE FRAME=xxx>
-static HTMLOptionEnum __READONLY_DATA aTableFrameOptEnums[] =
+static HTMLOptionEnum const aTableFrameOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TF_void,  HTML_TF_VOID    },
     { OOO_STRING_SVTOOLS_HTML_TF_above, HTML_TF_ABOVE   },
@@ -100,7 +100,7 @@ static HTMLOptionEnum __READONLY_DATA aTableFrameOptEnums[] =
 };
 
 // <TABLE RULES=xxx>
-static HTMLOptionEnum __READONLY_DATA aTableRulesOptEnums[] =
+static HTMLOptionEnum const aTableRulesOptEnums[] =
 {
     { OOO_STRING_SVTOOLS_HTML_TR_none,  HTML_TR_NONE    },
     { OOO_STRING_SVTOOLS_HTML_TR_groups,    HTML_TR_GROUPS  },
@@ -2117,7 +2117,7 @@ enum eHtmlMetas {
 };
 
 // <META NAME=xxx>
-static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+static HTMLOptionEnum const aHTMLMetaNameTable[] =
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
     { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },

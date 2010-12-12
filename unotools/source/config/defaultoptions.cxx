@@ -125,7 +125,7 @@ struct PathToDefaultMapping_Impl
     PathStrPtr              _pDefaultPath;
 };
 
-static PathToDefaultMapping_Impl __READONLY_DATA PathMap_Impl[] =
+static PathToDefaultMapping_Impl const PathMap_Impl[] =
 {
     { SvtPathOptions::PATH_ADDIN,           &SvtDefaultOptions_Impl::m_aAddinPath },
     { SvtPathOptions::PATH_AUTOCORRECT,     &SvtDefaultOptions_Impl::m_aAutoCorrectPath },
