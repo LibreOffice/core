@@ -172,7 +172,8 @@ gb_LinkTarget_CFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 
 endif
 
-gb_LinkTarget_INCLUDE := $(subst -I. , ,$(SOLARINC))
+gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
+gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 define gb_LinkTarget_command
 $(call gb_Helper_announce,Linking $(2) ...)
