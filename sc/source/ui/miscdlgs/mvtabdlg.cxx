@@ -56,7 +56,8 @@
 
 //==================================================================
 
-ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
+ScMoveTableDlg::ScMoveTableDlg( Window*       pParent,
+                                const String& rDefault )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_MOVETAB ) ),
         //
@@ -71,6 +72,7 @@ ScMoveTableDlg::ScMoveTableDlg( Window* pParent )
         aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp    ( this, ScResId( BTN_HELP ) ),
         //
+        mrDefaultName( rDefault ),
         nDocument   ( 0 ),
         nTable      ( 0 ),
         bCopyTable  ( FALSE ),
@@ -136,6 +138,7 @@ void ScMoveTableDlg::EnableTabName(BOOL bFlag)
     if(bFlag)
     {
         aEdTabName.Enable();
+        aEdTabName.SetText( mrDefaultName );
     }
     else
     {
@@ -213,6 +216,11 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     nTable      = (nTabSel != nTabLast) ? static_cast<SCTAB>(nTabSel) : SC_TAB_APPEND;
     bCopyTable  = aBtnCopy.IsChecked();
     bRenameTable= aBtnRename.IsChecked();
+
+    // Return an empty string, when the new name is the same as the original name.
+    if( mrDefaultName == aEdTabName.GetText() )
+        aEdTabName.SetText( String() );
+
     EndDialog( RET_OK );
 
     return 0;

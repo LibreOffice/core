@@ -1125,13 +1125,15 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
 
 
 //add for  ScMoveTableDlg  begin
-AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent, int nId )
+AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent,
+                                                                              const String& rDefault,
+                                                                              int nId )
 {
     ScMoveTableDlg * pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_MOVETAB :
-            pDlg = new ScMoveTableDlg( pParent );
+            pDlg = new ScMoveTableDlg( pParent, rDefault );
             break;
         default:
             break;

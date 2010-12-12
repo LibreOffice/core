@@ -492,7 +492,10 @@ public:
                                                                 long            nFirst    = 1,
                                                                 long          nLast     = 100 );
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent, int nId ); //add for ScMoveTableDlg
+    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent,  //add for ScMoveTableDlg
+                                                            const String& rDefault,
+                                                            int nId );
+
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId ); //add for ScNameCreateDlg
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg

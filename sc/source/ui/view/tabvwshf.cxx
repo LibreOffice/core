@@ -544,10 +544,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
+                    String aDefaultName;
+                    pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
+
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(), RID_SCDLG_MOVETAB );
+                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(),
+                                                                                aDefaultName,
+                                                                                RID_SCDLG_MOVETAB );
                     DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();

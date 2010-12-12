@@ -2645,7 +2645,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
         for( USHORT j=0; j<TheTabs.Count(); j++, nDestTab1++ )
         {   // #63304# insert sheets first and update all references
             String aName;
-            if( pName->Len() )
+            if( (pName != NULL ) && ( pName->Len() ) )
                 aName = *pName;
             else
                 pDoc->GetName( TheTabs[j], aName );
@@ -2830,7 +2830,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
         }
 
         // Rename must be done after that all sheets have been moved.
-        if( pName->Len() )
+        if( (pName != NULL) && ( pName->Len() ) )
         {
             for(int j=0;j<TheDestTabs.Count();j++)
             {

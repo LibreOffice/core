@@ -45,7 +45,7 @@
 class ScMoveTableDlg : public ModalDialog
 {
 public:
-                    ScMoveTableDlg( Window* pParent );
+                    ScMoveTableDlg( Window* pParent, const String& rDefault );
                     ~ScMoveTableDlg();
 
     USHORT  GetSelectedDocument     () const;
@@ -70,6 +70,8 @@ private:
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
+
+    const String&   mrDefaultName;
 
     USHORT          nDocument;
     SCTAB           nTable;
