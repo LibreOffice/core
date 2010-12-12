@@ -148,8 +148,7 @@ void G2GApp::ShowUsage()
 
 int G2GApp::Start( const ::std::vector< String >& rArgs )
 {
-    int     nCmdCount = rArgs.size();
-    USHORT  nCurCmd = 0;
+    size_t nCmdCount = rArgs.size();
 
     cExitCode = EXIT_NOERROR;
 
@@ -157,6 +156,7 @@ int G2GApp::Start( const ::std::vector< String >& rArgs )
     {
         GraphicFilter   aFilter( sal_False );
         String          aInFile, aOutFile, aFilterStr, aFilterPath, aTransColStr;
+        size_t nCurCmd = 0;
 
         aInFile = rArgs[ nCurCmd++ ];
         aOutFile = rArgs[ nCurCmd++ ];
