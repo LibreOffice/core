@@ -101,7 +101,7 @@ extern void TransformOOo2xDocument( SdDrawDocument* pDocument );
 
 #define MAP_LEN(x) x, sizeof(x) - 1
 
-#define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
 
 XML_STRING( sXML_metaStreamName, "meta.xml");
 XML_STRING( sXML_styleStreamName, "styles.xml" );

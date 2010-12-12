@@ -116,7 +116,7 @@ namespace sd
 
 // Slots, welche im Sfx verwaltet werden und in der SlideShow disabled
 // werden sollen (muss in Reihenfolge der SIDs geordnet sein)
-static USHORT __READONLY_DATA pAllowed[] =
+static USHORT const pAllowed[] =
 {
     SID_OPENDOC                             , //     5501   // damit interne Spruenge klappen
     SID_JUMPTOMARK                          , //     5598
