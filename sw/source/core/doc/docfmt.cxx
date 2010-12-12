@@ -247,7 +247,7 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
 
         const SfxPoolItem* pItem;
 
-        USHORT __READONLY_DATA aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,    //->add by zhaojianwei
+        USHORT const aSavIds[ 4 ] = { RES_PAGEDESC, RES_BREAK,  //->add by zhaojianwei
                                                 RES_PARATR_NUMRULE,
                                                 RES_PARATR_OUTLINELEVEL };
         for( USHORT n = 0; n < 4; ++n )                                     //<-end,zhaojianwei

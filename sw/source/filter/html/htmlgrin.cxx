@@ -765,7 +765,7 @@ IMAGE_SETEVENT:
 
         {
             const SvxMacro *pMacro;
-            static USHORT __READONLY_DATA aEvents[] = {
+            static USHORT const aEvents[] = {
                 SFX_EVENT_MOUSEOVER_OBJECT,
                 SFX_EVENT_MOUSECLICK_OBJECT,
                 SFX_EVENT_MOUSEOUT_OBJECT,

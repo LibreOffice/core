@@ -1125,7 +1125,7 @@ void SwDocShell::Execute(SfxRequest& rReq)
                 ToggleBrowserMode(bSet, 0);
 
                 // OS: numerische Reihenfolge beachten!
-                static USHORT __READONLY_DATA aInva[] =
+                static USHORT const aInva[] =
                                     {
                                         SID_NEWWINDOW,/*5620*/
                                         SID_BROWSER_MODE, /*6313*/

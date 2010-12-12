@@ -347,7 +347,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
             break;
     }
 
-    static sal_uInt16 __READONLY_DATA aInval[] =
+    static sal_uInt16 const aInval[] =
     {
         // Slot-Ids muessen beim Aufruf von Invalidate sortiert sein!
         SID_ATTRIBUTES_AREA,

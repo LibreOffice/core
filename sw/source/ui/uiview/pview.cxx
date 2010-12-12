@@ -143,7 +143,7 @@ USHORT lcl_GetNextZoomStep(USHORT nCurrentZoom, BOOL bZoomIn)
 
 void lcl_InvalidateZoomSlots(SfxBindings& rBindings)
 {
-    static USHORT __READONLY_DATA aInval[] =
+    static USHORT const aInval[] =
     {
         SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN, SID_ATTR_ZOOMSLIDER, FN_PREVIEW_ZOOM, FN_STAT_ZOOM,
         0
@@ -281,7 +281,7 @@ void SwPagePreViewWin::CalcWish( BYTE nNewRow, BYTE nNewCol )
 
     // Sortierung muss eingehalten werden!!
     // OD 24.03.2003 #108282# - additional invalidate page status.
-    static USHORT __READONLY_DATA aInval[] =
+    static USHORT const aInval[] =
     {
         SID_ATTR_ZOOM, SID_ZOOM_OUT, SID_ZOOM_IN,
         FN_PREVIEW_ZOOM,
@@ -393,7 +393,7 @@ int SwPagePreViewWin::MovePage( int eMoveMode )
     mnSttPage = nNewSttPage;
 
     // OD 24.03.2003 #108282# - additional invalidate page status.
-    static USHORT __READONLY_DATA aInval[] =
+    static USHORT const aInval[] =
     {
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_PAGE, 0
@@ -554,7 +554,7 @@ void SwPagePreViewWin::MouseButtonDown( const MouseEvent& rMEvt )
                 mrView.SetVScrollbarThumbPos( nNewSelectedPage );
             }
             // OD 24.03.2003 #108282# - invalidate page status.
-            static USHORT __READONLY_DATA aInval[] =
+            static USHORT const aInval[] =
             {
                 FN_STAT_PAGE, 0
             };
@@ -708,7 +708,7 @@ void SwPagePreView::_ExecPgUpAndPgDown( const bool  _bPgUp,
             }
             ScrollViewSzChg();
             // OD 24.03.2003 #108282# - additional invalidate page status.
-            static USHORT __READONLY_DATA aInval[] =
+            static USHORT const aInval[] =
             {
                 FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                 FN_STAT_PAGE, 0
@@ -771,7 +771,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 // book preview mode changed. Thus, adjust scrollbars and
                 // invalidate corresponding states.
                 ScrollViewSzChg();
-                static USHORT __READONLY_DATA aInval[] =
+                static USHORT const aInval[] =
                 {
                     FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
                     FN_STAT_PAGE, FN_SHOW_BOOKVIEW, 0
@@ -896,7 +896,7 @@ void  SwPagePreView::Execute( SfxRequest &rReq )
                 }
                 GetViewShell()->ShowPreViewSelection( nNewSelectedPage );
                 // OD 24.03.2003 #108282# - invalidate page status.
-                static USHORT __READONLY_DATA aInval[] =
+                static USHORT const aInval[] =
                 {
                     FN_STAT_PAGE, 0
                 };
@@ -1384,7 +1384,7 @@ int SwPagePreView::ChgPage( int eMvMode, int bUpdateScrollbar )
         {
             ScrollViewSzChg();
 
-            static USHORT __READONLY_DATA aInval[] =
+            static USHORT const aInval[] =
             {
                 FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT,
                 FN_PAGEUP, FN_PAGEDOWN, 0
@@ -1607,7 +1607,7 @@ IMPL_LINK( SwPagePreView, EndScrollHdl, SwScrollbar *, pScrollbar )
         aViewWin.Scroll(nThmbPos - aViewWin.GetPaintedPreviewDocRect().Left(), 0);
     }
     // OD 24.03.2003 #108282# - additional invalidate page status.
-    static USHORT __READONLY_DATA aInval[] =
+    static USHORT const aInval[] =
     {
         FN_START_OF_DOCUMENT, FN_END_OF_DOCUMENT, FN_PAGEUP, FN_PAGEDOWN,
         FN_STAT_PAGE, 0
@@ -1763,7 +1763,7 @@ USHORT  SwPagePreView::SetPrinter( SfxPrinter *pNew, USHORT nDiffFlags, bool )
         rESh.SetModified();
         rESh.EndAllAction();
 
-        static USHORT __READONLY_DATA aInval[] =
+        static USHORT const aInval[] =
         {
             SID_ATTR_LONG_ULSPACE, SID_ATTR_LONG_LRSPACE,
             SID_RULER_BORDERS, SID_RULER_PAGE_POS, 0

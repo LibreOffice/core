@@ -515,7 +515,7 @@ void WW8Export::OutGrf(const sw::Frame &rFrame)
     {
         WriteChar( (char)0x0d ); // umgebenden Rahmen mit CR abschliessen
 
-        static BYTE __READONLY_DATA nSty[2] = { 0, 0 };
+        static BYTE const nSty[2] = { 0, 0 };
         pO->Insert( nSty, 2, pO->Count() );     // Style #0
         bool bOldGrf = bOutGrf;
         bOutGrf = true;

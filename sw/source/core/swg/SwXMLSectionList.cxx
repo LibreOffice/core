@@ -39,8 +39,8 @@ using namespace ::com::sun::star;
 using ::rtl::OUString;
 using namespace ::xmloff::token;
 
-sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
-sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
+sal_Char const sXML_np__office[] = "_ooffice";
+sal_Char const sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLSectionList::SwXMLSectionList(

@@ -771,7 +771,7 @@ void SwNumberPortion::Paint( const SwTxtPaintInfo &rInf ) const
             if( bPaintSpace && nOldWidth > nSpaceOffs )
             {
                 SwTxtPaintInfo aInf( rInf );
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
                 aInf.X( aInf.X() + nSpaceOffs );
 
                 // --> FME 2005-08-12 #i53199# Adjust position of underline:

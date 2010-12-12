@@ -2481,7 +2481,7 @@ void SwFEShell::MirrorSelection( BOOL bHorizontal )
 BOOL SwFEShell::GotoFly( const String& rName, FlyCntType eType, BOOL bSelFrm )
 {
     BOOL bRet = FALSE;
-static BYTE __READONLY_DATA aChkArr[ 4 ] = {
+static BYTE const aChkArr[ 4 ] = {
              /* FLYCNTTYPE_ALL */   0,
              /* FLYCNTTYPE_FRM */   ND_TEXTNODE,
              /* FLYCNTTYPE_GRF */   ND_GRFNODE,

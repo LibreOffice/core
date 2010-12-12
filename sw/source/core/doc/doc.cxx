@@ -1154,7 +1154,7 @@ static void lcl_FormatPostIt(
     bool bNewPage, bool bIsFirstPostIt,
     USHORT nPageNo, USHORT nLineNo )
 {
-    static char __READONLY_DATA sTmp[] = " : ";
+    static char const sTmp[] = " : ";
 
     DBG_ASSERT( ViewShell::GetShellRes(), "missing ShellRes" );
 

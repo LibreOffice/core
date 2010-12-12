@@ -38,9 +38,9 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using ::rtl::OUString;
 
-sal_Char __READONLY_DATA sXML_np__block_list[] = "_block-list";
-sal_Char __READONLY_DATA sXML_np__office[] = "_ooffice";
-sal_Char __READONLY_DATA sXML_np__text[] = "_otext";
+sal_Char const sXML_np__block_list[] = "_block-list";
+sal_Char const sXML_np__office[] = "_ooffice";
+sal_Char const sXML_np__text[] = "_otext";
 
 // #110680#
 SwXMLBlockListImport::SwXMLBlockListImport(

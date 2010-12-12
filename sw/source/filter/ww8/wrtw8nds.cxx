@@ -893,7 +893,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     //all links end up in the data stream as absolute references.
     bool bAbsolute = !bBookMarkOnly;
 
-    static BYTE __READONLY_DATA aURLData1[] = {
+    static BYTE const aURLData1[] = {
         0,0,0,0,        // len of struct
         0x44,0,         // the start of "next" data
         0,0,0,0,0,0,0,0,0,0,                // PIC-Structure!
@@ -902,7 +902,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
         0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,    //  |
         0,0,0,0,                            // /
     };
-    static BYTE __READONLY_DATA MAGIC_A[] = {
+    static BYTE const MAGIC_A[] = {
         // start of "next" data
         0xD0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
         0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
@@ -927,13 +927,13 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
     {
         // version 1 (for a document)
 
-        static BYTE __READONLY_DATA MAGIC_C[] = {
+        static BYTE const MAGIC_C[] = {
             0x03, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46,
             0x00, 0x00
         };
 
-        static BYTE __READONLY_DATA MAGIC_D[] = {
+        static BYTE const MAGIC_D[] = {
             0xFF, 0xFF, 0xAD, 0xDE, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -982,7 +982,7 @@ bool WW8AttributeOutput::StartURL( const String &rUrl, const String &rTarget )
         // what the data mean, except for the URL.
         // The First piece is the WW8_PIC structure.
         //
-        static BYTE __READONLY_DATA MAGIC_B[] = {
+        static BYTE const MAGIC_B[] = {
             0xE0,0xC9,0xEA,0x79,0xF9,0xBA,0xCE,0x11,
             0x8C,0x82,0x00,0xAA,0x00,0x4B,0xA9,0x0B
         };
@@ -2663,7 +2663,7 @@ void WW8AttributeOutput::Redline( const SwRedlineData* pRedline )
     if ( pRedline->Next() )
         Redline( pRedline->Next() );
 
-    static USHORT __READONLY_DATA aSprmIds[ 2 * 2 * 3 ] =
+    static USHORT const aSprmIds[ 2 * 2 * 3 ] =
     {
         // Ids for insert
             NS_sprm::LN_CFRMark, NS_sprm::LN_CIbstRMark, NS_sprm::LN_CDttmRMark,         // for WW8

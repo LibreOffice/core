@@ -891,7 +891,7 @@ FormTokenType SwFormTokensHelper::GetTokenType(const String & sToken,
         USHORT nLen;
         USHORT nOffset;
         FormTokenType eToken;
-    } __READONLY_DATA aTokenArr[] = {
+    } const aTokenArr[] = {
         { SwForm::aFormTab,       SwForm::nFormEntryLen,      1, TOKEN_TAB_STOP },
         { SwForm::aFormPageNums,  SwForm::nFormPageNumsLen,   1, TOKEN_PAGE_NUMS },
         { SwForm::aFormLinkStt,   SwForm::nFormLinkSttLen,    1, TOKEN_LINK_START },

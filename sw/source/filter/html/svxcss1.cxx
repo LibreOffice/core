@@ -76,7 +76,7 @@ SV_IMPL_PTRARR( CSS1Selectors, CSS1Selector* )
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aFontSizeTable[] =
+static CSS1PropertyEnum const aFontSizeTable[] =
 {
     { sCSS1_PV_xx_small,    0                   },
     { sCSS1_PV_x_small,     1                   },
@@ -88,7 +88,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontSizeTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontFamilyTable[] =
+static CSS1PropertyEnum const aFontFamilyTable[] =
 {
     { sCSS1_PV_serif,       FAMILY_ROMAN        },
     { sCSS1_PV_sans_serif,  FAMILY_SWISS        },
@@ -98,7 +98,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontFamilyTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontWeightTable[] =
+static CSS1PropertyEnum const aFontWeightTable[] =
 {
     { sCSS1_PV_extra_light, WEIGHT_NORMAL       }, // WEIGHT_ULTRALIGHT (OBS)
     { sCSS1_PV_light,       WEIGHT_NORMAL       }, // WEIGHT_LIGHT (OBSOLETE)
@@ -113,7 +113,7 @@ static CSS1PropertyEnum __READONLY_DATA aFontWeightTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontStyleTable[] =
+static CSS1PropertyEnum const aFontStyleTable[] =
 {
     { sCSS1_PV_normal,      ITALIC_NONE         },
     { sCSS1_PV_italic,      ITALIC_NORMAL       },
@@ -121,14 +121,14 @@ static CSS1PropertyEnum __READONLY_DATA aFontStyleTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFontVariantTable[] =
+static CSS1PropertyEnum const aFontVariantTable[] =
 {
     { sCSS1_PV_normal,      SVX_CASEMAP_NOT_MAPPED      },
     { sCSS1_PV_small_caps,  SVX_CASEMAP_KAPITAELCHEN    },
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
+static CSS1PropertyEnum const aDirectionTable[] =
 {
     { sCSS1_PV_ltr,         FRMDIR_HORI_LEFT_TOP        },
     { sCSS1_PV_rtl,         FRMDIR_HORI_RIGHT_TOP       },
@@ -138,7 +138,7 @@ static CSS1PropertyEnum __READONLY_DATA aDirectionTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aBGRepeatTable[] =
+static CSS1PropertyEnum const aBGRepeatTable[] =
 {
     { sCSS1_PV_repeat,      GPOS_TILED                  },
     { sCSS1_PV_repeat_x,    GPOS_TILED                  },
@@ -147,7 +147,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGRepeatTable[] =
     { 0,                    0                           }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aBGHoriPosTable[] =
+static CSS1PropertyEnum const aBGHoriPosTable[] =
 {
     { sCSS1_PV_left,        GPOS_LT                 },
     { sCSS1_PV_center,      GPOS_MT                 },
@@ -155,7 +155,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGHoriPosTable[] =
     { 0,                    0                       }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aBGVertPosTable[] =
+static CSS1PropertyEnum const aBGVertPosTable[] =
 {
     { sCSS1_PV_top,         GPOS_LT                 },
     { sCSS1_PV_middle,      GPOS_LM                 },
@@ -165,7 +165,7 @@ static CSS1PropertyEnum __READONLY_DATA aBGVertPosTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aTextAlignTable[] =
+static CSS1PropertyEnum const aTextAlignTable[] =
 {
     { sCSS1_PV_left,        SVX_ADJUST_LEFT     },
     { sCSS1_PV_center,      SVX_ADJUST_CENTER   },
@@ -176,7 +176,7 @@ static CSS1PropertyEnum __READONLY_DATA aTextAlignTable[] =
 
 /*  */
 
-static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
+static CSS1PropertyEnum const aBorderWidthTable[] =
 {
     { sCSS1_PV_thin,        0   },  // DEF_LINE_WIDTH_0 / DEF_DOUBLE_LINE0
     { sCSS1_PV_medium,      1   },  // DEF_LINE_WIDTH_1 / DEF_DOUBLE_LINE1
@@ -186,7 +186,7 @@ static CSS1PropertyEnum __READONLY_DATA aBorderWidthTable[] =
 
 enum CSS1BorderStyle { CSS1_BS_NONE, CSS1_BS_SINGLE, CSS1_BS_DOUBLE, CSS1_BS_DOTTED, CSS1_BS_DASHED };
 
-static CSS1PropertyEnum __READONLY_DATA aBorderStyleTable[] =
+static CSS1PropertyEnum const aBorderStyleTable[] =
 {
     { sCSS1_PV_none,        CSS1_BS_NONE        },
     { sCSS1_PV_dotted,      CSS1_BS_DOTTED      },
@@ -200,7 +200,7 @@ static CSS1PropertyEnum __READONLY_DATA aBorderStyleTable[] =
     { 0,                    0                   }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aFloatTable[] =
+static CSS1PropertyEnum const aFloatTable[] =
 {
     { sCSS1_PV_left,    SVX_ADJUST_LEFT         },
     { sCSS1_PV_right,   SVX_ADJUST_RIGHT        },
@@ -208,7 +208,7 @@ static CSS1PropertyEnum __READONLY_DATA aFloatTable[] =
     { 0,                0                       }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aPositionTable[] =
+static CSS1PropertyEnum const aPositionTable[] =
 {
     { sCSS1_PV_absolute,    SVX_CSS1_POS_ABSOLUTE   },
     { sCSS1_PV_relative,    SVX_CSS1_POS_RELATIVE   },
@@ -217,7 +217,7 @@ static CSS1PropertyEnum __READONLY_DATA aPositionTable[] =
 };
 
 // Feature: PrintExt
-static CSS1PropertyEnum __READONLY_DATA aSizeTable[] =
+static CSS1PropertyEnum const aSizeTable[] =
 {
     { sCSS1_PV_auto,        SVX_CSS1_STYPE_AUTO         },
     { sCSS1_PV_landscape,   SVX_CSS1_STYPE_LANDSCAPE    },
@@ -225,7 +225,7 @@ static CSS1PropertyEnum __READONLY_DATA aSizeTable[] =
     { 0,                    0                           }
 };
 
-static CSS1PropertyEnum __READONLY_DATA aPageBreakTable[] =
+static CSS1PropertyEnum const aPageBreakTable[] =
 {
     { sCSS1_PV_auto,        SVX_CSS1_PBREAK_AUTO        },
     { sCSS1_PV_always,      SVX_CSS1_PBREAK_ALWAYS      },
@@ -259,13 +259,13 @@ static CSS1PropertyEnum __READONLY_DATA aPageBreakTable[] =
     DEF_DOUBLE_LINE##n##_DIST
 
 
-static USHORT __READONLY_DATA aSBorderWidths[] =
+static USHORT const aSBorderWidths[] =
 {
     SBORDER_ENTRY( 0 ), SBORDER_ENTRY( 1 ), SBORDER_ENTRY( 2 ),
     SBORDER_ENTRY( 3 ), SBORDER_ENTRY( 4 )
 };
 
-static USHORT __READONLY_DATA aDBorderWidths[] =
+static USHORT const aDBorderWidths[] =
 {
     DBORDER_ENTRY( 0 ),
     DBORDER_ENTRY( 7 ),
@@ -279,7 +279,7 @@ static USHORT __READONLY_DATA aDBorderWidths[] =
     DBORDER_ENTRY( 5 )
 };
 
-static USHORT __READONLY_DATA aTDBorderWidths[] =
+static USHORT const aTDBorderWidths[] =
 {
     TDBORDER_ENTRY( 7 ), TDBORDER_ENTRY( 8 ), TDBORDER_ENTRY( 9 ),
     TDBORDER_ENTRY( 10 )

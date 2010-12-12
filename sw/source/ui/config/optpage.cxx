@@ -1218,7 +1218,7 @@ BOOL SwTableOptionsTabPage::FillItemSet( SfxItemSet& )
         if(pWrtShell && nsSelectionType::SEL_TBL & pWrtShell->GetSelectionType())
         {
             pWrtShell->SetTblChgMode(eMode);
-            static USHORT __READONLY_DATA aInva[] =
+            static USHORT const aInva[] =
                                 {   FN_TABLE_MODE_FIX,
                                     FN_TABLE_MODE_FIX_PROP,
                                     FN_TABLE_MODE_VARIABLE,

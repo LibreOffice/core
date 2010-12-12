@@ -4404,7 +4404,7 @@ void SwEditWin::SetApplyTemplate(const SwApplyTemplate &rTempl)
             rSh.Edit();
     }
 
-    static USHORT __READONLY_DATA aInva[] =
+    static USHORT const aInva[] =
     {
         SID_STYLE_WATERCAN,
         SID_ATTR_CHAR_COLOR_EXT,
@@ -5322,7 +5322,7 @@ void SwEditWin::SetChainMode( BOOL bOn )
     if ( !bChainMode )
         rView.GetViewFrame()->HideStatusText();
 
-    static USHORT __READONLY_DATA aInva[] =
+    static USHORT const aInva[] =
     {
         FN_FRAME_CHAIN, FN_FRAME_UNCHAIN, 0
     };

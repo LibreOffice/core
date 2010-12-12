@@ -126,7 +126,7 @@ bool SwWrtShell::GotoFieldmark(::sw::mark::IFieldmark const * const pMark)
 
 void SwWrtShell::DrawSelChanged( )
 {
-    static sal_uInt16 __READONLY_DATA aInval[] =
+    static sal_uInt16 const aInval[] =
     {
         SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, SID_ATTR_LINE_STYLE,
         SID_ATTR_LINE_WIDTH, SID_ATTR_LINE_COLOR, 0

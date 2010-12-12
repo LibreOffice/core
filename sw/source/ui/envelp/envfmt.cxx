@@ -352,7 +352,7 @@ SfxItemSet *SwEnvFmtPage::GetCollItemSet(SwTxtFmtColl* pColl, BOOL bSender)
         // Range ermitteln (Ranges beider Itemsets mergen)
         const USHORT *pRanges = pColl->GetAttrSet().GetRanges();
 
-        static USHORT __READONLY_DATA aRanges[] =
+        static USHORT const aRanges[] =
         {
             RES_PARATR_BEGIN, RES_PARATR_ADJUST,
             RES_PARATR_TABSTOP, RES_PARATR_END-1,

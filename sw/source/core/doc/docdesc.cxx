@@ -152,7 +152,7 @@ void lcl_DescSetAttr( const SwFrmFmt &rSource, SwFrmFmt &rDest,
 // funktioniert nicht richtig, wenn man unterschiedliche WhichRanges hat.
 /////////////// !!!!!!!!!!!!!!!!
     //Die interressanten Attribute uebernehmen.
-    USHORT __READONLY_DATA aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
+    USHORT const aIdArr[] = { RES_FRM_SIZE, RES_UL_SPACE,
                                         RES_BACKGROUND, RES_SHADOW,
                                         RES_COL, RES_COL,
                                         RES_FRAMEDIR, RES_FRAMEDIR,

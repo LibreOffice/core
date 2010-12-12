@@ -597,7 +597,7 @@ void SwTextShell::ExecInsert(SfxRequest &rReq)
         }
         else
         {
-            static USHORT __READONLY_DATA aFrmAttrRange[] =
+            static USHORT const aFrmAttrRange[] =
             {
                 RES_FRMATR_BEGIN,       RES_FRMATR_END-1,
                 SID_ATTR_BORDER_INNER,  SID_ATTR_BORDER_INNER,

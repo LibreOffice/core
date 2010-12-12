@@ -168,7 +168,7 @@ STOP1(Ww1SingleSprmPDxa, RES_LR_SPACE)
 void Ww1SingleSprmPJc::Start(
     Ww1Shell& rOut, BYTE, BYTE* pSprm, USHORT, Ww1Manager&)
 {
-    static SvxAdjust __READONLY_DATA aAdj[] = {
+    static SvxAdjust const aAdj[] = {
         SVX_ADJUST_LEFT,
         SVX_ADJUST_CENTER,
         SVX_ADJUST_RIGHT,
@@ -297,7 +297,7 @@ void Ww1SingleSprmPBrc::Start(
 
 STOP2(Ww1SingleSprmPBrc, RES_BOX, RES_SHADOW)
 
-static USHORT __READONLY_DATA nBrcTrans[BRC_ANZ] =
+static USHORT const nBrcTrans[BRC_ANZ] =
      { BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
 
 void Ww1SingleSprmPBrc10::Start(

@@ -775,7 +775,7 @@ void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 
                 if( pSetBox )
                 {
-                    static USHORT __READONLY_DATA aBorders[] = {
+                    static USHORT const aBorders[] = {
                         BOX_LINE_BOTTOM, BOX_LINE_TOP,
                         BOX_LINE_RIGHT, BOX_LINE_LEFT };
                     const USHORT* pBrd = aBorders;
@@ -1089,7 +1089,7 @@ void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
                 // Abstand zum Text
                 if (aSetBoxInfo.IsValid(VALID_DISTANCE))
                 {
-                    static USHORT __READONLY_DATA aBorders[] = {
+                    static USHORT const aBorders[] = {
                         BOX_LINE_BOTTOM, BOX_LINE_TOP,
                         BOX_LINE_RIGHT, BOX_LINE_LEFT };
                     const USHORT* pBrd = aBorders;

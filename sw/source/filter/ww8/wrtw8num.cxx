@@ -573,12 +573,12 @@ void WW8Export::OutputOlst( const SwNumRule& rRule )
     if ( bWrtWW8 )
         return;
 
-    static BYTE __READONLY_DATA aAnlvBase[] = { // Defaults
+    static BYTE const aAnlvBase[] = { // Defaults
                                 1,0,0,          // Upper Roman
                                 0x0C,           // Hanging Indent, fPrev
                                 0,0,1,0x80,0,0,1,0,0x1b,1,0,0 };
 
-    static BYTE __READONLY_DATA aSprmOlstHdr[] = { 133, 212 };
+    static BYTE const aSprmOlstHdr[] = { 133, 212 };
 
     pO->Insert( aSprmOlstHdr, sizeof( aSprmOlstHdr ), pO->Count() );
     WW8_OLST aOlst;
@@ -859,7 +859,7 @@ void WW8Export::BuildAnlvBase(WW8_ANLV& rAnlv, BYTE*& rpCh,
 void WW8Export::Out_NumRuleAnld( const SwNumRule& rRul, const SwNumFmt& rFmt,
                                    BYTE nSwLevel )
 {
-    static BYTE __READONLY_DATA aSprmAnldDefault[54] = {
+    static BYTE const aSprmAnldDefault[54] = {
                          12, 52,
                          1,0,0,0x0c,0,0,1,0x80,0,0,1,0,0x1b,1,0,0,0x2e,
                          0,0,0,

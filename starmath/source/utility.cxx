@@ -337,7 +337,7 @@ void SmFace::SetSize(const Size& rSize)
     Size  aSize (rSize);
 
     // check the requested size against minimum value
-    static int __READONLY_DATA  nMinVal = SmPtsTo100th_mm(2);
+    static int const    nMinVal = SmPtsTo100th_mm(2);
 
     if (aSize.Height() < nMinVal)
         aSize.Height() = nMinVal;

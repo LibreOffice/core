@@ -1503,7 +1503,7 @@ String SwHiddenTxtField::GetCntnt(sal_Bool bName) const
 
         if(nSubType == TYP_CONDTXTFLD)
         {
-static char __READONLY_DATA cTmp[] = " : ";
+static char const cTmp[] = " : ";
             aStr.AppendAscii(cTmp);
             aStr += aFALSETxt;
         }

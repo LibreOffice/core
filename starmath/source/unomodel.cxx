@@ -651,7 +651,7 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
                     sal_uInt32 nSize = aSequence.getLength();
                     SvMemoryStream aStream ( aSequence.getArray(), nSize, STREAM_READ );
                     aStream.Seek ( STREAM_SEEK_TO_BEGIN );
-                    static sal_uInt16 __READONLY_DATA nRange[] =
+                    static sal_uInt16 const nRange[] =
                     {
                         SID_PRINTSIZE,       SID_PRINTSIZE,
                         SID_PRINTZOOM,       SID_PRINTZOOM,

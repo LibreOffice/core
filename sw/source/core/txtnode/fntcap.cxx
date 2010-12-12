@@ -330,7 +330,7 @@ void SwDoDrawCapital::Do()
 
 void SwDoDrawCapital::DrawSpace( Point &rPos )
 {
-    static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+    static sal_Char const sDoubleSpace[] = "  ";
 
     long nDiff = rInf.GetPos().X() - rPos.X();
 

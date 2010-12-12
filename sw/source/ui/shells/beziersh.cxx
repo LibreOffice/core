@@ -130,7 +130,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
         case SID_BEZIER_INSERT:
             {
                 GetView().GetEditWin().SetBezierMode(nSlotId);
-                static USHORT __READONLY_DATA aInva[] =
+                static USHORT const aInva[] =
                                 {
                                     SID_BEZIER_INSERT,
                                     SID_BEZIER_MOVE,
@@ -190,7 +190,7 @@ void SwBezierShell::Execute(SfxRequest &rReq)
                         {
                             pSdrView->SetMarkedPointsSmooth(eKind);
 
-                            static USHORT __READONLY_DATA aInva[] =
+                            static USHORT const aInva[] =
                                             {
                                                 SID_BEZIER_SMOOTH,
                                                 SID_BEZIER_EDGE,

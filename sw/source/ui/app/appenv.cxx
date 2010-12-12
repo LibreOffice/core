@@ -487,7 +487,7 @@ void SwModule::InsertEnv( SfxRequest& rReq )
 
             if ( rItem.aAddrText.indexOf('<') >= 0 )
             {
-                static USHORT __READONLY_DATA aInva[] =
+                static USHORT const aInva[] =
                                     {
                                         SID_SBA_BRW_UPDATE,
                                         SID_SBA_BRW_INSERT,

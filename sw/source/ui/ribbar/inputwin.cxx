@@ -281,7 +281,7 @@ void SwInputWindow::ShowWin()
 
 IMPL_LINK( SwInputWindow, MenuHdl, Menu *, pMenu )
 {
-static const char * __READONLY_DATA aStrArr[] = {
+static const char * const aStrArr[] = {
     sCalc_Phd,
     sCalc_Sqrt,
     sCalc_Or,

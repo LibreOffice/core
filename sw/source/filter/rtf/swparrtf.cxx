@@ -4221,7 +4221,7 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
 
 void SwRTFParser::ReadInfo( const sal_Char* pChkForVerNo )
 {
-sal_Char __READONLY_DATA aChkForVerNo[] = "StarWriter";
+sal_Char const aChkForVerNo[] = "StarWriter";
 
     // falls nicht schon was vorgegeben wurde, setzen wir unseren Namen
     // rein. Wenn das im Kommentar match, wird im Parser die VersionNummer

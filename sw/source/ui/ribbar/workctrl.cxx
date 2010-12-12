@@ -351,7 +351,7 @@ void SwTbxAutoTextCtrl::DelPopup()
 
 /* Navigations-Popup */
 // determine the order of the toolbox items
-static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
+static USHORT const aNavigationInsertIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     NID_TBL,
@@ -376,7 +376,7 @@ static USHORT __READONLY_DATA aNavigationInsertIds[ NAVI_ENTRIES ] =
     NID_TABLE_FORMULA_ERROR,
     NID_NEXT
 };
-static USHORT __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
+static USHORT const aNavigationHelpIds[ NAVI_ENTRIES ] =
 {
     // -- first line
     HID_NID_TBL,

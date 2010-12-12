@@ -1718,7 +1718,7 @@ void SwWW8ImplReader::MatchSdrItemsIntoFlySet( SdrObject* pSdrObj,
 
     // einige Items koennen direkt so uebernommen werden
     const USHORT nDirectMatch = 2;
-    static RES_FRMATR __READONLY_DATA aDirectMatch[ nDirectMatch ] =
+    static RES_FRMATR const aDirectMatch[ nDirectMatch ] =
     {
         RES_LR_SPACE,   // Aussenabstand links/rechts: SvxLRSpaceItem
         RES_UL_SPACE    // Aussenabstand Oben/unten:   SvxULSpaceItem

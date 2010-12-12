@@ -483,7 +483,7 @@ static WWDateTime GetTimeDatePara( const String& rForm,
 
     if( STRING_NOTFOUND != nDPos )                  // Monat -> Datum ?
     {
-        static SwDateFormat __READONLY_DATA aDateA[32] =
+        static SwDateFormat const aDateA[32] =
         {
             DFF_DMY, DFF_DMMY, DFF_DMYY, DFF_DMMYY,
             DFF_DMMMY, DFF_DMMMY, DFF_DMMMYY, DFF_DMMMYY,

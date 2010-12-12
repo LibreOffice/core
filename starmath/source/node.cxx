@@ -299,7 +299,7 @@ void SmNode::SetFontSize(const Fraction &rSize, USHORT nType)
         }
 
         // check the requested size against maximum value
-        static int __READONLY_DATA  nMaxVal = SmPtsTo100th_mm(128);
+        static int const    nMaxVal = SmPtsTo100th_mm(128);
         if (aFntSize.Height() > nMaxVal)
             aFntSize.Height() = nMaxVal;
 

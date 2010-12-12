@@ -92,29 +92,29 @@ static RTF_FLD_TYPES _WhichFld( String& rName, String& rNext )
 {
     // Strings sind PascalStrings; Laenge steht an 1. Stellen, dadurch wird
     // sich der Aufruf von strlen erspart!!!
-    sal_Char __READONLY_DATA sTOC[]=        "\x03""toc";
-    sal_Char __READONLY_DATA sIMPORT[]=     "\x06""import";
-    sal_Char __READONLY_DATA sINDEX[]=      "\x05""index";
-    sal_Char __READONLY_DATA sSYMBOL[]=     "\x06""symbol";
-    sal_Char __READONLY_DATA sPAGE[]=       "\x04""page";
-    sal_Char __READONLY_DATA sNUMPAGES[]=   "\x08""numpages";
-    sal_Char __READONLY_DATA sDATE[]=       "\x04""date";
-    sal_Char __READONLY_DATA sTIME[]=       "\x04""time";
-    sal_Char __READONLY_DATA sDATA[]=       "\x04""data";
-    sal_Char __READONLY_DATA sMERGEFLD[]=   "\x0A""mergefield";
-    sal_Char __READONLY_DATA sIMPORT2[]=    "\x0E""includepicture";
-    sal_Char __READONLY_DATA sHYPERLINK[]=  "\x09""hyperlink";
-    sal_Char __READONLY_DATA sREF[]=        "\x03""ref";
-    sal_Char __READONLY_DATA sPAGEREF[]=    "\x07""pageref";
-    sal_Char __READONLY_DATA sEQ[]=         "\x02""eq";
-    sal_Char __READONLY_DATA sINCLUDETEXT[]="\x0B""includetext";
+    sal_Char const sTOC[]=      "\x03""toc";
+    sal_Char const sIMPORT[]=   "\x06""import";
+    sal_Char const sINDEX[]=        "\x05""index";
+    sal_Char const sSYMBOL[]=   "\x06""symbol";
+    sal_Char const sPAGE[]=     "\x04""page";
+    sal_Char const sNUMPAGES[]=   "\x08""numpages";
+    sal_Char const sDATE[]=     "\x04""date";
+    sal_Char const sTIME[]=     "\x04""time";
+    sal_Char const sDATA[]=     "\x04""data";
+    sal_Char const sMERGEFLD[]= "\x0A""mergefield";
+    sal_Char const sIMPORT2[]=  "\x0E""includepicture";
+    sal_Char const sHYPERLINK[]=    "\x09""hyperlink";
+    sal_Char const sREF[]=      "\x03""ref";
+    sal_Char const sPAGEREF[]=  "\x07""pageref";
+    sal_Char const sEQ[]=           "\x02""eq";
+    sal_Char const sINCLUDETEXT[]="\x0B""includetext";
 
     struct _Dummy_RTF_FLD_TYPES
     {
         RTF_FLD_TYPES eFldType;
         const sal_Char* pFldNm;
     };
-    __READONLY_DATA _Dummy_RTF_FLD_TYPES aFldNmArr[RTFFLD_INCLUDETEXT + 1] = {
+    const _Dummy_RTF_FLD_TYPES aFldNmArr[RTFFLD_INCLUDETEXT + 1] = {
             {RTFFLD_TOC,         sTOC},
             {RTFFLD_IMPORT,      sIMPORT},
             {RTFFLD_INDEX,       sINDEX},

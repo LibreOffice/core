@@ -2838,7 +2838,7 @@ void RtfAttributeOutput::FormatBox( const SvxBoxItem& rBox )
 {
     OSL_TRACE("%s", OSL_THIS_FUNC);
 
-    static USHORT __READONLY_DATA aBorders[] = {
+    static USHORT const aBorders[] = {
         BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
     static const sal_Char* aBorderNames[] = {
         OOO_STRING_SVTOOLS_RTF_BRDRT, OOO_STRING_SVTOOLS_RTF_BRDRL, OOO_STRING_SVTOOLS_RTF_BRDRB, OOO_STRING_SVTOOLS_RTF_BRDRR };

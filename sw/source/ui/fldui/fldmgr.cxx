@@ -391,7 +391,7 @@ SwField* SwFldMgr::GetCurFld()
 
 const SwFldGroupRgn& SwFldMgr::GetGroupRange(BOOL bHtmlMode, USHORT nGrpId) const
 {
-static SwFldGroupRgn __READONLY_DATA aRanges[] =
+static SwFldGroupRgn const aRanges[] =
 {
     { /* Document   */  GRP_DOC_BEGIN,  GRP_DOC_END },
     { /* Functions  */  GRP_FKT_BEGIN,  GRP_FKT_END },
@@ -400,7 +400,7 @@ static SwFldGroupRgn __READONLY_DATA aRanges[] =
     { /* Database   */  GRP_DB_BEGIN,   GRP_DB_END  },
     { /* User       */  GRP_VAR_BEGIN,  GRP_VAR_END }
 };
-static SwFldGroupRgn __READONLY_DATA aWebRanges[] =
+static SwFldGroupRgn const aWebRanges[] =
 {
     { /* Document    */  GRP_WEB_DOC_BEGIN,  GRP_WEB_DOC_END },
     { /* Functions   */  GRP_WEB_FKT_BEGIN,  GRP_WEB_FKT_END },
@@ -1615,7 +1615,7 @@ void SwFieldType::_GetFldName()
 {
     static const USHORT coFldCnt = STR_TYPE_END - STR_TYPE_BEGIN;
 
-    static USHORT __READONLY_DATA coFldNms[ coFldCnt ] = {
+    static USHORT const coFldNms[ coFldCnt ] = {
         FLD_DATE_STD,
         FLD_TIME_STD,
         STR_FILENAMEFLD,

@@ -118,7 +118,7 @@ USHORT Ww1Style::ReadName( BYTE*&p, USHORT& rnCountBytes, USHORT stc )
     rnCountBytes--;
     if( !nCountBytes ) // default
     {
-        static const sal_Char* __READONLY_DATA names[] =
+        static const sal_Char* const names[] =
         {
             "W1 Null",  //222
             "W1 Annotation reference",  //223

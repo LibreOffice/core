@@ -112,7 +112,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
                 pSh->EndAction();
 
-                static USHORT __READONLY_DATA aInval[] =
+                static USHORT const aInval[] =
                 {
                     SID_ATTR_FILL_STYLE, SID_ATTR_FILL_COLOR, 0
                 };
@@ -151,7 +151,7 @@ void SwDrawShell::ExecDrawDlg(SfxRequest& rReq)
                     pView->SetDefaultAttr(*pDlg->GetOutputItemSet(), FALSE);
                 pSh->EndAction();
 
-                static USHORT __READONLY_DATA aInval[] =
+                static USHORT const aInval[] =
                 {
                     SID_ATTR_LINE_STYLE, SID_ATTR_LINE_WIDTH,
                     SID_ATTR_LINE_COLOR, 0

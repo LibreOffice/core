@@ -124,7 +124,7 @@ SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     nSelectionWidth = aRect.Width();
 
     SfxItemSet* pColPgSet = 0;
-    static USHORT __READONLY_DATA aSectIds[] = { RES_COL, RES_COL,
+    static USHORT const aSectIds[] = { RES_COL, RES_COL,
                                                 RES_FRM_SIZE, RES_FRM_SIZE,
                                                 RES_COLUMNBALANCE, RES_FRAMEDIR,
                                                 0 };

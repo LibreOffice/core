@@ -1273,14 +1273,14 @@ static void DumpPcd( BYTE nVersion, long nPos, long nLen )
 
 static void DumpPLCF( long nPos, long nLen, ePLCFT ePlc )
 {
-    static int __READONLY_DATA WW8FkpSizeTabVer6[ PLCF_END ] = {
+    static int const WW8FkpSizeTabVer6[ PLCF_END ] = {
                                                     1,  7, 0 /*, 0, 0, 0*/ };
-    static int __READONLY_DATA PlcSizeTabVer6[ PLCF_END+4 ] = {
+    static int const PlcSizeTabVer6[ PLCF_END+4 ] = {
                                                     2, 2, 12, 0, 2, 2, 20 };
 
-    static int __READONLY_DATA WW8FkpSizeTabVer8[ PLCF_END ] = {
+    static int const WW8FkpSizeTabVer8[ PLCF_END ] = {
                                                     1, 13, 0 /*, 0, 0, 0*/ };
-    static int __READONLY_DATA PlcSizeTabVer8[ PLCF_END+4 ] = {
+    static int const PlcSizeTabVer8[ PLCF_END+4 ] = {
                                                     4, 4, 12, 0, 2, 2, 30 };
 
     const int* pFkpSizeTab;
@@ -2309,7 +2309,7 @@ void DumpEscherRec( ULONG nPos, UINT8 nVer, UINT16 nInst,
                     nCnt = 0;
                 }
 
-                static char __READONLY_DATA sHex[17] = { "0123456789abcdef" };
+                static char const sHex[17] = { "0123456789abcdef" };
                 BYTE c;
                 *xTableStream >> c;
                 *pOut << sHex[ ( c & 0xf0 ) >> 4 ] << sHex[ c & 0x0f ] << ' ';

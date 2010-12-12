@@ -1921,7 +1921,7 @@ void SwBaseShell::SetFrmMode(FlyMode eMode, SwWrtShell *pSh )
     }
     else if( eMode == FLY_DRAG_END )
     {
-        static USHORT __READONLY_DATA aInval[] =
+        static USHORT const aInval[] =
         {
             SID_ATTR_POSITION, SID_ATTR_SIZE, 0
         };

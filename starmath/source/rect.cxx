@@ -49,7 +49,7 @@
 // '\0' terminiertes Array mit Zeichen, die im StarMath Font als Buchstaben
 // betrachtet werden sollen, (um im Gegensatz zu den anderen Operatoren
 // und Symbolen ein "normales"(ungecliptes) SmRect zu erhalten).
-static xub_Unicode __READONLY_DATA aMathAlpha[] =
+static xub_Unicode const aMathAlpha[] =
 {
     MS_ALEPH,               MS_IM,                  MS_RE,
     MS_WP,                  xub_Unicode(0xE070),    MS_EMPTYSET,

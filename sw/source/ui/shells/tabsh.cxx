@@ -429,7 +429,7 @@ void ItemSetToTableParam( const SfxItemSet& rSet,
         rSh.SetTableName( *pFmt, ((const SfxStringItem*)pItem)->GetValue() );
 
     // kopiere die ausgesuchten Attribute in den ItemSet
-    static USHORT __READONLY_DATA aIds[] =
+    static USHORT const aIds[] =
         {
             RES_PAGEDESC,
             RES_BREAK,
@@ -1034,7 +1034,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                                         : TBLVAR_CHGABS ) );
 
             SfxBindings& rBind = GetView().GetViewFrame()->GetBindings();
-            static USHORT __READONLY_DATA aInva[] =
+            static USHORT const aInva[] =
                             {   FN_TABLE_MODE_FIX,
                                 FN_TABLE_MODE_FIX_PROP,
                                 FN_TABLE_MODE_VARIABLE,

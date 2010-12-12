@@ -254,7 +254,7 @@ struct WW8_BordersSO            // fuer StarOffice-Border Code
 */
 // Deklarationen gemaess BOXITEM.HXX
 #define WW8_DECL_LINETAB_ARRAY                                               \
-    static WW8_BordersSO __READONLY_DATA nLineTabVer8[] =                    \
+    static WW8_BordersSO const nLineTabVer8[] =                  \
     {                                                                        \
 /* 0*/  { DEF_LINE_WIDTH_0, 0, 0 },                                          \
 /* 1*/  { DEF_LINE_WIDTH_1, 0, 0 },                                          \

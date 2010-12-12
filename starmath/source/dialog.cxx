@@ -795,7 +795,7 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
 #if OSL_DEBUG_LEVEL > 1
     OSL_ENSURE(NOCATEGORIES == 10, "Sm : array doesn't fit into the number of categories");
 #endif
-    ULONG __READONLY_DATA  aCatMf2Hid[10][4] =
+    ULONG const  aCatMf2Hid[10][4] =
     {
         { HID_SMA_DEFAULT_DIST,         HID_SMA_LINE_DIST,          HID_SMA_ROOT_DIST, 0 },
         { HID_SMA_SUP_DIST,             HID_SMA_SUB_DIST ,          0, 0 },
@@ -810,7 +810,7 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
     };
 
     // array to help iterate over the controls
-    Window * __READONLY_DATA  aWin[4][2] =
+    Window * const  aWin[4][2] =
     {
         { &aFixedText1,  &aMetricField1 },
         { &aFixedText2,  &aMetricField2 },

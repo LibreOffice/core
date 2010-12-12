@@ -917,7 +917,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
         Size aFontSize = _GetTxtSize( rInf );
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
@@ -1028,7 +1028,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
 
     if( pUnderFnt && nOldUnder != UNDERLINE_NONE )
     {
-static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
+static sal_Char const sDoubleSpace[] = "  ";
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
         xub_StrLen nOldIdx = rInf.GetIdx();

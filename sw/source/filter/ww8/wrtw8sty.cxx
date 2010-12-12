@@ -478,7 +478,7 @@ void WW8AttributeOutput::DefaultStyle( USHORT nStyle )
     {
         if ( m_rWW8Export.bWrtWW8 )
         {
-            static BYTE __READONLY_DATA aDefCharSty[] = {
+            static BYTE const aDefCharSty[] = {
                 0x42, 0x00,
                 0x41, 0x40, 0xF2, 0xFF, 0xA1, 0x00, 0x42, 0x00,
                 0x00, 0x00, 0x19, 0x00, 0x41, 0x00, 0x62, 0x00,
@@ -493,7 +493,7 @@ void WW8AttributeOutput::DefaultStyle( USHORT nStyle )
         }
         else
         {
-            static BYTE __READONLY_DATA aDefCharSty[] = {
+            static BYTE const aDefCharSty[] = {
                 0x26, 0x00,
                 0x41, 0x40, 0xF2, 0xFF, 0xA1, 0x00, 0x26, 0x00,
                 0x19, 0x41, 0x62, 0x73, 0x61, 0x74, 0x7A, 0x2D,
@@ -554,7 +554,7 @@ void WW8AttributeOutput::StartStyles()
 
     if ( m_rWW8Export.bWrtWW8 )
     {
-        static BYTE __READONLY_DATA aStShi[] = {
+        static BYTE const aStShi[] = {
             0x12, 0x00,
             0x0F, 0x00, 0x0A, 0x00, 0x01, 0x00, 0x5B, 0x00,
             0x0F, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -564,7 +564,7 @@ void WW8AttributeOutput::StartStyles()
     }
     else
     {
-        static BYTE __READONLY_DATA aStShi[] = {
+        static BYTE const aStShi[] = {
             0x0E, 0x00,
             0x0F, 0x00, 0x08, 0x00, 0x01, 0x00, 0x4B, 0x00,
             0x0F, 0x00, 0x00, 0x00, 0x00, 0x00 };
