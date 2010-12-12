@@ -46,35 +46,35 @@
         void         TestMemberInvariant( BOOL bPrint );
 
 #define SO2_IMPL_INVARIANT(ClassName)                                   \
-void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( BOOL bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
 }                                                                       \
-void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( BOOL bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
 }
 
 #define SO2_IMPL_INVARIANT1(ClassName,Super1)                           \
-void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( BOOL bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
 }                                                                       \
-void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( BOOL bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
 }
 
 #define SO2_IMPL_INVARIANT2(ClassName,Super1,Super2)                    \
-void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( BOOL bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
     Super2::TestObjRef( bFree );                                        \
 }                                                                       \
-void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( BOOL bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -82,14 +82,14 @@ void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
 }
 
 #define SO2_IMPL_INVARIANT3(ClassName,Super1,Super2,Super3)             \
-void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( BOOL bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
     Super2::TestObjRef( bFree );                                        \
     Super3::TestObjRef( bFree );                                        \
 }                                                                       \
-void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( BOOL bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -98,7 +98,7 @@ void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
 }
 
 #define SO2_IMPL_INVARIANT4(ClassName,Super1,Super2,Super3,Super4)      \
-void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
+void ClassName::TestObjRef( BOOL bFree )                       \
 {                                                                       \
     TestMemberObjRef( bFree );                                          \
     Super1::TestObjRef( bFree );                                        \
@@ -106,7 +106,7 @@ void __EXPORT ClassName::TestObjRef( BOOL bFree )                       \
     Super3::TestObjRef( bFree );                                        \
     Super4::TestObjRef( bFree );                                        \
 }                                                                       \
-void __EXPORT ClassName::TestInvariant( BOOL bPrint )                   \
+void ClassName::TestInvariant( BOOL bPrint )                   \
 {                                                                       \
     TestMemberInvariant( bPrint );                                      \
     Super1::TestInvariant( bPrint );                                    \
@@ -171,18 +171,18 @@ SotFactory * ClassName::ClassFactory()                                     \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
-void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
+void * ClassName::CreateInstance( SotObject ** ppObj )            \
 {                                                                         \
     ClassName * p = new ClassName();                                      \
     if( ppObj )                                                           \
         *ppObj = p;                                                       \
     return p;                                                             \
 }                                                                         \
-const SotFactory * __EXPORT ClassName::GetSvFactory() const                         \
+const SotFactory * ClassName::GetSvFactory() const                         \
 {                                                                         \
     return ClassFactory();                                                \
 }                                                                         \
-void * __EXPORT ClassName::Cast( const SotFactory * pFact )                         \
+void * ClassName::Cast( const SotFactory * pFact )                         \
 {                                                                         \
     void * pRet = NULL;                                                   \
     if( !pFact || pFact == ClassFactory() )                               \
@@ -209,7 +209,7 @@ SotFactory * ClassName::ClassFactory()                                     \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
-void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
+void * ClassName::CreateInstance( SotObject ** ppObj )            \
 {                                                                         \
     ClassName * p = new ClassName();                                      \
     Super1* pSuper1 = p;                                                  \
@@ -218,11 +218,11 @@ void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
         *ppObj = pBasicObj;                                               \
     return p;                                                             \
 }                                                                         \
-const SotFactory * __EXPORT ClassName::GetSvFactory() const                \
+const SotFactory * ClassName::GetSvFactory() const                \
 {                                                                         \
     return ClassFactory();                                                \
 }                                                                         \
-void * __EXPORT ClassName::Cast( const SotFactory * pFact )                \
+void * ClassName::Cast( const SotFactory * pFact )                \
 {                                                                         \
     void * pRet = NULL;                                                   \
     if( !pFact || pFact == ClassFactory() )                               \
@@ -252,18 +252,18 @@ SotFactory * ClassName::ClassFactory()                                     \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
-void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
+void * ClassName::CreateInstance( SotObject ** ppObj )            \
 {                                                                         \
     ClassName * p = new ClassName();                                      \
     if( ppObj )                                                           \
         *ppObj = p;                                                       \
     return p;                                                             \
 }                                                                         \
-const SotFactory * __EXPORT ClassName::GetSvFactory() const                \
+const SotFactory * ClassName::GetSvFactory() const                \
 {                                                                         \
     return ClassFactory();                                                \
 }                                                                         \
-void * __EXPORT ClassName::Cast( const SotFactory * pFact )                \
+void * ClassName::Cast( const SotFactory * pFact )                \
 {                                                                         \
     void * pRet = NULL;                                                   \
     if( !pFact || pFact == ClassFactory() )                               \
@@ -295,18 +295,18 @@ SotFactory * ClassName::ClassFactory()                                     \
     }                                                                     \
     return *pFactory;                                                     \
 }                                                                         \
-void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
+void * ClassName::CreateInstance( SotObject ** ppObj )            \
 {                                                                         \
     ClassName * p = new ClassName();                                      \
     if( ppObj )                                                           \
         *ppObj = p;                                                       \
     return p;                                                             \
 }                                                                         \
-const SotFactory * __EXPORT ClassName::GetSvFactory() const                \
+const SotFactory * ClassName::GetSvFactory() const                \
 {                                                                         \
     return ClassFactory();                                                \
 }                                                                         \
-void * __EXPORT ClassName::Cast( const SotFactory * pFact )                \
+void * ClassName::Cast( const SotFactory * pFact )                \
 {                                                                         \
     void * pRet = NULL;                                                   \
     if( !pFact || pFact == ClassFactory() )                               \
@@ -342,18 +342,18 @@ SotFactory * ClassName::ClassFactory()                                     \
     }                                                                     \
     return *ppFactory;                                                    \
 }                                                                         \
-void * __EXPORT ClassName::CreateInstance( SotObject ** ppObj )            \
+void * ClassName::CreateInstance( SotObject ** ppObj )            \
 {                                                                         \
     ClassName * p = new ClassName();                                      \
     if( ppObj )                                                           \
         *ppObj = p;                                                       \
     return p;                                                             \
 }                                                                         \
-const SotFactory * __EXPORT ClassName::GetSvFactory() const                \
+const SotFactory * ClassName::GetSvFactory() const                \
 {                                                                         \
     return ClassFactory();                                                \
 }                                                                         \
-void * __EXPORT ClassName::Cast( const SotFactory * pFact )                \
+void * ClassName::Cast( const SotFactory * pFact )                \
 {                                                                         \
     void * pRet = NULL;                                                   \
     if( !pFact || pFact == ClassFactory() )                               \

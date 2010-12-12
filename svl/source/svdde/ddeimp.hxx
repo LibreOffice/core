@@ -96,11 +96,11 @@ public:
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
 #if defined ( MTW ) || ( defined ( GCC ) && defined ( OS2 )) || defined( ICC )
-    static HDDEDATA CALLBACK __EXPORT CliCallback
+    static HDDEDATA CALLBACK CliCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT SvrCallback
+    static HDDEDATA CALLBACK SvrCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
-    static HDDEDATA CALLBACK __EXPORT InfCallback
+    static HDDEDATA CALLBACK InfCallback
            ( WORD, WORD, HCONV, HSZ, HSZ, HDDEDATA, DWORD, DWORD );
 #else
     static HDDEDATA CALLBACK _export CliCallback
