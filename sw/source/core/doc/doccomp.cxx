@@ -50,7 +50,11 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
+#include <vector>
+
 using namespace ::com::sun::star;
+
+using ::std::vector;
 
 class CompareLine
 {
@@ -62,15 +66,13 @@ public:
     virtual BOOL Compare( const CompareLine& rLine ) const = 0;
 };
 
-DECLARE_LIST( CompareList, CompareLine* )
-
 class CompareData
 {
-    ULONG* pIndex;
-    BOOL* pChangedFlag;
+    size_t* pIndex;
+    bool* pChangedFlag;
 
 protected:
-    CompareList aLines;
+    vector< CompareLine* > aLines;
     ULONG nSttLineNum;
 
     // Anfang und Ende beschneiden und alle anderen in das
@@ -103,24 +105,24 @@ public:
     // Eindeutigen Index fuer eine Line setzen. Gleiche Lines haben den
     // selben Index; auch in den anderen CompareData!
     void SetIndex( ULONG nLine, ULONG nIndex );
-    ULONG GetIndex( ULONG nLine ) const
-        { return nLine < aLines.Count() ? pIndex[ nLine ] : 0; }
+    size_t GetIndex( size_t nLine ) const
+        { return nLine < aLines.size() ? pIndex[ nLine ] : 0; }
 
     // setze/erfrage ob eine Zeile veraendert ist
-    void SetChanged( ULONG nLine, BOOL bFlag = TRUE );
-    BOOL GetChanged( ULONG nLine ) const
+    void SetChanged( size_t nLine, bool bFlag = true );
+    bool GetChanged( size_t nLine ) const
         {
-            return (pChangedFlag && nLine < aLines.Count())
+            return (pChangedFlag && nLine < aLines.size())
                 ? pChangedFlag[ nLine ]
                 : 0;
         }
 
-    ULONG GetLineCount() const      { return aLines.Count(); }
+    size_t GetLineCount() const     { return aLines.size(); }
     ULONG GetLineOffset() const     { return nSttLineNum; }
-    const CompareLine* GetLine( ULONG nLine ) const
-            { return aLines.GetObject( nLine ); }
+    const CompareLine* GetLine( size_t nLine ) const
+            { return aLines[ nLine ]; }
     void InsertLine( CompareLine* pLine )
-        { aLines.Insert( pLine, LIST_APPEND ); }
+        { aLines.push_back( pLine ); }
 };
 
 class Hash
@@ -207,25 +209,25 @@ CompareData::~CompareData()
     delete[] pChangedFlag;
 }
 
-void CompareData::SetIndex( ULONG nLine, ULONG nIndex )
+void CompareData::SetIndex( size_t nLine, size_t nIndex )
 {
     if( !pIndex )
     {
-        pIndex = new ULONG[ aLines.Count() ];
-        memset( pIndex, 0, aLines.Count() * sizeof( ULONG ) );
+        pIndex = new size_t[ aLines.size() ];
+        memset( pIndex, 0, aLines.size() * sizeof( size_t ) );
     }
-    if( nLine < aLines.Count() )
+    if( nLine < aLines.size() )
         pIndex[ nLine ] = nIndex;
 }
 
-void CompareData::SetChanged( ULONG nLine, BOOL bFlag )
+void CompareData::SetChanged( size_t nLine, bool bFlag )
 {
     if( !pChangedFlag )
     {
-        pChangedFlag = new BOOL[ aLines.Count() +1 ];
-        memset( pChangedFlag, 0, aLines.Count() +1 * sizeof( BOOL ) );
+        pChangedFlag = new bool[ aLines.size() +1 ];
+        memset( pChangedFlag, 0, (aLines.size() +1) * sizeof( bool ) );
     }
-    if( nLine < aLines.Count() )
+    if( nLine < aLines.size() )
         pChangedFlag[ nLine ] = bFlag;
 }
 
