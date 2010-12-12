@@ -92,13 +92,17 @@ fi
 
 mkdir -p ${DESTDIR}/usr/bin
 
-office_root=/opt/${PREFIX}
+office_prefix=/opt
+office_root=${office_prefix}/${PREFIX}
 
 cp openoffice.sh ${DESTDIR}/usr/bin/${PREFIX}
 cp printeradmin.sh ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 chmod 0755 ${DESTDIR}/usr/bin/${PREFIX} ${DESTDIR}/usr/bin/${PREFIX}-printeradmin
 
 if test "${PREFIX}" != libreoffice ; then
+    # compat symlinks
+    mkdir -p ${DESTDIR}${office_prefix}
+    ln -sf libreoffice ${DESTDIR}${office_root}
     ln -sf /usr/bin/${PREFIX} ${DESTDIR}/usr/bin/libreoffice
     ln -sf /usr/bin/${PREFIX}-printeradmin ${DESTDIR}/usr/bin/libreoffice-printeradmin
 fi
