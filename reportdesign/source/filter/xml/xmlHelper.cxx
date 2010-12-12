@@ -91,7 +91,7 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
     {
         case XML_RPT_ALGINMENT:
             {
-                static SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
+                static SvXMLEnumMapEntry const pXML_VerticalAlign_Enum[] =
                 {
                     { XML_TOP,          style::VerticalAlignment_TOP },
                     { XML_MIDDLE,       style::VerticalAlignment_MIDDLE },

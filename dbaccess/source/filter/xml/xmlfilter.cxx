@@ -217,8 +217,8 @@ namespace dbaxml
             }
         };
     }
-    sal_Char __READONLY_DATA sXML_np__db[] = "_db";
-    sal_Char __READONLY_DATA sXML_np___db[] = "__db";
+    sal_Char const sXML_np__db[] = "_db";
+    sal_Char const sXML_np___db[] = "__db";
 
     using namespace ::com::sun::star::util;
     /// read a component (file + filter version)

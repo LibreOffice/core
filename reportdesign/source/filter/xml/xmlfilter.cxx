@@ -85,8 +85,8 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::report;
 using namespace ::com::sun::star::xml::sax;
 using namespace xmloff;
-    sal_Char __READONLY_DATA sXML_np__rpt[] = "_report";
-    sal_Char __READONLY_DATA sXML_np___rpt[] = "__report";
+    sal_Char const sXML_np__rpt[] = "_report";
+    sal_Char const sXML_np___rpt[] = "__report";
 
     using namespace ::com::sun::star::util;
 
