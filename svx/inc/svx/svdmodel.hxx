@@ -620,7 +620,7 @@ public:
 
     // Hier kann die Applikation einen Handler setzen, der die auflaufenden
     // UndoActions einsammelt. Der Handler hat folgendes Aussehen:
-    //   void __EXPORT NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
+    //   void NotifyUndoActionHdl(SfxUndoAction* pUndoAction);
     // Beim Aufruf des Handlers findet eine Eigentumsuebereignung statt; die
     // UndoAction gehoert somit dem Handler, nicht mehr dem SdrModel.
     void        SetNotifyUndoActionHdl(const Link& rLink)    { aUndoLink=rLink; }
@@ -642,7 +642,7 @@ public:
     // Hier kann man einen Handler setzen der beim Streamen mehrfach gerufen
     // wird und ungefaehre Auskunft ueber den Fortschreitungszustand der
     // Funktion gibt. Der Handler muss folgendes Aussehen haben:
-    //   void __EXPORT class::IOProgressHdl(const USHORT& nPercent);
+    //   void class::IOProgressHdl(const USHORT& nPercent);
     // Der erste Aufruf des Handlers erfolgt grundsaetzlich mit 0, der letzte
     // mit 100. Dazwischen erfolgen maximal 99 Aufrufe mit Werten 1...99.
     // Man kann also durchaus bei 0 den Progressbar Initiallisieren und bei

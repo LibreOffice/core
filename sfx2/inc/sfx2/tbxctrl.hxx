@@ -298,14 +298,14 @@ public:
 };
 
 #define SFX_IMPL_TOOLBOX_CONTROL(Class, nItemClass) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx ); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \
                     Class::CreateImpl, TYPE(nItemClass), nSlotId ) ); }
 
 #define SFX_IMPL_TOOLBOX_CONTROL_ARG(Class, nItemClass, Arg) \
-        SfxToolBoxControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
+        SfxToolBoxControl* Class::CreateImpl( USHORT nSlotId, USHORT nId, ToolBox &rTbx ) \
                { return new Class( nSlotId, nId, rTbx, Arg); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
                { SfxToolBoxControl::RegisterToolBoxControl( pMod, new SfxTbxCtrlFactory( \

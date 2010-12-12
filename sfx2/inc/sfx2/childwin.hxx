@@ -262,7 +262,7 @@ public:
 
 //! demn"achst hinf"allig !
 #define SFX_IMPL_CHILDWINDOW_CONTEXT(Class, MyID, ShellClass) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent, \
@@ -282,7 +282,7 @@ public:
 // CreateImpl mu\s noch als Parameter die Factory mitbekommen wg. ContextId
 // Solange wird diese Id auf 0 gesetzt und in SfxChildWindow::CreateContext gepatched
 #define SFX_IMPL_CHILDWINDOWCONTEXT(Class, MyID) \
-        SfxChildWindowContext* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindowContext* Class::CreateImpl( ::Window *pParent, \
                 SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
         {   \
             SfxChildWindowContext *pContext = new Class(pParent,0,pBindings,pInfo);\
@@ -307,7 +307,7 @@ public:
         SFX_IMPL_POS_CHILDWINDOW(Class, MyID, CHILDWIN_NOPOS)
 
 #define SFX_IMPL_POS_CHILDWINDOW(Class, MyID, Pos) \
-        SfxChildWindow* __EXPORT Class::CreateImpl( ::Window *pParent, \
+        SfxChildWindow* Class::CreateImpl( ::Window *pParent, \
                 sal_uInt16 nId, SfxBindings *pBindings, SfxChildWinInfo* pInfo ) \
                 {   \
                     SfxChildWindow *pWin = new Class(pParent, nId, pBindings, pInfo);\
@@ -326,7 +326,7 @@ public:
 
 #define SFX_IMPL_FLOATINGWINDOW(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxFloatingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -334,7 +334,7 @@ public:
 
 #define SFX_IMPL_MODELESSDIALOG(Class, MyID)    \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxModelessDialog*)GetWindow())->FillInfo( aInfo );  \
@@ -342,7 +342,7 @@ public:
 
 #define SFX_IMPL_DOCKINGWINDOW(Class, MyID) \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxDockingWindow*)GetWindow())->FillInfo( aInfo );  \
@@ -350,7 +350,7 @@ public:
 
 #define SFX_IMPL_TOOLBOX(Class, MyID)   \
         SFX_IMPL_CHILDWINDOW(Class, MyID)       \
-        SfxChildWinInfo __EXPORT Class::GetInfo() const \
+        SfxChildWinInfo Class::GetInfo() const \
         {                                       \
             SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();     \
             ((SfxToolbox*)GetWindow())->FillInfo( aInfo );  \

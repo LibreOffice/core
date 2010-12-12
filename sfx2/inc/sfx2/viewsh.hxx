@@ -126,7 +126,7 @@ public: \
 
 #define SFX_IMPL_NAMED_VIEWFACTORY(Class, AsciiViewName) \
     SfxViewFactory* Class::pFactory; \
-    SfxViewShell* __EXPORT Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
+    SfxViewShell* Class::CreateInstance(SfxViewFrame *pFrame, SfxViewShell *pOldView) \
     { return new Class(pFrame, pOldView); } \
     void Class::RegisterFactory( USHORT nPrio ) \
     { \

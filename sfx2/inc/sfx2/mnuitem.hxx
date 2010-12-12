@@ -148,7 +148,7 @@ inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
         static void RegisterControl(USHORT nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_MENU_CONTROL(Class, nItemClass) \
-        SfxMenuControl* __EXPORT Class::CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings ) \
+        SfxMenuControl* Class::CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings ) \
                { return new Class(nId, rMenu, rBindings); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
                { SfxMenuControl::RegisterMenuControl( pMod, new SfxMenuCtrlFactory( \

@@ -76,14 +76,14 @@ class SfxRequest;
 class SfxItemSet;
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \
- void __EXPORT SfxStub##aShellClass##aExecMethod( \
+ void SfxStub##aShellClass##aExecMethod( \
    SfxShell *pShell, SfxRequest& rReq) \
   { \
     (( aShellClass* ) pShell )->aExecMethod( rReq ); \
   }
 
 #define SFX_STATE_STUB( aShellClass, aStateMethod) \
- void  __EXPORT SfxStub##aShellClass##aStateMethod( \
+ void  SfxStub##aShellClass##aStateMethod( \
    SfxShell *pShell, SfxItemSet& rSet) \
   { \
     (( aShellClass* ) pShell )->aStateMethod( rSet ); \

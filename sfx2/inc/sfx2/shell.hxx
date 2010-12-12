@@ -323,7 +323,7 @@ inline void SfxShell::SetPool
                                                                             \
     SfxInterface* Class::pInterface = 0;                                    \
     const SfxFormalArgument* Class::pSfxFormalArgs_Impl = a##Class##Args_Impl;\
-    SfxInterface* __EXPORT Class::GetStaticInterface()                      \
+    SfxInterface* Class::GetStaticInterface()                      \
     {                                                                       \
         if ( !pInterface )                                                  \
         {                                                                   \

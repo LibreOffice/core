@@ -139,7 +139,7 @@ public:
         static void RegisterControl(USHORT nSlotId = 0, SfxModule *pMod=NULL)
 
 #define SFX_IMPL_STATUSBAR_CONTROL(Class, nItemClass) \
-        SfxStatusBarControl* __EXPORT Class::CreateImpl( USHORT nSlotId, USHORT nId, StatusBar &rStb ) \
+        SfxStatusBarControl* Class::CreateImpl( USHORT nSlotId, USHORT nId, StatusBar &rStb ) \
                { return new Class( nSlotId, nId, rStb ); } \
         void Class::RegisterControl(USHORT nSlotId, SfxModule *pMod) \
                { SfxStatusBarControl::RegisterStatusBarControl( pMod, new SfxStbCtrlFactory( \
