@@ -466,24 +466,6 @@ public:
                                     A nStart, A nEnd, const D& rValueToAnd,
                                     long nSourceDy = 0 );
 
-    /** Copy values from rArray and bitwise OR them with rValueToOr. */
-    void                        CopyFromOred(
-                                    const ScBitMaskCompressedArray& rArray,
-                                    A nStart, A nEnd, const D& rValueToOr,
-                                    long nSourceDy = 0 );
-
-    /** Return the start row of a region where all entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare). If not even nEnd meets
-        this condition, ::std::numeric_limits<A>::max() is returned. */
-    A                           GetBitStateStart( A nEnd, const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Return the end row of a region where all entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare). If not even nStart meets
-        this condition, ::std::numeric_limits<A>::max() is returned. */
-    A                           GetBitStateEnd( A nStart, const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
     /** Return the first row where an entry meets the condition:
         ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
         nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
@@ -491,39 +473,6 @@ public:
     SC_DLLPUBLIC A                           GetFirstForCondition( A nStart, A nEnd,
                                     const D& rBitMask,
                                     const D& rMaskedCompare ) const;
-
-    /** Return the last row where an entry meets the condition:
-        ((aValue & rBitMask) == rMaskedCompare), searching between nStart and
-        nEnd. If no entry meets this condition, ::std::numeric_limits<A>::max()
-        is returned. */
-    SC_DLLPUBLIC A                           GetLastForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Count rows between nStart and nEnd where entries meet the condition:
-        ((aValue & rBitMask) == rMaskedCompare) */
-    A                           CountForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Whether there is any entry between nStart and nEnd where the condition
-        is met: ((aValue & rBitMask) == rMaskedCompare) */
-    SC_DLLPUBLIC bool                        HasCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare ) const;
-
-    /** Fill an array with row numbers between nStart and nEnd where entries
-        meet the condition: ((aValue & rBitMask) == rMaskedCompare).
-        @return the count of used elements in array. */
-    size_t                      FillArrayForCondition( A nStart, A nEnd,
-                                    const D& rBitMask,
-                                    const D& rMaskedCompare,
-                                    A * pArray, size_t nArraySize ) const;
-
-    /** Count rows between nStart and nEnd where entries meet the condition:
-        ((aValue & rBitMask) != 0) */
-    A                           CountForAnyBitCondition( A nStart, A nEnd,
-                                    const D& rBitMask ) const;
 
     /** Return the last row where an entry meets the condition:
         ((aValue & rBitMask) != 0), start searching at nStart. If no entry
