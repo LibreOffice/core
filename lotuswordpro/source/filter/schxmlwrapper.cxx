@@ -134,7 +134,7 @@
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #endif
 
-#define XML_STRING(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define XML_STRING(i, x) sal_Char const i[sizeof(x)] = x
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 XML_STRING( sXML_metaStreamName,        "meta.xml");

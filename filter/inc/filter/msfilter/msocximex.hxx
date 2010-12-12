@@ -308,7 +308,7 @@ protected:
     sal_Int16 ImportSpecEffect( sal_uInt8 nSpecialEffect ) const;
     sal_uInt8 ExportSpecEffect( sal_Int16 nApiEffect ) const;
     static sal_uInt16 nStandardId;
-    static sal_uInt8 __READONLY_DATA aObjInfo[4];
+    static sal_uInt8 const aObjInfo[4];
     rtl::OUString msFormType;
     rtl::OUString msDialogType;
         OCX_Control* mpParent;
