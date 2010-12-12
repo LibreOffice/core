@@ -937,11 +937,6 @@ public:
         close();
     }
 
-    #define OpenFlag_Read   osl_File_OpenFlag_Read
-    #define OpenFlag_Write  osl_File_OpenFlag_Write
-    #define OpenFlag_Create osl_File_OpenFlag_Create
-    #define OpenFlag_NoLock osl_File_OpenFlag_NoLock
-
     /** Open a regular file.
 
         Open a file. Only regular files can be openend.
