@@ -44,7 +44,7 @@ uno::Reference< io::XInputStream > getFileAsStream( const rtl::OUString &rName )
         sFileURL = rName; // maybe it already was a file url
 
     File * blobFile = new File(sFileURL);
-    File::RC errorCode = blobFile->open(OpenFlag_Read);
+    File::RC errorCode = blobFile->open(osl_File_OpenFlag_Read);
 
     uno::Reference<io::XInputStream> xResult;
     switch (errorCode)

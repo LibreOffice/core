@@ -138,7 +138,7 @@ bool ImplImageTree::checkStyle(rtl::OUString const & style)
         // skip brand-specific icon themes; they are incomplete and thus not useful for this check
         if (nFromIndex < 0 || !aZipURL.match(sBrandURLSuffix, nFromIndex)) {
             osl::File aZip(aZipURL);
-            if (aZip.open(OpenFlag_Read) == ::osl::FileBase::E_None) {
+            if (aZip.open(osl_File_OpenFlag_Read) == ::osl::FileBase::E_None) {
                 aZip.close();
                 exists = true;
             }

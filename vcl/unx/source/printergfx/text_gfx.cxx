@@ -813,7 +813,7 @@ PrinterGfx::writeResources( osl::File* pFile, std::list< rtl::OString >& rSuppli
         WritePS (pFile, aPostScriptName.getStr());
         WritePS (pFile, "\n");
 
-        osl::File::RC nError = aFontFile.open (OpenFlag_Read);
+        osl::File::RC nError = aFontFile.open(osl_File_OpenFlag_Read);
         if (nError == osl::File::E_None)
         {
             convertPfbToPfa (aFontFile, *pFile);

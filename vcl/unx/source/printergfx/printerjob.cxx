@@ -113,7 +113,7 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
     aFileURL = maSpoolDirName + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("/")) + aFileURL;
 
     pFile = new osl::File (aFileURL);
-    nError = pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
+    nError = pFile->open (osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
     if (nError != osl::File::E_None)
     {
         delete pFile;
@@ -579,7 +579,7 @@ PrinterJob::EndJob ()
     {
         if( *pPageHead )
         {
-            osl::File::RC nError = (*pPageHead)->open(OpenFlag_Read);
+            osl::File::RC nError = (*pPageHead)->open(osl_File_OpenFlag_Read);
             if (nError == osl::File::E_None)
             {
                 AppendPS (pDestFILE, *pPageHead, pBuffer);
@@ -590,7 +590,7 @@ PrinterJob::EndJob ()
             bSuccess = sal_False;
         if( *pPageBody )
         {
-            osl::File::RC nError = (*pPageBody)->open(OpenFlag_Read);
+            osl::File::RC nError = (*pPageBody)->open(osl_File_OpenFlag_Read);
             if (nError == osl::File::E_None)
             {
                 AppendPS (pDestFILE, *pPageBody, pBuffer);

@@ -1200,7 +1200,7 @@ HELPLINKER_DLLPUBLIC bool compileExtensionHelp
         sal_uInt64 ret, len = aFileStatus.getFileSize();
         char* s = new char[ int(len) ];  // the buffer to hold the installed files
         osl::File aFile( aTreeFileURL );
-        aFile.open( OpenFlag_Read );
+        aFile.open( osl_File_OpenFlag_Read );
         aFile.read( s, len, ret );
         aFile.close();
 
