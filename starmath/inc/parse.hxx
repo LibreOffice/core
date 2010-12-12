@@ -36,6 +36,8 @@
 
 #include "types.hxx"
 
+#include <vector>
+
 class SmNode;
 class SmDocShell;
 
@@ -159,7 +161,7 @@ struct SmErrorDesc
 };
 
 DECLARE_STACK(SmNodeStack,  SmNode *)
-DECLARE_LIST(SmErrDescList, SmErrorDesc *)
+typedef ::std::vector< SmErrorDesc* > SmErrDescList;
 
 /**************************************************************************/
 
@@ -260,19 +262,18 @@ public:
 
     const String & GetText() const { return BufferString; };
 
-    SmConvert    GetConversion() const              { return eConversion; }
-    void         SetConversion(SmConvert eConv)     { eConversion = eConv; }
+    SmConvert   GetConversion() const              { return eConversion; }
+    void        SetConversion(SmConvert eConv)     { eConversion = eConv; }
 
-    bool         IsImportSymbolNames() const        { return bImportSymNames; }
-    void         SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
-    bool         IsExportSymbolNames() const        { return bExportSymNames; }
-    void         SetExportSymbolNames(bool bVal)    { bExportSymNames = bVal; }
+    bool        IsImportSymbolNames() const        { return bImportSymNames; }
+    void        SetImportSymbolNames(bool bVal)    { bImportSymNames = bVal; }
+    bool        IsExportSymbolNames() const        { return bExportSymNames; }
+    void        SetExportSymbolNames(bool bVal)    { bExportSymNames = bVal; }
 
-    USHORT       AddError(SmParseError Type, SmNode *pNode);
-
-    const SmErrorDesc * NextError();
-    const SmErrorDesc * PrevError();
-    const SmErrorDesc * GetError(USHORT i = 0xFFFF);
+    size_t      AddError(SmParseError Type, SmNode *pNode);
+    const SmErrorDesc*  NextError();
+    const SmErrorDesc*  PrevError();
+    const SmErrorDesc*  GetError(size_t i = size_t(-1) );
     static const SmTokenTableEntry* GetTokenTableEntry( const String &rName );
 };
 

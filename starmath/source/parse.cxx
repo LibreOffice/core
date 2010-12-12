@@ -2401,10 +2401,9 @@ SmNode *SmParser::Parse(const String &rBuffer)
     ColOff       = 0;
     CurError     = -1;
 
-    for (USHORT i = 0;  i < ErrDescList.Count();  i++)
-        delete ErrDescList.Remove(i);
-
-    ErrDescList.Clear();
+    for ( size_t i = 0, n = ErrDescList.size(); i < n; ++i )
+        delete ErrDescList[ i ];
+    ErrDescList.clear();
 
     NodeStack.Clear();
 
@@ -2425,10 +2424,9 @@ SmNode *SmParser::ParseExpression(const String &rBuffer)
     ColOff       = 0;
     CurError     = -1;
 
-    for (USHORT i = 0;  i < ErrDescList.Count();  i++)
-        delete ErrDescList.Remove(i);
-
-    ErrDescList.Clear();
+    for ( size_t i = 0, n = ErrDescList.size(); i < n; ++i )
+        delete ErrDescList[ i ];
+    ErrDescList.clear();
 
     NodeStack.Clear();
 
@@ -2440,7 +2438,7 @@ SmNode *SmParser::ParseExpression(const String &rBuffer)
 }
 
 
-USHORT SmParser::AddError(SmParseError Type, SmNode *pNode)
+size_t SmParser::AddError(SmParseError Type, SmNode *pNode)
 {
     SmErrorDesc *pErrDesc = new SmErrorDesc;
 
@@ -2470,44 +2468,43 @@ USHORT SmParser::AddError(SmParseError Type, SmNode *pNode)
     }
     pErrDesc->Text += SmResId(nRID);
 
-    ErrDescList.Insert(pErrDesc);
+    ErrDescList.push_back( pErrDesc );
 
-    return (USHORT) ErrDescList.GetPos(pErrDesc);
+    return ErrDescList.size()-1;
 }
 
 
-const SmErrorDesc  *SmParser::NextError()
+const SmErrorDesc *SmParser::NextError()
 {
-    if (ErrDescList.Count())
-        if (CurError > 0) return ErrDescList.Seek(--CurError);
+    if ( !ErrDescList.empty() )
+        if (CurError > 0) return ErrDescList[ --CurError ];
         else
         {
             CurError = 0;
-            return ErrDescList.Seek(CurError);
+            return ErrDescList[ CurError ];
         }
-    else return 0;
+    else return NULL;
 }
 
 
-const SmErrorDesc  *SmParser::PrevError()
+const SmErrorDesc *SmParser::PrevError()
 {
-    if (ErrDescList.Count())
-        if (CurError < (int) (ErrDescList.Count() - 1)) return ErrDescList.Seek(++CurError);
+    if ( !ErrDescList.empty() )
+        if (CurError < (int) (ErrDescList.size() - 1)) return ErrDescList[ ++CurError ];
         else
         {
-            CurError = (int) (ErrDescList.Count() - 1);
-            return ErrDescList.Seek(CurError);
+            CurError = (int) (ErrDescList.size() - 1);
+            return ErrDescList[ CurError ];
         }
-    else return 0;
+    else return NULL;
 }
 
 
-const SmErrorDesc  *SmParser::GetError(USHORT i)
+const SmErrorDesc  *SmParser::GetError(size_t i)
 {
-    return (/*i >= 0  &&*/  i < ErrDescList.Count())
-               ? ErrDescList.Seek(i)
-               : ErrDescList.Seek(CurError);
+    return ( i < ErrDescList.size() )
+               ? ErrDescList[ i ]
+               : ErrDescList[ CurError ];
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
