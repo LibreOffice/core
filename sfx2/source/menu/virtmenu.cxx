@@ -409,7 +409,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
         }
 
         const String sItemText = pSVMenu->GetItemText(nSlotId);
-        const String sHelpText = pSVMenu->GetHelpText(nSlotId);
+        const String sHelpText; // not used for anything -> just empty string
 
         if ( pPopup )
         {
@@ -815,7 +815,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
                 DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
 
                 rCtrl.Bind( this, nSID, *pSubMenu,
-                    pSVMenu->GetItemText(nSID), pSVMenu->GetHelpText(nSID),
+                    pSVMenu->GetItemText(nSID), String(),
                     *pBindings );
 
                 // Activate weiterleiten
@@ -1331,7 +1331,7 @@ void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL /*bOLE*/ )
         DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
 
         rCtrl.Bind( this, nSID, *pSubMenu,
-            pSVMenu->GetItemText(nSID), pSVMenu->GetHelpText(nSID),
+            pSVMenu->GetItemText(nSID), String(),
             *pBindings );
     }
 }
