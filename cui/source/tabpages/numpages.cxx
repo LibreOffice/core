@@ -162,7 +162,7 @@ static const sal_Unicode aBulletTypes[] =
     0x2714
 };
 
-static sal_Char __READONLY_DATA aNumChar[] =
+static sal_Char const aNumChar[] =
 {
     'A', //CHARS_UPPER_LETTER
     'a', //CHARS_LOWER_LETTER

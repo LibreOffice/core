@@ -38,11 +38,11 @@
 #include "hyperdlg.hrc"
 #include "hlmarkwn_def.hxx"
 
-sal_Char __READONLY_DATA sHash[]                = "#";
-sal_Char __READONLY_DATA sFileScheme[]          = INET_FILE_SCHEME;
-sal_Char __READONLY_DATA sNewsSRVScheme[] = "news://";
+sal_Char const sHash[]              = "#";
+sal_Char const sFileScheme[]            = INET_FILE_SCHEME;
+sal_Char const sNewsSRVScheme[] = "news://";
     // TODO news:// is nonsense
-sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
+sal_Char const sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 /*************************************************************************
 |*

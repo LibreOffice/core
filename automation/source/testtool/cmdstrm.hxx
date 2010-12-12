@@ -60,7 +60,7 @@ public:
     SvMemoryStream* GetStream();
 
     static CNames *pKeyCodes;           // Namen der Sondertasten  MOD1, F1, LEFT ...
-    static ControlDefLoad __READONLY_DATA arKeyCodes [];
+    static ControlDefLoad const arKeyCodes [];
 
 private:
     String WandleKeyEventString( String aKeys );    // Nutzt pKeyCodes.  <RETURN> <SHIFT LEFT LEFT>

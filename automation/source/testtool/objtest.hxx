@@ -236,7 +236,7 @@ public:
     virtual SbxVariable* Find( const String&, SbxClassType );
     SbxTransportMethodRef pMethodVar;     // zum Transport von Find nach Notify
     static CNames  *pClasses;
-    static ControlDefLoad __READONLY_DATA arClasses [];
+    static ControlDefLoad const arClasses [];
 };
 SV_DECL_IMPL_REF(Controls);
 

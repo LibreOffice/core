@@ -527,7 +527,7 @@ namespace pcr
         *pCounter++ = new SvxFontListItem (new FontList(Application::GetDefaultDevice()), CFID_FONTLIST);
 
         // create the pool
-        static SfxItemInfo __READONLY_DATA aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
+        static SfxItemInfo const aItemInfos[CFID_LAST_ITEM_ID - CFID_FIRST_ITEM_ID + 1] =
         {
             { SID_ATTR_CHAR_FONT,               0 },
             { SID_ATTR_CHAR_FONTHEIGHT,         0 },

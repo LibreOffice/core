@@ -123,7 +123,7 @@ struct Handle2CfgNameMapping_Impl
     const char* m_pCfgName;
 };
 
-static Handle2CfgNameMapping_Impl __READONLY_DATA Hdl2CfgMap_Impl[] =
+static Handle2CfgNameMapping_Impl const Hdl2CfgMap_Impl[] =
 {
     { SvtPathOptions::PATH_AUTOCORRECT, "AutoCorrect" },
     { SvtPathOptions::PATH_AUTOTEXT,    "AutoText" },

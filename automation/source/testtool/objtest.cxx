@@ -105,11 +105,11 @@ static CommunicationFactory aComManFac;
 #define KEEP_SEQUENCES      100         // Keep Names of last 100 Calls
 
 
-ControlDefLoad __READONLY_DATA Controls::arClasses [] =
+ControlDefLoad const Controls::arClasses [] =
 #include "classes.hxx"
 CNames *Controls::pClasses = NULL;
 
-ControlDefLoad __READONLY_DATA TestToolObj::arR_Cmds [] =
+ControlDefLoad const TestToolObj::arR_Cmds [] =
 #include "r_cmds.hxx"
 CNames *TestToolObj::pRCommands = NULL;
 CErrors *TestToolObj::pFehlerListe = NULL;      // Hier werden die Fehler des Testtools gespeichert
@@ -3862,7 +3862,7 @@ String TestToolObj::GetKeyName( USHORT nKeyCode )
 
 void TestToolObj::ReplaceNumbers(String &aText)
 {
-static ControlDefLoad __READONLY_DATA arRes_Type [] =
+static ControlDefLoad const arRes_Type [] =
 #include "res_type.hxx"
 
     static CNames *pRTypes = NULL;

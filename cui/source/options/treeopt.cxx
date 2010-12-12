@@ -382,7 +382,7 @@ struct OptionsMapping_Impl
     USHORT      m_nPageId;
 };
 
-static OptionsMapping_Impl __READONLY_DATA OptionsMap_Impl[] =
+static OptionsMapping_Impl const OptionsMap_Impl[] =
 {
 //    GROUP                 PAGE                    PAGE-ID
     { "ProductName",        NULL,                   SID_GENERAL_OPTIONS },

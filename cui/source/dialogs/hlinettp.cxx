@@ -40,11 +40,11 @@
 #define STD_DOC_SUBPATH     "internal"
 #define STD_DOC_NAME        "url_transfer.htm"
 
-sal_Char __READONLY_DATA sAnonymous[]    = "anonymous";
-sal_Char __READONLY_DATA sHTTPScheme[]   = INET_HTTP_SCHEME;
-sal_Char __READONLY_DATA sHTTPSScheme[]  = INET_HTTPS_SCHEME;
-sal_Char __READONLY_DATA sFTPScheme[]    = INET_FTP_SCHEME;
-sal_Char __READONLY_DATA sTelnetScheme[] = INET_TELNET_SCHEME;
+sal_Char const sAnonymous[]    = "anonymous";
+sal_Char const sHTTPScheme[]   = INET_HTTP_SCHEME;
+sal_Char const sHTTPSScheme[]  = INET_HTTPS_SCHEME;
+sal_Char const sFTPScheme[]    = INET_FTP_SCHEME;
+sal_Char const sTelnetScheme[] = INET_TELNET_SCHEME;
 
 /*************************************************************************
 |*

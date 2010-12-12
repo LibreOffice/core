@@ -39,7 +39,7 @@
 #include "svcommstream.hxx"
 #include <basic/testtool.hrc>
 
-ControlDefLoad __READONLY_DATA CmdStream::arKeyCodes [] =
+ControlDefLoad const CmdStream::arKeyCodes [] =
 #include <keycodes.hxx>
 CNames *CmdStream::pKeyCodes = NULL;
 
