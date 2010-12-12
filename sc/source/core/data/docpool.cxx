@@ -94,7 +94,7 @@ USHORT* ScDocumentPool::pVersionMap11 = 0;
 
 // ATTR_FONT_TWOLINES (not used) was changed to ATTR_USERDEF (not saved in binary format) in 641c
 
-static SfxItemInfo __READONLY_DATA  aItemInfos[] =
+static SfxItemInfo const  aItemInfos[] =
 {
     { SID_ATTR_CHAR_FONT,           SFX_ITEM_POOLABLE },    // ATTR_FONT
     { SID_ATTR_CHAR_FONTHEIGHT,     SFX_ITEM_POOLABLE },    // ATTR_FONT_HEIGHT

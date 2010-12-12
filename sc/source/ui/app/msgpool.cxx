@@ -40,7 +40,7 @@
 
 //------------------------------------------------------------------------
 
-static SfxItemInfo __READONLY_DATA aMsgItemInfos[] =
+static SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - nicht mehr benutzt !!!
