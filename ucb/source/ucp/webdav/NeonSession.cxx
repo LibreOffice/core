@@ -1922,8 +1922,6 @@ int NeonSession::GET( ne_session * sess,
     //struct get_context ctx;
     ne_request * req = ne_request_create( sess, "GET", uri );
     int ret;
-    void *cursor = NULL;
-    const char *name, *value;
 
 #if NEON_VERSION < 0x0250
     if ( getheaders )
@@ -1941,6 +1939,8 @@ int NeonSession::GET( ne_session * sess,
 #if NEON_VERSION >= 0x0250
     if ( getheaders )
     {
+        void *cursor = NULL;
+        const char *name, *value;
         while ( ( cursor = ne_response_header_iterate(
                                req, cursor, &name, &value ) ) != NULL )
         {
