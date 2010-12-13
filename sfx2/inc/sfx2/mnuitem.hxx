@@ -44,9 +44,6 @@ struct SfxMenuCtrlFactory;
 
 class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 {
-//friend SvStream& operator<<( SvStream& rStream, const SfxMenuControl& rItem );
-//friend SvStream& operator>>( SvStream& rStream, SfxMenuControl& rItem );
-
     String                  aTitle;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
@@ -69,9 +66,6 @@ public:
     void                    Bind( SfxVirtualMenu* pOwnMenu, USHORT nId,
                                   SfxVirtualMenu& rSubMenu,
                                   const String& rTitle, SfxBindings& rBindings );
-
-//  SvStream &              Load(SvStream &, SfxBindings*);
-//  SvStream &              Store(SvStream &);
 
     String                  GetTitle() const;
     SfxVirtualMenu*         GetPopupMenu() const;
@@ -103,8 +97,6 @@ public:
     void                    Select();
 };
 
-//--------------------------------------------------------------------
-
 typedef SfxMenuControl* (*SfxMenuControlCtor)( USHORT nId, Menu &, SfxBindings & );
 
 struct SfxMenuCtrlFactory
@@ -121,21 +113,15 @@ struct SfxMenuCtrlFactory
     {}
 };
 
-//
-
 inline String SfxMenuControl::GetTitle() const
 {
     return aTitle;
 }
-//--------------------------------------------------------------------
-
-//
 
 inline SfxVirtualMenu* SfxMenuControl::GetPopupMenu() const
 {
     return pSubMenu;
 }
-//--------------------------------------------------------------------
 
 #define SFX_DECL_MENU_CONTROL() \
         static SfxMenuControl* CreateImpl( USHORT nId, Menu &rMenu, SfxBindings &rBindings ); \

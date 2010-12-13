@@ -189,8 +189,6 @@ SfxMenuControl::SfxMenuControl( BOOL bShowStrings )
 
 //--------------------------------------------------------------------
 
-// ctor for array
-
 SfxMenuControl::SfxMenuControl():
     pOwnMenu(0),
     pSubMenu(0),
@@ -219,8 +217,6 @@ SfxMenuControl::SfxMenuControl(USHORT nSlotId, SfxBindings& rBindings):
 
 //--------------------------------------------------------------------
 
-// dtor
-
 SfxMenuControl::~SfxMenuControl()
 {
     if ( SfxMacroConfig::IsMacroSlot( GetId() ) )
@@ -244,7 +240,7 @@ void SfxMenuControl::StateChanged
     const SfxPoolItem*  pState
 )
 {
-    (void)nSID; //unused
+    (void)nSID;
     DBG_MEMTEST();
     DBG_ASSERT( nSID == GetId(), "strange SID" );
     DBG_ASSERT( pOwnMenu != 0, "setting state to dangling SfxMenuControl" );
@@ -269,18 +265,12 @@ void SfxMenuControl::StateChanged
         if ( !bIsObjMenu )
             pOwnMenu->CheckItem( GetId(), FALSE );
 
-        // SetItemText flackert in MenuBar insbes. unter OS/2 (Bug #20658)
-        if ( // !bIsObjMenu && nicht wegen "Format/Datenbank"
-             pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
+        if ( pOwnMenu->GetSVMenu()->GetItemText( GetId() ) != GetTitle() )
         {
              DBG_WARNING("Title of menu item changed - please check if this needs correction!");
-            // pOwnMenu->SetItemText( GetId(), GetTitle() );
         }
         return;
     }
-
-    // ggf. das alte Enum-Menu entfernen/loeschen
-    //! delete pOwnMenu->GetMenu().ChangePopupMenu( GetId(), 0 );
 
     bool bCheck = false;
     if ( pState->ISA(SfxBoolItem) )
