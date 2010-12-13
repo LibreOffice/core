@@ -39,6 +39,10 @@
 #include <com/sun/star/awt/Rectangle.idl>
 #endif
 
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
+#endif
+
 #ifndef __com_sun_star_util_URL_idl__
 #include <com/sun/star/util/URL.idl>
 #endif
@@ -162,6 +166,23 @@ published service MediaDescriptor
         </p>
      */
     [optional,property] string DocumentTitle;
+
+    //-------------------------------------------------------------------------
+    /** encryption information for encryption/decryption of documents
+
+        <p>
+        It contains the necessary information for encryption/decryption of
+        a component (if necessary).
+        If neither password nor encryption data is specified, loading of
+        a password protected document will fail, storing will be done without
+        encryption. If both are provided, the encryption data is used
+        ( if the filter supports it ).
+        </p>
+        <p>
+        The encryption data is generated based on the password.
+        </p>
+     */
+    [optional,property] sequence< ::com::sun::star::beans::NamedValue > EncryptionData;
 
     //-------------------------------------------------------------------------
     /** same as <member>MediaDescriptor::URL</member>
@@ -365,9 +386,11 @@ published service MediaDescriptor
     /** pasword for loading storing documents
 
         <p>
-        It caontains a password for loading or storing a component (if necessary).
-        If no password is specified, loading of a password protected document
-        will fail, storing will be done without encryption.
+        It contains a password for loading or storing a component (if necessary).
+        If neither password nor encryption data is specified, loading of
+        a password protected document will fail, storing will be done without
+        encryption. If both are provided, the encryption data is used
+        ( if the filter supports it ).
         </p>
      */
     [optional,property] string Password;
