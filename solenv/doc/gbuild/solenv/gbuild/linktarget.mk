@@ -20,25 +20,25 @@ namespace gb
             /// CObjects do not need to be explicitly constructed.
             /// They are named after the path of their source file (without
             /// file extension) from the root of their source repository.
-            CObject(String name) {};
-            friend LinkTarget;
+            CObject(String name);
+            friend class LinkTarget;
 
-            /// Platformdependant command to compile a plain C object.
+            /// Platformdependent command to compile a plain C object.
             static const Command command(
                 Path objectfile,
                 String name,
                 Path sourcefile,
                 List<String> defs,
                 List<String> cxxflags,
-                List<String> include);
-            /// Platformdependant command to generate plain C object dependancies.
+                List<Path> include);
+            /// Platformdependent command to generate plain C object dependencies.
             static const Command command_dep(
                 Path depfile,
                 String name,
                 Path sourcefile,
                 List<String> defs,
                 List<String> cxxflags,
-                List<String> include);
+                List<Path> include);
     };
 
     /// CxxObjects are never used standalone. They only exist as part of a 
@@ -46,40 +46,40 @@ namespace gb
     class CxxObject : public HasSource, public HasDependencies, public Target
     {
         public:
-            Path get_source() {};
+            Path get_source();
         private:
             /// CxxObjects do not need to be explicitly constructed.
             /// They are named after the path of their source file (without
             /// file extension) from the root of their source repository.
-            CxxObject(String name) {};
-            friend LinkTarget;
+            CxxObject(String name);
+            friend class LinkTarget;
 
-            /// Platformdependant command to compile a C++ object.
+            /// Platformdependent command to compile a C++ object.
             static const Command command(
                 Path objectfile,
                 String name,
                 Path sourcefile,
                 List<String> defs,
                 List<String> cxxflags,
-                List<String> include);
-            /// Platformdependant command to generate C++ object dependancies.
+                List<Path> include);
+            /// Platformdependent command to generate C++ object dependencies.
             static const Command command_dep(
                 Path objectfile,
                 String name,
                 Path sourcefile,
                 List<String> defs,
                 List<String> cxxflags,
-                List<String> include);
+                List<Path> include);
     };
 
     class LinkTarget : public IsCleanable, public HasDependencies, public IsLinking, public DeliversHeaders, public HasCompileSettings, public Target
     {
         public:
-            LinkTarget(String name) {};
+            LinkTarget(String name);
 
         private:
-            void get_external_headers_check() {};
-            void add_internal_headers(const List<Target>& internal_headers) {};
+            void get_external_headers_check();
+            void add_internal_headers(const List<Target>& internal_headers);
 
             /// @warning Evil Hack: SELF is set to the name of the LinkTarget
             /// in the constructor. If SELF is not set to the LinkTarget name in
@@ -103,7 +103,7 @@ namespace gb
             List<String> TARGETTYPE_FLAGS;
             Path DLLTARGET;
 
-            /// Platformdependant command for linking.
+            /// Platformdependent command for linking.
             static const Command command (
                 Path linktargetfile,
                 String linktargetname,
@@ -112,7 +112,7 @@ namespace gb
                 List<StaticLibrary> linked_static_libs,
                 List<CObject> cobjects,
                 List<CxxObject> cxxobjects);
-            /// Command to collect all dependancies of this LinkTarget.
+            /// Command to collect all dependencies of this LinkTarget.
             static const Command command_dep(
                 Path depfile,
                 String linktargetname,

@@ -10,6 +10,11 @@ namespace gb
     {
         public:
             StaticLibrary(String name) {};
+            /// Returns how the library is named in the filesystem on the current platform.
+            /// StaticLibrary filename schemes are defined in solenv/gbuild/libnames.mk (with some platformdependant hacks in solenv/gbuild/platform/*.mk.
+
+            /// This function needs to be defined in solenv/gbuild/target_names.mk so that it is available to everywhere.
+            Path get_filename();
 
         private:
             /// private helper function for the constructor
