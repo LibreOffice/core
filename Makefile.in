@@ -46,3 +46,15 @@ check:
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
+
+id:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		create-ids
+
+tags:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		create-tags
+
+docs:
+	@. ./*[Ee]nv.[Ss]et.sh && \
+		mkdocs.sh $$SRC_ROOT/docs $$SOLARENV/inc/doxygen.cfg

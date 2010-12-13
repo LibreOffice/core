@@ -39,7 +39,11 @@
 /warn
 /build.log
 /install
+/downloaded
 /*.Set.sh
+/ID
+/tags
+/docs
 
 /*/*.exe
 
