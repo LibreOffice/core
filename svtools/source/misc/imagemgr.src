@@ -95,7 +95,7 @@ ImageList RID_SVTOOLS_IMAGELIST_BIG
     };
     IdCount =
     {
-        68 ;
+        51 ;
     };
 };
 
@@ -109,7 +109,7 @@ ImageList RID_SVTOOLS_IMAGELIST_SMALL
     };
     IdCount =
     {
-        68;
+        51;
     };
 };
 
