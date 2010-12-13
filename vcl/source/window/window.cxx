@@ -8521,10 +8521,6 @@ Reference< XDragSource > Window::GetDragSource()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    // #i91990#
-    if ( Application::IsHeadlessModeEnabled() )
-        return Reference< XDragSource > ();
-
     if( mpWindowImpl->mpFrameData )
     {
         if( ! mpWindowImpl->mpFrameData->mxDragSource.is() )
@@ -8619,7 +8615,7 @@ Reference< XClipboard > Window::GetClipboard()
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    if( mpWindowImpl->mpFrameData && ! Application::IsHeadlessModeEnabled() )
+    if( mpWindowImpl->mpFrameData )
     {
         if( ! mpWindowImpl->mpFrameData->mxClipboard.is() )
         {
