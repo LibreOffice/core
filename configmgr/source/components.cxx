@@ -595,7 +595,10 @@ Components::Components(
     RTL_LOGFILE_TRACE_AUTHOR("configmgr", "sb", "end parsing");
 }
 
-Components::~Components() {}
+Components::~Components()
+{
+    flushModifications();
+}
 
 void Components::parseFileLeniently(
     FileParser * parseFile, rtl::OUString const & url, int layer, Data & data,
