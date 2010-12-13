@@ -66,7 +66,7 @@ $(MISC)$/do_namespaces $(do_phony) : namespaces.txt gennamespaces.pl
     $(PERL) gennamespaces.pl namespaces.txt $(INCCOM)$/oox$/core$/namespaces.hxx && $(TOUCH) $@
 
 $(INCCOM)$/tokens.inc : $(MISC)$/tokens.gperf $(MISC)$/do_tokens
-        $(AUGMENT_LIBRARY_PATH) gperf --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokens.inc
+        $(AUGMENT_LIBRARY_PATH) $(GPERF) --compare-strncmp $(MISC)$/tokens.gperf | $(SED) -e "s/(char\*)0/(char\*)0, 0/g" | $(GREP) -v "^#line" >$(INCCOM)$/tokens.inc
 
 $(SLO)$/tokenmap.obj : $(INCCOM)$/tokens.inc $(INCCOM)$/tokenwords.inc $(INCCOM)$/tokens.hxx $(INCCOM)$/oox$/core$/namespaces.hxx $(MISC)$/do_tokens $(MISC)$/do_namespaces
 
