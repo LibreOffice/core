@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <string.h>
+
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/drawing/ColorMode.hpp>
