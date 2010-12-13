@@ -3359,7 +3359,6 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         if(nMove)
         {
             // move the complete list
-            Control* pCtrl = NULL;
             for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
             {
                 Control* pCtrl = *it;
@@ -3368,7 +3367,7 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
                 pCtrl->SetPosPixel(aPos);
             }
             aLeftScrollWin.Enable(aControlList.front()->GetPosPixel().X() < 0);
-            pCtrl = aControlList.back();
+            Control* pCtrl = aControlList.back();
             aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
 
 #if OSL_DEBUG_LEVEL > 1
