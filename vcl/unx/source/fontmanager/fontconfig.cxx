@@ -154,7 +154,10 @@ public:
     { return m_pFcInit(); }
 
     void FcFini()
-    { if (m_pFcFini) m_pFcFini(); }
+    {
+        //To-Do: get non-headless mode smoketest to pass
+        //if (m_pFcFini) m_pFcFini();
+    }
 
     int FcGetVersion()
     { return m_pFcGetVersion(); }
