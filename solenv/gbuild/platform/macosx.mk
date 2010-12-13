@@ -30,9 +30,9 @@ COM := GCC
 
 gb_MKTEMP := TMPDIR= mktemp -t
 
-gb_CC := gcc
-gb_CXX := g++
-gb_GCCP := gcc
+gb_CC := $(CC)
+gb_CXX := $(CXX)
+gb_GCCP := $(CC)
 
 
 gb_OSDEFS := \
