@@ -64,8 +64,16 @@ gb_Module_CLEANTARGETSTACK := $$(wordlist 2,$$(words $$(gb_Module_CLEANTARGETSTA
 
 endef
 
+define gb_Module_add_moduledir
+$(call gb_Module_add_target,$(1),$(2)/Module_$(2))
+endef
+
 define gb_Module_add_targets
 $(foreach target,$(2),$(call gb_Module_add_target,$(1),$(target)))
+endef
+
+define gb_Module_add_moduledirs
+$(foreach target,$(2),$(call gb_Module_add_moduledir,$(1),$(target)))
 endef
 
 define gb_Module_make_global_targets
