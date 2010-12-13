@@ -34,4 +34,6 @@ include $(GBUILDDIR)/gbuild.mk
 
 $(eval $(call gb_Module_make_global_targets,ooo))
 
+include $(foreach repo,$(filter-out $(SRCDIR),$(gb_REPOS)),$(repo)/$(notdir $(firstword $(MAKEFILE_LIST))))
+
 # vim: set noet sw=4 ts=4:
