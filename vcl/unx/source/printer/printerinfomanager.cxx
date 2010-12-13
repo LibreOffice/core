@@ -51,6 +51,8 @@
 #include "osl/mutex.hxx"
 #include "osl/process.h"
 
+#include <boost/scoped_ptr.hpp>
+
 // filename of configuration files
 #define PRINT_FILENAME  "psprint.conf"
 // the group of the global defaults
@@ -94,19 +96,17 @@ namespace psp
 
 PrinterInfoManager& PrinterInfoManager::get()
 {
-    static PrinterInfoManager* pManager = NULL;
+    static boost::scoped_ptr<PrinterInfoManager> pManager;
 
-    if( ! pManager )
+    if (!pManager)
     {
-        pManager = CUPSManager::tryLoadCUPS();
-        if( ! pManager )
-            pManager = new PrinterInfoManager();
-
-        if( pManager )
-            pManager->initialize();
-        #if OSL_DEBUG_LEVEL > 1
+        pManager.reset(CUPSManager::tryLoadCUPS());
+        if (!pManager)
+            pManager.reset(new PrinterInfoManager());
+        pManager->initialize();
+#       if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "PrinterInfoManager::get create Manager of type %d\n", pManager->getType() );
-        #endif
+#       endif
     }
 
     return *pManager;

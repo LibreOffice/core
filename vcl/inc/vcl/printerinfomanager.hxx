@@ -140,7 +140,6 @@ protected:
     bool                              m_bDisableCUPS;
 
     PrinterInfoManager( Type eType = Default );
-    virtual ~PrinterInfoManager();
 
     virtual void initialize();
 
@@ -235,6 +234,8 @@ public:
 
     // gets m_bDisableCUPS, initialized from printer config
     bool isCUPSDisabled() const;
+
+    virtual ~PrinterInfoManager();
 };
 
 } // namespace
