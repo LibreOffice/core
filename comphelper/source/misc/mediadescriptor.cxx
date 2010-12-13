@@ -112,6 +112,12 @@ const ::rtl::OUString& MediaDescriptor::PROP_DOCUMENTSERVICE()
     return sProp;
 }
 
+const ::rtl::OUString& MediaDescriptor::PROP_ENCRYPTIONDATA()
+{
+    static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("EncryptionData"));
+    return sProp;
+}
+
 const ::rtl::OUString& MediaDescriptor::PROP_EXTENSION()
 {
     static const ::rtl::OUString sProp(RTL_CONSTASCII_USTRINGPARAM("Extension"));
