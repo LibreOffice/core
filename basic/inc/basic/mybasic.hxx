@@ -31,20 +31,7 @@
 
 #include <basic/sbstar.hxx>
 
-class BasicApp;
 class AppBasEd;
-class ErrorEntry;
-
-class BasicError {
-    AppBasEd* pWin;
-    USHORT  nLine, nCol1, nCol2;
-    String aText;
-public:
-    BasicError( AppBasEd*, USHORT, const String&, USHORT, USHORT, USHORT );
-    void Show();
-};
-
-DECLARE_LIST( ErrorList, BasicError* )
 
 #define SBXID_MYBASIC   0x594D      // MyBasic: MY
 #define SBXCR_TEST      0x54534554  // TEST
@@ -68,7 +55,6 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_TEST,SBXID_MYBASIC,1);
     TYPEINFO();
-    ErrorList aErrors;
     MyBasic();
     virtual ~MyBasic();
     virtual BOOL Compile( SbModule* );
