@@ -200,6 +200,7 @@ namespace writerfilter
     {
         xmlTextWriterEndDocument( pWriter );
         xmlFreeTextWriter( pWriter );
+        pWriter = NULL;
     }
 
 
