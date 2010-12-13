@@ -168,24 +168,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
             break;
         }
         // convert file URLs to internal form #112849#
-        if (aArg.indexOf(OUString(RTL_CONSTASCII_USTRINGPARAM("file:")))==0 &&
+        if (aArg.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("file:"))==0 &&
             xTranslator.is())
         {
             OUString tmp(xTranslator->translateToInternal(aArg));
             if (tmp.getLength() > 0)
                 aArg = tmp;
         }
-        String          aArgStr = aArg;
 
         if ( aArg.getLength() > 0 )
         {
             m_eArgumentCount = m_eArgumentCount == NONE ? ONE : MANY;
             if ( !InterpretCommandLineParameter( aArg ))
             {
-                if ( aArgStr.GetChar(0) == '-' )
+                if ( aArg.toChar() == '-' )
                 {
                     // handle this argument as an option
-                    if ( aArgStr.EqualsIgnoreCaseAscii( "-n" ))
+                    if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-n")))
                     {
                         // force new documents based on the following documents
                         bForceNewEvent  = sal_True;
@@ -197,7 +196,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-o" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-o")))
                     {
                         // force open documents regards if they are templates or not
                         bForceOpenEvent = sal_True;
@@ -209,7 +208,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-pt" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-pt")))
                     {
                         // Print to special printer
                         bPrintToEvent   = sal_True;
@@ -222,7 +221,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = sal_False;
                          bForceOpenEvent = sal_False;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-p" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-p")))
                     {
                         // Print to default printer
                         bPrintEvent     = sal_True;
@@ -234,7 +233,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-view" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-view")))
                     {
                         // open in viewmode
                         bOpenEvent      = sal_False;
@@ -246,7 +245,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_False;
                      }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-show" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-show")))
                     {
                         // open in viewmode
                         bOpenEvent      = sal_False;
@@ -258,7 +257,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bForceOpenEvent = sal_False;
                         bDisplaySpec    = sal_False;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-display" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-display")))
                     {
                         // set display
                         bOpenEvent      = sal_False;
@@ -270,7 +269,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bStartEvent     = sal_False;
                         bDisplaySpec    = sal_True;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-language" ))
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-language")))
                     {
                         bOpenEvent      = sal_False;
                            bPrintEvent     = sal_False;
@@ -288,7 +287,7 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                        the only platform dependent parameter. Should more appear
                        we should find a better solution
                     */
-                    else if ( aArgStr.CompareToAscii( "-psn", 4 ) == COMPARE_EQUAL )
+                    else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")))
                     {
                         // finder argument from MacOSX
                         bOpenEvent      = sal_False;
@@ -301,23 +300,23 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                         bDisplaySpec    = sal_False;
                     }
                     #endif
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-convert-to" ) )
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-convert-to")))
                     {
                         bOpenEvent = sal_False;
                         bConversionEvent = sal_True;
                         bConversionParamsEvent = sal_True;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-print-to-file" ) )
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-print-to-file")))
                     {
                         bOpenEvent = sal_False;
                         bBatchPrintEvent = sal_True;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-printer-name" ) &&
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-printer-name")) &&
                               bBatchPrintEvent )
                     {
                         bBatchPrinterNameEvent = sal_True;
                     }
-                    else if ( aArgStr.EqualsIgnoreCaseAscii( "-outdir" ) &&
+                    else if ( aArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-outdir")) &&
                               (bConversionEvent || bBatchPrintEvent) )
                     {
                         bConversionOutEvent = sal_True;
@@ -328,59 +327,59 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     if ( bPrinterName && bPrintToEvent )
                     {
                         // first argument after "-pt" this must be the printer name
-                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArgStr );
+                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
                         bPrinterName = sal_False;
                     }
                     else if ( bConversionParamsEvent && bConversionEvent )
                     {
                         // first argument must be the the params
-                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONPARAMS, aArgStr );
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONPARAMS, aArg );
                         bConversionParamsEvent = sal_False;
                     }
                     else if ( bBatchPrinterNameEvent && bBatchPrintEvent )
                     {
                         // first argument is the printer name
-                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArgStr );
+                        AddStringListParam_Impl( CMD_STRINGPARAM_PRINTERNAME, aArg );
                         bBatchPrinterNameEvent = sal_False;
                     }
                     else if ( (bConversionEvent || bBatchPrintEvent) && bConversionOutEvent )
                     {
-                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONOUT, aArgStr );
+                        AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONOUT, aArg );
                         bConversionOutEvent = sal_False;
                     }
                     else
                     {
                         if( bOpenEvent || bViewEvent || bForceNewEvent || bForceOpenEvent )
                         {
-                            if( ::rtl::OUString(aArgStr).matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("::ODMA")) )
+                            if( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("::ODMA")) )
                             {
-                                ::rtl::OUString sArg = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/"));
-                                sArg += aArgStr;
-                                aArgStr = sArg;
+                                ::rtl::OUString sArg(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.odma:/"));
+                                sArg += aArg;
+                                aArg = sArg;
                             }
                         }
                         // handle this argument as a filename
                         if ( bOpenEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_OPENLIST, aArg );
                         else if ( bViewEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_VIEWLIST, aArg );
                         else if ( bStartEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_STARTLIST, aArg );
                         else if ( bPrintEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTLIST, aArg );
                         else if ( bPrintToEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_PRINTTOLIST, aArg );
                         else if ( bForceNewEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCENEWLIST, aArg );
                         else if ( bForceOpenEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_FORCEOPENLIST, aArg );
                         else if ( bDisplaySpec ){
-                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArgStr );
-                            bDisplaySpec = sal_False; // only one display, not a lsit
+                            AddStringListParam_Impl( CMD_STRINGPARAM_DISPLAY, aArg );
+                            bDisplaySpec = sal_False; // only one display, not a list
                             bOpenEvent = sal_True;    // set back to standard
                         }
                         else if ( bConversionEvent || bBatchPrintEvent )
-                            AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONLIST, aArgStr );
+                            AddStringListParam_Impl( CMD_STRINGPARAM_CONVERSIONLIST, aArg );
                     }
                 }
             }
@@ -405,8 +404,6 @@ void CommandLineArgs::SetBoolParam_Impl( BoolParam eParam, sal_Bool bValue )
 
 sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& aArg )
 {
-    String aArgStr( aArg );
-
     if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-minimized" )) == sal_True )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_MINIMIZED, sal_True );
@@ -528,9 +525,9 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
-    else if ( aArgStr.Copy(0, 13).EqualsIgnoreCaseAscii( "-splash-pipe=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-splash-pipe=")) )
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, aArgStr.Copy( 13 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_SPLASHPIPE, aArg.copy(RTL_CONSTASCII_LENGTH("-splash-pipe=")) );
         return sal_True;
     }
     #ifdef MACOSX
@@ -539,59 +536,57 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
        the only platform dependent parameter. Should more appear
        we should find a better solution
     */
-    else if ( aArg.compareToAscii( "-psn", 4 ) == 0 )
+    else if ( aArg.equalsAsciiL(RTL_CONSTASCII_LENGTH("-psn")) )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
         return sal_True;
     }
     #endif
-    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-infilter=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-infilter=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, aArgStr.Copy( 10 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_INFILTER, aArg.copy(RTL_CONSTASCII_LENGTH("-infilter=")) );
         return sal_True;
     }
-    else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-accept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArg.copy(RTL_CONSTASCII_LENGTH("-accept=")) );
         return sal_True;
     }
-    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-unaccept=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-unaccept=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, aArgStr.Copy( 10 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_UNACCEPT, aArg.copy(RTL_CONSTASCII_LENGTH("-unaccept=")) );
         return sal_True;
     }
-    else if ( aArgStr.CompareIgnoreCaseToAscii( "-portal," ,
-                                                RTL_CONSTASCII_LENGTH( "-portal," )) == COMPARE_EQUAL )
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-portal,")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, aArgStr.Copy( RTL_CONSTASCII_LENGTH( "-portal," )) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_PORTAL, aArg.copy(RTL_CONSTASCII_LENGTH("-portal,")) );
         return sal_True;
     }
-    else if ( aArgStr.Copy( 0, 7 ).EqualsIgnoreCaseAscii( "-userid" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-userid")))
     {
-        if ( aArgStr.Len() > 8 )
+        if ( aArg.getLength() > RTL_CONSTASCII_LENGTH("-userid")+1 )
         {
-            rtl::OUString aUserDir = aArgStr;
             AddStringListParam_Impl(
                 CMD_STRINGPARAM_USERDIR,
-                ::rtl::Uri::decode( aUserDir.copy( 8 ),
+                ::rtl::Uri::decode( aArg.copy(RTL_CONSTASCII_LENGTH("-userid")+1),
                                     rtl_UriDecodeWithCharset,
                                     RTL_TEXTENCODING_UTF8 ) );
         }
         return sal_True;
     }
-    else if ( aArgStr.Copy( 0, 15).EqualsIgnoreCaseAscii( "-clientdisplay=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-clientdisplay=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, aArgStr.Copy( 15 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_CLIENTDISPLAY, aArg.copy(RTL_CONSTASCII_LENGTH("-clientdisplay=")) );
         return sal_True;
     }
-    else if ( aArgStr.Copy(0, 9).EqualsIgnoreCaseAscii( "-version=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-version=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArgStr.Copy( 9 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_VERSION, aArg.copy(RTL_CONSTASCII_LENGTH("-version=")) );
         return sal_True;
     }
-    else if ( aArgStr.Copy(0, 10).EqualsIgnoreCaseAscii( "-language=" ))
+    else if ( aArg.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("-language=")))
     {
-        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, aArgStr.Copy( 10 ) );
+        AddStringListParam_Impl( CMD_STRINGPARAM_LANGUAGE, aArg.copy(RTL_CONSTASCII_LENGTH("-language=")) );
         return sal_True;
     }
     else if ( aArg.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "-writer" )) == sal_True )
