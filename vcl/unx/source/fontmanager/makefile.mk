@@ -44,6 +44,8 @@ CDEFS += -DENABLE_FONTCONFIG
 
 CFLAGS+= $(FREETYPE_CFLAGS)
 CFLAGS+= $(FONTCONFIG_CFLAGS)
+CFLAGS+=-I$(SOLARVER)$/$(INPATH)$/inc
+
 # --- Files --------------------------------------------------------
 
 .IF "$(GUIBASE)"=="aqua"
@@ -70,7 +72,9 @@ NOOPTFILES=$(SLO)$/fontmanager.obj
 
 .INCLUDE :  target.mk
 
-afm_hash.cpp: afm_keyword_list
+$(SLO)$/parseAFM.obj: $(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp
+
+$(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp: afm_keyword_list
     $(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' afm_keyword_list > $@
 
 
