@@ -62,6 +62,7 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 
+#include <vector>
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -73,7 +74,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using table::XCell;
-
+using ::std::vector;
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
@@ -197,14 +198,15 @@ DECLARE_LIST( SwXMLTableLinesCache_Impl, SwXMLTableLinesPtr )
 
 // ---------------------------------------------------------------------
 
-typedef SwFrmFmt *SwFrmFmtPtr;
-DECLARE_LIST( SwXMLFrmFmts_Impl, SwFrmFmtPtr )
+typedef vector< SwFrmFmt* > SwXMLFrmFmts_Impl;
 
-class SwXMLTableFrmFmtsSort_Impl : public SwXMLFrmFmts_Impl
+class SwXMLTableFrmFmtsSort_Impl
 {
+private:
+    SwXMLFrmFmts_Impl aFormatList;
+
 public:
-    SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 nInit, sal_uInt16 nGrow ) :
-        SwXMLFrmFmts_Impl( nInit, nGrow )
+    SwXMLTableFrmFmtsSort_Impl ( sal_uInt16 /* nInit */, sal_uInt16 /*nGrow*/ )
     {}
 
     sal_Bool AddRow( SwFrmFmt& rFrmFmt, const OUString& rNamePrefix, sal_uInt32 nLine );
@@ -236,15 +238,14 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         return sal_False;
 
     // order is: -/brush, size/-, size/brush
-    sal_uInt32 nCount2 = Count();
     sal_Bool bInsert = sal_True;
-    sal_uInt32 i;
-    for( i = 0; i < nCount2; ++i )
+    SwXMLFrmFmts_Impl::iterator i;
+    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
         const SwFmtFrmSize *pTestFrmSize = 0;
         const SwFmtRowSplit* pTestRowSplit = 0;
         const SvxBrushItem *pTestBrush = 0;
-        const SwFrmFmt *pTestFmt = GetObject(i);
+        const SwFrmFmt *pTestFmt = *i;
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_FRM_SIZE, sal_False,
                                                   &pItem ) )
@@ -315,7 +316,8 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddRow( SwFrmFmt& rFrmFmt,
         sBuffer.append( (sal_Int32)(nLine+1UL) );
 
         rFrmFmt.SetName( sBuffer.makeStringAndClear() );
-        Insert( &rFrmFmt, i );
+        if ( i != aFormatList.end() ) ++i;
+        aFormatList.insert( i, &rFrmFmt );
     }
 
     return bInsert;
@@ -381,17 +383,16 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
     //           vert/-/-/-, vert/-/-/num, vert/-/box/-, ver/-/box/num,
     //           vert/brush/-/-, vert/brush/-/num, vert/brush/box/-,
     //           vert/brush/box/num
-    sal_uInt32 nCount2 = Count();
     sal_Bool bInsert = sal_True;
-    sal_uInt32 i;
-    for( i = 0; i < nCount2; ++i )
+    SwXMLFrmFmts_Impl::iterator i;
+    for( i = aFormatList.begin(); i < aFormatList.end(); ++i )
     {
         const SwFmtVertOrient *pTestVertOrient = 0;
         const SvxBrushItem *pTestBrush = 0;
         const SvxBoxItem *pTestBox = 0;
         const SwTblBoxNumFormat *pTestNumFmt = 0;
         const SvxFrameDirectionItem *pTestFrameDir = 0;
-        const SwFrmFmt *pTestFmt = GetObject(i);
+        const SwFrmFmt* pTestFmt = *i;
         const SfxItemSet& rTestSet = pTestFmt->GetAttrSet();
         if( SFX_ITEM_SET == rTestSet.GetItemState( RES_VERT_ORIENT, sal_False,
                                                   &pItem ) )
@@ -492,7 +493,8 @@ sal_Bool SwXMLTableFrmFmtsSort_Impl::AddCell( SwFrmFmt& rFrmFmt,
         OUStringBuffer sBuffer( rNamePrefix.getLength() + 8UL );
         lcl_xmltble_appendBoxPrefix( sBuffer, rNamePrefix, nCol, nRow, bTop );
         rFrmFmt.SetName( sBuffer.makeStringAndClear() );
-        Insert( &rFrmFmt, i );
+        if ( i != aFormatList.end() ) ++i;
+        aFormatList.insert( i, &rFrmFmt );
     }
 
     return bInsert;
