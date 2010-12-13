@@ -27,14 +27,9 @@
 #ifndef _BASIDESH_HRC
 #define _BASIDESH_HRC
 
-#ifndef _SVTOOLS_IMAGEMGR_HRC
-#include <svtools/imagemgr.hrc>
-#endif
-
 #ifndef _SVX_SVXIDS_HRC
 #include <svx/svxids.hrc>
 #endif
-
 
 // Resource-ID's...
 #ifndef _SVX_NOIDERESIDS
