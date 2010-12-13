@@ -191,6 +191,7 @@ include $(foreach class,\
 	sdi\
 	alllangres\
 	package\
+	pch\
 ,$(GBUILDDIR)/$(class).mk)
 
 # Module class
