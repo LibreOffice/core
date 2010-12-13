@@ -9,7 +9,7 @@ namespace gb
     class SrsPartTarget : public Target, public HasDependencies, public UsesRsc
     {
         private:
-            /// SrsPartTarget do not need to be explicitly constructed.
+            /// SrsPartTarget s do not need to be explicitly constructed.
 
             /// They are a helper class for the SrsTarget class.
             /// They are named after the path of their source file (without
@@ -41,7 +41,7 @@ namespace gb
             /// Adds multiple SrsPartTarget s to be processed.
             void add_files(List<SrsPartTarget> parts);
         private:
-            /// SrsPartTarget do not need to be explicitly constructed.
+            /// SrsTarget s do not need to be explicitly constructed.
 
             /// They are a helper class for the ResTarget class.
             SrsTarget(String name);
