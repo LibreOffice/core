@@ -294,7 +294,7 @@ SwGlossaryDlg::SwGlossaryDlg(SfxViewFrame* pViewFrame,
         aInsertBtn.Enable(sal_False);
     aNameED.GrabFocus();
     aCategoryBox.SetHelpId(HID_MD_GLOS_CATEGORY);
-    aCategoryBox.SetWindowBits(WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
+    aCategoryBox.SetStyle(aCategoryBox.GetStyle()|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL|WB_VSCROLL|WB_CLIPCHILDREN|WB_SORT);
     aCategoryBox.GetModel()->SetSortMode(SortAscending);
     aCategoryBox.SetHighlightRange();   // ueber volle Breite selektieren
     aCategoryBox.SetNodeDefaultImages( );

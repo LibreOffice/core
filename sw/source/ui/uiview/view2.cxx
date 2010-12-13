@@ -55,6 +55,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/viewlayoutitem.hxx>
 #include <svx/zoomslideritem.hxx>
+#include <svtools/xwindowitem.hxx>
 #include <svx/htmlmode.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -538,11 +539,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
                     // xmlsec05:    new password dialog
                     Window* pParent;
                     const SfxPoolItem* pParentItem;
-                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                        pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+                    if( SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                        pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
                     else
                         pParent = &GetViewFrame()->GetWindow();
                     SfxPasswordDialog aPasswdDlg( pParent );
+                    aPasswdDlg.SetMinLen( 1 );
                     //#i69751# the result of Execute() can be ignored
                     aPasswdDlg.Execute();
                     String sNewPasswd( aPasswdDlg.GetPassword() );
@@ -574,11 +576,12 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //              message box for wrong password
             Window* pParent;
             const SfxPoolItem* pParentItem;
-            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_PARENTWINDOW, FALSE, &pParentItem ) )
-                pParent = ( Window* ) ( ( const OfaPtrItem* ) pParentItem )->GetValue();
+            if( pArgs && SFX_ITEM_SET == pArgs->GetItemState( SID_ATTR_XWINDOW, FALSE, &pParentItem ) )
+                pParent = ( ( const XWindowItem* ) pParentItem )->GetWindowPtr();
             else
                 pParent = &GetViewFrame()->GetWindow();
             SfxPasswordDialog aPasswdDlg( pParent );
+            aPasswdDlg.SetMinLen( 1 );
             if(!aPasswd.getLength())
                 aPasswdDlg.ShowExtras(SHOWEXTRAS_CONFIRM);
             if (aPasswdDlg.Execute())
@@ -910,7 +913,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             GetViewFrame()->GetBindings().Invalidate( nSlot );
         }
         break;
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
         case SID_TWAIN_SELECT:
         case SID_TWAIN_TRANSFER:
             GetViewImpl()->ExecuteScan( rReq );

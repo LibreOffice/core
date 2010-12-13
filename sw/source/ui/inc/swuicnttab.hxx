@@ -163,6 +163,8 @@ class SwTOXSelectTabPage : public SfxTabPage
 //  PushButton      aChapterDlgPB;  //#outline level,removed by zhaojianwei
     CheckBox        aAddStylesCB;
     PushButton      aAddStylesPB;
+    Point           aAddStylesPosDef;
+    Point           aAddStylesPosUser;
     //user
     CheckBox        aFromTablesCB;
     CheckBox        aFromFramesCB;

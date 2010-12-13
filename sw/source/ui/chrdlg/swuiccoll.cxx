@@ -109,7 +109,7 @@ SwCondCollPage::SwCondCollPage(Window *pParent, const SfxItemSet &rSet)
     aStyleLB.SetSelectHdl(      LINK(this, SwCondCollPage, SelectHdl));
     aFilterLB.SetSelectHdl(     LINK(this, SwCondCollPage, SelectHdl));
 
-    aTbLinks.SetWindowBits(WB_HSCROLL|WB_CLIPCHILDREN);
+    aTbLinks.SetStyle(aTbLinks.GetStyle()|WB_HSCROLL|WB_CLIPCHILDREN);
     aTbLinks.SetSelectionMode( SINGLE_SELECTION );
     aTbLinks.SetTabs( &nTabs[0], MAP_APPFONT );
     aTbLinks.Resize();  // OS: Hack fuer richtige Selektion

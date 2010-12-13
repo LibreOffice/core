@@ -68,6 +68,7 @@ ModalDialog DLG_GLOSSARY_DECIDE_DLG
     };
     ListBox LB_LIST
     {
+        HelpID = "sw:ListBox:DLG_GLOSSARY_DECIDE_DLG:LB_LIST";
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 81 , 40 ) ;
         TabStop = TRUE ;

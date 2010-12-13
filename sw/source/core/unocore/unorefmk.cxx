@@ -68,7 +68,8 @@ public:
             SwDoc *const pDoc, SwFmtRefMark const*const pRefMark)
         : SwClient((pDoc) ? pDoc->GetUnoCallBack() : 0)
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
-        , m_bIsDescriptor(0 == pRefMark)
+        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        , m_bIsDescriptor((0 == pRefMark) ? true : false)
         , m_pDoc(pDoc)
         , m_pMarkFmt(pRefMark)
     {
@@ -762,7 +763,8 @@ public:
         , m_ListenerContainer(static_cast< ::cppu::OWeakObject* >(&rThis))
         , m_pTextPortions( pPortions )
         , m_bIsDisposed( false )
-        , m_bIsDescriptor(0 == pMeta)
+        // #i111177# unxsols4 (Sun C++ 5.9 SunOS_sparc) may generate wrong code
+        , m_bIsDescriptor((0 == pMeta) ? true : false)
         , m_xParentText(xParentText)
         , m_Text(rDoc, rThis)
     {

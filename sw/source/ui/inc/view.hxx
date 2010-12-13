@@ -83,7 +83,6 @@ class CommandEvent;
 class InsCaptionOpt;
 class SvGlobalName;
 class SvtAccessibilityOptions;
-class SwPrtOptions;
 class SwTransferable;
 class SwMailMergeConfigItem;
 class SwTxtNode; // #i23726#
@@ -452,7 +451,7 @@ public:
     inline       SwEditWin &GetEditWin()        { return *pEditWin; }
     inline const SwEditWin &GetEditWin () const { return *pEditWin; }
 
-#if defined WIN || defined WNT || defined UNX
+#if defined WNT || defined UNX
     void ScannerEventHdl( const ::com::sun::star::lang::EventObject& rEventObject );
 #endif
 

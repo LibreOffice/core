@@ -398,7 +398,9 @@ bGrammarResults(false)
 {
     DBG_ASSERT(xSpellAlt.is(), "no spelling alternatives available");
 
-    CreateAutoMnemonics();
+//    CreateAutoMnemonics();
+    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
+
     nCheckedLanguage = LANGUAGE_NONE;
     if (xSpellAlt.is())
     {
@@ -471,7 +473,8 @@ bGrammarResults(false)
     }
 
     pMenu = GetPopupMenu(MN_ADD_TO_DIC);
-    pMenu->CreateAutoMnemonics();
+//    pMenu->CreateAutoMnemonics();
+    pMenu->SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);     //! necessary to retrieve the correct dictionary name in 'Execute' below
     bEnable = FALSE;    // enable MN_ADD_TO_DIC?
     uno::Reference< linguistic2::XDictionaryList >    xDicList( SvxGetDictionaryList() );
     if (xDicList.is())
@@ -572,7 +575,6 @@ bGrammarResults(false)
     //////////////////////////////////////////////////////////////////////////////////
 
     RemoveDisabledEntries( TRUE, TRUE );
-    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 }
 
 /*--------------------------------------------------------------------------
@@ -599,7 +601,8 @@ aInfo16( SW_RES(IMG_INFO_16) )
     InsertItem( MN_SHORT_COMMENT, aMessageText, MIB_NOSELECT, nPos++ );
     SetItemImage( MN_SHORT_COMMENT, aInfo16 );
 
-    CreateAutoMnemonics();
+//    CreateAutoMnemonics();
+    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 
     InsertSeparator( nPos++ );
     sal_Int32 nStringCount = aSuggestions.getLength();
@@ -705,7 +708,6 @@ aInfo16( SW_RES(IMG_INFO_16) )
     //////////////////////////////////////////////////////////////////////////////////
 
     RemoveDisabledEntries( TRUE, TRUE );
-    SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 }
 
 /*--------------------------------------------------------------------------
@@ -821,12 +823,17 @@ void SwSpellPopup::Execute( USHORT nId )
     else if (MN_DICTIONARIES_START <= nId && nId <= MN_DICTIONARIES_END)
     {
             OUString aWord( xSpellAlt->getWord() );
-            USHORT nDicIdx = nId - MN_DICTIONARIES_START;
-            DBG_ASSERT( nDicIdx < aDics.getLength(), "dictionary index out of range" );
 
-            if (nDicIdx < aDics.getLength())
+            PopupMenu *pMenu = GetPopupMenu(MN_ADD_TO_DIC);
+            String aDicName ( pMenu->GetItemText(nId) );
+
+            uno::Reference< linguistic2::XDictionary >      xDic;
+            uno::Reference< linguistic2::XDictionaryList >  xDicList( SvxGetDictionaryList() );
+            if (xDicList.is())
+                xDic = xDicList->getDictionaryByName( aDicName );
+
+            if (xDic.is())
             {
-                uno::Reference< linguistic2::XDictionary > xDic = aDics.getConstArray()[nDicIdx];
                 INT16 nAddRes = linguistic::AddEntryToDic( xDic, aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
                 // save modified user-dictionary if it is persistent
                 uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );

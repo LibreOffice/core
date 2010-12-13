@@ -418,7 +418,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
 
     m_aStatusLB.SetHelpId(HID_MM_MAILSTATUS_TLB);
     static long nTabs[] = {3, 0, nPos1, aSz.Width() };
-    m_aStatusLB.SetWindowBits( WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
+    m_aStatusLB.SetStyle( m_aStatusLB.GetStyle() | WB_SORT | WB_HSCROLL | WB_CLIPCHILDREN | WB_TABSTOP );
     m_aStatusLB.SetSelectionMode( SINGLE_SELECTION );
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aStatusLB.SetSpaceBetweenEntries(3);

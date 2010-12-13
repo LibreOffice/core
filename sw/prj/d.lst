@@ -36,6 +36,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\swreport\statusbar
 ..\%__SRC%\bin\vbaswobj*.dll %_DEST%\bin%_EXT%\vbaswobj*.dll
 ..\%__SRC%\bin\sw*.res %_DEST%\bin%_EXT%\sw*.res
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\misc\swd.component %_DEST%\xml%_EXT%\swd.component
+..\%__SRC%\misc\msword.component %_DEST%\xml%_EXT%\msword.component
 
 ..\uiconfig\swriter\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swriter\menubar\*.xml
 ..\uiconfig\swxform\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swxform\menubar\*.xml
@@ -57,3 +59,5 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\swreport\statusbar
 ..\uiconfig\swreport\statusbar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\swreport\statusbar\*.xml
 
 ..\%__SRC%\bin\*-layout.zip %_DEST%\pck%_EXT%\*.*
+..\%__SRC%\misc\sw.component %_DEST%\xml%_EXT%\sw.component
+..\%__SRC%\misc\vbaswobj.component %_DEST%\xml%_EXT%\vbaswobj.component

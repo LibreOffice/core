@@ -125,7 +125,7 @@ using ::com::sun::star::util::SearchOptions;
 
 
 
-SFX_IMPL_VIEWFACTORY(SwSrcView, SW_RES(STR_NONAME))
+SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
@@ -599,15 +599,11 @@ void SwSrcView::GetState(SfxItemSet& rSet)
             break;
             case SID_PASTE:
             {
-                BOOL bDisable = 0 == SW_MOD()->pClipboard;
-                if( bDisable  )
-                {
-                    TransferableDataHelper aDataHelper(
-                        TransferableDataHelper::CreateFromSystemClipboard(
-                                                            &aEditWin) );
-                    bDisable = !aDataHelper.GetXTransferable().is() ||
-                                0 == aDataHelper.GetFormatCount();
-                }
+                TransferableDataHelper aDataHelper(
+                    TransferableDataHelper::CreateFromSystemClipboard(
+                                                        &aEditWin) );
+                BOOL bDisable = !aDataHelper.GetXTransferable().is() ||
+                            0 == aDataHelper.GetFormatCount();
                 if( bDisable )
                     rSet.DisableItem(nWhich);
             }

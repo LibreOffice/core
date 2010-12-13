@@ -30,6 +30,9 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=chrdlg
 LIBTARGET=NO
+
+ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  $(PRJ)$/inc$/swpre.mk

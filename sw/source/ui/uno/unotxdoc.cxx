@@ -47,7 +47,7 @@
 #include <srcview.hxx>
 #include <viewsh.hxx>
 #include <pvprtdat.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <svl/stritem.hxx>
 #include <unotxdoc.hxx>
 #include <svl/numuno.hxx>
@@ -82,7 +82,7 @@
 #include <svx/xmleohlp.hxx>
 #include <globals.hrc>
 #include <unomid.h>
-
+#include <unotools/printwarningoptions.hxx>
 #include <com/sun/star/util/SearchOptions.hpp>
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -107,7 +107,6 @@
 #include <swcont.hxx>
 #include <unodefaults.hxx>
 #include <SwXDocumentSettings.hxx>
-#include <SwXPrintPreviewSettings.hxx>
 #include <doc.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <svl/zforlist.hxx>
@@ -948,7 +947,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
                                 RES_CHRATR_BEGIN, RES_CHRATR_END-1,
                                 RES_PARATR_BEGIN, RES_PARATR_END-1,
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1,
-                                RES_TXTATR_INETFMT, RES_TXTATR_INETFMT,
+                                RES_TXTATR_INETFMT, RES_TXTATR_CHARFMT,
                                 0);
             pSearch->FillSearchItemSet(aSearch);
             BOOL bCancel;
@@ -1809,9 +1808,7 @@ Reference< XInterface >  SwXTextDocument::createInstance(const OUString& rServic
             }
             else if (sCategory == C2U ("text") )
             {
-                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.PrintPreviewSettings") ) )
-                    xRet = Reference < XInterface > ( *new SwXPrintPreviewSettings ( pDocShell->GetDoc() ) );
-                else if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
+                if( 0 == rServiceName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.text.DocumentSettings") ) )
                     xRet = Reference < XInterface > ( *new SwXDocumentSettings ( this ) );
             }
             else if (sCategory == C2U ("chart2") )
@@ -2718,24 +2715,36 @@ sal_Int32 SAL_CALL SwXTextDocument::getRendererCount(
                     m_pRenderData->ViewOptionAdjustStart( *pWrtShell, *pWrtShell->GetViewOptions() );
             }
 
-            m_pRenderData->SetSwPrtOptions( new SwPrtOptions( C2U( bIsPDFExport ? "PDF export" : "Printing" ) ) );
+            m_pRenderData->SetSwPrtOptions( new SwPrintData );
             m_pRenderData->MakeSwPrtOptions( m_pRenderData->GetSwPrtOptionsRef(), pRenderDocShell,
                     m_pPrintUIOptions, m_pRenderData, bIsPDFExport );
 
             if (pView->IsA(aSwViewTypeId))
             {
                 // PDF export should not make use of the SwPrtOptions
-                const SwPrtOptions *pPrtOptions = bIsPDFExport? NULL : m_pRenderData->GetSwPrtOptions();
+                const SwPrintData *pPrtOptions = (bIsPDFExport)
+                    ? NULL : m_pRenderData->GetSwPrtOptions();
                 m_pRenderData->ViewOptionAdjust( pPrtOptions );
             }
 
             // since printing now also use the API for PDF export this option
             // should be set for printing as well ...
             pWrtShell->SetPDFExportOption( sal_True );
+            bool bOrigStatus = pRenderDocShell->IsEnableSetModified();
+            // check configuration: shall update of printing information in DocInfo set the document to "modified"?
+            bool bStateChanged = false;
+            if ( bOrigStatus && !SvtPrintWarningOptions().IsModifyDocumentOnPrintingAllowed() )
+            {
+                pRenderDocShell->EnableSetModified( sal_False );
+                bStateChanged = true;
+            }
+
 
             // --> FME 2005-05-23 #122919# Force field update before PDF export:
             pWrtShell->ViewShell::UpdateFlds(TRUE);
             // <--
+            if( bStateChanged )
+                pRenderDocShell->EnableSetModified( sal_True );
 
             // there is some redundancy between those two function calls, but right now
             // there is no time to sort this out.
@@ -2844,7 +2853,14 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
     uno::Sequence< beans::PropertyValue > aRenderer;
     if (m_pRenderData)
     {
-        const USHORT nPage = nRenderer + 1;
+        // --> TL, OD 2010-09-07 #i114210#
+        // determine the correct page number from the renderer index
+        // --> OD 2010-10-01 #i114875
+        // consider brochure print
+        const USHORT nPage = bPrintProspect
+                             ? nRenderer + 1
+                             : m_pRenderData->GetPagesToPrint()[ nRenderer ];
+        // <--
 
         // get paper tray to use ...
         sal_Int32 nPrinterPaperTray = -1;
@@ -3071,7 +3087,8 @@ void SAL_CALL SwXTextDocument::render(
                     }
                     // <--
 
-                    const SwPrtOptions &rSwPrtOptions = *m_pRenderData->GetSwPrtOptions();
+                    SwPrintData const& rSwPrtOptions =
+                        *m_pRenderData->GetSwPrtOptions();
                     if (bPrintProspect)
                         pVwSh->PrintProspect( pOut, rSwPrtOptions, nRenderer );
                     else    // normal printing and PDF export
@@ -4094,8 +4111,8 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
 }
 
 
-void SwViewOptionAdjust_Impl::AdjustViewOptions(
-    const SwPrtOptions *pPrtOptions )
+void
+SwViewOptionAdjust_Impl::AdjustViewOptions(SwPrintData const*const pPrtOptions)
 {
     // to avoid unnecessary reformatting the view options related to the content
     // below should only change if necessary, that is if respective content is present

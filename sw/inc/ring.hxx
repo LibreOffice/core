@@ -27,9 +27,10 @@
 #ifndef _RING_HXX
 #define _RING_HXX
 
+#include <swdllapi.h>
 #include <swtypes.hxx>
 
-class Ring
+class SW_DLLPUBLIC Ring
 {
     Ring *pNext;
     Ring* pPrev;    // zur Optimierung, damit das ein/ausketten schneller geht!

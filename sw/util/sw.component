@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+
+<component loader="com.sun.star.loader.SharedLibrary"
+    xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="SwXAutoTextContainer">
+    <service name="com.sun.star.text.AutoTextContainer"/>
+  </implementation>
+  <implementation name="SwXMailMerge">
+    <service name="com.sun.star.sdb.DataAccessDescriptor"/>
+    <service name="com.sun.star.text.MailMerge"/>
+  </implementation>
+  <implementation name="SwXModule">
+    <service name="com.sun.star.text.GlobalSettings"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.FilterOptionsDialog">
+    <service name="com.sun.star.ui.dialogs.FilterOptionsDialog"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.GlobalDocument">
+    <service name="com.sun.star.text.GlobalDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.TextDocument">
+    <service name="com.sun.star.text.TextDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.WebDocument">
+    <service name="com.sun.star.text.WebDocument"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.WriterModule">
+    <service name="com.sun.star.text.ModuleDispatcher"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLContentExporter">
+    <service name="com.sun.star.comp.Writer.XMLContentExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLExporter">
+    <service name="com.sun.star.comp.Writer.XMLExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLMetaExporter">
+    <service name="com.sun.star.comp.Writer.XMLMetaExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisContentExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisContentImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisContentImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisMetaExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisMetaImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisMetaImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisSettingsExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisSettingsImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisSettingsImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesExporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisStylesExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLOasisStylesImporter">
+    <service name="com.sun.star.comp.Writer.XMLOasisStylesImporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLSettingsExporter">
+    <service name="com.sun.star.comp.Writer.XMLSettingsExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.comp.Writer.XMLStylesExporter">
+    <service name="com.sun.star.comp.Writer.XMLStylesExporter"/>
+  </implementation>
+  <implementation name="com.sun.star.util.comp.FinalThreadManager">
+    <service name="com.sun.star.util.JobManager"/>
+  </implementation>
+</component>

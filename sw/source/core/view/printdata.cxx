@@ -40,7 +40,6 @@
 #include <wdocsh.hxx>
 #include <viewsh.hxx>
 #include <docfld.hxx>
-#include <swprtopt.hxx>
 
 #include <svl/languageoptions.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
@@ -127,7 +126,7 @@ void SwRenderData::ViewOptionAdjustStart( SwWrtShell &rSh, const SwViewOption &r
 }
 
 
-void SwRenderData::ViewOptionAdjust( const SwPrtOptions *pPrtOptions )
+void SwRenderData::ViewOptionAdjust(SwPrintData const*const pPrtOptions)
 {
     m_pViewOptionAdjust->AdjustViewOptions( pPrtOptions );
 }
@@ -144,7 +143,7 @@ void SwRenderData::ViewOptionAdjustStop()
 
 
 void SwRenderData::MakeSwPrtOptions(
-    SwPrtOptions &rOptions,
+    SwPrintData & rOptions,
     const SwDocShell *pDocShell,
     const SwPrintUIOptions *pOpt,
     const SwRenderData *pData,
@@ -156,7 +155,7 @@ void SwRenderData::MakeSwPrtOptions(
     // get default print options
     const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
     BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-    rOptions.MakeOptions( bWeb );
+    ::sw::InitPrintOptionsFromApplication(rOptions, bWeb);
 
     // get print options to use from provided properties
     rOptions.bPrintGraphic          = pOpt->IsPrintGraphics();
@@ -183,17 +182,6 @@ void SwRenderData::MakeSwPrtOptions(
     //! function will destroy the pointers
     rOptions.SetPrintUIOptions( pOpt );
     rOptions.SetRenderData( pData );
-
-    // rOptions.aMulti is not used anymore in the XRenderable API
-    // Thus we set it to a dummy value here.
-    rOptions.aMulti = MultiSelection( Range( 1, 1 ) );
-
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rOptions.bPrintSelection parameter will be false.
-    if (bIsPDFExport)
-        rOptions.bPrintSelection = FALSE;
 }
 
 
@@ -325,22 +313,26 @@ SwPrintUIOptions::SwPrintUIOptions(
 
     // create a choice for the content to create
     rtl::OUString aPrintRangeName( RTL_CONSTASCII_USTRINGPARAM( "PrintContent" ) );
-    uno::Sequence< rtl::OUString > aChoices( bHasSelection ? 3 : 2 );
-    uno::Sequence< rtl::OUString > aHelpText( bHasSelection ? 3 : 2 );
+    uno::Sequence< rtl::OUString > aChoices( 3 );
+    uno::Sequence< sal_Bool > aChoicesDisabled( 3 );
+    uno::Sequence< rtl::OUString > aHelpText( 3 );
     aChoices[0] = aLocalizedStrings.GetString( 38 );
+    aChoicesDisabled[0] = sal_False;
     aHelpText[0] = aLocalizedStrings.GetString( 39 );
     aChoices[1] = aLocalizedStrings.GetString( 40 );
+    aChoicesDisabled[1] = sal_False;
     aHelpText[1] = aLocalizedStrings.GetString( 41 );
-    if (bHasSelection)
-    {
-        aChoices[2] = aLocalizedStrings.GetString( 42 );
-        aHelpText[2] = aLocalizedStrings.GetString( 43 );
-    }
+    aChoices[2] = aLocalizedStrings.GetString( 42 );
+    aChoicesDisabled[2] = sal_Bool(! bHasSelection);
+    aHelpText[2] = aLocalizedStrings.GetString( 43 );
     m_aUIProperties[nIdx++].Value = getChoiceControlOpt( rtl::OUString(),
                                                          aHelpText,
                                                          aPrintRangeName,
                                                          aChoices,
-                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */);
+                                                         bHasSelection ? 2 /*enable 'Selection' radio button*/ : 0 /* enable 'All pages' */,
+                                                         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         aChoicesDisabled
+                                                         );
     // create a an Edit dependent on "Pages" selected
     vcl::PrinterOptionsHelper::UIControlOptions aPageRangeOpt( aPrintRangeName, 1, sal_True );
     m_aUIProperties[nIdx++].Value = getEditControlOpt( rtl::OUString(),
@@ -374,6 +366,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                     aChoices,
                                                     nPrintPostIts,
                                                     rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                    uno::Sequence< sal_Bool >(),
                                                     aAnnotOpt
                                                     );
 
@@ -441,6 +434,7 @@ SwPrintUIOptions::SwPrintUIOptions(
                                                                aBRTLChoices,
                                                                nBRTLChoice,
                                                                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "List" ) ),
+                                                               uno::Sequence< sal_Bool >(),
                                                                aBrochureRTLOpt
                                                                );
     }

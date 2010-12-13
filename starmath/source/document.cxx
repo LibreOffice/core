@@ -38,6 +38,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/ustring.hxx>
+#include <unotools/eventcfg.hxx>
+#include <sfx2/event.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
@@ -131,9 +133,9 @@ void SmDocShell::SFX_NOTIFY(SfxBroadcaster&, const TypeId&,
     {
         case HINT_FORMATCHANGED:
             SetFormulaArranged(FALSE);
-            nModifyCount++;     //! merkwuerdig...
-                                // ohne dies wird die Grafik letztlich
-                                // nicht geupdatet
+
+            nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+
             Repaint();
             break;
     }
@@ -180,7 +182,14 @@ void SmDocShell::SetText(const String& rBuffer)
         {
             pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_TEXT);
             if ( SFX_CREATE_MODE_EMBEDDED == GetCreateMode() )
+            {
+                // have SwOleClient::FormatChanged() to align the modified formula properly
+                // even if the vis area does not change (e.g. when formula text changes from
+                // "{a over b + c} over d" to "d over {a over b + c}"
+                SFX_APP()->NotifyEvent(SfxEventHint( SFX_EVENT_VISAREACHANGED, GlobalEventConfig::GetEventName(STR_EVENT_VISAREACHANGED), this));
+
                 Repaint();
+            }
             else
                 pViewSh->GetGraphicWindow().Invalidate();
         }
@@ -211,11 +220,19 @@ void SmDocShell::SetFormat(SmFormat& rFormat)
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmDocShell::SetFormat" );
 
     aFormat = rFormat;
-    SetFormulaArranged(FALSE);
-    SmViewShell *pViewSh = SmGetActiveView();
-    if (pViewSh)
-        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_GAPHIC_SM);
-    SetModified(TRUE);
+    SetFormulaArranged( FALSE );
+    SetModified( TRUE );
+
+    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
+
+    // don't use SmGetActiveView since the view shell might not be active (0 pointer)
+    // if for example the Basic Macro dialog currently has the focus. Thus:
+    SfxViewFrame* pFrm = SfxViewFrame::GetFirst( this );
+    while (pFrm)
+    {
+        pFrm->GetBindings().Invalidate(SID_GAPHIC_SM);
+        pFrm = SfxViewFrame::GetNext( *pFrm, this );
+    }
 }
 
 String SmDocShell::GetAccessibleText()
@@ -241,7 +258,7 @@ void SmDocShell::Parse()
         delete pTree;
     ReplaceBadChars();
     pTree = aInterpreter.Parse(aText);
-    nModifyCount++;
+    nModifyCount++;     //! see comment for SID_GAPHIC_SM in SmDocShell::GetState
     SetFormulaArranged( FALSE );
 }
 
@@ -1123,13 +1140,9 @@ void SmDocShell::Execute(SfxRequest& rReq)
 
         case SID_TEXT:
         {
-            const SfxStringItem& rItem =
-                (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
-
+            const SfxStringItem& rItem = (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
             if (GetText() != rItem.GetValue())
-            {
                 SetText(rItem.GetValue());
-            }
         }
         break;
 
@@ -1222,6 +1235,10 @@ void SmDocShell::GetState(SfxItemSet &rSet)
             break;
 
         case SID_GAPHIC_SM:
+            //! very old (pre UNO) and ugly hack to invalidate the SmGraphicWindow.
+            //! If nModifyCount gets changed then the call below will implicitly notify
+            //! SmGraphicController::StateChanged and there the window gets invalidated.
+            //! Thus all the 'nModifyCount++' before invalidating this slot.
             rSet.Put(SfxInt16Item(SID_GAPHIC_SM, nModifyCount));
             break;
 

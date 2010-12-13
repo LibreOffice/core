@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _INETFLD_HXX
-#define _INETFLD_HXX
+#ifndef SW_INETFLD_HXX
+#define SW_INETFLD_HXX
 
 
 #include "fldbas.hxx"
@@ -69,15 +69,16 @@ class SwINetField : public SwField
     String  sText;
     SvxMacroTableDtor* pMacroTbl;
 
+    virtual String   Expand() const;
+    virtual SwField* Copy() const;
+
 public:
     // Direkte Eingabe alten Wert loeschen
     SwINetField( SwINetFieldType* pTyp, USHORT nFmt,
                   const String& rURL, const String& rText );
     virtual ~SwINetField();
 
-    virtual String   GetCntnt(BOOL bName = FALSE) const;
-    virtual String   Expand() const;
-    virtual SwField* Copy() const;
+    virtual String   GetFieldName() const;
 
     // URL
     virtual const String& GetPar1() const;
@@ -105,5 +106,5 @@ public:
 };
 
 
-#endif // _INETFLD_HXX
+#endif // SW_INETFLD_HXX
 

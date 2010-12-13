@@ -39,6 +39,7 @@
 #include <svl/zforlist.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>
+#include <svl/PasswordHelper.hxx>
 #include <editeng/adjitem.hxx>
 #include <basic/sbx.hxx>
 #include <unotools/moduleoptions.hxx>
@@ -64,7 +65,7 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
@@ -208,23 +209,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             return 0;
         }
     }
-    if(rMedium.IsStorage())
-    {
-        //SvStorageRef aStor( rMedium.GetStorage() );
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pItem;
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
-            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
-        }
-        // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
-        // eigene Filter ist.
-        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "Am Filter ist keine FF-Version gesetzt" );
-        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-        //    aStor->SetVersion( (long)pFlt->GetVersion() );
-    }
+
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
@@ -894,7 +879,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
@@ -1146,6 +1131,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
             rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
         }
         break;
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //check if linked content or possibly hidden content is available
+            //pDoc->UpdateFlds( NULL, false );
+            sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+            const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+            sal_Bool bRet = sal_False;
+            if( rLnks.Count() )
+                bRet = sal_True;
+            else
+            {
+                //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields
+                bRet = pDoc->HasInvisibleContent();
+            }
+            rSet.Put( SfxBoolItem( nWhich, bRet ) );
+        }
+        break;
 
         default: DBG_ASSERT(!this,"Hier darfst Du nicht hinein!");
 
@@ -1367,3 +1369,79 @@ const ::sfx2::IXmlIdRegistry* SwDocShell::GetXmlIdRegistry() const
 {
     return pDoc ? &pDoc->GetXmlIdRegistry() : 0;
 }
+
+
+bool SwDocShell::IsChangeRecording() const
+{
+    return (pWrtShell->GetRedlineMode() & nsRedlineMode_t::REDLINE_ON) != 0;
+}
+
+
+bool SwDocShell::HasChangeRecordProtection() const
+{
+    return pWrtShell->getIDocumentRedlineAccess()->GetRedlinePassword().getLength() > 0;
+}
+
+
+void SwDocShell::SetChangeRecording( bool bActivate )
+{
+    USHORT nOn = bActivate ? nsRedlineMode_t::REDLINE_ON : 0;
+    USHORT nMode = pWrtShell->GetRedlineMode();
+    pWrtShell->SetRedlineModeAndCheckInsMode( (nMode & ~nsRedlineMode_t::REDLINE_ON) | nOn);
+}
+
+
+bool SwDocShell::SetProtectionPassword( const String &rNewPassword )
+{
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswd = pIDRA->GetRedlinePassword();
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswd.getLength() > 0))
+        return false;
+
+    bool bRes = false;
+
+    if (rNewPassword.Len())
+    {
+        // when password protection is applied change tracking must always be active
+        SetChangeRecording( true );
+
+        Sequence< sal_Int8 > aNewPasswd;
+        SvPasswordHelper::GetHashPassword( aNewPasswd, rNewPassword );
+        pIDRA->SetRedlinePassword( aNewPasswd );
+        bRes = true;
+    }
+    else
+    {
+        pIDRA->SetRedlinePassword( Sequence< sal_Int8 >() );
+        bRes = true;
+    }
+
+    return bRes;
+}
+
+
+bool SwDocShell::GetProtectionHash( /*out*/ ::com::sun::star::uno::Sequence< sal_Int8 > &rPasswordHash )
+{
+    bool bRes = false;
+
+    const SfxAllItemSet aSet( GetPool() );
+    const SfxItemSet*   pArgs = &aSet;
+    const SfxPoolItem*  pItem = NULL;
+
+    IDocumentRedlineAccess* pIDRA = pWrtShell->getIDocumentRedlineAccess();
+    Sequence< sal_Int8 > aPasswdHash( pIDRA->GetRedlinePassword() );
+    if (pArgs && SFX_ITEM_SET == pArgs->GetItemState( FN_REDLINE_PROTECT, FALSE, &pItem )
+        && ((SfxBoolItem*)pItem)->GetValue() == (aPasswdHash.getLength() != 0))
+        return false;
+    rPasswordHash = aPasswdHash;
+    bRes = true;
+
+    return bRes;
+}
+
+

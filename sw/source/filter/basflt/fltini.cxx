@@ -1,7 +1,7 @@
 /*************************************************************************
  *
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
- *
+ * 
  * Copyright 2000, 2010 Oracle and/or its affiliates.
  *
  * OpenOffice.org - a multi-platform office productivity suite
@@ -66,10 +66,17 @@
 #include <swfltopt.hxx>
 #include <swerror.h>
 #include <osl/module.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/componentcontext.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XMacroExpander.hpp>
+#include <rtl/uri.hxx>
+#include <tools/svlibrary.hxx>
 
 using namespace utl;
 using rtl::OUString;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 
 SwRead ReadAscii = 0, /*ReadSwg = 0, ReadSw3 = 0,*/
         ReadHTML = 0, ReadXML = 0;
@@ -959,13 +966,12 @@ extern "C" { static void SAL_CALL thisModule() {} }
 static oslGenericFunction GetMswordLibSymbol( const char *pSymbol )
 {
     static ::osl::Module aModule;
-    if ( aModule.is() ||
-         aModule.loadRelative( &thisModule,
-             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) ) ) )
-    {
+    static sal_Bool bLoaded = sal_False;
+    static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "msword" ) ) );
+    if (!bLoaded)
+        bLoaded = SvLibrary::LoadModule( aModule, aLibName, &thisModule );
+    if (bLoaded)
         return aModule.getFunctionSymbol( ::rtl::OUString::createFromAscii( pSymbol ) );
-    }
-
     return NULL;
 }
 

@@ -38,6 +38,7 @@
 // #include <cmath>
 #include <cfloat>
 #include <hintids.hxx>
+#include <osl/diagnose.hxx>
 #include <rtl/math.hxx>
 #include <editeng/langitem.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -270,7 +271,7 @@ SwCalc::SwCalc( SwDoc& rD )
     :
     aErrExpr( aEmptyStr, SwSbxValue(), 0 ),
     rDoc( rD ),
-    pLclData( &SvtSysLocale().GetLocaleData() ),
+    pLclData( m_aSysLocale.GetLocaleDataPtr() ),
     pCharClass( &GetAppCharClass() ),
     nListPor( 0 ),
     eError( CALC_NOERR )
@@ -419,7 +420,7 @@ SwCalc::~SwCalc()
 {
     for( USHORT n = 0; n < TBLSZ; ++n )
         delete VarTable[n];
-    if( pLclData != &SvtSysLocale().GetLocaleData() )
+    if( pLclData != m_aSysLocale.GetLocaleDataPtr() )
         delete pLclData;
     if( pCharClass != &GetAppCharClass() )
         delete pCharClass;
@@ -1608,63 +1609,64 @@ String SwCalc::GetDBName(const String& rName)
 
 //------------------------------------------------------------------------------
 
+namespace
+{
+
+static bool
+lcl_Str2Double( const String& rCommand, xub_StrLen& rCommandPos, double& rVal,
+        const LocaleDataWrapper* const pLclData )
+{
+    OSL_ASSERT(pLclData);
+    const xub_Unicode nCurrCmdPos = rCommandPos;
+    rtl_math_ConversionStatus eStatus;
+    const sal_Unicode* pEnd;
+    rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
+            rCommand.GetBuffer() + rCommand.Len(),
+            pLclData->getNumDecimalSep().GetChar(0),
+            pLclData->getNumThousandSep().GetChar(0),
+            &eStatus, &pEnd );
+    rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
+
+    return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
+}
+
+}
+
 /******************************************************************************
  *  Methode     :   BOOL SwCalc::Str2Double( double& )
  *  Beschreibung:
  *  Erstellt    :   OK 07.06.94 12:56
  *  Aenderung   :   JP 27.10.98
  ******************************************************************************/
-BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
-                            double& rVal, const LocaleDataWrapper* pLclData )
+bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+                            double& rVal, const LocaleDataWrapper* const pLclData )
 {
-    const LocaleDataWrapper* pLclD = pLclData;
-    if( !pLclD )
-        pLclD = &SvtSysLocale().GetLocaleData();
-
-    const xub_Unicode nCurrCmdPos = rCommandPos;
-    rtl_math_ConversionStatus eStatus;
-    const sal_Unicode* pEnd;
-    rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
-            rCommand.GetBuffer() + rCommand.Len(),
-            pLclD->getNumDecimalSep().GetChar(0),
-            pLclD->getNumThousandSep().GetChar(0),
-            &eStatus, &pEnd );
-    rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
-
-    if( !pLclData && pLclD != &SvtSysLocale().GetLocaleData() )
-        delete (LocaleDataWrapper*)pLclD;
-
-    return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
+    const SvtSysLocale aSysLocale;
+    return lcl_Str2Double( rCommand, rCommandPos, rVal,
+            pLclData ? pLclData : aSysLocale.GetLocaleDataPtr() );
 }
 
-BOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
-                            double& rVal, SwDoc* pDoc )
+bool SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+                            double& rVal, SwDoc* const pDoc )
 {
-    const LocaleDataWrapper* pLclD = &SvtSysLocale().GetLocaleData();
+    const SvtSysLocale aSysLocale;
+    ::std::auto_ptr<const LocaleDataWrapper> pLclD;
     if( pDoc )
     {
-
         LanguageType eLang = GetDocAppScriptLang( *pDoc );
-        if( eLang != SvxLocaleToLanguage( pLclD->getLocale() ) )
-            pLclD = new LocaleDataWrapper(
+        if (eLang !=
+                SvxLocaleToLanguage(aSysLocale.GetLocaleData().getLocale()))
+        {
+            pLclD.reset( new LocaleDataWrapper(
                             ::comphelper::getProcessServiceFactory(),
-                            SvxCreateLocale( eLang ) );
+                            SvxCreateLocale( eLang ) ) );
+        }
     }
 
-    const xub_Unicode nCurrCmdPos = rCommandPos;
-    rtl_math_ConversionStatus eStatus;
-    const sal_Unicode* pEnd;
-    rVal = rtl_math_uStringToDouble( rCommand.GetBuffer() + rCommandPos,
-            rCommand.GetBuffer() + rCommand.Len(),
-            pLclD->getNumDecimalSep().GetChar(0),
-            pLclD->getNumThousandSep().GetChar(0),
-            &eStatus, &pEnd );
-    rCommandPos = static_cast<xub_StrLen>(pEnd - rCommand.GetBuffer());
+    bool const bRet = lcl_Str2Double( rCommand, rCommandPos, rVal,
+            (pLclD.get()) ? pLclD.get() : aSysLocale.GetLocaleDataPtr() );
 
-    if( pLclD != &SvtSysLocale().GetLocaleData() )
-        delete (LocaleDataWrapper*)pLclD;
-
-    return rtl_math_ConversionStatus_Ok == eStatus && nCurrCmdPos != rCommandPos;
+    return bRet;
 }
 
 //------------------------------------------------------------------------------

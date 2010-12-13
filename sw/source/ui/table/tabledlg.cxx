@@ -1539,7 +1539,7 @@ BOOL  SwTextFlowPage::FillItemSet( SfxItemSet& rSet )
     if ( bState != aPageCollCB.GetSavedValue() ||
          ( bState &&
            aPageCollLB.GetSelectEntryPos() != aPageCollLB.GetSavedValue() )
-           || aPageNoNF.IsEnabled() && aPageNoNF.IsValueModified())
+           || (aPageNoNF.IsEnabled() && aPageNoNF.IsValueModified()) )
     {
         String sPage;
 
@@ -1643,7 +1643,7 @@ void   SwTextFlowPage::Reset( const SfxItemSet& rSet )
         }
 
         String aFmtName;
-        for(i = RES_POOLPAGE_BEGIN; i <= RES_POOLPAGE_REGISTER; ++i)
+        for(i = RES_POOLPAGE_BEGIN; i < RES_POOLPAGE_END; ++i)
             if( LISTBOX_ENTRY_NOTFOUND == aPageCollLB.GetEntryPos(
                     aFmtName = SwStyleNameMapper::GetUIName( i, aFmtName ) ))
                 aPageCollLB.InsertEntry( aFmtName );

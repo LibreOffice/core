@@ -1539,14 +1539,14 @@ void SwXMLTableContext::InsertColumn( sal_Int32 nWidth2, sal_Bool bRelWidth2,
     else if( nWidth2 > USHRT_MAX )
         nWidth2 = USHRT_MAX;
     aColumnWidths.Insert( (sal_uInt16)nWidth2, aColumnWidths.Count() );
-    aColumnRelWidths.Insert( bRelWidth2, aColumnRelWidths.Count() );
+    aColumnRelWidths.push_back( bRelWidth2 );
     if( (pDfltCellStyleName && pDfltCellStyleName->getLength() > 0) ||
         pColumnDefaultCellStyleNames )
     {
         if( !pColumnDefaultCellStyleNames )
         {
             pColumnDefaultCellStyleNames = new SvStringsDtor;
-            sal_uInt16 nCount = aColumnRelWidths.Count() - 1;
+            size_t nCount = aColumnRelWidths.size() - 1;
             while( nCount-- )
                 pColumnDefaultCellStyleNames->Insert( new String,
                     pColumnDefaultCellStyleNames->Count() );
@@ -1649,7 +1649,7 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
         for( i=GetColumnCount(); i<nColsReq; i++ )
         {
             aColumnWidths.Insert( MINLAY, aColumnWidths.Count() );
-            aColumnRelWidths.Insert( sal_True, aColumnRelWidths.Count() );
+            aColumnRelWidths.push_back( sal_True );
         }
         // adjust columns in *all* rows, if columns must be inserted
         for( i=0; i<pRows->Count(); i++ )

@@ -334,7 +334,13 @@ BOOL SwNodes::InsBoxen( SwTableNode* pTblNd,
         new SwEndNode( aEndIdx, *pSttNd );
 
         pPrvBox = new SwTableBox( pBoxFmt, *pSttNd, pLine );
-        pLine->GetTabBoxes().C40_INSERT( SwTableBox, pPrvBox, nInsPos + n );
+
+        SwTableBoxes & rTabBoxes = pLine->GetTabBoxes();
+        USHORT nRealInsPos = nInsPos + n;
+        if (nRealInsPos > rTabBoxes.Count())
+            nRealInsPos = rTabBoxes.Count();
+
+        rTabBoxes.C40_INSERT( SwTableBox, pPrvBox, nRealInsPos );
 
         //if( NO_NUMBERING == pTxtColl->GetOutlineLevel()//#outline level,zhaojianwei
         if( ! pTxtColl->IsAssignedToListLevelOfOutlineStyle()//<-end,zhaojianwei
@@ -2120,9 +2126,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             BOOL bSavePageBreak = FALSE, bSavePageDesc = FALSE;
@@ -2176,9 +2183,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
                 *aSavePaM.GetMark() = SwPosition( *pTblNd );
                 aSavePaM.Move( fnMoveBackward, fnGoNode );
             }
-            ::PaMCorrAbs( SwNodeIndex( *pTblNd ),
-                          SwNodeIndex( *pTblNd->EndOfSectionNode() ),
-                          *aSavePaM.GetMark() );
+            {
+                SwPaM const tmpPaM(*pTblNd, *pTblNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, *aSavePaM.GetMark());
+            }
 
             // harte SeitenUmbrueche am nachfolgenden Node verschieben
             SwCntntNode* pNextNd = GetNodes()[ pTblNd->EndOfSectionIndex()+1 ]->GetCntntNode();

@@ -61,30 +61,35 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
     };
     PushButton       PB_LOADLIST
     {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_LOADLIST";
         Pos = MAP_APPFONT ( 194 , 43 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Add...";
     };
     PushButton PB_CREATELIST
     {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_CREATELIST";
         Pos = MAP_APPFONT ( 194 , 60 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Create...";
     };
     PushButton      PB_FILTER
     {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_FILTER";
         Pos = MAP_APPFONT ( 194 , 77 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Filter...";
     };
     PushButton PB_EDIT
     {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_EDIT";
         Pos = MAP_APPFONT ( 194 , 94 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Edit...";
     };
     PushButton PB_TABLE
     {
+        HelpID = "sw:PushButton:DLG_MM_ADDRESSLISTDIALOG:PB_TABLE";
         Pos = MAP_APPFONT ( 194 , 111 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Change ~Table...";

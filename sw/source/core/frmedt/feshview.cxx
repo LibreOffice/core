@@ -27,12 +27,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <com/sun/star/embed/EmbedMisc.hpp>
-#include "hintids.hxx"
 
-#ifdef WIN
-#define _FESHVIEW_ONLY_INLINE_NEEDED
-#endif
+#include <com/sun/star/embed/EmbedMisc.hpp>
+
+#include "hintids.hxx"
 
 #include <svx/sdrobjectfilter.hxx>
 #include <svx/svditer.hxx>
@@ -52,9 +50,9 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdpagv.hxx>
 
-#ifndef _POOLFMT_HRC
+#include <IDocumentSettingAccess.hxx>
+#include <cmdid.h>
 #include <poolfmt.hrc>      // fuer InitFldTypes
-#endif
 #include <frmfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtfsize.hxx>
@@ -603,7 +601,7 @@ bool SwFEShell::IsSelContainsControl() const
         // if we have one marked object, get the SdrObject and check
         // whether it contains a control
         const SdrObject* pSdrObject = pMarkList->GetMark( 0 )->GetMarkedSdrObj();
-        bRet = CheckControlLayer( pSdrObject );
+        bRet = ::CheckControlLayer( pSdrObject );
     }
     return bRet;
 }
@@ -998,8 +996,14 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
             SdrObject* pObj = rMrkList.GetMark( i )->GetMarkedSdrObj();
             // OD 21.08.2003 #i18447# - no change of layer for controls
             // or group objects containing controls.
-            const bool bControlObj = ::CheckControlLayer( pObj );
-            //if ( pObj->GetLayer() != nLayerId && pObj->GetLayer() != nControls )
+            // --> OD 2010-09-14 #i113730#
+            // consider that a member of a drawing group has been selected.
+            const SwContact* pContact = ::GetUserCall( pObj );
+            ASSERT( pContact && pContact->GetMaster(), "<SwFEShell::ChangeOpaque(..)> - missing contact or missing master object at contact!" );
+            const bool bControlObj = ( pContact && pContact->GetMaster() )
+                                     ? ::CheckControlLayer( pContact->GetMaster() )
+                                     : ::CheckControlLayer( pObj );
+            // <--
             if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );
@@ -1473,10 +1477,12 @@ const SdrObject* SwFEShell::GetBestObject( BOOL bNext, USHORT /*GOTOOBJ_...*/ eT
                 break;
             }
 
-            if( (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
+            if( (
+                (bNext? (aPos.Y() < aCurPos.Y()) :          // nur unter mir
                         (aPos.Y() > aCurPos.Y())) &&        // " reverse
                 (bNext? (aBestPos.Y() > aCurPos.Y()) :      // naeher drunter
-                        (aBestPos.Y() < aCurPos.Y())) ||    // " reverse
+                        (aBestPos.Y() < aCurPos.Y()))
+                    ) ||    // " reverse
                         (aBestPos.Y() == aCurPos.Y() &&
                 (bNext? (aBestPos.X() > aCurPos.X()) :      // weiter links
                         (aBestPos.X() < aCurPos.X()))))     // " reverse
@@ -2571,26 +2577,32 @@ BYTE SwFEShell::IsSelObjProtected( USHORT eType ) const
                 nChk |= ( pObj->IsMoveProtect() ? FLYPROTECT_POS : 0 ) |
                         ( pObj->IsResizeProtect()? FLYPROTECT_SIZE : 0 );
 
-                if( FLYPROTECT_CONTENT & eType && pObj->ISA(SwVirtFlyDrawObj) )
+                if( pObj->ISA(SwVirtFlyDrawObj) )
                 {
                     SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
-                    if ( pFly->GetFmt()->GetProtect().IsCntntProtected() )
+                    if ( (FLYPROTECT_CONTENT & eType) && pFly->GetFmt()->GetProtect().IsCntntProtected() )
                         nChk |= FLYPROTECT_CONTENT;
 
                     if ( pFly->Lower() && pFly->Lower()->IsNoTxtFrm() )
                     {
                         SwOLENode *pNd = ((SwCntntFrm*)pFly->Lower())->GetNode()->GetOLENode();
-                        if ( pNd )
+                        uno::Reference < embed::XEmbeddedObject > xObj( pNd ? pNd->GetOLEObj().GetOleRef() : 0 );
+                        if ( xObj.is() )
                         {
-                            uno::Reference < embed::XEmbeddedObject > xObj = pNd->GetOLEObj().GetOleRef();
-
                             // TODO/LATER: use correct aspect
-                            if ( xObj.is() &&
-                                 embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) )
+                            const bool bNeverResize = (embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ));
+                            if ( (FLYPROTECT_CONTENT & eType) && bNeverResize )
                             {
                                 nChk |= FLYPROTECT_SIZE;
                                 nChk |= FLYPROTECT_FIXED;
                             }
+
+                            // set FLYPROTECT_POS if it is a Math object anchored 'as char' and baseline alignment is activated
+                            const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
+                                    && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
+                                    && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                            if ((FLYPROTECT_POS & eType) && bProtectMathPos)
+                                nChk |= FLYPROTECT_POS;
                         }
                     }
                 }

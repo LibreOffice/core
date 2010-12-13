@@ -24,19 +24,14 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLDDROPDOWN_HXX
-#define _FLDDROPDOWN_HXX
+#ifndef SW_FLDDROPDOWN_HXX
+#define SW_FLDDROPDOWN_HXX
 
-#ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX
 #include "com/sun/star/uno/Sequence.hxx"
-#endif
 #include "swdllapi.h"
 #include "fldbas.hxx"
 
-#ifndef INCLUDED_VECTOR
 #include <vector>
-#define INCLUDED_VECTOR
-#endif
 
 /**
     Field type for dropdown boxes.
@@ -95,6 +90,23 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
      */
     String aToolTip;
 
+    /**
+       Expands the field.
+
+       The expanded value of the field is the value of the selected
+       item. If no item is selected, an empty string is returned.
+
+       @return the expanded value of the field
+    */
+    virtual String Expand() const;
+
+    /**
+       Creates a copy of this field.
+
+       @return the copy of this field
+    */
+    virtual SwField * Copy() const;
+
 public:
     /**
        Constructor
@@ -114,23 +126,6 @@ public:
        Destructor
     */
     virtual ~SwDropDownField();
-
-    /**
-       Expands the field.
-
-       The expanded value of the field is the value of the selected
-       item. If no item is selected, an empty string is returned.
-
-       @return the expanded value of the field
-    */
-    virtual String Expand() const;
-
-    /**
-       Creates a copy of this field.
-
-       @return the copy of this field
-    */
-    virtual SwField * Copy() const;
 
     /**
        Returns the selected value.

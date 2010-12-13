@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _TABFRM_HXX
-#define _TABFRM_HXX
+#ifndef SW_TABFRM_HXX
+#define SW_TABFRM_HXX
 
 #include <tools/mempool.hxx>
 #include "layfrm.hxx"
@@ -129,7 +129,8 @@ public:
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual void  CheckDirection( BOOL bVert );
 
     virtual void Cut();
@@ -230,4 +231,4 @@ inline SwTabFrm *SwTabFrm::GetFollow()
     return (SwTabFrm*)SwFlowFrm::GetFollow();
 }
 
-#endif  //_TABFRM_HXX
+#endif  // SW_TABFRM_HXX

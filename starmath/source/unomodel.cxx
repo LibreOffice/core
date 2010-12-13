@@ -81,8 +81,8 @@ using namespace ::com::sun::star::script;
 SmPrintUIOptions::SmPrintUIOptions()
 {
     ResStringArray      aLocalizedStrings( SmResId( RID_PRINTUIOPTIONS ) );
-    DBG_ASSERT( aLocalizedStrings.Count() >= 18, "resource incomplete" );
-    if( aLocalizedStrings.Count() < 18 ) // bad resource ?
+    DBG_ASSERT( aLocalizedStrings.Count() >= 15, "resource incomplete" );
+    if( aLocalizedStrings.Count() < 15 ) // bad resource ?
         return;
 
     SmModule *pp = SM_MOD();
@@ -203,6 +203,7 @@ enum SmModelPropertyHandles
     HANDLE_RELATIVE_FONT_HEIGHT_OPERATORS,
     HANDLE_RELATIVE_FONT_HEIGHT_LIMITS,
     HANDLE_IS_TEXT_MODE,
+    HANDLE_GREEK_CHAR_STYLE,
     HANDLE_ALIGNMENT,
     HANDLE_RELATIVE_SPACING,
     HANDLE_RELATIVE_LINE_SPACING,
@@ -237,7 +238,8 @@ enum SmModelPropertyHandles
     // --> PB 2004-08-25 #i33095# Security Options
     HANDLE_LOAD_READONLY,
     // <--
-    HANDLE_DIALOG_LIBRARIES     // #i73329#
+    HANDLE_DIALOG_LIBRARIES,     // #i73329#
+    HANDLE_BASELINE // 3.7.2010 #i972#
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -273,6 +275,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "Formula"                           ),    HANDLE_FORMULA                             ,        &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsScaleAllBrackets"              ), HANDLE_IS_SCALE_ALL_BRACKETS              ,      &::getBooleanCppuType(),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "IsTextMode"                       ), HANDLE_IS_TEXT_MODE                       ,         &::getBooleanCppuType(),    PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM( "GreekCharStyle" ),                   HANDLE_GREEK_CHAR_STYLE,    &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM( "LeftMargin"                        ), HANDLE_LEFT_MARGIN                        ,        &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_LEFTSPACE                 },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterName"                    ), HANDLE_PRINTER_NAME                        ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, 0                  },
         { RTL_CONSTASCII_STRINGPARAM( "PrinterSetup"                       ), HANDLE_PRINTER_SETUP                       ,      &::getCppuType((const Sequence < sal_Int8 >*)0),    PROPERTY_NONE, 0                  },
@@ -307,6 +310,9 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "TopMargin"                         ),    HANDLE_TOP_MARGIN                    ,      &::getCppuType((const sal_Int16*)0),    PROPERTY_NONE, DIS_TOPSPACE               },
         // --> PB 2004-08-25 #i33095# Security Options
         { RTL_CONSTASCII_STRINGPARAM( "LoadReadonly" ), HANDLE_LOAD_READONLY, &::getBooleanCppuType(), PROPERTY_NONE, 0 },
+        // <--
+        // --> 3.7.2010 #i972#
+        { RTL_CONSTASCII_STRINGPARAM( "BaseLine"), HANDLE_BASELINE, &::getCppuType((const sal_Int16*)0), PROPERTY_NONE, 0},
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
     };
@@ -593,6 +599,16 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             }
             break;
 
+            case HANDLE_GREEK_CHAR_STYLE                    :
+            {
+                sal_Int16 nVal = 0;
+                *pValues >>= nVal;
+                if (nVal < 0 || nVal > 2)
+                    throw IllegalArgumentException();
+                aFormat.SetGreekCharStyle( nVal );
+            }
+            break;
+
             case HANDLE_ALIGNMENT                          :
             {
                 // SmHorAlign uses the same values as HorizontalAlignment
@@ -824,6 +840,10 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             }
             break;
 
+            case HANDLE_GREEK_CHAR_STYLE                    :
+                *pValue <<= (sal_Int16)aFormat.GetGreekCharStyle();
+            break;
+
             case HANDLE_ALIGNMENT                          :
                 // SmHorAlign uses the same values as HorizontalAlignment
                 *pValue <<= (sal_Int16)aFormat.GetHorAlign();
@@ -938,6 +958,21 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
                  *pValue <<= pDocSh->IsLoadReadonly();
                 break;
             }
+            // <--
+            // --> 3.7.2010 #i972#
+            case HANDLE_BASELINE:
+            {
+                if ( !pDocSh->pTree )
+                    pDocSh->Parse();
+                if ( pDocSh->pTree )
+                {
+                    if ( !pDocSh->IsFormulaArranged() )
+                        pDocSh->ArrangeFormula();
+
+                    *pValue <<= static_cast<sal_Int32>( pDocSh->pTree->GetFormulaBaseline() );
+                }
+            }
+            break;
             // <--
         }
     }

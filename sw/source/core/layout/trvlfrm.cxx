@@ -581,8 +581,8 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             if ( !pCell ||
                     ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
-                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) &&
-                        !pCell->IsCoveredCell() )
+                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) &&
+                        !pCell->IsCoveredCell() ) )
                 bProtect = FALSE;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -701,14 +701,14 @@ BOOL MA_FASTCALL lcl_UpDown( SwPaM *pPam, const SwCntntFrm *pStart,
             const long nPrtLeft = bRTL ?
                                 (pTable->*fnRect->fnGetPrtRight)() :
                                 (pTable->*fnRect->fnGetPrtLeft)();
-            if ( bRTL != nX < nPrtLeft )
+            if ( (bRTL != (nX < nPrtLeft)) )
                 nX = nPrtLeft;
             else
             {
                    const long nPrtRight = bRTL ?
                                     (pTable->*fnRect->fnGetPrtLeft)() :
                                     (pTable->*fnRect->fnGetPrtRight)();
-                if ( bRTL != nX > nPrtRight )
+                if ( (bRTL != (nX > nPrtRight)) )
                     nX = nPrtRight;
             }
         }
@@ -1811,10 +1811,10 @@ USHORT SwFrm::GetVirtPageNum() const
     const SwFrm *pFrm = 0;
     const SfxItemPool &rPool = pPage->GetFmt()->GetDoc()->GetAttrPool();
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = rPool.GetItemCount( RES_PAGEDESC );
-    for( USHORT n = 0; n < nMaxItems; ++n )
+    sal_uInt32 nMaxItems = rPool.GetItemCount2( RES_PAGEDESC );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
     {
-        if( 0 == (pItem = rPool.GetItem( RES_PAGEDESC, n ) ))
+        if( 0 == (pItem = rPool.GetItem2( RES_PAGEDESC, n ) ))
             continue;
 
         const SwFmtPageDesc *pDesc = (SwFmtPageDesc*)pItem;
@@ -2308,12 +2308,14 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                         (aTmp.*fnRectX->fnSetTop)( nTmp );
                         if( (aEndRect.*fnRectX->fnGetTop)() !=
                             (pEnd2Pos->aPortion.*fnRectX->fnGetTop)() )
-                        if( bPorR2L )
-                            (aTmp.*fnRectX->fnSetLeft)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
-                        else
-                            (aTmp.*fnRectX->fnSetRight)(
-                                (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        {
+                            if( bPorR2L )
+                                (aTmp.*fnRectX->fnSetLeft)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetLeft)() );
+                            else
+                                (aTmp.*fnRectX->fnSetRight)(
+                                    (pEnd2Pos->aPortion.*fnRectX->fnGetRight)() );
+                        }
                         aTmp.Intersection( aEndFrm );
                         Sub( aRegion, aTmp );
                     }
