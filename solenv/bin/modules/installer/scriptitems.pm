@@ -1871,6 +1871,44 @@ sub remove_Languagepacklibraries_from_Installset
 }
 
 ############################################################################
+# Removing all help pack files from installation set (files with
+# the style HELPPACK), except this is a help pack.
+############################################################################
+
+sub remove_Helppacklibraries_from_Installset
+{
+    my ($itemsarrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::remove_Helppacklibraries_from_Installset : $#{$itemsarrayref}"); }
+
+    my $infoline;
+
+    my @newitemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
+    {
+        my $oneitem = ${$itemsarrayref}[$i];
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+
+        if ( $styles =~ /\bHELPPACK\b/ )
+        {
+            $infoline = "Removing help pack file $oneitem->{'gid'} from the installation set.\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+
+            next;
+        }
+
+        push(@newitemsarray, $oneitem);
+    }
+
+    $infoline = "\n";
+    push( @installer::globals::globallogfileinfo, $infoline);
+
+    return \@newitemsarray;
+}
+
+############################################################################
 # Removing all files with flag PATCH_ONLY from installation set.
 # This function is not called during patch creation.
 ############################################################################

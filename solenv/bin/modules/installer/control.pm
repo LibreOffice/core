@@ -428,6 +428,7 @@ sub determine_ship_directory
     }
 
     if ( $installer::globals::languagepack ) { $productstring = $productstring . "_languagepack"; }
+    if ( $installer::globals::helppack ) { $productstring = $productstring . "_helppack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
@@ -700,6 +701,7 @@ sub set_addjavainstaller
 
     if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
     if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
+    if ( $installer::globals::helppack ) { $installer::globals::addjavainstaller = 0; }
     if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
 
     my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
@@ -718,6 +720,7 @@ sub set_addsystemintegration
 
     if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
     if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
+    if ( $installer::globals::helppack ) { $installer::globals::addsystemintegration = 0; }
     if (( $installer::globals::packageformat eq "native" ) || ( $installer::globals::packageformat eq "portable" )) { $installer::globals::addsystemintegration = 0; }
 
     my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";

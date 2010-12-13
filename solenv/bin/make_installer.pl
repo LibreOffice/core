@@ -44,6 +44,7 @@ use installer::exiter;
 use installer::files;
 use installer::followme;
 use installer::globals;
+use installer::helppack;
 use installer::javainstaller;
 use installer::languagepack;
 use installer::languages;
@@ -454,6 +455,12 @@ if (! $installer::globals::languagepack)
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2b.log", $filesinproductarrayref); }
 }
 
+if (! $installer::globals::helppack)
+{
+    $filesinproductarrayref = installer::scriptitems::remove_Helppacklibraries_from_Installset($filesinproductarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles2b2.log", $filesinproductarrayref); }
+}
+
 if (! $installer::globals::patch)
 {
     $filesinproductarrayref = installer::scriptitems::remove_patchonlyfiles_from_Installset($filesinproductarrayref);
@@ -635,6 +642,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }
 
     if ( $installer::globals::languagepack )
+    {
+        $installer::globals::addchildprojects = 0;
+        $installer::globals::addsystemintegration = 0;
+        $installer::globals::makejds = 0;
+        $installer::globals::addlicensefile = 0;
+
+        if ( $allvariableshashref->{'OPENSOURCE'} ) { $installer::globals::makedownload = 1; }
+        else { $installer::globals::makedownload = 0; }
+    }
+
+    if ( $installer::globals::helppack )
     {
         $installer::globals::addchildprojects = 0;
         $installer::globals::addsystemintegration = 0;
@@ -898,7 +916,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $allvariableshashref->{'SERVICESPROJEKT'} )
     {
-        if (! $installer::globals::languagepack)
+        if (! $installer::globals::languagepack && ! $installer::globals::helppack)
         {
             # ATTENTION: For creating the services.rdb it is necessary to execute the native file
             # "regcomp" or "regcomp.exe". Therefore this function can only be executed on the
@@ -920,7 +938,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if (!($installer::globals::is_copy_only_project))
     {
-        if (! $installer::globals::languagepack)
+        if (! $installer::globals::languagepack && ! $installer::globals::helppack)
         {
             installer::logger::print_message( "... merging files into registry database ...\n" );
 
@@ -1023,7 +1041,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     my $profilesinproductlanguageresolvedarrayref;
     my $profileitemsinproductlanguageresolvedarrayref;
 
-    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )) && (!($installer::globals::languagepack)))
+    if ((!($installer::globals::is_copy_only_project)) && (!($installer::globals::product =~ /ada/i )) && (!($installer::globals::languagepack)) && (!($installer::globals::helppack)))
     {
         installer::logger::print_message( "... creating profiles ...\n" );
 
@@ -1161,6 +1179,35 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             $registryitemsinproductlanguageresolvedarrayref = installer::worker::select_langpack_items($registryitemsinproductlanguageresolvedarrayref, "RegistryItem");
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems3aa.log", $registryitemsinproductlanguageresolvedarrayref); }
+        }
+
+    }
+
+    # Help pack projects can now start to select the required information
+    if ( $installer::globals::helppack )
+    {
+        $filesinproductlanguageresolvedarrayref = installer::helppack::select_help_items($filesinproductlanguageresolvedarrayref, $languagesarrayref, "File");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16b2.log", $filesinproductlanguageresolvedarrayref); }
+        $scpactionsinproductlanguageresolvedarrayref = installer::helppack::select_help_items($scpactionsinproductlanguageresolvedarrayref, $languagesarrayref, "ScpAction");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions6b2.log", $scpactionsinproductlanguageresolvedarrayref); }
+        $linksinproductlanguageresolvedarrayref = installer::helppack::select_help_items($linksinproductlanguageresolvedarrayref, $languagesarrayref, "Shortcut");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productlinks8b2.log", $linksinproductlanguageresolvedarrayref); }
+        $unixlinksinproductlanguageresolvedarrayref = installer::helppack::select_help_items($unixlinksinproductlanguageresolvedarrayref, $languagesarrayref, "Unixlink");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "unixlinks5b2.log", $unixlinksinproductlanguageresolvedarrayref); }
+        @{$folderitemsinproductlanguageresolvedarrayref} = (); # no folderitems in helppacks
+
+        # Collecting the directories again, to include only the language specific directories
+        ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_from_filesarray($filesinproductlanguageresolvedarrayref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3ahelppack.log", $directoriesforepmarrayref); }
+        ($directoriesforepmarrayref, $alldirectoryhash) = installer::scriptitems::collect_directories_with_create_flag_from_directoryarray($dirsinproductlanguageresolvedarrayref, $alldirectoryhash);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3bhelppack.log", $directoriesforepmarrayref); }
+        installer::sorter::sorting_array_of_hashes($directoriesforepmarrayref, "HostName");
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "directoriesforepmlist3chelppack.log", $directoriesforepmarrayref); }
+
+        if ( $installer::globals::iswindowsbuild )
+        {
+            $registryitemsinproductlanguageresolvedarrayref = installer::worker::select_helppack_items($registryitemsinproductlanguageresolvedarrayref, "RegistryItem");
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems3aa2.log", $registryitemsinproductlanguageresolvedarrayref); }
         }
 
     }
@@ -1325,6 +1372,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::languagepack ) { installer::languagepack::replace_languagestring_variable($onepackage, $languagestringref); }
 
+            # checking, if this is a help pack
+            # Creating help packs only, if $installer::globals::helppack is set. Parameter: -helppack
+
+            if ( $installer::globals::helppack ) { installer::helppack::replace_languagestring_variable($onepackage, $languagestringref); }
+
             my $onepackagename = $onepackage->{'module'};           # name of the top module (required)
 
             my $shellscriptsfilename = "";
@@ -1368,6 +1420,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 my $oldpackagename = $packagename;
                 $installer::globals::add_required_package = $oldpackagename;    # the link rpm requires the non-linked version
                 if ( $installer::globals::languagepack ) { $packagename = $packagename . "_u"; }
+                elsif ( $installer::globals::helppack ) { $packagename = $packagename . "_v"; } # wtf...
                 else { $packagename = $packagename . "u"; }
                 my $savestring = $oldpackagename . "\t" . $packagename;
                 push(@installer::globals::linkrpms, $savestring);
@@ -1389,6 +1442,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if (( $installer::globals::patch ) ||
                 ( $installer::globals::languagepack ) ||
+                ( $installer::globals::helppack ) ||
                 ( $installer::globals::packageformat eq "native" ) ||
                 ( $installer::globals::packageformat eq "portable" ) ||
                 ( $installer::globals::packageformat eq "osx" )) { $allvariableshashref->{'POOLPRODUCT'} = 0; }
@@ -1760,7 +1814,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::isxpdplatform )
             {
-                if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch ))
+                if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $installer::globals::patch ))
                 {
                     if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
                     {
@@ -2072,7 +2126,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::idtglobal::prepare_language_idt_directory($languageidtdir, $newidtdir, $onelanguage, $filesinproductlanguageresolvedarrayref, \@iconfilecollector, $binarytablefiles, $allvariableshashref);
 
-            if ( ! $installer::globals::languagepack )
+            if ( ! $installer::globals::languagepack && ! $installer::globals::helppack )
             {
                 # For multilingual installation sets, the dialog for the language selection can now be prepared, with
                 # a checkbox for each available language. This has to happen before the following translation.
@@ -2184,7 +2238,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # setting patch codes to detect installed products
 
-            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $allvariableshashref->{'PDFCONVERTER'} )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
+            if (( $installer::globals::patch ) || ( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $allvariableshashref->{'PDFCONVERTER'} )) { installer::windows::patch::update_patch_tables($languageidtdir, $allvariableshashref); }
 
             # Adding Windows Installer CustomActions
 
@@ -2351,6 +2405,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         my $create_download = 0;
         my $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
         if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
+        if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
         if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
 
         if ( $is_success ) { installer::followme::save_followme_info($finalinstalldir, $includepatharrayref, $allvariableshashref, $$downloadname, $languagestringref, $languagesarrayref, $current_install_number, $loggingdir, $installlogdir); }
