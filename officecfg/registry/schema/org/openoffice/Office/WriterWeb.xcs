@@ -418,6 +418,15 @@
 				<info>
 					<desc>Contains miscellaneous settings.</desc>
 				</info>
+                <prop oor:name="IsAlignMathObjectsToBaseline" oor:type="xs:boolean">
+                    <!-- UIHints: none yet -->
+                    <info>
+                        <author>TL</author>
+                        <desc>Automatically align the baseline of Math objects with the baseline of the surrounding text.</desc>
+                        <label>Align Math objects</label>
+                    </info>
+                    <value>true</value>
+                </prop>
 				<prop oor:name="MeasureUnit" oor:type="xs:int">
 					<!-- OldPath: HTML_Editor/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->

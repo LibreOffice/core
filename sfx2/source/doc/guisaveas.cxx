@@ -978,12 +978,11 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                          NULL );
 
     const SfxPoolItem* pItem = NULL;
-    if ( bPreselectPassword && aDialogParams.GetItemState( SID_PASSWORD, sal_True, &pItem ) != SFX_ITEM_SET )
+    if ( bPreselectPassword && aDialogParams.GetItemState( SID_ENCRYPTIONDATA, sal_True, &pItem ) != SFX_ITEM_SET )
     {
-        // the file dialog preselects the password checkbox if the provided mediadescriptor has password entry
-        // after dialog execution the password entry will be either removed or replaced with the password
-        // entered by the user
-        aDialogParams.Put( SfxStringItem( SID_PASSWORD, String() ) );
+        // the file dialog preselects the password checkbox if the provided mediadescriptor has encryption data entry
+        // after dialog execution the password interaction flag will be either removed or not
+        aDialogParams.Put( SfxBoolItem( SID_PASSWORDINTERACTION, sal_True ) );
     }
 
     // aStringTypeFN is a pure output parameter, pDialogParams is an in/out parameter
@@ -1590,6 +1589,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     DocumentSettingsGuard aSettingsGuard( aModelData.GetModel(), aModelData.IsRecommendReadOnly(), nStoreMode & EXPORT_REQUESTED );
 
+    OSL_ENSURE( aModelData.GetMediaDescr().find( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) ) ) == aModelData.GetMediaDescr().end(), "The Password property of MediaDescriptor should not be used here!" );
     if ( aOptions.IsDocInfoSave()
       && ( !aModelData.GetStorable()->hasLocation()
           || INetURLObject( aModelData.GetStorable()->getLocation() ) != aURL ) )

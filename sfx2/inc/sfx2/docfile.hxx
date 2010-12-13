@@ -112,7 +112,7 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
     SAL_DLLPRIVATE void CloseStreams_Impl();
     DECL_DLLPRIVATE_STATIC_LINK( SfxMedium, UCBHdl_Impl, sal_uInt32 * );
 
-    SAL_DLLPRIVATE void SetPasswordToStorage_Impl();
+    SAL_DLLPRIVATE void SetEncryptionDataToStorage_Impl();
 #endif
 
 public:

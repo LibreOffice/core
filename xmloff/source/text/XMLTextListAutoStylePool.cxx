@@ -185,7 +185,15 @@ XMLTextListAutoStylePool::XMLTextListAutoStylePool( SvXMLExport& rExp ) :
 
 XMLTextListAutoStylePool::~XMLTextListAutoStylePool()
 {
+    // The XMLTextListAutoStylePoolEntry_Impl object in the pool need delete explicitly in dtor.
+    ULONG nCount = pPool->Count();
+    while ( nCount-- )
+        delete pPool->Remove(nCount);
     delete pPool;
+
+    nCount = pNames->Count();
+    while ( nCount-- )
+        delete pNames->Remove(nCount);
     delete pNames;
 }
 

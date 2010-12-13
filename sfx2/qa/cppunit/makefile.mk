@@ -25,6 +25,10 @@
 #
 #*************************************************************************
 
+.IF "$(OOO_SUBSEQUENT_TESTS)" == ""
+nothing .PHONY:
+.ELSE
+
 PRJ=../..
 PRJNAME=sfx2
 TARGET=qa_cppunit
@@ -79,3 +83,4 @@ SLOFILES= \
 .INCLUDE :  target.mk
 .INCLUDE : _cppunit.mk
 
+.END

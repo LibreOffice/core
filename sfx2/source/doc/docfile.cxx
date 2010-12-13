@@ -881,17 +881,21 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 }
 
 //------------------------------------------------------------------
-void SfxMedium::SetPasswordToStorage_Impl()
+void SfxMedium::SetEncryptionDataToStorage_Impl()
 {
     // in case media-descriptor contains password it should be used on opening
     if ( pImp->xStorage.is() && pSet )
     {
-        ::rtl::OUString aPasswd;
-        if ( GetPasswd_Impl( pSet, aPasswd ) )
+        uno::Sequence< beans::NamedValue > aEncryptionData;
+        if ( GetEncryptionData_Impl( pSet, aEncryptionData ) )
         {
+            // replace the password with encryption data
+            pSet->ClearItem( SID_PASSWORD );
+            pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
+
             try
             {
-                ::comphelper::OStorageHelper::SetCommonStoragePassword( pImp->xStorage, aPasswd );
+                ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( pImp->xStorage, aEncryptionData );
             }
             catch( uno::Exception& )
             {
@@ -1326,7 +1330,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage( sal_Bool bCreateTempIf
     // TODO/LATER: Get versionlist on demand
     if ( pImp->xStorage.is() )
     {
-        SetPasswordToStorage_Impl();
+        SetEncryptionDataToStorage_Impl();
         GetVersionList();
     }
 
