@@ -1544,8 +1544,6 @@ void SVTXRoadmap::elementRemoved( const ::com::sun::star::container::ContainerEv
         sal_Int32 DelIndex = 0;
         _rEvent.Accessor >>= DelIndex;
         pField->DeleteRoadmapItem(DelIndex);
-//        pField->GetCurrentRoadmapItem()
-//        setProperty(::rtl::OUString.createFromAscii( "CurrentItem" )aAny,
     }
 }
 
