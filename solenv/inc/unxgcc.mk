@@ -148,8 +148,7 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    lotuswordpro \
-    soldep
+    lotuswordpro
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
