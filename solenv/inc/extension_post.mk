@@ -73,7 +73,7 @@ $(COMPONENT_JARFILES) : $(CLASSDIR)/$$(@:f)
 $(COMPONENT_LIBRARIES) : $(DLLDEST)/$$(@:f)
     @@-$(MKDIRHIER) $(@:d)
     $(COMMAND_ECHO)$(COPY) $< $@
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 .IF "$(COM)"=="GCC"
    $(GNUCOPY) $(SOLARBINDIR)/mingwm10.dll $(EXTENSIONDIR)
    .IF "$(MINGW_GCCDLL)"!=""
@@ -119,7 +119,7 @@ $(COMPONENT_LIBRARIES) : $(DLLDEST)/$$(@:f)
 .ENDIF			# "$(CCNUMVER)" <= "001399999999"
 .ENDIF          # "$(PACKMS)"!=""
 .ENDIF	#"$(COM)"=="GCC" 
-.ENDIF 			# "$(OS)$(CPU)"=="WNTI"
+.ENDIF 			# "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 .ENDIF			# "$(COMPONENT_LIBRARIES)"!=""
 
 IMPLEMENTATION_IDENTIFIER*="com.sun.star.$(EXTENSIONNAME)-$(PLATFORMID)"
@@ -135,14 +135,13 @@ $(DESCRIPTION) $(PHONYDESC) : $(DESCRIPTION_SRC)
 
     $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/licinserter.pl $(DESCRIPTION_SRC) $(COMPONENT_LIC_TEMPL) $@.1.$(EXTNAME)
 
-    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/transform_description.pl $@.1.$(EXTNAME) $@.2.$(EXTNAME)
+    $(COMMAND_ECHO)$(PERL) $(SOLARENV)/bin/transform_description.pl $(DESCRIPTION_SRC) $@.1.$(EXTNAME)
+
+    $(COMMAND_ECHO)$(TYPE) $@.1.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $@.2.$(EXTNAME)
     @@-$(RM) $@.1.$(EXTNAME)
 
-    $(COMMAND_ECHO)$(TYPE) $@.2.$(EXTNAME) | sed s/UPDATED_IDENTIFIER/$(IMPLEMENTATION_IDENTIFIER)/ >  $@.3.$(EXTNAME)
+    $(COMMAND_ECHO)$(TYPE) $@.2.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
     @@-$(RM) $@.2.$(EXTNAME)
-
-    $(COMMAND_ECHO)$(TYPE) $@.3.$(EXTNAME) | sed s/UPDATED_SUPPORTED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $@.3.$(EXTNAME)
 
 .ENDIF			# "$(DESCRIPTION)"!=""
 # default OOo license text!!!
