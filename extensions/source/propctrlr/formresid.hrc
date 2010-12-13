@@ -363,7 +363,6 @@
 #define RID_SVXIMG_EDIT                             10599
 #define RID_SVXIMG_LISTBOX                          10600
 #define RID_SVXIMG_COMBOBOX                         10601
-#define RID_SVXIMG_URLBUTTON                        10602
 #define RID_SVXIMG_GRID                             10603
 #define RID_SVXIMG_IMAGEBUTTON                      10604
 #define RID_SVXIMG_FILECONTROL                      10605
