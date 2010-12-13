@@ -259,6 +259,8 @@ endef
 
 # PrecompiledHeader class
 
+gb_PrecompiledHeader_get_enableflags = -Yu$(patsubst %.pch,%,$(notdir $(1))) -Fp$(1)
+
 define gb_PrecompiledHeader__command
 $(call gb_Helper_announce,Compiling pch $(1) ...)
 $(call gb_Helper_abbreviate_dirs_native,\
