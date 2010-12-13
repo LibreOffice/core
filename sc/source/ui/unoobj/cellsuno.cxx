@@ -1335,25 +1335,6 @@ String lcl_GetInputString( ScDocument* pDoc, const ScAddress& rPosition, BOOL bE
 
 //------------------------------------------------------------------------
 
-// Default-ctor fuer SMART_REFLECTION Krempel
-ScCellRangesBase::ScCellRangesBase() :
-    pPropSet(lcl_GetCellsPropertySet()),
-    pDocShell( NULL ),
-    pValueListener( NULL ),
-    pCurrentFlat( NULL ),
-    pCurrentDeep( NULL ),
-    pCurrentDataSet( NULL ),
-    pNoDfltCurrentDataSet( NULL ),
-    pMarkData( NULL ),
-    nObjectId( 0 ),
-    bChartColAsHdr( FALSE ),
-    bChartRowAsHdr( FALSE ),
-    bCursorOnly( FALSE ),
-    bGotDataChangedHint( FALSE ),
-    aValueListeners( 0 )
-{
-}
-
 ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pPropSet(lcl_GetCellsPropertySet()),
     pDocShell( pDocSh ),
