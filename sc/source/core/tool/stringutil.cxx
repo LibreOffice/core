@@ -63,16 +63,23 @@ bool ScStringUtil::parseSimpleNumber(
     sal_Int32 nPosDSep = -1, nPosGSep = -1;
     sal_uInt32 nDigitCount = 0;
 
-    for (sal_Int32 i = 0; i < n; ++i, ++p)
+    sal_Int32 i = 0;
+
+    // Skip preceding spaces.
+    for (i = 0; i < n; ++i, ++p)
+    {
+        sal_Unicode c = *p;
+        if (c != 0x0020 && c != 0x00A0)
+            // first non-space character.  Exit.
+            break;
+    }
+
+    for (; i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
         if (c == 0x00A0)
             // unicode space to ascii space
             c = 0x0020;
-
-        if (c == 0x0020)
-            // Skip preceding spaces.
-            continue;
 
         if (sal_Unicode('0') <= c && c <= sal_Unicode('9'))
         {
