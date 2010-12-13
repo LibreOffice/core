@@ -80,15 +80,13 @@ QStyle::State vclStateValue2StateFlag( ControlState nControlState,
 }
 
 /**
- Convert VCL Region to QRect.
- @param rControlRegion The region to convert.
- @return The bounding box of the region.
+ Convert VCL Rectangle to QRect.
+ @param rControlRegion The Rectangle to convert.
+ @return The matching QRect
 */
-QRect region2QRect( const Region& rControlRegion )
+QRect region2QRect( const Rectangle& rControlRegion )
 {
-    Rectangle aRect = rControlRegion.GetBoundRect();
-
-    return QRect(aRect.Left(), aRect.Top(), aRect.GetWidth(), aRect.GetHeight());
+    return QRect(rControlRegion.Left(), rControlRegion.Top(), rControlRegion.GetWidth(), rControlRegion.GetHeight());
 }
 
 KDESalGraphics::KDESalGraphics() :
@@ -157,7 +155,7 @@ BOOL KDESalGraphics::IsNativeControlSupported( ControlType type, ControlPart par
 }
 
 BOOL KDESalGraphics::hitTestNativeControl( ControlType, ControlPart,
-                                           const Region&, const Point&,
+                                           const Rectangle&, const Point&,
                                            BOOL& )
 {
     return FALSE;
@@ -195,6 +193,22 @@ namespace
         kapp->style()->drawComplexControl(element, option, &painter);
     }
 
+    int getFrameWidth()
+    {
+        static int s_nFrameWidth = -1;
+        if( s_nFrameWidth < 0 )
+        {
+            // fill in a default
+            s_nFrameWidth = 2;
+            QFrame aFrame( NULL );
+            aFrame.setFrameRect( QRect(0, 0, 100, 30) );
+            aFrame.setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+            aFrame.ensurePolished();
+            s_nFrameWidth = aFrame.frameWidth();
+        }
+        return s_nFrameWidth;
+    }
+
     void lcl_drawFrame(QStyle::PrimitiveElement element, QImage* image, QStyle::State state)
     {
     #if ( QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 ) )
@@ -219,7 +233,7 @@ namespace
 }
 
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
-                                        const Region& rControlRegion, ControlState nControlState,
+                                        const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
                                         const OUString& )
 {
@@ -236,7 +250,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         type = CTRL_SPINBUTTONS;
     if( type == CTRL_SPINBUTTONS )
     {
-        SpinbuttonValue* pSpinVal = (SpinbuttonValue *)(value.getOptionalVal());
+        OSL_ASSERT( value.getType() != CTRL_SPINBUTTONS );
+        const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
         Rectangle aButtonRect( pSpinVal->maUpperRect);
         aButtonRect.Union( pSpinVal->maLowerRect );;
         widgetRect = QRect( aButtonRect.Left(), aButtonRect.Top(),
@@ -409,7 +424,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         if ((part == PART_DRAW_BACKGROUND_VERT) || (part == PART_DRAW_BACKGROUND_HORZ))
         {
             QStyleOptionSlider option;
-            ScrollbarValue* sbVal = static_cast<ScrollbarValue *> ( value.getOptionalVal() );
+            OSL_ASSERT( value.getType() == CTRL_SCROLLBAR );
+            const ScrollbarValue* sbVal = static_cast<const ScrollbarValue *>(&value);
 
             //if the scroll bar is active (aka not degenrate...allow for hover events
             if (sbVal->mnVisibleSize < sbVal->mnMax)
@@ -445,9 +461,9 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         QStyleOptionSpinBox option;
 
         // determine active control
-        SpinbuttonValue* pSpinVal = (SpinbuttonValue *)(value.getOptionalVal());
-        if( pSpinVal )
+        if( value.getType() == CTRL_SPINBUTTONS )
         {
+            const SpinbuttonValue* pSpinVal = static_cast<const SpinbuttonValue *>(&value);
             if( (pSpinVal->mnUpperState & CTRL_STATE_PRESSED) )
                 option.activeSubControls |= QStyle::SC_SpinBoxUp;
             if( (pSpinVal->mnLowerState & CTRL_STATE_PRESSED) )
@@ -480,18 +496,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         lcl_drawFrame( QStyle::PE_Frame, m_image,
                        vclStateValue2StateFlag(nControlState, value) );
 
-        int size = kapp->style()->pixelMetric(QStyle::PM_LayoutLeftMargin);
+        // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
+        int nFrameWidth = getFrameWidth();
         pTempClipRegion = XCreateRegion();
         XRectangle xRect = { widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height() };
         XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
-        XLIB_Region pSubtract = XCreateRegion();
-        xRect.x += size;
-        xRect.y += size;
-        xRect.width -= 2* size;
-        xRect.height -= 2*size;
-        XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
-        XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
-        XDestroyRegion( pSubtract );
+        xRect.x += nFrameWidth;
+        xRect.y += nFrameWidth;
+
+        // do not crash for too small widgets, see http://qa.openoffice.org/issues/show_bug.cgi?id=112102
+        if( xRect.width > 2*nFrameWidth && xRect.height > 2*nFrameWidth )
+        {
+            xRect.width -= 2*nFrameWidth;
+            xRect.height -= 2*nFrameWidth;
+
+            XLIB_Region pSubtract = XCreateRegion();
+            XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
+            XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
+            XDestroyRegion( pSubtract );
+        }
     }
     else if (type == CTRL_FIXEDBORDER)
     {
@@ -513,7 +536,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     }
     else if (type == CTRL_SLIDER && (part == PART_TRACK_HORZ_AREA || part == PART_TRACK_VERT_AREA))
     {
-        SliderValue* slVal = static_cast<SliderValue *> ( value.getOptionalVal() );
+        OSL_ASSERT( value.getType() == CTRL_SLIDER );
+        const SliderValue* slVal = static_cast<const SliderValue *>(&value);
         QStyleOptionSlider option;
 
         option.rect = QRect(0, 0, widgetRect.width(), widgetRect.height());
@@ -566,10 +590,10 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 }
 
 BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
-                                             const Region& controlRegion, ControlState controlState,
+                                             const Rectangle& controlRegion, ControlState controlState,
                                              const ImplControlValue& val,
                                              const OUString&,
-                                             Region &nativeBoundingRegion, Region &nativeContentRegion )
+                                             Rectangle &nativeBoundingRegion, Rectangle &nativeContentRegion )
 {
     bool retVal = false;
 
@@ -744,14 +768,14 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         {
             if( part == PART_BORDER )
             {
-                int size = kapp->style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+                int nFrameWidth = getFrameWidth();
                 USHORT nStyle = val.getNumericVal();
                 if( nStyle & FRAME_DRAW_NODRAW )
                 {
                     // in this case the question is: how thick would a frame be
                     // see brdwin.cxx, decoview.cxx
                     // most probably the behavior in decoview.cxx is wrong.
-                    contentRect.adjust(size, size, -size, -size);
+                    contentRect.adjust(nFrameWidth, nFrameWidth, -nFrameWidth, -nFrameWidth);
                 }
                 retVal = true;
             }
@@ -869,12 +893,12 @@ BOOL KDESalGraphics::getNativeControlRegion( ControlType type, ControlPart part,
         // Bounding region
         Point aBPoint( boundingRect.x(), boundingRect.y() );
         Size aBSize( boundingRect.width(), boundingRect.height() );
-        nativeBoundingRegion = Region( Rectangle( aBPoint, aBSize ) );
+        nativeBoundingRegion = Rectangle( aBPoint, aBSize );
 
         // Region of the content
         Point aPoint( contentRect.x(), contentRect.y() );
         Size  aSize( contentRect.width(), contentRect.height() );
-        nativeContentRegion = Region( Rectangle( aPoint, aSize ) );
+        nativeContentRegion = Rectangle( aPoint, aSize );
     }
 
     return retVal;

@@ -165,7 +165,7 @@ namespace svt
         OSL_PRECOND( i_nPosition <= m_aDrawers.size(), "DrawerDeckLayouter::PanelInserted: inconsistency!" );
 
         PToolPanelDrawer pDrawer( new ToolPanelDrawer( m_rParentWindow, i_pPanel->GetDisplayName() ) );
-        pDrawer->SetSmartHelpId( i_pPanel->GetHelpID() );
+        pDrawer->SetHelpId( i_pPanel->GetHelpID() );
         // proper Z-Order
         if ( i_nPosition == 0 )
         {

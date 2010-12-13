@@ -169,10 +169,6 @@ main( int argc, char* argv[])
 	FILE *pFile;
 
 	pOutput = GetOutputFile( argc, argv );
-	if( !isQuiet() ){
-        fprintf( stdout, "\nCfgEx 0.9 Copyright 2000, 2010 Oracle and/or its affiliates. All Rights Reserved.\n" );
-	    fprintf( stdout, "===================================================================================\n" );
-    }
 
     if ( !pOutput ) {
 		fprintf( stdout, "Syntax: CFGEX[-p Prj][-r PrjRoot]-i FileIn [-o FileOut][-m DataBase][-e][-b][-u][-f][-d DoneFile][-g[:dtd] ][-L l1,l2,...]\n" );
@@ -181,7 +177,6 @@ main( int argc, char* argv[])
 		fprintf( stdout, " FileIn:   Source files (*.src)\n" );
 		fprintf( stdout, " FileOut:  Destination file (*.*)\n" );
 		fprintf( stdout, " DataBase: Mergedata (*.sdf)\n" );
-		fprintf( stdout, " -QQ: quiet output\n" );
         fprintf( stdout, " -e: Disable writing errorlog\n" );
 		fprintf( stdout, " -b: Break when Token \"HelpText\" found in source\n" );
 		fprintf( stdout, " -u: [english] and [german] are allowed, Id is Taken from DataBase \n" );
@@ -213,20 +208,10 @@ main( int argc, char* argv[])
 	nRetValue = GetError();
 	EndCfgExport();
 
-	if( !isQuiet() ){
-        fprintf( stdout, "\n===================================\n\n" );
-    }
     
     removeTempFile();
 /* return error level */
 	return nRetValue;
 }
 
-/*"<!--"[^"-->"]*"-->" {
-	bText = 0;
-	WorkOnTokenSet( COMMEND, yytext );
-}*/
-/*"<!"[^\-].*\>	{
-	bText = 0;
-	WorkOnTokenSet( CFG_TAG, yytext );
-}*/
+

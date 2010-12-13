@@ -36,12 +36,16 @@ public class MasterPasswdHandler extends WeakBase
                     XInteractionSupplyAuthentication xAuthentication = null;
 
                     for( int i = 0; i < xContinuations.length; ++i ) {
-                        xAuthentication = (XInteractionSupplyAuthentication)UnoRuntime.queryInterface( XInteractionSupplyAuthentication.class, xContinuations[i]);
+                        xAuthentication = UnoRuntime.queryInterface(XInteractionSupplyAuthentication.class, xContinuations[i]);
                         if( xAuthentication != null )
+                        {
                             break;
+                        }
                     }
                     if( xAuthentication.canSetPassword() )
-                        xAuthentication.setPassword( "abcdefghijklmnopqrstuvwxyz123456" );
+                    {
+                        xAuthentication.setPassword("abcdefghijklmnopqrstuvwxyz123456");
+                    }
                     xAuthentication.select();
                 }
             } else {

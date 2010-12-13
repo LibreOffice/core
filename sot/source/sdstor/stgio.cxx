@@ -159,6 +159,7 @@ class EasyFat
 public:
     EasyFat( StgIo & rIo, StgStrm *pFatStream, INT32 nPSize );
     ~EasyFat() { delete[] pFat; delete[] pFree; }
+
     INT32 GetPageSize() { return nPageSize; }
     INT32 Count() { return nPages; }
     INT32 operator[]( INT32 nOffset ) { return pFat[ nOffset ]; }
@@ -385,5 +386,3 @@ ULONG StgIo::ValidateFATs()
 //  DBG_ERROR("Validiere nicht (kein FileStorage)");
     return FAT_OK;
 }
-
-

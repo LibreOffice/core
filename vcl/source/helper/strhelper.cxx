@@ -365,8 +365,8 @@ String WhitespaceToSpace( const String& rLine, BOOL bProtect )
             else
             {
                 *pLeap = *pRun;
-                *pLeap++;
-                *pRun++;
+                ++pLeap;
+                ++pRun;
             }
         }
     }
@@ -422,8 +422,8 @@ ByteString WhitespaceToSpace( const ByteString& rLine, BOOL bProtect )
             else
             {
                 *pLeap = *pRun;
-                *pLeap++;
-                *pRun++;
+                ++pLeap;
+                ++pRun;
             }
         }
     }

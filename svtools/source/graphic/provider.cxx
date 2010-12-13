@@ -231,19 +231,19 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
     if( ( 0 == rResourceURL.getToken( 0, '/', nIndex ).compareToAscii( "private:standardimage" ) ) )
     {
         rtl::OUString sImageName( rResourceURL.copy( nIndex ) );
-        if ( sImageName.compareToAscii( "info" ) )
+        if ( sImageName.equalsAscii( "info" ) )
         {
             xRet = InfoBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.compareToAscii( "warning" ) )
+        else if ( sImageName.equalsAscii( "warning" ) )
         {
             xRet = WarningBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.compareToAscii( "error" ) )
+        else if ( sImageName.equalsAscii( "error" ) )
         {
             xRet = ErrorBox::GetStandardImage().GetXGraphic();
         }
-        else if ( sImageName.compareToAscii( "query" ) )
+        else if ( sImageName.equalsAscii( "query" ) )
         {
             xRet = QueryBox::GetStandardImage().GetXGraphic();
         }

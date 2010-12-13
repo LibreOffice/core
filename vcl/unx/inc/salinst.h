@@ -39,11 +39,11 @@
 #include <vcl/dllapi.h>
 #include <vcl/salinst.hxx>
 
-class VCL_DLLPUBLIC SalYieldMutex : public NAMESPACE_VOS(OMutex)
+class VCL_DLLPUBLIC SalYieldMutex : public vos::OMutex
 {
 protected:
     ULONG                                       mnCount;
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   mnThreadId;
+    vos::OThread::TThreadIdentifier mnThreadId;
 
 public:
                                                 SalYieldMutex();
@@ -53,7 +53,7 @@ public:
     virtual sal_Bool                            tryToAcquire();
 
     ULONG                                       GetAcquireCount() const { return mnCount; }
-    NAMESPACE_VOS(OThread)::TThreadIdentifier   GetThreadId() const { return mnThreadId; }
+    vos::OThread::TThreadIdentifier GetThreadId() const { return mnThreadId; }
 };
 
 // -=-= SalInstanceData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -102,13 +102,10 @@ public:
     virtual vos::IMutex*        GetYieldMutex();
     virtual ULONG               ReleaseYieldMutex();
     virtual void                AcquireYieldMutex( ULONG nCount );
+    virtual bool                CheckYieldMutex();
 
     virtual void                Yield( bool bWait, bool bHandleAllCurrentEvents );
     virtual bool                AnyInput( USHORT nType );
-    virtual SalMenu*        CreateMenu( BOOL bMenuBar );
-    virtual void            DestroyMenu( SalMenu* pMenu);
-    virtual SalMenuItem*    CreateMenuItem( const SalItemParams* pItemData );
-    virtual void            DestroyMenuItem( SalMenuItem* pItem );
 
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
     void                    FillFontPathList( std::list< rtl::OString >& o_rFontPaths );

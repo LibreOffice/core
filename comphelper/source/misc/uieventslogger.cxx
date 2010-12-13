@@ -175,6 +175,7 @@ namespace comphelper
             static const OUString FN_ROTATEDLOG;
             static const OUString LOGROTATE_EVENTNAME;
             static const OUString URL_UNO;
+            static const OUString URL_SPECIAL;
             static const OUString URL_FILE;
     };
 }
@@ -209,6 +210,7 @@ namespace comphelper
     const OUString UiEventsLogger_Impl::LOGROTATE_EVENTNAME = OUString::createFromAscii("onOOoImprovementLogRotated");
 
     const OUString UiEventsLogger_Impl::URL_UNO = OUString::createFromAscii(".uno:");
+    const OUString UiEventsLogger_Impl::URL_SPECIAL = OUString::createFromAscii(".special:");
     const OUString UiEventsLogger_Impl::URL_FILE = OUString::createFromAscii("file:");
 
 
@@ -347,7 +349,12 @@ namespace comphelper
         const Sequence<PropertyValue>& args)
     {
         if(!m_Active) return;
-        if(!url.Complete.match(URL_UNO) && !url.Complete.match(URL_FILE)) return;
+        if(!url.Complete.match(URL_UNO)
+            && !url.Complete.match(URL_FILE)
+            && !url.Complete.match(URL_SPECIAL))
+        {
+            return;
+        }
         checkIdleTimeout();
 
         Sequence<OUString> logdata = Sequence<OUString>(COLUMNS);

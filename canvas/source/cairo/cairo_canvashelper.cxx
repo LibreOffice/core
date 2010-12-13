@@ -1395,6 +1395,7 @@ namespace cairocanvas
                 ::rtl::math::approxEqual( aMatrix.x0, 0 ) &&
                 ::rtl::math::approxEqual( aMatrix.y0, 0 ) )
                  cairo_set_operator( mpCairo.get(), CAIRO_OPERATOR_SOURCE );
+            cairo_pattern_set_extend( cairo_get_source(mpCairo.get()), CAIRO_EXTEND_PAD );
             cairo_rectangle( mpCairo.get(), 0, 0, aBitmapSize.Width, aBitmapSize.Height );
             cairo_clip( mpCairo.get() );
 

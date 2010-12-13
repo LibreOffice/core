@@ -1258,7 +1258,7 @@ enum RTF_TOKEN_IDS {
     RTF_SOUTLVL,
 
 // shapes
-    RTF_SHP, RTF_SN, RTF_SV
+    RTF_SHP, RTF_SN, RTF_SV, RTF_SP
 /*
     RTF_SHPLEFT,
     RTF_SHPTOP,

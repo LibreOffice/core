@@ -162,9 +162,11 @@ typedef sal_Int64 WinBits;
 // - Help-Types -
 // --------------
 
+#if 0
 // from vcl/inc/help.hxx
-#define OOO_HELP_INDEX          ((ULONG)0xFFFFFFFF)
-#define OOO_HELP_HELPONHELP     ((ULONG)0xFFFFFFFE)
+#define OOO_HELP_INDEX          ".help:index"
+#define OOO_HELP_HELPONHELP     ".help:helponhelp"
+#endif
 
 // --------------
 // - FieldTypes -

@@ -38,25 +38,23 @@ TARGET=edit
 # --- Files --------------------------------------------------------
 
 SLOFILES=   \
+            $(EXCEPTIONSFILES) \
             $(SLO)$/textdata.obj	\
-            $(SLO)$/textdoc.obj		\
-            $(SLO)$/texteng.obj		\
             $(SLO)$/textundo.obj	\
-            $(SLO)$/textview.obj	\
             $(SLO)$/txtattr.obj		\
             $(SLO)$/xtextedt.obj	\
             $(SLO)$/sychconv.obj	\
             $(SLO)$/svmedit.obj		\
             $(SLO)$/svmedit2.obj    \
-            $(SLO)$/textwindowpeer.obj	\
-            $(SLO)$/syntaxhighlight.obj \
         $(SLO)$/editsyntaxhighlighter.obj
 
 EXCEPTIONSFILES=	\
             $(SLO)$/textview.obj	\
             $(SLO)$/textdoc.obj     \
             $(SLO)$/texteng.obj     \
-            $(SLO)$/textwindowpeer.obj
+            $(SLO)$/textwindowpeer.obj \
+            $(SLO)$/syntaxhighlight.obj \
+
 
 # --- Targets ------------------------------------------------------
 

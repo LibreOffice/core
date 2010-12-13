@@ -52,7 +52,7 @@
 #include "xbmread.hxx"
 #include "xpmread.hxx"
 #include <svl/solar.hrc>
-#include "strings.hrc"
+#include <svtools/svtools.hrc>
 #include "sgffilt.hxx"
 #include "osl/module.hxx"
 #include <com/sun/star/uno/Reference.h>
@@ -79,7 +79,7 @@
 
 #define PMGCHUNG_msOG       0x6d734f47      // Microsoft Office Animated GIF
 
-#if defined WIN || (defined OS2 && !defined ICC)
+#if (defined OS2 && !defined ICC)
 
 #define IMPORT_FUNCTION_NAME    "_GraphicImport"
 #define EXPORT_FUNCTION_NAME    "_GraphicExport"
@@ -552,16 +552,48 @@ static BOOL ImpPeekGraphicFormat( SvStream& rStream, String& rFormatExtension, B
     if( !bTest || ( rFormatExtension.CompareToAscii( "PCT", 3 ) == COMPARE_EQUAL ) )
     {
         bSomethingTested = TRUE;
-        BYTE sBuf[4];
+        BYTE sBuf[3];
+        // store number format
+        sal_uInt16 oldNumberFormat = rStream.GetNumberFormatInt();
         sal_uInt32 nOffset; // in ms documents the pict format is used without the first 512 bytes
-        for ( nOffset = 10; ( nOffset <= 522 ) && ( ( nStreamPos + nOffset + 3 ) <= nStreamLen ); nOffset += 512 )
+        for ( nOffset = 0; ( nOffset <= 512 ) && ( ( nStreamPos + nOffset + 14 ) <= nStreamLen ); nOffset += 512 )
         {
-            rStream.Seek( nStreamPos + nOffset );
+            short y1,x1,y2,x2;
+            bool bdBoxOk = true;
+
+            rStream.Seek( nStreamPos + nOffset);
+            // size of the pict in version 1 pict ( 2bytes) : ignored
+            rStream.SeekRel(2);
+            // bounding box (bytes 2 -> 9)
+            rStream.SetNumberFormatInt(NUMBERFORMAT_INT_BIGENDIAN);
+            rStream >> y1 >> x1 >> y2 >> x2;
+            rStream.SetNumberFormatInt(oldNumberFormat); // reset format
+
+            if (x1 > x2 || y1 > y2 || // bad bdbox
+                (x1 == x2 && y1 == y2) || // 1 pixel picture
+                x2-x1 > 2048 || y2-y1 > 2048 ) // picture anormaly big
+              bdBoxOk = false;
+
+            // read version op
             rStream.Read( sBuf,3 );
-            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && ( sBuf[ 2 ] == 0x01 || sBuf[ 2 ] == 0x02 ) )
+            // see http://developer.apple.com/legacy/mac/library/documentation/mac/pdf/Imaging_With_QuickDraw/Appendix_A.pdf
+            // normal version 2 - page A23 and A24
+            if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x02)
             {
-                rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
-                return TRUE;
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
+            }
+            // normal version 1 - page A25
+            else if (sBuf[ 0 ] == 0x11 && sBuf[ 1 ] == 0x01 && bdBoxOk) {
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
+            }
+            // previous code kept in order to do not break any compatibility
+            // probably eroneous
+            else if ( sBuf[ 0 ] == 0x00 && sBuf[ 1 ] == 0x11 && sBuf[ 2 ] == 0x01 && bdBoxOk)
+            {
+              rFormatExtension = UniString::CreateFromAscii( "PCT", 3 );
+              return TRUE;
             }
         }
     }
@@ -752,7 +784,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
     {
-        sal_Int32 nMode = rConfigItem.ReadInt32( String( ResId( KEY_MODE, *pResMgr ) ), -1 );
+        sal_Int32 nMode = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ExportMode" ) ), -1 );
 
         if ( nMode == -1 )  // the property is not there, this is possible, if the graphic filter
         {                   // is called via UnoGraphicExporter and not from a graphic export Dialog
@@ -782,7 +814,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
                 Bitmap      aBitmap( rGraphic.GetBitmap() );
                 MapMode     aMap( MAP_100TH_INCH );
 
-                sal_Int32   nDPI = rConfigItem.ReadInt32( String( ResId( KEY_RES, *pResMgr ) ), 75 );
+                sal_Int32   nDPI = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Resolution" ) ), 75 );
                 Fraction    aFrac( 1, Min( Max( nDPI, sal_Int32( 75 ) ), sal_Int32( 600 ) ) );
 
                 aMap.SetScaleX( aFrac );
@@ -806,7 +838,7 @@ static Graphic ImpGetScaledGraphic( const Graphic& rGraphic, FilterConfigItem& r
             else
                 aGraphic = rGraphic;
 
-            sal_Int32 nColors = rConfigItem.ReadInt32( String( ResId( KEY_COLORS, *pResMgr ) ), 0 ); // #92767#
+            sal_Int32 nColors = rConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Color" ) ), 0 ); // #92767#
             if ( nColors )  // graphic conversion necessary ?
             {
                 BitmapEx aBmpEx( aGraphic.GetBitmapEx() );
@@ -1771,7 +1803,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
                         aBmp = aGraphic.GetBitmap();
                 }
                 ResMgr*     pResMgr = CREATERESMGR( svt );
-                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( ResId( KEY_RLE_CODING, *pResMgr ) ), sal_True );
+                sal_Bool    bRleCoding = aConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "RLE_Coding" ) ), sal_True );
                 // Wollen wir RLE-Kodiert speichern?
                 aBmp.Write( rOStm, bRleCoding );
                 delete pResMgr;

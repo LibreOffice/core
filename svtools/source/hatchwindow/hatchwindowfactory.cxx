@@ -112,45 +112,6 @@ SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment (
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
-SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo (
-    void * /* pServiceManager */, void * pRegistryKey)
-{
-    if (pRegistryKey)
-    {
-        uno::Reference< registry::XRegistryKey> xRegistryKey (
-            reinterpret_cast< registry::XRegistryKey* >(pRegistryKey));
-        uno::Reference< registry::XRegistryKey> xNewKey;
-
-        // OHatchWindowFactory registration
-
-        xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-            OHatchWindowFactory::impl_staticGetImplementationName() +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        uno::Sequence< ::rtl::OUString > aServices =
-            OHatchWindowFactory::impl_staticGetSupportedServiceNames();
-        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-
-        // ODocumentCloser registration
-
-        xNewKey = xRegistryKey->createKey (
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) +
-            ODocumentCloser::impl_staticGetImplementationName() +
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "/UNO/SERVICES") ) );
-
-        aServices = ODocumentCloser::impl_staticGetSupportedServiceNames();
-        for (sal_Int32 i = 0, n = aServices.getLength(); i < n; i++ )
-            xNewKey->createKey( aServices.getConstArray()[i] );
-
-
-        return sal_True;
-    }
-    return sal_False;
-}
-
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory (
     const sal_Char * pImplementationName, void * pServiceManager, void * /* pRegistryKey */)
 {

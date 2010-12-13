@@ -11,4 +11,12 @@ ti	toolkit\source\controls\grid			nmake	-	all	ti_grid  NULL
 ti	toolkit\source\layout\core			nmake	-	all	ti_layout_core  NULL
 ti	toolkit\source\layout\vcl			nmake	-	all	ti_layout_vcl  NULL
 ti	toolkit\util							nmake	-	all	ti_util ti_awt ti_controls ti_layout_core ti_helper ti_tree ti_grid ti_layout_vcl NULL
-ti toolkit\qa\unoapi nmake - all ti_qa_unoapi NULL
+
+ti      toolkit\qa\unoapi nmake - all ti_qa_unoapi NULL
+
+
+# fail on unxsoli4
+#ti      toolkit\qa\complex\xunitconversion nmake - all ti_complex_conv ti_util NULL
+
+# fails
+# ti      toolkit\qa\complex\toolkit                   nmake - all ti_complex_ti ti_qa_complex_toolkit_interface_tests ti_util NULL

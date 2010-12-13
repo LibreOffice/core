@@ -169,20 +169,27 @@ IMPL_LINK( MenuButton, ImplMenuTimeoutHdl, Timer*, EMPTYARG )
 
 void MenuButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
+    bool bExecute = true;
     if ( mnMenuMode & MENUBUTTON_MENUMODE_TIMED )
     {
-        if ( !mpMenuTimer )
+        // if the separated dropdown symbol is hit,
+        // execute the popup immediately
+        if( ! ImplGetSymbolRect().IsInside( rMEvt.GetPosPixel() ) )
         {
-            mpMenuTimer = new Timer;
-            mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
+            if ( !mpMenuTimer )
+            {
+                mpMenuTimer = new Timer;
+                mpMenuTimer->SetTimeoutHdl( LINK( this, MenuButton, ImplMenuTimeoutHdl ) );
+            }
+
+            mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
+            mpMenuTimer->Start();
+
+            PushButton::MouseButtonDown( rMEvt );
+            bExecute = false;
         }
-
-        mpMenuTimer->SetTimeout( GetSettings().GetMouseSettings().GetActionDelay() );
-        mpMenuTimer->Start();
-
-        PushButton::MouseButtonDown( rMEvt );
     }
-    else
+    if( bExecute )
     {
         if ( PushButton::ImplHitTestPushButton( this, rMEvt.GetPosPixel() ) )
         {

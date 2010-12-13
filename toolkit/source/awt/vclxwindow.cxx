@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_toolkit.hxx"
+
 #include <com/sun/star/awt/WindowEvent.hpp>
 #include <com/sun/star/awt/KeyEvent.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -41,6 +42,7 @@
 #include <com/sun/star/awt/EndPopupModeEvent.hpp>
 #include <com/sun/star/awt/XWindowListener2.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <toolkit/awt/vclxpointer.hxx>
@@ -64,7 +66,8 @@
 #include <vcl/button.hxx>
 #include <comphelper/asyncnotification.hxx>
 #include <toolkit/helper/solarrelease.hxx>
-
+#include "stylesettings.hxx"
+#include <tools/urlobj.hxx>
 #include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 #include <boost/bind.hpp>
@@ -73,10 +76,13 @@ using namespace ::com::sun::star;
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::uno::RuntimeException;
 using ::com::sun::star::lang::EventObject;
 using ::com::sun::star::awt::XWindowListener2;
 using ::com::sun::star::awt::XDockableWindowListener;
 using ::com::sun::star::awt::XDevice;
+using ::com::sun::star::awt::XStyleSettings;
+using ::com::sun::star::lang::DisposedException;
 using ::com::sun::star::style::VerticalAlignment;
 using ::com::sun::star::style::VerticalAlignment_TOP;
 using ::com::sun::star::style::VerticalAlignment_MIDDLE;
@@ -86,6 +92,7 @@ using ::com::sun::star::style::VerticalAlignment_MAKE_FIXED_SIZE;
 namespace WritingMode2 = ::com::sun::star::text::WritingMode2;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
+using ::toolkit::ReleaseSolarMutex;
 
 //====================================================================
 //= misc helpers
@@ -164,6 +171,8 @@ public:
                                         mxAccessibleContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >
                                         mxViewGraphics;
+    ::com::sun::star::uno::Reference< ::com::sun::star::awt::XStyleSettings >
+                                        mxWindowStyleSettings;
 
 public:
     bool&   getDrawingOntoParent_ref()  { return mbDrawingOntoParent; }
@@ -198,6 +207,8 @@ public:
         return maAccFactory;
     }
 
+    Reference< XStyleSettings > getStyleSettings();
+
     /** returns the container of registered XWindowListener2 listeners
     */
     inline ::cppu::OInterfaceContainerHelper&   getWindow2Listeners()       { return maWindow2Listeners; }
@@ -220,17 +231,6 @@ protected:
 
 private:
     DECL_LINK( OnProcessCallbacks, void* );
-
-private:
-private:
-    /** determines whether the instance is already disposed
-        @precond
-            m_aMutex must be acquired
-    */
-    inline bool impl_isDisposed()
-    {
-        return mbDisposed;
-    }
 
 private:
     VCLXWindowImpl();                                   // never implemented
@@ -298,6 +298,10 @@ void VCLXWindowImpl::disposing()
     maContainerListeners.disposeAndClear( aEvent );
     maTopWindowListeners.disposeAndClear( aEvent );
 
+    ::toolkit::WindowStyleSettings* pStyleSettings = static_cast< ::toolkit::WindowStyleSettings* >( mxWindowStyleSettings.get() );
+    if ( pStyleSettings != NULL )
+        pStyleSettings->dispose();
+    mxWindowStyleSettings.clear();
 }
 
 //--------------------------------------------------------------------
@@ -336,7 +340,7 @@ IMPL_LINK( VCLXWindowImpl, OnProcessCallbacks, void*, EMPTYARG )
     }
 
     {
-        ::toolkit::ReleaseSolarMutex aReleaseSolar;
+        ReleaseSolarMutex aReleaseSolar( ReleaseSolarMutex::RescheduleDuringAcquire );
         for (   CallbackArray::const_iterator loop = aCallbacksCopy.begin();
                 loop != aCallbacksCopy.end();
                 ++loop
@@ -359,6 +363,17 @@ void SAL_CALL VCLXWindowImpl::acquire()
 void SAL_CALL VCLXWindowImpl::release()
 {
     mrAntiImpl.release();
+}
+
+//--------------------------------------------------------------------
+Reference< XStyleSettings > VCLXWindowImpl::getStyleSettings()
+{
+    ::vos::OGuard  aGuard( mrMutex );
+    if ( mbDisposed )
+        throw DisposedException( ::rtl::OUString(), mrAntiImpl );
+    if ( !mxWindowStyleSettings.is() )
+        mxWindowStyleSettings = new ::toolkit::WindowStyleSettings( mrMutex, maListenerContainerMutex, mrAntiImpl );
+    return mxWindowStyleSettings;
 }
 
 //====================================================================
@@ -1585,17 +1600,11 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             ::rtl::OUString aURL;
             if ( Value >>= aURL )
             {
-                String aHelpURL(  aURL );
-                String aPattern( RTL_CONSTASCII_USTRINGPARAM( "HID:" ) );
-                if ( aHelpURL.CompareIgnoreCaseToAscii( aPattern, aPattern.Len() ) == COMPARE_EQUAL )
-                {
-                    String aID = aHelpURL.Copy( aPattern.Len() );
-                    pWindow->SetHelpId( aID.ToInt32() );
-                }
+                INetURLObject aHelpURL( aURL );
+                if ( aHelpURL.GetProtocol() == INET_PROT_HID )
+                    pWindow->SetHelpId( rtl::OUStringToOString( aHelpURL.GetURLPath(), RTL_TEXTENCODING_UTF8 ) );
                 else
-                {
-                    pWindow->SetSmartHelpId( SmartId( aHelpURL ) );
-                }
+                    pWindow->SetHelpId( rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ) );
             }
         }
         break;
@@ -2066,19 +2075,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_HELPURL:
             {
-                SmartId aSmartId = GetWindow()->GetSmartHelpId();
-                if( aSmartId.HasString() )
-                {
-                    String aStrHelpId = aSmartId.GetStr();
-                    aProp <<= ::rtl::OUString( aStrHelpId );
-                }
-                else
-                {
-                    ::rtl::OUStringBuffer aURL;
-                    aURL.appendAscii( "HID:" );
-                    aURL.append( (sal_Int32) GetWindow()->GetHelpId() );
-                    aProp <<= aURL.makeStringAndClear();
-                }
+                rtl::OUString aHelpId( rtl::OStringToOUString( GetWindow()->GetHelpId(), RTL_TEXTENCODING_UTF8 ) );
+                aProp <<= ::rtl::OUString( aHelpId );
             }
             break;
             case BASEPROPERTY_FONTDESCRIPTOR:
@@ -2650,4 +2648,9 @@ VCLXWindow::getPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun:
 VCLXWindow::hasPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun::star::uno::RuntimeException)
 {
     return GetPropHelper()->hasPropertyByName( rName );
+}
+
+Reference< XStyleSettings > SAL_CALL VCLXWindow::getStyleSettings() throw (RuntimeException)
+{
+    return mpImpl->getStyleSettings();
 }

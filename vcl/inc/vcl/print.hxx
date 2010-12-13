@@ -400,7 +400,7 @@ protected:
     PrinterController( const boost::shared_ptr<Printer>& );
 public:
     enum NupOrderType
-    { LRTB, TBLR };
+    { LRTB, TBLR, TBRL, RLTB };
     struct MultiPageSetup
     {
         // all metrics in 100th mm
@@ -478,6 +478,7 @@ public:
     */
     void enableUIOption( const rtl::OUString& rPropName, bool bEnable );
     bool isUIOptionEnabled( const rtl::OUString& rPropName ) const;
+    bool isUIChoiceEnabled( const rtl::OUString& rPropName, sal_Int32 nChoice ) const;
     /* returns the property name rPropName depends on or an empty string
        if no dependency exists.
     */
@@ -513,20 +514,24 @@ public:
     bool isDirectPrint() const;
 
     // implementation details, not usable outside vcl
-    SAL_DLLPRIVATE int getFilteredPageCount();
+    // don't use outside vcl. Some of these ar exported for
+    // the benefit of vcl's plugins.
+    // Still: DO NOT USE OUTSIDE VCL
+    int getFilteredPageCount();
     SAL_DLLPRIVATE PageSize getPageFile( int i_inUnfilteredPage, GDIMetaFile& rMtf, bool i_bMayUseCache = false );
-    SAL_DLLPRIVATE PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
+    PageSize getFilteredPageFile( int i_nFilteredPage, GDIMetaFile& o_rMtf, bool i_bMayUseCache = false );
     SAL_DLLPRIVATE void printFilteredPage( int i_nPage );
     SAL_DLLPRIVATE void setPrinter( const boost::shared_ptr<Printer>& );
     SAL_DLLPRIVATE void setOptionChangeHdl( const Link& );
-    SAL_DLLPRIVATE void createProgressDialog();
+    void createProgressDialog();
+    bool isProgressCanceled() const;
     SAL_DLLPRIVATE void setMultipage( const MultiPageSetup& );
     SAL_DLLPRIVATE const MultiPageSetup& getMultipage() const;
-    SAL_DLLPRIVATE void setLastPage( sal_Bool i_bLastPage );
+    void setLastPage( sal_Bool i_bLastPage );
     SAL_DLLPRIVATE void setReversePrint( sal_Bool i_bReverse );
     SAL_DLLPRIVATE bool getReversePrint() const;
     SAL_DLLPRIVATE void pushPropertiesToPrinter();
-    SAL_DLLPRIVATE void setJobState( com::sun::star::view::PrintableState );
+    void setJobState( com::sun::star::view::PrintableState );
     SAL_DLLPRIVATE bool setupPrinter( Window* i_pDlgParent );
 
     SAL_DLLPRIVATE int getPageCountProtected() const;
@@ -649,6 +654,7 @@ class VCL_DLLPUBLIC PrinterOptionsHelper
                                                          const com::sun::star::uno::Sequence< rtl::OUString >& i_rChoices,
                                                          sal_Int32 i_nValue,
                                                          const rtl::OUString& i_rType = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Radio" ) ),
+                                                         const com::sun::star::uno::Sequence< sal_Bool >& i_rDisabledChoices = com::sun::star::uno::Sequence< sal_Bool >(),
                                                          const UIControlOptions& i_rControlOptions = UIControlOptions()
                                                          );
 

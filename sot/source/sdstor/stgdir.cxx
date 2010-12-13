@@ -936,8 +936,11 @@ BOOL StgDirStrm::Store()
 
 void* StgDirStrm::GetEntry( INT32 n, BOOL bDirty )
 {
+    if( n < 0 )
+        return NULL;
+
     n *= STGENTRY_SIZE;
-    if( n >= nSize )
+    if( n < 0 && n >= nSize )
         return NULL;
     return GetPtr( n, TRUE, bDirty );
 }

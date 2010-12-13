@@ -317,7 +317,7 @@ BOOL WinSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
  */
 BOOL WinSalGraphics::hitTestNativeControl( ControlType,
                               ControlPart,
-                              const Region&,
+                              const Rectangle&,
                               const Point&,
                               BOOL& )
 {
@@ -553,9 +553,9 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
     }
     if( nType == CTRL_SPINBUTTONS && nPart == PART_ALL_BUTTONS )
     {
-        SpinbuttonValue *pValue = (SpinbuttonValue*) aValue.getOptionalVal();
-        if( pValue )
+        if( aValue.getType() == CTRL_SPINBUTTONS )
         {
+            const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue*>(&aValue);
             BOOL bOk = FALSE;
 
             RECT rect;
@@ -578,9 +578,9 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         //rc.bottom--;
         if( nPart == PART_ALL_BUTTONS )
         {
-            SpinbuttonValue *pValue = (SpinbuttonValue*) aValue.getOptionalVal();
-            if( pValue )
+            if( aValue.getType() == CTRL_SPINBUTTONS )
             {
+                const SpinbuttonValue *pValue = static_cast<const SpinbuttonValue*>(&aValue);
                 BOOL bOk = FALSE;
 
                 RECT rect;
@@ -787,20 +787,19 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         iPart = TABP_TABITEMLEFTEDGE;
         rc.bottom--;
 
-        TabitemValue *pValue = (TabitemValue*) aValue.getOptionalVal();
-        if( pValue )
+        OSL_ASSERT( aValue.getType() == CTRL_TAB_ITEM );
+
+        const TabitemValue *pValue = static_cast<const TabitemValue*>(&aValue);
+        if( pValue->isBothAligned() )
         {
-            if( pValue->isBothAligned() )
-            {
-                iPart = TABP_TABITEMLEFTEDGE;
-                rc.right--;
-            }
-            else if( pValue->isLeftAligned() )
-                iPart = TABP_TABITEMLEFTEDGE;
-            else if( pValue->isRightAligned() )
-                iPart = TABP_TABITEMRIGHTEDGE;
-            else iPart = TABP_TABITEM;
+            iPart = TABP_TABITEMLEFTEDGE;
+            rc.right--;
         }
+        else if( pValue->isLeftAligned() )
+            iPart = TABP_TABITEMLEFTEDGE;
+        else if( pValue->isRightAligned() )
+            iPart = TABP_TABITEMRIGHTEDGE;
+        else iPart = TABP_TABITEM;
 
         if( !(nState & CTRL_STATE_ENABLED) )
             iState = TILES_DISABLED;
@@ -856,9 +855,12 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         }
         else if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
         {
-            ToolbarValue *pValue = (ToolbarValue*) aValue.getOptionalVal();
-            if( pValue && pValue->mbIsTopDockingArea )
-                rc.top = 0; // extend potential gradient to cover menu bar as well
+            if( aValue.getType() == CTRL_TOOLBAR )
+            {
+                const ToolbarValue *pValue = static_cast<const ToolbarValue*>(&aValue);
+                if( pValue->mbIsTopDockingArea )
+                    rc.top = 0; // extend potential gradient to cover menu bar as well
+            }
             return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
         }
     }
@@ -868,9 +870,11 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         if( nPart != PART_ENTIRE_CONTROL )
             return FALSE;
 
-        MenubarValue *pValue = (MenubarValue*) aValue.getOptionalVal();
-        if( pValue )
+        if( aValue.getType() == CTRL_MENUBAR )
+        {
+            const MenubarValue *pValue = static_cast<const MenubarValue*>(&aValue);
             rc.bottom += pValue->maTopDockingAreaHeight;    // extend potential gradient to cover docking area as well
+        }
         return ImplDrawTheme( hTheme, hDC, iPart, iState, rc, aCaption);
     }
 
@@ -918,7 +922,8 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
         ImplDrawTheme( hTheme, hDC, iPart, iState, aTRect, aCaption );
 
         RECT aThumbRect;
-        SliderValue* pVal = (SliderValue*)aValue.getOptionalVal();
+        OSL_ASSERT( aValue.getType() == CTRL_SLIDER );
+        const SliderValue* pVal = static_cast<const SliderValue*>(&aValue);
         aThumbRect.left   = pVal->maThumbRect.Left();
         aThumbRect.top    = pVal->maThumbRect.Top();
         aThumbRect.right  = pVal->maThumbRect.Right();
@@ -963,7 +968,7 @@ BOOL ImplDrawNativeControl( HDC hDC, HTHEME hTheme, RECT rc,
  */
 BOOL WinSalGraphics::drawNativeControl( ControlType nType,
                             ControlPart nPart,
-                            const Region& rControlRegion,
+                            const Rectangle& rControlRegion,
                             ControlState nState,
                             const ImplControlValue& aValue,
                             const OUString& aCaption )
@@ -1043,7 +1048,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
     if( !hTheme )
         return false;
 
-    Rectangle buttonRect = rControlRegion.GetBoundRect();
+    Rectangle buttonRect = rControlRegion;
     RECT rc;
     rc.left   = buttonRect.Left();
     rc.right  = buttonRect.Right()+1;
@@ -1080,7 +1085,7 @@ BOOL WinSalGraphics::drawNativeControl( ControlType nType,
  */
 BOOL WinSalGraphics::drawNativeControlText( ControlType,
                                 ControlPart,
-                                const Region&,
+                                const Rectangle&,
                                 ControlState,
                                 const ImplControlValue&,
                                 const OUString& )
@@ -1104,12 +1109,12 @@ BOOL WinSalGraphics::drawNativeControlText( ControlType,
  */
 BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
                                 ControlPart nPart,
-                                const Region& rControlRegion,
+                                const Rectangle& rControlRegion,
                                 ControlState nState,
                                 const ImplControlValue& rControlValue,
                                 const OUString&,
-                                Region &rNativeBoundingRegion,
-                                Region &rNativeContentRegion )
+                                Rectangle &rNativeBoundingRegion,
+                                Rectangle &rNativeContentRegion )
 {
     BOOL bRet = FALSE;
 
@@ -1146,7 +1151,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             if( hTheme )
             {
                 Rectangle aRect( ImplGetThemeRect( hTheme, hDC, TP_SPLITBUTTONDROPDOWN,
-                    TS_HOT, rControlRegion.GetBoundRect() ) );
+                    TS_HOT, rControlRegion ) );
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
                 if( !rNativeContentRegion.IsEmpty() )
@@ -1160,7 +1165,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if( hTheme )
         {
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, PP_BAR,
-                0, rControlRegion.GetBoundRect() ) );
+                0, rControlRegion ) );
             rNativeContentRegion = aRect;
             rNativeBoundingRegion = rNativeContentRegion;
             if( !rNativeContentRegion.IsEmpty() )
@@ -1172,12 +1177,9 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         HTHEME hTheme = getThemeHandle( mhWnd, L"Combobox");
         if( hTheme )
         {
-            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aBoxRect( rControlRegion );
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, CP_DROPDOWNBUTTON,
                                                CBXS_NORMAL, aBoxRect ) );
-            Rectangle aBrdRect( ImplGetThemeRect( hTheme, hDC, CP_BORDER,
-                                                  CBB_HOT, aBoxRect ) );
-            aRect.Top() -= aBrdRect.GetHeight();
             if( aRect.GetHeight() > aBoxRect.GetHeight() )
                 aBoxRect.Bottom() = aBoxRect.Top() + aRect.GetHeight();
             if( aRect.GetWidth() > aBoxRect.GetWidth() )
@@ -1195,7 +1197,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
         if( hTheme )
         {
             // get borderr size
-            Rectangle aBoxRect( rControlRegion.GetBoundRect() );
+            Rectangle aBoxRect( rControlRegion );
             Rectangle aRect( ImplGetThemeRect( hTheme, hDC, EP_BACKGROUNDWITHBORDER,
                                                EBWBS_HOT, aBoxRect ) );
             // ad app font height
@@ -1234,7 +1236,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             if( nPart == PART_THUMB_HORZ )
             {
                 long nW = aThumbRect.GetWidth();
-                Rectangle aRect( rControlRegion.GetBoundRect() );
+                Rectangle aRect( rControlRegion );
                 aRect.Right() = aRect.Left() + nW - 1;
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
@@ -1242,7 +1244,7 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
             else
             {
                 long nH = aThumbRect.GetHeight();
-                Rectangle aRect( rControlRegion.GetBoundRect() );
+                Rectangle aRect( rControlRegion );
                 aRect.Bottom() = aRect.Top() + nH - 1;
                 rNativeContentRegion = aRect;
                 rNativeBoundingRegion = rNativeContentRegion;
@@ -1253,30 +1255,30 @@ BOOL WinSalGraphics::getNativeControlRegion(  ControlType nType,
 
     if ( ( nType == CTRL_TAB_ITEM ) && ( nPart == PART_ENTIRE_CONTROL ) )
     {
-        Rectangle aControlRect( rControlRegion.GetBoundRect() );
+        Rectangle aControlRect( rControlRegion );
         rNativeContentRegion = aControlRect;
 
         --aControlRect.Bottom();
 
-        TabitemValue *pValue = static_cast< TabitemValue* >( rControlValue.getOptionalVal() );
-        if ( pValue )
+        if( rControlValue.getType() == CTRL_TAB_ITEM )
         {
+            const TabitemValue *pValue = static_cast<const TabitemValue*>(&rControlValue);
             if ( pValue->isBothAligned() )
                 --aControlRect.Right();
-        }
 
-        if ( nState & CTRL_STATE_SELECTED )
-        {
-            aControlRect.Left() -= 2;
-            if ( pValue && !pValue->isBothAligned() )
+            if ( nState & CTRL_STATE_SELECTED )
             {
-                if ( pValue->isLeftAligned() || pValue->isNotAligned() )
-                    aControlRect.Right() += 2;
-                if ( pValue->isRightAligned() )
-                    aControlRect.Right() += 1;
+                aControlRect.Left() -= 2;
+                if ( pValue && !pValue->isBothAligned() )
+                {
+                    if ( pValue->isLeftAligned() || pValue->isNotAligned() )
+                        aControlRect.Right() += 2;
+                    if ( pValue->isRightAligned() )
+                        aControlRect.Right() += 1;
+                }
+                aControlRect.Top() -= 2;
+                aControlRect.Bottom() += 2;
             }
-            aControlRect.Top() -= 2;
-            aControlRect.Bottom() += 2;
         }
         rNativeBoundingRegion = aControlRect;
         bRet = TRUE;

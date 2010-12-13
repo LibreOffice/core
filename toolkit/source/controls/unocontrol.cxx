@@ -653,7 +653,7 @@ void UnoControl::ImplModelPropertiesChanged( const Sequence< PropertyChangeEvent
         // #82300# - 2000-12-21 - fs@openoffice.org
         if (bNeedNewPeer && xParent.is())
         {
-            NAMESPACE_VOS(OGuard) aVclGuard( Application::GetSolarMutex() );
+            vos::OGuard aVclGuard( Application::GetSolarMutex() );
                 // and now this is the final withdrawal:
                 // With 83561, I have no other idea than locking the SolarMutex here ....
                 // I really hate the fact that VCL is not theadsafe ....
@@ -1463,7 +1463,7 @@ sal_Bool UnoControl::supportsService( const ::rtl::OUString& rServiceName ) thro
 
     Sequence< ::rtl::OUString > aSNL = getSupportedServiceNames();
     const ::rtl::OUString* pArray = aSNL.getConstArray();
-    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray();
+    const ::rtl::OUString* pArrayEnd = aSNL.getConstArray() + aSNL.getLength();
     for (; pArray != pArrayEnd; ++pArray )
         if( *pArray == rServiceName )
             break;
@@ -1587,3 +1587,15 @@ awt::Size SAL_CALL UnoControl::convertSizeToPixel( const awt::Size& i_Size, ::sa
     return awt::Size( );
 }
 
+//----------------------------------------------------------------------------------------------------------------------
+uno::Reference< awt::XStyleSettings > SAL_CALL UnoControl::getStyleSettings() throw (RuntimeException)
+{
+    Reference< awt::XStyleSettingsSupplier > xPeerSupplier;
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xPeerSupplier = xPeerSupplier.query( getPeer() );
+    }
+    if ( xPeerSupplier.is() )
+        return xPeerSupplier->getStyleSettings();
+    return NULL;
+}

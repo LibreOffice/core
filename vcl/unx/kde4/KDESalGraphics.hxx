@@ -58,12 +58,12 @@ class KDESalGraphics : public X11SalGraphics
             type/part combination.
         */
         virtual BOOL hitTestNativeControl( ControlType type, ControlPart part,
-                                        const Region& rControlRegion, const Point& aPos,
+                                        const Rectangle& rControlRegion, const Point& aPos,
                                         BOOL& rIsInside );
         /** Draw the requested control described by part/nControlState.
 
             @param rControlRegion
-            The bounding region of the complete control in VCL frame coordinates.
+            The bounding Rectangle of the complete control in VCL frame coordinates.
 
             @param aValue
             An optional value (tristate/numerical/string).
@@ -72,7 +72,7 @@ class KDESalGraphics : public X11SalGraphics
             A caption or title string (like button text etc.)
         */
         virtual BOOL drawNativeControl( ControlType type, ControlPart part,
-                                        const Region& rControlRegion, ControlState nControlState,
+                                        const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& aValue,
                                         const rtl::OUString& aCaption );
 
@@ -85,7 +85,7 @@ class KDESalGraphics : public X11SalGraphics
             @param aCaption A caption or title string (like button text etc.)
         */
         virtual BOOL drawNativeControlText( ControlType, ControlPart,
-                                            const Region&, ControlState,
+                                            const Rectangle&, ControlState,
                                             const ImplControlValue&,
                                             const rtl::OUString& ) { return false; }
         /** Check if the bounding regions match.
@@ -106,8 +106,8 @@ class KDESalGraphics : public X11SalGraphics
             A caption or title string (like button text etc.)
         */
         virtual BOOL getNativeControlRegion( ControlType type, ControlPart part,
-                                            const Region& rControlRegion, ControlState nControlState,
+                                            const Rectangle& rControlRegion, ControlState nControlState,
                                             const ImplControlValue& aValue,
                                             const rtl::OUString& aCaption,
-                                            Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+                                            Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 };

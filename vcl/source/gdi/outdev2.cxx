@@ -1614,6 +1614,18 @@ void OutputDevice::DrawPixel( const Polygon& rPts, const Color& rColor )
 
 // ------------------------------------------------------------------------
 
+namespace
+{
+    BYTE lcl_calcColor( const BYTE nSourceColor, const BYTE nSourceOpaq, const BYTE nDestColor )
+    {
+        int c = ( (int)nDestColor * ( 255 - nSourceOpaq ) )
+            +     (int)nSourceOpaq * (int)nSourceColor;
+        return BYTE( c / 255 );
+    }
+}
+
+// ------------------------------------------------------------------------
+
 Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
                                          BitmapReadAccess*   pP,
                                          BitmapReadAccess*   pA,
@@ -1626,7 +1638,6 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
                                          const long*         pMapY )
 {
     BitmapColor aDstCol,aSrcCol;
-    BYTE        nSrcAlpha, nDstAlpha;
     Bitmap      res;
     int         nX, nOutX, nY, nOutY;
 
@@ -1660,36 +1671,23 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
                     aDstCol = pB->GetColor( nY, nX );
-                    nSrcAlpha  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
-                    nDstAlpha  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+                    const BYTE nSrcOpaq = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
+                    const BYTE nDstOpaq  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
 
-                    if( nSrcAlpha + nDstAlpha == 0 )
-                    {
-                        // #i70653# zero alpha -> zero color values
-                        aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] +
-                                                  nVCLGLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] +
-                                                  nVCLBLut[ ( nVCLLut[ 0 ] + nD ) >> 16UL ] ) );
-                    }
-                    else
-                    {
-                        aDstCol.SetRed( (BYTE)(((int)(aSrcCol.GetRed())*nSrcAlpha + (int)(aDstCol.GetRed())*nDstAlpha) /
-                                               (nSrcAlpha+nDstAlpha)) );
-                        aDstCol.SetGreen( (BYTE)(((int)(aSrcCol.GetGreen())*nSrcAlpha + (int)(aDstCol.GetGreen())*nDstAlpha) /
-                                                 (nSrcAlpha+nDstAlpha)) );
-                        aDstCol.SetBlue( (BYTE)(((int)(aSrcCol.GetBlue())*nSrcAlpha + (int)(aDstCol.GetBlue())*nDstAlpha) /
-                                                (nSrcAlpha+nDstAlpha)) );
+                    aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcOpaq, aDstCol.GetRed() ) );
+                    aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcOpaq, aDstCol.GetBlue() ) );
+                    aDstCol.SetGreen( lcl_calcColor( aSrcCol.GetGreen(), nSrcOpaq, aDstCol.GetGreen() ) );
 
-                        aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
-                                                  nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
-                                                  nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
-                    }
+                    aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ aDstCol.GetRed() ] + nD ) >> 16UL ] +
+                                              nVCLGLut[ ( nVCLLut[ aDstCol.GetGreen() ] + nD ) >> 16UL ] +
+                                              nVCLBLut[ ( nVCLLut[ aDstCol.GetBlue() ] + nD ) >> 16UL ] ) );
                     pW->SetPixel( nY, nX, aIndex );
 
                     // Have to perform the compositing 'algebra' in
                     // the inverse alpha space (with 255 meaning
                     // opaque), otherwise, transitivity is not
                     // achieved.
-                    nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstAlpha, nSrcAlpha );
+                    const BYTE nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstOpaq, nSrcOpaq );
 
                     aIndex.SetIndex( (BYTE) ( nVCLRLut[ ( nVCLLut[ nSrcAlpha ] + nD ) >> 16UL ] +
                                               nVCLGLut[ ( nVCLLut[ nSrcAlpha ] + nD ) >> 16UL ] +
@@ -1718,25 +1716,12 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
 
                     aSrcCol = pP->GetColor( nMapY, nMapX );
                     aDstCol = pB->GetColor( nY, nX );
-                    nSrcAlpha  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
-                    nDstAlpha  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
+                    const BYTE nSrcOpaq  = 255 - pA->GetPixel( nMapY, nMapX ).GetBlueOrIndex();
+                    const BYTE nDstOpaq  = 255 - pAlphaW->GetPixel( nY, nX ).GetBlueOrIndex();
 
-                    if( nSrcAlpha + nDstAlpha == 0 )
-                    {
-                        // #i70653# zero alpha -> zero color values
-                        aDstCol.SetRed(0);
-                        aDstCol.SetGreen(0);
-                        aDstCol.SetBlue(0);
-                    }
-                    else
-                    {
-                        aDstCol.SetRed( (BYTE)(((int)(aSrcCol.GetRed())*nSrcAlpha + (int)(aDstCol.GetRed())*nDstAlpha) /
-                                               (nSrcAlpha+nDstAlpha)) );
-                        aDstCol.SetGreen( (BYTE)(((int)(aSrcCol.GetGreen())*nSrcAlpha + (int)(aDstCol.GetGreen())*nDstAlpha) /
-                                                 (nSrcAlpha+nDstAlpha)) );
-                        aDstCol.SetBlue( (BYTE)(((int)(aSrcCol.GetBlue())*nSrcAlpha + (int)(aDstCol.GetBlue())*nDstAlpha) /
-                                                (nSrcAlpha+nDstAlpha)) );
-                    }
+                    aDstCol.SetRed( lcl_calcColor( aSrcCol.GetRed(), nSrcOpaq, aDstCol.GetRed() ) );
+                    aDstCol.SetBlue( lcl_calcColor( aSrcCol.GetBlue(), nSrcOpaq, aDstCol.GetBlue() ) );
+                    aDstCol.SetGreen( lcl_calcColor( aSrcCol.GetGreen(), nSrcOpaq, aDstCol.GetGreen() ) );
 
                     pB->SetPixel( nY, nX, aDstCol );
 
@@ -1744,7 +1729,7 @@ Bitmap OutputDevice::ImplBlendWithAlpha( Bitmap              aBmp,
                     // the inverse alpha space (with 255 meaning
                     // opaque), otherwise, transitivity is not
                     // achieved.
-                    nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstAlpha, nSrcAlpha );
+                    const BYTE nSrcAlpha = 255-COLOR_CHANNEL_MERGE( 255, (BYTE)nDstOpaq, nSrcOpaq );
 
                     pAlphaW->SetPixel( nY, nX, Color(nSrcAlpha, nSrcAlpha, nSrcAlpha) );
                 }
@@ -2003,7 +1988,15 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             const long      nSrcWidth = aBmpRect.GetWidth(), nSrcHeight = aBmpRect.GetHeight();
             const long      nDstWidth = aDstRect.GetWidth(), nDstHeight = aDstRect.GetHeight();
             const long      nOutWidth = aOutSz.Width(), nOutHeight = aOutSz.Height();
-            const long      nOffX = aDstRect.Left() - aOutPt.X(), nOffY = aDstRect.Top() - aOutPt.Y();
+            // calculate offset in original bitmap
+            // in RTL case this is a little more complicated since the contents of the
+            // bitmap is not mirrored (it never is), however the paint region and bmp region
+            // are in mirrored coordinates, so the intersection of (aOutPt,aOutSz) with these
+            // is content wise somewhere else and needs to take mirroring into account
+            const long      nOffX = IsRTLEnabled()
+                                    ? aOutSz.Width() - aDstRect.GetWidth() - (aDstRect.Left() - aOutPt.X())
+                                    : aDstRect.Left() - aOutPt.X(),
+                            nOffY = aDstRect.Top() - aOutPt.Y();
             long            nX, nOutX, nY, nOutY;
             long            nMirrOffX = 0;
             long            nMirrOffY = 0;
@@ -2017,7 +2010,6 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
             for( nX = 0L, nOutX = nOffX; nX < nDstWidth; nX++, nOutX++ )
             {
                 pMapX[ nX ] = aBmpRect.Left() + nOutX * nSrcWidth / nOutWidth;
-
                 if( bHMirr )
                     pMapX[ nX ] = nMirrOffX - pMapX[ nX ];
             }

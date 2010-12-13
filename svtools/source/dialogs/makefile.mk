@@ -44,7 +44,6 @@ SRC1FILES=		filedlg2.src	\
                 prnsetup.src	\
                 printdlg.src	\
                 colrdlg.src		\
-                logindlg.src	\
                 addresstemplate.src	\
                 wizardmachine.src
 
@@ -69,8 +68,7 @@ SLOFILES=	\
                     $(SLO)$/colrdlg.obj 	\
                     $(SLO)$/property.obj	\
                     $(SLO)$/wizdlg.obj		\
-                    $(SLO)$/mcvmath.obj		\
-                    $(SLO)$/logindlg.obj
+                    $(SLO)$/mcvmath.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -35,7 +35,7 @@ using namespace vos;
 oslSignalAction vos::signalHandlerFunction_impl(
     void * pthis, oslSignalInfo * pInfo)
 {
-    NAMESPACE_VOS(OSignalHandler)* pThis= (NAMESPACE_VOS(OSignalHandler)*)pthis;
+    vos::OSignalHandler* pThis= (vos::OSignalHandler*)pthis;
 
     return ((oslSignalAction)pThis->signal(pInfo));
 }

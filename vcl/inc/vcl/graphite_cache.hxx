@@ -105,15 +105,16 @@ typedef std::pair<GraphiteRopeMap::iterator, GraphiteRopeMap::iterator> GrRMEntr
 */
 class GraphiteSegmentCache
 {
+public:
   enum {
     // not really sure what good values are here,
     // bucket size should be >> cache size
-    SEG_BUCKET_SIZE = 4096,
-    SEG_CACHE_SIZE = 255
+    SEG_BUCKET_FACTOR = 4,
+    SEG_DEFAULT_CACHE_SIZE = 2047
   };
-public:
-  GraphiteSegmentCache()
-    : m_segMap(SEG_BUCKET_SIZE),
+  GraphiteSegmentCache(sal_uInt32 nSegCacheSize)
+    : m_segMap(nSegCacheSize * SEG_BUCKET_FACTOR),
+    m_nSegCacheSize(nSegCacheSize),
     m_oldestKey(NULL) {};
   ~GraphiteSegmentCache()
   {
@@ -224,6 +225,7 @@ public:
 private:
   GraphiteSegMap m_segMap;
   GraphiteRopeMap m_ropeMap;
+  sal_uInt32 m_nSegCacheSize;
   const xub_Unicode * m_oldestKey;
   const xub_Unicode * m_prevKey;
 };
@@ -236,7 +238,24 @@ typedef std::hash_map<int, GraphiteSegmentCache *, std::hash<int> > GraphiteCach
 class GraphiteCacheHandler
 {
 public:
-  GraphiteCacheHandler() : m_cacheMap(255) {};
+  GraphiteCacheHandler() : m_cacheMap(255)
+  {
+    const char * pEnvCache = getenv( "SAL_GRAPHITE_CACHE_SIZE" );
+    if (pEnvCache != NULL)
+    {
+        int envCacheSize = atoi(pEnvCache);
+        if (envCacheSize <= 0)
+            m_nSegCacheSize = GraphiteSegmentCache::SEG_DEFAULT_CACHE_SIZE;
+        else
+        {
+            m_nSegCacheSize = envCacheSize;
+        }
+    }
+    else
+    {
+        m_nSegCacheSize = GraphiteSegmentCache::SEG_DEFAULT_CACHE_SIZE;
+    }
+  };
   ~GraphiteCacheHandler()
   {
     GraphiteCacheMap::iterator i = m_cacheMap.begin();
@@ -257,12 +276,13 @@ public:
     {
       return m_cacheMap.find(fontHash)->second;
     }
-    GraphiteSegmentCache *pCache = new GraphiteSegmentCache();
+    GraphiteSegmentCache *pCache = new GraphiteSegmentCache(m_nSegCacheSize);
     m_cacheMap[fontHash] = pCache;
     return pCache;
   }
 private:
   GraphiteCacheMap m_cacheMap;
+  sal_uInt32 m_nSegCacheSize;
 };
 
 #endif

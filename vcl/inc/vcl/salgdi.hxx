@@ -125,7 +125,7 @@ protected:
     virtual void        drawPolygon( ULONG nPoints, const SalPoint* pPtAry ) = 0;
     virtual void        drawPolyPolygon( sal_uInt32 nPoly, const sal_uInt32* pPoints, PCONSTSALPOINT* pPtAry ) = 0;
     virtual bool        drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency ) = 0;
-    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin ) = 0;
+    virtual bool        drawPolyLine( const ::basegfx::B2DPolygon&, double fTransparency, const ::basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin ) = 0;
     virtual sal_Bool    drawPolyLineBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry ) = 0;
     virtual sal_Bool    drawPolygonBezier( ULONG nPoints, const SalPoint* pPtAry, const BYTE* pFlgAry ) = 0;
     virtual sal_Bool    drawPolyPolygonBezier( sal_uInt32 nPoly, const sal_uInt32* pPoints, const SalPoint* const* pPtAry, const BYTE* const* pFlgAry ) = 0;
@@ -158,17 +158,17 @@ protected:
     virtual BOOL        drawEPS( long nX, long nY, long nWidth, long nHeight, void* pPtr, ULONG nSize ) = 0;
 
     // native widget rendering methods that require mirroring
-    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        hitTestNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                               const Point& aPos, BOOL& rIsInside );
-    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        drawNativeControl( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                            ControlState nState, const ImplControlValue& aValue,
                                            const rtl::OUString& aCaption );
-    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Region& rControlRegion,
+    virtual BOOL        drawNativeControlText( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion,
                                                ControlState nState, const ImplControlValue& aValue,
                                                const rtl::OUString& aCaption );
-    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Region& rControlRegion, ControlState nState,
+    virtual BOOL        getNativeControlRegion( ControlType nType, ControlPart nPart, const Rectangle& rControlRegion, ControlState nState,
                                                 const ImplControlValue& aValue, const rtl::OUString& aCaption,
-                                                Region &rNativeBoundingRegion, Region &rNativeContentRegion );
+                                                Rectangle &rNativeBoundingRegion, Rectangle &rNativeContentRegion );
 
     /** Render bitmap with alpha channel
 
@@ -233,13 +233,13 @@ public:
     // release the fonts
     void                   ReleaseFonts() { SetFont( NULL, 0 ); }
     // get the current font's metrics
-    virtual void            GetFontMetric( ImplFontMetricData* ) = 0;
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel = 0 ) = 0;
 
     // get kernign pairs of the current font
     // return only PairCount if (pKernPairs == NULL)
     virtual ULONG           GetKernPairs( ULONG nMaxPairCount, ImplKernPairData* ) = 0;
     // get the repertoire of the current font
-    virtual ImplFontCharMap* GetImplFontCharMap() const = 0;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const = 0;
     // graphics must fill supplied font list
     virtual void            GetDevFontList( ImplDevFontList* ) = 0;
     // graphics should call ImplAddDevFontSubstitute on supplied
@@ -373,7 +373,7 @@ public:
                                              PCONSTSALPOINT* pPtAry,
                                              const OutputDevice *pOutDev );
     bool                    DrawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency, const OutputDevice* );
-    bool                    DrawPolyLine( const basegfx::B2DPolygon&, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin, const OutputDevice* );
+    bool                    DrawPolyLine( const basegfx::B2DPolygon&, double fTransparency, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin, const OutputDevice* );
     sal_Bool                DrawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry,
@@ -440,7 +440,7 @@ public:
     // Query the native control to determine if it was acted upon
     BOOL HitTestNativeControl( ControlType nType,
                                       ControlPart nPart,
-                                      const Region& rControlRegion,
+                                      const Rectangle& rControlRegion,
                                       const Point& aPos,
                                       BOOL& rIsInside,
                                       const OutputDevice *pOutDev );
@@ -448,7 +448,7 @@ public:
     // Request rendering of a particular control and/or part
     BOOL DrawNativeControl( ControlType nType,
                                     ControlPart nPart,
-                                    const Region& rControlRegion,
+                                    const Rectangle& rControlRegion,
                                     ControlState nState,
                                     const ImplControlValue& aValue,
                                     const rtl::OUString& aCaption,
@@ -457,7 +457,7 @@ public:
     // Request rendering of a caption string for a control
     BOOL DrawNativeControlText( ControlType nType,
                                         ControlPart nPart,
-                                        const Region& rControlRegion,
+                                        const Rectangle& rControlRegion,
                                         ControlState nState,
                                         const ImplControlValue& aValue,
                                         const rtl::OUString& aCaption,
@@ -466,12 +466,12 @@ public:
     // Query the native control's actual drawing region (including adornment)
     BOOL GetNativeControlRegion( ControlType nType,
                                          ControlPart nPart,
-                                         const Region& rControlRegion,
+                                         const Rectangle& rControlRegion,
                                          ControlState nState,
                                          const ImplControlValue& aValue,
                                          const rtl::OUString& aCaption,
-                                         Region &rNativeBoundingRegion,
-                                         Region &rNativeContentRegion,
+                                         Rectangle &rNativeBoundingRegion,
+                                         Rectangle &rNativeContentRegion,
                                          const OutputDevice *pOutDev );
 
     static void AddDevFontSubstitute( OutputDevice* pOutDev,

@@ -102,9 +102,9 @@ public:
 
     virtual void            SetTextColor( SalColor nSalColor );
     virtual USHORT          SetFont( ImplFontSelectData*, int nFallbackLevel );
-    virtual void            GetFontMetric( ImplFontMetricData* );
+    virtual void            GetFontMetric( ImplFontMetricData*, int nFallbackLevel );
     virtual ULONG           GetKernPairs( ULONG nMaxPairs, ImplKernPairData* );
-    virtual ImplFontCharMap* GetImplFontCharMap() const;
+    virtual const ImplFontCharMap* GetImplFontCharMap() const;
     virtual void            GetDevFontList( ImplDevFontList* );
     virtual void            GetDevFontSubstList( OutputDevice* );
     virtual bool            AddTempDevFont( ImplDevFontList*, const String& rFileURL, const String& rFontName );
@@ -142,7 +142,7 @@ public:
                                              const sal_uInt32* pPoints,
                                              PCONSTSALPOINT* pPtAry );
     virtual bool            drawPolyPolygon( const ::basegfx::B2DPolyPolygon&, double fTransparency );
-    virtual bool            drawPolyLine( const basegfx::B2DPolygon&, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin);
+    virtual bool            drawPolyLine( const basegfx::B2DPolygon&, double fTransparency, const basegfx::B2DVector& rLineWidths, basegfx::B2DLineJoin);
     virtual sal_Bool        drawPolyLineBezier( ULONG nPoints,
                                                 const SalPoint* pPtAry,
                                                 const BYTE* pFlgAry );

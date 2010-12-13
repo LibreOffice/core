@@ -328,23 +328,23 @@ Resource RID_ERRHDL
     };
     String ERRCODE_INET_CONNECT
     {
-        Text [ en-US ] = "Could not establish Internet connection to $(ARG1)." ;
+        Text [ en-US ] = "Could not establish network connection to $(ARG1)." ;
     };
     String ERRCODE_INET_READ
     {
-        Text [ en-US ] = "Error reading data from the Internet.\nServer error message: $(ARG1)." ;
+        Text [ en-US ] = "Error reading data from the network.\nServer error message: $(ARG1)." ;
     };
     String ERRCODE_INET_WRITE
     {
-        Text [ en-US ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)." ;
+        Text [ en-US ] = "Error transferring data to the network.\nServer error message: $(ARG1)." ;
     };
     String ERRCODE_INET_GENERAL
     {
-        Text [ en-US ] = "General Internet error has occurred." ;
+        Text [ en-US ] = "General network error has occurred." ;
     };
     String ERRCODE_INET_OFFLINE
     {
-        Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
+        Text [ en-US ] = "The requested network data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {

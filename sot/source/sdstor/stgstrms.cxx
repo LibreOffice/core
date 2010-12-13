@@ -41,13 +41,7 @@
 #include "stgdir.hxx"
 #include "stgio.hxx"
 
-#if defined(W31)
-        #include <tools/svwin.h>
-    #define memcpy hmemcpy
-    #define __HUGE _huge
-#else
-    #define __HUGE
-#endif
+#define __HUGE
 
 ///////////////////////////// class StgFAT ///////////////////////////////
 

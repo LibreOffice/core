@@ -83,3 +83,11 @@ RESLIB1SRSFILES=$(RES1FILELIST)
 
 # --- Footer -------------------------------------------------------------
 .INCLUDE :	target.mk
+
+ALLTAR : $(MISC)/tk.component
+
+$(MISC)/tk.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        tk.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt tk.component

@@ -1397,6 +1397,7 @@ static void FindCmap(TrueTypeFont *ttf)
     sal_uInt32 table_size = getTableSize(ttf, O_cmap);
     sal_uInt16 ncmaps = GetUInt16(table, 2, 1);
     unsigned int i;
+    sal_uInt32 AppleUni   = 0;              // Apple Unicode
     sal_uInt32 ThreeZero  = 0;              /* MS Symbol            */
     sal_uInt32 ThreeOne   = 0;              /* MS UCS-2             */
     sal_uInt32 ThreeTwo   = 0;              /* MS ShiftJIS          */
@@ -1423,7 +1424,7 @@ static void FindCmap(TrueTypeFont *ttf)
 
         /* Unicode tables in Apple fonts */
         if (pID == 0) {
-            ThreeOne   = offset; break;
+            AppleUni = offset;
         }
 
         if (pID == 3) {
@@ -1439,6 +1440,10 @@ static void FindCmap(TrueTypeFont *ttf)
             }
         }
     }
+
+    // fall back to AppleUnicode if there are no ThreeOne/Threezero tables
+    if( AppleUni && !ThreeZero && !ThreeOne)
+        ThreeOne = AppleUni;
 
     if (ThreeOne) {
         ttf->cmapType = CMAP_MS_Unicode;

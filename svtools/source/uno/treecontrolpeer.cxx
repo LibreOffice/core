@@ -1322,6 +1322,21 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
 
     switch( GetPropertyId( PropertyName ) )
     {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+        {
+            sal_Bool bEnabled = sal_False;
+            if ( aValue >>= bEnabled )
+            {
+                WinBits nStyle = rTree.GetStyle();
+                if ( bEnabled )
+                    nStyle |= WB_HIDESELECTION;
+                else
+                    nStyle &= ~WB_HIDESELECTION;
+                rTree.SetStyle( nStyle );
+            }
+        }
+        break;
+
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
             SelectionType eSelectionType;
@@ -1375,11 +1390,11 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
-                WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINES);
+                WinBits nBits = rTree.GetStyle() & (~WB_HASLINES);
                 if( bEnabled )
                     nBits |= WB_HASLINES;
-                if( nBits != rTree.GetWindowBits() )
-                    rTree.SetWindowBits( nBits );
+                if( nBits != rTree.GetStyle() )
+                    rTree.SetStyle( nBits );
             }
             break;
         }
@@ -1388,11 +1403,11 @@ void TreeControlPeer::setProperty( const ::rtl::OUString& PropertyName, const An
             sal_Bool bEnabled = false;
             if( aValue >>= bEnabled )
             {
-                WinBits nBits = rTree.GetWindowBits() & (~WB_HASLINESATROOT);
+                WinBits nBits = rTree.GetStyle() & (~WB_HASLINESATROOT);
                 if( bEnabled )
                     nBits |= WB_HASLINESATROOT;
-                if( nBits != rTree.GetWindowBits() )
-                    rTree.SetWindowBits( nBits );
+                if( nBits != rTree.GetStyle() )
+                    rTree.SetStyle( nBits );
             }
             break;
         }
@@ -1412,6 +1427,9 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         UnoTreeListBoxImpl& rTree = getTreeListBoxOrThrow();
         switch(nPropId)
         {
+        case BASEPROPERTY_HIDEINACTIVESELECTION:
+            return Any( ( rTree.GetStyle() & WB_HIDESELECTION ) != 0 ? sal_True : sal_False );
+
         case BASEPROPERTY_TREE_SELECTIONTYPE:
         {
             SelectionType eSelectionType;
@@ -1438,9 +1456,9 @@ Any TreeControlPeer::getProperty( const ::rtl::OUString& PropertyName ) throw(Ru
         case BASEPROPERTY_TREE_ROOTDISPLAYED:
             return Any( mbIsRootDisplayed );
         case BASEPROPERTY_TREE_SHOWSHANDLES:
-            return Any( (rTree.GetWindowBits() & WB_HASLINES) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINES) != 0 ? sal_True : sal_False );
         case BASEPROPERTY_TREE_SHOWSROOTHANDLES:
-            return Any( (rTree.GetWindowBits() & WB_HASLINESATROOT) != 0 ? sal_True : sal_False );
+            return Any( (rTree.GetStyle() & WB_HASLINESATROOT) != 0 ? sal_True : sal_False );
         }
     }
     return VCLXWindow::getProperty( PropertyName );
@@ -1509,7 +1527,7 @@ UnoTreeListBoxImpl::UnoTreeListBoxImpl( TreeControlPeer* pPeer, Window* pParent,
 : SvTreeListBox( pParent, nWinStyle )
 , mxPeer( pPeer )
 {
-    SetWindowBits( WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_HSCROLL );
+    SetStyle( WB_BORDER | WB_HASLINES |WB_HASBUTTONS | WB_HASLINESATROOT | WB_HASBUTTONSATROOT | WB_HSCROLL );
     SetNodeDefaultImages();
     SetSelectHdl( LINK(this, UnoTreeListBoxImpl, OnSelectionChangeHdl) );
     SetDeselectHdl( LINK(this, UnoTreeListBoxImpl, OnSelectionChangeHdl) );

@@ -66,28 +66,28 @@
       <FormatCode>0,00%</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey1" default="true" type="short" usage="CURRENCY"  formatindex="12">
-      <FormatCode># ##0[$Ls-426];-# ##0[$Ls-426]</FormatCode>
+      <FormatCode>[$Ls-426] # ##0;[$Ls-426] -# ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey2" default="false" type="medium" usage="CURRENCY"  formatindex="13">
-      <FormatCode># ##0,00[$Ls-426];-# ##0,00[$Ls-426]</FormatCode>
+      <FormatCode>[$Ls-426] # ##0,00;[$Ls-426] -# ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey3" default="false" type="medium" usage="CURRENCY"  formatindex="14">
-      <FormatCode># ##0[$Ls-426];[RED]-# ##0[$Ls-426]</FormatCode>
+      <FormatCode>[$Ls-426] # ##0;[RED][$Ls-426] -# ##0</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey4" default="true" type="medium" usage="CURRENCY"  formatindex="15">
-      <FormatCode># ##0,00[$Ls-426];[RED]-# ##0,00[$Ls-426]</FormatCode>
+      <FormatCode>[$Ls-426] # ##0,00;[RED][$Ls-426] -# ##0,00</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey5" default="false" type="medium" usage="CURRENCY"  formatindex="16">
       <FormatCode># ##0,00 CCC</FormatCode>
     </FormatElement>
     <FormatElement msgid="CurrencyFormatskey6" default="false" type="medium" usage="CURRENCY"  formatindex="17">
-      <FormatCode># ##0,--[$Ls-426];[RED]-# ##0,--[$Ls-426]</FormatCode>
+      <FormatCode>[$Ls-426] # ##0,--;[RED][$Ls-426] -# ##0,--</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey1" default="true" type="short" usage="DATE" formatindex="18">
       <FormatCode>D.M.YY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey9" default="true" type="long" usage="DATE" formatindex="19">
-      <FormatCode>DD. NNNNMMMM, YYYY</FormatCode>
+      <FormatCode>YYYY. "gada" DD. MMMM, NNNN</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="true" type="medium" usage="DATE" formatindex="20">
       <FormatCode>DD.MM.YY</FormatCode>
@@ -120,7 +120,7 @@
       <FormatCode>NN, D. MMMM, YYYY</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey15" default="false" type="long" usage="DATE" formatindex="30">
-      <FormatCode>NNNNMMMM D, YYYY</FormatCode>
+      <FormatCode>NNNN, YYYY. "gada" DD. MMMM</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey18" default="false" type="short" usage="DATE" formatindex="31">
       <FormatCode>DD-MM</FormatCode>

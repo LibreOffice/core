@@ -48,10 +48,10 @@ class OStreamPipe;
 
 /** Represents a pipe.
 */
-class OPipe : public NAMESPACE_VOS(OReference),
-              public NAMESPACE_VOS(OObject)
+class OPipe : public vos::OReference,
+              public vos::OObject
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OPipe));
+    VOS_DECLARE_CLASSINFO(vos::OPipe);
 
 public:
     /*
@@ -101,7 +101,7 @@ public:
         @param Security
     */
     OPipe(const ::rtl::OUString& strName, TPipeOption Options,
-          const NAMESPACE_VOS(OSecurity)& rSecurity);
+          const vos::OSecurity& rSecurity);
 
     /** Copy constructor.
     */
@@ -132,7 +132,7 @@ public:
         @return True if socket was successfully created.
     */
     sal_Bool SAL_CALL create(const ::rtl::OUString& strName, TPipeOption Options,
-                   const NAMESPACE_VOS(OSecurity)& rSecurity);
+                   const vos::OSecurity& rSecurity);
 
     /** Assignment operator. If pipe was already created, the old one will
         be discarded.
@@ -191,10 +191,10 @@ public:
 
 /** A pipe to send or receive a stream of data.
 */
-class OStreamPipe : public NAMESPACE_VOS(OPipe),
-                    public NAMESPACE_VOS(IStream)
+class OStreamPipe : public vos::OPipe,
+                    public vos::IStream
 {
-    VOS_DECLARE_CLASSINFO(NAMESPACE_VOS(OStreamPipe));
+    VOS_DECLARE_CLASSINFO(vos::OStreamPipe);
 public:
 
     /** Creates an unattached pipe. You must attach the pipe to an oslPipe

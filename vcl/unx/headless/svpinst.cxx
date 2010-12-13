@@ -302,7 +302,7 @@ vos::IMutex* SvpSalInstance::GetYieldMutex()
 ULONG SvpSalInstance::ReleaseYieldMutex()
 {
     if ( m_aYieldMutex.GetThreadId() ==
-         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+         vos::OThread::getCurrentIdentifier() )
     {
         ULONG nCount = m_aYieldMutex.GetAcquireCount();
         ULONG n = nCount;
@@ -325,6 +325,19 @@ void SvpSalInstance::AcquireYieldMutex( ULONG nCount )
         m_aYieldMutex.acquire();
         nCount--;
     }
+}
+
+bool SvpSalInstance::CheckYieldMutex()
+{
+    bool bRet = true;
+
+    if ( m_aYieldMutex.GetThreadId() !=
+         vos::OThread::getCurrentIdentifier() )
+    {
+        bRet = false;
+    }
+
+    return bRet;
 }
 
 void SvpSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
@@ -419,24 +432,6 @@ bool SvpSalInstance::AnyInput( USHORT nType )
     return false;
 }
 
-SalMenu* SvpSalInstance::CreateMenu( BOOL )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenu( SalMenu* )
-{
-}
-
-SalMenuItem* SvpSalInstance::CreateMenuItem( const SalItemParams* )
-{
-    return NULL;
-}
-
-void SvpSalInstance::DestroyMenuItem( SalMenuItem* )
-{
-}
-
 SalSession* SvpSalInstance::CreateSalSession()
 {
     return NULL;
@@ -464,13 +459,13 @@ SvpSalYieldMutex::SvpSalYieldMutex()
 void SvpSalYieldMutex::acquire()
 {
     OMutex::acquire();
-    mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+    mnThreadId = vos::OThread::getCurrentIdentifier();
     mnCount++;
 }
 
 void SvpSalYieldMutex::release()
 {
-    if ( mnThreadId == NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    if ( mnThreadId == vos::OThread::getCurrentIdentifier() )
     {
         if ( mnCount == 1 )
             mnThreadId = 0;
@@ -483,7 +478,7 @@ sal_Bool SvpSalYieldMutex::tryToAcquire()
 {
     if ( OMutex::tryToAcquire() )
     {
-        mnThreadId = NAMESPACE_VOS(OThread)::getCurrentIdentifier();
+        mnThreadId = vos::OThread::getCurrentIdentifier();
         mnCount++;
         return sal_True;
     }

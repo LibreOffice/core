@@ -36,7 +36,7 @@
 //  class UnoControlBase
 //  ----------------------------------------------------
 
-class UnoControlBase : public UnoControl
+class TOOLKIT_DLLPUBLIC UnoControlBase : public UnoControl
 {
 protected:
     sal_Bool                    ImplHasProperty( sal_uInt16 nProp );

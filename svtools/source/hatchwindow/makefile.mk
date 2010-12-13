@@ -63,3 +63,11 @@ DEF1NAME=	$(SHL1TARGET)
 
 .INCLUDE : target.mk
 
+
+ALLTAR : $(MISC)/hatchwindowfactory.component
+
+$(MISC)/hatchwindowfactory.component .ERRREMOVE : \
+        $(SOLARENV)/bin/createcomponent.xslt hatchwindowfactory.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt hatchwindowfactory.component

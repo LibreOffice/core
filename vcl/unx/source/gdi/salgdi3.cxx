@@ -1494,20 +1494,13 @@ void X11SalGraphics::DrawStringUCS2MB( ExtendedFontStruct& rFont,
 
 //--------------------------------------------------------------------------
 
-ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* X11SalGraphics::GetImplFontCharMap() const
 {
-    // TODO: get ImplFontCharMap directly from fonts
     if( !mpServerFont[0] )
-#if 0 // RIP XLFD fonts
-    if( mXFont[0] )
-        // TODO?: nPairCount = mXFont[0]->GetFontCodeRanges( NULL );
-#endif
         return NULL;
 
-    CmapResult aCmapResult;
-    if( !mpServerFont[0]->GetFontCodeRanges( aCmapResult ) )
-        return NULL;
-    return new ImplFontCharMap( aCmapResult );
+    const ImplFontCharMap* pIFCMap = mpServerFont[0]->GetImplFontCharMap();
+    return pIFCMap;
 }
 
 // ----------------------------------------------------------------------------
@@ -1763,16 +1756,19 @@ bool GetFCFontOptions( const ImplFontAttributes& rFontAttributes, int nSize,
 // ----------------------------------------------------------------------------
 
 void
-X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric )
+X11SalGraphics::GetFontMetric( ImplFontMetricData *pMetric, int nFallbackLevel )
 {
-    if( mpServerFont[0] != NULL )
+    if( nFallbackLevel >= MAX_FALLBACK )
+        return;
+
+    if( mpServerFont[nFallbackLevel] != NULL )
     {
         long rDummyFactor;
-        mpServerFont[0]->FetchFontMetric( *pMetric, rDummyFactor );
+        mpServerFont[nFallbackLevel]->FetchFontMetric( *pMetric, rDummyFactor );
     }
-    else if( mXFont[0] != NULL )
+    else if( mXFont[nFallbackLevel] != NULL )
     {
-        mXFont[0]->ToImplFontMetricData( pMetric );
+        mXFont[nFallbackLevel]->ToImplFontMetricData( pMetric );
         if ( bFontVertical_ )
             pMetric->mnOrientation = 0;
     }

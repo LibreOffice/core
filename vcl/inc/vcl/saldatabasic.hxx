@@ -32,11 +32,17 @@
 #include <vcl/salinst.hxx>
 #include <osl/module.h>
 
+namespace psp
+{
+    class PrinterInfoManager;
+}
+
 class VCL_DLLPUBLIC SalData
 {
 public:
-    SalInstance*        m_pInstance; // pointer to instance
-    oslModule           m_pPlugin;   // plugin library handle
+    SalInstance*                  m_pInstance; // pointer to instance
+    oslModule                     m_pPlugin;   // plugin library handle
+    psp::PrinterInfoManager*      m_pPIManager;
 
     SalData();
     virtual ~SalData();

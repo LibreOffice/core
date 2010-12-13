@@ -2057,7 +2057,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             OutString = rScan.GetFalseString();
         return FALSE;
     }
-    if (eType & NUMBERFORMAT_TEXT && bStandard)
+    if (eType & NUMBERFORMAT_TEXT)
     {
         ImpGetOutputStandard(fNumber, OutString);
         return FALSE;
@@ -2086,7 +2086,9 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         if (!nLen)
                             return false;
 
-                        if (nLen > 11)
+                        // #i112250# With the 10-decimal limit, small numbers are formatted as "0".
+                        // Switch to scientific in that case, too:
+                        if (nLen > 11 || (OutString.EqualsAscii("0") && fNumber != 0.0))
                         {
                             sal_uInt16 nStandardPrec = rScan.GetStandardPrec();
                             nStandardPrec = ::std::min(nStandardPrec, static_cast<sal_uInt16>(14)); // limits to 14 decimals

@@ -37,32 +37,33 @@
 #include <cmath>
 #include <limits.h>
 
-#include <vcl/svdata.hxx>
-#include <svsys.h>
+#include "vcl/svdata.hxx"
+#include "svsys.h"
 
 #ifdef WNT
 #undef min
 #endif
-#include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/event.hxx>
-#include <vcl/lstbox.hxx>
-#include <vcl/button.hxx>
-#include <vcl/edit.hxx>
-#include <vcl/fixed.hxx>
-#include <vcl/group.hxx>
-#include <vcl/field.hxx>
-#include <vcl/msgbox.hxx>
-#include <vcl/wrkwin.hxx>
-#include <vcl/sound.hxx>
-#include <vcl/threadex.hxx>
-#include <vcl/dbggui.hxx>
-#include <com/sun/star/i18n/XCharacterClassification.hpp>
+#include "tools/debug.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/event.hxx"
+#include "vcl/lstbox.hxx"
+#include "vcl/button.hxx"
+#include "vcl/edit.hxx"
+#include "vcl/fixed.hxx"
+#include "vcl/group.hxx"
+#include "vcl/field.hxx"
+#include "vcl/msgbox.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/sound.hxx"
+#include "vcl/threadex.hxx"
+#include "vcl/dbggui.hxx"
+#include "com/sun/star/i18n/XCharacterClassification.hpp"
 
-#include <vcl/unohelp.hxx>
-#include <vcl/unohelp2.hxx>
-#include <vos/mutex.hxx>
+#include "vcl/unohelp.hxx"
+#include "vcl/unohelp2.hxx"
+#include "vos/mutex.hxx"
+#include "vcl/salinst.hxx"
 
 #include <map>
 #include <algorithm>
@@ -1963,9 +1964,11 @@ void DbgPrintWindow( const char* pLine )
 
 // =======================================================================
 
-#ifdef WNT
-void ImplDbgTestSolarMutex();
-#endif
+void ImplDbgTestSolarMutex()
+{
+    bool bCheck = ImplGetSVData()->mpDefInst->CheckYieldMutex();
+    OSL_ENSURE( bCheck, "SolarMutex not locked" );
+}
 
 // =======================================================================
 
@@ -1973,9 +1976,7 @@ void DbgGUIInit()
 {
     DbgSetPrintMsgBox( DbgPrintMsgBox );
     DbgSetPrintWindow( DbgPrintWindow );
-#ifdef WNT
     DbgSetTestSolarMutex( ImplDbgTestSolarMutex );
-#endif
 }
 
 // -----------------------------------------------------------------------
@@ -1984,9 +1985,7 @@ void DbgGUIDeInit()
 {
     DbgSetPrintMsgBox( NULL );
     DbgSetPrintWindow( NULL );
-#ifdef WNT
     DbgSetTestSolarMutex( NULL );
-#endif
 
     DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
     if ( pDbgWindow )

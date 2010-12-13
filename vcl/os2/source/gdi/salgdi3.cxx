@@ -434,9 +434,8 @@ bool ImplOs2FontData::IsGSUBstituted( sal_Ucs cChar ) const
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplOs2FontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplOs2FontData::GetImplFontCharMap() const
 {
-    mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
 
@@ -592,6 +591,7 @@ void ImplOs2FontData::ReadCmapTable( HPS hPS ) const
             aResult.mpPairCodes, aResult.mpStartGlyphs );
     else
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap();
+    mpUnicodeMap->AddReference();
 }
 
 // =======================================================================
@@ -999,10 +999,10 @@ ULONG Os2SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // -----------------------------------------------------------------------
 
-static ImplFontCharMap* pOs2DefaultImplFontCharMap = NULL;
+static const ImplFontCharMap* pOs2DefaultImplFontCharMap = NULL;
 static const sal_uInt32 pOs2DefaultRangeCodes[] = {0x0020,0x00FF};
 
-ImplFontCharMap* Os2SalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* Os2SalGraphics::GetImplFontCharMap() const
 {
     if( !mpOs2FontData[0] )
         return ImplFontCharMap::GetDefaultMap();
@@ -1705,7 +1705,7 @@ void Os2SalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rUnicodeEnc.clear();
             }
             const ImplOs2FontData* pWinFont = static_cast<const ImplOs2FontData*>(pFont);
-            ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
+            const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
 
             int nCharCount = pMap->GetCharCount();

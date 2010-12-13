@@ -2118,11 +2118,7 @@ enum eHtmlMetas {
 };
 
 // <META NAME=xxx>
-#ifdef __MINGW32__ // for runtime pseudo reloc
-static HTMLOptionEnum aHTMLMetaNameTable[] =
-#else
 static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
-#endif
 {
     { OOO_STRING_SVTOOLS_HTML_META_author,        HTML_META_AUTHOR        },
     { OOO_STRING_SVTOOLS_HTML_META_changed,       HTML_META_CHANGED       },

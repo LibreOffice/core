@@ -217,11 +217,12 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             {
                 gint nMonitors = gdk_screen_get_n_monitors(pScreen);
                 m_aXineramaScreens = std::vector<Rectangle>();
+                m_aXineramaScreenIndexMap = std::vector<int>(nMonitors);
                 for (gint i = 0; i < nMonitors; ++i)
                 {
                     GdkRectangle dest;
                     gdk_screen_get_monitor_geometry(pScreen, i, &dest);
-                    addXineramaScreenUnique( dest.x, dest.y, dest.width, dest.height );
+                    m_aXineramaScreenIndexMap[i] = addXineramaScreenUnique( dest.x, dest.y, dest.width, dest.height );
                 }
                 m_bXinerama = m_aXineramaScreens.size() > 1;
                 if( ! m_aFrames.empty() )
@@ -233,6 +234,26 @@ void GtkSalDisplay::monitorsChanged( GdkScreen* pScreen )
             }
         }
     }
+}
+
+extern "C"
+{
+    typedef gint(* screen_get_primary_monitor)(GdkScreen *screen);
+}
+
+int GtkSalDisplay::GetDefaultMonitorNumber() const
+{
+    int n = 0;
+    GdkScreen* pScreen = gdk_display_get_screen( m_pGdkDisplay, m_nDefaultScreen );
+#if GTK_CHECK_VERSION(2,20,0)
+    n = m_aXineramaScreenIndexMap[gdk_screen_get_primary_monitor(pScreen)];
+#else
+    static screen_get_primary_monitor sym_gdk_screen_get_primary_monitor =
+        (screen_get_primary_monitor)osl_getAsciiFunctionSymbol( GetSalData()->m_pPlugin, "gdk_screen_get_primary_monitor" );
+    if (sym_gdk_screen_get_primary_monitor)
+        n = m_aXineramaScreenIndexMap[sym_gdk_screen_get_primary_monitor( pScreen )];
+#endif
+    return n;
 }
 
 void GtkSalDisplay::initScreen( int nScreen ) const
@@ -489,6 +510,7 @@ class GtkXLib : public SalXLib
     GSource             *m_pUserEvent;
     oslMutex             m_aDispatchMutex;
     oslCondition         m_aDispatchCondition;
+    XIOErrorHandler      m_aOrigGTKXIOErrorHandler;
 
 public:
     static gboolean      timeoutFn(gpointer data);
@@ -522,6 +544,7 @@ GtkXLib::GtkXLib()
     m_pUserEvent = NULL;
     m_aDispatchCondition = osl_createCondition();
     m_aDispatchMutex = osl_createMutex();
+    m_aOrigGTKXIOErrorHandler = NULL;
 }
 
 GtkXLib::~GtkXLib()
@@ -535,6 +558,9 @@ GtkXLib::~GtkXLib()
     osl_setCondition( m_aDispatchCondition );
     osl_destroyCondition( m_aDispatchCondition );
     osl_destroyMutex( m_aDispatchMutex );
+
+    PopXErrorLevel();
+    XSetIOErrorHandler (m_aOrigGTKXIOErrorHandler);
 }
 
 void GtkXLib::Init()
@@ -596,6 +622,10 @@ void GtkXLib::Init()
     // init gtk/gdk
     gtk_init_check( &nParams, &pCmdLineAry );
 
+    //gtk_init_check sets XError/XIOError handlers, we want our own one
+    m_aOrigGTKXIOErrorHandler = XSetIOErrorHandler ( (XIOErrorHandler)X11SalData::XIOErrorHdl );
+    PushXErrorLevel( !!getenv( "SAL_IGNOREXERRORS" ) );
+
     for (i = 0; i < nParams; i++ )
         g_free( pCmdLineAry[i] );
     delete [] pCmdLineAry;
@@ -630,9 +660,10 @@ void GtkXLib::Init()
      * the clipboard build another connection
      * to the xserver using $DISPLAY
      */
-    char *pPutEnvIsBroken = g_strdup_printf( "DISPLAY=%s",
-                                             gdk_display_get_name( pGdkDisp ) );
-    putenv( pPutEnvIsBroken );
+    rtl::OUString envVar(RTL_CONSTASCII_USTRINGPARAM("DISPLAY"));
+    const gchar *name = gdk_display_get_name( pGdkDisp );
+    rtl::OUString envValue(name, strlen(name), aEnc);
+    osl_setEnvironment(envVar.pData, envValue.pData);
 
     Display *pDisp = gdk_x11_display_get_xdisplay( pGdkDisp );
 

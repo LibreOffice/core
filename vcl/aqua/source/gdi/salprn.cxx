@@ -445,7 +445,7 @@ ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USH
         case PRINTER_CAPABILITIES_COPIES:
             return 0xffff;
         case PRINTER_CAPABILITIES_COLLATECOPIES:
-            return 0;
+            return 0xffff;
         case PRINTER_CAPABILITIES_SETORIENTATION:
             return 1;
         case PRINTER_CAPABILITIES_SETDUPLEX:
@@ -459,6 +459,8 @@ ULONG AquaSalInfoPrinter::GetCapabilities( const ImplJobSetup* i_pSetupData, USH
         case PRINTER_CAPABILITIES_EXTERNALDIALOG:
             return getUseNativeDialog() ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
+            return 1;
+        case PRINTER_CAPABILITIES_USEPULLMODEL:
             return 1;
         default: break;
     };
@@ -634,6 +636,8 @@ BOOL AquaSalInfoPrinter::StartJob( const String* i_pFileName,
             }
 
             [pPrintDict setObject: [[NSNumber numberWithInt: nCopies] autorelease] forKey: NSPrintCopies];
+            if( nCopies > 1 )
+                [pPrintDict setObject: [[NSNumber numberWithBool: pPrinter->IsCollateCopy()] autorelease] forKey: NSPrintMustCollate];
             [pPrintDict setObject: [[NSNumber numberWithBool: YES] autorelease] forKey: NSPrintDetailedErrorReporting];
             [pPrintDict setObject: [[NSNumber numberWithInt: 1] autorelease] forKey: NSPrintFirstPage];
             // #i103253# weird: for some reason, autoreleasing the value below like the others above

@@ -533,9 +533,10 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     // avoid fonts with unknown CMAP subtables for glyph fallback
     if( !pCharMap || pCharMap->IsDefaultMap() )
         return false;
+        pCharMap->AddReference();
 
     int nMatchCount = 0;
-    // static const int nMaxMatchCount = 1; // TODO: check more missing characters?
+    // static const int nMaxMatchCount = 1; // TODO: tolerate more missing characters?
     const sal_Int32 nStrLen = rMissingChars.getLength();
     for( sal_Int32 nStrIdx = 0; nStrIdx < nStrLen; ++nStrIdx )
     {
@@ -543,6 +544,7 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
         nMatchCount += pCharMap->HasChar( uChar );
         break; // for now
     }
+        pCharMap->DeReference();
 
     const bool bHasMatches = (nMatchCount > 0);
     return bHasMatches;
@@ -1206,11 +1208,10 @@ bool ImplWinFontData::IsGSUBstituted( sal_UCS4 cChar ) const
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
+const ImplFontCharMap* ImplWinFontData::GetImplFontCharMap() const
 {
     if( !mpUnicodeMap )
         return NULL;
-    mpUnicodeMap->AddReference();
     return mpUnicodeMap;
 }
 
@@ -1320,6 +1321,7 @@ void ImplWinFontData::ReadCmapTable( HDC hDC ) const
 
     if( !mpUnicodeMap )
         mpUnicodeMap = ImplFontCharMap::GetDefaultMap( bIsSymbolFont );
+    mpUnicodeMap->AddReference();
 }
 
 // =======================================================================
@@ -1760,8 +1762,11 @@ USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
 // -----------------------------------------------------------------------
 
-void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric, int nFallbackLevel )
 {
+    // temporarily change the HDC to the font in the fallback level
+    HFONT hOldFont = SelectFont( mhDC, mhFonts[nFallbackLevel] );
+
     if ( aSalShlData.mbWNT )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
@@ -1775,8 +1780,12 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
             pMetric->maName = ImplSalGetUniString( aFaceName );
     }
 
+    // get the font metric
     TEXTMETRICA aWinMetric;
-    if( !GetTextMetricsA( mhDC, &aWinMetric ) )
+    const bool bOK = GetTextMetricsA( mhDC, &aWinMetric );
+    // restore the HDC to the font in the base level
+    SelectFont( mhDC, hOldFont );
+    if( !bOK )
         return;
 
     // device independent font attributes
@@ -1815,7 +1824,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // #107888# improved metric compatibility for Asian fonts...
     // TODO: assess workaround below for CWS >= extleading
     // TODO: evaluate use of aWinMetric.sTypo* members for CJK
-    if( mpWinFontData[0] && mpWinFontData[0]->SupportsCJK() )
+    if( mpWinFontData[nFallbackLevel] && mpWinFontData[nFallbackLevel]->SupportsCJK() )
     {
         pMetric->mnIntLeading += pMetric->mnExtLeading;
 
@@ -1836,7 +1845,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 
         // #109280# HACK korean only: increase descent for wavelines and impr
         if( !aSalShlData.mbWNT )
-            if( mpWinFontData[0]->SupportsKorean() )
+            if( mpWinFontData[nFallbackLevel]->SupportsKorean() )
                 pMetric->mnDescent += pMetric->mnExtLeading;
     }
 
@@ -2053,7 +2062,7 @@ ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 
 // -----------------------------------------------------------------------
 
-ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
+const ImplFontCharMap* WinSalGraphics::GetImplFontCharMap() const
 {
     if( !mpWinFontData[0] )
         return ImplFontCharMap::GetDefaultMap();
@@ -2875,8 +2884,6 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ImplDoSetFont( &aIFSD, fScale, hOldFont );
 
     ImplWinFontData* pWinFontData = (ImplWinFontData*)aIFSD.mpFontData;
-    pWinFontData->UpdateFromHDC( mhDC );
-/*const*/ ImplFontCharMap* pImplFontCharMap = pWinFontData->GetImplFontCharMap();
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
@@ -2899,6 +2906,10 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     const RawFontData aRawCffData( mhDC, nCffTag );
     if( aRawCffData.get() )
     {
+        pWinFontData->UpdateFromHDC( mhDC );
+        const ImplFontCharMap* pCharMap = pWinFontData->GetImplFontCharMap();
+        pCharMap->AddReference();
+
         long nRealGlyphIds[ 256 ];
         for( int i = 0; i < nGlyphCount; ++i )
         {
@@ -2906,12 +2917,14 @@ BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
             // TODO: use GDI's GetGlyphIndices instead? Does it handle GSUB properly?
             sal_uInt32 nGlyphIdx = pGlyphIDs[i] & GF_IDXMASK;
             if( pGlyphIDs[i] & GF_ISCHAR ) // remaining pseudo-glyphs need to be translated
-                nGlyphIdx = pImplFontCharMap->GetGlyphIndex( nGlyphIdx );
+                nGlyphIdx = pCharMap->GetGlyphIndex( nGlyphIdx );
             if( (pGlyphIDs[i] & (GF_ROTMASK|GF_GSUB)) != 0) // TODO: vertical substitution
                 {/*####*/}
 
             nRealGlyphIds[i] = nGlyphIdx;
         }
+
+        pCharMap->DeReference(); // TODO: and and use a RAII object
 
         // provide a font subset from the CFF-table
         FILE* pOutFile = fopen( aToFile.GetBuffer(), "wb" );
@@ -3160,8 +3173,9 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 rUnicodeEnc.clear();
             }
             const ImplWinFontData* pWinFont = static_cast<const ImplWinFontData*>(pFont);
-            ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
+            const ImplFontCharMap* pMap = pWinFont->GetImplFontCharMap();
             DBG_ASSERT( pMap && pMap->GetCharCount(), "no map" );
+            pMap->AddReference();
 
             int nCharCount = pMap->GetCharCount();
             sal_uInt32 nChar = pMap->GetFirstChar();
@@ -3177,6 +3191,8 @@ void WinSalGraphics::GetGlyphWidths( const ImplFontData* pFont,
                 }
                 nChar = pMap->GetNextChar( nChar );
             }
+
+            pMap->DeReference(); // TODO: and and use a RAII object
         }
     }
     else if( pFont->IsEmbeddable() )

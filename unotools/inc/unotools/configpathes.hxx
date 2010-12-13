@@ -76,6 +76,9 @@ namespace utl
             If this is not a valid configuration path, it is interpreted as
             a single name of a node.
 
+        @param _sOutPath
+            If non-null, contains the remainder of the path upon return.
+
         @returns
             The plain (non-escaped) name of the node that is the first step
             when traversing <var>_sInPath</var>.<BR/>
@@ -83,7 +86,8 @@ namespace utl
             configuration path, it is returned unaltered.
 
     */
-    UNOTOOLS_DLLPUBLIC ::rtl::OUString extractFirstFromConfigurationPath(::rtl::OUString const& _sInPath);
+    UNOTOOLS_DLLPUBLIC ::rtl::OUString extractFirstFromConfigurationPath(
+        ::rtl::OUString const& _sInPath, ::rtl::OUString* _sOutPath = 0);
 
 //----------------------------------------------------------------------------
     /** check whether a path is to a nested node with respect to a parent path.

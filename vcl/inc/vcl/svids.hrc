@@ -122,8 +122,10 @@
 #define SV_PRINT_PRT_NUP_ORIENTATION_PORTRAIT     1
 #define SV_PRINT_PRT_NUP_ORIENTATION_LANDSCAPE    2
 
-#define SV_PRINT_PRT_NUP_ORDER_LRTD               0
-#define SV_PRINT_PRT_NUP_ORDER_TDLR               1
+#define SV_PRINT_PRT_NUP_ORDER_LRTB               0
+#define SV_PRINT_PRT_NUP_ORDER_TBLR               1
+#define SV_PRINT_PRT_NUP_ORDER_TBRL               2
+#define SV_PRINT_PRT_NUP_ORDER_RLTB               3
 
 #define SV_PRINT_TAB_JOB                    2
 #define SV_PRINT_PRINTERS_FL                1
@@ -212,7 +214,8 @@
 #define SV_ACCESSERROR_JAVA_NOT_CONFIGURED  10507
 #define SV_ACCESSERROR_JAVA_DISABLED        10508
 #define SV_ACCESSERROR_TURNAROUND_MSG       10509
-#define SV_ACCESSERROR_LAST                 SV_ACCESSERROR_TURNAROUND_MSG
+#define SV_ACCESSERROR_NO_FONTS             10510
+#define SV_ACCESSERROR_LAST                 SV_ACCESSERROR_NO_FONTS
 
 #define SV_SHORTCUT_HELP                    10600
 #define SV_SHORTCUT_CONTEXTHELP             10601
