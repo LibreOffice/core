@@ -153,6 +153,8 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : COBJECTS := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $$(gb_LinkTarget_CXXFLAGS)
 $(call gb_LinkTarget_get_clean_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXOBJECTS := 
@@ -163,6 +165,8 @@ $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS :=
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
+$(call gb_LinkTarget_get_dep_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $$(gb_LinkTarget_DEFAULTDEFS)
 $(call gb_LinkTarget_get_target,$(1)) : DLLTARGET := 
 $(call gb_LinkTarget_get_dep_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : INCLUDE := $$(gb_LinkTarget_INCLUDE)
@@ -181,8 +185,10 @@ endif
 endef
 
 define gb_LinkTarget_set_defs
-$(call gb_LinkTarget_get_target,$(1)) : DEFS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS := $(2)
 endef
 
 define gb_LinkTarget_set_cflags
@@ -193,6 +199,8 @@ endef
 define gb_LinkTarget_set_cxxflags
 $(call gb_LinkTarget_get_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : CXXFLAGS := $(2)
+$(call gb_LinkTarget_get_target,$(1)) \
+$(call gb_LinkTarget_get_dep_target,$(1)) : PCH_CXXFLAGS := $(2)
 endef
 
 define gb_LinkTarget_set_objcxxflags
@@ -335,6 +343,22 @@ endef
 define gb_LinkTarget_add_sdi_headers
 $(call gb_LinkTarget__add_internal_headers,$(1),$(foreach sdi,$(2),$(call gb_SdiTarget_get_target,$(sdi))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach sdi,$(2),$(call gb_SdiTarget_get_clean_target,$(sdi)))
+endef
+
+
+define gb_LinkTarget__add_precompiled_header_impl
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_target,$(3)))
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_PrecompiledHeader_get_noex_target,$(3)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_PrecompiledHeader_get_clean_target,$(3))
+$(call gb_PrecompiledHeader_get_noex_target,$(3)) : EXCEPTIONFLAGS :=
+$(call gb_PrecompiledHeader_get_target,$(3)) \
+$(call gb_PrecompiledHeader_get_noex_target,$(3)) : $(2).cxx $(2).hxx
+endef
+
+define gb_LinkTarget_add_precompiled_header
+ifeq ($(gb_ENABLE_PCH),$(true))
+$(call gb_LinkTarget__add_precompiled_header_impl,$(1),$(2),$(notdir $(2)))
+endif
 endef
 
 # vim: set noet sw=4 ts=4:
