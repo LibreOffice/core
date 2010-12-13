@@ -209,6 +209,15 @@ WindowsCustomAction gid_Customaction_Register_Extensions
 	Assignment2 = ("AdminExecuteSequence", "Not REMOVE=\"ALL\"", "end");
 End
 
+WindowsCustomAction gid_Customaction_Remove_Extensions
+	Name = "RemoveExtensions";
+	Typ = "65";
+	Source = "shlxtmsi.dll";
+	Target = "RemoveExtensions";
+	Inbinarytable = 1;
+	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\" And Not PATCH", "FileCost");
+End
+
 WindowsCustomAction gid_Customaction_Set_Admininstall
 	Name = "SetAdminInstallProperty";
 	Typ = "65";
@@ -216,27 +225,6 @@ WindowsCustomAction gid_Customaction_Set_Admininstall
 	Target = "SetAdminInstallProperty";
 	Inbinarytable = 1;
 	Assignment1 = ("AdminExecuteSequence", "", "InstallInitialize");
-End
-
-/*
-WindowsCustomAction gid_Customaction_Remove_Extensions
-	Name = "RemoveExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "RemoveExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "REMOVE=\"ALL\"", "Shellextensionsdll4");
-End
-*/
-
-WindowsCustomAction gid_Customaction_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "shlxtmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	// Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "gid_Customaction_Remove_Extensions");
-	Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"\"", "behind_IsolateComponents");
 End
 
 WindowsCustomAction gid_Customaction_Check_Install_Directory
@@ -326,34 +314,6 @@ WindowsCustomAction gid_Customaction_Langpack_Register_Extensions
 	Inbinarytable = 1;
 	Assignment1 = ("InstallExecuteSequence", "", "end");
 	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Langpack_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "lngpckinsthlp.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Register_Extensions
-	Name = "RegisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "RegisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "end");
-	Assignment2 = ("AdminExecuteSequence", "", "end");
-End
-
-WindowsCustomAction gid_Customaction_Patch_Deregister_Extensions
-	Name = "DeregisterExtensions";
-	Typ = "65";
-	Source = "patchmsi.dll";
-	Target = "DeregisterExtensions";
-	Inbinarytable = 1;
-	Assignment1 = ("InstallExecuteSequence", "", "InstallInitialize");
 End
 
 WindowsCustomAction gid_Customaction_Patch_SetFeatureState
@@ -468,6 +428,16 @@ WindowsCustomAction gid_Customaction_MigrateInstallPath
       Inbinarytable = 1;
       Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
       Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "CostInitialize");
+End
+
+WindowsCustomAction gid_Customaction_CompleteInstallPath
+      Name = "CompleteInstallPath";
+      Typ = "321";
+      Source = "shlxtmsi.dll";
+      Target = "CompleteInstallPath";
+      Inbinarytable = 1;
+      Assignment1 = ("InstallExecuteSequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
+      Assignment2 = ("InstallUISequence", "Not REMOVE=\"ALL\" And Not PATCH", "MigrateInstallPath");
 End
 
 WindowsCustomAction gid_Customaction_CheckVersions

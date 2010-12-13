@@ -316,6 +316,11 @@ sub set_important_properties
     {
         my $onepropertyline = "OFFICEDIRHOSTNAME" . "\t" . $installer::globals::officedirhostname . "\n";
         push(@{$propertyfile}, $onepropertyline);
+
+        my $localofficedirhostname = $installer::globals::officedirhostname;
+        $localofficedirhostname =~ s/\//\\/g;
+        $onepropertyline = "OFFICEDIRHOSTNAME_" . "\t" . $localofficedirhostname . "\n";
+        push(@{$propertyfile}, $onepropertyline);
     }
 
     if ( $installer::globals::sundirhostname )
@@ -353,8 +358,8 @@ sub set_important_properties
 
     if (( $allvariables->{'PRODUCTEXTENSION'} ) && ( $allvariables->{'PRODUCTEXTENSION'}  eq "Beta" ))
     {
-        my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
-        push(@{$propertyfile}, $registryline);
+        # my $registryline = "WRITE_REGISTRY" . "\t" . "0" . "\n";
+        # push(@{$propertyfile}, $registryline);
         my $betainfoline = "BETAPRODUCT" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $betainfoline);
     }

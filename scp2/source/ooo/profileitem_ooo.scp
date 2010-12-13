@@ -173,6 +173,24 @@ End
 
 #endif
 
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "$BRAND_BASE_DIR/share/extensions";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/bundled";
+End
+
 ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
@@ -191,6 +209,15 @@ ProfileItem gid_Profileitem_Uno_Uno_Shared_Packages_Cache
     Value = "$UNO_SHARED_PACKAGES/cache";
 End
 
+ProfileItem gid_Profileitem_Uno_Uno_Shared_Extensions_User
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/shared";
+End
+
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
@@ -198,6 +225,15 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages
     Order = 3;
     Key = "UNO_USER_PACKAGES";
     Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/uno_packages";
+End
+
+ProfileItem gid_Profileitem_Uno_Uno_Bundled_Tmp_Extensions
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 1;
+    Key = "TMP_EXTENSIONS";
+    Value = "${$BRAND_BASE_DIR/program/" PROFILENAME(bootstrap) ":UserInstallation}/user/extensions/tmp";
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
@@ -208,6 +244,14 @@ ProfileItem gid_Profileitem_Uno_Uno_User_Packages_Cache
     Key = "UNO_USER_PACKAGES_CACHE";
     Value = "$UNO_USER_PACKAGES/cache";
 End
+ProfileItem gid_Profileitem_Uno_Pkg_BundledUnoFile
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 5;
+    Key = "PKG_BundledUnoFile";
+    Value = "$BUNDLED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+End
 
 ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
     ProfileID = gid_Profile_Uno_Ini;
@@ -215,7 +259,7 @@ ProfileItem gid_Profileitem_Uno_Pkg_SharedUnoFile
     Section = "Bootstrap";
     Order = 5;
     Key = "PKG_SharedUnoFile";
-    Value = "$UNO_SHARED_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
+    Value = "$SHARED_EXTENSIONS_USER/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
 
 ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
@@ -227,12 +271,36 @@ ProfileItem gid_Profileitem_Uno_Pkg_UserUnoFile
     Value = "$UNO_USER_PACKAGES_CACHE/registry/com.sun.star.comp.deployment.component.PackageRegistryBackend/unorc";
 End
 
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Bundled_Extensions_User
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "BUNDLED_EXTENSIONS_USER";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":BUNDLED_EXTENSIONS_USER}";
+End
+
 ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Packages_Cache
     ModuleID = gid_Module_Root;
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "UNO_SHARED_PACKAGES_CACHE";
     Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_SHARED_PACKAGES_CACHE}";
+End
+
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Shared_Extensions_User
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "SHARED_EXTENSIONS_USER";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":SHARED_EXTENSIONS_USER}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Uno_User_Packages_Cache
@@ -243,15 +311,23 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Uno_User_Packages_Cache
     Value = "${$ORIGIN/" PROFILENAME(uno) ":UNO_USER_PACKAGES_CACHE}";
 End
 
+ProfileItem gid_Profileitem_Fundamentalbasis_Uno_Tmp_Extensions
+    ModuleID = gid_Module_Root;
+    ProfileID = gid_Profile_Fundamentalbasis_Ini;
+    Section = "Bootstrap";
+    Key = "TMP_EXTENSIONS";
+    Value = "${$ORIGIN/" PROFILENAME(uno) ":TMP_EXTENSIONS}";
+End
+
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Types
     ModuleID = gid_Module_Root;
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_TYPES";
 #if defined ENABLE_VBA && !defined VBA_EXTENSION
-    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES}";
+    Value = "$ORIGIN/offapi.rdb $ORIGIN/oovbaapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
 #else
-    Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES}";
+    Value = "$ORIGIN/offapi.rdb ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_TYPES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_TYPES}";
 #endif
 End
 
@@ -260,7 +336,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Services
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_SERVICES";
-    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
+    Value = "${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_SERVICES} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_SERVICES} $ORIGIN/services.rdb";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
@@ -268,7 +344,7 @@ ProfileItem gid_Profileitem_Fundamentalbasis_Ure_More_Java_Types
     ProfileID = gid_Profile_Fundamentalbasis_Ini;
     Section = "Bootstrap";
     Key = "URE_MORE_JAVA_TYPES";
-    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
+    Value = "$ORIGIN/classes/unoil.jar $ORIGIN/classes/ScriptFramework.jar ${${$ORIGIN/" PROFILENAME(uno) ":PKG_UserUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH} ${${$ORIGIN/" PROFILENAME(uno) ":PKG_BundledUnoFile}:UNO_JAVA_CLASSPATH}";
 End
 
 ProfileItem gid_Profileitem_Fundamentalbasis_Ure_Java_Jfw_Shared_Data
@@ -385,4 +461,3 @@ ProfileItem gid_Basis_Profileitem_Version_Ooopackageversion
     Key = "OOOPackageVersion";
     Value = "${OOOPACKAGEVERSION}";
 End
-

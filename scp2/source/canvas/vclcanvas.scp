@@ -27,4 +27,4 @@
 
 #include "macros.inc"
 
-SPECIAL_UNO_COMPONENT_LIB_FILE(gid_File_Lib_VCLCanvas, vclcanvas.uno)
+SPECIAL_COMPONENT_LIB_FILE(gid_File_Lib_VCLCanvas, vclcanvas.uno)

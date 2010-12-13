@@ -538,16 +538,6 @@ $(SHL1TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL1TARGET)
-
-runtest_$(SHL1TARGET) : $(SHL1TARGETN)
-    testshl $(SHL1TARGETN) sce/$(SHL1TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL1TARGETN)"!=""
 
 # unroll begin
@@ -1090,16 +1080,6 @@ $(SHL2TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL2TARGET)
-
-runtest_$(SHL2TARGET) : $(SHL2TARGETN)
-    testshl $(SHL2TARGETN) sce/$(SHL2TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL2TARGETN)"!=""
 
 # unroll begin
@@ -1642,16 +1622,6 @@ $(SHL3TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL3TARGET)
-
-runtest_$(SHL3TARGET) : $(SHL3TARGETN)
-    testshl $(SHL3TARGETN) sce/$(SHL3TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL3TARGETN)"!=""
 
 # unroll begin
@@ -2194,16 +2164,6 @@ $(SHL4TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL4TARGET)
-
-runtest_$(SHL4TARGET) : $(SHL4TARGETN)
-    testshl $(SHL4TARGETN) sce/$(SHL4TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL4TARGETN)"!=""
 
 # unroll begin
@@ -2746,16 +2706,6 @@ $(SHL5TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL5TARGET)
-
-runtest_$(SHL5TARGET) : $(SHL5TARGETN)
-    testshl $(SHL5TARGETN) sce/$(SHL5TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL5TARGETN)"!=""
 
 # unroll begin
@@ -3298,16 +3248,6 @@ $(SHL6TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL6TARGET)
-
-runtest_$(SHL6TARGET) : $(SHL6TARGETN)
-    testshl $(SHL6TARGETN) sce/$(SHL6TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL6TARGETN)"!=""
 
 # unroll begin
@@ -3850,16 +3790,6 @@ $(SHL7TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL7TARGET)
-
-runtest_$(SHL7TARGET) : $(SHL7TARGETN)
-    testshl $(SHL7TARGETN) sce/$(SHL7TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL7TARGETN)"!=""
 
 # unroll begin
@@ -4402,16 +4332,6 @@ $(SHL8TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL8TARGET)
-
-runtest_$(SHL8TARGET) : $(SHL8TARGETN)
-    testshl $(SHL8TARGETN) sce/$(SHL8TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL8TARGETN)"!=""
 
 # unroll begin
@@ -4954,16 +4874,6 @@ $(SHL9TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL9TARGET)
-
-runtest_$(SHL9TARGET) : $(SHL9TARGETN)
-    testshl $(SHL9TARGETN) sce/$(SHL9TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL9TARGETN)"!=""
 
 # unroll begin
@@ -5506,16 +5416,6 @@ $(SHL10TARGETN) : \
 
 .ENDIF			# "$(GUI)" == "OS2"
 
-
-.IF "$(TESTDIR)"!=""
-.IF "$(NO_TESTS)"==""
-
-ALLTAR : runtest_$(SHL10TARGET)
-
-runtest_$(SHL10TARGET) : $(SHL10TARGETN)
-    testshl $(SHL10TARGETN) sce/$(SHL10TARGET).sce -msg -skip
-.ENDIF			# "$(NO_TESTS)"==""
-.ENDIF			# "$(TESTDIR)"!=""
 .ENDIF			# "$(SHL10TARGETN)"!=""
 
 # unroll begin

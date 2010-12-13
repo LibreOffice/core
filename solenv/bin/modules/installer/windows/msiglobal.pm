@@ -1696,7 +1696,6 @@ sub include_cabs_into_msi
     $msifilename = installer::converter::make_path_conform($msifilename);
 
     # msidb.exe really wants backslashes. (And double escaping because system() expands the string.)
-    $idtdirbase =~ s/\//\\\\/g;
     $msifilename =~ s/\//\\\\/g;
     $extraslash = "\\";
 

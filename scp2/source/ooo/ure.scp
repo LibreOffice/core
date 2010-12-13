@@ -312,6 +312,13 @@ File gid_File_Dl_Store
     // CompID = "A5477BD7-89A3-44AF-8B42-9E28D55C8066";
 End
 
+File gid_File_Dl_Xmlreader
+    TXT_FILE_BODY;
+    Dir = SCP2_URE_DL_DIR;
+    Name = SCP2_URE_DL_NORMAL("xmlreader");
+    Styles = (PACKED);
+End
+
 File gid_File_Dl_Jvmaccess
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
@@ -667,8 +674,7 @@ File gid_File_Dl_Acceptor
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("acceptor.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "31183C51-C9A4-4D7A-A2F4-103252E1FEB0";
 End
 
@@ -676,8 +682,7 @@ File gid_File_Dl_Bootstrap
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("bootstrap.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "2620B307-25DB-498F-B2B8-46D928165331";
 End
 
@@ -685,8 +690,7 @@ File gid_File_Dl_Bridgefac
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("bridgefac.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "E025163F-FE1E-4E8C-B0E5-49C08924A646";
 End
 
@@ -694,8 +698,7 @@ File gid_File_Dl_Connector
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("connector.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "EBCE77E7-E244-40F6-96E2-5319D6571C5D";
 End
 
@@ -703,8 +706,7 @@ File gid_File_Dl_Introspection
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("introspection.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "E99960CF-FE59-4332-A2AC-47418C3A17C1";
 End
 
@@ -712,8 +714,7 @@ File gid_File_Dl_Invocadapt
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("invocadapt.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "77DDC112-1994-49D5-A086-FB16D4328AB9";
 End
 
@@ -721,8 +722,7 @@ File gid_File_Dl_Invocation
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("invocation.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "A79ACB80-DA65-47CA-81BA-7CD9E191C84C";
 End
 
@@ -732,8 +732,7 @@ File gid_File_Dl_Javaloader
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("javaloader.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "19A20968-E654-4E2C-9F58-7B66F07CA346";
 End
 #endif
@@ -743,8 +742,7 @@ File gid_File_Dl_Javavm
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("javavm.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "F1266B2B-80AD-4248-A921-9161759FA4DA";
 End
 #endif
@@ -753,8 +751,7 @@ File gid_File_Dl_Namingservice
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("namingservice.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "DD22BE3A-AD21-447D-B3A3-89B0FCDB0B31";
 End
 
@@ -762,8 +759,7 @@ File gid_File_Dl_Stocservices
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("stocservices.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "EBF6BBDE-EC50-4FB8-A0D4-BEC58F1C8C07";
 End
 
@@ -771,8 +767,7 @@ File gid_File_Dl_Proxyfac
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("proxyfac.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "A2CDDEC3-B9C7-48C9-AB35-65008777BC2F";
 End
 
@@ -780,8 +775,7 @@ File gid_File_Dl_Reflection
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("reflection.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "601C7946-CFEB-4F56-9429-6D5963188DF3";
 End
 
@@ -789,8 +783,7 @@ File gid_File_Dl_Remotebridge
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("remotebridge.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "B440B28E-B7AD-40C7-89E1-1508CA798347";
 End
 
@@ -798,8 +791,7 @@ File gid_File_Dl_Streams
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("streams.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "6028CF43-A9B7-40A8-8216-509CAB256A2B";
 End
 
@@ -807,8 +799,7 @@ File gid_File_Dl_Textinstream
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("textinstream.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "DAA39D01-D9C5-40C4-94EC-9E4B2F94EABA";
 End
 
@@ -816,8 +807,7 @@ File gid_File_Dl_Textoutstream
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("textoutstream.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "DD01EB0C-A119-43AE-9100-F7A595D099E4";
 End
 
@@ -825,8 +815,7 @@ File gid_File_Dl_Uuresolver
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
     Name = SCP2_URE_DL_BARE("uuresolver.uno");
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "377090E1-5008-424F-B0F6-A9EFC9F11206";
 End
 
@@ -896,7 +885,7 @@ End
 File gid_File_Dl_GccS
     TXT_FILE_BODY;
     Dir = SCP2_URE_DL_DIR;
-    Name = SCP2_URE_DL_VER("gcc_s", "1");
+    Name = SCP2_URE_DL_VER("gcc_s", STRING(SHORTSTDC3));
     Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "C601D04B-2194-4F1B-BB09-7B4930D6E1DB";
 End
@@ -1018,8 +1007,7 @@ File gid_File_Java_JuhJar
     TXT_FILE_BODY;
     Dir = gid_Dir_Ure_Java;
     Name = "juh.jar";
-    Styles = (PACKED, UNO_COMPONENT, VERSION_INDEPENDENT_COMP_ID);
-    RegistryID = gid_Starregistry_Services_Rdb_Ure;
+    Styles = (PACKED, VERSION_INDEPENDENT_COMP_ID);
     // CompID = "E77CC8B5-0345-4B7F-ABED-5EB9DC94E492";
 End
 #endif
@@ -1066,6 +1054,13 @@ File gid_File_Misc_TypesRdb
     // CompID = "E5086F6A-855B-4CAE-AD3A-A85A21C5AE44";
 End
 
+File gid_File_Misc_ServicesRdb
+    TXT_FILE_BODY;
+    Dir = gid_Dir_Ure_Misc;
+    Name = "/ure/services.rdb";
+    Styles = (PACKED);
+End
+
 // Private Miscellaneous Files:
 
 #if defined SOLAR_JAVA
@@ -1077,18 +1072,6 @@ File gid_File_Misc_JavavendorsXml
     // CompID = "403FCCFE-545B-44F6-91D1-5C75F846E587";
 End
 #endif
-
-// StarRegistry File
-
-File gid_Starregistry_Services_Rdb_Ure
-    TXT_FILE_BODY;
-    Name = "services.rdb";
-    Dir = gid_Dir_Ure_Misc;
-    Styles = (PACKED, STARREGISTRY, VERSION_INDEPENDENT_COMP_ID);
-    NativeServicesURLPrefix = "vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/";
-    JavaServicesURLPrefix = "vnd.sun.star.expand:$URE_INTERNAL_JAVA_DIR/";
-    // CompID = "F4BD7B0A-5A20-4167-9D10-18597C5F85AF";
-End
 
 #if defined MACOSX
 Unixlink gid_Unixlink_Ure_Bin_Urelibs
@@ -1150,6 +1133,7 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Dl_Reg,
             gid_File_Dl_Rmcxt,
             gid_File_Dl_Store,
+            gid_File_Dl_Xmlreader,
             gid_File_Dl_Jvmaccess,
             gid_File_Dl_Jvmfwk,
             gid_File_Dl_Sunjavaplugin,
@@ -1204,8 +1188,8 @@ Module gid_Module_Root_Ure_Hidden
             gid_File_Java_RidlJar,
             gid_File_Java_JavaUnoJar,
             gid_File_Misc_TypesRdb,
-            gid_File_Misc_JavavendorsXml,
-            gid_Starregistry_Services_Rdb_Ure);
+            gid_File_Misc_ServicesRdb,
+            gid_File_Misc_JavavendorsXml);
     Unixlinks = (gid_Unixlink_Ure_Bin_Urelibs);
 End
 

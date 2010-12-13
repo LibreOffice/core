@@ -8,6 +8,4 @@
 ..\%__SRC%\bin\cpp.exe %_DEST%\bin%_EXT%\cpplcc.exe
 ..\%__SRC%\bin\cpp %_DEST%\bin%_EXT%\cpp.lcc
 ..\%__SRC%\inc\unistd.h %_DEST%\inc%_EXT%\unistd.h
-..\%__SRC%\bin\hidc.exe %_DEST%\bin%_EXT%\hidc.exe
-..\%__SRC%\bin\hidc %_DEST%\bin%_EXT%\hidc
 ..\%__SRC%\bin\testhxx* %_DEST%\bin%_EXT%\testhxx*

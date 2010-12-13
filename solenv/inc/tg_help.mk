@@ -31,23 +31,31 @@
 aux_alllangiso*:=$(alllangiso)
 
 SHELL_PACKAGE:=$(subst,/,$/ $(PACKAGE))
-HLANGXHPFILES:=$(foreach,i,$(XHPFILES) $(foreach,j,$(aux_alllangiso) $(COMMONMISC)$/$j$/$(SHELL_PACKAGE)$/$(i:f)))
 
-ALLTAR : $(COMMONMISC)$/$(TARGET).done $(COMMONMISC)$/xhp_changed.flag optix
+.IF "$(XHPDEST)"==""
+XHPDEST*:=$(COMMONMISC)
+HELP_OUT:=$(COMMONMISC)
+.ELSE          # "$(XHPDEST)"==""
+HELP_OUT:=$(MISC)
+.ENDIF          # "$(XHPDEST)"==""
+
+HLANGXHPFILES*:=$(foreach,i,$(XHPFILES) $(foreach,j,$(aux_alllangiso) $(XHPDEST)$/$j$/$(SHELL_PACKAGE)$/$(i:f)))
+
+ALLTAR : $(HELP_OUT)$/$(TARGET).done $(HELP_OUT)$/xhp_changed.flag optix
 
 $(HLANGXHPFILES) : $$(@:d)thisdir.created
 
-$(COMMONMISC)$/{$(aux_alllangiso)}$/$(SHELL_PACKAGE)$/%.xhp :| %.xhp
+$(XHPDEST)$/{$(aux_alllangiso)}$/$(SHELL_PACKAGE)$/%.xhp :| %.xhp
     @$(TOUCH) $@
 # internal dependencies not sufficient to trigger merge?
 #    @$(NULL)
 
 
-$(COMMONMISC)$/$(TARGET).done : $(HLANGXHPFILES)
+$(HELP_OUT)$/$(TARGET).done : $(HLANGXHPFILES)
 .IF "$(WITH_LANG)"!=""
-    $(AUGMENT_LIBRARY_PATH) $(HELPEX) -QQ -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(COMMONMISC) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
+    $(AUGMENT_LIBRARY_PATH) $(HELPEX) -p $(PRJNAME) -r $(PRJ) -i @$(mktmp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES))))) -x $(XHPDEST) -y $(SHELL_PACKAGE) -l all -lf $(aux_alllangiso:t",") -m $(LOCALIZESDF) && $(TOUCH) $@
 .ELSE			# "$(WITH_LANG)"!=""
-    cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(COMMONMISC)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
+    cp $(uniq $(foreach,i,$? $(!eq,$(i:f),$(i:f:s/.xhp//) $(i:f) $(XHPFILES)))) $(XHPDEST)$/en-US$/$(SHELL_PACKAGE) && $(TOUCH) $@
 .ENDIF			# "$(WITH_LANG)"!=""
 .IF "$(OS)"=="SOLARIS"
     @$(ECHONL) " "
@@ -55,24 +63,24 @@ $(COMMONMISC)$/$(TARGET).done : $(HLANGXHPFILES)
     @$(ECHONL)
 .ENDIF			# "$(OS)"=="SOLARIS"
 
-$(COMMONMISC)$/xhp_changed.flag : $(HLANGXHPFILES)
+$(HELP_OUT)$/xhp_changed.flag : $(HLANGXHPFILES)
     @$(TOUCH) $@
 
 # urks - dmake mixes up operators and strings :-(
 .IF "$(HLANGXHPFILES:s/defined/xxx/)"!=""
 
 .IF "$(HELPTRANSPHONY)"!=""
-$(COMMONMISC)$/$(TARGET).done .PHONY :
+$(HELP_OUT)$/$(TARGET).done .PHONY :
 .ELSE           # "$(HELPTRANSPHONY)"!=""
 
-$(COMMONMISC)$/$(TARGET).done : makefile.mk
+$(HELP_OUT)$/$(TARGET).done : makefile.mk
 .IF "$(WITH_LANG)"!=""
-$(COMMONMISC)$/$(TARGET).done : $(LOCALIZESDF)
+$(HELP_OUT)$/$(TARGET).done : $(LOCALIZESDF)
 .ENDIF			# "$(WITH_LANG)"!=""
 .ENDIF          # "$(HELPTRANSPHONY)"!=""
 .ENDIF          # "$(HLANGXHPFILES)"!=""
 
-optix: $(COMMONMISC)$/$(TARGET).done
+optix: $(HELP_OUT)$/$(TARGET).done
     @echo done
 
 %.created :

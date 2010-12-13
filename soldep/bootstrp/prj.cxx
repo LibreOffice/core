@@ -41,31 +41,21 @@
 
 //#define TEST  1
 
-#ifdef MAC
-#define putenv(x)
-#endif
-
-#if defined(DOS) || defined(WNT) || defined(OS2)
+#if defined(WNT) || defined(OS2)
 #define LIST_DELIMETER ';'
 #else
 #ifdef UNX
 #define LIST_DELIMETER ':'
 #else
-#ifdef MAC
-#define LIST_DELIMETER ','
-#endif
 #endif
 #endif
 
-#if defined(DOS) || defined(WNT) || defined(OS2) || defined(WIN)
+#if defined(WNT) || defined(OS2)
 #define PATH_DELIMETER '\\'
 #else
 #ifdef UNX
 #define PATH_DELIMETER '/'
 #else
-#ifdef MAC
-#define PATH_DELIMETER ':'
-#endif
 #endif
 #endif
 
@@ -142,14 +132,6 @@ ByteString  SimpleConfig::GetNextLine()
     ByteString aEraseString;
     for ( USHORT i = 0; i<= nLength; i++)
     {
-#ifdef MAC
-        if ( aTmpStr.GetChar( i ) == '"')
-        {
-            if ( bFound) bFound = FALSE;
-            else bFound = TRUE;
-            aTmpStr.SetChar( i, '\t' );
-        }
-#endif
         if ( aTmpStr.GetChar( i ) == 0x20  && !bFound )
             aTmpStr.SetChar( i, 0x09 );
     }

@@ -43,7 +43,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision$ ';
+$id_str = ' $Revision: 275594 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -404,6 +404,8 @@ sub parse_options
 {
     my $arg;
     my $dontdeletecommon = 0;
+    $opt_silent = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE');
+    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE');
     while ( $arg = shift @ARGV ) {
         $arg =~ /^-force$/      and $opt_force  = 1  and next;
         $arg =~ /^-check$/      and $opt_check  = 1  and $opt_verbose = 1 and next;
@@ -423,15 +425,13 @@ sub parse_options
         }
         $dest = $arg;
     }
-    $opt_silent = 1 if ( !defined $ENV{VERBOSE} || (defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'FALSE')) && ( ! $opt_verbose );
-    $opt_verbose = 1 if ( defined $ENV{VERBOSE} && $ENV{VERBOSE} eq 'TRUE') && ( ! $opt_silent );
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
         usage(1);
     }
     # $opt_silent and $opt_check or $opt_verbose are mutually exclusive
     if ( ($opt_check or $opt_verbose) and $opt_silent ) {
-        print STDERR "Error on command line: options '-check'/'-verbose' and '-quiet' are mutually exclusive.\n";
+        print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
     if ($dontdeletecommon) {
@@ -679,6 +679,12 @@ sub glob_line
     }
     else {
         # no globbing but renaming possible
+        # #i89066#
+        if (-d $to && -f $from) {
+            my $filename = File::Basename::basename($from);
+            $to .= '/' if ($to !~ /[\\|\/]$/);
+            $to .= $filename;
+        };
         push(@globbed_files, [$from, $to]);
     }
     if ( $opt_checkdlst ) {

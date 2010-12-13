@@ -51,12 +51,12 @@ if [ -x $checkdll ]; then
     shift  # remove the trailing ---
 
     case `uname -s` in
-    Darwin) case "${DYLD_LIBRARY_PATH+X}" in
+    Darwin) case "${DYLD_LIBRARY_PATH:+X}" in
         X) DYLD_LIBRARY_PATH=$libpath:$DYLD_LIBRARY_PATH;;
         *) DYLD_LIBRARY_PATH=$libpath;;
         esac
         export DYLD_LIBRARY_PATH;;
-    *)  case "${LD_LIBRARY_PATH+X}" in
+    *)  case "${LD_LIBRARY_PATH:+X}" in
         X) LD_LIBRARY_PATH=$libpath:$LD_LIBRARY_PATH;;
         *) LD_LIBRARY_PATH=$libpath;;
         esac
