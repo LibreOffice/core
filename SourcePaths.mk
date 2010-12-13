@@ -14,22 +14,25 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.	If not, see
+# version 3 along with OpenOffice.org.  If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-include $(dir $(firstword $MAKEFILE_LIST))/SourcePaths.mk
-include $(GBUILDDIR)/gbuild.mk
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set)
+endif
+ifeq ($(OS),WNT)
+SRCDIR := $(shell cygpath -u $(SRCDIR))
+else
+SRCDIR := $(SOLARSRC)
+endif
+CURRENTREPO := $(SRCDIR)
 
-$(eval $(call gb_Module_make_global_targets,$(SRCDIR)/Module_ooo.mk))
-
-include $(foreach repo,$(filter-out $(SRCDIR),$(gb_REPOS)),$(repo)/$(notdir $(firstword $(MAKEFILE_LIST))))
-
-# vim: set noet sw=4 ts=4:
+GBUILDDIR := $(SOLARENV)/gbuild
