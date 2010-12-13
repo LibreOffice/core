@@ -60,9 +60,6 @@ SOLARINC += $(JDKINCS)
 SRCDIR := $(SOLARSRC)
 OUTDIR := $(SOLARVERSION)/$(INPATH)
 WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
-ifeq ($(strip $(gb_REPOS)),)
-gb_REPOS := $(SRCDIR)
-endif
 
 # HACK
 ifeq ($(OS),WNT)
@@ -72,6 +69,10 @@ OUTDIR := $(shell cygpath -u $(OUTDIR))
 endif
 true := T
 false :=
+
+ifeq ($(strip $(gb_REPOS)),)
+gb_REPOS := $(SRCDIR)
+endif
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
