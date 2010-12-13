@@ -2277,7 +2277,6 @@ void RadioButton::ImplInvalidateOrDrawRadioButtonState()
 
 void RadioButton::ImplDrawRadioButtonState()
 {
-    USHORT nButtonStyle = 0;
     BOOL   bNativeOK = FALSE;
 
     // no native drawing for image radio buttons
@@ -2325,12 +2324,12 @@ if ( bNativeOK == FALSE )
         Rectangle               aImageRect  = maStateRect;
         Size                    aImageSize  = maImage.GetSizePixel();
         BOOL                    bEnabled    = IsEnabled();
+        USHORT nButtonStyle = FRAME_DRAW_DOUBLEIN;
 
         aImageSize.Width()  = CalcZoom( aImageSize.Width() );
         aImageSize.Height() = CalcZoom( aImageSize.Height() );
 
         // Border und Selektionsstatus ausgeben
-        nButtonStyle = FRAME_DRAW_DOUBLEIN;
         aImageRect = aDecoView.DrawFrame( aImageRect, nButtonStyle );
         if ( (ImplGetButtonState() & BUTTON_DRAW_PRESSED) || !bEnabled )
             SetFillColor( rStyleSettings.GetFaceColor() );

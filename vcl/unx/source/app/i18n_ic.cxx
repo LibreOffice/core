@@ -559,14 +559,14 @@ SalI18N_InputContext::IsSupportedIMStyle( XIMStyle nStyle ) const
 Bool
 SalI18N_InputContext::SupportInputMethodStyle( XIMStyles *pIMStyles )
 {
-    int nBestScore   = 0;
-    int nActualScore = 0;
-
     mnPreeditStyle = 0;
     mnStatusStyle  = 0;
 
     if ( pIMStyles != NULL )
     {
+        int nBestScore   = 0;
+        int nActualScore = 0;
+
         // check whether the XIM supports one of the desired styles
         // only a single preedit and a single status style must occure
         // in a inpuut method style. Hideki said so, so i trust him

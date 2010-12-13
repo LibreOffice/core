@@ -966,10 +966,11 @@ BOOL Bitmap::ImplScaleFast( const double& rScaleX, const double& rScaleY )
             const long  nHeight1 = pReadAcc->Height() - 1L;
             long*       pLutX = new long[ nNewWidth ];
             long*       pLutY = new long[ nNewHeight ];
-            long        nX, nY, nMapY, nActY = 0L;
 
             if( nNewWidth1 && nNewHeight1 )
             {
+                long        nX, nY, nMapY, nActY = 0L;
+
                 for( nX = 0L; nX < nNewWidth; nX++ )
                     pLutX[ nX ] = nX * nWidth1 / nNewWidth1;
 

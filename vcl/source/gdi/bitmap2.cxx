@@ -308,7 +308,6 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal
 
     // BITMAPCOREHEADER
     sal_Int16 nTmp16 = 0;
-    sal_uInt8 nTmp8 = 0;
     if ( rHeader.nSize == DIBCOREHEADERSIZE )
     {
 
@@ -319,6 +318,7 @@ BOOL Bitmap::ImplReadDIBInfoHeader( SvStream& rIStm, DIBInfoHeader& rHeader, sal
     }
     else if ( bIsMSOFormat && ( rHeader.nSize == BITMAPINFOHEADER ) )
     {
+        sal_uInt8 nTmp8 = 0;
         rIStm >> nTmp16; rHeader.nWidth = nTmp16;
         rIStm >> nTmp16; rHeader.nHeight = nTmp16;
         rIStm >> nTmp8; rHeader.nPlanes = nTmp8;

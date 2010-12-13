@@ -1039,7 +1039,6 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
 bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData )
 {
-    int nFormat;
     bool bSuccess = false;
 
     ::std::hash_map< Atom, Selection* >::iterator it;
@@ -1223,6 +1222,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
 
     if( ! bSuccess )
     {
+        int nFormat;
         ::std::list< Atom > aTypes;
         convertTypeToNative( rType, selection, nFormat, aTypes );
         ::std::list< Atom >::const_iterator type_it;

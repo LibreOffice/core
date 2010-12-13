@@ -506,17 +506,14 @@ void FixedLine::ImplDraw( bool bLayout )
     {
         if( !pVector )
         {
-            long nX = 0;
-            long nY = 0;
-
             if ( nWinStyle & WB_VERT )
             {
-                nX = (aOutSize.Width()-1)/2;
+                long nX = (aOutSize.Width()-1)/2;
                 aDecoView.DrawSeparator( Point( nX, 0 ), Point( nX, aOutSize.Height()-1 ) );
             }
             else
             {
-                nY = (aOutSize.Height()-1)/2;
+                long nY = (aOutSize.Height()-1)/2;
                 aDecoView.DrawSeparator( Point( 0, nY ), Point( aOutSize.Width()-1, nY ), false );
             }
         }

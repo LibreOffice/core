@@ -607,10 +607,10 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
         // No Name, than set all names
         if ( !aFont.GetName().Len() )
         {
-            xub_StrLen nIndex = 0;
             if ( nFlags & DEFAULTFONT_FLAGS_ONLYONE )
             {
-                //aFont.SetName( aSearch.GetToken( 0, ';', nIndex ) );
+                xub_StrLen nIndex = 0;
+
                 if( !pOutDev )
                     pOutDev = (const OutputDevice *)ImplGetSVData()->mpDefaultWin;
                 if( !pOutDev )

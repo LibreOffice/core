@@ -120,7 +120,7 @@ private:
     void                ImplWriteChunk( BYTE nNumb );
     void                ImplWriteChunk( sal_uInt32 nNumb );
     void                ImplWriteChunk( unsigned char* pSource, sal_uInt32 nDatSize );
-    void                ImplCloseChunk( void );
+    void                ImplCloseChunk( void ) const;
 };
 
 // ------------------------------------------------------------------------
@@ -699,7 +699,7 @@ void PNGWriterImpl::ImplWriteChunk ( unsigned char* pSource, sal_uInt32 nDatSize
 
 // ------------------------------------------------------------------------
 // nothing to do
-void PNGWriterImpl::ImplCloseChunk ( void )
+void PNGWriterImpl::ImplCloseChunk ( void ) const
 {
 }
 

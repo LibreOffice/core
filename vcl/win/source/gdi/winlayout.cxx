@@ -2231,12 +2231,6 @@ void UniscribeLayout::DrawText( SalGraphics& ) const
             else
                 nBaseGlyphPos = nMinGlyphPos;
 
-            const int* pGlyphWidths;
-            if( mpJustifications )
-                pGlyphWidths = mpJustifications;
-            else
-                pGlyphWidths = mpGlyphAdvances;
-
             int i = mnMinCharPos;
             while( (--i >= rVisualItem.mnMinCharPos)
                 && (nBaseGlyphPos == mpLogClusters[i]) )

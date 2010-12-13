@@ -213,7 +213,7 @@ static void ImplTCToTC( const BitmapBuffer& rSrcBuffer, BitmapBuffer& rDstBuffer
     if( BMP_SCANLINE_FORMAT( rSrcBuffer.mnFormat ) == BMP_FORMAT_24BIT_TC_BGR )
     {
         BitmapColor aCol;
-        BYTE*       pPixel;
+        BYTE* pPixel = NULL;
 
         for( long nActY = 0, nMapY; nActY < nHeight; nActY++ )
         {

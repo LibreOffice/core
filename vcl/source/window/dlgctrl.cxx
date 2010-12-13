@@ -896,10 +896,8 @@ BOOL Window::ImplDlgCtrl( const KeyEvent& rKEvt, BOOL bKeyInput )
 BOOL Window::ImplHasDlgCtrl()
 {
     Window* pDlgCtrlParent;
-    Window* pDlgCtrl;
 
     // lookup window for dialog control
-    pDlgCtrl = this;
     pDlgCtrlParent = ImplGetParent();
     while ( pDlgCtrlParent &&
             !pDlgCtrlParent->ImplIsOverlapWindow() &&
