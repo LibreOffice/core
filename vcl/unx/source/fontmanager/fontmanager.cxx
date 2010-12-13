@@ -1167,13 +1167,14 @@ OString PrintFontManager::s_aEmptyOString;
  */
 PrintFontManager& PrintFontManager::get()
 {
-    static PrintFontManager* theManager = NULL;
-    if( ! theManager )
+    static PrintFontManager* pManager = NULL;
+    if( ! pManager )
     {
-        theManager = new PrintFontManager();
-        theManager->initialize();
+        static PrintFontManager theManager;
+        pManager = &theManager;
+        pManager->initialize();
     }
-    return *theManager;
+    return *pManager;
 }
 
 // -------------------------------------------------------------------------
