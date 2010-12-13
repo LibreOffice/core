@@ -75,11 +75,9 @@
     IMG_SGV ; \
     IMG_SIM ; \
     IMG_SVM ; \
-    IMG_SVT_FOLDER ; \
     IMG_TABLE ; \
     IMG_TEXTFILE ; \
     IMG_TIFF ; \
-    IMG_URL ; \
     IMG_WMF ; \
     IMG_WRITER ; \
     IMG_WRITERTEMPLATE ; \

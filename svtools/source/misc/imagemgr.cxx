@@ -211,7 +211,6 @@ static SvtExtensionResIdMapping_Impl const ExtensionMap_Impl[] =
     {"TIFF-File",              FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_TIFF},
     {"MS-Metafile",            FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_WMF},
     {"XBM-File",               FALSE,STR_DESCRIPTION_GRAPHIC_DOC, IMG_BITMAP},
-    {"UniformResourceLocator", FALSE,STR_DESCRIPTION_LINK,        IMG_URL},
     {NULL, 0}
     };
 #endif
