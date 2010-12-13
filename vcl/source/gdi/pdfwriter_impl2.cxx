@@ -163,13 +163,13 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                 try
                 {
                     uno::Reference < io::XStream > xStream = new utl::OStreamWrapper( aStrm );
-                    Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
-                    Reference< graphic::XGraphicProvider > xGraphicProvider( ImplGetSVData()->maAppData.mxMSF->createInstance(
+                    uno::Reference< io::XSeekable > xSeekable( xStream, UNO_QUERY_THROW );
+                    uno::Reference< graphic::XGraphicProvider > xGraphicProvider( ImplGetSVData()->maAppData.mxMSF->createInstance(
                         OUString::createFromAscii( "com.sun.star.graphic.GraphicProvider" ) ), UNO_QUERY );
                     if ( xGraphicProvider.is() )
                     {
-                        Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
-                        Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
+                        uno::Reference< graphic::XGraphic > xGraphic( aGraphic.GetXGraphic() );
+                        uno::Reference < io::XOutputStream > xOut( xStream->getOutputStream() );
                         rtl::OUString aMimeType( ::rtl::OUString::createFromAscii( "image/jpeg" ) );
                         uno::Sequence< beans::PropertyValue > aOutMediaProperties( 3 );
                         aOutMediaProperties[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
@@ -192,7 +192,7 @@ void PDFWriterImpl::implWriteBitmapEx( const Point& i_rPoint, const Size& i_rSiz
                             Sequence< PropertyValue > aArgs( 1 );
                             aArgs[ 0 ].Name = ::rtl::OUString::createFromAscii( "InputStream" );
                             aArgs[ 0 ].Value <<= xStream;
-                            Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
+                            uno::Reference< XPropertySet > xPropSet( xGraphicProvider->queryGraphicDescriptor( aArgs ) );
                             if ( xPropSet.is() )
                             {
                                 sal_Int16 nBitsPerPixel = 24;

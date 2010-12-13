@@ -28,6 +28,7 @@
 #ifndef _SV_SVDATA_HXX
 #define _SV_SVDATA_HXX
 
+#include "rtl/ref.hxx"
 #include "vos/thread.hxx"
 #include "tools/string.hxx"
 #include "tools/gen.hxx"
@@ -50,9 +51,6 @@ namespace lang {
 }
 namespace frame {
     class XSessionManagerClient;
-}
-namespace awt {
-    class XDisplayConnection;
 }
 }}}
 
@@ -361,8 +359,7 @@ struct ImplSVData
     BOOL                    mbIsTestTool;
 
     vos::OThread::TThreadIdentifier                     mnMainThreadId;
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::awt::XDisplayConnection >     mxDisplayConnection;
+    rtl::Reference< vcl::DisplayConnection >            mxDisplayConnection;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxAccessBridge;
     com::sun::star::uno::Reference< com::sun::star::frame::XSessionManagerClient > xSMClient;

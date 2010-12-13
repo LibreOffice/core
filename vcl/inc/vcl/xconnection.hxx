@@ -28,10 +28,11 @@
 #ifndef _VCL_XCONNECTION_HXX
 #define _VCL_XCONNECTION_HXX
 
-#include <com/sun/star/awt/XDisplayConnection.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/ref.hxx>
 #include <com/sun/star/uno/Reference.hxx>
+
+#include "vcl/displayconnectiondispatch.hxx"
 
 #ifndef _STLP_LIST
 #include <list>
@@ -40,7 +41,7 @@
 namespace vcl {
 
     class DisplayConnection :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::awt::XDisplayConnection >
+        public DisplayConnectionDispatch
     {
         ::osl::Mutex                    m_aMutex;
         ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler > >
@@ -52,9 +53,11 @@ namespace vcl {
         DisplayConnection();
         virtual ~DisplayConnection();
 
-        static bool dispatchEvent( void* pThis, void* pData, int nBytes );
-        static bool dispatchErrorEvent( void* pThis, void* pData, int nBytes );
-        void dispatchDowningEvent();
+        void start();
+        void terminate();
+
+        virtual bool dispatchEvent( void* pData, int nBytes );
+        virtual bool dispatchErrorEvent( void* pData, int nBytes );
 
         // XDisplayConnection
         virtual void SAL_CALL addEventHandler( const ::com::sun::star::uno::Any& window, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw();

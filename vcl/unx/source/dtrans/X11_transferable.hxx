@@ -44,10 +44,10 @@ namespace x11 {
         ::osl::Mutex m_aMutex;
 
         SelectionManager&               m_rManager;
-        Reference< XInterface >         m_xCreator;
+        com::sun::star::uno::Reference< XInterface >            m_xCreator;
         Atom                m_aSelection;
     public:
-        X11Transferable( SelectionManager& rManager, const Reference< XInterface >& xCreator, Atom selection = None );
+        X11Transferable( SelectionManager& rManager, const com::sun::star::uno::Reference< XInterface >& xCreator, Atom selection = None );
         virtual ~X11Transferable();
 
         /*

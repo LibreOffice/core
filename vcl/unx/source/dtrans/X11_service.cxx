@@ -39,6 +39,12 @@
 #include <cppuhelper/factory.hxx>
 #include <cppuhelper/compbase1.hxx>
 
+namespace {
+
+namespace css = com::sun::star;
+
+}
+
 using namespace rtl;
 using namespace cppu;
 using namespace com::sun::star::lang;
@@ -69,9 +75,9 @@ Sequence< OUString > SAL_CALL x11::Xdnd_dropTarget_getSupportedServiceNames()
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
+css::uno::Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& arguments )
 {
-    static std::hash_map< OUString, ::std::hash_map< Atom, Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
+    static std::hash_map< OUString, ::std::hash_map< Atom, css::uno::Reference< XClipboard > >, ::rtl::OUStringHash > m_aInstances;
 
     OUString aDisplayName;
     Atom nSelection;
@@ -80,7 +86,7 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
     // by SelectionManager.initialize() if no display connection is given.
     if( arguments.getLength() > 0 )
     {
-        Reference< XDisplayConnection > xConn;
+        css::uno::Reference< XDisplayConnection > xConn;
         arguments.getConstArray()[0] >>= xConn;
 
         if( xConn.is() )
@@ -107,8 +113,8 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
         nSelection = rManager.getAtom( OUString::createFromAscii( "CLIPBOARD" ) );
     }
 
-    ::std::hash_map< Atom, Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
-    ::std::hash_map< Atom, Reference< XClipboard > >::iterator it = rMap.find( nSelection );
+    ::std::hash_map< Atom, css::uno::Reference< XClipboard > >& rMap( m_aInstances[ aDisplayName ] );
+    ::std::hash_map< Atom, css::uno::Reference< XClipboard > >::iterator it = rMap.find( nSelection );
     if( it != rMap.end() )
         return it->second;
 
@@ -120,16 +126,16 @@ Reference< XInterface > X11SalInstance::CreateClipboard( const Sequence< Any >& 
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateDragSource()
+css::uno::Reference< XInterface > X11SalInstance::CreateDragSource()
 {
-    return Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
+    return css::uno::Reference < XInterface >( ( OWeakObject * ) new SelectionManagerHolder() );
 }
 
 // ------------------------------------------------------------------------
 
-Reference< XInterface > X11SalInstance::CreateDropTarget()
+css::uno::Reference< XInterface > X11SalInstance::CreateDropTarget()
 {
-    return Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
+    return css::uno::Reference < XInterface >( ( OWeakObject * ) new DropTarget() );
 }
 
 
