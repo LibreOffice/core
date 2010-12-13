@@ -50,4 +50,9 @@ ZIP1LIST=com -x "*makefile.mk"
 
 .INCLUDE : target.mk
 
+ALLTAR : $(MISC)/juh.component
 
+$(MISC)/juh.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        juh.component
+    $(XSLTPROC) --nonet --stringparam uri '$(COMPONENTPREFIX_URE_JAVA)juh.jar' \
+        -o $@ $(SOLARENV)/bin/createcomponent.xslt juh.component

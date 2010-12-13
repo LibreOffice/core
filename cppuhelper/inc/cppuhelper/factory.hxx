@@ -87,6 +87,9 @@ typedef void (SAL_CALL * component_getImplementationEnvironmentExtFunc)(
 typedef const sal_Char * (SAL_CALL * component_getDescriptionFunc)(void);
 
 /** Function pointer declaration.
+
+    @obsolete component_writeInfo should no longer be used in new components
+
     Function writes component registry info, at least writing the supported service names.
 
     @param pServiceManager

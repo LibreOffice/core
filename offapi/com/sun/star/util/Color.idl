@@ -37,10 +37,10 @@ module com { module sun { module star { module util {
 
     <p>The byte order is from high to low:
     <ol>alpha channel
-    <li>red
-    <li>green
-    <li>blue
-    </ol>
+    <li>red</li>
+    <li>green</li>
+    <li>blue</li>
+    </ol></p>
 */
 published typedef long Color;
 

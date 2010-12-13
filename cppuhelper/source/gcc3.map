@@ -382,3 +382,9 @@ UDK_3.6 { # OOo 3.3
         _ZN4cppu33createOneInstanceComponentFactoryEPFN3com3sun4star3uno9ReferenceINS3_10XInterfaceEEERKNS4_INS3_17XComponentContextEEEERKN3rtl8OUStringERKNS3_8SequenceISE_EEP16_rtl_ModuleCount;
 } UDK_3.5;
 
+
+UDK_3.7 { # OOo 3.4
+    global:
+        _ZN4cppu18OPropertySetHelper29setDependentFastPropertyValueE?RKN3com3sun4star3uno3AnyE;
+} UDK_3.6;
+

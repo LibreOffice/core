@@ -25,33 +25,36 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
-#define INCLUDED_com_sun_star_deployment_LicenseIndividualAgreementException_idl
+#ifndef INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
+#define INCLUDED_COM_SUN_STAR_DEPLOYMENT_INVALIDREMOVEDPARAMETEREXCEPTION_IDL
 
-#include <com/sun/star/uno/Exception.idl>
-
+#include "com/sun/star/uno/Exception.idl"
 
 module com { module sun { module star { module deployment {
 
-/** The exception signals that an extension is about to be installed for more than
-    one user, allthough every user needs to agree to the license.
+interface XPackage;
 
-    @since OOo 2.0.6
- */
-exception LicenseIndividualAgreementException : com::sun::star::uno::Exception
-{
-    /** name of the extension.
+/**
+   indicates that <member>XPackageRegistry::bindPackage</member> was previously
+   called with a different value for the <code>removed</code> parameter and that
+   the <type>XPackage</type> object created by that call still exist.
 
-        Contains the file name only.
-     */
-    string ExtensionName;
-    /** indicates if the user can prevent to show the license
-
-    Represents the attribute value
-    /description/registration/simple-license/@suppress-if-required
-    from the description.xml
+   @since OOo 3.3.0
+*/
+exception InvalidRemovedParameterException: com::sun::star::uno::Exception {
+    /** the value of the <code>removed</code> parameter which was used in
+        <member>XPackageRegistry::bindPackage</member> to create the currently
+        existing <type>XPackage</type> object.
     */
-    boolean SuppressIfRequired;
+    boolean PreviousValue;
+    /**
+       the <type>XPackage</type> that was already bound to the provided
+       <code>url</code> paramter during
+       <member>XPackageRegistry::bindPackage</member>.
+
+       <p>Must not be <NULL/>.</p>
+    */
+    XPackage Extension;
 };
 
 }; }; }; };

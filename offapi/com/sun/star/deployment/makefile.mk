@@ -35,25 +35,29 @@ PACKAGE = com$/sun$/star$/deployment
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
 
 IDLFILES = \
-        DeploymentException.idl                 \
-        XPackageTypeInfo.idl                    \
-        XPackage.idl                            \
-        XPackageRegistry.idl                    \
-        PackageRegistryBackend.idl              \
-        XPackageManager.idl                     \
-        XPackageManagerFactory.idl              \
-        thePackageManagerFactory.idl			\
-        DependencyException.idl                 \
-        LicenseException.idl                    \
-        VersionException.idl                    \
-        InstallException.idl                    \
-        UpdateInformationEntry.idl				\
-        XUpdateInformationProvider.idl          \
-        UpdateInformationProvider.idl           \
-        XPackageInformationProvider.idl         \
-        PackageInformationProvider.idl          \
-        LicenseIndividualAgreementException.idl \
-        PlatformException.idl
+        DeploymentException.idl \
+        XPackageTypeInfo.idl \
+        XPackage.idl \
+        XPackageRegistry.idl \
+        PackageRegistryBackend.idl \
+        XPackageManager.idl \
+        XPackageManagerFactory.idl \
+        XExtensionManager.idl \
+        ExtensionManager.idl \
+        thePackageManagerFactory.idl \
+        DependencyException.idl \
+        LicenseException.idl \
+        VersionException.idl \
+        InstallException.idl \
+        UpdateInformationEntry.idl \
+        XUpdateInformationProvider.idl \
+        UpdateInformationProvider.idl \
+        XPackageInformationProvider.idl \
+        PackageInformationProvider.idl \
+        PlatformException.idl \
+        InvalidRemovedParameterException.idl \
+        ExtensionRemovedException.idl \
+        Prerequisites.idl
 
 .INCLUDE : target.mk
 .INCLUDE : $(PRJ)$/util$/target.pmk

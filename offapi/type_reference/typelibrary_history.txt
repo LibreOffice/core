@@ -154,3 +154,7 @@
   Update reference type library with the version of OOo 3.2. The new
   reference type library is taken from the release source tree OOO320 m12.
 
+02/06/10 (JSC): TaskID=i112019
+  Update reference type library with the version of OOo 3.2.1. The new
+  reference type library is taken from the release source tree OOO320 m19.
+

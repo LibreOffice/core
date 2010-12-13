@@ -24,31 +24,29 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
-PRJ=..$/..
 
-PRJNAME=cpputools
-TARGET=regcomplazy
-TARGETTYPE=CUI
-LIBTARGET=NO
+PRJ=..$/..$/..$/..$/..
 
-ENABLE_EXCEPTIONS=TRUE
+PRJNAME=offapi
+
+TARGET=cssscriptvba
+PACKAGE=com$/sun$/star$/script$/vba
 
 # --- Settings -----------------------------------------------------
+.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
-.INCLUDE :  settings.mk
+# ------------------------------------------------------------------------
 
-# --- Files --------------------------------------------------------
+IDLFILES=\
+    VBAEventId.idl \
+    VBAEventProcessor.idl \
+    VBASpreadsheetEventProcessor.idl \
+    VBATextEventProcessor.idl \
+    XVBACompatibility.idl \
+    XVBAEventProcessor.idl \
+    XVBAModuleInfo.idl
 
-DEPOBJFILES= \
-    $(OBJ)$/regcomplazy.obj 
-
-APP1TARGET=$(TARGET)
-APP1OBJS=$(DEPOBJFILES)  
-
-APP1STDLIBS= \
-    $(SALLIB) \
-    $(SALHELPERLIB) \
-    $(REGLIB)
+# ------------------------------------------------------------------
 
 .INCLUDE :  target.mk
-
+.INCLUDE :  $(PRJ)$/util$/target.pmk

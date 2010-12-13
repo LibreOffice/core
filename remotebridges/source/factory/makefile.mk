@@ -64,3 +64,10 @@ DEF1NAME=		$(SHL1TARGET)
 
 .INCLUDE :	target.mk
 
+ALLTAR : $(MISC)/bridgefac.component
+
+$(MISC)/bridgefac.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        bridgefac.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt bridgefac.component

@@ -29,9 +29,6 @@
 #include <string.h>
 #include "cpp.h"
 
-extern int cppgetopt(int, char *const *, const char *);
-extern char *optarg;
-extern int optind;
 extern int Cplusplus;
 Nlist *kwdefined;
 char wd[128];

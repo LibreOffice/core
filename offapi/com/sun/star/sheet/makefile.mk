@@ -122,6 +122,7 @@ IDLFILES=\
     DatabaseRange.idl\
     DatabaseRanges.idl\
     DatabaseRangesEnumeration.idl\
+    DimensionFlags.idl\
     DocumentSettings.idl\
      ExternalDocLink.idl\
      ExternalDocLinks.idl\
@@ -164,6 +165,7 @@ IDLFILES=\
     NamedRangeFlag.idl\
     NamedRanges.idl\
     NamedRangesEnumeration.idl\
+    NoConvergenceException.idl\
     PasteOperation.idl\
     RangeSelectionArguments.idl\
     RangeSelectionEvent.idl\

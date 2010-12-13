@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/StringPair.idl>
 #include <com/sun/star/deployment/DeploymentException.idl>
 #include <com/sun/star/deployment/XPackageTypeInfo.idl>
+#include <com/sun/star/deployment/ExtensionRemovedException.idl>
 #include <com/sun/star/graphic/XGraphic.idl>
 #include <com/sun/star/lang/XComponent.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
@@ -72,30 +73,25 @@ interface XPackage
 
         Only if the return value is true the package is allowed to be installed.
         In case of false or in case of an exception, the package must be removed
-        in completely.
+        completely.
         After return of this function no code from the extension may be used
         anymore, so that the extension can be safely removed from the harddisk.
 
         @param xCmdEnv
                command environment for error handling and other interaction.
-        @installed
-            signalls if an extension with the same identifyer is already installed.
-
-        @aContextName
-            the name of the context of  XPackageManager implementation that is to be used
-            to install the extension. Currently we use the names "user"
-            and "shared".
+        @alreadyInstalled
+            indicates that an extension with the same identifyer is already installed.
 
         @return
-            true - the package can be installed
-            false - the package must not be installed.
+            null - all prerequisites are met. Otherwise, a value from
+            <member>Prerequisites</member> indicating what prerequisites are missing.
      */
-    boolean checkPrerequisites(
+    long checkPrerequisites(
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv,
-        [in] boolean installed,
-        [in] string aContextName)
+        [in] boolean alreadyInstalled)
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
 
@@ -116,6 +112,7 @@ interface XPackage
     boolean checkDependencies(
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException);
 
 
@@ -140,8 +137,14 @@ interface XPackage
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException);
 
-    /** registers this <type>XPackage</type>, thus activating the package.
+    /** registers this <type>XPackage</type>.
 
+        NEVER call this directly. This is done by the extension manager if necessary.
+
+        @param startup
+               indicates that registration is adapted to the particular
+               startup scenario. That is, it is set to true, when called
+               from <member>XExtensionManager::synchronize</member>
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
                or null
@@ -149,14 +152,18 @@ interface XPackage
                command environment for error and progress handling
     */
     void registerPackage(
+        [in] boolean startup,
         [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
         raises (DeploymentException,
+                ExtensionRemovedException,
                 com::sun::star::ucb::CommandFailedException,
                 com::sun::star::ucb::CommandAbortedException,
                 com::sun::star::lang::IllegalArgumentException);
 
     /** revokes this <type>XPackage</type>.
+
+        NEVER call this directly. This is done by the extension manager if necessary.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
@@ -181,6 +188,9 @@ interface XPackage
     boolean isBundle();
 
     /** Gets packages of the bundle.
+
+        If <member>isRemoved</member> returns true then getBundle may return an
+        empty sequence in case the object is not registered.
 
         @param xAbortChannel
                abort channel to asynchronously abort the registration process,
@@ -225,7 +235,8 @@ interface XPackage
         @return
                 the textual version representation
     */
-    string getVersion();
+    string getVersion()
+        raises (ExtensionRemovedException);
 
     /** returns the location of the package.
 
@@ -240,14 +251,16 @@ interface XPackage
         @return
                 display name of the package
     */
-    string getDisplayName();
+    string getDisplayName()
+        raises (ExtensionRemovedException);
 
     /** returns a description string to describe the  package.
 
         @return
                 description
     */
-    string getDescription();
+    string getDescription()
+         raises (ExtensionRemovedException);
 
     /** returns a sequence of update information URLs.
 
@@ -258,8 +271,8 @@ interface XPackage
         @return
                 update information URLs
     */
-    sequence<string> getUpdateInformationURLs();
-
+    sequence<string> getUpdateInformationURLs()
+        raises (ExtensionRemovedException);
     /** returns the publisher info for a package, the strings
         might be empty, if there are no publisher
 
@@ -269,8 +282,8 @@ interface XPackage
         represents the URL to the publisher.
     */
 
-    ::com::sun::star::beans::StringPair getPublisherInfo();
-
+    ::com::sun::star::beans::StringPair getPublisherInfo()
+        raises (ExtensionRemovedException);
     /** returns the <type>XPackageTypeInfo</type>, e.g. media-type etc.
 
         @return
@@ -293,8 +306,10 @@ interface XPackage
                    [in] string newTitle,
                    [in] long nameClashAction,
                    [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (com::sun::star::ucb::CommandFailedException,
-                com::sun::star::ucb::CommandAbortedException);
+        raises (
+            ExtensionRemovedException,
+            com::sun::star::ucb::CommandFailedException,
+            com::sun::star::ucb::CommandAbortedException);
 
     /** returns an icon for a package.
 
@@ -305,7 +320,37 @@ interface XPackage
             database application window, or <NULL/> if the default icon
             should be used.
     */
-    com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast );
+    com::sun::star::graphic::XGraphic getIcon( [in] boolean highContrast )
+        raises (ExtensionRemovedException);
+
+    /** returns the name of the repository where this object comes from.
+     */
+    string getRepositoryName();
+
+    /** return a URL to a directory which contains the registration data.
+
+        This data may be created when calling
+        <member>XPackage::registerPackage</member>.  If this is the case is
+        indicated by <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> of the return
+        value.
+        If registration data are created during registration, but the package is
+        currently not registered, for example after calling
+        <member>XPackage::revokePackage</member>, then <member
+        scope="com::sun::star::beans">Optional::IsPresent</member> is true and
+        the <member scope="com::sun::star::beans">Optional::Value</member> may
+        be an empty string.
+    */
+    com::sun::star::beans::Optional<string> getRegistrationDataURL()
+        raises (ExtensionRemovedException);
+
+    /** indicates if this object represents a removed extension or extension
+        item. This is the case when it was created by providing
+        <code>true</code> for the <code>removed</code> parameter in the function
+        <member>XPackageRegistry::bindPackage</member>.
+     */
+    boolean isRemoved();
+
 };
 
 }; }; }; };

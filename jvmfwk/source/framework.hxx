@@ -64,6 +64,10 @@ typedef javaPluginError (*jfw_plugin_startJavaVirtualMachine_ptr)(
     JavaVM ** ppVM,
     JNIEnv ** ppEnv);
 
+typedef javaPluginError (*jfw_plugin_existJRE_ptr)(
+    const JavaInfo *info,
+    sal_Bool *exist);
+
 
 namespace jfw
 {

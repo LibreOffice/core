@@ -1,4 +1,4 @@
-UDK_3_0_0 {
+UDK_3.1 {
     global:
         # jvmaccess/virtualmachine.hxx:
         ??0CreationException@AttachGuard@VirtualMachine@jvmaccess@@QAE@XZ; # jvmaccess::VirtualMachine::AttachGuard::CreationException::CreationException()
@@ -15,7 +15,7 @@ UDK_3_0_0 {
 
 UDK_3.2 {
     global:
-} UDK_3_0_0;
+} UDK_3.1;
 
 UDK_3.3 {
     global:

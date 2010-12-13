@@ -95,6 +95,7 @@ UNOIDLDBFILES= \
     $(UCR)$/cssdomevents.db \
     $(UCR)$/cssscanner.db \
     $(UCR)$/cssscript.db \
+    $(UCR)$/cssscriptvba.db \
     $(UCR)$/csssdb.db \
     $(UCR)$/csssdbc.db \
     $(UCR)$/csssdbcx.db \

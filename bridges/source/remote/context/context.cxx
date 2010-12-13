@@ -38,6 +38,7 @@
 #include <osl/mutex.hxx>
 
 #include "rtl/ustring.hxx"
+#include "rtl/instance.hxx"
 
 #include <bridges/remote/context.h>
 #include <bridges/remote/remote.h>
@@ -109,17 +110,9 @@ ContextMap;
 static MyCounter thisCounter( "DEBUG : Context" );
 #endif
 
-class ContextAdmin;
-
-ContextAdmin *g_pTheContext = 0;
-
-
-
 class ContextAdmin
 {
 public:
-    static ContextAdmin *getInstance();
-
     // listener administration
     void addContextListener( remote_contextListenerFunc listener , void *pObject );
     void removeContextListener( remote_contextListenerFunc listener , void *pObject );
@@ -138,7 +131,7 @@ public:
 
     void revokeContext( uno_Context *pRemoteContext );
 
-    uno_Context *get( rtl_uString *pHost );
+    uno_Context *getContext( rtl_uString *pHost );
 
     rtl_uString ** getConnectionList(
         sal_Int32 *pnStringCount, MemAlloc memAlloc );
@@ -151,19 +144,6 @@ private:
     typedef std::list< std::pair< remote_contextListenerFunc, void * > > List;
     List m_lstListener;
 };
-
-ContextAdmin *ContextAdmin::getInstance()
-{
-    if( ! g_pTheContext ) {
-        ::osl::MutexGuard guard( ::osl::Mutex::getGlobalMutex() );
-        if( ! g_pTheContext ) {
-            //TODO  This memory is leaked; see #i63473# for when this should be
-            // changed again:
-            g_pTheContext = new ContextAdmin;
-        }
-    }
-    return g_pTheContext;
-}
 
 void ContextAdmin::addContextListener( remote_contextListenerFunc listener , void  *pObject )
 {
@@ -209,7 +189,7 @@ uno_Context *ContextAdmin::createAndRegisterContext( remote_Connection *pConnect
 {
     ::osl::MutexGuard guard( m_mutex );
 
-    uno_Context *pContext = get( pIdStr );
+    uno_Context *pContext = getContext( pIdStr );
     if( pContext )
     {
         pContext->release( pContext );
@@ -245,7 +225,7 @@ void ContextAdmin::revokeContext( uno_Context *pRemoteContext )
 
 }
 
-uno_Context *ContextAdmin::get( rtl_uString *pHost )
+uno_Context *ContextAdmin::getContext( rtl_uString *pHost )
 {
     ::osl::MutexGuard guard( m_mutex );
 
@@ -267,6 +247,10 @@ rtl_uString ** ContextAdmin::getConnectionList(
     ::osl::MutexGuard guard( m_mutex );
 
     *pnStringCount = m_mapContext.size();
+
+    if (*pnStringCount == 0)
+        return NULL;
+
     rtl_uString **ppReturn = ( rtl_uString ** )
         memAlloc( sizeof( rtl_uString * ) * m_mapContext.size() );
     memset( ppReturn , 0 , sizeof( rtl_uString * ) * m_mapContext.size() );
@@ -283,6 +267,7 @@ rtl_uString ** ContextAdmin::getConnectionList(
 }
 
 
+struct theContextAdmin : public rtl::Static<ContextAdmin, theContextAdmin> {};
 
 /*****************************
  * remote_ContextImpl implementation
@@ -379,7 +364,7 @@ void remote_ContextImpl::thisDispose( remote_Context *pRemoteC )
     if( ! pImpl->m_bDisposed )
     {
         pImpl->m_bDisposed = sal_True;
-        ContextAdmin::getInstance()->revokeContext( (uno_Context * )  pRemoteC );
+        theContextAdmin::get().revokeContext( (uno_Context * )  pRemoteC );
 
         if( pImpl->m_pInstanceProvider )
         {
@@ -456,7 +441,7 @@ using namespace remote_context;
 extern "C" remote_Context * SAL_CALL
 remote_getContext( rtl_uString *pIdString )
 {
-    return (remote_Context *) ContextAdmin::getInstance()->get(  pIdString );
+    return (remote_Context *) theContextAdmin::get().getContext(pIdString);
 }
 
 
@@ -469,7 +454,7 @@ remote_createContext( remote_Connection *pConnection,
                       remote_InstanceProvider *pProvider )
 {
     remote_ContextImpl *p = (remote_ContextImpl * )
-        ContextAdmin::getInstance()->createAndRegisterContext(
+        theContextAdmin::get().createAndRegisterContext(
             pConnection ,
             pIdStr ,
             pDescription,
@@ -483,17 +468,17 @@ remote_createContext( remote_Connection *pConnection,
 extern "C" void SAL_CALL
 remote_addContextListener( remote_contextListenerFunc listener,  void *pObject )
 {
-    ContextAdmin::getInstance()->addContextListener( listener , pObject );
+    theContextAdmin::get().addContextListener( listener , pObject );
 }
 
 extern "C" void SAL_CALL
 remote_removeContextListener( remote_contextListenerFunc listener , void *pObject )
 {
-    ContextAdmin::getInstance()->removeContextListener( listener , pObject );
+    theContextAdmin::get().removeContextListener( listener , pObject );
 }
 
 extern "C" rtl_uString ** SAL_CALL
 remote_getContextList( sal_Int32 *pnStringCount, MemAlloc memAlloc )
 {
-    return ContextAdmin::getInstance()->getConnectionList( pnStringCount , memAlloc );
+    return theContextAdmin::get().getConnectionList( pnStringCount , memAlloc );
 }

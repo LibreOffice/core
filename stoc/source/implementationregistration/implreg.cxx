@@ -628,9 +628,9 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                 } else
                 {
                     oldImpl = implEntries.getConstArray()[0];
-
+                    rtl::OUString path(xOldKey->getKeyName());
                     xOldKey->closeKey();
-                    xRootKey->deleteKey(xOldKey->getKeyName());
+                    xRootKey->deleteKey(path);
                 }
 
                 OUString oldTarget = searchLinkTargetForImpl(xRootKey, linkName, oldImpl);
@@ -644,8 +644,9 @@ static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
             {
                 bClean = sal_True;
                 hasNoImplementations = sal_False;
+                rtl::OUString path(xOldKey->getKeyName());
                 xOldKey->closeKey();
-                xRootKey->deleteKey(xOldKey->getKeyName());
+                xRootKey->deleteKey(path);
             }
         }
     } else
@@ -808,21 +809,24 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
             if (hasLocationUrl)
             {
                 hasLocationUrl = sal_False;
+                rtl::OUString path(xImplKey->getKeyName());
                 xImplKey->closeKey();
-                xReg->getRootKey()->deleteKey(xImplKey->getKeyName());
+                xReg->getRootKey()->deleteKey(path);
             }
         }
 
         subKeys = xSource->openKeys();
         if (subKeys.getLength() == 0)
         {
+            rtl::OUString path(xSource->getKeyName());
             xSource->closeKey();
-            xReg->getRootKey()->deleteKey(xSource->getKeyName());
+            xReg->getRootKey()->deleteKey(path);
         }
     } else
     {
+        rtl::OUString path(xSource->getKeyName());
         xSource->closeKey();
-        xReg->getRootKey()->deleteKey(xSource->getKeyName());
+        xReg->getRootKey()->deleteKey(path);
     }
 }
 
@@ -947,21 +951,24 @@ static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xRe
             if (hasNoImplementations)
             {
                 hasNoImplementations = sal_False;
+                rtl::OUString path(xServiceKey->getKeyName());
                 xServiceKey->closeKey();
-                xReg->getRootKey()->deleteKey(xServiceKey->getKeyName());
+                xReg->getRootKey()->deleteKey(path);
             }
         }
 
         subKeys = xSource->openKeys();
         if (subKeys.getLength() == 0)
         {
+            rtl::OUString path(xSource->getKeyName());
             xSource->closeKey();
-            xReg->getRootKey()->deleteKey(xSource->getKeyName());
+            xReg->getRootKey()->deleteKey(path);
         }
     } else
     {
+        rtl::OUString path(xSource->getKeyName());
         xSource->closeKey();
-        xReg->getRootKey()->deleteKey(xSource->getKeyName());
+        xReg->getRootKey()->deleteKey(path);
     }
 }
 
