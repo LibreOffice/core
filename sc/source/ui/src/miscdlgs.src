@@ -439,7 +439,7 @@ ModalDialog RID_SCDLG_MOVETAB
     OutputSize = TRUE ;
     HelpId = FID_TAB_MOVE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 154 ) ;
+    Size = MAP_APPFONT ( 168 , 145 ) ;
     Text [ en-US ] = "Move/Copy Sheet" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -499,7 +499,7 @@ ModalDialog RID_SCDLG_MOVETAB
     CheckBox BTN_RENAME
     {
         Pos = MAP_APPFONT ( 6 , 128 ) ;
-        Size = MAP_APPFONT (  52 , 10 ) ;
+        Size = MAP_APPFONT ( 52 , 10 ) ;
         Text [ en-US ] = "~Rename" ;
         TabStop = TRUE ;
     };
