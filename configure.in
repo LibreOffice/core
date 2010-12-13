@@ -3917,6 +3917,7 @@ if test "`$GPERF --version | $EGREP ^GNU\ gperf | $AWK '{ print $3 }' | cut -d. 
 else
     AC_MSG_ERROR([too old, you need at least 3.0.0])
 fi
+AC_SUBST(GPERF)
 
 dnl ===================================================================
 dnl Check for building stax
