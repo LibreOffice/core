@@ -51,7 +51,7 @@ public:
     USHORT  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
     BOOL    GetCopyTable            () const;
-    BOOL    GetRenameTable          () const;
+    bool    GetRenameTable          () const;
     void    GetTabNameString( String& rString ) const;
     void    SetCopyTable            (BOOL bFlag=TRUE);
     void    EnableCopyTable         (BOOL bFlag=TRUE);

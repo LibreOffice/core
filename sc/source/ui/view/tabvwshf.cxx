@@ -478,7 +478,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 USHORT nDoc = 0;
                 SCTAB nTab = pViewData->GetTabNo();
                 BOOL   bCpy = FALSE;
-                BOOL   bRna = FALSE;
                 String aDocName;
                 String aTabName;
 
@@ -574,7 +573,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         nDoc = pDlg->GetSelectedDocument();
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
-                        bRna = pDlg->GetRenameTable();
+                        bool bRna = pDlg->GetRenameTable();
                         // Leave aTabName string empty, when Rename is FALSE.
                         if( bRna )
                         {

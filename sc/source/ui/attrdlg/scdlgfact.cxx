@@ -502,7 +502,7 @@ BOOL    AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
     return pDlg->GetCopyTable();
 }
-BOOL    AbstractScMoveTableDlg_Impl::GetRenameTable() const
+bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
 {
     return pDlg->GetRenameTable();
 }

@@ -100,7 +100,7 @@ SCTAB ScMoveTableDlg::GetSelectedTable    () const { return nTable;     }
 
 BOOL   ScMoveTableDlg::GetCopyTable        () const { return bCopyTable; }
 
-BOOL   ScMoveTableDlg::GetRenameTable        () const { return bRenameTable; }
+bool   ScMoveTableDlg::GetRenameTable        () const { return bRenameTable; }
 
 void ScMoveTableDlg::GetTabNameString( String& rString ) const
 {
