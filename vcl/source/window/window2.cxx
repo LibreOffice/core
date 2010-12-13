@@ -342,14 +342,6 @@ Bitmap Window::SnapShot( BOOL bBorder ) const
 
 // -----------------------------------------------------------------------
 
-Bitmap Window::SnapShot() const
-{
-    // Should be merged in the next top level build !!!
-    return SnapShot( TRUE );
-}
-
-// -----------------------------------------------------------------------
-
 void Window::ShowFocus( const Rectangle& rRect )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );

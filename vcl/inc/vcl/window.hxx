@@ -965,9 +965,7 @@ public:
     void                SetData( void* pNewData );
     void*               GetData() const;
 
-    // Should be merged in the next top level build !!!
-    Bitmap              SnapShot( BOOL bBorder ) const;
-    Bitmap              SnapShot() const;
+    Bitmap              SnapShot( BOOL bBorder=TRUE ) const;
 
     void                ShowFocus( const Rectangle& rRect );
     void                HideFocus();
