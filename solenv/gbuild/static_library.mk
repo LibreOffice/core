@@ -51,11 +51,11 @@ ifeq (,$$(findstring $(1),$$(gb_StaticLibrary_KNOWNLIBS)))
 $$(info currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)))
 $$(error Library $(1) must be registered in $(GBUILDDIR)/libnames.mk)
 endif
-$(call gb_StaticLibrary_StaticLibrary__impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(call gb_StaticLibrary_get_filename,$(1))))
+$(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(call gb_StaticLibrary_get_filename,$(1))))
 
 endef
 
-define gb_StaticLibrary_StaticLibrary__impl
+define gb_StaticLibrary__StaticLibrary_impl
 $(call gb_LinkTarget_LinkTarget,$(2))
 $(call gb_LinkTarget_set_targettype_flags,$(2),$(gb_StaticLibrary_TARGETTYPEFLAGS))
 $(call gb_LinkTarget_set_defs,$(2)),\

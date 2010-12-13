@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -26,87 +26,95 @@
 #*************************************************************************
 
 GUI := UNX
-COM := gcc
+COM := C52
 
-gb_CC := gcc
-gb_CXX := g++
-gb_GCCP := gcc
+gb_CC := cc
+gb_CXX := CC
+gb_GCCP := cc
 
 gb_OSDEFS := \
-	-DLINUX \
+	-DSYSV \
+	-DSUN \
+	-DSUN4 \
+	-D_REENTRANT \
+	-D_POSIX_PTHREAD_SEMANTICS \
 	-D_PTHREADS \
+	-DSOLARIS \
 	-DUNIX \
-	-DUNX \
-	$(PTHREAD_CFLAGS) \
+	-D$(GUI) \
+#	$(PTHREAD_CFLAGS) \
 
 gb_COMPILERDEFS := \
-	-DGCC \
-	-D$(CVER) \
-	-DCVER=$(CVER) \
-	-DGLIBC=2 \
-	-DGXX_INCLUDE_PATH=$(GXX_INCLUDE_PATH) \
-	-DHAVE_GCC_VISIBILITY_FEATURE \
-	-DCPPU_ENV=gcc3 \
+	-D$(COM) \
+#	-D$(CVER) \
+#	-DCVER=$(CVER) \
 
-ifeq ($(CPUNAME),X86_64)
-gb_CPUDEFS := -D$(CPUNAME)
-else
-gb_CPUDEFS := -DX86
+#ifeq ($(CPUNAME),X86_64)
+#gb_CPUDEFS := -D$(CPUNAME)
+#else
+#gb_CPUDEFS := -DX86
+#endif
+
+ifeq ($(CPUNAME),INTEL)
+gb_CFLAGS_ARCH :=
+else # ifeq ($(CPUNAME),SPARC)
+gb_CFLAGS_ARCH := -D__sparcv8plus
 endif
 
 gb_CFLAGS := \
-	-isystem $(SYSBASE)/usr/include \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
-	-fmessage-length=0 \
-	-fno-strict-aliasing \
-	-fpic \
-	-fvisibility=hidden \
-	-pipe \
+	-temp=/tmp \
+	-KPIC \
+	-mt \
+	-xCC \
+	-xc99=none \
+	$(gb_CFLAGS_ARCH) \
 
 gb_CXXFLAGS := \
-	-isystem $(SYSBASE)/usr/include \
-	-Wall \
-	-Wendif-labels \
-	-Wextra \
-	-Wno-ctor-dtor-privacy \
-	-Wno-non-virtual-dtor \
-	-Wreturn-type \
-	-Wshadow \
-	-Wuninitialized \
-	-fmessage-length=0 \
-	-fno-strict-aliasing \
-	-fno-use-cxa-atexit \
-	-fpic \
-	-fvisibility=hidden \
-	-fvisibility-inlines-hidden \
-	-pipe \
+	-temp=/tmp \
+	-KPIC \
+	-mt \
+	-features=no%altspell \
+	-library=no%Cstd \
+	+w2 \
+	-erroff=doubunder,identexpected,inllargeuse,inllargeint,notemsource,reftotemp,truncwarn,wnoretvalue,anonnotype \
+
+gb_CFLAGS_WERROR := \
+	-errwarn=%all \
+
+gb_CXXFLAGS_WERROR := \
+	-xwe \
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
-	-fno-exceptions \
-	
+	-noex \
+
+# FIXME RPATH is hardcoded
 gb_LinkTarget_LDFLAGS := \
-	-Wl,--dynamic-list-cpp-new \
-	-Wl,--dynamic-list-cpp-typeinfo \
-	-Wl,--hash-style=both \
-	-Wl,-Bsymbolic-functions \
-	-Wl,-rpath,$(OUTDIR)/lib \
-	-Wl,-rpath-link,$(OUTDIR)/lib \
-	-Wl,-z,combreloc \
-	-Wl,-z,defs \
 	$(subst -L../lib , ,$(SOLARLIB)) \
+	-temp=/tmp \
+	-w \
+	-mt \
+	-z combreloc \
+	-norunpath \
+	-PIC \
+	-library=no%Cstd \
+	$(gb_LinkTarget_RPATH_OOO) \
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_GCCOPTFLAGS := -O0
+gb_CCOPTFLAGS :=
 else
-gb_GCCOPTFLAGS := -Os
+ifeq ($(CPUNAME),INTEL)
+gb_CCOPTFLAGS := -xarch=generic -xO3
+else # ifeq ($(CPUNAME),SPARC)
+#  -m32 -xarch=sparc        restrict target to 32 bit sparc
+#  -xO3                     optimization level 3
+#  -xspace                  don't do optimizations which do increase binary size
+#  -xprefetch=yes           do prefetching (helps on UltraSparc III)
+gb_CCOPTFLAGS := -m32 -xarch=sparc -xO3 -xspace -xprefetch=yes
+endif
 endif
 
 
@@ -117,22 +125,23 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
 # CObject class
 
-define gb_CObject__command
+define gb_CObject_command
 $(call gb_Helper_announce,Compiling $(2) (plain C) ...)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
+	rm -f $(call gb_CObject_get_dep_target,$(2)) && \
 	mkdir -p $(dir $(call gb_CObject_get_dep_target,$(2))) && \
 	$(gb_CC) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CObject_get_target,$(2)) \
-		-MF $(call gb_CObject_get_dep_target,$(2)) \
+		-xMMD \
+		-xMF $(call gb_CObject_get_dep_target,$(2)) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6))
 endef
 
-define gb_CObject__command_dep
+define gb_CObject_command_dep
 mkdir -p $(dir $(1)) && \
 	echo '$(call gb_CObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -140,7 +149,7 @@ endef
 
 # CxxObject class
 
-define gb_CxxObject__command
+define gb_CxxObject_command
 $(call gb_Helper_announce,Compiling $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
@@ -148,14 +157,14 @@ $(call gb_Helper_abbreviate_dirs,\
 	$(gb_CXX) \
 		-c $(3) \
 		-o $(1) \
-		-MMD -MT $(call gb_CxxObject_get_target,$(2)) \
-		-MF $(call gb_CxxObject_get_dep_target,$(2)) \
+		-xMMD \
+		-xMF $(call gb_CxxObject_get_dep_target,$(2)) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6))
 endef
 
-define gb_CxxObject__command_dep
+define gb_CxxObject_command_dep
 mkdir -p $(dir $(1)) && \
 	echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
 endef
@@ -163,52 +172,58 @@ endef
 
 # LinkTarget class
 
-gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_GCCOPTFLAGS)
-gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_GCCOPTFLAGS)
+gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CCOPTFLAGS)
+gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CCOPTFLAGS)
 
 ifeq ($(gb_DEBUGLEVEL),2)
-gb_LinkTarget_CXXFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-gb_LinkTarget_CFLAGS += -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
-
+gb_LinkTarget_CXXFLAGS += -g
+gb_LinkTarget_CFLAGS += -g
 endif
 
 gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-define gb_LinkTarget__command
+define gb_LinkTarget_command
 $(call gb_Helper_announce,Linking $(2) ...)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
 		$(3) \
 		$(patsubst lib%.so,-l%,$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib)))) \
-		$(foreach object,$(6),$(call gb_CObject_get_target,$(object))) \
-		$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
-		-Wl$(COMMA)--start-group $(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) -Wl$(COMMA)--end-group \
+		$(foreach object,$(6),$(call gb_CxxObject_get_target,$(object))) \
+		$(foreach object,$(7),$(call gb_CObject_get_target,$(object))) \
+		$(foreach lib,$(5),$(call gb_StaticLibrary_get_target,$(lib))) \
 		-o $(1))
 endef
 
 
 # Library class
 
-gb_Library_DEFS := -DSHAREDLIB -D_DLL_
-gb_Library_TARGETTYPEFLAGS := -shared -Wl,-z,noexecstack
+gb_LinkTarget_RPATH_URELIB := -R\''$$ORIGIN'\'
+gb_LinkTarget_RPATH_UREBIN := -R\''$$ORIGIN/../lib:$$ORIGIN'\'
+gb_LinkTarget_RPATH_OOO := -R\''$$ORIGIN:$$ORIGIN/../ure-link/lib'\'
+gb_LinkTarget_RPATH_SDK := -R\''$$ORIGIN/../../ure-link/lib'\'
+gb_LinkTarget_RPATH_BRAND := -R\''$$ORIGIN:$$ORIGIN/../basis-link/program:$$ORIGIN/../basis-link/ure-link/lib'\'
+
+#gb_Library_DEFS := -DSHAREDLIB -D_DLL_
+gb_Library_DEFS :=
+gb_Library_TARGETTYPEFLAGS := -Bdynamic -z text -G
 gb_Library_SYSPRE := lib
 gb_Library_UNOVERPRE := $(gb_Library_SYSPRE)uno_
 gb_Library_PLAINEXT := .so
-gb_Library_RTEXT := gcc3$(gb_Library_PLAINEXT)
+gb_Library_RTEXT := C52$(gb_Library_PLAINEXT)
 ifeq ($(gb_PRODUCT),$(true))
-gb_Library_STLEXT := port_gcc$(gb_Library_PLAINEXT)
+gb_Library_STLEXT := port_sunpro$(gb_Library_PLAINEXT)
 else
-gb_Library_STLEXT := port_gcc_stldebug$(gb_Library_PLAINEXT)
+gb_Library_STLEXT := port_sunpro_debug$(gb_Library_PLAINEXT)
 endif
 
-ifeq ($(CPUNAME),X86_64)
-gb_Library_OOOEXT := lx$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := lx.uno$(gb_Library_PLAINEXT)
-else
-gb_Library_OOOEXT := li$(gb_Library_PLAINEXT)
-gb_Library_UNOEXT := li.uno$(gb_Library_PLAINEXT)
+ifeq ($(CPUNAME),INTEL)
+gb_Library_OOOEXT := si$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := si.uno$(gb_Library_PLAINEXT)
+else # ifeq ($(CPUNAME),SPARC)
+gb_Library_OOOEXT := ss$(gb_Library_PLAINEXT)
+gb_Library_UNOEXT := ss.uno$(gb_Library_PLAINEXT)
 endif
 
 gb_Library_PLAINLIBS += \
@@ -235,18 +250,16 @@ gb_Library_FILENAMES := $(patsubst ucbhelper:libucbhelper%,ucbhelper:libucbhelpe
 gb_Library_FILENAMES := $(patsubst jvmfwk:libuno_jvmfwk%,jvmfwk:libjvmfwk%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst salhelper:libsalhelper%,salhelper:libuno_salhelper%,$(gb_Library_FILENAMES))
 
-ifeq ($(USE_SYSTEM_STL),YES)
-gb_Library_FILENAMES := $(patsubst stl:%,stl:libstdc++.so,$(gb_Library_FILENAMES))
-gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
-endif
-
 gb_Library_Library_platform =
 
 
 # StaticLibrary class
 
 gb_StaticLibrary_DEFS :=
-gb_StaticLibrary_TARGETTYPEFLAGS := -Wl,-z,noexecstack
+gb_StaticLibrary_TARGETTYPEFLAGS := \
+	-Bstatic \
+	-xar \
+
 gb_StaticLibrary_SYSPRE := lib
 gb_StaticLibrary_PLAINEXT := .a
 gb_StaticLibrary_JPEGEXT := lib$(gb_StaticLibrary_PLAINEXT)
@@ -273,15 +286,25 @@ gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
 gb_SrsPartTarget_RSCTARGET := $(OUTDIR)/bin/rsc
 gb_SrsPartTarget_RSCCOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib SOLARBINDIR=$(OUTDIR)/bin $(gb_SrsPartTarget_RSCTARGET)
 
-define gb_SrsPartTarget__command_dep
+# FIXME use mkdepend or something
+define gb_SrsPartTarget_command_dep
 $(call gb_Helper_abbreviate_dirs,\
-	$(gb_GCCP) \
-		-MM -MT $(call gb_SrsPartTarget_get_target,$(1)) \
-		$(3) \
-		$(4) \
-		-c -x c++-header $(2) \
-		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
+	mkdir -p `dirname $(call gb_SrsPartTarget_get_target,$(1))` && \
+	touch $(call gb_SrsPartTarget_get_target,$(1))
+)
 endef
+# FIXME does not work!
+#	$(gb_GCCP) \
+#		-xM1 \
+#		-xMF $(call gb_SrsPartTarget_get_target,$(1)) \
+#		$(3) \
+#		$(4) \
+#		-c $(2) \
+#		)
+#endef
+#		-c -x c++-header $(2) \
+#		-o $(call gb_SrsPartTarget_get_dep_target,$(1)))
 
 
 # vim: set noet sw=4 ts=4:
+
