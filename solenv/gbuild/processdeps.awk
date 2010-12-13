@@ -30,7 +30,8 @@
 # awk -f .../processdeps.awk \
 #     -v OUTDIR=outdir \
 #     -v SRCDIR=srcdir \
-#     -v wORKDIR=workdir \
+#     -v WORKDIR=workdir \
+#     -v REPODIR=repodir \
 #     -v OBJECTFILE=objectfile
 # called like this the script will read from stdin
 # and write to stdout. It will:
@@ -39,6 +40,7 @@
 #  - replace the string given as WORKDIR with $(WORKDIR)/
 #  - replace the string given as OUTDIR with $(OUTDIR)/
 #  - replace the string given as SRCDIR with $(SRCDIR)/
+#  - replace the string given as REPODIR with $(REPODIR)/
 #  - translates absolute mixed windows paths to cygwin paths by
 #    substituting a path starting with X:... to /cygdrive/X/...
 
