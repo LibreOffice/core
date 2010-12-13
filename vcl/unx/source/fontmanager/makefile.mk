@@ -42,8 +42,9 @@ INCDEPN+= -I..$/fontsubset
 CDEFS += -DENABLE_FONTCONFIG
 .ENDIF
 
-CFLAGS+=$(FREETYPE_CFLAGS)
-
+CFLAGS+= $(FREETYPE_CFLAGS)
+CFLAGS+= $(FONTCONFIG_CFLAGS)
+CFLAGS+=-I$(SOLARVER)$/$(INPATH)$/inc
 
 # --- Files --------------------------------------------------------
 
@@ -70,3 +71,8 @@ NOOPTFILES=$(SLO)$/fontmanager.obj
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+$(SLO)$/parseAFM.obj: $(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp
+
+$(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp: afm_keyword_list
+    $(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' afm_keyword_list > $@
