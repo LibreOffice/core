@@ -29,7 +29,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD)
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include <com/sun/star/uno/genfunc.hxx>
 #include "com/sun/star/uno/RuntimeException.hpp"
