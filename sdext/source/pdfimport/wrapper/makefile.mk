@@ -37,6 +37,7 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE: ../pdfisettings.pmk
 
 CDEFS+= -DPDFI_IMPL_IDENTIFIER=$(IMPLEMENTATION_IDENTIFIER)
+CFLAGS+=-I$(SOLARVER)$/$(INPATH)$/inc
 
 # --- Files --------------------------------------------------------
 
@@ -51,3 +52,9 @@ SLOFILES=\
 .ENDIF
 
 .INCLUDE :  target.mk
+
+$(SLO)$/wrapper.obj: $(SOLARVER)$/$(INPATH)$/inc$/hash.cxx
+
+$(SOLARVER)$/$(INPATH)$/inc$/hash.cxx: keyword_list
+    $(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' keyword_list > $@
+
