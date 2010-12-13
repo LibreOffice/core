@@ -77,6 +77,8 @@ public:
      * don't do any elaborate parsing here; we only check for the simplest
      * case of decimal number format.
      *
+     * Note that preceding and trailing spaces are ignored during parsing.
+     *
      * @param rStr string to parse
      * @param dsep decimal separator
      * @param gsep group separator (aka thousands separator)
