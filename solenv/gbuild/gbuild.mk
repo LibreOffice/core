@@ -104,7 +104,7 @@ ifeq ($(OS),WNT)
 include $(GBUILDDIR)/platform/windows.mk
 else
 ifeq ($(OS),SOLARIS)
-include $(SRCDIR)/solenv/inc/platform/solaris.mk
+include $(GBUILDDIR)/platform/solaris.mk
 else
 $(error unsupported OS: $(OS))
 endif
