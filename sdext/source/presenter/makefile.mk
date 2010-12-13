@@ -312,7 +312,7 @@ $(COMPONENT_IMAGES) : $(SOLARSRC)$/$(RSCDEFIMG)$/desktop$/res$/$$(@:f)
 $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)
     +$(COPY) $< $@
-.IF "$(OS)$(CPU)"=="WNTI"
+.IF "$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
  .IF "$(COM)"=="GCC"
     $(GNUCOPY) $(SOLARBINDIR)$/mingwm10.dll $(ZIP1DIR)
  .ELSE
@@ -352,7 +352,7 @@ $(COMPONENT_LIBRARY) : $(DLLDEST)$/$$(@:f)
         .ENDIF
     .ENDIF         # "$(PACKMS)"!=""
  .ENDIF	#"$(COM)"=="GCC"
-.ENDIF
+.ENDIF #"$(OS)$(CPU)"=="WNTI" && "$(WITH_EXTENSION_INTEGRATION)"!="YES"
 
 
 
@@ -364,19 +364,14 @@ $(ZIP1DIR)$/%.xcs : %.xcs
     @@-$(MKDIRHIER) $(@:d)
     $(GNUCOPY) $< $@
 
-# Temporary file that is used to replace some placeholders in description.xml.
-DESCRIPTION_TMP:=$(ZIP1DIR)$/description.xml.tmp
-
 .INCLUDE .IGNORE : $(ZIP1DIR)_lang_track.mk
 .IF "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 PHONYDESC=.PHONY
 .ENDIF			# "$(LAST_WITH_LANG)"!="$(WITH_LANG)"
 $(DESCRIPTION) $(PHONYDESC) : $$(@:f)
     @-$(MKDIRHIER) $(@:d)
-    $(PERL) $(SOLARENV)$/bin$/licinserter.pl description.xml registry/LICENSE_xxx $(DESCRIPTION_TMP)
     @echo LAST_WITH_LANG=$(WITH_LANG) > $(ZIP1DIR)_lang_track.mk
-    $(TYPE) $(DESCRIPTION_TMP) | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
-    @@-$(RM) $(DESCRIPTION_TMP)
+    $(TYPE) description.tmp | sed s/UPDATED_PLATFORM/$(PLATFORMID)/ > $@
 
 .ELSE
 ivo:
