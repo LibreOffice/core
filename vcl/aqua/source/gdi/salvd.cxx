@@ -206,11 +206,26 @@ BOOL AquaSalVirtualDevice::SetSize( long nDX, long nDY )
                 if( pNSContext )
                     xCGContext = reinterpret_cast<CGContextRef>([pNSContext graphicsPort]);
             }
+            else
+            {
+                // fall back to a virtual device
+                if( mnBitmapDepth > 16 )
+                    mnBitmapDepth = 32;
+                else
+                    mnBitmapDepth = 16;
+                const CGColorSpaceRef aCGColorSpace = GetSalData()->mxRGBSpace;
+                const CGBitmapInfo aCGBmpInfo = kCGImageAlphaNone;
+                const int nBytesPerRow = (mnBitmapDepth * nDX) / 8;
+
+                void* pRawData = rtl_allocateMemory( nBytesPerRow * nDY );
+                mxBitmapContext = ::CGBitmapContextCreate( pRawData, nDX, nDY,
+                                                           mnBitmapDepth, nBytesPerRow, aCGColorSpace, aCGBmpInfo );
+                xCGContext = mxBitmapContext;
+            }
         }
     }
 
-    if ( !Application::IsHeadlessModeEnabled() )
-        DBG_ASSERT( xCGContext, "no context" );
+    DBG_ASSERT( xCGContext, "no context" );
 
     const CGSize aNewSize = { nDX, nDY };
     mxLayer = CGLayerCreateWithContext( xCGContext, aNewSize, NULL );
