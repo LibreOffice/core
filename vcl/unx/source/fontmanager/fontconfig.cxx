@@ -99,6 +99,7 @@ class FontCfgWrapper
 
     int             m_nFcVersion;
     FcBool          (*m_pFcInit)();
+    void            (*m_pFcFini)();
     int             (*m_pFcGetVersion)();
     FcConfig*       (*m_pFcConfigGetCurrent)();
     FcObjectSet*    (*m_pFcObjectSetVaBuild)(const char*,va_list);
@@ -151,6 +152,9 @@ public:
 
     FcBool FcInit()
     { return m_pFcInit(); }
+
+    void FcFini()
+    { if (m_pFcFini) m_pFcFini(); }
 
     int FcGetVersion()
     { return m_pFcGetVersion(); }
@@ -286,6 +290,8 @@ FontCfgWrapper::FontCfgWrapper()
 
     m_pFcInit = (FcBool(*)())
         loadSymbol( "FcInit" );
+    m_pFcFini = (void(*)())
+        loadSymbol( "FcFini" );
     m_pFcGetVersion = (int(*)())
         loadSymbol( "FcGetVersion" );
     m_pFcConfigGetCurrent = (FcConfig *(*)())
@@ -465,6 +471,7 @@ FontCfgWrapper::~FontCfgWrapper()
 {
     if( m_pOutlineSet )
         FcFontSetDestroy( m_pOutlineSet );
+    FcFini();
     if( m_pLib )
         osl_unloadModule( (oslModule)m_pLib );
 }
