@@ -1904,6 +1904,7 @@ if ( '@ENABLE_RPATH@' eq "no" ) {
 ToFile( "EPM",               "@EPM@",              "e" );
 ToFile( "EPM_FLAGS",         $EPM_FLAGS,           "e" );
 ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
+ToFile( "GPERF",             "@GPERF@",            "e" );
 ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
 ToFile( "SYSTEM_STDLIBS",    "@SYSTEM_STDLIBS@",   "e" );
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
