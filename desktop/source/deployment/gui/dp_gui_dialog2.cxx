@@ -1154,12 +1154,11 @@ void ExtMgrDialog::Resize()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+                                                 aNativeControlRegion, aNativeContentRegion ) != FALSE )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
@@ -1599,12 +1598,11 @@ void UpdateRequiredDialog::Resize()
     if( IsNativeControlSupported( CTRL_PROGRESS, PART_ENTIRE_CONTROL ) )
     {
         ImplControlValue aValue;
-        bool bNativeOK;
         Rectangle aControlRegion( Point( 0, 0 ), m_aProgressBar.GetSizePixel() );
         Rectangle aNativeControlRegion, aNativeContentRegion;
-        if( (bNativeOK = GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
+        if( GetNativeControlRegion( CTRL_PROGRESS, PART_ENTIRE_CONTROL, aControlRegion,
                                                  CTRL_STATE_ENABLED, aValue, rtl::OUString(),
-                                                 aNativeControlRegion, aNativeContentRegion ) ) != FALSE )
+                                                 aNativeControlRegion, aNativeContentRegion ) != FALSE )
         {
             nProgressHeight = aNativeControlRegion.GetHeight();
         }
