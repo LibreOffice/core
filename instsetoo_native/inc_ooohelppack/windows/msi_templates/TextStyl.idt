@@ -1,0 +1,25 @@
+TextStyle	FaceName	Size	Color	StyleBits
+s72	s32	i2	I4	I2
+TextStyle	TextStyle
+Arial8	Arial	8		
+Arial9	Arial	9		
+ArialBlue10	Arial	10	16711680	
+ArialBlueStrike10	Arial	10	16711680	8
+CourierNew8	Courier New	8		
+CourierNew9	Courier New	9		
+MSGothic9	MS Gothic	9		
+MSSansBold8	Tahoma	8		1
+MSSansSerif8	MS Sans Serif	8		
+MSSansSerif9	MS Sans Serif	9		
+MSSGreySerif8	MS Sans Serif	8	8421504	
+MSSWhiteSerif8	Tahoma	8	16777215	
+Tahoma10	Tahoma	10		
+Tahoma8	Tahoma	8		
+Tahoma9	Tahoma	9		
+TahomaBold10	Tahoma	10		1
+TahomaBold8	Tahoma	8		1
+Times8	Times New Roman	8		
+Times9	Times New Roman	9		
+TimesItalic12	Times New Roman	12		2
+TimesItalicBlue10	Times New Roman	10	16711680	2
+TimesRed16	Times New Roman	16	255	

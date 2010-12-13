@@ -1,0 +1,3 @@
+# OpenOffice 2 UpgradeCodes
+
+{D8B206B8-6822-48C2-A799-E35BFD585035}	# OOo UpgradeCode
