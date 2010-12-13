@@ -28,7 +28,7 @@
 GUI := WNT
 COM := MSC
 
-gb_MkTemp := mktemp -p
+gb_MKTEMP := mktemp -p
 
 gb_CC := cl
 gb_CXX := cl

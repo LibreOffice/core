@@ -28,7 +28,7 @@
 GUI := UNX
 COM := GCC
 
-gb_MkTemp := mktemp -p
+gb_MKTEMP := mktemp -p
 
 gb_CC := gcc
 gb_CXX := g++
