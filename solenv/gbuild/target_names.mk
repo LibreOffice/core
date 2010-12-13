@@ -71,6 +71,7 @@ endef
 
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_SdiTarget_get_target = $(WORKDIR)/SdiTarget/$(1)
+gb_SrsPartMergeTarget_get_target = $(WORKDIR)/SrsPartMergeTarget/$(1)
 gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_ResTarget_get_target = $(OUTDIR)/misc/res/$(1).res
