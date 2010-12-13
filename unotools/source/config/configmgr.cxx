@@ -375,7 +375,7 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     ::rtl::OUString sBrandName;
     LanguageType nType = MsLangId::getSystemUILanguage();
     if ( nType == LANGUAGE_PORTUGUESE_BRAZILIAN )
-        sBrandName = OUString::createFromAscii("BrOffice");
+        sBrandName = OUString(RTL_CONSTASCII_USTRINGPARAM("BrOffice"));
     else
         sBrandName = BrandName::get();
 
@@ -444,9 +444,8 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
 
     if (eProp == PRODUCTEXTENSION) {
         rtl::OUString name(
-            rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM(
-                    "${BRAND_BASE_DIR}/program/edition/edition.ini")));
+                    "${BRAND_BASE_DIR}/program/edition/edition.ini"));
         rtl::Bootstrap::expandMacros(name);
         if (rtl::Bootstrap(name).getFrom(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EDITIONNAME")),
