@@ -2833,19 +2833,16 @@ SwTokenWindow::SwTokenWindow(SwTOXEntryTabPage* pParent, const ResId& rResId) :
 
 SwTokenWindow::~SwTokenWindow()
 {
-
-    for( sal_uInt32 n = 0; n < aControlList.Count(); ++n )
+    for ( TOXControlList::iterator i = aControlList.begin(); i != aControlList.end(); ++i )
     {
-        Control* pControl = aControlList.GetObject( n );
+        Control* pControl = *i;
         pControl->SetGetFocusHdl( Link() );
         pControl->SetLoseFocusHdl( Link() );
     }
 
-    for( ULONG i = aControlList.Count(); i; )
-    {
-        Control* pControl = aControlList.Remove( --i );
-        delete pControl;
-    }
+    for ( TOXControlList::iterator i = aControlList.begin(); i != aControlList.end(); ++i )
+        delete *i;
+    aControlList.clear();
 }
 
 void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
@@ -2854,12 +2851,9 @@ void    SwTokenWindow::SetForm(SwForm& rForm, sal_uInt16 nL)
     bValid = sal_True;
     if(pForm)
     {
-        //apply current level settings to the form
-        for( ULONG i = aControlList.Count(); i; )
-        {
-            Control* pControl = aControlList.Remove( --i );
-            delete pControl;
-        }
+        for ( TOXControlList::iterator i = aControlList.begin(); i != aControlList.end(); ++i )
+            delete *i;
+        aControlList.clear();
     }
     nLevel = nL;
     pForm = &rForm;
@@ -2955,7 +2949,7 @@ void SwTokenWindow::SetActiveControl(Control* pSet)
 Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rToken)
 {
     Control* pRet = 0;
-    Control* pLast = aControlList.Last();
+    Control* pLast = aControlList.back();
     Size aControlSize(GetOutputSizePixel());
      Point aControlPos;
     if( pLast )
@@ -2968,9 +2962,9 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     {
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, rToken);
         pEdit->SetPosPixel(aControlPos);
-        aControlList.Insert(pEdit, aControlList.Count());
+        aControlList.push_back( pEdit );
         pEdit->SetText(rText);
-         Size aEditSize(aControlSize);
+        Size aEditSize(aControlSize);
         aEditSize.Width() = pEdit->GetTextWidth(rText) + EDIT_MINWIDTH;
         pEdit->SetSizePixel(aEditSize);
         pEdit->SetModifyHdl(LINK(this, SwTokenWindow, EditResize ));
@@ -2983,8 +2977,8 @@ Control*    SwTokenWindow::InsertItem(const String& rText, const SwFormToken& rT
     {
         SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, rToken);
         pButton->SetPosPixel(aControlPos);
-        aControlList.Insert(pButton, aControlList.Count());
-         Size aEditSize(aControlSize);
+        aControlList.push_back( pButton );
+        Size aEditSize(aControlSize);
         aEditSize.Width() = pButton->GetTextWidth(rText) + 5;
         pButton->SetSizePixel(aEditSize);
         pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
@@ -3026,9 +3020,13 @@ void    SwTokenWindow::InsertAtSelection(
         sal_Bool bPreStartLinkFound = sal_False; //
         sal_Bool bPreEndLinkFound = sal_False;
 
-        const Control* pControl = aControlList.First();
-        const Control* pExchange = 0;
-        while( pControl && pActiveCtrl != pControl )
+        const Control* pExchange = NULL;
+        const Control* pControl  = NULL;
+
+        TOXControlList::iterator it = aControlList.begin();
+        while (  ( it != aControlList.end() )
+              && ( (pControl = *it) != pActiveCtrl )
+              )
         {
             if( WINDOW_EDIT != pControl->GetType())
             {
@@ -3050,14 +3048,15 @@ void    SwTokenWindow::InsertAtSelection(
                     }
                 }
             }
-            pControl = aControlList.Next();
+            ++it;
         }
 
         sal_Bool bPostLinkEndFound = sal_False;
         sal_Bool bPostLinkStartFound = sal_False;
         if(!bPreStartLinkFound && !bPreEndLinkFound)
-            while(pControl)
+            while( it != aControlList.end() )
             {
+                pControl = *it;
                 if( pControl != pActiveCtrl &&
                     WINDOW_EDIT != pControl->GetType())
                 {
@@ -3084,7 +3083,7 @@ void    SwTokenWindow::InsertAtSelection(
                         break;
                     }
                 }
-                pControl = aControlList.Next();
+                ++it;
             }
 
         if(bPreStartLinkFound)
@@ -3116,14 +3115,13 @@ void    SwTokenWindow::InsertAtSelection(
 
     //if the active control is text then insert a new button at the selection
     //else replace the button
-    sal_uInt32 nActivePos = aControlList.GetPos(pActiveCtrl);
-    sal_uInt32 nInsertPos = nActivePos;
+    TOXControlList::iterator it = aControlList.begin();
+    for ( ; it != aControlList.end() && *it != pActiveCtrl; ++it );
 
     Size aControlSize(GetOutputSizePixel());
     if( WINDOW_EDIT == pActiveCtrl->GetType())
     {
-        nInsertPos++;
-         Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
+        Selection aSel = ((SwTOXEdit*)pActiveCtrl)->GetSelection();
         aSel.Justify();
         String sEditText = ((SwTOXEdit*)pActiveCtrl)->GetText();
         String sLeft = sEditText.Copy( 0, static_cast< USHORT >(aSel.A()) );
@@ -3135,7 +3133,7 @@ void    SwTokenWindow::InsertAtSelection(
 
         SwFormToken aTmpToken(TOKEN_TEXT);
         SwTOXEdit* pEdit = new SwTOXEdit(&aCtrlParentWin, this, aTmpToken);
-        aControlList.Insert(pEdit, nActivePos + 1);
+        it = aControlList.insert( ++it, pEdit );
         pEdit->SetText(sRight);
         pEdit->SetSizePixel(aControlSize);
         pEdit->AdjustSize();
@@ -3146,14 +3144,14 @@ void    SwTokenWindow::InsertAtSelection(
     }
     else
     {
-        aControlList.Remove(pActiveCtrl);
         pActiveCtrl->Hide();
         delete pActiveCtrl;
+        it = aControlList.erase( it );
     }
 
     //now the new button
     SwTOXButton* pButton = new SwTOXButton(&aCtrlParentWin, this, aToInsertToken);
-    aControlList.Insert(pButton, nInsertPos);
+    it = aControlList.insert( it, pButton );
     pButton->SetPrevNextLink(LINK(this, SwTokenWindow, NextItemBtnHdl));
     pButton->SetGetFocusHdl(LINK(this, SwTokenWindow, TbxFocusBtnHdl));
     if(TOKEN_AUTHORITY != aToInsertToken.eTokenType)
@@ -3181,28 +3179,37 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
     if(bInternalCall && TOX_AUTHORITIES == pForm->GetTOXType())
         m_pParent->PreTokenButtonRemoved(pDel->GetFormToken());
 
-    sal_uInt32 nActivePos = aControlList.GetPos(pDel);
-    OSL_ENSURE(nActivePos != 0xffffffff, "Control does not exist!");
+    TOXControlList::iterator itLeft = aControlList.begin();
+    for ( ; itLeft != aControlList.end() && *itLeft != pDel; ++itLeft );
+
+    TOXControlList::iterator itRight = itLeft;
+    if (  itLeft    == aControlList.end()   // not found
+       || itLeft    == aControlList.begin() // the 1st element  (no left )
+       || ++itRight == aControlList.end()   // the last element (no right)
+       )
+        return;
+
     // the two neighbours of the box must be merged
     // the properties of the right one will be lost
-    OSL_ENSURE(nActivePos && nActivePos < aControlList.Count() - 1,
-        "Button at first or last position?");
-    aControlList.Seek(nActivePos - 1);
-    Control* pLeftEdit = aControlList.GetCurObject();
-    aControlList.Seek(nActivePos + 1);
-    Control* pRightEdit = aControlList.GetCurObject();
+    --itLeft;
+    Control* pLeftEdit = *itLeft;
+
+    Control* pRightEdit = *itRight;
+
     String sTemp(((SwTOXEdit*)pLeftEdit)->GetText());
     sTemp += ((SwTOXEdit*)pRightEdit)->GetText();
     ((SwTOXEdit*)pLeftEdit)->SetText(sTemp);
     ((SwTOXEdit*)pLeftEdit)->AdjustSize();
 
-    aControlList.Remove(pRightEdit);
     delete pRightEdit;
+    itRight = aControlList.erase( itRight );
 
-    aControlList.Remove(pDel);
-    pActiveCtrl->Hide();
-    delete pActiveCtrl;
-    SetActiveControl(pLeftEdit);
+    ++itLeft;
+    pDel->Hide();
+    delete pDel;
+    itLeft = aControlList.erase( itLeft );
+
+    SetActiveControl( pLeftEdit );
     AdjustPositions();
     if(aModifyHdl.IsSet())
         aModifyHdl.Call(0);
@@ -3210,13 +3217,15 @@ void SwTokenWindow::RemoveControl(SwTOXButton* pDel, sal_Bool bInternalCall )
 
 void SwTokenWindow::AdjustPositions()
 {
-    if(aControlList.Count() > 1)
+    if( aControlList.size() > 1 )
     {
-        Control* pCtrl = aControlList.First();
-     Point aNextPos = pCtrl->GetPosPixel();
+        TOXControlList::iterator it = aControlList.begin();
+        Control* pCtrl = *it;
+        Point aNextPos = pCtrl->GetPosPixel();
         aNextPos.X() += pCtrl->GetSizePixel().Width();
-        while(0 != (pCtrl = aControlList.Next()))
+        while ( ++it != aControlList.end() )
         {
+            pCtrl = *it;
             pCtrl->SetPosPixel(aNextPos);
             aNextPos.X() += pCtrl->GetSizePixel().Width();
         }
@@ -3227,22 +3236,22 @@ void SwTokenWindow::AdjustPositions()
 void SwTokenWindow::MoveControls(long nOffset)
 {
     // move the complete list
-    Control* pCtrl = aControlList.First();
-    do
+    for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
     {
+        Control* pCtrl = *it;
         Point aPos = pCtrl->GetPosPixel();
         aPos.X() += nOffset;
         pCtrl->SetPosPixel(aPos);
-    }while(0 != (pCtrl = aControlList.Next()));
+    }
 }
 
 void SwTokenWindow::AdjustScrolling()
 {
-    if(aControlList.Count() > 1)
+    if( aControlList.size() > 1 )
     {
         //validate scroll buttons
-        Control* pLastCtrl = aControlList.Last();
-        Control* pFirstCtrl = aControlList.First();
+        Control* pLastCtrl  = aControlList.back();
+        Control* pFirstCtrl = aControlList.front();
         long nSpace = aCtrlParentWin.GetSizePixel().Width();
         long nWidth = pLastCtrl->GetPosPixel().X() - pFirstCtrl->GetPosPixel().X()
                                                     + pLastCtrl->GetSizePixel().Width();
@@ -3250,7 +3259,7 @@ void SwTokenWindow::AdjustScrolling()
         //the active control must be visible
         if(bEnable && pActiveCtrl)
         {
-             Point aActivePos(pActiveCtrl->GetPosPixel());
+            Point aActivePos(pActiveCtrl->GetPosPixel());
             long nMove = 0;
             if(aActivePos.X() < 0)
                 nMove = -aActivePos.X();
@@ -3258,8 +3267,8 @@ void SwTokenWindow::AdjustScrolling()
                 nMove = -(aActivePos.X() + pActiveCtrl->GetSizePixel().Width() - nSpace);
             if(nMove)
                 MoveControls(nMove);
-            aLeftScrollWin.Enable(aControlList.First()->GetPosPixel().X() < 0);
-            Control* pCtrl = aControlList.Last();
+            aLeftScrollWin.Enable( aControlList.front()->GetPosPixel().X() < 0 );
+            Control* pCtrl = aControlList.back();
             aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
         }
         else
@@ -3279,44 +3288,46 @@ void SwTokenWindow::AdjustScrolling()
 
 IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 {
-    if(aControlList.Count())
+    if( !aControlList.empty() )
     {
         const long nSpace = aCtrlParentWin.GetSizePixel().Width();
 #if OSL_DEBUG_LEVEL > 1
-    //find all start/end positions and print it
-    String sMessage(String::CreateFromAscii("Space: "));
-    sMessage += String::CreateFromInt32(nSpace);
-    sMessage += String::CreateFromAscii(" | ");
-    Control* pDebugCtrl = aControlList.First();
-    do
-    {
-        long nDebugXPos = pDebugCtrl->GetPosPixel().X();
-        long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
-        sMessage += String::CreateFromInt32( nDebugXPos );
-        sMessage += String::CreateFromAscii(" ");
-        sMessage += String::CreateFromInt32(nDebugXPos + nDebugWidth);
+        //find all start/end positions and print it
+        String sMessage(String::CreateFromAscii("Space: "));
+        sMessage += String::CreateFromInt32(nSpace);
         sMessage += String::CreateFromAscii(" | ");
-
-    }while(0 != (pDebugCtrl = aControlList.Next()));
-
+        for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
+        {
+            Control* pDebugCtrl = *it;
+            long nDebugXPos = pDebugCtrl->GetPosPixel().X();
+            long nDebugWidth = pDebugCtrl->GetSizePixel().Width();
+            sMessage += String::CreateFromInt32( nDebugXPos );
+            sMessage += String::CreateFromAscii(" ");
+            sMessage += String::CreateFromInt32(nDebugXPos + nDebugWidth);
+            sMessage += String::CreateFromAscii(" | ");
+        }
 #endif
 
         long nMove = 0;
         if(pBtn == &aLeftScrollWin)
         {
             //find the first completely visible control (left edge visible)
-            for(sal_uInt16 i = 0; i < aControlList.Count(); i++ )
+            for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
             {
-                Control* pCtrl = aControlList.GetObject(i);
+                Control* pCtrl = *it;
                 long nXPos = pCtrl->GetPosPixel().X();
                 if(nXPos >= 0)
                 {
-                    if(!i)
+                    if( it != aControlList.begin() )
                         //move the current control to the left edge
                         nMove = -nXPos;
                     else
+                    {
                         //move the left neighbor to the start position
-                        nMove = -aControlList.GetObject(i - 1)->GetPosPixel().X();
+                        TOXControlList::iterator itLeft = it;
+                        --itLeft;
+                        nMove = -( (*itLeft)->GetPosPixel().X() );
+                    }
                     break;
                 }
             }
@@ -3324,17 +3335,19 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         else
         {
             //find the first completely visible control (left edge visible)
-            for(ULONG i = aControlList.Count(); i; i-- )
+            for ( TOXControlList::reverse_iterator it = aControlList.rbegin(); it != aControlList.rend(); ++it )
             {
-                Control* pCtrl = aControlList.GetObject(i - 1);
+                Control* pCtrl = *it;
                 long nCtrlWidth = pCtrl->GetSizePixel().Width();
                 long nXPos = pCtrl->GetPosPixel().X() + nCtrlWidth;
                 if(nXPos <= nSpace)
                 {
-                    if( i < aControlList.Count())
+                    if( it != aControlList.rbegin() )
                     {
                         //move the right neighbor  to the right edge right aligned
-                        Control* pRight = aControlList.GetObject(i);
+                        TOXControlList::reverse_iterator itRight = it;
+                        --itRight;
+                        Control* pRight = *itRight;
                         nMove = nSpace - pRight->GetPosPixel().X() - pRight->GetSizePixel().Width();
                     }
                     break;
@@ -3346,15 +3359,16 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
         if(nMove)
         {
             // move the complete list
-            Control* pCtrl = aControlList.First();
-            do
+            Control* pCtrl = NULL;
+            for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
             {
-             Point aPos = pCtrl->GetPosPixel();
+                Control* pCtrl = *it;
+                Point aPos = pCtrl->GetPosPixel();
                 aPos.X() += nMove;
                 pCtrl->SetPosPixel(aPos);
-            }while(0 != (pCtrl = aControlList.Next()));
-            aLeftScrollWin.Enable(aControlList.First()->GetPosPixel().X() < 0);
-            pCtrl = aControlList.Last();
+            }
+            aLeftScrollWin.Enable(aControlList.front()->GetPosPixel().X() < 0);
+            pCtrl = aControlList.back();
             aRightScrollWin.Enable((pCtrl->GetPosPixel().X() + pCtrl->GetSizePixel().Width()) > nSpace);
 
 #if OSL_DEBUG_LEVEL > 1
@@ -3370,17 +3384,15 @@ IMPL_LINK(SwTokenWindow, ScrollHdl, ImageButton*, pBtn )
 String  SwTokenWindow::GetPattern() const
 {
     String sRet;
-    const Control* pControl = ((SwTokenWindow*)this)->aControlList.First();
-    while(pControl)
+    for ( TOXControlList::const_iterator it = aControlList.begin(); it != aControlList.end(); ++it )
     {
+        const Control* pControl = *it;
         const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
                     ? ((SwTOXEdit*)pControl)->GetFormToken()
                     : ((SwTOXButton*)pControl)->GetFormToken();
 
         //TODO: prevent input of TOX_STYLE_DELIMITER in KeyInput
         sRet += rNewToken.GetString();
-
-        pControl = ((SwTokenWindow*)this)->aControlList.Next();
     }
     return sRet;
 }
@@ -3391,9 +3403,9 @@ String  SwTokenWindow::GetPattern() const
 sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
 {
     sal_Bool bRet = sal_False;
-    const Control* pControl = ((SwTokenWindow*)this)->aControlList.First();
-    while(pControl)
+    for ( TOXControlList::const_iterator it = aControlList.begin(); it != aControlList.end(); ++it )
     {
+        const Control* pControl = *it;
         const SwFormToken& rNewToken = WINDOW_EDIT == pControl->GetType()
                     ? ((SwTOXEdit*)pControl)->GetFormToken()
                     : ((SwTOXButton*)pControl)->GetFormToken();
@@ -3403,7 +3415,6 @@ sal_Bool SwTokenWindow::Contains(FormTokenType eSearchFor) const
             bRet = sal_True;
             break;
         }
-        pControl = ((SwTokenWindow*)this)->aControlList.Next();
     }
     return bRet;
 }
@@ -3482,15 +3493,19 @@ IMPL_LINK(SwTokenWindow, EditResize, Edit*, pEdit)
 
 IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 {
-    sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pEdit);
-    if((nPos && !pEdit->IsNextControl()) ||
-       (nPos < aControlList.Count() - 1 && pEdit->IsNextControl()))
+    TOXControlList::iterator it = aControlList.begin();
+    for ( ; it != aControlList.end() && *it != pEdit; ++it );
+
+    if (  ( it != aControlList.end()  && !pEdit->IsNextControl() )
+       || (*it != aControlList.back() &&  pEdit->IsNextControl() )
+       )
     {
-        aControlList.Seek(nPos);
-        Control* pNextPrev = pEdit->IsNextControl() ? aControlList.Next() : aControlList.Prev();
-        nPos += pEdit->IsNextControl() ? 1 : -1;
-        pNextPrev->GrabFocus();
-        ((SwTOXButton*)pNextPrev)->Check();
+        if ( pEdit->IsNextControl() )
+            ++it;
+        else
+            --it;
+        (*it)->GrabFocus();
+        ((SwTOXButton*)*it)->Check();
         AdjustScrolling();
     }
     return 0;
@@ -3498,15 +3513,11 @@ IMPL_LINK(SwTokenWindow, NextItemHdl, SwTOXEdit*,  pEdit)
 
 IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 {
-    for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
+    for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
     {
-        Control* pControl = aControlList.First();
-        while(pControl)
-        {
-            if(WINDOW_EDIT != pControl->GetType() )
-                ((SwTOXButton*)pControl)->Check(sal_False);
-            pControl = aControlList.Next();
-        }
+        Control* pControl = *it;
+        if(WINDOW_EDIT != pControl->GetType() )
+            ((SwTOXButton*)pControl)->Check(sal_False);
     }
     SetActiveControl(pEdit);
     return 0;
@@ -3514,22 +3525,27 @@ IMPL_LINK(SwTokenWindow, TbxFocusHdl, SwTOXEdit*, pEdit)
 
 IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 {
-    sal_uInt16 nPos = (sal_uInt16)aControlList.GetPos(pBtn);
-    if((nPos && !pBtn->IsNextControl()) ||
-       (nPos < aControlList.Count() - 1 && pBtn->IsNextControl()))
+    TOXControlList::iterator it = aControlList.begin();
+    for ( ; it != aControlList.end() && *it != pBtn; ++it );
+
+    if (  ( it != aControlList.end()  && !pBtn->IsNextControl() )
+       || (*it != aControlList.back() &&  pBtn->IsNextControl() )
+       )
     {
-        aControlList.Seek(nPos);
         sal_Bool bNext = pBtn->IsNextControl();
-        Control* pNextPrev = bNext ? aControlList.Next() : aControlList.Prev();
-        pNextPrev->GrabFocus();
-         Selection aSel(0, 0);
-        if(!bNext)
+        if ( bNext )
+            ++it;
+        else
+            --it;
+        (*it)->GrabFocus();
+        Selection aSel( 0, 0 );
+        if ( !bNext )
         {
-            sal_uInt16 nLen = ((SwTOXEdit*)pNextPrev)->GetText().Len();
+            sal_uInt16 nLen = ((SwTOXEdit*)*it)->GetText().Len();
             aSel.A() = nLen;
             aSel.B() = nLen;
         }
-        ((SwTOXEdit*)pNextPrev)->SetSelection(aSel);
+        ((SwTOXEdit*)*it)->SetSelection(aSel);
         pBtn->Check(sal_False);
         AdjustScrolling();
     }
@@ -3538,15 +3554,11 @@ IMPL_LINK(SwTokenWindow, NextItemBtnHdl, SwTOXButton*, pBtn )
 
 IMPL_LINK(SwTokenWindow, TbxFocusBtnHdl, SwTOXButton*, pBtn )
 {
-    for(sal_uInt16 i = 0; i < aControlList.Count(); i++)
+    for ( TOXControlList::iterator it = aControlList.begin(); it != aControlList.end(); ++it )
     {
-        Control* pControl = aControlList.First();
-        while(pControl)
-        {
-            if(WINDOW_EDIT != pControl->GetType() )
-                ((SwTOXButton*)pControl)->Check(pBtn == pControl);
-            pControl = aControlList.Next();
-        }
+        Control* pControl = *it;
+        if(WINDOW_EDIT != pControl->GetType() )
+            ((SwTOXButton*)pControl)->Check(pBtn == pControl);
     }
     SetActiveControl(pBtn);
     return 0;
@@ -3556,9 +3568,9 @@ void SwTokenWindow::GetFocus()
 {
     if(GETFOCUS_TAB & GetGetFocusFlags())
     {
-       Control* pFirst = aControlList.First();
-       if(pFirst)
+       if( !aControlList.empty() )
        {
+            Control* pFirst = aControlList.front();
             pFirst->GrabFocus();
             SetActiveControl(pFirst);
             AdjustScrolling();
