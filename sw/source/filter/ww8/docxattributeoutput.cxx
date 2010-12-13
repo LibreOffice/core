@@ -1579,6 +1579,7 @@ void DocxAttributeOutput::TableBackgrounds( ww8::WW8TableNodeInfoInner::Pointer_
         OString sColor = impl_ConvertColor( aColor );
         m_pSerializer->singleElementNS( XML_w, XML_shd,
                 FSNS( XML_w, XML_fill ), sColor.getStr( ),
+                FSNS( XML_w, XML_val ), "clear",
                 FSEND );
 }
 
@@ -2841,7 +2842,9 @@ void DocxAttributeOutput::CharAnimatedText( const SvxBlinkItem& rBlink )
 void DocxAttributeOutput::CharBackground( const SvxBrushItem& rBrush )
 {
     m_pSerializer->singleElementNS( XML_w, XML_shd,
-            FSNS( XML_w, XML_fill ), impl_ConvertColor( rBrush.GetColor() ).getStr(), FSEND );
+            FSNS( XML_w, XML_fill ), impl_ConvertColor( rBrush.GetColor() ).getStr(),
+            FSNS( XML_w, XML_val ), "clear",
+            FSEND );
 }
 
 void DocxAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
@@ -3738,6 +3741,7 @@ void DocxAttributeOutput::FormatBackground( const SvxBrushItem& rBrush )
         OString sColor = impl_ConvertColor( rBrush.GetColor( ) );
         m_pSerializer->singleElementNS( XML_w, XML_shd,
                 FSNS( XML_w, XML_fill ), sColor.getStr( ),
+                FSNS( XML_w, XML_val ), "clear",
                 FSEND );
     }
 }
