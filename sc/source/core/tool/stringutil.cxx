@@ -74,7 +74,13 @@ bool ScStringUtil::parseSimpleNumber(
             break;
     }
 
-    for (; i < n; ++i, ++p)
+    if (i == n)
+        // the whole string is space.  Fail.
+        return false;
+
+    n -= i; // Subtract the length of preceding space.
+
+    for (sal_Int32 i = 0; i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
         if (c == 0x00A0)
