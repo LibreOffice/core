@@ -96,8 +96,8 @@ BOOL ConvertGDIMetaFileToWMF( const GDIMetaFile & rMTF, SvStream & rTargetStream
 BOOL ConvertGDIMetaFileToEMF( const GDIMetaFile & rMTF, SvStream & rTargetStream,
                               FilterConfigItem* pConfigItem )
 {
-    EMFWriter aEMFWriter;
-    return aEMFWriter.WriteEMF( rMTF, rTargetStream, pConfigItem );
+    EMFWriter aEMFWriter(rTargetStream);
+    return aEMFWriter.WriteEMF( rMTF, pConfigItem );
 }
 
 // -----------------------------------------------------------------------------

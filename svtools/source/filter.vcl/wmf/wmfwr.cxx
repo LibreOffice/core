@@ -2014,10 +2014,10 @@ USHORT WMFWriter::CalcSaveTargetMapMode(MapMode& rMapMode,
 
 void WMFWriter::WriteEmbeddedEMF( const GDIMetaFile& rMTF )
 {
-    EMFWriter aEMFWriter;
     SvMemoryStream aStream;
+    EMFWriter aEMFWriter(aStream);
 
-    if( aEMFWriter.WriteEMF( rMTF, aStream ) )
+    if( aEMFWriter.WriteEMF( rMTF ) )
     {
         sal_Size nTotalSize = aStream.Tell();
         if( nTotalSize > SAL_MAX_UINT32 )

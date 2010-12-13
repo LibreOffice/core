@@ -50,7 +50,7 @@ private:
     VirtualDevice       maVDev;
     MapMode             maDestMapMode;
     FilterConfigItem*   mpFilterConfigItem;
-    SvStream*           mpStm;
+    SvStream& m_rStm;
     BOOL*               mpHandlesUsed;
     ULONG               mnHandleCount;
     ULONG               mnLastPercent;
@@ -93,9 +93,9 @@ private:
 
 public:
 
-                        EMFWriter() {}
+    EMFWriter(SvStream &rStream) : m_rStm(rStream) {}
 
-    BOOL                WriteEMF( const GDIMetaFile& rMtf, SvStream& rOStm, FilterConfigItem* pConfigItem = NULL );
+    BOOL WriteEMF( const GDIMetaFile& rMtf, FilterConfigItem* pConfigItem = NULL );
 };
 
 #endif // _EMFWR_HXX
