@@ -353,6 +353,12 @@ class SwShdwCrsrOptionsTabPage : public SfxTabPage
     FixedLine       aCrsrOptFL;
     CheckBox        aCrsrInProtCB;
 
+    FixedLine       m_aLayoutOptionsFL;
+    CheckBox        m_aMathBaselineAlignmentCB;
+
+    SwWrtShell *    m_pWrtShell;
+
+
     SwShdwCrsrOptionsTabPage( Window* pParent, const SfxItemSet& rSet );
     ~SwShdwCrsrOptionsTabPage();
 
@@ -362,6 +368,9 @@ public:
 
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
+
+    void    SetWrtShell( SwWrtShell * pSh ) { m_pWrtShell = pSh; }
+    virtual void        PageCreated( SfxAllItemSet aSet );
 };
 
 /*-----------------------------------------------------------------------
@@ -498,5 +507,3 @@ private:
 };
 #endif //PRODUCT
 #endif
-
-

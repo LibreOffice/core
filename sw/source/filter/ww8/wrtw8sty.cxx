@@ -784,14 +784,16 @@ void wwFontHelper::InitFontTable(bool bWrtWW8,const SwDoc& rDoc)
     const USHORT aTypes[] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT, 0 };
     for (const USHORT* pId = aTypes; *pId; ++pId)
     {
-        USHORT nMaxItem = rPool.GetItemCount2( *pId );
-        for( USHORT nGet = 0; nGet < nMaxItem; ++nGet )
-            if( 0 != (pFont = (const SvxFontItem*)rPool.GetItem2(
-                            *pId, nGet )) )
+        sal_uInt32 const nMaxItem = rPool.GetItemCount2( *pId );
+        for (sal_uInt32 nGet = 0; nGet < nMaxItem; ++nGet)
+        {
+            pFont = (const SvxFontItem*)rPool.GetItem2( *pId, nGet );
+            if (0 != pFont)
             {
                 GetId(wwFont(pFont->GetFamilyName(), pFont->GetPitch(),
                             pFont->GetFamily(), pFont->GetCharSet(),bWrtWW8));
             }
+        }
     }
 }
 

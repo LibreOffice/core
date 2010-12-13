@@ -375,7 +375,7 @@ SHL5LIBS=$(SLB)$/$(TARGET_VBA).lib
 
 .INCLUDE :  target.mk
 
-ALLTAR : $(MISC)/sw.component $(MISC)/swd.component $(MISC)/vbaswobj.component
+ALLTAR : $(MISC)/sw.component $(MISC)/swd.component $(MISC)/vbaswobj.component $(MISC)/msword.component
 
 $(MISC)/sw.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         sw.component
@@ -394,3 +394,9 @@ $(MISC)/vbaswobj.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL5TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt vbaswobj.component
+
+$(MISC)/msword.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
+        msword.component
+    $(XSLTPROC) --nonet --stringparam uri \
+        '$(COMPONENTPREFIX_BASIS_NATIVE)$(SHL4TARGETN:f)' -o $@ \
+        $(SOLARENV)/bin/createcomponent.xslt msword.component

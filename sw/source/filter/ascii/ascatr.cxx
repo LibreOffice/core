@@ -205,8 +205,8 @@ static Writer& OutASC_SwTxtNode( Writer& rWrt, SwCntntNode& rNode )
     } while( nStrPos < nEnde );
 
     if( !bLastNd ||
-        ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
-            && !nStrPos && nEnde == nNodeEnde )
+        ( ( !rWrt.bWriteClipboardDoc && !rWrt.bASCII_NoLastLineEnd )
+            && !nStrPos && nEnde == nNodeEnde ) )
         rWrt.Strm().WriteUnicodeOrByteText( ((SwASCWriter&)rWrt).GetLineEnd());
 
     return rWrt;

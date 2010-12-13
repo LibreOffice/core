@@ -27,19 +27,15 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
-#include <hintids.hxx>
-#ifndef _CMDID_H
-#include <cmdid.h>          // Funktion-Ids
-#endif
-
-#include <com/sun/star/i18n/ScriptType.hpp>
 
 #define _SVSTDARR_STRINGSDTOR
 #include <svl/svstdarr.hxx>
 
-#ifndef _MSGBOX_HXX //autogen
+#include <com/sun/star/i18n/ScriptType.hpp>
+
+#include <hintids.hxx>
+#include <cmdid.h>          // Funktion-Ids
 #include <vcl/msgbox.hxx>
-#endif
 #include <svl/eitem.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/app.hxx>
@@ -47,9 +43,7 @@
 #include <svx/htmlmode.hxx>
 #include <sfx2/bindings.hxx>
 #include <editeng/brshitem.hxx>
-#ifndef _SVX_TSTPITEM_HXX //autogen
 #include <editeng/tstpitem.hxx>
-#endif
 #include <svx/optgrid.hxx>
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
@@ -59,37 +53,25 @@
 #include <optcomp.hxx>
 #include <edtwin.hxx>
 #include <swmodule.hxx>
-#ifndef _VIEW_HXX
 #include <view.hxx>
-#endif
+#include <doc.hxx>
 #include <wrtsh.hxx>
-#ifndef IDOCUMENTDEVICEACCESS_HXX_INCLUDED
 #include <IDocumentDeviceAccess.hxx>
-#endif
 #include <uitool.hxx>
 #include <initui.hxx>                   // fuer ::GetGlossaries()
 #include <fldbas.hxx>      //fuer UpdateFields
-#ifndef _WVIEW_HXX
 #include <wview.hxx>
-#endif
 #include <cfgitems.hxx>
 #include <prtopt.hxx>
-#ifndef _PVIEW_HXX
 #include <pview.hxx>
-#endif
 #include <usrpref.hxx>
-#ifndef _MODCFG_HXX
 #include <modcfg.hxx>
-#endif
 #include <glosdoc.hxx>
 #include <uiitems.hxx>
 #include <editeng/langitem.hxx>
 #include <unotools/lingucfg.hxx>
 #include <editeng/unolingu.hxx>
-
-#ifndef _GLOBALS_HRC
 #include <globals.hrc>
-#endif
 #include <globals.h>        // globale Konstanten z.B.
 #include <svl/slstitm.hxx>
 #include "swabstdlg.hxx"
@@ -334,8 +316,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     /*---------------------------------------------------------------------
             Seite Dokumentansicht auswerten
     -----------------------------------------------------------------------*/
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                FN_PARAM_DOCDISP, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_DOCDISP, FALSE, &pItem ))
     {
         const SwDocDisplayItem* pDocDispItem = (const SwDocDisplayItem*)pItem;
 
@@ -364,23 +345,20 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
                 Elemente - Item auswerten
     -----------------------------------------------------------------------*/
 
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                                    FN_PARAM_ELEM, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ELEM, FALSE, &pItem ) )
     {
         const SwElemItem* pElemItem = (const SwElemItem*)pItem;
         pElemItem->FillViewOptions( aViewOpt );
 
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC,
-                                                    FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_METRIC, FALSE, &pItem ) )
     {
         SFX_APP()->SetOptions(rSet);
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         ::SetDfltMetric((FieldUnit)pMetricItem->GetValue(), !bTextDialog);
     }
-    if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC,
-                                                    FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_HSCROLL_METRIC, FALSE, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
@@ -389,8 +367,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             pAppView->ChangeTabMetric(eUnit);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC,
-                                                    FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(FN_VSCROLL_METRIC, FALSE, &pItem ) )
     {
         const SfxUInt16Item* pMetricItem = (const SfxUInt16Item*)pItem;
         FieldUnit eUnit = (FieldUnit)pMetricItem->GetValue();
@@ -399,8 +376,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             pAppView->ChangeVLinealMetric(eUnit);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP,
-                                                    FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState(SID_ATTR_DEFTABSTOP, FALSE, &pItem ) )
     {
         USHORT nTabDist = ((const SfxUInt16Item*)pItem)->GetValue();
         pPref->SetDefTab(nTabDist);
@@ -427,8 +403,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             Seite Rastereinstellungen auswerten
     ----------------------------------------------------------------------*/
 
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                                SID_ATTR_GRID_OPTIONS, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( SID_ATTR_GRID_OPTIONS, FALSE, &pItem ))
     {
         const SvxGridItem* pGridItem = (const SvxGridItem*)pItem;
 
@@ -458,8 +433,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
     //      Writer Drucker Zusatzeinstellungen auswerten
     //----------------------------------------------------------------------------
 
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                                FN_PARAM_ADDPRINTER, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_ADDPRINTER, FALSE, &pItem ))
     {
         SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
         if (pOpt)
@@ -473,16 +447,25 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
 
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                        FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_SHADOWCURSOR, FALSE, &pItem ))
     {
         ((SwShadowCursorItem*)pItem)->FillViewOptions( aViewOpt );
         if(pBindings)
             pBindings->Invalidate(FN_SHADOWCURSOR);
     }
 
-    if( SFX_ITEM_SET == rSet.GetItemState(
-                        FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
+    if( pAppView )
+    {
+        SwWrtShell &rWrtSh = pAppView->GetWrtShell();
+        const bool bAlignFormulas = rWrtSh.GetDoc()->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+        pPref->SetAlignMathObjectsToBaseline( bAlignFormulas );
+
+        // don't align formulas in documents that are currently loading
+        if (bAlignFormulas && !rWrtSh.GetDoc()->IsInReading())
+            rWrtSh.AlignAllFormulasToBaseline();
+    }
+
+    if( SFX_ITEM_SET == rSet.GetItemState( FN_PARAM_CRSR_IN_PROTECTED, FALSE, &pItem ))
     {
         aViewOpt.SetCursorInProtectedArea(((const SfxBoolItem*)pItem)->GetValue());
     }
@@ -510,8 +493,7 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
             }
 #endif
         // dann an der akt. View und Shell die entsp. Elemente setzen
-    ApplyUsrPref( aViewOpt, pAppView,
-                 bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
+    ApplyUsrPref( aViewOpt, pAppView, bTextDialog? VIEWOPT_DEST_TEXT : VIEWOPT_DEST_WEB);
 }
 /* -----------------12.02.99 12:28-------------------
  *
@@ -609,6 +591,15 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
                 if ( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
+            if (pRet && (nId == RID_SW_TP_OPTSHDWCRSR || nId == RID_SW_TP_HTML_OPTSHDWCRSR))
+            {
+                SwView* pCurrView = GetView();
+                if(pCurrView)
+                {
+                    aSet.Put( SwWrtShellItem( SID_WRT_SHELL, pCurrView->GetWrtShellPtr() ) );
+                    pRet->PageCreated(aSet);
+                }
+            }
         }
         break;
 #ifdef DBG_UTIL
@@ -652,6 +643,4 @@ SfxTabPage* SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItemS
     DBG_ASSERT( pRet, "SwModule::CreateTabPage(): Unknown tabpage id" );
     return pRet;
 }
-
-
 

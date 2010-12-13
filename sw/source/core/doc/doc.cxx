@@ -206,6 +206,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         case PURGE_OLE: return mbPurgeOLE;
         case KERN_ASIAN_PUNCTUATION: return mbKernAsianPunctuation;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT: return mbDoNotResetParaAttrsForNumFont;
+        case MATH_BASELINE_ALIGNMENT: return mbMathBaselineAlignment;
         default:
             ASSERT(false, "Invalid setting id");
     }
@@ -304,7 +305,7 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case UNIX_FORCE_ZERO_EXT_LEADING:
             mbUnixForceZeroExtLeading = value;
             break;
-    case PROTECT_FORM:
+        case PROTECT_FORM:
         mbProtectForm = value;
         break;
 
@@ -344,6 +345,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
             break;
         case DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT:
             mbDoNotResetParaAttrsForNumFont = value;
+            break;
+        case MATH_BASELINE_ALIGNMENT:
+            mbMathBaselineAlignment  = value;
             break;
         default:
             ASSERT(false, "Invalid setting id");
