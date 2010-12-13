@@ -285,7 +285,9 @@ ShapeSharedPtr ShapeImporter::createShape(
     rtl::OUString const& shapeType ) const
 {
     if( shapeType.equalsAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ))
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.MediaShape") ) ||
+        shapeType.equalsAsciiL(
+            RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.MediaShape") ) )
     {
         // Media shape (video etc.). This is a special object
         return createMediaShape(xCurrShape,
@@ -337,7 +339,9 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   mrContext );
     }
     else if( shapeType.equalsAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape") ))
+                 RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.OLE2Shape") ) ||
+             shapeType.equalsAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OLE2Shape") ) )
     {
         // #i46224# Mark OLE shapes as foreign content - scan them for
         // unsupported actions, and fallback to bitmap, if necessary
@@ -349,7 +353,10 @@ ShapeSharedPtr ShapeImporter::createShape(
     }
     else if( shapeType.equalsAsciiL(
                  RTL_CONSTASCII_STRINGPARAM(
-                     "com.sun.star.drawing.GraphicObjectShape") ))
+                     "com.sun.star.drawing.GraphicObjectShape") ) ||
+             shapeType.equalsAsciiL(
+                 RTL_CONSTASCII_STRINGPARAM(
+                     "com.sun.star.presentation.GraphicObjectShape") ) )
     {
         GraphicObject aGraphicObject;
 
