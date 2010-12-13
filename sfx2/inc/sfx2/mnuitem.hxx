@@ -48,7 +48,6 @@ class SFX2_DLLPUBLIC SfxMenuControl: public SfxControllerItem
 //friend SvStream& operator>>( SvStream& rStream, SfxMenuControl& rItem );
 
     String                  aTitle;
-    String                  aHelpText;
     SfxVirtualMenu*         pOwnMenu;
     SfxVirtualMenu*         pSubMenu;
     BOOL                    b_ShowStrings;
@@ -66,12 +65,10 @@ public:
 
         using SfxControllerItem::Bind;
     void                    Bind( SfxVirtualMenu* pOwnMenu, USHORT nId,
-                                  const String& rTitle, const String &rHelpText,
-                                  SfxBindings & );
+                                  const String& rTitle, SfxBindings& rBindings );
     void                    Bind( SfxVirtualMenu* pOwnMenu, USHORT nId,
                                   SfxVirtualMenu& rSubMenu,
-                                  const String& rTitle, const String &rHelpText,
-                                  SfxBindings & );
+                                  const String& rTitle, SfxBindings& rBindings );
 
 //  SvStream &              Load(SvStream &, SfxBindings*);
 //  SvStream &              Store(SvStream &);
@@ -82,15 +79,12 @@ public:
     void                    SetOwnMenu( SfxVirtualMenu* pMenu );
     void                    RemovePopup();
 
-    const String&           GetHelpText() const { return aHelpText; }
-    void                    SetHelpText(const String &rStr) { aHelpText  = rStr; }
-
     virtual void            StateChanged( USHORT nSID, SfxItemState eState,
                                           const SfxPoolItem* pState );
 
     static SfxMenuControl*    CreateControl( USHORT nId, Menu &, SfxBindings & );
     static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, SfxBindings&, SfxVirtualMenu* );
-    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, const String& sItemText, const String& sHelpText, SfxBindings&, SfxVirtualMenu* );
+    static SfxUnoMenuControl* CreateControl( const String&, USHORT, Menu&, const String& sItemText, SfxBindings&, SfxVirtualMenu* );
     static BOOL             IsSpecialControl( USHORT nId, SfxModule* );
     static void             RegisterMenuControl(SfxModule*, SfxMenuCtrlFactory*);
 
@@ -103,7 +97,7 @@ public:
                             SfxUnoMenuControl( const String&, USHORT nId, Menu&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             SfxUnoMenuControl( const String&, USHORT nId, Menu&,
-                                               const String&, const String&,
+                                               const String&,
                                                 SfxBindings&, SfxVirtualMenu* );
                             ~SfxUnoMenuControl();
     void                    Select();

@@ -140,13 +140,11 @@ void SfxMenuControl::Bind(
     SfxVirtualMenu* pOwn,
     USHORT nSlotId,
     const String& rTitle,
-    const String &rHelpText,
     SfxBindings &rBindings )
 {
     DBG_MEMTEST();
 
     aTitle = rTitle;
-    aHelpText = rHelpText;
     pOwnMenu = pOwn;
     pSubMenu = 0;
     if ( pOwn )
@@ -167,7 +165,6 @@ void SfxMenuControl::Bind(
     USHORT nSlotId,
     SfxVirtualMenu& rMenu,
     const String& rTitle,
-    const String &rHelpText,
     SfxBindings &rBindings )
 {
     DBG_MEMTEST();
@@ -176,7 +173,6 @@ void SfxMenuControl::Bind(
     pOwnMenu = pOwn;
     pSubMenu = &rMenu;
     aTitle = rTitle;
-    aHelpText = rHelpText;
 }
 
 //--------------------------------------------------------------------
@@ -531,18 +527,17 @@ SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
 }
 
 SfxUnoMenuControl* SfxMenuControl::CreateControl( const String& rCmd,
-        USHORT nId, Menu& rMenu, const String& sItemText, const String& sHelpText,
+        USHORT nId, Menu& rMenu, const String& sItemText,
         SfxBindings& rBindings, SfxVirtualMenu* pVirt)
 {
-    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, sHelpText, rBindings, pVirt);
+    return new SfxUnoMenuControl( rCmd, nId, rMenu, sItemText, rBindings, pVirt);
 }
 
 SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
     Menu& rMenu, SfxBindings& rBindings, SfxVirtualMenu* pVirt )
     : SfxMenuControl( nSlotId, rBindings )
 {
-    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId),
-                        rMenu.GetHelpText(nSlotId), rBindings);
+    Bind( pVirt, nSlotId, rMenu.GetItemText(nSlotId), rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();
@@ -551,11 +546,11 @@ SfxUnoMenuControl::SfxUnoMenuControl( const String& rCmd, USHORT nSlotId,
 
 SfxUnoMenuControl::SfxUnoMenuControl(
     const String& rCmd, USHORT nSlotId, Menu& /*rMenu*/,
-    const String& rItemText, const String& rHelpText,
+    const String& rItemText,
     SfxBindings& rBindings, SfxVirtualMenu* pVirt)
     : SfxMenuControl( nSlotId, rBindings )
 {
-    Bind( pVirt, nSlotId, rItemText, rHelpText, rBindings);
+    Bind( pVirt, nSlotId, rItemText, rBindings);
     UnBind();
     pUnoCtrl = new SfxUnoControllerItem( this, rBindings, rCmd );
     pUnoCtrl->acquire();

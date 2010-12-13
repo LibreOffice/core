@@ -396,7 +396,6 @@ void SfxVirtualMenu::CreateFromSVMenu()
         }
 
         const String sItemText = pSVMenu->GetItemText(nSlotId);
-        const String sHelpText = pSVMenu->GetHelpText(nSlotId);
 
         if ( pPopup )
         {
@@ -416,8 +415,8 @@ void SfxVirtualMenu::CreateFromSVMenu()
 
                 SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                 rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count() );
-                (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
-                pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
+                (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
+                pMnuCtrl->Bind( this, nSlotId, sItemText, *pBindings);
 
                 if (  Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
                 {
@@ -453,8 +452,7 @@ void SfxVirtualMenu::CreateFromSVMenu()
                 {
                     pMnuCtrl->Bind( this, nSlotId,
                         *new SfxVirtualMenu(nSlotId, this, *pPopup, bHelpInitialized, *pBindings, bOLE, bResCtor),
-                        sItemText, sHelpText,
-                        *pBindings );
+                        sItemText, *pBindings );
                 }
             }
 
@@ -490,12 +488,12 @@ void SfxVirtualMenu::CreateFromSVMenu()
                     if ( aCmd.Len() && (( nSlotId < SID_SFX_START ) || ( nSlotId > SHRT_MAX )) )
                     {
                         // try to create control via comand name
-                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, sHelpText, *pBindings, this );
+                        pMnuCtrl = SfxMenuControl::CreateControl( aCmd, nSlotId, *pSVMenu, sItemText, *pBindings, this );
                         if ( pMnuCtrl )
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
                         }
                     }
 
@@ -507,13 +505,13 @@ void SfxVirtualMenu::CreateFromSVMenu()
                         {
                             SfxMenuCtrlArr_Impl &rCtrlArr = GetAppCtrl_Impl();
                             rCtrlArr.C40_INSERT( SfxMenuControl, pMnuCtrl, rCtrlArr.Count());
-                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, sHelpText, *pBindings);
+                            (pItems+nPos)->Bind( 0, nSlotId, sItemText, *pBindings);
                         }
                         else
                             // take default control
                             pMnuCtrl = (pItems+nPos);
 
-                        pMnuCtrl->Bind( this, nSlotId, sItemText, sHelpText, *pBindings);
+                        pMnuCtrl->Bind( this, nSlotId, sItemText, *pBindings);
                     }
 
                     if ( Application::GetSettings().GetStyleSettings().GetUseImagesInMenus() )
@@ -798,9 +796,7 @@ bool SfxVirtualMenu::Bind_Impl( Menu *pMenu )
 
                 DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
 
-                rCtrl.Bind( this, nSID, *pSubMenu,
-                    pSVMenu->GetItemText(nSID), pSVMenu->GetHelpText(nSID),
-                    *pBindings );
+                rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
 
                 // Activate weiterleiten
                 pSubMenu->Bind_Impl( pMenu );
@@ -1207,21 +1203,6 @@ String SfxVirtualMenu::GetItemText( USHORT nSlotId ) const
 }
 //--------------------------------------------------------------------
 
-// returns the text of the item as currently shown in the menu
-
-String SfxVirtualMenu::GetItemHelpText( USHORT nSlotId ) const
-{
-    DBG_MEMTEST();
-    DBG_CHKTHIS(SfxVirtualMenu, 0);
-
-    USHORT nPos = GetItemPos(nSlotId);
-    if ( nPos != MENU_ITEM_NOTFOUND )
-        return (pItems+nPos)->GetHelpText();
-    return String();
-}
-
-//--------------------------------------------------------------------
-
 // set the checkmark of the specified item
 
 void SfxVirtualMenu::CheckItem( USHORT nItemId, BOOL bCheck )
@@ -1304,9 +1285,7 @@ void SfxVirtualMenu::InitPopup( USHORT nPos, BOOL /*bOLE*/ )
 
         DBG_OUTF( ("Neues VirtualMenu %lx erzeugt", pSubMenu) );
 
-        rCtrl.Bind( this, nSID, *pSubMenu,
-            pSVMenu->GetItemText(nSID), pSVMenu->GetHelpText(nSID),
-            *pBindings );
+        rCtrl.Bind( this, nSID, *pSubMenu, pSVMenu->GetItemText(nSID), *pBindings );
     }
 }
 

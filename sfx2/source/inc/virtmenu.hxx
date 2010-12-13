@@ -108,7 +108,6 @@ public:
     USHORT          GetItemId( USHORT nPos ) const;
     SfxVirtualMenu* GetPopupMenu( USHORT nId ) const;
     String          GetItemText( USHORT nId ) const;
-    String          GetItemHelpText( USHORT nId ) const;
 
     //void            InvalidateKeyCodes();
 
