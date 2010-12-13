@@ -106,7 +106,11 @@ else
 ifeq ($(OS),SOLARIS)
 include $(GBUILDDIR)/platform/solaris.mk
 else
+ifeq ($(OS),MACOSX)
+include $(GBUILDDIR)/platform/macosx.mk
+else
 $(error unsupported OS: $(OS))
+endif
 endif
 endif
 endif
