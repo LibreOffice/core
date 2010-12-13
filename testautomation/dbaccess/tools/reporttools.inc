@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Report Helper Routines for Base tests.
 '*
@@ -365,7 +365,7 @@ function tools_reporttools_InstallExtension
     dim i as integer
     use "global/tools/includes/optional/t_extension_manager_tools.inc"
     if (not hIsExtensionAlreadyInstalled("Report Builder")) then
-        i = hExtensionAddGUI( gTesttoolPath + "dbaccess/required/input/sun-report-builder.oxt", "AcceptLicense,InstallForUser" )
+        i = hExtensionAddGUI( gTesttoolPath + "dbaccess/required/input/oracle-report-builder.oxt", "AcceptLicense,InstallForUser" )
         if (i > 0) then    
             tools_reporttools_InstallExtension = 0
         else

@@ -25,13 +25,17 @@
 '
 '/************************************************************************
 '*
-'* owner : joerg.skottke@sun.com
+'* owner : joerg.skottke@oracle.com
 '*
 '* short description : "10ner/Smoke Test" from release engineering
 '*
 '\******************************************************************************
 
 testcase tSmokeTest
+
+    if ( not hCheckForBinfilters() ) then
+        goto endsub
+    endif
 
     printlog( "Smoketest (10er-Test) from Release Engineering" )
     dim sLocation as string

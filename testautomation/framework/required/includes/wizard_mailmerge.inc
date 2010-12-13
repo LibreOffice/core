@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for the mailmerge wizard
 '*
@@ -60,36 +60,36 @@ testcase tUpdtWizardMailMerge
     endif
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickButton( NextButton )
     hUpdtMMWPage2()
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
-	hUpdtMMWpage3()
+    hClickButton( NextButton )
+    hUpdtMMWpage3()
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickButton( NextButton )
     hUpdtMMWPage4()
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickButton( NextButton )
     hUpdtMMWPage5()
 
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickButton( NextButton )
     hUpdtMMWPage6()
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickButton( NextButton )
     hUpdtMMWPage7()
     
     Kontext "MailMergeWizard"
-    brc = hClickNextButton()
+    hClickNextButton()
     hUpdtMMWPage8()
     
     printlog( "close the wizard" )
     Kontext "MailMergeWizard"
-    MailMergeWizard.cancel()
+    hCloseDialog( MailMergeWizard, "cancel" )
 
     hRemoveDatabaseConnections()
     hCloseDocument()

@@ -25,51 +25,12 @@
 '
 '/******************************************************************************
 '*
-'* Owner : wolfram.garten@sun.com
+'* Owner : wolfram.garten@oracle.com
 '*
 '* short description : some tools (Functions)
 '*
 '\******************************************************************************
 
-'Functions:
-' #1 hFindSpellHypLanguage
-' #1 GetDecimalSeperator
-' #1 LiberalMeasurement
-' #1 GetMeasUnit
-' #1 StrToDouble
-' #1 fGetPositionX
-' #1 setStartCurrentPage
-' #1 fIsDocumentWritable
-' #1 fIsDocumentWritable
-' #1 fGetSizeXY
-' #1 hCallExport
-' #1 checkexppdfwaitmax10sec
-' #1 fCompareTwoValues
-' #1 fConvertBackslashToSlash
-' #1 hScreenFontAntialiasing
-' #1 fSaveLoadAllFormats
-' #1 setCharacterLanguage
-' #1 toggleGermanSpellchecking
-' #1 sAnalyseContextMenu
-' #1 sLongToBinary
-' #1 sBinaryToLong
-' #1 fGetIntoDictionary
-' #1 hSelectInList
-' #1 hWalkTheStyles2
-' #1 fGetSlideNumber
-' #1 fGetSlideCount
-' #1 fGetSlideName
-' #1 fGetSetPageBackground
-' #1 CreateTextSetEffectAndAngle
-' #1 fGetPresentationStyle
-' #1 hPrepareSearchBUG
-' #1 makeNumOutOfText
-' #1 wIgnorierenlisteLoeschen
-' #1 optionstest
-' #1 optionstest2
-
-
-'\*****************************************************************
 function hFindSpellHypLanguage (optional sBooks()) as string
     printlog "print all available languages that have a language module"
     dim iListLength as integer
@@ -98,8 +59,7 @@ function hFindSpellHypLanguage (optional sBooks()) as string
         ModuleBearbeiten.Close
         Kontext "ExtrasOptionenDlg"
         printlog "close dialog 'Options - '"
-        ExtrasOptionenDlg.OK
-        sleep 1
+        hCloseDialog( ExtrasOptionenDlg, "ok" )
     endif
 end function
 
@@ -109,7 +69,7 @@ function GetDecimalSeperator ( sDummy$ ) as String
     printlog "Input : number with fractionmark from 'NumericField' as String "
     printlog "+ Output: '.' or ',' as String                                  "
     dim i1, i2 as integer
-    
+
     printlog "get position of fraction mark / get IT"
     i1 = instr (sDummy$, ",")
     i2 = instr (sDummy$, ".")
@@ -128,10 +88,10 @@ function LiberalMeasurement ( sShould$, sActual$) as Boolean
     printlog "+ there are also some rounding errors because of the internal representatio of floating point numbers in computers "
     printlog "+   now lets try to get rid of them and have a nicer output in tests... "
     printlog " measurement units are defined in http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src "
-   
+
     dim iTolerance as Double
 
-    LiberalMeasurement = False 
+    LiberalMeasurement = False
 
     if (sShould$ = sActual$) then
         LiberalMeasurement = True
@@ -143,12 +103,12 @@ function LiberalMeasurement ( sShould$, sActual$) as Boolean
             printlog "set factor for liberality"
             printlog "took units from http://gsl.openoffice.org/source/browse/gsl/vcl/source/src/units.src"
             select case GetMeasUnit(sShould$)
-                case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
-                case "cm","センチ","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
-                case chr$(34) : iTolerance = 2.5
-                case "pi","ピクセル" : iTolerance = 2.5                 '01, 81
-                case "pt",  "ポイント" : iTolerance = 2.5                '01, 81
-                case "" : iTolerance = 1.5 ' cm is presubposition in old functions
+            case "mm", "ミリ", "公厘" : iTolerance = 2.0             '01, 81,     88
+            case "cm","セン�?","厘米","公分"  : iTolerance = 0.5       '01, 81, 86, 88
+            case chr$(34) : iTolerance = 2.5
+            case "pi","ピクセル" : iTolerance = 2.5                 '01, 81
+            case "pt",  "�?イント" : iTolerance = 2.5                '01, 81
+            case "" : iTolerance = 1.5 ' cm is presubposition in old functions
             case else
                 iTolerance = 2.5
                 qaErrorLog "This Unit is not available in this function. '" + GetMeasUnit(sShould$) + "'"
@@ -156,7 +116,7 @@ function LiberalMeasurement ( sShould$, sActual$) as Boolean
             printlog "have to get the measurem unit, cause the offset is different for each"
             printlog "!!! val(str()) is important because of double calculating actions !!! #110996#"
             if ( val(str(StrToDouble(sShould$)+iTolerance)) >= StrToDouble(sActual$) ) AND (val(str(StrToDouble ( sShould$ )-iTolerance)) <= StrToDouble ( sActual$ )) then
-                 LiberalMeasurement = True
+                LiberalMeasurement = True
             else
                 LiberalMeasurement = False
             end if
@@ -202,52 +162,54 @@ function StrToDouble ( sWert$ ) as Double
 
     printlog "get rid of measure unit, the only single character is '' all others are two chars"
     printlog "there was a problem, if there is NO meas.unit!!"
-        if (isNumeric (sWert$) = FALSE) then
-            if (  StrComp (right (sWert$, 1), chr$(34) ) = 0 ) then
-                sDummy$ = Left ( sWert$, Len(sWert$)-1 )
-            else
-                sDummy$ = Left ( sWert$, Len(sWert$)-2 )
-            endif
+    if (isNumeric (sWert$) = FALSE) then
+        if (  StrComp (right (sWert$, 1), chr$(34) ) = 0 ) then
+            sDummy$ = Left ( sWert$, Len(sWert$)-1 )
         else
-            sDummy$ = sWert$
+            sDummy$ = Left ( sWert$, Len(sWert$)-2 )
         endif
+    else
+        sDummy$ = sWert$
+    endif
     printlog "get position of fraction mark"
     i1 = instr (sDummy$, ",")  ' wrong output
     i2 = instr (sDummy$, ".")
     if i1 > i2 then i = i1 else i = i2
-        printlog " in front of decimal seperator:"
-        try
-            a = val (left (sDummy$,i-1))
-        catch
+    printlog " in front of decimal seperator:"
+    try
+        a = val (left (sDummy$,i-1))
+    catch
         'printlog sWert$ + ":" + sDummy$ + ":" + i + ":" + i1+ ":" + i2
-        endcatch
-        printlog "after the decimal seperator"
-        n = (len (sDummy$)-i)
-        b = val (right (sDummy$, n) )
-        c = b * 10 ^ -n
-        'printlog "-------------- :"+sWert$ +" :'"+a+"' :"+n+" :"+b+" :'"+c+"':"
-        ' !!! val(str()) is important because of double calculating actions !!! #110996#
-        StrToDouble = val(str(a + c))
+    endcatch
+    printlog "after the decimal seperator"
+    n = (len (sDummy$)-i)
+    b = val (right (sDummy$, n) )
+    c = b * 10 ^ -n
+    'printlog "-------------- :"+sWert$ +" :'"+a+"' :"+n+" :"+b+" :'"+c+"':"
+    ' !!! val(str()) is important because of double calculating actions !!! #110996#
+    StrToDouble = val(str(a + c))
 end function
 
 '-------------------------------------------------------------------------------
 function fGetPositionX () as string
 
-   fGetPositionX = ""
-   try
-      ContextPositionAndSize
-   catch
-      warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
-   endcatch
-   kontext
-   active.SetPage TabPositionAndSize
-   kontext "TabPositionAndSize"
-   if TabPositionAndSize.exists (5) then
-      fGetPositionX = PositionX.GetText
-      TabPositionAndSize.OK
-   else
-      warnlog "Couldn't switch tab page :-( "
-   endif
+    fGetPositionX = ""
+    try
+        ContextPositionAndSize
+
+        kontext
+        active.SetPage TabPositionAndSize
+        kontext "TabPositionAndSize"
+        if ( TabPositionAndSize.exists( 5 ) ) then
+            fGetPositionX = PositionX.GetText()
+            TabPositionAndSize.OK()
+        else
+            warnlog( "Couldn't switch to <TabPositionAndSize>" )
+        endif
+    catch
+        warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
+    endcatch
+
 end function
 
 '-------------------------------------------------------------------------------
@@ -257,173 +219,181 @@ function setStartCurrentPage(optional bState as boolean) as boolean
     ToolsOptions
     printlog "+ select in section 'Presentation' tabpage 'general' "
     hToolsOptions ("IMPRESS","General")
-        printlog "+ check the checkbox 'Always with current page' "
-        setStartCurrentPage = MitAktuellerSeite.isChecked
-        if bState then
-            MitAktuellerSeite.Check
-        else
-            MitAktuellerSeite.UnCheck
-        endif
+    printlog "+ check the checkbox 'Always with current page' "
+    setStartCurrentPage = MitAktuellerSeite.isChecked
+    if bState then
+        MitAktuellerSeite.Check
+    else
+        MitAktuellerSeite.UnCheck
+    endif
     Kontext "ExtrasOptionenDlg"
     printlog "+ close dialog 'Options - Presenation - General' with OK "
-    ExtrasOptionenDlg.OK
+    hCloseDialog( ExtrasOptionenDlg, "ok" )
 end function
 
 '-------------------------------------------------------------------------------
 function fIsDocumentWritable() as boolean
 
-    printlog " check if a document is writeable"
-    printlog " <u>parameter:</u>"
-    printlog " <u>return:</u>"
-    printlog " true if the document is writeable otherwise false"
-
     Kontext "Standardbar"
-        if Bearbeiten.GetState(2) <> 1 then
-            fIsDocumentWritable = false
-        else
-            fIsDocumentWritable = true
-        endif
+    if Bearbeiten.GetState( 2 ) <> 1 then
+        fIsDocumentWritable = false
+    else
+        fIsDocumentWritable = true
+    endif
 
 end function
 
 '-------------------------------------------------------------------------------
 function fMakeDocumentWritable() as boolean
 
-    'make a document is writeable
-    'parameter:</u>
-    '<u>return:</u>
-    'true if the document can make writeable otherwise false
+    printlog( "Remove write protection from current file" )
 
     Kontext "Standardbar"
-    sleep (1)
-        if Bearbeiten.GetState(2) <> 1 then
-            Bearbeiten.Click
-            Kontext
-                if Active.Exists(1) then
-                    Active.Yes
-                    fMakeDocumentWritable = true
-                else
-                    warnlog "No messagebox after making document editable?"
-                    fMakeDocumentWritable = false
-                endif
-        else
-            printlog "Document is allready writable."
+    sleep ( 1 )
+    if Bearbeiten.GetState(2) <> 1 then
+        Bearbeiten.Click
+        Kontext
+        if Active.Exists(1) then
+            Active.Yes
             fMakeDocumentWritable = true
+        else
+            warnlog "No messagebox after making document editable?"
+            fMakeDocumentWritable = false
         endif
-    sleep (1)
+    else
+        printlog "Document is already writable."
+        fMakeDocumentWritable = true
+    endif
+    sleep(1)
 end function
 
 '-------------------------------------------------------------------------------
-
 function fGetSizeXY (sX as string, sY as string, bGet as boolean) as Boolean
-   dim sTx as string
-   dim sTy as string
-   dim bReturn as boolean
+    dim sTx as string
+    dim sTy as string
+    dim bReturn as boolean
 
-   bReturn = True
-   try
-      ContextPositionAndSize
-   catch
-      warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
-   endcatch
-   kontext
-   active.SetPage TabPositionAndSize
-   kontext "TabPositionAndSize"
-   if TabPositionAndSize.exists (5) then
-      sTx = Width.GetText
-      sTy = Height.GetText
-      TabPositionAndSize.OK
-   else
-      warnlog "Couldn't switch tab page :-( "
-   endif
-   if bGet then  ' Get the Values only
-      sY = sTy
-      sX = sTx
-   else          ' Get the Values and COMPARE them
-      if (LiberalMeasurement (sX,sTx) <> TRUE) then
-         warnlog "width is different :-( should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
-         bReturn = False
-      endif
-      if (LiberalMeasurement (sY,sTy) <> TRUE) then
-         warnlog "hight is different :-( should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
-         bReturn = False
-      endif
-      bGet = bReturn
-   endif
+    bReturn = True
+    try
+        printlog "Trying to open Position and size Dialog.."
+        ContextPositionAndSize
+    catch
+        warnlog "couldn't call 'ContextPositionAndSize' no object selected ?"
+    endcatch
+    kontext
+    active.SetPage TabPositionAndSize
+    kontext "TabPositionAndSize"
+    printlog "Getting some sizes from Position and Size dialog."
+    if TabPositionAndSize.exists (5) then
+        sTx = Width.GetText
+        printlog "Width, sTx=" & sTx
+        sTy = Height.GetText
+        printlog "Height, sTy=" & sTy
+        TabPositionAndSize.OK
+    else
+        warnlog "Couldn't switch tab page :-( "
+    endif
+    if bGet then  ' Get the Values only
+        sY = sTy
+        printlog "sY=" & sY
+        sX = sTx
+        printlog "sX=" & sX
+    else          ' Get the Values and COMPARE them
+        if (LiberalMeasurement (sX,sTx) <> TRUE) then
+            warnlog "width is different :-( XXXXXXXXXXXXX should: '"+sX+"' is: '"+sTx+"'" + "eventually a result of i35519"
+            bReturn = False
+        endif
+        if (LiberalMeasurement (sY,sTy) <> TRUE) then
+            warnlog "hight is different :-( xxxxxxxxxxxx should: '"+sY+"' is: '"+sTy+"'" + "eventually a result of i35519"
+            bReturn = False
+        endif
+        bGet = bReturn
+    endif
 end function
 
 '-------------------------------------------------------------------------
 
-function hCallExport ( HyWhatsYourName as String , sFilter as String, optional bSelection as boolean ) as Boolean
-   hCallExport = TRUE
-   Printlog "Will try to select export filter: '" + sFilter + "'" + ""
-   try
-      FileExport
-   catch
-      Sleep 10
-      Warnlog "It takes to much time to export the graphic (>10 sec.). Please check the problem, maybe it's a bug!"
-      FileExport
-   endcatch
+function hCallExport ( cFileName as String , sFilter as String, optional bSelection as boolean ) as Boolean
 
-   Sleep (3)
-   Kontext "ExportierenDlg"
-   try
-      Dateityp.Select sFilter
-   catch
-      Warnlog "'" + sFilter + "' is missing!"
-      dim iAll, counter as integer
-      iAll = Dateityp.GetItemCount
-      printlog "   List of entries in the menu:"
-      for counter = 1 to iAll
-          printlog "   " + counter + "/" + iAll + ": " + Dateityp.GetItemText(counter)
-      next counter
-      hCallExport = FALSE
-      ExportierenDlg.Cancel
-      exit function
-   endcatch
-   if ((IsMissing(bSelection) = FALSE) AND (bSelection = TRUE)) then
-      sleep 2
-      Selektion.Check
-   else
-      if (Selektion.isEnabled) then
-         Selektion.UnCheck
-      endif
-   endif
+    const RC_FAILURE = -1
+    dim bExportSelectionOnly as boolean
 
-   if AutomatischeDateinamenserweiterung.Exists then
-       QAErrorLog "OBSOLETE: Automatic file extension check-box in file dialog will be removed soon!"
-       AutomatischeDateinamenserweiterung.check
-   endif
+    hCallExport() = false
+    
+    printlog( "Exporting file with provided filter" )
 
-   Dateiname.SetText ( HyWhatsYourName )
-   sleep 2
-   Speichern.Click
-   sleep 2
-   kontext "AlienWarning"
-      if AlienWarning.exists(5) then
-         warnlog "#i41983# Alien Warning on export not allowed"
-         AlienWarning.OK
-      endif
-   Kontext "Active"
-   if Active.Exists then Active.Yes
-   Sleep 3
+    ' Handle infamous optional parameter
+    if ( IsMissing( bSelection ) ) then 
+        bExportSelectionOnly = false
+    else
+        bExportSelectionOnly = bSelection
+    endif
+
+    if ( hUseAsyncSlot( "FileExport" ) <> RC_FAILURE ) then
+
+        Kontext "ExportierenDlg"
+        if ( ExportierenDlg.exists( 3 ) ) then
+            try
+                Dateityp.Select sFilter
+
+                if ( selektion.exists() ) then
+                    if ( selektion.isEnabled() ) then
+                        if ( bExportSelectionOnly ) then
+                            selektion.check()
+                        else
+                            selektion.unCheck()
+                        endif
+                    else
+                        printlog( "Cannot set <seletion>, it is disabled" )
+                    endif
+                else
+                    if ( bExportSelectionOnly ) then
+                        warnlog( "It was requested to export only the current selection but the option is disabled" )
+                    endif
+                endif
+
+                AutomatischeDateinamenserweiterung.check()
+                Dateiname.SetText( cFileName )
+                Speichern.Click()
+
+                kontext "AlienWarning"
+                if AlienWarning.exists(5) then
+                    warnlog "#i41983# Alien Warning on export not allowed"
+                    hCloseDialog( AlienWarning, "ok" )
+                endif
+
+                Kontext "Active"
+                hCloseDialog( Active, "yes,optional" )
+
+                hCallExport = true
+            catch
+                warnlog( "Filter could not be selectd, it might be missing: " & sFilter )
+                hCloseDialog( ExportierenDlg, "cancel" )
+            endcatch
+        else
+            warnlog( "<ExportierenDlg> not open" )
+        endif
+    else
+        warnlog( "Slot <FileExport> is blocked" )
+    endif
+
 end function
 
 '-------------------------------------------------------------------------
 function checkexppdfwaitmax10sec
 
- dim i as integer
+    dim i as integer
     kontext "Standardbar"
-       i = 0
-       do
-         i = i + 1
-	 sleep 1
-         if (ExportAsPDF.isEnabled = TRUE) then i = 15
-	 loop while ((i < 15))
-       if (ExportAsPDF.isEnabled = FALSE) then
-          Warnlog "ExportAsPDF was NOT ok. Waited " + i + " seconds."
-       endif
-       sleep (3)
+    i = 0
+    do
+        i = i + 1
+        sleep 1
+        if (ExportAsPDF.isEnabled = TRUE) then i = 15
+    loop while ((i < 15))
+    if (ExportAsPDF.isEnabled = FALSE) then
+        Warnlog "ExportAsPDF was NOT ok. Waited " + i + " seconds."
+    endif
+    sleep (3)
 end function
 
 '-------------------------------------------------------------------------------
@@ -439,21 +409,21 @@ end function
 '-------------------------------------------------------------------------------
 function fConvertBackslashToSlash (sInput as string) as string
 
-   dim i as integer
-   dim sTemp as string
-   dim sI as string
-   dim x as integer
+    dim i as integer
+    dim sTemp as string
+    dim sI as string
+    dim x as integer
 
-   sTemp = ""
-   x = len (sInput)
-   for i = 1 to x
-      sI = mid(sInput, i, 1)
-      if (sI = "\") then
-         sI = "/"
-      endif
-      sTemp = sTemp + sI
-   next i
-   fConvertBackslashToSlash = sTemp
+    sTemp = ""
+    x = len (sInput)
+    for i = 1 to x
+        sI = mid(sInput, i, 1)
+        if (sI = "\") then
+            sI = "/"
+        endif
+        sTemp = sTemp + sI
+    next i
+    fConvertBackslashToSlash = sTemp
 end function
 
 '-------------------------------------------------------------------------------
@@ -477,13 +447,13 @@ function fSaveLoadAllFormats (NewFileDir as String)
     Dim iFileTypeCounter as Integer
     Dim SavedFile(30) as String
     Dim iCounter as Integer
-   
+
     printlog "Save the document in different formats..."
     FileSaveAs
     kontext "ExportierenDlg"
     For iFileTypeCounter = 1 to Dateityp.GetItemCount
         sleep (1)
-        if iFileTypeCounter > 1 then 
+        if iFileTypeCounter > 1 then
             WaitSlot (2000)
             FileSaveAs
             kontext "ExportierenDlg"
@@ -524,38 +494,38 @@ function setCharacterLanguage(sLanguage as string) as boolean
     Kontext
     Messagebox.SetPage TabFont
     kontext "TabFont"
-        sleep 1
-        printlog "sLanguage = " + sLanguage
-        if (bAsianLan) then  'Eastern languages  'OR 
-            try
-                printlog "LanguageWest.GetSelText = " + LanguageWest.GetSelText
-                LanguageWest.select (sLanguage) 'East
-            catch
-                printlog "Language.GetSelText = " + Language.GetSelText
-                Language.select (sLanguage) 'East
-            endcatch
+    sleep 1
+    printlog "sLanguage = " + sLanguage
+    if (bAsianLan) then  'Eastern languages  'OR
+        try
+            printlog "LanguageWest.GetSelText = " + LanguageWest.GetSelText
+            LanguageWest.select (sLanguage) 'East
+        catch
+            printlog "Language.GetSelText = " + Language.GetSelText
+            Language.select (sLanguage) 'East
+        endcatch
 
-            setCharacterLanguage = TRUE
-        elseif (iSprache = 07) then 
+        setCharacterLanguage = TRUE
+    elseif (iSprache = 07) then
+        printlog "LanguageWest.GetSelText = " + LanguageWest.GetSelText
+        LanguageWest.select (sLanguage)
+    else
+        try
             printlog "LanguageWest.GetSelText = " + LanguageWest.GetSelText
             LanguageWest.select (sLanguage)
-        else
-            try
-                printlog "LanguageWest.GetSelText = " + LanguageWest.GetSelText
-                LanguageWest.select (sLanguage)
-            catch
-                printlog "Language.GetSelText = " + Language.GetSelText
-                Language.select (sLanguage)
-            endcatch
-            setCharacterLanguage = TRUE
-        end if
+        catch
+            printlog "Language.GetSelText = " + Language.GetSelText
+            Language.select (sLanguage)
+        endcatch
+        setCharacterLanguage = TRUE
+    end if
     TabFont.Ok
     sleep 1
 end function
 
 '-------------------------------------------------------------------------------
 function toggleGermanSpellchecking as string
-    
+
     printlog " activate old german spellchecking "
     printlog "+ Tools->Options "
     ToolsOptions
@@ -615,23 +585,23 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
 
         printlog " If the string vnd.sun.search:SubMenu (the SunSearch-menu) is found in the menu, we'll skip that word. "
 
-        'Get first entry. 
+        'Get first entry.
         f = MenuGetItemCommand (MenuGetItemID (1))
         printlog "f = '" + f + "'."
         'If it's "vnd.sun.search:SubMenu" , then skip the word. Printlog "Word not underlined, Search-Toolbar active."
-        if f <> "vnd.sun.search:SubMenu" then 
+        if f <> "vnd.sun.search:SubMenu" then
             try          ' WorkAround ##
                 editcopy
                 sCandidates(2) = getClipboardText()
-    '            printlog "******************* " + getclipboardtext()
+                '            printlog "******************* " + getclipboardtext()
             catch
                 sCandidates(2) = ""
-    '            printlog "###################################################"
+                '            printlog "###################################################"
             endcatch
             ' if (1) is different from nonempty (2) then the wrong word is selected
             if (sCandidates(1) <> sCandidates(2)) then
                 if ("" <> sCandidates(2)) then
-    '                printlog "############ " + sCandidates(1) + " ################## " + sCandidates(2) + " #####################"
+                    '                printlog "############ " + sCandidates(1) + " ################## " + sCandidates(2) + " #####################"
                     bDifferent = TRUE
                     iError1 = iError1 + (2^i)
                 else
@@ -639,7 +609,7 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
                     ' no word is selected... a) not underlined b) no context menu open
                 end if
             else
-        '        printlog "******************* " + sCandidates(1)
+                '        printlog "******************* " + sCandidates(1)
                 bDifferent = FALSE
             end if
             ' check if context menu opened
@@ -652,11 +622,11 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
                 bNoContextMenu = true
                 iError2 = iError2 + (2^i)
                 ' in writer it would work... :-( #i23568#
-        '       warnlog ""+i+" C: " + x + ";------ " + getClipboardText + " -------- "
+                '       warnlog ""+i+" C: " + x + ";------ " + getClipboardText + " -------- "
             endcatch
             ' if context menu open do....
             if (not bNoContextMenu) then
-        '        printlog ""+i+" C: " + x + ";------ " + getClipboardText + " -------- " + hMenuItemGetText(1)
+                '        printlog ""+i+" C: " + x + ";------ " + getClipboardText + " -------- " + hMenuItemGetText(1)
                 printlog " analyze context menu entries "
                 for y = 1 to x
                     z = hMenuGetItemId(y)
@@ -668,12 +638,12 @@ function sAnalyseContextMenu(iItems as integer, optional iError as long) as inte
                 printlog " close Context Menu "
                 if (iSlot <> 10456) then
                     if (not bDifferent) then  ' WorkAround ##
-    '                qaerrorlog "" + iSlot + " UNDERLINED"
+                        '                qaerrorlog "" + iSlot + " UNDERLINED"
                         iTemp = iTemp + (2^i)
                     end if
                     call hMenuClose()
                 else
-    '                printlog "" + iSlot + " not underlined"
+                    '                printlog "" + iSlot + " not underlined"
                     'InsertSpecialCharacterDraw
                     hMenuSelectNr(iSpecialCharacterEntry)  ' because of bug #112919#
                     kontext "Sonderzeichen"
@@ -756,20 +726,20 @@ function fGetIntoDictionary as boolean
     dim bFound as boolean
     dim iBooks as integer
     dim i as integer
-    
+
     iBooks = Benutzerwoerterbuch.GetItemCount
     i=0
     bFound=TRUE
     while (bFound AND (i < iBooks))
-    inc i
-    Benutzerwoerterbuch.select i
-    printlog Benutzerwoerterbuch.getSelText + i
-    try
-        Bearbeiten.Click
-        bFound = FALSE
-    catch
-        printLog "wIgLi" + i
-    endcatch
+        inc i
+        Benutzerwoerterbuch.select i
+        printlog Benutzerwoerterbuch.getSelText + i
+        try
+            Bearbeiten.Click
+            bFound = FALSE
+        catch
+            printLog "wIgLi" + i
+        endcatch
     wend
     fGetIntoDictionary = bFound
 end function
@@ -777,10 +747,10 @@ end function
 '-------------------------------------------------------------------------------
 function hSelectInList (window, sEntry as String) as Boolean
 
-printlog " alternativ method to 'hDoubleClickInList' (without mouse) "
-printlog "+ window: name of list "
-printlog "+ sEntry: string to find in list "
-printlog "+ ReturnValue: if found: TRUE; else FALSE "
+    printlog " alternativ method to 'hDoubleClickInList' (without mouse) "
+    printlog "+ window: name of list "
+    printlog "+ sEntry: string to find in list "
+    printlog "+ ReturnValue: if found: TRUE; else FALSE "
     Dim i as Integer
     Dim sTemp as String
     Dim sLastTemp as String
@@ -811,7 +781,7 @@ function hWalkTheStyles2 (atemp)
     dim itemp
     dim bSet
     dim aSettings(5,5)
-'    dim atemp
+    '    dim atemp
 
     printlog " Organizer "
     i=1
@@ -833,7 +803,7 @@ function hWalkTheStyles2 (atemp)
         atemp.check
 
     else
-'        aSettings(i,1).Uncheck
+        '        aSettings(i,1).Uncheck
     endif
     i=2
     Kontext
@@ -914,33 +884,33 @@ function hWalkTheStyles2 (atemp)
     Messagebox.setpage TabTabulator
     Kontext "TabTabulator"
 
-'    printlog " switch to tabpage 'Bullets' "
-'      Messagebox.SetPage TabBullet
-'      Kontext "TabBullet"
-'      sleep 1
-'      Call DialogTest (TabBullet)
-'      sleep 1
-'      Kontext
-'    printlog " switch to tabpage 'Numbering Type' "
-'      Messagebox.SetPage TabNumerierungsart
-'      Kontext "TabNumerierungsart"
-'      sleep 1
-'      Call DialogTest (TabNumerierungsart)
-'      sleep 1
-'      Kontext
-'    printlog " switch to tabpage 'Graphics' "
-'      Messagebox.SetPage TabGrafiken
-'      Kontext "TabGrafiken"
-'      sleep 1
-'      Call DialogTest (TabGrafiken)
-'      sleep 1
-'      Kontext
-'    printlog " switch to tabpage 'Customize' "
-'      Messagebox.SetPage TabOptionenNumerierung
-'      Kontext "TabOptionenNumerierung"
-'      sleep 1
-'      Call DialogTest (TabOptionenNumerierung)
-'      sleep 1
+    '    printlog " switch to tabpage 'Bullets' "
+    '      Messagebox.SetPage TabBullet
+    '      Kontext "TabBullet"
+    '      sleep 1
+    '      Call DialogTest (TabBullet)
+    '      sleep 1
+    '      Kontext
+    '    printlog " switch to tabpage 'Numbering Type' "
+    '      Messagebox.SetPage TabNumerierungsart
+    '      Kontext "TabNumerierungsart"
+    '      sleep 1
+    '      Call DialogTest (TabNumerierungsart)
+    '      sleep 1
+    '      Kontext
+    '    printlog " switch to tabpage 'Graphics' "
+    '      Messagebox.SetPage TabGrafiken
+    '      Kontext "TabGrafiken"
+    '      sleep 1
+    '      Call DialogTest (TabGrafiken)
+    '      sleep 1
+    '      Kontext
+    '    printlog " switch to tabpage 'Customize' "
+    '      Messagebox.SetPage TabOptionenNumerierung
+    '      Kontext "TabOptionenNumerierung"
+    '      sleep 1
+    '      Call DialogTest (TabOptionenNumerierung)
+    '      sleep 1
 end function
 
 '-------------------------------------------------------------------------------
@@ -960,7 +930,7 @@ function fGetSlideNumber (optional sCompare as integer) as integer
         ViewNavigator
         sleep 3
         printlog " check in list, if the page changed "
-        
+
     else
         printlog "If Navigator is not open, opening it now."
         ViewNavigator
@@ -987,28 +957,28 @@ function fGetSlideCount (optional iCount as integer) as integer
     printlog "+ output : number of slides in presentation "
     dim i as integer
 
-   printlog " open navigator "
-   Kontext "Navigator"
-   if Navigator.exists then
-      Printlog "Navigator: open :-)"
-   else
-      Printlog "Navigator: NOT available :-( will be opened now!"
-      ViewNavigator
-   endif
-   Sleep 1
-   printlog " count rows in list of navigator: usually number of slides "
-   Kontext "NavigatorDraw"
-   i = Liste.GetItemCount
-   if (isMissing(iCount) = FALSE) then
-      if (i <> iCount) then
-         Warnlog "Error! Expected slides: '" + iCount + "'; but are '" + i +"'"
-      else
-         Printlog "ok"
-      endif
-   endif
-   printlog " close navigator "
-   ViewNavigator
-   fGetSlideCount = i
+    printlog " open navigator "
+    Kontext "Navigator"
+    if Navigator.exists then
+        Printlog "Navigator: open :-)"
+    else
+        Printlog "Navigator: NOT available :-( will be opened now!"
+        ViewNavigator
+    endif
+    Sleep 1
+    printlog " count rows in list of navigator: usually number of slides "
+    Kontext "NavigatorDraw"
+    i = Liste.GetItemCount
+    if (isMissing(iCount) = FALSE) then
+        if (i <> iCount) then
+            Warnlog "Error! Expected slides: '" + iCount + "'; but are '" + i +"'"
+        else
+            Printlog "ok"
+        endif
+    endif
+    printlog " close navigator "
+    ViewNavigator
+    fGetSlideCount = i
 end function
 
 '-------------------------------------------------------------------------------
@@ -1021,115 +991,115 @@ function fGetSlideName (optional sCompare as string) as string
     printlog "+ EXIT: kontext on  DocumentPresentation "
 
     Kontext "NavigatorDraw"
-   if NavigatorDraw.exists (5) then
-      sleep 3
-      printlog "check in list, if the page changed"
-      fGetSlideName = Liste.GetSelText
-   else
-      warnlog "Navigator not open! in function fGetSlideName TBO"
-      Kontext "NavigatorDraw"
-      fGetSlideName = ""
-   endif
-   if (isMissing (sCompare) = False) then ' if optional parameter exists
-   printlog "fGetSlideName is: " & fGetSlideName
-   printlog "sCompare is: " & sCompare
-      if fGetSlideName <> sCompare then
-         warnlog "   Slide Name is '" + fGetSlideName + "'; should be: '" + sCompare + "'"
-      endif
-   endif
-   Kontext "DocumentPresentation"
+    if NavigatorDraw.exists (5) then
+        sleep 3
+        printlog "check in list, if the page changed"
+        fGetSlideName = Liste.GetSelText
+    else
+        warnlog "Navigator not open! in function fGetSlideName TBO"
+        Kontext "NavigatorDraw"
+        fGetSlideName = ""
+    endif
+    if (isMissing (sCompare) = False) then ' if optional parameter exists
+        printlog "fGetSlideName is: " & fGetSlideName
+        printlog "sCompare is: " & sCompare
+        if fGetSlideName <> sCompare then
+            warnlog "   Slide Name is '" + fGetSlideName + "'; should be: '" + sCompare + "'"
+        endif
+    endif
+    Kontext "DocumentPresentation"
 end function
 
 '------------------------------------------------------------------------------
 function fGetSetPageBackground (iSelect as integer, iWhere as integer) as integer
-    
+
     printlog " Get or Set the Page Background via stylist (iWhere = 0) or format menue (...= 1) "
     printlog "+ if iSelect > 0 then set, else get "
     printlog "+ return selected color number or -1 on error "
 
     if (iWhere = 0) then
-    printlog " Stylist -> Background -> Kontext menu -> modify -> Area -> Color "
-      fGetSetPageBackground = -1 ' worst case
-      Kontext "Stylist"
-      if Stylist.NotExists (5) then
-         FormatStylist
+        printlog " Stylist -> Background -> Kontext menu -> modify -> Area -> Color "
+        fGetSetPageBackground = -1 ' worst case
         Kontext "Stylist"
-        if Stylist.NotExists (5) then warnlog "Could not open stylist :-("
-      end if
-      Praesentationsvorlagen.Click
-      sleep 1
-      Vorlagenliste.TypeKeys "<PAGEDOWN>"
-      hDoubleClickInList (vorlagenliste, glLocale(5), TRUE)
-      sleep 1
-      vorlagenliste.OpenContextMenu
-      sleep 1
-      hMenuSelectNr (1)
-   else
-      printlog " Format -> Page -> Background -> Color "'FormatPage
-      sleep 1
-      try          ' this was just paranoia to find a not mentioned messagebox
-         FormatSlideDraw
+        if Stylist.NotExists (5) then
+            FormatStylist
+            Kontext "Stylist"
+            if Stylist.NotExists (5) then warnlog "Could not open stylist :-("
+        end if
+        Praesentationsvorlagen.Click
+        sleep 1
+        Vorlagenliste.TypeKeys "<PAGEDOWN>"
+        hDoubleClickInList (vorlagenliste, glLocale(5), TRUE)
+        sleep 1
+        vorlagenliste.OpenContextMenu
+        sleep 1
+        hMenuSelectNr (1)
+    else
+        printlog " Format -> Page -> Background -> Color "'FormatPage
+        sleep 1
+        try          ' this was just paranoia to find a not mentioned messagebox
+            FormatSlideDraw
         catch
-        warnlog "slooooow slot TBO :-("
-        exit function
-      endcatch
-      sleep 1
-      Kontext
-      if (active.getrt = 373) then
-        Active.SetPage TabArea
-      else
-         warnlog active.getrt
-         if (active.getrt = 304) then
-         warnlog active.gettext
-         endif
-      endif        ' paranoia end ----------------------------------------------
-   endif
+            warnlog "slooooow slot TBO :-("
+            exit function
+        endcatch
+        sleep 1
+        Kontext
+        if (active.getrt = 373) then
+            Active.SetPage TabArea
+        else
+            warnlog active.getrt
+            if (active.getrt = 304) then
+                warnlog active.gettext
+            endif
+        endif        ' paranoia end ----------------------------------------------
+    endif
 
-   kontext "TabArea"
-   if TabArea.exists then
-      FillOptions.Select 2 ' Select "Colour"
-      if (iSelect > 1) then   ' Select the entry
-'         Color.Check
-         if (iSelect < ColourList.GetItemCount) then
-            ColourList.Select iSelect
-         else
-            warnlog "Select entry is larger than list :-("
-         endif
-         fGetSetPageBackground = ColourList.GetSelIndex
-         if fGetSetPageBackground = 0 then
-            warnlog "There were no color selected in the list."
-         endif
-         TabArea.OK
-         sleep 2
-         kontext
-         if (active.exists (2)) then
-            warnlog "active about <changing the background for all pages ?>: '" + active.gettext + "'"
-            active.yes
-         else
-            printlog "No message about 'changing the background for all pages ?' :-("
-         endif
-      else ' yust read the selected entry
-         if FillOptions.GetSelIndex = 2 then
+    kontext "TabArea"
+    if TabArea.exists then
+        FillOptions.Select 2 ' Select "Colour"
+        if (iSelect > 1) then   ' Select the entry
+            '         Color.Check
+            if (iSelect < ColourList.GetItemCount) then
+                ColourList.Select iSelect
+            else
+                warnlog "Select entry is larger than list :-("
+            endif
             fGetSetPageBackground = ColourList.GetSelIndex
-            TabArea.Cancel
-         else
-            warnlog "Can't get value, because something different than color is selected :-("
-         endif
-      endif
-   else
-   kontext "TabFont"
-      if TabFont.exists then
-         Warnlog "Something wrong with the word " + glLocale(5) + ". It was either not found or wrong."
-      else
-	 warnlog "Error: Can't get context menu ?"
-      endif
-   endif
+            if fGetSetPageBackground = 0 then
+                warnlog "There were no color selected in the list."
+            endif
+            TabArea.OK
+            sleep 2
+            kontext
+            if (active.exists (2)) then
+                warnlog "active about <changing the background for all pages ?>: '" + active.gettext + "'"
+                active.yes
+            else
+                printlog "No message about 'changing the background for all pages ?' :-("
+            endif
+        else ' yust read the selected entry
+            if FillOptions.GetSelIndex = 2 then
+                fGetSetPageBackground = ColourList.GetSelIndex
+                TabArea.Cancel
+            else
+                warnlog "Can't get value, because something different than color is selected :-("
+            endif
+        endif
+    else
+        kontext "TabFont"
+        if TabFont.exists then
+            Warnlog "Something wrong with the word " + glLocale(5) + ". It was either not found or wrong."
+        else
+            warnlog "Error: Can't get context menu ?"
+        endif
+    endif
 
-   if (iWhere = 0) then
+    if (iWhere = 0) then
         sleep 1 ' ABSOLUT NECESSARY !!! (TBO) else crash on UNIX on following command!!!!
         FormatStylist ' closing
-   endif
-   sleep 4
+    endif
+    sleep 4
 end function
 
 '------------------------------------------------------------------------------
@@ -1139,31 +1109,31 @@ function CreateTextSetEffectAndAngle
     SetClipBoard "Revenue"
     DocumentImpress.TypeKeys "<MOD1 V>"
     SlideShowCustomAnimation
-        Kontext "Tasks"
-        WaitSlot (1000)
-        EffectAdd.Click
-        kontext
-        printlog " Switch to TabPage: Entrance "
-        active.setPage(TabEntrance)
-        kontext "TabEntrance"
-            if TabEntrance.exists(5) then
-                printlog " select in the listbox 'Effects' the second entry"
-                Effects.select (24)
-                printlog " select speed 'Fast' -> fourth item in list "
-                Speed.Select 2
-                TabEntrance.OK
-            end if
-        kontext "tasks"
-        EffectStart.TypeKeys "<HOME><DOWN>" 'Select the second entry.
+    Kontext "Tasks"
+    WaitSlot (1000)
+    EffectAdd.Click
+    kontext
+    printlog " Switch to TabPage: Entrance "
+    active.setPage(TabEntrance)
+    kontext "TabEntrance"
+    if TabEntrance.exists(5) then
+        printlog " select in the listbox 'Effects' the second entry"
+        Effects.select (24)
+        printlog " select speed 'Fast' -> fourth item in list "
+        Speed.Select 2
+        TabEntrance.OK
+    end if
+    kontext "tasks"
+    EffectStart.TypeKeys "<HOME><DOWN>" 'Select the second entry.
 
-        kontext "DocumentImpress"
-        FormatPositionAndSize
-        WaitSlot (1000)
-        kontext
-        active.setPage(TabDrehung)
-        kontext "TabDrehung"
+    kontext "DocumentImpress"
+    FormatPositionAndSize
+    WaitSlot (1000)
+    kontext
+    active.setPage(TabDrehung)
+    kontext "TabDrehung"
 
-        Winkel.TypeKeys "45"
+    Winkel.TypeKeys "45"
     TabDrehung.OK
     WaitSlot (1000)
     kontext "DocumentImpress"
@@ -1177,29 +1147,29 @@ function fGetPresentationStyle (optional sCompare as integer) as integer
     printlog "+ RETURN:  LAST CHARACTER of the actual selected style in the stylist "
     dim sTemp as integer
     dim sTemp0 as string
-    
+
     sTemp = (-1)
     printlog " open stylist if not already open: Format->Stylist "
     kontext "Stylist"
     if (Stylist.exists = FALSE) then
-      try
-         FormatStylist
-      catch
-         sleep 1
-      endcatch
+        try
+            FormatStylist
+        catch
+            sleep 1
+        endcatch
     endif
     kontext "Stylist"
     if Stylist.exists(5) then
-      sTemp0 = Vorlagenliste.GetSeltext
-      sTemp = val(right (sTemp0, 1))
-      if (isMissing (sCompare) = False) then ' if optional parameter exists
-         if sTemp <> sCompare then
-            Warnlog "Style Name's last character is '" + sTemp + "'; should be: '" + sCompare + "'"
-         endif
-      endif
-      FormatStylist
+        sTemp0 = Vorlagenliste.GetSeltext
+        sTemp = val(right (sTemp0, 1))
+        if (isMissing (sCompare) = False) then ' if optional parameter exists
+            if sTemp <> sCompare then
+                Warnlog "Style Name's last character is '" + sTemp + "'; should be: '" + sCompare + "'"
+            endif
+        endif
+        FormatStylist
     else
-      Warnlog "The Stylist could not be opened for unknown reasons  :-("
+        Warnlog "The Stylist could not be opened for unknown reasons  :-("
     endif
     fGetPresentationStyle = sTemp
 end function
@@ -1243,23 +1213,23 @@ function wIgnorierenlisteLoeschen as boolean
         exit function
     end if
     Kontext "BenutzerwoerterbuchBearbeiten"
-        sleep 1
-        iBooks = Buch.GetItemCount
-        for i = 1 to iBooks
-            Buch.Select i
-            if Left$(Buch.GetSelText,13)="IgnoreAllList" then
-                sleep 2
-                while (Loeschen.IsEnabled)
-                    Loeschen.Click
-                    sleep 1
-                wend
-            end if
-        next i
+    sleep 1
+    iBooks = Buch.GetItemCount
+    for i = 1 to iBooks
+        Buch.Select i
+        if Left$(Buch.GetSelText,13)="IgnoreAllList" then
+            sleep 2
+            while (Loeschen.IsEnabled)
+                Loeschen.Click
+                sleep 1
+            wend
+        end if
+    next i
     Kontext "BenutzerwoerterbuchBearbeiten"
-        BenutzerwoerterbuchBearbeiten.Cancel
+    BenutzerwoerterbuchBearbeiten.Cancel
     Kontext "ExtrasOptionenDlg"
-        ExtrasOptionenDlg.OK
-        wIgnorierenlisteLoeschen = TRUE
+    ExtrasOptionenDlg.OK
+    wIgnorierenlisteLoeschen = TRUE
 end function
 
 '-------------------------------------------------------------------------------
@@ -1278,121 +1248,121 @@ function optionstest
     dim etshap as integer
     dim etgt as integer
 
-     Kontext "Tasks"
-        EffectOptions.Click
-        kontext "TabEffect"
-        if TabEffect.Exists(5) then
-           optsound = Sound.GetItemCount
-           for os = 1 to optsound
-               Sound.Select os
-               kontext "OeffnenDlg"
-               if OeffnenDlg.Exists (5) then
-                  filedialogue = TRUE
-                  OeffnenDlg.Close
-                  kontext "TabEffect"
-               else
-                  kontext "TabEffect"
-               endif
-           next os
-           if AfterAnimation.isEnabled AND AfterAnimation.isVisible then
-              for oa = 1 to AfterAnimation.GetItemCount
-                  AfterAnimation.Select oa
-                  if DimColor.isEnabled then
-                     for odc = 1 to DimColor.GetItemCount
-                         DimColor.Select odc
-                     next odc
-                  endif
-                  if DelayBetweenCharacters.isEnabled then
-                     for odc = 1 to DelayBetweenCharacters.GetItemCount
-                         DelayBetweenCharacters.Select odc
-                     next odc
-                  endif
-              next oa
-           else
-              if DelayBetweenCharacters.isEnabled then
-                 for odc = 1 to DelayBetweenCharacters.GetItemCount
-                     DelayBetweenCharacters.Select odc
-                 next odc
-              endif
-           endif
-           for ota = 1 to TextAnimation.GetItemCount
-               TextAnimation.Select ota
-           next ota
-           printlog " switch to TabPage 'Timing' "
-           Kontext
-           Active.SetPage TabTiming
-           kontext "TabTiming"
-           if TabTiming.Exists(5) then
-              for ets = 1 to TimingStart.GetItemCount
-                  TimingStart.Select ets
-              next ets
-              if Delay.isVisible AND Delay.isEnabled then
-                 Delay.GetText
-              else
-                 Warnlog "Delay in Effect Options were not to be found."
-              endif
-              if Speed.isVisible AND Speed.isEnabled then
-                 for etspeed = 1 to Speed.GetItemCount
-                     Speed.Select etspeed
-                 next etspeed
-              else
-                 printlog " No Speed-entry for this effect."
-              endif
-              if Repeat.isVisible AND Repeat.isEnabled then
-                 for etrep = 1 to Speed.GetItemCount
-                 Repeat.Select etrep
-                 next etrep
-              else
-                 Printlog "Repeat in Effect Options were not to be found."
-              endif
-              Rewind.Check
-              Rewind.UnCheck
-              TriggerAnimate.IsChecked
-              TriggerStart.IsChecked
-              if Shape.isVisible AND Shape.isEnabled then
-                 for etshap = 1 to Shape.GetItemCount
-                 Shape.Select etshap
-                 next etshap
-              else
-                 Warnlog "Shape in Effect Options were not to be found."
-              endif
-           else
-              warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
-           endif
-           printlog " switch to TabPage 'Timing' "
-           Kontext
-           active.setPage TabTextAnimation
-           kontext "TabTextAnimation"
-           if TabTextAnimation.Exists(5) then
-              lala = GroupText.GetItemCount
-              for etgt = 1 to lala
-                  GroupText.Select etgt
-                  if AutomaticallyAfter.IsEnabled then
-                     AutomaticallyAfter.Check
-                     AutomaticallyAfter.TypeKeys "<UP>"
-                  endif
-                  if AnimateAttachedShape.IsEnabled then
-                     AnimateAttachedShape.Check
-                     if AnimateAttachedShape.IsChecked = FALSE then
-                        Warnlog "AnimateAttachedShape should have been checked"
-                     endif
-                  endif
-                  if InreverseOrder.IsEnabled then
-                     InreverseOrder.Check
-                     if InreverseOrder.IsChecked = FALSE then
-                        Warnlog "InreverseOrder should have been checked"
-                     endif
-                  endif
-              next etgt
-              TabTextAnimation.Cancel
-           else
-              warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
-           endif
+    Kontext "Tasks"
+    EffectOptions.Click
+    kontext "TabEffect"
+    if TabEffect.Exists(5) then
+        optsound = Sound.GetItemCount
+        for os = 1 to optsound
+            Sound.Select os
+            kontext "OeffnenDlg"
+            if OeffnenDlg.Exists (5) then
+                filedialogue = TRUE
+                OeffnenDlg.Close
+                kontext "TabEffect"
+            else
+                kontext "TabEffect"
+            endif
+        next os
+        if AfterAnimation.isEnabled AND AfterAnimation.isVisible then
+            for oa = 1 to AfterAnimation.GetItemCount
+                AfterAnimation.Select oa
+                if DimColor.isEnabled then
+                    for odc = 1 to DimColor.GetItemCount
+                        DimColor.Select odc
+                    next odc
+                endif
+                if DelayBetweenCharacters.isEnabled then
+                    for odc = 1 to DelayBetweenCharacters.GetItemCount
+                        DelayBetweenCharacters.Select odc
+                    next odc
+                endif
+            next oa
         else
-           warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
+            if DelayBetweenCharacters.isEnabled then
+                for odc = 1 to DelayBetweenCharacters.GetItemCount
+                    DelayBetweenCharacters.Select odc
+                next odc
+            endif
         endif
-        Kontext "Tasks"
-        
+        for ota = 1 to TextAnimation.GetItemCount
+            TextAnimation.Select ota
+        next ota
+        printlog " switch to TabPage 'Timing' "
+        Kontext
+        Active.SetPage TabTiming
+        kontext "TabTiming"
+        if TabTiming.Exists(5) then
+            for ets = 1 to TimingStart.GetItemCount
+                TimingStart.Select ets
+            next ets
+            if Delay.isVisible AND Delay.isEnabled then
+                Delay.GetText
+            else
+                Warnlog "Delay in Effect Options were not to be found."
+            endif
+            if Speed.isVisible AND Speed.isEnabled then
+                for etspeed = 1 to Speed.GetItemCount
+                    Speed.Select etspeed
+                next etspeed
+            else
+                printlog " No Speed-entry for this effect."
+            endif
+            if Repeat.isVisible AND Repeat.isEnabled then
+                for etrep = 1 to Speed.GetItemCount
+                    Repeat.Select etrep
+                next etrep
+            else
+                Printlog "Repeat in Effect Options were not to be found."
+            endif
+            Rewind.Check
+            Rewind.UnCheck
+            TriggerAnimate.IsChecked
+            TriggerStart.IsChecked
+            if Shape.isVisible AND Shape.isEnabled then
+                for etshap = 1 to Shape.GetItemCount
+                    Shape.Select etshap
+                next etshap
+            else
+                Warnlog "Shape in Effect Options were not to be found."
+            endif
+        else
+            warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
+        endif
+        printlog " switch to TabPage 'Timing' "
+        Kontext
+        active.setPage TabTextAnimation
+        kontext "TabTextAnimation"
+        if TabTextAnimation.Exists(5) then
+            lala = GroupText.GetItemCount
+            for etgt = 1 to lala
+                GroupText.Select etgt
+                if AutomaticallyAfter.IsEnabled then
+                    AutomaticallyAfter.Check
+                    AutomaticallyAfter.TypeKeys "<UP>"
+                endif
+                if AnimateAttachedShape.IsEnabled then
+                    AnimateAttachedShape.Check
+                    if AnimateAttachedShape.IsChecked = FALSE then
+                        Warnlog "AnimateAttachedShape should have been checked"
+                    endif
+                endif
+                if InreverseOrder.IsEnabled then
+                    InreverseOrder.Check
+                    if InreverseOrder.IsChecked = FALSE then
+                        Warnlog "InreverseOrder should have been checked"
+                    endif
+                endif
+            next etgt
+            TabTextAnimation.Cancel
+        else
+            warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
+        endif
+    else
+        warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
+    endif
+    Kontext "Tasks"
+
 end function
 
 '-------------------------------------------------------------------------------
@@ -1411,124 +1381,124 @@ function optionstest2
     dim etshap as integer
     dim etgt as integer
 
-     Kontext "Tasks"
-        EffectOptions.Click
-        kontext "TabEffect"
-        if TabEffect.Exists(5) then
-           Sound.Select 5
-           sleep 4
-           if Play.IsEnabled then
-              Play.Click
-           else
-              warnlog "Play should have been enabled after selecting a sound."
-           endif
-           AfterAnimation.Select 2
-           if DimColor.isEnabled then
-              DimColor.Select 5
-           else
-              Warnlog "DimColor should have been enabled"
-           endif
-           TextAnimation.Select 3
-           if DelayBetweenCharacters.isEnabled then
-              DelayBetweenCharacters.More 5
-           else
-              Warnlog "DelayBetweenCharacters should have been enabled"
-           endif
-           printlog " switch to TabPage 'Timing' "
-           Kontext
-           Active.SetPage TabTiming
-           kontext "TabTiming"
-           if TabTiming.Exists(5) then
-              TimingStart.Select 2
-              if Delay.isVisible AND Delay.isEnabled then
-                 Delay.More 5
-              else
-                 Warnlog "Delay in Effect Options were not to be found."
-              endif
-              if Speed.isVisible AND Speed.isEnabled then
-                 Speed.Select 3
-              else
-                 Printlog "Speed in Effect Options were not to be found."
-              endif
-              if Repeat.isVisible then
-                 if Repeat.isEnabled then
+    Kontext "Tasks"
+    EffectOptions.Click
+    kontext "TabEffect"
+    if TabEffect.Exists(5) then
+        Sound.Select 5
+        sleep 4
+        if Play.IsEnabled then
+            Play.Click
+        else
+            warnlog "Play should have been enabled after selecting a sound."
+        endif
+        AfterAnimation.Select 2
+        if DimColor.isEnabled then
+            DimColor.Select 5
+        else
+            Warnlog "DimColor should have been enabled"
+        endif
+        TextAnimation.Select 3
+        if DelayBetweenCharacters.isEnabled then
+            DelayBetweenCharacters.More 5
+        else
+            Warnlog "DelayBetweenCharacters should have been enabled"
+        endif
+        printlog " switch to TabPage 'Timing' "
+        Kontext
+        Active.SetPage TabTiming
+        kontext "TabTiming"
+        if TabTiming.Exists(5) then
+            TimingStart.Select 2
+            if Delay.isVisible AND Delay.isEnabled then
+                Delay.More 5
+            else
+                Warnlog "Delay in Effect Options were not to be found."
+            endif
+            if Speed.isVisible AND Speed.isEnabled then
+                Speed.Select 3
+            else
+                Printlog "Speed in Effect Options were not to be found."
+            endif
+            if Repeat.isVisible then
+                if Repeat.isEnabled then
                     for etrep = 1 to Speed.GetItemCount
                         Repeat.Select etrep
                     next etrep
-                 else
+                else
                     Warnlog "Repeat in Effect Options were not enabled."
-                 endif
-              else
-                 Warnlog "Repeat in Effect Options were not visible."
-              endif
-              if Rewind.isVisible then
-                 if Rewind.isEnabled then
+                endif
+            else
+                Warnlog "Repeat in Effect Options were not visible."
+            endif
+            if Rewind.isVisible then
+                if Rewind.isEnabled then
                     Rewind.Check
-                 else
+                else
                     Printlog "Rewind in Effect Options were not to be found."
-                 endif
-              else
-                 Printlog "Rewind in Effect Options were not to be found."
-              endif
-              if Rewind.isVisible then
-                 if Rewind.isEnabled then
+                endif
+            else
+                Printlog "Rewind in Effect Options were not to be found."
+            endif
+            if Rewind.isVisible then
+                if Rewind.isEnabled then
                     Rewind.Check
                     Rewind.UnCheck
-                 else
+                else
                     Warnlog "Rewind in Effect Options were not enabled."
-                 endif
-              else
-                 Warnlog "Rewind in Effect Options were not visible."
-              endif
-              TriggerAnimate.IsChecked
-              TriggerStart.IsChecked
-              if Shape.isVisible then
-                 if Shape.isEnabled then
+                endif
+            else
+                Warnlog "Rewind in Effect Options were not visible."
+            endif
+            TriggerAnimate.IsChecked
+            TriggerStart.IsChecked
+            if Shape.isVisible then
+                if Shape.isEnabled then
                     for etshap = 1 to Shape.GetItemCount
                         Shape.Select etshap
                     next etshap
-                 else
+                else
                     Warnlog "Shape in Effect Options were not to be found."
-                 endif
-              else
-                 Warnlog "Shape in Effect Options were not to be found."
-              endif
-           else
-              warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
-           endif
-           printlog " switch to TabPage 'Timing' "
-           Kontext
-           active.setPage TabTextAnimation
-           kontext "TabTextAnimation"
-           if TabTextAnimation.Exists(5) then
-              lala = GroupText.GetItemCount
-              for etgt = 1 to lala
-                  GroupText.Select etgt
-                  if AutomaticallyAfter.IsEnabled then
-                     AutomaticallyAfter.Check
-                     AutomaticallyAfter.TypeKeys "<UP>"
-                  endif
-                  if AnimateAttachedShape.IsEnabled then
-                     AnimateAttachedShape.Check
-                     if AnimateAttachedShape.IsChecked = FALSE then
-                        Warnlog "AnimateAttachedShape should have been checked"
-                     endif
-                  endif
-                  if InreverseOrder.IsEnabled then
-                     InreverseOrder.Check
-                     if InreverseOrder.IsChecked = FALSE then
-                        Warnlog "InreverseOrder should have been checked"
-                     endif
-                  endif
-              next etgt
-              TabTextAnimation.Cancel
-           else
-              warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
-           endif
+                endif
+            else
+                Warnlog "Shape in Effect Options were not to be found."
+            endif
         else
-           warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
+            warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: Timing TabPage didn't work."
         endif
-        Kontext "Tasks"
-        
+        printlog " switch to TabPage 'Timing' "
+        Kontext
+        active.setPage TabTextAnimation
+        kontext "TabTextAnimation"
+        if TabTextAnimation.Exists(5) then
+            lala = GroupText.GetItemCount
+            for etgt = 1 to lala
+                GroupText.Select etgt
+                if AutomaticallyAfter.IsEnabled then
+                    AutomaticallyAfter.Check
+                    AutomaticallyAfter.TypeKeys "<UP>"
+                endif
+                if AnimateAttachedShape.IsEnabled then
+                    AnimateAttachedShape.Check
+                    if AnimateAttachedShape.IsChecked = FALSE then
+                        Warnlog "AnimateAttachedShape should have been checked"
+                    endif
+                endif
+                if InreverseOrder.IsEnabled then
+                    InreverseOrder.Check
+                    if InreverseOrder.IsChecked = FALSE then
+                        Warnlog "InreverseOrder should have been checked"
+                    endif
+                endif
+            next etgt
+            TabTextAnimation.Cancel
+        else
+            warnlog "Impress:Tasks Pane:Custom Animation:Effect Options: TextAnimation TabPage didn't work."
+        endif
+    else
+        warnlog "Impress:Tasks Pane:Custom Animation:... button didn't work."
+    endif
+    Kontext "Tasks"
+
 end function
 '-------------------------------------------------------------------------------

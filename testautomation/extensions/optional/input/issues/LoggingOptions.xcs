@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office" xml:lang="en-US">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Logging" oor:package="org.openoffice.Office">
   <templates>
     <group oor:name="LoggerSettings">
       <group oor:name="HandlerSettings" oor:extensible="true">

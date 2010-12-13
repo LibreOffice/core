@@ -25,16 +25,9 @@
 '
 '/******************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Testing of impress tables
-'*
-'*******************************************************************
-'*
-' #1 tiInsertTableUsingMenu
-' #1 tiInsertTableUsingButton
-' #1 tiTableObjectBar
-' #1 tiInsertTableUsingToolbarbuttonView
 '*
 '\******************************************************************
 
@@ -50,11 +43,13 @@ testcase tiInsertTableUsingMenu
     printlog "Inserting table into doc using the menu."
     Call hNewDocument
     printlog "Switching between Draw/Impress"
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
+        Kontext "Document Impress"
         DocumentImpress.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
+        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)
@@ -213,11 +208,13 @@ testcase tiTableObjectBar
     printlog "Inserting table into doc using the menu."
     Call hNewDocument
     printlog "Switching between Draw/Impress"
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         DocumentImpress.UseMenu
+        Kontext "Document Impress"
         hMenuSelectNr(4)
         hMenuSelectNr(14)
     else
+        Kontext "Document Draw"
         DocumentDraw.UseMenu
         hMenuSelectNr(4)
         hMenuSelectNr(11)
@@ -225,11 +222,15 @@ testcase tiTableObjectBar
 
     Kontext "InsertTableImpress"
     printlog "Inserting table."
-    InsertTableImpress.OK
-
+    if InsertTableImpress.Exists(1) then
+        InsertTableImpress.OK
+    else
+        sleep (1)
+        InsertTableImpress.OK
+    endif
     printlog "Selecting table for geeting the TableObjectBar."
     printlog "Switching between Draw/Impress"
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" )then
         Kontext "DocumentImpress"
         DocumentImpress.TypeKeys "<TAB>",3
     else
@@ -258,7 +259,7 @@ testcase tiTableObjectBar
     Kontext "TableObjectBar"
 
     TableObjectBar.Close
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         Kontext "DocumentImpress"
     else
         Kontext "DocumentDraw"
@@ -278,7 +279,7 @@ testcase tiTableObjectBar
     endif
     Kontext "TableObjectBar"
     TableObjectBar.Close
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         Kontext "DocumentImpress"
     else
         Kontext "DocumentDraw"
@@ -295,7 +296,7 @@ testcase tiTableObjectBar
     else
         warnlog "BordersTB is not up!"
     endif
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         Kontext "DocumentImpress"
     else
         Kontext "DocumentDraw"
@@ -303,7 +304,7 @@ testcase tiTableObjectBar
 
     printlog "Checking merge cells."
     printlog "Inserting something into cell and select."
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         DocumentImpress.TypeKeys ("a")
         DocumentImpress.TypeKeys "<SHIFT RIGHT>"
     else
@@ -312,29 +313,46 @@ testcase tiTableObjectBar
     endif
     Kontext "TableObjectBar"
     if TableObjectBar.NotExists(2) then ViewToolbarsTable
-    ZellenVerbinden.Click
-    printlog "Cells merged."
 
-    printlog "Checking split cells."
+    printlog( "Merge cells" )
+    Wait( 1000 )
+    ZellenVerbinden.Click
+
+    printlog( "Split cells" )
+    Wait( 1000 )
     ZelleTeilen.Click
-    printlog "Cells split."
+
     Kontext "ZellenTeilen"
-    WaitSlot(1000)
-    printlog "SplitCells dialog open."
-    Anzahl.ToMax
-    printlog "Maximum SplitCellCount is " & Anzahl.GetText & "."
-    Anzahl.ToMin
-    printlog "Minimum SplitCellCount is " & Anzahl.GetText & "."
-    if Horizontal.IsChecked = TRUE then
-        printlog "Horizontally is clicked."
+    if ( ZellenTeilen.exists( 2 ) ) then
+        
+        printlog "SplitCells dialog open."
+
+        printlog( "Set number to maximum" )
+        Anzahl.ToMax
+        printlog "Maximum SplitCellCount is " & Anzahl.GetText & "."
+
+        printlog( "Set number to minimum" )
+        Anzahl.ToMin
+        printlog "Minimum SplitCellCount is " & Anzahl.GetText & "."
+
+        printlog( "<Horizontal> should be checked" )
+        if ( Horizontal.IsChecked ) then
+            printlog "Horizontally is clicked."
+        else
+            warnlog "Horizontally should be clicked by default!"
+        endif
+
+        printlog( "Distribute/Split equally" )
+        GleichmaessigTeilen.Check
+
+        printlog( "Check <Vertically>" )
+        Vertikal.Check
+
+        printlog( "Close dialog <Split Cells>" )
+        hCloseDialog( ZellenTeilen, "close" )
     else
-        warnlog "Horizontally should be clicked by default!"
+        warnlog( "Dialog <Split Cells> did not open" )
     endif
-    GleichmaessigTeilen.Check
-    printlog "Split Equal checked."
-    Vertikal.Check
-    printlog "Cells vertically checked."
-    ZellenTeilen.OK
     printlog " Checking optimize button   'ToDo: button not working"
     'Kontext "TableObjectBar"
     'Optimieren.TearOff
@@ -364,7 +382,7 @@ testcase tiTableObjectBar
     tabledesign.Click
     
     printlog "Checking for Table Design in Impress TaskBar or for Dialog in Draw."
-    if (UCase(gApplication)) = "IMPRESS" then
+    if ( gApplication = "IMPRESS" ) then
         kontext "Tasks"
         if (NOT Tasks.exists) then
             warnlog "Tasks Panel not visible. Opening now."
@@ -395,6 +413,20 @@ testcase tiTableObjectBar
     kontext "TabFont"
 
     printlog "Checking Fonts Box."
+
+    if ( Font.exists() ) then
+        printlog( "Western dialog layout -> good" )
+    else
+        if ( FontWest.exists() ) then
+            warnlog( "<FontWest> exists, asian support is enabled which this test cannot handle" )
+        else
+            warnlog( "Unknown error while trying to access <Font> listbox" )
+        endif
+        hCloseDialog( TabFont, "close" )
+        hFileCloseAll()
+        goto endsub
+    endif
+
     iItemCount = Font.GetItemCount
     printlog "Fontbox has " & iItemCount & " entries."
     for iItemIndex = 1 to iItemCount

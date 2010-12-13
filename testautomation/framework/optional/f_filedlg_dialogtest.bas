@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 ' **
-' ** owner : joerg.skottke@sun.com
+' ** owner : joerg.skottke@oracle.com
 ' **
 ' ** short description : check the internal file dialog (Dialog)
 ' **
@@ -59,8 +59,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_docfuncs.inc"
     use "global\tools\includes\optional\t_accels.inc"
 
-    use "framework\tools\includes\tabpages.inc"
-   
     gApplication = "WRITER"
     Call GetUseFiles
 

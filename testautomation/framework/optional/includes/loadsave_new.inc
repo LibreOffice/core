@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : tborsten.bosbach@sun.com
+'* owner : tborsten.bosbach@oracle.com
 '*
 '* short description : global functionality - load/save documents
 '*

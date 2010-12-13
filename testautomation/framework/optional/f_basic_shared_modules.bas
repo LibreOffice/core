@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Access modules below OpenOffice.org macros
 '*
@@ -51,8 +51,6 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_basic_ide_tools.inc"
     use "global\tools\includes\optional\t_treelist_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
-
-    use "framework\tools\includes\init_tools.inc"
 
     gApplication = "WRITER"
     call GetUseFiles()

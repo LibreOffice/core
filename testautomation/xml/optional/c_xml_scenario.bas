@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.creamer@Sun.COM
+'* owner : oliver.craemer@Sun.COM
 '*
 '* short description  :  Lookup for correct attributes of calc scenarios
 '*

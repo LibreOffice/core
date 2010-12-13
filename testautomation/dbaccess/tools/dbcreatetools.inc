@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : marc.neumann@sun.com
+'* owner : marc.neumann@oracle.com
 '*
 '* short description : Library with function for creating all possible databases
 '*
@@ -1375,8 +1375,17 @@ function fRegisterDatabaseFile( sFileName, sName)
         NewBtn.Click
     sleep(1)
     Kontext "CreateDatabaseLink"
-        DatabaseFile.setText(sFileName)    
+    
         RegisteredName.setText(sName)
+
+        ' this does not work due to issue 115468
+        ' DatabaseFile.setText(sFileName)
+        ' workaround
+        CreatedatabaseLink.typeKeys("<shift tab>")
+        CreatedatabaseLink.typeKeys("<shift tab>")
+        CreatedatabaseLink.typeKeys(sFileName)
+        ' -
+
         CreateDatabaseLink.OK
         
     sleep(1)
@@ -1462,6 +1471,7 @@ function fSetJDBCDriverFiles(sClassPath) as boolean
     call hCloseDocument
     
 end function
+
 '-------------------------------------------------------------------------
 
 function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
@@ -1510,7 +1520,7 @@ function hGetInstalledDatabaseDrivers( dbDriverList() as string ) as integer
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Returning " & iDriverCount & " drivers" )
     endif
 
@@ -1588,7 +1598,7 @@ function hGetDatabaseDisplayName( dbDriverURL as string ) as string
         
     endif
     
-    if ( VERBOSE ) then 
+    if ( GVERBOSE ) then
         printlog( CFN & "Database display string: " & sDatabaseName )
     endif
     hGetDataBaseDisplayName() = sDatabaseName

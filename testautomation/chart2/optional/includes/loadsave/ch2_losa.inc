@@ -23,192 +23,197 @@
 ' <http://www.openoffice.org/license.html>
 ' for a copy of the LGPLv3 License.
 '
-'/************************************************************************
+'/******************************************************************************
 '*
-'* owner : oliver.craemer@sun.com
+'* owner : oliver.craemer@oracle.com
 '*
 '* short description : Load file of one Spreadsheet format and save to another
 '*
-'************************************************************************
-'*
-' #1 subLoSaFromTo        ' Initial routine
-' #1 tLoadSaveFromTo
-'*
-'\************************************************************************
+'\******************************************************************************
 
 sub subLoSaFromTo
-    Dim sSourcePath as STRING
-    Dim lsInputFileList ( 500 ) as STRING
-    Dim iFilesInList as INTEGER
-    Dim sCurrentFileInList as STRING
-    Dim iMainIndex as INTEGER
-    
+
+    dim sSourcePath as string
+    dim lsInputFileList ( 500 ) as string
+    dim iFilesInList as integer
+    dim sCurrentFileInList as string
+    dim iMainIndex as integer
+
+    dim cRelativePath as string
+        cRelativePath = "chart2\optional\input\" & gsDirectoryInSourcePath &"\"
+
     '///<u><b>Load/Save files with charts</b></u>
     printLog Chr(13) + "---------  Save with filter: " & gsFileFormat & "  ----------"
-    sSourcePath = convertPath ( gtesttoolpath & "chart2\optional\input\" & gsDirectoryInSourcePath &"\" )
+    sSourcePath = convertPath ( gtesttoolpath & cRelativePath )
+
     '///+<ul><li>Determine list of files to test (All files in 'chart2\loadsave\input\<gsDirectoryInSourcePath>\')</li>
-    Call GetAllFileList( sSourcePath , "*." & gsDirectoryInSourcePath , lsInputFileList() )
-    '///+<li>Determine number of files found</li>   
-    iFilesInList = cInt( lsInputFileList(0) )
+    GetAllFileList( sSourcePath , "*." & gsDirectoryInSourcePath , lsInputFileList() )
+    iFilesInList = ListCount( lsInputFileList() )
     '///+<li>Run testcase 'tLoadSaveFromTo' for each file in list</li></ul>
     for iMainIndex = 2 to iFilesInList
+
         sCurrentFileInList = lsInputFileList( iMainIndex )
         printlog "* * * * * * *"
         printlog "Loop " & ( iMainIndex - 1 ) & " of " & ( iFilesInList - 1 )
         printlog "Test document: " & sCurrentFileInList
         call tLoadSaveFromTo ( sCurrentFileInList )
+
     next iMainIndex
-End Sub
 
-'*******************************************************************
+end sub
 
-testcase tLoadSaveFromTo ( sCurrentFile as STRING )
-    Dim sCurrentFileLength as INTEGER
-    Dim iCurrentPostionInFileName as INTEGER
-    Dim iLastPathSignePositon as INTEGER
-    Dim sExtractedFileName as STRING
-    Dim sExtractedExtension as STRING
-    Dim sTemporaryFile as STRING
-    Dim sOutputFile as STRING
-    Dim iIndex as INTEGER
-    
-    '///<u><b>Load file - SaveAs... - Close - Relaod</b></u>
+'*******************************************************************************
+
+function hLoSaEscape() as boolean
+
+    ' Fine grained function to send Escape-keystroke to a spreadsheet document
+
+    const MAX_TRIES = 12
+    dim iTry as integer
+
+    for iTry = 1 to MAX_TRIES
+
+        wait( 250 )
+
+        Kontext "DocumentCalc"
+        try
+            DocumentCalc.TypeKeys( "<ESCAPE>" )
+            hLoSaEscape() = true
+            exit for
+        catch
+            if ( iTry = MAX_TRIES ) then
+                warnlog( "hLoSaEscape(): Sending <ESCAPE> to document failed." )
+                hLoSaEscape() = false
+            endif
+        endcatch
+
+    next iTry
+
+end function
+
+'*******************************************************************************
+
+function hLoSaInplaceEditing() as boolean
+
+    ' Enter in-place editing mode
+
+    const RC_TIMEOUT = -1
+
+    Kontext "DocumentCalc"
+    printlog( "Enable in-place editing by slot <EditObjectEdit>" )
+    if ( hUseAsyncSlot( "EditObjectEdit" ) <> RC_TIMEOUT ) then
+
+        printlog( "Clicked menuitem: Format->Charttype" )
+        if ( hUseAsyncSlot( "FormatChartType" ) <> RC_TIMEOUT ) then
+
+            Kontext "ChartType"
+            if ChartType.exists(2) then
+
+                printlog( "Chart type dialog open, Chart object was found." )
+                Kontext "ChartType"
+                if ( hCloseDialog( ChartType, "cancel" ) ) then
+                    printlog( "Chart type dialog closed successfully" )
+                    hLoSaInplaceEditing() = true
+                else
+                    warnlog( "hLoSaInplaceEditing(): Failed to close dialog <ChartType>" )
+                    hLoSaInplaceEditing() = false
+                endif
+            else
+                warnlog( "hLoSaInplaceEditing(): Chart type dialog not open, please check the Chart object" )
+                hLoSaInplaceEditing() = false
+            endif
+
+        else
+            warnlog( "hLoSaInplaceEditing(): Failed to execute slot <FormatChartType>" )
+            hLoSaInplaceEditing() = false
+        endif
+    else
+        warnlog( "hLoSaInplaceEditing(): Failed to execute slot <EditObjectEdit>" )
+        hLoSaInplaceEditing() = false
+    endif
+
+end function
+
+'*******************************************************************************
+
+testcase tLoadSaveFromTo ( sCurrentFile as string )
+
+    printlog( "Load/Save files containing Chart OLE objects in multiple file-formats" )
+
+    dim sCurrentFileLength as integer
+    dim iCurrentPostionInFileName as integer
+    dim iLastPathSignePositon as integer : iLastPathSignePositon = 0
+    dim sExtractedFileName as string
+    dim sExtractedExtension as string
+    dim sTemporaryFile as string
+    dim sOutputFile as string
+    dim iIndex as integer
+
     sCurrentFileLength = len ( sCurrentFile )
-    iCurrentPostionInFileName = 0
-    iLastPathSignePositon = 0
+
     'Remove path and extension from file name
-    DO
+    do
         iCurrentPostionInFileName = instr ( iCurrentPostionInFileName + 1 , sCurrentFile , gPathSigne )
         if iCurrentPostionInFileName = 0 then
-            Exit DO
+            exit do
         endif
         iLastPathSignePositon = iCurrentPostionInFileName
-    LOOP
+    loop
+
     sExtractedFileName = right ( sCurrentFile , sCurrentFileLength - iLastPathSignePositon )
     sCurrentFileLength = len ( sExtractedFileName )
-    sExtractedExtension = right ( sExtractedFileName , 4 )    
+    sExtractedExtension = right ( sExtractedFileName , 4 )
     sExtractedFileName = left ( sExtractedFileName , sCurrentFileLength - 4 )
     sTemporaryFile = ( gOfficePath & ConvertPath("user\work\TemporaryFileToAvoidLocking" ) )
-    sOutputFile = ( gOfficePath & ConvertPath("user\work\") &  sExtractedFileName & "_" & gsDirectoryInSourcePath & "_to" & gsOutputFileCustomExtension  )  
-    '///+<ul><li>Open test document</li>
-    try 
-        call hFileOpen(sCurrentFile)
-    catch
-        warnlog "Serious Problem occured while loading the input file -> Quit"
+    sOutputFile = ( gOfficePath & ConvertPath("user\work\" & sExtractedFileName & "_" & gsDirectoryInSourcePath & "_to" & gsOutputFileCustomExtension  ) )
+
+    printlog( "Open file: " & sCurrentFile )
+    if ( not hFileOpen( sCurrentFile ) ) then
+        warnlog( "Unable to read file" )
         goto endsub
-    endcatch
-    
-        '///+<li>Save file localy to avoid locking issues</li>
-        if hFileSaveAsKill ( sTemporaryFile & sExtractedExtension ) then
-            printlog ">> OK, successfully saved the test document localy!"
-        else
-               warnlog "Saving the testdocument localy in source format failed!"
-        endif
-        sleep (2)
-    
-        '///+<li>Check existence of chart in file using following steps</li>
-        '///+<li>1. Select Chart</li>
-        printlog ">> Check if chart exist after loading file"
-        call fSelectFirstOLE
-       
-        Kontext "DocumentCalc"
-        try
-            '///+<li>2. Invoke 'Edit::Object::Edit' to enter inplace mode</li>
-            EditObjectEdit
-            sleep(2)
-            '///+<li>3. Invoke Chart Type</li>
-            FormatChartType
-            '///+<li>4. Check if Chart Type came up</li>
-            Kontext "ChartType"
-            if ChartType.exists(2) then
-                printlog ">> OK, found a Chart object after loading the file."
-            else
-                warnlog "Chart Type did not appear -> Check this out!"
-            endif
-            '///+<li>5. Close Chart Type</li>
-            Kontext "ChartType"
-            ChartType.Cancel
-        catch
-            warnlog "Chart does not exist in file or a serious problem occured -> Check this out!" 
-        endcatch
-        sleep(3)
-    
-        '///+<li>Hit 'ESCAPE' key to leave inplace mode</li>
-        Kontext "DocumentCalc"
-        try 
-            DocumentCalc.TypeKeys "<ESCAPE>"            
-        catch
-            warnlog "CRASH???"
-            goto endsub
-        endcatch
-    
-        '///+<li>Save file using ODS format</li>
-        printlog "Save file as " & sOutputFile
-        try
-            if hFileSaveAsWithFilter ( sOutputFile , gsFileFormat ) then
-                printlog ">> OK, successfully saved the test document!"
-            else
-                warnlog "Saving the testdocument failed!"
-            endif
-        catch
-            warnlog "A serious problem occured while saving file to target format -> Check this out!"
-            goto endsub
-        endcatch
-        sleep(2)
-    
-        '///+<li>Close document</li>
-        printlog "Closing test document"
-    call hCloseDocument
-    sleep(5)
+    endif
 
-    '///+<li>Open document again</li>
-    printlog "Reloading saved document"
-    try 
-        call hFileOpen(sOutputFile)
-    catch
-        warnlog "Serious Problem occured while reloading the output file -> Quit"
+    printlog( "Save file locally, overwriting existing" )
+    if ( not hFileSaveAsKill( sTemporaryFile & sExtractedExtension ) ) then
+        warnlog( "Unable to save file locally" )
         goto endsub
-    endcatch
-        sleep(2)
+    endif
 
-        '///+<li>Check existence of chart after saving to target format in file using following steps</li>
-        '///+<li>1. Select Chart</li>
-        printlog ">> Check if chart exist after saving file to target format"
-        call fSelectFirstOLE
-   
-        Kontext "DocumentCalc"
-        try
-            '///+<li>2. Invoke 'Edit::Object::Edit' to enter inplace mode</li>
-            EditObjectEdit
-            '///+<li>3. Invoke Chart Type</li>
-            FormatChartType
-            '///+<li>4. Check if Chart Type came up</li>
-            Kontext "ChartType"
-            if ChartType.exists(2) then
-                printlog ">> OK, found a Chart object after saving the file to target format."
-            else
-                warnlog "Chart Type did not appear after saving the file to target format -> Check this out!"
-            endif
-            '///+<li>5. Close Chart Type</li>
-            Kontext "ChartType"
-            ChartType.Cancel
-        catch
-            warnlog "Chart does not exist in file or a serious problem occured after saving the file to target format -> Check this out!" 
-        endcatch
-        sleep(3)
+    printlog( "Select the first OLE object via Navigator" )
+    call fSelectFirstOLE
 
-        '///+<li>Hit 'ESCAPE' key to leave inplace mode</li>
-        Kontext "DocumentCalc"
-        try 
-            DocumentCalc.TypeKeys "<ESCAPE>"            
-        catch
-            warnlog "CRASH???"
-            goto endsub
-        endcatch
+    printlog( "Enter in-place editing mode" )
+    hLoSaInplaceEditing()
 
-        '///+<li>Close document</li>
-        printlog "Closing test document"
-    call hCloseDocument
-    '///+<li>END</li></ul>
+    printlog( "Type <Escape> to exit in-place editing mode" )
+    hLoSaEscape()
+
+    printlog( "Save file as " & sOutputFile & " using filter: " & gsFileFormat )
+    if ( not hFileSaveAsWithFilterKill ( sOutputFile , gsFileFormat ) ) then
+        warnlog( "Saving the document failed using filter: " & gsFileFormat )
+        goto endsub
+    endif
+
+    printlog( "Close the document" )
+    hCloseDocument()
+
+    printlog( "Reload document" )
+    if ( not hFileOpen(sOutputFile) ) then
+        warnlog( "Failed to reload document" )
+        goto endsub
+    endif
+
+    printlog( "Select the first (and only) OLE object" )
+    call fSelectFirstOLE
+
+    printlog( "Enter in-place editing mode" )
+    hLoSaInplaceEditing()
+
+    printlog( "Type <Escape> to exit in-place editing mode" )
+    hLoSaEscape()
+
+    printlog( "Close the document" )
+    call hCloseDocument()
+    
 endcase
 

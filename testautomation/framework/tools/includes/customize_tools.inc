@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Tools to ease the use of the ToolsCustomize-Dialog
 '*
@@ -33,43 +33,10 @@
 
 function hToolsCustomizeOpen() as boolean
 
-    '///<h3>Open Tools/Customize</h3>
-    '///<i>Starting point: Any plain document</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Keyboard-Tab is open</li>
-    '///+<li>FALSE on any other case</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hToolsCustomizeOpen::"
-
-    '///+<li>Open Tools/Customize using the ToolsCustomize slot</li>
+    printlog( "Open Tools/Customize dialog" )
     ToolsCustomize
-
-    '///+<li>Switch to the Events Tab</li>
-    hToolsCustomizeSelectTab( "Events" )
+    hToolsCustomizeOpen() = hToolsCustomizeSelectTab( "Events" )
     
-    '///+<li>Verify that the requested tabpage is open</li>
-    Kontext TabCustomizeEvents
-    if ( TabCustomizeEvents.exists() ) then
-    	hToolsCustomizeOpen() = true
-    	printlog( CFN & "Successfully opened ToolsCustomize" )
-    else
-        hToolsCustomizeOpen() = false
-        printlog( CFN & "Failed to open ToolsCustomize" )
-    endif
-    '///+<li>Return TRUE on success</li>
-    '///</ul>
-
 end function
 
 '*******************************************************************************
@@ -100,185 +67,61 @@ function hToolsCustomizeSelectTab( cTab as string ) as boolean
     '///<ul>
     
     const CFN = "hToolsCustomizeSelectTab::"
-    dim brc as boolean
-        brc = false
-
+    hToolsCustomizeSelectTab() = true
     ctab = lcase( ctab )
 
     '///+<li>Switch to one of the four available tabpages</li>
     '///<ol>
+
+    printlog( "Open Tools/Customize: <" & ctab & ">" )
     kontext
     
     try
-
         select case ctab
         '///+<li>Keyboard</li>
-        case "keyboard"    : active.setPage TabTastatur 
-                             kontext "TabTastatur"
-                             if ( Aendern.isVisible() ) then
-                                 brc = true
-                             endif
+        case "keyboard"    : 
+            active.setPage TabTastatur
+            WaitSlot
+            kontext "TabTastatur"
+            if ( not Aendern.isVisible() ) then
+                printlog( CFN & "Keyboard tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Menu</li>
-        case "menu"        : active.setPage TabCustomizeMenu 
-                             kontext "TabCustomizeMenu"
-                             if ( Entries.isVisible() ) then
-                                 brc = true
-                             endif
+        case "menu"        : 
+            active.setPage TabCustomizeMenu
+            WaitSlot
+            kontext "TabCustomizeMenu"
+            if ( not Entries.isVisible() ) then
+                printlog( CFN & "Menu tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Toolbars</li>
-        case "toolbars"    : active.setPage TabCustomizeToolbars 
-                             kontext "TabCustomizeToolbars"
-                             if ( ToolbarContents.isVisible() ) then
-                                 brc = true
-                             endif
+        case "toolbars"    : 
+            active.setPage TabCustomizeToolbars
+            WaitSlot
+            kontext "TabCustomizeToolbars"
+            if ( not ToolbarContents.isVisible() ) then
+                printlog( CFN & "Toolbar tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         '///+<li>Events</li>
-        case "events"      : active.setPage TabCustomizeEvents 
-                             kontext "TabCustomizeEvents"
-                             if ( AssignMacro.isVisible() ) then
-                                 brc = true
-                             endif 
+        case "events"      : 
+            active.setPage TabCustomizeEvents
+            WaitSlot
+            kontext "TabCustomizeEvents"
+            if ( not AssignMacro.isVisible() ) then
+                printlog( CFN & "Assign Macro tabpage is not available" )
+                hToolsCustomizeSelectTab() = false
+            endif
         end select
         '///</ol>
-        
     catch
-    
         printlog( CFN & "Could not access requested tabpage" )
-        brc = false
-        
+        hToolsCustomizeSelectTab() = false
     endcatch
-
-    if ( brc ) then
-        printlog( CFN & "Opened Tab: " & cTab )
-    else
-        printlog( CFN & "Failed to open Tab: " & cTab )
-    endif
-    
-    '///+<li>Return TRUE on success</li>
     '///</ul>
-    hToolsCustomizeSelectTab() = brc
     
-end function
-
-'*******************************************************************************
-
-function hToolsCustomizeClose( iMode as integer  ) as boolean
-
-    '///<h3>Close the ToolsCustomize-Dialog</h3>
-    '///<i>Starting point: Tools/Customize dialog</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Closing mode (integer)</li>
-    '///<ul>
-    '///+<li>1: Use OK-button</li>
-    '///+<li>2: Use Cancel-button</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if executing close action succeeded</li>
-    '///+<li>FALSE on any other condition</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hToolsCustomizeClose::"
-    dim brc as boolean : brc = true
-
-    kontext 
-
-    '///+<li>Switch to the Events page by default</li>
-    active.setPage( TabCustomizeEvents )
-    
-    '///+<li>Close dialog by OK or CANCEL</li>
-    '///<ol>
-    select case iMode
-    '///+<li>OK</li>
-    case 1 : TabCustomizeEvents.OK()
-    '///+<li>Cancel</li>
-    case 2 : TabCustomizeEvents.Cancel()
-    case else
-        brc = false
-    end select
-    '///</ol>
-    
-    
-    
-    '///+<li>Verify that the dialog has indeed been closed</li>
-    kontext "TabCustomizeEvents"
-    TabCustomizeEvents.notExists( 3 )
-    if ( TabCustomizeEvents.exists() ) then
-        brc = false
-    endif
-
-    if ( brc ) then
-        printlog( CFN & "Closed Tools/Customize" )
-    else
-        printlog( CFN & "Failed to close Tools/Customize" )
-    endif
-
-    '///</ul>
-    hToolsCustomizeClose() = brc
-end function
-
-'*******************************************************************************
-
-function hToolsCustomizeAddNewMenu( cName as string, bMode as boolean ) as boolean
-
-    '///<h3>Add a new menu via Tools/Customize/Menu</h3>
-    '///<i>Starting point: Tools/Customize with Menu-Tab open</i><br>
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Name of the new menu (string)</li>
-    '///+<li>Mode (boolean). Options:</li>
-    '///<ul>
-    '///+<li>TRUE = The entry will be created (OK)</li>
-    '///+<li>FALSE = The entry will not be created (Cancel)</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Errorstatus (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on success</li>
-    '///+<li>FALSE on failure</li>
-    '///</ul>
-    '///</ol>
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hToolsCustomizeAddNewMenu::"
-    dim brc as boolean
-        brc = false
-    
-    '///+<li>Click the &quot;New...&quot; button</li>
-    kontext "TabCustomizeMenu"
-    BtnNew.click()
-    
-    '///+<li>Verify that the menu organizer exists</li>
-    Kontext "MenuOrganiser"
-    if ( not MenuName.exists() ) then
-        printlog( CFN & "MenuOrganiser is not open" )
-        exit function
-    endif
-    
-    '///+<li>Name the new menu if we intend to create the new entry</li>
-    if ( bMode ) then
-        printlog( CFN & "Naming menu: " & cName )
-        MenuName.setText( cName )
-        MenuOrganiser.OK()
-        brc = true
-    else
-        call DialogTest( MenuOrganiser )
-        printlog( CFN & "Opened and closed MenuOrganiser" )
-        MenuOrganiser.cancel()
-        brc = true
-    endif
-    
-    hToolsCustomizeAddNewMenu() = brc
-    '///</ul>
-
 end function
 
 '*******************************************************************************

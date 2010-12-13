@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : hercule.li@sun.com
+'* owner : hercule.li@oracle.com
 '*
 '* short description : CJK Feature Switch test
 '*
@@ -78,7 +78,7 @@ testcase tWriterUIChangesTest1
     TabAusrichtungAbsatz.Cancel
 
     '/// turn off "Asian Language support" , check if checkbox "Snap to text grid" isn't enable
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         Kontext
@@ -96,27 +96,30 @@ testcase tWriterUIChangesTest1
         TabAusrichtungAbsatz.Cancel
     end if
 
-   TabAusrichtungAbsatz.Cancel
+    ' JSK I have no idea why the tabpage was closed a second time so i do not fix it
+    ' but make closing the tabpage optional. I hate this.
+    kontext "TabAusrichtungAbsatz"
+    hCloseDialog( TabAusrichtungAbsatz, "cancel,optional" )
 
-  if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
-     Call CheckAsianLanguageSupport("Off")
+    if ( not hSystemHasAsianLocale() ) then
+        Call CheckAsianLanguageSupport("Off")
 
-      Kontext
-      FormatParagraph
-      Active.SetPage TabAusrichtungAbsatz
-      Kontext "TabAusrichtungAbsatz"
+        Kontext
+        FormatParagraph
+        Active.SetPage TabAusrichtungAbsatz
+        Kontext "TabAusrichtungAbsatz"
 
-      try
-        if TextrasterFangen.IsChecked = TRUE Or TextrasterFangen.IsChecked <> TRUE then
-           warnlog "Something wrong in checkbox 'snap to text grid'"
-        end if
-      catch
-      endcatch
+        try
+            if TextrasterFangen.IsChecked = TRUE Or TextrasterFangen.IsChecked <> TRUE then
+                warnlog "Something wrong in checkbox 'snap to text grid'"
+            end if
+        catch
+        endcatch
 
-     TabAusrichtungAbsatz.Cancel
-  end if
+        TabAusrichtungAbsatz.Cancel
+    end if
 
-  Call hCloseDocument
+    Call hCloseDocument
 endcase
 
 '-------------------------------------------------------------------------
@@ -143,7 +146,7 @@ testcase tWriterUIChangesTest2
     endcatch
 
     '/// turn off "Asian Language support" , check if tabpage "Asian Typography" disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         Kontext
@@ -186,7 +189,7 @@ testcase tWriterUIChangesTest3
     TabFont.Cancel
 
     '/// turn off "Asian Language support" , Check if list box "Asian text font" disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         Kontext
@@ -227,7 +230,7 @@ testcase tWriterUIChangesTest4
     TabFontEffects.Cancel
 
     '/// turn off "Asian Language support" , Check if list box "Emphasis mark" disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         Kontext
@@ -264,7 +267,7 @@ testcase tWriterUIChangesTest5
     ExtrasOptionenDlg.Cancel
 
     '/// turn on "Asian Language support" , Check if tabpage "Searching in Japanese" disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         ToolsOptions
 
@@ -299,7 +302,7 @@ testcase tWriterUIChangesTest6
     ExtrasOptionenDlg.Cancel
 
     '/// turn off "Asian Language support" , Check if tabpage "Asian Layout" disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         ToolsOptions
 
@@ -335,7 +338,7 @@ testcase tWriterUIChangesTest7
     endcatch
 
     '/// turn off "Asian Language support" , Check if menu format/Ruby is inactived
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         try
@@ -390,7 +393,7 @@ testcase tWriterUIChangesTest8
     endcatch
 
     '/// turn off "Asian Language support" , Check if submenus in format/change case is inactived
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         try
@@ -424,7 +427,7 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest9
-  call  hNewDocument
+    call  hNewDocument
 
     '/// turn on "Asian Language support" , Check if list box text direction appear
     Call CheckAsianLanguageSupport("On")
@@ -442,7 +445,7 @@ testcase tWriterUIChangesTest9
     TabSeite.Cancel
 
     '/// turn off "Asian Language support" , Check if list box text direction disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         FormatPageWriter
@@ -485,7 +488,7 @@ testcase tWriterUIChangesTest10
     endcatch
 
     '/// turn off "Asian Language support" , Check if vertical text box and callout disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         Kontext "Drawbar"
         try
@@ -507,12 +510,12 @@ endcase
 '-------------------------------------------------------------------------
 
 testcase tWriterUIChangesTest11
- Dim iHopeNumber1 , iHopeNumber2 as Integer
- dim i as integer
- dim iCount as integer
 
-    iHopeNumber1 = 38
-    iHopeNumber2 = 19
+    dim i as integer
+    dim iCount as integer
+
+    const iHopeNumber1 = 42
+    const iHopeNumber2 = 23
 
     '/// Check if the number in listbox numbering  is right or not.
     '/// [if the number of the listbox numbering is changed, this case should be modified according]
@@ -543,16 +546,11 @@ testcase tWriterUIChangesTest11
                 Active.Ok
                 QAErrorLog "No Default-Printer!"
                 Kontext "Printing"
-                if ( Printing.exists( 1 ) ) then
-                    Printing.cancel()
-                endif
+                hCloseDialog( Printing, "cancel,optional" )
             end if
         else
             Kontext "Printing"
-            if ( Printing.exists( 2 ) ) then
-                Printing.cancel()
-                Printing.notExists( 5 )
-            endif
+            hCloseDialog( Printing, "cancel,optional" )
         endif
     else
         for i =1 to iCount
@@ -561,14 +559,14 @@ testcase tWriterUIChangesTest11
         'Referenze:
         TabOptionenNumerierung.Cancel
         qaerrorlog "the number of list box numbering is wrong when Asian Language support is on; expected: " + iHopeNumber1 + "; is: " + iCount
-     end if
-     
-     'print warning if no printer is available
-     kontext
-     if active.exists(5) then
-         qaErrorlog "print warning: '" + active.getText + "'"
-         active.ok
-     endif
+    end if
+
+    'print warning if no printer is available
+    kontext
+    if active.exists(5) then
+        qaErrorlog "print warning: '" + active.getText + "'"
+        active.ok
+    endif
 
     'print warning if no printer is available
     kontext
@@ -578,7 +576,7 @@ testcase tWriterUIChangesTest11
     endif
 
     '/// turn off "Asian Language support" , Check if the number in listbox numbering  is right
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
 
         FormatNumberingBullets
@@ -613,7 +611,7 @@ testcase tProlongedVowelsTest1
     ToolsOptions
     Call hToolsOptions("LANGUAGESETTINGS","SEARCHINGINJAPANESE")
 
-    if ProlongedSoundmarks.IsChecked <> TRUE  then
+    if ( not ProlongedSoundmarks.IsChecked ) then
         warnlog "The default setting of 'Prolonged vowels (ka-/kaa)' isn't ACTIVATED."
     end if
 
@@ -648,7 +646,7 @@ testcase tCalcUIChangesTest_10
     endcatch
 
     '/// turn off "Asian Language support" , Check if vertical text box and callout disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         Kontext "Drawbar"
         try
@@ -686,7 +684,7 @@ testcase tImpressUIChangesTest_10
     endcatch
 
     '/// turn off "Asian Language support" , Check if vertical text box disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         sleep(1)
         Kontext "Drawbar"
@@ -719,7 +717,7 @@ testcase tDrawUIChangesTest_10
     endcatch
 
     '/// turn off "Asian Language support" , Check if vertical text box disappear
-    if iSystemSprache <> 81 AND iSystemSprache <> 82 AND iSystemSprache <> 86 AND iSystemSprache <> 88 then
+    if ( not hSystemHasAsianLocale() ) then
         Call CheckAsianLanguageSupport("Off")
         Kontext "Drawbar"
         try
@@ -734,3 +732,12 @@ testcase tDrawUIChangesTest_10
 endcase
 
 '-------------------------------------------------------------------------
+
+function hSystemHasAsianLocale() as boolean
+
+    select case ( iSystemSprache )
+    case 81, 82, 86, 88 : hSystemHasAsianLocale() = true
+    case else           : hSystemHasAsianLocale() = false
+    end select
+
+end function

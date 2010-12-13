@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : thorsten.bosbach@sun.com
+'* owner : thorsten.bosbach@oracle.com
 '*
 '* short description : update and resouce test for all option pages (at tools/options)
 '*
@@ -208,21 +208,6 @@ testcase tToolsOptionsStarOffice
                     qaerrorlog( "#i45295# or office built without mozilla support" )
                 endif
 
-                Kontext "TabSecurity"
-                if Protect.isEnabled then
-                    Protect.click()
-                    Kontext "PasswordDLG"
-                    call DialogTest( PasswordDLG )
-                    PasswordDLG.cancel()
-                else
-                    select case uCase(gApplication)
-                    case "WRITER","MASTERDOCUMENT"
-                        WarnLog "Protect-Button is disabled."
-                    case "MATH","IMPRESS","DRAW","HTML","CALC"
-                        PrintLog "Protect-Button is disabled."
-                    end select
-                endif
-                
                 Kontext "TabSecurity"
                 if ( TabSecurity.exists( 1 ) ) then
                     Options.click
@@ -594,14 +579,28 @@ testcase tToolsOptionsInternet
         '///+<ol><li>Proxy</li>
         '///+<li>Search</li>
         '///+<li>Mozilla Plugin</li></ol>
-        EchteAnzahl = OptionTabPageZaehler ( 3 , FALSE )
+        EchteAnzahl = OptionTabPageZaehler ( 3 , TRUE )
+        if (EchteAnzahl > 3) then
+			qaErrorLog ("Due to some installed extensions the tabpage count is not 3 it is: " + EchteAnzahl)
+        else 
+            if (EchteAnzahl < 3) then
+                warnlog "Number of tabpages old :   3   new :  " + EchteAnzahl
+            endif
+        endif
     else
         '/// On Unix systems this section includes four tab pages.
         '///+<ol><li>Proxy</li>
         '///+<li>Search</li>
         '///+<li>E-Mail</li>
         '///+<li>Mozilla Plugin</li></ol>
-        EchteAnzahl = OptionTabPageZaehler ( 4 , FALSE )
+        EchteAnzahl = OptionTabPageZaehler ( 4 , TRUE )
+        if (EchteAnzahl > 4) then
+			qaErrorLog ("Due to some installed extensions the tabpage count is not 3 it is: " + EchteAnzahl)
+        else 
+            if (EchteAnzahl < 4) then
+               warnlog "Number of tabpages old :   3   new :  " + EchteAnzahl
+            endif
+        endif
     endif
 
     for i=1 to EchteAnzahl
@@ -662,6 +661,18 @@ testcase tToolsOptionsInternet
                     Call DialogTest ( TabMozillaPlugin )
                 endif
             endif
+        case 5,6 :  Kontext "TabMediaWiki"
+                    if TabMediaWiki.exists then
+                        qaerrorlog "  - Wiki Publisher"
+                        Call DialogTest ( TabMediaWiki )
+                        gefunden = TRUE
+                    endif
+                    Kontext "TabWeblog"
+                    if TabWeblog.exists then
+                        qaerrorlog "  - Weblog Publisher"
+                        Call DialogTest ( TabWeblog )
+                        gefunden = TRUE
+                    endif
         end select
         if gefunden=FALSE then
             Warnlog "Error with the " + i + ".page, perhaps this page is deleted or change the place!"

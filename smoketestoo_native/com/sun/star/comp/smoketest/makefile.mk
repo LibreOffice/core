@@ -34,6 +34,8 @@ no_common_build_zip:=TRUE
 
 # --- Settings -----------------------------------------------------
 
+.IF "$(SOLAR_JAVA)" != ""
+
 .INCLUDE : settings.mk
 
 JARFILES = ridl.jar jurt.jar unoil.jar juh.jar
@@ -62,11 +64,15 @@ ZIP1DEPS=$(MISC)$/$(TARGET)$/$(JARTARGET)\
 
 .INCLUDE :  target.mk
 
+$(MISC)$/$(TARGET)$/META-INF:
+    @-$(MKDIRHIER) $(@)
+
 $(MISC)$/TestExtension.urd: TestExtension.idl
     $(IDLC) -O$(MISC) -I$(SOLARIDLDIR) -cid -we $<
 
+$(MISC)$/$(TARGET)$/META-INF$/manifest.xml $(MISC)$/$(TARGET)$/TestExtension.rdb : $(MISC)$/$(TARGET)$/META-INF
+
 $(MISC)$/$(TARGET)$/META-INF$/manifest.xml: manifest.xml
-    @-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
 $(MISC)$/$(TARGET)$/TestExtension.rdb: $(MISC)$/TestExtension.urd
@@ -77,3 +83,8 @@ $(JAVACLASSFILES) .UPDATEALL: $(MISC)$/$(TARGET)$/TestExtension.rdb
 
 $(MISC)$/$(TARGET)$/$(JARTARGET) : $(JARTARGETN)
     $(COPY) $< $@
+
+.ELSE
+@all:
+    @echo "Java disabled. Nothing to do."
+.ENDIF

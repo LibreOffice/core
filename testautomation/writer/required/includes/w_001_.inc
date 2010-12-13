@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Required-Testcases for the File-menu.
 '*
@@ -55,9 +55,6 @@ end sub
 
 testcase tFileNewLabels
 
-QAErrorLog "#i102218# - tFileNewLabels outcommented due to bug."
-goto endsub
-
     Dim iSheetFormat as integer
     Dim iBrandIndex as integer
     Dim iType as integer
@@ -78,7 +75,7 @@ goto endsub
         cBrandList( 10 ) = "Sigel"
 
     PrintLog "Open Labels-dialog with File / New / Labels"
-    if ( hCreateLabels ) then 
+    if ( hCreateLabels() ) then
 
         Call DialogTest( TabEtiketten )
         
@@ -86,7 +83,8 @@ goto endsub
         PrintLog "Check number of brands and types (see #i44801# for details)"
         
         For iSheetFormat = 1 to 2
-            
+
+            kontext "TabEtiketten"
             Select Case( iSheetFormat )
             Case 1
                 Endlos.Check
@@ -247,9 +245,6 @@ endcase
 
 testcase tFileNewBusinessCards
 
-QAErrorLog "#i102218# - tFileNewBusinessCards outcommented due to bug."
-goto endsub
-
     Dim iFormat as integer
     Dim iBrand as integer
     Dim iType as integer
@@ -359,7 +354,7 @@ goto endsub
 
         Kontext "Active"
         if ( Active.GetRT = 304 ) then
-            Warnlog( "UNexpected messagebox: " & Active.GetText() )
+            Warnlog( "Unexpected messagebox: " & Active.GetText() )
             Active.Ok
         end if
 
@@ -778,9 +773,7 @@ testcase tFileSaveAsExport
     Call hNewDocument
 
     PrintLog "Open document '..\writer\required\input\st1_1.sxw"
-    Call hFileOpen(xExport)
-
-    Call sMakeReadOnlyDocumentEditable
+    Call hFileOpenLocally(xExport)
 
     PrintLog "Select Save as .. and choose 'Microsoft Word 97/2000/XP' as export-filter"
     xExportFile = gOfficepath + "user\work\ecksport.doc"
@@ -1034,7 +1027,7 @@ testcase tFileReload
     Wait (500)
 
     PrintLog "Open previous saved document"
-    Call hFileOpen ( gOfficePath + "user\work\" + sFile$ )
+    hFileOpen(  gOfficePath + "user\work\" + sFile$ )
     PrintLog "Insert a table in document"
     Call hTabelleEinfuegen
     PrintLog "File / Reload"

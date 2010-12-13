@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : oliver.creamer@Sun.COM
+'* owner : oliver.craemer@Sun.COM
 '*
 '* short description  :  Detailed test of the chart types
 '*

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Test_Ext" script:language="StarBasic">REM  *****  BASIC  *****
+
+const cMessageExtensionService = &quot;Extension Service&quot;
+const cMessageExtensionInstall = &quot;Install Extension&quot;
+const cMessageExtensionUninstall = &quot;Uninstall Extension&quot;
+
+Sub TestExtensions (FilterType as Integer)
+Dim oTestExtension as Object, obj_null as Object
+Dim sCurrentMessage as String
+Dim nCurrentAction as Integer
+Dim bResult as Boolean
+Dim sImplementationNameString as String
+sImplementationNameString = cUnoSmoketestTestExtension + &quot;$_TestExtension&quot;
+
+    On Local Error GoTo EXTERROR
+
+    nCurrentAction = cLogfileFailed
+    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+
+    sCurrentMessage = cMessageExtensionService
+    nCurrentAction = cEXTService
+
+    &apos;Create an implementation of com.sun.star.ucb.XCommandEnvironment which is needed for
+    &apos;adding the extension. The implementation is in
+    &apos;javaunohelper/com/sun/star/comp/juhtest/SmoketestCommandEnvironment.java and the code is in juh.jar
+    cmdEnv = createUnoService(cUnoSmoketestCommandEnvironment)
+
+    &apos;Create the component context and then get the singleton ExtensionManager
+    &apos;A singleton cannot be created with createUnoService
+    ctx = getDefaultContext
+    ext_mgr = ctx.getValueByName(&quot;/singletons/&quot; + cExtensionManager)
+
+    LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, FileChannel)
+    LogState (not IsNull (ext_mgr), &quot;Extension &quot;+ cMessageExtensionService, MainFileChannel)
+    SetStatus (FilterType, cEXTService, not IsNull (ext_mgr))
+    if (IsNull(ext_mgr)) then
+          Close #FileChannel%
+        Exit Sub
+    End If
+
+    sCurrentMessage = cMessageExtensionInstall
+    nCurrentAction = cEXTInstall
+
+    &apos;Add the extension. We must provide a file URL here.
+    &apos;By passing &quot;user&quot; we determine that the actions we perform on
+    &apos;XExtensionManager only affect the user installation. To modify the share installation one would pass &quot;share&quot;.
+
+    Dim props() as Object
+    ext_mgr.addExtension(sExtensionURL + cExtensionFileName, props, &quot;user&quot;, obj_null, cmdEnv)
+
+    &apos;Check if the extension has been added by creating a service which is contained in the extension.
+    oTestExtension = createUnoService(cUnoSmoketestTestExtension)
+    bResult = (oTestExtension.getImplementationName = sImplementationNameString)
+    LogState (bResult, &quot;Extension &quot;+ cMessageExtensionInstall, FileChannel)
+    LogState (bResult, &quot;Extension &quot;+ cMessageExtensionInstall, MainFileChannel)
+    SetStatus (FilterType, cEXTInstall, bResult)
+    if (not bResult) then
+           Close #FileChannel%
+        Exit Sub
+    End If
+
+    sCurrentMessage = cMessageExtensionUninstall
+    nCurrentAction = cEXTUninstall
+
+    &apos;Remove the package
+    ext_mgr.removeExtension(&quot;org.openoffice.legacy.&quot; + cExtensionFileName, cExtensionFileName, &quot;user&quot;,obj_null, cmdEnv)
+
+    &apos;Try to create the service which is contained in the now removed extension.
+    oTestExtension = createUnoService(cUnoSmoketestTestExtension)
+
+    &apos;The service must not be available anymore. Therefor isNull must return true.
+    LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, FileChannel)
+    LogState (IsNull (oTestExtension), &quot;Extension &quot;+ cMessageExtensionUninstall, MainFileChannel)
+    SetStatus (FilterType, cEXTUninstall, IsNull (oTestExtension))
+
+    Print #FileChannel, &quot;---&quot;
+    Close #FileChannel%
+    Exit Sub &apos; Without error
+
+    EXTERROR:
+    If  (nCurrentAction = cLogfileFailed) then
+        SetStatus (FilterType, cEXTService, False)
+        Exit Sub
+    else
+        LogState (False, &quot;Extension &quot;+ sCurrentMessage, FileChannel)
+        LogState (False, &quot;Extension &quot;+ sCurrentMessage, MainFileChannel)
+        SetStatus (FilterType, nCurrentAction, False)
+        Close #FileChannel%
+    End If
+    Exit Sub &apos; With error
+
+End Sub
+</script:module>

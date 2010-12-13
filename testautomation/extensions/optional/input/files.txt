@@ -29,8 +29,12 @@ dependencies\version25.oxt;0,0,1,0,0
 dependencies\version30.oxt;0,0,1,0,0
 dependencies\version300.oxt;0,0,1,0,0
 dependencies\version301.oxt;0,0,1,0,0
+dependencies\version310.oxt;0,0,1,0,0
+dependencies\version330.oxt;0,0,1,0,0
 dependencies\versionempty.oxt;0,0,1,0,0
-dependencies\version31.oxt;1,0,0,0,0
+dependencies\version31.oxt;0,0,1,0,0
+dependencies\version33.oxt;0,0,1,0,0
+dependencies\version34.oxt;1,0,0,0,0
 dependencies\version937.oxt;1,0,0,0,0
 dependencies\versionnone.oxt;0,0,1,0,0
 versions/plain.oxt;0,0,1,0,0
@@ -43,3 +47,4 @@ versions/version_1.2.4.7/plain.oxt;0,0,1,0,2
 versions/version_1.02.4.7.0/plain.oxt;0,0,1,0,1
 versions/version_1.2.3/plain.oxt;0,0,1,0,2
 versions/version_1.2.15.3/plain.oxt;0,0,1,0,2
+issues/111434.oxt;0,1,1,0,0

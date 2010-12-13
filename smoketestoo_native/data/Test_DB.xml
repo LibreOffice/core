@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--**********************************************************************
+*
+* DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+*
+* Copyright 2000, 2010 Oracle and/or its affiliates.
+*
+* OpenOffice.org - a multi-platform office productivity suite
+*
+* This file is part of OpenOffice.org.
+*
+* OpenOffice.org is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License version 3
+* only, as published by the Free Software Foundation.
+*
+* OpenOffice.org is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU Lesser General Public License version 3 for more details
+* (a copy is included in the LICENSE file that accompanied this code).
+*
+* You should have received a copy of the GNU Lesser General Public License
+* version 3 along with OpenOffice.org.  If not, see
+* <http://www.openoffice.org/license.html>
+* for a copy of the LGPLv3 License.
+*
+**********************************************************************-->
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="Test_DB" script:language="StarBasic">REM  *****  Database Test  *****
+
+const cMessageDatabaseService = &quot;Database Service&quot;
+const cMessageDatabaseOpen = &quot;Open Database&quot;
+const cMessageDatabaseInsert = &quot;Insert record into Database&quot;
+const cMessageDatabaseDelete = &quot;Delete record from Database&quot;
+const cMessageDatabaseSeek = &quot;Read other record from Database&quot;
+const cMessageDatabaseClose = &quot;Close Database&quot;
+
+Sub TestDB (FilterType as Integer)
+
+Dim oDBConnection as Object, oDataSource as Object, oDBContext as Object
+Dim sDBName as String, sTable as String, sCurrentMessage as String
+Dim nRowCount as Integer, nCurrentAction as Integer
+Dim bResult as Boolean
+Const sTestString = &quot;Automatical Test&quot;
+
+
+    On Local Error GoTo DBERROR
+
+    nCurrentAction = cLogfileFailed
+    FileChannel% = OpenLogDat (GetLogFileName(FilterType))
+
+    nCurrentAction = cDBService
+    sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoDatabaseContext
+
+    oDBContext = CreateUnoService(cUnoDatabaseContext)
+    sDBName=oDBContext.ElementNames(0) &apos;Names of Databases
+
+    nCurrentAction = cDBOpen
+    sCurrentMessage = cMessageDatabaseOpen
+
+    oDataSource = oDBContext.GetByName(sDBName)
+    sTable=oDataSource.Tables.ElementNames(0)
+    oDBConnection = oDBContext.GetByName(sDBName).GetConnection(&quot;&quot;,&quot;&quot;)
+
+    LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, FileChannel)
+    LogState (not IsNull (oDBConnection), &quot;Database &quot;+ cMessageDatabaseOpen, MainFileChannel)
+    SetStatus (FilterType, cDBOpen, not IsNull (oDBConnection))
+    if (IsNull(oDBConnection)) then
+           Close #FileChannel%
+        Exit Sub
+    End If
+
+    &apos; Database is open now
+
+    nCurrentAction = cDBService
+    sCurrentMessage = cMessageDatabaseService + &quot; &quot; + cUnoRowSet
+    oRowSet = createUnoService(cUnoRowSet)
+
+    if (IsNull(oRowSet)) then
+        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, FileChannel)
+        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService + &quot; &quot; + cUnoRowSet, MainFileChannel)
+        SetStatus (FilterType, cDBService, not IsNull (oRowSet))
+        Exit Sub
+    else
+        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService, FileChannel)
+        LogState (not IsNull (oRowSet), &quot;Database &quot;+ cMessageDatabaseService, MainFileChannel)
+        SetStatus (FilterType, cDBService, not IsNull (oRowSet))
+    End If
+
+    nCurrentAction = cDBInsert
+    sCurrentMessage = cMessageDatabaseInsert
+
+    oRowSet.ActiveConnection = oDBConnection
+
+    oRowSet.CommandType = com.sun.star.sdb.CommandType.COMMAND
+    oRowSet.Command = &quot;SELECT * FROM &quot; + sTable
+    oRowSet.execute()
+
+    oRowSet.moveToInsertRow
+    oRowSet.updateString(5, sTestString)
+
+    oRowSet.insertRow()
+    nRowCount=oRowSet.RowCount
+
+    oRowSet.moveToCurrentRow()
+
+    bResult = (oRowSet.getString(5) = sTestString)
+    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, FileChannel)
+    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseInsert, MainFileChannel)
+    SetStatus (FilterType, cDBInsert, bResult)
+
+    &apos;delete only if insert passed
+
+    if (bResult) Then
+        nCurrentAction = cDBDelete
+        sCurrentMessage = cMessageDatabaseDelete
+        oRowSet.deleteRow()
+        bResult = (nRowCount - oRowSet.RowCount = 0)
+        if ( bResult ) Then
+            oRowSet.next()
+            bResult = (nRowCount - oRowSet.RowCount = 1)
+        End If
+        LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, FileChannel)
+        LogState (bResult, &quot;Database &quot;+ cMessageDatabaseDelete, MainFileChannel)
+        SetStatus (FilterType, cDBDelete, bResult)
+    End If
+
+    &apos; read other record
+
+    nCurrentAction = cDBSeek
+    sCurrentMessage = cMessageDatabaseSeek
+    oRowSet.first()
+    bResult = not (oRowSet.getString(5) = sTestString)
+    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, FileChannel)
+    LogState (bResult, &quot;Database &quot;+ cMessageDatabaseSeek, MainFileChannel)
+    SetStatus (FilterType, cDBSeek, bResult)
+
+    nCurrentAction = cDBClose
+    sCurrentMessage = cMessageDatabaseClose
+    oDBConnection.Dispose()
+    LogState (True, &quot;Database &quot;+ cMessageDatabaseClose, FileChannel)
+    LogState (True, &quot;Database &quot;+ cMessageDatabaseClose, MainFileChannel)
+    SetStatus (FilterType, cDBClose, True)
+
+    Print #FileChannel, &quot;---&quot;
+    Close #FileChannel%
+    Exit Sub &apos; Without error
+
+    DBERROR:
+    If  (nCurrentAction = cLogfileFailed) then
+        SetStatus (FilterType, cDBOpen, False)
+        Exit Sub
+    else
+        LogState (False, &quot;Database &quot;+ sCurrentMessage, FileChannel)
+        LogState (False, &quot;Database &quot;+ sCurrentMessage, MainFileChannel)
+        SetStatus (FilterType, nCurrentAction, False)
+        Close #FileChannel%
+    End If
+    Exit Sub &apos; With error
+End Sub
+</script:module>

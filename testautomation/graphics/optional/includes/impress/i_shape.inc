@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : owner : wolfram.garten@sun.com
+'* owner : owner : wolfram.garten@oracle.com
 '*
 '* short description : import presentations with shapes in .ppt format
 '*

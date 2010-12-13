@@ -24,7 +24,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Functions for HTML-Test
 '*
@@ -78,7 +78,7 @@ function wPasteAvailableClipboardFormats(TheNumber as integer, CheckWhat as Stri
             QAErrorlog " - " + Active.Gettext + "->Bug#110181"
             Active.Ok
         end if
-        Call wDocSetContext
+        hSetDocumentContext()
         Call wTypeKeys "<Escape>",2
         Select Case gApplication
             Case "WRITER","MASTERDOCUMENT","HTML"
@@ -141,8 +141,8 @@ end function
 
 function wSetClipboardtestDefaults(ForWhat as string) as boolean
     printlog " Points cursor to beginning of document "
-    Call hFileOpen (gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( gtesttoolpath & "writer\optional\input\clipboard\writer.sxw")
+    
     Kontext "DocumentWriter"
     printlog " Jump to beginning of document "
     Call wTypeKeys "<Mod1 Home>"

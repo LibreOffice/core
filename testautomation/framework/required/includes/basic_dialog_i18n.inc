@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for Basic IDE / Dialog i18n-feature
 '*
@@ -34,54 +34,54 @@
 testcase tUpdtBasicDialogI18n
 
     printlog( "BASIC IDE Dialog i18n." )
+    const MODULE_NAME = "tUpdtBasicDialogI18n"
+    const DIALOG_DEFAULT_TIMEOUT = 2
 
-    dim brc as boolean
+    kontext "Navigator"
+    hCloseDialog( Navigator, "close,optional" )
+    hCreateDocument()
     
-    hCloseNavigator()
-    hCreateDocument()'
-    
-    brc = hInitFormControls( "tDialogI18n" )
-    if ( not brc ) then
+    if ( not hInitFormControls( MODULE_NAME ) ) then
         warnlog( "Failed to open Basic IDE / Dialogs / ToolsCollectionBar" )
         goto endsub
     endif
     
     printlog( "Click Manage Languages on ToolsCollectionBar")
     kontext "ToolsCollectionBar" 
-    sleep(1)
-    if ( ToolsCollectionBar.exists() ) then
-        ManageLanguage.click()
+    if ( ToolsCollectionBar.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
+        wait( 500 )
+        hClickButton( ManageLanguage )
     else
         warnlog( "<ToolsCollectionBar> is not open, is the test environment dirty?" )
     endif
         
     kontext "ManageUILanguages"
-    if ( ManageUILanguages.exists( 2 ) ) then
+    if ( ManageUILanguages.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
         call dialogtest( ManageUILanguages )
         
         printlog( "Add default language, choose preselection")
         kontext "ManageUILanguages"
-        Add.click()
+        hClickButton( Add )
         
         kontext "SetDefaultLanguage"
-        if ( SetDefaultLanguage.exists( 2 ) ) then
+        if ( SetDefaultLanguage.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
             call dialogtest( SetDefaultLanguage )
             
             kontext "SetDefaultLanguage"
             DefaultLanguageListbox.select( 3 )
             
             kontext "SetDefaultLanguage"
-            SetDefaultLanguage.ok()
+            hCloseDialog( SetDefaultLanguage, "ok" )
         else
             warnlog( "Dialog <SetDefaultLanguage> did not open" )
-         endif  
+        endif  
        
         printlog( "Back on Manage UI Languages Dialog we click <Add>")
         kontext "ManageUILanguages"
-        Add.click()
+        hClickButton( Add )
         
         kontext "AddUserInterface"
-        if ( AddUserInterface.exists( 2 ) ) then
+        if ( AddUserInterface.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
             call dialogtest( AddUserInterface )
 
             printlog( "Add just another language at random")    
@@ -90,7 +90,7 @@ testcase tUpdtBasicDialogI18n
             AddNewControl.typeKeys( "<SPACE>" )    ' check it
 
             kontext "AddUserInterface"
-            AddUserInterface.ok()
+            hCloseDialog( AddUserInterface, "ok" )
         else
             warnlog( "Dialog <AddUserInterface> did not open" )
         endif
@@ -100,39 +100,32 @@ testcase tUpdtBasicDialogI18n
         
         printlog( "Back on Manage UI Languages Dialog, delete selected language")
         kontext "ManageUILanguages"
-        Delete.click()
-        sleep(1)
+        hClickButton( Delete )
+
         printlog( "Confirm delete")
         kontext "active"
-        if ( Active.exists( 1 ) ) then
+        if ( Active.exists( DIALOG_DEFAULT_TIMEOUT ) ) then
             call dialogtest( active )
             
             kontext "active"
-            active.ok()
+            hCloseDialog( active, "ok" )
         else
             warnlog( "Confirm delete messagebox is missing" )
         endif
         
         printlog( "Leave Manage UI Languages Dialog")
         kontext "ManageUILanguages"
-        ManageUILanguages.ok()
+        hCloseDialog( ManageUILanguages, "ok" )
     else
         warnlog( "Manage UI languages did not open" )
     endif
     
     printlog( "Verify that the translationbar is visible")
     kontext "TranslationBar"
-    if ( not TranslationBar.exists() ) then
-        warnlog( "The IDE Translation Toolbar is not visible" )
-    endif
+    if ( not TranslationBar.exists() ) then warnlog( "The IDE Translation Toolbar is not visible" )
 
     kontext "ToolsCollectionBar"
-    if ( not ToolsCollectionBar.exists() ) then
-        warnlog( "The ToolsCollectionBar is not visible" )
-    endif
-
-    printlog( "Cleanup" )
-    ToolsCollectionBar.Close
+    hCloseDialog( ToolsCollectionBar, "close" )
     hClosebasicIDE()
     hDestroyDocument()
 

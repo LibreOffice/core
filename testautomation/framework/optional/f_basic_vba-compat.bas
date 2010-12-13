@@ -25,7 +25,7 @@
 '
 '/******************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Test VBA import options and compatibility switches
 '*
@@ -64,6 +64,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_security_tools.inc"
     use "global\tools\includes\optional\t_macro_tools.inc"
     use "global\tools\includes\optional\t_docfuncs.inc"
+    use "global\tools\includes\optional\t_user_info.inc"
 
     use "framework\optional\includes\basic_vba_compat_tools.inc"
     

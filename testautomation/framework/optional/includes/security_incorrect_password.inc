@@ -25,44 +25,38 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Password protect files
 '*
 '\******************************************************************************
 
 testcase tIncorrectPassword( filetypeID as string )
-
  
-    const WORKFILE = "password"
-    dim suffix as string 
-    dim workpath as string
-
-    dim rc as integer
-    dim brc as boolean
     dim iCurrentFilter as integer
     dim cCurrentFilter as string
+    dim filepath as string
     
     const PASSWORD_VALID = "MyPasswd09#+1"
     const PASSWORD_FALSE = "MyPasswd00#+1"
     const DOC_ID = "f_sec_incorrect_password.bas testdocument"
-    
-    workpath = hGetWorkPath()
-    
-    suffix = hGetSuffix( filetypeID )
+
+    printlog( "Build a valid filename with full path and suffix" )
+    filepath = hGetWorkPath() & "password" & hGetSuffix( filetypeID )
+    printlog( "The workfile is: " & filepath )
     
     printlog( "Delete the workfile - if it was left over by a former testrun" )
-    hDeleteFile( workpath & WORKFILE & suffix )    
+    hDeleteFile( filepath )
 
     printlog( "Make sure we have exactly one single document open" )
     hFileCloseAll()
-    hCreateDocument()
+    hCreateDocument() ' Do not use hInitSingleDoc() here as it creates a Writer document
 
     printlog( "Change the document" )
     hChangeDoc()
 
     printlog( "Click on FileSave" )
-    FileSave
+    hUseAsyncSlot( "FileSave" )
 
     Kontext "SpeichernDlg"
     if ( SpeichernDlg.exists( 1 ) ) then
@@ -72,8 +66,8 @@ testcase tIncorrectPassword( filetypeID as string )
         printlog( "Check the password checkbox" )
         Passwort.check()
 
-        printlog( "Name the file as " & workpath & WORKFILE )
-        Dateiname.settext( workpath & WORKFILE )
+        printlog( "Name the file as " & filepath )
+        Dateiname.settext( filepath )
 
         if ( filetypeID <> "current" ) then
             for iCurrentFilter = 1 to DateiTyp.getItemCount()
@@ -92,9 +86,7 @@ testcase tIncorrectPassword( filetypeID as string )
         printlog( "Click on the Save-Button" )
         Speichern.click()
 
-        brc = hSecurityEnterPasswordOnSave( PASSWORD_VALID )
-
-        if ( brc ) then
+        if ( hSecurityEnterPasswordOnSave( PASSWORD_VALID ) ) then
 
             kontext "AlienWarning"
             if ( AlienWarning.exists( 3 ) ) then
@@ -107,8 +99,7 @@ testcase tIncorrectPassword( filetypeID as string )
             endif
 
             printlog( "Close the document" )
-            brc = hDestroyDocument()
-            if ( not brc ) then
+            if ( not hDestroyDocument() ) then
                 warnlog( "Something went wrong while closing the document. please check" )
             endif
 
@@ -117,9 +108,8 @@ testcase tIncorrectPassword( filetypeID as string )
         endif
 
         printlog( "Load the file again" )
-        hFileOpen( workpath & WORKFILE & suffix )
-        brc = hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false )
-        if ( not brc ) then
+        hFileOpen( filepath )
+        if ( not hSecurityEnterPasswordOnLoad( PASSWORD_FALSE , false ) ) then
             warnlog( "Something went wrong while using the password dialog" )
         endif
 
@@ -131,7 +121,7 @@ testcase tIncorrectPassword( filetypeID as string )
         endif
 
         printlog( "Delete the workfile" )
-        hDeleteFile( workpath & WORKFILE & suffix )
+        hDeleteFile( filepath )
     else
         warnlog( "Unable to open file save dialog" )
     endif

@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : wolfram.garten@sun.com
+'* owner : wolfram.garten@oracle.com
 '*
 '* short description : Global Required/resource test: Checking the gallery
 '*

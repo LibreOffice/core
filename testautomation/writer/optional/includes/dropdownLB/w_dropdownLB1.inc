@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Test Drop Down List Box
 '*
@@ -1024,8 +1024,8 @@ testcase tDropDownLB_17
     PrintLog "- Open a new document"
     Call hNewDocument
     PrintLog "- Open a word document  which includes 2 entries."
-    Call hFileOpen(sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( sTestFile )
+    
 
     Kontext "EditInputList"
     if EditInputList.Exists then EditInputList.Cancel

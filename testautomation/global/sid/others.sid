@@ -4,37 +4,36 @@
 ' ***************************************************
 
 ' ** to create a new document
-NeuDirekt SID_NEWDOCDIRECT
-NewDirect SID_NEWDOCDIRECT
+NeuDirekt .uno:AddDirect
+NewDirect .uno:AddDirect
 
 ' ** slots for file import
-FileName SID_FILE_NAME
-FilterName SID_FILTER_NAME
+FileName .uno:FileName
 
 ' ** slots for file printing
-PrinterName SID_PRINTER_NAME
+PrinterName .uno:Printer
 
 ' ** to jump to a new table in calc
-GeheZuTabelle SID_CURRENTTAB
-GeheZuZelle SID_CURRENTCELL
-GeheZuDokument SID_CURRENTDOC
-GeheZuObjekt SID_CURRENTOBJECT
-GoToTable SID_CURRENTTAB
-GoToCell SID_CURRENTCELL
-GoToDocument SID_CURRENTDOC
-GoToObject SID_CURRENTOBJECT
+GeheZuTabelle .uno:JumpToTable
+GeheZuZelle .uno:GoToCell
+GeheZuDokument .uno:GotoDocument
+GeheZuObjekt .uno:GoToObject
+GoToTable .uno:JumpToTable
+GoToCell .uno:GoToCell
+GoToDocument .uno:GotoDocument
+GoToObject .uno:GoToObject
 
 ' ** activate OLE-Object
-CalcOLEAktivieren SID_OLE_ACTIVATE
-CalcOLEDeaktivieren SID_OLE_DEACTIVATE
-CalcActivateOLE SID_OLE_ACTIVATE
-CalcDeactivateOLE SID_OLE_DEACTIVATE
+CalcOLEAktivieren .uno:ActivateOLE
+CalcOLEDeaktivieren .uno:Deactivate
+CalcActivateOLE .uno:ActivateOLE
+CalcDeactivateOLE .uno:Deactivate
 
 ' **  show office version
-GetVersion SID_VERSION_VISIBLE
+GetVersion .uno:VersionVisible
 
 ' ** Load / Save
-IsDocImageLoading SID_IMG_LOADING
-IsDocLoading SID_DOC_LOADING
-IsDocSaving SID_DOC_SAVED
+IsDocImageLoading .uno:IsLoadingImages
+IsDocLoading .uno:IsLoading
+IsDocSaving .uno:Saved
 

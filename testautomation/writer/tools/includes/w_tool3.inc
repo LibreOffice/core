@@ -24,7 +24,7 @@
 '
 '/******************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Description of file
 '*
@@ -33,7 +33,7 @@
 sub InTabelleKontrollieren
     Call wTypeKeys ("<Home>")
     Call wTypeKeys ("<Tab><Shift End>")
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     if GetClipBoardText <> "Text" then
         Warnlog "Text has not been inserted in a table"
     else
@@ -45,7 +45,7 @@ end sub
 ' ****
 sub InTabelleKontrollierenExtra
     Call wTypeKeys ("<Home><Shift Tab><Shift End>")
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     if GetClipBoardText <> "Der" then
         Warnlog "Text has not been inserted in a table"
     else
@@ -57,7 +57,7 @@ end sub
 '***
 sub InTextKontrollieren
     Call wTypeKeys ("<Home><Shift Mod1 Right>")
-    EditCopy
+    hUseAsyncSlot( "EditCopy" )
     if Left$(GetClipBoardText,3) <> "Der" AND Left$(GetClipboardText,4) <> "Der " then
         Warnlog "Table has not been changed to text"
     else
@@ -270,7 +270,7 @@ sub UndoRichtigBeiSortierung
     if Fehler = TRUE then
         Warnlog "Undo after sorting has not been functioned correctly"
         Call hCloseDocument
-        Call hFileOpen ( gTesttoolPath + "writer\optional\input\st1_5.sdw" )
+        hFileOpenLocally(  gTesttoolPath + "writer\optional\input\st1_5.sdw" )
     end if
     Call wTypeKeys "<End>"
     Call wTypeKeys "<Down>",6

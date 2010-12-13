@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Hide section /Protect section / Display of dialogues
 '*
@@ -1064,7 +1064,7 @@ testcase tPasswordProtectSection_2
     Call hCloseDocument
     
     PrintLog " Reload the file"
-    Call hFileOpen (gOfficePath + "user\work\tPasswordProtectSection_2.odt")
+    hFileOpen( gOfficepath + "user\work\tPasswordProtectSection_2.odt")
     
     FormatSections
     Kontext "BereicheBearbeiten"
@@ -1200,7 +1200,7 @@ testcase tPasswordProtectSection_4
     Call hCloseDocument
     
     PrintLog " Reload the file"
-    Call hFileOpen (gOfficePath + "user\work\tPasswordProtectSection_4.odt")
+    hFileOpen( gOfficepath + "user\work\tPasswordProtectSection_4.odt")
     
     PrintLog " In format/section, PW-Dialogue should appear when clicking 'option' button"
     FormatSections

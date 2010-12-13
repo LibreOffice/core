@@ -78,7 +78,7 @@ public class Summarizer
             {
                 if (states.elementAt(j).equals("not part of the job"))
                 {
-                    state = "Not possible since not all Interfaces/Services have been checked";
+                    state = "PASSED(some interfaces/services not tested).OK";
                 }
                 else
                 {

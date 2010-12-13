@@ -33,8 +33,8 @@
 #include "osl/process.h"
 #include "test/detail/testdllapi.hxx"
 
-namespace com { namespace sun { namespace star { namespace lang {
-    class XMultiServiceFactory;
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
 } } } }
 
 namespace test {
@@ -51,13 +51,13 @@ public:
 
     void tearDown();
 
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-    getFactory() const;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+    getComponentContext() const;
 
 private:
     oslProcess process_;
-    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
-        factory_;
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        context_;
 };
 
 }

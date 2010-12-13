@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Testcases for the Tools-Menu
 '*
@@ -80,12 +80,11 @@ testcase tToolsSpellcheck
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    hFileOpen ( TheFile )
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally( TheFile )
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -125,7 +124,7 @@ testcase tToolsSpellcheck
                 if Active.exists then
                     if Active.GetRT = 304 then Active.Ok
                     Warnlog "Dialog 'Spellcheck' not up!"
-                    Call hCloseDocument
+                    hFileCloseAll()
                     goto endsub
                 end if
             catch
@@ -204,9 +203,8 @@ testcase tToolsSpellcheck
     Spellcheck.Close
     wait 500
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+
 endcase
 
 ' -------------------------------------------
@@ -243,12 +241,11 @@ testcase tToolsThesaurus
 
     printlog " Open document where the formatting is set to the language we wish to test."
     TheFile = Convertpath (gTesttoolpath + "writer\optional\input\spellcheck\spellcheck_" + iSprache + ".odt")
-    if ( not hFileExists ( TheFile ) ) then
+    if ( not FileExists ( TheFile ) ) then
         Warnlog "Found no Document for the language you're testing in, Please inform the Test-Developer."
         goto endsub
     end if
-    call hFileOpen( TheFile )
-    Call sMakeReadOnlyDocumentEditable
+    call hFileOpenLocally( TheFile )
 
     printlog " Insert some faulty text"
     select case iSprache
@@ -292,9 +289,8 @@ testcase tToolsThesaurus
     printlog " Close 'Thesaurus' dialog"
     Thesaurus.Cancel
     PrintLog "Close active documents"
-    Do Until GetDocumentCount = 0
-        Call hCloseDocument
-    Loop
+    hFileCloseAll()
+    
 endcase
 
 ' -------------------------------------------
@@ -332,14 +328,14 @@ testcase tToolsHyphenation
         LingFile = str$(iSprache) + "-hyph.dat"
     end select
 
-    if ( not hFileExists( DieDatei ) ) then
+    if ( not FileExists( DieDatei ) ) then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
 
     Select Case gApplication
     Case "WRITER"
-        hFileOpen( DieDatei )
+        hFileOpenLocally( DieDatei )
 
     Case "MASTERDOCUMENT"
         if wInsertDocumentinMasterDoc(DieDatei) = False then
@@ -356,7 +352,6 @@ testcase tToolsHyphenation
         goto endsub
     end select
 
-    Call sMakeReadOnlyDocumentEditable
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")
@@ -988,8 +983,7 @@ testcase tToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    hFileOpen (sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(sTestFile)
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
@@ -1116,6 +1110,7 @@ endcase
 ' -------------------------------------------
 
 testcase tHtmlDocToolsHangulHanjaConversion
+
     Dim bAsianLanguage as Boolean
     Dim sTestFile as String
 
@@ -1127,8 +1122,7 @@ testcase tHtmlDocToolsHangulHanjaConversion
     bAsianLanguage = ActiveDeactivateAsianSupport(TRUE)
 
     printlog " Open the test file"
-    hFileOpen (sTestFile)
-    Call sMakeReadOnlyDocumentEditable
+    hFileOpenLocally(sTestFile)
     Call wTypeKeys("<MOD1 Home>")
 
     printlog " Tools / HangulHanjaConversion"
@@ -1225,7 +1219,7 @@ testcase tMasterDocToolsHyphenation
     end select
 
     sTestFile = convertpath( sTestFile )
-    if ( not hFileExists( sTestFile ) )then
+    if ( not FileExists( sTestFile ) )then
         Warnlog "No defined Errortext for language: " + isprache + "! Exit!"
         goto endsub
     end if
@@ -1239,7 +1233,7 @@ testcase tMasterDocToolsHyphenation
         hUseAsyncSlot( "EditPaste" )
     end if
 
-    Call sMakeReadOnlyDocumentEditable
+    
     printlog " Insert file 'writer\required\input\linguistik\0 + [OfficeLanguage] + '.odt'"
     Sleep 1
     Call wTypeKeys ("<Mod1 Home>")

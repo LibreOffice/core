@@ -25,179 +25,115 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Tools for working with the property browser for formcontrols
 '*
 '\******************************************************************************
 
-private const DEBUG_ENABLE = false
-
 function hOpenPropertyBrowser() as boolean
-    
-    '///<h3>Function to open the properties of a selected control</h3>
-    '///<i>The function verifies that the property browser is really open and
-    '///+ ensures that we are on the General tabpage</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    
-    '///+<li>Nothing</li>
-    
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE on successful open of the property browser</li>
-    '///+<li>FALSE on any error</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hOpenPropertyBrowser::"
-    dim irc as integer
-    
-    '///+<li>Open the property browser (call slot)</li>
-    irc = hUseAsyncSlot( "ContextProperties" )
-    
-    ' Check that the slot did indeed get executed. If not: Warn and exit
-    if ( irc = -1 ) then
-        warnlog( CFN & "hUseAsyncSlot timed out for <ContextProperties>" )
-        hOpenPropertyBrowser() = false
-        exit function
-    endif
-    
-    '///+<li>Verify that the property browser is open</li>
+
+    '///<h3>Open the BASIC property browser</h3>
+
+    const CFN = "framework::tools::includes::pbrowser_tools.inc::hOpenPropertyBrowser(): "
+
     kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists( 2 ) ) then
-        
-        '///+<li>Activate General-tabpage</li>
-        ControlPropertiesTabControl.setPage( TabGeneralControl )
-    
-        '///+<li>Verify that the General-tabpage is visible</li>
-        kontext "TabGeneralControl"
-        if ( TabGeneralControl.isVisible() ) then
-            printlog( CFN & "ok" )
-            hOpenPropertyBrowser() = true
-        else
-            printlog( CFN & "General-tab is not visible." )
-            hOpenPropertyBrowser() = false
-        endif   
+    if ( ControlPropertiesTabControl.exists() ) then
+        printlog( "Property Browser is already open, no action taken" )
+        hOpenPropertyBrowser() = true
     else
-        printlog( CFN & "Could not open property browser" )
-        hOpenPropertyBrowser() = false    
+        if ( hUseAsyncSlot( "ContextProperties" ) <> -1 ) then
+            kontext "ControlPropertiesTabControl"
+            if ( ControlPropertiesTabControl.exists( 2 ) ) then
+                ControlPropertiesTabControl.setPage( TabGeneralControl )
+                hOpenPropertyBrowser() = true
+            else
+                warnlog( CFN & "Dialog <ControlPropertiesTabControl> is not available" )
+                hOpenPropertyBrowser() = false
+            endif
+        else
+            warnlog( CFN & "Could not execute <ContextProperties> slot" )
+            hOpenPropertyBrowser() = false
+        endif
     endif
-    '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
 function hClosePropertyBrowser() as boolean
-    
-    '///<h3>A function that closes the Property-Browser</h3>
-    '///<i>The property browser is closed by executing the slot (the slot 
-    '///+ toggles the dialog).</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Nothing</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE if the Property Browser has been closed</li>
-    '///+<li>FALSE if the property browser is not open</li>
-    '///+<li>FALSE if the property browser could not be closed</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    const CFN = "hClosePropertyBrowser::"
 
-    '///+<li>Verify that the property browser is open</li>
+    const CFN = "framework::tools::includes::pbrowser_tools.inc::hClosePropertyBrowser(): "
+    printlog( "Closing Property-Browser (if open)" )
+
     kontext "ControlPropertiesTabControl"
-    if ( ControlPropertiesTabControl.exists( 1 ) ) then
-    
-        '///+<li>Execute the ContextProperties slot</li>
-        ContextProperties
-        
-        '///+<li>Verify that the property browser is closed</li>
-        if ( ControlPropertiesTabControl.exists() ) then
-            printlog( CFN & "Property browser could not be closed" )
-            hClosePropertyBrowser() = false
-        else
-            printlog( CFN & "ok" )
+    if ( ControlPropertiesTabControl.exists() ) then
+
+        hUseAsyncSlot( "ContextProperties" )
+
+        if ( ControlPropertiesTabControl.notExists( 2 ) ) then
             hClosePropertyBrowser() = true
+        else
+            warnlog( CFN & "Failed to close dialog" )
+            hClosePropertyBrowser() = false
         endif
     else
-        printlog( CFN & "Property browser is not open" )
-        hClosePropertyBrowser() = false
+        printlog( "Property browser is not open, no action taken." )
+        hClosePropertyBrowser() = true
     endif
-    '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
 function hPBSetControlName( cControl as string ) as boolean
-    
+
     '///<h3>Name a control, with limited errorhandling</h3>
-    
+
     '///<i>This function was introduced due to a problem with the property-
     '///browser not being open fast enough or just refusing to accept input</i><br><br>
-    
+
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Text to be inserted in the control &quot;NameText&quot; (string)</li>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
-    
+
     '///+<li>Errorcondition</li>
     '///<ul>
     '///+<li>TRUE: The control name was successfully updated</li>
     '///+<li>FALSE: Control is not visible within current context</li>
     '///</ul>
-    
+
     '///</ol>
-    
+
     const CFN = "hPBSetControlName::"
-    
+
     '///<u>Description</u>:
     '///<ul>
     '///+<li>Test that the control &quot;NameText&quot; exists</li>
+
+    ' Note: A number of fallbacks are used here because the entryfield "NameText"
+    ' is less than reliable. My hope is that one of the methods succeeds.
     kontext "TabGeneralControl"
     if ( NameText.exists() ) then
         '///+<li>Set the new name</li>
-        WaitSlot()
-        
+        hDeleteEntryFieldContent( NameText )
+
         ' Name the control and append some Spaces which should be truncated.
         printlog( CFN & "Naming control: " & cControl )
         NameText.setText( cControl )
-        TabGeneralControl.typeKeys( "   <RETURN>" )
+        TabGeneralControl.typeKeys( "<RETURN>" )
         WaitSlot()
-        
-        printlog( CFN & "Verifying rename..." )
+
         if ( NameText.getText() = cControl ) then
             printlog( CFN & "Name is set ok: " & cControl )
             hPBSetControlName() = true
             exit function
         endif
-        
+
         ' If the name cannot be set this is in 99% of the cases a timing problem.
         ' Here is a (costly) workaround.
         qaerrorlog( CFN & "Name not set correctly, retrying" )
@@ -212,55 +148,55 @@ function hPBSetControlName( cControl as string ) as boolean
             hPBSetControlName() = true
             exit function
         endif
-        
+
         warnlog( CFN & "Unable to set control name: " & cControl )
         hPBSetControlName() = false
-            
+
     else
         warnlog( "Unable to name the control." )
         hPBSetControlName() = false
     endif
     '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
 function hPBGetControlName( cControl as string ) as boolean
-    
+
     '///<h3>Verify that the expected control is open</h3>
     '///<i>Use hPBSetControlName( string ) to set the name and when you reopen it
     '///+ verify that you got the right control wit this function</i><br><br>
-    
+
     '///<u>Input</u>:
     '///<ol>
     '///+<li>Name of the control (string)</li>
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
-    
+
     '///+<li>Errorcondition (boolean)</li>
     '///<ul>
     '///+<li>TRUE: The control has the correct name</li>
     '///+<li>FALSE: Any other condition</li>
     '///</ul>
-    
+
     '///</ol>
-    
+
     '///<u>Description</u>:
     '///<ul>
-    
+
     dim cControlName as string
     const CFN = "hPBGetControlName::"
-    
+
     '///+<li>If &quot;NameText&quot; exists, retrieve its text</li>
     kontext "TabGeneralControl"
     if ( TabGeneralControl.exists( 1 ) ) then
         if ( TabGeneralControl.isVisible() ) then
-    
+            wait( 300 )
             cControlName = NameText.getText()
-        
+
             '///+<li>Verify that the name is correct</li>
             if ( cControlName = cControl ) then
                 printlog( CFN & "The name of the control is correct: " & cControl )
@@ -280,100 +216,42 @@ function hPBGetControlName( cControl as string ) as boolean
         hPBGetControlName() = false
     endif
     '///</ul>
-    
-end function
 
-'*******************************************************************************
-
-function hCheckPropertyPresence ( cSetting as string , iPos as integer ) as boolean
-    
-    '///<h3>Function to determine whether a property is available for a control or not</h3>
-    '///<i>This function takes a string (provided by controlcfg.dat) and looks for an 'x' at.
-    '///+ a given position.  If it is found it returns TRUE, FALSE if it is a '-'<br>
-    '///+Note that this function is a terrible workaround for a missing feature: In the current
-    '///+ version of the Testtool we cannot ask which controls are present on a dialog. So this
-    '///+ has to be kept in a list of some sort. This is especially bad for a property browser
-    '///+ test as we need to maintain such a list for 21 controls and a total of 76 (IIRC)
-    '///+ possible properties whereof only a small number (eight, i think) are common for all
-    '///+ controls. The test is barely maintainable, issues have been written but there is
-    '///+ no solution so far.</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    
-    '///+<li>Configuration string (string)</li>
-    '///<ul>
-    '///+<li>The string must be taken from file &quot;controlcfg.dat&quot;</li>
-    '///</ul>
-    
-    '///+<li>Position of the control (integer)</li>
-    '///<ul>
-    '///+<li>&gt; 0 and &lt; 74 (all possible control config items)</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    '///+<li>Status (boolean)</li>
-    '///<ul>
-    '///+<li>TRUE: The property should exist for the current control</li>
-    '///+<li>FALSE: The property is not expected to exist for this control</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    
-    ' this function looks at a given position in the string cSetting for either
-    ' a "x" or a "-".
-    ' if "x" is found, the function returns true, else false.
-    
-    
-    '///+<li>Find the requested position in the string, set TRUE if it is an &quot;x&quot;</li>
-    if ( mid( cSetting , iPos , 1 ) = "x" ) then
-        hCheckPropertyPresence() = true
-    else
-        hCheckPropertyPresence() = false
-    endif
-    '///</ul>
-    
 end function
 
 '*******************************************************************************
 
 function hSetPBTabPage( iPage as integer ) as boolean
-    
+
     '///<h3>A small helper to switch between tabpages in the property-browser</h3>
     '///<u>Input</u>:
     '///<ol>
-    
+
     '///+<li>Page-ID (integer)</li>
     '///<ul>
     '///+<li>1 = General page</li>
     '///+<li>2 = Events page</li>
     '///</ul>
-    
+
     '///</ol>
-    
+
     '///<u>Returns</u>:
     '///<ol>
-    
+
     '///+<li>Errorcondition (boolean)</li>
     '///<ul>
     '///+<li>TRUE on success</li>
     '///+<li>FALSE on any error</li>
     '///</ul>
-    
+
     '///</ol>
-    
+
     '///<u>Description</u>:
     '///<ul>
-    
+
     const CFN = "hSetPBTabPage::"
     printlog( CFN & "Enter with option: " & iPage )
-    
+
     '///+<li>Switch to the requested page</li>
     kontext "ControlPropertiesTabControl"
     if ( not ControlPropertiesTabControl.exists( 3 ) ) then
@@ -381,18 +259,18 @@ function hSetPBTabPage( iPage as integer ) as boolean
         hSetPBTabPage() = false
         exit function
     else
-        if ( DEBUG_ENABLE ) then
+        if ( GVERBOSE ) then
             printlog( CFN & "Control Properties Dialog is open" )
         endif
     endif
-    
+
     select case iPage
-    case 1 
-    
+    case 1
+
         printlog( CFN & "Switching to control properties tabpage" )
         kontext "ControlPropertiesTabControl"
         ControlPropertiesTabControl.setPage TabGeneralControl
-        
+
         kontext "TabGeneralControl"
         if ( nametext.exists( 5 ) ) then
             printlog( CFN & "Exit: Control properties are open (true)" )
@@ -403,13 +281,13 @@ function hSetPBTabPage( iPage as integer ) as boolean
             hSetPBTabPage() = false
             exit function
         endif
-            
+
     case 2
-    
+
         printlog( CFN & "Switching to event assignment tabpage" )
         kontext "ControlPropertiesTabControl"
         ControlPropertiesTabControl.setPage TabEventsControl
-        
+
         kontext "TabEventsControl"
         if ( PBFocusGained.exists( 5 ) ) then
             printlog( CFN & "Exit: Events page is open (true)" )
@@ -420,57 +298,32 @@ function hSetPBTabPage( iPage as integer ) as boolean
             hSetPBTabPage() = false
             exit function
         endif
-        
+
     case else
-    
+
         printlog( CFN & "Invalid parameter passed to function: " & iPage )
         hSerPBTabPage() = false
         exit function
-            
+
     end select
     '///</ul>
-    
+
 end function
 
 '*******************************************************************************
 
-function hSetLabelName( sLabelName as string ) as boolean
-    
-    '///<h3>Name a control, with limited errorhandling</h3>
-    
-    '///<i>This function was introduced due to a problem with the property-
-    '///browser not being open fast enough or just refusing to accept input</i><br><br>
-    
-    '///<u>Input</u>:
-    '///<ol>
-    '///+<li>Text to be inserted in the control &quot;NameText&quot; (string)</li>
-    '///</ol>
-    
-    '///<u>Returns</u>:
-    '///<ol>
-    
-    '///+<li>Errorcondition</li>
-    '///<ul>
-    '///+<li>TRUE: The control name was successfully updated</li>
-    '///+<li>FALSE: Control is not visible within current context</li>
-    '///</ul>
-    
-    '///</ol>
-    
-    '///<u>Description</u>:
-    '///<ul>
-    '///+<li>Test that the control &quot;NameText&quot; exists</li>
-    kontext "TabGeneralControl"
-    if ( Label.exists() ) then
-        '///+<li>Set the new name</li>
-        Label.setText( sLabelName )
-        TabGeneralControl.TypeKeys ("<RETURN>" , true)
-        hSetLabelName() = true
-    else
-        warnlog( "Unable to name the control." )
-        hSetLabelName() = false
-    endif
-    '///</ul>
-    
-end function
+function hDeleteEntryFieldContent( oControl as object ) as boolean
 
+    printlog( "Original name is: " & oControl.getText() )
+
+    oControl.typeKeys( "<HOME>" )
+    oControl.typeKeys( "<SHIFT END>" )
+    oControl.typeKeys( "<DELETE>" )
+
+    if ( oControl.getText() = "" ) then
+        hDeleteEntryFieldContent() = true
+    else
+        hDeleteEntryFieldContent() = false
+    endif
+
+end function

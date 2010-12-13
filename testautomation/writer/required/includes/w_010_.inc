@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description :  Testcases for the Objectbars.
 '*
@@ -74,6 +74,9 @@ end sub
 '-----------------------------------------------------------
 
 testcase tFormatting
+
+    GLOBAL_USE_NEW_SLEEP = TRUE
+
     printlog "- Objectbar ( normal ) : Formatting"
     Call hNewDocument
     printlog " Open new document"
@@ -147,6 +150,9 @@ testcase tFormatting
     Sleep 1
     Call hCloseDocument
     printlog " Close active document"
+
+    GLOBAL_USE_NEW_SLEEP = FALSE
+    
 endcase
 
 '-----------------------------------------------------------
@@ -1078,6 +1084,10 @@ testcase tHtmlDocFormatting
 
     printlog " Open new document"
     Call hNewDocument
+
+    Kontext "NavigatorWriter"
+    if NavigatorWriter.Exists then ViewNavigator
+
     Call wTypeKeys ("Formatting <Shift Home>")
     Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )
@@ -1153,6 +1163,11 @@ testcase tMasterDocFormatting
 
     printlog " Open new document"
     Call hNewDocument
+
+    Kontext "NavigatorGlobalDoc"
+    if NavigatorGlobalDoc.Exists then ViewNavigator
+
+
     Call wTypeKeys ("Formatting <Shift Home>")
     Kontext "TextObjectbar"
     if Not TextObjectbar.Exists then Call hToolbarSelect ( "FORMATTING", true )

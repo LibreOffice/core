@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Modules in BASIC-IDE
 '*
@@ -71,6 +71,7 @@ sub LoadIncludeFiles
     use "global\tools\includes\optional\t_filetools.inc"
     use "global\tools\includes\optional\t_accels.inc"
     use "global\tools\includes\optional\t_stringtools.inc"
+    use "global\tools\includes\optional\t_macro_tools.inc"
    
     gApplication = "WRITER"
     call GetUseFiles()

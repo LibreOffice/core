@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'* owner : helge.delfs@sun.com
+'* owner : helge.delfs@oracle.com
 '*
 '* short description : Testing Number and Bullets
 '*
@@ -340,7 +340,7 @@ testcase tToolsNumbering6
 			Call hFileSaveAsKill ( gOfficepath & "user\work\tToolsNumbering6.odt" )
 			'/// Close and reload document
 			Call hCloseDocument
-			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering6.odt" )
+			hFileOpen( gOfficepath & "user\work\tToolsNumbering6.odt" )
 		end if
 		call wTypeKeys ( "<MOD1 A>" )	
 		EditCopy
@@ -358,11 +358,11 @@ testcase tToolsNumbering6
 						Warnlog "First paragraph not 'This is the first' but: " & sClipBrd(0)
 					end if
 				Case 2
-					if sClipBrd(1) <> "1.This is the second" then
+					if sClipBrd(1) <> "1. This is the second" then
 						Warnlog "First paragraph not '1.This is the second' but: " & sClipBrd(1)
 					end if		
 				Case 3
-					if sClipBrd(2) <> "2.This is the third" then
+					if sClipBrd(2) <> "2. This is the third" then
 						Warnlog "First paragraph not '2.This is the third' but: " & sClipBrd(2)
 					end if
 			end select
@@ -448,7 +448,7 @@ testcase tToolsNumbering7
 			Call hFileSaveAsKill ( gOfficepath & "user\work\tToolsNumbering7.odt" )
 			'/// Close and reload document
 			Call hCloseDocument
-			Call hFileOpen ( gOfficepath & "user\work\tToolsNumbering7.odt" )
+			hFileOpen( gOfficepath & "user\work\tToolsNumbering7.odt" )
 		end if
         
 		call wTypeKeys ( "<MOD1 A>" )	
@@ -472,12 +472,12 @@ testcase tToolsNumbering7
                         end if
 					end if
 				Case 2
-					if sClipBrd(1) <> "1.1.My second number" then
-						Warnlog "#128041#First paragraph not '1.1.My second number' but: " & sClipBrd(1)
+					if sClipBrd(1) <> "1. 1.My second number" then
+						Warnlog "#128041#Second paragraph not '1. 1.My second number' but: " & sClipBrd(1)
 					end if		
 				Case 3
-					if sClipBrd(2) <> "2.2.My third number" then
-						Warnlog "#128041#First paragraph not '2.2.My third number' but: " & sClipBrd(2)
+					if sClipBrd(2) <> "2. 2.My third number" then
+						Warnlog "#128041#Third paragraph not '2. 2.My third number' but: " & sClipBrd(2)
 					end if
 			end select
 		next i	
@@ -707,16 +707,16 @@ testcase tToolsNumbering11
     For i = 1 to 3
         Select Case i
             Case 1
-                if sClipBrd(0) <> "11A new first paragraph" then
-                    Warnlog "First Heading not: '11A new first paragraph' but: " &  sClipBrd(0)
+                if sClipBrd(0) <> "1 1A new first paragraph" then
+                    Warnlog "First Heading not: '1 1A new first paragraph' but: " &  sClipBrd(0)
                 end if
             Case 2
-                if sClipBrd(1) <> "22" then
-                    Warnlog "First paragraph not '22' but: " & sClipBrd(1)
+                if sClipBrd(1) <> "2 2" then
+                    Warnlog "First paragraph not '2 2' but: " & sClipBrd(1)
                 end if
             Case 3
-                if sClipBrd(2) <> "33A new third paragraph" then
-                    Warnlog "First paragraph not '33A new third paragraph' but: " & sClipBrd(2)
+                if sClipBrd(2) <> "3 3A new third paragraph" then
+                    Warnlog "First paragraph not '3 3A new third paragraph' but: " & sClipBrd(2)
                 end if
         end select
     next i

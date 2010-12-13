@@ -25,7 +25,7 @@
 '
 '/************************************************************************
 '*
-'*  owner : joerg.skottke@sun.com
+'*  owner : joerg.skottke@oracle.com
 '*
 '*  short description : Update test for agenda wizard
 '*
@@ -56,23 +56,23 @@ testcase tUpdtWizardAgenda
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 1 )
         PageDesignList.select( 3 )
-        hClickNextButton()
+        hClickButton( NextButton )
         
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 2 )
-        hClickNextButton()
+        hClickButton( NextButton )
         
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 3 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 4 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 5 )
-        hClickNextButton()
+        hClickButton( NextButton )
 
         Kontext "AutopilotAgenda"
         call DialogTest( AutopilotAgenda, 6 )
@@ -81,25 +81,18 @@ testcase tUpdtWizardAgenda
         hWaitForObject( TemplateName, 3000 )
         TemplateName.setText( cTemplateName )
         hSetTemplateSavePath( cTemplatePath )    
-            
-        hFinishWizard( 1 )
+
+        kontext "AutopilotAgenda"
+        hClickButton( CreateButton )
         
-        iErr = hHandleSaveError()
-        if ( iErr = 1 ) then
+        if ( hHandleSaveError() = 1 ) then
             kontext "AutopilotAgenda"
-            hFinishWizard( 1 )
+            hClickButton( CreateButton )
         endif    
         
-        brc = hDestroyDocument()
-        if ( not brc ) then
-            qaerrorlog( "#i59233# The wizard does not display the new template" )
-        endif
-        
-        do while( getDocumentCount() > 0 )
-            call hCloseDocument()
-        loop
-        
-            
+        if ( not hDestroyDocument() ) then qaerrorlog( "#i59233# The wizard does not display the new template" )
+
+        hFileCloseAll()
         hDeleteFile( cTemplatePath )
     else
         warnlog ( "The Agenda wizard did not open/timelimit exceeded" )

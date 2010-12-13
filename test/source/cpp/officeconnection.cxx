@@ -30,16 +30,20 @@
 #include "com/sun/star/connection/NoConnectException.hpp"
 #include "com/sun/star/frame/XDesktop.hpp"
 #include "com/sun/star/lang/DisposedException.hpp"
-#include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
 #include "cppuhelper/bootstrap.hxx"
+#include <preextstl.h>
 #include "cppunit/TestAssert.h"
+#include <postextstl.h>
 #include "osl/process.h"
 #include "osl/time.h"
 #include "sal/types.h"
-#include "test/getargument.hxx"
 #include "test/officeconnection.hxx"
 #include "test/toabsolutefileurl.hxx"
+#include "test/uniquepipename.hxx"
+
+#include "getargument.hxx"
 
 namespace {
 
@@ -57,17 +61,13 @@ void OfficeConnection::setUp() {
     rtl::OUString desc;
     rtl::OUString argSoffice;
     CPPUNIT_ASSERT(
-        getArgument(
+        detail::getArgument(
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("soffice")),
             &argSoffice));
     if (argSoffice.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("path:"))) {
-        oslProcessInfo info;
-        info.Size = sizeof info;
-        CPPUNIT_ASSERT_EQUAL(
-            osl_Process_E_None,
-            osl_getProcessInfo(0, osl_Process_IDENTIFIER, &info));
-        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=oootest")) +
-            rtl::OUString::valueOf(static_cast< sal_Int64 >(info.Ident));
+        desc = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pipe,name=")) +
+            uniquePipeName(
+                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("oootest")));
         rtl::OUString noquickArg(
             RTL_CONSTASCII_USTRINGPARAM("-quickstart=no"));
         rtl::OUString nofirstArg(
@@ -78,7 +78,7 @@ void OfficeConnection::setUp() {
             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(";urp")));
         rtl::OUString argUser;
         CPPUNIT_ASSERT(
-            getArgument(
+            detail::getArgument(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("user")), &argUser));
         rtl::OUString userArg(
             rtl::OUString(
@@ -86,15 +86,12 @@ void OfficeConnection::setUp() {
             toAbsoluteFileUrl(argUser));
         rtl::OUString jreArg(
             RTL_CONSTASCII_USTRINGPARAM("-env:UNO_JAVA_JFW_ENV_JREHOME=true"));
-        rtl::OUString classpathArg(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "-env:UNO_JAVA_JFW_ENV_CLASSPATH=true"));
         rtl_uString * args[] = {
             noquickArg.pData, nofirstArg.pData, norestoreArg.pData,
-            acceptArg.pData, userArg.pData, jreArg.pData, classpathArg.pData };
+            acceptArg.pData, userArg.pData, jreArg.pData };
         rtl_uString ** envs = 0;
         rtl::OUString argEnv;
-        if (getArgument(
+        if (detail::getArgument(
                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("env")), &argEnv))
         {
             envs = &argEnv.pData;
@@ -118,14 +115,14 @@ void OfficeConnection::setUp() {
             cppu::defaultBootstrap_InitialComponentContext()));
     for (;;) {
         try {
-            factory_ =
-                css::uno::Reference< css::lang::XMultiServiceFactory >(
+            context_ =
+                css::uno::Reference< css::uno::XComponentContext >(
                     resolver->resolve(
                         rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("uno:")) +
                         desc +
                         rtl::OUString(
                             RTL_CONSTASCII_USTRINGPARAM(
-                                ";urp;StarOffice.ServiceManager"))),
+                                ";urp;StarOffice.ComponentContext"))),
                     css::uno::UNO_QUERY_THROW);
             break;
         } catch (css::connection::NoConnectException &) {}
@@ -139,21 +136,23 @@ void OfficeConnection::setUp() {
 }
 
 void OfficeConnection::tearDown() {
-    if (factory_.is()) {
-        css::uno::Reference< css::frame::XDesktop > desktop(
-            factory_->createInstance(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.Desktop"))),
-            css::uno::UNO_QUERY_THROW);
-        factory_.clear();
-        try {
-            CPPUNIT_ASSERT(desktop->terminate());
-            desktop.clear();
-        } catch (css::lang::DisposedException &) {}
-            // it appears that DisposedExceptions can already happen while
-            // receiving the response of the terminate call
-    }
     if (process_ != 0) {
+        if (context_.is()) {
+            css::uno::Reference< css::frame::XDesktop > desktop(
+                context_->getServiceManager()->createInstanceWithContext(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.frame.Desktop")),
+                    context_),
+                css::uno::UNO_QUERY_THROW);
+            context_.clear();
+            try {
+                CPPUNIT_ASSERT(desktop->terminate());
+                desktop.clear();
+            } catch (css::lang::DisposedException &) {}
+                // it appears that DisposedExceptions can already happen while
+                // receiving the response of the terminate call
+        }
         CPPUNIT_ASSERT_EQUAL(osl_Process_E_None, osl_joinProcess(process_));
         oslProcessInfo info;
         info.Size = sizeof info;
@@ -165,9 +164,9 @@ void OfficeConnection::tearDown() {
     }
 }
 
-css::uno::Reference< css::lang::XMultiServiceFactory >
-OfficeConnection::getFactory() const {
-    return factory_;
+css::uno::Reference< css::uno::XComponentContext >
+OfficeConnection::getComponentContext() const {
+    return context_;
 }
 
 }
