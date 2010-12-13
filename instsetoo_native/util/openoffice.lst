@@ -26,8 +26,8 @@ Globals
             REGISTRATION_HOST https://registration.libreoffice.org/RegistrationWeb
 			REGISTRATIONURL http://survey.libreoffice.org/user/index.php
 			PROGRESSBARCOLOR 126,170,23
-			PROGRESSSIZE 320,7
-			PROGRESSPOSITION 165,186
+			PROGRESSSIZE 319,10
+			PROGRESSPOSITION 164,225
 			PROGRESSFRAMECOLOR 207,208,211
 			NATIVEPROGRESS true
 			REGISTRYLAYERNAME Layers
