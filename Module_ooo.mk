@@ -25,13 +25,17 @@
 #
 #*************************************************************************
 
-ifeq ($(strip $(SOLARENV)),)
-$(error No environment set)
-endif
+$(eval $(call gb_Module_Module,ooo))
 
-GBUILDDIR := $(SOLARENV)/gbuild
-include $(GBUILDDIR)/gbuild.mk
+$(eval $(call gb_Module_add_targets,ooo,$(foreach module,\
+	framework \
+	sfx2 \
+	svl \
+	svtools \
+	xmloff \
+	sw \
+	toolkit \
+	tools \
+,$(module)/Module_$(module))))
 
-$(eval $(call gb_Module_make_global_targets,ooo))
-
-# vim: set noet sw=4 ts=4:
+# vim: set noet ts=4 sw=4:
