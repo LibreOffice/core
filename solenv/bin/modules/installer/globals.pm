@@ -190,7 +190,7 @@ BEGIN
     %alllangmodules = ();
     $englishlicenseset = 0;
     $englishlicense = "";
-    $englishsolarislicensename = "LICENSE";
+    $englishsolarislicensename = "LICENSE_en-US";
     $solarisdontcompress = 0;
     $patharray = "";
 
@@ -325,6 +325,7 @@ BEGIN
     @binarytableonlyfiles = ();
     @allscpactions = ();
     $languagepackaddon = "LanguagePack";
+    $helppackaddon = "HelpPack";
     $patchaddon = "Patch";
     $ooodownloadfilename = "";
     $downloadfilename = "";
@@ -342,6 +343,7 @@ BEGIN
     $patch_user_dir = 0;
     $addchildprojects = 0;
     $languagepack = 0;
+    $helppack = 0;
     $tab = 0;
     $patch = 0;
     $patchincludepath = "";
@@ -457,6 +459,7 @@ BEGIN
     @regcompjars = ( "unoil.jar", "java_uno.jar", "ridl.jar", "jurt.jar", "juh.jar", "xmerge.jar", "commonwizards.jar" );
     @regcompregisterlibs = ( "javavm.uno", "javaloader.uno", "stocservices.uno" );
     @languagepackfeature =();
+    @helppackfeature =();
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis";

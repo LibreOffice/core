@@ -1223,7 +1223,7 @@ sub select_patch_items_without_name
 }
 
 ###########################################################
-# Selecting patch items
+# Selecting langpack items
 ###########################################################
 
 sub select_langpack_items
@@ -1242,6 +1242,31 @@ sub select_langpack_items
         my $styles = "";
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
         if (( $styles =~ /\bLANGUAGEPACK\b/ ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ )) { push(@itemsarray, $oneitem); }
+    }
+
+    return \@itemsarray;
+}
+
+###########################################################
+# Selecting helppack items
+###########################################################
+
+sub select_helppack_items
+{
+    my ( $itemsref, $itemname ) = @_;
+
+    installer::logger::include_header_into_logfile("Selecting RegistryItems for Help Packs");
+
+    my @itemsarray = ();
+
+    for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
+    {
+        my $oneitem = ${$itemsref}[$i];
+
+        # Items with style "HELPPACK" have to be included into the patch
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+        if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ )) { push(@itemsarray, $oneitem); }
     }
 
     return \@itemsarray;

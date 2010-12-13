@@ -96,6 +96,7 @@ sub get_createfolder_component
 
     my $onefile = "";
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
+    elsif ( $installer::globals::helppack ) { $onefile = installer::existence::get_specified_file($filesref, 'gid_File_Help_Help_Zip'); }
     else { $onefile = installer::existence::get_specified_file($filesref, $globalfilegid); }
 
     return $onefile->{'componentname'};

@@ -47,7 +47,7 @@ sub create_upgrade_table
     # fix for problematic OOo 1.9 versions
     my $include_ooo_fix = 0;
     my $ooomaxnew = "";
-    if (($installer::globals::product =~ /^\s*OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )) && ( ! $installer::globals::languagepack ))
+    if (($installer::globals::product =~ /^\s*OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
     {
         $include_ooo_fix = 1;
         $ooomaxnew = "34.0.0";
@@ -102,7 +102,7 @@ sub create_upgrade_table
 
         # also searching for the stub
 
-        if (( $allvariableshashref->{'STUBUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
+        if (( $allvariableshashref->{'STUBUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
         {
             $newline = $allvariableshashref->{'STUBUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "STUBPRODUCTS" . "\n";
             push(@upgradetable, $newline);
@@ -110,7 +110,7 @@ sub create_upgrade_table
 
         # searching for all older patches and languagepacks (defined in a extra file)
 
-        if (( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} ) && ( ! $installer::globals::languagepack ))
+        if (( $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
         {
             my $filename = $allvariableshashref->{'REMOVE_UPGRADE_CODE_FILE'};
             my $langpackcodefilename = $installer::globals::idttemplatepath  . $installer::globals::separator . $filename;
@@ -125,7 +125,7 @@ sub create_upgrade_table
 
     # No upgrade for Beta versions!
 
-    if (( $allvariableshashref->{'PRODUCTEXTENSION'} eq "Beta" ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ))
+    if (( $allvariableshashref->{'PRODUCTEXTENSION'} eq "Beta" ) && ( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
     {
         @upgradetable = ();
         installer::windows::idtglobal::write_idt_header(\@upgradetable, "upgrade");
