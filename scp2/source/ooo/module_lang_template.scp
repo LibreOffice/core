@@ -35,7 +35,6 @@ Module gid_Module_Langpack_Basis_Template
              gid_File_Extra_Tpllayoutimpr_Lang,
              gid_File_Extra_Tplpresntimpr_Lang,
              gid_File_Extra_Tplwizagenda_Lang,
-             gid_File_Extra_Tplwizbitmap,
              gid_File_Extra_Tplwizdesktop_Lang,
              gid_File_Extra_Tplwizfax_Lang,
              gid_File_Extra_Tplwizletter_Lang,
