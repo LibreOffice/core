@@ -117,6 +117,11 @@ class AbstractL10nTool:
 
     def copy_file(self, inputfilename, outputfilename):
         try:
+            os.remove(outputfilename)
+        except:
+            pass
+
+        try:
             shutil.copy(inputfilename, outputfilename)
         except IOError:
             print "ERROR: Can not copy file '" + inputfilename + "' to " + "'" + outputfilename + "'"
