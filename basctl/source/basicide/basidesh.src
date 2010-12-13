@@ -347,7 +347,6 @@ ImageButton RID_IMGBTN_GOTOCALL
 {
     HelpId = HID_BASICIDE_GOTOALL ;
     SmallStyle = TRUE ;
-    ButtonImage = Image { ImageBitmap = Bitmap { File = "basgocl.bmp" ; }; } ;
 };
 
 String RID_STR_REMOVEWATCH
