@@ -46,7 +46,7 @@ TARFILE_MD5=
 .ENDIF
 TARFILE_ROOTDIR=icu
 
-PATCH_FILES=${TARFILE_NAME}.patch
+PATCH_FILES=${TARFILE_NAME}.patch icu-mp.patch
 
 # ADDITIONAL_FILES=
 
@@ -77,11 +77,6 @@ CC:=gcc $(EXTRA_CFLAGS)
 .EXPORT : CPP
 .ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ENDIF # "$(OS)"=="MACOSX"
-
-# Disable executable stack
-.IF "$(OS)$(COM)"=="LINUXGCC"
-icu_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CDEFS)
 icu_LDFLAGS+=$(EXTRA_LINKFLAGS)
@@ -118,7 +113,7 @@ CONFIGURE_FLAGS=
 # note the position of the single quotes.
 
 BUILD_DIR=$(CONFIGURE_DIR)
-BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE)
+BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) -j$(EXTMAXPROCESS)
 OUT2LIB= \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR).$(ICU_MICRO) \
     $(BUILD_DIR)$/lib$/libicudata$(DLLPOST).$(ICU_MAJOR)$(ICU_MINOR) \
@@ -158,6 +153,7 @@ icu_LIBS=-lmingwthrd
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 icu_LIBS+=-lstdc++_s
 .ENDIF
+icu_LDFLAGS+=-Wl,--enable-runtime-pseudo-reloc-v2
 CONFIGURE_ACTION+=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(icu_LDFLAGS)" LIBS="$(icu_LIBS)" ./configure --build=i586-pc-mingw32 --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
 
 #CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no

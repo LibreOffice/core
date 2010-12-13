@@ -70,11 +70,9 @@ cairo_CPPFLAGS+=$(INCLUDE)
 .IF "$(OS)"=="WNT"
 # --------- Windows -------------------------------------------------
 .IF "$(COM)"=="GCC"
-cairo_CFLAGS+=-D_MT
 cairo_LDFLAGS+=-no-undefined -L$(ILIB:s/;/ -L/)
 cairo_CPPFLAGS+=-nostdinc
-cairo_CC=$(CC)
-cairo_LIBS+=-lmingwthrd
+cairo_CC=$(CC) -mthreads
 
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 cairo_CC+=-shared-libgcc
@@ -122,7 +120,7 @@ OUT2INC+=src$/cairo-quartz.h
 .ELSE
 # ----------- Unix ---------------------------------------------------------
 .IF "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"
-cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec -Wl,-z,noexecstack
+cairo_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib' -Wl,-noinhibit-exec
 .ELIF "$(OS)$(COM)"=="SOLARISC52"
 cairo_LDFLAGS+=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF  # "$(OS)$(COM)"=="LINUXGCC" || "$(OS)$(COM)"=="FREEBSDGCC"

@@ -76,7 +76,7 @@ CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
 .EXPORT: LDFLAGS
 #The current dir when linking is unxlngi6.pro/misc/build/db-4.2.52.NC/out
 # the map file is in  unxlngi6.pro/misc/build/db-4.2.52.NC
@@ -107,7 +107,7 @@ CXXFLAGS+:=$(ARCH_FLAGS)
 
 BUILD_DIR=$(CONFIGURE_DIR)
 BUILD_DIR_OUT=$(CONFIGURE_DIR)
-BUILD_ACTION=make
+BUILD_ACTION=$(GNUMAKE) -j$(EXTMAXPROCESS)
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
 OUT2INC= \
@@ -120,9 +120,9 @@ OUT2INC= \
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
 # TODO needs clean up
-CFLAGS+=-nostdinc -D_MT
-db_CC=$(CC)
-db_CXX=$(CXX)
+CFLAGS+=-nostdinc
+db_CC=$(CC) -mthreads
+db_CXX=$(CXX) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 db_CC+=-shared-libgcc
 db_CXX+=-shared-libgcc
@@ -132,7 +132,7 @@ db_LDFLAGS=-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin
 db_LDFLAGS+=-L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api
 .ENDIF
 db_LDFLAGS+=-L$(COMPATH)/lib -L$(MINGW_CLIB_DIR)
-db_LIBS=-lmingwthrd
+db_LIBS=
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 CFLAGS+=-D_GLIBCXX_DLL
 db_LIBS+=-lstdc++_s

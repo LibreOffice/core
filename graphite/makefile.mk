@@ -51,7 +51,8 @@ PATCH_FILES=graphite-2.3.1.patch
 
 # convert line-endings to avoid problems when patching
 CONVERTFILES=\
-    engine/makefile.vc8
+    engine/makefile.vc8 \
+    engine/test/RegressionTest/RtTextSrc.h
 
 #.IF "$(OS)"=="WNT" && "$(COM)"!="GCC"
 #CONFIGURE_DIR=win32
@@ -72,14 +73,18 @@ EXT_USE_STLPORT=TRUE
 BUILD_ACTION=nmake VERBOSE=1
 .IF "$(debug)"=="true"
 BUILD_FLAGS= "CFG=DEBUG"
+CFLAGSWITHPATH= $(CFLAGS:s!-Fd.!-Fd../../../../../!)
+.ELSE
+# Speed Optimization is really needed for Graphite
+CFLAGSWITHPATH= $(CFLAGS) /O2
 .ENDIF
 ### convert CFLAGS as cl.exe cannot handle OOO"s generic ones directly
 ### TODO: use "guw.exe" instead?
-ALLCFLAGS= $(CFLAGS) $(CFLAGSCXX) $(CFLAGSEXCEPTIONS) $(CDEFS)
+ALLCFLAGS= $(CFLAGSWITHPATH) $(CFLAGSCXX) $(CFLAGSEXCEPTIONS) $(CDEFS)
 JUSTASLASH= /
 CFLAGS2MSC= $(ALLCFLAGS:s/-Z/$(JUSTASLASH)Z/)
 CFLAGS4MSC= $(CFLAGS2MSC:s/ -/ $(JUSTASLASH)/)
-BUILD_FLAGS+= "MLIB=MD" "CFLAGS4MSC=$(CFLAGS4MSC)" /F makefile.vc$(VCNUM) dll
+BUILD_FLAGS+= "CFLAGS4MSC=$(CFLAGS4MSC)" /F makefile.vc$(VCNUM) lib_dll
 .ENDIF
 
 .IF "$(COM)"=="GCC"
@@ -102,11 +107,11 @@ GR_LIB_PATH=
 
 .IF "$(OS)"=="WNT"
 PATCH_FILES+=graphite-2.3.1.patch.mingw
-EXTRA_GR_CXX_FLAGS=-nostdinc
+EXTRA_GR_CXX_FLAGS=-mthreads -nostdinc
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 EXTRA_GR_CXX_FLAGS+=-shared-libgcc
 .ENDIF
-EXTRA_GR_LD_FLAGS+=-no-undefined
+EXTRA_GR_LD_FLAGS+=-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2
 .ENDIF
 
 # don't use SOLARLIB for LDFLAGS because it pulls in system graphite so build will fail
@@ -138,11 +143,11 @@ OUT2LIB+=src$/.libs$/libgraphite.*.dylib
 #OUT2LIB+=engine$/src$/.libs$/libgraphite*.dll
 .IF "$(debug)"=="true"
 OUT2BIN= \
-    engine$/debug$/*.dll \
+#    engine$/debug$/*.dll \
     engine$/debug$/*.pdb
 .ELSE
-OUT2BIN= \
-    engine$/release$/*.dll
+OUT2BIN=
+#    engine$/release$/*.dll
 #    engine$/release$/*.pdb
 .ENDIF
 .ELSE

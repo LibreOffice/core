@@ -46,26 +46,29 @@ LIBXML2VERSION=2.7.6
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 TARFILE_MD5=7740a8ec23878a2f50120e1faa2730f2
+
+# libxml2-global-symbols: #i112480#: Solaris ld won't export non-listed symbols
 PATCH_FILES=libxml2-configure.patch \
             libxml2-mingw.patch \
             libxml2-gnome599717.patch \
-            libxml2-gnome602728.patch
+            libxml2-global-symbols.patch \
+
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
-xml2_CC=$(CC)
+xml2_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 xml2_CC+=-shared-libgcc
 .ENDIF
-xml2_LIBS=-lws2_32 -lmingwthrd
+xml2_LIBS=-lws2_32
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 xml2_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP="$(WRAPCMD) objdump"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --without-zlib --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CC="$(xml2_CC)" LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc-v2 -L$(ILIB:s/;/ -L/)" LIBS="$(xml2_LIBS)" OBJDUMP=objdump
 BUILD_ACTION=$(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 .ELSE
@@ -86,10 +89,6 @@ xml2_CFLAGS+=$(ARCH_FLAGS) $(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
-
-.IF "$(OS)$(COM)"=="LINUXGCC"
-xml2_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
 
 CONFIGURE_DIR=
 .IF "$(OS)"=="OS2"

@@ -65,10 +65,6 @@ curl_CFLAGS+=-I$(SYSBASE)$/usr$/include
 curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
-.IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
-curl_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 .IF "$(OS)$(CPU)"=="SOLARISU"
 curl_CFLAGS+:=$(ARCH_FLAGS)
 curl_LDFLAGS+:=$(ARCH_FLAGS)
@@ -89,18 +85,18 @@ OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl$(DLLPOST).4
 
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-curl_CC=$(CC)
+curl_CC=$(CC) -mthreads
 .IF "$(MINGW_SHARED_GCCLIB)"=="YES"
 curl_CC+=-shared-libgcc
 .ENDIF
-curl_LIBS=-lws2_32 -lwinmm -lmingwthrd
+curl_LIBS=-lws2_32 -lwinmm
 .IF "$(MINGW_SHARED_GXXLIB)"=="YES"
 curl_LIBS+=-lstdc++_s
 .ENDIF
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 CC="$(curl_CC)" CPPFLAGS="$(INCLUDE)" OBJDUMP="objdump" LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="$(curl_LIBS)"
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 BUILD_ACTION=make
 OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
