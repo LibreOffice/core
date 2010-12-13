@@ -163,8 +163,9 @@ private:
 
 // -----------------------------------------------------------------------
 
-ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle ) :
-    Window( pParent, nWinStyle & WB_3DLOOK )
+ImplTabSizer::ImplTabSizer( TabBar* pParent, WinBits nWinStyle )
+    : Window( pParent, nWinStyle & WB_3DLOOK )
+    , mnStartWidth(0)
 {
     SetPointer( Pointer( POINTER_HSIZEBAR ) );
     SetSizePixel( Size( 7, 0 ) );
