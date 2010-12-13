@@ -207,8 +207,7 @@ void AquaSalFrame::initWindowAndView()
     else
         [mpWindow setAcceptsMouseMovedEvents: YES];
     [mpWindow setHasShadow: YES];
-    // compiler warning: class 'NSWindow' does not implement the 'NSWindowDelegate' protocol
-    // [mpWindow setDelegate: mpWindow];
+    [mpWindow setDelegate: mpWindow];
 
     NSRect aRect = { { 0,0 }, { maGeometry.nWidth, maGeometry.nHeight } };
     mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
