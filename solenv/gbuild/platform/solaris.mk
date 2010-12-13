@@ -28,6 +28,8 @@
 GUI := UNX
 COM := C52
 
+gb_MkTemp := mktemp -p
+
 gb_CC := cc
 gb_CXX := CC
 gb_GCCP := cc
