@@ -80,7 +80,7 @@ bool ScStringUtil::parseSimpleNumber(
 
     n -= i; // Subtract the length of preceding space.
 
-    for (sal_Int32 i = 0; i < n; ++i, ++p)
+    for (i = 0; i < n; ++i, ++p)
     {
         sal_Unicode c = *p;
         if (c == 0x00A0)
