@@ -104,7 +104,7 @@ public:
 
     // Eindeutigen Index fuer eine Line setzen. Gleiche Lines haben den
     // selben Index; auch in den anderen CompareData!
-    void SetIndex( ULONG nLine, ULONG nIndex );
+    void SetIndex( size_t nLine, size_t nIndex );
     size_t GetIndex( size_t nLine ) const
         { return nLine < aLines.size() ? pIndex[ nLine ] : 0; }
 
@@ -368,14 +368,14 @@ void Hash::CalcHashValue( CompareData& rData )
 {
     if( pHashArr )
     {
-        for( ULONG n = 0; n < rData.GetLineCount(); ++n )
+        for( size_t n = 0; n < rData.GetLineCount(); ++n )
         {
             const CompareLine* pLine = rData.GetLine( n );
             OSL_ENSURE( pLine, "wo ist die Line?" );
             ULONG nH = pLine->GetHashValue();
 
             ULONG* pFound = &pHashArr[ nH % nPrime ];
-            ULONG i;
+            size_t i;
             for( i = *pFound;  ;  i = pDataArr[i].nNext )
                 if( !i )
                 {
