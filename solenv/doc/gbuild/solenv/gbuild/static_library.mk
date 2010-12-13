@@ -9,7 +9,7 @@ namespace gb
     class StaticLibrary : public IsCleanable, public HasDependencies, public IsLinking, public DeliversHeaders, public HasCompileSettings, public Target
     {
         public:
-            StaticLibrary(String name) {};
+            StaticLibrary(String name);
             /// Returns how the library is named in the filesystem on the current platform.
             /// StaticLibrary filename schemes are defined in solenv/gbuild/libnames.mk (with some platformdependant hacks in solenv/gbuild/platform/*.mk.
 
@@ -18,10 +18,9 @@ namespace gb
 
         private:
             /// private helper function for the constructor
-            void StaticLibrary_impl(
-                LinkTarget library_linktarget) {};
+            void StaticLibrary_impl(LinkTarget library_linktarget);
             /// helper function to wrap LinkTargets functions (this is more or less pimpl ...).
-            void forward_to_linktarget(Function f) {};
+            void forward_to_linktarget(Function f);
 
             /// List of buildable static libraries (i.e. static libraries that are not expected to exist outside of \$(OUTDIR) on the system).
             static const List<StaticLibrary> TARGETS;
