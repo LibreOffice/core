@@ -333,11 +333,14 @@ NeonPropFindRequest::NeonPropFindRequest(
                             std::vector< DAVResourceInfo > & ioResInfo,
                             int & nError )
 {
-    nError = ne_propnames( inSession,
-                           inPath,
-                           inDepth,
-                           NPFR_propnames_results,
-                           &ioResInfo );
+    {
+        osl::Guard< osl::Mutex > theGlobalGuard( aGlobalNeonMutex );
+        nError = ne_propnames( inSession,
+                            inPath,
+                            inDepth,
+                            NPFR_propnames_results,
+                            &ioResInfo );
+    }
 
     // #87585# - Sometimes neon lies (because some servers lie).
     if ( ( nError == NE_OK ) && ioResInfo.empty() )
