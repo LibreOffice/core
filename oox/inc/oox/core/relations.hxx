@@ -105,6 +105,6 @@ private:
 } // namespace core
 } // namespace oox
 
-#endif // OOX_CORE_RELATIONS
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
