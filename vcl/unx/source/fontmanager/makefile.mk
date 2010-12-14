@@ -44,7 +44,6 @@ CDEFS += -DENABLE_FONTCONFIG
 
 CFLAGS+= $(FREETYPE_CFLAGS)
 CFLAGS+= $(FONTCONFIG_CFLAGS)
-CFLAGS+=-I$(INCCOM)
 
 # --- Files --------------------------------------------------------
 
