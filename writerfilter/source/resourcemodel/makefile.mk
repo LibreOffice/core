@@ -58,12 +58,6 @@ SLOFILES= \
     $(SLO)$/WW8Analyzer.obj \
     $(SLO)$/Protocol.obj
 
-# linux 64 bit: compiler (gcc 4.2.3) fails with 'out of memory'
-.IF "$(OUTPATH)"=="unxlngx6"
-NOOPTFILES= \
-    $(SLO)$/qnametostr.obj
-.ENDIF
-
 SHL1TARGET=$(TARGET)
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
