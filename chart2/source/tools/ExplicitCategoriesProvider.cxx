@@ -402,9 +402,9 @@ bool lcl_isDateFormat( sal_Int32 nNumberFormat, const Reference< util::XNumberFo
     Reference< beans::XPropertySet > xKeyProps = xNumberFormats->getByKey( nNumberFormat );
     if( xKeyProps.is() )
     {
-        sal_Int32 nType = util::NumberFormat::DATETIME;
+        sal_Int32 nType = util::NumberFormat::UNDEFINED;
         xKeyProps->getPropertyValue( C2U("Type") ) >>= nType;
-        bIsDate = (nType&util::NumberFormat::DATE || nType&util::NumberFormat::DATETIME);
+        bIsDate = nType & util::NumberFormat::DATE;
     }
     return bIsDate;
 }
