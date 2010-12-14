@@ -3671,6 +3671,29 @@ void SwWW8ImplReader::ResetCJKCharSetVars()
         maFontSrcCJKCharSets.pop();
 }
 
+void SwWW8ImplReader::openFont(USHORT nFCode, USHORT nId)
+{
+    if (SetNewFontAttr(nFCode, true, nId) && pAktColl && pStyles)
+    {
+        // merken zur Simulation Default-Font
+        if (RES_CHRATR_CJK_FONT == nId)
+            pStyles->bCJKFontChanged = true;
+        else if (RES_CHRATR_CTL_FONT == nId)
+            pStyles->bCTLFontChanged = true;
+        else
+            pStyles->bFontChanged = true;
+    }
+}
+
+void SwWW8ImplReader::closeFont(USHORT nId)
+{
+    pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
+    if (nId == RES_CHRATR_CJK_FONT)
+        ResetCJKCharSetVars();
+    else
+        ResetCharSetVars();
+}
+
 /*
     Font ein oder ausschalten:
 */
@@ -3698,28 +3721,20 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
                 return ;
         }
 
+        ww::WordVersion eVersion = pWwFib->GetFIBVersion();
+
         if( nLen < 0 ) // Ende des Attributes
         {
-            pCtrlStck->SetAttr( *pPaM->GetPoint(), nId );
-            if (nId == RES_CHRATR_CJK_FONT)
-                ResetCJKCharSetVars();
-            else
-                ResetCharSetVars();
+            if (eVersion <= ww::eWW6)
+                closeFont(RES_CHRATR_CTL_FONT);
+            closeFont(nId);
         }
         else
         {
             USHORT nFCode = SVBT16ToShort( pData );     // Font-Nummer
-            if (SetNewFontAttr(nFCode, true, nId)   // Lies Inhalt
-                && pAktColl && pStyles )                // Style-Def ?
-            {
-                // merken zur Simulation Default-Font
-                if (RES_CHRATR_CJK_FONT == nId)
-                    pStyles->bCJKFontChanged = true;
-                else if (RES_CHRATR_CTL_FONT == nId)
-                    pStyles->bCTLFontChanged = true;
-                else
-                    pStyles->bFontChanged = true;
-            }
+            openFont(nFCode, nId);
+            if (eVersion <= ww::eWW6)
+                openFont(nFCode, RES_CHRATR_CTL_FONT);
         }
     }
 }

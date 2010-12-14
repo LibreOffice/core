@@ -1441,6 +1441,8 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_SubSuperProp(     USHORT, const BYTE*, short nLen );
     void Read_Underline(        USHORT, const BYTE*, short nLen );
     void Read_TxtColor(         USHORT, const BYTE*, short nLen );
+    void openFont(USHORT nFCode, USHORT nId);
+    void closeFont(USHORT nId);
     void Read_FontCode(         USHORT, const BYTE*, short nLen );
     void Read_FontSize(         USHORT, const BYTE*, short nLen );
     void Read_CharSet(USHORT , const BYTE* pData, short nLen);
