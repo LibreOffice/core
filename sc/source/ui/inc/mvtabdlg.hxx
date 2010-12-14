@@ -57,7 +57,10 @@ public:
     void    EnableCopyTable         (BOOL bFlag=TRUE);
     void    SetRenameTable          (BOOL bFlag=TRUE);
     void    EnableRenameTable       (BOOL bFlag=TRUE);
-    void    EnableTabName           (BOOL bFlag=TRUE);
+
+private:
+    void ResetRenameInput();
+    ScDocument* GetSelectedDoc();
 
 private:
     FixedText       aFtDoc;
@@ -83,7 +86,7 @@ private:
     void    InitDocListBox  ();
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );
-    DECL_LINK( RenameHdl, void * );
+    DECL_LINK( CheckBtnHdl, void * );
 };
 
 #include <layout/layout-post.hxx>
