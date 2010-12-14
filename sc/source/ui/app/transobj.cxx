@@ -311,8 +311,15 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             BOOL bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScImportExport aObj( pDoc, aBlock );
+            ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
             if ( bUsedForLink )
-                aObj.SetExportTextOptions( ScExportTextOptions( ScExportTextOptions::ToSpace, ' ', false ) );
+            {
+                // For a DDE link, convert line breaks and separators to space.
+                aTextOptions.meNewlineConversion = ScExportTextOptions::ToSpace;
+                aTextOptions.mcSeparatorConvertTo = ' ';
+                aTextOptions.mbAddQuotes = false;
+            }
+            aObj.SetExportTextOptions(aTextOptions);
             aObj.SetFormulas( pDoc->GetViewOptions().GetOption( VOPT_FORMULAS ) );
             aObj.SetIncludeFiltered( bIncludeFiltered );
 
