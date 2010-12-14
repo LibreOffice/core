@@ -1964,7 +1964,7 @@ WW8TabDesc::WW8TabDesc(SwWW8ImplReader* pIoClass, WW8_CP nStartCp) :
                     default:
                         ;
                 }
-                aSprmIter++;
+                aSprmIter.advance();
             }
 
             if( !nLoop )

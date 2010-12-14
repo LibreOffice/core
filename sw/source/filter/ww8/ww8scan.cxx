@@ -895,22 +895,17 @@ void WW8SprmIter::SetSprms(const BYTE* pSprms_, long nLen_)
     UpdateMyMembers();
 }
 
-const BYTE* WW8SprmIter::operator ++( int )
+void WW8SprmIter::advance()
 {
     if (nRemLen > 0 )
     {
-        if( nRemLen >= nAktSize )
-        {
-            pSprms += nAktSize;
-            nRemLen -= nAktSize;
-            UpdateMyMembers();
-        }
-        else
-        {
-            throw( ::std::exception() );
-        }
+        USHORT nSize = nAktSize;
+        if (nSize > nRemLen)
+            nSize = nRemLen;
+        pSprms += nSize;
+        nRemLen -= nSize;
+        UpdateMyMembers();
     }
-    return pSprms;
 }
 
 void WW8SprmIter::UpdateMyMembers()
@@ -936,7 +931,7 @@ const BYTE* WW8SprmIter::FindSprm(USHORT nId)
     {
         if( GetAktId() == nId )
             return GetAktParams();              // SPRM found!
-        operator ++(0);
+        advance();
     }
 
     return 0;                                   // SPRM _not_ found
@@ -2828,7 +2823,7 @@ bool WW8PLCFx_Fc_FKP::WW8Fkp::HasSprm(USHORT nId,
     {
         if (aIter.GetAktId() == nId)
             rResult.push_back(aIter.GetAktParams());
-        aIter++;
+        aIter.advance();
     };
     return !rResult.empty();
 }
@@ -3151,7 +3146,7 @@ bool WW8PLCFx_Fc_FKP::HasSprm(USHORT nId, std::vector<const BYTE *> &rResult)
         {
             if (aIter.GetAktId() == nId)
                 rResult.push_back(aIter.GetAktParams());
-            aIter++;
+            aIter.advance();
         };
     }
     return !rResult.empty();

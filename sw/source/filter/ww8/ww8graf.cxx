@@ -1052,7 +1052,7 @@ SwFrmFmt* SwWW8ImplReader::InsertTxbxText(SdrTextObj* pTextObj,
                                             Read_PicLoc(nAktId, pParams, 1);
                                         break;
                                 }
-                                aSprmIter++;
+                                aSprmIter.advance();
                             }
 
                             if( !nLoop )

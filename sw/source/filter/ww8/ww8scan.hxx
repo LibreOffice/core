@@ -261,7 +261,7 @@ public:
         const wwSprmParser &rSprmParser);
     void  SetSprms( const BYTE* pSprms_, long nLen_ );
     const BYTE* FindSprm(USHORT nId);
-    const BYTE*  operator ++( int );
+    void  advance();
     const BYTE* GetSprms() const
         { return ( pSprms && (0 < nRemLen) ) ? pSprms : 0; }
     const BYTE* GetAktParams() const { return pAktParams; }
