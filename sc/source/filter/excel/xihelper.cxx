@@ -845,7 +845,7 @@ XclImpCachedMatrix::XclImpCachedMatrix( XclImpStream& rStrm ) :
 
     for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
-            maValueList.Append( new XclImpCachedValue( rStrm ) );
+            maValueList.push_back( new XclImpCachedValue( rStrm ) );
 }
 
 XclImpCachedMatrix::~XclImpCachedMatrix()
@@ -855,38 +855,38 @@ XclImpCachedMatrix::~XclImpCachedMatrix()
 ScMatrixRef XclImpCachedMatrix::CreateScMatrix() const
 {
     ScMatrixRef xScMatrix;
-    DBG_ASSERT( mnScCols * mnScRows == maValueList.Count(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
-    if( mnScCols && mnScRows && static_cast< ULONG >( mnScCols * mnScRows ) <= maValueList.Count() )
+    DBG_ASSERT( mnScCols * mnScRows == maValueList.size(), "XclImpCachedMatrix::CreateScMatrix - element count mismatch" );
+    if( mnScCols && mnScRows && static_cast< ULONG >( mnScCols * mnScRows ) <= maValueList.size() )
     {
         xScMatrix = new ScMatrix( mnScCols, mnScRows );
-        const XclImpCachedValue* pValue = maValueList.First();
+        XclImpValueList::const_iterator itValue = maValueList.begin();
         for( SCSIZE nScRow = 0; nScRow < mnScRows; ++nScRow )
         {
             for( SCSIZE nScCol = 0; nScCol < mnScCols; ++nScCol )
             {
-                switch( pValue->GetType() )
+                switch( itValue->GetType() )
                 {
                     case EXC_CACHEDVAL_EMPTY:
                         // Excel shows 0.0 here, not an empty cell
                         xScMatrix->PutEmpty( nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_DOUBLE:
-                        xScMatrix->PutDouble( pValue->GetValue(), nScCol, nScRow );
+                        xScMatrix->PutDouble( itValue->GetValue(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_STRING:
-                        xScMatrix->PutString( pValue->GetString(), nScCol, nScRow );
+                        xScMatrix->PutString( itValue->GetString(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_BOOL:
-                        xScMatrix->PutBoolean( pValue->GetBool(), nScCol, nScRow );
+                        xScMatrix->PutBoolean( itValue->GetBool(), nScCol, nScRow );
                     break;
                     case EXC_CACHEDVAL_ERROR:
-                        xScMatrix->PutError( pValue->GetScError(), nScCol, nScRow );
+                        xScMatrix->PutError( itValue->GetScError(), nScCol, nScRow );
                     break;
                     default:
                         DBG_ERRORFILE( "XclImpCachedMatrix::CreateScMatrix - unknown value type" );
                         xScMatrix->PutEmpty( nScCol, nScRow );
                 }
-                pValue = maValueList.Next();
+                ++itValue;
             }
         }
     }

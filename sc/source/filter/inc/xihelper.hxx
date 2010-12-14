@@ -32,6 +32,7 @@
 #include <editeng/editdata.hxx>
 #include <boost/noncopyable.hpp>
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "scmatrix.hxx"
 #include "xladdress.hxx"
 #include "xiroot.hxx"
@@ -347,7 +348,7 @@ public:
     ScMatrixRef         CreateScMatrix() const;
 
 private:
-    typedef ScfDelList< XclImpCachedValue > XclImpValueList;
+    typedef boost::ptr_vector< XclImpCachedValue > XclImpValueList;
 
     XclImpValueList     maValueList;    /// List of cached cell values.
     SCSIZE              mnScCols;       /// Number of cached columns.
