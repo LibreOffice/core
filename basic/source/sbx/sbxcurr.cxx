@@ -118,24 +118,18 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
 
 static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
 {
-// TODO consider various possible errors: overflow, end-of-string check for leftovers from malformed string
-    sal_Int32   nFractDigit = 4;
-    sal_Int64   nResult = 0;
-    sal_Bool    bNeg = sal_False;
 
-    const sal_Unicode* p = rStr.getStr();
+    sal_Int32   nFractDigit = 4;
 
     SvtSysLocale aSysLocale;
-#if MAYBEFUTURE
-    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
-    sal_Unicode cLocaleDeciPnt = rData.getNumDecimalSep().GetBuffer()[0];
-    sal_Unicode cLocale1000Sep = rData.getNumThousandSep().GetBuffer()[0];
-#endif
-    sal_Unicode cSpaceSep = sal_Unicode(' ');
     sal_Unicode cDeciPnt = sal_Unicode('.');
     sal_Unicode c1000Sep = sal_Unicode(',');
 
 #if MAYBEFUTURE
+    const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
+    sal_Unicode cLocaleDeciPnt = rData.getNumDecimalSep().GetBuffer()[0];
+    sal_Unicode cLocale1000Sep = rData.getNumThousandSep().GetBuffer()[0];
+
         // score each set of separators (Locale and Basic) on total number of matches
         // if one set has more matches use that set
         // if tied use the set with the only or rightmost decimal separator match
@@ -171,51 +165,53 @@ static sal_Int64 ImpStringToCurrency( const rtl::OUString &rStr )
     }
 #endif
 
-    //  p == original param value: re-starting at top of string
-    while( *p == cSpaceSep ) p++;                   // skip leading spaces
-    if( *p == sal_Unicode('-') )
+    // lets use the existing string number conversions
+    // there is a performance impact here ( multiple string copies )
+    // but better I think than a home brewed string parser, if we need a parser
+    // we should share some existing ( possibly from calc is there a currency
+    // conversion there ? #TODO check )
+
+    rtl::OUString sTmp( rStr.trim() );
+    const sal_Unicode* p =  sTmp.getStr();
+
+    // normalise string number by removeing thousands & decimal point seperators
+    rtl::OUStringBuffer sNormalisedNumString( sTmp.getLength() +  nFractDigit );
+
+    if ( *p == '-'  || *p == '+' )
+        sNormalisedNumString.append( *p );
+
+    while ( ( *p >= '0' && *p <= '9' ) )
     {
-        p++;
-        bNeg = sal_True;
-    }
-    else if ( *p == sal_Unicode('+') )
-        p++;
-
-    while( *p == cSpaceSep ) p++;                   // skip space between sign and number
-
-    // always accept space as thousand separator (is never decimal pt; maybe stray)
-    // exits on non-numeric (incl. null terminator)
-    while( ( *p >= '0' && *p <= '9' ) || *p == c1000Sep || *p == cSpaceSep )
-    {
-        if ( *p >= '0' && *p <= '9' )
-            nResult = 10*nResult + (sal_Int64)*p - (sal_Int64)'0';
-        p++;
-        // could be overflow here ... new result < last result (results always > 0)
-    }
-
-    if( *p == cDeciPnt ) {
-        p++;
-        while( (nFractDigit && *p >= '0' && *p <= '9') || *p == cSpaceSep )
-        {
-            nResult = 10*nResult + (sal_Int64)*p - (sal_Int64)'0';
-            nFractDigit--;
+        sNormalisedNumString.append( *p++ );
+        // #TODO in vba mode set runtime error when a space ( or other )
+        // illegal character is found
+        if( *p == c1000Sep )
             p++;
-            // could be overflow here ...
-        }
-        while( *p == cSpaceSep ) p++;               // skip mid-number/trailing spaces
-        if( *p >= '5' && *p <= '9' ) nResult ++;    // round 5-9 up = round to nearest
     }
-    while( *p == cSpaceSep ) p++;                   // skip mid-number/trailing spaces
-    // error cases of junky string skip thru to end up here
-    // warning cases of extra num ignored end up here too
 
-    // make sure all of CURRENCY_FACTOR is applied
-    while( nFractDigit ) {
-        nResult *= 10;
+    if( *p == cDeciPnt )
+    {
+        p++;
+        while( nFractDigit && *p >= '0' && *p <= '9' )
+        {
+            sNormalisedNumString.append( *p++ );
+            nFractDigit--;
+        }
+    }
+    // can we raise error here ? ( previous behaviour was more forgiving )
+    // so... not sure that could bread existing code, lets see if anyone
+    // complains.
+
+    if ( p != sTmp.getStr() + sTmp.getLength() )
+        SbxBase::SetError( SbxERR_CONVERSION );
+    while( nFractDigit )
+    {
+        sNormalisedNumString.append( '0' );
         nFractDigit--;
     }
-    if( bNeg )  return -nResult;
-    return nResult;
+
+    sal_Int64 result = sNormalisedNumString.makeStringAndClear().toInt64();
+    return result;
 }
 
 
