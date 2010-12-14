@@ -93,6 +93,24 @@ inline static void SwapLongInt( int& r )
     {   r = SWAPLONG(r);   }
 inline static void SwapLongUInt( unsigned int& r )
     {   r = SWAPLONG(r);   }
+
+inline static void SwapUInt64( sal_uInt64& r )
+    {
+        union
+        {
+            sal_uInt64 n;
+            sal_uInt32 c[2];
+        } s;
+
+        s.n = r;
+        s.c[0] ^= s.c[1]; // swap the 32 bit words
+        s.c[1] ^= s.c[0];
+        s.c[0] ^= s.c[1];
+        // swap the bytes in the words
+        s.c[0] = SWAPLONG(s.c[0]);
+        s.c[1] = SWAPLONG(s.c[1]);
+        r = s.n;
+    }
 #ifdef UNX
 inline static void SwapFloat( float& r )
     {
@@ -106,6 +124,7 @@ inline static void SwapFloat( float& r )
         s.c = SWAPLONG( s.c );
         r = s.f;
     }
+
 inline static void SwapDouble( double& r )
     {
         if( sizeof(double) != 8 )
@@ -1224,6 +1243,15 @@ SvStream& SvStream::operator>> ( sal_uInt32& r )
     return *this;
 }
 
+
+SvStream& SvStream::operator>> ( sal_uInt64& r )
+{
+    READNUMBER_WITHOUT_SWAP(sal_uInt64,r)
+    if( bSwap )
+        SwapUInt64(r);
+    return *this;
+}
+
 SvStream& SvStream::operator >> ( long& r )
 {
 #if(SAL_TYPES_SIZEOFLONG != 4)
@@ -1361,6 +1389,14 @@ SvStream& SvStream::operator<<  ( sal_uInt32 v )
     if( bSwap )
         SwapULong(v);
     WRITENUMBER_WITHOUT_SWAP(sal_uInt32,v)
+    return *this;
+}
+
+SvStream& SvStream::operator<<  ( sal_uInt64 v )
+{
+    if( bSwap )
+        SwapUInt64(v);
+    WRITENUMBER_WITHOUT_SWAP(sal_uInt64,v)
     return *this;
 }
 
