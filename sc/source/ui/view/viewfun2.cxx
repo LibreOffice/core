@@ -2716,13 +2716,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
             default:
             break;
         }
-        //pDestShell->GetUndoManager()->Clear();        //! Undo implementieren !!!
-/*
-        String sName;
-        pDestDoc->GetName(nDestTab, sName);
-        pDestShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTab( pDestShell, nDestTab, TRUE, sName ) );
-*/
+
         if (!bCopy)
         {
             if(nTabCount!=nTabSelCount)
@@ -2738,7 +2732,6 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
                 pDestDoc->UpdateChartListenerCollection();
 
             pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.Count()));   // alte erste Tabelle
-//?         pDestDoc->SelectTable(0, TRUE);     // neue erste Tabelle selektieren
             if (pDestViewSh)
                 pDestViewSh->TabChanged();      // Pages auf dem Drawing-Layer
             pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
