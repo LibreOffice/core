@@ -256,23 +256,23 @@ XclImpNameManager::XclImpNameManager( const XclImpRoot& rRoot ) :
 
 void XclImpNameManager::ReadName( XclImpStream& rStrm )
 {
-    ULONG nCount = maNameList.Count();
+    ULONG nCount = maNameList.size();
     if( nCount < 0xFFFF )
-        maNameList.Append( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
+        maNameList.push_back( new XclImpName( rStrm, static_cast< sal_uInt16 >( nCount + 1 ) ) );
 }
 
 const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nScTab ) const
 {
     const XclImpName* pGlobalName = 0;   // a found global name
     const XclImpName* pLocalName = 0;    // a found local name
-    for( const XclImpName* pName = maNameList.First(); pName && !pLocalName; pName = maNameList.Next() )
+    for( XclImpNameList::const_iterator itName = maNameList.begin(); itName != maNameList.end() && !pLocalName; ++itName )
     {
-        if( pName->GetXclName() == rXclName )
+        if( itName->GetXclName() == rXclName )
         {
-            if( pName->GetScTab() == nScTab )
-                pLocalName = pName;
-            else if( pName->IsGlobal() )
-                pGlobalName = pName;
+            if( itName->GetScTab() == nScTab )
+                pLocalName = &(*itName);
+            else if( itName->IsGlobal() )
+                pGlobalName = &(*itName);
         }
     }
     return pLocalName ? pLocalName : pGlobalName;
@@ -281,7 +281,7 @@ const XclImpName* XclImpNameManager::FindName( const String& rXclName, SCTAB nSc
 const XclImpName* XclImpNameManager::GetName( sal_uInt16 nXclNameIdx ) const
 {
     DBG_ASSERT( nXclNameIdx > 0, "XclImpNameManager::GetName - index must be >0" );
-    return maNameList.GetObject( nXclNameIdx - 1 );
+    return &(maNameList.at( nXclNameIdx - 1 ));
 }
 
 // ============================================================================
