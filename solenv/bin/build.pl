@@ -783,6 +783,18 @@ sub dmake_dir {
         remove_from_dependencies($job_name, \%local_deps_hash) if (!$child);
         return if ($cmd_file || $show);
         $error_code = run_job($dmake, $job_name);
+
+        #if dmake fails, have a go at regenerating the dependencies
+        #and try again
+        if ($error_code && ($ENV{nodep} eq '') && ($ENV{depend} eq '')) {
+            print "Forcing regeneration of dependency info\n";
+            $ENV{depend} = 't';
+            run_job($dmake, $job_name);
+            print "Retrying $job_name\n";
+            $ENV{depend} = '';
+            $error_code = run_job($dmake, $job_name);
+        }
+
         html_store_job_info(\%local_deps_hash, $job_name, $error_code) if (!$child);
     };
     if ($error_code && $ignore) {
