@@ -501,7 +501,11 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
         int nFrameWidth = getFrameWidth();
         pTempClipRegion = XCreateRegion();
-        XRectangle xRect = { widgetRect.left(), widgetRect.top(), widgetRect.width(), widgetRect.height() };
+        XRectangle xRect;
+        xRect.x = widgetRect.left();
+        xRect.y = widgetRect.top();
+        xRect.width = widgetRect.width();
+        xRect.height = widgetRect.height();
         XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
         xRect.x += nFrameWidth;
         xRect.y += nFrameWidth;
