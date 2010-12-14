@@ -3190,8 +3190,6 @@ void AnimationImporter::dump_atom_header( const Atom* pAtom, bool bOpen, bool bA
     {
         const char* pTitle;
 
-        bool bUnknown = false;
-
         switch( pAtom->getType() )
         {
         case DFF_msofbtAnimEvent: pTitle = "AnimEvent"; break;
