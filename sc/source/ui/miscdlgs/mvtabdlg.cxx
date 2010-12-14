@@ -239,9 +239,24 @@ IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
     bCopyTable  = aBtnCopy.IsChecked();
     bRenameTable= aBtnRename.IsChecked();
 
-    // Return an empty string, when the new name is the same as the original name.
-    if( mrDefaultName == aEdTabName.GetText() )
-        aEdTabName.SetText( String() );
+    if (bCopyTable)
+    {
+        // Return an empty string when the new name is the same as the
+        // automatic name assigned by the document.
+        String aCopyName = mrDefaultName;
+        ScDocument* pDoc = GetSelectedDoc();
+        if (pDoc)
+            pDoc->CreateValidTabName(aCopyName);
+        if (aCopyName == aEdTabName.GetText())
+            aEdTabName.SetText( String() );
+    }
+    else
+    {
+        // Return an empty string, when the new name is the same as the
+        // original name.
+        if( mrDefaultName == aEdTabName.GetText() )
+            aEdTabName.SetText( String() );
+    }
 
     EndDialog( RET_OK );
 
