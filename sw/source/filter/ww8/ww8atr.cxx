@@ -1080,20 +1080,26 @@ void WW8AttributeOutput::CharFont( const SvxFontItem& rFont )
 
 void WW8AttributeOutput::CharFontCTL( const SvxFontItem& rFont )
 {
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    USHORT nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
-    {
         m_rWW8Export.InsUInt16( NS_sprm::LN_CFtcBi );
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( rFont ) );
-    }
+    else
+        m_rWW8Export.pO->Insert( 93, m_rWW8Export.pO->Count() );
+    m_rWW8Export.InsUInt16( nFontID );
 }
 
 void WW8AttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
+    //Can only export in 8+, in 7- export as normal varient and expect that
+    //upperlevel code has blocked exporting clobbering attributes
+    USHORT nFontID = m_rWW8Export.GetId( rFont );
     if ( m_rWW8Export.bWrtWW8 )
-    {
         m_rWW8Export.InsUInt16( NS_sprm::LN_CRgFtc1 );
-        m_rWW8Export.InsUInt16( m_rWW8Export.GetId( rFont ) );
-    }
+    else
+        m_rWW8Export.pO->Insert( 93, m_rWW8Export.pO->Count() );
+    m_rWW8Export.InsUInt16( nFontID );
 }
 
 void WW8AttributeOutput::CharWeightCTL( const SvxWeightItem& rWeight )
