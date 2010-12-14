@@ -1149,10 +1149,6 @@ Any sbxToUnoValueImpl( SbxVariable* pVar, bool bBlockConversionToSmallestType = 
                         aType = ::getCppuType( (sal_Int16*)0 );
                     else if( d >= -SbxMAXLNG && d <= SbxMAXLNG )
                         aType = ::getCppuType( (sal_Int32*)0 );
-#if MAYBEFUTURE
-                    else
-                        aType = ::getCppuType( (sal_Int64*)0 );
-#endif
                 }
                 break;
             }

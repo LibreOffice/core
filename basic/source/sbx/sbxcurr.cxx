@@ -43,8 +43,9 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     sal_Int64 absVal = isNeg ? -rVal : rVal;
 
     SvtSysLocale aSysLocale;
-    sal_Unicode cDecimalSep = '.', cThousandSep = ',';
+    sal_Unicode cDecimalSep = '.';
 #if MAYBEFUTURE
+    sal_Unicode cThousandSep = ',';
     const LocaleDataWrapper& rData = aSysLocale.GetLocaleData();
     cDecimalSep = rData.getNumDecimalSep().GetBuffer()[0];
     cThousandSep = rData.getNumThousandSep().GetBuffer()[0];
@@ -64,11 +65,13 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     if ( !bLessThanOne )
     {
         nCapacity = initialLen + 1;
+#if MAYBEFUTURE
         if ( initialLen > 5 )
         {
             sal_Int32 nThouSeperators = ( initialLen - 5 ) / 3;
             nCapacity += nThouSeperators;
         }
+#endif
     }
 
     if ( isNeg )
@@ -85,8 +88,10 @@ static rtl::OUString ImpCurrencyToString( const sal_Int64 &rVal )
     {
         if ( nDigitCount == 4 )
             aBuf.setCharAt( nInsertIndex--, cDecimalSep );
+#if MAYBEFUTURE
         if ( nDigitCount > 4 && ! ( ( nDigitCount - 4  ) % 3) )
             aBuf.setCharAt( nInsertIndex--, cThousandSep );
+#endif
         if ( nDigitCount < initialLen )
             aBuf.setCharAt( nInsertIndex--, aAbsStr[ charCpyIndex-- ] );
         else

@@ -1502,6 +1502,8 @@ BOOL SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 
 BOOL SbxValue::LoadData( SvStream& r, USHORT )
 {
+    // #TODO see if these types are really dumped to any stream
+    // more than likely this is functionality used in the binfilter alone
     SbxValue::Clear();
     UINT16 nType;
     r >> nType;
@@ -1543,21 +1545,20 @@ BOOL SbxValue::LoadData( SvStream& r, USHORT )
             break;
         }
         case SbxSALUINT64:
-        {
-// TODO fix write for whole 64 bits was Hi then Lo
-            sal_uInt32 tmpHi, tmpLo;
-            r >> tmpHi >> tmpLo;
-            aData.uInt64 = ((sal_Int64)tmpHi << 32) || (sal_Int64)tmpLo;
-            break;
-        }
         case SbxSALINT64:
+            // Rather ugly use of the union here because we only
+            // have a SvStream& SvStream::operator>>(sal_uInt64&) available to us
+            // There is no SvStream::operator>>(sal_Int64&) due to conflict with
+            // SvStream::operator>>(long&) ( at least on 64 bit linux )
+            r >> aData.uInt64;
+            break;
         case SbxCURRENCY:
         {
-// TODO fix write for whole 64 bits was Hi then Lo
-            sal_Int32 tmpHi;
-            sal_uInt32 tmpLo;
+            sal_uInt32 tmpHi = 0;
+            sal_uInt32 tmpLo = 0;
             r >> tmpHi >> tmpLo;
-            aData.nInt64 = ((sal_Int64)tmpHi << 32) || (sal_Int64)tmpLo;
+            aData.nInt64 = ((sal_Int64)tmpHi << 32);
+            aData.nInt64 |= (sal_Int64)tmpLo;
             break;
         }
         case SbxSTRING:
@@ -1667,18 +1668,15 @@ BOOL SbxValue::StoreData( SvStream& r ) const
             r.WriteByteString( GetCoreString(), RTL_TEXTENCODING_ASCII_US );
             break;
         case SbxSALUINT64:
-        {
-// TODO check output from this
-            sal_uInt32 tmpHi = (aData.uInt64 >> 32);
-            r << tmpHi << (sal_uInt32)(aData.uInt64);
-            break;
-        }
         case SbxSALINT64:
+            // see comment in SbxValue::StoreData
+            r << aData.uInt64;
+            break;
         case SbxCURRENCY:
         {
-// TODO check output from this
-            sal_Int32 tmpHi = (aData.nInt64 >> 32);
-            r << tmpHi << (sal_Int32)(aData.nInt64);
+            sal_Int32 tmpHi = ( (aData.nInt64 >> 32) &  0xFFFFFFFF );
+            sal_Int32 tmpLo = ( sal_Int32 )aData.nInt64;
+            r << tmpHi << tmpLo;
             break;
         }
         case SbxSTRING:
