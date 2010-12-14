@@ -558,10 +558,11 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         pDlg->SetCopyTable();
                         pDlg->EnableCopyTable(FALSE);
                     }
-                    if(nTabSelCount != 1)
-                    {
-                        pDlg->EnableRenameTable(FALSE);
-                    }
+
+                    // We support direct renaming of sheet only when one sheet
+                    // is selected.
+                    pDlg->EnableRenameTable(nTabSelCount == 1);
+
                     if ( pDlg->Execute() == RET_OK )
                     {
                         nDoc = pDlg->GetSelectedDocument();

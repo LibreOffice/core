@@ -128,14 +128,18 @@ void ScMoveTableDlg::SetRenameTable(BOOL bFlag)
 
 void ScMoveTableDlg::EnableRenameTable(BOOL bFlag)
 {
-    if( bFlag )
-        aBtnRename.Enable();
-    else
-        aBtnRename.Disable();
+    aBtnRename.Enable(bFlag);
+    ResetRenameInput();
 }
 
 void ScMoveTableDlg::ResetRenameInput()
 {
+    if (!aBtnRename.IsEnabled())
+    {
+        aEdTabName.SetText(String());
+        return;
+    }
+
     bool bVal = aBtnCopy.IsChecked();
     if (bVal)
     {
@@ -174,7 +178,6 @@ void ScMoveTableDlg::Init()
     aEdTabName.Enable(false);
     InitDocListBox();
     SelHdl( &aLbDoc );
-    ResetRenameInput();
 }
 
 //------------------------------------------------------------------------
