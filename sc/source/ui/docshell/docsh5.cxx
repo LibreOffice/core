@@ -69,6 +69,9 @@
 #include <basic/sbstar.hxx>
 #include <basic/basmgr.hxx>
 
+#include <memory>
+#include <vector>
+
 // defined in docfunc.cxx
 void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String& sModuleSource );
 
@@ -77,6 +80,9 @@ using com::sun::star::script::vba::XVBACompatibility;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::UNO_QUERY;
+
+using ::std::auto_ptr;
+using ::std::vector;
 
 // ---------------------------------------------------------------------------
 
@@ -934,12 +940,10 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
 
             if (bRecord)
             {
-                SvShorts aSrcList;
-                SvShorts aDestList;
-                aSrcList.Insert(nSrcTab,0);
-                aDestList.Insert(nDestTab,0);
+                auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+                auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
                 GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab( this, aSrcList, aDestList ) );
+                        new ScUndoCopyTab(this, pSrcList.release(), pDestList.release()));
             }
 
             BOOL bVbaEnabled = aDocument.IsInVBAMode();
@@ -996,12 +1000,10 @@ BOOL ScDocShell::MoveTable( SCTAB nSrcTab, SCTAB nDestTab, BOOL bCopy, BOOL bRec
             return FALSE;
         else if (bRecord)
         {
-            SvShorts aSrcList;
-            SvShorts aDestList;
-            aSrcList.Insert(nSrcTab,0);
-            aDestList.Insert(nDestTab,0);
+            auto_ptr< vector<SCTAB> > pSrcList(new vector<SCTAB>(1, nSrcTab));
+            auto_ptr< vector<SCTAB> > pDestList(new vector<SCTAB>(1, nDestTab));
             GetUndoManager()->AddUndoAction(
-                    new ScUndoMoveTab( this, aSrcList, aDestList ) );
+                    new ScUndoMoveTab(this, pSrcList.release(), pDestList.release()));
         }
 
         Broadcast( ScTablesHint( SC_TAB_MOVED, nSrcTab, nDestTab ) );

@@ -184,7 +184,8 @@ public:
                     TYPEINFO();
                     ScUndoMoveTab(
                         ScDocShell* pNewDocShell,
-                        const SvShorts &aOldTab, const SvShorts &aNewTab,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
                         ::std::vector< ::rtl::OUString>* pOldNames = NULL,
                         ::std::vector< ::rtl::OUString>* pNewNames = NULL );
 
@@ -198,10 +199,10 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
     ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpOldNames;
     ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
 
     void DoChange( BOOL bUndo ) const;
 };
@@ -213,8 +214,8 @@ public:
                     TYPEINFO();
                     ScUndoCopyTab(
                         ScDocShell* pNewDocShell,
-                        const SvShorts &aOldTab,
-                        const SvShorts &aNewTab,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
                         ::std::vector< ::rtl::OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoCopyTab();
@@ -227,10 +228,10 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
     ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
 
     void DoChange() const;
 };

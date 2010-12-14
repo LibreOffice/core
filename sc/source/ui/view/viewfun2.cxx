@@ -2756,10 +2756,12 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
         // Move or copy within the same document.
         SCTAB       nTabCount   = pDoc->GetTableCount();
 
-        SvShorts    TheTabs;
-        SvShorts    TheDestTabs;
+        auto_ptr< vector<SCTAB> >    pSrcTabs(new vector<SCTAB>);
+        auto_ptr< vector<SCTAB> >    pDestTabs(new vector<SCTAB>);
         auto_ptr< vector<OUString> > pTabNames(new vector<OUString>);
         auto_ptr< vector<OUString> > pDestNames(NULL);
+        pSrcTabs->reserve(nTabCount);
+        pDestTabs->reserve(nTabCount);
         pTabNames->reserve(nTabCount);
         String      aDestName;
 
@@ -2819,7 +2821,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
                 pDoc->SetVisible(nDestTab1,bVisible );
             }
 
-            TheTabs.Insert(nMovTab,TheTabs.Count());
+            pSrcTabs->push_back(nMovTab);
 
             if(!bCopy)
             {
@@ -2829,18 +2831,18 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
                 }
             }
 
-            TheDestTabs.Insert(nDestTab1,TheDestTabs.Count());
+            pDestTabs->push_back(nDestTab1);
         }
 
         // Rename must be done after all sheets have been moved.
         if (bRename)
         {
             pDestNames.reset(new vector<OUString>);
-            size_t n = TheDestTabs.Count();
+            size_t n = pDestTabs->size();
             pDestNames->reserve(n);
             for (size_t j = 0; j < n; ++j)
             {
-                SCTAB nRenameTab = static_cast<SCTAB>(TheDestTabs[j]);
+                SCTAB nRenameTab = (*pDestTabs)[j];
                 String aTabName = *pNewTabName;
                 pDoc->CreateValidTabName( aTabName );
                 pDestNames->push_back(aTabName);
@@ -2858,13 +2860,14 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
             if (bCopy)
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs, pDestNames.release()));
+                        new ScUndoCopyTab(
+                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pDestNames.release()));
             }
             else
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
                         new ScUndoMoveTab(
-                            pDocShell, TheTabs, TheDestTabs, pTabNames.release(), pDestNames.release()));
+                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pTabNames.release(), pDestNames.release()));
             }
         }
 
