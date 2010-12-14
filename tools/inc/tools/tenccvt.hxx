@@ -54,6 +54,17 @@ TOOLS_DLLPUBLIC rtl_TextEncoding GetOneByteTextEncoding( rtl_TextEncoding eEncod
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOLoadTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
 TOOLS_DLLPUBLIC rtl_TextEncoding GetSOStoreTextEncoding( rtl_TextEncoding eEncoding, USHORT nVersion = SOFFICE_FILEFORMAT_50 );
 
+/*
+ * Given a Unicode character, return a legacy Microsoft Encoding which
+ * supports it. Returns RTL_TEXTENCODING_DONTKNOW if there is
+ * no encoding which could support the character
+ *
+ * Useful as a utility to categorize unicode characters into the best fit
+ * windows charset range for exporting to ww6 & wmf or as a hint to non \u
+ * unicode token aware rtf readers
+ */
+TOOLS_DLLPUBLIC rtl_TextEncoding getBestMSEncodingByChar(sal_Unicode c);
+
 #endif  // _TOOLS_TENCCVT_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -19,7 +19,8 @@ tl	tools\source\fsys					nmake	-	all	tl_fsys tl_inc NULL
 tl	tools\source\zcodec					nmake	-	all	tl_zco tl_fsys tl_inc NULL
 tl	tools\source\communi				nmake	-	all	tl_com tl_fsys tl_inc NULL
 tl	tools\source\inet					nmake	-	all	tl_inet tl_fsys tl_inc NULL
-tl	tools\source\string					nmake	-	all	tl_string tl_fsys tl_inc NULL
+tl	tools\source\reversemap				nmake	-	all	tl_reversemap NULL
+tl	tools\source\string					nmake	-	all	tl_string tl_reversemap tl_fsys tl_inc NULL
 tl  tools\source\misc                   nmake   -   all tl_misc tl_inc NULL
 tl	tools\win\source\dll				nmake	-	w	tl_dllw tl_inc NULL
 tl	tools\os2\source\dll				nmake	-	p	tl_dllp tl_inc NULL

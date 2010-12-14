@@ -48,11 +48,13 @@ ALWAYSDBGTARGET=do_it_alwaysdebug
 SLOFILES=   $(SLO)$/tstring.obj     \
             $(SLO)$/tustring.obj    \
             $(SLO)$/tenccvt.obj     \
+            $(SLO)$/reversemap.obj  \
             $(SLO)$/debugprint.obj
 
 OBJFILES=   $(OBJ)$/tstring.obj     \
             $(OBJ)$/tustring.obj    \
             $(OBJ)$/tenccvt.obj     \
+            $(OBJ)$/reversemap.obj  \
             $(OBJ)$/debugprint.obj
 
 # --- Targets ------------------------------------------------------
@@ -62,6 +64,12 @@ TARGETDEPS+=$(ALWAYSDBGTARGET)
 .ENDIF
 
 .INCLUDE : target.mk
+
+$(INCCOM)$/reversemap.hxx: $(BIN)$/bestreversemap
+    $(AUGMENT_LIBRARY_PATH) $(BIN)$/bestreversemap > $@
+
+$(SLO)$/reversemap.obj: $(INCCOM)$/reversemap.hxx
+$(OBJ)$/reversemap.obj: $(INCCOM)$/reversemap.hxx
 
 .IF "$(ALWAYSDBGTARGET)" != ""
 .IF "$(ALWAYSDBG_FLAG)" == ""
