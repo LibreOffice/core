@@ -243,6 +243,11 @@ namespace desktop {
         FileBase::RC rc = Directory::createPath(aUserPath);
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
+#ifdef UNIX
+    // set safer permissions for the user directory by default
+    File::setAttributes(aUserPath, Attribute_OwnWrite| Attribute_OwnRead| Attribute_OwnExe);
+#endif
+
             // copy data from shared data directory of base installation
         for (sal_Int32 i=0; pszSrcList[i]!=NULL && pszDstList[i]!=NULL; i++)
         {
