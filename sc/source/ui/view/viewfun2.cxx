@@ -2865,7 +2865,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const
             if (bCopy)
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs));
+                        new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs, pDestNames.release()));
             }
             else
             {

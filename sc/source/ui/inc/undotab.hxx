@@ -211,9 +211,11 @@ class ScUndoCopyTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoCopyTab(ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoCopyTab(
+                        ScDocShell* pNewDocShell,
+                        const SvShorts &aOldTab,
+                        const SvShorts &aNewTab,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoCopyTab();
 
@@ -225,6 +227,7 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
     SvShorts    theOldTabs;
     SvShorts    theNewTabs;

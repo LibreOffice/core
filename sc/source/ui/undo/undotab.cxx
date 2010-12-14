@@ -657,10 +657,11 @@ BOOL ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //      Tabelle kopieren
 //
 
-ScUndoCopyTab::ScUndoCopyTab( ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab) :
+ScUndoCopyTab::ScUndoCopyTab(
+    ScDocShell* pNewDocShell, const SvShorts &aOldTab, const SvShorts &aNewTab,
+    vector<OUString>* pNewNames) :
     ScSimpleUndo( pNewDocShell ),
+    mpNewNames(pNewNames),
     pDrawUndo( NULL )
 {
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
@@ -671,6 +672,10 @@ ScUndoCopyTab::ScUndoCopyTab( ScDocShell* pNewDocShell,
 
     for(i=0;i<aNewTab.Count();i++)
         theNewTabs.Insert(aNewTab[sal::static_int_cast<USHORT>(i)],theNewTabs.Count());
+
+    if (mpNewNames && theNewTabs.Count() != mpNewNames->size())
+        // The sizes differ.  Something is wrong.
+        mpNewNames.reset();
 }
 
 ScUndoCopyTab::~ScUndoCopyTab()
@@ -770,6 +775,12 @@ void ScUndoCopyTab::Redo()
 
         if ( pDoc->IsTabProtected( nAdjSource ) )
             pDoc->CopyTabProtection(nAdjSource, nNewTab);
+
+        if (mpNewNames)
+        {
+            const OUString& rName = (*mpNewNames)[i];
+            pDoc->RenameTab(nNewTab, rName);
+        }
     }
 
     RedoSdrUndoAction( pDrawUndo );             // after the sheets are inserted
