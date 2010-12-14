@@ -48,17 +48,3 @@ Module gid_Module_Optional_Systemintegration
 	InstallOrder = "desktop-integration:1050, suse-menus:1060, freedesktop-menus:1250, redhat-menus:1260";
 End
 
-#ifdef ENABLE_BROFFICE
-#ifdef UNX
-
-Module gid_Module_Optional_Systemintegration_Br
-    ParentID = gid_Module_Optional;
-    Sortkey = "800";
-    MOD_NAME_DESC(MODULE_OPTIONAL_SYSTEMINTEGRATION);
-    Styles = (SYSTEMMODULE,NOTRELOCATABLE,DONTSHOWINUSERINSTALL,INSTALLCANFAIL,USEFORCE);
-    PackageName = "broffice-desktop-integration.tar.gz";
-    InstallOrder = "desktop-integration:1050, suse-menus:1060, freedesktop-menus:1250, redhat-menus:1260";
-End
-
-#endif
-#endif
