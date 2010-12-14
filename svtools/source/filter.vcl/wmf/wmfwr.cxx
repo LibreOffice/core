@@ -246,34 +246,6 @@
 
 #define PRIVATE_ESCAPE_UNICODE          2
 
-/// copied from writerwordglue.cxx
-
-/*
-    Utility to categorize unicode characters into the best fit windows charset
-    range for exporting to ww6, or as a hint to non \u unicode token aware rtf
-    readers
-*/
-rtl_TextEncoding getScriptClass(sal_Unicode cChar)
-{
-    using namespace com::sun::star::i18n;
-
-    static ScriptTypeList aScripts[] =
-    {
-        { UnicodeScript_kBasicLatin, UnicodeScript_kBasicLatin, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatin1Supplement, UnicodeScript_kLatin1Supplement, RTL_TEXTENCODING_MS_1252},
-        { UnicodeScript_kLatinExtendedA, UnicodeScript_kLatinExtendedA, RTL_TEXTENCODING_MS_1250},
-        { UnicodeScript_kLatinExtendedB, UnicodeScript_kLatinExtendedB, RTL_TEXTENCODING_MS_1257},
-        { UnicodeScript_kGreek, UnicodeScript_kGreek, RTL_TEXTENCODING_MS_1253},
-        { UnicodeScript_kCyrillic, UnicodeScript_kCyrillic, RTL_TEXTENCODING_MS_1251},
-        { UnicodeScript_kHebrew, UnicodeScript_kHebrew, RTL_TEXTENCODING_MS_1255},
-        { UnicodeScript_kArabic, UnicodeScript_kArabic, RTL_TEXTENCODING_MS_1256},
-        { UnicodeScript_kThai, UnicodeScript_kThai, RTL_TEXTENCODING_MS_1258},
-        { UnicodeScript_kScriptCount, UnicodeScript_kScriptCount, RTL_TEXTENCODING_MS_1252}
-    };
-    return unicode::getUnicodeScriptType(cChar, aScripts,
-        RTL_TEXTENCODING_MS_1252);
-}
-
 //========================== Methoden von WMFWriter ==========================
 
 void WMFWriter::MayCallback()
@@ -598,13 +570,13 @@ sal_Bool WMFWriter::WMFRecord_Escape_Unicode( const Point& rPoint, const String&
             {                                                   // try again, with determining a better charset from unicode char
                 pBuf = rUniStr.GetBuffer();
                 const sal_Unicode* pCheckChar = pBuf;
-                rtl_TextEncoding aTextEncoding = getScriptClass (*pCheckChar); // try the first character
+                rtl_TextEncoding aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the first character
                 for ( i = 1; i < nStringLen; i++)
                 {
                     if (aTextEncoding != aTextEncodingOrg) // found something
                         break;
                     pCheckChar++;
-                    aTextEncoding = getScriptClass (*pCheckChar); // try the next character
+                    aTextEncoding = getBestMSEncodingByChar(*pCheckChar); // try the next character
                 }
 
                 aByteStr = ByteString ( rUniStr,  aTextEncoding );
