@@ -60,7 +60,7 @@ SdrObject* View::GetEmptyPresentationObject( PresObjKind eKind )
     if( pPV )
     {
         SdPage* pPage = static_cast< SdPage* >( pPV->GetPage() );
-        if( pPage )
+        if( pPage && !pPage->IsMasterPage() )
         {
             // first try selected shape
             if ( AreObjectsMarked() )

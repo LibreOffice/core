@@ -5010,7 +5010,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 continue;
             }
             else if ( ( mType == "drawing.OLE2" ) || ( mType == "presentation.OLE2" )
-                        || ( mType == "presentation.Chart" ) || ( mType == "presentation.Table" )
+                        || ( mType == "presentation.Chart" ) || ( mType == "presentation.Calc" )
                             || ( mType == "presentation.OrgChart" ) )
             {
                 mpPptEscherEx->OpenContainer( ESCHER_SpContainer );
@@ -5201,7 +5201,7 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                     }
                 }
             }
-            else if ( mType == "drawing.Table" )
+            else if ( (mType == "drawing.Table") || (mType == "presentation.Table") )
             {
                 SvMemoryStream* pTmp = NULL;
                 if ( bEffect && !mbUseNewAnimations )
@@ -5390,7 +5390,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                 ImplFlipBoundingBox( aPropOpt );
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
-            mpPptEscherEx->AddClientAnchor( maRect );
+            if ( GetCurrentGroupLevel() > 0 )
+                mpPptEscherEx->AddChildAnchor( maRect );
+            else
+                mpPptEscherEx->AddClientAnchor( maRect );
 
             if ( pClientData )
             {
@@ -5460,7 +5463,10 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
 
             aPropOpt.CreateShapeProperties( mXShape );
             aPropOpt.Commit( *mpStrm );
-            mpPptEscherEx->AddClientAnchor( maRect );
+            if ( GetCurrentGroupLevel() > 0 )
+                mpPptEscherEx->AddChildAnchor( maRect );
+            else
+                mpPptEscherEx->AddClientAnchor( maRect );
 
             *mpStrm << (sal_uInt32)( ( ESCHER_ClientTextbox << 16 ) | 0xf )
                     << (sal_uInt32)pClientTextBox->Tell();
@@ -5639,11 +5645,10 @@ void PPTWriter::ImplCreateTable( uno::Reference< drawing::XShape >& rXShape, Esc
                 aPropOpt.CreateShapeProperties( rXShape );
                 aPropOpt.Commit( *mpStrm );
                 aPropOpt2.Commit( *mpStrm, 3, ESCHER_UDefProp );
-                mpPptEscherEx->AddAtom( 8, ESCHER_ClientAnchor );
-                *mpStrm << (sal_Int16)maRect.Top()
-                        << (sal_Int16)maRect.Left()
-                        << (sal_Int16)( maRect.GetWidth()  + maRect.Left() )
-                        << (sal_Int16)( maRect.GetHeight() + maRect.Top() );
+                if ( GetCurrentGroupLevel() > 0 )
+                    mpPptEscherEx->AddChildAnchor( maRect );
+                else
+                    mpPptEscherEx->AddClientAnchor( maRect );
                 mpPptEscherEx->CloseContainer();
 
 
