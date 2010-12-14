@@ -976,10 +976,10 @@ const String& XclExpPTItem::GetItemName() const
 
 void XclExpPTItem::SetPropertiesFromMember( const ScDPSaveMember& rSaveMem )
 {
-    // #i115659# GetIsVisible() is not valid if HasIsVisible() returns false, default is true then
-    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN, !rSaveMem.HasIsVisible() || !rSaveMem.GetIsVisible() );
-    // #i115659# GetShowDetails() is not valid if HasShowDetails() returns false, default is true then
-    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, !rSaveMem.HasShowDetails() || !rSaveMem.GetShowDetails() );
+    // #i115659# GetIsVisible() is not valid if HasIsVisible() returns false, default is 'visible' then
+    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDDEN, rSaveMem.HasIsVisible() && !rSaveMem.GetIsVisible() );
+    // #i115659# GetShowDetails() is not valid if HasShowDetails() returns false, default is 'show detail' then
+    ::set_flag( maItemInfo.mnFlags, EXC_SXVI_HIDEDETAIL, rSaveMem.HasShowDetails() && !rSaveMem.GetShowDetails() );
 
     // visible name
     const OUString* pVisName = rSaveMem.GetLayoutName();
