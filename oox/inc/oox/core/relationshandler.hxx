@@ -25,8 +25,8 @@
  *
  ************************************************************************/
 
-#ifndef OOX_CORE_RELATIONSHANDLER
-#define OOX_CORE_RELATIONSHANDLER
+#ifndef OOX_CORE_RELATIONSHANDLER_HXX
+#define OOX_CORE_RELATIONSHANDLER_HXX
 
 #include "oox/core/fragmenthandler.hxx"
 
@@ -57,5 +57,5 @@ private:
 } // namespace core
 } // namespace oox
 
-#endif // OOX_CORE_RELATIONSHANDLER
+#endif
 
