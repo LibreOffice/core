@@ -61,7 +61,10 @@ extern BOOL bDrawIsInUndo;          //! irgendwo als Member !!!
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Sequence;
+using ::rtl::OUString;
 using ::std::auto_ptr;
+using ::std::vector;
+using ::boost::shared_ptr;
 
 // STATIC DATA -----------------------------------------------------------
 
@@ -543,10 +546,11 @@ BOOL ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 //      Tabelle verschieben
 //
 
-ScUndoMoveTab::ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab) :
-    ScSimpleUndo( pNewDocShell )
+ScUndoMoveTab::ScUndoMoveTab(
+    ScDocShell* pNewDocShell, const SvShorts &aOldTab, const SvShorts &aNewTab,
+    vector<OUString>* pOldNames, vector<OUString>* pNewNames) :
+    ScSimpleUndo( pNewDocShell ),
+    mpOldNames(pOldNames), mpNewNames(pNewNames)
 {
     int i;
     for(i=0;i<aOldTab.Count();i++)
@@ -554,6 +558,14 @@ ScUndoMoveTab::ScUndoMoveTab( ScDocShell* pNewDocShell,
 
     for(i=0;i<aNewTab.Count();i++)
         theNewTabs.Insert(aNewTab[sal::static_int_cast<USHORT>(i)],theNewTabs.Count());
+
+    if (mpOldNames && theOldTabs.Count() != mpOldNames->size())
+        // The sizes differ.  Something is wrong.
+        mpOldNames.reset();
+
+    if (mpNewNames && theNewTabs.Count() != mpNewNames->size())
+        // The sizes differ.  Something is wrong.
+        mpNewNames.reset();
 }
 
 ScUndoMoveTab::~ScUndoMoveTab()
@@ -584,6 +596,11 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
             pDoc->MoveTab( nDestTab, nOldTab );
             pViewShell->GetViewData()->MoveTab( nDestTab, nOldTab );
             pViewShell->SetTabNo( nOldTab, TRUE );
+            if (mpOldNames)
+            {
+                const OUString& rOldName = (*mpOldNames)[i];
+                pDoc->RenameTab(nOldTab, rOldName);
+            }
         }
     }
     else
@@ -599,6 +616,11 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
             pDoc->MoveTab( nOldTab, nNewTab );
             pViewShell->GetViewData()->MoveTab( nOldTab, nNewTab );
             pViewShell->SetTabNo( nDestTab, TRUE );
+            if (mpNewNames)
+            {
+                const OUString& rNewName = (*mpNewNames)[i];
+                pDoc->RenameTab(nNewTab, rNewName);
+            }
         }
     }
 

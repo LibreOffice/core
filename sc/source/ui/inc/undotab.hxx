@@ -51,7 +51,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <boost/shared_ptr.hpp>
 #include <memory>
+#include <vector>
 
 class ScDocShell;
 class ScDocument;
@@ -180,9 +182,12 @@ class ScUndoMoveTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoMoveTab(
+                        ScDocShell* pNewDocShell,
+                        const SvShorts &aOldTab, const SvShorts &aNewTab,
+                        ::std::vector< ::rtl::OUString>* pOldNames = NULL,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
+
     virtual         ~ScUndoMoveTab();
 
     virtual void    Undo();
@@ -193,6 +198,8 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpOldNames;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
     SvShorts    theOldTabs;
     SvShorts    theNewTabs;
 
