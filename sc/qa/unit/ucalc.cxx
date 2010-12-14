@@ -1,7 +1,29 @@
 /* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
- * Known problems:
- * + We need to re-enable the exports.map with the right symbol
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License. You may obtain a copy of the License at
+ * http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * The Initial Developer of the Original Code is
+ *       Novell, Inc.
+ * Portions created by the Initial Developer are Copyright (C) 2010 the
+ * Initial Developer. All Rights Reserved.
+ *
+ * Contributor(s):  Michael Meeks <michael.meeks@novell.com>
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
  */
 
 // TODO ...
@@ -31,6 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <scdll.hxx>
 #include <document.hxx>
+#include <stringutil.hxx>
 
 #include "preextstl.h"
 #include <cppunit/TestSuite.h>
@@ -51,10 +74,12 @@ public:
 
     void testSUM();
     void testNamedRange();
+    void testCSV();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testNamedRange);
+    CPPUNIT_TEST(testCSV);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -130,6 +155,39 @@ void Test::testNamedRange()
     CPPUNIT_ASSERT_MESSAGE ("calculation failed", result == 1.0);
 
     m_pDoc->DeleteTab(0);
+}
+
+void Test::testCSV()
+{
+    const int English = 0, European = 1;
+    struct {
+        const char *pStr; int eSep; bool bResult; double nValue;
+    } aTests[] = {
+        { "foo",       English,  false, 0.0 },
+        { "1.0",       English,  true,  1.0 },
+        { "1,0",       English,  false, 0.0 },
+        { "1.0",       European, false, 0.0 },
+        { "1.000",     European, true,  1000.0 },
+        { "1,000",     European, true,  1.0 },
+        { "1.000",     English,  true,  1.0 },
+        { "1,000",     English,  true,  1000.0 },
+        { " 1.0",      English,  true,  1.0 },
+        { " 1.0  ",    English,  true,  1.0 },
+        { "1.0 ",      European, false, 0.0 },
+        { "1.000",     European, true,  1000.0 },
+        { "1137.999",  English,  true,  1137.999 },
+        { "1.000.00",  European, false, 0.0 }
+    };
+    for (sal_uInt32 i = 0; i < SAL_N_ELEMENTS(aTests); i++) {
+        rtl::OUString aStr(aTests[i].pStr, strlen (aTests[i].pStr), RTL_TEXTENCODING_UTF8);
+        double nValue = 0.0;
+        bool bResult = ScStringUtil::parseSimpleNumber
+                (aStr, aTests[i].eSep == English ? '.' : ',',
+                 aTests[i].eSep == English ? ',' : '.',
+                 nValue);
+        CPPUNIT_ASSERT_MESSAGE ("CSV numeric detection failure", bResult == aTests[i].bResult);
+        CPPUNIT_ASSERT_MESSAGE ("CSV numeric value failure", nValue == aTests[i].nValue);
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);
