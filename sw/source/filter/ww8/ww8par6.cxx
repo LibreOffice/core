@@ -2910,7 +2910,8 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
     const int nContigiousWestern = 8;
     const int nWestern = nContigiousWestern + 1;
     const int nEastern = 2;
-    const int nIds = nWestern + nEastern;
+    const int nCTL = 2;
+    const int nIds = nWestern + nEastern + nCTL;
     static const USHORT nEndIds[ nIds ] =
     {
         RES_CHRATR_WEIGHT,          RES_CHRATR_POSTURE,
@@ -2920,7 +2921,9 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
 
         RES_CHRATR_CROSSEDOUT,
 
-        RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CJK_POSTURE
+        RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CJK_POSTURE,
+
+        RES_CHRATR_CTL_WEIGHT,      RES_CHRATR_CTL_POSTURE
     };
 
     ww::WordVersion eVersion = pWwFib->GetFIBVersion();
@@ -2944,11 +2947,19 @@ void SwWW8ImplReader::Read_BoldUsw( USHORT nId, const BYTE* pData, short nLen )
 
     if (nLen < 0)
     {
-        pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nI ] );
-        // reset the CJK Weight and Posture, because they are the same as their
-        // western equivalents in word
         if (nI < 2)
+        {
+            if (eVersion <= ww::eWW6)
+            {
+                // reset the CTL Weight and Posture, because they are the same as their
+                // western equivalents in ww6
+                pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nWestern + nEastern + nI ] );
+            }
+            // reset the CJK Weight and Posture, because they are the same as their
+            // western equivalents in word
             pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nWestern + nI ] );
+        }
+        pCtrlStck->SetAttr( *pPaM->GetPoint(), nEndIds[ nI ] );
         pCtrlStck->SetToggleAttr(nI, false);
         return;
     }
@@ -3104,6 +3115,8 @@ void SwWW8ImplReader::SetToggleBiDiAttr(BYTE nAttrId, bool bOn)
 
 void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
 {
+    ww::WordVersion eVersion = pWwFib->GetFIBVersion();
+
     switch (nAttrId)
     {
         case 0:
@@ -3112,6 +3125,11 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
                 NewAttr( aAttr );
                 aAttr.SetWhich( RES_CHRATR_CJK_WEIGHT );
                 NewAttr( aAttr );
+                if (eVersion <= ww::eWW6)
+                {
+                    aAttr.SetWhich( RES_CHRATR_CTL_WEIGHT );
+                    NewAttr( aAttr );
+                }
             }
             break;
         case 1:
@@ -3120,6 +3138,11 @@ void SwWW8ImplReader::SetToggleAttr(BYTE nAttrId, bool bOn)
                 NewAttr( aAttr );
                 aAttr.SetWhich( RES_CHRATR_CJK_POSTURE );
                 NewAttr( aAttr );
+                if (eVersion <= ww::eWW6)
+                {
+                    aAttr.SetWhich( RES_CHRATR_CTL_POSTURE );
+                    NewAttr( aAttr );
+                }
             }
             break;
         case 2:
