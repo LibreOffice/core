@@ -59,6 +59,7 @@ SHL1STDLIBS=                     \
     $(COMPHELPERLIB)         \
     $(SALLIB)                \
     $(EXPATASCII3RDLIB)      \
+    $(UNOTOOLSLIB)           \
     $(UCBHELPERLIB)          \
         $(BERKELEYLIB)           \
         $(XSLTLIB)

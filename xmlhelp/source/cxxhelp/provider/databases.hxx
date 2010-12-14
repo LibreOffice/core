@@ -311,13 +311,15 @@ namespace chelp {
         char*  m_pCustomCSSDoc;
         rtl::OUString m_aCSS;
 
-#define PRODUCTNAME    0
-#define PRODUCTVERSION 1
-#define VENDORNAME     2
-#define VENDORVERSION  3
-#define VENDORSHORT    4
-#define NEWPRODUCTNAME    5
-#define NEWPRODUCTVERSION 6
+        enum {
+            PRODUCTNAME = 0,
+            PRODUCTVERSION,
+            VENDORNAME,
+            VENDORVERSION,
+            VENDORSHORT,
+            NEWPRODUCTNAME,
+            NEWPRODUCTVERSION
+        };
 
         int                    m_vAdd[7];
         rtl::OUString          m_vReplacement[7];

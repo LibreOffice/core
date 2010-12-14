@@ -47,6 +47,7 @@
 #include <com/sun/star/container/XNameReplace.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <unotools/configmgr.hxx>
 #include <rtl/bootstrap.hxx>
 
 #include "databases.hxx"
@@ -306,9 +307,10 @@ void ContentProvider::init()
      *  productversion,
      */
 
+    rtl::OUString productname;
+    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= productname;
+
     xHierAccess = getHierAccess( sProvider, "org.openoffice.Setup" );
-    rtl::OUString productname(
-        getKey( xHierAccess,"Product/ooName" ) );
 
     rtl::OUString setupversion(
         getKey( xHierAccess,"Product/ooSetupVersion" ) );
