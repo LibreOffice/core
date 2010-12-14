@@ -3749,7 +3749,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
         if( nLen < 0 ) // Ende des Attributes
         {
             if (eVersion <= ww::eWW6)
+            {
                 closeFont(RES_CHRATR_CTL_FONT);
+                closeFont(RES_CHRATR_CJK_FONT);
+            }
             closeFont(nId);
         }
         else
@@ -3757,7 +3760,10 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
             USHORT nFCode = SVBT16ToShort( pData );     // Font-Nummer
             openFont(nFCode, nId);
             if (eVersion <= ww::eWW6)
+            {
+                openFont(nFCode, RES_CHRATR_CJK_FONT);
                 openFont(nFCode, RES_CHRATR_CTL_FONT);
+            }
         }
     }
 }
