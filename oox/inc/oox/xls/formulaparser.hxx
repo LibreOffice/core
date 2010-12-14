@@ -87,6 +87,7 @@ private:
     const ApiToken*     getSingleToken( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     skipParentheses( const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
     const ApiToken*     findParameters( ParameterPosVector& rParams, const ApiToken* pToken, const ApiToken* pTokenEnd ) const;
+    void                appendEmptyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
     void                appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam );
     void                appendRequiredParameters( const FunctionInfo& rFuncInfo, size_t nParamCount );
 

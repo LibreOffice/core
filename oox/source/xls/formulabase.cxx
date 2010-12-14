@@ -237,8 +237,10 @@ const sal_uInt16 FUNCFLAG_MACROCMD          = 0x0080;   /// Function is a macro-
 const sal_uInt16 FUNCFLAG_ALWAYSVAR         = 0x0100;   /// Function is always represented by a tFuncVar token.
 const sal_uInt16 FUNCFLAG_PARAMPAIRS        = 0x0200;   /// Optional parameters are expected to appear in pairs.
 
-const sal_uInt16 FUNCFLAG_FUNCLIBMASK       = 0xF000;   /// Mask for function library bits.
-const sal_uInt16 FUNCFLAG_EUROTOOL          = 0x1000;   /// Function is part of the EuroTool add-in.
+/// Converts a function library index (value of enum FunctionLibraryType) to function flags.
+#define FUNCLIB_TO_FUNCFLAGS( funclib_index ) static_cast< sal_uInt16 >( static_cast< sal_uInt8 >( funclib_index ) << 12 )
+/// Extracts a function library index (value of enum FunctionLibraryType) from function flags.
+#define FUNCFLAGS_TO_FUNCLIB( func_flags ) extractValue< FunctionLibraryType >( func_flags, 12, 4 )
 
 typedef ::boost::shared_ptr< FunctionInfo > FunctionInfoRef;
 
@@ -688,7 +690,7 @@ static const FunctionData saFuncTableBiff5[] =
 
     // *** EuroTool add-in ***
 
-    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCFLAG_EUROTOOL },
+    { "EUROCONVERT",            "EUROCONVERT",          NOID,   NOID,   3,  5,  V, { VR }, FUNCLIB_TO_FUNCFLAGS( FUNCLIB_EUROTOOL ) },
 
     // *** macro sheet commands ***
 
@@ -925,12 +927,7 @@ void FunctionProviderImpl::initFunc( const FunctionData& rFuncData, sal_uInt8 nM
         xFuncInfo->maBiffMacroName = CREATE_OUSTRING( "_xlfnodf." ) + xFuncInfo->maOdfFuncName;
     }
 
-    switch( rFuncData.mnFlags & FUNCFLAG_FUNCLIBMASK )
-    {
-        case FUNCFLAG_EUROTOOL: xFuncInfo->meFuncLibType = FUNCLIB_EUROTOOL;    break;
-        default:                xFuncInfo->meFuncLibType = FUNCLIB_UNKNOWN;
-    }
-
+    xFuncInfo->meFuncLibType = FUNCFLAGS_TO_FUNCLIB( rFuncData.mnFlags );
     xFuncInfo->mnApiOpCode = -1;
     xFuncInfo->mnOobFuncId = rFuncData.mnOobFuncId;
     xFuncInfo->mnBiffFuncId = rFuncData.mnBiffFuncId;

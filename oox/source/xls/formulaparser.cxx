@@ -126,7 +126,6 @@ const FunctionInfo* FormulaFinalizer::getFunctionInfo( ApiToken& orFuncToken )
 
     // no success - return null
     return 0;
-
 }
 
 const FunctionInfo* FormulaFinalizer::getExternCallInfo( ApiToken& orFuncToken, const ApiToken& rECToken )
@@ -248,17 +247,29 @@ const ApiToken* FormulaFinalizer::processParameters(
 
                 if( !aParamInfoIt.isExcelOnlyParam() )
                 {
-                    // replace empty second and third parameter in IF function with zeros
-                    if( (pRealFuncInfo->mnOobFuncId == OOBIN_FUNC_IF) && ((nParam == 1) || (nParam == 2)) && bIsEmpty )
+                    // handle empty parameters
+                    if( bIsEmpty )
                     {
-                        maTokens.append< double >( OPCODE_PUSH, 0.0 );
-                        bIsEmpty = false;
+                        // append leading space tokens from original token array
+                        while( (pParamBegin < pParamEnd) && (pParamBegin->OpCode == OPCODE_SPACES) )
+                            maTokens.push_back( *pParamBegin++ );
+                        // add default values for some empty parameters, or the OPCODE_MISSING token
+                        appendEmptyParameter( *pRealFuncInfo, nParam );
+                        // reset bIsEmpty flag, if something has been appended in appendEmptyParameter()
+                        bIsEmpty = maTokens.back().OpCode == OPCODE_MISSING;
+                        // skip OPCODE_MISSING token in the original token array
+                        OSL_ENSURE( (pParamBegin == pParamEnd) || (pParamBegin->OpCode == OPCODE_MISSING), "FormulaFinalizer::processParameters - OPCODE_MISSING expected" );
+                        if( pParamBegin < pParamEnd ) ++pParamBegin;
+                        // append trailing space tokens from original token array
+                        while( (pParamBegin < pParamEnd) && (pParamBegin->OpCode == OPCODE_SPACES) )
+                            maTokens.push_back( *pParamBegin++ );
                     }
                     else
                     {
-                        // process all tokens of the parameter
+                        // if parameter is not empty, process all tokens of the parameter
                         processTokens( pParamBegin, pParamEnd );
                     }
+
                     // append parameter separator token
                     maTokens.append( OPCODE_SEP );
                 }
@@ -363,6 +374,25 @@ const ApiToken* FormulaFinalizer::findParameters( ParameterPosVector& rParams,
     OSL_ENSURE( ((pToken < pTokenEnd) && (pToken->OpCode == OPCODE_CLOSE)) || ((pTokenEnd - 1)->OpCode == OPCODE_BAD), "FormulaFinalizer::findParameters - OPCODE_CLOSE expected" );
     rParams.push_back( pToken );
     return (pToken < pTokenEnd) ? (pToken + 1) : pTokenEnd;
+}
+
+void FormulaFinalizer::appendEmptyParameter( const FunctionInfo& rFuncInfo, size_t nParam )
+{
+    // remeber old size of the token array
+    size_t nTokenArraySize = maTokens.size();
+
+    switch( rFuncInfo.mnOobFuncId )
+    {
+        case OOBIN_FUNC_IF:
+            if( (nParam == 1) || (nParam == 2) )
+                maTokens.append< double >( OPCODE_PUSH, 0.0 );
+        break;
+        default:;
+    }
+
+    // if no token has been added, append a OPCODE_MISSING token
+    if( nTokenArraySize == maTokens.size() )
+        maTokens.append( OPCODE_MISSING );
 }
 
 void FormulaFinalizer::appendCalcOnlyParameter( const FunctionInfo& rFuncInfo, size_t nParam )

@@ -473,8 +473,8 @@ struct FunctionParamInfo
     containing supported sheet functions. */
 enum FunctionLibraryType
 {
-    FUNCLIB_EUROTOOL,           /// EuroTool add-in with EUROCONVERT function.
-    FUNCLIB_UNKNOWN             /// Unknown library.
+    FUNCLIB_UNKNOWN = 0,        /// Unknown library (must be zero).
+    FUNCLIB_EUROTOOL            /// EuroTool add-in with EUROCONVERT function.
 };
 
 // ----------------------------------------------------------------------------
