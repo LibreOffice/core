@@ -2095,20 +2095,19 @@ const DirEntry& DirEntry::SetTempNameBase( const String &rBase )
 DirEntry DirEntry::TempName( DirEntryKind eKind ) const
 {
         // ggf. Base-Temp-Dir verwenden (macht Remote keinen Sinn => vorher)
-    const DirEntry &rEntry = TempNameBase_Impl::get();
+        const DirEntry &rEntry = TempNameBase_Impl::get();
         if ( !pParent && FSYS_FLAG_CURRENT != rEntry.eFlag && FSYS_FLAG_ABSROOT != eFlag )
-
         {
                 DirEntry aFactory( rEntry );
                 aFactory += GetName();
                 return aFactory.TempName();
         }
 
-        ByteString aDirName; // hiermit hatte MPW C++ Probleme - immmer noch??
+        ByteString aDirName;
         char *ret_val;
         size_t i;
 
-        // dertermine Directory, Prefix and Extension
+        // determine Directory, Prefix and Extension
         char pfx[6];
         char ext[5];
         const char *dir;
@@ -2134,17 +2133,15 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
         else
         {
             aDirName = ByteString(GetFull(), osl_getThreadTextEncoding());
-            strcpy( pfx, "sv" );
+            strcpy( pfx, "lo" );
             strcpy( ext, ".tmp" );
         }
         dir = aDirName.GetBuffer();
 
-        // wurde kein Dir angegeben, dann nehmen wir ein passendes TEMP-Verz.
         char sBuf[_MAX_PATH];
         if ( eFlag == FSYS_FLAG_CURRENT || ( !pParent && pWild ) )
             dir = TempDirImpl(sBuf);
 
-        // ab hier leicht modifizierter Code von VB
         DirEntry aRet(FSYS_FLAG_INVALID);
         i = strlen(dir);
         // need to add ?\\? + prefix + number + pid + .ext + '\0'

@@ -203,7 +203,7 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
     // ER 13.07.00  why not radix 36 [0-9A-Z] ?!?
     const unsigned nRadix = 26;
     String aName( rName );
-    aName += String::CreateFromAscii( "sv" );
+    aName += String::CreateFromAscii( "lu" );
 
     rName.Erase();
     static unsigned long u = Time::GetSystemTicks();
@@ -216,8 +216,14 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
 
         if ( bDir )
         {
+#ifdef UNX /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
+#endif
             FileBase::RC err = Directory::create( aTmp );
-            if (  err == FileBase::E_None )
+#ifdef UNX
+            umask(old_mode);
+#endif
+            if ( err == FileBase::E_None )
             {
                 // !bKeep: only for creating a name, not a file or directory
                 if ( bKeep || Directory::remove( aTmp ) == FileBase::E_None )
@@ -234,13 +240,12 @@ void CreateTempName_Impl( String& rName, sal_Bool bKeep, sal_Bool bDir = sal_Tru
         {
             DBG_ASSERT( bKeep, "Too expensive, use directory for creating name!" );
             File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
+#ifdef UNX /* RW permission for the user only! */
+            mode_t old_mode = umask(077);
 #endif
             FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
 #ifdef UNX
-umask(old_mode);
+            umask(old_mode);
 #endif
             if (  err == FileBase::E_None )
             {
