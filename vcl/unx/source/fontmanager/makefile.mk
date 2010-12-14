@@ -75,6 +75,4 @@ NOOPTFILES=$(SLO)$/fontmanager.obj
 $(SLO)$/parseAFM.obj: $(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp
 
 $(SOLARVER)$/$(INPATH)$/inc$/afm_hash.cpp: afm_keyword_list
-    $(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' afm_keyword_list > $@
-
-
+    $(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' afm_keyword_list | $(SED) -e "s/(char\*)0/(char\*)0, NOPE/g" | $(GREP) -v "^#line" > $@
