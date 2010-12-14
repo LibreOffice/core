@@ -278,10 +278,9 @@ Function SetupBranding
 	File "/oname=$PLUGINSDIR\modern-wizard.bmp" WELCOMEBMPPLACEHOLDER
 	File "/oname=$PLUGINSDIR\modern-wizard-br.bmp" WELCOMEBMPPLACEHOLDER_BR
 
-	; use broffice specific branding if executable name begins BrOffice
-	StrCpy $0 $EXEFILE 8
-;	messageBox MB_OK "ExeName: $0 - chopped $EXEFILE"
-	StrCmp $0 "BrOffice" BrOfficeSplash DefaultSplash
+	; use broffice specific branding if we are in Brazil
+;	messageBox MB_OK "Language: $LANGUAGE"
+	StrCmp $LANGUAGE "1046" BrOfficeSplash DefaultSplash
 	DefaultSplash:
 ;		messageBox MB_OK "LibreOffice"
 		SetBrandingImage /IMGID=1046 "$PLUGINSDIR\modern-header.bmp"
