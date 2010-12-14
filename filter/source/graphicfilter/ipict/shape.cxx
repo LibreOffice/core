@@ -38,6 +38,7 @@ Here, we choose:
 - for horizontal/vertical lines and line with length less than five to draw the real line,
 - in the other case, we keep the same shape (even if this means some "bad" coordinates)
 */
+#include "precompiled_filter.hxx"
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
