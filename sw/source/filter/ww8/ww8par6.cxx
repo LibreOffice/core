@@ -3680,17 +3680,17 @@ void SwWW8ImplReader::Read_FontCode( USHORT nId, const BYTE* pData, short nLen )
     {                       // (siehe sprmCSymbol) gesetzte Font !
         switch( nId )
         {
-            case 113:
+            case 113:       //WW7
             case 0x4A51:    //"Other" font, override with BiDi if it exists
             case 0x4A5E:    //BiDi Font
                 nId = RES_CHRATR_CTL_FONT;
                 break;
-            case 93:
-            case 111:
+            case 93:        //WW6
+            case 111:       //WW7
             case 0x4A4f:
                 nId = RES_CHRATR_FONT;
                 break;
-            case 112:
+            case 112:       //WW7
             case 0x4A50:
                 nId = RES_CHRATR_CJK_FONT;
                 break;
@@ -3733,8 +3733,8 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
         case 0x4a43:
             nId = RES_CHRATR_FONTSIZE;
             break;
-        case 85:
-        case 116:
+        case 85:  //WW2
+        case 116: //WW7
         case 0x4a61:
             nId = RES_CHRATR_CTL_FONTSIZE;
             break;
@@ -3742,25 +3742,32 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
             return ;
     }
 
+    ww::WordVersion eVersion = pWwFib->GetFIBVersion();
+
     if( nLen < 0 )          // Ende des Attributes
     {
         pCtrlStck->SetAttr( *pPaM->GetPoint(), nId  );
-        if( RES_CHRATR_FONTSIZE == nId )  // reset additional the CJK size
+        if (eVersion <= ww::eWW6) // reset additionally the CTL size
+            pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CTL_FONTSIZE );
+        if (RES_CHRATR_FONTSIZE == nId)  // reset additionally the CJK size
             pCtrlStck->SetAttr( *pPaM->GetPoint(), RES_CHRATR_CJK_FONTSIZE );
     }
     else
     {
-        ww::WordVersion eVersion = pWwFib->GetFIBVersion();
-
         // Font-Size in half points e.g. 10 = 1440 / ( 72 * 2 )
         USHORT nFSize = eVersion <= ww::eWW2 ? *pData : SVBT16ToShort(pData);
         nFSize*= 10;
 
         SvxFontHeightItem aSz( nFSize, 100, nId );
         NewAttr( aSz );
-        if( RES_CHRATR_FONTSIZE == nId )  // set additional the CJK size
+        if (RES_CHRATR_FONTSIZE == nId)  // set additionally the CJK size
         {
             aSz.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+            NewAttr( aSz );
+        }
+        if (eVersion <= ww::eWW6) // set additionally the CTL size
+        {
+            aSz.SetWhich( RES_CHRATR_CTL_FONTSIZE );
             NewAttr( aSz );
         }
         if (pAktColl && pStyles)            // Style-Def ?
@@ -3769,7 +3776,11 @@ void SwWW8ImplReader::Read_FontSize( USHORT nId, const BYTE* pData, short nLen )
             if (nId == RES_CHRATR_CTL_FONTSIZE)
                 pStyles->bFCTLSizeChanged = true;
             else
+            {
                 pStyles->bFSizeChanged = true;
+                if (eVersion <= ww::eWW6)
+                    pStyles->bFCTLSizeChanged= true;
+            }
         }
     }
 }
