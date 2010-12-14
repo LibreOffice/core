@@ -498,12 +498,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                     if( IS_AVAILABLE( FN_PARAM_2, &pItem ) )
                         bCpy = ((const SfxBoolItem*)pItem)->GetValue();
 
-#if 0
-// This must be checked:
-                    if( IS_AVAILABLE( FN_PARAM_3, &pItem ) )
-                        aTabName = ((const SfxStringItem*)pItem)->GetValue();
-#endif
-
                     if( aDocName.Len() )
                     {
                         SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
