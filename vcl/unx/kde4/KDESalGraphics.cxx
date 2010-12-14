@@ -305,7 +305,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
     m_image->fill(KApplication::palette().color(QPalette::Window).rgb());
 
 
-    XLIB_Region pTempClipRegion = 0;
+    QRegion* clipRegion = NULL;
 
     if (type == CTRL_PUSHBUTTON)
     {
@@ -532,28 +532,8 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                        vclStateValue2StateFlag(nControlState, value) );
 
         // draw just the border, see http://qa.openoffice.org/issues/show_bug.cgi?id=107945
-        int nFrameWidth = getFrameWidth();
-        pTempClipRegion = XCreateRegion();
-        XRectangle xRect;
-        xRect.x = widgetRect.left();
-        xRect.y = widgetRect.top();
-        xRect.width = widgetRect.width();
-        xRect.height = widgetRect.height();
-        XUnionRectWithRegion( &xRect, pTempClipRegion, pTempClipRegion );
-        xRect.x += nFrameWidth;
-        xRect.y += nFrameWidth;
-
-        // do not crash for too small widgets, see http://qa.openoffice.org/issues/show_bug.cgi?id=112102
-        if( xRect.width > 2*nFrameWidth && xRect.height > 2*nFrameWidth )
-        {
-            xRect.width -= 2*nFrameWidth;
-            xRect.height -= 2*nFrameWidth;
-
-            XLIB_Region pSubtract = XCreateRegion();
-            XUnionRectWithRegion( &xRect, pSubtract, pSubtract );
-            XSubtractRegion( pTempClipRegion, pSubtract, pTempClipRegion );
-            XDestroyRegion( pSubtract );
-        }
+        int fw = getFrameWidth();
+        clipRegion = new QRegion( QRegion( widgetRect ).subtracted( widgetRect.adjusted( fw, fw, -fw, -fw )));
     }
     else if (type == CTRL_FIXEDBORDER)
     {
@@ -603,11 +583,10 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         // See XRegionToQRegion() comment for a small catch (although not real hopefully).
         QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
         QPainter paint( &destPixmap );
-        if( pTempClipRegion && pClipRegion_ )
-            paint.setClipRegion( XRegionToQRegion( pTempClipRegion )
-                .intersected( XRegionToQRegion( pClipRegion_ )));
-        else if( pTempClipRegion )
-            paint.setClipRegion( XRegionToQRegion( pTempClipRegion ));
+        if( clipRegion && pClipRegion_ )
+            paint.setClipRegion( clipRegion->intersected( XRegionToQRegion( pClipRegion_ )));
+        else if( clipRegion )
+            paint.setClipRegion( *clipRegion );
         else if( pClipRegion_ )
             paint.setClipRegion( XRegionToQRegion( pClipRegion_ ));
         paint.drawImage( widgetRect.left(), widgetRect.top(), *m_image,
@@ -615,11 +594,21 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
             Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither );
 #else
         GC gc = SelectFont();
-
         if( gc )
         {
-            if( pTempClipRegion )
+            XLIB_Region pTempClipRegion = NULL;
+            if( clipRegion )
             {
+                pTempClipRegion = XCreateRegion();
+                foreach( const QRect& r, clipRegion->rects())
+                {
+                    XRectangle xr;
+                    xr.x = r.x();
+                    xr.y = r.y();
+                    xr.width = r.width();
+                    xr.height = r.height();
+                    XUnionRectWithRegion( &xr, pTempClipRegion, pTempClipRegion );
+                }
                 if( pClipRegion_ )
                     XIntersectRegion( pTempClipRegion, pClipRegion_, pTempClipRegion );
                 XSetRegion( GetXDisplay(), gc, pTempClipRegion );
@@ -636,15 +625,14 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                     XSetRegion( GetXDisplay(), gc, pClipRegion_ );
                 else
                     XSetClipMask( GetXDisplay(), gc, None );
+                XDestroyRegion( pTempClipRegion );
             }
         }
         else
             returnVal = false;
 #endif
     }
-    if( pTempClipRegion )
-        XDestroyRegion( pTempClipRegion );
-
+    delete clipRegion;
     return returnVal;
 }
 
