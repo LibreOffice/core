@@ -233,6 +233,39 @@ namespace
     }
 }
 
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 )
+#define IMAGE_BASED_PAINTING
+#else
+#undef IMAGE_BASED_PAINTING
+#endif
+
+#ifdef IMAGE_BASED_PAINTING
+// There is a small catch with this function, although hopefully only philosophical.
+// Officially Xlib's Region is an opaque data type, with only functions for manipulating it.
+// However, whoever designed it apparently didn't give it that much thought, as it's impossible
+// to find out what exactly a region actually is (except for really weird ways like XClipBox()
+// and repeated XPointInRegion(), which would be awfully slow). Fortunately, the header file
+// describing the structure actually happens to be installed too, and there's at least one
+// widely used software using it (Compiz). So access the data directly too and assume that
+// everybody who compiles with Qt4 support has Xlib new enough and good enough to support this.
+// In case this doesn't work for somebody, try #include <X11/region.h> instead, or build
+// without IMAGE_BASED_PAINTING (in which case QApplication::setGraphicsSystem( "native" ) may
+// be needed too).
+#include <X11/Xregion.h>
+static QRegion XRegionToQRegion( XLIB_Region xr )
+{
+    QRegion qr;
+    for( int i = 0;
+         i < xr->numRects;
+         ++i )
+    {
+        BOX& b = xr->rects[ i ];
+        qr |= QRect( b.x1, b.y1, b.x2 - b.x1, b.y2 - b.y1 ); // x2,y2 is outside, not the bottom-right corner
+    }
+    return qr;
+}
+#endif
+
 BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
                                         const Rectangle& rControlRegion, ControlState nControlState,
                                         const ImplControlValue& value,
@@ -562,6 +595,25 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
 
     if (returnVal)
     {
+#ifdef IMAGE_BASED_PAINTING
+        // Create a wrapper QPixmap around the destination pixmap, allowing the use of QPainter.
+        // Using X11SalGraphics::CopyScreenArea() would require using QPixmap and if Qt uses
+        // other graphics system than native, QPixmap::handle() would be 0 (i.e. it wouldn't work),
+        // I have no idea how to create QPixmap with non-null handle() in such case, so go this way.
+        // See XRegionToQRegion() comment for a small catch (although not real hopefully).
+        QPixmap destPixmap = QPixmap::fromX11Pixmap( GetDrawable(), QPixmap::ExplicitlyShared );
+        QPainter paint( &destPixmap );
+        if( pTempClipRegion && pClipRegion_ )
+            paint.setClipRegion( XRegionToQRegion( pTempClipRegion )
+                .intersected( XRegionToQRegion( pClipRegion_ )));
+        else if( pTempClipRegion )
+            paint.setClipRegion( XRegionToQRegion( pTempClipRegion ));
+        else if( pClipRegion_ )
+            paint.setClipRegion( XRegionToQRegion( pClipRegion_ ));
+        paint.drawImage( widgetRect.left(), widgetRect.top(), *m_image,
+            0, 0, widgetRect.width(), widgetRect.height(),
+            Qt::ColorOnly | Qt::OrderedDither | Qt::OrderedAlphaDither );
+#else
         GC gc = SelectFont();
 
         if( gc )
@@ -588,6 +640,7 @@ BOOL KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         }
         else
             returnVal = false;
+#endif
     }
     if( pTempClipRegion )
         XDestroyRegion( pTempClipRegion );
