@@ -49,8 +49,6 @@
 #include <vcl/menubtn.hxx>
 #include <svx/langbox.hxx>
 #include <cnttab.hxx>
-#include <list>
-
 class SwWrtShell;
 class SwTOXMgr;
 namespace com{namespace sun{namespace star{
@@ -233,7 +231,7 @@ class SwTOXSelectTabPage : public SfxTabPage
     DECL_LINK(RadioButtonHdl, RadioButton* );
     DECL_LINK(ModifyHdl, void*);
 
-    void    ApplyTOXDescription();
+      void  ApplyTOXDescription();
     void    FillTOXDescription();
 
     using SfxTabPage::ActivatePage;
@@ -256,7 +254,7 @@ public:
     void                SetWrtShell(SwWrtShell& rSh);
 };
 
-typedef ::std::list< Control* > TOXControlList;
+DECLARE_LIST(TOXControlList, Control*)
 
 class SwTOXEdit;
 class SwTOXButton;
