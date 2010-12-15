@@ -40,6 +40,7 @@
 #include "colrowst.hxx"
 #include "excdefs.hxx"
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
 class SfxItemSet;
@@ -108,7 +109,7 @@ protected:
     XclImpOutlineBuffer*    pRowOutlineBuff;
     XclImpColRowSettings*   pColRowBuff;        // Col/Row-Einstellungen 1 Tabelle
 
-    typedef ScfDelList< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
+    typedef boost::ptr_vector< XclImpOutlineDataBuffer > XclImpOutlineListBuffer;
     XclImpOutlineListBuffer* pOutlineListBuffer;
 
     sal_Int16               mnLastRefIdx;

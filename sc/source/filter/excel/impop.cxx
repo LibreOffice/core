@@ -1168,11 +1168,11 @@ void ImportExcel::NeueTabelle( void )
 
     InitializeTable( nTab );
 
-    pOutlineListBuffer->Append( new XclImpOutlineDataBuffer( GetRoot(), nTab ) );
-
-    pExcRoot->pColRowBuff = pColRowBuff = pOutlineListBuffer->Last()->GetColRowBuff();
-    pColOutlineBuff = pOutlineListBuffer->Last()->GetColOutline();
-    pRowOutlineBuff = pOutlineListBuffer->Last()->GetRowOutline();
+    XclImpOutlineDataBuffer* pNewItem = new XclImpOutlineDataBuffer( GetRoot(), nTab );
+    pOutlineListBuffer->push_back( pNewItem );
+    pExcRoot->pColRowBuff = pColRowBuff = pNewItem->GetColRowBuff();
+    pColOutlineBuff = pNewItem->GetColOutline();
+    pRowOutlineBuff = pNewItem->GetRowOutline();
 }
 
 
@@ -1202,8 +1202,8 @@ void ImportExcel::PostDocLoad( void )
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
     // outlines for all sheets, sets hidden rows and columns (#i11776# after filtered ranges)
-    for( XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
-        pBuffer->Convert();
+    for (XclImpOutlineListBuffer::iterator itBuffer = pOutlineListBuffer->begin(); itBuffer != pOutlineListBuffer->end(); ++itBuffer)
+        itBuffer->Convert();
 
     // document view settings (before visible OLE area)
     GetDocViewSettings().Finalize();
