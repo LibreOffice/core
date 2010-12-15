@@ -109,7 +109,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
+ScSpecialFilterDlg::~ScSpecialFilterDlg()
 {
     USHORT nEntries = aLbFilterArea.GetEntryCount();
     USHORT i;
@@ -130,7 +130,7 @@ __EXPORT ScSpecialFilterDlg::~ScSpecialFilterDlg()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
+void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 {
     const ScQueryItem& rQueryItem = (const ScQueryItem&)
                                     rArgSet.Get( nWhichQuery );
@@ -231,7 +231,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScSpecialFilterDlg::Close()
+BOOL ScSpecialFilterDlg::Close()
 {
     if (pViewData)
         pViewData->GetDocShell()->CancelAutoDBRange();

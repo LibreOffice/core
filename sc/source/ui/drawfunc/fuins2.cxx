@@ -162,7 +162,7 @@ void lcl_ChartInit( const uno::Reference < embed::XEmbeddedObject >& xObj, ScVie
             // use ScChartPositioner to auto-detect column/row headers (like ScChartArray in old version)
             ScRangeListRef aRangeListRef( new ScRangeList );
             aRangeListRef->Parse( aRangeString, pScDoc );
-            if ( aRangeListRef->Count() )
+            if ( !aRangeListRef->empty() )
             {
                 pScDoc->LimitChartIfAll( aRangeListRef );               // limit whole columns/rows to used area
 
@@ -532,12 +532,13 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, ScDrawView* 
             aRangeString = aStr;
 
             // get "total" range for positioning
-            ULONG nCount = aRanges.Count();
-            if ( nCount > 0 )
+            if ( !aRanges.empty() )
             {
-                aPositionRange = *aRanges.GetObject(0);
-                for (ULONG i=1; i<nCount; i++)
-                    aPositionRange.ExtendTo( *aRanges.GetObject(i) );
+                aPositionRange = *aRanges[ 0 ];
+                for ( size_t i = 1, nCount = aRanges.size(); i < nCount; ++i )
+                {
+                    aPositionRange.ExtendTo( *aRanges[ i ] );
+                }
             }
 
             if(bAutomaticMark)

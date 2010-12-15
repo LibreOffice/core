@@ -58,7 +58,7 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 }
 
 sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
-                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue)
+                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const
 {
     if (bEmpty == bPrevEmpty)
         if (bEmpty)

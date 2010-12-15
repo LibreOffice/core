@@ -1082,7 +1082,7 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     if (!bWasThere)
         pNewEngine->InsertView(pEditView[eWhich]);
 
-    //      Hintergrundfarbe der Zelle
+    //      background color of the cell
     Color aBackCol = ((const SvxBrushItem&)pPattern->GetItem(ATTR_BACKGROUND)).GetColor();
 
     ScModule* pScMod = SC_MOD();
@@ -1092,8 +1092,8 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     }
     pEditView[eWhich]->SetBackgroundColor( aBackCol );
 
-    pEditView[eWhich]->Invalidate();            //  noetig ??
-    //  noetig, wenn Position geaendert
+    pEditView[eWhich]->Invalidate();            //  needed ??
+    //  needed, wenn position changed
 }
 
 IMPL_LINK_INLINE_START( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
@@ -1593,7 +1593,7 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
 }
 
 //
-//      Anzahl Zellen auf einem Bildschirm
+//      Number of cells on a screen
 //
 
 SCCOL ScViewData::CellsAtX( SCsCOL nPosX, SCsCOL nDir, ScHSplitPos eWhichX, USHORT nScrSizeX ) const

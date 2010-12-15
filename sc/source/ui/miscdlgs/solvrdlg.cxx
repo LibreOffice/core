@@ -93,13 +93,13 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScSolverDlg::~ScSolverDlg()
+ScSolverDlg::~ScSolverDlg()
 {
 }
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScSolverDlg::Init()
+void ScSolverDlg::Init()
 {
     String          aStr;
 
@@ -128,7 +128,7 @@ void __EXPORT ScSolverDlg::Init()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScSolverDlg::Close()
+BOOL ScSolverDlg::Close()
 {
     return DoClose( ScSolverDlgWrapper::GetChildWindowId() );
 }
@@ -212,7 +212,7 @@ BOOL ScSolverDlg::IsRefInputMode() const
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScSolverDlg::CheckTargetValue( String& rStrVal )
+BOOL ScSolverDlg::CheckTargetValue( String& rStrVal )
 {
     sal_uInt32 n1 = 0;
     double n2;

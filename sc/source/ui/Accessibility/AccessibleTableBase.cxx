@@ -355,10 +355,6 @@ uno::Reference< XAccessible > SAL_CALL
     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-/*  String sCoreName;
-    if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
-        sDesc.SearchAndReplaceAscii("%1", sCoreName);
-    sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));*/
     return rtl::OUString(sDesc);
 }
 
@@ -402,8 +398,7 @@ sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // I don't need to guard, because the called funtions have a guard
-//    SolarMutexGuard aGuard;
+    // I don't need to guard, because the called functions have a guard
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
         throw lang::IndexOutOfBoundsException();
     return isAccessibleSelected(getAccessibleRow(nChildIndex), getAccessibleColumn(nChildIndex));

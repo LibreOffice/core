@@ -779,7 +779,6 @@ awt::Rectangle SAL_CALL AccessibleBase::getBounds()
             if( xParent.is() )
                 aParentLocOnScreen = xParent->getLocationOnScreen();
 
-            // aOffset = aParentLocOnScreen - GetUpperLeftOnScreen()
             awt::Point aULOnScreen = GetUpperLeftOnScreen();
             awt::Point aOffset( aParentLocOnScreen.X - aULOnScreen.X,
                                 aParentLocOnScreen.Y - aULOnScreen.Y );

@@ -113,7 +113,7 @@ DelCellCmd ScDeleteCellDlg::GetDelCellCmd() const
     return nReturn;
 }
 
-__EXPORT ScDeleteCellDlg::~ScDeleteCellDlg()
+ScDeleteCellDlg::~ScDeleteCellDlg()
 {
 }
 

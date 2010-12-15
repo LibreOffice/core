@@ -693,7 +693,7 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTPValidationHelp::~ScTPValidationHelp()
+ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
@@ -706,14 +706,14 @@ void ScTPValidationHelp::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTPValidationHelp::GetRanges()
+USHORT* ScTPValidationHelp::GetRanges()
 {
     return pValueRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*    pParent,
+SfxTabPage* ScTPValidationHelp::Create( Window* pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTPValidationHelp( pParent, rArgSet ) );
@@ -721,7 +721,7 @@ SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*    pParent,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
+void ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
@@ -743,7 +743,7 @@ void __EXPORT ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWHELP, aTsbHelp.GetState() == STATE_CHECK ) );
     rArgSet.Put( SfxStringItem( FID_VALID_HELPTITLE, aEdtTitle.GetText() ) );
@@ -780,7 +780,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTPValidationError::~ScTPValidationError()
+ScTPValidationError::~ScTPValidationError()
 {
 }
 
@@ -799,14 +799,14 @@ void ScTPValidationError::Init()
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTPValidationError::GetRanges()
+USHORT* ScTPValidationError::GetRanges()
 {
     return pValueRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTPValidationError::Create( Window*   pParent,
+SfxTabPage* ScTPValidationError::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
 {
     return ( new ScTPValidationError( pParent, rArgSet ) );
@@ -814,7 +814,7 @@ SfxTabPage* __EXPORT ScTPValidationError::Create( Window*   pParent,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
+void ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
     const SfxPoolItem* pItem;
 
@@ -843,7 +843,7 @@ void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
+BOOL ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
     rArgSet.Put( SfxBoolItem( FID_VALID_SHOWERR, aTsbShow.GetState() == STATE_CHECK ) );
     rArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE, aLbAction.GetSelectEntryPos() ) );

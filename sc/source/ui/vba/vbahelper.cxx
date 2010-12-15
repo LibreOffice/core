@@ -82,7 +82,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
     if( !xIntrospection.is() )
     {
         uno::Reference< lang::XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xIntrospection.set( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(("com.sun.star.beans.Introspection")) ), uno::UNO_QUERY_THROW );
+        xIntrospection.set( xFactory->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.beans.Introspection") ), uno::UNO_QUERY_THROW );
     }
     return xIntrospection->inspect( aObject );
 }

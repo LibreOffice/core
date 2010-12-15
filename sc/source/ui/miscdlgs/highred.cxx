@@ -115,7 +115,7 @@ ScHighlightChgDlg::~ScHighlightChgDlg()
     SetDispatcherLock( FALSE );
 }
 
-void __EXPORT ScHighlightChgDlg::Init()
+void ScHighlightChgDlg::Init()
 {
     String  aAreaStr;
     ScRange aRange;
@@ -162,12 +162,11 @@ void __EXPORT ScHighlightChgDlg::Init()
     }
 
     aFilterCtr.CheckRange(aChangeViewSet.HasRange());
-    ScRange* pRangeEntry=aChangeViewSet.GetTheRangeList().GetObject(0);
 
-
-    if(pRangeEntry!=NULL)
+    if ( !aChangeViewSet.GetTheRangeList().empty() )
     {
         String aRefStr;
+        const ScRange* pRangeEntry = aChangeViewSet.GetTheRangeList().front();
         pRangeEntry->Format( aRefStr, ABS_DREF3D, pDoc );
         aFilterCtr.SetRange(aRefStr);
     }
@@ -193,7 +192,7 @@ void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 }
 
 //----------------------------------------------------------------------------
-BOOL __EXPORT ScHighlightChgDlg::Close()
+BOOL ScHighlightChgDlg::Close()
 {
     return DoClose( ScHighlightChgDlgWrapper::GetChildWindowId() );
 }

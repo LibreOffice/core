@@ -2338,7 +2338,7 @@ void ScChangeTrack::Clear()
 }
 
 
-void __EXPORT ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
+void ScChangeTrack::ConfigurationChanged( utl::ConfigurationBroadcaster*, sal_uInt32 )
 {
     if ( !pDoc->IsInDtorClear() )
     {
@@ -2742,24 +2742,6 @@ BOOL ScChangeTrack::IsMatrixFormulaRangeDifferent( const ScBaseCell* pOldCell,
         ((const ScFormulaCell*)pNewCell)->GetMatColsRows( nC1, nR1 );
     return nC1 != nC2 || nR1 != nR2;
 }
-
-
-void ScChangeTrack::AppendContent( const ScAddress& rPos,
-        const String& rNewValue, ScBaseCell* pOldCell )
-{
-    String aOldValue;
-    ScChangeActionContent::GetStringOfCell( aOldValue, pOldCell, pDoc, rPos );
-    if ( aOldValue != rNewValue ||
-            IsMatrixFormulaRangeDifferent( pOldCell, NULL ) )
-    {   // nur wirkliche Aenderung tracken
-        ScRange aRange( rPos );
-        ScChangeActionContent* pAct = new ScChangeActionContent( aRange );
-        pAct->SetOldValue( pOldCell, pDoc, pDoc );
-        pAct->SetNewValue( rNewValue, pDoc );
-        Append( pAct );
-    }
-}
-
 
 void ScChangeTrack::AppendContent( const ScAddress& rPos,
         const ScBaseCell* pOldCell, ULONG nOldFormat, ScDocument* pRefDoc )

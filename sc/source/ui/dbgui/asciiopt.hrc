@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 #include "sc.hrc"
-//#define RID_SCDLG_ASCII 256
+
 #define BTN_OK                      1
 #define BTN_CANCEL                  2
 #define BTN_HELP                    3
@@ -60,12 +60,3 @@
 #define LB_TYPE1                    28
 #define CTR_TABLEBOX                29
 #define STR_TEXTTOCOLUMNS           30
-
-
-
-
-
-
-
-
-

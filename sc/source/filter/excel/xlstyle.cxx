@@ -36,6 +36,7 @@
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <vcl/svapp.hxx>
 #include <vcl/font.hxx>
+#include <sal/macros.h>
 #include <rtl/tencinfo.h>
 #include <toolkit/unohlp.hxx>
 #include <editeng/svxfont.hxx>
@@ -112,20 +113,20 @@ XclDefaultPalette::XclDefaultPalette( const XclRoot& rRoot ) :
     {
         case EXC_BIFF2:
             mpnColorTable = spnDefColorTable2;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable2 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable2 );
         break;
         case EXC_BIFF3:
         case EXC_BIFF4:
             mpnColorTable = spnDefColorTable3;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable3 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable3 );
         break;
         case EXC_BIFF5:
             mpnColorTable = spnDefColorTable5;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable5 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable5 );
         break;
         case EXC_BIFF8:
             mpnColorTable = spnDefColorTable8;
-            mnTableSize = STATIC_TABLE_SIZE( spnDefColorTable8 );
+            mnTableSize = SAL_N_ELEMENTS( spnDefColorTable8 );
         break;
         default:
             DBG_ERROR_BIFF();

@@ -114,7 +114,7 @@ USHORT ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
+void ScTabViewShell::Activate(BOOL bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
@@ -228,7 +228,7 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
     //  beim Umschalten zwischen Dokumenten)
 }
 
-void __EXPORT ScTabViewShell::Deactivate(BOOL bMDI)
+void ScTabViewShell::Deactivate(BOOL bMDI)
 {
     HideTip();
 
@@ -283,7 +283,7 @@ void ScTabViewShell::SetActive()
     ActiveGrabFocus();
 }
 
-USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
+USHORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
 {
     // Call EnterHandler even in formula mode here,
     // so a formula change in an embedded object isn't lost
@@ -319,7 +319,7 @@ USHORT __EXPORT ScTabViewShell::PrepareClose(BOOL bUI, BOOL bForBrowsing)
 
 //------------------------------------------------------------------
 
-Size __EXPORT ScTabViewShell::GetOptimalSizePixel() const
+Size ScTabViewShell::GetOptimalSizePixel() const
 {
     Size aOptSize;
 
@@ -367,12 +367,12 @@ void ScTabViewShell::UpdateOleZoom()
     }
 }
 
-void __EXPORT ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
+void ScTabViewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     OuterResizePixel( rPos, rSize );
 }
 
-void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
+void ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 {
     Size aNewSize( rSize );
     if ( GetViewFrame()->GetFrame().IsInPlace() )
@@ -416,7 +416,7 @@ void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &r
     GetViewData()->GetDocShell()->SetDocumentModified();
 }
 
-void __EXPORT ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
+void ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
 {
     SvBorder aBorder;
     GetBorderSize( aBorder, rSize );
@@ -430,7 +430,7 @@ void __EXPORT ScTabViewShell::OuterResizePixel( const Point &rOfs, const Size &r
     ForceMove();
 }
 
-void __EXPORT ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
+void ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fraction &rZoomY )
 {
     //  fuer OLE...
 
@@ -458,7 +458,7 @@ void __EXPORT ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fract
     SfxViewShell::SetZoomFactor( rZoomX, rZoomY );
 }
 
-void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
+void ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 {
     //  auf ganze Zellen anpassen (in 1/100 mm)
 
@@ -489,7 +489,7 @@ void __EXPORT ScTabViewShell::QueryObjAreaPixel( Rectangle& rRect ) const
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::Move()
+void ScTabViewShell::Move()
 {
     Point aNewPos = GetViewFrame()->GetWindow().OutputToScreenPixel(Point());
 
@@ -502,7 +502,7 @@ void __EXPORT ScTabViewShell::Move()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ShowCursor(bool /* bOn */)
+void ScTabViewShell::ShowCursor(bool /* bOn */)
 {
 /*!!!   ShowCursor wird nicht paarweise wie im gridwin gerufen.
         Der CursorLockCount am Gridwin muss hier direkt auf 0 gesetzt werden
@@ -516,7 +516,7 @@ void __EXPORT ScTabViewShell::ShowCursor(bool /* bOn */)
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
+void ScTabViewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
 {
     GetViewData()->WriteUserData(rData);
 }
@@ -526,7 +526,7 @@ void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue
     GetViewData()->WriteUserDataSequence (rSettings);
 }
 
-void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
+void ScTabViewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
 {
     if ( !GetViewData()->GetDocShell()->IsPreview() )
         DoReadUserData( rData );
@@ -1088,18 +1088,18 @@ ScTabViewShell* ScTabViewShell::GetActiveViewShell()
 
 //------------------------------------------------------------------
 
-SfxPrinter* __EXPORT ScTabViewShell::GetPrinter( BOOL bCreate )
+SfxPrinter* ScTabViewShell::GetPrinter( BOOL bCreate )
 {
     //  Drucker ist immer da (wird fuer die FontListe schon beim Starten angelegt)
     return GetViewData()->GetDocShell()->GetPrinter(bCreate);
 }
 
-USHORT __EXPORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+USHORT ScTabViewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     return GetViewData()->GetDocShell()->SetPrinter( pNewPrinter, nDiffFlags );
 }
 
-PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
+PrintDialog* ScTabViewShell::CreatePrintDialog( Window *pParent )
 {
     ScDocShell* pDocShell   = GetViewData()->GetDocShell();
     ScDocument* pDoc        = pDocShell->GetDocument();
@@ -1165,7 +1165,7 @@ SfxTabPage* ScTabViewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void __EXPORT ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
+void ScTabViewShell::PreparePrint( PrintDialog* pPrintDialog )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
 
@@ -1225,7 +1225,7 @@ ErrCode ScTabViewShell::DoPrint( SfxPrinter *pPrinter,
     return nRet;
 }
 
-USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
+USHORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
                                        PrintDialog* pPrintDialog )
 {
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
@@ -1568,7 +1568,7 @@ BOOL ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
     return sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKeyEvent ));
 }
 
-bool __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
+bool ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 {
 //  return SfxViewShell::KeyInput( rKeyEvent );
     return TabKeyInput( rKeyEvent );
@@ -1881,7 +1881,7 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
 //------------------------------------------------------------------
 
-__EXPORT ScTabViewShell::~ScTabViewShell()
+ScTabViewShell::~ScTabViewShell()
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     EndListening(*pDocSh);

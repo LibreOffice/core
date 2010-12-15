@@ -72,7 +72,7 @@ using ::osl::MutexGuard;
 // ----------------------------------------
 namespace
 {
-#define LOCAL_CONST_STR(i, x) sal_Char __READONLY_DATA i[sizeof(x)] = x
+#define LOCAL_CONST_STR(i, x) sal_Char const i[sizeof(x)] = x
 #define MAP_LEN(x) x, sizeof(x) - 1
 
 LOCAL_CONST_STR( sXML_metaStreamName,       "meta.xml");

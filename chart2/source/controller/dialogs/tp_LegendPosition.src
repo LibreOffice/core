@@ -34,12 +34,14 @@ TabPage TP_LEGEND_POS
     HelpID = HID_SCH_LEGEND_POS ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
+
     FixedLine GRP_LEGEND
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Position" ;
     };
+
     RESOURCE_LEGENDPOSITION( 12, 14 )
 
     FixedLine FL_LEGEND_TEXTORIENT
@@ -48,12 +50,14 @@ TabPage TP_LEGEND_POS
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Text orientation" ;
     };
+
     FixedText FT_LEGEND_TEXTDIR
     {
         Pos = MAP_APPFONT ( 12 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 19 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
         Text [ en-US ] = "Te~xt direction" ;
     };
+
     ListBox LB_LEGEND_TEXTDIR
     {
         Pos = MAP_APPFONT ( 78 , 14 + RESOURCE_LEGENDPOSITION_HEIGHT + 17 ) ;

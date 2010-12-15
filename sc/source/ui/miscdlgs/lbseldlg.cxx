@@ -94,7 +94,7 @@ IMPL_LINK_INLINE_END( ScSelEntryDlg, DblClkHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScSelEntryDlg::~ScSelEntryDlg()
+ScSelEntryDlg::~ScSelEntryDlg()
 {
 }
 

@@ -124,7 +124,7 @@ ScServerObject::ScServerObject( ScDocShell* pShell, const String& rItem ) :
     StartListening(*SFX_APP());     // for SC_HINT_AREAS_CHANGED
 }
 
-__EXPORT ScServerObject::~ScServerObject()
+ScServerObject::~ScServerObject()
 {
     Clear();
 }
@@ -149,7 +149,7 @@ void ScServerObject::EndListeningAll()
     SfxListener::EndListeningAll();
 }
 
-BOOL __EXPORT ScServerObject::GetData(
+BOOL ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
         const String & rMimeType, BOOL /* bSynchron */ )
 {
@@ -213,7 +213,7 @@ BOOL __EXPORT ScServerObject::GetData(
     return 0;
 }
 
-void __EXPORT ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScServerObject::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     BOOL bDataChanged = FALSE;
 

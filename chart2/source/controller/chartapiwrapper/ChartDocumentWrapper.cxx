@@ -1498,19 +1498,6 @@ uno::Sequence< ::rtl::OUString > SAL_CALL ChartDocumentWrapper::getAvailableServ
 
     return aResult;
 
-//         // shapes
-// //         uno::Sequence< OUString > aDrawServices( SvxUnoDrawMSFactory::getAvailableServiceNames() );
-// //         const OUString * pArr = aDrawServices.getConstArray();
-// //         aServices.insert( aServices.end(), pArr, pArr + aDrawServices.getLength() );
-//     }
-
-
-    // add-ins
- //    uno::Sequence< OUString > aAddIns( GetAddInCollection().GetAddInNames() );
-//     pArr = aAddIns.getConstArray();
-//     aServices.insert( aServices.end(), pArr, pArr + aAddIns.getLength() );
-
-//     return ContainerToSequence( aServices );
 }
 
 // ____ XAggregation ____

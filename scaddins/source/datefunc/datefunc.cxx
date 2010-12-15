@@ -178,9 +178,7 @@ sal_uInt16 ScaFuncData::GetStrIndex( sal_uInt16 nParam ) const
 ScaFuncDataList::ScaFuncDataList( ResMgr& rResMgr ) :
     nLast( 0xFFFFFFFF )
 {
-    const sal_uInt32 nCnt = sizeof( pFuncDataArr ) / sizeof( ScaFuncDataBase );
-
-    for( sal_uInt16 nIndex = 0; nIndex < nCnt; nIndex++ )
+    for( sal_uInt16 nIndex = 0; nIndex < SAL_N_ELEMENTS(pFuncDataArr); nIndex++ )
         Append( new ScaFuncData( pFuncDataArr[ nIndex ], rResMgr ) );
 }
 
@@ -323,7 +321,7 @@ ScaDateAddIn::~ScaDateAddIn()
 
 static const sal_Char*  pLang[] = { "de", "en" };
 static const sal_Char*  pCoun[] = { "DE", "US" };
-static const sal_uInt32 nNumOfLoc = sizeof( pLang ) / sizeof( sal_Char* );
+static const sal_uInt32 nNumOfLoc = SAL_N_ELEMENTS( pLang );
 
 void ScaDateAddIn::InitDefLocales()
 {

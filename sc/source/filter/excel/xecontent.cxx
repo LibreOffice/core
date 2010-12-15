@@ -332,12 +332,15 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 
 sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 {
-    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.Count(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
     ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
-    for( const ScRange* pScRange = rNCRanges.First(); pScRange; pScRange = rNCRanges.Next(), ++aIt )
+    for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )
+    {
+        const ScRange* pScRange = rNCRanges[ i ];
         if( pScRange->In( rPos ) )
             return *aIt;
+    }
     return EXC_XFID_NOTFOUND;
 }
 
@@ -363,16 +366,16 @@ void XclExpMergedcells::Save( XclExpStream& rStrm )
 
 void XclExpMergedcells::SaveXml( XclExpXmlStream& rStrm )
 {
-    ULONG nCount = maMergedRanges.Count();
+    size_t nCount = maMergedRanges.size();
     if( !nCount )
         return;
     sax_fastparser::FSHelperPtr& rWorksheet = rStrm.GetCurrentStream();
     rWorksheet->startElement( XML_mergeCells,
             XML_count,  OString::valueOf( (sal_Int32) nCount ).getStr(),
             FSEND );
-    for( ULONG i = 0; i < nCount; ++i )
+    for( size_t i = 0; i < nCount; ++i )
     {
-        if( const ScRange* pRange = maMergedRanges.GetObject( i ) )
+        if( const ScRange* pRange = maMergedRanges[ i ] )
         {
             rWorksheet->singleElement( XML_mergeCell,
                     XML_ref,    XclXmlUtils::ToOString( *pRange ).getStr(),
@@ -410,11 +413,19 @@ XclExpHyperlink::XclExpHyperlink( const XclExpRoot& rRoot, const SvxURLField& rU
     }
 
     // file link or URL
-    if( eProtocol == INET_PROT_FILE )
+    if( eProtocol == INET_PROT_FILE || eProtocol == INET_PROT_SMB )
     {
         sal_uInt16 nLevel;
         bool bRel;
         String aFileName( BuildFileName( nLevel, bRel, rUrl, rRoot ) );
+
+        if( eProtocol == INET_PROT_SMB )
+        {
+            // #n382718# (and #n261623#) Convert smb notation to '\\'
+            aFileName = aUrlObj.GetMainURL( INetURLObject::NO_DECODE );
+            aFileName = String( aFileName.GetBuffer() + 4 ); // skip the 'smb:' part
+            aFileName.SearchAndReplaceAll( '/', '\\' );
+        }
 
         if( !bRel )
             mnFlags |= EXC_HLINK_ABS;
@@ -568,9 +579,12 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
     // row label ranges
     FillRangeList( maRowRanges, rRoot.GetDoc().GetRowNameRangesRef(), nScTab );
     // row labels only over 1 column (restriction of Excel97/2000/XP)
-    for( ScRange* pScRange = maRowRanges.First(); pScRange; pScRange = maRowRanges.Next() )
+    for ( size_t i = 0, nRanges = maRowRanges.size(); i < nRanges; ++i )
+    {
+        ScRange* pScRange = maRowRanges[ i ];
         if( pScRange->aStart.Col() != pScRange->aEnd.Col() )
             pScRange->aEnd.SetCol( pScRange->aStart.Col() );
+    }
     // col label ranges
     FillRangeList( maColRanges, rRoot.GetDoc().GetColNameRangesRef(), nScTab );
 }
@@ -578,8 +592,9 @@ XclExpLabelranges::XclExpLabelranges( const XclExpRoot& rRoot ) :
 void XclExpLabelranges::FillRangeList( ScRangeList& rScRanges,
         ScRangePairListRef xLabelRangesRef, SCTAB nScTab )
 {
-    for( const ScRangePair* pRangePair = xLabelRangesRef->First(); pRangePair; pRangePair = xLabelRangesRef->Next() )
+    for ( size_t i = 0, nPairs = xLabelRangesRef->size(); i < nPairs; ++i )
     {
+        ScRangePair* pRangePair = (*xLabelRangesRef)[i];
         const ScRange& rScRange = pRangePair->GetRange( 0 );
         if( rScRange.aStart.Tab() == nScTab )
             rScRanges.Append( rScRange );

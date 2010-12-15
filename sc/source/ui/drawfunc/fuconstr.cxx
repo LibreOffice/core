@@ -83,7 +83,7 @@ BYTE FuConstruct::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -130,7 +130,7 @@ BOOL __EXPORT FuConstruct::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseMove(const MouseEvent& rMEvt)
 {
     FuDraw::MouseMove(rMEvt);
 
@@ -177,7 +177,7 @@ BOOL __EXPORT FuConstruct::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -275,7 +275,7 @@ BOOL FuConstruct::SimpleMouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstruct::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstruct::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
 

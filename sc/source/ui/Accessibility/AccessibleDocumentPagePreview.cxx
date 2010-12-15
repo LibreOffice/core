@@ -792,21 +792,6 @@ void ScShapeChilds::Notify(SfxBroadcaster&, const SfxHint& rHint)
                     {
                     }
                     break;
-                    // no longer necessary
-/*                    case HINT_OBJINSERTED :    // Neues Zeichenobjekt eingefuegt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            AddShape(xShape, pObj->GetLayer());
-                    }
-                    break;
-                    case HINT_OBJREMOVED :     // Zeichenobjekt aus Liste entfernt
-                    {
-                        uno::Reference<drawing::XShape> xShape (pObj->getUnoShape(), uno::UNO_QUERY);
-                        if (xShape.is())
-                            RemoveShape(xShape, pObj->GetLayer());
-                    }
-                    break;*/
                     default :
                     {
                         // other events are not interesting
@@ -1201,144 +1186,6 @@ void ScShapeChilds::FillShapes(const Rectangle& aPixelPaintRect, const MapMode& 
     }
 }
 
-
-/*void ScShapeChilds::AddShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
-{
-    uno::Reference < XAccessible > xNew;
-    Window* pWin = mpViewShell->GetWindow();
-    if (pWin)
-    {
-        ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
-        ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
-        sal_Bool bNotify(sal_False);
-        uno::Reference <XAccessible> xAcc;
-        while (aItr != aEndItr)
-        {
-            Rectangle aLogicPaintRect(pWin->PixelToLogic(aItr->maPixelRect, aItr->maMapMode));
-            Rectangle aRect(VCLPoint(xShape->getPosition()), VCLSize(xShape->getSize()));
-            if(!aRect.GetIntersection(aLogicPaintRect).IsEmpty())
-            {
-                ScShapeChild aShape;
-                aShape.mxShape = xShape;
-                switch (aLayerID)
-                {
-                    case SC_LAYER_INTERN:
-                    case SC_LAYER_FRONT:
-                    {
-                        SetAnchor(aShape);
-                        aItr->maForeShapes.push_back(aShape);
-                        std::sort(aItr->maForeShapes.begin(), aItr->maForeShapes.end(),ScShapeChildLess());
-
-                    }
-                    break;
-                    case SC_LAYER_BACK:
-                    {
-                        aItr->maBackShapes.push_back(aShape);
-                        std::sort(aItr->maBackShapes.begin(), aItr->maBackShapes.end(),ScShapeChildLess());
-                    }
-                    break;
-                    case SC_LAYER_CONTROLS:
-                    {
-                        SetAnchor(aShape);
-                        aItr->maControls.push_back(aShape);
-                        std::sort(aItr->maControls.begin(), aItr->maControls.end(),ScShapeChildLess());
-                    }
-                    break;
-                    default:
-                    {
-                        DBG_ERRORFILE("I don't know this layer.");
-                    }
-                    break;
-                }
-                if (bNotify)
-                {
-                    xAcc = GetAccShape(aShape);
-                    AccessibleEventObject aEvent;
-                    aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-                    aEvent.EventId = AccessibleEventId::CHILD;
-                    aEvent.NewValue <<= xAcc;
-                    mpAccDoc->CommitChange(aEvent);
-                    bNotify = sal_False;
-                }
-                xAcc = NULL;
-            }
-            ++aItr;
-        }
-    }
-}*/
-
-/*sal_Bool HaveToNotify(uno::Reference<XAccessible>& xAcc, ScShapeChildVec::iterator aItr)
-{
-    sal_Bool bResult(sal_False);
-    if (aItr->mpAccShape)
-    {
-        bResult = sal_True;
-        xAcc = aItr->mpAccShape;
-    }
-    else
-        DBG_ERRORFILE("No Accessible object found. Don't know how to notify.");
-    return bResult;
-}*/
-
-/*void ScShapeChilds::RemoveShape(const uno::Reference<drawing::XShape>& xShape, SdrLayerID aLayerID)
-{
-    ScShapeRangeVec::iterator aEndItr = maShapeRanges.end();
-    ScShapeRangeVec::iterator aItr = maShapeRanges.begin();
-    ScShapeChildVec::iterator aEraseItr;
-    sal_Bool bNotify(sal_False);
-    uno::Reference <XAccessible> xAcc;
-    while (aItr != aEndItr)
-    {
-        switch (aLayerID)
-        {
-            case SC_LAYER_INTERN:
-            case SC_LAYER_FRONT:
-            {
-                if (FindShape(aItr->maForeShapes, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maForeShapes.erase(aEraseItr);
-                }
-            }
-            break;
-            case SC_LAYER_BACK:
-            {
-                if (FindShape(aItr->maBackShapes, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maBackShapes.erase(aEraseItr);
-                }
-            }
-            break;
-            case SC_LAYER_CONTROLS:
-            {
-                if (FindShape(aItr->maControls, xShape, aEraseItr))
-                {
-                    bNotify = HaveToNotify(xAcc, aEraseItr);
-                    aItr->maControls.erase(aEraseItr);
-                }
-            }
-            break;
-            default:
-            {
-                DBG_ERRORFILE("I don't know this layer.");
-            }
-            break;
-        }
-        if (bNotify)
-        {
-            AccessibleEventObject aEvent;
-            aEvent.Source = uno::Reference<XAccessibleContext> (mpAccDoc);
-            aEvent.EventId = AccessibleEventId::CHILD;
-            aEvent.OldValue <<= xAcc;
-            mpAccDoc->CommitChange(aEvent);
-            bNotify = sal_False;
-        }
-        xAcc = NULL;
-        ++aItr;
-    }
-}*/
-
 SdrPage* ScShapeChilds::GetDrawPage() const
 {
     SCTAB nTab( mpViewShell->GetLocationData().GetPrintTab() );
@@ -1431,8 +1278,6 @@ ScAccessibleDocumentPagePreview::ScAccessibleDocumentPagePreview(
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
 
-//    GetNotesChilds(); not neccessary and reduces the creation performance
-//    GetShapeChilds();
 }
 
 ScAccessibleDocumentPagePreview::~ScAccessibleDocumentPagePreview(void)
@@ -1592,19 +1437,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
                 const ScPreviewLocationData& rData = mpViewShell->GetLocationData();
                 ScPagePreviewCountData aCount( rData, mpViewShell->GetWindow(), GetNotesChilds(), GetShapeChilds() );
 
-/*              if ( rData.HasCellsInRange( Rectangle( rPoint, rPoint ) ) )
-                {
-                    if ( !mpTable && (aCount.nTables > 0) )
-                    {
-                        //! order is background shapes, header, table or notes, footer, foreground shapes, controls
-                        sal_Int32 nIndex (aCount.nBackShapes + aCount.nHeaders);
-
-                        mpTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
-                        mpTable->acquire();
-                        mpTable->Init();
-                    }
-                    xAccessible = mpTable;
-                }*/
                 if ( !mpTable && (aCount.nTables > 0) )
                 {
                     //! order is background shapes, header, table or notes, footer, foreground shapes, controls

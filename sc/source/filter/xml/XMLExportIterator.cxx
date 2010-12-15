@@ -614,6 +614,7 @@ void ScMyDetectiveOpContainer::Sort()
 ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
+    fValue(0.0),
     nValidationIndex(-1),
     pBaseCell(NULL),
     bIsAutoStyle( sal_False ),

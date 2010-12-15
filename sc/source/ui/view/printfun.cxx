@@ -519,7 +519,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
 
     Rectangle aLines;
     ScRange aRange( nX1,nY1,nTab, nX2,nY2,nTab );
-//    BOOL bAddLines = pDoc->HasLines( aRange, aLines );
 
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
@@ -553,9 +552,6 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPr
     if (bEmbed)
         pDoc->SetEmbedded(aERange);
 
-/*  if (!bMetaFile)
-        pDev->SetMapMode(MAP_PIXEL);
-*/
     long nScrX = aRect.Left();
     long nScrY = aRect.Top();
 
@@ -798,7 +794,6 @@ long ScPrintFunc::TextHeight( const EditTextObject* pObject )
     if (!pObject)
         return 0;
 
-//  pEditEngine->SetPageNo( nTotalPages );
     pEditEngine->SetTextNewDefaults( *pObject, *pEditDefaults, FALSE );
 
     return (long) pEditEngine->GetTextHeight();
@@ -1024,8 +1019,6 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
         //  Die Tabellen-Abfrage ist schon in DocShell::Print, hier immer
         aAreaParam.aPrintArea.aStart.SetTab(nPrintTab);
         aAreaParam.aPrintArea.aEnd.SetTab(nPrintTab);
-
-//      lcl_LimitRange( aAreaParam.aPrintArea, nPrintTab );         // ganze Zeilen/Spalten...
     }
     else if ( pDoc->HasPrintRange() )
     {
@@ -1183,7 +1176,6 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
     Size aDrawSize = aGrfSize;
 
     bool bDraw = TRUE;
-//  bool bRetouche = TRUE;
     switch ( ePos )
     {
         case GPOS_LT: aPos = rOrg.TopLeft();
@@ -1218,7 +1210,6 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
         case GPOS_AREA:
                       aPos = rOrg.TopLeft();
                       aDrawSize = rOrg.GetSize();
-//                    bRetouche = FALSE;
                       break;
         case GPOS_TILED:
                     {
@@ -1268,7 +1259,6 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
                         }
 
                         bDraw = FALSE;
-//                      bRetouche = FALSE;
                     }
                     break;
 
@@ -1335,7 +1325,6 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if ( pBackground && !bCellContrast )
     {
-//      Rectangle aBackRect( Point(nScrX+nLeft, nScrY+nTop), Size(nEffWidth,nEffHeight) );
         if (pBackground->GetGraphicPos() != GPOS_NONE)
         {
             OutputDevice* pRefDev;
@@ -1423,8 +1412,6 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
         ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, aTabInfo, pBorderDoc, 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
         aOutputData.SetUseStyleColor( bUseStyleColor );
-
-//      pDev->SetMapMode(aTwipMode);
 
         if (pBorderData)
             aOutputData.DrawFrame();
@@ -1683,41 +1670,24 @@ void ScPrintFunc::PrintArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
             aOutputData.SetRefDevice( pRefDev );
     }
 
-//  aOutputData.SetMetaFileMode(TRUE);
     if( aTableParam.bCellContent )
         aOutputData.DrawBackground();
 
     pDev->SetClipRegion( Rectangle( aPos, Size( aOutputData.GetScrW(), aOutputData.GetScrH() ) ) );
     pDev->SetClipRegion();
 
-//  aOutputData.SetMetaFileMode(FALSE);
     if( aTableParam.bCellContent )
     {
         aOutputData.DrawExtraShadow( bShLeft, bShTop, bShRight, bShBottom );
         aOutputData.DrawFrame();
         aOutputData.DrawStrings();
-
-    //  pDev->SetMapMode(aLogicMode);
         aOutputData.DrawEdit(FALSE);
     }
 
-//  pDev->SetMapMode(aOffsetMode);
     if (aTableParam.bGrid)
         aOutputData.DrawGrid( TRUE, FALSE );    // keine Seitenumbrueche
 
-/*!!!!!!!!!!!       Notizen in Tabelle markieren ??????????????????????????
-
-    if (aTableParam.bNotes)
-    {
-        pDev->SetMapMode(aOffsetMode);
-        aOutputData.PrintNoteMarks(aNotePosList);
-        pDev->SetMapMode(aLogicMode);
-    }
-*/
-
     aOutputData.AddPDFNotes();      // has no effect if not rendering PDF with notes enabled
-
-//  pDev->SetMapMode(aDrawMode);
 
     // test if all paint parts are hidden, then a paint is not necessary at all
     if(!bHideAllDrawingLayer)
@@ -1941,7 +1911,6 @@ long ScPrintFunc::DoNotes( long nNoteStart, BOOL bDoPrint, ScPreviewLocationData
     Font aMarkFont;
     ScAutoFontColorMode eColorMode = bUseStyleColor ? SC_AUTOCOL_DISPLAY : SC_AUTOCOL_PRINT;
     ((const ScPatternAttr&)pDoc->GetPool()->GetDefaultItem(ATTR_PATTERN)).GetFont( aMarkFont, eColorMode );
-//? aMarkFont.SetWeight( WEIGHT_BOLD );
     pDev->SetFont( aMarkFont );
     long nMarkLen = pDev->GetTextWidth(
             String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("GW99999:")));
@@ -2045,7 +2014,6 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     if ( pPrinter && bDoPrint )
     {
         DBG_ERROR( "StartPage does not exist anymore" );
-        // pPrinter->StartPage();
     }
 
     if ( bDoPrint || pLocationData )
@@ -2069,7 +2037,6 @@ long ScPrintFunc::PrintNotes( long nPageNo, long nNoteStart, BOOL bDoPrint, ScPr
     if ( pPrinter && bDoPrint )
     {
         DBG_ERROR( "EndPage does not exist anymore" );
-        // pPrinter->EndPage();
     }
 
     return nCount;
@@ -2135,7 +2102,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if ( pPrinter && bDoPrint )
     {
         DBG_ERROR( "StartPage does not exist anymore" );
-        // pPrinter->StartPage();
     }
 
     //  Kopf- und Fusszeilen (ohne Zentrierung)
@@ -2229,9 +2195,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
 
     long nStartX = ((long) ( nLeftSpace * nScaleX ));
     long nStartY = ((long) ( nTopSpace  * nScaleY ));
-//      nStartX -= aOffset.X();         // schon im MapMode
-//      nStartY -= aOffset.Y();
-
     long nInnerStartX = nStartX;
     long nInnerStartY = nStartY;
     if (pBorderItem)
@@ -2420,7 +2383,6 @@ void ScPrintFunc::PrintPage( long nPageNo, SCCOL nX1, SCROW nY1, SCCOL nX2, SCRO
     if ( pPrinter && bDoPrint )
     {
         DBG_ERROR( "EndPage does not exist anymore" );
-        // pPrinter->EndPage();
     }
 
     aLastSourceRange = ScRange( nX1, nY1, nPrintTab, nX2, nY2, nPrintTab );
@@ -2566,7 +2528,6 @@ long ScPrintFunc::CountPages()                          // setzt auch nPagesX, n
     }
     else
     {
-//      nZoom = 100;                        // nZoom auf letztem Wert stehenlassen !!!
         nPagesX = nPagesY = nTotalY = 0;
         return 0;
     }
@@ -2646,8 +2607,6 @@ void ScPrintFunc::InitModes()               // aus nZoom etc. die MapModes setze
     aOffset = Point( aSrcOffset.X()*100/nZoom, aSrcOffset.Y()*100/nZoom );
 
     long nEffZoom = nZoom * (long) nManualZoom;
-
-//  nScaleX = nScaleY = 1.0;            // Ausgabe in Twips
     nScaleX = nScaleY = HMM_PER_TWIPS;  // Ausgabe in 1/100 mm
 
     Fraction aZoomFract( nEffZoom,10000 );

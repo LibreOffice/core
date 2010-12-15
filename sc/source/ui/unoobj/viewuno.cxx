@@ -469,7 +469,7 @@ private:
     ScTabViewObj* pViewObj;
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEventsHelper;
     sal_Bool bDelaySelectionEvent;
-    sal_Bool bSelectionChangeOccured;
+    sal_Bool bSelectionChangeOccurred;
 
     void fireSelectionChangeEvent();
 
@@ -487,7 +487,7 @@ public:
 };
 
 ScTabViewEventListener::ScTabViewEventListener(ScTabViewObj* pObj, uno::Reference< script::vba::XVBAEventProcessor >& rVbaEventsHelper):
-    pViewObj( pObj ),xVbaEventsHelper( rVbaEventsHelper ), bDelaySelectionEvent( sal_False ), bSelectionChangeOccured( sal_False )
+    pViewObj( pObj ),xVbaEventsHelper( rVbaEventsHelper ), bDelaySelectionEvent( sal_False ), bSelectionChangeOccurred( sal_False )
 {
 }
 
@@ -514,14 +514,14 @@ void ScTabViewEventListener::fireSelectionChangeEvent()
                 }
     }
     bDelaySelectionEvent = sal_False;
-    bSelectionChangeOccured = sal_False;
+    bSelectionChangeOccurred = sal_False;
 }
 
 sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouseEvent& e ) throw (uno::RuntimeException)
 {
     // Delay to fire the selection change event if clicking the left mouse button to do selection.
     bDelaySelectionEvent = ( e.Buttons == ::com::sun::star::awt::MouseButton::RIGHT ) ? sal_False : sal_True;
-    bSelectionChangeOccured = sal_False;
+    bSelectionChangeOccurred = sal_False;
 
     // ScTabViewObj::MousePressed should handle process BeforeDoubleClick and BeforeRightClick events
     return sal_True;
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL ScTabViewEventListener::mousePressed( const awt::EnhancedMouse
 
 sal_Bool SAL_CALL ScTabViewEventListener::mouseReleased( const awt::EnhancedMouseEvent&/*e*/) throw (uno::RuntimeException)
 {
-    if ( bSelectionChangeOccured )
+    if ( bSelectionChangeOccurred )
         fireSelectionChangeEvent();
     return sal_True;
 }
@@ -542,7 +542,7 @@ void SAL_CALL ScTabViewEventListener::selectionChanged( const lang::EventObject&
     }
     else
     {
-        bSelectionChangeOccured = sal_True;
+        bSelectionChangeOccurred = sal_True;
     }
 }
 
@@ -755,10 +755,9 @@ uno::Sequence<sal_Int8> SAL_CALL ScTabViewObj::getImplementationId()
 
 BOOL lcl_TabInRanges( SCTAB nTab, const ScRangeList& rRanges )
 {
-    ULONG nCount = rRanges.Count();
-    for (ULONG i=0; i<nCount; i++)
+    for (size_t i = 0, nCount = rRanges.size(); i < nCount; ++i)
     {
-        const ScRange* pRange = rRanges.GetObject(i);
+        const ScRange* pRange = rRanges[ i ];
         if ( nTab >= pRange->aStart.Tab() && nTab <= pRange->aEnd.Tab() )
             return TRUE;
     }
@@ -868,17 +867,17 @@ sal_Bool SAL_CALL ScTabViewObj::select( const uno::Any& aSelection )
             //  Ranges selektieren
 
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            ULONG nRangeCount = rRanges.Count();
+            size_t nRangeCount = rRanges.size();
             // for empty range list, remove selection (cursor remains where it was)
             if ( nRangeCount == 0 )
                 pViewSh->Unmark();
             else if ( nRangeCount == 1 )
-                pViewSh->MarkRange( *rRanges.GetObject(0) );
+                pViewSh->MarkRange( *rRanges[ 0 ] );
             else
             {
                 //  Mehrfachselektion
 
-                const ScRange* pFirst = rRanges.GetObject(0);
+                const ScRange* pFirst = rRanges[ 0 ];
                 if ( pFirst && !lcl_TabInRanges( pViewData->GetTabNo(), rRanges ) )
                     pViewSh->SetTabNo( pFirst->aStart.Tab() );
                 pViewSh->DoneBlockMode();
@@ -1042,7 +1041,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
             ScRangeList aRangeList;
             aFilteredMark.FillRangeListWithMarks( &aRangeList, FALSE);
             // Theoretically a selection may start and end on a filtered row.
-            switch (aRangeList.Count())
+            switch ( aRangeList.size() )
             {
                 case 0:
                     // No unfiltered row, we have to return some object, so
@@ -1051,7 +1050,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
                     break;
                 case 1:
                     {
-                        const ScRange& rRange = *(aRangeList.GetObject(0));
+                        const ScRange& rRange = *(aRangeList[ 0 ]);
                         if (rRange.aStart == rRange.aEnd)
                             pObj = new ScCellObj( pDocSh, rRange.aStart );
                         else
@@ -1227,9 +1226,9 @@ ScTabViewObj::selectSheet( const uno::Reference<sheet::XSpreadsheet>& xActiveShe
         if ( pRangesImp && pViewSh->GetViewData()->GetDocShell() == pRangesImp->GetDocShell() )
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            if ( rRanges.Count() == 1 )
+            if ( rRanges.size() == 1 )
             {
-                SCTAB nNewTab = rRanges.GetObject(0)->aStart.Tab();
+                SCTAB nNewTab = rRanges[ 0 ]->aStart.Tab();
                 if ( pViewSh->GetViewData()->GetDocument()->HasTable(nNewTab) )
                     pViewSh->SetTabNo( nNewTab, bNew, bExpand );
             }

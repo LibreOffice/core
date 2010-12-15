@@ -208,12 +208,7 @@ public:
     virtual void SAL_CALL setDefaultRotation() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDefaultIllumination() throw (::com::sun::star::uno::RuntimeException);
 
-//     // ____ XEventListener ____
-//     virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
-//         throw (::com::sun::star::uno::RuntimeException);
-
     // ____ XDiagramPositioning ____
-
     virtual void SAL_CALL setAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL isAutomaticDiagramPositioning(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDiagramPositionExcludingAxes( const ::com::sun::star::awt::Rectangle& PositionRect ) throw (::com::sun::star::uno::RuntimeException);

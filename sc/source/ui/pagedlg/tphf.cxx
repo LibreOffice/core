@@ -105,13 +105,13 @@ ScHFPage::ScHFPage( Window* pParent, USHORT nResId,
 
 //------------------------------------------------------------------
 
-__EXPORT ScHFPage::~ScHFPage()
+ScHFPage::~ScHFPage()
 {
 }
 
 //------------------------------------------------------------------
 
-void __EXPORT ScHFPage::Reset( const SfxItemSet& rSet )
+void ScHFPage::Reset( const SfxItemSet& rSet )
 {
     SvxHFPage::Reset( rSet );
     TurnOnHdl( 0 );
@@ -119,7 +119,7 @@ void __EXPORT ScHFPage::Reset( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
+BOOL ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 {
     BOOL bResult = SvxHFPage::FillItemSet( rOutSet );
 
@@ -139,7 +139,7 @@ BOOL __EXPORT ScHFPage::FillItemSet( SfxItemSet& rOutSet )
 
 //------------------------------------------------------------------
 
-void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
+void ScHFPage::ActivatePage( const SfxItemSet& rSet )
 {
     USHORT              nPageWhich = GetWhich( SID_ATTR_PAGE );
     const SvxPageItem&  rPageItem  = (const SvxPageItem&)
@@ -157,7 +157,7 @@ void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-int __EXPORT ScHFPage::DeactivatePage( SfxItemSet* pSetP )
+int ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
         if ( pSetP )
@@ -291,14 +291,14 @@ ScHeaderPage::ScHeaderPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScHeaderPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScHeaderPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-USHORT* __EXPORT ScHeaderPage::GetRanges()
+USHORT* ScHeaderPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }
@@ -314,14 +314,14 @@ ScFooterPage::ScFooterPage( Window* pParent, const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScFooterPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
 {
     return ( new ScFooterPage( pParent, rCoreSet ) );
 }
 
 //------------------------------------------------------------------
 
-USHORT* __EXPORT ScFooterPage::GetRanges()
+USHORT* ScFooterPage::GetRanges()
 {
     return SvxHeaderPage::GetRanges();
 }

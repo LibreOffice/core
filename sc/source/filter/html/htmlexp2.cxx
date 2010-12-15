@@ -66,11 +66,11 @@ void ScHTMLExport::PrepareGraphics( ScDrawLayer* pDrawLayer, SCTAB nTab,
         if ( pDrawPage )
         {
             bTabHasGraphics = TRUE;
-            FillGraphList( pDrawPage, nTab,
-                nStartCol, nStartRow, nEndCol, nEndRow );
-            for ( ScHTMLGraphEntry* pE = aGraphList.First(); pE;
-                    pE = aGraphList.Next() )
+            FillGraphList( pDrawPage, nTab, nStartCol, nStartRow, nEndCol, nEndRow );
+            size_t ListSize = aGraphList.size();
+            for ( size_t i = 0; i < ListSize; ++i )
             {
+                ScHTMLGraphEntry* pE = &aGraphList[ i ];
                 if ( !pE->bInCell )
                 {   // nicht alle in Zellen: einige neben Tabelle
                     bTabAlignedLeft = TRUE;
@@ -127,7 +127,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 }
                 ScHTMLGraphEntry* pE = new ScHTMLGraphEntry( pObject,
                     aR, aSize, bInCell, aSpace );
-                aGraphList.Insert( pE, LIST_APPEND );
+                aGraphList.push_back( pE );
             }
             pObject = aIter.Next();
         }

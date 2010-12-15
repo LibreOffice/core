@@ -85,20 +85,20 @@ ScStyleSheet::ScStyleSheet( const ScStyleSheet& rStyle )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScStyleSheet::~ScStyleSheet()
+ScStyleSheet::~ScStyleSheet()
 {
 }
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScStyleSheet::HasFollowSupport() const
+BOOL ScStyleSheet::HasFollowSupport() const
 {
     return FALSE;
 }
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScStyleSheet::HasParentSupport () const
+BOOL ScStyleSheet::HasParentSupport () const
 {
     BOOL bHasParentSupport = FALSE;
 
@@ -117,7 +117,7 @@ BOOL __EXPORT ScStyleSheet::HasParentSupport () const
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScStyleSheet::SetParent( const String& rParentName )
+BOOL ScStyleSheet::SetParent( const String& rParentName )
 {
     BOOL bResult = FALSE;
     String aEffName = rParentName;
@@ -145,7 +145,7 @@ BOOL __EXPORT ScStyleSheet::SetParent( const String& rParentName )
 
 //------------------------------------------------------------------------
 
-SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
+SfxItemSet& ScStyleSheet::GetItemSet()
 {
     if ( !pSet )
     {
@@ -265,7 +265,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScStyleSheet::IsUsed() const
+BOOL ScStyleSheet::IsUsed() const
 {
     if ( GetFamily() == SFX_STYLE_FAMILY_PARA )
     {
@@ -284,7 +284,7 @@ BOOL __EXPORT ScStyleSheet::IsUsed() const
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
         if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )

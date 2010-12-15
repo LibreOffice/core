@@ -730,13 +730,7 @@ const std::vector< WrappedProperty* > DataSeriesPointWrapper::createWrappedPrope
     WrappedDataCaptionProperties::addWrappedPropertiesForSeries( aWrappedProperties, m_spChart2ModelContact );
     WrappedScaleTextProperties::addWrappedProperties( aWrappedProperties, m_spChart2ModelContact );
 
-    //add unnamed fill properties (different inner names here)
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillGradient" ), C2U( "GradientName" ) ) );
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillHatch" ), C2U( "HatchName" ) ) );
-//     aWrappedProperties.push_back( new  WrappedUnnamedProperty( C2U( "FillTransparenceGradient" ), C2U( "TransparencyGradientName" ) ) );
-
     //add unnamed line properties (different inner names here)
-//     aWrappedProperties.push_back( new WrappedUnnamedProperty( C2U( "LineDash" ), C2U( "LineDashName" ) ) );
 
     aWrappedProperties.push_back( new WrappedProperty( C2U( "FillColor" ), C2U( "Color" ) ) );
     aWrappedProperties.push_back( new WrappedLineStyleProperty( this ) );

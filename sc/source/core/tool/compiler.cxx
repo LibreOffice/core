@@ -3066,8 +3066,9 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                 pRL = pDoc->GetColNameRanges();
             else
                 pRL = pDoc->GetRowNameRanges();
-            for ( ScRangePair* pR = pRL->First(); pR && !bInList; pR = pRL->Next() )
+            for ( size_t iPair = 0, nPairs = pRL->size(); iPair < nPairs && !bInList; ++iPair )
             {
+                ScRangePair* pR = (*pRL)[iPair];
                 const ScRange& rNameRange = pR->GetRange(0);
                 if ( jThisTab && !(rNameRange.aStart.Tab() <= nThisTab &&
                         nThisTab <= rNameRange.aEnd.Tab()) )
@@ -3140,10 +3141,10 @@ BOOL ScCompiler::IsColRowName( const String& rName )
         ScAutoNameCache* pNameCache = pDoc->GetAutoNameCache();
         if ( pNameCache )
         {
-            //  #b6355215# use GetNameOccurences to collect all positions of aName on the sheet
+            //  #b6355215# use GetNameOccurrences to collect all positions of aName on the sheet
             //  (only once), similar to the outer part of the loop in the "else" branch.
 
-            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurences( aName, aPos.Tab() );
+            const ScAutoNameAddresses& rAddresses = pNameCache->GetNameOccurrences( aName, aPos.Tab() );
 
             //  Loop through the found positions, similar to the inner part of the loop in the "else" branch.
             //  The order of addresses in the vector is the same as from ScCellIterator.
@@ -5262,8 +5263,9 @@ BOOL ScCompiler::HandleSingleRef()
     ScRangePairList* pRL = (bColName ?
         pDoc->GetColNameRanges() : pDoc->GetRowNameRanges());
     ScRange aRange;
-    for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
+    for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
     {
+        ScRangePair* pR = (*pRL)[i];
         if ( pR->GetRange(0).In( aLook ) )
         {
             bInList = bValidName = TRUE;
@@ -5308,8 +5310,9 @@ BOOL ScCompiler::HandleSingleRef()
                         nMaxRow = nMyRow - 1;
                     }
                 }
-                for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
+                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined ColNameRange below limits row
+                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Col() <= nCol && nCol <= rRange.aEnd.Col() )
                     {   // identical column range
@@ -5340,8 +5343,9 @@ BOOL ScCompiler::HandleSingleRef()
                         nMaxCol = nMyCol - 1;
                     }
                 }
-                for ( ScRangePair* pR = pRL->First(); pR; pR = pRL->Next() )
+                for ( size_t i = 0, nPairs = pRL->size(); i < nPairs; ++i )
                 {   // next defined RowNameRange to the right limits column
+                    ScRangePair* pR = (*pRL)[i];
                     const ScRange& rRange = pR->GetRange(1);
                     if ( rRange.aStart.Row() <= nRow && nRow <= rRange.aEnd.Row() )
                     {   // identical row range

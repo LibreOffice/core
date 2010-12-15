@@ -62,12 +62,12 @@ ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
 {
 }
 
-__EXPORT ScSimpleUndo::~ScSimpleUndo()
+ScSimpleUndo::~ScSimpleUndo()
 {
     delete pDetectiveUndo;
 }
 
-BOOL __EXPORT ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
+BOOL ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
 {
     //  Zu jeder Undo-Action kann eine SdrUndoGroup fuer das Aktualisieren
     //  der Detektiv-Pfeile gehoeren.
@@ -177,7 +177,7 @@ ScBlockUndo::ScBlockUndo( ScDocShell* pDocSh, const ScRange& rRange,
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
-__EXPORT ScBlockUndo::~ScBlockUndo()
+ScBlockUndo::~ScBlockUndo()
 {
     DeleteSdrUndoAction( pDrawUndo );
 }
@@ -286,7 +286,7 @@ ScMoveUndo::ScMoveUndo( ScDocShell* pDocSh, ScDocument* pRefDoc, ScRefUndoData* 
     pDrawUndo = GetSdrUndoAction( pDoc );
 }
 
-__EXPORT ScMoveUndo::~ScMoveUndo()
+ScMoveUndo::~ScMoveUndo()
 {
     delete pRefUndoData;
     delete pRefUndoDoc;

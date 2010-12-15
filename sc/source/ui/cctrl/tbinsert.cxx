@@ -70,11 +70,11 @@ ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx  ) :
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
-__EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
+ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
 
-void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
+void ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
@@ -98,7 +98,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
     }
 }
 
-SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
+SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
 {
     USHORT nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
@@ -119,12 +119,12 @@ SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
     return NULL;
 }
 
-SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
+SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
 {
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
+void ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );

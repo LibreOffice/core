@@ -131,7 +131,7 @@ ULONG ScEEImport::Read( SvStream& rStream, const String& rBaseURL )
 void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNumberFormatter* pFormatter, bool bConvertDate )
 {
     ScProgress* pProgress = new ScProgress( mpDoc->GetDocumentShell(),
-        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->Count() );
+        ScGlobal::GetRscString( STR_LOAD_DOC ), mpParser->ListSize() );
     ULONG nProgress = 0;
 
     SCCOL nStartCol, nEndCol;
@@ -160,8 +160,9 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
     }
     ScDocumentPool* pDocPool = mpDoc->GetPool();
     ScRangeName* pRangeNames = mpDoc->GetRangeName();
-    for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
+    for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
     {
+        pE = mpParser->ListEntry( i );
         SCROW nRow = nStartRow + pE->nRow;
         if ( nRow != nLastMergedRow )
             nMergeColAdd = 0;
@@ -279,22 +280,22 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     BYTE nScriptType = mpDoc->GetStringScriptType( aStr );
                     const BYTE nScripts[3] = { SCRIPTTYPE_LATIN,
                         SCRIPTTYPE_ASIAN, SCRIPTTYPE_COMPLEX };
-                    for ( BYTE i=0; i<3; ++i )
+                    for ( BYTE j=0; j<3; ++j )
                     {
-                        if ( nScriptType & nScripts[i] )
+                        if ( nScriptType & nScripts[j] )
                         {
                             if ( pFont )
                                 rSet.Put( *pFont, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT ));
+                                            nScripts[j], ATTR_FONT ));
                             if ( pHeight )
                                 rSet.Put( *pHeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_HEIGHT ));
+                                            nScripts[j], ATTR_FONT_HEIGHT ));
                             if ( pWeight )
                                 rSet.Put( *pWeight, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_WEIGHT ));
+                                            nScripts[j], ATTR_FONT_WEIGHT ));
                             if ( pPosture )
                                 rSet.Put( *pPosture, ScGlobal::GetScriptedWhichID(
-                                            nScripts[i], ATTR_FONT_POSTURE ));
+                                            nScripts[j], ATTR_FONT_POSTURE ));
                         }
                     }
                 }
@@ -399,7 +400,7 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
                     mpDoc, mpEngine->GetEditTextObjectPool() ) );
                 delete pObject;
             }
-            if ( pE->pImageList )
+            if ( pE->maImageList.size() )
                 bHasGraphics |= GraphicSize( nCol, nRow, nTab, pE );
             if ( pE->pName )
             {   // Anchor Name => RangeName
@@ -451,10 +452,12 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
         }
     }
     if ( bHasGraphics )
-    {   // Grafiken einfuegen
-        for ( pE = mpParser->First(); pE; pE = mpParser->Next() )
+    {
+        // Grafiken einfuegen
+        for ( size_t i = 0, nListSize = mpParser->ListSize(); i < nListSize; ++i )
         {
-            if ( pE->pImageList )
+            pE = mpParser->ListEntry( i );
+            if ( !pE->maImageList.empty() )
             {
                 SCCOL nCol = pE->nCol;
                 SCROW nRow = pE->nRow;
@@ -468,19 +471,18 @@ void ScEEImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor, SvNu
 }
 
 
-BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
-        ScEEParseEntry* pE )
+BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEParseEntry* pE )
 {
-    ScHTMLImageList* pIL = pE->pImageList;
-    if ( !pIL || !pIL->Count() )
+    if ( !pE->maImageList.size() )
         return FALSE;
     BOOL bHasGraphics = FALSE;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
     long nWidth, nHeight;
     nWidth = nHeight = 0;
     sal_Char nDir = nHorizontal;
-    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+    for ( sal_uInt32 i = 0; i < pE->maImageList.size() ; ++i )
     {
+        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( pI->pGraphic )
             bHasGraphics = TRUE;
         Size aSizePix = pI->aSize;
@@ -536,8 +538,7 @@ BOOL ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/,
 void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
         ScEEParseEntry* pE )
 {
-    ScHTMLImageList* pIL = pE->pImageList;
-    if ( !pIL || !pIL->Count() )
+    if ( !pE->maImageList.size() )
         return ;
     ScDrawLayer* pModel = mpDoc->GetDrawLayer();
     if (!pModel)
@@ -556,8 +557,9 @@ void ScEEImport::InsertGraphic( SCCOL nCol, SCROW nRow, SCTAB nTab,
     Point aSpace;
     Size aLogicSize;
     sal_Char nDir = nHorizontal;
-    for ( ScHTMLImage* pI = pIL->First(); pI; pI = pIL->Next() )
+    for ( sal_uInt32 i = 0; i < pE->maImageList.size(); ++i )
     {
+        ScHTMLImage* pI = &pE->maImageList[ i ];
         if ( nDir & nHorizontal )
         {   // horizontal
             aInsertPos.X() += aLogicSize.Width();
@@ -604,7 +606,6 @@ ScEEParser::ScEEParser( EditEngine* pEditP ) :
         pEdit( pEditP ),
         pPool( EditEngine::CreatePool() ),
         pDocPool( new ScDocumentPool ),
-        pList( new ScEEParseList ),
         pColWidths( new Table ),
         nLastToken(0),
         nColCnt(0),
@@ -623,9 +624,7 @@ ScEEParser::~ScEEParser()
 {
     delete pActEntry;
     delete pColWidths;
-    for ( ScEEParseEntry* pE = pList->First(); pE; pE = pList->Next() )
-        delete pE;
-    delete pList;
+    if ( !maList.empty() ) maList.clear();
 
     // Pool erst loeschen nachdem die Listen geloescht wurden
     pPool->SetSecondaryPool( NULL );

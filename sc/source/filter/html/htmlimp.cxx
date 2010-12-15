@@ -150,8 +150,10 @@ void ScHTMLImport::WriteToDocument(
     pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
 
     // correct cell borders for merged cells
-    for ( ScEEParseEntry* pEntry = pParser->First(); pEntry; pEntry = pParser->Next() )
+    size_t ListSize = pParser->ListSize();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
+        const ScEEParseEntry* pEntry = pParser->ListEntry( i );
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
             SCTAB nTab = maRange.aStart.Tab();

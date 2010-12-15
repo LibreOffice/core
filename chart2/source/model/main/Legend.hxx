@@ -91,13 +91,6 @@ protected:
         getPropertySetInfo()
         throw (::com::sun::star::uno::RuntimeException);
 
-//  virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
-
     // ____ XLegend ____
     virtual void SAL_CALL registerEntry( const ::com::sun::star::uno::Reference<
                                          ::com::sun::star::chart2::XLegendEntry >& xEntry )

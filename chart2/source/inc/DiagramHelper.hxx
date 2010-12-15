@@ -159,7 +159,7 @@ public:
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Int32 nNewDimensionCount );
 
-    /** Replaces all occurences of xCooSysToReplace in the tree with
+    /** Replaces all occurrences of xCooSysToReplace in the tree with
         xReplacement in the diagram's tree
      */
     SAL_DLLPRIVATE static void replaceCoordinateSystem(

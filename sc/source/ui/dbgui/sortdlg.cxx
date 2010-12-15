@@ -63,7 +63,7 @@ ScSortDlg::ScSortDlg( Window*           pParent,
     FreeResource();
 }
 
-__EXPORT ScSortDlg::~ScSortDlg()
+ScSortDlg::~ScSortDlg()
 {
 }
 

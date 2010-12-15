@@ -172,31 +172,6 @@ sal_Int32 SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnCount() throw (u
 rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sal_Int32 nRow )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // is not supported or specified so not implemented
-/*  SolarMutexGuard aGuard;
-    IsObjectValid();
-
-    FillTableInfo();
-
-    rtl::OUString sName;
-    if ( mpTableInfo && nRow >= 0 && nRow < mpTableInfo->GetRows() )
-    {
-        const ScPreviewColRowInfo& rInfo = mpTableInfo->GetRowInfo()[nRow];
-        if ( rInfo.bIsHeader )
-        {
-            //! name of column headers row?
-
-            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Column Headers"));
-        }
-        else
-        {
-            // normal row name
-            sName = rtl::OUString::valueOf( (sal_Int32) ( rInfo.nDocIndex + 1 ) );
-        }
-    }
-    else
-        throw lang::IndexOutOfBoundsException();*/
-
     SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nRow < 0 || (mpTableInfo && nRow >= mpTableInfo->GetRows()) )
@@ -208,31 +183,6 @@ rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleRowDescription( sa
 rtl::OUString SAL_CALL ScAccessiblePreviewTable::getAccessibleColumnDescription( sal_Int32 nColumn )
                                 throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
-    // is not supported or specified so not implemented
-/*  SolarMutexGuard aGuard;
-    IsObjectValid();
-
-    FillTableInfo();
-
-    rtl::OUString sName;
-    if ( mpTableInfo && nColumn >= 0 && nColumn < mpTableInfo->GetCols() )
-    {
-        const ScPreviewColRowInfo& rInfo = mpTableInfo->GetColInfo()[nColumn];
-        if ( rInfo.bIsHeader )
-        {
-            //! name of row headers column?
-
-            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Row Headers"));
-        }
-        else
-        {
-            // normal column name
-            sName = ScColToAlpha( rInfo.nDocIndex );
-        }
-    }
-    else
-        throw lang::IndexOutOfBoundsException();*/
-
     SolarMutexGuard aGuard;
     FillTableInfo();
     if ( nColumn < 0 || (mpTableInfo && nColumn >= mpTableInfo->GetCols()) )
@@ -670,18 +620,6 @@ uno::Sequence<sal_Int8> SAL_CALL ScAccessiblePreviewTable::getImplementationId()
                     throw (uno::RuntimeException)
 {
     String sDesc(ScResId(STR_ACC_TABLE_DESCR));
-/*    if (mpViewShell && mpViewShell->GetDocument())
-    {
-        FillTableInfo();
-
-        if ( mpTableInfo )
-        {
-            String sCoreName;
-            if (mpViewShell->GetDocument()->GetName( mpTableInfo->GetTab(), sCoreName ))
-                sDesc.SearchAndReplaceAscii("%1", sCoreName);
-        }
-    }
-    sDesc.SearchAndReplaceAscii("%2", String(ScResId(SCSTR_UNKNOWN)));*/
     return rtl::OUString(sDesc);
 }
 

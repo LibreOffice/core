@@ -1837,7 +1837,7 @@ ULONG ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFo
 }
 
 
-void __EXPORT ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
+void ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
 {
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {

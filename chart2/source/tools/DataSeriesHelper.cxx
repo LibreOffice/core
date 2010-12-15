@@ -739,7 +739,7 @@ bool hasUnhiddenData( const uno::Reference< chart2::XDataSeries >& xSeries )
 
 struct lcl_LessIndex
 {
-    inline bool operator() ( const sal_Int32& first, const sal_Int32& second )
+    inline bool operator() ( const sal_Int32& first, const sal_Int32& second ) const
     {
         return ( first < second );
     }

@@ -325,7 +325,7 @@ public class CalcRTL extends ComplexTestCase {
             worked = checkResult(set, pName, oldValue, pValue, resValue,
                                  exception);
         } catch (Exception e) {
-            System.out.println("Exception occured while testing property '" +
+            System.out.println("Exception occurred while testing property '" +
                                pName + "'");
             e.printStackTrace();
             worked = false;

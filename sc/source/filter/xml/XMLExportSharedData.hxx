@@ -68,12 +68,12 @@ public:
 
     void SetLastColumn(const sal_Int32 nTable, const sal_Int32 nCol);
     void SetLastRow(const sal_Int32 nTable, const sal_Int32 nRow);
-    sal_Int32 GetLastColumn(const sal_Int32 nTable);
-    sal_Int32 GetLastRow(const sal_Int32 nTable);
+    sal_Int32 GetLastColumn(const sal_Int32 nTable) const;
+    sal_Int32 GetLastRow(const sal_Int32 nTable) const;
     void AddDrawPage(const ScMyDrawPage& aDrawPage, const sal_Int32 nTable);
     void SetDrawPageHasForms(const sal_Int32 nTable, sal_Bool bHasForms);
     com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage> GetDrawPage(const sal_Int32 nTable);
-    sal_Bool HasDrawPage() { return pDrawPages != NULL; }
+    sal_Bool HasDrawPage() const { return pDrawPages != NULL; }
     sal_Bool HasForm(const sal_Int32 nTable, com::sun::star::uno::Reference<com::sun::star::drawing::XDrawPage>& xDrawPage);
     void AddNewShape(const ScMyShape& aMyShape);
     void SortShapesContainer();

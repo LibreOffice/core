@@ -274,9 +274,9 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     }
     SetText( aName );
 
-
-    OUString sFieldSeparators;
-    OUString sTextSeparators;
+    // Default options
+    OUString sFieldSeparators(RTL_CONSTASCII_USTRINGPARAM("\t"));
+    OUString sTextSeparators(mcTextSep);
     bool bMergeDelimiters = false;
     bool bFixedWidth = false;
     bool bQuotedFieldAsText = true;
@@ -403,6 +403,7 @@ ScImportAsciiDlg::ScImportAsciiDlg( Window* pParent,String aDatName,
     aLbType.Disable();
 
     // *** table box preview ***
+    maTableBox.Init();
     maTableBox.SetUpdateTextHdl( LINK( this, ScImportAsciiDlg, UpdateTextHdl ) );
     maTableBox.InitTypes( aLbType );
     maTableBox.SetColTypeHdl( LINK( this, ScImportAsciiDlg, ColTypeHdl ) );

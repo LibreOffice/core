@@ -1720,7 +1720,7 @@ void lcl_FillOldFields(
 
     bool bDataFound = false;
 
-    //! merge multiple occurences (data field with different functions)
+    //! merge multiple occurrences (data field with different functions)
     //! force data field in one dimension
 
     vector<long> aPos;

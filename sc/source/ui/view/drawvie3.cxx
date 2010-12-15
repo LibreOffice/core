@@ -119,7 +119,7 @@ ScAnchorType ScDrawView::GetAnchor() const
     return SCA_DONTKNOW;
 }
 
-void __EXPORT ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(ScTabDeletedHint))                        // Tabelle geloescht
     {

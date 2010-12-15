@@ -55,6 +55,7 @@
 #include <vcl/hatch.hxx>
 #include <sot/formats.hxx>
 #include <sot/clsids.hxx>
+#include <sal/macros.h>
 
 #include <svx/svdview.hxx>      // fuer Command-Handler (COMMAND_INSERTTEXT)
 #include <editeng/outliner.hxx>     // fuer Command-Handler (COMMAND_INSERTTEXT)
@@ -234,7 +235,7 @@ ScFilterListBox::ScFilterListBox( Window* pParent, ScGridWindow* pGrid,
 {
 }
 
-__EXPORT ScFilterListBox::~ScFilterListBox()
+ScFilterListBox::~ScFilterListBox()
 {
     if (IsMouseCaptured())
         ReleaseMouse();
@@ -251,7 +252,7 @@ void ScFilterListBox::EndInit()
     bInit = FALSE;
 }
 
-void __EXPORT ScFilterListBox::LoseFocus()
+void ScFilterListBox::LoseFocus()
 {
 #ifndef UNX
     Hide();
@@ -286,13 +287,13 @@ long ScFilterListBox::PreNotify( NotifyEvent& rNEvt )
     return nDone ? nDone : ListBox::PreNotify( rNEvt );
 }
 
-void __EXPORT ScFilterListBox::Select()
+void ScFilterListBox::Select()
 {
     ListBox::Select();
     SelectHdl();
 }
 
-void __EXPORT ScFilterListBox::SelectHdl()
+void ScFilterListBox::SelectHdl()
 {
     if ( !IsTravelSelect() && !bInit && !bCancelled )
     {
@@ -486,7 +487,7 @@ ScGridWindow::ScGridWindow( Window* pParent, ScViewData* pData, ScSplitPos eWhic
     EnableRTL( FALSE );
 }
 
-__EXPORT ScGridWindow::~ScGridWindow()
+ScGridWindow::~ScGridWindow()
 {
     // #114409#
     ImpDestroyOverlayObjects();
@@ -496,7 +497,7 @@ __EXPORT ScGridWindow::~ScGridWindow()
     delete pNoteMarker;
 }
 
-void __EXPORT ScGridWindow::Resize( const Size& )
+void ScGridWindow::Resize( const Size& )
 {
     //  gar nix
 }
@@ -953,7 +954,7 @@ void ScGridWindow::DoAutoFilterMenue( SCCOL nCol, SCROW nRow, BOOL bDataSelect )
 
         //  default entries
         static const USHORT nDefIDs[] = { SCSTR_ALLFILTER, SCSTR_TOP10FILTER, SCSTR_STDFILTER, SCSTR_EMPTY, SCSTR_NOTEMPTY };
-        const USHORT nDefCount = sizeof(nDefIDs) / sizeof(USHORT);
+        const USHORT nDefCount = SAL_N_ELEMENTS(nDefIDs);
         for (i=0; i<nDefCount; i++)
         {
             String aEntry( (ScResId) nDefIDs[i] );
@@ -1471,7 +1472,7 @@ BOOL ScGridWindow::TestMouse( const MouseEvent& rMEvt, BOOL bAction )
     return bNewPointer;
 }
 
-void __EXPORT ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void ScGridWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     nNestedButtonState = SC_NESTEDBUTTON_DOWN;
 
@@ -1792,7 +1793,7 @@ void ScGridWindow::HandleMouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
     ScDocument* pDoc = pViewData->GetDocument();
@@ -2245,7 +2246,7 @@ void ScGridWindow::FakeButtonUp()
     }
 }
 
-void __EXPORT ScGridWindow::MouseMove( const MouseEvent& rMEvt )
+void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
 {
     aCurMousePos = rMEvt.GetPosPixel();
 
@@ -2635,7 +2636,7 @@ void lcl_SetTextCursorPos( ScViewData* pViewData, ScSplitPos eWhich, Window* pWi
     pWin->SetCursorRect( &aEditArea );
 }
 
-void __EXPORT ScGridWindow::Command( const CommandEvent& rCEvt )
+void ScGridWindow::Command( const CommandEvent& rCEvt )
 {
     // The command event is send to the window after a possible context
     // menu from an inplace client is closed. Now we have the chance to
@@ -3075,7 +3076,7 @@ static void ClearSingleSelection( ScViewData* pViewData )
     }
 }
 
-void __EXPORT ScGridWindow::KeyInput(const KeyEvent& rKEvt)
+void ScGridWindow::KeyInput(const KeyEvent& rKEvt)
 {
     // #96965# Cursor control for ref input dialog
     const KeyCode& rKeyCode = rKEvt.GetKeyCode();
@@ -4549,7 +4550,7 @@ void ScGridWindow::ShowCursor()
     --nCursorHideCount;
 }
 
-void __EXPORT ScGridWindow::GetFocus()
+void ScGridWindow::GetFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->GotFocus();
@@ -4572,7 +4573,7 @@ void __EXPORT ScGridWindow::GetFocus()
     Window::GetFocus();
 }
 
-void __EXPORT ScGridWindow::LoseFocus()
+void ScGridWindow::LoseFocus()
 {
     ScTabViewShell* pViewShell = pViewData->GetViewShell();
     pViewShell->LostFocus();
@@ -5126,10 +5127,10 @@ BOOL ScGridWindow::HasScenarioButton( const Point& rPosPixel, ScRange& rScenRang
         aMarks.FillRangeListWithMarks( &aRanges, FALSE );
 
 
-        ULONG nRangeCount = aRanges.Count();
-        for (ULONG j=0; j<nRangeCount; j++)
+        size_t nRangeCount = aRanges.size();
+        for (size_t j=0;  j< nRangeCount; ++j)
         {
-            ScRange aRange = *aRanges.GetObject(j);
+            ScRange aRange = *aRanges[j];
             //  Szenario-Rahmen immer dann auf zusammengefasste Zellen erweitern, wenn
             //  dadurch keine neuen nicht-ueberdeckten Zellen mit umrandet werden
             pDoc->ExtendTotalMerge( aRange );
@@ -5250,8 +5251,9 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
     ScClipParam& rClipParam = pClipDoc->GetClipParam();
     mpOOSelectionBorder = new ::sdr::overlay::OverlayObjectList;
-    for (ScRange* p = rClipParam.maRanges.First(); p; p = rClipParam.maRanges.Next())
+    for ( size_t i = 0; i < rClipParam.maRanges.size(); ++i )
     {
+        ScRange* p = rClipParam.maRanges[i];
         if (p->aStart.Tab() != nCurTab)
             continue;
 

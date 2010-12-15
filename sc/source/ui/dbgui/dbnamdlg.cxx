@@ -191,7 +191,7 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScDbNameDlg::~ScDbNameDlg()
+ScDbNameDlg::~ScDbNameDlg()
 {
     DELETEZ( pSaveObj );
 
@@ -219,14 +219,6 @@ void ScDbNameDlg::Init()
     aBtnMore.AddWindow( &aFTSource );
     aBtnMore.AddWindow( &aFTOperations );
 
-    String  theAreaStr;
-    SCCOL   nStartCol   = 0;
-    SCROW   nStartRow   = 0;
-    SCTAB   nStartTab   = 0;
-    SCCOL   nEndCol     = 0;
-    SCROW   nEndRow     = 0;
-    SCTAB   nEndTab     = 0;
-
     aBtnOk.SetClickHdl      ( LINK( this, ScDbNameDlg, OkBtnHdl ) );
     aBtnCancel.SetClickHdl  ( LINK( this, ScDbNameDlg, CancelBtnHdl ) );
     aBtnAdd.SetClickHdl     ( LINK( this, ScDbNameDlg, AddBtnHdl ) );
@@ -235,8 +227,17 @@ void ScDbNameDlg::Init()
     aEdAssign.SetModifyHdl  ( LINK( this, ScDbNameDlg, AssModifyHdl ) );
     UpdateNames();
 
+    String  theAreaStr;
+
     if ( pViewData && pDoc )
     {
+        SCCOL   nStartCol   = 0;
+        SCROW   nStartRow   = 0;
+        SCTAB   nStartTab   = 0;
+        SCCOL   nEndCol     = 0;
+        SCROW   nEndRow     = 0;
+        SCTAB   nEndTab     = 0;
+
         ScDBCollection* pDBColl = pDoc->GetDBCollection();
         ScDBData*       pDBData = NULL;
 
@@ -342,7 +343,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScDbNameDlg::Close()
+BOOL ScDbNameDlg::Close()
 {
     return DoClose( ScDbNameDlgWrapper::GetChildWindowId() );
 }

@@ -155,7 +155,7 @@ void ScPivotShell::Execute( SfxRequest& rReq )
 }
 
 //------------------------------------------------------------------------
-void __EXPORT ScPivotShell::GetState( SfxItemSet& rSet )
+void ScPivotShell::GetState( SfxItemSet& rSet )
 {
     ScDocShell* pDocSh = pViewShell->GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();

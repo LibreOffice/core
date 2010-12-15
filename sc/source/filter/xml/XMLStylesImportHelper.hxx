@@ -105,12 +105,6 @@ class ScMyStyleRanges : public SvRefBase
     ::boost::shared_ptr<ScSimpleRangeList> mpUndefinedList;
     ScMyCurrencyStylesSet*  pCurrencyList;
 
-    void AddRange(const ScRange& rRange, ScRangeList* pList,
-        const rtl::OUString* pStyleName, const sal_Int16 nType,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
-    void AddCurrencyRange(const ScRange& rRange, ScRangeListRef xList,
-        const rtl::OUString* pStyleName, const rtl::OUString* pCurrency,
-        ScXMLImport& rImport, const sal_uInt32 nMaxRanges);
     void SetStylesToRanges(const ::std::list<ScRange>& rList,
         const rtl::OUString* pStyleName, const sal_Int16 nCellType,
         const rtl::OUString* pCurrency, ScXMLImport& rImport);

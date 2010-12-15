@@ -36,17 +36,17 @@
 #include <tools/string.hxx>
 #include <tools/list.hxx>
 #include <tools/debug.hxx>
+#include <sal/macros.h>
 #include <oox/helper/helper.hxx>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "filter.hxx"
 #include "scdllapi.h"
 
 // Common macros ==============================================================
 
-/** Expands to the size of a STATIC data array. */
-#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 /** Expands to a pointer behind the last element of a STATIC data array (like STL end()). */
-#define STATIC_TABLE_END( array )   ((array)+STATIC_TABLE_SIZE(array))
+#define STATIC_TABLE_END( array )   ((array)+SAL_N_ELEMENTS(array))
 
 /** Expands to a temporary String, created from an ASCII character array. */
 #define CREATE_STRING( ascii )      String( RTL_CONSTASCII_USTRINGPARAM( ascii ) )
@@ -139,99 +139,49 @@ void insert_value( Type& rnBitField, InsertType nValue, sal_uInt8 nStartBit, sal
 
 // ============================================================================
 
-/** Simple shared pointer (NOT thread-save, but faster than boost::shared_ptr). */
-template< typename Type >
-class ScfRef
-{
-    template< typename > friend class ScfRef;
-
-public:
-    typedef Type        element_type;
-    typedef ScfRef      this_type;
-
-    inline explicit     ScfRef( element_type* pObj = 0 ) { eat( pObj ); }
-    inline /*implicit*/ ScfRef( const this_type& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    template< typename Type2 >
-    inline /*implicit*/ ScfRef( const ScfRef< Type2 >& rRef ) { eat( rRef.mpObj, rRef.mpnCount ); }
-    inline              ~ScfRef() { rel(); }
-
-    inline void         reset( element_type* pObj = 0 ) { rel(); eat( pObj ); }
-    inline this_type&   operator=( const this_type& rRef ) { if( this != &rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); } return *this; }
-    template< typename Type2 >
-    inline this_type&   operator=( const ScfRef< Type2 >& rRef ) { rel(); eat( rRef.mpObj, rRef.mpnCount ); return *this; }
-
-    inline element_type* get() const { return mpObj; }
-    inline bool         is() const { return mpObj != 0; }
-
-    inline element_type* operator->() const { return mpObj; }
-    inline element_type& operator*() const { return *mpObj; }
-
-    inline bool         operator!() const { return mpObj == 0; }
-
-private:
-    inline void         eat( element_type* pObj, size_t* pnCount = 0 ) { mpObj = pObj; mpnCount = mpObj ? (pnCount ? pnCount : new size_t( 0 )) : 0; if( mpnCount ) ++*mpnCount; }
-    inline void         rel() { if( mpnCount && !--*mpnCount ) { DELETEZ( mpObj ); DELETEZ( mpnCount ); } }
-
-private:
-    Type*               mpObj;
-    size_t*             mpnCount;
-};
-
-template< typename Type >
-inline bool operator==( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() == rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator!=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() != rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() < rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() > rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator<=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() <= rxRef2.get();
-}
-
-template< typename Type >
-inline bool operator>=( const ScfRef< Type >& rxRef1, const ScfRef< Type >& rxRef2 )
-{
-    return rxRef1.get() >= rxRef2.get();
-}
-
-// ----------------------------------------------------------------------------
-
-/** Template for a map of ref-counted objects with additional accessor functions. */
+/**
+ * Template for a map of ref-counted objects with additional accessor functions.
+ *
+ * Note that unlike <c>std::map</c> or ,c>boost::ptr_map</c> this map can be
+ * used for classes that do not have a default constructor.
+ *
+ * @tparam KeyType The key type used to access elements.
+ * @tparam ObjType The element type to be stored. Note that this is stored
+ *                 internally as <c>boost::shared_ptr&lt;ObjType&gt;</c>
+ **/
 template< typename KeyType, typename ObjType >
-class ScfRefMap : public ::std::map< KeyType, ScfRef< ObjType > >
+class ScfRefMap : public ::std::map< KeyType, boost::shared_ptr< ObjType > >
 {
 public:
     typedef KeyType                             key_type;
-    typedef ScfRef< ObjType >                   ref_type;
+    typedef boost::shared_ptr< ObjType >        ref_type;
     typedef ::std::map< key_type, ref_type >    map_type;
 
-    /** Returns true, if the object accossiated to the passed key exists. */
+    /**
+     * Does a valid object with the passed key exist in the map?
+     *
+     * @param nKey The key to look for in the map.
+     * @return true if the key exists in the map and points to a valid instance
+     *         of <c>ObjType<c>.
+     **/
     inline bool         has( key_type nKey ) const
                         {
                             typename map_type::const_iterator aIt = find( nKey );
-                            return (aIt != this->end()) && aIt->second.is();
+                            return (aIt != this->end()) && aIt->second;
                         }
 
-    /** Returns a reference to the object accossiated to the passed key, or 0 on error. */
+    /**
+     * Returns a reference to the object associated to the passed key.
+     *
+     * If the key does not exist in the map, a new (empty) instance of ref_type
+     * is created and returned.
+     *
+     * Note: This method differs from the behaviour of <c>std::map::operator[]</c>
+     * in that if a new instance is returned, it is NOT added to the map.
+     *
+     * @param nKey The key to look for in the map.
+     * @return The instance of <c>ref_type</c> corresponding to nKey or a new instance.
+     **/
     inline ref_type     get( key_type nKey ) const
                         {
                             typename map_type::const_iterator aIt = find( nKey );

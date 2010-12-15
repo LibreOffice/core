@@ -155,36 +155,36 @@ using ::std::vector;
 
 //  Stream-Namen im Storage
 
-const sal_Char __FAR_DATA ScDocShell::pStarCalcDoc[] = STRING_SCSTREAM;     // "StarCalcDocument"
-const sal_Char __FAR_DATA ScDocShell::pStyleName[] = "SfxStyleSheets";
+const sal_Char ScDocShell::pStarCalcDoc[] = STRING_SCSTREAM;        // "StarCalcDocument"
+const sal_Char ScDocShell::pStyleName[] = "SfxStyleSheets";
 
 //  Filter-Namen (wie in sclib.cxx)
 
-static const sal_Char __FAR_DATA pFilterSc50[]      = "StarCalc 5.0";
-//static const sal_Char __FAR_DATA pFilterSc50Temp[]    = "StarCalc 5.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc40[]      = "StarCalc 4.0";
-//static const sal_Char __FAR_DATA pFilterSc40Temp[]    = "StarCalc 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc30[]      = "StarCalc 3.0";
-//static const sal_Char __FAR_DATA pFilterSc30Temp[]    = "StarCalc 3.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterSc10[]      = "StarCalc 1.0";
-static const sal_Char __FAR_DATA pFilterXML[]       = "StarOffice XML (Calc)";
-static const sal_Char __FAR_DATA pFilterAscii[]     = "Text - txt - csv (StarCalc)";
-static const sal_Char __FAR_DATA pFilterLotus[]     = "Lotus";
-static const sal_Char __FAR_DATA pFilterQPro6[]     = "Quattro Pro 6.0";
-static const sal_Char __FAR_DATA pFilterExcel4[]    = "MS Excel 4.0";
-static const sal_Char __FAR_DATA pFilterEx4Temp[]   = "MS Excel 4.0 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel5[]    = "MS Excel 5.0/95";
-static const sal_Char __FAR_DATA pFilterEx5Temp[]   = "MS Excel 5.0/95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel95[]   = "MS Excel 95";
-static const sal_Char __FAR_DATA pFilterEx95Temp[]  = "MS Excel 95 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterExcel97[]   = "MS Excel 97";
-static const sal_Char __FAR_DATA pFilterEx97Temp[]  = "MS Excel 97 Vorlage/Template";
-static const sal_Char __FAR_DATA pFilterDBase[]     = "dBase";
-static const sal_Char __FAR_DATA pFilterDif[]       = "DIF";
-static const sal_Char __FAR_DATA pFilterSylk[]      = "SYLK";
-static const sal_Char __FAR_DATA pFilterHtml[]      = "HTML (StarCalc)";
-static const sal_Char __FAR_DATA pFilterHtmlWebQ[]  = "calc_HTML_WebQuery";
-static const sal_Char __FAR_DATA pFilterRtf[]       = "Rich Text Format (StarCalc)";
+static const sal_Char pFilterSc50[]     = "StarCalc 5.0";
+//static const sal_Char pFilterSc50Temp[]   = "StarCalc 5.0 Vorlage/Template";
+static const sal_Char pFilterSc40[]     = "StarCalc 4.0";
+//static const sal_Char pFilterSc40Temp[]   = "StarCalc 4.0 Vorlage/Template";
+static const sal_Char pFilterSc30[]     = "StarCalc 3.0";
+//static const sal_Char pFilterSc30Temp[]   = "StarCalc 3.0 Vorlage/Template";
+static const sal_Char pFilterSc10[]     = "StarCalc 1.0";
+static const sal_Char pFilterXML[]      = "StarOffice XML (Calc)";
+static const sal_Char pFilterAscii[]        = "Text - txt - csv (StarCalc)";
+static const sal_Char pFilterLotus[]        = "Lotus";
+static const sal_Char pFilterQPro6[]        = "Quattro Pro 6.0";
+static const sal_Char pFilterExcel4[]   = "MS Excel 4.0";
+static const sal_Char pFilterEx4Temp[]  = "MS Excel 4.0 Vorlage/Template";
+static const sal_Char pFilterExcel5[]   = "MS Excel 5.0/95";
+static const sal_Char pFilterEx5Temp[]  = "MS Excel 5.0/95 Vorlage/Template";
+static const sal_Char pFilterExcel95[]  = "MS Excel 95";
+static const sal_Char pFilterEx95Temp[] = "MS Excel 95 Vorlage/Template";
+static const sal_Char pFilterExcel97[]  = "MS Excel 97";
+static const sal_Char pFilterEx97Temp[] = "MS Excel 97 Vorlage/Template";
+static const sal_Char pFilterDBase[]        = "dBase";
+static const sal_Char pFilterDif[]      = "DIF";
+static const sal_Char pFilterSylk[]     = "SYLK";
+static const sal_Char pFilterHtml[]     = "HTML (StarCalc)";
+static const sal_Char pFilterHtmlWebQ[] = "calc_HTML_WebQuery";
+static const sal_Char pFilterRtf[]      = "Rich Text Format (StarCalc)";
 
 //----------------------------------------------------------------------
 
@@ -204,7 +204,7 @@ TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-I
 
 //------------------------------------------------------------------
 
-void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
+void ScDocShell::FillClass( SvGlobalName* pClassName,
                                         sal_uInt32* pFormat,
                                         String* /* pAppName */,
                                         String* pFullTypeName,
@@ -484,7 +484,7 @@ BOOL ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::R
     return bRet;
 }
 
-BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
+BOOL ScDocShell::Load( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Load" );
     LoadMediumGuard aLoadGuard(&aDocument);
@@ -534,7 +534,7 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
     return bRet;
 }
 
-void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     uno::Reference< script::vba::XVBAEventProcessor > xVbaEvents = aDocument.GetVbaEventProcessor();
     if ( xVbaEvents.is() ) try
@@ -967,7 +967,7 @@ void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
     // Inhalte fuer Organizer laden
 
 
-BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
+BOOL ScDocShell::LoadFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::LoadFrom" );
     LoadMediumGuard aLoadGuard(&aDocument);
@@ -1022,7 +1022,7 @@ static void lcl_parseHtmlFilterOption(const OUString& rOption, LanguageType& rLa
     rDateConvert = static_cast<bool>(aTokens[1].toInt32());
 }
 
-BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
+BOOL ScDocShell::ConvertFrom( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertFrom" );
 
@@ -1557,7 +1557,7 @@ ScDocShell::PrepareSaveGuard::~PrepareSaveGuard()
 }
 
 
-BOOL __EXPORT ScDocShell::Save()
+BOOL ScDocShell::Save()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::Save" );
 
@@ -1573,11 +1573,10 @@ BOOL __EXPORT ScDocShell::Save()
 }
 
 
-BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
+BOOL ScDocShell::SaveAs( SfxMedium& rMedium )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::SaveAs" );
 
-#if ENABLE_SHEET_PROTECTION
     ScTabViewShell* pViewShell = GetBestViewShell();
     bool bNeedsRehash = ScPassHashHelper::needsPassHashRegen(aDocument, PASSHASH_SHA1);
     if (bNeedsRehash)
@@ -1590,7 +1589,6 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
             // password re-type cancelled.  Don't save the document.
             return false;
     }
-#endif
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
@@ -1605,7 +1603,7 @@ BOOL __EXPORT ScDocShell::SaveAs( SfxMedium& rMedium )
 }
 
 
-BOOL __EXPORT ScDocShell::IsInformationLost()
+BOOL ScDocShell::IsInformationLost()
 {
 /*
     const SfxFilter *pFilt = GetMedium()->GetFilter();
@@ -2057,7 +2055,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     rStream.SetNumberFormatInt( nOldNumberFormatInt );
 }
 
-BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
+BOOL ScDocShell::ConvertTo( SfxMedium &rMed )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ConvertTo" );
 
@@ -2125,13 +2123,11 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 }
             }
 
-#if ENABLE_SHEET_PROTECTION
             if( bDoSave )
             {
                 bool bNeedRetypePassDlg = ScPassHashHelper::needsPassHashRegen( aDocument, PASSHASH_XL );
                 bDoSave = !bNeedRetypePassDlg || pViewShell->ExecuteRetypePassDlg( PASSHASH_XL );
             }
-#endif
         }
 
         if( bDoSave )
@@ -2328,13 +2324,13 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
 }
 
 
-BOOL __EXPORT ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
+BOOL ScDocShell::SaveCompleted( const uno::Reference < embed::XStorage >& xStor )
 {
     return SfxObjectShell::SaveCompleted( xStor );
 }
 
 
-BOOL __EXPORT ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
+BOOL ScDocShell::DoSaveCompleted( SfxMedium * pNewStor )
 {
     BOOL bRet = SfxObjectShell::DoSaveCompleted( pNewStor );
 
@@ -2383,7 +2379,7 @@ sal_Bool ScDocShell::QuerySlotExecutable( USHORT nSlotId )
 }
 
 
-USHORT __EXPORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
+USHORT ScDocShell::PrepareClose( BOOL bUI, BOOL bForBrowsing )
 {
     if(SC_MOD()->GetCurRefDlgId()>0)
     {
@@ -2589,7 +2585,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags )
 
 //------------------------------------------------------------------
 
-__EXPORT ScDocShell::~ScDocShell()
+ScDocShell::~ScDocShell()
 {
     ResetDrawObjectShell(); // #55570# falls der Drawing-Layer noch versucht, darauf zuzugreifen
 
@@ -2626,7 +2622,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
 //------------------------------------------------------------------
 
-SfxUndoManager* __EXPORT ScDocShell::GetUndoManager()
+SfxUndoManager* ScDocShell::GetUndoManager()
 {
     return aDocument.GetUndoManager();
 }
@@ -2753,7 +2749,7 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 }
 
 
-SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
+SfxDocumentInfoDialog* ScDocShell::CreateDocumentInfoDialog(
                                          Window *pParent, const SfxItemSet &rSet )
 {
     SfxDocumentInfoDialog* pDlg   = new SfxDocumentInfoDialog( pParent, rSet );

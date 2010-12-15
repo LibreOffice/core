@@ -35,6 +35,7 @@
 #include "xehelper.hxx"
 #include "xeformula.hxx"
 #include "externalrefmgr.hxx"
+#include <boost/shared_ptr.hpp>
 
 class ScRange;
 struct ScSingleRefData;
@@ -210,7 +211,7 @@ public:
     virtual void        Save( XclExpStream& rStrm );
 
 private:
-    typedef ScfRef< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
+    typedef boost::shared_ptr< XclExpLinkManagerImpl > XclExpLinkMgrImplPtr;
     XclExpLinkMgrImplPtr mxImpl;
 };
 

@@ -147,7 +147,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
 
 //------------------------------------------------------------------------
 
-__EXPORT ScNewScenarioDlg::~ScNewScenarioDlg()
+ScNewScenarioDlg::~ScNewScenarioDlg()
 {
 }
 

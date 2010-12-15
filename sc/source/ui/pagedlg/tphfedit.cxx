@@ -130,7 +130,7 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLo
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScEditWindow::~ScEditWindow()
+ScEditWindow::~ScEditWindow()
 {
     // delete Accessible object before deleting EditEngine and EditView
     if (pAcc)
@@ -153,7 +153,7 @@ void ScEditWindow::SetNumType(SvxNumType eNumType)
 
 // -----------------------------------------------------------------------
 
-EditTextObject* __EXPORT ScEditWindow::CreateTextObject()
+EditTextObject* ScEditWindow::CreateTextObject()
 {
     //  wegen #38841# die Absatzattribute zuruecksetzen
     //  (GetAttribs beim Format-Dialog-Aufruf gibt immer gesetzte Items zurueck)
@@ -237,7 +237,7 @@ void ScEditWindow::SetCharAttriutes()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
+void ScEditWindow::Paint( const Rectangle& rRec )
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -253,14 +253,14 @@ void __EXPORT ScEditWindow::Paint( const Rectangle& rRec )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseMove( const MouseEvent& rMEvt )
+void ScEditWindow::MouseMove( const MouseEvent& rMEvt )
 {
     pEdView->MouseMove( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
+void ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if ( !HasFocus() )
         GrabFocus();
@@ -270,14 +270,14 @@ void __EXPORT ScEditWindow::MouseButtonDown( const MouseEvent& rMEvt )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
+void ScEditWindow::MouseButtonUp( const MouseEvent& rMEvt )
 {
     pEdView->MouseButtonUp( rMEvt );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::KeyInput( const KeyEvent& rKEvt )
+void ScEditWindow::KeyInput( const KeyEvent& rKEvt )
 {
     USHORT nKey =  rKEvt.GetKeyCode().GetModifier()
                  + rKEvt.GetKeyCode().GetCode();
@@ -301,7 +301,7 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScEditWindow::GetFocus()
+void ScEditWindow::GetFocus()
 {
     pActiveEdWnd = this;
 
@@ -314,7 +314,7 @@ void __EXPORT ScEditWindow::GetFocus()
         pAcc = NULL;
 }
 
-void __EXPORT ScEditWindow::LoseFocus()
+void ScEditWindow::LoseFocus()
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
     if (xTemp.is() && pAcc)
@@ -336,19 +336,16 @@ void __EXPORT ScEditWindow::LoseFocus()
     case Left:
         {
             sName = String(ScResId(STR_ACC_LEFTAREA_NAME));
-//            sDescription = String(ScResId(STR_ACC_LEFTAREA_DESCR));
         }
         break;
     case Center:
         {
             sName = String(ScResId(STR_ACC_CENTERAREA_NAME));
-//            sDescription = String(ScResId(STR_ACC_CENTERAREA_DESCR));
         }
         break;
     case Right:
         {
             sName = String(ScResId(STR_ACC_RIGHTAREA_NAME));
-//            sDescription = String(ScResId(STR_ACC_RIGHTAREA_DESCR));
         }
         break;
     }
@@ -359,38 +356,6 @@ void __EXPORT ScEditWindow::LoseFocus()
     return pAcc;
 }
 
-/*
-class ScExtIButton : public ImageButton
-{
-private:
-
-    Timer           aTimer;
-    ScPopupMenu*    pPopupMenu;
-
-    DECL_LINK( TimerHdl, Timer*);
-
-    void            DrawArrow();
-
-protected:
-
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void    MouseButtonUp( const MouseEvent& rMEvt);
-
-    virtual void    StartPopup();
-
-public:
-
-    ScExtIButton(Window* pParent, const ResId& rResId );
-
-    void            SetPopupMenu(ScPopupMenu* pPopUp);
-
-    USHORT          GetSelected();
-
-    void            SetMenuHdl( const Link& rLink ) { aFxLink = rLink; }
-    const Link&     GetMenuHdl() const { return aFxLink; }
-
-}
-*/
 ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
 :   ImageButton(pParent,rResId),
     pPopupMenu(NULL)
@@ -398,8 +363,6 @@ ScExtIButton::ScExtIButton(Window* pParent, const ResId& rResId )
     nSelected=0;
     aTimer.SetTimeout(600);
     SetDropDown( TRUE);
-
-//  DrawArrow();
 }
 
 void ScExtIButton::SetPopupMenu(ScPopupMenu* pPopUp)
@@ -473,95 +436,6 @@ IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
     StartPopup();
     return 0;
 }
-
-/*
-static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack,
-                               BOOL bLeft = FALSE, BOOL bTop = FALSE )
-{
-    Color           aOldFillColor = pBox->GetFillColor();
-    WindowAlign     eAlign = pBox->meAlign;
-    if ( bLeft )
-        eAlign = WINDOWALIGN_RIGHT;
-    else if ( bTop )
-        eAlign = WINDOWALIGN_BOTTOM;
-
-    switch ( eAlign )
-    {
-        case WINDOWALIGN_LEFT:
-            if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+0, nY+6 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+1, nY+5 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
-            if ( bBlack )
-            {
-                pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
-                pBox->DrawRect( Rectangle( nX+2, nY+3, nX+2, nY+3 ) );
-            }
-            break;
-        case WINDOWALIGN_TOP:
-            if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+0, nX+6, nY+0 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+1, nX+5, nY+1 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+3, nX+3, nY+3 ) );
-            if ( bBlack )
-            {
-                pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-                pBox->DrawRect( Rectangle( nX+3, nY+2, nX+3, nY+2 ) );
-            }
-            break;
-        case WINDOWALIGN_RIGHT:
-            if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+6 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+2, nY+5 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+1, nY+4 ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+0, nY+3 ) );
-            if ( bBlack )
-            {
-                pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+2, nY+4 ) );
-                pBox->DrawRect( Rectangle( nX+1, nY+3, nX+1, nY+3 ) );
-            }
-            break;
-        case WINDOWALIGN_BOTTOM:
-            if ( bBlack )
-                pBox->SetFillColor( Color( COL_BLACK ) );
-            pBox->DrawRect( Rectangle( nX+0, nY+3, nX+6, nY+3 ) );
-            pBox->DrawRect( Rectangle( nX+1, nY+2, nX+5, nY+2 ) );
-            pBox->DrawRect( Rectangle( nX+2, nY+1, nX+4, nY+1 ) );
-            pBox->DrawRect( Rectangle( nX+3, nY+0, nX+3, nY+0 ) );
-            if ( bBlack )
-            {
-                pBox->SetFillColor( aOldFillColor );
-                pBox->DrawRect( Rectangle( nX+2, nY+2, nX+4, nY+2 ) );
-                pBox->DrawRect( Rectangle( nX+3, nY+1, nX+3, nY+1 ) );
-            }
-            break;
-    }
-}
-Down
-    - Timer starten
-
-Click
-    - Timer abbrechen
-
-Timer
-    if ( ??? )
-    {
-    - SetPressed( TRUE );
-    - EndSelection();
-    - Menu anzeigen
-    - SetPressed( FALSE );
-    }
-
-
-*/
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

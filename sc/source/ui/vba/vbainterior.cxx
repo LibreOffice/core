@@ -43,13 +43,13 @@
 
 #include <map>
 
+#include <sal/macros.h>
 #include <svx/xtable.hxx>
 
 #include "vbainterior.hxx"
 #include "vbapalette.hxx"
 #include "document.hxx"
 
-#define STATIC_TABLE_SIZE( array )  (sizeof(array)/sizeof(*(array)))
 #define COLORMAST 0xFFFFFF
 const sal_uInt16 EXC_COLOR_WINDOWBACK = 65;
 typedef std::map< sal_Int32, sal_Int32 >  PatternMap;
@@ -240,7 +240,7 @@ ScVbaInterior::GetPatternColor( const Color& rPattColor, const Color& rBackColor
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return ( nXclPattern < STATIC_TABLE_SIZE( pnRatioTable ) ) ?
+    return ( nXclPattern < SAL_N_ELEMENTS( pnRatioTable ) ) ?
         GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 Color

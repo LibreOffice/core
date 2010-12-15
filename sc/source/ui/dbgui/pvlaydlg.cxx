@@ -710,7 +710,6 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
         ScDPFieldControlBase* theWnd  = GetFieldWindow(eFromType);
         ScDPFuncDataVec*    theArr   = GetFieldDataArray(eFromType);
         size_t              nAt      = 0;
-        size_t              nToIndex = 0;
         Point               aToPos;
         BOOL                bDataArr = eFromType == TYPE_DATA;
 

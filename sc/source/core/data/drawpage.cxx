@@ -52,7 +52,7 @@ ScDrawPage::ScDrawPage(ScDrawLayer& rNewModel, StarBASIC* pBasic, BOOL bMasterPa
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScDrawPage::~ScDrawPage()
+ScDrawPage::~ScDrawPage()
 {
 }
 

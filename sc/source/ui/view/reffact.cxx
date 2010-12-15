@@ -75,7 +75,7 @@ SFX_IMPL_CHILDWINDOW(ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
 //<!--Added by PengYunQuan for Validity Cell Range Picker
 //SFX_IMPL_MODELESSDIALOG(ScValidityRefChildWin, SID_VALIDITY_REFERENCE )
 SFX_IMPL_CHILDWINDOW(ScValidityRefChildWin, SID_VALIDITY_REFERENCE)
-SfxChildWinInfo __EXPORT ScValidityRefChildWin::GetInfo() const
+SfxChildWinInfo ScValidityRefChildWin::GetInfo() const
 {
     SfxChildWinInfo anInfo = SfxChildWindow::GetInfo();
 

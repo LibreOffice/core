@@ -81,16 +81,16 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
     aRemoveColorLB.SetSelectHdl( aLk );
 }
 
-__EXPORT ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
+ScRedlineOptionsTabPage::~ScRedlineOptionsTabPage()
 {
 }
 
-SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
+SfxTabPage* ScRedlineOptionsTabPage::Create( Window* pParent, const SfxItemSet& rSet )
 {
     return new ScRedlineOptionsTabPage( pParent, rSet );
 }
 
-BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
+BOOL ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
@@ -157,7 +157,7 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
     return FALSE;
 }
 
-void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
+void ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
 
     XColorTable* pColorTbl = XColorTable::GetStdColorTable();

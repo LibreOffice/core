@@ -680,7 +680,7 @@ bool XclExpLabelCell::IsMultiLineText() const
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
         const ScPatternAttr* pPattern, XclExpStringRef xText )
 {
-    DBG_ASSERT( xText.is() && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
+    DBG_ASSERT( xText && xText->Len(), "XclExpLabelCell::XclExpLabelCell - empty string passed" );
     mxText = xText;
     mnSstIndex = 0;
 
@@ -846,7 +846,7 @@ XclExpFormulaCell::XclExpFormulaCell(
             // other formula cell covered by a matrix - find the ARRAY record
             mxAddRec = rArrayBfr.FindArray( rScTokArr );
             // should always be found, if Calc document is not broken
-            DBG_ASSERT( mxAddRec.is(), "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
+            DBG_ASSERT( mxAddRec, "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
         }
         break;
         default:;
@@ -864,22 +864,22 @@ XclExpFormulaCell::XclExpFormulaCell(
 void XclExpFormulaCell::Save( XclExpStream& rStrm )
 {
     // create token array for FORMULA cells with additional record
-    if( mxAddRec.is() )
+    if( mxAddRec )
         mxTokArr = mxAddRec->CreateCellTokenArray( rStrm.GetRoot() );
 
     // FORMULA record itself
-    DBG_ASSERT( mxTokArr.is(), "XclExpFormulaCell::Save - missing token array" );
+    DBG_ASSERT( mxTokArr, "XclExpFormulaCell::Save - missing token array" );
     if( !mxTokArr )
         mxTokArr = rStrm.GetRoot().GetFormulaCompiler().CreateErrorFormula( EXC_ERR_NA );
     SetContSize( 16 + mxTokArr->GetSize() );
     XclExpSingleCellBase::Save( rStrm );
 
     // additional record (ARRAY, SHRFMLA, or TABLEOP), only for first FORMULA record
-    if( mxAddRec.is() && mxAddRec->IsBasePos( GetXclCol(), GetXclRow() ) )
+    if( mxAddRec && mxAddRec->IsBasePos( GetXclCol(), GetXclRow() ) )
         mxAddRec->Save( rStrm );
 
     // STRING record for string result
-    if( mxStringRec.is() )
+    if( mxStringRec )
         mxStringRec->Save( rStrm );
 }
 
@@ -899,7 +899,7 @@ void XclExpFormulaCell::SaveXml( XclExpXmlStream& rStrm )
 
     rWorksheet->startElement( XML_f,
             // OOXTODO: XML_t,      ST_CellFormulaType
-            XML_aca,    XclXmlUtils::ToPsz( (mxTokArr.is() && mxTokArr->IsVolatile()) || (mxAddRec.is() && mxAddRec->IsVolatile()) ),
+            XML_aca,    XclXmlUtils::ToPsz( (mxTokArr && mxTokArr->IsVolatile()) || (mxAddRec && mxAddRec->IsVolatile()) ),
             // OOXTODO: XML_ref,    ST_Ref
             // OOXTODO: XML_dt2D,   bool
             // OOXTODO: XML_dtr,    bool
@@ -979,8 +979,8 @@ void XclExpFormulaCell::WriteContents( XclExpStream& rStrm )
 
     // flags and formula token array
     sal_uInt16 nFlags = EXC_FORMULA_DEFAULTFLAGS;
-    ::set_flag( nFlags, EXC_FORMULA_RECALC_ALWAYS, mxTokArr->IsVolatile() || (mxAddRec.is() && mxAddRec->IsVolatile()) );
-    ::set_flag( nFlags, EXC_FORMULA_SHARED, mxAddRec.is() && (mxAddRec->GetRecId() == EXC_ID_SHRFMLA) );
+    ::set_flag( nFlags, EXC_FORMULA_RECALC_ALWAYS, mxTokArr->IsVolatile() || (mxAddRec && mxAddRec->IsVolatile()) );
+    ::set_flag( nFlags, EXC_FORMULA_SHARED, mxAddRec && (mxAddRec->GetRecId() == EXC_ID_SHRFMLA) );
     rStrm << nFlags << sal_uInt32( 0 ) << *mxTokArr;
 }
 
@@ -1936,7 +1936,7 @@ void XclExpRow::Save( XclExpStream& rStrm )
 
 void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell.is(), "XclExpRow::InsertCell - missing cell" );
+    DBG_ASSERT( xCell, "XclExpRow::InsertCell - missing cell" );
 
     /*  #109751# If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
@@ -1946,7 +1946,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase
 
     // try to merge with previous cell, insert the new cell if not successful
     XclExpCellRef xPrevCell = maCellList.GetRecord( nPos - 1 );
-    if( xPrevCell.is() && xPrevCell->TryMerge( *xCell ) )
+    if( xPrevCell && xPrevCell->TryMerge( *xCell ) )
         xCell = xPrevCell;
     else
         maCellList.InsertRecord( xCell, nPos++ );
@@ -1954,7 +1954,7 @@ void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase
 
     // try to merge with following cell, remove it if successful
     XclExpCellRef xNextCell = maCellList.GetRecord( nPos );
-    if( xNextCell.is() && xCell->TryMerge( *xNextCell ) )
+    if( xNextCell && xCell->TryMerge( *xNextCell ) )
         maCellList.RemoveRecord( nPos );
 }
 
@@ -2005,7 +2005,7 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 
 void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
-    DBG_ASSERT( xCell.is(), "XclExpRowBuffer::AppendCell - missing cell" );
+    DBG_ASSERT( xCell, "XclExpRowBuffer::AppendCell - missing cell" );
     GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
 }
 
@@ -2105,7 +2105,6 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
     for (itr = itrBeg; itr != itrEnd; ++itr)
     {
         // find end of row block
-        ++itrBlkEnd;
         while( (itrBlkEnd != itrEnd) && (itrBlkEnd->second->GetXclRow() - nStartXclRow < EXC_ROW_ROWBLOCKSIZE) )
             ++itrBlkEnd;
 
@@ -2118,7 +2117,7 @@ void XclExpRowBuffer::Save( XclExpStream& rStrm )
         for( itRow = itrBlkStart; itRow != itrBlkEnd; ++itRow )
              itRow->second->WriteCellList( rStrm );
 
-        itrBlkStart = itrBlkEnd;
+        itrBlkStart = (itrBlkEnd == itrEnd) ? itrBlkEnd : itrBlkEnd++;
         nStartXclRow += EXC_ROW_ROWBLOCKSIZE;
     }
 }
@@ -2339,7 +2338,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
         }
 
         // insert the cell into the current row
-        if( xCell.is() )
+        if( xCell )
             maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         // notes
@@ -2359,7 +2358,7 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
-                sal_uInt32 nXFId = xCell.is() ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
+                sal_uInt32 nXFId = xCell ? xCell->GetFirstXFId() : EXC_XFID_NOTFOUND;
                 // #120156# blank cells merged vertically may occur repeatedly
                 DBG_ASSERT( (aScRange.aStart.Col() == aScRange.aEnd.Col()) || (nScCol == nLastScCol),
                     "XclExpCellTable::XclExpCellTable - invalid repeated blank merged cell" );

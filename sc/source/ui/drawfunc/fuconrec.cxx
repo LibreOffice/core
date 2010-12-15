@@ -74,7 +74,7 @@ FuConstRectangle::~FuConstRectangle()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -107,7 +107,7 @@ BOOL __EXPORT FuConstRectangle::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -118,7 +118,7 @@ BOOL __EXPORT FuConstRectangle::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -161,7 +161,7 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstRectangle::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);

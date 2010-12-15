@@ -53,7 +53,6 @@
 #define TP_LEGEND_POS   900
 #define TP_DATA_DESCR   901
 #define TP_ALIGNMENT    902
-//#define TP_SYMBOL     906
 #define TP_LAYOUT       907
 #define TP_OPTIONS      908
 #define TP_POLAROPTIONS 909

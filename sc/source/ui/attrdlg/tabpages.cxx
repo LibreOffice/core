@@ -86,20 +86,20 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTabPageProtection::~ScTabPageProtection()
+ScTabPageProtection::~ScTabPageProtection()
 {
 }
 
 //------------------------------------------------------------------------
 
-USHORT* __EXPORT ScTabPageProtection::GetRanges()
+USHORT* ScTabPageProtection::GetRanges()
 {
     return pProtectionRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*           pParent,
+SfxTabPage* ScTabPageProtection::Create( Window*            pParent,
                                                   const SfxItemSet& rAttrSet )
 {
     return ( new ScTabPageProtection( pParent, rAttrSet ) );
@@ -107,7 +107,7 @@ SfxTabPage* __EXPORT ScTabPageProtection::Create( Window*           pParent,
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
+void ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 {
     //  Variablen initialisieren
 
@@ -151,7 +151,7 @@ void __EXPORT ScTabPageProtection::Reset( const SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     BOOL                bAttrsChanged   = FALSE;
     USHORT              nWhich          = GetWhich( SID_SCATTR_PROTECTION );
@@ -185,7 +185,7 @@ BOOL __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
+int ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( *pSetP );

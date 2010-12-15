@@ -329,7 +329,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
 //----------------------------------------------------------------------------
 // Destruktor
 
-__EXPORT ScConditionalFormatDlg::~ScConditionalFormatDlg()
+ScConditionalFormatDlg::~ScConditionalFormatDlg()
 {
 }
 

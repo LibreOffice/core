@@ -77,6 +77,9 @@ private:
 public:
     explicit                    ScCsvTableBox( Window* pParent, const ResId& rResId );
 
+    /** Finishes initialization. Must be called after constructing a new object. */
+    void Init();
+
     // common table box handling ----------------------------------------------
 public:
     /** Sets the control to separators mode. */
@@ -85,8 +88,6 @@ public:
     void                        SetFixedWidthMode();
 
 private:
-    /** Initialisation on construction. */
-    SC_DLLPRIVATE void                        Init();
     /** Initializes the children controls (pos/size, scroll bars, ...). */
     SC_DLLPRIVATE void                        InitControls();
     /** Initializes size and position data of horizontal scrollbar. */

@@ -172,7 +172,7 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScHFEditPage::~ScHFEditPage()
+ScHFEditPage::~ScHFEditPage()
 {
 }
 
@@ -187,7 +187,7 @@ void ScHFEditPage::SetNumType(SvxNumType eNumType)
 
 #define IS_AVAILABLE(w)(rCoreSet.GetItemState( (w) ) >= SFX_ITEM_AVAILABLE)
 
-void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
+void ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 {
     if ( IS_AVAILABLE( nWhich ) )
     {
@@ -208,7 +208,7 @@ void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
+BOOL ScHFEditPage::FillItemSet( SfxItemSet& rCoreSet )
 {
     ScPageHFItem    aItem( nWhich );
     EditTextObject* pLeft   = aWndLeft  .CreateTextObject();
@@ -925,12 +925,12 @@ ScRightHeaderEditPage::ScRightHeaderEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-USHORT* __EXPORT ScRightHeaderEditPage::GetRanges()
+USHORT* ScRightHeaderEditPage::GetRanges()
     { return pPageRightHeaderRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScRightHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightHeaderEditPage( pParent, rCoreSet ) ); };
 
 
@@ -945,12 +945,12 @@ ScLeftHeaderEditPage::ScLeftHeaderEditPage( Window* pParent, const SfxItemSet& r
 
 // -----------------------------------------------------------------------
 
-USHORT* __EXPORT ScLeftHeaderEditPage::GetRanges()
+USHORT* ScLeftHeaderEditPage::GetRanges()
     { return pPageLeftHeaderRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScLeftHeaderEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftHeaderEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
@@ -964,12 +964,12 @@ ScRightFooterEditPage::ScRightFooterEditPage( Window* pParent, const SfxItemSet&
 
 // -----------------------------------------------------------------------
 
-USHORT* __EXPORT ScRightFooterEditPage::GetRanges()
+USHORT* ScRightFooterEditPage::GetRanges()
     { return pPageRightFooterRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScRightFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScRightFooterEditPage( pParent, rCoreSet ) ); };
 
 //========================================================================
@@ -983,12 +983,12 @@ ScLeftFooterEditPage::ScLeftFooterEditPage( Window* pParent, const SfxItemSet& r
 
 // -----------------------------------------------------------------------
 
-USHORT* __EXPORT ScLeftFooterEditPage::GetRanges()
+USHORT* ScLeftFooterEditPage::GetRanges()
     { return pPageLeftFooterRanges; }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
+SfxTabPage* ScLeftFooterEditPage::Create( Window* pParent, const SfxItemSet& rCoreSet )
     { return ( new ScLeftFooterEditPage( pParent, rCoreSet ) ); };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

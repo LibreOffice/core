@@ -26,8 +26,6 @@
  ************************************************************************/
 #include "sc.hrc"
 
-//#define RID_SCDLG_NAVIGATOR   256
-
 #define FT_ROW                  1
 #define ED_ROW                  2
 #define FT_COL                  3

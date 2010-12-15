@@ -1012,19 +1012,6 @@ void DataBrowser::PaintCell(
     if( ! bEnabled )
         rDev.SetTextColor( GetSettings().GetStyleSettings().GetDisableColor() );
 
-    // TEST
-//     if( nColumnId == 1 )
-//         // categories
-//         rDev.SetFillColor( Color( 0xff, 0xff, 0xff ));
-//     else if( nColumnId == 2 )
-//         // x-values
-//         rDev.SetFillColor( Color( 0xf0, 0xf0, 0xff ));
-//     else
-//         // y-values
-//         rDev.SetFillColor( Color( 0xff, 0xff, 0xf0 ));
-
-//     rDev.DrawRect( rRect );
-
     // draw the text
     rDev.DrawText( aPos, aText );
 

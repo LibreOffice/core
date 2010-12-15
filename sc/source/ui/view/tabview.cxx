@@ -177,11 +177,11 @@ ScCornerButton::ScCornerButton( Window* pParent, ScViewData* pData, BOOL bAdditi
     EnableRTL( FALSE );
 }
 
-__EXPORT ScCornerButton::~ScCornerButton()
+ScCornerButton::~ScCornerButton()
 {
 }
 
-void __EXPORT ScCornerButton::Paint( const Rectangle& rRect )
+void ScCornerButton::Paint( const Rectangle& rRect )
 {
     Size aSize = GetOutputSizePixel();
     long nPosX = aSize.Width()-1;
@@ -247,12 +247,12 @@ void ScCornerButton::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 
-void __EXPORT ScCornerButton::Resize()
+void ScCornerButton::Resize()
 {
     Invalidate();
 }
 
-void __EXPORT ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
+void ScCornerButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     ScModule* pScMod = SC_MOD();
     BOOL bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();

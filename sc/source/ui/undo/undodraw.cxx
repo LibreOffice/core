@@ -178,7 +178,7 @@ ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
 {
 }
 
-__EXPORT ScUndoDraw::~ScUndoDraw()
+ScUndoDraw::~ScUndoDraw()
 {
     delete pDrawUndo;
 }
@@ -188,7 +188,7 @@ void ScUndoDraw::ForgetDrawUndo()
     pDrawUndo = NULL;   // nicht loeschen (Draw-Undo muss dann von aussen gemerkt werden)
 }
 
-String __EXPORT ScUndoDraw::GetComment() const
+String ScUndoDraw::GetComment() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetComment();
@@ -196,7 +196,7 @@ String __EXPORT ScUndoDraw::GetComment() const
         return String();
 }
 
-String __EXPORT ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
+String ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->GetRepeatComment(rTarget);
@@ -204,7 +204,7 @@ String __EXPORT ScUndoDraw::GetRepeatComment(SfxRepeatTarget& rTarget) const
         return String();
 }
 
-USHORT __EXPORT ScUndoDraw::GetId() const
+USHORT ScUndoDraw::GetId() const
 {
     if (pDrawUndo)
         return pDrawUndo->GetId();
@@ -212,7 +212,7 @@ USHORT __EXPORT ScUndoDraw::GetId() const
         return 0;
 }
 
-BOOL __EXPORT ScUndoDraw::IsLinked()
+BOOL ScUndoDraw::IsLinked()
 {
     if (pDrawUndo)
         return pDrawUndo->IsLinked();
@@ -220,13 +220,13 @@ BOOL __EXPORT ScUndoDraw::IsLinked()
         return FALSE;
 }
 
-void __EXPORT ScUndoDraw::SetLinked( BOOL bIsLinked )
+void ScUndoDraw::SetLinked( BOOL bIsLinked )
 {
     if (pDrawUndo)
         pDrawUndo->SetLinked(bIsLinked);
 }
 
-BOOL  __EXPORT ScUndoDraw::Merge( SfxUndoAction* pNextAction )
+BOOL  ScUndoDraw::Merge( SfxUndoAction* pNextAction )
 {
     if (pDrawUndo)
         return pDrawUndo->Merge(pNextAction);
@@ -234,7 +234,7 @@ BOOL  __EXPORT ScUndoDraw::Merge( SfxUndoAction* pNextAction )
         return FALSE;
 }
 
-void __EXPORT ScUndoDraw::Undo()
+void ScUndoDraw::Undo()
 {
     if (pDrawUndo)
     {
@@ -243,7 +243,7 @@ void __EXPORT ScUndoDraw::Undo()
     }
 }
 
-void __EXPORT ScUndoDraw::Redo()
+void ScUndoDraw::Redo()
 {
     if (pDrawUndo)
     {
@@ -252,13 +252,13 @@ void __EXPORT ScUndoDraw::Redo()
     }
 }
 
-void __EXPORT ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoDraw::Repeat(SfxRepeatTarget& rTarget)
 {
     if (pDrawUndo)
         pDrawUndo->Repeat(rTarget);
 }
 
-BOOL __EXPORT ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoDraw::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     if (pDrawUndo)
         return pDrawUndo->CanRepeat(rTarget);

@@ -77,18 +77,6 @@ RegressionEquationItemConverter::RegressionEquationItemConverter(
     m_aConverters.push_back( new CharacterPropertyItemConverter(
                                  rPropertySet, rItemPool, pRefSize, C2U("ReferencePageSize")));
 
-//     // CharacterProperties are not at the title but at its contained XFormattedString objects
-//     // take the first formatted string in the sequence
-//     uno::Reference< chart2::XTitle > xTitle( rPropertySet, uno::UNO_QUERY );
-//     if( xTitle.is())
-//     {
-//         uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
-//         if( aStringSeq.getLength() > 0 )
-//         {
-//             m_aConverters.push_back(
-//                 new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize, rPropertySet ));
-//         }
-//     }
 }
 
 RegressionEquationItemConverter::~RegressionEquationItemConverter()
@@ -145,12 +133,6 @@ bool RegressionEquationItemConverter::ApplySpecialItem(
     {
         case SID_ATTR_NUMBERFORMAT_VALUE:
         {
-//             bool bUseSourceFormat =
-//                 (static_cast< const SfxBoolItem & >(
-//                     rItemSet.Get( SID_ATTR_NUMBERFORMAT_SOURCE )).GetValue() );
-
-//             if( ! bUseSourceFormat )
-//             {
             uno::Any aValue( static_cast< sal_Int32 >(
                 static_cast< const SfxUInt32Item & >(
                     rItemSet.Get( nWhichId )).GetValue()));

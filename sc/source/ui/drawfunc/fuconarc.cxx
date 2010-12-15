@@ -66,7 +66,7 @@ FuConstArc::~FuConstArc()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
+BOOL FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -89,7 +89,7 @@ BOOL __EXPORT FuConstArc::MouseButtonDown( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
+BOOL FuConstArc::MouseMove( const MouseEvent& rMEvt )
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -100,7 +100,7 @@ BOOL __EXPORT FuConstArc::MouseMove( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
+BOOL FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -133,7 +133,7 @@ BOOL __EXPORT FuConstArc::MouseButtonUp( const MouseEvent& rMEvt )
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstArc::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstArc::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);

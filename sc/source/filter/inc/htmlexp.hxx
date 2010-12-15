@@ -33,6 +33,7 @@
 #include <rtl/textenc.h>
 #include <tools/gen.hxx>
 #include <tools/color.hxx>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 #include "expbase.hxx"
 
@@ -87,7 +88,6 @@ struct ScHTMLGraphEntry
         pObject( pObj ), bInCell( bIn ), bWritten( FALSE ) {}
 };
 
-DECLARE_LIST( ScHTMLGraphList, ScHTMLGraphEntry* )
 
 #define SC_HTML_FONTSIZES 7
 const short nIndentMax = 23;
@@ -100,9 +100,9 @@ class ScHTMLExport : public ScExportBase
     static USHORT       nFontSize[SC_HTML_FONTSIZES];
     static const char*  pFontSizeCss[SC_HTML_FONTSIZES];
     static const USHORT nCellSpacing;
-    static const sal_Char __FAR_DATA sIndentSource[];
+    static const sal_Char sIndentSource[];
 
-    ScHTMLGraphList     aGraphList;
+    boost::ptr_vector< ScHTMLGraphEntry > aGraphList;
     ScHTMLStyle         aHTMLStyle;
     String              aBaseURL;
     String              aStreamPath;

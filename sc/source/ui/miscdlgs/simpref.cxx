@@ -94,7 +94,7 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 }
 
 //----------------------------------------------------------------------------
-__EXPORT ScSimpleRefDlg::~ScSimpleRefDlg()
+ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     SetDispatcherLock( FALSE ); // Modal-Modus einschalten
 }
@@ -160,7 +160,7 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 
 //----------------------------------------------------------------------------
-BOOL __EXPORT ScSimpleRefDlg::Close()
+BOOL ScSimpleRefDlg::Close()
 {
     CancelBtnHdl(&aBtnCancel);
     return TRUE;

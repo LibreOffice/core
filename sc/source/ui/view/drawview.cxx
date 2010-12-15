@@ -148,7 +148,7 @@ void ScDrawView::ImplClearCalcDropMarker()
     }
 }
 
-__EXPORT ScDrawView::~ScDrawView()
+ScDrawView::~ScDrawView()
 {
     ImplClearCalcDropMarker();
 }
@@ -570,7 +570,7 @@ void ScDrawView::MarkListHasChanged()
 
 }
 
-void __EXPORT ScDrawView::ModelHasChanged()
+void ScDrawView::ModelHasChanged()
 {
     SdrObject* pEditObj = GetTextEditObject();
     if ( pEditObj && !pEditObj->IsInserted() && pViewData )
@@ -584,7 +584,7 @@ void __EXPORT ScDrawView::ModelHasChanged()
     FmFormView::ModelHasChanged();
 }
 
-void __EXPORT ScDrawView::UpdateUserViewOptions()
+void ScDrawView::UpdateUserViewOptions()
 {
     if (pViewData)
     {
@@ -714,7 +714,7 @@ void ScDrawView::LockCalcLayer( SdrLayerID nLayer, bool bLock )
         SetLayerLocked( pLockLayer->GetName(), bLock );
 }
 
-void __EXPORT ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
+void ScDrawView::MakeVisible( const Rectangle& rRect, Window& rWin )
 {
     //! rWin richtig auswerten
     //! ggf Zoom aendern

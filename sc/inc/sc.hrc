@@ -127,11 +127,6 @@
 #define HID_SC_HF_FRL           ( HID_SC_CONTROL_START + 9 )
 #define HID_SC_HF_FRC           ( HID_SC_CONTROL_START + 10 )
 #define HID_SC_HF_FRR           ( HID_SC_CONTROL_START + 11 )
-//  "Spalten" in Teilergebnissen: Gruppe 1/2/3 - nicht mehr!
-//#define HID_SC_SUBT_COLS_1        ( HID_SC_CONTROL_START + 12 )
-//#define HID_SC_SUBT_COLS_2        ( HID_SC_CONTROL_START + 13 )
-//#define HID_SC_SUBT_COLS_3        ( HID_SC_CONTROL_START + 14 )
-//  Eintraege im Navigator
 #define HID_SC_NAVIPI_ENTRIES   ( HID_SC_CONTROL_START + 15 )
 #define HID_SC_NAVIPI_ROW       ( HID_SC_CONTROL_START + 16 )
 #define HID_SC_NAVIPI_COL       ( HID_SC_CONTROL_START + 17 )
@@ -143,11 +138,12 @@
 #define HID_SC_NAVIPI_ROOT      ( HID_SC_CONTROL_START + 23 )
 #define HID_SC_NAVIPI_SCEN      ( HID_SC_CONTROL_START + 24 )
 #define HID_SC_NAVIPI_DROP      ( HID_SC_CONTROL_START + 25 )
+
 //  Teilergebnisse
 #define HID_SC_SUBT_GROUP       ( HID_SC_CONTROL_START + 26 )
 #define HID_SC_SUBT_COLS        ( HID_SC_CONTROL_START + 27 )
 #define HID_SC_SUBT_FUNC        ( HID_SC_CONTROL_START + 28 )
-//
+
 #define HID_SC_NAVIPI_TOOLBOX   ( HID_SC_CONTROL_START + 29 )
 //  Bereich ist voll!
 
@@ -482,7 +478,6 @@
 #define FID_TESTFUNC9           (SC_VIEW_START + 9)
 #define FID_SCALESTATUS         (SC_VIEW_START + 10)
 #define FID_COLOR               (SC_VIEW_START + 11)
-//aus sfx: #define SID_REPAINT              (SC_VIEW_START + 12)
 #define SID_UPDATECHART         (SC_VIEW_START + 13)
 #define FID_MARKLEFT            (SC_VIEW_START + 14)
 #define FID_MARKRIGHT           (SC_VIEW_START + 15)
@@ -566,7 +561,6 @@
 
 #define SID_CHOOSE_DESIGN       (SC_VIEW_START + 82)
 #define SID_EURO_CONVERTER      (SC_VIEW_START + 83)
-//#define SID_CHG_PROTECT         (SC_VIEW_START + 84)      -> moved to SVX
 #define SID_EXTERNAL_SOURCE     (SC_VIEW_START + 85)
 
 #define SID_SC_INPUT_TEXTWYSIWYG        (SC_VIEW_START + 86)
@@ -653,21 +647,16 @@
 #define SID_OPENDLG_FUNCTION        (SC_MESSAGE_START + 52)
 #define SID_OPENDLG_SOLVE           (SC_MESSAGE_START + 53)
 #define SID_OPENDLG_TABOP           (SC_MESSAGE_START + 54)
-//#define SID_OPENDLG_CHART         (SC_MESSAGE_START + 55)
 #define SID_OPENDLG_EDITFUNCTION    (SC_MESSAGE_START + 56)
 #define SID_OPENDLG_ARGUMENT        (SC_MESSAGE_START + 57)
-//#define SID_OPENDLG_MODCHART      (SC_MESSAGE_START + 58)
 #define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
 #define SID_OPENDLG_OPTSOLVER       (SC_MESSAGE_START + 60)
-//<!--Added by PengYunQuan for Validity Cell Range Picker
 #define SID_VALIDITY_REFERENCE      (SC_MESSAGE_START + 61)
-//-->Added by PengYunQuan for Validity Cell Range Picker
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
 // Funktionen ------------------------------------------------------------
 
 
-//#define FID_PRINT_PREVIEW     (SC_FUNCTION_START)
 #define FID_DOC_MANAGER         (SC_FUNCTION_START + 1)
 #define FID_CURSOR_ENTER        (SC_FUNCTION_START + 2)
 #define SID_MAIL                (SC_FUNCTION_START + 3)
@@ -693,7 +682,6 @@
 #define SID_DEL_ROWS            (EDIT_MENU_START + 16)//JN
 #define SID_DEL_COLS            (EDIT_MENU_START + 17)//JN
 
-//#define   FID_CHG_RECORD          (EDIT_MENU_START + 18)  -> moved to SVX
 #define FID_CHG_SHOW            (EDIT_MENU_START + 19)
 
 #define EDIT_MENU_END           (EDIT_MENU_START + 20)
@@ -709,9 +697,7 @@
 #define FID_FUNCTION_BOX        (VIEW_MENU_START + 8)
 #define FID_NORMALVIEWMODE      (VIEW_MENU_START + 9)
 #define FID_TOGGLEFORMULA       (VIEW_MENU_START + 10)
-// Compare/Merge jetzt aus Sfx
-//#define FID_CHG_COMPARE       (VIEW_MENU_START + 16)// DANGER DIRTY ID
-//#define FID_CHG_MERGE         (VIEW_MENU_START + 17)// DANGER DIRTY ID
+
 #define FID_CHG_ACCEPT          (VIEW_MENU_START + 18)// DANGER DIRTY ID
 #define FID_CHG_COMMENT         (VIEW_MENU_START + 19)// DANGER DIRTY ID
 #define VIEW_MENU_END           (VIEW_MENU_START + 20)
@@ -733,8 +719,6 @@
 #define FID_USE_NAME            (INSERT_MENU_START + 13)
 #define FID_APPLY_NAME          (INSERT_MENU_START + 14)
 #define FID_INS_TABLE_EXT       (INSERT_MENU_START + 15)
-//#define SID_CHARMAP               (INSERT_MENU_START + 15)//!!! kommt von sfx
-//aus sfx: #define SID_INSERT_POSTIT       (INSERT_MENU_START + 16)
 #define SID_INSERT_CLIPART      (INSERT_MENU_START + 17) //!!! sollte vom Svx kommen
 #define FID_INS_CELLSDOWN       (INSERT_MENU_START + 18)
 #define FID_INS_CELLSRIGHT      (INSERT_MENU_START + 19)
@@ -799,12 +783,7 @@
 #define SID_UNFILTER            (DATA_MENU_START + 6)
 #define SID_QUERY               (DATA_MENU_START + 7)
 #define SID_SUBTOTALS           (DATA_MENU_START + 8)
-//aus sfx: #define SID_OUTLINE_HIDE        (DATA_MENU_START + 9)
-//aus sfx: #define SID_OUTLINE_SHOW        (DATA_MENU_START + 10)
-//aus sfx: #define SID_OUTLINE_MAKE        (DATA_MENU_START + 11)
-//aus sfx: #define SID_OUTLINE_REMOVE      (DATA_MENU_START + 12)
 #define SID_AUTO_OUTLINE        (DATA_MENU_START + 13)
-//aus sfx: #define SID_OUTLINE_DELETEALL   (DATA_MENU_START + 14)
 #define SID_IMPORT_DATA         (DATA_MENU_START + 15)
 #define SID_REIMPORT_DATA       (DATA_MENU_START + 16)
 #define SID_PIVOT_TABLE         (DATA_MENU_START + 17)
@@ -817,8 +796,7 @@
 
 #define SID_SORT_DESCENDING     (DATA_MENU_START + 23)
 #define SID_SORT_ASCENDING      (DATA_MENU_START + 24)
-//
-//
+
 #define DATA_MENU_END           (DATA_MENU_START + 25)
 
 #define TAB_POPUP_START         (DATA_MENU_END)
@@ -859,12 +837,8 @@
 #define DRAW_BAR_START          (RID_INPUTBAR_END)
 #define SID_DRAWTOABOVE         (DRAW_BAR_START+15)
 #define SID_DRAWTOBELOW         (DRAW_BAR_START+16)
-//#define SID_GROUP             (DRAW_BAR_START+17)
-//#define SID_UNGROUP               (DRAW_BAR_START+18)
 #define SID_FRAMETOTOP          (DRAW_BAR_START+19)
 #define SID_FRAMETOBOTTOM       (DRAW_BAR_START+20)
-//aus sfx: #define SID_FRAME_UP         (DRAW_BAR_START+21)
-//aus sfx: #define SID_FRAME_DOWN           (DRAW_BAR_START+22)
 #define SID_TOOL_TEXT           (DRAW_BAR_START+23)
 #define SID_ANCHOR_PAGE         (DRAW_BAR_START+24)
 #define SID_ANCHOR_CELL         (DRAW_BAR_START+25)
@@ -906,7 +880,6 @@
 #define DETECTIVE_END           (DETECTIVE_START+20)
 
 #define SID_API_SLOTS           (DETECTIVE_END)
-//aus sfx: #define SID_ENTER_STRING     (SID_API_SLOTS)
 #define SID_INSERT_MATRIX       (SID_API_SLOTS+1)
 
 #define SID_DELETE_NOTE         (SID_API_SLOTS+2)
@@ -994,7 +967,6 @@
 #define SID_FILL_COUNT          (SID_NEW_SLOTS+8)
 #define SID_WITH_UNDO           (SID_NEW_SLOTS+9)
 #define FID_MERGE_TOGGLE        (SID_NEW_SLOTS+10)
-//aus sfx: #define SID_ATTR_SECIALCHAR      (SID_NEW_SLOTS+10)
 #define SID_ATTR_ROWHEADERS     (SID_NEW_SLOTS+11)
 #define SID_ATTR_COLHEADERS     (SID_NEW_SLOTS+12)
 
@@ -1110,16 +1082,6 @@
 
 // idl Parameter ---------------------------------------------------------
 
-//aus sfx: #define FN_PARAM_1               (SC_PARAM_START)
-//aus sfx: #define FN_PARAM_2               (SC_PARAM_START+1)
-//aus sfx: #define FN_PARAM_3               (SC_PARAM_START+2)
-//aus sfx: #define FN_PARAM_4               (SC_PARAM_START+3)
-//aus sfx: #define FN_PARAM_5               (SC_PARAM_START+4)
-//aus sfx: #define FN_PARAM_6               (SC_PARAM_START+5)
-//aus sfx: #define FN_PARAM_7               (SC_PARAM_START+6)
-//aus sfx: #define FN_PARAM_8               (SC_PARAM_START+7)
-#define FN_PARAM_9              (FN_PARAM_8+1)
-
 #define SID_SORT_BYROW          (SC_PARAM_START)
 #define SID_SORT_HASHEADER      (SC_PARAM_START+1)
 #define SID_SORT_CASESENS       (SC_PARAM_START+2)
@@ -1139,8 +1101,6 @@
 #define RID_POPUP_PREVIEW       (SC_RESOURCE_START+7)
 #define RID_POPUP_OLE           (SC_RESOURCE_START+8)
 #define RID_POPUP_CHART         (SC_RESOURCE_START+9)
-//#define RID_ANCHORBITMAP      (SC_RESOURCE_START+10)
-//#define RID_GRAYANCHORBITMAP  (SC_RESOURCE_START+11)
 #define RID_OUTLINEBITMAPS      (SC_RESOURCE_START+12)
 #define RID_DRAW_WIN            (SC_RESOURCE_START+13)
 #define RID_CNTRLR_WIN          (SC_RESOURCE_START+14)
@@ -1158,29 +1118,19 @@
 #define RID_POPUP_EDIT          (SC_RESOURCE_START+33)
 #define RID_POPUP_AUDIT         (SC_RESOURCE_START+34)
 #define RID_OBJECTBAR_TOOLS     (SC_RESOURCE_START+35)
-// free
-// free
 #define RID_TBXCTL_INSERT       (SC_RESOURCE_START+38)
 #define RID_TBXCTL_INSCELLS     (SC_RESOURCE_START+39)
 #define RID_TBXCTL_INSOBJ       (SC_RESOURCE_START+40)
-// free
-// free
 #define RID_SC_FUNCTION_DESCRIPTIONS1   (SC_RESOURCE_START+43)
 #define RID_SC_FUNCTION_DESCRIPTIONS2   (SC_RESOURCE_START+44)
 #define RID_POPUP_CONTROL       (SC_RESOURCE_START+45)
 #define RID_POPUP_PAGEBREAK     (SC_RESOURCE_START+46)
-// free
 #define RID_POPUP_DRAWFORM      (SC_RESOURCE_START+48)
 #define RID_SC_ADDIN_ROT13      (SC_RESOURCE_START+50)
 #define RID_SC_ADDIN_DFA        (SC_RESOURCE_START+51)
 #define RID_IMAGELIST_NAVCONT   (SC_RESOURCE_START+52)
 #define RID_DRAW_OBJECTBAR      (SC_RESOURCE_START+53)
 #define RID_GRAPHIC_OBJECTBAR   (SC_RESOURCE_START+54)
-// free
-// free
-// free
-// free
-// free
 #define RID_MEDIA_OBJECTBAR     (SC_RESOURCE_START+60)
 #define RID_POPUP_MEDIA         (SC_RESOURCE_START+61)
 #define RID_FUNCTION_CATEGORIES (SC_RESOURCE_START+62)
@@ -1216,7 +1166,6 @@
 #define SCSTR_APDTABLE          (STR_START + 27)
 #define SCSTR_RENAMETAB         (STR_START + 28)
 #define STR_INSERTGRAPHIC       (STR_START + 29)
-//#define STR_BASIC_IDE           (STR_START + 30)
 #define SCSTR_APPLICATION       (STR_START + 31)
 #define SCSTR_DOCSHELL          (STR_START + 32)
 #define SCSTR_TABVIEWSHELL      (STR_START + 33)
@@ -1304,7 +1253,7 @@
 #define STR_PRINT_NOTHING           (STR_START + 93)
 #define SCSTR_ALLFILTER             (STR_START + 94)
 #define SCSTR_MOREBTN_MOREOPTIONS   (STR_START + 95)
-#define SCSTR_MOREBTN_FEWEROPTIONS   (STR_START + 96)
+#define SCSTR_MOREBTN_FEWEROPTIONS  (STR_START + 96)
 
 // Items
 
@@ -1337,6 +1286,7 @@
 #define STR_ACC_TABLE_DESCR         (STR_START + 157)
 #define STR_ACC_CELL_NAME           (STR_START + 158)
 #define STR_ACC_CELL_DESCR          (STR_START + 159)
+
 // Preview
 #define STR_ACC_PREVIEWDOC_NAME     (STR_START + 160)
 #define STR_ACC_PREVIEWDOC_DESCR    (STR_START + 161)
@@ -1419,7 +1369,7 @@
 #define SCSTR_FUSTAT            (STR_START + 395)
 #define SCSTR_FUTAB             (STR_START + 396)
 #define SCSTR_FUTEXT            (STR_START + 397)
-//
+
 #define SCSTR_COMPILER_STRINGS  (STR_START + 398)
 #define SCSTR_FILTER_STRINGS    (STR_START + 399)
 #define SCSTR_COMPILER_INTL_STR (STR_START + 400)
@@ -1533,7 +1483,6 @@
 
 #define RID_SCDLG_CHAR                  (SC_DIALOGS_START + 76)
 #define RID_SCDLG_PARAGRAPH             (SC_DIALOGS_START + 77)
-//#define RID_SCDLG_CHARTRANGE          (SC_DIALOGS_START + 78)
 
 #define RID_SCPAGE_STAT                 (SC_DIALOGS_START + 79)
 #define RID_SCDLG_CHARTCOLROW           (SC_DIALOGS_START + 80)
@@ -1541,7 +1490,7 @@
 
 #define RID_SCDLG_EDITCHAR              (SC_DIALOGS_START + 82)
 
-    //  Popup fuer Statusbar-Controller
+// Popup fuer Statusbar-Controller
 #define RID_POPUP_SUMCTL                (SC_DIALOGS_START + 83)
 #define RID_SUMCTL_SUM                  (SC_DIALOGS_START + 84)
 #define RID_SUMCTL_MIN                  (SC_DIALOGS_START + 85)
@@ -1553,7 +1502,7 @@
 
 #define RID_SCDLG_ASCII                 (SC_DIALOGS_START + 91)
 
-    //  Popup fuer Drop-Modus im Navigator
+// Popup fuer Drop-Modus im Navigator
 #define RID_POPUP_DROPMODE              (SC_DIALOGS_START + 92)
 #define RID_DROPMODE_URL                (SC_DIALOGS_START + 93)
 #define RID_DROPMODE_LINK               (SC_DIALOGS_START + 94)
@@ -1642,9 +1591,6 @@
 #define STD_MASKCOLOR Color { Red = 0xFF00; Green = 0x0000; Blue = 0xFF00; }
 #endif
 
-// mask color for high contrast
-#define SC_HC_MASKCOLOR STD_MASKCOLOR
-
 #define MID_1   1
 #define MID_2   2
 #define MID_3   3
@@ -1676,5 +1622,4 @@
 #define HID_SCPAGE_COMPATIBILITY    (SC_OOO_BUILD_START + 10)
 
 #endif
-
 

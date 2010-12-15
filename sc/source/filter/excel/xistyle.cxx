@@ -53,6 +53,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <sal/macros.h>
 #include "document.hxx"
 #include "docpool.hxx"
 #include "attrib.hxx"
@@ -904,7 +905,7 @@ bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, 
 
     if( nXclLine == EXC_LINE_NONE )
         return false;
-    if( nXclLine >= STATIC_TABLE_SIZE( ppnLineParam ) )
+    if( nXclLine >= SAL_N_ELEMENTS( ppnLineParam ) )
         nXclLine = EXC_LINE_THIN;
 
     rLine.SetColor( rPalette.GetColor( nXclColor ) );
@@ -1787,10 +1788,15 @@ void XclImpXFRangeBuffer::SetXF( const ScAddress& rScPos, sal_uInt16 nXFIndex, X
         if( pXF && ((pXF->GetHorAlign() == EXC_XF_HOR_CENTER_AS) || (pXF->GetHorAlign() == EXC_XF_HOR_FILL)) )
         {
             // expand last merged range if this attribute is set repeatedly
-            ScRange* pRange = maMergeList.Last();
-            if( pRange && (pRange->aEnd.Row() == nScRow) && (pRange->aEnd.Col() + 1 == nScCol)
-                    && (eMode == xlXFModeBlank) )
-                pRange->aEnd.IncCol();
+            if ( !maMergeList.empty() )
+            {
+                ScRange* pRange = maMergeList.back();
+                if(  (pRange->aEnd.Row()     == nScRow)
+                  && (pRange->aEnd.Col() + 1 == nScCol)
+                  && (eMode                  == xlXFModeBlank)
+                  )
+                    pRange->aEnd.IncCol();
+            }
             else if( eMode != xlXFModeBlank )   // #108781# do not merge empty cells
                 SetMerge( nScCol, nScRow );
         }
@@ -1871,7 +1877,7 @@ void XclImpXFRangeBuffer::Finalize()
     for( XclImpXFRangeColumnVec::const_iterator aVBeg = maColumns.begin(), aVEnd = maColumns.end(), aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
     {
         // apply all cell styles of an existing column
-        if( aVIt->is() )
+        if( aVIt->get() )
         {
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
@@ -1912,8 +1918,9 @@ void XclImpXFRangeBuffer::Finalize()
         XclImpHyperlink::InsertUrl( GetRoot(), aLIt->first, aLIt->second );
 
     // apply cell merging
-    for( const ScRange* pRange = maMergeList.First(); pRange; pRange = maMergeList.Next() )
+    for ( size_t i = 0, nRange = maMergeList.size(); i < nRange; ++i )
     {
+        const ScRange* pRange = maMergeList[ i ];
         const ScAddress& rStart = pRange->aStart;
         const ScAddress& rEnd = pRange->aEnd;
         bool bMultiCol = rStart.Col() != rEnd.Col();

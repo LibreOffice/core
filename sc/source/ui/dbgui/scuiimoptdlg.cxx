@@ -242,7 +242,7 @@ ScImportOptionsDlg::ScImportOptionsDlg(
 
 //------------------------------------------------------------------------
 
-__EXPORT ScImportOptionsDlg::~ScImportOptionsDlg()
+ScImportOptionsDlg::~ScImportOptionsDlg()
 {
     delete pFieldSepTab;
     delete pTextSepTab;

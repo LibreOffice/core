@@ -87,7 +87,7 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
 }
 
-__EXPORT ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
+ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
 {
     delete[] pRanges;
     delete pUndoDoc;
@@ -95,7 +95,7 @@ __EXPORT ScUndoWidthOrHeight::~ScUndoWidthOrHeight()
     DeleteSdrUndoAction( pDrawUndo );
 }
 
-String __EXPORT ScUndoWidthOrHeight::GetComment() const
+String ScUndoWidthOrHeight::GetComment() const
 {
     // [ "optimale " ] "Spaltenbreite" | "Zeilenhoehe"
     return ( bWidth ?
@@ -109,7 +109,7 @@ String __EXPORT ScUndoWidthOrHeight::GetComment() const
         ) );
 }
 
-void __EXPORT ScUndoWidthOrHeight::Undo()
+void ScUndoWidthOrHeight::Undo()
 {
     BeginUndo();
 
@@ -168,7 +168,7 @@ void __EXPORT ScUndoWidthOrHeight::Undo()
     EndUndo();
 }
 
-void __EXPORT ScUndoWidthOrHeight::Redo()
+void ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
@@ -202,13 +202,13 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoWidthOrHeight::Repeat(SfxRepeatTarget& rTarget)
 {
     if (rTarget.ISA(ScTabViewTarget))
         ((ScTabViewTarget&)rTarget).GetViewShell()->SetMarkedWidthOrHeight( bWidth, eMode, nNewSize, TRUE );
 }
 
-BOOL __EXPORT ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoWidthOrHeight::CanRepeat(SfxRepeatTarget& rTarget) const
 {
     return (rTarget.ISA(ScTabViewTarget));
 }

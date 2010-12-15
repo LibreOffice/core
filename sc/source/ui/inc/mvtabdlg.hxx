@@ -35,6 +35,7 @@
 #include <vcl/imagebtn.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
+#include <vcl/edit.hxx>
 
 #include <layout/layout.hxx>
 #include <layout/layout-pre.hxx>
@@ -44,14 +45,22 @@
 class ScMoveTableDlg : public ModalDialog
 {
 public:
-                    ScMoveTableDlg( Window* pParent );
+                    ScMoveTableDlg( Window* pParent, const String& rDefault );
                     ~ScMoveTableDlg();
 
     USHORT  GetSelectedDocument     () const;
     SCTAB   GetSelectedTable        () const;
     BOOL    GetCopyTable            () const;
+    bool    GetRenameTable          () const;
+    void    GetTabNameString( String& rString ) const;
     void    SetCopyTable            (BOOL bFlag=TRUE);
     void    EnableCopyTable         (BOOL bFlag=TRUE);
+    void    SetRenameTable          (BOOL bFlag=TRUE);
+    void    EnableRenameTable       (BOOL bFlag=TRUE);
+
+private:
+    void ResetRenameInput();
+    ScDocument* GetSelectedDoc();
 
 private:
     FixedText       aFtDoc;
@@ -59,18 +68,25 @@ private:
     FixedText       aFtTable;
     ListBox         aLbTable;
     CheckBox        aBtnCopy;
+    CheckBox        aBtnRename;
+    Edit            aEdTabName;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
+    const String&   mrDefaultName;
+
     USHORT          nDocument;
     SCTAB           nTable;
     BOOL            bCopyTable;
+    BOOL            bRenameTable;
     //--------------------------------------
     void    Init            ();
+    void    InitBtnRename   ();
     void    InitDocListBox  ();
     DECL_LINK( OkHdl, void * );
     DECL_LINK( SelHdl, ListBox * );
+    DECL_LINK( CheckBtnHdl, void * );
 };
 
 #include <layout/layout-post.hxx>

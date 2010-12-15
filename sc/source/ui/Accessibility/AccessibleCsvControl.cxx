@@ -489,13 +489,6 @@ Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes(
     ensureValidIndexWithEnd( nIndex );
     Sequence< PropertyValue > aSeq;
     lcl_FillFontAttributes( aSeq, implGetRuler().GetFont() );
-//! TODO split attribute: waiting for #102221#
-//    if( implHasSplit( nIndex ) )
-//    {
-//        sal_Int32 nIndex = lcl_ExpandSequence( aSeq, 1 );
-//        aSeq[ nIndex ].Name = CREATE_OUSTRING( "..." );
-//        aSeq[ nIndex ].Value <<= ...;
-//    }
     return aSeq;
 }
 

@@ -716,8 +716,6 @@ void ErrorBarResources::listeningFinished(
     // rNewRange becomes invalid after removing the listener
     ::rtl::OUString aRange( rNewRange );
 
-//     m_rDialogModel.startControllerLockTimer();
-
     // stop listening
     m_apRangeSelectionHelper->stopRangeListening();
 

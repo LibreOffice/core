@@ -39,7 +39,7 @@
 
 //------------------------------------------------------------------
 
-void __EXPORT ScPopupMenu::Select()
+void ScPopupMenu::Select()
 {
     nSel = GetCurItemId();
     bHit = TRUE;

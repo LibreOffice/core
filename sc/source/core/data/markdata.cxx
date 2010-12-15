@@ -345,18 +345,18 @@ void ScMarkData::MarkFromRangeList( const ScRangeList& rList, BOOL bReset )
         ResetMark();
     }
 
-    ULONG nCount = rList.Count();
+    size_t nCount = rList.size();
     if ( nCount == 1 && !bMarked && !bMultiMarked )
     {
-        ScRange aRange = *rList.GetObject(0);
+        ScRange aRange = *rList[ 0 ];
         SetMarkArea( aRange );
         SelectTable( aRange.aStart.Tab(), TRUE );
     }
     else
     {
-        for (ULONG i=0; i<nCount; i++)
+        for (size_t i=0; i < nCount; i++)
         {
-            ScRange aRange = *rList.GetObject(i);
+            ScRange aRange = *rList[ i ];
             SetMultiMarkArea( aRange, TRUE );
             SelectTable( aRange.aStart.Tab(), TRUE );
         }
@@ -411,10 +411,9 @@ void ScMarkData::ExtendRangeListTables( ScRangeList* pList ) const
     for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         if (bTabMarked[nTab])
         {
-            ULONG nCount = aOldList.Count();
-            for (ULONG i=0; i<nCount; i++)
+            for ( size_t i=0, nCount = aOldList.size(); i<nCount; i++)
             {
-                ScRange aRange = *aOldList.GetObject(i);
+                ScRange aRange = *aOldList[ i ];
                 aRange.aStart.SetTab(nTab);
                 aRange.aEnd.SetTab(nTab);
                 pList->Append( aRange );
