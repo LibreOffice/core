@@ -46,8 +46,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_PAGE
     {
+        /* Size is calculated in the dialog code. */
         Pos = MAP_APPFONT ( 20 , 14 ) ;
-        Size = MAP_APPFONT ( 202 , 34 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_COL
@@ -58,8 +59,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_COL
     {
+        /* Size is calculated in the dialog code. */
         Pos = MAP_APPFONT ( 56 , 56 ) ;
-        Size = MAP_APPFONT ( 144 , 34 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_ROW
@@ -70,8 +72,9 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_ROW
     {
+        /* Size is calculated in the dialog code. */
         Pos = MAP_APPFONT ( 6 , 98 ) ;
-        Size = MAP_APPFONT ( 50 , 96 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_DATA
@@ -82,14 +85,16 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     Control WND_DATA
     {
+        /* Size is calculated in the dialog code. */
         Pos = MAP_APPFONT ( 56 , 98 ) ;
-        Size = MAP_APPFONT ( 144 , 96 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
         TabStop = TRUE ;
     };
     Control WND_SELECT
     {
+        /* Size is calculated in the dialog code. */
         Pos = MAP_APPFONT ( 210 , 14 ) ;
-        Size = MAP_APPFONT ( 70 , 136 ) ;
+        Size = MAP_APPFONT ( 1 , 1 ) ;
         TabStop = TRUE ;
     };
     String STR_SELECT
