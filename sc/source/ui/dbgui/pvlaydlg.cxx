@@ -548,6 +548,8 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
 
 void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::AppendField");
+    fprintf(stdout, "ScDPLayoutDlg::AppendField:   from index = %d  to type = %d\n", nFromIndex, eToType);
     ScDPFuncData aFuncData = *aSelectArr[nFromIndex];
 
     size_t nAt = 0;
@@ -619,6 +621,8 @@ void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
 
 void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType, const Point& rAtPos )
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::MoveField");
+    fprintf(stdout, "ScDPLayoutDlg::MoveField:   from type = %d  from index = %d  to type = %d\n", eFromType, nFromIndex, eToType);
     if ( eFromType == TYPE_SELECT )
         AddField( nFromIndex, eToType, rAtPos );
     else if ( eFromType != eToType )
@@ -763,6 +767,10 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
 void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType )
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::MoveFieldToEnd");
+    fprintf(stdout, "ScDPLayoutDlg::MoveFieldToEnd:   from type = %d  from index = %d  to type = %d\n",
+            eFromType, nFromIndex, eToType);
+
     if ( eFromType == TYPE_SELECT )
         AppendField( nFromIndex, eToType );
     else if ( eFromType != eToType )
@@ -899,6 +907,8 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
 
 void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::RemoveField");
+    fprintf(stdout, "ScDPLayoutDlg::RemoveField:   from type = %d  index = %d\n", eFromType, nIndex);
     ScDPFuncDataVec* pArr = GetFieldDataArray(eFromType);
 
     if( pArr )
@@ -917,44 +927,44 @@ void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
 
 void ScDPLayoutDlg::NotifyMouseButtonUp( const Point& rAt )
 {
+    StackPrinter __stack_printer__("ScDPLayoutDlg::NotifyMouseButtonUp");
     if ( bIsDrag )
     {
         bIsDrag = FALSE;
 
         ScDPFieldType   eDnDToType = TYPE_SELECT;
         Point           aPos = ScreenToOutputPixel( rAt );
-        BOOL            bDel = FALSE;
+        bool            bDel = false;
 
         if ( aRectPage.IsInside( aPos ) )
         {
             eDnDToType = TYPE_PAGE;
-            bDel = FALSE;
         }
         else if ( aRectCol.IsInside( aPos ) )
         {
             eDnDToType = TYPE_COL;
-            bDel = FALSE;
         }
         else if ( aRectRow.IsInside( aPos ) )
         {
             eDnDToType = TYPE_ROW;
-            bDel = FALSE;
         }
         else if ( aRectData.IsInside( aPos ) )
         {
             eDnDToType = TYPE_DATA;
-            bDel = FALSE;
         }
         else if ( aRectSelect.IsInside( aPos ) )
         {
             eDnDToType = TYPE_SELECT;
-            bDel = TRUE;
         }
         else
             bDel = TRUE;
 
-        if ( bDel )
-            RemoveField( eDnDFromType, nDnDFromIndex );
+        if (bDel)
+        {
+            // We don't remove any buttons from the select field.
+            if (eDnDFromType != TYPE_SELECT)
+                RemoveField( eDnDFromType, nDnDFromIndex );
+        }
         else
             MoveField( eDnDFromType, nDnDFromIndex, eDnDToType, aPos );
     }
