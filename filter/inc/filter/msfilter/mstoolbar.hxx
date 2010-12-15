@@ -74,7 +74,7 @@ protected:
 public:
     TBBase() : nOffSet( 0 ) {}
     virtual ~TBBase(){}
-    rtl::OUString readUnicodeString( SvStream* pS, sal_Int32 nChars );
+    rtl::OUString readUnicodeString( SvStream* pS, sal_Size nChars );
 
     virtual bool Read(SvStream *pS) = 0;
     virtual void Print( FILE* ) {} // #FIXME remove this an implement the debug routines in all the classes below to enable some sort of readable output

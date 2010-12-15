@@ -186,7 +186,7 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
    va_end( ap );
 }
 
-rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Int32 nChars )
+rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Size nChars )
 {
     sal_Size nBufSize = nChars * 2;
     boost::scoped_array< sal_uInt8 > pArray( new sal_uInt8[ nBufSize ] );
@@ -394,7 +394,7 @@ WString::Read( SvStream *pS )
     nOffSet = pS->Tell();
     sal_Int8 nChars = 0;
     *pS >> nChars;
-    sString = readUnicodeString( pS, static_cast< sal_Int32 >( nChars  ) );
+    sString = readUnicodeString( pS, nChars );
     return true;
 }
 
