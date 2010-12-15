@@ -37,6 +37,7 @@
 #include <pagedesc.hxx>
 #include <charfmt.hxx>
 #include <UndoCore.hxx>
+#include <hints.hxx>
 #include <rolbck.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>

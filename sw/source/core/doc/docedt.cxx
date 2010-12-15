@@ -64,6 +64,7 @@
 #include <swtable.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
 #include <txtfrm.hxx>
+#include <hints.hxx>
 #include <UndoCore.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>

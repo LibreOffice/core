@@ -56,6 +56,7 @@
 #include <swtable.hxx>
 #include <swtblfmt.hxx>
 #include <UndoCore.hxx>
+#include <hints.hxx>
 #include <rolbck.hxx>
 #include <ndnotxt.hxx>
 #include <dcontact.hxx>

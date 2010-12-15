@@ -49,7 +49,6 @@
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <calbck.hxx>
-#include <numrule.hxx>
 
 
 class SwFmt;
@@ -827,114 +826,6 @@ public:
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
-};
-
-//--------------------------------------------------------------------
-// ---------- Undo fuer Numerierung ----------------------------------
-
-class SwUndoInsNum : public SwUndo, private SwUndRng
-{
-    SwNumRule aNumRule;
-    SwHistory* pHistory;
-    ULONG nSttSet;
-    SwNumRule* pOldNumRule;
-    String sReplaceRule;
-    USHORT nLRSavePos;
-public:
-    SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule );
-    SwUndoInsNum( const SwNumRule& rOldRule, const SwNumRule& rNewRule,
-                  SwUndoId nUndoId = UNDO_INSFMTATTR );
-    SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
-                            const String& rReplaceRule );
-
-    virtual ~SwUndoInsNum();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    virtual SwRewriter GetRewriter() const;
-
-    SwHistory* GetHistory();        // wird ggfs. neu angelegt!
-    void SetSttNum( ULONG nNdIdx ) { nSttSet = nNdIdx; }
-    void SaveOldNumRule( const SwNumRule& rOld );
-
-    void SetLRSpaceEndPos();
-
-};
-
-class SwUndoDelNum : public SwUndo, private SwUndRng
-{
-    SvULongs aNodeIdx;
-    SvBytes aLevels;
-    SvBools aRstLRSpaces;
-    SwHistory* pHistory;
-public:
-    SwUndoDelNum( const SwPaM& rPam );
-
-    virtual ~SwUndoDelNum();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void AddNode( const SwTxtNode& rNd, BOOL bResetLRSpace );
-    SwHistory* GetHistory() { return pHistory; }
-
-};
-
-class SwUndoMoveNum : public SwUndo, private SwUndRng
-{
-    ULONG nNewStt;
-    long nOffset;
-public:
-    SwUndoMoveNum( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv = FALSE );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void SetStartNode( ULONG nValue ) { nNewStt = nValue; }
-};
-
-class SwUndoNumUpDown : public SwUndo, private SwUndRng
-{
-    short nOffset;
-public:
-    SwUndoNumUpDown( const SwPaM& rPam, short nOffset );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-};
-
-class SwUndoNumOrNoNum : public SwUndo
-{
-    ULONG nIdx;
-    BOOL mbNewNum, mbOldNum;
-
-public:
-    SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL mbOldNum,
-                      BOOL mbNewNum );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-};
-
-class SwUndoNumRuleStart : public SwUndo
-{
-    ULONG nIdx;
-    USHORT nOldStt, nNewStt;
-    BOOL bSetSttValue : 1;
-    BOOL bFlag : 1;
-public:
-    SwUndoNumRuleStart( const SwPosition& rPos, BOOL bDelete );
-    SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 //--------------------------------------------------------------------

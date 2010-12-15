@@ -39,6 +39,7 @@
 #include <svx/svdmark.hxx>
 
 #include <hintids.hxx>
+#include <hints.hxx>
 #include <fmtanchr.hxx>
 #include <fmtflcnt.hxx>
 #include <txtflcnt.hxx>

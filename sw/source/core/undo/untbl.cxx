@@ -31,6 +31,7 @@
 #include <UndoTable.hxx>
 #include <UndoCore.hxx>
 #include <hintids.hxx>
+#include <hints.hxx>
 #include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
 #include <fmtpdsc.hxx>

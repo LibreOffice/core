@@ -28,9 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <svl/itemiter.hxx>
 
 #include <hintids.hxx>
-#include <svl/itemiter.hxx>
+#include <hints.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtanchr.hxx>
 #include <fmtcntnt.hxx>

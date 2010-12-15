@@ -28,12 +28,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <rolbck.hxx>
+
 #include <tools/resid.hxx>
 
 #include <svl/itemiter.hxx>
 
 #include <editeng/brkitem.hxx>
 
+#include <hints.hxx>
 #include <hintids.hxx>
 #include <fmtftn.hxx>
 #include <fchrfmt.hxx>
@@ -59,7 +62,6 @@
 #include <fldbas.hxx>           // fuer Felder
 #include <pam.hxx>              // fuer SwPaM
 #include <swtable.hxx>
-#include <rolbck.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
 #include <UndoCore.hxx>
 #include <IMark.hxx>            // fuer SwBookmark
