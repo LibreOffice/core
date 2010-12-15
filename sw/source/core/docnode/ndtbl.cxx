@@ -1801,24 +1801,28 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSCOL, rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
     }
 
-    SwTableFmlUpdate aMsgHnt( &rTbl );
-    aMsgHnt.eFlags = TBL_BOXPTR;
-    UpdateTblFlds( &aMsgHnt );
-
-    BOOL bRet = rTbl.InsertCol( this, rBoxes, nCnt, bBehind );
-    if( bRet )
+    bool bRet(false);
     {
-        SetModified();
-        ::ClearFEShellTabCols();
-        SetFieldsDirty( true, NULL, 0 );
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+        SwTableFmlUpdate aMsgHnt( &rTbl );
+        aMsgHnt.eFlags = TBL_BOXPTR;
+        UpdateTblFlds( &aMsgHnt );
+
+        bRet = rTbl.InsertCol( this, rBoxes, nCnt, bBehind );
+        if (bRet)
+        {
+            SetModified();
+            ::ClearFEShellTabCols();
+            SetFieldsDirty( true, NULL, 0 );
+        }
     }
 
     if( pUndo )
@@ -1864,24 +1868,28 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
 
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW,rBoxes, *pTblNd,
                                      0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
     }
 
-    SwTableFmlUpdate aMsgHnt( &rTbl );
-    aMsgHnt.eFlags = TBL_BOXPTR;
-    UpdateTblFlds( &aMsgHnt );
-
-    BOOL bRet = rTbl.InsertRow( this, rBoxes, nCnt, bBehind );
-    if( bRet )
+    bool bRet(false);
     {
-        SetModified();
-        ::ClearFEShellTabCols();
-        SetFieldsDirty( true, NULL, 0 );
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+        SwTableFmlUpdate aMsgHnt( &rTbl );
+        aMsgHnt.eFlags = TBL_BOXPTR;
+        UpdateTblFlds( &aMsgHnt );
+
+        bRet = rTbl.InsertRow( this, rBoxes, nCnt, bBehind );
+        if (bRet)
+        {
+            SetModified();
+            ::ClearFEShellTabCols();
+            SetFieldsDirty( true, NULL, 0 );
+        }
     }
 
     if( pUndo )
@@ -2207,30 +2215,34 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
     }
 
     SwUndoTblNdsChg* pUndo = 0;
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_DELBOX, aSelBoxes, *pTblNd,
                                      nMin, nMax, 0, FALSE, FALSE );
     }
 
-    SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
-    aMsgHnt.eFlags = TBL_BOXPTR;
-    UpdateTblFlds( &aMsgHnt );
+    bool bRet(false);
+    {
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
-    if( rTable.IsNewModel() )
-    {
-        if( bColumn )
-            rTable.PrepareDeleteCol( nMin, nMax );
-        rTable.FindSuperfluousRows( aSelBoxes );
-        if( pUndo )
-            pUndo->ReNewBoxes( aSelBoxes );
-    }
-    const BOOL bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, TRUE, TRUE );
-    if( bRet )
-    {
-        SetModified();
-        SetFieldsDirty( true, NULL, 0 );
+        SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
+        aMsgHnt.eFlags = TBL_BOXPTR;
+        UpdateTblFlds( &aMsgHnt );
+
+        if (rTable.IsNewModel())
+        {
+            if (bColumn)
+                rTable.PrepareDeleteCol( nMin, nMax );
+            rTable.FindSuperfluousRows( aSelBoxes );
+            if (pUndo)
+                pUndo->ReNewBoxes( aSelBoxes );
+        }
+        bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, TRUE, TRUE );
+        if (bRet)
+        {
+            SetModified();
+            SetFieldsDirty( true, NULL, 0 );
+        }
     }
 
     if( pUndo )
@@ -2269,8 +2281,7 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, 0, 0,
                                      nCnt, bVert, bSameHeight );
@@ -2287,20 +2298,24 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
         }
     }
 
-    SwTableFmlUpdate aMsgHnt( &rTbl );
-    aMsgHnt.eFlags = TBL_BOXPTR;
-    UpdateTblFlds( &aMsgHnt );
-
-    BOOL bRet;
-    if( bVert )
-        bRet = rTbl.SplitCol( this, rBoxes, nCnt );
-    else
-        bRet = rTbl.SplitRow( this, rBoxes, nCnt, bSameHeight );
-
-    if( bRet )
+    bool bRet(false);
     {
-        SetModified();
-        SetFieldsDirty( true, NULL, 0 );
+        ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+
+        SwTableFmlUpdate aMsgHnt( &rTbl );
+        aMsgHnt.eFlags = TBL_BOXPTR;
+        UpdateTblFlds( &aMsgHnt );
+
+        if (bVert)
+            bRet = rTbl.SplitCol( this, rBoxes, nCnt );
+        else
+            bRet = rTbl.SplitRow( this, rBoxes, nCnt, bSameHeight );
+
+        if (bRet)
+        {
+            SetModified();
+            SetFieldsDirty( true, NULL, 0 );
+        }
     }
 
     if( pUndo )

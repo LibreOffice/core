@@ -585,14 +585,14 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
     // ? TL_CHART2: ?
 
     SwUndoSort* pUndoSort = 0;
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         pUndoSort = new SwUndoSort( rBoxes[0]->GetSttIdx(),
                                     rBoxes[rBoxes.Count()-1]->GetSttIdx(),
                                    *pTblNd, rOpt, aFlatBox.HasItemSets() );
         GetIDocumentUndoRedo().AppendUndo(pUndoSort);
     }
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // SchluesselElemente einsortieren
     USHORT nCount = (rOpt.eDirection == SRT_ROWS) ?

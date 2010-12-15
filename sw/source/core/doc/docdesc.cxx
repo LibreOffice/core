@@ -201,12 +201,12 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
     SwPageDesc *pDesc = aPageDescs[i];
 
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         SwUndo *const pUndo(new SwUndoPageDesc(*pDesc, rChged, this));
         GetIDocumentUndoRedo().AppendUndo(pUndo);
     }
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     //Als erstes wird ggf. gespiegelt.
     if ( rChged.GetUseOn() == nsUseOnPage::PD_MIRROR )

@@ -396,15 +396,15 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
 
-    // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
-    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
         pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
     }
+
+    // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
+    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
     //desselben einer Spezialmethode. Sie Returnt TRUE wenn der Fly neu

@@ -648,16 +648,15 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
 
         if( bOnlyAttrChg )
         {
-            // #i32968# Inserting columns in the section causes MakeFrmFmt
-            // to put two  objects of type SwUndoFrmFmt on the undo stack.
-            // We don't want them.
-            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-
-            if (undoGuard.UndoWasEnabled())
+            if (GetIDocumentUndoRedo().DoesUndo())
             {
                 GetIDocumentUndoRedo().AppendUndo(
                     MakeUndoUpdateSection( *pFmt, true ) );
             }
+            // #i32968# Inserting columns in the section causes MakeFrmFmt
+            // to put two  objects of type SwUndoFrmFmt on the undo stack.
+            // We don't want them.
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
             pFmt->SetFmtAttr( *pAttr );
             SetModified();
         }
@@ -684,13 +683,13 @@ void SwDoc::UpdateSection(sal_uInt16 const nPos, SwSectionData & rNewData,
         }
     }
 
-    // #i32968# Inserting columns in the section causes MakeFrmFmt to put two
-    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    if (undoGuard.UndoWasEnabled())
+    if (GetIDocumentUndoRedo().DoesUndo())
     {
         GetIDocumentUndoRedo().AppendUndo(MakeUndoUpdateSection(*pFmt, false));
     }
+    // #i32968# Inserting columns in the section causes MakeFrmFmt to put two
+    // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     // #56167# Der LinkFileName koennte auch nur aus Separatoren bestehen
     String sCompareString = sfx2::cTokenSeperator;

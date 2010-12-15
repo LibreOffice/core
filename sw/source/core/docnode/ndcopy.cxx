@@ -732,44 +732,47 @@ SwDoc::CopyRange( SwPaM& rPam, SwPosition& rPos, const bool bCopyAll ) const
                 "please tell me what you did to get here!");
         pDoc->SetRedlineMode_intern((RedlineMode_t)(eOld | nsRedlineMode_t::REDLINE_IGNORE));
 
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         // dann kopiere den Bereich im unteren DokumentBereich,
         // (mit Start/End-Nodes geklammert) und verschiebe diese
         // dann an die gewuenschte Stelle.
 
         SwUndoCpyDoc* pUndo = 0;
         SwPaM aPam( rPos );         // UndoBereich sichern
-        if (undoGuard.UndoWasEnabled())
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pDoc->GetIDocumentUndoRedo().ClearRedo();
             pUndo = new SwUndoCpyDoc( aPam );
         }
 
-        SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
+        {
+            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
+            SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection(
                                 SwNodeIndex( GetNodes().GetEndOfAutotext() ));
-        aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
-        // copy without Frames
-        pDoc->CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, 0 );
+            aPam.GetPoint()->nNode = *pSttNd->EndOfSectionNode();
+            // copy without Frames
+            pDoc->CopyImpl( rPam, *aPam.GetPoint(), false, bCopyAll, 0 );
 
-        aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
-        aPam.SetMark();
-        SwCntntNode* pNode = pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
-        pNode->MakeEndIndex( &aPam.GetMark()->nContent );
+            aPam.GetPoint()->nNode = pDoc->GetNodes().GetEndOfAutotext();
+            aPam.SetMark();
+            SwCntntNode* pNode =
+                pDoc->GetNodes().GoPrevious( &aPam.GetMark()->nNode );
+            pNode->MakeEndIndex( &aPam.GetMark()->nContent );
 
-        aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
-        pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
-        pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
-        // move to desired position
-        pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
+            aPam.GetPoint()->nNode = *aPam.GetNode()->StartOfSectionNode();
+            pNode = pDoc->GetNodes().GoNext( &aPam.GetPoint()->nNode );
+            pNode->MakeStartIndex( &aPam.GetPoint()->nContent );
+            // move to desired position
+            pDoc->MoveRange( aPam, rPos, DOC_MOVEDEFAULT );
 
-        pNode = aPam.GetCntntNode();
-        *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
-        aPam.SetMark();                 // auch den Mark umsetzen !!
-        aPam.DeleteMark();              // aber keinen Bereich makieren !!
-        pDoc->DeleteSection( pNode );           // Bereich wieder loeschen
+            pNode = aPam.GetCntntNode();
+            *aPam.GetPoint() = rPos;        // Cursor umsetzen fuers Undo !
+            aPam.SetMark();                 // auch den Mark umsetzen !!
+            aPam.DeleteMark();              // aber keinen Bereich makieren !!
+            pDoc->DeleteSection( pNode );           // Bereich wieder loeschen
+        }
 
         // if Undo is enabled, store the insertion range
-        if (undoGuard.UndoWasEnabled())
+        if (pDoc->GetIDocumentUndoRedo().DoesUndo())
         {
             pUndo->SetInsertRange( aPam );
             pDoc->GetIDocumentUndoRedo().AppendUndo(pUndo);
