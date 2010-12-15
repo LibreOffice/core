@@ -2467,20 +2467,8 @@ SetRedlineMode( eOld );
             bool const bDoesUndo = GetIDocumentUndoRedo().DoesUndo();
             if (bDoesUndo)
             {
-                GetIDocumentUndoRedo().ClearRedo();
-
-                SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
-                if (pLastUndo &&
-                    (UNDO_REPLACE == pLastUndo->GetId()))
-                {
-                    pUndoRpl = static_cast<SwUndoReplace*>(pLastUndo);
-                }
-                if (!pUndoRpl || pUndoRpl->IsFull())
-                {
-                    pUndoRpl = new SwUndoReplace();
-                    GetIDocumentUndoRedo().AppendUndo(pUndoRpl);
-                }
-                pUndoRpl->AddEntry( aDelPam, sRepl, bRegExReplace );
+                pUndoRpl = new SwUndoReplace(aDelPam, sRepl, bRegExReplace);
+                GetIDocumentUndoRedo().AppendUndo(pUndoRpl);
                 GetIDocumentUndoRedo().DoUndo(false);
             }
 
@@ -2535,7 +2523,7 @@ SetRedlineMode( eOld );
 
             if( pUndoRpl )
             {
-                pUndoRpl->SetEntryEnd( rPam );
+                pUndoRpl->SetEnd(rPam);
                 GetIDocumentUndoRedo().DoUndo(bDoesUndo);
             }
         }

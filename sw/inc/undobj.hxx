@@ -1252,20 +1252,17 @@ public:
 
 //--------------------------------------------------------------------
 
-class _UnReplaceData;
-SV_DECL_PTRARR_DEL( _UnReplaceDatas, _UnReplaceData*, 10, 25 )
+SwRewriter SW_DLLPRIVATE
+MakeUndoReplaceRewriter(ULONG const ocurrences,
+    ::rtl::OUString const& sOld, ::rtl::OUString const& sNew);
 
-class SwUndoReplace : public SwUndo
+class SwUndoReplace
+    : public SwUndo
 {
-    friend class ::sw::UndoManager;
-
-    BOOL bOldIterFlag;      // Status vom Undo-Iter vorm 1. Aufruf
-    USHORT nAktPos;         // fuer GetUndoRange und Undo/Redo
-    _UnReplaceDatas aArr;
-    SwRedlineData* pRedlData;
-
 public:
-    SwUndoReplace();
+    SwUndoReplace(SwPaM const& rPam,
+            ::rtl::OUString const& rInsert, bool const bRegExp);
+
     virtual ~SwUndoReplace();
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
@@ -1292,12 +1289,11 @@ public:
     */
     virtual SwRewriter GetRewriter() const;
 
-    void AddEntry( const SwPaM& rPam, const String& rInsert, BOOL bRegExp );
-    void SetEntryEnd( const SwPaM& rPam );
+    void SetEnd( const SwPaM& rPam );
 
-    BOOL IsFull() const
-        { return ((USHRT_MAX / sizeof( void* )) - 50 ) < aArr.Count(); }
-
+private:
+    struct Impl;
+    ::std::auto_ptr<Impl> m_pImpl;
 };
 
 
@@ -1832,8 +1828,6 @@ class SwUndoIter
     friend void SwUndoStart::Redo( SwUndoIter& );
     friend void SwUndoEnd::Repeat( SwUndoIter& );
     friend void SwUndoStart::Repeat( SwUndoIter& );
-    friend void SwUndoReplace::Undo( SwUndoIter& );
-    friend void SwUndoReplace::Redo( SwUndoIter& );
 
     SwUndoId nUndoId;
     USHORT nEndCnt;

@@ -63,32 +63,6 @@
 using namespace ::com::sun::star;
 
 
-class _UnReplaceData : private SwUndoSaveCntnt
-{
-    String m_sOld, m_sIns;
-    ULONG m_nSttNd, m_nEndNd, m_nOffset;
-    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
-    BOOL m_bSplitNext : 1;
-    BOOL m_bRegExp : 1;
-    // metadata references for paragraph and following para (if m_bSplitNext)
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
-
-public:
-    _UnReplaceData( const SwPaM& rPam, const String& rIns, BOOL bRegExp );
-    ~_UnReplaceData();
-
-    void Undo( SwUndoIter& rIter );
-    void Redo( SwUndoIter& rIter );
-    void SetEnd( const SwPaM& rPam );
-
-    const String & GetOld() const { return m_sOld; }
-    const String & GetIns() const { return m_sIns; }
-};
-
-
-SV_IMPL_PTRARR( _UnReplaceDatas, _UnReplaceData* )
-
 //------------------------------------------------------------------
 
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -505,10 +479,38 @@ SwRewriter SwUndoInsert::GetRewriter() const
 }
 
 
-/*  */
+// SwUndoReplace /////////////////////////////////////////////////////////
 
-SwUndoReplace::SwUndoReplace()
-    : SwUndo( UNDO_REPLACE ), nAktPos( USHRT_MAX )
+
+class SwUndoReplace::Impl
+    : private SwUndoSaveCntnt
+{
+    ::rtl::OUString m_sOld;
+    ::rtl::OUString m_sIns;
+    ULONG m_nSttNd, m_nEndNd, m_nOffset;
+    xub_StrLen m_nSttCnt, m_nEndCnt, m_nSetPos, m_nSelEnd;
+    bool m_bSplitNext : 1;
+    bool m_bRegExp : 1;
+    // metadata references for paragraph and following para (if m_bSplitNext)
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
+    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
+
+public:
+    Impl(SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp);
+
+    void Undo( SwUndoIter& );
+    void Redo( SwUndoIter& );
+    void SetEnd(SwPaM const& rPam);
+
+    ::rtl::OUString const& GetOld() const { return m_sOld; }
+    ::rtl::OUString const& GetIns() const { return m_sIns; }
+};
+
+
+SwUndoReplace::SwUndoReplace(SwPaM const& rPam,
+        ::rtl::OUString const& rIns, bool const bRegExp)
+    : SwUndo( UNDO_REPLACE )
+    , m_pImpl(new Impl(rPam, rIns, bRegExp))
 {
 }
 
@@ -518,69 +520,41 @@ SwUndoReplace::~SwUndoReplace()
 
 void SwUndoReplace::Undo( SwUndoIter& rUndoIter )
 {
-    // war dieses nicht die letze Undo-Aktion, dann setze den
-    // Count neu
-    if( rUndoIter.pLastUndoObj != this )
-    {
-        nAktPos = aArr.Count();
-        rUndoIter.pLastUndoObj = this;
-        bOldIterFlag = rUndoIter.bWeiter;
-        rUndoIter.bWeiter = TRUE;
-    }
-
-    aArr[ --nAktPos ]->Undo( rUndoIter );
-
-    if( !nAktPos )      // alten Status wieder zurueck
-        rUndoIter.bWeiter = bOldIterFlag;
+    m_pImpl->Undo( rUndoIter );
 }
 
 
 void SwUndoReplace::Redo( SwUndoIter& rUndoIter )
 {
-    // war dieses nicht die letze Undo-Aktion, dann setze den
-    // Count neu
-    if( rUndoIter.pLastUndoObj != this )
-    {
-        ASSERT( !nAktPos, "Redo ohne vorheriges Undo??" );
-        rUndoIter.pLastUndoObj = this;
-        bOldIterFlag = rUndoIter.bWeiter;
-        rUndoIter.bWeiter = TRUE;
-    }
-
-    aArr[ nAktPos ]->Redo( rUndoIter );
-
-    if( ++nAktPos >= aArr.Count() ) // alten Status wieder zurueck
-    {
-        nAktPos = USHRT_MAX;
-        rUndoIter.bWeiter = bOldIterFlag;
-    }
+    m_pImpl->Redo( rUndoIter );
 }
 
-// #111827#
-SwRewriter SwUndoReplace::GetRewriter() const
+SwRewriter
+MakeUndoReplaceRewriter(ULONG const occurrences,
+        ::rtl::OUString const& sOld, ::rtl::OUString const& sNew)
 {
     SwRewriter aResult;
 
-    if (aArr.Count() > 1)
+    if (1 < occurrences)
     {
-        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(aArr.Count()));
+        aResult.AddRule(UNDO_ARG1, String::CreateFromInt32(occurrences));
         aResult.AddRule(UNDO_ARG2, String(SW_RES(STR_OCCURRENCES_OF)));
 
         String aTmpStr;
         aTmpStr += String(SW_RES(STR_START_QUOTE));
-        aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+        aTmpStr += ShortenString(sOld, nUndoStringLength,
                                  SW_RES(STR_LDOTS));
         aTmpStr += String(SW_RES(STR_END_QUOTE));
         aResult.AddRule(UNDO_ARG3, aTmpStr);
     }
-    else if (aArr.Count() == 1)
+    else if (1 == occurrences)
     {
         {
             String aTmpStr;
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
             // #i33488 #
-            aTmpStr += ShortenString(aArr[0]->GetOld(), nUndoStringLength,
+            aTmpStr += ShortenString(sOld, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG1, aTmpStr);
@@ -593,7 +567,7 @@ SwRewriter SwUndoReplace::GetRewriter() const
 
             aTmpStr += String(SW_RES(STR_START_QUOTE));
             // #i33488 #
-            aTmpStr += ShortenString(aArr[0]->GetIns(), nUndoStringLength,
+            aTmpStr += ShortenString(sNew, nUndoStringLength,
                                      SW_RES(STR_LDOTS));
             aTmpStr += String(SW_RES(STR_END_QUOTE));
             aResult.AddRule(UNDO_ARG3, aTmpStr);
@@ -603,24 +577,23 @@ SwRewriter SwUndoReplace::GetRewriter() const
     return aResult;
 }
 
-void SwUndoReplace::AddEntry( const SwPaM& rPam, const String& rInsert,
-                                BOOL bRegExp )
+// #111827#
+SwRewriter SwUndoReplace::GetRewriter() const
 {
-    _UnReplaceData* pNew = new _UnReplaceData( rPam, rInsert, bRegExp );
-    aArr.C40_INSERT(_UnReplaceData, pNew, aArr.Count() );
+    return MakeUndoReplaceRewriter(1, m_pImpl->GetOld(), m_pImpl->GetIns());
 }
 
-void SwUndoReplace::SetEntryEnd( const SwPaM& rPam )
+void SwUndoReplace::SetEnd(SwPaM const& rPam)
 {
-    _UnReplaceData* pEntry = aArr[ aArr.Count()-1 ];
-    pEntry->SetEnd( rPam );
+    m_pImpl->SetEnd(rPam);
 }
 
-_UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
-                                BOOL bRgExp )
-    : m_sIns( rIns ), m_nOffset( 0 )
+SwUndoReplace::Impl::Impl(
+        SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp)
+    : m_sIns( rIns )
+    , m_nOffset( 0 )
+    , m_bRegExp(bRegExp)
 {
-    m_bRegExp = bRgExp;
 
     const SwPosition * pStt( rPam.Start() );
     const SwPosition * pEnd( rPam.End() );
@@ -674,11 +647,7 @@ _UnReplaceData::_UnReplaceData( const SwPaM& rPam, const String& rIns,
     m_sOld = pNd->GetTxt().Copy( m_nSttCnt, nECnt - m_nSttCnt );
 }
 
-_UnReplaceData::~_UnReplaceData()
-{
-}
-
-void _UnReplaceData::Undo( SwUndoIter& rIter )
+void SwUndoReplace::Impl::Undo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
     SwPaM& rPam = *rIter.pAktPam;
@@ -690,10 +659,10 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     SwAutoCorrExceptWord* pACEWord = pDoc->GetAutoCorrExceptWord();
     if( pACEWord )
     {
-        if( 1 == m_sIns.Len() && 1 == m_sOld.Len() )
+        if ((1 == m_sIns.getLength()) && (1 == m_sOld.getLength()))
         {
             SwPosition aPos( *pNd ); aPos.nContent.Assign( pNd, m_nSttCnt );
-            pACEWord->CheckChar( aPos, m_sOld.GetChar( 0 ) );
+            pACEWord->CheckChar( aPos, m_sOld[ 0 ] );
         }
         pDoc->SetAutoCorrExceptWord( 0 );
     }
@@ -701,7 +670,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     SwIndex aIdx( pNd, m_nSttCnt );
     if( m_nSttNd == m_nEndNd )
     {
-        pNd->EraseText( aIdx, m_sIns.Len() );
+        pNd->EraseText( aIdx, m_sIns.getLength() );
     }
     else
     {
@@ -729,7 +698,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
         pNd->RestoreMetadata(m_pMetadataUndoStart);
     }
 
-    if( m_sOld.Len() )
+    if (m_sOld.getLength())
     {
         pNd->InsertText( m_sOld, aIdx );
     }
@@ -763,7 +732,7 @@ void _UnReplaceData::Undo( SwUndoIter& rIter )
     rPam.GetPoint()->nContent = aIdx;
 }
 
-void _UnReplaceData::Redo( SwUndoIter& rIter )
+void SwUndoReplace::Impl::Redo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
     ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -807,18 +776,19 @@ void _UnReplaceData::Redo( SwUndoIter& rIter )
     rPam.DeleteMark();
 }
 
-void _UnReplaceData::SetEnd( const SwPaM& rPam )
+void SwUndoReplace::Impl::SetEnd(SwPaM const& rPam)
 {
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
     {
-        // es wurden mehrere Absaetze eingefuegt
+        // multiple paragraphs were inserted
         const SwPosition* pEnd = rPam.End();
         m_nEndNd = m_nOffset + pEnd->nNode.GetIndex();
         m_nEndCnt = pEnd->nContent.GetIndex();
     }
 }
 
-/*  */
+
+// SwUndoReRead //////////////////////////////////////////////////////////
 
 
 SwUndoReRead::SwUndoReRead( const SwPaM& rPam, const SwGrfNode& rGrfNd )

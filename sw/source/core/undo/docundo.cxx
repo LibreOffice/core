@@ -490,13 +490,6 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
 
     m_rRedlineAccess.SetRedlineMode( eOld );
 
-    // special treatment for Undo Replace: internal history
-    if ((UNDO_REPLACE == nAktId) && static_cast<SwUndoReplace*>(pUndo)->nAktPos)
-    {
-        ++m_nUndoPos;
-        return true;
-    }
-
     if (m_nUndoPos && !rUndoIter.bWeiter)
     {
         pUndo = (*m_pUndos)[ m_nUndoPos-1 ];
@@ -940,14 +933,6 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
     pUndo->Redo( rUndoIter );
 
     m_rRedlineAccess.SetRedlineMode(eOld);
-
-    // special treatment for Undo Replace: internal history
-    if ((UNDO_REPLACE == pUndo->GetId()) &&
-        (USHRT_MAX != static_cast<SwUndoReplace*>(pUndo)->nAktPos))
-    {
-        --m_nUndoPos;
-        return true;
-    }
 
     if (rUndoIter.bWeiter && (m_nUndoPos >= m_pUndos->Count()))
     {

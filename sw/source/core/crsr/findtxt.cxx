@@ -49,6 +49,7 @@
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
+#include <undobj.hxx>
 #include <breakit.hxx>
 
 #include <docsh.hxx>
@@ -662,7 +663,9 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt, BOOL bSearchInNotes,
 
     if (bStartUndo)
     {
-        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, NULL );
+        SwRewriter rewriter(MakeUndoReplaceRewriter(
+                nRet, rSearchOpt.searchString, rSearchOpt.replaceString));
+        pDoc->GetIDocumentUndoRedo().EndUndo( UNDO_REPLACE, & rewriter );
     }
     return nRet;
 }
