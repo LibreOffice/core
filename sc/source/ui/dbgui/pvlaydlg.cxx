@@ -717,6 +717,7 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
         if ( Contains( theArr, fData.mnCol, nAt ) )
         {
+            size_t nToIndex = 0;
             aToPos = DlgPos2WndPos( rAtPos, *theWnd );
             theWnd->GetExistingIndex( aToPos, nToIndex );
 
