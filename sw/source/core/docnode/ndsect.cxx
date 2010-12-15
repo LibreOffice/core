@@ -43,7 +43,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
-#include <UndoCore.hxx>
+#include <UndoSection.hxx>
 #include <UndoDelete.hxx>
 #include <swundo.hxx>
 #include <calc.hxx>

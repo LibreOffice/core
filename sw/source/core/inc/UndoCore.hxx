@@ -30,17 +30,11 @@
 
 #include <undobj.hxx>
 
-#include <memory>
-
 #include <calbck.hxx>
 
 
 class SfxItemSet;
 class SwFmtColl;
-class SwTxtNode;
-class SwSectionData;
-class SwSectionFmt;
-class SwTOXBase;
 class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
@@ -195,43 +189,6 @@ public:
 
     virtual SwRewriter GetRewriter() const;
 };
-
-
-//------------ Undo von Insert-/Delete-Sections ----------------------
-
-class SwUndoInsSection : public SwUndo, private SwUndRng
-{
-private:
-    const ::std::auto_ptr<SwSectionData> m_pSectionData;
-    const ::std::auto_ptr<SwTOXBase> m_pTOXBase; /// set iff section is TOX
-    const ::std::auto_ptr<SfxItemSet> m_pAttrSet;
-    ::std::auto_ptr<SwHistory> m_pHistory;
-    ::std::auto_ptr<SwRedlineData> m_pRedlData;
-    ULONG m_nSectionNodePos;
-    bool m_bSplitAtStart : 1;
-    bool m_bSplitAtEnd : 1;
-    bool m_bUpdateFtn : 1;
-
-    void Join( SwDoc& rDoc, ULONG nNode );
-
-public:
-    SwUndoInsSection(SwPaM const&, SwSectionData const&,
-        SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
-
-    virtual ~SwUndoInsSection();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
-    void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
-    void SetUpdtFtnFlag(bool const bFlag)   { m_bUpdateFtn = bFlag; }
-};
-
-SW_DLLPRIVATE SwUndo * MakeUndoDelSection(SwSectionFmt const&);
-
-SW_DLLPRIVATE SwUndo * MakeUndoUpdateSection(SwSectionFmt const&, bool const);
 
 
 //------------ Undo von verschieben/stufen von Gliederung ----------------
