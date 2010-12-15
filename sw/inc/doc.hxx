@@ -224,6 +224,7 @@ namespace sw { namespace mark {
 namespace sw {
     class MetaFieldManager;
     class UndoManager;
+    class IShellCursorSupplier;
 }
 
 namespace com { namespace sun { namespace star {
@@ -1758,6 +1759,7 @@ public:
 
     // suche ueber das Layout eine EditShell und ggfs. eine ViewShell
     SwEditShell* GetEditShell( ViewShell** ppSh = 0 ) const;
+    ::sw::IShellCursorSupplier * GetIShellCursorSupplier();
 
     // OLE 2.0-Benachrichtung
     inline       void  SetOle2Link(const Link& rLink) {aOle2Link = rLink;}
