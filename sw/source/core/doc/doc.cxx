@@ -83,6 +83,7 @@
 #include <ndtxt.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <UndoCore.hxx>
+#include <UndoTable.hxx>
 #include <pagedesc.hxx> //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>

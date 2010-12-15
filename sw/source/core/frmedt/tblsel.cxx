@@ -52,7 +52,7 @@
 #include <rootfrm.hxx>
 #include <viscrs.hxx>
 #include <swtblfmt.hxx>
-#include <UndoCore.hxx>
+#include <UndoTable.hxx>
 #include <mvsave.hxx>
 // OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>

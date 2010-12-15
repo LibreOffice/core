@@ -34,6 +34,7 @@
 #include <swtable.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
+#include <UndoTable.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
 #include <redline.hxx>

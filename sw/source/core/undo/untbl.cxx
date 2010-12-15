@@ -28,7 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <UndoTable.hxx>
+#include <UndoCore.hxx>
 #include <hintids.hxx>
 #include <editeng/brkitem.hxx>
 #include <fmtornt.hxx>
@@ -43,7 +44,6 @@
 #include <cntfrm.hxx>
 #include <tblsel.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
-#include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <tabcol.hxx>
