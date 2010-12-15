@@ -61,7 +61,6 @@
 #define OUSTR( str )              OUString::createFromAscii( #str )
 #define OUSTR_( str )             OUString::createFromAscii( str )
 #define EMPTY_OUSTR               OUString()
-//#define PRIVATE_OO                  OUString::createFromAscii( "application/x-openoffice;" "windows_formatname=" )
 
 const rtl::OUString Windows_FormatName (RTL_CONSTASCII_USTRINGPARAM("windows_formatname"));
 const com::sun::star::uno::Type CppuType_ByteSequence = ::getCppuType((const com::sun::star::uno::Sequence<sal_Int8>*)0);
