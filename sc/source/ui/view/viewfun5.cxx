@@ -320,8 +320,27 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             ::rtl::OUString aStr;
             SotStorageStreamRef xStream;
             if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
+            {
+                if (nFormatId == SOT_FORMATSTR_ID_HTML)
+                {
+                    // Launch the text import options dialog.  For now, we do
+                    // this for html pasting only, but in the future it may
+                    // make sense to do it for other data types too.
+                    ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                    ::std::auto_ptr<AbstractScTextImportOptionsDlg> pDlg(
+                        pFact->CreateScTextImportOptionsDlg(NULL, RID_SCDLG_TEXT_IMPORT_OPTIONS));
+
+                    if (pDlg->Execute() == RET_OK)
+                    {
+                        ScAsciiOptions aOptions;
+                        aOptions.SetLanguage(pDlg->GetLanguageType());
+                        aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
+                        aObj.SetExtOptions(aOptions);
+                    }
+                }
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
                 bRet = aObj.ImportStream( *xStream, String(), nFormatId );
+            }
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
                 // Do CSV dialog if more than one line.

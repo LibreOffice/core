@@ -2035,7 +2035,19 @@ BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
 
         USHORT nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
-        pImp->WriteToDocument();
+
+        if (pExtOptions)
+        {
+            // Pick up import options if available.
+            LanguageType eLang = pExtOptions->GetLanguage();
+            SvNumberFormatter aNumFormatter(pDoc->GetServiceManager(), eLang);
+            bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
+            pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
+        }
+        else
+            // Regular import, with no options.
+            pImp->WriteToDocument();
+
         EndPaste();
     }
     delete pImp;
