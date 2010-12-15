@@ -40,6 +40,7 @@
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
+#include <UndoInsert.hxx>
 #include <swtable.hxx>
 #include <viscrs.hxx>
 #include <fntcache.hxx>

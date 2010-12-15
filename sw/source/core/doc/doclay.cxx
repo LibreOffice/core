@@ -86,7 +86,7 @@
 #include <dcontact.hxx>
 #include <swundo.hxx>
 #include <flypos.hxx>
-#include <UndoCore.hxx>
+#include <UndoInsert.hxx>
 #include <expfld.hxx>       // InsertLabel
 #include <poolfmt.hxx>      // PoolVorlagen-Id's
 #include <docary.hxx>
