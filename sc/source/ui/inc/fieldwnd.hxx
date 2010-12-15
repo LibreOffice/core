@@ -230,6 +230,10 @@ private:
 
 // ============================================================================
 
+/**
+ * Base class for field control with a horizontal scroll bar at the bottom.
+ * Page, column, data and select fields are derived from this class.
+ */
 class ScDPHorFieldControl : public ScDPFieldControlBase
 {
 protected:
@@ -295,6 +299,9 @@ public:
 
 // ============================================================================
 
+/**
+ * Row field control with a vertical scroll bar.
+ */
 class ScDPRowFieldControl : public ScDPFieldControlBase
 {
 public:
