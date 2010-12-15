@@ -323,6 +323,7 @@ rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
     // without the description, and there may be several filters with the same pattern
     QString filter = _dialog->filterWidget()->currentText();
+    filter = filter.mid( filter.indexOf( '|' ) + 1 ); // convert from the pattern|description format if needed
     filter.replace( "\\/", "/" );
 
     //default if not found
