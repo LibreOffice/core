@@ -69,15 +69,15 @@ public:
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
-    virtual SwUndoId GetUndoIds(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const;
+    virtual SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const;
+    virtual SwUndoComments_t GetUndoComments() const;
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter & rUndoIter);
-    virtual SwUndoId GetRedoIds(String *const o_pStr,
-                SwUndoIds *const o_pRedoIds) const;
+    virtual SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt);
-    virtual SwUndoId GetRepeatIds(String *const o_pStr) const;
+    virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
     virtual bool IsUndoNodes(SwNodes const& rNodes) const;

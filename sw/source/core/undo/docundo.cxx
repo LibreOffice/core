@@ -55,8 +55,6 @@ using namespace ::com::sun::star;
 #define UNDO_ACTION_LIMIT (USHRT_MAX - 1000)
 
 
-SV_IMPL_PTRARR( SwUndoIds, SwUndoIdAndNamePtr )
-
 //#define _SHOW_UNDORANGE
 #ifdef _SHOW_UNDORANGE
 
@@ -708,6 +706,7 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
   -----------------------------------------------------------------------*/
 
+typedef ::std::pair<SwUndoId, ::rtl::OUString> IdAndName_t;
 
 /**
    Returns id and comment for a certain undo object in an undo stack.
@@ -730,9 +729,9 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
    @param rUndos           the undo stack
    @param nPos             position of the undo object to query
 
-   @return SwUndoIdAndName object containing the query result
+   @return IdAndName_t object containing the query result
  */
-SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
+IdAndName_t lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos)
 {
     SwUndo * pUndo = rUndos[ nPos ];
     SwUndoId nId = UNDO_EMPTY;
@@ -834,38 +833,41 @@ SwUndoIdAndName * lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos )
         sStr = pUndo->GetComment();
     }
 
-    return new SwUndoIdAndName(nId, &sStr);
+    return IdAndName_t(nId, sStr);
 }
 
-SwUndoId
-UndoManager::GetUndoIds(String *const o_pStr, SwUndoIds *const o_pUndoIds) const
+
+SwUndoId UndoManager::GetLastUndoInfo(::rtl::OUString *const o_pStr) const
 {
+    if (!m_nUndoPos)
+    {
+        return UNDO_EMPTY;
+    }
+
+    IdAndName_t const idAndName(lcl_GetUndoIdAndName(*m_pUndos, m_nUndoPos-1));
+
+    if (o_pStr)
+    {
+        *o_pStr = idAndName.second;
+    }
+
+    return idAndName.first;
+}
+
+
+SwUndoComments_t UndoManager::GetUndoComments() const
+{
+    SwUndoComments_t ret;
     int nTmpPos = m_nUndoPos - 1;
-    SwUndoId nId = UNDO_EMPTY;
 
     while (nTmpPos >= 0)
     {
         SwUndo *const pUndo = (*m_pUndos)[ static_cast<USHORT>(nTmpPos) ];
 
-        SwUndoIdAndName *const pIdAndName =
-            lcl_GetUndoIdAndName( *m_pUndos, static_cast<sal_uInt16>(nTmpPos) );
+        IdAndName_t const idAndName(
+            lcl_GetUndoIdAndName(*m_pUndos, static_cast<sal_uInt16>(nTmpPos)));
 
-        if (nTmpPos == m_nUndoPos - 1)
-        {
-            nId = pIdAndName->GetUndoId();
-
-            if (o_pStr)
-            {
-                *o_pStr = *pIdAndName->GetUndoStr();
-            }
-        }
-
-        if (o_pUndoIds)
-        {
-            o_pUndoIds->Insert(pIdAndName, o_pUndoIds->Count());
-        }
-        else
-            break;
+        ret.push_back(idAndName.second);
 
         if (pUndo->GetId() == UNDO_END)
         {
@@ -875,7 +877,7 @@ UndoManager::GetUndoIds(String *const o_pStr, SwUndoIds *const o_pUndoIds) const
         nTmpPos--;
     }
 
-    return nId;
+    return ret;
 }
 
 bool UndoManager::HasTooManyUndos() const
@@ -953,35 +955,36 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 }
 
 
-SwUndoId
-UndoManager::GetRedoIds(String *const o_pStr, SwUndoIds *const o_pRedoIds) const
+SwUndoId UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
 {
+    if (m_pUndos->Count() == m_nUndoPos)
+    {
+        return UNDO_EMPTY;
+    }
+
+    IdAndName_t const idAndName(lcl_GetUndoIdAndName(*m_pUndos, m_nUndoPos));
+
+    if (o_pStr)
+    {
+        *o_pStr = idAndName.second;
+    }
+
+    return idAndName.first;
+}
+
+
+SwUndoComments_t UndoManager::GetRedoComments() const
+{
+    SwUndoComments_t ret;
     sal_uInt16 nTmpPos = m_nUndoPos;
-    SwUndoId nId = UNDO_EMPTY;
 
     while (nTmpPos < m_pUndos->Count())
     {
         SwUndo *const pUndo = (*m_pUndos)[nTmpPos];
 
-        SwUndoIdAndName *const pIdAndName =
-            lcl_GetUndoIdAndName(*m_pUndos, nTmpPos);
+        IdAndName_t const idAndName(lcl_GetUndoIdAndName(*m_pUndos, nTmpPos));
 
-        if (nTmpPos == m_nUndoPos)
-        {
-            nId = pIdAndName->GetUndoId();
-
-            if (o_pStr)
-            {
-                *o_pStr = *pIdAndName->GetUndoStr();
-            }
-        }
-
-        if (o_pRedoIds)
-        {
-            o_pRedoIds->Insert(pIdAndName, o_pRedoIds->Count());
-        }
-        else
-            break;
+        ret.push_back(idAndName.second);
 
         if (pUndo->GetId() == UNDO_START)
         {
@@ -992,7 +995,7 @@ UndoManager::GetRedoIds(String *const o_pStr, SwUndoIds *const o_pRedoIds) const
         nTmpPos++;
     }
 
-    return nId;
+    return ret;
 }
 
 /**************** REPEAT ******************/
@@ -1057,10 +1060,9 @@ bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
 }
 
 
-SwUndoId
-UndoManager::GetRepeatIds(String *const o_pStr) const
+SwUndoId UndoManager::GetRepeatInfo(::rtl::OUString *const o_pStr) const
 {
-    SwUndoId const nRepeatId = GetUndoIds(o_pStr, 0);
+    SwUndoId const nRepeatId = GetLastUndoInfo(o_pStr);
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
     {
         return nRepeatId;
@@ -1091,18 +1093,4 @@ SwUndo* UndoManager::RemoveLastUndo(SwUndoId const eUndoId)
 }
 
 } // namespace sw
-
-// SwUndoIdAndName ///////////////////////////////////////////////////////
-
-SwUndoIdAndName::SwUndoIdAndName( SwUndoId nId, const String* pStr )
-    : eUndoId( nId ), pUndoStr( pStr ? new String( *pStr ) : 0 )
-{
-}
-
-SwUndoIdAndName::~SwUndoIdAndName()
-{
-    delete pUndoStr;
-}
-
-
 

@@ -1448,7 +1448,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 sal_uInt16 nCount = pUndoManager->GetUndoActionCount();
                 if ( nCount )
                     pSfxViewFrame->GetSlotState( nWhich, pSfxViewFrame->GetInterface(), &rSet );
-                else if (UNDO_EMPTY != rSh.GetUndoIds())
+                else if (UNDO_EMPTY != rSh.GetLastUndoInfo(0))
                 {
                     rSet.Put( SfxStringItem( nWhich, rSh.GetDoString(SwWrtShell::UNDO)) );
                 }
@@ -1461,7 +1461,7 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
                 sal_uInt16 nCount = pUndoManager->GetRedoActionCount();
                 if ( nCount )
                     pSfxViewFrame->GetSlotState( nWhich, pSfxViewFrame->GetInterface(), &rSet );
-                else if (UNDO_EMPTY != rSh.GetRedoIds())
+                else if (UNDO_EMPTY != rSh.GetFirstRedoInfo(0))
                 {
                     rSet.Put(SfxStringItem( nWhich, rSh.GetDoString(SwWrtShell::REDO)) );
                 }
@@ -1498,12 +1498,13 @@ void SwAnnotationShell::StateUndo(SfxItemSet &rSet)
 
                     SfxStringListItem aItem( nWhich );
                     if ((nWhich == SID_GETUNDOSTRINGS) &&
-                        (UNDO_EMPTY != rSh.GetUndoIds()))
+                        (UNDO_EMPTY != rSh.GetLastUndoInfo(0)))
                     {
                         rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
                     }
                     else if ((nWhich == SID_GETREDOSTRINGS) &&
-                             (UNDO_EMPTY != rSh.GetRedoIds()))
+                             (UNDO_EMPTY !=
+                              rSh.GetFirstRedoInfo(0)))
                     {
                         rSh.GetDoStrings( SwWrtShell::UNDO, aItem );
                     }

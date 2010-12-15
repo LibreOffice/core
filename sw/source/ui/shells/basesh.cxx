@@ -543,7 +543,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if (UNDO_EMPTY != rSh.GetUndoIds())
+                if (UNDO_EMPTY != rSh.GetLastUndoInfo(0))
                 {
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
@@ -554,7 +554,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REDO:
             {
-                if (UNDO_EMPTY != rSh.GetRedoIds())
+                if (UNDO_EMPTY != rSh.GetFirstRedoInfo(0))
                 {
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
@@ -565,9 +565,9 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REPEAT:
             {   // Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
-                if ((rSh.GetRedoIds() == UNDO_EMPTY) &&
+                if ((UNDO_EMPTY == rSh.GetFirstRedoInfo(0)) &&
                     !rSh.IsSelFrmMode() &&
-                    (UNDO_EMPTY != rSh.GetRepeatIds()))
+                    (UNDO_EMPTY != rSh.GetRepeatInfo(0)))
                 {
                     rSet.Put(SfxStringItem(nWhich, rSh.GetRepeatString()));
                 }
@@ -577,7 +577,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
 
             case SID_GETUNDOSTRINGS:
-                if (UNDO_EMPTY != rSh.GetUndoIds())
+                if (UNDO_EMPTY != rSh.GetLastUndoInfo(0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::UNDO, aStrLst );
@@ -588,7 +588,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
 
             case SID_GETREDOSTRINGS:
-                if (UNDO_EMPTY != rSh.GetRedoIds())
+                if (UNDO_EMPTY != rSh.GetFirstRedoInfo(0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::REDO, aStrLst );

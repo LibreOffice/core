@@ -73,7 +73,6 @@ class SwFmtRefMark;
 class SwNumRule;        // Numerierung
 //class SwNodeNum;      // Numerierung
 
-class SwUndoIds;        // fuer Undo
 class SwTxtFmtColl;
 class SwGrfNode;
 class SwFlyFrmFmt;
@@ -533,13 +532,10 @@ public:
     SwUndoId StartUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
-    SwUndoId GetUndoIds( String* pUndoStr = 0, SwUndoIds *pUndoIds = 0) const;
 
-    // Redo
-    SwUndoId GetRedoIds( String* pRedoStr = 0, SwUndoIds *pRedoIds = 0) const;
-
-    // Repeat
-    SwUndoId GetRepeatIds( String* pRepeatStr = 0) const;
+    SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const;
+    SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
     // mit KillPaMs, ClearMark

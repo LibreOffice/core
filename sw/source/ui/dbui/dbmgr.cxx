@@ -2938,8 +2938,11 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 SwNewDBMgr* pWorkDBMgr = pWorkDoc->GetNewDBMgr();
                 pWorkDoc->SetNewDBMgr( this );
                 pWorkDoc->EmbedAllLinks();
-                if(UNDO_UI_DELETE_INVISIBLECNTNT == rWorkShell.GetUndoIds())
+                if (UNDO_UI_DELETE_INVISIBLECNTNT ==
+                        rWorkShell.GetLastUndoInfo(0))
+                {
                     rWorkShell.Undo();
+                }
                 // #i69485# lock fields to prevent access to the result set while calculating layout
                 rWorkShell.LockExpFlds();
                 // create a layout

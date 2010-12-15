@@ -29,15 +29,15 @@
 #define IDOCUMENTUNDOREDO_HXX_INCLUDED
 
 #include <sal/types.h>
+
 #include <swundo.hxx>
 
 
 class SwUndoIter;
 class SwRewriter;
-class String;
-class SwUndoIds;
 class SwNodes;
 class SwUndo;
+
 
 
 /** IDocumentUndoRedo
@@ -144,14 +144,17 @@ public:
     */
     virtual void DelAllUndoObj() = 0;
 
-    /** Get Ids and comments of Undo actions.
+    /** Get Id and comment of last Undo action.
         @param o_pStr       if not 0, receives comment of last Undo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Undo actions.
         @return     Id of last Undo action, or UNDO_EMPTY if there is none.
     */
-    virtual SwUndoId GetUndoIds(String *const o_pStr,
-                SwUndoIds *const o_pUndoIds) const = 0;
+    virtual SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const = 0;
+
+    /** Get comments of Undo actions.
+        @return     comments of all top-level Undo actions.
+    */
+    virtual SwUndoComments_t GetUndoComments() const = 0;
+
 
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId) = 0;
 
@@ -168,19 +171,22 @@ public:
     */
     virtual bool Redo(SwUndoIter & rUndoIter) = 0;
 
-    /** Get Ids and comments of Redo actions.
+    /** Get Id and comment of first Redo action.
         @param o_pStr       if not 0, receives comment of first Redo action.
-        @param o_pUndoIds   if not 0, receives SwUndoIdAndName objects for all
-                            top-level Redo actions.
         @return     Id of first Redo action, or UNDO_EMPTY if there is none.
     */
-    virtual SwUndoId GetRedoIds(String *const o_pStr,
-                SwUndoIds *const o_pRedoIds) const = 0;
+    virtual SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const = 0;
+
+    /** Get comments of Redo actions.
+        @return     comments of all top-level Redo actions.
+    */
+    virtual SwUndoComments_t GetRedoComments() const = 0;
 
     /** Repeat the last Undo action.
         @return     true if repeating the last Undo Redo action was attempted.
     */
-    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt) = 0;
+    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
+        = 0;
 
     /** Get Id and comment of last Undo action, if it is Repeat capable.
         @param o_pStr       if not 0, receives comment of last Undo action
@@ -188,7 +194,7 @@ public:
         @return     Id of last Undo action if it is Repeat capable,
                     or UNDO_EMPTY if there is none or it is not Repeat capable.
     */
-    virtual SwUndoId GetRepeatIds(String *const o_pStr) const = 0;
+    virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const = 0;
 
     /** Add new Undo action.
         Takes over ownership of pUndo.

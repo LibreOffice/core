@@ -54,7 +54,8 @@ SLOFILES =  \
 
 EXCEPTIONSFILES = \
         $(SLO)$/wrtsh1.obj \
-        $(SLO)$/wrtsh2.obj
+        $(SLO)$/wrtsh2.obj \
+        $(SLO)$/wrtundo.obj \
 
 # --- Tagets -------------------------------------------------------
 

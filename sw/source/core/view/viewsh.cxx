@@ -2732,8 +2732,10 @@ IDocumentContentOperations* ViewShell::getIDocumentContentOperations() { return 
 IDocumentStylePoolAccess* ViewShell::getIDocumentStylePoolAccess() { return pDoc; }
 const IDocumentStatistics* ViewShell::getIDocumentStatistics() const { return pDoc; }
 
-IDocumentUndoRedo* ViewShell::getIDocumentUndoRedoAccess()
-{ return &pDoc->GetIDocumentUndoRedo(); }
+IDocumentUndoRedo      & ViewShell::GetIDocumentUndoRedo()
+{ return pDoc->GetIDocumentUndoRedo(); }
+IDocumentUndoRedo const& ViewShell::GetIDocumentUndoRedo() const
+{ return pDoc->GetIDocumentUndoRedo(); }
 
 // --> OD 2007-11-14 #i83479#
 const IDocumentListItems* ViewShell::getIDocumentListItemsAccess() const

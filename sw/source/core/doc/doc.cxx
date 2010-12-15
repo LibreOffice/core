@@ -2451,7 +2451,7 @@ bool SwDoc::RestoreInvisibleContent()
 {
     bool bRet = false;
     if (UNDO_UI_DELETE_INVISIBLECNTNT ==
-            GetIDocumentUndoRedo().GetUndoIds(0, 0))
+            GetIDocumentUndoRedo().GetLastUndoInfo(0))
     {
         SwPaM aPam( GetNodes().GetEndOfPostIts() );
         SwUndoIter aUndoIter( &aPam );

@@ -298,14 +298,14 @@ SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
 { return GetDoc()->GetIDocumentUndoRedo().EndUndo(eUndoId, pRewriter); }
 
 
-SwUndoId SwEditShell::GetUndoIds(String* pStr,SwUndoIds *pUndoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetUndoIds(pStr,pUndoIds); }
+SwUndoId SwEditShell::GetLastUndoInfo(::rtl::OUString *const o_pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr); }
 
-SwUndoId SwEditShell::GetRedoIds(String* pStr,SwUndoIds *pRedoIds) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRedoIds(pStr,pRedoIds); }
+SwUndoId SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr); }
 
-SwUndoId SwEditShell::GetRepeatIds(String* pStr) const
-{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatIds(pStr); }
+SwUndoId SwEditShell::GetRepeatInfo(::rtl::OUString *const o_pStr) const
+{ return GetDoc()->GetIDocumentUndoRedo().GetRepeatInfo(o_pStr); }
 
 
 

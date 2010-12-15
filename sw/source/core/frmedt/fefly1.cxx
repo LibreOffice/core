@@ -770,7 +770,7 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                     GetDoc()->GetIDocumentUndoRedo().DoesUndo();
                 if (bDoesUndo &&
                     (UNDO_INSLAYFMT ==
-                     GetDoc()->GetIDocumentUndoRedo().GetUndoIds(NULL, NULL)))
+                     GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0)))
                 {
                     GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
                 }
