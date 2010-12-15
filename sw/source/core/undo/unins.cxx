@@ -44,6 +44,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
+#include <UndoAttribute.hxx>
 #include <rolbck.hxx>
 #include <ndgrf.hxx>
 #include <ndole.hxx>

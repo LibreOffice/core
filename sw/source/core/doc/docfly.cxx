@@ -62,6 +62,7 @@
 #include <swtable.hxx>
 #include <crstate.hxx>
 #include <UndoCore.hxx>
+#include <UndoAttribute.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 

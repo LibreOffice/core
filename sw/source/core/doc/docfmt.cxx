@@ -61,6 +61,7 @@
 #include <ndtxt.hxx>
 #include <pam.hxx>
 #include <UndoCore.hxx>
+#include <UndoAttribute.hxx>
 #include <ndgrf.hxx>
 #include <pagedesc.hxx>         // Fuer Sonderbehandlung in InsFrmFmt
 #include <rolbck.hxx>           // Undo-Attr
