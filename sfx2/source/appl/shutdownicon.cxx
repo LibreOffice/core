@@ -80,7 +80,11 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::ui::dialogs;
 using namespace ::vos;
+#ifdef WNT
 using ::rtl::OUString;
+#else
+using namespace ::rtl;
+#endif
 using namespace ::sfx2;
 
 #ifdef ENABLE_QUICKSTART_APPLET
