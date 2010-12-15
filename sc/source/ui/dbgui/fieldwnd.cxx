@@ -690,8 +690,7 @@ void ScDPFieldControlBase::ModifySelectionOffset( long nOffsetDiff )
 
 void ScDPFieldControlBase::SelectNext()
 {
-    if( GetFieldType() == TYPE_SELECT )
-        MoveSelection( KEY_DOWN, 0, 1 );
+    SetSelection(mnFieldSelected + 1);
 }
 
 void ScDPFieldControlBase::GrabFocusWithSel( size_t nIndex )
