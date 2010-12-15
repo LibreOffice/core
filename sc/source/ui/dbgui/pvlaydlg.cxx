@@ -957,7 +957,7 @@ void ScDPLayoutDlg::NotifyMouseButtonUp( const Point& rAt )
             eDnDToType = TYPE_SELECT;
         }
         else
-            bDel = TRUE;
+            bDel = true;
 
         if (bDel)
         {
