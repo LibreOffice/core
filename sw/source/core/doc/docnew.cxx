@@ -472,6 +472,9 @@ SwDoc::SwDoc()
 
 SwDoc::~SwDoc()
 {
+    // nothing here should create Undo actions!
+    GetIDocumentUndoRedo().DoUndo(false);
+
     // --> OD 2007-03-16 #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
     // <--
@@ -520,9 +523,6 @@ SwDoc::~SwDoc()
 
     delete pPgPViewPrtData;
 
-    // turn off Undo so the footnote attributes don't mess with
-    // the footnote nodes
-    GetIDocumentUndoRedo().DoUndo(false);
     mbDtor = TRUE;
 
     DELETEZ( pLayout );
