@@ -123,7 +123,7 @@ public class UndoManager
     public void checkWriterUndo() throws Exception
     {
         m_currentTestCase = new WriterDocumentTest( getORB() );
-        impl_checkUndo( true );
+        impl_checkUndo( false );
     }
 
     // -----------------------------------------------------------------------------------------------------------------

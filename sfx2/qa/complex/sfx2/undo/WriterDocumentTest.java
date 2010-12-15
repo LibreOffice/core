@@ -74,6 +74,7 @@ public class WriterDocumentTest extends DocumentTestBase
 
         // insert the table into the doc
         docText.insertTextContent( cursor, textTable, false );
+        ++expectedUndoActions; //FIXME this will create 2 actions! currently the event is sent for every individual action; should it be sent for top-level actions only? how many internal actions are created is an implementation detail!
         ++expectedUndoActions;
 
         // write some content into the center cell
