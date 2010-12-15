@@ -460,6 +460,8 @@ bool UndoManager::Undo( SwUndoIter& rUndoIter )
         return false;
     }
 
+    ::sw::UndoGuard const undoGuard(*this);
+
     SwUndo * pUndo = (*m_pUndos)[ --m_nUndoPos ];
 
     RedlineMode_t const eOld = m_rRedlineAccess.GetRedlineMode();
@@ -912,6 +914,8 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
         rUndoIter.bWeiter = FALSE;
         return false;
     }
+
+    ::sw::UndoGuard const undoGuard(*this);
 
     SwUndo *const pUndo = (*m_pUndos)[ m_nUndoPos++ ];
 

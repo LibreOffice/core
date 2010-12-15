@@ -176,7 +176,6 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     SwPaM * pPam = rUndoIter.pAktPam;
     SwDoc* pDoc = pPam->GetDoc();
     SetPaM( rUndoIter );
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );

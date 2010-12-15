@@ -94,8 +94,6 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
     if( nSttNode )
         SetPaM( rUndoIter );
 
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
-
     if( pOldNumRule )
         rDoc.ChgNumRuleFmts( *pOldNumRule );
 
@@ -217,8 +215,6 @@ void SwUndoDelNum::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
     SetPaM( rUndoIter );
-
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     pHistory->TmpRollback( &rDoc, 0 );
     pHistory->SetTmpEnd( pHistory->Count() );

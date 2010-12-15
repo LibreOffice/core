@@ -72,7 +72,6 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
             nId = pNew->GetPoolFmtId() & COLL_GET_RANGE_BITS;
             bAuto = pNew->IsAuto();
 
-            ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
             Delete();
         }
     }
@@ -80,8 +79,6 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
 
 void SwUndoFmtCreate::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
     SwFmt * pFmt = Create(pDerivedFrom);
 
@@ -128,8 +125,6 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 
 void SwUndoFmtDelete::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
 
     SwFmt * pFmt = Create(pDerivedFrom);
@@ -150,7 +145,6 @@ void SwUndoFmtDelete::Redo(SwUndoIter &)
 
     if (pOld)
     {
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         Delete(pOld);
     }
 }
@@ -184,7 +178,6 @@ void SwUndoRenameFmt::Undo(SwUndoIter &)
 
     if (pFmt)
     {
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->RenameFmt(*pFmt, sOldName, TRUE);
     }
 }
@@ -195,7 +188,6 @@ void SwUndoRenameFmt::Redo(SwUndoIter &)
 
     if (pFmt)
     {
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->RenameFmt(*pFmt, sNewName, TRUE);
     }
 }
@@ -383,8 +375,6 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 
 void SwUndoNumruleCreate::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     if (! bInitialized)
     {
         aNew = *pNew;
@@ -396,7 +386,6 @@ void SwUndoNumruleCreate::Undo(SwUndoIter &)
 
 void SwUndoNumruleCreate::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->MakeNumRule(aNew.GetName(), &aNew, TRUE);
 }
 
@@ -423,13 +412,11 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 
 void SwUndoNumruleDelete::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->MakeNumRule(aOld.GetName(), &aOld, TRUE);
 }
 
 void SwUndoNumruleDelete::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->DelNumRule(aOld.GetName(), TRUE);
 }
 
@@ -452,13 +439,11 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 
 void SwUndoNumruleRename::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->RenameNumRule(aNewName, aOldName, TRUE);
 }
 
 void SwUndoNumruleRename::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->RenameNumRule(aOldName, aNewName, TRUE);
 }
 

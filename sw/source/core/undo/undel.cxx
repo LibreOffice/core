@@ -646,7 +646,6 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
 void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     ULONG nCalcStt = nSttNode - nNdDiff;
 

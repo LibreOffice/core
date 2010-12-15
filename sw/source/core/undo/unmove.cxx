@@ -191,7 +191,6 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc* pDoc = &rUndoIter.GetDoc();
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // Block, damit aus diesem gesprungen werden kann
     do {

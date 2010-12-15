@@ -734,7 +734,6 @@ void SwUndoReplace::Impl::Undo( SwUndoIter& rIter )
 void SwUndoReplace::Impl::Redo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     SwPaM& rPam = *rIter.pAktPam;
     rPam.DeleteMark();

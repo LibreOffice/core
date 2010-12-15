@@ -93,7 +93,6 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
 
     if (pField)
     {
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->UpdateFld(pTxtFld, *pOldField, pHnt, bUpdate);
     }
 }
@@ -105,7 +104,6 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
     if (pField)
     {
-        ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
         pDoc->UpdateFld(pTxtFld, *pNewField, pHnt, bUpdate);
         SwFmtFld* pDstFmtFld = (SwFmtFld*)&pTxtFld->GetFld();
 
@@ -116,6 +114,7 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
 
 void SwUndoFieldFromDoc::Repeat(SwUndoIter & rIt)
 {
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     Redo(rIt);
 }
 

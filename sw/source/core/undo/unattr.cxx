@@ -1089,7 +1089,6 @@ SwUndoMoveLeftMargin::~SwUndoMoveLeftMargin()
 void SwUndoMoveLeftMargin::Undo( SwUndoIter& rIter )
 {
     SwDoc* pDoc = &rIter.GetDoc();
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
 
     // restore old values
     m_pHistory->TmpRollback( pDoc, 0 );
@@ -1134,8 +1133,6 @@ void SwUndoChangeFootNote::Undo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
     SetPaM( rIter );
-
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     m_pHistory->TmpRollback( &rDoc, 0 );
     m_pHistory->SetTmpEnd( m_pHistory->Count() );

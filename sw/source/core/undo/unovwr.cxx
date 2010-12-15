@@ -385,7 +385,6 @@ SwUndoTransliterate::~SwUndoTransliterate()
 void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 {
     SwDoc& rDoc = rUndoIter.GetDoc();
-    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     // since the changes were added to the vector from the end of the string/node towards
     // the start, we need to revert them from the start towards the end now to keep the

@@ -328,8 +328,6 @@ void SwUndoPageDesc::ExchangeContentNodes( SwPageDesc& rSource, SwPageDesc &rDes
 
 void SwUndoPageDesc::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     // Move (header/footer)content node responsibility from new page descriptor to old one again.
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aNew, (SwPageDesc&)aOld );
@@ -338,8 +336,6 @@ void SwUndoPageDesc::Undo(SwUndoIter &)
 
 void SwUndoPageDesc::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     // Move (header/footer)content node responsibility from old page descriptor to new one again.
     if( bExchange )
         ExchangeContentNodes( (SwPageDesc&)aOld, (SwPageDesc&)aNew );
@@ -376,8 +372,6 @@ SwUndoPageDescCreate::~SwUndoPageDescCreate()
 
 void SwUndoPageDescCreate::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     // -> #116530#
     if (pDesc)
     {
@@ -392,14 +386,13 @@ void SwUndoPageDescCreate::Undo(SwUndoIter &)
 
 void SwUndoPageDescCreate::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     SwPageDesc aPageDesc = aNew;
     pDoc->MakePageDesc(aNew.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
 }
 
 void SwUndoPageDescCreate::Repeat(SwUndoIter & rIt)
 {
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     Redo(rIt);
 }
 
@@ -429,20 +422,18 @@ SwUndoPageDescDelete::~SwUndoPageDescDelete()
 
 void SwUndoPageDescDelete::Undo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-
     SwPageDesc aPageDesc = aOld;
     pDoc->MakePageDesc(aOld.GetName(), &aPageDesc, FALSE, TRUE); // #116530#
 }
 
 void SwUndoPageDescDelete::Redo(SwUndoIter &)
 {
-    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     pDoc->DelPageDesc(aOld.GetName(), TRUE); // #116530#
 }
 
 void SwUndoPageDescDelete::Repeat(SwUndoIter & rIt)
 {
+    ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
     Redo(rIt);
 }
 
