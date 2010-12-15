@@ -745,6 +745,17 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame >& rHelpTask   ,
     return pHelpWindow;
 }
 
+/// Check for built-in help
+static bool impl_hasHelpInstalled()
+{
+    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
+    AppendConfigToken_Impl( aHelpRootURL, sal_True );
+    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
+
+    return ( aFactories.getLength() != 0 );
+}
+
+/// Redirect the vnd.sun.star.help:// urls to http://help.libreoffice.org
 static bool impl_showOnlineHelp( const String& rURL )
 {
     String aInternal( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.help://" ) );
@@ -811,13 +822,8 @@ BOOL SfxHelp::Start( const String& rURL, const Window* pWindow )
         }
     }
 
-    // check if help is available
-    String aHelpRootURL( DEFINE_CONST_OUSTRING("vnd.sun.star.help://") );
-    AppendConfigToken_Impl( aHelpRootURL, sal_True );
-    Sequence< ::rtl::OUString > aFactories = SfxContentHelper::GetResultSet( aHelpRootURL );
-    if ( 0 == aFactories.getLength() )
+    if ( !impl_hasHelpInstalled() )
     {
-        // no factories -> no help -> try online
         if ( impl_showOnlineHelp( aHelpURL ) )
             return TRUE;
         else
@@ -871,7 +877,7 @@ BOOL SfxHelp::Start( ULONG nHelpId, const Window* pWindow )
 {
     String aHelpModuleName( GetHelpModuleName_Impl() );
     String aHelpURL = CreateHelpURL( nHelpId, aHelpModuleName );
-    if ( pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
+    if ( impl_hasHelpInstalled() && pWindow && SfxContentHelper::IsHelpErrorDocument( aHelpURL ) )
     {
         // no help found -> try with parent help id.
         Window* pParent = pWindow->GetParent();
