@@ -396,15 +396,17 @@ void ScDPFieldControlBase::KeyInput( const KeyEvent& rKEvt )
         bKeyEvaluated = true;
         switch( nCode )
         {
-            case KEY_UP:    MoveSelection( nCode, 0, -1 );          break;
-            case KEY_DOWN:  MoveSelection( nCode, 0, 1 );           break;
-            case KEY_LEFT:  MoveSelection( nCode, -1, 0 );          break;
-            case KEY_RIGHT: MoveSelection( nCode, 1, 0 );           break;
-            case KEY_HOME:  SetSelectionHome();                     break;
-            case KEY_END:   SetSelectionEnd();                      break;
+            case KEY_UP:    MoveSelection( 0, -1 ); break;
+            case KEY_DOWN:  MoveSelection( 0, 1 ); break;
+            case KEY_LEFT:  MoveSelection( -1, 0 ); break;
+            case KEY_RIGHT: MoveSelection( 1, 0 ); break;
+            case KEY_HOME:  SetSelectionHome();     break;
+            case KEY_END:   SetSelectionEnd();      break;
             case KEY_DELETE:
-                mpDlg->NotifyRemoveField( GetFieldType(), mnFieldSelected );   break;
-            default:        bKeyEvaluated = false;
+                mpDlg->NotifyRemoveField( GetFieldType(), mnFieldSelected );
+            break;
+            default:
+                bKeyEvaluated = false;
         }
     }
 
@@ -504,8 +506,16 @@ void ScDPFieldControlBase::DrawBackground( OutputDevice& rDev )
     Point aPos0;
     Size aSize( GetSizePixel() );
 
-    rDev.SetLineColor( aWinTextColor );
-    rDev.SetFillColor( aWinColor );
+    if (mpCaption)
+    {
+        rDev.SetLineColor( aWinTextColor );
+        rDev.SetFillColor( aWinColor );
+    }
+    else
+    {
+        rDev.SetLineColor( aFaceColor );
+        rDev.SetFillColor( aFaceColor );
+    }
     rDev.DrawRect( Rectangle( aPos0, aSize ) );
 
     rDev.SetTextColor( aWinTextColor );
@@ -676,7 +686,7 @@ void ScDPFieldControlBase::SetSelectionEnd()
     }
 }
 
-void ScDPFieldControlBase::MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY )
+void ScDPFieldControlBase::MoveSelection(SCsCOL nDX, SCsROW nDY)
 {
     size_t nNewIndex = CalcNewFieldIndex( nDX, nDY );
     SetSelection( nNewIndex );

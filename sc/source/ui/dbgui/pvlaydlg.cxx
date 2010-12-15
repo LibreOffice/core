@@ -1360,6 +1360,7 @@ void ScDPLayoutDlg::CalcWndSizes()
     // selection area
     long nLineSize = 10; // number of fields per column.
     long nH = OUTER_MARGIN_VER + nLineSize* nFldH + nLineSize * ROW_FIELD_BTN_GAP;
+    nH += ROW_FIELD_BTN_GAP;
     nH += GetSettings().GetStyleSettings().GetScrollBarSize() + OUTER_MARGIN_VER;
     aWndSelect.SetSizePixel(
         Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10, nH));

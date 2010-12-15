@@ -211,7 +211,7 @@ private:
     /** Sets selection to last field. */
     void                    SetSelectionEnd();
     /** Sets selection to new position relative to current. */
-    void                    MoveSelection( USHORT nKeyCode, SCsCOL nDX, SCsROW nDY );
+    void                    MoveSelection( SCsCOL nDX, SCsROW nDY );
 
 private:
     typedef ::std::vector<Window*> Paintables;

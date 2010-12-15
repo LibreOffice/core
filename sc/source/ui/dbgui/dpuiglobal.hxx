@@ -28,8 +28,6 @@
 #ifndef __SC_DPUIGLOBAL_HXX__
 #define __SC_DPUIGLOBAL_HXX__
 
-#define MAX_PAGEFIELDS 10   // maximum count of fields for page area
-
 #define OUTER_MARGIN_HOR     4
 #define OUTER_MARGIN_VER     4
 #define DATA_FIELD_BTN_GAP   2     // must be an even number
