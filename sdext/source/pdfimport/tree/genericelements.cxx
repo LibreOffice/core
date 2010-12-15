@@ -164,6 +164,10 @@ void PolyPolyElement::updateGeometry()
     y = aRange.getMinY();
     w = aRange.getWidth();
     h = aRange.getHeight();
+
+    // fdo#32330 - non-closed paths will not show up filled in LibO
+    if( Action & (PATH_FILL | PATH_EOFILL) )
+        PolyPoly.setClosed(true);
 }
 
 void PolyPolyElement::visitedBy( ElementTreeVisitor&                          rVisitor,
