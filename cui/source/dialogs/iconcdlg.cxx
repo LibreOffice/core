@@ -874,7 +874,7 @@ IMPL_LINK( IconChoiceDialog, CancelHdl, Button*, EMPTYARG )
 
 void IconChoiceDialog::ActivatePageImpl ()
 {
-    DBG_ASSERT( maPageList.Count(), "keine Pages angemeldet" );
+    DBG_ASSERT( !maPageList.empty(), "keine Pages angemeldet" );
     IconChoicePageData* pData = GetPageData ( mnCurrentPageId );
     DBG_ASSERT( pData, "Id nicht bekannt" );
     if ( pData )

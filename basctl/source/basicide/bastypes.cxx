@@ -298,7 +298,7 @@ void BreakPointList::InsertSorted( BreakPoint* pNewBrk )
     {
         if ( pNewBrk->nLine <= (*i)->nLine )
         {
-            DBG_ASSERT( ( pBrk->nLine != pNewBrk->nLine ) || pNewBrk->bTemp, "BreakPoint existiert schon!" );
+            DBG_ASSERT( ( (*i)->nLine != pNewBrk->nLine ) || pNewBrk->bTemp, "BreakPoint existiert schon!" );
             maBreakPoints.insert( i, pNewBrk );
             return;
         }
