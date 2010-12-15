@@ -64,6 +64,7 @@
 #include <poolfmt.hxx>
 #include <tabfrm.hxx>
 #include <UndoCore.hxx>
+#include <UndoRedline.hxx>
 #include <UndoTable.hxx>
 #include <hints.hxx>
 #include <tblafmt.hxx>

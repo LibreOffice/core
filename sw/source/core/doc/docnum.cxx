@@ -42,6 +42,7 @@
 #include <doctxm.hxx>       // pTOXBaseRing
 #include <poolfmt.hxx>
 #include <UndoCore.hxx>
+#include <UndoRedline.hxx>
 #include <UndoNumbering.hxx>
 #include <swundo.hxx>
 #include <SwUndoFmt.hxx>

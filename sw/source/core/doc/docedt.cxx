@@ -66,6 +66,7 @@
 #include <txtfrm.hxx>
 #include <hints.hxx>
 #include <UndoCore.hxx>
+#include <UndoRedline.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
 #include <breakit.hxx>

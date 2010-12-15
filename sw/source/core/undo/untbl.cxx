@@ -29,6 +29,8 @@
 #include "precompiled_sw.hxx"
 
 #include <UndoTable.hxx>
+
+#include <UndoRedline.hxx>
 #include <UndoCore.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>

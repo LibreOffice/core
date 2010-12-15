@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoRedline.hxx>
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>
@@ -90,6 +91,12 @@ SwUndoRedline::~SwUndoRedline()
     delete pRedlData;
     delete pRedlSaveData;
 }
+
+USHORT SwUndoRedline::GetRedlSaveCount() const
+{
+    return pRedlSaveData ? pRedlSaveData->Count() : 0;
+}
+
 
 void SwUndoRedline::UndoImpl(::sw::UndoRedoContext & rContext)
 {

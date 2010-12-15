@@ -49,6 +49,7 @@
 #include <sortopt.hxx>
 #include <docsort.hxx>
 #include <UndoCore.hxx>
+#include <UndoRedline.hxx>
 #include <hints.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>

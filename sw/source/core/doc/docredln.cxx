@@ -44,6 +44,7 @@
 #include <redline.hxx>
 #include <swundo.hxx>
 #include <UndoCore.hxx>
+#include <UndoRedline.hxx>
 #include <hints.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
