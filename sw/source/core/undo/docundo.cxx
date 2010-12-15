@@ -536,8 +536,16 @@ UndoManager::StartUndo(SwUndoId const i_eUndoId,
 
     SwUndoStart * pUndo = new SwUndoStart( eUndoId );
 
+    OSL_ASSERT(UNDO_END != eUndoId);
+    String comment( (UNDO_START == eUndoId)
+        ?   String("??", RTL_TEXTENCODING_ASCII_US)
+        :   String(SW_RES(UNDO_BASE + eUndoId)) );
     if (pRewriter)
-        pUndo->SetRewriter(*pRewriter);
+    {
+        OSL_ASSERT(UNDO_START != eUndoId);
+        comment = pRewriter->Apply(comment);
+    }
+    pUndo->SetComment(comment);
 
     AppendUndo(pUndo);
 
@@ -690,12 +698,16 @@ UndoManager::EndUndo(SwUndoId const i_eUndoId, SwRewriter const*const pRewriter)
 
     if (pRewriter)
     {
-        pUndoStart->SetRewriter(*pRewriter);
-        pUndoEnd->SetRewriter(*pRewriter);
+        OSL_ASSERT(UNDO_START != eUndoId);
+        String const comment( (UNDO_END == eUndoId)
+            ?   String("??", RTL_TEXTENCODING_ASCII_US)
+            :   pRewriter->Apply(String(SW_RES(UNDO_BASE + eUndoId))) );
+        pUndoStart->SetComment(comment);
+        pUndoEnd->SetComment(comment);
     }
     else
     {
-        pUndoEnd->SetRewriter(pUndoStart->GetRewriter());
+        pUndoEnd->SetComment(pUndoStart->GetComment());
     }
 
     AppendUndo( pUndoEnd );

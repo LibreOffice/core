@@ -933,27 +933,13 @@ void SwUndoStart::Repeat( SwUndoIter& rUndoIter )
 
 String SwUndoStart::GetComment() const
 {
-    String sResult;
-
-    switch (nUserId)
-    {
-    case UNDO_START:
-    case UNDO_END:
-        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-
-    default:
-        sResult = String(SW_RES(UNDO_BASE + nUserId));
-        sResult = GetRewriter().Apply(sResult);
-    }
-
-    return sResult;
+    OSL_ASSERT(pComment);
+    return (pComment) ? *pComment : String("??", RTL_TEXTENCODING_ASCII_US);
 }
 
-SwRewriter SwUndoStart::GetRewriter() const
+void SwUndoStart::SetComment(String const& rComment)
 {
-    return mRewriter;
+    pComment = new String(rComment);
 }
 
 SwUndoId SwUndoStart::GetEffectiveId() const
@@ -961,10 +947,6 @@ SwUndoId SwUndoStart::GetEffectiveId() const
     return GetUserId();
 }
 
-void SwUndoStart::SetRewriter(const SwRewriter & rRewriter)
-{
-    mRewriter = rRewriter;
-}
 
 // END
 SwUndoEnd::SwUndoEnd( SwUndoId nInitId )
@@ -995,36 +977,18 @@ void SwUndoEnd::Repeat( SwUndoIter& rUndoIter )
 
 String SwUndoEnd::GetComment() const
 {
-    String sResult;
-
-    switch (nUserId)
-    {
-    case UNDO_START:
-    case UNDO_END:
-        sResult = String("??", RTL_TEXTENCODING_ASCII_US);
-
-        break;
-    default:
-        sResult = SW_RES(UNDO_BASE + nUserId);
-        sResult = GetRewriter().Apply(sResult);
-    }
-
-    return sResult;
+    OSL_ASSERT(pComment);
+    return (pComment) ? *pComment : String("??", RTL_TEXTENCODING_ASCII_US);
 }
 
-void SwUndoEnd::SetRewriter(const SwRewriter & rRewriter)
+void SwUndoEnd::SetComment(String const& rComment)
 {
-    mRewriter = rRewriter;
+    pComment = new String(rComment);
 }
 
 SwUndoId SwUndoEnd::GetEffectiveId() const
 {
     return GetUserId();
-}
-
-SwRewriter SwUndoEnd::GetRewriter() const
-{
-    return mRewriter;
 }
 
 /*  */

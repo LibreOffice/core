@@ -292,8 +292,6 @@ class SwUndoStart: public SwUndo
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nEndOffset;
 
-    SwRewriter mRewriter;
-
 public:
     SwUndoStart( SwUndoId nId );
     virtual void Undo( SwUndoIter& );
@@ -302,8 +300,7 @@ public:
 
     // -> #111827#
     virtual String GetComment() const;
-    void SetRewriter(const SwRewriter & rRewriter);
-    virtual SwRewriter GetRewriter() const;
+    void SetComment(String const& rString);
     // <- #111827#
 
     virtual SwUndoId GetEffectiveId() const;
@@ -322,8 +319,6 @@ class SwUndoEnd: public SwUndo
     // fuer die "Verpointerung" von Start- und End-Undos
     USHORT nSttOffset;
 
-    SwRewriter mRewriter;
-
 public:
     SwUndoEnd( SwUndoId nId );
     virtual void Undo( SwUndoIter& );
@@ -332,8 +327,7 @@ public:
 
     // -> #111827#
     virtual String GetComment() const;
-    void SetRewriter(const SwRewriter & rRewriter);
-    virtual SwRewriter GetRewriter() const;
+    void SetComment(String const& rString);
     // <- #111827#
 
     virtual SwUndoId GetEffectiveId() const;
