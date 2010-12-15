@@ -166,6 +166,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // determine size and position of the dialog & elements
     Size aAppLogoSiz = aAppLogo.GetSizePixel();
+
+    if (aAppLogoSiz.Width() < 300)
+        aAppLogoSiz.Width() = 300;
+
     Size aOutSiz     = GetOutputSizePixel();
     aOutSiz.Width()  = aAppLogoSiz.Width();
 
