@@ -758,18 +758,19 @@ bool ScDPHorFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
     size_t nW = aWndSize.Width();
     size_t nH = aWndSize.Height();
 
-    size_t nCurX = OUTER_MARGIN_HOR + FIELD_BTN_WIDTH + ROW_FIELD_BTN_GAP/2;
-    size_t nCurY = OUTER_MARGIN_VER + FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP/2;
+    Size aFldSize = GetFieldSize();
+    size_t nCurX = OUTER_MARGIN_HOR + aFldSize.Width() + ROW_FIELD_BTN_GAP/2;
+    size_t nCurY = OUTER_MARGIN_VER + aFldSize.Height() + ROW_FIELD_BTN_GAP/2;
     size_t nCol = 0;
     size_t nRow = 0;
     while (nX > nCurX && nCurX <= nW)
     {
-        nCurX += FIELD_BTN_WIDTH + ROW_FIELD_BTN_GAP;
+        nCurX += aFldSize.Width() + ROW_FIELD_BTN_GAP;
         ++nCol;
     }
     while (nY > nCurY && nCurY <= nH)
     {
-        nCurY += FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP;
+        nCurY += aFldSize.Height() + ROW_FIELD_BTN_GAP;
         ++nRow;
     }
 
@@ -840,8 +841,8 @@ void ScDPHorFieldControl::CalcSize()
 
     long nTotalH = aWndSize.Height() - nScrollSize - OUTER_MARGIN_VER*2;
     long nTotalW = aWndSize.Width() - OUTER_MARGIN_HOR*2;
-    mnFieldBtnRowCount = nTotalH / (FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP);
-    mnFieldBtnColCount = (nTotalW + ROW_FIELD_BTN_GAP) / (FIELD_BTN_WIDTH + ROW_FIELD_BTN_GAP);
+    mnFieldBtnRowCount = nTotalH / (GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
+    mnFieldBtnColCount = (nTotalW + ROW_FIELD_BTN_GAP) / (GetFieldSize().Width() + ROW_FIELD_BTN_GAP);
 
     maScroll.SetLineSize(1);
     maScroll.SetVisibleSize(mnFieldBtnColCount);
@@ -942,11 +943,11 @@ bool ScDPHorFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSi
     size_t nRow = nPos % mnFieldBtnRowCount;
     size_t nCol = nPos / mnFieldBtnRowCount;
 
-    aPos.X() += nCol*(FIELD_BTN_WIDTH + ROW_FIELD_BTN_GAP);
-    aPos.Y() += nRow*(FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP);
+    aPos.X() += nCol*(GetFieldSize().Width() + ROW_FIELD_BTN_GAP);
+    aPos.Y() += nRow*(GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
 
     rPos = aPos;
-    rSize = Size(FIELD_BTN_WIDTH, FIELD_BTN_HEIGHT);
+    rSize = GetFieldSize();
     return true;
 }
 
@@ -1041,7 +1042,7 @@ bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
     if (rPos.X() < 0 || rPos.Y() < 0)
         return false;
 
-    rnIndex = rPos.Y() / FIELD_BTN_HEIGHT + maScroll.GetThumbPos();
+    rnIndex = rPos.Y() / GetFieldSize().Height() + maScroll.GetThumbPos();
     return IsValidIndex(rnIndex);
 }
 
@@ -1095,7 +1096,7 @@ void ScDPRowFieldControl::CalcSize()
     Size aWndSize = GetSizePixel();
 
     long nTotal = aWndSize.Height() - OUTER_MARGIN_VER;
-    mnColumnBtnCount = nTotal / (FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP);
+    mnColumnBtnCount = nTotal / (GetFieldSize().Height() + ROW_FIELD_BTN_GAP);
 
     long nScrollSize = GetSettings().GetStyleSettings().GetScrollBarSize();
 
@@ -1184,9 +1185,9 @@ bool ScDPRowFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSi
     if (nPos + nOffset >= GetFieldCount())
         return false;
 
-    rSize = Size(FIELD_BTN_WIDTH, FIELD_BTN_HEIGHT);
+    rSize = GetFieldSize();
     rPos = Point(OUTER_MARGIN_HOR, OUTER_MARGIN_VER);
-    rPos.Y() += nPos * (FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP);
+    rPos.Y() += nPos * (rSize.Height() + ROW_FIELD_BTN_GAP);
     return true;
 }
 
@@ -1260,7 +1261,7 @@ void ScDPDataFieldControl::CalcSize()
     maScroll.SetSizePixel(Size(aWndSize.Width() - OUTER_MARGIN_HOR*2, nScrollSize));
     maScroll.SetPosPixel(Point(OUTER_MARGIN_HOR, aWndSize.Height() - mnScrollMarginHeight));
 
-    long nH = FIELD_BTN_HEIGHT + DATA_FIELD_BTN_GAP;
+    long nH = GetFieldSize().Height() + DATA_FIELD_BTN_GAP;
     long nTotalH = aWndSize.Height() - mnScrollMarginHeight - OUTER_MARGIN_VER;
     mnColumnBtnCount = nTotalH / nH;
     mnTotalBtnCount = mnColumnBtnCount * 2;
@@ -1426,7 +1427,7 @@ bool ScDPDataFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rS
 void ScDPDataFieldControl::GetFieldBtnColRow(const Point& rPos, size_t& rCol, size_t& rRow)
 {
     Size aSize = GetSizePixel();
-    long nBtnH = FIELD_BTN_HEIGHT;
+    long nBtnH = GetFieldSize().Height();
 
     size_t nCol = (rPos.X() <= aSize.Width()/2.0) ? 0 : 1;
     size_t nRow = 0;
