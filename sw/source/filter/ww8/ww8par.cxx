@@ -3895,7 +3895,7 @@ void SwWW8ImplReader::ReadDocInfo()
                         xDocProps->setTemplateURL( sTemplateURL );
                 }
             }
-            else // not a template
+            else if (pWwFib->lcbSttbfAssoc) // not a template, and has a SttbfAssoc
             {
                 long nCur = pTableStream->Tell();
                 Sttb aSttb;
