@@ -317,4 +317,9 @@ $(call gb_Helper_abbreviate_dirs,\
 endef
 
 
+# ComponentTarget
+
+gb_ComponentTarget_PREFIXBASISNATIVE := vnd.sun.star.expand:$$OOO_BASE_DIR/program/
+
+
 # vim: set noet sw=4 ts=4:
