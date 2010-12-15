@@ -188,10 +188,11 @@ TBBase::indent_printf( FILE* fp, const char* format, ... )
 
 rtl::OUString TBBase::readUnicodeString( SvStream* pS, sal_Int32 nChars )
 {
-    sal_Int32 nBufSize = nChars * 2;
+    sal_Size nBufSize = nChars * 2;
     boost::scoped_array< sal_uInt8 > pArray( new sal_uInt8[ nBufSize ] );
-    pS->Read( pArray.get(), nBufSize );
-    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nBufSize );
+    sal_Size nReadSize = pS->Read( pArray.get(), nBufSize );
+    OSL_ASSERT(nReadSize == nBufSize);
+    return svt::BinFilterUtils::CreateOUStringFromUniStringArray(  reinterpret_cast< const char* >( pArray.get() ), nReadSize );
 }
 
 TBCHeader::TBCHeader() : bSignature( 0x3 )
