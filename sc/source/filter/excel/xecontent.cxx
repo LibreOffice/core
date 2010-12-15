@@ -332,7 +332,7 @@ void XclExpMergedcells::AppendRange( const ScRange& rRange, sal_uInt32 nBaseXFId
 
 sal_uInt32 XclExpMergedcells::GetBaseXFId( const ScAddress& rPos ) const
 {
-    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.Count(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
+    DBG_ASSERT( maBaseXFIds.size() == maMergedRanges.size(), "XclExpMergedcells::GetBaseXFId - invalid lists" );
     ScfUInt32Vec::const_iterator aIt = maBaseXFIds.begin();
     ScRangeList& rNCRanges = const_cast< ScRangeList& >( maMergedRanges );
     for ( size_t i = 0, nRanges = rNCRanges.size(); i < nRanges; ++i, ++aIt )

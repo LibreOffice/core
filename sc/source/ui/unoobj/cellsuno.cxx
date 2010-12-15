@@ -7017,7 +7017,7 @@ uno::Reference<sheet::XSheetCellCursor> SAL_CALL ScTableSheetObj::createCursorBy
         if (pRangesImp)
         {
             const ScRangeList& rRanges = pRangesImp->GetRangeList();
-            DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
+            DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
             return new ScCellCursorObj( pDocSh, *rRanges[ 0 ] );
         }
     }
