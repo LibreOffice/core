@@ -32,7 +32,7 @@ gb_CObject_get_target = $(WORKDIR)/CObject/$(1).o
 gb_CxxObject_get_target = $(WORKDIR)/CxxObject/$(1).o
 gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_LinkTarget_get_target = $(WORKDIR)/LinkTarget/$(1)
-gb_ComponentTarget_get_target = $(OUTDIR)/misc/$(1).component
+gb_ComponentTarget_get_target = $(OUTDIR)/xml/$(1).component
 
 define gb_LinkTarget_get_layer
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))

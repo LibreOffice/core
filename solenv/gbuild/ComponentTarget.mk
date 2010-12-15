@@ -27,7 +27,7 @@
 
 gb_ComponentTarget_REPOS := $(gb_REPOS)
 
-gb_ComponentTarget_XLSTCOMMAND := xslt
+gb_ComponentTarget_XLSTCOMMAND := xsltproc
 gb_ComponentTarget_XLSTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
