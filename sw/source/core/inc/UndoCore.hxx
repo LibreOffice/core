@@ -46,7 +46,6 @@ class SwFmtColl;
 class SwTxtNode;
 class SwTableNode;
 struct SwSortOptions;
-class SwHistoryBookmark;
 class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
@@ -70,9 +69,6 @@ namespace utl {
 namespace sw {
     class UndoManager;
     class IShellCursorSupplier;
-    namespace mark {
-        class IMark;
-    }
 }
 
 
@@ -407,46 +403,6 @@ public:
 
     SwHistory* GetHistory() { return pHistory; }
 
-};
-
-
-class SwUndoBookmark : public SwUndo
-{
-    const ::std::auto_ptr<SwHistoryBookmark> m_pHistoryBookmark;
-
-protected:
-    SwUndoBookmark( SwUndoId nUndoId, const ::sw::mark::IMark& );
-
-    void SetInDoc( SwDoc* );
-    void ResetInDoc( SwDoc* );
-
-public:
-    virtual ~SwUndoBookmark();
-
-    // #111827#
-    /**
-       Returns the rewriter for this undo object.
-
-       The rewriter contains the following rule:
-
-           $1 -> <name of bookmark>
-
-       <name of bookmark> is the name of the bookmark whose
-       insertion/deletion is recorded by this undo object.
-
-       @return the rewriter for this undo object
-     */
-    virtual SwRewriter GetRewriter() const;
-};
-
-
-class SwUndoInsBookmark : public SwUndoBookmark
-{
-public:
-    SwUndoInsBookmark( const ::sw::mark::IMark& );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 

@@ -39,7 +39,7 @@
 #include <swserv.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <swtypes.hxx>
-#include <UndoCore.hxx>
+#include <UndoBookmark.hxx>
 #include <unobookmark.hxx>
 #include <rtl/random.h>
 #include <xmloff/odffields.hxx>

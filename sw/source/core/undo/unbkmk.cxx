@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoBookmark.hxx>
 
 #include "doc.hxx"
 #include "docary.hxx"
