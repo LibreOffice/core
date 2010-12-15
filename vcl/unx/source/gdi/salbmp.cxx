@@ -783,11 +783,11 @@ bool X11SalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::s
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet > xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
     if( xFastPropertySet.get() ) {
-        long pixmapHandle;
         sal_Int32 depth;
         ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
 
         if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
+            long pixmapHandle;
             if( ( args[1] >>= pixmapHandle ) && ( args[2] >>= depth ) ) {
 
                 mbGrey = bMask;

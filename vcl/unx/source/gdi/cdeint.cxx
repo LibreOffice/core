@@ -73,7 +73,6 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
         int nStringCount;
         XTextProperty aTextProperty;
         aTextProperty.value = 0;
-        int i;
 
         static Atom nResMgrAtom = XInternAtom( mpDisplay, "RESOURCE_MANAGER", False );
 
@@ -89,6 +88,7 @@ void CDEIntegrator::GetSystemLook( AllSettings& rSettings )
             // *n*ColorPalette: palettefile
 
             ByteString aLines;
+            int i;
             for( i=0; i < nStringCount; i++ )
                 aLines += ppStringList[i];
             for( i = aLines.GetTokenCount( '\n' )-1; i >= 0; i-- )

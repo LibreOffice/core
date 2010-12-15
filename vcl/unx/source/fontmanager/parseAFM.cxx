@@ -1421,7 +1421,7 @@ int parseFile( const char* pFilename, FontInfo** fi, FLAGS flags)
 void
 freeFontInfo (FontInfo *fi)
 {
-    int i, j;
+    int i;
 
     if (fi->gfi)
     {
@@ -1475,6 +1475,7 @@ freeFontInfo (FontInfo *fi)
         for (i = 0; i < fi->numOfComps; i++)
         {
             free (fi->ccd[i].ccName);
+            int j;
             for (j = 0; j < fi->ccd[i].numOfPieces; j++)
                 free (fi->ccd[i].pieces[j].pccName);
 

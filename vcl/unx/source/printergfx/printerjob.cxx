@@ -327,12 +327,12 @@ createSpoolDir ()
 PrinterJob::~PrinterJob ()
 {
     std::list< osl::File* >::iterator pPage;
-    for (pPage = maPageList.begin(); pPage != maPageList.end(); pPage++)
+    for (pPage = maPageList.begin(); pPage != maPageList.end(); ++pPage)
     {
         //(*pPage)->remove();
         delete *pPage;
     }
-    for (pPage = maHeaderList.begin(); pPage != maHeaderList.end(); pPage++)
+    for (pPage = maHeaderList.begin(); pPage != maHeaderList.end(); ++pPage)
     {
         //(*pPage)->remove();
         delete *pPage;
@@ -575,7 +575,7 @@ PrinterJob::EndJob ()
     std::list< osl::File* >::iterator pPageHead;
     for (pPageBody  = maPageList.begin(), pPageHead  = maHeaderList.begin();
          pPageBody != maPageList.end() && pPageHead != maHeaderList.end();
-         pPageBody++, pPageHead++)
+         ++pPageBody, ++pPageHead)
     {
         if( *pPageHead )
         {
@@ -806,7 +806,6 @@ static bool writeFeature( osl::File* pFile, const PPDKey* pKey, const PPDValue* 
 bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool bDocumentSetup )
 {
     bool bSuccess = true;
-    int i;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -817,6 +816,7 @@ bool PrinterJob::writeFeatureList( osl::File* pFile, const JobData& rJob, bool b
         ( m_aLastJobData.m_pParser == rJob.m_pParser || m_aLastJobData.m_pParser == NULL )
         )
     {
+        int i;
         int nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )

@@ -755,7 +755,6 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
 {
     PrintFontManager& rManager( PrintFontManager::get() );
 
-    int i;
     FontInfo* pInfo = NULL;
     parseFile( rFileName.getStr(), &pInfo, P_ALL );
     if( ! pInfo || ! pInfo->numOfChars )
@@ -969,6 +968,7 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
         // note: this only works with single byte encodings
         sal_Unicode* pUnicodes = (sal_Unicode*)alloca( pInfo->numOfChars * sizeof(sal_Unicode));
         CharMetricInfo* pChar = pInfo->cmi;
+        int i;
 
         for( i = 0; i < pInfo->numOfChars; i++, pChar++ )
         {

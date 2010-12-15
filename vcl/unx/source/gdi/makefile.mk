@@ -73,6 +73,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/salgdi3.obj		\
         $(SLO)$/salvd.obj		\
         $(SLO)$/xfont.obj		\
+        $(SLO)$/xlfd_attr.obj		\
         $(SLO)$/xlfd_extd.obj
 
 .IF "$(USE_XPRINT)" == "TRUE"

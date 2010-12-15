@@ -28,6 +28,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -542,7 +543,16 @@ AttributeStorage::Enlarge()
     else
     {
         mnSize = mnSize < 32768 ? (mnSize * 2) : 65535;
-        mpList  = (Attribute*) realloc( mpList, mnSize * sizeof(Attribute) );
+        Attribute* pTemp;
+        pTemp = (Attribute*) realloc( mpList, mnSize * sizeof(Attribute) );
+        if (pTemp)
+        {
+            mpList = pTemp;
+        }
+        else
+        {
+            throw std::bad_alloc();
+        }
     }
 }
 

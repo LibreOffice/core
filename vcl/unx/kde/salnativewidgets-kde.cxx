@@ -394,7 +394,11 @@ WidgetPainter::WidgetPainter( void )
       m_pToolBarVert( NULL ),
       m_pToolButton( NULL ),
       m_pMenuBar( NULL ),
+      m_nMenuBarEnabledItem( 0 ),
+      m_nMenuBarDisabledItem( 0 ),
       m_pPopupMenu( NULL ),
+      m_nPopupMenuEnabledItem( 0 ),
+      m_nPopupMenuDisabledItem( 0 ),
       m_pProgressBar( NULL )
 {
 }

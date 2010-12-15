@@ -440,7 +440,6 @@ void CUPSManager::runDests()
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "starting cupsGetDests\n" );
 #endif
-    int nDests = 0;
     cups_dest_t* pDests = NULL;
 
     // #i86306# prepare against really broken CUPS installations / missing servers
@@ -460,7 +459,7 @@ void CUPSManager::runDests()
     // prepare against a signal during FcInit or FcConfigGetCurrent
     if( sigsetjmp( aViolationBuffer, ~0 ) == 0 )
     {
-        nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
+        int nDests = m_pCUPSWrapper->cupsGetDests( &pDests );
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "came out of cupsGetDests\n" );
         #endif
@@ -855,7 +854,6 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
 {
     rNumOptions = 0;
     *rOptions = NULL;
-    int i;
 
     // emit features ordered to OrderDependency
     // ignore features that are set to default
@@ -863,6 +861,7 @@ void CUPSManager::getOptionsFromDocumentSetup( const JobData& rJob, int& rNumOpt
     // sanity check
     if( rJob.m_pParser == rJob.m_aContext.getParser() && rJob.m_pParser )
     {
+        int i;
         int nKeys = rJob.m_aContext.countValuesModified();
         ::std::vector< const PPDKey* > aKeys( nKeys );
         for(  i = 0; i < nKeys; i++ )

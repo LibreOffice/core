@@ -1490,13 +1490,14 @@ void PPDParser::getResolutionFromString(
                                         const String& rString,
                                         int& rXRes, int& rYRes ) const
 {
-    int nPos = 0, nDPIPos;
+    int nDPIPos;
 
     rXRes = rYRes = 300;
 
     nDPIPos = rString.SearchAscii( "dpi" );
     if( nDPIPos != STRING_NOTFOUND )
     {
+        int nPos = 0;
         if( ( nPos = rString.Search( 'x' ) ) != STRING_NOTFOUND )
         {
             rXRes = rString.Copy( 0, nPos ).ToInt32();
