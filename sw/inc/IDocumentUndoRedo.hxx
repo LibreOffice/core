@@ -157,13 +157,6 @@ public:
     */
     virtual SwUndoComments_t GetUndoComments() const = 0;
 
-
-    /** 2002-05-31 dvo, #95884#: To prevent an undo array overflow when
-        doing nested undos, undo may have to be disabled. Undo-intensive
-        actions (like auto-format) should check this manually.
-    */
-    virtual bool HasTooManyUndos() const = 0;
-
     /** Execute Redo.
 
         @postcondition rUndoIter.pAktPam will contain the affected range.

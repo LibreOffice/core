@@ -899,17 +899,6 @@ SwUndoComments_t UndoManager::GetUndoComments() const
     return ret;
 }
 
-bool UndoManager::HasTooManyUndos() const
-{
-    // AppendUndo checks the UNDO_ACTION_LIMIT, unless there's a nested undo.
-    // So HasTooManyUndos() may only occur when undos are nested; else
-    // AppendUndo has some sort of bug.
-    OSL_ENSURE(
-        (m_nNestingDepth != 0) || (m_pUndos->Count() < UNDO_ACTION_LIMIT),
-                "non-nested undos should have been handled in AppendUndo" );
-    return (m_pUndos->Count() >= UNDO_ACTION_LIMIT);
-}
-
 
 /**************** REDO ******************/
 

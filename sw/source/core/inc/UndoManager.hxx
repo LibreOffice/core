@@ -72,7 +72,6 @@ public:
     virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-    virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter & rUndoIter);
     virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     virtual SwUndoComments_t GetRedoComments() const;
