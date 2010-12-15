@@ -1008,6 +1008,8 @@ sal_Bool DocInsertStringSplitCR(
                     IDocumentContentOperations::INS_EMPTYEXPAND)
             : IDocumentContentOperations::INS_EMPTYEXPAND;
 
+    // grouping done in InsertString is intended for typing, not API calls
+    ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
     SwTxtNode* const pTxtNd =
