@@ -44,8 +44,6 @@
 class SfxItemSet;
 class SwFmtColl;
 class SwTxtNode;
-class SwTableNode;
-struct SwSortOptions;
 class SwSectionData;
 class SwSectionFmt;
 class SwTOXBase;
@@ -55,7 +53,6 @@ class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
 class SwRedlineSaveData;
-class SwUndoAttrTbl;
 class SwUndoFmtAttr;
 
 namespace sfx2 {
@@ -355,7 +352,6 @@ public:
 };
 
 
-
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
     String aFmtName;
@@ -402,64 +398,6 @@ public:
     virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory() { return pHistory; }
-
-};
-
-
-/*--------------------------------------------------------------------
-    Beschreibung: Undo auf Sorting
- --------------------------------------------------------------------*/
-
-struct SwSortUndoElement
-{
-    union {
-        struct {
-            ULONG nKenn;
-            ULONG nSource, nTarget;
-        } TXT;
-        struct {
-            String *pSource, *pTarget;
-        } TBL;
-    } SORT_TXT_TBL;
-
-    SwSortUndoElement( const String& aS, const String& aT )
-    {
-        SORT_TXT_TBL.TBL.pSource = new String( aS );
-        SORT_TXT_TBL.TBL.pTarget = new String( aT );
-    }
-    SwSortUndoElement( ULONG nS, ULONG nT )
-    {
-        SORT_TXT_TBL.TXT.nSource = nS;
-        SORT_TXT_TBL.TXT.nTarget = nT;
-        SORT_TXT_TBL.TXT.nKenn   = 0xffffffff;
-    }
-    ~SwSortUndoElement();
-};
-
-SV_DECL_PTRARR_DEL(SwSortList, SwSortUndoElement*, 10,30)
-SV_DECL_PTRARR(SwUndoSortList, SwNodeIndex*, 10,30)
-
-class SwUndoSort : public SwUndo, private SwUndRng
-{
-    SwSortOptions*  pSortOpt;       // die Optionen mit den Sortier-Kriterien
-    SwSortList      aSortList;
-    SwUndoAttrTbl*  pUndoTblAttr;
-    SwRedlineData*  pRedlData;
-    ULONG           nTblNd;
-
-public:
-    SwUndoSort( const SwPaM&, const SwSortOptions& );
-    SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode&,
-                const SwSortOptions&, BOOL bSaveTable );
-
-    virtual ~SwUndoSort();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void Insert( const String& rOrgPos, const String& rNewPos );
-    void Insert( ULONG nOrgPos, ULONG nNewPos );
 
 };
 
