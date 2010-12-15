@@ -159,6 +159,9 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 # default linker flags
+.IF "$(SYSBASE)"!=""
+LINKFLAGS_SYSBASE:=-Wl,--sysroot=$(SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
 LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH_URELIB=-Wl,-rpath,\''$$ORIGIN'\'
 LINKFLAGSRUNPATH_UREBIN=-Wl,-rpath,\''$$ORIGIN/../lib:$$ORIGIN'\'
@@ -170,16 +173,16 @@ LINKFLAGSRUNPATH_OXT=
 LINKFLAGSRUNPATH_BOXT=-Wl,-rpath,\''$$ORIGIN/../../../basis-link/program'\'
 LINKFLAGSRUNPATH_NONE=
 # flag -Wl,-z,noexecstack sets the NX bit on the stack
-LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS)
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGS_SYSBASE)
 .IF "$(HAVE_LD_BSYMBOLIC_FUNCTIONS)"  == "TRUE"
 LINKFLAGS += -Wl,-Bsymbolic-functions -Wl,--dynamic-list-cpp-new -Wl,--dynamic-list-cpp-typeinfo
 .ENDIF
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
 LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec \
-    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR)
+    -Wl,-rpath-link,$(LB):$(SOLARLIBDIR):$(SYSBASE)/lib:$(SYSBASE)/usr/lib
 
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
