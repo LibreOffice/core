@@ -30,6 +30,7 @@
 #define SC_FPROGRESSBAR_HXX
 
 #include <boost/noncopyable.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 #include "globstr.hrc"
 #include "ftools.hxx"
 #include "scdllapi.h"
@@ -174,8 +175,8 @@ private:
                             ~ScfProgressSegment();
     };
 
-    typedef ::std::auto_ptr< ScProgress >       ScProgressPtr;
-    typedef ScfDelList< ScfProgressSegment >    ScfSegmentList;
+    typedef ::std::auto_ptr< ScProgress >           ScProgressPtr;
+    typedef boost::ptr_vector< ScfProgressSegment > ScfSegmentList;
 
     ScfSegmentList      maSegments;         /// List of progress segments.
     String              maText;             /// UI string for system progress.

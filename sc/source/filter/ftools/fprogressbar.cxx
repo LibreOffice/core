@@ -84,8 +84,8 @@ ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegme
 {
     if( nSegment < 0 )
         return 0;
-    DBG_ASSERT( maSegments.GetObject( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
-    return maSegments.GetObject( nSegment );
+    DBG_ASSERT( maSegments.at( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
+    return const_cast<ScfProgressBar::ScfProgressSegment*>(&(maSegments.at( nSegment )));
 }
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
@@ -155,9 +155,9 @@ sal_Int32 ScfProgressBar::AddSegment( sal_Size nSize )
     if( nSize == 0 )
         return SCF_INV_SEGMENT;
 
-    maSegments.Append( new ScfProgressSegment( nSize ) );
+    maSegments.push_back( new ScfProgressSegment( nSize ) );
     mnTotalSize += nSize;
-    return static_cast< sal_Int32 >( maSegments.Count() - 1 );
+    return static_cast< sal_Int32 >( maSegments.size() - 1 );
 }
 
 ScfProgressBar& ScfProgressBar::GetSegmentProgressBar( sal_Int32 nSegment )
