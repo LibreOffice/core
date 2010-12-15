@@ -70,7 +70,7 @@
 #include <txttypes.hxx>
 #include <breakit.hxx>
 #include <crstate.hxx>
-#include <UndoCore.hxx>
+#include <UndoOverwrite.hxx>
 #include <txatritr.hxx>
 #include <redline.hxx>      // SwRedline
 #include <docary.hxx>       // SwRedlineTbl

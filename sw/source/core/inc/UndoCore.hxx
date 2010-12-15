@@ -32,8 +32,6 @@
 
 #include <memory>
 
-#include <com/sun/star/uno/Sequence.h>
-
 #include <tools/mempool.hxx>
 
 #include <swtypes.hxx>
@@ -57,10 +55,6 @@ class SwUndoFmtAttr;
 
 namespace sfx2 {
     class MetadatableUndo;
-}
-
-namespace utl {
-    class TransliterationWrapper;
 }
 
 namespace sw {
@@ -253,42 +247,6 @@ public:
     BOOL IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
-};
-
-
-class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
-{
-    String aDelStr, aInsStr;
-    SwRedlineSaveDatas* pRedlSaveData;
-    ULONG nSttNode;
-    xub_StrLen nSttCntnt;
-    BOOL bInsChar : 1;      // kein Overwrite mehr; sondern Insert
-    BOOL bGroup : 1;        // TRUE: ist schon eine Gruppe; wird in
-                            //       CanGrouping() ausgwertet !!
-public:
-    SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
-
-    virtual ~SwUndoOverwrite();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    // #111827#
-    /**
-       Returns the rewriter of this undo object.
-
-       The rewriter contains the following rule:
-
-           $1 -> '<overwritten text>'
-
-       <overwritten text> is shortened to nUndoStringLength characters.
-
-       @return the rewriter of this undo object
-     */
-    virtual SwRewriter GetRewriter() const;
-
-    BOOL CanGrouping( SwDoc*, SwPosition&, sal_Unicode cIns );
 };
 
 
@@ -613,32 +571,6 @@ public:
     void SetUndoKeep()  { bUndoKeep = TRUE; }
     void SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet, SwFrmFmt& rNewFly );
     void SetDrawObj( BYTE nLayerId );
-};
-
-
-//--------------------------------------------------------------------
-
-struct _UndoTransliterate_Data;
-class SwUndoTransliterate : public SwUndo, public SwUndRng
-{
-    std::vector< _UndoTransliterate_Data * >    aChanges;
-    sal_uInt32 nType;
-
-    void DoTransliterate(SwDoc & rDoc, SwPaM & rPam);
-
-public:
-    SwUndoTransliterate( const SwPaM& rPam,
-                            const utl::TransliterationWrapper& rTrans );
-
-    virtual ~SwUndoTransliterate();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
-                     ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
-    BOOL HasData() const { return aChanges.size() > 0; }
 };
 
 

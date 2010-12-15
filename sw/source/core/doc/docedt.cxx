@@ -67,6 +67,7 @@
 #include <hints.hxx>
 #include <UndoCore.hxx>
 #include <UndoRedline.hxx>
+#include <UndoOverwrite.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
 #include <breakit.hxx>
