@@ -369,7 +369,7 @@ public:
     ::rtl::OUString
     EnsureNamespace(::rtl::OUString const & i_rNamespace,
         ::rtl::OUString const & i_rPreferredPrefix
-        = ::rtl::OUString::createFromAscii("gen") );
+        = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("gen")) );
 
     // Check if common attribute list is empty.
 #ifndef DBG_UTIL
