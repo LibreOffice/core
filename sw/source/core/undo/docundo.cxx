@@ -1040,12 +1040,12 @@ bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
     do {    // iterate over ring
         for( USHORT nRptCnt = nRepeatCnt; nRptCnt > 0; --nRptCnt )
         {
-            rUndoIter.pLastUndoObj = 0;
             for (USHORT nCnt = nCurrentRepeat; nCnt < nEndCnt; ++nCnt)
             {
                 (*m_pUndos)[ nCnt ]->Repeat( rUndoIter );
             }
         }
+        rUndoIter.m_bDeleteRepeated = false; // reset for next PaM
         rUndoIter.pAktPam = static_cast<SwPaM*>(rUndoIter.pAktPam->GetNext());
     } while (pTmpCrsr != rUndoIter.pAktPam);
     if( pTmpCrsr != pTmpCrsr->GetNext() || !bOneUndo )

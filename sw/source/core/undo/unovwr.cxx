@@ -271,7 +271,6 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
 {
-    rUndoIter.pLastUndoObj = this;
     SwPaM* pAktPam = rUndoIter.pAktPam;
     if( !aInsStr.Len() || pAktPam->HasMark() )
         return;
@@ -411,8 +410,6 @@ void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
 
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     rDoc.TransliterateText( rPam, aTrans );
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 void SwUndoTransliterate::AddChanges( SwTxtNode& rTNd,

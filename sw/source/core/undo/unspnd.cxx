@@ -166,10 +166,7 @@ void SwUndoSplitNode::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoSplitNode::Repeat( SwUndoIter& rUndoIter )
 {
-    if( UNDO_SPLITNODE == rUndoIter.GetLastUndoId() )
-        return;
     rUndoIter.GetDoc().SplitNode( *rUndoIter.pAktPam->GetPoint(), bChkTblStt );
-    rUndoIter.pLastUndoObj = this;
 }
 
 

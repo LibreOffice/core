@@ -85,20 +85,13 @@ void SwUndoFmtColl::Redo( SwUndoIter& rUndoIter )
 {
     // setze Attribut in dem Bereich:
     SetPaM( rUndoIter );
-    rUndoIter.pLastUndoObj = 0;
 
     Repeat( rUndoIter );    // Collection setzen
-
-    rUndoIter.pLastUndoObj = 0;
 }
 
 
 void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
 {
-    if( UNDO_SETFMTCOLL == rUndoIter.GetLastUndoId() &&
-        pFmtColl == ((SwUndoFmtColl*)rUndoIter.pLastUndoObj)->pFmtColl )
-        return;
-
     // es kann nur eine TextFmtColl auf einen Bereich angewendet werden,
     // also erfrage auch nur in dem Array
     USHORT nPos = rUndoIter.GetDoc().GetTxtFmtColls()->GetPos(
@@ -113,8 +106,6 @@ void SwUndoFmtColl::Repeat( SwUndoIter& rUndoIter )
                                           mbResetListAttrs );
         // <--
     }
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 SwRewriter SwUndoFmtColl::GetRewriter() const
@@ -129,3 +120,4 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
 
     return aResult;
 }
+

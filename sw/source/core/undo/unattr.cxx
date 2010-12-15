@@ -344,16 +344,6 @@ void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
     if ( !m_pOldSet.get() )
         return;
 
-    if ( UNDO_INSFMTATTR == rUndoIter.GetLastUndoId())
-    {
-        SwUndoFmtAttr* pLast
-            = static_cast<SwUndoFmtAttr*>(rUndoIter.pLastUndoObj);
-        if (pLast->m_pOldSet.get() && pLast->m_pFmt)
-        {
-            return;
-        }
-    }
-
     switch ( m_nFmtWhich )
     {
     case RES_GRFFMTCOLL:
@@ -407,8 +397,6 @@ void SwUndoFmtAttr::Repeat( SwUndoIter& rUndoIter)
             break;
         }
     }
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 SwRewriter SwUndoFmtAttr::GetRewriter() const
@@ -717,7 +705,6 @@ void SwUndoResetAttr::Redo( SwUndoIter& rUndoIter )
     // setze Attribut in dem Bereich:
     SetPaM( rUndoIter );
     SwDoc& rDoc = rUndoIter.GetDoc();
-    rUndoIter.pLastUndoObj = 0;
     SvUShortsSort* pIdArr = m_Ids.Count() ? &m_Ids : 0;
 
     switch ( m_nFormatId )
@@ -771,15 +758,11 @@ void SwUndoResetAttr::Redo( SwUndoIter& rUndoIter )
         }
         break;
     }
-    rUndoIter.pLastUndoObj = 0;
 }
 
 void SwUndoResetAttr::Repeat( SwUndoIter& rUndoIter )
 {
-    if ( (RES_FMT_BEGIN > m_nFormatId) ||
-         ( (UNDO_RESETATTR == rUndoIter.GetLastUndoId()) &&
-           (m_nFormatId == static_cast<SwUndoResetAttr*>(rUndoIter.pLastUndoObj)
-                            ->m_nFormatId) ) )
+    if (m_nFormatId < RES_FMT_BEGIN)
     {
         return;
     }
@@ -797,7 +780,6 @@ void SwUndoResetAttr::Repeat( SwUndoIter& rUndoIter )
         rUndoIter.GetDoc().ResetAttrs( *rUndoIter.pAktPam, TRUE, pIdArr );
         break;
     }
-    rUndoIter.pLastUndoObj = this;
 }
 
 
@@ -908,42 +890,8 @@ void SwUndoAttr::Undo( SwUndoIter& rUndoIter )
     SetPaM( rUndoIter );
 }
 
-int lcl_HasEqualItems( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
-{
-    int nRet = -1;
-    SfxItemIter aIter1( rSet1 ), aIter2( rSet2 );
-    const SfxPoolItem *pI1 = aIter1.FirstItem(), *pI2 = aIter2.FirstItem();
-
-    while( pI1 && pI2 )
-    {
-        if( pI1->Which() != pI2->Which() ||
-            aIter1.IsAtEnd() != aIter2.IsAtEnd() )
-        {
-            nRet = 0;
-            break;
-        }
-        if( aIter1.IsAtEnd() )
-            break;
-        pI1 = aIter1.NextItem();
-        pI2 = aIter2.NextItem();
-    }
-    return nRet;
-}
-
 void SwUndoAttr::Repeat( SwUndoIter& rUndoIter )
 {
-    if ( UNDO_INSATTR == rUndoIter.GetLastUndoId() )
-    {
-        SwUndoAttr* pLast = static_cast<SwUndoAttr*>(rUndoIter.pLastUndoObj);
-        if ((pLast->m_AttrSet.Count() == m_AttrSet.Count()) &&
-            (pLast->m_nInsertFlags    == m_nInsertFlags   ) &&
-            lcl_HasEqualItems( m_AttrSet, pLast->m_AttrSet ))
-        {
-            return;
-        }
-    }
-
-
     // RefMarks are not repeat capable
     if ( SFX_ITEM_SET != m_AttrSet.GetItemState( RES_TXTATR_REFMARK, FALSE ) )
     {
@@ -957,7 +905,6 @@ void SwUndoAttr::Repeat( SwUndoIter& rUndoIter )
         rUndoIter.GetDoc().InsertItemSet( *rUndoIter.pAktPam,
                                            aTmpSet, m_nInsertFlags );
     }
-    rUndoIter.pLastUndoObj = this;
 }
 
 void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
@@ -996,8 +943,6 @@ void SwUndoAttr::Redo( SwUndoIter& rUndoIter )
     {
         rDoc.InsertItemSet( rPam, m_AttrSet, m_nInsertFlags );
     }
-
-    rUndoIter.pLastUndoObj = 0;
 }
 
 
@@ -1166,7 +1111,6 @@ void SwUndoMoveLeftMargin::Repeat( SwUndoIter& rIter )
     SwDoc* pDoc = &rIter.GetDoc();
     pDoc->MoveLeftMargin( *rIter.pAktPam, GetId() == UNDO_INC_LEFTMARGIN,
             m_bModulus );
-    rIter.pLastUndoObj = this;
 }
 
 // -----------------------------------------------------
@@ -1212,7 +1156,6 @@ void SwUndoChangeFootNote::Repeat( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
     rDoc.SetCurFtn( *rIter.pAktPam, m_Text, m_nNumber, m_bEndNote );
-    rIter.pLastUndoObj = this;
 }
 
 

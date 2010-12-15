@@ -71,6 +71,7 @@ SV_IMPL_PTRARR( SwUndos, SwUndo*)
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
 SwUndoIter::SwUndoIter( SwPaM* pPam, SwUndoId nId )
+    : m_bDeleteRepeated(false)
 {
     nUndoId = nId;
     bWeiter = nId ? TRUE : FALSE;
@@ -214,9 +215,8 @@ SwUndo::~SwUndo()
     delete pComment;
 }
 
-void SwUndo::Repeat( SwUndoIter& rIter )
+void SwUndo::Repeat( SwUndoIter & )
 {
-    rIter.pLastUndoObj = this;
 }
 
 String SwUndo::GetComment() const

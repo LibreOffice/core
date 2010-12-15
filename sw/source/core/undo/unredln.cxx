@@ -491,8 +491,6 @@ void SwUndoCompDoc::Redo( SwUndoIter& rIter )
     SwPaM* pPam = rIter.pAktPam;
     SwDoc* pDoc = pPam->GetDoc();
 
-    rIter.pLastUndoObj = 0;
-
     if( bInsert )
     {
         SetPaM( *pPam );

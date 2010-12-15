@@ -973,7 +973,9 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
 {
-    if( UNDO_DELETE == rUndoIter.GetLastUndoId() )
+    // this action does not seem idempotent,
+    // so make sure it is only executed once on repeat
+    if (rUndoIter.m_bDeleteRepeated)
         return;
 
     SwPaM& rPam = *rUndoIter.pAktPam;
@@ -988,7 +990,7 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
         rDoc.DelFullPara( rPam );
     else
         rDoc.DeleteAndJoin( rPam );
-    rUndoIter.pLastUndoObj = this;
+    rUndoIter.m_bDeleteRepeated = true;
 }
 
 

@@ -1834,8 +1834,8 @@ class SwUndoIter
     BOOL bWeiter : 1;
 
 public:
+    bool m_bDeleteRepeated; // has a delete action been repeated?
     SwPaM * pAktPam;        // Member fuer das Undo
-    SwUndo* pLastUndoObj;   // fuers Redo, das vorherige UndoObj.
     SwFrmFmt* pSelFmt;      // ggfs. das Format Rahmen/Object-Selektionen
     SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
 
@@ -1845,8 +1845,6 @@ public:
 
     inline SwDoc& GetDoc() const;
     SwUndoId GetId() const  { return nUndoId; }
-    SwUndoId GetLastUndoId() const
-        { return  pLastUndoObj ? pLastUndoObj->GetId() : UNDO_EMPTY ; }
     void ClearSelections()  { pSelFmt = 0; pMarkList = 0; }
 };
 

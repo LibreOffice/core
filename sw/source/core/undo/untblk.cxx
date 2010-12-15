@@ -339,14 +339,9 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
 {
-    if( GetId() == rUndoIter.GetLastUndoId() )
-        return;
-
     SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
     SetPaM( aPam );
     aPam.GetDoc()->CopyRange( aPam, *rUndoIter.pAktPam->GetPoint(), false );
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 

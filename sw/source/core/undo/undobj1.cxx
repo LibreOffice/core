@@ -298,16 +298,11 @@ void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoInsLayFmt::Redo( SwUndoIter& rUndoIter )
 {
-    rUndoIter.pLastUndoObj = 0;
     InsFly( rUndoIter );
 }
 
 void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
 {
-    if( UNDO_INSLAYFMT == rUndoIter.GetLastUndoId() &&
-        pFrmFmt == ((SwUndoInsLayFmt*)rUndoIter.pLastUndoObj)->pFrmFmt )
-        return;
-
     SwDoc* pDoc = &rUndoIter.GetDoc();
     // erfrage und setze den Anker neu
     SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
@@ -332,7 +327,6 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
         }
         else
         {
-            rUndoIter.pLastUndoObj = this;
             return ;
         }
     }
@@ -347,8 +341,6 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
     rUndoIter.pSelFmt = pFlyFmt;
-
-    rUndoIter.pLastUndoObj = this;
 }
 
 // #111827#

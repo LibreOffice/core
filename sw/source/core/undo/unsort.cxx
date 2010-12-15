@@ -251,6 +251,7 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
 
 void SwUndoSort::Repeat(SwUndoIter& rIter)
 {
+    // table not repeat capable
     if(!pSortOpt->bTable)
     {
         SwPaM* pPam = rIter.pAktPam;
@@ -259,8 +260,6 @@ void SwUndoSort::Repeat(SwUndoIter& rIter)
         if( !rDoc.IsIdxInTbl( pPam->Start()->nNode ) )
             rDoc.SortText(*pPam, *pSortOpt);
     }
-    // Tabelle ist nicht Repeat-Faehig
-    rIter.pLastUndoObj = this;
 }
 
 

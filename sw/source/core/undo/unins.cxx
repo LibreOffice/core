@@ -381,7 +381,6 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
 
 void SwUndoInsert::Repeat( SwUndoIter& rUndoIter )
 {
-    rUndoIter.pLastUndoObj = this;
     if( !nLen )
         return;
 
