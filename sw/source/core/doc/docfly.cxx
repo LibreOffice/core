@@ -389,32 +389,26 @@ sal_Int8 SwDoc::SetFlyFrmAnchor( SwFrmFmt& rFmt, SfxItemSet& rSet, BOOL bNewFrms
     return MAKEFRMS;
 }
 
-BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+static bool
+lcl_SetFlyFrmAttr(SwDoc & rDoc,
+        sal_Int8 (SwDoc::*pSetFlyFrmAnchor)(SwFrmFmt &, SfxItemSet &, BOOL),
+        SwFrmFmt & rFlyFmt, SfxItemSet & rSet)
 {
-    if( !rSet.Count() )
-        return FALSE;
-
-    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
-
-    if (GetIDocumentUndoRedo().DoesUndo())
-    {
-        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
-        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
-    }
-
     // #i32968# Inserting columns in the frame causes MakeFrmFmt to put two
     // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
 
     //Ist das Ankerattribut dabei? Falls ja ueberlassen wir die Verarbeitung
     //desselben einer Spezialmethode. Sie Returnt TRUE wenn der Fly neu
     //erzeugt werden muss (z.B. weil ein Wechsel des FlyTyps vorliegt).
-    sal_Int8 nMakeFrms = SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE )?
-                         SetFlyFrmAnchor( rFlyFmt, rSet, FALSE ) : DONTMAKEFRMS;
+    sal_Int8 const nMakeFrms =
+        (SFX_ITEM_SET == rSet.GetItemState( RES_ANCHOR, FALSE ))
+             ?  (rDoc.*pSetFlyFrmAnchor)( rFlyFmt, rSet, FALSE )
+             :  DONTMAKEFRMS;
 
     const SfxPoolItem* pItem;
     SfxItemIter aIter( rSet );
-    SfxItemSet aTmpSet( GetAttrPool(), aFrmFmtSetRange );
+    SfxItemSet aTmpSet( rDoc.GetAttrPool(), aFrmFmtSetRange );
     USHORT nWhich = aIter.GetCurItem()->Which();
     do {
         switch( nWhich )
@@ -424,7 +418,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
         case RES_PAGEDESC:
         case RES_CNTNT:
         case RES_FOOTER:
-            ASSERT( !this, ":-) Unbekanntes Attribut fuer Fly." );
+            OSL_ENSURE(false, ":-) unknown Attribute for Fly.");
             // kein break;
         case RES_CHAIN:
             rSet.ClearItem( nWhich );
@@ -452,6 +446,25 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
     if( MAKEFRMS == nMakeFrms )
         rFlyFmt.MakeFrms();
 
+    return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
+}
+
+BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
+{
+    if( !rSet.Count() )
+        return FALSE;
+
+    ::std::auto_ptr<SwUndoFmtAttrHelper> pSaveUndo;
+
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().ClearRedo(); // AppendUndo far below, so leave it
+        pSaveUndo.reset( new SwUndoFmtAttrHelper( rFlyFmt ) );
+    }
+
+    bool const bRet =
+        lcl_SetFlyFrmAttr(*this, &SwDoc::SetFlyFrmAnchor, rFlyFmt, rSet);
+
     if ( pSaveUndo.get() )
     {
         if ( pSaveUndo->GetUndo() )
@@ -462,7 +475,7 @@ BOOL SwDoc::SetFlyFrmAttr( SwFrmFmt& rFlyFmt, SfxItemSet& rSet )
 
     SetModified();
 
-    return aTmpSet.Count() || MAKEFRMS == nMakeFrms;
+    return bRet;
 }
 
 // --> OD 2009-07-20 #i73249#
