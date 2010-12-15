@@ -347,10 +347,6 @@ public:
 
 // ============================================================================
 
-#define DATA_FIELD_NEW 1
-
-#if DATA_FIELD_NEW
-
 class ScDPDataFieldControl : public ScDPHorFieldControl
 {
 public:
@@ -361,69 +357,6 @@ public:
     virtual Size GetFieldSize() const;
     virtual String GetDescription() const;
 };
-
-#else
-
-class ScDPDataFieldControl : public ScDPFieldControlBase
-{
-public:
-    ScDPDataFieldControl( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption );
-    virtual ~ScDPDataFieldControl();
-
-    virtual void CalcSize();
-    virtual bool IsValidIndex( size_t nIndex ) const;
-    virtual Point GetFieldPosition( size_t nIndex );
-    virtual bool GetFieldIndex(const Point& rPos, size_t& rnIndex);
-    virtual Size GetFieldSize() const;
-    virtual String GetDescription() const;
-    virtual ScDPFieldType GetFieldType() const;
-    virtual void ScrollToEnd();
-    virtual void ScrollToShowSelection();
-    virtual void ResetScrollBar();
-
-public:
-    virtual void Paint( const Rectangle& rRect );
-    virtual void DataChanged( const DataChangedEvent& rDCEvt );
-    virtual void MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void MouseButtonUp( const MouseEvent& rMEvt );
-    virtual void MouseMove( const MouseEvent& rMEvt );
-
-protected:
-    virtual void Redraw();
-    virtual size_t CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
-    virtual size_t GetDisplayPosition(size_t nIndex) const;
-
-private:
-    /**
-     * Get the size and position of specified field button.
-     *
-     * @param nPos position index of the field button.  Note that this index
-     *             differs from field name index in that, the top left button
-     *             always has an index of 0 regardless off scroll offset.
-     * @param rPos
-     * @param rSize
-     *
-     * @return false if the position index is out-of-bound, or otherwise
-     *         invalid.
-     */
-    bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
-    void GetFieldBtnColRow(const Point& rPos, size_t& rCol, size_t& rRow);
-    long CalcOffsetToShowSelection();
-    void HandleScroll();
-
-    DECL_LINK(ScrollHdl, ScrollBar*);
-    DECL_LINK(EndScrollHdl, ScrollBar*);
-
-private:
-    ScrollBar       maScroll;
-    ScDPLayoutDlg*  mpParent;
-
-    long            mnScrollMarginHeight; /// bottom scroll bar margin height.
-    size_t          mnColumnBtnCount; /// number of buttons per single column.
-    size_t          mnTotalBtnCount; /// number of total visible buttons
-};
-
-#endif
 
 #endif // SC_FIELDWND_HXX
 
