@@ -534,7 +534,7 @@ public:
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
 
     SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const;
-    SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    bool     GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
 
     // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId

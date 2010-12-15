@@ -554,7 +554,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REDO:
             {
-                if (UNDO_EMPTY != rSh.GetFirstRedoInfo(0))
+                if (rSh.GetFirstRedoInfo(0))
                 {
                     rSet.Put(SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::REDO)));
@@ -565,7 +565,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
             case SID_REPEAT:
             {   // Repeat nur moeglich wenn kein REDO moeglich - UI-Restriktion
-                if ((UNDO_EMPTY == rSh.GetFirstRedoInfo(0)) &&
+                if ((!rSh.GetFirstRedoInfo(0)) &&
                     !rSh.IsSelFrmMode() &&
                     (UNDO_EMPTY != rSh.GetRepeatInfo(0)))
                 {
@@ -588,7 +588,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
                 break;
 
             case SID_GETREDOSTRINGS:
-                if (UNDO_EMPTY != rSh.GetFirstRedoInfo(0))
+                if (rSh.GetFirstRedoInfo(0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::REDO, aStrLst );

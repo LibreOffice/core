@@ -74,7 +74,7 @@ public:
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter & rUndoIter);
-    virtual SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
+    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     virtual SwUndoComments_t GetRedoComments() const;
     virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt);
     virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;

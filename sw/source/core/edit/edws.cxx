@@ -301,7 +301,7 @@ SwUndoId SwEditShell::EndUndo(SwUndoId eUndoId,
 SwUndoId SwEditShell::GetLastUndoInfo(::rtl::OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(o_pStr); }
 
-SwUndoId SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+bool     SwEditShell::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
 { return GetDoc()->GetIDocumentUndoRedo().GetFirstRedoInfo(o_pStr); }
 
 SwUndoId SwEditShell::GetRepeatInfo(::rtl::OUString *const o_pStr) const

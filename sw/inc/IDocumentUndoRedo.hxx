@@ -171,11 +171,11 @@ public:
     */
     virtual bool Redo(SwUndoIter & rUndoIter) = 0;
 
-    /** Get Id and comment of first Redo action.
+    /** Get comment of first Redo action.
         @param o_pStr       if not 0, receives comment of first Redo action.
-        @return     Id of first Redo action, or UNDO_EMPTY if there is none.
+        @return     true if there is a Redo action, false if none
     */
-    virtual SwUndoId GetFirstRedoInfo(::rtl::OUString *const o_pStr) const = 0;
+    virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const = 0;
 
     /** Get comments of Redo actions.
         @return     comments of all top-level Redo actions.

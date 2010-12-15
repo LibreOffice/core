@@ -962,11 +962,11 @@ bool UndoManager::Redo(SwUndoIter & rUndoIter)
 }
 
 
-SwUndoId UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
+bool UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
 {
     if (m_pUndos->Count() == m_nUndoPos)
     {
-        return UNDO_EMPTY;
+        return false;
     }
 
     IdAndName_t const idAndName(lcl_GetUndoIdAndName(*m_pUndos, m_nUndoPos));
@@ -976,7 +976,7 @@ SwUndoId UndoManager::GetFirstRedoInfo(::rtl::OUString *const o_pStr) const
         *o_pStr = idAndName.second;
     }
 
-    return idAndName.first;
+    return true;
 }
 
 
