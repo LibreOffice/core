@@ -152,12 +152,6 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(6))
 endef
 
-define gb_CxxObject_command_dep
-mkdir -p $(dir $(1)) && \
-	echo '$(call gb_CxxObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-endef
-
-
 # LinkTarget class
 
 define gb_LinkTarget__get_rpath_for_layer
