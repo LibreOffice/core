@@ -852,8 +852,6 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
 {
-    rUndoIter.SetUpdateAttr( TRUE );
-
     SwPaM& rPam = *rUndoIter.pAktPam;
     SwDoc& rDoc = *rPam.GetDoc();
 

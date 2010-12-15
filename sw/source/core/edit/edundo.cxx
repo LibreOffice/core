@@ -186,9 +186,6 @@ USHORT SwEditShell::Redo( USHORT nCnt )
             } while( TRUE );
         }
 
-        if( aUndoIter.IsUpdateAttr() )
-            UpdateAttr();
-
         if( aUndoIter.pSelFmt )     // dann erzeuge eine Rahmen-Selection
         {
             if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )

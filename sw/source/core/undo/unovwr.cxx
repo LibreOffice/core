@@ -400,8 +400,6 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
 
 void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
 {
-/* ??? */   rUndoIter.SetUpdateAttr( TRUE );
-
     SetPaM( *rUndoIter.pAktPam );
     Repeat( rUndoIter );
 }

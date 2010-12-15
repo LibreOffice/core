@@ -74,7 +74,6 @@ SwUndoIter::SwUndoIter( SwPaM* pPam, SwUndoId nId )
 {
     nUndoId = nId;
     bWeiter = nId ? TRUE : FALSE;
-    bUpdateAttr = FALSE;
     pAktPam = pPam;
     nEndCnt = 0;
     pSelFmt = 0;

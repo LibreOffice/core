@@ -1832,7 +1832,6 @@ class SwUndoIter
     SwUndoId nUndoId;
     USHORT nEndCnt;
     BOOL bWeiter : 1;
-    BOOL bUpdateAttr : 1;   // Setze das GCAttr an der CursorShell
 
 public:
     SwPaM * pAktPam;        // Member fuer das Undo
@@ -1843,8 +1842,6 @@ public:
     SwUndoIter( SwPaM * pPam, SwUndoId nId = UNDO_EMPTY );
 
     BOOL IsNextUndo() const             { return bWeiter; }
-    BOOL IsUpdateAttr() const           { return bUpdateAttr; }
-    void SetUpdateAttr( BOOL bNew )     { bUpdateAttr = bNew; }
 
     inline SwDoc& GetDoc() const;
     SwUndoId GetId() const  { return nUndoId; }
