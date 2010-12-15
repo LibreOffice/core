@@ -1145,7 +1145,6 @@ class SwUndoSort : public SwUndo, private SwUndRng
     SwRedlineData*  pRedlData;
     ULONG           nTblNd;
 
-    void RemoveIdx( SwPaM& rPam );
 public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
     SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode&,

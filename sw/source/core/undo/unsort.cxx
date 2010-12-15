@@ -27,6 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
+
 #include <doc.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
@@ -34,9 +35,7 @@
 #include <ndtxt.hxx>
 #include <undobj.hxx>
 #include <sortopt.hxx>
-#ifndef _DOCSORT_HXX
 #include <docsort.hxx>
-#endif
 #include <redline.hxx>
 #include <node2lay.hxx>
 
@@ -69,7 +68,6 @@ SwUndoSort::SwUndoSort(const SwPaM& rRg, const SwSortOptions& rOpt)
     pSortOpt = new SwSortOptions(rOpt);
 }
 
-
 SwUndoSort::SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode& rTblNd,
                         const SwSortOptions& rOpt, BOOL bSaveTable )
     : SwUndo(UNDO_SORT_TBL), pUndoTblAttr( 0 ), pRedlData( 0 )
@@ -83,16 +81,12 @@ SwUndoSort::SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode& rTblNd,
         pUndoTblAttr = new SwUndoAttrTbl( rTblNd );
 }
 
-
-
 SwUndoSort::~SwUndoSort()
 {
     delete pSortOpt;
     delete pUndoTblAttr;
     delete pRedlData;
 }
-
-
 
 void SwUndoSort::Undo( SwUndoIter& rIter)
 {
@@ -141,7 +135,9 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
     else
     {
         // Undo Text
-        RemoveIdx( *rIter.pAktPam );
+        SwPaM & rPam( *rIter.pAktPam );
+        SetPaM(rPam);
+        RemoveIdxFromRange(rPam, true);
 
         // fuer die sorted Positions einen Index anlegen.
         // JP 25.11.97: Die IndexList muss aber nach SourcePosition
@@ -171,7 +167,6 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
         SetPaM( rIter, TRUE );
     }
 }
-
 
 void SwUndoSort::Redo( SwUndoIter& rIter)
 {
@@ -219,8 +214,10 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
     }
     else
     {
-        // Redo bei Text
-        RemoveIdx( *rIter.pAktPam );
+        // Redo for Text
+        SwPaM & rPam( *rIter.pAktPam );
+        SetPaM(rPam);
+        RemoveIdxFromRange(rPam, true);
 
         SwUndoSortList aIdxList( (BYTE)aSortList.Count() );
         USHORT i;
@@ -248,7 +245,6 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
     }
 }
 
-
 void SwUndoSort::Repeat(SwUndoIter& rIter)
 {
     // table not repeat capable
@@ -262,40 +258,15 @@ void SwUndoSort::Repeat(SwUndoIter& rIter)
     }
 }
 
-
-void SwUndoSort::RemoveIdx( SwPaM& rPam )
-{
-    rPam.DeleteMark();
-    rPam.GetPoint()->nNode = nSttNode;
-
-    SwCntntNode* pCNd = rPam.GetCntntNode();
-    xub_StrLen nLen = pCNd->Len();
-    if( nLen >= nSttCntnt )
-        nLen = nSttCntnt;
-    rPam.GetPoint()->nContent.Assign(pCNd, nLen );
-    rPam.SetMark();
-
-    rPam.GetPoint()->nNode = nEndNode;
-    pCNd = rPam.GetCntntNode();
-    nLen = pCNd->Len();
-    if( nLen >= nEndCntnt )
-        nLen = nEndCntnt;
-    rPam.GetPoint()->nContent.Assign(pCNd, nLen );
-    RemoveIdxFromRange( rPam, TRUE );
-}
-
-
 void SwUndoSort::Insert( const String& rOrgPos, const String& rNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(rOrgPos, rNewPos);
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
 }
 
-
 void SwUndoSort::Insert( ULONG nOrgPos, ULONG nNewPos)
 {
     SwSortUndoElement* pEle = new SwSortUndoElement(nOrgPos, nNewPos);
     aSortList.C40_INSERT( SwSortUndoElement, pEle, aSortList.Count() );
 }
-
 
