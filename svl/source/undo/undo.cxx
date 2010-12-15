@@ -188,6 +188,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
 
     sal_Int32       mnLockCount;
     sal_Int32       mnMarks;
+    sal_Int32       mnEmptyMark;
     bool            mbDoing;
 
     UndoListeners   aListeners;
@@ -198,6 +199,7 @@ struct SVL_DLLPRIVATE SfxUndoManager_Data
         ,pFatherUndoArray( NULL )
         ,mnLockCount( 0 )
         ,mnMarks( 0 )
+        ,mnEmptyMark(MARK_INVALID)
         ,mbDoing( false )
 
     {
@@ -512,6 +514,7 @@ void SfxUndoManager::ImplClear( UndoManagerGuard& i_guard )
     m_pData->pActUndoArray->nCurUndoAction = 0;
 
     m_pData->mnMarks = 0;
+    m_pData->mnEmptyMark = MARK_INVALID;
 
     // notify listeners
     i_guard.scheduleNotification( &SfxUndoListener::cleared );
@@ -1146,12 +1149,20 @@ UndoStackMark SfxUndoManager::MarkTopUndoAction()
 {
     UndoManagerGuard aGuard( *m_pData );
 
-    USHORT nActionPos = m_pData->pUndoArray->nCurUndoAction;
-    ENSURE_OR_RETURN( nActionPos > 0, "SfxUndoManager::MarkTopUndoAction: undo stack is empty!", MARK_INVALID );
+    OSL_ENSURE( !IsInListAction(),
+            "SfxUndoManager::MarkTopUndoAction(): suspicious call!" );
+    OSL_ENSURE((m_pData->mnMarks + 1) < (m_pData->mnEmptyMark - 1),
+            "SfxUndoManager::MarkTopUndoAction(): mark overflow!");
 
-    OSL_ENSURE( !IsInListAction(), "SfxUndoManager::MarkTopUndoAction: suspicious call!" );
+    USHORT const nActionPos = m_pData->pUndoArray->nCurUndoAction;
+    if (0 == nActionPos)
+    {
+        --m_pData->mnEmptyMark;
+        return m_pData->mnEmptyMark;
+    }
 
-    m_pData->pUndoArray->aUndoActions[ nActionPos ].aMarks.push_back( ++m_pData->mnMarks );
+    m_pData->pUndoArray->aUndoActions[ nActionPos-1 ].aMarks.push_back(
+            ++m_pData->mnMarks );
     return m_pData->mnMarks;
 }
 
@@ -1159,6 +1170,16 @@ UndoStackMark SfxUndoManager::MarkTopUndoAction()
 void SfxUndoManager::RemoveMark( UndoStackMark const i_mark )
 {
     UndoManagerGuard aGuard( *m_pData );
+
+    if ((m_pData->mnEmptyMark < i_mark) || (MARK_INVALID == i_mark))
+    {
+        return; // nothing to remove
+    }
+    else if (i_mark == m_pData->mnEmptyMark)
+    {
+        --m_pData->mnEmptyMark; // never returned from MarkTop => invalid
+        return;
+    }
 
     for ( size_t i=0; i<m_pData->pUndoArray->aUndoActions.size(); ++i )
     {
@@ -1188,9 +1209,12 @@ bool SfxUndoManager::HasTopUndoActionMark( UndoStackMark const i_mark )
 
     USHORT nActionPos = m_pData->pUndoArray->nCurUndoAction;
     if ( nActionPos == 0 )
-        return false;
+    {
+        return (i_mark == m_pData->mnEmptyMark);
+    }
 
-    const MarkedUndoAction& rAction = m_pData->pUndoArray->aUndoActions[ nActionPos ];
+    const MarkedUndoAction& rAction =
+            m_pData->pUndoArray->aUndoActions[ nActionPos-1 ];
     for (   ::std::vector< UndoStackMark >::const_iterator markPos = rAction.aMarks.begin();
             markPos != rAction.aMarks.end();
             ++markPos
