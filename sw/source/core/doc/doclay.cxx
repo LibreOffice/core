@@ -1573,39 +1573,25 @@ SwDoc::InsertLabel(
 |*
 |*************************************************************************/
 
-SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
+static SwFlyFrmFmt *
+lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
+        SwUndoInsertLabel *const pUndo, SwDrawFrmFmt *const pOldFmt,
+        String const& rTxt,
                                      const String& rSeparator,
                                      const String& rNumberSeparator,
                                      const sal_uInt16 nId,
                                      const String& rCharacterStyle,
                                      SdrObject& rSdrObj )
 {
-
-    SwDrawContact* pContact = (SwDrawContact*)GetUserCall( &rSdrObj );
-    ASSERT( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
-            "Kein DrawFrmFmt" );
-    if ( !pContact )
-        return 0;
-
-    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
-    if( !pOldFmt )
-        return 0;
-
-    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
-    ::sw::DrawUndoGuard const drawUndoGuard(GetIDocumentUndoRedo());
-    SwUndoInsertLabel* pUndo = 0;
-    if (undoGuard.UndoWasEnabled())
-    {
-        GetIDocumentUndoRedo().ClearRedo();
-        pUndo = new SwUndoInsertLabel(
-            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
-    }
+    ::sw::UndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
+    ::sw::DrawUndoGuard const drawUndoGuard(rDoc.GetIDocumentUndoRedo());
 
     // Erstmal das Feld bauen, weil ueber den Namen die TxtColl besorgt
     // werden muss
-    ASSERT( nId == USHRT_MAX  || nId < GetFldTypes()->Count(), "FldType overflow" );
-    SwFieldType *pType = nId != USHRT_MAX ? (*GetFldTypes())[nId] : 0;
-    ASSERT( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
+    OSL_ENSURE( nId == USHRT_MAX  || nId < rDoc.GetFldTypes()->Count(),
+            "FldType index out of bounds" );
+    SwFieldType *pType = nId != USHRT_MAX ? (*rDoc.GetFldTypes())[nId] : 0;
+    OSL_ENSURE( !pType || pType->Which() == RES_SETEXPFLD, "Wrong label id" );
 
     SwTxtFmtColl *pColl = NULL;
     if( pType )
@@ -1622,7 +1608,9 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     }
 
     if( !pColl )
-        pColl = GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+    {
+        pColl = rDoc.GetTxtCollFromPool( RES_POOLCOLL_LABEL );
+    }
 
     SwTxtNode* pNew = NULL;
     SwFlyFrmFmt* pNewFmt = NULL;
@@ -1661,8 +1649,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     // Den Rahmen ggf. in den Hintergrund schicken.
     // OD 02.07.2003 #108784# - consider 'invisible' hell layer.
-    if ( GetHellId() != nLayerId &&
-         GetInvisibleHellId() != nLayerId )
+    if ( rDoc.GetHellId() != nLayerId &&
+         rDoc.GetInvisibleHellId() != nLayerId )
     {
         SvxOpaqueItem aOpaque( RES_OPAQUE );
         aOpaque.SetValue( sal_True );
@@ -1691,11 +1679,12 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->Put( pOldFmt->GetULSpace() );
 
     SwStartNode* pSttNd =
-        GetNodes().MakeTextSection( SwNodeIndex( GetNodes().GetEndOfAutotext() ),
+        rDoc.GetNodes().MakeTextSection(
+            SwNodeIndex( rDoc.GetNodes().GetEndOfAutotext() ),
                                     SwFlyStartNode, pColl );
 
-    pNewFmt = MakeFlyFrmFmt( GetUniqueFrameName(),
-                             GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
+    pNewFmt = rDoc.MakeFlyFrmFmt( rDoc.GetUniqueFrameName(),
+                 rDoc.GetFrmFmtFromPool( RES_POOLFRM_FRAME ) );
 
     // JP 28.10.99: Bug 69487 - set border and shadow to default if the
     //              template contains any.
@@ -1734,11 +1723,15 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     pNewSet->ClearItem();
 
     pNewSet->Put( SwFmtSurround( SURROUND_NONE ) );
-    if( nLayerId == GetHellId() )
-        rSdrObj.SetLayer( GetHeavenId() );
+    if (nLayerId == rDoc.GetHellId())
+    {
+        rSdrObj.SetLayer( rDoc.GetHeavenId() );
+    }
     // OD 02.07.2003 #108784# - consider drawing objects in 'invisible' hell layer
-    else if( nLayerId == GetInvisibleHellId() )
-        rSdrObj.SetLayer( GetInvisibleHeavenId() );
+    else if (nLayerId == rDoc.GetInvisibleHellId())
+    {
+        rSdrObj.SetLayer( rDoc.GetInvisibleHeavenId() );
+    }
     pNewSet->Put( SvxLRSpaceItem( RES_LR_SPACE ) );
     pNewSet->Put( SvxULSpaceItem( RES_UL_SPACE ) );
 
@@ -1807,11 +1800,11 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
             pNew->InsertItem( aFmt, nIdx, nIdx );
             if ( rCharacterStyle.Len() )
             {
-                SwCharFmt* pCharFmt = FindCharFmtByName( rCharacterStyle );
+                SwCharFmt * pCharFmt = rDoc.FindCharFmtByName(rCharacterStyle);
                 if ( !pCharFmt )
                 {
                     const USHORT nMyId = SwStyleNameMapper::GetPoolIdFromUIName( rCharacterStyle, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT );
-                    pCharFmt = GetCharFmtFromPool( nMyId );
+                    pCharFmt = rDoc.GetCharFmtFromPool( nMyId );
                 }
                 if ( pCharFmt )
                 {
@@ -1823,7 +1816,42 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         }
     }
 
-    if( pUndo )
+    return pNewFmt;
+}
+
+SwFlyFrmFmt* SwDoc::InsertDrawLabel(
+        String const& rTxt,
+        String const& rSeparator,
+        String const& rNumberSeparator,
+        sal_uInt16 const nId,
+        String const& rCharacterStyle,
+        SdrObject& rSdrObj )
+{
+    SwDrawContact *const pContact =
+        static_cast<SwDrawContact*>(GetUserCall( &rSdrObj ));
+    OSL_ENSURE( RES_DRAWFRMFMT == pContact->GetFmt()->Which(),
+            "InsertDrawLabel(): not a DrawFrmFmt" );
+    if (!pContact)
+        return 0;
+
+    SwDrawFrmFmt* pOldFmt = (SwDrawFrmFmt *)pContact->GetFmt();
+    if (!pOldFmt)
+        return 0;
+
+    SwUndoInsertLabel * pUndo = 0;
+    if (GetIDocumentUndoRedo().DoesUndo())
+    {
+        GetIDocumentUndoRedo().ClearRedo();
+        pUndo = new SwUndoInsertLabel(
+            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False,
+            nId, rCharacterStyle, sal_False );
+    }
+
+    SwFlyFrmFmt *const pNewFmt = lcl_InsertDrawLabel(
+        *this, pTxtFmtCollTbl, pUndo, pOldFmt,
+        rTxt, rSeparator, rNumberSeparator, nId, rCharacterStyle, rSdrObj);
+
+    if (pUndo)
     {
         GetIDocumentUndoRedo().AppendUndo( pUndo );
     }
@@ -1834,6 +1862,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     return pNewFmt;
 }
+
 
 /*************************************************************************
 |*
