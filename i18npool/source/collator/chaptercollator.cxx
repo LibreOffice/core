@@ -80,7 +80,7 @@ ChapterCollator::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int
 
     const OUString aAddAllowed(RTL_CONSTASCII_USTRINGPARAM("?"));
     ParseResult res1, res2;
-    // Bug #100323#, since parseAnyToken does not take length as parameter, we have to copy
+    // since parseAnyToken does not take length as parameter, we have to copy
     // it to a temp. string.
     OUString s1 = str1.copy(off1+i1, len1-i1), s2 = str2.copy(off2+i2, len2-i2);
     res1 = cclass->parseAnyToken( s1, 0, nLocale, DIGIT, aAddAllowed, DIGIT, aAddAllowed );
