@@ -28,6 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoSplitMove.hxx>
+
 #include "doc.hxx"
 #include "pam.hxx"
 #include "swtable.hxx"

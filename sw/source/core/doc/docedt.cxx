@@ -65,7 +65,7 @@
 #include <swundo.hxx>       // fuer die UndoIds
 #include <txtfrm.hxx>
 #include <hints.hxx>
-#include <UndoCore.hxx>
+#include <UndoSplitMove.hxx>
 #include <UndoRedline.hxx>
 #include <UndoOverwrite.hxx>
 #include <UndoInsert.hxx>

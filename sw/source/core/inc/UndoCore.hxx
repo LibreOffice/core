@@ -121,66 +121,6 @@ private:
 
 
 
-class SwUndoSplitNode: public SwUndo
-{
-    SwHistory* pHistory;
-    SwRedlineData* pRedlData;
-    ULONG nNode;
-    xub_StrLen nCntnt;
-    BOOL bTblFlag : 1;
-    BOOL bChkTblStt : 1;
-public:
-    SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, BOOL bChkTbl );
-
-    virtual ~SwUndoSplitNode();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    void SetTblFlag()       { bTblFlag = TRUE; }
-};
-
-
-class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
-{
-    // nDest.. - Bereich, in den verschoben wurde (nach dem Move!)
-    // nIns.. - Position, von der verschoben wurde und wieder die neue InsPos. ist
-    // nMv.. Position auf die verschoben wird (vor dem Move!) ; fuers REDO
-    ULONG nDestSttNode, nDestEndNode, nInsPosNode, nMvDestNode;
-    xub_StrLen nDestSttCntnt, nDestEndCntnt, nInsPosCntnt, nMvDestCntnt;
-
-    USHORT nFtnStt;         // StartPos der Fussnoten in der History
-
-    BOOL bJoinNext : 1,
-         bJoinPrev : 1,
-         bMoveRange : 1;
-
-    bool bMoveRedlines; // use DOC_MOVEREDLINES when calling SwDoc::Move
-
-    void DelFtn( const SwPaM& );
-public:
-    SwUndoMove( const SwPaM&, const SwPosition& );
-    SwUndoMove( SwDoc* pDoc, const SwNodeRange&, const SwNodeIndex& );
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    // setze den Destination-Bereich nach dem Verschieben.
-    void SetDestRange( const SwPaM&, const SwPosition&, BOOL, BOOL );
-    void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
-                        const SwNodeIndex& rInsPos );
-
-    BOOL IsMoveRange() const        { return bMoveRange; }
-    ULONG GetEndNode() const        { return nEndNode; }
-    ULONG GetDestSttNode() const    { return nDestSttNode; }
-    xub_StrLen GetDestSttCntnt() const  { return nDestSttCntnt; }
-
-    void SetMoveRedlines( bool b )       { bMoveRedlines = b; }
-
-};
-
-
 class SwUndoFmtColl : public SwUndo, private SwUndRng
 {
     String aFmtName;

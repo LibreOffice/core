@@ -32,6 +32,7 @@
 
 #include <UndoRedline.hxx>
 #include <UndoDelete.hxx>
+#include <UndoSplitMove.hxx>
 #include <UndoCore.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>

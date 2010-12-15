@@ -84,6 +84,7 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <UndoCore.hxx>
 #include <UndoInsert.hxx>
+#include <UndoSplitMove.hxx>
 #include <UndoTable.hxx>
 #include <pagedesc.hxx> //DTor
 #include <breakit.hxx>
