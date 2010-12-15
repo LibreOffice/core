@@ -198,8 +198,8 @@ void SwUndo::RemoveIdxRel( ULONG nIdx, const SwPosition& rPos )
     ::PaMCorrRel( aIdx, rPos );
 }
 
-SwUndo::SwUndo( SwUndoId nI )
-    : nId(nI), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
+SwUndo::SwUndo(SwUndoId const nId)
+    : m_nId(nId), nOrigRedlineMode(nsRedlineMode_t::REDLINE_NONE),
       bCacheComment(true), pComment(NULL)
 {
 }
@@ -227,7 +227,7 @@ String SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment = new String(SW_RES(UNDO_BASE + nId));
+            pComment = new String(SW_RES(UNDO_BASE + GetId()));
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -238,7 +238,7 @@ String SwUndo::GetComment() const
     }
     else
     {
-        aResult = String(SW_RES(UNDO_BASE + nId));
+        aResult = String(SW_RES(UNDO_BASE + GetId()));
 
         SwRewriter aRewriter = GetRewriter();
 

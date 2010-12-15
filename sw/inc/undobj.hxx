@@ -124,7 +124,7 @@ SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
 
 class SwUndo
 {
-    SwUndoId nId;
+    SwUndoId const m_nId;
     USHORT nOrigRedlineMode;
 
 protected:
@@ -134,8 +134,6 @@ protected:
     void RemoveIdxFromSection( SwDoc&, ULONG nSttIdx, ULONG* pEndIdx = 0 );
     void RemoveIdxFromRange( SwPaM& rPam, BOOL bMoveNext );
     void RemoveIdxRel( ULONG, const SwPosition& );
-
-    void SetId( SwUndoId nNew ) { nId = nNew; }
 
     static BOOL CanRedlineGroup( SwRedlineSaveDatas& rCurr,
                                 const SwRedlineSaveDatas& rCheck,
@@ -149,10 +147,10 @@ protected:
     */
     virtual SwRewriter GetRewriter() const;
 public:
-    SwUndo( SwUndoId nI );
+    SwUndo(SwUndoId const nId);
     virtual ~SwUndo();
 
-    SwUndoId GetId() const { return nId; }
+    SwUndoId GetId() const { return m_nId; }
     virtual SwUndoId GetEffectiveId() const;
     virtual void Undo( SwUndoIter& ) = 0;
     virtual void Redo( SwUndoIter& ) = 0;

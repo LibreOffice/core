@@ -377,26 +377,35 @@ String SwUndoInsLayFmt::GetComment() const
 
 // ----- Undo-DeleteFly ------
 
+static SwUndoId
+lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
+{
+    if (RES_DRAWFRMFMT != pFrmFmt->Which())
+    {
+        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+        OSL_ENSURE( rCntnt.GetCntntIdx(), "Fly without content" );
+
+        SwNodeIndex firstNode(*rCntnt.GetCntntIdx(), 1);
+        SwNoTxtNode *const pNoTxtNode(firstNode.GetNode().GetNoTxtNode());
+        if (pNoTxtNode && pNoTxtNode->IsGrfNode())
+        {
+            return UNDO_DELGRF;
+        }
+        else if (pNoTxtNode && pNoTxtNode->IsOLENode())
+        {
+            // surprisingly not UNDO_DELOLE, which does not seem to work
+            return UNDO_DELETE;
+        }
+    }
+    return UNDO_DELLAYFMT;
+}
+
 SwUndoDelLayFmt::SwUndoDelLayFmt( SwFrmFmt* pFormat )
-    : SwUndoFlyBase( pFormat, UNDO_DELLAYFMT ), bShowSelFrm( TRUE )
+    : SwUndoFlyBase( pFormat, lcl_GetSwUndoId(pFormat) )
+    , bShowSelFrm( TRUE )
 {
     SwDoc* pDoc = pFormat->GetDoc();
     DelFly( pDoc );
-
-    SwNodeIndex* pIdx = GetMvSttIdx();
-    SwNode* pNd;
-    if( 1 == GetMvNodeCnt() && pIdx &&
-        ( pNd = & pIdx->GetNode() )->IsNoTxtNode() )
-    {
-        // dann setze eine andere Undo-ID; Grafik oder OLE
-        if( pNd->IsGrfNode() )
-            SetId( UNDO_DELGRF );
-        else if( pNd->IsOLENode() )
-        {
-            SetId( UNDO_DELETE );
-
-        }
-    }
 }
 
 SwRewriter SwUndoDelLayFmt::GetRewriter() const
