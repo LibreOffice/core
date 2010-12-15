@@ -229,6 +229,7 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
     mkdir -p $(dir $(1)) && \
+    unset INCLUDE && \
     $(gb_CC) \
         $(4) $(5) \
         -I$(dir $(3)) \
