@@ -885,15 +885,12 @@ BOOL lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
                     *pStrm << (USHORT)SbxLONG; // VarType Id
                 *pStrm << rVar.GetLong();
                 break;
-#if IMPLEMENTATION_READY
         case SbxSALINT64:
         case SbxSALUINT64:
                 if( bIsVariant )
                     *pStrm << (USHORT)SbxSALINT64; // VarType Id
-                //TODO fix truncating cast with new stream method or 2 part print
-                *pStrm << (sal_Int32)rVar.GetInt64();
+                *pStrm << (sal_uInt64)rVar.GetInt64();
                 break;
-#endif
         case SbxSINGLE:
                 if( bIsVariant )
                     *pStrm << (USHORT)eType; // VarType Id
@@ -995,17 +992,14 @@ BOOL lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
                 rVar.PutLong( aInt );
                 }
                 break;
-#if IMPLEMENTATION_READY
         case SbxSALINT64:
         case SbxSALUINT64:
                 {
-                sal_Int32 aInt;
-                //TODO fix incorrect use of 32bit type with new stream method in tools
+                sal_uInt32 aInt;
                 *pStrm >> aInt;
                 rVar.PutInt64( (sal_Int64)aInt );
                 }
                 break;
-#endif
         case SbxSINGLE:
                 {
                 float nS;
