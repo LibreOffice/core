@@ -142,11 +142,25 @@ sub get_english_language_string
     return $langstring;
 }
 
-sub get_productname_for_property_table
+sub get_productname($$)
 {
-    my ( $allvariables ) = @_;
+    my ( $language, $allvariables ) = @_;
 
     my $name = $allvariables->{'PRODUCTNAME'};
+
+    # BrOffice has its own locale-specific name
+    if ($language eq 'pt-BR' && defined $allvariables->{'PRODUCTNAME_BR'}) {
+        $name = $allvariables->{'PRODUCTNAME_BR'};
+    }
+
+    return $name;
+}
+
+sub get_productname_for_property_table($$)
+{
+    my ( $language, $allvariables ) = @_;
+
+    my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $productname = $name . " " . $version;
 
@@ -186,13 +200,12 @@ sub get_productname_for_property_table
     return $productname;
 }
 
-sub get_quickstarterlinkname_for_property_table
+sub get_quickstarterlinkname_for_property_table($$)
 {
-    my ( $allvariables ) = @_;
+    my ( $language, $allvariables ) = @_;
 
     # no usage of POSTVERSIONEXTENSION for Quickstarter link name!
-
-    my $name = $allvariables->{'PRODUCTNAME'};
+    my $name = get_productname ($language, $allvariables);
     my $version = $allvariables->{'PRODUCTVERSION'};
     my $quickstartername = $name . " " . $version;
 
@@ -479,9 +492,9 @@ sub update_property_table
     my $ischeckforproductupdates = get_ischeckforproductupdates_for_property_table();
     my $manufacturer = get_manufacturer_for_property_table();
     my $productlanguage = get_productlanguage_for_property_table($language);
-    my $productname = get_productname_for_property_table($allvariables);
+    my $productname = get_productname_for_property_table($language, $allvariables);
     my $productversion = get_productversion_for_property_table();
-    my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($allvariables);
+    my $quickstarterlinkname = get_quickstarterlinkname_for_property_table($language, $allvariables);
 
     # Updating the values
 
