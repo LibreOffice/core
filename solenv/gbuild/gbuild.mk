@@ -210,6 +210,7 @@ gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
 # We are using a set of scopes that we might as well call classes.
 
 include $(foreach class,\
+	ComponentTarget \
 	LinkTarget\
 	Library\
 	StaticLibrary\
@@ -219,7 +220,6 @@ include $(foreach class,\
 	Package\
 	PrecompiledHeaders\
 	Module\
-	ComponentTarget \
 ,$(GBUILDDIR)/$(class).mk)
 
 # vim: set noet sw=4 ts=4:
