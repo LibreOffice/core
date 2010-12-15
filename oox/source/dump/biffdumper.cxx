@@ -1909,7 +1909,7 @@ void WorkbookStreamObject::implDumpRecordBody()
 
         case BIFF_ID_CHPICFORMAT:
             dumpDec< sal_uInt16 >( "bitmap-mode", "CHPICFORMAT-BITMAP-MODE" );
-            dumpDec< sal_uInt16 >( "image-format", "CHPICFORMAT-IMAGE-FORMAT" );
+            dumpUnused( 2 );
             dumpHex< sal_uInt16 >( "flags", "CHPICFORMAT-FLAGS" );
             dumpDec< double >( "scaling-factor" );
         break;
