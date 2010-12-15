@@ -721,7 +721,7 @@ ScDPHorFieldControl::ScDPHorFieldControl(
 {
     maScroll.SetScrollHdl( LINK(this, ScDPHorFieldControl, ScrollHdl) );
     maScroll.SetEndScrollHdl( LINK(this, ScDPHorFieldControl, EndScrollHdl) );
-    maScroll.Show();
+    maScroll.Hide();
 
     AppendPaintable(&maScroll);
 }
@@ -931,7 +931,11 @@ void ScDPHorFieldControl::ResetScrollBar()
         static_cast<double>(GetFieldCount()) / static_cast<double>(mnFieldBtnRowCount));
 
     if (nOldMax != nNewMax)
+    {
         maScroll.SetRangeMax(nNewMax);
+        bool bShow = mnFieldBtnColCount*mnFieldBtnRowCount < GetFieldCount();
+        maScroll.Show(bShow);
+    }
 }
 
 bool ScDPHorFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
@@ -1012,7 +1016,7 @@ ScDPRowFieldControl::ScDPRowFieldControl(
 {
     maScroll.SetScrollHdl( LINK(this, ScDPRowFieldControl, ScrollHdl) );
     maScroll.SetEndScrollHdl( LINK(this, ScDPRowFieldControl, EndScrollHdl) );
-    maScroll.Show();
+    maScroll.Show(false);
 
     AppendPaintable(&maScroll);
 }
@@ -1173,7 +1177,10 @@ void ScDPRowFieldControl::ResetScrollBar()
     long nNewMax = std::max<long>(mnColumnBtnCount, GetFieldCount());
 
     if (nOldMax != nNewMax)
+    {
         maScroll.SetRangeMax(nNewMax);
+        maScroll.Show(GetFieldCount() > mnColumnBtnCount);
+    }
 }
 
 bool ScDPRowFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
