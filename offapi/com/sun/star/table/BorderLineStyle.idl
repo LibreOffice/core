@@ -69,17 +69,17 @@ constants BorderLineStyle
     /** Double border line with a thick line outside and a thin line
         inside separated by a small gap.
      */
-    const short THINTHICK_SMALLGAP = 7;
+    const short THICKTHIN_SMALLGAP = 7;
 
     /** Double border line with a thick line outside and a thin line
         inside separated by a medium gap.
      */
-    const short THINTHICK_MEDIUMGAP = 8;
+    const short THICKTHIN_MEDIUMGAP = 8;
 
     /** Double border line with a thick line outside and a thin line
         inside separated by a large gap.
      */
-    const short THINTHICK_LARGEGAP = 9;
+    const short THICKTHIN_LARGEGAP = 9;
 
     /** 3D embossed border line.
      */
