@@ -424,7 +424,7 @@ DemoWindow::DemoWindow() :
     maUpdateTimer(),
     mbSlideDisplayed( false )
 {
-    SetText( rtl::OUString::createFromAscii( "Slideshow Demo" ) );
+    SetText( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Slideshow Demo" )) );
     SetSizePixel( Size( 640, 480 ) );
     EnablePaint( true );
 
@@ -468,7 +468,7 @@ void DemoWindow::init()
                                   uno::Reference< animations::XAnimationNode >(),
                                   uno::Sequence< beans::PropertyValue >() );
             mxShow->setProperty( beans::PropertyValue(
-                                     rtl::OUString::createFromAscii("RehearseTimings"),
+                                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RehearseTimings")),
                                      0,
                                      uno::makeAny( sal_True ),
                                      beans::PropertyState_DIRECT_VALUE ));
