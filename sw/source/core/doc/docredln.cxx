@@ -3858,9 +3858,9 @@ String SwRedline::GetDescr(USHORT nPos)
 bool SwDoc::IsInRedlines(const SwNode & rNode) const
 {
     SwPosition aPos(rNode);
-    SwNode & rEndOfRedlines = aNodes.GetEndOfRedlines();
+    SwNode & rEndOfRedlines = GetNodes().GetEndOfRedlines();
     SwPaM aPam(SwPosition(*rEndOfRedlines.StartOfSectionNode()),
                SwPosition(rEndOfRedlines));
 
-    return aPam.ContainsPosition(aPos) ? sal_True : sal_False;
+    return aPam.ContainsPosition(aPos) ? true : false;
 }

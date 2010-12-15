@@ -62,7 +62,6 @@ class SwList;
 #include <vcl/timer.hxx>
 #include "swdllapi.h"
 #include <swtypes.hxx>
-#include <ndarr.hxx>
 #include <swatrset.hxx>
 #include <toxe.hxx>             // enums
 #include <flyenum.hxx>
@@ -154,6 +153,7 @@ class SwNewDBMgr;
 class SwNoTxtNode;
 class SwNodeIndex;
 class SwNodeRange;
+class SwNodes;
 class SwNumRule;
 class SwNumRuleTbl;
 class SwPageDesc;
@@ -286,8 +286,7 @@ class SW_DLLPUBLIC SwDoc :
     //---------------- private Member --------------------------------
 
     // -------------------------------------------------------------------
-    // die Objecte
-    SwNodes     aNodes;                 // Inhalt des Dokumentes
+    ::boost::scoped_ptr<SwNodes> m_pNodes;  /// document content (Nodes Array)
     SwAttrPool* mpAttrPool;             // der Attribut Pool
     SwPageDescs aPageDescs;             // PageDescriptoren
     Link        aOle2Link;              // OLE 2.0-Benachrichtigung
@@ -720,8 +719,8 @@ public:
     /* @@@MAINTAINABILITY-HORROR@@@
        Implementation details made public.
     */
-          SwNodes& GetNodes()                   { return aNodes; }
-    const SwNodes& GetNodes() const             { return aNodes; }
+    SwNodes      & GetNodes()       { return *m_pNodes; }
+    SwNodes const& GetNodes() const { return *m_pNodes; }
 
     /** IInterface
     */

@@ -1085,7 +1085,7 @@ bool SwDoc::IsPoolTxtCollUsed( USHORT nId ) const
     if( !bFnd || !pNewColl->GetDepends() )
         return FALSE;
 
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewColl->GetInfo( aGetHt );
 }
 
@@ -1433,7 +1433,7 @@ bool SwDoc::IsPoolFmtUsed( USHORT nId ) const
     {
         // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
         // (auch indirekte fuer Format-Ableitung! )
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         bFnd = !pNewFmt->GetInfo( aGetHt );
     }
     else
@@ -2356,7 +2356,7 @@ bool SwDoc::IsPoolPageDescUsed( USHORT nId ) const
 
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !pNewPgDsc->GetInfo( aGetHt );
 }
 
@@ -2365,7 +2365,7 @@ sal_Bool SwDoc::IsUsed( const SwModify& rModify ) const
 {
     // dann teste mal, ob es abhaengige ContentNodes im Nodes Array gibt
     // (auch indirekte fuer Format-Ableitung! )
-    SwAutoFmtGetDocNode aGetHt( &aNodes );
+    SwAutoFmtGetDocNode aGetHt( &GetNodes() );
     return !rModify.GetInfo( aGetHt );
 }
 

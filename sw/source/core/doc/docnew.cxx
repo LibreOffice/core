@@ -218,8 +218,9 @@ BOOL lcl_DelFmtIndizes( const SwFrmFmtPtr& rpFmt, void* )
  * exportierte Methoden
  */
 
-SwDoc::SwDoc() :
-    aNodes( this ),
+SwDoc::SwDoc()
+    : m_pNodes( new SwNodes(this) )
+    ,
     mpAttrPool(new SwAttrPool(this)),
     pMarkManager(new ::sw::mark::MarkManager(*this)),
     m_pMetaFieldManager(new ::sw::MetaFieldManager()),
@@ -431,7 +432,7 @@ SwDoc::SwDoc() :
     new SwTxtNode(
             SwNodeIndex(GetUndoManager().GetUndoNodes().GetEndOfContent()),
             pDfltTxtFmtColl );
-    new SwTxtNode( SwNodeIndex( aNodes.GetEndOfContent() ),
+    new SwTxtNode( SwNodeIndex( GetNodes().GetEndOfContent() ),
                     GetTxtCollFromPool( RES_POOLCOLL_STANDARD ));
 
     // den eigenen IdleTimer setzen
@@ -547,7 +548,7 @@ SwDoc::~SwDoc()
 
     // die KapitelNummern / Nummern muessen vor den Vorlage geloescht werden
     // ansonsten wird noch staendig geupdatet !!!
-    aNodes.pOutlineNds->Remove( USHORT(0), aNodes.pOutlineNds->Count() );
+    m_pNodes->pOutlineNds->Remove(USHORT(0), m_pNodes->pOutlineNds->Count());
     SwNodes & rUndoNodes( GetUndoManager().GetUndoNodes() );
     rUndoNodes.pOutlineNds->Remove(USHORT(0), rUndoNodes.pOutlineNds->Count());
 
@@ -597,7 +598,7 @@ SwDoc::~SwDoc()
     // Inhaltssections loeschen
     // nicht erst durch den SwNodes-DTOR, damit Formate
     // keine Abhaengigen mehr haben.
-    aNodes.DelNodes( SwNodeIndex( aNodes ), aNodes.Count() );
+    m_pNodes->DelNodes( SwNodeIndex(*m_pNodes), m_pNodes->Count() );
     rUndoNodes.DelNodes( SwNodeIndex( rUndoNodes ), rUndoNodes.Count() );
 
     // Formate loeschen, spaeter mal permanent machen.

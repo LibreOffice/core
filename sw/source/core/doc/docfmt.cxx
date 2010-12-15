@@ -1498,7 +1498,7 @@ USHORT SwDoc::GetTblFrmFmtCount(BOOL bUsed) const
     USHORT nCount = pTblFrmFmtTbl->Count();
     if(bUsed)
     {
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( USHORT i = nCount; i; )
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
@@ -1516,8 +1516,7 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(USHORT nFmt, BOOL bUsed ) const
     USHORT nRemoved = 0;
     if(bUsed)
     {
-        SwAutoFmtGetDocNode aGetHt( &aNodes );
-
+        SwAutoFmtGetDocNode aGetHt( &GetNodes() );
         for ( USHORT i = 0; i <= nFmt; i++ )
         {
             while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))

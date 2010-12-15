@@ -438,9 +438,11 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
                     & rEnd = &rStt == rPam.GetPoint() ? *rPam.GetMark()
                                                       : *rPam.GetPoint();
     if( !GetNodes().GetOutLineNds().Count() || !nOffset ||
-        rStt.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() ||
-        rEnd.nNode.GetIndex() < aNodes.GetEndOfExtras().GetIndex() )
+        (rStt.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()) ||
+        (rEnd.nNode.GetIndex() < GetNodes().GetEndOfExtras().GetIndex()))
+    {
         return FALSE;
+    }
 
     USHORT nAktPos = 0;
     SwNodeIndex aSttRg( rStt.nNode ), aEndRg( rEnd.nNode );
@@ -574,7 +576,7 @@ BOOL SwDoc::MoveOutlinePara( const SwPaM& rPam, short nOffset )
     // setze die Position auf den Dokumentanfang.
     // Sollten da Bereiche oder Tabellen stehen, so werden sie nach
     // hinten verschoben.
-    nNewPos = Max( nNewPos, aNodes.GetEndOfExtras().GetIndex() + 2 );
+    nNewPos = Max( nNewPos, GetNodes().GetEndOfExtras().GetIndex() + 2 );
 
     long nOffs = nNewPos - ( 0 < nOffset ? aEndRg.GetIndex() : aSttRg.GetIndex());
     SwPaM aPam( aSttRg, aEndRg, 0, -1 );
@@ -1922,8 +1924,8 @@ const SwNumRule *  SwDoc::SearchNumRule(const SwPosition & rPos,
 
             pNode = &aIdx.GetNode();
         }
-        while (! (pNode == aNodes.DocumentSectionStartNode(pStartFromNode) ||
-                  pNode == aNodes.DocumentSectionEndNode(pStartFromNode)));
+        while (!(pNode == GetNodes().DocumentSectionStartNode(pStartFromNode) ||
+                 pNode == GetNodes().DocumentSectionEndNode(pStartFromNode)));
         // <--
     }
 

@@ -2567,8 +2567,10 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
     if ( nSectDiff-2 <= nNodeDiff || IsRedlineOn() ||
          /* #i9185# Prevent getting the node after the end node (see below) */
-        rEnd.nNode.GetIndex() + 1 == aNodes.Count() )
+        rEnd.nNode.GetIndex() + 1 == GetNodes().Count() )
+    {
         return sal_False;
+    }
 
     // harte SeitenUmbrueche am nachfolgenden Node verschieben
     sal_Bool bSavePageBreak = sal_False, bSavePageDesc = sal_False;
@@ -2576,7 +2578,7 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
     /* #i9185# This whould lead to a segmentation fault if not catched
        above. */
     ULONG nNextNd = rEnd.nNode.GetIndex() + 1;
-    SwTableNode* pTblNd = aNodes[ nNextNd ]->GetTableNode();
+    SwTableNode *const pTblNd = GetNodes()[ nNextNd ]->GetTableNode();
 
     if( pTblNd && pNd->IsCntntNode() )
     {
