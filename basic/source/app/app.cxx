@@ -1101,10 +1101,10 @@ IMPL_LINK( BasicFrame, InitMenu, Menu *, pMenu )
     BOOL bPrev   = bHasErr & bNormal;
     if( bHasErr )
     {
-        ULONG n = pBasic->aErrors.GetCurPos();
+        size_t n = pBasic->GetCurrentError();
         if( n == 0 )
             bPrev = FALSE;
-        if( USHORT(n+1) == pBasic->GetErrors() )
+        if( SbError(n+1) == pBasic->GetErrors() )
             bNext = FALSE;
     }
     pMenu->EnableItem( RID_RUNNEXTERR, bNext );
@@ -1378,11 +1378,11 @@ long BasicFrame::Command( short nID, BOOL bChecked )
             bInBreak = FALSE;
             break;
         case RID_RUNNEXTERR:
-            pErr = pBasic->aErrors.Next();
+            pErr = pBasic->NextError();
             if( pErr ) pErr->Show();
             break;
         case RID_RUNPREVERR:
-            pErr = pBasic->aErrors.Prev();
+            pErr = pBasic->PrevError();
             if( pErr ) pErr->Show();
             break;
 

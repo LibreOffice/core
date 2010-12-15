@@ -30,11 +30,16 @@
 #define _MYBASIC_HXX
 
 #include <basic/sbstar.hxx>
+#include <vector>
 
 class BasicApp;
 class AppBasEd;
 class ErrorEntry;
 
+#define SBXID_MYBASIC   0x594D      // MyBasic: MY
+#define SBXCR_TEST      0x54534554  // TEST
+
+//-----------------------------------------------------------------------------
 class BasicError {
     AppBasEd* pWin;
     USHORT  nLine, nCol1, nCol2;
@@ -44,11 +49,7 @@ public:
     void Show();
 };
 
-DECLARE_LIST( ErrorList, BasicError* )
-
-#define SBXID_MYBASIC   0x594D      // MyBasic: MY
-#define SBXCR_TEST      0x54534554  // TEST
-
+//-----------------------------------------------------------------------------
 class MyBasic : public StarBASIC
 {
     SbError nError;
@@ -56,6 +57,8 @@ class MyBasic : public StarBASIC
     virtual USHORT BreakHdl();
 
 protected:
+    ::std::vector< BasicError* > aErrors;
+    size_t CurrentError;
     Link GenLogHdl();
     Link GenWinInfoHdl();
     Link GenModuleWinExistsHdl();
@@ -68,14 +71,17 @@ protected:
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_TEST,SBXID_MYBASIC,1);
     TYPEINFO();
-    ErrorList aErrors;
     MyBasic();
     virtual ~MyBasic();
     virtual BOOL Compile( SbModule* );
     void Reset();
     SbError GetErrors() { return nError; }
+    size_t GetCurrentError() { return CurrentError; }
+    BasicError* FirstError();
+    BasicError* NextError();
+    BasicError* PrevError();
 
-        // Do not use #ifdefs here because this header file is both used for testtool and basic
+    // Do not use #ifdefs here because this header file is both used for testtool and basic
     SbxObject *pTestObject; // for Testool; otherwise NULL
 
     virtual void LoadIniFile();

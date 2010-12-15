@@ -59,7 +59,6 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( TRUE );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
-//  ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetWordDelimiters( CUniString(" ,.;:(){}[]\"'+-*/<>^\\") );
     ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( TRUE );
     ((TextEdit*)pDataEdit)->SaveAsUTF8( TRUE );
 
@@ -75,10 +74,6 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
     bCompiled = pMod->IsCompiled();
 
     pBreakpoints->SetModule( pMod );
-
-    // Define icon:
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     SetText( pMod->GetName() );
     pDataEdit->SetText( pMod->GetSource() );
@@ -207,7 +202,6 @@ void AppBasEd::LoadSource()
 {
     BOOL bErr;
 
-//  if( pDataEdit->GetText().Len() != 0 ) return;
     String aName = pMod->GetName();
     bErr = !pDataEdit->Load( aName );
     pBreakpoints->LoadBreakpoints( GetText() );
@@ -247,7 +241,7 @@ BOOL AppBasEd::Compile()
     }
     else
     {
-        BasicError* pErr = pFrame->Basic().aErrors.First();
+        BasicError* pErr = pFrame->Basic().FirstError();
         if( pErr ) pErr->Show();
     }
     return bCompiled = bRes;
@@ -284,7 +278,7 @@ void AppBasEd::Run()
         pMain->Run();
         if (aBasicApp.pFrame)
         {
-            BasicError* pErr = aBasicApp.pFrame->Basic().aErrors.First();
+            BasicError* pErr = aBasicApp.pFrame->Basic().FirstError();
             if( pErr )
                 pErr->Show();
             aBasicApp.pFrame->SetAppMode( String() );

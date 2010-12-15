@@ -79,6 +79,7 @@ SbxBase* MyFactory::Create( UINT16 nSbxId, UINT32 nCr )
 MyBasic::MyBasic() : StarBASIC()
 {
     nError = 0;
+    CurrentError = 0;
     if( !nInst++ )
     {
         AddFactory( &aFac1 );
@@ -161,7 +162,7 @@ SbTextType MyBasic::GetSymbolType( const String &rSymbol, BOOL bWasTTControl )
 
 MyBasic::~MyBasic()
 {
-    aErrors.Clear();
+    Reset();
     if( !--nInst )
     {
         RemoveFactory( &aFac1 );
@@ -172,14 +173,46 @@ MyBasic::~MyBasic()
 
 void MyBasic::Reset()
 {
-    aErrors.Clear();
+    for ( size_t i = 0, n = aErrors.size(); i < n; ++i ) delete aErrors[ i ];
+    aErrors.clear();
     nError = 0;
+    CurrentError = 0;
 }
 
 BOOL MyBasic::Compile( SbModule* p )
 {
     Reset();
     return StarBASIC::Compile( p );
+}
+
+BasicError* MyBasic::NextError()
+{
+    if ( CurrentError < ( aErrors.size() - 1 ) )
+    {
+        ++CurrentError;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
+}
+
+BasicError* MyBasic::PrevError()
+{
+    if ( !aErrors.empty() && CurrentError > 0 )
+    {
+        --CurrentError;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
+}
+
+BasicError* MyBasic::FirstError()
+{
+    if ( !aErrors.empty() )
+    {
+        CurrentError = 0;
+        return aErrors[ CurrentError ];
+    }
+    return NULL;
 }
 
 BOOL MyBasic::ErrorHdl()
@@ -193,12 +226,13 @@ BOOL MyBasic::ErrorHdl()
         pWin->ToTop();
     if( IsCompilerError() )
     {
-        aErrors.Insert(
+        aErrors.push_back(
           new BasicError
             ( pWin,
-              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() ),
-              LIST_APPEND );
+              0, StarBASIC::GetErrorText(), GetLine(), GetCol1(), GetCol2() )
+            );
         nError++;
+        CurrentError = aErrors.size() - 1;
         return BOOL( nError < 20 ); // Cancel after 20 errors
     }
     else
