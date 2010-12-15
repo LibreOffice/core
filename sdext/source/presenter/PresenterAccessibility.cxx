@@ -1612,7 +1612,7 @@ void PresenterAccessible::AccessibleObject::ThrowException (
     const sal_Char* pMessage,
     const ExceptionType eExceptionType) const
 {
-    const OUString sMessage (OUString(A2S("PresenterAccessible: ")) + OUString(A2S(pMessage)));
+    const OUString sMessage (OUString(A2S("PresenterAccessible: ")) + OUString::createFromAscii(pMessage));
     const Reference<XInterface> xObject (
         const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     switch (eExceptionType)
