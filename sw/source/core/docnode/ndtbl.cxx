@@ -51,6 +51,7 @@
 #include <tabcol.hxx>
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <UndoManager.hxx>
 #include <cntfrm.hxx>
 #include <pam.hxx>
 #include <swcrsr.hxx>
@@ -2385,7 +2386,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
                 && (UNDO_REDLINE == nLastUndoId))
             {
                 SwUndoRedline *const pU = dynamic_cast<SwUndoRedline*>(
-                        GetIDocumentUndoRedo().RemoveLastUndo(UNDO_REDLINE));
+                        GetUndoManager().RemoveLastUndo());
                 if( pU->GetRedlSaveCount() )
                 {
                     SwUndoIter aUndoIter( &rPam, UNDO_REDLINE );

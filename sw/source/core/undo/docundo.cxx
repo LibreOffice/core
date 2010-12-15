@@ -1089,12 +1089,12 @@ SwUndoId UndoManager::GetRepeatInfo(::rtl::OUString *const o_pStr) const
 }
 
 
-SwUndo* UndoManager::RemoveLastUndo(SwUndoId const eUndoId)
+SwUndo* UndoManager::RemoveLastUndo()
 {
     SwUndo *const pUndo = (*m_pUndos)[ m_nUndoPos - 1 ];
-    if ((eUndoId != pUndo->GetId()) || (m_nUndoPos != m_pUndos->Count()))
+    if (m_nUndoPos != m_pUndos->Count())
     {
-        OSL_ENSURE(false, "RemoveLastUndo(): wrong Undo action");
+        OSL_ENSURE(false, "RemoveLastUndo(): there are Redo actions?");
         return 0;
     }
     if (!m_nNestingDepth)

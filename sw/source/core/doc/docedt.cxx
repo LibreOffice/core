@@ -1597,7 +1597,7 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
                     {
                         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
                         SwUndo const*const pDeleted =
-                            GetUndoManager().RemoveLastUndo(UNDO_REDLINE);
+                            GetUndoManager().RemoveLastUndo();
                         OSL_ENSURE(pDeleted == pUndo,
                             "DeleteAndJoinWithRedlineImpl: "
                             "undo removed is not undo inserted?");

@@ -72,7 +72,6 @@ public:
     virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-    virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
     virtual bool Redo(SwUndoIter & rUndoIter);
     virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
@@ -83,7 +82,8 @@ public:
     virtual void ClearRedo();
     virtual bool IsUndoNodes(SwNodes const& rNodes) const;
 
-    SwUndo* GetLastUndo();
+    SwUndo * RemoveLastUndo();
+    SwUndo * GetLastUndo();
 
     SwNodes const& GetUndoNodes() const;
     SwNodes      & GetUndoNodes();
