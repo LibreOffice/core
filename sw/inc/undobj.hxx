@@ -449,8 +449,6 @@ public:
     void SetTableName(const String & rName);
 
     // SwUndoTblCpyTbl needs this information:
-    long NodeDiff() const { return nSttNode - nEndNode; }
-    xub_StrLen ContentStart() const { return nSttCntnt; }
     BOOL IsDelFullPara() const { return bDelFullPara; }
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
@@ -1760,6 +1758,10 @@ public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
 
     BOOL CanGrouping( const SwUndoRedlineDelete& rPrev );
+
+    // SwUndoTblCpyTbl needs this information:
+    long NodeDiff() const { return nSttNode - nEndNode; }
+    xub_StrLen ContentStart() const { return nSttCntnt; }
 };
 
 class SwUndoRedlineSort : public SwUndoRedline

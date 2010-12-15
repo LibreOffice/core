@@ -2558,23 +2558,29 @@ void SwUndoTblCpyTbl::Undo( SwUndoIter& rIter )
             // There are a couple of different situations to consider during redlining
             if( pEntry->pUndo )
             {
-                SwUndoDelete *pUnDel = (SwUndoDelete*)pEntry->pUndo;
-                if( UNDO_REDLINE == pUnDel->GetId() )
+                SwUndoDelete *const pUndoDelete =
+                    dynamic_cast<SwUndoDelete*>(pEntry->pUndo);
+                SwUndoRedlineDelete *const pUndoRedlineDelete =
+                    dynamic_cast<SwUndoRedlineDelete*>(pEntry->pUndo);
+                OSL_ASSERT(pUndoDelete || pUndoRedlineDelete);
+                if (pUndoRedlineDelete)
                 {
                     // The old content was not empty or he has been merged with the new content
                     bDeleteCompleteParagraph = !pEntry->bJoin; // bJoin is set when merged
                     // Set aTmpIdx to the beginning fo the old content
-                    SwNodeIndex aTmpIdx( *pEndNode, pUnDel->NodeDiff()-1 );
+                    SwNodeIndex aTmpIdx( *pEndNode,
+                            pUndoRedlineDelete->NodeDiff()-1 );
                     SwTxtNode *pTxt = aTmpIdx.GetNode().GetTxtNode();
                     if( pTxt )
                     {
                         aPam.GetPoint()->nNode = *pTxt;
-                        aPam.GetPoint()->nContent.Assign( pTxt, pUnDel->ContentStart() );
+                        aPam.GetPoint()->nContent.Assign( pTxt,
+                                pUndoRedlineDelete->ContentStart() );
                     }
                     else
                         *aPam.GetPoint() = SwPosition( aTmpIdx );
                 }
-                else if( pUnDel->IsDelFullPara() )
+                else if (pUndoDelete && pUndoDelete->IsDelFullPara())
                 {
                     // When the old content was an empty paragraph, but could not be joined
                     // with the new content (e.g. because of a section or table)

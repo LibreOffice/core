@@ -785,7 +785,6 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     SwIndex& rIdx = rPt.nContent;
     xub_StrLen nStart = 0;
 
-    SwUndo * pUndo;
     sal_Unicode c;
     String aStr;
 
@@ -806,12 +805,13 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
             bool bMerged(false);
             if (GetIDocumentUndoRedo().DoesGroupUndo())
             {
-                pUndo = GetUndoManager().GetLastUndo();
-                if (pUndo && (UNDO_OVERWRITE == pUndo->GetId()))
+                SwUndo *const pUndo = GetUndoManager().GetLastUndo();
+                SwUndoOverwrite *const pUndoOW(
+                    dynamic_cast<SwUndoOverwrite *>(pUndo) );
+                if (pUndoOW)
                 {
                     // if CanGrouping() returns true it's already merged
-                    bMerged = static_cast<SwUndoOverwrite*>(pUndo)
-                                ->CanGrouping( this, rPt, c );
+                    bMerged = pUndoOW->CanGrouping( this, rPt, c );
                 }
             }
             if (!bMerged)
@@ -1588,14 +1588,11 @@ bool SwDoc::DeleteAndJoinWithRedlineImpl( SwPaM & rPam, const bool )
             if (GetIDocumentUndoRedo().DoesGroupUndo())
             {
                 SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
-                if (pLastUndo &&
-                    (UNDO_REDLINE == pLastUndo->GetId()) &&
-                    (UNDO_DELETE ==
-                     static_cast<SwUndoRedline*>(pLastUndo)->GetUserId()))
+                SwUndoRedlineDelete *const pUndoRedlineDel(
+                        dynamic_cast<SwUndoRedlineDelete*>(pLastUndo) );
+                if (pUndoRedlineDel)
                 {
-                    bool const bMerged =
-                        static_cast<SwUndoRedlineDelete*>(pLastUndo)
-                            ->CanGrouping( *pUndo );
+                    bool const bMerged = pUndoRedlineDel->CanGrouping(*pUndo);
                     if (bMerged)
                     {
                         ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
@@ -1710,10 +1707,11 @@ bool SwDoc::DeleteRangeImplImpl(SwPaM & rPam)
         if (GetIDocumentUndoRedo().DoesGroupUndo())
         {
             SwUndo *const pLastUndo( GetUndoManager().GetLastUndo() );
-            if (pLastUndo && (UNDO_DELETE == pLastUndo->GetId()))
+            SwUndoDelete *const pUndoDelete(
+                    dynamic_cast<SwUndoDelete *>(pLastUndo) );
+            if (pUndoDelete)
             {
-                bMerged = static_cast<SwUndoDelete*>(pLastUndo)
-                            ->CanGrouping( this, rPam );
+                bMerged = pUndoDelete->CanGrouping( this, rPam );
                 // if CanGrouping() returns true it's already merged
             }
         }

@@ -876,22 +876,11 @@ bool SwDoc::InsertString( const SwPaM &rRg, const String &rStr,
         // -> #111827#
         {
             SwUndo *const pLastUndo = GetUndoManager().GetLastUndo();
-            if (pLastUndo)
+            SwUndoInsert *const pUndoInsert(
+                dynamic_cast<SwUndoInsert *>(pLastUndo) );
+            if (pUndoInsert && pUndoInsert->CanGrouping(rPos))
             {
-                switch (pLastUndo->GetId())
-                {
-                    case UNDO_INSERT:
-                    case UNDO_TYPING:
-                        if (static_cast<SwUndoInsert*>(pLastUndo)
-                                ->CanGrouping( rPos ))
-                        {
-                            pUndo = static_cast<SwUndoInsert*>(pLastUndo);
-                        }
-                        break;
-
-                    default:
-                        break;
-                }
+                pUndo = pUndoInsert;
             }
         }
         // <- #111827#
