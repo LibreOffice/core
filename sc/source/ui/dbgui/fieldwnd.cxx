@@ -1228,6 +1228,38 @@ ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
 
 //=============================================================================
 
+#if DATA_FIELD_NEW
+
+ScDPDataFieldControl::ScDPDataFieldControl(
+    ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
+    ScDPHorFieldControl(pDialog, rResId, pCaption)
+{
+}
+
+ScDPDataFieldControl::~ScDPDataFieldControl()
+{
+}
+
+ScDPFieldType ScDPDataFieldControl::GetFieldType() const
+{
+    return TYPE_DATA;
+}
+
+Size ScDPDataFieldControl::GetFieldSize() const
+{
+    Size aWndSize = GetSizePixel();
+    long nFieldObjWidth = aWndSize.Width() / 2.0 - OUTER_MARGIN_HOR - DATA_FIELD_BTN_GAP/2;
+    Size aFieldSize(nFieldObjWidth, FIELD_BTN_HEIGHT);
+    return aFieldSize;
+}
+
+String ScDPDataFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_DATA_DESCR);
+}
+
+#else
+
 ScDPDataFieldControl::ScDPDataFieldControl( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption ) :
     ScDPFieldControlBase(pParent, rResId, pCaption),
     maScroll(this, WB_HORZ | WB_DRAG),
@@ -1579,5 +1611,7 @@ IMPL_LINK(ScDPDataFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
     HandleScroll();
     return 0;
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

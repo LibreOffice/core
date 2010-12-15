@@ -347,6 +347,23 @@ public:
 
 // ============================================================================
 
+#define DATA_FIELD_NEW 1
+
+#if DATA_FIELD_NEW
+
+class ScDPDataFieldControl : public ScDPHorFieldControl
+{
+public:
+    ScDPDataFieldControl( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption );
+    virtual ~ScDPDataFieldControl();
+
+    virtual ScDPFieldType GetFieldType() const;
+    virtual Size GetFieldSize() const;
+    virtual String GetDescription() const;
+};
+
+#else
+
 class ScDPDataFieldControl : public ScDPFieldControlBase
 {
 public:
@@ -405,6 +422,8 @@ private:
     size_t          mnColumnBtnCount; /// number of buttons per single column.
     size_t          mnTotalBtnCount; /// number of total visible buttons
 };
+
+#endif
 
 #endif // SC_FIELDWND_HXX
 
