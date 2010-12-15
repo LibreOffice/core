@@ -299,10 +299,7 @@ void SAL_CALL KDE4FilePicker::appendFilter( const ::rtl::OUString &title, const 
     if (!_filter.isNull())
         _filter.append("\n");
 
-    //add to hash map for reverse lookup in getCurrentFilter
-    _filters.insert(f, t);
-
-    // '/' meed to be escaped to else they are assumed to be mime types by kfiledialog
+    // '/' need to be escaped else they are assumed to be mime types by kfiledialog
     //see the docs
     t.replace("/", "\\/");
 
@@ -323,7 +320,10 @@ void SAL_CALL KDE4FilePicker::setCurrentFilter( const rtl::OUString &title )
 rtl::OUString SAL_CALL KDE4FilePicker::getCurrentFilter()
     throw( uno::RuntimeException )
 {
-    QString filter = _filters[_dialog->currentFilter()];
+    // _dialog->currentFilter() wouldn't quite work, because it returns only e.g. "*.doc",
+    // without the description, and there may be several filters with the same pattern
+    QString filter = _dialog->filterWidget()->currentText();
+    filter.replace( "\\/", "/" );
 
     //default if not found
     if (filter.isNull())
@@ -608,7 +608,6 @@ void SAL_CALL KDE4FilePicker::initialize( const uno::Sequence<uno::Any> &args )
     throw( uno::Exception, uno::RuntimeException )
 {
     _filter.clear();
-    _filters.clear();
 
     // parameter checking
     uno::Any arg;
