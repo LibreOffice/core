@@ -38,6 +38,7 @@
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
 #include <UndoCore.hxx>
+#include <UndoDraw.hxx>
 #include <rolbck.hxx>       // fuer die Attribut History
 #include <doc.hxx>
 #include <docary.hxx>

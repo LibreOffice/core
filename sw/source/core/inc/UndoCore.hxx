@@ -46,8 +46,6 @@
 #endif
 #include <svl/itemset.hxx>
 
-#include <svx/svdundo.hxx> // #111827#
-
 #include <swtypes.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <calbck.hxx>
@@ -69,13 +67,7 @@ class SwGrfNode;
 class SwFtnInfo;
 class SwEndNoteInfo;
 class SwFmtAnchor;
-struct SwUndoGroupObjImpl;
-class SdrMark;
 class SdrMarkList;
-class SdrObject;
-class SdrObjGroup;
-class SdrUndoAction;
-class SwDrawFrmFmt;
 class SwUndoDelete;
 class SwRedlineSaveData;
 class SwRedline;
@@ -943,109 +935,6 @@ public:
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
     virtual void RepeatImpl( ::sw::RepeatContext & );
-};
-
-//--------------------------------------------------------------------
-// ---------- Undo fuer DrawObjecte ----------------------------------
-
-class SwSdrUndo : public SwUndo
-{
-    SdrUndoAction* pSdrUndo;
-    SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
-public:
-    SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
-
-    virtual ~SwSdrUndo();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    String GetComment() const;
-};
-
-class SwUndoDrawGroup : public SwUndo
-{
-    SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
-
-public:
-    SwUndoDrawGroup( USHORT nCnt );
-
-    virtual ~SwUndoDrawGroup();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, SdrObject* );
-    void SetGroupFmt( SwDrawFrmFmt* );
-};
-
-// --> OD 2006-11-01 #130889#
-// Action "ungroup drawing object" is now splitted into three parts - see
-// method <SwDoc::UnGroupSelection(..)>:
-// - creation for <SwDrawFrmFmt> instances for the group members of the
-//   selected group objects
-// - intrinsic ungroup of the selected group objects
-// - creation of <SwDrawContact> instances for the former group members and
-//   connection to the Writer layout.
-// Thus, two undo actions (instances of <SwUndo>) are needed:
-// - Existing class <SwUndoDrawUnGroup> takes over the part for the formats.
-// - New class <SwUndoDrawUnGroupConnectToLayout> takes over the part for
-//   contact object.
-class SwUndoDrawUnGroup : public SwUndo
-{
-    SwUndoGroupObjImpl* pObjArr;
-    USHORT nSize;
-    BOOL bDelFmt;
-
-public:
-    SwUndoDrawUnGroup( SdrObjGroup* );
-
-    virtual ~SwUndoDrawUnGroup();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    void AddObj( USHORT nPos, SwDrawFrmFmt* );
-};
-
-// --> OD 2006-11-01 #130889#
-class SwUndoDrawUnGroupConnectToLayout : public SwUndo
-{
-    private:
-        std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > > aDrawFmtsAndObjs;
-
-    public:
-        SwUndoDrawUnGroupConnectToLayout();
-
-        virtual ~SwUndoDrawUnGroupConnectToLayout();
-
-        virtual void UndoImpl( ::sw::UndoRedoContext & );
-        virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-        void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
-                           SdrObject* pDrawObject );
-};
-// <--
-
-
-class SwUndoDrawDelete : public SwUndo
-{
-    SwUndoGroupObjImpl* pObjArr;
-    SdrMarkList* pMarkLst;  // MarkList for all selected SdrObjects
-    USHORT nSize;
-    BOOL bDelFmt;
-
-public:
-    SwUndoDrawDelete( USHORT nCnt );
-
-    virtual ~SwUndoDrawDelete();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-
-    void AddObj( USHORT nPos, SwDrawFrmFmt*, const SdrMark& );
 };
 
 //--------------------------------------------------------------------
