@@ -69,7 +69,6 @@
 #include <svx/svxids.hrc>
 // --> OD 2008-02-12 #newlistlevelattrs#
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 // <--
 
 // MD 06.02.95: Die Formatnamen in der Liste aller Namen haben als

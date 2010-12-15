@@ -35,7 +35,7 @@
 #include <IDocumentUndoRedo.hxx>
 #include <pamtyp.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 #include <comcore.hrc>
 
 //------------------ Methoden der CrsrShell ---------------------------

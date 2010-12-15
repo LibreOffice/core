@@ -45,7 +45,6 @@
 #include <rubylist.hxx>
 #include <pam.hxx>
 #include <swundo.hxx>       // fuer die UndoIds
-#include <undobj.hxx>
 #include <breakit.hxx>
 #include <crsskip.hxx>
 

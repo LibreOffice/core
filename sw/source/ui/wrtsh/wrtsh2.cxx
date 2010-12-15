@@ -68,8 +68,7 @@
 #include <wrtsh.hrc>
 #include "swabstdlg.hxx"
 #include "fldui.hrc"
-
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>

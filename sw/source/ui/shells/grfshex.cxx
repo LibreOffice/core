@@ -34,42 +34,28 @@
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <docary.hxx>
-#ifndef _TEXTSH_HXX
 #include <textsh.hxx>
-#endif
 #include <viewopt.hxx>
 #include <swundo.hxx>
-#ifndef _SHELLS_HRC
 #include <shells.hrc>
-#endif
 #include <caption.hxx>
 #define _SVSTDARR_STRINGSSORTDTOR
 #include <svl/svstdarr.hxx>
 #include <svtools/filter.hxx>
 #include <svx/htmlmode.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <frmfmt.hxx>
 #include <frmmgr.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVX_SVDOMEDIA_HXX
 #include <svx/svdomedia.hxx>
-#endif
-#ifndef _SVX_SVDVIEW_HXX
 #include <svx/svdview.hxx>
-#endif
-#ifndef _SVX_SVDPAGV_HXX
 #include <svx/svdpagv.hxx>
-#endif
 #include <SwStyleNameMapper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/ui/dialogs/ListboxControlActions.hpp>
-#ifndef _POOLFMT_HRC
 #include <poolfmt.hrc>
-#endif
 
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -79,7 +65,6 @@
 
 // -> #111827#
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <comcore.hrc>
 // <- #111827#
 

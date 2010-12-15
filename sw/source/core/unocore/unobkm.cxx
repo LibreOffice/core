@@ -44,7 +44,7 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
 #include <docsh.hxx>
 
 

@@ -47,7 +47,6 @@
 #include "swtypes.hxx"
 #include "swundo.hxx"
 #include "uitool.hxx"
-#include "undobj.hxx"
 #include "unomid.h"
 #include "view.hxx"
 #include "viewopt.hxx"

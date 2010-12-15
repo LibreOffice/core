@@ -40,7 +40,6 @@
 #include <IMark.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <globals.hrc>
 
 #include <comcore.hrc>

@@ -53,7 +53,8 @@
 #include <fchrfmt.hxx>
 #include <svtools/htmlcfg.hxx>
 #include <SwStyleNameMapper.hxx>
-#include <undobj.hxx>
+#include <SwRewriter.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 
 #include "view.hxx"

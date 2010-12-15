@@ -118,9 +118,6 @@ namespace sw {
     class UndoManager;
 }
 
-const String UNDO_ARG1("$1", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG2("$2", RTL_TEXTENCODING_ASCII_US);
-const String UNDO_ARG3("$3", RTL_TEXTENCODING_ASCII_US);
 
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
 SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )

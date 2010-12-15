@@ -53,7 +53,6 @@
 #include <ndtxt.hxx>
 #include <errhdl.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
 #include <txttxmrk.hxx>
 #include <edimp.hxx>
 #include <tox.hxx>

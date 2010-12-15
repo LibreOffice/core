@@ -52,7 +52,7 @@
 #include <pamtyp.hxx>
 #include <swundo.hxx>
 #include <crsskip.hxx>
-#include <undobj.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;

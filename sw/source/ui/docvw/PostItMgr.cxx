@@ -59,15 +59,11 @@
 #include <redline.hxx>
 #include <docary.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <tools/color.hxx>
 
 #include <swmodule.hxx>
 #include <annotation.hrc>
 #include "cmdid.h"
-
-#include <SwRewriter.hxx>
-#include <undobj.hxx>
 
 #include <sfx2/request.hxx>
 #include <sfx2/event.hxx>

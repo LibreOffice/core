@@ -133,7 +133,6 @@
 // #109590#
 #include <swcrsr.hxx>
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
 #include <globals.hrc>
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>

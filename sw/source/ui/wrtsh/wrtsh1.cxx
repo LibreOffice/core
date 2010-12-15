@@ -101,7 +101,6 @@
 // -> #111827#
 #include <SwRewriter.hxx>
 #include <comcore.hrc>
-#include <undobj.hxx>
 // <- #111827#
 
 #include <toolkit/helper/vclunohelper.hxx>
