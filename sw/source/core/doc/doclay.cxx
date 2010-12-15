@@ -2314,16 +2314,24 @@ SwRootFrm *SwDoc::GetCurrentLayout(){
         return GetCurrentViewShell()->GetLayout();
     return 0;
 }
-std::set<SwRootFrm*> SwDoc::GetAllLayouts(){
+
+std::set<SwRootFrm*> SwDoc::GetAllLayouts()
+{
     std::set<SwRootFrm*> aAllLayouts;
     ViewShell *pStart = GetCurrentViewShell();
     ViewShell *pTemp = pStart;
-    do {
-        if (pTemp->GetLayout()) {
-            aAllLayouts.insert(pTemp->GetLayout());
-            pTemp = (ViewShell*)pTemp->GetNext();
-        }
-    } while(pTemp!=pStart);
+    if ( pTemp )
+    {
+        do
+        {
+            if (pTemp->GetLayout())
+            {
+                aAllLayouts.insert(pTemp->GetLayout());
+                pTemp = (ViewShell*)pTemp->GetNext();
+            }
+        } while(pTemp!=pStart);
+    }
+
     return aAllLayouts;
 }//swmod 070825
 
