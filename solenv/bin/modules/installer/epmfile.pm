@@ -405,12 +405,12 @@ sub create_epm_header
     {
         if ( $installer::globals::iswindowsbuild )
         {
-            $licensefilename = "license_$searchlanguage.txt";
+            $licensefilename = "license.txt"; # _$searchlanguage.txt";
             $readmefilename = "readme_$searchlanguage.txt";
         }
         else
         {
-            $licensefilename = "LICENSE_$searchlanguage";
+            $licensefilename = "LICENSE"; # _$searchlanguage";
             $readmefilename = "README_$searchlanguage";
         }
     }

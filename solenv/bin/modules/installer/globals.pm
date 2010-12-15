@@ -190,7 +190,7 @@ BEGIN
     %alllangmodules = ();
     $englishlicenseset = 0;
     $englishlicense = "";
-    $englishsolarislicensename = "LICENSE_en-US";
+    $englishsolarislicensename = "LICENSE"; # _en-US";
     $solarisdontcompress = 0;
     $patharray = "";
 
