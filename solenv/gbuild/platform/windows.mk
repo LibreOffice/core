@@ -199,7 +199,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
+		$(filter -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
 		$(3) \
@@ -242,7 +242,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(4) $(5) \
+		$(filter -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
 		$(3) \
@@ -309,9 +309,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
 	E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
-	$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+rm $(1).obj
+$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
 
@@ -349,9 +350,10 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(dir $(3)) \
 		$(6) \
 		-c $(3) \
-		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1)" && \
+		-Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fo$(1).obj" && \
 	E=$$($$C) || (R=$$? && echo "$$C" && echo "$$E" 1>&2 && $$(exit $$R)))
-	$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+rm $(1).obj
+$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
 
 endef
 
