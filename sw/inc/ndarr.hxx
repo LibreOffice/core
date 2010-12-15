@@ -30,6 +30,8 @@
 
 #include <vector>
 
+#include <boost/utility.hpp>
+
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 
 #include <svl/svarray.hxx>
@@ -82,7 +84,9 @@ typedef BOOL (*FnForEach_SwNodes)( const SwNodePtr&, void* pArgs );
 
 SV_DECL_PTRARR_SORT( SwOutlineNodes, SwNodePtr, 0, 10 )
 
-class SW_DLLPUBLIC SwNodes: private BigPtrArray
+class SW_DLLPUBLIC SwNodes
+    : private BigPtrArray
+    , private ::boost::noncopyable
 {
     friend class SwDoc;
     friend class SwNode;
@@ -129,7 +133,7 @@ class SW_DLLPUBLIC SwNodes: private BigPtrArray
                     BOOL bNewFrms = TRUE, BOOL bTblInsDummyNode = FALSE ) const;
     void _DelDummyNodes( const SwNodeRange& rRg );
 
-public:
+protected:
     SwNodes( SwDoc* pDoc );
 
 public:
@@ -342,11 +346,6 @@ public:
     SwNode * DocumentSectionStartNode(SwNode * pNode) const;
     SwNode * DocumentSectionEndNode(SwNode * pNode) const;
     //<- #112139#
-private:
-    // privater Constructor, weil nie kopiert werden darf !!
-    SwNodes( const SwNodes & rNodes );
 };
-
-
 
 #endif
