@@ -75,12 +75,14 @@ void SwEditShell::GCAttr()
 //              Sonst Probleme im MouseBut.DownHdl - Bug 35562
 //  StartAllAction();
     FOREACHPAM_START(this)
-        SwTxtNode *pTxtNode;
         if ( !PCURCRSR->HasMark() )
         {
-            if( 0 != (pTxtNode = GetDoc()->GetNodes()[
-                                PCURCRSR->GetPoint()->nNode]->GetTxtNode()))
+            SwTxtNode *const pTxtNode =
+                PCURCRSR->GetPoint()->nNode.GetNode().GetTxtNode();
+            if (pTxtNode)
+            {
                 pTxtNode->GCAttr();
+            }
         }
         else
         {

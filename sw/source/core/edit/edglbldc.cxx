@@ -165,7 +165,7 @@ BOOL SwEditShell::InsertGlobalDocContent( const SwGlblDocContent& rInsPos,
 
     BOOL bEndUndo = FALSE;
     SwDoc* pMyDoc = GetDoc();
-    SwTxtNode* pTxtNd = pMyDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( pTxtNd )
         rPos.nContent.Assign( pTxtNd, 0 );
     else
@@ -371,7 +371,7 @@ BOOL SwEditShell::GotoGlobalDocContent( const SwGlblDocContent& rPos )
     rCrsrPos.nNode = rPos.GetDocPos();
 
     SwDoc* pMyDoc = GetDoc();
-    SwCntntNode* pCNd = pMyDoc->GetNodes()[ rCrsrPos.nNode ]->GetCntntNode();
+    SwCntntNode * pCNd = rCrsrPos.nNode.GetNode().GetCntntNode();
     if( !pCNd )
         pCNd = pMyDoc->GetNodes().GoNext( &rCrsrPos.nNode );
 

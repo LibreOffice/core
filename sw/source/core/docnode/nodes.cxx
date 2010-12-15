@@ -1464,8 +1464,7 @@ USHORT SwNodes::GetSectionLevel(const SwNodeIndex &rIdx) const {
      * Keine Rekursion! - hier wird das SwNode::GetSectionLevel
      * aufgerufen
      */
-    return (*this)[rIdx]->GetSectionLevel();
-
+    return rIdx.GetNode().GetSectionLevel();
 }
 
 void SwNodes::GoStartOfSection(SwNodeIndex *pIdx) const
@@ -1793,8 +1792,8 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
 
     SwNodeIndex aEndIdx( pEnd->nNode );
     SwNodeIndex aSttIdx( pStt->nNode );
-    SwTxtNode* const pSrcNd = (*this)[ aSttIdx ]->GetTxtNode();
-    SwTxtNode* pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
+    SwTxtNode *const pSrcNd = aSttIdx.GetNode().GetTxtNode();
+    SwTxtNode * pDestNd = rPos.nNode.GetNode().GetTxtNode();
     BOOL bSplitDestNd = TRUE;
     BOOL bCopyCollFmt = pDestNd && !pDestNd->GetTxt().Len();
 
@@ -1930,7 +1929,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         bSplitDestNd = TRUE;
     }
 
-    SwTxtNode* const pEndSrcNd = (*this)[ aEndIdx ]->GetTxtNode();
+    SwTxtNode* const pEndSrcNd = aEndIdx.GetNode().GetTxtNode();
     if ( pEndSrcNd )
     {
         {
@@ -1949,7 +1948,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
             }
             else
             {
-                pDestNd = rNodes[ rPos.nNode ]->GetTxtNode();
+                pDestNd = rPos.nNode.GetNode().GetTxtNode();
             }
 
             if( pDestNd && pEnd->nContent.GetIndex() )
@@ -2004,7 +2003,7 @@ void SwNodes::MoveRange( SwPaM & rPam, SwPosition & rPos, SwNodes& rNodes )
         ASSERT( bSuccess, "Move() - no ContentNode here" );
         (void) bSuccess;
     }
-    pStt->nContent.Assign( (*this)[ pStt->nNode ]->GetCntntNode(),
+    pStt->nContent.Assign( pStt->nNode.GetNode().GetCntntNode(),
                             pStt->nContent.GetIndex() );
     // der PaM wird korrigiert, denn falls ueber Nodegrenzen verschoben
     // wurde, so stehen sie in unterschielichen Nodes. Auch die Selektion
@@ -2049,7 +2048,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     SwNodeRange aRg( rRange );
 
     // "einfache" StartNodes oder EndNodes ueberspringen
-    while( ND_STARTNODE == (pAktNode = (*this)[ aRg.aStart ])->GetNodeType()
+    while( ND_STARTNODE == (pAktNode = & aRg.aStart.GetNode())->GetNodeType()
             || ( pAktNode->IsEndNode() &&
                 !pAktNode->pStartOfSection->IsSectionNode() ) )
         aRg.aStart++;
@@ -2061,7 +2060,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
     // special section nodes and then one before the first.
     if (aRg.aEnd.GetNode().StartOfSectionIndex() != 0)
     {
-        while( (( pAktNode = (*this)[ aRg.aEnd ])->GetStartNode() &&
+        while( ((pAktNode = & aRg.aEnd.GetNode())->GetStartNode() &&
                 !pAktNode->IsSectionNode() ) ||
                 ( pAktNode->IsEndNode() &&
                 ND_STARTNODE == pAktNode->pStartOfSection->GetNodeType()) )
@@ -2214,7 +2213,7 @@ void SwNodes::_CopyNodes( const SwNodeRange& rRange,
                 // dann muss an der akt. InsPos auch ein SectionNode
                 // (Start/Ende) stehen; dann diesen ueberspringen.
                 // Andernfalls nicht weiter beachten.
-                SwNode* pTmpNd = pDoc->GetNodes()[ aInsPos ];
+                SwNode *const pTmpNd = & aInsPos.GetNode();
                 if( pTmpNd->IsSectionNode() ||
                     pTmpNd->StartOfSectionNode()->IsSectionNode() )
                     aInsPos++;  // ueberspringen
@@ -2289,7 +2288,8 @@ SwCntntNode* SwNodes::GoNextSection( SwNodeIndex * pIdx,
     const SwNode* pNd;
     while( aTmp < Count() - 1 )
     {
-        if( ND_SECTIONNODE == ( pNd = (*this)[aTmp])->GetNodeType() )
+        pNd = & aTmp.GetNode();
+        if (ND_SECTIONNODE == pNd->GetNodeType())
         {
             const SwSection& rSect = ((SwSectionNode*)pNd)->GetSection();
             if( (bSkipHidden && rSect.IsHiddenFlag()) ||
@@ -2341,7 +2341,8 @@ SwCntntNode* SwNodes::GoPrevSection( SwNodeIndex * pIdx,
     const SwNode* pNd;
     while( aTmp > 0 )
     {
-        if( ND_ENDNODE == ( pNd = (*this)[aTmp])->GetNodeType() )
+        pNd = & aTmp.GetNode();
+        if (ND_ENDNODE == pNd->GetNodeType())
         {
             if( pNd->pStartOfSection->IsSectionNode() )
             {

@@ -217,7 +217,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                 // <--
                 //Wenn in einem der Nodes noch ein Crsr angemeldet ist, muss das
                 //ParkCrsr einer (beliebigen) Shell gerufen werden.
-                pNode = pDoc->GetNodes()[ aIdx ];
+                pNode = & aIdx.GetNode();
                 sal_uInt32 nEnd = pNode->EndOfSectionIndex();
                 while ( aIdx < nEnd )
                 {
@@ -236,7 +236,7 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
                         } while ( aIter++ );
                     }
                     aIdx++;
-                    pNode = pDoc->GetNodes()[ aIdx ];
+                    pNode = & aIdx.GetNode();
                 }
             }
             rCnt.SetNewCntntIdx( (const SwNodeIndex*)0 );

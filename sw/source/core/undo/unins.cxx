@@ -317,8 +317,8 @@ void SwUndoInsert::Undo( SwUndoIter& rUndoIter )
         rUndoIter.pAktPam->DeleteMark();
 
         IterPt(rUndoIter)->nNode = nNd;
-        IterPt(rUndoIter)->nContent.Assign( pTmpDoc->GetNodes()[
-                IterPt(rUndoIter)->nNode ]->GetCntntNode(), nCnt );
+        IterPt(rUndoIter)->nContent.Assign(
+                IterPt(rUndoIter)->nNode.GetNode().GetCntntNode(), nCnt );
         // SPoint und GetMark auf der gleichen Position
     }
 
@@ -358,7 +358,8 @@ void SwUndoInsert::Redo( SwUndoIter& rUndoIter )
     else
     {
         pPam->GetPoint()->nNode = nNode;
-        SwCntntNode* pCNd = pTmpDoc->GetNodes()[ pPam->GetPoint()->nNode ]->GetCntntNode();
+        SwCntntNode *const pCNd =
+            pPam->GetPoint()->nNode.GetNode().GetCntntNode();
         pPam->GetPoint()->nContent.Assign( pCNd, nCntnt );
 
         if( nLen )

@@ -141,9 +141,8 @@ USHORT SwDoc::GetTOIKeys( SwTOIKeyType eTyp, SvStringsSort& rArr ) const
 USHORT SwDoc::GetCurTOXMark( const SwPosition& rPos,
                                 SwTOXMarks& rArr ) const
 {
-    // suche an der Position rPos nach allen SwTOXMark's
-    SwTxtNode* pTxtNd = GetNodes()[ rPos.nNode ]->GetTxtNode();
-    // kein TextNode oder kein HintsArray vorhanden ??
+    // search on Position rPos for all SwTOXMarks
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
     if( !pTxtNd || !pTxtNd->GetpSwpHints() )
         return 0;
 

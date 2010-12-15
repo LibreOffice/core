@@ -164,8 +164,8 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
         // 1. den Nachfolger nehmen
         // 2. den Vorgaenger
 
-        SwNode *pNd;
-        switch( ( pNd = (*this)[aTmp] )->GetNodeType() )
+        SwNode * pNd = & aTmp.GetNode();
+        switch (pNd->GetNodeType())
         {
         case ND_TABLENODE:
             ((SwTableNode*)pNd)->MakeFrms( aIdx );

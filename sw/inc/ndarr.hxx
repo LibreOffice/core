@@ -145,10 +145,6 @@ public:
     SwNodePtr operator[]( ULONG n ) const
         { return (SwNodePtr)BigPtrArray::operator[] ( n ); }
 
-//JP 29.09.97: impl. steht im ndindex.hxx - sollte moeglichst bald auf die
-//              neue Schnittstelle angepasst werden
-    inline SwNodePtr operator[]( const SwNodeIndex& rIdx ) const;
-
     ULONG Count() const { return BigPtrArray::Count(); }
     void ForEach( FnForEach_SwNodes fnForEach, void* pArgs = 0 )
     {

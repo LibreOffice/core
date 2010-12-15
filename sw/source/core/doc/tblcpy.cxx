@@ -628,8 +628,8 @@ void lcl_CpyBox( const SwTable& rCpyTbl, const SwTableBox* pCpyBox,
     if( pUndo )
         pUndo->AddBoxAfter( *pDstBox, aInsIdx, bDelCntnt );
 
-    // Ueberschrift
-    SwTxtNode* pTxtNd = pDoc->GetNodes()[ aSavePos ]->GetTxtNode();
+    // heading
+    SwTxtNode *const pTxtNd = aSavePos.GetNode().GetTxtNode();
     if( pTxtNd )
     {
         USHORT nPoolId = pTxtNd->GetTxtColl()->GetPoolFmtId();

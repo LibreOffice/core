@@ -1433,7 +1433,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
                         //last node information is only necessary to know for the last TextNode
                         SwNodeIndex aTmp( pAPos->nNode );
                         ++aTmp;//goto next node
-                        while( rNodes[aTmp ]->IsEndNode() )
+                        while (aTmp.GetNode().IsEndNode())
                         {
                             if( aTmp == rNodes.GetEndOfContent().GetIndex() )
                             {

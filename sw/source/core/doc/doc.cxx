@@ -793,10 +793,8 @@ bool SwDoc::SplitNode( const SwPosition &rPos, bool bChkTableStart )
 
 bool SwDoc::AppendTxtNode( SwPosition& rPos )
 {
-    /*
-     * Neuen Node vor EndOfContent erzeugen.
-     */
-    SwTxtNode *pCurNode = GetNodes()[ rPos.nNode ]->GetTxtNode();
+    // create new node before EndOfContent
+    SwTxtNode * pCurNode = rPos.nNode.GetNode().GetTxtNode();
     if( !pCurNode )
     {
         // dann kann ja einer angelegt werden!

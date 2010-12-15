@@ -199,8 +199,8 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     {
         nNdPgPos = pPos->nNode.GetIndex();
         nCntPos = pPos->nContent.GetIndex();
-        SwTxtNode *pTxtNd = pDoc->GetNodes()[ pPos->nNode ]->GetTxtNode();
-        ASSERT( pTxtNd, "Kein Textnode gefunden" );
+        SwTxtNode *const pTxtNd = pPos->nNode.GetNode().GetTxtNode();
+        OSL_ENSURE(pTxtNd, "no Textnode");
         SwTxtFlyCnt* const pAttr = static_cast<SwTxtFlyCnt*>(
             pTxtNd->GetTxtAttrForCharAt( nCntPos, RES_TXTATR_FLYCNT ) );
         // Attribut steht noch im TextNode, loeschen

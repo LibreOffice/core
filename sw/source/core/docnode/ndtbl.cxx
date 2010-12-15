@@ -1658,7 +1658,7 @@ BOOL SwNodes::TableToText( const SwNodeRange& rRange, sal_Unicode cCh,
     // ist eine Tabelle selektiert ?
     SwTableNode* pTblNd;
     if( rRange.aStart.GetIndex() >= rRange.aEnd.GetIndex() ||
-        0 == ( pTblNd = (*this)[ rRange.aStart ]->GetTableNode()) ||
+        0 == ( pTblNd = rRange.aStart.GetNode().GetTableNode()) ||
         &rRange.aEnd.GetNode() != pTblNd->EndOfSectionNode() )
         return FALSE;
 
@@ -4275,7 +4275,7 @@ void SwDoc::SetTblBoxFormulaAttrs( SwTableBox& rBox, const SfxItemSet& rSet )
 void SwDoc::ClearBoxNumAttrs( const SwNodeIndex& rNode )
 {
     SwStartNode* pSttNd;
-    if( 0 != ( pSttNd = GetNodes()[ rNode ]->
+    if( 0 != ( pSttNd = rNode.GetNode().
                                 FindSttNodeByType( SwTableBoxStartNode )) &&
         2 == pSttNd->EndOfSectionIndex() - pSttNd->GetIndex() )
     {
@@ -4327,7 +4327,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
             ? pCpyTbl->GetTableNode()
             : rBoxes[ 0 ]->GetSttNd()->FindTableNode();
 
-    SwTableNode* pInsTblNd = GetNodes()[ rInsPos.nNode ]->FindTableNode();
+    SwTableNode * pInsTblNd = rInsPos.nNode.GetNode().FindTableNode();
 
     bool const bUndo( GetIDocumentUndoRedo().DoesUndo() );
     if( !pCpyTbl && !pInsTblNd )

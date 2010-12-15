@@ -79,7 +79,8 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
             pHistory->CopyFmtAttr( *pEndTxtNd->GetpSwAttrSet(), nEndNode );
     }
 
-    if( 0 != (pTxtNd = rRange.GetDoc()->GetNodes()[ rMvPos.nNode ]->GetTxtNode() ))
+    pTxtNd = rMvPos.nNode.GetNode().GetTxtNode();
+    if (0 != pTxtNd)
     {
         pHistory->Add( pTxtNd->GetTxtColl(), nMvDestNode, ND_TEXTNODE );
         if ( pTxtNd->GetpSwpHints() )

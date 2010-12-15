@@ -754,8 +754,8 @@ void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
     if( nSttCntnt )
         ++nTblNd;       // Node wurde vorher gesplittet
     SwNodeIndex aIdx( rDoc.GetNodes(), nTblNd );
-    SwTableNode* pTNd = rDoc.GetNodes()[ aIdx ]->GetTableNode();
-    ASSERT( pTNd, "keinen Tabellen-Node gefunden" );
+    SwTableNode *const pTNd = aIdx.GetNode().GetTableNode();
+    OSL_ENSURE( pTNd, "SwUndoTxtToTbl: no TableNode" );
 
     RemoveIdxFromSection( rDoc, nTblNd );
 
@@ -789,7 +789,7 @@ void SwUndoTxtToTbl::Undo( SwUndoIter& rUndoIter )
     if( nSttCntnt )
     {
         pPos->nNode = nTblNd;
-        pPos->nContent.Assign( rDoc.GetNodes()[ pPos->nNode ]->GetCntntNode(), 0 );
+        pPos->nContent.Assign(pPos->nNode.GetNode().GetCntntNode(), 0);
         if( rUndoIter.pAktPam->Move( fnMoveBackward, fnGoCntnt))
         {
             SwNodeIndex& rIdx = rUndoIter.pAktPam->GetPoint()->nNode;
@@ -1772,8 +1772,8 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
     SwDoc& rDoc = rUndoIter.GetDoc();
     SwNodeIndex aIdx( rDoc.GetNodes(), nSttNode );
 
-    SwTableNode* pTblNd = rDoc.GetNodes()[ aIdx ]->GetTableNode();
-    ASSERT( pTblNd, "kein TabellenNode" );
+    SwTableNode *const pTblNd = aIdx.GetNode().GetTableNode();
+    OSL_ENSURE( pTblNd, "SwUndoTblNdsChg: no TableNode" );
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
@@ -2027,8 +2027,8 @@ void SwUndoTblMerge::Undo( SwUndoIter& rUndoIter )
     SwDoc& rDoc = rUndoIter.GetDoc();
     SwNodeIndex aIdx( rDoc.GetNodes(), nTblNode );
 
-    SwTableNode* pTblNd = rDoc.GetNodes()[ aIdx ]->GetTableNode();
-    ASSERT( pTblNd, "kein TabellenNode" );
+    SwTableNode *const pTblNd = aIdx.GetNode().GetTableNode();
+    OSL_ENSURE( pTblNd, "SwUndoTblMerge: no TableNode" );
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
@@ -2412,7 +2412,7 @@ void SwUndoTblNumFmt::Redo( SwUndoIter& rIter )
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nNode;
 
-    SwNode* pNd = rDoc.GetNodes()[ pPam->GetPoint()->nNode ];
+    SwNode * pNd = & pPam->GetPoint()->nNode.GetNode();
     SwStartNode* pSttNd = pNd->FindSttNodeByType( SwTableBoxStartNode );
     ASSERT( pSttNd, "ohne StartNode kein TabellenBox" );
     SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().GetTblBox(

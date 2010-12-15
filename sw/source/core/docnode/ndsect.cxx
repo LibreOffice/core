@@ -1119,7 +1119,7 @@ void SwSectionNode::MakeFrms(const SwNodeIndex & rIdx )
                 if( 0 == ( pCNd = rNds.GoPrevSection( &aIdx, TRUE, FALSE )) )
                     return ;
             }
-            pCNd = rNds[ aIdx ]->GetCntntNode();
+            pCNd = aIdx.GetNode().GetCntntNode();
             pCNd->MakeFrms( (SwCntntNode&)rIdx.GetNode() );
         }
         else

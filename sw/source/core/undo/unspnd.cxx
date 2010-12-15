@@ -57,8 +57,8 @@ SwUndoSplitNode::SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos,
         nCntnt( rPos.nContent.GetIndex() ),
         bTblFlag( FALSE ), bChkTblStt( bChkTable )
 {
-    SwTxtNode* pTxtNd = pDoc->GetNodes()[ rPos.nNode ]->GetTxtNode();
-    ASSERT( pTxtNd, "nur beim TextNode rufen!" );
+    SwTxtNode *const pTxtNd = rPos.nNode.GetNode().GetTxtNode();
+    OSL_ENSURE(pTxtNd, "SwUndoSplitNode: TextNode expected!");
     if( pTxtNd->GetpSwpHints() )
     {
         pHistory = new SwHistory;

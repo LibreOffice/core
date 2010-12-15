@@ -80,8 +80,9 @@ namespace
     {
         SwPosition& rStart = pField->GetMarkStart();
         SwPosition& rEnd = pField->GetMarkEnd();
-        SwTxtNode const * const pStartTxtNode = io_pDoc->GetNodes()[rStart.nNode]->GetTxtNode();
-        SwTxtNode const * const pEndTxtNode = io_pDoc->GetNodes()[rEnd.nNode]->GetTxtNode();
+        SwTxtNode const*const pStartTxtNode =
+            rStart.nNode.GetNode().GetTxtNode();
+        SwTxtNode const*const pEndTxtNode = rEnd.nNode.GetNode().GetTxtNode();
         const sal_Unicode ch_start=pStartTxtNode->GetTxt().GetChar(rStart.nContent.GetIndex());
         const sal_Unicode ch_end=pEndTxtNode->GetTxt().GetChar(rEnd.nContent.GetIndex()-1);
         SwPaM aStartPaM(rStart);

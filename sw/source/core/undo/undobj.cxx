@@ -589,7 +589,8 @@ void SwUndoSaveCntnt::DelCntntIndex( const SwPosition& rMark,
                     {
                         if( !pHistory )
                             pHistory = new SwHistory;
-                        SwTxtNode* pTxtNd = pDoc->GetNodes()[ pAPos->nNode]->GetTxtNode();
+                        SwTxtNode *const pTxtNd =
+                            pAPos->nNode.GetNode().GetTxtNode();
                         SwTxtAttr* const pFlyHnt = pTxtNd->GetTxtAttrForCharAt(
                             pAPos->nContent.GetIndex());
                         ASSERT( pFlyHnt, "kein FlyAttribut" );
@@ -870,8 +871,8 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx,
     {
         // ueberpruefe, ob der Inhalt an der alten Position steht
         SwNodeIndex aSttIdx( pDoc->GetNodes(), nStartPos );
-        ASSERT( !pDoc->GetNodes()[ aSttIdx ]->GetCntntNode(),
-                "Position in irgendeiner Section" );
+        OSL_ENSURE(!aSttIdx.GetNode().GetCntntNode(),
+                "RestoreSection(): Position on content node");
 
         // move den Inhalt aus dem UndoNodes-Array in den Fly
         SwStartNode* pSttNd = pDoc->GetNodes().MakeEmptySection( aSttIdx,

@@ -1002,7 +1002,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetFmtAttr(const SwPosition& rPos,
     const SfxPoolItem *pItem = GetStackAttr(rPos, nWhich);
     if (!pItem)
     {
-        const SwCntntNode *pNd = pDoc->GetNodes()[ rPos.nNode ]->GetCntntNode();
+        SwCntntNode const*const pNd = rPos.nNode.GetNode().GetCntntNode();
         if (!pNd)
             pItem = &pDoc->GetAttrPool().GetDefaultItem(nWhich);
         else
@@ -3604,8 +3604,7 @@ void wwSectionManager::InsertSegments()
             }
 
             const SwPosition* pPos  = aSectPaM.GetPoint();
-            const SwTxtNode* pSttNd =
-                mrReader.rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+            SwTxtNode const*const pSttNd = pPos->nNode.GetNode().GetTxtNode();
             const SwTableNode* pTableNd = pSttNd ? pSttNd->FindTableNode() : 0;
             if (pTableNd)
             {
@@ -4020,8 +4019,7 @@ ULONG SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
         // evtl. Zeilen eingefuegt / aufgebrochen werden
         //
         const SwPosition* pPos = pPaM->GetPoint();
-        const SwTxtNode* pSttNd =
-            rDoc.GetNodes()[ pPos->nNode ]->GetTxtNode();
+        SwTxtNode const*const pSttNd = pPos->nNode.GetNode().GetTxtNode();
 
         USHORT nCntPos = pPos->nContent.GetIndex();
 
