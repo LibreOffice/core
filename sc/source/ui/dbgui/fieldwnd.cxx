@@ -1199,8 +1199,6 @@ IMPL_LINK(ScDPRowFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
 
 //=============================================================================
 
-#if NEW_SELECT_FIELD
-
 ScDPSelectFieldControl::ScDPSelectFieldControl(
         ScDPLayoutDlg* pDialog, const ResId& rResId, FixedText* pCaption) :
     ScDPHorFieldControl(pDialog, rResId, pCaption)
@@ -1216,121 +1214,6 @@ ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
 {
     return TYPE_SELECT;
 }
-
-#else
-
-ScDPSelectFieldControl::ScDPSelectFieldControl(
-    ScDPLayoutDlg* pDialog, const ResId& rResId, const String& rName ) :
-    ScDPFieldControlBase( pDialog, rResId, NULL )
-{
-    SetName(rName);
-}
-
-ScDPSelectFieldControl::~ScDPSelectFieldControl()
-{
-}
-
-Point ScDPSelectFieldControl::GetFieldPosition( size_t nIndex )
-{
-    Point aPos;
-    long nFldW = FIELD_BTN_WIDTH;
-    long nFldH = FIELD_BTN_HEIGHT;
-    long nSpace = SELECT_FIELD_BTN_SPACE;
-
-    aPos.X() = (nFldW + nSpace) * (nIndex / LINE_SIZE);
-    aPos.Y() = (nFldH + nSpace) * (nIndex % LINE_SIZE);
-    return aPos;
-}
-
-Size ScDPSelectFieldControl::GetFieldSize() const
-{
-    return Size(FIELD_BTN_WIDTH, FIELD_BTN_HEIGHT);
-}
-
-bool ScDPSelectFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
-{
-    rnIndex = INVALID_INDEX;
-    long nFldW = FIELD_BTN_WIDTH;
-    long nFldH = FIELD_BTN_HEIGHT;
-    long nSpace = SELECT_FIELD_BTN_SPACE;
-    if( (rPos.X() >= 0) && (rPos.Y() >= 0) )
-    {
-        size_t nRow = rPos.Y() / (nFldH + nSpace);
-        size_t nCol = rPos.X() / (nFldW + nSpace);
-        // is not between controls?
-        if( (rPos.Y() % (nFldH + nSpace) < nFldH) && (rPos.X() % (nFldW + nSpace) < nFldW) )
-            rnIndex = nCol * LINE_SIZE + nRow;
-    }
-    return IsValidIndex( rnIndex );
-}
-
-void ScDPSelectFieldControl::Redraw()
-{
-    const StyleSettings& rStyleSet = GetSettings().GetStyleSettings();
-    Color aFaceColor = rStyleSet.GetFaceColor();
-    Color aWinColor = rStyleSet.GetWindowColor();
-    Color aTextColor = rStyleSet.GetButtonTextColor();
-    Color aWinTextColor = rStyleSet.GetWindowTextColor();
-
-    VirtualDevice   aVirDev;
-    // #i97623# VirtualDevice is always LTR while other windows derive direction from parent
-    aVirDev.EnableRTL( IsRTLEnabled() );
-    aVirDev.SetMapMode( MAP_PIXEL );
-
-    Point           aPos0;
-    Size            aSize( GetSizePixel() );
-    Font            aFont( GetFont() );         // Font vom Window
-    aFont.SetTransparent( TRUE );
-    aVirDev.SetFont( aFont );
-    aVirDev.SetOutputSizePixel( aSize );
-
-    aVirDev.SetLineColor();
-    aVirDev.SetFillColor( aFaceColor );
-    aVirDev.DrawRect( Rectangle(aPos0, aSize) );
-
-    size_t nFieldSelected = GetSelectedField();
-    FieldNames& rFields = GetFieldNames();
-
-    Rectangle aFieldRect( aPos0, GetFieldSize() );
-    for( size_t nIx = 0; nIx < rFields.size(); ++nIx )
-    {
-        aFieldRect.SetPos( GetFieldPosition( nIx ) );
-        bool bFocus = HasFocus() && (nIx == nFieldSelected);
-        DrawField( aVirDev, aFieldRect, rFields[ nIx ], bFocus );
-    }
-
-    DrawBitmap( aPos0, aVirDev.GetBitmap( aPos0, aSize ) );
-    DrawInvertSelection();
-    UpdateStyle();
-}
-
-//-------------------------------------------------------------------
-
-bool ScDPSelectFieldControl::IsValidIndex( size_t nIndex ) const
-{
-    return nIndex < PAGE_SIZE;
-}
-
-size_t ScDPSelectFieldControl::CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const
-{
-    size_t nNewField = GetSelectedField();
-    nNewField += static_cast<SCsCOLROW>(nDX) * LINE_SIZE + nDY;
-    return IsExistingIndex( nNewField ) ? nNewField : GetSelectedField();
-}
-
-//-------------------------------------------------------------------
-
-String ScDPSelectFieldControl::GetDescription() const
-{
-    return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
-}
-
-ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
-{
-    return TYPE_SELECT;
-}
-
-#endif
 
 //=============================================================================
 

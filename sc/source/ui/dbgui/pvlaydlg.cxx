@@ -1358,9 +1358,11 @@ void ScDPLayoutDlg::CalcWndSizes()
               aWndPage.GetPosPixel().Y()));
 
     // selection area
+    long nLineSize = 8; // number of fields per column.
+    long nH = OUTER_MARGIN_VER + nLineSize* nFldH + nLineSize * ROW_FIELD_BTN_GAP;
+    nH += GetSettings().GetStyleSettings().GetScrollBarSize() + OUTER_MARGIN_VER;
     aWndSelect.SetSizePixel(
-        Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10,
-             LINE_SIZE * nFldH + (LINE_SIZE - 1) * ROW_FIELD_BTN_GAP));
+        Size(2 * nFldW + ROW_FIELD_BTN_GAP + 10, nH));
 
     aRectPage   = Rectangle( aWndPage.GetPosPixel(),    aWndPage.GetSizePixel() );
     aRectRow    = Rectangle( aWndRow.GetPosPixel(),     aWndRow.GetSizePixel() );

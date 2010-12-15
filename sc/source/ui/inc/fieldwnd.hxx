@@ -37,12 +37,6 @@
 #include <vcl/scrbar.hxx>
 #include <cppuhelper/weakref.hxx>
 
-#define NEW_SELECT_FIELD 1
-
-#define PAGE_SIZE   16      // count of visible fields for scrollbar
-#define LINE_SIZE   8       // count of fields per column for scrollbar
-#define MAX_FIELDS  8       // maximum count of fields for row/col/data area
-
 class ScDPLayoutDlg;
 class ScAccessibleDataPilotControl;
 
@@ -341,8 +335,6 @@ private:
 
 // ============================================================================
 
-#if NEW_SELECT_FIELD
-
 class ScDPSelectFieldControl : public ScDPHorFieldControl
 {
 public:
@@ -352,35 +344,6 @@ public:
 
     virtual ScDPFieldType GetFieldType() const;
 };
-
-#else
-
-class ScDPSelectFieldControl : public ScDPFieldControlBase
-{
-public:
-    ScDPSelectFieldControl(
-        ScDPLayoutDlg* pDialog, const ResId& rResId, const String& aName );
-
-    virtual                 ~ScDPSelectFieldControl();
-
-    virtual void            CalcSize() {}
-    virtual bool            IsValidIndex( size_t nIndex ) const;
-    virtual Point           GetFieldPosition( size_t nIndex );
-    virtual Size            GetFieldSize() const;
-    virtual bool            GetFieldIndex( const Point& rPos, size_t& rnIndex );
-    virtual String          GetDescription() const;
-    virtual ScDPFieldType   GetFieldType() const;
-
-    virtual void ScrollToEnd() {}
-    virtual void ScrollToShowSelection() {}
-    virtual void ResetScrollBar() {}
-
-protected:
-    virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;
-    virtual size_t          GetDisplayPosition(size_t nIndex) const { return 0; }
-    virtual void            Redraw();
-};
-#endif
 
 // ============================================================================
 
