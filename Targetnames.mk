@@ -48,15 +48,16 @@ gb_Library_OOOLIBS :=\
 	basegfx \
 	cui \
 	drawinglayer \
+	editeng \
 	fwe \
 	fwi \
 	fwk \
 	fwl \
 	fwm \
-	go \
 	lng \
 	msfilter \
 	msword \
+	oox \
 	qstart_gtk \
 	sax \
 	sb \
