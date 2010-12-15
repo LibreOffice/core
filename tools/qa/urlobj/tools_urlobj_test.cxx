@@ -49,7 +49,7 @@
      // this is only demonstration code
      void urlobjTest_001()
      {
-        INetURLObject aUrl(rtl::OUString::createFromAscii("file://10.10.1.1/sampledir/sample.file"));
+        INetURLObject aUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("file://10.10.1.1/sampledir/sample.file")));
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://10.10.1.1/sampledir/sample.file")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
@@ -68,7 +68,7 @@
      void urlobjTest_002()
      {
         INetURLObject aUrl;
-        aUrl.setFSysPath(rtl::OUString::createFromAscii("\\\\137.65.170.24\\c$\\Img0001.jpg"), INetURLObject::FSYS_DETECT);
+        aUrl.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\\\137.65.170.24\\c$\\Img0001.jpg")), INetURLObject::FSYS_DETECT);
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://137.65.170.24/c$/Img0001.jpg")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
@@ -88,7 +88,7 @@
      void urlobjTest_003()
      {
         INetURLObject aUrl;
-        aUrl.setFSysPath(rtl::OUString::createFromAscii("\\\\hive-winxp-x86\\pmladek\\test2.odt"), INetURLObject::FSYS_DETECT);
+        aUrl.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\\\hive-winxp-x86\\pmladek\\test2.odt")), INetURLObject::FSYS_DETECT);
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://hive-winxp-x86/pmladek/test2.odt")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
@@ -103,7 +103,7 @@
 
      void urlobjTest_004()
      {
-        INetURLObject aUrl(rtl::OUString::createFromAscii("smb://10.10.1.1/sampledir/sample.file"));
+        INetURLObject aUrl(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("smb://10.10.1.1/sampledir/sample.file")));
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://10.10.1.1/sampledir/sample.file")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
@@ -122,7 +122,7 @@
      void urlobjTest_005()
      {
         INetURLObject aUrl;
-        aUrl.setFSysPath(rtl::OUString::createFromAscii("//137.65.170.24/c$/Img0001.jpg"), INetURLObject::FSYS_DETECT);
+        aUrl.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("//137.65.170.24/c$/Img0001.jpg")), INetURLObject::FSYS_DETECT);
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://137.65.170.24/c$/Img0001.jpg")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
@@ -142,7 +142,7 @@
      void urlobjTest_006()
      {
         INetURLObject aUrl;
-        aUrl.setFSysPath(rtl::OUString::createFromAscii("//hive-winxp-x86/pmladek/test2.odt"), INetURLObject::FSYS_DETECT);
+        aUrl.setFSysPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("//hive-winxp-x86/pmladek/test2.odt")), INetURLObject::FSYS_DETECT);
  #ifdef LINUX
         CPPUNIT_ASSERT(aUrl.GetMainURL(INetURLObject::NO_DECODE).compareToAscii("smb://hive-winxp-x86/pmladek/test2.odt")==0);
         CPPUNIT_ASSERT(aUrl.GetProtocol()==INET_PROT_SMB);
