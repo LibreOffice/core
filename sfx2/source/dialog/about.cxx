@@ -68,8 +68,6 @@ using namespace ::com::sun::star;
 #define SPACE_OFFSET    5
 #define SCROLL_TIMER    30
 
-#define WELCOME_URL     DEFINE_CONST_UNICODE( "http://www.openoffice.org/welcome/credits.html" )
-
 /** loads the application logo as used in the about dialog and impress slideshow pause screen */
 Image SfxApplication::GetApplicationLogo()
 {
