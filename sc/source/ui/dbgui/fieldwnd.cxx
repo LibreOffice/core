@@ -834,7 +834,7 @@ void ScDPHorFieldControl::CalcSize()
     mnFieldBtnRowCount = nTotalH / (FIELD_BTN_HEIGHT + ROW_FIELD_BTN_GAP);
     mnFieldBtnColCount = (nTotalW + ROW_FIELD_BTN_GAP) / (FIELD_BTN_WIDTH + ROW_FIELD_BTN_GAP);
 
-    maScroll.SetLineSize(mnFieldBtnRowCount);
+    maScroll.SetLineSize(1);
     maScroll.SetVisibleSize(mnFieldBtnColCount);
     maScroll.SetPageSize(mnFieldBtnColCount);
     maScroll.SetRange(Range(0, mnFieldBtnColCount));
