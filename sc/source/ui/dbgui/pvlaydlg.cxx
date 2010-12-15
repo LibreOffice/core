@@ -1460,8 +1460,6 @@ void ScDPLayoutDlg::UpdateSrcRange()
     aWndPage.ClearFields();
 
     aSelectArr.clear();
-    aSelectArr.resize(PAGE_SIZE);
-
     aRowArr.clear();
     aColArr.clear();
     aDataArr.clear();

@@ -166,7 +166,7 @@ private:
     ScDPFieldType           eLastActiveType;        /// Type of last active area.
     size_t                  nOffset;                /// Offset of first field in TYPE_SELECT area.
 
-    ScDPFuncDataVec         aSelectArr;  // holds instances for visible buttons only
+    ScDPFuncDataVec         aSelectArr;
     ScDPFuncDataVec         aPageArr;
     ScDPFuncDataVec         aColArr;
     ScDPFuncDataVec         aRowArr;

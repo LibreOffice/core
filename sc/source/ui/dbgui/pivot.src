@@ -89,19 +89,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     Control WND_SELECT
     {
         Pos = MAP_APPFONT ( 210 , 14 ) ;
-        Size = MAP_APPFONT ( 70 , 126 ) ;
+        Size = MAP_APPFONT ( 70 , 136 ) ;
         TabStop = TRUE ;
     };
     String STR_SELECT
     {
         Text [ en-US ] = "Selection area";
-    };
-    ScrollBar WND_HSCROLL
-    {
-        Pos = MAP_APPFONT ( 208 , 144 ) ;
-        Size = MAP_APPFONT ( 70 , 8 ) ;
-        HScroll = TRUE ;
-        TabStop = FALSE ;
     };
     FixedText FT_INFO
     {
