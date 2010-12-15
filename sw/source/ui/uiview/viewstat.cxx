@@ -156,8 +156,7 @@ void SwView::GetState(SfxItemSet &rSet)
             break;
             case SID_CLEARHISTORY:
             {
-                rSet.Put(SfxBoolItem(nWhich,
-                            pWrtShell->GetLastUndoInfo(0) != UNDO_EMPTY));
+                rSet.Put(SfxBoolItem(nWhich, pWrtShell->GetLastUndoInfo(0, 0)));
             }
             break;
             case SID_UNDO:

@@ -543,7 +543,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
         {
             case SID_UNDO:
             {
-                if (UNDO_EMPTY != rSh.GetLastUndoInfo(0))
+                if (rSh.GetLastUndoInfo(0, 0))
                 {
                     rSet.Put( SfxStringItem(nWhich,
                         rSh.GetDoString(SwWrtShell::UNDO)));
@@ -577,7 +577,7 @@ void SwBaseShell::StateUndo(SfxItemSet &rSet)
             }
 
             case SID_GETUNDOSTRINGS:
-                if (UNDO_EMPTY != rSh.GetLastUndoInfo(0))
+                if (rSh.GetLastUndoInfo(0, 0))
                 {
                     SfxStringListItem aStrLst( nWhich );
                     rSh.GetDoStrings( SwWrtShell::UNDO, aStrLst );

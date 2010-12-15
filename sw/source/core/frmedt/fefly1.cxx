@@ -768,11 +768,15 @@ const SwFrmFmt *SwFEShell::NewFlyFrm( const SfxItemSet& rSet, sal_Bool bAnchVali
                 // aufgezeichnet werden.
                 bool const bDoesUndo =
                     GetDoc()->GetIDocumentUndoRedo().DoesUndo();
+                SwUndoId nLastUndoId(UNDO_EMPTY);
                 if (bDoesUndo &&
-                    (UNDO_INSLAYFMT ==
-                     GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0)))
+                    GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0,
+                        & nLastUndoId))
                 {
-                    GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+                    if (UNDO_INSLAYFMT == nLastUndoId)
+                    {
+                        GetDoc()->GetIDocumentUndoRedo().DoUndo(false);
+                    }
                 }
 
                 ((SfxItemSet&)rSet).Put( *pOldAnchor );

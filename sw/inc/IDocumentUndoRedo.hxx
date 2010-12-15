@@ -146,9 +146,11 @@ public:
 
     /** Get Id and comment of last Undo action.
         @param o_pStr       if not 0, receives comment of last Undo action.
-        @return     Id of last Undo action, or UNDO_EMPTY if there is none.
+        @param o_pId        if not 0, receives Id of last Undo action.
+        @return     true if there is a Undo action, false if none
     */
-    virtual SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const = 0;
+    virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                SwUndoId *const o_pId) const = 0;
 
     /** Get comments of Undo actions.
         @return     comments of all top-level Undo actions.

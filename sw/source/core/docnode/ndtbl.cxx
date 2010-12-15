@@ -2380,7 +2380,9 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
         if( pUndo )
         {
             delete pUndo;
-            if (UNDO_REDLINE == GetIDocumentUndoRedo().GetLastUndoInfo(0))
+            SwUndoId nLastUndoId(UNDO_EMPTY);
+            if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
+                && (UNDO_REDLINE == nLastUndoId))
             {
                 SwUndoRedline *const pU = dynamic_cast<SwUndoRedline*>(
                         GetIDocumentUndoRedo().RemoveLastUndo(UNDO_REDLINE));

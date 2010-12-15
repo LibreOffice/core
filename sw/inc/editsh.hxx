@@ -533,7 +533,8 @@ public:
     // schliesst Klammerung der nUndoId, nicht vom UI benutzt
     SwUndoId EndUndo( SwUndoId eUndoId = UNDO_EMPTY, const SwRewriter * pRewriter = 0 );
 
-    SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const;
+    bool     GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                             SwUndoId *const o_pId) const;
     bool     GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
 

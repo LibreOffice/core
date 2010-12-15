@@ -850,11 +850,13 @@ IdAndName_t lcl_GetUndoIdAndName(const SwUndos & rUndos, sal_uInt16 nPos)
 }
 
 
-SwUndoId UndoManager::GetLastUndoInfo(::rtl::OUString *const o_pStr) const
+bool
+UndoManager::GetLastUndoInfo(
+        ::rtl::OUString *const o_pStr, SwUndoId *const o_pId) const
 {
     if (!m_nUndoPos)
     {
-        return UNDO_EMPTY;
+        return false;
     }
 
     IdAndName_t const idAndName(lcl_GetUndoIdAndName(*m_pUndos, m_nUndoPos-1));
@@ -863,8 +865,12 @@ SwUndoId UndoManager::GetLastUndoInfo(::rtl::OUString *const o_pStr) const
     {
         *o_pStr = idAndName.second;
     }
+    if (o_pId)
+    {
+        *o_pId = idAndName.first;
+    }
 
-    return idAndName.first;
+    return true;
 }
 
 
@@ -1069,7 +1075,8 @@ bool UndoManager::Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
 
 SwUndoId UndoManager::GetRepeatInfo(::rtl::OUString *const o_pStr) const
 {
-    SwUndoId const nRepeatId = GetLastUndoInfo(o_pStr);
+    SwUndoId nRepeatId(UNDO_EMPTY);
+    GetLastUndoInfo(o_pStr, & nRepeatId);
     if( REPEAT_START <= nRepeatId && REPEAT_END > nRepeatId )
     {
         return nRepeatId;

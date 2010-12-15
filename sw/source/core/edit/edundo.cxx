@@ -69,8 +69,8 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
-        SwUndoId const nLastUndoId =
-            GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0);
+        SwUndoId nLastUndoId(UNDO_EMPTY);
+        GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId);
         BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();

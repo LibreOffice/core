@@ -481,9 +481,13 @@ void SwWrtShell::NavigatorPaste( const NaviContentBookmark& rBkmk,
             // the undostack. Then the change of the section dont create
             // any undoobject. -  BUG 69145
             BOOL bDoesUndo = DoesUndo();
-            if (UNDO_INSSECTION != GetLastUndoInfo(0))
+            SwUndoId nLastUndoId(UNDO_EMPTY);
+            if (GetLastUndoInfo(0, & nLastUndoId))
             {
-                DoUndo(false);
+                if (UNDO_INSSECTION != nLastUndoId)
+                {
+                    DoUndo(false);
+                }
             }
             UpdateSection( GetSectionFmtPos( *pIns->GetFmt() ), aSection );
             DoUndo( bDoesUndo );

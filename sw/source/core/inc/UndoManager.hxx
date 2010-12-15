@@ -69,7 +69,8 @@ public:
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual void DelAllUndoObj();
-    virtual SwUndoId GetLastUndoInfo(::rtl::OUString *const o_pStr) const;
+    virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
+                SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
     virtual SwUndo* RemoveLastUndo(SwUndoId const eUndoId);
     virtual bool HasTooManyUndos() const;
