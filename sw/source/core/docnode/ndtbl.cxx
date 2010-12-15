@@ -4099,10 +4099,10 @@ BOOL SwDoc::SetColRowWidthHeight( SwTableBox& rAktBox, USHORT eType,
         break;
     }
 
+    GetIDocumentUndoRedo().DoUndo(bUndo); // SetColWidth can turn it off
     if( pUndo )
     {
         GetIDocumentUndoRedo().AppendUndo( pUndo );
-        GetIDocumentUndoRedo().DoUndo(bUndo); // SetColWidth can turn it off
     }
 
     if( bRet )
@@ -4352,15 +4352,21 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             GetIDocumentUndoRedo().ClearRedo();
             pUndo = new SwUndoCpyTbl;
-            GetIDocumentUndoRedo().DoUndo(false);
         }
 
-        bRet = pSrcTblNd->GetTable().MakeCopy( this, rInsPos, rBoxes,
+        {
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
+            bRet = pSrcTblNd->GetTable().MakeCopy( this, rInsPos, rBoxes,
                                                 TRUE, bCpyName );
+        }
+
         if( pUndo )
         {
             if( !bRet )
+            {
                 delete pUndo;
+                pUndo = 0;
+            }
             else
             {
                 pInsTblNd = GetNodes()[ rInsPos.nNode.GetIndex() - 1 ]->FindTableNode();
@@ -4368,7 +4374,6 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 pUndo->SetTableSttIdx( pInsTblNd->GetIndex() );
                 GetIDocumentUndoRedo().AppendUndo( pUndo );
             }
-            GetIDocumentUndoRedo().DoUndo(bUndo);
         }
     }
     else
@@ -4410,6 +4415,7 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
                 {
                     GetIDocumentUndoRedo().DoUndo(bUndo);
                     delete pUndo;
+                    pUndo = 0;
                 }
                 return FALSE;
             }
@@ -4464,13 +4470,13 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
         {
             // falls die Tabelle nicht kopiert werden konnte, das Undo-Object
             // wieder loeschen
+            GetIDocumentUndoRedo().DoUndo(bUndo);
             if( !bRet && pUndo->IsEmpty() )
                 delete pUndo;
             else
             {
                 GetIDocumentUndoRedo().AppendUndo(pUndo);
             }
-            GetIDocumentUndoRedo().DoUndo(bUndo);
         }
 
         if( bCorrPos )

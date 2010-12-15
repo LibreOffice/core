@@ -272,8 +272,11 @@ ULONG SwReader::Read( const Reader& rOptions )
                             if( bSaveUndo )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
+                                // UGLY: temp. enable undo
+                                pDoc->GetIDocumentUndoRedo().DoUndo(true);
                                 pDoc->GetIDocumentUndoRedo().AppendUndo(
                                     new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
+                                pDoc->GetIDocumentUndoRedo().DoUndo(false);
                                 pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
                             if( pFrmFmt->GetDepends() )
@@ -317,7 +320,10 @@ ULONG SwReader::Read( const Reader& rOptions )
         {
             pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, FALSE );
+            // UGLY: temp. enable undo
+            pDoc->GetIDocumentUndoRedo().DoUndo(true);
             pDoc->GetIDocumentUndoRedo().AppendUndo( pUndo );
+            pDoc->GetIDocumentUndoRedo().DoUndo(false);
             pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
         }
 
@@ -351,13 +357,9 @@ ULONG SwReader::Read( const Reader& rOptions )
     pDoc->ChkCondColls();
     pDoc->SetAllUniqueFlyNames();
 
-    if( bReadPageDescs )
+    pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
+    if (!bReadPageDescs)
     {
-        pDoc->GetIDocumentUndoRedo().DoUndo(true);
-    }
-    else
-    {
-        pDoc->GetIDocumentUndoRedo().DoUndo(bDocUndo);
         if( bSaveUndo )
         {
             pDoc->SetRedlineMode_intern( eOld );

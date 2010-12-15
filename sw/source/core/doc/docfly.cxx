@@ -548,12 +548,11 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
     {
         pUndo = new SwUndoSetFlyFmt( rFmt, rNewFmt );
         GetIDocumentUndoRedo().AppendUndo(pUndo);
-        // --> FME 2004-10-13 #i32968#
-        // Inserting columns in the section causes MakeFrmFmt to put two
-        // objects of type SwUndoFrmFmt on the undo stack. We don't want them.
-        GetIDocumentUndoRedo().DoUndo(false);
-        // <--
     }
+
+    // #i32968# Inserting columns in the section causes MakeFrmFmt to put
+    // 2 objects of type SwUndoFrmFmt on the undo stack. We don't want them.
+    ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
     //Erstmal die Spalten setzen, sonst gibts nix als Aerger mit dem
     //Set/Reset/Abgleich usw.
@@ -620,11 +619,6 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         rFmt.Remove( pUndo );
 
     SetModified();
-
-    if ( pUndo )
-    {
-        GetIDocumentUndoRedo().DoUndo(bUndo);
-    }
 
     return bChgAnchor;
 }

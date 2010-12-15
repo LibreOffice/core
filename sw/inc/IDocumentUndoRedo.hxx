@@ -199,8 +199,7 @@ public:
     /** Add new Undo action.
         Takes over ownership of pUndo.
         @remark     calls ClearRedo(), except for UNDO_START/UNDO_END.
-        @remark     does intentionally not check DoesUndo();
-                    that is caller's responsibility.
+        @remark     does nothing if !DoesUndo().
     */
     virtual void AppendUndo(SwUndo *const pUndo) = 0;
 

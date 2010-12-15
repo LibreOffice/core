@@ -2469,8 +2469,8 @@ SetRedlineMode( eOld );
             {
                 pUndoRpl = new SwUndoReplace(aDelPam, sRepl, bRegExReplace);
                 GetIDocumentUndoRedo().AppendUndo(pUndoRpl);
-                GetIDocumentUndoRedo().DoUndo(false);
             }
+            ::sw::UndoGuard const undoGuard(GetIDocumentUndoRedo());
 
             if( aDelPam.GetPoint() != pStt )
                 aDelPam.Exchange();
@@ -2524,7 +2524,6 @@ SetRedlineMode( eOld );
             if( pUndoRpl )
             {
                 pUndoRpl->SetEnd(rPam);
-                GetIDocumentUndoRedo().DoUndo(bDoesUndo);
             }
         }
     }

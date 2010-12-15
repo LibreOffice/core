@@ -465,7 +465,10 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
         if( pRedlUndo )
         {
             pRedlUndo->SetSaveRange( *pRedlPam );
+            // UGLY: temp. enable Undo
+            GetIDocumentUndoRedo().DoUndo(true);
             GetIDocumentUndoRedo().AppendUndo( pRedlUndo );
+            GetIDocumentUndoRedo().DoUndo(false);
         }
 
         // nBeg is start of sorted range

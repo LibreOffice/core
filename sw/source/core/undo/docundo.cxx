@@ -216,6 +216,12 @@ SwUndo* UndoManager::GetLastUndo()
 
 void UndoManager::AppendUndo(SwUndo *const pUndo)
 {
+    OSL_ENSURE(DoesUndo(), "AppendUndo called with Undo disabled?");
+    if (!DoesUndo())
+    {
+        return;
+    }
+
     if( nsRedlineMode_t::REDLINE_NONE == pUndo->GetRedlineMode() )
     {
         pUndo->SetRedlineMode( m_rRedlineAccess.GetRedlineMode() );
