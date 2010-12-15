@@ -71,6 +71,9 @@ gb_REPOS := $(shell cygpath -u $(gb_REPOS))
 endif
 
 REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))
+ifeq ($(SRCDIR),)
+SRCDIR := $(REPODIR)/ooo
+endif
 
 true := T
 false :=
