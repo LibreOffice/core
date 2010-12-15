@@ -2385,12 +2385,15 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
             if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
                 && (UNDO_REDLINE == nLastUndoId))
             {
+                // FIXME: why is this horrible cleanup necessary?
                 SwUndoRedline *const pU = dynamic_cast<SwUndoRedline*>(
                         GetUndoManager().RemoveLastUndo());
                 if( pU->GetRedlSaveCount() )
                 {
-                    SwUndoIter aUndoIter( &rPam, UNDO_REDLINE );
-                    pU->Undo( aUndoIter );
+                    SwEditShell *const pEditShell(GetEditShell(0));
+                    OSL_ASSERT(pEditShell);
+                    ::sw::UndoRedoContext context(*this, *pEditShell);
+                    static_cast<SfxUndoAction *>(pU)->UndoWithContext(context);
                 }
                 delete pU;
             }

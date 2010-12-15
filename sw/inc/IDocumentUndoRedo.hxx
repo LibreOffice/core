@@ -33,10 +33,13 @@
 #include <swundo.hxx>
 
 
-class SwUndoIter;
 class SwRewriter;
 class SwNodes;
 class SwUndo;
+
+namespace sw {
+    class RepeatContext;
+}
 
 
 
@@ -98,10 +101,9 @@ public:
 
     /** Execute Undo.
 
-        @postcondition rUndoIter.pAktPam will contain the affected range.
         @return     true if executing the last Undo action was successful.
     */
-    virtual bool Undo(SwUndoIter & rUndoIter) = 0; // -> #111827#
+    virtual sal_Bool Undo() = 0;
 
     /** Opens undo block.
 
@@ -159,10 +161,9 @@ public:
 
     /** Execute Redo.
 
-        @postcondition rUndoIter.pAktPam will contain the affected range.
         @return     true if executing the first Redo action was successful.
     */
-    virtual bool Redo(SwUndoIter & rUndoIter) = 0;
+    virtual sal_Bool Redo() = 0;
 
     /** Get comment of first Redo action.
         @param o_pStr       if not 0, receives comment of first Redo action.
@@ -178,8 +179,8 @@ public:
     /** Repeat the last Undo action.
         @return     true if repeating the last Undo Redo action was attempted.
     */
-    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt)
-        = 0;
+    virtual bool Repeat(::sw::RepeatContext & rContext,
+                sal_uInt16 const nRepeatCnt) = 0;
 
     /** Get Id and comment of last Undo action, if it is Repeat capable.
         @param o_pStr       if not 0, receives comment of last Undo action

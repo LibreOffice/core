@@ -65,8 +65,6 @@ struct SwUndoGroupObjImpl
 };
 
 
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
 // Draw-Objecte
 
 IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
@@ -107,16 +105,16 @@ SwSdrUndo::~SwSdrUndo()
     delete pMarkList;
 }
 
-void SwSdrUndo::Undo( SwUndoIter& rUndoIter )
+void SwSdrUndo::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     pSdrUndo->Undo();
-    rUndoIter.pMarkList = pMarkList;
+    rContext.SetSelections(0, pMarkList);
 }
 
-void SwSdrUndo::Redo( SwUndoIter& rUndoIter )
+void SwSdrUndo::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     pSdrUndo->Redo();
-    rUndoIter.pMarkList = pMarkList;
+    rContext.SetSelections(0, pMarkList);
 }
 
 String SwSdrUndo::GetComment() const
@@ -223,7 +221,7 @@ SwUndoDrawGroup::~SwUndoDrawGroup()
     delete [] pObjArr;
 }
 
-void SwUndoDrawGroup::Undo( SwUndoIter& )
+void SwUndoDrawGroup::UndoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = FALSE;
 
@@ -274,7 +272,7 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
     }
 }
 
-void SwUndoDrawGroup::Redo( SwUndoIter& )
+void SwUndoDrawGroup::RedoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = TRUE;
 
@@ -388,14 +386,14 @@ SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
     delete [] pObjArr;
 }
 
-void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
+void SwUndoDrawUnGroup::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = TRUE;
 
-    // aus dem Array austragen
-    SwDoc* pDoc = &rIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
 
+    // remove from array
     for( USHORT n = 1; n < nSize; ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
@@ -440,7 +438,7 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     // <--
 }
 
-void SwUndoDrawUnGroup::Redo( SwUndoIter& )
+void SwUndoDrawUnGroup::RedoImpl(::sw::UndoRedoContext &)
 {
     bDelFmt = FALSE;
 
@@ -510,7 +508,8 @@ SwUndoDrawUnGroupConnectToLayout::~SwUndoDrawUnGroupConnectToLayout()
 {
 }
 
-void SwUndoDrawUnGroupConnectToLayout::Undo( SwUndoIter& )
+void
+SwUndoDrawUnGroupConnectToLayout::UndoImpl(::sw::UndoRedoContext &)
 {
     for ( std::vector< SdrObject >::size_type i = 0;
           i < aDrawFmtsAndObjs.size(); ++i )
@@ -529,7 +528,8 @@ void SwUndoDrawUnGroupConnectToLayout::Undo( SwUndoIter& )
     }
 }
 
-void SwUndoDrawUnGroupConnectToLayout::Redo( SwUndoIter& )
+void
+SwUndoDrawUnGroupConnectToLayout::RedoImpl(::sw::UndoRedoContext &)
 {
     for ( std::vector< std::pair< SwDrawFrmFmt*, SdrObject* > >::size_type i = 0;
           i < aDrawFmtsAndObjs.size(); ++i )
@@ -571,10 +571,10 @@ SwUndoDrawDelete::~SwUndoDrawDelete()
     delete pMarkLst;
 }
 
-void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
+void SwUndoDrawDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = FALSE;
-    SwSpzFrmFmts& rFlyFmts = *rIter.GetDoc().GetSpzFrmFmts();
+    SwSpzFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
@@ -597,13 +597,13 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         }
         // <--
     }
-    rIter.pMarkList = pMarkLst;
+    rContext.SetSelections(0, pMarkLst);
 }
 
-void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
+void SwUndoDrawDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     bDelFmt = TRUE;
-    SwSpzFrmFmts& rFlyFmts = *rIter.GetDoc().GetSpzFrmFmts();
+    SwSpzFrmFmts & rFlyFmts = *rContext.GetDoc().GetSpzFrmFmts();
     for( USHORT n = 0; n < pMarkLst->GetMarkCount(); ++n )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );

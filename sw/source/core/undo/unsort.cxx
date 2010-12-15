@@ -39,7 +39,6 @@
 #include <redline.hxx>
 #include <node2lay.hxx>
 
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 /*--------------------------------------------------------------------
     Beschreibung:  Undo fuers Sorting
@@ -88,16 +87,18 @@ SwUndoSort::~SwUndoSort()
     delete pRedlData;
 }
 
-void SwUndoSort::Undo( SwUndoIter& rIter)
+void SwUndoSort::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc&  rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
     if(pSortOpt->bTable)
     {
         // Undo Tabelle
         RemoveIdxFromSection( rDoc, nSttNode, &nEndNode );
 
         if( pUndoTblAttr )
-            pUndoTblAttr->Undo( rIter );
+        {
+            pUndoTblAttr->UndoImpl(rContext);
+        }
 
         SwTableNode* pTblNd = rDoc.GetNodes()[ nTblNd ]->GetTableNode();
 
@@ -135,8 +136,7 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
     else
     {
         // Undo Text
-        SwPaM & rPam( *rIter.pAktPam );
-        SetPaM(rPam);
+        SwPaM & rPam( AddUndoRedoPaM(rContext) );
         RemoveIdxFromRange(rPam, true);
 
         // fuer die sorted Positions einen Index anlegen.
@@ -164,13 +164,13 @@ void SwUndoSort::Undo( SwUndoIter& rIter)
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
-        SetPaM( rIter, TRUE );
+        SetPaM(rPam, true);
     }
 }
 
-void SwUndoSort::Redo( SwUndoIter& rIter)
+void SwUndoSort::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     if(pSortOpt->bTable)
     {
@@ -203,7 +203,9 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         }
 
         if( pUndoTblAttr )
-            pUndoTblAttr->Redo( rIter );
+        {
+            pUndoTblAttr->RedoImpl(rContext);
+        }
 
         // Restore table frames:
         // --> FME 2004-11-26 #i37739# A simple 'MakeFrms' after the node sorting
@@ -215,7 +217,7 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
     else
     {
         // Redo for Text
-        SwPaM & rPam( *rIter.pAktPam );
+        SwPaM & rPam( AddUndoRedoPaM(rContext) );
         SetPaM(rPam);
         RemoveIdxFromRange(rPam, true);
 
@@ -238,19 +240,21 @@ void SwUndoSort::Redo( SwUndoIter& rIter)
         }
         // Indixes loeschen
         aIdxList.DeleteAndDestroy(0, aIdxList.Count());
-        SetPaM( rIter, TRUE );
-        const SwTxtNode* pTNd = rIter.pAktPam->GetNode()->GetTxtNode();
+        SetPaM(rPam, true);
+        SwTxtNode const*const pTNd = rPam.GetNode()->GetTxtNode();
         if( pTNd )
-            rIter.pAktPam->GetPoint()->nContent = pTNd->GetTxt().Len();
+        {
+            rPam.GetPoint()->nContent = pTNd->GetTxt().Len();
+        }
     }
 }
 
-void SwUndoSort::Repeat(SwUndoIter& rIter)
+void SwUndoSort::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // table not repeat capable
     if(!pSortOpt->bTable)
     {
-        SwPaM* pPam = rIter.pAktPam;
+        SwPaM *const pPam = & rContext.GetRepeatPaM();
         SwDoc& rDoc = *pPam->GetDoc();
 
         if( !rDoc.IsIdxInTbl( pPam->Start()->nNode ) )

@@ -46,6 +46,7 @@ SRC1FILES =  \
 
 EXCEPTIONSFILES = \
         $(SLO)$/SwRewriter.obj \
+        $(SLO)$/docundo.obj \
         $(SLO)$/unattr.obj \
         $(SLO)$/undobj.obj \
         $(SLO)$/undraw.obj \

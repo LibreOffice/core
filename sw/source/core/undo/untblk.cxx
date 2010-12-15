@@ -171,11 +171,10 @@ SwUndoInserts::~SwUndoInserts()
 }
 
 
-void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
+void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM * pPam = rUndoIter.pAktPam;
-    SwDoc* pDoc = pPam->GetDoc();
-    SetPaM( rUndoIter );
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
 
     if( IDocumentRedlineAccess::IsRedlineOn( GetRedlineMode() ))
         pDoc->DeleteRedline( *pPam, true, USHRT_MAX );
@@ -198,7 +197,7 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
         }
 
         RemoveIdxFromRange( *pPam, FALSE );
-        SetPaM( rUndoIter );
+        SetPaM(*pPam);
 
         // sind Fussnoten oder CntntFlyFrames im Text ??
         nSetPos = pHistory->Count();
@@ -220,7 +219,9 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
     {
         ULONG nTmp = pPam->GetPoint()->nNode.GetIndex();
         for( USHORT n = pFlyUndos->Count(); n; )
-            (*pFlyUndos)[ --n ]->Undo( rUndoIter );
+        {
+            (*pFlyUndos)[ --n ]->UndoImpl(rContext);
+        }
         nNdDiff += nTmp - pPam->GetPoint()->nNode.GetIndex();
     }
 
@@ -266,15 +267,12 @@ void SwUndoInserts::Undo( SwUndoIter& rUndoIter )
             pHistory->TmpRollback( pDoc, 0, false );
         }
     }
-
-    if( pPam != rUndoIter.pAktPam )
-        delete pPam;
 }
 
-void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
+void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     // setze noch den Cursor auf den Redo-Bereich
-    SwPaM* pPam = rUndoIter.pAktPam;
+    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
     SwDoc* pDoc = pPam->GetDoc();
     pPam->DeleteMark();
     pPam->GetPoint()->nNode = nSttNode - nNdDiff;
@@ -320,7 +318,9 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
 
     if( pFlyUndos )
         for( USHORT n = pFlyUndos->Count(); n; )
-            (*pFlyUndos)[ --n ]->Redo( rUndoIter );
+        {
+            (*pFlyUndos)[ --n ]->RedoImpl(rContext);
+        }
 
     pHistory->Rollback( pDoc, nSetPos );
 
@@ -336,16 +336,16 @@ void SwUndoInserts::Redo( SwUndoIter& rUndoIter )
         pDoc->SplitRedline( *pPam );
 }
 
-void SwUndoInserts::Repeat( SwUndoIter& rUndoIter )
+void SwUndoInserts::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwPaM aPam( *rUndoIter.pAktPam->GetPoint() );
+    SwPaM aPam( rContext.GetDoc().GetNodes().GetEndOfContent() );
     SetPaM( aPam );
-    aPam.GetDoc()->CopyRange( aPam, *rUndoIter.pAktPam->GetPoint(), false );
+    SwPaM & rRepeatPaM( rContext.GetRepeatPaM() );
+    aPam.GetDoc()->CopyRange( aPam, *rRepeatPaM.GetPoint(), false );
 }
 
 
-/*  */
-
+//////////////////////////////////////////////////////////////////////////
 
 SwUndoInsDoc::SwUndoInsDoc( const SwPaM& rPam )
     : SwUndoInserts( UNDO_INSDOKUMENT, rPam )

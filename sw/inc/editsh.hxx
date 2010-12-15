@@ -122,6 +122,10 @@ namespace sfx2{
 class LinkManager;
 }
 
+namespace sw {
+    class UndoRedoContext;
+}
+
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
 #define GETSELTXT_PARABRK_TO_ONLYCR     2
@@ -538,13 +542,16 @@ public:
     bool     GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
 
-    // 0 letzte Aktion, sonst Aktionen bis zum Start der Klammerung nUndoId
-    // mit KillPaMs, ClearMark
-    BOOL Undo(SwUndoId nUndoId = UNDO_EMPTY, USHORT nCnt = 1 );
-    // wiederholt
-    USHORT Repeat( USHORT nCount );
-    // wiederholt
-    USHORT Redo( USHORT nCnt = 1 );
+    /// is it forbidden to modify cursors via API calls?
+    bool CursorsLocked() const;
+    /// set selections to those contained in the UndoRedoContext
+    /// should only be called by sw::UndoManager!
+    void HandleUndoRedoContext(::sw::UndoRedoContext & rContext);
+
+    bool Undo(USHORT const nCount = 1);
+    bool Redo(USHORT const nCount = 1);
+    bool Repeat(USHORT const nCount);
+
     // fuer alle Sichten auf dieses Dokument
     void StartAllAction();
     void EndAllAction();

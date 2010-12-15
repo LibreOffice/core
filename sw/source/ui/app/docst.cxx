@@ -766,7 +766,7 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
             {
                 // #116530#
                 //pBasePool->Erase( &aTmp );
-                GetWrtShell()->Undo(UNDO_EMPTY, 1);
+                GetWrtShell()->Undo(1);
                 pDoc->GetIDocumentUndoRedo().ClearRedo();
             }
 

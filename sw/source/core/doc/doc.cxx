@@ -2443,13 +2443,7 @@ bool SwDoc::RestoreInvisibleContent()
     if (GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId)
         && (UNDO_UI_DELETE_INVISIBLECNTNT == nLastUndoId))
     {
-        SwPaM aPam( GetNodes().GetEndOfPostIts() );
-        SwUndoIter aUndoIter( &aPam );
-        do
-        {
-            GetIDocumentUndoRedo().Undo( aUndoIter );
-        }
-        while (aUndoIter.IsNextUndo());
+        GetIDocumentUndoRedo().Undo();
         GetIDocumentUndoRedo().ClearRedo();
         bRet = true;
     }

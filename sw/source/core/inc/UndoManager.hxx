@@ -32,8 +32,9 @@
 
 #include <memory>
 
+#include <svl/undo.hxx>
 
-class SwUndos;
+
 class IDocumentDrawModelAccess;
 class IDocumentRedlineAccess;
 class IDocumentState;
@@ -43,6 +44,7 @@ namespace sw {
 
 class UndoManager
     : public IDocumentUndoRedo
+    , private SfxUndoManager
 {
 public:
 
@@ -63,7 +65,7 @@ public:
     virtual void UnLockUndoNoModifiedPosition();
     virtual void SetUndoNoResetModified();
     virtual bool IsUndoNoResetModified() const;
-    virtual bool Undo(SwUndoIter & rUndoIter);
+//    virtual bool Undo();
     virtual SwUndoId StartUndo(SwUndoId const eUndoId,
                 SwRewriter const*const pRewriter);
     virtual SwUndoId EndUndo(SwUndoId const eUndoId,
@@ -72,14 +74,23 @@ public:
     virtual bool GetLastUndoInfo(::rtl::OUString *const o_pStr,
                 SwUndoId *const o_pId) const;
     virtual SwUndoComments_t GetUndoComments() const;
-    virtual bool Redo(SwUndoIter & rUndoIter);
+//    virtual bool Redo();
     virtual bool GetFirstRedoInfo(::rtl::OUString *const o_pStr) const;
     virtual SwUndoComments_t GetRedoComments() const;
-    virtual bool Repeat(SwUndoIter & rUndoIter, sal_uInt16 const nRepeatCnt);
+    virtual bool Repeat(::sw::RepeatContext & rContext,
+                sal_uInt16 const nRepeatCnt);
     virtual SwUndoId GetRepeatInfo(::rtl::OUString *const o_pStr) const;
     virtual void AppendUndo(SwUndo *const pUndo);
     virtual void ClearRedo();
     virtual bool IsUndoNodes(SwNodes const& rNodes) const;
+
+    // ::svl::IUndoManager
+    virtual void     AddUndoAction(SfxUndoAction *pAction,
+                                   sal_Bool bTryMerg = sal_False);
+    virtual sal_Bool Undo();
+    virtual sal_Bool Redo();
+    virtual void     EnableUndo(bool bEnable);
+    virtual USHORT   LeaveListAction();
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();
@@ -95,24 +106,18 @@ private:
     /// Undo nodes array: content not currently in document
     ::std::auto_ptr<SwNodes> m_pUndoNodes;
 
-    ::std::auto_ptr<SwUndos> m_pUndos;  // Undo/Redo History
-
-    sal_uInt16  m_nUndoPos;     // current Undo-InsertPosition (beyond: Redo)
-    sal_uInt16  m_nUndoSavePos; // position in Undo-Array at which Doc was saved
-    sal_uInt16  m_nUndoActions; // number of Undo/Redo actions
-    sal_uInt16  m_nNestingDepth;// nesting depth: != 0 -> inside StartUndo()
-
-    bool m_bUndo            : 1;    // TRUE: Undo enabled
     bool m_bGroupUndo       : 1;    // TRUE: Undo grouping enabled
     bool m_bDrawUndo        : 1;    // TRUE: Draw Undo enabled
     bool m_bLockUndoNoModifiedPosition : 1;
+    bool m_bClearOnLeave    : 1;
+    /// position in Undo-Array at which Doc was saved (and is not modified)
+    UndoStackMark m_UndoSaveMark;
 
-    /// delete all undo objects from 0 until nEnd
-    bool DelUndoObj(sal_uInt16 nEnd);
-    /** Is there an Undo action with the given Id, or a Start/End action
-        with the given Id as UserId?
-    */
-    bool HasUndoId(SwUndoId const eId) const;
+    typedef enum { UNDO = true, REDO = false } UndoOrRedo_t;
+    bool impl_DoUndoRedo(UndoOrRedo_t const undoOrRedo);
+
+    // UGLY: should not be called
+    using SfxUndoManager::Repeat;
 };
 
 } // namespace sw

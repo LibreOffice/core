@@ -49,10 +49,9 @@
 #include <dcontact.hxx>
 #include <ndole.hxx>
 
-// Inline Methode vom UndoIter
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //---------------------------------------------------------------------
+// SwUndoLayBase /////////////////////////////////////////////////////////
 
 SwUndoFlyBase::SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId )
     : SwUndo( nUndoId ), pFrmFmt( pFormat )
@@ -65,9 +64,9 @@ SwUndoFlyBase::~SwUndoFlyBase()
         delete pFrmFmt;
 }
 
-void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
+void SwUndoFlyBase::InsFly(::sw::UndoRedoContext & rContext, bool bShowSelFrm)
 {
-    SwDoc* pDoc = &rUndoIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
 
     // ins Array wieder eintragen
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
@@ -96,7 +95,7 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     }
     else
     {
-        SwPosition aNewPos( *rUndoIter.pAktPam->GetPoint() );
+        SwPosition aNewPos(pDoc->GetNodes().GetEndOfContent());
         aNewPos.nNode = nNdPgPos;
         if ((FLY_AS_CHAR == nRndId) || (FLY_AT_CHAR == nRndId))
         {
@@ -132,7 +131,9 @@ void SwUndoFlyBase::InsFly( SwUndoIter& rUndoIter, BOOL bShowSelFrm )
     pFrmFmt->MakeFrms();
 
     if( bShowSelFrm )
-        rUndoIter.pSelFmt = pFrmFmt;
+    {
+        rContext.SetSelections(pFrmFmt, 0);
+    }
 
     if( GetHistory() )
         GetHistory()->Rollback( pDoc );
@@ -234,7 +235,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     rFlyFmts.Remove( rFlyFmts.GetPos( pFrmFmt ));
 }
 
-// ----- Undo-InsertFly ------
+// SwUndoInsLayFmt ///////////////////////////////////////////////////////
 
 SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx )
     : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
@@ -270,47 +271,52 @@ SwUndoInsLayFmt::~SwUndoInsLayFmt()
 {
 }
 
-void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
+void SwUndoInsLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
+    SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     if( rCntnt.GetCntntIdx() )  // kein Inhalt
     {
         bool bRemoveIdx = true;
         if( mnCrsrSaveIndexPara > 0 )
         {
-            SwTxtNode *pNode = rUndoIter.GetDoc().GetNodes()[mnCrsrSaveIndexPara]->GetTxtNode();
+            SwTxtNode *const pNode =
+                rDoc.GetNodes()[mnCrsrSaveIndexPara]->GetTxtNode();
             if( pNode )
             {
-                SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), rCntnt.GetCntntIdx()->GetIndex() );
-                SwNodeIndex aEndIdx( rUndoIter.GetDoc().GetNodes(), aIdx.GetNode().EndOfSectionIndex() );
+                SwNodeIndex aIdx( rDoc.GetNodes(),
+                        rCntnt.GetCntntIdx()->GetIndex() );
+                SwNodeIndex aEndIdx( rDoc.GetNodes(),
+                        aIdx.GetNode().EndOfSectionIndex() );
                 SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
                 SwPosition aPos( *pNode, aIndex );
-                rUndoIter.GetDoc().CorrAbs( aIdx, aEndIdx, aPos, TRUE );
+                rDoc.CorrAbs( aIdx, aEndIdx, aPos, TRUE );
                 bRemoveIdx = false;
             }
         }
         if( bRemoveIdx )
-            RemoveIdxFromSection( rUndoIter.GetDoc(),
-                                rCntnt.GetCntntIdx()->GetIndex() );
+        {
+            RemoveIdxFromSection( rDoc, rCntnt.GetCntntIdx()->GetIndex() );
+        }
     }
-    DelFly( &rUndoIter.GetDoc() );
+    DelFly(& rDoc);
 }
 
-void SwUndoInsLayFmt::Redo( SwUndoIter& rUndoIter )
+void SwUndoInsLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    InsFly( rUndoIter );
+    InsFly(rContext);
 }
 
-void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
+void SwUndoInsLayFmt::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwDoc* pDoc = &rUndoIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
     // erfrage und setze den Anker neu
     SwFmtAnchor aAnchor( pFrmFmt->GetAnchor() );
     if ((FLY_AT_PARA == aAnchor.GetAnchorId()) ||
         (FLY_AT_CHAR == aAnchor.GetAnchorId()) ||
         (FLY_AS_CHAR == aAnchor.GetAnchorId()))
     {
-        SwPosition aPos( *rUndoIter.pAktPam->GetPoint() );
+        SwPosition aPos( *rContext.GetRepeatPaM().GetPoint() );
         if (FLY_AT_PARA == aAnchor.GetAnchorId())
         {
             aPos.nContent.Assign( 0, 0 );
@@ -319,7 +325,8 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
     }
     else if( FLY_AT_FLY == aAnchor.GetAnchorId() )
     {
-        const SwStartNode* pSttNd = rUndoIter.pAktPam->GetNode()->FindFlyStartNode();
+        SwStartNode const*const pSttNd =
+            rContext.GetRepeatPaM().GetNode()->FindFlyStartNode();
         if( pSttNd )
         {
             SwPosition aPos( *pSttNd );
@@ -332,15 +339,17 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
     }
     else if (FLY_AT_PAGE == aAnchor.GetAnchorId())
     {
-        aAnchor.SetPageNum( pDoc->GetRootFrm()->GetCurrPage(
-                                        rUndoIter.pAktPam ));
+        aAnchor.SetPageNum(
+                pDoc->GetRootFrm()->GetCurrPage(& rContext.GetRepeatPaM()) );
     }
     else {
         ASSERT( FALSE, "was fuer ein Anker ist es denn nun?" );
     }
 
     SwFrmFmt* pFlyFmt = pDoc->CopyLayoutFmt( *pFrmFmt, aAnchor, true, true );
-    rUndoIter.pSelFmt = pFlyFmt;
+    (void) pFlyFmt;
+//FIXME nobody ever did anything with this selection:
+//    rContext.SetSelections(pFlyFmt, 0);
 }
 
 // #111827#
@@ -375,7 +384,7 @@ String SwUndoInsLayFmt::GetComment() const
     return aResult;
 }
 
-// ----- Undo-DeleteFly ------
+// SwUndoDelLayFmt ///////////////////////////////////////////////////////
 
 static SwUndoId
 lcl_GetSwUndoId(SwFrmFmt *const pFrmFmt)
@@ -433,22 +442,24 @@ SwRewriter SwUndoDelLayFmt::GetRewriter() const
     return aRewriter;
 }
 
-void SwUndoDelLayFmt::Undo( SwUndoIter& rUndoIter )
+void SwUndoDelLayFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    InsFly( rUndoIter, bShowSelFrm );
+    InsFly( rContext, bShowSelFrm );
 }
 
-void SwUndoDelLayFmt::Redo( SwUndoIter& rUndoIter )
+void SwUndoDelLayFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
+    SwDoc & rDoc(rContext.GetDoc());
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     if( rCntnt.GetCntntIdx() )  // kein Inhalt
-        RemoveIdxFromSection( rUndoIter.GetDoc(),
-                                rCntnt.GetCntntIdx()->GetIndex() );
+    {
+        RemoveIdxFromSection(rDoc, rCntnt.GetCntntIdx()->GetIndex());
+    }
 
-    DelFly( &rUndoIter.GetDoc() );
+    DelFly(& rDoc);
 }
 
-void SwUndoDelLayFmt::Redo()
+void SwUndoDelLayFmt::RedoForRollback()
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     if( rCntnt.GetCntntIdx() )  // kein Inhalt
@@ -458,7 +469,7 @@ void SwUndoDelLayFmt::Redo()
     DelFly( pFrmFmt->GetDoc() );
 }
 
-/*  */
+// SwUndoSetFlyFmt ///////////////////////////////////////////////////////
 
 SwUndoSetFlyFmt::SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt )
     : SwUndo( UNDO_SETFLYFRMFMT ), SwClient( &rFlyFmt ), pFrmFmt( &rFlyFmt ),
@@ -534,9 +545,9 @@ void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
         rAnchor.SetPageNum( nCntnt );
 }
 
-void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
+void SwUndoSetFlyFmt::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     // ist das neue Format noch vorhanden ??
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pOldFmt ) )
@@ -604,13 +615,13 @@ void SwUndoSetFlyFmt::Undo( SwUndoIter& rIter )
 
             pFrmFmt->MakeFrms();
         }
-        rIter.pSelFmt = pFrmFmt;
+        rContext.SetSelections(pFrmFmt, 0);
     }
 }
 
-void SwUndoSetFlyFmt::Redo( SwUndoIter& rIter )
+void SwUndoSetFlyFmt::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     // ist das neue Format noch vorhanden ??
     if( USHRT_MAX != rDoc.GetFrmFmts()->GetPos( (const SwFrmFmtPtr)pNewFmt ) )
@@ -627,7 +638,7 @@ void SwUndoSetFlyFmt::Redo( SwUndoIter& rIter )
         else
             rDoc.SetFrmFmtToFly( *pFrmFmt, *pNewFmt, 0 );
 
-        rIter.pSelFmt = pFrmFmt;
+        rContext.SetSelections(pFrmFmt, 0);
     }
 }
 

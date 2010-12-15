@@ -56,7 +56,7 @@ SwUndoFmtCreate::~SwUndoFmtCreate()
 {
 }
 
-void SwUndoFmtCreate::Undo(SwUndoIter &)
+void SwUndoFmtCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (pNew)
     {
@@ -77,7 +77,7 @@ void SwUndoFmtCreate::Undo(SwUndoIter &)
     }
 }
 
-void SwUndoFmtCreate::Redo(SwUndoIter &)
+void SwUndoFmtCreate::RedoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
     SwFmt * pFmt = Create(pDerivedFrom);
@@ -123,7 +123,7 @@ SwUndoFmtDelete::~SwUndoFmtDelete()
 {
 }
 
-void SwUndoFmtDelete::Undo(SwUndoIter &)
+void SwUndoFmtDelete::UndoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pDerivedFrom = Find(sDerivedFrom);
 
@@ -139,7 +139,7 @@ void SwUndoFmtDelete::Undo(SwUndoIter &)
     }
 }
 
-void SwUndoFmtDelete::Redo(SwUndoIter &)
+void SwUndoFmtDelete::RedoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pOld = Find(sOldName);
 
@@ -172,7 +172,7 @@ SwUndoRenameFmt::~SwUndoRenameFmt()
 {
 }
 
-void SwUndoRenameFmt::Undo(SwUndoIter &)
+void SwUndoRenameFmt::UndoImpl(::sw::UndoRedoContext &)
 {
     SwFmt * pFmt = Find(sNewName);
 
@@ -182,7 +182,7 @@ void SwUndoRenameFmt::Undo(SwUndoIter &)
     }
 }
 
-void SwUndoRenameFmt::Redo(SwUndoIter &)
+void SwUndoRenameFmt::RedoImpl(::sw::UndoRedoContext &)
 {
     SwFmt *  pFmt = Find(sOldName);
 
@@ -373,7 +373,7 @@ SwUndoNumruleCreate::SwUndoNumruleCreate(const SwNumRule * _pNew,
 {
 }
 
-void SwUndoNumruleCreate::Undo(SwUndoIter &)
+void SwUndoNumruleCreate::UndoImpl(::sw::UndoRedoContext &)
 {
     if (! bInitialized)
     {
@@ -384,7 +384,7 @@ void SwUndoNumruleCreate::Undo(SwUndoIter &)
     pDoc->DelNumRule(aNew.GetName(), TRUE);
 }
 
-void SwUndoNumruleCreate::Redo(SwUndoIter &)
+void SwUndoNumruleCreate::RedoImpl(::sw::UndoRedoContext &)
 {
     pDoc->MakeNumRule(aNew.GetName(), &aNew, TRUE);
 }
@@ -410,12 +410,12 @@ SwUndoNumruleDelete::SwUndoNumruleDelete(const SwNumRule & rRule,
 {
 }
 
-void SwUndoNumruleDelete::Undo(SwUndoIter &)
+void SwUndoNumruleDelete::UndoImpl(::sw::UndoRedoContext &)
 {
     pDoc->MakeNumRule(aOld.GetName(), &aOld, TRUE);
 }
 
-void SwUndoNumruleDelete::Redo(SwUndoIter &)
+void SwUndoNumruleDelete::RedoImpl(::sw::UndoRedoContext &)
 {
     pDoc->DelNumRule(aOld.GetName(), TRUE);
 }
@@ -437,12 +437,12 @@ SwUndoNumruleRename::SwUndoNumruleRename(const String & _aOldName,
 {
 }
 
-void SwUndoNumruleRename::Undo(SwUndoIter &)
+void SwUndoNumruleRename::UndoImpl(::sw::UndoRedoContext &)
 {
     pDoc->RenameNumRule(aNewName, aOldName, TRUE);
 }
 
-void SwUndoNumruleRename::Redo(SwUndoIter &)
+void SwUndoNumruleRename::RedoImpl(::sw::UndoRedoContext &)
 {
     pDoc->RenameNumRule(aOldName, aNewName, TRUE);
 }

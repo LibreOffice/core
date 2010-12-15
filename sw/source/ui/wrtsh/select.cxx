@@ -210,7 +210,7 @@ ULONG SwWrtShell::SearchPattern( const SearchOptions& rSearchOpt, BOOL bSearchIn
     ULONG nRet = Find( rSearchOpt, bSearchInNotes, eStt, eEnd, bCancel, eFlags, bReplace );
     if(bCancel)
     {
-        Undo(UNDO_EMPTY, 1);
+        Undo(1);
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -238,7 +238,7 @@ ULONG SwWrtShell::SearchTempl( const String &rTempl,
                                eStt,eEnd, bCancel, eFlags, pReplaceColl);
     if(bCancel)
     {
-        Undo(UNDO_EMPTY, 1);
+        Undo(1);
         nRet = ULONG_MAX;
     }
     return nRet;
@@ -263,7 +263,7 @@ ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
 
     if(bCancel)
     {
-        Undo(UNDO_EMPTY, 1);
+        Undo(1);
         nRet = ULONG_MAX;
     }
     return nRet;

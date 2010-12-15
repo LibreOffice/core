@@ -37,8 +37,6 @@
 #include <rolbck.hxx>
 
 
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
 // MOVE
 
 SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
@@ -188,9 +186,9 @@ void SwUndoMove::SetDestRange( const SwNodeIndex& rStt,
 }
 
 
-void SwUndoMove::Undo( SwUndoIter& rUndoIter )
+void SwUndoMove::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc* pDoc = &rUndoIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
 
     // Block, damit aus diesem gesprungen werden kann
     do {
@@ -277,14 +275,16 @@ void SwUndoMove::Undo( SwUndoIter& rUndoIter )
 
     // setze noch den Cursor auf den Undo-Bereich
     if( !bMoveRange )
-        SetPaM( rUndoIter );
+    {
+        AddUndoRedoPaM(rContext);
+    }
 }
 
 
-void SwUndoMove::Redo( SwUndoIter& rUndoIter )
+void SwUndoMove::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM* pPam = rUndoIter.pAktPam;
-    SwDoc& rDoc = *pPam->GetDoc();
+    SwPaM *const pPam = & AddUndoRedoPaM(rContext);
+    SwDoc & rDoc = rContext.GetDoc();
 
     SwNodes& rNds = rDoc.GetNodes();
     SwNodeIndex aIdx( rNds, nMvDestNode );

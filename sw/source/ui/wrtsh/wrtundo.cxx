@@ -59,7 +59,7 @@ void SwWrtShell::Do( DoType eDoType, USHORT nCnt )
             DoUndo(sal_False); // #i21739#
             // Modi zuruecksetzen
             EnterStdMode();
-            SwEditShell::Undo(UNDO_EMPTY, nCnt );
+            SwEditShell::Undo(nCnt);
             break;
         case REDO:
             DoUndo(sal_False); // #i21739#

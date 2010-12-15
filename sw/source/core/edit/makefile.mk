@@ -41,6 +41,7 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 EXCEPTIONSFILES=\
+        $(SLO)$/edundo.obj \
         $(SLO)$/eddel.obj \
         $(SLO)$/edlingu.obj \
         $(SLO)$/edfldexp.obj \
@@ -61,7 +62,6 @@ SLOFILES =	\
         $(SLO)$/ednumber.obj \
         $(SLO)$/edredln.obj \
         $(SLO)$/edtox.obj \
-        $(SLO)$/edundo.obj \
         $(SLO)$/edws.obj \
         $(SLO)$/edsect.obj
 

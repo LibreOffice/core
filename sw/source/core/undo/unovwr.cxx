@@ -37,6 +37,7 @@
 
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IShellCursorSupplier.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
@@ -52,18 +53,8 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::uno;
 
-//------------------------------------------------------------------
-
-// zwei Zugriffs-Funktionen
-inline SwPosition* IterPt( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetPoint();  }
-inline SwPosition* IterMk( SwUndoIter& rUIter )
-{   return rUIter.pAktPam->GetMark();   }
-
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //------------------------------------------------------------
-
 
 // OVERWRITE
 
@@ -203,10 +194,11 @@ BOOL SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,
 
 
 
-void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
+void SwUndoOverwrite::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM* pAktPam = rUndoIter.pAktPam;
-    SwDoc* pDoc = pAktPam->GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
@@ -269,13 +261,13 @@ void SwUndoOverwrite::Undo( SwUndoIter& rUndoIter )
         SetSaveData( *pDoc, *pRedlSaveData );
 }
 
-void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
+void SwUndoOverwrite::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwPaM* pAktPam = rUndoIter.pAktPam;
+    SwPaM *const pAktPam = & rContext.GetRepeatPaM();
     if( !aInsStr.Len() || pAktPam->HasMark() )
         return;
 
-    SwDoc& rDoc = *pAktPam->GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     {
         ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
@@ -285,12 +277,11 @@ void SwUndoOverwrite::Repeat( SwUndoIter& rUndoIter )
         rDoc.Overwrite( *pAktPam, aInsStr.GetChar( n ) );
 }
 
-
-
-void SwUndoOverwrite::Redo( SwUndoIter& rUndoIter )
+void SwUndoOverwrite::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM* pAktPam = rUndoIter.pAktPam;
-    SwDoc* pDoc = pAktPam->GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
+    SwPaM *const pAktPam(& rContext.GetCursorSupplier().CreateNewShellCursor());
+
     pAktPam->DeleteMark();
     pAktPam->GetPoint()->nNode = nSttNode;
     SwTxtNode* pTxtNd = pAktPam->GetNode()->GetTxtNode();
@@ -382,9 +373,9 @@ SwUndoTransliterate::~SwUndoTransliterate()
         delete aChanges[i];
 }
 
-void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
+void SwUndoTransliterate::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    SwDoc & rDoc = rContext.GetDoc();
 
     // since the changes were added to the vector from the end of the string/node towards
     // the start, we need to revert them from the start towards the end now to keep the
@@ -393,20 +384,22 @@ void SwUndoTransliterate::Undo( SwUndoIter& rUndoIter )
     for (sal_Int32 i = aChanges.size() - 1; i >= 0;  --i)
         aChanges[i]->SetChangeAtNode( rDoc );
 
-    SetPaM( rUndoIter, TRUE );
+    AddUndoRedoPaM(rContext, true);
 }
 
-void SwUndoTransliterate::Redo( SwUndoIter& rUndoIter )
+void SwUndoTransliterate::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetPaM( *rUndoIter.pAktPam );
-    Repeat( rUndoIter );
+    SwPaM & rPam( AddUndoRedoPaM(rContext) );
+    DoTransliterate(rContext.GetDoc(), rPam);
 }
 
-void SwUndoTransliterate::Repeat( SwUndoIter& rUndoIter )
+void SwUndoTransliterate::RepeatImpl(::sw::RepeatContext & rContext)
 {
-    SwPaM& rPam = *rUndoIter.pAktPam;
-    SwDoc& rDoc = rUndoIter.GetDoc();
+    DoTransliterate(rContext.GetDoc(), rContext.GetRepeatPaM());
+}
 
+void SwUndoTransliterate::DoTransliterate(SwDoc & rDoc, SwPaM & rPam)
+{
     utl::TransliterationWrapper aTrans( ::comphelper::getProcessServiceFactory(), nType );
     rDoc.TransliterateText( rPam, aTrans );
 }

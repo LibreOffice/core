@@ -29,6 +29,7 @@
 #include "precompiled_sw.hxx"
 
 
+#include <IShellCursorSupplier.hxx>
 #include <txtftn.hxx>
 #include <fmtanchr.hxx>
 #include <ftnidx.hxx>
@@ -70,17 +71,6 @@ public:
 SV_IMPL_PTRARR( SwUndos, SwUndo*)
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
-SwUndoIter::SwUndoIter( SwPaM* pPam, SwUndoId nId )
-    : m_bDeleteRepeated(false)
-{
-    nUndoId = nId;
-    bWeiter = nId ? TRUE : FALSE;
-    pAktPam = pPam;
-    nEndCnt = 0;
-    pSelFmt = 0;
-    pMarkList = 0;
-}
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
 
 //------------------------------------------------------------
 
@@ -144,11 +134,14 @@ void SwUndRng::SetPaM( SwPaM & rPam, BOOL bCorrToCntnt ) const
         rPam.GetPoint()->nContent.Assign( 0, 0 );
 }
 
-void SwUndRng::SetPaM( SwUndoIter& rIter, BOOL bCorrToCntnt ) const
+SwPaM & SwUndRng::AddUndoRedoPaM(
+        ::sw::UndoRedoContext & rContext, bool bCorrToCntnt) const
 {
-    if( rIter.pAktPam )
-        SetPaM( *rIter.pAktPam, bCorrToCntnt );
+    SwPaM & rPaM( rContext.GetCursorSupplier().CreateNewShellCursor() );
+    SetPaM( rPaM, bCorrToCntnt );
+    return rPaM;
 }
+
 
 //------------------------------------------------------------
 
@@ -215,8 +208,89 @@ SwUndo::~SwUndo()
     delete pComment;
 }
 
-void SwUndo::Repeat( SwUndoIter & )
+
+class UndoRedoRedlineGuard
 {
+public:
+    UndoRedoRedlineGuard(::sw::UndoRedoContext & rContext, SwUndo & rUndo)
+        : m_rRedlineAccess(rContext.GetDoc())
+        , m_eMode(m_rRedlineAccess.GetRedlineMode())
+    {
+        RedlineMode_t const eTmpMode =
+            static_cast<RedlineMode_t>(rUndo.GetRedlineMode());
+        if ((nsRedlineMode_t::REDLINE_SHOW_MASK & eTmpMode) !=
+            (nsRedlineMode_t::REDLINE_SHOW_MASK & m_eMode))
+        {
+            m_rRedlineAccess.SetRedlineMode( eTmpMode );
+        }
+        m_rRedlineAccess.SetRedlineMode_intern( static_cast<RedlineMode_t>(
+                eTmpMode | nsRedlineMode_t::REDLINE_IGNORE) );
+    }
+    ~UndoRedoRedlineGuard()
+    {
+        m_rRedlineAccess.SetRedlineMode(m_eMode);
+    }
+private:
+    IDocumentRedlineAccess & m_rRedlineAccess;
+    RedlineMode_t const m_eMode;
+};
+
+void SwUndo::Undo()
+{
+    OSL_ENSURE(false, "SwUndo::Undo(): ERROR: must call Undo(context) instead");
+}
+
+void SwUndo::Redo()
+{
+    OSL_ENSURE(false, "SwUndo::Redo(): ERROR: must call Redo(context) instead");
+}
+
+void SwUndo::UndoWithContext(SfxUndoContext & rContext)
+{
+    ::sw::UndoRedoContext *const pContext(
+            dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
+    OSL_ASSERT(pContext);
+    if (!pContext) { return; }
+    UndoRedoRedlineGuard(*pContext, *this);
+    UndoImpl(*pContext);
+}
+
+void SwUndo::RedoWithContext(SfxUndoContext & rContext)
+{
+    ::sw::UndoRedoContext *const pContext(
+            dynamic_cast< ::sw::UndoRedoContext * >(& rContext));
+    OSL_ASSERT(pContext);
+    if (!pContext) { return; }
+    UndoRedoRedlineGuard(*pContext, *this);
+    RedoImpl(*pContext);
+}
+
+void SwUndo::Repeat(SfxRepeatTarget & rContext)
+{
+    ::sw::RepeatContext *const pRepeatContext(
+            dynamic_cast< ::sw::RepeatContext * >(& rContext));
+    OSL_ASSERT(pRepeatContext);
+    if (!pRepeatContext) { return; }
+    RepeatImpl(*pRepeatContext);
+}
+
+BOOL SwUndo::CanRepeat(SfxRepeatTarget & rContext) const
+{
+    ::sw::RepeatContext *const pRepeatContext(
+            dynamic_cast< ::sw::RepeatContext * >(& rContext));
+    OSL_ASSERT(pRepeatContext);
+    if (!pRepeatContext) { return false; }
+    return CanRepeatImpl(*pRepeatContext);
+}
+
+void SwUndo::RepeatImpl( ::sw::RepeatContext & )
+{
+}
+
+bool SwUndo::CanRepeatImpl( ::sw::RepeatContext & ) const
+{
+//    return false;
+    return ((REPEAT_START <= GetId()) && (GetId() < REPEAT_END));
 }
 
 String SwUndo::GetComment() const
@@ -248,17 +322,13 @@ String SwUndo::GetComment() const
     return aResult;
 }
 
-SwUndoId SwUndo::GetEffectiveId() const
-{
-    return GetId();
-}
-
 SwRewriter SwUndo::GetRewriter() const
 {
     SwRewriter aResult;
 
     return aResult;
 }
+
 
 //------------------------------------------------------------
 
@@ -905,92 +975,6 @@ void SwUndoSaveSection::RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos 
     }
 }
 
-// START
-SwUndoStart::SwUndoStart( SwUndoId nInitId )
-    : SwUndo( UNDO_START ), nUserId( nInitId ), nEndOffset( 0 )
-{
-}
-
-void SwUndoStart::Undo( SwUndoIter& rUndoIter )
-{
-    if( !( --rUndoIter.nEndCnt ) && rUndoIter.bWeiter &&
-        ( rUndoIter.GetId() ? ( rUndoIter.GetId() == nUserId ||
-        ( UNDO_END == rUndoIter.GetId() && UNDO_START == GetId() )) : TRUE ))
-        rUndoIter.bWeiter = FALSE;
-}
-
-void SwUndoStart::Redo( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = TRUE;
-    ++rUndoIter.nEndCnt;
-}
-
-void SwUndoStart::Repeat( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = FALSE;
-}
-
-String SwUndoStart::GetComment() const
-{
-    OSL_ASSERT(pComment);
-    return (pComment) ? *pComment : String("??", RTL_TEXTENCODING_ASCII_US);
-}
-
-void SwUndoStart::SetComment(String const& rComment)
-{
-    pComment = new String(rComment);
-}
-
-SwUndoId SwUndoStart::GetEffectiveId() const
-{
-    return GetUserId();
-}
-
-
-// END
-SwUndoEnd::SwUndoEnd( SwUndoId nInitId )
-    : SwUndo( UNDO_END ), nUserId( nInitId ), nSttOffset( 0 )
-{
-}
-
-void SwUndoEnd::Undo( SwUndoIter& rUndoIter )
-{
-    if( rUndoIter.GetId() == GetId() || !rUndoIter.GetId() )
-        rUndoIter.bWeiter = TRUE;
-    if( rUndoIter.bWeiter )
-        ++rUndoIter.nEndCnt;
-}
-
-void SwUndoEnd::Redo( SwUndoIter& rUndoIter )
-{
-    if( !( --rUndoIter.nEndCnt ) && rUndoIter.bWeiter &&
-        ( rUndoIter.GetId() ? ( rUndoIter.GetId() == nUserId ||
-        ( UNDO_END == rUndoIter.GetId() && UNDO_START == GetId() )) : TRUE ))
-        rUndoIter.bWeiter = FALSE;
-}
-
-void SwUndoEnd::Repeat( SwUndoIter& rUndoIter )
-{
-    rUndoIter.bWeiter = FALSE;
-}
-
-String SwUndoEnd::GetComment() const
-{
-    OSL_ASSERT(pComment);
-    return (pComment) ? *pComment : String("??", RTL_TEXTENCODING_ASCII_US);
-}
-
-void SwUndoEnd::SetComment(String const& rComment)
-{
-    pComment = new String(rComment);
-}
-
-SwUndoId SwUndoEnd::GetEffectiveId() const
-{
-    return GetUserId();
-}
-
-/*  */
         // sicher und setze die RedlineDaten
 
 SwRedlineSaveData::SwRedlineSaveData( SwComparePosition eCmpPos,

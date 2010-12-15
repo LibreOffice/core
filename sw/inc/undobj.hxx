@@ -44,6 +44,7 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <svl/itemset.hxx>
+#include <svl/undo.hxx>
 
 #include <svx/svdundo.hxx> // #111827#
 
@@ -56,7 +57,6 @@
 #include <IDocumentContentOperations.hxx>
 
 
-class SwUndoIter;
 class SwHistory;
 class SwIndex;
 class SwPaM;
@@ -98,6 +98,7 @@ class SwSelBoxes;
 class SwTableSortBoxes;
 class SwUndoSaveSections;
 class SwUndoMoves;
+class SwUndoDelete;
 class SwStartNode;
 class _SaveFlyArr;
 class SwTblToTxtSaves;
@@ -116,13 +117,80 @@ namespace utl {
 
 namespace sw {
     class UndoManager;
+    class IShellCursorSupplier;
 }
 
 
 typedef SwRedlineSaveData* SwRedlineSaveDataPtr;
 SV_DECL_PTRARR_DEL( SwRedlineSaveDatas, SwRedlineSaveDataPtr, 8, 8 )
 
+
+namespace sw {
+
+class SW_DLLPRIVATE UndoRedoContext
+    : public SfxUndoContext
+{
+public:
+    UndoRedoContext(SwDoc & rDoc, IShellCursorSupplier & rCursorSupplier)
+        : m_rDoc(rDoc)
+        , m_rCursorSupplier(rCursorSupplier)
+        , m_pSelFmt(0)
+        , m_pMarkList(0)
+    { }
+
+    SwDoc & GetDoc() const { return m_rDoc; }
+
+    IShellCursorSupplier & GetCursorSupplier() { return m_rCursorSupplier; }
+
+    void SetSelections(SwFrmFmt *const pSelFmt, SdrMarkList *const pMarkList)
+    {
+        m_pSelFmt = pSelFmt;
+        m_pMarkList = pMarkList;
+    }
+    void GetSelections(SwFrmFmt *& o_rpSelFmt, SdrMarkList *& o_rpMarkList)
+    {
+        o_rpSelFmt = m_pSelFmt;
+        o_rpMarkList = m_pMarkList;
+    }
+
+private:
+    SwDoc & m_rDoc;
+    IShellCursorSupplier & m_rCursorSupplier;
+    SwFrmFmt * m_pSelFmt;
+    SdrMarkList * m_pMarkList;
+};
+
+class SW_DLLPRIVATE RepeatContext
+    : public SfxRepeatTarget
+{
+public:
+    RepeatContext(SwDoc & rDoc, SwPaM & rPaM)
+        : m_rDoc(rDoc)
+        , m_pCurrentPaM(& rPaM)
+        , m_bDeleteRepeated(false)
+    { }
+
+    SwDoc & GetDoc() const { return m_rDoc; }
+
+    SwPaM & GetRepeatPaM()
+    {
+        return *m_pCurrentPaM;
+    }
+
+private:
+    friend class ::sw::UndoManager;
+    friend class ::SwUndoDelete;
+
+    SwDoc & m_rDoc;
+    SwPaM * m_pCurrentPaM;
+    bool m_bDeleteRepeated; /// has a delete action been repeated?
+};
+
+} // namespace sw
+
+
 class SwUndo
+    : public SfxUndoAction
 {
     SwUndoId const m_nId;
     USHORT nOrigRedlineMode;
@@ -146,15 +214,30 @@ protected:
        @return the rewriter for this object
     */
     virtual SwRewriter GetRewriter() const;
+
+    // return type is USHORT because this overrides SfxUndoAction::GetId()
+    virtual USHORT GetId() const { return static_cast<USHORT>(m_nId); }
+
+    // the 4 methods that derived classes have to override
+    // base implementation does nothing
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+    virtual bool CanRepeatImpl( ::sw::RepeatContext & ) const;
+public: // should not be public, but ran into trouble in untbl.cxx
+    virtual void UndoImpl( ::sw::UndoRedoContext & ) = 0;
+    virtual void RedoImpl( ::sw::UndoRedoContext & ) = 0;
+
+private:
+    // SfxUndoAction
+    virtual void Undo();
+    virtual void Redo();
+    virtual void UndoWithContext(SfxUndoContext &);
+    virtual void RedoWithContext(SfxUndoContext &);
+    virtual void Repeat(SfxRepeatTarget &);
+    virtual BOOL CanRepeat(SfxRepeatTarget &) const;
+
 public:
     SwUndo(SwUndoId const nId);
     virtual ~SwUndo();
-
-    SwUndoId GetId() const { return m_nId; }
-    virtual SwUndoId GetEffectiveId() const;
-    virtual void Undo( SwUndoIter& ) = 0;
-    virtual void Redo( SwUndoIter& ) = 0;
-    virtual void Repeat( SwUndoIter& );
 
     // #111827#
     /**
@@ -277,64 +360,10 @@ public:
 
     void SetValues( const SwPaM& rPam );
     void SetPaM( SwPaM&, BOOL bCorrToCntnt = FALSE ) const;
-    void SetPaM( SwUndoIter&, BOOL bCorrToCntnt = FALSE ) const;
+    SwPaM & AddUndoRedoPaM(
+        ::sw::UndoRedoContext &, bool const bCorrToCntnt = false) const;
 };
 
-
-class SwUndoStart: public SwUndo
-{
-    // Um innerhalb von Undo zuerkennen, wann ein Start vorliegt, gibt
-    // GetId() immer die UNDO_START zurueck. Die UserId kann ueber
-    // GetUserId() erfragt werden.
-    SwUndoId nUserId;
-    // fuer die "Verpointerung" von Start- und End-Undos
-    USHORT nEndOffset;
-
-public:
-    SwUndoStart( SwUndoId nId );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
-
-    // -> #111827#
-    virtual String GetComment() const;
-    void SetComment(String const& rString);
-    // <- #111827#
-
-    virtual SwUndoId GetEffectiveId() const;
-    SwUndoId GetUserId() const { return nUserId; }
-    // Setzen vom End-Undo-Offset geschieht im Doc::EndUndo
-    USHORT GetEndOffset() const { return nEndOffset; }
-    void SetEndOffset( USHORT n ) { nEndOffset = n; }
-};
-
-class SwUndoEnd: public SwUndo
-{
-    // Um innerhalb von Undo zuerkennen, wann ein Ende vorliegt, gibt
-    // GetId() immer die UNDO_END zurueck. Die UserId kann ueber
-    // GetUserId() erfragt werden.
-    SwUndoId nUserId;
-    // fuer die "Verpointerung" von Start- und End-Undos
-    USHORT nSttOffset;
-
-public:
-    SwUndoEnd( SwUndoId nId );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
-
-    // -> #111827#
-    virtual String GetComment() const;
-    void SetComment(String const& rString);
-    // <- #111827#
-
-    virtual SwUndoId GetEffectiveId() const;
-    SwUndoId GetUserId() const { return nUserId; }
-
-    // Setzen vom Start-Undo-Offset geschieht im Doc::EndUndo
-    void SetSttOffset(USHORT _nSttOffSet) { nSttOffset = _nSttOffSet; }
-    USHORT GetSttOffset() const { return nSttOffset; }
-};
 
 class SwUndoInsert: public SwUndo, private SwUndoSaveCntnt
 {
@@ -364,9 +393,9 @@ public:
     SwUndoInsert( const SwNodeIndex& rNode );
     virtual ~SwUndoInsert();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // #111827#
     /**
@@ -418,9 +447,10 @@ class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 public:
     SwUndoDelete( SwPaM&, BOOL bFullPara = FALSE, BOOL bCalledByTblCpy = FALSE );
     virtual ~SwUndoDelete();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // #111827#
     /**
@@ -464,10 +494,12 @@ class SwUndoOverwrite: public SwUndo, private SwUndoSaveCntnt
                             //       CanGrouping() ausgwertet !!
 public:
     SwUndoOverwrite( SwDoc*, SwPosition&, sal_Unicode cIns );
+
     virtual ~SwUndoOverwrite();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // #111827#
     /**
@@ -497,10 +529,13 @@ class SwUndoSplitNode: public SwUndo
     BOOL bChkTblStt : 1;
 public:
     SwUndoSplitNode( SwDoc* pDoc, const SwPosition& rPos, BOOL bChkTbl );
+
     virtual ~SwUndoSplitNode();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     void SetTblFlag()       { bTblFlag = TRUE; }
 };
 
@@ -525,8 +560,10 @@ class SwUndoMove : public SwUndo, private SwUndRng, private SwUndoSaveCntnt
 public:
     SwUndoMove( const SwPaM&, const SwPosition& );
     SwUndoMove( SwDoc* pDoc, const SwNodeRange&, const SwNodeIndex& );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+
     // setze den Destination-Bereich nach dem Verschieben.
     void SetDestRange( const SwPaM&, const SwPosition&, BOOL, BOOL );
     void SetDestRange( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
@@ -556,10 +593,13 @@ class SwUndoAttr : public SwUndo, private SwUndRng
 public:
     SwUndoAttr( const SwPaM&, const SfxItemSet &, const SetAttrMode nFlags );
     SwUndoAttr( const SwPaM&, const SfxPoolItem&, const SetAttrMode nFlags );
+
     virtual ~SwUndoAttr();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     void SaveRedlineData( const SwPaM& rPam, BOOL bInsCntnt );
 
     SwHistory& GetHistory() { return *m_pHistory; }
@@ -575,10 +615,13 @@ class SwUndoResetAttr : public SwUndo, private SwUndRng
 public:
     SwUndoResetAttr( const SwPaM&, USHORT nFmtId );
     SwUndoResetAttr( const SwPosition&, USHORT nFmtId );
+
     virtual ~SwUndoResetAttr();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     void SetAttrs( const SvUShortsSort& rArr );
 
     SwHistory& GetHistory() { return *m_pHistory; }
@@ -604,7 +647,7 @@ class SwUndoFmtAttr : public SwUndo
     //          an invalid anchor position and all other existing attributes
     //          aren't restored.
     //          This situation occurs for undo of styles.
-    bool RestoreFlyAnchor( SwUndoIter& rIter );
+    bool RestoreFlyAnchor(::sw::UndoRedoContext & rContext);
     // <--
     // --> OD 2008-02-27 #refactorlists# - removed <rAffectedItemSet>
     void Init();
@@ -620,12 +663,13 @@ public:
     SwUndoFmtAttr( const SfxPoolItem& rItem,
                    SwFmt& rFmt,
                    bool bSaveDrawPt = true );
+
     virtual ~SwUndoFmtAttr();
-    virtual void Undo( SwUndoIter& );
-    // --> OD 2004-10-26 #i35443# - <Redo(..)> calls <Undo(..)> - nothing else
-    virtual void Redo( SwUndoIter& );
-    // <--
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     virtual SwRewriter GetRewriter() const;
 
     void PutAttr( const SfxPoolItem& rItem );
@@ -640,8 +684,8 @@ class SwUndoFmtResetAttr : public SwUndo
                             const USHORT nWhichId );
         ~SwUndoFmtResetAttr();
 
-        virtual void Undo( SwUndoIter& );
-        virtual void Redo( SwUndoIter& );
+        virtual void UndoImpl( ::sw::UndoRedoContext & );
+        virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     private:
         // format at which a certain attribute is reset.
@@ -660,9 +704,10 @@ class SwUndoDontExpandFmt : public SwUndo
 
 public:
     SwUndoDontExpandFmt( const SwPosition& rPos );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 // helper class to receive changed attribute sets
@@ -695,6 +740,9 @@ class SwUndoFmtColl : public SwUndo, private SwUndRng
     // the nodes before the format has been applied.
     const bool mbResetListAttrs;
     // <--
+
+    void DoSetFmtColl(SwDoc & rDoc, SwPaM & rPaM);
+
 public:
     // --> OD 2008-04-15 #refactorlists#
 //    SwUndoFmtColl( const SwPaM&, SwFmtColl* );
@@ -703,9 +751,10 @@ public:
                    const bool bResetListAttrs );
     // <--
     virtual ~SwUndoFmtColl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // #111827#
     /**
@@ -735,10 +784,12 @@ class SwUndoMoveLeftMargin : public SwUndo, private SwUndRng
 
 public:
     SwUndoMoveLeftMargin( const SwPaM&, BOOL bRight, BOOL bModulus );
+
     virtual ~SwUndoMoveLeftMargin();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 
@@ -761,9 +812,10 @@ protected:
 public:
     virtual ~SwUndoInserts();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     // setze den Destination-Bereich nach dem Einlesen.
     void SetInsertRange( const SwPaM&, BOOL bScanFlys = TRUE,
                         BOOL bSttWasTxtNd = TRUE );
@@ -798,10 +850,12 @@ public:
                     USHORT eAdjust, const SwInsertTableOptions& rInsTblOpts,
                     const SwTableAutoFmt* pTAFmt, const SvUShorts* pColArr,
                   const String & rName);
+
     virtual ~SwUndoInsTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     virtual SwRewriter GetRewriter() const;
 
@@ -821,11 +875,13 @@ class SwUndoTxtToTbl : public SwUndo, public SwUndRng
 public:
     SwUndoTxtToTbl( const SwPaM&, const SwInsertTableOptions&, sal_Unicode , USHORT,
                     const SwTableAutoFmt* pAFmt );
+
     virtual ~SwUndoTxtToTbl();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     SwHistory& GetHistory();        // wird ggfs. angelegt
     void AddFillBox( const SwTableBox& rBox );
@@ -846,10 +902,12 @@ class SwUndoTblToTxt : public SwUndo
 
 public:
     SwUndoTblToTxt( const SwTable& rTbl, sal_Unicode cCh );
+
     virtual ~SwUndoTblToTxt();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void SetRange( const SwNodeRange& );
     void AddBoxPos( SwDoc& rDoc, ULONG nNdIdx, ULONG nEndIdx,
@@ -863,9 +921,11 @@ class SwUndoAttrTbl : public SwUndo
     BOOL bClearTabCol : 1;
 public:
     SwUndoAttrTbl( const SwTableNode& rTblNd, BOOL bClearTabCols = FALSE );
+
     virtual ~SwUndoAttrTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 class SwUndoTblAutoFmt : public SwUndo
@@ -875,13 +935,16 @@ class SwUndoTblAutoFmt : public SwUndo
     SwUndos* pUndos;
     BOOL bSaveCntntAttr;
 
-    void UndoRedo( BOOL bUndo, SwUndoIter& rUndoIter );
+    void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);
 
 public:
     SwUndoTblAutoFmt( const SwTableNode& rTblNd, const SwTableAutoFmt& );
+
     virtual ~SwUndoTblAutoFmt();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+
     void SaveBoxCntnt( const SwTableBox& rBox );
 };
 
@@ -912,8 +975,9 @@ public:
                     const SwTableNode& rTblNd );
 
     virtual ~SwUndoTblNdsChg();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld );
     void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld,
@@ -944,9 +1008,11 @@ class SwUndoTblMerge : public SwUndo, private SwUndRng
 
 public:
     SwUndoTblMerge( const SwPaM& rTblSel );
+
     virtual ~SwUndoTblMerge();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos );
 
@@ -977,9 +1043,11 @@ class SwUndoTblNumFmt : public SwUndo
 
 public:
     SwUndoTblNumFmt( const SwTableBox& rBox, const SfxItemSet* pNewSet = 0 );
+
     virtual ~SwUndoTblNumFmt();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void SetNumFmt( ULONG nNewNumFmtIdx, const double& rNewNumber )
             { nFmtIdx = nNewNumFmtIdx; fNum = rNewNumber; }
@@ -999,9 +1067,11 @@ class SwUndoTblCpyTbl : public SwUndo
         bool& rJoin, bool bRedo );
 public:
     SwUndoTblCpyTbl();
+
     virtual ~SwUndoTblCpyTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void AddBoxBefore( const SwTableBox& rBox, BOOL bDelCntnt );
     void AddBoxAfter( const SwTableBox& rBox, const SwNodeIndex& rIdx, BOOL bDelCntnt );
@@ -1016,9 +1086,11 @@ class SwUndoCpyTbl : public SwUndo
     ULONG nTblNode;
 public:
     SwUndoCpyTbl();
+
     virtual ~SwUndoCpyTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void SetTableSttIdx( ULONG nIdx )           { nTblNode = nIdx; }
 };
@@ -1033,10 +1105,12 @@ class SwUndoSplitTbl : public SwUndo
     BOOL bCalcNewSize;
 public:
     SwUndoSplitTbl( const SwTableNode& rTblNd, SwSaveRowSpan* pRowSp, USHORT nMode, BOOL bCalcNewSize );
+
     virtual ~SwUndoSplitTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void SetTblNodeOffset( ULONG nIdx )     { nOffset = nIdx - nTblNode; }
     SwHistory* GetHistory()                 { return pHistory; }
@@ -1054,10 +1128,12 @@ class SwUndoMergeTbl : public SwUndo
 public:
     SwUndoMergeTbl( const SwTableNode& rTblNd, const SwTableNode& rDelTblNd,
                     BOOL bWithPrev, USHORT nMode );
+
     virtual ~SwUndoMergeTbl();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void SaveFormula( SwHistory& rHistory );
 };
@@ -1097,8 +1173,9 @@ class SwUndoInsBookmark : public SwUndoBookmark
 {
 public:
     SwUndoInsBookmark( const ::sw::mark::IMark& );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 
@@ -1147,11 +1224,12 @@ public:
     SwUndoSort( const SwPaM&, const SwSortOptions& );
     SwUndoSort( ULONG nStt, ULONG nEnd, const SwTableNode&,
                 const SwSortOptions&, BOOL bSaveTable );
+
     virtual ~SwUndoSort();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void Insert( const String& rOrgPos, const String& rNewPos );
     void Insert( ULONG nOrgPos, ULONG nNewPos );
@@ -1171,7 +1249,7 @@ protected:
     USHORT nRndId;
     BOOL bDelFmt;                       // loesche das gespeicherte Format
 
-    void InsFly( SwUndoIter&, BOOL bShowSel = TRUE );
+    void InsFly(::sw::UndoRedoContext & rContext, bool bShowSel = true);
     void DelFly( SwDoc* );
 
     SwUndoFlyBase( SwFrmFmt* pFormat, SwUndoId nUndoId );
@@ -1182,9 +1260,6 @@ protected:
 public:
     virtual ~SwUndoFlyBase();
 
-    virtual void Undo( SwUndoIter& ) = 0;
-    virtual void Redo( SwUndoIter& ) = 0;
-
 };
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
@@ -1193,11 +1268,12 @@ class SwUndoInsLayFmt : public SwUndoFlyBase
     xub_StrLen mnCrsrSaveIndexPos;            // for undo
 public:
     SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx );
-    ~SwUndoInsLayFmt();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual ~SwUndoInsLayFmt();
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     String GetComment() const;
 
@@ -1209,9 +1285,10 @@ class SwUndoDelLayFmt : public SwUndoFlyBase
 public:
     SwUndoDelLayFmt( SwFrmFmt* pFormat );
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    void Redo();        // Schnittstelle fuers Rollback
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+
+    void RedoForRollback();
 
     void ChgShowSel( BOOL bNew ) { bShowSelFrm = bNew; }
 
@@ -1239,8 +1316,8 @@ public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
     virtual ~SwUndoSetFlyFmt();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     virtual SwRewriter GetRewriter() const;
 };
@@ -1259,8 +1336,9 @@ public:
             ::rtl::OUString const& rInsert, bool const bRegExp);
 
     virtual ~SwUndoReplace();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     // #111827#
     /**
@@ -1302,9 +1380,10 @@ class SwUndoTblHeadline : public SwUndo
     USHORT nNewHeadline;
 public:
     SwUndoTblHeadline( const SwTable&, USHORT nOldHdl,  USHORT nNewHdl );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 
@@ -1328,10 +1407,12 @@ private:
 public:
     SwUndoInsSection(SwPaM const&, SwSectionData const&,
         SfxItemSet const*const pSet, SwTOXBase const*const pTOXBase);
+
     virtual ~SwUndoInsSection();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void SetSectNdPos(ULONG const nPos)     { m_nSectionNodePos = nPos; }
     void SaveSplitNode(SwTxtNode *const pTxtNd, bool const bAtStart);
@@ -1350,9 +1431,10 @@ class SwUndoOutlineLeftRight : public SwUndo, private SwUndRng
     short nOffset;
 public:
     SwUndoOutlineLeftRight( const SwPaM& rPam, short nOffset );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 //--------------------------------------------------------------------
@@ -1365,9 +1447,11 @@ class SwUndoDefaultAttr : public SwUndo
 public:
     // registers at the format and saves old attributes
     SwUndoDefaultAttr( const SfxItemSet& rOldSet );
+
     virtual ~SwUndoDefaultAttr();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 //--------------------------------------------------------------------
@@ -1387,10 +1471,13 @@ public:
                   SwUndoId nUndoId = UNDO_INSFMTATTR );
     SwUndoInsNum( const SwPosition& rPos, const SwNumRule& rRule,
                             const String& rReplaceRule );
+
     virtual ~SwUndoInsNum();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     virtual SwRewriter GetRewriter() const;
 
     SwHistory* GetHistory();        // wird ggfs. neu angelegt!
@@ -1409,10 +1496,12 @@ class SwUndoDelNum : public SwUndo, private SwUndRng
     SwHistory* pHistory;
 public:
     SwUndoDelNum( const SwPaM& rPam );
+
     virtual ~SwUndoDelNum();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void AddNode( const SwTxtNode& rNd, BOOL bResetLRSpace );
     SwHistory* GetHistory() { return pHistory; }
@@ -1425,9 +1514,11 @@ class SwUndoMoveNum : public SwUndo, private SwUndRng
     long nOffset;
 public:
     SwUndoMoveNum( const SwPaM& rPam, long nOffset, BOOL bIsOutlMv = FALSE );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
+
     void SetStartNode( ULONG nValue ) { nNewStt = nValue; }
 };
 
@@ -1436,9 +1527,10 @@ class SwUndoNumUpDown : public SwUndo, private SwUndRng
     short nOffset;
 public:
     SwUndoNumUpDown( const SwPaM& rPam, short nOffset );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 class SwUndoNumOrNoNum : public SwUndo
@@ -1449,9 +1541,10 @@ class SwUndoNumOrNoNum : public SwUndo
 public:
     SwUndoNumOrNoNum( const SwNodeIndex& rIdx, BOOL mbOldNum,
                       BOOL mbNewNum );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 class SwUndoNumRuleStart : public SwUndo
@@ -1463,9 +1556,10 @@ class SwUndoNumRuleStart : public SwUndo
 public:
     SwUndoNumRuleStart( const SwPosition& rPos, BOOL bDelete );
     SwUndoNumRuleStart( const SwPosition& rPos, USHORT nStt );
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 //--------------------------------------------------------------------
@@ -1477,9 +1571,11 @@ class SwSdrUndo : public SwUndo
     SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
 public:
     SwSdrUndo( SdrUndoAction* , const SdrMarkList* pMarkList );
+
     virtual ~SwSdrUndo();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     String GetComment() const;
 };
@@ -1492,9 +1588,11 @@ class SwUndoDrawGroup : public SwUndo
 
 public:
     SwUndoDrawGroup( USHORT nCnt );
+
     virtual ~SwUndoDrawGroup();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void AddObj( USHORT nPos, SwDrawFrmFmt*, SdrObject* );
     void SetGroupFmt( SwDrawFrmFmt* );
@@ -1520,9 +1618,11 @@ class SwUndoDrawUnGroup : public SwUndo
 
 public:
     SwUndoDrawUnGroup( SdrObjGroup* );
+
     virtual ~SwUndoDrawUnGroup();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void AddObj( USHORT nPos, SwDrawFrmFmt* );
 };
@@ -1535,9 +1635,11 @@ class SwUndoDrawUnGroupConnectToLayout : public SwUndo
 
     public:
         SwUndoDrawUnGroupConnectToLayout();
+
         virtual ~SwUndoDrawUnGroupConnectToLayout();
-        virtual void Undo( SwUndoIter& );
-        virtual void Redo( SwUndoIter& );
+
+        virtual void UndoImpl( ::sw::UndoRedoContext & );
+        virtual void RedoImpl( ::sw::UndoRedoContext & );
 
         void AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
                            SdrObject* pDrawObject );
@@ -1554,9 +1656,11 @@ class SwUndoDrawDelete : public SwUndo
 
 public:
     SwUndoDrawDelete( USHORT nCnt );
+
     virtual ~SwUndoDrawDelete();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     void AddObj( USHORT nPos, SwDrawFrmFmt*, const SdrMark& );
 };
@@ -1571,14 +1675,15 @@ class SwUndoReRead : public SwUndo
     USHORT nMirr;
 
     void SaveGraphicData( const SwGrfNode& );
-    void SetAndSave( SwUndoIter& );
+    void SetAndSave( ::sw::UndoRedoContext & );
 
 public:
     SwUndoReRead( const SwPaM& rPam, const SwGrfNode& pGrfNd );
+
     virtual ~SwUndoReRead();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 //--------------------------------------------------------------------
@@ -1623,9 +1728,9 @@ public:
                         const BOOL bCpyBrd );
     virtual ~SwUndoInsertLabel();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     // #111827#
     /**
@@ -1664,9 +1769,9 @@ public:
                           USHORT nNum, bool bIsEndNote );
     virtual ~SwUndoChangeFootNote();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
-    virtual void Repeat( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     SwHistory& GetHistory() { return *m_pHistory; }
 };
@@ -1677,10 +1782,11 @@ class SwUndoFootNoteInfo : public SwUndo
 
 public:
     SwUndoFootNoteInfo( const SwFtnInfo &rInfo );
+
     virtual ~SwUndoFootNoteInfo();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 class SwUndoEndNoteInfo : public SwUndo
@@ -1689,10 +1795,11 @@ class SwUndoEndNoteInfo : public SwUndo
 
 public:
     SwUndoEndNoteInfo( const SwEndNoteInfo &rInfo );
+
     virtual ~SwUndoEndNoteInfo();
 
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 
@@ -1704,14 +1811,17 @@ class SwUndoTransliterate : public SwUndo, public SwUndRng
     std::vector< _UndoTransliterate_Data * >    aChanges;
     sal_uInt32 nType;
 
+    void DoTransliterate(SwDoc & rDoc, SwPaM & rPam);
+
 public:
     SwUndoTransliterate( const SwPaM& rPam,
                             const utl::TransliterationWrapper& rTrans );
+
     virtual ~SwUndoTransliterate();
 
-    virtual void Undo( SwUndoIter& rUndoIter );
-    virtual void Redo( SwUndoIter& rUndoIter );
-    virtual void Repeat( SwUndoIter& rUndoIter );
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void AddChanges( SwTxtNode& rTNd, xub_StrLen nStart, xub_StrLen nLen,
                      ::com::sun::star::uno::Sequence <sal_Int32>& rOffsets );
@@ -1728,14 +1838,16 @@ protected:
     SwUndoId nUserId;
     BOOL bHiddenRedlines;
 
-    virtual void _Undo( SwUndoIter& );
-    virtual void _Redo( SwUndoIter& );
+    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
     SwUndoRedline( SwUndoId nUserId, const SwPaM& rRange );
+
     virtual ~SwUndoRedline();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 
     SwUndoId GetUserId() const { return nUserId; }
     USHORT GetRedlSaveCount() const
@@ -1748,8 +1860,8 @@ class SwUndoRedlineDelete : public SwUndoRedline
     BOOL bIsDelim : 1;
     BOOL bIsBackspace : 1;
 
-    virtual void _Undo( SwUndoIter& );
-    virtual void _Redo( SwUndoIter& );
+    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
     SwUndoRedlineDelete( const SwPaM& rRange, SwUndoId nUserId = UNDO_EMPTY );
@@ -1767,13 +1879,15 @@ class SwUndoRedlineSort : public SwUndoRedline
     ULONG nSaveEndNode, nOffset;
     xub_StrLen nSaveEndCntnt;
 
-    virtual void _Undo( SwUndoIter& );
-    virtual void _Redo( SwUndoIter& );
+    virtual void UndoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
 
 public:
     SwUndoRedlineSort( const SwPaM& rRange, const SwSortOptions& rOpt );
+
     virtual ~SwUndoRedlineSort();
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 
     void SetSaveRange( const SwPaM& rRange );
     void SetOffset( const SwNodeIndex& rIdx );
@@ -1781,18 +1895,24 @@ public:
 
 class SwUndoAcceptRedline : public SwUndoRedline
 {
-    virtual void _Redo( SwUndoIter& );
+private:
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
+
 public:
     SwUndoAcceptRedline( const SwPaM& rRange );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 class SwUndoRejectRedline : public SwUndoRedline
 {
-    virtual void _Redo( SwUndoIter& );
+private:
+    virtual void RedoRedlineImpl(SwDoc & rDoc, SwPaM & rPam);
+
 public:
     SwUndoRejectRedline( const SwPaM& rRange );
-    virtual void Repeat( SwUndoIter& );
+
+    virtual void RepeatImpl( ::sw::RepeatContext & );
 };
 
 //--------------------------------------------------------------------
@@ -1808,45 +1928,13 @@ public:
     SwUndoCompDoc( const SwRedline& rRedl );
 
     virtual ~SwUndoCompDoc();
-    virtual void Undo( SwUndoIter& );
-    virtual void Redo( SwUndoIter& );
+
+    virtual void UndoImpl( ::sw::UndoRedoContext & );
+    virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
 
 //--------------------------------------------------------------------
-
-// Object der als Iterator durch die Undo-Liste laeuft, bis die
-// letze oder die angegebene Klammerung/Id erreicht ist.
-
-class SwUndoIter
-{
-    friend class ::sw::UndoManager; // to set bWeiter in SwDoc::Undo
-    friend void SwUndoEnd::Undo( SwUndoIter& );
-    friend void SwUndoStart::Undo( SwUndoIter& );
-    friend void SwUndoEnd::Redo( SwUndoIter& );
-    friend void SwUndoStart::Redo( SwUndoIter& );
-    friend void SwUndoEnd::Repeat( SwUndoIter& );
-    friend void SwUndoStart::Repeat( SwUndoIter& );
-
-    SwUndoId nUndoId;
-    USHORT nEndCnt;
-    BOOL bWeiter : 1;
-
-public:
-    bool m_bDeleteRepeated; // has a delete action been repeated?
-    SwPaM * pAktPam;        // Member fuer das Undo
-    SwFrmFmt* pSelFmt;      // ggfs. das Format Rahmen/Object-Selektionen
-    SdrMarkList* pMarkList; // MarkList for all selected SdrObjects
-
-    SwUndoIter( SwPaM * pPam, SwUndoId nId = UNDO_EMPTY );
-
-    BOOL IsNextUndo() const             { return bWeiter; }
-
-    inline SwDoc& GetDoc() const;
-    SwUndoId GetId() const  { return nUndoId; }
-    void ClearSelections()  { pSelFmt = 0; pMarkList = 0; }
-};
-
 
 // -> #111827#
 const int nUndoStringLength = 20;

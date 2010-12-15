@@ -61,7 +61,6 @@
 #include <unoredline.hxx>
 #include <unomap.hxx>
 #include <unoprnms.hxx>
-#include <undobj.hxx>
 #include <unoparagraph.hxx>
 #include <unocrsrhelper.hxx>
 #include <docsh.hxx>
@@ -1427,8 +1426,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aPam, UNDO_EMPTY );
-        m_pDoc->GetIDocumentUndoRedo().Undo(aUndoIter);
+        m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1540,8 +1538,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_INSERT, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( pCursor, UNDO_EMPTY );
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -1819,8 +1816,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
     m_pImpl->m_pDoc->GetIDocumentUndoRedo().EndUndo(UNDO_END, NULL);
     if (bIllegalException || bRuntimeException)
     {
-        SwUndoIter aUndoIter( &aStartPam, UNDO_EMPTY );
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         if (bIllegalException)
         {
             lang::IllegalArgumentException aEx;
@@ -2300,8 +2296,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 
     if(bExcept)
     {
-        SwUndoIter aUndoIter( &aLastPaM, UNDO_EMPTY );
-        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo(aUndoIter);
+        m_pImpl->m_pDoc->GetIDocumentUndoRedo().Undo();
         throw lang::IllegalArgumentException();
     }
 

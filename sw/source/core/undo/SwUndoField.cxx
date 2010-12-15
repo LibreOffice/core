@@ -86,7 +86,7 @@ SwUndoFieldFromDoc::~SwUndoFieldFromDoc()
     delete pNewField;
 }
 
-void SwUndoFieldFromDoc::Undo( SwUndoIter& )
+void SwUndoFieldFromDoc::UndoImpl(::sw::UndoRedoContext &)
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
@@ -97,7 +97,7 @@ void SwUndoFieldFromDoc::Undo( SwUndoIter& )
     }
 }
 
-void SwUndoFieldFromDoc::Redo( SwUndoIter& )
+void SwUndoFieldFromDoc::DoImpl()
 {
     SwTxtFld * pTxtFld = SwDoc::GetTxtFld(GetPosition());
     const SwField * pField = pTxtFld->GetFld().GetFld();
@@ -112,10 +112,15 @@ void SwUndoFieldFromDoc::Redo( SwUndoIter& )
     }
 }
 
-void SwUndoFieldFromDoc::Repeat(SwUndoIter & rIt)
+void SwUndoFieldFromDoc::RedoImpl(::sw::UndoRedoContext &)
+{
+    DoImpl();
+}
+
+void SwUndoFieldFromDoc::RepeatImpl(::sw::RepeatContext &)
 {
     ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
-    Redo(rIt);
+    DoImpl();
 }
 
 SwUndoFieldFromAPI::SwUndoFieldFromAPI(const SwPosition & rPos,
@@ -129,7 +134,7 @@ SwUndoFieldFromAPI::~SwUndoFieldFromAPI()
 {
 }
 
-void SwUndoFieldFromAPI::Undo( SwUndoIter& )
+void SwUndoFieldFromAPI::UndoImpl(::sw::UndoRedoContext &)
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
@@ -137,7 +142,7 @@ void SwUndoFieldFromAPI::Undo( SwUndoIter& )
         pField->PutValue(aOldVal, nWhich);
 }
 
-void SwUndoFieldFromAPI::Redo( SwUndoIter& )
+void SwUndoFieldFromAPI::DoImpl()
 {
     SwField * pField = SwDoc::GetField(GetPosition());
 
@@ -145,8 +150,13 @@ void SwUndoFieldFromAPI::Redo( SwUndoIter& )
         pField->PutValue(aNewVal, nWhich);
 }
 
-
-void SwUndoFieldFromAPI::Repeat(SwUndoIter & rIter)
+void SwUndoFieldFromAPI::RedoImpl(::sw::UndoRedoContext &)
 {
-    Redo(rIter);
+    DoImpl();
 }
+
+void SwUndoFieldFromAPI::RepeatImpl(::sw::RepeatContext &)
+{
+    DoImpl();
+}
+

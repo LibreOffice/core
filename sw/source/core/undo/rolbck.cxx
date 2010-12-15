@@ -579,9 +579,10 @@ SwHistoryTxtFlyCnt::~SwHistoryTxtFlyCnt()
 
 void SwHistoryTxtFlyCnt::SetInDoc( SwDoc* pDoc, bool )
 {
-    SwPaM aPam( pDoc->GetNodes().GetEndOfPostIts() );
-    SwUndoIter aUndoIter( &aPam );
-    m_pUndo->Undo( aUndoIter );
+    ::sw::IShellCursorSupplier *const pISCS(pDoc->GetIShellCursorSupplier());
+    OSL_ASSERT(pISCS);
+    ::sw::UndoRedoContext context(*pDoc, *pISCS);
+    m_pUndo->UndoImpl(context);
 }
 
 
@@ -1265,7 +1266,7 @@ USHORT SwHistory::SetTmpEnd( USHORT nNewTmpEnd )
         if ( HSTRY_FLYCNT == (*this)[ n ]->Which() )
         {
             static_cast<SwHistoryTxtFlyCnt*>((*this)[ n ])
-                ->GetUDelLFmt()->Redo();
+                ->GetUDelLFmt()->RedoForRollback();
         }
     }
 

@@ -61,8 +61,6 @@
 
 // using namespace comphelper;
 
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
 
 // DELETE
 /*  lcl_MakeAutoFrms has to call MakeFrms for objects bounded "AtChar" ( == AUTO ),
@@ -643,9 +641,9 @@ void lcl_ReAnchorAtCntntFlyFrames( const SwSpzFrmFmts& rSpzArr, SwPosition &rPos
     }
 }
 
-void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
+void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwDoc* pDoc = &rUndoIter.GetDoc();
+    SwDoc *const pDoc = & rContext.GetDoc();
 
     ULONG nCalcStt = nSttNode - nNdDiff;
 
@@ -846,15 +844,13 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
     if( pRedlSaveData )
         SetSaveData( *pDoc, *pRedlSaveData );
 
-    SetPaM( rUndoIter, TRUE );
+    AddUndoRedoPaM(rContext, true);
 }
 
-void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
+void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SwPaM& rPam = *rUndoIter.pAktPam;
+    SwPaM & rPam = AddUndoRedoPaM(rContext);
     SwDoc& rDoc = *rPam.GetDoc();
-
-    SetPaM( rPam );
 
     if( pRedlSaveData )
     {
@@ -970,14 +966,14 @@ void SwUndoDelete::Redo( SwUndoIter& rUndoIter )
         rDoc.DeleteAndJoin( rPam );
 }
 
-void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
+void SwUndoDelete::RepeatImpl(::sw::RepeatContext & rContext)
 {
     // this action does not seem idempotent,
     // so make sure it is only executed once on repeat
-    if (rUndoIter.m_bDeleteRepeated)
+    if (rContext.m_bDeleteRepeated)
         return;
 
-    SwPaM& rPam = *rUndoIter.pAktPam;
+    SwPaM & rPam = rContext.GetRepeatPaM();
     SwDoc& rDoc = *rPam.GetDoc();
     ::sw::GroupUndoGuard const undoGuard(rDoc.GetIDocumentUndoRedo());
     if( !rPam.HasMark() )
@@ -989,7 +985,7 @@ void SwUndoDelete::Repeat( SwUndoIter& rUndoIter )
         rDoc.DelFullPara( rPam );
     else
         rDoc.DeleteAndJoin( rPam );
-    rUndoIter.m_bDeleteRepeated = true;
+    rContext.m_bDeleteRepeated = true;
 }
 
 

@@ -41,9 +41,6 @@
 #include "SwRewriter.hxx"
 
 
-inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
-
-
 SwUndoBookmark::SwUndoBookmark( SwUndoId nUndoId,
             const ::sw::mark::IMark& rBkmk )
     : SwUndo( nUndoId )
@@ -59,7 +56,6 @@ void SwUndoBookmark::SetInDoc( SwDoc* pDoc )
 {
     m_pHistoryBookmark->SetInDoc( pDoc, false );
 }
-
 
 void SwUndoBookmark::ResetInDoc( SwDoc* pDoc )
 {
@@ -95,15 +91,13 @@ SwUndoInsBookmark::SwUndoInsBookmark( const ::sw::mark::IMark& rBkmk )
 }
 
 
-void SwUndoInsBookmark::Undo( SwUndoIter& rUndoIter )
+void SwUndoInsBookmark::UndoImpl(::sw::UndoRedoContext & rContext)
 {
-    ResetInDoc( &rUndoIter.GetDoc() );
+    ResetInDoc( &rContext.GetDoc() );
 }
 
-
-void SwUndoInsBookmark::Redo( SwUndoIter& rUndoIter )
+void SwUndoInsBookmark::RedoImpl(::sw::UndoRedoContext & rContext)
 {
-    SetInDoc( &rUndoIter.GetDoc() );
+    SetInDoc( &rContext.GetDoc() );
 }
-
 

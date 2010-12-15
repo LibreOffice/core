@@ -41,6 +41,7 @@
 #include <flyfrm.hxx>
 #include <frmfmt.hxx>
 #include <viewimp.hxx>
+#include <docsh.hxx>
 
 
 /** helper function to select all objects in an SdrMarkList;
@@ -48,8 +49,57 @@
 void lcl_SelectSdrMarkList( SwEditShell* pShell,
                             const SdrMarkList* pSdrMarkList );
 
+bool SwEditShell::CursorsLocked() const
+{
 
-BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
+    return GetDoc()->GetDocShell()->GetModel()->hasControllersLocked();
+}
+
+void
+SwEditShell::HandleUndoRedoContext(::sw::UndoRedoContext & rContext)
+{
+    // do nothing if somebody has locked controllers!
+    if (CursorsLocked())
+    {
+        return;
+    }
+
+    SwFrmFmt * pSelFmt(0);
+    SdrMarkList * pMarkList(0);
+    rContext.GetSelections(pSelFmt, pMarkList);
+
+    if (pSelFmt) // select frame
+    {
+        if (RES_DRAWFRMFMT == pSelFmt->Which())
+        {
+            SdrObject* pSObj = pSelFmt->FindSdrObject();
+            static_cast<SwFEShell*>(this)->SelectObj(
+                    pSObj->GetCurrentBoundRect().Center() );
+        }
+        else
+        {
+            Point aPt;
+            SwFlyFrm *const pFly =
+                static_cast<SwFlyFrmFmt*>(pSelFmt)->GetFrm(& aPt, false);
+            if (pFly)
+            {
+                static_cast<SwFEShell*>(this)->SelectFlyFrm(*pFly, true);
+            }
+        }
+    }
+    else if (pMarkList)
+    {
+        lcl_SelectSdrMarkList( this, pMarkList );
+    }
+    else if (GetCrsr()->GetNext() != GetCrsr())
+    {
+        // current cursor is the last one:
+        // go around the ring, to the first cursor
+        GoNextCrsr();
+    }
+}
+
+bool SwEditShell::Undo(USHORT const nCount)
 {
     SET_CURR_SHELL( this );
 
@@ -71,7 +121,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
         //              soll dieser wieder an die Position
         SwUndoId nLastUndoId(UNDO_EMPTY);
         GetDoc()->GetIDocumentUndoRedo().GetLastUndoInfo(0, & nLastUndoId);
-        BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
+        bool bRestoreCrsr = 1 == nCount && (UNDO_AUTOFORMAT == nLastUndoId ||
                                            UNDO_AUTOCORRECT == nLastUndoId );
         Push();
 
@@ -81,52 +131,19 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
-        SwUndoIter aUndoIter( GetCrsr(), nUndoId );
-        while( nCnt-- )
-        {
-            do {
-
-                bRet = GetDoc()->GetIDocumentUndoRedo().Undo( aUndoIter )
+        try {
+            for (USHORT i = 0; i < nCount; ++i)
+            {
+                bRet = GetDoc()->GetIDocumentUndoRedo().Undo()
                     || bRet;
-
-                if( !aUndoIter.IsNextUndo() )
-                    break;
-
-                // es geht weiter, also erzeuge einen neuen Cursor wenn
-                // der alte schon eine Selection hat
-                // JP 02.04.98: aber nicht wenns ein Autoformat ist
-                if( !bRestoreCrsr && HasSelection() )
-                {
-                    CreateCrsr();
-                    aUndoIter.pAktPam = GetCrsr();
-                }
-            } while( TRUE );
+            }
+        } catch (::com::sun::star::uno::Exception & e) {
+            OSL_TRACE("SwEditShell::Undo(): exception caught:\n %s",
+                ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+                    .getStr());
         }
 
         Pop( !bRestoreCrsr );
-
-        if( aUndoIter.pSelFmt )     // dann erzeuge eine Rahmen-Selection
-        {
-            if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
-            {
-                SdrObject* pSObj = aUndoIter.pSelFmt->FindSdrObject();
-                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
-            }
-            else
-            {
-                Point aPt;
-                SwFlyFrm* pFly = ((SwFlyFrmFmt*)aUndoIter.pSelFmt)->GetFrm(
-                                                            &aPt, FALSE );
-                if( pFly )
-                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, TRUE );
-            }
-        }
-        else if( aUndoIter.pMarkList )
-        {
-            lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
-        }
-        else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
-            GoNextCrsr();               // Undo zur alten Undo-Position !!
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
@@ -139,7 +156,7 @@ BOOL SwEditShell::Undo( SwUndoId nUndoId, USHORT nCnt )
     return bRet;
 }
 
-USHORT SwEditShell::Redo( USHORT nCnt )
+bool SwEditShell::Redo(USHORT const nCount)
 {
     SET_CURR_SHELL( this );
 
@@ -165,49 +182,17 @@ USHORT SwEditShell::Redo( USHORT nCnt )
 
         RedlineMode_t eOld = GetDoc()->GetRedlineMode();
 
-        SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
-        while( nCnt-- )
-        {
-            do {
-
-                bRet = GetDoc()->GetIDocumentUndoRedo().Redo( aUndoIter )
+        try {
+            for (USHORT i = 0; i < nCount; ++i)
+            {
+                bRet = GetDoc()->GetIDocumentUndoRedo().Redo()
                     || bRet;
-
-                if( !aUndoIter.IsNextUndo() )
-                    break;
-
-                // es geht weiter, also erzeugen einen neuen Cursor wenn
-                // der alte schon eine SSelection hat
-                if( HasSelection() )
-                {
-                    CreateCrsr();
-                    aUndoIter.pAktPam = GetCrsr();
-                }
-            } while( TRUE );
-        }
-
-        if( aUndoIter.pSelFmt )     // dann erzeuge eine Rahmen-Selection
-        {
-            if( RES_DRAWFRMFMT == aUndoIter.pSelFmt->Which() )
-            {
-                SdrObject* pSObj = aUndoIter.pSelFmt->FindSdrObject();
-                ((SwFEShell*)this)->SelectObj( pSObj->GetCurrentBoundRect().Center() );
             }
-            else
-            {
-                Point aPt;
-                SwFlyFrm* pFly = ((SwFlyFrmFmt*)aUndoIter.pSelFmt)->GetFrm(
-                                                            &aPt, FALSE );
-                if( pFly )
-                    ((SwFEShell*)this)->SelectFlyFrm( *pFly, TRUE );
-            }
+        } catch (::com::sun::star::uno::Exception & e) {
+            OSL_TRACE("SwEditShell::Redo(): exception caught:\n %s",
+                ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+                    .getStr());
         }
-        else if( aUndoIter.pMarkList )
-        {
-            lcl_SelectSdrMarkList( this, aUndoIter.pMarkList );
-        }
-        else if( GetCrsr()->GetNext() != GetCrsr() )    // gehe nach einem
-            GoNextCrsr();                   // Redo zur alten Undo-Position !!
 
         GetDoc()->SetRedlineMode( eOld );
         GetDoc()->CompressRedlines();
@@ -222,16 +207,22 @@ USHORT SwEditShell::Redo( USHORT nCnt )
 }
 
 
-USHORT SwEditShell::Repeat( USHORT nCount )
+bool SwEditShell::Repeat(USHORT const nCount)
 {
     SET_CURR_SHELL( this );
 
     BOOL bRet = FALSE;
     StartAllAction();
 
-        SwUndoIter aUndoIter( GetCrsr(), UNDO_EMPTY );
-        bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( aUndoIter, nCount )
+    try {
+        ::sw::RepeatContext context(*GetDoc(), *GetCrsr());
+        bRet = GetDoc()->GetIDocumentUndoRedo().Repeat( context, nCount )
             || bRet;
+    } catch (::com::sun::star::uno::Exception & e) {
+        OSL_TRACE("SwEditShell::Repeat(): exception caught:\n %s",
+            ::rtl::OUStringToOString(e.Message, RTL_TEXTENCODING_UTF8)
+                .getStr());
+    }
 
     EndAllAction();
     return bRet;
