@@ -79,7 +79,6 @@ class SvxTabStopItem;
 class SwDDEFieldType;
 class Graphic;
 class SwGrfNode;
-class SwUndos;
 class SwFtnInfo;
 class SwEndNoteInfo;
 class SwNodeIndex;
@@ -795,12 +794,15 @@ public:
 
 };
 
-// Basis-Klasse fuer Insert von Dokument, Glossaries und Kopieren
+
+class SwUndoInsLayFmt;
+
+// base class for insertion of Document, Glossaries and Copy
 class SwUndoInserts : public SwUndo, public SwUndRng, private SwUndoSaveCntnt
 {
     SwTxtFmtColl *pTxtFmtColl, *pLastNdColl;
     SvPtrarr* pFrmFmts;
-    SwUndos* pFlyUndos;
+    ::std::vector< ::boost::shared_ptr<SwUndoInsLayFmt> > m_FlyUndos;
     SwRedlineData* pRedlData;
     BOOL bSttWasTxtNd;
 protected:
@@ -928,11 +930,13 @@ public:
     virtual void RedoImpl( ::sw::UndoRedoContext & );
 };
 
+class SwUndoTblNumFmt;
+
 class SwUndoTblAutoFmt : public SwUndo
 {
     ULONG nSttNode;
     _SaveTable* pSaveTbl;
-    SwUndos* pUndos;
+    ::std::vector< ::boost::shared_ptr<SwUndoTblNumFmt> > m_Undos;
     BOOL bSaveCntntAttr;
 
     void UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext);

@@ -68,7 +68,6 @@ public:
 #endif
 };
 
-SV_IMPL_PTRARR( SwUndos, SwUndo*)
 SV_IMPL_PTRARR( SwRedlineSaveDatas, SwRedlineSaveDataPtr )
 
 

@@ -45,7 +45,7 @@
 
 SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     : SwUndo( nUndoId ), SwUndRng( rPam ),
-    pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pFlyUndos(0), pRedlData( 0 ),
+    pTxtFmtColl( 0 ), pLastNdColl(0), pFrmFmts( 0 ), pRedlData( 0 ),
     bSttWasTxtNd( TRUE ), nNdDiff( 0 ), pPos( 0 ), nSetPos( 0 )
 {
     pHistory = new SwHistory;
@@ -116,7 +116,6 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
     {
         // dann alle neuen Flys zusammen sammeln !!
         SwDoc* pDoc = (SwDoc*)rPam.GetDoc();
-        pFlyUndos = new SwUndos();
         USHORT nFndPos, nArrLen = pDoc->GetSpzFrmFmts()->Count();
         for( USHORT n = 0; n < nArrLen; ++n )
         {
@@ -130,16 +129,15 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
                 if( !pFrmFmts ||
                     USHRT_MAX == ( nFndPos = pFrmFmts->GetPos( pFmt ) ) )
                 {
-                    SwUndoInsLayFmt* pFlyUndo = new SwUndoInsLayFmt( pFmt,0,0 );
-                    pFlyUndos->Insert( pFlyUndo, pFlyUndos->Count() );
+                    ::boost::shared_ptr<SwUndoInsLayFmt> const pFlyUndo(
+                        new SwUndoInsLayFmt(pFmt, 0, 0));
+                    m_FlyUndos.push_back(pFlyUndo);
                 }
                 else
                     pFrmFmts->Remove( nFndPos );
             }
         }
         delete pFrmFmts, pFrmFmts = 0;
-        if( !pFlyUndos->Count() )
-            delete pFlyUndos, pFlyUndos = 0;
     }
 }
 
@@ -166,7 +164,6 @@ SwUndoInserts::~SwUndoInserts()
         delete pPos;
     }
     delete pFrmFmts;
-    delete pFlyUndos;
     delete pRedlData;
 }
 
@@ -215,12 +212,12 @@ void SwUndoInserts::UndoImpl(::sw::UndoRedoContext & rContext)
         }
     }
 
-    if( pFlyUndos )
+    if (m_FlyUndos.size())
     {
         ULONG nTmp = pPam->GetPoint()->nNode.GetIndex();
-        for( USHORT n = pFlyUndos->Count(); n; )
+        for (size_t n = m_FlyUndos.size(); 0 < n; --n)
         {
-            (*pFlyUndos)[ --n ]->UndoImpl(rContext);
+            m_FlyUndos[ n-1 ]->UndoImpl(rContext);
         }
         nNdDiff += nTmp - pPam->GetPoint()->nNode.GetIndex();
     }
@@ -316,11 +313,10 @@ void SwUndoInserts::RedoImpl(::sw::UndoRedoContext & rContext)
             pTxtNd->ChgFmtColl( pLastNdColl );
     }
 
-    if( pFlyUndos )
-        for( USHORT n = pFlyUndos->Count(); n; )
-        {
-            (*pFlyUndos)[ --n ]->RedoImpl(rContext);
-        }
+    for (size_t n = m_FlyUndos.size(); 0 < n; --n)
+    {
+        m_FlyUndos[ n-1 ]->RedoImpl(rContext);
+    }
 
     pHistory->Rollback( pDoc, nSetPos );
 

@@ -843,41 +843,6 @@ SW_DLLPUBLIC const char * dbg_out(SwOutlineNodes & rNodes)
     return dbg_out(lcl_dbg_out(rNodes));
 }
 
-#if 0
-String lcl_dbg_out(const SwUndos & rUndos)
-{
-    USHORT nIndent = 0;
-
-    String aStr("[\n", RTL_TEXTENCODING_ASCII_US);
-
-    for (USHORT n = 0; n < rUndos.Count(); n++)
-    {
-        SwUndo * pUndo = rUndos[n];
-
-        if (pUndo->GetId() == UNDO_END)
-            nIndent--;
-
-        for (USHORT nI = 0; n < nIndent; nI++)
-            aStr += String("  ", RTL_TEXTENCODING_ASCII_US);
-
-        aStr += lcl_dbg_out(*pUndo);
-        aStr += String("\n", RTL_TEXTENCODING_ASCII_US);
-
-        if (pUndo->GetId() == UNDO_START)
-            nIndent++;
-    }
-
-    aStr += String("]\n", RTL_TEXTENCODING_ASCII_US);
-
-    return aStr;
-}
-
-SW_DLLPUBLIC const char * dbg_out(const SwUndos & rUndos)
-{
-    return dbg_out(lcl_dbg_out(rUndos));
-}
-#endif
-
 String lcl_dbg_out(const SwRewriter & rRewriter)
 {
     (void) rRewriter;

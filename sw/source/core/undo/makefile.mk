@@ -52,7 +52,8 @@ EXCEPTIONSFILES = \
         $(SLO)$/undraw.obj \
         $(SLO)$/unnum.obj \
         $(SLO)$/unovwr.obj \
-        $(SLO)$/untbl.obj
+        $(SLO)$/untbl.obj \
+        $(SLO)$/untblk.obj \
 
 SLOFILES =	\
         $(SLO)$/SwRewriter.obj \

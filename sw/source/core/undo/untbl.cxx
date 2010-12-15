@@ -1473,7 +1473,7 @@ void SwUndoAttrTbl::RedoImpl(::sw::UndoRedoContext & rContext)
 SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
                                     const SwTableAutoFmt& rAFmt )
     : SwUndo( UNDO_TABLE_AUTOFMT ),
-    nSttNode( rTblNd.GetIndex() ), pUndos( 0 ),
+    nSttNode( rTblNd.GetIndex() ),
     bSaveCntntAttr( FALSE )
 {
     pSaveTbl = new _SaveTable( rTblNd.GetTable() );
@@ -1489,16 +1489,13 @@ SwUndoTblAutoFmt::SwUndoTblAutoFmt( const SwTableNode& rTblNd,
 
 SwUndoTblAutoFmt::~SwUndoTblAutoFmt()
 {
-    delete pUndos;
     delete pSaveTbl;
 }
 
 void SwUndoTblAutoFmt::SaveBoxCntnt( const SwTableBox& rBox )
 {
-    SwUndoTblNumFmt* p = new SwUndoTblNumFmt( rBox );
-    if( !pUndos )
-        pUndos = new SwUndos( 8, 8 );
-    pUndos->Insert( p, pUndos->Count() );
+    ::boost::shared_ptr<SwUndoTblNumFmt> const p(new SwUndoTblNumFmt(rBox));
+    m_Undos.push_back(p);
 }
 
 
@@ -1515,12 +1512,13 @@ SwUndoTblAutoFmt::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rContext)
     if( bSaveCntntAttr )
         pOrig->SaveCntntAttrs( &rDoc );
 
-    if( pUndos && bUndo )
-        for( USHORT n = pUndos->Count(); n; )
+    if (bUndo)
+    {
+        for (size_t n = m_Undos.size(); 0 < n; --n)
         {
-            static_cast<SwUndoTblNumFmt*>(pUndos->GetObject( --n ))
-                ->UndoImpl(rContext);
+            m_Undos.at(n-1)->UndoImpl(rContext);
         }
+    }
 
     pSaveTbl->RestoreAttr( pTblNd->GetTable(), !bUndo );
     delete pSaveTbl;
