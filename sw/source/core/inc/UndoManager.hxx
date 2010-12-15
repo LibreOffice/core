@@ -44,7 +44,7 @@ namespace sw {
 
 class UndoManager
     : public IDocumentUndoRedo
-    , private SfxUndoManager
+    , public SfxUndoManager
 {
 public:
 

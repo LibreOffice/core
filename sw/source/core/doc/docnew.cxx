@@ -475,6 +475,11 @@ SwDoc::~SwDoc()
     // nothing here should create Undo actions!
     GetIDocumentUndoRedo().DoUndo(false);
 
+    if (pDocShell)
+    {
+        pDocShell->SetUndoManager(0);
+    }
+
     // --> OD 2007-03-16 #i73788#
     SwPauseThreadStarting aPauseThreadStarting;
     // <--
@@ -753,7 +758,15 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
 {
     if( pDocShell != pDSh )
     {
+        if (pDocShell)
+        {
+            pDocShell->SetUndoManager(0);
+        }
         pDocShell = pDSh;
+        if (pDocShell)
+        {
+            pDocShell->SetUndoManager(& GetUndoManager());
+        }
 
         pLinkMgr->SetPersist( pDocShell );
         //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
