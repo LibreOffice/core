@@ -272,7 +272,7 @@ sub replace_all_setupscriptvariables_in_script
     my $bigstring = '';
     for my $line (@{$scriptref}) { $bigstring = $bigstring . $line; }
 
-    foreach my $key ( keys %subs )
+    foreach my $key (sort { length ($b) <=> length ($a) } keys %subs)
     {
         # Attention: It must be possible to substitute "%PRODUCTNAMEn", "%PRODUCTNAME%PRODUCTVERSIONabc"
         my $value = $subs{$key};
