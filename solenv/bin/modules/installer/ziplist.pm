@@ -464,7 +464,7 @@ sub replace_all_variables_in_pathes
 
         my $key;
 
-        foreach $key (keys %{$variableshashref})
+        foreach $key (sort { length ($b) <=> length ($a) } keys %{$variableshashref})
         {
             my $value = $variableshashref->{$key};
 
