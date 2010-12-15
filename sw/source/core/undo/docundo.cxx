@@ -42,7 +42,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <undo.hrc>
 #include <editsh.hxx>

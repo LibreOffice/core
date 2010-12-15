@@ -59,7 +59,7 @@
 #include <poolfmt.hxx>
 #include <txtfrm.hxx>
 #include <rootfrm.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swundo.hxx>
 #include <mdiexp.hxx>
 #include <docary.hxx>

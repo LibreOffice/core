@@ -37,7 +37,7 @@
 #include <txtflcnt.hxx>
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>       // fuer die Attribut History
 #include <doc.hxx>
 #include <docary.hxx>

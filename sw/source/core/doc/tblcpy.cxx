@@ -48,7 +48,7 @@
 #include <mvsave.hxx>
 #include <docary.hxx>
 #include <fmtanchr.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <redline.hxx>
 #include <fmtfsize.hxx>
 #include <list>

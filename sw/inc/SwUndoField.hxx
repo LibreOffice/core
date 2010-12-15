@@ -29,6 +29,9 @@
 
 #include <undobj.hxx>
 
+#include <com/sun/star/uno/Any.h>
+
+
 class SwDoc;
 class SwField;
 class SwMsgPoolItem;

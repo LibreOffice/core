@@ -47,7 +47,7 @@
 #include <swundo.hxx>           // fuer die UndoIds
 #include <pam.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <dcontact.hxx>
 #include <dview.hxx>
 #include <rootfrm.hxx>

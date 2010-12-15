@@ -61,7 +61,7 @@
 #include <swundo.hxx>
 #include <swtable.hxx>
 #include <crstate.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
 

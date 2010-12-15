@@ -29,6 +29,8 @@
 
 #include <undobj.hxx>
 #include <swundo.hxx>
+#include <numrule.hxx>
+
 
 class SwDoc;
 class SwTxtFmtColl;

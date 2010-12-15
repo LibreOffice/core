@@ -41,7 +41,7 @@
 #include <ndtxt.hxx>
 #include <doctxm.hxx>       // pTOXBaseRing
 #include <poolfmt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swundo.hxx>
 #include <SwUndoFmt.hxx>
 #include <rolbck.hxx>

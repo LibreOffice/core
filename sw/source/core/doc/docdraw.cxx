@@ -56,7 +56,7 @@
 #include <poolfmt.hxx>
 #include <viewsh.hxx>           // fuer MakeDrawView
 #include <drawdoc.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <dcontact.hxx>
 #include <dview.hxx>

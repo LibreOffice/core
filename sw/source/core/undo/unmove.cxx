@@ -33,7 +33,7 @@
 #include <pam.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>
 
 

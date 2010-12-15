@@ -43,7 +43,7 @@
 #include <cntfrm.hxx>
 #include <tblsel.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <rolbck.hxx>
 #include <ddefld.hxx>
 #include <tabcol.hxx>

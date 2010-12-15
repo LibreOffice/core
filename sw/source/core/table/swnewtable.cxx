@@ -32,7 +32,7 @@
 #include <tblsel.hxx>
 #include <tblrwcl.hxx>
 #include <node.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <pam.hxx>
 #include <frmfmt.hxx>
 #include <frmatr.hxx>

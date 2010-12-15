@@ -39,7 +39,7 @@
 #include <frmfmt.hxx>
 #include <frmtool.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swtable.hxx>
 #include <viscrs.hxx>
 #include <fntcache.hxx>

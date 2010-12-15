@@ -42,7 +42,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <redline.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <section.hxx>
 #include <tox.hxx>
 #include <docsh.hxx>

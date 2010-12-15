@@ -34,7 +34,7 @@
 #include "swundo.hxx"           // fuer die UndoIds
 #include "pam.hxx"
 
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 #include "IMark.hxx"
 #include "rolbck.hxx"
 

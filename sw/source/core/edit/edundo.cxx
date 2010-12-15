@@ -35,7 +35,7 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <pam.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swundo.hxx>
 #include <dcontact.hxx>
 #include <flyfrm.hxx>

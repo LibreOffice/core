@@ -33,7 +33,7 @@
 #include <pam.hxx>
 #include <swtable.hxx>
 #include <ndtxt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
 #include <redline.hxx>

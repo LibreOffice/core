@@ -63,7 +63,7 @@
 #include <fldbas.hxx>
 #include <poolfmt.hxx>
 #include <tabfrm.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <tblafmt.hxx>
 #include <swcache.hxx>
 #include <ddefld.hxx>

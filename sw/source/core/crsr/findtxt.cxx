@@ -49,7 +49,7 @@
 #include <pamtyp.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <breakit.hxx>
 
 #include <docsh.hxx>

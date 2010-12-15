@@ -42,7 +42,7 @@
 #include <viewopt.hxx>
 // <--
 #include <SwRewriter.hxx>
-#include <undobj.hxx>
+#include <numrule.hxx>
 #include <swundo.hxx>
 
 /*************************************

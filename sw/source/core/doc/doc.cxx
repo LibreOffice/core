@@ -82,7 +82,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <swundo.hxx>           // fuer die UndoIds
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <pagedesc.hxx> //DTor
 #include <breakit.hxx>
 #include <ndole.hxx>

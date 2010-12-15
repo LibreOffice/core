@@ -33,7 +33,7 @@
 #include "pam.hxx"
 #include "ndtxt.hxx"
 
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 
 
 SwUndoOutlineLeftRight::SwUndoOutlineLeftRight( const SwPaM& rPam,

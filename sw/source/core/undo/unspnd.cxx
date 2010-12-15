@@ -36,7 +36,7 @@
 #include <editeng/brkitem.hxx>
 #include <fmtpdsc.hxx>
 #include <frmfmt.hxx>
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 #include "rolbck.hxx"
 #include "redline.hxx"
 #include "docary.hxx"

@@ -43,7 +43,7 @@
 #include <ndtxt.hxx>
 #include <redline.hxx>
 #include <swundo.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <pamtyp.hxx>
 #include <poolfmt.hxx>
 #include <viewsh.hxx>

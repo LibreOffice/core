@@ -48,7 +48,7 @@
 #include <swundo.hxx>
 #include <sortopt.hxx>
 #include <docsort.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <tblsel.hxx>
 #include <cellatr.hxx>
 #include <redline.hxx>

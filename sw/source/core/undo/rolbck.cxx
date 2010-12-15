@@ -61,7 +61,7 @@
 #include <swtable.hxx>
 #include <rolbck.hxx>
 #include <ndgrf.hxx>            // SwGrfNode
-#include <undobj.hxx>           // fuer UndoDelete
+#include <UndoCore.hxx>
 #include <IMark.hxx>            // fuer SwBookmark
 #include <charfmt.hxx> // #i27615#
 #include <comcore.hrc>

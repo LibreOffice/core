@@ -43,7 +43,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <section.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <swundo.hxx>
 #include <calc.hxx>
 #include <swtable.hxx>

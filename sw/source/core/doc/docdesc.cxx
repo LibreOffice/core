@@ -70,6 +70,7 @@
 #include <GetMetricVal.hxx>
 #include <unotools/syslocale.hxx>
 #include <statstr.hrc>
+#include <hints.hxx>
 
 #include <SwUndoPageDesc.hxx>
 

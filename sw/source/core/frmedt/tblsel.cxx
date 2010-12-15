@@ -52,7 +52,7 @@
 #include <rootfrm.hxx>
 #include <viscrs.hxx>
 #include <swtblfmt.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <mvsave.hxx>
 // OD 26.08.2003 #i18103#
 #include <sectfrm.hxx>

@@ -42,6 +42,7 @@
 #include <docary.hxx>
 #include <swundo.hxx>
 #include <undobj.hxx>
+#include <numrule.hxx>
 #include <doc.hxx>
 #include <frmfmt.hxx>
 #include <fmtanchr.hxx>

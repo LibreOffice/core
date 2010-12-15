@@ -56,7 +56,7 @@
 #include "swtblfmt.hxx"
 #include "docary.hxx"
 #include "ndindex.hxx"
-#include "undobj.hxx"
+#include <UndoCore.hxx>
 
 using namespace ::com::sun::star;
 

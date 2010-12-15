@@ -52,7 +52,7 @@
 #include <swundo.hxx>
 #include <rowfrm.hxx>
 #include <ddefld.hxx>
-#include <undobj.hxx>
+#include <UndoCore.hxx>
 #include <cellatr.hxx>
 #include <mvsave.hxx>
 #include <swtblfmt.hxx>
