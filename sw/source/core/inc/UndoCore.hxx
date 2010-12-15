@@ -32,8 +32,6 @@
 
 #include <memory>
 
-#include <tools/mempool.hxx>
-
 #include <calbck.hxx>
 
 
@@ -47,10 +45,6 @@ class SwFmtAnchor;
 class SdrMarkList;
 class SwUndoDelete;
 class SwRedlineSaveData;
-
-namespace sfx2 {
-    class MetadatableUndo;
-}
 
 namespace sw {
     class UndoManager;
@@ -125,73 +119,6 @@ private:
 
 } // namespace sw
 
-
-
-class SwUndoDelete: public SwUndo, private SwUndRng, private SwUndoSaveCntnt
-{
-    SwNodeIndex* pMvStt;            // Position der Nodes im UndoNodes-Array
-    String *pSttStr, *pEndStr;
-    SwRedlineData* pRedlData;
-    SwRedlineSaveDatas* pRedlSaveData;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
-    ::boost::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
-
-    String sTableName;
-
-    ULONG nNode;
-    ULONG nNdDiff;              // Differenz von Nodes vor-nach Delete
-    ULONG nSectDiff;            // Diff. von Nodes vor/nach Move mit SectionNodes
-    ULONG nReplaceDummy;        // Diff. to a temporary dummy object
-    USHORT nSetPos;
-
-    BOOL bGroup : 1;    // TRUE: ist schon eine Gruppe; wird in CanGrouping() ausgwertet !!
-    BOOL bBackSp : 1;   // TRUE: wenn Gruppierung und der Inhalt davor geloescht wird
-    BOOL bJoinNext: 1;  // TRUE: wenn der Bereich von Oben nach unten geht
-    BOOL bTblDelLastNd : 1; // TRUE: TextNode hinter der Tabelle einf./loeschen
-    BOOL bDelFullPara : 1;  // TRUE: gesamte Nodes wurden geloescht
-    BOOL bResetPgDesc : 1;  // TRUE: am nachfolgenden Node das PgDsc zuruecksetzen
-    BOOL bResetPgBrk : 1;   // TRUE: am nachfolgenden Node das PgBreak zuruecksetzen
-    BOOL bFromTableCopy : 1; // TRUE: called by SwUndoTblCpyTbl
-
-    BOOL SaveCntnt( const SwPosition* pStt, const SwPosition* pEnd,
-                    SwTxtNode* pSttTxtNd, SwTxtNode* pEndTxtNd );
-public:
-    SwUndoDelete( SwPaM&, BOOL bFullPara = FALSE, BOOL bCalledByTblCpy = FALSE );
-    virtual ~SwUndoDelete();
-
-    virtual void UndoImpl( ::sw::UndoRedoContext & );
-    virtual void RedoImpl( ::sw::UndoRedoContext & );
-    virtual void RepeatImpl( ::sw::RepeatContext & );
-
-    // #111827#
-    /**
-       Returns rewriter for this undo object.
-
-       The rewriter consists of the following rule:
-
-           $1 -> '<deleted text>'
-
-       <deleted text> is shortened to nUndoStringLength characters.
-
-       @return rewriter for this undo object
-    */
-    virtual SwRewriter GetRewriter() const;
-
-    BOOL CanGrouping( SwDoc*, const SwPaM& );
-
-    void SetTblDelLastNd()      { bTblDelLastNd = TRUE; }
-
-    // fuer die PageDesc/PageBreak Attribute einer Tabelle
-    void SetPgBrkFlags( BOOL bPageBreak, BOOL bPageDesc )
-        { bResetPgDesc = bPageDesc; bResetPgBrk = bPageBreak; }
-
-    void SetTableName(const String & rName);
-
-    // SwUndoTblCpyTbl needs this information:
-    BOOL IsDelFullPara() const { return bDelFullPara; }
-
-    DECL_FIXEDMEMPOOL_NEWDEL(SwUndoDelete)
-};
 
 
 class SwUndoSplitNode: public SwUndo

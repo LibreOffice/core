@@ -31,6 +31,7 @@
 #include <UndoTable.hxx>
 
 #include <UndoRedline.hxx>
+#include <UndoDelete.hxx>
 #include <UndoCore.hxx>
 #include <hintids.hxx>
 #include <hints.hxx>

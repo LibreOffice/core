@@ -28,6 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
+#include <UndoDelete.hxx>
 
 #include <hintids.hxx>
 #include <unotools/charclass.hxx>

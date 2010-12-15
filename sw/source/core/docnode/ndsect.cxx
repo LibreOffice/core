@@ -44,6 +44,7 @@
 #include <ndtxt.hxx>
 #include <section.hxx>
 #include <UndoCore.hxx>
+#include <UndoDelete.hxx>
 #include <swundo.hxx>
 #include <calc.hxx>
 #include <swtable.hxx>

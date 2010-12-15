@@ -37,6 +37,7 @@
 #include <pam.hxx>
 #include <ndtxt.hxx>
 #include <UndoCore.hxx>
+#include <UndoDelete.hxx>
 #include <rolbck.hxx>
 #include <redline.hxx>
 #include <docary.hxx>

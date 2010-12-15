@@ -69,6 +69,7 @@
 #include <UndoRedline.hxx>
 #include <UndoOverwrite.hxx>
 #include <UndoInsert.hxx>
+#include <UndoDelete.hxx>
 #include <breakit.hxx>
 #include <hhcwrp.hxx>
 #include <breakit.hxx>

@@ -65,6 +65,7 @@
 #include <tabfrm.hxx>
 #include <UndoCore.hxx>
 #include <UndoRedline.hxx>
+#include <UndoDelete.hxx>
 #include <UndoTable.hxx>
 #include <hints.hxx>
 #include <tblafmt.hxx>
