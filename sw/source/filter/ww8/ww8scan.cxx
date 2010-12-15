@@ -2561,6 +2561,7 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
     long nOldPos = pSt->Tell();
 
     pSt->Seek(nFilePos);
+    memset(maRawData, 0, 512);
     pSt->Read(maRawData, 512);
     mnIMax = maRawData[511];
 
@@ -2605,24 +2606,36 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
                             aEntry.mnLen = maRawData[nOfs+1];
                             nDelta++;
                         }
-
                         aEntry.mnLen *= 2;
 
                         //stylecode, std/istd
                         if (eVersion == ww::eWW2)
                         {
-                            aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
-                            aEntry.mnLen--;  //style code
-                            aEntry.mnLen-=6; //PHE
-                            //skipi stc, len byte + 6 byte PHE
-                            aEntry.mpData = maRawData + nOfs + 8;
+                            if (aEntry.mnLen >= 1)
+                            {
+                                aEntry.mnIStd = *(maRawData+nOfs+1+nDelta);
+                                aEntry.mnLen--;  //style code
+                                if (aEntry.mnLen >= 6)
+                                {
+                                    aEntry.mnLen-=6; //PHE
+                                    //skipi stc, len byte + 6 byte PHE
+                                    aEntry.mpData = maRawData + nOfs + 8;
+                                }
+                                else
+                                    aEntry.mnLen=0; //Too short
+                            }
                         }
                         else
                         {
-                            aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
-                            aEntry.mnLen-=2; //istd
-                            //skip istd, len byte + optional extra len byte
-                            aEntry.mpData = maRawData + nOfs + 3 + nDelta;
+                            if (aEntry.mnLen >= 2)
+                            {
+                                aEntry.mnIStd = SVBT16ToShort(maRawData+nOfs+1+nDelta);
+                                aEntry.mnLen-=2; //istd
+                                //skip istd, len byte + optional extra len byte
+                                aEntry.mpData = maRawData + nOfs + 3 + nDelta;
+                            }
+                            else
+                                aEntry.mnLen=0; //Too short, ignore
                         }
 
                         USHORT nSpId = aEntry.mnLen ? maSprmParser.GetSprmId(aEntry.mpData) : 0;
@@ -2666,6 +2679,17 @@ WW8PLCFx_Fc_FKP::WW8Fkp::WW8Fkp(ww::WordVersion eVersion, SvStream* pSt,
         }
 
         maEntries.push_back(aEntry);
+
+#ifdef DEBUGSPRMREADER
+        {
+            sal_Int32 nLen;
+            BYTE* pSprms = GetLenAndIStdAndSprms( nLen );
+
+            WW8SprmIter aIter(pSprms, nLen, maSprmParser);
+            while(aIter.GetSprms())
+                aIter.advance();
+        }
+#endif
     }
 
     //one more FC than grrpl entries
