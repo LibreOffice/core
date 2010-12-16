@@ -842,20 +842,21 @@ FltError ImportExcel8::Read( void )
         if( eAkt == EXC_STATE_BEFORE_SHEET )
         {
             sal_uInt16 nScTab = GetCurrScTab();
-            if( nScTab < maSheetOffsets.size()  )
+            if( nScTab < maSheetOffsets.size() )
             {
-                nProgressBaseSize += (aIn.GetSvStreamPos() - nProgressBasePos);
+                nProgressBaseSize += (maStrm.GetSvStreamPos() - nProgressBasePos);
                 nProgressBasePos = maSheetOffsets[ nScTab ];
+
+                // i#115255 fdo#40304 BOUNDSHEET doesn't point to a valid
+                // BOF record position.  Scan the records manually (from
+                // the BOUNDSHEET position) until we find a BOF.  Some 3rd
+                // party Russian programs generate invalid xls docs with
+                // this kind of silliness.
                 if (aIn.PeekRecId(nProgressBasePos) == EXC_ID5_BOF)
                     // BOUNDSHEET points to a valid BOF record.  Good.
                     aIn.StartNextRecord(nProgressBasePos);
                 else
                 {
-                    // i#115255 fdo#40304 BOUNDSHEET doesn't point to a valid
-                    // BOF record position.  Scan the records manually (from
-                    // the BOUNDSHEET position) until we find a BOF.  Some 3rd
-                    // party Russian programs generate invalid xls docs with
-                    // this kind of silliness.
                     bool bValid = true;
                     while (bValid && aIn.GetRecId() != EXC_ID5_BOF)
                         bValid = aIn.StartNextRecord();
@@ -863,6 +864,54 @@ FltError ImportExcel8::Read( void )
                     if (!bValid)
                         // Safeguard ourselves from potential infinite loop.
                         eAkt = EXC_STATE_END;
+                }
+
+                // FIXME_REMOVE_WHEN_RE_BASE_COMPLETE
+                // a lamer approach to do the above from dr:
+
+                // import only 256 sheets
+                if( nScTab > GetScMaxPos().Tab() )
+                {
+                    if( maStrm.GetRecId() != EXC_ID_EOF )
+                        XclTools::SkipSubStream( maStrm );
+                    // #i29930# show warning box
+                    GetAddressConverter().CheckScTab( nScTab, true );
+                    eAkt = EXC_STATE_END;
+                }
+                else
+                {
+                    // #i109800# SHEET record may point to any record inside the
+                    // sheet substream
+                    bool bIsBof = maStrm.GetRecId() == EXC_ID5_BOF;
+                    if( bIsBof )
+                        Bof5(); // read the BOF record
+                    else
+                        pExcRoot->eDateiTyp = Biff8;    // on missing BOF, assume a standard worksheet
+                    NeueTabelle();
+                    switch( pExcRoot->eDateiTyp )
+                    {
+                    case Biff8:     // worksheet
+                    case Biff8M4:   // macro sheet
+                        eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
+                        // go to next record
+                        if( bIsBof ) maStrm.StartNextRecord();
+                        maStrm.StoreGlobalPosition();
+                        break;
+                    case Biff8C:    // chart sheet
+                        GetCurrSheetDrawing().ReadTabChart( maStrm );
+                        Eof();
+                        GetTracer().TraceChartOnlySheet();
+                        break;
+                    case Biff8W:    // workbook
+                        OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
+                        // run through
+                    case Biff8V:    // VB module
+                    default:
+                        // TODO: do not create a sheet in the Calc document
+                        pD->SetVisible( nScTab, false );
+                        XclTools::SkipSubStream( maStrm );
+                        IncCurrScTab();
+                    }
                 }
             }
             else
@@ -1039,51 +1088,6 @@ FltError ImportExcel8::Read( void )
                     case EXC_ID_DCONNAME:       rPTableMgr.ReadDConName( maStrm );  break;
                 }
 
-            }
-            break;
-
-            // ----------------------------------------------------------------
-            // before worksheet: wait for new worksheet BOF
-            case EXC_STATE_BEFORE_SHEET:
-            {
-                if( nRecId == EXC_ID5_BOF )
-                {
-                    // import only 256 sheets
-                    if( GetCurrScTab() > GetScMaxPos().Tab() )
-                    {
-                        XclTools::SkipSubStream( maStrm );
-                        // #i29930# show warning box
-                        GetAddressConverter().CheckScTab( GetCurrScTab(), true );
-                        eAkt = EXC_STATE_END;
-                    }
-                    else
-                    {
-                        Bof5();
-                        NeueTabelle();
-                        switch( pExcRoot->eDateiTyp )
-                        {
-                            case Biff8:     // worksheet
-                            case Biff8M4:   // macro sheet
-                                eAkt = EXC_STATE_SHEET_PRE;  // Shrfmla Prefetch, Row-Prefetch
-                                aIn.StoreGlobalPosition();
-                            break;
-                            case Biff8C:    // chart sheet
-                                GetCurrSheetDrawing().ReadTabChart( maStrm );
-                                Eof();
-                                GetTracer().TraceChartOnlySheet();
-                            break;
-                            case Biff8W:    // workbook
-                                OSL_FAIL( "ImportExcel8::Read - double workbook globals" );
-                                // run through
-                            case Biff8V:    // VB module
-                            default:
-                                // TODO: do not create a sheet in the Calc document
-                                pD->SetVisible( GetCurrScTab(), false );
-                                XclTools::SkipSubStream( maStrm );
-                                IncCurrScTab();
-                        }
-                    }
-                }
             }
             break;
 

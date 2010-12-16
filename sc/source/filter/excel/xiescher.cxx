@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include "xiescher.hxx"
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -1557,23 +1556,39 @@ XclImpChartObj::XclImpChartObj( const XclImpRoot& rRoot, bool bOwnTab ) :
 
 void XclImpChartObj::ReadChartSubStream( XclImpStream& rStrm )
 {
-    if( mbOwnTab ? (rStrm.GetRecId() == EXC_ID5_BOF) : ((rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord()) )
+    /*  If chart is read from a chartsheet (mbOwnTab == true), the BOF record
+        has already been read. If chart is embedded as object, the next record
+        has to be the BOF record. */
+    if( mbOwnTab )
     {
-        sal_uInt16 nBofType;
-        rStrm.Seek( 2 );
-        rStrm >> nBofType;
-        OSL_ENSURE( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
-
-        // read chart, even if BOF record contains wrong substream identifier
-        mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
-        mxChart->ReadChartSubStream( rStrm );
-        if( mbOwnTab )
-            FinalizeTabChart();
+        /*  #i109800# The input stream may point somewhere inside the chart
+            substream and not exactly to the leading BOF record. To read this
+            record correctly in the following, the stream has to rewind it, so
+            that the next call to StartNextRecord() will find it correctly. */
+        if( rStrm.GetRecId() != EXC_ID5_BOF )
+            rStrm.RewindRecord();
     }
     else
     {
-        OSL_FAIL( "XclImpChartObj::ReadChartSubStream - missing chart substream" );
+        if( (rStrm.GetNextRecId() == EXC_ID5_BOF) && rStrm.StartNextRecord() )
+        {
+            sal_uInt16 nBofType;
+            rStrm.Seek( 2 );
+            rStrm >> nBofType;
+            DBG_ASSERT( nBofType == EXC_BOF_CHART, "XclImpChartObj::ReadChartSubStream - no chart BOF record" );
+        }
+        else
+        {
+            DBG_ERRORFILE( "XclImpChartObj::ReadChartSubStream - missing chart substream" );
+            return;
+        }
     }
+
+    // read chart, even if BOF record contains wrong substream identifier
+    mxChart.reset( new XclImpChart( GetRoot(), mbOwnTab ) );
+    mxChart->ReadChartSubStream( rStrm );
+    if( mbOwnTab )
+        FinalizeTabChart();
 }
 
 void XclImpChartObj::DoReadObj3( XclImpStream& rStrm, sal_uInt16 nMacroSize )
