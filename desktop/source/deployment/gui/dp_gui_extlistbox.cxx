@@ -1150,7 +1150,7 @@ void ExtensionBox_Impl::checkEntries()
                     nNewPos = nPos;
                 if ( nPos <= m_nActive )
                     m_nActive += 1;
-                iIndex++;
+                ++iIndex;
             }
             else
             {   // remove entry from list
@@ -1164,7 +1164,7 @@ void ExtensionBox_Impl::checkEntries()
             }
         }
         else
-            iIndex++;
+            ++iIndex;
     }
     guard.clear();
 
