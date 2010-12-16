@@ -796,6 +796,11 @@ String STR_ACC_DATAPILOT_SEL_DESCR
     Text [ en-US ] = "Lists the fields that you can drag to one of the other three areas.";
 };
 
+String STR_ACC_DATAPILOT_PAGE_DESCR
+{
+    Text [ en-US ] = "Fields that you drop here will be available as filter lists at the top of the final DataPilot table.";
+};
+
 String SCSTR_MEDIASHELL
 {
     Text [ en-US ] = "Media Playback";

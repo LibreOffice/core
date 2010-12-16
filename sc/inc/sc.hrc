@@ -1316,6 +1316,7 @@
 #define STR_ACC_DATAPILOT_COL_DESCR (STR_START + 179)
 #define STR_ACC_DATAPILOT_DATA_DESCR (STR_START + 180)
 #define STR_ACC_DATAPILOT_SEL_DESCR (STR_START + 181)
+#define STR_ACC_DATAPILOT_PAGE_DESCR (STR_START + 182)
 
 // --------------------------------------------------
 

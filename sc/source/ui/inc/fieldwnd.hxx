@@ -302,6 +302,7 @@ public:
     virtual ~ScDPPageFieldControl();
 
     virtual ScDPFieldType GetFieldType() const;
+    virtual String GetDescription() const;
 };
 
 // ============================================================================
@@ -314,6 +315,7 @@ public:
     virtual ~ScDPColFieldControl();
 
     virtual ScDPFieldType GetFieldType() const;
+    virtual String GetDescription() const;
 };
 
 // ============================================================================
@@ -370,6 +372,7 @@ public:
     virtual ~ScDPSelectFieldControl();
 
     virtual ScDPFieldType GetFieldType() const;
+    virtual String GetDescription() const;
 };
 
 // ============================================================================

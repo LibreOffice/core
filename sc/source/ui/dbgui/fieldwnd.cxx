@@ -977,6 +977,11 @@ ScDPFieldType ScDPPageFieldControl::GetFieldType() const
     return TYPE_PAGE;
 }
 
+String ScDPPageFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_PAGE_DESCR);
+}
+
 //=============================================================================
 
 ScDPColFieldControl::ScDPColFieldControl(
@@ -992,6 +997,11 @@ ScDPColFieldControl::~ScDPColFieldControl()
 ScDPFieldType ScDPColFieldControl::GetFieldType() const
 {
     return TYPE_COL;
+}
+
+String ScDPColFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_COL_DESCR);
 }
 
 //=============================================================================
@@ -1242,6 +1252,11 @@ ScDPSelectFieldControl::~ScDPSelectFieldControl()
 ScDPFieldType ScDPSelectFieldControl::GetFieldType() const
 {
     return TYPE_SELECT;
+}
+
+String ScDPSelectFieldControl::GetDescription() const
+{
+    return ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
 }
 
 //=============================================================================
