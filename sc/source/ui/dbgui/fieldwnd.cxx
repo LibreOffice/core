@@ -1004,7 +1004,23 @@ bool ScDPRowFieldControl::GetFieldIndex( const Point& rPos, size_t& rnIndex )
     if (rPos.X() < 0 || rPos.Y() < 0)
         return false;
 
-    rnIndex = rPos.Y() / GetFieldSize().Height() + maScroll.GetThumbPos();
+    long nFldH = GetFieldSize().Height();
+    long nThreshold = OUTER_MARGIN_VER + nFldH + ROW_FIELD_BTN_GAP / 2;
+
+    size_t nIndex = 0;
+    for (; nIndex < mnColumnBtnCount; ++nIndex)
+    {
+        if (rPos.Y() < nThreshold)
+            break;
+
+        nThreshold += nFldH + ROW_FIELD_BTN_GAP;
+    }
+
+    if (nIndex >= mnColumnBtnCount)
+        nIndex = mnColumnBtnCount - 1;
+
+    nIndex += maScroll.GetThumbPos();
+    rnIndex = nIndex;
     return IsValidIndex(rnIndex);
 }
 
@@ -1074,6 +1090,8 @@ void ScDPRowFieldControl::CalcSize()
 
 bool ScDPRowFieldControl::IsValidIndex(size_t /*nIndex*/) const
 {
+    // This method is here in case we decide to impose an arbitrary upper
+    // boundary on the number of fields.
     return true;
 }
 
