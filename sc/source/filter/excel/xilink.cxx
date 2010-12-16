@@ -41,6 +41,7 @@
 #include "externalrefmgr.hxx"
 
 #include <vector>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 using ::std::vector;
 
@@ -50,7 +51,10 @@ using ::std::vector;
 
 // Cached external cells ======================================================
 
-/** Contains the address and value of an external referenced cell. */
+/**
+ * Contains the address and value of an external referenced cell.
+ * Note that this is non-copyable, so cannot be used in most stl/boost containers.
+ */
 class XclImpCrn : public XclImpCachedValue
 {
 public:
@@ -82,7 +86,8 @@ public:
     void                LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable);
 
 private:
-    typedef ScfDelList< XclImpCrn > XclImpCrnList;
+    typedef boost::shared_ptr< XclImpCrn > XclImpCrnRef;
+    typedef std::vector< XclImpCrnRef > XclImpCrnList;
 
     XclImpCrnList       maCrnList;      /// List of CRN records (cached cell values).
     String              maTabName;      /// Name of the external sheet.
@@ -129,8 +134,8 @@ public:
     void                LoadCachedValues();
 
 private:
-    typedef ScfDelList< XclImpSupbookTab >  XclImpSupbookTabList;
-    typedef ScfDelList< XclImpExtName >     XclImpExtNameList;
+    typedef boost::ptr_vector< XclImpSupbookTab >  XclImpSupbookTabList;
+    typedef boost::ptr_vector< XclImpExtName >     XclImpExtNameList;
 
     XclImpSupbookTabList maSupbTabList;     /// All sheet names of the document.
     XclImpExtNameList   maExtNameList;      /// All external names of the document.
@@ -212,7 +217,7 @@ private:
 
 private:
     typedef ::std::vector< XclImpXti >  XclImpXtiVector;
-    typedef ScfDelList< XclImpSupbook > XclImpSupbookList;
+    typedef boost::ptr_vector< XclImpSupbook > XclImpSupbookList;
 
     XclImpXtiVector     maXtiList;          /// List of all XTI structures.
     XclImpSupbookList   maSupbookList;      /// List of external documents.
@@ -388,43 +393,45 @@ XclImpSupbookTab::~XclImpSupbookTab()
 
 void XclImpSupbookTab::ReadCrn( XclImpStream& rStrm, const XclAddress& rXclPos )
 {
-    maCrnList.Append( new XclImpCrn( rStrm, rXclPos ) );
+    XclImpCrnRef crnRef( new XclImpCrn(rStrm, rXclPos) );
+    maCrnList.push_back( crnRef );
 }
 
 void XclImpSupbookTab::LoadCachedValues(ScExternalRefCache::TableTypeRef pCacheTable)
 {
-    if (maCrnList.Empty())
+    if (maCrnList.empty())
         return;
 
-    for (XclImpCrn* p = maCrnList.First(); p; p = maCrnList.Next())
+    for (XclImpCrnList::iterator itCrnRef = maCrnList.begin(); itCrnRef != maCrnList.end(); ++itCrnRef)
     {
-        const XclAddress& rAddr = p->GetAddress();
-        switch (p->GetType())
+        const XclImpCrn* const pCrn = itCrnRef->get();
+        const XclAddress& rAddr = pCrn->GetAddress();
+        switch (pCrn->GetType())
         {
             case EXC_CACHEDVAL_BOOL:
             {
-                bool b = p->GetBool();
+                bool b = pCrn->GetBool();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(b ? 1.0 : 0.0));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_DOUBLE:
             {
-                double f = p->GetValue();
+                double f = pCrn->GetValue();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(f));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_ERROR:
             {
-                double fError = XclTools::ErrorToDouble( p->GetXclError() );
+                double fError = XclTools::ErrorToDouble( pCrn->GetXclError() );
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaDoubleToken(fError));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
             break;
             case EXC_CACHEDVAL_STRING:
             {
-                const String& rStr = p->GetString();
+                const String& rStr = pCrn->GetString();
                 ScExternalRefCache::TokenRef pToken(new formula::FormulaStringToken(rStr));
                 pCacheTable->setCell(rAddr.mnCol, rAddr.mnRow, pToken, 0, false);
             }
@@ -463,7 +470,7 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     if( maXclUrl.EqualsIgnoreCaseAscii( "\010EUROTOOL.XLA" ) )
     {
         meType = EXC_SBTYPE_EUROTOOL;
-        maSupbTabList.Append( new XclImpSupbookTab( maXclUrl ) );
+        maSupbTabList.push_back( new XclImpSupbookTab( maXclUrl ) );
     }
     else if( nSBTabCnt )
     {
@@ -471,14 +478,14 @@ XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
         for( sal_uInt16 nSBTab = 0; nSBTab < nSBTabCnt; ++nSBTab )
         {
             String aTabName( rStrm.ReadUniString() );
-            maSupbTabList.Append( new XclImpSupbookTab( aTabName ) );
+            maSupbTabList.push_back( new XclImpSupbookTab( aTabName ) );
         }
     }
     else
     {
         meType = EXC_SBTYPE_SPECIAL;
         // create dummy list entry
-        maSupbTabList.Append( new XclImpSupbookTab( maXclUrl ) );
+        maSupbTabList.push_back( new XclImpSupbookTab( maXclUrl ) );
     }
 }
 
@@ -490,26 +497,26 @@ void XclImpSupbook::ReadXct( XclImpStream& rStrm )
 
 void XclImpSupbook::ReadCrn( XclImpStream& rStrm )
 {
-    if( XclImpSupbookTab* pSBTab = maSupbTabList.GetObject( mnSBTab ) )
-    {
-        sal_uInt8 nXclColLast, nXclColFirst;
-        sal_uInt16 nXclRow;
-        rStrm >> nXclColLast >> nXclColFirst >> nXclRow;
+    if (mnSBTab >= maSupbTabList.size())
+        return;
+    XclImpSupbookTab& rSbTab = maSupbTabList[mnSBTab];
+    sal_uInt8 nXclColLast, nXclColFirst;
+    sal_uInt16 nXclRow;
+    rStrm >> nXclColLast >> nXclColFirst >> nXclRow;
 
-        for( sal_uInt8 nXclCol = nXclColFirst; (nXclCol <= nXclColLast) && (rStrm.GetRecLeft() > 1); ++nXclCol )
-            pSBTab->ReadCrn( rStrm, XclAddress( nXclCol, nXclRow ) );
-    }
+    for( sal_uInt8 nXclCol = nXclColFirst; (nXclCol <= nXclColLast) && (rStrm.GetRecLeft() > 1); ++nXclCol )
+        rSbTab.ReadCrn( rStrm, XclAddress( nXclCol, nXclRow ) );
 }
 
 void XclImpSupbook::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv )
 {
-    maExtNameList.Append( new XclImpExtName( *this, rStrm, meType, pFormulaConv ) );
+    maExtNameList.push_back( new XclImpExtName( *this, rStrm, meType, pFormulaConv ) );
 }
 
 const XclImpExtName* XclImpSupbook::GetExternName( sal_uInt16 nXclIndex ) const
 {
     DBG_ASSERT( nXclIndex > 0, "XclImpSupbook::GetExternName - index must be >0" );
-    return (meType == EXC_SBTYPE_SELF) ? 0 : maExtNameList.GetObject( nXclIndex - 1 );
+    return (meType == EXC_SBTYPE_SELF) ? 0 : &(maExtNameList.at( nXclIndex - 1 ));
 }
 
 bool XclImpSupbook::GetLinkData( String& rApplic, String& rTopic ) const
@@ -526,22 +533,14 @@ const String& XclImpSupbook::GetMacroName( sal_uInt16 nXclNameIdx ) const
 
 const String& XclImpSupbook::GetTabName( sal_uInt16 nXtiTab ) const
 {
-    if (maSupbTabList.Empty())
+    if (nXtiTab >= maSupbTabList.size())
         return EMPTY_STRING;
-
-    sal_uInt16 i = 0;
-    for (XclImpSupbookTab* p = maSupbTabList.First(); p; p = maSupbTabList.Next(), ++i)
-    {
-        if (i == nXtiTab)
-            return p->GetTabName();
-    }
-
-    return EMPTY_STRING;
+    return maSupbTabList[nXtiTab].GetTabName();
 }
 
 sal_uInt16 XclImpSupbook::GetTabCount() const
 {
-    return ulimit_cast<sal_uInt16>(maSupbTabList.Count());
+    return ulimit_cast<sal_uInt16>(maSupbTabList.size());
 }
 
 void XclImpSupbook::LoadCachedValues()
@@ -554,16 +553,11 @@ void XclImpSupbook::LoadCachedValues()
     ScExternalRefManager* pRefMgr = GetRoot().GetDoc().GetExternalRefManager();
     sal_uInt16 nFileId = pRefMgr->getExternalFileId(aAbsUrl);
 
-    sal_uInt16 nCount = static_cast< sal_uInt16 >( maSupbTabList.Count() );
-    for (sal_uInt16 i = 0; i < nCount; ++i)
+    for (XclImpSupbookTabList::iterator itTab = maSupbTabList.begin(); itTab != maSupbTabList.end(); ++itTab)
     {
-        XclImpSupbookTab* pTab = maSupbTabList.GetObject(i);
-        if (!pTab)
-            return;
-
-        const String& rTabName = pTab->GetTabName();
+        const String& rTabName = itTab->GetTabName();
         ScExternalRefCache::TableTypeRef pCacheTable = pRefMgr->getCacheTable(nFileId, rTabName, true);
-        pTab->LoadCachedValues(pCacheTable);
+        itTab->LoadCachedValues(pCacheTable);
         pCacheTable->setWholeTableCached();
     }
 }
@@ -597,25 +591,25 @@ void XclImpLinkManagerImpl::ReadExternsheet( XclImpStream& rStrm )
 
 void XclImpLinkManagerImpl::ReadSupbook( XclImpStream& rStrm )
 {
-    maSupbookList.Append( new XclImpSupbook( rStrm ) );
+    maSupbookList.push_back( new XclImpSupbook( rStrm ) );
 }
 
 void XclImpLinkManagerImpl::ReadXct( XclImpStream& rStrm )
 {
-    if( XclImpSupbook* pSupbook = maSupbookList.Last() )
-        pSupbook->ReadXct( rStrm );
+    if( !maSupbookList.empty() )
+        maSupbookList.back().ReadXct( rStrm );
 }
 
 void XclImpLinkManagerImpl::ReadCrn( XclImpStream& rStrm )
 {
-    if( XclImpSupbook* pSupbook = maSupbookList.Last() )
-        pSupbook->ReadCrn( rStrm );
+    if( !maSupbookList.empty() )
+        maSupbookList.back().ReadCrn( rStrm );
 }
 
 void XclImpLinkManagerImpl::ReadExternname( XclImpStream& rStrm, ExcelToSc* pFormulaConv )
 {
-    if( XclImpSupbook* pSupbook = maSupbookList.Last() )
-        pSupbook->ReadExternname( rStrm, pFormulaConv );
+    if( !maSupbookList.empty() )
+        maSupbookList.back().ReadExternname( rStrm, pFormulaConv );
 }
 
 bool XclImpLinkManagerImpl::IsSelfRef( sal_uInt16 nXtiIndex ) const
@@ -629,7 +623,7 @@ bool XclImpLinkManagerImpl::GetScTabRange(
 {
     if( const XclImpXti* pXti = GetXti( nXtiIndex ) )
     {
-        if (maSupbookList.GetObject(pXti->mnSupbook))
+        if (!maSupbookList.empty() && (pXti->mnSupbook < maSupbookList.size()) )
         {
             rnFirstScTab = pXti->mnSBTabFirst;
             rnLastScTab  = pXti->mnSBTabLast;
@@ -678,21 +672,20 @@ const XclImpXti* XclImpLinkManagerImpl::GetXti( sal_uInt16 nXtiIndex ) const
 
 const XclImpSupbook* XclImpLinkManagerImpl::GetSupbook( sal_uInt16 nXtiIndex ) const
 {
+    if ( maSupbookList.empty() )
+        return NULL;
     const XclImpXti* pXti = GetXti( nXtiIndex );
-    return pXti ? maSupbookList.GetObject( pXti->mnSupbook ) : 0;
+    if (!pXti || pXti->mnSupbook >= maSupbookList.size())
+        return NULL;
+    return &(maSupbookList.at( pXti->mnSupbook ));
 }
 
 void XclImpLinkManagerImpl::LoadCachedValues()
 {
     // Read all CRN records which can be accessed via XclImpSupbook, and store
     // the cached values to the external reference manager.
-
-    sal_uInt32 nCount = maSupbookList.Count();
-    for (sal_uInt16 nSupbook = 0; nSupbook < nCount; ++nSupbook)
-    {
-        XclImpSupbook* pSupbook = maSupbookList.GetObject(nSupbook);
-        pSupbook->LoadCachedValues();
-    }
+    for (XclImpSupbookList::iterator itSupbook = maSupbookList.begin(); itSupbook != maSupbookList.end(); ++itSupbook)
+        itSupbook->LoadCachedValues();
 }
 
 // ============================================================================
