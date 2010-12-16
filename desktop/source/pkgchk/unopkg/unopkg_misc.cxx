@@ -195,7 +195,7 @@ struct ProcessWorkingDir : public rtl::StaticWithInit<
     const OUString, ProcessWorkingDir> {
     const OUString operator () () {
         OUString workingDir;
-        tools::getProcessWorkingDir(&workingDir);
+        tools::getProcessWorkingDir(workingDir);
         return workingDir;
     }
 };

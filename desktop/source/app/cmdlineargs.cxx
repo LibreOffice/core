@@ -58,7 +58,7 @@ public:
         m_index(0)
     {
         rtl::OUString url;
-        if (tools::getProcessWorkingDir(&url)) {
+        if (tools::getProcessWorkingDir(url)) {
             m_cwdUrl.reset(url);
         }
     }

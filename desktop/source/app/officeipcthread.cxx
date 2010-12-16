@@ -543,7 +543,7 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         sal_Bool bWaitBeforeClose = sal_False;
         ByteString aArguments(RTL_CONSTASCII_STRINGPARAM(ARGUMENT_PREFIX));
         rtl::OUString cwdUrl;
-        if (!(tools::getProcessWorkingDir(&cwdUrl) &&
+        if (!(tools::getProcessWorkingDir(cwdUrl) &&
               addArgument(&aArguments, '1', cwdUrl)))
         {
             aArguments += '0';
@@ -972,7 +972,7 @@ static void AddConversionsToDispatchList(
 
     OUString aOutDir( rParamOut.trim() );
     ::rtl::OUString aPWD;
-    ::tools::getProcessWorkingDir( &aPWD );
+    ::tools::getProcessWorkingDir( aPWD );
 
     if( !::osl::FileBase::getAbsoluteFileURL( aPWD, rParamOut, aOutDir ) )
         ::osl::FileBase::getSystemPathFromFileURL( aOutDir, aOutDir );
