@@ -1,9 +1,8 @@
 # @configure_input@
-# FIXME: create 'install' and 'check' target
 
 SHELL=/usr/bin/env bash
 
-all: dmake/dmake@EXEEXT@ fetch
+all: Makefile dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
         cd instsetoo_native && \
         build.pl -P@BUILD_NCPUS@ --all -- -P@BUILD_MAX_JOBS@
@@ -40,6 +39,9 @@ src/downloaded: ooo.lst download
 	$$SRC_ROOT/download $$SRC_ROOT/ooo.lst && touch $@
 
 fetch: src/downloaded
+
+Makefile: configure.in set_soenv.in Makefile.in
+	./autogen.sh
 
 check:
 	@. ./*[Ee]nv.[Ss]et.sh && \
