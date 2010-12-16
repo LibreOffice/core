@@ -662,8 +662,8 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
 {
     OSL_ENSURE( pParent, "Kein Parent fuer Insert." );
-    OSL_ENSURE( (!pBehind || (pBehind && ( pParent == pBehind->GetUpper())
-            || ( pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm() ) ) ),
+    OSL_ENSURE( (!pBehind || ( (pBehind && (pParent == pBehind->GetUpper()))
+            || ((pParent->IsSctFrm() && pBehind->GetUpper()->IsColBodyFrm())) ) ),
             "Framebaum inkonsistent." );
     if( pSct )
     {
