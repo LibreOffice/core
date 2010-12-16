@@ -119,9 +119,7 @@ Module gid_Module_Langpack_Brand_Template
     Description = "gid_Module_Langpack_Brand_Template";
     Styles = (TEMPLATEMODULE);
     InstallOrder = "1050";
-    Dirs = (gid_Brand_Dir_Help,
-            gid_Brand_Dir_Help_Isolanguage,
-            gid_Brand_Dir_Program,
+    Dirs = (gid_Brand_Dir_Program,
             gid_Brand_Dir_Program_Shell,
             gid_Brand_Dir_Program_Resource,
             gid_Brand_Dir_Readme);

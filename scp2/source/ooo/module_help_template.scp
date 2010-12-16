@@ -39,6 +39,8 @@ Module gid_Module_Helppack_Help_Template
              gid_File_Help_Simpress_Zip,
              gid_File_Help_Smath_Zip,
              gid_File_Help_Swriter_Zip);
+    Dirs = (gid_Brand_Dir_Help,
+            gid_Brand_Dir_Help_Isolanguage);
 End
 
 #include "allhelpmodules_root.inc"
