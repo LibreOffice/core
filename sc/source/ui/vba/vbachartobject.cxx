@@ -205,7 +205,7 @@ ScVbaChartObject::setTop(double _fTop)
 }
 
 uno::Reference< uno::XInterface >
-ScVbaChartObject::getUnoObject() throw (script::BasicErrorException)
+ScVbaChartObject::getUnoObject() const throw (script::BasicErrorException)
 {
     return uno::Reference< uno::XInterface >( xShape, uno::UNO_QUERY );
 }
