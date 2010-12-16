@@ -1,7 +1,20 @@
-#!/bin/sh
+#!/usr/bin/env sh
 
-# create tags file for the whole LibO tree. run it in toplevel dir
-. ./*.Set.sh
+# create tags file for the whole OOo tree. run it in build/xyz680-mABC
+current_dir=`basename $PWD`
+
+# Don't create the tags file in rawbuild: due to the links the editor
+# (at least Vim) will most likely consider to be in clone/repo folder.
+if [ -d $current_dir/clone ]; then
+    cd clone
+    current_dir=`basename $PWD`
+fi
+
+if [ "$current_dir" == "clone" ]; then
+    . ../*.Set.sh
+else
+    . ./*.Set.sh
+fi
 
 omnicppoptions="--c++-kinds=+p --fields=+iaS --extra=+q"
 ctags -h "+.hdl.hrc" --langmap=c:+.hdl.hrc.src $omnicppoptions \
