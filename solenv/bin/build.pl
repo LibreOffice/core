@@ -1699,6 +1699,7 @@ sub cancel_build {
     }
     print "-----------------------------------------------------------------------\n";
     print "\n";
+    print "rm -Rf " . $ENV{'SRC_ROOT'} . "/$module/" . $ENV{'INPATH'} . " # optional module 'clean'\n";
     print "" . $ENV{'OOO_SHELL'} . "\n";
     print "cd " . $ENV{'SRC_ROOT'} . "\n";
     print "source ./" . $ENV{'ENV_SCRIPT'} . "\n";
@@ -1706,8 +1707,6 @@ sub cancel_build {
     print "build\n";
     print "\n";
     print "when the problem is isolated and fixed exit and re-run 'make' from the top-level\n";
-    print "sometimes (sadly) it is necessary to rm -Rf " . $ENV{INPATH} . " in a module.\n";
-
     zenity_message("LibreOffice Build Failed!");
     zenity_close();
 
