@@ -431,6 +431,12 @@ void XclImpStream::ResetRecord( bool bContLookup, sal_uInt16 nAltContId )
     }
 }
 
+void XclImpStream::RewindRecord()
+{
+    mnNextRecPos = maFirstRec.GetPos();
+    mbValid = mbValidRec = false;
+}
+
 void XclImpStream::SetDecrypter( XclImpDecrypterRef xDecrypter )
 {
     mxDecrypter = xDecrypter;
