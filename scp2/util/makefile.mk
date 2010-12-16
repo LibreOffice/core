@@ -55,6 +55,8 @@ SCP1FILES  = installation_ooo.par          \
              module_hidden_ooo.par         \
              module_langpack.par           \
              module_lang_template.par      \
+             module_helppack.par           \
+             module_help_template.par      \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
@@ -239,6 +241,8 @@ SCP2FILES  = installation_ooo.par          \
              module_hidden_ooo.par         \
              module_langpack.par           \
              module_lang_template.par      \
+             module_helppack.par           \
+             module_help_template.par      \
              module_java.par               \
              profile_ooo.par               \
              profileitem_ooo.par           \
