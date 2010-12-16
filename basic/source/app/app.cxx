@@ -154,20 +154,20 @@ void TestToolDebugMessageFilter( const sal_Char *pString, BOOL bIsOsl )
             printf("DbgPrintMsgBox failed: %s\n", pString );
         }
     }
-/*    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
-    DBG_ERROR( pString );
-    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )*/
     static_bInsideFilter = FALSE;
 }
+
 void SAL_CALL DBG_TestToolDebugMessageFilter( const sal_Char *pString )
 {
         TestToolDebugMessageFilter( pString, FALSE );
 }
+
 extern "C" void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
     if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
         TestToolDebugMessageFilter( pString, TRUE );
 }
+
 #endif
 
 // #94145# Due to a tab in TT_SIGNATURE_FOR_UNICODE_TEXTFILES which is changed to blanks by some editors

@@ -792,7 +792,7 @@ StringList* GenericOptions::GetAllGroups()
     for ( USHORT i = 0 ; i < aConf.GetGroupCount() ; i++ )
     {
         String *pGroup = new String( aConf.GetGroupName( i ), RTL_TEXTENCODING_UTF8 );
-        pGroups->Insert( pGroup );
+        pGroups->push_back( pGroup );
     }
     return pGroups;
 }
@@ -800,19 +800,17 @@ StringList* GenericOptions::GetAllGroups()
 void GenericOptions::LoadData()
 {
     StringList* pGroups = GetAllGroups();
-    String* pGroup;
-    while ( (pGroup = pGroups->First()) != NULL )
+    for ( size_t i = 0, n = pGroups->size(); i < n; ++i )
     {
-        pGroups->Remove( pGroup );
+        String* pGroup = pGroups->at( i );
         aConf.SetGroup( ByteString( *pGroup, RTL_TEXTENCODING_UTF8 ) );
         if ( aConf.ReadKey( C_KEY_AKTUELL ).Len() > 0 )
-        {
             aCbArea.InsertEntry( *pGroup );
-        }
         delete pGroup;
     }
+    pGroups->clear();
     delete pGroups;
-    aCbArea.SetText( aCbArea.GetEntry( 0 ) );
+        aCbArea.SetText( aCbArea.GetEntry( 0 ) );
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
 
     // Add load the data

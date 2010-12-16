@@ -44,6 +44,7 @@
 #include <vcl/toolbox.hxx>
 #include <svtools/ctrltool.hxx>
 #include <svtools/ctrlbox.hxx>
+#include <vector>
 
 class SbxVariable;
 
@@ -239,8 +240,7 @@ public:
     void Save( Config &aConfig );
 };
 
-
-DECLARE_LIST( StringList, String * )
+typedef ::std::vector< String* > StringList;
 #define C_KEY_ALLE          CByteString("All")
 #define C_KEY_AKTUELL       CByteString("Current")
 #define C_KEY_TYPE          CByteString("Type")
@@ -348,9 +348,6 @@ protected:
     SbxVariable *pVar;
 
     DECL_LINK( OKClick, Button * );
-
-//  BOOL bCompare = FALSE;
-//  String aCompareString;
 
 public:
     VarEditDialog( Window * pParent, SbxVariable *pPVar );
