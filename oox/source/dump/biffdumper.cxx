@@ -2567,12 +2567,12 @@ void WorkbookStreamObject::implDumpRecordBody()
         break;
 
         case BIFF_ID_PALETTE:
-            mxOut->resetItemIndex();
+            mxOut->resetItemIndex( 8 );
             for( sal_uInt16 nIdx = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !rStrm.isEof() && (nIdx < nCount); ++nIdx )
             {
                 OUStringBuffer aColorName;
                 StringHelper::appendHex( aColorName, dumpColorABGR( "#color" ) );
-                mxColors->setName( nIdx, aColorName.makeStringAndClear() );
+                mxColors->setName( nIdx + 8, aColorName.makeStringAndClear() );
             }
         break;
 
