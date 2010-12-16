@@ -140,28 +140,10 @@ BiffFragmentHandler::BiffFragmentHandler( const BiffFragmentHandler& rHandler ) 
 
 BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff )
 {
-    return mrStrm.startNextRecord() ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
-BiffFragmentType BiffFragmentHandler::startFragment( BiffType eBiff, sal_Int64 nRecHandle )
-{
-    return mrStrm.startRecordByHandle( nRecHandle ) ? implStartFragment( eBiff ) : BIFF_FRAGMENT_UNKNOWN;
-}
-
-bool BiffFragmentHandler::skipFragment()
-{
-    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
-        if( isBofRecord() )
-            skipFragment();
-    return !mrStrm.isEof() && (mrStrm.getRecId() == BIFF_ID_EOF);
-}
-
-BiffFragmentType BiffFragmentHandler::implStartFragment( BiffType eBiff )
-{
     BiffFragmentType eFragment = BIFF_FRAGMENT_UNKNOWN;
     /*  #i23425# Don't rely on BOF record ID to read BOF contents, but on
         the detected BIFF version. */
-    if( isBofRecord() )
+    if( mrStrm.startNextRecord() && isBofRecord() )
     {
         // BOF is always written unencrypted
         mrStrm.enableDecoder( false );
@@ -217,6 +199,14 @@ BiffFragmentType BiffFragmentHandler::implStartFragment( BiffType eBiff )
         }
     }
     return eFragment;
+}
+
+bool BiffFragmentHandler::skipFragment()
+{
+    while( mrStrm.startNextRecord() && (mrStrm.getRecId() != BIFF_ID_EOF) )
+        if( isBofRecord() )
+            skipFragment();
+    return !mrStrm.isEof() && (mrStrm.getRecId() == BIFF_ID_EOF);
 }
 
 // ============================================================================

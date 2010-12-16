@@ -2461,6 +2461,12 @@ void WorkbookStreamObject::implDumpRecordBody()
             dumpDec< sal_Int32 >( "sst-idx" );
         break;
 
+        case BIFF_ID_MERGEDCELLS:
+            mxOut->resetItemIndex();
+            for( sal_uInt16 nIdx = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !rStrm.isEof() && (nIdx < nCount); ++nIdx )
+                dumpRange( "#range" );
+        break;
+
         case BIFF_ID_MSODRAWING:
         case BIFF_ID_MSODRAWINGGROUP:
         case BIFF_ID_MSODRAWINGSEL:
@@ -2557,6 +2563,16 @@ void WorkbookStreamObject::implDumpRecordBody()
                 dumpDec< double >( "header-margin", "CONV-INCH-TO-CM" );
                 dumpDec< double >( "footer-margin", "CONV-INCH-TO-CM" );
                 dumpDec< sal_uInt16 >( "copies" );
+            }
+        break;
+
+        case BIFF_ID_PALETTE:
+            mxOut->resetItemIndex();
+            for( sal_uInt16 nIdx = 0, nCount = dumpDec< sal_uInt16 >( "count" ); !rStrm.isEof() && (nIdx < nCount); ++nIdx )
+            {
+                OUStringBuffer aColorName;
+                StringHelper::appendHex( aColorName, dumpColorABGR( "#color" ) );
+                mxColors->setName( nIdx, aColorName.makeStringAndClear() );
             }
         break;
 

@@ -379,10 +379,25 @@ bool BiffWorkbookFragment::importFragment()
             bool bNextSheet = bRet;
             for( sal_Int32 nWorksheet = 0, nWorksheetCount = rWorksheets.getWorksheetCount(); bNextSheet && (nWorksheet < nWorksheetCount); ++nWorksheet )
             {
-                // try to start a new sheet fragment
+                // calculate progress size for the sheet
                 double fSegmentLength = getProgressBar().getFreeLength() / (nWorksheetCount - nWorksheet);
                 ISegmentProgressBarRef xSheetProgress = getProgressBar().createSegment( fSegmentLength );
-                BiffFragmentType eSheetFragment = startFragment( getBiff(), rWorksheets.getBiffRecordHandle( nWorksheet ) );
+                /*  Try to start a new sheet fragment. The SHEET records point to the
+                    first record of the sheet fragment which is usually a BOF record. */
+                BiffFragmentType eSheetFragment = BIFF_FRAGMENT_UNKNOWN;
+                sal_Int64 nRecHandle = rWorksheets.getBiffRecordHandle( nWorksheet );
+                if( mrStrm.startRecordByHandle( nRecHandle ) )
+                {
+                    /*  #i109800# Stream may point to any record of the sheet fragment.
+                        Check the record identifier before calling startFragment(). */
+                    bool bIsBofRec = isBofRecord();
+                    /*  Rewind the record. If it is the BOF record, it will be read in
+                        startFragment(). In every case, stream will point before the
+                        first available non-BOF record. */
+                    mrStrm.rewindRecord();
+                    // if the BOF record is missing, a regular worksheet will be assumed
+                    eSheetFragment = bIsBofRec ? startFragment( getBiff() ) : BIFF_FRAGMENT_WORKSHEET;
+                }
                 sal_Int16 nCalcSheet = rWorksheets.getCalcSheetIndex( nWorksheet );
                 bNextSheet = importSheetFragment( *xSheetProgress, eSheetFragment, nCalcSheet );
             }
