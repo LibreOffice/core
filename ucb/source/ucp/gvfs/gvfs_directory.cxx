@@ -135,10 +135,10 @@ struct gvfs::DataSupplier_Impl
         ResultList::const_iterator end = m_aResults.end();
 
         while ( it != end )
-            {
-                delete (*it);
-                it++;
-            }
+        {
+            delete (*it);
+            ++it;
+        }
     }
 };
 
