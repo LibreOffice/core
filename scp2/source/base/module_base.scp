@@ -54,15 +54,6 @@ Module gid_Module_Prg_Base_Bin
     );
 End
 
-// Module gid_Module_Prg_Base_Help
-//     MOD_NAME_DESC ( MODULE_PRG_BASE_HELP );
-//     ParentID = gid_Module_Prg_Base;
-//     Sortkey = "200";
-//     Minimal = NO;
-//     Default = YES;
-//     Files = (gid_File_Help_Sdatabase_Zip);
-// End
-
 Module gid_Module_Brand_Prg_Base
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Base";
@@ -81,8 +72,7 @@ Module gid_Module_Langpack_Base_Template
     Name = "gid_Module_Langpack_Base_Template";
     Description = "gid_Module_Langpack_Base_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Sdatabase_Zip,
-             gid_File_Res_Abp,
+    Files = (gid_File_Res_Abp,
              gid_File_Res_Adabasui,
              gid_File_Res_Cnr,
              gid_File_Res_Dbp,
