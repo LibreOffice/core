@@ -84,6 +84,9 @@ FunctionReference FuExpandPage::Create( ViewShell* pViewSh, ::sd::Window* pWin, 
 
 void FuExpandPage::DoExecute( SfxRequest& )
 {
+    if ( mpView && mpView->IsTextEdit() )
+        mpView->SdrEndTextEdit();
+
     // Selektierte Seite finden (nur Standard-Seiten)
     SdPage* pActualPage = NULL;
     USHORT i = 0;
