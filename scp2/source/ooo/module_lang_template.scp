@@ -114,17 +114,6 @@ Module gid_Module_Langpack_Resource_Template
              gid_File_Res_UpdChk,
              gid_File_Res_Upd);
 End
-
-Module gid_Module_Langpack_Help_Template
-    ParentID = gid_Module_Langpack_Languageroot;
-    Name = "gid_Module_Langpack_Help_Template";
-    Description = "gid_Module_Langpack_Help_Template";
-    Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Common_Zip,
-             gid_File_Help_Sbasic_Zip,
-             gid_File_Help_Schart_Zip);
-End
-
 Module gid_Module_Langpack_Fonts_Template
     ParentID = gid_Module_Langpack_Languageroot;
     Name = "gid_Module_Langpack_Fonts_Template";
