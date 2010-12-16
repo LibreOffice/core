@@ -58,48 +58,6 @@
 #include "sc.hrc"
 #include "scabstdlg.hxx"
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class StackPrinter
-{
-public:
-    explicit StackPrinter(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~StackPrinter()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 using namespace com::sun::star;
 using ::rtl::OUString;
 using ::std::vector;
@@ -473,7 +431,6 @@ void ScDPLayoutDlg::InitFields()
 
 void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Point& rAtPos )
 {
-    fprintf(stdout, "ScDPLayoutDlg::AddField:   from index = %d  pos = (%ld, %ld)\n", nFromIndex, rAtPos.X(), rAtPos.Y());
     ScDPFuncData        fData( *(aSelectArr[nFromIndex]) );
     size_t nAt = 0;
     ScDPFieldControlBase* toWnd = GetFieldWindow(eToType);
@@ -548,8 +505,6 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
 
 void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::AppendField");
-    fprintf(stdout, "ScDPLayoutDlg::AppendField:   from index = %d  to type = %d\n", nFromIndex, eToType);
     ScDPFuncData aFuncData = *aSelectArr[nFromIndex];
 
     size_t nAt = 0;
@@ -621,8 +576,6 @@ void ScDPLayoutDlg::AppendField(size_t nFromIndex, ScDPFieldType eToType)
 
 void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType, const Point& rAtPos )
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::MoveField");
-    fprintf(stdout, "ScDPLayoutDlg::MoveField:   from type = %d  from index = %d  to type = %d\n", eFromType, nFromIndex, eToType);
     if ( eFromType == TYPE_SELECT )
         AddField( nFromIndex, eToType, rAtPos );
     else if ( eFromType != eToType )
@@ -767,10 +720,6 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
 
 void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, ScDPFieldType eToType )
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::MoveFieldToEnd");
-    fprintf(stdout, "ScDPLayoutDlg::MoveFieldToEnd:   from type = %d  from index = %d  to type = %d\n",
-            eFromType, nFromIndex, eToType);
-
     if ( eFromType == TYPE_SELECT )
         AppendField( nFromIndex, eToType );
     else if ( eFromType != eToType )
@@ -907,8 +856,6 @@ void ScDPLayoutDlg::MoveFieldToEnd( ScDPFieldType eFromType, size_t nFromIndex, 
 
 void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::RemoveField");
-    fprintf(stdout, "ScDPLayoutDlg::RemoveField:   from type = %d  index = %d\n", eFromType, nIndex);
     ScDPFuncDataVec* pArr = GetFieldDataArray(eFromType);
 
     if( pArr )
@@ -927,7 +874,6 @@ void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
 
 void ScDPLayoutDlg::NotifyMouseButtonUp( const Point& rAt )
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::NotifyMouseButtonUp");
     if ( bIsDrag )
     {
         bIsDrag = FALSE;
@@ -1431,7 +1377,6 @@ bool ScDPLayoutDlg::GetPivotArrays(
 
 void ScDPLayoutDlg::UpdateSrcRange()
 {
-    StackPrinter __stack_printer__("ScDPLayoutDlg::UpdateSrcRange");
     String  theCurPosStr = aEdInPos.GetText();
     USHORT  nResult = ScRange().Parse(theCurPosStr, pDoc, pDoc->GetAddressConvention());
 
