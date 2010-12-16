@@ -438,7 +438,7 @@ private_strerror (errnum)
      int errnum;
 {
 #ifndef __APPLE__
-# if defined(arm32) || defined(linux) || defined(__FreeBSD__) || defined(__OpenBSD__)
+# if defined(arm32) || defined(linux) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__)
   extern  const char * const sys_errlist[];
 # else
   extern  char *sys_errlist[];

@@ -7828,7 +7828,7 @@ dnl ===================================================================
 dnl Number of CPUs to use during the build
 dnl ===================================================================
 AC_MSG_CHECKING([for number of processors to use])
-if test "z`uname -s`" = "zDarwin" -o "z`uname -s`" = "zOpenBSD"; then
+if test "z`uname -s`" = "zDarwin" -o "z`uname -s`" = "zNetBSD" -o "z`uname -s`" = "zOpenBSD"; then
     BUILD_NCPUS=`sysctl -n hw.ncpu`
 else
     BUILD_NCPUS=`grep $'^processor\t*:' /proc/cpuinfo | wc -l`
