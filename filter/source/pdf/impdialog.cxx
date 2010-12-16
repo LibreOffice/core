@@ -33,7 +33,9 @@
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "sfx2/passwd.hxx"
-#include "com/sun/star/uno/Sequence.hxx"
+
+#include "comphelper/storagehelper.hxx"
+
 #include "com/sun/star/text/XTextRange.hpp"
 #include "com/sun/star/drawing/XShapes.hpp"
 #include "com/sun/star/container/XIndexAccess.hpp"
@@ -382,8 +384,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     nElementAdded--;
 
 // add the open password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentOpenPassword" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msUserPassword );
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPasswords" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= mxPreparedPasswords;
     nElementAdded--;
 
 //the restrict permission flag (needed to have the scripting consistent with the dialog)
@@ -392,8 +394,8 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     nElementAdded--;
 
 //add the permission password
-    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PermissionPassword" ) );
-    aRet[ aRet.getLength() - nElementAdded ].Value <<= OUString( msOwnerPassword );
+    aRet[ aRet.getLength() - nElementAdded ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "PreparedPermissionPassword" ) );
+    aRet[ aRet.getLength() - nElementAdded ].Value <<= maPreparedOwnerPassword;
     nElementAdded--;
 
 // this should be the last added...
@@ -1017,12 +1019,12 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
                                               const SfxItemSet& i_rCoreSet ) :
     SfxTabPage( i_pParent, PDFFilterResId( RID_PDF_TAB_SECURITY ), i_rCoreSet ),
-    maPbUserPwd( this, PDFFilterResId( BTN_USER_PWD ) ),
+    maFlGroup( this, PDFFilterResId( FL_PWD_GROUP ) ),
+    maPbSetPwd( this, PDFFilterResId( BTN_SET_PWD ) ),
     maFtUserPwd( this, PDFFilterResId( FT_USER_PWD ) ),
     maUserPwdSet( PDFFilterResId( STR_USER_PWD_SET ) ),
     maUserPwdUnset( PDFFilterResId( STR_USER_PWD_UNSET ) ),
-
-    maPbOwnerPwd( this, PDFFilterResId( BTN_OWNER_PWD ) ),
+    maStrSetPwd( PDFFilterResId( STR_SET_PWD ) ),
     maFtOwnerPwd( this, PDFFilterResId( FT_OWNER_PWD ) ),
     maOwnerPwdSet( PDFFilterResId( STR_OWNER_PWD_SET ) ),
     maOwnerPwdUnset( PDFFilterResId( STR_OWNER_PWD_UNSET ) ),
@@ -1043,6 +1045,8 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
     maCbEnableAccessibility( this, PDFFilterResId( CB_ENAB_ACCESS ) ),
 
     msUserPwdTitle( PDFFilterResId( STR_PDF_EXPORT_UDPWD ) ),
+    mbHaveOwnerPassword( false ),
+    mbHaveUserPassword( false ),
 
     msOwnerPwdTitle( PDFFilterResId( STR_PDF_EXPORT_ODPWD ) )
 {
@@ -1081,6 +1085,8 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* i_pParent,
             (*pCurrent++)->SetPosPixel( aNewPos );
         }
     }
+
+    maPbSetPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl ) );
 }
 
 // -----------------------------------------------------------------------------
@@ -1100,13 +1106,11 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 {
 // please note that in PDF/A-1a mode even if this are copied back,
 // the security settings are forced disabled in PDFExport::Export
-    paParent->mbEncrypt = (msUserPassword.Len() > 0);
-    if( paParent->mbEncrypt )
-        paParent->msUserPassword = msUserPassword;
+    paParent->mbEncrypt = mbHaveUserPassword;
+    paParent->mxPreparedPasswords = mxPreparedPasswords;
 
-    paParent->mbRestrictPermissions = (msOwnerPassword.Len() > 0);
-    if( msOwnerPassword.Len() > 0 )
-        paParent->msOwnerPassword = msOwnerPassword;
+    paParent->mbRestrictPermissions = mbHaveOwnerPassword;
+    paParent->maPreparedOwnerPassword = maPreparedOwnerPassword;
 
 //verify print status
     paParent->mnPrint = 0;
@@ -1135,10 +1139,6 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
 // -----------------------------------------------------------------------------
 void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
-    maPbUserPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl ) );
-
-    maPbOwnerPwd.SetClickHdl( LINK( this, ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl ) );
-
     switch( paParent->mnPrint )
     {
     default:
@@ -1184,39 +1184,44 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
             !( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->IsPdfaSelected() );
 }
 
-//method common to both the password entry procedures
-void ImpPDFTabSecurityPage::ImplPwdPushButton( const String & i_rDlgTitle, String & io_rDestPassword )
+IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbSetPwdHdl, void*, EMPTYARG )
 {
-// string needed: dialog title, message box text, depending on the button clicked
-    SfxPasswordDialog aPwdDialog( this );
+    SfxPasswordDialog aPwdDialog( this, &msUserPwdTitle );
     aPwdDialog.SetMinLen( 0 );
-    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM );
-    aPwdDialog.SetText( i_rDlgTitle );
+    aPwdDialog.ShowExtras( SHOWEXTRAS_CONFIRM | SHOWEXTRAS_PASSWORD2 | SHOWEXTRAS_CONFIRM2 );
+    aPwdDialog.SetText( maStrSetPwd );
+    aPwdDialog.SetGroup2Text( msOwnerPwdTitle );
     aPwdDialog.AllowAsciiOnly();
     if( aPwdDialog.Execute() == RET_OK )  //OK issued get password and set it
-        io_rDestPassword = aPwdDialog.GetPassword();
+    {
+        rtl::OUString aUserPW( aPwdDialog.GetPassword() );
+        rtl::OUString aOwnerPW( aPwdDialog.GetPassword2() );
+
+        mbHaveUserPassword = (aUserPW.getLength() != 0);
+        mbHaveOwnerPassword = (aOwnerPW.getLength() != 0);
+
+        mxPreparedPasswords = vcl::PDFWriter::InitEncryption( aOwnerPW, aUserPW, true );
+
+        if( mbHaveOwnerPassword )
+        {
+            maPreparedOwnerPassword = comphelper::OStorageHelper::CreatePackageEncryptionData( aOwnerPW );
+        }
+        else
+            maPreparedOwnerPassword = Sequence< NamedValue >();
+
+        // trash clear text passwords string memory
+        rtl_zeroMemory( (void*)aUserPW.getStr(), aUserPW.getLength() );
+        rtl_zeroMemory( (void*)aOwnerPW.getStr(), aOwnerPW.getLength() );
+    }
     enablePermissionControls();
-}
-
-IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbUserPwdHdl, void*, EMPTYARG )
-{
-    ImplPwdPushButton(msUserPwdTitle, msUserPassword );
-    return 0;
-}
-
-IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, EMPTYARG )
-{
-    ImplPwdPushButton( msOwnerPwdTitle, msOwnerPassword );
-
     return 0;
 }
 
 void ImpPDFTabSecurityPage::enablePermissionControls()
 {
-    maFtUserPwd.SetText( (msUserPassword.Len() > 0 && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
+    maFtUserPwd.SetText( (mbHaveUserPassword && IsEnabled()) ? maUserPwdSet : maUserPwdUnset );
 
-    sal_Bool bLocalEnable = (msOwnerPassword.Len() > 0) && IsEnabled();
-
+    sal_Bool bLocalEnable = mbHaveOwnerPassword && IsEnabled();
     maFtOwnerPwd.SetText( bLocalEnable ? maOwnerPwdSet : maOwnerPwdUnset );
 
     maFlPrintPermissions.Enable( bLocalEnable );
