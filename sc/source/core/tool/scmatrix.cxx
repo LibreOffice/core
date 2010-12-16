@@ -245,7 +245,6 @@ bool ScMatrixImpl::IsImmutable() const
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
-    Clear();
 }
 
 ScMatrix::DensityType ScMatrixImpl::GetDensityType() const
