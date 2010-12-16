@@ -77,7 +77,7 @@ using ::rtl::OUStringBuffer;
 
 namespace {
 
-// constants to track occurence of specific data types
+// constants to track occurrence of specific data types
 const sal_uInt16 EXC_PCITEM_DATA_STRING     = 0x0001;   /// String, empty, boolean, error.
 const sal_uInt16 EXC_PCITEM_DATA_DOUBLE     = 0x0002;   /// Double with fraction.
 const sal_uInt16 EXC_PCITEM_DATA_INTEGER    = 0x0004;   /// Integer, double without fraction.
@@ -1685,7 +1685,7 @@ void XclExpPivotTable::WriteSxpi( XclExpStream& rStrm ) const
         for( ScfUInt16Vec::const_iterator aIt = maPageFields.begin(), aEnd = maPageFields.end(); aIt != aEnd; ++aIt )
         {
             XclExpPTFieldRef xField = maFieldList.GetRecord( *aIt );
-            if( xField.is() )
+            if( xField )
                 xField->WriteSxpiEntry( rStrm );
         }
         rStrm.EndRecord();
@@ -1697,7 +1697,7 @@ void XclExpPivotTable::WriteSxdiList( XclExpStream& rStrm ) const
     for( XclPTDataFieldPosVec::const_iterator aIt = maDataFields.begin(), aEnd = maDataFields.end(); aIt != aEnd; ++aIt )
     {
         XclExpPTFieldRef xField = maFieldList.GetRecord( aIt->first );
-        if( xField.is() )
+        if( xField )
             xField->WriteSxdi( rStrm, aIt->second );
     }
 }

@@ -1194,7 +1194,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
         }
 }
 
-void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
+void ScCellShell::GetDBState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     ScViewData* pData       = GetViewData();

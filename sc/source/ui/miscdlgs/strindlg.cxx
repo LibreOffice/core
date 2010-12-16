@@ -100,7 +100,7 @@ void ScStringInputDlg::GetInputString( String& rString ) const
     rString = aEdInput.GetText();
 }
 
-__EXPORT ScStringInputDlg::~ScStringInputDlg()
+ScStringInputDlg::~ScStringInputDlg()
 {
 }
 

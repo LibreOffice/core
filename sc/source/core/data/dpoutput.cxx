@@ -29,8 +29,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -98,7 +96,6 @@ using ::rtl::OUString;
 
 //! dynamic!!!
 #define SC_DPOUT_MAXLEVELS  256
-
 
 struct ScDPOutLevelData
 {

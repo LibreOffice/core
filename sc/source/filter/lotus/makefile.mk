@@ -46,11 +46,11 @@ VISIBILITY_HIDDEN=TRUE
 
 SLOFILES =				\
         $(EXCEPTIONSFILES)		\
-        $(SLO)$/export.obj		\
         $(SLO)$/optab.obj
 
 EXCEPTIONSFILES =			\
         $(SLO)$/expop.obj		\
+        $(SLO)$/export.obj		\
         $(SLO)$/filter.obj		\
         $(SLO)$/lotattr.obj		\
         $(SLO)$/lotform.obj		\

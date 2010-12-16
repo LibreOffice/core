@@ -407,7 +407,7 @@ void ScExternalRefCache::Table::setCachedCell(SCCOL nCol, SCROW nRow)
 void ScExternalRefCache::Table::setCachedCellRange(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
 {
     ScRange aRange(nCol1, nRow1, 0, nCol2, nRow2, 0);
-    if (!maCachedRanges.Count())
+    if ( maCachedRanges.empty() )
         maCachedRanges.Append(aRange);
     else
         maCachedRanges.Join(aRange);
@@ -1323,20 +1323,17 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
             static_cast<ScEditCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
-        //break;
         case CELLTYPE_STRING:
         {
             String aStr;
             static_cast<ScStringCell*>(pCell)->GetString(aStr);
             return new formula::FormulaStringToken(aStr);
         }
-        //break;
         case CELLTYPE_VALUE:
         {
             double fVal = static_cast<ScValueCell*>(pCell)->GetValue();
             return new formula::FormulaDoubleToken(fVal);
         }
-        //break;
         case CELLTYPE_FORMULA:
         {
             ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
@@ -1355,7 +1352,6 @@ static FormulaToken* lcl_convertToToken(ScBaseCell* pCell)
                 return new formula::FormulaStringToken(aStr);
             }
         }
-        //break;
         default:
             DBG_ERROR("attempted to convert an unknown cell type.");
     }

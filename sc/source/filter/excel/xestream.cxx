@@ -369,7 +369,7 @@ void XclExpStream::SetEncrypter( XclExpEncrypterRef xEncrypter )
 
 bool XclExpStream::HasValidEncrypter() const
 {
-    return mxEncrypter.is() && mxEncrypter->IsValid();
+    return mxEncrypter && mxEncrypter->IsValid();
 }
 
 void XclExpStream::EnableEncryption( bool bEnable )
@@ -732,7 +732,10 @@ rtl::OUString XclXmlUtils::GetStreamName( const char* sStreamDir, const char* sS
     sBuf.appendAscii( sStream );
     if( nId )
         sBuf.append( nId );
-    sBuf.appendAscii( ".xml" );
+    if( strstr(sStream, "vml") )
+        sBuf.appendAscii( ".vml" );
+    else
+        sBuf.appendAscii( ".xml" );
     return sBuf.makeStringAndClear();
 }
 
@@ -1110,18 +1113,6 @@ bool XclExpXmlStream::exportDocument() throw()
     mpRoot = &aRoot;
     aRoot.GetOldRoot().pER = &aRoot;
     aRoot.GetOldRoot().eDateiTyp = Biff8;
-#if 0 // FIXME: Re-write this block without using SotStorage.
-    if ( SvtFilterOptions* pOptions = SvtFilterOptions::Get() )
-        if ( pShell && pOptions->IsLoadExcelBasicStorage() )
-            if ( sal_uInt32 nError
-                 = SvxImportMSVBasic( *pShell, *rStorage,
-                                      pOptions->IsLoadExcelBasicCode(),
-                                      pOptions->IsLoadExcelBasicStorage() )
-                .SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT) )
-            {
-                pShell->SetError( nError, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
-            }
-#endif
     // Get the viewsettings before processing
     if( pShell->GetViewData() )
         pShell->GetViewData()->WriteExtOptions( mpRoot->GetExtDocOptions() );

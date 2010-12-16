@@ -132,7 +132,7 @@ FuText::~FuText()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -343,7 +343,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
+BOOL FuText::MouseMove(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
 
@@ -387,7 +387,7 @@ BOOL __EXPORT FuText::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuText::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -580,7 +580,7 @@ void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuText::KeyInput(const KeyEvent& rKEvt)
+BOOL FuText::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FALSE;
 

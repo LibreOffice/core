@@ -83,7 +83,6 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
         aBtnDateStd     ( this, ScResId( BTN_DATESTD ) ),
         aBtnDateSc10    ( this, ScResId( BTN_DATESC10 ) ),
         aBtnDate1904    ( this, ScResId( BTN_DATE1904 ) ),
-        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
         aBtnCalc        ( this, ScResId( BTN_CALC ) ),
         aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
@@ -107,7 +106,7 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
 
 //-----------------------------------------------------------------------
 
-__EXPORT ScTpCalcOptions::~ScTpCalcOptions()
+ScTpCalcOptions::~ScTpCalcOptions()
 {
     delete pOldOptions;
     delete pLocalOptions;
@@ -126,21 +125,21 @@ void ScTpCalcOptions::Init()
 
 //-----------------------------------------------------------------------
 
-USHORT* __EXPORT ScTpCalcOptions::GetRanges()
+USHORT* ScTpCalcOptions::GetRanges()
 {
     return pCalcOptRanges;
 }
 
 //-----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpCalcOptions::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpCalcOptions( pParent, rAttrSet ) );
 }
 
 //-----------------------------------------------------------------------
 
-void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
+void ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
     USHORT  d,m,y;
 
@@ -191,7 +190,7 @@ void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 
 //-----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // alle weiteren Optionen werden in den Handlern aktualisiert
     pLocalOptions->SetIterCount( (USHORT)aEdSteps.GetValue() );
@@ -218,7 +217,7 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
+int ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     int nReturn = KEEP_PAGE;
 

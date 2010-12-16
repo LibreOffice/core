@@ -56,7 +56,22 @@ ScXMLExportDDELinks::~ScXMLExportDDELinks()
 {
 }
 
-namespace {
+sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
+                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const
+{
+    if (bEmpty == bPrevEmpty)
+        if (bEmpty)
+            return sal_True;
+        else if (bString == bPrevString)
+            if (bString)
+                return (sPrevValue == sValue);
+            else
+                return (fPrevValue == fValue);
+        else
+            return sal_False;
+    else
+        return sal_False;
+}
 
 void WriteCell(ScXMLExport& rExport, const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {

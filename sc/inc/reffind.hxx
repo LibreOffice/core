@@ -47,7 +47,7 @@ private:
     xub_StrLen  nSelEnd;
 
 public:
-    static const sal_Unicode __FAR_DATA pDelimiters[];
+    static const sal_Unicode pDelimiters[];
 
     ScRefFinder( const String& rFormula,
              ScDocument* pDocument = NULL,

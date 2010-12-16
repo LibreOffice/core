@@ -96,13 +96,13 @@ ScAreaLink::ScAreaLink( SfxObjectShell* pShell, const String& rFile,
     SetRefreshControl( pImpl->m_pDocSh->GetDocument()->GetRefreshTimerControlAddress() );
 }
 
-__EXPORT ScAreaLink::~ScAreaLink()
+ScAreaLink::~ScAreaLink()
 {
     StopRefreshTimer();
     delete pImpl;
 }
 
-void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
+void ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
@@ -118,7 +118,7 @@ void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
     pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
-void __EXPORT ScAreaLink::DataChanged( const String&,
+void ScAreaLink::DataChanged( const String&,
                                        const ::com::sun::star::uno::Any& )
 {
     //  bei bInCreate nichts tun, damit Update gerufen werden kann, um den Status im
@@ -154,7 +154,7 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
     }
 }
 
-void __EXPORT ScAreaLink::Closed()
+void ScAreaLink::Closed()
 {
     // Verknuepfung loeschen: Undo
 

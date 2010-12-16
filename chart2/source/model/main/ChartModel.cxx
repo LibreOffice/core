@@ -495,9 +495,7 @@ uno::Reference< uno::XInterface > SAL_CALL ChartModel::getCurrentSelection() thr
             uno::Any aSel = xSelectionSupl->getSelection();
             rtl::OUString aObjectCID;
             if( aSel >>= aObjectCID )
-            {
                 xReturn.set( ObjectIdentifier::getObjectPropertySet( aObjectCID, Reference< XChartDocument >(this)));
-            }
         }
     }
     return xReturn;
@@ -531,13 +529,6 @@ void SAL_CALL ChartModel::dispose() throw(uno::RuntimeException)
     DisposeHelper::DisposeAndClear( m_xPageBackground );
     DisposeHelper::DisposeAndClear( m_xXMLNamespaceMap );
 
-    // not owner of storage
-//     if( m_xStorage.is())
-//     {
-//         Reference< lang::XComponent > xComp( m_xStorage, uno::UNO_QUERY );
-//         if( xComp.is())
-//             xComp->dispose();
-//     }
     m_xStorage.clear();
 
     if( m_xOldModelAgg.is())
@@ -1170,9 +1161,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
-//     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMEType,
-//         C2U( "GDIMetaFile" ),
-//      ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
     aRet[0] = datatransfer::DataFlavor( lcl_aGDIMetaFileMIMETypeHighContrast,
         C2U( "GDIMetaFile" ),
         ::getCppuType( (const uno::Sequence< sal_Int8 >*) NULL ) );
@@ -1183,8 +1171,6 @@ Sequence< datatransfer::DataFlavor > SAL_CALL ChartModel::getTransferDataFlavors
 ::sal_Bool SAL_CALL ChartModel::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
     throw (uno::RuntimeException)
 {
-//     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
-//              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
     return aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast);
 }
 

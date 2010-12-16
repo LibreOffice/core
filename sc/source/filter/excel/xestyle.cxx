@@ -313,10 +313,10 @@ private:
                             const Color& rColor ) const;
 
 private:
-    typedef ScfDelList< XclListColor >          XclListColorList;
-    typedef ScfRef< XclListColorList >          XclListColorListRef;
-    typedef ::std::vector< XclColorIdData >     XclColorIdDataVec;
-    typedef ::std::vector< XclPaletteColor >    XclPaletteColorVec;
+    typedef ScfDelList< XclListColor >            XclListColorList;
+    typedef boost::shared_ptr< XclListColorList > XclListColorListRef;
+    typedef ::std::vector< XclColorIdData >       XclColorIdDataVec;
+    typedef ::std::vector< XclPaletteColor >      XclPaletteColorVec;
 
     const XclDefaultPalette& mrDefPal;      /// The default palette for the current BIFF version.
     XclListColorListRef mxColorList;        /// Working color list.

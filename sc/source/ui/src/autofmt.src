@@ -169,8 +169,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     String STR_ADD_TITLE
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
-        /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : AutoFormat hinzuf³gen */
         Text [ en-US ] = "Add AutoFormat" ;
     };
 
@@ -229,43 +227,3 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Text [ en-US ] = "Total" ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

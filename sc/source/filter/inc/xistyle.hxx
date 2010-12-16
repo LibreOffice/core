@@ -32,6 +32,7 @@
 #include <list>
 #include <tools/mempool.hxx>
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "rangelst.hxx"
 #include "patattr.hxx"
 #include "xladdress.hxx"
@@ -215,7 +216,7 @@ private:
 
 // FORMAT record - number formats =============================================
 
-/** Stores all user defined number formats occured in the file. */
+/** Stores all user defined number formats occurred in the file. */
 class XclImpNumFmtBuffer : public XclNumFmtBuffer, protected XclImpRoot
 {
 public:
@@ -479,7 +480,7 @@ private:
 
 // ----------------------------------------------------------------------------
 
-/** Contains all XF records occured in the file.
+/** Contains all XF records occurred in the file.
     @descr  This class is able to read XF records (BIFF2 - BIFF8) and STYLE records (BIFF8). */
 class XclImpXFBuffer : protected XclImpRoot, private boost::noncopyable
 {
@@ -655,10 +656,10 @@ private:
     void                SetBorderLine( const ScRange& rRange, SCTAB nScTab, USHORT nLine );
 
 private:
-    typedef ScfRef< XclImpXFRangeColumn >           XclImpXFRangeColumnRef;
-    typedef ::std::vector< XclImpXFRangeColumnRef > XclImpXFRangeColumnVec;
-    typedef ::std::pair< XclRange, String >         XclImpHyperlinkRange;
-    typedef ::std::list< XclImpHyperlinkRange >     XclImpHyperlinkList;
+    typedef boost::shared_ptr< XclImpXFRangeColumn > XclImpXFRangeColumnRef;
+    typedef ::std::vector< XclImpXFRangeColumnRef >  XclImpXFRangeColumnVec;
+    typedef ::std::pair< XclRange, String >          XclImpHyperlinkRange;
+    typedef ::std::list< XclImpHyperlinkRange >      XclImpHyperlinkList;
 
     XclImpXFRangeColumnVec maColumns;       /// Array of column XF index buffers.
     XclImpHyperlinkList maHyperlinks;       /// Maps URLs to hyperlink cells.

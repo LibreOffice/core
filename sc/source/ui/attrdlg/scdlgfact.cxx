@@ -502,6 +502,14 @@ BOOL    AbstractScMoveTableDlg_Impl::GetCopyTable() const
 {
     return pDlg->GetCopyTable();
 }
+bool AbstractScMoveTableDlg_Impl::GetRenameTable() const
+{
+    return pDlg->GetRenameTable();
+}
+void AbstractScMoveTableDlg_Impl::GetTabNameString( String& rString ) const
+{
+    pDlg->GetTabNameString( rString );
+}
 void    AbstractScMoveTableDlg_Impl::SetCopyTable(BOOL bFla)
 {
     return pDlg->SetCopyTable( bFla );
@@ -510,6 +518,15 @@ void    AbstractScMoveTableDlg_Impl::EnableCopyTable(BOOL bFlag)
 {
     return pDlg->EnableCopyTable( bFlag);
 }
+void    AbstractScMoveTableDlg_Impl::SetRenameTable(BOOL bFla)
+{
+    return pDlg->SetRenameTable( bFla );
+}
+void    AbstractScMoveTableDlg_Impl::EnableRenameTable(BOOL bFlag)
+{
+    return pDlg->EnableRenameTable( bFlag);
+}
+
 //add for AbstractScMoveTableDlg_Impl end
 
 //add for AbstractScNameCreateDlg_Impl begin
@@ -1108,13 +1125,15 @@ AbstractScMetricInputDlg * ScAbstractDialogFactory_Impl::CreateScMetricInputDlg 
 
 
 //add for  ScMoveTableDlg  begin
-AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent, int nId )
+AbstractScMoveTableDlg * ScAbstractDialogFactory_Impl::CreateScMoveTableDlg(  Window* pParent,
+                                                                              const String& rDefault,
+                                                                              int nId )
 {
     ScMoveTableDlg * pDlg=NULL;
     switch ( nId )
     {
         case RID_SCDLG_MOVETAB :
-            pDlg = new ScMoveTableDlg( pParent );
+            pDlg = new ScMoveTableDlg( pParent, rDefault );
             break;
         default:
             break;

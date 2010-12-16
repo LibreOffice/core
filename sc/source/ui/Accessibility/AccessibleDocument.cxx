@@ -82,7 +82,6 @@ struct ScAccessibleShapeData
     ~ScAccessibleShapeData();
     mutable ::accessibility::AccessibleShape* pAccShape;
     mutable ScAddress*          pRelationCell; // if it is NULL this shape is anchored on the table
-//    SdrObject*                  pShape;
     com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
     mutable sal_Bool            bSelected;
     sal_Bool                    bSelectable;

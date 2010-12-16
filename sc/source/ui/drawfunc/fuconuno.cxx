@@ -68,7 +68,7 @@ FuConstUnoControl::~FuConstUnoControl()
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -91,7 +91,7 @@ BOOL __EXPORT FuConstUnoControl::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 {
     return FuConstruct::MouseMove(rMEvt);
 }
@@ -102,7 +102,7 @@ BOOL __EXPORT FuConstUnoControl::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
@@ -127,7 +127,7 @@ BOOL __EXPORT FuConstUnoControl::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL __EXPORT FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstUnoControl::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
     return(bReturn);

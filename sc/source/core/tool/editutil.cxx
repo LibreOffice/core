@@ -69,7 +69,7 @@
 
 //  Delimiters zusaetzlich zu EditEngine-Default:
 
-const sal_Char __FAR_DATA ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
+const sal_Char ScEditUtil::pCalcDelimiters[] = "=()+-*/^&<>";
 
 
 //------------------------------------------------------------------------
@@ -647,7 +647,7 @@ ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, BOOL bDeleteE
 {
 }
 
-String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+String ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     USHORT /* nPara */, USHORT /* nPos */,
                                     Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
@@ -713,7 +713,7 @@ ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePoolP,
     SetControlWord( (GetControlWord() | EE_CNTRL_MARKFIELDS) & ~EE_CNTRL_RTFSTYLESHEETS );
 }
 
-String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
+String ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
                                     USHORT /* nPara */, USHORT /* nPos */,
                                     Color*& rTxtColor, Color*& /* rFldColor */ )
 {
@@ -757,7 +757,7 @@ String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
     return aRet;
 }
 
-void __EXPORT ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT, USHORT )
+void ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, USHORT, USHORT )
 {
     const SvxFieldData* pFld = rField.GetField();
 

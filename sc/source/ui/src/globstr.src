@@ -27,8 +27,6 @@
 #include "globstr.hrc"
 #include "sc.hrc"
 
-
-
 Resource RID_GLOBSTR
 {
     String STR_UNDO_INSERTCELLS

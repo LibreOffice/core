@@ -43,7 +43,7 @@ ScTemplateDlg::ScTemplateDlg(Window * pParent, USHORT nAppResource) :
 
 //------------------------------------------------------------------------
 
-__EXPORT ScTemplateDlg::~ScTemplateDlg()
+ScTemplateDlg::~ScTemplateDlg()
 {
 }
 

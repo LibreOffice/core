@@ -256,8 +256,8 @@ class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
     {
         nStopOnMismatchDisabled = 0x00,
         nStopOnMismatchEnabled  = 0x01,
-        nStopOnMismatchOccured  = 0x02,
-        nStopOnMismatchExecuted = nStopOnMismatchEnabled | nStopOnMismatchOccured
+        nStopOnMismatchOccurred  = 0x02,
+        nStopOnMismatchExecuted = nStopOnMismatchEnabled | nStopOnMismatchOccurred
     };
 
     enum TestEqualConditionBits

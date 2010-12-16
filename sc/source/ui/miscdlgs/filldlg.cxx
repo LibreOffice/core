@@ -110,7 +110,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScFillSeriesDlg::~ScFillSeriesDlg()
+ScFillSeriesDlg::~ScFillSeriesDlg()
 {
 }
 
@@ -231,7 +231,7 @@ void ScFillSeriesDlg::Init( USHORT nPossDir )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScFillSeriesDlg::CheckStartVal()
+BOOL ScFillSeriesDlg::CheckStartVal()
 {
     BOOL bValOk = FALSE;
     sal_uInt32 nKey = 0;
@@ -251,7 +251,7 @@ BOOL __EXPORT ScFillSeriesDlg::CheckStartVal()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
+BOOL ScFillSeriesDlg::CheckIncrementVal()
 {
     sal_uInt32 nKey = 0;
     String aStr( aEdIncrement.GetText() );
@@ -262,7 +262,7 @@ BOOL __EXPORT ScFillSeriesDlg::CheckIncrementVal()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScFillSeriesDlg::CheckEndVal()
+BOOL ScFillSeriesDlg::CheckEndVal()
 {
     BOOL    bValOk = FALSE;
     sal_uInt32 nKey = 0;

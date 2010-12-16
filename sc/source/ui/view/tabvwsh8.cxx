@@ -61,7 +61,7 @@ void ScTabViewShell::SetDefaultFrameLine( const SvxBorderLine* pLine )
 
 //------------------------------------------------------------------
 
-BOOL __EXPORT ScTabViewShell::HasSelection( BOOL bText ) const
+BOOL ScTabViewShell::HasSelection( BOOL bText ) const
 {
     BOOL bHas = FALSE;
     ScViewData* pData = (ScViewData*)GetViewData();     // const weggecasted

@@ -183,7 +183,7 @@ public:
                             { UnoAny aAny; return GetAnyProperty( aAny, rPropName ) && (aAny >>= rValue); }
 
     /** Gets the specified Boolean property from the property set.
-        @return  true = property contains true; false = property contains false or error occured. */
+        @return  true = property contains true; false = property contains false or error occurred. */
     bool                GetBoolProperty( const ::rtl::OUString& rPropName ) const;
 
     /** Gets the specified Boolean property from the property set.

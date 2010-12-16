@@ -178,8 +178,9 @@ XclRoot::XclRoot( XclRootData& rRootData ) :
 
     // filter tracer
     // do not use CREATE_OUSTRING for conditional expression
-    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), OUString::createFromAscii(
-        IsExport() ? "Office.Tracing/Export/Excel" : "Office.Tracing/Import/Excel" ) ) );
+    mrData.mxTracer.reset( new XclTracer( GetDocUrl(), IsExport() ?
+                                                OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Export/Excel"))
+                                              : OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Tracing/Import/Excel" )) ) );
 }
 
 XclRoot::XclRoot( const XclRoot& rRoot ) :

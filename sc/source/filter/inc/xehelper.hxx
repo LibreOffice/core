@@ -30,6 +30,7 @@
 #define SC_XEHELPER_HXX
 
 #include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
 #include "xladdress.hxx"
 #include "xeroot.hxx"
 #include "xestring.hxx"
@@ -176,14 +177,14 @@ class XclExpHyperlink;
 /** Helper to create HLINK records during creation of formatted cell strings.
 
     In Excel it is not possible to have more than one hyperlink in a cell. This
-    helper detects multiple occurences of hyperlinks and fills a string which
+    helper detects multiple occurrences of hyperlinks and fills a string which
     is used to create a cell note containing all URLs. Only cells containing
     one hyperlink are exported as hyperlink cells.
  */
 class XclExpHyperlinkHelper : protected XclExpRoot
 {
 public:
-    typedef ScfRef< XclExpHyperlink > XclExpHyperlinkRef;
+    typedef boost::shared_ptr< XclExpHyperlink > XclExpHyperlinkRef;
 
     explicit            XclExpHyperlinkHelper( const XclExpRoot& rRoot, const ScAddress& rScPos );
                         ~XclExpHyperlinkHelper();

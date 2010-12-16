@@ -105,13 +105,13 @@ ColumnEdit::ColumnEdit( ScNavigatorDlg* pParent, const ResId& rResId )
 
 //------------------------------------------------------------------------
 
-__EXPORT ColumnEdit::~ColumnEdit()
+ColumnEdit::~ColumnEdit()
 {
 }
 
 //------------------------------------------------------------------------
 
-long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
+long ColumnEdit::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = SpinField::Notify( rNEvt );
 
@@ -143,7 +143,7 @@ long __EXPORT ColumnEdit::Notify( NotifyEvent& rNEvt )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ColumnEdit::LoseFocus()
+void ColumnEdit::LoseFocus()
 {
     EvalText();
 }
@@ -151,7 +151,7 @@ void __EXPORT ColumnEdit::LoseFocus()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ColumnEdit::Up()
+void ColumnEdit::Up()
 {
     nCol++;
 
@@ -168,7 +168,7 @@ void __EXPORT ColumnEdit::Up()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ColumnEdit::Down()
+void ColumnEdit::Down()
 {
     if ( nCol>1 )
         SetCol( nCol-1 );
@@ -180,7 +180,7 @@ void __EXPORT ColumnEdit::Down()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ColumnEdit::First()
+void ColumnEdit::First()
 {
     nCol = 1;
     SetText( 'A' );
@@ -188,7 +188,7 @@ void __EXPORT ColumnEdit::First()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ColumnEdit::Last()
+void ColumnEdit::Last()
 {
     String aStr;
     nCol = NumToAlpha( SCNAV_MAXCOL, aStr );
@@ -316,13 +316,13 @@ RowEdit::RowEdit( ScNavigatorDlg* pParent, const ResId& rResId )
 
 //------------------------------------------------------------------------
 
-__EXPORT RowEdit::~RowEdit()
+RowEdit::~RowEdit()
 {
 }
 
 //------------------------------------------------------------------------
 
-long __EXPORT RowEdit::Notify( NotifyEvent& rNEvt )
+long RowEdit::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = NumericField::Notify( rNEvt );
 
@@ -343,7 +343,7 @@ long __EXPORT RowEdit::Notify( NotifyEvent& rNEvt )
 
 //------------------------------------------------------------------------
 
-void __EXPORT RowEdit::LoseFocus()
+void RowEdit::LoseFocus()
 {
 }
 
@@ -370,13 +370,13 @@ ScDocListBox::ScDocListBox( ScNavigatorDlg* pParent, const ResId& rResId )
 
 //------------------------------------------------------------------------
 
-__EXPORT ScDocListBox::~ScDocListBox()
+ScDocListBox::~ScDocListBox()
 {
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScDocListBox::Select()
+void ScDocListBox::Select()
 {
     ScNavigatorDlg::ReleaseFocus();
 
@@ -397,13 +397,11 @@ CommandToolBox::CommandToolBox( ScNavigatorDlg* pParent, const ResId& rResId )
     SetSizePixel( CalcWindowSizePixel() );
     SetDropdownClickHdl( LINK(this, CommandToolBox, ToolBoxDropdownClickHdl) );
     SetItemBits( IID_DROPMODE, GetItemBits( IID_DROPMODE ) | TIB_DROPDOWNONLY );
-//  EnableItem( IID_UP, FALSE );
-//  EnableItem( IID_DOWN, FALSE );
 }
 
 //------------------------------------------------------------------------
 
-__EXPORT CommandToolBox::~CommandToolBox()
+CommandToolBox::~CommandToolBox()
 {
 }
 
@@ -447,7 +445,6 @@ void CommandToolBox::Select( USHORT nSelId )
             case IID_DOWN:
                 rDlg.EndOfDataArea();
                 break;
-            // IID_DROPMODE ist in Click
             case IID_CHANGEROOT:
                 rDlg.aLbEntries.ToggleRoot();
                 UpdateButtons();
@@ -455,14 +452,14 @@ void CommandToolBox::Select( USHORT nSelId )
         }
 }
 
-void __EXPORT CommandToolBox::Select()
+void CommandToolBox::Select()
 {
     Select( GetCurItemId() );
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT CommandToolBox::Click()
+void CommandToolBox::Click()
 {
 }
 
@@ -515,23 +512,19 @@ void CommandToolBox::UpdateButtons()
         CheckItem( IID_CHANGEROOT, bRootSet );
     }
 
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
     USHORT nImageId = 0;
     switch ( rDlg.nDropMode )
     {
-        case SC_DROPMODE_URL:   nImageId = bHC ? RID_IMG_H_DROP_URL  : RID_IMG_DROP_URL;  break;
-        case SC_DROPMODE_LINK:  nImageId = bHC ? RID_IMG_H_DROP_LINK : RID_IMG_DROP_LINK; break;
-        case SC_DROPMODE_COPY:  nImageId = bHC ? RID_IMG_H_DROP_COPY : RID_IMG_DROP_COPY; break;
+        case SC_DROPMODE_URL:   nImageId = RID_IMG_DROP_URL;  break;
+        case SC_DROPMODE_LINK:  nImageId = RID_IMG_DROP_LINK; break;
+        case SC_DROPMODE_COPY:  nImageId = RID_IMG_DROP_COPY; break;
     }
     SetItemImage( IID_DROPMODE, Image(ScResId(nImageId)) );
 }
 
 void CommandToolBox::InitImageList()
 {
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
-    ImageList& rImgLst = bHC ? rDlg.aCmdImageListH : rDlg.aCmdImageList;
+    ImageList& rImgLst = rDlg.aCmdImageList;
 
     USHORT nCount = GetItemCount();
     for (USHORT i = 0; i < nCount; i++)
@@ -642,7 +635,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
 //!?    pNavigator->Show();
 }
 
-void __EXPORT ScNavigatorDialogWrapper::Resizing( Size& rSize )
+void ScNavigatorDialogWrapper::Resizing( Size& rSize )
 {
     ((ScNavigatorDlg*)GetWindow())->Resizing(rSize);
 }
@@ -660,7 +653,6 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
         Window( pParent, ScResId(RID_SCDLG_NAVIGATOR) ),
         rBindings   ( *pB ),                                // is used in CommandToolBox ctor
         aCmdImageList( ScResId( IL_CMD ) ),
-        aCmdImageListH( ScResId( ILH_CMD ) ),
         aFtCol      ( this, ScResId( FT_COL ) ),
         aEdCol      ( this, ScResId( ED_COL ) ),
         aFtRow      ( this, ScResId( FT_ROW ) ),
@@ -771,7 +763,7 @@ ScNavigatorDlg::ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Win
 
 //------------------------------------------------------------------------
 
-__EXPORT ScNavigatorDlg::~ScNavigatorDlg()
+ScNavigatorDlg::~ScNavigatorDlg()
 {
     aContentTimer.Stop();
 
@@ -788,7 +780,7 @@ __EXPORT ScNavigatorDlg::~ScNavigatorDlg()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
+void ScNavigatorDlg::Resizing( Size& rNewSize )  // Size = Outputsize?
 {
     FloatingWindow* pFloat = pContextWin->GetFloatingWindow();
     if ( pFloat )
@@ -838,7 +830,7 @@ void ScNavigatorDlg::DataChanged( const DataChangedEvent& rDCEvt )
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorDlg::Resize()
+void ScNavigatorDlg::Resize()
 {
     DoResize();
 }
@@ -904,7 +896,7 @@ void ScNavigatorDlg::DoResize()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
     {
@@ -1471,7 +1463,7 @@ void ScNavigatorDlg::EndOfDataArea()
 
 //------------------------------------------------------------------------
 
-SfxChildAlignment __EXPORT ScNavigatorDlg::CheckAlignment(
+SfxChildAlignment ScNavigatorDlg::CheckAlignment(
                             SfxChildAlignment eActAlign, SfxChildAlignment eAlign )
 {
     SfxChildAlignment eRetAlign;

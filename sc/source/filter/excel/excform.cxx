@@ -1524,7 +1524,7 @@ BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Si
     }
     rStrm.Seek( nEndPos );
 
-    return rRangeList.Count() != 0;
+    return !rRangeList.empty();
 }
 
 void ExcelToSc::DoMulArgs( DefTokenId eId, sal_uInt8 nAnz, sal_uInt8 nMinParamCount )

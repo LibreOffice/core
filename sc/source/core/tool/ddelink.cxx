@@ -68,7 +68,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const 
 {
 }
 
-__EXPORT ScDdeLink::~ScDdeLink()
+ScDdeLink::~ScDdeLink()
 {
     // Verbindung aufheben
 
@@ -136,7 +136,7 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
     rHdr.EndEntry();
 }
 
-void __EXPORT ScDdeLink::DataChanged( const String& rMimeType,
+void ScDdeLink::DataChanged( const String& rMimeType,
                                 const ::com::sun::star::uno::Any & rValue )
 {
     //  wir koennen nur Strings...
@@ -242,7 +242,7 @@ void ScDdeLink::ResetValue()
         Broadcast( ScHint( SC_HINT_DATACHANGED, ScAddress(), NULL ) );
 }
 
-void __EXPORT ScDdeLink::ListenersGone()
+void ScDdeLink::ListenersGone()
 {
     BOOL bWas = bIsInUpdate;
     bIsInUpdate = TRUE;             // Remove() kann Reschedule ausloesen??!?

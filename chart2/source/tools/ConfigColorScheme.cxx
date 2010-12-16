@@ -34,6 +34,7 @@
 #include "macros.hxx"
 
 #include <unotools/configitem.hxx>
+#include <sal/macros.h>
 
 #include <set>
 
@@ -175,7 +176,7 @@ void ConfigColorScheme::retrieveConfigColors()
         0xff00ff, 0x00ffff, 0xffff00
     };
 
-    static const sal_Int32 nMaxDefaultColors = sizeof( nDefaultColors ) / sizeof( sal_Int32 );
+    static const sal_Int32 nMaxDefaultColors = SAL_N_ELEMENTS( nDefaultColors );
     return nDefaultColors[ nIndex % nMaxDefaultColors ];
 }
 

@@ -142,7 +142,7 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScConsolidateDlg::~ScConsolidateDlg()
+ScConsolidateDlg::~ScConsolidateDlg()
 {
     delete [] pAreaData;
     delete pRangeUtil;
@@ -315,7 +315,7 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScConsolidateDlg::Close()
+BOOL ScConsolidateDlg::Close()
 {
     return DoClose( ScConsolidateDlgWrapper::GetChildWindowId() );
 }
@@ -344,7 +344,7 @@ void ScConsolidateDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScConsolidateDlg::Deactivate()
+void ScConsolidateDlg::Deactivate()
 {
     bDlgLostFocus = TRUE;
 }

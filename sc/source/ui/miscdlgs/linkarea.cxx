@@ -132,7 +132,7 @@ IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
     String aFilter;
     String aOptions;
     //  get filter name by looking at the file content (bWithContent = TRUE)
-    // Break operation if any error occured inside.
+    // Break operation if any error occurred inside.
     if (!ScDocumentLoader::GetFilterName( aEntered, aFilter, aOptions, TRUE, TRUE ))
         return 0;
 

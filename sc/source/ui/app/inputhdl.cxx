@@ -106,7 +106,7 @@ BOOL ScInputHandler::bAutoComplete = FALSE;         // wird in KeyInput gesetzt
 //  only characters that are allowed in formulas next to references
 //  and the quotation mark (so string constants can be skipped)
 
-static const sal_Char __FAR_DATA pMinDelimiters[] = " !\"";
+static const sal_Char pMinDelimiters[] = " !\"";
 
 extern USHORT nEditAdjust;      //! Member an ViewData
 
@@ -472,7 +472,7 @@ ScInputHandler::ScInputHandler()
     //  Bindings (nur noch fuer Invalidate benutzt) werden bei Bedarf aktuell geholt
 }
 
-__EXPORT ScInputHandler::~ScInputHandler()
+ScInputHandler::~ScInputHandler()
 {
     //  Wenn dies der Applikations-InputHandler ist, wird der dtor erst nach SfxApplication::Main
     //  gerufen, darf sich also auf keine Sfx-Funktionen mehr verlassen

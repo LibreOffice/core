@@ -109,10 +109,6 @@ namespace
     }
 //
 } // namespace
-//
-// ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
-// SubCode via FormulaTokenIterator Push/Pop moeglich
-IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 

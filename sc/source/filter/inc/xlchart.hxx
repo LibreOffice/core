@@ -37,6 +37,7 @@
 #include <map>
 #include <tools/gen.hxx>
 #include "fapihelper.hxx"
+#include <boost/shared_ptr.hpp>
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -823,8 +824,8 @@ class EscherPropertyContainer;
 
 struct XclChEscherFormat
 {
-    typedef ScfRef< SfxItemSet >                SfxItemSetRef;
-    typedef ScfRef< EscherPropertyContainer >   EscherPropSetRef;
+    typedef boost::shared_ptr< SfxItemSet >                SfxItemSetRef;
+    typedef boost::shared_ptr< EscherPropertyContainer >   EscherPropSetRef;
 
     SfxItemSetRef       mxItemSet;          /// Item set for Escher properties import.
     EscherPropSetRef    mxEscherSet;        /// Container for Escher properties export.
@@ -1445,9 +1446,9 @@ private:
 /** Base struct for internal root data structs for import and export. */
 struct XclChRootData
 {
-    typedef ScfRef< XclChTypeInfoProvider >                 XclChTypeProvRef;
-    typedef ScfRef< XclChFormatInfoProvider >               XclChFmtInfoProvRef;
-    typedef ScfRef< XclChObjectTable >                      XclChObjectTableRef;
+    typedef boost::shared_ptr< XclChTypeInfoProvider >      XclChTypeProvRef;
+    typedef boost::shared_ptr< XclChFormatInfoProvider >    XclChFmtInfoProvRef;
+    typedef boost::shared_ptr< XclChObjectTable >           XclChObjectTableRef;
     typedef ::std::map< XclChTextKey, XclChGetShapeFunc >   XclChGetShapeFuncMap;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartDocument >

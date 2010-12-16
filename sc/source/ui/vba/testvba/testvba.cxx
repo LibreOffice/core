@@ -113,7 +113,6 @@ mxCompLoader( _xCompLoader ), msOutDirPath( convertToURL( _outDirPath  ) )
     {
         printf("%s\n", getenv("HOME") );
         printf("file name %s\n", rtl::OUStringToOString( fileName, RTL_TEXTENCODING_UTF8 ).getStr() );
-        //rtl::OUString sLogLocation( rtl::OUString::createFromAscii( getenv("HOME") ) );
         rtl::OUString sLogLocation;
         Reference< XPropertySet > pathSettings( mxMCF->createInstanceWithContext( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.framework.PathSettings" )), mxContext), uno::UNO_QUERY_THROW );
         pathSettings->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Work" )) ) >>= sLogLocation;
@@ -298,8 +297,6 @@ int main( int argv, char** argc )
             dTest->traverse( ascii( argc[ 1 ] ) );
         }
         delete dTest;
-//      tryDispose( xLoader, "desktop" );
-//      tryDispose( xCC, "remote context" );
 
     }
     catch( uno::Exception& e )

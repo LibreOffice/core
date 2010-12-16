@@ -57,7 +57,7 @@
 
 //==================================================================
 
-String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
+String ScTabViewShell::GetSelectionText( BOOL bWholeWord )
 {
     String aStrSelection;
 

@@ -131,7 +131,7 @@ void ScFormulaReferenceHelper::enableInput( BOOL bEnable )
 // -----------------------------------------------------------------------------
 void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 {
-    if( /*!pRefEdit &&*/ bEnableColorRef )
+    if( bEnableColorRef )
     {
         bHighLightRef=TRUE;
         ScViewData* pViewData=ScDocShell::GetViewData();
@@ -147,16 +147,12 @@ void ScFormulaReferenceHelper::ShowSimpleReference( const XubString& rStr )
 
             if( ParseWithNames( aRangeList, rStr, pDoc ) )
             {
-                ScRange* pRangeEntry = aRangeList.First();
-
-                USHORT nIndex=0;
-                while(pRangeEntry != NULL)
+                for ( size_t i = 0, nRanges = aRangeList.size(); i < nRanges; ++i )
                 {
-                    ColorData aColName = ScRangeFindList::GetColorName(nIndex++);
-                    pTabViewShell->AddHighlightRange(*pRangeEntry, aColName);
-
-                    pRangeEntry = aRangeList.Next();
-                }
+                    ScRange* pRangeEntry = aRangeList[ i ];
+                    ColorData aColName = ScRangeFindList::GetColorName( i );
+                    pTabViewShell->AddHighlightRange( *pRangeEntry, aColName );
+               }
             }
         }
     }
@@ -317,9 +313,9 @@ void ScFormulaReferenceHelper::ReleaseFocus( formula::RefEdit* pEdit, formula::R
             ScRangeList aRangeList;
             if( ParseWithNames( aRangeList, pRefEdit->GetText(), pDoc ) )
             {
-                const ScRange* pRange = aRangeList.GetObject( 0 );
-                if( pRange )
+                if ( !aRangeList.empty() )
                 {
+                    const ScRange* pRange = aRangeList.front();
                     pViewShell->SetTabNo( pRange->aStart.Tab() );
                     pViewShell->MoveCursorAbs(  pRange->aStart.Col(),
                         pRange->aStart.Row(), SC_FOLLOW_JUMP, FALSE, FALSE );
@@ -821,14 +817,14 @@ BOOL ScRefHandler::IsDocAllowed(SfxObjectShell* pDocSh) const   // pDocSh may be
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::IsRefInputMode() const
+BOOL ScRefHandler::IsRefInputMode() const
 {
     return m_rWindow.IsVisible(); // nur wer sichtbar ist kann auch Referenzen bekommen
 }
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::DoClose( USHORT nId )
+BOOL ScRefHandler::DoClose( USHORT nId )
 {
     m_aHelper.DoClose(nId);
     return TRUE;
@@ -855,7 +851,7 @@ void ScRefHandler::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScRefHandler::IsTableLocked() const
+BOOL ScRefHandler::IsTableLocked() const
 {
     // per Default kann bei Referenzeingabe auch die Tabelle umgeschaltet werden
 

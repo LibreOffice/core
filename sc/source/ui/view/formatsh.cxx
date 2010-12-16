@@ -179,7 +179,7 @@ ScFormatShell::~ScFormatShell()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
+void ScFormatShell::GetStyleState( SfxItemSet& rSet )
 {
     ScDocument*             pDoc        = GetViewData()->GetDocument();
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
@@ -273,7 +273,7 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
+void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 {
     // Wenn ToolBar vertikal :
     if ( !rReq.GetArgs() )

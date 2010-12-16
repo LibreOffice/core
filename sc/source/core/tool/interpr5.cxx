@@ -100,6 +100,28 @@ const double fInvEpsilon = 1.0E-7;
         }
     };
 
+namespace
+{
+
+// Multiply n x m Mat A with m x l Mat B to n x l Mat R
+void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
+                   SCSIZE n, SCSIZE m, SCSIZE l)
+{
+    double sum;
+    for (SCSIZE row = 0; row < n; row++)
+    {
+        for (SCSIZE col = 0; col < l; col++)
+        {   // result element(col, row) =sum[ (row of A) * (column of B)]
+            sum = 0.0;
+            for (SCSIZE k = 0; k < m; k++)
+                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
+            pR->PutDouble(sum, col, row);
+        }
+    }
+}
+
+}
+
 double ScInterpreter::ScGetGCD(double fx, double fy)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::div" );
@@ -679,7 +701,7 @@ void ScInterpreter::MEMat(ScMatrix* mM, SCSIZE n)
  * permutations (row exchanges).
  *
  * Returns 0 if a singular matrix is encountered, else +1 if an even number of
- * permutations occured, or -1 if odd, which is the sign of the determinant.
+ * permutations occurred, or -1 if odd, which is the sign of the determinant.
  * This may be used to calculate the determinant by multiplying the sign with
  * the product of the diagonal elements of the LU matrix.
  */
@@ -920,7 +942,7 @@ void ScInterpreter::ScMatInv()
                         for (SCSIZE i=0; i < nR; ++i)
                             pY->PutDouble( X[i], j, i);
                     }
-#if 0
+#if OSL_DEBUG_LEVEL > 1
                     /* Possible checks for ill-condition:
                      * 1. Scale matrix, invert scaled matrix. If there are
                      *    elements of the inverted matrix that are several
@@ -943,9 +965,7 @@ void ScInterpreter::ScMatInv()
                     {
                         ScMatrix* pR = xR;
                         lcl_MFastMult( pMat, pY, pR, nR, nR, nR);
-#if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "\n%s\n", "ScMatInv(): mult-identity");
-#endif
                         for (SCSIZE i=0; i < nR; ++i)
                         {
                             for (SCSIZE j=0; j < nR; ++j)
@@ -1859,23 +1879,6 @@ namespace {
 // where Y (=observed values) is given as row.
 // Remember, ScMatrix matrices are zero based, index access (column,row).
 // -----------------------------------------------------------------------------
-
-// Multiply n x m Mat A with m x l Mat B to n x l Mat R
-void lcl_MFastMult(ScMatrixRef pA, ScMatrixRef pB, ScMatrixRef pR,
-                   SCSIZE n, SCSIZE m, SCSIZE l)
-{
-    double sum;
-    for (SCSIZE row = 0; row < n; row++)
-    {
-        for (SCSIZE col = 0; col < l; col++)
-        {   // result element(col, row) =sum[ (row of A) * (column of B)]
-            sum = 0.0;
-            for (SCSIZE k = 0; k < m; k++)
-                sum += pA->GetDouble(k,row) * pB->GetDouble(col,k);
-            pR->PutDouble(sum, col, row);
-        }
-    }
-}
 
 // <A;B> over all elements; uses the matrices as vectors of length M
 double lcl_GetSumProduct(ScMatrixRef pMatA, ScMatrixRef pMatB, SCSIZE nM)

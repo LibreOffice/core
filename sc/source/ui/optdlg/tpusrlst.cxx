@@ -115,7 +115,7 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScTpUserLists::~ScTpUserLists()
+ScTpUserLists::~ScTpUserLists()
 {
     delete pUserLists;
     delete pRangeUtil;
@@ -173,21 +173,21 @@ void ScTpUserLists::Init()
 
 // -----------------------------------------------------------------------
 
-USHORT* __EXPORT ScTpUserLists::GetRanges()
+USHORT* ScTpUserLists::GetRanges()
 {
     return pUserListsRanges;
 }
 
 // -----------------------------------------------------------------------
 
-SfxTabPage* __EXPORT ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
+SfxTabPage* ScTpUserLists::Create( Window* pParent, const SfxItemSet& rAttrSet )
 {
     return ( new ScTpUserLists( pParent, rAttrSet ) );
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
+void ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 {
     const ScUserListItem& rUserListItem = (const ScUserListItem&)
                                            rCoreAttrs.Get( nWhichUserLists );
@@ -238,7 +238,7 @@ void __EXPORT ScTpUserLists::Reset( const SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-BOOL __EXPORT ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
+BOOL ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 {
     // Modifikationen noch nicht uebernommen?
     // -> Click auf Add-Button simulieren
@@ -279,7 +279,7 @@ BOOL __EXPORT ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
+int ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pSetP )
         FillItemSet( *pSetP );

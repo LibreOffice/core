@@ -47,7 +47,7 @@ ScDDComboBoxButton::ScDDComboBoxButton( OutputDevice* pOutputDevice )
 
 // -------------------------------------------------------------------------
 
-__EXPORT ScDDComboBoxButton::~ScDDComboBoxButton()
+ScDDComboBoxButton::~ScDDComboBoxButton()
 {
 }
 

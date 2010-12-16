@@ -741,7 +741,7 @@ void XclExpChTrData::Clear()
 
 void XclExpChTrData::WriteFormula( XclExpStream& rStrm, const XclExpChTrTabIdBuffer& rTabIdBuffer )
 {
-    DBG_ASSERT( mxTokArr.is() && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
+    DBG_ASSERT( mxTokArr && !mxTokArr->Empty(), "XclExpChTrData::Write - no formula" );
     rStrm << *mxTokArr;
 
     for( XclExpRefLog::const_iterator aIt = maRefLog.begin(), aEnd = maRefLog.end(); aIt != aEnd; ++aIt )
@@ -949,24 +949,26 @@ static const char* lcl_GetType( XclExpChTrData* pData )
 {
     switch( pData->nType )
     {
-        case EXC_CHTR_TYPE_RK:
-        case EXC_CHTR_TYPE_DOUBLE:
-            return "n";
-            break;
-        case EXC_CHTR_TYPE_FORMULA:
-            {
-                ScFormulaCell* pFormulaCell = const_cast< ScFormulaCell* >( pData->mpFormulaCell );
-                const char* sType;
-                OUString sValue;
-                XclXmlUtils::GetFormulaTypeAndValue( *pFormulaCell, sType, sValue );
-                return sType;
-            }
-            break;
-        case EXC_CHTR_TYPE_STRING:
-            return "inlineStr";
-        default:
-            return "*unknown*";
+    case EXC_CHTR_TYPE_RK:
+    case EXC_CHTR_TYPE_DOUBLE:
+        return "n";
+        break;
+    case EXC_CHTR_TYPE_FORMULA:
+        {
+            ScFormulaCell* pFormulaCell = const_cast< ScFormulaCell* >( pData->mpFormulaCell );
+            const char* sType;
+            OUString sValue;
+            XclXmlUtils::GetFormulaTypeAndValue( *pFormulaCell, sType, sValue );
+            return sType;
+        }
+        break;
+    case EXC_CHTR_TYPE_STRING:
+        return "inlineStr";
+        break;
+    default:
+        break;
     }
+    return "*unknown*";
 }
 
 static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScAddress& rPosition, XclExpChTrData* pData )
@@ -1000,7 +1002,7 @@ static void lcl_WriteCell( XclExpXmlStream& rStrm, sal_Int32 nElement, const ScA
             break;
         case EXC_CHTR_TYPE_STRING:
             pStream->startElement( XML_is, FSEND );
-            if( pData->mpFormattedString.is() )
+            if( pData->mpFormattedString )
                 pData->mpFormattedString->WriteXml( rStrm );
             else
                 pData->pString->WriteXml( rStrm );

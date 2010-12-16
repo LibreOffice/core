@@ -53,16 +53,16 @@ TabPage TP_LOCATION
     {
         Pos = MAP_APPFONT ( WIZ_POSX1 , WIZ_POSY1 ) ;
         Size = MAP_APPFONT ( WIZ_FIXEDLINE_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-
         Text [ en-US ] = "Place chart" ;
     };
+
     FixedText FT_TABLE
     {
         Pos = MAP_APPFONT ( WIZ_POSX2 , WIZ_POSY2 ) ;
         Size = MAP_APPFONT ( TEXT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-
         Text [ en-US ] = "~Insert in sheet" ;
     };
+
     ListBox LB_TABLE
     {
         Border = TRUE ;

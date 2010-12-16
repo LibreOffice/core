@@ -233,7 +233,7 @@ BOOL ScDocument::HasChartAtPoint( SCTAB nTab, const Point& rPos, String* pName )
 
     if (pName)
         pName->Erase();
-    return FALSE;                   // nix gefunden
+    return FALSE;                   // nothing found
 }
 
 void ScDocument::UpdateChartArea( const String& rChartName,
@@ -396,9 +396,8 @@ void ScDocument::UpdateChartArea( const String& rChartName,
                         aNewRanges = new ScRangeList;
                         aNewRanges->Parse( aRangesStr, this );
 
-                        ULONG nAddCount = rNewList->Count();
-                        for ( ULONG nAdd=0; nAdd<nAddCount; nAdd++ )
-                            aNewRanges->Append( *rNewList->GetObject(nAdd) );
+                        for ( size_t nAdd = 0, nAddCount = rNewList->size(); nAdd < nAddCount; ++nAdd )
+                            aNewRanges->Append( *(*rNewList)[nAdd] );
                     }
                     else
                     {
@@ -434,10 +433,7 @@ void ScDocument::UpdateChartArea( const String& rChartName,
 
                     pChartListenerCollection->ChangeListening( rChartName, aNewRanges );
 
-                    // ((SdrOle2Obj*)pObject)->GetNewReplacement();
-                    // pObject->ActionChanged();
-
-                    return;         // nicht weitersuchen
+                    return;         // do not search anymore
                 }
             }
             pObject = aIter.Next();
@@ -516,8 +512,9 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         ScRangeListRef aNewRLR( new ScRangeList );
         BOOL bChanged = FALSE;
         BOOL bDataChanged = FALSE;
-        for ( ScRangePtr pR = aRLR->First(); pR; pR = aRLR->Next() )
+        for ( size_t i = 0, nListSize = aRLR->size(); i < nListSize; ++i )
         {
+            ScRange* pR = (*aRLR)[i];
             SCCOL theCol1 = pR->aStart.Col();
             SCROW theRow1 = pR->aStart.Row();
             SCTAB theTab1 = pR->aStart.Tab();
@@ -555,9 +552,6 @@ void ScDocument::UpdateChartRef( UpdateRefMode eUpdateRefMode,
         if ( bChanged )
         {
             {
-//              SetChartRangeList( pChartListener->GetString(), aNewRLR );
-//              pChartListener->ChangeListening( aNewRLR, bDataChanged );
-
                 // Force the chart to be loaded now, so it registers itself for UNO events.
                 // UNO broadcasts are done after UpdateChartRef, so the chart will get this
                 // reference change.
@@ -683,7 +677,7 @@ void ScDocument::UpdateChartListenerCollection()
     else
     {
         ScRange aRange;
-        // Range fuer Suche unwichtig
+        // Range for searching is not important
         ScChartListener aCLSearcher( EMPTY_STRING, this, aRange );
         for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
         {
@@ -732,20 +726,13 @@ void ScDocument::UpdateChartListenerCollection()
                                 // unable to set the data. So a chart from the
                                 // same document is treated like a chart with
                                 // own data for the time being.
-#if 0
+
                                 // data provider
-                                uno::Reference< chart2::data::XDataProvider > xDataProvider = new
-                                    ScChart2DataProvider( this );
-                                xReceiver->attachDataProvider( xDataProvider );
                                 // number formats supplier
-                                uno::Reference< util::XNumberFormatsSupplier > xNumberFormatsSupplier( pShell->GetModel(), uno::UNO_QUERY );
-                                xReceiver->attachNumberFormatsSupplier( xNumberFormatsSupplier );
+
                                 // data ?
                                 // how to set?? Defined in XML-file, which is already loaded!!!
                                 // => we have to do this stuff here, BEFORE the chart is actually loaded
-
-                                bIsChart = true;
-#endif
                             }
 
                             if (!bIsChart)

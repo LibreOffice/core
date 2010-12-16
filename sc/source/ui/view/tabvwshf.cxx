@@ -479,6 +479,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 SCTAB nTab = pViewData->GetTabNo();
                 BOOL   bCpy = FALSE;
                 String aDocName;
+                String aTabName;
 
                 if( pReqArgs != NULL )
                 {
@@ -536,10 +537,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 }
                 else
                 {
+                    String aDefaultName;
+                    pDoc->GetName( pViewData->GetTabNo(), aDefaultName );
+
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");
 
-                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(), RID_SCDLG_MOVETAB );
+                    AbstractScMoveTableDlg* pDlg = pFact->CreateScMoveTableDlg( GetDialogParent(),
+                                                                                aDefaultName,
+                                                                                RID_SCDLG_MOVETAB );
                     DBG_ASSERT(pDlg, "Dialog create fail!");
 
                     SCTAB nTableCount = pDoc->GetTableCount();
@@ -552,11 +558,22 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         pDlg->SetCopyTable();
                         pDlg->EnableCopyTable(FALSE);
                     }
+
+                    // We support direct renaming of sheet only when one sheet
+                    // is selected.
+                    pDlg->EnableRenameTable(nTabSelCount == 1);
+
                     if ( pDlg->Execute() == RET_OK )
                     {
                         nDoc = pDlg->GetSelectedDocument();
                         nTab = pDlg->GetSelectedTable();
                         bCpy = pDlg->GetCopyTable();
+                        bool bRna = pDlg->GetRenameTable();
+                        // Leave aTabName string empty, when Rename is FALSE.
+                        if( bRna )
+                        {
+                           pDlg->GetTabNameString( aTabName );
+                        }
                         bDoIt = TRUE;
 
                         String aFoundDocName;
@@ -586,7 +603,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     rReq.Done();        // aufzeichnen, solange das Dokument noch aktiv ist
 
-                    MoveTable( nDoc, nTab, bCpy );
+                    MoveTable( nDoc, nTab, bCpy, &aTabName );
                 }
             }
             break;

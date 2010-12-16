@@ -44,7 +44,6 @@ namespace chart
 class ChartTypeManager :
         public ::cppu::WeakImplHelper2<
         ::com::sun::star::lang::XMultiServiceFactory,
-//     ::com::sun::star::lang::XMultiComponentFactory,
         ::com::sun::star::chart2::XChartTypeManager >
 {
 public:

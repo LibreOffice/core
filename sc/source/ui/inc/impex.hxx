@@ -40,6 +40,10 @@ class SvStream;
 class SfxMedium;
 class ScAsciiOptions;
 
+/**
+ * These options control how multi-line cells are converted during export in
+ * certain lossy formats (such as csv).
+ */
 struct ScExportTextOptions
 {
     enum NewlineConversion { ToSystem, ToSpace, None };

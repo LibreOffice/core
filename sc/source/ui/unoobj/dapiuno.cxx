@@ -2097,7 +2097,7 @@ void ScDataPilotFieldObj::setOrientation(DataPilotFieldOrientation eNew)
                     if ( pOneDim->GetOrientation() == DataPilotFieldOrientation_HIDDEN )
                         pNewDim = pOneDim;      // use this one
                     else
-                        ++nFound;               // count existing non-hidden occurences
+                        ++nFound;               // count existing non-hidden occurrences
                 }
             }
 
@@ -2952,7 +2952,7 @@ void SAL_CALL ScDataPilotFieldGroupsObj::insertByName( const OUString& rName, co
     if( !lclExtractGroupMembers( aMembers, rElement ) )
         throw IllegalArgumentException();
 
-    // create the new entry if no error has been occured
+    // create the new entry if no error has been occurred
     maGroups.resize( maGroups.size() + 1 );
     ScFieldGroup& rGroup = maGroups.back();
     rGroup.maName = rName;

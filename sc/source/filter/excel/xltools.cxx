@@ -34,6 +34,7 @@
 #include <sal/mathconf.h>
 #include <unotools/fontcvt.hxx>
 #include <sfx2/objsh.hxx>
+#include <sal/macros.h>
 #include <editeng/editstat.hxx>
 #include <filter/msfilter/msvbahelper.hxx>
 #include "xestream.hxx"
@@ -358,7 +359,7 @@ Color XclTools::GetPatternColor( const Color& rPattColor, const Color& rBackColo
         0x40, 0x40, 0x20, 0x60, 0x60, 0x60, 0x60, 0x48,     // 08 - 15
         0x50, 0x70, 0x78                                    // 16 - 18
     };
-    return (nXclPattern < STATIC_TABLE_SIZE( pnRatioTable )) ?
+    return (nXclPattern < SAL_N_ELEMENTS( pnRatioTable )) ?
         ScfTools::GetMixedColor( rPattColor, rBackColor, pnRatioTable[ nXclPattern ] ) : rPattColor;
 }
 
@@ -488,10 +489,10 @@ static const sal_Char* const ppcDefNames[] =
 
 String XclTools::GetXclBuiltInDefName( sal_Unicode cBuiltIn )
 {
-    DBG_ASSERT( STATIC_TABLE_SIZE( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
+    DBG_ASSERT( SAL_N_ELEMENTS( ppcDefNames ) == EXC_BUILTIN_UNKNOWN,
         "XclTools::GetXclBuiltInDefName - built-in defined name list modified" );
     String aDefName;
-    if( cBuiltIn < STATIC_TABLE_SIZE( ppcDefNames ) )
+    if( cBuiltIn < SAL_N_ELEMENTS( ppcDefNames ) )
         aDefName.AssignAscii( ppcDefNames[ cBuiltIn ] );
     else
         aDefName = String::CreateFromInt32( cBuiltIn );
@@ -555,7 +556,7 @@ String XclTools::GetBuiltInStyleName( sal_uInt8 nStyleId, const String& rName, s
     else
     {
         aStyleName = maStyleNamePrefix1;
-        if( nStyleId < STATIC_TABLE_SIZE( ppcStyleNames ) )
+        if( nStyleId < SAL_N_ELEMENTS( ppcStyleNames ) )
             aStyleName.AppendAscii( ppcStyleNames[ nStyleId ] );
         else if( rName.Len() > 0 )
             aStyleName.Append( rName );
@@ -595,7 +596,7 @@ bool XclTools::IsBuiltInStyleName( const String& rStyleName, sal_uInt8* pnStyleI
     if( nPrefixLen > 0 )
     {
         String aShortName;
-        for( sal_uInt8 nId = 0; nId < STATIC_TABLE_SIZE( ppcStyleNames ); ++nId )
+        for( sal_uInt8 nId = 0; nId < SAL_N_ELEMENTS( ppcStyleNames ); ++nId )
         {
             if( nId != EXC_STYLE_NORMAL )
             {

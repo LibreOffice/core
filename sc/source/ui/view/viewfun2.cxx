@@ -56,7 +56,6 @@
 #include <basic/sbstar.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/script/XLibraryContainer.hpp>
-using namespace com::sun::star;
 
 #include "viewfunc.hxx"
 
@@ -98,10 +97,15 @@ using namespace com::sun::star;
 #include <com/sun/star/script/XLibraryContainer.hpp>
 
 #include <boost/scoped_ptr.hpp>
+#include <vector>
+#include <memory>
 
 using namespace com::sun::star;
 using ::rtl::OUStringBuffer;
 using ::rtl::OUString;
+
+using ::std::vector;
+using ::std::auto_ptr;
 
 // helper func defined in docfunc.cxx
 void VBA_DeleteModule( ScDocShell& rDocSh, String& sModuleName );
@@ -741,9 +745,11 @@ String ScViewFunc::GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTo
     }
 
     ScRangeList aRangeList = rRangeList;
-    const ScRange* pFirst = aRangeList.First();
-    for (const ScRange* p = pFirst; p; p = aRangeList.Next())
+    const ScRange* pFirst = aRangeList.front();
+    size_t ListSize = aRangeList.size();
+    for ( size_t i = 0; i < ListSize; ++i )
     {
+        const ScRange* p = aRangeList[i];
         if (p != pFirst)
             pArray->AddOpCode(ocSep);
         ScComplexRefData aRef;
@@ -989,18 +995,12 @@ void ScViewFunc::SetPrintRanges( BOOL bEntireSheet, const String* pPrint,
                 else if ( rMark.IsMultiMarked() )
                 {
                     rMark.MarkToMulti();
-                    ScRangeListRef aList( new ScRangeList );
-                    rMark.FillRangeListWithMarks( aList, FALSE );
-                    USHORT nCnt = (USHORT) aList->Count();
-                    if ( nCnt )
+                    ScRangeListRef pList( new ScRangeList );
+                    rMark.FillRangeListWithMarks( pList, FALSE );
+                    for (size_t i = 0, n = pList->size(); i < n; ++i)
                     {
-                        ScRangePtr pR;
-                        USHORT i;
-                        for ( pR = aList->First(), i=0; i < nCnt;
-                              pR = aList->Next(), i++ )
-                        {
-                            pDoc->AddPrintRange( nTab, *pR );
-                        }
+                        ScRange* pR = (*pList)[i];
+                        pDoc->AddPrintRange(nTab, *pR);
                     }
                 }
             }
@@ -2547,7 +2547,7 @@ void ScViewFunc::ImportTables( ScDocShell* pSrcShell,
 //----------------------------------------------------------------------------
 //  Tabelle in anderes Dokument verschieben / kopieren
 
-void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
+void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy, const String* pNewTabName )
 {
     ScDocument* pDoc       = GetViewData()->GetDocument();
     ScDocShell* pDocShell  = GetViewData()->GetDocShell();
@@ -2555,6 +2555,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
     ScDocShell* pDestShell = NULL;
     ScTabViewShell* pDestViewSh = NULL;
     BOOL bUndo (pDoc->IsUndoEnabled());
+    bool bRename = pNewTabName && pNewTabName->Len();
 
     BOOL bNewDoc = ( nDestDocNo == SC_DOC_NEW );
     if ( bNewDoc )
@@ -2593,6 +2594,14 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         return;
     }
 
+    ScMarkData& rMark = GetViewData()->GetMarkData();
+    if (bRename && rMark.GetSelectCount() != 1)
+    {
+        // Custom sheet name is provided, but more than one sheet is selected.
+        // We don't support this scenario at the moment.
+        return;
+    }
+
     pDestDoc = pDestShell->GetDocument();
 
     SCTAB nTab = GetViewData()->GetTabNo();
@@ -2608,7 +2617,6 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                         FALSE );
         }
 
-        ScMarkData& rMark       = GetViewData()->GetMarkData();
         SCTAB       nTabCount   = pDoc->GetTableCount();
         SCTAB       nTabSelCount = rMark.GetSelectCount();
 
@@ -2649,7 +2657,11 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         for( USHORT j=0; j<TheTabs.Count(); j++, nDestTab1++ )
         {   // #63304# insert sheets first and update all references
             String aName;
-            pDoc->GetName( TheTabs[j], aName );
+            if (bRename)
+                aName = *pNewTabName;
+            else
+                pDoc->GetName( TheTabs[j], aName );
+
             pDestDoc->CreateValidTabName( aName );
             if ( !pDestDoc->InsertTab( nDestTab1, aName ) )
             {
@@ -2704,13 +2716,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             default:
             break;
         }
-        //pDestShell->GetUndoManager()->Clear();        //! Undo implementieren !!!
-/*
-        String sName;
-        pDestDoc->GetName(nDestTab, sName);
-        pDestShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoInsertTab( pDestShell, nDestTab, TRUE, sName ) );
-*/
+
         if (!bCopy)
         {
             if(nTabCount!=nTabSelCount)
@@ -2726,7 +2732,6 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 pDestDoc->UpdateChartListenerCollection();
 
             pDestDoc->DeleteTab(static_cast<SCTAB>(TheTabs.Count()));   // alte erste Tabelle
-//?         pDestDoc->SelectTable(0, TRUE);     // neue erste Tabelle selektieren
             if (pDestViewSh)
                 pDestViewSh->TabChanged();      // Pages auf dem Drawing-Layer
             pDestShell->PostPaint( 0,0,0, MAXCOL,MAXROW,MAXTAB,
@@ -2746,17 +2751,19 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         pDestShell->SetDocumentModified();
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
     }
-    else                    // innerhalb des Dokuments
+    else
     {
-
-        ScMarkData& rMark       = GetViewData()->GetMarkData();
+        // Move or copy within the same document.
         SCTAB       nTabCount   = pDoc->GetTableCount();
 
-        SvShorts    TheTabs;
-        SvShorts    TheDestTabs;
-        SvStrings   TheTabNames;
+        auto_ptr< vector<SCTAB> >    pSrcTabs(new vector<SCTAB>);
+        auto_ptr< vector<SCTAB> >    pDestTabs(new vector<SCTAB>);
+        auto_ptr< vector<OUString> > pTabNames(new vector<OUString>);
+        auto_ptr< vector<OUString> > pDestNames(NULL);
+        pSrcTabs->reserve(nTabCount);
+        pDestTabs->reserve(nTabCount);
+        pTabNames->reserve(nTabCount);
         String      aDestName;
-        String      *pString;
 
         for(SCTAB i=0;i<nTabCount;i++)
         {
@@ -2764,19 +2771,18 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             {
                 String aTabName;
                 pDoc->GetName( i, aTabName);
-                TheTabNames.Insert(new String(aTabName),TheTabNames.Count());
+                pTabNames->push_back(aTabName);
 
                 for(SCTAB j=i+1;j<nTabCount;j++)
                 {
                     if((!pDoc->IsVisible(j))&&(pDoc->IsScenario(j)))
                     {
                         pDoc->GetName( j, aTabName);
-                        TheTabNames.Insert(new String(aTabName),TheTabNames.Count());
+                        pTabNames->push_back(aTabName);
                         i=j;
                     }
                     else break;
                 }
-
             }
         }
 
@@ -2786,11 +2792,11 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         pDoc->GetName( nDestTab, aDestName);
         SCTAB nDestTab1=nDestTab;
         SCTAB nMovTab=0;
-        for(int j=0;j<TheTabNames.Count();j++)
+        for (size_t j = 0, n = pTabNames->size(); j < n; ++j)
         {
             nTabCount   = pDoc->GetTableCount();
-            pString=TheTabNames[sal::static_int_cast<USHORT>(j)];
-            if(!pDoc->GetTable(*pString,nMovTab))
+            const OUString& rStr = (*pTabNames)[j];
+            if(!pDoc->GetTable(rStr,nMovTab))
             {
                 nMovTab=nTabCount;
             }
@@ -2815,19 +2821,37 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 pDoc->SetVisible(nDestTab1,bVisible );
             }
 
-            TheTabs.Insert(nMovTab,TheTabs.Count());
+            pSrcTabs->push_back(nMovTab);
 
             if(!bCopy)
             {
-                if(!pDoc->GetTable(*pString,nDestTab1))
+                if(!pDoc->GetTable(rStr,nDestTab1))
                 {
                     nDestTab1=nTabCount;
                 }
             }
 
-            TheDestTabs.Insert(nDestTab1,TheDestTabs.Count());
-            delete pString;
+            pDestTabs->push_back(nDestTab1);
         }
+
+        // Rename must be done after all sheets have been moved.
+        if (bRename)
+        {
+            pDestNames.reset(new vector<OUString>);
+            size_t n = pDestTabs->size();
+            pDestNames->reserve(n);
+            for (size_t j = 0; j < n; ++j)
+            {
+                SCTAB nRenameTab = (*pDestTabs)[j];
+                String aTabName = *pNewTabName;
+                pDoc->CreateValidTabName( aTabName );
+                pDestNames->push_back(aTabName);
+                pDoc->RenameTab(nRenameTab, aTabName);
+            }
+        }
+        else
+            // No need to keep this around when we are not renaming.
+            pTabNames.reset();
 
         nTab = GetViewData()->GetTabNo();
 
@@ -2836,12 +2860,14 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
             if (bCopy)
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoCopyTab( pDocShell, TheTabs, TheDestTabs));
+                        new ScUndoCopyTab(
+                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pDestNames.release()));
             }
             else
             {
                 pDocShell->GetUndoManager()->AddUndoAction(
-                        new ScUndoMoveTab( pDocShell, TheTabs, TheDestTabs));
+                        new ScUndoMoveTab(
+                            pDocShell, pSrcTabs.release(), pDestTabs.release(), pTabNames.release(), pDestNames.release()));
             }
         }
 

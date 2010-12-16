@@ -131,13 +131,13 @@ ScStyleDlg::ScStyleDlg( Window*             pParent,
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScStyleDlg::~ScStyleDlg()
+ScStyleDlg::~ScStyleDlg()
 {
 }
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
+void ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 {
     if ( nDlgRsc == RID_SCDLG_STYLES_PAR )
     {
@@ -206,7 +206,7 @@ void __EXPORT ScStyleDlg::PageCreated( USHORT nPageId, SfxTabPage& rTabPage )
 
 // -----------------------------------------------------------------------
 
-const SfxItemSet* __EXPORT ScStyleDlg::GetRefreshedSet()
+const SfxItemSet* ScStyleDlg::GetRefreshedSet()
 {
     SfxItemSet* pItemSet = GetInputSetImpl();
     pItemSet->ClearItem();

@@ -995,7 +995,7 @@ void XclObjAny::SaveXml( XclExpXmlStream& rStrm )
 
     sax_fastparser::FSHelperPtr pDrawing = rStrm.GetCurrentStream();
 
-    ShapeExport aDML( XML_xdr, pDrawing, &rStrm, DrawingML::DOCUMENT_XLSX );
+    ShapeExport aDML( XML_xdr, pDrawing, NULL, &rStrm, DrawingML::DOCUMENT_XLSX );
 
     pDrawing->startElement( FSNS( XML_xdr, XML_twoCellAnchor ), // OOXTODO: oneCellAnchor, absoluteAnchor
             XML_editAs, GetEditAs( *this ),
@@ -1216,9 +1216,9 @@ ExcEScenario::ExcEScenario( const XclExpRoot& rRoot, SCTAB nTab )
     String  sText;
     double  fVal;
 
-    for( UINT32 nRange = 0; (nRange < pRList->Count()) && bContLoop; nRange++ )
+    for( size_t nRange = 0; (nRange < pRList->size()) && bContLoop; nRange++ )
     {
-        const ScRange* pRange = pRList->GetObject( nRange );
+        const ScRange* pRange = (*pRList)[nRange];
         for( nRow = pRange->aStart.Row(); (nRow <= pRange->aEnd.Row()) && bContLoop; nRow++ )
             for( nCol = pRange->aStart.Col(); (nCol <= pRange->aEnd.Col()) && bContLoop; nCol++ )
             {

@@ -70,11 +70,11 @@ ScTbxInsertCtrl::ScTbxInsertCtrl( USHORT nSlotId, USHORT nId, ToolBox& rTbx  ) :
     rTbx.SetItemBits( nId, TIB_DROPDOWN | rTbx.GetItemBits( nId ) );
 }
 
-__EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
+ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
 
-void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
+void ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
@@ -91,56 +91,40 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eSt
             aSlotURL += rtl::OUString::valueOf( sal_Int32( nImageId ));
             Image aImage = GetImage( m_xFrame,
                                      aSlotURL,
-                                     hasBigImages(),
-                                     GetToolBox().GetSettings().GetStyleSettings().GetHighContrastMode() );
+                                     hasBigImages()
+                                     );
             GetToolBox().SetItemImage(GetId(), aImage);
         }
     }
 }
 
-SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
+SfxPopupWindow* ScTbxInsertCtrl::CreatePopupWindow()
 {
-//    USHORT nWinResId, nTbxResId;
     USHORT nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
         rtl::OUString aInsertBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertbar" ));
         createAndPositionSubToolBar( aInsertBarResStr );
-//      nWinResId = RID_TBXCTL_INSERT;
-//      nTbxResId = RID_TOOLBOX_INSERT;
     }
     else if (nSlotId == SID_TBXCTL_INSCELLS)
     {
         rtl::OUString aInsertCellsBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertcellsbar" ));
         createAndPositionSubToolBar( aInsertCellsBarResStr );
-//      nWinResId = RID_TBXCTL_INSCELLS;
-//      nTbxResId = RID_TOOLBOX_INSCELLS;
     }
-    else /* SID_TBXCTL_INSOBJ */
+    else
     {
         rtl::OUString aInsertObjectBarResStr( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/insertobjectbar" ));
         createAndPositionSubToolBar( aInsertObjectBarResStr );
-//      nWinResId = RID_TBXCTL_INSOBJ;
-//      nTbxResId = RID_TOOLBOX_INSOBJ;
     }
-/*
-    WindowAlign eNewAlign = ( GetToolBox().IsHorizontal() ) ? WINDOWALIGN_LEFT : WINDOWALIGN_TOP;
-    ScTbxInsertPopup *pWin = new ScTbxInsertPopup( nSlotId, eNewAlign,
-                                    ScResId(nWinResId), ScResId(nTbxResId), GetBindings() );
-    pWin->StartPopupMode(&GetToolBox(), TRUE);
-    pWin->StartSelection();
-    pWin->Show();
-    return pWin;
-*/
     return NULL;
 }
 
-SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
+SfxPopupWindowType ScTbxInsertCtrl::GetPopupWindowType() const
 {
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
+void ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );
@@ -155,80 +139,6 @@ void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
     if ( pDispatch )
         pDispatch->Execute(nLastSlotId);
 }
-/*
-//------------------------------------------------------------------
-//
-//  Popup - Window
-//
-//------------------------------------------------------------------
-
-ScTbxInsertPopup::ScTbxInsertPopup( USHORT nId, WindowAlign eNewAlign,
-                        const ResId& rRIdWin, const ResId& rRIdTbx,
-                        SfxBindings& rBindings ) :
-                SfxPopupWindow  ( nId, rRIdWin, rBindings),
-                aTbx            ( this, GetBindings(), rRIdTbx ),
-                aRIdWinTemp(rRIdWin),
-                aRIdTbxTemp(rRIdTbx)
-{
-    aTbx.UseDefault();
-    FreeResource();
-
-    aTbx.GetToolBox().SetAlign( eNewAlign );
-    if (eNewAlign == WINDOWALIGN_LEFT || eNewAlign == WINDOWALIGN_RIGHT)
-        SetText( EMPTY_STRING );
-
-    Size aSize = aTbx.CalcWindowSizePixel();
-    aTbx.SetPosSizePixel( Point(), aSize );
-    SetOutputSizePixel( aSize );
-    aTbx.GetToolBox().SetSelectHdl( LINK(this, ScTbxInsertPopup, TbxSelectHdl));
-    aTbxClickHdl = aTbx.GetToolBox().GetClickHdl();
-    aTbx.GetToolBox().SetClickHdl(  LINK(this, ScTbxInsertPopup, TbxClickHdl));
-}
-
-ScTbxInsertPopup::~ScTbxInsertPopup()
-{
-}
-
-SfxPopupWindow* __EXPORT ScTbxInsertPopup::Clone() const
-{
-    return new ScTbxInsertPopup( GetId(), aTbx.GetToolBox().GetAlign(),
-                                    aRIdWinTemp, aRIdTbxTemp,
-                                    (SfxBindings&) GetBindings() );
-}
-
-void ScTbxInsertPopup::StartSelection()
-{
-    aTbx.GetToolBox().StartSelection();
-}
-
-IMPL_LINK(ScTbxInsertPopup, TbxSelectHdl, ToolBox*, pBox)
-{
-    EndPopupMode();
-
-    USHORT nLastSlotId = pBox->GetCurItemId();
-    SfxUInt16Item aItem( GetId(), nLastSlotId );
-    SfxDispatcher* pDisp = GetBindings().GetDispatcher();
-    pDisp->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-    pDisp->Execute( nLastSlotId, SFX_CALLMODE_ASYNCHRON );
-    return 0;
-}
-
-IMPL_LINK(ScTbxInsertPopup, TbxClickHdl, ToolBox*, pBox)
-{
-    USHORT nLastSlotId = pBox->GetCurItemId();
-    SfxUInt16Item aItem( GetId(), nLastSlotId );
-    GetBindings().GetDispatcher()->Execute( GetId(), SFX_CALLMODE_SYNCHRON, &aItem, 0L );
-    if(aTbxClickHdl.IsSet())
-        aTbxClickHdl.Call(pBox);
-    return 0;
-}
-
-void __EXPORT ScTbxInsertPopup::PopupModeEnd()
-{
-    aTbx.GetToolBox().EndSelection();
-    SfxPopupWindow::PopupModeEnd();
-}
-*/
 
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

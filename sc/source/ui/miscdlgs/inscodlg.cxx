@@ -333,7 +333,7 @@ IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-__EXPORT ScInsertContentsDlg::~ScInsertContentsDlg()
+ScInsertContentsDlg::~ScInsertContentsDlg()
 {
     ScInsertContentsDlg::nPreviousChecks2 = 0;
     if(aBtnSkipEmptyCells.IsChecked())

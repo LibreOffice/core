@@ -260,13 +260,11 @@ bool XclExpAddressConverter::ConvertRange( XclRange& rXclRange,
 
 void XclExpAddressConverter::ValidateRangeList( ScRangeList& rScRanges, bool bWarn )
 {
-    ULONG nIdx = rScRanges.Count();
-    while( nIdx )
+    for ( size_t nRange = rScRanges.size(); nRange > 0; )
     {
-        --nIdx; // backwards to keep nIdx valid
-        ScRange* pScRange = rScRanges.GetObject( nIdx );
-        if( pScRange && !CheckRange( *pScRange, bWarn ) )
-            delete rScRanges.Remove( nIdx );
+        ScRange* pScRange = rScRanges[ --nRange ];
+        if( !CheckRange( *pScRange, bWarn ) )
+            delete rScRanges.Remove(nRange);
     }
 }
 
@@ -274,9 +272,9 @@ void XclExpAddressConverter::ConvertRangeList( XclRangeList& rXclRanges,
         const ScRangeList& rScRanges, bool bWarn )
 {
     rXclRanges.clear();
-    for( ULONG nPos = 0, nCount = rScRanges.Count(); nPos < nCount; ++nPos )
+    for( size_t nPos = 0, nCount = rScRanges.size(); nPos < nCount; ++nPos )
     {
-        if( const ScRange* pScRange = rScRanges.GetObject( nPos ) )
+        if( const ScRange* pScRange = rScRanges[ nPos ] )
         {
             XclRange aXclRange( ScAddress::UNINITIALIZED );
             if( ConvertRange( aXclRange, *pScRange, bWarn ) )
@@ -318,7 +316,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
     if( GetBiff() == EXC_BIFF8 )    // no HLINK records in BIFF2-BIFF7
     {
         // there was/is already a HLINK record
-        mbMultipleUrls = mxLinkRec.is();
+        mbMultipleUrls = mxLinkRec;
 
         mxLinkRec.reset( new XclExpHyperlink( GetRoot(), rUrlField, maScPos ) );
 
@@ -335,7 +333,7 @@ String XclExpHyperlinkHelper::ProcessUrlField( const SvxURLField& rUrlField )
 
 bool XclExpHyperlinkHelper::HasLinkRecord() const
 {
-    return !mbMultipleUrls && mxLinkRec.is();
+    return !mbMultipleUrls && mxLinkRec;
 }
 
 XclExpHyperlinkHelper::XclExpHyperlinkRef XclExpHyperlinkHelper::GetLinkRecord()

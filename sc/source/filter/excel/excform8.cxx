@@ -1586,7 +1586,7 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
     }
     aIn.Seek( nEndPos );
 
-    return r.Count() != 0;
+    return !r.empty();
 }
 
 

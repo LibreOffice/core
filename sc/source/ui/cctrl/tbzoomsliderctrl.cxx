@@ -64,7 +64,7 @@ ScZoomSliderControl::ScZoomSliderControl(
 
 // -----------------------------------------------------------------------
 
-__EXPORT ScZoomSliderControl::~ScZoomSliderControl()
+ScZoomSliderControl::~ScZoomSliderControl()
 {
 
 }

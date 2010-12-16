@@ -260,11 +260,11 @@ FloatingWindow RID_TBXCTL_INSOBJ
 #define DEFAULT_IDLIST \
     IdList = {                                          \
         /* Eingabezeile */                              \
-        SID_INPUT_FUNCTION;             /* 20047 */     \
-        SID_INPUT_SUM;                  /* 20048 */     \
-        SID_INPUT_EQUAL;                /* 20049 */     \
-        SID_INPUT_CANCEL;                               \
-        SID_INPUT_OK;                                   \
+        SID_INPUT_FUNCTION;             /* 26047 */     \
+        SID_INPUT_SUM;                  /* 26048 */     \
+        SID_INPUT_EQUAL;                /* 26049 */     \
+        SID_INPUT_CANCEL;               /* 26050 */     \
+        SID_INPUT_OK;                   /* 26051 */     \
     };                                                  \
     IdCount = {                                         \
         5;                                              \

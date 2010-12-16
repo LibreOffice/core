@@ -652,7 +652,6 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, BOOL bNewScenario 
         //  und aktuelle Werte in bisher aktive Szenarios zurueckschreiben
 
         ScRangeList aRanges = *pTab[nSrcTab]->GetScenarioRanges();
-        const ULONG nRangeCount = aRanges.Count();
 
         //  nDestTab ist die Zieltabelle
         for ( SCTAB nTab = nDestTab+1;
@@ -662,9 +661,9 @@ void ScDocument::CopyScenario( SCTAB nSrcTab, SCTAB nDestTab, BOOL bNewScenario 
             if ( pTab[nTab]->IsActiveScenario() )       // auch wenn's dasselbe Szenario ist
             {
                 BOOL bTouched = FALSE;
-                for ( ULONG nR=0; nR<nRangeCount && !bTouched; nR++)
+                for ( size_t nR=0, nRangeCount = aRanges.size(); nR < nRangeCount && !bTouched; nR++ )
                 {
-                    const ScRange* pRange = aRanges.GetObject(nR);
+                    const ScRange* pRange = aRanges[ nR ];
                     if ( pTab[nTab]->HasScenarioRange( *pRange ) )
                         bTouched = TRUE;
                 }
@@ -704,10 +703,6 @@ void ScDocument::MarkScenario( SCTAB nSrcTab, SCTAB nDestTab, ScMarkData& rDestM
 BOOL ScDocument::HasScenarioRange( SCTAB nTab, const ScRange& rRange ) const
 {
     return ValidTab(nTab) && pTab[nTab] && pTab[nTab]->HasScenarioRange( rRange );
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->HasScenarioRange( rRange );
-
-    //return FALSE;
 }
 
 const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
@@ -721,10 +716,6 @@ const ScRangeList* ScDocument::GetScenarioRanges( SCTAB nTab ) const
 BOOL ScDocument::IsActiveScenario( SCTAB nTab ) const
 {
     return ValidTab(nTab) && pTab[nTab] && pTab[nTab]->IsActiveScenario(  );
-    //if (ValidTab(nTab) && pTab[nTab])
-    //  return pTab[nTab]->IsActiveScenario();
-
-    //return FALSE;
 }
 
 void ScDocument::SetActiveScenario( SCTAB nTab, BOOL bActive )
@@ -948,8 +939,8 @@ void ScDocument::UpdateTranspose( const ScAddress& rDestPos, ScDocument* pClipDo
 
     ScRange aSource;
     ScClipParam& rClipParam = GetClipParam();
-    if (rClipParam.maRanges.Count())
-        aSource = *rClipParam.maRanges.First();
+    if (!rClipParam.maRanges.empty())
+        aSource = *rClipParam.maRanges.front();
     ScAddress aDest = rDestPos;
 
     SCTAB nClipTab = 0;
@@ -1452,16 +1443,14 @@ BOOL ScDocument::GetDataEntries( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
 BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 {
-    USHORT i;
-
     //
     //  Bereichsnamen
     //
 
     if ( pRangeName )
     {
-        USHORT nRangeCount = pRangeName->GetCount();
-        for ( i=0; i<nRangeCount; i++ )
+        sal_uInt16 nRangeCount = pRangeName->GetCount();
+        for ( sal_uInt16 i = 0; i < nRangeCount; i++ )
         {
             ScRangeData* pData = (*pRangeName)[i];
             if (pData)
@@ -1479,8 +1468,8 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
 
     if ( pDBCollection )
     {
-        USHORT nDBCount = pDBCollection->GetCount();
-        for ( i=0; i<nDBCount; i++ )
+        sal_uInt16 nDBCount = pDBCollection->GetCount();
+        for ( sal_uInt16 i=0; i<nDBCount; i++ )
         {
             ScDBData* pData = (*pDBCollection)[i];
             if (pData)
@@ -1501,10 +1490,11 @@ BOOL ScDocument::GetFormulaEntries( TypedScStrCollection& rStrings )
     pLists[1] = GetRowNameRanges();
     for (USHORT nListNo=0; nListNo<2; nListNo++)
     {
-        ScRangePairList* pList = pLists[nListNo];
+        ScRangePairList* pList = pLists[ nListNo ];
         if (pList)
-            for ( ScRangePair* pPair = pList->First(); pPair; pPair = pList->Next() )
+            for ( size_t i = 0, nPairs = pList->size(); i < nPairs; ++i )
             {
+                ScRangePair* pPair = (*pList)[i];
                 ScRange aRange = pPair->GetRange(0);
                 ScCellIterator aIter( this, aRange );
                 for ( ScBaseCell* pCell = aIter.GetFirst(); pCell; pCell = aIter.GetNext() )
@@ -2048,7 +2038,7 @@ void ScDocument::DecSizeRecalcLevel( SCTAB nTab, bool bUpdateNoteCaptionPos )
 // DataPilot Migration - Cache&&Performance
 ScDPTableDataCache* ScDocument::GetDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     { //
         if ( nID == (*iter)->GetId() )
             return *iter;
@@ -2092,7 +2082,7 @@ long ScDocument::GetNewDPObjectCacheId()
     bool bFound = false;
     std::list<ScDPTableDataCache*>::iterator iter;
     do {
-        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+        for ( iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
         { //Get a new Id
             if ( nID == (*iter)->GetId() )
             {
@@ -2110,7 +2100,7 @@ long ScDocument::GetNewDPObjectCacheId()
 
 void ScDocument::RemoveDPObjectCache( long nID )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         if ( nID == (*iter)->GetId() )
         {
@@ -2125,7 +2115,7 @@ void ScDocument::RemoveDPObjectCache( long nID )
 
 void ScDocument::RemoveUnusedDPObjectCaches()
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         long  nID = (*iter)->GetId();
         USHORT nCount = GetDPCollection()->GetCount();
@@ -2147,7 +2137,7 @@ void ScDocument::RemoveUnusedDPObjectCaches()
 
 void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist )
 {
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); iter++ )
+    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
     {
         long  nID = (*iter)->GetId();
         USHORT nCount = GetDPCollection()->GetCount();

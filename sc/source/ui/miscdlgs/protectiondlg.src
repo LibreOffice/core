@@ -56,7 +56,7 @@ ModalDialog RID_SCDLG_TABPROTECTION
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 150 , 10 );
 
-        Text [ en-US ] = "P~rotect this sheet and the contents of locked cells" ;
+        Text [ en-US ] = "P~rotect this sheet and the contents of protected cells" ;
     };
 
     FixedText FT_PASSWORD1
@@ -115,13 +115,13 @@ ModalDialog RID_SCDLG_TABPROTECTION
         TabStop = TRUE ;
     };
 
-    String ST_SELECT_LOCKED_CELLS
+    String ST_SELECT_PROTECTED_CELLS
     {
-        Text [ en-US ] = "Select locked cells";
+        Text [ en-US ] = "Select protected cells";
     };
 
-    String ST_SELECT_UNLOCKED_CELLS
+    String ST_SELECT_UNPROTECTED_CELLS
     {
-        Text [ en-US ] = "Select unlocked cells";
+        Text [ en-US ] = "Select unprotected cells";
     };
 };

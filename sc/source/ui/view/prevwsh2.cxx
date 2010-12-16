@@ -310,7 +310,7 @@
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
+void ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     BOOL bDataChanged = FALSE;
 

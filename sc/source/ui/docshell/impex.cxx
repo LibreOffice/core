@@ -1398,10 +1398,38 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
     return p;
 }
 
-        //
-        //
-        //
+namespace {
 
+/**
+ * Check if a given string has any line break characters or separators.
+ *
+ * @param rStr string to inspect.
+ * @param cSep separator character.
+ */
+bool hasLineBreaksOrSeps( const String& rStr, sal_Unicode cSep )
+{
+    const sal_Unicode* p = rStr.GetBuffer();
+    for (xub_StrLen i = 0, n = rStr.Len(); i < n; ++i, ++p)
+    {
+        sal_Unicode c = *p;
+        if (c == cSep)
+            // separator found.
+            return true;
+
+        switch (c)
+        {
+            case _LF:
+            case _CR:
+                // line break found.
+                return true;
+            default:
+                ;
+        }
+    }
+    return false;
+}
+
+}
 
 BOOL ScImportExport::Doc2Text( SvStream& rStrm )
 {
@@ -1482,7 +1510,7 @@ BOOL ScImportExport::Doc2Text( SvStream& rStrm )
                         if( mExportTextOptions.mcSeparatorConvertTo && cSep )
                             aCell.SearchAndReplaceAll( cSep, mExportTextOptions.mcSeparatorConvertTo );
 
-                        if( mExportTextOptions.mbAddQuotes && ( aCell.Search( cSep ) != STRING_NOTFOUND ) )
+                        if( mExportTextOptions.mbAddQuotes && hasLineBreaksOrSeps(aCell, cSep) )
                             lcl_WriteString( rStrm, aCell, cStr, cStr );
                         else
                             lcl_WriteSimpleString( rStrm, aCell );
@@ -2007,7 +2035,19 @@ BOOL ScImportExport::HTML2Doc( SvStream& rStrm, const String& rBaseURL )
 
         USHORT nFlags = IDF_ALL & ~IDF_STYLES;
         pDoc->DeleteAreaTab( aRange, nFlags );
-        pImp->WriteToDocument();
+
+        if (pExtOptions)
+        {
+            // Pick up import options if available.
+            LanguageType eLang = pExtOptions->GetLanguage();
+            SvNumberFormatter aNumFormatter(pDoc->GetServiceManager(), eLang);
+            bool bSpecialNumber = pExtOptions->IsDetectSpecialNumber();
+            pImp->WriteToDocument(false, 1.0, &aNumFormatter, bSpecialNumber);
+        }
+        else
+            // Regular import, with no options.
+            pImp->WriteToDocument();
+
         EndPaste();
     }
     delete pImp;

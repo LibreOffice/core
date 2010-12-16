@@ -77,12 +77,13 @@ typedef ::boost::shared_ptr<ScDPLabelData> ScDPLabelDataRef;
 
 struct PivotField
 {
-    SCsCOL               nCol;
+    SCsCOL              nCol;
     USHORT              nFuncMask;
     USHORT              nFuncCount;
     ::com::sun::star::sheet::DataPilotFieldReference maFieldRef;
 
     explicit            PivotField( SCsCOL nNewCol = 0, USHORT nNewFuncMask = PIVOT_FUNC_NONE );
+    PivotField( const PivotField& r );
 
     bool                operator==( const PivotField& r ) const;
 };
@@ -96,14 +97,10 @@ struct ScPivotParam
     SCROW           nRow;           // bzw. Anfang des Zielbereiches
     SCTAB           nTab;
     ::std::vector<ScDPLabelDataRef> maLabelArray;
-    PivotField      aPageArr[PIVOT_MAXPAGEFIELD];
-    PivotField      aColArr[PIVOT_MAXFIELD];
-    PivotField      aRowArr[PIVOT_MAXFIELD];
-    PivotField      aDataArr[PIVOT_MAXFIELD];
-    SCSIZE          nPageCount;
-    SCSIZE          nColCount;
-    SCSIZE          nRowCount;
-    SCSIZE          nDataCount;
+    ::std::vector<PivotField> maPageFields;
+    ::std::vector<PivotField> maColFields;
+    ::std::vector<PivotField> maRowFields;
+    ::std::vector<PivotField> maDataFields;
     BOOL            bIgnoreEmptyRows;
     BOOL            bDetectCategories;
     BOOL            bMakeTotalCol;
@@ -117,14 +114,6 @@ struct ScPivotParam
     BOOL            operator==      ( const ScPivotParam& r ) const;
     void            ClearPivotArrays();
     void            SetLabelData    (const ::std::vector<ScDPLabelDataRef>& r);
-    void            SetPivotArrays  ( const PivotField* pPageArr,
-                                      const PivotField* pColArr,
-                                      const PivotField* pRowArr,
-                                      const PivotField* pDataArr,
-                                      SCSIZE            nPageCnt,
-                                      SCSIZE            nColCnt,
-                                      SCSIZE            nRowCnt,
-                                      SCSIZE            nDataCnt );
 };
 
 // -----------------------------------------------------------------------

@@ -91,14 +91,14 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
 //----------------------------------------------------------------------------
 
-__EXPORT ScTabOpDlg::~ScTabOpDlg()
+ScTabOpDlg::~ScTabOpDlg()
 {
     Hide();
 }
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScTabOpDlg::Init()
+void ScTabOpDlg::Init()
 {
     aBtnOk.         SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
     aBtnCancel.     SetClickHdl     ( LINK( this, ScTabOpDlg, BtnHdl ) );
@@ -128,7 +128,7 @@ void __EXPORT ScTabOpDlg::Init()
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScTabOpDlg::Close()
+BOOL ScTabOpDlg::Close()
 {
     return DoClose( ScTabOpDlgWrapper::GetChildWindowId() );
 }

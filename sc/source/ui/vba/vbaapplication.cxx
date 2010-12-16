@@ -1177,12 +1177,12 @@ uno::Reference< excel::XRange > lclCreateVbaRange(
     for( ListOfScRange::const_iterator aIt = rList.begin(), aEnd = rList.end(); aIt != aEnd; ++aIt )
         aCellRanges.Append( *aIt );
 
-    if( aCellRanges.Count() == 1 )
+    if( aCellRanges.size() == 1 )
     {
-        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.First() ) );
+        uno::Reference< table::XCellRange > xRange( new ScCellRangeObj( pDocShell, *aCellRanges.front() ) );
         return new ScVbaRange( excel::getUnoSheetModuleObj( xRange ), rxContext, xRange );
     }
-    if( aCellRanges.Count() > 1 )
+    if( aCellRanges.size() > 1 )
     {
         uno::Reference< sheet::XSheetCellRangeContainer > xRanges( new ScCellRangesObj( pDocShell, aCellRanges ) );
         return new ScVbaRange( excel::getUnoSheetModuleObj( xRanges ), rxContext, xRanges );

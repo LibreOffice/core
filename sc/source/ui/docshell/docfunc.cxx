@@ -547,13 +547,14 @@ static void lcl_collectAllPredOrSuccRanges(
     ScDocument* pDoc = rDocShell.GetDocument();
     vector<ScSharedTokenRef> aRefTokens;
     ScRangeList aSrcRanges(rSrcRanges);
-    ScRange* p = aSrcRanges.First();
-    if (!p)
+    if ( aSrcRanges.empty() )
         return;
+    ScRange* p = aSrcRanges.front();
     ScDetectiveFunc aDetFunc(pDoc, p->aStart.Tab());
     ScRangeList aDestRanges;
-    for (; p; p = aSrcRanges.Next())
+    for ( size_t i = 1, ListSize = aSrcRanges.size(); i < ListSize; ++i )
     {
+        p = aSrcRanges[ i ];
         if (bPred)
         {
             aDetFunc.GetAllPreds(
@@ -2674,13 +2675,13 @@ void VBA_InsertModule( ScDocument& rDoc, SCTAB nTab, String& sModuleName, String
         sal_Int32 nNum = 0;
         String genModuleName;
         if ( sModuleName.Len() )
-            sModuleName = sModuleName;
+            genModuleName = sModuleName;
         else
         {
              genModuleName = String::CreateFromAscii( "Sheet1" );
              nNum = 1;
         }
-        while( xLib->hasByName( genModuleName  ) )
+        while( xLib->hasByName( genModuleName ) )
             genModuleName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "Sheet")) + rtl::OUString::valueOf( ++nNum );
 
         uno::Any aSourceAny;
@@ -3745,13 +3746,6 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 
         if (bSize)
         {
-/*          SCCOL nCols[2];
-            nCols[0] = nStartCol;
-            nCols[1] = nEndCol;
-            SCROW nRows[2];
-            nRows[0] = nStartRow;
-            nRows[1] = nEndRow;
-*/
             SCCOLROW nCols[2] = { nStartCol, nEndCol };
             SCCOLROW nRows[2] = { nStartRow, nEndRow };
 

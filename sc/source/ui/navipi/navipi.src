@@ -59,23 +59,13 @@ Window RID_SCDLG_NAVIGATOR
 {
     SVLook = TRUE ;
     HelpId = HID_SC_NAVIGATOR ;
-     //?    Pos = MAP_APPFONT( 0, 0 );
     Size = MAP_APPFONT ( 115 , 116 ) ;
     OutputSize = TRUE ;
     DialogControl = TRUE ;
     Hide = TRUE ;
     Text [ en-US ] = "Navigator" ;
-     //    Closeable = TRUE ;
-     //    Moveable = TRUE ;
-     //    Zoomable = TRUE ;
-     //    Sizeable = TRUE ;
-     //    EnableResizing = TRUE ;
-     //    HideWhenDeactivate = TRUE ;
-     //    Border = TRUE ;
-     //    Dockable = TRUE ;
     FixedText FT_ROW
     {
-         //         Pos = MAP_APPFONT( 2, 20 );
         Pos = MAP_APPFONT ( 2 , 19 ) ;
          // an kleinere Toolbox-Bitmaps angepasst
         Size = MAP_APPFONT ( 19 , 10 ) ;
@@ -85,7 +75,6 @@ Window RID_SCDLG_NAVIGATOR
     {
         HelpId = HID_SC_NAVIPI_ROW ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 31, 19 );
         Pos = MAP_APPFONT ( 31 , 18 ) ;
          // an kleinere Toolbox-Bitmaps angepasst
         Size = MAP_APPFONT ( 30 , 12 ) ;
@@ -119,7 +108,6 @@ Window RID_SCDLG_NAVIGATOR
          // "Control" braucht immer eigene HelpId
         HelpId = HID_SC_NAVIPI_ENTRIES ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 2, 52 );
         Pos = MAP_APPFONT ( 2 , 35 ) ;
         Size = MAP_APPFONT ( 110 , 100 ) ;
         TabStop = TRUE ;
@@ -128,7 +116,6 @@ Window RID_SCDLG_NAVIGATOR
     {
         HelpId = HID_SC_NAVIPI_DOC ;
         Border = TRUE ;
-         //         Pos = MAP_APPFONT( 2, 35 );
         Pos = MAP_APPFONT ( 2 , 89 ) ;
         Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
@@ -139,12 +126,6 @@ Window RID_SCDLG_NAVIGATOR
     {
         Prefix = "na";
         MaskColor = STD_MASKCOLOR ;
-        SC_NAVI_CMD_IDLIST
-    };
-    ImageList ILH_CMD
-    {
-        Prefix = "nah";
-        MaskColor = SC_HC_MASKCOLOR ;
         SC_NAVI_CMD_IDLIST
     };
     ToolBox TBX_CMD
@@ -244,49 +225,29 @@ Window RID_SCDLG_NAVIGATOR
 
 };
 
-
 ImageList RID_IMAGELIST_NAVCONT
 {
     Prefix = "nc";
     MaskColor = STD_MASKCOLOR ;
     SC_NAVI_CONT_IDLIST
 };
-ImageList RID_IMAGELIST_H_NAVCONT
-{
-    Prefix = "nch";
-    MaskColor = SC_HC_MASKCOLOR ;
-    SC_NAVI_CONT_IDLIST
-};
 
 Image RID_IMG_DROP_URL
 {
-    ImageBitmap = Bitmap { File = "dropurl.bmp" ; };
+    ImageBitmap = Bitmap { File = "dropurl.png" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
 Image RID_IMG_DROP_LINK
 {
-    ImageBitmap = Bitmap { File = "droplink.bmp" ; };
+    ImageBitmap = Bitmap { File = "droplink.png" ; };
     MaskColor = STD_MASKCOLOR ;
 };
+
 Image RID_IMG_DROP_COPY
 {
-    ImageBitmap = Bitmap { File = "dropcopy.bmp" ; };
+    ImageBitmap = Bitmap { File = "dropcopy.png" ; };
     MaskColor = STD_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_URL
-{
-    ImageBitmap = Bitmap { File = "dropurl_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_LINK
-{
-    ImageBitmap = Bitmap { File = "droplink_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
-};
-Image RID_IMG_H_DROP_COPY
-{
-    ImageBitmap = Bitmap { File = "dropcopy_h.bmp" ; };
-    MaskColor = SC_HC_MASKCOLOR ;
 };
 
 //  content description strings are also used in ScLinkTargetsObj
@@ -295,38 +256,47 @@ String SCSTR_CONTENT_ROOT
 {
     Text [ en-US ] = "Contents" ;
 };
+
 String SCSTR_CONTENT_TABLE
 {
     Text [ en-US ] = "Sheets" ;
 };
+
 String SCSTR_CONTENT_RANGENAME
 {
     Text [ en-US ] = "Range names" ;
 };
+
 String SCSTR_CONTENT_DBAREA
 {
     Text [ en-US ] = "Database Ranges" ;
 };
+
 String SCSTR_CONTENT_GRAPHIC
 {
     Text [ en-US ] = "Graphics" ;
 };
+
 String SCSTR_CONTENT_OLEOBJECT
 {
     Text [ en-US ] = "OLE objects" ;
 };
+
 String SCSTR_CONTENT_NOTE
 {
     Text [ en-US ] = "Comments" ;
 };
+
 String SCSTR_CONTENT_AREALINK
 {
     Text [ en-US ] = "Linked areas" ;
 };
+
 String SCSTR_CONTENT_DRAWING
 {
     Text [ en-US ] = "Drawing objects";
 };
+
  // PopupMenu -------------------------------------------------------------
 Menu RID_POPUP_DROPMODE
 {
@@ -352,6 +322,7 @@ Menu RID_POPUP_DROPMODE
         };
     };
 };
+
 Menu RID_POPUP_NAVIPI_SCENARIO
 {
     ItemList =
@@ -370,45 +341,3 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         };
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

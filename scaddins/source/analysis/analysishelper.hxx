@@ -53,12 +53,10 @@ class ScaAnyConverter;
 
 #define PI          3.1415926535897932
 #define PI_2        (PI/2.0)
-//#define   EULER       2.7182818284590452
 #define EOL         ( ( const sal_Char* ) 1 )
 #define EOE         ( ( const sal_Char* ) 2 )
 
 
-//double                _Test( sal_Int32 nMode, double f1, double f2, double f3 );
 inline sal_Bool     IsLeapYear( sal_uInt16 nYear );
 sal_uInt16          DaysInMonth( sal_uInt16 nMonth, sal_uInt16 nYear );
 sal_Int32           DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear );
@@ -125,7 +123,6 @@ double              GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_In
                                 double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) THROWDEF_RTE_IAE;
 double              GetRmz( double fZins, double fZzr, double fBw, double fZw, sal_Int32 nF );
 double              GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF );
-//double                TBillYield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fPrice )THROWDEF_RTE_IAE;
 
 double              GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq,
                                 sal_Int32 nBase ) THROWDEF_RTE_IAE;

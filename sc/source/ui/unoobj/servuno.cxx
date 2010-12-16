@@ -247,7 +247,7 @@ struct ProvNamesId_Type
     sal_uInt16      nType;
 };
 
-static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
+static const ProvNamesId_Type aProvNamesId[] =
 {
     { "com.sun.star.sheet.Spreadsheet",                 SC_SERVICE_SHEET },
     { "com.sun.star.text.TextField.URL",                SC_SERVICE_URLFIELD },
@@ -315,7 +315,7 @@ static const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
 //  in case some macro is still using them
 //
 
-static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
+static const sal_Char* aOldNames[SC_SERVICE_COUNT] =
     {
         "",                                         // SC_SERVICE_SHEET
         "stardiv.one.text.TextField.URL",           // SC_SERVICE_URLFIELD

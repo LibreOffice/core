@@ -85,7 +85,7 @@ void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
 
 //      Drag & Drop
 
-void __EXPORT ScViewFunctionSet::BeginDrag()
+void ScViewFunctionSet::BeginDrag()
 {
     SCTAB nTab = pViewData->GetTabNo();
 
@@ -160,7 +160,7 @@ void __EXPORT ScViewFunctionSet::BeginDrag()
 
 //      Selection
 
-void __EXPORT ScViewFunctionSet::CreateAnchor()
+void ScViewFunctionSet::CreateAnchor()
 {
     if (bAnchor) return;
 
@@ -215,7 +215,7 @@ void ScViewFunctionSet::SetAnchor( SCCOL nPosX, SCROW nPosY )
     bAnchor = TRUE;
 }
 
-void __EXPORT ScViewFunctionSet::DestroyAnchor()
+void ScViewFunctionSet::DestroyAnchor()
 {
     BOOL bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
@@ -231,7 +231,7 @@ void ScViewFunctionSet::SetAnchorFlag( BOOL bSet )
     bAnchor = bSet;
 }
 
-BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
+BOOL ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -612,7 +612,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
     return TRUE;
 }
 
-BOOL __EXPORT ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+BOOL ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     BOOL bRefMode = SC_MOD()->IsFormulaMode();
     if (bRefMode)
@@ -633,12 +633,12 @@ BOOL __EXPORT ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
     return FALSE;
 }
 
-void __EXPORT ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
+void ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
     //  gibt's nicht
 }
 
-void __EXPORT ScViewFunctionSet::DeselectAll()
+void ScViewFunctionSet::DeselectAll()
 {
     if (pViewData->IsAnyFillMode())
         return;
@@ -696,12 +696,12 @@ void ScHeaderFunctionSet::SetWhich( ScSplitPos eNew )
     eWhich = eNew;
 }
 
-void __EXPORT ScHeaderFunctionSet::BeginDrag()
+void ScHeaderFunctionSet::BeginDrag()
 {
     // gippsnich
 }
 
-void __EXPORT ScHeaderFunctionSet::CreateAnchor()
+void ScHeaderFunctionSet::CreateAnchor()
 {
     if (bAnchor)
         return;
@@ -721,13 +721,13 @@ void __EXPORT ScHeaderFunctionSet::CreateAnchor()
     bAnchor = TRUE;
 }
 
-void __EXPORT ScHeaderFunctionSet::DestroyAnchor()
+void ScHeaderFunctionSet::DestroyAnchor()
 {
     pViewData->GetView()->DoneBlockMode( TRUE );
     bAnchor = FALSE;
 }
 
-BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
+BOOL ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -830,7 +830,7 @@ BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, B
     return TRUE;
 }
 
-BOOL __EXPORT ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
+BOOL ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
 {
     SCsCOL  nPosX;
     SCsROW  nPosY;
@@ -844,11 +844,11 @@ BOOL __EXPORT ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel 
         return rMark.IsRowMarked( nPosY );
 }
 
-void __EXPORT ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
+void ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
 }
 
-void __EXPORT ScHeaderFunctionSet::DeselectAll()
+void ScHeaderFunctionSet::DeselectAll()
 {
     pViewData->GetView()->DoneBlockMode( FALSE );
     bAnchor = FALSE;

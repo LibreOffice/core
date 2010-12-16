@@ -110,16 +110,7 @@ protected:
     virtual void SAL_CALL getFastPropertyValue(
         ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
 
-//  virtual sal_Bool SAL_CALL convertFastPropertyValue
-//         ( ::com::sun::star::uno::Any & rConvertedValue,
-//           ::com::sun::star::uno::Any & rOldValue,
-//           sal_Int32 nHandle,
-//           const ::com::sun::star::uno::Any& rValue )
-//      throw (::com::sun::star::lang::IllegalArgumentException);
-
     // ____ XDiagram ____
-//     virtual ::rtl::OUString SAL_CALL getChartTypeTemplateServiceName()
-//         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > SAL_CALL getWall()
         throw (::com::sun::star::uno::RuntimeException);

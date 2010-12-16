@@ -71,7 +71,7 @@
 
 // -----------------------------------------------------------------------
 
-SdrView* __EXPORT ScTabViewShell::GetDrawView() const
+SdrView* ScTabViewShell::GetDrawView() const
 {
     return ((ScTabViewShell*)this)->GetScDrawView();    // GetScDrawView ist nicht-const
 }

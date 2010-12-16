@@ -40,7 +40,7 @@
 
 //------------------------------------------------------------------------
 
-static SfxItemInfo __READONLY_DATA aMsgItemInfos[] =
+static SfxItemInfo const aMsgItemInfos[] =
 {
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_STRING
     { 0,                         SFX_ITEM_POOLABLE },   // SCITEM_SEARCHDATA - nicht mehr benutzt !!!
@@ -94,7 +94,7 @@ ScMessagePool::ScMessagePool()
 }
 
 
-__EXPORT ScMessagePool::~ScMessagePool()
+ScMessagePool::~ScMessagePool()
 {
     Delete();
     SetSecondaryPool( NULL );       // before deleting defaults (accesses defaults)
@@ -108,7 +108,7 @@ __EXPORT ScMessagePool::~ScMessagePool()
 }
 
 
-SfxMapUnit __EXPORT ScMessagePool::GetMetric( USHORT nWhich ) const
+SfxMapUnit ScMessagePool::GetMetric( USHORT nWhich ) const
 {
     //  eigene Attribute: Twips, alles andere 1/100 mm
 

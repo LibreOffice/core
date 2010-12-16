@@ -43,7 +43,7 @@
 // STATIC DATA -----------------------------------------------------------
 
 //  incl. Doppelpunkt -> Doppelte Referenzen werden einzeln behandelt
-const sal_Unicode __FAR_DATA ScRefFinder::pDelimiters[] = {
+const sal_Unicode ScRefFinder::pDelimiters[] = {
     '=','(',')','+','-','*','/','^','&',' ','{','}','<','>',':', 0
 };
 

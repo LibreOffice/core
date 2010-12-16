@@ -32,7 +32,7 @@
 
 #include "AccessibleContextBase.hxx"
 
-class ScDPFieldWindow;
+class ScDPFieldControlBase;
 class ScAccessibleDataPilotButton;
 
 class ScAccessibleDataPilotControl
@@ -43,7 +43,7 @@ public:
     ScAccessibleDataPilotControl(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>& rxParent,
-        ScDPFieldWindow* pDPFieldWindow);
+        ScDPFieldControlBase* pDPFieldWindow);
 
     virtual void Init();
 
@@ -132,7 +132,7 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    ScDPFieldWindow* mpDPFieldWindow;
+    ScDPFieldControlBase* mpDPFieldWindow;
     struct AccessibleWeak
     {
         ::com::sun::star::uno::WeakReference< ::com::sun::star::accessibility::XAccessible > xWeakAcc;

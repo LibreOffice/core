@@ -51,7 +51,9 @@
 
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <boost/shared_ptr.hpp>
 #include <memory>
+#include <vector>
 
 class ScDocShell;
 class ScDocument;
@@ -180,9 +182,13 @@ class ScUndoMoveTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoMoveTab( ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoMoveTab(
+                        ScDocShell* pNewDocShell,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
+                        ::std::vector< ::rtl::OUString>* pOldNames = NULL,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
+
     virtual         ~ScUndoMoveTab();
 
     virtual void    Undo();
@@ -193,8 +199,10 @@ public:
     virtual String  GetComment() const;
 
 private:
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpOldNames;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
 
     void DoChange( BOOL bUndo ) const;
 };
@@ -204,9 +212,11 @@ class ScUndoCopyTab: public ScSimpleUndo
 {
 public:
                     TYPEINFO();
-                    ScUndoCopyTab(ScDocShell* pNewDocShell,
-                                  const SvShorts &aOldTab,
-                                  const SvShorts &aNewTab);
+                    ScUndoCopyTab(
+                        ScDocShell* pNewDocShell,
+                        ::std::vector<SCTAB>* pOldTabs,
+                        ::std::vector<SCTAB>* pNewTabs,
+                        ::std::vector< ::rtl::OUString>* pNewNames = NULL );
 
     virtual         ~ScUndoCopyTab();
 
@@ -218,9 +228,10 @@ public:
     virtual String  GetComment() const;
 
 private:
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpOldTabs;
+    ::boost::shared_ptr< ::std::vector<SCTAB> > mpNewTabs;
+    ::boost::shared_ptr< ::std::vector< ::rtl::OUString> > mpNewNames;
     SdrUndoAction*  pDrawUndo;
-    SvShorts    theOldTabs;
-    SvShorts    theNewTabs;
 
     void DoChange() const;
 };

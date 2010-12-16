@@ -57,7 +57,7 @@
 
 //==================================================================
 
-void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.ISA(SfxSimpleHint))                       // ohne Parameter
     {

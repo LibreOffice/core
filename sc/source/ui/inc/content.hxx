@@ -61,7 +61,6 @@ class ScContentTree : public SvTreeListBox
 {
     ScNavigatorDlg*     pParentWindow;
     ImageList           aEntryImages;
-    ImageList           aHCEntryImages;
     SvLBoxEntry*        pRootNodes[SC_CONTENT_COUNT];
     USHORT              nRootType;          // als Root eingestellt
     String              aManualDoc;         // im Navigator umgeschaltet (Title)

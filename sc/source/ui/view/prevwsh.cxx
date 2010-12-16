@@ -172,7 +172,7 @@ ScPreviewShell::ScPreviewShell( SfxViewFrame* pViewFrame,
     }
 }
 
-__EXPORT ScPreviewShell::~ScPreviewShell()
+ScPreviewShell::~ScPreviewShell()
 {
     // #108333#; notify Accessibility that Shell is dying and before destroy all
     BroadcastAccessibility( SfxSimpleHint( SFX_HINT_DYING ) );
@@ -201,12 +201,12 @@ void ScPreviewShell::InitStartTable(SCTAB nTab)
 
 //------------------------------------------------------------------
 
-String __EXPORT ScPreviewShell::GetDescription() const
+String ScPreviewShell::GetDescription() const
 {
     return String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(" ** Test ** "));
 }
 
-Size __EXPORT ScPreviewShell::GetOptimalSizePixel() const
+Size ScPreviewShell::GetOptimalSizePixel() const
 {
     Size aOptSize(100,100);
 
@@ -242,7 +242,7 @@ Size __EXPORT ScPreviewShell::GetOptimalSizePixel() const
     return aOptSize;
 }
 
-void __EXPORT ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
+void ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size &rSize )
 {
     long nBarW = GetViewFrame()->GetWindow().GetSettings().GetStyleSettings().GetScrollBarSize();
     long nBarH = nBarW;
@@ -266,12 +266,12 @@ void __EXPORT ScPreviewShell::AdjustPosSizePixel( const Point &rPos, const Size 
     UpdateScrollBars();
 }
 
-void __EXPORT ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
+void ScPreviewShell::InnerResizePixel( const Point &rOfs, const Size &rSize )
 {
     AdjustPosSizePixel( rOfs,rSize );
 }
 
-void __EXPORT ScPreviewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
+void ScPreviewShell::OuterResizePixel( const Point &rOfs, const Size &rSize )
 {
     AdjustPosSizePixel( rOfs,rSize );
 }
@@ -471,17 +471,17 @@ BOOL ScPreviewShell::ScrollCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-SfxPrinter* __EXPORT ScPreviewShell::GetPrinter( BOOL bCreate )
+SfxPrinter* ScPreviewShell::GetPrinter( BOOL bCreate )
 {
     return pDocShell->GetPrinter(bCreate);
 }
 
-USHORT __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
+USHORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDiffFlags, bool )
 {
     return pDocShell->SetPrinter( pNewPrinter, nDiffFlags );
 }
 
-PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
+PrintDialog* ScPreviewShell::CreatePrintDialog( Window* pParent )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
     (void)GetPrinter();
@@ -525,7 +525,7 @@ SfxTabPage* ScPreviewShell::CreatePrintOptionsPage( Window *pParent, const SfxIt
     return 0;
 }
 
-void __EXPORT ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
+void ScPreviewShell::PreparePrint( PrintDialog* pPrintDialog )
 {
     SfxViewShell::PreparePrint( pPrintDialog );
 
@@ -551,7 +551,7 @@ ErrCode ScPreviewShell::DoPrint( SfxPrinter *pPrinter,
     return nRet;
 }
 
-USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog )
+USHORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pPrintDialog )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
@@ -587,7 +587,7 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, Prin
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPreviewShell::Activate(BOOL bMDI)
+void ScPreviewShell::Activate(BOOL bMDI)
 {
     SfxViewShell::Activate(bMDI);
 
@@ -602,7 +602,7 @@ void __EXPORT ScPreviewShell::Activate(BOOL bMDI)
     }
 }
 
-void __EXPORT ScPreviewShell::Deactivate(BOOL bMDI)
+void ScPreviewShell::Deactivate(BOOL bMDI)
 {
     SfxViewShell::Deactivate(bMDI);
 
@@ -613,7 +613,7 @@ void __EXPORT ScPreviewShell::Deactivate(BOOL bMDI)
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
+void ScPreviewShell::Execute( SfxRequest& rReq )
 {
     USHORT nSlot = rReq.GetSlot();
     const SfxItemSet* pReqArgs = rReq.GetArgs();
@@ -827,7 +827,7 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
     }
 }
 
-void __EXPORT ScPreviewShell::GetState( SfxItemSet& rSet )
+void ScPreviewShell::GetState( SfxItemSet& rSet )
 {
     pPreview->SetInGetState(TRUE);
 
@@ -955,7 +955,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
+void ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
 {
     //  nZoom
     //  nPageNo
@@ -965,7 +965,7 @@ void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
     rData += String::CreateFromInt32(pPreview->GetPageNo());
 }
 
-void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
+void ScPreviewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
 {
     xub_StrLen nCount = rData.GetTokenCount();
     if (nCount)
@@ -977,7 +977,7 @@ void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL /* bBrowse 
     }
 }
 
-void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
+void ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
 {
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
@@ -995,7 +995,7 @@ void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::Prope
     }
 }
 
-void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
+void ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
 {
     sal_Int32 nCount(rSeq.getLength());
     if (nCount)

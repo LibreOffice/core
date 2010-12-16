@@ -77,7 +77,6 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
         m_xContext;
     ImageList       m_aToolboxImageList;
-    ImageList       m_aToolboxImageListHighContrast;
 
     /// handles actions of the toolbox
     DECL_LINK( ToolboxHdl, void* );

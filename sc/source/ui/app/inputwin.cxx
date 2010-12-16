@@ -119,7 +119,7 @@ ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
 
 //  GetInfo fliegt wieder raus, wenn es ein SFX_IMPL_TOOLBOX gibt !!!!
 
-SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
+SfxChildWinInfo ScInputWindowWrapper::GetInfo() const
 {
     SfxChildWinInfo aInfo = SfxChildWindow::GetInfo();
     return aInfo;
@@ -127,7 +127,7 @@ SfxChildWinInfo __EXPORT ScInputWindowWrapper::GetInfo() const
 
 //==================================================================
 
-#define IMAGE(id) pImgMgr->SeekImage(id, bHC)
+#define IMAGE(id) pImgMgr->SeekImage(id)
 
 //==================================================================
 //  class ScInputWindow
@@ -165,8 +165,6 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
             pViewSh = PTR_CAST( ScTabViewShell, pViewFrm->GetViewShell() );
     }
     DBG_ASSERT( pViewSh, "no view shell for input window" );
-
-    BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
 
     // Positionsfenster, 3 Buttons, Eingabefenster
     InsertWindow    ( 1, &aWndPos, 0,                                     0 );
@@ -226,7 +224,7 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
     pImgMgr->RegisterToolBox( this );
 }
 
-__EXPORT ScInputWindow::~ScInputWindow()
+ScInputWindow::~ScInputWindow()
 {
     BOOL bDown = ( ScGlobal::pSysLocale == NULL );    // after Clear?
 
@@ -275,11 +273,11 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
     if ( pViewSh )
     {
         ScDocument* pDoc = pViewSh->GetViewData()->GetDocument();
-        sal_Int32 nRangeCount (pRangeList->Count());
-        sal_Int32 nRangeIndex (0);
+        size_t nRangeCount (pRangeList->size());
+        size_t nRangeIndex (0);
         while (!bSubTotal && nRangeIndex < nRangeCount)
         {
-            const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+            const ScRange* pRange = (*pRangeList)[nRangeIndex];
             if( pRange )
             {
                 SCTAB nTabEnd(pRange->aEnd.Tab());
@@ -312,7 +310,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
                 nRangeIndex = 0;
                 while (!bSubTotal && nRangeIndex < nRangeCount)
                 {
-                    const ScRange* pRange = pRangeList->GetObject( nRangeIndex );
+                    const ScRange* pRange = (*pRangeList)[nRangeIndex];
                     if( pRange )
                     {
                         ScRange aDBArea;
@@ -329,7 +327,7 @@ sal_Bool ScInputWindow::UseSubTotal(ScRangeList* pRangeList) const
     return bSubTotal;
 }
 
-void __EXPORT ScInputWindow::Select()
+void ScInputWindow::Select()
 {
     ScModule* pScMod = SC_MOD();
     ToolBox::Select();
@@ -377,10 +375,10 @@ void __EXPORT ScInputWindow::Select()
 
                         // check if one of the marked ranges is empty
                         bool bEmpty = false;
-                        const ULONG nCount = aMarkRangeList.Count();
-                        for ( ULONG i = 0; i < nCount; ++i )
+                        const size_t nCount = aMarkRangeList.size();
+                        for ( size_t i = 0; i < nCount; ++i )
                         {
-                            const ScRange aRange( *aMarkRangeList.GetObject( i ) );
+                            const ScRange aRange( *aMarkRangeList[i] );
                             if ( pDoc->IsBlockEmpty( aRange.aStart.Tab(),
                                     aRange.aStart.Col(), aRange.aStart.Row(),
                                     aRange.aEnd.Col(), aRange.aEnd.Row() ) )
@@ -396,7 +394,7 @@ void __EXPORT ScInputWindow::Select()
                             const BOOL bDataFound = pViewSh->GetAutoSumArea( aRangeList );
                             if ( bDataFound )
                             {
-                                ScAddress aAddr = aRangeList.Last()->aEnd;
+                                ScAddress aAddr = aRangeList.back()->aEnd;
                                 aAddr.IncRow();
                                 const sal_Bool bSubTotal( UseSubTotal( &aRangeList ) );
                                 pViewSh->EnterAutoSum( aRangeList, bSubTotal, aAddr );
@@ -405,9 +403,9 @@ void __EXPORT ScInputWindow::Select()
                         else
                         {
                             const sal_Bool bSubTotal( UseSubTotal( &aMarkRangeList ) );
-                            for ( ULONG i = 0; i < nCount; ++i )
+                            for ( size_t i = 0; i < nCount; ++i )
                             {
-                                const ScRange aRange( *aMarkRangeList.GetObject( i ) );
+                                const ScRange aRange( *aMarkRangeList[i] );
                                 const bool bSetCursor = ( i == nCount - 1 ? true : false );
                                 const bool bContinue = ( i != 0  ? true : false );
                                 if ( !pViewSh->AutoSum( aRange, bSubTotal, bSetCursor, bContinue ) )
@@ -487,7 +485,7 @@ void __EXPORT ScInputWindow::Select()
     }
 }
 
-void __EXPORT ScInputWindow::Resize()
+void ScInputWindow::Resize()
 {
     ToolBox::Resize();
 
@@ -560,8 +558,6 @@ void ScInputWindow::SetOkCancelMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (!bIsOkCancelMode)
     {
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         RemoveItem( 3 ); // SID_INPUT_SUM und SID_INPUT_EQUAL entfernen
         RemoveItem( 3 );
         InsertItem( SID_INPUT_CANCEL, IMAGE( SID_INPUT_CANCEL ), 0, 3 );
@@ -584,8 +580,6 @@ void ScInputWindow::SetSumAssignMode()
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
     if (bIsOkCancelMode)
     {
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-
         // SID_INPUT_CANCEL, und SID_INPUT_OK entfernen
         RemoveItem( 3 );
         RemoveItem( 3 );
@@ -607,12 +601,12 @@ void ScInputWindow::SetFormulaMode( BOOL bSet )
     aTextWindow.SetFormulaMode(bSet);
 }
 
-void __EXPORT ScInputWindow::SetText( const String& rString )
+void ScInputWindow::SetText( const String& rString )
 {
     ToolBox::SetText(rString);
 }
 
-String __EXPORT ScInputWindow::GetText() const
+String ScInputWindow::GetText() const
 {
     return ToolBox::GetText();
 }
@@ -694,11 +688,9 @@ void ScInputWindow::DataChanged( const DataChangedEvent& rDCEvt )
     if ( rDCEvt.GetType() == DATACHANGED_SETTINGS && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         //  update item images
-
         ScModule*        pScMod  = SC_MOD();
         SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
-        BOOL bHC = GetSettings().GetStyleSettings().GetHighContrastMode();
-        // IMAGE macro uses pScMod, pImgMgr, bHC
+        // IMAGE macro uses pScMod, pImgMg
 
         SetItemImage( SID_INPUT_FUNCTION, IMAGE( SID_INPUT_FUNCTION ) );
         if ( bIsOkCancelMode )
@@ -756,7 +748,7 @@ ScTextWnd::ScTextWnd( Window* pParent )
     SetPointer          ( POINTER_TEXT );
 }
 
-__EXPORT ScTextWnd::~ScTextWnd()
+ScTextWnd::~ScTextWnd()
 {
     while (!maAccTextDatas.empty()) {
         maAccTextDatas.back()->Dispose();
@@ -765,7 +757,7 @@ __EXPORT ScTextWnd::~ScTextWnd()
     delete pEditEngine;
 }
 
-void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
+void ScTextWnd::Paint( const Rectangle& rRec )
 {
     if (pEditView)
         pEditView->Paint( rRec );
@@ -791,7 +783,7 @@ void __EXPORT ScTextWnd::Paint( const Rectangle& rRec )
     }
 }
 
-void __EXPORT ScTextWnd::Resize()
+void ScTextWnd::Resize()
 {
     if (pEditView)
     {
@@ -812,13 +804,13 @@ void __EXPORT ScTextWnd::Resize()
     }
 }
 
-void __EXPORT ScTextWnd::MouseMove( const MouseEvent& rMEvt )
+void ScTextWnd::MouseMove( const MouseEvent& rMEvt )
 {
     if (pEditView)
         pEditView->MouseMove( rMEvt );
 }
 
-void __EXPORT ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
+void ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if (!HasFocus())
     {
@@ -834,7 +826,7 @@ void __EXPORT ScTextWnd::MouseButtonDown( const MouseEvent& rMEvt )
     }
 }
 
-void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
+void ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
 {
     if (pEditView)
         if (pEditView->MouseButtonUp( rMEvt ))
@@ -850,7 +842,7 @@ void __EXPORT ScTextWnd::MouseButtonUp( const MouseEvent& rMEvt )
         }
 }
 
-void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
+void ScTextWnd::Command( const CommandEvent& rCEvt )
 {
     bInputMode = TRUE;
     USHORT nCommand = rCEvt.GetCommand();
@@ -924,7 +916,7 @@ void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
     }
 }
 
-void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
+void ScTextWnd::KeyInput(const KeyEvent& rKEvt)
 {
     bInputMode = TRUE;
     if (!SC_MOD()->InputKeyEvent( rKEvt ))
@@ -939,18 +931,18 @@ void __EXPORT ScTextWnd::KeyInput(const KeyEvent& rKEvt)
     bInputMode = FALSE;
 }
 
-void __EXPORT ScTextWnd::GetFocus()
+void ScTextWnd::GetFocus()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
         pViewSh->SetFormShellAtTop( FALSE );     // focus in input line -> FormShell no longer on top
 }
 
-void __EXPORT ScTextWnd::LoseFocus()
+void ScTextWnd::LoseFocus()
 {
 }
 
-String __EXPORT ScTextWnd::GetText() const
+String ScTextWnd::GetText() const
 {
     //  ueberladen, um per Testtool an den Text heranzukommen
 
@@ -1382,7 +1374,7 @@ ScPosWnd::ScPosWnd( Window* pParent ) :
     StartListening( *SFX_APP() );       // fuer Navigator-Bereichsnamen-Updates
 }
 
-__EXPORT ScPosWnd::~ScPosWnd()
+ScPosWnd::~ScPosWnd()
 {
     EndListening( *SFX_APP() );
 
@@ -1638,7 +1630,7 @@ void ScPosWnd::Modify()
     }
 }
 
-void __EXPORT ScPosWnd::Select()
+void ScPosWnd::Select()
 {
     ComboBox::Select();     //  in VCL gibt GetText() erst danach den ausgewaehlten Eintrag
 
@@ -1734,7 +1726,7 @@ void ScPosWnd::DoEnter()
     ReleaseFocus_Impl();
 }
 
-long __EXPORT ScPosWnd::Notify( NotifyEvent& rNEvt )
+long ScPosWnd::Notify( NotifyEvent& rNEvt )
 {
     long nHandled = 0;
 

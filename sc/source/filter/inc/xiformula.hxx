@@ -31,6 +31,7 @@
 
 #include "xlformula.hxx"
 #include "xiroot.hxx"
+#include <boost/shared_ptr.hpp>
 
 // Formula compiler ===========================================================
 
@@ -59,7 +60,7 @@ public:
     const ScTokenArray* CreateFormula( XclFormulaType eType, const XclTokenArray& rXclTokArr );
 
 private:
-    typedef ScfRef< XclImpFmlaCompImpl > XclImpFmlaCompImplRef;
+    typedef boost::shared_ptr< XclImpFmlaCompImpl > XclImpFmlaCompImplRef;
     XclImpFmlaCompImplRef mxImpl;
 };
 

@@ -46,13 +46,8 @@
 #include <memory>
 #include <map>
 #include <set>
-
-// Wang Xu Ming -- 2009-8-17
-// DataPilot Migration - Cache&&Performance
 #include <list>
-#include "dpobject.hxx"
-#include "dptabdat.hxx"
-// End Comments
+#include <boost/ptr_container/ptr_vector.hpp>
 
 class KeyEvent;
 class OutputDevice;
@@ -152,6 +147,8 @@ class ScRowBreakIterator;
 struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
+class ScDPTableDataCache;
+struct ScCopyBlockFromClipParams;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -203,27 +200,6 @@ struct ScDocStat
     USHORT  nPageCount;
 };
 
-// The constant parameters to CopyBlockFromClip
-struct ScCopyBlockFromClipParams
-{
-    ScDocument* pRefUndoDoc;
-    ScDocument* pClipDoc;
-    USHORT      nInsFlag;
-    SCTAB       nTabStart;
-    SCTAB       nTabEnd;
-    BOOL        bAsLink;
-    BOOL        bSkipAttrForEmpty;
-};
-
-
-// for loading of binary file format symbol string cells which need font conversion
-struct ScSymbolStringCellEntry
-{
-    ScStringCell*   pCell;
-    SCROW           nRow;
-};
-
-
 // -----------------------------------------------------------------------
 
 // DDE link modes
@@ -231,7 +207,6 @@ const BYTE SC_DDE_DEFAULT       = 0;
 const BYTE SC_DDE_ENGLISH       = 1;
 const BYTE SC_DDE_TEXT          = 2;
 const BYTE SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
-
 
 // -----------------------------------------------------------------------
 
@@ -272,7 +247,6 @@ private:
     ScDPCollection*     pDPCollection;
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
-    std::list<ScDPObject>        m_listDPObjectsInClip;
     std::list<ScDPTableDataCache*>   m_listDPObjectsCaches;
     // End Comments
     ScChartCollection*  pChartCollection;
@@ -342,7 +316,7 @@ private:
                         mxVbaEvents;
 
 public:
-    ScTabOpList         aTableOpList;                   // list of ScInterpreterTableOpParams currently in use
+    boost::ptr_vector< ScInterpreterTableOpParams > aTableOpList; // list of ScInterpreterTableOpParams currently in use
     ScInterpreterTableOpParams  aLastTableOpParams;     // remember last params
 private:
 
@@ -706,7 +680,7 @@ public:
 
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
-        @return  true = DDE link found; false = Unpredictable error occured, no DDE link created. */
+        @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
     SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults = NULL );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).

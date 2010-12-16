@@ -263,8 +263,12 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScM
     virtual USHORT  GetSelectedDocument     () const;
     virtual USHORT  GetSelectedTable        () const;
     virtual BOOL    GetCopyTable            () const;
+    virtual bool    GetRenameTable          () const;
+    virtual void    GetTabNameString( String& rString ) const;
     virtual void    SetCopyTable            (BOOL bFlag=TRUE);
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE);
+    virtual void    SetRenameTable          (BOOL bFlag=TRUE);
+    virtual void    EnableRenameTable       (BOOL bFlag=TRUE);
 };
 
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg  //add for ScNameCreateDlg
@@ -488,7 +492,10 @@ public:
                                                                 long            nFirst    = 1,
                                                                 long          nLast     = 100 );
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent, int nId ); //add for ScMoveTableDlg
+    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent,  //add for ScMoveTableDlg
+                                                            const String& rDefault,
+                                                            int nId );
+
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId ); //add for ScNameCreateDlg
 
     virtual AbstractScNamePasteDlg * CreateScNamePasteDlg ( Window * pParent, const ScRangeName* pList, //add for ScNamePasteDlg

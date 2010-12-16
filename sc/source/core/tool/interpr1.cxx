@@ -3358,7 +3358,6 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
             case svDoubleRef :
             case svRefList :
             {
-                USHORT nErr = 0;
                 PopDoubleRef( aRange, nParamCount, nRefInList);
                 if ( nGlobalError && ( eFunc == ifCOUNT2 || eFunc == ifCOUNT ) )
                 {
@@ -3387,6 +3386,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 else
                 {
                     ScValueIterator aValIter( pDok, aRange, glSubTotal, bTextAsZero );
+                    USHORT nErr = 0;
                     if (aValIter.GetFirst(fVal, nErr))
                     {
                         // placed the loop on the inside for performance reasons:
@@ -5697,7 +5697,8 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
         SCCOL nCol2 = 0;
         SCROW nRow2 = 0;
         SCTAB nTab2;
-        if (GetStackType() == svDoubleRef)
+        StackVar eType = GetStackType();
+        if (eType == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
             if (nTab1 != nTab2)
@@ -5706,9 +5707,13 @@ void ScInterpreter::CalculateLookup(BOOL HLookup)
                 return;
             }
         }
-        else if (GetStackType() == svMatrix)
+        else if (eType == svMatrix || eType == svExternalDoubleRef)
         {
-            pMat = PopMatrix();
+            if (eType == svMatrix)
+                pMat = PopMatrix();
+            else
+                PopExternalDoubleRef(pMat);
+
             if (pMat)
                 pMat->GetDimensions(nC, nR);
             else
@@ -7266,10 +7271,10 @@ void ScInterpreter::ScRight()
 void ScInterpreter::ScSearch()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScSearch" );
-    double fAnz;
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
+        double fAnz;
         if (nParamCount == 3)
         {
             fAnz = ::rtl::math::approxFloor(GetDouble());

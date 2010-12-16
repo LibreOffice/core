@@ -645,7 +645,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
     const ScMatrix *pValues = aValidationSrc.GetMatrix();
     if (!pValues)
     {
-        // The somewhat nasty case of either an error occured, or the
+        // The somewhat nasty case of either an error occurred, or the
         // dereferenced value of a single cell reference or an immediate result
         // is stored as a single value.
 

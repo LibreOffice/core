@@ -87,7 +87,7 @@
 //
 ////------------------------------------------------------------------------
 //
-//__EXPORT ImportProgress::~ImportProgress()
+//ImportProgress::~ImportProgress()
 //{
 //  aProgress.SetState( 100 );
 //}

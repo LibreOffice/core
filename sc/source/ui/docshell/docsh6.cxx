@@ -99,7 +99,7 @@ inline OUString C2U(const char* s)
 //  Ole
 //
 
-void __EXPORT ScDocShell::SetVisArea( const Rectangle & rVisArea )
+void ScDocShell::SetVisArea( const Rectangle & rVisArea )
 {
     //  with the SnapVisArea call in SetVisAreaOrSize, it's safe to always
     //  use both the size and position of the VisArea
@@ -254,7 +254,7 @@ void ScDocShell::UpdateOle( const ScViewData* pViewData, BOOL bSnapSize )
 //  Style-Krempel fuer Organizer etc.
 //
 
-SfxStyleSheetBasePool* __EXPORT ScDocShell::GetStyleSheetPool()
+SfxStyleSheetBasePool* ScDocShell::GetStyleSheetPool()
 {
     return (SfxStyleSheetBasePool*)aDocument.GetStyleSheetPool();
 }
@@ -292,7 +292,7 @@ void lcl_AdjustPool( SfxStyleSheetBasePool* pStylePool )
     }
 }
 
-void __EXPORT ScDocShell::LoadStyles( SfxObjectShell &rSource )
+void ScDocShell::LoadStyles( SfxObjectShell &rSource )
 {
     aDocument.StylesToNames();
 
@@ -375,7 +375,7 @@ void ScDocShell::LoadStylesArgs( ScDocShell& rSource, BOOL bReplace, BOOL bCellS
 }
 
 
-BOOL __EXPORT ScDocShell::Insert( SfxObjectShell &rSource,
+BOOL ScDocShell::Insert( SfxObjectShell &rSource,
                                 USHORT nSourceIdx1, USHORT nSourceIdx2, USHORT nSourceIdx3,
                                 USHORT &nIdx1, USHORT &nIdx2, USHORT &nIdx3, USHORT &rIdxDeleted )
 {

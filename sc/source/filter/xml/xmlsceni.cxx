@@ -163,9 +163,9 @@ void ScXMLTableScenarioContext::EndElement()
         if( bProtected )
             nFlags |= SC_SCENARIO_PROTECT;
         pDoc->SetScenarioData( nCurrTable, String( sComment ), aBorderColor, nFlags );
-        for( sal_Int32 i = 0; i < static_cast<sal_Int32>(aScenarioRanges.Count()); ++i )
+        for( size_t i = 0; i < aScenarioRanges.size(); ++i )
         {
-            ScRange* pRange(aScenarioRanges.GetObject( i ));
+            ScRange* pRange(aScenarioRanges[ i ]);
             if( pRange )
                 pDoc->ApplyFlagsTab( pRange->aStart.Col(), pRange->aStart.Row(),
                     pRange->aEnd.Col(), pRange->aEnd.Row(), nCurrTable, SC_MF_SCENARIO );

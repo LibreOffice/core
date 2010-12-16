@@ -81,7 +81,7 @@ ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScStyleSheetPool::~ScStyleSheetPool()
+ScStyleSheetPool::~ScStyleSheetPool()
 {
 }
 
@@ -121,7 +121,7 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 
 //------------------------------------------------------------------------
 
-SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create(
+SfxStyleSheetBase* ScStyleSheetPool::Create(
                                             const String&   rName,
                                             SfxStyleFamily  eFamily,
                                             USHORT          nMaskP )
@@ -135,7 +135,7 @@ SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create(
 
 //------------------------------------------------------------------------
 
-SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
+SfxStyleSheetBase* ScStyleSheetPool::Create( const SfxStyleSheetBase& rStyle )
 {
     DBG_ASSERT( rStyle.ISA(ScStyleSheet), "Invalid StyleSheet-class! :-/" );
     return new ScStyleSheet( (const ScStyleSheet&) rStyle );
@@ -143,7 +143,7 @@ SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create( const SfxStyleSheetBase& r
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
+void ScStyleSheetPool::Remove( SfxStyleSheetBase* pStyle )
 {
     if ( pStyle )
     {

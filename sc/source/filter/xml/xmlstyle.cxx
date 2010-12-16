@@ -1176,7 +1176,7 @@ bool XmlScPropHdl_JustifyMethod::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Int32 nVal1, nVal2;
+    sal_Int32 nVal1(0), nVal2(0);
 
     if((r1 >>= nVal1) && (r2 >>= nVal2))
         return (nVal1 == nVal2);
@@ -1214,7 +1214,7 @@ sal_Bool XmlScPropHdl_JustifyMethod::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal(0);
     bool bRetval = false;
 
     if (rValue >>= nVal)
@@ -1597,7 +1597,7 @@ bool XmlScPropHdl_RotateReference::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Int32 aReference1, aReference2;
+    sal_Int32 aReference1(0), aReference2(0);
 
     if((r1 >>= aReference1) && (r2 >>= aReference2))
         return (aReference1 == aReference2);
@@ -1645,7 +1645,7 @@ sal_Bool XmlScPropHdl_RotateReference::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal(0);
     sal_Bool bRetval(sal_False);
 
     if(rValue >>= nVal)
@@ -1694,7 +1694,7 @@ bool XmlScPropHdl_VertJustify::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Int32 aReference1, aReference2;
+    sal_Int32 aReference1(0), aReference2(0);
 
     if((r1 >>= aReference1) && (r2 >>= aReference2))
         return (aReference1 == aReference2);
@@ -1748,7 +1748,7 @@ sal_Bool XmlScPropHdl_VertJustify::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal(0);
     sal_Bool bRetval(sal_False);
 
     if(rValue >>= nVal)

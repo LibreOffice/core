@@ -290,13 +290,11 @@ void ScOptSolverDlg::Init(const ScAddress& rCursorPos)
     rtl::OUString aSlotURL( RTL_CONSTASCII_USTRINGPARAM( "slot:" ));
     aSlotURL += rtl::OUString::valueOf( sal_Int32( SID_DEL_ROWS ) );
     uno::Reference<frame::XFrame> xFrame = GetBindings().GetActiveFrame();
-    Image aDelNm = ::GetImage( xFrame, aSlotURL, FALSE, FALSE );
-    Image aDelHC = ::GetImage( xFrame, aSlotURL, FALSE, TRUE );     // high contrast
+    Image aDelNm = ::GetImage( xFrame, aSlotURL, FALSE );
 
     for ( sal_uInt16 nRow = 0; nRow < EDIT_ROW_COUNT; ++nRow )
     {
-        mpDelButton[nRow]->SetModeImage( aDelNm, BMP_COLOR_NORMAL );
-        mpDelButton[nRow]->SetModeImage( aDelHC, BMP_COLOR_HIGHCONTRAST );
+        mpDelButton[nRow]->SetModeImage( aDelNm );
     }
 
     maBtnOpt.SetClickHdl( LINK( this, ScOptSolverDlg, BtnHdl ) );
@@ -843,10 +841,10 @@ bool ScOptSolverDlg::CallSolver()       // return true -> close dialog after cal
     }
     uno::Sequence<table::CellAddress> aVariables;
     sal_Int32 nVarPos = 0;
-       ULONG nRangeCount = aVarRanges.Count();
-    for (ULONG nRangePos=0; nRangePos<nRangeCount; ++nRangePos)
+
+    for ( size_t nRangePos=0, nRange = aVarRanges.size(); nRangePos < nRange; ++nRangePos )
     {
-        ScRange aRange(*aVarRanges.GetObject(nRangePos));
+        ScRange aRange(*aVarRanges[ nRangePos ] );
         aRange.Justify();
         SCTAB nTab = aRange.aStart.Tab();
 

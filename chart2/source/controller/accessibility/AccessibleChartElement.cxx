@@ -130,30 +130,6 @@ void AccessibleChartElement::InitTextEdit()
             ASSERT_EXCEPTION( ex );
         }
 }
-//     OSL_ASSERT( m_pTextHelper == 0 );
-
-//     // /-- solar
-//     SolarMutexGuard aSolarGuard;
-//     Window* pWindow( VCLUnoHelper::GetWindow( GetInfo().m_xWindow ));
-//     if( pWindow )
-//     {
-//         // we need ChartController::m_pDrawViewWrapper here
-//         SdrView * pView = 0;
-//         if( pView )
-//         {
-//             SdrObject * pTextObj = m_pDrawViewWrapper->getTextEditObject();
-//             if( pTextObj )
-//             {
-//                 SvxEditSource * pEditSource = new SvxEditSource( pTextObj, pView, pWindow );
-//                 m_pTextHelper = new ::accessibility::AccessibleTextHelper(
-//                     ::std::auto_ptr< SvxEditSource >( pEditSource ));
-//                 if( m_pTextHelper )
-//                     m_pTextHelper->SetEventSource( this );
-//             }
-//         }
-//     }
-//     // \-- solar
-// }
 
 // ____________________________________
 // ____________________________________
@@ -169,14 +145,7 @@ Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal
     Reference< XAccessible > xResult;
 
     if( m_bHasText )
-    {
         xResult.set( m_xTextHelper->getAccessibleChild( i ));
-        // /-- solar
-//         SolarMutexGuard aSolarGuard;
-//         if( m_pTextHelper )
-//             xResult.set( m_pTextHelper->GetChild( i ) );
-        // \-- solar
-    }
     else
         xResult.set( AccessibleBase::ImplGetAccessibleChildById( i ));
 

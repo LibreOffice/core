@@ -232,7 +232,6 @@ protected:
                                         ::com::sun::star::uno::RuntimeException);
 
 public:
-                            ScCellRangesBase();     // fuer SMART_REFLECTION Krempel
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR);
                             ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR);
     virtual                 ~ScCellRangesBase();

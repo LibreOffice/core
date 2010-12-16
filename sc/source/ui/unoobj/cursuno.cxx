@@ -120,8 +120,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -145,8 +145,8 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray() throw(uno::RuntimeExcept
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  use the start address of the range
@@ -180,8 +180,8 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea() throw(uno::RuntimeExceptio
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ] );
 
         ScDocument* pDoc = pDocSh->GetDocument();
         pDoc->ExtendOverlapped( aNewRange );
@@ -195,8 +195,8 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns() throw(uno::RuntimeExcepti
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aNewRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( *rRanges[ 0 ] );
 
     aNewRange.aStart.SetRow( 0 );
     aNewRange.aEnd.SetRow( MAXROW );
@@ -208,8 +208,8 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aNewRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aNewRange( *rRanges[ 0 ] );
 
     aNewRange.aStart.SetCol( 0 );
     aNewRange.aEnd.SetCol( MAXCOL );
@@ -229,8 +229,8 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
     else
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ] );
 
         aNewRange.Justify();    //! wirklich?
 
@@ -261,8 +261,8 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea( sal_Bool bExpand )
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[0] );
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // Anfang holen
@@ -289,8 +289,8 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
     if ( pDocSh )
     {
         const ScRangeList& rRanges = GetRangeList();
-        DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-        ScRange aNewRange(*rRanges.GetObject(0));
+        DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+        ScRange aNewRange( *rRanges[ 0 ]);
         SCTAB nTab = aNewRange.aStart.Tab();
 
         SCCOL nUsedX = 0;       // Ende holen
@@ -318,8 +318,8 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException)
 
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ]);
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -346,8 +346,8 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException)
 
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScDocShell* pDocSh = GetDocShell();
@@ -371,8 +371,8 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
@@ -393,8 +393,8 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
 
     aOneRange.Justify();
     ScAddress aCursor(aOneRange.aStart);        //  bei Block immer den Start nehmen
@@ -416,8 +416,8 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
-    DBG_ASSERT( rRanges.Count() == 1, "Range? Ranges?" );
-    ScRange aOneRange(*rRanges.GetObject(0));
+    DBG_ASSERT( rRanges.size() == 1, "Range? Ranges?" );
+    ScRange aOneRange( *rRanges[ 0 ] );
     aOneRange.Justify();
 
     if ( aOneRange.aStart.Col() + nColumnOffset >= 0 &&

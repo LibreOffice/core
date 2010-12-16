@@ -213,8 +213,12 @@ public:
     virtual USHORT  GetSelectedDocument     () const = 0;
     virtual USHORT  GetSelectedTable        () const = 0;
     virtual BOOL    GetCopyTable            () const = 0;
+    virtual bool    GetRenameTable          () const = 0;
+    virtual void    GetTabNameString( String& rString ) const = 0;
     virtual void    SetCopyTable            (BOOL bFlag=TRUE) = 0;
     virtual void    EnableCopyTable         (BOOL bFlag=TRUE) = 0;
+    virtual void    SetRenameTable          (BOOL bFlag=TRUE) = 0;
+    virtual void    EnableRenameTable       (BOOL bFlag=TRUE) = 0;
 };
 
 class AbstractScNameCreateDlg : public VclAbstractDialog  //add for ScNameCreateDlg
@@ -406,7 +410,9 @@ public:
                                                                 long            nFirst    = 1,
                                                                 long          nLast     = 100 ) = 0;
 
-    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent, int nId ) = 0; //add for ScMoveTableDlg
+    virtual AbstractScMoveTableDlg * CreateScMoveTableDlg(  Window* pParent,  //add for ScMoveTableDlg
+                                                            const String& rDefault,
+                                                            int nId ) = 0;
 
     virtual AbstractScNameCreateDlg * CreateScNameCreateDlg ( Window * pParent, USHORT nFlags, int nId ) = 0; //add for ScNameCreateDlg
 

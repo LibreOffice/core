@@ -105,7 +105,7 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
 
 //------------------------------------------------------------------------
 
-__EXPORT ScInsertTableDlg::~ScInsertTableDlg()
+ScInsertTableDlg::~ScInsertTableDlg()
 {
     if (pDocShTables)
         pDocShTables->DoClose();
@@ -170,7 +170,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
 #define ModalDialog Dialog
 #endif /* ENABLE_LAYOUT */
 
-short __EXPORT ScInsertTableDlg::Execute()
+short ScInsertTableDlg::Execute()
 {
     // set Parent of DocumentInserter and Doc-Manager
     Window* pOldDefParent = Application::GetDefDialogParent();

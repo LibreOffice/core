@@ -45,8 +45,7 @@ VISIBILITY_HIDDEN=TRUE
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-        $(EXCEPTIONSFILES)				\
-        $(SLO)$/xltracer.obj
+        $(EXCEPTIONSFILES)
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES = \
@@ -109,6 +108,7 @@ EXCEPTIONSFILES = \
         $(SLO)$/xlstyle.obj				\
         $(SLO)$/xltoolbar.obj				\
         $(SLO)$/xltools.obj				\
+        $(SLO)$/xltracer.obj				\
         $(SLO)$/xlview.obj
 
 # --- Targets -------------------------------------------------------

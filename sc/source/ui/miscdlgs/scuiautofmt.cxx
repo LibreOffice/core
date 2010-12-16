@@ -112,7 +112,7 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
 
 //------------------------------------------------------------------------
 
-__EXPORT ScAutoFormatDlg::~ScAutoFormatDlg()
+ScAutoFormatDlg::~ScAutoFormatDlg()
 {
     delete pWndPreview;
 }
@@ -467,7 +467,7 @@ IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-String __EXPORT ScAutoFormatDlg::GetCurrFormatName()
+String ScAutoFormatDlg::GetCurrFormatName()
 {
     String  aResult;
 
