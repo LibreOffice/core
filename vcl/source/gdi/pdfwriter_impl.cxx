@@ -3051,7 +3051,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
         return aRet;
     }
 
-    sal_Int32 nFontObject = 0;
     sal_Int32 nFontDescriptor = 0;
     rtl::OString aSubType( "/Type1" );
     FontSubsetInfo aInfo;
@@ -3149,7 +3148,6 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitSystemFont( const ImplFontDa
                           "endobj\n\n" );
             writeBuffer( aLine.getStr(), aLine.getLength() );
 
-            nFontObject = nObject;
             aRet[ rEmbed.m_nNormalFontID ] = nObject;
         }
     }
