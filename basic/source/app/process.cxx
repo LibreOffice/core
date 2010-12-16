@@ -42,12 +42,6 @@
 #include <osl/process.h>
 
 #include <basic/ttstrhlp.hxx>
-
-//#ifndef _BYTE_STRING_LIST
-//DECLARE_LIST( ByteStringList, ByteString * );
-//#define _BYTE_STRING_LIST
-//#endif
-
 #include <basic/process.hxx>
 
 Process::Process()
@@ -183,7 +177,6 @@ BOOL Process::Start()
     {
         bWasGPF = FALSE;
 #ifdef WNT
-//      sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
         sal_uInt32 nErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX | SEM_NOALIGNMENTFAULTEXCEPT | SEM_NOGPFAULTERRORBOX);
         try
         {
