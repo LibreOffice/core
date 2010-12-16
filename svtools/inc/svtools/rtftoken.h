@@ -658,6 +658,8 @@ enum RTF_TOKEN_IDS {
     RTF_BRDRDOT,
     RTF_BRDRHAIR,
     RTF_BRDRDASH,
+    RTF_BRDRINSET,
+    RTF_BRDROUTSET,
     RTF_BRDRFRAME,
 
     // Swg-Border-Tokens
