@@ -3055,7 +3055,8 @@ sal_Unicode GetCharOfTxtAttr( const SwTxtAttr& rAttr )
             cRet = CH_TXTATR_BREAKWORD;
 
             // #i78149: PostIt fields should not break words for spell and grammar checking
-            if (RES_POSTITFLD == rAttr.GetFld().GetFld()->GetTyp()->Which())
+            if (rAttr.Which() == RES_TXTATR_FIELD &&
+                RES_POSTITFLD == rAttr.GetFld().GetFld()->GetTyp()->Which())
                 cRet = CH_TXTATR_INWORD;
         }
         break;
