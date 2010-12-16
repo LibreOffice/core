@@ -12087,7 +12087,7 @@ void PDFWriterImpl::computeEncryptionKey(sal_uInt8 *paThePaddedPassword, sal_uIn
         if( nError == rtl_Digest_E_None )
             nError = rtl_digest_updateMD5( m_aDigest, m_nDocID , sizeof( m_nDocID ) );
 //get the digest
-        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
+        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ] = {0};
         if( nError == rtl_Digest_E_None )
         {
             rtl_digest_getMD5( m_aDigest, nMD5Sum, sizeof( nMD5Sum ) );
