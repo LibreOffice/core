@@ -1473,7 +1473,10 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
                 aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
-        aTxt += rSeparator;
+        if( rTxt.Len() > 0 )
+        {
+            aTxt += rSeparator;
+        }
         xub_StrLen nSepIdx = aTxt.Len();
         aTxt += rTxt;
 

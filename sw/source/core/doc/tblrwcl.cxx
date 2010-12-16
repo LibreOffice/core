@@ -2925,10 +2925,10 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if(
                 rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
-                                n < rBoxes.Count() &&
+                                (n < rBoxes.Count() &&
                                 (nDist + nWidth + rBoxes[ n+1 ]->
                                     GetFrmFmt()->GetFrmSize().GetWidth() / 2)
-                                  > rParam.nSide ))
+                                  > rParam.nSide) ))
                              : (nDist + nWidth / 2 ) > rParam.nSide
                 )
             {
@@ -2990,10 +2990,10 @@ BOOL lcl_InsOtherBox( SwTableLine* pLine, CR_SetBoxWidth& rParam,
             if( nLowerDiff ||
                 (rParam.bLeft ? ((nDist + nWidth / 2 ) <= rParam.nSide &&
                                 (TBLFIX_CHGABS != rParam.nMode ||
-                                n < rBoxes.Count() &&
+                                (n < rBoxes.Count() &&
                                 (nDist + nWidth + rBoxes[ n+1 ]->
                                     GetFrmFmt()->GetFrmSize().GetWidth() / 2)
-                                  > rParam.nSide ))
+                                  > rParam.nSide) ))
                               : (nDist + nWidth / 2 ) > rParam.nSide ))
             {
                 if( !nLowerDiff )
