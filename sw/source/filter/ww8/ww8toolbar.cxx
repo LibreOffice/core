@@ -132,7 +132,7 @@ bool CTBWrapper::Read( SvStream* pS )
         // Strange error condition, shouldn't happen ( but does in at least
         // one test document ) In the case where it happens the TBC &
         // TBCHeader records seem blank??? ( and incorrect )
-        OSL_ENSURE( pS->Tell() == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
+        OSL_ENSURE( static_cast< long >(pS->Tell()) == nExpectedPos, "### Error: Expected pos not equal to actual pos after reading rtbdc");
         OSL_TRACE("\tPos now is 0x%x should be 0x%x", pS->Tell(), nExpectedPos );
         // seek to correct position after rtbdc
         pS->Seek( nExpectedPos );
