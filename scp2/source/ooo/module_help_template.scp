@@ -32,7 +32,13 @@ Module gid_Module_Helppack_Help_Template
     Styles = (TEMPLATEMODULE);
     Files = (gid_File_Help_Common_Zip,
              gid_File_Help_Sbasic_Zip,
-             gid_File_Help_Schart_Zip);
+             gid_File_Help_Scalc_Zip,
+             gid_File_Help_Schart_Zip,
+             gid_File_Help_Sdatabase_Zip,
+             gid_File_Help_Sdraw_Zip,
+             gid_File_Help_Simpress_Zip,
+             gid_File_Help_Smath_Zip,
+             gid_File_Help_Swriter_Zip);
 End
 
 #include "allhelpmodules_root.inc"

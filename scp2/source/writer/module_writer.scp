@@ -62,15 +62,6 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Tmp_Userinstall_Wrt_Inf);
 End
 
-// Module gid_Module_Prg_Wrt_Help
-//    MOD_NAME_DESC ( MODULE_PRG_WRT_HELP );
-//    ParentID = gid_Module_Prg_Wrt;
-//    Sortkey = "200";
-//    Default = YES;
-//    Minimal = YES;
-//    Files = (gid_File_Help_Swriter_Zip);
-// End
-
 Module gid_Module_Brand_Prg_Wrt
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Wrt";
@@ -89,8 +80,7 @@ Module gid_Module_Langpack_Writer_Template
     Name = "gid_Module_Langpack_Writer_Template";
     Description = "gid_Module_Langpack_Writer_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Swriter_Zip,
-             gid_File_Res_T602Filter);
+    Files = (gid_File_Res_T602Filter);
 End
 
 Module gid_Module_Prg_Wrt_MSO_Reg

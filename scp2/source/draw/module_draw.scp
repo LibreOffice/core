@@ -47,14 +47,6 @@ Module gid_Module_Prg_Draw_Bin
     gid_File_Tmp_Userinstall_Draw_Inf);
 End
 
-// Module gid_Module_Prg_Draw_Help
-//     MOD_NAME_DESC ( MODULE_PRG_DRAW_HELP );
-//     ParentID = gid_Module_Prg_Draw;
-//     Sortkey = "200";
-//     Default = YES;
-//     Files = (gid_File_Help_Sdraw_Zip);
-// End
-
 Module gid_Module_Brand_Prg_Draw
     PackageInfo = "packinfo_brand.txt";
     Name = "gid_Module_Brand_Prg_Draw";
@@ -73,7 +65,7 @@ Module gid_Module_Langpack_Draw_Template
     Name = "gid_Module_Langpack_Draw_Template";
     Description = "gid_Module_Langpack_Draw_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Sdraw_Zip);
+    Files = ();
 End
 
 #include "alllangmodules_draw.inc"

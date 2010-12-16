@@ -47,14 +47,6 @@ Module gid_Module_Prg_Calc_Bin
     gid_File_Tmp_Userinstall_Calc_Inf);
 End
 
-// Module gid_Module_Prg_Calc_Help
-//    MOD_NAME_DESC ( MODULE_PRG_CALC_HELP );
-//    ParentID = gid_Module_Prg_Calc;
-//    Sortkey = "200";
-//    Default = YES;
-//    Files = (gid_File_Help_Scalc_Zip);
-// End
-
 Module gid_Module_Prg_Calc_Addins
     MOD_NAME_DESC ( MODULE_OPTIONAL_ADDINS );
     Styles = (HIDDEN_ROOT);
@@ -82,8 +74,7 @@ Module gid_Module_Langpack_Calc_Template
     Name = "gid_Module_Langpack_Calc_Template";
     Description = "gid_Module_Langpack_Calc_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (gid_File_Help_Scalc_Zip,
-             gid_File_Res_Analysis,
+    Files = (gid_File_Res_Analysis,
              gid_File_Res_Date,
              gid_File_Res_Sc,
              gid_File_Res_Solver);
