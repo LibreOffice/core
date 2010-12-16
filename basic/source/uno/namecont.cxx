@@ -69,6 +69,7 @@
 #include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
+#include <boost/scoped_ptr.hpp>
 
 namespace basic
 {
@@ -1760,7 +1761,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
     if( !nLibsToSave )
         return;
 
-    ::xmlscript::LibDescriptorArray* pLibArray = new ::xmlscript::LibDescriptorArray( nLibsToSave );
+    boost::scoped_ptr< ::xmlscript::LibDescriptorArray > pLibArray(new ::xmlscript::LibDescriptorArray(nLibsToSave));
 
     // Write to storage?
     sal_Bool bStorage = i_rStorage.is();
@@ -2066,7 +2067,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
     try
     {
-        xmlscript::exportLibraryContainer( xHandler, pLibArray );
+        xmlscript::exportLibraryContainer( xHandler, pLibArray.get() );
         if ( bStorage )
         {
             uno::Reference< embed::XTransactedObject > xTransact( xTargetLibrariesStor, uno::UNO_QUERY );
@@ -2083,8 +2084,6 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
         ULONG nErrorCode = ERRCODE_IO_GENERAL;
         ErrorHandler::HandleError( nErrorCode );
     }
-
-    delete pLibArray;
 }
 
 
