@@ -2169,8 +2169,8 @@ void ScDPObject::ConvertOrientation(
     const Reference<XDimensionsSupplier>& xSource,
     vector<PivotField>* pRefColFields, vector<PivotField>* pRefRowFields, vector<PivotField>* pRefPageFields )
 {
-    //  pDoc or xSource must be set
-    DBG_ASSERT( pDoc || xSource.is(), "missing string source" );
+    //  xSource must be set
+    DBG_ASSERT( xSource.is(), "missing string source" );
 
     vector<PivotField>::const_iterator itr, itrBeg = rFields.begin(), itrEnd = rFields.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
