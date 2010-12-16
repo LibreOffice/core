@@ -599,8 +599,9 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                 // ========================================================================================================
 
                 sal_Bool bPreselectPassword = sal_False;
+                SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, FALSE );
                 SFX_ITEMSET_ARG( GetMedium()->GetItemSet(), pOldPasswordItem, SfxStringItem, SID_PASSWORD, FALSE );
-                if ( pOldPasswordItem )
+                if ( pOldEncryptionDataItem || pOldPasswordItem )
                     bPreselectPassword = sal_True;
 
                 uno::Sequence< beans::PropertyValue > aDispatchArgs;

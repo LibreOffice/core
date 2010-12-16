@@ -329,13 +329,13 @@ void SfxVersionDialog::Open_Impl()
     SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
 
-    ::rtl::OUString aPassString;
-    if ( GetPasswd_Impl( pObjShell->GetMedium()->GetItemSet(), aPassString ) )
+    uno::Sequence< beans::NamedValue > aEncryptionData;
+    if ( GetEncryptionData_Impl( pObjShell->GetMedium()->GetItemSet(), aEncryptionData ) )
     {
         // there is a password, it should be used during the opening
-        SfxStringItem aPassItem( SID_PASSWORD, aPassString );
+        SfxUnoAnyItem aEncryptionDataItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) );
         pViewFrame->GetDispatcher()->Execute(
-            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aPassItem, 0L );
+            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aEncryptionDataItem, 0L );
     }
     else
         pViewFrame->GetDispatcher()->Execute(

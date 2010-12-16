@@ -239,8 +239,7 @@ void SetTemplate_Impl( const String &rFileName,
     pDoc->ResetFromTemplate( rLongName, rFileName );
 }
 
-//--------------------------------------------------------------------
-
+//====================================================================
 class SfxDocPasswordVerifier : public ::comphelper::IDocPasswordVerifier
 {
 public:
@@ -248,21 +247,33 @@ public:
                             mxStorage( rxStorage ) {}
 
     virtual ::comphelper::DocPasswordVerifierResult
-                        verifyPassword( const ::rtl::OUString& rPassword );
+                        verifyPassword( const ::rtl::OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData );
+    virtual ::comphelper::DocPasswordVerifierResult
+                        verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData );
+
 
 private:
     Reference< embed::XStorage > mxStorage;
 };
 
-::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const ::rtl::OUString& rPassword )
+//--------------------------------------------------------------------
+::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyPassword( const ::rtl::OUString& rPassword, uno::Sequence< beans::NamedValue >& o_rEncryptionData )
+{
+    o_rEncryptionData = ::comphelper::OStorageHelper::CreatePackageEncryptionData( rPassword );
+    return verifyEncryptionData( o_rEncryptionData );
+}
+
+
+//--------------------------------------------------------------------
+::comphelper::DocPasswordVerifierResult SfxDocPasswordVerifier::verifyEncryptionData( const uno::Sequence< beans::NamedValue >& rEncryptionData )
 {
     ::comphelper::DocPasswordVerifierResult eResult = ::comphelper::DocPasswordVerifierResult_WRONG_PASSWORD;
     try
     {
-        // check the password
-        // if the password correct is the stream will be opened successfuly
+        // check the encryption data
+        // if the data correct is the stream will be opened successfuly
         // and immediatelly closed
-        ::comphelper::OStorageHelper::SetCommonStoragePassword( mxStorage, rPassword );
+        ::comphelper::OStorageHelper::SetCommonStorageEncryptionData( mxStorage, rEncryptionData );
 
         mxStorage->openStreamElement(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "content.xml" ) ),
@@ -282,6 +293,8 @@ private:
     }
     return eResult;
 }
+
+//====================================================================
 
 //--------------------------------------------------------------------
 
@@ -341,14 +354,28 @@ sal_uInt32 CheckPasswd_Impl
                         if( xInteractionHandler.is() )
                         {
                             // use the comphelper password helper to request a password
-                            ::rtl::OUString aDocumentName = INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
-                            SfxDocPasswordVerifier aVerifier( xStorage );
-                            ::rtl::OUString aPassword = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-                                aVerifier, ::rtl::OUString(), xInteractionHandler, aDocumentName, comphelper::DocPasswordRequestType_STANDARD );
+                            ::rtl::OUString aPassword;
+                            SFX_ITEMSET_ARG( pSet, pPasswordItem, SfxStringItem, SID_PASSWORD, sal_False);
+                            if ( pPasswordItem )
+                                aPassword = pPasswordItem->GetValue();
 
-                            if ( aPassword.getLength() > 0 )
+                            uno::Sequence< beans::NamedValue > aEncryptionData;
+                            SFX_ITEMSET_ARG( pSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, sal_False);
+                            if ( pEncryptionDataItem )
+                                pEncryptionDataItem->GetValue() >>= aEncryptionData;
+
+                            ::rtl::OUString aDocumentName = INetURLObject( pFile->GetOrigURL() ).GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+
+                            SfxDocPasswordVerifier aVerifier( xStorage );
+                            aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
+                                aVerifier, aEncryptionData, aPassword, xInteractionHandler, aDocumentName, comphelper::DocPasswordRequestType_STANDARD );
+
+                            pSet->ClearItem( SID_PASSWORD );
+                            pSet->ClearItem( SID_ENCRYPTIONDATA );
+
+                            if ( aEncryptionData.getLength() > 0 )
                             {
-                                pSet->Put( SfxStringItem( SID_PASSWORD, aPassword ) );
+                                pSet->Put( SfxUnoAnyItem( SID_ENCRYPTIONDATA, uno::makeAny( aEncryptionData ) ) );
 
                                 try
                                 {

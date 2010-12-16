@@ -79,8 +79,6 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <tools/urlobj.hxx>
 
-extern sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
-
 // --------------------------------------------------------------
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
