@@ -132,10 +132,7 @@ SAL_IMPLEMENT_MAIN()
             ++c;
         }
         sal_Unicode cEnd = c;
-        if (bFirstOutput)
-            printf("    if (c < 0x%x)\n", c);
-        else
-            printf("    else if (c < 0x%x)\n", c);
+        printf("    if (c < 0x%x)\n", c);
         printf("        return %s;\n", aConverters[nMostCapable].getName());
         bFirstOutput = false;
         while(c < 0xFFFF)
@@ -158,7 +155,7 @@ SAL_IMPLEMENT_MAIN()
         {
             if (c < 0xFFFF)
             {
-                printf("    else if (c < 0x%x)\n", c);
+                printf("    if (c < 0x%x)\n", c);
                 printf("        return RTL_TEXTENCODING_DONTKNOW;\n");
             }
             else
