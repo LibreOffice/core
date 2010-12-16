@@ -868,7 +868,7 @@ AC_ARG_WITH(system-libxslt,
         [Use libxslt already on system.]))
 
 AC_ARG_WITH(system-odbc,
-    AS_HELP_STRING([--with-system-odbc-headers],
+    AS_HELP_STRING([--with-system-odbc],
         [Use the odbc headers already on system.]))
 
 AC_ARG_WITH(system-sane,
@@ -4839,8 +4839,8 @@ dnl ===================================================================
 dnl Check for system odbc
 dnl ===================================================================
 AC_MSG_CHECKING([which odbc headers to use])
-if test -n "$with_system_odbc_headers" -o -n "$with_system_headers" && \
-    test "$with_system_odbc_headers" != "no"; then
+if test -n "$with_system_odbc" -o -n "$with_system_headers" && \
+    test "$with_system_odbc" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_ODBC_HEADERS=YES
 
