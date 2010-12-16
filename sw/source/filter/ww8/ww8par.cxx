@@ -3564,7 +3564,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
         else
         {
             USHORT nPos = mrReader.rDoc.MakePageDesc(
-                ViewShell::GetShellRes()->GetPageDescName(mnDesc)
+                ViewShell::GetShellRes()->GetPageDescName(mnDesc, true)
                 , 0, false);
             rIter->mpTitlePage = &mrReader.rDoc._GetPageDesc(nPos);
         }
@@ -3583,8 +3583,7 @@ SwFmtPageDesc wwSectionManager::SetSwFmtPageDesc(mySegIter &rIter,
     else
     {
         USHORT nPos = mrReader.rDoc.MakePageDesc(
-            ViewShell::GetShellRes()->GetPageDescName(mnDesc,
-                false, rIter->HasTitlePage()),
+            ViewShell::GetShellRes()->GetPageDescName(mnDesc),
                 rIter->mpTitlePage, false);
         rIter->mpPage = &mrReader.rDoc._GetPageDesc(nPos);
     }
