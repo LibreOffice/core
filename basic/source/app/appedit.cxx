@@ -52,9 +52,6 @@ AppEdit::AppEdit( BasicFrame* pParent )
 
     pDataEdit = new TextEdit( this, WB_LEFT );
     LoadIniFile();
-    // define Icon:
-//  pIcon = new Icon( ResId( RID_WORKICON ) );
-//  if( pIcon ) SetIcon( *pIcon );
 
     pDataEdit->SetText( aEmpty );
 
@@ -92,9 +89,7 @@ void AppEdit::LoadIniFile()
     String aFontStyle = String( aConf.ReadKey( "ScriptFontStyle", "normal" ), RTL_TEXTENCODING_UTF8 );
     String aFontSize = String( aConf.ReadKey( "ScriptFontSize", "12" ), RTL_TEXTENCODING_UTF8 );
     Font aFont = aFontList.Get( aFontName, aFontStyle );
-//    ULONG nFontSize = aFontSize.GetValue( FUNIT_POINT );
     ULONG nFontSize = aFontSize.ToInt32();
-//    aFont.SetSize( Size( nFontSize, nFontSize ) );
     aFont.SetHeight( nFontSize );
 
 #if OSL_DEBUG_LEVEL > 1
@@ -103,8 +98,6 @@ void AppEdit::LoadIniFile()
     }
 #endif
     aFont.SetTransparent( FALSE );
-//    aFont.SetAlign( ALIGN_BOTTOM );
-//    aFont.SetHeight( aFont.GetHeight()+2 );
     pDataEdit->SetFont( aFont );
 
     if ( ((TextEdit*)pDataEdit)->GetBreakpointWindow() )
@@ -276,7 +269,6 @@ void AppEdit::Resize()
         aStartDocPos.Y() = nMaxVisAreaStart;
         pTextView->SetStartDocPos( aStartDocPos );
         pTextView->ShowCursor();
-//              pModulWindow->GetBreakPointWindow().GetCurYOffset() = aStartDocPos.Y();
     }
     InitScrollBars();
     if ( nVisY != pTextView->GetStartDocPos().Y() )

@@ -56,7 +56,6 @@ AppBasEd::AppBasEd( BasicFrame* pParent, SbModule* p )
 
     pBreakpoints->Show();
 
-
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextView->SetAutoIndentMode( TRUE );
     ((TextEdit*)pDataEdit)->GetTextEditImp().pTextEngine->SetMaxTextLen( STRING_MAXLEN );
     ((TextEdit*)pDataEdit)->GetTextEditImp().SyntaxHighlight( TRUE );

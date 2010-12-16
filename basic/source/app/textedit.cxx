@@ -215,7 +215,6 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
         if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
@@ -276,7 +275,6 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
     for ( i = 0; i < aPortionList.Count(); i++ )
     {
         SbTextPortion& r = aPortionList[i];
-//      DBG_ASSERT( r.nStart <= r.nEnd, "Highlight: Start > End?" );
         if ( r.nStart > r.nEnd )    // Only up to the bug of MD repaired
             continue;
 
@@ -338,12 +336,10 @@ void TextEditImp::ImpDoHighlight( const String& rSource, ULONG nLineOff )
 void TextEditImp::DoSyntaxHighlight( ULONG nPara )
 {
     // Due to delayed syntax highlight it can happen that the
-   // paragraph does no longer exist
+    // paragraph does no longer exist
     if ( nPara < pTextEngine->GetParagraphCount() )
     {
         // unfortunatly I don't know if exact this line Modified() ...
-//      if ( pProgress )
-//          pProgress->StepProgress();
         pTextEngine->RemoveAttribs( nPara );
         String aSource( pTextEngine->GetText( nPara ) );
         ImpDoHighlight( aSource, nPara );
@@ -354,8 +350,6 @@ void TextEditImp::DoDelayedSyntaxHighlight( xub_StrLen nPara )
 {
     // Paragraph is added to 'List', processed in TimerHdl.
     // => Do not manipulate paragraphs while EditEngine is formatting
-//  if ( pProgress )
-//      pProgress->StepProgress();
 
     if ( !bHighlightning && bDoSyntaxHighlight )
     {
@@ -381,16 +375,6 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
         nLine = (USHORT)aSyntaxLineTable.GetCurKey();
         DoSyntaxHighlight( nLine );
         aSyntaxLineTable.Remove( nLine );
-/*      if ( Application::AnyInput() )
-        {
-            aSyntaxIdleTimer.Start();       // Launch if we are landing in a dialog
-            pTextView->ShowCursor( TRUE, TRUE );
-            pTextEngine->SetUpdateMode( TRUE );
-            bHighlightning = FALSE;
-            GetpApp()->Reschedule();
-            bHighlightning = TRUE;
-            pTextEngine->SetUpdateMode( FALSE );
-        }*/
     }
 
     BOOL bWasModified = pTextEngine->IsModified();
@@ -401,24 +385,16 @@ IMPL_LINK( TextEditImp, SyntaxTimerHdl, Timer *, EMPTYARG )
     }
     else
         pTextEngine->SetUpdateMode( TRUE );             // ! With VDev
-//  pTextView->ForceUpdate();
 
     // SetUpdateMode( TRUE ) soll kein Modify setzen
     pTextEngine->SetModified( bWasModified );
 
     // SyntaxTimerHdl wird gerufen, wenn Text-Aenderung
     // => gute Gelegenheit, Textbreite zu ermitteln!
-//  long nPrevTextWidth = nCurTextWidth;
-//  nCurTextWidth = pTextEngine->CalcTextWidth();
-//  if ( nCurTextWidth != nPrevTextWidth )
-//      SetScrollBarRanges();
     bHighlightning = FALSE;
 
     if ( aSyntaxLineTable.First() )
         aImplSyntaxIdleTimer.Start();
-
-//  while ( Application::AnyInput() )
-//      Application::Reschedule();  // Reschedule, because the UserEvent let pass no paints etc.
 
     return 0;
 }
@@ -450,7 +426,6 @@ void TextEditImp::SyntaxHighlight( BOOL bNew )
         for ( ULONG i = 0; i < pTextEngine->GetParagraphCount(); i++ )
             pTextEngine->RemoveAttribs( i );
 
-//      pTextEngine->QuickFormatDoc();
         pTextEngine->SetUpdateMode( TRUE );
         pTextView->ShowCursor(TRUE, TRUE );
     }
@@ -481,13 +456,15 @@ void TextEditImp::KeyInput( const KeyEvent& rKeyEvent )
         pTextView->GetTextEngine()->SetModified( bWasModified );
 }
 
-void TextEditImp::Paint( const Rectangle& rRect ){ pTextView->Paint( rRect );}
-void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonUp( rMouseEvent );}
-//void TextEditImp::MouseButtonDown( const MouseEvent& rMouseEvent ){ pTextView->MouseButtonDown( rMouseEvent );}
-//void TextEditImp::MouseMove( const MouseEvent& rMouseEvent ){ pTextView->MouseMove( rMouseEvent );}
-//void TextEditImp::Command( const CommandEvent& rCEvt ){ pTextView->Command( rCEvt );}
-//BOOL TextEditImp::Drop( const DropEvent& rEvt ){ return FALSE /*pTextView->Drop( rEvt )*/;}
-//BOOL TextEditImp::QueryDrop( DropEvent& rEvt ){ return FALSE /*pTextView->QueryDrop( rEvt )*/;}
+void TextEditImp::Paint( const Rectangle& rRect )
+{
+    pTextView->Paint( rRect );
+}
+
+void TextEditImp::MouseButtonUp( const MouseEvent& rMouseEvent )
+{
+    pTextView->MouseButtonUp( rMouseEvent );
+}
 
 
 void TextEditImp::Command( const CommandEvent& rCEvt )
@@ -542,7 +519,7 @@ SbxBase* TextEditImp::GetSbxAtMousePos( String &aWord )
     Point aDocPos = pTextView->GetDocPos( aPos );
     aWord = pTextEngine->GetWord( pTextEngine->GetPaM( aDocPos ) );
 
-    if ( aWord.Len() /*&& !Application::GetAppInternational().IsNumeric( aWord )*/ )
+    if ( aWord.Len() )
     {
         xub_StrLen nLastChar = aWord.Len()-1;
         String aSuffixes = CUniString( cSuffixes );
