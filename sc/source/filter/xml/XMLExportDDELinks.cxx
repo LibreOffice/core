@@ -73,7 +73,7 @@ sal_Bool ScXMLExportDDELinks::CellsEqual(const sal_Bool bPrevEmpty, const sal_Bo
         return sal_False;
 }
 
-void WriteCell(ScXMLExport& rExport, const ScMatrixValue& aVal, sal_Int32 nRepeat)
+void ScXMLExportDDELinks::WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat)
 {
     bool bString = ScMatrix::IsNonValueType(aVal.nType);
     bool bEmpty = ScMatrix::IsEmptyType(aVal.nType);
@@ -101,8 +101,6 @@ void WriteCell(ScXMLExport& rExport, const ScMatrixValue& aVal, sal_Int32 nRepea
         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NUMBER_COLUMNS_REPEATED, aBuf.makeStringAndClear());
     }
     SvXMLElementExport(rExport, XML_NAMESPACE_TABLE, XML_TABLE_CELL, sal_True, sal_True);
-}
-
 }
 
 void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
@@ -140,13 +138,13 @@ void ScXMLExportDDELinks::WriteTable(const sal_Int32 nPos)
             if (nCol > 0 && aVal != aPrevVal)
             {
                 // Cell value differs.  Flush the cell content.
-                WriteCell(rExport, aPrevVal, nRepeat);
+                WriteCell(aPrevVal, nRepeat);
                 nRepeat = 0;
             }
             aPrevVal = aVal;
         }
 
-        WriteCell(rExport, aPrevVal, nRepeat);
+        WriteCell(aPrevVal, nRepeat);
     }
 }
 
