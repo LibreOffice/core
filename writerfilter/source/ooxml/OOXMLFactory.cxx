@@ -146,7 +146,7 @@ void OOXMLFactory::attributes(OOXMLFastContextHandler * pHandler,
         AttributeToResourceMap::const_iterator aIt;
         AttributeToResourceMap::const_iterator aEndIt = pMap->end();
 
-        for (aIt = pMap->begin(); aIt != aEndIt; aIt++)
+        for (aIt = pMap->begin(); aIt != aEndIt; ++aIt)
         {
             Id nId = (*pTokenToIdMap)[aIt->first];
 #ifdef DEBUG_ATTRIBUTES
