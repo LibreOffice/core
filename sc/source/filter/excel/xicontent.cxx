@@ -666,23 +666,23 @@ XclImpCondFormatManager::XclImpCondFormatManager( const XclImpRoot& rRoot ) :
 
 void XclImpCondFormatManager::ReadCondfmt( XclImpStream& rStrm )
 {
-    XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.Count() );
+    XclImpCondFormat* pFmt = new XclImpCondFormat( GetRoot(), maCondFmtList.size() );
     pFmt->ReadCondfmt( rStrm );
-    maCondFmtList.Append( pFmt );
+    maCondFmtList.push_back( pFmt );
 }
 
 void XclImpCondFormatManager::ReadCF( XclImpStream& rStrm )
 {
-    DBG_ASSERT( !maCondFmtList.Empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
-    if( !maCondFmtList.Empty() )
-        maCondFmtList.GetObject( maCondFmtList.Count() - 1 )->ReadCF( rStrm );
+    DBG_ASSERT( !maCondFmtList.empty(), "XclImpCondFormatManager::ReadCF - CF without leading CONDFMT" );
+    if( !maCondFmtList.empty() )
+        maCondFmtList.back().ReadCF( rStrm );
 }
 
 void XclImpCondFormatManager::Apply()
 {
-    for( XclImpCondFormat* pFmt = maCondFmtList.First(); pFmt; pFmt = maCondFmtList.Next() )
-        pFmt->Apply();
-    maCondFmtList.Clear();
+    for( XclImpCondFmtList::iterator itFmt = maCondFmtList.begin(); itFmt != maCondFmtList.end(); ++itFmt )
+        itFmt->Apply();
+    maCondFmtList.clear();
 }
 
 // Data Validation ============================================================
@@ -987,7 +987,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
             {
                 ScRange aRange;
                 if( pRangeData->IsReference( aRange ) )
-                    maWQList.Append( new XclImpWebQuery( aRange ) );
+                    maWQList.push_back( new XclImpWebQuery( aRange ) );
             }
         }
     }
@@ -999,34 +999,34 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
 
 void XclImpWebQueryBuffer::ReadParamqry( XclImpStream& rStrm )
 {
-    if( XclImpWebQuery* pQuery = maWQList.Last() )
-        pQuery->ReadParamqry( rStrm );
+    if (!maWQList.empty())
+        maWQList.back().ReadParamqry( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqstring( XclImpStream& rStrm )
 {
-    if( XclImpWebQuery* pQuery = maWQList.Last() )
-        pQuery->ReadWqstring( rStrm );
+    if (!maWQList.empty())
+        maWQList.back().ReadWqstring( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqsettings( XclImpStream& rStrm )
 {
-    if( XclImpWebQuery* pQuery = maWQList.Last() )
-        pQuery->ReadWqsettings( rStrm );
+    if (!maWQList.empty())
+        maWQList.back().ReadWqsettings( rStrm );
 }
 
 void XclImpWebQueryBuffer::ReadWqtables( XclImpStream& rStrm )
 {
-    if( XclImpWebQuery* pQuery = maWQList.Last() )
-        pQuery->ReadWqtables( rStrm );
+    if (!maWQList.empty())
+        maWQList.back().ReadWqtables( rStrm );
 }
 
 void XclImpWebQueryBuffer::Apply()
 {
     ScDocument& rDoc = GetDoc();
     String aFilterName( RTL_CONSTASCII_USTRINGPARAM( EXC_WEBQRY_FILTER ) );
-    for( XclImpWebQuery* pQuery = maWQList.First(); pQuery; pQuery = maWQList.Next() )
-        pQuery->Apply( rDoc, aFilterName );
+    for( XclImpWebQueryList::iterator itQuery = maWQList.begin(); itQuery != maWQList.end(); ++itQuery )
+        itQuery->Apply( rDoc, aFilterName );
 }
 
 // Decryption =================================================================

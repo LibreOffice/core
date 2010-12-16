@@ -172,7 +172,7 @@ public:
     void                Apply();
 
 private:
-    typedef ScfDelList< XclImpCondFormat > XclImpCondFmtList;
+    typedef boost::ptr_vector< XclImpCondFormat > XclImpCondFmtList;
     XclImpCondFmtList   maCondFmtList;      /// List with all conditional formattings.
 };
 
@@ -262,7 +262,7 @@ public:
     void                Apply();
 
 private:
-    typedef ScfDelList< XclImpWebQuery > XclImpWebQueryList;
+    typedef boost::ptr_vector< XclImpWebQuery > XclImpWebQueryList;
     XclImpWebQueryList  maWQList;       /// List of the web query objects.
 };
 
