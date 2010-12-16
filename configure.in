@@ -1491,7 +1491,7 @@ case "$host_os" in
     *netbsd*)
         test_gtk=yes
         build_gstreamer=yes
-        test_kde=yes
+        test_kde=no
         test_kde4=yes
         test_freetype=yes
         PTHREAD_CFLAGS="-pthread"
