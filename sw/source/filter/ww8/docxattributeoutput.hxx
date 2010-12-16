@@ -544,7 +544,8 @@ private:
 
     ::sax_fastparser::FastAttributeList *m_pFontsAttrList, *m_pEastAsianLayoutAttrList;
     ::sax_fastparser::FastAttributeList *m_pCharLangAttrList;
-    ::sax_fastparser::FastAttributeList *m_pSpacingAttrList;
+    ::sax_fastparser::FastAttributeList *m_pSectionSpacingAttrList;
+    ::sax_fastparser::FastAttributeList *m_pParagraphSpacingAttrList;
     ::sax_fastparser::FastAttributeList *m_pHyperlinkAttrList;
     ::sax_fastparser::FastAttributeList *m_pFlyAttrList;
 

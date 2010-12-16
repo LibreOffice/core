@@ -315,7 +315,7 @@ void DocxAttributeOutput::StartParagraphProperties( const SwTxtNode& rNode )
 
 void DocxAttributeOutput::InitCollectedParagraphProperties()
 {
-    m_pSpacingAttrList = NULL;
+    m_pParagraphSpacingAttrList = NULL;
 
     // Write the elements in the spec order
     static const sal_Int32 aOrder[] =
@@ -378,10 +378,10 @@ void DocxAttributeOutput::WriteCollectedParagraphProperties()
         m_pSerializer->singleElementNS( XML_w, XML_framePr, xAttrList );
     }
 
-    if ( m_pSpacingAttrList )
+    if ( m_pParagraphSpacingAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pSpacingAttrList );
-        m_pSpacingAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pParagraphSpacingAttrList );
+        m_pParagraphSpacingAttrList = NULL;
 
         m_pSerializer->singleElementNS( XML_w, XML_spacing, xAttrList );
     }
@@ -2253,10 +2253,10 @@ void DocxAttributeOutput::StartSection()
 void DocxAttributeOutput::EndSection()
 {
     // Write the section properties
-    if ( m_pSpacingAttrList )
+    if ( m_pSectionSpacingAttrList )
     {
-        XFastAttributeListRef xAttrList( m_pSpacingAttrList );
-        m_pSpacingAttrList = NULL;
+        XFastAttributeListRef xAttrList( m_pSectionSpacingAttrList );
+        m_pSectionSpacingAttrList = NULL;
 
         m_pSerializer->singleElementNS( XML_w, XML_pgMar, xAttrList );
     }
@@ -3223,26 +3223,26 @@ void DocxAttributeOutput::FootnotesEndnotes( bool bFootnotes )
 
 void DocxAttributeOutput::ParaLineSpacing_Impl( short nSpace, short nMulti )
 {
-    if ( !m_pSpacingAttrList )
-        m_pSpacingAttrList = m_pSerializer->createAttrList();
+    if ( !m_pParagraphSpacingAttrList )
+        m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
 
     if ( nSpace < 0 )
     {
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "exact" );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( -nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "exact" );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( -nSpace ) ) );
     }
     else if( nMulti )
     {
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
     }
     else if ( nSpace > 0 )
     {
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "atLeast" );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "atLeast" );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_line ), OString::valueOf( sal_Int32( nSpace ) ) );
     }
     else
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_lineRule ), "auto" );
 }
 
 void DocxAttributeOutput::ParaAdjust( const SvxAdjustItem& rAdjust )
@@ -3500,8 +3500,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
     }
     else if ( m_rExport.bOutPageDescs )
     {
-        if ( !m_pSpacingAttrList )
-            m_pSpacingAttrList = m_pSerializer->createAttrList();
+        if ( !m_pSectionSpacingAttrList )
+            m_pSectionSpacingAttrList = m_pSerializer->createAttrList();
 
         USHORT nLDist, nRDist;
         const SfxPoolItem* pItem = m_rExport.HasItem( RES_BOX );
@@ -3515,8 +3515,8 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
         nLDist = nLDist + (USHORT)rLRSpace.GetLeft();
         nRDist = nRDist + (USHORT)rLRSpace.GetRight();
 
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nLDist ) ) );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( nRDist ) ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_left ), OString::valueOf( sal_Int32( nLDist ) ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_right ), OString::valueOf( sal_Int32( nRDist ) ) );
     }
     else
     {
@@ -3536,8 +3536,6 @@ void DocxAttributeOutput::FormatLRSpace( const SvxLRSpaceItem& rLRSpace )
 
 void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
 {
-    if ( !m_pSpacingAttrList && !m_rExport.bOutFlyFrmAttrs )
-        m_pSpacingAttrList = m_pSerializer->createAttrList();
 
     if ( m_rExport.bOutFlyFrmAttrs )
     {
@@ -3554,36 +3552,41 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
         if ( !m_rExport.GetCurItemSet() )
             return;
 
+        if ( !m_pSectionSpacingAttrList )
+            m_pSectionSpacingAttrList = m_pSerializer->createAttrList();
+
         HdFtDistanceGlue aDistances( *m_rExport.GetCurItemSet() );
 
         sal_Int32 nHeader = 0;
         if ( aDistances.HasHeader() )
             nHeader = sal_Int32( aDistances.dyaHdrTop );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::valueOf( nHeader ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_header ), OString::valueOf( nHeader ) );
 
         // Page top
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_top ),
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_top ),
                 OString::valueOf( sal_Int32( aDistances.dyaTop ) ) );
 
         sal_Int32 nFooter = 0;
         if ( aDistances.HasFooter() )
             nFooter = sal_Int32( aDistances.dyaHdrBottom );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::valueOf( nFooter ) );
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_footer ), OString::valueOf( nFooter ) );
 
         // Page Bottom
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_bottom ),
                 OString::valueOf( sal_Int32( aDistances.dyaBottom ) ) );
 
         // FIXME Page Gutter is not handled ATM, setting to 0 as it's mandatory for OOXML
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
+        m_pSectionSpacingAttrList->add( FSNS( XML_w, XML_gutter ),
                 OString::valueOf( sal_Int32( 0 ) ) );
 
     }
     else
     {
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_before ),
+        if ( !m_pParagraphSpacingAttrList )
+            m_pParagraphSpacingAttrList = m_pSerializer->createAttrList();
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_before ),
                 OString::valueOf( (sal_Int32)rULSpace.GetUpper() ) );
-        m_pSpacingAttrList->add( FSNS( XML_w, XML_after ),
+        m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
                 OString::valueOf( (sal_Int32)rULSpace.GetLower() ) );
     }
 }
@@ -3927,7 +3930,8 @@ DocxAttributeOutput::DocxAttributeOutput( DocxExport &rExport, FSHelperPtr pSeri
       m_pFontsAttrList( NULL ),
       m_pEastAsianLayoutAttrList( NULL ),
       m_pCharLangAttrList( NULL ),
-      m_pSpacingAttrList( NULL ),
+      m_pSectionSpacingAttrList( NULL ),
+      m_pParagraphSpacingAttrList( NULL ),
       m_pHyperlinkAttrList( NULL ),
       m_pFlyAttrList( NULL ),
       m_pFootnotesList( new ::docx::FootnotesList() ),
@@ -3952,7 +3956,8 @@ DocxAttributeOutput::~DocxAttributeOutput()
     delete m_pFontsAttrList, m_pFontsAttrList = NULL;
     delete m_pEastAsianLayoutAttrList, m_pEastAsianLayoutAttrList = NULL;
     delete m_pCharLangAttrList, m_pCharLangAttrList = NULL;
-    delete m_pSpacingAttrList, m_pSpacingAttrList = NULL;
+    delete m_pSectionSpacingAttrList, m_pSectionSpacingAttrList = NULL;
+    delete m_pParagraphSpacingAttrList, m_pParagraphSpacingAttrList = NULL;
     delete m_pHyperlinkAttrList, m_pHyperlinkAttrList = NULL;
     delete m_pFlyAttrList, m_pFlyAttrList = NULL;
 
