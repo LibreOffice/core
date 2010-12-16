@@ -38,7 +38,7 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/embed/XEncryptionProtectedSource.hpp>
+#include <com/sun/star/embed/XEncryptionProtectedSource2.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/XRelationshipAccess.hpp>
 #include <com/sun/star/embed/XExtendedStorageStream.hpp>
@@ -52,6 +52,8 @@
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/interfacecontainer.h>
+
+#include <comphelper/sequenceashashmap.hxx>
 
 #include <list>
 
@@ -75,7 +77,7 @@ namespace cppu {
 
 namespace package {
     void StaticAddLog( const ::rtl::OUString& aMessage );
-    ::com::sun::star::uno::Sequence< sal_Int8 > MakeKeyFromPass( const ::rtl::OUString& aPass, sal_Bool bUseUTF );
+    bool PackageEncryptionDatasEqual( const ::comphelper::SequenceAsHashMap& aHash1, const ::comphelper::SequenceAsHashMap& aHash2 );
 }
 
 struct WSInternalData_Impl
@@ -127,9 +129,9 @@ struct OWriteStream_Impl : public PreCreationStruct
 
     sal_Bool m_bForceEncrypted;
 
-    sal_Bool m_bUseCommonPass;
-    sal_Bool m_bHasCachedPassword;
-    ::rtl::OUString m_aPass;
+    sal_Bool m_bUseCommonEncryption;
+    sal_Bool m_bHasCachedEncryptionData;
+    ::comphelper::SequenceAsHashMap m_aEncryptionData;
 
     sal_Bool m_bCompressedSetExplicit;
 
@@ -161,12 +163,12 @@ private:
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
                                                                                         sal_Bool bHierarchyAccess );
 
-    ::rtl::OUString GetCommonRootPass() throw ( ::com::sun::star::packages::NoEncryptionException );
+    ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( ::com::sun::star::packages::NoEncryptionException );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > ReadPackageStreamProperties();
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > InsertOwnProps(
                             const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                            sal_Bool bUseCommonPass );
+                            sal_Bool bUseCommonEncryption );
 
 public:
     OWriteStream_Impl(
@@ -186,7 +188,7 @@ public:
 
     void AddLog( const ::rtl::OUString& aMessage );
 
-    sal_Bool UsesCommonPass_Impl() { return m_bUseCommonPass; }
+    sal_Bool UsesCommonEncryption_Impl() { return m_bUseCommonEncryption; }
     sal_Bool HasTempFile_Impl() { return ( m_aTempURL.getLength() != 0 ); }
     sal_Bool IsTransacted();
 
@@ -198,13 +200,14 @@ public:
 
     void SetToBeCommited() { m_bFlushed = sal_True; }
 
-    sal_Bool HasCachedPassword() { return m_bHasCachedPassword; }
-    ::rtl::OUString GetCachedPassword() { return m_aPass; }
+    sal_Bool HasCachedEncryptionData() { return m_bHasCachedEncryptionData; }
+    ::comphelper::SequenceAsHashMap& GetCachedEncryptionData() { return m_aEncryptionData; }
+
     sal_Bool IsModified() { return m_bHasDataToFlush || m_bFlushed; }
 
     sal_Bool IsEncrypted();
     void SetDecrypted();
-    void SetEncryptedWithPass( const ::rtl::OUString& aPass );
+    void SetEncrypted( const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
     void DisposeWrappers();
 
@@ -226,12 +229,12 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::beans::StringPair > > GetAllRelationshipsIfAny();
 
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream,
-                                const ::rtl::OUString& aPass );
+                                const ::comphelper::SequenceAsHashMap& aEncryptionData );
     void CopyInternallyTo_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xDestStream );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
                         sal_Int32 nStreamMode,
-                        const ::rtl::OUString& aPass,
+                        const ::comphelper::SequenceAsHashMap& aEncryptionData,
                         sal_Bool bHierarchyAccess );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > GetStream(
@@ -247,13 +250,13 @@ public:
     void CreateReadonlyCopyBasedOnData(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& xDataToCopy,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps,
-                    sal_Bool bUseCommonPass,
+                    sal_Bool bUseCommonEncryption,
                     ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
 
     void GetCopyOfLastCommit( ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream );
     void GetCopyOfLastCommit(
                   ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream >& xTargetStream,
-                            const ::rtl::OUString& aPass );
+                            const ::comphelper::SequenceAsHashMap& aEncryptionData );
 
 
     void CommitStreamRelInfo(
@@ -272,7 +275,7 @@ class OWriteStream : ::com::sun::star::lang::XTypeProvider
             , public ::com::sun::star::embed::XExtendedStorageStream
             , public ::com::sun::star::io::XSeekable
             , public ::com::sun::star::io::XTruncate
-            , public ::com::sun::star::embed::XEncryptionProtectedSource
+            , public ::com::sun::star::embed::XEncryptionProtectedSource2
             , public ::com::sun::star::embed::XRelationshipAccess
             , public ::com::sun::star::embed::XTransactedObject
             , public ::com::sun::star::embed::XTransactionBroadcaster
@@ -365,6 +368,9 @@ public:
     virtual void SAL_CALL removeEncryption()
         throw ( ::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::io::IOException );
+
+    //XEncryptionProtectedSource2
+    virtual void SAL_CALL setEncryptionData( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aEncryptionData ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
     //XRelationshipAccess
     virtual ::sal_Bool SAL_CALL hasByID( const ::rtl::OUString& sID ) throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);

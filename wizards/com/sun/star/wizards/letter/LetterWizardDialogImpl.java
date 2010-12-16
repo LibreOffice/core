@@ -1294,7 +1294,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
         {
             sTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "share", "/wizard");
             sUserTemplatePath = FileAccess.getOfficePath(xMSF, "Template", "user", "");
-            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/wizard/bitmap");
+            sBitmapPath = FileAccess.combinePaths(xMSF, sTemplatePath, "/../wizard/bitmap");
         }
         catch (NoValidPathException e)
         {
