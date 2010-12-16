@@ -88,6 +88,7 @@ public:
     virtual void ScrollToShowSelection() = 0;
     virtual void ScrollToEnd() = 0;
     virtual void ResetScrollBar() = 0;
+    virtual void HandleWheelScroll(long nNotch) = 0;
 
     /** Reads the FixedText's text with mnemonic and hides the FixedText. */
     void            UseMnemonic();
@@ -145,6 +146,7 @@ public:
 
     virtual void            Paint( const Rectangle& rRect );
     virtual void            DataChanged( const DataChangedEvent& rDCEvt );
+    virtual void            Command( const CommandEvent& rCEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
     virtual void            MouseButtonUp( const MouseEvent& rMEvt );
     virtual void            MouseMove( const MouseEvent& rMEvt );
@@ -257,6 +259,7 @@ public:
     virtual void ScrollToEnd();
     virtual void ScrollToShowSelection();
     virtual void ResetScrollBar();
+    virtual void HandleWheelScroll(long nNotch);
 
 private:
     bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
@@ -321,6 +324,7 @@ public:
     virtual void ScrollToEnd();
     virtual void ScrollToShowSelection();
     virtual void ResetScrollBar();
+    virtual void HandleWheelScroll(long nNotch);
 
 protected:
     virtual size_t          CalcNewFieldIndex( SCsCOL nDX, SCsROW nDY ) const;

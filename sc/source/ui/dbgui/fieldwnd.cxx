@@ -275,6 +275,20 @@ void ScDPFieldControlBase::DataChanged( const DataChangedEvent& rDCEvt )
     Control::DataChanged( rDCEvt );
 }
 
+void ScDPFieldControlBase::Command( const CommandEvent& rCEvt )
+{
+    if (rCEvt.GetCommand() == COMMAND_WHEEL)
+    {
+        const CommandWheelData* pData = rCEvt.GetWheelData();
+        if (pData->GetMode() == COMMAND_WHEEL_SCROLL && !pData->IsHorz())
+        {
+            // Handle vertical mouse wheel scrolls.
+            long nNotch = pData->GetNotchDelta(); // positive => up; negative => down
+            HandleWheelScroll(nNotch);
+        }
+    }
+}
+
 void ScDPFieldControlBase::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if( rMEvt.IsLeft() )
@@ -896,6 +910,11 @@ void ScDPHorFieldControl::ResetScrollBar()
     }
 }
 
+void ScDPHorFieldControl::HandleWheelScroll(long /*nNotch*/)
+{
+    // not handled for horizontal field controls.
+}
+
 bool ScDPHorFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
 {
     if (nPos >= mnFieldBtnColCount*mnFieldBtnRowCount)
@@ -1157,6 +1176,11 @@ void ScDPRowFieldControl::ResetScrollBar()
         maScroll.SetRangeMax(nNewMax);
         maScroll.Show(GetFieldCount() > mnColumnBtnCount);
     }
+}
+
+void ScDPRowFieldControl::HandleWheelScroll(long nNotch)
+{
+    maScroll.DoScroll(maScroll.GetThumbPos() - nNotch);
 }
 
 bool ScDPRowFieldControl::GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize)
