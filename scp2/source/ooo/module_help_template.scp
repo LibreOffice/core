@@ -25,40 +25,14 @@
  *
  ************************************************************************/
 
-#include "macros.inc"
-
-File gid_File_Share_Registry_Draw_Xcd
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Registry;
-    Name = "draw.xcd";
+Module gid_Module_Helppack_Help_Template
+    ParentID = gid_Module_Helppack_Helproot;
+    Name = "gid_Module_Helppack_Help_Template";
+    Description = "gid_Module_Helppack_Help_Template";
+    Styles = (TEMPLATEMODULE);
+    Files = (gid_File_Help_Common_Zip,
+             gid_File_Help_Sbasic_Zip,
+             gid_File_Help_Schart_Zip);
 End
 
-File gid_File_Help_Sdraw_Zip
-    Dir = gid_Dir_Help_Isolanguage;
-    ARCHIVE_TXT_FILE_BODY_HELPPACK;
-    EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdraw);
-    Patchfiles = (); 
-End
-
-File gid_File_Exe_Sdraw
-    BIN_FILE_BODY;
-    Dir = gid_Brand_Dir_Program;
-    Name = EXENAME(sdraw);
-  #ifdef WNT
-    FileDescription = "%PRODUCTNAME Draw";
-    Styles = (PACKED, PATCH_SO_NAME);
-  #else
-    Styles = (PACKED);
-  #endif
-End
-
-// new user interface configuration files
-/*
-File gid_File_Share_Config_Sofficecfg_Draw_Menubar_Xml
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Share_Config_Sofficecfg_Sdraw_Menubar;
-    Name = "/uiconfig/sdraw/menubar/menubar.xml";
-End
-*/
+#include "allhelpmodules_root.inc"

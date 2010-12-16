@@ -290,6 +290,8 @@ PARFILES=                          \
         module_hidden_ooo.par      \
         module_langpack.par        \
         module_lang_template.par   \
+        module_helppack.par        \
+        module_help_template.par   \
         module_java.par            \
         module_systemint.par       \
         module_improvement.par     \

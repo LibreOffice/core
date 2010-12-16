@@ -116,6 +116,10 @@
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,PATCH)
 
+#define ARCHIVE_TXT_FILE_BODY_HELPPACK \
+        TXT_FILE_BODY; \
+        Styles = (ARCHIVE,HELPPACK)
+
 #define ARCHIVE_SUBST_FILE_BODY \
         TXT_FILE_BODY; \
         Styles = (ARCHIVE,SUBSTITUTE)
