@@ -4992,7 +4992,6 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
             bDone = sal_True;
             break;
         default:
-            int nNxtToken = nToken;
             if( pPendStack )
             {
                 SwPendingStack* pTmp = pPendStack->pNext;
@@ -5000,7 +4999,6 @@ void SwHTMLParser::BuildTableCaption( HTMLTable *pCurTable )
                 pPendStack = pTmp;
 
                 OSL_ENSURE( !pTmp, "weiter kann es nicht gehen!" );
-                nNxtToken = 0;  // neu lesen
             }
 
             if( IsParserWorking() )
