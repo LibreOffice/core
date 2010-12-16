@@ -316,6 +316,7 @@ ULFFILES=                          \
         folderitem_ooo.ulf         \
         module_ooo.ulf             \
         module_langpack.ulf        \
+        module_helppack.ulf        \
         module_java.ulf            \
         registryitem_ooo.ulf       \
         module_systemint.ulf
