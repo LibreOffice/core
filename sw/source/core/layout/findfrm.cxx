@@ -1666,8 +1666,8 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
         return *this;
 
     OSL_ENSURE( pTableFrm &&
-            (  bStart && GetTabBox()->getRowSpan() < 1 ||
-              !bStart && GetLayoutRowSpan() > 1 ),
+            (  (bStart && GetTabBox()->getRowSpan() < 1) ||
+              (!bStart && GetLayoutRowSpan() > 1) ),
             "SwCellFrm::FindStartRowSpanCell: No rowspan, no table, no cookies" );
 
     if ( pTableFrm )
