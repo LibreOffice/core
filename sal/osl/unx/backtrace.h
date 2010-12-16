@@ -55,7 +55,7 @@ struct frame {
 } /* extern "C" */
 #endif
 
-#endif /* defined SOLARIS || FREEBSD || OPENBSD */
+#endif /* defined SOLARIS || FREEBSD || NETBSD || OPENBSD */
 
 #if defined (LINUX) && defined (SPARC)
 #ifdef __cplusplus
