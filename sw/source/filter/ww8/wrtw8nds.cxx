@@ -2358,7 +2358,7 @@ void WW8AttributeOutput::TableNodeInfo( ww8::WW8TableNodeInfo::Pointer_t pNodeIn
         {
         }
 
-        aIt++;
+        ++aIt;
     }
 }
 //---------------------------------------------------------------------------
