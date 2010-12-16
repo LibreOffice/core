@@ -65,6 +65,22 @@ protected:
     typedef ::std::vector<FieldName> FieldNames;
 
 public:
+
+    /**
+     * Custom scroll bar to pass the command event to its parent window.
+     * We need this to pass the mouse wheel events to its parent field
+     * control to have mouse wheel events appaer to be properly handled by the
+     * scroll bar.
+     */
+    class ScrollBar : public ::ScrollBar
+    {
+    public:
+        ScrollBar(Window* pParent, WinBits nStyle);
+        virtual void Command( const CommandEvent& rCEvt );
+    private:
+        Window* mpParent;
+    };
+
     ScDPFieldControlBase(
         ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption );
     virtual ~ScDPFieldControlBase();
@@ -340,7 +356,7 @@ private:
 
 private:
 
-    ScrollBar               maScroll;
+    ScDPFieldControlBase::ScrollBar maScroll;
     size_t                  mnColumnBtnCount;
 };
 

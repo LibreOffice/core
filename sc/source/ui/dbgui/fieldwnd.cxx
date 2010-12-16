@@ -51,6 +51,17 @@ using ::com::sun::star::accessibility::XAccessible;
 
 const size_t INVALID_INDEX = static_cast<size_t>(-1);
 
+ScDPFieldControlBase::ScrollBar::ScrollBar(Window* pParent, WinBits nStyle) :
+    ::ScrollBar(pParent, nStyle),
+    mpParent(pParent)
+{
+}
+
+void ScDPFieldControlBase::ScrollBar::Command( const CommandEvent& rCEvt )
+{
+    mpParent->Command(rCEvt);
+}
+
 ScDPFieldControlBase::ScDPFieldControlBase( ScDPLayoutDlg* pParent, const ResId& rResId, FixedText* pCaption ) :
     Control(pParent, rResId),
     mpDlg(pParent),
