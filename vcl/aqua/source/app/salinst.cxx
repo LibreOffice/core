@@ -306,7 +306,7 @@ void InitSalMain()
 {
     rtl::OUString urlWorkDir;
     rtl_uString *sysWorkDir = NULL;
-    if (tools::getProcessWorkingDir(&urlWorkDir))
+    if (tools::getProcessWorkingDir(urlWorkDir))
     {
         oslFileError err2 = osl_getSystemPathFromFileURL(urlWorkDir.pData, &sysWorkDir);
         if (err2 == osl_File_E_None)
