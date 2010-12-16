@@ -32,6 +32,6 @@ Module gid_Module_Helppack_Help_<LANGUAGE_>
     Assigns = gid_Module_Helppack_Help_Template;
     Name = "gid_Module_Helppack_Help_<LANGUAGE_>";
     Description = "gid_Module_Helppack_Help_<LANGUAGE_>";
-    PackageInfo = "packinfo_office_lang.txt";
+    PackageInfo = "packinfo_office_help.txt";
     Styles =(HIDDEN_ROOT, LANGUAGEMODULE);
 End
