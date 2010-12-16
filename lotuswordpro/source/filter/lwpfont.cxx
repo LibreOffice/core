@@ -355,15 +355,16 @@ BOOL LwpFontNameEntry::IsBackgroundColorOverridden()
     return (0 != (m_nOverrideBits & BKCOLOR));
 }
 
-BOOL LwpFontNameEntry::IsTightnessOverridden()
-{
-    return (0 != (m_nOverrideBits & TIGHTNESS));
-}
+//TODO
+//BOOL LwpFontNameEntry::IsTightnessOverridden()
+//{
+//    return (0 != (m_nOverrideBits & TIGHTNESS));
+//}
 
-BOOL LwpFontNameEntry::IsAnythingOverridden()
-{
-    return (0 != (m_nOverrideBits & ALL_BITS));
-}
+//BOOL LwpFontNameEntry::IsAnythingOverridden()
+//{
+//    return (0 != (m_nOverrideBits & ALL_BITS));
+//}
 
 
 LwpFontNameManager::LwpFontNameManager()

@@ -149,8 +149,9 @@ private:
     inline BOOL IsPointSizeOverridden();
     inline BOOL IsColorOverridden();
     inline BOOL IsBackgroundColorOverridden();
-    inline BOOL IsTightnessOverridden();
-    inline BOOL IsAnythingOverridden();
+//TODO
+//    inline BOOL IsTightnessOverridden();
+//    inline BOOL IsAnythingOverridden();
 };
 
 class LwpFontNameManager
