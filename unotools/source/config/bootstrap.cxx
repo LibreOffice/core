@@ -261,7 +261,7 @@ bool implEnsureAbsolute(OUString & _rsURL) // also strips embedded dots !!
     using osl::File;
 
     OUString sBasePath;
-    OSL_VERIFY(tools::getProcessWorkingDir(&sBasePath));
+    OSL_VERIFY(tools::getProcessWorkingDir(sBasePath));
 
     OUString sAbsolute;
     if ( File::E_None == File::getAbsoluteFileURL(sBasePath, _rsURL, sAbsolute))
