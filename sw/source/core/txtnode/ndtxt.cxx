@@ -365,6 +365,8 @@ void lcl_ChangeFtnRef( SwTxtNode &rNode )
 
 SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 {
+    bool parentIsOutline = IsOutline();
+
     // lege den Node "vor" mir an
     const xub_StrLen nSplitPos = rPos.nContent.GetIndex();
     const xub_StrLen nTxtLen = m_Text.Len();
@@ -386,7 +388,7 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
     ResetAttr( RES_PARATR_LIST_ISRESTART );
     ResetAttr( RES_PARATR_LIST_RESTARTVALUE );
     ResetAttr( RES_PARATR_LIST_ISCOUNTED );
-    if ( GetNumRule() == 0 )
+    if ( GetNumRule() == 0 || (parentIsOutline && !IsOutline()) )
     {
         ResetAttr( RES_PARATR_LIST_ID );
         ResetAttr( RES_PARATR_LIST_LEVEL );
