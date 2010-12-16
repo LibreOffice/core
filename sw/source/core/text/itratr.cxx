@@ -435,7 +435,6 @@ sal_Bool SwTxtNode::IsSymbol( const xub_StrLen nBegin ) const//swmodtest 080307
     SwScriptInfo aScriptInfo;
     SwAttrIter aIter( *(SwTxtNode*)this, aScriptInfo );
     aIter.Seek( nBegin );
-    //const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetCurrentLayout();
     return aIter.GetFnt()->IsSymbol(
         const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()) );//swmod 080311
 }
@@ -702,7 +701,6 @@ void SwTxtNode::GetMinMaxSize( ULONG nIndex, ULONG& rMin, ULONG &rMax,
             case CHAR_HARDHYPHEN:
             {
                 XubString sTmp( cChar );
-                //const SwRootFrm* pTmpRootFrm = getIDocumentLayoutAccess()->GetCurrentLayout();
                 SwDrawTextInfo aDrawInf( const_cast<ViewShell *>(getIDocumentLayoutAccess()->GetCurrentViewShell()),
                     *pOut, 0, sTmp, 0, 1, 0, sal_False );//swmod 080311
                 nAktWidth = aIter.GetFnt()->_GetTxtSize( aDrawInf ).Width();

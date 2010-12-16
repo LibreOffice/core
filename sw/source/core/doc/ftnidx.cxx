@@ -232,7 +232,6 @@ void SwFtnIdxs::UpdateAllFtn()
                nFtnIdx = 0;     // Index in das FtnIdx-Array
         for( USHORT n = 0; n < rOutlNds.Count(); ++n )
         {
-            //if( !rOutlNds[ n ]->GetTxtNode()->GetTxtColl()->GetOutlineLevel() )//#outline level,zhaojianwei
             if ( rOutlNds[ n ]->GetTxtNode()->GetAttrOutlineLevel() == 1 )//<-end,zhaojianwei
             {
                 ULONG nCapStt = rOutlNds[ n ]->GetIndex();  // Start eines neuen Kapitels
@@ -294,8 +293,6 @@ void SwFtnIdxs::UpdateAllFtn()
         }
     }
 
-    //if( pDoc->GetCurrentLayout() && FTNNUM_PAGE == rFtnInfo.eNum )
-    //  pDoc->GetCurrentLayout()->UpdateFtnNums();
     if( pTmpRoot && FTNNUM_PAGE == rFtnInfo.eNum )
         std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::UpdateFtnNums));//swmod 0
 }

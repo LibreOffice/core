@@ -1095,8 +1095,7 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
     {
         SwFrm::CheckPageDescs( (SwPageFrm*)(*pLayoutIter)->Lower() );
     }//swmod 080310
-    //if(pDoc->GetCurrentLayout())
-        //SwFrm::CheckPageDescs( (SwPageFrm*)pDoc->GetCurrentLayout()->Lower() );   //swmod 080218
+
     SetProtect( SwTOXBase::IsProtected() );
 }
 

@@ -559,7 +559,6 @@ void ViewShell::InvalidateWindows( const SwRect &rRect )
             if ( pSh->GetWin() )
             {
                 if ( pSh->IsPreView() )
-//                  pSh->GetWin()->Invalidate();
                     ::RepaintPagePreview( pSh, rRect );
                 else if ( pSh->VisArea().IsOver( rRect ) )
                     pSh->GetWin()->Invalidate( rRect.SVRect() );
@@ -587,7 +586,7 @@ void ViewShell::MakeVisible( const SwRect &rRect )
         {
             if( pWin )
             {
-                const SwFrm* pRoot = /*GetDoc()->GetCurrentViewShell()->*/GetLayout();
+                const SwFrm* pRoot = GetLayout();
                 int nLoopCnt = 3;
                 long nOldH;
                 do{

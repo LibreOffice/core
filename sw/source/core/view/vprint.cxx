@@ -341,7 +341,6 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
     SET_CURR_SHELL( this );
 
     SwRootFrm* pMyLayout = GetLayout();
-    // ULONG nStatMax = pMyLayout->GetPageNum();
 
     const SwFrm *pPage = pMyLayout->Lower();
     SwLayAction aAction( pMyLayout, Imp() );
@@ -752,7 +751,6 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
              pSh->GetNext() == pSh )
         {
             pSh->CheckBrowseView( FALSE );
-            //pDoc->GetCurrentLayout()->Lower()->InvalidateSize();  //swmod 080218//?
             pSh->GetLayout()->Lower()->InvalidateSize();
         }
 

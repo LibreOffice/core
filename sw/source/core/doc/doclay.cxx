@@ -2294,22 +2294,45 @@ sal_Bool SwDoc::IsInVerticalText( const SwPosition& rPos, const Point* pPt ) con
     return FRMDIR_VERT_TOP_RIGHT == nDir || FRMDIR_VERT_TOP_LEFT == nDir;
 }
 
-//const SwRootFrm* SwDoc::GetRootFrm() const { return pLayout; }
-//SwRootFrm* SwDoc::GetRootFrm() { return pLayout; }
-//void SwDoc::SetRootFrm( SwRootFrm* pNew ) { pLayout = pNew; } //swmod 071029//swmod 071225
-void SwDoc::SetCurrentViewShell( ViewShell* pNew ) { pCurrentView = pNew; }//swmod 071227
-SwLayouter* SwDoc::GetLayouter() { return pLayouter; }
-const SwLayouter* SwDoc::GetLayouter() const { return pLayouter; }
-void SwDoc::SetLayouter( SwLayouter* pNew ) { pLayouter = pNew; }
-const ViewShell *SwDoc::GetCurrentViewShell() const { return pCurrentView;} //swmod 080219
-ViewShell *SwDoc::GetCurrentViewShell()     { return pCurrentView;} //swmod 080219 It must be able to communicate to a ViewShell.This is going to be removerd later.
-const SwRootFrm *SwDoc::GetCurrentLayout() const {
+void SwDoc::SetCurrentViewShell( ViewShell* pNew )
+{
+    pCurrentView = pNew;
+}
+
+SwLayouter* SwDoc::GetLayouter()
+{
+    return pLayouter;
+}
+
+const SwLayouter* SwDoc::GetLayouter() const
+{
+    return pLayouter;
+}
+
+void SwDoc::SetLayouter( SwLayouter* pNew )
+{
+    pLayouter = pNew;
+}
+
+const ViewShell *SwDoc::GetCurrentViewShell() const
+{
+    return pCurrentView;
+}
+
+ViewShell *SwDoc::GetCurrentViewShell()
+{
+    return pCurrentView;
+}   //swmod 080219 It must be able to communicate to a ViewShell.This is going to be removedd later.
+
+const SwRootFrm *SwDoc::GetCurrentLayout() const
+{
     if(GetCurrentViewShell())
         return GetCurrentViewShell()->GetLayout();
     return 0;
 }
-SwRootFrm *SwDoc::GetCurrentLayout(){
 
+SwRootFrm *SwDoc::GetCurrentLayout()
+{
     if(GetCurrentViewShell())
         return GetCurrentViewShell()->GetLayout();
     return 0;
@@ -2334,4 +2357,3 @@ std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 
     return aAllLayouts;
 }//swmod 070825
-

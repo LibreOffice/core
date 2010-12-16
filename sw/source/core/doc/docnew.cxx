@@ -238,7 +238,6 @@ SwDoc::SwDoc() :
     pGrfFmtCollTbl( new SwGrfFmtColls() ),
     pTOXTypes( new SwTOXTypes() ),
     pDefTOXBases( new SwDefTOXBase_Impl() ),
-    //pLayout( 0 ),                 // Rootframe des spezifischen Layouts.  //swmod 071029
     pCurrentView( 0 ),  //swmod 071225
     pDrawModel( 0 ),
     pUndos( new SwUndos( 0, 20 ) ),
@@ -319,7 +318,6 @@ SwDoc::SwDoc() :
     mbNewDoc =
     mbCopyIsMove =
     mbNoDrawUndoObj =
-    //mbBrowseMode =//swmod 080130
     mbInReading =
     mbInXMLImport =
     mbUpdateTOX =
@@ -527,8 +525,6 @@ SwDoc::~SwDoc()
     mbUndo = FALSE;         // immer das Undo abschalten !!
     // damit die Fussnotenattribute die Fussnotennodes in Frieden lassen.
     mbDtor = TRUE;
-
-    //DELETEZ( pCurrentView );  //swmod 080110//test if i can commit
 
     delete pRedlineTbl;
     delete pUnoCrsrTbl;

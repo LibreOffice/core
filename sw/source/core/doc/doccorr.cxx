@@ -43,8 +43,6 @@
 #include <swundo.hxx>
 #include <hints.hxx>
 
-/*  */
-
 /*
  * MACROS um ueber alle CrsrShells zu iterieren
  */
@@ -441,7 +439,7 @@ SwEditShell* SwDoc::GetEditShell( ViewShell** ppSh ) const
     // Layout und OLE-Shells sollten vorhanden sein!
     if( pCurrentView )
     {
-        register ViewShell *pSh = pCurrentView, *pVSh = pSh;
+        ViewShell *pSh = pCurrentView, *pVSh = pSh;
         if( ppSh )
             *ppSh = pSh;
 
