@@ -1897,7 +1897,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                 bool bFooter
                     = (nI & ( WW8_FOOTER_EVEN | WW8_FOOTER_ODD | WW8_FOOTER_FIRST )) ? true: false;
 
-                SwFrmFmt* pFmt = bUseLeft ? &pPD->GetLeft() : &pPD->GetMaster();
+                SwFrmFmt& rFmt = bUseLeft ? pPD->GetLeft() : pPD->GetMaster();
 
                 SwFrmFmt* pHdFtFmt;
                 if (bFooter)
@@ -1908,7 +1908,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                         pPD->GetMaster().SetFmtAttr(SwFmtFooter(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtFooter(true));
-                    pHdFtFmt = (SwFrmFmt*)pFmt->GetFooter().GetFooterFmt();
+                    pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetFooter().GetFooterFmt());
                 }
                 else
                 {
@@ -1918,7 +1918,7 @@ void SwWW8ImplReader::Read_HdFt(bool bIsTitle, int nSect,
                         pPD->GetMaster().SetFmtAttr(SwFmtHeader(true));
                     if (bUseLeft)
                         pPD->GetLeft().SetFmtAttr(SwFmtHeader(true));
-                    pHdFtFmt = (SwFrmFmt*)pFmt->GetHeader().GetHeaderFmt();
+                    pHdFtFmt = const_cast<SwFrmFmt*>(rFmt.GetHeader().GetHeaderFmt());
                 }
 
                 if (bOk)
