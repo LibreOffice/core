@@ -32,9 +32,14 @@ TARGET=init
 # --- Settings ----------------------------------
 .INCLUDE : settings.mk
 .INCLUDE : target.mk
+.INCLUDE : versionlist.mk
 
-ALLTAR : comment
+ALLTAR : $(INCCOM)/versionlist.hrc
 
-comment:
-    @echo just for sideeffects...
-
+$(INCCOM)/versionlist.hrc : ./inc/version.lst
+    $(COMMAND_ECHO)echo "#define VERSION $(OOOBASEVERSIONMAJOR)" > $@
+    $(COMMAND_ECHO)echo "#define SUBVERSION $(OOOBASEVERSIONMINOR)" >> $@
+    $(COMMAND_ECHO)echo "#define MICROVERSION $(OOOBASEVERSIONMICRO)" >> $@
+    $(COMMAND_ECHO)echo "#define VER_DAY $(OOOBASEVERSIONDAY)" >> $@
+    $(COMMAND_ECHO)echo "#define VER_MONTH $(OOOBASEVERSIONMONTH)" >> $@
+    $(COMMAND_ECHO)echo "#define VER_YEAR $(OOOBASEVERSIONYEAR)" >> $@
