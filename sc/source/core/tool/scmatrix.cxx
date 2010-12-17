@@ -517,8 +517,11 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
                 aVal.pS = maMat.get_string(nR, nC);
             break;
             case mdds::element_empty:
+                // TODO: Check for the flag value to differentiate from empty path.
+                aVal.nType == SC_MATVAL_EMPTY;
+                aVal.fVal = 0.0;
             default:
-                ; // no action is needed for an empty element.
+                ;
         }
     }
     else
