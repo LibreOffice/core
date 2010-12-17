@@ -406,7 +406,7 @@ End
 
 File gid_File_Help_Help_Zip
     Dir = gid_Dir_Help;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_HELPPACK;
     Name = "helpxsl.zip";
 End
 
