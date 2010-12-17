@@ -760,7 +760,7 @@ void SwXMLImport::startDocument( void )
     // SJ: #i49801# locking the modell to disable repaints
     SdrModel* pDrawModel = pDoc->GetDrawModel();
     if ( pDrawModel )
-        pDrawModel->setLock( sal_True );
+        pDrawModel->setLock(true);
 
     if( !GetGraphicResolver().is() )
     {
@@ -962,7 +962,7 @@ void SwXMLImport::endDocument( void )
     {
         SdrModel* pDrawModel = pDoc->GetDrawModel();
         if ( pDrawModel )
-            pDrawModel->setLock( sal_False );
+            pDrawModel->setLock(false);
     }
 
     // #i90243#
