@@ -719,8 +719,12 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplPeekMessage( &aMsg, 0, 0, 0, PM_REMOVE ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
+
             bOneEvent = bWasMsg = true;
         }
         else
@@ -731,8 +735,11 @@ void ImplSalYield( BOOL bWait, BOOL bHandleAllCurrentEvents )
     {
         if ( ImplGetMessage( &aMsg, 0, 0, 0 ) )
         {
-            TranslateMessage( &aMsg );
-            ImplSalDispatchMessage( &aMsg );
+            if ( !ImplInterceptChildWindowKeyDown( aMsg ) )
+            {
+                TranslateMessage( &aMsg );
+                ImplSalDispatchMessage( &aMsg );
+            }
         }
     }
 }
