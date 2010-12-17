@@ -234,9 +234,9 @@ namespace
                 UNO_QUERY_THROW
             );
             if ( i_add )
-                xDataModel->addDataListener( i_listener.get() );
+                xDataModel->addGridDataListener( i_listener.get() );
             else
-                xDataModel->removeDataListener( i_listener.get() );
+                xDataModel->removeGridDataListener( i_listener.get() );
         }
         catch( const Exception& )
         {

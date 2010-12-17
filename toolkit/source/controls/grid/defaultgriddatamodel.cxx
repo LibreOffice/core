@@ -225,14 +225,14 @@ void SAL_CALL DefaultGridDataModel::removeRow(::sal_Int32 index) throw (::com::s
 
 //---------------------------------------------------------------------
 
-void SAL_CALL DefaultGridDataModel::addDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
+void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
 {
     BrdcstHelper.addListener( XGridDataListener::static_type(), xListener );
 }
 
 //---------------------------------------------------------------------
 
-void SAL_CALL DefaultGridDataModel::removeDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
+void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException)
 {
     BrdcstHelper.removeListener( XGridDataListener::static_type(), xListener );
 }

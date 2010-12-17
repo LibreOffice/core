@@ -68,8 +68,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< Any > > SAL_CALL getData() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addRow(const ::rtl::OUString & headername, const ::com::sun::star::uno::Sequence< Any > & data) throw (::com::sun::star::uno::RuntimeException);
        virtual void SAL_CALL removeRow(::sal_Int32 index) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
-    virtual void SAL_CALL removeDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
+    virtual void SAL_CALL addGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
+    virtual void SAL_CALL removeGridDataListener( const Reference< XGridDataListener >& xListener ) throw (RuntimeException);
     virtual void SAL_CALL removeAll() throw (RuntimeException);
     virtual void SAL_CALL setRowHeaderWidth(sal_Int32 _value) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getRowHeaderWidth() throw (::com::sun::star::uno::RuntimeException);
