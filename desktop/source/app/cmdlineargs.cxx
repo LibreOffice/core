@@ -536,7 +536,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
        the only platform dependent parameter. Should more appear
        we should find a better solution
     */
-    else if ( aArg.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
+    else if ( aArg.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("-psn")) )
     {
         SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
         return sal_True;
