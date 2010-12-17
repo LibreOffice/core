@@ -342,8 +342,17 @@ public:
     void CompareLessEqual();
     void CompareGreaterEqual();
 
-    double And();       // logical AND of all matrix values, or NAN
-    double Or();        // logical OR of all matrix values, or NAN
+    double And() const;       // logical AND of all matrix values, or NAN
+    double Or() const;        // logical OR of all matrix values, or NAN
+
+    double Sum() const;
+    double SumSquare() const;
+    double Product() const;
+    double Average(bool bTextAsZero) const;
+    double Min() const;
+    double Max() const;
+    size_t Count(bool bCountStrings) const;
+
 
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.

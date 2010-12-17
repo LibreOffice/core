@@ -208,8 +208,16 @@ public:
     void CompareGreater();
     void CompareLessEqual();
     void CompareGreaterEqual();
-    double And();
-    double Or();
+    double And() const;
+    double Or() const;
+
+    double Sum() const;
+    double SumSquare() const;
+    double Product() const;
+    double Average(bool bTextAsZero) const;
+    double Min() const;
+    double Max() const;
+    size_t Count(bool bCountStrings) const;
 
 private:
     void CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const;
@@ -722,18 +730,53 @@ bool EvalMatrix(const MatrixImplType& rMat)
 
 }
 
-double ScMatrixImpl::And()
+double ScMatrixImpl::And() const
 {
     // All elements must be of value type.
     // True only if all the elements have non-zero values.
     return EvalMatrix<AndEvaluator>(maMat);
 }
 
-double ScMatrixImpl::Or()
+double ScMatrixImpl::Or() const
 {
     // All elements must be of value type.
     // True if at least one element has a non-zero value.
     return EvalMatrix<OrEvaluator>(maMat);
+}
+
+double ScMatrixImpl::Sum() const
+{
+    return 0.0;
+}
+
+double ScMatrixImpl::SumSquare() const
+{
+    return 0.0;
+}
+
+double ScMatrixImpl::Product() const
+{
+    return 0.0;
+}
+
+double ScMatrixImpl::Average(bool bTextAsZero) const
+{
+    return 0.0;
+}
+
+double ScMatrixImpl::Min() const
+{
+    return 0.0;
+}
+
+double ScMatrixImpl::Max() const
+{
+    return 0.0;
+}
+
+size_t ScMatrixImpl::Count(bool bCountStrings) const
+{
+    return 0;
 }
 
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
@@ -998,14 +1041,49 @@ void ScMatrix::CompareGreaterEqual()
     pImpl->CompareGreaterEqual();
 }
 
-double ScMatrix::And()
+double ScMatrix::And() const
 {
     return pImpl->And();
 }
 
-double ScMatrix::Or()
+double ScMatrix::Or() const
 {
     return pImpl->Or();
+}
+
+double ScMatrix::Sum() const
+{
+    return pImpl->Sum();
+}
+
+double ScMatrix::SumSquare() const
+{
+    return pImpl->SumSquare();
+}
+
+double ScMatrix::Product() const
+{
+    return pImpl->Product();
+}
+
+double ScMatrix::Average(bool bTextAsZero) const
+{
+    return pImpl->Average(bTextAsZero);
+}
+
+double ScMatrix::Min() const
+{
+    return pImpl->Min();
+}
+
+double ScMatrix::Max() const
+{
+    return pImpl->Max();
+}
+
+size_t ScMatrix::Count(bool bCountStrings) const
+{
+    return pImpl->Count(bCountStrings);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
