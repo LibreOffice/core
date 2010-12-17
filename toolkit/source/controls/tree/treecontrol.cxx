@@ -141,8 +141,9 @@ Reference< XPropertySetInfo > UnoTreeModel::getPropertySetInfo(  ) throw(Runtime
 //  ----------------------------------------------------
 //  class UnoTreeControl
 //  ----------------------------------------------------
-UnoTreeControl::UnoTreeControl()
-: maSelectionListeners( *this )
+UnoTreeControl::UnoTreeControl( const Reference< XMultiServiceFactory >& i_factory )
+: UnoTreeControl_Base( i_factory )
+, maSelectionListeners( *this )
 , maTreeExpansionListeners( *this )
 , maTreeEditListeners( *this )
 {
@@ -453,9 +454,9 @@ void UnoTreeControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolk
 
 }
 
-Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& )
+Reference< XInterface > SAL_CALL TreeControl_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
 {
-    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl );
+    return Reference < XInterface >( ( ::cppu::OWeakObject* ) new ::toolkit::UnoTreeControl( i_factory ) );
 }
 
 Reference< XInterface > SAL_CALL TreeControlModel_CreateInstance( const Reference< XMultiServiceFactory >& i_factory )
