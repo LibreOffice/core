@@ -633,7 +633,7 @@ void Fraction::ReduceInaccurate( unsigned nSignificantBits )
 |*
 *************************************************************************/
 
-BOOL operator == ( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
         return FALSE;
@@ -659,7 +659,7 @@ BOOL operator == ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-BOOL operator < ( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
         return FALSE;
@@ -689,7 +689,7 @@ BOOL operator < ( const Fraction& rVal1, const Fraction& rVal2 )
 // und (c*b) zu vergleichen. Das Ergebnis dieses Vergleichs wird
 // zurueckgegeben.
 
-BOOL operator > ( const Fraction& rVal1, const Fraction& rVal2 )
+bool operator > ( const Fraction& rVal1, const Fraction& rVal2 )
 {
     if ( !rVal1.IsValid() || !rVal2.IsValid() )
         return FALSE;
