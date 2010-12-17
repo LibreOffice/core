@@ -58,6 +58,7 @@ namespace toolkit
     using ::com::sun::star::container::XContainerListener;
     using ::com::sun::star::container::ContainerEvent;
     using ::com::sun::star::uno::Exception;
+    using ::com::sun::star::lang::IndexOutOfBoundsException;
     /** === end UNO using === **/
 
     //==================================================================================================================
@@ -104,16 +105,14 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (RuntimeException)
+    Reference< XGridColumn > SAL_CALL DefaultGridColumnModel::getColumn(::sal_Int32 index) throw (IndexOutOfBoundsException, RuntimeException)
     {
         ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
+
         if ( index >=0 && index < ((sal_Int32)m_aColumns.size()))
-        {
             return m_aColumns[index];
-        }
-        else
-            // TODO: exception
-            return Reference< XGridColumn >();
+
+        throw IndexOutOfBoundsException();
     }
 
     //------------------------------------------------------------------------------------------------------------------
