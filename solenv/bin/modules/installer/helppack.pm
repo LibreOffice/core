@@ -50,39 +50,40 @@ sub select_help_items
     {
         my $oneitem = ${$itemsref}[$i];
 
-        my $ismultilingual = $oneitem->{'ismultilingual'};
+        my $styles = "";
+        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
 
-        if (!($ismultilingual))
+        if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
         {
             # Files with style "HELPPACK" and "FORCEHELPPACK" also have to be included into the help pack.
             # Files with style "HELPPACK" are only included into help packs.
             # Files with style "FORCEHELPPACK" are included into help packs and non help packs. They are
             # forced, because otherwise they not not be included into helppacks.
 
-            my $styles = "";
-            if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
+            my $ismultilingual = $oneitem->{'ismultilingual'};
 
-            if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ )) { push(@itemsarray, $oneitem); }
+            if ($ismultilingual)
+            {
+                my $specificlanguage = "";
+                if ( $oneitem->{'specificlanguage'} ) { $specificlanguage = $oneitem->{'specificlanguage'}; }
 
-            next;   # single language files are not included into help pack
-        }
+            for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )   # iterating over all languages
+                {
+                    my $onelanguage = ${$languagesarrayref}[$j];
+                    my $locallang = $onelanguage;
+                    $locallang =~ s/-/_/;
 
-    if (0) {
-        my $specificlanguage = "";
-        if ( $oneitem->{'specificlanguage'} ) { $specificlanguage = $oneitem->{'specificlanguage'}; }
-
-        for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )   # iterating over all languages
-        {
-            my $onelanguage = ${$languagesarrayref}[$j];
-            my $locallang = $onelanguage;
-            $locallang =~ s/-/_/;
-
-            if ( $specificlanguage eq $onelanguage )
+                    if ( $specificlanguage eq $onelanguage )
+                    {
+                    push(@itemsarray, $oneitem);
+                    }
+                }
+            }
+            else
             {
                 push(@itemsarray, $oneitem);
             }
         }
-    }
     }
 
     return \@itemsarray;
