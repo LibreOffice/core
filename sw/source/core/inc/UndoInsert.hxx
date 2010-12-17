@@ -136,7 +136,7 @@ public:
     void SetEnd( const SwPaM& rPam );
 
 private:
-    struct Impl;
+    class Impl;
     ::std::auto_ptr<Impl> m_pImpl;
 };
 

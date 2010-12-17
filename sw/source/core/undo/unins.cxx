@@ -493,6 +493,9 @@ class SwUndoReplace::Impl
 
 public:
     Impl(SwPaM const& rPam, ::rtl::OUString const& rIns, bool const bRegExp);
+    virtual ~Impl()
+    {
+    }
 
     virtual void UndoImpl( ::sw::UndoRedoContext & );
     virtual void RedoImpl( ::sw::UndoRedoContext & );
@@ -663,10 +666,10 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
         pDoc->SetAutoCorrExceptWord( 0 );
     }
 
-    SwIndex aIdx( pNd, m_nSttCnt );
+    SwIndex aIdx( pNd, USHORT( m_nSttCnt ) );
     if( m_nSttNd == m_nEndNd )
     {
-        pNd->EraseText( aIdx, m_sIns.getLength() );
+        pNd->EraseText( aIdx, USHORT( m_sIns.getLength() ) );
     }
     else
     {
