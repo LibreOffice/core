@@ -1368,6 +1368,7 @@ COMPONENTPREFIX_BASIS_PYTHON = vnd.openoffice.pymodule:
 COMPONENTPREFIX_INBUILD_NATIVE = \
     vnd.sun.star.expand:$$OOO_INBUILD_SHAREDLIB_DIR/
 COMPONENTPREFIX_INBUILD_JAVA = vnd.sun.star.expand:$$OOO_INBUILD_JAR_DIR/
+COMPONENTPREFIX_EXTENSION = ./
 
 # workaround for strange dmake bug:
 # if the previous block was a rule or a target, "\#" isn't recognized
