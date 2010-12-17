@@ -5452,6 +5452,12 @@ if test "$with_system_mesa_headers" = "no"; then
 else
    AC_MSG_RESULT([external])
    SYSTEM_MESA_HEADERS=YES
+   AC_LANG_PUSH(C)
+   AC_CHECK_HEADER(GL/glxext.h, [],
+      [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
+   AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
+   AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
+   AC_LANG_POP(C)
 fi
 AC_SUBST(SYSTEM_MESA_HEADERS)
 
