@@ -289,7 +289,7 @@ void ScDocShell::LockDocument_Impl(USHORT nNew)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(TRUE);
+            pDrawLayer->setLock(true);
     }
     nDocumentLock = nNew;
 }
@@ -301,7 +301,7 @@ void ScDocShell::UnlockDocument_Impl(USHORT nNew)
     {
         ScDrawLayer* pDrawLayer = aDocument.GetDrawLayer();
         if (pDrawLayer)
-            pDrawLayer->setLock(FALSE);
+            pDrawLayer->setLock(false);
     }
 }
 
