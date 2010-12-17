@@ -43,7 +43,7 @@
 #include <math.h>
 
 #define MDDS_HASH_CONTAINER_STLPORT 1
-#include <mdds/quad_type_matrix.hpp>
+#include <mdds/mixed_type_matrix.hpp>
 
 using ::std::pair;
 using ::mdds::matrix_element_t;
@@ -52,7 +52,7 @@ using ::mdds::matrix_element_t;
 
 namespace {
 
-typedef ::mdds::quad_type_matrix<String, sal_uInt8> MatrixImplType;
+typedef ::mdds::mixed_type_matrix<String, sal_uInt8> MatrixImplType;
 
 struct ElemEqual : public ::std::unary_function<double, bool>
 {
