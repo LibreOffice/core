@@ -244,8 +244,8 @@ public:
     //     - Linie behaelt beim Draggen ihren Winkel bei und wird nur    (ni)
     //       verlaengert bzw. verkuerzt.
     // Defaultmaessig ist Ortho ausgeschaltet. Persistent.
-    void SetOrtho(BOOL bOn) { bOrtho=bOn; } // unvollstaendig
-    BOOL IsOrtho() const { return bOrtho; }
+    void SetOrtho(bool bOn) { bOrtho=bOn; } // unvollstaendig
+    bool IsOrtho() const { return bOrtho; }
 
     // BigOrtho hat nur Relevanz wenn Ortho eingeschaltet ist.
     // Beispiel: Ein Rechteck wird mit eingeschaltetem Ortho (also ein Quadrat)
@@ -257,8 +257,8 @@ public:
     //   tetem BigOrtho bekaeme man dagegen ein Quadrat der Kantenlaenge 80.
     // Gleiches gilt auch fuer Resize.
     // Defaultmaessig ist BigOrtho eingeschaltet. Persistent.
-    void SetBigOrtho(BOOL bOn) { bBigOrtho=bOn; }
-    BOOL IsBigOrtho() const { return bBigOrtho; }
+    void SetBigOrtho(bool bOn) { bBigOrtho=bOn; }
+    bool IsBigOrtho() const { return bBigOrtho; }
 
     // bei MoveOnlyDragging=TRUE wird bei Resize/Rotate/Shear/Mirror/Crook
     // nur das Zentrum der markierten Objekte transformiert. Groesse, Form
