@@ -32,7 +32,11 @@ Module gid_Module_Helppack_Helproot
     XPDParentID = "root";
     Sortkey = "300";
     MOD_NAME_DESC(MODULE_ROOT_HELPPACK);
+#ifdef WITH_HELPPACK_INTEGRATION
     Styles = (SHOW_MULTILINGUAL_ONLY);
+#else
+    Styles = (HIDDEN_ROOT);
+#endif
 End
 
 #include "allhelpmodules.inc"
