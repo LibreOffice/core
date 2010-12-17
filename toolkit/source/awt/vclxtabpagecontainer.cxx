@@ -177,7 +177,7 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
             case VCLEVENT_TABPAGE_ACTIVATE:
             {
 //                allocateArea( maAllocation );
-                sal_Int32 page = (sal_Int32) _rVclWindowEvent.GetData();
+                ULONG page = (ULONG)_rVclWindowEvent.GetData();
                 awt::tab::TabPageActivatedEvent aEvent(NULL,page);
                 m_aTabPageListeners.tabPageActivated(aEvent);
                 break;
