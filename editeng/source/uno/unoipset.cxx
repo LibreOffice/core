@@ -33,7 +33,6 @@
 #include <tools/list.hxx>
 
 #include <hash_map>
-#include <vector>
 #include <svl/itemprop.hxx>
 
 #include <editeng/unoipset.hxx>
@@ -44,6 +43,8 @@
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
+
+using ::std::vector;
 
 //----------------------------------------------------------------------
 
@@ -60,13 +61,11 @@ struct SvxIDPropertyCombine
     uno::Any    aAny;
 };
 
-DECLARE_LIST( SvxIDPropertyCombineList, SvxIDPropertyCombine * )
 
 SvxItemPropertySet::SvxItemPropertySet( const SfxItemPropertyMapEntry* pMap, SfxItemPool& rItemPool, sal_Bool bConvertTwips )
 :   m_aPropertyMap( pMap ),
     _pMap(pMap), mbConvertTwips(bConvertTwips), mrItemPool( rItemPool )
 {
-    pCombiList = NULL;
 }
 
 //----------------------------------------------------------------------
@@ -78,16 +77,11 @@ SvxItemPropertySet::~SvxItemPropertySet()
 //----------------------------------------------------------------------
 uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 {
-    if(pCombiList && pCombiList->Count())
+    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
     {
-        SvxIDPropertyCombine* pActual = pCombiList->First();
-        while(pActual)
-        {
-            if(pActual->nWID == nWID)
-                return &pActual->aAny;
-            pActual = pCombiList->Next();
-
-        }
+        SvxIDPropertyCombine* pActual = aCombineList[ i ];
+        if( pActual->nWID == nWID )
+            return &pActual->aAny;
     }
     return NULL;
 }
@@ -95,22 +89,19 @@ uno::Any* SvxItemPropertySet::GetUsrAnyForID(sal_uInt16 nWID) const
 //----------------------------------------------------------------------
 void SvxItemPropertySet::AddUsrAnyForID(const uno::Any& rAny, sal_uInt16 nWID)
 {
-    if(!pCombiList)
-        pCombiList = new SvxIDPropertyCombineList();
-
     SvxIDPropertyCombine* pNew = new SvxIDPropertyCombine;
     pNew->nWID = nWID;
     pNew->aAny = rAny;
-    pCombiList->Insert(pNew);
+    aCombineList.push_back( pNew );
 }
 
 //----------------------------------------------------------------------
 
 void SvxItemPropertySet::ClearAllUsrAny()
 {
-    if(pCombiList)
-        delete pCombiList;
-    pCombiList = NULL;
+    for ( size_t i = 0, n = aCombineList.size(); i < n; ++i )
+        delete aCombineList[ i ];
+    aCombineList.clear();
 }
 
 //----------------------------------------------------------------------
