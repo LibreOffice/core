@@ -2034,7 +2034,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
                                 const SwPageFrm  *pPage )
 {
     //wird sind hier evtl. nur angekommen, weil der Cntnt DrawObjekte haelt.
-    const BOOL bDrawObjsOnly = pCntnt->IsValid() && !pCntnt->IsCompletePaint() &&
+    const bool bDrawObjsOnly = pCntnt->IsValid() && !pCntnt->IsCompletePaint() &&
                          !pCntnt->IsRetouche();
     SWRECTFN( pCntnt )
     if ( !bDrawObjsOnly && IsPaint() )
