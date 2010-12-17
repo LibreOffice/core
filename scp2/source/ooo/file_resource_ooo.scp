@@ -89,7 +89,7 @@ STD_RES_FILE( gid_File_Res_Spa, spa )
 STD_RES_FILE( gid_File_Res_Stt, stt )
 STD_RES_FILE( gid_File_Res_Sb, sb )
 
-STD_RES_FILE( gid_File_Res_Svs, svs )
+STD_RES_FILE( gid_File_Res_Svl, svl )
 
 STD_RES_FILE( gid_File_Res_Svt, svt )
 
