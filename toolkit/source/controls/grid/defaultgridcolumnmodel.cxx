@@ -36,6 +36,7 @@
 
 #include <comphelper/sequence.hxx>
 #include <toolkit/helper/servicenames.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <tools/diagnose_ex.h>
 
 //......................................................................................................................
@@ -156,6 +157,11 @@ namespace toolkit
             for ( sal_Int32 i=0; i<rowElements; ++i )
             {
                 const Reference< XGridColumn > xColumn( m_aContext.createComponent( "com.sun.star.awt.grid.GridColumn" ), UNO_QUERY_THROW );
+                ::rtl::OUStringBuffer colTitle;
+                colTitle.appendAscii( "Column " );
+                colTitle.append( i );
+                xColumn->setTitle( colTitle.makeStringAndClear() );
+                xColumn->setPreferredWidth( 80 /* APPFONT */ );
 
                 ContainerEvent aEvent;
                 aEvent.Source = *this;

@@ -127,9 +127,9 @@ Any UnoGridModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
         case BASEPROPERTY_GRID_SELECTIONMODE:
             return uno::makeAny( SelectionType(1) );
         case BASEPROPERTY_GRID_SHOWROWHEADER:
-            return uno::makeAny( (sal_Bool)sal_False );
+            return uno::makeAny( (sal_Bool)sal_True );
         case BASEPROPERTY_GRID_SHOWCOLUMNHEADER:
-            return uno::makeAny( (sal_Bool)sal_False );
+            return uno::makeAny( (sal_Bool)sal_True );
         case BASEPROPERTY_GRID_DATAMODEL:
             return uno::makeAny( Reference<XGridDataModel> ());
         case BASEPROPERTY_GRID_COLUMNMODEL:

@@ -28,15 +28,19 @@
 #define SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 
 #include "svtools/svtdllapi.h"
-#include <svtools/table/tabletypes.hxx>
-#include <svtools/table/tablerenderer.hxx>
-#include <svtools/table/tableinputhandler.hxx>
-#include <rtl/ref.hxx>
-#include <sal/types.h>
+#include "svtools/table/tabletypes.hxx"
+#include "svtools/table/tablerenderer.hxx"
+#include "svtools/table/tableinputhandler.hxx"
+
 #include <com/sun/star/util/Color.hpp>
-#include <boost/shared_ptr.hpp>
 #include <com/sun/star/style/VerticalAlignment.hpp>
 #include <com/sun/star/style/HorizontalAlignment.hpp>
+
+#include <rtl/ref.hxx>
+#include <sal/types.h>
+
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
 
 //........................................................................
 namespace svt { namespace table
@@ -81,10 +85,9 @@ namespace svt { namespace table
     /** declares an interface to be implemented by components interested in
         changes in an ->ITableModel
     */
-    class SAL_NO_VTABLE ITableModelListener
+    class SAL_NO_VTABLE ITableModelListener : public ::boost::enable_shared_from_this< ITableModelListener >
     {
     public:
-        //virtual void  onTableModelChanged(PTableModel pTableModel) = 0;
         /** notifies the listener that one or more rows have been inserted into
             the table
 
@@ -122,9 +125,9 @@ namespace svt { namespace table
             the table
 
             @param first
-                the old index of the first removed row
+                the old index of the first removed column
             @param last
-                the old index of the last removed row. Must not be smaller
+                the old index of the last removed column. Must not be smaller
                 than ->first
         */
         virtual void    columnsRemoved( ColPos first, ColPos last ) = 0;
@@ -355,20 +358,8 @@ namespace svt { namespace table
 
             @return
                 the model of the column in question. Must not be <NULL/>
-
-            @see getColumnModelByID
         */
         virtual PColumnModel    getColumnModel( ColPos column ) = 0;
-
-        /** finds a column model by ID
-
-            @param id
-                the id of the column which is to be looked up
-            @return
-                the column model with the given ID, or <NULL/> if there is
-                no such column
-        */
-        virtual PColumnModel    getColumnModelByID( ColumnID id ) = 0;
 
         /** returns a renderer which is able to paint the table represented
             by this table model
@@ -423,22 +414,30 @@ namespace svt { namespace table
         */
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const = 0;
 
-    virtual bool hasVerticalScrollbar() = 0;
-    virtual bool hasHorizontalScrollbar() = 0;
+        /** adds a listener to be notified of changes in the table model
+        */
+        virtual void addTableModelListener( const PTableModelListener& i_listener ) = 0;
 
-    /** gets the content of the cells
-    */
-    virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
+        /** remove a listener to be notified of changes in the table model
+        */
+        virtual void removeTableModelListener( const PTableModelListener& i_listener ) = 0;
 
-    /** gets title of header rows
-    */
-    virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getLineColor() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getTextColor() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
-    SVT_DLLPRIVATE virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
+        virtual bool hasVerticalScrollbar() = 0;
+        virtual bool hasHorizontalScrollbar() = 0;
+
+        /** gets the content of the cells
+        */
+        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent() = 0;
+
+        /** gets title of header rows
+        */
+        virtual std::vector<rtl::OUString>&   getRowHeaderName() = 0;
+        virtual ::com::sun::star::util::Color getLineColor() = 0;
+        virtual ::com::sun::star::util::Color getHeaderBackgroundColor() = 0;
+        virtual ::com::sun::star::util::Color getTextColor() = 0;
+        virtual ::com::sun::star::util::Color getOddRowBackgroundColor() = 0;
+        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor() = 0;
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign() = 0;
 
         /// destroys the table model instance
         virtual ~ITableModel() { }

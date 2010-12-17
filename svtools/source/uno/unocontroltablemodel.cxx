@@ -38,6 +38,7 @@
 #include <toolkit/helper/property.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/awt/grid/XGridColumn.hpp>
+#include <tools/diagnose_ex.h>
 
 using ::rtl::OUString;
 using namespace ::svt::table;
@@ -45,18 +46,31 @@ using namespace ::com::sun::star::uno;
 
 
     //--------------------------------------------------------------------
-    UnoControlTableColumn::UnoControlTableColumn(Reference<XGridColumn> m_xGridColumn)
+    UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
         :m_nID( 0 )
         ,m_sName()
         ,m_bIsResizable( true )
         ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )
         ,m_nMaxWidth( 0 )
-    ,m_nPrefWidth ( 0 )
-    ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
+        ,m_nPrefWidth ( 0 )
+        ,m_eHorizontalAlign( com::sun::star::style::HorizontalAlignment_LEFT )
     {
-    m_sName = m_xGridColumn->getTitle();
+        ENSURE_OR_THROW( i_gridColumn.is(), "illegal column" );
+        m_sName = i_gridColumn->getTitle();
+
+        // don't do this here. The attribute getters at the XGridColumn implementation do some notifications,
+        // which is absolutely weird. Sadly, this also means that we can't call the getters while we're
+        // being constructed, and not yet inserted into the column model.
+//        m_eHorizontalAlign = i_gridColumn->getHorizontalAlign();
+//        m_nWidth = i_gridColumn->getColumnWidth();
+//        m_bIsResizable = i_gridColumn->getResizeable();
+//
+//        m_nPrefWidth = i_gridColumn->getPreferredWidth();
+//        m_nMaxWidth = i_gridColumn->getMaxWidth();
+//        m_nMinWidth = i_gridColumn->getMinWidth();
     }
+
     //--------------------------------------------------------------------
     UnoControlTableColumn::UnoControlTableColumn()
         :m_nID( 0 )
@@ -65,8 +79,8 @@ using namespace ::com::sun::star::uno;
         ,m_nWidth( 4  )
         ,m_nMinWidth( 0 )
         ,m_nMaxWidth( 0 )
-    ,m_nPrefWidth ( 0 )
-    ,m_xHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
+        ,m_nPrefWidth ( 0 )
+        ,m_eHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
     {
     }
 
@@ -155,60 +169,62 @@ using namespace ::com::sun::star::uno;
     //--------------------------------------------------------------------
     ::com::sun::star::style::HorizontalAlignment UnoControlTableColumn::getHorizontalAlign()
     {
-        return m_xHorizontalAlign;
+        return m_eHorizontalAlign;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setHorizontalAlign( com::sun::star::style::HorizontalAlignment _align )
     {
-        m_xHorizontalAlign = _align;
+        m_eHorizontalAlign = _align;
     }
 
     //====================================================================
     //= DefaultTableModel_Impl
     //====================================================================
+    typedef ::std::vector< PTableModelListener >    ModellListeners;
     struct UnoControlTableModel_Impl
     {
-        ::std::vector< PColumnModel >  aColumns;
-        TableSize                       nRowCount;
-        bool                            bHasColumnHeaders;
-        bool                            bHasRowHeaders;
-    bool                            bVScroll;
-    bool                            bHScroll;
-        PTableRenderer                  pRenderer;
-        PTableInputHandler              pInputHandler;
-        TableMetrics                    nRowHeight;
-        TableMetrics                    nColumnHeaderHeight;
-        TableMetrics                    nRowHeaderWidth;
-    std::vector<rtl::OUString>      aRowHeadersTitle;
-    std::vector<std::vector< Any > >    aCellContent;
-    ::com::sun::star::util::Color m_xLineColor;
-    ::com::sun::star::util::Color m_xHeaderColor;
-    ::com::sun::star::util::Color m_xTextColor;
-    ::com::sun::star::util::Color m_xRowColor1;
-    ::com::sun::star::util::Color m_xRowColor2;
-    ::com::sun::star::style::VerticalAlignment m_xVerticalAlign;
+        ::std::vector< PColumnModel >       aColumns;
+        TableSize                           nRowCount;
+        bool                                bHasColumnHeaders;
+        bool                                bHasRowHeaders;
+        bool                                bVScroll;
+        bool                                bHScroll;
+        PTableRenderer                      pRenderer;
+        PTableInputHandler                  pInputHandler;
+        TableMetrics                        nRowHeight;
+        TableMetrics                        nColumnHeaderHeight;
+        TableMetrics                        nRowHeaderWidth;
+        ::std::vector<rtl::OUString >       aRowHeadersTitle;
+        ::std::vector<std::vector< Any > >  aCellContent;
+        ::com::sun::star::util::Color       m_nLineColor;
+        ::com::sun::star::util::Color       m_nHeaderColor;
+        ::com::sun::star::util::Color       m_nTextColor;
+        ::com::sun::star::util::Color       m_nRowColor1;
+        ::com::sun::star::util::Color       m_nRowColor2;
+        ::com::sun::star::style::VerticalAlignment  m_eVerticalAlign;
+        ModellListeners                     m_aListeners;
 
         UnoControlTableModel_Impl()
-            :aColumns       ( )
-        ,nRowCount          ( 0         )
-            ,bHasColumnHeaders  ( false     )
-            ,bHasRowHeaders     ( false     )
-        ,bVScroll       ( false     )
-            ,bHScroll       ( false     )
+            :aColumns           ( )
+            ,nRowCount          ( 0         )
+            ,bHasColumnHeaders  ( true      )
+            ,bHasRowHeaders     ( true      )
+            ,bVScroll           ( false     )
+            ,bHScroll           ( false     )
             ,pRenderer          (           )
             ,pInputHandler      (           )
-            ,nRowHeight         ( 0 )
-            ,nColumnHeaderHeight( 0 )
+            ,nRowHeight         ( 10 )
+            ,nColumnHeaderHeight( 10 )
             ,nRowHeaderWidth    ( 10 )
-        ,aRowHeadersTitle   ( )
-        ,aCellContent   ( )
-        ,m_xLineColor   ( 0xFFFFFF )
-        ,m_xHeaderColor ( 0xFFFFFF )
-        ,m_xTextColor   ( 0 )//black as default
-        ,m_xRowColor1   ( 0xFFFFFF )
-        ,m_xRowColor2   ( 0xFFFFFF )
-        ,m_xVerticalAlign   (com::sun::star::style::VerticalAlignment(0))
+            ,aRowHeadersTitle   ( )
+            ,aCellContent       ( )
+            ,m_nLineColor       ( 0xFFFFFF )
+            ,m_nHeaderColor     ( 0xFFFFFF )
+            ,m_nTextColor       ( 0 )//black as default
+            ,m_nRowColor1       ( 0xFFFFFF )
+            ,m_nRowColor2       ( 0xFFFFFF )
+            ,m_eVerticalAlign   ( com::sun::star::style::VerticalAlignment_TOP )
         {
         }
     };
@@ -220,8 +236,8 @@ using namespace ::com::sun::star::uno;
     UnoControlTableModel::UnoControlTableModel()
         :m_pImpl( new UnoControlTableModel_Impl )
     {
-        m_pImpl->bHasColumnHeaders = false;
-        m_pImpl->bHasRowHeaders = false;
+        m_pImpl->bHasColumnHeaders = true;
+        m_pImpl->bHasRowHeaders = true;
         m_pImpl->pRenderer.reset( new GridTableRenderer( *this ) );
         m_pImpl->pInputHandler.reset( new DefaultInputHandler );
     }
@@ -285,41 +301,50 @@ using namespace ::com::sun::star::uno;
     }
 
     //--------------------------------------------------------------------
-    void UnoControlTableModel::addTableModelListener( const PTableModelListener& listener )
-    {
-        (void) listener;
-        // TODO
-        DBG_ERROR( "DefaultTableModel::addTableModelListener: not yet implemented!" );
-    }
-
-    //--------------------------------------------------------------------
-    void UnoControlTableModel::removeTableModelListener( const PTableModelListener& listener )
-    {
-        (void)listener;
-        // TODO
-        DBG_ERROR( "DefaultTableModel::removeTableModelListener: not yet implemented!" );
-    }
-
-    //--------------------------------------------------------------------
     PColumnModel UnoControlTableModel::getColumnModel( ColPos column )
     {
-        DBG_ASSERT( ( column >= 0 ) && ( column < getColumnCount() ),
-            "DefaultTableModel::getColumnModel: invalid index!" );
+        ENSURE_OR_RETURN( ( column >= 0 ) && ( column < getColumnCount() ),
+            "DefaultTableModel::getColumnModel: invalid index!", PColumnModel() );
         return m_pImpl->aColumns[ column ];
     }
 
     //--------------------------------------------------------------------
-    std::vector<PColumnModel>& UnoControlTableModel::getColumnModel()
+    void UnoControlTableModel::appendColumn( const PColumnModel& i_column )
     {
-        return m_pImpl->aColumns;
+        ENSURE_OR_RETURN_VOID( !!i_column, "illegal column" );
+
+        const ColPos nInsertPosition = m_pImpl->aColumns.size();
+        m_pImpl->aColumns.push_back( i_column );
+
+        // notify listeners
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->columnsInserted( nInsertPosition, nInsertPosition );
+        }
     }
+
     //--------------------------------------------------------------------
-    PColumnModel UnoControlTableModel::getColumnModelByID( ColumnID id )
+    void UnoControlTableModel::removeAllColumns()
     {
-        (void)id;
-        // TODO
-        DBG_ERROR( "DefaultTableModel::getColumnModelByID: not yet implemented!" );
-        return PColumnModel();
+        if ( m_pImpl->aColumns.empty() )
+            return;
+
+        const ColPos nLastIndex = m_pImpl->aColumns.size() - 1;
+        m_pImpl->aColumns.clear();
+
+        // notify listeners
+        ModellListeners aListeners( m_pImpl->m_aListeners );
+        for (   ModellListeners::const_iterator loop = aListeners.begin();
+                loop != aListeners.end();
+                ++loop
+            )
+        {
+            (*loop)->columnsRemoved( 0, nLastIndex );
+        }
     }
 
     //--------------------------------------------------------------------
@@ -403,6 +428,31 @@ using namespace ::com::sun::star::uno;
         else
             return ScrollbarShowAlways;
     }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::addTableModelListener( const PTableModelListener& i_listener )
+    {
+        ENSURE_OR_RETURN_VOID( !!i_listener, "illegal NULL listener" );
+        m_pImpl->m_aListeners.push_back( i_listener );
+    }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::removeTableModelListener( const PTableModelListener& i_listener )
+    {
+        for (   ModellListeners::iterator lookup = m_pImpl->m_aListeners.begin();
+                lookup != m_pImpl->m_aListeners.end();
+                ++lookup
+            )
+        {
+            if ( *lookup == i_listener )
+            {
+                m_pImpl->m_aListeners.erase( lookup );
+                return;
+            }
+        }
+        OSL_ENSURE( false, "UnoControlTableModel::removeTableModelListener: listener is not registered - sure you're doing the right thing here?" );
+    }
+
     //--------------------------------------------------------------------
     void UnoControlTableModel::setVerticalScrollbarVisibility(bool _bVScroll) const
     {
@@ -447,67 +497,67 @@ using namespace ::com::sun::star::uno;
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getLineColor()
     {
-        return  m_pImpl->m_xLineColor;
+        return  m_pImpl->m_nLineColor;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setLineColor( ::com::sun::star::util::Color _rColor )
     {
-         m_pImpl->m_xLineColor = _rColor;
+         m_pImpl->m_nLineColor = _rColor;
     }
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getHeaderBackgroundColor()
     {
-        return  m_pImpl->m_xHeaderColor;
+        return  m_pImpl->m_nHeaderColor;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setHeaderBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
-        m_pImpl->m_xHeaderColor = _rColor;
+        m_pImpl->m_nHeaderColor = _rColor;
     }
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getTextColor()
     {
-        return  m_pImpl->m_xTextColor;
+        return  m_pImpl->m_nTextColor;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setTextColor( ::com::sun::star::util::Color _rColor )
     {
-         m_pImpl->m_xTextColor = _rColor;
+         m_pImpl->m_nTextColor = _rColor;
     }
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getOddRowBackgroundColor()
     {
-        return  m_pImpl->m_xRowColor1;
+        return  m_pImpl->m_nRowColor1;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setOddRowBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
-        m_pImpl->m_xRowColor1 = _rColor;
+        m_pImpl->m_nRowColor1 = _rColor;
     }
     //--------------------------------------------------------------------
     ::com::sun::star::util::Color UnoControlTableModel::getEvenRowBackgroundColor()
     {
-        return  m_pImpl->m_xRowColor2;
+        return  m_pImpl->m_nRowColor2;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setEvenRowBackgroundColor( ::com::sun::star::util::Color _rColor )
     {
-        m_pImpl->m_xRowColor2 = _rColor;
+        m_pImpl->m_nRowColor2 = _rColor;
     }
     //--------------------------------------------------------------------
     ::com::sun::star::style::VerticalAlignment UnoControlTableModel::getVerticalAlign()
     {
-        return  m_pImpl->m_xVerticalAlign;
+        return  m_pImpl->m_eVerticalAlign;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableModel::setVerticalAlign( com::sun::star::style::VerticalAlignment _xAlign )
     {
-         m_pImpl->m_xVerticalAlign = _xAlign;
+         m_pImpl->m_eVerticalAlign = _xAlign;
     }
 

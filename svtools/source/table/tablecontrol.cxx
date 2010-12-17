@@ -88,11 +88,12 @@ namespace svt { namespace table
     TableControl::~TableControl()
     {
         ImplCallEventListeners( VCLEVENT_OBJECT_DYING );
-        DELETEZ( m_pImpl );
+
+        m_pImpl->setModel( PTableModel() );
+        m_pImpl.reset();
+
         if ( m_pAccessTable->m_pAccessible )
-        {
             m_pAccessTable->m_pAccessible->dispose();
-        }
     }
 
     //--------------------------------------------------------------------

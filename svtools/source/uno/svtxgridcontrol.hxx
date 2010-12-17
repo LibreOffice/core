@@ -113,11 +113,18 @@ public:
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
     static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
-    void SAL_CALL setVisible(sal_Bool bVisible) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XComponent
     void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
 
-    // XContainertListener
+protected:
+    // VCLXWindow
+    virtual void    SetWindow( Window* pWindow );
+
+private:
+    void    impl_removeAllColumns_nothrow();
+    void    impl_updateColumnsFromModel_nothrow();
+
+    void    impl_setColumnListening( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >& i_column, bool const i_start );
 };
 #endif // _SVT_GRIDCONTROL_HXX_

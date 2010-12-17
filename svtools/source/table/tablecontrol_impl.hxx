@@ -27,18 +27,13 @@
 #ifndef SVTOOLS_TABLECONTROL_IMPL_HXX
 #define SVTOOLS_TABLECONTROL_IMPL_HXX
 
-#ifndef SVTOOLS_INC_TABLE_TABLEMODEL_HXX
 #include <svtools/table/tablemodel.hxx>
-#endif
-
-#ifndef SVTOOLS_INC_TABLE_ABSTRACTTABLECONTROL_HXX
 #include <svtools/table/abstracttablecontrol.hxx>
-#endif
-
 #include <svtools/table/tablemodel.hxx>
-#include <vector>
+
 #include <vcl/seleng.hxx>
 
+#include <vector>
 
 class ScrollBar;
 class ScrollBarBox;
@@ -57,7 +52,8 @@ namespace svt { namespace table
     //====================================================================
     //= TableControl_Impl
     //====================================================================
-    class TableControl_Impl : public IAbstractTableControl
+    class TableControl_Impl :public IAbstractTableControl
+                            ,public ITableModelListener
     {
         friend class TableGeometry;
         friend class TableRowGeometry;
@@ -78,7 +74,7 @@ namespace svt { namespace table
         */
         ArrayOfLong             m_aAccColumnWidthsPixel;
 
-    ArrayOfLong     m_aVisibleColumnWidthsPixel;
+        ArrayOfLong     m_aVisibleColumnWidthsPixel;
         /// the height of a single row in the table, measured in pixels
         long                    m_nRowHeightPixel;
         /// the height of the column header row in the table, measured in pixels
@@ -109,18 +105,18 @@ namespace svt { namespace table
         /// the horizontal scrollbar, if any
         ScrollBar*          m_pHScroll;
         ScrollBarBox*           m_pScrollCorner;
-    //selection engine - for determining selection range, e.g. single, multiple
-    SelectionEngine*        m_pSelEngine;
-    //vector which contains the selected rows
-    std::vector<RowPos>     m_nRowSelected;
-    //part of selection engine
-    TableFunctionSet*       m_pTableFunctionSet;
-    //part of selection engine
-    RowPos              m_nAnchor;
-    bool            m_bResizing;
-    ColPos          m_nResizingColumn;
-    bool            m_bResizingGrid;
-    rtl::OUString   m_aTooltipText;
+        //selection engine - for determining selection range, e.g. single, multiple
+        SelectionEngine*        m_pSelEngine;
+        //vector which contains the selected rows
+        std::vector<RowPos>     m_nRowSelected;
+        //part of selection engine
+        TableFunctionSet*       m_pTableFunctionSet;
+        //part of selection engine
+        RowPos              m_nAnchor;
+        bool            m_bResizing;
+        ColPos          m_nResizingColumn;
+        bool            m_bResizingGrid;
+        rtl::OUString   m_aTooltipText;
 
 #if DBG_UTIL
     #define INV_SCROLL_POSITION     1
@@ -185,44 +181,53 @@ namespace svt { namespace table
                 <TRUE/> if it's okay that the given cooordinate is only partially visible
         */
         void    ensureVisible( ColPos _nColumn, RowPos _nRow, bool _bAcceptPartialVisibility );
-    /** returns the row, which contains the input point*/
-    virtual RowPos  getCurrentRow (const Point& rPoint);
+        /** returns the row, which contains the input point*/
+        virtual RowPos  getCurrentRow (const Point& rPoint);
 
-    void setCursorAtCurrentCell(const Point& rPoint);
-    /** checks whether the vector with the selected rows contains the current row*/
-    BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
+        void setCursorAtCurrentCell(const Point& rPoint);
+        /** checks whether the vector with the selected rows contains the current row*/
+        BOOL    isRowSelected(const ::std::vector<RowPos>& selectedRows, RowPos current);
 
-    bool    isRowSelected(RowPos current);
-    /** returns the position of the current row in the selection vector */
-    int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
-    /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
-    void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
-    /** to be called when a new row is added to the control*/
-    void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
-    /** returns the vector, which contains the selected rows*/
-    std::vector<RowPos>& getSelectedRows();
-    /** updates the vector, which contains the selected rows after removing the row nRowPos*/
-    void    removeSelectedRow(RowPos _nRowPos);
-    void    invalidateRows();
-    void    clearSelection();
-        // IAbstractTableControl
-        virtual void    hideCursor();
-        virtual void    showCursor();
-        virtual bool    dispatchAction( TableControlAction _eAction );
-    virtual SelectionEngine* getSelEngine();
-    virtual bool isTooltipActive();
-    virtual rtl::OUString& setTooltip(const Point& rPoint );
-    virtual void resizeColumn(const Point& rPoint);
-    virtual bool startResizeColumn(const Point& rPoint);
-    virtual bool endResizeColumn(const Point& rPoint);
+        bool    isRowSelected(RowPos current);
+        /** returns the position of the current row in the selection vector */
+        int getRowSelectedNumber(const ::std::vector<RowPos>& selectedRows, RowPos current);
+        /** _rCellRect contains the region, which should be invalidate after some action e.g. selecting row*/
+        void    invalidateSelectedRegion(RowPos _nPrevRow, RowPos _nCurRow, Rectangle& _rCellRect );
+        /** to be called when a new row is added to the control*/
+        void    invalidateRow(RowPos _nRowPos, Rectangle& _rCellRect );
+        /** returns the vector, which contains the selected rows*/
+        std::vector<RowPos>& getSelectedRows();
+        /** updates the vector, which contains the selected rows after removing the row nRowPos*/
+        void    removeSelectedRow(RowPos _nRowPos);
+        void    invalidateRows();
+        void    clearSelection();
+            // IAbstractTableControl
+            virtual void    hideCursor();
+            virtual void    showCursor();
+            virtual bool    dispatchAction( TableControlAction _eAction );
+        virtual SelectionEngine* getSelEngine();
+        virtual bool isTooltipActive();
+        virtual rtl::OUString& setTooltip(const Point& rPoint );
+        virtual void resizeColumn(const Point& rPoint);
+        virtual bool startResizeColumn(const Point& rPoint);
+        virtual bool endResizeColumn(const Point& rPoint);
 
-    TableDataWindow* getDataWindow();
-    ScrollBar* getHorzScrollbar();
-    ScrollBar* getVertScrollbar();
+        TableDataWindow* getDataWindow();
+        ScrollBar* getHorzScrollbar();
+        ScrollBar* getVertScrollbar();
 
-    ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
-    Rectangle calcHeaderRect(bool bColHeader);
-    Rectangle calcTableRect();
+        ::rtl::OUString convertToString(const ::com::sun::star::uno::Any& _value);
+        Rectangle calcHeaderRect(bool bColHeader);
+        Rectangle calcTableRect();
+
+        // ITableModelListener
+        virtual void    rowsInserted( RowPos first, RowPos last );
+        virtual void    rowsRemoved( RowPos first, RowPos last );
+        virtual void    columnsInserted( ColPos first, ColPos last );
+        virtual void    columnsRemoved( ColPos first, ColPos last );
+        virtual void    columnMoved( ColPos oldIndex, ColPos newIndex );
+        virtual void    cellsUpdated( ColPos firstCol, ColPos lastCol, RowPos firstRow, RowPos lastRow );
+
     private:
         /** toggles the cursor visibility
 

@@ -53,18 +53,18 @@ using namespace ::com::sun::star::awt::grid;
 class UnoControlTableColumn : public IColumnModel
 {
     private:
-        ColumnID        m_nID;
-        String          m_sName;
-        bool            m_bIsResizable;
-        TableMetrics    m_nWidth;
-        TableMetrics    m_nMinWidth;
-        TableMetrics    m_nMaxWidth;
-        TableMetrics    m_nPrefWidth;
-        ::com::sun::star::style::HorizontalAlignment m_xHorizontalAlign;
+        ColumnID                                        m_nID;
+        String                                          m_sName;
+        bool                                            m_bIsResizable;
+        TableMetrics                                    m_nWidth;
+        TableMetrics                                    m_nMinWidth;
+        TableMetrics                                    m_nMaxWidth;
+        TableMetrics                                    m_nPrefWidth;
+        ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;
 
     public:
-        UnoControlTableColumn(Reference<XGridColumn>);
-    UnoControlTableColumn();
+        UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn );
+        UnoControlTableColumn();
 
         // IColumnModel overridables
         virtual ColumnID        getID() const;
@@ -79,10 +79,10 @@ class UnoControlTableColumn : public IColumnModel
         virtual void            setMinWidth( TableMetrics _nMinWidth );
         virtual TableMetrics    getMaxWidth() const;
         virtual void            setMaxWidth( TableMetrics _nMaxWidth );
-    virtual TableMetrics    getPreferredWidth() const;
+        virtual TableMetrics    getPreferredWidth() const;
         virtual void            setPreferredWidth( TableMetrics _nPrefWidth );
-    virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
-    virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
+        virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
+        virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
 };
 
 struct UnoControlTableModel_Impl;
@@ -122,52 +122,55 @@ class UnoControlTableModel : public ITableModel
 
     public:
         // ITableModel overridables
-        virtual TableSize           getColumnCount() const;
-        virtual TableSize           getRowCount() const;
-    virtual void                setColumnCount(TableSize _nColCount);
-        virtual void                setRowCount(TableSize _nRowCount);
-        virtual bool                hasColumnHeaders() const;
-        virtual bool                hasRowHeaders() const;
-    virtual void                setRowHeaders(bool _bRowHeaders);
-    virtual void                setColumnHeaders(bool _bColumnHeaders);
-        virtual bool                isCellEditable( ColPos col, RowPos row ) const;
-        virtual void                addTableModelListener( const PTableModelListener& listener );
-        virtual void                removeTableModelListener( const PTableModelListener& listener );
-        virtual PColumnModel        getColumnModel( ColPos column );
-    virtual std::vector<PColumnModel>& getColumnModel();
-        virtual PColumnModel        getColumnModelByID( ColumnID id );
-        virtual PTableRenderer      getRenderer() const;
+        virtual TableSize   getColumnCount() const;
+        virtual TableSize   getRowCount() const;
+        virtual bool        hasColumnHeaders() const;
+        virtual bool        hasRowHeaders() const;
+        virtual bool        isCellEditable( ColPos col, RowPos row ) const;
+        virtual PColumnModel    getColumnModel( ColPos column );
+        virtual PTableRenderer  getRenderer() const;
         virtual PTableInputHandler  getInputHandler() const;
-        virtual TableMetrics        getRowHeight() const;
-        virtual TableMetrics        getColumnHeaderHeight() const;
-        virtual TableMetrics        getRowHeaderWidth() const;
-        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight, int actHeight) const;
+        virtual TableMetrics    getRowHeight() const;
+        virtual TableMetrics    getColumnHeaderHeight() const;
+        virtual TableMetrics    getRowHeaderWidth() const;
+        virtual ScrollbarVisibility getVerticalScrollbarVisibility(int overAllHeight,int actHeight) const;
         virtual ScrollbarVisibility getHorizontalScrollbarVisibility(int overAllWidth, int actWidth) const;
-    virtual void                setVerticalScrollbarVisibility(bool _bVScroll) const;
-        virtual void                setHorizontalScrollbarVisibility(bool _bHScroll) const;
-    virtual void                setCellContent(const std::vector<std::vector< Any > >& cellContent);
-    virtual std::vector<std::vector< Any > >&   getCellContent();
-    virtual void                setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
-    virtual std::vector<rtl::OUString>& getRowHeaderName();
-    virtual ::com::sun::star::util::Color getLineColor();
-    virtual void                setLineColor(::com::sun::star::util::Color _rColor);
-    virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
-    virtual void                setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
-    virtual ::com::sun::star::util::Color getTextColor();
-    virtual void                setTextColor(::com::sun::star::util::Color _rColor);
-    virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
-    virtual void                setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
-    virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
-    virtual void                setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
-    virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
-    virtual void                setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
-    virtual bool                hasVerticalScrollbar();
-    virtual bool                hasHorizontalScrollbar();
+        virtual void addTableModelListener( const PTableModelListener& i_listener );
+        virtual void removeTableModelListener( const PTableModelListener& i_listener );
+        virtual bool hasVerticalScrollbar();
+        virtual bool hasHorizontalScrollbar();
+        virtual std::vector< std::vector< ::com::sun::star::uno::Any > >&   getCellContent();
+        virtual std::vector<rtl::OUString>&   getRowHeaderName();
+        virtual ::com::sun::star::util::Color getLineColor();
+        virtual ::com::sun::star::util::Color getHeaderBackgroundColor();
+        virtual ::com::sun::star::util::Color getTextColor();
+        virtual ::com::sun::star::util::Color getOddRowBackgroundColor();
+        virtual ::com::sun::star::util::Color getEvenRowBackgroundColor();
+        virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign();
+
+
+        // other operations
+        void    setRowCount(TableSize _nRowCount);
+        void    setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
+        void    setVerticalScrollbarVisibility(bool _bVScroll) const;
+        void    setHorizontalScrollbarVisibility(bool _bHScroll) const;
+        void    setCellContent(const std::vector<std::vector< Any > >& cellContent);
+        void    setColumnCount(TableSize _nColCount);
+        void    setRowHeaders(bool _bRowHeaders);
+        void    setColumnHeaders(bool _bColumnHeaders);
+        void    setLineColor(::com::sun::star::util::Color _rColor);
+        void    setHeaderBackgroundColor(::com::sun::star::util::Color _rColor);
+        void    setTextColor(::com::sun::star::util::Color _rColor);
+        void    setOddRowBackgroundColor(::com::sun::star::util::Color _rColor);
+        void    setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
+        void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
+        void    appendColumn( const PColumnModel& i_column );
+        void    removeAllColumns();
 };
 
 inline void UnoControlTableModel::SetColumnWidth( ColPos _nColumn, TableMetrics _nWidth100thMM )
 {
-        getColumnModel( _nColumn )->setWidth( _nWidth100thMM );
+    getColumnModel( _nColumn )->setWidth( _nWidth100thMM );
 }
 
 inline TableMetrics UnoControlTableModel::GetColumnWidth( ColPos _nColumn )

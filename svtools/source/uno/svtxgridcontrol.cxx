@@ -81,6 +81,18 @@ SVTXGridControl::~SVTXGridControl()
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+void SVTXGridControl::SetWindow( Window* pWindow )
+{
+    TableControl* pTable = dynamic_cast< TableControl* >( pWindow );
+    ENSURE_OR_THROW( ( pTable != NULL ) || ( pWindow == NULL ), "SVTXGridControl::SetWindow: illegal window!" );
+
+    SVTXGridControl_Base::SetWindow( pWindow );
+
+    if ( pTable )
+        pTable->SetModel( PTableModel( m_pTableModel ) );
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 sal_Int32 SAL_CALL SVTXGridControl::getItemIndexAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (::com::sun::star::uno::RuntimeException)
 {
     ::vos::OGuard aGuard( GetMutex() );
@@ -269,7 +281,7 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                             for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
                             {
                                 UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
-                                m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+                                m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
                             }
                             m_xColumnModel->setDefaultColumns(rawRowData.getLength());
                         }
@@ -302,36 +314,14 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
         }
         case BASEPROPERTY_GRID_COLUMNMODEL:
         {
+            // remove all old columns
+            m_pTableModel->removeAllColumns();
+
+            // obtain new col model
             m_xColumnModel = Reference< XGridColumnModel >( aValue, UNO_QUERY_THROW );
-            if(m_xColumnModel->getColumnCount() != 0)
-            {
-                Sequence<Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
-                std::vector<Reference< XGridColumn > > aNewColumns(
-                    comphelper::sequenceToContainer<std::vector<Reference< XGridColumn > > >(columns));
-                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight()+3 ), MAP_APPFONT ).Height();
-                if(m_xColumnModel->getColumnHeaderHeight() == 0)
-                {
-                    m_pTableModel->setColumnHeaderHeight(fontHeight);
-                    m_xColumnModel->setColumnHeaderHeight(fontHeight);
-                }
-                else
-                    m_pTableModel->setColumnHeaderHeight(m_xColumnModel->getColumnHeaderHeight());
-                for ( ::svt::table::ColPos col = 0; col < m_xColumnModel->getColumnCount(); ++col )
-                {
-                    UnoControlTableColumn* tableColumn = new UnoControlTableColumn(aNewColumns[col]);
-                    Reference< XGridColumn > xGridColumn = m_xColumnModel->getColumn(col);
-                    m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
-                    tableColumn->setHorizontalAlign(xGridColumn->getHorizontalAlign());
-                    tableColumn->setWidth(xGridColumn->getColumnWidth());
-                    if(xGridColumn->getPreferredWidth() != 0)
-                        tableColumn->setPreferredWidth(xGridColumn->getPreferredWidth());
-                    if(xGridColumn->getMaxWidth() != 0)
-                        tableColumn->setMaxWidth(xGridColumn->getMaxWidth());
-                    if(xGridColumn->getMinWidth() != 0)
-                        tableColumn->setMinWidth(xGridColumn->getMinWidth());
-                    tableColumn->setResizable(xGridColumn->getResizeable());
-                }
-            }
+
+            // remove new columns
+            impl_updateColumnsFromModel_nothrow();
 
             break;
         }
@@ -400,16 +390,6 @@ void SVTXGridControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
     );
     VCLXWindow::ImplGetPropertyIds( rIds, true );
 }
-void SAL_CALL SVTXGridControl::setVisible( sal_Bool bVisible ) throw(::com::sun::star::uno::RuntimeException)
-{
-    ::vos::OGuard aGuard( GetMutex() );
-    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
-    ENSURE_OR_RETURN_VOID( pTable != NULL, "SVTXGridControl::setVisible: no control (anymore)!" );
-
-    pTable->SetModel( PTableModel( m_pTableModel ) );
-        // TODO: what's this SetModel call good for? Looks like a hack to me, to work around some other bug.
-    pTable->Show( bVisible );
-}
 
 void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
 {
@@ -425,7 +405,7 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
         for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
         {
             UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
-            m_pTableModel->getColumnModel().push_back((PColumnModel)tableColumn);
+            m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
             m_xColumnModel->getColumn(col)->addColumnListener(listener);
         }
 
@@ -516,45 +496,59 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
 
     if(Event.valueName == rtl::OUString::createFromAscii("ColumnResize"))
     {
-        bool resizable = m_pTableModel->getColumnModel()[Event.index]->isResizable();
+        bool resizable = m_pTableModel->getColumnModel( Event.index )->isResizable();
         Event.newValue>>=resizable;
-        m_pTableModel->getColumnModel()[Event.index]->setResizable(resizable);
+        m_pTableModel->getColumnModel( Event.index )->setResizable(resizable);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("ColWidth"))
     {
-        sal_Int32 colWidth = m_pTableModel->getColumnModel()[Event.index]->getWidth();
+        sal_Int32 colWidth = m_pTableModel->getColumnModel( Event.index )->getWidth();
         Event.newValue>>=colWidth;
-        m_pTableModel->getColumnModel()[Event.index]->setWidth(colWidth);
+        m_pTableModel->getColumnModel( Event.index )->setWidth(colWidth);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("MaxWidth"))
     {
-        sal_Int32 maxWidth = m_pTableModel->getColumnModel()[Event.index]->getMaxWidth();
+        sal_Int32 maxWidth = m_pTableModel->getColumnModel( Event.index )->getMaxWidth();
         Event.newValue>>=maxWidth;
-        m_pTableModel->getColumnModel()[Event.index]->setMaxWidth(maxWidth);
+        m_pTableModel->getColumnModel( Event.index )->setMaxWidth(maxWidth);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("MinWidth"))
     {
-        sal_Int32 minWidth = m_pTableModel->getColumnModel()[Event.index]->getMinWidth();
+        sal_Int32 minWidth = m_pTableModel->getColumnModel( Event.index )->getMinWidth();
         Event.newValue>>=minWidth;
-        m_pTableModel->getColumnModel()[Event.index]->setMinWidth(minWidth);
+        m_pTableModel->getColumnModel( Event.index )->setMinWidth(minWidth);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("PrefWidth"))
     {
-        sal_Int32 prefWidth = m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth();
+        sal_Int32 prefWidth = m_pTableModel->getColumnModel( Event.index )->getPreferredWidth();
         Event.newValue>>=prefWidth;
-        m_pTableModel->getColumnModel()[Event.index]->setPreferredWidth(prefWidth);
+        m_pTableModel->getColumnModel( Event.index )->setPreferredWidth(prefWidth);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("HAlign"))
     {
-        ::com::sun::star::style::HorizontalAlignment hAlign = m_pTableModel->getColumnModel()[Event.index]->getHorizontalAlign();
+        ::com::sun::star::style::HorizontalAlignment hAlign = m_pTableModel->getColumnModel( Event.index )->getHorizontalAlign();
         Event.newValue>>=hAlign;
-        m_pTableModel->getColumnModel()[Event.index]->setHorizontalAlign(hAlign);
+        m_pTableModel->getColumnModel( Event.index )->setHorizontalAlign(hAlign);
     }
     else if(Event.valueName == rtl::OUString::createFromAscii("UpdateWidth"))
     {
-        if(m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth() != 0)
-            m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString::createFromAscii("PrefWidth"), m_pTableModel->getColumnModel()[Event.index]->getPreferredWidth());
-        m_xColumnModel->getColumn(Event.index)->updateColumn(rtl::OUString::createFromAscii("ColWidth"), m_pTableModel->getColumnModel()[Event.index]->getWidth());
+        const PColumnModel pTableColumn( m_pTableModel->getColumnModel( Event.index ) );
+        ENSURE_OR_RETURN_VOID( !!pTableColumn, "invalid table column!" );
+
+        Reference< XGridColumn > xColumn;
+        try
+        {
+             xColumn.set( m_xColumnModel->getColumn( Event.index ), UNO_SET_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+            return;
+        }
+
+        if ( pTableColumn->getPreferredWidth() != 0 )
+            xColumn->updateColumn(rtl::OUString::createFromAscii("PrefWidth"), pTableColumn->getPreferredWidth());
+        xColumn->updateColumn(rtl::OUString::createFromAscii("ColWidth"), pTableColumn->getWidth() );
     }
     pTable->Invalidate();
 }
@@ -616,28 +610,29 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    (void)i_event;
+    const Reference< XGridColumn > xGridColumn( i_event.Element, UNO_QUERY );
+    const PColumnModel tableColumn( new UnoControlTableColumn( xGridColumn ) );
+        // will throw if this is not a valid grid column
+    m_pTableModel->appendColumn( tableColumn );
 
-    // TODO: add as XGridColumnListener
-    // TODO: update our TableControl
+    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), true );
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    (void)i_event;
+    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), false );
 
-    // TODO: remove as XGridColumnListener
-    // TODO: update our TableControl
+    // TODO: remove the respective column from our table model
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    (void)i_event;
+    impl_setColumnListening( Reference< XGridColumn >( i_event.ReplacedElement, UNO_QUERY ), false );
+    impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), true );
 
-    // TODO: add/remove as XGridColumnListener
-    // TODO: update our TableControl
+    // TODO: replace the respective column in our table model
 }
 
 
@@ -945,4 +940,61 @@ void SVTXGridControl::ImplCallItemListeners()
         m_nSelectedRowCount=actSelRowCount;
         m_aSelectionListeners.selectionChanged( aEvent );
     }
+}
+
+void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
+{
+    ENSURE_OR_RETURN_VOID( m_xColumnModel.is(), "no model!" );
+    TableControl* pTable = dynamic_cast< TableControl* >( GetWindow() );
+    ENSURE_OR_RETURN_VOID( pTable != NULL, "no table!" );
+
+    try
+    {
+        if ( m_xColumnModel->getColumnCount() != 0 )
+        {
+            if ( m_xColumnModel->getColumnHeaderHeight() == 0 )
+            {
+                sal_Int32 fontHeight = pTable->PixelToLogic( Size( 0, pTable->GetTextHeight() + 3 ), MAP_APPFONT ).Height();
+                m_pTableModel->setColumnHeaderHeight( fontHeight );
+            }
+            else
+                m_pTableModel->setColumnHeaderHeight( m_xColumnModel->getColumnHeaderHeight() );
+
+            const Sequence< Reference< XGridColumn > > columns = m_xColumnModel->getColumns();
+            for (   const Reference< XGridColumn >* colRef = columns.getConstArray();
+                    colRef != columns.getConstArray() + columns.getLength();
+                    ++colRef
+                )
+            {
+                ENSURE_OR_CONTINUE( colRef->is(), "illegal column!" );
+
+                impl_setColumnListening( *colRef, true );
+
+                UnoControlTableColumn* tableColumn = new UnoControlTableColumn( *colRef );
+                m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
+
+                tableColumn->setHorizontalAlign( (*colRef)->getHorizontalAlign() );
+                tableColumn->setWidth( (*colRef)->getColumnWidth() );
+                tableColumn->setResizable( (*colRef)->getResizeable() );
+                tableColumn->setPreferredWidth( (*colRef)->getPreferredWidth() );
+                tableColumn->setMaxWidth( (*colRef)->getMaxWidth() );
+                tableColumn->setMinWidth( (*colRef)->getMinWidth() );
+            }
+        }
+
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+}
+
+void SVTXGridControl::impl_setColumnListening( const Reference< XGridColumn >& i_column, bool const i_start )
+{
+    ENSURE_OR_RETURN_VOID( i_column.is(), "SVTXGridControl::impl_setColumnListening: illegal column!" );
+
+    if ( i_start )
+        i_column->addColumnListener( this );
+    else
+        i_column->removeColumnListener( this );
 }
