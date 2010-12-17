@@ -106,8 +106,6 @@ const sal_uInt32 BIFF_ROW_THICKTOP          = 0x10000000;
 const sal_uInt32 BIFF_ROW_THICKBOTTOM       = 0x20000000;
 const sal_uInt32 BIFF_ROW_SHOWPHONETIC      = 0x40000000;
 
-const sal_uInt8 BIFF2_CELL_LOCKED           = 0x40;
-const sal_uInt8 BIFF2_CELL_HIDDEN           = 0x80;
 const sal_Int32 BIFF2_CELL_USEIXFE          = 63;
 
 // ----------------------------------------------------------------------------
