@@ -261,6 +261,11 @@ struct PartiallyFilledEmptyMatrix
             CPPUNIT_ASSERT_MESSAGE("element is not of value type", rVal.nType == SC_MATVAL_STRING);
             CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.pS->EqualsAscii("Test"));
         }
+        else if (nCol == 8 && nRow == 11)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of empty path type", rVal.nType == SC_MATVAL_EMPTYPATH);
+            CPPUNIT_ASSERT_MESSAGE("value of \"empty\" element is expected to be zero", rVal.fVal == 0.0);
+        }
         else
         {
             CPPUNIT_ASSERT_MESSAGE("element is not of empty type", rVal.nType == SC_MATVAL_EMPTY);
@@ -310,6 +315,7 @@ void Test::testMatrix()
         pMat->PutDouble(-12.5, 4, 5);
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("Test"));
         pMat->PutString(aStr, 8, 2);
+        pMat->PutEmptyPath(8, 11);
         checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
     }
 }
