@@ -585,11 +585,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         }
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
-
-#if 0
-        // TODO: Switch to this code block once we have support for sparsely-filled
-        // matrices in ScMatrix.
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
+            static_cast<SCSIZE>(nDataRow2-nDataRow1+1), ScMatrix::SPARSE_EMPTY);
 
         // Only fill non-empty cells, for better performance.
         vector<SCROW> aRows;
@@ -621,40 +618,6 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 }
             }
         }
-#else
-        vector<SCROW> aRows;
-        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
-        if (aRows.empty())
-            // Cache is empty.
-            return TokenArrayRef();
-        else
-            // Trim the column below the last non-empty row.
-            nDataRow2 = aRows.back();
-
-        // Empty all matrix elements first, and fill only non-empty elements.
-        for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
-        {
-            for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
-            {
-                TokenRef pToken = pTab->getCell(nCol, nRow);
-                SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
-                if (!pToken)
-                    return TokenArrayRef();
-
-                switch (pToken->GetType())
-                {
-                    case svDouble:
-                        xMat->PutDouble(pToken->GetDouble(), nC, nR);
-                    break;
-                    case svString:
-                        xMat->PutString(pToken->GetString(), nC, nR);
-                    break;
-                    default:
-                        xMat->PutEmpty(nC, nR);
-                }
-            }
-        }
-#endif
 
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
