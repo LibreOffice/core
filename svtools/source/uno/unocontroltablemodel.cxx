@@ -43,7 +43,7 @@
 using ::rtl::OUString;
 using namespace ::svt::table;
 using namespace ::com::sun::star::uno;
-
+using namespace ::com::sun::star::awt::grid;
 
     //--------------------------------------------------------------------
     UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
@@ -55,20 +55,17 @@ using namespace ::com::sun::star::uno;
         ,m_nMaxWidth( 0 )
         ,m_nPrefWidth ( 0 )
         ,m_eHorizontalAlign( com::sun::star::style::HorizontalAlignment_LEFT )
+        ,m_xGridColumn( i_gridColumn )
     {
-        ENSURE_OR_THROW( i_gridColumn.is(), "illegal column" );
-        m_sName = i_gridColumn->getTitle();
+        m_sName = m_xGridColumn->getTitle();
 
-        // don't do this here. The attribute getters at the XGridColumn implementation do some notifications,
-        // which is absolutely weird. Sadly, this also means that we can't call the getters while we're
-        // being constructed, and not yet inserted into the column model.
-//        m_eHorizontalAlign = i_gridColumn->getHorizontalAlign();
-//        m_nWidth = i_gridColumn->getColumnWidth();
-//        m_bIsResizable = i_gridColumn->getResizeable();
-//
-//        m_nPrefWidth = i_gridColumn->getPreferredWidth();
-//        m_nMaxWidth = i_gridColumn->getMaxWidth();
-//        m_nMinWidth = i_gridColumn->getMinWidth();
+        m_eHorizontalAlign = m_xGridColumn->getHorizontalAlign();
+        m_nWidth = m_xGridColumn->getColumnWidth();
+        m_bIsResizable = m_xGridColumn->getResizeable();
+
+        m_nPrefWidth = m_xGridColumn->getPreferredWidth();
+        m_nMaxWidth = m_xGridColumn->getMaxWidth();
+        m_nMinWidth = m_xGridColumn->getMinWidth();
     }
 
     //--------------------------------------------------------------------
@@ -130,6 +127,15 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setWidth( TableMetrics _nWidth )
     {
         m_nWidth = _nWidth;
+        try
+        {
+            if ( m_xGridColumn.is() )
+                m_xGridColumn->setColumnWidth( getWidth() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //--------------------------------------------------------------------
@@ -165,6 +171,15 @@ using namespace ::com::sun::star::uno;
     void UnoControlTableColumn::setPreferredWidth( TableMetrics _nPrefWidth )
     {
         m_nPrefWidth = _nPrefWidth;
+        try
+        {
+            if ( m_xGridColumn.is() )
+                m_xGridColumn->setPreferredWidth( getPreferredWidth() );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
     //--------------------------------------------------------------------
     ::com::sun::star::style::HorizontalAlignment UnoControlTableColumn::getHorizontalAlign()

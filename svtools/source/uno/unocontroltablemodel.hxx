@@ -47,8 +47,6 @@
 
 
 using namespace ::svt::table;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::awt::grid;
 
 class UnoControlTableColumn : public IColumnModel
 {
@@ -62,8 +60,11 @@ class UnoControlTableColumn : public IColumnModel
         TableMetrics                                    m_nPrefWidth;
         ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;
 
+        const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >
+                                                        m_xGridColumn;
+
     public:
-        UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn );
+        UnoControlTableColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >& i_gridColumn );
         UnoControlTableColumn();
 
         // IColumnModel overridables
@@ -154,7 +155,7 @@ class UnoControlTableModel : public ITableModel
         void    setRowHeaderName(const std::vector<rtl::OUString>& cellColumnContent);
         void    setVerticalScrollbarVisibility(bool _bVScroll) const;
         void    setHorizontalScrollbarVisibility(bool _bHScroll) const;
-        void    setCellContent(const std::vector<std::vector< Any > >& cellContent);
+        void    setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& cellContent);
         void    setColumnCount(TableSize _nColCount);
         void    setRowHeaders(bool _bRowHeaders);
         void    setColumnHeaders(bool _bColumnHeaders);

@@ -43,8 +43,6 @@
 namespace toolkit
 {
 
-enum broadcast_column_type { column_attribute_changed};
-
 typedef ::cppu::WeakComponentImplHelper2    <   ::com::sun::star::awt::grid::XGridColumn
                                             ,   ::com::sun::star::lang::XServiceInfo
                                             >   GridColumn_Base;
@@ -74,7 +72,6 @@ public:
     virtual void SAL_CALL setHorizontalAlign(::com::sun::star::style::HorizontalAlignment align) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL addColumnListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeColumnListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumnListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL updateColumn( const ::rtl::OUString& name, ::sal_Int32 width ) throw (::com::sun::star::uno::RuntimeException);
 
     // XComponent (base of XGridColumn)
     virtual void SAL_CALL dispose(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -88,8 +85,12 @@ public:
 
     virtual void SAL_CALL setIndex(sal_Int32 _nIndex)throw (::com::sun::star::uno::RuntimeException);
 private:
-    void broadcast( broadcast_column_type eType, const ::com::sun::star::awt::grid::GridColumnEvent& aEvent );
-    void broadcast_changed( ::rtl::OUString name, ::com::sun::star::uno::Any oldValue, ::com::sun::star::uno::Any newValue);
+    void broadcast_changed(
+            ::rtl::OUString name,
+            ::com::sun::star::uno::Any oldValue,
+            ::com::sun::star::uno::Any newValue,
+            ::osl::ClearableMutexGuard& i_Guard
+        );
 
     ::com::sun::star::uno::Any                      m_aIdentifier;
     sal_Int32                                       m_nIndex;

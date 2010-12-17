@@ -530,26 +530,6 @@ void SAL_CALL  SVTXGridControl::columnChanged(const ::com::sun::star::awt::grid:
         Event.newValue>>=hAlign;
         m_pTableModel->getColumnModel( Event.index )->setHorizontalAlign(hAlign);
     }
-    else if(Event.valueName == rtl::OUString::createFromAscii("UpdateWidth"))
-    {
-        const PColumnModel pTableColumn( m_pTableModel->getColumnModel( Event.index ) );
-        ENSURE_OR_RETURN_VOID( !!pTableColumn, "invalid table column!" );
-
-        Reference< XGridColumn > xColumn;
-        try
-        {
-             xColumn.set( m_xColumnModel->getColumn( Event.index ), UNO_SET_THROW );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-            return;
-        }
-
-        if ( pTableColumn->getPreferredWidth() != 0 )
-            xColumn->updateColumn(rtl::OUString::createFromAscii("PrefWidth"), pTableColumn->getPreferredWidth());
-        xColumn->updateColumn(rtl::OUString::createFromAscii("ColWidth"), pTableColumn->getWidth() );
-    }
     pTable->Invalidate();
 }
 void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::GridDataEvent& Event ) throw (::com::sun::star::uno::RuntimeException)
@@ -972,13 +952,6 @@ void SVTXGridControl::impl_updateColumnsFromModel_nothrow()
 
                 UnoControlTableColumn* tableColumn = new UnoControlTableColumn( *colRef );
                 m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
-
-                tableColumn->setHorizontalAlign( (*colRef)->getHorizontalAlign() );
-                tableColumn->setWidth( (*colRef)->getColumnWidth() );
-                tableColumn->setResizable( (*colRef)->getResizeable() );
-                tableColumn->setPreferredWidth( (*colRef)->getPreferredWidth() );
-                tableColumn->setMaxWidth( (*colRef)->getMaxWidth() );
-                tableColumn->setMinWidth( (*colRef)->getMinWidth() );
             }
         }
 
