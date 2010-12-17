@@ -291,6 +291,8 @@ void Test::testMatrix()
         pMat->Resize(4, 10);
         pMat->GetDimensions(nC, nR);
         CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
+        CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
+                               !pMat->And() && !pMat->Or());
 
         // Resizing into a larger matrix should fill the void space with zeros.
         checkMatrixElements<AllZeroMatrix>(*pMat);
@@ -298,6 +300,11 @@ void Test::testMatrix()
         pMat->FillDouble(3.0, 1, 2, 2, 8);
         checkMatrixElements<PartiallyFilledZeroMatrix>(*pMat);
         CPPUNIT_ASSERT_MESSAGE("matrix is expected to be numeric", pMat->IsNumeric());
+        CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
+                               !pMat->And() && pMat->Or());
+        pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
+        CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
+                               pMat->And() && pMat->Or());
     }
 
     // Now test the emtpy matrix types.
