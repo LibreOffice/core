@@ -606,7 +606,7 @@ BasicLibInfo* BasicLibs::Prev()
 BasicLibInfo* BasicLibs::Next()
 {
     if (  aList.empty()
-       || CurrentLib < ( aList.size() - 1 )
+       || CurrentLib >= ( aList.size() - 1 )
        )
         return NULL;
     ++CurrentLib;
