@@ -32,6 +32,7 @@
 
 #include <com/sun/star/awt/grid/XGridColumn.idl>
 #include <com/sun/star/container/XContainer.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
 
 //=============================================================================
 
@@ -96,7 +97,8 @@ interface XGridColumnModel
         @returns
                  the requested column.
     */
-    XGridColumn getColumn( [in] long index);
+    XGridColumn getColumn( [in] long index)
+        raises ( ::com::sun::star::lang::IndexOutOfBoundsException );
 
     /** Fills the model with the given number of default columns
 
