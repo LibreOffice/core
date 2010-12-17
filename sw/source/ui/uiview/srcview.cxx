@@ -49,6 +49,8 @@
 #include <svl/whiter.hxx>
 #include <unotools/saveopt.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/htmlcfg.hxx>
 #include <sfx2/app.hxx>
@@ -123,13 +125,10 @@ using ::com::sun::star::util::SearchOptions;
 #define BMARGPRN        1000
 #define BORDERPRN       300
 
-
-
 SFX_IMPL_NAMED_VIEWFACTORY(SwSrcView, "SourceView")
 {
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
-
 
 SFX_IMPL_INTERFACE( SwSrcView, SfxViewShell, SW_RES(0) )
 {
@@ -561,7 +560,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetUndoActionCount();
                     if(nCount)
                     {
-                        String aStr(ResId( STR_UNDO, *SFX_APP()->GetSfxResManager() ));;
+                        String aStr(SvtResId( STR_UNDO));;
                         aStr += rMgr.GetUndoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich, aStr));
                     }
@@ -573,7 +572,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetRedoActionCount();
                     if(nCount)
                     {
-                        String aStr(ResId( STR_REDO, *SFX_APP()->GetSfxResManager() ));;
+                        String aStr(SvtResId( STR_REDO));;
                         aStr += rMgr.GetRedoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich,aStr));
                     }

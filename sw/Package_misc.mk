@@ -1,8 +1,8 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-#
-# Copyright 2000, 2010 Oracle and/or its affiliates.
+# 
+# Copyright 2009 by Sun Microsystems, Inc.
 #
 # OpenOffice.org - a multi-platform office productivity suite
 #
@@ -14,48 +14,17 @@
 #
 # OpenOffice.org is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU Lesser General Public License version 3 for more details
 # (a copy is included in the LICENSE file that accompanied this code).
 #
 # You should have received a copy of the GNU Lesser General Public License
-# version 3 along with OpenOffice.org.  If not, see
+# version 3 along with OpenOffice.org.	If not, see
 # <http://www.openoffice.org/license.html>
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
-
-PRJNAME=sw
-TARGET=view
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  $(PRJ)$/inc$/swpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  $(PRJ)$/inc$/sw.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =  \
-    $(SLO)$/vdraw.obj \
-    $(SLO)$/viewimp.obj \
-    $(SLO)$/viewsh.obj \
-    $(SLO)$/pagepreviewlayout.obj \
-    $(SLO)$/printdata.obj \
-    $(SLO)$/viewpg.obj \
-    $(SLO)$/vnew.obj \
-    $(SLO)$/vprint.obj
-
-
-
-EXCEPTIONSFILES = \
-        $(SLO)$/pagepreviewlayout.obj
-
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+$(eval $(call gb_Package_Package,sw_misc,$(SRCDIR)/sw/misc))
+# TODO: 
+#COPY sw/unxlngx6.pro/misc/swslots_sid.hid unxlngx6.pro/bin/hid/swslots_sid.hid
