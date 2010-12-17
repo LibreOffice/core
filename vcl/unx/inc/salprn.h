@@ -36,7 +36,7 @@
 
 class PspGraphics;
 
-class PspSalInfoPrinter : public SalInfoPrinter
+class VCL_DLLPUBLIC PspSalInfoPrinter : public SalInfoPrinter
 {
 public:
     PspGraphics*            m_pGraphics;
@@ -63,7 +63,7 @@ public:
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-class PspSalPrinter : public SalPrinter
+class VCL_DLLPUBLIC PspSalPrinter : public SalPrinter
 {
 public:
     String                  m_aFileName;
