@@ -36,8 +36,8 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 ..\msvcp80\msvcm80*.dll %_DEST%\bin%_EXT%
 ..\msvcp80\msvcp80*.dll %_DEST%\bin%_EXT%
 ..\msvcp80\msvcr80*.dll %_DEST%\bin%_EXT%
-..\msvcp90\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.CRT.manifest
-..\msvcp90\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.DebugCRT.manifest
+..\msvcp80\Microsoft.VC80.CRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.CRT.manifest
+..\msvcp80\Microsoft.VC80.DebugCRT.manifest %_DEST%\bin%_EXT%\Microsoft.VC80.DebugCRT.manifest
 
 ..\msvcp90\msvcm90*.dll %_DEST%\bin%_EXT%
 ..\msvcp90\msvcp90*.dll %_DEST%\bin%_EXT%
