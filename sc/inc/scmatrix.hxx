@@ -224,23 +224,19 @@ public:
         MUST be at least of the size of the original matrix. */
     ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType) const;
 
-    /// Disable refcounting forever, may only be deleted via Delete() afterwards.
-    inline  void    SetEternalRef()         { nRefCnt = ULONG_MAX; }
-    inline  bool    IsEternalRef() const    { return nRefCnt == ULONG_MAX; }
     inline  void    IncRef() const
     {
-        if ( !IsEternalRef() )
-            ++nRefCnt;
+        ++nRefCnt;
     }
     inline  void    DecRef() const
     {
-        if ( nRefCnt > 0 && !IsEternalRef() )
+        if ( nRefCnt > 0 )
             if ( --nRefCnt == 0 )
                 delete this;
     }
     inline  void    Delete()
     {
-        if ( nRefCnt == 0 || IsEternalRef() )
+        if ( nRefCnt == 0 )
             delete this;
         else
             --nRefCnt;

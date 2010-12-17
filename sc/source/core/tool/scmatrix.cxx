@@ -772,7 +772,7 @@ ScMatrix* ScMatrix::Clone( DensityType eType) const
 
 ScMatrix* ScMatrix::CloneIfConst()
 {
-    return (pImpl->IsImmutable() || IsEternalRef()) ? Clone() : this;
+    return pImpl->IsImmutable() ? Clone() : this;
 }
 
 void ScMatrix::SetImmutable( bool bVal )
