@@ -175,7 +175,7 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
     nStarDrawPreviewMasterPageNum = SDRPAGE_NOTFOUND;
     pModelStorage = NULL;
     mpForbiddenCharactersTable = NULL;
-    mbModelLocked = FALSE;
+    mbModelLocked = false;
     mpOutlinerCache = NULL;
     mbKernAsianPunctuation = sal_False;
     mbAddExtLeading = sal_False;
@@ -1887,7 +1887,7 @@ uno::Reference< uno::XInterface > SdrModel::createUnoModel()
     return xInt;
 }
 
-void SdrModel::setLock( BOOL bLock )
+void SdrModel::setLock( bool bLock )
 {
     if( mbModelLocked != bLock )
     {

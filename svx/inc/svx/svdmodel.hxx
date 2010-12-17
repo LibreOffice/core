@@ -691,8 +691,8 @@ public:
 
     // these functions are used by the api to disable repaints during a
     // set of api calls.
-    BOOL isLocked() const { return (BOOL)mbModelLocked; }
-    void setLock( BOOL bLock );
+    bool isLocked() const { return mbModelLocked; }
+    void setLock( bool bLock );
 
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars );
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable() const;

@@ -325,7 +325,7 @@ void SAL_CALL SvxUnoDrawingModel::lockControllers(  )
     throw(uno::RuntimeException)
 {
     if( mpDoc )
-        mpDoc->setLock( sal_True );
+        mpDoc->setLock(true);
 }
 
 void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
@@ -333,7 +333,7 @@ void SAL_CALL SvxUnoDrawingModel::unlockControllers(  )
 {
     if( mpDoc && mpDoc->isLocked() )
     {
-        mpDoc->setLock( sal_False );
+        mpDoc->setLock(false);
     }
 }
 
