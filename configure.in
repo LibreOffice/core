@@ -7132,7 +7132,7 @@ if test "z$with_helppack_integration" = "z" -o "z$with_helppack_integration" = "
   AC_MSG_RESULT([no integration])
 else
   WITH_HELPPACK_INTEGRATION=YES
-  SCPDEFS="$SCPDEFS -DWITH_HELLPACK_INTEGRATION"
+  SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
   AC_MSG_RESULT([integration])
 fi
 AC_SUBST(WITH_HELPPACK_INTEGRATION)
