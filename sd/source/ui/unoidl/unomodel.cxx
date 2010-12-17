@@ -587,7 +587,7 @@ void SAL_CALL SdXImpressDocument    ::lockControllers(  )
     if( NULL == mpDoc )
         throw lang::DisposedException();
 
-    mpDoc->setLock( sal_True );
+    mpDoc->setLock(true);
 }
 
 void SAL_CALL SdXImpressDocument::unlockControllers(  )
@@ -600,7 +600,7 @@ void SAL_CALL SdXImpressDocument::unlockControllers(  )
 
     if( mpDoc->isLocked() )
     {
-        mpDoc->setLock( sal_False );
+        mpDoc->setLock(false);
     }
 }
 

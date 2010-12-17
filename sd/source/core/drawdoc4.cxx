@@ -963,18 +963,18 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
             {
                 sd::ModifyGuard aGuard( this );
                 SdrModel* pModel = pObj->GetModel();
-                sal_Bool bLock = sal_False;
+                bool bLock = sal_False;
                 if ( pModel )
                 {
                     bLock = pModel->isLocked();
-                    pModel->setLock( sal_True );
+                    pModel->setLock(true);
                 }
                 // taking text from the outliner
                 ((SdrTextObj*) pObj)->SetOutlinerParaObject( pOutl->CreateParaObject() );
 
                 pObj->BroadcastObjectChange();
                 if ( pModel )
-                    pModel->setLock( bLock );
+                    pModel->setLock(bLock);
             }
         }
 

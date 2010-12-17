@@ -255,7 +255,7 @@ sal_Bool ImplSdPPTImport::Import()
     if ( !bOk )
         return FALSE;
 
-    pSdrModel->setLock( sal_True );
+    pSdrModel->setLock(true);
     pSdrModel->EnableUndo(false);
 
     SdrOutliner& rOutl = mpDoc->GetDrawOutliner();
@@ -1407,7 +1407,7 @@ sal_Bool ImplSdPPTImport::Import()
     sfx2::LoadOlePropertySet(xDocProps, &mrStorage);
     xDocProps->setTemplateName(::rtl::OUString());
 
-    pSdrModel->setLock( sal_False );
+    pSdrModel->setLock(false);
     pSdrModel->EnableUndo(true);
     return bOk;
 }
