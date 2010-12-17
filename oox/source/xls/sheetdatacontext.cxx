@@ -106,8 +106,9 @@ const sal_uInt32 BIFF_ROW_THICKTOP          = 0x10000000;
 const sal_uInt32 BIFF_ROW_THICKBOTTOM       = 0x20000000;
 const sal_uInt32 BIFF_ROW_SHOWPHONETIC      = 0x40000000;
 
-const sal_Int32 BIFF2_XF_EXTENDED_IDS       = 63;
-const sal_uInt8 BIFF2_XF_MASK               = 0x3F;
+const sal_uInt8 BIFF2_CELL_LOCKED           = 0x40;
+const sal_uInt8 BIFF2_CELL_HIDDEN           = 0x80;
+const sal_Int32 BIFF2_CELL_USEIXFE          = 63;
 
 // ----------------------------------------------------------------------------
 
@@ -600,7 +601,6 @@ BiffSheetDataContext::BiffSheetDataContext( const BiffWorksheetFragmentBase& rPa
     BiffWorksheetContextBase( rParent ),
     mnBiff2XfId( 0 )
 {
-    mnArrayIgnoreSize = (getBiff() == BIFF2) ? 1 : ((getBiff() <= BIFF4) ? 2 : 6);
     switch( getBiff() )
     {
         case BIFF2:
@@ -718,12 +718,33 @@ void BiffSheetDataContext::importXfId( bool bBiff2 )
 {
     if( bBiff2 )
     {
-        sal_uInt8 nBiff2XfId;
-        mrStrm >> nBiff2XfId;
-        mrStrm.skip( 2 );
-        maCurrCell.mnXfId = nBiff2XfId & BIFF2_XF_MASK;
-        if( maCurrCell.mnXfId == BIFF2_XF_EXTENDED_IDS )
-            maCurrCell.mnXfId = mnBiff2XfId;
+        /*  #i71453# On first call, check if the file contains XF records (by
+            trying to access the first XF with index 0). If there are no XFs,
+            the explicit formatting information contained in each cell record
+            will be used instead. */
+        if( !mobBiff2HasXfs )
+            mobBiff2HasXfs = getStyles().getCellXf( 0 ).get() != 0;
+        // read formatting information (includes the XF identifier)
+        sal_uInt8 nFlags1, nFlags2, nFlags3;
+        mrStrm >> nFlags1 >> nFlags2 >> nFlags3;
+        /*  If the file contains XFs, extract and set the XF identifier,
+            otherwise get the explicit formatting. */
+        if( mobBiff2HasXfs.get() )
+        {
+            maCurrCell.mnXfId = extractValue< sal_Int32 >( nFlags1, 0, 6 );
+            /*  If the identifier is equal to 63, then the real identifier is
+                contained in the preceding IXFE record (stored in mnBiff2XfId). */
+            if( maCurrCell.mnXfId == BIFF2_CELL_USEIXFE )
+                maCurrCell.mnXfId = mnBiff2XfId;
+        }
+        else
+        {
+            /*  Let the Xf class do the API conversion. Keeping the member
+                maCurrCell.mnXfId untouched will prevent to trigger the usual
+                XF formatting conversion later on. */
+            PropertySet aPropSet( maCurrCell.mxCell );
+            Xf::writeBiff2CellFormatToPropertySet( *this, aPropSet, nFlags1, nFlags2, nFlags3 );
+        }
     }
     else
     {

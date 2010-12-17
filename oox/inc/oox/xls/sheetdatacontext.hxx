@@ -163,6 +163,7 @@ private:
     sal_uInt32          mnFormulaIgnoreSize;    /// Number of bytes to be ignored in FORMULA record.
     sal_uInt32          mnArrayIgnoreSize;      /// Number of bytes to be ignored in ARRAY record.
     sal_uInt16          mnBiff2XfId;            /// Current XF identifier from IXFE record.
+    OptValue< bool >    mobBiff2HasXfs;         /// Select XF formatting or direct formatting in BIFF2.
 };
 
 // ============================================================================
