@@ -100,7 +100,6 @@ ScVbaNames::Add( const css::uno::Any& Name ,
                                         const css::uno::Any& RefersToR1C1,
                                         const css::uno::Any& RefersToR1C1Local ) throw (css::uno::RuntimeException)
 {
-
     rtl::OUString sName;
     uno::Reference< excel::XRange > xRange;
     if ( Name.hasValue() )
@@ -158,6 +157,8 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             if ( mxNames->hasByName( sName ) )
                 mxNames->removeByName(sName);
             mxNames->addNewByName( sName , rtl::OUString(sTmp) , aCellAddr , (sal_Int32)nType);
+            uno::Reference< sheet::XNamedRange > xName( mxNames->getByName( sName ), uno::UNO_QUERY_THROW );
+            return uno::Any( uno::Reference< excel::XName >( new ScVbaName( getParent(), mxContext, xName, mxNames, mxModel ) ) );
         }
     }
     return css::uno::Any();
@@ -174,7 +175,7 @@ uno::Reference< container::XEnumeration >
 ScVbaNames::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( mxNames, uno::UNO_QUERY_THROW );
-    return new NamesEnumeration( this, mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
+    return new NamesEnumeration( getParent(), mxContext, xEnumAccess->createEnumeration(), mxModel , mxNames );
 }
 
 uno::Any
