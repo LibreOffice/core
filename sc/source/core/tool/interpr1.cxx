@@ -3101,7 +3101,7 @@ namespace {
 
 void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, BOOL bTextAsZero,
-    ULONG& rCount, short& rFuncFmtType, double& fVal, double& fRes, double& fMem, BOOL& bNull)
+    ULONG& rCount, short& rFuncFmtType, double& fVal, double& fRes, double& fMem, bool& bNull)
 {
     if (!pMat)
         return;
@@ -3110,7 +3110,10 @@ void IterateMatrix(
     rFuncFmtType = NUMBERFORMAT_NUMBER;
     pMat->GetDimensions(nC, nR);
     if( eFunc == ifCOUNT2 )
+    {
+        // TODO: Count everything but empty.  Fix this.
         rCount += (ULONG) nC * nR;
+    }
     else
     {
         for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
@@ -3127,7 +3130,7 @@ void IterateMatrix(
                         case ifSUM:
                             if ( bNull && fVal != 0.0 )
                             {
-                                bNull = FALSE;
+                                bNull = false;
                                 fMem = fVal;
                             }
                             else
@@ -3157,8 +3160,8 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
     short nParamCount = GetByte();
     double fRes = ( eFunc == ifPRODUCT ) ? 1.0 : 0.0;
     double fVal = 0.0;
-    double fMem = 0.0;
-    BOOL bNull = TRUE;
+    double fMem = 0.0; // first numeric value.
+    bool bNull = true;
     ULONG nCount = 0;
     ScAddress aAdr;
     ScRange aRange;
@@ -3219,7 +3222,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                     case ifSUM:
                         if ( bNull && fVal != 0.0 )
                         {
-                            bNull = FALSE;
+                            bNull = false;
                             fMem = fVal;
                         }
                         else
@@ -3270,7 +3273,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                         case ifSUM:
                             if ( bNull && fVal != 0.0 )
                             {
-                                bNull = FALSE;
+                                bNull = false;
                                 fMem = fVal;
                             }
                             else
@@ -3328,7 +3331,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                             case ifSUM:
                                 if ( bNull && fVal != 0.0 )
                                 {
-                                    bNull = FALSE;
+                                    bNull = false;
                                     fMem = fVal;
                                 }
                                 else
@@ -3400,7 +3403,7 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                                         SetError(nErr);
                                         if ( bNull && fVal != 0.0 )
                                         {
-                                            bNull = FALSE;
+                                            bNull = false;
                                             fMem = fVal;
                                         }
                                         else
