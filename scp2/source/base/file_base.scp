@@ -77,7 +77,6 @@ File gid_File_Help_Sdatabase_Zip
     ARCHIVE_TXT_FILE_BODY_HELPPACK;
     EXTRA_ALL_GOOD_HELP_LOCALIZATIONS_LANG(sdatabase);
     Patchfiles = (); 
-    Styles = (ACRHIVE,HELPPACK);
 End
 
 File gid_File_Share_Registry_Base_Xcd

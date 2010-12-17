@@ -1237,7 +1237,11 @@ End
 Directory gid_Dir_Help_Isolanguage
     ParentID = gid_Dir_Help;
     DIR_ISOLANGUAGE_ALL_LANG;
+#ifdef WITH_HELPPACK_INTEGRATION
+    Styles = (FORCEHELPPACK);
+#else
     Styles = (HELPPACK);
+#endif
 End
 
 #ifdef UNX
