@@ -57,13 +57,16 @@
 #include <ucbhelper/commandenvironment.hxx>
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
+#include <vector>
 
 using namespace com::sun::star;
 using namespace rtl;
 using namespace comphelper;
 using namespace osl;
 
-DECLARE_LIST( StringList_Impl, OUString* )
+using ::std::vector;
+
+typedef vector< OUString* > StringList_Impl;
 
 #define CONVERT_DATETIME( aUnoDT, aToolsDT ) \
     aToolsDT = DateTime( Date( aUnoDT.Day, aUnoDT.Month, aUnoDT.Year ), \
@@ -308,7 +311,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
 
         if ( xResultSet.is() )
         {
-            pFiles = new StringList_Impl;
+            pFiles = new StringList_Impl();
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
             try
             {
@@ -316,7 +319,7 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
                 {
                     OUString aId = xContentAccess->queryContentIdentifierString();
                     OUString* pFile = new OUString( aId );
-                    pFiles->Insert( pFile, LIST_APPEND );
+                    pFiles->push_back( pFile );
                 }
             }
             catch( ucb::CommandAbortedException& )
@@ -336,15 +339,16 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContents( const String& rF
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        size_t nCount = pFiles->size();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pFile = pFiles->GetObject(i);
+            OUString* pFile = pFiles->at( i );
             pRet[i] = *( pFile );
             delete pFile;
         }
+        pFiles->clear();
         delete pFiles;
         return aRet;
     }
@@ -400,9 +404,6 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
             {
                 xResultSet = xDynamicResultSet->getStaticResultSet();
             }
-
-//          if ( xDynResultSet.is() )
-//              xResultSet = xDynResultSet->getStaticResultSet();
         }
         catch( ucb::CommandAbortedException& )
         {
@@ -416,10 +417,10 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
         if ( xResultSet.is() )
         {
             LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-            pProperties = new StringList_Impl;
+            pProperties = new StringList_Impl();
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-            ULONG nFolderPos = LIST_APPEND;
+            size_t nFolderPos = size_t(-1);
 
             try
             {
@@ -429,12 +430,10 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                     String aType( xRow->getString(2) );
                     sal_Int64 nSize = xRow->getLong(3);
                     util::DateTime aDT = xRow->getTimestamp(4);
-                    sal_Bool bFolder = xRow->getBoolean(5);
+                    sal_Bool bFolder = xRow->getBoolean(5);         // true = directory, else file
 
                     String aRow = aTitle;
                     aRow += '\t';
-//!                 aRow += aType;
-//!                 aRow += '\t';
                     aRow += String::CreateFromInt64( nSize );
                     aRow += '\t';
                     AppendDateTime_Impl( aDT, aRow, aLocaleWrapper );
@@ -443,16 +442,23 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
                     OUString* pRow = new OUString( aRow );
-                    ULONG nPos = LIST_APPEND;
-                    if ( bFolder )
+                    size_t nPos = size_t(-1);
+                    if ( bFolder )      // place the directories at the top of the listing
                     {
-                        if ( LIST_APPEND == nFolderPos )
+                        if ( nFolderPos == size_t(-1) )
                             nFolderPos = 0;
                         else
                             nFolderPos++;
                         nPos = nFolderPos;
                     }
-                    pProperties->Insert( pRow, nPos );
+                    if ( nPos >= pProperties->size() )
+                        pProperties->push_back( pRow );
+                    else
+                    {
+                        StringList_Impl::iterator it = pProperties->begin();
+                        ::std::advance( it, nPos );
+                        it = pProperties->insert( it, pRow );
+                    }
                 }
             }
             catch( ucb::CommandAbortedException& )
@@ -472,15 +478,16 @@ uno::Sequence < OUString > SfxContentHelper::GetFolderContentProperties( const S
 
     if ( pProperties )
     {
-        ULONG nCount = pProperties->Count();
+        size_t nCount = pProperties->size();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pProperty = pProperties->GetObject(i);
+            OUString* pProperty = pProperties->at(i);
             pRet[i] = *( pProperty );
             delete pProperty;
         }
+        pProperties->clear();
         delete pProperties;
         return aRet;
     }
@@ -521,7 +528,7 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 
         if ( xResultSet.is() )
         {
-            pList = new StringList_Impl;
+            pList = new StringList_Impl();
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
@@ -537,7 +544,7 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
                     aRow += '\t';
                     aRow += String( xContentAccess->queryContentIdentifierString() );
                     OUString* pRow = new OUString( aRow );
-                    pList->Insert( pRow, LIST_APPEND );
+                    pList->push_back( pRow );
                 }
             }
             catch( ucb::CommandAbortedException& )
@@ -565,15 +572,16 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
 
     if ( pList )
     {
-        ULONG nCount = pList->Count();
+        size_t nCount = pList->size();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pEntry = pList->GetObject(i);
+            OUString* pEntry = pList->at(i);
             pRet[i] = *( pEntry );
             delete pEntry;
         }
+        pList->clear();
         delete pList;
         return aRet;
     }
@@ -615,7 +623,7 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
 
         if ( xResultSet.is() )
         {
-            pProperties = new StringList_Impl;
+            pProperties = new StringList_Impl();
             uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
             uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
 
@@ -631,7 +639,7 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
                     aRow += '\t';
                     aRow += bFolder ? '1' : '0';
                     OUString* pRow = new OUString( aRow );
-                    pProperties->Insert( pRow, LIST_APPEND );
+                    pProperties->push_back( pRow );
                 }
             }
             catch( ucb::CommandAbortedException& )
@@ -648,15 +656,16 @@ uno::Sequence< OUString > SfxContentHelper::GetHelpTreeViewContents( const Strin
 
     if ( pProperties )
     {
-        ULONG nCount = pProperties->Count();
+        size_t nCount = pProperties->size();
         uno::Sequence < OUString > aRet( nCount );
         OUString* pRet = aRet.getArray();
-        for ( ULONG i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            OUString* pProperty = pProperties->GetObject(i);
+            OUString* pProperty = pProperties->at(i);
             pRet[i] = *( pProperty );
             delete pProperty;
         }
+        pProperties->clear();
         delete pProperties;
         return aRet;
     }
