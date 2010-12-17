@@ -789,8 +789,8 @@ BOOL ScRefListToken::operator==( const FormulaToken& r ) const
 }
 
 
-const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix; }
-ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix; }
+const ScMatrix* ScMatrixToken::GetMatrix() const        { return pMatrix.get(); }
+ScMatrix*       ScMatrixToken::GetMatrix()              { return pMatrix.get(); }
 BOOL ScMatrixToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pMatrix == static_cast<const ScToken&>(r).GetMatrix();
@@ -1027,7 +1027,7 @@ BOOL ScEmptyCellToken::operator==( const FormulaToken& r ) const
 
 double          ScMatrixCellResultToken::GetDouble() const  { return xUpperLeft->GetDouble(); }
 const String &  ScMatrixCellResultToken::GetString() const  { return xUpperLeft->GetString(); }
-const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix; }
+const ScMatrix* ScMatrixCellResultToken::GetMatrix() const  { return xMatrix.get(); }
 // Non-const GetMatrix() is private and unused but must be implemented to
 // satisfy vtable linkage.
 ScMatrix* ScMatrixCellResultToken::GetMatrix()
@@ -1580,7 +1580,7 @@ FormulaToken* ScTokenArray::AddDoubleReference( const ScComplexRefData& rRef )
     return Add( new ScDoubleRefToken( rRef ) );
 }
 
-FormulaToken* ScTokenArray::AddMatrix( ScMatrix* p )
+FormulaToken* ScTokenArray::AddMatrix( const ScMatrixRef& p )
 {
     return Add( new ScMatrixToken( p ) );
 }

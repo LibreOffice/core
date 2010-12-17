@@ -30,10 +30,11 @@
 #define SC_MATRIX_HXX
 
 #include "global.hxx"
-#include "formula/intruref.hxx"
 #include "formula/errorcodes.hxx"
 #include <tools/string.hxx>
 #include "scdllapi.h"
+
+#include <boost/intrusive_ptr.hpp>
 
 class SvStream;
 class ScInterpreter;
@@ -134,7 +135,7 @@ struct ScMatrixValue
 class SC_DLLPUBLIC ScMatrix
 {
     ScMatrixImpl*   pImpl;
-    mutable ULONG   nRefCnt;    // reference count
+    mutable size_t  nRefCnt;    // reference count
 
     // only delete via Delete()
     ~ScMatrix();
@@ -355,10 +356,18 @@ public:
     // to be numerically safe.
 };
 
+inline void intrusive_ptr_add_ref(const ScMatrix* p)
+{
+    p->IncRef();
+}
 
-typedef formula::SimpleIntrusiveReference< class ScMatrix > ScMatrixRef;
-typedef formula::SimpleIntrusiveReference< const class ScMatrix > ScConstMatrixRef;
+inline void intrusive_ptr_release(const ScMatrix* p)
+{
+    p->DecRef();
+}
 
+typedef ::boost::intrusive_ptr<ScMatrix> ScMatrixRef;
+typedef ::boost::intrusive_ptr<const ScMatrix> ScConstMatrixRef;
 
 #endif  // SC_MATRIX_HXX
 

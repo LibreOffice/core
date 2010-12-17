@@ -1917,7 +1917,7 @@ void ScInterpreter::PushExternalDoubleRef(
 }
 
 
-void ScInterpreter::PushMatrix(ScMatrix* pMat)
+void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushMatrix" );
     pMat->SetErrorInterpreter( NULL);
@@ -2699,7 +2699,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillLongArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillLongArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2730,7 +2730,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillDoubleArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillDoubleArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2761,7 +2761,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix(), pFormatter ))
+                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix().get(), pFormatter ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2812,7 +2812,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2858,7 +2858,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         case svMissing:

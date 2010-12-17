@@ -672,7 +672,7 @@ bool ScValidationData::GetSelectionFromFormula( TypedScStrCollection* pStrings,
             xMatRef->PutString( aStr, 0);
         }
 
-        pValues = xMatRef;
+        pValues = xMatRef.get();
     }
 
     // which index matched.  We will want it eventually to pre-select that item.

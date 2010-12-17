@@ -340,7 +340,7 @@ void PushExternalSingleRef(sal_uInt16 nFileId, const String& rTabName,
 void PushExternalDoubleRef(sal_uInt16 nFileId, const String& rTabName,
                            SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
                            SCCOL nCol2, SCROW nRow2, SCTAB nTab2);
-void PushMatrix(ScMatrix* pMat);
+void PushMatrix(const ScMatrixRef& pMat);
 void PushError( USHORT nError );
 /// Raw stack type without default replacements.
 formula::StackVar GetRawStackType();
@@ -400,7 +400,7 @@ double Compare();
         NULL means case sensitivity document option is to be used!
  */
 ScMatrixRef CompareMat( ScCompareOptions* pOptions = NULL );
-ScMatrixRef QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions );
+ScMatrixRef QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions );
 void ScEqual();
 void ScNotEqual();
 void ScLess();
@@ -663,14 +663,14 @@ void ScLCM();
 //-------------------------- Matrixfunktionen ---------------------------------
 
 void ScMatValue();
-void MEMat(ScMatrix* mM, SCSIZE n);
+void MEMat(const ScMatrixRef& mM, SCSIZE n);
 void ScMatDet();
 void ScMatInv();
 void ScMatMult();
 void ScMatTrans();
 void ScEMat();
 void ScMatRef();
-ScMatrixRef MatConcat(ScMatrix* pMat1, ScMatrix* pMat2);
+ScMatrixRef MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2);
 void ScSumProduct();
 void ScSumX2MY2();
 void ScSumX2DY2();

@@ -957,7 +957,7 @@ ScMatrixRef ScInterpreter::CompareMat( ScCompareOptions* pOptions )
 }
 
 
-ScMatrixRef ScInterpreter::QueryMat( ScMatrix* pMat, ScCompareOptions& rOptions )
+ScMatrixRef ScInterpreter::QueryMat( const ScMatrixRef& pMat, ScCompareOptions& rOptions )
 {
     short nSaveCurFmtType = nCurFmtType;
     short nSaveFuncFmtType = nFuncFmtType;

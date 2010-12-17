@@ -1716,7 +1716,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             bDirty = FALSE;
             bTableOpDirty = FALSE;
         }
-        if( aResult.GetMatrix().Is() )
+        if( aResult.GetMatrix() )
         {
             // If the formula wasn't entered as a matrix formula, live on with
             // the upper left corner and let reference counting delete the matrix.

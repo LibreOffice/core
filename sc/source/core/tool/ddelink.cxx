@@ -166,7 +166,7 @@ void ScDdeLink::DataChanged( const String& rMimeType,
 
     if (!nRows || !nCols)               // keine Daten
     {
-        pResult.Clear();
+        pResult.reset();
     }
     else                                // Daten aufteilen
     {
@@ -233,7 +233,7 @@ void ScDdeLink::DataChanged( const String& rMimeType,
 
 void ScDdeLink::ResetValue()
 {
-    pResult.Clear();
+    pResult.reset();
 
     //  Es hat sich was getan...
     //  Tracking, FID_DATACHANGED etc. passiert von aussen

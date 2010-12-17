@@ -1474,7 +1474,7 @@ uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
                     break;
             }
 
-            if ( pDoc->CreateDdeLink( aApplication, aTopic, aItem, nMod ) )
+            if ( pDoc->CreateDdeLink( aApplication, aTopic, aItem, nMod, ScMatrixRef() ) )
             {
                 const ::rtl::OUString aName( lcl_BuildDDEName( aApplication, aTopic, aItem ) );
                 xLink.set( GetObjectByName_Impl( aName ) );

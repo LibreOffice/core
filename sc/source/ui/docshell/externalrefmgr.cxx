@@ -659,8 +659,7 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrix* pMat2 = xMat;
-        ScMatrixToken aToken(pMat2);
+        ScMatrixToken aToken(xMat);
         if (!pArray)
             pArray.reset(new ScTokenArray);
         pArray->AddToken(aToken);
@@ -1464,8 +1463,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrix* pMat2 = xMat;
-        ScMatrixToken aToken(pMat2);
+        ScMatrixToken aToken(xMat);
         pArray->AddToken(aToken);
 
         itrCache->mpRangeData = xMat;
@@ -1493,8 +1491,7 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
         for (SCSIZE j = 0; j < nR; ++j)
             xMat->PutEmpty(i, j);
 
-    ScMatrix* pMat2 = xMat;
-    ScMatrixToken aToken(pMat2);
+    ScMatrixToken aToken(xMat);
     auto_ptr<ScTokenArray> pArray(new ScTokenArray);
     pArray->AddToken(aToken);
     return pArray.release();

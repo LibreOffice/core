@@ -1668,17 +1668,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const INT32* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol],
+                                xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0,
+                                xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
@@ -1711,17 +1710,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const double* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutDouble( pColArr[nCol],
+                                xMatrix->PutDouble( pColArr[nCol],
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutDouble( 0.0,
+                                xMatrix->PutDouble( 0.0,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
@@ -1754,17 +1752,16 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                         xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
-                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
                             const rtl::OUString* pColArr = pRowArr[nRow].getConstArray();
                             for (nCol=0; nCol<nColCount; nCol++)
-                                pMatrix->PutString( String( pColArr[nCol] ),
+                                xMatrix->PutString( String( pColArr[nCol] ),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                             for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING,
+                                xMatrix->PutString( EMPTY_STRING,
                                         static_cast<SCSIZE>(nCol),
                                         static_cast<SCSIZE>(nRow) );
                         }
