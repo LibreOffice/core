@@ -158,16 +158,25 @@ namespace
                 m_Thread->create();
             }
             virtual ~OnLogRotateThreadWatcher()
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
 
             // XTerminateListener
             virtual void SAL_CALL queryTermination(const EventObject&) throw(RuntimeException)
                 { };
             virtual void SAL_CALL notifyTermination(const EventObject&) throw(RuntimeException)
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
             // XEventListener
             virtual void SAL_CALL disposing(const EventObject&) throw(RuntimeException)
-                { m_Thread->disposing()->terminate(); };
+            {
+                m_Thread->disposing()->terminate();
+                m_Thread->join();
+            };
         private:
             ::std::auto_ptr<OnLogRotateThread> m_Thread;
     };
