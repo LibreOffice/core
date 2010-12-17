@@ -229,11 +229,11 @@ static uno::Reference< util::XCloseable > CreateDocument( const uno::Reference< 
     }
     catch( const uno::Exception& )
     {
-        // some of our embedded object implementations (in particular chart) do neither support
-        // the EmbeddedObject, nor the EmbeddedScriptSupport argument. Also, they do not support
-        // XInitialization, which means the default factory from cppuhelper will throw an
+        // if an embedded object implementation does not support XInitialization,
+        // the default factory from cppuhelper will throw an
         // IllegalArgumentException when we try to create the instance with arguments.
         // Okay, so we fall back to creating the instance without any arguments.
+        OSL_ASSERT("Consider implementing interface XInitialization to avoid duplicate construction");
         xDocument = _rxFactory->createInstance( _rDocumentServiceName );
     }
 
