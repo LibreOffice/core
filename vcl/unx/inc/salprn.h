@@ -99,23 +99,6 @@ public:
     virtual ULONG                   GetErrorCode();
 };
 
-class Timer;
-
-namespace vcl_sal {
-class VCL_DLLPUBLIC PrinterUpdate
-{
-    static Timer*           pPrinterUpdateTimer;
-    static int              nActiveJobs;
-
-    static void doUpdate();
-    DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
-public:
-    static void update();
-    static void jobStarted() { nActiveJobs++; }
-    static void jobEnded();
-};
-}
-
 #endif // _SV_SALPRN_H
 
 

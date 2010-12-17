@@ -198,6 +198,10 @@ public:
     virtual void*           GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes );
 
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
+
+    virtual void updatePrinterUpdate();
+    virtual void jobStartedPrinterUpdate();
+    virtual void jobEndedPrinterUpdate();
 };
 
 #endif // _SV_SALINST_HXX

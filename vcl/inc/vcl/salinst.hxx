@@ -181,6 +181,11 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDragSource();
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void        AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType) = 0;
+
+    // callbacks for printer updates
+    virtual void updatePrinterUpdate() {}
+    virtual void jobStartedPrinterUpdate() {}
+    virtual void jobEndedPrinterUpdate() {}
 };
 
 // called from SVMain

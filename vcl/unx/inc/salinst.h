@@ -117,6 +117,9 @@ public:
     virtual com::sun::star::uno::Reference< com::sun::star::uno::XInterface > CreateDropTarget();
     virtual void            AddToRecentDocumentList(const rtl::OUString& rFileUrl, const rtl::OUString& rMimeType);
 
+    virtual void updatePrinterUpdate();
+    virtual void jobStartedPrinterUpdate();
+    virtual void jobEndedPrinterUpdate();
 
     bool isPrinterInit() const
     {

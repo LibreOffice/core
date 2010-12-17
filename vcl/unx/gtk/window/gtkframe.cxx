@@ -2842,8 +2842,11 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
 
     GTK_YIELD_GRAB();
 
+    X11SalInstance *pSalInstance =
+        static_cast< X11SalInstance* >(GetSalData()->m_pInstance);
+
     // check if printers have changed (analogous to salframe focus handler)
-    vcl_sal::PrinterUpdate::update();
+    pSalInstance->updatePrinterUpdate();
 
     if( !pEvent->in )
     {
@@ -2856,9 +2859,8 @@ gboolean GtkSalFrame::signalFocus( GtkWidget*, GdkEventFocus* pEvent, gpointer f
         pThis->m_pIMHandler->focusChanged( pEvent->in );
 
     // ask for changed printers like generic implementation
-    if( pEvent->in )
-        if( static_cast< X11SalInstance* >(GetSalData()->m_pInstance)->isPrinterInit() )
-            vcl_sal::PrinterUpdate::update();
+    if( pEvent->in && pSalInstance->isPrinterInit() )
+        pSalInstance->updatePrinterUpdate();
 
     // FIXME: find out who the hell steals the focus from our frame
     // while we have the pointer grabbed, this should not come from

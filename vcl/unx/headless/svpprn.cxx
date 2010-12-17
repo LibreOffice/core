@@ -851,7 +851,7 @@ BOOL PspSalPrinter::StartJob(
     bool /*bDirect*/,
     ImplJobSetup* pJobSetup )
 {
-    vcl_sal::PrinterUpdate::jobStarted();
+    SvpSalInstance::s_pDefaultInstance->jobStartedPrinterUpdate();
 
     m_bFax      = false;
     m_bPdf      = false;
@@ -946,7 +946,7 @@ BOOL PspSalPrinter::EndJob()
             bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }
-    vcl_sal::PrinterUpdate::jobEnded();
+    SvpSalInstance::s_pDefaultInstance->jobEndedPrinterUpdate();
     return bSuccess;
 }
 
@@ -955,7 +955,7 @@ BOOL PspSalPrinter::EndJob()
 BOOL PspSalPrinter::AbortJob()
 {
     BOOL bAbort = m_aPrintJob.AbortJob() ? TRUE : FALSE;
-    vcl_sal::PrinterUpdate::jobEnded();
+    SvpSalInstance::s_pDefaultInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
 
@@ -997,13 +997,29 @@ ULONG PspSalPrinter::GetErrorCode()
 }
 
 /*
- *  vcl::PrinterUpdate
+ *  svp::PrinterUpdate
  */
 
-Timer* vcl_sal::PrinterUpdate::pPrinterUpdateTimer = NULL;
-int vcl_sal::PrinterUpdate::nActiveJobs = 0;
+namespace svp
+{
+    class PrinterUpdate
+    {
+        static Timer*                       pPrinterUpdateTimer;
+        static int                          nActiveJobs;
 
-void vcl_sal::PrinterUpdate::doUpdate()
+        static void doUpdate();
+        DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+    public:
+        static void update();
+        static void jobStarted() { nActiveJobs++; }
+        static void jobEnded();
+    };
+}
+
+Timer* svp::PrinterUpdate::pPrinterUpdateTimer = NULL;
+int svp::PrinterUpdate::nActiveJobs = 0;
+
+void svp::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if( rManager.checkPrintersChanged( false ) && SvpSalInstance::s_pDefaultInstance )
@@ -1017,7 +1033,7 @@ void vcl_sal::PrinterUpdate::doUpdate()
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, )
+IMPL_STATIC_LINK_NOINSTANCE( svp::PrinterUpdate, UpdateTimerHdl, void*, )
 {
     if( nActiveJobs < 1 )
     {
@@ -1033,7 +1049,7 @@ IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, )
 
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::update()
+void svp::PrinterUpdate::update()
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
@@ -1053,14 +1069,19 @@ void vcl_sal::PrinterUpdate::update()
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, vcl_sal::PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, svp::PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateTimer->Start();
     }
 }
 
+void SvpSalInstance::updatePrinterUpdate()
+{
+    svp::PrinterUpdate::update();
+}
+
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::jobEnded()
+void svp::PrinterUpdate::jobEnded()
 {
     nActiveJobs--;
     if( nActiveJobs < 1 )
@@ -1073,6 +1094,16 @@ void vcl_sal::PrinterUpdate::jobEnded()
             doUpdate();
         }
     }
+}
+
+void SvpSalInstance::jobStartedPrinterUpdate()
+{
+    svp::PrinterUpdate::jobStarted();
+}
+
+void SvpSalInstance::jobEndedPrinterUpdate()
+{
+    svp::PrinterUpdate::jobEnded();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

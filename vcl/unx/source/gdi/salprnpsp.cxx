@@ -944,7 +944,7 @@ BOOL PspSalPrinter::StartJob(
     bool bDirect,
     ImplJobSetup* pJobSetup )
 {
-    vcl_sal::PrinterUpdate::jobStarted();
+    GetSalData()->m_pInstance->jobStartedPrinterUpdate();
 
     m_bFax      = false;
     m_bPdf      = false;
@@ -1040,7 +1040,7 @@ BOOL PspSalPrinter::EndJob()
             bSuccess = createPdf( m_aFileName, m_aTmpFile, rInfo.m_aCommand );
         }
     }
-    vcl_sal::PrinterUpdate::jobEnded();
+    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bSuccess;
 }
 
@@ -1049,7 +1049,7 @@ BOOL PspSalPrinter::EndJob()
 BOOL PspSalPrinter::AbortJob()
 {
     BOOL bAbort = m_aPrintJob.AbortJob() ? TRUE : FALSE;
-    vcl_sal::PrinterUpdate::jobEnded();
+    GetSalData()->m_pInstance->jobEndedPrinterUpdate();
     return bAbort;
 }
 
@@ -1090,14 +1090,30 @@ ULONG PspSalPrinter::GetErrorCode()
     return 0;
 }
 
+namespace x11
+{
+    class PrinterUpdate
+    {
+        static Timer*                       pPrinterUpdateTimer;
+        static int                          nActiveJobs;
+
+        static void doUpdate();
+        DECL_STATIC_LINK( PrinterUpdate, UpdateTimerHdl, void* );
+    public:
+        static void update(X11SalInstance &rInstance);
+        static void jobStarted() { nActiveJobs++; }
+        static void jobEnded();
+    };
+}
+
 /*
- *  vcl::PrinterUpdate
+ *  x11::PrinterUpdate
  */
 
-Timer* vcl_sal::PrinterUpdate::pPrinterUpdateTimer = NULL;
-int vcl_sal::PrinterUpdate::nActiveJobs = 0;
+Timer* x11::PrinterUpdate::pPrinterUpdateTimer = NULL;
+int x11::PrinterUpdate::nActiveJobs = 0;
 
-void vcl_sal::PrinterUpdate::doUpdate()
+void x11::PrinterUpdate::doUpdate()
 {
     ::psp::PrinterInfoManager& rManager( ::psp::PrinterInfoManager::get() );
     if( rManager.checkPrintersChanged( false ) )
@@ -1112,7 +1128,7 @@ void vcl_sal::PrinterUpdate::doUpdate()
 
 // -----------------------------------------------------------------------
 
-IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
+IMPL_STATIC_LINK_NOINSTANCE( x11::PrinterUpdate, UpdateTimerHdl, void*, EMPTYARG )
 {
     if( nActiveJobs < 1 )
     {
@@ -1128,12 +1144,12 @@ IMPL_STATIC_LINK_NOINSTANCE( vcl_sal::PrinterUpdate, UpdateTimerHdl, void*, EMPT
 
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::update()
+void x11::PrinterUpdate::update(X11SalInstance &rInstance)
 {
     if( Application::GetSettings().GetMiscSettings().GetDisablePrinting() )
         return;
 
-    if( ! static_cast< X11SalInstance* >(GetSalData()->m_pInstance)->isPrinterInit() )
+    if( ! rInstance.isPrinterInit() )
     {
         // #i45389# start background printer detection
         psp::PrinterInfoManager::get();
@@ -1146,14 +1162,24 @@ void vcl_sal::PrinterUpdate::update()
     {
         pPrinterUpdateTimer = new Timer();
         pPrinterUpdateTimer->SetTimeout( 500 );
-        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, vcl_sal::PrinterUpdate, UpdateTimerHdl ) );
+        pPrinterUpdateTimer->SetTimeoutHdl( STATIC_LINK( NULL, x11::PrinterUpdate, UpdateTimerHdl ) );
         pPrinterUpdateTimer->Start();
     }
 }
 
+void X11SalInstance::updatePrinterUpdate()
+{
+    x11::PrinterUpdate::update(*this);
+}
+
+void X11SalInstance::jobStartedPrinterUpdate()
+{
+    x11::PrinterUpdate::jobStarted();
+}
+
 // -----------------------------------------------------------------------
 
-void vcl_sal::PrinterUpdate::jobEnded()
+void x11::PrinterUpdate::jobEnded()
 {
     nActiveJobs--;
     if( nActiveJobs < 1 )
@@ -1166,6 +1192,11 @@ void vcl_sal::PrinterUpdate::jobEnded()
             doUpdate();
         }
     }
+}
+
+void X11SalInstance::jobEndedPrinterUpdate()
+{
+    x11::PrinterUpdate::jobEnded();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
