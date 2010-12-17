@@ -491,6 +491,7 @@ if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isx
 }
 
 if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
+if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::patch ) { installer::scriptitems::use_patch_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1b.log", $scpactionsinproductarrayref); }
 
@@ -829,7 +830,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_For_Languagepacks($filesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles10c.log", $filesinproductlanguageresolvedarrayref); }
     }
-
 
     if ( ! $allvariableshashref->{'NO_README_IN_ROOTDIR'} )
     {
@@ -1857,6 +1857,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
 
+            # Creating installation set for Unix help packs, that are not part of multi lingual installation sets
+            if ( ( $installer::globals::helppack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::helppack::build_installer_for_helppack($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
+
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::epmoutpath, $allvariableshashref); }
             if (( $installer::globals::patch ) && ( $installer::globals::isrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref); }
@@ -1894,6 +1897,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             # Creating installation set for Unix language packs, that are not part of multi lingual installation sets
             if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::languagepack::build_installer_for_languagepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
+
+            # Creating installation set for Unix help packs, that are not part of multi lingual installation sets
+            if ( ( $installer::globals::helppack ) && ( ! $installer::globals::debian ) && ( ! $installer::globals::makedownload ) ) { installer::helppack::build_installer_for_helpepack($newepmdir, $allvariableshashref, $includepatharrayref, $languagesarrayref, $languagestringref); }
 
             chdir($currentdir); # changing back into start directory
         }
@@ -2087,7 +2093,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         installer::windows::upgrade::create_upgrade_table($newidtdir, $allvariableshashref);
 
-        if ( ! $installer::globals::languagepack )   # the following tables not for language packs
+        if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack )) # the following tables not for language packs or help packs
         {
             installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 

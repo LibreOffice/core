@@ -706,7 +706,7 @@ sub change_patchmetadata_table
     my $descriptionvalue = "";
 
     my $base = $allvariables->{'PRODUCTNAME'} . " " . $allvariables->{'PRODUCTVERSION'};
-    if ( $installer::globals::languagepack ) { $base = $targetproductnamevalue; }
+    if ( $installer::globals::languagepack || $installer::globals::helppack ) { $base = $targetproductnamevalue; }
 
     my $windowspatchlevel = 0;
     if ( $allvariables->{'WINDOWSPATCHLEVEL'} ) { $windowspatchlevel = $allvariables->{'WINDOWSPATCHLEVEL'}; }
@@ -985,6 +985,7 @@ sub correct_patch
 
     my $localproduct = $installer::globals::product;
     if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+    elsif ( $installer::globals::helppack ) { $localproduct = $localproduct . "HelpPack"; }
 
     if ( $product eq $localproduct ) { $product_is_good = 1; }
 
@@ -1211,6 +1212,7 @@ sub create_msp_patch
     my $pcpfilename = $allvariables->{'PCPFILENAME'};
 
     if ( $installer::globals::languagepack ) { $pcpfilename =~ s/.pcp\s*$/languagepack.pcp/; }
+    elsif ( $installer::globals::helppack ) { $pcpfilename =~ s/.pcp\s*$/helppack.pcp/; }
 
     # Searching the pcp file in the include pathes
     my $fullpcpfilenameref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$pcpfilename, $includepatharrayref, 1);
@@ -1259,7 +1261,7 @@ sub create_msp_patch
     installer::systemactions::copy_complete_directory($oldinstallationsetpath, $mspdir);
 
     # Copying additional patches into the installation set, if required
-    if (( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ) && ( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ne "" ) && ( ! $installer::globals::languagepack ))
+    if (( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ) && ( $allvariables->{'ADDITIONALREQUIREDPATCHES'} ne "" ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
     {
         my $filename = $allvariables->{'ADDITIONALREQUIREDPATCHES'};
 

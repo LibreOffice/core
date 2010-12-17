@@ -54,6 +54,7 @@ sub get_arpcomments_for_property_table
     }
 
     if ( $installer::globals::languagepack ) { $comment = $comment . " " . "Language Pack"; }
+    elsif ( $installer::globals::helppack ) { $comment = $comment . " " . "Help Pack"; }
 
     if ( $installer::globals::patch )
     {
@@ -183,6 +184,11 @@ sub get_productname_for_property_table($$)
         # my $langstring = get_language_string();   # Example (English, Deutsch)
         my $langstring = get_english_language_string(); # New: (English, German)
         $productname = $name . " " . $version . " Language Pack" . " " . $langstring;
+    }
+    elsif ( $installer::globals::helppack )
+    {
+        my $langstring = get_english_language_string(); # New: (English, German)
+        $productname = $name . " " . $version . " Help Pack" . " " . $langstring;
     }
 
     if ( $installer::globals::patch )
@@ -363,6 +369,11 @@ sub set_important_properties
     if ( $installer::globals::languagepack )
     {
         my $onepropertyline = "ISLANGUAGEPACK" . "\t" . "1" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
+    }
+    elsif ( $installer::globals::helppack )
+    {
+        my $onepropertyline = "ISHELPPACK" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
     }
 

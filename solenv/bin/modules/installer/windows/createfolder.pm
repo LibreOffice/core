@@ -122,8 +122,8 @@ sub create_createfolder_table
     {
         my $onedir = ${$dirref}[$i];
 
-        # language packs get only language dependent directories
-        if (( $installer::globals::languagepack ) && ( $onedir->{'specificlanguage'} eq "" )) { next };
+        # language packs and help packs get only language dependent directories
+        if (( $installer::globals::languagepack ) ||  ( $installer::globals::languagepack ) && ( $onedir->{'specificlanguage'} eq "" )) { next };
 
         my $styles = "";
 

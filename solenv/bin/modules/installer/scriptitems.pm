@@ -1226,6 +1226,7 @@ sub get_Source_Directory_For_Files_From_Includepathlist
         if (( $styles =~ /\bSTARREGISTRY\b/ ) || ( $styles =~ /\bFILE_CAN_MISS\b/ )) { $file_can_miss = 1; }
 
         if (( $installer::globals::languagepack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))) { $file_can_miss = 1; }
+        if (( $installer::globals::helppack ) && ( ! $onefile->{'ismultilingual'} ) && ( ! ( $styles =~ /\bFORCEHELPPACK\b/ ))) { $file_can_miss = 1; }
 
         my $sourcepathref = "";
 
@@ -1367,7 +1368,7 @@ sub remove_Files_Without_Sourcedirectory
 
                     next;   # removing this file from list, if sourcepath is empty
                 }
-                else # special case for language packs
+                elsif ( $installer::globals::languagepack ) # special case for language packs
                 {
                     if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCELANGUAGEPACK\b/ ))
                     {
@@ -1384,6 +1385,28 @@ sub remove_Files_Without_Sourcedirectory
                         $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
                         push( @installer::globals::logfileinfo, $infoline);
                         $infoline = "INFO: It is not language dependent and can be ignored in language packs.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                }
+                else # special case for help packs
+                {
+                    if (( $onefile->{'ismultilingual'} ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
+                    {
+                        $infoline = "ERROR: Removing file $filename from file list.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+
+                        push(@missingfiles, "ERROR: File not found: $filename\n");
+                        $error_occured = 1;
+
+                        next;   # removing this file from list, if sourcepath is empty
+                    }
+                    else
+                    {
+                        $infoline = "INFO: Removing file $filename from file list. It is not language dependent.\n";
+                        push( @installer::globals::logfileinfo, $infoline);
+                        $infoline = "INFO: It is not language dependent and can be ignored in help packs.\n";
                         push( @installer::globals::logfileinfo, $infoline);
 
                         next;   # removing this file from list, if sourcepath is empty

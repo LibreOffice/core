@@ -111,6 +111,13 @@ sub register_extensions
         push( @installer::globals::logfileinfo, $infoline);
     }
 
+    if (( $installer::globals::helppack ) && ( ! -f $unopkgfile ))
+    {
+        $unopkgexists = 0;
+        $infoline = "Help packs do not contain unopkg!\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
     if ( ! -f $unopkgfile )
     {
         $unopkgexists = 0;
@@ -424,10 +431,11 @@ sub create_package
 
         my $localtempdir = $tempdir;
 
-        if (( $installer::globals::languagepack ) || ( $installer::globals::patch ))
+        if (( $installer::globals::languagepack ) || ( $installer::globals::helppack ) || ( $installer::globals::patch ))
         {
             $localtempdir = "$tempdir/$packagename";
             if ( $installer::globals::languagepack ) { $volume_name = "$volume_name Language Pack"; }
+            if ( $installer::globals::helppack ) { $volume_name = "$volume_name Help Pack"; }
             if ( $installer::globals::patch ) { $volume_name = "$volume_name Patch"; }
 
             # Create tar ball named tarball.tar.bz2
@@ -472,6 +480,7 @@ sub create_package
             my $scriptrealfilename = "osx_install.applescript";
             my $scriptfilename = "";
             if ( $installer::globals::languagepack ) { $scriptfilename = "osx_install_languagepack.applescript"; }
+            if ( $installer::globals::helppack ) { $scriptfilename = "osx_install_helppack.applescript"; }
             if ( $installer::globals::patch ) { $scriptfilename = "osx_install_patch.applescript"; }
             my $scripthelpersolverfilename = "mac_install.script";
             my $scripthelperrealfilename = $volume_name;
@@ -616,6 +625,7 @@ sub create_simple_package
         {
             $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
             if ( $installer::globals::languagepack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "langpackdownloadname"); }
+            if ( $installer::globals::helppack ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "helppackdownloadname"); }
             if ( $installer::globals::patch ) { $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "patchdownloadname"); }
             $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
         }

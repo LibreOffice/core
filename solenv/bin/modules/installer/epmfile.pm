@@ -402,7 +402,8 @@ sub create_epm_header
         $readmefilenameen = "README_en-US";
     }
 
-    if (( $installer::globals::languagepack )   # in language packs the files LICENSE and README are removed, because they are not language specific
+    if (( $installer::globals::languagepack )   # in language packs and help packs the files LICENSE and README are removed, because they are not language specific
+        || ( $installer::globals::helppack )
         || ( $variableshashref->{'NO_README_IN_ROOTDIR'} ))
     {
         if ( $installer::globals::iswindowsbuild )
