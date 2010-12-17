@@ -82,8 +82,6 @@ void ImportExcel::Formula25()
         bShrFmla = nFlag0 & 0x08;   // shared or not shared
     }
 
-    nLastXF = nXF;
-
     Formula( aXclPos, nXF, nFormLen, fCurVal, bShrFmla );
 }
 
@@ -104,8 +102,6 @@ void ImportExcel::Formula4()
     aIn >> aXclPos >> nXF >> fCurVal >> nFlag0;
     aIn.Ignore( 1 );
     aIn >> nFormLen;
-
-    nLastXF = nXF;
 
     Formula( aXclPos, nXF, nFormLen, fCurVal, false );
 }

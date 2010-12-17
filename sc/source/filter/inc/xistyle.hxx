@@ -416,6 +416,11 @@ public:
                             ::std::list<ScAttrEntry>& rAttrs, SCROW nRow1, SCROW nRow2,
                             sal_uInt32 nForceScNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND);
 
+    /** Converts formatting information from BIFF2 cell record data directly. */
+    static void         ApplyPatternForBiff2CellFormat(
+                            const XclImpRoot& rRoot, const ScAddress& rScPos,
+                            sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 );
+
 private:
     void                ReadXF2( XclImpStream& rStrm );
     void                ReadXF3( XclImpStream& rStrm );
