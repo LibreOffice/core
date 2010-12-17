@@ -102,22 +102,6 @@ namespace svt { namespace table
         {
             return false;
         }
-    virtual void                setRowHeaders(bool _bRowHeaders)
-        {
-            (void)_bRowHeaders;
-        }
-    virtual void                setColumnHeaders(bool _bColumnHeaders)
-        {
-        (void)_bColumnHeaders;
-        }
-    void setColumnCount(TableSize _nColCount)
-    {
-        (void) _nColCount;
-    }
-    void setRowCount(TableSize _nRowCount)
-    {
-        (void)_nRowCount;
-    }
         virtual bool                isCellEditable( ColPos col, RowPos row ) const
         {
             (void)col;
@@ -186,57 +170,33 @@ namespace svt { namespace table
     {
         return false;
     }
-    virtual void setCellContent(const std::vector<std::vector< ::com::sun::star::uno::Any > >& )
-    {
-    }
     virtual ::com::sun::star::util::Color getLineColor()
     {
         return 0;
-    }
-    virtual void setLineColor(::com::sun::star::util::Color )
-    {
     }
     virtual ::com::sun::star::util::Color getHeaderBackgroundColor()
     {
         return -1;
     }
-    virtual void setHeaderBackgroundColor(::com::sun::star::util::Color )
-    {
-    }
     virtual ::com::sun::star::util::Color getTextColor()
     {
         return 0;
-    }
-    virtual void setTextColor(::com::sun::star::util::Color )
-    {
     }
     virtual ::com::sun::star::util::Color getOddRowBackgroundColor()
     {
         return -1;
     }
-    virtual void setOddRowBackgroundColor(::com::sun::star::util::Color )
-    {
-    }
     virtual ::com::sun::star::style::VerticalAlignment getVerticalAlign()
     {
         return com::sun::star::style::VerticalAlignment(0);
-    }
-    virtual void setVerticalAlign(com::sun::star::style::VerticalAlignment )
-    {
     }
     virtual ::com::sun::star::util::Color getEvenRowBackgroundColor()
     {
         return -1;
     }
-    virtual void setEvenRowBackgroundColor(::com::sun::star::util::Color )
-    {
-    }
     virtual std::vector<std::vector< ::com::sun::star::uno::Any > >& getCellContent()
     {
         return m_aCellContent;
-    }
-    virtual void setRowHeaderName(const std::vector<rtl::OUString>& )
-    {
     }
     virtual std::vector<rtl::OUString>& getRowHeaderName()
     {
