@@ -44,10 +44,10 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dockwin.hxx>
+#include <sfx2/sfxresid.hxx>
 
 #include "pres.hxx"
 #include "navigatr.hxx"
-//#include "navichld.hxx"
 #include "navigatr.hrc"
 #include "pgjump.hxx"
 #include "app.hrc"
@@ -345,7 +345,6 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
             pMenu->Execute( this, maToolbox.GetItemRect( nId ), POPUPMENU_EXECUTE_DOWN );
             pBox->EndSelection();
             delete pMenu;
-            //pBox->Invalidate();
         }
         break;
 
