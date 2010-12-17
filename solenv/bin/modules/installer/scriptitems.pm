@@ -1357,7 +1357,7 @@ sub remove_Files_Without_Sourcedirectory
             {
                 my $filename = $onefile->{'Name'};
 
-                if ( ! $installer::globals::languagepack )
+                if ( ! $installer::globals::languagepack && !$installer::globals::helppack)
                 {
                     $infoline = "ERROR: Removing file $filename from file list.\n";
                     push( @installer::globals::logfileinfo, $infoline);
