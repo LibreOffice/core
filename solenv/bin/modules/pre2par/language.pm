@@ -27,6 +27,7 @@
 
 package pre2par::language;
 
+use strict;
 use pre2par::existence;
 
 ##############################################################
@@ -71,39 +72,6 @@ sub get_language_string_from_language_block
     return $newstring;
 }
 
-##############################################################
-# Returning the complete block in all languages
-# for a specified string
-##############################################################
-
-sub get_language_block_from_language_file
-{
-    my ($searchstring, $langfile) = @_;
-
-    my @language_block = ();
-
-    for ( my $i = 0; $i <= $#{$langfile}; $i++ )
-    {
-        if ( ${$langfile}[$i] =~ /^\s*\[\s*$searchstring\s*\]\s*$/ )
-        {
-            my $counter = $i;
-
-            push(@language_block, ${$langfile}[$counter]);
-            $counter++;
-
-            while (( $counter <= $#{$langfile} ) && (!( ${$langfile}[$counter] =~ /^\s*\[/ )))
-            {
-                push(@language_block, ${$langfile}[$counter]);
-                $counter++;
-            }
-
-            last;
-        }
-    }
-
-    return \@language_block;
-}
-
 ############################################
 # collecting all replace variables
 # in a language file
@@ -119,7 +87,20 @@ sub get_all_replace_variables
     {
         if ( ${$langfile}[$i] =~ /^\s*\[\s*(.*?)\s*\]\s*$/ )
         {
-        $allvars{$1} = 1;
+        my $variable = $1;
+#       print "lang block '$variable'\n";
+        my @lang_block = ();
+        my $counter;
+
+        # Store the complete block in all languages for a specified variable
+            for ( $counter = $i + 1; $counter <= $#{$langfile}; $counter++ ) {
+        my $line = ${$langfile}[$counter];
+        last if ($line =~ /^s*\[/); # next decl.
+        push @lang_block, $line;
+        }
+#       print "$variable = '@lang_block'\n";
+        $allvars{$variable} = \@lang_block;
+        $i = $counter - 1;
         }
     }
 
@@ -151,9 +132,8 @@ sub localize
 #       print "line '$oneline' split to '$language' '$variable'\n";
 
         if (defined $replace_hash->{$variable}) {
-                    my $languageblock = get_language_block_from_language_file($variable, $langfile);
-                    my $newstring = get_language_string_from_language_block($languageblock, $language);
-
+                    my $languageblock = $replace_hash->{$variable};
+                    my $newstring = get_language_string_from_language_block($replace_hash->{$variable}, $language);
                     if ( $newstring eq "" ) { $newstring = "\"" . $variable . "\""; }
 
                     $oneline =~ s/$variable/$newstring/g;
