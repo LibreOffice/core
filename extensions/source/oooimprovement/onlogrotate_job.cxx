@@ -132,8 +132,12 @@ namespace
             {
                 if(Config(m_ServiceFactory).getInvitationAccepted())
                 {
-                    packLogs(m_ServiceFactory);
-                    uploadLogs(m_ServiceFactory);
+                    try
+                    {
+                        packLogs(m_ServiceFactory);
+                        uploadLogs(m_ServiceFactory);
+                    }
+                    catch( com::sun::star::uno::Exception) {}
                 }
                 else
                     LogStorage(m_ServiceFactory).clear();
