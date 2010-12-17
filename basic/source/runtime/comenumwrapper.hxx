@@ -24,36 +24,31 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef __ooo_vba_word_XWindow_idl__
-#define __ooo_vba_word_XWindow_idl__
 
-#ifndef __com_sun_star_uno_XInterface_idl__
-#include <com/sun/star/uno/XInterface.idl>
-#endif
+#ifndef _COMENUMWRAPPER_HXX
+#define _COMENUMWRAPPER_HXX
 
-#ifndef __ooo_vba_XHelperInterface_idl__
-#include <ooo/vba/XHelperInterface.idl>
-#endif
+#include <com/sun/star/container/XEnumeration.hpp>
+#include <com/sun/star/script/XInvocation.hpp>
 
-//=============================================================================
+#include <cppuhelper/implbase1.hxx>
 
-module ooo {  module vba {  module word {
-
-//=============================================================================
-//interface XPane;
-interface XWindow : com::sun::star::uno::XInterface
+class ComEnumerationWrapper : public ::cppu::WeakImplHelper1< ::com::sun::star::container::XEnumeration >
 {
-    [attribute] any View;
-    void Activate();
-    void Close([in] any SaveChanges, [in] any RouteDocument);
-    any Panes( [in] any Index ); // this is a fake api for it seems not support in Write
-    any ActivePane(); // this is a fake api for it seems not support in Write
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > m_xInvocation;
+    sal_Int32 m_nCurInd;
+
+public:
+    ComEnumerationWrapper( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation >& xInvocation )
+    : m_xInvocation( xInvocation )
+    , m_nCurInd( 0 )
+    {
+    }
+
+    // container::XEnumeration
+    virtual ::sal_Bool SAL_CALL hasMoreElements() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL nextElement() throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
-//=============================================================================
-
-}; }; };
-
-#endif
-
+#endif // _COMENUMWRAPPER_HXX
 

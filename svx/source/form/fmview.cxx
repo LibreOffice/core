@@ -139,9 +139,7 @@ void FmFormView::Init()
         const SfxPoolItem *pItem=0;
         if ( pObjShell->GetMedium()->GetItemSet()->GetItemState( SID_COMPONENTDATA, sal_False, &pItem ) == SFX_ITEM_SET )
         {
-            Sequence< PropertyValue > aSeq;
-            ( ((SfxUnoAnyItem*)pItem)->GetValue() ) >>= aSeq;
-            ::comphelper::NamedValueCollection aComponentData( aSeq );
+            ::comphelper::NamedValueCollection aComponentData( ((SfxUnoAnyItem*)pItem)->GetValue() );
             bInitDesignMode = aComponentData.getOrDefault( "ApplyFormDesignMode", bInitDesignMode );
         }
     }
