@@ -88,13 +88,6 @@ interface XGridColumn : com::sun::star::lang::XComponent
     */
     [oneway] void removeColumnListener( [in] XGridColumnListener listener);
 
-    /**Updates changed column widths, when column widths are being resized.
-        @param name
-            can be PrefWidth or ColWidth, depending on which was changed
-        @param width
-            the new column width
-    */
-    void updateColumn( [in] string name, [in] long width);
     /**Sets column index
         @param index
             index, which is the index of the column in the column array of the column model
