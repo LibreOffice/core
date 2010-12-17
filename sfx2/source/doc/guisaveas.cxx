@@ -71,6 +71,7 @@
 #include <tools/urlobj.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <comphelper/mimeconfighelper.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/window.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
@@ -507,7 +508,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sa
     aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
     aSearchRequest[0].Value <<= GetDocServiceName();
 
-    return SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+    return ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
 
 //-------------------------------------------------------------------------
@@ -527,7 +528,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         aSearchRequest[1].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
         aSearchRequest[1].Value <<= GetDocServiceName();
 
-        aFilterProps = SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
+        aFilterProps = ::comphelper::MimeConfigurationHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
     }
     else
     {
@@ -1646,47 +1647,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
     }
 
     return bDialogUsed;
-}
-
-//-------------------------------------------------------------------------
-// static
-uno::Sequence< beans::PropertyValue > SfxStoringHelper::SearchForFilter(
-                                                        const uno::Reference< container::XContainerQuery >& xFilterQuery,
-                                                        const uno::Sequence< beans::NamedValue >& aSearchRequest,
-                                                        sal_Int32 nMustFlags,
-                                                        sal_Int32 nDontFlags )
-{
-    uno::Sequence< beans::PropertyValue > aFilterProps;
-    uno::Reference< container::XEnumeration > xFilterEnum =
-                                            xFilterQuery->createSubSetEnumerationByProperties( aSearchRequest );
-
-    // the first default filter will be taken,
-    // if there is no filter with flag default the first acceptable filter will be taken
-    if ( xFilterEnum.is() )
-    {
-        while ( xFilterEnum->hasMoreElements() )
-        {
-            uno::Sequence< beans::PropertyValue > aProps;
-            if ( xFilterEnum->nextElement() >>= aProps )
-            {
-                ::comphelper::SequenceAsHashMap aPropsHM( aProps );
-                sal_Int32 nFlags = aPropsHM.getUnpackedValueOrDefault( ::rtl::OUString::createFromAscii( "Flags" ),
-                                                                        (sal_Int32)0 );
-                if ( ( ( nFlags & nMustFlags ) == nMustFlags ) && !( nFlags & nDontFlags ) )
-                {
-                    if ( ( nFlags & SFX_FILTER_DEFAULT ) == SFX_FILTER_DEFAULT )
-                    {
-                        aFilterProps = aProps;
-                        break;
-                    }
-                    else if ( !aFilterProps.getLength() )
-                        aFilterProps = aProps;
-                }
-            }
-        }
-    }
-
-    return aFilterProps;
 }
 
 //-------------------------------------------------------------------------
