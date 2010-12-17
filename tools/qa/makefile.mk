@@ -42,8 +42,11 @@ CFLAGSCXX+=-DADAPT_EXT_STL
 CFLAGSCXX += $(CPPUNIT_CFLAGS)
 DLLPRE = # no leading "lib" on .so files
 
-SHL1TARGET = test_pathutils
-SHL1OBJS = $(SLO)$/test_pathutils.obj $(SLO)$/pathutils.obj
+SHL1TARGET=test_tools
+SHL1OBJS=\
+    $(SLO)$/pathutils.obj \
+    $(SLO)$/test_pathutils.obj \
+    $(SLO)$/test_reversemap.obj
 SHL1STDLIBS = $(TOOLSLIB) $(CPPUNITLIB) $(SALLIB)
 SHL1VERSIONMAP = version.map
 SHL1IMPLIB = i$(SHL1TARGET)
