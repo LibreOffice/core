@@ -115,15 +115,15 @@ interface XGridDataModel: ::com::sun::star::lang::XComponent
         @param Listener
             the listener to add.
     */
-    [oneway] void addDataListener( [in] XGridDataListener  listener);
+    [oneway] void addGridDataListener( [in] XGridDataListener  listener);
 
     //-------------------------------------------------------------------------
 
-    /** Removes a listener previously added with <method>addDataListener()</method>.
+    /** Removes a listener previously added with <method>addGridDataListener()</method>.
         @param Listener
             the listener to remove.
     */
-    [oneway] void removeDataListener( [in] XGridDataListener listener);
+    [oneway] void removeGridDataListener( [in] XGridDataListener listener);
 
 };
 
