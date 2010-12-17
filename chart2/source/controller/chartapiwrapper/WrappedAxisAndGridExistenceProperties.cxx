@@ -69,7 +69,6 @@ private: //member
     sal_Int32   m_nDimensionIndex;
 };
 
-//static
 void WrappedAxisAndGridExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -239,7 +238,6 @@ private: //member
     TitleHelper::eTitleType             m_eTitleType;
 };
 
-//static
 void WrappedAxisTitleExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -359,7 +357,6 @@ private: //member
     sal_Int32   m_nDimensionIndex;
 };
 
-//static
 void WrappedAxisLabelExistenceProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
             , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

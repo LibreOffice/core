@@ -198,7 +198,6 @@ drawing::Position3D PlottingPositionHelper::transformScaledLogicToScene(
     return SequenceToPosition3D(aSeq);
 }
 
-//static
 awt::Point PlottingPositionHelper::transformSceneToScreenPosition( const drawing::Position3D& rScenePosition3D
                 , const uno::Reference< drawing::XShapes >& xSceneTarget
                 , ShapeFactory* pShapeFactory
