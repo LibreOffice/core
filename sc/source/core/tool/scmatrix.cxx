@@ -518,7 +518,7 @@ ScMatrixValue ScMatrixImpl::Get(SCSIZE nC, SCSIZE nR) const
             break;
             case mdds::element_empty:
                 // Empty path equals empty plus flag.
-                aVal.nType == maMat.get_flag(nR, nC) ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
+                aVal.nType = maMat.get_flag(nR, nC) ? SC_MATVAL_EMPTYPATH : SC_MATVAL_EMPTY;
                 aVal.fVal = 0.0;
             default:
                 ;
@@ -677,58 +677,63 @@ void ScMatrixImpl::CompareGreaterEqual()
     compareMatrix<ElemGreaterEqual>(maMat);
 }
 
-double ScMatrixImpl::And()
+namespace {
+
+struct AndEvaluator
 {
-    // All elements must be of value type.
-    // True only if all the elements have non-zero values.
-    pair<size_t,size_t> aDim = maMat.size();
+    bool isBadElem(double fVal) const { return fVal == 0; }
+    bool returnOnElem() const { return false; }
+    bool returnOnAllElems() const { return true; }
+};
+
+struct OrEvaluator
+{
+    bool isBadElem(double fVal) const { return fVal != 0; }
+    bool returnOnElem() const { return true; }
+    bool returnOnAllElems() const { return false; }
+};
+
+template <typename _Evaluator>
+bool EvalMatrix(const MatrixImplType& rMat)
+{
+    _Evaluator aEval;
+    pair<size_t,size_t> aDim = rMat.size();
     size_t nRows = aDim.first, nCols = aDim.second;
     for (size_t i = 0; i < nRows; ++i)
     {
         for (size_t j = 0; j < nCols; ++j)
         {
-            matrix_element_t eType = maMat.get_type(i, j);
+            matrix_element_t eType = rMat.get_type(i, j);
             if (eType != mdds::element_numeric && eType == mdds::element_boolean)
                 // assuming a CompareMat this is an error
                 return CreateDoubleError(errIllegalArgument);
 
-            double fVal = maMat.get_numeric(i, j);
+            double fVal = rMat.get_numeric(i, j);
             if (!::rtl::math::isFinite(fVal))
                 // DoubleError
                 return fVal;
 
-            if (fVal == 0.0)
-                return false;
+            if (aEval.isBadElem(fVal))
+                return aEval.returnOnElem();
         }
     }
-    return true;
+    return aEval.returnOnAllElems();
+}
+
+}
+
+double ScMatrixImpl::And()
+{
+    // All elements must be of value type.
+    // True only if all the elements have non-zero values.
+    return EvalMatrix<AndEvaluator>(maMat);
 }
 
 double ScMatrixImpl::Or()
 {
     // All elements must be of value type.
     // True if at least one element has a non-zero value.
-    pair<size_t,size_t> aDim = maMat.size();
-    size_t nRows = aDim.first, nCols = aDim.second;
-    for (size_t i = 0; i < nRows; ++i)
-    {
-        for (size_t j = 0; j < nCols; ++j)
-        {
-            matrix_element_t eType = maMat.get_type(i, j);
-            if (eType != mdds::element_numeric && eType == mdds::element_boolean)
-                // assuming a CompareMat this is an error
-                return CreateDoubleError(errIllegalArgument);
-
-            double fVal = maMat.get_numeric(i, j);
-            if (!::rtl::math::isFinite(fVal))
-                // DoubleError
-                return fVal;
-
-            if (fVal != 0.0)
-                return true;
-        }
-    }
-    return false;
+    return EvalMatrix<OrEvaluator>(maMat);
 }
 
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
