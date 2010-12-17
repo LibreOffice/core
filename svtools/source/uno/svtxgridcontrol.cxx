@@ -589,10 +589,12 @@ void SAL_CALL  SVTXGridControl::dataChanged(const ::com::sun::star::awt::grid::G
 //----------------------------------------------------------------------------------------------------------------------
 void SAL_CALL SVTXGridControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException)
 {
-    const Reference< XGridColumn > xGridColumn( i_event.Element, UNO_QUERY );
+    const Reference< XGridColumn > xGridColumn( i_event.Element, UNO_QUERY_THROW );
+    sal_Int32 nIndex( m_pTableModel->getColumnCount() );
+    OSL_VERIFY( i_event.Accessor >>= nIndex );
+
     const PColumnModel tableColumn( new UnoControlTableColumn( xGridColumn ) );
-        // will throw if this is not a valid grid column
-    m_pTableModel->appendColumn( tableColumn );
+    m_pTableModel->insertColumn( nIndex, tableColumn );
 
     impl_setColumnListening( Reference< XGridColumn >( i_event.Element, UNO_QUERY ), true );
 }

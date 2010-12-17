@@ -326,10 +326,16 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     void UnoControlTableModel::appendColumn( const PColumnModel& i_column )
     {
+        insertColumn( m_pImpl->aColumns.size(), i_column );
+    }
+
+    //--------------------------------------------------------------------
+    void UnoControlTableModel::insertColumn( ColPos const i_position, const PColumnModel& i_column )
+    {
+        ENSURE_OR_RETURN_VOID( ( i_position >= 0 ) && ( i_position <= m_pImpl->aColumns.size() ), "illegal position!" );
         ENSURE_OR_RETURN_VOID( !!i_column, "illegal column" );
 
-        const ColPos nInsertPosition = m_pImpl->aColumns.size();
-        m_pImpl->aColumns.push_back( i_column );
+        m_pImpl->aColumns.insert( m_pImpl->aColumns.begin(), i_column );
 
         // notify listeners
         ModellListeners aListeners( m_pImpl->m_aListeners );
@@ -338,7 +344,7 @@ using namespace ::com::sun::star::awt::grid;
                 ++loop
             )
         {
-            (*loop)->columnsInserted( nInsertPosition, nInsertPosition );
+            (*loop)->columnsInserted( i_position, i_position );
         }
     }
 

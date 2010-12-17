@@ -166,6 +166,7 @@ class UnoControlTableModel : public ITableModel
         void    setEvenRowBackgroundColor(::com::sun::star::util::Color _rColor);
         void    setVerticalAlign(::com::sun::star::style::VerticalAlignment _rAlign);
         void    appendColumn( const PColumnModel& i_column );
+        void    insertColumn( ColPos const i_position, const PColumnModel& i_column );
         void    removeAllColumns();
 };
 
