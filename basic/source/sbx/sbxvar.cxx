@@ -81,7 +81,6 @@ SbxVariable::SbxVariable() : SbxValue()
     nHash = 0;
 #ifdef DBG_UTIL
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
 
@@ -110,7 +109,6 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     if ( maName.EqualsAscii( aCellsStr ) )
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
 
@@ -123,7 +121,6 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
     nHash = 0;
 #ifdef DBG_UTIL
     DbgOutf( "SbxVariable::Ctor %lx=%ld", (void*)this, ++nVar );
-    GetSbxData_Impl()->aVars.Insert( this, LIST_APPEND );
 #endif
 }
 
@@ -135,7 +132,6 @@ SbxVariable::~SbxVariable()
     static sal_Char const aCellsStr[] = "Cells";
     if ( maName.EqualsAscii( aCellsStr ) )
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
-    GetSbxData_Impl()->aVars.Remove( this );
 #endif
     delete mpSbxVariableImpl;
     delete pCst;
