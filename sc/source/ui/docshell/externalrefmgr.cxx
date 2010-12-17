@@ -2048,10 +2048,6 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     {
         // document already loaded.
 
-        // TODO: Find out a way to access a document that's already open in
-        // memory and re-use that instance, instead of loading it from the
-        // disk again.
-
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time();
         return static_cast<ScDocShell*>(p)->GetDocument();
