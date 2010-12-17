@@ -201,8 +201,8 @@ long AppEdit::InitMenu( Menu* pMenu )
 
     if( pDataEdit )
     {
-        USHORT UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
-        USHORT RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
+        size_t UndoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetUndoActionCount();
+        size_t RedoCount = ((TextEdit*)pDataEdit)->aEdit.pTextEngine->GetUndoManager().GetRedoActionCount();
 
         pMenu->EnableItem( RID_EDITUNDO,    UndoCount > 0 );
         pMenu->EnableItem( RID_EDITREDO,    RedoCount > 0 );

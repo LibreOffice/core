@@ -590,7 +590,7 @@ namespace framework
                 getXUndoManager()
             );
 
-        USHORT nContextElements = 0;
+        size_t nContextElements = 0;
 
         const bool isHiddenContext = m_aContextVisibilities.top();;
         m_aContextVisibilities.pop();
@@ -647,7 +647,7 @@ namespace framework
         if ( rUndoManager.IsInListAction() )
             throw UndoContextNotClosedException( ::rtl::OUString(), getXUndoManager() );
 
-        const USHORT nElements  =   i_undo
+        const size_t nElements  =   i_undo
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
         if ( nElements == 0 )
@@ -1017,7 +1017,7 @@ namespace framework
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
 
             const IUndoManager& rUndoManager = i_impl.getUndoManager();
-            const USHORT nActionCount = i_undo
+            const size_t nActionCount = i_undo
                                     ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                     :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
             if ( nActionCount == 0 )
@@ -1039,12 +1039,12 @@ namespace framework
             ::osl::MutexGuard aGuard( i_impl.getMutex() );
 
             const IUndoManager& rUndoManager = i_impl.getUndoManager();
-            const USHORT nCount =   i_undo
+            const size_t nCount =   i_undo
                                 ?   rUndoManager.GetUndoActionCount( IUndoManager::TopLevel )
                                 :   rUndoManager.GetRedoActionCount( IUndoManager::TopLevel );
 
             Sequence< ::rtl::OUString > aTitles( nCount );
-            for ( USHORT i=0; i<nCount; ++i )
+            for ( size_t i=0; i<nCount; ++i )
             {
                 aTitles[i] =    i_undo
                             ?   rUndoManager.GetUndoActionComment( i, IUndoManager::TopLevel )
