@@ -634,8 +634,8 @@ void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, 
 {
     if (ValidColRow( nC1, nR1) && ValidColRow( nC2, nR2))
     {
-        for (SCSIZE i = nR1; i < nR2; ++i)
-            for (SCSIZE j = nC1; j < nC2; ++j)
+        for (SCSIZE i = nR1; i <= nR2; ++i)
+            for (SCSIZE j = nC1; j <= nC2; ++j)
                 maMat.set(i, j, fVal);
     }
     else
