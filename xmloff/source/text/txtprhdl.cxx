@@ -1039,8 +1039,8 @@ sal_Bool XMLTextCombineCharPropHdl_Impl::exportXML(
 {
     rValue >>= rStrExpValue;
 
-    // #i114107# attribute of type "character": only export if length is 1
-    return (1 == rStrExpValue.getLength()) ? sal_True : sal_False;
+    // #i114107# attribute of type "character": export only if length is 1
+    return (1 == rStrExpValue.getLength())  ? sal_True : sal_False;
 }
 
 XMLTextCombineCharPropHdl_Impl::~XMLTextCombineCharPropHdl_Impl()
