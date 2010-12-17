@@ -333,7 +333,7 @@ void ScInterpreter:: ScLCM()
 ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetNewMat" );
-    ScMatrix* pMat = new ScMatrix( nC, nR);
+    ScMatrixRef pMat = new ScMatrix( nC, nR);
     pMat->SetErrorInterpreter( this);
     // A temporary matrix is mutable and ScMatrix::CloneIfConst() returns the
     // very matrix.
@@ -343,8 +343,7 @@ ScMatrixRef ScInterpreter::GetNewMat(SCSIZE nC, SCSIZE nR)
     if ( nCols != nC || nRows != nR )
     {   // arbitray limit of elements exceeded
         SetError( errStackOverflow);
-        pMat->Delete();
-        pMat = NULL;
+        pMat.reset();
     }
     return pMat;
 }

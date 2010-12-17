@@ -225,22 +225,15 @@ public:
         MUST be at least of the size of the original matrix. */
     ScMatrix* CloneAndExtend( SCSIZE nNewCols, SCSIZE nNewRows, DensityType eType) const;
 
-    inline  void    IncRef() const
+    inline void IncRef() const
     {
         ++nRefCnt;
     }
-    inline  void    DecRef() const
+    inline void DecRef() const
     {
-        if ( nRefCnt > 0 )
-            if ( --nRefCnt == 0 )
-                delete this;
-    }
-    inline  void    Delete()
-    {
-        if ( nRefCnt == 0 )
+        --nRefCnt;
+        if (nRefCnt == 0)
             delete this;
-        else
-            --nRefCnt;
     }
 
     DensityType GetDensityType() const;
