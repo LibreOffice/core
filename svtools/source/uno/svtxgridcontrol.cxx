@@ -278,12 +278,8 @@ void SVTXGridControl::setProperty( const ::rtl::OUString& PropertyName, const An
                         //check whether the data row vector length matches with the column count
                         if(m_xColumnModel->getColumnCount() == 0)
                         {
-                            for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
-                            {
-                                UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
-                                m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
-                            }
                             m_xColumnModel->setDefaultColumns(rawRowData.getLength());
+                            // this will trigger notifications, which in turn will let us update our m_pTableModel
                         }
                         else
                             if((unsigned int)rawRowData.getLength()!=(unsigned)m_pTableModel->getColumnCount())
@@ -400,13 +396,8 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
     int colCount = m_xColumnModel->getColumnCount();
     if(colCount == 0)
     {
-        Reference<XGridColumnListener> listener(*this,UNO_QUERY_THROW);
         m_xColumnModel->setDefaultColumns(rawRowData.getLength());
-        for ( ::svt::table::ColPos col = 0; col < rawRowData.getLength(); ++col )
-        {
-            UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
-            m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
-        }
+            // this will trigger notifications, which in turn will let us update our m_pTableModel
 
     }
     else if((unsigned int)rawRowData.getLength()!=(unsigned)colCount)

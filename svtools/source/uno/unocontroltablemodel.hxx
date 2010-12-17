@@ -52,20 +52,12 @@ class UnoControlTableColumn : public IColumnModel
 {
     private:
         ColumnID                                        m_nID;
-        String                                          m_sName;
-        bool                                            m_bIsResizable;
-        TableMetrics                                    m_nWidth;
-        TableMetrics                                    m_nMinWidth;
-        TableMetrics                                    m_nMaxWidth;
-        TableMetrics                                    m_nPrefWidth;
-        ::com::sun::star::style::HorizontalAlignment    m_eHorizontalAlign;
 
         const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >
                                                         m_xGridColumn;
 
     public:
         UnoControlTableColumn( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::grid::XGridColumn >& i_gridColumn );
-        UnoControlTableColumn();
 
         // IColumnModel overridables
         virtual ColumnID        getID() const;
@@ -84,6 +76,9 @@ class UnoControlTableColumn : public IColumnModel
         virtual void            setPreferredWidth( TableMetrics _nPrefWidth );
         virtual ::com::sun::star::style::HorizontalAlignment getHorizontalAlign();
         virtual void setHorizontalAlign(::com::sun::star::style::HorizontalAlignment _xAlign);
+
+    private:
+        UnoControlTableColumn();    // not implemented
 };
 
 struct UnoControlTableModel_Impl;

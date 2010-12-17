@@ -46,38 +46,42 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::awt::grid;
 
     //--------------------------------------------------------------------
-    UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
-        :m_nID( 0 )
-        ,m_sName()
-        ,m_bIsResizable( true )
-        ,m_nWidth( 4  )
-        ,m_nMinWidth( 0 )
-        ,m_nMaxWidth( 0 )
-        ,m_nPrefWidth ( 0 )
-        ,m_eHorizontalAlign( com::sun::star::style::HorizontalAlignment_LEFT )
-        ,m_xGridColumn( i_gridColumn )
+    namespace
     {
-        m_sName = m_xGridColumn->getTitle();
+        template< class ATTRIBUTE_TYPE >
+        void lcl_set( Reference< XGridColumn > const & i_column, void ( SAL_CALL XGridColumn::*i_setter )( ATTRIBUTE_TYPE ),
+            ATTRIBUTE_TYPE i_value )
+        {
+            try
+            {
+                (i_column.get()->*i_setter) ( i_value );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
 
-        m_eHorizontalAlign = m_xGridColumn->getHorizontalAlign();
-        m_nWidth = m_xGridColumn->getColumnWidth();
-        m_bIsResizable = m_xGridColumn->getResizeable();
-
-        m_nPrefWidth = m_xGridColumn->getPreferredWidth();
-        m_nMaxWidth = m_xGridColumn->getMaxWidth();
-        m_nMinWidth = m_xGridColumn->getMinWidth();
+        template< class ATTRIBUTE_TYPE >
+        ATTRIBUTE_TYPE lcl_get( Reference< XGridColumn > const & i_column, ATTRIBUTE_TYPE ( SAL_CALL XGridColumn::*i_getter )() )
+        {
+            ATTRIBUTE_TYPE value = ATTRIBUTE_TYPE();
+            try
+            {
+                value = (i_column.get()->*i_getter)();
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+            return value;
+        }
     }
 
     //--------------------------------------------------------------------
-    UnoControlTableColumn::UnoControlTableColumn()
+    UnoControlTableColumn::UnoControlTableColumn( const Reference< XGridColumn >& i_gridColumn )
         :m_nID( 0 )
-        ,m_sName()
-        ,m_bIsResizable( true )
-        ,m_nWidth( 4  )
-        ,m_nMinWidth( 0 )
-        ,m_nMaxWidth( 0 )
-        ,m_nPrefWidth ( 0 )
-        ,m_eHorizontalAlign(com::sun::star::style::HorizontalAlignment(0))
+        ,m_xGridColumn( i_gridColumn, UNO_SET_THROW )
     {
     }
 
@@ -97,100 +101,101 @@ using namespace ::com::sun::star::awt::grid;
     //--------------------------------------------------------------------
     String UnoControlTableColumn::getName() const
     {
-        return m_sName;
+        ::rtl::OUString sName;
+        try
+        {
+            sName = m_xGridColumn->getTitle();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return sName;
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setName( const String& _rName )
     {
-        m_sName = _rName;
+        try
+        {
+            m_xGridColumn->setTitle( _rName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
+
     //--------------------------------------------------------------------
     bool UnoControlTableColumn::isResizable() const
     {
-        return m_bIsResizable;
+        return lcl_get( m_xGridColumn, &XGridColumn::getResizeable );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setResizable( bool _bResizable )
     {
-        m_bIsResizable = _bResizable;
+        return lcl_set( m_xGridColumn, &XGridColumn::setResizeable, sal_Bool( _bResizable ) );
     }
 
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getWidth() const
     {
-        return m_nWidth;
+        return lcl_get( m_xGridColumn, &XGridColumn::getColumnWidth );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setWidth( TableMetrics _nWidth )
     {
-        m_nWidth = _nWidth;
-        try
-        {
-            if ( m_xGridColumn.is() )
-                m_xGridColumn->setColumnWidth( getWidth() );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        lcl_set( m_xGridColumn, &XGridColumn::setColumnWidth, _nWidth );
     }
 
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getMinWidth() const
     {
-        return m_nMinWidth;
+        return lcl_get( m_xGridColumn, &XGridColumn::getMinWidth );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setMinWidth( TableMetrics _nMinWidth )
     {
-        m_nMinWidth = _nMinWidth;
+        lcl_set( m_xGridColumn, &XGridColumn::setMinWidth, _nMinWidth );
     }
 
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getMaxWidth() const
     {
-        return m_nMaxWidth;
+        return lcl_get( m_xGridColumn, &XGridColumn::getMaxWidth );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setMaxWidth( TableMetrics _nMaxWidth )
     {
-        m_nMaxWidth = _nMaxWidth;
+        lcl_set( m_xGridColumn, &XGridColumn::setMinWidth, _nMaxWidth );
     }
+
     //--------------------------------------------------------------------
     TableMetrics UnoControlTableColumn::getPreferredWidth() const
     {
-        return m_nPrefWidth;
+        return lcl_get( m_xGridColumn, &XGridColumn::getPreferredWidth );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setPreferredWidth( TableMetrics _nPrefWidth )
     {
-        m_nPrefWidth = _nPrefWidth;
-        try
-        {
-            if ( m_xGridColumn.is() )
-                m_xGridColumn->setPreferredWidth( getPreferredWidth() );
-        }
-        catch( const Exception& )
-        {
-            DBG_UNHANDLED_EXCEPTION();
-        }
+        lcl_set( m_xGridColumn, &XGridColumn::setPreferredWidth, _nPrefWidth );
     }
+
     //--------------------------------------------------------------------
     ::com::sun::star::style::HorizontalAlignment UnoControlTableColumn::getHorizontalAlign()
     {
-        return m_eHorizontalAlign;
+        return lcl_get( m_xGridColumn, &XGridColumn::getHorizontalAlign );
     }
 
     //--------------------------------------------------------------------
     void UnoControlTableColumn::setHorizontalAlign( com::sun::star::style::HorizontalAlignment _align )
     {
-        m_eHorizontalAlign = _align;
+        lcl_set( m_xGridColumn, &XGridColumn::setHorizontalAlign, _align );
     }
 
     //====================================================================
