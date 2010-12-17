@@ -564,8 +564,8 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
                     {
                         List* pList = aStrLst.GetList();
                         BOOL bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
-                        USHORT nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
-                        for (USHORT i=0; i<nCount; i++)
+                        size_t nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
+                        for (size_t i=0; i<nCount; i++)
                             pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
                                                                  pUndoManager->GetRedoActionComment(i) ),
                                            LIST_APPEND );
