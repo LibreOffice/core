@@ -93,7 +93,7 @@
 #include <hash_map>
 
 #include <sfx2/event.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 
 #define OMULTITYPEINTERFACECONTAINERHELPER      ::cppu::OMultiTypeInterfaceContainerHelper
 #define OINTERFACECONTAINERHELPER               ::cppu::OInterfaceContainerHelper

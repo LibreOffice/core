@@ -110,7 +110,7 @@ using namespace ::vos;
 #include <svtools/sfxecode.hxx>
 #include <unotools/syslocale.hxx>
 
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include "sfxbasic.hxx"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfac.hxx>
@@ -120,7 +120,7 @@ using namespace ::vos;
 #include <sfx2/progress.hxx>
 #include "openflag.hxx"
 #include "bastyp.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/doctempl.hxx>
 #include <sfx2/frame.hxx>
 #include <sfx2/dispatch.hxx>

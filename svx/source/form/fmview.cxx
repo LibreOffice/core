@@ -50,7 +50,7 @@
 #include <basic/sbx.hxx>
 #include "fmitems.hxx"
 #include "fmobj.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpagv.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/fmview.hxx>
@@ -76,7 +76,7 @@
 #include <vcl/stdtext.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

@@ -29,8 +29,8 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdopage.hxx>
-#include "svdglob.hxx"  // Stringcache
-#include "svdstr.hrc"   // Objektname
+#include "svx/svdglob.hxx"  // Stringcache
+#include "svx/svdstr.hrc"   // Objektname
 #include <svx/svdtrans.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdmodel.hxx>

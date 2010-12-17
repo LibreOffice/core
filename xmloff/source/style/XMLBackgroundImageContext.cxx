@@ -31,7 +31,7 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmluconv.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>

@@ -102,7 +102,7 @@
 //________________________________________________________________________________________________________
 
 #include <sfx2/sfxbasecontroller.hxx>
-#include "viewfac.hxx"
+#include "sfx2/viewfac.hxx"
 #include "workwin.hxx"
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
@@ -114,7 +114,7 @@
 #include <sfx2/request.hxx>
 #include <sfx2/objuno.hxx>
 #include <sfx2/printer.hxx>
-#include <basmgr.hxx>
+#include <sfx2/basmgr.hxx>
 #include <sfx2/event.hxx>
 #include <eventsupplier.hxx>
 #include <sfx2/evntconf.hxx>
@@ -125,12 +125,12 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>
 #include "sfx2/docstoragemodifylistener.hxx"
-#include "brokenpackageint.hxx"
+#include "sfx2/brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/DocumentMetadataAccess.hxx>
 
-#include <sfxresid.hxx>
+#include <sfx2/sfxresid.hxx>
 
 //________________________________________________________________________________________________________
 // const
@@ -1805,10 +1805,9 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                 SFX_ITEMSET_ARG( pMedium->GetItemSet(), pRepairItem, SfxBoolItem, SID_REPAIRPACKAGE, FALSE );
                 if ( !pRepairItem || !pRepairItem->GetValue() )
                 {
-                    RequestPackageReparation* pRequest = new RequestPackageReparation( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pRequest );
-                    xHandler->handle( xRequest );
-                    if( pRequest->isApproved() )
+                    RequestPackageReparation aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
+                    if( aRequest.isApproved() )
                     {
                         // broken package: try second loading and allow repair
                         pMedium->GetItemSet()->Put( SfxBoolItem( SID_REPAIRPACKAGE, sal_True ) );
@@ -1828,9 +1827,8 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
                 if ( nError == ERRCODE_IO_BROKENPACKAGE )
                 {
                     // repair either not allowed or not successful
-                    NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocName );
-                    com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest > xRequest ( pNotifyRequest );
-                       xHandler->handle( xRequest );
+                    NotifyBrokenPackage aRequest( aDocName );
+                    xHandler->handle( aRequest.GetRequest() );
                 }
             }
         }
@@ -3288,7 +3286,7 @@ uno::Reference< ui::XUIConfigurationManager > SAL_CALL SfxBaseModel::getUIConfig
                     uno::Reference< lang::XMultiServiceFactory > xServiceMgr( ::comphelper::getProcessServiceFactory() );
                     uno::Sequence< uno::Reference< container::XIndexContainer > > rToolbars;
 
-                    sal_Bool bImported = UIConfigurationImporterOOo1x::ImportCustomToolbars(
+                    sal_Bool bImported = framework::UIConfigurationImporterOOo1x::ImportCustomToolbars(
                                             xNewUIConfMan, rToolbars, xServiceMgr, xOOo1ConfigStorage );
                     if ( bImported )
                     {

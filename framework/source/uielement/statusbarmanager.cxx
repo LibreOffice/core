@@ -35,7 +35,7 @@
 //_________________________________________________________________________________________________________________
 #include <threadhelp/threadhelpbase.hxx>
 #include <threadhelp/resetableguard.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <macros/generic.hxx>
 #include <macros/xinterface.hxx>
 #include <macros/xtypeprovider.hxx>

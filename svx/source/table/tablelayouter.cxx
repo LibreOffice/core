@@ -44,8 +44,8 @@
 #include "editeng/borderline.hxx"
 #include "editeng/boxitem.hxx"
 #include "svx/svdmodel.hxx"
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 using ::rtl::OUString;
 using ::com::sun::star::awt::XLayoutConstrains;

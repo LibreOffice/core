@@ -41,17 +41,17 @@
 #include <comphelper/serviceinfohelper.hxx>
 
 #include <cppuhelper/implbase2.hxx>
-#include <unofill.hxx>
+#include <svx/unofill.hxx>
 #include <editeng/unonrule.hxx>
 #include <svtools/unoimap.hxx>
 #include <svx/fmdpage.hxx>
 #include <svx/fmmodel.hxx>
 #include <svx/fmpage.hxx>
 #include <sfx2/sfx.hrc>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 
 #include <svx/svdmodel.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/svdtypes.hxx>
 #include <svx/unoprov.hxx>
 #include <svx/unopage.hxx>
