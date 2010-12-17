@@ -62,6 +62,8 @@
 #include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 #include <com/sun/star/util/XMacroExpander.hpp>
 
+#include <vector>
+
 #define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
 #define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
 
@@ -75,6 +77,8 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::container;
+
+using ::std::vector;
 
 namespace io_FileAccess
 {
@@ -523,8 +527,7 @@ DateTime OFileAccess::getDateTimeModified( const rtl::OUString& FileURL )
     return aDateTime;
 }
 
-
-DECLARE_LIST( StringList_Impl, rtl::OUString* )
+typedef vector< rtl::OUString* > StringList_Impl;
 
 Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& FolderURL, sal_Bool bIncludeFolders )
     throw(CommandAbortedException, Exception, RuntimeException)
@@ -551,7 +554,7 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
 
     if ( xResultSet.is() )
     {
-        pFiles = new StringList_Impl;
+        pFiles = new StringList_Impl();
         Reference< com::sun::star::ucb::XContentAccess > xContentAccess( xResultSet, UNO_QUERY );
 
         while ( xResultSet->next() )
@@ -559,21 +562,22 @@ Sequence< rtl::OUString > OFileAccess::getFolderContents( const rtl::OUString& F
             rtl::OUString aId = xContentAccess->queryContentIdentifierString();
             INetURLObject aURL( aId, INET_PROT_FILE );
             rtl::OUString* pFile = new rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-            pFiles->Insert( pFile, LIST_APPEND );
+            pFiles->push_back( pFile );
         }
     }
 
     if ( pFiles )
     {
-        ULONG nCount = pFiles->Count();
+        size_t nCount = pFiles->size();
         Sequence < rtl::OUString > aRet( nCount );
         rtl::OUString* pRet = aRet.getArray();
-        for ( USHORT i = 0; i < nCount; ++i )
+        for ( size_t i = 0; i < nCount; ++i )
         {
-            rtl::OUString* pFile = pFiles->GetObject(i);
+            rtl::OUString* pFile = pFiles->at( i );
             pRet[i] = *( pFile );
             delete pFile;
         }
+        pFiles->clear();
         delete pFiles;
         return aRet;
     }
