@@ -201,9 +201,6 @@ public:
         return (nType & SC_MATVAL_NONVALUE) == SC_MATVAL_EMPTYPATH;
     }
 
-    /** If nC*nR results in more than GetElementsMax() entries, a 1x1 matrix is
-        created instead and a double error value (errStackOverflow) is set.
-        Compare nC and nR with a GetDimensions() call to check. */
     ScMatrix( SCSIZE nC, SCSIZE nR, DensityType eType = FILLED_ZERO);
 
     /** Clone the matrix. */
@@ -219,8 +216,7 @@ public:
     void SetImmutable( bool bVal );
 
     /**
-     * Resize the matrix to specified new dimension.  Note that this operation
-     * clears all stored values.
+     * Resize the matrix to specified new dimension.
      */
     void Resize( SCSIZE nC, SCSIZE nR);
 
