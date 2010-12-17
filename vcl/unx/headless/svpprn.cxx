@@ -317,7 +317,7 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
                                                    ImplJobSetup*            pJobSetup )
 {
     // create and initialize SalInfoPrinter
-    PspSalInfoPrinter* pPrinter = new PspSalInfoPrinter;
+    SvpSalInfoPrinter* pPrinter = new SvpSalInfoPrinter;
 
     if( pJobSetup )
     {
@@ -362,8 +362,8 @@ void SvpSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 SalPrinter* SvpSalInstance::CreatePrinter( SalInfoPrinter* pInfoPrinter )
 {
     // create and initialize SalPrinter
-    PspSalPrinter* pPrinter = new PspSalPrinter( pInfoPrinter );
-    pPrinter->m_aJobData = static_cast<PspSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
+    SvpSalPrinter* pPrinter = new SvpSalPrinter( pInfoPrinter );
+    pPrinter->m_aJobData = static_cast<SvpSalInfoPrinter*>(pInfoPrinter)->m_aJobData;
 
     return pPrinter;
 }
@@ -438,7 +438,7 @@ String SvpSalInstance::GetDefaultPrinter()
 
 // =======================================================================
 
-PspSalInfoPrinter::PspSalInfoPrinter()
+SvpSalInfoPrinter::SvpSalInfoPrinter()
 {
     m_pGraphics = NULL;
     m_bPapersInit = false;
@@ -446,7 +446,7 @@ PspSalInfoPrinter::PspSalInfoPrinter()
 
 // -----------------------------------------------------------------------
 
-PspSalInfoPrinter::~PspSalInfoPrinter()
+SvpSalInfoPrinter::~SvpSalInfoPrinter()
 {
     if( m_pGraphics )
     {
@@ -457,7 +457,7 @@ PspSalInfoPrinter::~PspSalInfoPrinter()
 
 // -----------------------------------------------------------------------
 
-void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
+void SvpSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 {
     m_aPaperFormats.clear();
     m_bPapersInit = true;
@@ -482,14 +482,14 @@ void PspSalInfoPrinter::InitPaperFormats( const ImplJobSetup* )
 
 // -----------------------------------------------------------------------
 
-int PspSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
+int SvpSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* )
 {
     return 900;
 }
 
 // -----------------------------------------------------------------------
 
-SalGraphics* PspSalInfoPrinter::GetGraphics()
+SalGraphics* SvpSalInfoPrinter::GetGraphics()
 {
     // return a valid pointer only once
     // the reasoning behind this is that we could have different
@@ -507,7 +507,7 @@ SalGraphics* PspSalInfoPrinter::GetGraphics()
 
 // -----------------------------------------------------------------------
 
-void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
+void SvpSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
 {
     if( pGraphics == m_pGraphics )
     {
@@ -519,7 +519,7 @@ void PspSalInfoPrinter::ReleaseGraphics( SalGraphics* pGraphics )
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
+BOOL SvpSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 {
     return FALSE;
 }
@@ -531,7 +531,7 @@ BOOL PspSalInfoPrinter::Setup( SalFrame*, ImplJobSetup* )
 // data should be merged into the driver data
 // If pJobSetup->mpDriverData IS NULL, then the driver defaults
 // should be merged into the independent data
-BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
+BOOL SvpSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
     if( pJobSetup->mpDriverData )
         return SetData( ~0, pJobSetup );
@@ -558,7 +558,7 @@ BOOL PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 // and sets the new independ data in pJobSetup
 // Only the data must be changed, where the bit
 // in nGetDataFlags is set
-BOOL PspSalInfoPrinter::SetData(
+BOOL SvpSalInfoPrinter::SetData(
     ULONG nSetDataFlags,
     ImplJobSetup* pJobSetup )
 {
@@ -664,7 +664,7 @@ BOOL PspSalInfoPrinter::SetData(
 
 // -----------------------------------------------------------------------
 
-void PspSalInfoPrinter::GetPageInfo(
+void SvpSalInfoPrinter::GetPageInfo(
     const ImplJobSetup* pJobSetup,
     long& rOutWidth, long& rOutHeight,
     long& rPageOffX, long& rPageOffY,
@@ -708,7 +708,7 @@ void PspSalInfoPrinter::GetPageInfo(
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
+ULONG SvpSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 {
     if( ! pJobSetup )
         return 0;
@@ -722,7 +722,7 @@ ULONG PspSalInfoPrinter::GetPaperBinCount( const ImplJobSetup* pJobSetup )
 
 // -----------------------------------------------------------------------
 
-String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG nPaperBin )
+String SvpSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG nPaperBin )
 {
     JobData aData;
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, aData );
@@ -746,7 +746,7 @@ String PspSalInfoPrinter::GetPaperBinName( const ImplJobSetup* pJobSetup, ULONG 
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT nType )
+ULONG SvpSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT nType )
 {
     switch( nType )
     {
@@ -814,7 +814,7 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
  *  SalPrinter
  */
 
-PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
+SvpSalPrinter::SvpSalPrinter( SalInfoPrinter* pInfoPrinter )
  : m_bFax( false ),
    m_bPdf( false ),
    m_bSwallowFaxNo( false ),
@@ -827,7 +827,7 @@ PspSalPrinter::PspSalPrinter( SalInfoPrinter* pInfoPrinter )
 
 // -----------------------------------------------------------------------
 
-PspSalPrinter::~PspSalPrinter()
+SvpSalPrinter::~SvpSalPrinter()
 {
 }
 
@@ -842,7 +842,7 @@ static String getTmpName()
     return aSys;
 }
 
-BOOL PspSalPrinter::StartJob(
+BOOL SvpSalPrinter::StartJob(
     const XubString* pFileName,
     const XubString& rJobName,
     const XubString& rAppName,
@@ -926,7 +926,7 @@ BOOL PspSalPrinter::StartJob(
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::EndJob()
+BOOL SvpSalPrinter::EndJob()
 {
     BOOL bSuccess = m_aPrintJob.EndJob();
 
@@ -952,7 +952,7 @@ BOOL PspSalPrinter::EndJob()
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::AbortJob()
+BOOL SvpSalPrinter::AbortJob()
 {
     BOOL bAbort = m_aPrintJob.AbortJob() ? TRUE : FALSE;
     SvpSalInstance::s_pDefaultInstance->jobEndedPrinterUpdate();
@@ -961,7 +961,7 @@ BOOL PspSalPrinter::AbortJob()
 
 // -----------------------------------------------------------------------
 
-SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
+SalGraphics* SvpSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
 {
     JobData::constructFromStreamBuffer( pJobSetup->mpDriverData, pJobSetup->mnDriverDataLen, m_aJobData );
     m_pGraphics = new PspGraphics( &m_aJobData, &m_aPrinterGfx, m_bFax ? &m_aFaxNr : NULL, m_bSwallowFaxNo, m_pInfoPrinter  );
@@ -982,7 +982,7 @@ SalGraphics* PspSalPrinter::StartPage( ImplJobSetup* pJobSetup, BOOL )
 
 // -----------------------------------------------------------------------
 
-BOOL PspSalPrinter::EndPage()
+BOOL SvpSalPrinter::EndPage()
 {
     sal_Bool bResult = m_aPrintJob.EndPage();
     m_aPrinterGfx.Clear();
@@ -991,7 +991,7 @@ BOOL PspSalPrinter::EndPage()
 
 // -----------------------------------------------------------------------
 
-ULONG PspSalPrinter::GetErrorCode()
+ULONG SvpSalPrinter::GetErrorCode()
 {
     return 0;
 }

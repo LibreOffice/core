@@ -36,15 +36,15 @@
 
 class PspGraphics;
 
-class PspSalInfoPrinter : public SalInfoPrinter
+class SvpSalInfoPrinter : public SalInfoPrinter
 {
 public:
     PspGraphics*            m_pGraphics;
     psp::JobData            m_aJobData;
     psp::PrinterGfx         m_aPrinterGfx;
 
-    PspSalInfoPrinter();
-    virtual ~PspSalInfoPrinter();
+    SvpSalInfoPrinter();
+    virtual ~SvpSalInfoPrinter();
 
     // overload all pure virtual methods
     virtual SalGraphics*            GetGraphics();
@@ -63,7 +63,7 @@ public:
     virtual int                 GetLandscapeAngle( const ImplJobSetup* pSetupData );
 };
 
-class PspSalPrinter : public SalPrinter
+class SvpSalPrinter : public SalPrinter
 {
 public:
     String                  m_aFileName;
@@ -80,8 +80,8 @@ public:
     bool                    m_bCollate;
     SalInfoPrinter*         m_pInfoPrinter;
 
-    PspSalPrinter( SalInfoPrinter* );
-    virtual ~PspSalPrinter();
+    SvpSalPrinter( SalInfoPrinter* );
+    virtual ~SvpSalPrinter();
 
     // overload all pure virtual methods
     using SalPrinter::StartJob;
