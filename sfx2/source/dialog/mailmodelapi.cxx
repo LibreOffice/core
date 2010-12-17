@@ -213,21 +213,15 @@ void SAL_CALL OMailSendThreadImpl::onTerminated()
     delete this;
 }
 
-// class AddressList_Impl ------------------------------------------------
-
-typedef String* AddressItemPtr_Impl;
-DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl )
-
 // class SfxMailModel -----------------------------------------------
 
 void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
-        for ( i = 0; i < nCount; ++i )
-            delete pList->GetObject(i);
-        pList->Clear();
+        for ( size_t i = 0, nCount = pList->size(); i < nCount; ++i )
+            delete pList->at(i);
+        pList->clear();
     }
 }
 
@@ -236,12 +230,11 @@ void SfxMailModel::MakeValueList( AddressList_Impl* pList, String& rValueList )
     rValueList.Erase();
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
-        for ( i = 0; i < nCount; ++i )
+        for ( size_t i = 0, nCount = pList->size(); i < nCount; ++i )
         {
             if ( rValueList.Len() > 0 )
                 rValueList += ',';
-            rValueList += *pList->GetObject(i);
+            rValueList += *pList->at(i);
         }
     }
 }
@@ -539,21 +532,21 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         {
             if ( !mpToList )
                 // create the list
-                mpToList = new AddressList_Impl;
+                mpToList = new AddressList_Impl();
             pList = mpToList;
         }
         else if ( ROLE_CC == eRole )
         {
             if ( !mpCcList )
                 // create the list
-                mpCcList = new AddressList_Impl;
+                mpCcList = new AddressList_Impl();
             pList = mpCcList;
         }
         else if ( ROLE_BCC == eRole )
         {
             if ( !mpBccList )
                 // create the list
-                mpBccList = new AddressList_Impl;
+                mpBccList = new AddressList_Impl();
             pList = mpBccList;
         }
         else
@@ -565,7 +558,7 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         {
             // add address to list
             AddressItemPtr_Impl pAddress = new String( rAddress );
-            pList->Insert( pAddress, LIST_APPEND );
+            pList->push_back( pAddress );
         }
     }
 }

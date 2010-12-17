@@ -35,9 +35,11 @@
 #include <tools/string.hxx>
 #include "sfx2/dllapi.h"
 
-// class SfxMailModel_Impl -----------------------------------------------
+// class AddressList_Impl ------------------------------------------------
+typedef String* AddressItemPtr_Impl;
+typedef ::std::vector< AddressItemPtr_Impl > AddressList_Impl;
 
-class AddressList_Impl;
+// class SfxMailModel_Impl -----------------------------------------------
 
 class SFX2_DLLPUBLIC SfxMailModel
 {

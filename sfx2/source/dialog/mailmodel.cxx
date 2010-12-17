@@ -96,11 +96,6 @@ using namespace ::rtl;
 
 namespace css = ::com::sun::star;
 
-// class AddressList_Impl ------------------------------------------------
-
-typedef String* AddressItemPtr_Impl;
-DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl )
-
 // class SfxMailModel -----------------------------------------------
 
 static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
@@ -110,10 +105,9 @@ void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
-        for ( i = 0; i < nCount; ++i )
-            delete pList->GetObject(i);
-        pList->Clear();
+        for( size_t i = 0, n = pList->size(); i < n; ++i )
+            delete pList->at(i);
+        pList->clear();
     }
 }
 
@@ -122,12 +116,11 @@ void SfxMailModel::MakeValueList( AddressList_Impl* pList, String& rValueList )
     rValueList.Erase();
     if ( pList )
     {
-        ULONG i, nCount = pList->Count();
-        for ( i = 0; i < nCount; ++i )
+        for( size_t i = 0, n = pList->size(); i < n; ++i )
         {
             if ( rValueList.Len() > 0 )
                 rValueList += ',';
-            rValueList += *pList->GetObject(i);
+            rValueList += *pList->at(i);
         }
     }
 }
@@ -704,21 +697,21 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         {
             if ( !mpToList )
                 // create the list
-                mpToList = new AddressList_Impl;
+                mpToList = new AddressList_Impl();
             pList = mpToList;
         }
         else if ( ROLE_CC == eRole )
         {
             if ( !mpCcList )
                 // create the list
-                mpCcList = new AddressList_Impl;
+                mpCcList = new AddressList_Impl();
             pList = mpCcList;
         }
         else if ( ROLE_BCC == eRole )
         {
             if ( !mpBccList )
                 // create the list
-                mpBccList = new AddressList_Impl;
+                mpBccList = new AddressList_Impl();
             pList = mpBccList;
         }
         else
@@ -730,7 +723,7 @@ void SfxMailModel::AddAddress( const String& rAddress, AddressRole eRole )
         {
             // add address to list
             AddressItemPtr_Impl pAddress = new String( rAddress );
-            pList->Insert( pAddress, LIST_APPEND );
+            pList->push_back( pAddress );
         }
     }
 }
@@ -793,52 +786,52 @@ SfxMailModel::SendMailResult SfxMailModel::Send( const css::uno::Reference< css:
                     }
                     xSimpleMailMessage->setOriginator( maFromAddress );
 
-                    sal_Int32 nToCount      = mpToList ? mpToList->Count() : 0;
-                    sal_Int32 nCcCount      = mpCcList ? mpCcList->Count() : 0;
-                    sal_Int32 nCcSeqCount   = nCcCount;
+                    size_t nToCount     = mpToList ? mpToList->size() : 0;
+                    size_t nCcCount     = mpCcList ? mpCcList->size() : 0;
+                    size_t nCcSeqCount  = nCcCount;
 
                     // set recipient (only one) for this simple mail server!!
                     if ( nToCount > 1 )
                     {
                         nCcSeqCount = nToCount - 1 + nCcCount;
-                        xSimpleMailMessage->setRecipient( *mpToList->GetObject( 0 ));
+                        xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
                         nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                     }
                     else if ( nToCount == 1 )
                     {
-                        xSimpleMailMessage->setRecipient( *mpToList->GetObject( 0 ));
+                        xSimpleMailMessage->setRecipient( *mpToList->at( 0 ) );
                         nSendFlags = SimpleMailClientFlags::NO_USER_INTERFACE;
                     }
 
                     // all other recipient must be handled with CC recipients!
                     if ( nCcSeqCount > 0 )
                     {
-                        sal_Int32               nIndex = 0;
+                        size_t                  nIndex = 0;
                         Sequence< OUString >    aCcRecipientSeq;
 
                         aCcRecipientSeq.realloc( nCcSeqCount );
                         if ( nCcSeqCount > nCcCount )
                         {
-                            for ( sal_Int32 i = 1; i < nToCount; ++i )
+                            for ( size_t i = 1; i < nToCount; ++i )
                             {
-                                aCcRecipientSeq[nIndex++] = *mpToList->GetObject(i);
+                                aCcRecipientSeq[nIndex++] = *mpToList->at(i);
                             }
                         }
 
-                        for ( sal_Int32 i = 0; i < nCcCount; i++ )
+                        for ( size_t i = 0; i < nCcCount; i++ )
                         {
-                            aCcRecipientSeq[nIndex++] = *mpCcList->GetObject(i);
+                            aCcRecipientSeq[nIndex++] = *mpCcList->at(i);
                         }
                         xSimpleMailMessage->setCcRecipient( aCcRecipientSeq );
                     }
 
-                    sal_Int32 nBccCount = mpBccList ? mpBccList->Count() : 0;
+                    size_t nBccCount = mpBccList ? mpBccList->size() : 0;
                     if ( nBccCount > 0 )
                     {
                         Sequence< OUString > aBccRecipientSeq( nBccCount );
-                        for ( sal_Int32 i = 0; i < nBccCount; ++i )
+                        for ( size_t i = 0; i < nBccCount; ++i )
                         {
-                            aBccRecipientSeq[i] = *mpBccList->GetObject(i);
+                            aBccRecipientSeq[i] = *mpBccList->at(i);
                         }
                         xSimpleMailMessage->setBccRecipient( aBccRecipientSeq );
                     }
