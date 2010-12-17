@@ -450,8 +450,12 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     }
     else if (IsBlockMode())
     {
+        // block end position.
         nNewX = nBlockEndX;
         nNewY = nBlockEndY;
+        // cursor position - diagonally opposite of the block end position.
+        nCurX = aViewData.GetCurX();
+        nCurY = aViewData.GetCurY();
     }
     else
     {
@@ -467,16 +471,16 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     SCsCOLROW i;
     if ( nMovX > 0 )
         for ( i=0; i<nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  1,  0 );
+            pDoc->FindAreaPos( nNewX, nCurY, nTab,  1,  0 );
     if ( nMovX < 0 )
         for ( i=0; i<-nMovX; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab, -1,  0 );
+            pDoc->FindAreaPos( nNewX, nCurY, nTab, -1,  0 );
     if ( nMovY > 0 )
         for ( i=0; i<nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0,  1 );
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0,  1 );
     if ( nMovY < 0 )
         for ( i=0; i<-nMovY; i++ )
-            pDoc->FindAreaPos( nNewX, nNewY, nTab,  0, -1 );
+            pDoc->FindAreaPos( nCurX, nNewY, nTab,  0, -1 );
 
     if (eMode==SC_FOLLOW_JUMP)                  // unten/rechts nicht zuviel grau anzeigen
     {
