@@ -512,9 +512,9 @@ AC_ARG_WITH(extension-integration,
 
 AC_ARG_WITH(helppack-integration,
 [
-  --with-helppack-integration      It will integrate the helppacks to the installer
+  --without-helppack-integration      It will not integrate the helppacks to the installer
                           of the product.
-                          Please use this switch to include any helppack.],
+                          Please use this switch to use the online help or separate help packages.],
 ,)
 
 AC_ARG_WITH(fonts,
@@ -7127,7 +7127,7 @@ dnl ===================================================================
 dnl Test whether to integrate helppacks into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for helppack integration])
-if test "z$with_helppack_integration" = "z" -o "z$with_helppack_integration" = "zno" ; then
+if test "z$with_helppack_integration" = "zno" ; then
   WITH_HELPPACK_INTEGRATION=NO
   AC_MSG_RESULT([no integration])
 else
