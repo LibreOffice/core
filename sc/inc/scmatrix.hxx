@@ -121,34 +121,15 @@ struct ScMatrixValue
     }
 };
 
-/** Matrix representation of double values and strings.
-
-    @ATTENTION: optimized for speed and double values.
-
-    <p> Matrix elements are NOT initialized after construction!
-
-    <p> All methods using an SCSIZE nIndex parameter and all Is...() methods do
-    NOT check the range for validity! However, the Put...() and Get...()
-    methods using nCol/nRow parameters do check the range.
-
-    <p> Methods using nCol/nRow parameters do replicate a single row vector if
-    nRow &gt; 0 and nCol &lt; nColCount, respectively a column vector if nCol
-    &gt; 0 and nRow &lt; nRowCount.
-
-    <p> GetString( SCSIZE nIndex ) does not check if there really is a string,
-    do this with IsString() first. GetString( SCSIZE nC, SCSIZE nR ) does check
-    it and returns and empty string if there is no string. Both GetDouble()
-    methods don't check for a string, do this with IsNumeric() or IsString() or
-    IsValue() first.
-
-    <p> The GetString( SvNumberFormatter&, ...) methods return the matrix
-    element's string if one is present, otherwise the numerical value is
-    formatted as a string, or in case of an error the error string is returned.
-
-    <p> PutDouble() does not reset an eventual string! Use
-    PutDoubleAndResetString() if that is wanted. Also the FillDouble...()
-    methods don't reset strings. As a consequence memory leaks may occur if
-    used wrong.
+/**
+ * Matrix data type that can store values of mixed types.  Each element can
+ * be one of the following types: numeric, string, boolean, empty, and empty
+ * path.
+ *
+ * This class also supports four different density types: filled zero,
+ * filled empty, sparse zero, and sparse empty.  The filled density type
+ * allocates memory for every single element at all times, whereas the
+ * sparse density types allocates memory only for non-default elements.
  */
 class SC_DLLPUBLIC ScMatrix
 {
