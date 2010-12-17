@@ -75,6 +75,57 @@ sub get_languagepack_file
 }
 
 ##############################################################
+# Searching the correct file for help pack directories.
+##############################################################
+
+sub get_helppack_file
+{
+    my ($filesref, $onedir) = @_;
+
+    my $language = $onedir->{'specificlanguage'};
+    my $foundfile = 0;
+    my $onefile = "";
+
+    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
+    {
+        last if ($foundfile);
+
+        $onefile = ${$filesref}[$i];
+
+        my $styles = "";
+        if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
+
+        # we need a file with the HELPPACK flag
+        if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
+        {
+            # chect that the language is correct
+            if ($onefile->{'ismultilingual'};)
+            {
+                my $specificlanguage = "";
+                if ( $onefile->{'specificlanguage'} ) { $specificlanguage = $onefile->{'specificlanguage'}; }
+
+                for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )   # iterating over all languages
+                {
+                    my $onelanguage = ${$languagesarrayref}[$j];
+                    my $locallang = $onelanguage;
+                    $locallang =~ s/-/_/;
+
+                    if ( $specificlanguage eq $onelanguage )
+                    {
+                        $foundfile = 1;
+                        last;
+                    }
+                }
+            }
+        }
+    }
+
+    if ( ! $foundfile ) { installer::exiter::exit_program("ERROR: No file with correct language found (language pack build)!", "get_languagepack_file"); }
+
+    return $onefile;
+}
+
+##############################################################
 # Returning component for createfolder table.
 ##############################################################
 
@@ -96,7 +147,7 @@ sub get_createfolder_component
 
     my $onefile = "";
     if ( $installer::globals::languagepack ) { $onefile = get_languagepack_file($filesref, $onedir); }
-    elsif ( $installer::globals::helppack ) { $onefile = installer::existence::get_specified_file($filesref, 'gid_File_Help_Help_Zip'); }
+    elsif ( $installer::globals::helppack ) { $onefile = get_helppack_file($filesref, $onedir); }
     else { $onefile = installer::existence::get_specified_file($filesref, $globalfilegid); }
 
     return $onefile->{'componentname'};
