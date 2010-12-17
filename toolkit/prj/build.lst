@@ -1,2 +1,2 @@
-ti toolkit : vcl NULL
+ti	toolkit	: LIBXSLT:libxslt vcl NULL
 ti toolkit\prj nmake - all ti_prj NULL
