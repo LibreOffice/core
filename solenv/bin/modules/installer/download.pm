@@ -664,7 +664,7 @@ sub get_install_type
     }
     elsif ( $installer::globals::helppack )
     {
-        $type = "langpack";
+        $type = "helppack";
 
         if ( $installer::globals::isrpmbuild )
         {
