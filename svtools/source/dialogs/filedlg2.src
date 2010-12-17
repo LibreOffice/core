@@ -25,7 +25,8 @@
  *
  ************************************************************************/
 
-#include <filedlg2.hrc>
+#include <svtools/filedlg2.hrc>
+
 String STR_FILEDLG_SELECT
 {
     Text [ en-US ] = "Select Directory" ;
