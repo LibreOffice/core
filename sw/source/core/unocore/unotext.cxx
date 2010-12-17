@@ -2687,7 +2687,7 @@ public:
         }
         return *pFmt;
     }
-
+protected:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 

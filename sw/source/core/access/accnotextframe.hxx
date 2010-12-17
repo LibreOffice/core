@@ -47,13 +47,13 @@ protected:
 
     const SwNoTxtNode *GetNoTxtNode() const;
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwAccessibleNoTextFrame( SwAccessibleMap* pInitMap,
                              sal_Int16 nInitRole,
                              const SwFlyFrm *pFlyFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     //=====  XAccessibleContext  ==============================================
 

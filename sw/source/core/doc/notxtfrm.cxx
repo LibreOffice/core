@@ -663,7 +663,7 @@ BOOL SwNoTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& ,
     }\
 }
 
-void SwNoTxtFrm::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwNoTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : pOld ? pOld->Which() : 0;
 

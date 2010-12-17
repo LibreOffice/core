@@ -114,10 +114,10 @@ SfxPoolItem* SwFmtCharFmt::Clone( SfxItemPool* ) const
 
 
 // weiterleiten an das TextAttribut
-void SwFmtCharFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwFmtCharFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pTxtAttr )
-        pTxtAttr->Modify( pOld, pNew );
+        pTxtAttr->ModifyNotification( pOld, pNew );
 }
 
 
@@ -657,7 +657,7 @@ void SwFmtMeta::NotifyChangeTxtNode(SwTxtNode *const pTxtNode)
         {
             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
                 &static_cast<SwModify&>(*m_pMeta) ); // cast to base class!
-            m_pMeta->Modify(&aMsgHint, &aMsgHint);
+            m_pMeta->ModifyNotification(&aMsgHint, &aMsgHint);
         }
         else
         {   // do not call Modify, that would call SwXMeta::Modify!
@@ -737,15 +737,15 @@ void Meta::NotifyChangeTxtNode()
     }
     else if (!pTxtNode && GetRegisteredIn())
     {
-        const_cast<SwModify *>(GetRegisteredIn())->Remove(this);
+        GetRegisteredInNonConst()->Remove(this);
     }
 }
 
 // SwClient
-void Meta::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void Meta::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
     NotifyChangeTxtNode();
-    SwModify::Modify(pOld, pNew);
+    NotifyClients(pOld, pNew);
     if (pOld && (RES_REMOVE_UNO_OBJECT == pOld->Which()))
     {   // invalidate cached uno object
         SetXMeta(uno::Reference<rdf::XMetadatable>(0));

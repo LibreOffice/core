@@ -32,9 +32,7 @@
 #include <sfx2/printer.hxx>
 #include <rtl/logfile.hxx>
 #include <doc.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <viewsh.hxx>
 #include <rootfrm.hxx>
 #include <viewimp.hxx>
@@ -48,14 +46,11 @@
 #include <ndgrf.hxx>
 #include <ndindex.hxx>
 #include <accessibilityoptions.hxx>
-
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
 |*  ViewShell::Init()
-|*
-|*  Letzte Aenderung    MA 14. Jun. 96
-|*
 |*************************************************************************/
 
 void ViewShell::Init( const SwViewOption *pNewOpt )
@@ -164,9 +159,6 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 /*************************************************************************
 |*
 |*  ViewShell::ViewShell()  CTor fuer die erste Shell.
-|*
-|*  Letzte Aenderung    MA 29. Aug. 95
-|*
 |*************************************************************************/
 
 ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
@@ -246,9 +238,6 @@ ViewShell::ViewShell( SwDoc& rDocument, Window *pWindow,
 /*************************************************************************
 |*
 |*  ViewShell::ViewShell()  CTor fuer weitere Shells auf ein Dokument.
-|*
-|*  Letzte Aenderung    MA 29. Aug. 95
-|*
 |*************************************************************************/
 
 ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
@@ -321,9 +310,6 @@ ViewShell::ViewShell( ViewShell& rShell, Window *pWindow,
 |*
 |*  ViewShell::~ViewShell()
 |*
-|*  Ersterstellung      MA ??
-|*  Letzte Aenderung    MA 10. May. 95
-|*
 ******************************************************************************/
 
 ViewShell::~ViewShell()
@@ -349,9 +335,8 @@ ViewShell::~ViewShell()
                 {
                     if( pGNd->IsAnimated() )
                     {
-                        SwClientIter aIter( *pGNd );
-                        for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                            pFrm; pFrm = (SwFrm*)aIter.Next() )
+                        SwIterator<SwFrm,SwGrfNode> aIter( *pGNd );
+                        for( SwFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
                         {
                             ASSERT( pFrm->IsNoTxtFrm(), "GraphicNode with Text?" );
                             ((SwNoTxtFrm*)pFrm)->StopAnimation( pOut );

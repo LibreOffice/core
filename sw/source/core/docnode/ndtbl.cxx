@@ -29,17 +29,11 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
-
-#ifdef WTC
-#define private public
-#endif
 #include <hintids.hxx>
-
 #include <editeng/lrspitem.hxx>
 #include <editeng/brkitem.hxx>
 #include <editeng/protitem.hxx>
 #include <editeng/boxitem.hxx>
-// OD 06.08.2003 #i17174#
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <fmtornt.hxx>
@@ -83,23 +77,17 @@
 #include <section.hxx>
 #include <frmtool.hxx>
 #include <node2lay.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include "docsh.hxx"
 #include <tabcol.hxx>
 #include <unochart.hxx>
-
 #include <node.hxx>
 #include <ndtxt.hxx>
-
 #include <map>
 #include <algorithm>
-// --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
-// <--
 #include <fldupde.hxx>
-
+#include <switerator.hxx>
 
 #ifndef DBG_UTIL
 #define CHECK_TABLE(t)
@@ -498,7 +486,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     SwTable * pNdTbl = &pTblNd->GetTable();
-    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
     pNdTbl->SetTableModel( bNewModel );
@@ -794,7 +782,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTblOpts,
 
     //Orientation am Fmt der Table setzen
     pTableFmt->SetFmtAttr( SwFmtHoriOrient( 0, eAdjust ) );
-    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     if( pTAFmt || ( rInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER) )
     {
@@ -1149,10 +1137,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     SwUndoTxtToTbl* pUndo = 0;
     if( DoesUndo() )
     {
-//        StartUndo( UNDO_TEXTTOTABLE );
-//        pUndo = new SwUndoTxtToTbl( aOriginal, rInsTblOpts, cCh, eAdjust, pTAFmt );
-//        AppendUndo( pUndo );
-
         // das Splitten vom TextNode nicht in die Undohistory aufnehmen
         DoUndo( FALSE );
     }
@@ -1204,8 +1188,6 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
     pLineFmt->SetFmtAttr( SwFmtFillOrder( ATT_LEFT_TO_RIGHT ));
     // die Tabelle bekommt USHRT_MAX als default SSize
     pTableFmt->SetFmtAttr( SwFmtFrmSize( ATT_VAR_SIZE, USHRT_MAX ));
-//    if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
-//        pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
 
     /* #106283# If the first node in the selection is a context node and if it
        has an item FRAMEDIR set (no default) propagate the item to the
@@ -1228,13 +1210,7 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
 
     SwTable * pNdTbl = &pTblNd->GetTable();
     ASSERT( pNdTbl, "kein Tabellen-Node angelegt."  )
-   pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
-
-//    const USHORT nRowsToRepeat =
-//            tabopts::HEADLINE == (rInsTblOpts.mnInsMode & tabopts::HEADLINE) ?
-//            rInsTblOpts.mnRowsToRepeat :
-//            0;
-//    pNdTbl->SetRowsToRepeat( nRowsToRepeat );
+    pNdTbl->RegisterToFormat( *pTableFmt );
 
     BOOL bUseBoxFmt = FALSE;
     if( !pBoxFmt->GetDepends() )
@@ -1244,27 +1220,10 @@ const SwTable* SwDoc::TextToTable( const std::vector< std::vector<SwNodeRange> >
         bUseBoxFmt = TRUE;
         pTableFmt->SetFmtAttr( pBoxFmt->GetFrmSize() );
         delete pBoxFmt;
-//        eAdjust = HORI_NONE;
     }
-
-    //Orientation am Fmt der Table setzen
-//    pTableFmt->SetAttr( SwFmtHoriOrient( 0, eAdjust ) );
-//    pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
-
 
     ULONG nIdx = pTblNd->GetIndex();
     aNode2Layout.RestoreUpperFrms( GetNodes(), nIdx, nIdx + 1 );
-
-    {
-//        SwPaM& rTmp = (SwPaM&)rRange;   // Point immer an den Anfang
-//        rTmp.DeleteMark();
-//        rTmp.GetPoint()->nNode = *pTblNd;
-//        SwCntntNode* pCNd = GetNodes().GoNext( &rTmp.GetPoint()->nNode );
-//        rTmp.GetPoint()->nContent.Assign( pCNd, 0 );
-    }
-
-//    if( pUndo )
-//        EndUndo( UNDO_TEXTTOTABLE );
 
     SetModified();
     SetFieldsDirty( true, NULL, 0 );
@@ -2451,7 +2410,7 @@ SwTableNode::~SwTableNode()
     SwFrmFmt* pTblFmt = GetTable().GetFrmFmt();
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
                                 pTblFmt );
-    pTblFmt->Modify( &aMsgHint, &aMsgHint );
+    pTblFmt->ModifyNotification( &aMsgHint, &aMsgHint );
     DelFrms();
     delete pTable;
 }
@@ -2537,14 +2496,12 @@ void SwTableNode::DelFrms()
     //Sie muessen etwas umstaendlich zerstort werden, damit die Master
     //die Follows mit in's Grab nehmen.
 
-    SwClientIter aIter( *(pTable->GetFrmFmt()) );
-    SwClient *pLast = aIter.GoStart();
-    while ( pLast )
+    SwIterator<SwTabFrm,SwFmt> aIter( *(pTable->GetFrmFmt()) );
+    SwTabFrm *pFrm = aIter.First();
+    while ( pFrm )
     {
         BOOL bAgain = FALSE;
-        if ( pLast->IsA( TYPE(SwFrm) ) )
         {
-            SwTabFrm *pFrm = (SwTabFrm*)pLast;
             if ( !pFrm->IsFollow() )
             {
                 while ( pFrm->HasFollow() )
@@ -2570,7 +2527,7 @@ void SwTableNode::DelFrms()
                 bAgain = TRUE;
             }
         }
-        pLast = bAgain ? aIter.GoStart() : aIter++;
+        pFrm = bAgain ? aIter.First() : aIter.Next();
     }
 }
 
@@ -3044,7 +3001,7 @@ void SwDoc::SetRowsToRepeat( SwTable &rTable, USHORT nSet )
 
     SwMsgPoolItem aChg( RES_TBLHEADLINECHG );
     rTable.SetRowsToRepeat( nSet );
-    rTable.GetFrmFmt()->Modify( &aChg, &aChg );
+    rTable.GetFrmFmt()->ModifyNotification( &aChg, &aChg );
     SetModified();
 }
 
@@ -3568,7 +3525,7 @@ SwTableNode* SwNodes::SplitTable( const SwNodeIndex& rPos, BOOL bAfter,
                                 pOldTblFmt->GetDoc()->GetDfltFrmFmt() );
 
         *pNewTblFmt = *pOldTblFmt;
-        pNewTblFmt->Add( &pNewTblNd->GetTable() );
+        pNewTblNd->GetTable().RegisterToFormat( *pNewTblFmt );
 
         // neue Size errechnen ? (lcl_ChgTblSize nur das 2. aufrufen, wenn es
         // beim 1. schon geklappt hat; also absolute Groesse hat)

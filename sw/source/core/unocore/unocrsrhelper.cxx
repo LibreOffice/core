@@ -385,7 +385,7 @@ sal_Bool getCrsrPropertyValue(const SfxItemPropertySimpleEntry& rEntry
             {
                 if( pAny )
                 {
-                    SwXTextField* pField = CreateSwXTextField(*rPam.GetDoc(),
+                    SwXTextField* pField = SwXTextField::CreateSwXTextField(*rPam.GetDoc(),
                            pTxtAttr->GetFld());
                     *pAny <<= uno::Reference< XTextField >( pField );
                 }

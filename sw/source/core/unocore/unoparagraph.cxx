@@ -151,7 +151,7 @@ public:
         return static_cast<const SwTxtNode*>(GetRegisteredIn());
     }
           SwTxtNode * GetTxtNode()       {
-        return static_cast<SwTxtNode*>(pRegisteredIn);
+        return static_cast<SwTxtNode*>(GetRegisteredInNonConst());
     }
 
     SwTxtNode & GetTxtNodeOrThrow() {
@@ -183,7 +183,7 @@ public:
             const uno::Sequence< ::rtl::OUString >& rPropertyNames,
             bool bDirectValuesOnly)
         throw (uno::RuntimeException);
-
+protected:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 

@@ -755,7 +755,7 @@ lcl_ExportHints(
                         xRef = pPortion = new SwXTextPortion(
                                 pUnoCrsr, xParent, PORTION_FIELD);
                         Reference<XTextField> xField =
-                            CreateSwXTextField(*pDoc, pAttr->GetFld());
+                            SwXTextField::CreateSwXTextField(*pDoc, pAttr->GetFld());
                         pPortion->SetTextField(xField);
                     }
                 break;
@@ -1219,7 +1219,7 @@ lcl_CreatePortions(
 /*-- 27.01.99 10:44:45---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SwXTextPortionEnumeration::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void    SwXTextPortionEnumeration::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

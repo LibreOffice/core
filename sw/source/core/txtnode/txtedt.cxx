@@ -617,9 +617,9 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
         }
         //TxtFrm's reagieren auf aHint, andere auf aNew
         SwUpdateAttr aHint( nMin, nMax, 0 );
-        SwModify::Modify( 0, &aHint );
+        NotifyClients( 0, &aHint );
         SwFmtChg aNew( GetFmtColl() );
-        SwModify::Modify( 0, &aNew );
+        NotifyClients( 0, &aNew );
     }
 }
 
@@ -1868,10 +1868,10 @@ void SwTxtNode::ReplaceTextOnly( xub_StrLen nPos, xub_StrLen nLen,
 
     // notify the layout!
     SwDelTxt aDelHint( nPos, nTLen );
-    SwModify::Modify( 0, &aDelHint );
+    NotifyClients( 0, &aDelHint );
 
     SwInsTxt aHint( nPos, nTLen );
-    SwModify::Modify( 0, &aHint );
+    NotifyClients( 0, &aHint );
 }
 
 void SwTxtNode::CountWords( SwDocStat& rStat,

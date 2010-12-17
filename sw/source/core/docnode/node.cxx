@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <hintids.hxx>
-
-// --> OD 2005-02-21 #i42921#
 #include <editeng/frmdiritem.hxx>
-// <--
 #include <editeng/protitem.hxx>
 #include <com/sun/star/i18n/CharacterIteratorMode.hdl>
 #include <fmtcntnt.hxx>
@@ -71,13 +67,11 @@
 #include <crsskip.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <scriptinfo.hxx>
-// --> OD 2005-12-05 #i27138#
 #include <rootfrm.hxx>
-// <--
 #include <istyleaccess.hxx>
-// --> OD 2007-10-31 #i83479#
 #include <IDocumentListItems.hxx>
-// <--
+#include <switerator.hxx>
+#include "ndole.hxx"
 
 using namespace ::com::sun::star::i18n;
 
@@ -787,10 +781,9 @@ SwFrmFmt* SwNode::GetFlyFmt() const
     {
         if( IsCntntNode() )
         {
-            SwClientIter aIter( *(SwCntntNode*)this );
-            SwClient* pCli = aIter.First( TYPE( SwCntntFrm ));
-            if( pCli )
-                pRet = ((SwCntntFrm*)pCli)->FindFlyFrm()->GetFmt();
+            SwCntntFrm* pFrm = SwIterator<SwCntntFrm,SwCntntNode>::FirstElement( *(SwCntntNode*)this );
+            if( pFrm )
+                pRet = pFrm->FindFlyFrm()->GetFmt();
         }
         if( !pRet )
         {
@@ -1060,7 +1053,7 @@ SwCntntNode::~SwCntntNode()
         ((SwAttrSet*)mpAttrSet.get())->SetModifyAtAttr( 0 );
 }
 
-void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
+void SwCntntNode::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem* pNewValue )
 {
     USHORT nWhich = pOldValue ? pOldValue->Which() :
                     pNewValue ? pNewValue->Which() : 0 ;
@@ -1072,7 +1065,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
             SwFmt * pFmt = (SwFmt *) ((SwPtrMsgPoolItem *)pNewValue)->pObject;
 
             // nicht umhaengen wenn dieses das oberste Format ist !!
-            if( pRegisteredIn == pFmt )
+            if( GetRegisteredIn() == pFmt )
             {
                 if( pFmt->GetRegisteredIn() )
                 {
@@ -1139,7 +1132,7 @@ void SwCntntNode::Modify( SfxPoolItem* pOldValue, SfxPoolItem* pNewValue )
         break;
     }
 
-    SwModify::Modify( pOldValue, pNewValue );
+    NotifyClients( pOldValue, pNewValue );
 }
 
 BOOL SwCntntNode::InvalidateNumRule()
@@ -1218,8 +1211,6 @@ SwFmtColl *SwCntntNode::ChgFmtColl( SwFmtColl *pNewColl )
         {
             SwFmtChg aTmp1( pOldColl );
             SwFmtChg aTmp2( pNewColl );
-            // damit alles was im Modify passiert hier nicht noch impl.
-            // werden muss
             SwCntntNode::Modify( &aTmp1, &aTmp2 );
         }
     }
@@ -1386,60 +1377,7 @@ void SwCntntNode::DelFrms()
     if( !GetDepends() )
         return;
 
-    SwClientIter aIter( *this );
-    SwCntntFrm *pFrm;
-
-    for( pFrm = (SwCntntFrm*)aIter.First( TYPE(SwCntntFrm)); pFrm;
-         pFrm = (SwCntntFrm*)aIter.Next() )
-    {
-        // --> OD 2005-12-01 #i27138#
-        // notify accessibility paragraphs objects about changed
-        // CONTENT_FLOWS_FROM/_TO relation.
-        // Relation CONTENT_FLOWS_FROM for current next paragraph will change
-        // and relation CONTENT_FLOWS_TO for current previous paragraph will change.
-        if ( pFrm->IsTxtFrm() )
-        {
-            ViewShell* pViewShell( pFrm->getRootFrm()->GetCurrShell() );
-            if ( pViewShell && pViewShell->GetLayout() &&
-                 pViewShell->GetLayout()->IsAnyShellAccessible() )
-            {
-                pViewShell->InvalidateAccessibleParaFlowRelation(
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindNextCnt( true )),
-                            dynamic_cast<SwTxtFrm*>(pFrm->FindPrevCnt( true )) );
-            }
-        }
-        // <--
-        if( pFrm->HasFollow() )
-            pFrm->GetFollow()->_SetIsFollow( pFrm->IsFollow() );
-        if( pFrm->IsFollow() )
-        {
-            SwCntntFrm* pMaster = (SwTxtFrm*)pFrm->FindMaster();
-            pMaster->SetFollow( pFrm->GetFollow() );
-            pFrm->_SetIsFollow( FALSE );
-        }
-        pFrm->SetFollow( 0 );//Damit er nicht auf dumme Gedanken kommt.
-                                //Andernfalls kann es sein, dass ein Follow
-                                //vor seinem Master zerstoert wird, der Master
-                                //greift dann ueber den ungueltigen
-                                //Follow-Pointer auf fremdes Memory zu.
-                                //Die Kette darf hier zerknauscht werden, weil
-                                //sowieso alle zerstoert werden.
-        if( pFrm->GetUpper() && pFrm->IsInFtn() && !pFrm->GetIndNext() &&
-            !pFrm->GetIndPrev() )
-        {
-            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-            ASSERT( pFtn, "You promised a FtnFrm?" );
-            SwCntntFrm* pCFrm;
-            if( !pFtn->GetFollow() && !pFtn->GetMaster() &&
-                0 != ( pCFrm = pFtn->GetRefFromAttr()) && pCFrm->IsFollow() )
-            {
-                ASSERT( pCFrm->IsTxtFrm(), "NoTxtFrm has Footnote?" );
-                ((SwTxtFrm*)pCFrm->FindMaster())->Prepare( PREP_FTN_GONE );
-            }
-        }
-        pFrm->Cut();
-        delete pFrm;
-    }
+    SwCntntFrm::DelFrms(*this);
     if( IsTxtNode() )
     {
         ((SwTxtNode*)this)->SetWrong( NULL );
@@ -1510,7 +1448,7 @@ BOOL SwCntntNode::GetInfo( SfxPoolItem& rInfo ) const
     case RES_CONTENT_VISIBLE:
         {
             ((SwPtrMsgPoolItem&)rInfo).pObject =
-                SwClientIter( *(SwCntntNode*)this ).First( TYPE(SwFrm) );
+                SwIterator<SwFrm,SwCntntNode>::FirstElement(*this);
         }
         return FALSE;
     }
@@ -1548,7 +1486,7 @@ BOOL SwCntntNode::SetAttr(const SfxPoolItem& rAttr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1624,7 +1562,7 @@ BOOL SwCntntNode::SetAttr( const SfxItemSet& rSet )
             // einige Sonderbehandlungen fuer Attribute
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     return bRet;
@@ -1674,7 +1612,7 @@ BOOL SwCntntNode::ResetAttr( USHORT nWhich1, USHORT nWhich2 )
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1715,7 +1653,7 @@ BOOL SwCntntNode::ResetAttr( const SvUShorts& rWhichArr )
         {
             SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
             SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-            Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+            ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
         }
     }
     if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
@@ -1754,7 +1692,7 @@ USHORT SwCntntNode::ResetAllAttr()
     {
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
-        Modify( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
+        ModifyNotification( &aChgOld, &aChgNew );       // alle veraenderten werden verschickt
 
         if( !GetpSwAttrSet()->Count() )   // leer, dann loeschen
             mpAttrSet.reset();//DELETEZ( mpAttrSet );
@@ -1894,7 +1832,7 @@ void SwCntntNode::SetCondFmtColl( SwFmtColl* pColl )
         {
             SwFmtChg aTmp1( pOldColl ? pOldColl : GetFmtColl() );
             SwFmtChg aTmp2( pColl ? pColl : GetFmtColl() );
-            SwModify::Modify( &aTmp1, &aTmp2 );
+            NotifyClients( &aTmp1, &aTmp2 );
         }
         if( IsInCache() )
         {
@@ -2073,6 +2011,24 @@ short SwCntntNode::GetTextDirection( const SwPosition& rPos,
     return nRet;
 }
 // <--
+
+SwOLENodes* SwCntntNode::CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize )
+{
+    SwOLENodes *pNodes = 0;
+    SwIterator<SwCntntNode,SwFmtColl> aIter( rColl );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
+    {
+        SwOLENode *pONd = pNd->GetOLENode();
+        if ( pONd && (!bOnlyWithInvalidSize || pONd->IsOLESizeInvalid()) )
+        {
+            if ( !pNodes  )
+                pNodes = new SwOLENodes;
+            pNodes->Insert( pONd, pNodes->Count() );
+        }
+    }
+
+    return pNodes;
+}
 
 //FEATURE::CONDCOLL
 // Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!

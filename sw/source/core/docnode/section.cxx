@@ -28,7 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
 #include <stdlib.h>
 #include <hintids.hxx>
 #include <svl/intitem.hxx>
@@ -38,7 +37,6 @@
 #include <editeng/protitem.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/urlobj.hxx>
-
 #include <sfx2/sfxsids.hrc>
 #include <sfx2/fcontnr.hxx>
 #include <docary.hxx>
@@ -64,11 +62,10 @@
 #include <fmtftntx.hxx>
 #include <ftnidx.hxx>
 #include <doctxm.hxx>
-// --> FME 2004-06-22 #114856# edit in readonly sections
 #include <fmteiro.hxx>
-// <--
 #include <swerror.h>
 #include <unosection.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -250,7 +247,7 @@ SwSection::~SwSection()
         // dann melden wir noch schnell unser Format um ans dflt FrameFmt,
         // damit es keine Abhaengigkeiten gibt
         if( pFmt->DerivedFrom() != pDoc->GetDfltFrmFmt() )
-            pDoc->GetDfltFrmFmt()->Add( pFmt );
+            pFmt->RegisterToFormat( *pDoc->GetDfltFrmFmt() );
     }
     else
     {
@@ -269,7 +266,7 @@ SwSection::~SwSection()
         // ist die Section der letzte Client im Format, kann dieses
         // geloescht werden
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
-        pFmt->Modify( &aMsgHint, &aMsgHint );
+        pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
         if( !pFmt->GetDepends() )
         {
             // Bug: 28191 - nicht ins Undo aufnehmen, sollte schon vorher
@@ -336,7 +333,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
 
                 // erstmal allen Childs sagen, das sie versteckt sind
                 SwMsgPoolItem aMsgItem( RES_SECTION_HIDDEN );
-                pFmt->Modify( &aMsgItem, &aMsgItem );
+                pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
                 // alle Frames loeschen
                 pFmt->DelFrms();
@@ -353,7 +350,7 @@ void SwSection::ImplSetHiddenFlag(bool const bTmpHidden, bool const bCondition)
                 // erstmal allen Childs sagen, das der Parent nicht mehr
                 // versteckt ist
                 SwMsgPoolItem aMsgItem( RES_SECTION_NOT_HIDDEN );
-                pFmt->Modify( &aMsgItem, &aMsgItem );
+                pFmt->ModifyNotification( &aMsgItem, &aMsgItem );
 
                 pFmt->MakeFrms();
             }
@@ -438,7 +435,7 @@ void SwSection::SetEditInReadonly(bool const bFlag)
 }
 // <--
 
-void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwSection::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     bool bRemake = false;
     bool bUpdateFtn = false;
@@ -487,7 +484,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         if( pNew )
         {
             bool bNewFlag =
-                static_cast<SvxProtectItem*>(pNew)->IsCntntProtected();
+                static_cast<const SvxProtectItem*>(pNew)->IsCntntProtected();
             if( !bNewFlag )
             {
                 // Abschalten: teste ob nicht vielleich ueber die Parents
@@ -511,7 +508,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         if( pNew )
         {
             const bool bNewFlag =
-                static_cast<SwFmtEditInReadonly*>(pNew)->GetValue();
+                static_cast<const SwFmtEditInReadonly*>(pNew)->GetValue();
             m_Data.SetEditInReadonlyFlag( bNewFlag );
         }
         return;
@@ -543,6 +540,10 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             bUpdateFtn = true;
         }
         break;
+
+    default:
+        CheckRegistration( pOld, pNew );
+        break;
     }
 
     if( bRemake )
@@ -557,7 +558,6 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         if( pSectNd )
             pSectNd->GetDoc()->GetFtnIdxs().UpdateFtn(SwNodeIndex( *pSectNd ));
     }
-    SwClient::Modify( pOld, pNew );
 }
 
 void SwSection::SetRefObject( SwServerObject* pObj )
@@ -700,19 +700,10 @@ SwSectionFmt::~SwSectionFmt()
                     rSect.SetHidden(false);
                 }
             }
-            SwClientIter aIter( *this );
-            SwClient *pLast = aIter.GoStart();
-            while ( pLast )
-            {
-                if ( pLast->IsA( TYPE(SwFrm) ) )
-                {
-                    SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                    SwSectionFrm::MoveCntntAndDelete( pFrm, TRUE );
-                    pLast = aIter.GoStart();
-                }
-                else
-                    pLast = aIter++;
-            }
+
+            // mba: test iteration; objects are removed while iterating
+            CallSwClientNotify( RES_OBJECTDYING );
+
             // hebe die Section doch mal auf
             SwNodeRange aRg( *pSectNd, 0, *pSectNd->EndOfSectionNode() );
             GetDoc()->GetNodes().SectionUp( &aRg );
@@ -726,14 +717,7 @@ SwSectionFmt::~SwSectionFmt()
 
 SwSection * SwSectionFmt::GetSection() const
 {
-    if( GetDepends() )
-    {
-        SwClientIter aIter( *(SwSectionFmt*)this );
-        return (SwSectionPtr)aIter.First( TYPE(SwSection) );
-    }
-
-    ASSERT( FALSE, "keine Section als Client." )
-    return 0;
+    return SwIterator<SwSection,SwSectionFmt>::FirstElement( *this );
 }
 
 extern void lcl_DeleteFtn( SwSectionNode *pNd, ULONG nStt, ULONG nEnd );
@@ -746,34 +730,19 @@ void SwSectionFmt::DelFrms()
     if( pIdx && &GetDoc()->GetNodes() == &pIdx->GetNodes() &&
         0 != (pSectNd = pIdx->GetNode().GetSectionNode() ))
     {
-        SwClientIter aIter( *this );
-        SwClient *pLast = aIter.GoStart();
-        // --> OD 2007-08-14 #147431#
-        // First delete the <SwSectionFrm> of the <SwSectionFmt> instance
-        while ( pLast )
-        {
-            if ( pLast->IsA( TYPE(SwFrm) ) )
-            {
-                SwSectionFrm *pFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pFrm, FALSE );
-                pLast = aIter.GoStart();
-            }
-            else
-            {
-                pLast = aIter++;
-            }
-        }
+        // #147431# : First delete the <SwSectionFrm> of the <SwSectionFmt> instance
+        // mba: test iteration as objects are removed in iteration
+        CallSwClientNotify( RES_OBJECTDYING );
+
         // Then delete frames of the nested <SwSectionFmt> instances
-        pLast = aIter.GoStart();
+        SwIterator<SwSectionFmt,SwSectionFmt> aIter( *this );
+        SwSectionFmt *pLast = aIter.First();
         while ( pLast )
         {
-            if ( pLast->IsA( TYPE(SwSectionFmt) ) )
-            {
-                ((SwSectionFmt*)pLast)->DelFrms();
-            }
-            pLast = aIter++;
+            pLast->DelFrms();
+            pLast = aIter.Next();
         }
-        // <--
+
         ULONG nEnde = pSectNd->EndOfSectionIndex();
         ULONG nStart = pSectNd->GetIndex()+1;
         lcl_DeleteFtn( pSectNd, nStart, nEnde );
@@ -790,7 +759,7 @@ void SwSectionFmt::DelFrms()
         if( pCNd )
         {
             const SfxPoolItem& rItem = pCNd->GetSwAttrSet().Get( RES_PAGEDESC );
-            pCNd->Modify( (SfxPoolItem*)&rItem, (SfxPoolItem*)&rItem );
+            pCNd->ModifyNotification( (SfxPoolItem*)&rItem, (SfxPoolItem*)&rItem );
         }
     }
 }
@@ -810,18 +779,7 @@ void SwSectionFmt::MakeFrms()
     }
 }
 
-void lcl_ClientIter( SwSectionFmt* pFmt, const SfxPoolItem* pOld,
-                                        const SfxPoolItem* pNew )
-{
-    SwClientIter aIter( *pFmt );
-    SwClient * pLast = aIter.GoStart();
-    if( pLast )
-        do {
-            pLast->Modify( (SfxPoolItem*)pOld, (SfxPoolItem*)pNew );
-        } while( 0 != ( pLast = aIter++ ));
-}
-
-void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwSectionFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     BOOL bClients = FALSE;
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -836,7 +794,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                                         RES_PROTECT, FALSE, &pItem ))
             {
-                lcl_ClientIter( this, pItem, pItem );
+                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_PROTECT );
                 pOldSet->ClearItem( RES_PROTECT );
             }
@@ -845,7 +803,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                         RES_EDIT_IN_READONLY, FALSE, &pItem ) )
             {
-                lcl_ClientIter( this, pItem, pItem );
+                ModifyBroadcast( (SfxPoolItem*)pItem, (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_EDIT_IN_READONLY );
                 pOldSet->ClearItem( RES_EDIT_IN_READONLY );
             }
@@ -854,16 +812,14 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                                     RES_FTN_AT_TXTEND, FALSE, &pItem ))
             {
-                lcl_ClientIter( this, &pOldSet->Get( RES_FTN_AT_TXTEND ),
-                                        pItem );
+                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_FTN_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_FTN_AT_TXTEND );
                 pOldSet->ClearItem( RES_FTN_AT_TXTEND );
             }
             if( SFX_ITEM_SET == pNewSet->GetItemState(
                                     RES_END_AT_TXTEND, FALSE, &pItem ))
             {
-                lcl_ClientIter( this, &pOldSet->Get( RES_END_AT_TXTEND ),
-                                        pItem );
+                ModifyBroadcast( (SfxPoolItem*)&pOldSet->Get( RES_END_AT_TXTEND ), (SfxPoolItem*)pItem );
                 pNewSet->ClearItem( RES_END_AT_TXTEND );
                 pOldSet->ClearItem( RES_END_AT_TXTEND );
             }
@@ -883,12 +839,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
             if( pSect && ( bClients || ( RES_SECTION_HIDDEN == nWhich ?
                             !pSect->IsHiddenFlag() : pSect->IsHiddenFlag() ) ) )
             {
-                // selbst ueber die Clients iterieren, sollte schneller sein!
-                SwClientIter aIter( *this );
-                SwClient * pLast = aIter.GoStart();
-                do {
-                    pLast->Modify( pOld, pNew );
-                } while( 0 != ( pLast = aIter++ ));
+                ModifyBroadcast( pOld, pNew );
             }
         }
         return ;
@@ -901,12 +852,7 @@ void SwSectionFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         // diese Messages bis zum Ende des Baums durchreichen !
         if( GetDepends() )
         {
-            SwClientIter aIter( *this );
-            SwClient * pLast = aIter.GoStart();
-            if( pLast )     // konnte zum Anfang gesprungen werden ??
-                do {
-                    pLast->Modify( pOld, pNew );
-                } while( 0 != ( pLast = aIter++ ));
+            ModifyBroadcast( pOld, pNew );
         }
         return;     // das wars
 
@@ -958,17 +904,16 @@ BOOL SwSectionFmt::GetInfo( SfxPoolItem& rInfo ) const
 
     case RES_CONTENT_VISIBLE:
         {
-            SwFrm* pFrm = (SwFrm*)SwClientIter( *(SwSectionFmt*)this ).First( TYPE(SwFrm) );
+            SwFrm* pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*this);
             // if the current section has no own frame search for the children
             if(!pFrm)
             {
-                SwClientIter aFormatIter( *(SwSectionFmt*)this );
-                SwSectionFmt* pChild = (SwSectionFmt*)aFormatIter.
-                                                First( TYPE(SwSectionFmt) );
+                SwIterator<SwSectionFmt,SwSectionFmt> aFormatIter(*this);
+                SwSectionFmt* pChild = aFormatIter.First();
                 while(pChild && !pFrm)
                 {
-                    pFrm = (SwFrm*)SwClientIter( *pChild ).First( TYPE(SwFrm) );
-                    pChild = (SwSectionFmt*)aFormatIter.Next();
+                    pFrm = SwIterator<SwFrm,SwFmt>::FirstElement(*pChild);
+                    pChild = aFormatIter.Next();
                 }
             }
             ((SwPtrMsgPoolItem&)rInfo).pObject = pFrm;
@@ -1027,15 +972,14 @@ USHORT SwSectionFmt::GetChildSections( SwSections& rArr,
 
     if( GetDepends() )
     {
-        SwClientIter aIter( *this );
-        SwClient * pLast;
+        SwIterator<SwSectionFmt,SwSectionFmt> aIter(*this);
         const SwNodeIndex* pIdx;
-        for( pLast = aIter.First(TYPE(SwSectionFmt)); pLast; pLast = aIter.Next() )
+        for( SwSectionFmt* pLast = aIter.First(); pLast; pLast = aIter.Next() )
             if( bAllSections ||
-                ( 0 != ( pIdx = ((SwSectionFmt*)pLast)->GetCntnt(FALSE).
+                ( 0 != ( pIdx = pLast->GetCntnt(FALSE).
                 GetCntntIdx()) && &pIdx->GetNodes() == &GetDoc()->GetNodes() ))
             {
-                const SwSection* Dummy=((SwSectionFmt*)pLast)->GetSection();
+                const SwSection* Dummy = pLast->GetSection();
                 rArr.C40_INSERT( SwSection,
                     Dummy,
                     rArr.Count() );
@@ -1085,8 +1029,8 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
     // <--
     bool bIsHidden = false;
 
-    SwClientIter aIter( *this );
-    SwClient * pLast = aIter.GoStart();
+    SwClientIter aIter( *this );    // TODO
+    ::SwClient * pLast = aIter.GoStart();
     if( pLast )     // konnte zum Anfang gesprungen werden ??
         do {
             if( pLast->IsA( TYPE(SwSectionFmt) ) )
@@ -1115,7 +1059,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                 if (!pProtect->IsCntntProtected() !=
                     !pSection->IsProtectFlag())
                 {
-                    pLast->Modify( (SfxPoolItem*)pProtect,
+                    pLast->ModifyNotification( (SfxPoolItem*)pProtect,
                                     (SfxPoolItem*)pProtect );
                 }
 
@@ -1123,7 +1067,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                 if (!pEditInReadonly->GetValue() !=
                     !pSection->IsEditInReadonlyFlag())
                 {
-                    pLast->Modify( (SfxPoolItem*)pEditInReadonly,
+                    pLast->ModifyNotification( (SfxPoolItem*)pEditInReadonly,
                                     (SfxPoolItem*)pEditInReadonly );
                 }
                 // <--
@@ -1133,7 +1077,7 @@ void SwSectionFmt::UpdateParent()       // Parent wurde veraendert
                     SwMsgPoolItem aMsgItem( static_cast<USHORT>(bIsHidden
                                 ? RES_SECTION_HIDDEN
                                 : RES_SECTION_NOT_HIDDEN ) );
-                    pLast->Modify( &aMsgItem, &aMsgItem );
+                    pLast->ModifyNotification( &aMsgItem, &aMsgItem );
                 }
             }
             else if( !pSection &&

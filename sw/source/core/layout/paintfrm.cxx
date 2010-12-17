@@ -29,10 +29,7 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/text/HoriOrientation.hpp>
-
-
 #include <hintids.hxx>
-
 #include <vcl/sound.hxx>
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
@@ -44,14 +41,11 @@
 #include <editeng/prntitem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
-// --> collapsing borders FME 2005-05-27 #i29550#
 #include <svx/framelink.hxx>
-// <--
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
 #include <tgrditem.hxx>
-
-
+#include <switerator.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
@@ -83,35 +77,23 @@
 #include <ptqueue.hxx>
 #include <noteurl.hxx>
 #include <virtoutp.hxx>
-#ifndef _LINEINFO_HXX
 #include <lineinfo.hxx>
-#endif
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
-// OD 20.12.2002 #94627#
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
-// OD 28.02.2003 #b4779636#, #107692#
 #include <swtable.hxx>
-// OD 02.07.2003 #108784#
 #include <svx/svdogrp.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-
-// --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <EnhancedPDFExportHelper.hxx>
-// <--
-
 #include <ndole.hxx>
 #include <svtools/chartprettypainter.hxx>
-
 #include <PostItMgr.hxx>
 #include <tools/color.hxx>
+#include <vcl/svapp.hxx>
+
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
-#include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
 
@@ -6614,10 +6596,10 @@ Graphic SwFlyFrmFmt::MakeGraphic( ImageMap* pMap )
 {
     Graphic aRet;
     //irgendeinen Fly suchen!
-    SwClientIter aIter( *this );
-    SwClient *pFirst = aIter.First( TYPE(SwFrm) );
+    SwIterator<SwFrm,SwFmt> aIter( *this );
+    SwFrm *pFirst = aIter.First();
     ViewShell *pSh;
-    if ( pFirst && 0 != ( pSh = ((SwFrm*)pFirst)->getRootFrm()->GetCurrShell()) )
+    if ( pFirst && 0 != ( pSh = pFirst->getRootFrm()->GetCurrShell()) )
     {
         ViewShell *pOldGlobal = pGlobalShell;
         pGlobalShell = pSh;

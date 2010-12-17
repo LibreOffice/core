@@ -75,6 +75,7 @@
 #include <breakit.hxx>
 #include <editsh.hxx>
 #include <scriptinfo.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 
@@ -259,15 +260,16 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     const SwTOXMark*    pMax    = &rCurTOXMark;
     const SwTOXMark*    pMin    = &rCurTOXMark;
 
-    const SwModify* pType = rCurTOXMark.GetRegisteredIn();
-    SwClientIter    aIter( *(SwModify*)pType );
+    const SwTOXType* pType = rCurTOXMark.GetTOXType();
+    SwTOXMarks aMarks;
+    SwTOXMark::InsertTOXMarks( aMarks, *pType );
 
     const SwTOXMark* pTOXMark;
     const SwCntntFrm* pCFrm;
     Point aPt;
-    for( pTOXMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pTOXMark;
-         pTOXMark = (SwTOXMark*)aIter.Next() )
+    for( sal_Int32 nMark=0; nMark<aMarks.Count(); nMark++ )
     {
+        pTOXMark = aMarks[nMark];
         if( pTOXMark != &rCurTOXMark &&
             0 != ( pMark = pTOXMark->GetTxtTOXMark()) &&
             0 != ( pTOXSrc = pMark->GetpTxtNd() ) &&
@@ -357,7 +359,6 @@ const SwTOXMark& SwDoc::GotoTOXMark( const SwTOXMark& rCurTOXMark,
     return *pNew;
 }
 
-/*  */
 
 const SwTOXBaseSection* SwDoc::InsertTableOf( const SwPosition& rPos,
                                                 const SwTOXBase& rTOX,
@@ -477,9 +478,7 @@ const SwTOXBase* SwDoc::GetCurTOX( const SwPosition& rPos ) const
     }
     return 0;
 }
-/* -----------------01.09.99 16:01-------------------
 
- --------------------------------------------------*/
 const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ), "no TOXBaseSection!" );
@@ -488,9 +487,7 @@ const SwAttrSet& SwDoc::GetTOXBaseAttrSet(const SwTOXBase& rTOXBase) const
     ASSERT( pFmt, "invalid TOXBaseSection!" );
     return pFmt->GetAttrSet();
 }
-/* -----------------02.09.99 07:48-------------------
 
- --------------------------------------------------*/
 const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
 {
     SwTOXBase** prBase = 0;
@@ -512,9 +509,7 @@ const SwTOXBase* SwDoc::GetDefaultTOXBase( TOXTypes eTyp, BOOL bCreate )
     }
     return (*prBase);
 }
-/* -----------------02.09.99 08:06-------------------
 
- --------------------------------------------------*/
 void    SwDoc::SetDefaultTOXBase(const SwTOXBase& rBase)
 {
     SwTOXBase** prBase = 0;
@@ -640,9 +635,7 @@ USHORT SwDoc::GetTOXTypeCount(TOXTypes eTyp) const
             ++nCnt;
     return nCnt;
 }
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
 const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
 {
     const SwTOXTypePtr * ppTTypes = pTOXTypes->GetData();
@@ -653,18 +646,14 @@ const SwTOXType* SwDoc::GetTOXType( TOXTypes eTyp, USHORT nId ) const
     return 0;
 }
 
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
 const SwTOXType* SwDoc::InsertTOXType( const SwTOXType& rTyp )
 {
     SwTOXType * pNew = new SwTOXType( rTyp );
     pTOXTypes->Insert( pNew, pTOXTypes->Count() );
     return pNew;
 }
-/*--------------------------------------------------------------------
 
- --------------------------------------------------------------------*/
 String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
                                     const String* pChkStr ) const
 {
@@ -719,9 +708,6 @@ String SwDoc::GetUniqueTOXBaseName( const SwTOXType& rType,
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-/*--------------------------------------------------------------------
-
- --------------------------------------------------------------------*/
 BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
 {
     ASSERT( rTOXBase.ISA( SwTOXBaseSection ),
@@ -739,7 +725,6 @@ BOOL SwDoc::SetTOXBaseName(const SwTOXBase& rTOXBase, const String& rName)
     return bRet;
 }
 
-/*  */
 
 const SwTxtNode* lcl_FindChapterNode( const SwNode& rNd, BYTE nLvl = 0 )
 {
@@ -1204,18 +1189,17 @@ SwTxtFmtColl* SwTOXBaseSection::GetTxtFmtColl( USHORT nLevel )
 void SwTOXBaseSection::UpdateMarks( const SwTOXInternational& rIntl,
                                     const SwTxtNode* pOwnChapterNode )
 {
-    const SwModify* pType = SwTOXBase::GetRegisteredIn();
+    const SwTOXType* pType = (SwTOXType*) SwTOXBase::GetRegisteredIn();
     if( !pType->GetDepends() )
         return;
 
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
     TOXTypes eTOXTyp = GetTOXType()->GetType();
-    SwClientIter aIter( *(SwModify*)pType );
+    SwIterator<SwTOXMark,SwTOXType> aIter( *pType );
 
     SwTxtTOXMark* pTxtMark;
     SwTOXMark* pMark;
-    for( pMark = (SwTOXMark*)aIter.First( TYPE( SwTOXMark )); pMark;
-        pMark = (SwTOXMark*)aIter.Next() )
+    for( pMark = aIter.First(); pMark; pMark = aIter.Next() )
     {
         ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1329,9 +1313,8 @@ void SwTOXBaseSection::UpdateTemplate( const SwTxtNode* pOwnChapterNode )
                     pColl->IsAssignedToListLevelOfOutlineStyle()) )//<-end,zhaojianwei
                   continue;
 
-            SwClientIter aIter( *pColl );
-            SwTxtNode* pTxtNd = (SwTxtNode*)aIter.First( TYPE( SwTxtNode ));
-            for( ; pTxtNd; pTxtNd = (SwTxtNode*)aIter.Next() )
+            SwIterator<SwTxtNode,SwFmtColl> aIter( *pColl );
+            for( SwTxtNode* pTxtNd = aIter.First(); pTxtNd; pTxtNd = aIter.Next() )
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1358,9 +1341,8 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
     if(!pSeqFld)
         return;
 
-    SwClientIter aIter( *pSeqFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pSeqFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         if(!pTxtFld)
@@ -1388,9 +1370,7 @@ void SwTOXBaseSection::UpdateSequence( const SwTxtNode* pOwnChapterNode )
         }
     }
 }
-/* -----------------15.09.99 14:18-------------------
 
- --------------------------------------------------*/
 void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
 {
     SwDoc* pDoc = (SwDoc*)GetFmt()->GetDoc();
@@ -1398,9 +1378,8 @@ void SwTOXBaseSection::UpdateAuthorities( const SwTOXInternational& rIntl )
     if(!pAuthFld)
         return;
 
-    SwClientIter aIter( *pAuthFld );
-    SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-    for( ; pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter( *pAuthFld );
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
     {
         const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
         //undo
@@ -2431,9 +2410,7 @@ BOOL SwTOXBase::IsTOXBaseInReadonly() const
     }
     return bRet;
 }
-/* -----------------17.08.99 13:29-------------------
 
- --------------------------------------------------*/
 const SfxItemSet* SwTOXBase::GetAttrSet() const
 {
     const SwTOXBaseSection *pSect = PTR_CAST(SwTOXBaseSection, this);
@@ -2463,7 +2440,4 @@ BOOL SwTOXBase::GetInfo( SfxPoolItem& rInfo ) const
     }
     return TRUE;
 }
-
-/*  */
-
 

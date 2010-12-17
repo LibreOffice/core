@@ -568,7 +568,7 @@ class SwDeletionChecker
 
     SwDeletionChecker( const SwFrm* pFrm )
             : mpFrm( pFrm ),
-              mpRegIn( pFrm ? pFrm->GetRegisteredIn() : 0 )
+              mpRegIn( pFrm ? const_cast<SwFrm*>(pFrm)->GetRegisteredIn() : 0 )
     {
     }
 

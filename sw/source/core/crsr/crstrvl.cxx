@@ -71,7 +71,7 @@
 #include <fmturl.hxx>
 #include "txtfrm.hxx"
 #include <wrong.hxx>
-
+#include <switerator.hxx>
 #include <vcl/window.hxx>
 #include <docufld.hxx> // OD 2008-06-19 #i90516#
 
@@ -411,14 +411,13 @@ BOOL SwCrsrShell::GotoTOXMarkBase()
         // dann nehme den 1. und hole den Verzeichnis-Typ.
         // Suche in seiner Abhaengigkeitsliste nach dem eigentlichem
         // Verzeichnis
-        SwModify* pType = (SwModify*)aMarks[0]->GetRegisteredIn();
-        SwClientIter aIter( *pType );
+        const SwTOXType* pType = aMarks[0]->GetTOXType();
+        SwIterator<SwTOXBase,SwTOXType> aIter( *pType );
         const SwSectionNode* pSectNd;
         const SwSectionFmt* pSectFmt;
 
-        for( SwTOXBase* pTOX =
-            (SwTOXBase*)aIter.First( TYPE( SwTOXBase ));
-                pTOX; pTOX = (SwTOXBase*)aIter.Next() )
+        for( SwTOXBase* pTOX = aIter.First(); pTOX; pTOX = aIter.Next() )
+        {
             if( pTOX->ISA( SwTOXBaseSection ) &&
                 0 != ( pSectFmt = ((SwTOXBaseSection*)pTOX)->GetFmt() ) &&
                 0 != ( pSectNd = pSectFmt->GetSectionNode() ))
@@ -444,6 +443,7 @@ BOOL SwCrsrShell::GotoTOXMarkBase()
                     break;
                 }
             }
+    }
     }
     return bRet;
 }
@@ -630,13 +630,13 @@ void lcl_MakeFldLst( _SetGetExpFlds& rLst, const SwFieldType& rFldType,
     // es muss immer der 1. Frame gesucht werden
     Point aPt;
     SwTxtFld* pTxtFld;
-    SwClientIter aIter( (SwFieldType&)rFldType );
+    SwIterator<SwFmtFld,SwFieldType> aIter(rFldType);
     BOOL bSubType = nSubType != USHRT_MAX;
-    for( SwClient* pLast = aIter.First( TYPE( SwFmtFld )); pLast; pLast = aIter.Next() )
-        if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
+    for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld; pFmtFld = aIter.Next() )
+        if( 0 != ( pTxtFld = pFmtFld->GetTxtFld() ) &&
             ( !bChkInpFlag || ((SwSetExpField*)pTxtFld->GetFld().GetFld())
                                 ->GetInputFlag() ) &&
-            (!bSubType || (((SwFmtFld*)pLast)->GetFld()->GetSubType()
+            (!bSubType || (pFmtFld->GetFld()->GetSubType()
                                 & 0xff ) == nSubType ))
         {
             SwCntntFrm* pCFrm;
@@ -1612,20 +1612,16 @@ bool SwContentAtPos::IsInRTLText()const
     }
     if(pNd)
     {
-        SwClientIter aClientIter( * const_cast<SwTxtNode*>(pNd) );
-        SwClient* pLast = aClientIter.GoStart();
-        while( pLast )
+        SwIterator<SwTxtFrm,SwTxtNode> aIter(*pNd);
+        SwTxtFrm* pTmpFrm = aIter.First();
+        while( pTmpFrm )
         {
-            if ( pLast->ISA( SwTxtFrm ) )
-            {
-                SwTxtFrm* pTmpFrm = static_cast<SwTxtFrm*>( pLast );
                 if ( !pTmpFrm->IsFollow())
                 {
                     bRet = pTmpFrm->IsRightToLeft();
                     break;
                 }
-            }
-            pLast = ++aClientIter;
+            pTmpFrm = aIter.Next();
         }
     }
     return bRet;
@@ -2110,14 +2106,13 @@ BOOL SwCrsrShell::SelectNxtPrvHyperlink( BOOL bNext )
         const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
         for( USHORT n = pFmts->Count(); 1 < n; )
         {
-            SwClientIter aIter( *(*pFmts)[  --n ] );
+            SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
 
-            for( SwClient* pFnd = aIter.First(TYPE( SwTxtINetFmt ));
-                    pFnd; pFnd = aIter.Next() )
-                if( 0 != ( pTxtNd = ((SwTxtINetFmt*)pFnd)->GetpTxtNode()) &&
+            for( SwTxtINetFmt* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+                if( 0 != ( pTxtNd = pFnd->GetpTxtNode()) &&
                     pTxtNd->GetNodes().IsDocNodes() )
                 {
-                    SwTxtINetFmt& rAttr = *(SwTxtINetFmt*)pFnd;
+                    SwTxtINetFmt& rAttr = *pFnd;
                     SwPosition aTmpPos( *pTxtNd );
                     _SetGetExpFld aPos( aTmpPos.nNode, rAttr );
                     SwCntntFrm* pFrm;

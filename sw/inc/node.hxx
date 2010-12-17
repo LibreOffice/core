@@ -82,9 +82,8 @@ class IDocumentLineNumberAccess;
 class IDocumentLinksAdministration;
 class IDocumentFieldsAccess;
 class IDocumentContentOperations;
-// --> OD 2007-10-31 #i83479#
 class IDocumentListItems;
-// <--
+class SwOLENodes;
 
 // --------------------
 // class SwNode
@@ -398,10 +397,10 @@ protected:
     // SwAttrSet (handle):
     USHORT ClearItemsFromAttrSet( const std::vector<USHORT>& rWhichIds );
 
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     TYPEINFO();     //Bereits in Basisklasse Client drin.
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
 
     // MakeFrm will be called for a certain layout
     // pSib is another SwFrm of the same layout (e.g. the SwRootFrm itself, a sibling, the parent)
@@ -508,11 +507,12 @@ public:
     inline void SetModifyAtAttr( bool bSetModifyAtAttr ) const { mbSetModifyAtAttr = bSetModifyAtAttr; }
     inline bool GetModifyAtAttr() const { return mbSetModifyAtAttr; }
 
+    static SwOLENodes* CreateOLENodesArray( const SwFmtColl& rColl, bool bOnlyWithInvalidSize );
+
 private:
     // privater Constructor, weil nie kopiert werden darf !!
     SwCntntNode( const SwCntntNode & rNode );
     SwCntntNode & operator= ( const SwCntntNode & rNode );
-
 };
 
 

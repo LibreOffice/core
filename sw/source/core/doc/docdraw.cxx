@@ -63,21 +63,15 @@
 #include <dflyobj.hxx>
 #include <svx/svdetc.hxx>
 #include <editeng/fhgtitem.hxx>
-
-// OD 26.06.2003 #108784#
 #include <svx/svdpagv.hxx>
-// OD 2004-04-01 #i26791#
 #include <dcontact.hxx>
 #include <txtfrm.hxx>
 #include <frmfmt.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <fmtornt.hxx>
-// --> OD 2006-03-14 #i62875#
 #include <svx/svditer.hxx>
-// <--
-// --> OD 2006-11-01 #130889#
 #include <vector>
-// <--
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::linguistic2;
@@ -544,28 +538,29 @@ _ZSortFly::_ZSortFly( const SwFrmFmt* pFrmFmt, const SwFmtAnchor* pFlyAn,
     // #i11176#
     // This also needs to work when no layout exists. Thus, for
     // FlyFrames an alternative method is used now in that case.
-    SwClientIter aIter( (SwFmt&)*pFmt );
-
     if( RES_FLYFRMFMT == pFmt->Which() )
     {
         if( pFmt->getIDocumentLayoutAccess()->GetCurrentViewShell() )   //swmod 071107//swmod 071225
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE( SwFlyFrm) ) )
-                nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum();
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( *pFrmFmt );
+            if( pFly )
+                nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
         }
         else
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE(SwFlyDrawContact) ) )
-                nOrdNum = ((SwFlyDrawContact*)aIter())->GetMaster()->GetOrdNum();
+            SwFlyDrawContact* pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+            if( pContact )
+                nOrdNum = pContact->GetMaster()->GetOrdNum();
         }
     }
     else if( RES_DRAWFRMFMT == pFmt->Which() )
     {
         // Schauen, ob es ein SdrObject dafuer gibt
-        if( aIter.First( TYPE(SwDrawContact) ) )
-            nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum();
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement( *pFrmFmt );
+            if( pContact )
+                nOrdNum = pContact->GetMaster()->GetOrdNum();
     }
     else {
         ASSERT( !this, "was ist das fuer ein Format?" );

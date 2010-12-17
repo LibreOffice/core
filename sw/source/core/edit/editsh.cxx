@@ -66,7 +66,7 @@
 #include <numrule.hxx>
 #include <SwNodeNum.hxx>
 #include <unocrsr.hxx>
-
+#include <switerator.hxx>
 
 using namespace com::sun::star;
 
@@ -423,8 +423,7 @@ void SwEditShell::SetGraphicPolygon( const PolyPolygon *pPoly )
     pNd->SetContour( pPoly );
     SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
     const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-    pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
-                                      (SwFmtSurround*)&rSur );
+    pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
     GetDoc()->SetModified();
     EndAllAction();
 }
@@ -439,8 +438,7 @@ void SwEditShell::ClearAutomaticContour()
         pNd->SetContour( NULL, FALSE );
         SwFlyFrm *pFly = (SwFlyFrm*)pNd->getLayoutFrm(GetLayout())->GetUpper();
         const SwFmtSurround &rSur = pFly->GetFmt()->GetSurround();
-        pFly->GetFmt()->SwModify::Modify( (SwFmtSurround*)&rSur,
-                                          (SwFmtSurround*)&rSur );
+        pFly->GetFmt()->NotifyClients( (SwFmtSurround*)&rSur, (SwFmtSurround*)&rSur );
         GetDoc()->SetModified();
         EndAllAction();
     }
@@ -811,14 +809,13 @@ USHORT SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
     const SwCharFmts* pFmts = GetDoc()->GetCharFmts();
     for( USHORT n = pFmts->Count(); 1 < n; )
     {
-        SwClientIter aIter( *(*pFmts)[  --n ] );
-
-        for( SwClient* pFnd = aIter.First(TYPE( SwTxtINetFmt ));
-                pFnd; pFnd = aIter.Next() )
-            if( 0 != ( pTxtNd = ((SwTxtINetFmt*)pFnd)->GetpTxtNode()) &&
+        SwIterator<SwTxtINetFmt,SwCharFmt> aIter(*(*pFmts)[--n]);
+        for( SwTxtINetFmt* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
+        {
+            if( 0 != ( pTxtNd = pFnd->GetpTxtNode()) &&
                 pTxtNd->GetNodes().IsDocNodes() )
             {
-                SwTxtINetFmt& rAttr = *(SwTxtINetFmt*)pFnd;
+                SwTxtINetFmt& rAttr = *pFnd;
                 String sTxt( pTxtNd->GetExpandTxt( *rAttr.GetStart(),
                                     *rAttr.GetEnd() - *rAttr.GetStart() ) );
 
@@ -831,6 +828,7 @@ USHORT SwEditShell::GetINetAttrs( SwGetINetAttrs& rArr )
                     rArr.C40_INSERT( SwGetINetAttr, pNew, rArr.Count() );
                 }
             }
+    }
     }
     return rArr.Count();
 }

@@ -28,11 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#ifdef WTC
-#define private public
-#endif
-
 #include "hintids.hxx"
 #include <editeng/lrspitem.hxx>
 #include <editeng/boxitem.hxx>
@@ -60,6 +55,7 @@
 #include "docary.hxx"
 #include "ndindex.hxx"
 #include "undobj.hxx"
+#include "switerator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -462,12 +458,12 @@ BOOL SwDoc::BalanceRowHeight( const SwCursor& rCursor, BOOL bTstOnly )
 
                 for ( i = 0; i < aRowArr.Count(); ++i )
                 {
-                    SwClientIter aIter( *((SwTableLine*)aRowArr[i])->GetFrmFmt() );
-                    SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
+                    SwIterator<SwFrm,SwFmt> aIter( *((SwTableLine*)aRowArr[i])->GetFrmFmt() );
+                    SwFrm* pFrm = aIter.First();
                     while ( pFrm )
                     {
                         nHeight = Max( nHeight, pFrm->Frm().Height() );
-                        pFrm = (SwFrm*)aIter.Next();
+                        pFrm = aIter.Next();
                     }
                 }
                 SwFmtFrmSize aNew( ATT_MIN_SIZE, 0, nHeight );

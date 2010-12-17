@@ -77,14 +77,15 @@ public:
     virtual SwFieldType*    Copy() const;
 
     SwDoc*                  GetDoc() const { return pDoc; }
-    // ueberlagert, um alle Ref-Felder zu updaten
-    virtual void Modify( SfxPoolItem *, SfxPoolItem * );
 
     void MergeWithOtherDoc( SwDoc& rDestDoc );
 
     static SwTxtNode* FindAnchor( SwDoc* pDoc, const String& rRefMark,
                                         USHORT nSubType, USHORT nSeqNo,
                                         USHORT* pStt, USHORT* pEnd = 0 );
+protected:
+    // ueberlagert, um alle Ref-Felder zu updaten
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem * );
 };
 
 /*--------------------------------------------------------------------

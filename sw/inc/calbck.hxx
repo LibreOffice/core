@@ -25,25 +25,6 @@
  *
  ************************************************************************/
 
-/*************************************************************
-#* Service-Klassen
- *************************************************************/
-
-/*
-#* Aendert sich ein Attribut in einem Format, so muss diese
-#* Aenderung an alle abhaengigen Formate und ueber sie an
-#* alle betroffenen Nodes propagiert werden. Dabei muss
-#* festgestellt werden, ob die Aenderung einen Effekt haben
-#* kann, oder ob das geaenderte Attribut von dem abhaengigen
-#* Format ueberdefiniert wird (so dass ohnehin der
-#* Attributwert des abhaengigen Formates den geaenderten
-#* Wert verdeckt). Weiterhin kann der betroffene Node
-#* feststellen, ob er von dem geaenderten Attribut Gebrauch
-#* macht (Beispiel: Linienabstand fuer Unterstreichung wurde
-#* geaendert, das Attribut Unterstreichung wurde aber nicht
-#* verwendet). So wird bei Aenderungen der minimale Aufwand
-#* zum Reformatieren erkannt.
- */
 #ifndef _CALBCK_HXX
 #define _CALBCK_HXX
 
@@ -53,7 +34,33 @@
 class SwModify;
 class SwClientIter;
 class SfxPoolItem;
-class SvStream;
+
+/*
+    SwModify and SwClient cooperate in propagating attribute changes.
+    If an attribute changes, the change is notified to all dependent
+    formats and other interested objects, e.g. Nodes. The clients will detect
+    if the change affects them. It could be that the changed attribute is
+    overruled in the receiving object so that its change does not become
+    effective or that the receiver is not interested in the particular attribute
+    in general (though probably in other attributes of the SwModify object they
+    are registered in).
+    As SwModify objects are derived from SwClient, they can create a chain of SwClient
+    objects where changes can get propagated through.
+    Each SwClient can be registered at only one SwModify object, while each SwModify
+    object is connected to a list of SwClient objects. If an object derived from SwClient
+    wants to get notifications from more than one SwModify object, it must create additional
+    SwClient objects. The SwDepend class allows to handle their notifications in the same
+    notification callback as it forwards the Modify() calls it receives to a "master"
+    SwClient implementation.
+    The SwClientIter class allows to iterate over the SwClient objects registered at an
+    SwModify. For historical reasons its ability to use TypeInfo to restrict this iteration
+    to objects of a particular type created a lot of code that misuses SwClient-SwModify
+    relationships that basically should be used only for Modify() callbacks.
+    This is still subject to refactoring.
+    Until this gets resolved, new SwClientIter base code should be reduced to the absolute
+    minimum and it also should be wrapped by SwIterator templates that prevent that the
+    code gets polluted by pointer casts (see switerator.hxx).
+ */
 
 // ----------
 // SwClient
@@ -61,106 +68,128 @@ class SvStream;
 
 class SW_DLLPUBLIC SwClient
 {
+    // avoids making the details of the linked list and the callback method public
     friend class SwModify;
     friend class SwClientIter;
 
-    SwClient *pLeft, *pRight;           // fuer die AVL-Sortierung
-    BOOL bModifyLocked : 1;             // wird in SwModify::Modify benutzt,
-                                        // eigentlich ein Member des SwModify
-                                        // aber aus Platzgruenden hier.
-    BOOL bInModify  : 1;                // ist in einem Modify. (Debug!!!)
-    BOOL bInDocDTOR : 1;                // Doc wird zerstoert, nicht "abmelden"
-    BOOL bInCache   : 1;                // Ist im BorderAttrCache des Layout,
-                                        // Traegt sich dann im Modify aus!
-    BOOL bInSwFntCache : 1;             // Ist im SwFont-Cache der Formatierung
+    SwClient *pLeft, *pRight;       // double-linked list of other clients
+    SwModify *pRegisteredIn;        // event source
+
+    // in general clients should not be removed when their SwModify sends out Modify()
+    // notifications; in some rare cases this is necessary, but only the concrete SwClient
+    // sub class will know that; this flag allows to make that known
+    bool mbIsAllowedToBeRemovedInModifyCall;
+
+    // callbacks received from SwModify (friend class - so these methods can be private)
+    // should be called only from SwModify the client is registered in
+    // mba: IMHO these methods should be pure virtual
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void SwClientNotify( SwModify* pModify, USHORT nWhich );
 
 protected:
-    SwModify *pRegisteredIn;
-
     // single argument ctors shall be explicit.
     explicit SwClient(SwModify *pToRegisterIn);
 
+    // write access to pRegisteredIn shall be granted only to the object itself (protected access)
+    SwModify* GetRegisteredInNonConst() const { return pRegisteredIn; }
+    void SetIsAllowedToBeRemovedInModifyCall( bool bSet ) { mbIsAllowedToBeRemovedInModifyCall = bSet; }
+
 public:
+
     inline SwClient();
     virtual ~SwClient();
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-    const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
+    // in case an SwModify object is destroyed that itself is registered in another SwModify,
+    // its SwClient objects can decide to get registered to the latter instead by calling this method
+    void CheckRegistration( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
 
-    //rtti, abgeleitete moegens gleichtun oder nicht. Wenn sie es gleichtun
-    //kann ueber die Abhaengigkeitsliste eines Modify typsicher gecastet
-    //werden.
+    // controlled access to Modify method
+    // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
+    void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+
+    const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
+    bool IsLast() const { return !pLeft && !pRight; }
+
+    // needed for class SwClientIter
     TYPEINFO();
 
-    void LockModify()                   { bModifyLocked = TRUE;  }
-    void UnlockModify()                 { bModifyLocked = FALSE; }
-    void SetInCache( BOOL bNew )        { bInCache = bNew;       }
-    void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
-    BOOL IsModifyLocked() const         { return bModifyLocked;  }
-    BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
-    BOOL IsInCache()      const         { return bInCache;       }
-    BOOL IsInSwFntCache()  const        { return bInSwFntCache;  }
-
-        // erfrage vom Client Informationen
+    // get information about attribute
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
 private:
+    // forbidden and not implemented
     SwClient( const SwClient& );
     SwClient &operator=( const SwClient& );
 };
 
 inline SwClient::SwClient() :
-    pLeft(0), pRight(0), pRegisteredIn(0)
-{ bModifyLocked = bInModify = bInDocDTOR = bInCache = bInSwFntCache = FALSE; }
-
+    pLeft(0), pRight(0), pRegisteredIn(0), mbIsAllowedToBeRemovedInModifyCall(false)
+{}
 
 // ----------
 // SwModify
 // ----------
 
-// Klasse hat eine doppelt Verkette Liste fuer die Abhaengigen.
-
 class SW_DLLPUBLIC SwModify: public SwClient
 {
-    friend SvStream& operator<<( SvStream& aS, SwModify & );
+//  friend class SwClientIter;
 
-    friend class SwClientIter;
-    SwClient* pRoot;
+    SwClient* pRoot;                // the start of the linked list of clients
+    BOOL bModifyLocked : 1;         // don't broadcast changes now
+    BOOL bLockClientList : 1;       // may be set when this instance notifies its clients
+    BOOL bInDocDTOR : 1;            // workaround for problems when a lot of objects are destroyed
+    BOOL bInCache   : 1;
+    BOOL bInSwFntCache : 1;
 
-    SwClient *_Remove(SwClient *pDepend);
+    // mba: IMHO this method should be pure virtual
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 
 public:
-    SwModify() : pRoot(0) {}
+    SwModify();
+
+    // broadcasting: send notifications to all clients
+    void NotifyClients( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+
+    // the same, but without setting bModifyLocked or checking for any of the flags
+    // mba: it would be interesting to know why this is necessary
+    // also allows to limit callback to certain type (HACK)
+    void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType = TYPE(SwClient) );
+
+    // placeholder for a more elaborated broadcasting mechanism; currently the nWhich is enough
+    void CallSwClientNotify( USHORT nWhich );
 
     // single argument ctors shall be explicit.
-    explicit SwModify(SwModify *pToRegisterIn );
+    explicit SwModify( SwModify *pToRegisterIn );
     virtual ~SwModify();
 
-    virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
     void Add(SwClient *pDepend);
-    SwClient *Remove(SwClient *pDepend)
-        {   return bInDocDTOR ?  0 : _Remove( pDepend ); }
-
+    SwClient* Remove(SwClient *pDepend);
     const SwClient* GetDepends() const  { return pRoot; }
 
-        // erfrage vom Client Informationen
+    // get information about attribute
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 
-    void SetInDocDTOR() { bInDocDTOR = TRUE; }
+    void LockModify()                   { bModifyLocked = TRUE;  }
+    void UnlockModify()                 { bModifyLocked = FALSE; }
+    void SetInCache( BOOL bNew )        { bInCache = bNew;       }
+    void SetInSwFntCache( BOOL bNew )   { bInSwFntCache = bNew;  }
+    void SetInDocDTOR()                 { bInDocDTOR = TRUE; }
+    BOOL IsModifyLocked() const         { return bModifyLocked;  }
+    BOOL IsInDocDTOR()    const         { return bInDocDTOR;     }
+    BOOL IsInCache()      const         { return bInCache;       }
+    BOOL IsInSwFntCache() const         { return bInSwFntCache;  }
 
     void CheckCaching( const USHORT nWhich );
 
-    BOOL IsLastDepend() const
-        { return pRoot && !pRoot->pLeft && !pRoot->pRight; }
+    bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
+
+#ifdef DBG_UTIL
+    int GetClientCount() const;
+#endif
 
 private:
-    // forbidden and not implemented (see @ SwClient).
+    // forbidden and not implemented
     SwModify & operator= (const SwModify &);
-
-protected:
-    // forbidden and not implemented (see @ SwClient),
-    //   but GCC >= 3.4 needs an accessible "T (const T&)"
-    //   to pass a "T" as a "const T&" argument
     SwModify (const SwModify &);
 };
 
@@ -169,9 +198,7 @@ protected:
 // ----------
 
 /*
- * Sehr sinnvolle Klasse, wenn ein Objekt von mehreren Objekten
- * abhaengig ist. Diese sollte fuer jede Abhaengigkeit ein Objekt
- * der Klasse SwDepend als Member haben.
+ * Helper class for objects that need to depend on more than one SwClient
  */
 class SW_DLLPUBLIC SwDepend: public SwClient
 {
@@ -182,13 +209,14 @@ public:
     SwDepend(SwClient *pTellHim, SwModify *pDepend);
 
     SwClient* GetToTell() { return pToTell; }
-    virtual void Modify( SfxPoolItem *pOldValue, SfxPoolItem *pNewValue );
 
-        // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem & ) const;
 
+protected:
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
+
 private:
-    // forbidden and not implemented (see @ SwClient).
+    // forbidden and not implemented
     SwDepend (const SwDepend &);
     SwDepend & operator= (const SwDepend &);
 };
@@ -196,55 +224,52 @@ private:
 
 class SwClientIter
 {
-    friend SwClient* SwModify::_Remove(SwClient *); // fuer Ptr-Korrektur
-    friend void SwModify::Add(SwClient *);          // nur fuer ASSERT !
+    friend SwClient* SwModify::Remove(SwClient *); // for pointer adjustments
+    friend void SwModify::Add(SwClient *pDepend);   // for pointer adjustments
 
-    SwModify const& rRoot;
-    SwClient *pAkt, *pDelNext;
-    // fuers Updaten der aller Iteratoren beim Einfuegen/Loeschen von
-    // Clients, wenn der Iterator gerade draufsteht.
+    const SwModify& rRoot;
+
+    // the current object in an iteration
+    SwClient* pAct;
+
+    // in case the current object is already removed, the next object in the list
+    // is marked down to become the current object in the next step
+    // this is necessary because iteration requires access to members of the current object
+    SwClient* pDelNext;
+
+    // SwClientIter objects are tracked in linked list so that they can react
+    // when the current (pAct) or marked down (pDelNext) SwClient is removed
+    // from its SwModify
     SwClientIter *pNxtIter;
 
-    SwClient* mpWatchClient;    // if set, SwModify::_Remove checks if this client is removed
-
-    TypeId aSrchId;             // fuer First/Next - suche diesen Type
+    // iterator can be limited to return only SwClient objects of a certain type
+    TypeId aSrchId;
 
 public:
-    SW_DLLPUBLIC SwClientIter( SwModify const& );
+    SW_DLLPUBLIC SwClientIter( const SwModify& );
     SW_DLLPUBLIC ~SwClientIter();
 
-    const SwModify& GetModify() const       { return rRoot; }
+    const SwModify& GetModify() const { return rRoot; }
 
-#ifndef CFRONT
-    SwClient* operator++(int);  // zum Naechsten
-    SwClient* operator--(int);  // zum Vorherigen
-#endif
-    SwClient* operator++();     // zum Naechsten
-    SwClient* operator--();     // zum Vorherigen
+    SwClient* operator++(int);
+    SwClient* GoStart();
+    SwClient* GoEnd();
 
-    SwClient* GoStart();        // zum Anfang
-    SwClient* GoEnd();          // zum Ende
-
-    inline SwClient* GoRoot();      // wieder ab Root (==Start) anfangen
-
+    // returns the current SwClient object;
+    // in case this was already removed, the object marked down to become
+    // the next current one is returned
     SwClient* operator()() const
-        { return pDelNext == pAkt ? pAkt : pDelNext; }
+        { return pDelNext == pAct ? pAct : pDelNext; }
 
-    int IsChanged() const { return pDelNext != pAkt; }
+    // return "true" if an object was removed from a client chain in iteration
+    // adding objects to a client chain in iteration is forbidden
+    // SwModify::Add() asserts this
+    bool IsChanged() const { return pDelNext != pAct; }
 
     SW_DLLPUBLIC SwClient* First( TypeId nType );
     SW_DLLPUBLIC SwClient* Next();
-
-    const SwClient* GetWatchClient() const { return mpWatchClient; }
-    void SetWatchClient( SwClient* pWatch ) { mpWatchClient = pWatch; }
+    SW_DLLPUBLIC SwClient* Last( TypeId nType );
+    SW_DLLPUBLIC SwClient* Previous();
 };
-
-inline SwClient* SwClientIter::GoRoot()     // wieder ab Root anfangen
-{
-    pAkt = rRoot.pRoot;
-    return (pDelNext = pAkt);
-}
-
-
 
 #endif

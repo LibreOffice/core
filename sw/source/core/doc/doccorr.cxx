@@ -257,7 +257,7 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
             {
                 // the UNO cursor has left its section. We need to notify it!
                 SwMsgPoolItem aHint( RES_UNOCURSOR_LEAVES_SECTION );
-                pUnoCursor->Modify( &aHint, NULL );
+                pUnoCursor->ModifyNotification( &aHint, NULL );
             }
         }
     }

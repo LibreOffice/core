@@ -24,45 +24,24 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _SDRHHCWRAP_HXX_
-#define _SDRHHCWRAP_HXX_
+#ifndef _SWITERATOR_HXX
+#define _SWITERATOR_HXX
 
-#include <svx/svdoutl.hxx>
+#include <calbck.hxx>
+#include <tools/debug.hxx>
 
-class SwView;
-class SdrTextObj;
-class OutlinerView;
-class SdrObjListIter;
-
-//////////////////////////////////////////////////////////////////////
-
-class SdrHHCWrapper : public SdrOutliner
+template< class TElementType, class TSource > class SwIterator
 {
-    // modified version of SdrSpeller
-
-    SwView*             pView;
-    SdrTextObj*         pTextObj;
-    OutlinerView*       pOutlView;
-    sal_Int32           nOptions;
-    sal_uInt16          nDocIndex;
-    LanguageType        nSourceLang;
-    LanguageType        nTargetLang;
-    const Font*         pTargetFont;
-    sal_Bool            bIsInteractive;
-
+    SwClientIter aClientIter;
 public:
-    SdrHHCWrapper( SwView* pVw,
-                   LanguageType nSourceLanguage, LanguageType nTargetLanguage,
-                   const Font* pTargetFnt,
-                   sal_Int32 nConvOptions, sal_Bool bInteractive );
 
-    virtual ~SdrHHCWrapper();
-
-    virtual sal_Bool ConvertNextDocument();
-    void    StartTextConversion();
+    SwIterator( const TSource& rSrc ) : aClientIter(rSrc) { DBG_ASSERT( TElementType::IsOf( TYPE(SwClient) ), "Incompatible types!" ); }
+    TElementType* First()     { SwClient* p = aClientIter.First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    TElementType* Last()      { SwClient* p = aClientIter.Last( TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    TElementType* Next()      { SwClient* p = aClientIter.Next();     return PTR_CAST(TElementType,p); }
+    TElementType* Previous()  { SwClient* p = aClientIter.Previous(); return PTR_CAST(TElementType,p);  }
+    static TElementType* FirstElement( const TSource& rMod ) { SwClient* p = SwClientIter(rMod).First(TYPE(TElementType)); return PTR_CAST(TElementType,p); }
+    bool IsChanged()          { return aClientIter.IsChanged(); }
 };
 
-//////////////////////////////////////////////////////////////////////
-
 #endif
-

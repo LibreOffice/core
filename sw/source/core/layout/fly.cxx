@@ -50,27 +50,16 @@
 #include <fmtcnct.hxx>
 #include <layhelp.hxx>
 #include <ndtxt.hxx>
-
-// --> OD 2010-09-14 #i113730#
 #include <svx/svdogrp.hxx>
-// <--
-// OD 16.04.2003 #i13147# - for <SwFlyFrm::GetContour(..)>
 #include <ndgrf.hxx>
-// OD 29.10.2003 #113049#
 #include <tolayoutanchoredobjectposition.hxx>
-// OD 06.11.2003 #i22305#
 #include <fmtfollowtextflow.hxx>
-// --> OD 2004-06-28 #i28701#
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
-// <--
-// OD 2004-04-06 #i26791#
 #include <anchoredobject.hxx>
-// --> OD 2006-01-31 #i53298#
 #include <ndole.hxx>
-// <--
 #include <swtable.hxx>
-
+#include <svx/svdpage.hxx>
 #include "doc.hxx"
 #include "viewsh.hxx"
 #include "layouter.hxx"
@@ -99,6 +88,7 @@
 #include "sectfrm.hxx"
 #include <vcl/svapp.hxx>
 #include <vcl/salbtype.hxx>     // FRound
+#include "switerator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -388,15 +378,81 @@ void SwFlyFrm::DeleteCnt()
 |*  Letzte Aenderung    MA 30. Nov. 95
 |*
 |*************************************************************************/
+
+sal_uInt32 SwFlyFrm::_GetOrdNumForNewRef( const SwFlyDrawContact* pContact )
+{
+    sal_uInt32 nOrdNum( 0L );
+
+    // search for another Writer fly frame registered at same frame format
+    SwIterator<SwFlyFrm,SwFmt> aIter( *pContact->GetFmt() );
+    const SwFlyFrm* pFlyFrm( 0L );
+    for ( pFlyFrm = aIter.First(); pFlyFrm; pFlyFrm = aIter.Next() )
+    {
+        if ( pFlyFrm != this )
+        {
+            break;
+        }
+    }
+
+    if ( pFlyFrm )
+    {
+        // another Writer fly frame found. Take its order number
+        nOrdNum = pFlyFrm->GetVirtDrawObj()->GetOrdNum();
+    }
+    else
+    {
+        // no other Writer fly frame found. Take order number of 'master' object
+        // --> OD 2004-11-11 #i35748# - use method <GetOrdNumDirect()> instead
+        // of method <GetOrdNum()> to avoid a recalculation of the order number,
+        // which isn't intended.
+        nOrdNum = pContact->GetMaster()->GetOrdNumDirect();
+        // <--
+    }
+
+    return nOrdNum;
+}
+
+SwVirtFlyDrawObj* SwFlyFrm::CreateNewRef( SwFlyDrawContact *pContact )
+{
+    SwVirtFlyDrawObj *pDrawObj = new SwVirtFlyDrawObj( *pContact->GetMaster(), this );
+    pDrawObj->SetModel( pContact->GetMaster()->GetModel() );
+    pDrawObj->SetUserCall( pContact );
+
+    //Der Reader erzeugt die Master und setzt diese, um die Z-Order zu
+    //transportieren, in die Page ein. Beim erzeugen der ersten Referenz werden
+    //die Master aus der Liste entfernt und fuehren von da an ein
+    //Schattendasein.
+    SdrPage* pPg( 0L );
+    if ( 0 != ( pPg = pContact->GetMaster()->GetPage() ) )
+    {
+        const UINT32 nOrdNum = pContact->GetMaster()->GetOrdNum();
+        pPg->ReplaceObject( pDrawObj, nOrdNum );
+    }
+    // --> OD 2004-08-16 #i27030# - insert new <SwVirtFlyDrawObj> instance
+    // into drawing page with correct order number
+    else
+    {
+        pContact->GetFmt()->getIDocumentDrawModelAccess()->GetDrawModel()->GetPage( 0 )->
+                        InsertObject( pDrawObj, _GetOrdNumForNewRef( pContact ) );
+    }
+    // <--
+    // --> OD 2004-12-13 #i38889# - assure, that new <SwVirtFlyDrawObj> instance
+    // is in a visible layer.
+    pContact->MoveObjToVisibleLayer( pDrawObj );
+    // <--
+    return pDrawObj;
+}
+
+
+
 void SwFlyFrm::InitDrawObj( BOOL bNotify )
 {
     //ContactObject aus dem Format suchen. Wenn bereits eines existiert, so
     //braucht nur eine neue Ref erzeugt werden, anderfalls ist es jetzt an
     //der Zeit das Contact zu erzeugen.
-    SwClientIter aIter( *GetFmt() );
-    SwFlyDrawContact *pContact = (SwFlyDrawContact*)
-                                        aIter.First( TYPE(SwFlyDrawContact) );
+
     IDocumentDrawModelAccess* pIDDMA = GetFmt()->getIDocumentDrawModelAccess();
+    SwFlyDrawContact *pContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *GetFmt() );
     if ( !pContact )
     {
         // --> OD 2005-08-08 #i52858# - method name changed
@@ -406,7 +462,7 @@ void SwFlyFrm::InitDrawObj( BOOL bNotify )
     }
     ASSERT( pContact, "InitDrawObj failed" );
     // OD 2004-03-22 #i26791#
-    SetDrawObj( *(pContact->CreateNewRef( this )) );
+    SetDrawObj( *(CreateNewRef( pContact )) );
 
     //Den richtigen Layer setzen.
     // OD 2004-01-19 #110582#
@@ -458,18 +514,19 @@ void SwFlyFrm::FinitDrawObj()
     SwFlyDrawContact *pMyContact = 0;
     if ( GetFmt() )
     {
-        SwClientIter aIter( *GetFmt() );
-        aIter.GoStart();
-        do {
-            if ( aIter()->ISA(SwFrm) && (SwFrm*)aIter() != this )
+        bool bContinue = true;
+        SwIterator<SwFrm,SwFmt> aFrmIter( *GetFmt() );
+        for ( SwFrm* pFrm = aFrmIter.First(); pFrm; pFrm = aFrmIter.Next() )
+            if ( pFrm != this )
             {
-                pMyContact = 0;
+                // don't delete Contact if there is still a Frm
+                bContinue = false;
                 break;
             }
-            if( !pMyContact && aIter()->ISA(SwFlyDrawContact) )
-                pMyContact = (SwFlyDrawContact*)aIter();
-            aIter++;
-        } while( aIter() );
+
+        if ( bContinue )
+            // no Frm left, find Contact object to destroy
+            pMyContact = SwIterator<SwFlyDrawContact,SwFmt>::FirstElement( *GetFmt() );
     }
 
     // OD, OS 2004-03-31 #116203# - clear user call of Writer fly frame 'master'
@@ -617,8 +674,8 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
             pLay = pLay->GetUpper();
     }
 
-    SwClientIter aIter( rChain );
-    SwFlyFrm *pFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm ) );
+    SwIterator<SwFlyFrm,SwFmt> aIter( rChain );
+    SwFlyFrm *pFly = aIter.First();
     if ( pLay )
     {
         while ( pFly )
@@ -633,7 +690,7 @@ SwFlyFrm *SwFlyFrm::FindChainNeighbour( SwFrmFmt &rChain, SwFrm *pAnch )
                 else if ( pLay == pFly->FindFooterOrHeader() )
                     break;
             }
-            pFly = (SwFlyFrm*)aIter.Next();
+            pFly = aIter.Next();
         }
     }
     else if ( pFly )
@@ -736,7 +793,7 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 |*
 |*************************************************************************/
 
-void SwFlyFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwFlyFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BYTE nInvFlags = 0;
 
@@ -804,7 +861,7 @@ void SwFlyFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     // <--
 }
 
-void SwFlyFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwFlyFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             BYTE &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -2876,3 +2933,11 @@ bool SwFlyFrm::IsFormatPossible() const
     return SwAnchoredObject::IsFormatPossible() &&
            !IsLocked() && !IsColLocked();
 }
+
+void SwFlyFrm::GetAnchoredObjects( std::list<SwAnchoredObject*>& aList, const SwFmt& rFmt )
+{
+    SwIterator<SwFlyFrm,SwFmt> aIter( rFmt );
+    for( SwFlyFrm* pFlyFrm = aIter.First(); pFlyFrm; pFlyFrm = aIter.Next() )
+        aList.push_back( pFlyFrm );
+}
+

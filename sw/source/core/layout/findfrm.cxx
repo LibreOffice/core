@@ -47,8 +47,8 @@
 #include "ftnfrm.hxx"
 #include "txtftn.hxx"
 #include "fmtftn.hxx"
-// OD 09.01.2004 #i11859#
 #include <txtfrm.hxx>   // SwTxtFrm
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
@@ -1683,13 +1683,10 @@ const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurren
                                        GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
                                        GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
 
-        SwClientIter aIter( const_cast<SwFrmFmt&>( *rMasterBox.GetFrmFmt()) );
+        SwIterator<SwCellFrm,SwFmt> aIter( *rMasterBox.GetFrmFmt() );
 
-        for ( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+        for ( SwCellFrm* pMasterCell = aIter.First(); pMasterCell; pMasterCell = aIter.Next() )
         {
-            ASSERT( ((SwFrm*)pLast)->IsCellFrm(), "Non-row frame registered in table line" )
-            const SwCellFrm* pMasterCell = static_cast<const SwCellFrm*>(pLast);
-
             if ( pMasterCell->GetTabBox() == &rMasterBox )
             {
                 const SwTabFrm* pMasterTable = static_cast<const SwTabFrm*>(pMasterCell->GetUpper()->GetUpper());

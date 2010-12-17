@@ -81,7 +81,7 @@
 #include <unocrsrhelper.hxx>
 #include <unotextrange.hxx>
 #include <sfx2/docfile.hxx>
-
+#include <switerator.hxx>
 #include "swdtflvr.hxx"
 #include <vcl/svapp.hxx>
 
@@ -575,9 +575,7 @@ uno::Any SwXTextView::getSelection(void) throw( uno::RuntimeException )
                 const SwFrmFmt* pFmt = rSh.GetFlyFrmFmt();
                 if (pFmt)
                 {
-                    SwXFrame* pxFrame = (SwXFrame*)SwClientIter((SwFrmFmt&)*pFmt).
-                                                    First(TYPE(SwXFrame));
-
+                    SwXFrame* pxFrame = SwIterator<SwXFrame,SwFmt>::FirstElement(*pFmt);
                     if(pxFrame)                //das einzige gemeinsame interface fuer alle Frames
                     {
                         aRef = uno::Reference< uno::XInterface >((cppu::OWeakObject*)pxFrame, uno::UNO_QUERY);

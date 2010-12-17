@@ -45,7 +45,7 @@
 #include <dbmgr.hxx>
 #include <swddetbl.hxx>
 #include <hints.hxx>
-
+#include <switerator.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen zu einer ResId zaehlen
@@ -202,7 +202,7 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
     BOOL bDDEFld = RES_DDEFLD == pType->Which();
     // Modify-Object gefunden, trage alle Felder ins Array ein
-    SwClientIter aIter( *pType );
+    SwClientIter aIter( *pType );       // TODO
     SwClient * pLast = aIter.GoStart();
 
     if( pLast )     // konnte zum Anfang gesprungen werden ??
@@ -579,13 +579,13 @@ BOOL SwEditShell::IsAnyDatabaseFieldInDoc()const
                 case RES_DBNUMSETFLD:
                 case RES_DBSETNUMBERFLD:
                 {
-                    SwClientIter aIter( rFldType );
-                    SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+                    SwIterator<SwFmtFld,SwFieldType> aIter( rFldType );
+                    SwFmtFld* pFld = aIter.First();
                     while(pFld)
                     {
                         if(pFld->IsFldInDoc())
                             return TRUE;
-                        pFld = (SwFmtFld*)aIter.Next();
+                        pFld = aIter.Next();
                     }
                 }
                 break;

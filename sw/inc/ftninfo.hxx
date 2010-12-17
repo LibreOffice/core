@@ -29,9 +29,6 @@
 
 #include <tools/string.hxx>
 #include "swdllapi.h"
-//#ifndef _NUMRULE_HXX
-//#include <numrule.hxx>
-//#endif
 #include <calbck.hxx>
 #include <editeng/numitem.hxx>
 
@@ -48,6 +45,8 @@ class SW_DLLPUBLIC SwEndNoteInfo : public SwClient
     String      sSuffix;
 protected:
     bool        m_bEndNote;
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
+
 public:
     SvxNumberType aFmt;
     USHORT    nFtnOffset;
@@ -67,8 +66,6 @@ public:
     void SetAnchorCharFmt( SwCharFmt* );
     SwClient   *GetAnchorCharFmtDep() const { return (SwClient*)&aAnchorCharFmtDep; }
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-
     SwEndNoteInfo & operator=(const SwEndNoteInfo&);
     BOOL operator==( const SwEndNoteInfo &rInf ) const;
 
@@ -80,6 +77,7 @@ public:
 
     void SetPrefix(const String& rSet)      { sPrefix = rSet; }
     void SetSuffix(const String& rSet)      { sSuffix = rSet; }
+    void ReleaseCollection() { if ( GetRegisteredInNonConst() ) GetRegisteredInNonConst()->Remove( this ); }
 };
 
 enum SwFtnPos

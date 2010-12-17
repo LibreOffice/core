@@ -47,14 +47,11 @@
 #include <ndindex.hxx>
 #include <fmtftntx.hxx>
 #include <section.hxx>
+#include <switerator.hxx>
 
 /*************************************************************************
 |*
 |*    class SwFmtFtn
-|*
-|*    Beschreibung
-|*    Ersterstellung    JP 09.08.94
-|*    Letzte Aenderung  JP 08.08.94
 |*
 *************************************************************************/
 
@@ -272,7 +269,7 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
 
     ASSERT( m_pTxtNode, "SwTxtFtn: where is my TxtNode?" );
     SwNodes &rNodes = m_pTxtNode->GetDoc()->GetNodes();
-    m_pTxtNode->Modify( 0, &rFtn );
+    m_pTxtNode->ModifyNotification( 0, &rFtn );
     if ( m_pStartNode )
     {
         // must iterate over all TxtNodes because of footnotes on other pages
@@ -283,7 +280,7 @@ void SwTxtFtn::SetNumber( const USHORT nNewNum, const XubString* pStr )
         {
             // Es koennen ja auch Grafiken in der Fussnote stehen ...
             if( ( pNd = rNodes[ nSttIdx ] )->IsTxtNode() )
-                ((SwTxtNode*)pNd)->Modify( 0, &rFtn );
+                ((SwTxtNode*)pNd)->ModifyNotification( 0, &rFtn );
         }
     }
 }
@@ -372,9 +369,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
     const SwRootFrm* pRoot = pSib ? pSib->getRootFrm() : 0;
     BOOL bFrmFnd = FALSE;
     {
-        SwClientIter aIter( *m_pTxtNode );
-        for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+        SwIterator<SwCntntFrm,SwTxtNode> aIter( *m_pTxtNode );
+        for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
         {
             if( pRoot != pFnd->getRootFrm() && pRoot )
                 continue;
@@ -394,9 +390,8 @@ void SwTxtFtn::DelFrms( const SwFrm* pSib )
         SwCntntNode* pCNd = m_pTxtNode->GetNodes().GoNext( &aIdx );
         if( pCNd )
         {
-            SwClientIter aIter( *pCNd );
-            for( SwCntntFrm* pFnd = (SwCntntFrm*)aIter.First( TYPE( SwCntntFrm ));
-                    pFnd; pFnd = (SwCntntFrm*)aIter.Next() )
+            SwIterator<SwCntntFrm,SwCntntNode> aIter( *pCNd );
+            for( SwCntntFrm* pFnd = aIter.First(); pFnd; pFnd = aIter.Next() )
             {
                 if( pRoot != pFnd->getRootFrm() && pRoot )
                     continue;

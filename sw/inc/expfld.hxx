@@ -82,8 +82,8 @@ public:
         // ueberlagert, weil das Get-Field nicht veraendert werden kann
         // und dann auch nicht aktualisiert werden muss. Aktualisierung
         // erfolgt beim Aendern von Set-Werten !
-
-        virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 };
 
 /*--------------------------------------------------------------------
@@ -165,6 +165,8 @@ class SW_DLLPUBLIC SwSetExpFieldType : public SwValueFieldType
     USHORT      nType;
     BYTE        nLevel;
     BOOL        bDeleted;
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
 
 public:
     SwSetExpFieldType( SwDoc* pDoc, const String& rName,
@@ -183,7 +185,6 @@ public:
 
     // ueberlagert, weil das Set-Field selbst dafuer sorgt, das
     // es aktualisiert wird.
-    virtual void            Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
     inline const String&    GetSetRefName() const;
 
     USHORT SetSeqRefNo( SwSetExpField& rFld );

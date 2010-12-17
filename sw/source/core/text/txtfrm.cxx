@@ -74,21 +74,16 @@
 #include <SwGrammarMarkUp.hxx>
 #include <lineinfo.hxx>
 #include <SwPortionHandler.hxx>
-// OD 2004-01-15 #110582#
 #include <dcontact.hxx>
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-// --> OD 2005-03-30 #???#
 #include <txtflcnt.hxx>     // SwTxtFlyCnt
 #include <fmtflcnt.hxx>     // SwFmtFlyCnt
 #include <fmtcntnt.hxx>     // SwFmtCntnt
-// <--
-// --> OD 2008-01-31 #newlistlevelattrs#
 #include <numrule.hxx>
-// <--
 #include <swtable.hxx>
 #include <fldupde.hxx>
 #include <IGrammarContact.hxx>
+#include <switerator.hxx>
 
 #if OSL_DEBUG_LEVEL > 1
 #include <txtpaint.hxx>     // DbgRect
@@ -905,7 +900,7 @@ void lcl_ModifyOfst( SwTxtFrm* pFrm, xub_StrLen nPos, xub_StrLen nLen )
  *                      SwTxtFrm::Modify()
  *************************************************************************/
 
-void SwTxtFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwTxtFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     const MSHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
 
@@ -2754,3 +2749,18 @@ void SwTxtFrm::CalcBaseOfstForFly()
     mnFlyAnchorOfst = nRet1 - nLeft;
     mnFlyAnchorOfstNoWrap = nRet2 - nLeft;
 }
+
+/* repaint all text frames of the given text node */
+void SwTxtFrm::repaintTextFrames( const SwTxtNode& rNode )
+{
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( rNode );
+    for( const SwTxtFrm *pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+    {
+        SwRect aRec( pFrm->PaintArea() );
+        const SwRootFrm *pRootFrm = pFrm->getRootFrm();
+        ViewShell *pCurShell = pRootFrm ? pRootFrm->GetCurrShell() : NULL;
+        if( pCurShell )
+            pCurShell->InvalidateWindows( aRec );
+    }
+}
+

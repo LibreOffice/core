@@ -2115,7 +2115,7 @@ void WW8AttributeOutput::TableOrientation( ww8::WW8TableNodeInfoInner::Pointer_t
 void WW8AttributeOutput::TableSpacing(ww8::WW8TableNodeInfoInner::Pointer_t pTableTextNodeInfoInner)
 {
     const SwTable * pTable = pTableTextNodeInfoInner->getTable();
-    const SwTableFmt * pTableFmt = dynamic_cast<const SwTableFmt *>(pTable->GetRegisteredIn());
+    const SwTableFmt * pTableFmt = pTable->GetTableFmt();
 
     if (pTableFmt != NULL)
     {

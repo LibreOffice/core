@@ -168,7 +168,7 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
     // alle Uno-Objecte sollten sich jetzt abmelden
     {
         SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFrmFmt );
-        pFrmFmt->Modify( &aMsgHint, &aMsgHint );
+        pFrmFmt->ModifyNotification( &aMsgHint, &aMsgHint );
     }
 
     if ( RES_DRAWFRMFMT != pFrmFmt->Which() )
@@ -485,6 +485,11 @@ SwUndoSetFlyFmt::~SwUndoSetFlyFmt()
     delete pItemSet;
 }
 
+void SwUndoSetFlyFmt::DeRegisterFromFormat( SwFmt& rFmt )
+{
+    rFmt.Remove(this);
+}
+
 void SwUndoSetFlyFmt::GetAnchor( SwFmtAnchor& rAnchor,
                                 ULONG nNode, xub_StrLen nCntnt )
 {
@@ -678,7 +683,7 @@ void SwUndoSetFlyFmt::PutAttr( USHORT nWhich, const SfxPoolItem* pItem )
         pItemSet->InvalidateItem( nWhich );
 }
 
-void SwUndoSetFlyFmt::Modify( SfxPoolItem* pOld, SfxPoolItem* )
+void SwUndoSetFlyFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* )
 {
     if( pOld )
     {

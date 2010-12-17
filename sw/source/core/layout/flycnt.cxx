@@ -101,7 +101,7 @@ TYPEINIT1(SwFlyAtCntFrm,SwFlyFreeFrm);
 |*
 |*************************************************************************/
 
-void SwFlyAtCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : 0;
     const SwFmtAnchor *pAnch = 0;

@@ -1490,7 +1490,7 @@ void _RestoreCntntIdx(SwDoc* pDoc,
                 {
                     SwFrmFmt *pFrmFmt = (*pSpz)[ aSave.GetCount() ];
                     SfxPoolItem *pAnchor = (SfxPoolItem*)&pFrmFmt->GetAnchor();
-                    pFrmFmt->SwModify::Modify( pAnchor, pAnchor );
+                    pFrmFmt->NotifyClients( pAnchor, pAnchor );
                 }
                 break;
 

@@ -220,8 +220,9 @@ class SwXFieldmarkParameters
         // XElementAccess
         virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw (::com::sun::star::uno::RuntimeException);
         virtual ::sal_Bool SAL_CALL hasElements(  ) throw (::com::sun::star::uno::RuntimeException);
+    protected:
         //SwClient
-        virtual void Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
     private:
         ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters() throw (::com::sun::star::uno::RuntimeException);
 };

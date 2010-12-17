@@ -62,10 +62,12 @@ SwDDETable::SwDDETable( SwTable& rTable, SwDDEFieldType* pDDEType,
         const SwNode& rNd = *GetTabSortBoxes()[0]->GetSttNd();
         if( rNd.GetNodes().IsDocNodes() )
         {
-            // "aktivieren der Updates" (Modify nicht noch mal rufen)
-            aDepend.LockModify();
+            // mba: swclient refactoring - this code shouldn't have done anything!
+            // the ModifyLock Flag is evaluated in SwModify only, though it was accessible via SwClient
+            // This has been fixed now
+//          aDepend.LockModify();
             pDDEType->IncRefCnt();
-            aDepend.UnlockModify();
+//          aDepend.UnlockModify();
 
             // Setzen der Werte in die einzelnen Boxen
             // update box content only if update flag is set (false in import)
@@ -91,7 +93,7 @@ __EXPORT SwDDETable::~SwDDETable()
     }
 }
 
-void SwDDETable::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if( pNew && RES_UPDATEDDETBL == pNew->Which() )
         ChangeContent();

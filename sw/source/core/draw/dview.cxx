@@ -444,7 +444,7 @@ void SwDrawView::_MoveRepeatedObjs( const SwAnchoredObject& _rMovedAnchoredObj,
                                     const std::vector<SdrObject*>& _rMovedChildObjs ) const
 {
     // determine 'repeated' objects of already moved object <_rMovedAnchoredObj>
-    std::vector<SwAnchoredObject*> aAnchoredObjs;
+    std::list<SwAnchoredObject*> aAnchoredObjs;
     {
         const SwContact* pContact = ::GetUserCall( _rMovedAnchoredObj.GetDrawObj() );
         ASSERT( pContact,

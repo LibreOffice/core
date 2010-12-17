@@ -42,12 +42,13 @@ public:
                 BOOL bUpdate = TRUE );
     ~SwDDETable();
 
-    void Modify( SfxPoolItem*, SfxPoolItem* );
     void ChangeContent();
     BOOL  NoDDETable();
 
     SwDDEFieldType* GetDDEFldType();
     inline const SwDDEFieldType* GetDDEFldType() const;
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 };
 
 

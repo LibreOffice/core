@@ -74,9 +74,8 @@
 #include "poolfmt.hxx"
 #include <editeng/frmdiritem.hxx>
 #include <swfntcch.hxx> // SwFontAccess
-// OD 2004-05-24 #i28701#
 #include <sortedobjs.hxx>
-
+#include <switerator.hxx>
 #include <vcl/svapp.hxx>
 
 using namespace ::com::sun::star;
@@ -456,12 +455,10 @@ void MA_FASTCALL lcl_MakeObjs( const SwSpzFrmFmts &rTbl, SwPageFrm *pPage )
             }
             else
             {
-                SwClientIter aIter( *pFmt );
-                SwClient *pTmp = aIter.First( TYPE(SwFrm) );
-                SwFlyFrm *pFly;
-                if ( pTmp )
+                SwIterator<SwFlyFrm,SwFmt> aIter( *pFmt );
+                SwFlyFrm *pFly = aIter.First();
+                if ( pFly)
                 {
-                    pFly = (SwFlyFrm*)pTmp;
                     if( pFly->GetAnchorFrm() )
                         pFly->AnchorFrm()->RemoveFly( pFly );
                 }
@@ -531,7 +528,7 @@ void SwPageFrm::PreparePage( BOOL bFtn )
 |*  Letzte Aenderung    MA 03. Mar. 96
 |*
 |*************************************************************************/
-void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwPageFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     ViewShell *pSh = getRootFrm()->GetCurrShell();
     if ( pSh )
@@ -578,7 +575,7 @@ void SwPageFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwPageFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                              BYTE &rInvFlags,
                              SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -1677,13 +1674,13 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
 #ifndef DBG_UTIL
-                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
+                        rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
 #else
                         const sal_uInt32 nCnt = pPage->GetSortedObjs()->Count();
-                        rFmt.SwModify::Modify( 0, (SwFmtAnchor*)&rAnch );
+                        rFmt.NotifyClients( 0, (SwFmtAnchor*)&rAnch );
                         ASSERT( !pPage->GetSortedObjs() ||
                                 nCnt != pPage->GetSortedObjs()->Count(),
-                                "Kann das Obj nicht umhaengen." );
+                                "Object couldn't be reattached!" );
 #endif
                         --i;
                     }

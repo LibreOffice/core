@@ -308,7 +308,7 @@ SwXFlatParagraphIterator::~SwXFlatParagraphIterator()
 }
 
 
-void SwXFlatParagraphIterator::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     ClientModify( this, pOld, pNew );
     // check if document gets closed...

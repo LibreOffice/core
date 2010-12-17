@@ -575,7 +575,7 @@ void SwDoc::DelSectionFmt( SwSectionFmt *pFmt, BOOL bDelNodes )
 
         {
             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
-            pFmt->Modify( &aMsgHint, &aMsgHint );
+            pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         // A ClearRedo could result in a rekursive call of this function and delete some section
@@ -1082,21 +1082,9 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 
 SwSectionNode::~SwSectionNode()
 {
-    {
-        SwClientIter aIter( *(m_pSection->GetFmt()) );
-        SwClient *pLast = aIter.GoStart();
-        while ( pLast )
-        {
-            if ( pLast->IsA( TYPE(SwFrm) ) )
-            {
-                SwSectionFrm *pSectFrm = (SwSectionFrm*)pLast;
-                SwSectionFrm::MoveCntntAndDelete( pSectFrm, TRUE );
-                pLast = aIter.GoStart();
-            }
-            else
-                pLast = aIter++;
-        }
-    }
+    // mba: test if iteration works as clients will be removed in callback
+    m_pSection->GetFmt()->CallSwClientNotify( RES_OBJECTDYING );
+
     SwDoc* pDoc = GetDoc();
 
     SwSectionFmt* pFmt = m_pSection->GetFmt();
@@ -1415,7 +1403,7 @@ void SwSectionNode::NodesArrChgd()
         if( !rNds.IsDocNodes() )
         {
             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, pFmt );
-            pFmt->Modify( &aMsgHint, &aMsgHint );
+            pFmt->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
         pFmt->LockModify();

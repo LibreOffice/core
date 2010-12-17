@@ -118,6 +118,16 @@ SwFrm::SwFrm( SwModify *pMod, SwFrm* pSib ) :
     bCompletePaint = bInfInvalid = TRUE;
 }
 
+bool SwFrm::KnowsFormat( const SwFmt& rFmt ) const
+{
+    return GetRegisteredIn() == &rFmt;
+}
+
+void SwFrm::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
 void SwFrm::CheckDir( UINT16 nDir, BOOL bVert, BOOL bOnlyBiDi, BOOL bBrowse )
 {
     if( FRMDIR_ENVIRONMENT == nDir || ( bVert && bOnlyBiDi ) )
@@ -232,15 +242,8 @@ void SwTxtFrm::CheckDirection( BOOL bVert )
               sal_True, bBrowseMode );
 }
 
-/*************************************************************************
-|*
-|*  SwFrm::Modify()
-|*
-|*  Ersterstellung      AK 01-Mar-1991
-|*  Letzte Aenderung    MA 20. Jun. 96
-|*
-|*************************************************************************/
-void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+/*************************************************************************/
+void SwFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BYTE nInvFlags = 0;
 
@@ -289,7 +292,7 @@ void SwFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwFrm::_UpdateAttrFrm( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwFrm::_UpdateAttrFrm( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                          BYTE &rInvFlags )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;
@@ -2122,7 +2125,7 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*    Letzte Aenderung  MA 13. Oct. 95
 |*
 |*************************************************************************/
-void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwCntntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BYTE nInvFlags = 0;
 
@@ -2195,7 +2198,7 @@ void SwCntntFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwCntntFrm::_UpdateAttr( SfxPoolItem* pOld, SfxPoolItem* pNew,
+void SwCntntFrm::_UpdateAttr( const SfxPoolItem* pOld, const SfxPoolItem* pNew,
                               BYTE &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {

@@ -124,6 +124,8 @@
 #include <vbahelper/vbaaccesshelper.hxx>
 #endif
 
+#include "switerator.hxx"
+
 /* @@@MAINTAINABILITY-HORROR@@@
    Probably unwanted dependency on SwDocShell
 */
@@ -1087,9 +1089,8 @@ USHORT _PostItFld::GetPageNo(
     //Bereichs ermittelt werden.
     rVirtPgNo = 0;
     USHORT nPos = GetCntnt();
-    SwClientIter aIter( (SwModify &)GetFld()->GetTxtNode() );
-    for( SwTxtFrm* pFrm = (SwTxtFrm*)aIter.First( TYPE( SwFrm ));
-            pFrm;  pFrm = (SwTxtFrm*)aIter.Next() )
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( GetFld()->GetTxtNode() );
+    for( SwTxtFrm* pFrm = aIter.First(); pFrm;  pFrm = aIter.Next() )
     {
         if( pFrm->GetOfst() > nPos ||
             (pFrm->HasFollow() && pFrm->GetFollow()->GetOfst() <= nPos) )
@@ -1119,13 +1120,11 @@ bool lcl_GetPostIts(
     if( pFldType->GetDepends() )
     {
         // Modify-Object gefunden, trage alle Felder ins Array ein
-        SwClientIter aIter( *pFldType );
-        SwClient* pLast;
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
         const SwTxtFld* pTxtFld;
-
-        for( pLast = aIter.First( TYPE(SwFmtFld)); pLast; pLast = aIter.Next() )
+        for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
         {
-            if( 0 != ( pTxtFld = ((SwFmtFld*)pLast)->GetTxtFld() ) &&
+            if( 0 != ( pTxtFld = pFld->GetTxtFld() ) &&
                 pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
             {
                 bHasPostIts = true;
@@ -1736,10 +1735,8 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
         // #i93174#: notes contain paragraphs that are not nodes
         {
             SwFieldType * const pPostits( GetSysFldType(RES_POSTITFLD) );
-            SwClientIter aIter(*pPostits);
-            SwFmtFld const * pFmtFld =
-                static_cast<SwFmtFld const*>(aIter.First( TYPE(SwFmtFld) ));
-            while (pFmtFld)
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pPostits );
+            for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
             {
                 if (pFmtFld->IsFldInDoc())
                 {
@@ -1747,7 +1744,6 @@ void SwDoc::UpdateDocStat( SwDocStat& rStat )
                         static_cast<SwPostItField const*>(pFmtFld->GetFld()));
                     rStat.nAllPara += pField->GetNumberOfParagraphs();
                 }
-                pFmtFld = static_cast<SwFmtFld const*>(aIter.Next());
             }
         }
 
@@ -2192,9 +2188,8 @@ BOOL SwDoc::RemoveInvisibleContent()
 
     {
         SwTxtNode* pTxtNd;
-        SwClientIter aIter( *GetSysFldType( RES_HIDDENPARAFLD ) );
-        for( SwFmtFld* pFmtFld = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
-                pFmtFld; pFmtFld = (SwFmtFld*)aIter.Next() )
+        SwIterator<SwFmtFld,SwFieldType> aIter( *GetSysFldType( RES_HIDDENPARAFLD )  );
+        for( SwFmtFld* pFmtFld = aIter.First(); pFmtFld;  pFmtFld = aIter.Next() )
         {
             if( pFmtFld->GetTxtFld() &&
                 0 != ( pTxtNd = (SwTxtNode*)pFmtFld->GetTxtFld()->GetpTxtNode() ) &&
@@ -2374,14 +2369,11 @@ BOOL SwDoc::ConvertFieldsToText()
         if ( RES_POSTITFLD == pCurType->Which() )
             continue;
 
-        SwClientIter aIter( *(SwFieldType*)pCurType );
-        const SwFmtFld* pCurFldFmt = (SwFmtFld*)aIter.First( TYPE( SwFmtFld ));
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pCurType );
         ::std::vector<const SwFmtFld*> aFieldFmts;
-        while (pCurFldFmt)
-        {
+        for( SwFmtFld* pCurFldFmt = aIter.First(); pCurFldFmt; pCurFldFmt = aIter.Next() )
             aFieldFmts.push_back(pCurFldFmt);
-            pCurFldFmt = (SwFmtFld*)aIter.Next();
-        }
+
         ::std::vector<const SwFmtFld*>::iterator aBegin = aFieldFmts.begin();
         ::std::vector<const SwFmtFld*>::iterator aEnd = aFieldFmts.end();
         while(aBegin != aEnd)
@@ -2671,21 +2663,8 @@ void SwDoc::ChkCondColls()
      for (USHORT n = 0; n < pTxtFmtCollTbl->Count(); n++)
      {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
-
         if (RES_CONDTXTFMTCOLL == pColl->Which())
-        {
-            SwClientIter aIter(*pColl);
-
-            SwClient * pClient = aIter.First(TYPE(SwTxtNode));
-            while (pClient)
-            {
-                SwTxtNode * pTxtNode = static_cast<SwTxtNode *>(pClient);
-
-                pTxtNode->ChkCondColl();
-
-                pClient = aIter.Next();
-            }
-        }
+            pColl->CallSwClientNotify( RES_CONDTXTFMTCOLL );
      }
 }
 

@@ -1405,7 +1405,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
     else if( bPageVar )
         ((SwRefPageGetFieldType*)pCurShell->GetFldType( 0, RES_REFPAGEGETFLD ))->UpdateFlds();
     else if( TYP_GETREFFLD == rData.nTypeId )
-        pFld->GetTyp()->Modify( 0, 0 );
+        pFld->GetTyp()->ModifyNotification( 0, 0 );
 
     // temporaeres Feld loeschen
     delete pFld;

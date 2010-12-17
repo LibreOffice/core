@@ -168,7 +168,7 @@ public:
             const uno::Sequence< ::rtl::OUString >& rPropertyNames)
         throw (beans::UnknownPropertyException, lang::WrappedTargetException,
                 uno::RuntimeException);
-
+protected:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 

@@ -46,12 +46,11 @@ protected:
 
     virtual ~SwAccessibleTextFrame();
 
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
 
     SwAccessibleTextFrame( SwAccessibleMap* pInitMap, const SwFlyFrm* pFlyFrm );
-
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
-
 
     //=====  XAccessibleContext  ==============================================
 

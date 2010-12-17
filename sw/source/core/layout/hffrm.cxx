@@ -710,7 +710,7 @@ void SwPageFrm::PrepareHeader()
     if ( !pLay )
         return;
 
-    const SwFmtHeader &rH = ((SwFrmFmt*)pRegisteredIn)->GetHeader();
+    const SwFmtHeader &rH = ((SwFrmFmt*)GetRegisteredIn())->GetHeader();
 
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     const BOOL bOn = !(pSh && pSh->GetViewOptions()->getBrowseMode());
@@ -759,7 +759,7 @@ void SwPageFrm::PrepareFooter()
     if ( !pLay )
         return;
 
-    const SwFmtFooter &rF = ((SwFrmFmt*)pRegisteredIn)->GetFooter();
+    const SwFmtFooter &rF = ((SwFrmFmt*)GetRegisteredIn())->GetFooter();
     while ( pLay->GetNext() )
         pLay = (SwLayoutFrm*)pLay->GetNext();
 

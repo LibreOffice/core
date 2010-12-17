@@ -49,8 +49,8 @@ SwEndNoteInfo& SwEndNoteInfo::operator=(const SwEndNoteInfo& rInfo)
 {
     if( rInfo.GetFtnTxtColl() )
         rInfo.GetFtnTxtColl()->Add(this);
-    else if ( pRegisteredIn)
-        pRegisteredIn->Remove(this);
+    else if ( GetRegisteredIn())
+        GetRegisteredInNonConst()->Remove(this);
 
     if ( rInfo.aPageDescDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
@@ -183,7 +183,7 @@ void SwEndNoteInfo::SetAnchorCharFmt( SwCharFmt* pChFmt )
     pChFmt->Add( &((SwClient&)aAnchorCharFmtDep) );
 }
 
-void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwEndNoteInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
 
@@ -207,7 +207,7 @@ void SwEndNoteInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         }
     }
     else
-        SwClient::Modify( pOld, pNew );
+        CheckRegistration( pOld, pNew );
 }
 
 SwFtnInfo& SwFtnInfo::operator=(const SwFtnInfo& rInfo)
@@ -314,7 +314,7 @@ void SwDoc::SetFtnInfo(const SwFtnInfo& rInfo)
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pFtnInfo->Modify( &aOld, &aNew );
+            pFtnInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // --> OD 2008-01-09 #i81002#
@@ -379,7 +379,7 @@ void SwDoc::SetEndNoteInfo(const SwEndNoteInfo& rInfo)
         {
             SwFmtChg aOld( pOldChrFmt );
             SwFmtChg aNew( pNewChrFmt );
-            pEndNoteInfo->Modify( &aOld, &aNew );
+            pEndNoteInfo->ModifyNotification( &aOld, &aNew );
         }
 
         // --> OD 2008-01-09 #i81002#
@@ -446,7 +446,7 @@ bool SwDoc::SetCurFtn( const SwPaM& rPam, const String& rNumStr,
                     pTxtFtn->CheckCondColl();
                     //#i11339# dispose UNO wrapper when a footnote is changed to an endnote or vice versa
                     SwPtrMsgPoolItem aMsgHint( RES_FOOTNOTE_DELETED, (void*)&pTxtFtn->GetAttr() );
-                    GetUnoCallBack()->Modify( &aMsgHint, &aMsgHint );
+                    GetUnoCallBack()->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
         }

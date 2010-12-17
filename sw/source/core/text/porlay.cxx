@@ -59,11 +59,8 @@
 #include <fchrfmt.hxx>
 #include <docary.hxx>       // SwRedlineTbl
 #include <redline.hxx>      // SwRedline
-
-// --> FME 2004-06-08 #i12836# enhanced pdf export
 #include <section.hxx>
-// <--
-
+#include <switerator.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -2238,15 +2235,12 @@ USHORT SwScriptInfo::ThaiJustify( const XubString& rTxt, sal_Int32* pKernArray,
 SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
                                            sal_Bool bAllowInvalid )
 {
-    SwClientIter aClientIter( (SwTxtNode&)rTNd );
-    SwClient* pLast = aClientIter.GoStart();
+    SwIterator<SwTxtFrm,SwTxtNode> aIter( rTNd );
     SwScriptInfo* pScriptInfo = 0;
 
-    while( pLast )
+    for( SwTxtFrm* pLast = aIter.First(); pLast; pLast = aIter.Next() )
     {
-        if ( pLast->ISA( SwTxtFrm ) )
-        {
-            pScriptInfo = (SwScriptInfo*)((SwTxtFrm*)pLast)->GetScriptInfo();
+            pScriptInfo = (SwScriptInfo*)pLast->GetScriptInfo();
             if ( pScriptInfo )
             {
                 if ( !bAllowInvalid && STRING_LEN != pScriptInfo->GetInvalidity() )
@@ -2254,8 +2248,6 @@ SwScriptInfo* SwScriptInfo::GetScriptInfo( const SwTxtNode& rTNd,
                 else break;
             }
         }
-        pLast = ++aClientIter;
-    }
 
     return pScriptInfo;
 }

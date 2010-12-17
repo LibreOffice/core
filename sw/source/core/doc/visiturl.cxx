@@ -92,7 +92,7 @@ void SwURLStateChanged::Notify( SfxBroadcaster& , const SfxHint& rHint )
                 SwUpdateAttr aUpdateAttr( *pAttr->GetStart(),
                                           *pAttr->GetEnd(),
                                           RES_FMT_CHG );
-                ((SwTxtNode*)pTxtNd)->Modify( &aUpdateAttr, &aUpdateAttr );
+                ((SwTxtNode*)pTxtNd)->ModifyNotification( &aUpdateAttr, &aUpdateAttr );
             }
 
         if( bAction )

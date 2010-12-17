@@ -102,7 +102,7 @@ class SwTabFrm: public SwLayoutFrm, public SwFlowFrm
     bool Split( const SwTwips nCutPos, bool bTryToSplit, bool bTableRowKeep );
     bool Join();
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat );
@@ -112,6 +112,7 @@ protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
         //Aendert nur die Framesize, nicht die PrtArea-SSize
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 public:
     SwTabFrm( SwTable &, SwFrm* );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
@@ -127,7 +128,6 @@ public:
     inline       SwTabFrm *GetFollow();
     SwTabFrm* FindMaster( bool bFirstMaster = false ) const;
 
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual BOOL GetInfo( SfxPoolItem &rHnt ) const;
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
     virtual void  CheckDirection( BOOL bVert );

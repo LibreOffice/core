@@ -123,7 +123,7 @@ void SwFlyInCntFrm::SetRefPoint( const Point& rPoint,
 |*  Letzte Aenderung    MA 02. Sep. 93
 |*
 |*************************************************************************/
-void SwFlyInCntFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     BOOL bCallPrepare = FALSE;
     USHORT nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0;

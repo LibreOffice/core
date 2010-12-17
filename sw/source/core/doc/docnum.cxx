@@ -49,18 +49,15 @@
 #include <txtfrm.hxx>
 #include <pamtyp.hxx>
 #include <redline.hxx>
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <editeng/adjitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <frmatr.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <SwNodeNum.hxx>
-// --> OD 2008-03-13 #refactorlists#
 #include <list.hxx>
 #include <listfunc.hxx>
-// <--
+#include <switerator.hxx>
 
 #include <map>
 
@@ -145,8 +142,6 @@ void SwDoc::PropagateOutlineRule()
        // if (NO_NUMBERING != pColl->GetOutlineLevel())//#outline level,zhaojianwei
         if(pColl->IsAssignedToListLevelOfOutlineStyle())//<-end,zhaojianwei
         {
-            SwClientIter aIter(*pColl);
-
             // --> OD 2006-11-20 #i71764#
             // Check only the list style, which is set at the paragraph style
             const SwNumRuleItem & rCollRuleItem = pColl->GetNumRule( FALSE );
@@ -1353,33 +1348,17 @@ void SwDoc::StopNumRuleAnimations( OutputDevice* pOut )
 {
     for( USHORT n = GetNumRuleTbl().Count(); n; )
     {
-        // --> OD 2008-02-19 #refactorlists#
-//        SwNumRuleInfo aUpd( GetNumRuleTbl()[ --n ]->GetName() );
-//        aUpd.MakeList( *this );
-
-//        for( ULONG nFirst = 0, nLast = aUpd.GetList().Count();
-//                nFirst < nLast; ++nFirst )
-//        {
-//            SwTxtNode* pTNd = aUpd.GetList().GetObject( nFirst );
-//            SwClientIter aIter( *pTNd );
-//            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-//                    pFrm; pFrm = (SwFrm*)aIter.Next() )
-//                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
-//                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
-//        }
         SwNumRule::tTxtNodeList aTxtNodeList;
         GetNumRuleTbl()[ --n ]->GetTxtNodeList( aTxtNodeList );
         for ( SwNumRule::tTxtNodeList::iterator aTxtNodeIter = aTxtNodeList.begin();
               aTxtNodeIter != aTxtNodeList.end(); ++aTxtNodeIter )
         {
             SwTxtNode* pTNd = *aTxtNodeIter;
-            SwClientIter aIter( *pTNd );
-            for( SwFrm* pFrm = (SwFrm*)aIter.First( TYPE(SwFrm) );
-                    pFrm; pFrm = (SwFrm*)aIter.Next() )
-                if( ((SwTxtFrm*)pFrm)->HasAnimation() )
-                    ((SwTxtFrm*)pFrm)->StopAnimation( pOut );
+            SwIterator<SwTxtFrm,SwTxtNode> aIter(*pTNd);
+            for(SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
+                if( pFrm->HasAnimation() )
+                    pFrm->StopAnimation( pOut );
         }
-        // <--
     }
 }
 

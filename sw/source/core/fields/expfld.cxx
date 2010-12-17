@@ -63,6 +63,7 @@
 #include <SwStyleNameMapper.hxx>
 #include <unofldmid.h>
 #include <numrule.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
@@ -276,10 +277,10 @@ SwFieldType* SwGetExpFieldType::Copy() const
     return new SwGetExpFieldType(GetDoc());
 }
 
-void SwGetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* pNew )
+void SwGetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* pNew )
 {
     if( pNew && RES_DOCPOS_UPDATE == pNew->Which() )
-        SwModify::Modify( 0, pNew );
+        NotifyClients( 0, pNew );
     // sonst nichts weiter expandieren
 }
 
@@ -420,9 +421,6 @@ void SwGetExpField::SetLanguage(USHORT nLng)
         SwValueField::SetLanguage(nLng);
 }
 
-/*-----------------07.03.98 16:08-------------------
-
---------------------------------------------------*/
 BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -459,9 +457,7 @@ BOOL SwGetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return TRUE;
 }
-/*-----------------07.03.98 16:08-------------------
 
---------------------------------------------------*/
 BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp = 0;
@@ -502,10 +498,6 @@ BOOL SwGetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
     return TRUE;
 }
 
-/*-----------------JP: 17.06.93 -------------------
- Set-Expression-Type
- --------------------------------------------------*/
-
 SwSetExpFieldType::SwSetExpFieldType( SwDoc* pDc, const String& rName, USHORT nTyp )
     : SwValueFieldType( pDc, RES_SETEXPFLD ),
     sName( rName ),
@@ -533,16 +525,15 @@ const String& SwSetExpFieldType::GetName() const
     return sName;
 }
 
-void SwSetExpFieldType::Modify( SfxPoolItem*, SfxPoolItem* )
+void SwSetExpFieldType::Modify( const SfxPoolItem*, const SfxPoolItem* )
 {
     return;     // nicht weiter expandieren
 }
 
 void SwSetExpFieldType::SetSeqFormat(ULONG nFmt)
 {
-    SwClientIter aIter(*this);
-    for( SwFmtFld* pFld = (SwFmtFld*)aIter.First( TYPE(SwFmtFld) );
-            pFld; pFld = (SwFmtFld*)aIter.Next() )
+    SwIterator<SwFmtFld,SwFieldType> aIter(*this);
+    for( SwFmtFld* pFld = aIter.First(); pFld; pFld = aIter.Next() )
         pFld->GetFld()->ChangeFormat( nFmt );
 }
 
@@ -567,10 +558,9 @@ extern void InsertSort( SvUShorts& rArr, USHORT nIdx, USHORT* pInsPos = 0 );
 
     // dann testmal, ob die Nummer schon vergeben ist oder ob eine neue
     // bestimmt werden muss.
-    SwClientIter aIter( *this );
+    SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
-    for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
-            pF = (SwFmtFld*)aIter.Next() )
+    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
         if( pF->GetFld() != &rFld && pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
@@ -605,10 +595,9 @@ USHORT SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
     if( rList.Count() )
         rList.Remove( 0, rList.Count() );
 
-    SwClientIter aIter( *this );
+    SwIterator<SwFmtFld,SwFieldType> aIter( *this );
     const SwTxtNode* pNd;
-    for( SwFmtFld* pF = (SwFmtFld*)aIter.First( TYPE( SwFmtFld )); pF;
-            pF = (SwFmtFld*)aIter.Next() )
+    for( SwFmtFld* pF = aIter.First(); pF; pF = aIter.Next() )
         if( pF->GetTxtFld() &&
             0 != ( pNd = pF->GetTxtFld()->GetpTxtNode() ) &&
             pNd->GetNodes().IsDocNodes() )
@@ -652,9 +641,6 @@ void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
     }
 }
 
-/* -----------------24.03.99 09:44-------------------
- *
- * --------------------------------------------------*/
 BOOL SwSetExpFieldType::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -911,7 +897,7 @@ void SwGetExpField::SetValue( const double& rAny )
     sExpand = ((SwValueFieldType*)GetTyp())->ExpandValue( rAny, GetFormat(),
                                                             GetLanguage());
 }
-/* -----------------14.07.99 12:21-------------------
+/* -------------------------------------------------
     Description: Find the index of the reference text
     following the current field
  --------------------------------------------------*/
@@ -1066,9 +1052,6 @@ String SwInputField::Expand() const
     return sRet;
 }
 
-/*-----------------06.03.98 11:12-------------------
-
---------------------------------------------------*/
 BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1090,9 +1073,7 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return TRUE;
 }
-/*-----------------06.03.98 11:12-------------------
 
---------------------------------------------------*/
 BOOL SwInputField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     switch( nWhichId )
@@ -1176,9 +1157,7 @@ void SwInputField::SetSubType(USHORT nSub)
 {
     nSubType = nSub;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
 {
     switch( nWhichId )
@@ -1243,9 +1222,7 @@ BOOL SwSetExpField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     }
     return TRUE;
 }
-/*-----------------05.03.98 17:22-------------------
 
---------------------------------------------------*/
 BOOL SwSetExpField::PutValue( const uno::Any& rAny, USHORT nWhichId )
 {
     sal_Int32 nTmp32 = 0;

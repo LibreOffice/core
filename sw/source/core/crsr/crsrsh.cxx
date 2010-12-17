@@ -2147,7 +2147,7 @@ SwCntntFrm *SwCrsrShell::GetCurrFrm( const BOOL bCalcFrm ) const
 // Link weitergeleitet.
 
 
-void SwCrsrShell::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwCrsrShell::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     const USHORT nWhich = pOld ?
                           pOld->Which() :
@@ -2673,7 +2673,7 @@ SwCrsrShell::~SwCrsrShell()
     //              der CursorShell haengt keine Chance geben, sich an den
     //              TextNode zu haengen.
     if( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 }
 
 SwShellCrsr* SwCrsrShell::getShellCrsr( bool bBlock )

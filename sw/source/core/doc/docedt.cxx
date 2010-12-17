@@ -832,13 +832,7 @@ bool SwDoc::Overwrite( const SwPaM &rRg, const String &rStr )
     if( nOldAttrCnt != nNewAttrCnt )
     {
         SwUpdateAttr aHint( 0, 0, 0 );
-        SwClientIter aIter( *pNode );
-        SwClient* pGTO = aIter.First(TYPE( SwCrsrShell ));
-        while( pGTO )
-        {
-            pGTO->Modify( 0, &aHint );
-            pGTO = aIter.Next();
-        }
+        pNode->ModifyBroadcast( 0, &aHint, TYPE( SwCrsrShell ) );
     }
 
     if( !DoesUndo() && !IsIgnoreRedline() && GetRedlineTbl().Count() )

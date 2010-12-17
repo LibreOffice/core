@@ -94,7 +94,7 @@ SwLineNumberInfo& SwLineNumberInfo::operator=(const SwLineNumberInfo &rCpy)
     if ( rCpy.GetRegisteredIn() )
         ((SwModify*)rCpy.GetRegisteredIn())->Add( this );
     else if ( GetRegisteredIn() )
-        pRegisteredIn->Remove( this );
+        GetRegisteredInNonConst()->Remove( this );
 
     aType = rCpy.GetNumType();
     aDivider = rCpy.GetDivider();
@@ -142,9 +142,9 @@ void SwLineNumberInfo::SetCharFmt( SwCharFmt *pChFmt )
     pChFmt->Add( this );
 }
 
-void SwLineNumberInfo::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwLineNumberInfo::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
-    SwClient::Modify( pOld, pNew );
+    CheckRegistration( pOld, pNew );
     SwDoc *pDoc = ((SwCharFmt*)GetRegisteredIn())->GetDoc();
     SwRootFrm* pRoot = pDoc->GetCurrentLayout();
     if( pRoot )

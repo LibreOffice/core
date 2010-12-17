@@ -64,19 +64,14 @@
 #include <undobj.hxx>
 #include <fmtcnct.hxx>
 #include <dflyobj.hxx>
-
-// --> OD 2009-07-20 #i73249#
 #include <undoflystrattr.hxx>
-// <--
+#include <switerator.hxx>
 
 extern USHORT GetHtmlMode( const SwDocShell* );
 
 
 using namespace ::com::sun::star;
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
 {
     const SwSpzFrmFmts& rFmts = *GetSpzFrmFmts();
@@ -118,9 +113,6 @@ USHORT SwDoc::GetFlyCount( FlyCntType eType ) const
     return nCount;
 }
 
-/*-----------------17.02.98 08:35-------------------
-
---------------------------------------------------*/
 // If you change this, also update SwXFrameEnumeration in unocoll.
 SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
 {
@@ -160,16 +152,6 @@ SwFrmFmt* SwDoc::GetFlyNum( USHORT nIdx, FlyCntType eType )
     }
     return pRetFmt;
 }
-
-/*  */
-
-/***********************************************************************
-#*  Class       :  SwDoc
-#*  Methode     :  SetFlyFrmAnchor
-#*  Beschreibung:  Das Ankerattribut des FlyFrms aendert sich.
-#*  Datum       :  MA 01. Feb. 94
-#*  Update      :  JP 09.03.98
-#***********************************************************************/
 
 Point lcl_FindAnchorLayPos( SwDoc& rDoc, const SwFmtAnchor& rAnch,
                             const SwFrmFmt* pFlyFmt )
@@ -527,13 +509,6 @@ void SwDoc::SetFlyFrmDescription( SwFlyFrmFmt& rFlyFrmFmt,
 }
 // <--
 
-/***************************************************************************
- *  Methode     :   BOOL SwDoc::SetFrmFmtToFly( SwFlyFrm&, SwFrmFmt& )
- *  Beschreibung:
- *  Erstellt    :   OK 14.04.94 15:40
- *  Aenderung   :   JP 23.04.98
- ***************************************************************************/
-
 BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
                             SfxItemSet* pSet, BOOL bKeepOrient )
 {
@@ -617,7 +592,7 @@ BOOL SwDoc::SetFrmFmtToFly( SwFrmFmt& rFmt, SwFrmFmt& rNewFmt,
         rFmt.MakeFrms();
 
     if( pUndo )
-        rFmt.Remove( pUndo );
+        pUndo->DeRegisterFromFormat( rFmt );
 
     SetModified();
 
@@ -637,15 +612,6 @@ void SwDoc::GetGrfNms( const SwFlyFrmFmt& rFmt, String* pGrfName,
     if( pGrfNd && pGrfNd->IsLinkedFile() )
         pGrfNd->GetFileFilterNms( pGrfName, pFltName );
 }
-
-/*************************************************************************
-|*
-|*  SwDoc::ChgAnchor()
-|*
-|*  Ersterstellung      MA 10. Jan. 95
-|*  Letzte Aenderung    JP 08.07.98
-|*
-*************************************************************************/
 
 sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
                            RndStdIds _eAnchorType,
@@ -898,9 +864,6 @@ sal_Bool SwDoc::ChgAnchor( const SdrMarkList& _rMrkList,
 }
 
 
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
 int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     //Die Source darf noch keinen Follow haben.
@@ -999,9 +962,7 @@ int SwDoc::Chainable( const SwFrmFmt &rSource, const SwFrmFmt &rDest )
 
     return bAllowed ? SW_CHAIN_OK : SW_CHAIN_WRONG_AREA;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
 {
     int nErr = Chainable( rSource, rDest );
@@ -1032,8 +993,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
         SwFmtFrmSize aSize( rSource.GetFrmSize() );
         if ( aSize.GetHeightSizeType() != ATT_FIX_SIZE )
         {
-            SwClientIter aIter( rSource );
-            SwFlyFrm *pFly = (SwFlyFrm*)aIter.First( TYPE(SwFlyFrm) );
+            SwFlyFrm *pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement( rSource );
             if ( pFly )
                 aSize.SetHeight( pFly->Frm().Height() );
             aSize.SetHeightSizeType( ATT_FIX_SIZE );
@@ -1045,9 +1005,7 @@ int SwDoc::Chain( SwFrmFmt &rSource, const SwFrmFmt &rDest )
     }
     return nErr;
 }
-/* -----------------23.07.98 13:56-------------------
- *
- * --------------------------------------------------*/
+
 void SwDoc::Unchain( SwFrmFmt &rFmt )
 {
     SwFmtChain aChain( rFmt.GetChain() );

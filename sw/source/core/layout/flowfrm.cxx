@@ -51,7 +51,6 @@
 #include <fmtftn.hxx>
 #include <editeng/pgrditem.hxx>
 #include <paratr.hxx>
-
 #include "ftnfrm.hxx"
 #include "txtfrm.hxx"
 #include "tabfrm.hxx"
@@ -63,15 +62,11 @@
 #include "section.hxx"
 #include "dbg_lay.hxx"
 #include "lineinfo.hxx"
-// OD 2004-03-02 #106629#
 #include <fmtclbl.hxx>
-// --> OD 2004-06-23 #i28701#
 #include <sortedobjs.hxx>
 #include <layouter.hxx>
-// <--
-// --> OD 2004-10-15 #i26945#
 #include <fmtfollowtextflow.hxx>
-// <--
+#include <switerator.hxx>
 
 BOOL SwFlowFrm::bMoveBwdJump = FALSE;
 
@@ -739,20 +734,13 @@ SwSectionFrm* SwSectionFrm::FindMaster() const
 {
     ASSERT( IsFollow(), "SwSectionFrm::FindMaster(): !IsFollow" );
 
-    SwClientIter aIter( *pSection->GetFmt() );
-    SwClient *pLast = aIter.GoStart();
-
-    while ( pLast )
+    SwIterator<SwSectionFrm,SwFmt> aIter( *pSection->GetFmt() );
+    SwSectionFrm* pSect = aIter.First();
+    while ( pSect )
     {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            ASSERT( ((SwFrm*)pLast)->IsSctFrm(),
-                    "Non-section frame registered in section format" )
-            SwSectionFrm* pSect = (SwSectionFrm*)pLast;
             if( pSect->GetFollow() == this )
                 return pSect;
-        }
-        pLast = aIter++;
+        pSect = aIter.Next();
     }
 
     ASSERT( FALSE, "Follow ist lost in Space." );
@@ -763,17 +751,10 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
 {
     ASSERT( IsFollow(), "SwTabFrm::FindMaster(): !IsFollow" );
 
-    SwClientIter aIter( *GetTable()->GetFrmFmt() );
-    SwClient* pLast = aIter.GoStart();
-
-    while ( pLast )
+    SwIterator<SwTabFrm,SwFmt> aIter( *GetTable()->GetFrmFmt() );
+    SwTabFrm* pTab = aIter.First();
+    while ( pTab )
     {
-        if ( pLast->ISA( SwFrm ) )
-        {
-            ASSERT( ((SwFrm*)pLast)->IsTabFrm(),
-                    "Non-table frame registered in table format" )
-            SwTabFrm* pTab = (SwTabFrm*)pLast;
-
             if ( bFirstMaster )
             {
                 //
@@ -797,8 +778,8 @@ SwTabFrm* SwTabFrm::FindMaster( bool bFirstMaster ) const
                 if ( pTab->GetFollow() == this )
                     return pTab;
             }
-        }
-        pLast = aIter++;
+
+        pTab = aIter.Next();
     }
 
     ASSERT( FALSE, "Follow ist lost in Space." );

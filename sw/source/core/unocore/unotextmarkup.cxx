@@ -48,7 +48,9 @@ using namespace ::com::sun::star;
 SwXTextMarkup::SwXTextMarkup( SwTxtNode& rTxtNode, const ModelToViewHelper::ConversionMap* pMap )
     : mpTxtNode( &rTxtNode ), mpConversionMap( pMap )
 {
-     mpTxtNode->Add(this);
+    // FME 2007-07-16 #i79641# SwXTextMarkup is allowed to be removed ...
+    SetIsAllowedToBeRemovedInModifyCall(true);
+    mpTxtNode->Add(this);
 }
 
 SwXTextMarkup::~SwXTextMarkup()
@@ -421,12 +423,12 @@ throw (lang::IllegalArgumentException, uno::RuntimeException)
 }
 
 
-void SwXTextMarkup::Modify( SfxPoolItem* /*pOld*/, SfxPoolItem* /*pNew*/ )
+void SwXTextMarkup::Modify( const SfxPoolItem* /*pOld*/, const SfxPoolItem* /*pNew*/ )
 {
     // FME 2007-07-16 #i79641# In my opinion this is perfectly legal,
     // therefore I remove the assertion in SwModify::_Remove()
-    if ( pRegisteredIn )
-        pRegisteredIn->Remove( this );
+    if ( GetRegisteredIn() )
+        GetRegisteredInNonConst()->Remove( this );
     // <--
 
     vos::OGuard aGuard(Application::GetSolarMutex());

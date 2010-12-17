@@ -28,8 +28,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "hintids.hxx"
 #include "cntfrm.hxx"       // _GetFly
 #include "doc.hxx"
@@ -43,9 +41,8 @@
 #include "swfont.hxx"
 #include "txtfrm.hxx"
 #include "flyfrms.hxx"
-// --> OD 2004-11-09 #i26945#
 #include <objectformatter.hxx>
-// <--
+#include <switerator.hxx>
 
 SwFmtFlyCnt::SwFmtFlyCnt( SwFrmFmt *pFrmFmt )
     : SfxPoolItem( RES_TXTATR_FLYCNT ),
@@ -238,17 +235,15 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
         return NULL;
     }
 
-    SwClientIter aIter( *GetFlyCnt().pFmt );
+    SwIterator<SwFlyFrm,SwFmt> aIter( *GetFlyCnt().pFmt );
     ASSERT( pCurrFrm->IsTxtFrm(), "SwTxtFlyCnt::_GetFlyFrm for TxtFrms only." );
-
-    if( aIter.GoStart() )
+    SwFrm* pFrm = aIter.First();
+    if ( pFrm )
     {
         SwTxtFrm *pFirst = (SwTxtFrm*)pCurrFrm;
         while ( pFirst->IsFollow() )
             pFirst = pFirst->FindMaster();
         do
-        {   SwFrm * pFrm = PTR_CAST( SwFrm, aIter() );
-            if ( pFrm )
             {
                 SwTxtFrm *pTmp = pFirst;
                 do
@@ -263,8 +258,10 @@ SwFlyInCntFrm *SwTxtFlyCnt::_GetFlyFrm( const SwFrm *pCurrFrm )
                     }
                     pTmp = pTmp->GetFollow();
                 } while ( pTmp );
-            }
-        } while( aIter++ );
+
+                pFrm = aIter.Next();
+
+        } while( pFrm );
     }
 
     // Wir haben keinen passenden FlyFrm gefunden, deswegen wird ein

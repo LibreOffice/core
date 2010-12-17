@@ -1359,7 +1359,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
             {
                 SwFmtChg aChgFmt( pDfltCharFmt );
                 // dann sage mal den Frames bescheid
-                aCallMod.Modify( &aChgFmt, &aChgFmt );
+                aCallMod.ModifyNotification( &aChgFmt, &aChgFmt );
             }
         }
     }
@@ -1368,7 +1368,7 @@ void SwDoc::SetDefault( const SfxItemSet& rSet )
     {
         SwAttrSetChg aChgOld( aOld, aOld );
         SwAttrSetChg aChgNew( aNew, aNew );
-        aCallMod.Modify( &aChgOld, &aChgNew );      // alle veraenderten werden verschickt
+        aCallMod.ModifyNotification( &aChgOld, &aChgNew );      // alle veraenderten werden verschickt
     }
 
     // und die default-Formate wieder beim Object austragen
@@ -2040,14 +2040,9 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
 
         pDest = FindFmtByName( rDestArr, pSrc->GetName() );
         pDest->SetAuto( FALSE );
-//      pDest->ResetAllAttr();
-//      pDest->CopyAttrs( *pSrc, TRUE );            // kopiere Attribute
-//JP 19.02.96: ist so wohl optimaler - loest ggfs. kein Modify aus!
         pDest->DelDiffs( *pSrc );
-        // --> OD 2009-03-23 #i94285#
-        // copy existing <SwFmtPageDesc> instance, before copying attributes
-//        pDest->SetFmtAttr( pSrc->GetAttrSet() );      // kopiere Attribute
-        //JP 18.08.98: Bug 55115 - copy PageDescAttribute in this case
+
+        // #i94285#: existing <SwFmtPageDesc> instance, before copying attributes
         const SfxPoolItem* pItem;
         if( &GetAttrPool() != pSrc->GetAttrSet().GetPool() &&
             SFX_ITEM_SET == pSrc->GetAttrSet().GetItemState(
@@ -2061,8 +2056,7 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
             {
                 pPageDesc = aPageDescs[ MakePageDesc( rNm ) ];
             }
-            pPageDesc->Add( &aPageDesc );
-//            pDest->SetFmtAttr( aPageDesc );
+            aPageDesc.RegisterToPageDesc( *pPageDesc );
             SwAttrSet aTmpAttrSet( pSrc->GetAttrSet() );
             aTmpAttrSet.Put( aPageDesc );
             pDest->SetFmtAttr( aTmpAttrSet );
@@ -2071,7 +2065,6 @@ void SwDoc::CopyFmtArr( const SvPtrarr& rSourceArr,
         {
             pDest->SetFmtAttr( pSrc->GetAttrSet() );
         }
-        // <--
 
         pDest->SetPoolFmtId( pSrc->GetPoolFmtId() );
         pDest->SetPoolHelpId( pSrc->GetPoolHelpId() );
@@ -2159,9 +2152,9 @@ void SwDoc::CopyPageDescHeaderFooterImpl( bool bCpyHeader,
                 pNewFmt->ResetFmtAttr( RES_CNTNT );
         }
         if( bCpyHeader )
-            pNewFmt->Add( (SwFmtHeader*)pNewItem );
+            ((SwFmtHeader*)pNewItem)->RegisterToFormat(*pNewFmt);
         else
-            pNewFmt->Add( (SwFmtFooter*)pNewItem );
+            ((SwFmtFooter*)pNewItem)->RegisterToFormat(*pNewFmt);
         rDestFmt.SetFmtAttr( *pNewItem );
     }
     delete pNewItem;
@@ -2248,16 +2241,10 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         rDstDesc.SetFtnInfo( rSrcDesc.GetFtnInfo() );
         SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
         {
-            SwClientIter aIter( rDstDesc.GetMaster() );
-            for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                    pLast = aIter.Next() )
-                pLast->Modify( &aInfo, 0 );
+            rDstDesc.GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
         {
-            SwClientIter aIter( rDstDesc.GetLeft() );
-            for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                    pLast = aIter.Next() )
-                pLast->Modify( &aInfo, 0 );
+            rDstDesc.GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
     }
 }

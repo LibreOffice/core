@@ -99,7 +99,7 @@ public:
     }
 
     void    Invalidate();
-
+protected:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
@@ -177,24 +177,6 @@ SwXFootnote::GetXFootnote(
     // to do this properly requires the SwXFootnote to register at the
     // SwFmtFtn directly, not at the unocallback
     // also this function must return a uno Reference!
-#if 0
-    SwClientIter aIter( rUnoCB );
-    SwXFootnote::Impl * pXFootnote = static_cast<SwXFootnote::Impl*>(
-            aIter.First( TYPE( SwXFootnote::Impl )));
-    while (pXFootnote)
-    {
-        SwDoc *const pDoc = pXFootnote->m_rThis.GetDoc();
-        if (pDoc)
-        {
-            SwFmtFtn const*const pFtn = pXFootnote->GetFootnoteFormat();
-            if (pFtn == &rFootnoteFmt)
-            {
-                return & pXFootnote->m_rThis;
-            }
-        }
-        pXFootnote = static_cast<SwXFootnote::Impl*>(aIter.Next());
-    }
-#endif
     return 0;
 }
 

@@ -228,6 +228,10 @@ public:
     //
     // End: Data collected during idle time
     //
+protected:
+    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+    virtual void SwClientNotify( SwModify* pModify, USHORT nWhich );
 
 public:
     using SwCntntNode::GetAttr;
@@ -793,9 +797,6 @@ public:
 // <--
 
     TYPEINFO(); // fuer rtti
-
-    // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     // override SwIndexReg
     virtual void Update( SwIndex const & rPos, const xub_StrLen nChangeLen,

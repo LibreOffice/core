@@ -63,6 +63,7 @@
 #include <ndole.hxx>
 #include <docsh.hxx>
 #include <sfx2/docfile.hxx>
+#include <switerator.hxx>
 
 // for locking SolarMutex: svapp + mutex
 #include <vcl/svapp.hxx>
@@ -320,9 +321,8 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
     {
         // check whether an object with this name already exists in the document
         String aName;
-        SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-                pNd; pNd = (SwCntntNode*)aIter.Next() )
+        SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+        for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
         {
             SwOLENode* pExistingOLENd = pNd->GetOLENode();
             if( pExistingOLENd )

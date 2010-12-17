@@ -92,7 +92,7 @@ SwAccessibleNoTextFrame::~SwAccessibleNoTextFrame()
 {
 }
 
-void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwAccessibleNoTextFrame::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 {
     const sal_uInt16 nWhich = pOld ? pOld->Which() : pNew ? pNew->Which() : 0 ;
     // --> OD 2009-07-14 #i73249#
@@ -112,9 +112,9 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
         case RES_TITLE_CHANGED:
         {
             const String& sOldTitle(
-                        dynamic_cast<SwStringMsgPoolItem*>(pOld)->GetString() );
+                        dynamic_cast<const SwStringMsgPoolItem*>(pOld)->GetString() );
             const String& sNewTitle(
-                        dynamic_cast<SwStringMsgPoolItem*>(pNew)->GetString() );
+                        dynamic_cast<const SwStringMsgPoolItem*>(pNew)->GetString() );
             if ( sOldTitle == sNewTitle )
             {
                 break;
@@ -168,7 +168,7 @@ void SwAccessibleNoTextFrame::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew)
     case RES_FMT_CHG:
         if( static_cast< SwFmtChg * >(pNew)->pChangedFmt == GetRegisteredIn() &&
             static_cast< SwFmtChg * >(pOld)->pChangedFmt->IsFmtInDTOR() )
-            pRegisteredIn->Remove( this );
+            GetRegisteredIn()->Remove( this );
         break;
     */
     }

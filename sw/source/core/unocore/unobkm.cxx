@@ -91,7 +91,7 @@ public:
     }
 
     void registerInMark(SwXBookmark & rThis, ::sw::mark::IMark *const pBkmk);
-
+protected:
     // SwClient
     virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
 
@@ -594,7 +594,7 @@ uno::Type SwXFieldmarkParameters::getElementType()
     return !getCoreParameters()->empty();
 }
 
-void SwXFieldmarkParameters::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXFieldmarkParameters::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }

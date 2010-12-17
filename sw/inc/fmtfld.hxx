@@ -27,6 +27,7 @@
 #ifndef _FMTFLD_HXX
 #define _FMTFLD_HXX
 
+#include <list>
 #include <svl/poolitem.hxx>
 #include <svl/brdcst.hxx>
 #include <svl/smplhint.hxx>
@@ -37,6 +38,7 @@
 class SwField;
 class SwTxtFld;
 class SwView;
+class SwFieldType;
 
 // ATT_FLD ***********************************
 class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBroadcaster
@@ -53,6 +55,9 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
     // @@@ copy construction allowed, but copy assignment is not? @@@
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     TYPEINFO();
 
@@ -68,7 +73,6 @@ public:
     virtual int             operator==( const SfxPoolItem& ) const;
     virtual SfxPoolItem*    Clone( SfxItemPool* pPool = 0 ) const;
 
-    virtual void Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
 
     const SwField *GetFld() const   { return pField; }
@@ -89,6 +93,7 @@ public:
 
     BOOL IsFldInDoc() const;
     BOOL IsProtect() const;
+    void RegisterToFieldType( SwFieldType& );
 };
 
 class SW_DLLPUBLIC SwFmtFldHint : public SfxHint

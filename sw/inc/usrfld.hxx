@@ -61,8 +61,6 @@ public:
     inline BOOL             IsValid() const;
     inline void             ChgValid( BOOL bNew );
 
-    virtual void            Modify( SfxPoolItem* pOld, SfxPoolItem* pNew );
-
            double           GetValue(SwCalc& rCalc);    // Member nValue neu berrechnen
     inline double           GetValue() const;
     inline void             SetValue(const double nVal);
@@ -75,6 +73,8 @@ public:
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nMId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nMId );
+protected:
+   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew );
 };
 
 inline BOOL SwUserFieldType::IsValid() const

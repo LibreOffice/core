@@ -35,9 +35,7 @@
 
 #include <unoflatpara.hxx>
 
-#ifndef _COMCORE_HRC
 #include <comcore.hrc>
-#endif
 #include <hintids.hxx>
 #include <linguistic/lngprops.hxx>
 #include <vcl/msgbox.hxx>
@@ -57,9 +55,7 @@
 #include <viscrs.hxx>       // SwShellCrsr
 #include <SwGrammarMarkUp.hxx>      // SwWrongList
 #include <mdiexp.hxx>       // Statusanzeige
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>      // StatLine-String
-#endif
 #include <cntfrm.hxx>
 #include <crsskip.hxx>
 #include <splargs.hxx>
@@ -67,7 +63,7 @@
 #include <docary.hxx>       // SwRedlineTbl
 #include <docsh.hxx>
 #include <txatbase.hxx>
-
+#include <txtfrm.hxx>
 
 using namespace ::svx;
 using namespace ::com::sun::star;
@@ -76,8 +72,6 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 
 #define C2U(cChar) rtl::OUString::createFromAscii(cChar)
-
-extern void repaintTextFrames( SwModify& rModify );
 
 /*************************************************************************
  *                     class SwLinguIter
@@ -1969,7 +1963,7 @@ void SwEditShell::IgnoreGrammarErrorAt( SwPaM& rErrorPosition )
             pWrong = pNode->GetWrong();
             if( pWrong )
                 pWrong->RemoveEntry( nStart, nEnd );
-            ::repaintTextFrames( *pNode );
+            SwTxtFrm::repaintTextFrames( *pNode );
         }
         ++aIdx;
         nStart = 0;

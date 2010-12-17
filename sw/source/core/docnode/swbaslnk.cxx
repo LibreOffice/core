@@ -80,7 +80,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
     //              them havent't a loaded Graphic. - #86501#
     rGrfNd.LockModify();
 
-    SwClientIter aIter( rGrfNd );
+    SwClientIter aIter( rGrfNd );   // TODO
     for( int n = 0; n < 2; ++n )
     {
         SwClient * pLast = aIter.GoStart();
@@ -88,7 +88,7 @@ void lcl_CallModify( SwGrfNode& rGrfNd, SfxPoolItem& rItem )
         {
             do {
                 if( (0 == n) ^ ( 0 != pLast->ISA( SwCntntFrm )) )
-                    pLast->Modify( &rItem, &rItem );
+                    pLast->ModifyNotification( &rItem, &rItem );
             } while( 0 != ( pLast = aIter++ ));
         }
     }
@@ -218,7 +218,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         if ( (!pSh || !pSh->ActionPend()) && (!pESh || !pESh->ActionPend()) )
         {
             SwMsgPoolItem aMsgHint( RES_GRAPHIC_PIECE_ARRIVED );
-            pCntntNode->Modify( &aMsgHint, &aMsgHint );
+            pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
             bUpdate = FALSE;
         }
     }
@@ -283,7 +283,7 @@ void SwBaseLink::DataChanged( const String& rMimeType,
         }
         else
         {
-            pCntntNode->Modify( &aMsgHint, &aMsgHint );
+            pCntntNode->ModifyNotification( &aMsgHint, &aMsgHint );
         }
 
 

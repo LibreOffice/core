@@ -92,7 +92,7 @@ class SwPageFrm: public SwFtnBossFrm
     static const sal_Int8 mnBorderPxWidth;
     static const sal_Int8 mnShadowPxWidth;
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     // Anpassen der max. Fussnotenhoehen in den einzelnen Spalten
@@ -191,6 +191,7 @@ class SwPageFrm: public SwFtnBossFrm
 
 protected:
     virtual void MakeAll();
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
@@ -251,7 +252,6 @@ public:
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
 

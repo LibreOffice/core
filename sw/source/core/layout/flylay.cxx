@@ -566,7 +566,7 @@ TYPEINIT1(SwFlyLayFrm,SwFlyFreeFrm);
 |*
 |*************************************************************************/
 
-void SwFlyLayFrm::Modify( SfxPoolItem *pOld, SfxPoolItem *pNew )
+void SwFlyLayFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 {
     USHORT nWhich = pNew ? pNew->Which() : 0;
 

@@ -1917,7 +1917,7 @@ IMPL_LINK( SwDoc, DoIdleJobs, Timer *, pTimer )
             const sal_Bool bOldLockView = pStartSh->IsViewLocked();
             pStartSh->LockView( sal_True );
 
-            GetSysFldType( RES_CHAPTERFLD )->Modify( 0, 0 );    // KapitelFld
+            GetSysFldType( RES_CHAPTERFLD )->ModifyNotification( 0, 0 );    // KapitelFld
             UpdateExpFlds( 0, sal_False );      // Expression-Felder Updaten
             UpdateTblFlds(NULL);                // Tabellen
             UpdateRefFlds(NULL);                // Referenzen

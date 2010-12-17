@@ -89,13 +89,15 @@ class SW_DLLPUBLIC SwAuthorityFieldType : public SwFieldType
     // @@@ private copy assignment, but public copy ctor? @@@
     const SwAuthorityFieldType& operator=( const SwAuthorityFieldType& );
 
+protected:
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+
 public:
     SwAuthorityFieldType(SwDoc* pDoc);
     SwAuthorityFieldType( const SwAuthorityFieldType& );
     ~SwAuthorityFieldType();
 
     virtual SwFieldType* Copy()    const;
-    virtual void        Modify( SfxPoolItem *pOld, SfxPoolItem *pNew );
 
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhichId ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );

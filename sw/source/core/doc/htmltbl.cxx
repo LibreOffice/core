@@ -34,12 +34,8 @@
 #ifdef TEST_DELAYED_RESIZE
 #include <vcl/sound.hxx>
 #endif
-#ifndef _WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
-#endif
-#ifndef _APP_HXX //autogen
 #include <vcl/svapp.hxx>
-#endif
 #include <sot/storage.hxx>
 #include <fmtornt.hxx>
 #include <fmtfsize.hxx>
@@ -55,9 +51,9 @@
 #include "viewsh.hxx"
 #include "tabfrm.hxx"
 #include "viewopt.hxx"
-
 #include "htmltbl.hxx"
 #include "ndindex.hxx"
+#include "switerator.hxx"
 
 using namespace ::com::sun::star;
 
@@ -65,8 +61,6 @@ using namespace ::com::sun::star;
 #define COLFUZZY 20
 #define MAX_TABWIDTH (USHRT_MAX - 2001)
 
-
-/*  */
 
 class SwHTMLTableLayoutConstraints
 {
@@ -421,11 +415,10 @@ USHORT SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 USHORT SwHTMLTableLayout::GetBrowseWidthByTable( const SwDoc& rDoc ) const
 {
     USHORT nBrowseWidth = 0;
-    SwClientIter aIter( *(SwModify*)pSwTable->GetFrmFmt() );
-    SwClient* pCli = aIter.First( TYPE( SwTabFrm ));
-    if( pCli )
+    SwTabFrm* pFrm = SwIterator<SwTabFrm,SwFmt>::FirstElement( *pSwTable->GetFrmFmt() );
+    if( pFrm )
     {
-        nBrowseWidth = GetBrowseWidthByTabFrm( *(SwTabFrm*)pCli );
+        nBrowseWidth = GetBrowseWidthByTabFrm( *pFrm );
     }
     else
     {

@@ -366,7 +366,7 @@ SwHistorySetTOXMark::SwHistorySetTOXMark( SwTxtTOXMark* pTxtHt, ULONG nNodePos )
     , m_nStart( *pTxtHt->GetStart() )
     , m_nEnd( *pTxtHt->GetAnyEnd() )
 {
-    const_cast<SwModify*>(m_TOXMark.GetRegisteredIn())->Remove( &m_TOXMark );
+    m_TOXMark.DeRegister();
 }
 
 
@@ -395,7 +395,7 @@ void SwHistorySetTOXMark::SetInDoc( SwDoc* pDoc, bool )
     }
 
     SwTOXMark aNew( m_TOXMark );
-    pToxType->Add( &aNew );
+    aNew.RegisterToTOXType( *pToxType );
 
     pTxtNd->InsertItem( aNew, m_nStart, m_nEnd,
                         nsSetAttrMode::SETATTR_NOTXTATRCHR );
@@ -1387,7 +1387,7 @@ SwRegHistory::SwRegHistory( const SwNode& rNd, SwHistory* pHst )
     _MakeSetWhichIds();
 }
 
-void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
+void SwRegHistory::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
 {
     if ( m_pHistory && ( pOld || pNew ) )
     {
@@ -1399,7 +1399,7 @@ void SwRegHistory::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         {
             SwHistoryHint* pNewHstr;
             const SfxItemSet& rSet =
-                *static_cast<SwAttrSetChg*>(pOld)->GetChgSet();
+                *static_cast<const SwAttrSetChg*>(pOld)->GetChgSet();
             if ( 1 < rSet.Count() )
             {
                 pNewHstr =

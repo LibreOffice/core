@@ -1236,7 +1236,7 @@ void SwPaM::InvalidatePaM()
         SwInsTxt aHint( Start()->nContent.GetIndex(),
                         End()->nContent.GetIndex() - Start()->nContent.GetIndex() + 1 );
         SwModify *_pModify=(SwModify*)_pTxtNd;
-        _pModify->Modify( 0, &aHint);
+        _pModify->ModifyNotification( 0, &aHint);
     }
 }
 

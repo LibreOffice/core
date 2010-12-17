@@ -680,11 +680,11 @@ class SwUndoFmtAttrHelper : public SwClient
 {
     ::std::auto_ptr<SwUndoFmtAttr> m_pUndo;
     const bool m_bSaveDrawPt;
+protected:
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     SwUndoFmtAttrHelper( SwFmt& rFmt, bool bSaveDrawPt = true );
-
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
 
     SwUndoFmtAttr* GetUndo() const  { return m_pUndo.get(); }
     // release the undo object (so it is not deleted here), and return it
@@ -1243,8 +1243,10 @@ class SwUndoSetFlyFmt : public SwUndo, public SwClient
     BOOL bAnchorChgd;
 
     void PutAttr( USHORT nWhich, const SfxPoolItem* pItem );
-    void Modify( SfxPoolItem*, SfxPoolItem* );
     void GetAnchor( SwFmtAnchor& rAnhor, ULONG nNode, xub_StrLen nCntnt );
+
+protected:
+   virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
     SwUndoSetFlyFmt( SwFrmFmt& rFlyFmt, SwFrmFmt& rNewFrmFmt );
@@ -1254,6 +1256,7 @@ public:
     virtual void Redo( SwUndoIter& );
 
     virtual SwRewriter GetRewriter() const;
+    void DeRegisterFromFormat( SwFmt& );
 };
 
 //--------------------------------------------------------------------

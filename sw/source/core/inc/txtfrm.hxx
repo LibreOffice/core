@@ -227,6 +227,8 @@ class SwTxtFrm: public SwCntntFrm
                                  xub_StrLen nInsertPos, xub_StrLen nActPos,
                                  xub_StrLen &nChgStart, xub_StrLen &nChgEnd,
                                  xub_StrLen &nInvStart, xub_StrLen &nInvEnd);
+protected:
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
 
 public:
 
@@ -293,7 +295,6 @@ public:
     void   PaintExtraData( const SwRect & rRect ) const; //Seitennummer usw.
     SwRect Paint();
     virtual void Paint( const SwRect &, const SwPrtOptions *pPrintData = NULL ) const;
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
     virtual sal_Bool GetInfo( SfxPoolItem & ) const;
 
     //Layoutorientiertes Cursortravelling: Linker, rechter Rand,
@@ -609,6 +610,8 @@ public:
     {
         return mnHeightOfLastLine;
     }
+
+    static void repaintTextFrames( const SwTxtNode& rNode );
 };
 
 /*************************************************************************

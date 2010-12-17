@@ -55,9 +55,7 @@
 #include <frmtool.hxx>
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>
-#ifndef _DOCSH_HXX
 #include <docsh.hxx>
-#endif
 #include <ndindex.hxx>
 #include <ftnidx.hxx>
 #include <fmtftn.hxx>
@@ -69,10 +67,8 @@
 #include <swwait.hxx>
 #include <GetMetricVal.hxx>
 #include <unotools/syslocale.hxx>
-#ifndef _STATSTR_HRC
 #include <statstr.hrc>
-#endif
-
+#include <switerator.hxx>
 #include <SwUndoPageDesc.hxx>
 
 #include <tgrditem.hxx>
@@ -416,16 +412,10 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
         pDesc->SetFtnInfo( rChged.GetFtnInfo() );
         SwMsgPoolItem  aInfo( RES_PAGEDESC_FTNINFO );
         {
-            SwClientIter aIter( pDesc->GetMaster() );
-            for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                    pLast = aIter.Next() )
-                pLast->Modify( &aInfo, 0 );
+            pDesc->GetMaster().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
         {
-            SwClientIter aIter( pDesc->GetLeft() );
-            for( SwClient* pLast = aIter.First(TYPE(SwFrm)); pLast;
-                    pLast = aIter.Next() )
-                pLast->Modify( &aInfo, 0 );
+            pDesc->GetLeft().ModifyBroadcast( &aInfo, 0, TYPE(SwFrm) );
         }
     }
     SetModified();
@@ -459,9 +449,9 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         return;
 
     SwFmtPageDesc aDfltDesc( aPageDescs[0] );
-    SwClientIter aIter( *pDel );
+    SwClientIter aIter( *pDel );            // TODO
     SwClient* pLast;
-    while( 0 != ( pLast = aIter.GoRoot() ))
+    while( 0 != ( pLast = aIter.GoStart() ))
     {
         if( pLast->ISA( SwFmtPageDesc ) )
         {
@@ -475,18 +465,22 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
                 else
                 {
                     ASSERT( !this, "was ist das fuer ein Mofify-Obj?" );
-                    aPageDescs[0]->Add( pLast );
+                    ((SwFmtPageDesc*)pLast)->RegisterToPageDesc( *aPageDescs[0] );
                 }
             }
             else    //Es kann noch eine Undo-Kopie existieren
-                aPageDescs[0]->Add( pLast );
+                ((SwFmtPageDesc*)pLast)->RegisterToPageDesc( *aPageDescs[0] );
         }
 
+        // mba: this code prevents us from using an SwIterator as GetPageDescDep() returns an SwClient that is an SwDepend
         BOOL bFtnInf = FALSE;
         if ( TRUE == (bFtnInf = pLast == pFtnInfo->GetPageDescDep()) ||
              pLast == pEndNoteInfo->GetPageDescDep() )
         {
-            aPageDescs[0]->Add( pLast );
+            if ( bFtnInf )
+                pFtnInfo->ChgPageDesc( aPageDescs[0] );
+            else
+                pEndNoteInfo->ChgPageDesc( aPageDescs[0] );
             if ( pTmpRoot )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
@@ -746,23 +740,7 @@ void SwDoc::PrtOLENotify( BOOL bAll )
 
         mbOLEPrtNotifyPending = mbAllOLENotify = FALSE;
 
-
-        SwOLENodes *pNodes = 0;
-        SwClientIter aIter( *(SwModify*)GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-             pNd;
-             pNd = (SwCntntNode*)aIter.Next() )
-        {
-            SwOLENode *pONd;
-            if ( 0 != (pONd = pNd->GetOLENode()) &&
-                 (bAll || pONd->IsOLESizeInvalid()) )
-            {
-                if ( !pNodes  )
-                    pNodes = new SwOLENodes;
-                pNodes->Insert( pONd, pNodes->Count() );
-            }
-        }
-
+        SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), !bAll );
         if ( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
@@ -836,31 +814,19 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
     {
         mbOLEPrtNotifyPending = mbAllOLENotify = FALSE;
 
-        SwOLENodes aOLENodes;
-        SwClientIter aIter( *(SwModify*)GetDfltGrfFmtColl() );
-        for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-             pNd;
-             pNd = (SwCntntNode*)aIter.Next() )
-        {
-            SwOLENode *pONd = pNd->GetOLENode();
-            if( pONd && pONd->IsOLESizeInvalid() )
-            {
-                aOLENodes.Insert( pONd, aOLENodes.Count() );
-            }
-        }
-
-        if( aOLENodes.Count() )
+        SwOLENodes *pNodes = SwCntntNode::CreateOLENodesArray( *GetDfltGrfFmtColl(), true );
+        if( pNodes )
         {
             ::StartProgress( STR_STATSTR_SWGPRTOLENOTIFY,
-                             0, aOLENodes.Count(), GetDocShell());
+                             0, pNodes->Count(), GetDocShell());
             GetCurrentLayout()->StartAllAction();   //swmod 080218
             SwMsgPoolItem aMsgHint( RES_UPDATE_ATTR );
 
-            for( USHORT i = 0; i < aOLENodes.Count(); ++i )
+            for( USHORT i = 0; i < pNodes->Count(); ++i )
             {
                 ::SetProgressState( i, GetDocShell() );
 
-                SwOLENode* pOLENd = aOLENodes[i];
+                SwOLENode* pOLENd = (*pNodes)[i];
                 pOLENd->SetOLESizeInvalid( FALSE );
 
                 //Kennen wir nicht, also muss das Objekt geladen werden.
@@ -881,11 +847,12 @@ IMPL_LINK( SwDoc, DoUpdateModifiedOLE, Timer *, )
                             pOLENd->SetOLESizeInvalid( TRUE );
                     }*/
                     // repaint it
-                    pOLENd->Modify( &aMsgHint, &aMsgHint );
+                    pOLENd->ModifyNotification( &aMsgHint, &aMsgHint );
                 }
             }
             GetCurrentLayout()->EndAllAction(); //swmod 080218
             ::EndProgress( GetDocShell() );
+            delete pNodes;
         }
     }
     return 0;

@@ -45,13 +45,17 @@ class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
     // forbidden and not implemented.
     SwTxtINetFmt();
 
+protected:
+virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+
 public:
     SwTxtINetFmt( SwFmtINetFmt& rAttr, xub_StrLen nStart, xub_StrLen nEnd );
     virtual ~SwTxtINetFmt();
     TYPEINFO();
 
-    virtual void Modify( SfxPoolItem *pOld, SfxPoolItem *pNew);
     virtual BOOL GetInfo( SfxPoolItem& rInfo ) const;
+
+    SW_DLLPRIVATE void InitINetFmt(SwTxtNode & rNode);
 
     // get and set TxtNode pointer
     const SwTxtNode* GetpTxtNode() const { return m_pTxtNode; }

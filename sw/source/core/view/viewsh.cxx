@@ -2276,7 +2276,7 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         if( pFldType && pFldType->GetDepends() )
         {
             SwMsgPoolItem aHnt( RES_HIDDENPARA_PRINT );
-            pFldType->Modify( &aHnt, 0);
+            pFldType->ModifyNotification( &aHnt, 0);
         }
         bReformat = TRUE;
     }

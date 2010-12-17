@@ -92,11 +92,8 @@
 #include <swcli.hxx>
 #include <txtftn.hxx>
 #include <ftnidx.hxx>
-
-// --> FME 2004-08-05 #i20883# Digital Signatures and Encryption
 #include <fldbas.hxx>
 #include <docary.hxx>
-// <--
 #include <swerror.h>        // Fehlermeldungen
 #include <helpid.h>
 #include <cmdid.h>
@@ -122,7 +119,7 @@
 #include <unomid.h>
 
 #include <sfx2/Metadatable.hxx>
-
+#include <switerator.hxx>
 
 using rtl::OUString;
 using namespace ::com::sun::star;
@@ -944,32 +941,6 @@ Rectangle SwDocShell::GetVisArea( USHORT nAspect ) const
 
         const SwRect aPageRect = pNd->FindPageFrmRect( FALSE, 0, FALSE );
         return aPageRect.SVRect();
-
-        // Why does this have to be that complicated? I replaced this by the
-        // call of FindPageFrmRect():
-        /*
-        //PageDesc besorgen, vom ersten Absatz oder den default.
-        const SwFmtPageDesc &rDesc = pNd->GetSwAttrSet().GetPageDesc();
-        const SwPageDesc* pDesc = rDesc.GetPageDesc();
-        if( !pDesc )
-            pDesc = &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
-
-        //Das Format wird evtl. von der virtuellen Seitennummer bestimmt.
-        const USHORT nPgNum = rDesc.GetNumOffset();
-        const BOOL bOdd = nPgNum % 2 ? TRUE : FALSE;
-        const SwFrmFmt *pFmt = bOdd ? pDesc->GetRightFmt() : pDesc->GetLeftFmt();
-        if ( !pFmt ) //#40568#
-            pFmt = bOdd ? pDesc->GetLeftFmt() : pDesc->GetRightFmt();
-
-        if ( pFmt->GetFrmSize().GetWidth() == LONG_MAX )
-            //Jetzt wird es aber Zeit fuer die Initialisierung
-            pDoc->getPrinter( true );
-
-        const SwFmtFrmSize& rFrmSz = pFmt->GetFrmSize();
-        const Size aSz( rFrmSz.GetWidth(), rFrmSz.GetHeight() );
-        const Point aPt( DOCUMENTBORDER, DOCUMENTBORDER );
-        const Rectangle aRect( aPt, aSz );
-        return aRect;*/
     }
     return SfxObjectShell::GetVisArea( nAspect );
 }
@@ -1014,17 +985,16 @@ sal_uInt16 SwDocShell::GetHiddenInformationState( sal_uInt16 nStates )
         if ( GetWrtShell() )
         {
             SwFieldType* pType = GetWrtShell()->GetFldType( RES_POSTITFLD, aEmptyStr );
-            SwClientIter aIter( *pType );
-            SwClient* pFirst = aIter.GoStart();
+            SwIterator<SwFmtFld,SwFieldType> aIter( *pType );
+            SwFmtFld* pFirst = aIter.First();
             while( pFirst )
             {
-                if( static_cast<SwFmtFld*>(pFirst)->GetTxtFld() &&
-                    static_cast<SwFmtFld*>(pFirst)->IsFldInDoc() )
+                if( pFirst->GetTxtFld() && pFirst->IsFldInDoc() )
                 {
                     nState |= HIDDENINFORMATION_NOTES;
                     break;
                 }
-                pFirst = ++aIter;
+                pFirst = aIter.Next();
             }
         }
     }
@@ -1048,16 +1018,6 @@ void SwDocShell::GetState(SfxItemSet& rSet)
     {
         switch (nWhich)
         {
-        // MT: MakroChosser immer enablen, weil Neu moeglich
-        // case SID_BASICCHOOSER:
-        // {
-        //  StarBASIC* pBasic = GetBasic();
-        //  StarBASIC* pAppBasic = SFX_APP()->GetBasic();
-        //  if ( !(pBasic->GetModules()->Count() ||
-        //      pAppBasic->GetModules()->Count()) )
-        //          rSet.DisableItem(nWhich);
-        // }
-        // break;
         case SID_PRINTPREVIEW:
         {
             BOOL bDisable = IsInPlaceActive();
@@ -1261,9 +1221,8 @@ SwFEShell* SwDocShell::GetFEShell()
 
 void SwDocShell::RemoveOLEObjects()
 {
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
@@ -1290,9 +1249,8 @@ void SwDocShell::CalcLayoutForOLEObjects()
     if( !pWrtShell )
         return;
 
-    SwClientIter aIter( *(SwModify*)pDoc->GetDfltGrfFmtColl() );
-    for( SwCntntNode* pNd = (SwCntntNode*)aIter.First( TYPE( SwCntntNode ) );
-            pNd; pNd = (SwCntntNode*)aIter.Next() )
+    SwIterator<SwCntntNode,SwFmtColl> aIter( *pDoc->GetDfltGrfFmtColl() );
+    for( SwCntntNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && pOLENd->IsOLESizeInvalid() )

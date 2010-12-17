@@ -777,11 +777,11 @@ SwFltAnchorClient::SwFltAnchorClient(SwFltAnchor * pFltAnchor)
 {
 }
 
-void  SwFltAnchorClient::Modify(SfxPoolItem *, SfxPoolItem * pNew)
+void  SwFltAnchorClient::Modify(const SfxPoolItem *, const SfxPoolItem * pNew)
 {
     if (pNew->Which() == RES_FMT_CHG)
     {
-        SwFmtChg * pFmtChg = dynamic_cast<SwFmtChg *> (pNew);
+        const SwFmtChg * pFmtChg = dynamic_cast<const SwFmtChg *> (pNew);
 
         if (pFmtChg != NULL)
         {

@@ -28,6 +28,7 @@
 #define _FLYFRM_HXX
 
 #include "layfrm.hxx"
+#include <list>
 
 class SwPageFrm;
 class SwFlyFrmFmt;
@@ -38,8 +39,10 @@ class SwVirtFlyDrawObj;
 class SwSpzFrmFmts;
 class SwAttrSetChg;
 class PolyPolygon;
+class SwFlyDrawContact;
+class SwDrawContact;
+class SwFmt;
 
-// OD 2004-03-22 #i26791#
 #include <anchoredobject.hxx>
 
 //Sucht ausgehend von pOldAnch einen Anker fuer Absatzgebundene Rahmen.
@@ -64,10 +67,13 @@ class SwFlyFrm : public SwLayoutFrm, public SwAnchoredObject
     void InitDrawObj( BOOL bNotify );   //Wird von den CToren gerufen.
     void FinitDrawObj();                //Wird vom CTor gerufen.
 
-    void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
+    void _UpdateAttr( const SfxPoolItem*, const SfxPoolItem*, BYTE &,
                       SwAttrSetChg *pa = 0, SwAttrSetChg *pb = 0 );
 
     using SwLayoutFrm::CalcRel;
+
+    sal_uInt32 _GetOrdNumForNewRef( const SwFlyDrawContact* );
+    SwVirtFlyDrawObj* CreateNewRef( SwFlyDrawContact* );
 
 protected:
 
@@ -141,20 +147,17 @@ protected:
     */
     virtual void RegisterAtCorrectPage();
 
-    // --> OD 2006-08-10 #i68520#
     virtual bool _SetObjTop( const SwTwips _nTop );
     virtual bool _SetObjLeft( const SwTwips _nLeft );
-    // <--
 
-    // --> OD 2006-10-05 #i70122#
     virtual const SwRect GetObjBoundRect() const;
-    // <--
+    virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
+
 public:
     // OD 2004-03-23 #i26791#
     TYPEINFO();
 
     virtual ~SwFlyFrm();
-    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
     virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
@@ -282,5 +285,6 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
+    static void GetAnchoredObjects( std::list<SwAnchoredObject*>&, const SwFmt& rFmt );
 };
 #endif

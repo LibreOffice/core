@@ -603,10 +603,8 @@ SwDoc::~SwDoc()
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl *pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pFtnInfo);
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if ( pFtnColl ) pFtnColl->Remove(pEndNoteInfo);
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
     ASSERT( pDfltTxtFmtColl == (*pTxtFmtCollTbl)[0],
             "Default-Text-Collection muss immer am Anfang stehen" );
@@ -865,10 +863,8 @@ void SwDoc::ClearDoc()
 
     // Delete fuer Collections
     // damit die Abhaengigen wech sind
-    SwTxtFmtColl* pFtnColl = pFtnInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pFtnInfo );
-    pFtnColl = pEndNoteInfo->GetFtnTxtColl();
-    if( pFtnColl ) pFtnColl->Remove( pEndNoteInfo );
+    pFtnInfo->ReleaseCollection();
+    pEndNoteInfo->ReleaseCollection();
 
     // JP 27.01.98: opt.: ausgehend davon, das Standard als 2. im Array
     //              steht, sollte das als letztes geloescht werden, damit

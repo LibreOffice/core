@@ -2442,7 +2442,7 @@ void SwSectionFrm::CalcEndAtEndFlag()
 |*
 |*************************************************************************/
 
-void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BYTE nInvFlags = 0;
 
@@ -2477,7 +2477,14 @@ void SwSectionFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwSectionFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwSectionFrm::SwClientNotify( SwModify*, USHORT nWhich )
+{
+    if ( nWhich == RES_OBJECTDYING )
+        SwSectionFrm::MoveCntntAndDelete( this, TRUE );
+}
+
+
+void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             BYTE &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {

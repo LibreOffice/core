@@ -366,7 +366,7 @@ void SwNodes::ChgNode( SwNodeIndex& rDelPos, ULONG nSz,
                                 SwPtrMsgPoolItem aMsgHint( nDelMsg,
                                                     (void*)&pAttr->GetAttr() );
                                 rNds.GetDoc()->GetUnoCallBack()->
-                                            Modify( &aMsgHint, &aMsgHint );
+                                            ModifyNotification( &aMsgHint, &aMsgHint );
                             }
                         }
                     }
@@ -663,7 +663,7 @@ BOOL SwNodes::_MoveNodes( const SwNodeRange& aRange, SwNodes & rNodes,
                             SwFrmFmt* pTblFmt = pTblNd->GetTable().GetFrmFmt();
                             SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT,
                                                         pTblFmt );
-                            pTblFmt->Modify( &aMsgHint, &aMsgHint );
+                            pTblFmt->ModifyNotification( &aMsgHint, &aMsgHint );
                         }
                     }
                     if( bNewFrms )
@@ -1524,79 +1524,6 @@ SwCntntNode* SwNodes::GoPrevious(SwNodeIndex *pIdx) const
         (*pIdx) = aTmp;
     return (SwCntntNode*)pNd;
 }
-
-SwNode* SwNodes::GoNextWithFrm(SwNodeIndex *pIdx) const
-{
-    if( pIdx->GetIndex() >= Count() - 1 )
-        return 0;
-
-    SwNodeIndex aTmp(*pIdx, +1);
-    SwNode* pNd = 0;
-    while( aTmp < Count()-1 )
-    {
-        pNd = &aTmp.GetNode();
-        SwModify *pMod = 0;
-        if ( pNd->IsCntntNode() )
-            pMod = (SwCntntNode*)pNd;
-        else if ( pNd->IsTableNode() )
-            pMod = ((SwTableNode*)pNd)->GetTable().GetFrmFmt();
-        else if( pNd->IsEndNode() && !pNd->StartOfSectionNode()->IsSectionNode() )
-        {
-            pNd = 0;
-            break;
-        }
-        if ( pMod && pMod->GetDepends() )
-        {
-            SwClientIter aIter( *pMod );
-            if( aIter.First( TYPE(SwFrm) ) )
-                break;
-        }
-        aTmp++;
-    }
-    if( aTmp == Count()-1 )
-        pNd = 0;
-    else if( pNd )
-        (*pIdx) = aTmp;
-    return pNd;
-}
-
-SwNode* SwNodes::GoPreviousWithFrm(SwNodeIndex *pIdx) const
-{
-    if( !pIdx->GetIndex() )
-        return 0;
-
-    SwNodeIndex aTmp( *pIdx, -1 );
-    SwNode* pNd(0);
-    while( aTmp.GetIndex() )
-    {
-        pNd = &aTmp.GetNode();
-        SwModify *pMod = 0;
-        if ( pNd->IsCntntNode() )
-            pMod = (SwCntntNode*)pNd;
-        else if ( pNd->IsTableNode() )
-            pMod = ((SwTableNode*)pNd)->GetTable().GetFrmFmt();
-        else if( pNd->IsStartNode() && !pNd->IsSectionNode() )
-        {
-            pNd = 0;
-            break;
-        }
-        if ( pMod && pMod->GetDepends() )
-        {
-            SwClientIter aIter( *pMod );
-            if( aIter.First( TYPE(SwFrm) ) )
-                break;
-        }
-        aTmp--;
-    }
-
-    if( !aTmp.GetIndex() )
-        pNd = 0;
-    else if( pNd )
-        (*pIdx) = aTmp;
-    return pNd;
-}
-
-
 
 /*************************************************************************
 |*

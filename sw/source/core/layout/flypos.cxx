@@ -28,13 +28,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-
 #include "doc.hxx"
 #include "node.hxx"
 #include <docary.hxx>
-
-
 #include <fmtanchr.hxx>
 #include "flypos.hxx"
 #include "frmfmt.hxx"
@@ -43,8 +39,7 @@
 #include "flyfrm.hxx"
 #include "dflyobj.hxx"
 #include "ndindex.hxx"
-
-
+#include "switerator.hxx"
 
 SV_IMPL_OP_PTRARR_SORT( SwPosFlyFrms, SwPosFlyFrmPtr )
 
@@ -60,21 +55,26 @@ SwPosFlyFrm::SwPosFlyFrm( const SwNodeIndex& rIdx, const SwFrmFmt* pFmt,
     }
     else if( pFmt->GetDoc()->GetCurrentViewShell() )    //swmod 071108//swmod 071225
     {
-        SwClientIter aIter( (SwFmt&)*pFmt );
         if( RES_FLYFRMFMT == pFmt->Which() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE( SwFlyFrm) ) )
-                nOrdNum = ((SwFlyFrm*)aIter())->GetVirtDrawObj()->GetOrdNum(),
+            SwFlyFrm* pFly = SwIterator<SwFlyFrm,SwFmt>::FirstElement(*pFmt);
+            if( pFly )
+            {
+                nOrdNum = pFly->GetVirtDrawObj()->GetOrdNum();
                 bFnd = TRUE;
+        }
         }
         else if( RES_DRAWFRMFMT == pFmt->Which() )
         {
             // Schauen, ob es ein SdrObject dafuer gibt
-            if( aIter.First( TYPE(SwDrawContact) ) )
-                nOrdNum = ((SwDrawContact*)aIter())->GetMaster()->GetOrdNum(),
+            SwDrawContact* pContact = SwIterator<SwDrawContact,SwFmt>::FirstElement(*pFmt);
+            if( pContact )
+            {
+                nOrdNum = pContact->GetMaster()->GetOrdNum();
                 bFnd = TRUE;
         }
+    }
     }
 
     if( !bFnd )

@@ -45,6 +45,7 @@
 #include "bodyfrm.hxx"   // ColumnFrms jetzt mit BodyFrm
 #include "rootfrm.hxx"   // wg. RemoveFtns
 #include "sectfrm.hxx"   // wg. FtnAtEnd-Flag
+#include "switerator.hxx"
 
 // ftnfrm.cxx:
 void lcl_RemoveFtns( SwFtnBossFrm* pBoss, BOOL bPageOnly, BOOL bEndNotes );
@@ -143,8 +144,8 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
     if ( pCont->IsBodyFrm() )
         pAttrOwner = pCont->FindPageFrm();
     SwLayoutFrm *pNeighbourCol = 0;
-    SwClientIter aIter( *pAttrOwner->GetFmt() );
-    SwLayoutFrm *pNeighbour = (SwLayoutFrm*)aIter.First( TYPE(SwLayoutFrm) );
+    SwIterator<SwLayoutFrm,SwFmt> aIter( *pAttrOwner->GetFmt() );
+    SwLayoutFrm *pNeighbour = aIter.First();
 
     USHORT nAdd = 0;
     SwFrm *pCol = pCont->Lower();
@@ -157,7 +158,7 @@ static BOOL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
              pNeighbourCol != pCont )
             break;
         pNeighbourCol = 0;
-        pNeighbour = (SwLayoutFrm*)aIter.Next();
+        pNeighbour = aIter.Next();
     }
 
     BOOL bRet;

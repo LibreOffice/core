@@ -3279,7 +3279,7 @@ void SwRedline::InvalidateRange()       // das Layout anstossen
         {
             aHt.nStart = n == nSttNd ? nSttCnt : 0;
             aHt.nEnd = n == nEndNd ? nEndCnt : ((SwTxtNode*)pNd)->GetTxt().Len();
-            ((SwTxtNode*)pNd)->Modify( &aHt, &aHt );
+            ((SwTxtNode*)pNd)->ModifyNotification( &aHt, &aHt );
         }
 }
 

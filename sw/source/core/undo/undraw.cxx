@@ -59,9 +59,6 @@ struct SwUndoGroupObjImpl
     SwDrawFrmFmt* pFmt;
     SdrObject* pObj;
     ULONG nNodeIdx;
-
-    // OD 2004-04-15 #i26791# - keeping the anchor and the relative position
-    // of drawing objects no longer needed
 };
 
 
@@ -81,7 +78,7 @@ IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
     {
         ClearRedo();
         const SdrMarkList* pMarkList = 0;
-        ViewShell* pSh = GetCurrentViewShell() ? GetCurrentViewShell() : 0; //swmod 071108//swmod 071225
+        ViewShell* pSh = GetCurrentViewShell();
         if( pSh && pSh->HasDrawView() )
             pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
 
@@ -129,7 +126,7 @@ String SwSdrUndo::GetComment() const
 void lcl_SendRemoveToUno( SwFmt& rFmt )
 {
     SwPtrMsgPoolItem aMsgHint( RES_REMOVE_UNO_OBJECT, &rFmt );
-    rFmt.Modify( &aMsgHint, &aMsgHint );
+    rFmt.ModifyNotification( &aMsgHint, &aMsgHint );
 }
 
 void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
@@ -147,15 +144,15 @@ void lcl_SaveAnchor( SwFrmFmt* pFmt, ULONG& rNodePos )
         {
             nCntntPos = rAnchor.GetCntntAnchor()->nContent.GetIndex();
 
-            // TextAttribut zerstoeren
+            // destroy TextAttribute
             SwTxtNode *pTxtNd = pFmt->GetDoc()->GetNodes()[ rNodePos ]->GetTxtNode();
-            ASSERT( pTxtNd, "Kein Textnode gefunden" );
+            ASSERT( pTxtNd, "No text node found!" );
             SwTxtFlyCnt* pAttr = static_cast<SwTxtFlyCnt*>(
                 pTxtNd->GetTxtAttrForCharAt( nCntntPos, RES_TXTATR_FLYCNT ));
-            // Attribut steht noch im TextNode, loeschen
+            // attribute still in text node, delete
             if( pAttr && pAttr->GetFlyCnt().GetFrmFmt() == pFmt )
             {
-                // Pointer auf 0, nicht loeschen
+                // just set pointer to 0, don't delete
                 ((SwFmtFlyCnt&)pAttr->GetFlyCnt()).SetFlyFmt();
                 SwIndex aIdx( pTxtNd, nCntntPos );
                 pTxtNd->EraseText( aIdx, 1 );
@@ -218,7 +215,7 @@ SwUndoDrawGroup::~SwUndoDrawGroup()
             delete pTmp->pFmt;
     }
     else
-        delete pObjArr->pFmt;       // das GroupObject-Format
+        delete pObjArr->pFmt;
 
     delete [] pObjArr;
 }
@@ -227,22 +224,22 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
 {
     bDelFmt = FALSE;
 
-    // das Group-Object sichern
+    // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
     SwDrawContact* pDrawContact = (SwDrawContact*)pFmt->FindContactObj();
     SdrObject* pObj = pDrawContact->GetMaster();
     pObjArr->pObj = pObj;
 
-    //loescht sich selbst!
+    // object will destroy itself
     pDrawContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+    // notify UNO objects to decouple
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // aus dem Array austragen
+    // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
@@ -258,19 +255,15 @@ void SwUndoDrawGroup::Undo( SwUndoIter& )
 
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->ConnectToLayout();
-        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-        // move object to visible layer
+        // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
-        // <--
-        // --> OD 2005-05-10 #i45952# - notify that position attributes
-        // are already set
+        // #i45952# - notify that position attributes are already set
         ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-        // <--
     }
 }
 
@@ -278,7 +271,7 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
 {
     bDelFmt = TRUE;
 
-    // aus dem Array austragen
+    // remove from array
     SwDoc* pDoc = pObjArr->pFmt->GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     SdrObject* pObj;
@@ -290,38 +283,35 @@ void SwUndoDrawGroup::Redo( SwUndoIter& )
         pObj = rSave.pObj;
 
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
-        //loescht sich selbst!
+
+        // object will destroy itself
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
 
-        // alle Uno-Objecte sollten sich jetzt abmelden
+        // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
         rFlyFmts.Remove( rFlyFmts.GetPos( rSave.pFmt ));
     }
 
-    // das Group-Object wieder einfuegen
+    // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
-    // OD 2004-04-15 #i26791# - correction: connect object to layout
+    // #i26791# - correction: connect object to layout
     pContact->ConnectToLayout();
-    // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-    // move object to visible layer
+    // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
-    // <--
-    // --> OD 2005-05-10 #i45952# - notify that position attributes
-    // are already set
+    // #i45952# - notify that position attributes are already set
     ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
         static_cast<SwDrawFrmFmt*>(pObjArr->pFmt)->PosAttrSet();
     }
-    // <--
 }
 
 void SwUndoDrawGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
@@ -331,10 +321,10 @@ void SwUndoDrawGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt, SdrObject* pObj )
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+       // notify UNO objects to decouple
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // aus dem Array austragen
+    // remove from array
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
 }
@@ -360,16 +350,16 @@ SwUndoDrawUnGroup::SwUndoDrawUnGroup( SdrObjGroup* pObj )
     pObjArr->pObj = pObj;
     pObjArr->pFmt = pFmt;
 
-    //loescht sich selbst!
+    // object will destroy itself
     pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
     pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+       // notify UNO objects to decouple
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // aus dem Array austragen
+    // remove from array
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pFmt->GetDoc()->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
 }
@@ -383,7 +373,7 @@ SwUndoDrawUnGroup::~SwUndoDrawUnGroup()
             delete pTmp->pFmt;
     }
     else
-        delete pObjArr->pFmt;       // das GroupObject-Format
+        delete pObjArr->pFmt;
 
     delete [] pObjArr;
 }
@@ -392,7 +382,7 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
 {
     bDelFmt = TRUE;
 
-    // aus dem Array austragen
+    // remove from array
     SwDoc* pDoc = &rIter.GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
 
@@ -400,65 +390,50 @@ void SwUndoDrawUnGroup::Undo( SwUndoIter& rIter )
     {
         SwUndoGroupObjImpl& rSave = *( pObjArr + n );
 
-        // --> OD 2006-11-01 #130889# - taken over by <SwUndoDrawUnGroupConnectToLayout>
-//        SwDrawContact* pContact = (SwDrawContact*)rSave.pFmt->FindContactObj();
-
-//        rSave.pObj = pContact->GetMaster();
-
-//        //loescht sich selbst!
-//        pContact->Changed( *rSave.pObj, SDRUSERCALL_DELETE,
-//                           rSave.pObj->GetLastBoundRect() );
-//        rSave.pObj->SetUserCall( 0 );
-        // <--
-
         ::lcl_SaveAnchor( rSave.pFmt, rSave.nNodeIdx );
 
-        // alle Uno-Objecte sollten sich jetzt abmelden
+           // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *rSave.pFmt );
 
         rFlyFmts.Remove( rFlyFmts.GetPos( rSave.pFmt ));
     }
 
-    // das Group-Object wieder einfuegen
+    // re-insert group object
     ::lcl_RestoreAnchor( pObjArr->pFmt, pObjArr->nNodeIdx );
     rFlyFmts.Insert( pObjArr->pFmt, rFlyFmts.Count() );
 
     SwDrawContact *pContact = new SwDrawContact( pObjArr->pFmt, pObjArr->pObj );
     pContact->ConnectToLayout();
-    // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-    // move object to visible layer
+    // #i45718# - follow-up of #i35635# move object to visible layer
     pContact->MoveObjToVisibleLayer( pObjArr->pObj );
-    // <--
-    // --> OD 2005-05-10 #i45952# - notify that position attributes
-    // are already set
+    // #i45952# - notify that position attributes are already set
     ASSERT( pObjArr->pFmt->ISA(SwDrawFrmFmt),
             "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
     if ( pObjArr->pFmt->ISA(SwDrawFrmFmt) )
     {
         static_cast<SwDrawFrmFmt*>(pObjArr->pFmt)->PosAttrSet();
     }
-    // <--
 }
 
 void SwUndoDrawUnGroup::Redo( SwUndoIter& )
 {
     bDelFmt = FALSE;
 
-    // das Group-Object sichern
+    // save group object
     SwDrawFrmFmt* pFmt = pObjArr->pFmt;
     SwDrawContact* pContact = (SwDrawContact*)pFmt->FindContactObj();
 
-    //loescht sich selbst!
+        // object will destroy itself
     pContact->Changed( *pObjArr->pObj, SDRUSERCALL_DELETE,
         pObjArr->pObj->GetLastBoundRect() );
     pObjArr->pObj->SetUserCall( 0 );
 
     ::lcl_SaveAnchor( pFmt, pObjArr->nNodeIdx );
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+       // notify UNO objects to decouple
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // aus dem Array austragen
+    // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
@@ -470,25 +445,13 @@ void SwUndoDrawUnGroup::Redo( SwUndoIter& )
         ::lcl_RestoreAnchor( rSave.pFmt, rSave.nNodeIdx );
         rFlyFmts.Insert( rSave.pFmt, rFlyFmts.Count() );
 
-        // --> OD 2006-11-01 #130889# - taken over by <SwUndoDrawUnGroupConnectToLayout>
-//        SdrObject* pObj = rSave.pObj;
-
-//        SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, rSave.pObj );
-//        pContact->ConnectToLayout();
-//        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-//        // move object to visible layer
-//        pContact->MoveObjToVisibleLayer( rSave.pObj );
-//        // <--
-        // <--
-        // --> OD 2005-05-10 #i45952# - notify that position attributes
-        // are already set
+        // #i45952# - notify that position attributes are already set
         ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-        // <--
     }
 }
 
@@ -499,8 +462,6 @@ void SwUndoDrawUnGroup::AddObj( USHORT nPos, SwDrawFrmFmt* pFmt )
     rSave.pObj = 0;
 }
 
-//-------------------------------------
-// --> OD 2006-11-01 #130889#
 SwUndoDrawUnGroupConnectToLayout::SwUndoDrawUnGroupConnectToLayout()
     : SwUndo( UNDO_DRAWUNGROUP )
 {
@@ -548,7 +509,6 @@ void SwUndoDrawUnGroupConnectToLayout::AddFmtAndObj( SwDrawFrmFmt* pDrawFrmFmt,
     aDrawFmtsAndObjs.push_back(
             std::pair< SwDrawFrmFmt*, SdrObject* >( pDrawFrmFmt, pDrawObject ) );
 }
-// <--
 
 //-------------------------------------
 
@@ -583,19 +543,15 @@ void SwUndoDrawDelete::Undo( SwUndoIter &rIter )
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = new SwDrawContact( rSave.pFmt, pObj );
         pContact->_Changed( *pObj, SDRUSERCALL_INSERTED, NULL );
-        // --> OD 2005-03-22 #i45718# - follow-up of #i35635#
-        // move object to visible layer
+        // #i45718# - follow-up of #i35635# move object to visible layer
         pContact->MoveObjToVisibleLayer( pObj );
-        // <--
-        // --> OD 2005-05-10 #i45952# - notify that position attributes
-        // are already set
+        // #i45952# - notify that position attributes are already set
         ASSERT( rSave.pFmt->ISA(SwDrawFrmFmt),
                 "<SwUndoDrawGroup::Undo(..)> - wrong type of frame format for drawing object" );
         if ( rSave.pFmt->ISA(SwDrawFrmFmt) )
         {
             static_cast<SwDrawFrmFmt*>(rSave.pFmt)->PosAttrSet();
         }
-        // <--
     }
     rIter.pMarkList = pMarkLst;
 }
@@ -610,11 +566,12 @@ void SwUndoDrawDelete::Redo( SwUndoIter &rIter )
         SdrObject *pObj = rSave.pObj;
         SwDrawContact *pContact = (SwDrawContact*)GetUserCall(pObj);
         SwDrawFrmFmt *pFmt = (SwDrawFrmFmt*)pContact->GetFmt();
-        //loescht sich selbst!
+
+        // object will destroy itself
         pContact->Changed( *pObj, SDRUSERCALL_DELETE, pObj->GetLastBoundRect() );
         pObj->SetUserCall( 0 );
 
-        // alle Uno-Objecte sollten sich jetzt abmelden
+           // notify UNO objects to decouple
         ::lcl_SendRemoveToUno( *pFmt );
 
         rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));
@@ -630,10 +587,10 @@ void SwUndoDrawDelete::AddObj( USHORT , SwDrawFrmFmt* pFmt,
     rSave.pFmt = pFmt;
     ::lcl_SaveAnchor( pFmt, rSave.nNodeIdx );
 
-    // alle Uno-Objecte sollten sich jetzt abmelden
+       // notify UNO objects to decouple
     ::lcl_SendRemoveToUno( *pFmt );
 
-    // aus dem Array austragen
+    // remove from array
     SwDoc* pDoc = pFmt->GetDoc();
     SwSpzFrmFmts& rFlyFmts = *(SwSpzFrmFmts*)pDoc->GetSpzFrmFmts();
     rFlyFmts.Remove( rFlyFmts.GetPos( pFmt ));

@@ -45,7 +45,6 @@
 #include "viewopt.hxx"
 #include "hints.hxx"
 #include "dbg_lay.hxx"
-
 #include <ftnidx.hxx>
 #include <svl/itemiter.hxx>
 #include <docary.hxx>
@@ -53,9 +52,7 @@
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/brshitem.hxx>
-// --> collapsing borders FME 2005-05-27 #i29550#
 #include <editeng/boxitem.hxx>
-// <--
 #include <vcl/outdev.hxx>
 #include <fmtlsplt.hxx>
 #include <fmtrowsplt.hxx>
@@ -65,7 +62,6 @@
 #include <fmtfsize.hxx>
 #include <swtblfmt.hxx>
 #include <ndtxt.hxx>
-
 #include "tabfrm.hxx"
 #include "rowfrm.hxx"
 #include "cellfrm.hxx"
@@ -73,15 +69,11 @@
 #include "txtfrm.hxx"       //HasFtn()
 #include "htmltbl.hxx"
 #include "sectfrm.hxx"  //SwSectionFrm
-// OD 30.09.2003 #i18732#
 #include <fmtfollowtextflow.hxx>
-// --> OD 2004-06-28 #i28701#
 #include <sortedobjs.hxx>
 #include <objectformatter.hxx>
-// <--
-// --> OD 2004-10-05 #i26945#
 #include <layouter.hxx>
-// <--
+#include <switerator.hxx>
 
 extern void AppendObjs( const SwSpzFrmFmts *pTbl, ULONG nIndex,
                         SwFrm *pFrm, SwPageFrm *pPage );
@@ -219,8 +211,6 @@ void SwTabFrm::RegistFlys()
 |*  Some prototypes
 |*************************************************************************/
 void MA_FASTCALL SwInvalidateAll( SwFrm *pFrm, long nBottom );
-bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm *pLay, const SwLayoutFrm* pDontLeave,
-                                 long nBottom, bool bSkipRowSpanCells );
 void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom );
 BOOL lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, BOOL bInva );
 // --> OD 2004-10-15 #i26945# - add parameter <_bOnlyRowsAndCells> to control
@@ -1543,7 +1533,7 @@ void lcl_InvalidateAllLowersPrt( SwLayoutFrm* pLayFrm )
 }
 // <-- collapsing
 
-bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
+bool SwCntntFrm::CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeave,
                                  long nBottom, bool bSkipRowSpanCells )
 {
     if ( !pLay )
@@ -1596,7 +1586,7 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
             ASSERT( !pCnt->IsTxtFrm() ||
                     pCnt->IsValid() ||
                     static_cast<SwTxtFrm*>(pCnt)->IsJoinLocked(),
-                    "<lcl_CalcLowers(..)> - text frame invalid and not locked." );
+                    "<SwCntntFrm::CalcLowers(..)> - text frame invalid and not locked." );
             if ( pCnt->IsTxtFrm() && pCnt->IsValid() )
             {
                 // --> OD 2004-11-02 #i23129#, #i36347# - pass correct page frame to
@@ -1621,7 +1611,7 @@ bool MA_FASTCALL lcl_CalcLowers( SwLayoutFrm* pLay, const SwLayoutFrm* pDontLeav
                     }
 
 #if OSL_DEBUG_LEVEL > 1
-                    ASSERT( false, "LoopControl in lcl_CalcLowers" )
+                    ASSERT( false, "LoopControl in SwCntntFrm::CalcLowers" )
 #endif
                 }
             }
@@ -1728,7 +1718,7 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
         {
             // --> OD 2004-11-23 #115759# - force another format of the
             // lowers, if at least one of it was invalid.
-            bCheck = lcl_CalcLowers( &rRow, rRow.GetUpper(), nBottom, true );
+            bCheck = SwCntntFrm::CalcLowers( &rRow, rRow.GetUpper(), nBottom, true );
             // <--
 
             // NEW TABLES
@@ -1748,7 +1738,7 @@ void MA_FASTCALL lcl_RecalcRow( SwRowFrm& rRow, long nBottom )
                         SwCellFrm& rToRecalc = 0 == i ?
                                                const_cast<SwCellFrm&>(pCellFrm->FindStartEndOfRowSpanCell( true, true )) :
                                                *pCellFrm;
-                        bCheck  |= lcl_CalcLowers( &rToRecalc, &rToRecalc, nBottom, false );
+                        bCheck  |= SwCntntFrm::CalcLowers( &rToRecalc, &rToRecalc, nBottom, false );
                     }
 
                     pCellFrm = static_cast<SwCellFrm*>(pCellFrm->GetNext());
@@ -3271,7 +3261,7 @@ SwTwips SwTabFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 |*    Letzte Aenderung  MA 06. Dec. 96
 |*
 |*************************************************************************/
-void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwTabFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BYTE nInvFlags = 0;
     BOOL bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
@@ -3336,7 +3326,7 @@ void SwTabFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
     }
 }
 
-void SwTabFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
+void SwTabFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             BYTE &rInvFlags,
                             SwAttrSetChg *pOldSet, SwAttrSetChg *pNewSet )
 {
@@ -3921,7 +3911,7 @@ void SwRowFrm::RegistFlys( SwPageFrm *pPage )
 |*    Letzte Aenderung  MA 12. Nov. 97
 |*
 |*************************************************************************/
-void SwRowFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwRowFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BOOL bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
     const SfxPoolItem *pItem = 0;
@@ -4401,13 +4391,9 @@ void SwRowFrm::Format( const SwBorderAttrs *pAttrs )
             // If we found a 'previous' row, we look for the appropriate row frame:
             if ( pPrevTabLine )
             {
-                SwClientIter aIter( *pPrevTabLine->GetFrmFmt() );
-                SwClient* pLast;
-                for ( pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+                SwIterator<SwRowFrm,SwFmt> aIter( *pPrevTabLine->GetFrmFmt() );
+                for ( SwRowFrm* pRow = aIter.First(); pRow; pRow = aIter.Next() )
                 {
-                    ASSERT( ((SwFrm*)pLast)->IsRowFrm(),
-                                "Non-row frame registered in table line" )
-                    SwRowFrm* pRow = (SwRowFrm*)pLast;
                     // --> OD 2004-11-23 #115759# - do *not* take repeated
                     // headlines, because during split of table it can be
                     // invalid and thus can't provide correct border values.
@@ -5441,7 +5427,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
 |*
 |*************************************************************************/
 
-void SwCellFrm::Modify( SfxPoolItem * pOld, SfxPoolItem * pNew )
+void SwCellFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
 {
     BOOL bAttrSetChg = pNew && RES_ATTRSET_CHG == pNew->Which();
     const SfxPoolItem *pItem = 0;

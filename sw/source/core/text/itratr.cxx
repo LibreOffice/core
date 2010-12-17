@@ -63,6 +63,7 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <editeng/lrspitem.hxx>
+#include <switerator.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star;
@@ -997,15 +998,10 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
     nWidth = Max( nWidth, nProWidth );
 
     // search for a text frame this node belongs to
-    SwClientIter aClientIter( *(SwTxtNode*)this );
-    SwClient* pLastFrm = aClientIter.GoStart();
+    SwIterator<SwTxtFrm,SwTxtNode> aFrmIter( *this );
     SwTxtFrm* pFrm = 0;
-
-    while( pLastFrm )
+    for( SwTxtFrm* pTmpFrm = aFrmIter.First(); pTmpFrm; pTmpFrm = aFrmIter.Next() )
     {
-        if ( pLastFrm->ISA( SwTxtFrm ) )
-        {
-            SwTxtFrm* pTmpFrm = ( SwTxtFrm* )pLastFrm;
             if ( pTmpFrm->GetOfst() <= nStt &&
                 ( !pTmpFrm->GetFollow() ||
                    pTmpFrm->GetFollow()->GetOfst() > nStt ) )
@@ -1014,8 +1010,6 @@ USHORT SwTxtNode::GetScalingOfSelectedText( xub_StrLen nStt, xub_StrLen nEnd )
                 break;
             }
         }
-        pLastFrm = ++aClientIter;
-    }
 
     // search for the line containing nStt
     if ( pFrm && pFrm->HasPara() )
@@ -1056,16 +1050,12 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
         aPos.nContent += nIdx;
 
         // Find the non-follow text frame:
-        SwClientIter aClientIter( (SwTxtNode&)*this );
-        SwClient* pLastFrm = aClientIter.GoStart();
-
-        while( pLastFrm )
+        SwIterator<SwTxtFrm,SwTxtNode> aIter( *this );
+        for( SwTxtFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
         {
             // Only consider master frames:
-            if ( pLastFrm->ISA(SwTxtFrm) &&
-                 !static_cast<SwTxtFrm*>(pLastFrm)->IsFollow() )
+            if ( !pFrm->IsFollow() )
             {
-                const SwTxtFrm* pFrm = static_cast<SwTxtFrm*>(pLastFrm);
                 SWRECTFN( pFrm )
                 SwRect aRect;
                 pFrm->GetCharRect( aRect, aPos );
@@ -1075,7 +1065,6 @@ USHORT SwTxtNode::GetWidthOfLeadingTabs() const
                             (aRect.*fnRect->fnGetLeft)() - (pFrm->*fnRect->fnGetPrtLeft)() );
                 break;
             }
-            pLastFrm = ++aClientIter;
         }
     }
 

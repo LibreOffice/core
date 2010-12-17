@@ -34,7 +34,7 @@
 
 class SwFrmFmt;
 class IntlWrapper;
-
+class SwFmt;
 
 //Kopfzeile, fuer Seitenformate
 //Client von FrmFmt das den Header beschreibt.
@@ -61,12 +61,14 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)pRegisteredIn; }
-          SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)pRegisteredIn; }
+    const SwFrmFmt *GetHeaderFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+          SwFrmFmt *GetHeaderFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
+    void RegisterToFormat( SwFmt& rFmt );
 };
+
 
 //Fusszeile, fuer Seitenformate
 //Client von FrmFmt das den Footer beschreibt.
@@ -93,12 +95,14 @@ public:
                                     String &rText,
                                     const IntlWrapper*    pIntl = 0 ) const;
 
-    const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)pRegisteredIn; }
-          SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)pRegisteredIn; }
+    const SwFrmFmt *GetFooterFmt() const { return (SwFrmFmt*)GetRegisteredIn(); }
+          SwFrmFmt *GetFooterFmt()       { return (SwFrmFmt*)GetRegisteredIn(); }
 
     BOOL IsActive() const { return bActive; }
     void SetActive( BOOL bNew = TRUE ) { bActive = bNew; }
+    void RegisterToFormat( SwFmt& rFmt );
 };
+
 
 inline const SwFmtHeader &SwAttrSet::GetHeader(BOOL bInP) const
     { return (const SwFmtHeader&)Get( RES_HEADER,bInP); }
