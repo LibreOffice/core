@@ -460,6 +460,23 @@ sub create_epm_header
         }
     }
 
+    # the readme file need not be packaged more times in the help content
+    # it needs to be installed in parallel with the main package anyway
+    # try to find the README file between all available files (not only between the packaged)
+    if (!($foundreadmefile) && $installer::globals::helppack)
+    {
+        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$readmefilenameen, "" , 0);
+        if($$fileref ne "" )
+        {
+            $infoline = "Fallback to readme file: \"$$fileref\"!\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
+            $foundreadmefile = 1;
+            $line = "%readme" . " " . $$fileref . "\n";
+            push(@epmheader, $line);
+        }
+    }
+
     # searching for and license file
 
     if ( $license_in_package_defined )
@@ -515,11 +532,12 @@ sub create_epm_header
                 last;
             }
         }
-        if (!($foundlicensefile) && $installer::globals::languagepack)
+
+        # the license file need not be packaged more times in the langpacks
+        # they need to be installed in parallel with the main package anyway
+        # try to find the LICENSE file between all available files (not only between the packaged)
+        if (!($foundlicensefile) && ($installer::globals::languagepack || $installer::globals::helppack))
         {
-            # the license file need not be packaged more times in the langpacks
-            # they need to be installed in parallel with the main package anyway
-            # try to find the LICENSE file between all available files (not only between the packaged)
             my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, "" , 0);
             if($$fileref ne "" )
             {
