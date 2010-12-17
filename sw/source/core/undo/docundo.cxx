@@ -414,9 +414,9 @@ void UndoManager::EnableUndo(bool bEnable)
     }
 }
 
-USHORT UndoManager::LeaveListAction()
+size_t UndoManager::LeaveListAction()
 {
-    USHORT const nCount = SfxUndoManager::LeaveListAction();
+    size_t const nCount = SfxUndoManager::LeaveListAction();
 
     if (m_bClearOnLeave)
     {

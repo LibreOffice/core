@@ -90,7 +90,7 @@ public:
     virtual sal_Bool Undo();
     virtual sal_Bool Redo();
     virtual void     EnableUndo(bool bEnable);
-    virtual USHORT   LeaveListAction();
+    virtual size_t   LeaveListAction();
 
     SwUndo * RemoveLastUndo();
     SwUndo * GetLastUndo();

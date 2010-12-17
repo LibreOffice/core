@@ -671,7 +671,7 @@ void SwDrawTextShell::StateUndo(SfxItemSet &rSet)
                 ::svl::IUndoManager* pUndoManager = GetUndoManager();
                 if( pUndoManager )
                 {
-                    UniString (::svl::IUndoManager:: *fnGetComment)( USHORT, bool const ) const;
+                    UniString (::svl::IUndoManager:: *fnGetComment)( size_t, bool const ) const;
 
                     sal_uInt16 nCount;
                     if( SID_GETUNDOSTRINGS == nWhich )
