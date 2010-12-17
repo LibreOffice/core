@@ -78,7 +78,7 @@ interface XGridColumn : com::sun::star::lang::XComponent
         @param Listener
             the listener to add.
     */
-    [oneway] void addColumnListener( [in] XGridColumnListener  listener);
+    [oneway] void addGridColumnListener( [in] XGridColumnListener  listener);
 
     //-------------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ interface XGridColumn : com::sun::star::lang::XComponent
         @param Listener
             the listener to remove.
     */
-    [oneway] void removeColumnListener( [in] XGridColumnListener listener);
+    [oneway] void removeGridColumnListener( [in] XGridColumnListener listener);
 
     /**Sets column index
         @param index
