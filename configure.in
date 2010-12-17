@@ -510,6 +510,13 @@ AC_ARG_WITH(extension-integration,
                           Please use this switch to include any extension.],
 ,)
 
+AC_ARG_WITH(helppack-integration,
+[
+  --with-helppack-integration      It will integrate the helppacks to the installer
+                          of the product.
+                          Please use this switch to include any helppack.],
+,)
+
 AC_ARG_WITH(fonts,
 [  --without-fonts         OOo includes some third-party fonts to provide a reliable
                           basis for help content, templates, samples, etc.
@@ -7115,6 +7122,20 @@ fi
   done
   AC_MSG_RESULT([$WITH_THEMES])
 AC_SUBST(WITH_THEMES)
+
+dnl ===================================================================
+dnl Test whether to integrate helppacks into the product's installer
+dnl ===================================================================
+AC_MSG_CHECKING([for helppack integration])
+if test "z$with_helppack_integration" = "z" -o "z$with_helppack_integration" = "zno" ; then
+  WITH_HELPPACK_INTEGRATION=NO
+  AC_MSG_RESULT([no integration])
+else
+  WITH_HELPPACK_INTEGRATION=YES
+  SCPDEFS="$SCPDEFS -DWITH_HELLPACK_INTEGRATION"
+  AC_MSG_RESULT([integration])
+fi
+AC_SUBST(WITH_HELPPACK_INTEGRATION)
 
 dnl ===================================================================
 dnl Test whether to integrate extensions into the product's installer
