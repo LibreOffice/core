@@ -97,9 +97,11 @@ done
 
 # test for availability of the fast external splash
 for arg in $@; do
-    if [ "$arg" = "-nologo" -o "$arg" = "-no-oosplash" ]; then
-       no_oosplash=y
-    fi
+    case "$arg" in
+    -nologo|-no-oosplash|-help|-h|-\?)
+        no_oosplash=y
+        ;;
+    esac
 done
 
 # Setup our app as oosplash, but try to avoid executing pagein,
