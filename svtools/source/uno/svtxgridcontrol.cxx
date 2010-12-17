@@ -406,7 +406,6 @@ void SAL_CALL SVTXGridControl::rowAdded(const ::com::sun::star::awt::grid::GridD
         {
             UnoControlTableColumn* tableColumn = new UnoControlTableColumn();
             m_pTableModel->appendColumn( PColumnModel( tableColumn ) );
-            m_xColumnModel->getColumn(col)->addColumnListener(listener);
         }
 
     }
@@ -967,7 +966,7 @@ void SVTXGridControl::impl_setColumnListening( const Reference< XGridColumn >& i
     ENSURE_OR_RETURN_VOID( i_column.is(), "SVTXGridControl::impl_setColumnListening: illegal column!" );
 
     if ( i_start )
-        i_column->addColumnListener( this );
+        i_column->addGridColumnListener( this );
     else
-        i_column->removeColumnListener( this );
+        i_column->removeGridColumnListener( this );
 }

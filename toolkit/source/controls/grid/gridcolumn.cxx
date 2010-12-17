@@ -222,13 +222,13 @@ namespace toolkit
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::addColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL GridColumn::addGridColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
     {
         rBHelper.addListener( XGridColumnListener::static_type(), xListener );
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    void SAL_CALL GridColumn::removeColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
+    void SAL_CALL GridColumn::removeGridColumnListener( const Reference< XGridColumnListener >& xListener ) throw (RuntimeException)
     {
         rBHelper.removeListener( XGridColumnListener::static_type(), xListener );
     }
