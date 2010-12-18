@@ -87,9 +87,6 @@ class SfxVersionTableDtor
 private:
     _SfxVersionTable        aTableList;
 public:
-                            SfxVersionTableDtor( const sal_uInt16 nInitSz=0, const sal_uInt16 nReSz=1 )
-                            {}
-
                             SfxVersionTableDtor( const SfxVersionTableDtor &rCpy )
                             { *this = rCpy; }
 
