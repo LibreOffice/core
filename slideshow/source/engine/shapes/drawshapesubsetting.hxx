@@ -1,0 +1,291 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX
+#define INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX
+
+#include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
+
+#include "doctreenode.hxx"
+#include "attributableshape.hxx"
+
+
+class GDIMetaFile;
+
+namespace slideshow
+{
+    namespace internal
+    {
+        /** This class encapsulates the subsetting aspects of a
+            DrawShape.
+         */
+        class DrawShapeSubsetting : private boost::noncopyable
+        {
+        public:
+            /** Create empty shape subset handling.
+
+                This method creates a subset handler which contains no
+                subset information. All methods will return default
+                values.
+
+                @param rMtf
+                Metafile to retrieve subset info from (must have been
+                generated with verbose text comments switched on).
+             */
+            DrawShapeSubsetting();
+
+            /** Create new shape subset handling.
+
+                This method creates a subset handler which initially
+                displays the whole shape.
+
+                @param rMtf
+                Metafile to retrieve subset info from (must have been
+                generated with verbose text comments switched on).
+             */
+            explicit DrawShapeSubsetting( const ::boost::shared_ptr< GDIMetaFile >& rMtf );
+
+            /** Create new shape subset handling.
+
+                @param rShapeSubset
+                The subset this object represents (can be empty, then
+                denoting 'represents a whole shape')
+
+                @param rMtf
+                Metafile to retrieve subset info from (must have been
+                generated with verbose text comments switched on).
+             */
+            DrawShapeSubsetting( const DocTreeNode&                         rShapeSubset,
+                                 const ::boost::shared_ptr< GDIMetaFile >&  rMtf );
+
+            /** Reset metafile.
+
+                Use this method to completely reset the
+                ShapeSubsetting, with a new metafile. Note that any
+                information previously set will be lost, including
+                added subset shapes!
+
+                @param rMtf
+                Metafile to retrieve subset info from (must have been
+                generated with verbose text comments switched on).
+             */
+            void reset( const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
+
+            /** Reset metafile and subset.
+
+                Use this method to completely reset the
+                ShapeSubsetting, with a new metafile and subset
+                range. Note that any information previously set will
+                be lost, including added subset shapes!
+
+                @param rShapeSubset
+                The subset this object represents (can be empty, then
+                denoting 'represents a whole shape')
+
+                @param rMtf
+                Metafile to retrieve subset info from (must have been
+                generated with verbose text comments switched on).
+             */
+            void reset( const DocTreeNode&                          rShapeSubset,
+                        const ::boost::shared_ptr< GDIMetaFile >&   rMtf );
+
+
+            // Shape subsetting methods
+            // ========================================================
+
+            /// Return subset node for this shape
+            DocTreeNode                 getSubsetNode       () const;
+
+            /// Return true, if any child subset shapes exist
+            bool                        hasSubsetShapes     () const;
+
+            /// Get subset shape for given node, if any
+            AttributableShapeSharedPtr  getSubsetShape      ( const DocTreeNode& rTreeNode ) const;
+
+            /// Add child subset shape (or increase use count, if already existent)
+            void                        addSubsetShape      ( const AttributableShapeSharedPtr& rShape );
+
+            /** Revoke subset shape
+
+                This method revokes a subset shape, decrementing the
+                use count for this subset by one. If the use count
+                reaches zero (i.e. when the number of addSubsetShape()
+                matches the number of revokeSubsetShape() calls for
+                the same subset), the subset entry is removed from the
+                internal list, and subsequent getSubsetShape() calls
+                will return the empty pointer for this subset.
+
+                @return true, if the subset shape was physically
+                removed from the list (false is returned, when nothing
+                was removed, either because only the use count was
+                decremented, or there was no such subset found, in the
+                first place).
+             */
+            bool                        revokeSubsetShape   ( const AttributableShapeSharedPtr& rShape );
+
+
+            // Doc tree methods
+            // ========================================================
+
+            /// Return overall number of nodes for given type
+            sal_Int32   getNumberOfTreeNodes        ( DocTreeNode::NodeType eNodeType ) const;
+
+            /// Return tree node of given index and given type
+            DocTreeNode getTreeNode                 ( sal_Int32             nNodeIndex,
+                                                      DocTreeNode::NodeType eNodeType ) const;
+
+            /// Return number of nodes of given type, below parent node
+            sal_Int32   getNumberOfSubsetTreeNodes  ( const DocTreeNode&    rParentNode,
+                                                      DocTreeNode::NodeType eNodeType ) const;
+
+            /// Return tree node of given index and given type, relative to parent node
+            DocTreeNode getSubsetTreeNode           ( const DocTreeNode&    rParentNode,
+                                                      sal_Int32             nNodeIndex,
+                                                      DocTreeNode::NodeType eNodeType ) const;
+
+            // Helper
+            // ========================================================
+
+            /** Return a vector of currently active subsets.
+
+                Needed when rendering a shape, this method provides a
+                vector of subsets currently visible (the range as
+                returned by getEffectiveSubset(), minus the parts that
+                are currently hidden, because displayed by child
+                shapes).
+             */
+            const VectorOfDocTreeNodes& getActiveSubsets() const;
+
+            /** This enum classifies each action index in the
+                metafile.
+
+                Of interest are, of course, the places where
+                structural shape and/or text elements end. The
+                remainder of the action gets classified as 'noop'
+             */
+            enum IndexClassificator
+            {
+                CLASS_NOOP,
+                CLASS_SHAPE_START,
+                CLASS_SHAPE_END,
+
+                CLASS_LINE_END,
+                CLASS_PARAGRAPH_END,
+                CLASS_SENTENCE_END,
+                CLASS_WORD_END,
+                CLASS_CHARACTER_CELL_END
+            };
+
+            typedef ::std::vector< IndexClassificator > IndexClassificatorVector;
+
+        private:
+            /** Entry for subset shape
+
+                This struct contains data for every subset shape
+                generated. Note that for a given start/end action
+                index combination, only one subset instance is
+                generated (and reused for subsequent queries).
+             */
+            struct SubsetEntry
+            {
+                AttributableShapeSharedPtr  mpShape;
+                sal_Int32                   mnStartActionIndex;
+                sal_Int32                   mnEndActionIndex;
+
+                /// Number of times this subset was queried, and not yet revoked
+                int                         mnSubsetQueriedCount;
+
+                sal_Int32 getHashValue() const
+                {
+                    // TODO(Q3): That's a hack. We assume that start
+                    // index will always be less than 65535 (if this
+                    // assumption is violated, hash map performance
+                    // will degrade severely)
+                    return mnStartActionIndex*SAL_MAX_INT16 + mnEndActionIndex;
+                }
+
+                /// The shape set is ordered according to this method
+                bool operator<(const SubsetEntry& rOther) const
+                {
+                    return getHashValue() < rOther.getHashValue();
+                }
+
+            };
+
+            typedef ::std::set< SubsetEntry >       ShapeSet;
+
+            void ensureInitializedNodeTree() const;
+            void updateSubsetBounds( const SubsetEntry& rSubsetEntry );
+            void updateSubsets();
+            void initCurrentSubsets();
+            void reset();
+
+            sal_Int32   implGetNumberOfTreeNodes( const IndexClassificatorVector::const_iterator&   rBegin,
+                                                  const IndexClassificatorVector::const_iterator&   rEnd,
+                                                  DocTreeNode::NodeType                             eNodeType ) const;
+            DocTreeNode implGetTreeNode( const IndexClassificatorVector::const_iterator&    rBegin,
+                                         const IndexClassificatorVector::const_iterator&    rEnd,
+                                         sal_Int32                                          nNodeIndex,
+                                         DocTreeNode::NodeType                              eNodeType ) const;
+
+            mutable IndexClassificatorVector    maActionClassVector;
+
+            /// Metafile to retrieve subset info from
+            ::boost::shared_ptr< GDIMetaFile >  mpMtf;
+
+            /// Subset of the metafile represented by this object
+            DocTreeNode                         maSubset;
+
+            /// the list of subset shapes spawned from this one.
+            ShapeSet                            maSubsetShapes;
+
+            /// caches minimal subset index from maSubsetShapes
+            sal_Int32                           mnMinSubsetActionIndex;
+
+            /// caches maximal subset index from maSubsetShapes
+            sal_Int32                           mnMaxSubsetActionIndex;
+
+            /** Current number of subsets to render (calculated from
+                maSubset and mnMin/MaxSubsetActionIndex).
+
+                Note that this is generally _not_ equivalent to
+                maSubset, as it excludes all active subset children!
+             */
+            mutable VectorOfDocTreeNodes        maCurrentSubsets;
+
+            /// Whether the shape's doc tree has been initialized successfully, or not
+            mutable bool                        mbNodeTreeInitialized;
+        };
+
+    }
+}
+
+#endif /* INCLUDED_SLIDESHOW_DRAWSHAPESUBSETTING_HXX */
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

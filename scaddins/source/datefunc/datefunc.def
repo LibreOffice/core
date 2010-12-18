@@ -1,0 +1,7 @@
+LIBRARY	  datefunc
+DESCRIPTION	'StarView 3.00 Uno BE Reflection data 551 '
+HEAPSIZE	  0
+EXPORTS
+component_getImplementationEnvironment
+component_writeInfo
+component_getFactory

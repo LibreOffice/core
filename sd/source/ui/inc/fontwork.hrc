@@ -1,0 +1,45 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#define GRP_STYLE 1
+#define BTN_STYLE_OFF 1
+#define BTN_STYLE_ROTATE 2
+#define BTN_STYLE_UPRIGHT 3
+#define BTN_STYLE_SLANTX 4
+#define BTN_STYLE_SLANTY 5
+#define CBX_MIRROR 1
+#define MTR_FLD_DISTANCE 1
+#define MTR_FLD_TEXTSTART 2
+#define BTN_POS_LEFT 6
+#define BTN_POS_CENTER 7
+#define BTN_POS_RIGHT 8
+#define BTN_POS_FULL 9
+#define GRP_POS 2
+#define FT_DISTANCE 1
+#define FT_TEXTSTART 2
+#define BTN_OK 1
+#define BTN_CANCEL 1
+#define BTN_HELP 1

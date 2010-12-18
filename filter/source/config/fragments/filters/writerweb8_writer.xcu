@@ -1,0 +1,10 @@
+    <node oor:name="writerweb8_writer" oor:op="replace">
+        <prop oor:name="Flags"><value>EXPORT TEMPLATE ENCRYPTION PASSWORDTOMODIFY</value></prop>
+        <prop oor:name="UIComponent"/>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value>CXML</value></prop>
+        <prop oor:name="FileFormatVersion"><value>6800</value></prop>
+        <prop oor:name="Type"><value>writer8</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.text.WebDocument</value></prop>
+    </node>

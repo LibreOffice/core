@@ -1,0 +1,1 @@
+#-o integration.extensions.ObjectInspector

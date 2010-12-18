@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="awt_UnoControlCurrencyFieldModel" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.awt.UnoControlCurrencyFieldModel
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+    Dim newVal, oldVal As Long
+
+
+    PropertyTester.TestProperty("BackgroundColor")
+
+    PropertyTester.TestProperty("Border")
+
+    PropertyTester.TestProperty("CurrencySymbol")
+
+    PropertyTester.TestProperty("DecimalAccuracy")
+
+    PropertyTester.TestProperty("Enabled")
+
+    PropertyTester.TestProperty("FontDescriptor")
+
+    PropertyTester.TestProperty("ShowThousandsSeparator")
+
+    PropertyTester.TestProperty("Printable")
+
+    PropertyTester.TestProperty("ReadOnly")
+
+    PropertyTester.TestProperty("Spin")
+
+    PropertyTester.TestProperty("StrictFormat")
+
+    PropertyTester.TestProperty("Tabstop")
+
+    PropertyTester.TestProperty("TextColor")
+
+    Test.StartMethod("Value")
+    bOK = true
+    oldVal = oObj.Value
+    Out.Log("value before: "+oldVal)
+    if (oldVal &lt;&gt; 999) then 
+        oObj.Value = 999
+    else
+        oObj.Value = 1000
+    endif
+    newVal = oObj.Value
+    Out.Log("value after: "+newVal)
+    bOK = bOK AND (newVal &lt;&gt; oldVal)
+    Test.MethodTested("Value",bOK)
+
+    Test.StartMethod("ValueMax")
+    bOK = true
+    oldVal = oObj.ValueMax
+    Out.Log("value before: "+oldVal)
+    if (oldVal &lt;&gt; 1000000) then 
+        oObj.ValueMax = 1000000
+    else
+        oObj.ValueMax = 1000001
+    endif
+    newVal = oObj.ValueMax
+    Out.Log("value after: "+newVal)
+    bOK = bOK AND (newVal &lt;&gt; oldVal)
+    Test.MethodTested("ValueMax",bOK)
+
+    Test.StartMethod("ValueMin")
+    bOK = true
+    oldVal = oObj.ValueMin
+    Out.Log("value before: "+oldVal)
+    if (oldVal &lt;&gt; -1000000) then 
+        oObj.ValueMin = -1000000
+    else
+        oObj.ValueMin = -1000001
+    endif
+    newVal = oObj.ValueMin
+    Out.Log("value after: "+newVal)
+    bOK = bOK AND (newVal &lt;&gt; oldVal)
+    Test.MethodTested("ValueMin",bOK)
+
+    PropertyTester.TestProperty("ValueStep")
+
+    PropertyTester.TestProperty("HelpText")
+
+    PropertyTester.TestProperty("HelpURL")
+
+    PropertyTester.TestProperty("FontEmphasisMark")
+
+    PropertyTester.TestProperty("FontRelief")
+
+    PropertyTester.TestProperty("PrependCurrencySymbol")
+
+    PropertyTester.TestProperty("TextLineColor")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

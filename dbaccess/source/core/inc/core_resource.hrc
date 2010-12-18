@@ -1,0 +1,110 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DBA_CORE_RESOURCE_HRC_
+#define _DBA_CORE_RESOURCE_HRC_
+
+#ifndef _SOLAR_HRC
+#include <svl/solar.hrc>
+#endif
+
+#define RID_CORE_STRINGS_START                  RID_DBACCESS_START
+
+//- String-IDs
+#define RID_STR_TRIED_OPEN_TABLE                ( RID_CORE_STRINGS_START +  0 )
+#define RID_STR_CONNECTION_INVALID              ( RID_CORE_STRINGS_START +  1 )
+#define RID_STR_TABLE_IS_FILTERED               ( RID_CORE_STRINGS_START +  2 )
+#define RID_STR_NEED_CONFIG_WRITE_ACCESS        ( RID_CORE_STRINGS_START +  3 )
+#define RID_STR_COULDNOTCONNECT_NODRIVER        ( RID_CORE_STRINGS_START +  4 )
+#define RID_STR_COULDNOTCONNECT_UNSPECIFIED     ( RID_CORE_STRINGS_START +  5 )
+#define RID_STR_COULDNOTLOAD_MANAGER            ( RID_CORE_STRINGS_START +  6 )
+#define RID_STR_ONLY_QUERY                      ( RID_CORE_STRINGS_START +  7 )
+#define RID_STR_NO_VALUE_CHANGED                ( RID_CORE_STRINGS_START +  8 )
+#define RID_STR_NO_XROWUPDATE                   ( RID_CORE_STRINGS_START +  9 )
+#define RID_STR_NO_XRESULTSETUPDATE             ( RID_CORE_STRINGS_START + 10 )
+#define RID_STR_NO_UPDATE_MISSING_CONDITION     ( RID_CORE_STRINGS_START + 11 )
+#define RID_STR_NO_COLUMN_ADD                   ( RID_CORE_STRINGS_START + 12 )
+#define RID_STR_NO_COLUMN_DROP                  ( RID_CORE_STRINGS_START + 13 )
+#define RID_STR_NO_CONDITION_FOR_PK             ( RID_CORE_STRINGS_START + 14 )
+#define RID_STR_NO_XQUERIESSUPPLIER             ( RID_CORE_STRINGS_START + 15 )
+#define RID_STR_NO_ABS_ZERO                     ( RID_CORE_STRINGS_START + 16 )
+#define RID_STR_NO_RELATIVE                     ( RID_CORE_STRINGS_START + 17 )
+#define RID_STR_NO_REFESH_AFTERLAST             ( RID_CORE_STRINGS_START + 18 )
+#define RID_STR_NO_MOVETOINSERTROW_CALLED       ( RID_CORE_STRINGS_START + 19 )
+#define RID_STR_NO_UPDATEROW                    ( RID_CORE_STRINGS_START + 20 )
+#define RID_STR_NO_DELETEROW                    ( RID_CORE_STRINGS_START + 21 )
+#define RID_STR_COLUMN_MUST_VISIBLE             ( RID_CORE_STRINGS_START + 22 )
+#define RID_STR_COLUMN_NOT_VALID                ( RID_CORE_STRINGS_START + 23 )
+#define RID_STR_COLUMN_NOT_SEARCHABLE           ( RID_CORE_STRINGS_START + 24 )
+#define RID_STR_NOT_SEQUENCE_INT8               ( RID_CORE_STRINGS_START + 25 )
+#define RID_STR_NOT_SUPPORTED_BY_DRIVER         ( RID_CORE_STRINGS_START + 26 )
+#define RID_STR_NO_TABLE_RENAME                 ( RID_CORE_STRINGS_START + 27 )
+#define RID_STR_COLUMN_ALTER_BY_NAME            ( RID_CORE_STRINGS_START + 28 )
+#define RID_STR_COLUMN_ALTER_BY_INDEX           ( RID_CORE_STRINGS_START + 29 )
+#define RID_STR_NO_ALTER_COLUMN_DEF             ( RID_CORE_STRINGS_START + 30 )
+#define RID_STR_COLUMN_UNKNOWN_PROP             ( RID_CORE_STRINGS_START + 31 )
+#define RID_STR_FORM                            ( RID_CORE_STRINGS_START + 32 )
+#define RID_STR_REPORT                          ( RID_CORE_STRINGS_START + 33 )
+#define RID_STR_DATASOURCE_NOT_STORED           ( RID_CORE_STRINGS_START + 34 )
+#define RID_STR_FILE_DOES_NOT_EXIST             ( RID_CORE_STRINGS_START + 35 )
+#define RID_STR_TABLE_DOES_NOT_EXIST            ( RID_CORE_STRINGS_START + 36 )
+#define RID_STR_CONFLICTING_NAMES               ( RID_CORE_STRINGS_START + 37 )
+#define RID_STR_COMMAND_LEADING_TO_ERROR        ( RID_CORE_STRINGS_START + 38 )
+#define RID_STR_STATEMENT_WITHOUT_RESULT_SET    ( RID_CORE_STRINGS_START + 39 )
+#define RID_STR_NAME_MUST_NOT_BE_EMPTY          ( RID_CORE_STRINGS_START + 40 )
+#define RID_STR_NO_NULL_OBJECTS_IN_CONTAINER    ( RID_CORE_STRINGS_START + 41 )
+#define RID_STR_NAME_ALREADY_USED               ( RID_CORE_STRINGS_START + 42 )
+#define RID_STR_OBJECT_CONTAINER_MISMATCH       ( RID_CORE_STRINGS_START + 43 )
+#define RID_STR_OBJECT_ALREADY_CONTAINED        ( RID_CORE_STRINGS_START + 44 )
+#define RID_STR_NAME_NOT_FOUND                  ( RID_CORE_STRINGS_START + 45 )
+#define RID_STR_QUERY_DOES_NOT_EXIST            ( RID_CORE_STRINGS_START + 46 )
+#define RID_STR_ERROR_WHILE_SAVING              ( RID_CORE_STRINGS_START + 47 )
+#define RID_STR_NO_SUB_FOLDER                   ( RID_CORE_STRINGS_START + 48 )
+
+#define RID_STR_NO_DELETE_BEFORE_AFTER          ( RID_CORE_STRINGS_START + 49 )
+#define RID_STR_NO_DELETE_INSERT_ROW            ( RID_CORE_STRINGS_START + 50 )
+#define RID_STR_RESULT_IS_READONLY              ( RID_CORE_STRINGS_START + 51 )
+#define RID_STR_NO_DELETE_PRIVILEGE             ( RID_CORE_STRINGS_START + 52 )
+#define RID_STR_ROW_ALREADY_DELETED             ( RID_CORE_STRINGS_START + 53 )
+#define RID_STR_UPDATE_FAILED                   ( RID_CORE_STRINGS_START + 54 )
+
+#define RID_STR_INVALID_INDEX                   ( RID_CORE_STRINGS_START + 55 )
+#define RID_STR_NO_INSERT_PRIVILEGE             ( RID_CORE_STRINGS_START + 56 )
+#define RID_STR_INTERNAL_ERROR                  ( RID_CORE_STRINGS_START + 57 )
+#define RID_STR_EXPRESSION1                     ( RID_CORE_STRINGS_START + 58 )
+#define RID_STR_NO_SQL_COMMAND                  ( RID_CORE_STRINGS_START + 59 )
+#define RID_STR_INVALID_CURSOR_STATE            ( RID_CORE_STRINGS_START + 60 )
+#define RID_STR_CURSOR_BEFORE_OR_AFTER          ( RID_CORE_STRINGS_START + 61 )
+#define RID_STR_NO_BOOKMARK_BEFORE_OR_AFTER     ( RID_CORE_STRINGS_START + 62 )
+#define RID_STR_NO_BOOKMARK_DELETED             ( RID_CORE_STRINGS_START + 63 )
+#define RID_STR_NO_EMBEDDING                    ( RID_CORE_STRINGS_START + 64 )
+#define RID_STR_CONNECTION_REQUEST              ( RID_CORE_STRINGS_START + 65 )
+#define RID_STR_MISSING_EXTENSION               ( RID_CORE_STRINGS_START + 66 )
+
+#define RID_NO_SUCH_DATA_SOURCE                 ( RID_CORE_STRINGS_START + 67 )
+
+#endif // _DBA_CORE_RESOURCE_HRC_

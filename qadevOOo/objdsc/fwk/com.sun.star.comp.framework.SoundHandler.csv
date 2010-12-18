@@ -1,0 +1,4 @@
+"SoundHandler";"com::sun::star::frame::XDispatch";"dispatch()"
+"SoundHandler";"com::sun::star::frame::XDispatch";"addStatusListener()"
+"SoundHandler";"com::sun::star::frame::XDispatch";"removeStatusListener()"
+"SoundHandler";"com::sun::star::frame::XNotifyingDispatch";"dispatchWithNotification()"

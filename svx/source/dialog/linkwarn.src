@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ * Copyright 2010 Novell, Inc.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#include "linkwarn.hrc"
+#include "svx/dialogs.hrc"
+#include "helpid.hrc"
+
+ModalDialog RID_SVXDLG_LINK_WARNING
+{
+    Size = MAP_APPFONT( DIALOG_WIDTH, DIALOG_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = FALSE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text = "%PRODUCTNAME %PRODUCTVERSION %PRODUCTEXTENSION";
+
+    FixedImage FI_QUERY
+    {
+        Pos = MAP_APPFONT( AW_COL_1, AW_ROW_1 );
+        Size = MAP_APPFONT( SYMBOL_EDGE, SYMBOL_EDGE );
+    };
+    FixedText FT_INFOTEXT
+    {
+        Pos = MAP_APPFONT( AW_COL_2, AW_ROW_1 );
+        Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, INFO_TEXT_LINES*RSC_CD_FIXEDTEXT_HEIGHT );
+        NoLabel = TRUE;
+        Wordbreak = TRUE;
+        Text [ en-US ] = "The file %FILENAME will not be stored along with your document, but only referenced as a link. This is dangerous if you move and/or rename the files. Do you want to embed the graphic instead?";
+        Text [ de-DE ] = "Die Datei %FILENAME wird nicht zusammen mit dem Dokument gespeichert, sondern nur als Verweis referenziert. Dies kann zu Problemen führen, wenn die Dateien verschoben und/oder umbenannt werden. Möchten Sie stattdessen die Grafik als eingebettetes Objekt einfügen?";
+    };
+    OKButton PB_OK
+    {
+        Pos = MAP_APPFONT( AW_COL_2, AW_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE ;
+        Text [ en-US ] = "~Keep Link";
+        Text [ de-DE ] = "~Als Verweis einfügen";
+    };
+    CancelButton PB_NO
+    {
+        Pos = MAP_APPFONT( AW_COL_3, AW_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "~Embed Graphic";
+        Text [ de-DE ] = "~Eingebettet einfügen";
+    };
+    FixedLine FL_OPTION
+    {
+        Pos = MAP_APPFONT( 0, AW_ROW_3 );
+        Size = MAP_APPFONT( DIALOG_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    CheckBox CB_WARNING_OFF
+    {
+        Pos = MAP_APPFONT( AW_COL_2, AW_ROW_4 );
+        Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
+        WordBreak = TRUE ;
+        Text [ en-US ] = "~Ask when linking a graphic";
+        Text [ de-DE ] = "~Nachfragen falls Grafik als Verweis eingefügt wird";
+    };
+};

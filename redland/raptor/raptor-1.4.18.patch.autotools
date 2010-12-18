@@ -1,0 +1,46 @@
+--- misc/raptor-1.4.18/configure	Sun Jun 15 10:25:55 2008
++++ misc/build/raptor-1.4.18/configure	Wed Feb 18 13:23:12 2009
+@@ -4321,7 +4321,7 @@
+ 
+ cygwin*)
+   # func_win32_libid is a shell function defined in ltmain.sh
+-  lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++  lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+   lt_cv_file_magic_cmd='func_win32_libid'
+   ;;
+ 
+@@ -4330,7 +4330,7 @@
+   # func_win32_libid shell function, so use a weaker test based on 'objdump',
+   # unless we find 'file', for example because we are cross-compiling.
+   if ( file / ) >/dev/null 2>&1; then
+-    lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
++    lt_cv_deplibs_check_method='file_magic ^x86 archive|^x86 DLL'
+     lt_cv_file_magic_cmd='func_win32_libid'
+   else
+     lt_cv_deplibs_check_method='file_magic file format pei*-i386(.*architecture: i386)?'
+--- misc/raptor-1.4.18/ltmain.sh	2008-02-02 22:28:24.000000000 +0900
++++ misc/build/raptor-1.4.18/ltmain.sh	2008-07-08 11:58:42.000000000 +0900
+@@ -3262,9 +3262,9 @@
+ 	    revision="$number_revision"
+ 	    ;;
+ 	  freebsd-aout|freebsd-elf|sunos)
+-	    current="$number_major"
+-	    revision="$number_minor"
+-	    age="0"
++	    current=`expr $number_major + $number_minor`
++	    age="$number_minor"
++	    revision="$number_revision"
+ 	    ;;
+ 	  irix|nonstopux)
+ 	    current=`expr $number_major + $number_minor`
+@@ -3344,8 +3344,8 @@
+ 	  ;;
+ 
+ 	freebsd-elf)
+-	  major=".$current"
+-	  versuffix=".$current";
++	  major=.`expr $current - $age`
++	  versuffix="$major.$age.$revision"
+ 	  ;;
+ 
+ 	irix | nonstopux)

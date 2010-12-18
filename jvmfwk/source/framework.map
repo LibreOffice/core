@@ -1,0 +1,31 @@
+UDK_3_0_0 {
+    global:
+        # jvmfwk/framework.h:
+    jfw_freeJavaInfo;
+    jfw_areEqualJavaInfo;
+    jfw_findAllJREs;
+    jfw_findAndSelectJRE;
+    jfw_startVM;
+    jfw_isVMRunning;
+    jfw_getJavaInfoByPath;
+    jfw_setSelectedJRE;
+    jfw_getSelectedJRE;
+    jfw_setEnabled;
+    jfw_getEnabled;
+    jfw_setVMParameters;
+    jfw_getVMParameters;
+    jfw_setUserClassPath;
+    jfw_getUserClassPath;
+    jfw_setJRELocations;
+    jfw_getJRELocations;
+    jfw_addJRELocation;
+    jfw_lock;
+    jfw_unlock;
+    local:
+        *;
+};
+
+UDK_3.1 { # OOo 3.1.0
+    global:
+    jfw_existJRE;
+} UDK_3_0_0;

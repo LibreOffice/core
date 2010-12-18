@@ -1,0 +1,72 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _XMLFILTERDIALOGSTRINGS_HRC_
+#define _XMLFILTERDIALOGSTRINGS_HRC_
+
+#include "xmlfiltercommon.hrc"
+
+#define STR_COLUMN_HEADER_NAME                  (RID_XSLT_DIALOG_START + 0)
+#define STR_COLUMN_HEADER_TYPE                  (RID_XSLT_DIALOG_START + 1)
+#define STR_UNKNOWN_APPLICATION                 (RID_XSLT_DIALOG_START + 2)
+#define STR_IMPORT_ONLY                         (RID_XSLT_DIALOG_START + 3)
+#define STR_IMPORT_EXPORT                       (RID_XSLT_DIALOG_START + 4)
+#define STR_EXPORT_ONLY                         (RID_XSLT_DIALOG_START + 5)
+
+#define STR_WARN_DELETE                         (RID_XSLT_DIALOG_START + 10)
+#define STR_NO_ERRORS_FOUND                     (RID_XSLT_DIALOG_START + 11)
+#define STR_NOT_SPECIFIED                       (RID_XSLT_DIALOG_START + 12)
+
+#define STR_DEFAULT_FILTER_NAME                 (RID_XSLT_DIALOG_START + 13)
+#define STR_DEFAULT_EXTENSION                   (RID_XSLT_DIALOG_START + 14)
+
+#define STR_ERROR_FILTER_NAME_EXISTS            (RID_XSLT_DIALOG_START + 15)
+#define STR_ERROR_TYPE_NAME_EXISTS              (RID_XSLT_DIALOG_START + 16)
+#define STR_ERROR_DTD_NOT_FOUND                 (RID_XSLT_DIALOG_START + 17)
+#define STR_ERROR_EXPORT_XSLT_NOT_FOUND         (RID_XSLT_DIALOG_START + 18)
+#define STR_ERROR_IMPORT_XSLT_NOT_FOUND         (RID_XSLT_DIALOG_START + 19)
+#define STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND     (RID_XSLT_DIALOG_START + 20)
+#define STR_DEFAULT_UI_NAME                     (RID_XSLT_DIALOG_START + 21)
+#define STR_UNDEFINED_FILTER                    (RID_XSLT_DIALOG_START + 22)
+
+#define STR_FILTER_HAS_BEEN_SAVED               (RID_XSLT_DIALOG_START + 23)
+#define STR_FILTERS_HAVE_BEEN_SAVED             (RID_XSLT_DIALOG_START + 24)
+#define STR_FILTER_PACKAGE                      (RID_XSLT_DIALOG_START + 25)
+#define STR_FILTER_INSTALLED                    (RID_XSLT_DIALOG_START + 26)
+#define STR_FILTERS_INSTALLED                   (RID_XSLT_DIALOG_START + 27)
+#define STR_NO_FILTERS_FOUND                    (RID_XSLT_DIALOG_START + 28)
+
+#define STR_APPL_NAME_WRITER                    (RID_XSLT_DIALOG_START + 30)
+#define STR_APPL_NAME_CALC                      (RID_XSLT_DIALOG_START + 31)
+#define STR_APPL_NAME_IMPRESS                   (RID_XSLT_DIALOG_START + 32)
+#define STR_APPL_NAME_DRAW                      (RID_XSLT_DIALOG_START + 33)
+#define STR_APPL_NAME_OASIS_WRITER              (RID_XSLT_DIALOG_START + 34)
+#define STR_APPL_NAME_OASIS_CALC                (RID_XSLT_DIALOG_START + 35)
+#define STR_APPL_NAME_OASIS_IMPRESS             (RID_XSLT_DIALOG_START + 36)
+#define STR_APPL_NAME_OASIS_DRAW                (RID_XSLT_DIALOG_START + 37)
+
+#endif

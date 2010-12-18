@@ -1,0 +1,50 @@
+The new OOo Canvas Framework
+============================
+
+The new OpenOffice.org canvas framework is the successor of the system
+GUI and graphics backend VCL. Basic functionality is available,
+supplying just as much features as necessary to provide a
+VCL-equivalent feature set (except proper BiDi/CTL support).
+
+For migration purposes, the new canvas and VCL will be shipped with
+OpenOffice.org for quite some time, allowing a step-by-step adaptation
+of the applications. Therefore, the canvas and VCL must somehow
+interoperate, since new code, using the canvas, typically is embedded
+in a VCL-based environment (for example, the OOo windows are still
+provided by VCL. To render into such a window via the canvas, a canvas
+must be constructable from a VCL window). Thus, essentially two new
+methods are provided at VCL's window, namely Window::GetCanvas() and
+Window::GetFullScreenCanvas(). Apart from that small link, canvas and
+VCL are completely separated.
+
+The canvas framework currently consists of the following two new
+CVS modules, /gsl/canvas and /gsl/cppcanvas. Additionally, a new
+generic graphics tooling is used (but not exclusively by the canvas,
+Armin's recent drawing layer fixups also make use of it), which
+resides in /graphics/basegfx. From these modules, six libraries are
+currently delivered, namely vclcanvas.uno.dll, javacanvas.jar,
+directxcanvas.uno.dll, canvastools680mi.dll, cppcanvas680mi.dll, and
+basegfx680mi.dll. 
+
+
+The new OOo slideshow engine
+============================
+
+The new OpenOffice.org slideshow engine will replace the current
+Impress-embedded presentation framework with a fully independent UNO
+component, and it will be based on the new canvas. In its current
+state, it is able to provide a basic set of functionality, enabling
+the playback of simple presentations. It furthermore provides features
+like double-buffering, hardware-accelerated alpha-blending (currently
+not on all platforms) and anti-aliased rendering of all primitives.
+
+In a second step, this new slideshow engine will then be integrated
+with Impress model enhancements and extended PowerPoint import/export
+filters, to implement nearly all of PowerPoint's set of effects.
+
+The new slideshow engine is currently not accessible from the office
+UI, but included in the installations sets. Thus, other developers can
+start to use the new functionality, and base their own implementations
+on top of that. For the records, the respective UNO implementation of
+the slideshow resides in the slideshow.uno.dll library.
+

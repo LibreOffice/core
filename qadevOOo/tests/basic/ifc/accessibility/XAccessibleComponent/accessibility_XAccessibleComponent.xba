@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="accessibility_XAccessibleComponent" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' INTERFACE: 
+' com.sun.star.accessibility.XAccessibleComponent
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+    Test.StartMethod("getBounds()")
+    Dim bounds As new com.sun.star.awt.Rectangle
+    Dim X1,Y1 As Integer
+    bOK = true
+    bounds = oObj.getBounds()
+    X1 = bounds.X+bounds.Width
+    Y1 = bounds.Y+bounds.Height
+    Out.Log("Object's bounding box: ("+bounds.X+","+bounds.Y+","+X1+","+Y1+").")
+    bOK = bOK AND (NOT isNull(bounds)) AND (bounds.X &gt;= 0) AND (bounds.Y &gt;= 0) _
+    AND (bounds.Width &gt; 0) AND (bounds.Height &gt; 0)
+    Test.MethodTested("getBounds()",bOK)
+    
+    Test.StartMethod("contains()")
+    Dim point1 As new com.sun.star.awt.Point
+    Dim point2 As new com.sun.star.awt.Point
+    bOK = true
+    point1.X = bounds.Width + 1
+    point1.Y = bounds.Height + 1
+    point2.X = 0
+    point2.Y = 0
+    bOK = bOK AND (NOT oObj.contains(point1)) AND oObj.contains(point2)
+    Test.MethodTested("contains()",bOK)
+
+    Test.StartMethod("getAccessibleAt()")
+    Dim accAt As Object, oChild As Object
+    Dim i As Integer, childCount As Long, mCount As Integer
+    Dim chBounds As new com.sun.star.awt.Rectangle
+    Dim locRes As Boolean
+	Dim ComponentFound As Boolean
+	Dim visibleFound as Boolean
+	Dim XAccessibleSelection as Boolean
+	
+    bOK = true
+    childCount = oObj.getAccessibleChildCount()
+    if (childCount = 0) then
+        Out.Log("There are no children supported by XAccessibleComponent...")
+    else
+        Out.Log("There are "+childCount+" children supported by XAccessibleComponent.")
+        if (childCount &gt; 50) then
+            mCount = 50
+            Out.Log("Checking only first 50 children...")
+        else
+            mCount = childCount
+        End If
+		ComponentFound = false
+		visibleFound = false
+		XAccessibleSelection = hasUNOInterfaces(oObj, "drafts.com.sun.star.accessibility.XAccessibleSelection")
+        for i = 0 to (mCount - 1)
+            oChild = oObj.getAccessibleChild(i)
+            if NOT hasUNOInterfaces(oChild,"drafts.com.sun.star.accessibility.XAccessibleContext") then
+                oChild = oChild.getAccessibleContext()
+            End If
+            if hasUNOInterfaces(oChild,"drafts.com.sun.star.accessibility.XAccessibleComponent") then
+				ComponentFound = TRUE
+				if XAccessibleSelection then 
+					if oObj.isAccessibleChildSelected(i) then
+						visibleFound = TRUE
+					End If
+				End If
+				oChild = oChild.getAccessibleContext()
+				chBounds = oChild.getBounds()
+				point1.X = chBounds.X
+				point1.Y = chBounds.Y
+				accAt = oObj.getAccessibleAt(point1)
+				locRes = utils.at_equals(accAt,oChild)
+				Out.log("	getAccessibleAt() with   valid points with child " + i + ": " + locRes) 
+				bOK = bOK AND locRes        
+				point2.X = chBounds.X - 1
+				point2.Y = chBounds.Y - 1
+				accAt = oObj.getAccessibleAt(point2)
+				locRes = NOT utils.at_equals(accAt,oChild)
+				Out.log("	getAccessibleAt() with invalid points with child " + i + ": " + locRes) 
+				bOK = bOK AND locRes
+            End If
+        next i
+		if not ComponentFound then
+			Out.Log("Could not find any children which supports XAccessibleComponent!")
+			bOK = TRUE
+		end if
+		if not visibleFound then
+			Out.Log("Could not find any children which is visible!")
+			bOK = TRUE
+		end if
+    End If
+    Test.MethodTested("getAccessibleAt()",bOK)
+
+    Test.StartMethod("getLocation()")
+    bOK = true
+    point1 = oObj.getLocation()
+    bOK = bOK AND (point1.X = bounds.X) AND (point1.Y = bounds.Y)
+    Test.MethodTested("getLocation()",bOK)
+
+    Test.StartMethod("getLocationOnScreen()")
+    Dim accParent As Object
+    bOK = true
+    accParent = getParentComponent()
+    point1 = oObj.getLocationOnScreen()
+    if NOT isNull(accParent) then
+        point2 = accParent.getLocationOnScreen()
+        bOK = bOK AND (point2.X + bounds.X = point1.X)
+        bOK = bOK AND (point2.Y + bounds.Y = point1.Y)
+    else
+        Out.Log("Component's parent is null.")
+    End If
+    Test.MethodTested("getLocationOnScreen()",bOK)
+
+    Test.StartMethod("getSize()")
+    Dim oSize As new com.sun.star.awt.Size
+    bOK = true
+    oSize = oObj.getSize()
+    bOK = bOK AND (oSize.Width = bounds.Width) AND (oSize.Height = bounds.Height)
+    Test.MethodTested("getSize()",bOK)
+
+    Test.StartMethod("grabFocus()")
+    bOK = true
+    oObj.grabFocus()
+    Test.MethodTested("grabFocus()",bOK)
+
+    Test.StartMethod("getForeground()")
+    Dim fColor As Long
+    bOK = true
+    fColor = oObj.getForeground()
+    Out.Log("Foreground color is: "+fColor)
+    Test.MethodTested("getForeground()",bOK)
+
+    Test.StartMethod("getBackground()")
+    Dim bColor As Long
+    bOK = true
+    bColor = oObj.getBackground()
+    Out.Log("Background color is: "+bColor)
+    Test.MethodTested("getBackground()",bOK)
+
+	
+	
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+
+Function getAccessibleChildren() As Variant
+    Dim accCount As Integer, i As Integer, j As Integer
+    Dim accChContext As Object, accCh As Object
+    Dim resArray(50) As Variant
+    Dim emptyArray() As Variant
+    j = 0
+    i = 0
+    if NOT hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessible") then 
+        Out.Log("An object does not support XAccessible interface!")
+        Exit Function
+    End If
+    accCount = oObj.getAccessibleChildCount()
+    if (accCount &gt; 50) then accCount = 50
+    while (i &lt; accCount)
+        accCh = oObj.getAccessibleChild(i)
+        accChContext = accCh.getAccessibleContext()
+        if hasUNOInterfaces(accChContext,"drafts.com.sun.star.accessibility.XAccessibleComponent") then
+            resArray(j) = accChContext
+            j = j + 1
+        End If
+        i = i + 1
+    wend
+    if (accCount &lt;&gt; 0) then
+        Dim returnArray(j - 1) As Variant
+        For i = 0 to (j - 1)
+            returnArray(i) = resArray(i)
+        next i
+        getAccessibleChildren() = returnArray()
+    else
+        getAccessibleChildren() = emptyArray()
+    End If
+End Function
+
+Function getParentComponent() As Object
+    Dim accParent As Object
+    Dim accParContext As Object
+    if NOT hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessible") then
+        Out.Log("An object does not support XAccessible interface!")
+        Exit Function
+    End If
+    accParent = oObj.getAccessibleParent()
+    if isNull(accParent) then 
+        Out.Log("The component has no accessible parent!")
+        Exit Function
+    End If
+    accParContext = accParent.getAccessibleContext()
+    if NOT hasUNOInterfaces(accParContext,"drafts.com.sun.star.accessibility.XAccessibleComponent") then
+        Out.Log("Accessible parent doesn't support XAccessibleComponent!")
+        Exit Function
+    else
+        getParentComponent() = accParContext
+    End If
+End Function
+</script:module>

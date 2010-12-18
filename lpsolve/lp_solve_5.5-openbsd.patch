@@ -1,0 +1,20 @@
+--- misc/lp_solve_5.5/lpsolve55/ccc	Fri Nov  5 13:51:18 2010
++++ misc/build/lp_solve_5.5/lpsolve55/ccc	Fri Nov  5 13:51:11 2010
+@@ -6,7 +6,7 @@
+ if [ "$PLATFORM" = "SCO_UNIX" ]
+ then def='-dy -K PIC -DNOLONGLONG'
+      dl=-lc
+-else dl=-ldl
++else
+      so=y
+ fi
+ 
+@@ -19,7 +19,7 @@
+ if [ "$so" != "" ]
+ then
+   $c -fpic -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
+-  $c -shared -Wl,-Bsymbolic -Wl,-soname,liblpsolve55.so -o liblpsolve55.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm -ldl
++  $c -shared -Wl,-Bsymbolic -Wl,-soname,liblpsolve55.so -o liblpsolve55.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm
+ fi
+ 
+ rm *.o 2>/dev/null

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+This file shows what elements the javasettings_platform.xml can contain.
+The children of javaInfo are only created when a JRE is selected. The children of
+vmParameters are only created when parameters are added and the children of
+jreLocations are only created when the paths are added.
+See CNodeJava::loadFromSettings and CNodeJava::writeSettings for details.
+When extending the javavendors.xml then use the schema to verify it.
+-->
+
+<java xmlns='http://openoffice.org/2004/java/framework/1.0'
+  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+  xsi:schemaLocation='http://openoffice.org/2004/java/framework/1.0 file:/D:/cws-jl6/jvmfwk/source/javasettings.xsd'>
+ <classesDirectory>program/classes</classesDirectory>
+ <enabled xsi:nil="true"></enabled>
+ <userClassPath xsi:nil="true"></userClassPath>
+ <vmParameters xsi:nil="true"/>
+  <!--param>-Xdebug</param-->
+ <!--</vmParameters>-->
+ <jreLocations xsi:nil="true"/>
+  <!--location></location-->
+ <!--</jreLocations>-->
+ <javaInfo xsi:nil="true"/>
+ <!--javaInfo vendorUpdate="2004-03-27" xsi:nil="false"-->
+  <!--vendor></vendor>
+  <location></location>
+  <version></version>
+  <features></features>
+  <requirements></requirements>
+  <vendorData></vendorData>
+ </javaInfo-->
+ </java>
+
+

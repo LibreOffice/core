@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema targetNamespace="http://openoffice.org/2004/java/framework/1.0"
+        xmlns:jf="http://openoffice.org/2004/java/framework/1.0"
+        xmlns="http://www.w3.org/2001/XMLSchema"
+        elementFormDefault="qualified">
+     
+ <element name="javaSelection" type="jf:JavaSelectionType">
+  <unique name="dummy1">
+   <selector xpath="jf:plugins/jf:library"/>
+   <field xpath="@vendor"/>
+  </unique>
+  
+  
+  <keyref name="dummy2" refer="jf:pluginKey">
+   <selector xpath="jf:vendorInfos/jf:vendor"/>
+   <field xpath="@name"/>
+  </keyref>
+
+  <unique name="dummy3">
+   <selector xpath="jf:vendorInfos/jf:vendor"/>
+   <field xpath="@name"/>
+  </unique>
+
+  <key name="pluginKey">
+   <selector xpath="jf:plugins/jf:library"/>
+   <field xpath="@vendor"/>
+  </key>
+ </element>
+ 
+ <complexType name="JavaSelectionType">
+  <sequence>
+   <element name="updated" type="date"/>
+   <element name="vendorInfos" type="jf:VendorInfoType"/>
+   <element name="plugins" type="jf:PluginType"/>
+  </sequence>
+ </complexType>
+ 
+ 
+  <complexType name="VendorInfoType">
+  <sequence>
+   <element name="vendor" type="jf:VendorType"  minOccurs="0" maxOccurs="unbounded"/>
+  </sequence>
+ </complexType>
+ 
+ <complexType name="PluginType">
+  <sequence>
+   <element name="library" type="jf:LibraryType" minOccurs="0" maxOccurs="unbounded"/>
+  </sequence>
+ </complexType>
+
+ <complexType name="LibraryType">
+  <simpleContent>
+    <extension base="string">
+     <attribute name="vendor" use="required" type="string"/>
+    </extension>
+  </simpleContent>
+ </complexType>
+     
+ <complexType name="VendorType">
+  <sequence>
+   <element name="minVersion" type="string" minOccurs="0"/>
+   <element name="maxVersion" type="string" minOccurs="0"/>
+   <element name="excludeVersions" minOccurs="0">
+    <complexType>
+     <sequence>
+      <element name="version" type="string" minOccurs="0" maxOccurs="unbounded"/>
+     </sequence>
+    </complexType>
+   </element>
+   </sequence> 
+  <attribute name="name" use="required" type="string"/>
+ </complexType>
+ 
+ 
+  
+</schema>

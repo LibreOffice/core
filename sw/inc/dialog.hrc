@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _DIALOG_HRC
+#define _DIALOG_HRC
+
+#include "rcid.hrc"
+
+// Dialoge ******************************************************************
+
+#define DLG_SAVE_REGISTRY_FILE  (RC_DIALOG_BEGIN +  1)
+
+#define DLG_PASSWD              (RC_DIALOG_BEGIN +  3)
+#define DLG_PASTESPECIAL        (RC_DIALOG_BEGIN +  5)
+#define DLG_LINKS               (RC_DIALOG_BEGIN +  6)
+#define DLG_LINKEDIT            (RC_DIALOG_BEGIN +  7)
+#define DLG_INSERT_ABSTRACT     (RC_DIALOG_BEGIN +  8)
+#define DLG_ASCII_FILTER        (RC_DIALOG_BEGIN +  9)
+#define DLG_WORDCOUNT           (RC_DIALOG_BEGIN + 10)
+#define RID_QB_SPELL_CONTINUE   (RC_DIALOG_BEGIN + 11)
+#define STR_SPELLING_COMPLETED  (RC_DIALOG_BEGIN + 12)
+
+// Strings ******************************************************************
+
+#define STR_LINKEDIT_TEXT       (RC_DIALOG_BEGIN +  1)
+
+#define STR_CLOSELINKMSG        (RC_DIALOG_BEGIN +  3)
+#define STR_PATH_NOT_FOUND      (RC_DIALOG_BEGIN +  4)
+
+#define STR_FLT_SGV             (RC_DIALOG_BEGIN +  8)
+
+#define STR_NEWDLG_NAME         (RC_DIALOG_BEGIN + 10)
+
+// Controls *****************************************************************
+
+#define CB_USE_PASSWD           (RC_DIALOG_BEGIN     )
+#define CB_READ_ONLY            (RC_DIALOG_BEGIN +  1)
+
+// Bereiche *****************************************************************
+
+
+#define RC_REGIONSW_BEGIN       (RC_DIALOG_BEGIN + 60)
+#define RC_REGIONSW_END         (RC_DIALOG_BEGIN + 79)
+
+#define RC_MACASSGN_BEGIN       (RC_DIALOG_BEGIN + 80)
+#define RC_MACASSGN_END         (RC_DIALOG_BEGIN + 89)
+
+#define RC_DLG_ADDR         (RC_DIALOG_BEGIN + 90)
+#define RC_SWDLG_BACKGROUND     (RC_DIALOG_BEGIN + 91)
+#define RC_DLG_SWNUMFMTDLG      (RC_DIALOG_BEGIN + 92)
+#define RC_DLG_SWBORDERDLG      (RC_DIALOG_BEGIN + 93)
+#define RC_DLG_SWWRAPDLG        (RC_DIALOG_BEGIN + 94)
+#define RC_DLG_SWFLDEDITDLG     (RC_DIALOG_BEGIN + 95)
+// Ueberlaufpruefung ********************************************************
+
+#define DIALOG_ACT_END  RC_MACASSGN_END
+
+#if DIALOG_ACT_END > RC_DIALOG_END
+#error Resource-Ueberlauf in #file, #line
+#endif
+
+#endif
+

@@ -1,0 +1,11 @@
+#! /bin/sh
+for d in $(cd ../../../../.. && pwd)/ooo-svn /usr/lib/ooo3/; do
+    if test -d $d; then
+        export OOO_INSTALL_PREFIX=$d
+	break
+    fi
+done
+export SAL_ALLOW_LINKOO_SYMLINKS=1
+test -d $OOO_INSTALL_PREFIX/openoffice.org3 && export OOO_PREFIX_BRAND=$OOO_INSTALL_PREFIX/openoffice.org3 || export OOO_PREFIX_BRAND=$OOO_INSTALL_PREFIX
+export LD_LIBRARY_PATH="$OOO_PREFIX_BRAND/basis-link/program:$OOO_PREFIX_BRAND/basis-link/ure-link/lib"
+../../unx*.pro/bin/test "$@"

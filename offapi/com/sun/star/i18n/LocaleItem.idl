@@ -1,0 +1,102 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_i18n_LocaleItem_idl__
+#define __com_sun_star_i18n_LocaleItem_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module i18n {
+
+//=============================================================================
+
+/**
+    @deprecated internal
+    Constant values identifying specific locale data items.
+
+    <p> These are not used with the API but with an OOo internal wrapper class
+    that caches the contents of an instance of <type>LocaleDataItem</type> and
+    uses these values to access it's members for faster access. </p>
+
+    <p> Whenever locale data items were added these values and the wrapper
+    class would have to be adjusted to give the application an easier access.
+    </p>
+ */
+
+published constants LocaleItem
+{
+    /// @see ::com::sun::star::i18n::LocaleDataItem::dateSeparator
+    const short DATE_SEPARATOR          = 0;
+    /// @see com::sun::star::i18n::LocaleDataItem::thousandSeparator
+    const short THOUSAND_SEPARATOR      = 1;
+    /// @see com::sun::star::i18n::LocaleDataItem::decimalSeparator
+    const short DECIMAL_SEPARATOR       = 2;
+    /// @see com::sun::star::i18n::LocaleDataItem::timeSeparator
+    const short TIME_SEPARATOR          = 3;
+    /// @see com::sun::star::i18n::LocaleDataItem::time100SecSeparator
+    const short TIME_100SEC_SEPARATOR   = 4;
+    /// @see com::sun::star::i18n::LocaleDataItem::listSeparator
+    const short LIST_SEPARATOR          = 5;
+    /// @see com::sun::star::i18n::LocaleDataItem::quotationStart
+    const short SINGLE_QUOTATION_START  = 6;
+    /// @see com::sun::star::i18n::LocaleDataItem::quotationEnd
+    const short SINGLE_QUOTATION_END    = 7;
+    /// @see com::sun::star::i18n::LocaleDataItem::doubleQuotationStart
+    const short DOUBLE_QUOTATION_START  = 8;
+    /// @see com::sun::star::i18n::LocaleDataItem::doubleQuotationEnd
+    const short DOUBLE_QUOTATION_END    = 9;
+    /// @see com::sun::star::i18n::LocaleDataItem::timeAM
+    const short MEASUREMENT_SYSTEM      = 10;
+    /// @see com::sun::star::i18n::LocaleDataItem::timePM
+    const short TIME_AM                 = 11;
+    /// @see com::sun::star::i18n::LocaleDataItem::measurementSystem
+    const short TIME_PM                 = 12;
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateDayOfWeekSeparator
+    const short LONG_DATE_DAY_OF_WEEK_SEPARATOR = 13;
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateDaySeparator
+    const short LONG_DATE_DAY_SEPARATOR = 14;
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateMonthSeparator
+    const short LONG_DATE_MONTH_SEPARATOR   = 15;
+    /// @see com::sun::star::i18n::LocaleDataItem::LongDateYearSeparator
+    const short LONG_DATE_YEAR_SEPARATOR    = 16;
+
+    //! New values may be inserted here if locale data provides them.
+    //! Do not forget to adjust the COUNT value.
+
+    /// count of items available
+    const short COUNT                   = 17;
+};
+
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
+

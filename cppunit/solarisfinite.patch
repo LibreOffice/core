@@ -1,0 +1,14 @@
+--- misc/cppunit-1.12.1/include/cppunit/portability/FloatingPoint.h	Mon Mar  5 04:16:42 2007
++++ misc/build/cppunit-1.12.1/include/cppunit/portability/FloatingPoint.h	Thu Dec  3 16:34:23 2009
+@@ -3,6 +3,11 @@
+ 
+ #include <cppunit/Portability.h>
+ #include <math.h>
++
++#if defined(__sun) && !defined(CPPUNIT_HAVE_ISFINITE) && defined(CPPUNIT_HAVE_FINITE)
++#include <ieeefp.h>
++  // <math.h> is still needed for usage of fabs in TestAssert.cpp
++#endif
+ 
+ CPPUNIT_NS_BEGIN
+ 

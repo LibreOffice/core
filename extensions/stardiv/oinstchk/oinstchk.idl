@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef _INSTALLATION_OINSTCHK_IDL
+#define _INSTALLATION_OINSTCHK_IDL
+
+
+#include <uno/intrface.idl>
+#include <stardiv/uno/beans/propset.idl>
+#include <stardiv/uno/lang/ulexcp.idl>
+
+module stardiv
+{
+
+    module installation
+    {
+
+/** a flag called "surpressed" changes the action of check and checkWithDialog
+ @author      Berndt Reinhold
+ @see         stardiv::uno::XInterface
+ */
+
+        [ uik(BF6D5A72-B53B-11d2-A17B00A0-243D2A0B), ident("OInstChk", 1.0) ]
+        interface XOInstChk: stardiv::uno::XInterface
+        {
+            /** Checks if "StarMath" and "StarBats" fonts are installed.
+             <P>
+             @param bForce: If TRUE check the fonts even if surpressed.
+             Otherwise check the fonts only if not surpressed.
+             @see resetSurpressed
+             @returns TRUE if the fonts are available. Also TRUE if surpressed
+             is TRUE and bForce is FALSE. Otherwise return FALSE.
+             </P>
+             */
+            boolean check([in] boolean bForce);
+
+            /** Same as check but additional shows a dialog if result is FALSE.
+             <P>
+             @param bForce: same as in check
+             @see check
+             @see resetSurpressed
+             </P>
+             */
+            boolean checkWithDialog([in] boolean bForce);
+
+            /** Shows a dialog if the font "StarBats" or "StarMath" is missing.
+             <P>
+             The dialog shows which font(s) is/are missing and have a checkbox,
+             that represents the state of the flag surpressed. This dialog is
+             the only way to set the flag surpressed to TRUE. This method is
+             not affected by the value of the flag surpressed.
+             @see resetSurpressed
+             </P>
+             */
+            boolean executeDialog();
+
+            /** Set flag surpressed to FALSE
+             <P>
+             The flag surpressed is stored in the registry. If surpressed is
+             FALSE the methods check and checkWithDialog ignores the parameter
+             bForce. if surpressed is TRUE check and checkWithDialog only
+             perform any action if their parameter bForce is TRUE. otherwise
+             they simply return TRUE.
+             </P>
+             */
+            void resetSurpressed();
+        };
+
+/*-------------- services -------------------------------------------
+ This service is the implementation of the interface XOInstChk.
+ @version 1.0
+ @author Berndt Reinhold
+ */
+
+        service OInstChkService
+        {
+            interface XOInstChk;
+        };
+
+//-------------------------------------------------------------------
+
+    }; // installation
+}; // stardiv
+
+#endif

@@ -1,0 +1,40 @@
+# This file contains the assignments Number=gApplication and
+# their plain text names as well as some other textual assignments
+
+[application]
+0=BACKGROUND
+1=WRITER
+2=CALC
+3=IMPRESS
+4=DRAW
+5=MATH
+6=MASTERDOCUMENT
+7=HTML
+8=DATABASE
+9=CHART
+
+
+[application_names]
+BACKGROUND=Backing window
+WRITER=Text document
+CALC=Spreadsheet document
+IMPRESS=Presentation document
+DRAW=Drawing document
+MATH=Formula document
+MASTERDOCUMENT=Master document
+HTML=HTML document
+DATABASE=Database
+CHART=Chart
+
+
+[DocumentKontext]
+BACKGROUND=DocumentBackground
+WRITER=DocumentWriter
+CALC=DocumentCalc
+IMPRESS=DocumentImpress
+DRAW=DocumentDraw
+MATH=DocumentMath
+MASTERDOCUMENT=DocumentWriter
+HTML=DocumentWriter
+DATABASE=Database
+CHART=<not defined>

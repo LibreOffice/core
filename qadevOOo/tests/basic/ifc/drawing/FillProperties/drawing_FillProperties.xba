@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="drawing_FillProperties" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.drawing.FillProperties
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+
+    PropertyTester.TestProperty("FillStyle")
+    oObj.FillStyle = com.sun.star.drawing.FillStyle.SOLID
+
+    PropertyTester.TestProperty("FillColor")
+
+    PropertyTester.TestProperty("FillTransparence")
+
+    Dim aTranspNames(1) As String
+    aTranspNames(0) = "Transparency 2"
+    aTranspNames(1) = "Transparency 1"
+    PropertyTester.TestProperty("FillTransparenceGradientName", aTranspNames())
+
+    PropertyTester.TestProperty("FillTransparenceGradient")
+
+    Dim aGradientNames(1) As String
+    aGradientNames(0) = "Gradient 2"
+    aGradientNames(1) = "Gradient 1"
+    PropertyTester.TestProperty("FillGradientName", aGradientNames())
+
+    PropertyTester.TestProperty("FillGradient")
+
+    Dim aHatchNames(1) As String
+    aHatchNames(0) = "Black 0 Degrees"
+    aHatchNames(1) = "Black 45 Degrees"
+    PropertyTester.TestProperty("FillHatchName", aHatchNames())
+
+    PropertyTester.TestProperty("FillHatch")
+
+    Dim aBitmapNames(1) As String
+    aBitmapNames(0) = "Sky"
+    aBitmapNames(1) = "Metal"
+    PropertyTester.TestProperty("FillBitmapName", aBitmapNames())
+
+    PropertyTester.TestProperty("FillBitmap")
+
+    Test.StartMethod("FillBitmapURL")
+    Dim sURL1 As String
+    Dim sURL2 As String
+    oObj.setPropertyValue("FillBitmapURL", utils.Path2URL(cTestDocsDir) &amp; "crazy-blue.jpg")
+    sURL1 = oObj.getPropertyValue("FillBitmapURL")
+    oObj.setPropertyValue("FillBitmapURL", utils.Path2URL(cTestDocsDir) &amp; "space-metal.jpg")
+    sURL2 = oObj.getPropertyValue("FillBitmapURL")
+    Test.MethodTested("FillBitmapURL", sURL1 &lt;&gt; sURL2)
+
+    Dim aOffsets(1) As Integer
+    aOffsets(0) = 10
+    aOffsets(1) = -10
+    PropertyTester.TestProperty("FillBitmapOffsetX", aOffsets())
+
+    PropertyTester.TestProperty("FillBitmapOffsetY", aOffsets())
+
+    PropertyTester.TestProperty("FillBitmapPositionOffsetX", aOffsets())
+
+    PropertyTester.TestProperty("FillBitmapPositionOffsetY", aOffsets())
+
+    PropertyTester.TestProperty("FillBitmapRectanglePoint")
+
+    PropertyTester.TestProperty("FillBitmapLogicalSize")
+
+    PropertyTester.TestProperty("FillBitmapSizeX")
+
+    PropertyTester.TestProperty("FillBitmapSizeY")
+
+    PropertyTester.TestProperty("FillBitmapMode")
+
+    PropertyTester.TestProperty("FillBackground")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+</script:module>

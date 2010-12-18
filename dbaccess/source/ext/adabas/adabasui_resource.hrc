@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+
+#ifndef _ADABASUI_RESOURCE_HRC_
+#define _ADABASUI_RESOURCE_HRC_
+
+#ifndef _SOLAR_HRC
+#include <svl/solar.hrc>
+#endif
+
+#define RID_DIALOG_START                RID_DB_EXTENSIONS_START
+#define RID_PAGE_START                  RID_DB_EXTENSIONS_START
+#define RID_ERRORBOX_START              RID_DB_EXTENSIONS_START
+#define RID_QUERYBOX_START              RID_DB_EXTENSIONS_START
+#define RID_TOOLBOX_START               RID_DB_EXTENSIONS_START
+#define RID_BITMAP_START                RID_DB_EXTENSIONS_START
+#define RID_IMAGE_START                 RID_DB_EXTENSIONS_START
+#define RID_IMAGELIST_START             RID_DB_EXTENSIONS_START
+#define RID_MENU_START                  RID_DB_EXTENSIONS_START
+#define RID_STRING_START                RID_DB_EXTENSIONS_START
+#define RID_UNTYPED_START               RID_DB_EXTENSIONS_START
+#define RID_WARN_START                  RID_DB_EXTENSIONS_START
+
+//========================================================================
+// dialog ids
+
+#define DLG_ADABAS_NEWDB                RID_DIALOG_START + 0
+//========================================================================
+// images
+
+#define CHECK_GREEN                     RID_IMAGE_START + 0
+#define UNCHECK_RED                     RID_IMAGE_START + 1
+#define DEFAULT_BLUE                    RID_IMAGE_START + 2
+
+//========================================================================
+// warning boxes
+
+#define INFO_STR_MAX_FILE_LENGTH        RID_WARN_START +  0
+
+//========================================================================
+// strings
+
+#define STR_ADABAS_NO_BACKUP_FILE           RID_STRING_START + 0
+//
+#define STR_NO_SAME_USER                    RID_STRING_START + 2
+#define STR_DEVSPACE_NO_FILE                RID_STRING_START + 3
+#define STR_NO_PERMISSION                   RID_STRING_START + 4
+#define STR_FILE_OR_DIR_UNKNOWN             RID_STRING_START + 5
+#define STR_STAT_WARNING                    RID_STRING_START + 6
+//
+#define STR_ADABAS_NO_PARAM_SET             RID_STRING_START + 8
+//
+//
+#define STR_ADABAS_NO_DB_CREATED            RID_STRING_START + 11
+#define STR_ADABAS_NO_SYSTEM_TABLES         RID_STRING_START + 12
+#define STR_ERROR_IN_ADABAS_INSTALLATION    RID_STRING_START + 13
+#define STR_ADABAS_CREATEFILES              RID_STRING_START + 14
+#define STR_ADABAS_CREATEPARAM_FILE         RID_STRING_START + 15
+#define STR_ADABAS_START_DATABASE           RID_STRING_START + 16
+#define STR_ADABAS_DB_EXISTS                RID_STRING_START + 17
+#define STR_ADABAS_NO_DEFAULTNAME           RID_STRING_START + 18
+#define STR_ADABAS_NO_ACCESSRIGHTS          RID_STRING_START + 19
+#define STR_ADABAS_CANNOT_CONVERT           RID_STRING_START + 20
+#define STR_ADABAS_PASSWORD_ILLEGAL         RID_STRING_START + 21
+
+
+#endif //  _ADABASUI_RESOURCE_HRC_
+

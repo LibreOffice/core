@@ -1,0 +1,50 @@
+# This file contains a number of servers providing certain services
+# both inside and outside your firewall. 
+# Acces the data via global/tools/inc/t_server_info.inc::hGetServerInfo(...)
+# This list can be extended to your liking (just create new unique sections).
+# You can even break the scheme used herein by just specifying a section like
+#[mysection]
+#FullURL=ftp://myname:mypassword@yourserver.com
+# and all you would have to do is call hGetServerInfo( "mysection", "FullURL" )
+# to get the string.
+
+[http_internal]
+Name=<some freeform server name>
+Port=80
+Protocol=http://
+URL=myserver.sweden.com
+UseProxy=no
+User=(none)
+Pass=(none)
+
+[http_external]
+Name=Heiseticker
+Port=80
+Protocol=http://
+URL=www.heise.de
+UseProxy=yes
+User=(none)
+Pass=(none)
+
+[ftp_internal]
+Name=<servername>
+Port=21
+Protocol=ftp://
+URL=<server>.<mydomain.net>
+Subdir=/
+UseProxy=no
+User=<username>
+Pass=<password>
+
+[ftp_external]
+Name=Mozilla Fondation Public FTP Server
+Port=21
+Protocol=ftp://
+URL=ftp.mozilla.org
+Subdir=/pub
+UseProxy=yes
+User=<username>
+Pass=<password>
+
+
+

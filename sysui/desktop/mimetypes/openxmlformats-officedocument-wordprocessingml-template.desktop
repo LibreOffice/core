@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.dotx
+MimeType=application/vnd.openxmlformats-officedocument.wordprocessingml.template
+Comment=Microsoft Word Document Template

@@ -1,0 +1,3 @@
+..\%__SRC%\bin\autodoc.exe %_DEST%\bin%_EXT%\autodoc.exe
+..\%__SRC%\bin\autodoc %_DEST%\bin%_EXT%\autodoc
+

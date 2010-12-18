@@ -1,0 +1,352 @@
+[%ANALYZE_NUM_DOCS%]
+en-US = "A total of <TOPIC> documents will be analyzed:"
+
+[%ANALYZE_RUN_TOOL%]
+en-US = "Run analysis"
+
+[%ANALYZE_SETUP_COMPLETE%]
+en-US = "Run the analysis and view the results"
+
+[%ANALYZE_VIEW_RESULTS%]
+en-US = "View results"
+
+[%ANALYZE_PREPARE_DOCS%]
+en-US = "Prepare Documents for Migration"
+
+[%ANALYZE_START%]
+en-US = "The analysis will now be carried out on <TOPIC> documents.<CR><CR>Please note this may take some time as each document must be opened<CR>in order to analyze it.<CR><CR>A message will appear when the analysis is complete."
+
+[%ANALYZE_COMPLETED%]
+en-US = "The analysis has been completed successfully.<CR><CR>Click on OK to see the results now."
+
+[%ANALYZE_VIEW_NOW%]
+en-US = "View Now"
+
+[%ANALYZE_VIEW_LATER%]
+en-US = "View Later"
+
+[%ANALYSE_NOT_RUN%]
+en-US = "The document analysis has not been run yet.<CR><CR>Click on OK to leave wizard now.<CR>Press 'Cancel' button to return to the Wizard. Then press 'Run Analysis' button to start the analysis."
+
+[%ANALYZE_DOCUMENTS%]
+en-US = "<TOPIC> Documents"
+
+[%ANALYZE_TEMPLATES%]
+en-US = "<TOPIC> Templates"
+
+[%ANALYZE_DOCUMENTS_XLS%]
+en-US = "<TOPIC> Spreadsheets"
+
+[%ANALYZE_DOCUMENTS_PPT%]
+en-US = "<TOPIC> Presentations"
+
+[%ERROR_AUTOMATION_SERVER_FAILED%]
+en-US = "<TOPIC> The analysis failed to connect to the <TOPIC> automation server.<CR><CR>Please ensure that all instances of <TOPIC> are closed before rerunning the analysis<CR>and check that the machine has sufficient free memory to run the analysis.<CR><CR>If necessary use the Task Manager to remove any frozen instances of <TOPIC>,<CR>using the Applications Tab - End Task"
+
+[%ERROR_CANNOT_CREATE_RESULTS_DIRECTORY%]
+en-US = "Can't create the directory: <CR><TOPIC><CR><CR>Check that you are creating only a single directory at the lowest level and <CR>that you can write to this disk and <CR>that it is not full."
+
+[%ERROR_CHOOSE_DOCUMENT_TYPE%]
+en-US = "Please choose at least one document type to analyze."
+
+[%ERROR_CREATE_FILE%]
+en-US = "Can't create the file: <CR><TOPIC><CR><CR>Please check that you have write permission to this directory."
+
+[%ERROR_EXCEL_ANALYSIS_FAILED%]
+en-US = "Excel Analysis Failed on document: <CR><CR><TOPIC><CR><CR>Please remove this file from the Documents Directory and ensure that all instances of Excel<CR>are closed before rerunning the analysis<CR><CR>If necessary use the Task Manager to remove any frozen instances of Excel,<CR>using the Applications Tab - End Task"
+
+[%ERROR_EXCEL_OPEN%]
+en-US = "The wizard cannot run the analysis if Excel is open. The wizard needs<CR>exclusive access to Excel in order to create the results spreadsheet.<CR><CR>Please close Excel so the analysis can be run."
+
+[%ERROR_MACRO_SECURITY_SET%]
+en-US = "Unable to detect or analyze <TOPIC> macros due to the following <TOPIC> macro security setting:<CR>    <TOPIC> main menu:<CR>        Tools-> Macro-> Security...<CR>            Trusted Sources tab:<CR>            Trust access to Visual Basic Project - unchecked<CR>To analyze macros you must check this checkbox before running the analysis.<CR><CR>Do you wish to continue the analysis without detecting and analyzing <TOPIC> macros?"
+
+[%ERROR_MISSING_DOCUMENTS_DIRECTORY%]
+en-US = "Documents Directory does not exist.<CR><CR>Please choose another directory."
+
+[%ERROR_MISSING_EXCEL_DRIVER%]
+en-US = "Missing Excel Analysis Driver Spreadsheet: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MISSING_ISSUES_LIST%]
+en-US = "Missing issues list:<CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MISSING_MIGRATION_RESULTS%]
+en-US = "Missing Analysis Results Document: <CR><TOPIC><CR><CR>Please check that you have write permissions on the <CR>results directory and rerun the analysis.<CR>"
+
+[%ERROR_MISSING_POWERPOINT_DRIVER%]
+en-US = "Missing PowerPoint Analysis Driver Document: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MISSING_README%]
+en-US = "Missing Help Documentation: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MISSING_RESULTS_TEMPLATE%]
+en-US = "Missing Results Template: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MISSING_WORD_DRIVER%]
+en-US = "Missing Word Analysis Driver Document: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%ERROR_MSOFFICE_9_REQUIRED%]
+en-US = "The wizard requires Microsoft Office version 9.0 or above to be installed.<CR><CR>The currently installed version <TOPIC> is not supported."
+
+[%ERROR_NO_RESULTS_DIRECTORY%]
+en-US = "Results Directory has not been specified.<CR><CR>Please enter a results directory."
+
+[%ERROR_POWERPOINT_ANALYSIS_FAILED%]
+en-US = "PowerPoint Analysis Failed on document: <CR><CR><TOPIC><CR><CR>Please remove this file from the Documents Directory and ensure that all instances of PowerPoint<CR>are closed before rerunning the analysis<CR><CR>If necessary use the Task Manager to remove any frozen instances of PowerPoint,<CR>using the Applications Tab - End Task"
+
+[%ERROR_RESULTS_DIRECTORY_DOES_NOT_EXIST%]
+en-US = "Results Directory does not exist.<CR><CR>Do you want to create the directory?"
+
+[%ERROR_RESULTS_SPREADSHEET_OPEN%]
+en-US = "The wizard needs to write to the results spreadsheet:<CR><TOPIC><CR><CR>Excel currently has this spreadsheet open. It must be closed before the analysis can be run.<CR><CR>If Excel does not appear to be running please check the Task Manager and remove any Excel.exe processes."
+
+[%ERROR_VERSION_MISMATCH%]
+en-US = "There is a version mismatch between the Wizard [<TOPIC>] and the Issues list [<TOPIC2>]<CR>used to cutomize the reporting of minor issues.<CR><CR>Please contact support."
+
+[%ERROR_WIN2000_REQUIRED%]
+en-US = "To run this wizard, Windows 2000 or newer is required.<CR><CR>The current operating system <TOPIC> is not supported."
+
+[%ERROR_WORD_ANALYSIS_FAILED%]
+en-US = "Word Analysis Failed on document: <CR><CR><TOPIC><CR><CR>Please remove this file from the Documents Directory and ensure that all instances of Word<CR>are closed before rerunning the analysis<CR><CR>If necessary use the Task Manager to remove any frozen instances of Word,<CR>using the Applications Tab - End Task"
+
+[%ERROR_APP_NOT_INSTALLED%]
+en-US = "The wizard requires Microsoft <TOPIC> version 9.0 or above to be installed.<CR><CR>Please install and rerun the analysis."
+
+[%ERROR_APPLICATION_STILL_RUNNING%]
+en-US = "The following applications are still running: <TOPIC>.<CR><CR>Please ensure that all instances of <TOPIC> are closed before rerunning the analysis.<CR><CR>If necessary use the Task Manager to remove any frozen instances of <TOPIC>,<CR>using the Applications Tab - End Task"
+
+[%ERROR_MISSING_IMPORTANT_FILE%]
+en-US = "A file needed for analyzing is missing: <CR><TOPIC><CR><CR>Please reinstall the application."
+
+[%INTRODUCTION%]
+en-US = "Introduction"
+
+[%INTRODUCTION_INTRO1%]
+en-US = "The <PRODUCTNAME> Document Analysis Wizard is for you to use to automatically analyze a collection of Microsoft Office documents for issues relevant to a migration to <PRODUCTNAME>."
+
+[%INTRODUCTION_INTRO2%]
+en-US = "You will be able to select which documents you want to analyze as well as where you want the results of the analysis to be saved."
+
+[%INTRODUCTION_INTRO3%]
+en-US = "The wizard will remain on screen while the analysis is carried out."
+
+[%NAVBAR_BACK_BTN%]
+en-US = "<< Back"
+
+[%NAVBAR_EXIT_BTN%]
+en-US = "Cancel"
+
+[%NAVBAR_FINISH_BTN%]
+en-US = "Finish"
+
+[%NAVBAR_HELP_BTN%]
+en-US = "Help"
+
+[%NAVBAR_NEXT_BTN%]
+en-US = "Next >>"
+
+[%OTHER_README_PATH%]
+en-US = "UserGuide_en-US.pdf"
+
+[%OTHER_RUNNING%]
+en-US = "Running ..."
+
+[%OTHER_SELECT_ANALYZE_DIRECTORY%]
+en-US = "Select a Directory to Analyze"
+
+[%OTHER_SELECT_RESULTS_DIRECTORY%]
+en-US = "Select a Directory for Analysis Results"
+
+[%OTHER_XML_RESULTS%]
+en-US = "Analysis Results have been output in XML format to: <CR><TOPIC>"
+
+[%DOCUMENTS_CHOOSE_DOCUMENTS%]
+en-US = "Choose the documents you want to analyze"
+
+[%DOCUMENTS_DOCUMENTS_DIRECTORY%]
+en-US = "Location of Microsoft Office documents"
+
+[%DOCUMENTS_INCLUDE_SUBDIRECTORIES%]
+en-US = "Include subdirectories in the analysis"
+
+[%DOCUMENTS_ROOT_C%]
+en-US = "C:\\"
+
+[%DOCUMENTS_CHOOSE_DOC_TYPES%]
+en-US = "Document types to analyze:"
+
+[%DOCUMENTS_CHOOSE_DOC%]
+en-US = "Documents (*.doc)"
+
+[%DOCUMENTS_CHOOSE_DOT%]
+en-US = "Templates (*.dot)"
+
+[%DOCUMENTS_CHOOSE_EXCEL%]
+en-US = "Excel"
+
+[%DOCUMENTS_CHOOSE_POT%]
+en-US = "Templates (*.pot)"
+
+[%DOCUMENTS_CHOOSE_POWERPOINT%]
+en-US = "PowerPoint"
+
+[%DOCUMENTS_CHOOSE_PPT%]
+en-US = "Presentations (*.ppt)"
+
+[%DOCUMENTS_CHOOSE_WORD%]
+en-US = "Word"
+
+[%DOCUMENTS_CHOOSE_XLS%]
+en-US = "Spreadsheets (*.xls)"
+
+[%DOCUMENTS_CHOOSE_XLT%]
+en-US = "Templates (*.xlt)"
+
+[%RESULTS_CHOOSE_OPTIONS%]
+en-US = "Choose where and how to save the results"
+
+[%RESULTS_RESULTS_SPREADSHEET%]
+en-US = "File name for the results spreadsheet"
+
+[%RESULTS_ANALYSIS_XLS%]
+en-US = "Analysis Results.xls"
+
+[%RESULTS_RESULTS_DIRECTORY%]
+en-US = "Location"
+
+[%RESULTS_CHOOSE_SAVE_OPTIONS%]
+en-US = "If results already exist under the same name and location:"
+
+[%RESULTS_CHOOSE_PROMPT%]
+en-US = "Ask me before overwriting"
+
+[%RESULTS_CHOOSE_OVERWRITE%]
+en-US = "Overwrite without asking me"
+
+[%RESULTS_CHOOSE_APPEND%]
+en-US = "Append the new results to the existing results"
+
+[%SIDEBAR_INTRODUCTION%]
+en-US = "1. Introduction"
+
+[%SIDEBAR_DOCUMENTS%]
+en-US = "2. Documents"
+
+[%SIDEBAR_RESULTS%]
+en-US = "3. Results"
+
+[%SIDEBAR_ANALYZE%]
+en-US = "4. Analysis"
+
+[%SIDEBAR_STEPS%]
+en-US = "Steps"
+
+[%TITLE%]
+en-US = "<PRODUCTNAME> Document Analysis Wizard"
+
+[%PRODUCTNAME%]
+en-US = "OpenOffice.org"
+
+[%TITLE_PREP%]
+en-US = "<PRODUCTNAME> Professional Analysis Wizard"
+
+[%SIDEBAR_ANALYZE_PREP%]
+en-US = "4. Analysis"
+
+[%INTRODUCTION_INTRO1_PREP%]
+en-US = "The <PRODUCTNAME> Professional Analysis Wizard is for you to use to automatically analyze a collection of Microsoft Office documents for issues relevant to a migration to <PRODUCTNAME>."
+
+[%INTRODUCTION_INTRO2_PREP%]
+en-US = "You will be able to select which documents you want to analyze as well as where you want the results of the analysis to be saved."
+
+[%INTRODUCTION_INTRO3_PREP%]
+en-US = "Where a workaround is available for a migration issue, the wizard will enable you to prepare a modified copy of the original document in which the migration issue has been resolved."
+
+[%DOCUMENTS_CHOOSE_DOCUMENTS_PREP%]
+en-US = "Choose the documents you want to analyze"
+
+[%DOCUMENTS_CHOOSE_DOC_TYPES_PREP%]
+en-US = "Document types to analyze:"
+
+[%IGNORE_OLDER_CB_LABEL%]
+en-US = "Ignore documents older than:"
+
+[%IGNORE_OLDER_3_MONTHS_TEXT%]
+en-US = "3 months"
+
+[%IGNORE_OLDER_6_MONTHS_TEXT%]
+en-US = "6 months"
+
+[%IGNORE_OLDER_12_MONTHS_TEXT%]
+en-US = "12 months"
+
+[%DOCUMENTS_INCLUDE_SUBDIRECTORIES_PREP%]
+en-US = "Include subdirectories in the analysis"
+
+[%RESULTS_CHOOSE_OPTIONS_PREP%]
+en-US = "Choose where and how to save the results"
+
+[%RESULTS_ANALYSIS_XLS_PREP%]
+en-US = "Analysis Results.xls"
+
+[%ANALYZE_NUM_DOCS_PREP%]
+en-US = "A total of <TOPIC> documents will be analyzed:"
+
+[%ANALYZE_IGNORED_DOCS%]
+en-US = "Skipped <TOPIC> documents because they were to old."
+
+[%ANALYZE_SETUP_COMPLETE_PREP%]
+en-US = "Run the analysis and view the results"
+
+[%OTHER_PLEASE_REFER_TO_README_PREP%]
+en-US = "<PRODUCTNAME> Professional Analysis Wizard  <TOPIC><CR><CR>For help please refer to the User Guide in<CR>the install directory."
+
+[%OTHER_XML_RESULTS_PREP%]
+en-US = "Analysis Results have been output in XML format to: <CR><TOPIC>"
+
+[%OTHER_PREPARE_PROMPT_PREP%]
+en-US = "Prepare any documents that have Preparable Document Issues, listed in the results spreadsheet:<CR>    <TOPIC><CR><CR>Prepared documents will be saved under:<CR>    <TOPIC2>\prepared<CR><CR>Source documents will not be modified."
+
+[%OTHER_PREPARE_COMPLETED_PREP%]
+en-US = "Preparation completed successfully.<CR><CR>Prepared documents have been saved under:<CR><TOPIC>\prepared"
+
+[%PROGRESS_CAPTION%]
+en-US = "Analysing Microsoft Office Documents"
+
+[%PROGRESS_ABORTING%]
+en-US = "Aborting"
+
+[%PROGRESS_PATH_LABEL%]
+en-US = "Path:"
+
+[%PROGRESS_FILE_LABEL%]
+en-US = "File:"
+
+[%PROGRESS_INFO_LABEL%]
+en-US = "Please wait while wizard is analysing Microsoft Office documents."
+
+[%PROGRESS_WAIT_LABEL%]
+en-US = "Please wait while wizard is aborting the analysis."
+
+[%SEARCH_CAPTION%]
+en-US = "Scanning for Microsoft Office Documents"
+
+[%SEARCH_INFO_LABEL%]
+en-US = "Please wait while wizard is scanning for Microsoft Office documents."
+
+[%SEARCH_FOUND_LABEL%]
+en-US = "Documents found:"
+
+[%TERMINATE_CAPTION%]
+en-US = "Application not Responding"
+
+[%TERMINATE_INFO%]
+en-US = "The Microsoft Office application, used for the analysis, is currently not responding and could not be closed. Microsoft Office needs to be closed before the Wizard could start a new analysis.<CR><CR>Do you want to abort  this application?<CR><CR>Please note that unsaved data of this application will be lost."
+
+[%TERMINATE_YES%]
+en-US = "Yes"
+
+[%TERMINATE_NO%]
+en-US = "No"
+
+

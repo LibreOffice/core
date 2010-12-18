@@ -1,0 +1,16 @@
+NPP_GetMIMEDescription
+NPP_GetValue
+NPP_Initialize
+NPP_GetJavaClass
+NPP_Shutdown
+NPP_New
+NPP_Destroy
+NPP_SetWindow
+NPP_NewStream
+NPP_WriteReady
+NPP_Write
+NPP_DestroyStream
+NPP_StreamAsFile
+NPP_URLNotify
+NPP_Print
+NPP_Shutdown

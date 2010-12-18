@@ -1,0 +1,47 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef SW_WORDCOUNTDIALOG_HRC
+#define SW_WORDCOUNTDIALOG_HRC
+#define FL_CURRENT                                1
+#define FT_CURRENTWORD                            2
+#define FI_CURRENTWORD                            3
+#define FT_CURRENTCHARACTER                       4
+#define FI_CURRENTCHARACTER                       5
+#define FT_CURRENTCHARACTEREXCLUDINGSPACES        6
+#define FI_CURRENTCHARACTEREXCLUDINGSPACES        7
+#define FL_DOC                                    8
+#define FT_DOCWORD                                9
+#define FI_DOCWORD                               10
+#define FT_DOCCHARACTER                          11
+#define FI_DOCCHARACTER                          12
+#define FT_DOCCHARACTEREXCLUDINGSPACES           13
+#define FI_DOCCHARACTEREXCLUDINGSPACES           14
+#define FL_BOTTOM                                15
+#define PB_OK                                    16
+#define PB_HELP                                  17
+
+#endif

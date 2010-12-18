@@ -1,0 +1,107 @@
+/* In this file the idl struct will be tested.
+  bla
+ */
+
+/// idlc defines a test module
+module idlc
+{
+
+/// test defines a test module
+module test
+{
+
+typedef sequence< long > Id;
+//struct Bla
+//{
+//  long bla;
+//};
+
+/** bla
+   BaseStruct defines an * intial struct
+ */
+struct BaseStruct
+{
+    Id Id;
+
+    /// a short  member
+    short   m1;
+
+    /// a unsigned short  member
+    unsigned short  m2;
+
+    /// a long member
+    long    m3;
+
+    /// a unsigned long  member
+    unsigned long   m4;
+
+    /// a hyper member
+    hyper   m5;
+
+    /// a unsigned hyper  member
+    unsigned hyper  m6;
+
+    /// a string member
+    string  m7;
+
+    /// a byte member
+    byte    m8;
+
+    /// a type member
+    type    m9;
+
+    /// a float member
+    float   m10;
+
+    /// a double member
+    double  m11;
+
+    /// a char member
+    char    m12;
+
+    /// a boolean member
+    boolean m13;
+
+    /// a any member
+    any     m14;
+};
+
+interface XTestBaseTypes;
+
+typedef sequence< long > LongSeq;
+
+typedef sequence< LongSeq > LongSeqSeq;
+
+/** TestStruct deinfes a struct which inherits
+    from the base strcut type BaseStruct.
+*/
+struct TestStruct : BaseStruct
+{
+    /// a sequence< long > member
+    sequence< long >    ms1;
+
+    /// a sequence< sequence< long > > member
+    sequence< sequence< long > >    ms2;
+
+    /// a long array member with dimesion 5,10
+//  long            ms3[5][10];
+
+    /// a string array member with dimension 4,8
+//  long[5][10]     ms4;
+
+    /// an interface member
+    XTestBaseTypes ms5;
+
+    /// a typedef  member
+    LongSeq ms6;
+
+    /// a further typedef  member
+    LongSeqSeq ms7;
+
+    /// a sequence typedef  member
+    sequence<LongSeq> ms8;
+
+};
+
+}; };
+

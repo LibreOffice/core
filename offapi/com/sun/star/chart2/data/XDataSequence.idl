@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_data_XDataSequence_idl
+#define com_sun_star_chart2_data_XDataSequence_idl
+
+#include <com/sun/star/uno/XInterface.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#include <com/sun/star/chart2/data/LabelOrigin.idl>
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+module data
+{
+
+/** allows access to a one-dimensional sequence of data.
+
+    <p>The data that is stored in this container may contain different
+    types.</p>
+ */
+interface XDataSequence : ::com::sun::star::uno::XInterface
+{
+    /** retrieves the data stored in this component.
+
+        @return a sequence containing the actual data.  This sequence
+                is a copy of the internal data.  Therefore changing
+                this object does not affect the content of the
+                XDataSequence object.
+     */
+    sequence< any >   getData();
+
+    /** returns the (UI) range representation string used by this
+        <type>XDataSequence</type>.
+     */
+    string getSourceRangeRepresentation();
+
+    /** creates a label that describes the origin of this data
+        sequence.
+
+        <p>This is useful, if a <type>XLabeledDataSequence</type> has
+        no label sequence.  In this case you can call this method at
+        the value sequence to obtain a fitting replacement label.</p>
+
+        <p>The sequence returned here may be empty if no suitable
+        label can be generated.</p>
+
+        <p>The strings returned should be localized.</p>
+
+        @param eLabelOrigin
+            denotes what part of the range should be used for label
+            generation. If you have, e.g., one cell only, the
+            parameter COLUMN enables you to get the name of the cell's
+            column, the parameter ROW will give you its row name.
+
+            If you have a non quadratic range you can ask for labels for
+            the longer side with parameter LONG_SIDE or you can obtain labels
+            for the shorter side with parameter SHORT_SIDE.
+
+            If the range is not structured in a tabular way you may receive
+            no label.
+
+        @return
+            Suitable labels for the given sequence depending on the range
+            of the sequence and the parameter <code>eLabelOrigin</code> passed.
+            In a spreadsheet this would typically be a label like "Column x"
+            for the short side used as DataSeries name and maybe a
+            sequence "Row 1" "Row 2" "Row 3" for the long side to be used
+            as categories for example.
+
+        Example: Assuming this sequence has a Range representation spanning
+        row 5 and 6 in column 8. Following sequences of strings or similar strings
+        are expected as return values:
+
+        generateLabel( SHORT_SIDE ) -> "Column 8"
+        generateLabel( LONG_SIDE )  -> "Row 5" "Row 6"
+        generateLabel( COLUMN )     -> "Column 8"
+        generateLabel( ROW )        -> "Row 5" "Row 6"
+
+        Which strings exactly you return depends on the naming scheme of the application
+        which provides its tabular data.
+     */
+    sequence< string > generateLabel( [in] com::sun::star::chart2::data::LabelOrigin eLabelOrigin );
+
+    /** returns a number format key for the value at the given index
+        in the data sequence. If nIndex is -1, a key for the entire
+        sequence should be returned, e.g. the most commonly used one.
+
+        <p>If number formats are not supported, or there is no
+        heuristic to return a key for the entire series, return 0
+        here.</p>
+
+        <p>The number format key must be valid for the
+        <type scope="com::sun::star::util">XNumberFormatsSupplier</type>
+        given by the <type>XDataProvider</type>, or 0 which is assumed
+        to be always valid.</p>
+     */
+    long getNumberFormatKeyByIndex( [in] long nIndex )
+        raises( ::com::sun::star::lang::IndexOutOfBoundsException );
+};
+
+} ; // data
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+
+#endif

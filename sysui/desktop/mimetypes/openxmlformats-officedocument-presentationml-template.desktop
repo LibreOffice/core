@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Hidden=false
+Icon=
+Type=MimeType
+Patterns=*.potx
+MimeType=application/vnd.openxmlformats-officedocument.presentationml.template
+Comment=Microsoft PowerPoint Presentation Template

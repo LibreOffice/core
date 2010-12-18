@@ -1,0 +1,7 @@
+at  migrationanalysis   :   soltools shell NULL
+at	migrationanalysis\src\msokill           nmake    -  w  at_src NULL
+at  migrationanalysis\src\driver_docs       nmake    -  w  at_src_driver NULL
+at  migrationanalysis\src\resources         nmake    -  w  at_src_resources NULL
+at  migrationanalysis\src\wizard            nmake    -  w  at_src_wizard NULL
+at  migrationanalysis\util                  nmake    -  w  at_util at_src.w at_src_driver.w at_src_resources.w at_src_wizard.w NULL
+

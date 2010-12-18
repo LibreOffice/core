@@ -1,0 +1,10 @@
+; XCallback_Impl.def : Declares the module parameters.
+
+LIBRARY      "XCallback_Impl.DLL"
+
+EXPORTS
+	DllCanUnloadNow     PRIVATE
+	DllGetClassObject   PRIVATE
+	DllRegisterServer   PRIVATE
+	DllUnregisterServer	PRIVATE
+

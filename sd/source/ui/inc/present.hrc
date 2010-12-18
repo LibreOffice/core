@@ -1,0 +1,67 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#include <sfx2/sfx.hrc>
+
+#define DLG_START_PRESENTATION  RID_APP_START+3
+#define BTN_OK 1
+#define BTN_CANCEL 1
+#define BTN_HELP 1
+
+#define GRP_RANGE 1
+#define RBT_ALL 1
+#define RBT_AT_DIA 2
+#define RBT_CUSTOMSHOW 3
+#define LB_DIAS 1
+#define LB_CUSTOMSHOW 2
+
+#define GRP_KIND 2
+#define RBT_STANDARD 4
+#define RBT_WINDOW 5
+#define RBT_AUTO 6
+#define FT_PAUSE 1
+#define TMF_PAUSE 1
+#define CBX_AUTOLOGO 1
+
+#define GRP_OPTIONS 3
+#define CBX_MANUEL 2
+#define CBX_MOUSEPOINTER 3
+#define CBX_PEN 4
+#define CBX_NAVIGATOR 5
+#define CBX_ANIMATION_ALLOWED 6
+#define CBX_CHANGE_PAGE 7
+#define CBX_ALWAYS_ON_TOP 8
+
+#define GRP_MONITOR 9
+#define FT_MONITOR 10
+#define LB_MONITOR 11
+
+#define STR_PRIMARY_MONITOR 1
+#define STR_MONITOR 2
+#define STR_ALL_MONITORS 3
+
+// #define CBX_ENDLESS 1
+// #define CBX_WINDOW_PRESENTATION 9

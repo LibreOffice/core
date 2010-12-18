@@ -1,0 +1,239 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+interface TableDraw
+{
+    // support assign macro for shape objects
+    SID_ASSIGNMACRO             [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
+
+     // Drawing geht von Basic aus gar nicht, darum alles mit Export = FALSE
+
+    FID_DEFINE_NAME             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_OPTSOLVER       [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_PIVOTTABLE      [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_TABOP           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_FILTER                  [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_SPECIAL_FILTER          [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_DEFINE_DBNAME           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_CONSOLIDATE     [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_EDIT_PRINTAREA  [ StateMethod = StateDisableItems; Export = FALSE; ]
+     // andere:
+    SID_DRAW_CHART              [ StateMethod = StateDisableItems; Export = FALSE; ]
+     //!    SID_STYLE_DESIGNER  [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_CATALOG           [ StateMethod = StateDisableItems; Export = FALSE; ]
+     //!    SID_OPENDLG_FUNCTION[ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_FAMILY2           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_FAMILY4           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_APPLY             [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_WATERCAN          [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_NEW_BY_EXAMPLE    [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_UPDATE_BY_EXAMPLE [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_NEW               [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_EDIT              [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_STYLE_DELETE            [ StateMethod = StateDisableItems; Export = FALSE; ]
+
+     //----------------------------------------------------------------------------
+    SID_TEXT_STANDARD       [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
+    SID_DRAWTEXT_ATTR_DLG   [ ExecMethod = ExecDrawAttr; StateMethod = NoState; Export = FALSE; ]
+
+     // ---- Slot-IDs fuer Objectbar:
+    SID_COLOR_TABLE         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_GRADIENT_LIST       [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_HATCH_LIST          [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_BITMAP_LIST         [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_DASH_LIST           [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_LINEEND_LIST        [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+     // Flaechen-Attribute
+    SID_ATTR_FILL_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+
+    // #i25616#
+    SID_ATTR_FILL_SHADOW
+    [
+        ExecMethod = ExecDrawAttr;
+        StateMethod = GetDrawAttrState;
+        Export = FALSE;
+    ]
+
+    SID_ATTR_FILL_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_FILL_GRADIENT  [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_FILL_HATCH     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_FILL_BITMAP    [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+     // ---- Linien-Attribute:
+    SID_ATTR_LINE_STYLE     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINEEND_STYLE  [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_ATTR_LINE_DASH      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINE_WIDTH     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_LINE_COLOR     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTRIBUTES_AREA     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_ATTRIBUTES_LINE     [ ExecMethod = ExecDrawAttr; StateMethod = GetAttrFuncState; Export = FALSE; ]
+    SID_ATTR_TRANSFORM      [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+     // ---- Ausrichtungs - Funktionen:
+     //!    PseudoSlots gibt Aerger mit Referenz-Dialogen ???
+    SID_OBJECT_ALIGN
+    [
+         //     PseudoSlots = TRUE;
+        PseudoSlots = FALSE ;
+        Export = FALSE ;
+         //     PseudoPrefix = SID_OBJECT_ALIGN;
+        ExecMethod = ExecDrawFunc ;
+        StateMethod = NoState ;
+        GroupId = GID_FORMAT ;
+        FastCall , Cachable ;
+        ToolBoxConfig ;
+    ]
+    SID_OBJECT_ALIGN_LEFT   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ALIGN_CENTER [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ALIGN_RIGHT  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ALIGN_UP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ALIGN_MIDDLE [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ALIGN_DOWN   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    // pseudo slots from Format menu
+    SID_ALIGN_ANY_LEFT      [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ALIGN_ANY_HCENTER   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ALIGN_ANY_RIGHT     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ALIGN_ANY_TOP       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ALIGN_ANY_VCENTER   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ALIGN_ANY_BOTTOM    [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+     // ---- andere Funktionen:
+    SID_OBJECT_HEAVEN   [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_HELL     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FRAME_TO_TOP    [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FRAME_TO_BOTTOM [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FRAME_UP        [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_FRAME_DOWN      [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_GROUP           [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_UNGROUP         [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ENTER_GROUP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_LEAVE_GROUP     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+     // !!! special
+    SID_DELETE          [ExecMethod = ExecDrawFunc ;StateMethod = GetDrawFuncState; Export = FALSE ;]
+
+    /*
+    SfxVoidItem Delete SID_DELETE ( )
+    [
+        ExecMethod = ExecDrawFunc ;
+        StateMethod = GetDrawFuncState ;
+        Export = FALSE ;
+        GroupId = GID_EDIT ;
+        FastCall , Cachable ;
+        ToolBoxConfig , MenuConfig , AccelConfig ;
+    ]
+    */
+    SID_DELETE_CONTENTS [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_CUT             [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_COPY            [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_SELECTALL       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OBJECT_ROTATE   [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_OBJECT_MIRROR   [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_BEZIER_EDIT     [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_MIRROR_HORIZONTAL[ ExecMethod = ExecDrawFunc;StateMethod = GetDrawFuncState; Export = FALSE; ]
+    /*
+    SfxVoidItem ObjectMirrorHorizontal SID_MIRROR_HORIZONTAL ( )
+    [
+        StateMethod = GetDrawFuncState ;
+        Export = FALSE ;
+        GroupId = GID_FORMAT ;
+        Cachable ;
+        MenuConfig ;  //FS
+    ]
+    */
+    SID_MIRROR_VERTICAL     [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ANCHOR_PAGE         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_ANCHOR_TOGGLE       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_ANCHOR_CELL         [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+     // ---- FontWork:
+    SID_FONTWORK            [ ExecMethod = ExecDrawFunc; StateMethod = GetState; Export = FALSE; ]
+    SID_FORMTEXT_STYLE      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_ADJUST     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_DISTANCE   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_START      [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_MIRROR     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_HIDEFORM   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_OUTLINE    [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHADOW     [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWCOLOR  [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWXVAL   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_SHDWYVAL   [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_FORMTEXT_STDFORM    [ ExecMethod = ExecFormText; StateMethod = GetFormTextState; Export = FALSE; ]
+    SID_ATTR_POSITION       [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ATTR_SIZE           [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_TABLE_CELL          [ StateMethod = GetDrawAttrState; Export = FALSE; ]
+    SID_ORIGINALSIZE        [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteHLink; Export = FALSE; ]
+    SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; Export = FALSE; ]
+    SID_ENABLE_HYPHENATION  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    // #i68101#
+    SID_TITLE_DESCRIPTION_OBJECT [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_RENAME_OBJECT       [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
+
+    SID_FORMATPAINTBRUSH    [ ExecMethod = ExecFormatPaintbrush; StateMethod = StateFormatPaintbrush; ]
+
+    SID_OPEN_XML_FILTERSETTINGS     [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TOOGLE            [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_DOWN         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_UP           [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_LEFT         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_TILT_RIGHT        [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH_FLOATER     [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH_DIALOG      [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DIRECTION_FLOATER [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_FLOATER  [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_SURFACE_FLOATER   [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_3D_COLOR          [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DEPTH             [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_DIRECTION         [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_PROJECTION        [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_DIRECTION[ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_LIGHTING_INTENSITY[ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_EXTRUSION_SURFACE           [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+
+    SID_FONTWORK_SHAPE                      [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_SHAPE_TYPE                 [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_ALIGNMENT_FLOATER          [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_CHARACTER_SPACING_FLOATER  [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_ALIGNMENT                  [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_SAME_LETTER_HEIGHTS        [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_CHARACTER_SPACING          [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_KERN_CHARACTER_PAIRS       [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+    SID_FONTWORK_CHARACTER_SPACING_DIALOG   [ ExecMethod = ExecDrawFunc ; StateMethod = GetDrawFuncState ; ]
+
+// ISSUE66550_HLINK_FOR_SHAPES
+    SID_DRAW_HLINK_EDIT             [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_DRAW_HLINK_DELETE           [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+    SID_OPEN_HYPERLINK              [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawFuncState; Export = FALSE; ]
+}
+
+
+ // ===========================================================================
+shell ScDrawShell
+{
+    import TableDraw;
+}

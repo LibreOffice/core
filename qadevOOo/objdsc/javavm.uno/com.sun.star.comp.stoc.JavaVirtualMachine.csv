@@ -1,0 +1,6 @@
+"JavaVirtualMachine";"com::sun::star::java::XJavaThreadRegister_11";"isThreadAttached()"
+"JavaVirtualMachine";"com::sun::star::java::XJavaThreadRegister_11";"registerThread()"
+"JavaVirtualMachine";"com::sun::star::java::XJavaThreadRegister_11";"revokeThread()"
+"JavaVirtualMachine";"com::sun::star::java::XJavaVM";"getJavaVM()"
+"JavaVirtualMachine";"com::sun::star::java::XJavaVM";"isVMStarted()"
+"JavaVirtualMachine";"com::sun::star::java::XJavaVM";"isVMEnabled()"

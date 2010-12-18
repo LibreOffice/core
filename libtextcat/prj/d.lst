@@ -1,0 +1,12 @@
+
+..\%__SRC%\lib\lib*.*        %_DEST%\lib%_EXT%\lib*.*
+..\%__SRC%\lib\ilib*.*        %_DEST%\lib%_EXT%\ilib*.*
+..\%__SRC%\bin\l*.dll         %_DEST%\bin%_EXT%\*.dll
+
+mkdir: %_DEST%\inc%_EXT%\libtextcat
+..\%__SRC%\misc\build\libtextcat-2.2\src\*.h %_DEST%\inc%_EXT%\libtextcat\*.h
+
+# data for language guessing
+..\data\new_fingerprints\fpdb.conf %COMMON_DEST%\pck%_EXT%\fpdb.conf
+..\data\new_fingerprints\lm\*.lm   %COMMON_DEST%\pck%_EXT%\*.lm
+

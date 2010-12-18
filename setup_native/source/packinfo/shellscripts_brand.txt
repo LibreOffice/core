@@ -1,0 +1,69 @@
+%preinstall << END
+END
+
+%postinstall << END
+
+# echo Command after installing
+# searching for the PRODUCTINSTALLLOCATION for the different platforms
+platform=`uname -s`
+case $$platform in
+SunOS)
+  BASISPACKAGE=openofficeorg-core01
+  BASISDIR=`pkginfo -r $$BASISPACKAGE`
+  PRODUCTINSTALLLOCATION="$$BASEDIR"
+  ;;
+Linux)
+  BASISPACKAGE=libreoffice-core01
+  BASISDIR=`rpm -q --queryformat "%{INSTALLPREFIX}" $$BASISPACKAGE`
+  PRODUCTINSTALLLOCATION="$$RPM_INSTALL_PREFIX"
+  ;;
+*)
+  PRODUCTINSTALLLOCATION="$$BASEDIR" 
+  ;;
+esac
+
+# creating link to basis layer
+if [ -d $$BASISDIR/libreoffice/basisBASISDIRECTORYVERSION ]
+then
+      ln -s $$BASISDIR/libreoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+else
+      ln -s ../libreoffice/basisBASISDIRECTORYVERSION $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link >/dev/null 2>&1
+fi
+
+exit 0
+END
+
+%preremove << END
+END
+
+%postremove << END
+# echo Command after removing
+
+LASTUNINSTALL=1	# important for RPM deinstallation
+
+# searching for the PRODUCTINSTALLLOCATION for the different platforms
+platform=`uname -s`
+case $$platform in
+SunOS)
+  PRODUCTINSTALLLOCATION="$$BASEDIR"
+  ;;
+Linux)
+  PRODUCTINSTALLLOCATION="$$RPM_INSTALL_PREFIX"
+  if [ "$$1" = 1 ]	# one package left after deinstallation -> update
+  then
+    LASTUNINSTALL=0
+  fi
+  ;;
+*)
+  PRODUCTINSTALLLOCATION="$$BASEDIR" 
+  ;;
+esac
+
+if [ -h $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link -a $$LASTUNINSTALL -eq 1 ]
+then
+  rm -f $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME/basis-link 2>/dev/null
+  rmdir $$PRODUCTINSTALLLOCATION/PRODUCTDIRECTORYNAME 2>/dev/null
+fi
+
+exit 0
+END

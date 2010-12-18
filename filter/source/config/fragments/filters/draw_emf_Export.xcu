@@ -1,0 +1,13 @@
+    <node oor:name="draw_emf_Export" oor:op="replace">
+        <prop oor:name="Flags"><value>EXPORT ALIEN SUPPORTSSELECTION</value></prop>
+        <prop oor:name="UIComponent"><value>com.sun.star.svtools.SvFilterOptionsDialog</value></prop>
+        <prop oor:name="FilterService"/>
+        <prop oor:name="UserData"><value></value></prop>
+        <prop oor:name="UIName">
+            <value xml:lang="x-default">EMF - Enhanced Metafile</value>
+        </prop>
+        <prop oor:name="FileFormatVersion"><value>0</value></prop>
+        <prop oor:name="Type"><value>emf_MS_Windows_Metafile</value></prop>
+        <prop oor:name="TemplateName"/>
+        <prop oor:name="DocumentService"><value>com.sun.star.drawing.DrawingDocument</value></prop>
+    </node>

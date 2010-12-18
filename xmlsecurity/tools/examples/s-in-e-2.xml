@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+XML Security Library example: Simple encryption template file for encrypt1 example.
+-->
+<Envelope xmlns="urn:envelope">
+  a signature in an encryption.
+  <EncryptedData xmlns="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+    <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#tripledes-cbc"></EncryptionMethod>
+    <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <EncryptedKey xmlns="http://www.w3.org/2001/04/xmlenc#">
+          <EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
+          <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+            <X509Data>
+            <X509IssuerSerial>
+                <X509IssuerName>CN=Test Issuer</X509IssuerName>
+                <X509SerialNumber>123450001</X509SerialNumber>
+            </X509IssuerSerial>
+            </X509Data>
+          </KeyInfo>
+          <CipherData>
+            <CipherValue/>
+          </CipherData>
+        </EncryptedKey>
+    </KeyInfo>
+    <CipherData>
+      <CipherValue/>
+    </CipherData>
+  </EncryptedData>
+  <Data>
+      Hello, World! the Following is a Signature
+        <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+            <SignedInfo>
+              <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+              <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+              <Reference URI="#target">
+                <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                <DigestValue> </DigestValue>
+              </Reference>
+            </SignedInfo>
+            <SignatureValue> </SignatureValue>
+            <KeyInfo>
+              <X509Data>
+                <X509IssuerSerial>
+                    <X509IssuerName>CN=Test Issuer</X509IssuerName>
+                    <X509SerialNumber>123450005</X509SerialNumber>
+                </X509IssuerSerial>
+              </X509Data>
+            </KeyInfo>
+        </Signature>
+  </Data>
+  <SignData id="target" refNum="1">Signed Data</SignData>
+</Envelope>
+

@@ -1,0 +1,6 @@
+[ComponentDescriptor]
+ImplementationName=com.sun.star.comp.GnomeVFSContentProvider
+ComponentName=ucpgvfs1.uno.so
+LoaderName=com.sun.star.loader.SharedLibrary
+[SupportedServices]
+com.sun.star.ucb.GnomeVFSContentProvider

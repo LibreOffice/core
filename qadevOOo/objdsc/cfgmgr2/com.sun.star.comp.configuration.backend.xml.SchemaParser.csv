@@ -1,0 +1,6 @@
+"SchemaParser";"com::sun::star::configuration::backend::XSchema";"readSchema()"
+"SchemaParser";"com::sun::star::configuration::backend::XSchema";"readComponent()"
+"SchemaParser";"com::sun::star::configuration::backend::XSchema";"readTemplates()"
+"SchemaParser";"com::sun::star::lang::XInitialization";"initialize()"
+"SchemaParser";"com::sun::star::io::XActiveDataSink";"setInputStream()"
+"SchemaParser";"com::sun::star::io::XActiveDataSink";"getInputStream()"

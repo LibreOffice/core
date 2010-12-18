@@ -1,0 +1,93 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_chart_ChartDataCaption_idl__
+#define __com_sun_star_chart_ChartDataCaption_idl__
+
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module chart {
+
+//=============================================================================
+
+/** These values specify how the captions of data points are displayed.
+ */
+published constants ChartDataCaption
+{
+    //-------------------------------------------------------------------------
+
+    /** No captions are displayed.
+     */
+    const long NONE = 0;
+
+    //-------------------------------------------------------------------------
+
+    /** The caption contains the value of the data point in the number
+        format of the axis that is attached to the respective data
+        series.
+     */
+    const long VALUE = 1;
+
+    //-------------------------------------------------------------------------
+
+    /** The caption contains the value of the data point in percent of
+        all data points of one category.
+
+        <p>That means, if a data point is the first one of a series,
+        the percentage is calculated by using the first data points of
+        all available series.</p>
+     */
+    const long PERCENT = 2;
+
+    //-------------------------------------------------------------------------
+
+    /** The caption contains the category name of the category to
+        which a data point belongs.
+     */
+    const long TEXT = 4;
+
+    //-------------------------------------------------------------------------
+
+    /** The number formatter is always used for displaying the value
+        as value.  So this setting is deprecated.
+
+        @deprecated
+     */
+    const long FORMAT = 8;
+
+    //-------------------------------------------------------------------------
+
+    /** The symbol of data column/row is additionally displayed in the caption.
+     */
+    const long SYMBOL = 16;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

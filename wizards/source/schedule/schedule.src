@@ -1,0 +1,357 @@
+/*************************************************************************
+ *
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ *
+ * Copyright 2000, 2010 Oracle and/or its affiliates.
+ *
+ * OpenOffice.org - a multi-platform office productivity suite
+ *
+ * This file is part of OpenOffice.org.
+ *
+ * OpenOffice.org is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License version 3
+ * only, as published by the Free Software Foundation.
+ *
+ * OpenOffice.org is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License version 3 for more details
+ * (a copy is included in the LICENSE file that accompanied this code).
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * version 3 along with OpenOffice.org.  If not, see
+ * <http://www.openoffice.org/license.html>
+ * for a copy of the LGPLv3 License.
+ *
+ ************************************************************************/// Dialog labels start at 1000
+#define dlgCalTitle 1000
+#define dlgCalTitleBack 1001
+#define dlgCalTitleOwnData  1002
+#define dlgSchdlTitle   1003
+#define dlgOK   1004
+#define dlgCancel   1005
+#define dlgCalFrameOption   1006
+#define dlgCalOptionYear    1007
+#define dlgCalOptionMonth   1008
+#define dlgSchdlDescription 1009
+#define dlgSchdlCountry 1010
+#define dlgTime 1011
+#define dlgYear 1012
+#define dlgCalMonth 1013
+#define dlgSpecificBankholidays 1014
+#define dlgCalOwnData   1015
+#define dlgCalInsert    1016
+#define dlgCalDelete    1017
+#define dlgCalNewEvent  1018
+#define dlgCalEvent 1019
+#define dlgCalEventOnce 1020
+#define dlgCalEventDay  1021
+#define dlgCalEventMonth    1022
+#define dlgCalEventYear 1023
+
+// Bitmap file is 1099
+#define dlgBitmapFile   1099
+
+// Names of states start at 1100
+#define dlgState    1100
+
+// Months start at 1200
+#define dlgMonth    1200
+
+// Messages start at 1300
+#define msgCalErrorTitle    1300
+#define msgCalError 1301
+#define msgCalRemoveTitle   1302
+#define msgCalRemove    1303
+
+// Styles start at 1400
+#define stlWorkday  1400
+#define stlWeekend  1401
+
+// Sheet names start at 1410
+#define nameCalYear 1410
+#define nameCalMonth    1411
+
+#define sProgress   1500
+
+// --------------------------------------------------------------------
+
+String dlgCalTitle
+{
+Text [ en-US ] = "%PRODUCTNAME Calendar";
+};
+
+String  dlgCalTitleBack
+{
+Text [ en-US ] = "Back";
+};
+
+String  dlgCalTitleOwnData
+{
+Text [ en-US ] = "Personal Data";
+};
+
+String dlgSchdlTitle
+{
+Text [ en-US ] = "Add Holidays to Calendar";
+};
+
+String dlgOK
+{
+Text [ en-US ] = "Create";
+};
+
+String dlgCancel
+{
+Text [ en-US ] = "Cancel";
+};
+
+String  dlgCalFrameOption
+{
+Text [ en-US ] = "Calendar";
+};
+
+String  dlgCalOptionYear
+{
+Text [ en-US ] = "~Year Overview";
+};
+
+String  dlgCalOptionMonth
+{
+Text [ en-US ] = "~Month";
+};
+
+String dlgSchdlDescription
+{
+Text [ en-US ] = "Add holidays for";
+};
+
+String dlgSchdlCountry
+{
+Text [ en-US ] = "USA";
+};
+
+String dlgTime
+{
+Text [ en-US ] = "Time Frame";
+};
+
+String dlgYear
+{
+Text [ en-US ] = "Year";
+};
+
+String dlgCalMonth
+{
+Text [ en-US ] = "Month";
+};
+
+String  dlgSpecificBankholidays
+{
+Text [ en-US ] = "-";
+};
+
+String  dlgCalOwnData
+{
+Text [ en-US ] = "Personal Data";
+};
+
+String dlgCalInsert
+{
+Text [ en-US ] = "~Insert";
+};
+
+String dlgCalDelete
+{
+Text [ en-US ] = "~Delete";
+};
+
+String dlgCalNewEvent
+{
+Text [ en-US ] = "New Event";
+};
+
+String dlgCalEvent
+{
+Text [ en-US ] = "Event";
+};
+
+String dlgCalEventOnce
+{
+Text [ en-US ] = "One-Time";
+};
+
+String dlgCalEventDay
+{
+Text [ en-US ] = "Day";
+};
+
+String dlgCalEventMonth
+{
+Text [ en-US ] = "Month";
+};
+
+String dlgCalEventYear
+{
+Text [ en-US ] = "Year";
+};
+
+// --------------------------------------------------------------------
+
+String dlgBitmapFile
+{
+Text [ en-US ] = "usa.bmp";
+
+};
+
+// --------------------------------------------------------------------
+
+String dlgState
+{
+Text [ en-US ] = "Public holidays";
+};
+
+
+// --------------------------------------------------------------------
+
+String dlgMonth
+{
+Text [ en-US ] = "January";
+};
+
+String dlgMonth+1
+{
+Text [ en-US ] = "February";
+};
+
+String dlgMonth+2
+{
+Text [ en-US ] = "March";
+};
+
+String dlgMonth+3
+{
+Text [ en-US ] = "April";
+};
+
+String dlgMonth+4
+{
+Text [ en-US ] = "May";
+};
+
+String dlgMonth+5
+{
+Text [ en-US ] = "June";
+};
+
+String dlgMonth+6
+{
+Text [ en-US ] = "July";
+};
+
+String dlgMonth+7
+{
+Text [ en-US ] = "August";
+};
+
+String dlgMonth+8
+{
+Text [ en-US ] = "September";
+};
+
+String dlgMonth+9
+{
+Text [ en-US ] = "October";
+};
+
+String dlgMonth+10
+{
+Text [ en-US ] = "November";
+};
+
+String dlgMonth+11
+{
+Text [ en-US ] = "December";
+};
+
+// --------------------------------------------------------------------
+
+String msgCalErrorTitle
+{
+Text [ en-US ] = "Yearly / Monthly Calendar";
+};
+
+String msgCalError
+{
+Text [ en-US ] = "An error occurred while creating the calendar.";
+};
+
+String msgCalRemoveTitle
+{
+Text [ en-US ] = "Delete event entries";
+};
+
+String msgCalRemove
+{
+Text [ en-US ] = "Delete the selected entries?";
+};
+
+// --------------------------------------------------------------------
+
+String stlWorkday
+{
+Text [ en-US ] = "Workweek";
+};
+
+String stlWeekend
+{
+Text [ en-US ] = "Weekend";
+};
+
+// --------------------------------------------------------------------
+
+String  nameCalYear
+{
+Text [ en-US ] = "Calendar";
+};
+
+String  nameCalMonth
+{
+Text [ en-US ] = "Month";
+};
+
+
+
+String  sProgress
+{
+Text [ en-US ] = "Progress:";
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

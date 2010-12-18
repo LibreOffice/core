@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="sw_SwXParagraph" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+
+' REQUIRED VARIABLES for interface/service tests:
+
+' Required for  com.sun.star.lang.XComponent:
+  Global oComponentInstance As Object ' it will be disposed
+  Global bXTextContentImpossible As Boolean
+
+
+Sub CreateObj()
+
+'*************************************************************************
+' COMPONENT: 
+' sw.SwXParagraph
+'*************************************************************************
+On Error Goto ErrHndl
+
+    Dim bOK As Boolean
+    Dim nWidth As Integer
+    Dim nHeight As Integer
+    Dim cText As String
+    Dim oCursor As Object
+    Dim i As Integer
+    Dim oInstance As Object
+    Dim oEnum As Object
+
+    bOK = true
+
+    oDoc = utils.createDocument("swriter", cObjectName)
+
+    nWidth = 5000
+    nHeight = 4000
+    cText = ". Zeile : test of " &amp; cObjectName
+
+    oCursor = oDoc.Text.createTextCursor()
+
+    ' write some strings to document
+    for i = 1 to 10
+        oCursor.gotoEnd(false)
+        oDoc.Text.insertString(oCursor,Trim(Str(i)) &amp; cText,false)
+        oDoc.Text.insertControlCharacter(oCursor, 0, false)
+    next i
+
+    oCursor.gotoEnd(false)
+    oInstance = oDoc.createInstance("com.sun.star.text.TextFrame")
+    sSize = createUNOStruct("com.sun.star.awt.Size")
+    sSize.Height = nHeight
+    sSize.Width = nWidth
+    oInstance.Size = sSize
+    oInstance.SizeType = 1
+    oInstance.AnchorType = 0
+    oInstance.Name = cObjectName
+    oInstance.HoriOrient = 2
+    oInstance.VertOrient = 2
+    oDoc.Text.insertTextContent(oCursor, oInstance, false)
+
+    oEnum = oDoc.Text.createEnumeration()
+    oObj = oEnum.nextElement()
+    oComponentInstance = oEnum.nextElement()
+	 
+	bXTextContentImpossible = TRUE
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+End Sub
+</script:module>

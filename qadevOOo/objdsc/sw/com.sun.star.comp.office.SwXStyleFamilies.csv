@@ -1,0 +1,7 @@
+"SwXStyleFamilies";"com::sun::star::container::XNameAccess";"getByName()"
+"SwXStyleFamilies";"com::sun::star::container::XNameAccess";"getElementNames()"
+"SwXStyleFamilies";"com::sun::star::container::XNameAccess";"hasByName()"
+"SwXStyleFamilies";"com::sun::star::container::XIndexAccess#optional";"getCount()"
+"SwXStyleFamilies";"com::sun::star::container::XIndexAccess#optional";"getByIndex()"
+"SwXStyleFamilies";"com::sun::star::container::XElementAccess";"getElementType()"
+"SwXStyleFamilies";"com::sun::star::container::XElementAccess";"hasElements()"

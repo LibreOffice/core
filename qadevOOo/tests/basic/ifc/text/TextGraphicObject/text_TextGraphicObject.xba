@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
+<script:module xmlns:script="http://openoffice.org/2000/script" script:name="text_TextGraphicObject" script:language="StarBasic">
+
+
+'*************************************************************************
+'
+' DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+' 
+' Copyright 2000, 2010 Oracle and/or its affiliates.
+'
+' OpenOffice.org - a multi-platform office productivity suite
+'
+' This file is part of OpenOffice.org.
+'
+' OpenOffice.org is free software: you can redistribute it and/or modify
+' it under the terms of the GNU Lesser General Public License version 3
+' only, as published by the Free Software Foundation.
+'
+' OpenOffice.org is distributed in the hope that it will be useful,
+' but WITHOUT ANY WARRANTY; without even the implied warranty of
+' MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+' GNU Lesser General Public License version 3 for more details
+' (a copy is included in the LICENSE file that accompanied this code).
+'
+' You should have received a copy of the GNU Lesser General Public License
+' version 3 along with OpenOffice.org.  If not, see
+' <http://www.openoffice.org/license.html>
+' for a copy of the LGPLv3 License.
+'
+'*************************************************************************
+'*************************************************************************
+
+
+
+' Be sure that all variables are dimensioned:
+option explicit
+
+
+
+Sub RunTest()
+
+'*************************************************************************
+' SERVICE: 
+' com.sun.star.text.TextGraphicObject
+'*************************************************************************
+On Error Goto ErrHndl
+    Dim bOK As Boolean
+
+
+    PropertyTester.TestProperty("ContentProtected")
+
+    PropertyTester.TestProperty("SurroundContour")
+
+    PropertyTester.TestProperty("ContourOutside")
+
+    Test.StartMethod("ContourPolyPolygon")
+    ' Because in additional parameters we must to
+    ' pass an array of values, we need such array.
+    Dim aPParr1(1) As Variant
+    Dim aPol1(3) As new com.sun.star.awt.Point
+    Dim gArr As Variant
+    
+    bOK = true
+    aPol1(0).x = 0   : aPol1(0).y = 0
+    aPol1(1).x = 101 : aPol1(1).y = 0
+    aPol1(2).x = 101 : aPol1(2).y = 101
+    aPol1(3).x = 0   : aPol1(3).y = 101
+    Dim aPol2(3) As new com.sun.star.awt.Point
+    aPol2(0).x = 11 : aPol2(0).y = 11
+    aPol2(1).x = 90 : aPol2(1).y = 11
+    aPol2(2).x = 90 : aPol2(2).y = 90
+    aPol2(3).x = 11 : aPol2(3).y = 90
+    aPParr1(0) = aPol1() : aPParr1(1) = aPol2()
+    oObj.setPropertyValue("ContourPolyPolygon", aPParr1())
+    gArr = oObj.getPropertyValue("ContourPolyPolygon")
+    
+    if isArray(gArr) AND ubound(gArr) &gt;= 1 then
+        Dim aP1 As Variant, aP2 As Variant
+        
+        aP1 = gArr(0)
+        aP2 = gArr(1)
+        bOK = bOK AND comparePointArrays(aPol1(), aP1, 0, 0, 4)
+        bOK = bOK AND comparePointArrays(aPol2(), aP2, 0, 0, 4)
+
+        ' One more point must be added to close the polygon
+        bOK = bOK AND comparePointArrays(aPol1(), aP1, 0, 4, 1)
+        bOK = bOK AND comparePointArrays(aPol2(), aP2, 0, 4, 1)
+    else
+        Out.Log("Returned value is invalid")
+        Out.Log = false
+    endif
+    
+    Test.MethodTested("ContourPolyPolygon", bOK)
+        
+'    PropertyTester.TestProperty("ContourPolyPolygon",testArr())
+
+    Dim aCropArr(1) As Variant
+    Dim Crop1 As Object
+    Dim Crop2 As Object
+
+    Crop1 = createUnoStruct("com.sun.star.text.GraphicCrop")
+    Crop2 = createUnoStruct("com.sun.star.text.GraphicCrop")
+
+    Crop1.Top = 11 : Crop1.Bottom = 11 : Crop1.Left = 11 : Crop1.Right = 11
+    Crop2.Top = -11 : Crop2.Bottom = 11 : Crop2.Left = -11 : Crop2.Right = 11
+
+    aCropArr(0) = Crop1 : aCropArr(1) = Crop2
+    PropertyTester.TestProperty("GraphicCrop",aCropArr())
+
+    PropertyTester.TestProperty("HoriMirroredOnEvenPages")
+
+    PropertyTester.TestProperty("HoriMirroredOnOddPages")
+
+    PropertyTester.TestProperty("VertMirrored")
+
+    PropertyTester.TestProperty("GraphicURL")
+
+    PropertyTester.TestProperty("GraphicFilter")
+
+    PropertyTester.TestProperty("ActualSize")
+
+    Dim oAdjustArr(4) As Integer
+    oAdjustArr(0) = -100
+    oAdjustArr(1) = -50
+    oAdjustArr(2) = 0
+    oAdjustArr(3) = 50
+    oAdjustArr(4) = 100
+
+    PropertyTester.TestProperty("AdjustLuminance",oAdjustArr())
+
+    PropertyTester.TestProperty("AdjustContrast",oAdjustArr())
+
+    PropertyTester.TestProperty("AdjustRed",oAdjustArr())
+
+    PropertyTester.TestProperty("AdjustGreen",oAdjustArr())
+
+    PropertyTester.TestProperty("AdjustBlue",oAdjustArr())
+
+    PropertyTester.TestProperty("Gamma",oAdjustArr())
+
+    PropertyTester.TestProperty("GraphicIsInverted")
+
+    PropertyTester.TestProperty("Transparency",oAdjustArr())
+
+    PropertyTester.TestProperty("GraphicColorMode")
+
+    PropertyTester.TestProperty("ImageMap")
+
+    PropertyTester.TestProperty("ActualSize")
+
+Exit Sub
+ErrHndl:
+    Test.Exception()
+    bOK = false
+    resume next
+End Sub
+
+Function comparePointArrays(arr1 As Variant, arr2 As Variant, fromIdx1 As Integer, fromIdx2 As Integer, count As Integer) As Boolean
+On Error Goto ErrHndl
+    Dim bOK As Boolean   
+    Dim i As Integer 
+    
+    if NOT isArray(arr1) then
+        Out.Log("First parameter is not Array.")
+        comparePointArrays() = false
+        exit Function
+    endif
+
+    if NOT isArray(arr2) then
+        Out.Log("Second parameter is not Array.")
+        comparePointArrays() = false
+        exit Function
+    endif
+
+    if (lbound(arr1) &gt; fromIdx1 OR ubound(arr1) &lt; (fromIdx1 + count - 1)) then
+        Out.Log("Invalid bounds of the first array")
+        comparePointArrays() = false
+        exit Function
+    endif
+    if (lbound(arr2) &gt; fromIdx2 OR ubound(arr2) &lt; (fromIdx2 + count - 1)) then
+        Out.Log("Invalid bounds of the second array")
+        comparePointArrays() = false
+        exit Function
+    endif
+
+    bOK = true
+    for i = 0 to count - 1
+        if arr1(fromIdx1 + i).x &lt;&gt; arr2(fromIdx2 + i).x OR _
+           arr1(fromIdx1 + i).y &lt;&gt; arr2(fromIdx2 + i).y then
+
+            Out.Log("Points #" + i + " are different : (" + _
+                arr1(fromIdx1 + i).x + "," + arr1(fromIdx1 + i).y + "), (" + _
+                arr2(fromIdx2 + i).x + "," + arr2(fromIdx2 + i).y + ")."
+                
+            bOK = false
+        end if
+    next i
+
+    comparePointArrays() = bOK
+    
+    exit Function
+ErrHndl:
+    Test.Exception()
+    comparePointArrays() = false
+End Function
+</script:module>

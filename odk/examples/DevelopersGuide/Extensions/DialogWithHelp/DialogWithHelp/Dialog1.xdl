@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Dialog1" dlg:left="244" dlg:top="200" dlg:width="201" dlg:height="169" dlg:help-url="com.foocorp.foo-ext:FooDialog" dlg:closeable="true" dlg:moveable="true" dlg:title="Foo Dialog">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="CommandButton1" dlg:tab-index="0" dlg:left="26" dlg:top="26" dlg:width="75" dlg:height="35" dlg:help-url="com.foocorp.foo-ext:FooDialogButton" dlg:value="Do it !">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.script:DialogWithHelp.Module1.HandleDoIt?language=Basic&amp;location=application" script:language="Script"/>
+  </dlg:button>
+  <dlg:button dlg:id="CommandButton2" dlg:tab-index="1" dlg:left="88" dlg:top="100" dlg:width="87" dlg:height="38" dlg:value="Dummy Button, no help"/>
+ </dlg:bulletinboard>
+</dlg:window>
