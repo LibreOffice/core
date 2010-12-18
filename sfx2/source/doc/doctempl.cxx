@@ -101,6 +101,10 @@ using namespace ::ucbhelper;
 #include <comphelper/storagehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 
+#include <vector>
+using ::std::vector;
+using ::std::advance;
+
 //========================================================================
 
 // #define DONT_USE_HIERARCHY
@@ -170,15 +174,14 @@ using namespace ::DocTempl;
 
 class RegionData_Impl
 {
-    DECLARE_LIST( EntryList_Impl, DocTempl_EntryData_Impl* )
     const SfxDocTemplate_Impl*  mpParent;
-    EntryList_Impl              maEntries;
+    vector< DocTempl_EntryData_Impl* > maEntries;
     OUString                    maTitle;
     OUString                    maOwnURL;
     OUString                    maTargetURL;
 
 private:
-    long                        GetEntryPos( const OUString& rTitle,
+    size_t                      GetEntryPos( const OUString& rTitle,
                                              sal_Bool& rFound ) const;
     const SfxDocTemplate_Impl*  GetParent() const { return mpParent; }
 
@@ -190,7 +193,7 @@ public:
     void                SetTargetURL( const OUString& rURL ) { maTargetURL = rURL; }
     void                SetHierarchyURL( const OUString& rURL) { maOwnURL = rURL; }
 
-    DocTempl_EntryData_Impl*     GetEntry( ULONG nIndex ) const;
+    DocTempl_EntryData_Impl*     GetEntry( size_t nIndex ) const;
     DocTempl_EntryData_Impl*     GetEntry( const OUString& rName ) const;
     DocTempl_EntryData_Impl*     GetByTargetURL( const OUString& rName ) const;
 
@@ -198,21 +201,21 @@ public:
     const OUString&     GetTargetURL();
     const OUString&     GetHierarchyURL();
 
-    ULONG               GetCount() const;
+    size_t              GetCount() const;
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
 
     void                AddEntry( const OUString& rTitle,
                                   const OUString& rTargetURL,
-                                  USHORT *pPos = NULL );
-    void                DeleteEntry( ULONG nIndex );
+                                  size_t *pPos = NULL );
+    void                DeleteEntry( size_t nIndex );
 
     int                 Compare( const OUString& rTitle ) const
                             { return maTitle.compareTo( rTitle ); }
     int                 Compare( RegionData_Impl* pCompareWith ) const;
 };
 
-DECLARE_LIST( RegionList_Impl, RegionData_Impl* )
+typedef vector< RegionData_Impl* > RegionList_Impl;
 
 // ------------------------------------------------------------------------
 
@@ -251,21 +254,20 @@ public:
 
     void                Rescan();
 
-    void                DeleteRegion( ULONG nIndex );
+    void                DeleteRegion( size_t nIndex );
 
-    ULONG               GetRegionCount() const
-                            { return maRegions.Count(); }
+    size_t              GetRegionCount() const
+                            { return maRegions.size(); }
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
-    RegionData_Impl*    GetRegion( ULONG nIndex ) const;
+    RegionData_Impl*    GetRegion( size_t nIndex ) const;
     void                GetTemplates( Content& rTargetFolder,
                                       Content& rParentFolder,
                                       RegionData_Impl* pRegion );
 
-    long                GetRegionPos( const OUString& rTitle,
-                                      sal_Bool& rFound ) const;
+    size_t              GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const;
 
     sal_Bool            GetTitleFromURL( const OUString& rURL, OUString& aTitle );
-    sal_Bool            InsertRegion( RegionData_Impl *pData, ULONG nPos = LIST_APPEND );
+    sal_Bool            InsertRegion( RegionData_Impl *pData, size_t nPos = size_t(-1) );
     OUString            GetRootURL() const { return maRootURL; }
 
     uno::Reference< XDocumentTemplates >     getDocTemplates() { return mxTemplates; }
@@ -409,7 +411,7 @@ USHORT SfxDocumentTemplates::GetRegionNo
         return USHRT_MAX;
 
     sal_Bool    bFound;
-    ULONG       nIndex = pImp->GetRegionPos( rRegion, bFound );
+    size_t      nIndex = pImp->GetRegionPos( rRegion, bFound );
 
     if ( bFound )
         return (USHORT) nIndex;
@@ -977,7 +979,9 @@ sal_Bool SfxDocumentTemplates::CopyOrMove
             }
         }
 
-        pTargetRgn->AddEntry( aTitle, aNewTargetURL, &nTargetIdx );
+        // todo: fix SfxDocumentTemplates to handle size_t instead of USHORT
+        size_t temp_nTargetIdx = nTargetIdx;
+        pTargetRgn->AddEntry( aTitle, aNewTargetURL, &temp_nTargetIdx );
 
         return sal_True;
     }
@@ -1269,7 +1273,9 @@ sal_Bool SfxDocumentTemplates::CopyFrom
                 else
                     nIdx += 1;
 
-                pTargetRgn->AddEntry( aTitle, aTemplName, &nIdx );
+                // todo: fix SfxDocumentTemplates to handle size_t instead of USHORT
+                size_t temp_nIdx = nIdx;
+                pTargetRgn->AddEntry( aTitle, aTemplName, &temp_nIdx );
                 rName = aTitle;
                 return sal_True;
             }
@@ -2036,26 +2042,21 @@ RegionData_Impl::RegionData_Impl( const SfxDocTemplate_Impl* pParent,
 // -----------------------------------------------------------------------
 RegionData_Impl::~RegionData_Impl()
 {
-    DocTempl_EntryData_Impl *pData = maEntries.First();
-
-    while ( pData )
-    {
-        delete pData;
-        pData = maEntries.Next();
-    }
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
+        delete maEntries[ i ];
+    maEntries.clear();
 }
 
 // -----------------------------------------------------------------------
-long RegionData_Impl::GetEntryPos( const OUString& rTitle,
-                                   sal_Bool& rFound ) const
+size_t RegionData_Impl::GetEntryPos( const OUString& rTitle, sal_Bool& rFound ) const
 {
 #if 1   // Don't use binary search today
-    ULONG i;
-    ULONG nCount = maEntries.Count();
+    size_t i;
+    size_t nCount = maEntries.size();
 
     for ( i=0; i<nCount; i++ )
     {
-        DocTempl_EntryData_Impl *pData = maEntries.GetObject( i );
+        DocTempl_EntryData_Impl *pData = maEntries[ i ];
 
         if ( pData->Compare( rTitle ) == 0 )
         {
@@ -2072,9 +2073,9 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
     // in the maEntries list
 
     int     nCompVal = 1;
-    long    nStart = 0;
-    long    nEnd = maEntries.Count() - 1;
-    long    nMid;
+    size_t  nStart = 0;
+    size_t  nEnd = maEntries.size() - 1;
+    size_t  nMid;
 
     DocTempl_EntryData_Impl* pMid;
 
@@ -2083,7 +2084,7 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
     while ( nCompVal && ( nStart <= nEnd ) )
     {
         nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maEntries.GetObject( nMid );
+        pMid = maEntries[ nMid ];
 
         nCompVal = pMid->Compare( rTitle );
 
@@ -2110,7 +2111,7 @@ long RegionData_Impl::GetEntryPos( const OUString& rTitle,
 // -----------------------------------------------------------------------
 void RegionData_Impl::AddEntry( const OUString& rTitle,
                                 const OUString& rTargetURL,
-                                USHORT *pPos )
+                                size_t *pPos )
 {
     INetURLObject aLinkObj( GetHierarchyURL() );
     aLinkObj.insertName( rTitle, false,
@@ -2118,13 +2119,13 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
                       INetURLObject::ENCODE_ALL );
     OUString aLinkURL = aLinkObj.GetMainURL( INetURLObject::NO_DECODE );
 
-    DocTempl_EntryData_Impl *pEntry;
+    DocTempl_EntryData_Impl* pEntry;
     sal_Bool        bFound = sal_False;
-    long            nPos = GetEntryPos( rTitle, bFound );
+    size_t          nPos = GetEntryPos( rTitle, bFound );
 
     if ( bFound )
     {
-        pEntry = maEntries.GetObject( nPos );
+        pEntry = maEntries[ nPos ];
     }
     else
     {
@@ -2134,14 +2135,20 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
         pEntry = new DocTempl_EntryData_Impl( this, rTitle );
         pEntry->SetTargetURL( rTargetURL );
         pEntry->SetHierarchyURL( aLinkURL );
-        maEntries.Insert( pEntry, nPos );
+        if ( nPos < maEntries.size() ) {
+            vector< DocTempl_EntryData_Impl* >::iterator it = maEntries.begin();
+            advance( it, nPos );
+            maEntries.insert( it, pEntry );
+        }
+        else
+            maEntries.push_back( pEntry );
     }
 }
 
 // -----------------------------------------------------------------------
 ULONG RegionData_Impl::GetCount() const
 {
-    return maEntries.Count();
+    return maEntries.size();
 }
 
 // -----------------------------------------------------------------------
@@ -2194,7 +2201,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
     long        nPos = GetEntryPos( rName, bFound );
 
     if ( bFound )
-        return maEntries.GetObject( nPos );
+        return maEntries[ nPos ];
     else
         return NULL;
 }
@@ -2202,35 +2209,32 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) cons
 // -----------------------------------------------------------------------
 DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName ) const
 {
-    DocTempl_EntryData_Impl *pEntry;
-
-    ULONG nCount = maEntries.Count();
-
-    for ( ULONG i=0; i<nCount; i++ )
+    for ( size_t i = 0, n = maEntries.size(); i < n; ++i )
     {
-        pEntry = maEntries.GetObject( i );
-        if ( pEntry && ( pEntry->GetTargetURL() == rName ) )
+        DocTempl_EntryData_Impl *pEntry = maEntries[ i ];
+        if ( pEntry->GetTargetURL() == rName )
             return pEntry;
     }
-
     return NULL;
 }
 
 // -----------------------------------------------------------------------
 DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
 {
-    return maEntries.GetObject( nIndex );
+    if ( nIndex < maEntries.size() )
+        return maEntries[ nIndex ];
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
-void RegionData_Impl::DeleteEntry( ULONG nIndex )
+void RegionData_Impl::DeleteEntry( size_t nIndex )
 {
-    DocTempl_EntryData_Impl *pEntry = maEntries.GetObject( nIndex );
-
-    if ( pEntry )
+    if ( nIndex < maEntries.size() )
     {
-        delete pEntry;
-        maEntries.Remove( (ULONG) nIndex );
+        delete maEntries[ nIndex ];
+        vector< DocTempl_EntryData_Impl*>::iterator it = maEntries.begin();
+        advance( it, nIndex );
+        maEntries.erase( it );
     }
 }
 
@@ -2276,38 +2280,35 @@ void SfxDocTemplate_Impl::DecrementLock()
 }
 
 // -----------------------------------------------------------------------
-RegionData_Impl* SfxDocTemplate_Impl::GetRegion( ULONG nIndex ) const
+RegionData_Impl* SfxDocTemplate_Impl::GetRegion( size_t nIndex ) const
 {
-    return maRegions.GetObject( nIndex );
+    if ( nIndex < maRegions.size() )
+        return maRegions[ nIndex ];
+    return NULL;
 }
 
 // -----------------------------------------------------------------------
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
-    ULONG nCount = maRegions.Count();
-    RegionData_Impl *pData;
-
-    for ( ULONG i=0; i<nCount; i++ )
+    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
     {
-        pData = maRegions.GetObject( i );
-
-        if ( pData->GetTitle() == rName )
+        RegionData_Impl* pData = maRegions[ i ];
+        if( pData->GetTitle() == rName )
             return pData;
     }
-
     return NULL;
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTemplate_Impl::DeleteRegion( ULONG nIndex )
+void SfxDocTemplate_Impl::DeleteRegion( size_t nIndex )
 {
-    RegionData_Impl* pRegion = maRegions.GetObject( nIndex );
-
-    if ( pRegion )
+    if ( nIndex < maRegions.size() )
     {
-        delete pRegion;
-        maRegions.Remove( (ULONG) nIndex );
+        delete maRegions[ nIndex ];
+        RegionList_Impl::iterator it = maRegions.begin();
+        advance( it, nIndex );
+        maRegions.erase( it );
     }
 }
 
@@ -2526,20 +2527,19 @@ void SfxDocTemplate_Impl::GetTemplates( Content& rTargetFolder,
 
 
 // -----------------------------------------------------------------------
-long SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle,
-                                        sal_Bool& rFound ) const
+size_t SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle, sal_Bool& rFound ) const
 {
     int     nCompVal = 1;
-    long    nStart = 0;
-    long    nEnd = maRegions.Count() - 1;
-    long    nMid = 0;
+    size_t  nStart = 0;
+    size_t  nEnd = maRegions.size() - 1;
+    size_t  nMid = 0;
 
     RegionData_Impl* pMid;
 
     while ( nCompVal && ( nStart <= nEnd ) )
     {
         nMid = ( nEnd - nStart ) / 2 + nStart;
-        pMid = maRegions.GetObject( nMid );
+        pMid = maRegions[ nMid ];
 
         nCompVal = pMid->Compare( rTitle );
 
@@ -2563,27 +2563,29 @@ long SfxDocTemplate_Impl::GetRegionPos( const OUString& rTitle,
 }
 
 // -----------------------------------------------------------------------
-sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew,
-                                            ULONG nPos )
+sal_Bool SfxDocTemplate_Impl::InsertRegion( RegionData_Impl *pNew, size_t nPos )
 {
     ::osl::MutexGuard   aGuard( maMutex );
-    RegionData_Impl    *pData = maRegions.First();
 
-    while ( pData && ( pData->Compare( pNew ) != 0 ) )
-        pData = maRegions.Next();
+    // return false (not inserted) if the entry already exists
+    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
+        if ( maRegions[ i ]->Compare( pNew ) == 0 )
+            return sal_False;
 
-    if ( ! pData )
+    size_t newPos = nPos;
+    if ( pNew->GetTitle() == maStandardGroup )
+        newPos = 0;
+
+    if ( newPos < maRegions.size() )
     {
-        // compare with the name of the standard group here to insert it
-        // first
-
-        if ( pNew->GetTitle() == maStandardGroup )
-            maRegions.Insert( pNew, (ULONG) 0 );
-        else
-            maRegions.Insert( pNew, nPos );
+        RegionList_Impl::iterator it = maRegions.begin();
+        advance( it, newPos );
+        maRegions.insert( it, pNew );
     }
+    else
+        maRegions.push_back( pNew );
 
-    return ( pData == NULL );
+    return sal_True;
 }
 
 // -----------------------------------------------------------------------
@@ -2663,15 +2665,9 @@ void SfxDocTemplate_Impl::Clear()
     if ( mnLockCounter )
         return;
 
-    RegionData_Impl *pRegData = maRegions.First();
-
-    while ( pRegData )
-    {
-        delete pRegData;
-        pRegData = maRegions.Next();
-    }
-
-    maRegions.Clear();
+    for ( size_t i = 0, n = maRegions.size(); i < n; ++i )
+        delete maRegions[ i ];
+    maRegions.clear();
 }
 
 // -----------------------------------------------------------------------
