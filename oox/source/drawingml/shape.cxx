@@ -421,7 +421,7 @@ Reference< XShape > Shape::createAndInsert(
         if( mxCreateCallback.get() )
         {
             for ( aShapePropIter = mxCreateCallback->getShapeProperties().begin();
-                aShapePropIter != mxCreateCallback->getShapeProperties().end(); aShapePropIter++ )
+                aShapePropIter != mxCreateCallback->getShapeProperties().end(); ++aShapePropIter )
                 aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
         }
 
@@ -429,7 +429,7 @@ Reference< XShape > Shape::createAndInsert(
         if( mpTextBody.get() )
         {
             for ( aShapePropIter = mpTextBody->getTextProperties().maPropertyMap.begin();
-                aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); aShapePropIter++ )
+                aShapePropIter != mpTextBody->getTextProperties().maPropertyMap.end(); ++aShapePropIter )
                 aShapeProperties[ (*aShapePropIter).first ] = (*aShapePropIter).second;
         }
 
@@ -505,7 +505,7 @@ void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
     {
         if ( rDest.find( (*aSourceIter ).first ) == rDest.end() )
             rDest[ (*aSourceIter).first ] <<= (*aSourceIter).second;
-        aSourceIter++;
+        ++aSourceIter;
     }
 }
 
