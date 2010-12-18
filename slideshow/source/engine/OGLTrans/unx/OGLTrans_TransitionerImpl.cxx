@@ -761,7 +761,7 @@ void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >&
         (xEnteringSet->getFastPropertyValue( 1 ) >>= enterArgs) ) {
         OSL_TRACE ("pixmaps available");
 
-        sal_Int32 depth;
+        sal_Int32 depth(0);
 
         leaveArgs[0] >>= mbFreeLeavingPixmap;
         enterArgs[0] >>= mbFreeEnteringPixmap;
