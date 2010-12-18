@@ -36,6 +36,7 @@
 #include <vcl/msgbox.hxx>
 #include <vcl/sound.hxx>
 #include "svl/zforlist.hxx"
+#include "svl/zformat.hxx"
 
 #include "viewfunc.hxx"
 #include "detfunc.hxx"
@@ -302,7 +303,13 @@ void ScViewFunc::InsertCurrentTime(short nCellFmt, const OUString& rUndoStr)
     fTime /= D_TIMEFACTOR;
     pUndoMgr->EnterListAction(rUndoStr, rUndoStr);
     pDocSh->GetDocFunc().PutCell(aCurPos, new ScValueCell(fDate+fTime), false);
-    SetNumberFormat(nCellFmt);
+
+    // Set the new cell format only when it differs from the current cell
+    // format type.
+    sal_uInt32 nCurNumFormat = pDoc->GetNumberFormat(aCurPos);
+    const SvNumberformat* pEntry = pFormatter->GetEntry(nCurNumFormat);
+    if (!pEntry || !(pEntry->GetType() & nCellFmt))
+        SetNumberFormat(nCellFmt);
     pUndoMgr->LeaveListAction();
 }
 
