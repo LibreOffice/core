@@ -1851,7 +1851,6 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         DBG_ASSERT( pEntry, "no entry selected" );
         if (pEntry)
         {
-            long nVal = -1;
             OptionsUserData aData( (ULONG)pEntry->GetUserData() );
             if(aData.HasNumericValue())
             {
@@ -1869,7 +1868,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                 aDlg.GetNumericFld().SetValue( aData.GetNumericValue() );
                 if (RET_OK == aDlg.Execute() )
                 {
-                    nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
+                    long nVal = static_cast<long>(aDlg.GetNumericFld().GetValue());
                     if (-1 != nVal && aData.GetNumericValue() != nVal)
                     {
                         aData.SetNumericValue( (BYTE)nVal ); //! sets IsModified !
