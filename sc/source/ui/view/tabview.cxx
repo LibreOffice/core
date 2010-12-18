@@ -441,7 +441,6 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
     long nPosY = rOffset.Y();
     long nSizeX = rSize.Width();
     long nSizeY = rSize.Height();
-    long nSize1;
 
     bMinimized = ( nSizeX<=SC_ICONSIZE || nSizeY<=SC_ICONSIZE );
     if ( bMinimized )
@@ -608,7 +607,7 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
         nBarY = aHScrollLeft.GetSizePixel().Height();
         nBarX = aVScrollBottom.GetSizePixel().Width();
 
-        nSize1 = nSizeX + nOverlap;
+        long nSize1 = nSizeX + nOverlap;
 
         long nTabSize = nSize1;
         if (nTabSize < 0) nTabSize = 0;
