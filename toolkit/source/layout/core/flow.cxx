@@ -44,6 +44,7 @@ Flow::Flow()
     : Container()
     , mnSpacing( 0 )
     , mbHomogeneous( false )
+    , mnEachWidth( 0 )
 {
     addProp( RTL_CONSTASCII_USTRINGPARAM( "Homogeneous" ),
              ::getCppuType( static_cast< const sal_Bool* >( NULL ) ),
