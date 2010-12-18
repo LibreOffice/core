@@ -4551,7 +4551,6 @@ we check in the following sequence:
 // extract target file type
             INetURLObject aDocumentURL( m_aContext.BaseURL );
             INetURLObject aTargetURL( rLink.m_aURL );
-            sal_Int32   nChangeFileExtensionToPDF = 0;
             sal_Int32   nSetGoToRMode = 0;
             sal_Bool    bTargetHasPDFExtension = sal_False;
             INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
@@ -4590,18 +4589,19 @@ we check in the following sequence:
             {
                 if( m_aContext.ConvertOOoTargetToPDFTarget )
                 {
-//examine the file type (.odm .odt. .odp, odg, ods)
+                    sal_Int32 bChangeFileExtensionToPDF = false;
+                    //examine the file type (.odm .odt. .odp, odg, ods)
                     if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odm" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odt" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odp" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odg" ) ) ) )
-                        nChangeFileExtensionToPDF++;
+                        bChangeFileExtensionToPDF = true;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ods" ) ) ) )
-                        nChangeFileExtensionToPDF++;
-                    if( nChangeFileExtensionToPDF )
+                        bChangeFileExtensionToPDF = true;
+                    if( bChangeFileExtensionToPDF )
                         aTargetURL.setExtension(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
                 }
 //check if extension is pdf, see if GoToR should be forced
