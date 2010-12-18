@@ -388,7 +388,6 @@ const Atom* Atom::findNextChildAtom( sal_uInt16 nRecType, sal_uInt16 nRecInstanc
 Atom* Atom::findFirstEqualAtom( Atom* pCompare, Atom* pContainer, Atom* pSearch, int& nDistance )
 {
     nDistance = 0;
-    Atom* pRet = 0;
 
     while( pSearch )
     {
@@ -515,48 +514,7 @@ public:
         SvLBoxString::Paint( rPos, rOutDev, nViewDataEntryFlags, pEntry );
 
         rOutDev.SetTextColor( aOldTextColor );
-
-/*
-        Color aOldFillColor = rOutDev.GetFillColor();
-
-        SvTreeListBox* pTreeBox = static_cast< SvTreeListBox* >( &rOutDev );
-        long nX = pTreeBox->GetSizePixel().Width();
-
-        ScrollBar* pVScroll = pTreeBox->GetVScroll();
-        if ( pVScroll->IsVisible() )
-        {
-            nX -= pVScroll->GetSizePixel().Width();
-        }
-
-        SvViewDataItem* pItem = rOutDev.GetViewDataItem( pEntry, this );
-        nX -= pItem->aSize.Height();
-
-        long nSize = pItem->aSize.Height() / 2;
-        long nHalfSize = nSize / 2;
-        long nY = rPos.Y() + nHalfSize;
-
-        if ( aOldFillColor == COL_WHITE )
-        {
-            rOutDev.SetFillColor( Color( COL_BLACK ) );
-        }
-        else
-        {
-            rOutDev.SetFillColor( Color( COL_WHITE ) );
-        }
-
-        long n = 0;
-        while ( n <= nHalfSize )
-        {
-            rOutDev.DrawRect( Rectangle( nX+n, nY+n, nX+n, nY+nSize-n ) );
-            n++;
-        }
-
-        rOutDev.SetFillColor( aOldFillColor );
-*/
     }
-
-private:
-    Image* mpImage;
 };
 
 
