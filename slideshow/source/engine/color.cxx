@@ -229,8 +229,8 @@ namespace slideshow
         }
 
         RGBColor::RGBColor(const RGBColor& rLHS)
+            : maRGBTriple( rLHS.maRGBTriple )
         {
-            RGBColor(rLHS.getRed(), rLHS.getGreen(), rLHS.getBlue());
         }
 
         RGBColor& RGBColor::operator=( const RGBColor& rLHS ){
