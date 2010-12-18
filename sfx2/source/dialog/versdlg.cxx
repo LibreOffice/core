@@ -53,8 +53,10 @@
 #include <sfx2/request.hxx>
 
 #include <sfx2/sfxuno.hxx>
+#include <vector>
 
 using namespace com::sun::star;
+using ::std::vector;
 
 // **************************************************************************
 struct SfxVersionInfo
@@ -77,16 +79,18 @@ struct SfxVersionInfo
                                 return *this;
                             }
 };
-DECLARE_LIST( _SfxVersionTable, SfxVersionInfo* )
-class SfxVersionTableDtor : public _SfxVersionTable
+
+typedef vector< SfxVersionInfo* > _SfxVersionTable;
+
+class SfxVersionTableDtor
 {
+private:
+    _SfxVersionTable        aTableList;
 public:
                             SfxVersionTableDtor( const sal_uInt16 nInitSz=0, const sal_uInt16 nReSz=1 )
-                                : _SfxVersionTable( nInitSz, nReSz )
                             {}
 
-                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy ) :
-                                _SfxVersionTable( rCpy )
+                            SfxVersionTableDtor( const SfxVersionTableDtor &rCpy )
                             { *this = rCpy; }
 
                             SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo );
@@ -99,6 +103,12 @@ public:
     SvStream&               Read( SvStream & );
     SvStream&               Write( SvStream & ) const;
     SvStringsDtor*          GetVersions() const;
+
+    size_t                  size() const
+                            { return aTableList.size(); }
+
+    SfxVersionInfo*         at( size_t i ) const
+                            { return aTableList[ i ]; }
 };
 
 SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTag >& rInfo )
@@ -110,34 +120,28 @@ SfxVersionTableDtor::SfxVersionTableDtor( const uno::Sequence < util::RevisionTa
         pInfo->aComment = rInfo[n].Comment;
         pInfo->aAuthor = rInfo[n].Author;
 
-        Date aDate ( rInfo[n].TimeStamp.Day, rInfo[n].TimeStamp.Month, rInfo[n].TimeStamp.Year );
+        Date aDate ( rInfo[n].TimeStamp.Day,   rInfo[n].TimeStamp.Month,   rInfo[n].TimeStamp.Year );
         Time aTime ( rInfo[n].TimeStamp.Hours, rInfo[n].TimeStamp.Minutes, rInfo[n].TimeStamp.Seconds, rInfo[n].TimeStamp.HundredthSeconds );
 
         pInfo->aCreationDate = DateTime( aDate, aTime );
-        Insert( pInfo, Count() );
+        aTableList.push_back( pInfo );
     }
 }
 
 void SfxVersionTableDtor::DelDtor()
 {
-    SfxVersionInfo* pTmp = First();
-    while( pTmp )
-    {
-        delete pTmp;
-        pTmp = Next();
-    }
-    Clear();
+    for ( size_t i = 0, n = aTableList.size(); i < n; ++i )
+        delete aTableList[ i ];
+    aTableList.clear();
 }
 
 SfxVersionTableDtor& SfxVersionTableDtor::operator=( const SfxVersionTableDtor& rTbl )
 {
     DelDtor();
-    SfxVersionInfo* pTmp = ((SfxVersionTableDtor&)rTbl).First();
-    while( pTmp )
+    for ( size_t i = 0, n = rTbl.size(); i < n; ++i )
     {
-        SfxVersionInfo *pNew = new SfxVersionInfo( *pTmp );
-        Insert( pNew, LIST_APPEND );
-        pTmp = ((SfxVersionTableDtor&)rTbl).Next();
+        SfxVersionInfo* pNew = new SfxVersionInfo( *(rTbl.at( i )) );
+        aTableList.push_back( pNew );
     }
     return *this;
 }
@@ -161,17 +165,16 @@ static String ConvertDateTime_Impl(const DateTime& rTime, const LocaleDataWrappe
 SvStringsDtor* SfxVersionTableDtor::GetVersions() const
 {
     SvStringsDtor *pList = new SvStringsDtor;
-    SfxVersionInfo* pInfo = ((SfxVersionTableDtor*) this)->First();
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    while ( pInfo )
+
+    for ( size_t i = 0, n = aTableList.size(); i < n; ++i )
     {
+        SfxVersionInfo* pInfo = aTableList[ i ];
         String *pString = new String( pInfo->aComment );
         (*pString) += DEFINE_CONST_UNICODE( "; " );
         (*pString) += ConvertDateTime_Impl( pInfo->aCreationDate, aLocaleWrapper );
         pList->Insert( pString, pList->Count() );
-        pInfo = ((SfxVersionTableDtor*) this)->Next();
     }
-
     return pList;
 }
 
@@ -284,9 +287,9 @@ void SfxVersionDialog::Init_Impl()
     delete mpTable;
     mpTable = new SfxVersionTableDtor( aVersions );
     {
-        for ( USHORT n = 0; n < mpTable->Count(); ++n )
+        for ( size_t n = 0; n < mpTable->size(); ++n )
         {
-            SfxVersionInfo *pInfo = mpTable->GetObject(n);
+            SfxVersionInfo *pInfo = mpTable->at( n );
             String aEntry = ConvertDateTime_Impl( pInfo->aCreationDate, *mpLocaleWrapper );
             aEntry += '\t';
             aEntry += pInfo->aAuthor;
