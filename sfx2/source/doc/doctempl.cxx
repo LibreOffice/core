@@ -2146,7 +2146,7 @@ void RegionData_Impl::AddEntry( const OUString& rTitle,
 }
 
 // -----------------------------------------------------------------------
-ULONG RegionData_Impl::GetCount() const
+size_t RegionData_Impl::GetCount() const
 {
     return maEntries.size();
 }
@@ -2219,7 +2219,7 @@ DocTempl_EntryData_Impl* RegionData_Impl::GetByTargetURL( const OUString& rName 
 }
 
 // -----------------------------------------------------------------------
-DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
+DocTempl_EntryData_Impl* RegionData_Impl::GetEntry( size_t nIndex ) const
 {
     if ( nIndex < maEntries.size() )
         return maEntries[ nIndex ];
