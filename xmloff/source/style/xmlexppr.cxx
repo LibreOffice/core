@@ -308,7 +308,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
             FilterPropertyInfoList_Impl::iterator aOld = aPropInfos.begin();
             FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
             FilterPropertyInfoList_Impl::iterator aCurrent = aOld;
-            aCurrent++;
+            ++aCurrent;
 
             while ( aCurrent != aEnd )
             {
@@ -325,7 +325,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
                 {
                     // remember old element and continue with next
                     aOld = aCurrent;
-                    aCurrent++;
+                    ++aCurrent;
                 }
             }
         }
@@ -335,7 +335,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         OUString *pNames = pApiNames->getArray();
         FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
         FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
-        for ( ; aItr != aEnd; aItr++, pNames++)
+        for ( ; aItr != aEnd; ++aItr, ++pNames)
             *pNames = aItr->GetApiName();
     }
 
@@ -477,7 +477,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                         pPropIter = aPropIters.begin();
 
                     XMLPropertyState aNewProperty( -1 );
-                    for( i = 0; i < nValueCount; i++ )
+                    for( i = 0; i < nValueCount; ++i )
                     {
                         aNewProperty.mnIndex = -1;
                         aNewProperty.maValue = *pValues;
@@ -503,7 +503,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                 const Any *pValues = aValues.getConstArray();
 
                 FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-                for(sal_uInt32 i = 0; i < nCount; i++ )
+                for(sal_uInt32 i = 0; i < nCount; ++i)
                 {
                     // The value is stored in the PropertySet itself, add to list.
                     XMLPropertyState aNewProperty( -1 );
@@ -512,19 +512,19 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     for( std::list<sal_uInt32>::iterator aIndexItr =
                             aItr->GetIndexes().begin();
                         aIndexItr != aItr->GetIndexes().end();
-                        aIndexItr++ )
+                        ++aIndexItr )
                     {
                         aNewProperty.mnIndex = *aIndexItr;
                         aPropStates.AddPropertyState( aNewProperty );
                     }
-                    aItr++;
+                    ++aItr;
                 }
             }
         }
         else
         {
             FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
-            for(sal_uInt32 i = 0; i < nCount; i++ )
+            for(sal_uInt32 i = 0; i < nCount; ++i)
             {
                 sal_Bool bDirectValue =
                     !pStates || *pStates == PropertyState_DIRECT_VALUE;
@@ -536,7 +536,7 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     for( std::list<sal_uInt32>::const_iterator aIndexItr =
                             aItr->GetIndexes().begin();
                         aIndexItr != aItr->GetIndexes().end();
-                        aIndexItr++ )
+                        ++aIndexItr )
                     {
                         if( bDirectValue ||
                             (rPropMapper->GetEntryFlags( *aIndexItr ) &
@@ -563,9 +563,9 @@ void FilterPropertiesInfo_Impl::FillPropertyStateArray(
                     }
                 }
 
-                aItr++;
+                ++aItr;
                 if( pStates )
-                    pStates++;
+                    ++pStates;
             }
         }
     }
