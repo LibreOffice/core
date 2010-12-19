@@ -270,7 +270,7 @@ Sequence< ::rtl::OUString > StringResourceImpl::implGetResourceIDs( LocaleItem* 
 
         IdToStringMap::const_iterator it;
         int iTarget = 0;
-        for( it = rHashMap.begin(); it != rHashMap.end(); it++ )
+        for( it = rHashMap.begin(); it != rHashMap.end(); ++it )
         {
             ::rtl::OUString aStr = (*it).first;
             pStrings[iTarget] = aStr;
@@ -512,7 +512,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
             const IdToStringMap& rSourceMap = pCopyFromItem->m_aIdToStringMap;
             IdToStringMap& rTargetMap = pLocaleItem->m_aIdToStringMap;
             IdToStringMap::const_iterator it;
-            for( it = rSourceMap.begin(); it != rSourceMap.end(); it++ )
+            for( it = rSourceMap.begin(); it != rSourceMap.end(); ++it )
             {
                 ::rtl::OUString aId  = (*it).first;
                 ::rtl::OUString aStr = (*it).second;
@@ -522,7 +522,7 @@ void StringResourceImpl::newLocale( const Locale& locale )
             const IdToIndexMap& rSourceIndexMap = pCopyFromItem->m_aIdToIndexMap;
             IdToIndexMap& rTargetIndexMap = pLocaleItem->m_aIdToIndexMap;
             IdToIndexMap::const_iterator it_index;
-            for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); it_index++ )
+            for( it_index = rSourceIndexMap.begin(); it_index != rSourceIndexMap.end(); ++it_index )
             {
                 ::rtl::OUString aId  = (*it_index).first;
                 sal_Int32 nIndex = (*it_index).second;
@@ -1294,10 +1294,10 @@ public:
     BinaryOutput( Reference< XMultiComponentFactory > xMCF,
         Reference< XComponentContext > xContext );
 
-    Reference< io::XOutputStream > getOutputStream( void )
+    Reference< io::XOutputStream > getOutputStream() const
         { return m_xOutputStream; }
 
-    Sequence< ::sal_Int8 > closeAndGetData( void );
+    Sequence< ::sal_Int8 > closeAndGetData();
 
     // Template to be used with sal_Int16 and sal_Unicode
     template< class T >
@@ -1365,7 +1365,7 @@ void BinaryOutput::writeString( const ::rtl::OUString& aStr )
     writeUnicodeChar( 0 );
 }
 
-Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData( void )
+Sequence< ::sal_Int8 > BinaryOutput::closeAndGetData()
 {
     Sequence< ::sal_Int8 > aRetSeq;
     if( !m_xOutputStream.is() )
@@ -2264,7 +2264,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 // Find max/min index
                 sal_Int32 nMinIndex = -1;
                 sal_Int32 nMaxIndex = -1;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); it_index++ )
+                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
                 {
                     sal_Int32 nIndex = (*it_index).second;
                     if( nMinIndex > nIndex || nMinIndex == -1 )
@@ -2279,7 +2279,7 @@ bool StringResourcePersistenceImpl::implWritePropertiesFile( LocaleItem* pLocale
                 sal_Int32 i;
                 for( i = 0 ; i < nTabSize ; i++ )
                     pIdPtrs[i] = NULL;
-                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); it_index++ )
+                for( it_index = rIndexMap.begin(); it_index != rIndexMap.end(); ++it_index )
                 {
                     sal_Int32 nIndex = (*it_index).second;
                     pIdPtrs[nIndex - nMinIndex] = &((*it_index).first);
