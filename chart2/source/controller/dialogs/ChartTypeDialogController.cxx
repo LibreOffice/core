@@ -218,7 +218,7 @@ void ChartTypeDialogController::adjustParameterToMainType( ChartTypeParameter& r
     const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
     for( sal_Int32 nMatchPrecision=0; nMatchPrecision<7 && !bFoundSomeMatch; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; aIter++ )
+        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
         {
             if( rParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
             {
@@ -263,7 +263,7 @@ rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const Chart
     const tTemplateServiceChartTypeParameterMap& rMap = getTemplateMap();
     tTemplateServiceChartTypeParameterMap::const_iterator       aIter = rMap.begin();
     const tTemplateServiceChartTypeParameterMap::const_iterator aEnd  = rMap.end();
-    for( ; aIter != aEnd; aIter++ )
+    for( ; aIter != aEnd; ++aIter )
     {
         if( aParameter.mapsToSameService( (*aIter).second ) )
             return (*aIter).first;
@@ -272,7 +272,7 @@ rtl::OUString ChartTypeDialogController::getServiceNameForParameter( const Chart
     OSL_ENSURE( false, "ChartType not implemented yet - use fallback to similar type" );
     for( sal_Int32 nMatchPrecision=1; nMatchPrecision<8; nMatchPrecision++ )
     {
-        for( aIter = rMap.begin(); aIter != aEnd; aIter++ )
+        for( aIter = rMap.begin(); aIter != aEnd; ++aIter )
         {
             if( aParameter.mapsToSimilarService( (*aIter).second, nMatchPrecision ) )
                 return (*aIter).first;
