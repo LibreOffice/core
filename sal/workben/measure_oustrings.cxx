@@ -53,7 +53,7 @@ SAL_IMPLEMENT_MAIN()
     //get my cpu fan up to speed :-)
     for (int i = 0; i < 10000000; ++i)
     {
-        rtl::OUString sFoo(RTL_CONSTASCII_USTRINGPARAM("X"));
+        rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
         rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM("X"));
 #ifdef SAL_DECLARE_UTF16
         rtl::OUString sBoo(RTL_CONSTASCII_USTRINGPARAM_WIDE("X"));
@@ -75,7 +75,7 @@ SAL_IMPLEMENT_MAIN()
     {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sFoo(OUString());
+        rtl::OUString sFoo(rtl::OUString::createFromAscii(""));
     sal_uInt32 nEndTime = osl_getGlobalTimer();
     std::cout << "rtl::OUString::createFromAscii() " << nEndTime - nStartTime << "ms" << std::endl;
     }
@@ -85,7 +85,7 @@ SAL_IMPLEMENT_MAIN()
     {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sFoo(RTL_CONSTASCII_USTRINGPARAM("X"));
+        rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
     sal_uInt32 nEndTime = osl_getGlobalTimer();
     std::cout << "rtl::OUString::createFromAscii(\"X\") " << nEndTime - nStartTime << "ms" << std::endl;
     }
@@ -120,7 +120,7 @@ SAL_IMPLEMENT_MAIN()
     {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sFoo(RTL_CONSTASCII_USTRINGPARAM("XXXXXXXXXXXXXXX"));
+        rtl::OUString sFoo(rtl::OUString::createFromAscii("XXXXXXXXXXXXXXX"));
     sal_uInt32 nEndTime = osl_getGlobalTimer();
     std::cout << "rtl::OUString::createFromAscii(\"XXXXXXXX\") " << nEndTime - nStartTime << "ms" << std::endl;
     }
