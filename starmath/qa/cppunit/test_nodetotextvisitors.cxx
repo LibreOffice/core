@@ -41,6 +41,7 @@
 #include <document.hxx>
 #include <node.hxx>
 #include <visitors.hxx>
+#include <cursor.hxx>
 
 #include "preextstl.h"
 #include <cppunit/TestSuite.h>
@@ -72,6 +73,14 @@ struct assertion_traits<String>
 SO2_DECL_REF(SmDocShell)
 SO2_IMPL_REF(SmDocShell)
 
+class TestOutputDevice : public OutputDevice
+{
+public:
+    TestOutputDevice()
+    {
+    }
+};
+
 using namespace ::com::sun::star;
 
 namespace {
@@ -95,6 +104,7 @@ public:
     void SimpleFormats();
     void SimpleGreekChars();
     void SimpleSpecialChars();
+    void testBinomInBinHor();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(SimpleUnaryOp);
@@ -109,6 +119,7 @@ public:
     CPPUNIT_TEST(SimpleFormats);
     CPPUNIT_TEST(SimpleGreekChars);
     CPPUNIT_TEST(SimpleSpecialChars);
+    CPPUNIT_TEST(testBinomInBinHor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -478,6 +489,32 @@ void Test::parseandparseagain(const char *formula, const char *test_name)
 
     delete pNode1;
     delete pNode2;
+}
+
+void Test::testBinomInBinHor()
+{
+    String sInput, sExpected, sOutput;
+    SmNode* pTree;
+
+    // set up a binom (table) node
+    sInput.AppendAscii("binom a b + c");
+    pTree = SmParser().Parse(sInput);
+    pTree->Prepare(xDocShRef->GetFormat(), *xDocShRef);
+
+    SmCursor aCursor(pTree, xDocShRef);
+    TestOutputDevice aOutputDevice;
+
+    // move forward (more than) enough places to be at the end
+    int i;
+    for (i = 0; i < 8; ++i)
+        aCursor.Move(&aOutputDevice, MoveRight);
+
+    // tack +d on the end, which will put the binom into an SmBinHorNode
+    aCursor.InsertElement(PlusElement);
+    aCursor.InsertText('d');
+
+    sExpected.AppendAscii(" { { binom a b + c } + d } ");
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Binom Node in BinHor Node", sExpected, xDocShRef->GetText());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(Test);

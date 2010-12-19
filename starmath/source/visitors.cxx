@@ -2163,9 +2163,10 @@ void SmSelectionDrawingVisitor::Visit( SmTextNode* pNode )
 void SmNodeToTextVisitor::Visit( SmTableNode* pNode )
 {
     if( pNode->GetToken( ).eType == TBINOM ) {
-        Append( "binom" );
+        Append( "{ binom" );
         LineToText( pNode->GetSubNode( 0 ) );
         LineToText( pNode->GetSubNode( 1 ) );
+        Append("} ");
     } else if( pNode->GetToken( ).eType == TSTACK ) {
         Append( "stack{ " );
         SmNodeIterator it( pNode );
