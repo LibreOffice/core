@@ -75,7 +75,7 @@ void PageCollector::CollectCustomShowPages( const com::sun::star::uno::Reference
                         {
                             if ( *aIter == xDrawPage )
                                 break;
-                            aIter++;
+                            ++aIter;
                         }
                         if ( aIter == aEnd )
                             rUsedPageList.push_back( xDrawPage );
@@ -109,7 +109,7 @@ void PageCollector::CollectNonCustomShowPages( const com::sun::star::uno::Refere
                 {
                     if ( *aIter == xDrawPage )
                         break;
-                    aIter++;
+                    ++aIter;
                 }
                 if ( aIter == aEnd )
                     rNonUsedPageList.push_back( xDrawPage );
@@ -141,7 +141,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
             {
                 if ( aIter->xMasterPage == xMasterPage )
                     break;
-                aIter++;
+                ++aIter;
             }
             if ( aIter == aEnd )
             {
@@ -168,7 +168,7 @@ void PageCollector::CollectMasterPages( const Reference< XModel >& rxModel, std:
                     aIter->bUsed = sal_True;
                     break;
                 }
-                aIter++;
+                ++aIter;
             }
             if ( aIter == aEnd )
                 throw uno::RuntimeException();
