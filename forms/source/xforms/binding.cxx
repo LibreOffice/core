@@ -580,7 +580,7 @@ void lcl_removeListenerFromNode( Reference<XNode> xNode,
     sal_Int32 nCount = 0; // count nodes for context position
     for( PathExpression::NodeVector_t::iterator aIter = aNodes.begin();
          aIter != aNodes.end();
-         aIter++, nCount++ )
+         ++aIter, ++nCount )
     {
         OSL_ENSURE( aIter->is(), "no node?" );
 
@@ -634,13 +634,13 @@ void Binding::bind( bool bForceRebind )
     {
         for( XNodes_t::iterator aIter = maEventNodes.begin();
              aIter != maEventNodes.end();
-             aIter ++ )
+             ++aIter )
             lcl_removeListenerFromNode( *aIter, this );
         maEventNodes.clear();
         if( isSimpleBinding() )
             for( PathExpression::NodeVector_t::iterator aIter = aNodes.begin();
                  aIter != aNodes.end();
-                 aIter++ )
+                 ++aIter )
                 maEventNodes.push_back( *aIter );
         else
             maEventNodes.push_back(
@@ -648,7 +648,7 @@ void Binding::bind( bool bForceRebind )
                                   UNO_QUERY_THROW ) );
         for( PathExpression::NodeVector_t::iterator aIter2 = maEventNodes.begin();
              aIter2 != maEventNodes.end();
-             aIter2 ++ )
+             ++aIter2 )
             lcl_addListenerToNode( *aIter2, this );
     }
 
@@ -872,7 +872,7 @@ void Binding::clear()
     // remove all references
     for( XNodes_t::iterator aIter = maEventNodes.begin();
          aIter != maEventNodes.end();
-         aIter ++ )
+         ++aIter )
         lcl_removeListenerFromNode( *aIter, this );
     maEventNodes.clear();
 
