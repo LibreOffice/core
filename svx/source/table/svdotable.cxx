@@ -271,6 +271,7 @@ public:
 SdrTableObjImpl::SdrTableObjImpl()
 : mpTableObj( 0 )
 , mpLayouter( 0 )
+, mbModifyPending( false )
 {
 }
 
