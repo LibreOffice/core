@@ -628,7 +628,7 @@ String LwpFormulaFunc::ToString(LwpTableLayout* pCellsMap)
 
     //Append args
     vector<LwpFormulaArg*>::iterator aItr;
-    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();aItr++)
+    for (aItr=m_aArgs.begin();aItr!=m_aArgs.end();++aItr)
     {
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
         aFormula.AppendAscii("|");//separator
@@ -660,7 +660,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
     if (2==m_aArgs.size())
     {
         vector<LwpFormulaArg*>::iterator aItr = m_aArgs.end();
-        aItr--;
+        --aItr;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
 
         aFormula.AppendAscii(" ");
@@ -670,7 +670,7 @@ String LwpFormulaOp::ToString(LwpTableLayout* pCellsMap)
 
         aFormula.AppendAscii(" ");
 
-        aItr--;
+        --aItr;
         aFormula.Append( (*aItr)->ToArgString(pCellsMap) );
     }
     else
