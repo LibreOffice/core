@@ -1022,7 +1022,7 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
                                     SwXMLTableInfo_Impl& rTblInfo,
                                     USHORT nHeaderRows )
 {
-    OSL_ENSURE( pTableLines && pTableLines->Count(),
+    OSL_ENSURE( pTableLines && !pTableLines->empty(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
     if( !pTableLines || pTableLines->empty() )
         return;
