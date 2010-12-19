@@ -517,7 +517,7 @@ XclImpFontBuffer::XclImpFontBuffer( const XclImpRoot& rRoot ) :
 
 void XclImpFontBuffer::Initialize()
 {
-    maFontList.Clear();
+    maFontList.clear();
 
     // application font for column width calculation, later filled with first font from font list
     XclFontData aAppFontData;
@@ -530,18 +530,24 @@ void XclImpFontBuffer::Initialize()
 const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
 {
     /*  Font with index 4 is not stored in an Excel file, but used e.g. by
-        BIFF5 form pushbutton objects. It is the bold default font. */
-    return (nFontIndex == 4) ? &maFont4 :
-        maFontList.GetObject( (nFontIndex < 4) ? nFontIndex : (nFontIndex - 1) );
+        BIFF5 form pushbutton objects. It is the bold default font.
+        This also means that entries above 4 are out by one in the list. */
+    if (nFontIndex == 4)
+        return &maFont4;
+    if ( (nFontIndex < 4) && (nFontIndex < maFontList.size()) )
+        return &(maFontList[nFontIndex]);
+    if ( (nFontIndex > 4) && (nFontIndex <= maFontList.size()) )
+        return &(maFontList[nFontIndex - 1]);
+    return 0;
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 {
     XclImpFont* pFont = new XclImpFont( GetRoot() );
     pFont->ReadFont( rStrm );
-    maFontList.Append( pFont );
+    maFontList.push_back( pFont );
 
-    if( maFontList.Count() == 1 )
+    if( maFontList.size() == 1 )
     {
         UpdateAppFont( pFont->GetFontData(), pFont->HasCharSet() );
         // #i71033# set text encoding from application font, if CODEPAGE is missing
@@ -551,8 +557,8 @@ void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
 
 void XclImpFontBuffer::ReadEfont( XclImpStream& rStrm )
 {
-    if( XclImpFont* pFont = maFontList.Last() )
-        pFont->ReadEfont( rStrm );
+    if( !maFontList.empty() )
+        maFontList.back().ReadEfont( rStrm );
 }
 
 void XclImpFontBuffer::FillToItemSet(
@@ -1431,9 +1437,9 @@ XclImpXFBuffer::XclImpXFBuffer( const XclImpRoot& rRoot ) :
 
 void XclImpXFBuffer::Initialize()
 {
-    maXFList.Clear();
-    maBuiltinStyles.Clear();
-    maUserStyles.Clear();
+    maXFList.clear();
+    maBuiltinStyles.clear();
+    maUserStyles.clear();
     maStylesByXf.clear();
 }
 
@@ -1441,14 +1447,14 @@ void XclImpXFBuffer::ReadXF( XclImpStream& rStrm )
 {
     XclImpXF* pXF = new XclImpXF( GetRoot() );
     pXF->ReadXF( rStrm );
-    maXFList.Append( pXF );
+    maXFList.push_back( pXF );
 }
 
 void XclImpXFBuffer::ReadStyle( XclImpStream& rStrm )
 {
     XclImpStyle* pStyle = new XclImpStyle( GetRoot() );
     pStyle->ReadStyle( rStrm );
-    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).Append( pStyle );
+    (pStyle->IsBuiltin() ? maBuiltinStyles : maUserStyles).push_back( pStyle );
     DBG_ASSERT( maStylesByXf.count( pStyle->GetXfId() ) == 0, "XclImpXFBuffer::ReadStyle - multiple styles with equal XF identifier" );
     maStylesByXf[ pStyle->GetXfId() ] = pStyle;
 }
@@ -1502,28 +1508,28 @@ void XclImpXFBuffer::CreateUserStyles()
 
     /*  Calculate names of built-in styles. Store styles with reserved names
         in the aConflictNameStyles list. */
-    for( XclImpStyle* pStyle = maBuiltinStyles.First(); pStyle; pStyle = maBuiltinStyles.Next() )
+    for( XclImpStyleList::iterator itStyle = maBuiltinStyles.begin(); itStyle != maBuiltinStyles.end(); ++itStyle )
     {
-        String aStyleName = XclTools::GetBuiltInStyleName( pStyle->GetBuiltinId(), pStyle->GetName(), pStyle->GetLevel() );
+        String aStyleName = XclTools::GetBuiltInStyleName( itStyle->GetBuiltinId(), itStyle->GetName(), itStyle->GetLevel() );
         DBG_ASSERT( bReserveAll || (aCellStyles.count( aStyleName ) == 0),
             "XclImpXFBuffer::CreateUserStyles - multiple styles with equal built-in identifier" );
         if( aCellStyles.count( aStyleName ) > 0 )
-            aConflictNameStyles.push_back( pStyle );
+            aConflictNameStyles.push_back( &(*itStyle) );
         else
-            aCellStyles[ aStyleName ] = pStyle;
+            aCellStyles[ aStyleName ] = &(*itStyle);
     }
 
     /*  Calculate names of user defined styles. Store styles with reserved
         names in the aConflictNameStyles list. */
-    for( XclImpStyle* pStyle = maUserStyles.First(); pStyle; pStyle = maUserStyles.Next() )
+    for( XclImpStyleList::iterator itStyle = maUserStyles.begin(); itStyle != maUserStyles.end(); ++itStyle )
     {
         // #i1624# #i1768# ignore unnamed user styles
-        if( pStyle->GetName().Len() > 0 )
+        if( itStyle->GetName().Len() > 0 )
         {
-            if( aCellStyles.count( pStyle->GetName() ) > 0 )
-                aConflictNameStyles.push_back( pStyle );
+            if( aCellStyles.count( itStyle->GetName() ) > 0 )
+                aConflictNameStyles.push_back( &(*itStyle) );
             else
-                aCellStyles[ pStyle->GetName() ] = pStyle;
+                aCellStyles[ itStyle->GetName() ] = &(*itStyle);
         }
     }
 
@@ -1593,10 +1599,10 @@ void XclImpXFRangeColumn::SetDefaultXF( const XclImpXFIndex& rXFIndex )
 {
     // List should be empty when inserting the default column format.
     // Later explicit SetXF() calls will break up this range.
-    DBG_ASSERT( maIndexList.Empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
+    DBG_ASSERT( maIndexList.empty(), "XclImpXFRangeColumn::SetDefaultXF - Setting Default Column XF is not empty" );
 
     // insert a complete row range with one insert.
-    maIndexList.Append( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
+    maIndexList.push_back( new XclImpXFRange( 0, MAXROW, rXFIndex ) );
 }
 
 // ----------------------------------------------------------------------------
@@ -1622,7 +1628,7 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
             SCROW nLastScRow = pPrevRange->mnScRow2;
             ULONG nIndex = nNextIndex - 1;
             XclImpXFRange* pThisRange = pPrevRange;
-            pPrevRange = nIndex ? maIndexList.GetObject( nIndex - 1 ) : 0;
+            pPrevRange = (nIndex > 0 && nIndex <= maIndexList.size()) ? &(maIndexList[ nIndex - 1 ]) : 0;
 
             if( nFirstScRow == nLastScRow )         // replace solely XF
             {
@@ -1635,20 +1641,20 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
                 ++(pThisRange->mnScRow1);
                 // try to concatenate with previous of this
                 if( !pPrevRange || !pPrevRange->Expand( nScRow, rXFIndex ) )
-                    maIndexList.Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
             }
             else if( nLastScRow == nScRow )         // replace last XF
             {
                 --(pThisRange->mnScRow2);
                 if( !pNextRange || !pNextRange->Expand( nScRow, rXFIndex ) )
-                    maIndexList.Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+                    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
             }
             else                                    // insert in the middle of the range
             {
                 pThisRange->mnScRow1 = nScRow + 1;
                 // List::Insert() moves entries towards end of list, so insert twice at nIndex
-                maIndexList.Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
-                maIndexList.Insert( new XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
+                Insert( new XclImpXFRange( nScRow, rXFIndex ), nIndex );
+                Insert( new XclImpXFRange( nFirstScRow, nScRow - 1, pThisRange->maXFIndex ), nIndex );
             }
             return;
         }
@@ -1664,7 +1670,14 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
         return;
 
     // create new range
-    maIndexList.Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+    Insert( new XclImpXFRange( nScRow, rXFIndex ), nNextIndex );
+}
+
+void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, ULONG nIndex)
+{
+    maIndexList.insert( maIndexList.begin() + nIndex, pXFRange );
+    if (nIndex <= mnCurIndex)
+        ++mnCurIndex;
 }
 
 void XclImpXFRangeColumn::Find(
@@ -1673,15 +1686,15 @@ void XclImpXFRangeColumn::Find(
 {
 
     // test whether list is empty
-    if( maIndexList.Empty() )
+    if( maIndexList.empty() )
     {
         rpPrevRange = rpNextRange = 0;
         rnNextIndex = 0;
         return;
     }
 
-    rpPrevRange = maIndexList.GetObject( 0 );
-    rpNextRange = maIndexList.GetObject( maIndexList.Count() - 1 );
+    rpPrevRange = const_cast<XclImpXFRange*> (&(maIndexList.front()));
+    rpNextRange = const_cast<XclImpXFRange*> (&(maIndexList.back()));
 
     // test whether row is at end of list (contained in or behind last range)
     // rpPrevRange will contain a possible existing row
@@ -1689,7 +1702,7 @@ void XclImpXFRangeColumn::Find(
     {
         rpPrevRange = rpNextRange;
         rpNextRange = 0;
-        rnNextIndex = maIndexList.Count();
+        rnNextIndex = maIndexList.size();
         return;
     }
 
@@ -1707,12 +1720,12 @@ void XclImpXFRangeColumn::Find(
     // if rpPrevRange contains nScRow (rpNextRange will never contain nScRow)
     ULONG nPrevIndex = 0;
     ULONG nMidIndex;
-    rnNextIndex = maIndexList.Count() - 1;
+    rnNextIndex = maIndexList.size() - 1;
     XclImpXFRange* pMidRange;
     while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevRange->mnScRow2 < nScRow) )
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
-        pMidRange = maIndexList.GetObject( nMidIndex );
+        pMidRange = const_cast<XclImpXFRange*>( &(maIndexList[ nMidIndex ]) );
         DBG_ASSERT( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
@@ -1730,22 +1743,23 @@ void XclImpXFRangeColumn::Find(
     if( nScRow <= rpPrevRange->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
-        rpNextRange = maIndexList.GetObject( rnNextIndex );
+        rpNextRange = const_cast<XclImpXFRange*>( &(maIndexList[rnNextIndex]) );
     }
 }
 
 void XclImpXFRangeColumn::TryConcatPrev( ULONG nIndex )
 {
-    if( !nIndex )
+    if( nIndex <= 0 || nIndex >= maIndexList.size() )
         return;
 
-    XclImpXFRange* pPrevRange = maIndexList.GetObject( nIndex - 1 );
-    XclImpXFRange* pNextRange = maIndexList.GetObject( nIndex );
-    if( !pPrevRange || !pNextRange )
-        return;
+    XclImpXFRange prevRange = maIndexList[ nIndex - 1 ];
+    XclImpXFRange nextRange = maIndexList[ nIndex ];
 
-    if( pPrevRange->Expand( *pNextRange ) )
-        maIndexList.Delete( nIndex );
+    if( prevRange.Expand( nextRange ) ) {
+        maIndexList.erase( maIndexList.begin() + nIndex );
+        if (mnCurIndex > nIndex)
+            --mnCurIndex;
+    }
 }
 
 // ----------------------------------------------------------------------------
