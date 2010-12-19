@@ -731,7 +731,6 @@ void BasicIDETabBar::Sort()
 void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BOOL bEraseTrailingEmptyLines )
 {
     sal_Int32 nStartPos = 0;
-    sal_Int32 nEndPos = 0;
     sal_Int32 nLine = 0;
     while ( nLine < nStartLine )
     {
@@ -746,7 +745,8 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, BO
 
     if ( nStartPos != -1 )
     {
-        nEndPos = nStartPos;
+        sal_Int32 nEndPos = nStartPos;
+
         for ( sal_Int32 i = 0; i < nLines; i++ )
             nEndPos = searchEOL( rStr, nEndPos+1 );
 
