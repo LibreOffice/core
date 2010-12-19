@@ -62,8 +62,6 @@
 #include "xmltexte.hxx"
 #include "xmlexp.hxx"
 
-#include <vector>
-
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 using namespace ::com::sun::star;
@@ -75,6 +73,7 @@ using namespace ::com::sun::star::container;
 using namespace ::xmloff::token;
 using table::XCell;
 using ::std::vector;
+using ::std::advance;
 
 class SwXMLTableColumn_Impl : public SwWriteTableCol
 {
@@ -192,9 +191,6 @@ SwXMLTableLines_Impl::SwXMLTableLines_Impl( const SwTableLines& rLines ) :
         }
     }
 }
-
-typedef SwXMLTableLines_Impl *SwXMLTableLinesPtr;
-DECLARE_LIST( SwXMLTableLinesCache_Impl, SwXMLTableLinesPtr )
 
 // ---------------------------------------------------------------------
 
@@ -586,11 +582,11 @@ void SwXMLExport::ExportTableLinesAutoStyles( const SwTableLines& rLines,
                                     sal_Bool bTop )
 {
     // pass 1: calculate columns
-    SwXMLTableLines_Impl *pLines =
-        new SwXMLTableLines_Impl( rLines );
+    SwXMLTableLines_Impl *pLines = new SwXMLTableLines_Impl( rLines );
     if( !pTableLines )
-        pTableLines = new SwXMLTableLinesCache_Impl( 5, 5 );
-    pTableLines->Insert( pLines, pTableLines->Count() );
+        pTableLines = new SwXMLTableLinesCache_Impl();
+
+    pTableLines->push_back( pLines );
 
     OUStringBuffer sBuffer( rNamePrefix.getLength() + 8L );
 
@@ -1028,16 +1024,16 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
 {
     OSL_ENSURE( pTableLines && pTableLines->Count(),
             "SwXMLExport::ExportTableLines: table columns infos missing" );
-    if( !pTableLines || 0 == pTableLines->Count() )
+    if( !pTableLines || pTableLines->empty() )
         return;
 
-    SwXMLTableLines_Impl *pLines = 0;
-    sal_uInt16 nInfoPos;
-    for( nInfoPos=0; nInfoPos < pTableLines->Count(); nInfoPos++ )
+    SwXMLTableLines_Impl* pLines = NULL;
+    size_t nInfoPos;
+    for( nInfoPos=0; nInfoPos < pTableLines->size(); nInfoPos++ )
     {
-        if( pTableLines->GetObject( nInfoPos )->GetLines() == &rLines )
+        if( pTableLines->at( nInfoPos )->GetLines() == &rLines )
         {
-            pLines = pTableLines->GetObject( nInfoPos );
+            pLines = pTableLines->at( nInfoPos );
             break;
         }
     }
@@ -1048,11 +1044,14 @@ void SwXMLExport::ExportTableLines( const SwTableLines& rLines,
     if( !pLines )
         return;
 
-    pTableLines->Remove( nInfoPos );
-    if( 0 == pTableLines->Count() )
+    SwXMLTableLinesCache_Impl::iterator it = pTableLines->begin();
+    advance( it, nInfoPos );
+    pTableLines->erase( it );
+
+    if( pTableLines->empty() )
     {
         delete pTableLines ;
-        pTableLines = 0;
+        pTableLines = NULL;
     }
 
     // pass 2: export columns
@@ -1246,5 +1245,15 @@ void SwXMLTextParagraphExport::exportTable(
     ((SwXMLExport&)GetExport()).SetShowProgress( bOldShowProgress );
 }
 
+void SwXMLExport::DeleteTableLines()
+{
+    if ( pTableLines )
+    {
+        for ( size_t i = 0, n = pTableLines->size(); i < n; ++i )
+            delete pTableLines->at( i );
+        pTableLines->clear();
+        delete pTableLines;
+    }
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

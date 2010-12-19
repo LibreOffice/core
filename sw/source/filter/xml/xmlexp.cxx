@@ -437,6 +437,7 @@ XMLShapeExport* SwXMLExport::CreateShapeExport()
 
 SwXMLExport::~SwXMLExport()
 {
+    DeleteTableLines();
     _FinitItemExport();
 }
 
