@@ -3092,7 +3092,6 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
     SfxModelGuard aGuard( *this );
 
     Sequence< ::rtl::OUString > aResult;
-    sal_Int32 nResultSize = 0;
     sal_Bool bSuccess = sal_False;
     if ( m_pData->m_pObjectShell.Is() )
     {
@@ -3101,6 +3100,7 @@ Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getDocumentSubStoragesNames()
         if ( xAccess.is() )
         {
             Sequence< ::rtl::OUString > aTemp = xAccess->getElementNames();
+            sal_Int32 nResultSize = 0;
             for ( sal_Int32 n = 0; n < aTemp.getLength(); n++ )
             {
                 if ( xStorage->isStorageElement( aTemp[n] ) )
