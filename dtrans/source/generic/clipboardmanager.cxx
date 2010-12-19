@@ -177,7 +177,7 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
     ClipboardMap::iterator iter = m_aClipboardMap.begin();
     ClipboardMap::iterator imax = m_aClipboardMap.end();
 
-    for (sal_Int32 n = 0; iter != imax; iter++)
+    for (sal_Int32 n = 0; iter != imax; ++iter)
         aRet[n++] = iter->first;
 
     return aRet;
@@ -209,7 +209,7 @@ void SAL_CALL ClipboardManager::dispose()
         ClipboardMap::iterator iter = aCopy.begin();
         ClipboardMap::iterator imax = aCopy.end();
 
-        for (; iter != imax; iter++)
+        for (; iter != imax; ++iter)
         {
             Reference< XComponent > xComponent(iter->second, UNO_QUERY);
             if (xComponent.is())
