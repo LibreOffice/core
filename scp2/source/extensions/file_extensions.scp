@@ -139,7 +139,7 @@ File gid_File_Oxt_CT2N
 	TXT_FILE_BODY;
 	Styles = (PACKED, ARCHIVE);
 	Dir = gid_Brand_Dir_Share_Extensions_CT2N;
-	Name = "ConvertTextToNumber-1.3.2.oxt";
+	Name = "ConvertTextToNumber.oxt";
 End
 
 #endif
@@ -282,7 +282,7 @@ File gid_File_Oxt_OOoBlogger
     TXT_FILE_BODY;
     Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_OOoBlogger;
-    Name = "oooblogger-0.1.oxt";
+    Name = "oooblogger.oxt";
 End
 
 #endif
