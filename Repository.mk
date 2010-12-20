@@ -74,6 +74,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
 	xo \
 	xof \
 	xcr \
+))
 
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_URE, \
 	xml2 \

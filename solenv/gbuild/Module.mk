@@ -47,6 +47,9 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
+.PHONY : all clean
+.DEFAULT_GOAL := all
+
 all :
 	$(call gb_Output_announce,top level modules: $(foreach module,$(filter-out deliverlog,$^),$(notdir $(module))),$(true),ALL,6)
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL,6)
@@ -58,18 +61,6 @@ clean :
 	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL,6)
 	$(call gb_Output_announce_title,all cleared.)
 	$(call gb_Output_announce_bell)
-
-.PHONY : all clean install uninstall
-.DEFAULT_GOAL := all
-
-all :
-	$(call gb_Helper_announce,Build for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
-
-clean :
-	$(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
-
-.PHONY : all clean install uninstall
-.DEFAULT_GOAL := all
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
