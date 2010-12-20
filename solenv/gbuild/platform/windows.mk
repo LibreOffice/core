@@ -166,10 +166,10 @@ gb_LinkTarget_LDFLAGS := \
 	-NODEFAULTLIB \
 	-OPT:NOREF \
 	-SUBSYSTEM:CONSOLE \
-    -safeseh \
-    -nxcompat \
-    -dynamicbase \
-	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(ILIB)))) \
+	-safeseh \
+	-nxcompat \
+	-dynamicbase \
+	$(patsubst %,-LIBPATH:%,$(filter-out .,$(subst ;, ,$(subst \,/,$(ILIB))))) \
 
 ifneq ($(ENABLE_CRASHDUMP),)
 gb_LinkTarget_LDFLAGS += -DEBUG
@@ -224,10 +224,6 @@ else
 CObject__command_deponcompile =
 endif
 
-# some dark shell magic here
-# C is the command to execute
-# E is the linker output, that we are only interested in on error (good programs keep silent on success)
-# RC is the return code of the link command
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -266,14 +262,11 @@ else
 gb_CxxObject__command_deponcompile =
 endif
 
-# some dark shell magic here
-# C is the command to execute
-# E is the linker output, that we are only interested in on error (good programs keep silent on success)
-# RC is the return code of the link command
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
+	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
@@ -316,6 +309,7 @@ define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
@@ -358,6 +352,7 @@ define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
+	unset INCLUDE && \
 	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
@@ -381,10 +376,6 @@ gb_LinkTarget_INCLUDE :=\
 
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
-# some dark shell magic here
-# C is the command to execute
-# E is the linker output, that we are only interested in on error (good programs keep silent on success)
-# R is the return code of the link command
 define gb_LinkTarget__command
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
