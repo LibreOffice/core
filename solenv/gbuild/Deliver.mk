@@ -43,16 +43,15 @@ gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODI
 
 endef
 
-ifeq($(strip $(gb_Deliver_GNUCOPY),)
+ifeq ($(strip $(gb_Deliver_GNUCOPY)),)
 define gb_Deliver_deliver
-mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(1) &&) cp -f $(1) $(2) && touch -r $(1) $(2)
-
+mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) cp -f $(1) $(2) && touch -r $(1) $(2)
 endef
 else
 define gb_Deliver_deliver
 mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) -pf $(1) $(2)
-
 endef
+endif
 
 
 # We are currently only creating a deliver.log, if only one module gets build.
