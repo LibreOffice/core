@@ -406,14 +406,14 @@ public:
     }
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
 /*-- 14.12.98 09:35:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndex::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndex::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 
@@ -1656,7 +1656,7 @@ public:
     void    Invalidate();
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 };
 
 /* -----------------------------16.10.00 11:24--------------------------------
@@ -1684,7 +1684,7 @@ void SwXDocumentIndexMark::Impl::Invalidate()
 /*-- 14.12.98 10:25:47---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXDocumentIndexMark::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXDocumentIndexMark::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 

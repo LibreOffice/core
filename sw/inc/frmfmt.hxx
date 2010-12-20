@@ -140,7 +140,7 @@ public:
             { m_wXObject = xObject; }
 
     DECL_FIXEDMEMPOOL_NEWDEL_DLL(SwFrmFmt)
-    void RegisterToFormat( SwFmt& rFmt ) { Add( &rFmt ); }
+    void RegisterToFormat( SwFmt& rFmt );
 };
 
 //Das FlyFrame-Format ------------------------------

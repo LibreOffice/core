@@ -830,11 +830,11 @@ public:
     }
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextCursor::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextCursor::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 

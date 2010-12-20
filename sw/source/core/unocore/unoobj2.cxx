@@ -522,11 +522,11 @@ public:
                 uno::RuntimeException);
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXParagraphEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXParagraphEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -793,11 +793,11 @@ public:
     const ::sw::mark::IMark * GetBookmark() const { return m_pMark; }
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void    Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextRange::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextRange::Impl::Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     const bool bAlreadyRegistered = 0 != GetRegisteredIn();
     ClientModify(this, pOld, pNew);
@@ -1591,11 +1591,11 @@ public:
     void MakeRanges();
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
-void SwXTextRanges::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXTextRanges::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
 }
@@ -1774,7 +1774,7 @@ public:
     }
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
@@ -1783,7 +1783,7 @@ struct InvalidFrameDepend {
     { return !rEntry->GetRegisteredIn(); }
 };
 
-void SwXParaFrameEnumeration::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXParaFrameEnumeration::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew)
 {
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())

@@ -2499,6 +2499,11 @@ void SwFrmFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
     }
 }
 
+void SwFrmFmt::RegisterToFormat( SwFmt& rFmt )
+{
+    rFmt.Add( this );
+}
+
 //Vernichtet alle Frms, die in aDepend angemeldet sind.
 
 void SwFrmFmt::DelFrms()

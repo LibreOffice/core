@@ -185,14 +185,14 @@ public:
         throw (uno::RuntimeException);
 protected:
     // SwClient
-    virtual void    Modify(SfxPoolItem *pOld, SfxPoolItem *pNew);
+    virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew);
 
 };
 
 /*-- 11.12.98 08:12:58---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXParagraph::Impl::Modify(SfxPoolItem *pOld, SfxPoolItem *pNew)
+void SwXParagraph::Impl::Modify( const SfxPoolItem *pOld, const SfxPoolItem *pNew )
 {
     ClientModify(this, pOld, pNew);
     if (!GetRegisteredIn())
