@@ -189,18 +189,9 @@ protected:
 
 namespace ScDPGlobal
 {
-// used for core data
-    String GetFieldFuncString( const String& rSourceName, USHORT &rFuncMask, bool bIsValue );
-    String GetFuncString( const String &rString, const USHORT nIndex );
-    com::sun::star::uno::Reference<com::sun::star::container::XNameAccess> DP_GetMembers( const com::sun::star::uno::Reference<
-                                                                                      com::sun::star::sheet::XDimensionsSupplier>&rSrc, long nField );
 // common operation
     String operator + ( const String & rL, const String &rR );
     Rectangle operator *( const Rectangle &rLeft, const std::pair<double,double> & rRight );
-// used for  DataPilot Panel
-    ScDPInfoWnd* GetDPInfoWnd( ScTabViewShell *pViewShell );
-   bool ChkDPTableOverlap( ScDocument *pDestDoc, std::list<ScDPObject> & rClipboard, SCCOL nClipStartCol, SCROW nClipStartRow, SCCOL nStartCol, SCROW nStartRow, SCTAB nStartTab, USHORT nEndTab, bool bExcludeClip = FALSE );
-
 }
 #endif
 

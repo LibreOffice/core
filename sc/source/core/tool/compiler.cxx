@@ -371,11 +371,6 @@ void ScCompiler::SetGrammar( const FormulaGrammar::Grammar eGrammar )
     }
 }
 
-void ScCompiler::SetEncodeUrlMode( EncodeUrlMode eMode )
-{
-    meEncodeUrlMode = eMode;
-}
-
 ScCompiler::EncodeUrlMode ScCompiler::GetEncodeUrlMode() const
 {
     return meEncodeUrlMode;
