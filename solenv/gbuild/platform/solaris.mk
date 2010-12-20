@@ -120,7 +120,7 @@ gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 # CObject class
 
 define gb_CObject_command
-$(call gb_Helper_announce,$(2),$(true),C  )
+$(call gb_Helper_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(call gb_CObject_get_dep_target,$(2)) && \
@@ -138,7 +138,7 @@ endef
 # CxxObject class
 
 define gb_CxxObject_command
-$(call gb_Helper_announce,$(2),$(true),CXX)
+$(call gb_Helper_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	mkdir -p $(dir $(call gb_CxxObject_get_dep_target,$(2))) && \
@@ -197,7 +197,7 @@ gb_LinkTarget_INCLUDE := $(filter-out %/stl, $(subst -I. , ,$(SOLARINC)))
 gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 define gb_LinkTarget_command
-$(call gb_Helper_announce,$(2),$(true),LNK)
+$(call gb_Helper_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_CXX) \
