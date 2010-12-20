@@ -1245,20 +1245,20 @@ AC_ARG_WITH(zip-home,
     ],
 ,)
 
-AC_ARG_WITH(mingwin,
-    AS_HELP_STRING([--with-mingwin],
-        [For Windows users, use the mingwin32 compiler within cygwin environment.])
+AC_ARG_WITH(mingw,
+    AS_HELP_STRING([--with-mingw],
+        [For Windows users, use the MinGW compiler within a Cygwin environment.])
     [
-                          Usage:     --with-mingwin=yes
+                          Usage:     --with-mingw=yes
 
-                          For !Windows use, use the mingw32 C++ compiler to
+                          For non-Windows use, use the MinGW C++ compiler to
                           (re-)build unowinreg.dll. Specify the MinGW C++
                           Compilers name.
 
-                          Usage:     --with-mingwin=i586-mingw32msvc-g++
+                          Usage:     --with-mingw=i586-mingw32msvc-g++
     ],
-    WITH_MINGWIN=$withval ,
-WITH_MINGWIN=0)
+    WITH_MINGW=$withval ,
+WITH_MINGW=0)
 
 AC_ARG_WITH(build-version,
     AS_HELP_STRING([--with-build-version],
@@ -1825,15 +1825,15 @@ link, and copy the program to the name of the link.])
    CXX=`echo $CXX | $SED "s/^guw.exe //"`
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
-   dnl $WITH_MINGWIN
+   dnl $WITH_MINGW
    dnl ===================================================================
       if test -n "$CC";then
          if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
-            WITH_MINGWIN="yes"
+            WITH_MINGW="yes"
          fi
       fi
    dnl ===================================================================
-   if test "$WITH_MINGWIN" = "yes" ; then
+   if test "$WITH_MINGW" = "yes" ; then
       if test -z "$CC"; then
          CC="gcc -mno-cygwin"
          CXX="g++ -mno-cygwin"
@@ -1841,7 +1841,7 @@ link, and copy the program to the name of the link.])
    fi
    AC_MSG_RESULT([ok])
 fi
-AC_SUBST(WITH_MINGWIN)
+AC_SUBST(WITH_MINGW)
 
 dnl ===================================================================
 dnl Extra check for Windows. cygwin builds need gcc to build dmake
@@ -1890,7 +1890,7 @@ if test "$GCC_HOME_SET" = "true" ; then
 fi
 
 dnl The following checks for gcc, cc and then cl (if it weren't guarded for win32)
-if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_PROG_CC
 fi
 
@@ -1905,7 +1905,7 @@ COMPATH=`echo $COMPATH | $SED "s@/[[Bb]][[Ii]][[Nn]]\\\$@@"`;
 dnl ===================================================================
 dnl  Test the gcc version,  3 is OK
 dnl ===================================================================
-if test \( "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes" \) -a "$GCC" = "yes"; then
+if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GNU gcc compiler version])
    _gcc_version=`$CC -dumpversion`
    _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
@@ -1960,7 +1960,7 @@ dnl Set the ENABLE_PCH variable. (Activate --enable-pch)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable pch feature])
 if test -n "$enable_pch" && test "$enable_pch" != "no"; then
-   if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+   if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
        ENABLE_PCH="TRUE"
        AC_MSG_RESULT([yes])
 dnl There is no PCH support in GCC versions prior to this
@@ -2137,7 +2137,7 @@ dnl ===================================================================
 dnl  Check which Microsoft C/C++ or MinGW compiler is used for WINNT
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-    if test "$WITH_MINGWIN" != "yes"; then
+    if test "$WITH_MINGW" != "yes"; then
         AC_MSG_CHECKING([for a friendly Microsoft C/C++ compiler installation path])
         if test -z "$with_cl_home"; then
             vctest=`./oowintool --msvc-productdir`;
@@ -2248,7 +2248,7 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
             AC_MSG_ERROR([Microsoft C/C++ Compiler not found. Use --with-cl-home or set path to cl.exe.])
         fi
     else
-        AC_MSG_CHECKING([the Mingwin32 C++ Compiler])
+        AC_MSG_CHECKING([the MinGW C++ Compiler])
         if test `$CC -dumpmachine | $SED -e 's/^.*-//'` = "mingw32"; then
             AC_MSG_RESULT([found.])
             if $CC -dumpspecs | grep -q "mno-cygwin"; then
@@ -2257,7 +2257,7 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
                 USE_MINGW="pure-mingw"
             fi
         else
-            AC_MSG_ERROR([Mingwin32 C++ Compiler not found.])
+            AC_MSG_ERROR([MinGW C++ Compiler not found.])
         fi
     fi
 fi
@@ -2273,7 +2273,7 @@ dnl in fact apply equally to what we actually support, i.e.
 dnl Visual Studio 2008 and 2010?)
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
-if test "$WITH_MINGWIN" = "yes" || test "$COMEX" -ge "10"; then
+if test "$WITH_MINGW" = "yes" || test "$COMEX" -ge "10"; then
     dnl Check midl.exe
     AC_PATH_PROG(MIDL_PATH, midl.exe)
     if test -n "$MIDL_PATH";then
@@ -2365,14 +2365,14 @@ fi
 dnl ===================================================================
 dnl Check if stdc headers are available excluding windows.
 dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_HEADER_STDC
 fi
 
 dnl ===================================================================
 dnl Find pre-processors.
 dnl ===================================================================
-if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_PROG_CXXCPP
 
 dnl Check whether there's a C pre-processor.
@@ -2465,14 +2465,14 @@ AC_SUBST(CRYPT_LINK)
 dnl ===================================================================
 dnl Testing for c++ compiler and version...
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
    if test -e "$CC"; then
       CXX="$CC"
    fi
 fi
 
 dnl Autoconf 2.53 can do this test for cl.exe, 2.13 can't!
-if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
    AC_PROG_CXX
 fi
 
@@ -2539,7 +2539,7 @@ if test "$GXX" = "yes"; then
       if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
           with_gxx_include_path="/usr/include"
       fi
-      if test "$WITH_MINGWIN" = "yes"; then
+      if test "$WITH_MINGW" = "yes"; then
          with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
          with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
       fi
@@ -2563,8 +2563,8 @@ AC_SUBST(GXX_INCLUDE_PATH)
 dnl ===================================================================
 dnl Set the mingw runtime library include directories
 dnl ===================================================================
-if test "$WITH_MINGWIN" = "yes"; then
-   AC_MSG_CHECKING([for mingwin runtime include path])
+if test "$WITH_MINGW" = "yes"; then
+   AC_MSG_CHECKING([for MinGW runtime include path])
    cat >conftest.$ac_ext <<_ACEOF
 #include <stddef.h>
 #include <bits/c++config.h>
@@ -2582,14 +2582,14 @@ _ACEOF
    fi
    if test -z "$_mingw_lib_include_path"; then
       _mingw_lib_include_path="NO_LIB_INCLUDE"
-      AC_MSG_RESULT([no mingwin runtime includes])
+      AC_MSG_RESULT([no MinGW runtime includes])
    else
       AC_MSG_RESULT([$_mingw_lib_include_path])
    fi
   MINGW_LIB_INCLUDE_PATH="$_mingw_lib_include_path"
   AC_SUBST(MINGW_LIB_INCLUDE_PATH)
 dnl mingw gcc 4.4.0 needs backward in include path to use hash_set/hash_map
-   AC_MSG_CHECKING([for mingwin c++ backward include path])
+   AC_MSG_CHECKING([for MinGW C++ backward include path])
    cat >conftest.$ac_ext <<_ACEOF
 #include <hash_set>
 _ACEOF
@@ -2601,7 +2601,7 @@ _ACEOF
       AC_MSG_RESULT([$_mingw_backward_include_path])
    else
       _mingw_backward_include_path="NO_BACKWARD_INCLUDE"
-      AC_MSG_RESULT([no mingwin c++ backward includes])
+      AC_MSG_RESULT([no MinGW C++ backward includes])
    fi
   MINGW_BACKWARD_INCLUDE_PATH="$_mingw_backward_include_path"
   AC_SUBST(MINGW_BACKWARD_INCLUDE_PATH)
@@ -2682,7 +2682,7 @@ fi
 dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
 dnl *************************************************************
-if test "$WITH_MINGWIN" = "yes"; then
+if test "$WITH_MINGW" = "yes"; then
   AC_MSG_CHECKING([exception type])
   AC_LANG_PUSH([C++])
   AC_TRY_LINK(
@@ -2825,7 +2825,7 @@ dnl ===================================================================
      esac
    elif test "$_os" = "SunOS"; then
       DEFAULT_TO_STLPORT="yes"
-   elif test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+   elif test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
       DEFAULT_TO_STLPORT="yes"
    elif test "$_os" = "OS2"; then
       DEFAULT_TO_STLPORT="yes"
@@ -2862,7 +2862,7 @@ dnl ===================================================================
       fi
    else
       STLPORT4=$WITH_STLPORT
-      if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
          AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport headers not found.]))
       else
          dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
@@ -2872,7 +2872,7 @@ dnl ===================================================================
             AC_MSG_ERROR([STLport headers not found.])
          fi
       fi
-      if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+      if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
          AC_MSG_CHECKING([for STLport libraries])
          if test "$_os" = "SunOS"; then
               if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
@@ -3973,16 +3973,16 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       BUILD_UNOWINREG=YES
    fi
    if test "$_os" != "WINNT" && test "$BUILD_UNOWINREG" = "YES"; then
-      if test -z "$WITH_MINGWIN" || test "$WITH_MINGWIN" = "0"; then
-         AC_MSG_ERROR([for rebuilding unowinreg.dll you need the mingw32 C++ compiler.
-         Specify mingw32 g++ executable name with --with-mingwin.
+      if test -z "$WITH_MINGW" || test "$WITH_MINGW" = "0"; then
+         AC_MSG_ERROR([for rebuilding unowinreg.dll you need the MinGW C++ compiler.
+         Specify mingw32 g++ executable name with --with-mingw.
          Or use prebuilt one from http://tools.openoffice.org/unowinreg_prebuild/680/ and
          put it into external/unowinreg])
       fi
-      if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
-         if ! test -x "$WITH_MINGWIN"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGWIN`; fi
+      if echo "$WITH_MINGW" | $EGREP -q "/"; then
+         if ! test -x "$WITH_MINGW"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGW`; fi
       else
-         AC_CHECK_TOOL(MINGWCXX, $WITH_MINGWIN, false)
+         AC_CHECK_TOOL(MINGWCXX, $WITH_MINGW, false)
       fi
       if test "$MINGWCXX" = "false"; then
          AC_MSG_ERROR(specified MinGW32 C++ cross-compiler not found. Install it or correct name.)
@@ -3993,10 +3993,10 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       else
          AC_MSG_RESULT(yes)
       fi
-      if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
-         if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
+      if echo "$WITH_MINGW" | $EGREP -q "/"; then
+         if ! test -x "`echo $WITH_MINGW | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGW | $SED -e s/g++/strip/)); fi
       else
-         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/`, false)
+         AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGW | $SED -e s/g++/strip/`, false)
       fi
       if test "$MINGWSTRIP" = "false"; then
          AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
@@ -5105,7 +5105,7 @@ AC_MSG_ERROR([Mozilla build tooling not found.
 Use the --with-mozilla-build option after installling the tools obtained
 from http://ftp.mozilla.org/pub/mozilla.org/mozilla/libraries/win32])
       else
-         if test \( "$WITH_MINGWIN" = "yes" \) ; then
+         if test \( "$WITH_MINGW" = "yes" \) ; then
             if test ! -d "$MOZILLABUILD" ; then
 AC_MSG_ERROR([Mozilla build tooling incomplete!])
             else
@@ -5128,13 +5128,13 @@ fi
 
 if test "$BUILD_MOZAB" = "TRUE"; then
   if test "$_os" = "WINNT"; then
-    if test "$WITH_MINGWIN" != "yes"; then
+    if test "$WITH_MINGW" != "yes"; then
       # compiling with MSVC. Only supported platform here is MSVS2005 at the moment.
       if test "$MSVSVER" != "2005"; then
         AC_MSG_ERROR([Building SeaMonkey is supported with Microsoft Visual Studio 2005 only.])
       fi
     else
-      AC_MSG_WARN([Building SeaMonkey with mingwin is not tested, and likely to break.])
+      AC_MSG_WARN([Building SeaMonkey with MinGW is not tested, and likely to break.])
       echo "Building SeaMonkey with MinGW is not tested, and likely to break." >> warn
     fi
   fi
@@ -5765,7 +5765,7 @@ dnl =========================================
 dnl Check for the Microsoft Platform SDK.
 dnl =========================================
 dnl FIXME: I don't know yet if PSDK works with MinGW, keep it until I know better,
-dnl and add "-a \( "$WITH_MINGWIN" != "yes" \)" then
+dnl and add "-a \( "$WITH_MINGW" != "yes" \)" then
 if test \( "$_os" = "WINNT" \) ; then
     AC_MSG_CHECKING([for PSDK files])
     if test -z "$with_psdk_home"; then
@@ -6020,7 +6020,7 @@ AC_SUBST(CYGWIN_PATH)
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
-if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
   AC_MSG_CHECKING([ml.exe assembler path])
   if test -n "$with_asm_home"; then
     with_asm_home=`cygpath -u "$with_asm_home"`
