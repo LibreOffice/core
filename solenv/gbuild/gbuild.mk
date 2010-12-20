@@ -201,6 +201,7 @@ include $(foreach class, \
     SdiTarget \
     Package \
     PrecompiledHeaders \
+    TestFixture \
     Module \
 ,$(GBUILDDIR)/$(class).mk)
 

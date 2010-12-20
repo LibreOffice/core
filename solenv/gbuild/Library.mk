@@ -28,7 +28,7 @@
 
 # Library class
 
-# defined globally in gbuild.mk
+# defined globally in TargetLocations.mk
 #  gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
 #  gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
 # defined by platform

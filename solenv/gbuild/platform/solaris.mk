@@ -289,6 +289,14 @@ gb_Executable_LAYER := \
     $(foreach exe,$(gb_Executable_NONE),$(exe):NONEBIN) \
 
 
+# TestFixture class
+
+gb_TestFixure_TARGETTYPEFLAGS := $(gb_Library_TARGETTYPEFLAGS)
+gb_TestFixure_CPPTESTPRECOMMAND :=
+gb_TestFixure_SYSPRE := libtest_
+gb_TestFixure_EXT := .so
+gb_TestFixure_get_filename = $(gb_TestFixure_SYSPRE)$(1)$(gb_TestFixure_EXT)
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := LD_LIBRARY_PATH=$(OUTDIR)/lib
