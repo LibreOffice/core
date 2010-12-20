@@ -47,6 +47,7 @@
 #include "init.hxx"
 #include "swtypes.hxx"
 #include "doc.hxx"
+#include "shellres.hxx"
 
 using namespace ::com::sun::star;
 
@@ -61,13 +62,12 @@ public:
     virtual void setUp();
     virtual void tearDown();
 
-    void randomTest()
-    {
-        CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
-    }
+    void testPageDescName();
+    void randomTest();
 
     CPPUNIT_TEST_SUITE(SwDocTest);
     CPPUNIT_TEST(randomTest);
+    CPPUNIT_TEST(testPageDescName);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -75,6 +75,30 @@ private:
     uno::Reference<lang::XMultiComponentFactory> m_xFactory;
     SwDoc *m_pDoc;
 };
+
+void SwDocTest::testPageDescName()
+{
+    ShellResource aShellResources;
+
+    std::vector<rtl::OUString> aResults;
+
+    //These names must be unique for each different combination, otherwise
+    //duplicate page description names may exist, which will causes lookup
+    //by name to be incorrect, and so the corresponding export to .odt
+    aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::NORMAL_PAGE));
+    aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::FIRST_PAGE));
+    aResults.push_back(aShellResources.GetPageDescName(1, ShellResource::FOLLOW_PAGE));
+
+    std::sort(aResults.begin(), aResults.end());
+    aResults.erase(std::unique(aResults.begin(), aResults.end()), aResults.end());
+
+    CPPUNIT_ASSERT_MESSAGE("GetPageDescName results must be unique", aResults.size() == 3);
+}
+
+void SwDocTest::randomTest()
+{
+    CPPUNIT_ASSERT_MESSAGE("SwDoc::IsRedlineOn()", !m_pDoc->IsRedlineOn());
+}
 
 SwDocTest::SwDocTest()
 {

@@ -198,11 +198,24 @@ ShellResource::~ShellResource()
         delete pAutoFmtNameLst, pAutoFmtNameLst = 0;
 }
 
-String ShellResource::GetPageDescName( USHORT nNo, BOOL bIsFirst, BOOL bFollow )
+String ShellResource::GetPageDescName( USHORT nNo, PageNameMode eMode )
 {
-    String sRet( bIsFirst ? sPageDescFirstName
-                          : bFollow ? sPageDescFollowName
-                                      : sPageDescName );
+    String sRet;
+
+    switch (eMode)
+    {
+        case NORMAL_PAGE:
+            sRet = sPageDescName;
+            break;
+            break;
+        case FIRST_PAGE:
+            sRet = sPageDescFirstName;
+            break;
+        case FOLLOW_PAGE:
+            sRet = sPageDescFollowName;
+            break;
+    }
+
     sRet.SearchAndReplaceAscii( "$(ARG1)", String::CreateFromInt32( nNo ));
     return sRet;
 }

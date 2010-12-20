@@ -922,7 +922,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
                 else
                 {
                     USHORT nPos = mrReader.pDoc->MakePageDesc(
-                        ViewShell::GetShellRes()->GetPageDescName(nDesc)
+                        ViewShell::GetShellRes()->GetPageDescName(nDesc, ShellResource::NORMAL_PAGE)
                         , 0, false);
                     aIter->mpTitlePage = &mrReader.pDoc->_GetPageDesc(nPos);
                 }
@@ -944,7 +944,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
             {
                 USHORT nPos = mrReader.pDoc->MakePageDesc(
                     ViewShell::GetShellRes()->GetPageDescName(nDesc,
-                        false, aIter->HasTitlePage()),
+                        aIter->HasTitlePage() ? ShellResource::FIRST_PAGE : ShellResource::NORMAL_PAGE),
                         aIter->mpTitlePage, false);
                 aIter->mpPage = &mrReader.pDoc->_GetPageDesc(nPos);
             }

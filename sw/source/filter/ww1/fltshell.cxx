@@ -2014,7 +2014,7 @@ SwPageDesc* SwFltShell::MakePageDesc(SwPageDesc* pFirstPageDesc)
 // fuer dopp. Namen ist gering)
 
     nPos = GetDoc().MakePageDesc( ViewShell::GetShellRes()->GetPageDescName(
-                                   GetDoc().GetPageDescCnt(), FALSE, bFollow ),
+                                   GetDoc().GetPageDescCnt(), bFollow ? ShellResource::FOLLOW_PAGE : ShellResource::NORMAL_PAGE),
                                 pFirstPageDesc, FALSE );
 
     pNewPD =  &((SwPageDesc&)const_cast<const SwDoc &>(GetDoc()).
