@@ -72,6 +72,10 @@ struct inclist *inc_path(file, include, dot, incCollection)
      * If the path was surrounded by "" or is an absolute path,
      * then check the exact path provided.
      */
+// FIXME: creates duplicates in the dependency files if absolute paths are
+// given, which certainly is not the intended behavior. Also it slows down
+// makedepend performance considerably.
+/*
     if (!found && (dot || *include == '/')) {
 
         if ((exists_path(incCollection, include)) && stat(include, &st) == 0 && !( st.st_mode & S_IFDIR)) {
@@ -81,6 +85,7 @@ struct inclist *inc_path(file, include, dot, incCollection)
         else if (show_where_not)
             warning1("\tnot in %s\n", include);
     }
+*/
 
     /*
      * See if this include file is in the directory of the
