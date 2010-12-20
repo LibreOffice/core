@@ -38,3 +38,5 @@
 
 #define FT_DATAFORM_FIXEDTEXT1    2001
 #define ED_DATAFORM_EDIT1         2002
+
+#define STR_NEW_RECORD            2003

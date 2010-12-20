@@ -52,6 +52,7 @@ private:
     OutlineLevels       maLevels;
     ::std::set<SCSIZE>  maCollapsedPosSet;
     ScOutlineArray*     mpOutlineArray;
+    SCSIZE              mnEndPos;
     sal_uInt8           mnMaxLevel;
     bool                mbButtonAfter:1;
 };

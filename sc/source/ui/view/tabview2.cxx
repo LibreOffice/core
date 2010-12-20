@@ -508,6 +508,126 @@ void ScTabView::GetAreaMoveEndPosition(SCsCOL nMovX, SCsROW nMovY, ScFollowMode 
     rMode = eMode;
 }
 
+void ScTabView::SkipCursorHorizontal(SCsCOL& rCurX, SCsROW& rCurY, SCsCOL nOldX, SCsROW nMovX)
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    bool bSkipProtected = false, bSkipUnprotected = false;
+    ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    if (pProtect && pProtect->isProtected())
+    {
+        bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    bool bSkipCell = false;
+    bool bHFlip = false;
+    do
+    {
+        SCCOL nLastCol = -1;
+        bSkipCell = pDoc->ColHidden(rCurX, nTab, nLastCol) || pDoc->IsHorOverlapped(rCurX, rCurY, nTab);
+        if (bSkipProtected && !bSkipCell)
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+        if (bSkipUnprotected && !bSkipCell)
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+
+        if (bSkipCell)
+        {
+            if (rCurX <= 0 || rCurX >= MAXCOL)
+            {
+                if (bHFlip)
+                {
+                    rCurX = nOldX;
+                    bSkipCell = false;
+                }
+                else
+                {
+                    nMovX = -nMovX;
+                    if (nMovX > 0)
+                        ++rCurX;
+                    else
+                        --rCurX;
+                    bHFlip = true;
+                }
+            }
+            else
+                if (nMovX > 0)
+                    ++rCurX;
+                else
+                    --rCurX;
+        }
+    }
+    while (bSkipCell);
+
+    if (pDoc->IsVerOverlapped(rCurX, rCurY, nTab))
+    {
+        aViewData.SetOldCursor(rCurX, rCurY);
+        while (pDoc->IsVerOverlapped(rCurX, rCurY, nTab))
+            --rCurY;
+    }
+}
+
+void ScTabView::SkipCursorVertical(SCsCOL& rCurX, SCsROW& rCurY, SCsROW nOldY, SCsROW nMovY)
+{
+    ScDocument* pDoc = aViewData.GetDocument();
+    SCTAB nTab = aViewData.GetTabNo();
+
+    bool bSkipProtected = false, bSkipUnprotected = false;
+    ScTableProtection* pProtect = pDoc->GetTabProtection(nTab);
+    if (pProtect && pProtect->isProtected())
+    {
+        bSkipProtected   = !pProtect->isOptionEnabled(ScTableProtection::SELECT_LOCKED_CELLS);
+        bSkipUnprotected = !pProtect->isOptionEnabled(ScTableProtection::SELECT_UNLOCKED_CELLS);
+    }
+
+    bool bSkipCell = false;
+    bool bVFlip = false;
+    do
+    {
+        SCROW nLastRow = -1;
+        bSkipCell = pDoc->RowHidden(rCurY, nTab, nLastRow) || pDoc->IsVerOverlapped( rCurX, rCurY, nTab );
+        if (bSkipProtected && !bSkipCell)
+            bSkipCell = pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+        if (bSkipUnprotected && !bSkipCell)
+            bSkipCell = !pDoc->HasAttrib(rCurX, rCurY, nTab, rCurX, rCurY, nTab, HASATTR_PROTECTED);
+
+        if (bSkipCell)
+        {
+            if (rCurY <= 0 || rCurY >= MAXROW)
+            {
+                if (bVFlip)
+                {
+                    rCurY = nOldY;
+                    bSkipCell = false;
+                }
+                else
+                {
+                    nMovY = -nMovY;
+                    if (nMovY > 0)
+                        ++rCurY;
+                    else
+                        --rCurY;
+                    bVFlip = true;
+                }
+            }
+            else
+                if (nMovY > 0)
+                    ++rCurY;
+                else
+                    --rCurY;
+        }
+    }
+    while (bSkipCell);
+
+    if (pDoc->IsHorOverlapped(rCurX, rCurY, nTab))
+    {
+        aViewData.SetOldCursor(rCurX, rCurY);
+        while (pDoc->IsHorOverlapped(rCurX, rCurY, nTab))
+            --rCurX;
+    }
+}
+
 namespace {
 
 bool lcl_isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, bool bSelectLocked, bool bSelectUnlocked)
@@ -522,6 +642,32 @@ bool lcl_isCellQualified(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, b
         return false;
 
     return true;
+}
+
+void skipHiddenRows(ScDocument* pDoc, SCTAB nTab, SCROW& rRow, bool bForward)
+{
+    SCROW nFirst, nLast;
+    if (!pDoc->RowHidden(rRow, nTab, &nFirst, &nLast))
+        // This row is visible.  Nothing to do.
+        return;
+
+    if (bForward)
+        rRow = nLast < MAXROW ? nLast + 1 : MAXROW;
+    else
+        rRow = nFirst > 0 ? nFirst - 1 : 0;
+}
+
+void skipHiddenCols(ScDocument* pDoc, SCTAB nTab, SCCOL& rCol, bool bForward)
+{
+    SCCOL nFirst, nLast;
+    if (!pDoc->ColHidden(rCol, nTab, &nFirst, &nLast))
+        // This row is visible.  Nothing to do.
+        return;
+
+    if (bForward)
+        rCol = nLast < MAXCOL ? nLast + 1 : MAXCOL;
+    else
+        rCol = nFirst > 0 ? nFirst - 1 : 0;
 }
 
 void lcl_moveCursorByProtRule(
@@ -545,6 +691,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol+1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rCol;
+                skipHiddenCols(pDoc, nTab, rCol, true);
             }
         }
     }
@@ -558,6 +705,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol-1, rRow, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rCol;
+                skipHiddenCols(pDoc, nTab, rCol, false);
             }
         }
     }
@@ -571,6 +719,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol, rRow+1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 ++rRow;
+                skipHiddenRows(pDoc, nTab, rRow, true);
             }
         }
     }
@@ -584,6 +733,7 @@ void lcl_moveCursorByProtRule(
                 if (!lcl_isCellQualified(pDoc, rCol, rRow-1, nTab, bSelectLocked, bSelectUnlocked))
                     break;
                 --rRow;
+                skipHiddenRows(pDoc, nTab, rRow, false);
             }
         }
     }

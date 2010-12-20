@@ -91,5 +91,9 @@ ModalDialog RID_SCDLG_DATAFORM
         HScroll = FALSE ;
         TabStop = FALSE ;
     };
+    String STR_NEW_RECORD
+    {
+        Text [ en-US ] = "New Record" ;
+    };
 };
 //end
