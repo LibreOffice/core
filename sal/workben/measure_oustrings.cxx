@@ -45,8 +45,12 @@
 
 #ifdef SAL_DECLARE_UTF16
 #  define RTL_CONSTASCII_USTRINGPARAM_WIDE(str) \
-     reinterpret_cast<const sal_Unicode*>(SAL_DECLARE_UTF16(str)), SAL_N_ELEMENTS(str)
+     reinterpret_cast<const sal_Unicode*>(SAL_DECLARE_UTF16(str)), (SAL_N_ELEMENTS(str)-1)
 #endif
+
+#define RTL_CONSTASCII_USTRINGPARAM_CLASSIC(str) \
+    str, ((sal_Int32)(SAL_N_ELEMENTS(str)-1)), RTL_TEXTENCODING_ASCII_US
+
 
 SAL_IMPLEMENT_MAIN()
 {
@@ -54,7 +58,7 @@ SAL_IMPLEMENT_MAIN()
     for (int i = 0; i < 10000000; ++i)
     {
         rtl::OUString sFoo(rtl::OUString::createFromAscii("X"));
-        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM("X"));
+        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("X"));
 #ifdef SAL_DECLARE_UTF16
         rtl::OUString sBoo(RTL_CONSTASCII_USTRINGPARAM_WIDE("X"));
 #endif
@@ -93,9 +97,9 @@ SAL_IMPLEMENT_MAIN()
     {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM("X"));
+        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("X"));
     sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"X\")) " << nEndTime - nStartTime << "ms" << std::endl;
+    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"X\")) " << nEndTime - nStartTime << "ms" << std::endl;
     }
 
 #ifdef SAL_DECLARE_UTF16
@@ -128,9 +132,9 @@ SAL_IMPLEMENT_MAIN()
     {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     for (int i = 0; i < 100000000; ++i)
-        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM("XXXXXXXXXXXXXXX"));
+        rtl::OUString sBar(RTL_CONSTASCII_USTRINGPARAM_CLASSIC("XXXXXXXXXXXXXXX"));
     sal_uInt32 nEndTime = osl_getGlobalTimer();
-    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(\"XXXXXXXX\")) " << nEndTime - nStartTime << "ms" << std::endl;
+    std::cout << "rtl::OUString(RTL_CONSTASCII_USTRINGPARAM_CLASSIC(\"XXXXXXXX\")) " << nEndTime - nStartTime << "ms" << std::endl;
     }
 
 #ifdef SAL_DECLARE_UTF16
