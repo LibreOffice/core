@@ -80,7 +80,7 @@ using ::com::sun::star::uno::Reference;
 using namespace ::toolkit;
 
 #define IMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString::createFromAscii( "stardiv.Toolkit." #ImplName ); } \
+    ::rtl::OUString SAL_CALL ImplName::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) { return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "stardiv.Toolkit." #ImplName )); } \
     ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL ImplName::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException) \
                             { \
                                 ::com::sun::star::uno::Sequence< ::rtl::OUString > aNames = BaseClass::getSupportedServiceNames( ); \

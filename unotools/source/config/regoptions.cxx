@@ -139,7 +139,7 @@ namespace utl
     #define DECLARE_STATIC_LAZY_USTRING( name ) \
     static const ::rtl::OUString& lcl_get##name##Name() \
     {   \
-        static const ::rtl::OUString sName = ::rtl::OUString::createFromAscii( #name ); \
+        static const ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM( #name )); \
         return sName;   \
     }
 
