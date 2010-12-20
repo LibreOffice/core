@@ -35,6 +35,7 @@ FileSendDocumentAsPDF SID_MAIL_SENDDOCASPDF
 FileVersions SID_VERSION
 FileReload SID_RELOAD SID_LASTVERSIONDOC
 FileProperties SID_DOCINFO
+FileDigitalSignatures .uno:Signature
 FileTemplatesOrganize SID_ORGANIZER
 FileTemplatesSave SID_DOCTEMPLATE
 FileTemplatesEdit SID_OPENTEMPLATE
