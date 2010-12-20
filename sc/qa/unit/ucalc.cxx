@@ -38,14 +38,22 @@
 //                 the need for manually calling regcomp and knowing what
 //                 services we need, and in what .so they are implemented
 
+#include "precompiled_sc.hxx"
+
 #ifdef WNT
 # include <tools/prewin.h>
 # include <windows.h>
 # include <tools/postwin.h>
-# undef ERROR
 #endif
 
-#include "sal/config.h"
+#include "preextstl.h"
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include "postextstl.h"
+
+#include <sal/config.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -55,20 +63,15 @@
 #include <document.hxx>
 #include <stringutil.hxx>
 
-#include "preextstl.h"
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
-
 using namespace ::com::sun::star;
 
 namespace {
 
 class Test : public CppUnit::TestFixture {
 public:
+    Test();
+    ~Test();
+
     virtual void setUp();
     virtual void tearDown();
 
@@ -83,15 +86,15 @@ public:
     CPPUNIT_TEST_SUITE_END();
 
 private:
-    uno::Reference< uno::XComponentContext > m_context;
+    uno::Reference< uno::XComponentContext > m_xContext;
     ScDocument *m_pDoc;
 };
 
-void Test::setUp()
+Test::Test()
 {
-    m_context = cppu::defaultBootstrap_InitialComponentContext();
+    m_xContext = cppu::defaultBootstrap_InitialComponentContext();
 
-    uno::Reference<lang::XMultiComponentFactory> xFactory(m_context->getServiceManager());
+    uno::Reference<lang::XMultiComponentFactory> xFactory(m_xContext->getServiceManager());
     uno::Reference<lang::XMultiServiceFactory> xSM(xFactory, uno::UNO_QUERY_THROW);
 
     //Without this we're crashing because callees are using
@@ -102,14 +105,21 @@ void Test::setUp()
     InitVCL(xSM);
 
     ScDLL::Init();
+}
 
+void Test::setUp()
+{
     m_pDoc = new ScDocument;
 }
 
 void Test::tearDown()
 {
     delete m_pDoc;
-    uno::Reference< lang::XComponent >(m_context, uno::UNO_QUERY_THROW)->dispose();
+}
+
+Test::~Test()
+{
+    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::testSUM()
