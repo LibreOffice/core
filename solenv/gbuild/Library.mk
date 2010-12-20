@@ -50,8 +50,8 @@ $(WORKDIR)/Clean/OutDir/lib/%$(gb_Library_PLAINEXT) : $(call gb_LinkTarget_get_c
 # FIXME: this should be cp -pf but that might break on some nfs setups
 $(gb_Library_OUTDIRLOCATION)/%$(gb_Library_PLAINEXT) :
 	$(call gb_Helper_abbreviate_dirs,\
-		$(call gb_Shadow_copy,$@,$<) \
-			$(foreach target,$(AUXTARGETS), && $(call gb_Shadow_copy,$(target),$(dir $<)/$(notdir $(target)))))
+		$(call gb_Shadow_deliver,$@,$<) \
+			$(foreach target,$(AUXTARGETS), && $(call gb_Shadow_deliver,$(target),$(dir $<)/$(notdir $(target)))))
 
 define gb_Library_Library
 ifeq (,$$(findstring $(1),$$(gb_Library_KNOWNLIBS)))
