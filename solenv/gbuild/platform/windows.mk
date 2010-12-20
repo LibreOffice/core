@@ -209,7 +209,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
-		$(6) \
+		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
 		$(3) \
 		-f - \
 	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
@@ -252,7 +252,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
-		$(6) \
+		$(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
 		$(3) \
 		-f - \
 	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
@@ -299,7 +299,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
-		$(6) \
+		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
 		$(3) \
 		-f - \
 	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
@@ -342,7 +342,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
-		$(6) \
+		$(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
 		$(3) \
 		-f - \
 	| $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
