@@ -364,6 +364,9 @@ gb_Executable_LAYER := \
 
 gb_SdiTarget_SVIDLPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := DYLD_LIBRARY_PATH=$(OUTDIR)/lib
 
 # SrsPartTarget class
 

@@ -528,6 +528,9 @@ endef
 
 gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 
+# SrsPartMergeTarget
+
+gb_SrsPartMergeTarget_TRANSEXPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"
 
 # SrsPartTarget class
 
