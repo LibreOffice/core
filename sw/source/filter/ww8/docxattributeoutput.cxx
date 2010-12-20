@@ -1310,11 +1310,23 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
     DocxExport& rExport = dynamic_cast< DocxExport& >( GetExport() );
     bool bEcma = rExport.GetFilter().getVersion( ) == oox::core::ECMA_DIALECT;
 
-    // The cell borders
-    m_pSerializer->startElementNS( XML_w, XML_tcBorders, FSEND );
-    SwFrmFmt *pFmt = pTblBox->GetFrmFmt( );
-    impl_pageBorders( m_pSerializer, pFmt->GetBox( ), !bEcma );
-    m_pSerializer->endElementNS( XML_w, XML_tcBorders );
+    // Cell prefered width
+    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
+    m_pSerializer->singleElementNS( XML_w, XML_tcW,
+           FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
+           FSNS( XML_w, XML_type ), "dxa",
+           FSEND );
+
+    // Horizontal spans
+    const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
+    SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
+    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
+
+    USHORT nColSpan = pCell->GetColSpan();
+    if ( nColSpan > 1 )
+        m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
+                FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nColSpan ) ).getStr(),
+                FSEND );
 
     // Vertical merges
     long vSpan = pTblBox->getRowSpan( );
@@ -1331,25 +1343,13 @@ void DocxAttributeOutput::TableCellProperties( ww8::WW8TableNodeInfoInner::Point
                 FSEND );
     }
 
-    // Horizontal spans
-    const SwWriteTableRows& aRows = m_pTableWrt->GetRows( );
-    SwWriteTableRow *pRow = aRows[ pTableTextNodeInfoInner->getRow( ) ];
-    SwWriteTableCell *pCell = pRow->GetCells( )[ pTableTextNodeInfoInner->getCell( ) ];
-
-    USHORT nColSpan = pCell->GetColSpan();
-    if ( nColSpan > 1 )
-        m_pSerializer->singleElementNS( XML_w, XML_gridSpan,
-                FSNS( XML_w, XML_val ), OString::valueOf( sal_Int32( nColSpan ) ).getStr(),
-                FSEND );
+    // The cell borders
+    m_pSerializer->startElementNS( XML_w, XML_tcBorders, FSEND );
+    SwFrmFmt *pFmt = pTblBox->GetFrmFmt( );
+    impl_pageBorders( m_pSerializer, pFmt->GetBox( ), !bEcma );
+    m_pSerializer->endElementNS( XML_w, XML_tcBorders );
 
     TableBackgrounds( pTableTextNodeInfoInner );
-
-    // Cell prefered width
-    SwTwips nWidth = GetGridCols( pTableTextNodeInfoInner )->at( pTableTextNodeInfoInner->getCell() );
-    m_pSerializer->singleElementNS( XML_w, XML_tcW,
-           FSNS( XML_w, XML_w ), OString::valueOf( sal_Int32( nWidth ) ).getStr( ),
-           FSNS( XML_w, XML_type ), "dxa",
-           FSEND );
 
     // Cell margins
     m_pSerializer->startElementNS( XML_w, XML_tcMar, FSEND );
