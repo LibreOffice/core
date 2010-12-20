@@ -563,7 +563,7 @@ bool ViewOverlayManager::CreateTags()
     {
         const std::list< SdrObject* >& rShapes = pPage->GetPresentationShapeList().getList();
 
-        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); iter++ )
+        for( std::list< SdrObject* >::const_iterator iter( rShapes.begin() ); iter != rShapes.end(); ++iter )
         {
             if( (*iter)->IsEmptyPresObj() && ((*iter)->GetObjIdentifier() == OBJ_OUTLINETEXT) && (mrBase.GetDrawView()->GetTextEditObject() != (*iter)) )
             {

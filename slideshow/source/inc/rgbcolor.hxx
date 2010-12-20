@@ -66,9 +66,6 @@ namespace slideshow
              */
             ::cppcanvas::Color::IntSRGBA getIntegerColor() const;
 
-            RGBColor(const RGBColor& rLHS);
-            RGBColor& operator=( const RGBColor& rLHS);
-
             struct RGBTriple
             {
                 RGBTriple();

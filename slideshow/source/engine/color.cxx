@@ -228,19 +228,6 @@ namespace slideshow
             return maHSLTriple.mnLuminance;
         }
 
-        RGBColor::RGBColor(const RGBColor& rLHS)
-            : maRGBTriple( rLHS.maRGBTriple )
-        {
-        }
-
-        RGBColor& RGBColor::operator=( const RGBColor& rLHS ){
-
-            maRGBTriple.mnRed = rLHS.getRed();
-            maRGBTriple.mnGreen = rLHS.getGreen();
-            maRGBTriple.mnBlue = rLHS.getBlue();
-            return *this;
-        }
-
         HSLColor operator+( const HSLColor& rLHS, const HSLColor& rRHS )
         {
             return HSLColor( rLHS.getHue() + rRHS.getHue(),
