@@ -35,6 +35,11 @@ gb_CXX := g++
 gb_GCCP := gcc
 gb_AWK := awk
 
+# normalize setsolar and configure env.
+ifeq ($(CPU),X)
+CPUNAME := X86_64
+endif
+
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
 gb_CC := $(CC)
