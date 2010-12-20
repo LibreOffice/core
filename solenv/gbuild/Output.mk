@@ -25,6 +25,7 @@
 #
 #*************************************************************************
 
+# user notifications and formatting
 
 define gb_Output__format_type
 [ $(word 2,$(1) build clean) $(2) ]
