@@ -36,6 +36,7 @@
 #include "tvread.hxx"
 #include <expat.h>
 #include <osl/file.hxx>
+#include <unotools/configmgr.hxx>
 #include <com/sun/star/frame/XConfigManager.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -676,10 +677,12 @@ ConfigData TVChildTarget::init( const Reference< XMultiServiceFactory >& xSMgr )
     /*                       reading setup                                */
     /**********************************************************************/
 
+    rtl::OUString productName;
+    ::utl::ConfigManager::GetDirectConfigProperty(::utl::ConfigManager::PRODUCTNAME) >>= productName;
+
     xHierAccess = getHierAccess( sProvider,
                                  "org.openoffice.Setup" );
 
-    rtl::OUString productName( getKey(  xHierAccess,"Product/ooName" ) );
     rtl::OUString setupversion( getKey( xHierAccess,"Product/ooSetupVersion" ) );
     rtl::OUString setupextension;
 

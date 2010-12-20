@@ -65,11 +65,11 @@ PKGVERSION.libreoffice = $(PKGVERSION)
 UNIXFILENAME.libreoffice = $(PRODUCTNAME.libreoffice:l)
 ICONPREFIX.libreoffice = $(UNIXFILENAME.libreoffice:s/.//g)
 
-PRODUCTNAME.broffice.org = BrOffice.org
-PRODUCTVERSION.broffice.org = $(PRODUCTVERSION)
-PRODUCTVERSIONSHORT.broffice.org = $(PRODUCTVERSIONSHORT)
-PKGVERSION.broffice.org = $(PKGVERSION)
-UNIXFILENAME.broffice.org = $(PRODUCTNAME.broffice.org:l)
-ICONPREFIX.broffice.org = $(UNIXFILENAME.broffice.org:s/.//g)
+PRODUCTNAME.broffice = BrOffice
+PRODUCTVERSION.broffice = $(PRODUCTVERSION)
+PRODUCTVERSIONSHORT.broffice = $(PRODUCTVERSIONSHORT)
+PKGVERSION.broffice = $(PKGVERSION)
+UNIXFILENAME.broffice = $(PRODUCTNAME.broffice:l)
+ICONPREFIX.broffice = $(UNIXFILENAME.broffice:s/.//g)
 
 

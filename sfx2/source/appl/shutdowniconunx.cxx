@@ -343,6 +343,22 @@ static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*
 }
 #endif
 
+#ifdef ENABLE_GIO
+/*
+ * See rhbz#610103. If the quickstarter is running, then LibreOffice is
+ * upgraded, then the old quickstarter is still running, but is now unreliable
+ * as the old install has been deleted. A fairly intractable problem but we
+ * can avoid much of the pain if we turn off the quickstarter if we detect
+ * that it has been physically deleted.
+*/
+static void notify_file_changed(GFileMonitor * /*gfilemonitor*/, GFile * /*arg1*/,
+    GFile * /*arg2*/, GFileMonitorEvent event_type, gpointer /*user_data*/)
+{
+    if (event_type == G_FILE_MONITOR_EVENT_DELETED)
+        exit_quickstarter_cb(GTK_WIDGET(pTrayIcon));
+}
+#endif
+
 void SAL_DLLPUBLIC_EXPORT plugin_init_sys_tray()
 {
     ::SolarMutexGuard aGuard;

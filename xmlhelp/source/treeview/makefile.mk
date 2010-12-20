@@ -57,6 +57,7 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(COMPHELPERLIB)         \
     $(EXPATASCII3RDLIB)      \
+    $(UNOTOOLSLIB)	     \
     $(SALLIB)  
 SHL1VERSIONMAP=$(SOLARENV)/src/component.map
 

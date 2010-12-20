@@ -18,15 +18,14 @@
 	<body>
 		<div id="Intro">
 			<h1 id="Welcome" xml:lang="en-US">${PRODUCTNAME} ${PRODUCTVERSION} ReadMe</h1>
-			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme/">http://www.libreoffice.org/welcome/readme/</a></p>
-			<p id="A6" xml:lang="en-US">This file contains important information about this program. Please read this information very carefully before starting work.</p>
-			<p id="A7" xml:lang="en-US">The LibreOffice Community, responsible for the development of this product, would like to invite you to participate as a community member. As a new user, you can check out the ${PRODUCTNAME} site with helpful user information at <a href="http://www.libreoffice.org/welcome/introduction/">http://www.libreoffice.org/welcome/introduction/</a></p>
-			<p id="A9" xml:lang="en-US">Also read the sections below about getting involved in the LibreOffice project.</p>
-			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} really free for any user? </h3>
-			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text delivered together with ${PRODUCTNAME} or <a href="http://www.libreoffice.org/license/">http://www.libreoffice.org/license/</a></p>
-			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} free for any user?</h3>
-			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} today free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading open-source office software.</p>
-			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure LibreOffice continues into the future, please consider contributing to the project - see <a href="http://www.libreoffice.org/contribution/">http://www.libreoffice.org/contribution/</a> for details. Everyone has a contribution to make.</p>
+			<p id="LatestUpdates" xml:lang="en-US">For latest updates to this readme file, see <a href="http://www.libreoffice.org/welcome/readme.html">http://www.libreoffice.org/welcome/readme.html</a></p>
+			<p id="A6" xml:lang="en-US">This file contains important information about the ${PRODUCTNAME} software. You are recommended to read this information very carefully before starting installation.</p>
+			<p id="A7" xml:lang="en-US">The ${PRODUCTNAME} community is responsible for the development of this product, and invites you to consider participating as a community member. If you are a new user, you can visit the ${PRODUCTNAME} site, where you will find lots of information about the ${PRODUCTNAME} project and the communities that exist around it. Go to <a href="http://www.libreoffice.org/">http://www.libreoffice.org/</a>.</p>
+			<h3 id="A10" xml:lang="en-US">Is ${PRODUCTNAME} Really Free for Any User?</h3>
+			<p id="A11" xml:lang="en-US">${PRODUCTNAME} is free for use by everybody. You may take this copy of ${PRODUCTNAME} and install it on as many computers as you like, and use it for any purpose you like (including commercial, government, public administration and educational use). For further details see the license text packaged with this ${PRODUCTNAME} download.</p>
+			<h3 id="A12" xml:lang="en-US">Why is ${PRODUCTNAME} Free for Any User?</h3>
+			<p id="A13" xml:lang="en-US">You can use this copy of ${PRODUCTNAME} free of charge because individual contributors and corporate sponsors have designed, developed, tested, translated, documented, supported, marketed, and helped in many other ways to make ${PRODUCTNAME} what it is today - the world's leading Open Source productivity software for home and office.</p>
+			<p id="A13b" xml:lang="en-US">If you appreciate their efforts, and would like to ensure that ${PRODUCTNAME} continues to be available far into the future, please consider contributing to the project - see <a href="http://www.documentfoundation.org/contribution/">http://www.documentfoundation.org/contribution/</a> for details. Everyone can make a contribution of some kind.</p>
 		</div>
 
 		<div id="Installation">
@@ -91,102 +90,88 @@
 				<p id="DLLA1" xml:lang="en-US">If you perform an administrative installation using setup /a, you need to make sure that the file msvc90.dll is installed on the system. This file is required for ${PRODUCTNAME} to start after an administrative installation. You can get the file from <a href="http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF">http://www.microsoft.com/downloads/details.aspx?familyid=9B2DA534-3E03-4391-8A4D-074B9F2BC1BF</a></p>
 				<p class="note" id="AdminNeeded" xml:lang="en-US">Please be aware that administrator rights are needed for the installation process.</p>
 			</div>
-			<div class="SOLSPARC" id="Sols2">
-				<ul>
-					<li>
-						<p id="s2335" xml:lang="en-US">Solaris 10 operating system (SPARC platform) or higher</p>
-					</li>
-
-					<li>
-						<p id="s253" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
-					</li>
-
-					<li>
-						<p id="s23seg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="s2s43gfe" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
-					</li>
-
-					<li>
-						<p id="n4234rw" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff2" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
-					</li>
-				</ul>
-			</div>
-			<div class="SOLX86" id="Solia2">
-				<ul>
-					<li>
-						<p id="s23h" xml:lang="en-US">Solaris 10 operating system (x86 platform) or higher</p>
-					</li>
-
-					<li>
-						<p id="s24f" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
-					</li>
-
-					<li>
-						<p id="fgheg" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
-					</li>
-
-					<li>
-						<p id="fghfgh" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
-					</li>
-
-					<li>
-						<p id="mgjfg" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff1" xml:lang="en-US">Gnome 2.6 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
-					</li>
-				</ul>
-			</div>
 			<div class="LINUX" id="Linuxi2">
+			    <p id="s2we10" xml:lang="en-US">As a general rule, you are recommended to install ${PRODUCTNAME} via the installation methods recommended by your particular Linux distribution (such as the Ubuntu Software Center, in the case of Ubuntu Linux). This is because it is usually the simplest way to obtain an installation that is optimally integrated into your system. Indeed, ${PRODUCTNAME} may well be already installed by default when you originally install your Linux operating system.</p>
+				<p id="s2we11" xml:lang="en-US">This "stand-alone" ${PRODUCTNAME} installer is provided for users in need of previews, having special needs, and for out-of-the-ordinary cases.</p>
 				<ul>
 					<li>
-						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher</p>
+						<p id="s2we35" xml:lang="en-US">Linux Kernel version 2.6.18 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s253we" xml:lang="en-US">glibc2 version 2.5 or higher</p>
+						<p id="s253we" xml:lang="en-US">glibc2 version 2.5 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s256we" xml:lang="en-US">gtk version 2.10.4 or higher</p>
+						<p id="s256we" xml:lang="en-US">gtk version 2.10.4 or higher;</p>
 					</li>
 
 					<li>
-						<p id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended)</p>
+						<p id="s2etfseg" xml:lang="en-US">Pentium compatible PC (Pentium III or Athlon recommended);</p>
 					</li>
 
 					<li>
-						<p id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended)</p>
+						<p id="s2ssdfe" xml:lang="en-US">256 MB RAM (512 MB RAM recommended);</p>
 					</li>
 
 					<li>
-						<p id="n42dfgf" xml:lang="en-US">Up to 1.55 GB available hard disk space</p>
+						<p id="n42dfgf" xml:lang="en-US">Up to 1.55 GB available hard disk space;</p>
 					</li>
 
 					<li>
-						<p id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors</p>
+						<p id="ghjhhr" xml:lang="en-US">X Server with 1024x768 resolution (higher resolution recommended), with at least 256 colors;</p>
 					</li>
 
 					<li>
-						<p id="fhrtz5" xml:lang="en-US">Window Manager</p>
-					</li>
-
-					<li>
-						<p id="wd2dff" xml:lang="en-US">Gnome 2.16 or higher, with the gail 1.8.6 and the at-spi 1.7 packages, required for support of assistive technology tools (AT tools)</p>
+						<p id="wd2dff" xml:lang="en-US">Gnome 2.16 or higher, with the gail 1.8.6 and the at-spi 1.7 packages (required for support for assistive technology [AT] tools), or another compatible GUI (such as KDE, among others).</p>
 					</li>
 				</ul>
-				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and even within the same distribution there may be different installation options (KDE vs Gnome, etc.). Some distributions ship with their own ‘native’ version of ${PRODUCTNAME}, which may have different features from this Community ${PRODUCTNAME}. Sometimes you can install the Community ${PRODUCTNAME} alongside the ‘native’ version. However, it’s usually safer to remove the ‘native’ version before installing this Community version. Consult the documentation for your distribution for details of how to do this.</p>
-				<p class="note" id="Linuxi4a" xml:lang="en-US">It is recommended that you always backup your system before you remove or install software.</p>
+				<p id="Linuxi3a" xml:lang="en-US">There is a wide variety of Linux distributions, and there may be different installation options (KDE vs Gnome, etc.) available from the same Linux vendor. Some distributions ship with their own “native” version of ${PRODUCTNAME}, which may have different features from this community-supplied version of ${PRODUCTNAME}. In many cases, you can install the community-supplied ${PRODUCTNAME} alongside a native version. However, you may prefer to remove the “native” version before installing this community-supplied version. For details on how to do that, please consult the user help resources provided by your particular Linux vendor.</p>
+				<p class="note" id="Linuxi4a" xml:lang="en-US">It is a recommended best practice to back-up your system and data before you remove or install software.</p>
 			</div>
-			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system and that read, write and run access rights have been granted. Close all other programs before starting the installation.</p>
+			<p id="Precautions" xml:lang="en-US">Please make sure you have enough free memory in the temporary directory on your system, and please ensure that read, write and run access rights have been granted. Close all other programs before starting the installation process.</p>
+			<h3 id="sdfsdfgf42s" xml:lang="en-US">Installation of ${PRODUCTNAME} on Debian/Ubuntu-based Linux systems</h3>
+			<p id="debianinstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to do that, please read the section below entitled Deinstallation of a Previous Version of ${PRODUCTNAME}. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
+			<p id="debianinstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
+			<p id="debianinstall3" xml:lang="en-US">This directory contains a subdirectory called "DEBS". Change directory to the "DEBS" directory.</p>
+			<p id="debianinstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
+			<p id="debianinstall5" xml:lang="en-US">sudo dpkg -i *.deb</p>
+			<p id="debianinstall6" xml:lang="en-US">The above dpkg command does the first part of the installation process. To complete the process, you also need to install the desktop integration packages. To do this, change directory to the "desktop-integration" directory that is within the "DEBS" directory, using the following command:</p>
+			<p id="debianinstall7" xml:lang="en-US">cd desktop-integration</p>
+			<p id="debianinstall8" xml:lang="en-US">Now run the dpkg command again:</p>
+			<p id="debianinstall9" xml:lang="en-US">sudo dpkg -i *.deb</p>
+			<p id="debianinstallA" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
+			<h3 id="sdfsdfgf42t" xml:lang="en-US">Installation of ${PRODUCTNAME} on Fedora, Suse, Mandriva and other Linux systems using RPM packages</h3>
+			<p id="rpminstall1" xml:lang="en-US">If you have a previous version of ${PRODUCTNAME} already installed, then you will need to de-install it before proceeding further. For instructions on how to do that, please read the section below entitled De-installation of a Previous Version of ${PRODUCTNAME}. For instructions on how to install a language pack (after having installed the US English version of ${PRODUCTNAME}), please read the section below entitled Installing a Language Pack.</p>
+			<p id="rpminstall2" xml:lang="en-US">When you unpack the downloaded archive, you will see that the contents have been decompressed into a sub-directory. Open a file manager window, and change directory to the one starting with "LibO_", followed by the version number and some platform information.</p>
+			<p id="rpminstall3" xml:lang="en-US">This directory contains a subdirectory called "RPMS". Change directory to the "RPMS" directory.</p>
+			<p id="rpminstall4" xml:lang="en-US">Right-click within the directory and choose "Open in Terminal". A terminal window will open. From the command line of the terminal window, enter the following command (you will be prompted to enter your root user's password before the command will execute):</p>
+			<p id="rpminstall5" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *.rpm'</p>
+			<p id="rpminstall6" xml:lang="en-US">For Mandriva-based systems: su urpmi *.rpm</p>
+			<p id="rpminstall7" xml:lang="en-US">For other RPM-based systems (Suse, etc.): rpm -Uvh *.rpm</p>
+			<p id="rpminstall8" xml:lang="en-US">The above command does the first part of the installation process. To complete the process, you also need to install the desktop integration packages. To do this, change directory to the "desktop-integration" directory that is within the "RPMS" directory, using the following command:</p>
+			<p id="rpminstall9" xml:lang="en-US">cd desktop-integration</p>
+			<p id="rpminstallA" xml:lang="en-US">Now run the installation command again:</p>
+			<p id="rpminstallB" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *redhat*.rpm'</p>
+			<p id="rpminstallC" xml:lang="en-US">For Mandriva-based systems: su urpmi *mandriva*.rpm</p>
+			<p id="rpminstallD" xml:lang="en-US">For other RPM-based systems (Suse, etc.): rpm -Uvh *suse*.rpm</p>
+			<p id="rpminstallE" xml:lang="en-US">The installation process is now completed, and you should have icons for all the ${PRODUCTNAME} applications in your desktop's Applications/Office menu.</p>
+			<h3 id="sdfsdfgf42t2" xml:lang="en-US">Notes Concerning Desktop Integration for Linux Distributions Not Covered in the Above Installation Instructions</h3>
+			<p id="otherinstall1" xml:lang="en-US">It should be easily possible to install ${PRODUCTNAME} on other Linux distributions not specifically covered in these installation instructions. The main aspect for which differences might be encountered is desktop integration.</p>
+			<p id="otherinstall2" xml:lang="en-US">The desktop-integration directory also contains a package named libreoffice3.3-freedesktop-menus-3.3.1.noarch.rpm (or similar). This is a package for all Linux distributions that support the Freedesktop.org specifications/recommendations (<a href="http://en.wikipedia.org/wiki/Freedesktop.org">http://en.wikipedia.org/wiki/Freedesktop.org</a>), and is provided for installation on other Linux distributions not covered in the aforementioned instructions.</p>
+			<h3 id="sdfsdfgf42t3" xml:lang="en-US">Installing a Language Pack</h3>
+			<p id="linuxlangpack1" xml:lang="en-US">Download the language pack for your desired language and platform. They are available from the same location as the main installation archive. From the Nautilus file manager, extract the downloaded archive into a directory (your desktop, for instance). Ensure that you have exited all ${PRODUCTNAME} applications (including the QuickStarter, if it is started).</p>
+			<p id="linuxlangpack2" xml:lang="en-US">Change directory to the directory in which you extracted your downloaded language pack.</p>
+			<p id="linuxlangpack3" xml:lang="en-US">Now change directory to the directory that was created during the extraction process. For instance, for the French language pack for a 32-bit Debian/Ubuntu-based system, the directory is named LibO_, plus some version information, plus Linux_x86_langpack-deb_fr.</p>
+			<p id="linuxlangpack4" xml:lang="en-US">Now change directory to the directory that contains the packages to install. On Debian/Ubuntu-based systems, the directory will be DEBS. On Fedora, Suse or Mandriva systems, the directory will be RPMS.</p>
+			<p id="linuxlangpack5" xml:lang="en-US">From the Nautilus file manager, right-click in the directory and choose the command "Open in terminal". In the terminal window you just opened, execute the command to install the language pack (with all of the commands below, you may be prompted to enter your root user's password):</p>
+			<p id="linuxlangpack6" xml:lang="en-US">For Debian/Ubuntu-based systems: sudo dpkg -i *.deb</p>
+			<p id="linuxlangpack7" xml:lang="en-US">For Fedora-based systems: su -c 'yum install *.rpm'</p>
+			<p id="linuxlangpack8" xml:lang="en-US">For Mandriva-based systems: su urpmi *.rpm</p>
+			<p id="linuxlangpack9" xml:lang="en-US">For other RPM-using systems (Suse, etc.): rpm -Uvh *.rpm</p>
+			<p id="linuxlangpackA" xml:lang="en-US">Now start one of the ${PRODUCTNAME} applications - Writer, for instance. Go to the Tools menu and choose Options. In the Options dialog box, click on "Language Settings" and then click on "Languages". Dropdown the "User interface" list and select the language you just installed. If you want, do the same thing for the "Locale setting", the "Default currency", and the "Default languages for documents".</p>
+			<p id="linuxlangpackB" xml:lang="en-US">After adjusting those settings, click on OK. The dialog box will close, and you will see an information message telling you that your changes will only be activated after you exit ${PRODUCTNAME} and start it again (remember to also exit the QuickStarter if it is started).</p>
+			<p id="linuxlangpackC" xml:lang="en-US">The next time you start ${PRODUCTNAME}, it will start in the language you just installed.</p>
 		</div>
 
 		<div class="LINUX WIN" id="StartupProblems">
@@ -225,8 +210,8 @@
 		</div>
 
 		<div class="LINUX" id="Graphic Performance">
-			<h2 id="gfh6w" xml:lang="en-US">Graphic Performance</h2>
-			<p id="pji76w" xml:lang="en-US">By default, ${PRODUCTNAME} favours nice-looking graphics over speed. If you experience slow graphics, switching off 'Tools - Options - ${PRODUCTNAME} - View - Use Anti-Aliasing' may help.</p>
+			<h2 id="gfh6w0" xml:lang="en-US">Graphic Performance</h2>
+			<p id="pji76w0" xml:lang="en-US">By default, ${PRODUCTNAME} favours nice-looking graphics over speed. If you experience slow graphics, switching off 'Tools - Options - ${PRODUCTNAME} - View - Use Anti-Aliasing' may help.</p>
 		</div>
 
 		<div class="WIN" id="Mapi">
@@ -275,7 +260,7 @@
 					<p id="subscribelist4" xml:lang="en-US">General developer list: libreoffice@lists.freedesktop.org (heavy traffic)</p>
 				</li>
 			</ul>
-			<h3 xml:lang="en-US">Joining one or more Projects</h3>
+			<h3 id="joining0" xml:lang="en-US">Joining one or more Projects</h3>
 			<p id="joining" xml:lang="en-US">You can make major contributions to this important open source project even if you have limited software design or coding experience. Yes, you!</p>
 		</div>
 

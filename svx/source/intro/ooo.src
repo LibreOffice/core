@@ -111,7 +111,7 @@ ModalDialog RID_DEFAULTABOUT
     };
     String ABOUT_STR_LINK
     {
-        Text[ en-US ] = "http://libreoffice.org/credits.html";
+        Text[ en-US ] = "http://www.libreoffice.org/credits.html";
     };
     StringArray ABOUT_STR_DEVELOPER_ARY
     {
