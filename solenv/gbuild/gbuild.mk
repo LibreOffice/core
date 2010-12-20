@@ -51,7 +51,18 @@
 SHELL := /bin/sh
 true := T
 false :=
+define NEWLINE
 
+
+endef
+
+define WHITESPACE
+ 
+endef
+
+COMMA :=,
+
+include $(GBUILDDIR)/Output.mk
 include $(GBUILDDIR)/BuildDirs.mk
 
 ifneq ($(strip $(PRODUCT)$(product)),)
