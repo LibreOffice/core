@@ -33,4 +33,3 @@ BEGIN {
 NF == 2 {
     print "COPY " $1 " " $2;
 }
-

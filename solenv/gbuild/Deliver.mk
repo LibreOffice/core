@@ -58,11 +58,12 @@ define gb_Deliver_deliver
 $(call gb_Deliver__deliverprefix,$(2)) $(gb_Deliver_GNUCOPY) -f $(1) $(2)
 endef
 
+# we need the trailing whitespace so that the newline of echo does not become part of the last record
 define gb_Deliver_setdeliverlogcommand
 ifeq ($$(words $(gb_Module_ALLMODULES)),1)
 $$(eval $$(call gb_Output_announce,$$(strip $$(gb_Module_ALLMODULES)),$$(true),LOG,1))
 deliverlog : COMMAND := mkdir -p $$(OUTDIR)/inc/$$(strip $$(gb_Module_ALLMODULES)) &&
-deliverlog : COMMAND += echo "$$(strip $$(call gb_Deliver_DELIVERABLES))" | awk -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/deliver.log
+deliverlog : COMMAND += echo "$$(strip $$(call gb_Deliver_DELIVERABLES)) " | awk -f $$(GBUILDDIR)/processdelivered.awk > $$(OUTDIR)/inc/$$(strip $(gb_Module_ALLMODULES))/deliver.log
 else
 $$(eval $$(call gb_Output_announce,more than one module - creating no deliver.log,$$(true),LOG,1))
 deliverlog : COMMAND := true
