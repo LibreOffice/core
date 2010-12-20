@@ -52,8 +52,8 @@ $(gb_StaticLibrary_OUTDIRLOCATION)/%$(gb_StaticLibrary_PLAINEXT) :
 
 define gb_StaticLibrary_StaticLibrary
 ifeq (,$$(findstring $(1),$$(gb_StaticLibrary_KNOWNLIBS)))
-$$(info currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)))
-$$(error Library $(1) must be registered in $(GBUILDDIR)/libnames.mk)
+$$(eval $$(call gb_Output_info,Currently known static libraries are: $(sort $(gb_StaticLibrary_KNOWNLIBS)),ALL))
+$$(eval $$(call gb_Output_error,Static library $(1) must be registered in Repository.mk))
 endif
 $(call gb_StaticLibrary_get_target,$(1)) : AUXTARGETS :=
 $(call gb_StaticLibrary__StaticLibrary_impl,$(1),$(call gb_StaticLibrary_get_linktargetname,$(call gb_StaticLibrary_get_filename,$(1))))
