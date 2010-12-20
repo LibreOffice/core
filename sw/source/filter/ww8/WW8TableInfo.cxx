@@ -252,9 +252,6 @@ WidthsPtr WW8TableNodeInfoInner::getWidthsOfRow()
         pWidths = WidthsPtr(new Widths);
         // number of cell written
         sal_uInt32 nBoxes = rTabBoxes.Count();
-        if ( nBoxes > 32 )
-            nBoxes = 32;
-
         for (sal_uInt32 n = 0; n < nBoxes; n++)
         {
             const SwFrmFmt* pBoxFmt = rTabBoxes[ n ]->GetFrmFmt();
@@ -283,9 +280,6 @@ RowSpansPtr WW8TableNodeInfoInner::getRowSpansOfRow()
         const SwTableBoxes & rTabBoxes = pTabLine->GetTabBoxes();
 
         sal_uInt32 nBoxes = rTabBoxes.Count();
-        if (nBoxes > 32)
-            nBoxes = 32;
-
         for (sal_uInt32 n = 0; n < nBoxes; ++n)
         {
             pResult->push_back(rTabBoxes[n]->getRowSpan());
