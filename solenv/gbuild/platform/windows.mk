@@ -207,7 +207,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 define gb_CObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter -DPRECOMPILED_HEADERS,$(4)) $(5) \
+		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
 		$(3) \
@@ -250,7 +250,7 @@ ifeq ($(gb_FULLDEPS),$(true))
 define gb_CxxObject__command_deponcompile
 $(call gb_Helper_abbreviate_dirs_native,\
 	$(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-		$(filter -DPRECOMPILED_HEADERS,$(4)) $(5) \
+		$(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
 		$(3) \
