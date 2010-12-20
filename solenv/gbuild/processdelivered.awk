@@ -30,6 +30,6 @@ BEGIN {
     FS=":"
 }
 
-NF == 2 {
+length($1) > 0 && length($2) > 0 {
     print "COPY " $1 " " $2;
 }
