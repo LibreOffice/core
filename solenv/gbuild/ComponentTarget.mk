@@ -27,8 +27,13 @@
 
 gb_ComponentTarget_REPOS := $(gb_REPOS)
 
+ifeq ($(SYSTEM_LIBXSLT),YES)
+gb_ComponentTarget_XSLTPROCTARGET :=
+gb_ComponentTarget_XSLTPROCCOMMAND := xsltproc
+else
 gb_ComponentTarget_XSLTPROCTARGET := $(call gb_Executable_get_target,xsltproc)
 gb_ComponentTarget_XSLTPROCCOMMAND := $(gb_ComponentTarget_XSLTPROCPRECOMMAND) $(gb_ComponentTarget_XSLTPROCTARGET)
+endif
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
