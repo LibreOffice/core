@@ -46,7 +46,7 @@ endef
 
 
 gb_Output_ESCAPE := $(shell echo -e '\033')
-gb_Output_BELL := $(shell echo -e '\033')
+gb_Output_BELL := $(shell echo -e '\07')
 
 # only enable colorized output if
 # - gb_COLOR is set
@@ -106,7 +106,7 @@ endif
 ifneq ($(strip $(gb_TITLES)),)
 ifneq ($(filter $(TERM),Eterm aterm gnome kterm rxvt rxvt-unicode screen xterm xterm-color),)
 define gb_Output_announce_title
-$(shell echo -en '\033]2;gbuild: $(1)\07' > `tty`)
+$(info $(gb_Output_ESCAPE)]2;gbuild: $(1)$(gb_Output_BELL)$(gb_Output_ESCAPE)[A)
 endef
 
 $(call gb_Output_announce_title,...)
@@ -119,7 +119,7 @@ endif
 # - gb_TTY is true (not piping to a file)
 ifneq ($(strip $(gb_BELL)),)
 define gb_Output_announce_bell
-$(shell echo -en '\07' > `tty`)
+$(info $(gb_Output_BELL)$(gb_Output_ESCAPE)[A)
 endef
 endif
 
