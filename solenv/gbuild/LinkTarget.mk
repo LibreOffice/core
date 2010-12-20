@@ -341,6 +341,7 @@ endif
 endef
 
 define gb_LinkTarget_set_defs
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : DEFS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_DEFS := $(2)
@@ -361,6 +362,7 @@ endif
 endef
 
 define gb_LinkTarget_set_cxxflags
+$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : CXXFLAGS := $(2)
 $(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_target,$(1)) : PCH_CXXFLAGS := $(2)
