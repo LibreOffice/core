@@ -120,8 +120,8 @@ sub get_feature_display
     # Special handling for c05office. No program module visible.
     if (( $onefeature->{'gid'} eq "gid_Module_Prg" ) && ( $installer::globals::product =~ /c05office/i )) { $display = "0"; }
 
-    # making all feature invisible in Language packs!
-    if ( $installer::globals::languagepack ) { $display = "0"; }
+    # making all feature invisible in Language packs and in Help packs!
+    if ( $installer::globals::languagepack || $installer::globals::helppack ) { $display = "0"; }
 
     return $display
 }

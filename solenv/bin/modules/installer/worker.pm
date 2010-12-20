@@ -822,7 +822,7 @@ sub install_simple ($$$$$$)
     {
         my $filelist;
         my $fname = $installer::globals::destdir . "/$packagename";
-        if ($installer::globals::languagepack) { $fname .= ".$languagestring"; }
+        if ($installer::globals::languagepack || $installer::globals::helppack) { $fname .= ".$languagestring"; }
         open ($filelist, ">$fname") || die "Can't open $fname: $!";
         print $filelist @lines;
         close ($filelist);
@@ -3137,7 +3137,8 @@ sub put_license_into_setup
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
-    my $licensefilename = "license_" . $licenselanguage . ".txt";
+    # my $licensefilename = "LICENSE"; # _" . $licenselanguage;
+    my $licensefilename = "license"; # . $licenselanguage . ".txt";
     my $licenseincludepatharrayref = get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);

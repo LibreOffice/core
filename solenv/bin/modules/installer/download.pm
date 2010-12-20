@@ -420,6 +420,7 @@ sub get_installation_type
     my $type = "";
 
     if ( $installer::globals::languagepack ) { $type = "langpack"; }
+    elsif ( $installer::globals::helppack ) { $type = "helppack"; }
     else { $type = "install"; }
 
     return $type;
@@ -645,6 +646,25 @@ sub get_install_type
     if ( $installer::globals::languagepack )
     {
         $type = "langpack";
+
+        if ( $installer::globals::isrpmbuild )
+        {
+            $type = $type . "-rpm";
+        }
+
+        if ( $installer::globals::isdebbuild )
+        {
+            $type = $type . "-deb";
+        }
+
+        if ( $installer::globals::packageformat eq "archive" )
+        {
+            $type = $type . "-arc";
+        }
+    }
+    elsif ( $installer::globals::helppack )
+    {
+        $type = "helppack";
 
         if ( $installer::globals::isrpmbuild )
         {
@@ -1025,7 +1045,7 @@ sub put_windows_productpath_into_template
 
     if (length($locallangs) > $installer::globals::max_lang_length) { $locallangs = "multi lingual"; }
 
-    if ( ! $installer::globals::languagepack ) { $productpath = $productpath . " (" . sprintf('%x', time()) . ")"; }
+    if ( ! $installer::globals::languagepack || ! $installer::globals::helppack ) { $productpath = $productpath . " (" . sprintf('%x', time()) . ")"; }
 
     replace_one_variable($templatefile, "PRODUCTPATHPLACEHOLDER", $productpath);
 }

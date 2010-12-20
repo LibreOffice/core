@@ -87,6 +87,7 @@ sub save_followme_info
     push(@filecontent, "globals:product: $installer::globals::product\n");
     push(@filecontent, "globals:patch: $installer::globals::patch\n");
     push(@filecontent, "globals:languagepack: $installer::globals::languagepack\n");
+    push(@filecontent, "globals:helppack: $installer::globals::helppack\n");
     push(@filecontent, "globals:installertypedir: $installer::globals::installertypedir\n");
     push(@filecontent, "globals:max_lang_length: $installer::globals::max_lang_length\n");
     push(@filecontent, "globals:compiler: $installer::globals::compiler\n");
@@ -189,6 +190,7 @@ sub read_followme_info
             if ( $name eq "product" ) { $installer::globals::product = $value; }
             if ( $name eq "patch" ) { $installer::globals::patch = $value; }
             if ( $name eq "languagepack" ) { $installer::globals::languagepack = $value; }
+            if ( $name eq "helppack" ) { $installer::globals::helppack = $value; }
             if ( $name eq "installertypedir" ) { $installer::globals::installertypedir = $value; }
             if ( $name eq "max_lang_length" ) { $installer::globals::max_lang_length = $value; }
             if ( $name eq "compiler" ) { $installer::globals::compiler = $value; }

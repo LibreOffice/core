@@ -215,6 +215,7 @@ sub correct_database
 
     my $localproduct = $installer::globals::product;
     if ( $installer::globals::languagepack ) { $localproduct = $localproduct . "LanguagePack"; }
+    elsif ( $installer::globals::helppack ) { $localproduct = $localproduct . "HelpPack"; }
 
     if ( $product eq $localproduct ) { $product_is_good = 1; }
 

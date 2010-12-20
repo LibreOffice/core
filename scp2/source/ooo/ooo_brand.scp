@@ -35,7 +35,7 @@ Directory gid_Dir_Brand_Root
   #else
     HostName = ".";
   #endif
-    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION);
+    Styles = (OFFICEDIRECTORY,ISINSTALLLOCATION,CREATE);
 End
 #endif
 

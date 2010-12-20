@@ -318,7 +318,7 @@ sub create_epm_header
 
     my @epmheader = ();
 
-    my ($licensefilename, $readmefilename);
+    my ($licensefilename, $readmefilename, $readmefilenameen);
 
     my $foundlicensefile = 0;
     my $foundreadmefile = 0;
@@ -388,24 +388,27 @@ sub create_epm_header
     {
         $licensefilename = "license.txt";
         $readmefilename = "readme.txt";
+        $readmefilenameen = "readme_en-US.txt";
     }
     else
     {
         $licensefilename = "LICENSE";
         $readmefilename = "README";
+        $readmefilenameen = "README_en-US";
     }
 
-    if (( $installer::globals::languagepack )   # in language packs the files LICENSE and README are removed, because they are not language specific
+    if (( $installer::globals::languagepack )   # in language packs and help packs the files LICENSE and README are removed, because they are not language specific
+        || ( $installer::globals::helppack )
         || ( $variableshashref->{'NO_README_IN_ROOTDIR'} ))
     {
         if ( $installer::globals::iswindowsbuild )
         {
-            $licensefilename = "license_$searchlanguage.txt";
+            $licensefilename = "license.txt"; # _$searchlanguage.txt";
             $readmefilename = "readme_$searchlanguage.txt";
         }
         else
         {
-            $licensefilename = "LICENSE_$searchlanguage";
+            $licensefilename = "LICENSE"; # _$searchlanguage";
             $readmefilename = "README_$searchlanguage";
         }
     }
@@ -432,18 +435,41 @@ sub create_epm_header
             $license_in_package_defined = 1;
         }
     }
-    # searching for and readme file
 
-    for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
+    # searching for and readme file;
+    # URE uses special README; others use README_en-US
+    # it does not matter which one is passed for epm if both are packaged
+    foreach my $possiblereadmefilename ($readmefilenameen, $readmefilename)
     {
-        my $onefile = ${$filesinproduct}[$i];
-        my $filename = $onefile->{'Name'};
-        if ( $filename eq $readmefilename )
+        last if ($foundreadmefile);
+        for ( my $i = 0; $i <= $#{$filesinproduct}; $i++ )
         {
+            my $onefile = ${$filesinproduct}[$i];
+            my $filename = $onefile->{'Name'};
+            if ( $filename eq $possiblereadmefilename )
+            {
+                $foundreadmefile = 1;
+                $line = "%readme" . " " . $onefile->{'sourcepath'} . "\n";
+                push(@epmheader, $line);
+                last;
+            }
+        }
+    }
+
+    # the readme file need not be packaged more times in the help content
+    # it needs to be installed in parallel with the main package anyway
+    # try to find the README file between all available files (not only between the packaged)
+    if (!($foundreadmefile) && $installer::globals::helppack)
+    {
+        my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$readmefilenameen, "" , 0);
+        if($$fileref ne "" )
+        {
+            $infoline = "Fallback to readme file: \"$$fileref\"!\n";
+            push(@installer::globals::logfileinfo, $infoline);
+
             $foundreadmefile = 1;
-            $line = "%readme" . " " . $onefile->{'sourcepath'} . "\n";
+            $line = "%readme" . " " . $$fileref . "\n";
             push(@epmheader, $line);
-            last;
         }
     }
 
@@ -500,6 +526,23 @@ sub create_epm_header
                 $line = "%license" . " " . $onefile->{'sourcepath'} . "\n";
                 push(@epmheader, $line);
                 last;
+            }
+        }
+
+        # the license file need not be packaged more times in the langpacks
+        # they need to be installed in parallel with the main package anyway
+        # try to find the LICENSE file between all available files (not only between the packaged)
+        if (!($foundlicensefile) && ($installer::globals::languagepack || $installer::globals::helppack))
+        {
+            my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, "" , 0);
+            if($$fileref ne "" )
+            {
+                $infoline = "Fallback to license file: \"$$fileref\"!\n";
+                push(@installer::globals::logfileinfo, $infoline);
+
+                $foundlicensefile = 1;
+                $line = "%license" . " " . $$fileref . "\n";
+                push(@epmheader, $line);
             }
         }
     }

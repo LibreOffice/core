@@ -94,7 +94,7 @@ sub create_upgrade_table
 
         # also searching for the beta
 
-        if (( $allvariableshashref->{'BETAUPGRADECODE'} ) && ( ! $installer::globals::languagepack ))
+        if (( $allvariableshashref->{'BETAUPGRADECODE'} ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ))
         {
             $newline = $allvariableshashref->{'BETAUPGRADECODE'} . "\t" . "1.0" . "\t" . "\t" . "\t" . "1" . "\t" . "\t" . "BETAPRODUCTS" . "\n";
             push(@upgradetable, $newline);

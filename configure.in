@@ -542,6 +542,12 @@ AC_ARG_WITH(theme,
          Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
 ,)
 
+AC_ARG_WITH(theme,
+    AS_HELP_STRING([--with-theme="theme1 theme2..."],
+	[Choose which themes to include. By default those themes with an '*' are included.
+         Possible choices: *default, *crystal, *hicontrast, *oxygen, *tango, classic, industrial.]),
+,)
+
 AC_ARG_WITH(extension-integration,
     AS_HELP_STRING([--with-extension-integration],
         [It will integrate the builded extensions to the installer of the product.
@@ -550,9 +556,9 @@ AC_ARG_WITH(extension-integration,
 
 AC_ARG_WITH(helppack-integration,
 [
-  --with-helppack-integration      It will integrate the helppacks to the installer
+  --without-helppack-integration      It will not integrate the helppacks to the installer
                           of the product.
-                          Please use this switch to include any helppack.],
+                          Please use this switch to use the online help or separate help packages.],
 ,)
 
 AC_ARG_WITH(fonts,
@@ -1764,9 +1770,8 @@ else
 fi
 AC_SUBST(WITH_MYSPELL_DICTS)
 
-if test "$WITH_MYSPELL_DICTS" = "NO"; then
-  AC_MSG_CHECKING([whether to use dicts from external paths])
-  if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
+AC_MSG_CHECKING([whether to use dicts from external paths])
+if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     SYSTEM_DICTS=YES
     AC_MSG_CHECKING([for spelling dictionary directory])
@@ -1790,10 +1795,9 @@ if test "$WITH_MYSPELL_DICTS" = "NO"; then
         THES_SYSTEM_DIR=file:///usr/share/mythes
     fi
     AC_MSG_RESULT([$THES_SYSTEM_DIR])
-  else
-      AC_MSG_RESULT([no])
-      SYSTEM_DICTS=NO
-  fi
+else
+        AC_MSG_RESULT([no])
+        SYSTEM_DICTS=NO
 fi
 AC_SUBST(SYSTEM_DICTS)
 AC_SUBST(DICT_SYSTEM_DIR)
@@ -3927,6 +3931,16 @@ fi
 AC_SUBST(GPERF)
 
 dnl ===================================================================
+dnl Check for pkg-config
+dnl # Note that if there is a possibility the first call to
+dnl # PKG_CHECK_MODULES might not happen, you should be sure to include an
+dnl # explicit call to PKG_PROG_PKG_CONFIG in your configure.ac
+dnl ===================================================================
+if test "$_os" != "WNT"; then
+    PKG_PROG_PKG_CONFIG
+fi
+
+dnl ===================================================================
 dnl Check for building stax
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the stax])
@@ -5479,6 +5493,12 @@ if test "$with_system_mesa_headers" = "no"; then
 else
    AC_MSG_RESULT([external])
    SYSTEM_MESA_HEADERS=YES
+   AC_LANG_PUSH(C)
+   AC_CHECK_HEADER(GL/glxext.h, [],
+      [ AC_MSG_ERROR(mesa headers not found.)], [#include <GL/glx.h>])
+   AC_MSG_CHECKING([whether GL/glxext.h defines PFNGLXBINDTEXIMAGEEXTPROC])
+   AC_EGREP_HEADER(PFNGLXBINDTEXIMAGEEXTPROC, GL/glxext.h, [AC_MSG_RESULT([yes])], AC_MSG_ERROR(no))
+   AC_LANG_POP(C)
 fi
 AC_SUBST(SYSTEM_MESA_HEADERS)
 
@@ -6956,6 +6976,21 @@ the root of your Qt installation by exporting QT4DIR before running "configure".
    KDE4_CFLAGS="`pkg-config --cflags QtCore` `pkg-config --cflags QtGui` -I$kde_incdir -DQT_CLEAN_NAMESPACE -DQT_THREAD_SUPPORT"
    KDE4_LIBS="-L$kde_libdir -L$qt_lib_dir -lkdeui -lkdecore -lQtCore -lQtGui"
 
+   AC_LANG_PUSH([C++])
+   save_CXXFLAGS=$CXXFLAGS
+   CXXFLAGS="$CXXFLAGS $KDE4_CFLAGS"
+   AC_MSG_CHECKING([whether KDE is >= 4.2])
+       AC_TRY_RUN([
+#include <kdeversion.h>
+
+int main(int argc, char **argv) {
+       if (KDE_VERSION_MAJOR == 4 && KDE_VERSION_MINOR >= 2) return 0;
+       else return 1;
+}
+       ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old])])
+   CXXFLAGS=$save_CXXFLAGS
+   AC_LANG_POP([C++])
+
    # Glib is needed for properly handling Qt event loop with Qt's Glib integration enabled
    PKG_CHECK_MODULES(KDE_GLIB,[glib-2.0 >= 2.4],
     [KDE_HAVE_GLIB=1],
@@ -7063,12 +7098,12 @@ dnl ===================================================================
 dnl Test whether to integrate helppacks into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for helppack integration])
-if test "z$with_helppack_integration" = "z" -o "z$with_helppack_integration" = "zno" ; then
+if test "z$with_helppack_integration" = "zno" ; then
   WITH_HELPPACK_INTEGRATION=NO
   AC_MSG_RESULT([no integration])
 else
   WITH_HELPPACK_INTEGRATION=YES
-  SCPDEFS="$SCPDEFS -DWITH_HELLPACK_INTEGRATION"
+  SCPDEFS="$SCPDEFS -DWITH_HELPPACK_INTEGRATION"
   AC_MSG_RESULT([integration])
 fi
 AC_SUBST(WITH_HELPPACK_INTEGRATION)

@@ -160,6 +160,7 @@ sub check_sourcedir_addon
     if (($installer::globals::addchildprojects) ||
         ($installer::globals::patch) ||
         ($installer::globals::languagepack) ||
+        ($installer::globals::helppack) ||
         ($allvariableshashref->{'CHANGETARGETDIR'}))
     {
         my $sourcediraddon = "\:\.";
@@ -311,7 +312,7 @@ sub add_root_directories
 
     my $oneline = "";
 
-    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
+    if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
     {
         my $productname = $allvariableshashref->{'PRODUCTNAME'};
         my $productversion = $allvariableshashref->{'PRODUCTVERSION'};
