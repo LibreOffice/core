@@ -30,6 +30,7 @@ BEGIN {
     FS=":"
 }
 
-NF == 2 {
-    print "COPY " $1 " " $2;
+{
+    if( NF == 2 )
+        print "COPY " $1 " " $2;
 }
