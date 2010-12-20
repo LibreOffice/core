@@ -35,15 +35,23 @@ gb_Module_CLEANTARGETSTACK :=
 
 .PHONY : $(call gb_Module_get_clean_target,%)
 $(call gb_Module_get_clean_target,%) :
-	$(call gb_Helper_announce,Cleaning up module $* ...)
+	$(call gb_Helper_announce,$*,$(false),MOD)
 	-$(call gb_Helper_abbreviate_dirs,\
 		rm -f $(call gb_Module_get_target,$*))
 
 $(call gb_Module_get_target,%) :
-	$(call gb_Helper_announce,Completed module $* ...)
+	$(call gb_Helper_announce,$*,$(true),MOD)
 	-$(call gb_Helper_abbreviate_dirs,\
 		mkdir -p $(dir $@) && \
 		touch $@)
+
+all :
+	$(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(true),ALL)
+	$(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),ALL)
+
+clean :
+	$(call gb_Helper_announce,top level modules: $(foreach module,$^,$(notdir $(module))),$(false),ALL)
+	$(call gb_Helper_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(false),ALL)
 
 .PHONY : all clean install uninstall
 .DEFAULT_GOAL := all
@@ -54,8 +62,8 @@ all :
 clean :
 	$(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
 
-install : all
-uninstall : clean
+.PHONY : all clean install uninstall
+.DEFAULT_GOAL := all
 
 
 define gb_Module_Module
