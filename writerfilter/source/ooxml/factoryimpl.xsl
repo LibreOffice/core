@@ -336,8 +336,8 @@ uno::Reference &lt; xml::sax::XFastParser &gt; OOXMLStreamImpl::getFastParser()
             (mxContext->getServiceManager());
 
         mxFastParser.set(xFactory->createInstanceWithContext
-            ( ::rtl::OUString::createFromAscii
-                ( "com.sun.star.xml.sax.FastParser" ), 
+            ( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                ( "com.sun.star.xml.sax.FastParser" )), 
                     mxContext ), uno::UNO_QUERY_THROW);
 </xsl:text>
 <xsl:for-each select="//namespace-alias">
