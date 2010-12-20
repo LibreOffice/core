@@ -25,7 +25,6 @@
 #
 #*************************************************************************
 
-
 # outdir target pattern
 
 gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
@@ -136,14 +135,6 @@ define gb_StaticLibrary_get_filename
 $(patsubst $(1):%,%,$(filter $(1):%,$(gb_StaticLibrary_FILENAMES)))
 endef
 
-
-# defined here so it is available early
-
-define gb_Module_register_target
-gb_Module_TARGETSTACK := $(1) $(gb_Module_TARGETSTACK)
-gb_Module_CLEANTARGETSTACK := $(2) $(gb_Module_CLEANTARGETSTACK)
-
-endef
 
 # static members declared here because they are used globally
 
