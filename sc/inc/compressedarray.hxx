@@ -101,11 +101,6 @@ public:
         not decremented and the value of the first entry is returned again. */
     const D&                    GetPrevValue( size_t& nIndex, A& nStart ) const;
 
-    /** Return the last row where an entry meets the condition:
-        (aValue != rCompare). If no entry meets this condition
-        ::std::numeric_limits<A>::max() is returned. */
-    A                           GetLastUnequalAccess( A nStart, const D& rCompare );
-
     /** Insert rows before nStart and copy value for inserted rows from
         nStart-1, return that value. */
     const D&                    Insert( A nStart, size_t nCount );

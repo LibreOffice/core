@@ -1640,11 +1640,4 @@ GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId 
     return 0;
 }
 
-void ScDPFunctionDlg_Dummy()
-{
-    // use ScDPListBoxWrapper to avoid warning (this isn't called)
-    ListBox* pListBox = NULL;
-    ScDPListBoxWrapper aWrapper( *pListBox );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

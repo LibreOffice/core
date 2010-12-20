@@ -42,7 +42,11 @@
 #include "refundo.hxx"
 #include "undodat.hxx"
 
+#include "rtl/ustrbuf.hxx"
+
 #define HDL(hdl)            LINK( this, ScDataFormDlg, hdl )
+
+using ::rtl::OUStringBuffer;
 
 //zhangyun
 ScDataFormDlg::ScDataFormDlg( Window* pParent, ScTabViewShell*  pTabViewShellOri) :
@@ -272,11 +276,17 @@ void ScDataFormDlg::FillCtrls(SCROW /*nCurrentRow*/)
                 pEdits[i]->SetText(String());
         }
     }
-    char sRecordStr[256];
-    if (aCurrentRow<=nEndRow)
-        aFixedText.SetText(String::CreateFromAscii(sRecordStr));
+
+    if (aCurrentRow <= nEndRow)
+    {
+        OUStringBuffer aBuf;
+        aBuf.append(static_cast<sal_Int32>(aCurrentRow - nStartRow));
+        aBuf.appendAscii(" / ");
+        aBuf.append(static_cast<sal_Int32>(nEndRow - nStartRow));
+        aFixedText.SetText(aBuf.makeStringAndClear());
+    }
     else
-        aFixedText.SetText(String::CreateFromAscii("New Record"));
+        aFixedText.SetText(String(ScResId(STR_NEW_RECORD)));
 
     aSlider.SetThumbPos(aCurrentRow-nStartRow-1);
 }

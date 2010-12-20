@@ -571,7 +571,6 @@ private:
     ScDPResultMember*        FindMember(   SCROW  iData ) const;
     ScDPResultMember*        AddMember( const ScDPParentDimData& aData );
     ScDPResultMember*        InsertMember( ScDPParentDimData* pMemberData );
-    ResultMembers*               GetResultMember( ScDPDimension* pDim, ScDPLevel* pLevel );
     void                                  InitWithMembers( LateInitParams& rParams,
                                                             const ::std::vector< SCROW >& pItemData,
                                                             size_t  nPos,

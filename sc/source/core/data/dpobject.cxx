@@ -256,16 +256,6 @@ void ScDPObject::SetSaveData(const ScDPSaveData& rData)
     InvalidateData();       // re-init source from SaveData
 }
 
-void ScDPObject::SetAutoFormatIndex(const sal_uInt16 nIndex)
-{
-    mnAutoFormatIndex = nIndex;
-}
-
-sal_uInt16 ScDPObject::GetAutoFormatIndex() const
-{
-    return mnAutoFormatIndex;
-}
-
 void ScDPObject::SetHeaderLayout (bool bUseGrid)
 {
     mbHeaderLayout = bUseGrid;
@@ -1837,7 +1827,7 @@ void lcl_FillOldFields(
                 try
                 {
                     if (nOrient == sheet::DataPilotFieldOrientation_DATA)
-                        xDimProp->getPropertyValue(OUString::createFromAscii(SC_UNO_REFVALUE))
+                        xDimProp->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_REFVALUE)))
                             >>= rField.maFieldRef;
                 }
                 catch (uno::Exception&)
@@ -2169,8 +2159,8 @@ void ScDPObject::ConvertOrientation(
     const Reference<XDimensionsSupplier>& xSource,
     vector<PivotField>* pRefColFields, vector<PivotField>* pRefRowFields, vector<PivotField>* pRefPageFields )
 {
-    //  pDoc or xSource must be set
-    DBG_ASSERT( pDoc || xSource.is(), "missing string source" );
+    //  xSource must be set
+    DBG_ASSERT( xSource.is(), "missing string source" );
 
     vector<PivotField>::const_iterator itr, itrBeg = rFields.begin(), itrEnd = rFields.end();
     for (itr = itrBeg; itr != itrEnd; ++itr)
@@ -2628,10 +2618,6 @@ void ScDPObject::SetCacheId( long nCacheId )
 
         mnCacheId = nCacheId;
     }
-}
-const ScDPTableDataCache* ScDPObject::GetCache() const
-{
-    return pDoc->GetDPObjectCache( GetCacheId() );
 }
 // End Comments
 

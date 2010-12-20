@@ -3949,27 +3949,6 @@ ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData 
     return pMember;
 }
 
-ResultMembers* ScDPResultDimension::GetResultMember( ScDPDimension* pThisDim, ScDPLevel* pThisLevel )
-{
-     ResultMembers* pResultMembers = new ResultMembers();
-     // global order is used to initialize aMembers, so it doesn't have to be looked at later
-     const ScMemberSortOrder& rGlobalOrder = pThisLevel->GetGlobalOrder();
-
-     ScDPMembers* pMembers = pThisLevel->GetMembersObject();
-     long nMembCount = pMembers->getCount();
-     for ( long i=0; i<nMembCount; i++ )
-     {
-         long nSorted = rGlobalOrder.empty() ? i : rGlobalOrder[i];
-         ScDPMember* pMember = pMembers->getByIndex(nSorted);
-         if ( NULL == pResultMembers->FindMember( pMember->GetItemDataId() ) )
-         {
-            ScDPParentDimData* pNew = new ScDPParentDimData( i, pThisDim, pThisLevel, pMember );
-            pResultMembers->InsertMember(  pNew );
-         }
-     }
-     return pResultMembers;
-}
-
 ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberData)
 {
     SCROW  nInsert = 0;

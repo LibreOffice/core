@@ -2,9 +2,6 @@
 /Linux*Env.Set*
 /bootstrap
 /makefile.mk
-unxlng*.pro
-unxlngi6
-unxlngi4
 /solver
 *.orig
 *.rej
@@ -23,5 +20,10 @@ warn
 CVS
 .hg
 .hgignore
-/*/unxmac??
+# the build directories
+/*/unxlng??
+/*/unxlng??.pro
+/*/wntmsci??
+/*/wntmsci??.pro
 /*/unxmac??.pro
+/*/unxmac??

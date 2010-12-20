@@ -377,7 +377,6 @@ public:
 
     void            SetGrammar( const formula::FormulaGrammar::Grammar eGrammar );
 
-    void            SetEncodeUrlMode( EncodeUrlMode eMode );
     EncodeUrlMode   GetEncodeUrlMode() const;
 private:
     /** Set grammar and reference convention from within SetFormulaLanguage()

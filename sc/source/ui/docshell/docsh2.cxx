@@ -225,7 +225,7 @@ ScDrawLayer* ScDocShell::MakeDrawLayer()
         InitItems();                                            // incl. Undo und Basic
         Broadcast( SfxSimpleHint( SC_HINT_DRWLAYER_NEW ) );
         if (nDocumentLock)
-            pDrawLayer->setLock(TRUE);
+            pDrawLayer->setLock(true);
     }
     return pDrawLayer;
 }

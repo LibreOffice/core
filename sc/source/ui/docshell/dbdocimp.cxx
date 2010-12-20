@@ -280,7 +280,6 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         //  progress bar
         //  only text (title is still needed, for the cancel button)
         ScProgress aProgress( &rDocShell, ScGlobal::GetRscString(STR_UNDO_IMPORTDATA), 0 );
-        USHORT nInserted = 0;
 
         uno::Reference<sdbc::XRowSet> xRowSet = uno::Reference<sdbc::XRowSet>(
                 xResultSet, uno::UNO_QUERY );
@@ -380,6 +379,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 BOOL bEnd = FALSE;
                 if ( !bDoSelection )
                     xRowSet->beforeFirst();
+                USHORT nInserted = 0;
                 while ( !bEnd )
                 {
                     //  skip rows that are not selected

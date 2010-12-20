@@ -335,11 +335,6 @@ String ScDPCacheTable::getFieldName(SCCOL  nIndex) const
     return getCache()->GetDimensionName( nIndex );
 }
 
-sal_Int32 ScDPCacheTable::getFieldIndex(const String& rStr) const
-{
-    return getCache()->GetDimensionIndex( rStr );
-}
-
 const ::std::vector<SCROW>&  ScDPCacheTable::getFieldEntries( sal_Int32 nColumn ) const
 {
     if (nColumn < 0 || static_cast<size_t>(nColumn) >= maFieldEntries.size())
@@ -419,12 +414,6 @@ void ScDPCacheTable::clear()
 {
     maFieldEntries.clear();
     maRowsVisible.clear();
-}
-
-void ScDPCacheTable::swap(ScDPCacheTable& rOther)
-{
-    maFieldEntries.swap(rOther.maFieldEntries);
-    maRowsVisible.swap(rOther.maRowsVisible);
 }
 
 bool ScDPCacheTable::empty() const

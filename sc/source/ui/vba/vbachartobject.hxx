@@ -75,7 +75,7 @@ public:
     void setTop( double _ftop );
     // should make this part of the XHelperInterface with a default
     // implementation returning NULL
-    css::uno::Reference< css::uno::XInterface > getUnoObject() throw ( css::script::BasicErrorException );
+    css::uno::Reference< css::uno::XInterface > getUnoObject() const throw ( css::script::BasicErrorException );
 };
 
 #endif //SC_VBA_WINDOW_HXX

@@ -420,7 +420,6 @@ private:
 public:
     SC_DLLPUBLIC ULONG          GetCellCount() const;       // alle Zellen
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
-    ULONG           GetWeightedCount() const;   // Formeln und Edit staerker gewichtet
     ULONG           GetCodeCount() const;       // RPN-Code in Formeln
     DECL_LINK( GetUserDefinedColor, USHORT * );
                                                                 // Numberformatter
@@ -498,7 +497,6 @@ public:
     SC_DLLPUBLIC long                                 AddDPObjectCache( ScDPTableDataCache* pData );
     SC_DLLPUBLIC void                                 RemoveDPObjectCache( long nID );
     SC_DLLPUBLIC void                                 RemoveUnusedDPObjectCaches();
-    SC_DLLPUBLIC void                                 GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist );
     SC_DLLPUBLIC long                                 GetNewDPObjectCacheId ();
     // End Comments
 

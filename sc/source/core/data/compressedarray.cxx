@@ -334,35 +334,6 @@ void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
     pData[nCount-1].nEnd = nMaxAccess;
 }
 
-
-template< typename A, typename D >
-A ScCompressedArray<A,D>::GetLastUnequalAccess( A nStart, const D& rCompare )
-{
-    A nEnd = ::std::numeric_limits<A>::max();
-    size_t nIndex = nCount-1;
-    while (1)
-    {
-        if (pData[nIndex].aValue != rCompare)
-        {
-            nEnd = pData[nIndex].nEnd;
-            break;  // while
-        }
-        else
-        {
-            if (nIndex > 0)
-            {
-                --nIndex;
-                if (pData[nIndex].nEnd < nStart)
-                    break;  // while
-            }
-            else
-                break;  // while
-        }
-    }
-    return nEnd;
-}
-
-
 // === ScSummableCompressedArray =============================================
 
 template< typename A, typename D >
