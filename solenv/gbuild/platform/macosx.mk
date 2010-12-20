@@ -33,6 +33,7 @@ gb_MKTEMP := TMPDIR= mktemp -t
 gb_CC := $(CC)
 gb_CXX := $(CXX)
 gb_GCCP := $(CC)
+gb_AWK := awk
 
 
 gb_OSDEFS := \

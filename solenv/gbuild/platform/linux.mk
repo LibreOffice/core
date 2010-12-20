@@ -33,6 +33,7 @@ gb_MKTEMP := mktemp -p
 gb_CC := gcc
 gb_CXX := g++
 gb_GCCP := gcc
+gb_AWK := awk
 
 # use CC/CXX if they are nondefaults
 ifneq ($(origin CC),default)
