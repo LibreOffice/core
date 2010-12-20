@@ -2657,22 +2657,6 @@ ScDPMember::~ScDPMember()
     //! release pSource
 }
 
-BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
-{
-    long nSrcDim = pSource->GetSourceDim( nDim );
-    if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) && r.IsValue() )
-    {
-        long nComp = pSource->GetData()->GetDatePart(
-                                        (long)::rtl::math::approxFloor( r.GetValue() ),
-                                        nHier, nLev );
-
-        //  fValue is converted from integer, so simple comparison works
-        return nComp == GetItemData().GetValue();
-    }
-
-    return r.IsCaseInsEqual( GetItemData() );
-}
-
 BOOL ScDPMember::IsNamedItem( SCROW    nIndex ) const
 {
     long nSrcDim = pSource->GetSourceDim( nDim );

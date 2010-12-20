@@ -2135,20 +2135,6 @@ void ScDocument::RemoveUnusedDPObjectCaches()
     }
 }
 
-void ScDocument::GetUsedDPObjectCache( std::list<ScDPTableDataCache*>& usedlist )
-{
-    for ( std::list<ScDPTableDataCache*>::iterator iter = m_listDPObjectsCaches.begin(); iter!=m_listDPObjectsCaches.end(); ++iter )
-    {
-        long  nID = (*iter)->GetId();
-        USHORT nCount = GetDPCollection()->GetCount();
-        USHORT i=0;
-        for ( i=0; i<nCount; i++)
-            if ( nID ==  (*pDPCollection)[i]->GetCacheId() )
-                break;
-        if ( i != nCount )
-            usedlist.push_back( *iter );
-    }
-}
 // End Comments
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

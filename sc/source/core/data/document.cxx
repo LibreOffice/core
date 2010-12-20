@@ -5141,18 +5141,6 @@ ULONG ScDocument::GetCodeCount() const
 }
 
 
-ULONG ScDocument::GetWeightedCount() const
-{
-    ULONG nCellCount = 0L;
-
-    for ( SCTAB nTab=0; nTab<=MAXTAB; nTab++ )
-        if ( pTab[nTab] )
-            nCellCount += pTab[nTab]->GetWeightedCount();
-
-    return nCellCount;
-}
-
-
 void ScDocument::PageStyleModified( SCTAB nTab, const String& rNewName )
 {
     if ( ValidTab(nTab)  && pTab[nTab] )

@@ -126,13 +126,6 @@ BOOL lcl_AdjustRanges( ScRangeList& rRanges, SCTAB nSourceTab, SCTAB nDestTab, S
 }//end anonymous namespace
 
 // === ScChartHelper ======================================
-
-//static
-USHORT ScChartHelper::DoUpdateCharts( const ScAddress& rPos, ScDocument* pDoc )
-{
-    return lcl_DoUpdateCharts( rPos, pDoc, FALSE );
-}
-
 //static
 USHORT ScChartHelper::DoUpdateAllCharts( ScDocument* pDoc )
 {

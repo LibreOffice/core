@@ -790,7 +790,6 @@ public:
     // End Comments
     virtual                 ~ScDPMember();
 
-    BOOL                    IsNamedItem( const ScDPItemData& r ) const;
     String                  GetNameStr() const;
     void                    FillItemData( ScDPItemData& rData ) const;
     // Wang Xu Ming -- 2009-8-17

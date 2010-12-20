@@ -123,7 +123,6 @@ public:
     // Wang Xu Ming -- 2009-8-17
     // DataPilot Migration - Cache&&Performance
     inline void SetRefresh() { bRefresh = TRUE; }
-    const        ScDPTableDataCache* GetCache() const;
     long          GetCacheId() const;
     void          SetCacheId( long nCacheId );
     ULONG RefreshCache();
@@ -150,9 +149,6 @@ public:
 
     void                SetOutRange(const ScRange& rRange);
     const ScRange&      GetOutRange() const     { return aOutRange; }
-
-    void                SetAutoFormatIndex (const sal_uInt16 nIndex);
-    sal_uInt16          GetAutoFormatIndex() const;
 
     void                SetHeaderLayout(bool bUseGrid);
     bool                GetHeaderLayout() const;
