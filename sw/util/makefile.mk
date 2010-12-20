@@ -1,7 +1,7 @@
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
-# 
+#
 # Copyright 2000, 2010 Oracle and/or its affiliates.
 #
 # OpenOffice.org - a multi-platform office productivity suite
@@ -114,13 +114,15 @@ SHL1STDLIBS+= \
     $(UCBHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-     \
     $(SALLIB) \
     $(SALHELPERLIB) \
     $(ICUUCLIB) \
-    $(I18NUTILLIB)
-SHL1STDLIBS+= \
+    $(I18NUTILLIB) \
     $(AVMEDIALIB)
+
+.IF "$(DBG_LEVEL)">="2"
+SHL1STDLIBS+= $(LIBXML2LIB)
+.ENDIF
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= $(ADVAPI32LIB)
@@ -160,6 +162,8 @@ SHL2OBJS=   $(SLO)$/swdetect.obj \
 .IF "$(DBG_LEVEL)">="2"
 SHL2OBJS+=  \
         $(SLO)$/errhdl.obj
+SHL2STDLIBS+= \
+        $(LIBXML2LIB)
 .ENDIF
 
 SHL2DEPN+=  makefile.mk
@@ -192,6 +196,9 @@ SHL3STDLIBS= \
             $(CPPULIB) \
             $(SALLIB) \
             $(SOTLIB)
+.IF "$(DBG_LEVEL)">="2"
+SHL3STDLIBS+= $(LIBXML2LIB)
+.ENDIF
 
 SHL3LIBS=   $(SLB)$/swui.lib
 LIB3TARGET = $(SLB)$/swui.lib

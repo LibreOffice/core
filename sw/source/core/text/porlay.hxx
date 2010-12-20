@@ -259,6 +259,8 @@ public:
 #if OSL_DEBUG_LEVEL > 1
     void DebugPortions( SvStream &rOs, const XubString &rTxt,
                         const xub_StrLen nStart ); //$ ostream
+
+    void dumpLineAsXml(xmlTextWriter* writer, USHORT& ofs, String& aText);
 #endif
 
     OUTPUT_OPERATOR
@@ -367,6 +369,10 @@ public:
     void SetErgoSumNum( const XubString &rErgo );
 
     const SwDropPortion *FindDropPortion() const;
+
+#if OSL_DEBUG_LEVEL > 1
+    void dumpAsXml( xmlTextWriter* writer, SwTxtFrm* pTxtFrm );
+#endif
 
     OUTPUT_OPERATOR
     DECL_FIXEDMEMPOOL_NEWDEL(SwParaPortion)

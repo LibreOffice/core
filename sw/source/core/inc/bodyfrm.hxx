@@ -44,6 +44,8 @@ protected:
 public:
     SwBodyFrm( SwFrmFmt* );
 
+    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+
     DECL_FIXEDMEMPOOL_NEWDEL(SwBodyFrm)
 };
 

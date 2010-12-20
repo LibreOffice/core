@@ -53,6 +53,7 @@ SLOFILES =  \
 
 .IF "$(DBG_LEVEL)">="2"
 SLOFILES +=  \
+        $(SLO)$/xmldump.obj \
         $(SLO)$/txtio.obj
 .ENDIF
 
@@ -96,7 +97,6 @@ EXCEPTIONSFILES = \
         $(SLO)$/txttab.obj \
         $(SLO)$/widorp.obj \
         $(SLO)$/wrong.obj
-
 
 # --- Tagets -------------------------------------------------------
 
