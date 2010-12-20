@@ -27,7 +27,7 @@
 
 # PackagePart class
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
-	mkdir -p $(dir $@) && $(call gb_Shadow_copy,$@,$<)
+	$(call gb_Shadow_copy,$@,$<)
 
 define gb_PackagePart_PackagePart
 $(OUTDIR)/$(1) : $(2)
