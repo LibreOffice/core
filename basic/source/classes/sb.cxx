@@ -1063,7 +1063,7 @@ void SbModule::implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassMod
 // Run Init-Code of all modules (including inserted libraries)
 void StarBASIC::InitAllModules( StarBASIC* pBasicNotToInit )
 {
-    NAMESPACE_VOS(OGuard) guard( Application::GetSolarMutex() );
+    ::vos::OGuard guard( Application::GetSolarMutex() );
 
     // Init own modules
     for ( USHORT nMod = 0; nMod < pModules->Count(); nMod++ )
