@@ -633,11 +633,11 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- default --------------------------------------------------
 
-    Any aBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue1") ), aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
-    Any aBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue2") ), aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
-    Any aBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue3") ), aDefaultCellStyleName, RGB_COLORDATA(0,102,204)));
+    Any aGray1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
+    Any aGray2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
+    Any aGray3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray3") ), aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("default")), aBlue1, aBlue3, aBlue2 );
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("default") ), aGray1, aGray3, aGray2 );
 
     // ---- BW ------------------------------------------------
 
@@ -665,11 +665,11 @@ void SdDrawDocument::CreateDefaultCellStyles()
 
     // ---- Gray ------------------------------------------------
 
-    Any aGray1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray1") ), aDefaultCellStyleName, RGB_COLORDATA(230,230,230)));
-    Any aGray2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray2") ), aDefaultCellStyleName, RGB_COLORDATA(204,204,204)));
-    Any aGray3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("gray3") ), aDefaultCellStyleName, RGB_COLORDATA(179,179,179)));
+    Any aBlue1( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue1") ), aDefaultCellStyleName, RGB_COLORDATA(153,204,255)));
+    Any aBlue2( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue2") ), aDefaultCellStyleName, RGB_COLORDATA(0,153,255)));
+    Any aBlue3( implMakeSolidCellStyle( pSSPool, OUString( RTL_CONSTASCII_USTRINGPARAM("blue3") ), aDefaultCellStyleName, RGB_COLORDATA(0,102,204)));
 
-    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("gray") ), aGray1, aGray3, aGray2 );
+    implCreateTableTemplate( xTableFamily, OUString(RTL_CONSTASCII_USTRINGPARAM("blue")), aBlue1, aBlue3, aBlue2 );
 
     // ---- Sun ------------------------------------------------
 
