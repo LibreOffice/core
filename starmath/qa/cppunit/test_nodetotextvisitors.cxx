@@ -29,7 +29,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#include "sal/config.h"
+#ifdef WNT
+# include <tools/prewin.h>
+# include <windows.h>
+# include <tools/postwin.h>
+#endif
+
+#include "preextstl.h"
+#include <cppunit/TestSuite.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include "postextstl.h"
+
+#include <sal/config.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -42,14 +56,6 @@
 #include <node.hxx>
 #include <visitors.hxx>
 #include <cursor.hxx>
-
-#include "preextstl.h"
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 namespace CppUnit {
 template<>

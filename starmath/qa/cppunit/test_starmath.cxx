@@ -3,7 +3,21 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_starmath.hxx"
 
-#include "sal/config.h"
+#ifdef WNT
+# include <tools/prewin.h>
+# include <windows.h>
+# include <tools/postwin.h>
+#endif
+
+#include "preextstl.h"
+#include <cppunit/TestSuite.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/TestCase.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include "postextstl.h"
+
+#include <sal/config.h>
 
 #include <cppuhelper/bootstrap.hxx>
 #include <comphelper/processfactory.hxx>
@@ -26,14 +40,6 @@
 #include <editeng/editview.hxx>
 
 #include <svx/zoomitem.hxx>
-
-#include "preextstl.h"
-#include <cppunit/TestSuite.h>
-#include <cppunit/TestFixture.h>
-#include <cppunit/TestCase.h>
-#include <cppunit/plugin/TestPlugIn.h>
-#include <cppunit/extensions/HelperMacros.h>
-#include "postextstl.h"
 
 SO2_DECL_REF(SmDocShell)
 SO2_IMPL_REF(SmDocShell)
