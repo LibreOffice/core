@@ -135,7 +135,6 @@ void Test::tearDown()
 
 Test::~Test()
 {
-    uno::Reference< lang::XComponent >(m_xContext, uno::UNO_QUERY_THROW)->dispose();
 }
 
 void Test::tmEditMarker()
