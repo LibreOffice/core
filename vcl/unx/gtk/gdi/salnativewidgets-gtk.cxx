@@ -403,9 +403,6 @@ void GtkData::initNWF( void )
     // draw separate buttons for toolbox dropdown items
     pSVData->maNWFData.mbToolboxDropDownSeparate = true;
 
-    // small extra border around menu items
-    pSVData->maNWFData.mnMenuFormatExtraBorder = 1;
-
     // draw toolbars in separate lines
     pSVData->maNWFData.mbDockingAreaSeparateTB = true;
 
@@ -419,6 +416,14 @@ void GtkData::initNWF( void )
     gWidgetData = std::vector<NWFWidgetData>( nScreens );
     for( int i = 0; i < nScreens; i++ )
         gWidgetData[i].gNWPixmapCacheList = new NWPixmapCacheList;
+
+    // small extra border around menu items
+    NWEnsureGTKMenu( 0 );
+    gint horizontal_padding = 1;
+    gtk_widget_style_get( gWidgetData[0].gMenuItemMenuWidget,
+            "horizontal_padding", &horizontal_padding,
+            (char *)NULL);
+    pSVData->maNWFData.mnMenuFormatExtraBorder = horizontal_padding;
 
     if( SalGetDesktopEnvironment().equalsAscii( "KDE" ) )
     {
