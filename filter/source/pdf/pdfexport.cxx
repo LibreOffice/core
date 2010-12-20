@@ -1005,7 +1005,7 @@ void PDFExport::ImplWriteWatermark( PDFWriter& rWriter, const Size& rPageSize )
     rWriter.Push( PUSH_ALL );
     rWriter.SetMapMode( MapMode( MAP_POINT ) );
     rWriter.SetFont( aFont );
-    rWriter.SetTextColor( COL_RED );
+    rWriter.SetTextColor( COL_LIGHTGREEN );
     Point aTextPoint;
     Rectangle aTextRect;
     if( rPageSize.Width() > rPageSize.Height() )
