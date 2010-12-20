@@ -120,8 +120,12 @@ $(eval $(call gb_Helper_make_dep_targets,\
 gb_Library_get_linktargetname = Library/$(1)
 gb_StaticLibrary_get_linktargetname = StaticLibrary/$(1)
 
-define gb_LinkTarget_get_layer
-$(patsubst $(1):%,%,$(filter $(1):%,$(gb_LinkTarget_LAYER)))
+define gb_Library_get_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Library_LAYER)))
+endef
+
+define gb_Executable_get_layer
+$(patsubst $(1):%,%,$(filter $(1):%,$(gb_Executable_LAYER)))
 endef
 
 define gb_Library_get_filename
@@ -143,8 +147,8 @@ endef
 
 # static members declared here because they are used globally
 
-gb_Library_OUTDIRLOCATION := $(OUTDIR)/lib
-gb_Library_DLLDIR := $(WORKDIR)/LinkTarget/Library
-gb_StaticLibrary_OUTDIRLOCATION := $(OUTDIR)/lib
+gb_Library_OUTDIRLOCATION = $(OUTDIR)/lib
+gb_Library_DLLDIR = $(WORKDIR)/LinkTarget/Library
+gb_StaticLibrary_OUTDIRLOCATION = $(OUTDIR)/lib
 
 # vim: set noet sw=4 ts=4:

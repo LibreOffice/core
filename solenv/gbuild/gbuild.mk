@@ -63,7 +63,10 @@ endef
 COMMA :=,
 
 include $(GBUILDDIR)/Output.mk
+
+# BuildDirs uses the Output functions already
 include $(GBUILDDIR)/BuildDirs.mk
+
 
 ifneq ($(strip $(PRODUCT)$(product)),)
 gb_PRODUCT := $(true)
@@ -95,6 +98,7 @@ gb_FULLDEPS := $(true)
 endif
 
 include $(GBUILDDIR)/Helper.mk
+include $(GBUILDDIR)/TargetLocations.mk
 
 $(eval $(call gb_Helper_init_registries))
 $(eval $(call gb_Helper_add_repositories,$(gb_REPOS)))
@@ -165,7 +169,6 @@ endif
 
 gb_GLOBALDEFS := $(sort $(gb_GLOBALDEFS))
 
-include $(GBUILDDIR)/TargetLocations.mk
 include $(GBUILDDIR)/Deliver.mk
 
 $(eval $(call gb_Deliver_init))
