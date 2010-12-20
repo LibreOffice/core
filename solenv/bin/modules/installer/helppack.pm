@@ -50,49 +50,15 @@ sub select_help_items
     {
         my $oneitem = ${$itemsref}[$i];
 
-<<<<<<< HEAD
-        my $ismultilingual = $oneitem->{'ismultilingual'};
-
-        if (!($ismultilingual))
-=======
         my $styles = "";
         if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
 
         if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ ))
->>>>>>> libreoffice-3.3.0.2
         {
             # Files with style "HELPPACK" and "FORCEHELPPACK" also have to be included into the help pack.
             # Files with style "HELPPACK" are only included into help packs.
             # Files with style "FORCEHELPPACK" are included into help packs and non help packs. They are
             # forced, because otherwise they not not be included into helppacks.
-<<<<<<< HEAD
-
-            my $styles = "";
-            if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-            if (( $styles =~ /\bHELPPACK\b/ ) || ( $styles =~ /\bFORCEHELPPACK\b/ )) { push(@itemsarray, $oneitem); }
-
-            next;   # single language files are not included into help pack
-        }
-
-    if (0) {
-        my $specificlanguage = "";
-        if ( $oneitem->{'specificlanguage'} ) { $specificlanguage = $oneitem->{'specificlanguage'}; }
-
-        for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )   # iterating over all languages
-        {
-            my $onelanguage = ${$languagesarrayref}[$j];
-            my $locallang = $onelanguage;
-            $locallang =~ s/-/_/;
-
-            if ( $specificlanguage eq $onelanguage )
-            {
-                push(@itemsarray, $oneitem);
-            }
-        }
-    }
-    }
-=======
 
             my $ismultilingual = $oneitem->{'ismultilingual'};
 
@@ -119,7 +85,6 @@ sub select_help_items
             }
         }
     }
->>>>>>> libreoffice-3.3.0.2
 
     return \@itemsarray;
 }
@@ -526,11 +491,7 @@ sub build_installer_for_helppack
 
     # find and read english license file
     my $licenselanguage = "en-US";                  # always english !
-<<<<<<< HEAD
-    my $licensefilename = "LICENSE_" . $licenselanguage;
-=======
     my $licensefilename = "LICENSE"; # _" . $licenselanguage;
->>>>>>> libreoffice-3.3.0.2
     my $licenseincludepatharrayref = installer::worker::get_language_specific_include_pathes($includepatharrayref, $licenselanguage);
 
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $licenseincludepatharrayref, 0);
