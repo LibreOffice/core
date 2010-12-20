@@ -1455,13 +1455,13 @@ void FileTimeTest( void )
     sSysModifyTime.tm_mon = 11;
     sSysModifyTime.tm_year = 95;
 
-    time_t aSysCreationTime =  mktime( &sSysCreationTime );
-    time_t aSysAccessTime =  mktime( &sSysAccessTime );
-    time_t aSysModifyTime =  mktime( &sSysModifyTime );
+    sal_uInt32 aSysCreationTime = mktime( &sSysCreationTime );
+    sal_uInt32 aSysAccessTime =  mktime( &sSysAccessTime );
+    sal_uInt32 aSysModifyTime =  mktime( &sSysModifyTime );
 
     TimeValue       aCreationTime   = { aSysCreationTime, 0};
-    TimeValue       aAccessTime     = { aSysAccessTime, 0};
-    TimeValue       aModifyTime     = { aSysModifyTime, 0};
+    TimeValue       aAccessTime = { aSysAccessTime, 0};
+    TimeValue       aModifyTime = { aSysModifyTime, 0};
 
     TimeValue       aCreationTimeRead;
     TimeValue       aAccessTimeRead;
