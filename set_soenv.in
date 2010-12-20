@@ -127,7 +127,7 @@ if ($SYSTEM_PYTHON eq "NO") {
 $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $JAVAFLAGS 		= '@JAVAFLAGS@';
-$MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
+$MINGW          = '@WITH_MINGW@';    # use MinGW for Windows build
 $USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
 if ( $MINGW eq "yes" )
 { $CC             = '@CC@';           # C compiler

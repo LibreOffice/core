@@ -69,7 +69,7 @@ fi
 dnl ===================================================================
 dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
-if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+if test "$_os" = "WINNT" -a "$WITH_MINGW" != "yes"; then
    if ./oowintool --msvc-copy-dlls ./external/msvcp ; then
        :
     else
