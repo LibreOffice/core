@@ -4629,6 +4629,7 @@ we check in the following sequence:
                     bSetRelative = true;
 
                 rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+                bool bIsURI=false; //URI: 12.6.4.7, URI Actions, URI must be encoded in 7-bit-ASCII
                 if( nSetGoToRMode == 0 )
                 {
                     switch( m_aContext.DefaultLinkAction )
@@ -4637,6 +4638,7 @@ we check in the following sequence:
                     case PDFWriter::URIAction :
                     case PDFWriter::URIActionDestination :
                         aLine.append( "/URI/URI" );
+                        bIsURI=true;
                         break;
                     case PDFWriter::LaunchAction:
 // now:
@@ -4648,7 +4650,10 @@ we check in the following sequence:
 // and will force the use of URI when the protocol is not file://
                         if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
                                         eTargetProtocol != INET_PROT_FILE )
+                        {
                             aLine.append( "/URI/URI" );
+                            bIsURI=true;
+                        }
                         else
                         {
                             aLine.append( "/Launch/F" );
@@ -4659,7 +4664,8 @@ we check in the following sequence:
                 }
 //fragment are encoded in the same way as in the named destination processing
                 if( nSetGoToRMode )
-                {//add the fragment
+                {
+                    //add the fragment
                     rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
                     aLine.append("/GoToR");
                     aLine.append("/F");

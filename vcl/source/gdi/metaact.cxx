@@ -1482,6 +1482,12 @@ void MetaTextArrayAction::Read( SvStream& rIStm, ImplMetaReadData* pData )
         sal_Unicode* pBuffer = maStr.AllocBuffer( nLen );
         while ( nLen-- )
             rIStm >> *pBuffer++;
+
+        if ( mnIndex + mnLen > maStr.Len() )
+        {
+            mnIndex = 0;
+            delete[] mpDXAry, mpDXAry = NULL;
+        }
     }
 }
 

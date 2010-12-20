@@ -37,6 +37,9 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE : settings.mk
 .INCLUDE :      $(PRJ)$/util$/makefile.pmk
 
+.IF "$(ENABLE_BROFFICE)"=="TRUE"
+CDEFS+=-DENABLE_BROFFICE
+.ENDIF
 
 # --- Files -------------------------------------
 

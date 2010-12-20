@@ -373,10 +373,12 @@ Any ConfigManager::GetDirectConfigProperty(ConfigProperty eProp)
     Any aRet;
 
     ::rtl::OUString sBrandName;
+#ifdef ENABLE_BROFFICE
     LanguageType nType = MsLangId::getSystemUILanguage();
     if ( nType == LANGUAGE_PORTUGUESE_BRAZILIAN )
         sBrandName = OUString(RTL_CONSTASCII_USTRINGPARAM("BrOffice"));
     else
+#endif
         sBrandName = BrandName::get();
 
     if ( eProp == PRODUCTNAME && sBrandName.getLength() )

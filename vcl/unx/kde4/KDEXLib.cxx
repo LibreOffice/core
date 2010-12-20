@@ -168,6 +168,9 @@ void KDEXLib::Init()
 
     KCmdLineArgs::init( m_nFakeCmdLineArgs, m_pAppCmdLineArgs, kAboutData );
 
+#if QT_VERSION >= QT_VERSION_CHECK( 4, 5, 0 )
+    QApplication::setGraphicsSystem( "native" ); // fdo#30991
+#endif
     m_pApplication = new VCLKDEApplication();
     kapp->disableSessionManagement();
     KApplication::setQuitOnLastWindowClosed(false);
