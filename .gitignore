@@ -11,3 +11,5 @@
 /external/*/*.dll
 /external/msi/*.exe
 /external/msv*/*.manifest
+/external/vcredist/vcredist_x64.exe
+/external/vcredist/vcredist_x86.exe
