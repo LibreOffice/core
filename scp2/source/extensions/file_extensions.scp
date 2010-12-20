@@ -110,7 +110,7 @@ End
 
 File gid_File_Oxt_LightProof
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, ARCHIVE);
     Dir = gid_Brand_Dir_Share_Extensions_Install;
     Name (hu) = "lightproof-hu-1.2.oxt";
     Name (en-US) = "lightproof-en-US-0.1.oxt";
@@ -293,15 +293,15 @@ End
 #ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
 
 File gid_File_Optional_Extensions_Sun_Template_Pack
-    Dir = gid_Brand_Dir_Share_Extensions_Install;
+    TXT_FILE_BODY;
+    Styles = (PACKED, ARCHIVE);
+    Dir = gid_Brand_Dir_Share_Extensions_Sun_Template_Pack;
     Name (en-US) = "Sun_ODF_Template_Pack_en-US.oxt";
     Name (de) = "Sun_ODF_Template_Pack_de.oxt";
     Name (it) = "Sun_ODF_Template_Pack_it.oxt";
     Name (fr) = "Sun_ODF_Template_Pack_fr.oxt";
     Name (es) = "Sun_ODF_Template_Pack_es.oxt";
     Name (hu) = "Sun_ODF_Template_Pack_hu.oxt";
-   Styles = (PACKED);
-   UnixRights = 444;
 End
 
 #endif

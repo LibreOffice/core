@@ -241,4 +241,19 @@ End
 
 /* ** Sun Template Pack ** */
 
+#ifdef WITH_EXTENSION_SUN_TEMPLATE_PACK
+
+Directory gid_Brand_Dir_Share_Extensions_Sun_Template_Pack
+    ParentID = gid_Brand_Dir_Share_Extensions;
+    DosName (en-US)= "Sun_ODF_Template_Pack_en-US";
+    DosName (de) = "Sun_ODF_Template_Pack_de";
+    DosName (it) = "Sun_ODF_Template_Pack_it";
+    DosName (fr) = "Sun_ODF_Template_Pack_fr";
+    DosName (es) = "Sun_ODF_Template_Pack_es";
+    DosName (hu) = "Sun_ODF_Template_Pack_hu";
+End
+
 #endif
+
+#endif
+
