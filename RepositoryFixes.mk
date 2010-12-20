@@ -107,5 +107,19 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif
 
+# we do not require a known rule for these, when using system libs
+
+ifeq ($(USE_SYSTEM_STL),YES)
+gb_Library_TARGETS := $(filter-out stl,$(gb_Library_TARGETS))
+endif
+
+ifeq ($(SYSTEM_LIBXML),YES)
+gb_Library_TARGETS := $(filter-out xml2,$(gb_Library_TARGETS))
+endif
+
+ifeq ($(SYSTEM_ICU),YES)
+gb_Library_TARGETS := $(filter-out icuuc,$(gb_Library_TARGETS))
+endif
+
 # vim: set noet sw=4 ts=4:
 
