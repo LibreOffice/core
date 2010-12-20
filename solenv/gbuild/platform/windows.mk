@@ -232,7 +232,7 @@ define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	RC=0 && $(gb_CC) \
+	$(gb_CC) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
@@ -274,7 +274,7 @@ define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
-	RC=0 && $(gb_CXX) \
+	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
@@ -316,7 +316,7 @@ define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_PrecompiledHeader_get_dep_target,$(2))) && \
-	RC=0 && $(gb_CXX) \
+	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
@@ -358,7 +358,7 @@ define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) $(dir $(call gb_NoexPrecompiledHeader_get_dep_target,$(2))) && \
-	RC=0 && C=$(gb_CXX) \
+	$(gb_CXX) \
 		$(4) $(5) \
 		-I$(dir $(3)) \
 		$(6) \
@@ -392,7 +392,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	RESPONSEFILE=$$(mktemp --tmpdir=$(gb_Helper_MISC)) && \
 	echo "$(foreach object,$(7),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(6),$(call gb_CObject_get_target,$(object)))" > $${RESPONSEFILE} && \
-	RC=0 && $(gb_LINK) \
+	$(gb_LINK) \
 		$(3) \
 		@$${RESPONSEFILE} \
 		$(foreach lib,$(4),$(call gb_Library_get_filename,$(lib))) \
