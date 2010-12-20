@@ -1063,6 +1063,27 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
         }
         aFilteredMark.SetMarkArea( aMarkRange);
     }
+    else
+    {
+        // FIX for issue #106711 : leftover data after undo.
+        if (!bNoPaste )
+        {
+            ScRange rRange;
+            aFilteredMark.GetMarkArea( rRange );
+            if( (rRange.aEnd.Col() - rRange.aStart.Col()) < nDestSizeX )
+            {
+                nStartCol = rRange.aStart.Col();
+                nStartRow = rRange.aStart.Row();
+                nStartTab = rRange.aStart.Tab();
+                nEndCol = nStartCol + nDestSizeX;
+                nEndRow = rRange.aEnd.Row();
+                nEndTab = rRange.aEnd.Tab();
+                aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
+                aFilteredMark.SetMarkArea( aMarkRange);
+            }
+        }
+    }
+
     if (bNoPaste)
     {
         ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
