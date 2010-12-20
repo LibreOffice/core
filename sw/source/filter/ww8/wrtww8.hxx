@@ -554,6 +554,7 @@ public:
     BYTE bSubstituteBullets : 1; // true: SubstituteBullet() gets called
 
     bool mbExportModeRTF;
+    bool mbOutOutlineOnly;   // export outline nodes, only (send outline to clipboard/presentation)
 
     SwDoc *pDoc;
     SwPaM *pCurPam, *pOrigPam;

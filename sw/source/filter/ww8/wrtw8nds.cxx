@@ -2837,8 +2837,12 @@ void MSWordExportBase::OutputContentNode( const SwCntntNode& rNode )
     switch ( rNode.GetNodeType() )
     {
         case ND_TEXTNODE:
-            OutputTextNode( *rNode.GetTxtNode() );
-            break;
+        {
+            const SwTxtNode& rTextNode = *rNode.GetTxtNode();
+            if( !mbOutOutlineOnly || rTextNode.IsOutline() )
+                OutputTextNode( rTextNode );
+        }
+        break;
         case ND_GRFNODE:
             OutputGrfNode( *rNode.GetGrfNode() );
             break;
