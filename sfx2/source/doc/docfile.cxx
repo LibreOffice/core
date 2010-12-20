@@ -1023,7 +1023,7 @@ sal_Bool SfxMedium::LockOrigFileOnDemand( sal_Bool bLoading, sal_Bool bNoUI )
             GetLockingStream_Impl();
         }
 
-        sal_Bool bResult = pImp->m_bLocked;
+        bResult = pImp->m_bLocked;
 
         if ( !bResult )
         {
