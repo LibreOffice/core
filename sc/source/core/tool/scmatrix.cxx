@@ -847,7 +847,6 @@ class MultiplyElements : public unary_function<void, MatrixImplType::element>
     bool mbTextAsZero;
 public:
     MultiplyElements(bool bTextAsZero) : maRes(0.0, 1.0, 0), mbTextAsZero(bTextAsZero) {}
-    MultiplyElements(const MultiplyElement& r) : maRes(r.maRes), mbTextAsZero(r.mbTextAsZero) {}
     ScMatrix::IterateResult getResult() const { return maRes; }
 
     void operator() (const MatrixImplType::element& elem)
