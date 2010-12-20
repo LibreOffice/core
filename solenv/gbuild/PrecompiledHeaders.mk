@@ -50,15 +50,9 @@ $(call gb_NoexPrecompiledHeader_get_dep_target,%) :
 		echo '$(call gb_NoexPrecompiledHeader_get_target,$*) : $$(gb_Helper_PHONY)' > $@)
 
 $(call gb_PrecompiledHeader_get_target,%) :
-	$(info pch def: $(PCH_DEFS))
-	$(info pch cxx: $(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS))
-	$(info pch inc: $(INCLUDE_STL) $(INCLUDE))
 	$(call gb_PrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 $(call gb_NoexPrecompiledHeader_get_target,%) :
-	$(info pch def: $(PCH_DEFS))
-	$(info pch cxx: $(PCH_CXXFLAGS) $(gb_PrecompiledHeader_EXCEPTIONFLAGS))
-	$(info pch inc: $(INCLUDE_STL) $(INCLUDE))
 	$(call gb_NoexPrecompiledHeader__command,$@,$*,$<,$(PCH_DEFS),$(PCH_CXXFLAGS) $(gb_NoexPrecompiledHeader_NOEXCEPTIONFLAGS),$(INCLUDE_STL) $(INCLUDE))
 
 .PHONY : $(call gb_PrecompiledHeader_get_clean_target,%) $(call gb_NoExPrecompiledHeader_get_clean_target,%)

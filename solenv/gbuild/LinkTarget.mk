@@ -553,7 +553,6 @@ ifeq ($(gb_FULLDEPS),$(true))
 -include \
 	$(call gb_PrecompiledHeader_get_dep_target,$(3)) \
 	$(call gb_NoexPrecompiledHeader_get_dep_target,$(3))
-$(call gb_LinkTarget_get_headers_target,$(1)) \
 $(call gb_LinkTarget_get_dep_target,$(1)) : DEFS := $$(DEFS) -DPRECOMPILED_HEADERS
 $(call gb_LinkTarget_get_dep_target,$(1)) : PCH_DEFS = $$(DEFS)
 endif
