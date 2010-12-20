@@ -213,7 +213,7 @@ endif
 
 define gb_LinkTarget__get_external_headers_check
 ifneq ($$(SELF),$$*)
-$$(info LinkTarget $$* not defined: Assuming headers to be there!)
+$$(eval $$(call gb_Output_info,LinkTarget $$* not defined: Assuming headers to be there!,ALL))
 endif
 $$@ : COMMAND := $$(call gb_Helper_abbreviate_dirs, mkdir -p $$(dir $$@) && touch $$@)
 
