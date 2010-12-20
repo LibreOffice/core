@@ -46,6 +46,10 @@
 #include <mdds/mixed_type_matrix.hpp>
 
 using ::std::pair;
+using ::std::for_each;
+using ::std::count_if;
+using ::std::advance;
+using ::std::unary_function;
 using ::mdds::matrix_element_t;
 
 // ============================================================================
@@ -54,7 +58,7 @@ namespace {
 
 typedef ::mdds::mixed_type_matrix<String, sal_uInt8> MatrixImplType;
 
-struct ElemEqual : public ::std::unary_function<double, bool>
+struct ElemEqual : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -62,7 +66,7 @@ struct ElemEqual : public ::std::unary_function<double, bool>
     }
 };
 
-struct ElemNotEqual : public ::std::unary_function<double, bool>
+struct ElemNotEqual : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -70,7 +74,7 @@ struct ElemNotEqual : public ::std::unary_function<double, bool>
     }
 };
 
-struct ElemGreater : public ::std::unary_function<double, bool>
+struct ElemGreater : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -78,7 +82,7 @@ struct ElemGreater : public ::std::unary_function<double, bool>
     }
 };
 
-struct ElemLess : public ::std::unary_function<double, bool>
+struct ElemLess : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -86,7 +90,7 @@ struct ElemLess : public ::std::unary_function<double, bool>
     }
 };
 
-struct ElemGreaterEqual : public ::std::unary_function<double, bool>
+struct ElemGreaterEqual : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -94,7 +98,7 @@ struct ElemGreaterEqual : public ::std::unary_function<double, bool>
     }
 };
 
-struct ElemLessEqual : public ::std::unary_function<double, bool>
+struct ElemLessEqual : public unary_function<double, bool>
 {
     bool operator() (double val) const
     {
@@ -142,6 +146,23 @@ void compareMatrix(MatrixImplType& rMat)
 
     // default density type
     return mdds::matrix_density_filled_zero;
+}
+
+/**
+ * Return a numeric value from a matrix element no matter what its type is.
+ */
+double getNumericValue(const MatrixImplType::element& elem)
+{
+    switch (elem.m_type)
+    {
+        case mdds::element_boolean:
+            return static_cast<double>(elem.m_boolean);
+        case mdds::element_numeric:
+            return elem.m_numeric;
+        default:
+            ;
+    }
+    return 0.0;
 }
 
 }
@@ -211,12 +232,9 @@ public:
     double And() const;
     double Or() const;
 
-    double Sum() const;
-    double SumSquare() const;
-    double Product() const;
-    double Average(bool bTextAsZero) const;
-    double Min() const;
-    double Max() const;
+    ScMatrix::IterateResult Sum(bool bTextAsZero) const;
+    ScMatrix::IterateResult SumSquare(bool bTextAsZero) const;
+    ScMatrix::IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
 
 private:
@@ -744,39 +762,155 @@ double ScMatrixImpl::Or() const
     return EvalMatrix<OrEvaluator>(maMat);
 }
 
-double ScMatrixImpl::Sum() const
+namespace {
+
+/**
+ * Function object to sum all numeric elements (including boolean).  It
+ * stores the first non-zero element value into maRes.mfFirst while the rest
+ * into maRes.mfRest.  This weird requirement comes from
+ * ScInterpreter::IterateParameters.
+ */
+class SumElements : public unary_function<void, MatrixImplType::element>
 {
-    return 0.0;
+    ScMatrix::IterateResult maRes;
+    bool mbTextAsZero;
+public:
+    SumElements(bool bTextAsZero) : maRes(0.0, 0.0, 0), mbTextAsZero(bTextAsZero) {}
+
+    ScMatrix::IterateResult getResult() const { return maRes; }
+    void operator() (const MatrixImplType::element& elem)
+    {
+        switch (elem.m_type)
+        {
+            case mdds::element_boolean:
+                if (elem.m_boolean)
+                {
+                    if (maRes.mfFirst)
+                        maRes.mfFirst = 1.0;
+                    else
+                        maRes.mfRest += 1.0;
+                }
+                ++maRes.mnCount;
+            break;
+            case mdds::element_numeric:
+                if (elem.m_numeric != 0.0)
+                {
+                    if (maRes.mfFirst)
+                        maRes.mfFirst = elem.m_numeric;
+                    else
+                        maRes.mfRest += elem.m_numeric;
+                }
+                ++maRes.mnCount;
+            break;
+            case mdds::element_string:
+                if (mbTextAsZero)
+                    ++maRes.mnCount;
+            default:
+                ;
+        }
+    }
+};
+
+class SumSquareElements : public unary_function<void, MatrixImplType::element>
+{
+    ScMatrix::IterateResult maRes;
+    bool mbTextAsZero;
+public:
+    SumSquareElements(bool bTextAsZero) : maRes(0.0, 0.0, 0), mbTextAsZero(bTextAsZero) {}
+    ScMatrix::IterateResult getResult() const { return maRes; }
+    void operator() (const MatrixImplType::element& elem)
+    {
+        if (elem.m_type == ::mdds::element_empty)
+            return;
+
+        if (elem.m_type == ::mdds::element_string)
+        {
+            if (mbTextAsZero)
+                ++maRes.mnCount;
+            return;
+        }
+
+        double val = getNumericValue(elem);
+        maRes.mfRest += val*val;
+        ++maRes.mnCount;
+    }
+};
+
+/**
+ * Multiply all boolean and numeric elements.  It skips empty elements, and
+ * optionally string elements if specified.  When text as zero option is
+ * specified, it treats string elements as if they have values of zero.
+ */
+class MultiplyElements : public unary_function<void, MatrixImplType::element>
+{
+    ScMatrix::IterateResult maRes;
+    bool mbTextAsZero;
+public:
+    MultiplyElements(bool bTextAsZero) : maRes(0.0, 1.0, 0), mbTextAsZero(bTextAsZero) {}
+    MultiplyElements(const MultiplyElement& r) : maRes(r.maRes), mbTextAsZero(r.mbTextAsZero) {}
+    ScMatrix::IterateResult getResult() const { return maRes; }
+
+    void operator() (const MatrixImplType::element& elem)
+    {
+        if (elem.m_type == ::mdds::element_string)
+        {
+            ++maRes.mnCount;
+            if (mbTextAsZero)
+                maRes.mfRest = 0.0;
+        }
+        else if (elem.m_type != ::mdds::element_empty)
+        {
+            ++maRes.mnCount;
+            maRes.mfRest *= getNumericValue(elem);
+        }
+    }
+};
+
+/**
+ * Predicate for counting only boolean, numeric, and optionally string
+ * elements.
+ */
+class CountNonEmptyElements : public unary_function<bool, MatrixImplType::element>
+{
+    const bool mbCountString;
+public:
+    CountNonEmptyElements(bool bCountString) : mbCountString(bCountString) {}
+    bool operator() (const MatrixImplType::element& elem) const
+    {
+        switch (elem.m_type)
+        {
+            case mdds::element_boolean:
+            case mdds::element_numeric:
+                return true;
+            case mdds::element_string:
+                return mbCountString;
+            default:
+                ;
+        }
+        return false;
+    }
+};
+
 }
 
-double ScMatrixImpl::SumSquare() const
+ScMatrix::IterateResult ScMatrixImpl::Sum(bool bTextAsZero) const
 {
-    return 0.0;
+    return for_each(maMat.begin(), maMat.end(), SumElements(bTextAsZero)).getResult();
 }
 
-double ScMatrixImpl::Product() const
+ScMatrix::IterateResult ScMatrixImpl::SumSquare(bool bTextAsZero) const
 {
-    return 0.0;
+    return for_each(maMat.begin(), maMat.end(), SumSquareElements(bTextAsZero)).getResult();
 }
 
-double ScMatrixImpl::Average(bool bTextAsZero) const
+ScMatrix::IterateResult ScMatrixImpl::Product(bool bTextAsZero) const
 {
-    return 0.0;
-}
-
-double ScMatrixImpl::Min() const
-{
-    return 0.0;
-}
-
-double ScMatrixImpl::Max() const
-{
-    return 0.0;
+    return for_each(maMat.begin(), maMat.end(), MultiplyElements(bTextAsZero)).getResult();
 }
 
 size_t ScMatrixImpl::Count(bool bCountStrings) const
 {
-    return 0;
+    return count_if(maMat.begin(), maMat.end(), CountNonEmptyElements(bCountStrings));
 }
 
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
@@ -1051,34 +1185,19 @@ double ScMatrix::Or() const
     return pImpl->Or();
 }
 
-double ScMatrix::Sum() const
+ScMatrix::IterateResult ScMatrix::Sum(bool bTextAsZero) const
 {
-    return pImpl->Sum();
+    return pImpl->Sum(bTextAsZero);
 }
 
-double ScMatrix::SumSquare() const
+ScMatrix::IterateResult ScMatrix::SumSquare(bool bTextAsZero) const
 {
-    return pImpl->SumSquare();
+    return pImpl->SumSquare(bTextAsZero);
 }
 
-double ScMatrix::Product() const
+ScMatrix::IterateResult ScMatrix::Product(bool bTextAsZero) const
 {
-    return pImpl->Product();
-}
-
-double ScMatrix::Average(bool bTextAsZero) const
-{
-    return pImpl->Average(bTextAsZero);
-}
-
-double ScMatrix::Min() const
-{
-    return pImpl->Min();
-}
-
-double ScMatrix::Max() const
-{
-    return pImpl->Max();
+    return pImpl->Product(bTextAsZero);
 }
 
 size_t ScMatrix::Count(bool bCountStrings) const

@@ -3101,54 +3101,51 @@ namespace {
 
 void IterateMatrix(
     const ScMatrixRef& pMat, ScIterFunc eFunc, BOOL bTextAsZero,
-    ULONG& rCount, short& rFuncFmtType, double& fVal, double& fRes, double& fMem, bool& bNull)
+    ULONG& rCount, short& rFuncFmtType, double& fRes, double& fMem, bool& bNull)
 {
     if (!pMat)
         return;
 
-    SCSIZE nC, nR;
     rFuncFmtType = NUMBERFORMAT_NUMBER;
-    pMat->GetDimensions(nC, nR);
-    if( eFunc == ifCOUNT2 )
+    switch (eFunc)
     {
-        // TODO: Count everything but empty.  Fix this.
-        rCount += (ULONG) nC * nR;
-    }
-    else
-    {
-        for (SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++)
+        case ifAVERAGE:
+        case ifSUM:
         {
-            for (SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++)
+            ScMatrix::IterateResult aRes = pMat->Sum(bTextAsZero);
+            if (bNull)
             {
-                if (!pMat->IsString(nMatCol,nMatRow))
-                {
-                    rCount++;
-                    fVal = pMat->GetDouble(nMatCol,nMatRow);
-                    switch( eFunc )
-                    {
-                        case ifAVERAGE:
-                        case ifSUM:
-                            if ( bNull && fVal != 0.0 )
-                            {
-                                bNull = false;
-                                fMem = fVal;
-                            }
-                            else
-                                fRes += fVal;
-                            break;
-                        case ifSUMSQ:   fRes += fVal * fVal; break;
-                        case ifPRODUCT: fRes *= fVal; break;
-                        default: ; // nothing
-                    }
-                }
-                else if ( bTextAsZero )
-                {
-                    rCount++;
-                    if ( eFunc == ifPRODUCT )
-                        fRes = 0.0;
-                }
+                bNull = false;
+                fMem = aRes.mfFirst;
+                fRes += aRes.mfRest;
             }
+            else
+                fRes += aRes.mfFirst + aRes.mfRest;
+            rCount += aRes.mnCount;
         }
+        break;
+        case ifCOUNT:
+            rCount += pMat->Count(bTextAsZero);
+        break;
+        case ifCOUNT2:
+            rCount += pMat->Count(true);
+        break;
+        case ifPRODUCT:
+        {
+            ScMatrix::IterateResult aRes = pMat->Product(bTextAsZero);
+            fRes *= aRes.mfRest;
+            rCount += aRes.mnCount;
+        }
+        break;
+        case ifSUMSQ:
+        {
+            ScMatrix::IterateResult aRes = pMat->SumSquare(bTextAsZero);
+            fRes += aRes.mfRest;
+            rCount += aRes.mnCount;
+        }
+        break;
+        default:
+            ;
     }
 }
 
@@ -3452,13 +3449,13 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 if (nGlobalError)
                     break;
 
-                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fMem, fRes, bNull);
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem, bNull);
             }
             break;
             case svMatrix :
             {
                 ScMatrixRef pMat = PopMatrix();
-                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fVal, fMem, fRes, bNull);
+                IterateMatrix(pMat, eFunc, bTextAsZero, nCount, nFuncFmtType, fRes, fMem, bNull);
             }
             break;
             case svError:

@@ -153,6 +153,28 @@ public:
         SPARSE_EMPTY
     };
 
+    /**
+     * When adding all numerical matrix elements for a scalar result such as
+     * summation, the interpreter wants to separate the first non-zero value
+     * with the rest of the summed values.
+     *
+     * TODO: Find out if we still need to do this.  If not, we can re-write
+     * ScInterpreter::IterateParameters() to make it simpler and remove this
+     * struct.
+     */
+    struct IterateResult
+    {
+        double mfFirst;
+        double mfRest;
+        size_t mnCount;
+
+        IterateResult(double fFirst, double fRest, size_t nCount) :
+            mfFirst(fFirst), mfRest(fRest), mnCount(nCount) {}
+
+        IterateResult(const IterateResult& r) :
+            mfFirst(r.mfFirst), mfRest(r.mfRest), mnCount(r.mnCount) {}
+    };
+
     /// The maximum number of elements a matrix may have at runtime.
     inline static size_t GetElementsMax()
     {
@@ -345,14 +367,10 @@ public:
     double And() const;       // logical AND of all matrix values, or NAN
     double Or() const;        // logical OR of all matrix values, or NAN
 
-    double Sum() const;
-    double SumSquare() const;
-    double Product() const;
-    double Average(bool bTextAsZero) const;
-    double Min() const;
-    double Max() const;
+    IterateResult Sum(bool bTextAsZero) const;
+    IterateResult SumSquare(bool bTextAsZero) const;
+    IterateResult Product(bool bTextAsZero) const;
     size_t Count(bool bCountStrings) const;
-
 
     // All other matrix functions  MatMult, MInv, ...  are in ScInterpreter
     // to be numerically safe.
