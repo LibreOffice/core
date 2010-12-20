@@ -74,7 +74,7 @@ else
 gb_PRODUCT := $(false)
 endif
 
-ifneq ($(strip $(DEBUG)),)
+ifneq ($(strip $(DEBUG)$(debug)),)
 gb_DEBUGLEVEL := 2
 else
 ifeq ($(gb_PRODUCT),$(true))
