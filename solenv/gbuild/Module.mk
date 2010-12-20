@@ -45,14 +45,18 @@ $(call gb_Module_get_target,%) :
 		mkdir -p $(dir $@) && \
 		touch $@)
 
-all : 
-	$(call gb_Helper_announce,Build for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
-
-clean : 
-	$(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
-
 .PHONY : all clean install uninstall
 .DEFAULT_GOAL := all
+
+all :
+	$(call gb_Helper_announce,Build for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
+
+clean :
+	$(call gb_Helper_announce,Cleanup for modules $(foreach module,$^,$(notdir $(module))) finished (loaded modules: $(sort $(gb_Module_ALLMODULES))).)
+
+install : all
+uninstall : clean
+
 
 define gb_Module_Module
 gb_Module_ALLMODULES += $(1)
@@ -88,13 +92,10 @@ ifneq ($$(gb_Module_TARGETSTACK),)
 $$(warn corrupted module target stack!)
 endif
 
-include $(dir $(1))/SourcePath.mk
 include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
 clean : $$(firstword $$(gb_Module_CLEANTARGETSTACK))
-install : all
-uninstall : clean
 
 ifneq ($$(words $$(gb_Module_TARGETSTACK)),1)
 $$(warn corrupted module target stack!)

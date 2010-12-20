@@ -25,6 +25,9 @@
 #
 #*************************************************************************
 
+gb_REPOSITORYDIRNAME := SRCDIR
+
+
 gb_Executable_UREBIN := \
 
 gb_Executable_SDK := \
