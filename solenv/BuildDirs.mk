@@ -1,0 +1,51 @@
+#*************************************************************************
+
+# extend for JDK include (seems only needed in setsolar env?)
+SOLARINC += $(JDKINCS)
+
+OUTDIR := $(SOLARVERSION)/$(INPATH)
+WORKDIR := $(SOLARVERSION)/$(INPATH)/workdir
+
+# if the goals do not include the targets install or uninstall we check if a
+# local overlay build dir was requested. We are making an distiction between
+# partitial and full builds. gb_LOCALPARTITIALBUILDDIR is only used here,
+# later only gb_LOCALBUILDDIR is used.
+ifeq ($(filter install uninstall,$(MAKECMDGOALS)),)
+ifeq ($(gb_PARTITIALBUILD),$(true))
+ifneq ($(gb_LOCALPARTITIALBUILDDIR),)
+OUTDIR := $(gb_LOCALPARTITIALBUILDDIR)/outdir/$(INPATH)
+WORKDIR := $(gb_LOCALPARTITIALBUILDDIR)/workdir/$(INPATH)
+gb_LOCALBUILDDIR := $(gb_LOCALPARTITIALBUILDDIR)
+endif
+else
+ifneq ($(gb_LOCALBUILDDIR),)
+OUTDIR := $(gb_LOCALPARTITIALBUILDDIR)/outdir/$(INPATH)
+WORKDIR := $(gb_LOCALPARTITIALBUILDDIR)/workdir/$(INPATH)
+endif
+endif
+endif
+
+ifneq ($(gb_LOCALBUILDDIR),)
+.PHONY : setuplocal
+setuplocal :
+	mkdir -p $(OUTDIR) $(WORKDIR)
+	time rsync -a $(SOLARVERSION)/$(INPATH)/ $(OUTDIR)
+
+endif
+
+ifeq ($(strip $(gb_REPOS)),)
+gb_REPOS := $(SOLARSRC)
+endif
+SRCDIR := $(firstword $(gb_REPOS))
+
+# HACK
+# unixify windoze paths
+ifeq ($(OS),WNT)
+WORKDIR := $(shell cygpath -u $(WORKDIR))
+OUTDIR := $(shell cygpath -u $(OUTDIR))
+gb_REPOS := $(shell cygpath -u $(gb_REPOS))
+endif
+
+REPODIR := $(patsubst %/,%,$(dir $(firstword $(gb_REPOS))))
+
+# vim: set noet sw=4 ts=4:

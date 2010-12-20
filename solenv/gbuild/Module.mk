@@ -88,6 +88,7 @@ ifneq ($$(gb_Module_TARGETSTACK),)
 $$(warn corrupted module target stack!)
 endif
 
+include $(dir $(1))/SourcePath.mk
 include $(1)
 
 all : $$(firstword $$(gb_Module_TARGETSTACK))
