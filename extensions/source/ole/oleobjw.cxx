@@ -1376,7 +1376,7 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const ::rtl::OUString& aNa
         try
         {
             sal_Int32 revIndex = 0;
-            for ( nInd = 0; nInd < dispparams.cArgs; nInd++)
+            for ( nInd = 0; nInd < sal_Int32(dispparams.cArgs); nInd++)
             {
                 revIndex = dispparams.cArgs - nInd - 1;
                 arRefArgs[revIndex].byref = 0;
