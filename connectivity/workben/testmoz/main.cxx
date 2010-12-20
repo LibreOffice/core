@@ -105,11 +105,7 @@ void printColumns( Reference<XResultSet> &xRes )
         {
             // printf(aPat.getStr(), xMeta->getColumnName(i).getStr());
             const char *str = OUtoCStr(xMeta->getColumnName(i));
-//           if ( i < 3 ) {
-//               printf( aPat_Short, str );
-//           } else {
-                printf( aPat, str );
-//           }
+            printf( aPat, str );
         }
         printf("\n");
         printf("------------------------------------------------------------------------------------------\n");
@@ -128,11 +124,7 @@ void printXResultSet( Reference<XResultSet> &xRes )
         {
             try {
                 const char *str = OUtoCStr(xRow->getString(j));
-//                   if ( j < 3 ) {
-//                       printf( aPat_Short, str );
-//                   } else {
-                        printf( aPat_Short, str );
-//                   }
+                printf( aPat_Short, str );
             } catch (...) {
                   printf(" Ex ");
             }
@@ -159,7 +151,6 @@ void printXResultSets( Reference<XResultSet> &xRes )
     }
 }
 
-//#define OUtoCStr( x ) ( ::rtl::OUStringToOString ( (x), RTL_TEXTENCODING_ASCII_US).getStr())
 static const char * const components[] =
 {
     SAL_MODULENAME( "ucb1" )    // KSO, ABI
@@ -281,20 +272,8 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     // set global factory
     setProcessServiceFactory( xSMgr );
 
-/*  // Create simple ConfigManager
-    Sequence< Any > aConfArgs(3);
-    aConfArgs[0] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("servertype")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("local")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
-    aConfArgs[1] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("sourcepath")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
-    aConfArgs[2] <<= PropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("updatepath")), 0, makeAny( OUString(RTL_CONSTASCII_USTRINGPARAM("g:\\")) ), ::com::sun::star::beans::PropertyState_DIRECT_VALUE );
-
-    Reference< XContentProvider > xConfProvider
-        ( xSMgr->createInstanceWithArguments( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationProvider")), aConfArgs), UNO_QUERY );
-*/
-
 
 //  Create unconfigured Ucb:
-/*  Sequence< Any > aArgs(1);
-    aArgs[1] = makeAny ( xConfProvider );*/
     Sequence< Any > aArgs;
     ::ucb::ContentBroker::initialize( xSMgr, aArgs );
     Reference< XContentProviderManager > xUcb =
@@ -305,10 +284,6 @@ Reference< XMultiServiceFactory > InitializeFac( void )
     xUcb->registerContentProvider( xFileProvider, OUString(RTL_CONSTASCII_USTRINGPARAM("file")), sal_True );
 
 
-/*  Reference< XContentProvider > xPackageProvider
-        ( xSMgr->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.PackageContentProvider")) ), UNO_QUERY );
-    xUcb->registerContentProvider( xPackageProvider, OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.pkg")), sal_True );
-    */
     globalUcb = xUcb;
     return xSMgr;
 }
@@ -397,12 +372,7 @@ Reference<XResultSet> TestQuery(Reference< ::com::sun::star::sdbc::XConnection> 
                   for (times = 0;times< 100;times ++)
                   {
      Reference<XResultSet> tmpRes =
-                  //xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"addr\""));
                   xStmt->executeQuery(OUString::createFromAscii(sql));
-                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail IS NULL )"));
-                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail LIKE \"Darren\" )"));
-                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\""));
-                  // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"myldap\" WHERE ( PrimaryEmail LIKE \"%Darren%\" OR DisplayName LIKE \"%Darren%\" )"));
 
                   autoTest( tmpRes );
                             Reference<XCloseable> clsRes(tmpRes,UNO_QUERY);
