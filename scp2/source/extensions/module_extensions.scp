@@ -133,6 +133,7 @@ Module gid_Module_Optional_Extensions_LightProof
     Default = YES;
     Styles = ( );
 End
+
 #endif
 
 /* ** Numbertext ** */

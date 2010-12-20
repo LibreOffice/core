@@ -46,8 +46,7 @@ Module gid_Module_Optional_Extensions_LightProof_Template
     Name = "gid_Module_Optional_Extensions_LightProof_Template";
     Description = "gid_Module_Optional_Extensions_LightProof_Template";
     Styles = (TEMPLATEMODULE);
-    Files = (
-        gid_File_Oxt_LightProof );
+    Files = ( gid_File_Oxt_LightProof );
     Minimal = NO;
     Default = YES;
 End
