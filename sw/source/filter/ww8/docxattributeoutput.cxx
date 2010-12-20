@@ -1500,10 +1500,6 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
                 FSNS( XML_w, XML_type ), "dxa",
                 FSEND );
 
-    // Output the table borders
-    TableDefaultBorders( pTableTextNodeInfoInner );
-    TableBidi( pTableTextNodeInfoInner );
-
     // Output the table alignement
     const SwTable *pTable = pTableTextNodeInfoInner->getTable();
     SwFrmFmt *pTblFmt = pTable->GetFrmFmt( );
@@ -1535,6 +1531,10 @@ void DocxAttributeOutput::TableDefinition( ww8::WW8TableNodeInfoInner::Pointer_t
     m_pSerializer->singleElementNS( XML_w, XML_jc,
             FSNS( XML_w, XML_val ), pJcVal,
             FSEND );
+
+    // Output the table borders
+    TableDefaultBorders( pTableTextNodeInfoInner );
+    TableBidi( pTableTextNodeInfoInner );
 
     // Table indent
     if ( nIndent != 0 )
