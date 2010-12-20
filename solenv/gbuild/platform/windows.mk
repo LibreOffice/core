@@ -33,7 +33,7 @@ gb_MKTEMP := mktemp -p
 gb_CC := cl
 gb_CXX := cl
 gb_LINK := link
-gb_AWK := awk
+gb_AWK := gawk
 
 gb_OSDEFS := \
     -DWINVER=0x0500 \
@@ -202,28 +202,8 @@ $(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,O=$(gb_Helper_OUTDIR_NATIVE)) && \
 $(subst $(gb_Helper_SRCDIR_NATIVE)/,$$S/,$(subst $(REPODIR)/,$$R/,$(subst $(SRCDIR)/,$$S/,$(subst $(gb_Helper_OUTDIR_NATIVE)/,$$O/,$(subst $(OUTDIR)/,$$O/,W=$(gb_Helper_WORKDIR_NATIVE) && $(subst $(gb_Helper_WORKDIR_NATIVE)/,$$W/,$(subst $(WORKDIR)/,$$W/,$(1)))))))))
 endef
 
-# CObject class
 
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_CObject_get_dep_target,$(2)))
-endef
-else
-CObject__command_deponcompile =
-endif
+# CObject class
 
 define gb_CObject__command
 $(call gb_Output_announce,$(2),$(true),C  ,3)
@@ -235,34 +215,20 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Fo$(1))
-$(call gb_CObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
+        -Fo$(1) \
+        -showIncludes > $(1).out; \
+    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+        -v RETURNCODE=$$? \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -- $(1).out)
 endef
-
 
 
 # CxxObject class
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_CxxObject__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(filter-out -DPRECOMPILED_HEADERS,$(4)) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% %/pch -I$(JAVA_HOME),$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_CxxObject_get_dep_target,$(2)))
-endef
-else
-gb_CxxObject__command_deponcompile =
-endif
 
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2),$(true),CXX,3)
@@ -274,9 +240,16 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Fo$(1))
-$(call gb_CxxObject__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
-
+        -Fo$(1) \
+        -showIncludes > $(1).out; \
+    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+        -v RETURNCODE=$$? \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -- $(1).out)
 endef
 
 
@@ -285,27 +258,6 @@ endef
 gb_PrecompiledHeader_get_enableflags = -Yu$(1).hxx \
                                        -Fp$(call gb_PrecompiledHeader_get_target,$(1)) \
                                        -Fd$(call gb_PrecompiledHeader_get_target,$(1)).pdb
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_PrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_PrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_PrecompiledHeader__command_deponcompile =
-endif
 
 define gb_PrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -317,10 +269,17 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj \
+        -showIncludes > $(1).out; \
+    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+        -v RETURNCODE=$$? \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -- $(1).out)
 rm $(1).obj
-$(call gb_PrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
-
 endef
 
 # NoexPrecompiledHeader class
@@ -328,27 +287,6 @@ endef
 gb_NoexPrecompiledHeader_get_enableflags = -Yu$(1).hxx \
                                            -Fp$(call gb_NoexPrecompiledHeader_get_target,$(1)) \
                                            -Fd$(call gb_NoexPrecompiledHeader_get_target,$(1)).pdb
-
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_NoexPrecompiledHeader__command_deponcompile
-$(call gb_Helper_abbreviate_dirs_native,\
-    $(OUTDIR)/bin/makedepend$(gb_Executable_EXT) \
-        $(4) $(5) \
-        -I$(dir $(3)) \
-        $(filter-out -I$(COMPATH)% -I$(JAVA_HOME),$(6)) \
-        $(3) \
-        -f - \
-    | $(gb_AWK) -f $(GBUILDDIR)/processdeps.awk \
-        -v OBJECTFILE=$(1) \
-        -v OUTDIR=$(OUTDIR)/ \
-        -v WORKDIR=$(WORKDIR)/ \
-        -v SRCDIR=$(SRCDIR)/ \
-        -v REPODIR=$(REPODIR)/ \
-    > $(call gb_NoexPrecompiledHeader_get_dep_target,$(2)))
-endef
-else
-gb_NoexPrecompiledHeader__command_deponcompile =
-endif
 
 define gb_NoexPrecompiledHeader__command
 $(call gb_Output_announce,$(2),$(true),PCH,1)
@@ -360,10 +298,17 @@ $(call gb_Helper_abbreviate_dirs_native,\
         -I$(dir $(3)) \
         $(6) \
         -c $(3) \
-        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj)
+        -Yc$(notdir $(patsubst %.cxx,%.hxx,$(3))) -Fp$(1) -Fd$(1).pdb -Fo$(1).obj \
+        -showIncludes > $(1).out; \
+    $(gb_AWK) -f (GBUILDDIR)/processdeps_msvc.awk \
+        -v OBJECTFILE=$(1) \
+        -v OUTDIR=$(OUTDIR)/ \
+        -v REPODIR=$(REPODIR)/ \
+        -v RETURNCODE=$$? \
+        -v SRCDIR=$(SRCDIR)/ \
+        -v WORKDIR=$(WORKDIR)/ \
+        -- $(1).out)
 rm $(1).obj
-$(call gb_NoexPrecompiledHeader__command_deponcompile,$(1),$(2),$(3),$(4),$(5),$(6))
-
 endef
 
 
