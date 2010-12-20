@@ -25,18 +25,12 @@
 #
 #*************************************************************************
 
-# gb_Deliver_GNUCOPY is set by the platform
+gb_Deliver_GNUCOPY := $(GNUCOPY)
 
 # if ($true) then old files will get removed from the target location before
 # they are copied there. In multi-user environments, this is needed you need to
 # be the owner of the target file to be able to modify timestamps
 gb_Deliver_CLEARONDELIVER := $(true)
-
-gb_Deliver__deliverprefix = mkdir -p $(dir $(1)) &&
-
-ifeq ($(gb_Deliver_CLEARONDELIVER),$(true))
-gb_Deliver__deliverprefix += rm -rf $(1) &&
-endif
 
 define gb_Deliver_init
 gb_Deliver_DELIVERABLES :=
@@ -49,9 +43,17 @@ gb_Deliver_DELIVERABLES += $$(patsubst $(REPODIR)/%,%,$(2)):$$(patsubst $(REPODI
 
 endef
 
+ifeq($(strip $(gb_Deliver_GNUCOPY),)
 define gb_Deliver_deliver
-$(call gb_Deliver__deliverprefix,$(2)) $(gb_Deliver_GNUCOPY) -f $(1) $(2) && touch -r $(1) $(2)
+mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(1) &&) cp -f $(1) $(2) && touch -r $(1) $(2)
+
 endef
+else
+define gb_Deliver_deliver
+mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) -pf $(1) $(2)
+
+endef
+
 
 # We are currently only creating a deliver.log, if only one module gets build.
 # As it is possible to add gbuild modules into other (which is done for example for

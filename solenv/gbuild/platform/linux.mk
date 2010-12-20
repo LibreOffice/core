@@ -136,11 +136,6 @@ endif
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 
-# Deliver class
-
-gb_Deliver_GNUCOPY := cp
-
-
 # CObject class
 
 define gb_CObject__command
