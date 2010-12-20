@@ -36,13 +36,13 @@ def stripped_paths_to_pack(loglines):
     return (path.partition('/')[2] for path in paths_to_pack(loglines))
 
 def main(args):
-    """creates/overwrites a file at OUTDIR/zip/MILESTONE/MODULE.zip containing the contents of the gb_deliver.log."""
-    if len(args) != 4:
-        print('usage: packmodule OUTDIR MODULE MILESTONE')
+    """creates/overwrites a file at OUTDIR/zip/MODULE.zip containing the contents of the gb_deliver.log."""
+    if len(args) != 3:
+        print('usage: packmodule OUTDIR MODULE')
         sys.exit(2)
-    (executable, outdir, module, milestone) = args
+    (executable, outdir, module) = args
     os.chdir(outdir)
-    zipdir = 'zip.'+milestone
+    zipdir = 'zip'
     try:
         os.makedirs(zipdir)
     except OSError:
