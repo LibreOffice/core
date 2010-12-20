@@ -98,7 +98,7 @@ $(MISC)/$(TARGET)/udkapi.rdb .ERRREMOVE : $(SOLARBINDIR)$/udkapi.rdb
     $(GNUCOPY) $? $@
 
 #Make a services.rdb with the services we know we need to get up and running
-$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb
+$(MISC)/$(TARGET)/services.rdb .ERRREMOVE : $(MISC)/$(TARGET)/udkapi.rdb makefile.mk
     $(MKDIRHIER) $(@:d)
     $(REGCOMP) -register -br $(MISC)/$(TARGET)/udkapi.rdb -r $@ -wop \
         -c $(DLLPRE)fwk$(DLLPOSTFIX)$(DLLPOST)
