@@ -128,21 +128,21 @@ namespace
         }
         {
             ::osl::Guard< ::osl::Mutex> service_factory_guard(m_ServiceFactoryMutex);
-            if(m_ServiceFactory.is())
+            try
             {
-                if(Config(m_ServiceFactory).getInvitationAccepted())
+                if(m_ServiceFactory.is())
                 {
-                    try
+                    if(Config(m_ServiceFactory).getInvitationAccepted())
                     {
                         packLogs(m_ServiceFactory);
                         uploadLogs(m_ServiceFactory);
                     }
-                    catch( com::sun::star::uno::Exception) {}
+                    else
+                        LogStorage(m_ServiceFactory).clear();
                 }
-                else
-                    LogStorage(m_ServiceFactory).clear();
+                m_ServiceFactory.clear();
             }
-            m_ServiceFactory.clear();
+            catch(...) {}
         }
     }
 
