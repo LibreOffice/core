@@ -183,8 +183,8 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
             {
                 case SbxLONG:       // alles immer als Short �bertragen
                 case SbxULONG:
-                case SbxLONG64:
-                case SbxULONG64:
+                case SbxSALINT64:
+                case SbxSALUINT64:
                 case SbxDOUBLE:
                 case SbxINTEGER:
                 case SbxBYTE:
@@ -348,8 +348,8 @@ void CmdStream::GenCmdSlot( USHORT nNr, SbxArray* rPar )
                     break;
                 case SbxLONG:
                 case SbxULONG:
-                case SbxLONG64:
-                case SbxULONG64:
+                case SbxSALINT64:
+                case SbxSALUINT64:
                 case SbxDOUBLE:
                     if ( !bWriteUnoSlot )
                         Write( (USHORT)BinULONG );
