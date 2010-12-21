@@ -58,7 +58,6 @@ SLOFILES=	\
     $(SLO)$/sbxsng.obj 		\
     $(SLO)$/sbxuint.obj		\
     $(SLO)$/sbxulng.obj		\
-    $(SLO)$/sbxvals.obj		\
     $(SLO)$/sbxvar.obj
 
 

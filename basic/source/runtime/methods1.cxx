@@ -158,12 +158,12 @@ RTLFUNC(CByte) // JSM
     rPar.Get(0)->PutByte(nByte);
 }
 
-RTLFUNC(CCur)  // JSM
+RTLFUNC(CCur)
 {
     (void)pBasic;
     (void)bWrite;
 
-    SbxINT64 nCur;
+    sal_Int64 nCur = 0;
     if ( rPar.Count() == 2 )
     {
         SbxVariable *pSbxVariable = rPar.Get(1);
@@ -175,7 +175,7 @@ RTLFUNC(CCur)  // JSM
     rPar.Get(0)->PutCurrency( nCur );
 }
 
-RTLFUNC(CDec)  // JSM
+RTLFUNC(CDec)
 {
     (void)pBasic;
     (void)bWrite;
@@ -881,13 +881,16 @@ BOOL lcl_WriteSbxVariable( const SbxVariable& rVar, SvStream* pStrm,
 
         case SbxLONG:
         case SbxULONG:
-        case SbxLONG64:
-        case SbxULONG64:
                 if( bIsVariant )
                     *pStrm << (USHORT)SbxLONG; // VarType Id
                 *pStrm << rVar.GetLong();
                 break;
-
+        case SbxSALINT64:
+        case SbxSALUINT64:
+                if( bIsVariant )
+                    *pStrm << (USHORT)SbxSALINT64; // VarType Id
+                *pStrm << (sal_uInt64)rVar.GetInt64();
+                break;
         case SbxSINGLE:
                 if( bIsVariant )
                     *pStrm << (USHORT)eType; // VarType Id
@@ -983,15 +986,20 @@ BOOL lcl_ReadSbxVariable( SbxVariable& rVar, SvStream* pStrm,
 
         case SbxLONG:
         case SbxULONG:
-        case SbxLONG64:
-        case SbxULONG64:
                 {
                 INT32 aInt;
                 *pStrm >> aInt;
                 rVar.PutLong( aInt );
                 }
                 break;
-
+        case SbxSALINT64:
+        case SbxSALUINT64:
+                {
+                sal_uInt32 aInt;
+                *pStrm >> aInt;
+                rVar.PutInt64( (sal_Int64)aInt );
+                }
+                break;
         case SbxSINGLE:
                 {
                 float nS;
@@ -1354,8 +1362,8 @@ RTLFUNC(TypeLen)
             case SbxDOUBLE:
             case SbxCURRENCY:
             case SbxDATE:
-            case SbxLONG64:
-            case SbxULONG64:
+            case SbxSALINT64:
+            case SbxSALUINT64:
                 nLen = 8;
                 break;
 
