@@ -35,6 +35,7 @@
 
 #include <tools/urlobj.hxx>
 #include <vcl/sound.hxx>
+#include <vcl/svapp.hxx>
 #include <sfx2/docfile.hxx>
 
 #include "select.hxx"
@@ -45,6 +46,8 @@
 #include "transobj.hxx"
 #include "docsh.hxx"
 #include "tabprotection.hxx"
+
+#define SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN 65
 
 extern USHORT nScFillModeMouseModifier;             // global.cxx
 
@@ -76,6 +79,83 @@ ScSplitPos ScViewFunctionSet::GetWhich()
         return pEngine->GetWhich();
     else
         return pViewData->GetActivePart();
+}
+
+ULONG ScViewFunctionSet::CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+                                             bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll )
+{
+    ULONG nUpdateInterval = SELENG_AUTOREPEAT_INTERVAL_MAX;
+    Window* pWin = pEngine->GetWindow();
+    Rectangle aScrRect = pWin->GetDesktopRectPixel();
+    Point aRootPos = pWin->OutputToAbsoluteScreenPixel(Point(0,0));
+    if (bRightScroll)
+    {
+        double nWinRight = rWinSize.getWidth() + aRootPos.getX();
+        double nMarginRight = aScrRect.GetWidth() - nWinRight;
+        double nHOffset = rEffPos.X() - rWinSize.Width();
+        double nHAccelRate = nHOffset / nMarginRight;
+
+        if (nHAccelRate > 1.0)
+            nHAccelRate = 1.0;
+
+        nUpdateInterval = static_cast<ULONG>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate));
+    }
+
+    if (bLeftScroll)
+    {
+        double nMarginLeft = aRootPos.getX();
+        double nHOffset = -rEffPos.X();
+        double nHAccelRate = nHOffset / nMarginLeft;
+
+        if (nHAccelRate > 1.0)
+            nHAccelRate = 1.0;
+
+        ULONG nTmp = static_cast<ULONG>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nHAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+    if (bBottomScroll)
+    {
+        double nWinBottom = rWinSize.getHeight() + aRootPos.getY();
+        double nMarginBottom = aScrRect.GetHeight() - nWinBottom;
+        double nVOffset = rEffPos.Y() - rWinSize.Height();
+        double nVAccelRate = nVOffset / nMarginBottom;
+
+        if (nVAccelRate > 1.0)
+            nVAccelRate = 1.0;
+
+        ULONG nTmp = static_cast<ULONG>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+    if (bTopScroll)
+    {
+        double nMarginTop = aRootPos.getY();
+        double nVOffset = -rEffPos.Y();
+        double nVAccelRate = nVOffset / nMarginTop;
+
+        if (nVAccelRate > 1.0)
+            nVAccelRate = 1.0;
+
+        ULONG nTmp = static_cast<ULONG>(SELENG_AUTOREPEAT_INTERVAL_MAX*(1.0 - nVAccelRate));
+        if (nUpdateInterval > nTmp)
+            nUpdateInterval = nTmp;
+    }
+
+#ifdef WNT
+    ScTabViewShell* pViewShell = pViewData->GetViewShell();
+    bool bRefMode = pViewShell && pViewShell->IsRefInputMode();
+    if (bRefMode && nUpdateInterval < SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN)
+        // Lower the update interval during ref mode, because re-draw can be
+        // expensive on Windows.  Making this interval too small would queue up
+        // the scroll/paint requests which would cause semi-infinite
+        // scrolls even after the mouse cursor is released.  We don't have
+        // this problem on Linux.
+        nUpdateInterval = SC_SELENG_REFMODE_UPDATE_INTERVAL_MIN;
+#endif
+    return nUpdateInterval;
 }
 
 void ScViewFunctionSet::SetSelectionEngine( ScViewSelectionEngine* pSelEngine )
@@ -255,10 +335,11 @@ BOOL ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDon
     //  Scrolling
 
     Size aWinSize = pEngine->GetWindow()->GetOutputSizePixel();
-    BOOL bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
-    BOOL bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
-    BOOL bNegScroll    = ( aEffPos.X() < 0 || aEffPos.Y() < 0 );
-    BOOL bScroll = bRightScroll || bBottomScroll || bNegScroll;
+    bool bRightScroll  = ( aEffPos.X() >= aWinSize.Width() );
+    bool bLeftScroll  = ( aEffPos.X() < 0 );
+    bool bBottomScroll = ( aEffPos.Y() >= aWinSize.Height() );
+    bool bTopScroll = ( aEffPos.Y() < 0 );
+    bool bScroll = bRightScroll || bBottomScroll || bLeftScroll || bTopScroll;
 
     SCsCOL  nPosX;
     SCsROW  nPosY;
@@ -309,6 +390,19 @@ BOOL ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDon
                 else if ( eWhich == SC_SPLIT_TOPRIGHT )
                     pViewData->GetView()->ActivatePart( SC_SPLIT_BOTTOMRIGHT ), bScroll = FALSE, bDidSwitch = TRUE;
             }
+    }
+
+    if (bScroll)
+    {
+        // Adjust update interval based on how far the mouse pointer is from the edge.
+        ULONG nUpdateInterval = CalcUpdateInterval(
+            aWinSize, aEffPos, bLeftScroll, bTopScroll, bRightScroll, bBottomScroll);
+        pEngine->SetUpdateInterval(nUpdateInterval);
+    }
+    else
+    {
+        // Don't forget to reset the interval when not scrolling!
+        pEngine->SetUpdateInterval(SELENG_AUTOREPEAT_INTERVAL);
     }
 
     pViewData->ResetOldCursor();

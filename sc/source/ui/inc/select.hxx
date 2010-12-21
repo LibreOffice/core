@@ -64,6 +64,9 @@ private:
 
     ScSplitPos      GetWhich();
 
+    ULONG           CalcUpdateInterval( const Size& rWinSize, const Point& rEffPos,
+                                        bool bLeftScroll, bool bTopScroll, bool bRightScroll, bool bBottomScroll );
+
 public:
                     ScViewFunctionSet( ScViewData* pNewViewData );
 
