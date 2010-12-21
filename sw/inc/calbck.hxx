@@ -183,9 +183,7 @@ public:
 
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
 
-#ifdef DBG_UTIL
     int GetClientCount() const;
-#endif
 
 private:
     // forbidden and not implemented

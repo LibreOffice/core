@@ -318,7 +318,6 @@ SwClient* SwModify::Remove(SwClient * pDepend)
     return pDepend;
 }
 
-#ifdef DBG_UTIL
 int SwModify::GetClientCount() const
 {
     int nRet=0;
@@ -331,7 +330,6 @@ int SwModify::GetClientCount() const
         } while( 0 != ( pLast = aIter++ ));
     return nRet;
 }
-#endif
 
 /*************************************************************************/
 

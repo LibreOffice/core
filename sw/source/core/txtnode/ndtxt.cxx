@@ -509,11 +509,10 @@ SwCntntNode *SwTxtNode::SplitCntntNode( const SwPosition &rPos )
 
         SwIterator<SwCntntFrm,SwTxtNode> aIter( *this );
         for( SwCntntFrm* pFrm = aIter.First(); pFrm; pFrm = aIter.Next() )
-                {
-                    pFrm->RegisterToNode( *pNode );
-                    if( pFrm->IsTxtFrm() && !pFrm->IsFollow() && ((SwTxtFrm*)pFrm)->GetOfst() )
-                        ((SwTxtFrm*)pFrm)->SetOfst( 0 );
-            pFrm = aIter.Next();
+        {
+            pFrm->RegisterToNode( *pNode );
+            if( pFrm->IsTxtFrm() && !pFrm->IsFollow() && ((SwTxtFrm*)pFrm)->GetOfst() )
+                ((SwTxtFrm*)pFrm)->SetOfst( 0 );
         }
 
         if ( IsInCache() )
