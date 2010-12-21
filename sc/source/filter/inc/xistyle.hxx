@@ -497,8 +497,11 @@ public:
     void                ReadStyle( XclImpStream& rStrm );
 
     /** Returns the object that stores all contents of an XF record. */
-    inline XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
-                            { return const_cast< XclImpXF* > ((nXFIndex >= maXFList.size()) ? 0 : &(maXFList.at(nXFIndex))); }
+    inline XclImpXF*    GetXF( sal_uInt16 nXFIndex )
+                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
+
+    inline const XclImpXF*    GetXF( sal_uInt16 nXFIndex ) const
+                            { return (nXFIndex >= maXFList.size()) ? NULL : &maXFList.at(nXFIndex); }
 
     /** Returns the index to the Excel font used in the specified XF record. */
     sal_uInt16          GetFontIndex( sal_uInt16 nXFIndex ) const;
@@ -589,7 +592,7 @@ private:
                             XclImpXFRange*& rpPrevRange,
                             XclImpXFRange*& rpNextRange,
                             ULONG& rnNextIndex,
-                            SCROW nScRow ) const;
+                            SCROW nScRow );
 
     /** Tries to concatenate a range with its predecessor.
         @descr  The ranges must have the same XF index and must not have a gap.

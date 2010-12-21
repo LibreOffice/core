@@ -532,13 +532,14 @@ const XclImpFont* XclImpFontBuffer::GetFont( sal_uInt16 nFontIndex ) const
     /*  Font with index 4 is not stored in an Excel file, but used e.g. by
         BIFF5 form pushbutton objects. It is the bold default font.
         This also means that entries above 4 are out by one in the list. */
+
     if (nFontIndex == 4)
         return &maFont4;
-    if ( (nFontIndex < 4) && (nFontIndex < maFontList.size()) )
-        return &(maFontList[nFontIndex]);
-    if ( (nFontIndex > 4) && (nFontIndex <= maFontList.size()) )
-        return &(maFontList[nFontIndex - 1]);
-    return 0;
+
+    if (nFontIndex >= maFontList.size())
+        return NULL;
+
+    return (nFontIndex < 4) ? &(maFontList[nFontIndex]) : &(maFontList[nFontIndex - 1]);
 }
 
 void XclImpFontBuffer::ReadFont( XclImpStream& rStrm )
@@ -1682,7 +1683,7 @@ void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, ULONG nIndex)
 
 void XclImpXFRangeColumn::Find(
         XclImpXFRange*& rpPrevRange, XclImpXFRange*& rpNextRange,
-        ULONG& rnNextIndex, SCROW nScRow ) const
+        ULONG& rnNextIndex, SCROW nScRow )
 {
 
     // test whether list is empty
@@ -1693,8 +1694,8 @@ void XclImpXFRangeColumn::Find(
         return;
     }
 
-    rpPrevRange = const_cast<XclImpXFRange*> (&(maIndexList.front()));
-    rpNextRange = const_cast<XclImpXFRange*> (&(maIndexList.back()));
+    rpPrevRange = &maIndexList.front();
+    rpNextRange = &maIndexList.back();
 
     // test whether row is at end of list (contained in or behind last range)
     // rpPrevRange will contain a possible existing row
@@ -1725,7 +1726,7 @@ void XclImpXFRangeColumn::Find(
     while( ((rnNextIndex - nPrevIndex) > 1) && (rpPrevRange->mnScRow2 < nScRow) )
     {
         nMidIndex = (nPrevIndex + rnNextIndex) / 2;
-        pMidRange = const_cast<XclImpXFRange*>( &(maIndexList[ nMidIndex ]) );
+        pMidRange = &maIndexList[nMidIndex];
         DBG_ASSERT( pMidRange, "XclImpXFRangeColumn::Find - missing XF index range" );
         if( nScRow < pMidRange->mnScRow1 )      // row is really before pMidRange
         {
@@ -1743,19 +1744,20 @@ void XclImpXFRangeColumn::Find(
     if( nScRow <= rpPrevRange->mnScRow2 )
     {
         rnNextIndex = nPrevIndex + 1;
-        rpNextRange = const_cast<XclImpXFRange*>( &(maIndexList[rnNextIndex]) );
+        rpNextRange = &maIndexList[rnNextIndex];
     }
 }
 
 void XclImpXFRangeColumn::TryConcatPrev( ULONG nIndex )
 {
-    if( nIndex <= 0 || nIndex >= maIndexList.size() )
+    if( !nIndex || nIndex >= maIndexList.size() )
         return;
 
-    XclImpXFRange prevRange = maIndexList[ nIndex - 1 ];
-    XclImpXFRange nextRange = maIndexList[ nIndex ];
+    XclImpXFRange& prevRange = maIndexList[ nIndex - 1 ];
+    XclImpXFRange& nextRange = maIndexList[ nIndex ];
 
-    if( prevRange.Expand( nextRange ) ) {
+    if( prevRange.Expand( nextRange ) )
+    {
         maIndexList.erase( maIndexList.begin() + nIndex );
         if (mnCurIndex > nIndex)
             --mnCurIndex;
