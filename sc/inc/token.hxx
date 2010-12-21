@@ -32,6 +32,7 @@
 #include <memory>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 
 #include "formula/opcode.hxx"
 #include "refdata.hxx"
@@ -47,7 +48,7 @@ class ScJumpMatrix;
 class ScToken;
 
 typedef ::std::vector< ScComplexRefData > ScRefList;
-typedef formula::SimpleIntrusiveReference< class ScToken > ScTokenRef;
+typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
 
 /**
  * Another ref-counted token type using shared_ptr.  <b>Be extra careful
@@ -121,6 +122,16 @@ public:
      */
     static  formula::FormulaTokenRef          ExtendRangeReference( formula::FormulaToken & rTok1, formula::FormulaToken & rTok2, const ScAddress & rPos, bool bReuseDoubleRef );
 };
+
+inline void intrusive_ptr_add_ref(const ScToken* p)
+{
+    p->IncRef();
+}
+
+inline void intrusive_ptr_release(const ScToken* p)
+{
+    p->DecRef();
+}
 
 class ScSingleRefToken : public ScToken
 {

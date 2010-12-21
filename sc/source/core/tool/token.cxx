@@ -1551,7 +1551,7 @@ FormulaToken* ScTokenArray::MergeRangeReference( const ScAddress & rPos )
             p2->DecRef();
             p3->DecRef();
             nLen -= 2;
-            pCode[ nLen-1 ] = p;
+            pCode[ nLen-1 ] = p.get();
             nRefs--;
         }
     }

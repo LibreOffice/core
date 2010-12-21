@@ -1895,7 +1895,7 @@ void ScInterpreter::ScIntersect()
                 PushTempToken( new ScDoubleRefToken( rRef));
         }
         else
-            PushTempToken( xRes);
+            PushTempToken( xRes.get());
     }
     else
     {
@@ -1966,7 +1966,7 @@ void ScInterpreter::ScRangeFunc()
     if (!xRes)
         PushIllegalArgument();
     else
-        PushTempToken( xRes);
+        PushTempToken( xRes.get());
 }
 
 
@@ -2044,7 +2044,7 @@ void ScInterpreter::ScUnionFunc()
         }
     }
     ValidateRef( *pRes);    // set #REF! if needed
-    PushTempToken( xRes);
+    PushTempToken( xRes.get());
 }
 
 
@@ -2054,8 +2054,8 @@ void ScInterpreter::ScCurrent()
     FormulaTokenRef xTok( PopToken());
     if (xTok)
     {
-        PushTempToken( xTok);
-        PushTempToken( xTok);
+        PushTempToken( xTok.get());
+        PushTempToken( xTok.get());
     }
     else
         PushError( errUnknownStackVariable);

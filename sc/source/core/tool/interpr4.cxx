@@ -1733,7 +1733,7 @@ bool ScInterpreter::ConvertMatrixParameters()
             GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type( pCur,
                         xNew));
         }
-        PushTempToken( xNew);
+        PushTempToken( xNew.get());
         // set continuation point of path for main code line
         aCode.Jump( nNext, nNext);
         return true;
@@ -1783,14 +1783,14 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULON
             if ( xMat->IsEmptyPath( 0, 0))
             {   // result of empty FALSE jump path
                 FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
-                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
             else
             {
                 String aStr( nMatVal.GetString());
                 FormulaTokenRef xRes = new FormulaStringToken( aStr);
-                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
                 rRetTypeExpr = NUMBERFORMAT_TEXT;
             }
         }
@@ -1802,7 +1802,7 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULON
                 xRes = new FormulaErrorToken( nErr);
             else
                 xRes = new FormulaDoubleToken( nMatVal.fVal);
-            PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+            PushTempToken( new ScMatrixCellResultToken( xMat, xRes.get()));
             if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
                 rRetTypeExpr = NUMBERFORMAT_NUMBER;
         }
@@ -3660,7 +3660,7 @@ StackVar ScInterpreter::Interpret()
             if ( nStackBase > sp )
                 nStackBase = sp;        // underflow?!?
             sp = nStackBase;
-            PushTempToken( (*aTokenMatrixMapIter).second);
+            PushTempToken( (*aTokenMatrixMapIter).second.get());
         }
         else
         {

@@ -1648,7 +1648,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
 
             if ( !bContentChanged && pDocument->IsStreamValid(aPos.Tab()) )
             {
-                ScFormulaResult aNewResult( p->GetResultToken());
+                ScFormulaResult aNewResult( p->GetResultToken().get());
                 StackVar eOld = aResult.GetCellResultType();
                 StackVar eNew = aNewResult.GetCellResultType();
                 if ( eOld == svUnknown && ( eNew == svError || ( eNew == svDouble && aNewResult.GetDouble() == 0.0 ) ) )
@@ -1668,11 +1668,11 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
                 }
             }
 
-            aResult.SetToken( p->GetResultToken() );
+            aResult.SetToken( p->GetResultToken().get() );
         }
         else
         {
-            ScFormulaResult aNewResult( p->GetResultToken());
+            ScFormulaResult aNewResult( p->GetResultToken().get());
             StackVar eOld = aResult.GetCellResultType();
             StackVar eNew = aNewResult.GetCellResultType();
             bChanged = (eOld != eNew ||
@@ -1721,7 +1721,7 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // If the formula wasn't entered as a matrix formula, live on with
             // the upper left corner and let reference counting delete the matrix.
             if( cMatrixFlag != MM_FORMULA && !pCode->IsHyperLink() )
-                aResult.SetToken( aResult.GetCellResultToken());
+                aResult.SetToken( aResult.GetCellResultToken().get());
         }
         if ( aResult.IsValue() && !::rtl::math::isFinite( aResult.GetDouble() ) )
         {

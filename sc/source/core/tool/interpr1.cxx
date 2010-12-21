@@ -179,7 +179,7 @@ void ScInterpreter::ScIfJump()
                     xNew = new ScJumpMatrixToken( pJumpMat );
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(pCur, xNew));
                 }
-                PushTempToken( xNew);
+                PushTempToken( xNew.get());
                 // set endpoint of path for main code line
                 aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
             }
@@ -293,7 +293,7 @@ void ScInterpreter::ScChoseJump()
                     GetTokenMatrixMap().insert( ScTokenMatrixMap::value_type(
                                 pCur, xNew));
                 }
-                PushTempToken( xNew);
+                PushTempToken( xNew.get());
                 // set endpoint of path for main code line
                 aCode.Jump( pJump[ nJumpCount ], pJump[ nJumpCount ] );
                 bHaveJump = true;
@@ -7347,7 +7347,7 @@ void ScInterpreter::ScText()
                     FormulaTokenRef xTok( PopToken());
                     if (!nGlobalError)
                     {
-                        PushTempToken( xTok);
+                        PushTempToken( xTok.get());
                         // Temporarily override the ConvertStringToValue()
                         // error for GetCellValue() / GetCellValueOrZero()
                         USHORT nSErr = mnStringNoValueError;
@@ -7358,7 +7358,7 @@ void ScInterpreter::ScText()
                         {
                             // Not numeric.
                             nGlobalError = 0;
-                            PushTempToken( xTok);
+                            PushTempToken( xTok.get());
                             aStr = GetString();
                             bString = true;
                         }

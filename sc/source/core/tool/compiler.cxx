@@ -5260,7 +5260,7 @@ void ScCompiler::fillAddInToken(::std::vector< ::com::sun::star::sheet::FormulaO
 // -----------------------------------------------------------------------------
 BOOL ScCompiler::HandleSingleRef()
 {
-    ScSingleRefData& rRef = static_cast<ScToken*>((FormulaToken*)pToken)->GetSingleRef();
+    ScSingleRefData& rRef = static_cast<ScToken*>(pToken.get())->GetSingleRef();
     rRef.CalcAbsIfRel( aPos );
     if ( !rRef.Valid() )
     {
