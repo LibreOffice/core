@@ -38,7 +38,6 @@ Module gid_Module_Optional_Winexplorerext
 			 gid_File_Lib_Shlxthdl64,
 			 gid_File_Lib_OOoFilt,
 			 gid_File_Lib_OOoFilt64,
-             gid_File_Lib_Shlxthdl_Msvcr71,
              gid_File_Lib_Shlxtmsi,
              gid_File_Lib_Reg64,
              gid_File_Tmp_Userinstall_Winexplorerext_Inf);    
