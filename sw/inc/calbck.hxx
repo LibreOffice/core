@@ -188,6 +188,13 @@ public:
 private:
     // forbidden and not implemented
     SwModify & operator= (const SwModify &);
+
+#ifdef GCC
+protected:
+    // GCC >= 3.4 needs an accessible "T (const T&)"
+    // to pass a "T" as a "const T&" argument
+        // it does not require an implementation though
+#endif
     SwModify (const SwModify &);
 };
 
