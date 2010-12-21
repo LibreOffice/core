@@ -472,13 +472,13 @@
     Identifier = SID_UNDO ; \
     Command = ".uno:UndoAction" ; \
     HelpID = SID_UNDO ; \
-    Text [ en-US ] = "Can't Undo" ; \
+    Text [ en-US ] = "Undo" ;   \
 
 #define ITEM_EDIT_REDO \
     Identifier = SID_REDO ; \
     Command = ".uno:Redo" ; \
     HelpID = SID_REDO ; \
-    Text [ en-US ] = "Can't Restore" ; \
+    Text [ en-US ] = "Redo" ; \
 
 #define ITEM_EDIT_REPEAT \
     Identifier = SID_REPEAT ; \

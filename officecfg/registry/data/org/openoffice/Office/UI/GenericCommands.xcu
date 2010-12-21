@@ -1274,7 +1274,7 @@
             </node>
             <node oor:name=".uno:UndoAction" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Can't Undo</value>
+                    <value xml:lang="en-US">Undo</value>
                 </prop>
             </node>
             <node oor:name=".uno:ToggleControlFocus" oor:op="replace">
@@ -3282,7 +3282,7 @@
             </node>
             <node oor:name=".uno:Redo" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Can&apos;t Restore</value>
+                    <value xml:lang="en-US">Redo</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -3290,7 +3290,7 @@
             </node>
             <node oor:name=".uno:Undo" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="en-US">Can&apos;t Undo</value>
+                    <value xml:lang="en-US">Undo</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
