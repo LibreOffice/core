@@ -1041,7 +1041,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     bool bMarkIsFiltered = (eMarkType == SC_MARK_SIMPLE_FILTERED);
     bool bNoPaste = ((eMarkType != SC_MARK_SIMPLE && !bMarkIsFiltered) ||
             (bMarkIsFiltered && (eMoveMode != INS_NONE || bAsLink)));
-    if (!bNoPaste && !rMark.IsMarked())
+
+    if (bNoPaste)
+    {
+        // Exit early when we don't want to perform pasting.
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return FALSE;
+    }
+
+    if (!rMark.IsMarked())
     {
         // Create a selection with clipboard row count and check that for
         // filtered.
@@ -1065,29 +1073,15 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     }
     else
     {
-        // FIX for issue #106711 : leftover data after undo.
-        if (!bNoPaste )
+        // Expand the marked area when the destination area is larger than the
+        // current selection, to get the undo do the right thing. (i#106711)
+        ScRange aRange;
+        aFilteredMark.GetMarkArea( aRange );
+        if( (aRange.aEnd.Col() - aRange.aStart.Col()) < nDestSizeX )
         {
-            ScRange rRange;
-            aFilteredMark.GetMarkArea( rRange );
-            if( (rRange.aEnd.Col() - rRange.aStart.Col()) < nDestSizeX )
-            {
-                nStartCol = rRange.aStart.Col();
-                nStartRow = rRange.aStart.Row();
-                nStartTab = rRange.aStart.Tab();
-                nEndCol = nStartCol + nDestSizeX;
-                nEndRow = rRange.aEnd.Row();
-                nEndTab = rRange.aEnd.Tab();
-                aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-                aFilteredMark.SetMarkArea( aMarkRange);
-            }
+            aRange.aEnd.SetCol(aRange.aStart.Col() + nDestSizeX);
+            aFilteredMark.SetMarkArea(aRange);
         }
-    }
-
-    if (bNoPaste)
-    {
-        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
-        return FALSE;
     }
 
     SCROW nUnfilteredRows = aMarkRange.aEnd.Row() - aMarkRange.aStart.Row() + 1;
