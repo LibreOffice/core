@@ -404,16 +404,6 @@ SCROW ScFlatBoolRowSegments::findLastNotOf(bool bValue) const
     return static_cast<SCROW>(mpImpl->findLastNotOf(bValue));
 }
 
-void ScFlatBoolRowSegments::enableTreeSearch(bool bEnable)
-{
-    mpImpl->enableTreeSearch(bEnable);
-}
-
-void ScFlatBoolRowSegments::setInsertFromBack(bool bInsertFromBack)
-{
-    mpImpl->setInsertFromBack(bInsertFromBack);
-}
-
 // ============================================================================
 
 ScFlatBoolColSegments::ScFlatBoolColSegments() :

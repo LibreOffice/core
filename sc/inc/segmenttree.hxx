@@ -84,9 +84,6 @@ public:
 
     SCROW findLastNotOf(bool bValue) const;
 
-    void enableTreeSearch(bool bEnable);
-    void setInsertFromBack(bool bInsertFromBack);
-
 private:
     ::std::auto_ptr<ScFlatBoolSegmentsImpl> mpImpl;
 };
