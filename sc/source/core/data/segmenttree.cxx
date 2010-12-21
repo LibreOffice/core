@@ -430,11 +430,6 @@ void ScFlatBoolColSegments::setFalse(SCCOL nCol1, SCCOL nCol2)
     mpImpl->setFalse(static_cast<SCCOLROW>(nCol1), static_cast<SCCOLROW>(nCol2));
 }
 
-bool ScFlatBoolColSegments::getValue(SCCOL nCol)
-{
-    return mpImpl->getValue(static_cast<SCCOLROW>(nCol));
-}
-
 bool ScFlatBoolColSegments::getRangeData(SCCOL nCol, RangeData& rData)
 {
     ScFlatBoolSegmentsImpl::RangeData aData;
@@ -455,11 +450,6 @@ void ScFlatBoolColSegments::removeSegment(SCCOL nCol1, SCCOL nCol2)
 void ScFlatBoolColSegments::insertSegment(SCCOL nCol, SCCOL nSize, bool bSkipStartBoundary)
 {
     mpImpl->insertSegment(static_cast<SCCOLROW>(nCol), static_cast<SCCOLROW>(nSize), bSkipStartBoundary);
-}
-
-void ScFlatBoolColSegments::enableTreeSearch(bool bEnable)
-{
-    mpImpl->enableTreeSearch(bEnable);
 }
 
 void ScFlatBoolColSegments::setInsertFromBack(bool bInsertFromBack)
