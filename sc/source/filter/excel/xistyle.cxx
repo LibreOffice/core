@@ -888,26 +888,33 @@ bool XclImpCellBorder::HasAnyOuterBorder() const
 
 namespace {
 
+// TODO: These values are approximate; we should probably tweak these values
+// further to better match Excel's border thickness.
+#define XLS_LINE_WIDTH_HAIR    1
+#define XLS_LINE_WIDTH_THIN    6
+#define XLS_LINE_WIDTH_MEDIUM 18
+#define XLS_LINE_WIDTH_THICK  24
+
 /** Converts the passed line style to a SvxBorderLine, or returns false, if style is "no line". */
 bool lclConvertBorderLine( SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
 {
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
-        //  outer width,        inner width,        distance    type
-        {   0,                  0,                  0,          SOLID },                // 0 = none
-        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // 1 = thin
-        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // 2 = medium
-        {   DEF_LINE_WIDTH_1,   0,                  0,          DASHED },               // 3 = dashed
-        {   DEF_LINE_WIDTH_1,   0,                  0,          DOTTED },               // 4 = dotted
-        {   DEF_LINE_WIDTH_3,   0,                  0,          SOLID },                // 5 = thick
-        {   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1,   DEF_LINE_WIDTH_1 },                 // 6 = double
-        {   DEF_LINE_WIDTH_0,   0,                  0,          SOLID },                // 7 = hair
-        {   DEF_LINE_WIDTH_2,   0,                  0,          DASHED },               // 8 = med dash
-        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // 9 = thin dashdot
-        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // A = med dashdot
-        {   DEF_LINE_WIDTH_1,   0,                  0,          SOLID },                // B = thin dashdotdot
-        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID },                // C = med dashdotdot
-        {   DEF_LINE_WIDTH_2,   0,                  0,          SOLID }                 // D = med slant dashdot
+        //  outer width,        inner width,        distance              type
+        {   0,                     0,                  0,                    SOLID },  // 0 = none
+        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // 1 = thin
+        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // 2 = medium
+        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    DASHED }, // 3 = dashed
+        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    DOTTED }, // 4 = dotted
+        {   XLS_LINE_WIDTH_THICK,  0,                  0,                    SOLID },  // 5 = thick
+        {   XLS_LINE_WIDTH_THIN,   XLS_LINE_WIDTH_THIN, XLS_LINE_WIDTH_THIN, SOLID },  // 6 = double
+        {   XLS_LINE_WIDTH_HAIR,   0,                  0,                    SOLID },  // 7 = hair
+        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    DASHED }, // 8 = med dash
+        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // 9 = thin dashdot
+        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // A = med dashdot
+        {   XLS_LINE_WIDTH_THIN,   0,                  0,                    SOLID },  // B = thin dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID },  // C = med dashdotdot
+        {   XLS_LINE_WIDTH_MEDIUM, 0,                  0,                    SOLID }   // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )
@@ -1257,6 +1264,10 @@ const ScPatternAttr& XclImpXF::CreatePattern( bool bSkipPoolDefs )
             eRotateMode = SVX_ROTATE_MODE_BOTTOM;
         ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
     }
+
+    // Excel's cell margins are different from Calc's default margins.
+    SvxMarginItem aItem(40, 40, 40, 40, ATTR_MARGIN);
+    ScfTools::PutItem(rItemSet, aItem, bSkipPoolDefs);
 
     return *mpPattern;
 }
