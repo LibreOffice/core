@@ -67,12 +67,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxDATE:
         case SbxDOUBLE:
             nRes = p->nDouble; break;
-        case SbxULONG64:
-            nRes = ImpUINT64ToDouble( p->nULong64 ); break;
-        case SbxLONG64:
-            nRes = ImpINT64ToDouble( p->nLong64 ); break;
         case SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( p->nLong64 ); break;
+            nRes = ImpCurrencyToDouble( p->nInt64 ); break;
         case SbxSALINT64:
             nRes = static_cast< double >(p->nInt64); break;
         case SbxSALUINT64:
@@ -178,12 +174,8 @@ double ImpGetDate( const SbxValues* p )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             nRes = *p->pDouble; break;
-        case SbxBYREF | SbxULONG64:
-            nRes = ImpUINT64ToDouble( *p->pULong64 ); break;
-        case SbxBYREF | SbxLONG64:
-            nRes = ImpINT64ToDouble( *p->pLong64 ); break;
         case SbxBYREF | SbxCURRENCY:
-            nRes = ImpCurrencyToDouble( *p->pLong64 ); break;
+            nRes = ImpCurrencyToDouble( *p->pnInt64 ); break;
         case SbxBYREF | SbxSALINT64:
             nRes = static_cast< double >(*p->pnInt64); break;
         case SbxBYREF | SbxSALUINT64:
@@ -223,11 +215,7 @@ start:
             aTmp.pUShort = &p->nUShort; goto direct;
         case SbxSINGLE:
             aTmp.pSingle = &p->nSingle; goto direct;
-        case SbxULONG64:
-            aTmp.pULong64 = &p->nULong64; goto direct;
-        case SbxLONG64:
         case SbxCURRENCY:
-            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
@@ -406,7 +394,7 @@ start:
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMINCURR;
             }
-            *p->pLong64 = ImpDoubleToCurrency( n ); break;
+            *p->pnInt64 = ImpDoubleToCurrency( n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
