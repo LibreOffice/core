@@ -696,7 +696,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
                         aPool   << ocDde << ocOpen << nPar1 << ocSep << nPar2 << ocSep
                                 << nMerk0 << ocClose;
 
-                        GetDoc().CreateDdeLink( aAppl, aExtDoc, pExtName->aName, SC_DDE_DEFAULT );
+                        GetDoc().CreateDdeLink( aAppl, aExtDoc, pExtName->aName, SC_DDE_DEFAULT, ScMatrixRef() );
                     }
                     else
                         aPool << ocBad;

@@ -62,6 +62,7 @@
 #include <scdll.hxx>
 #include <document.hxx>
 #include <stringutil.hxx>
+#include <scmatrix.hxx>
 
 using namespace ::com::sun::star;
 
@@ -78,11 +79,13 @@ public:
     void testSUM();
     void testNamedRange();
     void testCSV();
+    void testMatrix();
 
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testSUM);
     CPPUNIT_TEST(testNamedRange);
     CPPUNIT_TEST(testCSV);
+    CPPUNIT_TEST(testMatrix);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -197,6 +200,140 @@ void Test::testCSV()
                  nValue);
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric detection failure", bResult == aTests[i].bResult);
         CPPUNIT_ASSERT_MESSAGE ("CSV numeric value failure", nValue == aTests[i].nValue);
+    }
+}
+
+template<typename Evaluator>
+void checkMatrixElements(const ScMatrix& rMat)
+{
+    SCSIZE nC, nR;
+    rMat.GetDimensions(nC, nR);
+    Evaluator aEval;
+    for (SCSIZE i = 0; i < nC; ++i)
+    {
+        for (SCSIZE j = 0; j < nR; ++j)
+        {
+            aEval(i, j, rMat.Get(i, j));
+        }
+    }
+}
+
+struct AllZeroMatrix
+{
+    void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
+    {
+        CPPUNIT_ASSERT_MESSAGE("element is not of numeric type", rVal.nType == SC_MATVAL_VALUE);
+        CPPUNIT_ASSERT_MESSAGE("element value must be zero", rVal.fVal == 0.0);
+    }
+};
+
+struct PartiallyFilledZeroMatrix
+{
+    void operator() (SCSIZE nCol, SCSIZE nRow, const ScMatrixValue& rVal) const
+    {
+        CPPUNIT_ASSERT_MESSAGE("element is not of numeric type", rVal.nType == SC_MATVAL_VALUE);
+        if (1 <= nCol && nCol <= 2 && 2 <= nRow && nRow <= 8)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element value must be 3.0", rVal.fVal == 3.0);
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE("element value must be zero", rVal.fVal == 0.0);
+        }
+    }
+};
+
+struct AllEmptyMatrix
+{
+    void operator() (SCSIZE /*nCol*/, SCSIZE /*nRow*/, const ScMatrixValue& rVal) const
+    {
+        CPPUNIT_ASSERT_MESSAGE("element is not of empty type", rVal.nType == SC_MATVAL_EMPTY);
+        CPPUNIT_ASSERT_MESSAGE("value of \"empty\" element is expected to be zero", rVal.fVal == 0.0);
+    }
+};
+
+struct PartiallyFilledEmptyMatrix
+{
+    void operator() (SCSIZE nCol, SCSIZE nRow, const ScMatrixValue& rVal) const
+    {
+        if (nCol == 1 && nRow == 1)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of boolean type", rVal.nType == SC_MATVAL_BOOLEAN);
+            CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.fVal == 1.0);
+        }
+        else if (nCol == 4 && nRow == 5)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of value type", rVal.nType == SC_MATVAL_VALUE);
+            CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.fVal == -12.5);
+        }
+        else if (nCol == 8 && nRow == 2)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of value type", rVal.nType == SC_MATVAL_STRING);
+            CPPUNIT_ASSERT_MESSAGE("element value is not what is expected", rVal.pS->EqualsAscii("Test"));
+        }
+        else if (nCol == 8 && nRow == 11)
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of empty path type", rVal.nType == SC_MATVAL_EMPTYPATH);
+            CPPUNIT_ASSERT_MESSAGE("value of \"empty\" element is expected to be zero", rVal.fVal == 0.0);
+        }
+        else
+        {
+            CPPUNIT_ASSERT_MESSAGE("element is not of empty type", rVal.nType == SC_MATVAL_EMPTY);
+            CPPUNIT_ASSERT_MESSAGE("value of \"empty\" element is expected to be zero", rVal.fVal == 0.0);
+        }
+    }
+};
+
+void Test::testMatrix()
+{
+    ScMatrixRef pMat;
+    ScMatrix::DensityType eDT[2];
+
+    // First, test the zero matrix types.
+    eDT[0] = ScMatrix::FILLED_ZERO;
+    eDT[1] = ScMatrix::SPARSE_ZERO;
+    for (int i = 0; i < 2; ++i)
+    {
+        pMat = new ScMatrix(0, 0, eDT[i]);
+        SCSIZE nC, nR;
+        pMat->GetDimensions(nC, nR);
+        CPPUNIT_ASSERT_MESSAGE("matrix is not empty", nC == 0 && nR == 0);
+        pMat->Resize(4, 10);
+        pMat->GetDimensions(nC, nR);
+        CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 4 && nR == 10);
+        CPPUNIT_ASSERT_MESSAGE("both 'and' and 'or' should evaluate to false",
+                               !pMat->And() && !pMat->Or());
+
+        // Resizing into a larger matrix should fill the void space with zeros.
+        checkMatrixElements<AllZeroMatrix>(*pMat);
+
+        pMat->FillDouble(3.0, 1, 2, 2, 8);
+        checkMatrixElements<PartiallyFilledZeroMatrix>(*pMat);
+        CPPUNIT_ASSERT_MESSAGE("matrix is expected to be numeric", pMat->IsNumeric());
+        CPPUNIT_ASSERT_MESSAGE("partially non-zero matrix should evaluate false on 'and' and true on 'or",
+                               !pMat->And() && pMat->Or());
+        pMat->FillDouble(5.0, 0, 0, nC-1, nR-1);
+        CPPUNIT_ASSERT_MESSAGE("fully non-zero matrix should evaluate true both on 'and' and 'or",
+                               pMat->And() && pMat->Or());
+    }
+
+    // Now test the emtpy matrix types.
+    eDT[0] = ScMatrix::FILLED_EMPTY;
+    eDT[1] = ScMatrix::SPARSE_EMPTY;
+    for (int i = 0; i < 2; ++i)
+    {
+        pMat = new ScMatrix(10, 20, eDT[i]);
+        SCSIZE nC, nR;
+        pMat->GetDimensions(nC, nR);
+        CPPUNIT_ASSERT_MESSAGE("matrix size is not as expected", nC == 10 && nR == 20);
+        checkMatrixElements<AllEmptyMatrix>(*pMat);
+
+        pMat->PutBoolean(true, 1, 1);
+        pMat->PutDouble(-12.5, 4, 5);
+        rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("Test"));
+        pMat->PutString(aStr, 8, 2);
+        pMat->PutEmptyPath(8, 11);
+        checkMatrixElements<PartiallyFilledEmptyMatrix>(*pMat);
     }
 }
 

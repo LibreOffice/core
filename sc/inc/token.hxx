@@ -175,7 +175,7 @@ class ScMatrixToken : public ScToken
 private:
             ScMatrixRef         pMatrix;
 public:
-                                ScMatrixToken( ScMatrix* p ) :
+                                ScMatrixToken( ScMatrixRef p ) :
                                     ScToken( formula::svMatrix ), pMatrix( p ) {}
                                 ScMatrixToken( const ScMatrixToken& r ) :
                                     ScToken( r ), pMatrix( r.pMatrix ) {}
@@ -327,7 +327,7 @@ protected:
             ScConstMatrixRef    xMatrix;
             formula::FormulaConstTokenRef     xUpperLeft;
 public:
-                                ScMatrixCellResultToken( ScMatrix* pMat, formula::FormulaToken* pUL ) :
+                                ScMatrixCellResultToken( const ScConstMatrixRef& pMat, formula::FormulaToken* pUL ) :
                                     ScToken( formula::svMatrixCell ),
                                     xMatrix( pMat), xUpperLeft( pUL) {}
                                 ScMatrixCellResultToken( const ScMatrixCellResultToken& r ) :

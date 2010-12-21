@@ -103,8 +103,8 @@ EXCEPTIONSFILES= \
         $(SLO)$/rangeutl.obj \
         $(SLO)$/reffind.obj \
         $(SLO)$/reftokenhelper.obj \
-        $(SLO)$/refupdat.obj \
         $(SLO)$/scmatrix.obj \
+        $(SLO)$/refupdat.obj \
         $(SLO)$/simplerangelist.obj \
         $(SLO)$/stringutil.obj \
         $(SLO)$/subtotal.obj \

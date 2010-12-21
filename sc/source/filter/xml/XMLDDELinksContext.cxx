@@ -137,7 +137,7 @@ void ScXMLDDELinkContext::CreateDDELink()
         String sAppl(sApplication);
         String sTop(sTopic);
         String sIt(sItem);
-        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode);
+        GetScImport().GetDocument()->CreateDdeLink(sAppl, sTop, sIt, nMode, ScMatrixRef());
         sal_uInt16 nPos;
         if(GetScImport().GetDocument()->FindDdeLink(sAppl, sTop, sIt, nMode, nPos))
             nPosition = nPos;

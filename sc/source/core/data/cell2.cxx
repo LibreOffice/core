@@ -538,12 +538,12 @@ const ScMatrix* ScFormulaCell::GetMatrix()
     {
         // Was stored !bDirty but an accompanying matrix cell was bDirty?
         // => we need to get the matrix.
-        if (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix().Is())
+        if (!bDirty && cMatrixFlag == MM_FORMULA && !aResult.GetMatrix())
             bDirty = TRUE;
         if ( IsDirtyOrInTableOpDirty() )
             Interpret();
     }
-    return aResult.GetMatrix();
+    return aResult.GetMatrix().get();
 }
 
 BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const

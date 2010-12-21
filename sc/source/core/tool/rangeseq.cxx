@@ -401,9 +401,8 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
             xMatrix = new ScMatrix(
                     static_cast<SCSIZE>(nMaxColCount),
                     static_cast<SCSIZE>(nRowCount) );
-            ScMatrix* pMatrix = xMatrix;
             SCSIZE nCols, nRows;
-            pMatrix->GetDimensions( nCols, nRows);
+            xMatrix->GetDimensions( nCols, nRows);
             if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
             {
                 DBG_ERRORFILE( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
@@ -420,11 +419,11 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                     if (ScApiTypeConversion::ConvertAnyToDouble( fVal, eClass, pColArr[nCol]))
                     {
                         if (eClass == uno::TypeClass_BOOLEAN)
-                            pMatrix->PutBoolean( (fVal ? true : false),
+                            xMatrix->PutBoolean( (fVal ? true : false),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else
-                            pMatrix->PutDouble( fVal,
+                            xMatrix->PutDouble( fVal,
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                     }
@@ -435,18 +434,18 @@ ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::An
                         //Reflection* pRefl = pColArr[nCol].getReflection();
                         //if ( pRefl->equals( *OUString_getReflection() ) )
                         if ( pColArr[nCol] >>= aUStr )
-                            pMatrix->PutString( String( aUStr ),
+                            xMatrix->PutString( String( aUStr ),
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                         else
-                            pMatrix->PutEmpty(
+                            xMatrix->PutEmpty(
                                     static_cast<SCSIZE>(nCol),
                                     static_cast<SCSIZE>(nRow) );
                     }
                 }
                 for (nCol=nColCount; nCol<nMaxColCount; nCol++)
                 {
-                    pMatrix->PutEmpty(
+                    xMatrix->PutEmpty(
                             static_cast<SCSIZE>(nCol),
                             static_cast<SCSIZE>(nRow) );
                 }

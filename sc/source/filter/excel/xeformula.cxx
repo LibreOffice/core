@@ -1317,18 +1317,17 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
         {
             for( SCSIZE nScCol = 0; nScCol < nScCols; ++nScCol )
             {
-                ScMatValType nType;
-                const ScMatrixValue* pMatVal = pMatrix->Get( nScCol, nScRow, nType );
-                DBG_ASSERT( pMatVal, "XclExpFmlaCompImpl::ProcessMatrix - missing matrix value" );
-                if( ScMatrix::IsValueType( nType ) )    // value, boolean, or error
+                ScMatrixValue nMatVal = pMatrix->Get( nScCol, nScRow );
+                DBG_ASSERT( nMatVal, "XclExpFmlaCompImpl::ProcessMatrix - missing matrix value" );
+                if( ScMatrix::IsValueType( nMatVal.nType ) )    // value, boolean, or error
                 {
-                    if( ScMatrix::IsBooleanType( nType ) )
+                    if( ScMatrix::IsBooleanType( nMatVal.nType ) )
                     {
                         AppendExt( EXC_CACHEDVAL_BOOL );
-                        AppendExt( static_cast< sal_uInt8 >( pMatVal->GetBoolean() ? 1 : 0 ) );
+                        AppendExt( static_cast< sal_uInt8 >( nMatVal.GetBoolean() ? 1 : 0 ) );
                         AppendExt( 0, 7 );
                     }
-                    else if( USHORT nErr = pMatVal->GetError() )
+                    else if( USHORT nErr = nMatVal.GetError() )
                     {
                         AppendExt( EXC_CACHEDVAL_ERROR );
                         AppendExt( XclTools::GetXclErrorCode( nErr ) );
@@ -1337,12 +1336,12 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
                     else
                     {
                         AppendExt( EXC_CACHEDVAL_DOUBLE );
-                        AppendExt( pMatVal->fVal );
+                        AppendExt( nMatVal.fVal );
                     }
                 }
                 else    // string or empty
                 {
-                    const String& rStr = pMatVal->GetString();
+                    const String& rStr = nMatVal.GetString();
                     if( rStr.Len() == 0 )
                     {
                         AppendExt( EXC_CACHEDVAL_EMPTY );

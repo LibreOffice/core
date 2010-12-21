@@ -585,11 +585,8 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
         }
 
         ScMatrixRef xMat = new ScMatrix(
-            static_cast<SCSIZE>(nDataCol2-nDataCol1+1), static_cast<SCSIZE>(nDataRow2-nDataRow1+1));
-
-#if 0
-        // TODO: Switch to this code block once we have support for sparsely-filled
-        // matrices in ScMatrix.
+            static_cast<SCSIZE>(nDataCol2-nDataCol1+1),
+            static_cast<SCSIZE>(nDataRow2-nDataRow1+1), ScMatrix::SPARSE_EMPTY);
 
         // Only fill non-empty cells, for better performance.
         vector<SCROW> aRows;
@@ -621,46 +618,11 @@ ScExternalRefCache::TokenArrayRef ScExternalRefCache::getCellRangeData(
                 }
             }
         }
-#else
-        vector<SCROW> aRows;
-        pTab->getAllRows(aRows, nDataRow1, nDataRow2);
-        if (aRows.empty())
-            // Cache is empty.
-            return TokenArrayRef();
-        else
-            // Trim the column below the last non-empty row.
-            nDataRow2 = aRows.back();
-
-        // Empty all matrix elements first, and fill only non-empty elements.
-        for (SCROW nRow = nDataRow1; nRow <= nDataRow2; ++nRow)
-        {
-            for (SCCOL nCol = nDataCol1; nCol <= nDataCol2; ++nCol)
-            {
-                TokenRef pToken = pTab->getCell(nCol, nRow);
-                SCSIZE nC = nCol - nCol1, nR = nRow - nRow1;
-                if (!pToken)
-                    return TokenArrayRef();
-
-                switch (pToken->GetType())
-                {
-                    case svDouble:
-                        xMat->PutDouble(pToken->GetDouble(), nC, nR);
-                    break;
-                    case svString:
-                        xMat->PutString(pToken->GetString(), nC, nR);
-                    break;
-                    default:
-                        xMat->PutEmpty(nC, nR);
-                }
-            }
-        }
-#endif
 
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrix* pMat2 = xMat;
-        ScMatrixToken aToken(pMat2);
+        ScMatrixToken aToken(xMat);
         if (!pArray)
             pArray.reset(new ScTokenArray);
         pArray->AddToken(aToken);
@@ -1464,8 +1426,7 @@ static ScTokenArray* lcl_convertToTokenArray(const ScDocument* pSrcDoc, ScRange&
         if (!bFirstTab)
             pArray->AddOpCode(ocSep);
 
-        ScMatrix* pMat2 = xMat;
-        ScMatrixToken aToken(pMat2);
+        ScMatrixToken aToken(xMat);
         pArray->AddToken(aToken);
 
         itrCache->mpRangeData = xMat;
@@ -1493,8 +1454,7 @@ static ScTokenArray* lcl_fillEmptyMatrix(const ScRange& rRange)
         for (SCSIZE j = 0; j < nR; ++j)
             xMat->PutEmpty(i, j);
 
-    ScMatrix* pMat2 = xMat;
-    ScMatrixToken aToken(pMat2);
+    ScMatrixToken aToken(xMat);
     auto_ptr<ScTokenArray> pArray(new ScTokenArray);
     pArray->AddToken(aToken);
     return pArray.release();
@@ -2050,10 +2010,6 @@ const ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     if (itr != itrEnd)
     {
         // document already loaded.
-
-        // TODO: Find out a way to access a document that's already open in
-        // memory and re-use that instance, instead of loading it from the
-        // disk again.
 
         SfxObjectShell* p = itr->second.maShell;
         itr->second.maLastAccess = Time();

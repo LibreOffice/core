@@ -231,7 +231,7 @@ public:
 
     USHORT              GetErrCode() const      { return nErrCode; }
     BOOL                HasString() const       { return bHasString; }
-    BOOL                HasMatrix() const       { return ( xMatrix.Is() ); }
+    bool                HasMatrix() const       { return xMatrix.get(); }
     BOOL                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
     const String&       GetString() const       { return aString; }

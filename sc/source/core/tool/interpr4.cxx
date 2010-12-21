@@ -1776,42 +1776,37 @@ void ScInterpreter::QueryMatrixType(ScMatrixRef& xMat, short& rRetTypeExpr, ULON
 {
     if (xMat)
     {
-        ScMatValType nMatValType;
-        const ScMatrixValue* pMatVal = xMat->Get(0, 0, nMatValType);
-        if ( pMatVal )
+        ScMatrixValue nMatVal = xMat->Get(0, 0);
+        ScMatValType nMatValType = nMatVal.nType;
+        if (ScMatrix::IsNonValueType( nMatValType))
         {
-            if (ScMatrix::IsNonValueType( nMatValType))
-            {
-                if ( xMat->IsEmptyPath( 0, 0))
-                {   // result of empty FALSE jump path
-                    FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
-                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                    rRetTypeExpr = NUMBERFORMAT_LOGICAL;
-                }
-                else
-                {
-                    String aStr( pMatVal->GetString());
-                    FormulaTokenRef xRes = new FormulaStringToken( aStr);
-                    PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                    rRetTypeExpr = NUMBERFORMAT_TEXT;
-                }
+            if ( xMat->IsEmptyPath( 0, 0))
+            {   // result of empty FALSE jump path
+                FormulaTokenRef xRes = new FormulaDoubleToken( 0.0);
+                PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+                rRetTypeExpr = NUMBERFORMAT_LOGICAL;
             }
             else
             {
-                USHORT nErr = GetDoubleErrorValue( pMatVal->fVal);
-                FormulaTokenRef xRes;
-                if (nErr)
-                    xRes = new FormulaErrorToken( nErr);
-                else
-                    xRes = new FormulaDoubleToken( pMatVal->fVal);
+                String aStr( nMatVal.GetString());
+                FormulaTokenRef xRes = new FormulaStringToken( aStr);
                 PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
-                if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
-                    rRetTypeExpr = NUMBERFORMAT_NUMBER;
+                rRetTypeExpr = NUMBERFORMAT_TEXT;
             }
-            rRetIndexExpr = 0;
         }
         else
-            SetError( errUnknownStackVariable);
+        {
+            USHORT nErr = GetDoubleErrorValue( nMatVal.fVal);
+            FormulaTokenRef xRes;
+            if (nErr)
+                xRes = new FormulaErrorToken( nErr);
+            else
+                xRes = new FormulaDoubleToken( nMatVal.fVal);
+            PushTempToken( new ScMatrixCellResultToken( xMat, xRes));
+            if ( rRetTypeExpr != NUMBERFORMAT_LOGICAL )
+                rRetTypeExpr = NUMBERFORMAT_NUMBER;
+        }
+        rRetIndexExpr = 0;
         xMat->SetErrorInterpreter( NULL);
     }
     else
@@ -1922,7 +1917,7 @@ void ScInterpreter::PushExternalDoubleRef(
 }
 
 
-void ScInterpreter::PushMatrix(ScMatrix* pMat)
+void ScInterpreter::PushMatrix(const ScMatrixRef& pMat)
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::PushMatrix" );
     pMat->SetErrorInterpreter( NULL);
@@ -2335,47 +2330,51 @@ ScMatValType ScInterpreter::GetDoubleOrStringFromMatrix( double& rDouble,
         String& rString )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::GetDoubleOrStringFromMatrix" );
+
+    rDouble = 0.0;
+    rString.Erase();
     ScMatValType nMatValType = SC_MATVAL_EMPTY;
+
     switch ( GetStackType() )
     {
         case svMatrix:
             {
-                const ScMatrixValue* pMatVal = 0;
+                ScMatrixValue nMatVal;
                 ScMatrixRef pMat = PopMatrix();
                 if (!pMat)
                     ;   // nothing
                 else if (!pJumpMatrix)
-                    pMatVal = pMat->Get( 0, 0, nMatValType);
+                {
+                    nMatVal = pMat->Get(0, 0);
+                    nMatValType = nMatVal.nType;
+                }
                 else
                 {
                     SCSIZE nCols, nRows, nC, nR;
                     pMat->GetDimensions( nCols, nRows);
                     pJumpMatrix->GetPos( nC, nR);
                     if ( nC < nCols && nR < nRows )
-                        pMatVal = pMat->Get( nC, nR, nMatValType);
+                    {
+                        nMatVal = pMat->Get( nC, nR);
+                        nMatValType = nMatVal.nType;
+                    }
                     else
                         SetError( errNoValue);
                 }
-                if (!pMatVal)
-                {
-                    rDouble = 0.0;
-                    rString.Erase();
-                }
-                else if (nMatValType == SC_MATVAL_VALUE)
-                    rDouble = pMatVal->fVal;
+
+                if (nMatValType == SC_MATVAL_VALUE)
+                    rDouble = nMatVal.fVal;
                 else if (nMatValType == SC_MATVAL_BOOLEAN)
                 {
-                    rDouble = pMatVal->fVal;
+                    rDouble = nMatVal.fVal;
                     nMatValType = SC_MATVAL_VALUE;
                 }
                 else
-                    rString = pMatVal->GetString();
+                    rString = nMatVal.GetString();
             }
             break;
         default:
             PopError();
-            rDouble = 0.0;
-            rString.Erase();
             SetError( errIllegalParameter);
     }
     return nMatValType;
@@ -2700,7 +2699,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillLongArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillLongArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2731,7 +2730,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillDoubleArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillDoubleArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2762,7 +2761,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix(), pFormatter ))
+                            if (!ScRangeToSequence::FillStringArray( aParam, PopMatrix().get(), pFormatter ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2813,7 +2812,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         default:
@@ -2859,7 +2858,7 @@ void ScInterpreter::ScExternal()
                             }
                             break;
                         case svMatrix:
-                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix() ))
+                            if (!ScRangeToSequence::FillMixedArray( aParam, PopMatrix().get() ))
                                 SetError(errIllegalParameter);
                             break;
                         case svMissing:

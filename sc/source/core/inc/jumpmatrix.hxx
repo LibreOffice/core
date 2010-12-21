@@ -162,7 +162,7 @@ public:
             void                SetJumpParameters( ScTokenVec* p )
                                     { pParams = p; }
             const ScTokenVec*   GetJumpParameters() const { return pParams; }
-            ScMatrix*           GetResultMatrix() const { return pMat; }
+            ScMatrix*           GetResultMatrix() const { return pMat.get(); }
             void                GetPos( SCSIZE& rCol, SCSIZE& rRow ) const
                                     {
                                         rCol = nCurCol;
@@ -195,7 +195,7 @@ public:
                                     {
                                         if ( nNewCols > nResMatCols || nNewRows > nResMatRows )
                                         {
-                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows );
+                                            pMat = pMat->CloneAndExtend( nNewCols, nNewRows, pMat->GetDensityType() );
                                             if ( nResMatCols < nNewCols )
                                             {
                                                 pMat->FillDouble( CreateDoubleError(

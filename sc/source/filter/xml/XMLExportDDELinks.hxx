@@ -33,6 +33,7 @@
 
 class String;
 class ScXMLExport;
+class ScMatrixValue;
 
 class ScXMLExportDDELinks
 {
@@ -40,7 +41,7 @@ class ScXMLExportDDELinks
 
     sal_Bool            CellsEqual(const sal_Bool bPrevEmpty, const sal_Bool bPrevString, const String& sPrevValue, const double& fPrevValue,
                                     const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue) const;
-    void                WriteCell(const sal_Bool bEmpty, const sal_Bool bString, const String& sValue, const double& fValue, const sal_Int32 nRepeat);
+    void                WriteCell(const ScMatrixValue& aVal, sal_Int32 nRepeat);
     void                WriteTable(const sal_Int32 nPos);
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);

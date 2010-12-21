@@ -30,6 +30,7 @@
 #define SC_TOKENARRAY_HXX
 
 #include "formula/token.hxx"
+#include "scmatrix.hxx"
 #include <tools/solar.h>
 #include "scdllapi.h"
 #include <formula/tokenarray.hxx>
@@ -74,7 +75,7 @@ public:
     formula::FormulaToken* AddExternalName( sal_uInt16 nFileId, const String& rName );
     formula::FormulaToken* AddExternalSingleReference( sal_uInt16 nFileId, const String& rTabName, const ScSingleRefData& rRef );
     formula::FormulaToken* AddExternalDoubleReference( sal_uInt16 nFileId, const String& rTabName, const ScComplexRefData& rRef );
-    formula::FormulaToken* AddMatrix( ScMatrix* p );
+    formula::FormulaToken* AddMatrix( const ScMatrixRef& p );
     /** ScSingleRefOpToken with ocColRowName. */
     formula::FormulaToken* AddColRowName( const ScSingleRefData& rRef );
     virtual formula::FormulaToken* MergeArray( );

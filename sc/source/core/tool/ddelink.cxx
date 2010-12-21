@@ -105,7 +105,7 @@ ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& r
     BOOL bHasValue;
     rStream >> bHasValue;
     if ( bHasValue )
-        pResult = new ScMatrix( rStream );
+        pResult = new ScMatrix(0, 0);
 
     if (rHdr.BytesLeft())       // neu in 388b und der 364w (RealTime-Client) Version
         rStream >> nMode;
@@ -126,8 +126,6 @@ void ScDdeLink::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 
     BOOL bHasValue = ( pResult != NULL );
     rStream << bHasValue;
-    if (bHasValue)
-        pResult->Store( rStream );
 
     if( rStream.GetVersion() > SOFFICE_FILEFORMAT_40 )      // nicht bei 4.0 Export
         rStream << nMode;                                   // seit 388b
@@ -168,7 +166,7 @@ void ScDdeLink::DataChanged( const String& rMimeType,
 
     if (!nRows || !nCols)               // keine Daten
     {
-        pResult.Clear();
+        pResult.reset();
     }
     else                                // Daten aufteilen
     {
@@ -202,6 +200,9 @@ void ScDdeLink::DataChanged( const String& rMimeType,
                 double fVal;
                 if ( nMode != SC_DDE_TEXT && pFormatter->IsNumberFormat( aEntry, nIndex, fVal ) )
                     pResult->PutDouble( fVal, nC, nR );
+                else if (aEntry.Len() == 0)
+                    // empty cell
+                    pResult->PutEmpty(nC, nR);
                 else
                     pResult->PutString( aEntry, nC, nR );
             }
@@ -232,7 +233,7 @@ void ScDdeLink::DataChanged( const String& rMimeType,
 
 void ScDdeLink::ResetValue()
 {
-    pResult.Clear();
+    pResult.reset();
 
     //  Es hat sich was getan...
     //  Tracking, FID_DATACHANGED etc. passiert von aussen

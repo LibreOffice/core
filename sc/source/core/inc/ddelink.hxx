@@ -76,8 +76,8 @@ public:
 
                                             // fuer Interpreter:
 
-    const ScMatrix* GetResult() const           { return pResult; }
-    void            SetResult( ScMatrix* pRes ) { pResult = pRes; }
+    const ScMatrix* GetResult() const           { return pResult.get(); }
+    void            SetResult( ScMatrixRef pRes ) { pResult = pRes; }
 
                                             // XML and Excel import after NewData()
     ScMatrixRef     GetModifiableResult()   { return pResult; }

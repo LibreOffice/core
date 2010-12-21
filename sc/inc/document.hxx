@@ -35,8 +35,9 @@
 #include <com/sun/star/uno/Reference.hxx>
 #include <rtl/ref.hxx>
 #include "scdllapi.h"
-#include "table.hxx"        // FastGetRowHeight (inline)
 #include "rangelst.hxx"
+#include "table.hxx"
+#include "scmatrix.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
 #include "formula/grammar.hxx"
@@ -679,12 +680,12 @@ public:
     /** Tries to find a DDE link or creates a new, if not extant.
         @param pResults  If not 0, sets the matrix as as DDE link result matrix (also for existing links).
         @return  true = DDE link found; false = Unpredictable error occurred, no DDE link created. */
-    SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrix* pResults = NULL );
+    SC_DLLPUBLIC bool            CreateDdeLink( const String& rAppl, const String& rTopic, const String& rItem, BYTE nMode, ScMatrixRef pResults );
     /** Sets a result matrix for the specified DDE link.
         @param nDdePos  Index of the DDE link (does not include other links from link manager).
         @param pResults  The array containing all results of the DDE link (intrusive-ref-counted, do not delete).
         @return  true = DDE link found and matrix set. */
-    bool            SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrix* pResults );
+    bool            SetDdeLinkResultMatrix( USHORT nDdePos, ScMatrixRef pResults );
 
 
     SfxBindings*    GetViewBindings();
