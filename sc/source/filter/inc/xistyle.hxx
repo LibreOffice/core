@@ -573,12 +573,13 @@ inline bool XclImpXFRange::Contains( SCROW nScRow ) const
 class XclImpXFRangeColumn : private boost::noncopyable
 {
 public:
-    inline explicit     XclImpXFRangeColumn() : mnCurIndex(0) {}
+    typedef ::boost::ptr_vector<XclImpXFRange> IndexList;
 
-    /** Returns the first formatted cell range in this column. */
-    inline XclImpXFRange* First() { mnCurIndex = 0; return ( maIndexList.empty() ) ? 0 : &(maIndexList.front()); }
-    /** Returns the next formatted cell range in this column. */
-    inline XclImpXFRange* Next() { return ( ++mnCurIndex >= maIndexList.size() ) ? 0 : &(maIndexList[mnCurIndex]); }
+    inline explicit     XclImpXFRangeColumn() {}
+
+    IndexList::iterator begin() { return maIndexList.begin(); }
+    IndexList::iterator end() { return maIndexList.end(); }
+
     /** Inserts a single row range into the list. */
     void                SetDefaultXF( const XclImpXFIndex& rXFIndex );
 
@@ -603,8 +604,7 @@ private:
     void                Insert(XclImpXFRange* pXFRange, ULONG nIndex);
 
 private:
-    boost::ptr_vector< XclImpXFRange > maIndexList;    /// The list of XF index range.
-    ULONG mnCurIndex; ///Index of current element for use with First() and Next().
+    IndexList maIndexList;    /// The list of XF index range.
 };
 
 // ----------------------------------------------------------------------------

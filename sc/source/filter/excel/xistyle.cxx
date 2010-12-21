@@ -1677,8 +1677,6 @@ void XclImpXFRangeColumn::SetXF( SCROW nScRow, const XclImpXFIndex& rXFIndex )
 void XclImpXFRangeColumn::Insert(XclImpXFRange* pXFRange, ULONG nIndex)
 {
     maIndexList.insert( maIndexList.begin() + nIndex, pXFRange );
-    if (nIndex <= mnCurIndex)
-        ++mnCurIndex;
 }
 
 void XclImpXFRangeColumn::Find(
@@ -1757,11 +1755,7 @@ void XclImpXFRangeColumn::TryConcatPrev( ULONG nIndex )
     XclImpXFRange& nextRange = maIndexList[ nIndex ];
 
     if( prevRange.Expand( nextRange ) )
-    {
         maIndexList.erase( maIndexList.begin() + nIndex );
-        if (mnCurIndex > nIndex)
-            --mnCurIndex;
-    }
 }
 
 // ----------------------------------------------------------------------------
@@ -1898,9 +1892,12 @@ void XclImpXFRangeBuffer::Finalize()
             XclImpXFRangeColumn& rColumn = **aVIt;
             SCCOL nScCol = static_cast< SCCOL >( aVIt - aVBeg );
             list<ScAttrEntry> aAttrs;
-            for( XclImpXFRange* pStyle = rColumn.First(); pStyle; pStyle = rColumn.Next() )
+
+            for (XclImpXFRangeColumn::IndexList::iterator itr = rColumn.begin(), itrEnd = rColumn.end();
+                 itr != itrEnd; ++itr)
             {
-                const XclImpXFIndex& rXFIndex = pStyle->maXFIndex;
+                XclImpXFRange& rStyle = *itr;
+                const XclImpXFIndex& rXFIndex = rStyle.maXFIndex;
                 XclImpXF* pXF = rXFBuffer.GetXF( rXFIndex.GetXFIndex() );
                 if (!pXF)
                     continue;
@@ -1908,7 +1905,7 @@ void XclImpXFRangeBuffer::Finalize()
                 sal_uInt32 nForceScNumFmt = rXFIndex.IsBoolCell() ?
                     GetNumFmtBuffer().GetStdScNumFmt() : NUMBERFORMAT_ENTRY_NOT_FOUND;
 
-                pXF->ApplyPatternToAttrList(aAttrs, pStyle->mnScRow1, pStyle->mnScRow2, nForceScNumFmt);
+                pXF->ApplyPatternToAttrList(aAttrs, rStyle.mnScRow1, rStyle.mnScRow2, nForceScNumFmt);
             }
 
             if (aAttrs.empty() || aAttrs.back().nRow != MAXROW)
