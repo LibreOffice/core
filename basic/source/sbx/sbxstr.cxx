@@ -69,7 +69,7 @@
         case SbxDOUBLE:
             ImpPutDouble( &aTmp, p->nDouble ); break;
         case SbxCURRENCY:
-            ImpPutCurrency( &aTmp, p->nInt64 ); break;
+            ImpPutCurrency( &aTmp, p->nLong64 ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpPutDecimal( &aTmp, p->pDecimal ); break;
@@ -127,7 +127,7 @@
         case SbxBYREF | SbxDOUBLE:
             ImpPutDouble( &aTmp, *p->pDouble ); break;
         case SbxBYREF | SbxCURRENCY:
-            ImpPutCurrency( &aTmp, *p->pnInt64 ); break;
+            ImpPutCurrency( &aTmp, *p->pLong64 ); break;
         case SbxBYREF | SbxSALINT64:
             ImpPutInt64( &aTmp, *p->pnInt64 ); break;
         case SbxBYREF | SbxSALUINT64:
@@ -148,9 +148,9 @@
         XubString aRes;
         aTmp.eType = SbxSTRING;
         if( p->eType == SbxDOUBLE )
-            ImpPutDouble( &aTmp, p->nDouble, TRUE );    // true = bCoreString
+            ImpPutDouble( &aTmp, p->nDouble, /*bCoreString=*/TRUE );
         else
-            ImpPutDouble( &aTmp, *p->pDouble, TRUE );   // true = bCoreString
+            ImpPutDouble( &aTmp, *p->pDouble, /*bCoreString=*/TRUE );
         return aRes;
     }
     else
@@ -188,8 +188,8 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
             p->nDouble = ImpGetDate( &aTmp ); break;
         case SbxDOUBLE:
             p->nDouble = ImpGetDouble( &aTmp ); break;
-        case SbxCURRENCY:
-            p->nInt64 = ImpGetCurrency( &aTmp ); break;
+        case SbxULONG64:
+            p->nLong64 = ImpGetCurrency( &aTmp ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             releaseDecimalPtr( p->pDecimal );
@@ -244,17 +244,12 @@ void ImpPutString( SbxValues* p, const ::rtl::OUString* n )
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = ImpGetDouble( p ); break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = ImpGetCurrency( p ); break;
-        case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = ImpGetInt64( p ); break;
-        case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = ImpGetUInt64( p ); break;
+            *p->pLong64 = ImpGetCurrency( p ); break;
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }
     delete pTmp;
 }
-
 
 // Convert string to an array of bytes, preserving unicode (2bytes per character)
 SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
@@ -316,6 +311,5 @@ SbxArray* StringToByteArray(const ::rtl::OUString& rStr)
 
     return aStrBuf.makeStringAndClear();
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

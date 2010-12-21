@@ -95,13 +95,8 @@ start:
             else
                 nRes = (BYTE) p->nULong;
             break;
-        case SbxCURRENCY:
         case SbxSALINT64:
-        {
-            sal_Int64 val = p->nInt64;
-            if ( p->eType == SbxCURRENCY )
-                val = val / CURRENCY_FACTOR;
-            if( val > SbxMAXBYTE )
+            if( p->nInt64 > SbxMAXBYTE )
             {
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXBYTE;
             }
@@ -110,9 +105,8 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); nRes = 0;
             }
             else
-                nRes = (BYTE) val;
+                nRes = (BYTE) p->nInt64;
             break;
-        }
         case SbxSALUINT64:
             if( p->uInt64 > SbxMAXBYTE )
             {
@@ -135,11 +129,20 @@ start:
             break;
         case SbxDATE:
         case SbxDOUBLE:
+        case SbxLONG64:
+        case SbxULONG64:
+        case SbxCURRENCY:
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             {
             double dVal;
-            if( p->eType == SbxDECIMAL )
+            if( p->eType == SbxCURRENCY )
+                dVal = ImpCurrencyToDouble( p->nLong64 );
+            else if( p->eType == SbxLONG64 )
+                dVal = ImpINT64ToDouble( p->nLong64 );
+            else if( p->eType == SbxULONG64 )
+                dVal = ImpUINT64ToDouble( p->nULong64 );
+            else if( p->eType == SbxDECIMAL )
             {
                 dVal = 0.0;
                 if( p->pDecimal )
@@ -216,7 +219,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxULONG64:
+            aTmp.nULong64 = *p->pULong64; goto ref;
+        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
+            aTmp.nLong64 = *p->pLong64; goto ref;
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
@@ -252,12 +259,16 @@ void ImpPutByte( SbxValues* p, BYTE n )
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
-        case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
         case SbxSALINT64:
             p->nInt64 = n; break;
         case SbxSALUINT64:
             p->uInt64 = n; break;
+        case SbxULONG64:
+            p->nULong64 = ImpDoubleToUINT64( (double)n ); break;
+        case SbxLONG64:
+            p->nLong64 = ImpDoubleToINT64( (double)n ); break;
+        case SbxCURRENCY:
+            p->nLong64 = ImpDoubleToCurrency( (double)n ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpCreateDecimal( p )->setByte( n );
@@ -301,12 +312,16 @@ void ImpPutByte( SbxValues* p, BYTE n )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
-        case SbxBYREF | SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
+        case SbxBYREF | SbxULONG64:
+            *p->pULong64 = ImpDoubleToUINT64( (double)n ); break;
+        case SbxBYREF | SbxLONG64:
+            *p->pLong64 = ImpDoubleToINT64( (double)n ); break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
+        case SbxBYREF | SbxCURRENCY:
+            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );

@@ -33,13 +33,14 @@
 #include "svl/svarray.hxx"
 #include "svl/smplhint.hxx"
 #include "svl/lstner.hxx"
-
 #include <basic/sbxdef.hxx>
 #include <basic/sbxform.hxx>
+
 #include <basic/sbxobj.hxx>
 #include <basic/sbxprop.hxx>
 #include <basic/sbxmeth.hxx>
 
+class BigInt;
 class String;
 class UniString;
 class SvStream;
@@ -51,6 +52,8 @@ class SbxObject;
 class SbxArray;
 class SbxDimArray;
 class SbxFactory;
+struct SbxINT64;
+struct SbxUINT64;
 
 class SfxBroadcaster;
 class SvDispatch;

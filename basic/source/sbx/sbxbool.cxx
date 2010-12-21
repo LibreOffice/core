@@ -71,10 +71,14 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
             }
             break;
         case SbxSALINT64:
-        case SbxCURRENCY:
             nRes = p->nInt64 ? SbxTRUE : SbxFALSE; break;
         case SbxSALUINT64:
             nRes = p->uInt64 ? SbxTRUE : SbxFALSE; break;
+        case SbxULONG64:
+            nRes = !!p->nULong64 ? SbxTRUE : SbxFALSE; break;
+        case SbxLONG64:
+        case SbxCURRENCY:
+            nRes = !!p->nLong64 ? SbxTRUE : SbxFALSE; break;
         case SbxBYREF | SbxSTRING:
         case SbxSTRING:
         case SbxLPSTR:
@@ -135,11 +139,16 @@ enum SbxBOOL ImpGetBool( const SbxValues* p )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             nRes = ( *p->pDouble != 0 ) ? SbxTRUE : SbxFALSE; break;
-        case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
             nRes = ( *p->pnInt64 ) ? SbxTRUE : SbxFALSE; break;
         case SbxBYREF | SbxSALUINT64:
             nRes = ( *p->puInt64 ) ? SbxTRUE : SbxFALSE; break;
+        case SbxBYREF | SbxULONG64:
+            nRes = !!*p->pULong64 ? SbxTRUE : SbxFALSE; break;
+        case SbxBYREF | SbxLONG64:
+        case SbxBYREF | SbxCURRENCY:
+            nRes = !!*p->pLong64 ? SbxTRUE : SbxFALSE; break;
+
         default:
             SbxBase::SetError( SbxERR_CONVERSION ); nRes = SbxFALSE;
     }
@@ -171,11 +180,15 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
-        case SbxCURRENCY:
         case SbxSALINT64:
-            p->nInt64 = (sal_Int64) n; break;
+            p->nInt64 = n; break;
         case SbxSALUINT64:
-            p->uInt64 = (sal_uInt64) n; break;
+            p->uInt64 = n; break;
+        case SbxULONG64:
+            p->nULong64.Set( (UINT32)n ); break;
+        case SbxLONG64:
+        case SbxCURRENCY:
+            p->nLong64.Set( (INT32)n ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpCreateDecimal( p )->setInt( (INT16)n );
@@ -218,11 +231,16 @@ void ImpPutBool( SbxValues* p, INT16 n )
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = n; break;
-        case SbxBYREF | SbxCURRENCY:
         case SbxBYREF | SbxSALINT64:
-            *p->pnInt64 = (sal_Int64) n; break;
+            *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
-            *p->puInt64 = (sal_uInt64) n; break;
+            *p->puInt64 = n; break;
+        case SbxBYREF | SbxULONG64:
+            p->pULong64->Set( (UINT32)n ); break;
+        case SbxBYREF | SbxLONG64:
+        case SbxBYREF | SbxCURRENCY:
+            p->pLong64->Set( (INT32)n ); break;
+
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
     }

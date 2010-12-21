@@ -96,22 +96,6 @@ start:
             else
                 nRes = (INT16) ImpRound( p->nSingle );
             break;
-        case SbxCURRENCY:
-            {
-                sal_Int64 tstVal = (sal_Int64) p->nInt64 / (sal_Int64) CURRENCY_FACTOR;
-
-                if( tstVal > SbxMAXINT )
-                {
-                    SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMAXINT;
-                }
-                else if( tstVal  < SbxMININT )
-                {
-                    SbxBase::SetError( SbxERR_OVERFLOW ); nRes = SbxMININT;
-                }
-                else
-                    nRes = (INT16) (tstVal);
-                break;
-            }
         case SbxSALINT64:
             if( p->nInt64 > SbxMAXINT )
             {
@@ -134,12 +118,22 @@ start:
             break;
         case SbxDATE:
         case SbxDOUBLE:
+        case SbxLONG64:
+        case SbxULONG64:
+        case SbxCURRENCY:
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
-        {
-            double dVal = 0.0;
-            if( p->eType == SbxDECIMAL )
             {
+            double dVal;
+            if( p->eType == SbxCURRENCY )
+                dVal = ImpCurrencyToDouble( p->nLong64 );
+            else if( p->eType == SbxLONG64 )
+                dVal = ImpINT64ToDouble( p->nLong64 );
+            else if( p->eType == SbxULONG64 )
+                dVal = ImpUINT64ToDouble( p->nULong64 );
+            else if( p->eType == SbxDECIMAL )
+            {
+                dVal = 0.0;
                 if( p->pDecimal )
                     p->pDecimal->getDouble( dVal );
             }
@@ -157,7 +151,7 @@ start:
             else
                 nRes = (INT16) ImpRound( dVal );
             break;
-        }
+            }
         case SbxLPSTR:
         case SbxSTRING:
         case SbxBYREF | SbxSTRING:
@@ -214,7 +208,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxULONG64:
+            aTmp.nULong64 = *p->pULong64; goto ref;
+        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
+            aTmp.nLong64 = *p->pLong64; goto ref;
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         case SbxBYREF | SbxSALUINT64:
@@ -251,7 +249,7 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
-        // from here no tests needed
+        // frome here no longer
         case SbxINTEGER:
         case SbxBOOL:
             p->nInteger = n; break;
@@ -262,10 +260,14 @@ start:
         case SbxDATE:
         case SbxDOUBLE:
             p->nDouble = n; break;
-        case SbxCURRENCY:
-            p->nInt64 = n * CURRENCY_FACTOR; break;
         case SbxSALINT64:
             p->nInt64 = n; break;
+        case SbxULONG64:
+            p->nULong64 = ImpDoubleToUINT64( (double)n ); break;
+        case SbxLONG64:
+            p->nLong64 = ImpDoubleToINT64( (double)n ); break;
+        case SbxCURRENCY:
+            p->nLong64 = ImpDoubleToCurrency( (double)n ); break;
         case SbxDECIMAL:
         case SbxBYREF | SbxDECIMAL:
             ImpCreateDecimal( p )->setInt( n );
@@ -321,15 +323,12 @@ start:
                 SbxBase::SetError( SbxERR_OVERFLOW ); n = 0;
             }
             *p->pULong = (UINT32) n; break;
-        case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
             if( n < 0 )
             {
-                SbxBase::SetError( SbxERR_OVERFLOW );
-                *p->puInt64 = 0;
+                SbxBase::SetError( SbxERR_OVERFLOW ); *p->puInt64 = 0;
             }
             else
                 *p->puInt64 = n;
@@ -339,6 +338,12 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = (double) n; break;
+        case SbxBYREF | SbxULONG64:
+            *p->pULong64 = ImpDoubleToUINT64( (double)n ); break;
+        case SbxBYREF | SbxLONG64:
+            *p->pLong64 = ImpDoubleToINT64( (double)n ); break;
+        case SbxBYREF | SbxCURRENCY:
+            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
 
         default:
             SbxBase::SetError( SbxERR_CONVERSION );
@@ -380,7 +385,6 @@ sal_uInt64 ImpDoubleToSalUInt64( double d )
     return nRes;
 }
 
-
 double ImpSalUInt64ToDouble( sal_uInt64 n )
 {
     double d = 0.0;
@@ -412,20 +416,33 @@ start:
             nRes = p->nInteger; break;
         case SbxERROR:
         case SbxUSHORT:
-            nRes = (sal_Int64) p->nUShort; break;
+            nRes = p->nUShort; break;
         case SbxLONG:
-            nRes = (sal_Int64) p->nLong; break;
+            nRes = p->nLong; break;
         case SbxULONG:
             nRes = (sal_Int64) p->nULong; break;
         case SbxSINGLE:
-            nRes = (sal_Int64) p->nSingle;
+            nRes = ImpDoubleToSalInt64( (double)p->nSingle );
             break;
         case SbxDATE:
         case SbxDOUBLE:
-            nRes = (sal_Int64) p->nDouble;
-            break;
+        case SbxLONG64:
+        case SbxULONG64:
         case SbxCURRENCY:
-            nRes = p->nInt64 / CURRENCY_FACTOR; break;
+            {
+            double dVal;
+            if( p->eType == SbxCURRENCY )
+                dVal = ImpCurrencyToDouble( p->nLong64 );
+            else if( p->eType == SbxLONG64 )
+                dVal = ImpINT64ToDouble( p->nLong64 );
+            else if( p->eType == SbxULONG64 )
+                dVal = ImpUINT64ToDouble( p->nULong64 );
+            else
+                dVal = p->nDouble;
+
+            nRes = ImpDoubleToSalInt64( dVal );
+            break;
+            }
         case SbxSALINT64:
             nRes = p->nInt64; break;
         case SbxSALUINT64:
@@ -455,7 +472,7 @@ start:
                     if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                         nRes = 0;
                     else
-                        nRes = (sal_Int64) d;
+                        nRes = ImpDoubleToSalInt64( d );
                 }
             }
             break;
@@ -482,15 +499,10 @@ start:
             nRes = *p->pLong; break;
         case SbxBYREF | SbxULONG:
             nRes = *p->pULong; break;
-        case SbxBYREF | SbxCURRENCY:
-            nRes = p->nInt64 / CURRENCY_FACTOR; break;
         case SbxBYREF | SbxSALINT64:
             nRes = *p->pnInt64; break;
 
         // from here the values has to be checked
-        case SbxBYREF | SbxSALUINT64:
-            aTmp.uInt64 = *p->puInt64; goto ref;
-
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             aTmp.nUShort = *p->pUShort; goto ref;
@@ -499,6 +511,13 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxULONG64:
+            aTmp.nULong64 = *p->pULong64; goto ref;
+        case SbxBYREF | SbxLONG64:
+        case SbxBYREF | SbxCURRENCY:
+            aTmp.nLong64 = *p->pLong64; goto ref;
+        case SbxBYREF | SbxSALUINT64:
+            aTmp.uInt64 = *p->puInt64; goto ref;
         ref:
             aTmp.eType = SbxDataType( p->eType & 0x0FFF );
             p = &aTmp; goto start;
@@ -524,15 +543,17 @@ start:
         case SbxINTEGER:
         case SbxBOOL:
             aTmp.pInteger = &p->nInteger; goto direct;
+        case SbxULONG64:
+            aTmp.pULong64 = &p->nULong64; goto direct;
+        case SbxLONG64:
+        case SbxCURRENCY:
+            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxULONG:
             aTmp.pULong = &p->nULong; goto direct;
         case SbxERROR:
         case SbxUSHORT:
             aTmp.pUShort = &p->nUShort; goto direct;
         case SbxLONG:
-            aTmp.pnInt64 = &p->nInt64; goto direct;
-        case SbxCURRENCY:
-        case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSALUINT64:
             aTmp.puInt64 = &p->uInt64; goto direct;
@@ -541,6 +562,9 @@ start:
             aTmp.eType = SbxDataType( p->eType | SbxBYREF );
             p = &aTmp; goto start;
 
+        // Check not neccessary
+        case SbxSALINT64:
+            p->nInt64 = n; break;
         case SbxSINGLE:
             p->nSingle = (float) n; break;
         case SbxDATE:
@@ -636,7 +660,16 @@ start:
         case SbxBYREF | SbxDOUBLE:
             *p->pDouble = (double) n; break;
         case SbxBYREF | SbxCURRENCY:
-            *p->pnInt64 = n * CURRENCY_FACTOR; break;
+            if( n > SbxMAXCURR )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = (sal_Int64) SbxMAXCURR;
+            }
+            else if( n < SbxMINCURR )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = (sal_Int64) SbxMINCURR;
+            }
+            *p->pLong64 = ImpDoubleToCurrency( (double)n ); break;
+
         case SbxBYREF | SbxSALINT64:
             *p->pnInt64 = n; break;
         case SbxBYREF | SbxSALUINT64:
@@ -677,16 +710,27 @@ start:
         case SbxULONG:
             nRes = (sal_uInt64) p->nULong; break;
         case SbxSINGLE:
-            nRes = (sal_uInt64) p->nSingle; break;
+            nRes = ImpDoubleToSalUInt64( (double)p->nSingle );
+            break;
         case SbxDATE:
         case SbxDOUBLE:
+        case SbxLONG64:
+        case SbxULONG64:
+        case SbxCURRENCY:
             {
-//TODO overflow check
-            nRes = (sal_uInt64) p->nDouble;
+            double dVal;
+            if( p->eType == SbxCURRENCY )
+                dVal = ImpCurrencyToDouble( p->nLong64 );
+            else if( p->eType == SbxLONG64 )
+                dVal = ImpINT64ToDouble( p->nLong64 );
+            else if( p->eType == SbxULONG64 )
+                dVal = ImpUINT64ToDouble( p->nULong64 );
+            else
+                dVal = p->nDouble;
+
+            nRes = ImpDoubleToSalUInt64( dVal );
             break;
             }
-        case SbxCURRENCY:
-            nRes = p->nInt64 * CURRENCY_FACTOR; break;
         case SbxSALINT64:
             if( p->nInt64 < 0 )
             {
@@ -694,7 +738,6 @@ start:
             }
             else
                 nRes = (sal_uInt64) p->nInt64;
-            break;
         case SbxSALUINT64:
             nRes = p->uInt64; break;
 
@@ -762,7 +805,7 @@ start:
         case SbxBYREF | SbxSALUINT64:
             nRes = *p->puInt64; break;
 
-        // from here on the value has to be checked
+        // from here the values has to be checked
         case SbxBYREF | SbxERROR:
         case SbxBYREF | SbxUSHORT:
             aTmp.nUShort = *p->pUShort; goto ref;
@@ -771,7 +814,11 @@ start:
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
             aTmp.nDouble = *p->pDouble; goto ref;
+        case SbxBYREF | SbxULONG64:
+            aTmp.nULong64 = *p->pULong64; goto ref;
+        case SbxBYREF | SbxLONG64:
         case SbxBYREF | SbxCURRENCY:
+            aTmp.nLong64 = *p->pLong64; goto ref;
         case SbxBYREF | SbxSALINT64:
             aTmp.nInt64 = *p->pnInt64; goto ref;
         ref:
@@ -799,6 +846,11 @@ start:
         case SbxINTEGER:
         case SbxBOOL:
             aTmp.pInteger = &p->nInteger; goto direct;
+        case SbxULONG64:
+            aTmp.pULong64 = &p->nULong64; goto direct;
+        case SbxLONG64:
+        case SbxCURRENCY:
+            aTmp.pLong64 = &p->nLong64; goto direct;
         case SbxULONG:
             aTmp.pULong = &p->nULong; goto direct;
         case SbxERROR:
@@ -806,7 +858,6 @@ start:
             aTmp.pUShort = &p->nUShort; goto direct;
         case SbxLONG:
             aTmp.pnInt64 = &p->nInt64; goto direct;
-        case SbxCURRENCY:
         case SbxSALINT64:
             aTmp.pnInt64 = &p->nInt64; goto direct;
         case SbxSINGLE:
@@ -888,12 +939,14 @@ start:
             *p->pDouble = (float)ImpSalUInt64ToDouble( n ); break;
         case SbxBYREF | SbxDATE:
         case SbxBYREF | SbxDOUBLE:
-
             *p->pDouble = ImpSalUInt64ToDouble( n ); break;
         case SbxBYREF | SbxCURRENCY:
-            if ( n > ( SbxMAXSALINT64 / CURRENCY_FACTOR ) )
-                 SbxBase::SetError( SbxERR_OVERFLOW ); n = SbxMAXSALINT64;
-            *p->pnInt64 = ( sal_Int64) ( n * CURRENCY_FACTOR ); break;
+            if( n > SbxMAXSALINT64 || (sal_Int64)n > SbxMAXCURR )
+            {
+                SbxBase::SetError( SbxERR_OVERFLOW ); n = (sal_Int64) SbxMAXCURR;
+            }
+            *p->pLong64 = ImpDoubleToCurrency( (double)(sal_Int64) n ); break;
+
         case SbxBYREF | SbxSALUINT64:
             *p->puInt64 = n; break;
         case SbxBYREF | SbxSALINT64:
