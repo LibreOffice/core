@@ -263,7 +263,7 @@ BOOL FormulaByteToken::operator==( const FormulaToken& r ) const
 }
 
 
-FormulaToken* FormulaFAPToken::GetFAPOrigToken() const            { return pOrigToken; }
+FormulaToken* FormulaFAPToken::GetFAPOrigToken() const { return pOrigToken.get(); }
 BOOL FormulaFAPToken::operator==( const FormulaToken& r ) const
 {
     return FormulaByteToken::operator==( r ) && pOrigToken == r.GetFAPOrigToken();

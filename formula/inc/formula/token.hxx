@@ -33,10 +33,11 @@
 #include <string.h>
 #include <vector>
 #include "formula/opcode.hxx"
-#include "formula/intruref.hxx"
 #include <tools/mempool.hxx>
 #include "formula/IFunctionDescription.hxx"
 #include "formula/formuladllapi.h"
+
+#include <boost/intrusive_ptr.hpp>
 
 namespace formula
 {
@@ -85,9 +86,8 @@ typedef StackVarEnum StackVar;
 
 
 class FormulaToken;
-typedef SimpleIntrusiveReference< class FormulaToken > FormulaTokenRef;
-typedef SimpleIntrusiveReference< const class FormulaToken > FormulaConstTokenRef;
-
+typedef ::boost::intrusive_ptr<FormulaToken>        FormulaTokenRef;
+typedef ::boost::intrusive_ptr<const FormulaToken>  FormulaConstTokenRef;
 
 class FORMULA_DLLPUBLIC FormulaToken : public IFormulaToken
 {
@@ -178,6 +178,16 @@ public:
     static  size_t              GetStrLenBytes( const String& rStr )
                                     { return GetStrLenBytes( rStr.Len() ); }
 };
+
+inline void intrusive_ptr_add_ref(const FormulaToken* p)
+{
+    p->IncRef();
+}
+
+inline void intrusive_ptr_release(const FormulaToken* p)
+{
+    p->DecRef();
+}
 
 class FORMULA_DLLPUBLIC FormulaByteToken : public FormulaToken
 {

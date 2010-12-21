@@ -859,11 +859,11 @@ BOOL FormulaCompiler::GetToken()
             if ( nWasColRowName )
                 nWasColRowName++;
             if ( bAutoCorrect && !pStack )
-                CreateStringFromToken( aCorrectedFormula, pToken, FALSE );
+                CreateStringFromToken( aCorrectedFormula, pToken.get(), FALSE );
             pToken = pArr->Next();
         }
         if ( bAutoCorrect && !pStack && pToken )
-            CreateStringFromToken( aCorrectedSymbol, pToken, FALSE );
+            CreateStringFromToken( aCorrectedSymbol, pToken.get(), FALSE );
         if( !pToken )
         {
             if( pStack )
@@ -1401,7 +1401,7 @@ bool FormulaCompiler::MergeRangeReference(FormulaToken * * const pCode1, Formula
     p->IncRef();
     p1->DecRef();
     p2->DecRef();
-    *pCode1 = p;
+    *pCode1 = p.get();
     --pCode, --pc;
     pArr->nRefs--;
 
@@ -1840,7 +1840,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
         {
             p = new FormulaByteToken( ocStop );
             p->IncRef();
-            *pCode++ = p;
+            *pCode++ = p.get();
             ++pc;
         }
         SetError(errCodeOverflow);
@@ -1850,7 +1850,7 @@ void FormulaCompiler::PutCode( FormulaTokenRef& p )
         return;
     ForceArrayOperator( p, pCurrentFactorToken);
     p->IncRef();
-    *pCode++ = p;
+    *pCode++ = p.get();
     pc++;
 }
 

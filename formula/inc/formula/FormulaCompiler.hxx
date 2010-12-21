@@ -331,7 +331,7 @@ private:
 
     static inline void ForceArrayOperator( FormulaTokenRef& rCurr, const FormulaTokenRef& rPrev )
         {
-            if ( rPrev.Is() && rPrev->HasForceArray() &&
+            if ( rPrev && rPrev->HasForceArray() &&
                     rCurr->GetType() == svByte && rCurr->GetOpCode() != ocPush
                     && !rCurr->HasForceArray() )
                 rCurr->SetForceArray( true);
