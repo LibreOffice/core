@@ -1365,41 +1365,6 @@ BOOL ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     return ( bSimpleQuery && bColumnFound );
 }
 
-void ScGridWindow::DrawComboButton( const Point&    rCellPos,
-                                    long            nCellSizeX,
-                                    long            nCellSizeY,
-                                    BOOL            bArrowState,
-                                    BOOL            bBtnIn )
-{
-    Point   aScrPos  = rCellPos;
-    Size    aBtnSize = aComboButton.GetSizePixel();
-
-    if ( nCellSizeX < aBtnSize.Width() || nCellSizeY < aBtnSize.Height() )
-    {
-        if ( nCellSizeX < aBtnSize.Width() )
-            aBtnSize.Width() = nCellSizeX;
-
-        if ( nCellSizeY < aBtnSize.Height() )
-            aBtnSize.Height() = nCellSizeY;
-
-        aComboButton.SetSizePixel( aBtnSize );
-    }
-
-    BOOL bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
-
-    if ( bLayoutRTL )
-        aScrPos.X() -= nCellSizeX - 1;
-    else
-        aScrPos.X() += nCellSizeX - aBtnSize.Width();
-    aScrPos.Y() += nCellSizeY - aBtnSize.Height();
-
-    aComboButton.SetPosPixel( aScrPos );
-
-    HideCursor();
-    aComboButton.Draw( bArrowState, bBtnIn );
-    ShowCursor();
-}
-
 void ScGridWindow::InvertSimple( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     BOOL bTestMerge, BOOL bRepeat )
 {

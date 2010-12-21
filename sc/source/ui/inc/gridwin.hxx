@@ -265,19 +265,10 @@ private:
     void            DrawMarkDropObj( SdrObject* pObj );
     SdrObject*      GetEditObject();
     BOOL            IsMyModel(SdrEditView* pSdrView);
-    //void          DrawStartTimer();
 
     void            DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, ULONG nLayer );
     void            DrawSdrGrid( const Rectangle& rDrawingRect, OutputDevice* pContentDev );
-    //BOOL          DrawBeforeScroll();
     void            DrawAfterScroll(/*BOOL bVal*/);
-    //void          DrawMarks();
-    //BOOL          NeedDrawMarks();
-    void            DrawComboButton( const Point&   rCellPos,
-                                     long           nCellSizeX,
-                                     long           nCellSizeY,
-                                     BOOL           bArrowState,
-                                     BOOL           bBtnIn  = FALSE );
     Rectangle       GetListValButtonRect( const ScAddress& rButtonPos );
 
     void            DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, OutputDevice* pContentDev );
