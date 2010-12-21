@@ -124,6 +124,39 @@ start_dir=`pwd`
 logfile=$TARFILE_LOCATION/fetch.log
 date >> $logfile
 
+downloaditem()
+{
+    if [ "$1" != "" ]; then
+        if [ ! -f "../$2" ]; then
+            echo $2
+            if [ ! -z "$wget" ]; then
+                $wget -nv -N $1/$2 2>&1 | tee -a $logfile
+            else
+                echo fetching $2
+                $curl $file_date_check -O $1/$2 2>&1 | tee -a $logfile
+            fi
+            wret=$?
+            if [ $wret -ne 0 ]; then
+                mv $2 ${i}_broken
+                failed="$failed $2"
+                wret=0
+            fi
+            if [ -f $2 -a -n "$md5sum" ]; then
+                sum=`$md5sum $md5special $2 | sed "s/ .*//"`
+                if [ "$sum" != "$3" ]; then
+                    echo checksum failure for $2 2>&1 | tee -a $logfile
+                    failed="$failed $2"
+                    mv $2 ${i}_broken
+                else
+                    mv $2 ..
+                fi
+            else
+                mv $2 ..
+            fi
+        fi
+    fi
+}
+
 filelist=`cat $FILELIST`
 mkdir -p $TARFILE_LOCATION/tmp
 cd $TARFILE_LOCATION/tmp
@@ -135,37 +168,29 @@ for i in $filelist ; do
     # TODO: check for comment    
     else
         if [ "$tarurl" != "" ]; then
-            if [ ! -f "../$i" ]; then
-                echo $i
-                if [ ! -z "$wget" ]; then
-                    $wget -nv -N $tarurl/$i 2>&1 | tee -a $logfile
-                else
-                    echo fetching $i
-                    $curl $file_date_check -O $tarurl/$i 2>&1 | tee -a $logfile
-                fi
-                wret=$?
-                if [ $wret -ne 0 ]; then
-                    mv $i ${i}_broken
-                    failed="$failed $i"
-                    wret=0
-                fi
-                if [ -f $i -a -n "$md5sum" ]; then
-                    sum=`$md5sum $md5special $i | sed "s/ .*//"`
-                    sum2=`echo $i | sed "s/-.*//"`
-                    if [ "$sum" != "$sum2" ]; then
-                        echo checksum failure for $i 2>&1 | tee -a $logfile
-                        failed="$failed $i"
-                        mv $i ${i}_broken
-                    else
-                        mv $i ..
-                    fi
-                else
-                    mv $i ..
-                fi
-            fi
+            sum=`echo $i | sed "s/-.*//"`
+            downloaditem $tarurl $i $sum
         fi
     fi
 done
+
+if [ "$GUI" = "WNT" ]; then
+    downloaditem "http://download.microsoft.com/download/platformsdk/Redist/5.0.2195.1/W9XNT4/EN-US/" "dbghinst.EXE" "096f1d53d9ba09cde27d6f7c2ea6cc47"
+    downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
+    downloaditem "http://download.microsoft.com/download/WindowsInstaller/Install/2.0/W9XMe/EN-US/" "InstMsiA.exe" "22098231992c8c808543825e19dc9454"
+
+    msvcver=`$SRC_ROOT/oowintool --msvc-ver`
+    case "$msvcver" in
+        9.0)
+          downloaditem "http://download.microsoft.com/download/9/7/7/977B481A-7BA6-4E30-AC40-ED51EB2028F2/" "vcredist_x86.exe" "fd30acc7a696c32f661b33668e73bf7b"
+          downloaditem "http://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/" "vcredist_x64.exe" "a31dc1a74f1dee5caf63aec8ebb5fe20"
+        ;;
+    *)
+        ;;
+    esac
+
+fi
+
 rm $TARFILE_LOCATION/tmp/*-*
 cd $start_dir
 
@@ -176,6 +201,33 @@ if [ ! -z "$failed" ]; then
         echo $i
     done
     exit 1
+fi
+
+if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
+    TMPUNPACK=`cygpath -d $TARFILE_LOCATION/tmp`
+    if [ ! -f ./external/dbghelp/dbghelp.dll -a -f $TARFILE_LOCATION/dbghinst.EXE ]; then
+        $TARFILE_LOCATION/dbghinst.EXE /T:$TMPUNPACK /C
+        sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/dbghelp.exe | sed "s/ .*//"`
+        if [ "$sum" == "cd3086a91e37965dd761ef5fd5df5b15" ]; then
+            unzip -LL -j -o -d ./external/dbghelp $TARFILE_LOCATION/tmp/dbghelp.exe
+        fi
+    fi
+    if [ ! -f ./external/gdiplus/gdiplus.dll -a -f $TARFILE_LOCATION/WindowsXP-KB975337-x86-ENU.exe ]; then
+        $TARFILE_LOCATION/WindowsXP-KB975337-x86-ENU.exe /extract:$TMPUNPACK /q
+        sum=`$md5sum $md5special $TARFILE_LOCATION/tmp/asms/10/msft/windows/gdiplus/gdiplus.dll | sed "s/ .*//"`
+        if [ "$sum" == "4721ab485e0c29cd1617a5f296b9cc47" ]; then
+            cp $TARFILE_LOCATION/tmp/asms/10/msft/windows/gdiplus/gdiplus.dll ./external/gdiplus/gdiplus.dll
+        fi
+    fi
+    if [ ! -f ./external/vcredist/vcredist_x86.exe -a -f $TARFILE_LOCATION/vcredist_x86.exe ]; then
+        cp $TARFILE_LOCATION/vcredist_x86.exe ./external/vcredist/vcredist_x86.exe
+    fi
+    if [ ! -f ./external/vcredist/vcredist_x64.exe -a -f $TARFILE_LOCATION/vcredist_x64.exe ]; then
+        cp $TARFILE_LOCATION/vcredist_x64.exe ./external/vcredist/vcredist_x64.exe
+    fi
+    if [ ! -f ./external/msi/instmsiw.exe -a -f $TARFILE_LOCATION/InstMsiA.exe ]; then
+        cp $TARFILE_LOCATION/InstMsiA.exe ./external/msi/instmsiw.exe
+    fi
 fi
 
 [ -x "post_download" ] || { echo "'post_download' script not found, run ./autogen.sh." ; exit 1 ; }

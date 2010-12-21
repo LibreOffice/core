@@ -55,7 +55,7 @@ dnl Windows builds need dbghelp.dll in external/dbghelp/
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
    AC_MSG_CHECKING([for dbghelp.dll])
-   if test -x ./external/dbghelp/dbghelp.dll; then
+   if test -f ./external/dbghelp/dbghelp.dll; then
       AC_MSG_RESULT([found])
    else
       AC_MSG_ERROR([dbghelp.dll is missing in external/dbghelp/.
