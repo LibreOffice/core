@@ -56,7 +56,8 @@ class SW_DLLPUBLIC SwFmtFld : public SfxPoolItem, public SwClient, public SfxBro
     SwFmtFld& operator=(const SwFmtFld& rFld);
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 public:
     TYPEINFO();

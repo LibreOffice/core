@@ -60,7 +60,7 @@ protected:
     virtual BOOL ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL bHead, BOOL &rReformat );
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( SwModify* pModify, USHORT nWhich );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& );
 
 public:
     SwSectionFrm( SwSection &, SwFrm* );                 //Inhalt wird nicht erzeugt!

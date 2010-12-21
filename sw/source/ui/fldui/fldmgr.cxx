@@ -1034,8 +1034,8 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
             USHORT nTmpPos = sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator );
             sCmd.SearchAndReplace( ' ', sfx2::cTokenSeperator, nTmpPos );
 
-            SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType(
-                    SwDDEFieldType( rData.sPar1, sCmd, (USHORT)nFormatId ));
+            SwDDEFieldType aTyp( rData.sPar1, sCmd, (USHORT)nFormatId );
+            SwDDEFieldType* pTyp = (SwDDEFieldType*)pCurShell->InsertFldType( aTyp );
             pFld = new SwDDEField( pTyp );
             break;
         }

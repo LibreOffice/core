@@ -43,7 +43,7 @@
 #include "calc.hxx"         // Update fuer UserFields
 #include "hints.hxx"
 #include <IDocumentFieldsAccess.hxx>
-
+#include <fieldhint.hxx>
 #include <svl/smplhint.hxx>
 
 TYPEINIT3( SwFmtFld, SfxPoolItem, SwClient,SfxBroadcaster)
@@ -157,6 +157,29 @@ int SwFmtFld::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem* SwFmtFld::Clone( SfxItemPool* ) const
 {
     return new SwFmtFld( *this );
+}
+
+void SwFmtFld::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    if( !pTxtAttr )
+        return;
+
+    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
+    if ( pHint )
+    {
+        // replace field content by text
+        SwPaM* pPaM = pHint->GetPaM();
+        SwDoc* pDoc = pPaM->GetDoc();
+        const SwTxtNode& rTxtNode = pTxtAttr->GetTxtNode();
+        pPaM->GetPoint()->nNode = rTxtNode;
+        pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode, *pTxtAttr->GetStart() );
+
+        String const aEntry( GetFld()->ExpandField( pDoc->IsClipBoard() ) );
+        pPaM->SetMark();
+        pPaM->Move( fnMoveForward );
+        pDoc->DeleteRange( *pPaM );
+        pDoc->InsertString( *pPaM, aEntry );
+    }
 }
 
 void SwFmtFld::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )

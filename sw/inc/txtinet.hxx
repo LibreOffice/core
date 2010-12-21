@@ -42,9 +42,6 @@ class SW_DLLPUBLIC SwTxtINetFmt : public SwTxtAttrNesting, public SwClient
     bool m_bVisited         : 1; // visited link?
     bool m_bVisitedValid    : 1; // is m_bVisited valid?
 
-    // forbidden and not implemented.
-    SwTxtINetFmt();
-
 protected:
 virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
 

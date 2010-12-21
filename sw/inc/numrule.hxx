@@ -165,9 +165,6 @@ private:
     String msDefaultListId;
     // <--
 
-    // forbidden and not implemented.
-    SwNumRule();
-
 public:
     // --> OD 2008-02-08 #newlistlevelattrs#
     // add parameter <eDefaultNumberFormatPositionAndSpaceMode>

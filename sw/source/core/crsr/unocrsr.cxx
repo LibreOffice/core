@@ -47,14 +47,6 @@ SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
 
 {}
 
-// @@@ semantic: no copy ctor.
-SwUnoCrsr::SwUnoCrsr( SwUnoCrsr& rICrsr )
-    : SwCursor( rICrsr ), SwModify( 0 ),
-    bRemainInSection( rICrsr.bRemainInSection ),
-    bSkipOverHiddenSections( rICrsr.bSkipOverHiddenSections ),
-    bSkipOverProtectSections( rICrsr.bSkipOverProtectSections )
-{}
-
 SwUnoCrsr::~SwUnoCrsr()
 {
     SwDoc* pDoc = GetDoc();

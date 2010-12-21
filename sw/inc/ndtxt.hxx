@@ -44,15 +44,11 @@
 #include <vector>
 #include <set>
 
-
+class SfxHint;
 class SwNumRule;
 class SwNodeNum;
-// --> OD 2008-05-06 #refactorlists#
 class SwList;
-// <--
-// --> OD 2008-12-02 #i96772#
 class SvxLRSpaceItem;
-// <--
 
 namespace utl {
     class TransliterationWrapper;
@@ -231,7 +227,7 @@ public:
 protected:
     // fuers Umhaengen der TxtFmtCollections (Outline-Nummerierung!!)
     virtual void Modify( const SfxPoolItem*, const SfxPoolItem* );
-    virtual void SwClientNotify( SwModify* pModify, USHORT nWhich );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& );
 
 public:
     using SwCntntNode::GetAttr;

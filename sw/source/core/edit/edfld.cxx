@@ -46,6 +46,7 @@
 #include <swddetbl.hxx>
 #include <hints.hxx>
 #include <switerator.hxx>
+#include <fieldhint.hxx>
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldtypen zu einer ResId zaehlen
@@ -200,46 +201,13 @@ void SwEditShell::FieldToText( SwFieldType* pType )
     Push();
     SwPaM* pPaM = GetCrsr();
 
-    BOOL bDDEFld = RES_DDEFLD == pType->Which();
-    // Modify-Object gefunden, trage alle Felder ins Array ein
-    SwClientIter aIter( *pType );       // TODO
-    SwClient * pLast = aIter.GoStart();
-
-    if( pLast )     // konnte zum Anfang gesprungen werden ??
-        do {
-            pPaM->DeleteMark();
-            const SwFmtFld* pFmtFld = bDDEFld
-                        ? PTR_CAST( SwFmtFld, pLast )
-                        : (SwFmtFld*)pLast;
-
-            if( pFmtFld )
-            {
-                if( !pFmtFld->GetTxtFld() )
-                    continue;
-
-                // kann keine DDETabelle sein
-                const SwTxtNode& rTxtNode = pFmtFld->GetTxtFld()->GetTxtNode();
-                pPaM->GetPoint()->nNode = rTxtNode;
-                pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode,
-                                     *pFmtFld->GetTxtFld()->GetStart() );
-
-                // Feldinhalt durch Text ersetzen
-                String const aEntry(
-                    pFmtFld->GetFld()->ExpandField(GetDoc()->IsClipBoard()) );
-                pPaM->SetMark();
-                pPaM->Move( fnMoveForward );
-                GetDoc()->DeleteRange( *pPaM );
-                GetDoc()->InsertString( *pPaM, aEntry );
-            }
-            else if( bDDEFld )
-            {
-                // DDETabelle
-                SwDepend* pDep = (SwDepend*)pLast;
-                SwDDETable* pDDETbl = (SwDDETable*)pDep->GetToTell();
-                pDDETbl->NoDDETable();
-            }
-
-        } while( 0 != ( pLast = aIter++ ));
+    SwFieldHint aHint( pPaM );
+    SwClientIter aIter( *pType );
+    for ( SwClient* pClient = aIter.GoStart(); pClient; aIter++ )
+    {
+        pPaM->DeleteMark();
+        pClient->SwClientNotifyCall( *pType, aHint );
+     }
 
     Pop( FALSE );
     EndAllAction();

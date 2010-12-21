@@ -106,8 +106,8 @@ SwEndNoteInfo::SwEndNoteInfo(const SwEndNoteInfo& rInfo) :
     aFmt( rInfo.aFmt ),
     nFtnOffset( rInfo.nFtnOffset )
 {
-    if( rInfo.GetPageDescDep()->GetRegisteredIn() )
-        ((SwModify*)rInfo.GetPageDescDep()->GetRegisteredIn())->Add( &aPageDescDep );
+    if( rInfo.aPageDescDep.GetRegisteredIn() )
+        ((SwModify*)rInfo.aPageDescDep.GetRegisteredIn())->Add( &aPageDescDep );
 
     if( rInfo.aCharFmtDep.GetRegisteredIn() )
         ((SwModify*)rInfo.aCharFmtDep.GetRegisteredIn())->Add( &aCharFmtDep );
@@ -136,7 +136,18 @@ SwPageDesc *SwEndNoteInfo::GetPageDesc( SwDoc &rDoc ) const
             m_bEndNote ? RES_POOLPAGE_ENDNOTE   : RES_POOLPAGE_FOOTNOTE ) );
         pDesc->Add( &((SwClient&)aPageDescDep) );
     }
-    return (SwPageDesc*)aPageDescDep.GetRegisteredIn();
+
+    return (SwPageDesc*)( aPageDescDep.GetRegisteredIn() );
+}
+
+bool SwEndNoteInfo::KnowsPageDesc() const
+{
+    return (aPageDescDep.GetRegisteredIn() != 0);
+}
+
+bool SwEndNoteInfo::DependsOn( const SwPageDesc* pDesc ) const
+{
+    return ( aPageDescDep.GetRegisteredIn() == pDesc );
 }
 
 void SwEndNoteInfo::ChgPageDesc( SwPageDesc *pDesc )

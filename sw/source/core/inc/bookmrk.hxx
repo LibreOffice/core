@@ -50,7 +50,6 @@ namespace sw { namespace mark
 {
     class MarkBase
         : virtual public IMark
-        , private ::boost::noncopyable
     {
         public:
             //getters

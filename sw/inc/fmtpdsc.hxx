@@ -57,7 +57,8 @@ class SW_DLLPUBLIC SwFmtPageDesc : public SfxPoolItem, public SwClient
     SwModify* pDefinedIn;       // Verweis auf das Objekt, in dem das
                                 // Attribut gesetzt wurde (CntntNode/Format)
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew );
+    virtual void SwClientNotify( const SwModify&, const SfxHint& rHint );
 
 public:
     SwFmtPageDesc( const SwPageDesc *pDesc = 0 );
@@ -90,7 +91,6 @@ public:
     void RegisterToEndNotInfo( SwEndNoteInfo& );
     void RegisterToPageDesc( SwPageDesc& );
     bool KnowsPageDesc() const;
-    bool IsRegisteredAt( SwEndNoteInfo* pInfo ) const;
 };
 
 

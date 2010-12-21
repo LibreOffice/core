@@ -2338,6 +2338,12 @@ SwRootFrm *SwDoc::GetCurrentLayout()
     return 0;
 }
 
+bool SwDoc::HasLayout() const
+{
+    // if there is a view, there is always a layout
+    return (pCurrentView != 0);
+}
+
 std::set<SwRootFrm*> SwDoc::GetAllLayouts()
 {
     std::set<SwRootFrm*> aAllLayouts;

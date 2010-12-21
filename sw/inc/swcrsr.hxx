@@ -95,11 +95,7 @@ public:
 
     // @@@ semantic: no copy ctor.
     SwCursor( SwCursor& rCpy);
-private:
-    // forbidden and not implemented.
-    //SwCursor( const SwCursor& );
-    // @@@ used e.g. in core/frmedt/fetab.cxx @@@
-    // SwCursor & operator= ( const SwCursor& );
+
 public:
 
     virtual SwCursor* Create( SwPaM* pRing = 0 ) const;

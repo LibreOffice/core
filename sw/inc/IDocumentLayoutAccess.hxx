@@ -49,6 +49,7 @@ public:
     virtual       ViewShell* GetCurrentViewShell() = 0; //swmod 071107//swmod 071225
     virtual const SwRootFrm* GetCurrentLayout() const = 0;
     virtual       SwRootFrm* GetCurrentLayout() = 0;    //swmod 080218
+    virtual bool HasLayout() const = 0;
 
     /** !!!The old layout must be deleted!!!
     */

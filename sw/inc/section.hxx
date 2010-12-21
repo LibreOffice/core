@@ -161,7 +161,6 @@ public:
 
 class SW_DLLPUBLIC SwSection
     : public SwClient
-    , private ::boost::noncopyable
 {
     // damit beim Anlegen/Loeschen von Frames das Flag richtig gepflegt wird!
     friend class SwSectionNode;

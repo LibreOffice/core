@@ -52,8 +52,9 @@ public:
     USHORT    nFtnOffset;
 
     void        ChgPageDesc( SwPageDesc *pDesc );
-    SwPageDesc *GetPageDesc( SwDoc &rDoc ) const;
-    SwClient   *GetPageDescDep() const { return (SwClient*)&aPageDescDep; }
+    SwPageDesc* GetPageDesc( SwDoc &rDoc ) const;
+    bool        KnowsPageDesc() const;
+    bool        DependsOn( const SwPageDesc* ) const;
 
     void SetFtnTxtColl(SwTxtFmtColl& rColl);
     SwTxtFmtColl* GetFtnTxtColl() const { return  (SwTxtFmtColl*) GetRegisteredIn(); } // kann 0 sein

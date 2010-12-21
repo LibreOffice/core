@@ -30,10 +30,12 @@
 
 #include <tools/rtti.hxx>
 #include "swdllapi.h"
+#include <boost/noncopyable.hpp>
 
 class SwModify;
 class SwClientIter;
 class SfxPoolItem;
+class SfxHint;
 
 /*
     SwModify and SwClient cooperate in propagating attribute changes.
@@ -66,7 +68,7 @@ class SfxPoolItem;
 // SwClient
 // ----------
 
-class SW_DLLPUBLIC SwClient
+class SW_DLLPUBLIC SwClient : ::boost::noncopyable
 {
     // avoids making the details of the linked list and the callback method public
     friend class SwModify;
@@ -84,7 +86,7 @@ class SW_DLLPUBLIC SwClient
     // should be called only from SwModify the client is registered in
     // mba: IMHO these methods should be pure virtual
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew);
-    virtual void SwClientNotify( SwModify* pModify, USHORT nWhich );
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 
 protected:
     // single argument ctors shall be explicit.
@@ -105,7 +107,8 @@ public:
 
     // controlled access to Modify method
     // mba: this is still considered a hack and it should be fixed; the name makes grep-ing easier
-    void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue );
+    void ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue ) { Modify ( pOldValue, pNewValue ); }
+   void SwClientNotifyCall( const SwModify& rModify, const SfxHint& rHint ) { SwClientNotify( rModify, rHint ); }
 
     const SwModify* GetRegisteredIn() const { return pRegisteredIn; }
     bool IsLast() const { return !pLeft && !pRight; }
@@ -115,11 +118,6 @@ public:
 
     // get information about attribute
     virtual BOOL GetInfo( SfxPoolItem& ) const;
-
-private:
-    // forbidden and not implemented
-    SwClient( const SwClient& );
-    SwClient &operator=( const SwClient& );
 };
 
 inline SwClient::SwClient() :
@@ -155,8 +153,8 @@ public:
     // also allows to limit callback to certain type (HACK)
     void ModifyBroadcast( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue, TypeId nType = TYPE(SwClient) );
 
-    // placeholder for a more elaborated broadcasting mechanism; currently the nWhich is enough
-    void CallSwClientNotify( USHORT nWhich );
+    // a more universal broadcasting mechanism
+    void CallSwClientNotify( const SfxHint& rHint ) const;
 
     // single argument ctors shall be explicit.
     explicit SwModify( SwModify *pToRegisterIn );
@@ -184,18 +182,6 @@ public:
     bool IsLastDepend() { return pRoot && pRoot->IsLast(); }
 
     int GetClientCount() const;
-
-private:
-    // forbidden and not implemented
-    SwModify & operator= (const SwModify &);
-
-#ifdef GCC
-protected:
-    // GCC >= 3.4 needs an accessible "T (const T&)"
-    // to pass a "T" as a "const T&" argument
-        // it does not require an implementation though
-#endif
-    SwModify (const SwModify &);
 };
 
 // ----------
@@ -219,11 +205,7 @@ public:
 
 protected:
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNewValue );
-
-private:
-    // forbidden and not implemented
-    SwDepend (const SwDepend &);
-    SwDepend & operator= (const SwDepend &);
+    virtual void SwClientNotify( const SwModify& rModify, const SfxHint& rHint );
 };
 
 

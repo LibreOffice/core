@@ -39,7 +39,7 @@
 #include <ndindex.hxx>
 #include <fldupde.hxx>
 #include <swtblfmt.hxx>
-
+#include <fieldhint.hxx>
 
 TYPEINIT1( SwDDETable, SwTable );
 
@@ -99,6 +99,14 @@ void SwDDETable::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
         ChangeContent();
     else
         SwTable::Modify( pOld, pNew );
+}
+
+void SwDDETable::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    const SwFieldHint* pHint = dynamic_cast<const SwFieldHint*>( &rHint );
+    if ( pHint )
+        // replace DDETable by real table
+        NoDDETable();
 }
 
 void SwDDETable::ChangeContent()

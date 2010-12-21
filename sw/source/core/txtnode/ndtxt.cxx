@@ -92,6 +92,7 @@
 #include <svl/intitem.hxx>
 #include <list.hxx>
 #include <switerator.hxx>
+#include <attrhint.hxx>
 
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
@@ -123,21 +124,7 @@ SwTxtNode *SwNodes::MakeTxtNode( const SwNodeIndex & rWhere,
     // --> OD 2005-11-03 #125329#
     // call method <UpdateOutlineNode(..)> only for the document nodes array
     if ( IsDocNodes() )
-    {
-        //if ( pColl && NO_NUMBERING != pColl->GetOutlineLevel() )  //#outline level,removed by zhaojianwei
-        //{
-        //  UpdateOutlineNode( *pNode, NO_NUMBERING, pColl->GetOutlineLevel() );
-        //}
-//        if ( pColl && 0 != pColl->GetAttrOutlineLevel() )//#outline level,added by zhaojianwei
-//        {
-//            UpdateOutlineNode( *pNode, 0, pColl->GetAttrOutlineLevel() );
-//        }//<--end
-//        else
-        {
-            UpdateOutlineNode(*pNode);
-        }
-    }
-    // <--
+        UpdateOutlineNode(*pNode);
 
     //Wenn es noch kein Layout gibt oder in einer versteckten Section
     // stehen, brauchen wir uns um das MakeFrms nicht bemuehen.
@@ -5062,9 +5049,10 @@ bool SwTxtNode::IsInContent() const
     return !GetDoc()->IsInHeaderFooter( SwNodeIndex(*this) );
 }
 
-void SwTxtNode::SwClientNotify( SwModify* pModify, USHORT nWhich )
+void SwTxtNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 {
-    if ( nWhich == RES_CONDTXTFMTCOLL && pModify == GetRegisteredIn() )
+    const SwAttrHint* pHint = dynamic_cast<const SwAttrHint*>(&rHint);
+    if ( pHint && pHint->GetId() == RES_CONDTXTFMTCOLL && &rModify == GetRegisteredIn() )
         ChkCondColl();
 }
 

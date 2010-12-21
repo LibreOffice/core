@@ -108,7 +108,7 @@
 #include <HandleAnchorNodeChg.hxx>
 #include <svl/cjkoptions.hxx>
 #include <switerator.hxx>
-#include <ftninfo.hxx>
+#include <pagedeschint.hxx>
 
 using namespace ::com::sun::star;
 using ::rtl::OUString;
@@ -653,19 +653,9 @@ SwFmtPageDesc::SwFmtPageDesc( const SwPageDesc *pDesc )
 
  SwFmtPageDesc::~SwFmtPageDesc() {}
 
-void SwFmtPageDesc::RegisterToPageDesc( SwPageDesc& rFmt )
-{
-    rFmt.Add(this);
-}
-
 bool SwFmtPageDesc::KnowsPageDesc() const
 {
     return (GetRegisteredIn() != 0);
-}
-
-bool SwFmtPageDesc::IsRegisteredAt( SwEndNoteInfo* pInfo ) const
-{
-    return (pInfo->GetPageDescDep() == this);
 }
 
 int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
@@ -679,6 +669,38 @@ int  SwFmtPageDesc::operator==( const SfxPoolItem& rAttr ) const
 SfxPoolItem*  SwFmtPageDesc::Clone( SfxItemPool* ) const
 {
     return new SwFmtPageDesc( *this );
+}
+
+void SwFmtPageDesc::SwClientNotify( const SwModify&, const SfxHint& rHint )
+{
+    const SwPageDescHint* pHint = dynamic_cast<const SwPageDescHint*>(&rHint);
+    if ( pHint )
+    {
+        // mba: shouldn't that be broadcasted also?
+        SwFmtPageDesc aDfltDesc( pHint->GetPageDesc() );
+        SwPageDesc* pDesc = pHint->GetPageDesc();
+        const SwModify* pMod = GetDefinedIn();
+        if ( pMod )
+        {
+            if( pMod->ISA( SwCntntNode ) )
+                ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
+            else if( pMod->ISA( SwFmt ))
+                ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
+            else
+            {
+                DBG_ERROR( "What kind of SwModify is this?" );
+                RegisterToPageDesc( *pDesc );
+            }
+        }
+        else
+            // there could be an Undo-copy
+            RegisterToPageDesc( *pDesc );
+    }
+}
+
+void SwFmtPageDesc::RegisterToPageDesc( SwPageDesc& rDesc )
+{
+    rDesc.Add( this );
 }
 
 void SwFmtPageDesc::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )

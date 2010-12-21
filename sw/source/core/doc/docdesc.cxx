@@ -70,7 +70,7 @@
 #include <statstr.hrc>
 #include <switerator.hxx>
 #include <SwUndoPageDesc.hxx>
-
+#include <pagedeschint.hxx>
 #include <tgrditem.hxx>
 
 using namespace com::sun::star;
@@ -444,48 +444,30 @@ void SwDoc::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 // #i7983#
 void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
 {
-    SwRootFrm* pTmpRoot = GetCurrentLayout();//swmod 080219
     if (0 == pDel)
         return;
 
-    SwFmtPageDesc aDfltDesc( aPageDescs[0] );
-    SwClientIter aIter( *pDel );            // TODO
-    SwClient* pLast;
-    while( 0 != ( pLast = aIter.GoStart() ))
-    {
-        if( pLast->ISA( SwFmtPageDesc ) )
-        {
-            const SwModify* pMod = ((SwFmtPageDesc*)pLast)->GetDefinedIn();
-            if ( pMod )
-            {
-                if( pMod->ISA( SwCntntNode ) )
-                    ((SwCntntNode*)pMod)->SetAttr( aDfltDesc );
-                else if( pMod->ISA( SwFmt ))
-                    ((SwFmt*)pMod)->SetFmtAttr( aDfltDesc );
-                else
-                {
-                    ASSERT( !this, "was ist das fuer ein Mofify-Obj?" );
-                    ((SwFmtPageDesc*)pLast)->RegisterToPageDesc( *aPageDescs[0] );
-                }
-            }
-            else    //Es kann noch eine Undo-Kopie existieren
-                ((SwFmtPageDesc*)pLast)->RegisterToPageDesc( *aPageDescs[0] );
-        }
+    // mba: test iteration as clients are removed while iteration
+    SwPageDescHint aHint( aPageDescs[0] );
+    pDel->CallSwClientNotify( aHint );
 
-        // mba: this code prevents us from using an SwIterator as GetPageDescDep() returns an SwClient that is an SwDepend
-        BOOL bFtnInf = FALSE;
-        if ( TRUE == (bFtnInf = pLast == pFtnInfo->GetPageDescDep()) ||
-             pLast == pEndNoteInfo->GetPageDescDep() )
+    bool bHasLayout = HasLayout();
+    if ( pFtnInfo->DependsOn( pDel ) )
+    {
+        pFtnInfo->ChgPageDesc( aPageDescs[0] );
+        if ( bHasLayout )
         {
-            if ( bFtnInf )
-                pFtnInfo->ChgPageDesc( aPageDescs[0] );
-            else
-                pEndNoteInfo->ChgPageDesc( aPageDescs[0] );
-            if ( pTmpRoot )
-            {
-                std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
-                std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), !bFtnInf));//swmod 080228
-            }
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), false));
+        }
+    }
+    else if ( pEndNoteInfo->DependsOn( pDel ) )
+    {
+        pEndNoteInfo->ChgPageDesc( aPageDescs[0] );
+        if ( bHasLayout )
+        {
+            std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
+            std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::bind2nd(std::mem_fun(&SwRootFrm::CheckFtnPageDescs), true));
         }
     }
 
@@ -494,16 +476,12 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel)
         if ( aPageDescs[j]->GetFollow() == pDel )
         {
             aPageDescs[j]->SetFollow( 0 );
-            //Clients des PageDesc sind die Attribute, denen sagen wir bescheid.
-            //die Attribute wiederum reichen die Meldung an die Absaetze weiter.
-
-            //Layot benachrichtigen!
-            if( pTmpRoot )  // ist nicht immer vorhanden!! (Orginizer)
+            if( bHasLayout )
             {
                 std::set<SwRootFrm*> aAllLayouts = GetAllLayouts();
                 std::for_each( aAllLayouts.begin(), aAllLayouts.end(),std::mem_fun(&SwRootFrm::AllCheckPageDescs));//swmod 080228
+            }
         }
-    }
     }
 }
 

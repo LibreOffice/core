@@ -1007,6 +1007,8 @@ public:
     virtual ViewShell *GetCurrentViewShell();//swmod 080219 It must be able to communicate to a ViewShell.This is going to be removerd later.
     virtual const SwRootFrm *GetCurrentLayout() const;
     virtual SwRootFrm *GetCurrentLayout();//swmod 080219
+    virtual bool HasLayout() const;
+
     /** IDocumentTimerAccess
     */
     virtual void StartIdling();

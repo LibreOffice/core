@@ -77,13 +77,9 @@ void SwClient::Modify( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValu
     CheckRegistration( pOldValue, pNewValue );
 }
 
-void SwClient::ModifyNotification( const SfxPoolItem *pOldValue, const SfxPoolItem *pNewValue )
+void SwClient::SwClientNotify( const SwModify&, const SfxHint& )
 {
-    Modify( pOldValue, pNewValue );
-}
 
-void SwClient::SwClientNotify( SwModify*, USHORT )
-{
 }
 
 //*************************************************************************
@@ -363,13 +359,13 @@ void SwModify::CheckCaching( const USHORT nWhich )
         }
 }
 
-void SwModify::CallSwClientNotify( USHORT nWhich )
+void SwModify::CallSwClientNotify( const SfxHint& rHint ) const
 {
     SwClientIter aIter(*this);
     SwClient * pClient = aIter.GoStart();
     while (pClient)
     {
-        pClient->SwClientNotify( this, nWhich );
+        pClient->SwClientNotify( *this, rHint );
         pClient = aIter++;
     }
 }
@@ -407,6 +403,11 @@ void SwDepend::Modify( const SfxPoolItem* pOldValue, const SfxPoolItem *pNewValu
         pToTell->ModifyNotification(pOldValue, pNewValue);
 }
 
+void SwDepend::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
+{
+    if ( pToTell )
+        pToTell->SwClientNotifyCall( rMod, rHint );
+}
 
 BOOL SwDepend::GetInfo( SfxPoolItem& rInfo ) const
 {

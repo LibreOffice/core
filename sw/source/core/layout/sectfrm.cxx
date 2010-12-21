@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svl/smplhint.hxx>
 #include <svl/itemiter.hxx>
 #include <hints.hxx>
 #include <txtftn.hxx>
@@ -2477,12 +2477,14 @@ void SwSectionFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem * pNew )
     }
 }
 
-void SwSectionFrm::SwClientNotify( SwModify*, USHORT nWhich )
+void SwSectionFrm::SwClientNotify( const SwModify& rMod, const SfxHint& rHint )
 {
-    if ( nWhich == RES_OBJECTDYING )
+    const SfxSimpleHint* pSimpleHint = dynamic_cast<const SfxSimpleHint*>(&rHint);
+    if ( pSimpleHint && pSimpleHint->GetId() == SFX_HINT_DYING && &rMod == GetRegisteredIn() )
+    {
         SwSectionFrm::MoveCntntAndDelete( this, TRUE );
+    }
 }
-
 
 void SwSectionFrm::_UpdateAttr( const SfxPoolItem *pOld, const SfxPoolItem *pNew,
                             BYTE &rInvFlags,

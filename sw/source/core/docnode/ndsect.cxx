@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
+#include <svl/smplhint.hxx>
 #include <hintids.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <svl/itemiter.hxx>
@@ -1083,7 +1083,7 @@ SwFrm* SwClearDummies( SwFrm* pFrm )
 SwSectionNode::~SwSectionNode()
 {
     // mba: test if iteration works as clients will be removed in callback
-    m_pSection->GetFmt()->CallSwClientNotify( RES_OBJECTDYING );
+    m_pSection->GetFmt()->CallSwClientNotify( SfxSimpleHint( SFX_HINT_DYING ) );
 
     SwDoc* pDoc = GetDoc();
 

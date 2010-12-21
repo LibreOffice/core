@@ -114,7 +114,7 @@
 #include <viewsh.hxx>
 #include <shellres.hxx>
 #include <txtfrm.hxx>
-
+#include <attrhint.hxx>
 #include <vector>
 #include <map>
 
@@ -2664,7 +2664,7 @@ void SwDoc::ChkCondColls()
      {
         SwTxtFmtColl *pColl = (*pTxtFmtCollTbl)[n];
         if (RES_CONDTXTFMTCOLL == pColl->Which())
-            pColl->CallSwClientNotify( RES_CONDTXTFMTCOLL );
+            pColl->CallSwClientNotify( SwAttrHint(RES_CONDTXTFMTCOLL) );
      }
 }
 

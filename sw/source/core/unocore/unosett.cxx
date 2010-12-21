@@ -537,7 +537,7 @@ uno::Any SwXFootnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rFtnInfo.GetPageDescDep()->GetRegisteredIn() )
+                    if( rFtnInfo.KnowsPageDesc() )
                     {
                         SwStyleNameMapper::FillProgName(
                                 rFtnInfo.GetPageDesc( *pDoc )->GetName(),
@@ -809,7 +809,7 @@ uno::Any SwXEndnoteProperties::getPropertyValue(const OUString& rPropertyName)
                 case  WID_PAGE_STYLE :
                 {
                     String aString;
-                    if( rEndInfo.GetPageDescDep()->GetRegisteredIn() )
+                    if( rEndInfo.KnowsPageDesc() )
                     {
                         SwStyleNameMapper::FillProgName(
                             rEndInfo.GetPageDesc( *pDoc )->GetName(),
