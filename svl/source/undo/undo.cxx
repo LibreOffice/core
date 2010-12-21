@@ -1299,8 +1299,8 @@ SfxListUndoAction::SfxListUndoAction
 
 void SfxListUndoAction::Undo()
 {
-    for(INT16 i=nCurUndoAction-1;i>=0;i--)
-        aUndoActions[i].pAction->Undo();
+    for(size_t i=nCurUndoAction;i>0;)
+        aUndoActions[--i].pAction->Undo();
     nCurUndoAction=0;
 }
 
@@ -1308,8 +1308,8 @@ void SfxListUndoAction::Undo()
 
 void SfxListUndoAction::UndoWithContext( SfxUndoContext& i_context )
 {
-    for(INT16 i=nCurUndoAction-1;i>=0;i--)
-        aUndoActions[i].pAction->UndoWithContext( i_context );
+    for(size_t i=nCurUndoAction;i>0;)
+        aUndoActions[--i].pAction->UndoWithContext( i_context );
     nCurUndoAction=0;
 }
 
