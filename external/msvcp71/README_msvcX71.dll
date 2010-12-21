@@ -1,6 +1,0 @@
-Put the msvcp71.dll and msvcr71.dll in this directory for Windows builds using
-a .NET compiler. The dlls are part of the .NET2003 installation and can be found
-in a directory similar to:
-"c:\Program Files\Microsoft Visual Studio .NET 2003\Visual C++ .NET Professional - English\"
-If you use the --enable-dbgutil switch during configure, copy the appropriate msvcp71d.dll and
-msvcr71d.dll into this directory. 
