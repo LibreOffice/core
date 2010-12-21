@@ -37,9 +37,9 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "table.hxx"
-#include "scmatrix.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
+#include "types.hxx"
 #include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "scdllapi.h"

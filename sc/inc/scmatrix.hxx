@@ -30,6 +30,7 @@
 #define SC_MATRIX_HXX
 
 #include "global.hxx"
+#include "types.hxx"
 #include "formula/errorcodes.hxx"
 #include <tools/string.hxx>
 #include "scdllapi.h"
@@ -385,9 +386,6 @@ inline void intrusive_ptr_release(const ScMatrix* p)
 {
     p->DecRef();
 }
-
-typedef ::boost::intrusive_ptr<ScMatrix> ScMatrixRef;
-typedef ::boost::intrusive_ptr<const ScMatrix> ScConstMatrixRef;
 
 #endif  // SC_MATRIX_HXX
 
