@@ -84,7 +84,7 @@ const int SC_CLONECELL_NOCAPTION        = 0x0004;
 class SC_DLLPUBLIC ScBaseCell
 {
 protected:
-                    ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
+                    ~ScBaseCell();  // not virtual - not to be called directly.
 
 public:
     explicit        ScBaseCell( CellType eNewType );
