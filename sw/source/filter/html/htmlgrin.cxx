@@ -166,7 +166,7 @@ void SwHTMLParser::ConnectImageMaps()
 }
 
 
-/*  */
+/*  */
 
 void SwHTMLParser::SetAnchorAndAdjustment( sal_Int16 eVertOri,
                                            sal_Int16 eHoriOri,
@@ -302,12 +302,11 @@ void SwHTMLParser::RegisterFlyFrm( SwFrmFmt *pFlyFmt )
         SURROUND_THROUGHT == pFlyFmt->GetSurround().GetSurround() )
     {
         aMoveFlyFrms.Insert( pFlyFmt, aMoveFlyFrms.Count() );
-        aMoveFlyCnts.Insert( pPam->GetPoint()->nContent.GetIndex(),
-                             aMoveFlyCnts.Count() );
+        aMoveFlyCnts.push_back( pPam->GetPoint()->nContent.GetIndex() );
     }
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
                                          String& rTypeStr ) const
@@ -319,7 +318,7 @@ void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
     rTypeStr = GetScriptTypeString( pHeaderAttrs );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertImage()
 {
@@ -816,7 +815,7 @@ IMAGE_SETEVENT:
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBodyOptions()
 {
@@ -1047,7 +1046,7 @@ void SwHTMLParser::InsertBodyOptions()
         InsertBookmark( aId );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::NewAnchor()
 {
@@ -1268,7 +1267,7 @@ void SwHTMLParser::EndAnchor()
     EndTag( HTML_ANCHOR_OFF );
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::InsertBookmark( const String& rName )
 {
@@ -1324,7 +1323,7 @@ BOOL SwHTMLParser::HasCurrentParaBookmarks( BOOL bIgnoreStack ) const
     return bHasMarks;
 }
 
-/*  */
+/*  */
 
 void SwHTMLParser::StripTrailingPara()
 {

@@ -273,11 +273,8 @@ String SwGetRefField::Expand() const
 }
 
 
-String SwGetRefField::GetCntnt(BOOL bName) const
+String SwGetRefField::GetFieldName() const
 {
-    if( !bName )
-        return Expand();
-
     String aStr(GetTyp()->GetName());
     aStr += ' ';
     aStr += sSetRefName;

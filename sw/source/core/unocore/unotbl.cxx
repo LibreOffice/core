@@ -666,7 +666,7 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
         {
             aCols[i] = pArray[i].Position;
             if(pArray[i].IsVisible == aCols.IsHidden(i) ||
-                !bRow && aCols.IsHidden(i) ||
+                (!bRow && aCols.IsHidden(i)) ||
                 long(aCols[i] - long(nLastValue)) < 0 ||
                 UNO_TABLE_COLUMN_SUM < aCols[i] )
             {
@@ -2079,7 +2079,12 @@ void    SwTableProperties_Impl::ApplyTblAttr(const SwTable& rTbl, SwDoc& rDoc)
         rDoc.SetAttr( aSet, *rTbl.GetFrmFmt() );
     }
 }
+<<<<<<< local
+=======
+/* -----------------------------10.03.00 18:02--------------------------------
+>>>>>>> other
 
+<<<<<<< local
 SwXTextTable* SwXTextTable::GetImplementation(uno::Reference< XInterface> xRef )
 {
     uno::Reference<lang::XUnoTunnel> xTunnel( xRef, uno::UNO_QUERY);
@@ -2089,6 +2094,9 @@ SwXTextTable* SwXTextTable::GetImplementation(uno::Reference< XInterface> xRef )
     return 0;
 }
 
+=======
+ ---------------------------------------------------------------------------*/
+>>>>>>> other
 const uno::Sequence< sal_Int8 > & SwXTextTable::getUnoTunnelId()
 {
     static uno::Sequence< sal_Int8 > aSeq = ::CreateUnoTunnelId();
@@ -3138,10 +3146,10 @@ void SwXTextTable::setPropertyValue(const OUString& rPropertyName,
                             const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
                             const SvxBoxItem& rBox = pBoxFmt->GetBox();
                             if(
-                                aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( BOX_LINE_LEFT ) ||
-                                aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( BOX_LINE_RIGHT ) ||
-                                aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( BOX_LINE_TOP ) ||
-                                aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( BOX_LINE_BOTTOM ))
+                                (aTableBorderDistances.IsLeftDistanceValid && nLeftDistance !=   rBox.GetDistance( BOX_LINE_LEFT )) ||
+                                (aTableBorderDistances.IsRightDistanceValid && nRightDistance !=  rBox.GetDistance( BOX_LINE_RIGHT )) ||
+                                (aTableBorderDistances.IsTopDistanceValid && nTopDistance !=    rBox.GetDistance( BOX_LINE_TOP )) ||
+                                (aTableBorderDistances.IsBottomDistanceValid && nBottomDistance != rBox.GetDistance( BOX_LINE_BOTTOM )))
                             {
                                 SvxBoxItem aSetBox( rBox );
                                 SwFrmFmt* pSetBoxFmt = pBox->ClaimFrmFmt();
@@ -3440,7 +3448,7 @@ void SwXTextTable::setName(const OUString& rName) throw( uno::RuntimeException )
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwFrmFmt* pFmt = GetFrmFmt();
     String sNewTblName(rName);
-    if(!pFmt && !bIsDescriptor ||
+    if((!pFmt && !bIsDescriptor) ||
         !sNewTblName.Len() ||
             STRING_NOTFOUND != sNewTblName.Search('.') ||
                 STRING_NOTFOUND != sNewTblName.Search(' ')  )

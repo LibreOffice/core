@@ -24,8 +24,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _USRFLD_HXX
-#define _USRFLD_HXX
+#ifndef SW_USRFLD_HXX
+#define SW_USRFLD_HXX
 
 #include "swdllapi.h"
 #include "fldbas.hxx"
@@ -106,6 +106,9 @@ class SW_DLLPUBLIC SwUserField : public SwValueField
 {
     USHORT  nSubType;
 
+    virtual String          Expand() const;
+    virtual SwField*        Copy() const;
+
 public:
     SwUserField(SwUserFieldType*, USHORT nSub = 0, sal_uInt32 nFmt = 0);
 
@@ -115,9 +118,7 @@ public:
     virtual double          GetValue() const;
     virtual void            SetValue( const double& rVal );
 
-    virtual String          Expand() const;
-    virtual SwField*        Copy() const;
-    virtual String          GetCntnt(BOOL bName = FALSE) const;
+    virtual String          GetFieldName() const;
 
     // Name kann nicht geaendert werden
     virtual const String&   GetPar1() const;
@@ -129,4 +130,4 @@ public:
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhichId );
 };
 
-#endif // _USRFLD_HXX
+#endif // SW_USRFLD_HXX

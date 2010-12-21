@@ -1749,7 +1749,7 @@ void SwUndoTblNdsChg::SaveNewBoxes( const SwTableNode& rTblNd,
                 ( nNodes != ( pSourceBox->GetSttNd()->EndOfSectionIndex() -
                               pSourceBox->GetSttIdx() ) )
                 && ( nNodes - 1 > nLineDiff );
-            aMvBoxes.Insert( bNodesMoved, nInsPos );
+            aMvBoxes.insert( aMvBoxes.begin() + nInsPos, bNodesMoved );
         }
     }
 }
@@ -1809,7 +1809,7 @@ void SwUndoTblNdsChg::Undo( SwUndoIter& rUndoIter )
         }
         Ptrs.pDelSects->DeleteAndDestroy( 0, Ptrs.pDelSects->Count() );
     }
-    else if( aMvBoxes.Count() )
+    else if( !aMvBoxes.empty() )
     {
         // dann muessen Nodes verschoben und nicht geloescht werden!
         // Dafuer brauchen wir aber ein temp Array

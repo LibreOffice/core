@@ -29,7 +29,11 @@
 #include "precompiled_sw.hxx"
 
 #include <com/sun/star/text/HoriOrientation.hpp>
+<<<<<<< local
 #include <hintids.hxx>
+=======
+
+>>>>>>> other
 #include <vcl/sound.hxx>
 #include <tools/poly.hxx>
 #define _SVSTDARR_LONGS
@@ -42,10 +46,19 @@
 #include <editeng/boxitem.hxx>
 #include <editeng/shaditem.hxx>
 #include <svx/framelink.hxx>
+<<<<<<< local
+=======
+// <--
+>>>>>>> other
 #include <vcl/graph.hxx>
 #include <svx/svdpagv.hxx>
+
+#include <hintids.hxx>
 #include <tgrditem.hxx>
+<<<<<<< local
 #include <switerator.hxx>
+=======
+>>>>>>> other
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
 #include <tools/shl.hxx>
@@ -80,7 +93,15 @@
 #include <lineinfo.hxx>
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
+<<<<<<< local
+=======
+// OD 20.12.2002 #94627#
+>>>>>>> other
 #include <docsh.hxx>
+<<<<<<< local
+=======
+// OD 28.02.2003 #b4779636#, #107692#
+>>>>>>> other
 #include <swtable.hxx>
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
@@ -509,7 +530,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||
-                 bVert == rL2.Height() > rL2.Width() )
+                 (bVert == (rL2.Height() > rL2.Width())) )
                 continue;
 
             long nL2a, nL2b, nL2c, nL2d;
@@ -683,7 +704,7 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             if ( rLine.IsLocked () )
                 continue;
 
-            if ( !bVerticalSubs == rLine.Height() > rLine.Width() ) //gleiche Ausrichtung?
+            if ( (!bVerticalSubs == (rLine.Height() > rLine.Width())) ) //gleiche Ausrichtung?
                 continue;
 
             if ( aSubsRect.IsOver( rLine ) )
@@ -888,7 +909,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 SwLineRect &rLk = operator[](k);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
-                    if ( bVerticalSubs == rLk.Height() > rLk.Width() )
+                    if ( (bVerticalSubs == (rLk.Height() > rLk.Width())) )
                     {
                         if ( bVerticalSubs )
                         {
@@ -2711,7 +2732,8 @@ void SwTabFrmPainter::Insert( SwLineEntry& rNew, bool bHori )
 |*
 |*************************************************************************/
 
-void SwRootFrm::Paint( const SwRect& rRect, const SwPrtOptions *pPrintData ) const
+void
+SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
 {
         ASSERT( Lower() && Lower()->IsPageFrm(), "Lower der Root keine Seite." );
 
@@ -3161,7 +3183,7 @@ SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )
     }
 }
 
-void SwLayoutFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
+void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     ViewShell *pSh = getRootFrm()->GetCurrShell();
 
@@ -3449,7 +3471,7 @@ BOOL SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 /*************************************************************************
 |*  SwCellFrm::Paint( const SwRect& ) const
 |*************************************************************************/
-void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
+void SwCellFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( GetLayoutRowSpan() >= 1 )
         SwLayoutFrm::Paint( rRect );
@@ -3468,7 +3490,7 @@ void SwCellFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */
 void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
                                const SwRect &rRect, const SwPageFrm *pPage );
 
-void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
+void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     //wegen der Ueberlappung von Rahmen und Zeichenobjekten muessen die
     //Flys ihre Umrandung (und die der Innenliegenden) direkt ausgeben.
@@ -3703,7 +3725,7 @@ void SwFlyFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ 
 |*
 |*************************************************************************/
 
-void SwTabFrm::Paint( const SwRect& rRect, const SwPrtOptions* /* pPrintData */ ) const
+void SwTabFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     if ( pGlobalShell->GetViewOptions()->IsTable() )
     {
@@ -6239,7 +6261,7 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 void SwPageFrm::RefreshExtraData( const SwRect &rRect ) const
 {
     const SwLineNumberInfo &rInfo = GetFmt()->GetDoc()->GetLineNumberInfo();
-    BOOL bLineInFly = rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys()
+    BOOL bLineInFly = (rInfo.IsPaintLineNumbers() && rInfo.IsCountInFlys())
         || (sal_Int16)SW_MOD()->GetRedlineMarkPos() != text::HoriOrientation::NONE;
 
     SwRect aRect( rRect );

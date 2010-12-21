@@ -94,6 +94,10 @@
 #include <switerator.hxx>
 #include <attrhint.hxx>
 
+
+using namespace ::com::sun::star;
+
+
 SV_DECL_PTRARR( TmpHints, SwTxtAttr*, 0, 4 )
 
 TYPEINIT1( SwTxtNode, SwCntntNode )
@@ -2538,9 +2542,20 @@ void SwTxtNode::NumRuleChgd()
     }
     SetInSwFntCache( FALSE );
 
+<<<<<<< local
 
     SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
     NotifyClients( &rLR, &rLR );
+=======
+    // Sending "noop" modify in order to cause invalidations of registered
+    // <SwTxtFrm> instances to get the list style change respectively the change
+    // in the list tree reflected in the layout.
+    // Important note:
+    {
+        SvxLRSpaceItem& rLR = (SvxLRSpaceItem&)GetSwAttrSet().GetLRSpace();
+        SwModify::Modify( &rLR, &rLR );
+    }
+>>>>>>> other
 }
 
 // -> #i27615#
@@ -2806,13 +2821,19 @@ XubString SwTxtNode::GetNumString( const bool _bInclPrefixAndSuffixStrings, cons
     }
     const SwNumRule* pRule = GetNum() ? GetNum()->GetNumRule() : 0L;
     if ( pRule &&
-         IsCountedInList() &&
-         pRule->Get( static_cast<USHORT>(GetActualListLevel()) ).IsTxtFmt() )
+         IsCountedInList() )
     {
-        return pRule->MakeNumString( GetNum()->GetNumberVector(),
+        SvxNumberType const& rNumberType(
+                pRule->Get( static_cast<USHORT>(GetActualListLevel()) ) );
+        if (rNumberType.IsTxtFmt() ||
+        // #b6432095#
+            (style::NumberingType::NUMBER_NONE == rNumberType.GetNumberingType()))
+        {
+            return pRule->MakeNumString( GetNum()->GetNumberVector(),
                                      _bInclPrefixAndSuffixStrings ? TRUE : FALSE,
                                      FALSE,
                                      _nRestrictToThisLevel );
+        }
     }
 
     return aEmptyStr;
@@ -3029,8 +3050,7 @@ void SwTxtNode::Replace0xFF( XubString& rTxt, xub_StrLen& rTxtStt,
                         {
                             const XubString aExpand(
                                 static_cast<SwTxtFld const*>(pAttr)->GetFld()
-                                    .GetFld()->ExpandField(
-                                        GetDoc()->IsClipBoard()));
+                                    .GetFld()->ExpandField(true));
                             rTxt.Insert( aExpand, nPos );
                             nPos = nPos + aExpand.Len();
                             nEndPos = nEndPos + aExpand.Len();
@@ -3179,7 +3199,7 @@ BOOL SwTxtNode::GetExpandTxt( SwTxtNode& rDestNd, const SwIndex* pDestIdx,
                     {
                         XubString const aExpand(
                             static_cast<SwTxtFld const*>(pHt)->GetFld().GetFld()
-                                ->ExpandField(GetDoc()->IsClipBoard()));
+                                ->ExpandField(true));
                         if( aExpand.Len() )
                         {
                             aDestIdx++;     // dahinter einfuegen;
@@ -3277,7 +3297,7 @@ const ModelToViewHelper::ConversionMap*
         {
             const XubString aExpand(
                 static_cast<SwTxtFld const*>(pAttr)->GetFld().GetFld()
-                    ->ExpandField(GetDoc()->IsClipBoard()));
+                    ->ExpandField(true));
             if ( aExpand.Len() > 0 )
             {
                 const xub_StrLen nFieldPos = *pAttr->GetStart();
@@ -5057,8 +5077,6 @@ void SwTxtNode::SwClientNotify( const SwModify& rModify, const SfxHint& rHint )
 }
 
 #include <unoparagraph.hxx>
-
-using namespace ::com::sun::star;
 
 uno::Reference< rdf::XMetadatable >
 SwTxtNode::MakeUnoObject()

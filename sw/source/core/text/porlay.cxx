@@ -802,8 +802,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     MultiSelection aHiddenMulti( aRange );
     CalcHiddenRanges( rNode, aHiddenMulti );
 
-    aHiddenChg.Remove( 0, aHiddenChg.Count() );
-    USHORT nHiddenIdx = 0;
+    aHiddenChg.clear();
     USHORT i = 0;
     for( i = 0; i < aHiddenMulti.GetRangeCount(); ++i )
     {
@@ -811,8 +810,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         const xub_StrLen nStart = (xub_StrLen)rRange.Min();
         const xub_StrLen nEnd = (xub_StrLen)rRange.Max() + 1;
 
-        aHiddenChg.Insert( nStart, nHiddenIdx++ );
-        aHiddenChg.Insert( nEnd, nHiddenIdx++ );
+        aHiddenChg.push_back( nStart );
+        aHiddenChg.push_back( nEnd );
     }
 
     //
@@ -912,9 +911,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     //
 
     // remove invalid entries from script information arrays
-    const USHORT nScriptRemove = aScriptChg.Count() - nCnt;
-    aScriptChg.Remove( nCnt, nScriptRemove );
-    aScriptType.Remove( nCnt, nScriptRemove );
+    const size_t nScriptRemove = aScriptChg.size() - nCnt;
+    aScriptChg.erase( aScriptChg.begin() + nCnt, aScriptChg.end() );
+    aScriptType.erase( aScriptType.begin() + nCnt, aScriptType.begin() + (nCnt + nScriptRemove) );
 
     // get the start of the last compression group
     USHORT nLastCompression = nChg;
@@ -930,10 +929,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 
     // remove invalid entries from compression information arrays
-    const USHORT nCompRemove = aCompChg.Count() - nCntComp;
-    aCompChg.Remove( nCntComp, nCompRemove );
-    aCompLen.Remove( nCntComp, nCompRemove );
-    aCompType.Remove( nCntComp, nCompRemove );
+    const size_t nCompRemove = aCompChg.size() - nCntComp;
+    aCompChg.erase( aCompChg.begin() + nCntComp, aCompChg.end() );
+    aCompLen.erase( aCompLen.begin() + nCntComp, aCompLen.begin() + (nCntComp + nCompRemove) );
+    aCompType.erase( aCompType.begin() + nCntComp, aCompType.end() );
 
     // get the start of the last kashida group
     USHORT nLastKashida = nChg;
@@ -944,7 +943,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     }
 
     // remove invalid entries from kashida array
-    aKashida.Remove( nCntKash, aKashida.Count() - nCntKash );
+    aKashida.erase( aKashida.begin() + nCntKash, aKashida.end() );
 
     //
     // TAKE CARE OF WEAK CHARACTERS: WE MUST FIND AN APPROPRIATE
@@ -978,8 +977,9 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 
         if ( nScript != nNextScript )
         {
-            aScriptChg.Insert( nEnd, nCnt );
-            aScriptType.Insert( nScript, nCnt++ );
+            aScriptChg.insert( aScriptChg.begin() + nCnt, nEnd );
+            aScriptType.insert( aScriptType.begin() + nCnt, nScript );
+            nCnt++;
             nScript = nNextScript;
         }
     }
@@ -988,7 +988,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // UPDATE THE SCRIPT INFO ARRAYS:
     //
 
-    while ( nChg < rTxt.Len() || ( !aScriptChg.Count() && !rTxt.Len() ) )
+    while ( nChg < rTxt.Len() || ( aScriptChg.empty() && !rTxt.Len() ) )
     {
         ASSERT( i18n::ScriptType::WEAK != nScript,
                 "Inserting WEAK into SwScriptInfo structure" );
@@ -1029,18 +1029,19 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
             if (nType == U_NON_SPACING_MARK || nType == U_ENCLOSING_MARK ||
                 nType == U_COMBINING_SPACING_MARK )
             {
-                aScriptChg.Insert( nChg - 1, nCnt );
+                aScriptChg.insert( aScriptChg.begin() + nCnt, nChg - 1 );
             }
             else
             {
-                aScriptChg.Insert( nChg, nCnt );
+                aScriptChg.insert( aScriptChg.begin() + nCnt, nChg );
             }
         }
         else
         {
-            aScriptChg.Insert( nChg, nCnt );
+            aScriptChg.insert( aScriptChg.begin() + nCnt, nChg );
         }
-        aScriptType.Insert( nScript, nCnt++ );
+        aScriptType.insert( aScriptType.begin() + nCnt, nScript );
+        nCnt++;
 
         // if current script is asian, we search for compressable characters
         // in this range
@@ -1084,10 +1085,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                         if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                              ePrevState != KANA )
                         {
-                            aCompChg.Insert( nPrevChg, nCntComp );
+                            aCompChg.insert( aCompChg.begin() + nCntComp, nPrevChg );
                             BYTE nTmpType = ePrevState;
-                            aCompType.Insert( nTmpType, nCntComp );
-                            aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                            aCompType.insert( aCompType.begin() + nCntComp, nTmpType );
+                            aCompLen.insert( aCompLen.begin() + nCntComp, nLastCompression - nPrevChg );
+                            nCntComp++;
                         }
                     }
 
@@ -1105,10 +1107,11 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum ||
                      ePrevState != KANA )
                 {
-                    aCompChg.Insert( nPrevChg, nCntComp );
+                    aCompChg.insert( aCompChg.begin() + nCntComp, nPrevChg );
                     BYTE nTmpType = ePrevState;
-                    aCompType.Insert( nTmpType, nCntComp );
-                    aCompLen.Insert( nLastCompression - nPrevChg, nCntComp++ );
+                    aCompType.insert( aCompType.begin() + nCntComp, nTmpType );
+                    aCompLen.insert( aCompLen.begin() + nCntComp, nLastCompression - nPrevChg );
+                    nCntComp++;
                 }
             }
         }
@@ -1274,7 +1277,10 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 } // end of current word
 
                 if ( STRING_LEN != nKashidaPos )
-                    aKashida.Insert( nKashidaPos, nCntKash++ );
+                {
+                    aKashida.insert( aKashida.begin() + nCntKash, nKashidaPos);
+                    nCntKash++;
+                }
             } // end of kashida search
         }
 
@@ -1289,7 +1295,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
     // check kashida data
     long nTmpKashidaPos = -1;
     sal_Bool bWrongKash = sal_False;
-    for (i = 0; i < aKashida.Count(); ++i )
+    for (i = 0; i < aKashida.size(); ++i )
     {
         long nCurrKashidaPos = GetKashida( i );
         if ( nCurrKashidaPos <= nTmpKashidaPos )
@@ -1303,9 +1309,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 #endif
 
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirChg.clear();
+    aDirType.clear();
 
     // Perform Unicode Bidi Algorithm for text direction information
     bool bPerformUBA = UBIDI_LTR != nDefaultDir;
@@ -1325,7 +1330,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
         // 1. All text in RTL runs will use the CTL font
         // #i89825# change the script type also to CTL (hennerdrewes)
         // 2. Text in embedded LTR runs that does not have any strong LTR characters (numbers!)
-        for ( USHORT nDirIdx = 0; nDirIdx < aDirChg.Count(); ++nDirIdx )
+        for ( size_t nDirIdx = 0; nDirIdx < aDirChg.size(); ++nDirIdx )
         {
             const BYTE nCurrDirType = GetDirType( nDirIdx );
                 // nStart ist start of RTL run:
@@ -1337,7 +1342,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 ( nCurrDirType > UBIDI_LTR && !lcl_HasStrongLTR( rTxt, nStart, nEnd ) ) ) // non-strong text in embedded LTR run
             {
                 // nScriptIdx points into the ScriptArrays:
-                USHORT nScriptIdx = 0;
+                size_t nScriptIdx = 0;
 
                 // Skip entries in ScriptArray which are not inside the RTL run:
                 // Make nScriptIdx become the index of the script group with
@@ -1357,21 +1362,21 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 // we have to insert a new script change:
                 if ( nStart > 0 && nStartPosOfGroup < nStart )
                 {
-                    aScriptChg.Insert( nStart, nScriptIdx );
-                    aScriptType.Insert( nScriptTypeOfGroup, nScriptIdx );
+                    aScriptChg.insert( aScriptChg.begin() + nScriptIdx, nStart );
+                    aScriptType.insert( aScriptType.begin() + nScriptIdx, nScriptTypeOfGroup );
                     ++nScriptIdx;
                 }
 
                 // Remove entries in ScriptArray which end inside the RTL run:
-                while ( nScriptIdx < aScriptChg.Count() && GetScriptChg( nScriptIdx ) <= nEnd )
+                while ( nScriptIdx < aScriptChg.size() && GetScriptChg( nScriptIdx ) <= nEnd )
                 {
-                    aScriptChg.Remove( nScriptIdx, 1 );
-                    aScriptType.Remove( nScriptIdx, 1 );
+                    aScriptChg.erase( aScriptChg.begin() + nScriptIdx );
+                    aScriptType.erase( aScriptType.begin() + nScriptIdx );
                 }
 
                 // Insert a new entry in ScriptArray for the end of the RTL run:
-                aScriptChg.Insert( nEnd, nScriptIdx );
-                aScriptType.Insert( i18n::ScriptType::COMPLEX, nScriptIdx );
+                aScriptChg.insert( aScriptChg.begin() + nScriptIdx, nEnd );
+                aScriptType.insert( aScriptType.begin() + nScriptIdx, i18n::ScriptType::COMPLEX );
 
 #if OSL_DEBUG_LEVEL > 1
                 BYTE nScriptType;
@@ -1381,7 +1386,7 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
                 (void) nLastScriptChg;
                 (void) nLastScriptType;
 
-                for ( USHORT i2 = 0; i2 < aScriptChg.Count(); ++i2 )
+                for ( size_t i2 = 0; i2 < aScriptChg.size(); ++i2 )
                 {
                     nScriptChg = GetScriptChg( i2 );
                     nScriptType = GetScriptType( i2 );
@@ -1398,9 +1403,8 @@ void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode, sal_Bool bRTL )
 void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
 {
     // remove invalid entries from direction information arrays
-    const USHORT nDirRemove = aDirChg.Count();
-    aDirChg.Remove( 0, nDirRemove );
-    aDirType.Remove( 0, nDirRemove );
+    aDirChg.clear();
+    aDirType.clear();
 
     //
     // Bidi functions from icu 2.0
@@ -1417,13 +1421,12 @@ void SwScriptInfo::UpdateBidiInfo( const String& rTxt )
     int32_t nEnd;
     UBiDiLevel nCurrDir;
     // counter for direction information arrays
-    USHORT nCntDir = 0;
 
     for ( USHORT nIdx = 0; nIdx < nCount; ++nIdx )
     {
         ubidi_getLogicalRun( pBidi, nStart, &nEnd, &nCurrDir );
-        aDirChg.Insert( (USHORT)nEnd, nCntDir );
-        aDirType.Insert( (BYTE)nCurrDir, nCntDir++ );
+        aDirChg.push_back( (USHORT)nEnd );
+        aDirType.push_back( (BYTE)nCurrDir );
         nStart = nEnd;
     }
 
@@ -2008,7 +2011,7 @@ sal_Bool SwScriptInfo::IsArabicText( const XubString& rTxt, xub_StrLen nStt, xub
 
 sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
 {
-    for ( xub_StrLen i = 0; i < aKashidaInvalid.Count(); ++i )
+    for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
     {
         if ( aKashidaInvalid [ i ] == nKashPos )
             return false;
@@ -2020,13 +2023,13 @@ sal_Bool SwScriptInfo::IsKashidaValid ( xub_StrLen nKashPos ) const
  *                      SwScriptInfo::ClearKashidaInvalid()
  *************************************************************************/
 
-void SwScriptInfo::ClearKashidaInvalid (  xub_StrLen nKashPos )
+void SwScriptInfo::ClearKashidaInvalid ( xub_StrLen nKashPos )
 {
-    for ( xub_StrLen i = 0; i < aKashidaInvalid.Count(); ++i )
+    for ( size_t i = 0; i < aKashidaInvalid.size(); ++i )
     {
         if ( aKashidaInvalid [ i ] == nKashPos )
         {
-           aKashidaInvalid.Remove (i, 1);
+           aKashidaInvalid.erase ( aKashidaInvalid.begin() + i );
            return;
         }
     }
@@ -2082,7 +2085,7 @@ bool SwScriptInfo::MarkOrClearKashidaInvalid ( xub_StrLen nStt, xub_StrLen nLen,
 
 void SwScriptInfo::MarkKashidaInvalid ( xub_StrLen nKashPos )
 {
-    aKashidaInvalid.Insert( nKashPos, aKashidaInvalid.Count() );
+    aKashidaInvalid.push_back( nKashPos );
 }
 
 /*************************************************************************
@@ -2119,8 +2122,8 @@ USHORT SwScriptInfo::GetKashidaPositions ( xub_StrLen nStt, xub_StrLen nLen,
 
 void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 {
-    aNoKashidaLine.Insert( nStt, aNoKashidaLine.Count());
-    aNoKashidaLineEnd.Insert( nStt+nLen, aNoKashidaLineEnd.Count());
+    aNoKashidaLine.push_back( nStt );
+    aNoKashidaLineEnd.push_back( nStt+nLen );
 }
 
 /*************************************************************************
@@ -2130,7 +2133,7 @@ void SwScriptInfo::SetNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 
 bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
 {
-   for( xub_StrLen i = 0; i < aNoKashidaLine.Count(); ++i )
+   for( size_t i = 0; i < aNoKashidaLine.size(); ++i )
     {
        if( nCharIdx >= aNoKashidaLine[ i ] && nCharIdx < aNoKashidaLineEnd[ i ])
            return false;
@@ -2143,13 +2146,13 @@ bool SwScriptInfo::IsKashidaLine ( xub_StrLen nCharIdx ) const
 
 void SwScriptInfo::ClearNoKashidaLine ( xub_StrLen nStt, xub_StrLen nLen )
 {
-   xub_StrLen i = 0;
-   while( i < aNoKashidaLine.Count())
+   size_t i = 0;
+   while( i < aNoKashidaLine.size())
    {
        if( nStt + nLen >= aNoKashidaLine[ i ] && nStt < aNoKashidaLineEnd [ i ] )
        {
-           aNoKashidaLine.Remove(i, 1);
-           aNoKashidaLineEnd.Remove(i, 1);
+           aNoKashidaLine.erase(aNoKashidaLine.begin() + i);
+           aNoKashidaLineEnd.erase(aNoKashidaLineEnd.begin() + i);
        }
        else
            ++i;

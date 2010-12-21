@@ -65,7 +65,7 @@
 #include <fmtfld.hxx>
 #include <node.hxx>
 #include <swwait.hxx>
-#include <swprtopt.hxx>
+#include <printdata.hxx>
 #include <frmatr.hxx>
 #include <view.hxx>         // fuer die aktuelle Sicht
 #include <edtwin.hxx>
@@ -206,23 +206,7 @@ Reader* SwDocShell::StartConvertFrom(SfxMedium& rMedium, SwReader** ppRdr,
             return 0;
         }
     }
-    if(rMedium.IsStorage())
-    {
-        //SvStorageRef aStor( rMedium.GetStorage() );
-        const SfxItemSet* pSet = rMedium.GetItemSet();
-        const SfxPoolItem *pItem;
-        if(pSet && SFX_ITEM_SET == pSet->GetItemState(SID_PASSWORD, TRUE, &pItem))
-        {
-            DBG_ASSERT(pItem->IsA( TYPE(SfxStringItem) ), "Fehler Parametertype");
-            comphelper::OStorageHelper::SetCommonStoragePassword( rMedium.GetStorage(), ((const SfxStringItem *)pItem)->GetValue() );
-        }
-        // Fuer's Dokument-Einfuegen noch die FF-Version, wenn's der
-        // eigene Filter ist.
-        ASSERT( /*pRead != ReadSw3 || */pRead != ReadXML || pFlt->GetVersion(),
-                "Am Filter ist keine FF-Version gesetzt" );
-        //if( (pRead == ReadSw3 || pRead == ReadXML) && pFlt->GetVersion() )
-        //    aStor->SetVersion( (long)pFlt->GetVersion() );
-    }
+
     // #i30171# set the UpdateDocMode at the SwDocShell
     SFX_ITEMSET_ARG( rMedium.GetItemSet(), pUpdateDocItem, SfxUInt16Item, SID_UPDATEDOCMODE, sal_False);
     nUpdateDocMode = pUpdateDocItem ? pUpdateDocItem->GetValue() : document::UpdateDocMode::NO_UPDATE;
@@ -892,7 +876,7 @@ void SwDocShell::Draw( OutputDevice* pDev, const JobSetup& rSetup,
     pDev->SetLineColor();
     pDev->SetBackground();
     BOOL bWeb = 0 != PTR_CAST(SwWebDocShell, this);
-    SwPrtOptions aOpts( aEmptyStr );
+    SwPrintData aOpts;
     ViewShell::PrtOle2( pDoc, SW_MOD()->GetUsrPref(bWeb), aOpts, pDev, aRect );
     pDev->Pop();
 
@@ -1107,6 +1091,23 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         case SID_ATTR_CHAR_FONTLIST:
         {
             rSet.Put( SvxFontListItem( pFontList, SID_ATTR_CHAR_FONTLIST ) );
+        }
+        break;
+        case SID_MAIL_PREPAREEXPORT:
+        {
+            //check if linked content or possibly hidden content is available
+            //pDoc->UpdateFlds( NULL, false );
+            sfx2::LinkManager& rLnkMgr = pDoc->GetLinkManager();
+            const ::sfx2::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+            sal_Bool bRet = sal_False;
+            if( rLnks.Count() )
+                bRet = sal_True;
+            else
+            {
+                //sections with hidden flag, hidden character attribute, hidden paragraph/text or conditional text fields
+                bRet = pDoc->HasInvisibleContent();
+            }
+            rSet.Put( SfxBoolItem( nWhich, bRet ) );
         }
         break;
 

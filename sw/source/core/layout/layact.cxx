@@ -1078,7 +1078,7 @@ static bool lcl_IsInvaLay( const SwFrm *pFrm, long nBottom )
 {
     if (
          !pFrm->IsValid() ||
-         (pFrm->IsCompletePaint() && pFrm->Frm().Top() < nBottom)
+         (pFrm->IsCompletePaint() && ( pFrm->Frm().Top() < nBottom ) )
        )
     {
         return true;
@@ -2434,7 +2434,7 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 #endif
                 bVis = ((SwCrsrShell*)pSh)->GetCharRect().IsOver(pSh->VisArea());
             }
-            aBools.Insert( bVis, aBools.Count() );
+            aBools.push_back( bVis );
             pSh = (ViewShell*)pSh->GetNext();
         } while ( pSh != pImp->GetShell() );
 

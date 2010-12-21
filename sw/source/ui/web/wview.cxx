@@ -98,7 +98,6 @@ SFX_IMPL_NAMED_VIEWFACTORY(SwWebView, "Default")
     SFX_VIEW_REGISTRATION(SwWebDocShell);
 }
 
-
 SFX_IMPL_INTERFACE( SwWebView, SwView, SW_RES(RID_WEBTOOLS_TOOLBOX) )
 {
     SFX_CHILDWINDOW_REGISTRATION(SfxTemplateDialogWrapper::GetChildWindowId());

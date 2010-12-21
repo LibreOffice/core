@@ -24,14 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FLYFRM_HXX
-#define _FLYFRM_HXX
+#ifndef SW_FLYFRM_HXX
+#define SW_FLYFRM_HXX
 
 #include "layfrm.hxx"
+<<<<<<< local
 #include <list>
+=======
+#include "frmfmt.hxx"
+>>>>>>> other
 
 class SwPageFrm;
-class SwFlyFrmFmt;
 class SwFmtFrmSize;
 struct SwCrsrMoveState;
 class SwBorderAttrs;
@@ -160,7 +163,8 @@ public:
     virtual ~SwFlyFrm();
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
-    virtual void Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual Size ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
@@ -285,6 +289,15 @@ public:
         @author OD
     */
     virtual bool IsFormatPossible() const;
+<<<<<<< local
     static void GetAnchoredObjects( std::list<SwAnchoredObject*>&, const SwFmt& rFmt );
+=======
+
+    // overwriting "SwFrmFmt *SwLayoutFrm::GetFmt" to provide the correct derived return type.
+    // (This is in order to skip on the otherwise necessary casting of the result to
+    // 'SwFlyFrmFmt *' after calls to this function. The casting is now done in this function.)
+    virtual const SwFlyFrmFmt *GetFmt() const;
+    virtual       SwFlyFrmFmt *GetFmt();
+>>>>>>> other
 };
 #endif

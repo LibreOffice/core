@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _FRAME_HXX
-#define _FRAME_HXX
+#ifndef SW_FRAME_HXX
+#define SW_FRAME_HXX
+
 #include <svl/svarray.hxx>
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
@@ -54,8 +55,14 @@ class SvxBrushItem;
 class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
+<<<<<<< local
 class SwPrtOptions;
 class SwFmt;
+=======
+class SwPrintData;
+
+// --> OD 2004-07-06 #i28701#
+>>>>>>> other
 class SwSortedObjs;
 class SwAnchoredObject;
 
@@ -821,7 +828,8 @@ public:
                                  SwCrsrMoveState* = 0 ) const;
     virtual BOOL    GetCharRect( SwRect &, const SwPosition&,
                                  SwCrsrMoveState* = 0 ) const;
-    virtual void    Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
 
     // der "kurze Dienstweg" zwischen den Frames und der Formatierung.
     // Wer den void* falsch Casted ist selbst schuld!

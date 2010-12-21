@@ -885,9 +885,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
                 // #i59539: Don't remove all redline
-                ::PaMCorrAbs( SwNodeIndex( *pDestNd ),
-                            SwNodeIndex( *pDestNd->EndOfSectionNode() ),
-                            aPos );
+                SwPaM const tmpPaM(*pDestNd, *pDestNd->EndOfSectionNode());
+                ::PaMCorrAbs(tmpPaM, aPos);
             }
 
             bRet = GetDoc()->InsCopyOfTbl( aDestPos, aBoxes, &pSrcNd->GetTable(),
@@ -902,7 +901,11 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 SwCntntNode* pCNd = GetDoc()->GetNodes().GoNext( &aNdIdx );
                 SwPosition aPos( aNdIdx, SwIndex( pCNd, 0 ));
                 // #i59539: Don't remove all redline
-                ::PaMCorrAbs( PCURCRSR->GetPoint()->nNode, aPos );
+                SwNode & rNode(PCURCRSR->GetPoint()->nNode.GetNode());
+                SwCntntNode *const pCntntNode( rNode.GetCntntNode() );
+                SwPaM const tmpPam(rNode, 0,
+                                   rNode, (pCntntNode) ? pCntntNode->Len() : 0);
+                ::PaMCorrAbs(tmpPam, aPos);
             }
 
             break;      // aus der "while"-Schleife heraus

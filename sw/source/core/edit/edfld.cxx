@@ -203,11 +203,50 @@ void SwEditShell::FieldToText( SwFieldType* pType )
 
     SwFieldHint aHint( pPaM );
     SwClientIter aIter( *pType );
+<<<<<<< local
     for ( SwClient* pClient = aIter.GoStart(); pClient; aIter++ )
     {
         pPaM->DeleteMark();
         pClient->SwClientNotifyCall( *pType, aHint );
      }
+=======
+    SwClient * pLast = aIter.GoStart();
+
+    if( pLast )     // konnte zum Anfang gesprungen werden ??
+        do {
+            pPaM->DeleteMark();
+            const SwFmtFld* pFmtFld = bDDEFld
+                        ? PTR_CAST( SwFmtFld, pLast )
+                        : (SwFmtFld*)pLast;
+
+            if( pFmtFld )
+            {
+                if( !pFmtFld->GetTxtFld() )
+                    continue;
+
+                // kann keine DDETabelle sein
+                const SwTxtNode& rTxtNode = pFmtFld->GetTxtFld()->GetTxtNode();
+                pPaM->GetPoint()->nNode = rTxtNode;
+                pPaM->GetPoint()->nContent.Assign( (SwTxtNode*)&rTxtNode,
+                                     *pFmtFld->GetTxtFld()->GetStart() );
+
+                // Feldinhalt durch Text ersetzen
+                String const aEntry( pFmtFld->GetFld()->ExpandField(true) );
+                pPaM->SetMark();
+                pPaM->Move( fnMoveForward );
+                GetDoc()->DeleteRange( *pPaM );
+                GetDoc()->InsertString( *pPaM, aEntry );
+            }
+            else if( bDDEFld )
+            {
+                // DDETabelle
+                SwDepend* pDep = (SwDepend*)pLast;
+                SwDDETable* pDDETbl = (SwDDETable*)pDep->GetToTell();
+                pDDETbl->NoDDETable();
+            }
+
+        } while( 0 != ( pLast = aIter++ ));
+>>>>>>> other
 
     Pop( FALSE );
     EndAllAction();
@@ -310,11 +349,11 @@ SwTxtFld* lcl_FindInputFld( SwDoc* pDoc, SwField& rFld )
         ((SwSetExpField&)rFld).GetInputFlag() ) )
     {
         const SfxPoolItem* pItem;
-        USHORT n, nMaxItems =
-            pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
+        sal_uInt32 n, nMaxItems =
+            pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
         for( n = 0; n < nMaxItems; ++n )
             if( 0 != (pItem =
-                      pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n ) )
+                      pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n ) )
                 && ((SwFmtFld*)pItem)->GetFld() == &rFld )
             {
                 pTFld = ((SwFmtFld*)pItem)->GetTxtFld();

@@ -71,7 +71,7 @@
 #include <docufld.hxx>      // PostItFld /-Type
 #include <shellres.hxx>
 #include <viewopt.hxx>
-#include <swprtopt.hxx>     // SwPrtOptions
+#include <printdata.hxx>    // SwPrintData
 #include <pagedesc.hxx>
 #include <poolfmt.hxx>      // fuer RES_POOLPAGE_JAKET
 #include <mdiexp.hxx>       // Ansteuern der Statusleiste
@@ -369,6 +369,7 @@ void ViewShell::CalcPagesForPrint( USHORT nMax )
 
 /******************************************************************************/
 
+<<<<<<< local
 SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
@@ -470,6 +471,8 @@ SwDoc * ViewShell::CreatePrtDoc( SfxObjectShellRef &rDocShellRef)
     return pPrtDoc;
 }
 
+=======
+>>>>>>> other
 SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 {
     ASSERT( this->IsA( TYPE(SwFEShell) ),"ViewShell::Prt for FEShell only");
@@ -582,7 +585,7 @@ SwDoc * ViewShell::FillPrtDoc( SwDoc *pPrtDoc, const SfxPrinter* pPrt)
 
 sal_Bool ViewShell::PrintOrPDFExport(
     OutputDevice *pOutDev,
-    const SwPrtOptions &rPrintData,
+    SwPrintData const& rPrintData,
     sal_Int32 nRenderer     /* the index in the vector of pages to be printed */ )
 {
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -608,12 +611,16 @@ sal_Bool ViewShell::PrintOrPDFExport(
     //!! (h?ngt mit OLE Objekten im Dokument zusammen.)
     SfxObjectShellRef aDocShellRef;
 
-    //! Note: Since for PDF export of (multi-)selection a temporary
-    //! document is created that contains only the selects parts,
-    //! and thus that document is to printed in whole the,
-    //! rPrintData.bPrintSelection parameter will be false.
-    BOOL bSelection = rPrintData.bPrintSelection;
+    // Print/PDF export for (multi-)selection has already generated a
+    // temporary document with the selected text.
+    // (see XRenderable implementation in unotxdoc.cxx)
+    // It is implemented this way because PDF export calls this Prt function
+    // once per page and we do not like to always have the temporary document
+    // to be created that often here.
+    pOutDevDoc = GetDoc();
+    pShell = new ViewShell( *this, 0, pOutDev );
 
+<<<<<<< local
     // PDF export for (multi-)selection has already generated a temporary document
     // with the selected text. (see XRenderable implementation in unotxdoc.cxx)
     // Thus we like to go in the 'else' part here in that case.
@@ -634,6 +641,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
         pShell = new ViewShell( *this, 0, pOutDev, VSHELLFLAG_SHARELAYOUT );
     }
 
+=======
+>>>>>>> other
     SdrView *pDrawView = pShell->GetDrawView();
     if (pDrawView)
     {
@@ -682,6 +691,8 @@ sal_Bool ViewShell::PrintOrPDFExport(
                 rPrintData.GetRenderData().m_pPostItShell : pShell;
         ::SetSwVisArea( pViewSh2, pStPage->Frm() );
 
+// FIXME disabled because rPrintData.aOffset is always (0,0)
+#if 0
         //  wenn wir einen Umschlag drucken wird ein Offset beachtet
         if( pStPage->GetFmt()->GetPoolFmtId() == RES_POOLPAGE_JAKET )
         {
@@ -691,6 +702,7 @@ sal_Bool ViewShell::PrintOrPDFExport(
             aTmp.SetOrigin( aNewOrigin );
             pOutDev->SetMapMode( aTmp );
         }
+#endif
 
         pShell->InitPrt( pOutDev );
 
@@ -704,12 +716,6 @@ sal_Bool ViewShell::PrintOrPDFExport(
     }  //Zus. Scope wg. CurShell!
 
     delete pShell;
-
-    if (bSelection )
-    {
-        if ( !pOutDevDoc->release() )
-            delete pOutDevDoc;
-    }
 
     // restore settings of OutputDevice (should be done always now since the
     // output device is now provided by a call from outside the Writer)
@@ -788,9 +794,9 @@ void ViewShell::PrtOle2( SwDoc *pDoc, const SwViewOption *pOpt, const SwPrintDat
 BOOL ViewShell::IsAnyFieldInDoc() const
 {
     const SfxPoolItem* pItem;
-    USHORT nMaxItems = pDoc->GetAttrPool().GetItemCount( RES_TXTATR_FIELD );
-    for( USHORT n = 0; n < nMaxItems; ++n )
-        if( 0 != (pItem = pDoc->GetAttrPool().GetItem( RES_TXTATR_FIELD, n )))
+    sal_uInt32 nMaxItems = pDoc->GetAttrPool().GetItemCount2( RES_TXTATR_FIELD );
+    for( sal_uInt32 n = 0; n < nMaxItems; ++n )
+        if( 0 != (pItem = pDoc->GetAttrPool().GetItem2( RES_TXTATR_FIELD, n )))
         {
             const SwFmtFld* pFmtFld = (SwFmtFld*)pItem;
             const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();

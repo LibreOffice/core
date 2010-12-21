@@ -24,8 +24,9 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _ROOTFRM_HXX
-#define _ROOTFRM_HXX
+#ifndef SW_ROOTFRM_HXX
+#define SW_ROOTFRM_HXX
+
 #include "layfrm.hxx"
 
 class SwCntntFrm;
@@ -202,7 +203,8 @@ public:
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0 ) const;
 
-    virtual void  Paint( const SwRect&, const SwPrtOptions *pPrintData = NULL ) const;
+    virtual void Paint( SwRect const&,
+                        SwPrintData const*const pPrintData = NULL ) const;
     virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #ifdef DBG_UTIL
@@ -370,5 +372,5 @@ inline  void SwRootFrm::SetVirtPageNum( const BOOL bOf) const
     ((SwRootFrm*)this)->bIsVirtPageNum = bOf;
 }
 
-#endif  //_ROOTFRM_HXX
+#endif  // SW_ROOTFRM_HXX
 

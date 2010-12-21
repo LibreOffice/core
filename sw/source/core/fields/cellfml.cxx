@@ -203,7 +203,7 @@ double SwTableBox::GetValue( SwTblCalcPara& rCalcPara ) const
                 break;
 
             default:
-                String const value(pFld->ExpandField(pDoc->IsClipBoard()));
+                String const value(pFld->ExpandField(true));
                 nRet = rCalcPara.rCalc.Calculate(value).GetDouble();
             }
         }

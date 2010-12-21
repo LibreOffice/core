@@ -2368,7 +2368,7 @@ void SwTableBoxFmt::Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew )
                     BOOL bNewIsTxtFmt = pNumFmtr->IsTextFormat( nNewFmt ) ||
                                         NUMBERFORMAT_TEXT == nNewFmt;
 
-                    if( !bNewIsTxtFmt && nOldFmt != nNewFmt || pNewFml )
+                    if( (!bNewIsTxtFmt && nOldFmt != nNewFmt) || pNewFml )
                     {
                         BOOL bChgTxt = TRUE;
                         double fVal = 0;

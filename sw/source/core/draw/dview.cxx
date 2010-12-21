@@ -32,6 +32,7 @@
 #include <editeng/protitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/fmmodel.hxx>
+#include <sot/exchange.hxx>
 
 #include "swtypes.hxx"
 #include "pagefrm.hxx"
@@ -991,6 +992,14 @@ void SwDrawView::CheckPossibilities()
                             bSzProtect |= ( embed::EmbedMisc::EMBED_NEVERRESIZE & xObj->getStatus( embed::Aspects::MSOLE_CONTENT ) ) ? TRUE : FALSE;
 
                             // <--
+
+                            // #i972: protect position if it is a Math object anchored 'as char' and baseline alignment is activated
+                            SwDoc* pDoc = Imp().GetShell()->GetDoc();
+                            const bool bProtectMathPos = SotExchange::IsMath( xObj->getClassID() )
+                                    && FLY_AS_CHAR == pFly->GetFmt()->GetAnchor().GetAnchorId()
+                                    && pDoc->get( IDocumentSettingAccess::MATH_BASELINE_ALIGNMENT );
+                            if (bProtectMathPos)
+                                bMoveProtect = true;
                         }
                     }
                 }
@@ -1101,3 +1110,18 @@ void SwDrawView::DeleteMarked()
         pTmpRoot->EndAllAction();   //swmod 080218
 }
 
+<<<<<<< local
+=======
+/********
+JP 02.10.98: sollte als Fix fuer 57153 gelten, hatte aber Nebenwirkungen,
+            wie Bug 57475
+const SdrMarkList& SwDrawView::GetMarkedObjectList() const
+{
+    FlushComeBackTimer();
+    return FmFormView::GetMarkedObjectList();
+}
+*************/
+
+
+
+>>>>>>> other

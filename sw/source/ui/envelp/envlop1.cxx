@@ -103,9 +103,9 @@ void SwEnvPreview::Paint(const Rectangle &)
     USHORT nPageW = (USHORT) Max(rItem.lWidth, rItem.lHeight),
            nPageH = (USHORT) Min(rItem.lWidth, rItem.lHeight);
 
-    float fx = static_cast< float >(GetOutputSizePixel().Width () / nPageW),
-          fy = static_cast< float >(GetOutputSizePixel().Height() / nPageH),
-          f  = static_cast< float >(0.8 * ( fx < fy ? fx : fy ));
+    float fx = (float)GetOutputSizePixel().Width () / (float)nPageW,
+          fy = (float)GetOutputSizePixel().Height() / (float)nPageH,
+          f  = 0.8f * ( fx < fy ? fx : fy );
 
     Color aBack = rSettings.GetWindowColor( );
     Color aFront = SwViewOption::GetFontColor();
