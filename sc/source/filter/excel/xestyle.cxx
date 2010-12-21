@@ -711,7 +711,7 @@ sal_uInt32 XclExpPaletteImpl::GetNearestListColor( sal_uInt32 nIndex ) const
     if (nIndex >= mxColorList->size())
         return 0;
     XclListColor* pEntry = &(mxColorList->at( nIndex ));
-    return pEntry ? GetNearestListColor( pEntry->GetColor(), nIndex ) : 0;
+    return GetNearestListColor( pEntry->GetColor(), nIndex );
 }
 
 sal_Int32 XclExpPaletteImpl::GetNearestPaletteColor(
