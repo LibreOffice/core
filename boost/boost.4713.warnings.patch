@@ -274,3 +274,13 @@
          }           
                  
      public: // algorithms
+--- misc/build/boost_1_39_0/boost/ptr_container/ptr_map_adapter.hpp
++++ misc/build/boost_1_39_0/boost/ptr_container/ptr_map_adapter.hpp
+@@ -477,6 +477,7 @@
+         }
+                 
+         ptr_map_adapter( const ptr_map_adapter& r )
++          : base_type()
+         {
+             map_basic_clone_and_insert( r.begin(), r.end() );      
+         }
