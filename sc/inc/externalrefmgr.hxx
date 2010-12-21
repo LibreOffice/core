@@ -38,6 +38,7 @@
 #include "svl/zforlist.hxx"
 #include "scmatrix.hxx"
 #include "rangelst.hxx"
+#include "formula/token.hxx"
 
 #include <hash_map>
 #include <hash_set>
@@ -94,8 +95,8 @@ private:
 class ScExternalRefCache
 {
 public:
-    typedef ::boost::shared_ptr< formula::FormulaToken>     TokenRef;
-    typedef ::boost::shared_ptr<ScTokenArray>               TokenArrayRef;
+    typedef ::formula::FormulaTokenRef          TokenRef;
+    typedef ::boost::shared_ptr<ScTokenArray>   TokenArrayRef;
 
     struct TableName
     {
