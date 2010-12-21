@@ -236,7 +236,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
             pSubTotalFuncs[nSub] = r.pSubTotalFuncs[nSub];
     }
 
-    for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; i++)
+    for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; ++i)
     {
         const String& rName =  (*i)->GetName();
         ScDPSaveMember* pNew = new ScDPSaveMember( **i );
@@ -271,7 +271,7 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
 
 ScDPSaveDimension::~ScDPSaveDimension()
 {
-    for (MemberHash::const_iterator i=maMemberHash.begin(); i != maMemberHash.end() ; i++)
+    for (MemberHash::const_iterator i=maMemberHash.begin(); i != maMemberHash.end() ; ++i)
         delete i->second;
     delete pReferenceValue;
     delete pSortInfo;
@@ -687,7 +687,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                         if ( !pSortInfo || pSortInfo->Mode == sheet::DataPilotFieldSortMode::MANUAL )
                             nPosition = 0;
 
-                        for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; i++)
+                        for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; ++i)
                         {
                             ScDPSaveMember* pMember = *i;
                             if (!pMember->GetIsVisible())
@@ -1451,7 +1451,7 @@ void ScDPSaveDimension::Refresh( const com::sun::star::uno::Reference<
             if ( pCache->GetIdByItemData( nSrcDim, aMemberName ) == -1 )
                 i = maMemberList.erase( i );
             else
-                i++;
+                ++i;
         }
     }
 }

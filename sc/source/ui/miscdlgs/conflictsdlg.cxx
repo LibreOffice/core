@@ -132,7 +132,7 @@ void ScConflictsListHelper::Transform_Impl( ScChangeActionList& rActionList, ScC
         if ( aItrMap != pMergeMap->end() )
         {
             *aItr = aItrMap->second;
-            aItr++;
+            ++aItr;
         }
         else
         {

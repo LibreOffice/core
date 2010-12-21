@@ -1131,7 +1131,7 @@ void XclExpPTField::SetPropertiesFromDim( const ScDPSaveDimension& rSaveDim )
 
     // item properties
     const ScDPSaveDimension::MemberList &rMembers = rSaveDim.GetMembers();
-    for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; i++)
+    for (ScDPSaveDimension::MemberList::const_iterator i=rMembers.begin(); i != rMembers.end() ; ++i)
         if( XclExpPTItem* pItem = GetItemAcc( (*i)->GetName() ) )
             pItem->SetPropertiesFromMember( **i );
 }

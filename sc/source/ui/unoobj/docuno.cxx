@@ -1256,7 +1256,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
                 //  external link, use as-is
                 pPDFData->SetLinkURL( aIter->nLinkId, aBookmark );
             }
-            aIter++;
+            ++aIter;
         }
         rBookmarks.clear();
     }

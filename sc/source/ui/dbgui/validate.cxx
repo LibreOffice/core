@@ -570,7 +570,7 @@ void ScTPValidationValue::TidyListBoxes()
 
         if ( pWnd )
         {
-            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); i++ )
+            for ( std::list<Window*>::iterator i = alstOrder.begin(); i!=alstOrder.end(); ++i )
             {
                 Window *pParent = (*i)->GetParent();
                 (*i)->SetParent( pWnd );
