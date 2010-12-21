@@ -85,7 +85,7 @@ namespace
     {
         //Taking the single byte legacy encodings, fill in all possible values
         std::vector<sal_Char> aAllChars(255);
-        for (int i = 1; i <= 256; ++i)
+        for (int i = 1; i <= 255; ++i)
             aAllChars[i-1] = i;
 
         //Some slots are unused, so don't map to private, just set them to 'X'
