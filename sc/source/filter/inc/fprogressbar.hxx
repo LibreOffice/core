@@ -155,7 +155,7 @@ private:
     void                Init( SfxObjectShell* pDocShell );
 
     /** Returns the segment specified by list index. */
-    ScfProgressSegment* GetSegment( sal_Int32 nSegment ) const;
+    ScfProgressSegment* GetSegment( sal_Int32 nSegment );
     /** Activates progress bar and sets current segment. */
     void                SetCurrSegment( ScfProgressSegment* pSegment );
     /** Increases mnTotalPos and calls the system progress bar. */

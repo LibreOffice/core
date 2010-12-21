@@ -80,12 +80,12 @@ void ScfProgressBar::Init( SfxObjectShell* pDocShell )
     mbInProgress = false;
 }
 
-ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment ) const
+ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegment )
 {
     if( nSegment < 0 )
         return 0;
     DBG_ASSERT( maSegments.at( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
-    return const_cast<ScfProgressBar::ScfProgressSegment*>(&(maSegments.at( nSegment )));
+    return &(maSegments.at( nSegment ));
 }
 
 void ScfProgressBar::SetCurrSegment( ScfProgressSegment* pSegment )
