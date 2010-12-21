@@ -354,7 +354,6 @@ public:
 
     SvStream&       operator>>( sal_uInt16& rUInt16 );
     SvStream&       operator>>( sal_uInt32& rUInt32 );
-    SvStream&       operator>>( sal_uInt64& rUInt64 );
     SvStream&       operator>>( long& rLong );
     SvStream&       operator>>( short& rShort );
     SvStream&       operator>>( int& rInt );
@@ -373,7 +372,6 @@ public:
 
     SvStream&       operator<<( sal_uInt16 nUInt16 );
     SvStream&       operator<<( sal_uInt32 nUInt32 );
-    SvStream&       operator<<( sal_uInt64 nuInt64 );
     SvStream&       operator<<( long nLong );
     SvStream&       operator<<( short nShort );
     SvStream&       operator<<( int nInt );
