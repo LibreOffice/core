@@ -209,14 +209,14 @@ void ScViewFunc::DetectiveMarkPred()
     else
         aRanges.Append(aCurPos);
 
-    vector<ScSharedTokenRef> aRefTokens;
+    vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllPreds(aRanges, aRefTokens);
 
     if (aRefTokens.empty())
         // No precedents found.  Nothing to do.
         return;
 
-    ScSharedTokenRef p = aRefTokens.front();
+    ScTokenRef p = aRefTokens.front();
     if (ScRefTokenHelper::isExternalRef(p))
     {
         // This is external.  Open the external document if available, and
@@ -274,7 +274,7 @@ void ScViewFunc::DetectiveMarkSucc()
     else
         aRanges.Append(aCurPos);
 
-    vector<ScSharedTokenRef> aRefTokens;
+    vector<ScTokenRef> aRefTokens;
     pDocSh->GetDocFunc().DetectiveCollectAllSuccs(aRanges, aRefTokens);
 
     if (aRefTokens.empty())

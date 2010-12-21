@@ -93,7 +93,7 @@ void ScMyShapeResizer::CreateChartListener(ScDocument* pDoc,
     if (!pCollection)
         return;
 
-    auto_ptr< vector<ScSharedTokenRef> > pRefTokens(new vector<ScSharedTokenRef>);
+    auto_ptr< vector<ScTokenRef> > pRefTokens(new vector<ScTokenRef>);
     ScRefTokenHelper::compileRangeRepresentation(*pRefTokens, aRangeStr, pDoc);
     if (!pRefTokens->empty())
     {

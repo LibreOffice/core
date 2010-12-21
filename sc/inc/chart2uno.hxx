@@ -320,7 +320,7 @@ class ScChart2DataSequence : public
 public:
     explicit ScChart2DataSequence( ScDocument* pDoc,
             const com::sun::star::uno::Reference< com::sun::star::chart2::data::XDataProvider >& xDP,
-            ::std::vector<ScSharedTokenRef>* pTokens, bool bIncludeHiddenCells );
+            ::std::vector<ScTokenRef>* pTokens, bool bIncludeHiddenCells );
 
     virtual ~ScChart2DataSequence();
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
@@ -476,7 +476,7 @@ private:
 
     void RebuildDataCache();
 
-    sal_Int32 FillCacheFromExternalRef(const ScSharedTokenRef& pToken);
+    sal_Int32 FillCacheFromExternalRef(const ScTokenRef& pToken);
 
     void UpdateTokensFromRanges(const ScRangeList& rRanges);
 
@@ -525,7 +525,7 @@ private:
     sal_Bool                    m_bIncludeHiddenCells;
 
     // internals
-    typedef ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  TokenListPtr;
+    typedef ::std::auto_ptr< ::std::vector<ScTokenRef> >  TokenListPtr;
     typedef ::std::auto_ptr< ::std::vector<sal_uInt32> >        RangeIndexMapPtr;
     typedef ::std::auto_ptr<ExternalRefListener>                ExtRefListenerPtr;
 

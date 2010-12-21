@@ -1428,7 +1428,7 @@ BOOL ScDetectiveFunc::MarkInvalid(BOOL& rOverflow)
 }
 
 void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  vector<ScSharedTokenRef>& rRefTokens)
+                                  vector<ScTokenRef>& rRefTokens)
 {
     ScCellIterator aCellIter(pDoc, nCol1, nRow1, nTab, nCol2, nRow2, nTab);
     for (ScBaseCell* pCell = aCellIter.GetFirst(); pCell; pCell = aCellIter.GetNext())
@@ -1440,16 +1440,16 @@ void ScDetectiveFunc::GetAllPreds(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         ScDetectiveRefIter aRefIter(pFCell);
         for (ScToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
-            ScSharedTokenRef pRef(static_cast<ScToken*>(p->Clone()));
+            ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
             ScRefTokenHelper::join(rRefTokens, pRef);
         }
     }
 }
 
 void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
-                                  vector<ScSharedTokenRef>& rRefTokens)
+                                  vector<ScTokenRef>& rRefTokens)
 {
-    vector<ScSharedTokenRef> aSrcRange;
+    vector<ScTokenRef> aSrcRange;
     aSrcRange.push_back(
         ScRefTokenHelper::createRefToken(ScRange(nCol1, nRow1, nTab, nCol2, nRow2, nTab)));
 
@@ -1463,7 +1463,7 @@ void ScDetectiveFunc::GetAllSuccs(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
         ScDetectiveRefIter aRefIter(pFCell);
         for (ScToken* p = aRefIter.GetNextRefToken(); p; p = aRefIter.GetNextRefToken())
         {
-            ScSharedTokenRef pRef(static_cast<ScToken*>(p->Clone()));
+            ScTokenRef pRef(static_cast<ScToken*>(p->Clone()));
             if (ScRefTokenHelper::intersects(aSrcRange, pRef))
             {
                 pRef = ScRefTokenHelper::createRefToken(aCellIter.GetPos());

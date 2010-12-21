@@ -80,8 +80,8 @@ public:
     BOOL            DetectiveMarkInvalid(SCTAB nTab);
     BOOL            DetectiveDelAll(SCTAB nTab);
     BOOL            DetectiveRefresh(BOOL bAutomatic = FALSE);
-    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
-    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScSharedTokenRef>& rRefTokens);
+    void            DetectiveCollectAllPreds(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
+    void            DetectiveCollectAllSuccs(const ScRangeList& rSrcRanges, ::std::vector<ScTokenRef>& rRefTokens);
 
     BOOL            DeleteContents( const ScMarkData& rMark, USHORT nFlags,
                                     BOOL bRecord, BOOL bApi );

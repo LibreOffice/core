@@ -430,7 +430,7 @@ public:
     XFormattedStringSeq CreateStringSequence( const XclImpChRoot& rRoot,
                             sal_uInt16 nLeadFontIdx, const Color& rLeadFontColor ) const;
 
-    void                FillSourceLink(::std::vector<ScSharedTokenRef>& rTokens) const;
+    void                FillSourceLink(::std::vector<ScTokenRef>& rTokens) const;
 
 private:
     XclChSourceLink     maData;             /// Contents of the CHSOURCELINK record.
@@ -843,7 +843,7 @@ public:
     /** Creates a data series object with initialized source links. */
     XDataSeriesRef      CreateDataSeries() const;
 
-    void                FillAllSourceLinks(::std::vector<ScSharedTokenRef>& rTokens) const;
+    void                FillAllSourceLinks(::std::vector<ScTokenRef>& rTokens) const;
 
 private:
     /** Reads a CHSOURCELINK record. */

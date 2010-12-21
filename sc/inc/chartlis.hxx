@@ -72,7 +72,7 @@ public:
 private:
 
     ::std::auto_ptr<ExternalRefListener>                mpExtRefListener;
-    ::std::auto_ptr< ::std::vector<ScSharedTokenRef> >  mpTokens;
+    ::std::auto_ptr< ::std::vector<ScTokenRef> >  mpTokens;
 
     ScChartUnoData* pUnoData;
     ScDocument*     pDoc;
@@ -89,7 +89,7 @@ public:
                     ScChartListener( const String& rName, ScDocument* pDoc,
                                      const ScRangeListRef& rRangeListRef );
                     ScChartListener( const String& rName, ScDocument* pDoc,
-                                     ::std::vector<ScSharedTokenRef>* pTokens );
+                                     ::std::vector<ScTokenRef>* pTokens );
                     ScChartListener( const ScChartListener& );
     virtual         ~ScChartListener();
     virtual ScDataObject*   Clone() const;

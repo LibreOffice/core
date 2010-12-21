@@ -839,7 +839,7 @@ Sequence< Reference< XFormattedString > > XclImpChSourceLink::CreateStringSequen
     return ScfApiHelper::VectorToSequence( aStringVec );
 }
 
-void XclImpChSourceLink::FillSourceLink( ::std::vector< ScSharedTokenRef >& rTokens ) const
+void XclImpChSourceLink::FillSourceLink( ::std::vector< ScTokenRef >& rTokens ) const
 {
     if( !mxTokenArray )
         // no links to fill.
@@ -848,7 +848,7 @@ void XclImpChSourceLink::FillSourceLink( ::std::vector< ScSharedTokenRef >& rTok
     mxTokenArray->Reset();
     for (FormulaToken* p = mxTokenArray->First(); p; p = mxTokenArray->Next())
     {
-        ScSharedTokenRef pToken(static_cast<ScToken*>(p->Clone()));
+        ScTokenRef pToken(static_cast<ScToken*>(p->Clone()));
         if (ScRefTokenHelper::isRef(pToken))
             // This is a reference token.  Store it.
             ScRefTokenHelper::join(rTokens, pToken);
@@ -1959,7 +1959,7 @@ Reference< XDataSeries > XclImpChSeries::CreateDataSeries() const
     return xDataSeries;
 }
 
-void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScSharedTokenRef >& rTokens ) const
+void XclImpChSeries::FillAllSourceLinks( ::std::vector< ScTokenRef >& rTokens ) const
 {
     if( mxValueLink )
         mxValueLink->FillSourceLink( rTokens );
@@ -3834,7 +3834,7 @@ void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc,
     ScDocument& rDoc = GetRoot().GetDoc();
     if( ScChartListenerCollection* pChartCollection = rDoc.GetChartListenerCollection() )
     {
-        ::std::auto_ptr< ::std::vector< ScSharedTokenRef > > xRefTokens( new ::std::vector< ScSharedTokenRef > );
+        ::std::auto_ptr< ::std::vector< ScTokenRef > > xRefTokens( new ::std::vector< ScTokenRef > );
         for( XclImpChSeriesVec::const_iterator aIt = maSeries.begin(), aEnd = maSeries.end(); aIt != aEnd; ++aIt )
             (*aIt)->FillAllSourceLinks( *xRefTokens );
         if( !xRefTokens->empty() )

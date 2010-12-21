@@ -50,16 +50,6 @@ class ScToken;
 typedef ::std::vector< ScComplexRefData > ScRefList;
 typedef ::boost::intrusive_ptr<ScToken> ScTokenRef;
 
-/**
- * Another ref-counted token type using shared_ptr.  <b>Be extra careful
- * not to mix use of this smart pointer type with ScTokenRef</b>, since
- * mixing them might cause a premature object deletion because the same
- * object may be ref-counted by two different smart pointer wrappers.
- *
- * You have been warned.
- */
-typedef ::boost::shared_ptr< ScToken > ScSharedTokenRef;
-
 class SC_DLLPUBLIC ScToken : public formula::FormulaToken
 {
 private:

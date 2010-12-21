@@ -129,7 +129,7 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     StrData( rName ),
     SvtListener(),
     mpExtRefListener(NULL),
-    mpTokens(new vector<ScSharedTokenRef>),
+    mpTokens(new vector<ScTokenRef>),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( FALSE ),
@@ -144,7 +144,7 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     StrData( rName ),
     SvtListener(),
     mpExtRefListener(NULL),
-    mpTokens(new vector<ScSharedTokenRef>),
+    mpTokens(new vector<ScTokenRef>),
     pUnoData( NULL ),
     pDoc( pDocP ),
     bUsed( FALSE ),
@@ -154,7 +154,7 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
     ScRefTokenHelper::getTokensFromRangeList(*mpTokens, *rRangeList);
 }
 
-ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector<ScSharedTokenRef>* pTokens ) :
+ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP, vector<ScTokenRef>* pTokens ) :
     StrData( rName ),
     SvtListener(),
     mpExtRefListener(NULL),
@@ -171,7 +171,7 @@ ScChartListener::ScChartListener( const ScChartListener& r ) :
     StrData( r ),
     SvtListener(),
     mpExtRefListener(NULL),
-    mpTokens(new vector<ScSharedTokenRef>(*r.mpTokens)),
+    mpTokens(new vector<ScTokenRef>(*r.mpTokens)),
     pUnoData( NULL ),
     pDoc( r.pDoc ),
     bUsed( FALSE ),
@@ -284,27 +284,27 @@ ScRangeListRef ScChartListener::GetRangeList() const
 
 void ScChartListener::SetRangeList( const ScRangeListRef& rNew )
 {
-    vector<ScSharedTokenRef> aTokens;
+    vector<ScTokenRef> aTokens;
     ScRefTokenHelper::getTokensFromRangeList(aTokens, *rNew);
     mpTokens->swap(aTokens);
 }
 
 void ScChartListener::SetRangeList( const ScRange& rRange )
 {
-    ScSharedTokenRef pToken;
+    ScTokenRef pToken;
     ScRefTokenHelper::getTokenFromRange(pToken, rRange);
     mpTokens->push_back(pToken);
 }
 
 namespace {
 
-class StartEndListening : public unary_function<ScSharedTokenRef, void>
+class StartEndListening : public unary_function<ScTokenRef, void>
 {
 public:
     StartEndListening(ScDocument* pDoc, ScChartListener& rParent, bool bStart) :
         mpDoc(pDoc), mrParent(rParent), mbStart(bStart) {}
 
-    void operator() (const ScSharedTokenRef& pToken)
+    void operator() (const ScTokenRef& pToken)
     {
         if (!ScRefTokenHelper::isRef(pToken))
             return;
@@ -404,7 +404,7 @@ void ScChartListener::UpdateScheduledSeriesRanges()
 
 void ScChartListener::UpdateChartIntersecting( const ScRange& rRange )
 {
-    ScSharedTokenRef pToken;
+    ScTokenRef pToken;
     ScRefTokenHelper::getTokenFromRange(pToken, rRange);
 
     if (ScRefTokenHelper::intersects(*mpTokens, pToken))
