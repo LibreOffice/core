@@ -84,7 +84,6 @@ ScfProgressBar::ScfProgressSegment* ScfProgressBar::GetSegment( sal_Int32 nSegme
 {
     if( nSegment < 0 )
         return 0;
-    DBG_ASSERT( maSegments.at( nSegment ), "ScfProgressBar::GetSegment - invalid segment index" );
     return &(maSegments.at( nSegment ));
 }
 

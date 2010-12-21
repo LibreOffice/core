@@ -408,7 +408,6 @@ void XclExpPaletteImpl::Finalize()
                 nFound = nIndex;
         // replace default color with list color
         sal_uInt32 nNearest = aNearestVec[ nFound ].mnPalIndex;
-        DBG_ASSERT( mxColorList->at( nFound ), "XclExpPaletteImpl::Finalize - missing a color" );
         DBG_ASSERT( nNearest < maPalette.size(), "XclExpPaletteImpl::Finalize - algorithm error" );
         maPalette[ nNearest ].SetColor( mxColorList->at( nFound ).GetColor() );
         aRemapVec[ nFound ].SetIndex( nNearest );

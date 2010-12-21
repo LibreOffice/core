@@ -1318,7 +1318,6 @@ void XclExpFmlaCompImpl::ProcessMatrix( const XclExpScToken& rTokData )
             for( SCSIZE nScCol = 0; nScCol < nScCols; ++nScCol )
             {
                 ScMatrixValue nMatVal = pMatrix->Get( nScCol, nScRow );
-                DBG_ASSERT( nMatVal, "XclExpFmlaCompImpl::ProcessMatrix - missing matrix value" );
                 if( ScMatrix::IsValueType( nMatVal.nType ) )    // value, boolean, or error
                 {
                     if( ScMatrix::IsBooleanType( nMatVal.nType ) )
