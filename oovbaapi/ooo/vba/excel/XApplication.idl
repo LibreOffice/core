@@ -73,10 +73,10 @@ interface XApplication
     string LibraryPath() raises(com::sun::star::script::BasicErrorException);
     string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
     string PathSeparator() raises(com::sun::star::script::BasicErrorException);
-    //any CommandBars( [in] any aIndex );
-    any Workbooks( [in] any aIndex );
-    any Worksheets( [in] any aIndex );
-    any Windows( [in] any aIndex );
+    //any CommandBars( [in] any Index );
+    any Workbooks( [in] any Index );
+    any Worksheets( [in] any Index );
+    any Windows( [in] any Index );
     any WorksheetFunction();
     any Evaluate( [in] string Name );
     any Dialogs( [in] any DialogIndex );
@@ -92,7 +92,7 @@ interface XApplication
         raises(com::sun::star::script::BasicErrorException);
     void Volatile([in] any Volatile);
     void DoEvents();
-    any Caller( [in] any aIndex );
+    any Caller( [in] any Index );
 };
 
 }; }; };

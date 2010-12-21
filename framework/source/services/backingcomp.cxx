@@ -37,7 +37,7 @@
 #include <threadhelp/readguard.hxx>
 #include <threadhelp/writeguard.hxx>
 #include <classes/droptargetlistener.hxx>
-#include <helper/acceleratorinfo.hxx>
+#include <framework/acceleratorinfo.hxx>
 #include <targets.h>
 #include <properties.h>
 #include <services.h>

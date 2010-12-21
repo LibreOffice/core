@@ -33,7 +33,7 @@
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 
-#include <mieclip.hxx>
+#include <sfx2/mieclip.hxx>
 #include <sfx2/sfxuno.hxx>
 
 MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()

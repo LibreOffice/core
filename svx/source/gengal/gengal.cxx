@@ -67,7 +67,7 @@
 #include <osl/process.h>
 #include <rtl/bootstrap.hxx>
 
-#include <galtheme.hxx>
+#include <svx/galtheme.hxx>
 #include <svx/gallery1.hxx>
 
 using namespace ::vos;

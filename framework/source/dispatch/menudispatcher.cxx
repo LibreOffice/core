@@ -33,8 +33,8 @@
 //_________________________________________________________________________________________________________________
 #include <dispatch/menudispatcher.hxx>
 #include <general.h>
-#include <xml/menuconfiguration.hxx>
-#include <classes/addonmenu.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/addonmenu.hxx>
 #include <services.h>
 
 //_________________________________________________________________________________________________________________

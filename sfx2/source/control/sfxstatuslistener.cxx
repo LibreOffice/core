@@ -50,7 +50,7 @@
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/msgpool.hxx>
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::cppu;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;

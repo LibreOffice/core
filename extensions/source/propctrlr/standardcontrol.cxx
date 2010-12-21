@@ -47,7 +47,7 @@
 #include <svx/svxids.hrc>
 #endif
 #include <svx/drawitem.hxx>
-#include <xtable.hxx>
+#include <svx/xtable.hxx>
 //==================================================================
 #include <vcl/floatwin.hxx>
 #include <svtools/svmedit.hxx>

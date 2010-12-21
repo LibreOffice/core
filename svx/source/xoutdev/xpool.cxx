@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/xtable.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpool.hxx>
 #include <svx/svdattr.hxx>
 #include <svx/svxids.hrc>

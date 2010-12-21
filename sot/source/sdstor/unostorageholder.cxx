@@ -36,7 +36,7 @@
 #include <comphelper/processfactory.hxx>
 
 #include "unostorageholder.hxx"
-#include <storinfo.hxx>
+#include <sot/storinfo.hxx>
 
 
 using namespace ::com::sun::star;

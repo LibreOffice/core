@@ -28,8 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "txencbox.hxx"
-#include "txenctab.hxx"
+#include "svx/txencbox.hxx"
+#include "svx/txenctab.hxx"
 #include <svx/dialogs.hrc>
 #include "svx/dbcharsethelper.hxx"
 #include <vcl/svapp.hxx>

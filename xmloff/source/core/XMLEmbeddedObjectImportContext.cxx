@@ -42,11 +42,11 @@
 #include <sot/clsids.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 #include <xmloff/attrlist.hxx>
-#include "XMLFilterServiceNames.h"
+#include "xmloff/XMLFilterServiceNames.h"
 #include "XMLEmbeddedObjectImportContext.hxx"
 
 using ::rtl::OUString;

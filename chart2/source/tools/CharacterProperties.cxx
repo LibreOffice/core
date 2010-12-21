@@ -561,7 +561,6 @@ bool CharacterProperties::IsCharacterPropertyHandle( sal_Int32 nHandle )
              nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
 }
 
-// static
 awt::FontDescriptor CharacterProperties::createFontDescriptorFromPropertySet(
     const uno::Reference< beans::XMultiPropertySet > & xMultiPropSet )
 {

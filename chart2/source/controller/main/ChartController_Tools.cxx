@@ -297,6 +297,7 @@ void ChartController::executeDispatch_ScaleText()
 
 void ChartController::executeDispatch_Paste()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if( m_pChartWindow )
     {
         Graphic aGraphic;
@@ -581,7 +582,6 @@ void ChartController::executeDispatch_Cut()
     executeDispatch_Delete();
 }
 
-//static
 bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
 {
     ObjectIdentifier aSelOID( rSelection );

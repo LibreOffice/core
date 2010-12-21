@@ -37,7 +37,7 @@
 #include <svtools/imappoly.hxx>
 #include <svl/urlbmk.hxx>
 
-#include <xoutbmp.hxx>
+#include <svx/xoutbmp.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>

@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "fontlb.hxx"
+#include "svx/fontlb.hxx"
 #include <vcl/svapp.hxx>
 
 // ============================================================================

@@ -29,7 +29,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include "querytemplate.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "doc.hrc"
 #include "helpid.hrc"
 #include <vcl/svapp.hxx>

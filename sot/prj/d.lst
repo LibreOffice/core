@@ -1,20 +1,7 @@
 mkdir: %_DEST%\inc%_EXT%\sot
-..\inc\clsids.hxx %_DEST%\inc%_EXT%\sot\clsids.hxx
-..\inc\sot\object.hxx %_DEST%\inc%_EXT%\sot\object.hxx
-..\inc\sot\factory.hxx %_DEST%\inc%_EXT%\sot\factory.hxx
-..\inc\sot\sotdata.hxx %_DEST%\inc%_EXT%\sot\sotdata.hxx
-..\inc\agg.hxx %_DEST%\inc%_EXT%\sot\agg.hxx
-..\inc\sot\storage.hxx %_DEST%\inc%_EXT%\sot\storage.hxx
-..\inc\storinfo.hxx %_DEST%\inc%_EXT%\sot\storinfo.hxx
-..\inc\sot\sotref.hxx %_DEST%\inc%_EXT%\sot\sotref.hxx
-..\inc\sot\exchange.hxx %_DEST%\inc%_EXT%\sot\exchange.hxx
-..\inc\sot\formats.hxx %_DEST%\inc%_EXT%\sot\formats.hxx
-..\inc\absdev.hxx %_DEST%\inc%_EXT%\sot\absdev.hxx
-..\inc\stg.hxx %_DEST%\inc%_EXT%\sot\stg.hxx
-..\inc\filelist.hxx %_DEST%\inc%_EXT%\sot\filelist.hxx
-..\inc\sot\sotdllapi.h %_DEST%\inc%_EXT%\sot\sotdllapi.h
+..\inc\sot/*.hxx %_DEST%\inc%_EXT%\sot\*.hxx
+..\inc\sot\*.h %_DEST%\inc%_EXT%\sot\*.h
 
-..\%__SRC%\inc\sdintern.hxx %_DEST%\inc%_EXT%\sot\sdintern.hxx
 ..\%__SRC%\lib\sot.lib %_DEST%\lib%_EXT%\sot.lib
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%

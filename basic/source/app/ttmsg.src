@@ -24,7 +24,7 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#include "ttmsg.hrc"
+#include "basic/ttmsg.hrc"
 
 
 // Hier sind die Messages aus dem Verzeichnis /basic/source/testtool enhalten

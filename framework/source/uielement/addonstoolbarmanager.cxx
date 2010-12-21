@@ -43,13 +43,13 @@
 #endif
 #include <threadhelp/resetableguard.hxx>
 #include "services.h"
-#include <helper/imageproducer.hxx>
-#include <classes/sfxhelperfunctions.hxx>
+#include <framework/imageproducer.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 #include <classes/fwkresid.hxx>
 #ifndef __FRAMEWORK_CLASES_RESOURCE_HRC_
 #include <classes/resource.hrc>
 #endif
-#include <classes/addonsoptions.hxx>
+#include <framework/addonsoptions.hxx>
 #ifndef __FRAMEWORK_UIELEMENT_COMBOBOXTOOLBARCONTROLLER_HXX
 #include <uielement/comboboxtoolbarcontroller.hxx>
 #endif

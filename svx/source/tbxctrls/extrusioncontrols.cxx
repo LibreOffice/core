@@ -39,6 +39,7 @@
 
 #include <vos/mutex.hxx>
 
+#include <svtools/toolbarmenu.hxx>
 #include <vcl/toolbox.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/dispatch.hxx>
@@ -65,7 +66,7 @@
 ////////////
 
 using ::rtl::OUString;
-using ::svtools::ToolbarMenu;
+//using ::svtools::ToolbarMenu;
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

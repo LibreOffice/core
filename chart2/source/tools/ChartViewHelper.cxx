@@ -45,7 +45,6 @@ namespace chart
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
 
-//static
 void ChartViewHelper::setViewToDirtyState( const uno::Reference< frame::XModel >& xChartModel )
 {
     try

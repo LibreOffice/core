@@ -1114,6 +1114,9 @@ public:
     */
     void doLazyDelete();
 
+    // let the window intercept the KeyDown messages of the system children
+    void InterceptChildWindowKeyDown( sal_Bool bIntercept );
+
     virtual XubString GetSurroundingText() const;
     virtual Selection GetSurroundingTextSelection() const;
 

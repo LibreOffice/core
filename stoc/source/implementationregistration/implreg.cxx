@@ -1153,36 +1153,24 @@ static void prepareRegistry(
         {
             // update entries in SERVICES section
             Sequence< Reference < XRegistryKey > > serviceKeys = xKey->openKeys();
-            OUString implName;
+            const Reference < XRegistryKey > * pServiceKeys = serviceKeys.getConstArray();
 
-            if (serviceKeys.getLength())
+            OUString implName = OUString(xImplKey->getKeyName().getStr() + 1);
+            sal_Int32 firstDot = implName.indexOf('/');
+
+            if (firstDot >= 0)
+                implName = implName.copy(firstDot + 1);
+
+            sal_Int32 offset = xKey->getKeyName().getLength() + 1;
+
+            for (sal_Int32 j = 0; j < serviceKeys.getLength(); j++)
             {
-                const Reference < XRegistryKey > * pServiceKeys = serviceKeys.getConstArray();
+                OUString serviceName = pServiceKeys[j]->getKeyName().copy(offset);
 
-                implName = OUString(xImplKey->getKeyName().getStr() + 1);
-                sal_Int32 firstDot = implName.indexOf('/');
-
-                if (firstDot >= 0)
-                    implName = implName.copy(firstDot + 1);
-
-                sal_Int32 offset = xKey->getKeyName().getLength() + 1;
-
-                for (sal_Int32 j = 0; j < serviceKeys.getLength(); j++)
-                {
-                    OUString serviceName = pServiceKeys[j]->getKeyName().copy(offset);
-
-                    createUniqueSubEntry(
-                        xDest->getRootKey()->createKey(
-                            pool.slash_SERVICES + serviceName ),
-                        implName);
-                }
-
-            }
-            else
-            {
-                throw InvalidRegistryException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM( "prepareRegistry(): no service names given by component" ) ),
-                    Reference< XInterface > () );
+                createUniqueSubEntry(
+                    xDest->getRootKey()->createKey(
+                        pool.slash_SERVICES + serviceName ),
+                    implName);
             }
 
             xKey = xImplKey->openKey( pool.slash_UNO );
@@ -1205,38 +1193,38 @@ static void prepareRegistry(
                     }
                 }
             }
+        }
 
-            // update LOCATION entry
-            xKey = xImplKey->createKey( pool.slash_UNO_slash_LOCATION );
+        // update LOCATION entry
+        xKey = xImplKey->createKey( pool.slash_UNO_slash_LOCATION );
 
-            if (xKey.is())
+        if (xKey.is())
+        {
+            xKey->setAsciiValue(locationUrl);
+        }
+
+        // update ACTIVATOR entry
+        xKey = xImplKey->createKey( pool.slash_UNO_slash_ACTIVATOR );
+
+        if (xKey.is())
+        {
+            xKey->setAsciiValue(implementationLoaderUrl);
+        }
+
+        xKey = xImplKey->openKey( pool.slash_UNO_slash_SERVICES );
+
+        if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST))
+        {
+            // update link entries in REGISTRY_LINKS section
+            Sequence<OUString> linkNames = xKey->getAsciiListValue();
+
+            if (linkNames.getLength())
             {
-                xKey->setAsciiValue(locationUrl);
-            }
+                const OUString* pLinkNames = linkNames.getConstArray();
 
-            // update ACTIVATOR entry
-            xKey = xImplKey->createKey( pool.slash_UNO_slash_ACTIVATOR );
-
-            if (xKey.is())
-            {
-                xKey->setAsciiValue(implementationLoaderUrl);
-            }
-
-            xKey = xImplKey->openKey( pool.slash_UNO_slash_SERVICES );
-
-            if (xKey.is() && (xKey->getValueType() == RegistryValueType_ASCIILIST))
-            {
-                // update link entries in REGISTRY_LINKS section
-                Sequence<OUString> linkNames = xKey->getAsciiListValue();
-
-                if (linkNames.getLength())
+                for (sal_Int32 j = 0; j < linkNames.getLength(); j++)
                 {
-                    const OUString* pLinkNames = linkNames.getConstArray();
-
-                    for (sal_Int32 j = 0; j < linkNames.getLength(); j++)
-                    {
-                        prepareLink(xDest, xImplKey, pLinkNames[j]);
-                    }
+                    prepareLink(xDest, xImplKey, pLinkNames[j]);
                 }
             }
         }

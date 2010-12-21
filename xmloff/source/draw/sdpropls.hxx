@@ -35,7 +35,7 @@
 #include <xmloff/xmlement.hxx>
 #include <xmloff/prhdlfac.hxx>
 #include <xmloff/xmlprmap.hxx>
-#include "XMLTextListAutoStylePool.hxx"
+#include "xmloff/XMLTextListAutoStylePool.hxx"
 #include <xmloff/xmlexppr.hxx>
 
 //////////////////////////////////////////////////////////////////////////////

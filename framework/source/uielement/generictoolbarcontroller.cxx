@@ -65,7 +65,7 @@
 #include <classes/fwkresid.hxx>
 #include <dispatch/uieventloghelper.hxx>
 
-#include <xml/menuconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
 #include <uielement/menubarmanager.hxx>
 
 using namespace ::com::sun::star::awt;

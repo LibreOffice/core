@@ -134,7 +134,7 @@ public abstract class Configuration
 
     public static void set(boolean value, String name, Object parent) throws Exception
     {
-        if (value = true)
+        if (value == true)
         {
             set(Boolean.TRUE, name, parent);
         }

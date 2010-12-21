@@ -36,7 +36,7 @@
 
 #define _SVX_PASSWD_CXX
 
-#include "passwd.hxx"
+#include "svx/passwd.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
 #include "passwd.hrc"

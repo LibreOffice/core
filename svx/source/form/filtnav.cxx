@@ -34,7 +34,7 @@
 #include "fmhelp.hrc"
 #include "fmitems.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "gridcell.hxx"
 
 /** === begin UNO includes === **/

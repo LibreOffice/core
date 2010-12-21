@@ -27,11 +27,8 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "scriptedtext.hxx"
-
-#ifndef __SGI_STL_VECTOR
+#include <svtools/scriptedtext.hxx>
 #include <vector>
-#endif
 #include <rtl/ustring.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/font.hxx>

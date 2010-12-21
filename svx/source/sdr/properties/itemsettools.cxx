@@ -34,7 +34,7 @@
 
 #include <vector>
 #include <svx/svdogrp.hxx>
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 
 //////////////////////////////////////////////////////////////////////////////
 // class to remember broadcast start positions

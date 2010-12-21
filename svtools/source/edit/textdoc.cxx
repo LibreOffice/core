@@ -27,7 +27,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-
 #include <textdoc.hxx>
 
 #include <stdlib.h>

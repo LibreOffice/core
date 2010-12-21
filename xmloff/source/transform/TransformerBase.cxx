@@ -33,7 +33,7 @@
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <comphelper/processfactory.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "IgnoreTContext.hxx"
 #include "RenameElemTContext.hxx"
 #include "ProcAttrTContext.hxx"

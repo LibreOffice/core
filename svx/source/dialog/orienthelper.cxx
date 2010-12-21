@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "orienthelper.hxx"
+#include "svx/orienthelper.hxx"
 
 #include <vector>
 #include <utility>
@@ -35,7 +35,7 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
-#include "dialcontrol.hxx"
+#include "svx/dialcontrol.hxx"
 
 namespace svx {
 

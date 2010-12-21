@@ -134,7 +134,7 @@ public class NumberFormatter
 
     public double convertStringToNumber(int _nkey, String _sString)throws Exception
     {
-        return convertStringToNumber(_nkey, _sString);
+        return xNumberFormatter.convertStringToNumber(_nkey, _sString);
     }
 
 

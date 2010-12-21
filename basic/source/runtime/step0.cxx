@@ -47,6 +47,7 @@ Reference< XInterface > createComListener( const Any& aControlAny, const ::rtl::
                                            const ::rtl::OUString& aPrefix, SbxObjectRef xScopeObj );
 
 #include <algorithm>
+#include <hash_map>
 
 SbxVariable* getDefaultProp( SbxVariable* pRef );
 
@@ -418,8 +419,52 @@ void SbiRuntime::StepPUT()
 }
 
 
+// VBA Dim As New behavior handling, save init object information
+struct DimAsNewRecoverItem
+{
+    String          m_aObjClass;
+    String          m_aObjName;
+    SbxObject*      m_pObjParent;
+    SbModule*       m_pClassModule;
+
+    DimAsNewRecoverItem( void )
+        : m_pObjParent( NULL )
+        , m_pClassModule( NULL )
+    {}
+
+    DimAsNewRecoverItem( const String& rObjClass, const String& rObjName,
+        SbxObject* pObjParent, SbModule* pClassModule )
+            : m_aObjClass( rObjClass )
+            , m_aObjName( rObjName )
+            , m_pObjParent( pObjParent )
+            , m_pClassModule( pClassModule )
+    {}
+
+};
+
+
+struct SbxVariablePtrHash
+{
+    size_t operator()( SbxVariable* pVar ) const
+        { return (size_t)pVar; }
+};
+
+typedef std::hash_map< SbxVariable*, DimAsNewRecoverItem, SbxVariablePtrHash >  DimAsNewRecoverHash;
+
+static DimAsNewRecoverHash      GaDimAsNewRecoverHash;
+
+void removeDimAsNewRecoverItem( SbxVariable* pVar )
+{
+    DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( pVar );
+    if( it != GaDimAsNewRecoverHash.end() )
+        GaDimAsNewRecoverHash.erase( it );
+}
+
+
 // Speichern Objektvariable
 // Nicht-Objekt-Variable fuehren zu Fehlern
+
+static const char pCollectionStr[] = "Collection";
 
 void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, bool bHandleDefaultProp )
 {
@@ -523,6 +568,12 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
             }
         }
 
+        // Handle Dim As New
+        BOOL bDimAsNew = bVBAEnabled && refVar->IsSet( SBX_DIM_AS_NEW );
+        SbxBaseRef xPrevVarObj;
+        if( bDimAsNew )
+            xPrevVarObj = refVar->GetObject();
+
         // Handle withevents
         BOOL bWithEvents = refVar->IsSet( SBX_WITH_EVENTS );
         if ( bWithEvents )
@@ -541,7 +592,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                 xComListener = createComListener( aControlAny, aVBAType, aPrefix, xScopeObj );
 
                 refVal->SetDeclareClassName( aDeclareClassName );
-                refVal->SetComListener( xComListener );     // Hold reference
+                refVal->SetComListener( xComListener, &rBasic );        // Hold reference
             }
 
             *refVar = *refVal;
@@ -550,6 +601,68 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
         {
             *refVar = *refVal;
         }
+
+        if ( bDimAsNew )
+        {
+            if( !refVar->ISA(SbxObject) )
+            {
+                SbxBase* pValObjBase = refVal->GetObject();
+                if( pValObjBase == NULL )
+                {
+                    if( xPrevVarObj.Is() )
+                    {
+                        // Object is overwritten with NULL, instantiate init object
+                        DimAsNewRecoverHash::iterator it = GaDimAsNewRecoverHash.find( refVar );
+                        if( it != GaDimAsNewRecoverHash.end() )
+                        {
+                            const DimAsNewRecoverItem& rItem = it->second;
+                            if( rItem.m_pClassModule != NULL )
+                            {
+                                SbClassModuleObject* pNewObj = new SbClassModuleObject( rItem.m_pClassModule );
+                                pNewObj->SetName( rItem.m_aObjName );
+                                pNewObj->SetParent( rItem.m_pObjParent );
+                                refVar->PutObject( pNewObj );
+                            }
+                            else if( rItem.m_aObjClass.EqualsIgnoreCaseAscii( pCollectionStr ) )
+                            {
+                                BasicCollection* pNewCollection = new BasicCollection( String( RTL_CONSTASCII_USTRINGPARAM(pCollectionStr) ) );
+                                pNewCollection->SetName( rItem.m_aObjName );
+                                pNewCollection->SetParent( rItem.m_pObjParent );
+                                refVar->PutObject( pNewCollection );
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    // Does old value exist?
+                    bool bFirstInit = !xPrevVarObj.Is();
+                    if( bFirstInit )
+                    {
+                        // Store information to instantiate object later
+                        SbxObject* pValObj = PTR_CAST(SbxObject,pValObjBase);
+                        if( pValObj != NULL )
+                        {
+                            String aObjClass = pValObj->GetClassName();
+
+                            SbClassModuleObject* pClassModuleObj = PTR_CAST(SbClassModuleObject,pValObjBase);
+                            if( pClassModuleObj != NULL )
+                            {
+                                SbModule* pClassModule = pClassModuleObj->getClassModule();
+                                GaDimAsNewRecoverHash[refVar] =
+                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), pClassModule );
+                            }
+                            else if( aObjClass.EqualsIgnoreCaseAscii( "Collection" ) )
+                            {
+                                GaDimAsNewRecoverHash[refVar] =
+                                    DimAsNewRecoverItem( aObjClass, pValObj->GetName(), pValObj->GetParent(), NULL );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         // lhs is a property who's value is currently (Empty e.g. no broadcast yet)
         // in this case if there is a default prop involved the value of the

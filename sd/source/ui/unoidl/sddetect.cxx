@@ -291,20 +291,16 @@ SdFilterDetect::~SdFilterDetect()
                                     if ( !bRepairPackage )
                                     {
                                         // ask the user whether he wants to try to repair
-                                        RequestPackageReparation* pRequest = new RequestPackageReparation( aDocumentTitle );
-                                        uno::Reference< task::XInteractionRequest > xRequest ( pRequest );
-
-                                        xInteraction->handle( xRequest );
-
-                                        bRepairAllowed = pRequest->isApproved();
+                                        RequestPackageReparation aRequest( aDocumentTitle );
+                                        xInteraction->handle( aRequest.GetRequest() );
+                                        bRepairAllowed = aRequest.isApproved();
                                     }
 
                                     if ( !bRepairAllowed )
                                     {
                                         // repair either not allowed or not successful
-                                        NotifyBrokenPackage* pNotifyRequest = new NotifyBrokenPackage( aDocumentTitle );
-                                           uno::Reference< task::XInteractionRequest > xRequest ( pNotifyRequest );
-                                           xInteraction->handle( xRequest );
+                                        NotifyBrokenPackage aNotifyRequest( aDocumentTitle );
+                                        xInteraction->handle( aNotifyRequest.GetRequest() );
                                     }
                                 }
 

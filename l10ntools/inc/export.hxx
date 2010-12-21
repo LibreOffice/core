@@ -452,7 +452,6 @@ public:
                     const ByteString &rTitle
                     )
         {
-
             sText[ nId ] = rText;
             bTextFirst[ nId ] = true;
             sQuickHelpText[ nId ] = rQuickHelpText;
@@ -508,39 +507,33 @@ public:
 
 class MergeDataFile
 {
-private:
-    BOOL bErrorLog;
-    ByteString sErrorLog;
-    SvFileStream aErrLog;
-    ByteStringSet aLanguageSet;
-    MergeDataHashMap aMap;
-    ByteStringHashMap aLanguageMap;
-    std::vector<ByteString> aLanguageList;
-    ByteStringHashMap aFilenames;
+    private:
+        BOOL bErrorLog;
+        ByteString sErrorLog;
+        SvFileStream aErrLog;
+        MergeDataHashMap aMap;
+        std::set<ByteString> aLanguageSet;
 
+        MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
+        void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
+            const ByteString &rPFO,
+            const ByteString &nLang, const ByteString &rTEXT,
+            const ByteString &rQHTEXT, const ByteString &rTITLE,
+            const ByteString &sFilename, bool bCaseSensitive
+            );
+        ByteString Dump();
+        void WriteError( const ByteString &rLine );
 
-public:
-    MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
-    ~MergeDataFile();
+    public:
+        MergeDataFile( const ByteString &rFileName, const ByteString& rFile , BOOL bErrLog, CharSet aCharSet, bool bCaseSensitive = false );
+        ~MergeDataFile();
 
+        std::vector<ByteString> GetLanguages();
 
-    std::vector<ByteString> GetLanguages();
-    MergeData *GetMergeData( ResData *pResData , bool bCaseSensitve = false );
+        PFormEntrys *GetPFormEntrys( ResData *pResData );
+        PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
 
-    PFormEntrys *GetPFormEntrys( ResData *pResData );
-    PFormEntrys *GetPFormEntrysCaseSensitive( ResData *pResData );
-
-    void InsertEntry( const ByteString &rTYP, const ByteString &rGID, const ByteString &rLID,
-                const ByteString &rPFO,
-                const ByteString &nLang , const ByteString &rTEXT,
-                const ByteString &rQHTEXT, const ByteString &rTITLE ,
-                const ByteString &sFilename , bool bCaseSensitive
-                );
-    static USHORT GetLangIndex( USHORT nId );
-    static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
-
-    ByteString Dump();
-    void WriteError( const ByteString &rLine );
+        static ByteString CreateKey( const ByteString& rTYP , const ByteString& rGID , const ByteString& rLID , const ByteString& rFilename , bool bCaseSensitive = false );
 };
 
 

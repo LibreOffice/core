@@ -38,6 +38,7 @@
 #include <basic/sbdef.hxx>
 #include <basic/sberrors.hxx>
 #include <com/sun/star/script/ModuleInfo.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 
 class SbModule;                     // completed module
 class SbiInstance;                  // runtime instance
@@ -76,6 +77,8 @@ class StarBASIC : public SbxObject
 
     SbxObjectRef pVBAGlobals;
     SbxObject* getVBAGlobals( );
+
+    void implClearDependingVarsOnDelete( StarBASIC* pDeletedBasic );
 
 protected:
     BOOL            CError( SbError, const String&, xub_StrLen, xub_StrLen, xub_StrLen );
@@ -206,6 +209,9 @@ public:
     bool GetUNOConstant( const sal_Char* _pAsciiName, ::com::sun::star::uno::Any& aOut );
     void QuitAndExitApplication();
     BOOL IsQuitApplication() { return bQuit; };
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
+        GetModelFromBasic( SbxObject* pBasic );
 };
 
 #ifndef __SB_SBSTARBASICREF_HXX

@@ -52,7 +52,7 @@
 #define _XOUTBMP_STATICS_ONLY
 
 #include <svx/dialmgr.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <svx/contdlg.hxx>
@@ -61,7 +61,7 @@
 #include "contwnd.hxx"
 #include <svx/svdtrans.hxx>
 #include <svx/svdopath.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <vcl/svapp.hxx>
 
 /******************************************************************************/

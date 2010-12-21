@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "xmlexchg.hxx"
+#include "svx/xmlexchg.hxx"
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>
 #include <tools/debug.hxx>

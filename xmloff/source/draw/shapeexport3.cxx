@@ -49,7 +49,7 @@
 #include <xmloff/xmltoken.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;

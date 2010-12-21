@@ -28,10 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sw.hxx"
 
-
-#ifndef DBG_UTIL
-#error Wer fummelt denn an den makefiles?
-#endif
+#ifdef DBG_UTIL
 
 #include "viewsh.hxx"       // IsDbg()
 #include "viewopt.hxx"      // IsDbg()
@@ -946,4 +943,5 @@ SvStream &SwDropPortion::operator<<( SvStream &rOs ) const //$ ostream
 
 #endif /* OSL_DEBUG_LEVEL */
 
+#endif // DBG_UTIL
 

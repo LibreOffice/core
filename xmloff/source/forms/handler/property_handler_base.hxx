@@ -27,7 +27,7 @@
 #ifndef XMLOFF_PROPERTY_HANDLER_BASE_HXX
 #define XMLOFF_PROPERTY_HANDLER_BASE_HXX
 
-#include "property_handler.hxx"
+#include "forms/property_handler.hxx"
 
 #include <osl/interlck.h>
 

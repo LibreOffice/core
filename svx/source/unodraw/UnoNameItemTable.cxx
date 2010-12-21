@@ -39,7 +39,7 @@
 #include <vos/mutex.hxx>
 #include <vcl/svapp.hxx>
 
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

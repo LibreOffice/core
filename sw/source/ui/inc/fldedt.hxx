@@ -27,7 +27,7 @@
 #ifndef _FLDEDT_HXX
 #define _FLDEDT_HXX
 #include <sfx2/basedlgs.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 
 class SwView;
 class SwWrtShell;

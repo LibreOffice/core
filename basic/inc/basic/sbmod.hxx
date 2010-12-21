@@ -46,6 +46,7 @@ class SbProcedureProperty;
 class SbIfaceMapperMethod;
 class SbClassModuleObject;
 
+class ModuleInitDependencyMap;
 struct ClassModuleRunInitItem;
 struct SbClassData;
 class SbModuleImpl;
@@ -62,6 +63,8 @@ class SbModule : public SbxObject
     SbModuleImpl*   mpSbModuleImpl;     // Impl data
     std::vector< String > mModuleVariableNames;
 
+    void            implClearIfVarDependsOnDeletedBasic( SbxVariable* pVar, StarBASIC* pDeletedBasic );
+
 protected:
     com::sun::star::uno::Reference< com::sun::star::script::XInvocation > mxWrapper;
     ::rtl::OUString     aOUSource;
@@ -74,7 +77,7 @@ protected:
     SbxObjectRef pDocObject; // an impl object ( used by Document Modules )
     bool    bIsProxyModule;
 
-    static void     implProcessModuleRunInit( ClassModuleRunInitItem& rItem );
+    static void     implProcessModuleRunInit( ModuleInitDependencyMap& rMap, ClassModuleRunInitItem& rItem );
     void            StartDefinitions();
     SbMethod*       GetMethod( const String&, SbxDataType );
     SbProperty*     GetProperty( const String&, SbxDataType );
@@ -84,6 +87,7 @@ protected:
     USHORT          Run( SbMethod* );
     void            RunInit();
     void            ClearPrivateVars();
+    void            ClearVarsDependingOnDeletedBasic( StarBASIC* pDeletedBasic );
     void            GlobalRunInit( BOOL bBasicStart );  // for all modules
     void            GlobalRunDeInit( void );
     const BYTE*     FindNextStmnt( const BYTE*, USHORT&, USHORT& ) const;
@@ -94,6 +98,7 @@ protected:
     virtual BOOL LoadCompleted();
     virtual void SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                              const SfxHint& rHint, const TypeId& rHintType );
+    void handleProcedureProperties( SfxBroadcaster& rBC, const SfxHint& rHint );
     virtual ~SbModule();
 public:
     SBX_DECL_PERSIST_NODATA(SBXCR_SBX,SBXID_BASICMOD,2);

@@ -46,7 +46,7 @@
 #include "versdlg.hrc"
 #include "versdlg.hxx"
 #include <sfx2/viewfrm.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfxsids.hrc>

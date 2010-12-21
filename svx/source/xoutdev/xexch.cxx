@@ -43,7 +43,7 @@
 #endif
 #include <svl/itemset.hxx>
 #include <svx/xdef.hxx>
-#include "xexch.hxx"
+#include "svx/xexch.hxx"
 
 
 TYPEINIT1_AUTOFACTORY( XFillExchangeData, SvDataCopyStream );

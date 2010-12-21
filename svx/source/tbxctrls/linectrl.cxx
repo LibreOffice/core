@@ -42,10 +42,10 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-#include "drawitem.hxx"
-#include "xattr.hxx"
+#include "svx/drawitem.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
-#include "linectrl.hxx"
+#include "svx/linectrl.hxx"
 #include <svx/itemwin.hxx>
 #include <svx/dialmgr.hxx>
 

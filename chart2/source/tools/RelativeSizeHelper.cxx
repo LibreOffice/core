@@ -45,7 +45,6 @@ using ::rtl::OUString;
 namespace chart
 {
 
-// static
 double RelativeSizeHelper::calculate(
     double fValue,
     const Size & rOldReferenceSize,
@@ -61,7 +60,6 @@ double RelativeSizeHelper::calculate(
         * fValue;
 }
 
-// static
 void RelativeSizeHelper::adaptFontSizes(
     const Reference< XPropertySet > & xTargetProperties,
     const Size & rOldReferenceSize,

@@ -75,7 +75,7 @@ SimpleResMgr* ImpSvlData::GetSimpleRM(const ::com::sun::star::lang::Locale& rLoc
         = (*static_cast< SimpleResMgrMap * >(m_pThreadsafeRMs))[aISOcode];
     if (!rResMgr)
     {
-        rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svs), rLocale );
+        rResMgr = new SimpleResMgr(CREATEVERSIONRESMGR_NAME(svl), rLocale );
     }
     return rResMgr;
 }

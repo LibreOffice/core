@@ -28,12 +28,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <vos/mutex.hxx>
-#ifndef DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
@@ -43,12 +39,9 @@
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <comphelper/processfactory.hxx>
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_DROPTARGETDRAGCONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
-#endif
-
 #include "svl/urlbmk.hxx"
-#include "inetimg.hxx"
+#include <svtools/inetimg.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/transfer.hxx>
 

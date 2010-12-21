@@ -32,7 +32,7 @@
 #include <vcl/fixed.hxx>
 #include <vcl/combobox.hxx>
 #include <vcl/lstbox.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svx/txencbox.hxx>
 #include "scdllapi.h"
 #include "global.hxx"

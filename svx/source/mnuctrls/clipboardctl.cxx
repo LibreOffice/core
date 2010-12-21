@@ -36,8 +36,8 @@
 #include <sot/exchange.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/toolbox.hxx>
-#include <clipboardctl.hxx>
-#include <clipfmtitem.hxx>
+#include <svx/clipboardctl.hxx>
+#include <svx/clipfmtitem.hxx>
 
 #include <svtools/insdlg.hxx>
 #include <svx/svxids.hrc>

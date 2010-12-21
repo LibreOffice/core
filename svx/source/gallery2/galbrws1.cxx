@@ -35,7 +35,7 @@
 #include <sfx2/app.hxx>
 #include "helpid.hrc"
 #include "svx/gallery1.hxx"
-#include "galtheme.hxx"
+#include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
 #include "galbrws1.hxx"
 #include <com/sun/star/util/DateTime.hpp>

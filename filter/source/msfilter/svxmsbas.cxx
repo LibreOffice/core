@@ -252,14 +252,12 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
         Reference<XLibraryContainer> xLibContainer = rDocSh.GetBasicContainer();
         DBG_ASSERT( xLibContainer.is(), "No BasicContainer!" );
 
+        /*  Set library container to VBA compatibility mode. This will create
+            the VBA Globals object and store it in the Basic manager of the
+            document. */
         if( !bAsComment ) try
         {
-            Reference< vba::XVBACompatibility > xVBACompat( xLibContainer, UNO_QUERY_THROW );
-            xVBACompat->setVBACompatibilityMode( sal_True );
-            /*  Force creation of the VBAGlobals object, each application will
-                create the right one and store it at the Basic manager. */
-            Reference< XMultiServiceFactory > xFactory( rDocSh.GetModel(), UNO_QUERY_THROW );
-            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+            Reference< vba::XVBACompatibility >( xLibContainer, UNO_QUERY_THROW )->setVBACompatibilityMode( sal_True );
         }
         catch( Exception& )
         {

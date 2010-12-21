@@ -39,7 +39,7 @@
 
 #define _SVX_SELCTRL_CXX
 
-#include "selctrl.hxx"
+#include "svx/selctrl.hxx"
 #include <svx/dialmgr.hxx>
 
 #include <svx/dialogs.hrc>

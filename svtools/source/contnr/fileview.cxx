@@ -28,12 +28,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "fileview.hxx"
+#include <svtools/fileview.hxx>
 #include <svtools/svtdata.hxx>
-#include "imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 #include <svtools/headbar.hxx>
 #include <svtools/svtabbx.hxx>
-
 #include <svtools/svtools.hrc>
 #include "fileview.hrc"
 #include "contentenumeration.hxx"

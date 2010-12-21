@@ -1092,7 +1092,7 @@ testcase tSlideShowSlideTransition
          select case i
             case 1: printlog " click button 'Automatic Transition' "
                     if (TransitionAutomaticallyAfter.IsEnabled) then
-                       '///+ -  + +  Check Time '1' OR "
+                       printlog " Check Time '1' OR "
                        sTemp = TransitionAutomaticallyAfterTime.GetText
                        if (sTemp <> TimerValue) then
                           Warnlog "   Time is different :-( is: '" + sTemp + "' should be: '" + TimerValue + "'" '"00:00:01"
@@ -1101,11 +1101,11 @@ testcase tSlideShowSlideTransition
                        Warnlog "   button 'Automatic Transition' not pressed ?"
                     end if
             case 2: if (TransitionAutomaticallyAfter.IsChecked <> FALSE) then
-                       '///+ - + check button 'SemiAutomatic Transition' OR "
+                        printlog " check button 'SemiAutomatic Transition' OR "
                        Warnlog "   button 'Automatic Transition' is pressed ?"
                     end if
             case 3: if (TransitionAutomaticallyAfter.IsChecked <> FALSE) then
-                      '///+ - + click button 'Manual Transition' "
+                      printlog "click button 'Manual Transition' "
                        Warnlog "   button 'Automatic Transition' is pressed ?"
                     end if
          end select

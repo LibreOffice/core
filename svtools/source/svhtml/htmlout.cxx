@@ -36,7 +36,7 @@
 #include <svl/zforlist.hxx>
 
 #include <svtools/htmlout.hxx>
-#include "htmlkywd.hxx"
+#include <svtools/htmlkywd.hxx>
 #include <svtools/imap.hxx>
 #include <svtools/imaprect.hxx>
 #include <svtools/imapcirc.hxx>

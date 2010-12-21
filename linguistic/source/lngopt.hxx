@@ -45,7 +45,7 @@
 #include <tools/solar.h>
 
 #include <svl/itemprop.hxx>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 #include <vos/refernce.hxx>
 

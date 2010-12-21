@@ -36,7 +36,7 @@
 #include <sfx2/newstyle.hxx>
 #include "dialog.hrc"
 #include "newstyle.hrc"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 // PRIVATE METHODES ------------------------------------------------------
 

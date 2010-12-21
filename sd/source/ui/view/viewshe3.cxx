@@ -34,8 +34,9 @@
 #include "GraphicViewShellBase.hxx"
 
 #include <sfx2/viewfrm.hxx>
+#include <svtools/svtools.hrc>
 #include <com/sun/star/lang/Locale.hpp>
-
+#include <svtools/svtdata.hxx>
 #include <utility>
 #include <vector>
 
@@ -165,7 +166,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp( SvtResId( STR_UNDO ) );
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -193,7 +194,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
+            String aTmp(SvtResId(STR_REDO));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }

@@ -520,6 +520,15 @@ OUString Package::getDescription() throw (
 }
 
 //______________________________________________________________________________
+OUString Package::getLicenseText() throw (
+    deployment::ExtensionRemovedException,RuntimeException)
+{
+    if (m_bRemoved)
+        throw deployment::ExtensionRemovedException();
+    return OUString();
+}
+
+//______________________________________________________________________________
 Sequence<OUString> Package::getUpdateInformationURLs() throw (
     deployment::ExtensionRemovedException, RuntimeException)
 {

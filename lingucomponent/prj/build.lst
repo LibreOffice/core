@@ -1,4 +1,4 @@
-lc  lingucomponent  :      linguistic LIBTEXTCAT:libtextcat LIBTEXTCATDATA:libtextcat svl HYPHEN:hyphen HUNSPELL:hunspell MYTHES:mythes NULL
+lc  lingucomponent  :      linguistic LIBTEXTCAT:libtextcat LIBTEXTCATDATA:libtextcat svl HYPHEN:hyphen HUNSPELL:hunspell MYTHES:mythes LIBXSLT:libxslt NULL
 lc	lingucomponent								usr1	-	all	lc_mkout NULL
 lc  lingucomponent\inc                                      nmake   -   all lc_inc NULL
 lc  lingucomponent\source\lingutil                          nmake   -   all lc_util lc_inc NULL

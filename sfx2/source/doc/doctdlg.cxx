@@ -37,7 +37,7 @@
 
 #include <sfx2/doctdlg.hxx>
 #include "docvor.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "sfxtypes.hxx"
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>

@@ -27,9 +27,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
-#include "modsizeexceeded.hxx"
+#include "basic/modsizeexceeded.hxx"
 
-#include <framework/interaction.hxx>
+#include <comphelper/interaction.hxx>
 #include <com/sun/star/script/ModuleSizeExceededRequest.hpp>
 
 using namespace com::sun::star;
@@ -44,8 +44,8 @@ ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& 
 
     m_aRequest <<= aReq;
 
-    m_xAbort.set( uno::Reference< task::XInteractionAbort >(new framework::ContinuationAbort), uno::UNO_QUERY );
-    m_xApprove.set( uno::Reference< task::XInteractionApprove >(new framework::ContinuationApprove ), uno::UNO_QUERY );
+    m_xAbort.set( uno::Reference< task::XInteractionAbort >(new comphelper::OInteractionAbort), uno::UNO_QUERY );
+    m_xApprove.set( uno::Reference< task::XInteractionApprove >(new comphelper::OInteractionApprove ), uno::UNO_QUERY );
     m_lContinuations.realloc( 2 );
     m_lContinuations[0] =  m_xApprove;
     m_lContinuations[1] = m_xAbort;
@@ -54,15 +54,15 @@ ModuleSizeExceeded::ModuleSizeExceeded( const uno::Sequence< ::rtl::OUString >& 
 sal_Bool
 ModuleSizeExceeded::isAbort() const
 {
-    framework::ContinuationAbort* pBase = static_cast< framework::ContinuationAbort* >( m_xAbort.get() );
-    return pBase->isSelected();
+    comphelper::OInteractionAbort* pBase = static_cast< comphelper::OInteractionAbort* >( m_xAbort.get() );
+    return pBase->wasSelected();
 }
 
 sal_Bool
 ModuleSizeExceeded::isApprove() const
 {
-    framework::ContinuationApprove* pBase = static_cast< framework::ContinuationApprove* >( m_xApprove.get() );
-    return pBase->isSelected();
+    comphelper::OInteractionApprove* pBase = static_cast< comphelper::OInteractionApprove* >( m_xApprove.get() );
+    return pBase->wasSelected();
 }
 
 

@@ -45,6 +45,7 @@
 #include "sbunoobj.hxx"
 #include "errobject.hxx"
 #include "sbtrace.hxx"
+#include "comenumwrapper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -890,11 +891,12 @@ void SbiRuntime::Error( SbError _errCode, const String& _details )
 {
     if ( _errCode )
     {
-        OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
+        // Not correct for class module usage, remove for now
+        //OSL_ENSURE( pInst->pRun == this, "SbiRuntime::Error: can't propagate the error message details!" );
         if ( pInst->pRun == this )
         {
             pInst->Error( _errCode, _details );
-            OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
+            //OSL_POSTCOND( nError == _errCode, "SbiRuntime::Error: the instance is expecte to propagate the error code back to me!" );
         }
         else
         {
@@ -1175,6 +1177,23 @@ void SbiRuntime::PushForEach()
         {
             p->xEnumeration = xEnumerationAccess->createEnumeration();
             p->eForType = FOR_EACH_XENUMERATION;
+        }
+        else if ( isVBAEnabled() && pUnoObj->isNativeCOMObject() )
+        {
+            uno::Reference< script::XInvocation > xInvocation;
+            if ( ( aAny >>= xInvocation ) && xInvocation.is() )
+            {
+                try
+                {
+                    p->xEnumeration = new ComEnumerationWrapper( xInvocation );
+                    p->eForType = FOR_EACH_XENUMERATION;
+                }
+                catch( uno::Exception& )
+                {}
+            }
+
+            if ( !p->xEnumeration.is() )
+                bError_ = true;
         }
         else
         {

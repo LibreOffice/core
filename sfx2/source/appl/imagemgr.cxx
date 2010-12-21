@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
-#include "imagemgr.hxx"
+#include "sfx2/imagemgr.hxx"
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -41,7 +41,7 @@
 #include <rtl/ustring.hxx>
 #include <rtl/logfile.hxx>
 
-#include "imgmgr.hxx"
+#include "sfx2/imgmgr.hxx"
 #include <sfx2/app.hxx>
 #include <sfx2/unoctitm.hxx>
 #include <sfx2/dispatch.hxx>

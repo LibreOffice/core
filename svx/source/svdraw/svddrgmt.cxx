@@ -37,7 +37,7 @@
 #include <tools/bigint.hxx>
 #include <vcl/svapp.hxx>
 
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xpoly.hxx>
 #include <svx/svdetc.hxx>
 #include <svx/svdtrans.hxx>
@@ -45,8 +45,8 @@
 #include <svx/svdmark.hxx>
 #include <svx/svdocapt.hxx>
 #include <svx/svdpagv.hxx>
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <svx/svddrgv.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdograf.hxx>
@@ -59,7 +59,7 @@
 #include <svx/sdr/overlay/overlaymanager.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
@@ -68,7 +68,7 @@
 #include <svx/sdr/overlay/overlayprimitive2dsequenceobject.hxx>
 #include <drawinglayer/primitive2d/unifiedtransparenceprimitive2d.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdopath.hxx>
 #include <svx/polypolygoneditor.hxx>
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>

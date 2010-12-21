@@ -81,7 +81,7 @@ interface XGraphicObjects : com::sun::star::uno::XInterface
 
         @return  The created graphic object.
      */
-    any Add( [in] any fLeft, [in] any fTop, [in] any fWidth, [in] any fHeight );
+    any Add( [in] any Left, [in] any Top, [in] any Width, [in] any Height );
 };
 
 //=============================================================================
@@ -109,7 +109,7 @@ interface XLineObjects : com::sun::star::uno::XInterface
 
         @return  The created line object.
      */
-    any Add( [in] any fX1, [in] any fY1, [in] any fX2, [in] any fY2 );
+    any Add( [in] any X1, [in] any Y1, [in] any X2, [in] any Y2 );
 };
 
 //=============================================================================
@@ -131,7 +131,7 @@ interface XDrawings : com::sun::star::uno::XInterface
 
         @return  The created polygon object.
      */
-    any Add( [in] any fX1, [in] any fY1, [in] any fX2, [in] any fY2, [in] any bClosed );
+    any Add( [in] any X1, [in] any Y1, [in] any X2, [in] any Y2, [in] any Closed );
 };
 
 //=============================================================================

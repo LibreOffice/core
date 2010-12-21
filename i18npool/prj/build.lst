@@ -1,4 +1,4 @@
-inp  i18npool    :   bridges sax stoc comphelper ICU:icu i18nutil regexp NULL
+inp  i18npool    :   bridges sax stoc comphelper ICU:icu i18nutil regexp LIBXSLT:libxslt NULL
 inp  i18npool                                   usr1    -   all inp_mkout NULL
 inp  i18npool\inc                               nmake   -   all inp_inc NULL
 inp  i18npool\source\registerservices           nmake   -   all inp_rserv inp_inc NULL

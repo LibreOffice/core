@@ -30,7 +30,7 @@
 
 #include <classes/fwktabwindow.hxx>
 #include "framework.hrc"
-#include <classes/fwlresid.hxx>
+#include <classes/fwkresid.hxx>
 
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XContainerWindowEventHandler.hpp>
@@ -205,9 +205,9 @@ void FwkTabPage::Resize()
 
 FwkTabWindow::FwkTabWindow( Window* pParent ) :
 
-    Window( pParent, FwlResId( WIN_TABWINDOW ) ),
+    Window( pParent, FwkResId( WIN_TABWINDOW ) ),
 
-    m_aTabCtrl  ( this, FwlResId( TC_TABCONTROL ) )
+    m_aTabCtrl  ( this, FwkResId( TC_TABCONTROL ) )
 {
     uno::Reference < lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     m_xWinProvider = uno::Reference < awt::XContainerWindowProvider >(

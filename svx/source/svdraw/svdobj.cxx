@@ -47,8 +47,8 @@
 #include <svx/svdpage.hxx>
 #include <svx/svdovirt.hxx>  // Fuer Add/Del Ref
 #include <svx/svdview.hxx>   // fuer Dragging (Ortho abfragen)
-#include "svdglob.hxx"   // StringCache
-#include "svdstr.hrc"    // Objektname
+#include "svx/svdglob.hxx"   // StringCache
+#include <svx/svdstr.hrc>    // Objektname
 #include <svx/svdogrp.hxx>   // Factory
 #include <svx/svdopath.hxx>  // Factory
 #include <svx/svdoedge.hxx>  // Factory
@@ -74,7 +74,7 @@
 #include <svx/xlndsit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
-#include "svditer.hxx"
+#include <svx/svditer.hxx>
 #include <svx/xlntrit.hxx>
 #include <svx/xfltrit.hxx>
 #include <svx/xfltrit.hxx>

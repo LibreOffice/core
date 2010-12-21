@@ -544,6 +544,14 @@ bool ScDocument::HasAnySheetEventScript( sal_Int32 nEvent, bool bWithVbaEvents )
     return false;
 }
 
+bool ScDocument::HasAnyCalcNotification() const
+{
+    for (SCTAB nTab = 0; nTab <= MAXTAB; nTab++)
+        if (pTab[nTab] && pTab[nTab]->GetCalcNotification())
+            return true;
+    return false;
+}
+
 BOOL ScDocument::HasCalcNotification( SCTAB nTab ) const
 {
     if (VALIDTAB(nTab) && pTab[nTab])

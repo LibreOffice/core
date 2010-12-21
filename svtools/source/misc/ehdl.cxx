@@ -43,7 +43,7 @@
 #include <svtools/ehdl.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include "sfxecode.hxx"
+#include <svtools/sfxecode.hxx>
 
 //=========================================================================
 

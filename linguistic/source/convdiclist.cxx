@@ -53,7 +53,7 @@
 #include "convdiclist.hxx"
 #include "convdic.hxx"
 #include "hhconvdic.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 //using namespace utl;

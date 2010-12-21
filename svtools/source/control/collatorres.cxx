@@ -30,9 +30,7 @@
 #include "precompiled_svtools.hxx"
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-
-
-#include <collatorres.hxx>
+#include <svtools/collatorres.hxx>
 
 // -------------------------------------------------------------------------
 //

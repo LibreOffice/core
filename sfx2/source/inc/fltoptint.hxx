@@ -24,15 +24,17 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
+#ifndef SFX2_FLTOPTINT_HXX
+#define SFX2_FLTOPTINT_HXX
 
 #include <com/sun/star/document/FilterOptionsRequest.hpp>
 #include <com/sun/star/document/XInteractionFilterOptions.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <framework/interaction.hxx>
+#include <comphelper/interaction.hxx>
 
-using namespace ::framework;
+//using namespace ::framework;
 
-class FilterOptionsContinuation : public ContinuationBase< ::com::sun::star::document::XInteractionFilterOptions >
+class FilterOptionsContinuation : public comphelper::OInteraction< ::com::sun::star::document::XInteractionFilterOptions >
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties;
 
@@ -49,7 +51,7 @@ class RequestFilterOptions : public ::cppu::WeakImplHelper1< ::com::sun::star::t
                     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >
                 > m_lContinuations;
 
-    ContinuationAbort*  m_pAbort;
+    comphelper::OInteractionAbort*  m_pAbort;
 
     FilterOptionsContinuation*  m_pOptions;
 
@@ -57,7 +59,7 @@ public:
     RequestFilterOptions( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > rModel,
                               ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > rProperties );
 
-    sal_Bool    isAbort() { return m_pAbort->isSelected(); }
+    sal_Bool    isAbort() { return m_pAbort->wasSelected(); }
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > getFilterOptions()
     {
@@ -73,3 +75,4 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 };
 
+#endif

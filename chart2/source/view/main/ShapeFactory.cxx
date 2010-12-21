@@ -80,7 +80,6 @@ namespace chart
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
                                , const rtl::OUString& rName )
 {
@@ -104,7 +103,6 @@ void ShapeFactory::setShapeName( const uno::Reference< drawing::XShape >& xShape
 
 //-----------------------------------------------------------------------------
 
-//static
 rtl::OUString ShapeFactory::getShapeName( const uno::Reference< drawing::XShape >& xShape )
 {
     rtl::OUString aRet;
@@ -1961,7 +1959,6 @@ uno::Reference< drawing::XShape >
     return xShape;
 }
 
-//static
 rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool bStacked )
 {
     sal_Int32 nLen = rString.getLength();
@@ -1982,7 +1979,6 @@ rtl::OUString ShapeFactory::getStackedString( const rtl::OUString& rString, bool
     return aStackStr.makeStringAndClear();
 }
 
-//static
 bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
 {
     // #i67757# check all contained polygons, if at least one polygon contains 2 or more points, return true
@@ -1992,7 +1988,6 @@ bool ShapeFactory::hasPolygonAnyLines( drawing::PolyPolygonShape3D& rPoly)
     return false;
 }
 
-//static
 bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPoly)
 {
     // true, if empty polypolygon or one polygon with one point
@@ -2000,7 +1995,6 @@ bool ShapeFactory::isPolygonEmptyOrSinglePoint( drawing::PolyPolygonShape3D& rPo
         ((rPoly.SequenceX.getLength() == 1) && (rPoly.SequenceX[0].getLength() <= 1));
 }
 
-//static
 void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
 {
     DBG_ASSERT( rPoly.SequenceX.getLength() <= 1, "ShapeFactory::closePolygon - single polygon expected" );
@@ -2011,7 +2005,6 @@ void ShapeFactory::closePolygon( drawing::PolyPolygonShape3D& rPoly)
     AddPointToPoly( rPoly, aFirst );
 }
 
-//static
 awt::Size ShapeFactory::calculateNewSizeRespectingAspectRatio(
          const awt::Size& rTargetSize
          , const awt::Size& rSourceSizeWithCorrectAspectRatio )
@@ -2027,7 +2020,6 @@ awt::Size ShapeFactory::calculateNewSizeRespectingAspectRatio(
     return aNewSize;
 }
 
-//static
 awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
            const awt::Point& rTargetAreaPosition
          , const awt::Size& rTargetAreaSize
@@ -2039,7 +2031,6 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
     return aNewPosition;
 }
 
-//static
 ::basegfx::B2IRectangle ShapeFactory::getRectangleOfShape(
         const uno::Reference< drawing::XShape >& xShape )
 {
@@ -2055,7 +2046,6 @@ awt::Point ShapeFactory::calculateTopLeftPositionToCenterObject(
 
 }
 
-//static
 awt::Size ShapeFactory::getSizeAfterRotation(
          const uno::Reference< drawing::XShape >& xShape, double fRotationAngleDegree )
 {

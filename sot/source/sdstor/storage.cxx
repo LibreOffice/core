@@ -35,8 +35,8 @@
 
 #include <rtl/digest.h>
 #include <osl/file.hxx>
-#include <stg.hxx>
-#include <storinfo.hxx>
+#include <sot/stg.hxx>
+#include <sot/storinfo.hxx>
 #include <sot/storage.hxx>
 #include <sot/formats.hxx>
 #include <sot/exchange.hxx>

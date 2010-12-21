@@ -31,7 +31,7 @@
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <tools/debug.hxx>
 

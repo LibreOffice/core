@@ -88,6 +88,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
             OUString const & identifier);
         // XPackage
         virtual OUString SAL_CALL getDescription() throw (RuntimeException);
+        virtual OUString SAL_CALL getLicenseText() throw (RuntimeException);
     };
     friend class PackageImpl;
 
@@ -130,6 +131,12 @@ OUString BackendImpl::PackageImpl::getDescription() throw (RuntimeException)
         return Package::getDescription();
     else
         return m_descr;
+}
+
+//______________________________________________________________________________
+OUString BackendImpl::PackageImpl::getLicenseText() throw (RuntimeException)
+{
+    return Package::getDescription();
 }
 
 //______________________________________________________________________________

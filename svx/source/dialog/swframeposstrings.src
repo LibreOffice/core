@@ -26,7 +26,7 @@
  ************************************************************************/
 #include <svx/dialogs.hrc>
 
-//the following defines have to match the (enum values + 1) in swframeposstrings.hxx!
+//the following defines have to match the (enum values + 1) in svx/swframeposstrings.hxx!
 #define STR_LEFT                                1
 #define STR_RIGHT                               2
 #define STR_FROMLEFT                            3

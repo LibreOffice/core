@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <filedlg.hxx>
+#include <svtools/filedlg.hxx>
 #include <filedlg2.hxx>
 
 PathDialog::PathDialog( Window* _pParent, WinBits nStyle, BOOL bCreateDir ) :

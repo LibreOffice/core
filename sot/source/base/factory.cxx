@@ -36,7 +36,7 @@
 #include <tools/string.hxx>
 #include <sot/object.hxx>
 #include <sot/sotdata.hxx>
-#include <clsids.hxx>
+#include <sot/clsids.hxx>
 #include <rtl/instance.hxx>
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
 

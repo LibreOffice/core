@@ -43,7 +43,7 @@
 #include "editeng/fontitem.hxx"
 #include "editeng/flstitem.hxx"
 
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 
 #define LOGIC   OutputDevice::LogicToLogic

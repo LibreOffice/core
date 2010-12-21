@@ -341,7 +341,7 @@ public class StyleApplier
                     {
                         String[] sPropList = JavaTools.ArrayoutofString(scurline, ":");
                         String sPropValue = sPropList[1];
-                        sPropValue.trim();
+                        sPropValue = sPropValue.trim();
                         if (sPropValue.indexOf("#") > 0)
                         {
                             sPropValue = JavaTools.replaceSubString(sPropValue, "", ";");

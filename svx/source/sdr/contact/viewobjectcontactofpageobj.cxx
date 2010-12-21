@@ -38,7 +38,7 @@
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <svx/svdpage.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
 

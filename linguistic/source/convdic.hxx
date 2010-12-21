@@ -38,7 +38,7 @@
 #include <hash_map>
 #include <set>
 #include <memory>
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
 
 // text conversion dictionary extension

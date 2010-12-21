@@ -47,13 +47,13 @@
 
 #define _ZFORMAT_CXX
 #include <svl/zformat.hxx>
-#include "zforscan.hxx"
+#include <zforscan.hxx>
 
 #include "zforfind.hxx"
 #include <svl/zforlist.hxx>
 #include "numhead.hxx"
 #include <unotools/digitgroupingiterator.hxx>
-#include "nfsymbol.hxx"
+#include <svl/nfsymbol.hxx>
 
 #include <cmath>
 

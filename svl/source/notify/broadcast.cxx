@@ -32,9 +32,9 @@
 #endif
 #include <tools/debug.hxx>
 
-#include "listener.hxx"
-#include "listeneriter.hxx"
-#include "broadcast.hxx"
+#include <svl/listener.hxx>
+#include <svl/listeneriter.hxx>
+#include <svl/broadcast.hxx>
 #include <svl/smplhint.hxx>
 
 

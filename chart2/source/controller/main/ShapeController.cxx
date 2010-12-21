@@ -262,6 +262,7 @@ IMPL_LINK( ShapeController, CheckNameHdl, AbstractSvxNameDialog*, pDialog )
 
 void ShapeController::executeDispatch_FormatLine()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -276,7 +277,6 @@ void ShapeController::executeDispatch_FormatLine()
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
             }
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -302,6 +302,7 @@ void ShapeController::executeDispatch_FormatLine()
 
 void ShapeController::executeDispatch_FormatArea()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -315,7 +316,6 @@ void ShapeController::executeDispatch_FormatArea()
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
             }
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -351,6 +351,7 @@ void ShapeController::executeDispatch_FormatArea()
 
 void ShapeController::executeDispatch_TextAttributes()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -363,7 +364,6 @@ void ShapeController::executeDispatch_TextAttributes()
             {
                 pDrawViewWrapper->MergeAttrFromMarked( aAttr, FALSE );
             }
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if ( pFact )
             {
@@ -388,6 +388,7 @@ void ShapeController::executeDispatch_TextAttributes()
 
 void ShapeController::executeDispatch_TransformDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -402,7 +403,6 @@ void ShapeController::executeDispatch_TransformDialog()
                 pDrawViewWrapper->GetAttributes( aAttr );
                 // item set for position and size
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -427,7 +427,6 @@ void ShapeController::executeDispatch_TransformDialog()
             else
             {
                 SfxItemSet aGeoAttr( pDrawViewWrapper->GetGeoAttrFromMarked() );
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -446,6 +445,7 @@ void ShapeController::executeDispatch_TransformDialog()
 
 void ShapeController::executeDispatch_ObjectTitleDescription()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -456,7 +456,6 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
             {
                 String aTitle( pSelectedObj->GetTitle() );
                 String aDescription( pSelectedObj->GetDescription() );
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -477,6 +476,7 @@ void ShapeController::executeDispatch_ObjectTitleDescription()
 
 void ShapeController::executeDispatch_RenameObject()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
@@ -486,7 +486,6 @@ void ShapeController::executeDispatch_RenameObject()
             if ( pSelectedObj )
             {
                 String aName( pSelectedObj->GetName() );
-                ::vos::OGuard aGuard( Application::GetSolarMutex() );
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
@@ -509,10 +508,10 @@ void ShapeController::executeDispatch_RenameObject()
 
 void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     DrawViewWrapper* pDrawViewWrapper = ( m_pChartController ? m_pChartController->GetDrawViewWrapper() : NULL );
     if ( pDrawViewWrapper )
     {
-        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         switch ( nId )
         {
             case COMMAND_ID_BRING_TO_FRONT:
@@ -558,6 +557,7 @@ void ShapeController::executeDispatch_ChangeZOrder( sal_uInt16 nId )
 
 void ShapeController::executeDispatch_FontDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -568,7 +568,6 @@ void ShapeController::executeDispatch_FontDialog()
             SfxItemSet aAttr( pDrawViewWrapper->GetModel()->GetItemPool() );
             pDrawViewWrapper->GetAttributes( aAttr );
             ViewElementListProvider aViewElementListProvider( pDrawModelWrapper );
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             ::boost::scoped_ptr< ShapeFontDialog > pDlg( new ShapeFontDialog( pParent, &aAttr, &aViewElementListProvider ) );
             if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
             {
@@ -581,6 +580,7 @@ void ShapeController::executeDispatch_FontDialog()
 
 void ShapeController::executeDispatch_ParagraphDialog()
 {
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
     if ( m_pChartController )
     {
         Window* pParent = dynamic_cast< Window* >( m_pChartController->m_pChartWindow );
@@ -606,7 +606,6 @@ void ShapeController::executeDispatch_ParagraphDialog()
             aNewAttr.Put( SvxWidowsItem( 0, SID_ATTR_PARA_WIDOWS) );
             aNewAttr.Put( SvxOrphansItem( 0, SID_ATTR_PARA_ORPHANS) );
 
-            ::vos::OGuard aGuard( Application::GetSolarMutex() );
             ::boost::scoped_ptr< ShapeParagraphDialog > pDlg( new ShapeParagraphDialog( pParent, &aNewAttr ) );
             if ( pDlg.get() && ( pDlg->Execute() == RET_OK ) )
             {
@@ -701,6 +700,7 @@ bool ShapeController::isBackwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {
@@ -719,6 +719,7 @@ bool ShapeController::isForwardPossible()
 {
     if ( m_pChartController && m_pChartController->m_aSelection.isAdditionalShapeSelected() )
     {
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
         DrawViewWrapper* pDrawViewWrapper = m_pChartController->GetDrawViewWrapper();
         if ( pDrawViewWrapper )
         {

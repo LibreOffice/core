@@ -53,7 +53,7 @@
 #include "docvor.hxx"
 #include "orgmgr.hxx"
 #include "sfxtypes.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "view.hrc"
 #include <sfx2/docfilt.hxx>
 #include "fltfnc.hxx"

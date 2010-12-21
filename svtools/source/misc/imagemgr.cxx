@@ -30,7 +30,7 @@
 
 // includes --------------------------------------------------------------
 
-#include "imagemgr.hxx"
+#include <svtools/imagemgr.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
@@ -39,9 +39,7 @@
 #include <sot/storage.hxx>
 #include <sot/clsids.hxx>
 #include <unotools/ucbhelper.hxx>
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
 #include <comphelper/processfactory.hxx>
-#endif
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
@@ -51,9 +49,8 @@
 #include <tools/rcid.h>
 #include <rtl/logfile.hxx>
 #include <unotools/configmgr.hxx>
-
 #include <svtools/svtools.hrc>
-#include "imagemgr.hrc"
+#include <svtools/imagemgr.hrc>
 #include <svtools/svtdata.hxx>
 #include <vos/mutex.hxx>
 

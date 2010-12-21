@@ -41,7 +41,7 @@
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>
 #include <vcl/svapp.hxx>
-#include <gallery.hxx>
+#include <svx/gallery.hxx>
 #include <svl/urihelper.hxx>
 #include <editeng/brshitem.hxx>
 #include <svl/intitem.hxx>
@@ -49,14 +49,14 @@
 #include <vcl/graph.hxx>
 #include <vcl/msgbox.hxx>
 #include <editeng/flstitem.hxx>
-#include <dlgutil.hxx>
+#include <svx/dlgutil.hxx>
 #ifndef _XTABLE_HXX //autogen
 
 #include <svx/xtable.hxx>
 #endif
-#include <drawitem.hxx>
-#include <numvset.hxx>
-#include <htmlmode.hxx>
+#include <svx/drawitem.hxx>
+#include <svx/numvset.hxx>
+#include <svx/htmlmode.hxx>
 #include <unotools/pathoptions.hxx>
 #include <svtools/ctrltool.hxx>
 #include <editeng/unolingu.hxx>

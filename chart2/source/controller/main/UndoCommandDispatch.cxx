@@ -38,9 +38,8 @@
 #include <vcl/svapp.hxx>
 
 // for ressource strings STR_UNDO and STR_REDO
-#include <sfx2/sfx.hrc>
-
-#include "ResId.hxx"
+#include <svtools/svtools.hrc>
+#include <svtools/svtdata.hxx>
 
 using namespace ::com::sun::star;
 
@@ -86,13 +85,13 @@ void UndoCommandDispatch::fireStatusEvent(
         if( m_xUndoManager->undoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aUndo = OUString( String( SchResId( STR_UNDO )));
+            OUString aUndo = OUString( String( SvtResId( STR_UNDO )));
             aUndoState <<= ( aUndo + m_xUndoManager->getCurrentUndoString());
         }
         if( m_xUndoManager->redoPossible())
         {
             // using assignment for broken gcc 3.3
-            OUString aRedo = OUString( String( SchResId( STR_REDO )));
+            OUString aRedo = OUString( String( SvtResId( STR_REDO )));
             aRedoState <<= ( aRedo + m_xUndoManager->getCurrentRedoString());
         }
 

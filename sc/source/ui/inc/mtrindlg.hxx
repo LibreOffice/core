@@ -30,7 +30,7 @@
 
 #include <vcl/dialog.hxx>
 #include <vcl/field.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/fixed.hxx>
 
 

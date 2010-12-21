@@ -79,12 +79,6 @@ public:
                     ::rtl::OUString aUserSelectedName,
                     sal_uInt16 nDocumentSignatureState = SIGNATURESTATE_NOSIGNATURES );
 
-    static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SearchForFilter(
-                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerQuery >& xFilterQuery,
-                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aSearchRequest,
-                    sal_Int32 nMustFlags,
-                    sal_Int32 nDontFlags );
-
     static sal_Bool CheckFilterOptionsAppearence(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& xFilterCFG,
                     const ::rtl::OUString& aFilterName );

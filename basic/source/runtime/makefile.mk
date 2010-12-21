@@ -41,6 +41,7 @@ ENABLE_EXCEPTIONS = TRUE
 
 SLOFILES=	\
     $(SLO)$/basrdll.obj	\
+    $(SLO)$/comenumwrapper.obj	\
     $(SLO)$/inputbox.obj	\
     $(SLO)$/runtime.obj	\
     $(SLO)$/step0.obj	\

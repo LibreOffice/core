@@ -51,6 +51,7 @@
 #include <com/sun/star/sheet/XSheetOutline.hpp>
 #include <com/sun/star/sheet/XSheetPageBreak.hpp>
 #include <com/sun/star/sheet/XDataPilotTablesSupplier.hpp>
+#include <com/sun/star/sheet/XNamedRanges.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
@@ -61,6 +62,7 @@
 #include <com/sun/star/form/FormComponentType.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <ooo/vba/excel/XlEnableSelection.hpp>
+#include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
 
@@ -94,6 +96,7 @@
 #include "vbaworksheets.hxx"
 #include "vbahyperlinks.hxx"
 #include "vbasheetobjects.hxx"
+#include "vbanames.hxx"
 
 #define STANDARDWIDTH 2267
 #define STANDARDHEIGHT 427
@@ -179,20 +182,20 @@ openNewDoc(rtl::OUString aSheetName )
     return xModel;
 }
 
-ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext )
+ScVbaWorksheet::ScVbaWorksheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : WorksheetImpl_BASE( xParent, xContext ), mbVeryHidden( false )
 {
 }
 
 ScVbaWorksheet::ScVbaWorksheet(const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< sheet::XSpreadsheet >& xSheet,
-        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel)
+        const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException) : WorksheetImpl_BASE( xParent, xContext ), mxSheet( xSheet ), mxModel(xModel), mbVeryHidden( false )
 {
 }
 
 ScVbaWorksheet::ScVbaWorksheet( uno::Sequence< uno::Any> const & args,
-    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) )
+    uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  WorksheetImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext ), mxModel( getXSomethingFromArgs< frame::XModel >( args, 1 ) ), mbVeryHidden( false )
 {
-    if ( args.getLength() < 2 )
+    if ( args.getLength() < 3 )
         throw lang::IllegalArgumentException();
 
     rtl::OUString sSheetName;
@@ -221,24 +224,40 @@ ScVbaWorksheet::setName(const ::rtl::OUString &rName ) throw (uno::RuntimeExcept
     xNamed->setName( rName );
 }
 
-sal_Bool
+sal_Int32
 ScVbaWorksheet::getVisible() throw (uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    uno::Any aValue = xProps->getPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) );
-    sal_Bool bRet = false;
-    aValue >>= bRet;
-    return bRet;
+    bool bVisible = false;
+    xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ) ) >>= bVisible;
+    using namespace ::ooo::vba::excel::XlSheetVisibility;
+    return bVisible ? xlSheetVisible : (mbVeryHidden ? xlSheetVeryHidden : xlSheetHidden);
 }
 
 void
-ScVbaWorksheet::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
+ScVbaWorksheet::setVisible( sal_Int32 nVisible ) throw (uno::RuntimeException)
 {
+    using namespace ::ooo::vba::excel::XlSheetVisibility;
+    bool bVisible = true;
+    switch( nVisible )
+    {
+        case xlSheetVisible: case 1:  // Excel accepts -1 and 1 for visible sheets
+            bVisible = true;
+            mbVeryHidden = false;
+        break;
+        case xlSheetHidden:
+            bVisible = false;
+            mbVeryHidden = false;
+        break;
+        case xlSheetVeryHidden:
+            bVisible = false;
+            mbVeryHidden = true;
+        break;
+        default:
+            throw uno::RuntimeException();
+    }
     uno::Reference< beans::XPropertySet > xProps( getSheet(), uno::UNO_QUERY_THROW );
-    uno::Any aValue( bVisible );
-    xProps->setPropertyValue
-            (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), aValue);
+    xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsVisible" ) ), uno::Any( bVisible ) );
 }
 
 sal_Int16
@@ -639,7 +658,10 @@ uno::Reference< excel::XRange >
 ScVbaWorksheet::Cells( const ::uno::Any &nRow, const ::uno::Any &nCol )
         throw (uno::RuntimeException)
 {
-    return getSheetRange()->Cells( nRow, nCol );
+    // Performance optimization for often-called Cells method:
+    // Use a common helper method instead of creating a new ScVbaRange object
+    uno::Reference< table::XCellRange > xRange( getSheet(), uno::UNO_QUERY_THROW );
+    return ScVbaRange::CellsHelper( this, mxContext, xRange, nRow, nCol );
 }
 
 uno::Reference< excel::XRange >
@@ -716,8 +738,15 @@ ScVbaWorksheet::Hyperlinks( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
 uno::Any SAL_CALL
 ScVbaWorksheet::Names( const css::uno::Any& aIndex ) throw (uno::RuntimeException)
 {
-    uno::Reference< excel::XWorkbook > xWorkbook( getParent(), uno::UNO_QUERY_THROW );
-    return xWorkbook->Names( aIndex );
+    // fake sheet-local names by returning all global names
+    // #163498# initialize Names object with correct parent (this worksheet)
+    // TODO: real sheet-local names...
+    uno::Reference< beans::XPropertySet > xProps( mxModel, uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
+    uno::Reference< XCollection > xNames( new ScVbaNames( this, mxContext, xNamedRanges, mxModel ) );
+    if ( aIndex.hasValue() )
+        return uno::Any( xNames->Item( aIndex, uno::Any() ) );
+    return uno::Any( xNames );
 }
 
 uno::Any SAL_CALL
@@ -888,7 +917,8 @@ ScVbaWorksheet::getFormControls()
         // get the www-standard container ( maybe we should access the
         // 'www-standard' by name rather than index, this seems an
         // implementation detail
-        xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW );
+        if( xIndexAccess->hasElements() )
+            xFormControls.set( xIndexAccess->getByIndex(0), uno::UNO_QUERY );
 
     }
     catch( uno::Exception& )

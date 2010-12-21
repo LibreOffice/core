@@ -1,4 +1,4 @@
-eo	embeddedobj	:	offuh sal cppu cppuhelper comphelper tools unotools vos NULL
+eo	embeddedobj	:	offuh sal cppu cppuhelper comphelper tools unotools vos LIBXSLT:libxslt NULL
 eo	embeddedobj									usr1	-	all	eo_mkout NULL
 eo	embeddedobj\inc								nmake	-	all	eo_inc NULL
 eo	embeddedobj\source\commonembedding			nmake	-	all	eo_commonembed eo_inc NULL

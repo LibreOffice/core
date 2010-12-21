@@ -78,7 +78,7 @@
 #include <comphelper/processfactory.hxx>
 
 
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "graphhelp.hxx"
 #include "doc.hrc"
 

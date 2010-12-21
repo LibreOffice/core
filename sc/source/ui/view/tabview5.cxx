@@ -267,7 +267,7 @@ void ScTabView::DoAddWin( ScGridWindow* pWin )
 
 //==================================================================
 
-void ScTabView::TabChanged()
+void ScTabView::TabChanged( bool bSameTabButMoved )
 {
     if (pDrawView)
     {
@@ -339,7 +339,7 @@ void ScTabView::TabChanged()
         {
             ScTabViewObj* pImp = ScTabViewObj::getImplementation( xController );
             if (pImp)
-                pImp->SheetChanged();
+                pImp->SheetChanged( bSameTabButMoved );
         }
     }
 }

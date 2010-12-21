@@ -168,6 +168,8 @@ public:
     const String&   GetEditString();
     const String&   GetFormString() const   { return aFormText; }
 
+    const ScAddress& GetCursorPos() const   { return aCursorPos; }
+
     BOOL            GetTextAndFields( ScEditEngineDefaulter& rDestEngine );
 
     BOOL            KeyInput( const KeyEvent& rKEvt, BOOL bStartEdit = FALSE );

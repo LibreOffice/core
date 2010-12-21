@@ -29,7 +29,7 @@
 #include "precompiled_sfx2.hxx"
 
 #include <sfx2/app.hxx>
-#include "docinsert.hxx"
+#include "sfx2/docinsert.hxx"
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <sfx2/filedlghelper.hxx>

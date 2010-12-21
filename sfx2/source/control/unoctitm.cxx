@@ -463,7 +463,7 @@ void SfxOfficeDispatch::SetMasterUnoCommand( sal_Bool bSet )
 sal_Bool SfxOfficeDispatch::IsMasterUnoCommand() const
 {
     if ( pControllerItem )
-        pControllerItem->isMasterSlaveCommand();
+        return pControllerItem->isMasterSlaveCommand();
     return sal_False;
 }
 

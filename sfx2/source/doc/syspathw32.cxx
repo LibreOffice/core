@@ -28,6 +28,10 @@
 *
 ************************************************************************/
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sfx2.hxx"
+
+
 #ifdef WNT
 #ifdef _MSC_VER
 #pragma warning(disable:4917)

@@ -37,7 +37,7 @@
 #include <tools/shl.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/svdmodel.hxx>
-#include <globl3d.hxx>
+#include <svx/globl3d.hxx>
 #include <svx/view3d.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/sphere3d.hxx>
@@ -48,9 +48,9 @@
 #include <svx/polysc3d.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/style.hxx>
-#include <dlgutil.hxx>
+#include <svx/dlgutil.hxx>
 
-#include <dlgutil.hxx>
+#include <svx/dlgutil.hxx>
 #include <svx/dialmgr.hxx>
 #include <svx/viewpt3d.hxx> // ProjectionType
 
@@ -60,7 +60,7 @@
 #include <editeng/colritem.hxx>
 #include <svx/e3ditem.hxx>
 
-#include <gallery.hxx>
+#include <svx/gallery.hxx>
 #define GALLERY_THEME "3D"
 #include <svl/whiter.hxx>
 

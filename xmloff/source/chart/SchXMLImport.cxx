@@ -39,7 +39,7 @@
 // header for class ByteString
 #include <tools/string.hxx>
 #include <comphelper/processfactory.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/nmspmap.hxx>

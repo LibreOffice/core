@@ -65,6 +65,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 #include <svx/xmleohlp.hxx>
 #include <rtl/logfile.hxx>
@@ -426,6 +427,7 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             { MAP_LEN( "StreamRelPath" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "StreamName" ), 0, &::getCppuType( (rtl::OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "BuildId" ), 0, &::getCppuType( (OUString *)0 ), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
+            { MAP_LEN( "VBACompatibilityMode" ), 0, &::getBooleanCppuType(), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0 },
             { MAP_LEN( "ScriptConfiguration" ), 0, &::getCppuType((uno::Reference<container::XNameAccess> *)0), ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
 
             { NULL, 0, 0, NULL, 0, 0 }
@@ -643,6 +645,24 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             uno::Reference <container::XNameAccess> xCodeNameAccess;
             if( aAny >>= xCodeNameAccess )
                 XMLCodeNameProvider::set( xCodeNameAccess, &rDoc );
+
+            // VBA compatibility
+            bool bVBACompat = false;
+            if ( (xInfoSet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("VBACompatibilityMode"))) >>= bVBACompat) && bVBACompat )
+            {
+                /*  Set library container to VBA compatibility mode, this
+                    forces loading the Basic project, which in turn creates the
+                    VBA Globals object and does all related initialization. */
+                if ( xModelSet.is() ) try
+                {
+                    uno::Reference< script::vba::XVBACompatibility > xVBACompat( xModelSet->getPropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW );
+                    xVBACompat->setVBACompatibilityMode( sal_True );
+                }
+                catch( uno::Exception& )
+                {
+                }
+            }
         }
 
         // Don't test bStylesRetval and bMetaRetval, because it could be an older file which not contain such streams

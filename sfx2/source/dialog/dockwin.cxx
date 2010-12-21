@@ -44,7 +44,7 @@
 #include "workwin.hxx"
 #include "splitwin.hxx"
 #include <sfx2/viewsh.hxx>
-#include "sfxhelp.hxx"
+#include "sfx2/sfxhelp.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/msgpool.hxx>
 

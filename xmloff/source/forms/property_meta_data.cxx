@@ -27,10 +27,10 @@
 #include "precompiled_xmloff.hxx"
 
 #include "property_description.hxx"
-#include "form_handler_factory.hxx"
+#include "forms/form_handler_factory.hxx"
 #include "strings.hxx"
 #include "xmloff/xmltoken.hxx"
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 #include <tools/diagnose_ex.h>
 #include <tools/debug.hxx>

@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include "sores.hxx"
+#include <svtools/sores.hxx>
 
 String STR_FORMAT_STRING
 {

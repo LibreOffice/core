@@ -41,7 +41,7 @@
 #include <vector>
 #include <memory>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "lngopt.hxx"
 
 class DicEvtListenerHelper;

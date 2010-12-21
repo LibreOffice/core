@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 #include <com/sun/star/document/EventObject.hpp>
 
-#include "unoshcol.hxx"
+#include "svx/unoshcol.hxx"
 #include <svx/unoprov.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 

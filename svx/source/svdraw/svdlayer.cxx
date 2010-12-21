@@ -31,8 +31,8 @@
 
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx> // fuer Broadcasting
-#include "svdglob.hxx"  // StringCache
-#include "svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // SetOfByte

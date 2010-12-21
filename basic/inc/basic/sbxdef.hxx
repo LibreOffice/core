@@ -106,6 +106,7 @@ enum SbxDataType {
 };
 
 const UINT32 SBX_TYPE_WITH_EVENTS_FLAG = 0x10000;
+const UINT32 SBX_TYPE_DIM_AS_NEW_FLAG  = 0x20000;
 const UINT32 SBX_FIXED_LEN_STRING_FLAG = 0x10000;   // same value as above as no conflict possible
 
 #endif
@@ -317,6 +318,8 @@ enum SbxError {                 // Ergebnis einer Rechenoperation/Konversion
 #define SBX_REFERENCE 0x4000    // Parameter is Reference (DLL-call)
 #define SBX_NO_MODIFY 0x8000    // SetModified is suppressed
 #define SBX_WITH_EVENTS 0x0080  // Same value as unused SBX_HIDDEN
+#define SBX_DIM_AS_NEW  0x0800  // Same value as SBX_GBLSEARCH, cannot conflict as one
+                                // is used for objects, the other for variables only
 
 // Broadcaster-IDs:
 #define SBX_HINT_DYING          SFX_HINT_DYING

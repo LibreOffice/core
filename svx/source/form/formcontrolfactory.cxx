@@ -31,7 +31,7 @@
 #include "formcontrolfactory.hxx"
 #include "fmcontrollayout.hxx"
 #include "fmprop.hrc"
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #include "fmservs.hxx"
 #include "svx/dialmgr.hxx"
 #include "svx/svdouno.hxx"

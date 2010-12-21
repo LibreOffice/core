@@ -30,7 +30,7 @@
 
 #include <string.h> // memset()
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 
 class StgInternalStream : public SvStream

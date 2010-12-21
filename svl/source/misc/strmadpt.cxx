@@ -35,9 +35,9 @@
 #include <set>
 #include <rtl/alloc.h>
 #include <rtl/memory.h>
-#include <instrm.hxx>
-#include <outstrm.hxx>
-#include <strmadpt.hxx>
+#include <svl/instrm.hxx>
+#include <svl/outstrm.hxx>
+#include <svl/strmadpt.hxx>
 
 using namespace com::sun::star;
 

@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include "tabbar.hxx"
+#include <svtools/tabbar.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>
 #include <tools/poly.hxx>

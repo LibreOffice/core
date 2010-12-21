@@ -53,10 +53,10 @@
 
 #include <rtl/instance.hxx>
 
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "defs.hxx"
-#include "lngprops.hxx"
-#include "hyphdta.hxx"
+#include "linguistic/lngprops.hxx"
+#include "linguistic/hyphdta.hxx"
 #include <i18npool/mslangid.hxx>
 
 using namespace utl;

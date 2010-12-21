@@ -77,7 +77,7 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 #.ENDIF #FREEBSD
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
-SHL1OBJS+=$(SOLARLIBDIR)$/pathutils-slo.obj
+SHL1OBJS+=$(SOLARLIBDIR)$/pathutils-obj.obj
 STDLIBS+=$(SOLARLIBDIR)$/npwin.obj
 SHL1STDLIBS+= $(SHELL32LIB) $(SOLARLIBDIR)$/npwin.obj
 

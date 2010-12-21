@@ -32,7 +32,7 @@
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <svtools/svmedit.hxx>
 #include <svtools/ctrlbox.hxx>
 

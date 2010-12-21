@@ -52,7 +52,7 @@
 // header for define DBG_ERROR1
 #include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #ifndef _XMLOFF_NMSPMAP_HX
 #include <xmloff/nmspmap.hxx>

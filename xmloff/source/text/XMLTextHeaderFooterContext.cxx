@@ -30,7 +30,7 @@
 #include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/text/XRelativeTextContentRemove.hpp>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include "XMLTextHeaderFooterContext.hxx"
 #ifndef _XMLOFF_TEXTTABLECONTEXT_HXX_
 #include <xmloff/XMLTextTableContext.hxx>

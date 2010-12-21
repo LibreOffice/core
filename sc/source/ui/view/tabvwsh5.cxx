@@ -249,7 +249,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         //  kann und dann auch die aktive View umgeschaltet werden muss.
 
         SCTAB nNewTab = nActiveTab;
-        BOOL bForce = FALSE;
+        bool bStayOnActiveTab = true;
         switch (nId)
         {
             case SC_TAB_INSERTED:
@@ -260,7 +260,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 if ( nTab1 < nNewTab )              // vorher geloescht
                     --nNewTab;
                 else if ( nTab1 == nNewTab )        // aktuelle geloescht
-                    bForce = TRUE;
+                    bStayOnActiveTab = false;
                 break;
             case SC_TAB_MOVED:
                 if ( nNewTab == nTab1 )             // verschobene Tabelle
@@ -282,7 +282,7 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                 break;
             case SC_TAB_HIDDEN:
                 if ( nTab1 == nNewTab )             // aktuelle ausgeblendet
-                    bForce = TRUE;
+                    bStayOnActiveTab = false;
                 break;
         }
 
@@ -290,7 +290,8 @@ void __EXPORT ScTabViewShell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
         if ( nNewTab >= pDoc->GetTableCount() )
             nNewTab = pDoc->GetTableCount() - 1;
 
-        SetTabNo( nNewTab, bForce );
+        BOOL bForce = !bStayOnActiveTab;
+        SetTabNo( nNewTab, bForce, FALSE, bStayOnActiveTab );
     }
     else if (rHint.ISA(ScIndexHint))
     {

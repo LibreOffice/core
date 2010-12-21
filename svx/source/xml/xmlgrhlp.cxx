@@ -47,7 +47,7 @@
 #include <tools/zcodec.hxx>
 
 #include "svtools/filter.hxx"
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 
 #include <algorithm>
 

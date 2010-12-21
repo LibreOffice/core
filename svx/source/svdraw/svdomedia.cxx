@@ -31,8 +31,8 @@
 #include <vcl/svapp.hxx>
 
 #include <svx/svdomedia.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
 #include <svx/sdr/contact/viewcontactofsdrmediaobj.hxx>
 #include <avmedia/mediawindow.hxx>
 

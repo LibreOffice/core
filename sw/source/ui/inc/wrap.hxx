@@ -31,7 +31,7 @@
 #include <sfx2/basedlgs.hxx>
 
 #ifndef _IMAGEBTN_HXX //autogen
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen

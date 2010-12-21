@@ -37,7 +37,7 @@
 #include <vcl/lstbox.hxx>
 
 #ifndef _IMAGEBTN_HXX
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #endif
 #include <svtools/brwbox.hxx>
 #include <vcl/timer.hxx>

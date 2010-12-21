@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdotext.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx> // fuer GetMaxObjSize
 #include <svx/svdoutl.hxx>
 #include <editeng/outliner.hxx>

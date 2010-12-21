@@ -206,9 +206,10 @@ void SbiSymPool::Add( SbiSymDef* pDef )
 
 SbiSymDef* SbiSymPool::Find( const String& rName ) const
 {
-    for( USHORT i = 0; i < aData.Count(); i++ )
+    USHORT nCount = aData.Count();
+    for( USHORT i = 0; i < nCount; i++ )
     {
-        SbiSymDef* p = aData.GetObject( i );
+        SbiSymDef* p = aData.GetObject( nCount - i - 1 );
         if( ( !p->nProcId || ( p->nProcId == nProcId ) )
          && ( p->aName.EqualsIgnoreCaseAscii( rName ) ) )
             return p;

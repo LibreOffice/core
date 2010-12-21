@@ -29,7 +29,7 @@
 #include "precompiled_svx.hxx"
 
 // === includes (declaration) ============================================
-#include "databaseregistrationui.hxx"
+#include "svx/databaseregistrationui.hxx"
 
 // === includes (UNO) ====================================================
 // === /includes (UNO) ===================================================

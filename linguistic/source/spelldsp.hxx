@@ -29,7 +29,7 @@
 #define _LINGUISTIC_SPELLDSP_HXX_
 
 #include "lngopt.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 #include "iprcache.hxx"
 
 #include <uno/lbnames.h>            // CPPU_CURRENT_LANGUAGE_BINDING_NAME macro, which specify the environment type

@@ -40,12 +40,12 @@
 #include <svx/colrctrl.hxx>
 
 #include <svx/svdview.hxx>
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <editeng/colritem.hxx>
-#include "xattr.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/dialmgr.hxx>
-#include "xexch.hxx"
+#include "svx/xexch.hxx"
 #include <vcl/svapp.hxx>
 
 SFX_IMPL_DOCKINGWINDOW( SvxColorChildWindow, SID_COLOR_CONTROL )

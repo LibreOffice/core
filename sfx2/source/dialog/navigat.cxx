@@ -36,7 +36,7 @@
 #include <sfx2/navigat.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "helpid.hrc"
 
 SFX_IMPL_DOCKINGWINDOW( SfxNavigatorWrapper , SID_NAVIGATOR );

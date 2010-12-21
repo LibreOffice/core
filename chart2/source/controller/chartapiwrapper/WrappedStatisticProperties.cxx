@@ -1032,7 +1032,6 @@ void lcl_addWrappedProperties( std::vector< WrappedProperty* >& rList
 
 }//anonymous namespace
 
-//static
 void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -1128,7 +1127,6 @@ void WrappedStatisticProperties::addProperties( ::std::vector< Property > & rOut
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
@@ -1138,7 +1136,6 @@ void WrappedStatisticProperties::addWrappedPropertiesForSeries( std::vector< Wra
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedStatisticProperties::addWrappedPropertiesForDiagram( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {

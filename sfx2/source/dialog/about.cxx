@@ -29,7 +29,6 @@
 #include "precompiled_sfx2.hxx"
 
 // include ---------------------------------------------------------------
-#include <aboutbmpnames.hxx>
 
 #ifndef _SV_APP_HXX
 #include <vcl/svapp.hxx>
@@ -114,7 +113,7 @@ Image SfxApplication::GetApplicationLogo()
 {
     Image aAppLogo;
 
-    rtl::OUString aAbouts( RTL_CONSTASCII_USTRINGPARAM( ABOUT_BITMAP_STRINGLIST ) );
+    rtl::OUString aAbouts;
     bool bLoaded = false;
     sal_Int32 nIndex = 0;
     do

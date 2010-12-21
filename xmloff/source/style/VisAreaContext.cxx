@@ -32,9 +32,9 @@
 
 
 // INCLUDE ---------------------------------------------------------------
-#include "VisAreaContext.hxx"
+#include "xmloff/VisAreaContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlimp.hxx>

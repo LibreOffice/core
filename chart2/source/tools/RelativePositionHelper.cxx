@@ -36,7 +36,6 @@ using namespace ::com::sun::star;
 namespace chart
 {
 
-// static
 chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
     const chart2::RelativePosition & rPosition,
     const chart2::RelativeSize & rObjectSize,
@@ -132,7 +131,6 @@ chart2::RelativePosition RelativePositionHelper::getReanchoredPosition(
 }
 
 
-// static
 awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
       awt::Point aPoint
     , awt::Size aObjectSize
@@ -191,7 +189,6 @@ awt::Point RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
     return aResult;
 }
 
-// static
 awt::Point RelativePositionHelper::getCenterOfAnchoredObject(
       awt::Point aPoint
     , awt::Size aUnrotatedObjectSize

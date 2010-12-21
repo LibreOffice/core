@@ -33,7 +33,7 @@
 #include <svl/svstdarr.hxx>
 #endif
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #ifndef _XMLOFF_XMLITMAP_HXX
 //#include "xmlitmap.hxx"

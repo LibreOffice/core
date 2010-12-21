@@ -276,6 +276,8 @@ struct RefSaveItem
 
 class SbiRuntime
 {
+    friend void SbRtl_CallByName( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+
     typedef void( SbiRuntime::*pStep0 )();
     typedef void( SbiRuntime::*pStep1 )( UINT32 nOp1 );
     typedef void( SbiRuntime::*pStep2 )( UINT32 nOp1, UINT32 nOp2 );
@@ -434,7 +436,7 @@ class SbiRuntime
     void StepDCREATE_REDIMP(UINT32,UINT32), StepDCREATE_IMPL(UINT32,UINT32);
     void StepFIND_CM( UINT32, UINT32 );
     void StepFIND_STATIC( UINT32, UINT32 );
-    void implCreateFixedString( SbxVariable* pStrVar, UINT32 nOp2 );
+    void implHandleSbxFlags( SbxVariable* pVar, SbxDataType t, UINT32 nOp2 );
 public:
     void          SetVBAEnabled( bool bEnabled );
     USHORT      GetImageFlag( USHORT n ) const;

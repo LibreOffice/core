@@ -44,8 +44,8 @@
 #define TMP_STR_BEGIN   '['
 #define TMP_STR_END     ']'
 
-#include "drawitem.hxx"
-#include "xattr.hxx"
+#include "svx/drawitem.hxx"
+#include "svx/xattr.hxx"
 #include <svx/xtable.hxx>
 #include <svx/fillctrl.hxx>
 #include <svx/itemwin.hxx>

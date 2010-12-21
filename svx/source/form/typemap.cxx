@@ -38,7 +38,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/postitem.hxx>
 #ifndef _SVX_CLIPBOARDCTL_HXX_
-#include "clipfmtitem.hxx"
+#include "svx/clipfmtitem.hxx"
 #endif
 #include <editeng/fhgtitem.hxx>
 #include "editeng/fontitem.hxx"

@@ -33,12 +33,9 @@
 #include <svl/intitem.hxx>
 #include <vcl/svapp.hxx>
 
-#ifndef GCC
-#endif
-
 #include <sfx2/templdlg.hxx>
 #include <sfx2/bindings.hxx>
-#include "tplpitem.hxx"
+#include "sfx2/tplpitem.hxx"
 #include "tplcitem.hxx"
 #include "templdgi.hxx"
 

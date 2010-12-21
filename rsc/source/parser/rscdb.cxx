@@ -903,7 +903,7 @@ ERRTYPE RscTypCont :: WriteHxx( FILE * fOutput, ULONG nFileKey )
     fprintf( fOutput, "#include <vcl/fixed.hxx>\n" );
     fprintf( fOutput, "#include <vcl/group.hxx>\n" );
     fprintf( fOutput, "#include <vcl/image.hxx>\n" );
-    fprintf( fOutput, "#include <vcl/imagebtn.hxx>\n" );
+    fprintf( fOutput, "#include <vcl/button.hxx>\n" );
     fprintf( fOutput, "#include <vcl/keycod.hxx>\n" );
     fprintf( fOutput, "#include <vcl/lstbox.hxx>\n" );
     fprintf( fOutput, "#include <vcl/mapmod.hxx>\n" );
@@ -1113,3 +1113,4 @@ sal_uInt32 RscTypCont::PutTranslatorKey( sal_uInt64 nKey )
     aIdTranslator[ nKey ] = nFilePos;
     return nPMId++;
 }
+

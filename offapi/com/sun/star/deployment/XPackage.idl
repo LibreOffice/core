@@ -262,6 +262,14 @@ interface XPackage
     string getDescription()
          raises (ExtensionRemovedException);
 
+    /** returns a string containing the license text.
+
+        @return
+                license
+    */
+    string getLicenseText()
+         raises (ExtensionRemovedException);
+
     /** returns a sequence of update information URLs.
 
         The sequence may be empty in case no update information is available.

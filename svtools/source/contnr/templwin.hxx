@@ -32,8 +32,8 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/window.hxx>
 #include <svtools/headbar.hxx>
-#include "fileview.hxx"
-#include "ivctrl.hxx"
+#include <svtools/fileview.hxx>
+#include <svtools/ivctrl.hxx>
 #include <svtools/svmedit2.hxx>
 #include <svl/restrictedpaths.hxx>
 #include <com/sun/star/frame/XDispatch.hpp>

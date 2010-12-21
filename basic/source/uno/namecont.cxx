@@ -2815,19 +2815,37 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 
 void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( ::sal_Bool _vbacompatmodeon ) throw (RuntimeException)
 {
-    BasicManager* pBasMgr = getBasicManager();
-    if( pBasMgr )
+    /*  The member variable mbVBACompat must be set first, the following call
+        to getBasicManager() may call getVBACompatibilityMode() which returns
+        this value. */
+    mbVBACompat = _vbacompatmodeon;
+    if( BasicManager* pBasMgr = getBasicManager() )
     {
         // get the standard library
-        String aLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                if ( pBasMgr->GetName().Len() )
-                    aLibName = pBasMgr->GetName();
+        String aLibName = pBasMgr->GetName();
+        if ( aLibName.Len() == 0 )
+            aLibName = String( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
 
-        StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
-        if( pBasic )
+        if( StarBASIC* pBasic = pBasMgr->GetLib( aLibName ) )
             pBasic->SetVBAEnabled( _vbacompatmodeon );
+
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( mbVBACompat ) try
+        {
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
+        }
     }
-        mbVBACompat = _vbacompatmodeon;
 }
 
 // Methods XServiceInfo

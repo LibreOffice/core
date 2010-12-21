@@ -161,8 +161,6 @@ SFX_IMPL_NAMED_VIEWFACTORY( BasicIDEShell, "Default" )
 }
 
 
-// MI: Prinzipiel IDL, aber ich lieber doch nicht?
-// SFX_IMPL_ /*IDL_*/ INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 SFX_IMPL_INTERFACE( BasicIDEShell, SfxViewShell, IDEResId( RID_STR_IDENAME ) )
 {
     SFX_CHILDWINDOW_REGISTRATION( SID_SEARCH_DLG );

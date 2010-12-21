@@ -31,7 +31,7 @@
 #include "rtl/string.h"
 #include "rtl/string.h"
 #include "stgole.hxx"
-#include "storinfo.hxx"     // Read/WriteClipboardFormat()
+#include "sot/storinfo.hxx"     // Read/WriteClipboardFormat()
 
 #include <tools/debug.hxx>
 #if defined(_MSC_VER) && (_MSC_VER>=1400)

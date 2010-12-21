@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "dialcontrol.hxx"
+#include "svx/dialcontrol.hxx"
 
 #include <math.h>
 #include <vcl/virdev.hxx>

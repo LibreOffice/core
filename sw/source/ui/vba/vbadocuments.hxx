@@ -56,11 +56,6 @@ public:
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Template, const css::uno::Any& NewTemplate, const css::uno::Any& DocumentType, const css::uno::Any& Visible ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Open( const ::rtl::OUString& Filename, const css::uno::Any& ConfirmConversions, const css::uno::Any& ReadOnly, const css::uno::Any& AddToRecentFiles, const css::uno::Any& PasswordDocument, const css::uno::Any& PasswordTemplate, const css::uno::Any& Revert, const css::uno::Any& WritePasswordDocument, const css::uno::Any& WritePasswordTemplate, const css::uno::Any& Format, const css::uno::Any& Encoding, const css::uno::Any& Visible, const css::uno::Any& OpenAndRepair, const css::uno::Any& DocumentDirection, const css::uno::Any& NoEncodingDialog, const css::uno::Any& XMLTransform ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& OriginalFormat, const css::uno::Any& RouteDocument ) throw (css::uno::RuntimeException);
-
-    // VbaDocumentsBase / XDocumentsBase (to avoid warning C4266 for hiding function on wntmsci)
-    virtual css::uno::Any SAL_CALL Add() throw (css::uno::RuntimeException);
-    virtual void SAL_CALL Close(  ) throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL Open( const ::rtl::OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 
 #endif /* SW_VBA_DOCUMENTS_HXX */

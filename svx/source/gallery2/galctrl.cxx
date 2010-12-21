@@ -34,9 +34,9 @@
 #include <avmedia/mediaplayer.hxx>
 #include "helpid.hrc"
 #include "galbrws2.hxx"
-#include "galtheme.hxx"
+#include "svx/galtheme.hxx"
 #include "svx/galmisc.hxx"
-#include "galctrl.hxx"
+#include "svx/galctrl.hxx"
 #include "editeng/AccessibleStringWrap.hxx"
 #include <editeng/svxfont.hxx>
 #include "galobj.hxx"

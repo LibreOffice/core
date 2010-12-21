@@ -31,7 +31,7 @@
 
 #include "address.hxx"
 #include <vcl/dialog.hxx>
-#include <vcl/imagebtn.hxx>
+#include <vcl/button.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/fixed.hxx>
 

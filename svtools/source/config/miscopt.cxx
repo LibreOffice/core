@@ -45,7 +45,7 @@
 #include <rtl/logfile.hxx>
 #include "itemholder2.hxx"
 
-#include <imgdef.hxx>
+#include <svtools/imgdef.hxx>
 #include <vcl/svapp.hxx>
 
 //_________________________________________________________________________________________________________________

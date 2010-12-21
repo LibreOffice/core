@@ -41,7 +41,7 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 /** === end UNO includes === **/
 
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 #include <tools/diagnose_ex.h>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>

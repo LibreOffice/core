@@ -62,7 +62,7 @@
 #include "sdpropls.hxx"
 #include "propimp0.hxx"
 #include <xmloff/xmlexp.hxx>
-#include <xmlnmspe.hxx>
+#include <xmloff/xmlnmspe.hxx>
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/TextureProjectionMode.hpp>
 #include <com/sun/star/drawing/TextureKind.hpp>

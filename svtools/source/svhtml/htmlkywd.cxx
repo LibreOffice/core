@@ -34,8 +34,8 @@
 #include <limits.h>
 
 #include <svtools/svparser.hxx>
-#include "htmlkywd.hxx"
-#include "htmltokn.h"
+#include <svtools/htmlkywd.hxx>
+#include <svtools/htmltokn.h>
 
 // die Tabelle muss noch sortiert werden
 struct HTML_TokenEntry

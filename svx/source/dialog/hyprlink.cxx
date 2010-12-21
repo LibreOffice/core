@@ -43,11 +43,11 @@
 #include <sfx2/objsh.hxx>
 #include <comphelper/processfactory.hxx>
 
-#include "hlnkitem.hxx"
+#include "svx/hlnkitem.hxx"
 #include <svx/dialogs.hrc>
 #include "hyprlink.hrc"
 #include <svx/dialmgr.hxx>
-#include "hyprlink.hxx"
+#include "svx/hyprlink.hxx"
 #include "hyprdlg.hxx"
 
 using namespace ::rtl;

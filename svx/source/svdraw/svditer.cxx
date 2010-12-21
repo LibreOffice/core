@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdogrp.hxx>
 #include <svx/svdobj.hxx>

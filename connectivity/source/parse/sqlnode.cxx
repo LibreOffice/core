@@ -1425,7 +1425,8 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
             { OSQLParseNode::parenthesized_boolean_value_expression, "parenthesized_boolean_value_expression" },
             { OSQLParseNode::character_string_type, "character_string_type" },
             { OSQLParseNode::other_like_predicate_part_2, "other_like_predicate_part_2" },
-            { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" }
+            { OSQLParseNode::between_predicate_part_2, "between_predicate_part_2" },
+            { OSQLParseNode::cast_spec, "cast_spec" }
         };
         size_t nRuleMapCount = sizeof( aRuleDescriptions ) / sizeof( aRuleDescriptions[0] );
         OSL_ENSURE( nRuleMapCount == size_t( OSQLParseNode::rule_count ), "OSQLParser::OSQLParser: added a new rule? Adjust this map!" );
@@ -2511,6 +2512,7 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
             rString.append(m_aNodeValue);
             rString.appendAscii("#");
             break;
+
         case SQL_NODE_INTNUM:
         case SQL_NODE_APPROXNUM:
             {
@@ -2523,6 +2525,12 @@ void OSQLParseNode::parseLeaf(::rtl::OUStringBuffer& rString, const SQLParseNode
                 rString.append(aTmp);
 
             }   break;
+        case SQL_NODE_PUNCTUATION:
+            if ( getParent() && SQL_ISRULE(getParent(),cast_spec) && m_aNodeValue.toChar() == '(' ) // no spaces in front of '('
+            {
+                rString.append(m_aNodeValue);
+                break;
+            }
             // fall through
         default:
             if (rString.getLength() && m_aNodeValue.toChar() != '.' && m_aNodeValue.toChar() != ':' )

@@ -45,7 +45,7 @@
 #include <svx/unopage.hxx>
 #include <editeng/unoprnms.hxx>
 #include <svx/polysc3d.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <svx/cube3d.hxx>
 #include <svx/sphere3d.hxx>
 #include <svx/lathe3d.hxx>
@@ -324,7 +324,7 @@ static void ConvertObjectToHomogenMatric( E3dObject* pObject, Any& rValue )
 }
 
 //----------------------------------------------------------------------
-#include <svditer.hxx>
+#include <svx/svditer.hxx>
 
 struct ImpRememberTransAndRect
 {

@@ -28,17 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #include <vcl/svapp.hxx>
-#ifndef _SV_BUTTON_HXX //autogen
 #include <vcl/button.hxx>
-#endif
 #include <vcl/fixed.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <svtools/svtdata.hxx>
-
 #include <filedlg2.hxx>
-#include <filedlg.hxx>
-#include <filedlg2.hrc>
+#include <svtools/filedlg.hxx>
+#include <svtools/filedlg2.hrc>
 #include <vcl/msgbox.hxx>
 #include <vos/security.hxx>
 #include <com/sun/star/i18n/XCollator.hpp>

@@ -53,14 +53,14 @@
 
 #include <svx/dialogs.hrc>
 #include <svx/dialmgr.hxx>
-#include "xmlsecctrl.hxx"
+#include "svx/xmlsecctrl.hxx"
 #include <tools/urlobj.hxx>
 
 #define PAINT_OFFSET    5
 
 //#include <editeng/sizeitem.hxx>
 //#include <svx/dialmgr.hxx>
-//#include "dlgutil.hxx"
+//#include "svx/dlgutil.hxx"
 //#include "stbctrls.h"
 
 //#include <svx/dialogs.hrc>

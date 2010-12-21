@@ -97,6 +97,18 @@ public:
     /** Returns true, if the document contains the specified dialog. */
     bool                hasDialog( const ::rtl::OUString& rDialogName ) const;
 
+protected:
+    /** Registers a dummy module that will be created when the VBA project is
+        imported. */
+    void                addDummyModule( const ::rtl::OUString& rName, sal_Int32 nType );
+    /** Creates all dummy modules in the document. */
+    void                createDummyModules();
+
+    /** Called when the import process of the VBA project has been started. */
+    virtual void        prepareImport();
+    /** Called when the import process of the VBA project is finished. */
+    virtual void        finalizeImport();
+
 private:
                         VbaProject( const VbaProject& );
     VbaProject&         operator=( const VbaProject& );
@@ -113,12 +125,18 @@ private:
     /** Creates and returns the dialog library of the document used for import. */
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         createDialogLibrary();
+
     /** Imports the VBA code modules and forms. */
-    void                importVba( StorageBase& rVbaPrjStrg, const GraphicHelper& rGraphicHelper, bool bDefaultColorBgr );
+    void                importVba(
+                            StorageBase& rVbaPrjStrg,
+                            const GraphicHelper& rGraphicHelper,
+                            bool bDefaultColorBgr );
     /** Copies the entire VBA project storage to the passed document model. */
     void                copyStorage( StorageBase& rVbaPrjStrg );
 
 private:
+    typedef ::std::map< ::rtl::OUString, sal_Int32 >    DummyModuleMap;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         mxGlobalFactory;    /// Global service factory.
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >
@@ -127,6 +145,7 @@ private:
                         mxBasicLib;         /// The Basic library of the document used for import.
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >
                         mxDialogLib;        /// The dialog library of the document used for import.
+    DummyModuleMap      maDummyModules;     /// Additional empty modules created on import.
     const ::rtl::OUString maLibName;        /// Name for Basic and dialog library used for import.
 };
 

@@ -27,17 +27,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svl.hxx"
-#ifndef GCC
-#endif
 
-#ifndef DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-
 #include "listenerbase.hxx"
-#include "listeneriter.hxx"
-#include "listener.hxx"
-#include "broadcast.hxx"
+#include <svl/listeneriter.hxx>
+#include <svl/listener.hxx>
+#include <svl/broadcast.hxx>
 
 
 SvtListenerBase::SvtListenerBase( SvtListener& rLst,

@@ -59,13 +59,17 @@ class SbxVariableImpl
     friend class SbxVariable;
     String                      m_aDeclareClassName;
     Reference< XInterface >     m_xComListener;
+    StarBASIC*                  m_pComListenerParentBasic;
 
     SbxVariableImpl( void )
+        : m_pComListenerParentBasic( NULL )
     {}
     SbxVariableImpl( const SbxVariableImpl& r )
         : m_aDeclareClassName( r.m_aDeclareClassName )
         , m_xComListener( r.m_xComListener )
-    {}
+        , m_pComListenerParentBasic( r.m_pComListenerParentBasic )
+    {
+    }
 };
 
 
@@ -84,12 +88,18 @@ SbxVariable::SbxVariable() : SbxValue()
 #endif
 }
 
+void registerComListenerVariableForBasic( SbxVariable* pVar, StarBASIC* pBasic );
+
 SbxVariable::SbxVariable( const SbxVariable& r )
            : SvRefBase( r ), SbxValue( r ), mpPar( r.mpPar ), pInfo( r.pInfo )
 {
     mpSbxVariableImpl = NULL;
     if( r.mpSbxVariableImpl != NULL )
+    {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        if( mpSbxVariableImpl->m_xComListener.is() )
+            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+    }
     pCst = NULL;
     if( r.CanRead() )
     {
@@ -126,6 +136,8 @@ SbxVariable::SbxVariable( SbxDataType t, void* p ) : SbxValue( t, p )
 #endif
 }
 
+void removeDimAsNewRecoverItem( SbxVariable* pVar );
+
 SbxVariable::~SbxVariable()
 {
 #ifdef DBG_UTIL
@@ -136,6 +148,8 @@ SbxVariable::~SbxVariable()
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
     GetSbxData_Impl()->aVars.Remove( this );
 #endif
+    if( IsSet( SBX_DIM_AS_NEW ))
+        removeDimAsNewRecoverItem( this );
     delete mpSbxVariableImpl;
     delete pCst;
 }
@@ -315,7 +329,11 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     SbxValue::operator=( r );
     delete mpSbxVariableImpl;
     if( r.mpSbxVariableImpl != NULL )
+    {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+        if( mpSbxVariableImpl->m_xComListener.is() )
+            registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+    }
     else
         mpSbxVariableImpl = NULL;
     return *this;
@@ -396,10 +414,19 @@ void SbxVariable::SetDeclareClassName( const String& rDeclareClassName )
     pImpl->m_aDeclareClassName = rDeclareClassName;
 }
 
-void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener )
+void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xComListener,
+                                  StarBASIC* pParentBasic )
 {
     SbxVariableImpl* pImpl = getImpl();
     pImpl->m_xComListener = xComListener;
+    pImpl->m_pComListenerParentBasic = pParentBasic;
+    registerComListenerVariableForBasic( this, pParentBasic );
+}
+
+void SbxVariable::ClearComListener( void )
+{
+    SbxVariableImpl* pImpl = getImpl();
+    pImpl->m_xComListener.clear();
 }
 
 

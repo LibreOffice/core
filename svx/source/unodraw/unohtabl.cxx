@@ -37,7 +37,7 @@
 #include <svx/xdef.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/unomid.hxx>
-#include "unofill.hxx"
+#include "svx/unofill.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::rtl;

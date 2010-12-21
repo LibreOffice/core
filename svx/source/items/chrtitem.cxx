@@ -44,7 +44,7 @@
 #include <float.h>
 #include <rtl/math.hxx>
 
-#include "chrtitem.hxx"
+#include "svx/chrtitem.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

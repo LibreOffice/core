@@ -53,6 +53,7 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/weak.hxx>
+#include <framework/fwedllapi.h>
 
 namespace framework
 {
@@ -71,31 +72,34 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
-        UIElementWrapperBase( sal_Int16 nType );
-        virtual ~UIElementWrapperBase();
+        FWE_DLLPUBLIC UIElementWrapperBase( sal_Int16 nType );
+        virtual FWE_DLLPUBLIC ~UIElementWrapperBase();
 
-        //---------------------------------------------------------------------------------------------------------
-        //  XInterface, XTypeProvider
-        //---------------------------------------------------------------------------------------------------------
-        FWK_DECLARE_XINTERFACE
-        FWK_DECLARE_XTYPEPROVIDER
+        //  XInterface
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw( ::com::sun::star::uno::RuntimeException );
+        virtual FWE_DLLPUBLIC void SAL_CALL acquire() throw();
+        virtual FWE_DLLPUBLIC void SAL_CALL release() throw();
+
+        // XTypeProvider
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw( ::com::sun::star::uno::RuntimeException );
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw( ::com::sun::star::uno::RuntimeException );
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) = 0;
-        virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual FWE_DLLPUBLIC void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XInitialization
-        virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
         // XUpdatable
-        virtual void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC void SAL_CALL update() throw (::com::sun::star::uno::RuntimeException);
 
         // XUIElement
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > SAL_CALL getFrame() throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::rtl::OUString SAL_CALL getResourceURL() throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::sal_Int16 SAL_CALL getType() throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getRealInterface() throw (::com::sun::star::uno::RuntimeException) = 0;
 
     //-------------------------------------------------------------------------------------------------------------
     //  protected methods
@@ -103,19 +107,19 @@ class UIElementWrapperBase : public ::com::sun::star::lang::XTypeProvider       
     protected:
 
         //  OPropertySetHelper
-        virtual sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
+        virtual FWE_DLLPUBLIC sal_Bool                                            SAL_CALL convertFastPropertyValue        ( com::sun::star::uno::Any&        aConvertedValue ,
                                                                                                                com::sun::star::uno::Any&        aOldValue       ,
                                                                                                                sal_Int32                        nHandle         ,
                                                                                                                const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::lang::IllegalArgumentException );
-        virtual void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
+        virtual FWE_DLLPUBLIC void                                                SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32                        nHandle         ,
                                                                                                                const com::sun::star::uno::Any&  aValue          ) throw( com::sun::star::uno::Exception                 );
         using cppu::OPropertySetHelper::getFastPropertyValue;
-        virtual void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
+        virtual FWE_DLLPUBLIC void                                                SAL_CALL getFastPropertyValue( com::sun::star::uno::Any&    aValue          ,
                                                                                                    sal_Int32                    nHandle         ) const;
-        virtual ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
-        virtual ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
+        virtual FWE_DLLPUBLIC ::cppu::IPropertyArrayHelper&                       SAL_CALL getInfoHelper();
+        virtual FWE_DLLPUBLIC ::com::sun::star::uno::Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (::com::sun::star::uno::RuntimeException);
 
-        static const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
+        static FWE_DLLPUBLIC const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > impl_getStaticPropertyDescriptor();
 
         ::cppu::OMultiTypeInterfaceContainerHelper                          m_aListenerContainer;   /// container for ALL Listener
         rtl::OUString                                                       m_aResourceURL;

@@ -35,7 +35,7 @@
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
 #include <drawinglayer/geometry/viewinformation2d.hxx>
-#include <unoapi.hxx>
+#include <svx/unoapi.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoutl.hxx>

@@ -104,7 +104,6 @@ using ::rtl::OUString;
 
 #include <unomid.h>
 
-
 SFX_IMPL_NAMED_VIEWFACTORY(SwView, "Default")
 {
     if ( SvtModuleOptions().IsWriter() )

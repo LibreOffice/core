@@ -51,7 +51,7 @@ RESLIB1LIST=\
     $(SRS)$/pagedlg.srs	\
     $(SRS)$/navipi.srs	\
     $(SRS)$/cctrl.srs	\
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 RESLIB1NAME=sc
 RESLIB1IMAGES=\

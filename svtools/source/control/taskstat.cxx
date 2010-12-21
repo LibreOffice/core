@@ -30,18 +30,15 @@
 
 #define _TASKBAR_CXX
 
-#ifndef _TOOLS_LIST_HXX
 #include <tools/list.hxx>
-#endif
 #include <tools/debug.hxx>
 #include <tools/date.hxx>
 #include <vcl/image.hxx>
 #include <vcl/help.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/calendarwrapper.hxx>
-
 #include <unotools/syslocale.hxx>
-#include <taskbar.hxx>
+#include <svtools/taskbar.hxx>
 
 // =======================================================================
 

@@ -49,7 +49,7 @@
 #include <com/sun/star/i18n/NativeNumberXmlAttributes.hpp>
 
 #include <xmloff/xmlnumfe.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/attrlist.hxx>
 #include <xmloff/nmspmap.hxx>

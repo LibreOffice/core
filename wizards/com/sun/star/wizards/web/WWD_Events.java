@@ -1001,7 +1001,7 @@ public abstract class WWD_Events extends WWD_Startup
         //replace all '/' with '%2F'
         url1 = JavaTools.replaceSubString(url1, "%2F", "/");
 
-        p.url = "vnd.sun.star.pkg://" + url1 + "/";
+        p.url = "vnd.sun.star.zip://" + url1 + "/";
 
         /*
          * and now ftp...

@@ -32,8 +32,7 @@
 #include <tools/string.hxx>
 #include <ucbhelper/content.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-
-#include <fstathelper.hxx>
+#include <svl/fstathelper.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

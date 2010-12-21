@@ -45,13 +45,13 @@
 #include <svl/intitem.hxx>
 #define _SVX_PSZCTRL_CXX
 
-#include "pszctrl.hxx"
+#include "svx/pszctrl.hxx"
 
 #define PAINT_OFFSET    5
 
 #include <editeng/sizeitem.hxx>
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include "stbctrls.h"
 #include "sfx2/module.hxx"
 

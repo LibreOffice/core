@@ -39,7 +39,7 @@
 #include <sfx2/msg.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/msgpool.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/minarray.hxx>
 #include <sfx2/objsh.hxx>
 

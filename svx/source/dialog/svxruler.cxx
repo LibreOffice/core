@@ -48,7 +48,7 @@
 #include <svx/dialmgr.hxx>
 #include <svx/ruler.hxx>
 #include "rlrcitem.hxx"
-#include "rulritem.hxx"
+#include "svx/rulritem.hxx"
 #include <editeng/tstpitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include "editeng/protitem.hxx"

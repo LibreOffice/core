@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include "sychconv.hxx"
+#include <svtools/sychconv.hxx>
 #include <vcl/outdev.hxx>
 
 BOOL SymCharConverter::Convert( Font& rFont, UniString& rString, OutputDevice* pDev )

@@ -31,13 +31,8 @@
 #define _SV_FIELCTRL_CXX
 #include <tools/urlobj.hxx>
 #include <svtools/svtdata.hxx>
-#include <filectrl.hxx>
-#ifndef _SV_FILECTRL_HRC
+#include <svtools/filectrl.hxx>
 #include <filectrl.hrc>
-#endif
-
-#ifndef GCC
-#endif
 
 // =======================================================================
 

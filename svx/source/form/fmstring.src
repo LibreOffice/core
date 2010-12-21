@@ -25,7 +25,7 @@
  *
  ************************************************************************/
 
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 /* Strings fuer Uebersetzung */
 String RID_ERR_CONTEXT_ADDFORM
 {

@@ -57,7 +57,7 @@
 #include <svx/svdmodel.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdobj.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdorect.hxx>
 #include <svx/svdocirc.hxx>

@@ -36,7 +36,7 @@
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/txtimp.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
 
 using ::rtl::OUString;

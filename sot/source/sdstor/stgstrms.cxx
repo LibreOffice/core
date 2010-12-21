@@ -34,7 +34,7 @@
 #include <tools/tempfile.hxx>
 #include <tools/debug.hxx>
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"

@@ -40,7 +40,7 @@
 #include <tools/stream.hxx>
 
 #include "defs.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 
 ///////////////////////////////////////////////////////////////////////////

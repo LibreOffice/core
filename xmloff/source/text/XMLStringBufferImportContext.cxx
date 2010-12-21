@@ -29,7 +29,7 @@
 #include "precompiled_xmloff.hxx"
 #include "XMLStringBufferImportContext.hxx"
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 
 
 using ::rtl::OUString;

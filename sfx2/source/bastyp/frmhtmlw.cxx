@@ -46,7 +46,7 @@
 #include <sfx2/app.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/docfile.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/sfx.hrc>
 #include "bastyp.hrc"

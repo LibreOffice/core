@@ -33,12 +33,12 @@
 #include <uielement/constitemcontainer.hxx>
 #include <uielement/rootitemcontainer.hxx>
 #include <uielement/uielementtypenames.hxx>
-#include <xml/menuconfiguration.hxx>
-#include <xml/toolboxconfiguration.hxx>
+#include <framework/menuconfiguration.hxx>
+#include <framework/toolboxconfiguration.hxx>
 #include <uiconfiguration/imagemanager.hxx>
 
 #ifndef __FRAMEWORK_XML_STATUSBARCONFIGURATION_HXX_
-#include <xml/statusbarconfiguration.hxx>
+#include <framework/statusbarconfiguration.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________

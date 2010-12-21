@@ -1,4 +1,4 @@
-fml  formula    :   BOOST:boost comphelper svx NULL
+fml  formula    :   BOOST:boost LIBXSLT:libxslt comphelper svx NULL
 fml  formula                                                        usr1    -   all fml_mkout NULL
 fml  formula\inc                                                    nmake   -   all fml_inc NULL
 fml  formula\source\core\api                                        nmake   -   all fml_api fml_inc NULL

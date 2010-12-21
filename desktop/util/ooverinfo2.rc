@@ -25,21 +25,7 @@
  *
  *************************************************************************/
 
-#define VERSION         3
-#define SUBVERSION      3
-//#define VERVARIANT    0
-// .0 + VER_CONCEPT
-// .100 + VER_ALPHA
-// .200 + VER_BETA
-// .300 + VER_GAMMA
-// .500 + VER_FINAL
-//#define VER_CONCEPT   0
-//#define VER_BETA      6
-#define VER_FINAL       0
-
-#define VER_DAY         1
-#define VER_MONTH       1
-#define VER_YEAR        2010
+#include "version.hrc"
 
 // -----------------------------------------------------------------------
 

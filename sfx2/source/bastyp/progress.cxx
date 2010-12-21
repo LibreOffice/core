@@ -51,7 +51,7 @@
 #include "sfxtypes.hxx"
 #include <sfx2/docfile.hxx>
 #include "workwin.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include "bastyp.hrc"
 #include <sfx2/msg.hxx>
 

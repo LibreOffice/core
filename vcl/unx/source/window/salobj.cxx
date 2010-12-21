@@ -559,3 +559,10 @@ long X11SalObject::Dispatch( XEvent* pEvent )
     }
     return 0;
 }
+
+// -----------------------------------------------------------------------
+
+void X11SalObject::InterceptChildWindowKeyDown( sal_Bool /*bIntercept*/ )
+{
+}
+

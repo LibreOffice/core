@@ -28,10 +28,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 #include <svx/cube3d.hxx>
-#include "globl3d.hxx"
+#include "svx/globl3d.hxx"
 #include <basegfx/point/b3dpoint.hxx>
 #include <basegfx/polygon/b3dpolygon.hxx>
 #include <svx/sdr/contact/viewcontactofe3dcube.hxx>

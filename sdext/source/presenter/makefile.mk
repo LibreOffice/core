@@ -307,7 +307,10 @@ $(ZIP1DIR)/help/%/com.sun.PresenterScreen-$(PLATFORMID)/presenter.xhp : $(COMMON
     @-$(MKDIRHIER) $(@:d)
     $(TYPE) $< | sed "s/PLATFORMID/$(PLATFORMID)/" | sed 's/@PRESENTEREXTENSIONPRODUCTNAME@/Presenter Console/g' > $@
 
+.IF "$(ZIP1TARGETN)"!=""
 $(ZIP1TARGETN) : $(HELPLINKALLTARGETS)
+
+.ENDIF          # "$(ZIP1TARGETN)"!=""
 
 $(COMPONENT_BITMAPS) : bitmaps$/$$(@:f)
     @-$(MKDIRHIER) $(@:d)

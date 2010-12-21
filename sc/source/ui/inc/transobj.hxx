@@ -64,6 +64,7 @@ private:
     BOOL                            bDragWasInternal;
     BOOL                            bUsedForLink;
     bool                            bHasFiltered;       // if has filtered rows
+    bool                            bUseInApi;          // to recognize clipboard content copied from API
 
     void        InitDocShell();
     static void StripRefs( ScDocument* pDoc, SCCOL nStartX, SCROW nStartY,
@@ -93,6 +94,7 @@ public:
     SCTAB               GetVisibleTab() const   { return nVisibleTab; }
     USHORT              GetDragSourceFlags() const  { return nDragSourceFlags; }
     bool                HasFilteredRows() const { return bHasFiltered; }
+    bool                GetUseInApi() const     { return bUseInApi; }
     ScDocShell*         GetSourceDocShell();
     ScDocument*         GetSourceDocument();
     ScMarkData          GetSourceMarkData();
@@ -103,6 +105,7 @@ public:
     void                SetDragSource( ScDocShell* pSourceShell, const ScMarkData& rMark );
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
+    SC_DLLPUBLIC void   SetUseInApi( bool bSet );
 
     static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
 

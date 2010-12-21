@@ -47,7 +47,7 @@
 #include <sfx2/viewsh.hxx>
 #include "splitwin.hxx"
 #include <sfx2/msgpool.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>      // SFX_ITEMSET_SET
 #include <vcl/taskpanelist.hxx>

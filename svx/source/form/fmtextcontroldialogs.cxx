@@ -44,7 +44,7 @@
 //#include "tabstpge.hxx"
 #endif
 
-#include "flagsdef.hxx"
+#include "svx/flagsdef.hxx"
 #include <svl/intitem.hxx>
 
 #include <com/sun/star/uno/Sequence.hxx>

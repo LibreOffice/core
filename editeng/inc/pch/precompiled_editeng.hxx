@@ -694,7 +694,6 @@
 #include "svtools/apearcfg.hxx"
 #include "svl/brdcst.hxx"
 #include "unotools/cacheoptions.hxx"
-#include "svl/cancel.hxx"
 #include "svl/cjkoptions.hxx"
 #include "unotools/cmdoptions.hxx"
 #include "svl/cntwall.hxx"

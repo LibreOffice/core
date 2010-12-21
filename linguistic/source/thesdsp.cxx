@@ -38,7 +38,7 @@
 #include <osl/mutex.hxx>
 
 #include "thesdsp.hxx"
-#include "lngprops.hxx"
+#include "linguistic/lngprops.hxx"
 
 using namespace utl;
 using namespace osl;

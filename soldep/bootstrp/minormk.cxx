@@ -27,7 +27,7 @@
 
 #include "minormk.hxx"
 #include "prodmap.hxx"
-#include <appdef.hxx>
+#include <soldep/appdef.hxx>
 #include <tools/fsys.hxx>
 #include <tools/geninfo.hxx>
 

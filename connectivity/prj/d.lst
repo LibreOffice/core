@@ -2,6 +2,7 @@
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.jnilib %_DEST%\lib%_EXT%\*.jnilib
 ..\%__SRC%\slb\connectivity*.* %_DEST%\lib%_EXT%\connectivity*.*
 ..\%__SRC%\lib\idbt* %_DEST%\lib%_EXT%\idbt*
 ..\source\cpool\*.xml %_DEST%\xml%_EXT%\*.xml

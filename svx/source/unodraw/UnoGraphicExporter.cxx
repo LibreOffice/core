@@ -46,6 +46,7 @@
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/task/XInteractionContinuation.hpp>
 
+#include <comphelper/interaction.hxx>
 #include <framework/interaction.hxx>
 #include <com/sun/star/drawing/GraphicFilterRequest.hpp>
 #include <com/sun/star/util/URL.hpp>
@@ -65,9 +66,9 @@
 #include <editeng/numitem.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/svdograf.hxx>
-#include "xoutbmp.hxx"
+#include "svx/xoutbmp.hxx"
 #include "svtools/filter.hxx"
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/fmview.hxx>
@@ -1066,15 +1067,13 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
     {
         Any aInteraction;
         Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
-        ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+        ::comphelper::OInteractionApprove* pApprove = new ::comphelper::OInteractionApprove();
         lContinuations[0] = Reference< XInteractionContinuation >(static_cast< XInteractionContinuation* >(pApprove), UNO_QUERY);
 
         GraphicFilterRequest aErrorCode;
         aErrorCode.ErrCode = nStatus;
         aInteraction <<= aErrorCode;
-        framework::InteractionRequest* pRequest = new framework::InteractionRequest( aInteraction, lContinuations );
-        Reference< XInteractionRequest >xRequest( static_cast< XInteractionRequest* >(pRequest), UNO_QUERY );
-        aSettings.mxInteractionHandler->handle( xRequest );
+        aSettings.mxInteractionHandler->handle( framework::InteractionRequest::CreateRequest( aInteraction, lContinuations ) );
     }
     return nStatus == GRFILTER_OK;
 }

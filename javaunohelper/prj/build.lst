@@ -1,4 +1,4 @@
-jh  javaunohelper : bridges cppuhelper jurt ridljar unoil NULL
+jh  javaunohelper : LIBXSLT:libxslt bridges cppuhelper jurt ridljar unoil NULL
 jh	javaunohelper								usr1	-	all	jh_mkout NULL
 jh	javaunohelper\inc							nmake	-	all	jh_inc NULL
 jh	javaunohelper\com\sun\star\comp\helper		nmake	-	all	jh_helper jh_inc NULL

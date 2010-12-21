@@ -62,7 +62,7 @@
 #include <basic/basmgr.hxx>
 #include <basic/sbmod.hxx>
 #include <basic/basicmanagerrepository.hxx>
-#include "modsizeexceeded.hxx"
+#include "basic/modsizeexceeded.hxx"
 #include <xmlscript/xmlmod_imexp.hxx>
 #include <cppuhelper/factory.hxx>
 #include <com/sun/star/util/VetoException.hpp>
@@ -80,10 +80,9 @@ using namespace com::sun::star::script;
 using namespace com::sun::star::xml::sax;
 using namespace com::sun::star;
 using namespace cppu;
-using namespace rtl;
 using namespace osl;
 
-using com::sun::star::uno::Reference;
+using ::rtl::OUString;
 
 //============================================================================
 // Implementation class SfxScriptLibraryContainer
@@ -311,24 +310,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
     // aMod.aName ignored
     if( aMod.aModuleType.getLength() > 0 )
     {
-        if( !getVBACompatibilityMode() )
+        /*  If in VBA compatibility mode, force creation of the VBA Globals
+            object. Each application will create an instance of its own
+            implementation and store it in its Basic manager. Implementations
+            will do all necessary additional initialization, such as
+            registering the global "This***Doc" UNO constant, starting the
+            document events processor etc.
+         */
+        if( getVBACompatibilityMode() ) try
         {
-            setVBACompatibilityMode( sal_True );
-
-            Any aGlobs;
-            Sequence< Any > aArgs(1);
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            aArgs[ 0 ] <<= xModel;
-
-            BasicManager* pBasicMgr = getBasicManager();
-            if( pBasicMgr )
-            {
-                aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.excel.Globals" ) ), aArgs );
-                pBasicMgr->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-            }
-            pBasicMgr = BasicManagerRepository::getApplicationBasicManager( sal_False );
-            if( pBasicMgr )
-                pBasicMgr->SetGlobalUNOConstant( "ThisExcelDoc", aArgs[0] );
+            Reference< frame::XModel > xModel( mxOwnerDocument );   // weak-ref -> ref
+            Reference< XMultiServiceFactory > xFactory( xModel, UNO_QUERY_THROW );
+            xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAGlobals" ) ) );
+        }
+        catch( Exception& )
+        {
         }
 
         script::ModuleInfo aModInfo;
@@ -353,25 +349,21 @@ Any SAL_CALL SfxScriptLibraryContainer::importLibraryElement
                     RTL_CONSTASCII_STRINGPARAM("document") ))
         {
             aModInfo.ModuleType = ModuleType::DOCUMENT;
-            Reference<frame::XModel > xModel( mxOwnerDocument );
-            Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY);
-            Reference< container::XNameAccess > xVBACodeNameAccess;
-            if( xSF.is() )
+
+            // #163691# use the same codename access instance for all document modules
+            if( !mxCodeNameAccess.is() ) try
             {
-                try
-                {
-                    xVBACodeNameAccess.set( xSF->createInstance(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                            "ooo.vba.VBAObjectModuleObjectProvider"))),
-                        UNO_QUERY );
-                }
-                catch(uno::Exception&) {}
+                Reference<frame::XModel > xModel( mxOwnerDocument );
+                Reference< XMultiServiceFactory> xSF( xModel, UNO_QUERY_THROW );
+                mxCodeNameAccess.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAObjectModuleObjectProvider" ) ) ), UNO_QUERY );
             }
-            if( xVBACodeNameAccess.is() )
+            catch( Exception& ) {}
+
+            if( mxCodeNameAccess.is() )
             {
                 try
                 {
-                    aModInfo.ModuleObject.set( xVBACodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
+                    aModInfo.ModuleObject.set( mxCodeNameAccess->getByName( aElementName), uno::UNO_QUERY );
                 }
                 catch(uno::Exception&)
                 {

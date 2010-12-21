@@ -197,7 +197,6 @@ enum
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-//static
 void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutProperties )
 {
     rOutProperties.push_back(
@@ -226,12 +225,11 @@ void WrappedSplineProperties::addProperties( ::std::vector< Property > & rOutPro
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-//static
 void WrappedSplineProperties::addWrappedProperties( std::vector< WrappedProperty* >& rList
                                     , ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
 {
     rList.push_back( new WrappedSplineTypeProperty( spChart2ModelContact ) );
-    rList.push_back( new WrappedSplineProperty<sal_Int32>( C2U("SplineOrder"),      C2U("SplineOrder"), uno::makeAny(sal_Int32(2)), spChart2ModelContact ) );
+    rList.push_back( new WrappedSplineProperty<sal_Int32>( C2U("SplineOrder"),      C2U("SplineOrder"), uno::makeAny(sal_Int32(3)), spChart2ModelContact ) );
     rList.push_back( new WrappedSplineProperty<sal_Int32>( C2U("SplineResolution"), C2U("CurveResolution"), uno::makeAny(sal_Int32(20)), spChart2ModelContact ) );
 }
 

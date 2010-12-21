@@ -65,7 +65,7 @@
 #include "unopolyhelper.hxx"
 
 // #i29181#
-#include "svdviter.hxx"
+#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>

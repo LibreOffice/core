@@ -30,7 +30,7 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <svx/svdpntv.hxx>
 #include <vcl/msgbox.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <svtools/grfmgr.hxx>
 #include <svx/svdmodel.hxx>
 
@@ -54,7 +54,7 @@
 #include <svx/svdograf.hxx>
 #include <svx/svdattrx.hxx>
 #include "svdibrow.hxx"
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include <svx/svdouno.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
 #include <svx/sdr/overlay/overlayrollingrectangle.hxx>

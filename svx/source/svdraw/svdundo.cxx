@@ -29,15 +29,15 @@
 #include "precompiled_svx.hxx"
 
 #include <svx/svdundo.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdotext.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdlayer.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdview.hxx>
-#include "svdstr.hrc"   // Namen aus der Resource
-#include "svdglob.hxx"  // StringCache
+#include "svx/svdstr.hrc"   // Namen aus der Resource
+#include "svx/svdglob.hxx"  // StringCache
 #include <svx/scene3d.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdogrp.hxx>
@@ -47,7 +47,7 @@
 #include <svl/whiter.hxx>
 #include <svx/e3dsceneupdater.hxx>
 
-#include "svdviter.hxx"
+#include "svx/svdviter.hxx"
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

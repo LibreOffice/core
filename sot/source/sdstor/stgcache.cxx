@@ -41,7 +41,7 @@
 #include <osl/endian.h>
 #include <tools/string.hxx>
 
-#include "stg.hxx"
+#include "sot/stg.hxx"
 #include "stgelem.hxx"
 #include "stgcache.hxx"
 #include "stgstrms.hxx"

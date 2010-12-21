@@ -30,19 +30,15 @@
 
 #define _CTRLBOX_CXX
 #include <tools/debug.hxx>
-#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
-#endif
-#ifndef _FIELD_HXX
 #include <vcl/field.hxx>
-#endif
 #include <comphelper/processfactory.hxx>
 #include <unotools/charclass.hxx>
 
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include <ctrlbox.hxx>
-#include <ctrltool.hxx>
+#include <svtools/ctrlbox.hxx>
+#include <svtools/ctrltool.hxx>
 
 #include <vcl/i18nhelp.hxx>
 

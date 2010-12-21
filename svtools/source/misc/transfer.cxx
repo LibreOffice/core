@@ -43,12 +43,8 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <rtl/uri.hxx>
-#ifndef DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
 #include <unotools/ucbstreamhelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/storage.hxx>
@@ -65,12 +61,8 @@
 #include <comphelper/seqstream.hxx>
 #include <com/sun/star/datatransfer/clipboard/XClipboardNotifier.hpp>
 #include <com/sun/star/datatransfer/clipboard/XFlushableClipboard.hpp>
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XMIMECONTENTTYPEFACTORY_HPP_
 #include <com/sun/star/datatransfer/XMimeContentTypeFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATATRANSFER_CLIPBOARD_XMIMECONTENTTYPE_HPP_
 #include <com/sun/star/datatransfer/XMimeContentType.hpp>
-#endif
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 

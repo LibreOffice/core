@@ -305,7 +305,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             myLetterDoc.killEmptyFrames();
 
 
-            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false, "Template could not be saved to " + sPath);
+            bSaveSuccess = OfficeDocument.store(xMSF, xTextDocument, sPath, "writer8_template", false);
 
             if (bSaveSuccess)
             {

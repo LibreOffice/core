@@ -43,7 +43,7 @@
 
 #include <sfx2/imagemgr.hxx>
 #include <vcl/svapp.hxx>
-#include "tbxcustomshapes.hxx"
+#include "svx/tbxcustomshapes.hxx"
 
 SFX_IMPL_TOOLBOX_CONTROL(SvxTbxCtlCustomShapes, SfxBoolItem);
 

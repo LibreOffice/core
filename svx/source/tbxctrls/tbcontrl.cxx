@@ -72,7 +72,7 @@
 #include <svx/dialogs.hrc>
 #include <svx/svxitems.hrc>
 #include "helpid.hrc"
-#include "htmlmode.hxx"
+#include "svx/htmlmode.hxx"
 #include <svx/xtable.hxx>
 #include "editeng/fontitem.hxx"
 #include <editeng/fhgtitem.hxx>
@@ -81,9 +81,9 @@
 #include <editeng/colritem.hxx>
 #include "editeng/flstitem.hxx"
 #include "editeng/bolnitem.hxx"
-#include "drawitem.hxx"
+#include "svx/drawitem.hxx"
 #include <svx/tbcontrl.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 #include <svx/dialmgr.hxx>
 #include "colorwindow.hxx"
 #include <memory>
@@ -1800,8 +1800,7 @@ struct SvxStyleToolBoxControl::Impl
                 static const sal_Char* aCalcStyles[] =
                 {
                     "Default",
-                    "Heading 1",
-                    "Heading 2",
+                    "Heading1",
                     "Result",
                     "Result2"
                 };
@@ -1813,12 +1812,15 @@ struct SvxStyleToolBoxControl::Impl
                 {
                     try
                     {
-                        Reference< beans::XPropertySet > xStyle;
-                        xCellStyles->getByName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] )) >>= xStyle;
-                        ::rtl::OUString sName;
-                        xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName")))>>= sName;
-                        if( sName.getLength() )
-                            aDefaultStyles.push_back(sName);
+                        const rtl::OUString sStyleName( rtl::OUString::createFromAscii( aCalcStyles[nStyle] ) );
+                        if( xCellStyles->hasByName( sStyleName ) )
+                        {
+                            Reference< beans::XPropertySet > xStyle( xCellStyles->getByName( sStyleName), UNO_QUERY_THROW );
+                            ::rtl::OUString sName;
+                            xStyle->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DisplayName"))) >>= sName;
+                            if( sName.getLength() )
+                                aDefaultStyles.push_back(sName);
+                        }
                     }
                     catch( const uno::Exception& )
                     {}

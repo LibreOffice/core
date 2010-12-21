@@ -61,7 +61,7 @@
 #endif
 
 #ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
+#include "svx/fmresids.hrc"
 #endif
 #include <svx/dialmgr.hxx>
 #include <tools/shl.hxx>

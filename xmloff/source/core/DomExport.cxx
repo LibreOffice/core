@@ -32,7 +32,7 @@
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlexp.hxx>
-#include "xmlerror.hxx"
+#include "xmloff/xmlerror.hxx"
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/uno/Reference.hxx>

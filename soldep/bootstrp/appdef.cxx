@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <appdef.hxx>
+#include <soldep/appdef.hxx>
 
 const char* GetDefStandList()
 {

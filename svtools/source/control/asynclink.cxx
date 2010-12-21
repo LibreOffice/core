@@ -28,7 +28,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 
-#include <asynclink.hxx>
+#include <svtools/asynclink.hxx>
 #include <vos/mutex.hxx>
 #include <tools/debug.hxx>
 #include <vcl/timer.hxx>

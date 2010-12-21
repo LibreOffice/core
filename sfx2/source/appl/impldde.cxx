@@ -45,7 +45,7 @@
 #include "dde.hrc"
 #include <sfx2/lnkbase.hxx>
 #include <sfx2/linkmgr.hxx>
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>

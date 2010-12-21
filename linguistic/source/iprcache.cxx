@@ -31,7 +31,7 @@
 #include <string.h>
 
 #include "iprcache.hxx"
-#include "misc.hxx"
+#include "linguistic/misc.hxx"
 
 #include <com/sun/star/linguistic2/DictionaryListEventFlags.hpp>
 #include <tools/debug.hxx>
@@ -57,7 +57,7 @@
 #endif
 #include <unotools/processfactory.hxx>
 
-#include <lngprops.hxx>
+#include <linguistic/lngprops.hxx>
 
 using namespace utl;
 using namespace osl;

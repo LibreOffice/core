@@ -30,7 +30,6 @@
 
 #include "frmload.hxx"
 #include "objshimp.hxx"
-#include "viewfac.hxx"
 #include "sfx2/app.hxx"
 #include "sfx2/dispatch.hxx"
 #include "sfx2/docfac.hxx"
@@ -45,6 +44,7 @@
 #include "sfx2/sfxuno.hxx"
 #include "sfx2/viewfrm.hxx"
 #include "sfx2/viewsh.hxx"
+#include "sfx2/viewfac.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/container/XContainerQuery.hpp>
@@ -216,11 +216,10 @@ const SfxFilter* SfxFrameLoader_Impl::impl_getFilterFromServiceName_nothrow( con
     ::rtl::OUString sFilterName;
     try
     {
-        ::framework::RequestFilterSelect* pRequest = new ::framework::RequestFilterSelect( i_rDocumentURL );
-        Reference< XInteractionRequest > xRequest ( pRequest );
-        i_rxHandler->handle( xRequest );
-        if( !pRequest->isAbort() )
-            sFilterName = pRequest->getFilter();
+        ::framework::RequestFilterSelect aRequest( i_rDocumentURL );
+        i_rxHandler->handle( aRequest.GetRequest() );
+        if( !aRequest.isAbort() )
+            sFilterName = aRequest.getFilter();
     }
     catch( const Exception& )
     {

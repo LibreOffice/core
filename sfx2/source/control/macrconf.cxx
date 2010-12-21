@@ -59,8 +59,8 @@
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/dispatch.hxx>
-#include "minfitem.hxx"
-#include "imgmgr.hxx"
+#include "sfx2/minfitem.hxx"
+#include "sfx2/imgmgr.hxx"
 #include <sfx2/evntconf.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/genlink.hxx>

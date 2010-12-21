@@ -57,16 +57,16 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
-         $(PRJ)$/inc$/absdev.hxx	\
-         $(PRJ)$/inc$/agg.hxx       \
+         $(PRJ)$/inc$/sot/absdev.hxx	\
+         $(PRJ)$/inc$/sot/agg.hxx       \
          $(PRJ)$/inc$/sot$/exchange.hxx  \
          $(PRJ)$/inc$/sot$/factory.hxx   \
          $(PRJ)$/inc$/sot$/object.hxx    \
          $(PRJ)$/inc$/sot$/sotdata.hxx   \
          $(PRJ)$/inc$/sot$/sotref.hxx    \
-         $(PRJ)$/inc$/stg.hxx       \
+         $(PRJ)$/inc$/sot/stg.hxx       \
          $(PRJ)$/inc$/sot$/storage.hxx   \
-         $(PRJ)$/inc$/storinfo.hxx
+         $(PRJ)$/inc$/sot/storinfo.hxx
 DEFLIB1NAME =$(TARGET)
 DEF1DES 	=StarObjectsTools
 

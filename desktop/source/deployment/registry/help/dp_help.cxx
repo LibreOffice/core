@@ -450,7 +450,7 @@ void BackendImpl::implProcessHelp
                         aJarFile, rtl_UriCharClassPchar,
                         rtl_UriEncodeIgnoreEscapes,
                         RTL_TEXTENCODING_UTF8 );
-                    rtl::OUString aDestBasePath = rtl::OUString::createFromAscii( "vnd.sun.star.pkg://" );
+                    rtl::OUString aDestBasePath = rtl::OUString::createFromAscii( "vnd.sun.star.zip://" );
                     aDestBasePath += aEncodedJarFilePath;
                     aDestBasePath += rtl::OUString::createFromAscii( "/" );
 

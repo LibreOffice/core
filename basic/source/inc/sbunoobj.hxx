@@ -52,7 +52,7 @@ class SbUnoObject: public SbxObject
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactName;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XExactName > mxExactNameInvocation;
     BOOL bNeedIntrospection;
-    BOOL bIgnoreNativeCOMObjectMembers;
+    BOOL bNativeCOMObject;
     ::com::sun::star::uno::Any maTmpUnoObj; // Only to save obj for doIntrospection!
 
     // Hilfs-Methode zum Anlegen der dbg_-Properties
@@ -84,17 +84,22 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XInvocation > getInvocation( void )         { return mxInvocation; }
 
     void SFX_NOTIFY( SfxBroadcaster&, const TypeId&, const SfxHint& rHint, const TypeId& );
+
+    bool isNativeCOMObject( void )
+        { return bNativeCOMObject; }
 };
 SV_DECL_IMPL_REF(SbUnoObject);
 
 
 // #67781 Rueckgabewerte der Uno-Methoden loeschen
 void clearUnoMethods( void );
+void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
 class SbUnoMethod : public SbxMethod
 {
     friend class SbUnoObject;
     friend void clearUnoMethods( void );
+    friend void clearUnoMethodsForBasic( StarBASIC* pBasic );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > m_xUnoMethod;
     ::com::sun::star::uno::Sequence< ::com::sun::star::reflection::ParamInfo >* pParamInfoSeq;
@@ -103,13 +108,15 @@ class SbUnoMethod : public SbxMethod
     SbUnoMethod* pPrev;
     SbUnoMethod* pNext;
 
-    bool mbInvocation;      // Method is based on invocation
+    bool mbInvocation;       // Method is based on invocation
+    bool mbDirectInvocation; // Method should be used with XDirectInvocation interface
 
 public:
     TYPEINFO();
 
     SbUnoMethod( const String& aName_, SbxDataType eSbxType, ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlMethod > xUnoMethod_,
-        bool bInvocation );
+        bool bInvocation,
+        bool bDirect = false );
     virtual ~SbUnoMethod();
     virtual SbxInfo* GetInfo();
 
@@ -117,6 +124,8 @@ public:
 
     bool isInvocationBased( void )
         { return mbInvocation; }
+    bool needsDirectInvocation( void )
+        { return mbDirectInvocation; }
 };
 
 
@@ -292,6 +301,9 @@ void RTL_Impl_HasInterfaces( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_IsUnoStruct( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_EqualUnoObjects( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
 void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite );
+
+void disposeComVariablesForBasic( StarBASIC* pBasic );
+void clearNativeObjectWrapperVector( void );
 
 
 //========================================================================

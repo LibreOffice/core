@@ -46,7 +46,8 @@
 #include <com/sun/star/media/XPlayer.hpp>
 #include <com/sun/star/ui/dialogs/XFolderPicker.hpp>
 #include <svtools/dialogclosedlistener.hxx>
-#include <bootstrp/sstring.hxx>
+
+DECLARE_LIST( StringList, String* )
 
 // ------------
 // - Forwards -

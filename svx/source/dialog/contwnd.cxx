@@ -27,7 +27,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#include <xoutbmp.hxx>
+#include <svx/xoutbmp.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/svxids.hrc>
 #include <contdlg.hrc>
@@ -40,7 +40,7 @@
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 
 // #i75482#
-#include "sdrpaintwindow.hxx"
+#include "svx/sdrpaintwindow.hxx"
 
 #define TRANSCOL Color( COL_WHITE )
 

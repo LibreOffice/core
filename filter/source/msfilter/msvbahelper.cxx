@@ -92,6 +92,24 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
                 , rtl::OUStringToOString( xModel->getURL(), RTL_TEXTENCODING_UTF8 ).getStr()
                 , rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr()
             );
+            ::rtl::OUString aName = xModel->getURL() ;
+            if (0 == aName.getLength())
+                {
+
+                    const static rtl::OUString sTitle( RTL_CONSTASCII_USTRINGPARAM("Title" ) );
+                    uno::Reference< frame::XFrame > xFrame( xModel->getCurrentController()->getFrame(), uno::UNO_QUERY_THROW );
+                    uno::Reference< beans::XPropertySet > xProps( xFrame, uno::UNO_QUERY_THROW );
+                    xProps->getPropertyValue(sTitle) >>= aName;
+                    sal_Int32 pos = 0;
+                    aName = aName.getToken(0,'-',pos);
+                    aName = aName.trim();
+                    if( sMacroURLOrPath.lastIndexOf( aName ) >= 0 )
+                    {
+                        pFoundShell = pShell;
+                        break;
+                    }
+                }
+
             if ( sMacroURLOrPath.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) )
             {
                 uno::Reference< document::XDocumentInfoSupplier > xDocInfoSupp( xModel, uno::UNO_QUERY );
@@ -261,10 +279,13 @@ VBAMacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUStrin
 
         // macro format = Container.Module.Procedure
         parseMacro( sMacroUrl, sContainer, sModule, sProcedure );
-        uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
         uno::Reference< container::XNameContainer > xPrjNameCache;
-        if ( xSF.is() )
-            xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+
+        // As long as service VBAProjectNameProvider isn't supported in the model, disable the createInstance call
+        // (the ServiceNotRegisteredException is wrongly caught in ScModelObj::createInstance)
+        //uno::Reference< lang::XMultiServiceFactory> xSF( pShell->GetModel(), uno::UNO_QUERY);
+        //if ( xSF.is() )
+        //    xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
 
         std::vector< rtl::OUString > sSearchList;
 

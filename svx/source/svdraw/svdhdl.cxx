@@ -41,8 +41,8 @@
 #include <vcl/bmpacc.hxx>
 
 #include <svx/sxekitm.hxx>
-#include "svdstr.hrc"
-#include "svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdglob.hxx"
 
 #include <svx/svdmodel.hxx>
 #include "gradtrns.hxx"
@@ -62,7 +62,7 @@
 #include <svx/sdr/overlay/overlaytriangle.hxx>
 #include <svx/sdr/overlay/overlayhatchrect.hxx>
 #include <svx/sdrpagewindow.hxx>
-#include <sdrpaintwindow.hxx>
+#include <svx/sdrpaintwindow.hxx>
 #include <vcl/svapp.hxx>
 #include <svx/sdr/overlay/overlaypolypolygon.hxx>
 #include <vcl/lazydelete.hxx>

@@ -51,12 +51,12 @@
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/nmspmap.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 #include <xmloff/xmltoken.hxx>
 
-#include "i18nmap.hxx"
+#include <xmloff/i18nmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include "fonthdl.hxx"
 #include <xmloff/XMLFontStylesContext.hxx>

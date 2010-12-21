@@ -37,9 +37,9 @@
 
 #include <svx/svdpage.hxx> // SdrObjList
 
-#include "connctrl.hxx"
+#include "svx/connctrl.hxx"
 #include <svx/dialmgr.hxx>
-#include "dlgutil.hxx"
+#include "svx/dlgutil.hxx"
 
 // #110094#
 #include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>

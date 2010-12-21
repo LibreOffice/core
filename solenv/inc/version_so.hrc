@@ -25,21 +25,11 @@
  *
  *************************************************************************/
 
-#define VERSION         3
-#define SUBVERSION      4
-//#define VERVARIANT    0 // never define this one, will be provided by build environment (BUILD_ID)
-// .0 + VER_CONCEPT
-// .100 + VER_ALPHA
-// .200 + VER_BETA
-// .300 + VER_GAMMA
-// .500 + VER_FINAL
-//#define VER_CONCEPT   0
-//#define VER_BETA      6
-#define VER_FINAL       0
+#include "versionlist.hrc"
 
-#define VER_DAY         1
-#define VER_MONTH       8
-#define VER_YEAR        2010
+//#define VERVARIANT    0 // never define this one, will be provided by build environment (BUILD_ID)
+
+#define VER_FINAL       0
 
 #ifndef VER_FIRSTYEAR
 #define VER_FIRSTYEAR   VER_YEAR

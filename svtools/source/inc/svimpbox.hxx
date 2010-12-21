@@ -340,7 +340,7 @@ public:
     const Size&         GetOutputSize() const { return aOutputSize;}
     void                KeyUp( BOOL bPageUp, BOOL bNotifyScroll = TRUE );
     void                KeyDown( BOOL bPageDown, BOOL bNotifyScroll = TRUE );
-    bool                Command( const CommandEvent& rCEvt );
+    void                Command( const CommandEvent& rCEvt );
 
     void                Invalidate();
     void                DestroyAnchor() { pAnchor=0; aSelEng.Reset(); }

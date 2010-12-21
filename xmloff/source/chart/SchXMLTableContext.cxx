@@ -37,7 +37,7 @@
 #include "XMLStringBufferImportContext.hxx"
 #include <tools/debug.hxx>
 #include <rtl/math.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>

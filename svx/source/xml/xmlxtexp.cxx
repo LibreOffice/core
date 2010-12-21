@@ -54,7 +54,7 @@
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
-#include "xmlgrhlp.hxx"
+#include "svx/xmlgrhlp.hxx"
 
 #include "xmlxtexp.hxx"
 

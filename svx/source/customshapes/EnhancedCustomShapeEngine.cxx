@@ -28,16 +28,16 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include "EnhancedCustomShapeEngine.hxx"
-#include "EnhancedCustomShape2d.hxx"
+#include "svx/EnhancedCustomShape2d.hxx"
 #include "EnhancedCustomShape3d.hxx"
 #include "EnhancedCustomShapeFontWork.hxx"
 #include "EnhancedCustomShapeHandle.hxx"
-#include "EnhancedCustomShapeGeometry.hxx"
+#include "svx/EnhancedCustomShapeGeometry.hxx"
 #include <svx/unoshape.hxx>
 #ifndef _SVX_UNOPAGE_HXX
 #include "svx/unopage.hxx"
 #endif
-#include "unoapi.hxx"
+#include "svx/unoapi.hxx"
 #include <svx/svdobj.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdogrp.hxx>
@@ -49,7 +49,7 @@
 #include <svx/svdopath.hxx>
 #include <svx/svdpage.hxx>
 #include <svx/svdmodel.hxx>
-#include "svditer.hxx"
+#include "svx/svditer.hxx"
 #include "unopolyhelper.hxx"
 #include <uno/mapping.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

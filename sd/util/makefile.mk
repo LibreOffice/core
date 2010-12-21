@@ -54,7 +54,7 @@ RESLIB1SRSFILES=\
     $(SRS)$/uitable.srs			\
     $(SRS)$/view.srs			\
     $(SRS)$/uiannotations.srs	\
-    $(SOLARCOMMONRESDIR)$/sfx.srs
+
 
 # --- StarDraw DLL
 

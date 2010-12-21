@@ -230,6 +230,7 @@
     };
     my $workspace_path = get_workspace_path();   # This also sets $initial_module
     my $source_config = SourceConfig -> new($workspace_path);
+    check_partial_gnumake_build($initial_module);
 
     if ($html) {
         if (defined $html_path) {
@@ -3527,3 +3528,20 @@ sub fill_modules_queue {
         mp_success_exit();
     };
 };
+
+sub is_gnumake_module {
+    my $module = shift;
+    my $bridgemakefile = $source_config->get_module_path($module) . "/prj/makefile.mk";
+    return (-e $bridgemakefile);
+}
+
+sub check_partial_gnumake_build {
+    if(!$build_all_parents && is_gnumake_module(shift)) {
+        print "This module has been migrated to GNU make.\n";
+        print "You can only use build --all/--since here with build.pl.\n";
+        print "To do the equivalent of 'build && deliver' call:\n";
+        print "\tmake -sr\n";
+        print "in the module root (This will modify the solver).\n";
+        exit 1;
+    }
+}

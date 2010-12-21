@@ -27,23 +27,16 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
-#include <roadmap.hxx>
+#include <svtools/roadmap.hxx>
 
 #ifndef _STRING_HXX
 #define _STRING_HXX
 #endif
 
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
-
 #include <algorithm>
 #include <vcl/bitmap.hxx>
 #include <tools/color.hxx>
-
-#ifndef _RTL_USTRING_HXX_
-#include <rtl/OUString.hxx>
-#endif
 #include <memory>
 
 #define ROADMAP_INDENT_X        4

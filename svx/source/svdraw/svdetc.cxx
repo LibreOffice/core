@@ -31,12 +31,12 @@
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <svx/svdetc.hxx>
-#include "svditext.hxx"
+#include "svx/svditext.hxx"
 #include <svx/svdmodel.hxx>
 #include <svx/svdtrans.hxx>
-#include "svdglob.hxx"
-#include "svdstr.hrc"
-#include "svdviter.hxx"
+#include "svx/svdglob.hxx"
+#include "svx/svdstr.hrc"
+#include "svx/svdviter.hxx"
 #include <svx/svdview.hxx>
 #include <svx/svdoutl.hxx>
 #include <vcl/bmpacc.hxx>

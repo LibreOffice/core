@@ -38,10 +38,10 @@
 #include <sfx2/module.hxx>
 #include <sfx2/app.hxx>
 #include "arrdecl.hxx"
-#include "sfxresid.hxx"
+#include "sfx2/sfxresid.hxx"
 #include <sfx2/msgpool.hxx>
 #include <sfx2/tbxctrl.hxx>
-#include "stbitem.hxx"
+#include "sfx2/stbitem.hxx"
 #include <sfx2/mnuitem.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/mnumgr.hxx>

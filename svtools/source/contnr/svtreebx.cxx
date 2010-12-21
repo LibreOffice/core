@@ -2233,8 +2233,8 @@ Region SvTreeListBox::GetDragRegion() const
 void SvTreeListBox::Command( const CommandEvent& rCEvt )
 {
     DBG_CHKTHIS(SvTreeListBox,0);
-    if ( !pImp->Command( rCEvt ) )
-        SvLBox::Command( rCEvt );
+    // FIXME gnumake2 resync to DEV300_m84
+    pImp->Command( rCEvt );
 }
 
 

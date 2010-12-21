@@ -28,14 +28,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmloff.hxx"
 
-#include "xformsexport.hxx"
+#include "xmloff/xformsexport.hxx"
 
 #include "XFormsModelExport.hxx"
 #include "xformsapi.hxx"
 
 #include <xmloff/xmlexp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include "xmlnmspe.hxx"
+#include "xmloff/xmlnmspe.hxx"
 #include <xmloff/nmspmap.hxx>
 #include "DomExport.hxx"
 #include <xmloff/xmluconv.hxx>

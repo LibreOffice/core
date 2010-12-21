@@ -42,7 +42,7 @@
 #include <com/sun/star/table/CellOrientation.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
-#include "rotmodit.hxx"
+#include "svx/rotmodit.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;

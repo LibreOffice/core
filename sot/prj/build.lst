@@ -1,4 +1,4 @@
-to	sot	:	tools ucbhelper unotools NULL
+to	sot	: LIBXSLT:libxslt tools ucbhelper unotools NULL
 to	sot						usr1	-	all	sot_mkout NULL
 to	sot\inc						nmake	-	all	sot_inc NULL
 to	sot\prj						get	-	all	sot_prj NULL
