@@ -886,7 +886,7 @@ bool SwXMeta::SetContentRange(
         SwTxtMeta const * const pTxtAttr( pMeta->GetTxtAttr() );
         if (pTxtAttr)
         {
-            rpNode = pTxtAttr->GetTxtNode();
+            rpNode = pMeta->GetTxtNode();
             if (rpNode)
             {
                 // rStart points at the first position _within_ the meta!

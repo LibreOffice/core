@@ -308,10 +308,25 @@ SwCharFmt* SwTxtRuby::GetCharFmt()
  *                        class SwTxtMeta
  *************************************************************************/
 
+SwTxtMeta *
+SwTxtMeta::CreateTxtMeta(
+    ::sw::MetaFieldManager & i_rTargetDocManager,
+    SwTxtNode *const i_pTargetTxtNode,
+    SwFmtMeta & i_rAttr,
+    xub_StrLen const i_nStart, xub_StrLen const i_nEnd, bool const i_bIsCopy)
+{
+    if (COPY == i_bIsCopy)
+    {   // i_rAttr is already cloned, now call DoCopy to copy the sw::Meta
+        OSL_ENSURE(i_pTargetTxtNode, "cannot copy Meta without target node");
+        i_rAttr.DoCopy(i_rTargetDocManager, *i_pTargetTxtNode);
+    }
+    SwTxtMeta *const pTxtMeta(new SwTxtMeta(i_rAttr, i_nStart, i_nEnd));
+    return pTxtMeta;
+}
+
 SwTxtMeta::SwTxtMeta( SwFmtMeta & i_rAttr,
         const xub_StrLen i_nStart, const xub_StrLen i_nEnd )
     : SwTxtAttrNesting( i_rAttr, i_nStart, i_nEnd )
-    , m_pTxtNode( 0 )
 {
     i_rAttr.SetTxtAttr( this );
     SetHasDummyChar(true);
@@ -328,7 +343,6 @@ SwTxtMeta::~SwTxtMeta()
 
 void SwTxtMeta::ChgTxtNode(SwTxtNode * const pNode)
 {
-    m_pTxtNode = pNode; // before Notify!
     SwFmtMeta & rFmtMeta( static_cast<SwFmtMeta &>(GetAttr()) );
     if (rFmtMeta.GetTxtAttr() == this)
     {
