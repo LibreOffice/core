@@ -1042,46 +1042,48 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
     bool bNoPaste = ((eMarkType != SC_MARK_SIMPLE && !bMarkIsFiltered) ||
             (bMarkIsFiltered && (eMoveMode != INS_NONE || bAsLink)));
 
-    if (bNoPaste)
+    if (!bNoPaste)
     {
-        // Exit early when we don't want to perform pasting.
-        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
-        return FALSE;
+        if (!rMark.IsMarked())
+        {
+            // Create a selection with clipboard row count and check that for
+            // filtered.
+            nStartCol = GetViewData()->GetCurX();
+            nStartRow = GetViewData()->GetCurY();
+            nStartTab = GetViewData()->GetTabNo();
+            nEndCol = nStartCol + nDestSizeX;
+            nEndRow = nStartRow + nDestSizeY;
+            nEndTab = nStartTab;
+            aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
+            if (ScViewUtil::HasFiltered( aMarkRange, pDoc))
+            {
+                bMarkIsFiltered = true;
+                // Fit to clipboard's row count unfiltered rows. If there is no
+                // fit assume that pasting is not possible. Note that nDestSizeY is
+                // size-1 (difference).
+                if (!ScViewUtil::FitToUnfilteredRows( aMarkRange, pDoc, nDestSizeY+1))
+                    bNoPaste = true;
+            }
+            aFilteredMark.SetMarkArea( aMarkRange);
+        }
+        else
+        {
+            // Expand the marked area when the destination area is larger than the
+            // current selection, to get the undo do the right thing. (i#106711)
+            ScRange aRange;
+            aFilteredMark.GetMarkArea( aRange );
+            if( (aRange.aEnd.Col() - aRange.aStart.Col()) < nDestSizeX )
+            {
+                aRange.aEnd.SetCol(aRange.aStart.Col() + nDestSizeX);
+                aFilteredMark.SetMarkArea(aRange);
+            }
+        }
     }
 
-    if (!rMark.IsMarked())
+    if (bNoPaste)
     {
-        // Create a selection with clipboard row count and check that for
-        // filtered.
-        nStartCol = GetViewData()->GetCurX();
-        nStartRow = GetViewData()->GetCurY();
-        nStartTab = GetViewData()->GetTabNo();
-        nEndCol = nStartCol + nDestSizeX;
-        nEndRow = nStartRow + nDestSizeY;
-        nEndTab = nStartTab;
-        aMarkRange = ScRange( nStartCol, nStartRow, nStartTab, nEndCol, nEndRow, nEndTab);
-        if (ScViewUtil::HasFiltered( aMarkRange, pDoc))
-        {
-            bMarkIsFiltered = true;
-            // Fit to clipboard's row count unfiltered rows. If there is no
-            // fit assume that pasting is not possible. Note that nDestSizeY is
-            // size-1 (difference).
-            if (!ScViewUtil::FitToUnfilteredRows( aMarkRange, pDoc, nDestSizeY+1))
-                bNoPaste = true;
-        }
-        aFilteredMark.SetMarkArea( aMarkRange);
-    }
-    else
-    {
-        // Expand the marked area when the destination area is larger than the
-        // current selection, to get the undo do the right thing. (i#106711)
-        ScRange aRange;
-        aFilteredMark.GetMarkArea( aRange );
-        if( (aRange.aEnd.Col() - aRange.aStart.Col()) < nDestSizeX )
-        {
-            aRange.aEnd.SetCol(aRange.aStart.Col() + nDestSizeX);
-            aFilteredMark.SetMarkArea(aRange);
-        }
+        ErrorMessage(STR_MSSG_PASTEFROMCLIP_0);
+        return FALSE;
     }
 
     SCROW nUnfilteredRows = aMarkRange.aEnd.Row() - aMarkRange.aStart.Row() + 1;
