@@ -177,7 +177,6 @@ done
 if [ "$GUI" = "WNT" ]; then
     downloaditem "http://download.microsoft.com/download/platformsdk/Redist/5.0.2195.1/W9XNT4/EN-US/" "dbghinst.EXE" "096f1d53d9ba09cde27d6f7c2ea6cc47"
     downloaditem "http://download.microsoft.com/download/a/b/c/abc45517-97a0-4cee-a362-1957be2f24e1/" "WindowsXP-KB975337-x86-ENU.exe" "946d00d87e4094f3a6e425e2d538eadd"
-    downloaditem "http://download.microsoft.com/download/WindowsInstaller/Install/2.0/NT45/EN-US/" "InstMsiW.exe" "53820efbc952107ee1a38be6cd5aa3f0"
 
     msvcver=`$SRC_ROOT/oowintool --msvc-ver`
     case "$msvcver" in
@@ -224,9 +223,6 @@ if [ "$GUI" = "WNT" -a -n "$md5sum" ]; then
     fi
     if [ ! -f ./external/vcredist/vcredist_x64.exe -a -f $TARFILE_LOCATION/vcredist_x64.exe ]; then
         cp $TARFILE_LOCATION/vcredist_x64.exe ./external/vcredist/vcredist_x64.exe
-    fi
-    if [ ! -f ./external/msi/instmsiw.exe -a -f $TARFILE_LOCATION/InstMsiW.exe ]; then
-        cp $TARFILE_LOCATION/InstMsiW.exe ./external/msi/instmsiw.exe
     fi
 fi
 

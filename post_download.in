@@ -115,25 +115,6 @@ and put it into external/vcredist.])
 fi
 
 dnl ===================================================================
-dnl Windows builds - attempt to auto-copy required instmsiX.exe into external/
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-       ./oowintool --msvc-copy-instmsi ./external/msi
-fi
-
-dnl ===================================================================
-dnl Windows builds with MSVS 2008/2010 need instmsiw.exe in external/msi
-dnl ===================================================================
-if test "$_os" = "WINNT"; then
-   AC_MSG_CHECKING([for instmsiw.exe])
-   if test -f ./external/msi/instmsiw.exe; then
-      AC_MSG_RESULT([found])
-   else
-      AC_MSG_ERROR([instmsiw.exe is missing in external/msi.])
-   fi
-fi
-
-dnl ===================================================================
 dnl Windows builds with MSVS 2008/2010 need msvcr71.dll in external/msvcp71
 dnl ===================================================================
 if test "$_os" = "WINNT"; then
