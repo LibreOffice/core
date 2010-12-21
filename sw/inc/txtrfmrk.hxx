@@ -41,7 +41,7 @@ class SwTxtRefMark : public SwTxtAttrEnd
 
 public:
     SwTxtRefMark( SwFmtRefMark& rAttr,
-        xub_StrLen nStart, xub_StrLen * pEnd = 0 );
+            xub_StrLen const nStart, xub_StrLen const*const pEnd = 0);
 
     virtual xub_StrLen * GetEnd();       // SwTxtAttr
     inline const xub_StrLen * GetEnd() const { return m_pEnd; }
