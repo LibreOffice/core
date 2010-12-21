@@ -2267,8 +2267,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             case SbxLONG:       // alles immer als Short �bertragen
                             case SbxULONG:
-                            case SbxLONG64:
-                            case SbxULONG64:
+                            case SbxSALINT64:
+                            case SbxSALUINT64:
                             case SbxDOUBLE:
                             case SbxINTEGER:
                             case SbxBYTE:
