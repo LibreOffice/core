@@ -56,8 +56,10 @@ inline BOOL SelectionEngine::ShouldDeselect( BOOL bModifierKey1 ) const
 |*
 *************************************************************************/
 
-SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet ) :
-                    pWin( pWindow )
+SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet,
+                                  ULONG nAutoRepeatInterval ) :
+    pWin( pWindow ),
+    nUpdateInterval( nAutoRepeatInterval )
 {
     eSelMode = SINGLE_SELECTION;
     pFunctionSet = pFuncSet;
@@ -65,7 +67,7 @@ SelectionEngine::SelectionEngine( Window* pWindow, FunctionSet* pFuncSet ) :
     nLockedMods = 0;
 
     aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
-    aWTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
+    aWTimer.SetTimeout( nUpdateInterval );
 }
 
 /*************************************************************************
@@ -405,7 +407,7 @@ BOOL SelectionEngine::SelMouseMove( const MouseEvent& rMEvt )
     if( aWTimer.IsActive() && !aArea.IsInside( rMEvt.GetPosPixel() ))
         return TRUE;
 
-
+    aWTimer.SetTimeout( nUpdateInterval );
     aWTimer.Start();
     if ( eSelMode != SINGLE_SELECTION )
     {
@@ -500,6 +502,30 @@ void SelectionEngine::Command( const CommandEvent& rCEvt )
         else
             nFlags &= ~SELENG_CMDEVT;
     }
+}
+
+void SelectionEngine::SetUpdateInterval( ULONG nInterval )
+{
+    if (nInterval < SELENG_AUTOREPEAT_INTERVAL_MIN)
+        // Set a lower threshold.  On Windows, setting this value too low
+        // would cause selection to get updated indefinitely.
+        nInterval = SELENG_AUTOREPEAT_INTERVAL_MIN;
+
+    if (nUpdateInterval == nInterval)
+        // no update needed.
+        return;
+
+    if (aWTimer.IsActive())
+    {
+        // reset the timer right away on interval change.
+        aWTimer.Stop();
+        aWTimer.SetTimeout(nInterval);
+        aWTimer.Start();
+    }
+    else
+        aWTimer.SetTimeout(nInterval);
+
+    nUpdateInterval = nInterval;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

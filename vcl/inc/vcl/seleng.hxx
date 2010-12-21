@@ -39,6 +39,8 @@ class CommandEvent;
 // Timerticks
 #define SELENG_DRAGDROP_TIMEOUT     400
 #define SELENG_AUTOREPEAT_INTERVAL  50
+#define SELENG_AUTOREPEAT_INTERVAL_MIN 25
+#define SELENG_AUTOREPEAT_INTERVAL_MAX 300
 
 enum SelectionMode { NO_SELECTION, SINGLE_SELECTION, RANGE_SELECTION, MULTIPLE_SELECTION };
 
@@ -88,6 +90,7 @@ private:
     Timer               aWTimer; // erzeugt kuenstliche Mouse-Moves
     MouseEvent          aLastMove;
     SelectionMode       eSelMode;
+    ULONG               nUpdateInterval;
     // Stufigkeit fuer Mausbewegungen waehrend einer Selektion
     USHORT              nMouseSensitivity;
     USHORT              nLockedMods;
@@ -99,7 +102,8 @@ private:
 public:
 
                         SelectionEngine( Window* pWindow,
-                                         FunctionSet* pFunctions = NULL );
+                                         FunctionSet* pFunctions = NULL,
+                                         ULONG nAutoRepeatInterval = SELENG_AUTOREPEAT_INTERVAL );
                         ~SelectionEngine();
 
     // TRUE: Event wurde von Selection-Engine verarbeitet.
@@ -157,6 +161,8 @@ public:
 
     BOOL                HasAnchor() const;
     void                SetAnchor( BOOL bAnchor );
+
+    void                SetUpdateInterval( ULONG nInterval );
 
     // wird im Ctor eingeschaltet
     void                ExpandSelectionOnMouseMove( BOOL bExpand = TRUE )
