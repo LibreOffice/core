@@ -48,7 +48,7 @@ Module gid_Module_Optional_Accessories_Gallery
         gid_File_Extra_Gallery_Photos_Buildings_Accessories,
         gid_File_Extra_Gallery_Photos_Cities_Accessories,
         gid_File_Extra_Gallery_Photos_Space_Accessories,
-        gid_File_Extra_Gallery_Photos_Statues_Accessories
+        gid_File_Extra_Gallery_Photos_Statues_Accessories,
         gid_File_Extra_Gallery_Photos_Travel_Accessories,
         gid_File_Extra_Gallery_Elements_Bullets2_Accessories,
         gid_File_Extra_Gallery_NONFREE_Accessories );
