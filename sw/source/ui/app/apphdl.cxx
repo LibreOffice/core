@@ -701,14 +701,10 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             SwWrtShell* pWrtSh = pDocSh ? pDocSh->GetWrtShell() : 0;
             switch( rEvHint.GetEventId() )
             {
-/*          MA 07. Mar. 96: UpdateInputFlds() nur noch bei Dokument neu.
-                                (Und bei Einfuegen Textbaust.)
-                case SFX_EVENT_OPENDOC:
-                // dann am aktuellen Dokument die Input-Fedler updaten
-                if( pWrtSh )
-                    pWrtSh->UpdateInputFlds();
+            case SFX_EVENT_DOCCREATED:
+                OSL_ASSERT(!pWrtSh);
+                pDocSh->GetDoc()->SetFixFields(false, 0);
                 break;
-*/
             case SFX_EVENT_CREATEDOC:
                 // alle FIX-Date/Time Felder auf akt. setzen
                 if( pWrtSh )
@@ -717,7 +713,6 @@ void SwModule::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                     sal_Bool bUpdateFields = sal_True;
                     if( pUpdateDocItem &&  pUpdateDocItem->GetValue() == document::UpdateDocMode::NO_UPDATE)
                         bUpdateFields = sal_False;
-                    pWrtSh->SetFixFields();
                     if(bUpdateFields)
                     {
                         pWrtSh->UpdateInputFlds();
