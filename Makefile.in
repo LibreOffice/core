@@ -43,7 +43,7 @@ fetch: src/downloaded
 Makefile: configure.in set_soenv.in Makefile.in
 	./autogen.sh
 
-check:
+check: Makefile dmake/dmake@EXEEXT@ fetch
 	@. ./*[Ee]nv.[Ss]et.sh && \
 	cd smoketestoo_native && \
 	export SAL_USE_VCLPLUGIN="svp" && \
